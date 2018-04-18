@@ -19,7 +19,8 @@ const InputWithIcon = (props) => (
         required={true}
         class={props.class}
         id={props.id}
-        label={props.label} />
+        label={props.label}
+        onChange={props.onChange} />
     </Grid>
   </Grid>
 );

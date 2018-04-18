@@ -27,12 +27,12 @@ class RadioBtn extends Component {
 }
 
 class RadioGrp extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       selectedIndex: null,
       selectedValue: null,
-      options: ["Male", "Female"]
+      options: this.props.options
     };
   }
 
@@ -48,15 +48,19 @@ class RadioGrp extends Component {
     const { options } = this.state;
 
     const allOptions = options.map((option, i) => {
-      return <RadioBtn key={i} isChecked={(this.state.selectedIndex == i)} text={option} value={option} index={i} handler={this.toggleRadioBtn.bind(this)} />
+      return (
+        <Grid item xs={6} key={i}>
+          <RadioBtn isChecked={(this.state.selectedIndex == i)} text={option} value={option} index={i} handler={this.toggleRadioBtn.bind(this)} />
+        </Grid>
+      );
     });
 
     return (
       <div>
-        <div style={{color: '#444', fontSize: '0.9rem', marginBottom: 15}}>Gender *</div>
-        <div className="Flex">
+        <div style={{color: '#444', fontSize: '0.9rem', marginBottom: 15}}>{this.props.label} *</div>
+        <Grid container spacing={24}>
           {allOptions}
-        </div>
+        </Grid>
       </div>
     );
   }
@@ -70,7 +74,7 @@ const RadioWithIcon = (props) => (
         width={props.width} />
     </Grid>
     <Grid item xs={10}>
-      <RadioGrp />
+      <RadioGrp label={props.label} options={props.options}/>
     </Grid>
   </Grid>
 );

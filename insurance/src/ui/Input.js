@@ -15,7 +15,8 @@ const Input = (props) => {
         required={props.required}
         className={props.class}
         id={props.id}
-        label={props.label} />
+        label={props.label}
+        onChange={props.onChange} />
     );
   } else {
     return (
@@ -27,7 +28,8 @@ const Input = (props) => {
         required={props.required}
         className={props.class}
         id={props.id}
-        label={props.label} />
+        label={props.label}
+        onChange={props.onChange} />
     );
   }
 };
