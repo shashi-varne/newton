@@ -1,0 +1,27 @@
+.InputField {
+  margin-bottom: 30px;
+}
+.RadioButton.unchecked label {
+  background: #fff;
+  color: #4f2da7;
+  border: 1px solid #4f2da7;
+}
+.RadioButton.checked label {
+  background: #4f2da7;
+  border: 1px solid #4f2da7;
+  color: #fff;
+}
+.RadioButton label {
+  padding: 8px;
+  display: inline-block;
+  border-radius: 100px;
+  width: 80px;
+  text-align: center;
+}
+.Flex {
+  display: flex;
+  flex-direction: row;
+}
+.Flex .radio-btn-group {
+  flex: 1;
+}
