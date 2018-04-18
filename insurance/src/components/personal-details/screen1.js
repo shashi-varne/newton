@@ -3,7 +3,6 @@ import { FormControl } from 'material-ui/Form';
 import Container from '../../common/Container';
 import InputWithIcon from '../../ui/InputWithIcon';
 import RadioWithIcon from '../../ui/RadioWithIcon';
-import Input, { InputLabel } from 'material-ui/Input';
 import name from '../../assets/full_name_dark_icn.png';
 import dob from '../../assets/dob_dark_icn.png';
 import gender from '../../assets/gender_dark_icn.png';

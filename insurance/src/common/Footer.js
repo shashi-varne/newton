@@ -39,13 +39,13 @@ const styles = {
   image: {
     width: '90%',
     position: 'relative',
-    top: 2
+    top: 3
   },
   arrow: {
     marginLeft: 20
   },
   button: {
-    padding: '17px 24px',
+    padding: '13px 24px',
     borderRadius: 0,
     textTransform: 'capitalize',
     fontSize: '1.2rem'
