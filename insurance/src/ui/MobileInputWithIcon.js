@@ -5,19 +5,21 @@ import './style.css';
 import Input from './Input';
 import Icon from './Icon';
 
-const InputWithIcon = (props) => (
+const MobileInputWithIcon = (props) => (
   <Grid container spacing={16} alignItems="flex-end">
     <Grid item xs={2}>
-      {props.icon && <Icon
+      <Icon
         src={props.icon}
-        width={props.width} />}
+        width={props.width} />
     </Grid>
-    <Grid item xs={10}>
+    <Grid item xs={10} className="MobileGrid">
+      <div className="CountryCode">
+        +91
+      </div>
       <Input
         type={props.type}
         fullWidth={true}
         required={true}
-        shrink={props.shrink}
         class={props.class}
         id={props.id}
         label={props.label}
@@ -26,4 +28,4 @@ const InputWithIcon = (props) => (
   </Grid>
 );
 
-export default InputWithIcon;
+export default MobileInputWithIcon;

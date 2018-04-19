@@ -8,6 +8,8 @@ import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 
 import PersonalDetails1 from './components/personal-details/screen1';
 import PersonalDetails2 from './components/personal-details/screen2';
+import ContactDetails1 from './components/contact-details/screen1';
+import ContactDetails2 from './components/contact-details/screen2';
 import NotFound from './components/NotFound';
 
 const theme = createMuiTheme({
@@ -42,6 +44,8 @@ const App = () => (
       <Switch>
         <Route exact path="/" component={ PersonalDetails1 } />
         <Route path="/personal-details" component={ PersonalDetails2 } />
+        <Route path="/contact-details-1" component={ ContactDetails1 } />
+        <Route path="/contact-details-2" component={ ContactDetails2 } />
         <Route component={ NotFound }/>
       </Switch>
     </BrowserRouter>

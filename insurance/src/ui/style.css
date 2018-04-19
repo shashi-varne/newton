@@ -25,3 +25,24 @@
 .Flex .radio-btn-group {
   flex: 1;
 }
+.MobileGrid {
+  display: flex;
+  align-items: baseline;
+}
+.CountryCode {
+  margin-right: 20px;
+  font-size: 18px;
+  color: rgb(68,68,68);
+}
+.Banner {
+  background: rgb(250, 247, 255);
+}
+.Banner .Flex {
+  align-items: center;
+}
+.FlexItem {
+  color: rgb(68, 68, 68);
+}
+.Dropdown {
+  width: 100%;
+}

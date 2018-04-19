@@ -6,7 +6,7 @@ import logo from '../assets/hdfc_insurance_small_logo.png';
 import arrow from '../assets/next_arrow.png';
 
 const Footer = (props) => (
-  <div className={props.classes.footer}>
+  <div className={`Footer ${props.classes.footer}`}>
     <div className={props.classes.flex}>
       <div className={props.classes.flexItem} style={{flex: 1}}>
         <img src={logo} className={props.classes.image}/>
@@ -45,10 +45,11 @@ const styles = {
     marginLeft: 20
   },
   button: {
-    padding: '13px 24px',
+    padding: '16px 24px',
     borderRadius: 0,
     textTransform: 'capitalize',
-    fontSize: '1.2rem'
+    fontSize: '1.2rem',
+    boxShadow: 'none'
   }
 };
 
