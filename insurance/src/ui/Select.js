@@ -6,6 +6,7 @@ import Select from 'material-ui/Select';
 import { MenuItem } from 'material-ui/Menu';
 import { InputLabel } from 'material-ui/Input';
 import { FormControl } from 'material-ui/Form';
+import Icon from './Icon';
 
 class SelectGrp extends Component {
   constructor(props) {
@@ -49,7 +50,11 @@ class SelectGrp extends Component {
 
 const Dropdown = (props) => (
   <Grid container spacing={16} alignItems="flex-end">
-    <Grid item xs={2}></Grid>
+    <Grid item xs={2}>
+      {props.icon && <Icon
+        src={props.icon}
+        width={props.width} />}
+    </Grid>
     <Grid item xs={10}>
       <SelectGrp
         options={props.options}
