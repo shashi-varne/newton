@@ -19,7 +19,7 @@ class RadioBtn extends Component {
     return (
       <div className="radio-btn-group" onClick={() => this.handleClick()}>
         <div className={this.props.isChecked ? "RadioButton checked" : "RadioButton unchecked"} data-value={this.props.value}>
-          <label>{this.props.text}</label>
+          <label className={this.props.type}>{this.props.text}</label>
         </div>
       </div>
     );
@@ -48,43 +48,30 @@ class RadioGrp extends Component {
     const { options } = this.state;
 
     const allOptions = options.map((option, i) => {
-      if (this.props.type === 'professional') {
-        return (
-          <Grid item xs={6} key={i} style={{flexBasis: 'unset'}}>
-            <RadioBtn isChecked={(this.state.selectedIndex == i)} text={option} value={option} index={i} handler={this.toggleRadioBtn.bind(this)} />
-          </Grid>
-        );
-      } else {
-        return (
-          <Grid item xs={6} key={i}>
-            <RadioBtn isChecked={(this.state.selectedIndex == i)} text={option} value={option} index={i} handler={this.toggleRadioBtn.bind(this)} />
-          </Grid>
-        );
-      }
+      return (
+        <Grid item xs={6} key={i} style={{flexBasis: 'unset'}}>
+          <RadioBtn type={this.props.type} isChecked={(this.state.selectedIndex == i)} text={option} value={option} index={i} handler={this.toggleRadioBtn.bind(this)} />
+        </Grid>
+      );
     });
 
     return (
-      <div>
-        <div style={{color: '#444', fontSize: '0.9rem', marginBottom: 15}}>{this.props.label} *</div>
-        <Grid container spacing={24}>
-          {allOptions}
-        </Grid>
-      </div>
+      <Grid container spacing={24} alignItems="center" justify="flex-end">
+        {allOptions}
+      </Grid>
     );
   }
 }
 
-const RadioWithIcon = (props) => (
-  <Grid container spacing={16} alignItems="flex-start">
-    <Grid item xs={2}>
-      <Icon
-        src={props.icon}
-        width={props.width} />
+const RadioWithoutIcon = (props) => (
+  <Grid container spacing={16} alignItems="center" className={props.class}>
+    <Grid item xs={6}>
+      <span style={{color: '#444', fontSize: 18,fontFamily: 'Roboto', fontWeight: 500}}>{props.label}</span>
     </Grid>
-    <Grid item xs={10}>
-      <RadioGrp label={props.label} options={props.options} type={props.type}/>
+    <Grid item xs={6}>
+      <RadioGrp options={props.options} type={props.type}/>
     </Grid>
   </Grid>
 );
 
-export default RadioWithIcon;
+export default RadioWithoutIcon;

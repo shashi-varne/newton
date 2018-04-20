@@ -11,6 +11,22 @@
   border: 1px solid #4f2da7;
   color: #fff;
 }
+.RadioButton label.professional {
+  padding: 8px;
+  display: inline-block;
+  border-radius: 100px;
+  width: auto;
+  min-width: 100%;
+  text-align: center;
+}
+.RadioButton label.professional2 {
+  padding: 8px;
+  display: inline-block;
+  border-radius: 100px;
+  width: auto;
+  min-width: 50px;
+  text-align: center;
+}
 .RadioButton label {
   padding: 8px;
   display: inline-block;
