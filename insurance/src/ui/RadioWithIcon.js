@@ -1,16 +1,10 @@
 import React, { Component } from 'react';
 import Grid from 'material-ui/Grid';
-import { InputLabel } from 'material-ui/Input';
-import { FormControl } from 'material-ui/Form';
 
 import './style.css';
 import Icon from './Icon';
 
 class RadioBtn extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   handleClick(){
     this.props.handler(this.props.index);
   }
@@ -51,13 +45,13 @@ class RadioGrp extends Component {
       if (this.props.type === 'professional') {
         return (
           <Grid item xs={6} key={i} style={{flexBasis: 'unset'}}>
-            <RadioBtn isChecked={(this.state.selectedIndex == i)} text={option} value={option} index={i} handler={this.toggleRadioBtn.bind(this)} />
+            <RadioBtn isChecked={(this.state.selectedIndex === i)} text={option} value={option} index={i} handler={this.toggleRadioBtn.bind(this)} />
           </Grid>
         );
       } else {
         return (
           <Grid item xs={6} key={i}>
-            <RadioBtn isChecked={(this.state.selectedIndex == i)} text={option} value={option} index={i} handler={this.toggleRadioBtn.bind(this)} />
+            <RadioBtn isChecked={(this.state.selectedIndex === i)} text={option} value={option} index={i} handler={this.toggleRadioBtn.bind(this)} />
           </Grid>
         );
       }

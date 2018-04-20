@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
 import Container from '../../common/Container';
 import InputWithIcon from '../../ui/InputWithIcon';
-import RadioWithIcon from '../../ui/RadioWithIcon';
 import mother from '../../assets/mother_dark_icn.png';
 import father from '../../assets/father_dark_icn.png';
 import location from '../../assets/location_dark_icn.png';

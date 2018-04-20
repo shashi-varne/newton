@@ -6,7 +6,6 @@ import RadioWithoutIcon from '../../ui/RadioWithoutIcon';
 import name from '../../assets/name_present_employer_dark_icn.png';
 import location from '../../assets/location_dark_icn.png';
 import Dropdown from '../../ui/Select';
-import Grid from 'material-ui/Grid';
 
 const declareOptions = ['Yes', 'No'];
 const cityOptions = [

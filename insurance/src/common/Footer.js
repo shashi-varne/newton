@@ -1,6 +1,5 @@
 import React from 'react';
 import { withStyles } from 'material-ui/styles';
-import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import logo from '../assets/hdfc_insurance_small_logo.png';
 import arrow from '../assets/next_arrow.png';
@@ -9,11 +8,11 @@ const Footer = (props) => (
   <div className={`Footer ${props.classes.footer}`}>
     <div className={props.classes.flex}>
       <div className={props.classes.flexItem} style={{flex: 1}}>
-        <img src={logo} className={props.classes.image}/>
+        <img alt="" src={logo} className={props.classes.image}/>
       </div>
       <div className={props.classes.flexItem} style={{flex: 2}}>
         <Button fullWidth={true} variant="raised" size="large" color="secondary" className={props.classes.button}>
-          Save & Continue <img src={arrow} width={20} className={props.classes.arrow}/>
+          Save & Continue <img alt="" src={arrow} width={20} className={props.classes.arrow}/>
         </Button>
       </div>
     </div>

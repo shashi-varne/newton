@@ -1,6 +1,5 @@
 import React from 'react';
 import { withStyles } from 'material-ui/styles';
-import Grid from 'material-ui/Grid';
 import Header from './Header';
 import Footer from './Footer';
 import Banner from '../ui/Banner';
