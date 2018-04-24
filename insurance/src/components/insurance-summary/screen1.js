@@ -152,16 +152,16 @@ class Summary extends Component {
   renderAccordionBody = (name) => {
     if (this.state.benefits.is_open && name === 'benefits') {
       return (
-        <div className="AccordionBody">
+        <div className="Accordion">
           <ul>
-            <li>Accidental death benifits: {this.state.benefits.accident_benefit}</li>
-            <li>Payout option: {this.state.benefits.payout_option}</li>
+            <li>Accidental death benifits: <span>{this.state.benefits.accident_benefit}</span></li>
+            <li>Payout option: <span>{this.state.benefits.payout_option}</span></li>
           </ul>
         </div>
       );
     } else if (this.state.personal.is_open && name === 'personal') {
       return (
-        <div className="AccordionBody">
+        <div className="Accordion">
           <ul>
             <li></li>
           </ul>
@@ -169,7 +169,7 @@ class Summary extends Component {
       );
     } else if (this.state.contact.is_open && name === 'contact') {
       return (
-        <div className="AccordionBody">
+        <div className="Accordion">
           <ul>
             <li></li>
           </ul>
@@ -177,7 +177,7 @@ class Summary extends Component {
       );
     } else if (this.state.nominee.is_open && name === 'nominee') {
       return (
-        <div className="AccordionBody">
+        <div className="Accordion">
           <ul>
             <li></li>
           </ul>
@@ -185,7 +185,7 @@ class Summary extends Component {
       );
     } else if (this.state.professional.is_open && name === 'professional') {
       return (
-        <div className="AccordionBody">
+        <div className="Accordion">
           <ul>
             <li></li>
           </ul>

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
 import Container from '../../common/Container';
 import InputWithIcon from '../../ui/InputWithIcon';
-import Dropdown from '../../ui/Select';
 import location from '../../assets/location_dark_icn.png';
 import Grid from 'material-ui/Grid';
 import Checkbox from 'material-ui/Checkbox';
@@ -11,7 +10,7 @@ import Api from '../../service/api';
 class ContactDetails2 extends Component {
   state = {
     pincode: '',
-    address: '',
+    addressline: '',
     landmark: '',
     city: '',
     state: '',
@@ -22,6 +21,35 @@ class ContactDetails2 extends Component {
     ccity: '',
     cstate: '',
     country: 'INDIA'
+  }
+
+  setStateAsync(state) {
+    return new Promise((resolve) => {
+      this.setState(state, resolve)
+    });
+  }
+
+  async componentDidMount() {
+    const res = await Api.get('/api/insurance/profile/5668600916475904', {
+      groups: 'contact'
+    });
+
+    const { permanent_addr, corr_addr, corr_address_same } = res.pfwresponse.result.profile;
+
+    await this.setStateAsync({
+      pincode: permanent_addr.pincode,
+      addressline: permanent_addr.addressline,
+      landmark: permanent_addr.landmark,
+      city: permanent_addr.city,
+      state: permanent_addr.state,
+      checked: corr_address_same,
+      cpincode: corr_addr.pincode,
+      caddress: corr_addr.addressline,
+      clandmark: corr_addr.landmark,
+      ccity: corr_addr.city,
+      cstate: corr_addr.state,
+      country: corr_addr.country
+    });
   }
 
   handleChange = name => event => {
@@ -43,7 +71,7 @@ class ContactDetails2 extends Component {
       [name]: pincode
     });
 
-    if (pincode.length == 6) {
+    if (pincode.length === 6) {
       const res = await Api.get('/api/pincode/' + pincode);
 
       if (res.pfwresponse.status_code === 200) {
@@ -67,20 +95,20 @@ class ContactDetails2 extends Component {
   }
 
   handleClick = async () => {
-    let permanent_address, c_addr_same, address = {};
+    let permanent_address, address = {};
 
     permanent_address = {
       'pincode': this.state.pincode,
-      'addressline': this.state.address,
+      'addressline': this.state.addressline,
       'landmark': this.state.landmark
     };
 
     if (this.state.checked) {
-        address['insurance_app_id'] =  5526920682799104;
+        address['insurance_app_id'] =  5668600916475904;
         address['p_addr'] = permanent_address;
-        address['c_addr_same'] = true;
+        address['c_addr_same'] = 'Y';
     } else {
-        address['insurance_app_id'] = 5526920682799104;
+        address['insurance_app_id'] = 5668600916475904;
         address['p_addr'] = permanent_address;
         address['c_addr'] = {
           'pincode': this.state.cpincode,
@@ -142,7 +170,6 @@ class ContactDetails2 extends Component {
               disabled={true}
               id="ccity"
               label="City"
-              disabled={true}
               value={this.state.ccity}
               onChange={this.handleChange('ccity')} />
           </div>
@@ -151,7 +178,6 @@ class ContactDetails2 extends Component {
               disabled={true}
               id="cstate"
               label="State"
-              disabled={true}
               value={this.state.cstate}
               onChange={this.handleChange('cstate')} />
           </div>
@@ -160,7 +186,6 @@ class ContactDetails2 extends Component {
               disabled={true}
               id="country"
               label="Country"
-              disabled={true}
               value={this.state.country}
               onChange={this.handleChange('country')} />
           </div>
@@ -212,8 +237,8 @@ class ContactDetails2 extends Component {
               type="text"
               id="address"
               label="Permanent address"
-              value={this.state.address}
-              onChange={this.handleChange('address')} />
+              value={this.state.addressline}
+              onChange={this.handleChange('addressline')} />
           </div>
           <div className="InputField">
             <InputWithIcon
@@ -228,7 +253,6 @@ class ContactDetails2 extends Component {
               disabled={true}
               id="city"
               label="City"
-              disabled={true}
               value={this.state.city}
               onChange={this.handleChange('city')} />
           </div>
@@ -237,7 +261,6 @@ class ContactDetails2 extends Component {
               disabled={true}
               id="state"
               label="State"
-              disabled={true}
               value={this.state.state}
               onChange={this.handleChange('state')} />
           </div>

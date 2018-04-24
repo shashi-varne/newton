@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  BrowserRouter,
+  Router,
   Route,
   Switch
 } from 'react-router-dom';
@@ -16,6 +16,7 @@ import ProfessionalDetails1 from './components/professional-details/screen1';
 import ProfessionalDetails2 from './components/professional-details/screen2';
 import Summary from './components/insurance-summary/screen1';
 import NotFound from './components/NotFound';
+import { configureHistory } from './configureHistory.js';
 
 const theme = createMuiTheme({
   palette: {
@@ -43,9 +44,11 @@ const theme = createMuiTheme({
   }
 });
 
+const history = configureHistory();
+
 const App = () => (
   <MuiThemeProvider theme={theme}>
-    <BrowserRouter>
+    <Router history={history}>
       <Switch>
         <Route exact path="/" component={ PersonalDetails1 } />
         <Route path="/personal-details" component={ PersonalDetails2 } />
@@ -58,7 +61,7 @@ const App = () => (
         <Route path="/summary" component={ Summary } />
         <Route component={ NotFound }/>
       </Switch>
-    </BrowserRouter>
+    </Router>
   </MuiThemeProvider>
 );
 

@@ -2,13 +2,9 @@ import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
 import Container from '../../common/Container';
 import InputWithIcon from '../../ui/InputWithIcon';
-import RadioWithoutIcon from '../../ui/RadioWithoutIcon';
 import name from '../../assets/name_present_employer_dark_icn.png';
 import location from '../../assets/location_dark_icn.png';
-import Dropdown from '../../ui/Select';
 import Api from '../../service/api';
-
-const declareOptions = ['Y', 'N'];
 
 class ProfessionalDetails2 extends Component {
   state = {
@@ -18,6 +14,29 @@ class ProfessionalDetails2 extends Component {
     landmark: '',
     city: '',
     state: ''
+  }
+
+  setStateAsync(state) {
+    return new Promise((resolve) => {
+      this.setState(state, resolve)
+    });
+  }
+
+  async componentDidMount() {
+    const res = await Api.get('/api/insurance/profile/5668600916475904', {
+      groups: 'professional'
+    });
+
+    const { employer_name, employer_address } = res.pfwresponse.result.profile;
+
+    await this.setStateAsync({
+      employer_name: employer_name,
+      pincode: employer_address.pincode,
+      address: employer_address.addressline,
+      landmark: employer_address.landmark,
+      city: employer_address.city,
+      state: employer_address.state
+    });
   }
 
   handleChange = name => event => {
@@ -33,7 +52,7 @@ class ProfessionalDetails2 extends Component {
       [name]: pincode
     });
 
-    if (pincode.length == 6) {
+    if (pincode.length === 6) {
       const res = await Api.get('/api/pincode/' + pincode);
 
       if (res.pfwresponse.status_code === 200) {
@@ -52,7 +71,7 @@ class ProfessionalDetails2 extends Component {
   handleClick = async () => {
     let data = {};
 
-    data['insurance_app_id'] =  5526920682799104;
+    data['insurance_app_id'] =  5668600916475904;
     data['employer_name'] = this.state.employer_name;
     data['employer_address'] = {
       'pincode': this.state.pincode,
@@ -63,7 +82,7 @@ class ProfessionalDetails2 extends Component {
     const res = await Api.post('/api/insurance/profile', data);
 
     if (res.pfwresponse.status_code === 200) {
-      console.log(res.pfwresponse.result);
+      this.props.history.push('summary');
     } else {
       alert('Error');
       console.log(res.pfwresponse.result.error);
@@ -122,7 +141,6 @@ class ProfessionalDetails2 extends Component {
               disabled={true}
               id="city"
               label="City"
-              disabled={true}
               value={this.state.city}
               onChange={this.handleChange('city')} />
           </div>
@@ -131,7 +149,6 @@ class ProfessionalDetails2 extends Component {
               disabled={true}
               id="state"
               label="State"
-              disabled={true}
               value={this.state.state}
               onChange={this.handleChange('state')} />
           </div>

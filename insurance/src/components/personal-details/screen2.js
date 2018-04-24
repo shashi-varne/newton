@@ -14,6 +14,26 @@ class PersonalDetails2 extends Component {
     birth_place: ''
   }
 
+  setStateAsync(state) {
+    return new Promise((resolve) => {
+      this.setState(state, resolve)
+    });
+  }
+
+  async componentDidMount() {
+    const res = await Api.get('/api/insurance/profile/5668600916475904', {
+      groups: 'personal'
+    });
+
+    const { mother_name, father_name, birth_place } = res.pfwresponse.result.profile;
+
+    await this.setStateAsync({
+      mother_name: mother_name,
+      father_name: father_name,
+      birth_place: birth_place
+    });
+  }
+
   handleChange = name => event => {
     this.setState({
       [name]: event.target.value
@@ -22,7 +42,7 @@ class PersonalDetails2 extends Component {
 
   handleClick = async () => {
     const res = await Api.post('/api/insurance/profile', {
-      insurance_app_id: 5526920682799104,
+      insurance_app_id: 5668600916475904,
       father_name: this.state.father_name,
       mother_name: this.state.mother_name,
       birth_place: this.state.birth_place

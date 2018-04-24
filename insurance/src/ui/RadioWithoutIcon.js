@@ -23,8 +23,8 @@ class RadioGrp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedIndex: null,
-      selectedValue: null,
+      selectedIndex: (this.props.value === 'Y') ? 0 : 1,
+      selectedValue: this.props.value,
       options: this.props.options
     };
   }

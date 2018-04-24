@@ -43,10 +43,41 @@ class NomineeDetails extends Component {
     relationship: '',
     checked: true,
     pincode: '',
-    address: '',
+    addressline: '',
+    landmark: '',
     city: '',
     state: '',
     country: 'INDIA'
+  }
+
+
+  setStateAsync(state) {
+    return new Promise((resolve) => {
+      this.setState(state, resolve)
+    });
+  }
+
+  async componentDidMount() {
+    const res = await Api.get('/api/insurance/profile/5668600916475904', {
+      groups: 'nominee'
+    });
+
+    const { nominee_address_same, nominee, nominee_address } = res.pfwresponse.result.profile;
+
+    await this.setStateAsync({
+      name: nominee.name,
+      dob: nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('-'),
+      gender: nominee.gender,
+      marital_status: nominee.marital_status,
+      relationship: nominee.relationship,
+      checked: nominee_address_same,
+      pincode: nominee_address.pincode,
+      addressline: nominee_address.addressline,
+      landmark: nominee_address.landmark,
+      city: nominee_address.city,
+      state: nominee_address.state,
+      country: nominee_address.country
+    });
   }
 
   handleChange = name => event => {
@@ -84,7 +115,7 @@ class NomineeDetails extends Component {
       [name]: pincode
     });
 
-    if (pincode.length == 6) {
+    if (pincode.length === 6) {
       const res = await Api.get('/api/pincode/' + pincode);
 
       if (res.pfwresponse.status_code === 200) {
@@ -118,8 +149,8 @@ class NomineeDetails extends Component {
               type="text"
               id="address"
               label="Permanent address"
-              value={this.state.address}
-              onChange={this.handleChange('address')} />
+              value={this.state.addressline}
+              onChange={this.handleChange('addressline')} />
           </div>
           <div className="InputField">
             <InputWithIcon
@@ -134,7 +165,6 @@ class NomineeDetails extends Component {
               disabled={true}
               id="city"
               label="City"
-              disabled={true}
               value={this.state.city}
               onChange={this.handleChange('city')} />
           </div>
@@ -143,7 +173,6 @@ class NomineeDetails extends Component {
               disabled={true}
               id="state"
               label="State"
-              disabled={true}
               value={this.state.state}
               onChange={this.handleChange('state')} />
           </div>
@@ -152,7 +181,6 @@ class NomineeDetails extends Component {
               disabled={true}
               id="country"
               label="Country"
-              disabled={true}
               value={this.state.country}
               onChange={this.handleChange('country')} />
           </div>
@@ -166,10 +194,10 @@ class NomineeDetails extends Component {
   handleClick = async () => {
     let data = {
       nominee: {}
-    }, address = {};
+    };
     const formattedDob = this.state.dob.replace(/\\-/g, '/').split('-').reverse().join('/');
 
-    data['insurance_app_id'] =  5526920682799104;
+    data['insurance_app_id'] =  5668600916475904;
     data['nominee']['name'] = this.state.name;
     data['nominee']['dob'] = formattedDob;
     data['nominee']['gender'] = this.state.gender;
@@ -181,7 +209,7 @@ class NomineeDetails extends Component {
     } else {
       data['nominee_address'] = {
         'pincode': this.state.pincode,
-        'addressline': this.state.address,
+        'addressline': this.state.addressline,
         'landmark': this.state.landmark
       };
     }

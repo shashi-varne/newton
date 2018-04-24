@@ -17,6 +17,12 @@ class SelectGrp extends Component {
     };
   }
 
+  componentDidUpdate(prevState) {
+    if (prevState.value !== this.props.value) {
+      this.setState({selectedValue: this.props.value})
+    }
+  }
+
   handleChange = (event) => {
     this.setState({ selectedValue: event.target.value });
     this.props.onChange(event.target.value);

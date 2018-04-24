@@ -96,6 +96,31 @@ class ProfessionalDetails1 extends Component {
     is_criminal: 'N'
   }
 
+  setStateAsync(state) {
+    return new Promise((resolve) => {
+      this.setState(state, resolve)
+    });
+  }
+
+  async componentDidMount() {
+    const res = await Api.get('/api/insurance/profile/5668600916475904', {
+      groups: 'professional,misc'
+    });
+
+    const { annual_income, designation, education_qualification, occupation_category, occupation_detail, is_criminal, is_politically_exposed, pan_number } = res.pfwresponse.result.profile;
+
+    await this.setStateAsync({
+      occupation_detail: occupation_detail,
+      occupation_category: occupation_category,
+      annual_income: annual_income,
+      pan_number: pan_number || '',
+      education_qualification: education_qualification,
+      designation: designation || '',
+      is_politically_exposed: (is_criminal) ? 'Y' : 'N',
+      is_criminal: (is_politically_exposed) ? 'Y' : 'N'
+    });
+  }
+
   handleChange = name => event => {
     if (name === 'checked') {
       this.setState({
@@ -131,7 +156,7 @@ class ProfessionalDetails1 extends Component {
   handleClick = async () => {
     let data = {};
 
-    data['insurance_app_id'] =  5526920682799104;
+    data['insurance_app_id'] =  5668600916475904;
     data['occupation_detail'] = this.state.occupation_detail;
     data['occupation_category'] = this.state.occupation_category;
     data['annual_income'] = this.state.annual_income;
@@ -149,6 +174,8 @@ class ProfessionalDetails1 extends Component {
     if (res.pfwresponse.status_code === 200) {
       if (this.state.occupation_detail === 'SALRIED') {
         this.props.history.push('professional-details-2');
+      } else {
+        this.props.history.push('summary');
       }
     } else {
       alert('Error');

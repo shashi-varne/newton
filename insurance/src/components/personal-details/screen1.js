@@ -27,7 +27,7 @@ class PersonalDetails1 extends Component {
   }
 
   async componentDidMount() {
-    const res = await Api.get('/api/insurance/profile/5526920682799104', {
+    const res = await Api.get('/api/insurance/profile/5668600916475904', {
       groups: 'personal'
     });
 
@@ -63,7 +63,7 @@ class PersonalDetails1 extends Component {
     const formattedDob = this.state.dob.replace(/\\-/g, '/').split('-').reverse().join('/');
 
     const res = await Api.post('/api/insurance/profile', {
-      insurance_app_id: 5526920682799104,
+      insurance_app_id: 5668600916475904,
       name: this.state.name,
       dob: formattedDob,
       gender: this.state.gender,
