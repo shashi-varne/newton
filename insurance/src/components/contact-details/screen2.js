@@ -6,64 +6,22 @@ import Dropdown from '../../ui/Select';
 import location from '../../assets/location_dark_icn.png';
 import Grid from 'material-ui/Grid';
 import Checkbox from 'material-ui/Checkbox';
-
-const cityOptions = [
-  {
-    value: 'bangalore',
-    label: 'Bangalore'
-  },
-  {
-    value: 'delhi',
-    label: 'Delhi'
-  },
-  {
-    value: 'mumbai',
-    label: 'Mumbai'
-  },
-  {
-    value: 'chennai',
-    label: 'Chennai'
-  }
-];
-
-const stateOptions = [
-  {
-    value: 'karnataka',
-    label: 'Karnataka'
-  },
-  {
-    value: 'up',
-    label: 'Uttar Pradesh'
-  },
-  {
-    value: 'ap',
-    label: 'Andhra Pradesh'
-  },
-  {
-    value: 'tn',
-    label: 'Tamil Nadu'
-  }
-];
-
-const countryOptions = [
-  {
-    value: 'india',
-    label: 'India'
-  }
-];
+import Api from '../../service/api';
 
 class ContactDetails2 extends Component {
   state = {
     pincode: '',
     address: '',
+    landmark: '',
     city: '',
     state: '',
     checked: true,
     cpincode: '',
     caddress: '',
+    clandmark: '',
     ccity: '',
     cstate: '',
-    country: ''
+    country: 'INDIA'
   }
 
   handleChange = name => event => {
@@ -77,6 +35,69 @@ class ContactDetails2 extends Component {
       });
     }
   };
+
+  handlePincode = name => async (event) => {
+    const pincode = event.target.value;
+
+    this.setState({
+      [name]: pincode
+    });
+
+    if (pincode.length == 6) {
+      const res = await Api.get('/api/pincode/' + pincode);
+
+      if (res.pfwresponse.status_code === 200) {
+        if (name === 'pincode') {
+          this.setState({
+            city: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
+            state: res.pfwresponse.result[0].state_name
+          });
+        } else {
+          this.setState({
+            ccity: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
+            cstate: res.pfwresponse.result[0].state_name
+          });
+        }
+      } else {
+        alert('Error');
+        console.log(res.pfwresponse.result.error);
+      }
+    }
+
+  }
+
+  handleClick = async () => {
+    let permanent_address, c_addr_same, address = {};
+
+    permanent_address = {
+      'pincode': this.state.pincode,
+      'addressline': this.state.address,
+      'landmark': this.state.landmark
+    };
+
+    if (this.state.checked) {
+        address['insurance_app_id'] =  5526920682799104;
+        address['p_addr'] = permanent_address;
+        address['c_addr_same'] = true;
+    } else {
+        address['insurance_app_id'] = 5526920682799104;
+        address['p_addr'] = permanent_address;
+        address['c_addr'] = {
+          'pincode': this.state.cpincode,
+          'addressline': this.state.caddress,
+          'landmark': this.state.clandmark
+        }
+    }
+
+    const res = await Api.post('/api/insurance/profile', address);
+
+    if (res.pfwresponse.status_code === 200) {
+      this.props.history.push('nominee-details');
+    } else {
+      alert('Error');
+      console.log(res.pfwresponse.result.error);
+    }
+  }
 
   bannerText = () => {
     return (
@@ -97,34 +118,50 @@ class ContactDetails2 extends Component {
               width="40"
               label="Pincode"
               id="cpincode"
-              onChange={this.handleChange('cpincode')} />
+              value={this.state.cpincode}
+              onChange={this.handlePincode('cpincode')} />
           </div>
           <div className="InputField">
             <InputWithIcon
               type="text"
               id="caddress"
               label="Permanent address"
+              value={this.state.caddress}
               onChange={this.handleChange('caddress')} />
           </div>
           <div className="InputField">
-            <Dropdown
-              options={cityOptions}
+            <InputWithIcon
+              type="text"
+              id="clandmark"
+              label="Landmark"
+              value={this.state.clandmark}
+              onChange={this.handleChange('clandmark')} />
+          </div>
+          <div className="InputField">
+            <InputWithIcon
+              disabled={true}
               id="ccity"
               label="City"
+              disabled={true}
+              value={this.state.ccity}
               onChange={this.handleChange('ccity')} />
           </div>
           <div className="InputField">
-            <Dropdown
-              options={stateOptions}
+            <InputWithIcon
+              disabled={true}
               id="cstate"
               label="State"
+              disabled={true}
+              value={this.state.cstate}
               onChange={this.handleChange('cstate')} />
           </div>
           <div className="InputField">
-            <Dropdown
-              options={countryOptions}
+            <InputWithIcon
+              disabled={true}
               id="country"
               label="Country"
+              disabled={true}
+              value={this.state.country}
               onChange={this.handleChange('country')} />
           </div>
         </FormControl>
@@ -152,9 +189,9 @@ class ContactDetails2 extends Component {
         count={true}
         total={5}
         current={2}
-        state={this.state}
         banner={true}
         bannerText={this.bannerText()}
+        handleClick={this.handleClick}
         >
         <div className="SectionHead" style={{marginBottom: 15, color: 'rgb(68,68,68)', fontSize: 18, fontFamily: 'Roboto', fontWeight: 500}}>
           Permanent address
@@ -167,27 +204,41 @@ class ContactDetails2 extends Component {
               width="40"
               label="Pincode"
               id="pincode"
-              onChange={this.handleChange('pincode')} />
+              value={this.state.pincode}
+              onChange={this.handlePincode('pincode')} />
           </div>
           <div className="InputField">
             <InputWithIcon
               type="text"
               id="address"
               label="Permanent address"
+              value={this.state.address}
               onChange={this.handleChange('address')} />
           </div>
           <div className="InputField">
-            <Dropdown
-              options={cityOptions}
+            <InputWithIcon
+              type="text"
+              id="landmark"
+              label="Landmark"
+              value={this.state.landmark}
+              onChange={this.handleChange('landmark')} />
+          </div>
+          <div className="InputField">
+            <InputWithIcon
+              disabled={true}
               id="city"
               label="City"
+              disabled={true}
+              value={this.state.city}
               onChange={this.handleChange('city')} />
           </div>
           <div className="InputField">
-            <Dropdown
-              options={stateOptions}
+            <InputWithIcon
+              disabled={true}
               id="state"
               label="State"
+              disabled={true}
+              value={this.state.state}
               onChange={this.handleChange('state')} />
           </div>
         </FormControl>

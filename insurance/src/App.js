@@ -14,6 +14,7 @@ import NomineeDetails from './components/nominee-details/screen1';
 import AppointeeDetails from './components/nominee-details/screen2';
 import ProfessionalDetails1 from './components/professional-details/screen1';
 import ProfessionalDetails2 from './components/professional-details/screen2';
+import Summary from './components/insurance-summary/screen1';
 import NotFound from './components/NotFound';
 
 const theme = createMuiTheme({
@@ -54,6 +55,7 @@ const App = () => (
         <Route path="/appointee-details" component={ AppointeeDetails } />
         <Route path="/professional-details" component={ ProfessionalDetails1 } />
         <Route path="/professional-details-2" component={ ProfessionalDetails2 } />
+        <Route path="/summary" component={ Summary } />
         <Route component={ NotFound }/>
       </Switch>
     </BrowserRouter>

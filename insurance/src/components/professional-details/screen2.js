@@ -6,50 +6,16 @@ import RadioWithoutIcon from '../../ui/RadioWithoutIcon';
 import name from '../../assets/name_present_employer_dark_icn.png';
 import location from '../../assets/location_dark_icn.png';
 import Dropdown from '../../ui/Select';
+import Api from '../../service/api';
 
-const declareOptions = ['Yes', 'No'];
-const cityOptions = [
-  {
-    value: 'bangalore',
-    label: 'Bangalore'
-  },
-  {
-    value: 'delhi',
-    label: 'Delhi'
-  },
-  {
-    value: 'mumbai',
-    label: 'Mumbai'
-  },
-  {
-    value: 'chennai',
-    label: 'Chennai'
-  }
-];
-
-const stateOptions = [
-  {
-    value: 'karnataka',
-    label: 'Karnataka'
-  },
-  {
-    value: 'up',
-    label: 'Uttar Pradesh'
-  },
-  {
-    value: 'ap',
-    label: 'Andhra Pradesh'
-  },
-  {
-    value: 'tn',
-    label: 'Tamil Nadu'
-  }
-];
+const declareOptions = ['Y', 'N'];
 
 class ProfessionalDetails2 extends Component {
   state = {
-    name: '',
+    employer_name: '',
+    pincode: '',
     address: '',
+    landmark: '',
     city: '',
     state: ''
   }
@@ -60,6 +26,50 @@ class ProfessionalDetails2 extends Component {
     });
   };
 
+  handlePincode = name => async (event) => {
+    const pincode = event.target.value;
+
+    this.setState({
+      [name]: pincode
+    });
+
+    if (pincode.length == 6) {
+      const res = await Api.get('/api/pincode/' + pincode);
+
+      if (res.pfwresponse.status_code === 200) {
+        this.setState({
+          city: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
+          state: res.pfwresponse.result[0].state_name
+        });
+      } else {
+        alert('Error');
+        console.log(res.pfwresponse.result.error);
+      }
+    }
+
+  }
+
+  handleClick = async () => {
+    let data = {};
+
+    data['insurance_app_id'] =  5526920682799104;
+    data['employer_name'] = this.state.employer_name;
+    data['employer_address'] = {
+      'pincode': this.state.pincode,
+      'addressline': this.state.address,
+      'landmark': this.state.landmark
+    }
+
+    const res = await Api.post('/api/insurance/profile', data);
+
+    if (res.pfwresponse.status_code === 200) {
+      console.log(res.pfwresponse.result);
+    } else {
+      alert('Error');
+      console.log(res.pfwresponse.result.error);
+    }
+  }
+
   render() {
     return (
       <Container
@@ -67,7 +77,7 @@ class ProfessionalDetails2 extends Component {
         count={true}
         total={5}
         current={4}
-        state={this.state}
+        handleClick={this.handleClick}
         >
         <FormControl fullWidth>
           <div className="InputField">
@@ -78,54 +88,54 @@ class ProfessionalDetails2 extends Component {
               label="Name of present employer"
               class="Name"
               id="name"
-              onChange={this.handleChange('name')} />
+              value={this.state.employer_name}
+              onChange={this.handleChange('employer_name')} />
+          </div>
+          <div className="InputField">
+            <InputWithIcon
+              type="number"
+              icon={location}
+              width="40"
+              label="Pincode"
+              id="pincode"
+              value={this.state.pincode}
+              onChange={this.handlePincode('pincode')} />
           </div>
           <div className="InputField">
             <InputWithIcon
               type="text"
-              icon={location}
-              width="40"
-              label="Address of present employer"
-              class="Address"
               id="address"
+              label="Address of present employer"
+              value={this.state.address}
               onChange={this.handleChange('address')} />
           </div>
           <div className="InputField">
-            <Dropdown
-              options={cityOptions}
-              id="ccity"
+            <InputWithIcon
+              type="text"
+              id="landmark"
+              label="Landmark"
+              value={this.state.landmark}
+              onChange={this.handleChange('landmark')} />
+          </div>
+          <div className="InputField">
+            <InputWithIcon
+              disabled={true}
+              id="city"
               label="City"
+              disabled={true}
+              value={this.state.city}
               onChange={this.handleChange('city')} />
           </div>
           <div className="InputField">
-            <Dropdown
-              options={stateOptions}
-              id="cstate"
+            <InputWithIcon
+              disabled={true}
+              id="state"
               label="State"
+              disabled={true}
+              value={this.state.state}
               onChange={this.handleChange('state')} />
           </div>
         </FormControl>
-        <div className="SectionHead" style={{marginBottom: 30, color: 'rgb(68,68,68)', fontSize: 18, fontFamily: 'Roboto'}}>
-          By tapping continue, you declare that you’re -
-        </div>
-        <div className="RadioBlock">
-          <div className="RadioWithoutIcon" style={{marginBottom: 20, borderBottom: '1px solid #c6c6c6', paddingBottom: 20}}>
-            <RadioWithoutIcon
-              options={declareOptions}
-              type="professional2"
-              id="exposed"
-              label="Politically exposed"
-              onChange={this.handleChange('politicallyExposed')} />
-          </div>
-          <div className="RadioWithoutIcon">
-            <RadioWithoutIcon
-              options={declareOptions}
-              type="professional2"
-              id="criminal"
-              label="Criminal proceedings"
-              onChange={this.handleChange('politicallyExposed')} />
-          </div>
-        </div>
       </Container>
     );
   }

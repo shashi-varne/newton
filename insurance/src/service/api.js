@@ -2,6 +2,7 @@ import axios from 'axios';
 
 axios.defaults.baseURL = 'http://plutusdev.com';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
+axios.defaults.withCredentials = true;
 
 class Api {
   static get(route, params) {
@@ -25,12 +26,12 @@ class Api {
       method: verb,
       url: route,
       params: (verb === 'get') ? params : null,
-      data: (verb != 'get') ? params : null
+      data: (verb !== 'get') ? params : null
     });
 
     return axios(options)
       .then(response => {
-        return response;
+        return response.data;
       }, error => {
         return error.response.data;
       })

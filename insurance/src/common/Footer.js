@@ -11,7 +11,7 @@ const Footer = (props) => (
         <img alt="" src={logo} className={props.classes.image}/>
       </div>
       <div className={props.classes.flexItem} style={{flex: 2}}>
-        <Button fullWidth={true} variant="raised" size="large" color="secondary" className={props.classes.button}>
+        <Button fullWidth={true} variant="raised" size="large" color="secondary" className={props.classes.button} onClick={() => props.handleClick()}>
           Save & Continue <img alt="" src={arrow} width={20} className={props.classes.arrow}/>
         </Button>
       </div>

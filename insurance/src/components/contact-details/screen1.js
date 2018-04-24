@@ -5,19 +5,33 @@ import InputWithIcon from '../../ui/InputWithIcon';
 import MobileInputWithIcon from '../../ui/MobileInputWithIcon';
 import email from '../../assets/email_dark_icn.png';
 import phone from '../../assets/phone_dark_icn.png';
+import Api from '../../service/api';
 
 class ContactDetails1 extends Component {
   state = {
-    fullName: '',
-    dob: '',
-    gender: '',
-    maritalStatus: ''
+    email: '',
+    mobile_no: ''
   }
 
-  handleInput = (e) => {
+  handleChange = name => event => {
     this.setState({
-      fullName: e.target.value
+      [name]: event.target.value
     });
+  };
+
+  handleClick = async () => {
+    const res = await Api.post('/api/insurance/profile', {
+      insurance_app_id: 5526920682799104,
+      email: this.state.email,
+      mobile_no: this.state.mobile_no
+    });
+
+    if (res.pfwresponse.status_code === 200) {
+      this.props.history.push('contact-details-2');
+    } else {
+      alert('Error');
+      console.log(res.pfwresponse.result.error);
+    }
   }
 
   bannerText = () => {
@@ -35,9 +49,9 @@ class ContactDetails1 extends Component {
         count={true}
         total={5}
         current={2}
-        state={this.state}
         banner={true}
         bannerText={this.bannerText()}
+        handleClick={this.handleClick}
         >
         <FormControl fullWidth>
           <div className="InputField">
@@ -48,7 +62,8 @@ class ContactDetails1 extends Component {
               label="Email address"
               class="Email"
               id="email"
-              onChange={this.handleInput} />
+              value={this.state.email}
+              onChange={this.handleChange('email')} />
           </div>
           <div className="InputField">
             <MobileInputWithIcon
@@ -58,7 +73,8 @@ class ContactDetails1 extends Component {
               label="Mobile number"
               class="Mobile"
               id="number"
-              onChange={this.handleInput} />
+              value={this.state.mobile_no}
+              onChange={this.handleChange('mobile_no')} />
           </div>
         </FormControl>
       </Container>

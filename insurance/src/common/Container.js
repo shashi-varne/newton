@@ -12,7 +12,7 @@ const Container = (props) => {
       <div className={props.classes.wrapper}>
         { props.children }
       </div>
-      <Footer state={props.state}/>
+      <Footer handleClick={props.handleClick}/>
     </div>
   );
 };

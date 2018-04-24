@@ -5,77 +5,48 @@ import InputWithIcon from '../../ui/InputWithIcon';
 import RadioWithIcon from '../../ui/RadioWithIcon';
 import name from '../../assets/full_name_dark_icn.png';
 import dob from '../../assets/dob_dark_icn.png';
+import gender from '../../assets/gender_dark_icn.png';
 import relationship from '../../assets/relationship_dark_icn.png';
 import marital from '../../assets/marital_status_dark_icn.png';
 import location from '../../assets/location_dark_icn.png';
 import Grid from 'material-ui/Grid';
 import Dropdown from '../../ui/Select';
 import Checkbox from 'material-ui/Checkbox';
+import Api from '../../service/api';
 
-const maritalOptions = ['Single', 'Married', 'Divorced', 'Widow'];
+const maritalOptions = ['UNMARRIED', 'MARRIED', 'DIVORCED', 'WIDOW'];
+const genderOptions = ['MALE', 'FEMALE'];
+
 const relationshipOptions = [
-  {
-    value: 'brother',
-    label: 'Brother'
-  }
-];
-const cityOptions = [
-  {
-    value: 'bangalore',
-    label: 'Bangalore'
-  },
-  {
-    value: 'delhi',
-    label: 'Delhi'
-  },
-  {
-    value: 'mumbai',
-    label: 'Mumbai'
-  },
-  {
-    value: 'chennai',
-    label: 'Chennai'
-  }
-];
-
-const stateOptions = [
-  {
-    value: 'karnataka',
-    label: 'Karnataka'
-  },
-  {
-    value: 'up',
-    label: 'Uttar Pradesh'
-  },
-  {
-    value: 'ap',
-    label: 'Andhra Pradesh'
-  },
-  {
-    value: 'tn',
-    label: 'Tamil Nadu'
-  }
-];
-
-const countryOptions = [
-  {
-    value: 'india',
-    label: 'India'
-  }
+  'BROTHER',
+  'DAUGHTER',
+  'FATHER',
+  'GRAND DAUGHTER',
+  'GRAND FATHER',
+  'GRAND MOTHER',
+  'GRAND SON',
+  'HUSBAND',
+  'MOTHER',
+  'NEPHEW',
+  'NIECE',
+  'SISTER',
+  'SON',
+  'WIFE'
 ];
 
 class AppointeeDetails extends Component {
   state = {
     name: '',
     dob: '',
-    maritalStatus: '',
+    gender: '',
+    marital_status: '',
     relationship: '',
     checked: true,
     pincode: '',
     address: '',
     city: '',
     state: '',
-    country: ''
+    country: 'INDIA'
   }
 
   handleChange = name => event => {
@@ -83,12 +54,50 @@ class AppointeeDetails extends Component {
       this.setState({
         [name]: event.target.checked
       });
+    } else if (name === 'relationship') {
+      this.setState({
+        [name]: event
+      });
     } else {
       this.setState({
         [name]: event.target.value
       });
     }
   };
+
+  handleGenderRadioValue = name => index => {
+    this.setState({
+      [name]: genderOptions[index]
+    });
+  };
+
+  handleMaritalRadioValue = name => index => {
+    this.setState({
+      [name]: maritalOptions[index]
+    });
+  };
+
+  handlePincode = name => async (event) => {
+    const pincode = event.target.value;
+
+    this.setState({
+      [name]: pincode
+    });
+
+    if (pincode.length == 6) {
+      const res = await Api.get('/api/pincode/' + pincode);
+
+      if (res.pfwresponse.status_code === 200) {
+        this.setState({
+          city: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
+          state: res.pfwresponse.result[0].state_name
+        });
+      } else {
+        alert('Error');
+        console.log(res.pfwresponse.result.error);
+      }
+    }
+  }
 
   renderCorrespondenceAddress = () => {
     if (!this.state.checked) {
@@ -100,35 +109,51 @@ class AppointeeDetails extends Component {
               icon={location}
               width="40"
               label="Pincode"
-              id="cpincode"
-              onChange={this.handleChange('cpincode')} />
+              id="pincode"
+              value={this.state.pincode}
+              onChange={this.handlePincode('pincode')} />
           </div>
           <div className="InputField">
             <InputWithIcon
               type="text"
-              id="caddress"
+              id="address"
               label="Permanent address"
-              onChange={this.handleChange('caddress')} />
+              value={this.state.address}
+              onChange={this.handleChange('address')} />
           </div>
           <div className="InputField">
-            <Dropdown
-              options={cityOptions}
-              id="ccity"
+            <InputWithIcon
+              type="text"
+              id="landmark"
+              label="Landmark"
+              value={this.state.landmark}
+              onChange={this.handleChange('landmark')} />
+          </div>
+          <div className="InputField">
+            <InputWithIcon
+              disabled={true}
+              id="city"
               label="City"
-              onChange={this.handleChange('ccity')} />
+              disabled={true}
+              value={this.state.city}
+              onChange={this.handleChange('city')} />
           </div>
           <div className="InputField">
-            <Dropdown
-              options={stateOptions}
-              id="cstate"
+            <InputWithIcon
+              disabled={true}
+              id="state"
               label="State"
-              onChange={this.handleChange('cstate')} />
+              disabled={true}
+              value={this.state.state}
+              onChange={this.handleChange('state')} />
           </div>
           <div className="InputField">
-            <Dropdown
-              options={countryOptions}
+            <InputWithIcon
+              disabled={true}
               id="country"
               label="Country"
+              disabled={true}
+              value={this.state.country}
               onChange={this.handleChange('country')} />
           </div>
         </FormControl>
@@ -138,10 +163,43 @@ class AppointeeDetails extends Component {
     }
   }
 
+  handleClick = async () => {
+    let data = {
+      appointee: {}
+    }, address: {};
+    const formattedDob = this.state.dob.replace(/\\-/g, '/').split('-').reverse().join('/');
+
+    data['insurance_app_id'] =  5526920682799104;
+    data['appointee']['name'] = this.state.name;
+    data['appointee']['dob'] = formattedDob;
+    data['appointee']['gender'] = this.state.gender;
+    data['appointee']['marital_status'] = this.state.marital_status;
+    data['appointee']['relationship'] = this.state.relationship;
+
+    if (this.state.checked) {
+      data['a_addr_same'] = 'Y';
+    } else {
+      data['appointee_address'] = {
+        'pincode': this.state.pincode,
+        'addressline': this.state.address,
+        'landmark': this.state.landmark
+      };
+    }
+
+    const res = await Api.post('/api/insurance/profile', data);
+
+    if (res.pfwresponse.status_code === 200) {
+      this.props.history.push('professional-details');
+    } else {
+      alert('Error');
+      console.log(res.pfwresponse.result.error);
+    }
+  }
+
   bannerText = () => {
     return (
       <span>
-        Incase Nominee is minor, Appointee will <em><b>get the benefits</b></em>.
+        Incase Nominee is minor, Appointee will <em><b>get the benefits.</b></em>
       </span>
     );
   }
@@ -167,6 +225,7 @@ class AppointeeDetails extends Component {
         state={this.state}
         banner={true}
         bannerText={this.bannerText()}
+        handleClick={this.handleClick}
         >
         <FormControl fullWidth>
           <div className="InputField">
@@ -177,6 +236,7 @@ class AppointeeDetails extends Component {
               label="Full Name"
               class="FullName"
               id="full-name"
+              value={this.state.name}
               onChange={this.handleChange('name')}  />
           </div>
           <div className="InputField">
@@ -187,7 +247,19 @@ class AppointeeDetails extends Component {
               label="Date of birth"
               class="DOB"
               id="dob"
+              value={this.state.dob}
               onChange={this.handleChange('dob')} />
+          </div>
+          <div className="InputField">
+            <RadioWithIcon
+              icon={gender}
+              width="40"
+              label="Gender"
+              class="Gender"
+              options={genderOptions}
+              id="gender"
+              value={this.state.gender}
+              onChange={this.handleGenderRadioValue('gender')} />
           </div>
           <div className="InputField">
             <RadioWithIcon
@@ -197,7 +269,8 @@ class AppointeeDetails extends Component {
               class="MaritalStatus"
               options={maritalOptions}
               id="marital-status"
-              onChange={this.handleChange('maritalStatus')} />
+              value={this.state.marital_status}
+              onChange={this.handleMaritalRadioValue('marital_status')} />
           </div>
           <div className="InputField">
             <Dropdown
@@ -205,11 +278,12 @@ class AppointeeDetails extends Component {
               width="40"
               options={relationshipOptions}
               id="relationship"
-              label="Relationship with Nominee"
+              label="Relationship"
+              value={this.state.relationship}
               onChange={this.handleChange('relationship')} />
           </div>
         </FormControl>
-        <div className="CheckBlock" style={{marginBottom: 20}}>
+        <div className="CheckBlock" style={{marginBottom: 50}}>
           <Grid container spacing={16} alignItems="flex-end">
             <Grid item xs={2} style={{textAlign: 'center'}}>
               <Checkbox
@@ -220,7 +294,7 @@ class AppointeeDetails extends Component {
                 style={{width: 'auto', height: 'auto'}} />
             </Grid>
             <Grid item xs={10}>
-              <span style={{color: 'rgb(68, 68, 68)', fontSize: 16}}>Appotniee’s address is same as my address</span>
+              <span style={{color: 'rgb(68, 68, 68)', fontSize: 16}}>Apotniee’s address is same as my address</span>
             </Grid>
           </Grid>
         </div>

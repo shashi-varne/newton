@@ -12,13 +12,14 @@ class SelectGrp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedValue: '',
+      selectedValue: this.props.value,
       options: this.props.options
     };
   }
 
   handleChange = (event) => {
     this.setState({ selectedValue: event.target.value });
+    this.props.onChange(event.target.value);
   };
 
   render() {
@@ -26,12 +27,12 @@ class SelectGrp extends Component {
 
     const allOptions = options.map((option, i) => {
       return (
-        <MenuItem key={i} value={option.value}>{option.label}</MenuItem>
+        <MenuItem key={i} value={option}>{option}</MenuItem>
       );
     });
 
     return (
-      <FormControl className="Dropdown">
+      <FormControl className="Dropdown" disabled={this.props.disabled}>
         <InputLabel htmlFor={this.props.id}>{this.props.label} *</InputLabel>
         <Select
           value={this.state.selectedValue}
@@ -59,8 +60,10 @@ const Dropdown = (props) => (
       <SelectGrp
         options={props.options}
         id={props.id}
+        disabled={props.disabled}
         label={props.label}
-        onChange={props.handleChange} />
+        value={props.value}
+        onChange={props.onChange} />
     </Grid>
   </Grid>
 );

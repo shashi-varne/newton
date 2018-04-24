@@ -5,19 +5,35 @@ import InputWithIcon from '../../ui/InputWithIcon';
 import mother from '../../assets/mother_dark_icn.png';
 import father from '../../assets/father_dark_icn.png';
 import location from '../../assets/location_dark_icn.png';
+import Api from '../../service/api';
 
 class PersonalDetails2 extends Component {
   state = {
-    fullName: '',
-    dob: '',
-    gender: '',
-    maritalStatus: ''
+    mother_name: '',
+    father_name: '',
+    birth_place: ''
   }
 
-  handleInput = (e) => {
+  handleChange = name => event => {
     this.setState({
-      fullName: e.target.value
+      [name]: event.target.value
     });
+  };
+
+  handleClick = async () => {
+    const res = await Api.post('/api/insurance/profile', {
+      insurance_app_id: 5526920682799104,
+      father_name: this.state.father_name,
+      mother_name: this.state.mother_name,
+      birth_place: this.state.birth_place
+    });
+
+    if (res.pfwresponse.status_code === 200) {
+      this.props.history.push('contact-details-1');
+    } else {
+      alert('Error');
+      console.log(res.pfwresponse.result.error);
+    }
   }
 
   render() {
@@ -27,7 +43,7 @@ class PersonalDetails2 extends Component {
         count={true}
         total={5}
         current={1}
-        state={this.state}
+        handleClick={this.handleClick}
         >
         <FormControl fullWidth>
           <div className="InputField">
@@ -38,7 +54,8 @@ class PersonalDetails2 extends Component {
               label="Mother's name"
               class="Mothername"
               id="mother-name"
-              onChange={this.handleInput} />
+              value={this.state.mother_name}
+              onChange={this.handleChange('mother_name')} />
           </div>
           <div className="InputField">
             <InputWithIcon
@@ -47,7 +64,9 @@ class PersonalDetails2 extends Component {
               width="40"
               label="Father's name"
               class="FatherName"
-              id="father-name" />
+              id="father-name"
+              value={this.state.father_name}
+              onChange={this.handleChange('father_name')} />
           </div>
           <div className="InputField">
             <InputWithIcon
@@ -55,7 +74,9 @@ class PersonalDetails2 extends Component {
               width="40"
               label="Place of birth"
               class="Place"
-              id="birth-place" />
+              id="birth-place"
+              value={this.state.birth_place}
+              onChange={this.handleChange('birth_place')} />
           </div>
         </FormControl>
       </Container>

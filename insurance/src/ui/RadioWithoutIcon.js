@@ -29,7 +29,8 @@ class RadioGrp extends Component {
     };
   }
 
-  toggleRadioBtn(index){
+  toggleRadioBtn = (index) => {
+    this.props.onChange(index);
     this.setState({
       selectedIndex: index,
       selectedValue: this.state.options[index],
@@ -43,7 +44,7 @@ class RadioGrp extends Component {
     const allOptions = options.map((option, i) => {
       return (
         <Grid item xs={6} key={i} style={{flexBasis: 'unset'}}>
-          <RadioBtn type={this.props.type} isChecked={(this.state.selectedIndex === i)} text={option} value={option} index={i} handler={this.toggleRadioBtn.bind(this)} />
+          <RadioBtn type={this.props.type} isChecked={(this.state.selectedIndex === i)} text={option} value={option} index={i} handler={this.toggleRadioBtn} />
         </Grid>
       );
     });
@@ -62,7 +63,7 @@ const RadioWithoutIcon = (props) => (
       <span style={{color: '#444', fontSize: 18,fontFamily: 'Roboto', fontWeight: 500}}>{props.label}</span>
     </Grid>
     <Grid item xs={6}>
-      <RadioGrp options={props.options} type={props.type}/>
+      <RadioGrp options={props.options} type={props.type} value={props.value} onChange={props.onChange} />
     </Grid>
   </Grid>
 );

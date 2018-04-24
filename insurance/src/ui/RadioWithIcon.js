@@ -11,9 +11,12 @@ class RadioBtn extends Component {
 
   render() {
     return (
-      <div className="radio-btn-group" onClick={() => this.handleClick()}>
-        <div className={this.props.isChecked ? "RadioButton checked" : "RadioButton unchecked"} data-value={this.props.value}>
-          <label>{this.props.text}</label>
+      <div
+        className="radio-btn-group"
+        onClick={() => this.handleClick()} >
+        <div
+          className={this.props.isChecked ? "RadioButton checked" : "RadioButton unchecked"} data-value={this.props.value} >
+          <label className={this.props.type}>{this.props.text}</label>
         </div>
       </div>
     );
@@ -30,7 +33,8 @@ class RadioGrp extends Component {
     };
   }
 
-  toggleRadioBtn(index){
+  toggleRadioBtn = (index) => {
+    this.props.onChange(index);
     this.setState({
       selectedIndex: index,
       selectedValue: this.state.options[index],
@@ -44,14 +48,26 @@ class RadioGrp extends Component {
     const allOptions = options.map((option, i) => {
       if (this.props.type === 'professional') {
         return (
-          <Grid item xs={6} key={i} style={{flexBasis: 'unset'}}>
-            <RadioBtn isChecked={(this.state.selectedIndex === i)} text={option} value={option} index={i} handler={this.toggleRadioBtn.bind(this)} />
+          <Grid item xs={6} key={i} style={{flexBasis: 'unset', maxWidth: '100%'}}>
+            <RadioBtn
+              isChecked={(this.state.selectedIndex === i || option === this.props.value)}
+              text={option}
+              value={option}
+              index={i}
+              type={this.props.type}
+              handler={this.toggleRadioBtn} />
           </Grid>
         );
       } else {
         return (
           <Grid item xs={6} key={i}>
-            <RadioBtn isChecked={(this.state.selectedIndex === i)} text={option} value={option} index={i} handler={this.toggleRadioBtn.bind(this)} />
+            <RadioBtn
+              isChecked={(this.state.selectedIndex === i || option === this.props.value)}
+              text={option}
+              value={option}
+              index={i}
+              type={this.props.type}
+              handler={this.toggleRadioBtn} />
           </Grid>
         );
       }
@@ -76,7 +92,12 @@ const RadioWithIcon = (props) => (
         width={props.width} />
     </Grid>
     <Grid item xs={10}>
-      <RadioGrp label={props.label} options={props.options} type={props.type}/>
+      <RadioGrp
+        label={props.label}
+        options={props.options}
+        type={props.type}
+        value={props.value}
+        onChange={props.onChange} />
     </Grid>
   </Grid>
 );

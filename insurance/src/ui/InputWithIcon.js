@@ -14,8 +14,10 @@ const InputWithIcon = (props) => (
     </Grid>
     <Grid item xs={10}>
       <Input
+        disabled={props.disabled}
         type={props.type}
         fullWidth={true}
+        value={props.value}
         required={true}
         shrink={props.shrink}
         class={props.class}

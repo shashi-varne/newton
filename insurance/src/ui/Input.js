@@ -7,6 +7,7 @@ const Input = (props) => {
       <TextField
         type={props.type}
         defaultValue={props.default}
+        value={props.value}
         helperText={props.helperText}
         InputLabelProps={{
           shrink: true,
@@ -21,8 +22,10 @@ const Input = (props) => {
   } else {
     return (
       <TextField
+        disabled={props.disabled}
         type={props.type}
         defaultValue={props.default}
+        value={props.value}
         helperText={props.helperText}
         fullWidth={props.fullWidth}
         required={props.required}
