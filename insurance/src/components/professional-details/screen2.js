@@ -5,16 +5,21 @@ import InputWithIcon from '../../ui/InputWithIcon';
 import name from '../../assets/name_present_employer_dark_icn.png';
 import location from '../../assets/location_dark_icn.png';
 import Api from '../../service/api';
+import qs from 'query-string';
 
 class ProfessionalDetails2 extends Component {
-  state = {
-    show_loader: false,
-    employer_name: '',
-    pincode: '',
-    address: '',
-    landmark: '',
-    city: '',
-    state: ''
+  constructor(props) {
+    super(props);
+    this.state = {
+      show_loader: false,
+      employer_name: '',
+      pincode: '',
+      address: '',
+      landmark: '',
+      city: '',
+      state: '',
+      params: qs.parse(props.history.location.search)
+    }
   }
 
   setStateAsync(state) {
@@ -25,7 +30,7 @@ class ProfessionalDetails2 extends Component {
 
   async componentDidMount() {
     this.setState({show_loader: true});
-    const res = await Api.get('/api/insurance/profile/5668600916475904', {
+    const res = await Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
       groups: 'professional'
     });
 
@@ -74,7 +79,7 @@ class ProfessionalDetails2 extends Component {
   handleClick = async () => {
     let data = {};
 
-    data['insurance_app_id'] =  5668600916475904;
+    data['insurance_app_id'] =  this.state.params.insurance_id;
     data['employer_name'] = this.state.employer_name;
     data['employer_address'] = {
       'pincode': this.state.pincode,
@@ -88,7 +93,10 @@ class ProfessionalDetails2 extends Component {
 
     if (res.pfwresponse.status_code === 200) {
       this.setState({show_loader: false});
-      this.props.history.push('summary');
+      this.props.history.push({
+        pathname: '/summary',
+        search: '?insurance_id='+this.state.params.insurance_id
+      });
     } else {
       this.setState({show_loader: false});
       alert('Error');

@@ -6,13 +6,18 @@ import mother from '../../assets/mother_dark_icn.png';
 import father from '../../assets/father_dark_icn.png';
 import location from '../../assets/location_dark_icn.png';
 import Api from '../../service/api';
+import qs from 'query-string';
 
 class PersonalDetails2 extends Component {
-  state = {
-    mother_name: '',
-    father_name: '',
-    birth_place: '',
-    show_loader: false
+  constructor(props) {
+    super(props);
+    this.state = {
+      mother_name: '',
+      father_name: '',
+      birth_place: '',
+      show_loader: false,
+      params: qs.parse(props.history.location.search)
+    }
   }
 
   setStateAsync(state) {
@@ -23,7 +28,7 @@ class PersonalDetails2 extends Component {
 
   async componentDidMount() {
     this.setState({show_loader: true});
-    const res = await Api.get('/api/insurance/profile/5668600916475904', {
+    const res = await Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
       groups: 'personal'
     });
 
@@ -46,7 +51,7 @@ class PersonalDetails2 extends Component {
   handleClick = async () => {
     this.setState({show_loader: true});
     const res = await Api.post('/api/insurance/profile', {
-      insurance_app_id: 5668600916475904,
+      insurance_app_id: this.state.params.insurance_id,
       father_name: this.state.father_name,
       mother_name: this.state.mother_name,
       birth_place: this.state.birth_place
@@ -55,9 +60,15 @@ class PersonalDetails2 extends Component {
     if (res.pfwresponse.status_code === 200) {
       this.setState({show_loader: false});
       if (this.props.edit) {
-        this.props.history.push('summary');
+        this.props.history.push({
+          pathname: '/summary',
+          search: '?insurance_id='+this.state.params.insurance_id
+        });
       } else {
-        this.props.history.push('contact');
+        this.props.history.push({
+          pathname: '/contact',
+          search: '?insurance_id='+this.state.params.insurance_id
+        });
       }
     } else {
       this.setState({show_loader: false});

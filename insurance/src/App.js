@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Router,
+  BrowserRouter,
   Route,
   Switch
 } from 'react-router-dom';
@@ -16,7 +16,6 @@ import ProfessionalDetails1 from './components/professional-details/screen1';
 import ProfessionalDetails2 from './components/professional-details/screen2';
 import Summary from './components/insurance-summary/screen1';
 import NotFound from './components/NotFound';
-import { configureHistory } from './configureHistory.js';
 
 const theme = createMuiTheme({
   palette: {
@@ -44,14 +43,12 @@ const theme = createMuiTheme({
   }
 });
 
-const history = configureHistory();
-
 const App = () => (
   <MuiThemeProvider theme={theme}>
-    <Router history={history}>
+    <BrowserRouter>
       <Switch>
         <Route exact path="/" component={ PersonalDetails1 } />
-        <Route path="/native-summary" component={ Summary } />
+        <Route path="/resume" component={ Summary } />
         <Route path="/personal" component={ PersonalDetails2 } />
         <Route path="/contact" component={ ContactDetails1 } />
         <Route path="/contact1" component={ ContactDetails2 } />
@@ -60,6 +57,7 @@ const App = () => (
         <Route path="/professional" component={ ProfessionalDetails1 } />
         <Route path="/professional1" component={ ProfessionalDetails2 } />
         <Route path="/summary" component={ Summary } />
+        {/* Edit paths */}
         <Route path="/edit-personal" render={(props) => <PersonalDetails1 {...props} edit={true} /> } />
         <Route path="/edit-personal1" render={(props) => <PersonalDetails2 {...props} edit={true} /> } />
         <Route path="/edit-contact" render={(props) => <ContactDetails1 {...props} edit={true} /> } />
@@ -70,7 +68,7 @@ const App = () => (
         <Route path="/edit-professional1" render={(props) => <ProfessionalDetails2 {...props} edit={true} /> } />
         <Route component={ NotFound }/>
       </Switch>
-    </Router>
+    </BrowserRouter>
   </MuiThemeProvider>
 );
 

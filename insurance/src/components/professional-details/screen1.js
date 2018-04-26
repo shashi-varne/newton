@@ -11,6 +11,7 @@ import designation from '../../assets/designation_dark_icn.png';
 import income from '../../assets/annual_income_dark_icn.png';
 import Dropdown from '../../ui/Select';
 import Api from '../../service/api';
+import qs from 'query-string';
 
 const declareOptions = ['Y', 'N'];
 const occupationDetailOptions = ["SELF-EMPLOYED","SALRIED","STUDENT"];
@@ -85,16 +86,20 @@ const qualification = [
 ];
 
 class ProfessionalDetails1 extends Component {
-  state = {
-    show_loader: false,
-    occupation_detail: '',
-    occupation_category: '',
-    annual_income: '',
-    pan_number: '',
-    education_qualification: '',
-    designation: '',
-    is_politically_exposed: 'N',
-    is_criminal: 'N'
+  constructor(props) {
+    super(props);
+    this.state = {
+      show_loader: false,
+      occupation_detail: '',
+      occupation_category: '',
+      annual_income: '',
+      pan_number: '',
+      education_qualification: '',
+      designation: '',
+      is_politically_exposed: 'N',
+      is_criminal: 'N',
+      params: qs.parse(props.history.location.search)
+    }
   }
 
   setStateAsync(state) {
@@ -105,7 +110,7 @@ class ProfessionalDetails1 extends Component {
 
   async componentDidMount() {
     this.setState({show_loader: true});
-    const res = await Api.get('/api/insurance/profile/5668600916475904', {
+    const res = await Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
       groups: 'professional,misc'
     });
 
@@ -159,7 +164,7 @@ class ProfessionalDetails1 extends Component {
   handleClick = async () => {
     let data = {};
 
-    data['insurance_app_id'] =  5668600916475904;
+    data['insurance_app_id'] =  this.state.params.insurance_id;
     data['occupation_detail'] = this.state.occupation_detail;
     data['occupation_category'] = this.state.occupation_category;
     data['annual_income'] = this.state.annual_income;
@@ -180,12 +185,21 @@ class ProfessionalDetails1 extends Component {
       this.setState({show_loader: false});
       if (this.props.edit) {
         if (this.state.occupation_detail === 'SALRIED') {
-          this.props.history.push('edit-professional1');
+          this.props.history.push({
+            pathname: '/edit-professional1',
+            search: '?insurance_id='+this.state.params.insurance_id
+          });
         } else {
-          this.props.history.push('summary');
+          this.props.history.push({
+            pathname: '/summary',
+            search: '?insurance_id='+this.state.params.insurance_id
+          });
         }
       } else {
-        this.props.history.push('professional1');
+        this.props.history.push({
+          pathname: '/professional1',
+          search: '?insurance_id='+this.state.params.insurance_id
+        });
       }
     } else {
       this.setState({show_loader: false});

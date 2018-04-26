@@ -6,12 +6,17 @@ import MobileInputWithIcon from '../../ui/MobileInputWithIcon';
 import email from '../../assets/email_dark_icn.png';
 import phone from '../../assets/phone_dark_icn.png';
 import Api from '../../service/api';
+import qs from 'query-string';
 
 class ContactDetails1 extends Component {
-  state = {
-    email: '',
-    mobile_no: '',
-    show_loader: false
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      mobile_no: '',
+      show_loader: false,
+      params: qs.parse(props.history.location.search)
+    }
   }
 
   setStateAsync(state) {
@@ -22,7 +27,7 @@ class ContactDetails1 extends Component {
 
   async componentDidMount() {
     this.setState({show_loader: true});
-    const res = await Api.get('/api/insurance/profile/5668600916475904', {
+    const res = await Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
       groups: 'contact'
     });
 
@@ -44,7 +49,7 @@ class ContactDetails1 extends Component {
   handleClick = async () => {
     this.setState({show_loader: true});
     const res = await Api.post('/api/insurance/profile', {
-      insurance_app_id: 5668600916475904,
+      insurance_app_id: this.state.params.insurance_id,
       email: this.state.email,
       mobile_no: this.state.mobile_no
     });
@@ -52,9 +57,15 @@ class ContactDetails1 extends Component {
     if (res.pfwresponse.status_code === 200) {
       this.setState({show_loader: true});
       if (this.props.edit) {
-        this.props.history.push('edit-contact1');
+        this.props.history.push({
+          pathname: '/edit-contact1',
+          search: '?insurance_id='+this.state.params.insurance_id
+        });
       } else {
-        this.props.history.push('contact1');
+        this.props.history.push({
+          pathname: '/contact1',
+          search: '?insurance_id='+this.state.params.insurance_id
+        });
       }
     } else {
       this.setState({show_loader: false});

@@ -38,7 +38,7 @@ class Container extends Component {
       return (
         <div className="Loader">
           <div className="LoaderOverlay">
-            <img src={loader} />
+            <img src={loader} alt=""/>
           </div>
         </div>
       );

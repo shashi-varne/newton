@@ -11,6 +11,7 @@ import loader from '../../assets/loader_gif.gif';
 import Api from '../../service/api';
 import Modal from 'material-ui/Modal';
 import Typography from 'material-ui/Typography';
+import qs from 'query-string';
 
 const income_pairs = [
   {
@@ -60,7 +61,8 @@ class Summary extends Component {
       contact: {},
       nominee: {},
       appointee: {},
-      professional: {}
+      professional: {},
+      params: qs.parse(props.history.location.search)
     };
   }
 
@@ -220,6 +222,7 @@ class Summary extends Component {
 
   handleClick = () => {
     this.setState({openModal: true});
+    console.log();
     window.location.href = this.state.payment_link;
   }
 
@@ -232,7 +235,7 @@ class Summary extends Component {
       >
         <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor:'#fff', borderRadius: 4, minWidth: 320, padding: 25, textAlign: 'center'}}>
           <div style={{padding: '20px 0 30px'}}>
-            <img src={loader} />
+            <img src={loader} alt=""/>
           </div>
           <Typography variant="subheading" id="simple-modal-description" style={{color: '#444'}}>
             Wait a moment, you will be redirected to <b>HDFC</b> for the payment.

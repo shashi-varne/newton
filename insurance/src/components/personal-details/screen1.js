@@ -8,17 +8,22 @@ import dob from '../../assets/dob_dark_icn.png';
 import gender from '../../assets/gender_dark_icn.png';
 import marital from '../../assets/marital_status_dark_icn.png';
 import Api from '../../service/api';
+import qs from 'query-string';
 
 const maritalOptions = ['UNMARRIED', 'MARRIED', 'DIVORCED', 'WIDOW'];
 const genderOptions = ['MALE', 'FEMALE'];
 
 class PersonalDetails1 extends Component {
-  state = {
-    show_loader: false,
-    name: '',
-    dob: '',
-    gender: '',
-    marital_status: ''
+  constructor(props) {
+    super(props);
+    this.state = {
+      show_loader: false,
+      name: '',
+      dob: '',
+      gender: '',
+      marital_status: '',
+      params: qs.parse(props.history.location.search)
+    }
   }
 
   setStateAsync(state) {
@@ -29,7 +34,7 @@ class PersonalDetails1 extends Component {
 
   async componentDidMount() {
     this.setState({show_loader: true});
-    const res = await Api.get('/api/insurance/profile/5668600916475904', {
+    const res = await Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
       groups: 'personal'
     });
 
@@ -66,9 +71,9 @@ class PersonalDetails1 extends Component {
     const formattedDob = this.state.dob.replace(/\\-/g, '/').split('-').reverse().join('/');
 
     this.setState({show_loader: true});
-    
+
     const res = await Api.post('/api/insurance/profile', {
-      insurance_app_id: 5668600916475904,
+      insurance_app_id: this.state.params.insurance_id,
       name: this.state.name,
       dob: formattedDob,
       gender: this.state.gender,
@@ -78,9 +83,15 @@ class PersonalDetails1 extends Component {
     if (res.pfwresponse.status_code === 200) {
       this.setState({show_loader: false});
       if (this.props.edit) {
-        this.props.history.push('edit-personal1');
+        this.props.history.push({
+          pathname: '/edit-personal1',
+          search: '?insurance_id='+this.state.params.insurance_id
+        });
       } else {
-        this.props.history.push('personal');
+        this.props.history.push({
+          pathname: '/personal',
+          search: '?insurance_id='+this.state.params.insurance_id
+        });
       }
     } else {
       this.setState({show_loader: false});

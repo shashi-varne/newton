@@ -13,6 +13,7 @@ import Grid from 'material-ui/Grid';
 import Dropdown from '../../ui/Select';
 import Checkbox from 'material-ui/Checkbox';
 import Api from '../../service/api';
+import qs from 'query-string';
 
 const maritalOptions = ['UNMARRIED', 'MARRIED', 'DIVORCED', 'WIDOW'];
 const genderOptions = ['MALE', 'FEMALE'];
@@ -35,21 +36,25 @@ const relationshipOptions = [
 ];
 
 class NomineeDetails extends Component {
-  state = {
-    show_loader: false,
-    age: '',
-    name: '',
-    dob: '',
-    gender: '',
-    marital_status: '',
-    relationship: '',
-    checked: true,
-    pincode: '',
-    addressline: '',
-    landmark: '',
-    city: '',
-    state: '',
-    country: 'INDIA'
+  constructor(props) {
+    super(props);
+    this.state = {
+      show_loader: false,
+      age: '',
+      name: '',
+      dob: '',
+      gender: '',
+      marital_status: '',
+      relationship: '',
+      checked: true,
+      pincode: '',
+      addressline: '',
+      landmark: '',
+      city: '',
+      state: '',
+      country: 'INDIA',
+      params: qs.parse(props.history.location.search)
+    }
   }
 
   setStateAsync(state) {
@@ -60,7 +65,7 @@ class NomineeDetails extends Component {
 
   async componentDidMount() {
     this.setState({show_loader: true});
-    const res = await Api.get('/api/insurance/profile/5668600916475904', {
+    const res = await Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
       groups: 'nominee'
     });
 
@@ -201,7 +206,7 @@ class NomineeDetails extends Component {
     };
     const formattedDob = this.state.dob.replace(/\\-/g, '/').split('-').reverse().join('/');
 
-    data['insurance_app_id'] =  5668600916475904;
+    data['insurance_app_id'] =  this.state.params.insurance_id;
     data['nominee']['name'] = this.state.name;
     data['nominee']['dob'] = formattedDob;
     data['nominee']['gender'] = this.state.gender;
@@ -224,15 +229,27 @@ class NomineeDetails extends Component {
       this.setState({show_loader: false});
       if (this.props.edit) {
         if (this.state.age < 18) {
-          this.props.history.push('edit-appointee');
+          this.props.history.push({
+            pathname: '/edit-appointee',
+            search: '?insurance_id='+this.state.params.insurance_id
+          });
         } else {
-          this.props.history.push('summary');
+          this.props.history.push({
+            pathname: '/summary',
+            search: '?insurance_id='+this.state.params.insurance_id
+          });
         }
       } else {
         if (this.state.age < 18) {
-          this.props.history.push('appointee');
+          this.props.history.push({
+            pathname: '/appointee',
+            search: '?insurance_id='+this.state.params.insurance_id
+          });
         } else {
-          this.props.history.push('professional');
+          this.props.history.push({
+            pathname: '/professional',
+            search: '?insurance_id='+this.state.params.insurance_id
+          });
         }
       }
     } else {

@@ -6,22 +6,27 @@ import location from '../../assets/location_dark_icn.png';
 import Grid from 'material-ui/Grid';
 import Checkbox from 'material-ui/Checkbox';
 import Api from '../../service/api';
+import qs from 'query-string';
 
 class ContactDetails2 extends Component {
-  state = {
-    show_loader: false,
-    pincode: '',
-    addressline: '',
-    landmark: '',
-    city: '',
-    state: '',
-    checked: true,
-    cpincode: '',
-    caddress: '',
-    clandmark: '',
-    ccity: '',
-    cstate: '',
-    country: 'INDIA'
+  constructor(props) {
+    super(props);
+    this.state = {
+      show_loader: false,
+      pincode: '',
+      addressline: '',
+      landmark: '',
+      city: '',
+      state: '',
+      checked: true,
+      cpincode: '',
+      caddress: '',
+      clandmark: '',
+      ccity: '',
+      cstate: '',
+      country: 'INDIA',
+      params: qs.parse(props.history.location.search)
+    }
   }
 
   setStateAsync(state) {
@@ -32,7 +37,7 @@ class ContactDetails2 extends Component {
 
   async componentDidMount() {
     this.setState({show_loader: true});
-    const res = await Api.get('/api/insurance/profile/5668600916475904', {
+    const res = await Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
       groups: 'contact'
     });
 
@@ -107,11 +112,11 @@ class ContactDetails2 extends Component {
     };
 
     if (this.state.checked) {
-        address['insurance_app_id'] =  5668600916475904;
+        address['insurance_app_id'] =  this.state.params.insurance_id;
         address['p_addr'] = permanent_address;
         address['c_addr_same'] = 'Y';
     } else {
-        address['insurance_app_id'] = 5668600916475904;
+        address['insurance_app_id'] = this.state.params.insurance_id;
         address['p_addr'] = permanent_address;
         address['c_addr'] = {
           'pincode': this.state.cpincode,
@@ -127,9 +132,15 @@ class ContactDetails2 extends Component {
     if (res.pfwresponse.status_code === 200) {
       this.setState({show_loader: false});
       if (this.props.edit) {
-        this.props.history.push('summary');
+        this.props.history.push({
+          pathname: '/summary',
+          search: '?insurance_id='+this.state.params.insurance_id
+        });
       } else {
-        this.props.history.push('nominee');
+        this.props.history.push({
+          pathname: '/nominee',
+          search: '?insurance_id='+this.state.params.insurance_id
+        });
       }
     } else {
       this.setState({show_loader: false});

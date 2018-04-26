@@ -13,6 +13,7 @@ import Grid from 'material-ui/Grid';
 import Dropdown from '../../ui/Select';
 import Checkbox from 'material-ui/Checkbox';
 import Api from '../../service/api';
+import qs from 'query-string';
 
 const maritalOptions = ['UNMARRIED', 'MARRIED', 'DIVORCED', 'WIDOW'];
 const genderOptions = ['MALE', 'FEMALE'];
@@ -35,20 +36,24 @@ const relationshipOptions = [
 ];
 
 class AppointeeDetails extends Component {
-  state = {
-    show_loader: false,
-    name: '',
-    dob: '',
-    gender: '',
-    marital_status: '',
-    relationship: '',
-    checked: true,
-    pincode: '',
-    addressline: '',
-    landmark: '',
-    city: '',
-    state: '',
-    country: 'INDIA'
+  constructor(props) {
+    super(props);
+    this.state = {
+      show_loader: false,
+      name: '',
+      dob: '',
+      gender: '',
+      marital_status: '',
+      relationship: '',
+      checked: true,
+      pincode: '',
+      addressline: '',
+      landmark: '',
+      city: '',
+      state: '',
+      country: 'INDIA',
+      params: qs.parse(props.history.location.search)
+    }
   }
 
   setStateAsync(state) {
@@ -59,7 +64,7 @@ class AppointeeDetails extends Component {
 
   async componentDidMount() {
     this.setState({show_loader: true});
-    const res = await Api.get('/api/insurance/profile/5668600916475904', {
+    const res = await Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
       groups: 'appointee'
     });
 
@@ -199,7 +204,7 @@ class AppointeeDetails extends Component {
     };
     const formattedDob = this.state.dob.replace(/\\-/g, '/').split('-').reverse().join('/');
 
-    data['insurance_app_id'] =  5668600916475904;
+    data['insurance_app_id'] =  this.state.params.insurance_id;
     data['appointee']['name'] = this.state.name;
     data['appointee']['dob'] = formattedDob;
     data['appointee']['gender'] = this.state.gender;
@@ -221,9 +226,15 @@ class AppointeeDetails extends Component {
     if (res.pfwresponse.status_code === 200) {
       this.setState({show_loader: false});
       if (this.props.edit) {
-        this.props.history.push('summary');
+        this.props.history.push({
+          pathname: '/summary',
+          search: '?insurance_id='+this.state.params.insurance_id
+        });
       } else {
-        this.props.history.push('professional');
+        this.props.history.push({
+          pathname: '/professional',
+          search: '?insurance_id='+this.state.params.insurance_id
+        });
       }
     } else {
       this.setState({show_loader: false});
