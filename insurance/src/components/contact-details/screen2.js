@@ -9,6 +9,7 @@ import Api from '../../service/api';
 
 class ContactDetails2 extends Component {
   state = {
+    show_loader: false,
     pincode: '',
     addressline: '',
     landmark: '',
@@ -30,6 +31,7 @@ class ContactDetails2 extends Component {
   }
 
   async componentDidMount() {
+    this.setState({show_loader: true});
     const res = await Api.get('/api/insurance/profile/5668600916475904', {
       groups: 'contact'
     });
@@ -37,6 +39,7 @@ class ContactDetails2 extends Component {
     const { permanent_addr, corr_addr, corr_address_same } = res.pfwresponse.result.profile;
 
     await this.setStateAsync({
+      show_loader: false,
       pincode: permanent_addr.pincode,
       addressline: permanent_addr.addressline,
       landmark: permanent_addr.landmark,
@@ -117,11 +120,19 @@ class ContactDetails2 extends Component {
         }
     }
 
+    this.setState({show_loader: true});
+
     const res = await Api.post('/api/insurance/profile', address);
 
     if (res.pfwresponse.status_code === 200) {
-      this.props.history.push('nominee-details');
+      this.setState({show_loader: false});
+      if (this.props.edit) {
+        this.props.history.push('summary');
+      } else {
+        this.props.history.push('nominee');
+      }
     } else {
+      this.setState({show_loader: false});
       alert('Error');
       console.log(res.pfwresponse.result.error);
     }
@@ -196,29 +207,21 @@ class ContactDetails2 extends Component {
     }
   }
 
-  componentDidUpdate() {
-    var body = document.getElementsByTagName('body')[0].offsetHeight;
-    var client = document.getElementsByClassName('Container-wrapper-1')[0].offsetHeight;
-
-    if (client > body) {
-      document.getElementsByClassName('Footer')[0].style.position = "relative" ;
-    } else {
-      document.getElementsByClassName('Footer')[0].style.position = "fixed" ;
-    }
-  }
-
   render() {
     return (
       <Container
-        title={'Contact Details'}
+        showLoader={this.state.show_loader}
+        title={(this.props.edit) ? 'Edit Contact Details' : 'Contact Details'}
         count={true}
-        total={5}
+        total={4}
         current={2}
         banner={true}
         bannerText={this.bannerText()}
         handleClick={this.handleClick}
+        edit={this.props.edit}
+        buttonTitle="Save Details"
         >
-        <div className="SectionHead" style={{marginBottom: 15, color: 'rgb(68,68,68)', fontSize: 18, fontFamily: 'Roboto', fontWeight: 500}}>
+        <div className="SectionHead" style={{marginBottom: 15, color: 'rgb(68,68,68)', fontSize: 14, fontFamily: 'Roboto', fontWeight: 500}}>
           Permanent address
         </div>
         <FormControl fullWidth>
@@ -265,7 +268,7 @@ class ContactDetails2 extends Component {
               onChange={this.handleChange('state')} />
           </div>
         </FormControl>
-        <div className="SectionHead" style={{marginBottom: 15, color: 'rgb(68,68,68)', fontSize: 18, fontFamily: 'Roboto', fontWeight: 500}}>
+        <div className="SectionHead" style={{marginBottom: 15, color: 'rgb(68,68,68)', fontSize: 14, fontFamily: 'Roboto', fontWeight: 500}}>
           Correspondence address
         </div>
         <div className="CheckBlock" style={{marginBottom: 20}}>
@@ -278,7 +281,7 @@ class ContactDetails2 extends Component {
                 onChange={this.handleChange('checked')} />
             </Grid>
             <Grid item xs={10}>
-              <span style={{color: 'rgb(68, 68, 68)', fontSize: 16}}>Correspondence address same as permanent address</span>
+              <span style={{color: 'rgb(68, 68, 68)', fontSize: 14}}>Correspondence address same as permanent address</span>
             </Grid>
           </Grid>
         </div>

@@ -10,7 +10,8 @@ import Api from '../../service/api';
 class ContactDetails1 extends Component {
   state = {
     email: '',
-    mobile_no: ''
+    mobile_no: '',
+    show_loader: false
   }
 
   setStateAsync(state) {
@@ -20,6 +21,7 @@ class ContactDetails1 extends Component {
   }
 
   async componentDidMount() {
+    this.setState({show_loader: true});
     const res = await Api.get('/api/insurance/profile/5668600916475904', {
       groups: 'contact'
     });
@@ -27,6 +29,7 @@ class ContactDetails1 extends Component {
     const { email, mobile_no } = res.pfwresponse.result.profile;
 
     await this.setStateAsync({
+      show_loader: false,
       email: email,
       mobile_no: mobile_no
     });
@@ -39,6 +42,7 @@ class ContactDetails1 extends Component {
   };
 
   handleClick = async () => {
+    this.setState({show_loader: true});
     const res = await Api.post('/api/insurance/profile', {
       insurance_app_id: 5668600916475904,
       email: this.state.email,
@@ -46,8 +50,14 @@ class ContactDetails1 extends Component {
     });
 
     if (res.pfwresponse.status_code === 200) {
-      this.props.history.push('contact-details-2');
+      this.setState({show_loader: true});
+      if (this.props.edit) {
+        this.props.history.push('edit-contact1');
+      } else {
+        this.props.history.push('contact1');
+      }
     } else {
+      this.setState({show_loader: false});
       alert('Error');
       console.log(res.pfwresponse.result.error);
     }
@@ -64,13 +74,16 @@ class ContactDetails1 extends Component {
   render() {
     return (
       <Container
-        title={'Contact Details'}
+        showLoader={this.state.show_loader}
+        title={(this.props.edit) ? 'Edit Contact Details' : 'Contact Details'}
         count={true}
-        total={5}
+        total={4}
         current={2}
         banner={true}
         bannerText={this.bannerText()}
         handleClick={this.handleClick}
+        edit={this.props.edit}
+        buttonTitle="Save & Continue"
         >
         <FormControl fullWidth>
           <div className="InputField">

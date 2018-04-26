@@ -36,6 +36,8 @@ const relationshipOptions = [
 
 class NomineeDetails extends Component {
   state = {
+    show_loader: false,
+    age: '',
     name: '',
     dob: '',
     gender: '',
@@ -50,7 +52,6 @@ class NomineeDetails extends Component {
     country: 'INDIA'
   }
 
-
   setStateAsync(state) {
     return new Promise((resolve) => {
       this.setState(state, resolve)
@@ -58,6 +59,7 @@ class NomineeDetails extends Component {
   }
 
   async componentDidMount() {
+    this.setState({show_loader: true});
     const res = await Api.get('/api/insurance/profile/5668600916475904', {
       groups: 'nominee'
     });
@@ -65,6 +67,8 @@ class NomineeDetails extends Component {
     const { nominee_address_same, nominee, nominee_address } = res.pfwresponse.result.profile;
 
     await this.setStateAsync({
+      show_loader: false,
+      age: this.calculateAge(nominee.dob),
       name: nominee.name,
       dob: nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('-'),
       gender: nominee.gender,
@@ -213,15 +217,40 @@ class NomineeDetails extends Component {
         'landmark': this.state.landmark
       };
     }
-
+    this.setState({show_loader: true});
     const res = await Api.post('/api/insurance/profile', data);
 
     if (res.pfwresponse.status_code === 200) {
-      this.props.history.push('appointee-details');
+      this.setState({show_loader: false});
+      if (this.props.edit) {
+        if (this.state.age < 18) {
+          this.props.history.push('edit-appointee');
+        } else {
+          this.props.history.push('summary');
+        }
+      } else {
+        if (this.state.age < 18) {
+          this.props.history.push('appointee');
+        } else {
+          this.props.history.push('professional');
+        }
+      }
     } else {
+      this.setState({show_loader: false});
       alert('Error');
       console.log(res.pfwresponse.result.error);
     }
+  }
+
+  calculateAge = (birthday) => {
+    var today = new Date();
+    var birthDate = new Date(birthday);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
   }
 
   bannerText = () => {
@@ -232,28 +261,20 @@ class NomineeDetails extends Component {
     );
   }
 
-  componentDidUpdate() {
-    var body = document.getElementsByTagName('body')[0].offsetHeight;
-    var client = document.getElementsByClassName('Container-wrapper-1')[0].offsetHeight;
-
-    if (client > body) {
-      document.getElementsByClassName('Footer')[0].style.position = "relative" ;
-    } else {
-      document.getElementsByClassName('Footer')[0].style.position = "fixed" ;
-    }
-  }
-
   render() {
     return (
       <Container
-        title={'Nominee Details'}
+        showLoader={this.state.show_loader}
+        title={(this.props.edit) ? 'Edit Nominee Details' : 'Nominee Details'}
         count={true}
-        total={5}
+        total={4}
         current={3}
         state={this.state}
         banner={true}
         bannerText={this.bannerText()}
         handleClick={this.handleClick}
+        edit={this.props.edit}
+        buttonTitle={(this.state.age < 18) ? "Save & Continue" : "Save Details"}
         >
         <FormControl fullWidth>
           <div className="InputField">
@@ -322,7 +343,7 @@ class NomineeDetails extends Component {
                 style={{width: 'auto', height: 'auto'}} />
             </Grid>
             <Grid item xs={10}>
-              <span style={{color: 'rgb(68, 68, 68)', fontSize: 16}}>Nomniee’s address is same as my address</span>
+              <span style={{color: 'rgb(68, 68, 68)', fontSize: 14}}>Nomniee’s address is same as my address</span>
             </Grid>
           </Grid>
         </div>

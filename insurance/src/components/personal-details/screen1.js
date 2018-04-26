@@ -14,6 +14,7 @@ const genderOptions = ['MALE', 'FEMALE'];
 
 class PersonalDetails1 extends Component {
   state = {
+    show_loader: false,
     name: '',
     dob: '',
     gender: '',
@@ -27,6 +28,7 @@ class PersonalDetails1 extends Component {
   }
 
   async componentDidMount() {
+    this.setState({show_loader: true});
     const res = await Api.get('/api/insurance/profile/5668600916475904', {
       groups: 'personal'
     });
@@ -34,6 +36,7 @@ class PersonalDetails1 extends Component {
     const { name, dob, gender, marital_status } = res.pfwresponse.result.profile;
 
     await this.setStateAsync({
+      show_loader: false,
       name: name,
       dob: dob.replace(/\\-/g, '/').split('/').reverse().join('-'),
       gender: gender,
@@ -62,6 +65,8 @@ class PersonalDetails1 extends Component {
   handleClick = async () => {
     const formattedDob = this.state.dob.replace(/\\-/g, '/').split('-').reverse().join('/');
 
+    this.setState({show_loader: true});
+    
     const res = await Api.post('/api/insurance/profile', {
       insurance_app_id: 5668600916475904,
       name: this.state.name,
@@ -71,8 +76,14 @@ class PersonalDetails1 extends Component {
     });
 
     if (res.pfwresponse.status_code === 200) {
-      this.props.history.push('personal-details');
+      this.setState({show_loader: false});
+      if (this.props.edit) {
+        this.props.history.push('edit-personal1');
+      } else {
+        this.props.history.push('personal');
+      }
     } else {
+      this.setState({show_loader: false});
       alert('Error');
       console.log(res.pfwresponse.result.error);
     }
@@ -81,11 +92,14 @@ class PersonalDetails1 extends Component {
   render() {
     return (
       <Container
-        title={'Personal Details'}
+        showLoader={this.state.show_loader}
+        title={(this.props.edit) ? 'Edit Personal Details' : 'Personal Details'}
         count={true}
-        total={5}
+        total={4}
         current={1}
         handleClick={this.handleClick}
+        edit={this.props.edit}
+        buttonTitle="Save & Continue"
         >
         <FormControl fullWidth>
           <div className="InputField">

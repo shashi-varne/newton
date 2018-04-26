@@ -7,7 +7,7 @@ const Banner = (props) => (
       <div className="FlexItem" style={{flex: 1}}>
         <img src={hand} width={50} alt=""/>
       </div>
-      <div className="FlexItem" style={{flex: 5, padding: 15}}>
+      <div className="FlexItem" style={{flex: 5, padding: 10}}>
         { props.text }
       </div>
     </div>

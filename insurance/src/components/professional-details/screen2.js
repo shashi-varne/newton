@@ -8,6 +8,7 @@ import Api from '../../service/api';
 
 class ProfessionalDetails2 extends Component {
   state = {
+    show_loader: false,
     employer_name: '',
     pincode: '',
     address: '',
@@ -23,6 +24,7 @@ class ProfessionalDetails2 extends Component {
   }
 
   async componentDidMount() {
+    this.setState({show_loader: true});
     const res = await Api.get('/api/insurance/profile/5668600916475904', {
       groups: 'professional'
     });
@@ -30,6 +32,7 @@ class ProfessionalDetails2 extends Component {
     const { employer_name, employer_address } = res.pfwresponse.result.profile;
 
     await this.setStateAsync({
+      show_loader: false,
       employer_name: employer_name,
       pincode: employer_address.pincode,
       address: employer_address.addressline,
@@ -79,11 +82,15 @@ class ProfessionalDetails2 extends Component {
       'landmark': this.state.landmark
     }
 
+    this.setState({show_loader: true});
+
     const res = await Api.post('/api/insurance/profile', data);
 
     if (res.pfwresponse.status_code === 200) {
+      this.setState({show_loader: false});
       this.props.history.push('summary');
     } else {
+      this.setState({show_loader: false});
       alert('Error');
       console.log(res.pfwresponse.result.error);
     }
@@ -92,11 +99,14 @@ class ProfessionalDetails2 extends Component {
   render() {
     return (
       <Container
-        title={'Professional Details'}
+        showLoader={this.state.show_loader}
+        title={(this.props.edit) ? 'Edit Professional Details' : 'Professional Details'}
         count={true}
-        total={5}
+        total={4}
         current={4}
         handleClick={this.handleClick}
+        edit={this.props.edit}
+        buttonTitle="Save Details"
         >
         <FormControl fullWidth>
           <div className="InputField">

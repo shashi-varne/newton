@@ -11,7 +11,8 @@ class PersonalDetails2 extends Component {
   state = {
     mother_name: '',
     father_name: '',
-    birth_place: ''
+    birth_place: '',
+    show_loader: false
   }
 
   setStateAsync(state) {
@@ -21,6 +22,7 @@ class PersonalDetails2 extends Component {
   }
 
   async componentDidMount() {
+    this.setState({show_loader: true});
     const res = await Api.get('/api/insurance/profile/5668600916475904', {
       groups: 'personal'
     });
@@ -28,6 +30,7 @@ class PersonalDetails2 extends Component {
     const { mother_name, father_name, birth_place } = res.pfwresponse.result.profile;
 
     await this.setStateAsync({
+      show_loader: false,
       mother_name: mother_name,
       father_name: father_name,
       birth_place: birth_place
@@ -41,6 +44,7 @@ class PersonalDetails2 extends Component {
   };
 
   handleClick = async () => {
+    this.setState({show_loader: true});
     const res = await Api.post('/api/insurance/profile', {
       insurance_app_id: 5668600916475904,
       father_name: this.state.father_name,
@@ -49,8 +53,14 @@ class PersonalDetails2 extends Component {
     });
 
     if (res.pfwresponse.status_code === 200) {
-      this.props.history.push('contact-details-1');
+      this.setState({show_loader: false});
+      if (this.props.edit) {
+        this.props.history.push('summary');
+      } else {
+        this.props.history.push('contact');
+      }
     } else {
+      this.setState({show_loader: false});
       alert('Error');
       console.log(res.pfwresponse.result.error);
     }
@@ -59,11 +69,14 @@ class PersonalDetails2 extends Component {
   render() {
     return (
       <Container
-        title={'Personal Details'}
+        showLoader={this.state.show_loader}
+        title={(this.props.edit) ? 'Edit Personal Details' : 'Personal Details'}
         count={true}
-        total={5}
+        total={4}
         current={1}
         handleClick={this.handleClick}
+        edit={this.props.edit}
+        buttonTitle="Save Details"
         >
         <FormControl fullWidth>
           <div className="InputField">

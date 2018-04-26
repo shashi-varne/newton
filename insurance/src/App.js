@@ -51,14 +51,23 @@ const App = () => (
     <Router history={history}>
       <Switch>
         <Route exact path="/" component={ PersonalDetails1 } />
-        <Route path="/personal-details" component={ PersonalDetails2 } />
-        <Route path="/contact-details-1" component={ ContactDetails1 } />
-        <Route path="/contact-details-2" component={ ContactDetails2 } />
-        <Route path="/nominee-details" component={ NomineeDetails } />
-        <Route path="/appointee-details" component={ AppointeeDetails } />
-        <Route path="/professional-details" component={ ProfessionalDetails1 } />
-        <Route path="/professional-details-2" component={ ProfessionalDetails2 } />
+        <Route path="/native-summary" component={ Summary } />
+        <Route path="/personal" component={ PersonalDetails2 } />
+        <Route path="/contact" component={ ContactDetails1 } />
+        <Route path="/contact1" component={ ContactDetails2 } />
+        <Route path="/nominee" component={ NomineeDetails } />
+        <Route path="/appointee" component={ AppointeeDetails } />
+        <Route path="/professional" component={ ProfessionalDetails1 } />
+        <Route path="/professional1" component={ ProfessionalDetails2 } />
         <Route path="/summary" component={ Summary } />
+        <Route path="/edit-personal" render={(props) => <PersonalDetails1 {...props} edit={true} /> } />
+        <Route path="/edit-personal1" render={(props) => <PersonalDetails2 {...props} edit={true} /> } />
+        <Route path="/edit-contact" render={(props) => <ContactDetails1 {...props} edit={true} /> } />
+        <Route path="/edit-contact1" render={(props) => <ContactDetails2 {...props} edit={true} /> } />
+        <Route path="/edit-nominee" render={(props) => <NomineeDetails {...props} edit={true} /> } />
+        <Route path="/edit-appointee" render={(props) => <AppointeeDetails {...props} edit={true} /> } />
+        <Route path="/edit-professional" render={(props) => <ProfessionalDetails1 {...props} edit={true} /> } />
+        <Route path="/edit-professional1" render={(props) => <ProfessionalDetails2 {...props} edit={true} /> } />
         <Route component={ NotFound }/>
       </Switch>
     </Router>

@@ -36,6 +36,7 @@ const relationshipOptions = [
 
 class AppointeeDetails extends Component {
   state = {
+    show_loader: false,
     name: '',
     dob: '',
     gender: '',
@@ -57,24 +58,24 @@ class AppointeeDetails extends Component {
   }
 
   async componentDidMount() {
+    this.setState({show_loader: true});
     const res = await Api.get('/api/insurance/profile/5668600916475904', {
       groups: 'appointee'
     });
 
-    console.log(res);
-
-    const { appointee_address_same, appointee, appointee_address, landmark, gender } = res.pfwresponse.result.profile;
+    const { appointee_address_same, appointee, appointee_address } = res.pfwresponse.result.profile;
 
     await this.setStateAsync({
+      show_loader: false,
       name: appointee.name,
       dob: appointee.dob.replace(/\\-/g, '/').split('/').reverse().join('-'),
-      gender: gender,
+      gender: appointee.gender,
       marital_status: appointee.marital_status,
       relationship: appointee.relationship,
       checked: appointee_address_same,
       pincode: appointee_address.pincode,
       addressline: appointee_address.addressline,
-      landmark: landmark,
+      landmark: appointee_address.landmark,
       city: appointee_address.city,
       state: appointee_address.state,
       country: appointee_address.country
@@ -214,12 +215,18 @@ class AppointeeDetails extends Component {
         'landmark': this.state.landmark
       };
     }
-
+    this.setState({show_loader: true});
     const res = await Api.post('/api/insurance/profile', data);
 
     if (res.pfwresponse.status_code === 200) {
-      this.props.history.push('professional-details');
+      this.setState({show_loader: false});
+      if (this.props.edit) {
+        this.props.history.push('summary');
+      } else {
+        this.props.history.push('professional');
+      }
     } else {
+      this.setState({show_loader: false});
       alert('Error');
       console.log(res.pfwresponse.result.error);
     }
@@ -233,28 +240,20 @@ class AppointeeDetails extends Component {
     );
   }
 
-  componentDidUpdate() {
-    var body = document.getElementsByTagName('body')[0].offsetHeight;
-    var client = document.getElementsByClassName('Container-wrapper-1')[0].offsetHeight;
-
-    if (client > body) {
-      document.getElementsByClassName('Footer')[0].style.position = "relative" ;
-    } else {
-      document.getElementsByClassName('Footer')[0].style.position = "fixed" ;
-    }
-  }
-
   render() {
     return (
       <Container
-        title={'Appointee Details'}
+        showLoader={this.state.show_loader}
+        title={(this.props.edit) ? 'Edit Appointee Details' : 'Appointee Details'}
         count={true}
-        total={5}
+        total={4}
         current={3}
         state={this.state}
         banner={true}
         bannerText={this.bannerText()}
         handleClick={this.handleClick}
+        edit={this.props.edit}
+        buttonTitle={(this.props.edit) ? "Save Details" : "Save & Continue"}
         >
         <FormControl fullWidth>
           <div className="InputField">
@@ -323,7 +322,7 @@ class AppointeeDetails extends Component {
                 style={{width: 'auto', height: 'auto'}} />
             </Grid>
             <Grid item xs={10}>
-              <span style={{color: 'rgb(68, 68, 68)', fontSize: 16}}>Apotniee’s address is same as my address</span>
+              <span style={{color: 'rgb(68, 68, 68)', fontSize: 14}}>Apotniee’s address is same as my address</span>
             </Grid>
           </Grid>
         </div>

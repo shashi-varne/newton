@@ -86,6 +86,7 @@ const qualification = [
 
 class ProfessionalDetails1 extends Component {
   state = {
+    show_loader: false,
     occupation_detail: '',
     occupation_category: '',
     annual_income: '',
@@ -103,6 +104,7 @@ class ProfessionalDetails1 extends Component {
   }
 
   async componentDidMount() {
+    this.setState({show_loader: true});
     const res = await Api.get('/api/insurance/profile/5668600916475904', {
       groups: 'professional,misc'
     });
@@ -110,6 +112,7 @@ class ProfessionalDetails1 extends Component {
     const { annual_income, designation, education_qualification, occupation_category, occupation_detail, is_criminal, is_politically_exposed, pan_number } = res.pfwresponse.result.profile;
 
     await this.setStateAsync({
+      show_loader: false,
       occupation_detail: occupation_detail,
       occupation_category: occupation_category,
       annual_income: annual_income,
@@ -169,15 +172,23 @@ class ProfessionalDetails1 extends Component {
       data['is_criminal'] = this.state.is_criminal;
     }
 
+    this.setState({show_loader: true});
+
     const res = await Api.post('/api/insurance/profile', data);
 
     if (res.pfwresponse.status_code === 200) {
-      if (this.state.occupation_detail === 'SALRIED') {
-        this.props.history.push('professional-details-2');
+      this.setState({show_loader: false});
+      if (this.props.edit) {
+        if (this.state.occupation_detail === 'SALRIED') {
+          this.props.history.push('edit-professional1');
+        } else {
+          this.props.history.push('summary');
+        }
       } else {
-        this.props.history.push('summary');
+        this.props.history.push('professional1');
       }
     } else {
+      this.setState({show_loader: false});
       alert('Error');
       console.log(res.pfwresponse.result.error);
     }
@@ -226,7 +237,7 @@ class ProfessionalDetails1 extends Component {
     if (this.state.occupation_detail === 'SELF-EMPLOYED') {
       return (
         <div>
-          <div className="SectionHead" style={{marginBottom: 30, color: 'rgb(68,68,68)', fontSize: 18, fontFamily: 'Roboto'}}>
+          <div className="SectionHead" style={{marginBottom: 30, color: 'rgb(68,68,68)', fontSize: 14, fontFamily: 'Roboto'}}>
             By tapping continue, you declare that you’re -
           </div>
           <div className="RadioBlock">
@@ -279,11 +290,14 @@ class ProfessionalDetails1 extends Component {
   render() {
     return (
       <Container
-        title={'Professional Details'}
+        showLoader={this.state.show_loader}
+        title={(this.props.edit) ? 'Edit Professional Details' : 'Professional Details'}
         count={true}
-        total={5}
+        total={4}
         current={4}
         handleClick={this.handleClick}
+        edit={this.props.edit}
+        buttonTitle="Save & Continue"
         >
         <FormControl fullWidth>
           <div className="InputField">

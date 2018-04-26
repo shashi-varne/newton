@@ -6,17 +6,17 @@ import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import Arrow from '@material-ui/icons/ArrowBack';
 
-const Header = ({ classes, title, count, total, current, goBack }) => (
+const Header = ({ classes, title, count, total, current, goBack, edit }) => (
   <div className={classes.root}>
     <AppBar position="static" color="primary">
       <Toolbar>
         <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={goBack}>
           <Arrow />
         </IconButton>
-        <Typography variant="title" color="inherit" className={classes.flex}>
+        <Typography variant="subheading" color="inherit" className={classes.flex}>
           { title }
         </Typography>
-        { count && <span color="inherit">{current}/{total}</span> }
+        { !edit && count && <span color="inherit">{current}/{total}</span> }
       </Toolbar>
     </AppBar>
   </div>

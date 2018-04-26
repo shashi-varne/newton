@@ -60,7 +60,7 @@ class RadioGrp extends Component {
 const RadioWithoutIcon = (props) => (
   <Grid container spacing={16} alignItems="center" className={props.class}>
     <Grid item xs={6}>
-      <span style={{color: '#444', fontSize: 18,fontFamily: 'Roboto', fontWeight: 500}}>{props.label}</span>
+      <span style={{color: '#444', fontSize: 14,fontFamily: 'Roboto', fontWeight: 500}}>{props.label}</span>
     </Grid>
     <Grid item xs={6}>
       <RadioGrp options={props.options} type={props.type} value={props.value} onChange={props.onChange} />
