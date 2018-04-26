@@ -13,7 +13,7 @@ import Grid from 'material-ui/Grid';
 import Dropdown from '../../ui/Select';
 import Checkbox from 'material-ui/Checkbox';
 import Api from '../../service/api';
-import qs from 'query-string';
+import qs from 'qs';
 
 const maritalOptions = ['UNMARRIED', 'MARRIED', 'DIVORCED', 'WIDOW'];
 const genderOptions = ['MALE', 'FEMALE'];
@@ -52,7 +52,7 @@ class AppointeeDetails extends Component {
       city: '',
       state: '',
       country: 'INDIA',
-      params: qs.parse(props.history.location.search)
+      params: qs.parse(props.history.location.search.slice(1))
     }
   }
 

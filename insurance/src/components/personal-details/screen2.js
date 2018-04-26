@@ -6,7 +6,7 @@ import mother from '../../assets/mother_dark_icn.png';
 import father from '../../assets/father_dark_icn.png';
 import location from '../../assets/location_dark_icn.png';
 import Api from '../../service/api';
-import qs from 'query-string';
+import qs from 'qs';
 
 class PersonalDetails2 extends Component {
   constructor(props) {
@@ -16,7 +16,7 @@ class PersonalDetails2 extends Component {
       father_name: '',
       birth_place: '',
       show_loader: false,
-      params: qs.parse(props.history.location.search)
+      params: qs.parse(props.history.location.search.slice(1))
     }
   }
 

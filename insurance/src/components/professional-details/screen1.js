@@ -11,7 +11,7 @@ import designation from '../../assets/designation_dark_icn.png';
 import income from '../../assets/annual_income_dark_icn.png';
 import Dropdown from '../../ui/Select';
 import Api from '../../service/api';
-import qs from 'query-string';
+import qs from 'qs';
 
 const declareOptions = ['Y', 'N'];
 const occupationDetailOptions = ["SELF-EMPLOYED","SALRIED","STUDENT"];
@@ -98,7 +98,7 @@ class ProfessionalDetails1 extends Component {
       designation: '',
       is_politically_exposed: 'N',
       is_criminal: 'N',
-      params: qs.parse(props.history.location.search)
+      params: qs.parse(props.history.location.search.slice(1))
     }
   }
 

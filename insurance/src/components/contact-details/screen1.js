@@ -6,7 +6,7 @@ import MobileInputWithIcon from '../../ui/MobileInputWithIcon';
 import email from '../../assets/email_dark_icn.png';
 import phone from '../../assets/phone_dark_icn.png';
 import Api from '../../service/api';
-import qs from 'query-string';
+import qs from 'qs';
 
 class ContactDetails1 extends Component {
   constructor(props) {
@@ -15,7 +15,7 @@ class ContactDetails1 extends Component {
       email: '',
       mobile_no: '',
       show_loader: false,
-      params: qs.parse(props.history.location.search)
+      params: qs.parse(this.props.location.search.slice(1))
     }
   }
 

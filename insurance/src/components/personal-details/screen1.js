@@ -8,7 +8,7 @@ import dob from '../../assets/dob_dark_icn.png';
 import gender from '../../assets/gender_dark_icn.png';
 import marital from '../../assets/marital_status_dark_icn.png';
 import Api from '../../service/api';
-import qs from 'query-string';
+import qs from 'qs';
 
 const maritalOptions = ['UNMARRIED', 'MARRIED', 'DIVORCED', 'WIDOW'];
 const genderOptions = ['MALE', 'FEMALE'];
@@ -22,7 +22,7 @@ class PersonalDetails1 extends Component {
       dob: '',
       gender: '',
       marital_status: '',
-      params: qs.parse(props.history.location.search)
+      params: qs.parse(props.history.location.search.slice(1))
     }
   }
 

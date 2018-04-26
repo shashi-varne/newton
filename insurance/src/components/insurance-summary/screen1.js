@@ -11,7 +11,7 @@ import loader from '../../assets/loader_gif.gif';
 import Api from '../../service/api';
 import Modal from 'material-ui/Modal';
 import Typography from 'material-ui/Typography';
-import qs from 'query-string';
+import qs from 'qs';
 
 const income_pairs = [
   {
@@ -62,7 +62,7 @@ class Summary extends Component {
       nominee: {},
       appointee: {},
       professional: {},
-      params: qs.parse(props.history.location.search)
+      params: qs.parse(props.history.location.search.slice(1))
     };
   }
 

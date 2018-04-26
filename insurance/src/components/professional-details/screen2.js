@@ -5,7 +5,7 @@ import InputWithIcon from '../../ui/InputWithIcon';
 import name from '../../assets/name_present_employer_dark_icn.png';
 import location from '../../assets/location_dark_icn.png';
 import Api from '../../service/api';
-import qs from 'query-string';
+import qs from 'qs';
 
 class ProfessionalDetails2 extends Component {
   constructor(props) {
@@ -18,7 +18,7 @@ class ProfessionalDetails2 extends Component {
       landmark: '',
       city: '',
       state: '',
-      params: qs.parse(props.history.location.search)
+      params: qs.parse(props.history.location.search.slice(1))
     }
   }
 

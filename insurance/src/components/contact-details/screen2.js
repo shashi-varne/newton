@@ -6,7 +6,7 @@ import location from '../../assets/location_dark_icn.png';
 import Grid from 'material-ui/Grid';
 import Checkbox from 'material-ui/Checkbox';
 import Api from '../../service/api';
-import qs from 'query-string';
+import qs from 'qs';
 
 class ContactDetails2 extends Component {
   constructor(props) {
@@ -25,7 +25,7 @@ class ContactDetails2 extends Component {
       ccity: '',
       cstate: '',
       country: 'INDIA',
-      params: qs.parse(props.history.location.search)
+      params: qs.parse(props.history.location.search.slice(1))
     }
   }
 
