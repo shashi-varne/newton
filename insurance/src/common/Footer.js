@@ -1,8 +1,6 @@
 import React from 'react';
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
-import hdfc from '../assets/hdfc_insurance_small_logo.png';
-import icici from '../assets/icici_insurance_small_logo.png';
 import arrow from '../assets/next_arrow.png';
 
 const FullWidthButton = (props) => (
@@ -20,11 +18,7 @@ const DefaultButton = (props) => {
     return (
       <div className={props.classes.flex}>
         <div className={props.classes.flexItem} style={{flex: 1}}>
-          {
-            props.provider === 'HDFC'
-            ? <img alt="" src={hdfc} className={props.classes.image}/> 
-            : <img alt="" src={icici} className={props.classes.image}/>
-          }
+          <img alt="" src={props.logo} className={props.classes.image}/>
         </div>
         <div className={props.classes.flexItem} style={{flex: 2}}>
           <FullWidthButton {...props} arrow={true}/>
@@ -34,11 +28,15 @@ const DefaultButton = (props) => {
   }
 };
 
+function capitalize(string) {
+  return string.toLowerCase().replace(/(^|\s)[a-z]/g,function(f){return f.toUpperCase();})
+}
+
 const SummaryButton = (props) => (
   <div className={props.classes.flex}>
     <div style={{flex: 3, padding: '5px 0 0 10px'}}>
       <div style={{color: '#444', fontSize: 12}}>Premium</div>
-      <div style={{color: '#444', fontSize: 14, fontWeight: 500, fontFamily: 'Roboto'}}>₹ {props.premium} {props.paymentFrequency}</div>
+      <div style={{color: '#444', fontSize: 14, fontWeight: 500, fontFamily: 'Roboto'}}>₹ {props.premium} {capitalize(props.paymentFrequency)}</div>
       {(props.paymentFrequency === 'MONTHLY') && <div style={{color: '#878787', fontSize: 10}}>*You’ve to pay <b>3 months premiums</b>.</div>}
     </div>
     <div style={{flex: 1}}>

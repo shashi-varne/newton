@@ -48,15 +48,27 @@ class Container extends Component {
   }
 
   render() {
+    let steps = [];
+    for (var i = 0; i < this.props.total; i++) {
+      if (this.props.current > i) {
+        steps.push(<span className='active' key={i}></span>);
+      } else {
+        steps.push(<span key={i}></span>);
+      }
+    }
+
     return (
       <div className={`ContainerWrapper`}>
         <Header title={this.props.title} count={this.props.count} total={this.props.total} current={this.props.current} goBack={this.historyGoBack} edit={this.props.edit} />
+        <div className="Step">
+          {steps}
+        </div>
         {this.renderLoader()}
         { this.props.banner && <Banner text={this.props.bannerText}/> }
         <div className={`Container ${this.props.classes.wrapper}`}>
           { this.props.children }
         </div>
-        <Footer handleClick={this.props.handleClick} fullWidthButton={this.props.fullWidthButton} edit={this.props.edit} buttonTitle={this.props.buttonTitle} premium={this.props.premium} paymentFrequency={this.props.paymentFrequency} summaryButtonText={this.props.summaryButtonText} provider={this.props.provider}/>
+        <Footer handleClick={this.props.handleClick} fullWidthButton={this.props.fullWidthButton} edit={this.props.edit} buttonTitle={this.props.buttonTitle} premium={this.props.premium} paymentFrequency={this.props.paymentFrequency} summaryButtonText={this.props.summaryButtonText} provider={this.props.provider} logo={this.props.logo}/>
       </div>
     );
   }

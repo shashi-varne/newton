@@ -25,6 +25,7 @@ class ContactDetails2 extends Component {
       ccity: '',
       cstate: '',
       country: 'INDIA',
+      image: '',
       params: qs.parse(props.history.location.search.slice(1))
     }
   }
@@ -40,6 +41,8 @@ class ContactDetails2 extends Component {
       groups: 'contact'
     }).then(res => {
       const { permanent_addr, corr_addr } = res.pfwresponse.result.profile;
+      const { image } = res.pfwresponse.result.quote_desc;
+
       this.setState({
         show_loader: false,
         pincode: permanent_addr.pincode || '',
@@ -53,7 +56,8 @@ class ContactDetails2 extends Component {
         clandmark: corr_addr.landmark || '',
         ccity: corr_addr.city || '',
         cstate: corr_addr.state || '',
-        country: corr_addr.country || ''
+        country: corr_addr.country || '',
+        image: image
       });
     }).catch(error => {
       this.setState({show_loader: false});
@@ -232,6 +236,7 @@ class ContactDetails2 extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="Save Details"
+        logo={this.state.image}
         >
         <div className="SectionHead" style={{marginBottom: 15, color: 'rgb(68,68,68)', fontSize: 14, fontFamily: 'Roboto', fontWeight: 500}}>
           Permanent address

@@ -16,6 +16,7 @@ class PersonalDetails2 extends Component {
       father_name: '',
       birth_place: '',
       show_loader: true,
+      image: '',
       params: qs.parse(props.history.location.search.slice(1))
     }
   }
@@ -31,12 +32,14 @@ class PersonalDetails2 extends Component {
       groups: 'personal'
     }).then(res => {
       const { mother_name, father_name, birth_place } = res.pfwresponse.result.profile;
+      const { image } = res.pfwresponse.result.quote_desc;
 
       this.setState({
         show_loader: false,
         mother_name: mother_name || '',
         father_name: father_name || '',
-        birth_place: birth_place || ''
+        birth_place: birth_place || '',
+        image: image
       });
     }).catch(error => {
       this.setState({show_loader: false});
@@ -90,6 +93,7 @@ class PersonalDetails2 extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="Save Details"
+        logo={this.state.image}
         >
         <FormControl fullWidth>
           <div className="InputField">

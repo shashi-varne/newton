@@ -79,6 +79,7 @@ class AppointeeDetails extends Component {
       city: '',
       state: '',
       country: 'INDIA',
+      image: '',
       params: qs.parse(props.history.location.search.slice(1))
     }
   }
@@ -94,6 +95,7 @@ class AppointeeDetails extends Component {
       groups: 'appointee'
     }).then(res => {
       const { appointee, appointee_address } = res.pfwresponse.result.profile;
+      const { image } = res.pfwresponse.result.quote_desc;
 
       this.setState({
         show_loader: false,
@@ -108,7 +110,8 @@ class AppointeeDetails extends Component {
         landmark: appointee_address.landmark || '',
         city: appointee_address.city || '',
         state: appointee_address.state || '',
-        country: appointee_address.country || ''
+        country: appointee_address.country || '',
+        image: image
       });
     }).catch(error => {
       this.setState({show_loader: false});
@@ -294,6 +297,7 @@ class AppointeeDetails extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle={(this.props.edit) ? "Save Details" : "Save & Continue"}
+        logo={this.state.image}
         >
         <FormControl fullWidth>
           <div className="InputField">

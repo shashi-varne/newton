@@ -316,7 +316,7 @@ class Summary extends Component {
             <li>
               Permanent address:
               <div>
-                <span>
+                <span style={{wordWrap: 'break-word'}}>
                   {this.getAddress(this.state.contact.permanent_addr)}
                 </span>
               </div>
@@ -326,7 +326,7 @@ class Summary extends Component {
               ? <li>
                 Correspondence address:
                 <div>
-                  <span>
+                  <span style={{wordWrap: 'break-word'}}>
                     {this.getAddress(this.state.contact.permanent_addr)}
                   </span>
                 </div>
@@ -334,7 +334,7 @@ class Summary extends Component {
               : <li>
                 Correspondence address:
                 <div>
-                  <span>
+                  <span style={{wordWrap: 'break-word'}}>
                     {this.getAddress(this.state.contact.corr_addr)}
                   </span>
                 </div>
@@ -356,7 +356,7 @@ class Summary extends Component {
               ? <li>
                 Address:
                 <div>
-                  <span>
+                  <span style={{wordWrap: 'break-word'}}>
                     {this.getAddress(this.state.contact.permanent_addr)}
                   </span>
                 </div>
@@ -364,7 +364,7 @@ class Summary extends Component {
               : <li>
                 Address:
                 <div>
-                  <span>
+                  <span style={{wordWrap: 'break-word'}}>
                     {this.getAddress(this.state.nominee.nominee_address)}
                   </span>
                 </div>
@@ -386,7 +386,7 @@ class Summary extends Component {
                 ? <li>
                   Address:
                   <div>
-                    <span>
+                    <span style={{wordWrap: 'break-word'}}>
                       {this.getAddress(this.state.contact.permanent_addr)}
                     </span>
                   </div>
@@ -394,7 +394,7 @@ class Summary extends Component {
                 : <li>
                   Address:
                   <div>
-                    <span>
+                    <span style={{wordWrap: 'break-word'}}>
                       {this.getAddress(this.state.appointee.appointee_address)}
                     </span>
                   </div>
@@ -410,15 +410,15 @@ class Summary extends Component {
             <ul>
               <li>Pan number: <span>{this.state.professional.pan_number}</span></li>
               <li>Education qualification: <span>{this.state.professional.education_qualification}</span></li>
-              <li>Occupation_detail: <span>{this.capitalize(this.state.professional.occupation_detail)}</span></li>
-              <li>Occupation_category: <span>{this.capitalize(this.state.professional.occupation_category)}</span></li>
+              <li>Occupation detail: <span>{this.capitalize(this.state.professional.occupation_detail)}</span></li>
+              <li>Occupation category: <span>{this.capitalize(this.state.professional.occupation_category)}</span></li>
               <li>Annual income: <span>{this.numDifferentiation(this.state.professional.annual_income)}</span></li>
               <li>Employer name: <span>{this.state.professional.employer_name}</span></li>
               <li>
                 Employer address:
                 <div>
-                  <span>
-                    {this.state.professional.employer_address.addressline+','+ this.state.professional.employer_address.landmark+','+ this.state.professional.employer_address.city+','+ this.state.professional.employer_address.state+','+ this.state.professional.employer_address.pincode+','+ this.state.professional.employer_address.country}
+                  <span style={{wordWrap: 'break-word'}}>
+                    {this.state.professional.employer_address.addressline+', '+ this.state.professional.employer_address.landmark+', '+ this.capitalize(this.state.professional.employer_address.city)+', '+ this.capitalize(this.state.professional.employer_address.state)+', '+ this.state.professional.employer_address.pincode+', '+ this.capitalize(this.state.professional.employer_address.country)}
                   </span>
                 </div>
               </li>
@@ -433,7 +433,7 @@ class Summary extends Component {
             <ul>
               <li>Pan number: <span>{this.state.professional.pan_number}</span></li>
               <li>Education qualification: <span>{this.state.professional.education_qualification}</span></li>
-              <li>Occupation_detail: <span>{this.capitalize(this.state.professional.occupation_detail)}</span></li>
+              <li>Occupation detail: <span>{this.capitalize(this.state.professional.occupation_detail)}</span></li>
               <li>Criminal proceedings: <span>{(this.state.professional.is_criminal) ? 'Yes' : 'No'}</span></li>
               <li>Politically exposed: <span>{(this.state.professional.is_politically_exposed) ? 'Yes' : 'No'}</span></li>
             </ul>
@@ -445,7 +445,7 @@ class Summary extends Component {
             <ul>
               <li>Pan number: <span>{this.state.professional.pan_number}</span></li>
               <li>Education qualification: <span>{this.state.professional.education_qualification}</span></li>
-              <li>Occupation_detail: <span>{this.capitalize(this.state.professional.occupation_detail)}</span></li>
+              <li>Occupation detail: <span>{this.capitalize(this.state.professional.occupation_detail)}</span></li>
               <li>Designation: <span>{this.state.professional.designation}</span></li>
               <li>Annual income: <span>{this.numDifferentiation(this.state.professional.annual_income)}</span></li>
               <li>Criminal proceedings: <span>{(this.state.professional.is_criminal) ? 'Yes' : 'No'}</span></li>

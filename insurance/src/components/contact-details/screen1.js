@@ -15,6 +15,7 @@ class ContactDetails1 extends Component {
       show_loader: true,
       email: '',
       mobile_no: '',
+      image: '',
       params: qs.parse(this.props.location.search.slice(1))
     }
   }
@@ -30,11 +31,13 @@ class ContactDetails1 extends Component {
       groups: 'contact'
     }).then(res => {
       const { email, mobile_no } = res.pfwresponse.result.profile;
+      const { image } = res.pfwresponse.result.quote_desc;
 
       this.setState({
         show_loader: false,
         email: email || '',
-        mobile_no: mobile_no || ''
+        mobile_no: mobile_no || '',
+        image: image
       });
     }).catch(error => {
       this.setState({show_loader: false});
@@ -97,6 +100,7 @@ class ContactDetails1 extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="Save & Continue"
+        logo={this.state.image}
         >
         <FormControl fullWidth>
           <div className="InputField">

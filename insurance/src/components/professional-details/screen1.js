@@ -136,6 +136,7 @@ class ProfessionalDetails1 extends Component {
       designation: '',
       is_politically_exposed: 'N',
       is_criminal: 'N',
+      image: '',
       params: qs.parse(props.history.location.search.slice(1))
     }
   }
@@ -151,6 +152,7 @@ class ProfessionalDetails1 extends Component {
       groups: 'professional,misc'
     }).then(res => {
       const { annual_income, designation, education_qualification, occupation_category, occupation_detail, is_criminal, is_politically_exposed, pan_number } = res.pfwresponse.result.profile;
+      const { image } = res.pfwresponse.result.quote_desc;
 
       this.setState({
         show_loader: false,
@@ -161,7 +163,8 @@ class ProfessionalDetails1 extends Component {
         education_qualification: education_qualification || '',
         designation: designation || '',
         is_politically_exposed: (is_criminal) ? 'Y' : 'N',
-        is_criminal: (is_politically_exposed) ? 'Y' : 'N'
+        is_criminal: (is_politically_exposed) ? 'Y' : 'N',
+        image: image
       });
     }).catch(error => {
       this.setState({show_loader: false});
@@ -216,6 +219,9 @@ class ProfessionalDetails1 extends Component {
       data['is_politically_exposed'] = this.state.is_politically_exposed;
       data['is_criminal'] = this.state.is_criminal;
     }
+    if (this.state.occupation_detail === 'SALRIED') {
+      data['designation'] = this.state.designation;
+    }
 
     this.setState({show_loader: true});
 
@@ -256,7 +262,7 @@ class ProfessionalDetails1 extends Component {
   }
 
   renderDesignation = () => {
-    if (this.state.occupation_detail === 'SELF-EMPLOYED') {
+    if (this.state.occupation_detail === 'SELF-EMPLOYED' || this.state.occupation_detail === 'SALRIED') {
       return (
         <div className="InputField">
           <InputWithIcon
@@ -359,6 +365,7 @@ class ProfessionalDetails1 extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="Save & Continue"
+        logo={this.state.image}
         >
         <FormControl fullWidth>
           <div className="InputField">

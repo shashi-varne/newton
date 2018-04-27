@@ -72,3 +72,26 @@ div {
 .Container {
   margin-bottom: 30px;
 }
+.Step {
+  flex-direction: row;
+  display: flex;
+}
+.Step span {
+  background: #cacaca;
+  height: 5px;
+  flex: 1;
+  display: inline-block;
+  box-sizing: border-box;
+  margin-right: 5px;
+}
+.Step span.active {
+  background: #250087;
+  height: 5px;
+  flex: 1;
+  display: inline-block;
+  box-sizing: border-box;
+  margin-right: 5px;
+}
+.Step span:last-child {
+  margin-right: 0;
+}

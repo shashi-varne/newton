@@ -18,6 +18,7 @@ class ProfessionalDetails2 extends Component {
       landmark: '',
       city: '',
       state: '',
+      image: '',
       params: qs.parse(props.history.location.search.slice(1))
     }
   }
@@ -33,6 +34,7 @@ class ProfessionalDetails2 extends Component {
       groups: 'professional'
     }).then(res => {
       const { employer_name, employer_address } = res.pfwresponse.result.profile;
+      const { image } = res.pfwresponse.result.quote_desc;
 
       this.setState({
         show_loader: false,
@@ -41,7 +43,8 @@ class ProfessionalDetails2 extends Component {
         address: employer_address.addressline || '',
         landmark: employer_address.landmark || '',
         city: employer_address.city || '',
-        state: employer_address.state || ''
+        state: employer_address.state || '',
+        image: image
       });
     }).catch(error => {
       this.setState({show_loader: false});
@@ -117,6 +120,7 @@ class ProfessionalDetails2 extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="Save Details"
+        logo={this.state.image}
         >
         <FormControl fullWidth>
           <div className="InputField">

@@ -4,8 +4,6 @@ import Container from '../../common/Container';
 import InputWithIcon from '../../ui/InputWithIcon';
 import RadioWithIcon from '../../ui/RadioWithIcon';
 import name from '../../assets/full_name_dark_icn.png';
-import dob from '../../assets/dob_dark_icn.png';
-import gender from '../../assets/gender_dark_icn.png';
 import marital from '../../assets/marital_status_dark_icn.png';
 import Api from '../../service/api';
 import qs from 'qs';
@@ -48,6 +46,7 @@ class PersonalDetails1 extends Component {
       dob: '',
       gender: '',
       marital_status: '',
+      image: '',
       params: qs.parse(props.history.location.search.slice(1))
     }
   }
@@ -63,13 +62,15 @@ class PersonalDetails1 extends Component {
       groups: 'personal'
     }).then(res => {
       const { name, dob, gender, marital_status } = res.pfwresponse.result.profile;
+      const { image } = res.pfwresponse.result.quote_desc;
 
       this.setState({
         show_loader: false,
         name: name || '',
         dob: (dob) ? dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
         gender: gender || '',
-        marital_status: marital_status || ''
+        marital_status: marital_status || '',
+        image: image
       });
     }).catch(error => {
       this.setState({show_loader: false});
@@ -140,6 +141,7 @@ class PersonalDetails1 extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="Save & Continue"
+        logo={this.state.image}
         >
         <FormControl fullWidth>
           <div className="InputField">
@@ -152,28 +154,6 @@ class PersonalDetails1 extends Component {
               id="full-name"
               value={this.state.name}
               onChange={this.handleChange('name')} />
-          </div>
-          <div className="InputField">
-            <InputWithIcon
-              type="date"
-              icon={dob}
-              width="40"
-              label="Date of birth"
-              class="DOB"
-              id="dob"
-              value={this.state.dob}
-              onChange={this.handleChange('dob')} />
-          </div>
-          <div className="InputField">
-            <RadioWithIcon
-              icon={gender}
-              width="40"
-              label="Gender"
-              class="Gender"
-              options={genderOptions}
-              id="gender"
-              value={this.state.gender}
-              onChange={this.handleGenderRadioValue('gender')} />
           </div>
           <div className="InputField">
             <RadioWithIcon
