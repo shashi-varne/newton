@@ -16,7 +16,7 @@ class Container extends Component {
 
   historyGoBack = () => {
     if (this.props.history.location.pathname === "/" || this.props.history.location.pathname === "/resume") {
-      window.location.replace(window.location.href+'insurance/native_back', function() {});
+      window.location.replace(window.location.href+'&native_back', function() {});
     } else {
       this.props.history.goBack();
     }
@@ -24,7 +24,7 @@ class Container extends Component {
 
   componentDidUpdate() {
     var body = document.getElementsByTagName('body')[0].offsetHeight;
-    var client = document.getElementsByClassName('Container')[0].offsetHeight;
+    var client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
 
     if (client > body) {
       document.getElementsByClassName('Footer')[0].style.position = "relative" ;
@@ -56,7 +56,7 @@ class Container extends Component {
         <div className={`Container ${this.props.classes.wrapper}`}>
           { this.props.children }
         </div>
-        <Footer handleClick={this.props.handleClick} fullWidthButton={this.props.fullWidthButton} edit={this.props.edit} buttonTitle={this.props.buttonTitle} premium={this.props.premium} paymentFrequency={this.props.paymentFrequency}/>
+        <Footer handleClick={this.props.handleClick} fullWidthButton={this.props.fullWidthButton} edit={this.props.edit} buttonTitle={this.props.buttonTitle} premium={this.props.premium} paymentFrequency={this.props.paymentFrequency} summaryButtonText={this.props.summaryButtonText} provider={this.props.provider}/>
       </div>
     );
   }

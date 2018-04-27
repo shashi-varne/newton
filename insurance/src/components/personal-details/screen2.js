@@ -15,7 +15,7 @@ class PersonalDetails2 extends Component {
       mother_name: '',
       father_name: '',
       birth_place: '',
-      show_loader: false,
+      show_loader: true,
       params: qs.parse(props.history.location.search.slice(1))
     }
   }
@@ -26,19 +26,21 @@ class PersonalDetails2 extends Component {
     });
   }
 
-  async componentDidMount() {
-    this.setState({show_loader: true});
-    const res = await Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
+  componentDidMount() {
+    Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
       groups: 'personal'
-    });
+    }).then(res => {
+      const { mother_name, father_name, birth_place } = res.pfwresponse.result.profile;
 
-    const { mother_name, father_name, birth_place } = res.pfwresponse.result.profile;
-
-    await this.setStateAsync({
-      show_loader: false,
-      mother_name: mother_name,
-      father_name: father_name,
-      birth_place: birth_place
+      this.setState({
+        show_loader: false,
+        mother_name: mother_name || '',
+        father_name: father_name || '',
+        birth_place: birth_place || ''
+      });
+    }).catch(error => {
+      this.setState({show_loader: false});
+      console.log(error);
     });
   }
 

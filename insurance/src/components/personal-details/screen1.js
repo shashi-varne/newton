@@ -10,14 +10,40 @@ import marital from '../../assets/marital_status_dark_icn.png';
 import Api from '../../service/api';
 import qs from 'qs';
 
-const maritalOptions = ['UNMARRIED', 'MARRIED', 'DIVORCED', 'WIDOW'];
-const genderOptions = ['MALE', 'FEMALE'];
+const maritalOptions = [
+  {
+    'name': 'Unmarried',
+    'value': 'UNMARRIED'
+  },
+  {
+    'name': 'Married',
+    'value': 'MARRIED'
+  },
+  {
+    'name': 'Divorced',
+    'value': 'DIVORCED'
+  },
+  {
+    'name': 'Widow',
+    'value': 'WIDOW'
+  }
+];
+const genderOptions = [
+  {
+    'name': 'Male',
+    'value': 'MALE'
+  },
+  {
+    'name': 'Female',
+    'value': 'FEMALE'
+  }
+];
 
 class PersonalDetails1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false,
+      show_loader: true,
       name: '',
       dob: '',
       gender: '',
@@ -32,21 +58,24 @@ class PersonalDetails1 extends Component {
     });
   }
 
-  async componentDidMount() {
-    this.setState({show_loader: true});
-    const res = await Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
+  componentDidMount() {
+    Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
       groups: 'personal'
+    }).then(res => {
+      const { name, dob, gender, marital_status } = res.pfwresponse.result.profile;
+
+      this.setState({
+        show_loader: false,
+        name: name || '',
+        dob: (dob) ? dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
+        gender: gender || '',
+        marital_status: marital_status || ''
+      });
+    }).catch(error => {
+      this.setState({show_loader: false});
+      console.log(error);
     });
 
-    const { name, dob, gender, marital_status } = res.pfwresponse.result.profile;
-
-    await this.setStateAsync({
-      show_loader: false,
-      name: name,
-      dob: dob.replace(/\\-/g, '/').split('/').reverse().join('-'),
-      gender: gender,
-      marital_status: marital_status
-    });
   }
 
   handleChange = name => event => {
@@ -57,13 +86,13 @@ class PersonalDetails1 extends Component {
 
   handleGenderRadioValue = name => index => {
     this.setState({
-      [name]: genderOptions[index]
+      [name]: genderOptions[index]['value']
     });
   };
 
   handleMaritalRadioValue = name => index => {
     this.setState({
-      [name]: maritalOptions[index]
+      [name]: maritalOptions[index]['value']
     });
   };
 

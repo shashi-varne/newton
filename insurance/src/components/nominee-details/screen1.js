@@ -15,8 +15,35 @@ import Checkbox from 'material-ui/Checkbox';
 import Api from '../../service/api';
 import qs from 'qs';
 
-const maritalOptions = ['UNMARRIED', 'MARRIED', 'DIVORCED', 'WIDOW'];
-const genderOptions = ['MALE', 'FEMALE'];
+const maritalOptions = [
+  {
+    'name': 'Unmarried',
+    'value': 'UNMARRIED'
+  },
+  {
+    'name': 'Married',
+    'value': 'MARRIED'
+  },
+  {
+    'name': 'Divorced',
+    'value': 'DIVORCED'
+  },
+  {
+    'name': 'Widow',
+    'value': 'WIDOW'
+  }
+];
+const genderOptions = [
+  {
+    'name': 'Male',
+    'value': 'MALE'
+  },
+  {
+    'name': 'Female',
+    'value': 'FEMALE'
+  }
+];
+
 
 const relationshipOptions = [
   'BROTHER',
@@ -39,7 +66,7 @@ class NomineeDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false,
+      show_loader: true,
       age: '',
       name: '',
       dob: '',
@@ -63,29 +90,31 @@ class NomineeDetails extends Component {
     });
   }
 
-  async componentDidMount() {
-    this.setState({show_loader: true});
-    const res = await Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
+  componentDidMount() {
+    Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
       groups: 'nominee'
-    });
+    }).then(res => {
+      const { nominee, nominee_address } = res.pfwresponse.result.profile;
 
-    const { nominee_address_same, nominee, nominee_address } = res.pfwresponse.result.profile;
-
-    await this.setStateAsync({
-      show_loader: false,
-      age: this.calculateAge(nominee.dob),
-      name: nominee.name,
-      dob: nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('-'),
-      gender: nominee.gender,
-      marital_status: nominee.marital_status,
-      relationship: nominee.relationship,
-      checked: nominee_address_same,
-      pincode: nominee_address.pincode,
-      addressline: nominee_address.addressline,
-      landmark: nominee_address.landmark,
-      city: nominee_address.city,
-      state: nominee_address.state,
-      country: nominee_address.country
+      this.setState({
+        show_loader: false,
+        age: this.calculateAge(nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('/')),
+        name: nominee.name || '',
+        dob: (nominee.dob) ? nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
+        gender: nominee.gender || '',
+        marital_status: nominee.marital_status || '',
+        relationship: nominee.relationship || '',
+        checked: (Object.keys(nominee_address).length === 0) ? true : false,
+        pincode: nominee_address.pincode || '',
+        addressline: nominee_address.addressline || '',
+        landmark: nominee_address.landmark || '',
+        city: nominee_address.city || '',
+        state: nominee_address.state || '',
+        country: nominee_address.country || ''
+      });
+    }).catch(error => {
+      this.setState({show_loader: false});
+      console.log(error);
     });
   }
 
@@ -98,6 +127,11 @@ class NomineeDetails extends Component {
       this.setState({
         [name]: event
       });
+    } else if (name === 'dob') {
+      this.setState({
+        [name]: event.target.value,
+        age: this.calculateAge(event.target.value)
+      })
     } else {
       this.setState({
         [name]: event.target.value
@@ -107,13 +141,13 @@ class NomineeDetails extends Component {
 
   handleGenderRadioValue = name => index => {
     this.setState({
-      [name]: genderOptions[index]
+      [name]: genderOptions[index]['value']
     });
   };
 
   handleMaritalRadioValue = name => index => {
     this.setState({
-      [name]: maritalOptions[index]
+      [name]: maritalOptions[index]['value']
     });
   };
 
@@ -133,7 +167,7 @@ class NomineeDetails extends Component {
           state: res.pfwresponse.result[0].state_name
         });
       } else {
-        alert('Error');
+
         console.log(res.pfwresponse.result.error);
       }
     }
@@ -228,6 +262,7 @@ class NomineeDetails extends Component {
     if (res.pfwresponse.status_code === 200) {
       this.setState({show_loader: false});
       if (this.props.edit) {
+
         if (this.state.age < 18) {
           this.props.history.push({
             pathname: '/edit-appointee',
@@ -240,6 +275,7 @@ class NomineeDetails extends Component {
           });
         }
       } else {
+
         if (this.state.age < 18) {
           this.props.history.push({
             pathname: '/appointee',
@@ -349,13 +385,13 @@ class NomineeDetails extends Component {
               onChange={this.handleChange('relationship')} />
           </div>
         </FormControl>
-        <div className="CheckBlock" style={{marginBottom: 50}}>
+        <div className="CheckBlock" style={{marginTop: 20, marginBottom: 20}}>
           <Grid container spacing={16} alignItems="flex-end">
             <Grid item xs={2} style={{textAlign: 'center'}}>
               <Checkbox
                 defaultChecked
                 color="default"
-                value="checkedG"
+                value="checked"
                 onChange={this.handleChange('checked')}
                 style={{width: 'auto', height: 'auto'}} />
             </Grid>

@@ -12,7 +12,7 @@ class ContactDetails2 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false,
+      show_loader: true,
       pincode: '',
       addressline: '',
       landmark: '',
@@ -35,28 +35,29 @@ class ContactDetails2 extends Component {
     });
   }
 
-  async componentDidMount() {
-    this.setState({show_loader: true});
-    const res = await Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
+  componentDidMount() {
+    Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
       groups: 'contact'
-    });
-
-    const { permanent_addr, corr_addr, corr_address_same } = res.pfwresponse.result.profile;
-
-    await this.setStateAsync({
-      show_loader: false,
-      pincode: permanent_addr.pincode,
-      addressline: permanent_addr.addressline,
-      landmark: permanent_addr.landmark,
-      city: permanent_addr.city,
-      state: permanent_addr.state,
-      checked: corr_address_same,
-      cpincode: corr_addr.pincode,
-      caddress: corr_addr.addressline,
-      clandmark: corr_addr.landmark,
-      ccity: corr_addr.city,
-      cstate: corr_addr.state,
-      country: corr_addr.country
+    }).then(res => {
+      const { permanent_addr, corr_addr } = res.pfwresponse.result.profile;
+      this.setState({
+        show_loader: false,
+        pincode: permanent_addr.pincode || '',
+        addressline: permanent_addr.addressline || '',
+        landmark: permanent_addr.landmark || '',
+        city: permanent_addr.city || '',
+        state: permanent_addr.state || '',
+        checked: (Object.keys(corr_addr).length === 0) ? true : false,
+        cpincode: corr_addr.pincode || '',
+        caddress: corr_addr.addressline || '',
+        clandmark: corr_addr.landmark || '',
+        ccity: corr_addr.city || '',
+        cstate: corr_addr.state || '',
+        country: corr_addr.country || ''
+      });
+    }).catch(error => {
+      this.setState({show_loader: false});
+      console.log(error);
     });
   }
 
@@ -282,14 +283,15 @@ class ContactDetails2 extends Component {
         <div className="SectionHead" style={{marginBottom: 15, color: 'rgb(68,68,68)', fontSize: 14, fontFamily: 'Roboto', fontWeight: 500}}>
           Correspondence address
         </div>
-        <div className="CheckBlock" style={{marginBottom: 20}}>
+        <div className="CheckBlock" style={{marginTop: 20, marginBottom: 20}}>
           <Grid container spacing={16} alignItems="flex-end">
-            <Grid item xs={2}>
+            <Grid item xs={2} style={{textAlign: 'center'}}>
               <Checkbox
                 defaultChecked
                 color="default"
-                value="checkedG"
-                onChange={this.handleChange('checked')} />
+                value="checked"
+                onChange={this.handleChange('checked')}
+                style={{width: 'auto', height: 'auto'}}  />
             </Grid>
             <Grid item xs={10}>
               <span style={{color: 'rgb(68, 68, 68)', fontSize: 14}}>Correspondence address same as permanent address</span>

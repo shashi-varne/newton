@@ -12,9 +12,9 @@ class ContactDetails1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      show_loader: true,
       email: '',
       mobile_no: '',
-      show_loader: false,
       params: qs.parse(this.props.location.search.slice(1))
     }
   }
@@ -25,18 +25,20 @@ class ContactDetails1 extends Component {
     });
   }
 
-  async componentDidMount() {
-    this.setState({show_loader: true});
-    const res = await Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
+  componentDidMount() {
+    Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
       groups: 'contact'
-    });
+    }).then(res => {
+      const { email, mobile_no } = res.pfwresponse.result.profile;
 
-    const { email, mobile_no } = res.pfwresponse.result.profile;
-
-    await this.setStateAsync({
-      show_loader: false,
-      email: email,
-      mobile_no: mobile_no
+      this.setState({
+        show_loader: false,
+        email: email || '',
+        mobile_no: mobile_no || ''
+      });
+    }).catch(error => {
+      this.setState({show_loader: false});
+      console.log(error);
     });
   }
 

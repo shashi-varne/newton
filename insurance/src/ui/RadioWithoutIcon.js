@@ -33,7 +33,7 @@ class RadioGrp extends Component {
     this.props.onChange(index);
     this.setState({
       selectedIndex: index,
-      selectedValue: this.state.options[index],
+      selectedValue: this.state.options[index]['value'],
       options: this.state.options
     });
   }
@@ -44,7 +44,7 @@ class RadioGrp extends Component {
     const allOptions = options.map((option, i) => {
       return (
         <Grid item xs={6} key={i} style={{flexBasis: 'unset'}}>
-          <RadioBtn type={this.props.type} isChecked={(this.state.selectedIndex === i)} text={option} value={option} index={i} handler={this.toggleRadioBtn} />
+          <RadioBtn type={this.props.type} isChecked={(this.state.selectedIndex === i)} text={option.name} value={option.value} index={i} handler={this.toggleRadioBtn} />
         </Grid>
       );
     });

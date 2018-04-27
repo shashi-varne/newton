@@ -50,9 +50,9 @@ class RadioGrp extends Component {
         return (
           <Grid item xs={6} key={i} style={{flexBasis: 'unset', maxWidth: '100%'}}>
             <RadioBtn
-              isChecked={(this.state.selectedIndex === i || option === this.props.value)}
-              text={option}
-              value={option}
+              isChecked={(this.state.selectedIndex === i || option.value === this.props.value)}
+              text={option.name}
+              value={option.value}
               index={i}
               type={this.props.type}
               handler={this.toggleRadioBtn} />
@@ -62,9 +62,9 @@ class RadioGrp extends Component {
         return (
           <Grid item xs={6} key={i}>
             <RadioBtn
-              isChecked={(this.state.selectedIndex === i || option === this.props.value)}
-              text={option}
-              value={option}
+              isChecked={(this.state.selectedIndex === i || option.value === this.props.value)}
+              text={option.name}
+              value={option.value}
               index={i}
               type={this.props.type}
               handler={this.toggleRadioBtn} />

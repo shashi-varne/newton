@@ -13,9 +13,47 @@ import Dropdown from '../../ui/Select';
 import Api from '../../service/api';
 import qs from 'qs';
 
-const declareOptions = ['Y', 'N'];
-const occupationDetailOptions = ["SELF-EMPLOYED","SALRIED","STUDENT"];
-const occupationCategoryOptions = ["GOVERNMENT","PRIVATE","PUBLIC"];
+const declareOptions = [
+  {
+    'name': 'Yes',
+    'value': 'Y'
+  },
+  {
+    'name': 'No',
+    'value': 'N'
+  },
+];
+
+const occupationDetailOptions = [
+  {
+    'name': 'Self-Employed',
+    'value': 'SELF-EMPLOYED'
+  },
+  {
+    'name': 'Salaried',
+    'value': 'SALRIED'
+  },
+  {
+    'name': 'Student',
+    'value': 'STUDENT'
+  }
+];
+
+const occupationCategoryOptions = [
+  {
+    'name': 'Government',
+    'value': 'GOVERNMENT'
+  },
+  {
+    'name': 'Private',
+    'value': 'PRIVATE'
+  },
+  {
+    'name': 'Public',
+    'value': 'PUBLIC'
+  }
+];
+
 const qualification = [
   'B A',
   'BAMS',
@@ -89,7 +127,7 @@ class ProfessionalDetails1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false,
+      show_loader: true,
       occupation_detail: '',
       occupation_category: '',
       annual_income: '',
@@ -108,24 +146,26 @@ class ProfessionalDetails1 extends Component {
     });
   }
 
-  async componentDidMount() {
-    this.setState({show_loader: true});
-    const res = await Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
+  componentDidMount() {
+    Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
       groups: 'professional,misc'
-    });
+    }).then(res => {
+      const { annual_income, designation, education_qualification, occupation_category, occupation_detail, is_criminal, is_politically_exposed, pan_number } = res.pfwresponse.result.profile;
 
-    const { annual_income, designation, education_qualification, occupation_category, occupation_detail, is_criminal, is_politically_exposed, pan_number } = res.pfwresponse.result.profile;
-
-    await this.setStateAsync({
-      show_loader: false,
-      occupation_detail: occupation_detail,
-      occupation_category: occupation_category,
-      annual_income: annual_income,
-      pan_number: pan_number || '',
-      education_qualification: education_qualification,
-      designation: designation || '',
-      is_politically_exposed: (is_criminal) ? 'Y' : 'N',
-      is_criminal: (is_politically_exposed) ? 'Y' : 'N'
+      this.setState({
+        show_loader: false,
+        occupation_detail: occupation_detail || '',
+        occupation_category: occupation_category || '',
+        annual_income: annual_income || '',
+        pan_number: pan_number || '',
+        education_qualification: education_qualification || '',
+        designation: designation || '',
+        is_politically_exposed: (is_criminal) ? 'Y' : 'N',
+        is_criminal: (is_politically_exposed) ? 'Y' : 'N'
+      });
+    }).catch(error => {
+      this.setState({show_loader: false});
+      console.log(error);
     });
   }
 
@@ -140,7 +180,7 @@ class ProfessionalDetails1 extends Component {
       });
     } else if (name === 'is_politically_exposed' || name === 'is_criminal') {
       this.setState({
-        [name]: declareOptions[event]
+        [name]: declareOptions[event]['value']
       });
     } else {
       this.setState({
@@ -151,13 +191,13 @@ class ProfessionalDetails1 extends Component {
 
   handleOccCategoryRadioValue = name => index => {
     this.setState({
-      [name]: occupationCategoryOptions[index]
+      [name]: occupationCategoryOptions[index]['value']
     });
   };
 
   handleOccDetailRadioValue = name => index => {
     this.setState({
-      [name]: occupationDetailOptions[index]
+      [name]: occupationDetailOptions[index]['value']
     });
   };
 
@@ -196,10 +236,17 @@ class ProfessionalDetails1 extends Component {
           });
         }
       } else {
-        this.props.history.push({
-          pathname: '/professional1',
-          search: '?insurance_id='+this.state.params.insurance_id
-        });
+        if (this.state.occupation_detail === 'SALRIED') {
+          this.props.history.push({
+            pathname: '/professional1',
+            search: '?insurance_id='+this.state.params.insurance_id
+          });
+        } else {
+          this.props.history.push({
+            pathname: '/summary',
+            search: '?insurance_id='+this.state.params.insurance_id
+          });
+        }
       }
     } else {
       this.setState({show_loader: false});

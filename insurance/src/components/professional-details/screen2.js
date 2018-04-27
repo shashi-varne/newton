@@ -11,7 +11,7 @@ class ProfessionalDetails2 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false,
+      show_loader: true,
       employer_name: '',
       pincode: '',
       address: '',
@@ -28,22 +28,24 @@ class ProfessionalDetails2 extends Component {
     });
   }
 
-  async componentDidMount() {
-    this.setState({show_loader: true});
-    const res = await Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
+  componentDidMount() {
+    Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
       groups: 'professional'
-    });
+    }).then(res => {
+      const { employer_name, employer_address } = res.pfwresponse.result.profile;
 
-    const { employer_name, employer_address } = res.pfwresponse.result.profile;
-
-    await this.setStateAsync({
-      show_loader: false,
-      employer_name: employer_name,
-      pincode: employer_address.pincode,
-      address: employer_address.addressline,
-      landmark: employer_address.landmark,
-      city: employer_address.city,
-      state: employer_address.state
+      this.setState({
+        show_loader: false,
+        employer_name: employer_name || '',
+        pincode: employer_address.pincode || '',
+        address: employer_address.addressline || '',
+        landmark: employer_address.landmark || '',
+        city: employer_address.city || '',
+        state: employer_address.state || ''
+      });
+    }).catch(error => {
+      this.setState({show_loader: false});
+      console.log(error);
     });
   }
 

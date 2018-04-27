@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
   BrowserRouter,
   Route,
   Switch
 } from 'react-router-dom';
+import { withRouter } from "react-router";
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 
 import PersonalDetails1 from './components/personal-details/screen1';
@@ -43,31 +44,48 @@ const theme = createMuiTheme({
   }
 });
 
+const ScrollToTop = withRouter(
+  class ScrollToTopWithoutRouter extends Component {
+    componentDidUpdate(prevProps) {
+      if (this.props.location !== prevProps.location) {
+        window.scrollTo(0, 0)
+      }
+    }
+
+    render() {
+      return null;
+    }
+  }
+);
+
 const App = () => (
   <MuiThemeProvider theme={theme}>
     <BrowserRouter>
-      <Switch>
-        <Route exact path="/" component={ PersonalDetails1 } />
-        <Route path="/resume" component={ Summary } />
-        <Route path="/personal" component={ PersonalDetails2 } />
-        <Route path="/contact" component={ ContactDetails1 } />
-        <Route path="/contact1" component={ ContactDetails2 } />
-        <Route path="/nominee" component={ NomineeDetails } />
-        <Route path="/appointee" component={ AppointeeDetails } />
-        <Route path="/professional" component={ ProfessionalDetails1 } />
-        <Route path="/professional1" component={ ProfessionalDetails2 } />
-        <Route path="/summary" component={ Summary } />
-        {/* Edit paths */}
-        <Route path="/edit-personal" render={(props) => <PersonalDetails1 {...props} edit={true} /> } />
-        <Route path="/edit-personal1" render={(props) => <PersonalDetails2 {...props} edit={true} /> } />
-        <Route path="/edit-contact" render={(props) => <ContactDetails1 {...props} edit={true} /> } />
-        <Route path="/edit-contact1" render={(props) => <ContactDetails2 {...props} edit={true} /> } />
-        <Route path="/edit-nominee" render={(props) => <NomineeDetails {...props} edit={true} /> } />
-        <Route path="/edit-appointee" render={(props) => <AppointeeDetails {...props} edit={true} /> } />
-        <Route path="/edit-professional" render={(props) => <ProfessionalDetails1 {...props} edit={true} /> } />
-        <Route path="/edit-professional1" render={(props) => <ProfessionalDetails2 {...props} edit={true} /> } />
-        <Route component={ NotFound }/>
-      </Switch>
+      <div>
+        <ScrollToTop />
+        <Switch>
+          <Route exact path="/" component={ PersonalDetails1 } />
+          <Route path="/resume" component={ Summary } />
+          <Route path="/personal" component={ PersonalDetails2 } />
+          <Route path="/contact" component={ ContactDetails1 } />
+          <Route path="/contact1" component={ ContactDetails2 } />
+          <Route path="/nominee" component={ NomineeDetails } />
+          <Route path="/appointee" component={ AppointeeDetails } />
+          <Route path="/professional" component={ ProfessionalDetails1 } />
+          <Route path="/professional1" component={ ProfessionalDetails2 } />
+          <Route path="/summary" component={ Summary } />
+          {/* Edit paths */}
+          <Route path="/edit-personal" render={(props) => <PersonalDetails1 {...props} edit={true} /> } />
+          <Route path="/edit-personal1" render={(props) => <PersonalDetails2 {...props} edit={true} /> } />
+          <Route path="/edit-contact" render={(props) => <ContactDetails1 {...props} edit={true} /> } />
+          <Route path="/edit-contact1" render={(props) => <ContactDetails2 {...props} edit={true} /> } />
+          <Route path="/edit-nominee" render={(props) => <NomineeDetails {...props} edit={true} /> } />
+          <Route path="/edit-appointee" render={(props) => <AppointeeDetails {...props} edit={true} /> } />
+          <Route path="/edit-professional" render={(props) => <ProfessionalDetails1 {...props} edit={true} /> } />
+          <Route path="/edit-professional1" render={(props) => <ProfessionalDetails2 {...props} edit={true} /> } />
+          <Route component={ NotFound }/>
+        </Switch>
+      </div>
     </BrowserRouter>
   </MuiThemeProvider>
 );

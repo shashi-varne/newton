@@ -15,8 +15,35 @@ import Checkbox from 'material-ui/Checkbox';
 import Api from '../../service/api';
 import qs from 'qs';
 
-const maritalOptions = ['UNMARRIED', 'MARRIED', 'DIVORCED', 'WIDOW'];
-const genderOptions = ['MALE', 'FEMALE'];
+const maritalOptions = [
+  {
+    'name': 'Unmarried',
+    'value': 'UNMARRIED'
+  },
+  {
+    'name': 'Married',
+    'value': 'MARRIED'
+  },
+  {
+    'name': 'Divorced',
+    'value': 'DIVORCED'
+  },
+  {
+    'name': 'Widow',
+    'value': 'WIDOW'
+  }
+];
+const genderOptions = [
+  {
+    'name': 'Male',
+    'value': 'MALE'
+  },
+  {
+    'name': 'Female',
+    'value': 'FEMALE'
+  }
+];
+
 
 const relationshipOptions = [
   'BROTHER',
@@ -39,7 +66,7 @@ class AppointeeDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false,
+      show_loader: true,
       name: '',
       dob: '',
       gender: '',
@@ -62,28 +89,30 @@ class AppointeeDetails extends Component {
     });
   }
 
-  async componentDidMount() {
-    this.setState({show_loader: true});
-    const res = await Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
+  componentDidMount() {
+    Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
       groups: 'appointee'
-    });
+    }).then(res => {
+      const { appointee, appointee_address } = res.pfwresponse.result.profile;
 
-    const { appointee_address_same, appointee, appointee_address } = res.pfwresponse.result.profile;
-
-    await this.setStateAsync({
-      show_loader: false,
-      name: appointee.name,
-      dob: appointee.dob.replace(/\\-/g, '/').split('/').reverse().join('-'),
-      gender: appointee.gender,
-      marital_status: appointee.marital_status,
-      relationship: appointee.relationship,
-      checked: appointee_address_same,
-      pincode: appointee_address.pincode,
-      addressline: appointee_address.addressline,
-      landmark: appointee_address.landmark,
-      city: appointee_address.city,
-      state: appointee_address.state,
-      country: appointee_address.country
+      this.setState({
+        show_loader: false,
+        name: appointee.name || '',
+        dob: (appointee.dob) ? appointee.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
+        gender: appointee.gender || '',
+        marital_status: appointee.marital_status || '',
+        relationship: appointee.relationship || '',
+        checked: (Object.keys(appointee_address).length === 0) ? true : false,
+        pincode: appointee_address.pincode || '',
+        addressline: appointee_address.addressline || '',
+        landmark: appointee_address.landmark || '',
+        city: appointee_address.city || '',
+        state: appointee_address.state || '',
+        country: appointee_address.country || ''
+      });
+    }).catch(error => {
+      this.setState({show_loader: false});
+      console.log(error);
     });
   }
 
@@ -105,13 +134,13 @@ class AppointeeDetails extends Component {
 
   handleGenderRadioValue = name => index => {
     this.setState({
-      [name]: genderOptions[index]
+      [name]: genderOptions[index]['value']
     });
   };
 
   handleMaritalRadioValue = name => index => {
     this.setState({
-      [name]: maritalOptions[index]
+      [name]: maritalOptions[index]['value']
     });
   };
 
@@ -322,13 +351,13 @@ class AppointeeDetails extends Component {
               onChange={this.handleChange('relationship')} />
           </div>
         </FormControl>
-        <div className="CheckBlock" style={{marginBottom: 50}}>
+        <div className="CheckBlock" style={{marginTop: 20, marginBottom: 20}}>
           <Grid container spacing={16} alignItems="flex-end">
             <Grid item xs={2} style={{textAlign: 'center'}}>
               <Checkbox
                 defaultChecked
                 color="default"
-                value="checkedG"
+                value="checked"
                 onChange={this.handleChange('checked')}
                 style={{width: 'auto', height: 'auto'}} />
             </Grid>
