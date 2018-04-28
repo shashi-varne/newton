@@ -147,7 +147,7 @@ class PersonalDetails1 extends Component {
               helperText={this.state.name_error}
               icon={name}
               width="40"
-              label="Full Name"
+              label="Full Name *"
               class="FullName"
               id="name"
               name="name"

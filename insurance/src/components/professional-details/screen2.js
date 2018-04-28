@@ -163,7 +163,7 @@ class ProfessionalDetails2 extends Component {
               type="text"
               icon={name}
               width="40"
-              label="Name of present employer"
+              label="Name of present employer *"
               class="Name"
               id="name"
               name="employer_name"
@@ -177,7 +177,7 @@ class ProfessionalDetails2 extends Component {
               type="number"
               icon={location}
               width="40"
-              label="Pincode"
+              label="Pincode *"
               id="pincode"
               name="pincode"
               value={this.state.pincode}
@@ -190,7 +190,7 @@ class ProfessionalDetails2 extends Component {
               type="text"
               id="address"
               name="addressline"
-              label="Address of present employer"
+              label="Address of present employer *"
               value={this.state.addressline}
               onChange={this.handleChange()} />
           </div>
@@ -200,7 +200,7 @@ class ProfessionalDetails2 extends Component {
               helperText={this.state.landmark_error}
               type="text"
               id="landmark"
-              label="Landmark"
+              label="Landmark *"
               name="landmark"
               value={this.state.landmark}
               onChange={this.handleChange('landmark')} />
@@ -209,7 +209,7 @@ class ProfessionalDetails2 extends Component {
             <InputWithIcon
               disabled={true}
               id="city"
-              label="City"
+              label="City *"
               name="city"
               value={this.state.city}
               onChange={this.handleChange('city')} />
@@ -218,7 +218,7 @@ class ProfessionalDetails2 extends Component {
             <InputWithIcon
               disabled={true}
               id="state"
-              label="State"
+              label="State *"
               name="state"
               value={this.state.state}
               onChange={this.handleChange('state')} />

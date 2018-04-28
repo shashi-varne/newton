@@ -154,7 +154,7 @@ class AppointeeDetails extends Component {
               type="number"
               icon={location}
               width="40"
-              label="Pincode"
+              label="Pincode *"
               id="pincode"
               name="pincode"
               value={this.state.pincode}
@@ -166,7 +166,7 @@ class AppointeeDetails extends Component {
               helperText={this.state.addressline_error}
               type="text"
               id="address"
-              label="Permanent address"
+              label="Permanent address *"
               value={this.state.addressline}
               name="addressline"
               onChange={this.handleChange('addressline')} />
@@ -177,7 +177,7 @@ class AppointeeDetails extends Component {
               helperText={this.state.landmark_error}
               type="text"
               id="landmark"
-              label="Landmark"
+              label="Landmark *"
               value={this.state.landmark}
               name="landmark"
               onChange={this.handleChange('landmark')} />
@@ -186,7 +186,7 @@ class AppointeeDetails extends Component {
             <InputWithIcon
               disabled={true}
               id="city"
-              label="City"
+              label="City *"
               value={this.state.city}
               name="city"
               onChange={this.handleChange('city')} />
@@ -195,7 +195,7 @@ class AppointeeDetails extends Component {
             <InputWithIcon
               disabled={true}
               id="state"
-              label="State"
+              label="State *"
               value={this.state.state}
               name="state"
               onChange={this.handleChange('state')} />
@@ -332,7 +332,7 @@ class AppointeeDetails extends Component {
               type="text"
               icon={name}
               width="40"
-              label="Full Name"
+              label="Full Name *"
               class="FullName"
               id="full-name"
               name="name"
@@ -346,7 +346,7 @@ class AppointeeDetails extends Component {
               type="date"
               icon={dob}
               width="40"
-              label="Date of birth"
+              label="Date of birth *"
               class="DOB"
               id="dob"
               name="dob"

@@ -127,7 +127,7 @@ class ContactDetails1 extends Component {
               type="email"
               icon={email}
               width="40"
-              label="Email address"
+              label="Email address *"
               class="Email"
               id="email"
               name="email"
@@ -141,7 +141,7 @@ class ContactDetails1 extends Component {
               type="number"
               icon={phone}
               width="40"
-              label="Mobile number"
+              label="Mobile number *"
               class="Mobile"
               id="number"
               name="mobile_no"

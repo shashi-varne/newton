@@ -213,7 +213,7 @@ class ContactDetails2 extends Component {
               type="number"
               icon={location}
               width="40"
-              label="Pincode"
+              label="Pincode *"
               id="cpincode"
               name="cpincode"
               value={this.state.cpincode}
@@ -225,7 +225,7 @@ class ContactDetails2 extends Component {
               helperText={this.state.caddress_error}
               type="text"
               id="caddress"
-              label="Permanent address"
+              label="Permanent address *"
               value={this.state.caddress}
               name="caddress"
               onChange={this.handleChange()} />
@@ -236,7 +236,7 @@ class ContactDetails2 extends Component {
               helperText={this.state.clandmark_error}
               type="text"
               id="clandmark"
-              label="Landmark"
+              label="Landmark *"
               name="clandmark"
               value={this.state.clandmark}
               onChange={this.handleChange()} />
@@ -245,7 +245,7 @@ class ContactDetails2 extends Component {
             <InputWithIcon
               disabled={true}
               id="ccity"
-              label="City"
+              label="City *"
               value={this.state.ccity}
               name="ccity"
               onChange={this.handleChange()} />
@@ -254,7 +254,7 @@ class ContactDetails2 extends Component {
             <InputWithIcon
               disabled={true}
               id="cstate"
-              label="State"
+              label="State *"
               value={this.state.cstate}
               name="cstate"
               onChange={this.handleChange()} />
@@ -293,7 +293,7 @@ class ContactDetails2 extends Component {
               type="number"
               icon={location}
               width="40"
-              label="Pincode"
+              label="Pincode *"
               id="pincode"
               name="pincode"
               value={this.state.pincode}
@@ -305,7 +305,7 @@ class ContactDetails2 extends Component {
               helperText={this.state.addressline_error}
               type="text"
               id="address"
-              label="Permanent address"
+              label="Permanent address *"
               name="addressline"
               value={this.state.addressline}
               onChange={this.handleChange()} />
@@ -316,7 +316,7 @@ class ContactDetails2 extends Component {
               helperText={this.state.landmark_error}
               type="text"
               id="landmark"
-              label="Landmark"
+              label="Landmark *"
               name="landmark"
               value={this.state.landmark}
               onChange={this.handleChange()} />
@@ -325,7 +325,7 @@ class ContactDetails2 extends Component {
             <InputWithIcon
               disabled={true}
               id="city"
-              label="City"
+              label="City *"
               value={this.state.city}
               name="city"
               onChange={this.handleChange()} />
@@ -334,7 +334,7 @@ class ContactDetails2 extends Component {
             <InputWithIcon
               disabled={true}
               id="state"
-              label="State"
+              label="State *"
               value={this.state.state}
               name="state"
               onChange={this.handleChange()} />

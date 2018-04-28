@@ -137,7 +137,7 @@ class PersonalDetails2 extends Component {
               type="text"
               icon={mother}
               width="40"
-              label="Mother's name"
+              label="Mother's name *"
               class="Mothername"
               id="mother-name"
               name="mother_name"
@@ -151,7 +151,7 @@ class PersonalDetails2 extends Component {
               type="text"
               icon={father}
               width="40"
-              label="Father's name"
+              label="Father's name *"
               class="FatherName"
               id="father-name"
               name="father_name"
@@ -164,7 +164,7 @@ class PersonalDetails2 extends Component {
               helperText={this.state.birth_place_error}
               icon={location}
               width="40"
-              label="Place of birth"
+              label="Place of birth *"
               class="Place"
               id="birth-place"
               name="birth_place"

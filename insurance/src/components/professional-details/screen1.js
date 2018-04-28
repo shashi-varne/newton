@@ -203,7 +203,7 @@ class ProfessionalDetails1 extends Component {
             type="text"
             icon={designation}
             width="40"
-            label="Designation"
+            label="Designation *"
             class="Designation"
             id="designation"
             name="designation"
@@ -282,7 +282,7 @@ class ProfessionalDetails1 extends Component {
             type="text"
             icon={income}
             width="40"
-            label="Annual Income"
+            label="Annual Income *"
             class="Income"
             id="income"
             name="annual_income"
@@ -316,7 +316,7 @@ class ProfessionalDetails1 extends Component {
               type="text"
               icon={pan}
               width="40"
-              label="PAN"
+              label="PAN *"
               class="Pan"
               id="pan"
               name="pan_number"
