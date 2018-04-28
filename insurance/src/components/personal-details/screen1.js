@@ -5,37 +5,10 @@ import InputWithIcon from '../../ui/InputWithIcon';
 import RadioWithIcon from '../../ui/RadioWithIcon';
 import name from '../../assets/full_name_dark_icn.png';
 import marital from '../../assets/marital_status_dark_icn.png';
-import Api from '../../service/api';
+import Api from '../../utils/api';
 import qs from 'qs';
-
-const maritalOptions = [
-  {
-    'name': 'Unmarried',
-    'value': 'UNMARRIED'
-  },
-  {
-    'name': 'Married',
-    'value': 'MARRIED'
-  },
-  {
-    'name': 'Divorced',
-    'value': 'DIVORCED'
-  },
-  {
-    'name': 'Widow',
-    'value': 'WIDOW'
-  }
-];
-const genderOptions = [
-  {
-    'name': 'Male',
-    'value': 'MALE'
-  },
-  {
-    'name': 'Female',
-    'value': 'FEMALE'
-  }
-];
+import { maritalOptions, genderOptions } from '../../utils/constants';
+import { validateAlphabets } from '../../utils/validators';
 
 class PersonalDetails1 extends Component {
   constructor(props) {
@@ -47,6 +20,10 @@ class PersonalDetails1 extends Component {
       gender: '',
       marital_status: '',
       image: '',
+      name_error: '',
+      dob_error: '',
+      gender_error: '',
+      marital_status_error: '',
       params: qs.parse(props.history.location.search.slice(1))
     }
   }
@@ -79,9 +56,10 @@ class PersonalDetails1 extends Component {
 
   }
 
-  handleChange = name => event => {
+  handleChange = () => event => {
     this.setState({
-      [name]: event.target.value
+      [event.target.name]: event.target.value,
+      [event.target.name+'_error']: ''
     });
   };
 
@@ -93,41 +71,60 @@ class PersonalDetails1 extends Component {
 
   handleMaritalRadioValue = name => index => {
     this.setState({
-      [name]: maritalOptions[index]['value']
+      [name]: maritalOptions[index]['value'],
+      [name+'_error']: ''
     });
   };
 
   handleClick = async () => {
-    const formattedDob = this.state.dob.replace(/\\-/g, '/').split('-').reverse().join('/');
-
-    this.setState({show_loader: true});
-
-    const res = await Api.post('/api/insurance/profile', {
-      insurance_app_id: this.state.params.insurance_id,
-      name: this.state.name,
-      dob: formattedDob,
-      gender: this.state.gender,
-      marital_status: this.state.marital_status
-    });
-
-    if (res.pfwresponse.status_code === 200) {
-      this.setState({show_loader: false});
-      if (this.props.edit) {
-        this.props.history.push({
-          pathname: '/edit-personal1',
-          search: '?insurance_id='+this.state.params.insurance_id
-        });
-      } else {
-        this.props.history.push({
-          pathname: '/personal',
-          search: '?insurance_id='+this.state.params.insurance_id
-        });
-      }
+    if (this.state.name.length < 3) {
+      this.setState({
+        name_error: 'Please enter valid full name'
+      });
+    } else if (!validateAlphabets(this.state.name)) {
+      this.setState({
+        name_error: 'Name can contain only alphabets'
+      });
+    } else if (!this.state.marital_status) {
+      this.setState({
+        marital_status_error: 'Mandatory'
+      });
     } else {
-      this.setState({show_loader: false});
-      alert('Error');
-      console.log(res.pfwresponse.result.error);
+      const formattedDob = this.state.dob.replace(/\\-/g, '/').split('-').reverse().join('/');
+
+      this.setState({show_loader: true});
+
+      const res = await Api.post('/api/insurance/profile', {
+        insurance_app_id: this.state.params.insurance_id,
+        name: this.state.name,
+        dob: formattedDob,
+        gender: this.state.gender,
+        marital_status: this.state.marital_status
+      });
+
+      if (res.pfwresponse.status_code === 200) {
+        this.setState({show_loader: false});
+        if (this.props.edit) {
+          this.props.history.push({
+            pathname: '/edit-personal1',
+            search: '?insurance_id='+this.state.params.insurance_id
+          });
+        } else {
+          this.props.history.push({
+            pathname: '/personal',
+            search: '?insurance_id='+this.state.params.insurance_id
+          });
+        }
+      } else {
+        this.setState({show_loader: false});
+        for (let error of res.pfwresponse.result.errors) {
+          this.setState({
+            [error.field+'_error']: error.message
+          });
+        }
+      }
     }
+
   }
 
   render() {
@@ -147,16 +144,21 @@ class PersonalDetails1 extends Component {
           <div className="InputField">
             <InputWithIcon
               type="text"
+              error={(this.state.name_error) ? true : false}
+              helperText={this.state.name_error}
               icon={name}
               width="40"
               label="Full Name"
               class="FullName"
-              id="full-name"
+              id="name"
+              name="name"
               value={this.state.name}
-              onChange={this.handleChange('name')} />
+              onChange={this.handleChange()} />
           </div>
           <div className="InputField">
             <RadioWithIcon
+              error={(this.state.marital_status_error) ? true : false}
+              helperText={this.state.marital_status_error}
               icon={marital}
               width="40"
               label="Marital Status"

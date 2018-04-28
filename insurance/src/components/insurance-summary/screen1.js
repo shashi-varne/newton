@@ -8,37 +8,11 @@ import smoking from '../../assets/smoking_icon.png';
 import expand from '../../assets/expand_icn.png';
 import shrink from '../../assets/shrink_icn.png';
 import loader from '../../assets/loader_gif.gif';
-import Api from '../../service/api';
+import Api from '../../utils/api';
 import Modal from 'material-ui/Modal';
 import Typography from 'material-ui/Typography';
 import qs from 'qs';
-
-const income_pairs = [
-  {
-    "name" : "upto3",
-    "value" : "upto 3 lakhs"
-  },
-  {
-    "name" : "3-5",
-    "value" : "3-5 lakhs"
-  },
-  {
-    "name" : "5-7",
-    "value" : "5-7 lakhs"
-  },
-  {
-    "name" : "7-10",
-    "value" : "7-10 lakhs"
-  },
-  {
-    "name" : "10-15",
-    "value" : "10-15 lakhs"
-  },
-  {
-    "name" : "above15",
-    "value" : "15 lakhs +"
-  }
-];
+import { income_pairs } from '../../utils/constants';
 
 class Summary extends Component {
   constructor(props) {
@@ -240,13 +214,12 @@ class Summary extends Component {
         insurance_app_id: this.state.params.insurance_id
       });
       if (res.pfwresponse.status_code === 200) {
-        window.location.href = res.pfwresponse.result.insurance_app.payment_link;
+        window.location.replace(window.location.href+'&native_payment=true&payment_link='+res.pfwresponse.result.insurance_app.payment_link, function() {});
       } else {
-        alert(res.pfwresponse.result.error);
         this.setState({openModal: false});
       }
     } else {
-      window.location.href = this.state.resume_link;
+      window.location.replace(window.location.href+'&native_payment=true&resume_link='+this.state.resume_link, function() {});
     }
   }
 

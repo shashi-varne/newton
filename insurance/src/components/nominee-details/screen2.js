@@ -12,55 +12,10 @@ import location from '../../assets/location_dark_icn.png';
 import Grid from 'material-ui/Grid';
 import Dropdown from '../../ui/Select';
 import Checkbox from 'material-ui/Checkbox';
-import Api from '../../service/api';
+import Api from '../../utils/api';
 import qs from 'qs';
-
-const maritalOptions = [
-  {
-    'name': 'Unmarried',
-    'value': 'UNMARRIED'
-  },
-  {
-    'name': 'Married',
-    'value': 'MARRIED'
-  },
-  {
-    'name': 'Divorced',
-    'value': 'DIVORCED'
-  },
-  {
-    'name': 'Widow',
-    'value': 'WIDOW'
-  }
-];
-const genderOptions = [
-  {
-    'name': 'Male',
-    'value': 'MALE'
-  },
-  {
-    'name': 'Female',
-    'value': 'FEMALE'
-  }
-];
-
-
-const relationshipOptions = [
-  'BROTHER',
-  'DAUGHTER',
-  'FATHER',
-  'GRAND DAUGHTER',
-  'GRAND FATHER',
-  'GRAND MOTHER',
-  'GRAND SON',
-  'HUSBAND',
-  'MOTHER',
-  'NEPHEW',
-  'NIECE',
-  'SISTER',
-  'SON',
-  'WIFE'
-];
+import { maritalOptions, genderOptions, relationshipOptions } from '../../utils/constants';
+import { validateAlphabets, validateNumber, validateAddress } from '../../utils/validators';
 
 class AppointeeDetails extends Component {
   constructor(props) {
@@ -68,17 +23,24 @@ class AppointeeDetails extends Component {
     this.state = {
       show_loader: true,
       name: '',
+      name_error: '',
       dob: '',
+      dob_error: '',
       gender: '',
+      gender_error: '',
       marital_status: '',
+      marital_status_error: '',
       relationship: '',
+      relationship_error: '',
       checked: true,
       pincode: '',
+      pincode_error: '',
       addressline: '',
+      addressline_error: '',
       landmark: '',
+      landmark_error: '',
       city: '',
       state: '',
-      country: 'INDIA',
       image: '',
       params: qs.parse(props.history.location.search.slice(1))
     }
@@ -126,24 +88,33 @@ class AppointeeDetails extends Component {
       });
     } else if (name === 'relationship') {
       this.setState({
-        [name]: event
+        [name]: event,
+        [name+'_error']: ''
       });
+    } else if (name === 'dob') {
+      this.setState({
+        [name]: event.target.value,
+        [event.target.name+'_error']: ''
+      })
     } else {
       this.setState({
-        [name]: event.target.value
+        [name]: event.target.value,
+        [event.target.name+'_error']: ''
       });
     }
   };
 
   handleGenderRadioValue = name => index => {
     this.setState({
-      [name]: genderOptions[index]['value']
+      [name]: genderOptions[index]['value'],
+      [name+'_error']: ''
     });
   };
 
   handleMaritalRadioValue = name => index => {
     this.setState({
-      [name]: maritalOptions[index]['value']
+      [name]: maritalOptions[index]['value'],
+      [name+'_error']: ''
     });
   };
 
@@ -151,20 +122,23 @@ class AppointeeDetails extends Component {
     const pincode = event.target.value;
 
     this.setState({
-      [name]: pincode
+      [name]: pincode,
+      [name+'_error']: ''
     });
 
     if (pincode.length === 6) {
       const res = await Api.get('/api/pincode/' + pincode);
 
-      if (res.pfwresponse.status_code === 200) {
+      if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
         this.setState({
           city: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
           state: res.pfwresponse.result[0].state_name
         });
       } else {
-        alert('Error');
-        console.log(res.pfwresponse.result.error);
+        this.setState({
+          city: '',
+          state:  ''
+        });
       }
     }
   }
@@ -175,28 +149,37 @@ class AppointeeDetails extends Component {
         <FormControl fullWidth>
           <div className="InputField">
             <InputWithIcon
+              error={(this.state.pincode_error) ? true : false}
+              helperText={this.state.pincode_error}
               type="number"
               icon={location}
               width="40"
               label="Pincode"
               id="pincode"
+              name="pincode"
               value={this.state.pincode}
               onChange={this.handlePincode('pincode')} />
           </div>
           <div className="InputField">
             <InputWithIcon
+              error={(this.state.addressline_error) ? true : false}
+              helperText={this.state.addressline_error}
               type="text"
               id="address"
               label="Permanent address"
               value={this.state.addressline}
+              name="addressline"
               onChange={this.handleChange('addressline')} />
           </div>
           <div className="InputField">
             <InputWithIcon
+              error={(this.state.landmark_error) ? true : false}
+              helperText={this.state.landmark_error}
               type="text"
               id="landmark"
               label="Landmark"
               value={this.state.landmark}
+              name="landmark"
               onChange={this.handleChange('landmark')} />
           </div>
           <div className="InputField">
@@ -205,6 +188,7 @@ class AppointeeDetails extends Component {
               id="city"
               label="City"
               value={this.state.city}
+              name="city"
               onChange={this.handleChange('city')} />
           </div>
           <div className="InputField">
@@ -213,15 +197,8 @@ class AppointeeDetails extends Component {
               id="state"
               label="State"
               value={this.state.state}
+              name="state"
               onChange={this.handleChange('state')} />
-          </div>
-          <div className="InputField">
-            <InputWithIcon
-              disabled={true}
-              id="country"
-              label="Country"
-              value={this.state.country}
-              onChange={this.handleChange('country')} />
           </div>
         </FormControl>
       );
@@ -231,47 +208,88 @@ class AppointeeDetails extends Component {
   }
 
   handleClick = async () => {
-    let data = {
-      appointee: {}
-    };
-    const formattedDob = this.state.dob.replace(/\\-/g, '/').split('-').reverse().join('/');
-
-    data['insurance_app_id'] =  this.state.params.insurance_id;
-    data['appointee']['name'] = this.state.name;
-    data['appointee']['dob'] = formattedDob;
-    data['appointee']['gender'] = this.state.gender;
-    data['appointee']['marital_status'] = this.state.marital_status;
-    data['appointee']['relationship'] = this.state.relationship;
-
-    if (this.state.checked) {
-      data['a_addr_same'] = 'Y';
+    if (this.state.name.length < 3) {
+      this.setState({
+        name_error: 'Please enter valid full name'
+      });
+    } else if (!validateAlphabets(this.state.name)) {
+      this.setState({
+        name_error: 'Name can contain only alphabets'
+      });
+    } else if (!this.state.dob) {
+      this.setState({
+        dob_error: 'Valid age: 18-65'
+      });
+    } else if (!this.state.gender) {
+      this.setState({
+        gender_error: 'Mandatory'
+      });
+    } else if (!this.state.marital_status) {
+      this.setState({
+        marital_status_error: 'Mandatory'
+      });
+    } else if (!this.state.relationship) {
+      this.setState({
+        relationship_error: 'Please select relationship'
+      });
+    } else if (!this.state.checked && (this.state.pincode.length !== 6 || !validateNumber(this.state.pincode))) {
+      this.setState({
+        pincode_error: 'Please enter valid pincode'
+      });
+    } else if (!this.state.checked && !validateAddress(this.state.addressline)) {
+      this.setState({
+        addressline_error: 'Please enter valid address'
+      });
+    } else if (!this.state.checked && this.state.landmark.length < 3) {
+      this.setState({
+        landmark_error: 'Please enter valid landmark'
+      });
     } else {
-      data['appointee_address'] = {
-        'pincode': this.state.pincode,
-        'addressline': this.state.addressline,
-        'landmark': this.state.landmark
+      let data = {
+        appointee: {}
       };
-    }
-    this.setState({show_loader: true});
-    const res = await Api.post('/api/insurance/profile', data);
+      const formattedDob = this.state.dob.replace(/\\-/g, '/').split('-').reverse().join('/');
 
-    if (res.pfwresponse.status_code === 200) {
-      this.setState({show_loader: false});
-      if (this.props.edit) {
-        this.props.history.push({
-          pathname: '/summary',
-          search: '?insurance_id='+this.state.params.insurance_id
-        });
+      data['insurance_app_id'] =  this.state.params.insurance_id;
+      data['appointee']['name'] = this.state.name;
+      data['appointee']['dob'] = formattedDob;
+      data['appointee']['gender'] = this.state.gender;
+      data['appointee']['marital_status'] = this.state.marital_status;
+      data['appointee']['relationship'] = this.state.relationship;
+
+      if (this.state.checked) {
+        data['a_addr_same'] = 'Y';
       } else {
-        this.props.history.push({
-          pathname: '/professional',
-          search: '?insurance_id='+this.state.params.insurance_id
-        });
+        data['appointee_address'] = {
+          'pincode': this.state.pincode,
+          'addressline': this.state.addressline,
+          'landmark': this.state.landmark
+        };
       }
-    } else {
-      this.setState({show_loader: false});
-      alert('Error');
-      console.log(res.pfwresponse.result.error);
+      this.setState({show_loader: true});
+      const res = await Api.post('/api/insurance/profile', data);
+
+      if (res.pfwresponse.status_code === 200) {
+        this.setState({show_loader: false});
+        if (this.props.edit) {
+          this.props.history.push({
+            pathname: '/summary',
+            search: '?insurance_id='+this.state.params.insurance_id
+          });
+        } else {
+          this.props.history.push({
+            pathname: '/professional',
+            search: '?insurance_id='+this.state.params.insurance_id
+          });
+        }
+      } else {
+        this.setState({show_loader: false});
+        for (let error of res.pfwresponse.result.errors) {
+          this.setState({
+            [error.field+'_error']: error.message
+          });
+        }
+      }
     }
   }
 
@@ -302,64 +320,80 @@ class AppointeeDetails extends Component {
         <FormControl fullWidth>
           <div className="InputField">
             <InputWithIcon
+              error={(this.state.name_error) ? true : false}
+              helperText={this.state.name_error}
               type="text"
               icon={name}
               width="40"
               label="Full Name"
               class="FullName"
               id="full-name"
+              name="name"
               value={this.state.name}
               onChange={this.handleChange('name')}  />
           </div>
           <div className="InputField">
             <InputWithIcon
+              error={(this.state.dob_error) ? true : false}
+              helperText={this.state.dob_error}
               type="date"
               icon={dob}
               width="40"
               label="Date of birth"
               class="DOB"
               id="dob"
+              name="dob"
               value={this.state.dob}
               onChange={this.handleChange('dob')} />
           </div>
           <div className="InputField">
             <RadioWithIcon
+              error={(this.state.gender_error) ? true : false}
+              helperText={this.state.gender_error}
               icon={gender}
               width="40"
               label="Gender"
               class="Gender"
               options={genderOptions}
               id="gender"
+              name="gender"
               value={this.state.gender}
               onChange={this.handleGenderRadioValue('gender')} />
           </div>
           <div className="InputField">
             <RadioWithIcon
+              error={(this.state.marital_status_error) ? true : false}
+              helperText={this.state.marital_status_error}
               icon={marital}
               width="40"
               label="Marital Status"
               class="MaritalStatus"
               options={maritalOptions}
               id="marital-status"
+              name="marital_status"
               value={this.state.marital_status}
               onChange={this.handleMaritalRadioValue('marital_status')} />
           </div>
           <div className="InputField">
             <Dropdown
+              error={(this.state.relationship_error) ? true : false}
+              helperText={this.state.relationship_error}
               icon={relationship}
               width="40"
               options={relationshipOptions}
               id="relationship"
+              name="relationship"
               label="Relationship"
               value={this.state.relationship}
               onChange={this.handleChange('relationship')} />
           </div>
         </FormControl>
-        <div className="CheckBlock" style={{marginTop: 20, marginBottom: 20}}>
-          <Grid container spacing={16} alignItems="flex-end">
+        <div className="CheckBlock" style={{marginTop: 20, marginBottom: 30}}>
+          <Grid container spacing={16} alignItems="center">
             <Grid item xs={2} style={{textAlign: 'center'}}>
               <Checkbox
                 defaultChecked
+                checked={this.state.checked}
                 color="default"
                 value="checked"
                 onChange={this.handleChange('checked')}

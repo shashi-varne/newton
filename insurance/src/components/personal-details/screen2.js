@@ -5,8 +5,9 @@ import InputWithIcon from '../../ui/InputWithIcon';
 import mother from '../../assets/mother_dark_icn.png';
 import father from '../../assets/father_dark_icn.png';
 import location from '../../assets/location_dark_icn.png';
-import Api from '../../service/api';
+import Api from '../../utils/api';
 import qs from 'qs';
+import { validateAlphabets } from '../../utils/validators';
 
 class PersonalDetails2 extends Component {
   constructor(props) {
@@ -17,6 +18,9 @@ class PersonalDetails2 extends Component {
       birth_place: '',
       show_loader: true,
       image: '',
+      mother_name_error: '',
+      father_name_error: '',
+      birth_place_error: '',
       params: qs.parse(props.history.location.search.slice(1))
     }
   }
@@ -47,38 +51,67 @@ class PersonalDetails2 extends Component {
     });
   }
 
-  handleChange = name => event => {
+  handleChange = () => event => {
     this.setState({
-      [name]: event.target.value
+      [event.target.name]: event.target.value,
+      [event.target.name+'_error']: ''
     });
   };
 
   handleClick = async () => {
-    this.setState({show_loader: true});
-    const res = await Api.post('/api/insurance/profile', {
-      insurance_app_id: this.state.params.insurance_id,
-      father_name: this.state.father_name,
-      mother_name: this.state.mother_name,
-      birth_place: this.state.birth_place
-    });
-
-    if (res.pfwresponse.status_code === 200) {
-      this.setState({show_loader: false});
-      if (this.props.edit) {
-        this.props.history.push({
-          pathname: '/summary',
-          search: '?insurance_id='+this.state.params.insurance_id
-        });
-      } else {
-        this.props.history.push({
-          pathname: '/contact',
-          search: '?insurance_id='+this.state.params.insurance_id
-        });
-      }
+    if (this.state.mother_name.length < 3) {
+      this.setState({
+        mother_name_error: 'Please enter valid name'
+      });
+    } else if (!validateAlphabets(this.state.mother_name)) {
+      this.setState({
+        mother_name_error: 'Name can contain only alphabets'
+      });
+    } else if (this.state.father_name.length < 3) {
+      this.setState({
+        father_name_error: 'Please enter valid name'
+      });
+    } else if (!validateAlphabets(this.state.father_name)) {
+      this.setState({
+        father_name_error: 'Name can contain only alphabets'
+      });
+    } else if (this.state.birth_place.length < 3) {
+      this.setState({
+        birth_place_error: 'Please enter valid name'
+      });
+    } else if (!validateAlphabets(this.state.birth_place)) {
+      this.setState({
+        birth_place_error: 'Name can contain only alphabets'
+      });
     } else {
-      this.setState({show_loader: false});
-      alert('Error');
-      console.log(res.pfwresponse.result.error);
+      const res = await Api.post('/api/insurance/profile', {
+        insurance_app_id: this.state.params.insurance_id,
+        father_name: this.state.father_name,
+        mother_name: this.state.mother_name,
+        birth_place: this.state.birth_place
+      });
+
+      if (res.pfwresponse.status_code === 200) {
+        this.setState({show_loader: false});
+        if (this.props.edit) {
+          this.props.history.push({
+            pathname: '/summary',
+            search: '?insurance_id='+this.state.params.insurance_id
+          });
+        } else {
+          this.props.history.push({
+            pathname: '/contact',
+            search: '?insurance_id='+this.state.params.insurance_id
+          });
+        }
+      } else {
+        this.setState({show_loader: false});
+        for (let error of res.pfwresponse.result.errors) {
+          this.setState({
+            [error.field+'_error']: error.message
+          });
+        }
+      }
     }
   }
 
@@ -98,35 +131,44 @@ class PersonalDetails2 extends Component {
         <FormControl fullWidth>
           <div className="InputField">
             <InputWithIcon
+              error={(this.state.mother_name_error) ? true : false}
+              helperText={this.state.mother_name_error}
               type="text"
               icon={mother}
               width="40"
               label="Mother's name"
               class="Mothername"
               id="mother-name"
+              name="mother_name"
               value={this.state.mother_name}
-              onChange={this.handleChange('mother_name')} />
+              onChange={this.handleChange()} />
           </div>
           <div className="InputField">
             <InputWithIcon
+              error={(this.state.father_name_error) ? true : false}
+              helperText={this.state.father_name_error}
               type="text"
               icon={father}
               width="40"
               label="Father's name"
               class="FatherName"
               id="father-name"
+              name="father_name"
               value={this.state.father_name}
-              onChange={this.handleChange('father_name')} />
+              onChange={this.handleChange()} />
           </div>
           <div className="InputField">
             <InputWithIcon
+              error={(this.state.birth_place_error) ? true : false}
+              helperText={this.state.birth_place_error}
               icon={location}
               width="40"
               label="Place of birth"
               class="Place"
               id="birth-place"
+              name="birth_place"
               value={this.state.birth_place}
-              onChange={this.handleChange('birth_place')} />
+              onChange={this.handleChange()} />
           </div>
         </FormControl>
       </Container>

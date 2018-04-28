@@ -41,6 +41,7 @@ class SelectGrp extends Component {
       <FormControl className="Dropdown" disabled={this.props.disabled}>
         <InputLabel htmlFor={this.props.id}>{this.props.label} *</InputLabel>
         <Select
+          error={this.props.error}
           className="Select"
           value={this.state.selectedValue}
           onChange={(e) => this.handleChange(e)}
@@ -65,12 +66,7 @@ const Dropdown = (props) => (
     </Grid>
     <Grid item xs={10}>
       <SelectGrp
-        options={props.options}
-        id={props.id}
-        disabled={props.disabled}
-        label={props.label}
-        value={props.value}
-        onChange={props.onChange} />
+        {...props} />
     </Grid>
   </Grid>
 );

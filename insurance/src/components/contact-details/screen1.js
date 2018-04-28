@@ -5,8 +5,9 @@ import InputWithIcon from '../../ui/InputWithIcon';
 import MobileInputWithIcon from '../../ui/MobileInputWithIcon';
 import email from '../../assets/email_dark_icn.png';
 import phone from '../../assets/phone_dark_icn.png';
-import Api from '../../service/api';
+import Api from '../../utils/api';
 import qs from 'qs';
+import { validateEmail, validateNumber } from '../../utils/validators';
 
 class ContactDetails1 extends Component {
   constructor(props) {
@@ -15,6 +16,8 @@ class ContactDetails1 extends Component {
       show_loader: true,
       email: '',
       mobile_no: '',
+      email_error: '',
+      mobile_no_error: '',
       image: '',
       params: qs.parse(this.props.location.search.slice(1))
     }
@@ -45,37 +48,50 @@ class ContactDetails1 extends Component {
     });
   }
 
-  handleChange = name => event => {
+  handleChange = () => event => {
     this.setState({
-      [name]: event.target.value
+      [event.target.name]: event.target.value,
+      [event.target.name+'_error']: ''
     });
   };
 
   handleClick = async () => {
-    this.setState({show_loader: true});
-    const res = await Api.post('/api/insurance/profile', {
-      insurance_app_id: this.state.params.insurance_id,
-      email: this.state.email,
-      mobile_no: this.state.mobile_no
-    });
-
-    if (res.pfwresponse.status_code === 200) {
-      this.setState({show_loader: true});
-      if (this.props.edit) {
-        this.props.history.push({
-          pathname: '/edit-contact1',
-          search: '?insurance_id='+this.state.params.insurance_id
-        });
-      } else {
-        this.props.history.push({
-          pathname: '/contact1',
-          search: '?insurance_id='+this.state.params.insurance_id
-        });
-      }
+    if (!validateEmail(this.state.email)) {
+      this.setState({
+        email_error: 'Please enter valid email'
+      });
+    } else if (this.state.mobile_no.length !== 10 || !validateNumber(this.state.mobile_no)) {
+      this.setState({
+        mobile_no_error: 'Please enter valid mobile no'
+      });
     } else {
-      this.setState({show_loader: false});
-      alert('Error');
-      console.log(res.pfwresponse.result.error);
+      const res = await Api.post('/api/insurance/profile', {
+        insurance_app_id: this.state.params.insurance_id,
+        email: this.state.email,
+        mobile_no: this.state.mobile_no
+      });
+
+      if (res.pfwresponse.status_code === 200) {
+        this.setState({show_loader: true});
+        if (this.props.edit) {
+          this.props.history.push({
+            pathname: '/edit-contact1',
+            search: '?insurance_id='+this.state.params.insurance_id
+          });
+        } else {
+          this.props.history.push({
+            pathname: '/contact1',
+            search: '?insurance_id='+this.state.params.insurance_id
+          });
+        }
+      } else {
+        this.setState({show_loader: false});
+        for (let error of res.pfwresponse.result.errors) {
+          this.setState({
+            [error.field+'_error']: error.message
+          });
+        }
+      }
     }
   }
 
@@ -105,23 +121,29 @@ class ContactDetails1 extends Component {
         <FormControl fullWidth>
           <div className="InputField">
             <InputWithIcon
+              error={(this.state.email_error) ? true : false}
+              helperText={this.state.email_error}
               type="email"
               icon={email}
               width="40"
               label="Email address"
               class="Email"
               id="email"
+              name="email"
               value={this.state.email}
               onChange={this.handleChange('email')} />
           </div>
           <div className="InputField">
             <MobileInputWithIcon
+              error={(this.state.mobile_no_error) ? true : false}
+              helperText={this.state.mobile_no_error}
               type="number"
               icon={phone}
               width="40"
               label="Mobile number"
               class="Mobile"
               id="number"
+              name="mobile_no"
               value={this.state.mobile_no}
               onChange={this.handleChange('mobile_no')} />
           </div>

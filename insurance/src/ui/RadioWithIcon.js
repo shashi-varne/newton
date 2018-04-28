@@ -75,7 +75,10 @@ class RadioGrp extends Component {
 
     return (
       <div>
-        <div style={{color: '#444', fontSize: '0.8rem', marginBottom: 15}}>{this.props.label} *</div>
+        <div style={{color: '#444', fontSize: '0.8rem', marginBottom: 15, position: 'relative'}}>
+          <span>{this.props.label} *</span>
+          <span style={{position: 'absolute', right: 0, color: '#d0021b', fontSize: 14, fontStyle: 'italic'}} className={(this.props.error) ? 'error' : ''}>{(this.props.error) ? 'Mandatory' : ''}</span>
+        </div>
         <Grid container spacing={24}>
           {allOptions}
         </Grid>
@@ -93,11 +96,7 @@ const RadioWithIcon = (props) => (
     </Grid>
     <Grid item xs={10}>
       <RadioGrp
-        label={props.label}
-        options={props.options}
-        type={props.type}
-        value={props.value}
-        onChange={props.onChange} />
+        {...props} />
     </Grid>
   </Grid>
 );

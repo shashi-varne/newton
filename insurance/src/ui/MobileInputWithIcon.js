@@ -17,14 +17,7 @@ const MobileInputWithIcon = (props) => (
         +91
       </div>
       <Input
-        type={props.type}
-        fullWidth={true}
-        required={true}
-        class={props.class}
-        id={props.id}
-        label={props.label}
-        value={props.value}
-        onChange={props.onChange} />
+        {...props} />
     </Grid>
   </Grid>
 );

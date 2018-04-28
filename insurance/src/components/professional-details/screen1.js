@@ -10,118 +10,10 @@ import occupation from '../../assets/occupation_details_dark_icn.png';
 import designation from '../../assets/designation_dark_icn.png';
 import income from '../../assets/annual_income_dark_icn.png';
 import Dropdown from '../../ui/Select';
-import Api from '../../service/api';
+import Api from '../../utils/api';
 import qs from 'qs';
-
-const declareOptions = [
-  {
-    'name': 'Yes',
-    'value': 'Y'
-  },
-  {
-    'name': 'No',
-    'value': 'N'
-  },
-];
-
-const occupationDetailOptions = [
-  {
-    'name': 'Self-Employed',
-    'value': 'SELF-EMPLOYED'
-  },
-  {
-    'name': 'Salaried',
-    'value': 'SALRIED'
-  },
-  {
-    'name': 'Student',
-    'value': 'STUDENT'
-  }
-];
-
-const occupationCategoryOptions = [
-  {
-    'name': 'Government',
-    'value': 'GOVERNMENT'
-  },
-  {
-    'name': 'Private',
-    'value': 'PRIVATE'
-  },
-  {
-    'name': 'Public',
-    'value': 'PUBLIC'
-  }
-];
-
-const qualification = [
-  'B A',
-  'BAMS',
-  'BAC',
-  'B B A',
-  'BCA',
-  'B COM',
-  'BDS',
-  'B E',
-  'B ED',
-  'BHMS',
-  'BMLT',
-  'B M S',
-  'B PHARM',
-  'BPY',
-  'B SC',
-  'B TECH',
-  'BUMS',
-  'BACHELOR OF VETERINARY SCIENCE',
-  'CA',
-  'CFA',
-  'CSC',
-  'DCE',
-  'DIPLOMA IN CIVIL ENGINEERING',
-  'D ED',
-  'DIPLOMA IN ELECTRICAL ENGINEERING',
-  'DIPLOMA IN FASHION DESIGNING',
-  'DIPLOMA IN GENERAL NURSING',
-  'DIPLOMA IN INTERIOR DESIGNING',
-  'DIPLOMA IN INSTRUMENTATION ENGINEERING',
-  'DIPLOMA',
-  'DIPLOMA IN MECHANICAL ENGINEERING',
-  'DMLT',
-  'DIPLOMA IN PHARMACY',
-  'DTE',
-  'GRD',
-  'H S C',
-  'ICWA',
-  'ILLITERATE',
-  'ITI',
-  'LLB',
-  'MASTER OF LAW',
-  'M A',
-  'M. ARCH.',
-  'MBA',
-  'MBBS',
-  'MCA',
-  'M.CH',
-  'MCM',
-  'M D',
-  'M E',
-  'MED',
-  'MMS',
-  'M PHARM',
-  'M. PHIL',
-  'MPY',
-  'M S',
-  'M SC',
-  'M TECH',
-  'PGR',
-  'PG DIPLOMA  BUSINESS ADMIN',
-  'PBM',
-  'PG DIPLOMA MARKETING MANAGEMENT',
-  'PHARMD',
-  'PH.D.',
-  'S S C',
-  'UNDER MATRIC (CLASS L TO LX)'
-];
+import { declareOptions, occupationDetailOptions, occupationCategoryOptions, qualification } from '../../utils/constants';
+import { validatePan } from '../../utils/validators';
 
 class ProfessionalDetails1 extends Component {
   constructor(props) {
@@ -129,11 +21,17 @@ class ProfessionalDetails1 extends Component {
     this.state = {
       show_loader: true,
       occupation_detail: '',
+      occupation_detail_error: '',
       occupation_category: '',
+      occupation_category_error: '',
       annual_income: '',
+      annual_income_error: '',
       pan_number: '',
+      pan_number_error: '',
       education_qualification: '',
+      education_qualification_error: '',
       designation: '',
+      designation_error: '',
       is_politically_exposed: 'N',
       is_criminal: 'N',
       image: '',
@@ -179,85 +77,119 @@ class ProfessionalDetails1 extends Component {
       });
     } else if (name === 'education_qualification') {
       this.setState({
-        [name]: event
+        [name]: event,
+        [name+'_error']: ''
       });
     } else if (name === 'is_politically_exposed' || name === 'is_criminal') {
       this.setState({
-        [name]: declareOptions[event]['value']
+        [name]: declareOptions[event]['value'],
       });
     } else {
       this.setState({
-        [name]: event.target.value
+        [name]: event.target.value,
+        [name+'_error']: ''
       });
     }
   };
 
   handleOccCategoryRadioValue = name => index => {
     this.setState({
-      [name]: occupationCategoryOptions[index]['value']
+      [name]: occupationCategoryOptions[index]['value'],
+      [name+'_error']: ''
     });
   };
 
   handleOccDetailRadioValue = name => index => {
     this.setState({
-      [name]: occupationDetailOptions[index]['value']
+      [name]: occupationDetailOptions[index]['value'],
+      [name+'_error']: ''
     });
   };
 
   handleClick = async () => {
-    let data = {};
+    if (this.state.pan_number.length !== 10 || !validatePan(this.state.pan_number)) {
+      this.setState({
+        pan_number_error: 'Invalid PAN number'
+      });
+    } else if (!this.state.education_qualification) {
+      this.setState({
+        education_qualification_error: 'Invalid education qualification'
+      });
+    } else if (!this.state.occupation_detail) {
+      this.setState({
+        occupation_detail_error: 'Mandatory'
+      });
+    } else if (this.state.occupation_detail === 'SALRIED' && !this.state.occupation_category) {
+      this.setState({
+        occupation_category_error: 'Mandatory'
+      });
+    }  else if (!this.state.designation) {
+      this.setState({
+        designation_error: 'Invalid designation'
+      });
+    }  else if (!this.state.annual_income) {
+      this.setState({
+        annual_income_error: 'Invalid annual income'
+      });
+    } else {
 
-    data['insurance_app_id'] =  this.state.params.insurance_id;
-    data['occupation_detail'] = this.state.occupation_detail;
-    data['occupation_category'] = this.state.occupation_category;
-    data['annual_income'] = this.state.annual_income;
-    data['pan_number'] = this.state.pan_number;
-    data['education_qualification'] = this.state.education_qualification;
+      let data = {};
 
-    if (this.state.occupation_detail === 'SELF-EMPLOYED') {
-      data['designation'] = this.state.designation;
-      data['is_politically_exposed'] = this.state.is_politically_exposed;
-      data['is_criminal'] = this.state.is_criminal;
-    }
-    if (this.state.occupation_detail === 'SALRIED') {
-      data['designation'] = this.state.designation;
-    }
+      data['insurance_app_id'] =  this.state.params.insurance_id;
+      data['occupation_detail'] = this.state.occupation_detail;
+      data['occupation_category'] = this.state.occupation_category;
+      data['annual_income'] = this.state.annual_income;
+      data['pan_number'] = this.state.pan_number;
+      data['education_qualification'] = this.state.education_qualification;
 
-    this.setState({show_loader: true});
+      if (this.state.occupation_detail === 'SELF-EMPLOYED') {
+        data['designation'] = this.state.designation;
+        data['is_politically_exposed'] = this.state.is_politically_exposed;
+        data['is_criminal'] = this.state.is_criminal;
+      }
+      if (this.state.occupation_detail === 'SALRIED') {
+        data['designation'] = this.state.designation;
+      }
 
-    const res = await Api.post('/api/insurance/profile', data);
+      this.setState({show_loader: true});
 
-    if (res.pfwresponse.status_code === 200) {
-      this.setState({show_loader: false});
-      if (this.props.edit) {
-        if (this.state.occupation_detail === 'SALRIED') {
-          this.props.history.push({
-            pathname: '/edit-professional1',
-            search: '?insurance_id='+this.state.params.insurance_id
-          });
+      const res = await Api.post('/api/insurance/profile', data);
+
+      if (res.pfwresponse.status_code === 200) {
+        this.setState({show_loader: false});
+        if (this.props.edit) {
+          if (this.state.occupation_detail === 'SALRIED') {
+            this.props.history.push({
+              pathname: '/edit-professional1',
+              search: '?insurance_id='+this.state.params.insurance_id
+            });
+          } else {
+            this.props.history.push({
+              pathname: '/summary',
+              search: '?insurance_id='+this.state.params.insurance_id
+            });
+          }
         } else {
-          this.props.history.push({
-            pathname: '/summary',
-            search: '?insurance_id='+this.state.params.insurance_id
-          });
+          if (this.state.occupation_detail === 'SALRIED') {
+            this.props.history.push({
+              pathname: '/professional1',
+              search: '?insurance_id='+this.state.params.insurance_id
+            });
+          } else {
+            this.props.history.push({
+              pathname: '/summary',
+              search: '?insurance_id='+this.state.params.insurance_id
+            });
+          }
         }
       } else {
-        if (this.state.occupation_detail === 'SALRIED') {
-          this.props.history.push({
-            pathname: '/professional1',
-            search: '?insurance_id='+this.state.params.insurance_id
-          });
-        } else {
-          this.props.history.push({
-            pathname: '/summary',
-            search: '?insurance_id='+this.state.params.insurance_id
+        this.setState({show_loader: false});
+        for (let error of res.pfwresponse.result.errors) {
+          this.setState({
+            [error.field+'_error']: error.message
           });
         }
       }
-    } else {
-      this.setState({show_loader: false});
-      alert('Error');
-      console.log(res.pfwresponse.result.error);
     }
   }
 
@@ -266,12 +198,15 @@ class ProfessionalDetails1 extends Component {
       return (
         <div className="InputField">
           <InputWithIcon
+            error={(this.state.designation_error) ? true : false}
+            helperText={this.state.designation_error}
             type="text"
             icon={designation}
             width="40"
             label="Designation"
             class="Designation"
             id="designation"
+            name="designation"
             value={this.state.designation}
             onChange={this.handleChange('designation')} />
         </div>
@@ -282,21 +217,24 @@ class ProfessionalDetails1 extends Component {
   }
 
   renderCategory = () => {
-    if (this.state.occupation_detail === 'SELF-EMPLOYED' || this.state.occupation_detail === 'STUDENT') {
-      return null;
-    } else {
+    if (this.state.occupation_detail === 'SALRIED') {
       return (
         <div className="InputField">
           <RadioWithIcon
+            error={(this.state.occupation_category_error) ? true : false}
+            helperText={this.state.occupation_category_error}
             type="professional"
             label="Occupation category"
             class="Occupation"
             options={occupationCategoryOptions}
             id="occupation-category"
+            name="occupation_category"
             value={this.state.occupation_category}
             onChange={this.handleOccCategoryRadioValue('occupation_category')} />
         </div>
       );
+    } else {
+      return null;
     }
   }
 
@@ -335,22 +273,25 @@ class ProfessionalDetails1 extends Component {
   }
 
   renderIncome = () => {
-    if (this.state.occupation_detail === 'STUDENT') {
-      return null;
-    } else {
+    if (this.state.occupation_detail === 'SELF-EMPLOYED' || this.state.occupation_detail === 'SALRIED') {
       return (
         <div className="InputField">
           <InputWithIcon
+            error={(this.state.annual_income_error) ? true : false}
+            helperText={this.state.annual_income_error}
             type="text"
             icon={income}
             width="40"
             label="Annual Income"
             class="Income"
             id="income"
+            name="annual_income"
             value={this.state.annual_income}
             onChange={this.handleChange('annual_income')} />
         </div>
       );
+    } else {
+      return null;
     }
   }
 
@@ -370,28 +311,36 @@ class ProfessionalDetails1 extends Component {
         <FormControl fullWidth>
           <div className="InputField">
             <InputWithIcon
+              error={(this.state.pan_number_error) ? true : false}
+              helperText={this.state.pan_number_error}
               type="text"
               icon={pan}
               width="40"
               label="PAN"
               class="Pan"
               id="pan"
+              name="pan_number"
               value={this.state.pan_number}
               onChange={this.handleChange('pan_number')} />
           </div>
           <div className="InputField">
             <Dropdown
+              error={(this.state.education_qualification_error) ? true : false}
+              helperText={this.state.education_qualification_error}
               icon={education}
               width="40"
               options={qualification}
               label="Educational qualification"
               class="Education"
               id="education"
+              name="education_qualification"
               value={this.state.education_qualification}
               onChange={this.handleChange('education_qualification')} />
           </div>
           <div className="InputField">
             <RadioWithIcon
+              error={(this.state.occupation_detail_error) ? true : false}
+              helperText={this.state.occupation_detail_error}
               icon={occupation}
               width="40"
               type="professional"
@@ -399,6 +348,7 @@ class ProfessionalDetails1 extends Component {
               class="Occupation"
               options={occupationDetailOptions}
               id="occupation"
+              name="occupation_detail"
               value={this.state.occupation_detail}
               onChange={this.handleOccDetailRadioValue('occupation_detail')} />
           </div>
