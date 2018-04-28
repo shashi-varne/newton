@@ -13,6 +13,7 @@ import Modal from 'material-ui/Modal';
 import Typography from 'material-ui/Typography';
 import qs from 'qs';
 import { income_pairs } from '../../utils/constants';
+import { numDifferentiation } from '../../utils/validators';
 
 class Summary extends Component {
   constructor(props) {
@@ -67,7 +68,7 @@ class Summary extends Component {
         tobacco_choice: application.quote.tobacco_choice,
         annual_income: income_value[0].value,
         term: application.quote.term,
-        cover_amount: this.numDifferentiation(application.quote.cover_amount),
+        cover_amount: numDifferentiation(application.quote.cover_amount),
         payment_frequency: application.quote.payment_frequency,
         cover_plan: application.quote.quote_json.cover_plan,
         premium: application.quote.quote_json.premium,
@@ -132,13 +133,6 @@ class Summary extends Component {
       this.setState({show_loader: false});
       console.log(error);
     });
-  }
-
-  numDifferentiation = (val) => {
-    if(val >= 10000000) val = (val/10000000).toFixed(0) + ' Crores';
-    else if(val >= 100000) val = (val/100000).toFixed(0) + ' Lakhs';
-    else if(val >= 1000) val = (val/1000).toFixed(0) + ' Thousand';
-    return val;
   }
 
   calculateAge = (birthday) => {
@@ -261,7 +255,7 @@ class Summary extends Component {
       return (
         <div className="AccordionBody">
           <ul>
-            {this.state.benefits.accident_benefit && <li>Accidental death benifits:<span>{this.numDifferentiation(this.state.benefits.accident_benefit)}</span></li>}
+            {this.state.benefits.accident_benefit && <li>Accidental death benifits:<span>{numDifferentiation(this.state.benefits.accident_benefit)}</span></li>}
             <li>Payout option: <span>{this.state.benefits.payout_option}</span></li>
           </ul>
         </div>
@@ -385,7 +379,7 @@ class Summary extends Component {
               <li>Education qualification: <span>{this.state.professional.education_qualification}</span></li>
               <li>Occupation detail: <span>{this.capitalize(this.state.professional.occupation_detail)}</span></li>
               <li>Occupation category: <span>{this.capitalize(this.state.professional.occupation_category)}</span></li>
-              <li>Annual income: <span>{this.numDifferentiation(this.state.professional.annual_income)}</span></li>
+              <li>Annual income: <span>{numDifferentiation(this.state.professional.annual_income)}</span></li>
               <li>Employer name: <span>{this.state.professional.employer_name}</span></li>
               <li>
                 Employer address:
@@ -420,7 +414,7 @@ class Summary extends Component {
               <li>Education qualification: <span>{this.state.professional.education_qualification}</span></li>
               <li>Occupation detail: <span>{this.capitalize(this.state.professional.occupation_detail)}</span></li>
               <li>Designation: <span>{this.state.professional.designation}</span></li>
-              <li>Annual income: <span>{this.numDifferentiation(this.state.professional.annual_income)}</span></li>
+              <li>Annual income: <span>{numDifferentiation(this.state.professional.annual_income)}</span></li>
               <li>Criminal proceedings: <span>{(this.state.professional.is_criminal) ? 'Yes' : 'No'}</span></li>
               <li>Politically exposed: <span>{(this.state.professional.is_politically_exposed) ? 'Yes' : 'No'}</span></li>
             </ul>

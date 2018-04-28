@@ -35,6 +35,11 @@ const theme = createMuiTheme({
     // error: will us the default color
   },
   overrides: {
+    MuiFormControl: {
+      root: {
+        width: '100%'
+      }
+    },
     MuiInput: {
       input: {
         padding: '11px 0 7px',

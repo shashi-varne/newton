@@ -13,7 +13,7 @@ import Dropdown from '../../ui/Select';
 import Api from '../../utils/api';
 import qs from 'qs';
 import { declareOptions, occupationDetailOptions, occupationCategoryOptions, qualification } from '../../utils/constants';
-import { validatePan } from '../../utils/validators';
+import { validatePan, validateNumber, numDifferentiation } from '../../utils/validators';
 
 class ProfessionalDetails1 extends Component {
   constructor(props) {
@@ -127,7 +127,7 @@ class ProfessionalDetails1 extends Component {
       this.setState({
         designation_error: 'Invalid designation'
       });
-    }  else if (!this.state.annual_income) {
+    }  else if (!validateNumber(this.state.annual_income) || !this.state.annual_income) {
       this.setState({
         annual_income_error: 'Invalid annual income'
       });
@@ -278,7 +278,7 @@ class ProfessionalDetails1 extends Component {
         <div className="InputField">
           <InputWithIcon
             error={(this.state.annual_income_error) ? true : false}
-            helperText={this.state.annual_income_error}
+            helperText={numDifferentiation(this.state.annual_income)}
             type="text"
             icon={income}
             width="40"

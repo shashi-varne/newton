@@ -22,15 +22,19 @@ class Container extends Component {
     }
   }
 
-  componentDidUpdate() {
-    // var body = document.getElementsByTagName('body')[0].offsetHeight;
-    // var client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
-    //
-    // if (client > body) {
-    //   document.getElementsByClassName('Footer')[0].style.position = "relative" ;
-    // } else {
-    //   document.getElementsByClassName('Footer')[0].style.position = "fixed" ;
-    // }
+  componentDidUpdate(prevProps) {
+    if (prevProps.history.location.pathname !== this.props.history.location.pathname) {
+      if (this.props.history.location.pathname !== '/resume' || this.props.history.location.pathname !== '/summary') {
+        var body = document.getElementsByTagName('body')[0].offsetHeight;
+        var client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
+
+        if (client > body) {
+          document.getElementsByClassName('Footer')[0].style.position = "relative" ;
+        } else {
+          document.getElementsByClassName('Footer')[0].style.position = "fixed" ;
+        }
+      }
+    }
   }
 
   renderLoader = () => {

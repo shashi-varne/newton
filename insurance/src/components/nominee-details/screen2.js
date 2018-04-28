@@ -218,7 +218,7 @@ class AppointeeDetails extends Component {
       });
     } else if (!this.state.dob) {
       this.setState({
-        dob_error: 'Valid age: 18-65'
+        dob_error: 'Valid age: 18-65 years'
       });
     } else if (!this.state.gender) {
       this.setState({
