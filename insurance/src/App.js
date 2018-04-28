@@ -35,10 +35,17 @@ const theme = createMuiTheme({
     // error: will us the default color
   },
   overrides: {
+    MuiInput: {
+      input: {
+        padding: '11px 0 7px',
+        fontSize: '14px'
+      }
+    },
     MuiInputLabel: {
       root: {
         fontSize: '1rem',
-        color: '#444'
+        color: '#444',
+        fontWeight: 'normal'
       }
     }
   }

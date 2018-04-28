@@ -23,14 +23,14 @@ class Container extends Component {
   }
 
   componentDidUpdate() {
-    var body = document.getElementsByTagName('body')[0].offsetHeight;
-    var client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
-
-    if (client > body) {
-      document.getElementsByClassName('Footer')[0].style.position = "relative" ;
-    } else {
-      document.getElementsByClassName('Footer')[0].style.position = "fixed" ;
-    }
+    // var body = document.getElementsByTagName('body')[0].offsetHeight;
+    // var client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
+    //
+    // if (client > body) {
+    //   document.getElementsByClassName('Footer')[0].style.position = "relative" ;
+    // } else {
+    //   document.getElementsByClassName('Footer')[0].style.position = "fixed" ;
+    // }
   }
 
   renderLoader = () => {
@@ -60,6 +60,7 @@ class Container extends Component {
     return (
       <div className={`ContainerWrapper`}>
         <Header title={this.props.title} count={this.props.count} total={this.props.total} current={this.props.current} goBack={this.historyGoBack} edit={this.props.edit} />
+        <div style={{height: 56}}></div>
         <div className="Step">
           {steps}
         </div>
@@ -76,8 +77,8 @@ class Container extends Component {
 
 const styles = {
   wrapper: {
-    padding: '30px 20px',
-    marginBottom: 0
+    padding: '30px 10px',
+    marginBottom: '30px'
   }
 };
 

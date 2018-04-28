@@ -74,7 +74,7 @@ class Summary extends Component {
         image: application.quote.quote_describer.image,
         quote_provider: application.quote.quote_provider,
         benefits: {
-          is_open: false,
+          is_open: true,
           accident_benefit: application.quote.accident_benefit || '',
           payout_option: application.quote.payout_option || ''
         },

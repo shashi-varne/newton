@@ -8,7 +8,7 @@ import Arrow from '@material-ui/icons/ArrowBack';
 
 const Header = ({ classes, title, count, total, current, goBack, edit }) => (
   <div className={classes.root}>
-    <AppBar position="static" color="primary">
+    <AppBar position="fixed" color="primary">
       <Toolbar>
         <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={goBack}>
           <Arrow />

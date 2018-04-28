@@ -79,7 +79,7 @@ class RadioGrp extends Component {
           <span>{this.props.label} *</span>
           <span style={{position: 'absolute', right: 0, color: '#d0021b', fontSize: 14, fontStyle: 'italic'}} className={(this.props.error) ? 'error' : ''}>{(this.props.error) ? 'Mandatory' : ''}</span>
         </div>
-        <Grid container spacing={24}>
+        <Grid container spacing={16}>
           {allOptions}
         </Grid>
       </div>

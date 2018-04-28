@@ -50,7 +50,7 @@ class RadioGrp extends Component {
     });
 
     return (
-      <Grid container spacing={24} alignItems="center" justify="flex-end">
+      <Grid container spacing={16} alignItems="center" justify="flex-end">
         {allOptions}
       </Grid>
     );
