@@ -34,8 +34,8 @@ export function formatAmount(amount) {
 }
 
 export function numDifferentiation(val) {
-  if(val >= 10000000) val = (val/10000000).toFixed(0) + ' Crores';
-  else if(val >= 100000) val = (val/100000).toFixed(0) + ' Lakhs';
-  else if(val >= 1000) val = (val/1000).toFixed(0) + ' Thousand';
+  if(val >= 10000000) val = (val/10000000).toFixed(1) + ' Crores';
+  else if(val >= 100000) val = (val/100000).toFixed(1) + ' Lakhs';
+  else if(val >= 1000) val = (val/1000).toFixed(1) + ' Thousand';
   return val;
 }

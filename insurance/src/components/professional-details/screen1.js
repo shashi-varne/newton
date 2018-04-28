@@ -13,7 +13,7 @@ import Dropdown from '../../ui/Select';
 import Api from '../../utils/api';
 import qs from 'qs';
 import { declareOptions, occupationDetailOptions, occupationCategoryOptions, qualification } from '../../utils/constants';
-import { validatePan, validateNumber, numDifferentiation } from '../../utils/validators';
+import { validatePan, validateNumber, formatAmount } from '../../utils/validators';
 
 class ProfessionalDetails1 extends Component {
   constructor(props) {
@@ -86,7 +86,7 @@ class ProfessionalDetails1 extends Component {
       });
     } else {
       this.setState({
-        [name]: event.target.value,
+        [name]: event.target.value.replace (/,/g, ""),
         [name+'_error']: ''
       });
     }
@@ -132,7 +132,7 @@ class ProfessionalDetails1 extends Component {
         annual_income_error: 'Invalid annual income'
       });
     } else {
-
+      this.setState({show_loader: true});
       let data = {};
 
       data['insurance_app_id'] =  this.state.params.insurance_id;
@@ -278,7 +278,7 @@ class ProfessionalDetails1 extends Component {
         <div className="InputField">
           <InputWithIcon
             error={(this.state.annual_income_error) ? true : false}
-            helperText={numDifferentiation(this.state.annual_income)}
+            helperText={this.state.annual_income_error}
             type="text"
             icon={income}
             width="40"
@@ -286,7 +286,7 @@ class ProfessionalDetails1 extends Component {
             class="Income"
             id="income"
             name="annual_income"
-            value={this.state.annual_income}
+            value={formatAmount(this.state.annual_income)}
             onChange={this.handleChange('annual_income')} />
         </div>
       );

@@ -7,13 +7,12 @@ const Input = (props) => {
       <TextField
         error={props.error}
         type={props.type}
-        defaultValue={props.default}
         value={props.value}
         helperText={props.helperText}
         InputLabelProps={{
           shrink: true,
         }}
-        fullWidth={props.fullWidth}
+        fullWidth
         required={props.required}
         className={props.class}
         id={props.id}
@@ -28,10 +27,10 @@ const Input = (props) => {
         error={props.error}
         disabled={props.disabled}
         type={props.type}
-        defaultValue={props.default}
+        defaultValue={props.defaultValue}
         value={props.value}
         helperText={props.helperText}
-        fullWidth={props.fullWidth}
+        fullWidth
         required={props.required}
         className={props.class}
         id={props.id}

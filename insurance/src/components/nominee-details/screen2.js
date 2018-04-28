@@ -245,6 +245,7 @@ class AppointeeDetails extends Component {
         landmark_error: 'Please enter valid landmark'
       });
     } else {
+      this.setState({show_loader: true});
       let data = {
         appointee: {}
       };
@@ -266,7 +267,7 @@ class AppointeeDetails extends Component {
           'landmark': this.state.landmark
         };
       }
-      this.setState({show_loader: true});
+
       const res = await Api.post('/api/insurance/profile', data);
 
       if (res.pfwresponse.status_code === 200) {
@@ -299,6 +300,12 @@ class AppointeeDetails extends Component {
         Incase Nominee is minor, Appointee will <em><b>get the benefits.</b></em>
       </span>
     );
+  }
+
+  handleFocus = () => event => {
+    this.setState({
+      dob: ''
+    })
   }
 
   render() {
@@ -344,6 +351,7 @@ class AppointeeDetails extends Component {
               id="dob"
               name="dob"
               value={this.state.dob}
+              onFocus={this.handleFocus()}
               onChange={this.handleChange('dob')} />
           </div>
           <div className="InputField">

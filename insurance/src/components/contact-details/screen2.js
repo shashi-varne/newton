@@ -145,6 +145,7 @@ class ContactDetails2 extends Component {
         clandmark_error: 'Please enter valid landmark'
       });
     } else {
+      this.setState({show_loader: true});
       let permanent_address, address = {};
 
       permanent_address = {
@@ -166,8 +167,6 @@ class ContactDetails2 extends Component {
             'landmark': this.state.clandmark
           }
       }
-
-      this.setState({show_loader: true});
 
       const res = await Api.post('/api/insurance/profile', address);
 

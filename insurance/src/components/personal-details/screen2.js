@@ -84,6 +84,7 @@ class PersonalDetails2 extends Component {
         birth_place_error: 'Name can contain only alphabets'
       });
     } else {
+      this.setState({show_loader: true});
       const res = await Api.post('/api/insurance/profile', {
         insurance_app_id: this.state.params.insurance_id,
         father_name: this.state.father_name,

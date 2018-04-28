@@ -19,6 +19,9 @@ a,
 div {
   -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
+input#pan {
+  text-transform: uppercase;
+}
 .Accordion {
   width: 100%;
   border-top: solid 1px #c2c2c2;

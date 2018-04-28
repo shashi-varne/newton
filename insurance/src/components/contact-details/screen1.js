@@ -65,6 +65,7 @@ class ContactDetails1 extends Component {
         mobile_no_error: 'Please enter valid mobile no'
       });
     } else {
+      this.setState({show_loader: true});
       const res = await Api.post('/api/insurance/profile', {
         insurance_app_id: this.state.params.insurance_id,
         email: this.state.email,
@@ -72,7 +73,7 @@ class ContactDetails1 extends Component {
       });
 
       if (res.pfwresponse.status_code === 200) {
-        this.setState({show_loader: true});
+        this.setState({show_loader: false});
         if (this.props.edit) {
           this.props.history.push({
             pathname: '/edit-contact1',

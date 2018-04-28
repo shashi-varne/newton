@@ -112,6 +112,7 @@ class ProfessionalDetails2 extends Component {
         landmark_error: 'Please enter valid landmark'
       });
     } else {
+      this.setState({show_loader: true});
       let data = {};
 
       data['insurance_app_id'] =  this.state.params.insurance_id;
@@ -121,8 +122,6 @@ class ProfessionalDetails2 extends Component {
         'addressline': this.state.addressline,
         'landmark': this.state.landmark
       }
-
-      this.setState({show_loader: true});
 
       const res = await Api.post('/api/insurance/profile', data);
 

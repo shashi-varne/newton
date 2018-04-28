@@ -90,15 +90,14 @@ class PersonalDetails1 extends Component {
         marital_status_error: 'Mandatory'
       });
     } else {
-      const formattedDob = this.state.dob.replace(/\\-/g, '/').split('-').reverse().join('/');
-
       this.setState({show_loader: true});
+      // const formattedDob = this.state.dob.replace(/\\-/g, '/').split('-').reverse().join('/');
 
       const res = await Api.post('/api/insurance/profile', {
         insurance_app_id: this.state.params.insurance_id,
         name: this.state.name,
-        dob: formattedDob,
-        gender: this.state.gender,
+        // dob: formattedDob,
+        // gender: this.state.gender,
         marital_status: this.state.marital_status
       });
 
