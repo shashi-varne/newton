@@ -98,3 +98,32 @@ input#pan {
 .Step span:last-child {
   margin-right: 0;
 }
+.Progress {
+	height: 10px;
+	position: relative;
+	background: #ebebeb;
+	-moz-border-radius: 25px;
+	-webkit-border-radius: 25px;
+	border-radius: 25px;
+	/*box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);*/
+  flex: 2;
+}
+.Progress > span {
+  display: block;
+  height: 100%;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  background-color: #3023ae;
+  background-image: linear-gradient(
+    to right,
+    #3023ae,
+    #c86dd7
+  );
+  /*box-shadow:
+    inset 0 2px 9px  rgba(255,255,255,0.3),
+    inset 0 -2px 6px rgba(0,0,0,0.4);*/
+  position: relative;
+  overflow: hidden;
+}

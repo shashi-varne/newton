@@ -13,8 +13,7 @@ export function validateNumber(number) {
 }
 
 export function validateAddress(text) {
-  let rule = /^([\S]+)\s([\S]+)\s([\S]+)/;
-  return rule.test(text);
+  return (text.length > 0) ? true : false;
 }
 
 export function validatePan(string) {

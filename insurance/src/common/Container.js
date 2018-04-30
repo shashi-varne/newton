@@ -23,17 +23,13 @@ class Container extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.history.location.pathname !== this.props.history.location.pathname) {
-      if (this.props.history.location.pathname !== '/resume' || this.props.history.location.pathname !== '/summary') {
-        var body = document.getElementsByTagName('body')[0].offsetHeight;
-        var client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
+    var body = document.getElementsByTagName('body')[0].offsetHeight;
+    var client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
 
-        if (client > body) {
-          document.getElementsByClassName('Footer')[0].style.position = "relative" ;
-        } else {
-          document.getElementsByClassName('Footer')[0].style.position = "fixed" ;
-        }
-      }
+    if (client > body) {
+      document.getElementsByClassName('Footer')[0].style.position = "relative" ;
+    } else {
+      document.getElementsByClassName('Footer')[0].style.position = "fixed" ;
     }
   }
 
@@ -73,7 +69,8 @@ class Container extends Component {
         <div className={`Container ${this.props.classes.wrapper}`}>
           { this.props.children }
         </div>
-        <Footer handleClick={this.props.handleClick} fullWidthButton={this.props.fullWidthButton} edit={this.props.edit} buttonTitle={this.props.buttonTitle} premium={this.props.premium} paymentFrequency={this.props.paymentFrequency} summaryButtonText={this.props.summaryButtonText} provider={this.props.provider} logo={this.props.logo}/>
+        <Footer handleClick={this.props.handleClick} fullWidthButton={this.props.fullWidthButton} edit={this.props.edit} buttonTitle={this.props.buttonTitle} premium={this.props.premium} paymentFrequency={this.props.paymentFrequency} summaryButtonText={this.props.summaryButtonText} provider={this.props.provider} logo={this.props.logo}
+        resetpage={this.props.resetpage} handleReset={this.props.handleReset} />
       </div>
     );
   }
@@ -81,8 +78,9 @@ class Container extends Component {
 
 const styles = {
   wrapper: {
-    padding: '30px 10px',
-    marginBottom: '30px'
+    padding: '20px 15px',
+    marginBottom: '30px',
+    backgroundColor: '#fff'
   }
 };
 

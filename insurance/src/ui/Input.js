@@ -12,6 +12,9 @@ const Input = (props) => {
         InputLabelProps={{
           shrink: true,
         }}
+        inputProps={{
+          max: `${props.max}`
+        }}
         fullWidth
         required={props.required}
         className={props.class}

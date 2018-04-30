@@ -123,11 +123,19 @@ class ProfessionalDetails1 extends Component {
       this.setState({
         occupation_category_error: 'Mandatory'
       });
-    }  else if (!this.state.designation) {
+    } else if (this.state.occupation_detail === 'SALRIED' && !this.state.designation) {
       this.setState({
         designation_error: 'Invalid designation'
       });
-    }  else if (!validateNumber(this.state.annual_income) || !this.state.annual_income) {
+    } else if (this.state.occupation_detail === 'SELF-EMPLOYED' && !this.state.designation) {
+    this.setState({
+      designation_error: 'Invalid designation'
+    });
+    } else if (this.state.occupation_detail === 'SALRIED' && (!validateNumber(this.state.annual_income) || !this.state.annual_income)) {
+      this.setState({
+        annual_income_error: 'Invalid annual income'
+      });
+    } else if (this.state.occupation_detail === 'SELF-EMPLOYED' && (!validateNumber(this.state.annual_income) || !this.state.annual_income)) {
       this.setState({
         annual_income_error: 'Invalid annual income'
       });

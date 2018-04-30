@@ -15,7 +15,7 @@ import qs from 'qs';
 import { income_pairs } from '../../utils/constants';
 import { numDifferentiation } from '../../utils/validators';
 
-class Summary extends Component {
+class Resume extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -40,6 +40,31 @@ class Summary extends Component {
       nominee: {},
       appointee: {},
       professional: {},
+      required: {
+        personal: {
+          not_submitted: true,
+          fields: ["name", "dob", "father_name", "mother_name", "gender", "marital_status", "birth_place"]
+        },
+        contact: {
+          not_submitted: true,
+          fields: ["email", "mobile_no", "permanent_addr", "corr_addr", "corr_address_same"]
+        },
+        nominee: {
+          not_submitted: true,
+          fields: ["nominee", "nominee_address", "nominee_address_same"]
+        },
+        appointee: {
+          not_submitted: true,
+          fields: ["appointee_address", "appointee", "appointee_address_same"]
+        },
+        professional: {
+          not_submitted: true,
+          fields: ["employer_name", "employer_address", "occupation_detail", "occupation_category", "annual_income", "designation", "education_qualification", "pan_number"]
+        }
+      },
+      required_fields: [],
+      provider: '',
+      plutus_status: '',
       params: qs.parse(props.history.location.search.slice(1))
     };
   }
@@ -47,18 +72,45 @@ class Summary extends Component {
   componentDidMount() {
     Api.get('/api/insurance/all/summary')
       .then(res => {
-      let application;
+      let application, required_fields;
       if (res.pfwresponse.result.insurance_apps.init.length > 0) {
         application = res.pfwresponse.result.insurance_apps.init[0];
       } else {
         application = res.pfwresponse.result.insurance_apps.submitted[0];
       }
 
+      required_fields = res.pfwresponse.result.required;
+
       let income_value = income_pairs.filter(item => item.name === application.quote.annual_income);
 
-      let age = this.calculateAge(application.profile.nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
+      let age = application.profile.nominee.dob && this.calculateAge(application.profile.nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
+
+      let personal_submitted = this.state.required.personal.fields.some(r => required_fields.includes(r));
+      let contact_submitted = this.state.required.contact.fields.some(r => required_fields.includes(r));
+      let nominee_submitted = this.state.required.nominee.fields.some(r => required_fields.includes(r));
+      let appointee_submitted = this.state.required.appointee.fields.some(r => required_fields.includes(r));
+      let professional_submitted = this.state.required.professional.fields.some(r => required_fields.includes(r));
 
       this.setState({
+        required: {
+          personal: {
+            not_submitted: personal_submitted
+          },
+          contact: {
+            not_submitted: contact_submitted
+          },
+          nominee: {
+            not_submitted: nominee_submitted
+          },
+          appointee: {
+            not_submitted: appointee_submitted
+          },
+          professional: {
+            not_submitted: professional_submitted
+          }
+        },
+        plutus_status: application.plutus_status,
+        required_fields: required_fields,
         status: application.status,
         show_loader: false,
         payment_link: application.payment_link,
@@ -70,6 +122,7 @@ class Summary extends Component {
         term: application.quote.term,
         cover_amount: numDifferentiation(application.quote.cover_amount),
         payment_frequency: application.quote.payment_frequency,
+        provider: application.provider,
         cover_plan: application.quote.quote_json.cover_plan,
         premium: application.quote.quote_json.premium,
         image: application.quote.quote_describer.image,
@@ -202,19 +255,48 @@ class Summary extends Component {
   }
 
   handleClick = async () => {
-    this.setState({openModal: true});
-    if (this.state.status === 'init') {
-      const res = await Api.post('/api/insurance/profile/submit', {
-        insurance_app_id: this.state.params.insurance_id
-      });
-      if (res.pfwresponse.status_code === 200) {
-        window.location.replace(window.location.href+'&native_payment=true&payment_link='+res.pfwresponse.result.insurance_app.payment_link, function() {});
-      } else {
-        alert(res.pfwresponse.result.error);
-        this.setState({openModal: false});
+    if (this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') {
+      if (this.state.required.personal.not_submitted) {
+        this.props.history.push({
+          pathname: "/",
+          search: '?insurance_id='+this.state.params.insurance_id
+        });
+      } else if (this.state.required.contact.not_submitted) {
+        this.props.history.push({
+          pathname: "/contact",
+          search: '?insurance_id='+this.state.params.insurance_id
+        });
+      } else if (this.state.required.nominee.not_submitted) {
+        this.props.history.push({
+          pathname: "/nominee",
+          search: '?insurance_id='+this.state.params.insurance_id
+        });
+      } else if (this.state.required.appointee.not_submitted) {
+        this.props.history.push({
+          pathname: "/appointee",
+          search: '?insurance_id='+this.state.params.insurance_id
+        });
+      } else if (this.state.required.professional.not_submitted) {
+        this.props.history.push({
+          pathname: "/professional",
+          search: '?insurance_id='+this.state.params.insurance_id
+        });
       }
     } else {
-      window.location.replace(window.location.href+'&native_payment=true&resume_link='+this.state.resume_link, function() {});
+      this.setState({openModal: true});
+      if (this.state.status === 'init') {
+        const res = await Api.post('/api/insurance/profile/submit', {
+          insurance_app_id: this.state.params.insurance_id
+        });
+        if (res.pfwresponse.status_code === 200) {
+          window.location.replace(window.location.href+'&native_payment=true&payment_link='+res.pfwresponse.result.insurance_app.payment_link, function() {});
+        } else {
+          alert(res.pfwresponse.result.error);
+          this.setState({openModal: false});
+        }
+      } else {
+        window.location.replace(window.location.href+'&native_payment=true&resume_link='+this.state.resume_link, function() {});
+      }
     }
   }
 
@@ -431,16 +513,73 @@ class Summary extends Component {
     return string.toLowerCase().replace(/(^|\s)[a-z]/g,function(f){return f.toUpperCase();})
   }
 
+  handleReset = async () => {
+    const res = await Api.post('/api/insurance/profile/reset', {
+      insurance_app_id: this.state.params.insurance_id
+    });
+    if (res.pfwresponse.status_code === 200) {
+      window.location.replace(window.location.href+'&native_reset=true', function() {});
+    } else {
+      alert(res.pfwresponse.result.error);
+    }
+  }
+
+  renderPercentage = (number) => {
+    return (
+      <div style={{display: 'flex', alignItems: 'center', width: 170}}>
+        <div className="Progress">
+          <span style={{width: `${number}%`}}></span>
+        </div>
+        <div style={{flex: 1, color: '#878787', fontSize: 14, fontWeight: 400, textAlign: 'center'}}>{`${number}%`}</div>
+      </div>
+    );
+  }
+
+  renderTotalPercentage = () => {
+    let number = 50;
+    if (!this.state.required.personal.not_submitted) {
+      number+= 5;
+    }
+    if (!this.state.required.contact.not_submitted) {
+      number+= 5;
+    }
+    if (!this.state.required.nominee.not_submitted) {
+      number+= 5;
+    }
+    if (!this.state.required.professional.not_submitted) {
+      number+= 5;
+    }
+    return (
+      <div style={{display: 'flex', alignItems: 'center', width: 170}}>
+        <div className="Progress">
+          <span style={{width: `${number}%`}}></span>
+        </div>
+        <div style={{flex: 1, color: '#878787', fontSize: 14, fontWeight: 400, textAlign: 'center'}}>{`${number}%`}</div>
+      </div>
+    );
+  }
+
   render() {
     return (
       <Container
+        resetpage={(this.state.status === 'init') ? true : false}
+        handleReset={this.handleReset}
         showLoader={this.state.show_loader}
         title={'Term Insurance Plan Summary'}
         handleClick={this.handleClick}
         fullWidthButton={true}
         premium={this.state.premium}
+        provider={this.state.provider}
         paymentFrequency={this.state.payment_frequency}
-        summaryButtonText={(this.state.status === 'init') ? 'Pay Now' : 'Resume'} >
+        summaryButtonText={((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') ? 'Resume' : 'Pay Now')} >
+        <div style={{marginBottom: 20}}>
+          <div style={{color: '#4a4a4a', fontSize: 20, fontWeight: 700, marginBottom: 7}}>
+            Hey {this.state.personal.name}
+          </div>
+          <div style={{color: '#878787', fontSize: 16}}>
+            Share few more details and secure your family. It will only take 5 mins.
+          </div>
+        </div>
         <div>
           <Grid container spacing={8} alignItems="center">
             <Grid item xs={5}>
@@ -448,7 +587,8 @@ class Summary extends Component {
             </Grid>
             <Grid item xs={7}>
               <div className="Title" style={{color: '#444', fontFamily: 'Roboto', fontWeight: 500, fontSize: 18}}>
-                {this.state.cover_plan}
+                <div style={{marginBottom: 7}}>ID: {this.state.params.insurance_id}</div>
+                {this.renderTotalPercentage()}
               </div>
             </Grid>
           </Grid>
@@ -517,7 +657,7 @@ class Summary extends Component {
           <div className="accordion-container">
             <div className="Accordion">
               <div className="AccordionTitle" onClick={() => this.togglebenefitsAccordion('benefits')}>
-                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative'}}>
+                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative', marginBottom: 7}}>
                   <span style={{marginRight: 10}}>
                     <img style={{position: 'relative', top: 2}} src={(this.state.benefits.is_open) ? shrink : expand} alt="" width="20"/>
                   </span>
@@ -528,7 +668,7 @@ class Summary extends Component {
             </div>
             <div className="Accordion">
               <div className="AccordionTitle" onClick={() => this.togglepersonalAccordion('personal')}>
-                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative'}}>
+                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative', marginBottom: 7}}>
                   <span style={{marginRight: 10}}>
                     <img style={{position: 'relative', top: 2}} src={(this.state.personal.is_open) ? shrink : expand} alt="" width="20"/>
                   </span>
@@ -538,12 +678,13 @@ class Summary extends Component {
                     search: '?insurance_id='+this.state.params.insurance_id
                   })}>Edit</span>}
                 </div>
+                {this.renderPercentage((this.state.required.personal.not_submitted) ? 50 : 90)}
               </div>
               {this.renderAccordionBody('personal')}
             </div>
             <div className="Accordion">
               <div className="AccordionTitle" onClick={() => this.togglecontactAccordion('contact')}>
-                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative'}}>
+                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative', marginBottom: 7}}>
                   <span style={{marginRight: 10}}>
                     <img style={{position: 'relative', top: 2}} src={(this.state.contact.is_open) ? shrink : expand} alt="" width="20"/>
                   </span>
@@ -553,12 +694,13 @@ class Summary extends Component {
                     search: '?insurance_id='+this.state.params.insurance_id
                   })}>Edit</span>}
                 </div>
+                {this.renderPercentage((this.state.required.contact.not_submitted) ? 50 : 90)}
               </div>
               {this.renderAccordionBody('contact')}
             </div>
             <div className="Accordion">
               <div className="AccordionTitle" onClick={() => this.togglenomineeAccordion('nominee')}>
-                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative'}}>
+                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative', marginBottom: 7}}>
                   <span style={{marginRight: 10}}>
                     <img style={{position: 'relative', top: 2}} src={(this.state.nominee.is_open) ? shrink : expand} alt="" width="20"/>
                   </span>
@@ -568,13 +710,14 @@ class Summary extends Component {
                     search: '?insurance_id='+this.state.params.insurance_id
                   })}>Edit</span>}
                 </div>
+                {this.renderPercentage((this.state.required.nominee.not_submitted) ? 50 : 90)}
               </div>
               {this.renderAccordionBody('nominee')}
             </div>
             {this.state.show_appointee &&
               <div className="Accordion">
                 <div className="AccordionTitle" onClick={() => this.toggleappointeeAccordion('appointee')}>
-                  <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative'}}>
+                  <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative', marginBottom: 7}}>
                     <span style={{marginRight: 10}}>
                       <img style={{position: 'relative', top: 2}} src={(this.state.appointee.is_open) ? shrink : expand} alt="" width="20"/>
                     </span>
@@ -584,13 +727,14 @@ class Summary extends Component {
                       search: '?insurance_id='+this.state.params.insurance_id
                     })}>Edit</span>}
                   </div>
+                  {this.renderPercentage((this.state.required.appointee.not_submitted) ? 50 : 90)}
                 </div>
                 {this.renderAccordionBody('appointee')}
               </div>
             }
             <div className="Accordion">
               <div className="AccordionTitle" onClick={() => this.toggleprofessionalAccordion('professional')}>
-                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative'}}>
+                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative', marginBottom: 7}}>
                   <span style={{marginRight: 10}}>
                     <img style={{position: 'relative', top: 2}} src={(this.state.professional.is_open) ? shrink : expand} alt="" width="20"/>
                   </span>
@@ -600,6 +744,7 @@ class Summary extends Component {
                     search: '?insurance_id='+this.state.params.insurance_id
                   })}>Edit</span>}
                 </div>
+                {this.renderPercentage((this.state.required.professional.not_submitted) ? 50 : 90)}
               </div>
               {this.renderAccordionBody('professional')}
             </div>
@@ -612,4 +757,4 @@ class Summary extends Component {
 }
 
 
-export default Summary;
+export default Resume;

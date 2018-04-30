@@ -226,7 +226,7 @@ class NomineeDetails extends Component {
       });
     } else if (!this.state.dob) {
       this.setState({
-        dob_error: 'Valid age: 18-65 years'
+        dob_error: 'Please select date'
       });
     } else if (!this.state.gender) {
       this.setState({
@@ -311,6 +311,11 @@ class NomineeDetails extends Component {
       } else {
         this.setState({show_loader: false});
         for (let error of res.pfwresponse.result.errors) {
+          if (error.field === 'nominee_address') {
+            this.setState({
+              addressline_error: error.message
+            });
+          }
           this.setState({
             [error.field+'_error']: error.message
           });
@@ -339,6 +344,7 @@ class NomineeDetails extends Component {
   }
 
   render() {
+    let currentDate = new Date().toISOString().slice(0,10);
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -380,8 +386,8 @@ class NomineeDetails extends Component {
               class="DOB"
               id="dob"
               name="dob"
+              max={currentDate}
               value={this.state.dob}
-              onFocus={this.handleFocus()}
               onChange={this.handleChange('dob')} />
           </div>
           <div className="InputField">

@@ -37,7 +37,7 @@ const SummaryButton = (props) => (
     <div style={{flex: 3, padding: '5px 0 0 10px'}}>
       <div style={{color: '#444', fontSize: 12}}>Premium</div>
       <div style={{color: '#444', fontSize: 14, fontWeight: 500, fontFamily: 'Roboto'}}>₹ {props.premium} {capitalize(props.paymentFrequency)}</div>
-      {(props.paymentFrequency === 'MONTHLY') && <div style={{color: '#878787', fontSize: 10}}>*You’ve to pay <b>3 months premiums</b>.</div>}
+      {(props.provider === 'HDFC' && props.paymentFrequency === 'MONTHLY') && <div style={{color: '#878787', fontSize: 10}}>*You’ve to pay <b>3 months premiums</b>.</div>}
     </div>
     <div style={{flex: 1}}>
       <Button variant="raised" size="large" color="secondary"  style={{borderRadius: 5, margin: 5}} className={props.classes.button} onClick={props.handleClick}>
@@ -47,13 +47,42 @@ const SummaryButton = (props) => (
   </div>
 );
 
+const ResetButton = (props) => (
+  <div>
+    <div className={props.classes.flex}>
+      <div style={{flex: 3, padding: '5px 0 0 10px'}}>
+        <div style={{color: '#444', fontSize: 12}}>Premium</div>
+        <div style={{color: '#444', fontSize: 14, fontWeight: 500, fontFamily: 'Roboto'}}>₹ {props.premium} {capitalize(props.paymentFrequency)}</div>
+        {(props.provider === 'HDFC' && props.paymentFrequency === 'MONTHLY') && <div style={{color: '#878787', fontSize: 10}}>*You’ve to pay <b>3 months premiums</b>.</div>}
+      </div>
+      <div style={{flex: 1}}>
+        <Button variant="raised" size="large" color="secondary"  style={{borderRadius: 5, margin: 5}} className={props.classes.button} onClick={props.handleClick}>
+          {props.summaryButtonText}
+        </Button>
+      </div>
+    </div>
+    <div style={{padding: '50px 20px', textAlign: 'center', backgroundColor: '#f8f8f8'}}>
+      <div style={{color: '#878787', fontSize: 18, fontWeight: 500, marginBottom: 7}} onClick={props.handleReset}>Start Again</div>
+      <div style={{color: '#b1b1b1', fontSize: 12}}>By restart, you will loose all your progress!</div>
+    </div>
+  </div>
+);
+
 const Footer = (props) => {
   if (props.fullWidthButton) {
-    return (
-      <div className={`Footer ${props.classes.footer}`}>
-        <SummaryButton {...props}/>
-      </div>
-    );
+    if (props.resetpage) {
+      return (
+        <div className={`Footer ${props.classes.footer}`}>
+          <ResetButton {...props}/>
+        </div>
+      );
+    } else {
+      return (
+        <div className={`Footer ${props.classes.footer}`}>
+          <SummaryButton {...props}/>
+        </div>
+      );
+    }
   } else {
     return (
       <div className={`Footer ${props.classes.footer}`}>

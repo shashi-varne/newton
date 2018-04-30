@@ -56,7 +56,7 @@ class ContactDetails1 extends Component {
   };
 
   handleClick = async () => {
-    if (!validateEmail(this.state.email)) {
+    if (this.state.email.length < 10 || !validateEmail(this.state.email)) {
       this.setState({
         email_error: 'Please enter valid email'
       });

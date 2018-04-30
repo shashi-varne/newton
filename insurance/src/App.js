@@ -16,6 +16,7 @@ import AppointeeDetails from './components/nominee-details/screen2';
 import ProfessionalDetails1 from './components/professional-details/screen1';
 import ProfessionalDetails2 from './components/professional-details/screen2';
 import Summary from './components/insurance-summary/screen1';
+import Resume from './components/insurance-summary/screen2';
 import NotFound from './components/NotFound';
 
 const theme = createMuiTheme({
@@ -77,7 +78,7 @@ const App = () => (
         <ScrollToTop />
         <Switch>
           <Route exact path="/" component={ PersonalDetails1 } />
-          <Route path="/resume" component={ Summary } />
+          <Route path="/resume" component={ Resume } />
           <Route path="/personal" component={ PersonalDetails2 } />
           <Route path="/contact" component={ ContactDetails1 } />
           <Route path="/contact1" component={ ContactDetails2 } />

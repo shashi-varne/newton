@@ -186,6 +186,11 @@ class ContactDetails2 extends Component {
       } else {
         this.setState({show_loader: false});
         for (let error of res.pfwresponse.result.errors) {
+          if (error.field === 'p_addr') {
+            this.setState({
+              addressline_error: error.message
+            });
+          }
           this.setState({
             [error.field+'_error']: error.message
           });

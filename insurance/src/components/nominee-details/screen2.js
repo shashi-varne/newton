@@ -207,7 +207,19 @@ class AppointeeDetails extends Component {
     }
   }
 
+  calculateAge = (birthday) => {
+    var today = new Date();
+    var birthDate = new Date(birthday);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+  }
+
   handleClick = async () => {
+    let age  = this.calculateAge(this.state.dob.replace(/\\-/g, '/').split('-').reverse().join('/'));
     if (this.state.name.length < 3) {
       this.setState({
         name_error: 'Please enter valid full name'
@@ -218,7 +230,11 @@ class AppointeeDetails extends Component {
       });
     } else if (!this.state.dob) {
       this.setState({
-        dob_error: 'Valid age: 18-65 years'
+        dob_error: 'Please select date'
+      });
+    } else if (age < 18) {
+      this.setState({
+        dob_error: 'Minimum age should be 18 years'
       });
     } else if (!this.state.gender) {
       this.setState({
@@ -286,6 +302,11 @@ class AppointeeDetails extends Component {
       } else {
         this.setState({show_loader: false});
         for (let error of res.pfwresponse.result.errors) {
+          if (error.field === 'appointee_address') {
+            this.setState({
+              addressline_error: error.message
+            });
+          }
           this.setState({
             [error.field+'_error']: error.message
           });
@@ -351,7 +372,6 @@ class AppointeeDetails extends Component {
               id="dob"
               name="dob"
               value={this.state.dob}
-              onFocus={this.handleFocus()}
               onChange={this.handleChange('dob')} />
           </div>
           <div className="InputField">
