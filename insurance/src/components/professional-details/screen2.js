@@ -93,11 +93,11 @@ class ProfessionalDetails2 extends Component {
   handleClick = async () => {
     if (this.state.employer_name.length < 3) {
       this.setState({
-        employer_name_error: 'Please enter valid name'
+        employer_name_error: 'Enter full valid name - alphabets only'
       });
     } else if (!validateAlphabets(this.state.employer_name)) {
       this.setState({
-        employer_name_error: 'Name can contain only alphabets'
+        employer_name_error: 'Enter full valid name - alphabets only'
       });
     } else if (this.state.pincode.length !== 6 || !validateNumber(this.state.pincode)) {
       this.setState({

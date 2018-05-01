@@ -40,6 +40,7 @@ class Summary extends Component {
       nominee: {},
       appointee: {},
       professional: {},
+      provider: '',
       params: qs.parse(props.history.location.search.slice(1))
     };
   }
@@ -48,89 +49,94 @@ class Summary extends Component {
     Api.get('/api/insurance/all/summary')
       .then(res => {
       let application;
-      if (res.pfwresponse.result.insurance_apps.init.length > 0) {
-        application = res.pfwresponse.result.insurance_apps.init[0];
-      } else {
-        application = res.pfwresponse.result.insurance_apps.submitted[0];
-      }
-
-      let income_value = income_pairs.filter(item => item.name === application.quote.annual_income);
-
-      let age = this.calculateAge(application.profile.nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
-
-      this.setState({
-        status: application.status,
-        show_loader: false,
-        payment_link: application.payment_link,
-        resume_link: application.resume_link,
-        edit_allowed: (res.pfwresponse.result.insurance_apps.init.length > 0) ? true : false,
-        show_appointee: (age < 18) ? true : false,
-        tobacco_choice: application.quote.tobacco_choice,
-        annual_income: income_value[0].value,
-        term: application.quote.term,
-        cover_amount: numDifferentiation(application.quote.cover_amount),
-        payment_frequency: application.quote.payment_frequency,
-        cover_plan: application.quote.quote_json.cover_plan,
-        premium: application.quote.quote_json.premium,
-        image: application.quote.quote_describer.image,
-        quote_provider: application.quote.quote_provider,
-        benefits: {
-          is_open: true,
-          accident_benefit: application.quote.accident_benefit || '',
-          payout_option: application.quote.payout_option || ''
-        },
-        personal: {
-          is_open: false,
-          name: application.profile.name || '',
-          dob: (application.profile.dob) ? application.profile.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
-          marital_status: application.profile.marital_status || '',
-          birth_place: application.profile.birth_place || '',
-          mother_name: application.profile.mother_name || '',
-          father_name: application.profile.father_name || '',
-          gender: application.profile.gender || ''
-        },
-        contact: {
-          is_open: false,
-          email: application.profile.email || '',
-          mobile_no: application.profile.mobile_no || '',
-          permanent_addr: application.profile.permanent_addr || '',
-          corr_addr: application.profile.corr_addr || '',
-          corr_address_same: application.profile.corr_address_same
-        },
-        nominee: {
-          is_open: false,
-          name: application.profile.nominee.name  || '',
-          dob: (application.profile.nominee.dob) ? application.profile.nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
-          marital_status: application.profile.nominee.marital_status  || '',
-          relationship: application.profile.nominee.relationship  || '',
-          nominee_address: application.profile.nominee_address  || '',
-          nominee_address_same: application.profile.nominee_address_same
-        },
-        appointee: {
-          is_open: false,
-          name: application.profile.appointee.name || '',
-          dob: (application.profile.appointee.dob) ? application.profile.appointee.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
-          marital_status: application.profile.appointee.marital_status || '',
-          relationship: application.profile.appointee.relationship || '',
-          appointee_address: application.profile.appointee_address || '',
-          appointee_address_same: application.profile.appointee_address_same
-        },
-        professional: {
-          is_open: false,
-          pan_number: application.profile.pan_number || '',
-          occupation_category: application.profile.occupation_category || '',
-          occupation_detail: application.profile.occupation_detail || '',
-          is_criminal: application.profile.is_criminal || '',
-          is_politically_exposed: application.profile.is_politically_exposed || '',
-          employer_name: application.profile.employer_name || '',
-          employer_address: application.profile.employer_address || '',
-          education_qualification: application.profile.education_qualification || '',
-          designation: application.profile.designation || '',
-          annual_income: application.profile.annual_income || ''
+      if (res.pfwresponse.status_code === 200) {
+        if (res.pfwresponse.result.insurance_apps.init.length > 0) {
+          application = res.pfwresponse.result.insurance_apps.init[0];
+        } else {
+          application = res.pfwresponse.result.insurance_apps.submitted[0];
         }
-      });
+
+        let income_value = income_pairs.filter(item => item.name === application.quote.annual_income);
+
+        let age = this.calculateAge(application.profile.nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
+
+        this.setState({
+          status: application.status,
+          show_loader: false,
+          payment_link: application.payment_link,
+          resume_link: application.resume_link,
+          edit_allowed: (res.pfwresponse.result.insurance_apps.init.length > 0) ? true : false,
+          show_appointee: (age < 18) ? true : false,
+          tobacco_choice: application.quote.tobacco_choice,
+          annual_income: income_value[0].value,
+          term: application.quote.term,
+          cover_amount: numDifferentiation(application.quote.cover_amount),
+          payment_frequency: application.quote.payment_frequency,
+          provider: application.provider,
+          cover_plan: application.quote.quote_json.cover_plan,
+          premium: application.quote.quote_json.premium,
+          image: application.quote.quote_describer.image,
+          quote_provider: application.quote.quote_provider,
+          benefits: {
+            is_open: true,
+            accident_benefit: application.quote.accident_benefit || '',
+            payout_option: application.quote.payout_option || ''
+          },
+          personal: {
+            is_open: false,
+            name: application.profile.name || '',
+            dob: (application.profile.dob) ? application.profile.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
+            marital_status: application.profile.marital_status || '',
+            birth_place: application.profile.birth_place || '',
+            mother_name: application.profile.mother_name || '',
+            father_name: application.profile.father_name || '',
+            gender: application.profile.gender || ''
+          },
+          contact: {
+            is_open: false,
+            email: application.profile.email || '',
+            mobile_no: application.profile.mobile_no || '',
+            permanent_addr: application.profile.permanent_addr || '',
+            corr_addr: application.profile.corr_addr || '',
+            corr_address_same: application.profile.corr_address_same
+          },
+          nominee: {
+            is_open: false,
+            name: application.profile.nominee.name  || '',
+            dob: (application.profile.nominee.dob) ? application.profile.nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
+            marital_status: application.profile.nominee.marital_status  || '',
+            relationship: application.profile.nominee.relationship  || '',
+            nominee_address: application.profile.nominee_address  || '',
+            nominee_address_same: application.profile.nominee_address_same
+          },
+          appointee: {
+            is_open: false,
+            name: application.profile.appointee.name || '',
+            dob: (application.profile.appointee.dob) ? application.profile.appointee.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
+            marital_status: application.profile.appointee.marital_status || '',
+            relationship: application.profile.appointee.relationship || '',
+            appointee_address: application.profile.appointee_address || '',
+            appointee_address_same: application.profile.appointee_address_same
+          },
+          professional: {
+            is_open: false,
+            pan_number: application.profile.pan_number || '',
+            occupation_category: application.profile.occupation_category || '',
+            occupation_detail: application.profile.occupation_detail || '',
+            is_criminal: application.profile.is_criminal || '',
+            is_politically_exposed: application.profile.is_politically_exposed || '',
+            employer_name: application.profile.employer_name || '',
+            employer_address: application.profile.employer_address || '',
+            education_qualification: application.profile.education_qualification || '',
+            designation: application.profile.designation || '',
+            annual_income: application.profile.annual_income || ''
+          }
+        });
+      } else {
+        this.setState({show_loader: false});
+        alert(res.pfwresponse.result.error);
+      }
     }).catch(error => {
-      this.setState({show_loader: false});
       console.log(error);
     });
   }
@@ -203,18 +209,26 @@ class Summary extends Component {
 
   handleClick = async () => {
     this.setState({openModal: true});
+    let provider;
+
+    if (this.state.provider === 'HDFC') {
+      provider = 'HDFC Life';
+    } else {
+      provider = 'ICICI Pru';
+    }
+
     if (this.state.status === 'init') {
       const res = await Api.post('/api/insurance/profile/submit', {
         insurance_app_id: this.state.params.insurance_id
       });
       if (res.pfwresponse.status_code === 200) {
-        window.location.replace(window.location.href+'&native_payment=true&payment_link='+res.pfwresponse.result.insurance_app.payment_link, function() {});
+        window.location.replace(window.location.href+'&native_payment=true&payment_link='+res.pfwresponse.result.insurance_app.payment_link+'&provider='+provider, function() {});
       } else {
         alert(res.pfwresponse.result.error);
         this.setState({openModal: false});
       }
     } else {
-      window.location.replace(window.location.href+'&native_payment=true&resume_link='+this.state.resume_link, function() {});
+      window.location.replace(window.location.href+'&native_payment=true&resume_link='+this.state.resume_link+'&provider='+provider, function() {});
     }
   }
 
@@ -439,6 +453,7 @@ class Summary extends Component {
         handleClick={this.handleClick}
         fullWidthButton={true}
         premium={this.state.premium}
+        provider={this.state.provider}
         paymentFrequency={this.state.payment_frequency}
         summaryButtonText={(this.state.status === 'init') ? 'Pay Now' : 'Resume'} >
         <div>

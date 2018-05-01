@@ -23,13 +23,15 @@ class Container extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    var body = document.getElementsByTagName('body')[0].offsetHeight;
-    var client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
+    if (this.props.history.location.pathname === '/resume' || this.props.history.location.pathname === '/summary') {
+      var body = document.getElementsByTagName('body')[0].offsetHeight;
+      var client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
 
-    if (client > body) {
-      document.getElementsByClassName('Footer')[0].style.position = "relative" ;
-    } else {
-      document.getElementsByClassName('Footer')[0].style.position = "fixed" ;
+      if (client > body) {
+        document.getElementsByClassName('Footer')[0].style.position = "relative" ;
+      } else {
+        document.getElementsByClassName('Footer')[0].style.position = "fixed" ;
+      }
     }
   }
 

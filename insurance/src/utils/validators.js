@@ -38,3 +38,7 @@ export function numDifferentiation(val) {
   else if(val >= 1000) val = (val/1000).toFixed(1) + ' Thousand';
   return val;
 }
+
+export function validateName(string) {
+  return string.trim().indexOf(' ') !== -1;
+}

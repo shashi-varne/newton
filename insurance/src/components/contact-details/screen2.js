@@ -138,7 +138,7 @@ class ContactDetails2 extends Component {
       });
     } else if (!this.state.checked && !validateAddress(this.state.caddress)) {
       this.setState({
-        caddress_error: 'Please enter valid address'
+        caddress_error: 'Error: Minimum 3 words, beginning with your flat/house number.'
       });
     } else if (!this.state.checked && this.state.clandmark.length < 3) {
       this.setState({
@@ -187,9 +187,7 @@ class ContactDetails2 extends Component {
         this.setState({show_loader: false});
         for (let error of res.pfwresponse.result.errors) {
           if (error.field === 'p_addr') {
-            this.setState({
-              addressline_error: error.message
-            });
+            alert(error.message);
           }
           this.setState({
             [error.field+'_error']: error.message

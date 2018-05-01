@@ -15,7 +15,7 @@ import Checkbox from 'material-ui/Checkbox';
 import Api from '../../utils/api';
 import qs from 'qs';
 import { maritalOptions, genderOptions, relationshipOptions } from '../../utils/constants';
-import { validateAlphabets, validateNumber, validateAddress } from '../../utils/validators';
+import { validateAlphabets, validateNumber, validateAddress, validateName } from '../../utils/validators';
 
 class NomineeDetails extends Component {
   constructor(props) {
@@ -216,13 +216,13 @@ class NomineeDetails extends Component {
   }
 
   handleClick = async () => {
-    if (this.state.name.length < 3) {
+    if (!validateName(this.state.name) || this.state.name.length === 0) {
       this.setState({
-        name_error: 'Please enter valid full name'
+        name_error: 'Enter full valid name - alphabets only'
       });
     } else if (!validateAlphabets(this.state.name)) {
       this.setState({
-        name_error: 'Name can contain only alphabets'
+        name_error: 'Enter full valid name - alphabets only'
       });
     } else if (!this.state.dob) {
       this.setState({
@@ -246,7 +246,7 @@ class NomineeDetails extends Component {
       });
     } else if (!this.state.checked && !validateAddress(this.state.addressline)) {
       this.setState({
-        addressline_error: 'Please enter valid address'
+        addressline_error: 'Error: Minimum 3 words, beginning with your flat/house number.'
       });
     } else if (!this.state.checked && this.state.landmark.length < 3) {
       this.setState({
@@ -312,9 +312,7 @@ class NomineeDetails extends Component {
         this.setState({show_loader: false});
         for (let error of res.pfwresponse.result.errors) {
           if (error.field === 'nominee_address') {
-            this.setState({
-              addressline_error: error.message
-            });
+            alert(error.message);
           }
           this.setState({
             [error.field+'_error']: error.message

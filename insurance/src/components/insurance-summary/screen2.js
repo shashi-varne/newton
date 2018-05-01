@@ -73,115 +73,121 @@ class Resume extends Component {
     Api.get('/api/insurance/all/summary')
       .then(res => {
       let application, required_fields;
-      if (res.pfwresponse.result.insurance_apps.init.length > 0) {
-        application = res.pfwresponse.result.insurance_apps.init[0];
-      } else {
-        application = res.pfwresponse.result.insurance_apps.submitted[0];
-      }
+      if (res.pfwresponse.status_code === 200) {
 
-      required_fields = res.pfwresponse.result.required;
+        if (res.pfwresponse.result.insurance_apps.init.length > 0) {
+          application = res.pfwresponse.result.insurance_apps.init[0];
+        } else {
+          application = res.pfwresponse.result.insurance_apps.submitted[0];
+        }
 
-      let income_value = income_pairs.filter(item => item.name === application.quote.annual_income);
+        required_fields = res.pfwresponse.result.required;
 
-      let age = application.profile.nominee.dob && this.calculateAge(application.profile.nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
+        let income_value = income_pairs.filter(item => item.name === application.quote.annual_income);
 
-      let personal_submitted = this.state.required.personal.fields.some(r => required_fields.includes(r));
-      let contact_submitted = this.state.required.contact.fields.some(r => required_fields.includes(r));
-      let nominee_submitted = this.state.required.nominee.fields.some(r => required_fields.includes(r));
-      let appointee_submitted = this.state.required.appointee.fields.some(r => required_fields.includes(r));
-      let professional_submitted = this.state.required.professional.fields.some(r => required_fields.includes(r));
+        let age = application.profile.nominee.dob && this.calculateAge(application.profile.nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
 
-      this.setState({
-        required: {
+        let personal_submitted = this.state.required.personal.fields.some(r => required_fields.includes(r));
+        let contact_submitted = this.state.required.contact.fields.some(r => required_fields.includes(r));
+        let nominee_submitted = this.state.required.nominee.fields.some(r => required_fields.includes(r));
+        let appointee_submitted = this.state.required.appointee.fields.some(r => required_fields.includes(r));
+        let professional_submitted = this.state.required.professional.fields.some(r => required_fields.includes(r));
+
+        this.setState({
+          required: {
+            personal: {
+              not_submitted: personal_submitted
+            },
+            contact: {
+              not_submitted: contact_submitted
+            },
+            nominee: {
+              not_submitted: nominee_submitted
+            },
+            appointee: {
+              not_submitted: appointee_submitted
+            },
+            professional: {
+              not_submitted: professional_submitted
+            }
+          },
+          plutus_status: application.plutus_status,
+          required_fields: required_fields,
+          status: application.status,
+          show_loader: false,
+          payment_link: application.payment_link,
+          resume_link: application.resume_link,
+          edit_allowed: (res.pfwresponse.result.insurance_apps.init.length > 0) ? true : false,
+          show_appointee: (age < 18) ? true : false,
+          tobacco_choice: application.quote.tobacco_choice,
+          annual_income: income_value[0].value,
+          term: application.quote.term,
+          cover_amount: numDifferentiation(application.quote.cover_amount),
+          payment_frequency: application.quote.payment_frequency,
+          provider: application.provider,
+          cover_plan: application.quote.quote_json.cover_plan,
+          premium: application.quote.quote_json.premium,
+          image: application.quote.quote_describer.image,
+          quote_provider: application.quote.quote_provider,
+          benefits: {
+            is_open: true,
+            accident_benefit: application.quote.accident_benefit || '',
+            payout_option: application.quote.payout_option || ''
+          },
           personal: {
-            not_submitted: personal_submitted
+            is_open: false,
+            name: application.profile.name || '',
+            dob: (application.profile.dob) ? application.profile.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
+            marital_status: application.profile.marital_status || '',
+            birth_place: application.profile.birth_place || '',
+            mother_name: application.profile.mother_name || '',
+            father_name: application.profile.father_name || '',
+            gender: application.profile.gender || ''
           },
           contact: {
-            not_submitted: contact_submitted
+            is_open: false,
+            email: application.profile.email || '',
+            mobile_no: application.profile.mobile_no || '',
+            permanent_addr: application.profile.permanent_addr || '',
+            corr_addr: application.profile.corr_addr || '',
+            corr_address_same: application.profile.corr_address_same
           },
           nominee: {
-            not_submitted: nominee_submitted
+            is_open: false,
+            name: application.profile.nominee.name  || '',
+            dob: (application.profile.nominee.dob) ? application.profile.nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
+            marital_status: application.profile.nominee.marital_status  || '',
+            relationship: application.profile.nominee.relationship  || '',
+            nominee_address: application.profile.nominee_address  || '',
+            nominee_address_same: application.profile.nominee_address_same
           },
           appointee: {
-            not_submitted: appointee_submitted
+            is_open: false,
+            name: application.profile.appointee.name || '',
+            dob: (application.profile.appointee.dob) ? application.profile.appointee.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
+            marital_status: application.profile.appointee.marital_status || '',
+            relationship: application.profile.appointee.relationship || '',
+            appointee_address: application.profile.appointee_address || '',
+            appointee_address_same: application.profile.appointee_address_same
           },
           professional: {
-            not_submitted: professional_submitted
+            is_open: false,
+            pan_number: application.profile.pan_number || '',
+            occupation_category: application.profile.occupation_category || '',
+            occupation_detail: application.profile.occupation_detail || '',
+            is_criminal: application.profile.is_criminal || '',
+            is_politically_exposed: application.profile.is_politically_exposed || '',
+            employer_name: application.profile.employer_name || '',
+            employer_address: application.profile.employer_address || '',
+            education_qualification: application.profile.education_qualification || '',
+            designation: application.profile.designation || '',
+            annual_income: application.profile.annual_income || ''
           }
-        },
-        plutus_status: application.plutus_status,
-        required_fields: required_fields,
-        status: application.status,
-        show_loader: false,
-        payment_link: application.payment_link,
-        resume_link: application.resume_link,
-        edit_allowed: (res.pfwresponse.result.insurance_apps.init.length > 0) ? true : false,
-        show_appointee: (age < 18) ? true : false,
-        tobacco_choice: application.quote.tobacco_choice,
-        annual_income: income_value[0].value,
-        term: application.quote.term,
-        cover_amount: numDifferentiation(application.quote.cover_amount),
-        payment_frequency: application.quote.payment_frequency,
-        provider: application.provider,
-        cover_plan: application.quote.quote_json.cover_plan,
-        premium: application.quote.quote_json.premium,
-        image: application.quote.quote_describer.image,
-        quote_provider: application.quote.quote_provider,
-        benefits: {
-          is_open: true,
-          accident_benefit: application.quote.accident_benefit || '',
-          payout_option: application.quote.payout_option || ''
-        },
-        personal: {
-          is_open: false,
-          name: application.profile.name || '',
-          dob: (application.profile.dob) ? application.profile.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
-          marital_status: application.profile.marital_status || '',
-          birth_place: application.profile.birth_place || '',
-          mother_name: application.profile.mother_name || '',
-          father_name: application.profile.father_name || '',
-          gender: application.profile.gender || ''
-        },
-        contact: {
-          is_open: false,
-          email: application.profile.email || '',
-          mobile_no: application.profile.mobile_no || '',
-          permanent_addr: application.profile.permanent_addr || '',
-          corr_addr: application.profile.corr_addr || '',
-          corr_address_same: application.profile.corr_address_same
-        },
-        nominee: {
-          is_open: false,
-          name: application.profile.nominee.name  || '',
-          dob: (application.profile.nominee.dob) ? application.profile.nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
-          marital_status: application.profile.nominee.marital_status  || '',
-          relationship: application.profile.nominee.relationship  || '',
-          nominee_address: application.profile.nominee_address  || '',
-          nominee_address_same: application.profile.nominee_address_same
-        },
-        appointee: {
-          is_open: false,
-          name: application.profile.appointee.name || '',
-          dob: (application.profile.appointee.dob) ? application.profile.appointee.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
-          marital_status: application.profile.appointee.marital_status || '',
-          relationship: application.profile.appointee.relationship || '',
-          appointee_address: application.profile.appointee_address || '',
-          appointee_address_same: application.profile.appointee_address_same
-        },
-        professional: {
-          is_open: false,
-          pan_number: application.profile.pan_number || '',
-          occupation_category: application.profile.occupation_category || '',
-          occupation_detail: application.profile.occupation_detail || '',
-          is_criminal: application.profile.is_criminal || '',
-          is_politically_exposed: application.profile.is_politically_exposed || '',
-          employer_name: application.profile.employer_name || '',
-          employer_address: application.profile.employer_address || '',
-          education_qualification: application.profile.education_qualification || '',
-          designation: application.profile.designation || '',
-          annual_income: application.profile.annual_income || ''
-        }
-      });
+        });
+      } else {
+        this.setState({show_loader: false});
+        alert(res.pfwresponse.result.error);
+      }
     }).catch(error => {
       this.setState({show_loader: false});
       console.log(error);
@@ -255,47 +261,53 @@ class Resume extends Component {
   }
 
   handleClick = async () => {
-    if (this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') {
-      if (this.state.required.personal.not_submitted) {
-        this.props.history.push({
-          pathname: "/",
-          search: '?insurance_id='+this.state.params.insurance_id
-        });
-      } else if (this.state.required.contact.not_submitted) {
-        this.props.history.push({
-          pathname: "/contact",
-          search: '?insurance_id='+this.state.params.insurance_id
-        });
-      } else if (this.state.required.nominee.not_submitted) {
-        this.props.history.push({
-          pathname: "/nominee",
-          search: '?insurance_id='+this.state.params.insurance_id
-        });
-      } else if (this.state.required.appointee.not_submitted) {
-        this.props.history.push({
-          pathname: "/appointee",
-          search: '?insurance_id='+this.state.params.insurance_id
-        });
-      } else if (this.state.required.professional.not_submitted) {
-        this.props.history.push({
-          pathname: "/professional",
-          search: '?insurance_id='+this.state.params.insurance_id
-        });
-      }
+    if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.personal.not_submitted) {
+      this.props.history.push({
+        pathname: "/",
+        search: '?insurance_id='+this.state.params.insurance_id
+      });
+    } else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.contact.not_submitted) {
+      this.props.history.push({
+        pathname: "/contact",
+        search: '?insurance_id='+this.state.params.insurance_id
+      });
+    } else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.nominee.not_submitted) {
+      this.props.history.push({
+        pathname: "/nominee",
+        search: '?insurance_id='+this.state.params.insurance_id
+      });
+    } else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.appointee.not_submitted) {
+      this.props.history.push({
+        pathname: "/appointee",
+        search: '?insurance_id='+this.state.params.insurance_id
+      });
+    } else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.professional.not_submitted) {
+      this.props.history.push({
+        pathname: "/professional",
+        search: '?insurance_id='+this.state.params.insurance_id
+      });
     } else {
       this.setState({openModal: true});
+      let provider;
+
+      if (this.state.provider === 'HDFC') {
+        provider = 'HDFC Life';
+      } else {
+        provider = 'ICICI Pru';
+      }
+
       if (this.state.status === 'init') {
         const res = await Api.post('/api/insurance/profile/submit', {
           insurance_app_id: this.state.params.insurance_id
         });
         if (res.pfwresponse.status_code === 200) {
-          window.location.replace(window.location.href+'&native_payment=true&payment_link='+res.pfwresponse.result.insurance_app.payment_link, function() {});
+          window.location.replace(window.location.href+'&native_payment=true&payment_link='+res.pfwresponse.result.insurance_app.payment_link+'&provider='+provider, function() {});
         } else {
           alert(res.pfwresponse.result.error);
           this.setState({openModal: false});
         }
       } else {
-        window.location.replace(window.location.href+'&native_payment=true&resume_link='+this.state.resume_link, function() {});
+        window.location.replace(window.location.href+'&native_payment=true&resume_link='+this.state.resume_link+'&provider='+provider, function() {});
       }
     }
   }
@@ -524,6 +536,153 @@ class Resume extends Component {
     }
   }
 
+  renderPersonalPercentage = () => {
+    if (this.state.personal.name &&
+      this.state.personal.marital_status &&
+      this.state.personal.birth_place &&
+      this.state.personal.mother_name &&
+      this.state.personal.father_name) {
+      return 100;
+    } else if (this.state.personal.name ||
+      this.state.personal.marital_status ||
+      this.state.personal.birth_place ||
+      this.state.personal.mother_name ||
+      this.state.personal.father_name) {
+      return 50;
+    } else {
+      return 0;
+    }
+  }
+
+  renderContactPercentage = () => {
+    let contact = this.state.contact;
+    if (Object.getOwnPropertyNames(contact).length !== 0) {
+      if (contact.email &&
+        contact.mobile_no &&
+        contact.permanent_addr.hasOwnProperty('pincode') &&
+        contact.permanent_addr.hasOwnProperty('addressline') &&
+        contact.permanent_addr.hasOwnProperty('landmark')) {
+        return 100;
+      } else if (contact.email ||
+        contact.mobile_no ||
+        contact.permanent_addr.hasOwnProperty('pincode') ||
+        contact.permanent_addr.hasOwnProperty('addressline') ||
+        contact.permanent_addr.hasOwnProperty('landmark')) {
+        return 50;
+      } else {
+        return 0;
+      }
+    } else {
+      return 0;
+    }
+  }
+
+  renderNomineePercentage = () => {
+    let nominee = this.state.nominee;
+    if (Object.getOwnPropertyNames(nominee).length !== 0) {
+      if (nominee.name &&
+        nominee.dob &&
+        nominee.marital_status &&
+        nominee.relationship &&
+        (nominee.nominee_address_same ||
+          (
+            (!nominee.nominee_address_same && nominee.nominee_address.hasOwnProperty('pincode')) &&
+            (!nominee.nominee_address_same && nominee.nominee_address.hasOwnProperty('addressline')) &&
+            (!nominee.nominee_address_same && nominee.nominee_address.hasOwnProperty('landmark'))
+          )
+        )) {
+        return 100;
+      } else if (nominee.name ||
+        nominee.dob ||
+        nominee.marital_status ||
+        nominee.relationship ||
+        (nominee.nominee_address_same ||
+          (
+            (!nominee.nominee_address_same && nominee.nominee_address.hasOwnProperty('pincode')) &&
+            (!nominee.nominee_address_same && nominee.nominee_address.hasOwnProperty('addressline')) &&
+            (!nominee.nominee_address_same && nominee.nominee_address.hasOwnProperty('landmark'))
+          )
+        )) {
+        return 50;
+      } else {
+        return 0;
+      }
+    } else {
+      return 0;
+    }
+  }
+
+  renderAppointeePercentage = () => {
+    let appointee = this.state.appointee;
+    if (Object.getOwnPropertyNames(appointee).length !== 0) {
+      if (appointee.name &&
+        appointee.dob &&
+        appointee.marital_status &&
+        appointee.relationship &&
+        (appointee.appointee_address_same ||
+          (
+            (!appointee.appointee_address_same && appointee.appointee_address.hasOwnProperty('pincode')) &&
+            (!appointee.appointee_address_same && appointee.appointee_address.hasOwnProperty('addressline')) &&
+            (!appointee.appointee_address_same && appointee.appointee_address.hasOwnProperty('landmark'))
+          )
+        )) {
+        return 100;
+      } else if (appointee.name ||
+        appointee.dob ||
+        appointee.marital_status ||
+        appointee.relationship ||
+        (appointee.appointee_address_same ||
+          (
+            (!appointee.appointee_address_same && appointee.appointee_address.hasOwnProperty('pincode')) &&
+            (!appointee.appointee_address_same && appointee.appointee_address.hasOwnProperty('addressline')) &&
+            (!appointee.appointee_address_same && appointee.appointee_address.hasOwnProperty('landmark'))
+          )
+        )) {
+        return 50;
+      } else {
+        return 0;
+      }
+    } else {
+      return 0;
+    }
+  }
+
+  renderProfessionalPercentage = () => {
+    let professional = this.state.professional;
+    if (Object.getOwnPropertyNames(professional).length !== 0) {
+      if (professional.pan_number &&
+        professional.education_qualification &&
+        (
+          (professional.occupation_detail === 'SELF-EMPLOYED' && professional.designation && professional.annual_income !== '') ||
+          (
+            (professional.occupation_detail === 'SALRIED' && professional.occupation_category && professional.designation && professional.annual_income !== '' && professional.employer_address.hasOwnProperty('pincode') &&
+            professional.employer_address.hasOwnProperty('addressline') &&
+            professional.employer_address.hasOwnProperty('landmark'))
+          ) ||
+          (professional.occupation_detail === 'STUDENT')
+        )) {
+        return 100;
+      } else if (professional.pan_number ||
+        professional.education_qualification ||
+        (
+          (professional.occupation_detail === 'SELF-EMPLOYED' && (professional.designation || professional.annual_income !== '')) ||
+          (
+            (professional.occupation_detail === 'SALRIED' && (professional.occupation_category || professional.designation || professional.annual_income !== '' || professional.employer_name ||
+            professional.employer_address.hasOwnProperty('pincode') ||
+            professional.employer_address.hasOwnProperty('addressline') ||
+            professional.employer_address.hasOwnProperty('landmark')))
+          ) ||
+          (professional.occupation_detail === 'STUDENT')
+        )) {
+        return 50;
+      } else {
+        return 0;
+      }
+    } else {
+      return 0;
+    }
+  }
+
   renderPercentage = (number) => {
     return (
       <div style={{display: 'flex', alignItems: 'center', width: 170}}>
@@ -549,6 +708,9 @@ class Resume extends Component {
     if (!this.state.required.professional.not_submitted) {
       number+= 5;
     }
+    if (this.state.status === 'plutus_submitted') {
+      number+= 20;
+    }
     return (
       <div style={{display: 'flex', alignItems: 'center', width: 170}}>
         <div className="Progress">
@@ -565,7 +727,7 @@ class Resume extends Component {
         resetpage={(this.state.status === 'init') ? true : false}
         handleReset={this.handleReset}
         showLoader={this.state.show_loader}
-        title={'Term Insurance Plan Summary'}
+        title={'Resume Application'}
         handleClick={this.handleClick}
         fullWidthButton={true}
         premium={this.state.premium}
@@ -577,7 +739,7 @@ class Resume extends Component {
             Hey {this.state.personal.name}
           </div>
           <div style={{color: '#878787', fontSize: 16}}>
-            Share few more details and secure your family. It will only take 5 mins.
+            You are just minutes away to secure your family.
           </div>
         </div>
         <div>
@@ -678,7 +840,7 @@ class Resume extends Component {
                     search: '?insurance_id='+this.state.params.insurance_id
                   })}>Edit</span>}
                 </div>
-                {this.renderPercentage((this.state.required.personal.not_submitted) ? 50 : 90)}
+                {this.renderPercentage(this.renderPersonalPercentage())}
               </div>
               {this.renderAccordionBody('personal')}
             </div>
@@ -694,7 +856,7 @@ class Resume extends Component {
                     search: '?insurance_id='+this.state.params.insurance_id
                   })}>Edit</span>}
                 </div>
-                {this.renderPercentage((this.state.required.contact.not_submitted) ? 50 : 90)}
+                {this.renderPercentage(this.renderContactPercentage())}
               </div>
               {this.renderAccordionBody('contact')}
             </div>
@@ -710,7 +872,7 @@ class Resume extends Component {
                     search: '?insurance_id='+this.state.params.insurance_id
                   })}>Edit</span>}
                 </div>
-                {this.renderPercentage((this.state.required.nominee.not_submitted) ? 50 : 90)}
+                {this.renderPercentage(this.renderNomineePercentage())}
               </div>
               {this.renderAccordionBody('nominee')}
             </div>
@@ -727,7 +889,7 @@ class Resume extends Component {
                       search: '?insurance_id='+this.state.params.insurance_id
                     })}>Edit</span>}
                   </div>
-                  {this.renderPercentage((this.state.required.appointee.not_submitted) ? 50 : 90)}
+                  {this.renderPercentage(this.renderAppointeePercentage())}
                 </div>
                 {this.renderAccordionBody('appointee')}
               </div>
@@ -744,7 +906,7 @@ class Resume extends Component {
                     search: '?insurance_id='+this.state.params.insurance_id
                   })}>Edit</span>}
                 </div>
-                {this.renderPercentage((this.state.required.professional.not_submitted) ? 50 : 90)}
+                {this.renderPercentage(this.renderProfessionalPercentage())}
               </div>
               {this.renderAccordionBody('professional')}
             </div>

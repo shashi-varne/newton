@@ -7,7 +7,7 @@ import father from '../../assets/father_dark_icn.png';
 import location from '../../assets/location_dark_icn.png';
 import Api from '../../utils/api';
 import qs from 'qs';
-import { validateAlphabets } from '../../utils/validators';
+import { validateAlphabets, validateName } from '../../utils/validators';
 
 class PersonalDetails2 extends Component {
   constructor(props) {
@@ -59,29 +59,29 @@ class PersonalDetails2 extends Component {
   };
 
   handleClick = async () => {
-    if (this.state.mother_name.length < 3) {
+    if (!validateName(this.state.mother_name) || this.state.mother_name.length === 0) {
       this.setState({
-        mother_name_error: 'Please enter valid name'
+        mother_name_error: 'Enter full valid name - alphabets only'
       });
     } else if (!validateAlphabets(this.state.mother_name)) {
       this.setState({
-        mother_name_error: 'Name can contain only alphabets'
+        mother_name_error: 'Enter full valid name - alphabets only'
       });
-    } else if (this.state.father_name.length < 3) {
+    } else if (!validateName(this.state.mother_name) || this.state.father_name.length === 0) {
       this.setState({
-        father_name_error: 'Please enter valid name'
+        father_name_error: 'Enter full valid name - alphabets only'
       });
     } else if (!validateAlphabets(this.state.father_name)) {
       this.setState({
-        father_name_error: 'Name can contain only alphabets'
+        father_name_error: 'Enter full valid name - alphabets only'
       });
     } else if (this.state.birth_place.length < 3) {
       this.setState({
-        birth_place_error: 'Please enter valid name'
+        birth_place_error: 'Enter a valid city name - alphabets only'
       });
     } else if (!validateAlphabets(this.state.birth_place)) {
       this.setState({
-        birth_place_error: 'Name can contain only alphabets'
+        birth_place_error: 'Enter a valid city name - alphabets only'
       });
     } else {
       this.setState({show_loader: true});

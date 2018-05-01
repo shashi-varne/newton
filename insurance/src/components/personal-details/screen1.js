@@ -8,7 +8,7 @@ import marital from '../../assets/marital_status_dark_icn.png';
 import Api from '../../utils/api';
 import qs from 'qs';
 import { maritalOptions, genderOptions } from '../../utils/constants';
-import { validateAlphabets } from '../../utils/validators';
+import { validateAlphabets, validateName } from '../../utils/validators';
 
 class PersonalDetails1 extends Component {
   constructor(props) {
@@ -79,11 +79,11 @@ class PersonalDetails1 extends Component {
   handleClick = async () => {
     if (this.state.name.length < 3) {
       this.setState({
-        name_error: 'Please enter valid full name'
+        name_error: 'Enter full valid name - alphabets only'
       });
-    } else if (!validateAlphabets(this.state.name)) {
+    } else if (!validateName(this.state.name) || !validateAlphabets(this.state.name)) {
       this.setState({
-        name_error: 'Name can contain only alphabets'
+        name_error: 'Enter full valid name - alphabets only'
       });
     } else if (!this.state.marital_status) {
       this.setState({
