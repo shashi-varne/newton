@@ -16,7 +16,7 @@ class Container extends Component {
 
   historyGoBack = () => {
     if (this.props.history.location.pathname === "/" || this.props.history.location.pathname === "/resume") {
-      window.location.replace(window.location.href+'&native_back', function() {});
+      window.location.replace(window.location.href+'&native_back=true', function() {});
     } else {
       this.props.history.goBack();
     }
