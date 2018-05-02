@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
+import Checkbox from 'material-ui/Checkbox';
+import qs from 'qs';
+import Grid from 'material-ui/Grid';
+
 import Container from '../../common/Container';
 import InputWithIcon from '../../ui/InputWithIcon';
 import location from '../../assets/location_dark_icn.png';
-import Grid from 'material-ui/Grid';
-import Checkbox from 'material-ui/Checkbox';
 import Api from '../../utils/api';
-import qs from 'qs';
 import { validateNumber, validateAddress } from '../../utils/validators';
 
 class ContactDetails2 extends Component {
@@ -35,12 +36,6 @@ class ContactDetails2 extends Component {
       error: '',
       params: qs.parse(props.history.location.search.slice(1))
     }
-  }
-
-  setStateAsync(state) {
-    return new Promise((resolve) => {
-      this.setState(state, resolve)
-    });
   }
 
   componentDidMount() {
@@ -205,70 +200,6 @@ class ContactDetails2 extends Component {
     );
   }
 
-  renderCorrespondenceAddress = () => {
-    if (!this.state.checked) {
-      return (
-        <FormControl fullWidth>
-          <div className="InputField">
-            <InputWithIcon
-              error={(this.state.cpincode_error) ? true : false}
-              helperText={this.state.cpincode_error}
-              type="number"
-              icon={location}
-              width="40"
-              label="Pincode *"
-              id="cpincode"
-              name="cpincode"
-              value={this.state.cpincode}
-              onChange={this.handlePincode('cpincode')} />
-          </div>
-          <div className="InputField">
-            <InputWithIcon
-              error={(this.state.caddress_error) ? true : false}
-              helperText={this.state.caddress_error}
-              type="text"
-              id="caddress"
-              label="Permanent address *"
-              value={this.state.caddress}
-              name="caddress"
-              onChange={this.handleChange()} />
-          </div>
-          <div className="InputField">
-            <InputWithIcon
-              error={(this.state.clandmark_error) ? true : false}
-              helperText={this.state.clandmark_error}
-              type="text"
-              id="clandmark"
-              label="Landmark *"
-              name="clandmark"
-              value={this.state.clandmark}
-              onChange={this.handleChange()} />
-          </div>
-          <div className="InputField">
-            <InputWithIcon
-              disabled={true}
-              id="ccity"
-              label="City *"
-              value={this.state.ccity}
-              name="ccity"
-              onChange={this.handleChange()} />
-          </div>
-          <div className="InputField">
-            <InputWithIcon
-              disabled={true}
-              id="cstate"
-              label="State *"
-              value={this.state.cstate}
-              name="cstate"
-              onChange={this.handleChange()} />
-          </div>
-        </FormControl>
-      );
-    } else {
-      return null;
-    }
-  }
-
   render() {
     return (
       <Container
@@ -284,71 +215,69 @@ class ContactDetails2 extends Component {
         buttonTitle="Save Details"
         logo={this.state.image}
         >
-        <div className="SectionHead" style={{marginBottom: 15, color: 'rgb(68,68,68)', fontSize: 14, fontFamily: 'Roboto', fontWeight: 500}}>
-          Permanent address
-        </div>
-        <div style={{color: '#d0021b'}}>{this.state.error}</div>
-        <FormControl fullWidth>
-          <div className="InputField">
-            <InputWithIcon
-              error={(this.state.pincode_error) ? true : false}
-              helperText={this.state.pincode_error}
-              type="number"
-              icon={location}
-              width="40"
-              label="Pincode *"
-              id="pincode"
-              name="pincode"
-              value={this.state.pincode}
-              onChange={this.handlePincode('pincode')} />
-          </div>
-          <div className="InputField">
-            <InputWithIcon
-              error={(this.state.addressline_error) ? true : false}
-              helperText={this.state.addressline_error}
-              type="text"
-              id="address"
-              label="Permanent address *"
-              name="addressline"
-              value={this.state.addressline}
-              onChange={this.handleChange()} />
-          </div>
-          <div className="InputField">
-            <InputWithIcon
-              error={(this.state.landmark_error) ? true : false}
-              helperText={this.state.landmark_error}
-              type="text"
-              id="landmark"
-              label="Landmark *"
-              name="landmark"
-              value={this.state.landmark}
-              onChange={this.handleChange()} />
-          </div>
-          <div className="InputField">
-            <InputWithIcon
-              disabled={true}
-              id="city"
-              label="City *"
-              value={this.state.city}
-              name="city"
-              onChange={this.handleChange()} />
-          </div>
-          <div className="InputField">
-            <InputWithIcon
-              disabled={true}
-              id="state"
-              label="State *"
-              value={this.state.state}
-              name="state"
-              onChange={this.handleChange()} />
-          </div>
-        </FormControl>
-        <div className="SectionHead" style={{marginBottom: 15, color: 'rgb(68,68,68)', fontSize: 14, fontFamily: 'Roboto', fontWeight: 500}}>
-          Correspondence address
-        </div>
-        <div className="CheckBlock" style={{marginTop: 20, marginBottom: 30}}>
+        {/* Permanent Address Block */}
+          <div className="SectionHead">Permanent address</div>
+            <FormControl fullWidth>
+              <div className="InputField">
+                <InputWithIcon
+                  error={(this.state.pincode_error) ? true : false}
+                  helperText={this.state.pincode_error}
+                  type="number"
+                  icon={location}
+                  width="40"
+                  label="Pincode *"
+                  id="pincode"
+                  name="pincode"
+                  value={this.state.pincode}
+                  onChange={this.handlePincode('pincode')} />
+              </div>
+              <div className="InputField">
+                <InputWithIcon
+                  error={(this.state.addressline_error) ? true : false}
+                  helperText={this.state.addressline_error}
+                  type="text"
+                  id="address"
+                  label="Permanent address *"
+                  name="addressline"
+                  value={this.state.addressline}
+                  onChange={this.handleChange()} />
+              </div>
+              <div className="InputField">
+                <InputWithIcon
+                  error={(this.state.landmark_error) ? true : false}
+                  helperText={this.state.landmark_error}
+                  type="text"
+                  id="landmark"
+                  label="Landmark *"
+                  name="landmark"
+                  value={this.state.landmark}
+                  onChange={this.handleChange()} />
+              </div>
+              <div className="InputField">
+                <InputWithIcon
+                  disabled={true}
+                  id="city"
+                  label="City *"
+                  value={this.state.city}
+                  name="city"
+                  onChange={this.handleChange()} />
+              </div>
+              <div className="InputField">
+                <InputWithIcon
+                  disabled={true}
+                  id="state"
+                  label="State *"
+                  value={this.state.state}
+                  name="state"
+                  onChange={this.handleChange()} />
+              </div>
+            </FormControl>
+
+        {/* Correspondence Address Block */}
+        <div className="SectionHead">Correspondence address</div>
+        <div className="CheckBlock">
           <Grid container spacing={16} alignItems="center">
-            <Grid item xs={2} style={{textAlign: 'center'}}>
+            <Grid item xs={2} className="TextCenter">
               <Checkbox
                 defaultChecked
                 checked={this.state.checked}
@@ -356,14 +285,73 @@ class ContactDetails2 extends Component {
                 value="checked"
                 name="checked"
                 onChange={this.handleChange()}
-                style={{width: 'auto', height: 'auto'}}  />
+                className="Checkbox" />
             </Grid>
             <Grid item xs={10}>
-              <span style={{color: 'rgb(68, 68, 68)', fontSize: 14}}>Correspondence address same as permanent address</span>
+              <span className="SameAddress">Correspondence address same as permanent address</span>
             </Grid>
           </Grid>
         </div>
-        {this.renderCorrespondenceAddress()}
+
+        {/* Correspondence Address */}
+        {
+          !this.state.checked &&
+          <FormControl fullWidth>
+            <div className="InputField">
+              <InputWithIcon
+                error={(this.state.cpincode_error) ? true : false}
+                helperText={this.state.cpincode_error}
+                type="number"
+                icon={location}
+                width="40"
+                label="Pincode *"
+                id="cpincode"
+                name="cpincode"
+                value={this.state.cpincode}
+                onChange={this.handlePincode('cpincode')} />
+            </div>
+            <div className="InputField">
+              <InputWithIcon
+                error={(this.state.caddress_error) ? true : false}
+                helperText={this.state.caddress_error}
+                type="text"
+                id="caddress"
+                label="Permanent address *"
+                value={this.state.caddress}
+                name="caddress"
+                onChange={this.handleChange()} />
+            </div>
+            <div className="InputField">
+              <InputWithIcon
+                error={(this.state.clandmark_error) ? true : false}
+                helperText={this.state.clandmark_error}
+                type="text"
+                id="clandmark"
+                label="Landmark *"
+                name="clandmark"
+                value={this.state.clandmark}
+                onChange={this.handleChange()} />
+            </div>
+            <div className="InputField">
+              <InputWithIcon
+                disabled={true}
+                id="ccity"
+                label="City *"
+                value={this.state.ccity}
+                name="ccity"
+                onChange={this.handleChange()} />
+            </div>
+            <div className="InputField">
+              <InputWithIcon
+                disabled={true}
+                id="cstate"
+                label="State *"
+                value={this.state.cstate}
+                name="cstate"
+                onChange={this.handleChange()} />
+            </div>
+          </FormControl>
+        }
       </Container>
     );
   }

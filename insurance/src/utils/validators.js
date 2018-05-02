@@ -42,3 +42,7 @@ export function numDifferentiation(val) {
 export function validateName(string) {
   return string.trim().indexOf(' ') !== -1;
 }
+
+export function capitalize(string) {
+  return string.toLowerCase().replace(/(^|\s)[a-z]/g,function(f){return f.toUpperCase()});
+}

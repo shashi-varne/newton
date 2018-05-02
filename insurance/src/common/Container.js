@@ -1,24 +1,39 @@
 import React, { Component } from 'react';
-import { withStyles } from 'material-ui/styles';
-import Header from './Header';
-import Footer from './Footer';
-import Banner from '../ui/Banner';
 import { withRouter } from 'react-router';
+
+import Header from './Header';
+import Footer from './footer';
+import Banner from '../ui/Banner';
 import loader from '../assets/loader_gif.gif';
 
 class Container extends Component {
   constructor(props) {
-    super(props);
-    this.state = {
-      prevPath: ''
-    };
+    super();
   }
 
   historyGoBack = () => {
-    if (this.props.history.location.pathname === "/" || this.props.history.location.pathname === "/resume") {
-      window.location.replace(window.location.href+'&native_back=true', function() {});
+    let pathname = this.props.history.location.pathname;
+    switch (pathname) {
+      case "/":
+      case "/resume":
+        window.location.replace(window.location.href+'&native_back=true', function() {});
+        break;
+      default:
+        this.props.history.goBack();
+    }
+  }
+
+  renderPageLoader = () => {
+    if (this.props.showLoader) {
+      return (
+        <div className="Loader">
+          <div className="LoaderOverlay">
+            <img src={loader} alt=""/>
+          </div>
+        </div>
+      );
     } else {
-      this.props.history.goBack();
+      return null;
     }
   }
 
@@ -35,20 +50,6 @@ class Container extends Component {
     }
   }
 
-  renderLoader = () => {
-    if (this.props.showLoader) {
-      return (
-        <div className="Loader">
-          <div className="LoaderOverlay">
-            <img src={loader} alt=""/>
-          </div>
-        </div>
-      );
-    } else {
-      return null;
-    }
-  }
-
   render() {
     let steps = [];
     for (var i = 0; i < this.props.total; i++) {
@@ -60,30 +61,48 @@ class Container extends Component {
     }
 
     return (
-      <div className={`ContainerWrapper`}>
-        <Header title={this.props.title} count={this.props.count} total={this.props.total} current={this.props.current} goBack={this.historyGoBack} edit={this.props.edit} />
+      <div className="ContainerWrapper">
+        {/* Header Block */}
+        <Header
+          title={this.props.title}
+          count={this.props.count}
+          total={this.props.total}
+          current={this.props.current}
+          goBack={this.historyGoBack}
+          edit={this.props.edit} />
+
+        {/* Below Header Block */}
         <div style={{height: 56}}></div>
         <div className="Step">
           {steps}
         </div>
-        {this.renderLoader()}
+
+        {/* Loader Block */}
+        {this.renderPageLoader()}
+
+        {/* Banner Block */}
         { this.props.banner && <Banner text={this.props.bannerText}/> }
-        <div className={`Container ${this.props.classes.wrapper}`}>
+
+        {/* Children Block */}
+        <div className='Container'>
           { this.props.children }
         </div>
-        <Footer handleClick={this.props.handleClick} fullWidthButton={this.props.fullWidthButton} edit={this.props.edit} buttonTitle={this.props.buttonTitle} premium={this.props.premium} paymentFrequency={this.props.paymentFrequency} summaryButtonText={this.props.summaryButtonText} provider={this.props.provider} logo={this.props.logo}
-        resetpage={this.props.resetpage} handleReset={this.props.handleReset} />
+
+        {/* Footer Block */}
+        <Footer
+          fullWidthButton={this.props.fullWidthButton}
+          logo={this.props.logo}
+          buttonTitle={this.props.buttonTitle}
+          provider={this.props.provider}
+          premium={this.props.premium}
+          paymentFrequency={this.props.paymentFrequency}
+          edit={this.props.edit}
+          resetpage={this.props.resetpage}
+          handleClick={this.props.handleClick}
+          handleReset={this.props.handleReset} />
       </div>
     );
   }
 };
 
-const styles = {
-  wrapper: {
-    padding: '20px 15px',
-    marginBottom: '30px',
-    backgroundColor: '#fff'
-  }
-};
-
-export default withRouter(withStyles(styles)(Container));
+export default withRouter(Container);

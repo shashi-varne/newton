@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
+import qs from 'qs';
+
 import Container from '../../common/Container';
 import InputWithIcon from '../../ui/InputWithIcon';
 import MobileInputWithIcon from '../../ui/MobileInputWithIcon';
 import email from '../../assets/email_dark_icn.png';
 import phone from '../../assets/phone_dark_icn.png';
 import Api from '../../utils/api';
-import qs from 'qs';
 import { validateEmail, validateNumber } from '../../utils/validators';
 
 class ContactDetails1 extends Component {
@@ -21,12 +22,6 @@ class ContactDetails1 extends Component {
       image: '',
       params: qs.parse(this.props.location.search.slice(1))
     }
-  }
-
-  setStateAsync(state) {
-    return new Promise((resolve) => {
-      this.setState(state, resolve)
-    });
   }
 
   componentDidMount() {
@@ -132,7 +127,7 @@ class ContactDetails1 extends Component {
               id="email"
               name="email"
               value={this.state.email}
-              onChange={this.handleChange('email')} />
+              onChange={this.handleChange()} />
           </div>
           <div className="InputField">
             <MobileInputWithIcon
@@ -146,7 +141,7 @@ class ContactDetails1 extends Component {
               id="number"
               name="mobile_no"
               value={this.state.mobile_no}
-              onChange={this.handleChange('mobile_no')} />
+              onChange={this.handleChange()} />
           </div>
         </FormControl>
       </Container>

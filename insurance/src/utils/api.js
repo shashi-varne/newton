@@ -33,10 +33,10 @@ class Api {
       .then(response => {
         return response.data;
       }, error => {
-        return error.response.data;
+        return error;
       })
       .catch(error => {
-        return error.response.data;
+        return error;
       });
   }
 }

@@ -69,3 +69,29 @@
 .Dropdown {
   width: 100%;
 }
+.RadioGrpGrid {
+  flex-basis: unset;
+  max-width: 100%;
+}
+
+.RadioLabel {
+  color: #444;
+  font-size: 14px;
+  font-family: 'Roboto';
+  font-weight: 500;
+}
+
+.RadioWithIcon {
+  color: #444;
+  font-size: 0.8rem;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.RadioWithIcon .error {
+  position: absolute;
+  right: 0;
+  color: #d0021b;
+  font-size: 14px;
+  font-style: italic;
+}

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import Grid from 'material-ui/Grid';
-
-import './style.css';
 import Select from 'material-ui/Select';
 import { MenuItem } from 'material-ui/Menu';
 import { InputLabel } from 'material-ui/Input';
 import { FormControl } from 'material-ui/Form';
+
+import './style.css';
 import Icon from './Icon';
 
 class SelectGrp extends Component {

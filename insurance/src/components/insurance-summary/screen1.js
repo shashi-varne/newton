@@ -448,6 +448,7 @@ class Summary extends Component {
   render() {
     return (
       <Container
+        summarypage={true}
         showLoader={this.state.show_loader}
         title={'Term Insurance Plan Summary'}
         handleClick={this.handleClick}
@@ -455,7 +456,7 @@ class Summary extends Component {
         premium={this.state.premium}
         provider={this.state.provider}
         paymentFrequency={this.state.payment_frequency}
-        summaryButtonText={(this.state.status === 'init') ? 'Pay Now' : 'Resume'} >
+        buttonTitle={(this.state.status === 'init') ? 'Pay Now' : 'Resume'} >
         <div>
           <Grid container spacing={8} alignItems="center">
             <Grid item xs={5}>

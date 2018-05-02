@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
+import qs from 'qs';
+
 import Container from '../../common/Container';
 import InputWithIcon from '../../ui/InputWithIcon';
 import RadioWithIcon from '../../ui/RadioWithIcon';
 import name from '../../assets/full_name_dark_icn.png';
 import marital from '../../assets/marital_status_dark_icn.png';
 import Api from '../../utils/api';
-import qs from 'qs';
 import { maritalOptions, genderOptions } from '../../utils/constants';
 import { validateAlphabets, validateName } from '../../utils/validators';
 
@@ -28,12 +29,6 @@ class PersonalDetails1 extends Component {
     }
   }
 
-  setStateAsync(state) {
-    return new Promise((resolve) => {
-      this.setState(state, resolve)
-    });
-  }
-
   componentDidMount() {
     Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
       groups: 'personal'
@@ -53,7 +48,6 @@ class PersonalDetails1 extends Component {
       this.setState({show_loader: false});
       console.log(error);
     });
-
   }
 
   handleChange = () => event => {
@@ -91,13 +85,9 @@ class PersonalDetails1 extends Component {
       });
     } else {
       this.setState({show_loader: true});
-      // const formattedDob = this.state.dob.replace(/\\-/g, '/').split('-').reverse().join('/');
-
       const res = await Api.post('/api/insurance/profile', {
         insurance_app_id: this.state.params.insurance_id,
         name: this.state.name,
-        // dob: formattedDob,
-        // gender: this.state.gender,
         marital_status: this.state.marital_status
       });
 

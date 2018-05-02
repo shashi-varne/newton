@@ -2,22 +2,7 @@ import React, { Component } from 'react';
 import Grid from 'material-ui/Grid';
 
 import './style.css';
-
-class RadioBtn extends Component {
-  handleClick(){
-    this.props.handler(this.props.index);
-  }
-
-  render() {
-    return (
-      <div className="radio-btn-group" onClick={() => this.handleClick()}>
-        <div className={this.props.isChecked ? "RadioButton checked" : "RadioButton unchecked"} data-value={this.props.value}>
-          <label className={this.props.type}>{this.props.text}</label>
-        </div>
-      </div>
-    );
-  }
-}
+import RadioBtn from './RadioBtn';
 
 class RadioGrp extends Component {
   constructor(props) {
@@ -43,7 +28,7 @@ class RadioGrp extends Component {
 
     const allOptions = options.map((option, i) => {
       return (
-        <Grid item xs={6} key={i} style={{flexBasis: 'unset'}}>
+        <Grid item xs={6} key={i} className="RadioGrpGrid">
           <RadioBtn type={this.props.type} isChecked={(this.state.selectedIndex === i)} text={option.name} value={option.value} index={i} handler={this.toggleRadioBtn} />
         </Grid>
       );
@@ -60,7 +45,7 @@ class RadioGrp extends Component {
 const RadioWithoutIcon = (props) => (
   <Grid container spacing={16} alignItems="center" className={props.class}>
     <Grid item xs={6}>
-      <span style={{color: '#444', fontSize: 14,fontFamily: 'Roboto', fontWeight: 500}}>{props.label}</span>
+      <span className="RadioLabel">{props.label}</span>
     </Grid>
     <Grid item xs={6}>
       <RadioGrp options={props.options} type={props.type} value={props.value} onChange={props.onChange} />

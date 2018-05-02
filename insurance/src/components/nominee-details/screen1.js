@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
+import qs from 'qs';
+import Grid from 'material-ui/Grid';
+import Checkbox from 'material-ui/Checkbox';
+
 import Container from '../../common/Container';
 import InputWithIcon from '../../ui/InputWithIcon';
 import RadioWithIcon from '../../ui/RadioWithIcon';
@@ -9,11 +13,8 @@ import gender from '../../assets/gender_dark_icn.png';
 import relationship from '../../assets/relationship_dark_icn.png';
 import marital from '../../assets/marital_status_dark_icn.png';
 import location from '../../assets/location_dark_icn.png';
-import Grid from 'material-ui/Grid';
 import Dropdown from '../../ui/Select';
-import Checkbox from 'material-ui/Checkbox';
 import Api from '../../utils/api';
-import qs from 'qs';
 import { maritalOptions, genderOptions, relationshipOptions } from '../../utils/constants';
 import { validateAlphabets, validateNumber, validateAddress, validateName } from '../../utils/validators';
 
@@ -45,12 +46,6 @@ class NomineeDetails extends Component {
       image: '',
       params: qs.parse(props.history.location.search.slice(1))
     }
-  }
-
-  setStateAsync(state) {
-    return new Promise((resolve) => {
-      this.setState(state, resolve)
-    });
   }
 
   componentDidMount() {
@@ -149,70 +144,6 @@ class NomineeDetails extends Component {
     this.setState({
       dob: ''
     })
-  }
-
-  renderCorrespondenceAddress = () => {
-    if (!this.state.checked) {
-      return (
-        <FormControl fullWidth>
-          <div className="InputField">
-            <InputWithIcon
-              error={(this.state.pincode_error) ? true : false}
-              helperText={this.state.pincode_error}
-              type="number"
-              icon={location}
-              width="40"
-              label="Pincode *"
-              id="pincode"
-              name="pincode"
-              value={this.state.pincode}
-              onChange={this.handlePincode('pincode')} />
-          </div>
-          <div className="InputField">
-            <InputWithIcon
-              error={(this.state.addressline_error) ? true : false}
-              helperText={this.state.addressline_error}
-              type="text"
-              id="address"
-              label="Permanent address *"
-              value={this.state.addressline}
-              name="addressline"
-              onChange={this.handleChange('addressline')} />
-          </div>
-          <div className="InputField">
-            <InputWithIcon
-              error={(this.state.landmark_error) ? true : false}
-              helperText={this.state.landmark_error}
-              type="text"
-              id="landmark"
-              label="Landmark *"
-              value={this.state.landmark}
-              name="landmark"
-              onChange={this.handleChange('landmark')} />
-          </div>
-          <div className="InputField">
-            <InputWithIcon
-              disabled={true}
-              id="city"
-              label="City *"
-              value={this.state.city}
-              name="city"
-              onChange={this.handleChange('city')} />
-          </div>
-          <div className="InputField">
-            <InputWithIcon
-              disabled={true}
-              id="state"
-              label="State *"
-              value={this.state.state}
-              name="state"
-              onChange={this.handleChange('state')} />
-          </div>
-        </FormControl>
-      );
-    } else {
-      return null;
-    }
   }
 
   handleClick = async () => {
@@ -430,9 +361,11 @@ class NomineeDetails extends Component {
               onChange={this.handleChange('relationship')} />
           </div>
         </FormControl>
-        <div className="CheckBlock" style={{marginTop: 20, marginBottom: 30}}>
+
+        {/* Correspondence Address Block */}
+        <div className="CheckBlock">
           <Grid container spacing={16} alignItems="center">
-            <Grid item xs={2} style={{textAlign: 'center'}}>
+            <Grid item xs={2} className="TextCenter">
               <Checkbox
                 defaultChecked
                 checked={this.state.checked}
@@ -440,14 +373,73 @@ class NomineeDetails extends Component {
                 value="checked"
                 name="checked"
                 onChange={this.handleChange('checked')}
-                style={{width: 'auto', height: 'auto'}} />
+                className="Checkbox" />
             </Grid>
             <Grid item xs={10}>
-              <span style={{color: 'rgb(68, 68, 68)', fontSize: 14}}>Nomniee’s address is same as my address</span>
+              <span className="SameAddress">Nomniee’s address is same as my address</span>
             </Grid>
           </Grid>
         </div>
-        {this.renderCorrespondenceAddress()}
+
+      {/* Correspondence Address */}
+      {
+        !this.state.checked &&
+        <FormControl fullWidth>
+          <div className="InputField">
+            <InputWithIcon
+              error={(this.state.pincode_error) ? true : false}
+              helperText={this.state.pincode_error}
+              type="number"
+              icon={location}
+              width="40"
+              label="Pincode *"
+              id="pincode"
+              name="pincode"
+              value={this.state.pincode}
+              onChange={this.handlePincode('pincode')} />
+          </div>
+          <div className="InputField">
+            <InputWithIcon
+              error={(this.state.addressline_error) ? true : false}
+              helperText={this.state.addressline_error}
+              type="text"
+              id="address"
+              label="Permanent address *"
+              value={this.state.addressline}
+              name="addressline"
+              onChange={this.handleChange('addressline')} />
+          </div>
+          <div className="InputField">
+            <InputWithIcon
+              error={(this.state.landmark_error) ? true : false}
+              helperText={this.state.landmark_error}
+              type="text"
+              id="landmark"
+              label="Landmark *"
+              value={this.state.landmark}
+              name="landmark"
+              onChange={this.handleChange('landmark')} />
+          </div>
+          <div className="InputField">
+            <InputWithIcon
+              disabled={true}
+              id="city"
+              label="City *"
+              value={this.state.city}
+              name="city"
+              onChange={this.handleChange('city')} />
+          </div>
+          <div className="InputField">
+            <InputWithIcon
+              disabled={true}
+              id="state"
+              label="State *"
+              value={this.state.state}
+              name="state"
+              onChange={this.handleChange('state')} />
+          </div>
+        </FormControl>
+      }
       </Container>
     );
   }

@@ -733,7 +733,7 @@ class Resume extends Component {
         premium={this.state.premium}
         provider={this.state.provider}
         paymentFrequency={this.state.payment_frequency}
-        summaryButtonText={((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') ? 'Resume' : 'Pay Now')} >
+        buttonTitle={((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') ? 'Resume' : 'Pay Now')} >
         <div style={{marginBottom: 20}}>
           <div style={{color: '#4a4a4a', fontSize: 20, fontWeight: 700, marginBottom: 7}}>
             Hey {this.state.personal.name}

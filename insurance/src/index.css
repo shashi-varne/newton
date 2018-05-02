@@ -1,6 +1,7 @@
 html, body {
   height: 100%;
 }
+
 body {
   margin: 0;
   padding: 0;
@@ -8,9 +9,11 @@ body {
   background-color: #ffffff;
   font-size: 14px;
 }
+
 *:focus {
   outline: none;
- }
+}
+
 input,
 textarea,
 button,
@@ -19,9 +22,126 @@ a,
 div {
   -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
+
+.Container {
+  padding: 20px 15px;
+  margin-bottom: 30px;
+  background-color: #fff;
+}
+
+.SectionHead {
+  margin-bottom: 15px;
+  color: rgb(68,68,68);
+  font-size: 14px;
+  font-family: 'Roboto';
+  font-weight: 500;
+}
+
+.CheckBlock {
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.TextCenter {
+  text-align: center;
+}
+
+.Checkbox {
+  width: auto;
+  height: auto;
+}
+
+.SameAddress {
+  color: rgb(68, 68, 68);
+  font-size: 14px;
+}
+
+.FlexItem1 {
+  flex: 1;
+}
+
+.FlexItem5 {
+  flex: 5;
+}
+
+.Footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-top: 1px solid rgba(0,0,0,0.14);
+}
+
+.FooterButtonArrow {
+  margin-left: 20px;
+}
+
+.FlexItem3 {
+  flex: 3;
+}
+
+.FlexItem2 {
+  flex: 2;
+}
+
+.FooterSummaryLayout .FlexItem3 {
+  padding: 5px 0 0 10px;
+}
+
+.FooterSummaryLayout_title {
+  color: #444;
+  font-size: 12px;
+}
+
+.FooterSummaryLayout_subtitle {
+  color: #444;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Roboto';
+}
+
+.FooterSummaryLayout_hint {
+  color: #878787;
+  font-size: 10px;
+}
+
+.FooterReset {
+  padding: 50px 20px;
+  text-align: center;
+  background-color: #f8f8f8;
+}
+
+.FooterReset_title {
+  color: #878787;
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 7px;
+}
+
+.FooterReset_subtitle {
+  color: #b1b1b1;
+  font-size: 12px;
+}
+
+.FooterImage {
+  width: 80%;
+  position: relative;
+  top: 2px;
+}
+
+.FooterDefaultLayout, .FooterSummaryLayout {
+  display: flex;
+  align-items: center;
+}
+
+.FooterDefaultLayout .FlexItem3, .FooterDefaultLayout .FlexItem2, .FooterDefaultLayout .FlexItem1 {
+  text-align: center;
+}
+
 input#pan {
   text-transform: uppercase;
 }
+
 .Accordion {
   width: 100%;
   border-top: solid 1px #c2c2c2;

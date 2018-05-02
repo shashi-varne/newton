@@ -3,25 +3,7 @@ import Grid from 'material-ui/Grid';
 
 import './style.css';
 import Icon from './Icon';
-
-class RadioBtn extends Component {
-  handleClick(){
-    this.props.handler(this.props.index);
-  }
-
-  render() {
-    return (
-      <div
-        className="radio-btn-group"
-        onClick={() => this.handleClick()} >
-        <div
-          className={this.props.isChecked ? "RadioButton checked" : "RadioButton unchecked"} data-value={this.props.value} >
-          <label className={this.props.type}>{this.props.text}</label>
-        </div>
-      </div>
-    );
-  }
-}
+import RadioBtn from './RadioBtn';
 
 class RadioGrp extends Component {
   constructor(props) {
@@ -48,7 +30,7 @@ class RadioGrp extends Component {
     const allOptions = options.map((option, i) => {
       if (this.props.type === 'professional') {
         return (
-          <Grid item xs={6} key={i} style={{flexBasis: 'unset', maxWidth: '100%'}}>
+          <Grid item xs={6} key={i} className="RadioGrpGrid" style={{flexBasis: 'auto'}}>
             <RadioBtn
               isChecked={(this.state.selectedIndex === i || option.value === this.props.value)}
               text={option.name}
@@ -75,9 +57,9 @@ class RadioGrp extends Component {
 
     return (
       <div>
-        <div style={{color: '#444', fontSize: '0.8rem', marginBottom: 15, position: 'relative'}}>
+        <div className="RadioWithIcon">
           <span>{this.props.label} *</span>
-          <span style={{position: 'absolute', right: 0, color: '#d0021b', fontSize: 14, fontStyle: 'italic'}} className={(this.props.error) ? 'error' : ''}>{(this.props.error) ? 'Mandatory' : ''}</span>
+          <span className={(this.props.error) ? 'error' : ''}>{(this.props.error) ? 'Mandatory' : ''}</span>
         </div>
         <Grid container spacing={16}>
           {allOptions}

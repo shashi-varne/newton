@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
+import qs from 'qs';
+
 import Container from '../../common/Container';
 import InputWithIcon from '../../ui/InputWithIcon';
 import RadioWithIcon from '../../ui/RadioWithIcon';
@@ -11,7 +13,6 @@ import designation from '../../assets/designation_dark_icn.png';
 import income from '../../assets/annual_income_dark_icn.png';
 import Dropdown from '../../ui/Select';
 import Api from '../../utils/api';
-import qs from 'qs';
 import { declareOptions, occupationDetailOptions, occupationCategoryOptions, qualification } from '../../utils/constants';
 import { validatePan, validateNumber, formatAmount } from '../../utils/validators';
 
@@ -37,12 +38,6 @@ class ProfessionalDetails1 extends Component {
       image: '',
       params: qs.parse(props.history.location.search.slice(1))
     }
-  }
-
-  setStateAsync(state) {
-    return new Promise((resolve) => {
-      this.setState(state, resolve)
-    });
   }
 
   componentDidMount() {

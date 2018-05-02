@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
+import qs from 'qs';
+
 import Container from '../../common/Container';
 import InputWithIcon from '../../ui/InputWithIcon';
 import mother from '../../assets/mother_dark_icn.png';
 import father from '../../assets/father_dark_icn.png';
 import location from '../../assets/location_dark_icn.png';
 import Api from '../../utils/api';
-import qs from 'qs';
 import { validateAlphabets, validateName } from '../../utils/validators';
 
 class PersonalDetails2 extends Component {
@@ -23,12 +24,6 @@ class PersonalDetails2 extends Component {
       birth_place_error: '',
       params: qs.parse(props.history.location.search.slice(1))
     }
-  }
-
-  setStateAsync(state) {
-    return new Promise((resolve) => {
-      this.setState(state, resolve)
-    });
   }
 
   componentDidMount() {

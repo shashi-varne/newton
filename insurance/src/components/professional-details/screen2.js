@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
+import qs from 'qs';
+
 import Container from '../../common/Container';
 import InputWithIcon from '../../ui/InputWithIcon';
 import name from '../../assets/name_present_employer_dark_icn.png';
 import location from '../../assets/location_dark_icn.png';
 import Api from '../../utils/api';
-import qs from 'qs';
 import { validateAlphabets, validateNumber, validateAddress } from '../../utils/validators';
 
 class ProfessionalDetails2 extends Component {
@@ -26,12 +27,6 @@ class ProfessionalDetails2 extends Component {
       image: '',
       params: qs.parse(props.history.location.search.slice(1))
     }
-  }
-
-  setStateAsync(state) {
-    return new Promise((resolve) => {
-      this.setState(state, resolve)
-    });
   }
 
   componentDidMount() {
