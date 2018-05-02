@@ -163,6 +163,10 @@ class AppointeeDetails extends Component {
       this.setState({
         dob_error: 'Please select date'
       });
+    } else if (new Date(this.state.dob) > new Date()) {
+      this.setState({
+        dob_error: 'Please select valid date'
+      });
     } else if (age < 18) {
       this.setState({
         dob_error: 'Minimum age should be 18 years'
@@ -233,7 +237,7 @@ class AppointeeDetails extends Component {
       } else {
         this.setState({show_loader: false});
         for (let error of res.pfwresponse.result.errors) {
-          if (error.field === 'appointee_address') {
+          if (error.field === 'appointee_address' || error.field === 'appointee') {
             alert(error.message);
           }
           this.setState({
@@ -253,9 +257,9 @@ class AppointeeDetails extends Component {
   }
 
   handleFocus = () => event => {
-    this.setState({
-      dob: ''
-    })
+    let currentDate = new Date().toISOString().slice(0,10);
+    document.getElementById("dob").valueAsDate = null;
+    document.getElementById("dob").max = currentDate;
   }
 
   render() {
@@ -301,6 +305,7 @@ class AppointeeDetails extends Component {
               id="dob"
               name="dob"
               value={this.state.dob}
+              onFocus={this.handleFocus()}
               onChange={this.handleChange('dob')} />
           </div>
           <div className="InputField">
@@ -384,7 +389,7 @@ class AppointeeDetails extends Component {
             <div className="InputField">
               <InputWithIcon
                 error={(this.state.addressline_error) ? true : false}
-                helperText={this.state.addressline_error}
+                helperText="Valid address - House No, Society, Locality"
                 type="text"
                 id="address"
                 label="Permanent address *"

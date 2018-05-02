@@ -59,6 +59,7 @@
 .Banner {
   background: rgb(250, 247, 255);
   font-size: 14px;
+  color: #444;
 }
 .Banner .Flex {
   align-items: center;

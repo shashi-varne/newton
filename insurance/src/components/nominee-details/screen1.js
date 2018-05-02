@@ -141,9 +141,9 @@ class NomineeDetails extends Component {
   }
 
   handleFocus = () => event => {
-    this.setState({
-      dob: ''
-    })
+    let currentDate = new Date().toISOString().slice(0,10);
+    document.getElementById("dob").valueAsDate = null;
+    document.getElementById("dob").max = currentDate;
   }
 
   handleClick = async () => {
@@ -158,6 +158,10 @@ class NomineeDetails extends Component {
     } else if (!this.state.dob) {
       this.setState({
         dob_error: 'Please select date'
+      });
+    } else if (new Date(this.state.dob) > new Date()) {
+      this.setState({
+        dob_error: 'Please select valid date'
       });
     } else if (!this.state.gender) {
       this.setState({
@@ -242,7 +246,7 @@ class NomineeDetails extends Component {
       } else {
         this.setState({show_loader: false});
         for (let error of res.pfwresponse.result.errors) {
-          if (error.field === 'nominee_address') {
+          if (error.field === 'nominee_address' || error.field === 'nominee') {
             alert(error.message);
           }
           this.setState({
@@ -317,6 +321,7 @@ class NomineeDetails extends Component {
               name="dob"
               max={currentDate}
               value={this.state.dob}
+              onFocus={this.handleFocus()}
               onChange={this.handleChange('dob')} />
           </div>
           <div className="InputField">
@@ -401,7 +406,7 @@ class NomineeDetails extends Component {
           <div className="InputField">
             <InputWithIcon
               error={(this.state.addressline_error) ? true : false}
-              helperText={this.state.addressline_error}
+              helperText="Valid address - House No, Society, Locality"
               type="text"
               id="address"
               label="Permanent address *"

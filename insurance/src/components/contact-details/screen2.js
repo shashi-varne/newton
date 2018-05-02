@@ -181,7 +181,7 @@ class ContactDetails2 extends Component {
       } else {
         this.setState({show_loader: false});
         for (let error of res.pfwresponse.result.errors) {
-          if (error.field === 'p_addr') {
+          if (error.field === 'p_addr' || error.field === 'c_addr') {
             alert(error.message);
           }
           this.setState({
@@ -234,7 +234,7 @@ class ContactDetails2 extends Component {
               <div className="InputField">
                 <InputWithIcon
                   error={(this.state.addressline_error) ? true : false}
-                  helperText={this.state.addressline_error}
+                  helperText="Valid address - House No, Society, Locality"
                   type="text"
                   id="address"
                   label="Permanent address *"

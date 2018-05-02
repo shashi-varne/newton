@@ -25,7 +25,7 @@ div {
 
 .Container {
   padding: 20px 15px;
-  margin-bottom: 30px;
+  margin-bottom: 100px;
   background-color: #fff;
 }
 
@@ -192,9 +192,7 @@ input#pan {
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.Container {
-  margin-bottom: 30px;
-}
+
 .Step {
   flex-direction: row;
   display: flex;
