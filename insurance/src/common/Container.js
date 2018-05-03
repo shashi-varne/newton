@@ -41,35 +41,36 @@ class Container extends Component {
   componentDidUpdate(prevProps) {
     let body = document.getElementsByTagName('body')[0].offsetHeight;
     let client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
+    let ios = /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
+
     if (client > body) {
       document.getElementsByClassName('Footer')[0].style.position = "relative" ;
     } else {
       document.getElementsByClassName('Footer')[0].style.position = "absolute" ;
     }
 
+    if (ios) {
+      jQuery.noConflict();
+      (function($) {
 
-    jQuery.noConflict();
-    (function($) {
+          jQuery(function() {
 
-        jQuery(function() {
+              /* cache dom referencess */
+              var $body = jQuery('body');
 
-            /* cache dom referencess */
-            var $body = jQuery('body');
+              /* bind events */
+              jQuery(document)
+              .on('focus', 'input', function(e) {
+                  $body.addClass('fixheader');
+              })
+              .on('blur', 'input', function(e) {
+                  $body.removeClass('fixheader');
+              });
 
-            /* bind events */
-            jQuery(document)
-            .on('focus', 'input', function(e) {
-                console.log('focus on input');
-                $body.addClass('fixheader');
-            })
-            .on('blur', 'input', function(e) {
-                console.log('blur out of input');
-                $body.removeClass('fixheader');
-            });
+          });
 
-        });
-
-    })(jQuery);
+      })(jQuery);
+    }
   }
 
   render() {
@@ -94,6 +95,7 @@ class Container extends Component {
           edit={this.props.edit} />
 
         {/* Below Header Block */}
+        <div style={{height: 56}}></div>
         <div className="Step">
           {steps}
         </div>
