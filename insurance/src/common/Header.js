@@ -7,7 +7,7 @@ import IconButton from 'material-ui/IconButton';
 import Arrow from '@material-ui/icons/ArrowBack';
 
 const Header = ({ classes, title, count, total, current, goBack, edit }) => (
-  <div className={classes.root}>
+  <div className={`Header ${classes.root}`}>
     <AppBar position="fixed" color="primary">
       <Toolbar>
         <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={goBack}>

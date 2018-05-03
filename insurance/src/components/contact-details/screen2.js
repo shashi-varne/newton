@@ -111,7 +111,13 @@ class ContactDetails2 extends Component {
         });
       }
     }
+  }
 
+  navigate = (pathname) => {
+    this.props.history.push({
+      pathname: pathname,
+      search: '?insurance_id='+this.state.params.insurance_id+'&resume='+this.state.params.resume
+    });
   }
 
   handleClick = async () => {
@@ -168,15 +174,13 @@ class ContactDetails2 extends Component {
       if (res.pfwresponse.status_code === 200) {
         this.setState({show_loader: false});
         if (this.props.edit) {
-          this.props.history.push({
-            pathname: '/summary',
-            search: '?insurance_id='+this.state.params.insurance_id
-          });
+          if (this.state.params.resume) {
+            this.navigate('/resume');
+          } else {
+            this.navigate('/summary');
+          }
         } else {
-          this.props.history.push({
-            pathname: '/nominee',
-            search: '?insurance_id='+this.state.params.insurance_id
-          });
+          this.navigate('/nominee');
         }
       } else {
         this.setState({show_loader: false});

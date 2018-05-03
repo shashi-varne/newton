@@ -101,6 +101,13 @@ class ProfessionalDetails1 extends Component {
     });
   };
 
+  navigate = (pathname) => {
+    this.props.history.push({
+      pathname: pathname,
+      search: '?insurance_id='+this.state.params.insurance_id+'&resume='+this.state.params.resume
+    });
+  }
+
   handleClick = async () => {
     if (this.state.pan_number.length !== 10 || !validatePan(this.state.pan_number)) {
       this.setState({
@@ -162,27 +169,15 @@ class ProfessionalDetails1 extends Component {
         this.setState({show_loader: false});
         if (this.props.edit) {
           if (this.state.occupation_detail === 'SALRIED') {
-            this.props.history.push({
-              pathname: '/edit-professional1',
-              search: '?insurance_id='+this.state.params.insurance_id
-            });
+            this.navigate('/edit-professional1');
           } else {
-            this.props.history.push({
-              pathname: '/summary',
-              search: '?insurance_id='+this.state.params.insurance_id
-            });
+            this.navigate('/summary');
           }
         } else {
           if (this.state.occupation_detail === 'SALRIED') {
-            this.props.history.push({
-              pathname: '/professional1',
-              search: '?insurance_id='+this.state.params.insurance_id
-            });
+            this.navigate('/professional1');
           } else {
-            this.props.history.push({
-              pathname: '/summary',
-              search: '?insurance_id='+this.state.params.insurance_id
-            });
+            this.navigate('/summary');
           }
         }
       } else {

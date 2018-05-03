@@ -25,8 +25,17 @@ div {
 
 .Container {
   padding: 20px 15px;
-  margin-bottom: 100px;
+  /*margin-bottom: 100px;*/
   background-color: #fff;
+}
+
+.Header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
 }
 
 .SectionHead {
@@ -65,7 +74,7 @@ div {
 }
 
 .Footer {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   left: 0;
   right: 0;

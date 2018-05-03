@@ -142,8 +142,15 @@ class NomineeDetails extends Component {
 
   handleFocus = () => event => {
     let currentDate = new Date().toISOString().slice(0,10);
-    document.getElementById("dob").valueAsDate = null;
+    document.getElementById("dob").valueAsDate = new Date(currentDate);
     document.getElementById("dob").max = currentDate;
+  }
+
+  navigate = (pathname) => {
+    this.props.history.push({
+      pathname: pathname,
+      search: '?insurance_id='+this.state.params.insurance_id+'&resume='+this.state.params.resume
+    });
   }
 
   handleClick = async () => {
@@ -217,30 +224,16 @@ class NomineeDetails extends Component {
       if (res.pfwresponse.status_code === 200) {
         this.setState({show_loader: false});
         if (this.props.edit) {
-
           if (this.state.age < 18) {
-            this.props.history.push({
-              pathname: '/edit-appointee',
-              search: '?insurance_id='+this.state.params.insurance_id
-            });
+            this.navigate('/edit-appointee');
           } else {
-            this.props.history.push({
-              pathname: '/summary',
-              search: '?insurance_id='+this.state.params.insurance_id
-            });
+            this.navigate('/summary');
           }
         } else {
-
           if (this.state.age < 18) {
-            this.props.history.push({
-              pathname: '/appointee',
-              search: '?insurance_id='+this.state.params.insurance_id
-            });
+            this.navigate('/appointee');
           } else {
-            this.props.history.push({
-              pathname: '/professional',
-              search: '?insurance_id='+this.state.params.insurance_id
-            });
+            this.navigate('/professional');
           }
         }
       } else {

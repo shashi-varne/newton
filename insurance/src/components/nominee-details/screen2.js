@@ -149,6 +149,13 @@ class AppointeeDetails extends Component {
     return age;
   }
 
+  navigate = (pathname) => {
+    this.props.history.push({
+      pathname: pathname,
+      search: '?insurance_id='+this.state.params.insurance_id+'&resume='+this.state.params.resume
+    });
+  }
+
   handleClick = async () => {
     let age  = this.calculateAge(this.state.dob.replace(/\\-/g, '/').split('-').reverse().join('/'));
     if (!validateName(this.state.name) || this.state.name.length === 0) {
@@ -224,15 +231,13 @@ class AppointeeDetails extends Component {
       if (res.pfwresponse.status_code === 200) {
         this.setState({show_loader: false});
         if (this.props.edit) {
-          this.props.history.push({
-            pathname: '/summary',
-            search: '?insurance_id='+this.state.params.insurance_id
-          });
+          if (this.state.params.resume) {
+            this.navigate('/resume');
+          } else {
+            this.navigate('/summary');
+          }
         } else {
-          this.props.history.push({
-            pathname: '/professional',
-            search: '?insurance_id='+this.state.params.insurance_id
-          });
+          this.navigate('/professional');
         }
       } else {
         this.setState({show_loader: false});

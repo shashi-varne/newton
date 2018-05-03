@@ -70,6 +70,13 @@ class PersonalDetails1 extends Component {
     });
   };
 
+  navigate = (pathname) => {
+    this.props.history.push({
+      pathname: pathname,
+      search: '?insurance_id='+this.state.params.insurance_id+'&resume='+this.state.params.resume
+    });
+  }
+
   handleClick = async () => {
     if (this.state.name.length < 3) {
       this.setState({
@@ -94,15 +101,9 @@ class PersonalDetails1 extends Component {
       if (res.pfwresponse.status_code === 200) {
         this.setState({show_loader: false});
         if (this.props.edit) {
-          this.props.history.push({
-            pathname: '/edit-personal1',
-            search: '?insurance_id='+this.state.params.insurance_id
-          });
+          this.navigate('/edit-personal1');
         } else {
-          this.props.history.push({
-            pathname: '/personal',
-            search: '?insurance_id='+this.state.params.insurance_id
-          });
+          this.navigate('/personal');
         }
       } else {
         this.setState({show_loader: false});

@@ -50,6 +50,13 @@ class ContactDetails1 extends Component {
     });
   };
 
+  navigate = (pathname) => {
+    this.props.history.push({
+      pathname: pathname,
+      search: '?insurance_id='+this.state.params.insurance_id+'&resume='+this.state.params.resume
+    });
+  }
+
   handleClick = async () => {
     if (this.state.email.length < 10 || !validateEmail(this.state.email)) {
       this.setState({
@@ -70,15 +77,9 @@ class ContactDetails1 extends Component {
       if (res.pfwresponse.status_code === 200) {
         this.setState({show_loader: false});
         if (this.props.edit) {
-          this.props.history.push({
-            pathname: '/edit-contact1',
-            search: '?insurance_id='+this.state.params.insurance_id
-          });
+          this.navigate('/edit-contact1');
         } else {
-          this.props.history.push({
-            pathname: '/contact1',
-            search: '?insurance_id='+this.state.params.insurance_id
-          });
+          this.navigate('/contact1');
         }
       } else {
         this.setState({show_loader: false});

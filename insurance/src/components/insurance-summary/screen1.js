@@ -58,7 +58,7 @@ class Summary extends Component {
 
         let income_value = income_pairs.filter(item => item.name === application.quote.annual_income);
 
-        let age = this.calculateAge(application.profile.nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
+        let age = application.profile.nominee.dob && this.calculateAge(application.profile.nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
 
         this.setState({
           status: application.status,
@@ -265,6 +265,153 @@ class Summary extends Component {
     );
   }
 
+  renderPersonalPercentage = () => {
+    if (this.state.personal.name &&
+      this.state.personal.marital_status &&
+      this.state.personal.birth_place &&
+      this.state.personal.mother_name &&
+      this.state.personal.father_name) {
+      return 100;
+    } else if (this.state.personal.name ||
+      this.state.personal.marital_status ||
+      this.state.personal.birth_place ||
+      this.state.personal.mother_name ||
+      this.state.personal.father_name) {
+      return 50;
+    } else {
+      return 0;
+    }
+  }
+
+  renderContactPercentage = () => {
+    let contact = this.state.contact;
+    if (Object.getOwnPropertyNames(contact).length !== 0) {
+      if (contact.email &&
+        contact.mobile_no &&
+        contact.permanent_addr.hasOwnProperty('pincode') &&
+        contact.permanent_addr.hasOwnProperty('addressline') &&
+        contact.permanent_addr.hasOwnProperty('landmark')) {
+        return 100;
+      } else if (contact.email ||
+        contact.mobile_no ||
+        contact.permanent_addr.hasOwnProperty('pincode') ||
+        contact.permanent_addr.hasOwnProperty('addressline') ||
+        contact.permanent_addr.hasOwnProperty('landmark')) {
+        return 50;
+      } else {
+        return 0;
+      }
+    } else {
+      return 0;
+    }
+  }
+
+  renderNomineePercentage = () => {
+    let nominee = this.state.nominee;
+    if (Object.getOwnPropertyNames(nominee).length !== 0) {
+      if (nominee.name &&
+        nominee.dob &&
+        nominee.marital_status &&
+        nominee.relationship &&
+        (nominee.nominee_address_same ||
+          (
+            (!nominee.nominee_address_same && nominee.nominee_address.hasOwnProperty('pincode')) &&
+            (!nominee.nominee_address_same && nominee.nominee_address.hasOwnProperty('addressline')) &&
+            (!nominee.nominee_address_same && nominee.nominee_address.hasOwnProperty('landmark'))
+          )
+        )) {
+        return 100;
+      } else if (nominee.name ||
+        nominee.dob ||
+        nominee.marital_status ||
+        nominee.relationship ||
+        (nominee.nominee_address_same ||
+          (
+            (!nominee.nominee_address_same && nominee.nominee_address.hasOwnProperty('pincode')) &&
+            (!nominee.nominee_address_same && nominee.nominee_address.hasOwnProperty('addressline')) &&
+            (!nominee.nominee_address_same && nominee.nominee_address.hasOwnProperty('landmark'))
+          )
+        )) {
+        return 50;
+      } else {
+        return 0;
+      }
+    } else {
+      return 0;
+    }
+  }
+
+  renderAppointeePercentage = () => {
+    let appointee = this.state.appointee;
+    if (Object.getOwnPropertyNames(appointee).length !== 0) {
+      if (appointee.name &&
+        appointee.dob &&
+        appointee.marital_status &&
+        appointee.relationship &&
+        (appointee.appointee_address_same ||
+          (
+            (!appointee.appointee_address_same && appointee.appointee_address.hasOwnProperty('pincode')) &&
+            (!appointee.appointee_address_same && appointee.appointee_address.hasOwnProperty('addressline')) &&
+            (!appointee.appointee_address_same && appointee.appointee_address.hasOwnProperty('landmark'))
+          )
+        )) {
+        return 100;
+      } else if (appointee.name ||
+        appointee.dob ||
+        appointee.marital_status ||
+        appointee.relationship ||
+        (appointee.appointee_address_same ||
+          (
+            (!appointee.appointee_address_same && appointee.appointee_address.hasOwnProperty('pincode')) &&
+            (!appointee.appointee_address_same && appointee.appointee_address.hasOwnProperty('addressline')) &&
+            (!appointee.appointee_address_same && appointee.appointee_address.hasOwnProperty('landmark'))
+          )
+        )) {
+        return 50;
+      } else {
+        return 0;
+      }
+    } else {
+      return 0;
+    }
+  }
+
+  renderProfessionalPercentage = () => {
+    let professional = this.state.professional;
+    if (Object.getOwnPropertyNames(professional).length !== 0) {
+      if (professional.pan_number &&
+        professional.education_qualification &&
+        (
+          (professional.occupation_detail === 'SELF-EMPLOYED' && professional.designation && professional.annual_income !== '') ||
+          (
+            (professional.occupation_detail === 'SALRIED' && professional.occupation_category && professional.designation && professional.annual_income !== '' && professional.employer_address.hasOwnProperty('pincode') &&
+            professional.employer_address.hasOwnProperty('addressline') &&
+            professional.employer_address.hasOwnProperty('landmark'))
+          ) ||
+          (professional.occupation_detail === 'STUDENT')
+        )) {
+        return 100;
+      } else if (professional.pan_number ||
+        professional.education_qualification ||
+        (
+          (professional.occupation_detail === 'SELF-EMPLOYED' && (professional.designation || professional.annual_income !== '')) ||
+          (
+            (professional.occupation_detail === 'SALRIED' && (professional.occupation_category || professional.designation || professional.annual_income !== '' || professional.employer_name ||
+            professional.employer_address.hasOwnProperty('pincode') ||
+            professional.employer_address.hasOwnProperty('addressline') ||
+            professional.employer_address.hasOwnProperty('landmark')))
+          ) ||
+          (professional.occupation_detail === 'STUDENT')
+        )) {
+        return 50;
+      } else {
+        return 0;
+      }
+    } else {
+      return 0;
+    }
+  }
+
   renderAccordionBody = (name) => {
     if (this.state.benefits.is_open && name === 'benefits') {
       return (
@@ -275,7 +422,7 @@ class Summary extends Component {
           </ul>
         </div>
       );
-    } else if (this.state.personal.is_open && name === 'personal') {
+    } else if (this.state.personal.is_open && name === 'personal' && this.renderPersonalPercentage() !== 0) {
       return (
         <div className="AccordionBody">
           <ul>
@@ -289,7 +436,7 @@ class Summary extends Component {
           </ul>
         </div>
       );
-    } else if (this.state.contact.is_open && name === 'contact') {
+    } else if (this.state.contact.is_open && name === 'contact' && this.renderContactPercentage() !== 0) {
       return (
         <div className="AccordionBody">
           <ul>
@@ -325,7 +472,7 @@ class Summary extends Component {
           </ul>
         </div>
       );
-    } else if (this.state.nominee.is_open && name === 'nominee') {
+    } else if (this.state.nominee.is_open && name === 'nominee' && this.renderNomineePercentage() !== 0) {
       return (
         <div className="AccordionBody">
           <ul>
@@ -355,7 +502,7 @@ class Summary extends Component {
           </ul>
         </div>
       );
-    } else if (this.state.appointee.is_open && name === 'appointee') {
+    } else if (this.state.appointee.is_open && name === 'appointee' && this.renderAppointeePercentage() !== 0) {
       return (
         <div className="AccordionBody">
           <ul>
@@ -385,7 +532,7 @@ class Summary extends Component {
           </ul>
         </div>
       );
-    } else if (this.state.professional.is_open && name === 'professional') {
+    } else if (this.state.professional.is_open && name === 'professional' && this.renderProfessionalPercentage() !== 0) {
       if (this.state.professional.occupation_detail === 'SALRIED') {
         return (
           <div className="AccordionBody">
@@ -443,6 +590,13 @@ class Summary extends Component {
 
   capitalize = (string) => {
     return string.toLowerCase().replace(/(^|\s)[a-z]/g,function(f){return f.toUpperCase();})
+  }
+
+  navigate = (pathname) => {
+    this.props.history.push({
+      pathname: pathname,
+      search: '?insurance_id='+this.state.params.insurance_id
+    });
   }
 
   render() {
@@ -549,10 +703,7 @@ class Summary extends Component {
                     <img style={{position: 'relative', top: 2}} src={(this.state.personal.is_open) ? shrink : expand} alt="" width="20"/>
                   </span>
                   <span>Personal details</span>
-                  {this.state.personal.is_open && this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.props.history.push({
-                    pathname: '/edit-personal',
-                    search: '?insurance_id='+this.state.params.insurance_id
-                  })}>Edit</span>}
+                  {this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.navigate('/edit-personal')}>Edit</span>}
                 </div>
               </div>
               {this.renderAccordionBody('personal')}
@@ -564,10 +715,7 @@ class Summary extends Component {
                     <img style={{position: 'relative', top: 2}} src={(this.state.contact.is_open) ? shrink : expand} alt="" width="20"/>
                   </span>
                   <span>Contact details</span>
-                  {this.state.contact.is_open && this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.props.history.push({
-                    pathname: '/edit-contact',
-                    search: '?insurance_id='+this.state.params.insurance_id
-                  })}>Edit</span>}
+                  {this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.navigate('/edit-contact')}>Edit</span>}
                 </div>
               </div>
               {this.renderAccordionBody('contact')}
@@ -579,10 +727,7 @@ class Summary extends Component {
                     <img style={{position: 'relative', top: 2}} src={(this.state.nominee.is_open) ? shrink : expand} alt="" width="20"/>
                   </span>
                   <span>Nominee details</span>
-                  {this.state.nominee.is_open && this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.props.history.push({
-                    pathname: '/edit-nominee',
-                    search: '?insurance_id='+this.state.params.insurance_id
-                  })}>Edit</span>}
+                  {this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.navigate('/edit-nominee')}>Edit</span>}
                 </div>
               </div>
               {this.renderAccordionBody('nominee')}
@@ -595,10 +740,7 @@ class Summary extends Component {
                       <img style={{position: 'relative', top: 2}} src={(this.state.appointee.is_open) ? shrink : expand} alt="" width="20"/>
                     </span>
                     <span>Appointee details</span>
-                    {this.state.appointee.is_open && this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.props.history.push({
-                      pathname: '/edit-appointee',
-                      search: '?insurance_id='+this.state.params.insurance_id
-                    })}>Edit</span>}
+                    {this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.navigate('/edit-appointee')}>Edit</span>}
                   </div>
                 </div>
                 {this.renderAccordionBody('appointee')}
@@ -611,10 +753,7 @@ class Summary extends Component {
                     <img style={{position: 'relative', top: 2}} src={(this.state.professional.is_open) ? shrink : expand} alt="" width="20"/>
                   </span>
                   <span>Professional details</span>
-                  {this.state.professional.is_open && this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.props.history.push({
-                    pathname: '/edit-professional',
-                    search: '?insurance_id='+this.state.params.insurance_id
-                  })}>Edit</span>}
+                  {this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.navigate('/edit-professional')}>Edit</span>}
                 </div>
               </div>
               {this.renderAccordionBody('professional')}

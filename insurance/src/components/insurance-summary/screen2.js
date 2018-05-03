@@ -5,8 +5,6 @@ import cover_period from '../../assets/cover_period_icon.png';
 import life_cover from '../../assets/life_cover_icon.png';
 import income from '../../assets/income_icon.png';
 import smoking from '../../assets/smoking_icon.png';
-import expand from '../../assets/expand_icn.png';
-import shrink from '../../assets/shrink_icn.png';
 import loader from '../../assets/loader_gif.gif';
 import Api from '../../utils/api';
 import Modal from 'material-ui/Modal';
@@ -148,8 +146,8 @@ class Resume extends Component {
             is_open: false,
             email: application.profile.email || '',
             mobile_no: application.profile.mobile_no || '',
-            permanent_addr: application.profile.permanent_addr || '',
-            corr_addr: application.profile.corr_addr || '',
+            permanent_addr: application.profile.permanent_addr || {},
+            corr_addr: application.profile.corr_addr || {},
             corr_address_same: application.profile.corr_address_same
           },
           nominee: {
@@ -158,7 +156,7 @@ class Resume extends Component {
             dob: (application.profile.nominee.dob) ? application.profile.nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
             marital_status: application.profile.nominee.marital_status  || '',
             relationship: application.profile.nominee.relationship  || '',
-            nominee_address: application.profile.nominee_address  || '',
+            nominee_address: application.profile.nominee_address  || {},
             nominee_address_same: application.profile.nominee_address_same
           },
           appointee: {
@@ -167,7 +165,7 @@ class Resume extends Component {
             dob: (application.profile.appointee.dob) ? application.profile.appointee.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
             marital_status: application.profile.appointee.marital_status || '',
             relationship: application.profile.appointee.relationship || '',
-            appointee_address: application.profile.appointee_address || '',
+            appointee_address: application.profile.appointee_address || {},
             appointee_address_same: application.profile.appointee_address_same
           },
           professional: {
@@ -260,32 +258,24 @@ class Resume extends Component {
     }))
   }
 
+  navigate = (pathname) => {
+    this.props.history.push({
+      pathname: pathname,
+      search: '?insurance_id='+this.state.params.insurance_id+'&resume=true'
+    });
+  }
+
   handleClick = async () => {
     if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.personal.not_submitted) {
-      this.props.history.push({
-        pathname: "/",
-        search: '?insurance_id='+this.state.params.insurance_id
-      });
+      this.navigate("/");
     } else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.contact.not_submitted) {
-      this.props.history.push({
-        pathname: "/contact",
-        search: '?insurance_id='+this.state.params.insurance_id
-      });
+      this.navigate("/contact");
     } else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.nominee.not_submitted) {
-      this.props.history.push({
-        pathname: "/nominee",
-        search: '?insurance_id='+this.state.params.insurance_id
-      });
+      this.navigate("/nominee");
     } else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.appointee.not_submitted) {
-      this.props.history.push({
-        pathname: "/appointee",
-        search: '?insurance_id='+this.state.params.insurance_id
-      });
+      this.navigate("/appointee");
     } else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.professional.not_submitted) {
-      this.props.history.push({
-        pathname: "/professional",
-        search: '?insurance_id='+this.state.params.insurance_id
-      });
+      this.navigate("/professional");
     } else {
       this.setState({openModal: true});
       let provider;
@@ -343,182 +333,6 @@ class Resume extends Component {
         }
       </div>
     );
-  }
-
-  renderAccordionBody = (name) => {
-    if (this.state.benefits.is_open && name === 'benefits') {
-      return (
-        <div className="AccordionBody">
-          <ul>
-            {this.state.benefits.accident_benefit && <li>Accidental death benifits:<span>₹ {numDifferentiation(this.state.benefits.accident_benefit)}</span></li>}
-            <li>Payout option: <span>{this.state.benefits.payout_option}</span></li>
-          </ul>
-        </div>
-      );
-    } else if (this.state.personal.is_open && name === 'personal') {
-      return (
-        <div className="AccordionBody">
-          <ul>
-            <li>Name: <span>{this.state.personal.name}</span></li>
-            <li>DOB: <span>{this.state.personal.dob}</span></li>
-            <li>Marital status: <span>{this.capitalize(this.state.personal.marital_status)}</span></li>
-            <li>Birth place: <span>{this.state.personal.birth_place}</span></li>
-            <li>Mother name: <span>{this.state.personal.mother_name}</span></li>
-            <li>Father name: <span>{this.state.personal.father_name}</span></li>
-            <li>Gender: <span>{this.capitalize(this.state.personal.gender)}</span></li>
-          </ul>
-        </div>
-      );
-    } else if (this.state.contact.is_open && name === 'contact') {
-      return (
-        <div className="AccordionBody">
-          <ul>
-            <li>Email: <span>{this.state.contact.email}</span></li>
-            <li>Mobile number: <span>{this.state.contact.mobile_no}</span></li>
-            <li>
-              Permanent address:
-              <div>
-                <span style={{wordWrap: 'break-word'}}>
-                  {this.getAddress(this.state.contact.permanent_addr)}
-                </span>
-              </div>
-            </li>
-            {
-              (this.state.contact.corr_address_same)
-              ? <li>
-                Correspondence address:
-                <div>
-                  <span style={{wordWrap: 'break-word'}}>
-                    {this.getAddress(this.state.contact.permanent_addr)}
-                  </span>
-                </div>
-              </li>
-              : <li>
-                Correspondence address:
-                <div>
-                  <span style={{wordWrap: 'break-word'}}>
-                    {this.getAddress(this.state.contact.corr_addr)}
-                  </span>
-                </div>
-              </li>
-            }
-          </ul>
-        </div>
-      );
-    } else if (this.state.nominee.is_open && name === 'nominee') {
-      return (
-        <div className="AccordionBody">
-          <ul>
-            <li>Name: <span>{this.state.nominee.name}</span></li>
-            <li>DOB: <span>{this.state.nominee.dob}</span></li>
-            <li>Marital status: <span>{this.capitalize(this.state.nominee.marital_status)}</span></li>
-            <li>Relationship: <span>{this.capitalize(this.state.nominee.relationship)}</span></li>
-            {
-              (this.state.nominee.nominee_address_same)
-              ? <li>
-                Address:
-                <div>
-                  <span style={{wordWrap: 'break-word'}}>
-                    {this.getAddress(this.state.contact.permanent_addr)}
-                  </span>
-                </div>
-              </li>
-              : <li>
-                Address:
-                <div>
-                  <span style={{wordWrap: 'break-word'}}>
-                    {this.getAddress(this.state.nominee.nominee_address)}
-                  </span>
-                </div>
-              </li>
-            }
-          </ul>
-        </div>
-      );
-    } else if (this.state.appointee.is_open && name === 'appointee') {
-      return (
-        <div className="AccordionBody">
-          <ul>
-            <li>Name: <span>{this.state.appointee.name}</span></li>
-            <li>DOB: <span>{this.state.appointee.dob}</span></li>
-            <li>Marital status: <span>{this.capitalize(this.state.appointee.marital_status)}</span></li>
-            <li>Relationship: <span>{this.capitalize(this.state.appointee.relationship)}</span></li>
-              {
-                (this.state.appointee.appointee_address_same)
-                ? <li>
-                  Address:
-                  <div>
-                    <span style={{wordWrap: 'break-word'}}>
-                      {this.getAddress(this.state.contact.permanent_addr)}
-                    </span>
-                  </div>
-                </li>
-                : <li>
-                  Address:
-                  <div>
-                    <span style={{wordWrap: 'break-word'}}>
-                      {this.getAddress(this.state.appointee.appointee_address)}
-                    </span>
-                  </div>
-                </li>
-              }
-          </ul>
-        </div>
-      );
-    } else if (this.state.professional.is_open && name === 'professional') {
-      if (this.state.professional.occupation_detail === 'SALRIED') {
-        return (
-          <div className="AccordionBody">
-            <ul>
-              <li>Pan number: <span>{this.state.professional.pan_number}</span></li>
-              <li>Education qualification: <span>{this.state.professional.education_qualification}</span></li>
-              <li>Occupation detail: <span>{this.capitalize(this.state.professional.occupation_detail)}</span></li>
-              <li>Occupation category: <span>{this.capitalize(this.state.professional.occupation_category)}</span></li>
-              <li>Annual income: <span>{numDifferentiation(this.state.professional.annual_income)}</span></li>
-              <li>Employer name: <span>{this.state.professional.employer_name}</span></li>
-              <li>
-                Employer address:
-                <div>
-                  <span style={{wordWrap: 'break-word'}}>
-                    {this.state.professional.employer_address.addressline+', '+ this.state.professional.employer_address.landmark+', '+ this.capitalize(this.state.professional.employer_address.city)+', '+ this.capitalize(this.state.professional.employer_address.state)+', '+ this.state.professional.employer_address.pincode+', '+ this.capitalize(this.state.professional.employer_address.country)}
-                  </span>
-                </div>
-              </li>
-              <li>Criminal proceedings: <span>{(this.state.professional.is_criminal) ? 'Yes' : 'No'}</span></li>
-              <li>Politically exposed: <span>{(this.state.professional.is_politically_exposed) ? 'Yes' : 'No'}</span></li>
-            </ul>
-          </div>
-        );
-      } else if (this.state.professional.occupation_detail === 'STUDENT') {
-        return (
-          <div className="AccordionBody">
-            <ul>
-              <li>Pan number: <span>{this.state.professional.pan_number}</span></li>
-              <li>Education qualification: <span>{this.state.professional.education_qualification}</span></li>
-              <li>Occupation detail: <span>{this.capitalize(this.state.professional.occupation_detail)}</span></li>
-              <li>Criminal proceedings: <span>{(this.state.professional.is_criminal) ? 'Yes' : 'No'}</span></li>
-              <li>Politically exposed: <span>{(this.state.professional.is_politically_exposed) ? 'Yes' : 'No'}</span></li>
-            </ul>
-          </div>
-        );
-      } else {
-        return (
-          <div className="AccordionBody">
-            <ul>
-              <li>Pan number: <span>{this.state.professional.pan_number}</span></li>
-              <li>Education qualification: <span>{this.state.professional.education_qualification}</span></li>
-              <li>Occupation detail: <span>{this.capitalize(this.state.professional.occupation_detail)}</span></li>
-              <li>Designation: <span>{this.state.professional.designation}</span></li>
-              <li>Annual income: <span>{numDifferentiation(this.state.professional.annual_income)}</span></li>
-              <li>Criminal proceedings: <span>{(this.state.professional.is_criminal) ? 'Yes' : 'No'}</span></li>
-              <li>Politically exposed: <span>{(this.state.professional.is_politically_exposed) ? 'Yes' : 'No'}</span></li>
-            </ul>
-          </div>
-        );
-      }
-    } else {
-      return null;
-    }
   }
 
   capitalize = (string) => {
@@ -721,6 +535,13 @@ class Resume extends Component {
     );
   }
 
+  navigate = (pathname) => {
+    this.props.history.push({
+      pathname: pathname,
+      search: '?insurance_id='+this.state.params.insurance_id+'&resume=true'
+    });
+  }
+
   render() {
     return (
       <Container
@@ -744,10 +565,10 @@ class Resume extends Component {
         </div>
         <div>
           <Grid container spacing={8} alignItems="center">
-            <Grid item xs={5}>
+            <Grid item xs={4}>
               <img src={this.state.image} alt="" style={{width: '100%'}} />
             </Grid>
-            <Grid item xs={7}>
+            <Grid item xs={8}>
               <div className="Title" style={{color: '#444', fontFamily: 'Roboto', fontWeight: 500, fontSize: 18}}>
                 <div style={{marginBottom: 7}}>ID: {this.state.params.insurance_id}</div>
                 {this.renderTotalPercentage()}
@@ -820,95 +641,56 @@ class Resume extends Component {
             <div className="Accordion">
               <div className="AccordionTitle" onClick={() => this.togglebenefitsAccordion('benefits')}>
                 <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative', marginBottom: 7}}>
-                  <span style={{marginRight: 10}}>
-                    <img style={{position: 'relative', top: 2}} src={(this.state.benefits.is_open) ? shrink : expand} alt="" width="20"/>
-                  </span>
                   <span>Benefits</span>
                 </div>
               </div>
-              {this.renderAccordionBody('benefits')}
             </div>
             <div className="Accordion">
               <div className="AccordionTitle" onClick={() => this.togglepersonalAccordion('personal')}>
                 <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative', marginBottom: 7}}>
-                  <span style={{marginRight: 10}}>
-                    <img style={{position: 'relative', top: 2}} src={(this.state.personal.is_open) ? shrink : expand} alt="" width="20"/>
-                  </span>
                   <span>Personal details</span>
-                  {this.state.personal.is_open && this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.props.history.push({
-                    pathname: '/edit-personal',
-                    search: '?insurance_id='+this.state.params.insurance_id
-                  })}>Edit</span>}
+                  {this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.navigate('/edit-personal')}>Edit</span>}
                 </div>
                 {this.renderPercentage(this.renderPersonalPercentage())}
               </div>
-              {this.renderAccordionBody('personal')}
             </div>
             <div className="Accordion">
               <div className="AccordionTitle" onClick={() => this.togglecontactAccordion('contact')}>
                 <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative', marginBottom: 7}}>
-                  <span style={{marginRight: 10}}>
-                    <img style={{position: 'relative', top: 2}} src={(this.state.contact.is_open) ? shrink : expand} alt="" width="20"/>
-                  </span>
                   <span>Contact details</span>
-                  {this.state.contact.is_open && this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.props.history.push({
-                    pathname: '/edit-contact',
-                    search: '?insurance_id='+this.state.params.insurance_id
-                  })}>Edit</span>}
+                  {this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.navigate('/edit-contact')}>Edit</span>}
                 </div>
                 {this.renderPercentage(this.renderContactPercentage())}
               </div>
-              {this.renderAccordionBody('contact')}
             </div>
             <div className="Accordion">
               <div className="AccordionTitle" onClick={() => this.togglenomineeAccordion('nominee')}>
                 <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative', marginBottom: 7}}>
-                  <span style={{marginRight: 10}}>
-                    <img style={{position: 'relative', top: 2}} src={(this.state.nominee.is_open) ? shrink : expand} alt="" width="20"/>
-                  </span>
                   <span>Nominee details</span>
-                  {this.state.nominee.is_open && this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.props.history.push({
-                    pathname: '/edit-nominee',
-                    search: '?insurance_id='+this.state.params.insurance_id
-                  })}>Edit</span>}
+                  {this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.navigate('/edit-nominee')}>Edit</span>}
                 </div>
                 {this.renderPercentage(this.renderNomineePercentage())}
               </div>
-              {this.renderAccordionBody('nominee')}
             </div>
             {this.state.show_appointee &&
               <div className="Accordion">
                 <div className="AccordionTitle" onClick={() => this.toggleappointeeAccordion('appointee')}>
                   <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative', marginBottom: 7}}>
-                    <span style={{marginRight: 10}}>
-                      <img style={{position: 'relative', top: 2}} src={(this.state.appointee.is_open) ? shrink : expand} alt="" width="20"/>
-                    </span>
                     <span>Appointee details</span>
-                    {this.state.appointee.is_open && this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.props.history.push({
-                      pathname: '/edit-appointee',
-                      search: '?insurance_id='+this.state.params.insurance_id
-                    })}>Edit</span>}
+                    {this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.navigate('/edit-appointee')}>Edit</span>}
                   </div>
                   {this.renderPercentage(this.renderAppointeePercentage())}
                 </div>
-                {this.renderAccordionBody('appointee')}
               </div>
             }
             <div className="Accordion">
               <div className="AccordionTitle" onClick={() => this.toggleprofessionalAccordion('professional')}>
                 <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative', marginBottom: 7}}>
-                  <span style={{marginRight: 10}}>
-                    <img style={{position: 'relative', top: 2}} src={(this.state.professional.is_open) ? shrink : expand} alt="" width="20"/>
-                  </span>
                   <span>Professional details</span>
-                  {this.state.professional.is_open && this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.props.history.push({
-                    pathname: '/edit-professional',
-                    search: '?insurance_id='+this.state.params.insurance_id
-                  })}>Edit</span>}
+                  {this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.navigate('/edit-professional')}>Edit</span>}
                 </div>
                 {this.renderPercentage(this.renderProfessionalPercentage())}
               </div>
-              {this.renderAccordionBody('professional')}
             </div>
           </div>
         </div>
