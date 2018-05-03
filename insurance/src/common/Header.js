@@ -7,8 +7,7 @@ import IconButton from 'material-ui/IconButton';
 import Arrow from '@material-ui/icons/ArrowBack';
 
 const Header = ({ classes, title, count, total, current, goBack, edit }) => (
-  <div className={`Header ${classes.root}`}>
-    <AppBar position="fixed" color="primary">
+    <AppBar position="fixed" color="primary" className={`Header ${classes.root}`}>
       <Toolbar>
         <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={goBack}>
           <Arrow />
@@ -19,7 +18,6 @@ const Header = ({ classes, title, count, total, current, goBack, edit }) => (
         { !edit && count && <span color="inherit">{current}/{total}</span> }
       </Toolbar>
     </AppBar>
-  </div>
 );
 
 const styles = {

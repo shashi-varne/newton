@@ -5,6 +5,7 @@ import Header from './Header';
 import Footer from './footer';
 import Banner from '../ui/Banner';
 import loader from '../assets/loader_gif.gif';
+import jQuery from 'jquery';
 
 class Container extends Component {
   constructor(props) {
@@ -45,6 +46,30 @@ class Container extends Component {
     } else {
       document.getElementsByClassName('Footer')[0].style.position = "absolute" ;
     }
+
+
+    jQuery.noConflict();
+    (function($) {
+
+        jQuery(function() {
+
+            /* cache dom referencess */
+            var $body = jQuery('body');
+
+            /* bind events */
+            jQuery(document)
+            .on('focus', 'input', function(e) {
+                console.log('focus on input');
+                $body.addClass('fixheader');
+            })
+            .on('blur', 'input', function(e) {
+                console.log('blur out of input');
+                $body.removeClass('fixheader');
+            });
+
+        });
+
+    })(jQuery);
   }
 
   render() {
