@@ -50,26 +50,12 @@ class Container extends Component {
     }
 
     if (ios) {
-      jQuery.noConflict();
-      (function($) {
+      var $body = jQuery('body');
 
-          jQuery(function() {
-
-              /* cache dom referencess */
-              var $body = jQuery('body');
-
-              /* bind events */
-              jQuery(document)
-              .on('focus', 'input', function(e) {
-                  $body.addClass('fixheader');
-              })
-              .on('blur', 'input', function(e) {
-                  $body.removeClass('fixheader');
-              });
-
-          });
-
-      })(jQuery);
+      jQuery(document)
+      .on('focus', 'input', function(e) {
+          $body.addClass('fixheader');
+      });
     }
   }
 
