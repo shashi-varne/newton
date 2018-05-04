@@ -227,7 +227,11 @@ class NomineeDetails extends Component {
           if (this.state.age < 18) {
             this.navigate('/edit-appointee');
           } else {
-            this.navigate('/summary');
+            if (this.state.params.resume) {
+              this.navigate('/resume');
+            } else {
+              this.navigate('/summary');
+            }
           }
         } else {
           if (this.state.age < 18) {

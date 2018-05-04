@@ -171,7 +171,11 @@ class ProfessionalDetails1 extends Component {
           if (this.state.occupation_detail === 'SALRIED') {
             this.navigate('/edit-professional1');
           } else {
-            this.navigate('/summary');
+            if (this.state.params.resume) {
+              this.navigate('/resume');
+            } else {
+              this.navigate('/summary');
+            }
           }
         } else {
           if (this.state.occupation_detail === 'SALRIED') {

@@ -20,6 +20,7 @@ class Resume extends Component {
       openModal: false,
       quote_provider: '',
       status: '',
+      application_id: '',
       show_loader: true,
       show_appointee: false,
       tobacco_choice: '',
@@ -109,6 +110,7 @@ class Resume extends Component {
               not_submitted: professional_submitted
             }
           },
+          application_id: application.application_number,
           plutus_status: application.plutus_status,
           required_fields: required_fields,
           status: application.status,
@@ -570,7 +572,10 @@ class Resume extends Component {
             </Grid>
             <Grid item xs={8}>
               <div className="Title" style={{color: '#444', fontFamily: 'Roboto', fontWeight: 500, fontSize: 18}}>
-                <div style={{marginBottom: 7}}>ID: {this.state.params.insurance_id}</div>
+                <div style={{marginBottom: 7}}>{
+                    this.state.application_id &&
+                    `ID: ${this.state.application_id}`
+                  }</div>
                 {this.renderTotalPercentage()}
               </div>
             </Grid>
@@ -643,6 +648,7 @@ class Resume extends Component {
                 <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative', marginBottom: 7}}>
                   <span>Benefits</span>
                 </div>
+                {this.renderPercentage(100)}
               </div>
             </div>
             <div className="Accordion">
