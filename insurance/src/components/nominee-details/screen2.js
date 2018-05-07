@@ -16,7 +16,7 @@ import location from '../../assets/location_dark_icn.png';
 import Dropdown from '../../ui/Select';
 import Api from '../../utils/api';
 import { maritalOptions, genderOptions, relationshipOptions } from '../../utils/constants';
-import { validateAlphabets, validateNumber, validateAddress, validateName } from '../../utils/validators';
+import { validateAlphabets, validateNumber, validateStreetName, validateLength, validateConsecutiveChar, validateEmpty } from '../../utils/validators';
 
 class AppointeeDetails extends Component {
   constructor(props) {
@@ -158,13 +158,25 @@ class AppointeeDetails extends Component {
 
   handleClick = async () => {
     let age  = this.calculateAge(this.state.dob.replace(/\\-/g, '/').split('-').reverse().join('/'));
-    if (!validateName(this.state.name) || this.state.name.length === 0) {
+    if (this.state.name.split(" ").length < 2) {
       this.setState({
-        name_error: 'Enter full valid name - alphabets only'
+        name_error: 'Enter valid full name'
+      });
+    } else if (!validateEmpty(this.state.name)) {
+      this.setState({
+        name_error: 'Enter valid full name'
+      });
+    } else if (!validateLength(this.state.name)) {
+      this.setState({
+        name_error: 'Maximum length of name is 30 characters'
+      });
+    } else if (!validateConsecutiveChar(this.state.name)) {
+      this.setState({
+        name_error: 'Name can not contain more than 3 same consecutive characters'
       });
     } else if (!validateAlphabets(this.state.name)) {
       this.setState({
-        name_error: 'Enter full valid name - alphabets only'
+        name_error: 'Name can contain only alphabets'
       });
     } else if (!this.state.dob) {
       this.setState({
@@ -194,13 +206,33 @@ class AppointeeDetails extends Component {
       this.setState({
         pincode_error: 'Please enter valid pincode'
       });
-    } else if (!this.state.checked && !validateAddress(this.state.addressline)) {
+    } else if (!this.state.checked && !validateEmpty(this.state.addressline)) {
       this.setState({
-        addressline_error: 'Error: Minimum 3 words, beginning with your flat/house number.'
+        addressline_error: 'Address should begin with house number'
       });
-    } else if (!this.state.checked && this.state.landmark.length < 3) {
+    } else if (!this.state.checked && !validateLength(this.state.addressline)) {
       this.setState({
-        landmark_error: 'Please enter valid landmark'
+        addressline_error: 'Maximum length of name is 30 characters'
+      });
+    } else if (!this.state.checked && this.state.addressline.split(" ").length < 3) {
+      this.setState({
+        addressline_error: 'Address line should have at least 3 words'
+      });
+    } else if (!this.state.checked && !validateConsecutiveChar(this.state.addressline)) {
+      this.setState({
+        addressline_error: 'Name can not contain more than 3 same consecutive characters'
+      });
+    } else if (!this.state.checked && !validateEmpty(this.state.landmark)) {
+      this.setState({
+        clandmark_error: 'Please enter valid landmark'
+      });
+    } else if (!this.state.checked && !validateLength(this.state.landmark)) {
+      this.setState({
+        clandmark_error: 'Maximum length of landmark is 30'
+      });
+    } else if (!this.state.checked && !validateStreetName(this.state.landmark)) {
+      this.setState({
+        clandmark_error: 'Please enter valid landmark'
       });
     } else {
       this.setState({show_loader: true});
@@ -287,7 +319,7 @@ class AppointeeDetails extends Component {
           <div className="InputField">
             <InputWithIcon
               error={(this.state.name_error) ? true : false}
-              helperText={this.state.name_error}
+              helperText={this.state.name_error || "Please enter full name"}
               type="text"
               icon={name}
               width="40"
@@ -394,7 +426,7 @@ class AppointeeDetails extends Component {
             <div className="InputField">
               <InputWithIcon
                 error={(this.state.addressline_error) ? true : false}
-                helperText="Valid address - House No, Society, Locality"
+                helperText={this.state.addressline_error || "Valid address - House No, Society, Locality"}
                 type="text"
                 id="address"
                 label="Permanent address *"

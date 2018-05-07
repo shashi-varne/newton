@@ -12,12 +12,22 @@ import Typography from 'material-ui/Typography';
 import qs from 'qs';
 import { income_pairs } from '../../utils/constants';
 import { numDifferentiation } from '../../utils/validators';
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  withMobileDialog,
+} from 'material-ui/Dialog';
+import Button from 'material-ui/Button';
 
 class Resume extends Component {
   constructor(props) {
     super(props);
     this.state = {
       openModal: false,
+      openDialog: false,
+      openModalMessage: '',
       quote_provider: '',
       status: '',
       application_id: '',
@@ -267,6 +277,10 @@ class Resume extends Component {
     });
   }
 
+  handleClose = () => {
+    this.setState({ openDialog: false });
+  }
+
   handleClick = async () => {
     if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.personal.not_submitted) {
       this.navigate("/");
@@ -279,7 +293,7 @@ class Resume extends Component {
     } else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.professional.not_submitted) {
       this.navigate("/professional");
     } else {
-      this.setState({openModal: true});
+      this.setState({openModal: true, openModalMessage: `Wait a moment, you will be redirected to <b>${this.state.quote_provider}</b> for the payment.`});
       let provider;
 
       if (this.state.provider === 'HDFC') {
@@ -296,7 +310,7 @@ class Resume extends Component {
           window.location.replace(window.location.href+'&native_payment=true&payment_link='+res.pfwresponse.result.insurance_app.payment_link+'&provider='+provider, function() {});
         } else {
           alert(res.pfwresponse.result.error);
-          this.setState({openModal: false});
+          this.setState({openModal: false, openModalMessage: ''});
         }
       } else {
         window.location.replace(window.location.href+'&native_payment=true&resume_link='+this.state.resume_link+'&provider='+provider, function() {});
@@ -316,10 +330,35 @@ class Resume extends Component {
             <img src={loader} alt=""/>
           </div>
           <Typography variant="subheading" id="simple-modal-description" style={{color: '#444'}}>
-            Wait a moment, you will be redirected to <b>{this.state.quote_provider}</b> for the payment.
+            {this.state.openModalMessage}
           </Typography>
         </div>
       </Modal>
+    );
+  }
+
+  renderDialog = () => {
+    return (
+      <Dialog
+          fullScreen={false}
+          open={this.state.openDialog}
+          onClose={this.handleClose}
+          aria-labelledby="responsive-dialog-title"
+      >
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to exit the application process?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClose} color="primary">
+            No
+          </Button>
+          <Button onClick={this.handleReset} color="primary" autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
     );
   }
 
@@ -342,14 +381,20 @@ class Resume extends Component {
   }
 
   handleReset = async () => {
+    this.setState({openDialog: false, openModal: true, openModalMessage: 'Wait a moment while we reset your application'});
     const res = await Api.post('/api/insurance/profile/reset', {
       insurance_app_id: this.state.params.insurance_id
     });
     if (res.pfwresponse.status_code === 200) {
       window.location.replace(window.location.href+'&native_reset=true', function() {});
     } else {
+      this.setState({openModal: false, openModalMessage: ''});
       alert(res.pfwresponse.result.error);
     }
+  }
+
+  showDialog = () => {
+    this.setState({ openDialog: true });
   }
 
   renderPersonalPercentage = () => {
@@ -548,7 +593,7 @@ class Resume extends Component {
     return (
       <Container
         resetpage={(this.state.status === 'init') ? true : false}
-        handleReset={this.handleReset}
+        handleReset={this.showDialog}
         showLoader={this.state.show_loader}
         title={'Resume Application'}
         handleClick={this.handleClick}
@@ -701,6 +746,7 @@ class Resume extends Component {
           </div>
         </div>
         {this.renderModal()}
+        {this.renderDialog()}
       </Container>
     );
   }

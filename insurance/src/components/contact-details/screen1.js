@@ -44,10 +44,19 @@ class ContactDetails1 extends Component {
   }
 
   handleChange = () => event => {
-    this.setState({
-      [event.target.name]: event.target.value,
-      [event.target.name+'_error']: ''
-    });
+    if (event.target.name === 'mobile_no') {
+      if (event.target.value.length <= 10) {
+        this.setState({
+          [event.target.name]: event.target.value,
+          [event.target.name+'_error']: ''
+        });
+      }
+    } else {
+      this.setState({
+        [event.target.name]: event.target.value,
+        [event.target.name+'_error']: ''
+      });
+    }
   };
 
   navigate = (pathname) => {

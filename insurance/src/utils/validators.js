@@ -1,3 +1,51 @@
+export function validateEmpty(string) {
+  let nameSplit = string.split(" ").filter(e => e);
+  if (nameSplit.length > 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+export function validateLength(string) {
+  let nameSplit = string.trim(" ");
+  if (nameSplit.length > 30) {
+    return false;
+  }
+
+  return true;
+}
+
+export function validateConsecutiveChar(string) {
+  let nameSplit = string.trim(" ");
+  let name = nameSplit.toLowerCase();
+  let prevChar = name[0];
+  let count = 0;
+  for (let n of name) {
+    if (n === prevChar) {
+      count += 1;
+    } else {
+      count = 1;
+    }
+    if (count === 3) {
+      return false;
+    }
+    prevChar = n;
+  }
+
+  return true;
+}
+
+export function validateFlatNumber(string) {
+  let rule = /^[a-z A-Z0-9\.\-\#\/\'\,\(\)]+$/;
+  return rule.test(string);
+}
+
+export function validateStreetName(string) {
+  let rule = /^[a-z A-Z0-9\.\-\/]+$/;
+  return rule.test(string);
+}
+
 export function validateAlphabets(string) {
   return string.match(/^[a-z A-Z]+$/);
 }
@@ -10,10 +58,6 @@ export function validateEmail(string) {
 export function validateNumber(number) {
   let rule = /^[0-9]+$/;
   return rule.test(number);
-}
-
-export function validateAddress(text) {
-  return (text.length > 0) ? true : false;
 }
 
 export function validatePan(string) {

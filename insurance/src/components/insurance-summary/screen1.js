@@ -24,6 +24,7 @@ class Summary extends Component {
       status: '',
       show_loader: true,
       show_appointee: false,
+      application_id: '',
       tobacco_choice: '',
       annual_income: '',
       term: '',
@@ -61,6 +62,7 @@ class Summary extends Component {
         let age = application.profile.nominee.dob && this.calculateAge(application.profile.nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
 
         this.setState({
+          application_id: application.application_number,
           status: application.status,
           show_loader: false,
           payment_link: application.payment_link,
@@ -619,6 +621,10 @@ class Summary extends Component {
             <Grid item xs={7}>
               <div className="Title" style={{color: '#444', fontFamily: 'Roboto', fontWeight: 500, fontSize: 18}}>
                 {this.state.cover_plan}
+                <div style={{marginTop: 7, marginBottom: 7}}>{
+                    this.state.application_id &&
+                    `ID: ${this.state.application_id}`
+                  }</div>
               </div>
             </Grid>
           </Grid>

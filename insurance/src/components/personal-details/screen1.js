@@ -9,7 +9,7 @@ import name from '../../assets/full_name_dark_icn.png';
 import marital from '../../assets/marital_status_dark_icn.png';
 import Api from '../../utils/api';
 import { maritalOptions, genderOptions } from '../../utils/constants';
-import { validateAlphabets, validateName } from '../../utils/validators';
+import { validateAlphabets, validateEmpty, validateLength, validateConsecutiveChar } from '../../utils/validators';
 
 class PersonalDetails1 extends Component {
   constructor(props) {
@@ -78,13 +78,25 @@ class PersonalDetails1 extends Component {
   }
 
   handleClick = async () => {
-    if (this.state.name.length < 3) {
+    if (this.state.name.split(" ").length < 2) {
       this.setState({
-        name_error: 'Enter full valid name - alphabets only'
+        name_error: 'Enter valid full name'
       });
-    } else if (!validateName(this.state.name) || !validateAlphabets(this.state.name)) {
+    } else if (!validateEmpty(this.state.name)) {
       this.setState({
-        name_error: 'Enter full valid name - alphabets only'
+        name_error: 'Enter valid full name'
+      });
+    } else if (!validateAlphabets(this.state.name)) {
+      this.setState({
+        name_error: 'Name can contain only alphabets'
+      });
+    } else if (!validateLength(this.state.name)) {
+      this.setState({
+        name_error: 'Maximum length of name is 30 characters'
+      });
+    } else if (!validateConsecutiveChar(this.state.name)) {
+      this.setState({
+        name_error: 'Name can not contain more than 3 same consecutive characters'
       });
     } else if (!this.state.marital_status) {
       this.setState({
@@ -135,7 +147,7 @@ class PersonalDetails1 extends Component {
             <InputWithIcon
               type="text"
               error={(this.state.name_error) ? true : false}
-              helperText={this.state.name_error}
+              helperText={this.state.name_error || "Please enter full name"}
               icon={name}
               width="40"
               label="Full Name *"

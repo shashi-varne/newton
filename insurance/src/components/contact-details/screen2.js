@@ -8,7 +8,7 @@ import Container from '../../common/Container';
 import InputWithIcon from '../../ui/InputWithIcon';
 import location from '../../assets/location_dark_icn.png';
 import Api from '../../utils/api';
-import { validateNumber, validateAddress } from '../../utils/validators';
+import { validateNumber, validateStreetName, validateLength, validateConsecutiveChar, validateEmpty } from '../../utils/validators';
 
 class ContactDetails2 extends Component {
   constructor(props) {
@@ -125,23 +125,63 @@ class ContactDetails2 extends Component {
       this.setState({
         pincode_error: 'Please enter valid pincode'
       });
-    } else if (!validateAddress(this.state.addressline)) {
+    } else if (!validateEmpty(this.state.addressline)) {
       this.setState({
-        addressline_error: 'Please enter valid address'
+        addressline_error: 'Address should begin with house number'
       });
-    } else if (this.state.landmark.length < 3) {
+    } else if (!validateLength(this.state.addressline)) {
       this.setState({
-        landmark_error: 'Please enter valid landmark'
+        addressline_error: 'Maximum length of name is 30 characters'
+      });
+    } else if (this.state.addressline.split(" ").length < 3) {
+      this.setState({
+        addressline_error: 'Address line should have at least 3 words'
+      });
+    } else if (!validateConsecutiveChar(this.state.addressline)) {
+      this.setState({
+        addressline_error: 'Name can not contain more than 3 same consecutive characters'
+      });
+    } else if (!validateEmpty(this.state.landmark)) {
+      this.setState({
+        clandmark_error: 'Please enter valid landmark'
+      });
+    } else if (!validateLength(this.state.landmark)) {
+      this.setState({
+        clandmark_error: 'Maximum length of landmark is 30'
+      });
+    } else if (!validateStreetName(this.state.landmark)) {
+      this.setState({
+        clandmark_error: 'Please enter valid landmark'
       });
     } else if (!this.state.checked && (this.state.cpincode.length !== 6 || !validateNumber(this.state.cpincode))) {
       this.setState({
         cpincode_error: 'Please enter valid pincode'
       });
-    } else if (!this.state.checked && !validateAddress(this.state.caddress)) {
+    } else if (!this.state.checked && !validateEmpty(this.state.caddress)) {
       this.setState({
-        caddress_error: 'Error: Minimum 3 words, beginning with your flat/house number.'
+        addressline_error: 'Address should begin with house number'
       });
-    } else if (!this.state.checked && this.state.clandmark.length < 3) {
+    } else if (!this.state.checked && !validateLength(this.state.caddress)) {
+      this.setState({
+        addressline_error: 'Maximum length of name is 30 characters'
+      });
+    } else if (!this.state.checked && this.state.caddress.split(" ").length < 3) {
+      this.setState({
+        addressline_error: 'Address line should have at least 3 words'
+      });
+    } else if (!this.state.checked && !validateConsecutiveChar(this.state.caddress)) {
+      this.setState({
+        addressline_error: 'Name can not contain more than 3 same consecutive characters'
+      });
+    } else if (!this.state.checked && !validateEmpty(this.state.clandmark)) {
+      this.setState({
+        clandmark_error: 'Please enter valid landmark'
+      });
+    } else if (!this.state.checked && !validateLength(this.state.clandmark)) {
+      this.setState({
+        clandmark_error: 'Maximum length of landmark is 30'
+      });
+    } else if (!this.state.checked && !validateStreetName(this.state.clandmark)) {
       this.setState({
         clandmark_error: 'Please enter valid landmark'
       });
@@ -238,7 +278,7 @@ class ContactDetails2 extends Component {
               <div className="InputField">
                 <InputWithIcon
                   error={(this.state.addressline_error) ? true : false}
-                  helperText="Valid address - House No, Society, Locality"
+                  helperText={this.state.addressline_error || "Valid address - House No, Society, Locality"}
                   type="text"
                   id="address"
                   label="Permanent address *"

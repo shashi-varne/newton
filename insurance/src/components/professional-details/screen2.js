@@ -7,7 +7,7 @@ import InputWithIcon from '../../ui/InputWithIcon';
 import name from '../../assets/name_present_employer_dark_icn.png';
 import location from '../../assets/location_dark_icn.png';
 import Api from '../../utils/api';
-import { validateAlphabets, validateNumber, validateAddress } from '../../utils/validators';
+import { validateAlphabets, validateNumber, validateStreetName, validateLength, validateConsecutiveChar, validateEmpty } from '../../utils/validators';
 
 class ProfessionalDetails2 extends Component {
   constructor(props) {
@@ -92,25 +92,57 @@ class ProfessionalDetails2 extends Component {
   }
 
   handleClick = async () => {
-    if (this.state.employer_name.length < 3) {
+    if (this.state.employer_name.split(" ").length < 2) {
       this.setState({
-        employer_name_error: 'Enter full valid name - alphabets only'
+        employer_name_error: 'Enter valid full name'
+      });
+    } else if (!validateEmpty(this.state.employer_name)) {
+      this.setState({
+        employer_name_error: 'Enter valid full name'
       });
     } else if (!validateAlphabets(this.state.employer_name)) {
       this.setState({
-        employer_name_error: 'Enter full valid name - alphabets only'
+        employer_name_error: 'Name can contain only alphabets'
+      });
+    } else if (!validateLength(this.state.employer_name)) {
+      this.setState({
+        employer_name_error: 'Maximum length of name is 30 characters'
+      });
+    } else if (!validateConsecutiveChar(this.state.employer_name)) {
+      this.setState({
+        employer_name_error: 'Name can not contain more than 3 same consecutive characters'
       });
     } else if (this.state.pincode.length !== 6 || !validateNumber(this.state.pincode)) {
       this.setState({
         pincode_error: 'Please enter valid pincode'
       });
-    } else if (!validateAddress(this.state.addressline)) {
+    } else if (!validateEmpty(this.state.addressline)) {
       this.setState({
-        addressline_error: 'Please enter valid address'
+        addressline_error: 'Address should begin with house number'
       });
-    } else if (this.state.landmark.length < 3) {
+    } else if (!validateLength(this.state.addressline)) {
       this.setState({
-        landmark_error: 'Please enter valid landmark'
+        addressline_error: 'Maximum length of name is 30 characters'
+      });
+    } else if (this.state.addressline.split(" ").length < 3) {
+      this.setState({
+        addressline_error: 'Address line should have at least 3 words'
+      });
+    } else if (!validateConsecutiveChar(this.state.addressline)) {
+      this.setState({
+        addressline_error: 'Name can not contain more than 3 same consecutive characters'
+      });
+    } else if (!validateEmpty(this.state.landmark)) {
+      this.setState({
+        clandmark_error: 'Please enter valid landmark'
+      });
+    } else if (!validateLength(this.state.landmark)) {
+      this.setState({
+        clandmark_error: 'Maximum length of landmark is 30'
+      });
+    } else if (!validateStreetName(this.state.landmark)) {
+      this.setState({
+        clandmark_error: 'Please enter valid landmark'
       });
     } else {
       this.setState({show_loader: true});
@@ -161,7 +193,7 @@ class ProfessionalDetails2 extends Component {
           <div className="InputField">
             <InputWithIcon
               error={(this.state.employer_name_error) ? true : false}
-              helperText={this.state.employer_name_error}
+              helperText={this.state.employer_name_error || "Please enter full name"}
               type="text"
               icon={name}
               width="40"
@@ -188,7 +220,7 @@ class ProfessionalDetails2 extends Component {
           <div className="InputField">
             <InputWithIcon
               error={(this.state.addressline_error) ? true : false}
-              helperText={this.state.addressline_error}
+              helperText={this.state.addressline_error || "Valid address - House No, Society, Locality"}
               type="text"
               id="address"
               name="addressline"

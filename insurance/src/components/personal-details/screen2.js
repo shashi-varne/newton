@@ -8,7 +8,10 @@ import mother from '../../assets/mother_dark_icn.png';
 import father from '../../assets/father_dark_icn.png';
 import location from '../../assets/location_dark_icn.png';
 import Api from '../../utils/api';
-import { validateAlphabets, validateName } from '../../utils/validators';
+import { validateEmpty,
+validateLength,
+validateConsecutiveChar,
+validateAlphabets } from '../../utils/validators';
 
 class PersonalDetails2 extends Component {
   constructor(props) {
@@ -61,21 +64,45 @@ class PersonalDetails2 extends Component {
   }
 
   handleClick = async () => {
-    if (!validateName(this.state.mother_name) || this.state.mother_name.length === 0) {
+    if (this.state.mother_name.split(" ").length < 2) {
       this.setState({
-        mother_name_error: 'Enter full valid name - alphabets only'
+        mother_name_error: 'Enter valid full name'
+      });
+    } else if (!validateEmpty(this.state.mother_name)) {
+      this.setState({
+        mother_name_error: 'Enter valid full name'
+      });
+    } else if (!validateLength(this.state.mother_name)) {
+      this.setState({
+        mother_name_error: 'Maximum length of name is 30 characters'
+      });
+    } else if (!validateConsecutiveChar(this.state.mother_name)) {
+      this.setState({
+        mother_name_error: 'Name can not contain more than 3 same consecutive characters'
       });
     } else if (!validateAlphabets(this.state.mother_name)) {
       this.setState({
-        mother_name_error: 'Enter full valid name - alphabets only'
+        mother_name_error: 'Name can contain only alphabets'
       });
-    } else if (!validateName(this.state.mother_name) || this.state.father_name.length === 0) {
+    } else if (this.state.father_name.split(" ").length < 2) {
       this.setState({
-        father_name_error: 'Enter full valid name - alphabets only'
+        father_name_error: 'Enter valid full name'
+      });
+    } else if (!validateEmpty(this.state.father_name)) {
+      this.setState({
+        father_name_error: 'Enter valid full name'
+      });
+    } else if (!validateLength(this.state.father_name)) {
+      this.setState({
+        father_name_error: 'Maximum length of name is 30 characters'
+      });
+    } else if (!validateConsecutiveChar(this.state.father_name)) {
+      this.setState({
+        father_name_error: 'Name can not contain more than 3 same consecutive characters'
       });
     } else if (!validateAlphabets(this.state.father_name)) {
       this.setState({
-        father_name_error: 'Enter full valid name - alphabets only'
+        father_name_error: 'Name can contain only alphabets'
       });
     } else if (this.state.birth_place.length < 3) {
       this.setState({
@@ -133,7 +160,7 @@ class PersonalDetails2 extends Component {
           <div className="InputField">
             <InputWithIcon
               error={(this.state.mother_name_error) ? true : false}
-              helperText={this.state.mother_name_error}
+              helperText={this.state.mother_name_error || "Please enter full name"}
               type="text"
               icon={mother}
               width="40"
@@ -147,7 +174,7 @@ class PersonalDetails2 extends Component {
           <div className="InputField">
             <InputWithIcon
               error={(this.state.father_name_error) ? true : false}
-              helperText={this.state.father_name_error}
+              helperText={this.state.father_name_error || "Please enter full name"}
               type="text"
               icon={father}
               width="40"

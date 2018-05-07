@@ -45,18 +45,18 @@ class Container extends Component {
 
     if (client > body) {
       document.getElementsByClassName('Footer')[0].style.position = "relative" ;
+      if (ios) {
+        var $body = jQuery('body');
+
+        jQuery(document)
+        .on('focus', 'input', function(e) {
+          $body.addClass('fixheader');
+        });
+      }
     } else {
       document.getElementsByClassName('Footer')[0].style.position = "absolute" ;
     }
 
-    if (ios) {
-      var $body = jQuery('body');
-
-      jQuery(document)
-      .on('focus', 'input', function(e) {
-          $body.addClass('fixheader');
-      });
-    }
   }
 
   render() {
