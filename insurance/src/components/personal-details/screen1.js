@@ -112,7 +112,7 @@ class PersonalDetails1 extends Component {
 
       if (res.pfwresponse.status_code === 200) {
 
-        Android.showToast('Successfully submitted');
+        window.Android.showToast('Successfully submitted');
 
         this.setState({show_loader: false});
         if (this.props.edit) {
