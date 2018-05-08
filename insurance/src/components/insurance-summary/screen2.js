@@ -15,9 +15,7 @@ import { numDifferentiation } from '../../utils/validators';
 import Dialog, {
   DialogActions,
   DialogContent,
-  DialogContentText,
-  DialogTitle,
-  withMobileDialog,
+  DialogContentText
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 
@@ -277,6 +275,14 @@ class Resume extends Component {
     });
   }
 
+  modelMessage = () => {
+    return (
+      <span>
+        Wait a moment, you will be redirected to <b>{this.state.quote_provider}</b> for the payment.
+      </span>
+    );
+  }
+
   handleClose = () => {
     this.setState({ openDialog: false });
   }
@@ -293,7 +299,7 @@ class Resume extends Component {
     } else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.professional.not_submitted) {
       this.navigate("/professional");
     } else {
-      this.setState({openModal: true, openModalMessage: `Wait a moment, you will be redirected to <b>${this.state.quote_provider}</b> for the payment.`});
+      this.setState({openModal: true, openModalMessage: this.modelMessage()});
       let provider;
 
       if (this.state.provider === 'HDFC') {
