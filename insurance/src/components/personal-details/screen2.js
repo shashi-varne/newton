@@ -37,7 +37,7 @@ class PersonalDetails2 extends Component {
     Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
       groups: 'personal'
     }).then(res => {
-      const { mother_name, father_name, birth_place } = res.pfwresponse.result.profile;
+      const { mother_name, father_name, birth_place, marital_status, spouse_name } = res.pfwresponse.result.profile;
       const { image, provider } = res.pfwresponse.result.quote_desc;
 
       this.setState({
