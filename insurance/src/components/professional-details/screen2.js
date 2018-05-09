@@ -180,7 +180,7 @@ class ProfessionalDetails2 extends Component {
         window.location = "fisdom_webview://events?data="+jsonResponse;
 
         this.setState({show_loader: false});
-        if (this.state.params.resume) {
+        if (this.state.params.resume === true) {
           this.navigate('/resume');
         } else {
           this.navigate('/summary');

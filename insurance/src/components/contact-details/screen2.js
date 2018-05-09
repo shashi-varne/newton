@@ -237,7 +237,7 @@ class ContactDetails2 extends Component {
 
         this.setState({show_loader: false});
         if (this.props.edit) {
-          if (this.state.params.resume) {
+          if (this.state.params.resume === true) {
             this.navigate('/resume');
           } else {
             this.navigate('/summary');
