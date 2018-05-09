@@ -210,10 +210,6 @@ class AppointeeDetails extends Component {
       this.setState({
         addressline_error: 'Address should begin with house number'
       });
-    } else if (!this.state.checked && !validateLength(this.state.addressline)) {
-      this.setState({
-        addressline_error: 'Maximum length of name is 30 characters'
-      });
     } else if (!this.state.checked && this.state.addressline.split(" ").length < 3) {
       this.setState({
         addressline_error: 'Address line should have at least 3 words'
