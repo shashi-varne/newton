@@ -20,6 +20,7 @@ class PersonalDetails2 extends Component {
       mother_name: '',
       father_name: '',
       spouse_name: '',
+      marital_status: '',
       birth_place: '',
       show_loader: true,
       image: '',
@@ -35,13 +36,14 @@ class PersonalDetails2 extends Component {
     Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
       groups: 'personal'
     }).then(res => {
-      const { mother_name, father_name, spouse_name,  birth_place } = res.pfwresponse.result.profile;
+      const { mother_name, father_name, spouse_name,  birth_place, marital_status } = res.pfwresponse.result.profile;
       const { image } = res.pfwresponse.result.quote_desc;
 
       this.setState({
         show_loader: false,
         mother_name: mother_name || '',
         father_name: father_name || '',
+        marital_status: marital_status || '',
         spouse_name: spouse_name || '',
         birth_place: birth_place || '',
         image: image
@@ -87,23 +89,23 @@ class PersonalDetails2 extends Component {
       this.setState({
         mother_name_error: 'Name can contain only alphabets'
       });
-    } else if (this.state.spouse_name.split(" ").length < 2) {
+    } else if (this.state.marital_status === 'MARRIED' && this.state.spouse_name.split(" ").length < 2) {
       this.setState({
         spouse_name_error: 'Enter valid full name'
       });
-    } else if (!validateEmpty(this.state.spouse_name)) {
+    } else if (this.state.marital_status === 'MARRIED' && !validateEmpty(this.state.spouse_name)) {
       this.setState({
         spouse_name_error: 'Enter valid full name'
       });
-    } else if (!validateLength(this.state.spouse_name)) {
+    } else if (this.state.marital_status === 'MARRIED' && !validateLength(this.state.spouse_name)) {
       this.setState({
         spouse_name_error: 'Maximum length of name is 30 characters'
       });
-    } else if (!validateConsecutiveChar(this.state.spouse_name)) {
+    } else if (this.state.marital_status === 'MARRIED' && !validateConsecutiveChar(this.state.spouse_name)) {
       this.setState({
         spouse_name_error: 'Name can not contain more than 3 same consecutive characters'
       });
-    } else if (!validateAlphabets(this.state.spouse_name)) {
+    } else if (this.state.marital_status === 'MARRIED' && !validateAlphabets(this.state.spouse_name)) {
       this.setState({
         spouse_name_error: 'Name can contain only alphabets'
       });
@@ -209,20 +211,23 @@ class PersonalDetails2 extends Component {
               value={this.state.father_name}
               onChange={this.handleChange()} />
           </div>
-          <div className="InputField">
-            <InputWithIcon
-              error={(this.state.spouse_name_error) ? true : false}
-              helperText={this.state.spouse_name_error || "Please enter full name"}
-              type="text"
-              icon={father}
-              width="40"
-              label="Spouse name *"
-              class="SpouseName"
-              id="spouse-name"
-              name="spouse_name"
-              value={this.state.spouse_name}
-              onChange={this.handleChange()} />
-          </div>
+          {
+            this.state.marital_status === 'MARRIED' &&
+            <div className="InputField">
+              <InputWithIcon
+                error={(this.state.spouse_name_error) ? true : false}
+                helperText={this.state.spouse_name_error || "Please enter full name"}
+                type="text"
+                icon={father}
+                width="40"
+                label="Spouse name *"
+                class="SpouseName"
+                id="spouse-name"
+                name="spouse_name"
+                value={this.state.spouse_name}
+                onChange={this.handleChange()} />
+            </div>
+          }
           <div className="InputField">
             <InputWithIcon
               error={(this.state.birth_place_error) ? true : false}
