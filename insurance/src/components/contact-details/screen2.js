@@ -34,6 +34,7 @@ class ContactDetails2 extends Component {
       cstate: '',
       image: '',
       error: '',
+      provider: '',
       params: qs.parse(props.history.location.search.slice(1))
     }
   }
@@ -43,7 +44,7 @@ class ContactDetails2 extends Component {
       groups: 'contact'
     }).then(res => {
       const { permanent_addr, corr_addr } = res.pfwresponse.result.profile;
-      const { image } = res.pfwresponse.result.quote_desc;
+      const { image, provider } = res.pfwresponse.result.quote_desc;
 
       this.setState({
         show_loader: false,
@@ -58,7 +59,8 @@ class ContactDetails2 extends Component {
         clandmark: corr_addr.landmark || '',
         ccity: corr_addr.city || '',
         cstate: corr_addr.state || '',
-        image: image
+        image: image,
+        provider: provider
       });
     }).catch(error => {
       this.setState({show_loader: false});
@@ -212,6 +214,27 @@ class ContactDetails2 extends Component {
       const res = await Api.post('/api/insurance/profile', address);
 
       if (res.pfwresponse.status_code === 200) {
+
+        let eventObj = {
+          "event_name": "contact_two_save",
+          "properties": {
+            "provider": this.state.provider,
+            "address_same_option": (this.state.checked) ? 1 : 0,
+            "pin_correspondance": this.state.cpincode,
+            "add_correspondance": this.state.caddress,
+            "city_correspondance": this.state.ccity,
+            "state_correspondance": this.state.cstate,
+            "pin_permanent": this.state.pincode,
+            "add_permanent": this.state.addressline,
+            "city_permanent": this.state.city,
+            "state_permanent": this.state.state,
+            "from_edit": (this.state.edit) ? 1 : 0
+          }
+        };
+
+        let jsonResponse = JSON.stringify(eventObj);
+        window.location = "fisdom_webview://events?data="+jsonResponse;
+
         this.setState({show_loader: false});
         if (this.props.edit) {
           if (this.state.params.resume) {

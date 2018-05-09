@@ -20,6 +20,7 @@ class ContactDetails1 extends Component {
       email_error: '',
       mobile_no_error: '',
       image: '',
+      provider: '',
       params: qs.parse(this.props.location.search.slice(1))
     }
   }
@@ -29,13 +30,14 @@ class ContactDetails1 extends Component {
       groups: 'contact'
     }).then(res => {
       const { email, mobile_no } = res.pfwresponse.result.profile;
-      const { image } = res.pfwresponse.result.quote_desc;
+      const { image, provider } = res.pfwresponse.result.quote_desc;
 
       this.setState({
         show_loader: false,
         email: email || '',
         mobile_no: mobile_no || '',
-        image: image
+        image: image,
+        provider: provider
       });
     }).catch(error => {
       this.setState({show_loader: false});
@@ -84,6 +86,21 @@ class ContactDetails1 extends Component {
       });
 
       if (res.pfwresponse.status_code === 200) {
+
+        let eventObj = {
+          "event_name": "contact_one_save",
+          "properties": {
+            "provider": this.state.provider,
+            "email": this.state.email,
+            "mobile": this.state.mobile_no,
+            "closed_popup": "",
+            "from_edit": (this.state.edit) ? 1 : 0
+          }
+        };
+
+        let jsonResponse = JSON.stringify(eventObj);
+        window.location = "fisdom_webview://events?data="+jsonResponse;
+
         this.setState({show_loader: false});
         if (this.props.edit) {
           this.navigate('/edit-contact1');

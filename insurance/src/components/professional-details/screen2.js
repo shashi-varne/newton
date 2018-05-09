@@ -25,6 +25,7 @@ class ProfessionalDetails2 extends Component {
       city: '',
       state: '',
       image: '',
+      provider: '',
       params: qs.parse(props.history.location.search.slice(1))
     }
   }
@@ -34,7 +35,7 @@ class ProfessionalDetails2 extends Component {
       groups: 'professional'
     }).then(res => {
       const { employer_name, employer_address } = res.pfwresponse.result.profile;
-      const { image } = res.pfwresponse.result.quote_desc;
+      const { image, provider } = res.pfwresponse.result.quote_desc;
 
       this.setState({
         show_loader: false,
@@ -44,7 +45,8 @@ class ProfessionalDetails2 extends Component {
         landmark: employer_address.landmark || '',
         city: employer_address.city || '',
         state: employer_address.state || '',
-        image: image
+        image: image,
+        provider: provider
       });
     }).catch(error => {
       this.setState({show_loader: false});
@@ -159,6 +161,24 @@ class ProfessionalDetails2 extends Component {
       const res = await Api.post('/api/insurance/profile', data);
 
       if (res.pfwresponse.status_code === 200) {
+
+        let eventObj = {
+          "event_name": "employer_save",
+          "properties": {
+            "provider": this.state.provider,
+            "employer": this.state.employer_name,
+            "address": this.state.addressline,
+            "state": this.state.state,
+            "city": this.state.city,
+            "political": (this.state.is_politically_exposed) ? 1 : 0,
+            "criminal": (this.state.is_criminal) ? 1 : 0,
+            "from_edit": (this.state.edit) ? 1 : 0
+          }
+        };
+
+        let jsonResponse = JSON.stringify(eventObj);
+        window.location = "fisdom_webview://events?data="+jsonResponse;
+
         this.setState({show_loader: false});
         if (this.state.params.resume) {
           this.navigate('/resume');

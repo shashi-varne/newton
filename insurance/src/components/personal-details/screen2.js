@@ -25,6 +25,7 @@ class PersonalDetails2 extends Component {
       mother_name_error: '',
       father_name_error: '',
       birth_place_error: '',
+      provider: '',
       params: qs.parse(props.history.location.search.slice(1))
     }
   }
@@ -34,14 +35,15 @@ class PersonalDetails2 extends Component {
       groups: 'personal'
     }).then(res => {
       const { mother_name, father_name, birth_place } = res.pfwresponse.result.profile;
-      const { image } = res.pfwresponse.result.quote_desc;
+      const { image, provider } = res.pfwresponse.result.quote_desc;
 
       this.setState({
         show_loader: false,
         mother_name: mother_name || '',
         father_name: father_name || '',
         birth_place: birth_place || '',
-        image: image
+        image: image,
+        provider: provider
       });
     }).catch(error => {
       this.setState({show_loader: false});
@@ -122,6 +124,21 @@ class PersonalDetails2 extends Component {
       });
 
       if (res.pfwresponse.status_code === 200) {
+
+        let eventObj = {
+          "event_name": "personal_three_save",
+          "properties": {
+            "provider": this.state.provider,
+            "mother_name": this.state.mother_name,
+            "father_name": this.state.father_name,
+            "place_birth": this.state.birth_place,
+            "from_edit": (this.props.edit) ? 1 : 0
+          }
+        };
+
+        let jsonResponse = JSON.stringify(eventObj);
+        window.location = "fisdom_webview://events?data="+jsonResponse;
+
         this.setState({show_loader: false});
         if (this.props.edit) {
           if (this.state.params.resume) {

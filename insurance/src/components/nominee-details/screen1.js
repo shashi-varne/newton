@@ -44,6 +44,7 @@ class NomineeDetails extends Component {
       city: '',
       state: '',
       image: '',
+      provider: '',
       params: qs.parse(props.history.location.search.slice(1))
     }
   }
@@ -53,7 +54,7 @@ class NomineeDetails extends Component {
       groups: 'nominee'
     }).then(res => {
       const { nominee, nominee_address } = res.pfwresponse.result.profile;
-      const { image } = res.pfwresponse.result.quote_desc;
+      const { image, provider } = res.pfwresponse.result.quote_desc;
 
       this.setState({
         show_loader: false,
@@ -69,7 +70,8 @@ class NomineeDetails extends Component {
         landmark: nominee_address.landmark || '',
         city: nominee_address.city || '',
         state: nominee_address.state || '',
-        image: image
+        image: image,
+        provider: provider
       });
     }).catch(error => {
       this.setState({show_loader: false});
@@ -254,6 +256,26 @@ class NomineeDetails extends Component {
       const res = await Api.post('/api/insurance/profile', data);
 
       if (res.pfwresponse.status_code === 200) {
+
+        let eventObj = {
+          "event_name": "nominee_save",
+          "properties": {
+            "provider": this.state.provider,
+            "nominee_name": this.state.name,
+            "nominee_dob": this.state.dob,
+            "nominee_marital": this.state.marital_status.toLowerCase(),
+            "nominee_relation": this.state.relationship,
+            "address_same": (this.state.checked) ? 1 : 0,
+            "pin_nominee": this.state.pincode,
+            "city_nominee": this.state.city,
+            "state_nominee": this.state.state,
+            "from_edit": (this.state.edit) ? 1 : 0
+          }
+        };
+
+        let jsonResponse = JSON.stringify(eventObj);
+        window.location = "fisdom_webview://events?data="+jsonResponse;
+
         this.setState({show_loader: false});
         if (this.props.edit) {
           if (this.state.age < 18) {
