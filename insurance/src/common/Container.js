@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
-import { Offline, Online } from 'react-detect-offline';
 import jQuery from 'jquery';
 
 import Header from './Header';
 import Footer from './footer';
 import Banner from '../ui/Banner';
 import loader from '../assets/loader_gif.gif';
-import NoInternet from '../components/NoInternet';
 
 class Container extends Component {
   constructor(props) {
@@ -88,35 +86,30 @@ class Container extends Component {
         {/* Loader Block */}
         {this.renderPageLoader()}
 
-        <Online>
-          <div className="Step">
-            {steps}
-          </div>
+        <div className="Step">
+          {steps}
+        </div>
 
-          {/* Banner Block */}
-          { this.props.banner && <Banner text={this.props.bannerText}/> }
+        {/* Banner Block */}
+        { this.props.banner && <Banner text={this.props.bannerText}/> }
 
-          {/* Children Block */}
-          <div className='Container'>
-            { this.props.children }
-          </div>
+        {/* Children Block */}
+        <div className='Container'>
+          { this.props.children }
+        </div>
 
-          {/* Footer Block */}
-          <Footer
-            fullWidthButton={this.props.fullWidthButton}
-            logo={this.props.logo}
-            buttonTitle={this.props.buttonTitle}
-            provider={this.props.provider}
-            premium={this.props.premium}
-            paymentFrequency={this.props.paymentFrequency}
-            edit={this.props.edit}
-            resetpage={this.props.resetpage}
-            handleClick={this.props.handleClick}
-            handleReset={this.props.handleReset} />
-        </Online>
-        <Offline>
-          <NoInternet />
-        </Offline>
+        {/* Footer Block */}
+        <Footer
+          fullWidthButton={this.props.fullWidthButton}
+          logo={this.props.logo}
+          buttonTitle={this.props.buttonTitle}
+          provider={this.props.provider}
+          premium={this.props.premium}
+          paymentFrequency={this.props.paymentFrequency}
+          edit={this.props.edit}
+          resetpage={this.props.resetpage}
+          handleClick={this.props.handleClick}
+          handleReset={this.props.handleReset} />
       </div>
     );
   }

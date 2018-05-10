@@ -96,3 +96,8 @@
   font-size: 14px;
   font-style: italic;
 }
+.DialogButtonFullWidth {
+  width: 100%;
+  background-color: #1bda4e !important;
+  color: #fff !important;
+}
