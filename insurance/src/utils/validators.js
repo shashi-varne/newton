@@ -37,12 +37,12 @@ export function validateConsecutiveChar(string) {
 }
 
 export function validateFlatNumber(string) {
-  let rule = /^[a-z A-Z0-9\.\-\#\/\'\,\(\)]+$/;
+  let rule = /^[a-z A-Z0-9\.\-\#\/\'\,\(\)]+$/; // eslint-disable-next-line
   return rule.test(string);
 }
 
 export function validateStreetName(string) {
-  let rule = /^[a-z A-Z0-9\.\-\/]+$/;
+  let rule = /^[a-z A-Z0-9\.\-\/]+$/; // eslint-disable-next-line
   return rule.test(string);
 }
 
@@ -51,17 +51,17 @@ export function validateAlphabets(string) {
 }
 
 export function validateEmail(string) {
-  let rule = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  let rule = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // eslint-disable-next-line
   return rule.test(string);
 }
 
 export function validateNumber(number) {
-  let rule = /^[0-9]+$/;
+  let rule = /^[0-9]+$/; // eslint-disable-next-line
   return rule.test(number);
 }
 
 export function validatePan(string) {
-  let rule = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/;
+  let rule = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/; // eslint-disable-next-line
   return rule.test(string);
 }
 
