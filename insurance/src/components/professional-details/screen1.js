@@ -14,7 +14,7 @@ import income from '../../assets/annual_income_dark_icn.png';
 import Dropdown from '../../ui/Select';
 import Api from '../../utils/api';
 import { declareOptions, occupationDetailOptions, occupationCategoryOptions, qualification } from '../../utils/constants';
-import { validatePan, validateNumber, formatAmount } from '../../utils/validators';
+import { validatePan, validateNumber, formatAmount, validateEmpty } from '../../utils/validators';
 
 class ProfessionalDetails1 extends Component {
   constructor(props) {
@@ -109,7 +109,11 @@ class ProfessionalDetails1 extends Component {
   }
 
   handleClick = async () => {
-    if (this.state.pan_number.length !== 10 || !validatePan(this.state.pan_number)) {
+    if (!validateEmpty(this.state.pan_number)) {
+      this.setState({
+        pan_number_error: 'PAN number cannot be empty'
+      });
+    } else if (!validatePan(this.state.pan_number)) {
       this.setState({
         pan_number_error: 'Invalid PAN number'
       });
@@ -130,9 +134,17 @@ class ProfessionalDetails1 extends Component {
         designation_error: 'Invalid designation'
       });
     } else if (this.state.occupation_detail === 'SELF-EMPLOYED' && !this.state.designation) {
-    this.setState({
-      designation_error: 'Invalid designation'
-    });
+      this.setState({
+        designation_error: 'Invalid designation'
+      });
+    } else if (this.state.occupation_detail === 'SALRIED' && !this.state.annual_income) {
+      this.setState({
+        annual_income_error: 'Annual income cannot be empty'
+      });
+    } else if (this.state.occupation_detail === 'SELF-EMPLOYED' && !this.state.annual_income) {
+      this.setState({
+        annual_income_error: 'Annual income cannot be empty'
+      });
     } else if (this.state.occupation_detail === 'SALRIED' && (!validateNumber(this.state.annual_income) || !this.state.annual_income)) {
       this.setState({
         annual_income_error: 'Invalid annual income'

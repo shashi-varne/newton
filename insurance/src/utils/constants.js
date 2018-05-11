@@ -45,6 +45,8 @@ export const relationshipOptions = [
   'WIFE'
 ];
 
+export const appointeeRelationshipOptions = ["BROTHER", "UNCLE", "AUNT", "FATHER", "FATHER IN-LAW", "GRAND FATHER", "GRAND MOTHER", "MOTHER", "SISTER"];
+
 export const income_pairs = [
   {
     "name" : "upto3",

@@ -92,7 +92,7 @@ class ProfessionalDetails2 extends Component {
   }
 
   handleClick = async () => {
-    if (this.state.employer_name.split(" ").length < 2) {
+    if (this.state.employer_name.split(" ").filter(e => e).length < 2) {
       this.setState({
         employer_name_error: 'Enter valid full name'
       });
@@ -134,15 +134,15 @@ class ProfessionalDetails2 extends Component {
       });
     } else if (!validateEmpty(this.state.landmark)) {
       this.setState({
-        clandmark_error: 'Please enter valid landmark'
+        landmark_error: 'Please enter valid landmark'
       });
     } else if (!validateLength(this.state.landmark)) {
       this.setState({
-        clandmark_error: 'Maximum length of landmark is 30'
+        landmark_error: 'Maximum length of landmark is 30'
       });
     } else if (!validateStreetName(this.state.landmark)) {
       this.setState({
-        clandmark_error: 'Please enter valid landmark'
+        landmark_error: 'Please enter valid landmark'
       });
     } else {
       this.setState({show_loader: true});

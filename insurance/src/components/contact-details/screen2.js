@@ -121,6 +121,7 @@ class ContactDetails2 extends Component {
   }
 
   handleClick = async () => {
+    console.log(!validateEmpty(this.state.addressline));
     if (this.state.pincode.length !== 6 || !validateNumber(this.state.pincode)) {
       this.setState({
         pincode_error: 'Please enter valid pincode'
@@ -129,7 +130,7 @@ class ContactDetails2 extends Component {
       this.setState({
         addressline_error: 'Address should begin with house number'
       });
-    } else if (this.state.addressline.split(" ").length < 3) {
+    } else if (this.state.addressline.split(" ").filter(e => e).length < 3) {
       this.setState({
         addressline_error: 'Address line should have at least 3 words'
       });
@@ -139,15 +140,15 @@ class ContactDetails2 extends Component {
       });
     } else if (!validateEmpty(this.state.landmark)) {
       this.setState({
-        clandmark_error: 'Please enter valid landmark'
+        landmark_error: 'Please enter valid landmark'
       });
     } else if (!validateLength(this.state.landmark)) {
       this.setState({
-        clandmark_error: 'Maximum length of landmark is 30'
+        landmark_error: 'Maximum length of landmark is 30'
       });
     } else if (!validateStreetName(this.state.landmark)) {
       this.setState({
-        clandmark_error: 'Please enter valid landmark'
+        landmark_error: 'Please enter valid landmark'
       });
     } else if (!this.state.checked && (this.state.cpincode.length !== 6 || !validateNumber(this.state.cpincode))) {
       this.setState({

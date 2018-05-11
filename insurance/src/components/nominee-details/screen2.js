@@ -15,7 +15,7 @@ import marital from '../../assets/marital_status_dark_icn.png';
 import location from '../../assets/location_dark_icn.png';
 import Dropdown from '../../ui/Select';
 import Api from '../../utils/api';
-import { maritalOptions, genderOptions, relationshipOptions } from '../../utils/constants';
+import { maritalOptions, genderOptions, appointeeRelationshipOptions } from '../../utils/constants';
 import { validateAlphabets, validateNumber, validateStreetName, validateLength, validateConsecutiveChar, validateEmpty } from '../../utils/validators';
 
 class AppointeeDetails extends Component {
@@ -158,7 +158,7 @@ class AppointeeDetails extends Component {
 
   handleClick = async () => {
     let age  = this.calculateAge(this.state.dob.replace(/\\-/g, '/').split('-').reverse().join('/'));
-    if (this.state.name.split(" ").length < 2) {
+    if (this.state.name.split(" ").filter(e => e).length < 2) {
       this.setState({
         name_error: 'Enter valid full name'
       });
@@ -220,15 +220,15 @@ class AppointeeDetails extends Component {
       });
     } else if (!this.state.checked && !validateEmpty(this.state.landmark)) {
       this.setState({
-        clandmark_error: 'Please enter valid landmark'
+        landmark_error: 'Please enter valid landmark'
       });
     } else if (!this.state.checked && !validateLength(this.state.landmark)) {
       this.setState({
-        clandmark_error: 'Maximum length of landmark is 30'
+        landmark_error: 'Maximum length of landmark is 30'
       });
     } else if (!this.state.checked && !validateStreetName(this.state.landmark)) {
       this.setState({
-        clandmark_error: 'Please enter valid landmark'
+        landmark_error: 'Please enter valid landmark'
       });
     } else {
       this.setState({show_loader: true});
@@ -375,7 +375,7 @@ class AppointeeDetails extends Component {
               helperText={this.state.relationship_error}
               icon={relationship}
               width="40"
-              options={relationshipOptions}
+              options={appointeeRelationshipOptions}
               id="relationship"
               name="relationship"
               label="Relationship"

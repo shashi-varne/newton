@@ -154,7 +154,7 @@ class NomineeDetails extends Component {
   }
 
   handleClick = async () => {
-    if (this.state.name.split(" ").length < 2) {
+    if (this.state.name.split(" ").filter(e => e).length < 2) {
       this.setState({
         name_error: 'Enter valid full name'
       });
@@ -212,15 +212,15 @@ class NomineeDetails extends Component {
       });
     } else if (!this.state.checked && !validateEmpty(this.state.landmark)) {
       this.setState({
-        clandmark_error: 'Please enter valid landmark'
+        landmark_error: 'Please enter valid landmark'
       });
     } else if (!this.state.checked && !validateLength(this.state.landmark)) {
       this.setState({
-        clandmark_error: 'Maximum length of landmark is 30'
+        landmark_error: 'Maximum length of landmark is 30'
       });
     } else if (!this.state.checked && !validateStreetName(this.state.landmark)) {
       this.setState({
-        clandmark_error: 'Please enter valid landmark'
+        landmark_error: 'Please enter valid landmark'
       });
     } else {
       this.setState({show_loader: true});

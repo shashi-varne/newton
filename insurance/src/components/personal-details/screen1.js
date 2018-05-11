@@ -78,7 +78,7 @@ class PersonalDetails1 extends Component {
   }
 
   handleClick = async () => {
-    if (this.state.name.split(" ").length < 2) {
+    if (this.state.name.split(" ").filter(e => e).length < 2) {
       this.setState({
         name_error: 'Enter valid full name'
       });
