@@ -7,7 +7,7 @@ export const SummaryLayout = (props) => {
   return (
     <div>
       <div className="FooterSummaryLayout">
-        <div className="FlexItem3">
+        <div className="FlexItem2 padLR15">
           <div className="FooterSummaryLayout_title">Premium</div>
           <div className="FooterSummaryLayout_subtitle">₹ {props.premium} {capitalize(props.paymentFrequency)}</div>
           {
@@ -15,7 +15,7 @@ export const SummaryLayout = (props) => {
             <div className="FooterSummaryLayout_hint">*You’ve to pay <b>3 months premiums</b>.</div>
           }
         </div>
-        <div className="FlexItem1">
+        <div className="FlexItem2">
           <Button
             type={props.type}
             {...props} />

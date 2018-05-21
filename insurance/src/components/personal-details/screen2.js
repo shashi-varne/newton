@@ -64,7 +64,7 @@ class PersonalDetails2 extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id='+this.state.params.insurance_id+'&resume='+this.state.params.resume
+      search: '?insurance_id='+this.state.params.insurance_id+'&resume='+this.state.params.resume+'&base_url='+this.state.params.base_url
     });
   }
 
@@ -150,7 +150,7 @@ class PersonalDetails2 extends Component {
       if (res.pfwresponse.status_code === 200) {
         this.setState({show_loader: false});
         if (this.props.edit) {
-          if (this.state.params.resume === true) {
+          if (this.state.params.resume === "yes") {
             this.navigate('/resume');
           } else {
             this.navigate('/summary');

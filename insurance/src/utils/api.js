@@ -1,6 +1,11 @@
 import axios from 'axios';
+import qs from 'qs';
+import createBrowserHistory from 'history/createBrowserHistory';
 
-axios.defaults.baseURL = 'https://girish-dot-plutus-staging.appspot.com';
+const myHistory = createBrowserHistory();
+const { base_url } = qs.parse(myHistory.location.search.slice(1))
+
+axios.defaults.baseURL = decodeURIComponent(base_url).replace(/\/$/, "");
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.withCredentials = true;
 

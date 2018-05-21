@@ -271,7 +271,7 @@ class Resume extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id='+this.state.params.insurance_id+'&resume=true'
+      search: '?insurance_id='+this.state.params.insurance_id+'&resume=yes&base_url='+this.state.params.base_url
     });
   }
 
@@ -586,13 +586,6 @@ class Resume extends Component {
         <div style={{flex: 1, color: '#878787', fontSize: 14, fontWeight: 400, textAlign: 'center'}}>{`${number}%`}</div>
       </div>
     );
-  }
-
-  navigate = (pathname) => {
-    this.props.history.push({
-      pathname: pathname,
-      search: '?insurance_id='+this.state.params.insurance_id+'&resume=true'
-    });
   }
 
   render() {

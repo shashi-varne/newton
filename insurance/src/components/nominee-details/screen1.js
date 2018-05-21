@@ -149,7 +149,7 @@ class NomineeDetails extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id='+this.state.params.insurance_id+'&resume='+this.state.params.resume
+      search: '?insurance_id='+this.state.params.insurance_id+'&resume='+this.state.params.resume+'&base_url='+this.state.params.base_url
     });
   }
 
@@ -255,7 +255,7 @@ class NomineeDetails extends Component {
           if (this.state.age < 18) {
             this.navigate('/edit-appointee');
           } else {
-            if (this.state.params.resume === true) {
+            if (this.state.params.resume === "yes") {
               this.navigate('/resume');
             } else {
               this.navigate('/summary');
@@ -271,7 +271,7 @@ class NomineeDetails extends Component {
       } else {
         this.setState({show_loader: false});
         for (let error of res.pfwresponse.result.errors) {
-          if (error.field === 'nominee_address' || error.field === 'nominee') {
+          if (error.field === 'nominee_address' || error.field === 'nominee' || error.field === 'n_addr_same') {
             alert(error.message);
           }
           this.setState({
@@ -435,6 +435,7 @@ class NomineeDetails extends Component {
               type="text"
               id="address"
               label="Permanent address *"
+              placeholder="ex: 16 Queens paradise"
               value={this.state.addressline}
               name="addressline"
               onChange={this.handleChange('addressline')} />

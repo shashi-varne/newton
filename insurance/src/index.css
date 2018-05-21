@@ -73,6 +73,10 @@ div {
   flex: 1;
 }
 
+.padLR15 {
+  padding: 0 15px;
+}
+
 .FlexItem5 {
   flex: 5;
 }

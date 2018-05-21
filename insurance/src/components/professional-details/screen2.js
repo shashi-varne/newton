@@ -87,7 +87,7 @@ class ProfessionalDetails2 extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id='+this.state.params.insurance_id+'&resume='+this.state.params.resume
+      search: '?insurance_id='+this.state.params.insurance_id+'&resume='+this.state.params.resume+'&base_url='+this.state.params.base_url
     });
   }
 
@@ -119,10 +119,6 @@ class ProfessionalDetails2 extends Component {
     } else if (!validateEmpty(this.state.addressline)) {
       this.setState({
         addressline_error: 'Address should begin with house number'
-      });
-    } else if (!validateLength(this.state.addressline)) {
-      this.setState({
-        addressline_error: 'Maximum length of name is 30 characters'
       });
     } else if (this.state.addressline.split(" ").length < 3) {
       this.setState({
@@ -160,7 +156,7 @@ class ProfessionalDetails2 extends Component {
 
       if (res.pfwresponse.status_code === 200) {
         this.setState({show_loader: false});
-        if (this.state.params.resume === true) {
+        if (this.state.params.resume === "yes") {
           this.navigate('/resume');
         } else {
           this.navigate('/summary');
@@ -224,6 +220,7 @@ class ProfessionalDetails2 extends Component {
               type="text"
               id="address"
               name="addressline"
+              placeholder="ex: 16 Queens paradise"
               label="Address of present employer *"
               value={this.state.addressline}
               onChange={this.handleChange()} />

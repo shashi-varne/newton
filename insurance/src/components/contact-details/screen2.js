@@ -116,12 +116,11 @@ class ContactDetails2 extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id='+this.state.params.insurance_id+'&resume='+this.state.params.resume
+      search: '?insurance_id='+this.state.params.insurance_id+'&resume='+this.state.params.resume+'&base_url='+this.state.params.base_url
     });
   }
 
   handleClick = async () => {
-    console.log(!validateEmpty(this.state.addressline));
     if (this.state.pincode.length !== 6 || !validateNumber(this.state.pincode)) {
       this.setState({
         pincode_error: 'Please enter valid pincode'
@@ -211,7 +210,7 @@ class ContactDetails2 extends Component {
       if (res.pfwresponse.status_code === 200) {
         this.setState({show_loader: false});
         if (this.props.edit) {
-          if (this.state.params.resume === true) {
+          if (this.state.params.resume === "yes") {
             this.navigate('/resume');
           } else {
             this.navigate('/summary');
@@ -278,6 +277,7 @@ class ContactDetails2 extends Component {
                   helperText={this.state.addressline_error || "Valid address - House No, Society, Locality"}
                   type="text"
                   id="address"
+                  placeholder="ex: 16 Queens paradise"
                   label="Permanent address *"
                   name="addressline"
                   value={this.state.addressline}
@@ -357,6 +357,7 @@ class ContactDetails2 extends Component {
                 helperText={this.state.caddress_error}
                 type="text"
                 id="caddress"
+                placeholder="ex: 16 Queens paradise"
                 label="Permanent address *"
                 value={this.state.caddress}
                 name="caddress"
