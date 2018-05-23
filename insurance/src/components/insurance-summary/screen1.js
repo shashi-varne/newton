@@ -223,7 +223,43 @@ class Summary extends Component {
       const res = await Api.post('/api/insurance/profile/submit', {
         insurance_app_id: this.state.params.insurance_id
       });
+
       if (res.pfwresponse.status_code === 200) {
+        let eventObj;
+        if (this.state.status === 'init') {
+          eventObj = {
+            "event_name": 'make_payment_clicked',
+            "properties": {
+              "provider": this.state.provider,
+              "benefits": (this.state.benefits.accident_benefit !== '' && this.state.benefits.payout_option !== '') ? 1 : 0,
+              "personal_d": (this.renderPersonalPercentage() === 100) ? 1 : 0,
+              "contact_d": (this.renderContactPercentage() === 100) ? 1 : 0,
+              "nominee": (this.renderNomineePercentage() === 100) ? 1 : 0,
+              "professonal": (this.renderProfessionalPercentage() === 100) ? 1 : 0,
+              "appointee": (this.renderAppointeePercentage() === 100) ? 1 : 0
+            }
+          };
+        } else {
+          eventObj = {
+            "event_name": 'resume_clicked',
+            "properties": {
+              "overall_progress": this.renderTotalPercentage(),
+              "personal_d": this.renderPersonalPercentage(),
+              "contact_d": this.renderContactPercentage(),
+              "nominee_d": this.renderNomineePercentage(),
+              "professional": this.renderProfessionalPercentage(),
+              "professonal_edit": 0,
+              "pd_view": 0,
+              "cd_view": 0,
+              "nd_view": 0,
+              "professional_view": 0
+            }
+          };
+        }
+
+        let jsonResponse = JSON.stringify(eventObj);
+        window.location = "fisdom_webview://events?data="+jsonResponse;
+
         window.location.replace(window.location.href+'&native_payment=true&payment_link='+res.pfwresponse.result.insurance_app.payment_link+'&provider='+provider, function() {});
       } else {
         alert(res.pfwresponse.result.error);
@@ -265,6 +301,27 @@ class Summary extends Component {
         }
       </div>
     );
+  }
+
+  renderTotalPercentage = () => {
+    let number = 50;
+    if (!this.state.required.personal.not_submitted) {
+      number+= 5;
+    }
+    if (!this.state.required.contact.not_submitted) {
+      number+= 5;
+    }
+    if (!this.state.required.nominee.not_submitted) {
+      number+= 5;
+    }
+    if (!this.state.required.professional.not_submitted) {
+      number+= 5;
+    }
+    if (this.state.status === 'plutus_submitted') {
+      number+= 20;
+    }
+
+    return number;
   }
 
   renderPersonalPercentage = () => {

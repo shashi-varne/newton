@@ -25,6 +25,7 @@ class PersonalDetails1 extends Component {
       dob_error: '',
       gender_error: '',
       marital_status_error: '',
+      provider: '',
       params: qs.parse(props.history.location.search.slice(1))
     }
   }
@@ -34,7 +35,7 @@ class PersonalDetails1 extends Component {
       groups: 'personal'
     }).then(res => {
       const { name, dob, gender, marital_status } = res.pfwresponse.result.profile;
-      const { image } = res.pfwresponse.result.quote_desc;
+      const { image, provider } = res.pfwresponse.result.quote_desc;
 
       this.setState({
         show_loader: false,
@@ -42,7 +43,8 @@ class PersonalDetails1 extends Component {
         dob: (dob) ? dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
         gender: gender || '',
         marital_status: marital_status || '',
-        image: image
+        image: image,
+        provider: provider
       });
     }).catch(error => {
       this.setState({show_loader: false});
@@ -112,6 +114,22 @@ class PersonalDetails1 extends Component {
 
       if (res.pfwresponse.status_code === 200) {
         this.setState({show_loader: false});
+
+        let eventObj = {
+          "event_name": "personal_two_save",
+          "properties": {
+            "provider": this.state.provider,
+            "name": this.state.name,
+            "dob": this.state.dob,
+            "gender": this.state.gender.toLowerCase(),
+            "marital": this.state.marital_status.toLowerCase(),
+            "from_edit": (this.props.edit) ? 1 : 0
+          }
+        };
+
+        let jsonResponse = JSON.stringify(eventObj);
+        window.location = "fisdom_webview://events?data="+jsonResponse;
+
         if (this.props.edit) {
           this.navigate('/edit-personal1');
         } else {

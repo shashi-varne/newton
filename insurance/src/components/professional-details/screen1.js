@@ -36,6 +36,7 @@ class ProfessionalDetails1 extends Component {
       is_politically_exposed: 'N',
       is_criminal: 'N',
       image: '',
+      provider: '',
       params: qs.parse(props.history.location.search.slice(1))
     }
   }
@@ -45,7 +46,7 @@ class ProfessionalDetails1 extends Component {
       groups: 'professional,misc'
     }).then(res => {
       const { annual_income, designation, education_qualification, occupation_category, occupation_detail, is_criminal, is_politically_exposed, pan_number } = res.pfwresponse.result.profile;
-      const { image } = res.pfwresponse.result.quote_desc;
+      const { image, provider } = res.pfwresponse.result.quote_desc;
 
       this.setState({
         show_loader: false,
@@ -57,7 +58,8 @@ class ProfessionalDetails1 extends Component {
         designation: designation || '',
         is_politically_exposed: (is_criminal) ? 'Y' : 'N',
         is_criminal: (is_politically_exposed) ? 'Y' : 'N',
-        image: image
+        image: image,
+        provider: provider
       });
     }).catch(error => {
       this.setState({show_loader: false});
@@ -178,6 +180,35 @@ class ProfessionalDetails1 extends Component {
       const res = await Api.post('/api/insurance/profile', data);
 
       if (res.pfwresponse.status_code === 200) {
+
+        let sector_ev;
+        if (this.state.occupation_detail === 'SALRIED') {
+          sector_ev = 'salaried';
+        } else if (this.state.occupation_detail === 'SELF-EMPLOYED') {
+          sector_ev = 'self';
+        } else {
+          sector_ev = 'student';
+        }
+
+        let eventObj = {
+          "event_name": "professional_save",
+          "properties": {
+            "provider": this.state.provider,
+            "PAN": this.state.pan_number,
+            "education": this.state.education_qualification,
+            "occu": sector_ev,
+            "sector": this.state.sector.toLowerCase(),
+            "income": this.state.annual_income,
+            "designation": this.state.designation,
+            "political": (this.state.is_politically_exposed) ? 1 : 0,
+            "criminal": (this.state.is_criminal) ? 1 : 0,
+            "from_edit": (this.state.edit) ? 1 : 0
+          }
+        };
+
+        let jsonResponse = JSON.stringify(eventObj);
+        window.location = "fisdom_webview://events?data="+jsonResponse;
+
         this.setState({show_loader: false});
         if (this.props.edit) {
           if (this.state.occupation_detail === 'SALRIED') {
