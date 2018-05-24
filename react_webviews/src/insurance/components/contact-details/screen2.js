@@ -18,8 +18,10 @@ class ContactDetails2 extends Component {
       show_loader: true,
       pincode: '',
       pincode_error: '',
-      addressline: '',
-      addressline_error: '',
+      house_no: '',
+      house_no_error: '',
+      street: '',
+      street_error: '',
       landmark: '',
       landmark_error: '',
       city: '',
@@ -27,8 +29,10 @@ class ContactDetails2 extends Component {
       checked: true,
       cpincode: '',
       cpincode_error: '',
-      caddress: '',
-      caddress_error: '',
+      chouse_no: '',
+      chouse_no_error: '',
+      cstreet: '',
+      cstreet_error: '',
       clandmark: '',
       clandmark_error: '',
       ccity: '',
@@ -50,13 +54,15 @@ class ContactDetails2 extends Component {
       this.setState({
         show_loader: false,
         pincode: permanent_addr.pincode || '',
-        addressline: permanent_addr.addressline || '',
+        house_no: permanent_addr.house_no || '',
+        street: permanent_addr.street || '',
         landmark: permanent_addr.landmark || '',
         city: permanent_addr.city || '',
         state: permanent_addr.state || '',
         checked: (Object.keys(corr_addr).length === 0) ? true : false,
         cpincode: corr_addr.pincode || '',
-        caddress: corr_addr.addressline || '',
+        chouse_no: corr_addr.house_no || '',
+        cstreet: corr_addr.street || '',
         clandmark: corr_addr.landmark || '',
         ccity: corr_addr.city || '',
         cstate: corr_addr.state || '',
@@ -128,17 +134,37 @@ class ContactDetails2 extends Component {
       this.setState({
         pincode_error: 'Please enter valid pincode'
       });
-    } else if (!validateEmpty(this.state.addressline)) {
+    } else if (!validateEmpty(this.state.house_no)) {
       this.setState({
-        addressline_error: 'Address should begin with house number'
+        house_no_error: 'Address should begin with house number'
       });
-    } else if (this.state.addressline.split(" ").filter(e => e).length < 3) {
+    } else if (this.state.house_no.split(" ").filter(e => e).length < 3) {
       this.setState({
-        addressline_error: 'Address line should have at least 3 words'
+        house_no_error: 'Address line should have at least 3 words'
       });
-    } else if (!validateConsecutiveChar(this.state.addressline)) {
+    } else if (!validateConsecutiveChar(this.state.house_no)) {
       this.setState({
-        addressline_error: 'Name can not contain more than 3 same consecutive characters'
+        house_no_error: 'Name can not contain more than 3 same consecutive characters'
+      });
+    } else if (!validateLength(this.state.house_no)) {
+      this.setState({
+        house_no_error: 'Maximum length of address is 30'
+      });
+    }  else if (!validateEmpty(this.state.street)) {
+      this.setState({
+        street_error: 'Address should begin with house number'
+      });
+    } else if (this.state.street.split(" ").filter(e => e).length < 3) {
+      this.setState({
+        street_error: 'Address line should have at least 3 words'
+      });
+    } else if (!validateConsecutiveChar(this.state.street)) {
+      this.setState({
+        street_error: 'Name can not contain more than 3 same consecutive characters'
+      });
+    } else if (!validateLength(this.state.street)) {
+      this.setState({
+        street_error: 'Maximum length of address is 30'
       });
     } else if (!validateEmpty(this.state.landmark)) {
       this.setState({
@@ -190,7 +216,8 @@ class ContactDetails2 extends Component {
 
       permanent_address = {
         'pincode': this.state.pincode,
-        'addressline': this.state.addressline,
+        'house_no': this.state.house_no,
+        'street': this.state.street,
         'landmark': this.state.landmark
       };
 
@@ -203,7 +230,8 @@ class ContactDetails2 extends Component {
           address['p_addr'] = permanent_address;
           address['c_addr'] = {
             'pincode': this.state.cpincode,
-            'addressline': this.state.caddress,
+            'house_no': this.state.chouse_no,
+            'street': this.state.cstreet,
             'landmark': this.state.clandmark
           }
       }
@@ -218,11 +246,11 @@ class ContactDetails2 extends Component {
             "provider": this.state.provider,
             "address_same_option": (this.state.checked) ? 1 : 0,
             "pin_correspondance": this.state.cpincode,
-            "add_correspondance": this.state.caddress,
+            "add_correspondance": this.state.chouse_no,
             "city_correspondance": this.state.ccity,
             "state_correspondance": this.state.cstate,
             "pin_permanent": this.state.pincode,
-            "add_permanent": this.state.addressline,
+            "add_permanent": this.state.house_no,
             "city_permanent": this.state.city,
             "state_permanent": this.state.state,
             "from_edit": (this.state.edit) ? 1 : 0
@@ -296,14 +324,26 @@ class ContactDetails2 extends Component {
               </div>
               <div className="InputField">
                 <InputWithIcon
-                  error={(this.state.addressline_error) ? true : false}
-                  helperText={this.state.addressline_error || "Valid address - House No, Society, Locality"}
+                  error={(this.state.house_no_error) ? true : false}
+                  helperText={this.state.house_no_error || "House No, Society"}
                   type="text"
-                  id="address"
-                  label="Permanent address *"
-                  name="addressline"
-                  placeholder="ex: 16 Queens paradise"
-                  value={this.state.addressline}
+                  id="house_no"
+                  label="Address line 1 *"
+                  name="house_no"
+                  placeholder="ex: 16/1 Queens paradise"
+                  value={this.state.house_no}
+                  onChange={this.handleChange()} />
+              </div>
+              <div className="InputField">
+                <InputWithIcon
+                  error={(this.state.street_error) ? true : false}
+                  helperText={this.state.street_error || "Street, Locality"}
+                  type="text"
+                  id="street"
+                  label="Address line 2 *"
+                  name="street"
+                  placeholder="ex: Curve Road, Shivaji Nagar"
+                  value={this.state.street}
                   onChange={this.handleChange()} />
               </div>
               <div className="InputField">
@@ -376,13 +416,26 @@ class ContactDetails2 extends Component {
             </div>
             <div className="InputField">
               <InputWithIcon
-                error={(this.state.caddress_error) ? true : false}
-                helperText={this.state.caddress_error}
+                error={(this.state.chouse_no_error) ? true : false}
+                helperText={this.state.chouse_no_error || "House No, Society"}
                 type="text"
-                id="caddress"
-                label="Permanent address *"
-                value={this.state.caddress}
-                name="caddress"
+                id="chouse_no"
+                label="Address line 1 *"
+                placeholder="ex: 16/1 Queens paradise"
+                value={this.state.chouse_no}
+                name="chouse_no"
+                onChange={this.handleChange()} />
+            </div>
+            <div className="InputField">
+              <InputWithIcon
+                error={(this.state.cstreet_error) ? true : false}
+                helperText={this.state.cstreet_error || "Street, Locality"}
+                type="text"
+                id="cstreet"
+                placeholder="ex: Curve Road, Shivaji Nagar"
+                label="Address line 2 *"
+                value={this.state.cstreet}
+                name="cstreet"
                 onChange={this.handleChange()} />
             </div>
             <div className="InputField">

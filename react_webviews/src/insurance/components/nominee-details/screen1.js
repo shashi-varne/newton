@@ -38,8 +38,10 @@ class NomineeDetails extends Component {
       checked: true,
       pincode: '',
       pincode_error: '',
-      addressline: '',
-      addressline_error: '',
+      house_no: '',
+      house_no_error: '',
+      street: '',
+      street_error: '',
       landmark: '',
       landmark_error: '',
       city: '',
@@ -67,7 +69,8 @@ class NomineeDetails extends Component {
         relationship: nominee.relationship || '',
         checked: (Object.keys(nominee_address).length === 0) ? true : false,
         pincode: nominee_address.pincode || '',
-        addressline: nominee_address.addressline || '',
+        house_no: nominee_address.house_no || '',
+        street: nominee_address.street || '',
         landmark: nominee_address.landmark || '',
         city: nominee_address.city || '',
         state: nominee_address.state || '',
@@ -201,17 +204,37 @@ class NomineeDetails extends Component {
       this.setState({
         pincode_error: 'Please enter valid pincode'
       });
-    } else if (!this.state.checked && !validateEmpty(this.state.addressline)) {
+    } else if (!this.state.checked && !validateEmpty(this.state.house_no)) {
       this.setState({
-        addressline_error: 'Address should begin with house number'
+        house_no_error: 'Address should begin with house number'
       });
-    } else if (!this.state.checked && this.state.addressline.split(" ").length < 3) {
+    } else if (!this.state.checked && this.state.house_no.split(" ").length < 3) {
       this.setState({
-        addressline_error: 'Address line should have at least 3 words'
+        house_no_error: 'Address line should have at least 3 words'
       });
-    } else if (!this.state.checked && !validateConsecutiveChar(this.state.addressline)) {
+    } else if (!this.state.checked && !validateConsecutiveChar(this.state.house_no)) {
       this.setState({
-        addressline_error: 'Name can not contain more than 3 same consecutive characters'
+        house_no_error: 'Name can not contain more than 3 same consecutive characters'
+      });
+    } else if (!this.state.checked && !validateLength(this.state.house_no)) {
+      this.setState({
+        house_no_error: 'Maximum length of address is 30'
+      });
+    } else if (!this.state.checked && !validateEmpty(this.state.street)) {
+      this.setState({
+        street_error: 'Address should begin with house number'
+      });
+    } else if (!this.state.checked && this.state.street.split(" ").length < 3) {
+      this.setState({
+        street_error: 'Address line should have at least 3 words'
+      });
+    } else if (!this.state.checked && !validateConsecutiveChar(this.state.street)) {
+      this.setState({
+        street_error: 'Name can not contain more than 3 same consecutive characters'
+      });
+    } else if (!this.state.checked && !validateLength(this.state.street)) {
+      this.setState({
+        street_error: 'Maximum length of address is 30'
       });
     } else if (!this.state.checked && !validateEmpty(this.state.landmark)) {
       this.setState({
@@ -245,7 +268,8 @@ class NomineeDetails extends Component {
       } else {
         data['nominee_address'] = {
           'pincode': this.state.pincode,
-          'addressline': this.state.addressline,
+          'house_no': this.state.house_no,
+          'street': this.state.street,
           'landmark': this.state.landmark
         };
       }
@@ -446,21 +470,33 @@ class NomineeDetails extends Component {
               width="40"
               label="Pincode *"
               id="pincode"
-              name="pincode"
+              name="pincode"addressline
               value={this.state.pincode}
               onChange={this.handlePincode('pincode')} />
           </div>
           <div className="InputField">
             <InputWithIcon
-              error={(this.state.addressline_error) ? true : false}
-              helperText={this.state.addressline_error || "Valid address - House No, Society, Locality"}
+              error={(this.state.house_no_error) ? true : false}
+              helperText={this.state.house_no_error || "House No, Society"}
               type="text"
-              id="address"
-              label="Permanent address *"
-              placeholder="ex: 16 Queens paradise"
-              value={this.state.addressline}
-              name="addressline"
-              onChange={this.handleChange('addressline')} />
+              id="house_no"
+              label="Address line 1 *"
+              placeholder="ex: 16/1 Queens paradise"
+              value={this.state.house_no}
+              name="house_no"
+              onChange={this.handleChange('house_no')} />
+          </div>
+          <div className="InputField">
+            <InputWithIcon
+              error={(this.state.street_error) ? true : false}
+              helperText={this.state.street_error || "Street, Locality"}
+              type="text"
+              id="street"
+              label="Address line 2 *"
+              placeholder="ex: Curve Road, Shivaji Nagar"
+              value={this.state.street}
+              name="street"
+              onChange={this.handleChange('street')} />
           </div>
           <div className="InputField">
             <InputWithIcon
