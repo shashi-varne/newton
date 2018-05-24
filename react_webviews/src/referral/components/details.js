@@ -22,7 +22,7 @@ class Details extends Component {
       refer_message_2: '',
       referral_code: '',
       mobile: '',
-      total_earnings: 0,
+      total_earnings: 0.00,
       params: qs.parse(props.history.location.search.slice(1))
     }
   }
@@ -110,6 +110,8 @@ class Details extends Component {
               </div>
               <div className="ShareButton">
                 <Button
+                  disableRipple={true}
+                  disableFocusRipple={true}
                   fullWidth={true}
                   variant="raised"
                   size="large"
@@ -121,19 +123,25 @@ class Details extends Component {
             </div>
           </Card>
 
-          <Card>
-            <Grid container spacing={24} alignItems="center" className="ReferPaytmGrid" onClick={() => this.navigate('/referral/earnings')}>
+          <Card nopadding={(!this.state.campaign_expiry_date) ?   true : false}>
+            <Grid container spacing={24} alignItems="center" className={`ReferPaytmGrid (!this.state.campaign_expiry_date) ? ReferTermsGrid : ''`} onClick={() => this.navigate('/referral/earnings')}>
               <Grid item xs>
                 <img src={wallet} alt="" />
               </Grid>
               <Grid item xs={6}>
                 <p><span className="blue">Pay</span><span className="blue_light">tm</span> earnings</p>
-                <h1><span>₹</span> {this.state.total_earnings}</h1>
+                <h1><span>₹</span>{this.state.total_earnings}</h1>
               </Grid>
               <Grid item xs>
                 <h2 className="view">View</h2>
               </Grid>
             </Grid>
+            {
+              !this.state.campaign_expiry_date &&
+              <div className="terms" onClick={() => this.navigateWithparam('/referral/terms')}>
+                *View T&C
+              </div>
+            }
           </Card>
 
           {
