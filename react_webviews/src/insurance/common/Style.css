@@ -4,12 +4,12 @@
 
 .Container {
   padding: 20px 15px;
-  padding-bottom: 50px;
   background-color: #fff;
+  overflow-y: scroll;
 }
 
 .Header {
-  /* position: fixed; */
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -57,7 +57,7 @@
 }
 
 .Footer {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
