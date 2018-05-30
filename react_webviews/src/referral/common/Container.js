@@ -4,10 +4,19 @@ import { withRouter } from 'react-router';
 import Header from './Header';
 import loader from 'assets/loader_gif.gif';
 import { nativeCallback } from 'utils/native_callback';
+import Dialog, {
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+  DialogContentText
+} from 'material-ui/Dialog';
 
 class Container extends Component {
   constructor(props) {
-    super();
+    super(props);
+    this.state = {
+      openDialog: false
+    }
   }
 
   historyGoBack = () => {
@@ -17,8 +26,43 @@ class Container extends Component {
         nativeCallback({ action: 'native_back' });
         break;
       default:
+      if (navigator.onLine) {
         this.props.history.goBack();
+      } else {
+        this.setState({
+          openDialog: true
+        });
+      }
     }
+  }
+
+  renderDialog = () => {
+    return (
+      <Dialog
+          fullScreen={false}
+          open={this.state.openDialog}
+          onClose={this.handleClose}
+          aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">No Internet Found</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Check your connection and try again.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button className="DialogButtonFullWidth" onClick={this.handleClose} color="secondary" autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  }
+
+  handleClose = () => {
+    this.setState({
+      openDialog: false
+    });
   }
 
   renderPageLoader = () => {
@@ -53,6 +97,9 @@ class Container extends Component {
         <div className={`ReferralContainer ${this.props.background}`}>
           { this.props.children }
         </div>
+
+        {/* No Internet */}
+        {this.renderDialog()}
       </div>
     );
   }
