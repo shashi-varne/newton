@@ -21,7 +21,7 @@ class Earnings extends Component {
       refer_message_2: '',
       referral_code: '',
       type_of_referee_identifier: '',
-      total_earnings: 0
+      total_earnings: 0.00
     }
   }
 
@@ -148,13 +148,15 @@ class Earnings extends Component {
     return (
       <div className="FandF">
         <h1>Refer your family and friends</h1>
-        <p>& get <span className="BoldText">500</span> in Paytm after their first investment</p>
+        <p>& get <span className="BoldText">₹{this.state.amount_per_referral}</span> in Paytm after their first investment</p>
         <div className="Share">
           <p>Share your code</p>
           <h2>{this.state.referral_code}</h2>
         </div>
         <div className="ShareButton">
           <Button
+            disableRipple={true}
+            disableFocusRipple={true}
             fullWidth={true}
             variant="raised"
             size="large"
@@ -184,6 +186,8 @@ class Earnings extends Component {
               </div>
               <div className="ShareButton">
                 <Button
+                  disableRipple={true}
+                  disableFocusRipple={true}
                   fullWidth={true}
                   variant="raised"
                   size="large"
@@ -202,7 +206,7 @@ class Earnings extends Component {
       return (
         <div className="List pad15">
           <h1>Remind and Earn</h1>
-          <p>Remind your firends and family to invest with Fisdom and you get 500 when they invest.</p>
+          <p>Remind your friends and family to invest with Fisdom and you get ₹{this.state.amount_per_referral} when they invest.</p>
           <div className="Referres">
             {this.renderList()}
           </div>
@@ -238,7 +242,7 @@ class Earnings extends Component {
               </Grid>
               <Grid item xs={9}>
                 <p><span className="blue">Pay</span><span className="blue_light">tm</span> earnings</p>
-                <h1><span>₹</span> {this.state.total_earnings}</h1>
+                <h1><span>₹</span>{this.state.total_earnings}</h1>
               </Grid>
             </Grid>
           </div>

@@ -39,6 +39,15 @@ const theme = createMuiTheme({
       contrastText: '#ffffff',
     },
     // error: will us the default color
+  },
+  overrides: {
+    MuiButton: {
+      raisedSecondary: {
+        '&:hover': {
+          backgroundColor: '#1bda4e'
+        }
+      }
+    }
   }
 });
 

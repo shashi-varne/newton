@@ -43,19 +43,24 @@ class Container extends Component {
     let body = document.getElementsByTagName('body')[0].offsetHeight;
     let client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
     let ios = /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
+    let head = document.getElementsByClassName('Header')[0].offsetHeight;
+    let foot = document.getElementsByClassName('Footer')[0].offsetHeight;
+    let banner = document.getElementsByClassName('Banner')[0];
+    let bannerHeight = (banner) ? banner.offsetHeight : 0;
 
     if (client > body) {
-      document.getElementsByClassName('Footer')[0].style.position = "relative" ;
-      if (ios) {
-        var $body = jQuery('body');
-
-        jQuery(document)
-        .on('focus', 'input', function(e) {
-          $body.addClass('fixheader');
-        });
-      }
+      document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 40+'px';
+      document.getElementsByClassName('Footer')[0].style.position = "fixed";
+      // if (ios) {
+      //   var $body = jQuery('body');
+      //
+      //   jQuery(document)
+      //   .on('focus', 'input', function(e) {
+      //     $body.addClass('fixheader');
+      //   });
+      // }
     } else {
-      document.getElementsByClassName('Footer')[0].style.position = "absolute" ;
+      document.getElementsByClassName('Footer')[0].style.position = "fixed";
     }
 
   }

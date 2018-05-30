@@ -10,6 +10,12 @@ import Button from 'material-ui/Button';
 import Grid from '@material-ui/core/Grid';
 import qs from 'qs';
 import { nativeCallback } from 'utils/native_callback';
+import Dialog, {
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+  DialogContentText
+} from 'material-ui/Dialog';
 
 class Details extends Component {
   constructor(props) {
@@ -22,7 +28,8 @@ class Details extends Component {
       refer_message_2: '',
       referral_code: '',
       mobile: '',
-      total_earnings: 0,
+      total_earnings: 0.00,
+      openDialog: false,
       params: qs.parse(props.history.location.search.slice(1))
     }
   }
@@ -47,20 +54,55 @@ class Details extends Component {
     });
   }
 
-  navigate = (pathname) => {
-    let eventObj = {
-      "event_name": "earnings_view",
-      "properties": {
-        "earnings_value": this.state.total_earnings
-      }
-    };
+  renderDialog = () => {
+    return (
+      <Dialog
+          fullScreen={false}
+          open={this.state.openDialog}
+          onClose={this.handleClose}
+          aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">No Internet Found</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Check your connection and try again.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button className="DialogButtonFullWidth" onClick={this.handleClose} color="secondary" autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  }
 
-    nativeCallback({ events: eventObj });
-
-    this.props.history.push({
-      pathname: pathname,
-      search: '?base_url='+this.state.params.base_url
+  handleClose = () => {
+    this.setState({
+      openDialog: false
     });
+  }
+
+  navigate = (pathname) => {
+    if (navigator.onLine) {
+      let eventObj = {
+        "event_name": "earnings_view",
+        "properties": {
+          "earnings_value": this.state.total_earnings
+        }
+      };
+
+      nativeCallback({ events: eventObj });
+
+      this.props.history.push({
+        pathname: pathname,
+        search: '?base_url='+this.state.params.base_url
+      });
+    } else {
+      this.setState({
+        openDialog: true
+      });
+    }
   }
 
   navigateWithparam = (pathname, param) => {
@@ -110,6 +152,8 @@ class Details extends Component {
               </div>
               <div className="ShareButton">
                 <Button
+                  disableRipple={true}
+                  disableFocusRipple={true}
                   fullWidth={true}
                   variant="raised"
                   size="large"
@@ -121,19 +165,25 @@ class Details extends Component {
             </div>
           </Card>
 
-          <Card>
-            <Grid container spacing={24} alignItems="center" className="ReferPaytmGrid" onClick={() => this.navigate('/referral/earnings')}>
+          <Card nopadding={(!this.state.campaign_expiry_date) ?   true : false}>
+            <Grid container spacing={24} alignItems="center" className={`ReferPaytmGrid (!this.state.campaign_expiry_date) ? ReferTermsGrid : ''`} onClick={() => this.navigate('/referral/earnings')}>
               <Grid item xs>
                 <img src={wallet} alt="" />
               </Grid>
               <Grid item xs={6}>
                 <p><span className="blue">Pay</span><span className="blue_light">tm</span> earnings</p>
-                <h1><span>₹</span> {this.state.total_earnings}</h1>
+                <h1><span>₹</span>{this.state.total_earnings}</h1>
               </Grid>
               <Grid item xs>
                 <h2 className="view">View</h2>
               </Grid>
             </Grid>
+            {
+              !this.state.campaign_expiry_date &&
+              <div className="terms" onClick={() => this.navigateWithparam('/referral/terms')}>
+                *View T&C
+              </div>
+            }
           </Card>
 
           {
@@ -154,6 +204,7 @@ class Details extends Component {
             </Card>
           }
         </div>
+        {this.renderDialog()}
       </Container>
     );
   }
