@@ -21,6 +21,6 @@ yarn-debug.log*
 yarn-error.log*
 
 # dependencies
-/react_webviews/node_modules
-/react_webviews/build
-/insurance
+react_webviews/node_modules
+react_webviews/build
+insurance
