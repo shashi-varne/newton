@@ -4,6 +4,7 @@ import { withRouter } from 'react-router';
 import Header from './Header';
 import loader from 'assets/loader_gif.gif';
 import { nativeCallback } from 'utils/native_callback';
+import Button from 'material-ui/Button';
 import Dialog, {
   DialogActions,
   DialogTitle,
