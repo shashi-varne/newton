@@ -10,6 +10,13 @@ import location from 'assets/location_dark_icn.png';
 import Api from 'utils/api';
 import { validateNumber, validateStreetName, validateLength, validateConsecutiveChar, validateEmpty } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
+import Dialog, {
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+  DialogContentText
+} from 'material-ui/Dialog';
+import Button from 'material-ui/Button';
 
 class ContactDetails2 extends Component {
   constructor(props) {
@@ -40,6 +47,8 @@ class ContactDetails2 extends Component {
       image: '',
       error: '',
       provider: '',
+      apiError: '',
+      openDialog: false,
       params: qs.parse(props.history.location.search.slice(1))
     }
   }
@@ -289,7 +298,7 @@ class ContactDetails2 extends Component {
         this.setState({show_loader: false});
         for (let error of res.pfwresponse.result.errors) {
           if (error.field === 'p_addr' || error.field === 'c_addr') {
-            alert(error.message);
+            this.setState({ openDialog: true, apiError: error.message });
           }
           this.setState({
             [error.field+'_error']: error.message
@@ -304,6 +313,35 @@ class ContactDetails2 extends Component {
       <span>
         We will courier your policy paper at <em><b>your residence</b></em> too.
       </span>
+    );
+  }
+
+  handleClose = () => {
+    this.setState({
+      openDialog: false
+    });
+  }
+
+  renderDialog = () => {
+    return (
+      <Dialog
+        open={this.state.openDialog}
+        onClose={this.handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Oops!"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {this.state.apiError}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClose} color="primary" autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
     );
   }
 
@@ -485,6 +523,7 @@ class ContactDetails2 extends Component {
             </div>
           </FormControl>
         }
+        {this.renderDialog()}
       </Container>
     );
   }

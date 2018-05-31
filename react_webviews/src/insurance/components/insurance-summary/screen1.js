@@ -15,6 +15,13 @@ import qs from 'qs';
 import { income_pairs } from '../..//constants';
 import { numDifferentiation } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
+import Button from 'material-ui/Button';
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  DialogContentText
+} from 'material-ui/Dialog';
 
 class Summary extends Component {
   constructor(props) {
@@ -43,6 +50,8 @@ class Summary extends Component {
       appointee: {},
       professional: {},
       provider: '',
+      apiError: '',
+      openDialog: false,
       params: qs.parse(props.history.location.search.slice(1))
     };
   }
@@ -136,8 +145,7 @@ class Summary extends Component {
           }
         });
       } else {
-        this.setState({show_loader: false});
-        alert(res.pfwresponse.result.error);
+        this.setState({ show_loader: false });
       }
     }).catch(error => {
       this.setState({show_loader: false});
@@ -262,8 +270,7 @@ class Summary extends Component {
 
           nativeCallback({ events: eventObj, action: 'payment', message: { payment_link: res.pfwresponse.result.insurance_app.payment_link, provider: provider } });
       } else {
-        alert(res.pfwresponse.result.error);
-        this.setState({openModal: false});
+        this.setState({ openModal: false, openDialog: true, apiError: res.pfwresponse.result.error });
       }
     } else {
         nativeCallback({ action: 'resume_payment', message: { resume_link: this.state.resume_link, provider: provider } });
@@ -637,6 +644,35 @@ class Summary extends Component {
     });
   }
 
+  handleClose = () => {
+    this.setState({
+      openDialog: false
+    });
+  }
+
+  renderResponseDialog = () => {
+    return (
+      <Dialog
+        open={this.state.openDialog}
+        onClose={this.handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Oops!"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {this.state.apiError}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClose} color="primary" autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  }
+
   render() {
     return (
       <Container
@@ -803,6 +839,7 @@ class Summary extends Component {
           </div>
         </div>
         {this.renderModal()}
+        {this.renderResponseDialog()}
       </Container>
     );
   }

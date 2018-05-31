@@ -65,6 +65,18 @@ const theme = createMuiTheme({
         color: '#444',
         fontWeight: 'normal'
       }
+    },
+    MuiButton: {
+      raisedSecondary: {
+        '&:hover': {
+          backgroundColor: '#1bda4e'
+        }
+      }
+    },
+    MuiIconButton: {
+      root: {
+        height: '56px'
+      }
     }
   }
 });

@@ -14,10 +14,17 @@ import relationship from 'assets/relationship_dark_icn.png';
 import marital from 'assets/marital_status_dark_icn.png';
 import location from 'assets/location_dark_icn.png';
 import Dropdown from '../../ui/Select';
+import Button from 'material-ui/Button';
 import Api from 'utils/api';
 import { maritalOptions, genderOptions, appointeeRelationshipOptions } from '../../constants';
 import { validateAlphabets, validateNumber, validateStreetName, validateLength, validateConsecutiveChar, validateEmpty } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
+import Dialog, {
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+  DialogContentText
+} from 'material-ui/Dialog';
 
 class AppointeeDetails extends Component {
   constructor(props) {
@@ -47,6 +54,8 @@ class AppointeeDetails extends Component {
       state: '',
       image: '',
       provider: '',
+      apiError: '',
+      openDialog: false,
       params: qs.parse(props.history.location.search.slice(1))
     }
   }
@@ -317,7 +326,7 @@ class AppointeeDetails extends Component {
         this.setState({show_loader: false});
         for (let error of res.pfwresponse.result.errors) {
           if (error.field === 'appointee_address' || error.field === 'appointee' || error.field === 'a_addr_same') {
-            alert(error.message);
+            this.setState({ openDialog: true, apiError: error.message });
           }
           this.setState({
             [error.field+'_error']: error.message
@@ -339,6 +348,35 @@ class AppointeeDetails extends Component {
     let currentDate = new Date().toISOString().slice(0,10);
     document.getElementById("dob").valueAsDate = null;
     document.getElementById("dob").max = currentDate;
+  }
+
+  handleClose = () => {
+    this.setState({
+      openDialog: false
+    });
+  }
+
+  renderDialog = () => {
+    return (
+      <Dialog
+        open={this.state.openDialog}
+        onClose={this.handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Oops!"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {this.state.apiError}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClose} color="primary" autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
   }
 
   render() {
@@ -520,7 +558,7 @@ class AppointeeDetails extends Component {
             </div>
           </FormControl>
         }
-
+        {this.renderDialog()}
       </Container>
     );
   }

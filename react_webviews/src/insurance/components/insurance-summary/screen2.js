@@ -15,6 +15,7 @@ import { numDifferentiation } from 'utils/validators';
 import Dialog, {
   DialogActions,
   DialogContent,
+  DialogTitle,
   DialogContentText
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
@@ -73,6 +74,8 @@ class Resume extends Component {
       required_fields: [],
       provider: '',
       plutus_status: '',
+      apiError: '',
+      openResponseDialog: false,
       params: qs.parse(props.history.location.search.slice(1))
     };
   }
@@ -194,8 +197,7 @@ class Resume extends Component {
           }
         });
       } else {
-        this.setState({show_loader: false});
-        alert(res.pfwresponse.result.error);
+        this.setState({ show_loader: false });
       }
     }).catch(error => {
       this.setState({show_loader: false});
@@ -296,6 +298,12 @@ class Resume extends Component {
     this.setState({ openDialog: false });
   }
 
+  handleResponseClose = () => {
+    this.setState({
+      openResponseDialog: false
+    });
+  }
+
   handleClick = async () => {
     if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.personal.not_submitted) {
       this.navigate("/insurance");
@@ -358,8 +366,7 @@ class Resume extends Component {
 
           nativeCallback({ events: eventObj, action: 'payment', message: { payment_link: res.pfwresponse.result.insurance_app.payment_link, provider: provider } });
         } else {
-          alert(res.pfwresponse.result.error);
-          this.setState({openModal: false, openModalMessage: ''});
+          this.setState({ openModal: false, openModalMessage: '', openResponseDialog: true, apiError: res.pfwresponse.result.error });
         }
       } else {
           nativeCallback({ action: 'resume_payment', message: { resume_link: this.state.resume_link, provider: provider } });
@@ -430,15 +437,14 @@ class Resume extends Component {
   }
 
   handleReset = async () => {
-    this.setState({openDialog: false, openModal: true, openModalMessage: 'Wait a moment while we reset your application'});
+    this.setState({openResponseDialog: false, apiError: '', openDialog: false, openModal: true, openModalMessage: 'Wait a moment while we reset your application'});
     const res = await Api.post('/api/insurance/profile/reset', {
       insurance_app_id: this.state.params.insurance_id
     });
     if (res.pfwresponse.status_code === 200) {
       nativeCallback({ action: 'native_reset' });
     } else {
-      this.setState({openModal: false, openModalMessage: ''});
-      alert(res.pfwresponse.result.error);
+      this.setState({ openModal: false, openModalMessage: '', openResponseDialog: true, apiError: res.pfwresponse.result.error });
     }
   }
 
@@ -635,6 +641,29 @@ class Resume extends Component {
     );
   }
 
+  renderResponseDialog = () => {
+    return (
+      <Dialog
+        open={this.state.openResponseDialog}
+        onClose={this.handleResponseClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Oops!"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {this.state.apiError}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleResponseClose} color="primary" autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  }
+
   render() {
     return (
       <Container
@@ -794,6 +823,7 @@ class Resume extends Component {
         </div>
         {this.renderModal()}
         {this.renderDialog()}
+        {this.renderResponseDialog()}
       </Container>
     );
   }

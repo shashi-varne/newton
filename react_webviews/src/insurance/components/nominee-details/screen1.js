@@ -15,9 +15,16 @@ import marital from 'assets/marital_status_dark_icn.png';
 import location from 'assets/location_dark_icn.png';
 import Dropdown from '../../ui/Select';
 import Api from 'utils/api';
+import Button from 'material-ui/Button';
 import { maritalOptions, genderOptions, relationshipOptions } from '../../constants';
 import { validateAlphabets, validateNumber, validateStreetName, validateLength, validateConsecutiveChar, validateEmpty } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
+import Dialog, {
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+  DialogContentText
+} from 'material-ui/Dialog';
 
 class NomineeDetails extends Component {
   constructor(props) {
@@ -48,9 +55,15 @@ class NomineeDetails extends Component {
       state: '',
       image: '',
       provider: '',
+      apiError: '',
+      openDialog: false,
       params: qs.parse(props.history.location.search.slice(1))
     }
   }
+
+  handleClose = () => {
+    this.setState({ openDialog: false });
+  };
 
   componentDidMount() {
     Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
@@ -318,7 +331,7 @@ class NomineeDetails extends Component {
         this.setState({show_loader: false});
         for (let error of res.pfwresponse.result.errors) {
           if (error.field === 'nominee_address' || error.field === 'nominee' || error.field === 'n_addr_same') {
-            alert(error.message);
+            this.setState({ openDialog: true, apiError: error.message });
           }
           this.setState({
             [error.field+'_error']: error.message
@@ -344,6 +357,29 @@ class NomineeDetails extends Component {
       <span>
         <em><b>Nominee</b></em> is the one - who will <em><b>get the benefits</b></em> as per the insurance. Please share his/her details correctly.
       </span>
+    );
+  }
+
+  renderDialog = () => {
+    return (
+      <Dialog
+        open={this.state.openDialog}
+        onClose={this.handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Oops!"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {this.state.apiError}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClose} color="primary" autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
     );
   }
 
@@ -529,6 +565,7 @@ class NomineeDetails extends Component {
           </div>
         </FormControl>
       }
+      {this.renderDialog()}
       </Container>
     );
   }
