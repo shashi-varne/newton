@@ -182,21 +182,37 @@ class ContactDetails2 extends Component {
       this.setState({
         cpincode_error: 'Please enter valid pincode'
       });
-    } else if (!this.state.checked && !validateEmpty(this.state.caddress)) {
+    } else if (!this.state.checked && !validateEmpty(this.state.chouse_no)) {
       this.setState({
-        addressline_error: 'Address should begin with house number'
+        chouse_no_error: 'Address should begin with house number'
       });
-    } else if (!this.state.checked && !validateLength(this.state.caddress)) {
+    } else if (!this.state.checked && !validateLength(this.state.chouse_no)) {
       this.setState({
-        addressline_error: 'Maximum length of name is 30 characters'
+        chouse_no_error: 'Maximum length of name is 30 characters'
       });
-    } else if (!this.state.checked && this.state.caddress.split(" ").length < 3) {
+    } else if (!this.state.checked && this.state.chouse_no.split(" ").length < 3) {
       this.setState({
-        addressline_error: 'Address line should have at least 3 words'
+        chouse_no_error: 'Address line should have at least 3 words'
       });
-    } else if (!this.state.checked && !validateConsecutiveChar(this.state.caddress)) {
+    } else if (!this.state.checked && !validateConsecutiveChar(this.state.chouse_no)) {
       this.setState({
-        addressline_error: 'Name can not contain more than 3 same consecutive characters'
+        chouse_no_error: 'Name can not contain more than 3 same consecutive characters'
+      });
+    } else if (!this.state.checked && !validateEmpty(this.state.cstreet)) {
+      this.setState({
+        cstreet_error: 'Address should begin with house number'
+      });
+    } else if (!this.state.checked && !validateLength(this.state.cstreet)) {
+      this.setState({
+        cstreet_error: 'Maximum length of name is 30 characters'
+      });
+    } else if (!this.state.checked && this.state.cstreet.split(" ").length < 3) {
+      this.setState({
+        cstreet_error: 'Address line should have at least 3 words'
+      });
+    } else if (!this.state.checked && !validateConsecutiveChar(this.state.cstreet)) {
+      this.setState({
+        cstreet_error: 'Name can not contain more than 3 same consecutive characters'
       });
     } else if (!this.state.checked && !validateEmpty(this.state.clandmark)) {
       this.setState({
