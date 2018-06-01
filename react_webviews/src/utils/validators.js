@@ -95,3 +95,8 @@ export function validateName(string) {
 export function capitalize(string) {
   return string.toLowerCase().replace(/(^|\s)[a-z]/g,function(f){return f.toUpperCase()});
 }
+
+export function validate2ConsecutiveDigits(string) {
+  let rule = /(?=(\d{2}))/g;
+  return rule.test(string);
+}

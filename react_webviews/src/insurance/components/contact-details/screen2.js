@@ -8,7 +8,7 @@ import Container from '../../common/Container';
 import InputWithIcon from '../../ui/InputWithIcon';
 import location from 'assets/location_dark_icn.png';
 import Api from 'utils/api';
-import { validateNumber, validateStreetName, validateLength, validateConsecutiveChar, validateEmpty } from 'utils/validators';
+import { validateNumber, validateStreetName, validateLength, validate2ConsecutiveDigits, validateConsecutiveChar, validateEmpty } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import Dialog, {
   DialogActions,
@@ -145,31 +145,27 @@ class ContactDetails2 extends Component {
       });
     } else if (!validateEmpty(this.state.house_no)) {
       this.setState({
-        house_no_error: 'Address should begin with house number'
-      });
-    } else if (this.state.house_no.split(" ").filter(e => e).length < 3) {
-      this.setState({
-        house_no_error: 'Address line should have at least 3 words'
+        house_no_error: 'Enter your house number and society'
       });
     } else if (!validateConsecutiveChar(this.state.house_no)) {
       this.setState({
-        house_no_error: 'Name can not contain more than 3 same consecutive characters'
+        house_no_error: 'Address can not contain more than 3 same consecutive characters'
       });
     } else if (!validateLength(this.state.house_no)) {
       this.setState({
         house_no_error: 'Maximum length of address is 30'
       });
-    }  else if (!validateEmpty(this.state.street)) {
+    } else if (!validate2ConsecutiveDigits(this.state.house_no)) {
       this.setState({
-        street_error: 'Address should begin with house number'
+        house_no_error: 'House number should contain two digits'
       });
-    } else if (this.state.street.split(" ").filter(e => e).length < 3) {
+    } else if (!validateEmpty(this.state.street)) {
       this.setState({
-        street_error: 'Address line should have at least 3 words'
+        street_error: 'Enter your street and locality'
       });
     } else if (!validateConsecutiveChar(this.state.street)) {
       this.setState({
-        street_error: 'Name can not contain more than 3 same consecutive characters'
+        street_error: 'Address can not contain more than 3 same consecutive characters'
       });
     } else if (!validateLength(this.state.street)) {
       this.setState({
@@ -177,7 +173,7 @@ class ContactDetails2 extends Component {
       });
     } else if (!validateEmpty(this.state.landmark)) {
       this.setState({
-        landmark_error: 'Please enter valid landmark'
+        landmark_error: 'Enter nearest landmark'
       });
     } else if (!validateLength(this.state.landmark)) {
       this.setState({
@@ -193,39 +189,35 @@ class ContactDetails2 extends Component {
       });
     } else if (!this.state.checked && !validateEmpty(this.state.chouse_no)) {
       this.setState({
-        chouse_no_error: 'Address should begin with house number'
+        chouse_no_error: 'Enter your house number and society'
       });
     } else if (!this.state.checked && !validateLength(this.state.chouse_no)) {
       this.setState({
         chouse_no_error: 'Maximum length of name is 30 characters'
       });
-    } else if (!this.state.checked && this.state.chouse_no.split(" ").length < 3) {
-      this.setState({
-        chouse_no_error: 'Address line should have at least 3 words'
-      });
     } else if (!this.state.checked && !validateConsecutiveChar(this.state.chouse_no)) {
       this.setState({
-        chouse_no_error: 'Name can not contain more than 3 same consecutive characters'
+        chouse_no_error: 'Address can not contain more than 3 same consecutive characters'
+      });
+    } else if (!this.state.checked && !validate2ConsecutiveDigits(this.state.chouse_no)) {
+      this.setState({
+        chouse_no_error: 'House number should contain two digits'
       });
     } else if (!this.state.checked && !validateEmpty(this.state.cstreet)) {
       this.setState({
-        cstreet_error: 'Address should begin with house number'
+        cstreet_error: 'Enter your street and locality'
       });
     } else if (!this.state.checked && !validateLength(this.state.cstreet)) {
       this.setState({
         cstreet_error: 'Maximum length of name is 30 characters'
       });
-    } else if (!this.state.checked && this.state.cstreet.split(" ").length < 3) {
-      this.setState({
-        cstreet_error: 'Address line should have at least 3 words'
-      });
     } else if (!this.state.checked && !validateConsecutiveChar(this.state.cstreet)) {
       this.setState({
-        cstreet_error: 'Name can not contain more than 3 same consecutive characters'
+        cstreet_error: 'Address can not contain more than 3 same consecutive characters'
       });
     } else if (!this.state.checked && !validateEmpty(this.state.clandmark)) {
       this.setState({
-        clandmark_error: 'Please enter valid landmark'
+        clandmark_error: 'Enter nearest landmark'
       });
     } else if (!this.state.checked && !validateLength(this.state.clandmark)) {
       this.setState({
@@ -382,7 +374,7 @@ class ContactDetails2 extends Component {
                   helperText={this.state.house_no_error || "House No, Society"}
                   type="text"
                   id="house_no"
-                  label="Address line 1 *"
+                  label="Address line 1 (with house number)*"
                   name="house_no"
                   placeholder="ex: 16/1 Queens paradise"
                   value={this.state.house_no}

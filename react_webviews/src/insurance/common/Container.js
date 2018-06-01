@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
-import jQuery from 'jquery';
 
 import Header from './Header';
 import Footer from './footer';
@@ -87,7 +86,6 @@ class Container extends Component {
   componentDidUpdate(prevProps) {
     let body = document.getElementsByTagName('body')[0].offsetHeight;
     let client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
-    let ios = /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
     let head = document.getElementsByClassName('Header')[0].offsetHeight;
     let foot = document.getElementsByClassName('Footer')[0].offsetHeight;
     let banner = document.getElementsByClassName('Banner')[0];
@@ -95,19 +93,9 @@ class Container extends Component {
 
     if (client > body) {
       document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 40+'px';
-      document.getElementsByClassName('Footer')[0].style.position = "fixed";
-      // if (ios) {
-      //   var $body = jQuery('body');
-      //
-      //   jQuery(document)
-      //   .on('focus', 'input', function(e) {
-      //     $body.addClass('fixheader');
-      //   });
-      // }
     } else {
-      document.getElementsByClassName('Footer')[0].style.position = "fixed";
+      document.getElementsByClassName('Container')[0].style.height = document.getElementsByClassName('Container')[0].offsetHeight;
     }
-
   }
 
   render() {

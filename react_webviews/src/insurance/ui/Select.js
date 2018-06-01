@@ -49,7 +49,7 @@ class SelectGrp extends Component {
             name: this.props.id,
             id: this.props.id,
           }}
-          autoWidth >
+          autoWidth={true} >
           {allOptions}
         </Select>
       </FormControl>

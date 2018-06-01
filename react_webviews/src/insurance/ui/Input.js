@@ -22,7 +22,8 @@ const Input = (props) => {
         label={props.label}
         onFocus={props.onFocus}
         name={props.name}
-        onChange={props.onChange} />
+        onChange={props.onChange}
+         />
     );
   } else {
     return (
@@ -41,7 +42,8 @@ const Input = (props) => {
         label={props.label}
         onFocus={props.onFocus}
         name={props.name}
-        onChange={props.onChange} />
+        onChange={props.onChange}
+         />
     );
   }
 };
