@@ -12,7 +12,6 @@ import { validateNumber, validateStreetName, validateLength, validate2Consecutiv
 import { nativeCallback } from 'utils/native_callback';
 import Dialog, {
   DialogActions,
-  DialogTitle,
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
@@ -322,7 +321,6 @@ class ContactDetails2 extends Component {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Oops!"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             {this.state.apiError}
@@ -466,7 +464,7 @@ class ContactDetails2 extends Component {
                 helperText={this.state.chouse_no_error || "House No, Society"}
                 type="text"
                 id="chouse_no"
-                label="Address line 1 *"
+                label="Address line 1 (with house number)*"
                 placeholder="ex: 16/1 Queens paradise"
                 value={this.state.chouse_no}
                 name="chouse_no"

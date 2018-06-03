@@ -9,6 +9,12 @@ import location from '../../../assets/location_dark_icn.png';
 import Api from '../../../utils/api';
 import { validateAlphabets, validateNumber, validateStreetName, validateLength, validate2ConsecutiveDigits, validateConsecutiveChar, validateEmpty } from '../../../utils/validators';
 import { nativeCallback } from 'utils/native_callback';
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogContentText
+} from 'material-ui/Dialog';
+import Button from 'material-ui/Button';
 
 class ProfessionalDetails2 extends Component {
   constructor(props) {
@@ -29,6 +35,8 @@ class ProfessionalDetails2 extends Component {
       state: '',
       image: '',
       provider: '',
+      apiError: '',
+      openDialog: false,
       params: qs.parse(props.history.location.search.slice(1))
     }
   }
@@ -204,12 +212,43 @@ class ProfessionalDetails2 extends Component {
       } else {
         this.setState({show_loader: false});
         for (let error of res.pfwresponse.result.errors) {
+          if (error.field === 'employer_address') {
+            this.setState({ openDialog: true, apiError: error.message });
+          }
           this.setState({
             [error.field+'_error']: error.message
           });
         }
       }
     }
+  }
+
+  handleClose = () => {
+    this.setState({
+      openDialog: false
+    });
+  }
+
+  renderDialog = () => {
+    return (
+      <Dialog
+        open={this.state.openDialog}
+        onClose={this.handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {this.state.apiError}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClose} color="primary" autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
   }
 
   render() {
@@ -261,7 +300,7 @@ class ProfessionalDetails2 extends Component {
               id="house_no"
               name="house_no"
               placeholder="ex: 16/1 Queens paradise"
-              label="Address of present employer *"
+              label="Address line 1 (with house number)*"
               value={this.state.house_no}
               onChange={this.handleChange()} />
           </div>
@@ -273,7 +312,7 @@ class ProfessionalDetails2 extends Component {
               id="street"
               name="street"
               placeholder="ex: Curve Road, Shivaji Nagar"
-              label="Address of present employer *"
+              label="Address line 2 *"
               value={this.state.street}
               onChange={this.handleChange()} />
           </div>
@@ -307,6 +346,7 @@ class ProfessionalDetails2 extends Component {
               onChange={this.handleChange('state')} />
           </div>
         </FormControl>
+        {this.renderDialog()}
       </Container>
     );
   }

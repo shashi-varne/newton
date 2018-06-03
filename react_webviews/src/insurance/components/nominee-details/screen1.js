@@ -21,7 +21,6 @@ import { validateAlphabets, validateNumber, validateStreetName, validateLength, 
 import { nativeCallback } from 'utils/native_callback';
 import Dialog, {
   DialogActions,
-  DialogTitle,
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
@@ -364,7 +363,6 @@ class NomineeDetails extends Component {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Oops!"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             {this.state.apiError}
@@ -512,7 +510,7 @@ class NomineeDetails extends Component {
               helperText={this.state.house_no_error || "House No, Society"}
               type="text"
               id="house_no"
-              label="Address line 1 *"
+              label="Address line 1 (with house number)*"
               placeholder="ex: 16/1 Queens paradise"
               value={this.state.house_no}
               name="house_no"

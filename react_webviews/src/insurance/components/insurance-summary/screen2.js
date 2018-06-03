@@ -15,7 +15,6 @@ import { numDifferentiation } from 'utils/validators';
 import Dialog, {
   DialogActions,
   DialogContent,
-  DialogTitle,
   DialogContentText
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
@@ -649,7 +648,6 @@ class Resume extends Component {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Oops!"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             {this.state.apiError}
