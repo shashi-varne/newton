@@ -132,7 +132,7 @@ class ProfessionalDetails2 extends Component {
       });
     } else if (!validateEmpty(this.state.house_no)) {
       this.setState({
-        house_no_error: 'Enter your house number and society'
+        house_no_error: 'Enter your unit number and building name'
       });
     } else if (!validateConsecutiveChar(this.state.house_no)) {
       this.setState({
@@ -144,7 +144,7 @@ class ProfessionalDetails2 extends Component {
       });
     } else if (!validate2ConsecutiveDigits(this.state.house_no)) {
       this.setState({
-        house_no_error: 'House number should contain two digits'
+        house_no_error: 'Unit number should contain two digits'
       });
     } else if (!validateEmpty(this.state.street)) {
       this.setState({
@@ -295,12 +295,12 @@ class ProfessionalDetails2 extends Component {
           <div className="InputField">
             <InputWithIcon
               error={(this.state.house_no_error) ? true : false}
-              helperText={this.state.house_no_error || "House No, Society"}
+              helperText={this.state.house_no_error || "Unit No, Society"}
               type="text"
               id="house_no"
               name="house_no"
               placeholder="ex: 16/1 Queens paradise"
-              label="Address line 1 (with house number)*"
+              label="Address line 1 (with unit number)*"
               value={this.state.house_no}
               onChange={this.handleChange()} />
           </div>
