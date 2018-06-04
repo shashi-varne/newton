@@ -214,3 +214,8 @@
 .Terms .List .BoldText {
   font-weight: 700;
 }
+.loader {
+  text-align: center;
+  padding: 10px 0;
+  color: #878787;
+}

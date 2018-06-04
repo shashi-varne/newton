@@ -8,6 +8,8 @@ import Grid from '@material-ui/core/Grid';
 import { getAcronym } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import axios from 'axios';
+import Api from 'utils/api';
+import InfiniteScroll from 'react-infinite-scroller';
 
 class Earnings extends Component {
   constructor(props) {
@@ -21,7 +23,9 @@ class Earnings extends Component {
       refer_message_2: '',
       referral_code: '',
       type_of_referee_identifier: '',
-      total_earnings: 0.00
+      total_earnings: 0.00,
+      hasMoreItems: false,
+      nextPage: null
     }
   }
 
@@ -31,7 +35,7 @@ class Earnings extends Component {
       axios.get('/api/referral/v2/getactivecampaign/mine')
     ])
     .then(axios.spread((listRes, campaignRes) => {
-      const { data } = listRes.data.pfwresponse.result;
+      const { data, next_page } = listRes.data.pfwresponse.result;
       const { amount_per_referral, campaign_expiry_date, refer_message_1, refer_message_2, referral_code, type_of_referee_identifier, total_earnings } = campaignRes.data.pfwresponse.result;
 
       this.setState({
@@ -43,7 +47,9 @@ class Earnings extends Component {
         refer_message_2,
         referral_code,
         type_of_referee_identifier,
-        total_earnings
+        total_earnings,
+        hasMoreItems: (next_page) ? true : false,
+        nextPage: (next_page) ? next_page : null
       });
 
       let eventObj = {
@@ -61,6 +67,20 @@ class Earnings extends Component {
     }))
     .catch(error => {
       this.setState({show_loader: false});
+      console.log(error);
+    });
+  }
+
+  loadItems = (page) => {
+    Api.get(this.state.nextPage).then(res => {
+      const { data, next_page } = res.pfwresponse.result;
+
+      this.setState({
+        data: [...this.state.data, ...data],
+        hasMoreItems: (next_page) ? true : false,
+        nextPage: (next_page) ? next_page : null
+      });
+    }).catch(error => {
       console.log(error);
     });
   }
@@ -126,21 +146,39 @@ class Earnings extends Component {
 
   renderList = () => {
     const dataLength = this.state.data.filter(item => item.investment_status === 'pending' );
+    const loader = <div className="loader" key={0}>Loading...</div>
 
-    return this.state.data.map((item, i) =>
-      <div className="Item" key={i}>
-        <Grid container spacing={24} alignItems="center">
-          <Grid item xs={3}>
-            {this.renderIcon(item)}
+    let items = [];
+    // eslint-disable-next-line
+    this.state.data.map((item, i) => {
+      items.push(
+        <div className="Item" key={i}>
+          <Grid container spacing={24} alignItems="center">
+            <Grid item xs={3}>
+              {this.renderIcon(item)}
+            </Grid>
+            <Grid item xs={6}>
+              <span className="name">{this.capitalize((item.referee_name.length > 10) ? item.referee_name.replace('91|', '').substring(0,10)+'...' : item.referee_name)}</span>
+            </Grid>
+            <Grid item xs={3}>
+              {this.renderAction(dataLength, item, i)}
+            </Grid>
           </Grid>
-          <Grid item xs={6}>
-            <span className="name">{this.capitalize((item.referee_name.length > 15) ? item.referee_name.substring(0,15)+'...' : item.referee_name)}</span>
-          </Grid>
-          <Grid item xs={3}>
-            {this.renderAction(dataLength, item, i)}
-          </Grid>
-        </Grid>
-      </div>
+        </div>
+      );
+    });
+
+    return (
+      <InfiniteScroll
+        pageStart={0}
+        loadMore={(page) => this.loadItems(page)}
+        hasMore={this.state.hasMoreItems}
+        loader={loader}
+      >
+        <div className="list">
+          {items}
+        </div>
+      </InfiniteScroll>
     );
   }
 
