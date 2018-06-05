@@ -106,11 +106,11 @@ class ProfessionalDetails2 extends Component {
   }
 
   handleClick = async () => {
-    if (this.state.employer_name.split(" ").filter(e => e).length < 2) {
+    if (!validateEmpty(this.state.employer_name)) {
       this.setState({
-        employer_name_error: 'Enter valid full name'
+        employer_name_error: 'Enter full name e.g Fisdom Pvt Limited'
       });
-    } else if (!validateEmpty(this.state.employer_name)) {
+    } else if (this.state.employer_name.split(" ").filter(e => e).length < 2) {
       this.setState({
         employer_name_error: 'Enter valid full name'
       });
@@ -268,7 +268,7 @@ class ProfessionalDetails2 extends Component {
           <div className="InputField">
             <InputWithIcon
               error={(this.state.employer_name_error) ? true : false}
-              helperText={this.state.employer_name_error || "Please enter full name"}
+              helperText={this.state.employer_name_error || "Enter full name e.g Fisdom Pvt Limited"}
               type="text"
               icon={name}
               width="40"
