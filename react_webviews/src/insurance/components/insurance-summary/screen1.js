@@ -298,7 +298,8 @@ class Summary extends Component {
   getAddress = (addr) => {
     return (
       <div>
-        {addr.addressline +', '+
+        {addr.house_no +', '+
+          addr.street +', '+
           addr.landmark +', '+
           addr.pincode +', '+
           addr.city +', '+
@@ -333,13 +334,15 @@ class Summary extends Component {
       if (contact.email &&
         contact.mobile_no &&
         contact.permanent_addr.hasOwnProperty('pincode') &&
-        contact.permanent_addr.hasOwnProperty('addressline') &&
+        contact.permanent_addr.hasOwnProperty('house_no') &&
+        contact.permanent_addr.hasOwnProperty('street') &&
         contact.permanent_addr.hasOwnProperty('landmark')) {
         return 100;
       } else if (contact.email ||
         contact.mobile_no ||
         contact.permanent_addr.hasOwnProperty('pincode') ||
-        contact.permanent_addr.hasOwnProperty('addressline') ||
+        contact.permanent_addr.hasOwnProperty('house_no') ||
+        contact.permanent_addr.hasOwnProperty('street') ||
         contact.permanent_addr.hasOwnProperty('landmark')) {
         return 50;
       } else {
@@ -360,7 +363,8 @@ class Summary extends Component {
         (nominee.nominee_address_same ||
           (
             (!nominee.nominee_address_same && nominee.nominee_address.hasOwnProperty('pincode')) &&
-            (!nominee.nominee_address_same && nominee.nominee_address.hasOwnProperty('addressline')) &&
+            (!nominee.nominee_address_same && nominee.nominee_address.hasOwnProperty('house_no')) &&
+            (!nominee.nominee_address_same && nominee.nominee_address.hasOwnProperty('street')) &&
             (!nominee.nominee_address_same && nominee.nominee_address.hasOwnProperty('landmark'))
           )
         )) {
@@ -372,7 +376,8 @@ class Summary extends Component {
         (nominee.nominee_address_same ||
           (
             (!nominee.nominee_address_same && nominee.nominee_address.hasOwnProperty('pincode')) &&
-            (!nominee.nominee_address_same && nominee.nominee_address.hasOwnProperty('addressline')) &&
+            (!nominee.nominee_address_same && nominee.nominee_address.hasOwnProperty('house_no')) &&
+            (!nominee.nominee_address_same && nominee.nominee_address.hasOwnProperty('street')) &&
             (!nominee.nominee_address_same && nominee.nominee_address.hasOwnProperty('landmark'))
           )
         )) {
@@ -395,7 +400,8 @@ class Summary extends Component {
         (appointee.appointee_address_same ||
           (
             (!appointee.appointee_address_same && appointee.appointee_address.hasOwnProperty('pincode')) &&
-            (!appointee.appointee_address_same && appointee.appointee_address.hasOwnProperty('addressline')) &&
+            (!appointee.appointee_address_same && appointee.appointee_address.hasOwnProperty('house_no')) &&
+            (!appointee.appointee_address_same && appointee.appointee_address.hasOwnProperty('street')) &&
             (!appointee.appointee_address_same && appointee.appointee_address.hasOwnProperty('landmark'))
           )
         )) {
@@ -407,7 +413,8 @@ class Summary extends Component {
         (appointee.appointee_address_same ||
           (
             (!appointee.appointee_address_same && appointee.appointee_address.hasOwnProperty('pincode')) &&
-            (!appointee.appointee_address_same && appointee.appointee_address.hasOwnProperty('addressline')) &&
+            (!appointee.appointee_address_same && appointee.appointee_address.hasOwnProperty('house_no')) &&
+            (!appointee.appointee_address_same && appointee.appointee_address.hasOwnProperty('street')) &&
             (!appointee.appointee_address_same && appointee.appointee_address.hasOwnProperty('landmark'))
           )
         )) {
@@ -429,7 +436,8 @@ class Summary extends Component {
           (professional.occupation_detail === 'SELF-EMPLOYED' && professional.designation && professional.annual_income !== '') ||
           (
             (professional.occupation_detail === 'SALRIED' && professional.occupation_category && professional.designation && professional.annual_income !== '' && professional.employer_address.hasOwnProperty('pincode') &&
-            professional.employer_address.hasOwnProperty('addressline') &&
+            professional.employer_address.hasOwnProperty('house_no') &&
+            professional.employer_address.hasOwnProperty('street') &&
             professional.employer_address.hasOwnProperty('landmark'))
           ) ||
           (professional.occupation_detail === 'STUDENT')
@@ -442,7 +450,8 @@ class Summary extends Component {
           (
             (professional.occupation_detail === 'SALRIED' && (professional.occupation_category || professional.designation || professional.annual_income !== '' || professional.employer_name ||
             professional.employer_address.hasOwnProperty('pincode') ||
-            professional.employer_address.hasOwnProperty('addressline') ||
+            professional.employer_address.hasOwnProperty('house_no') ||
+            professional.employer_address.hasOwnProperty('street') ||
             professional.employer_address.hasOwnProperty('landmark')))
           ) ||
           (professional.occupation_detail === 'STUDENT')
@@ -591,7 +600,7 @@ class Summary extends Component {
                 Employer address:
                 <div>
                   <span style={{wordWrap: 'break-word'}}>
-                    {this.state.professional.employer_address.addressline+', '+ this.state.professional.employer_address.landmark+', '+ this.capitalize(this.state.professional.employer_address.city)+', '+ this.capitalize(this.state.professional.employer_address.state)+', '+ this.state.professional.employer_address.pincode+', '+ this.capitalize(this.state.professional.employer_address.country)}
+                    {this.state.professional.employer_address.house_no+', '+ this.state.professional.employer_address.street+', '+this.state.professional.employer_address.landmark+', '+ this.capitalize(this.state.professional.employer_address.city)+', '+ this.capitalize(this.state.professional.employer_address.state)+', '+ this.state.professional.employer_address.pincode+', '+ this.capitalize(this.state.professional.employer_address.country)}
                   </span>
                 </div>
               </li>
