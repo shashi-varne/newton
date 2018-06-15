@@ -14,10 +14,10 @@ export const nativeCallback = ({ action = null, message = null, events = null } 
   }
 
   if (isMobile.Android()) {
-    window.Android.callbackNative(JSON.stringify(callbackData));
+    // window.Android.callbackNative(JSON.stringify(callbackData));
   }
 
   if (isMobile.iOS()) {
-    window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+    // window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
   }
 };

@@ -30,7 +30,8 @@ class Details extends Component {
       mobile: '',
       total_earnings: 0.00,
       openDialog: false,
-      params: qs.parse(props.history.location.search.slice(1))
+      params: qs.parse(props.history.location.search.slice(1)),
+      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0
     }
   }
 
@@ -119,7 +120,7 @@ class Details extends Component {
   }
 
   shareHandler = () => {
-    let message = 'Try out fisdom: a simple app to make smart investments with zero paperwork! Use my referral code '+this.state.referral_code.toUpperCase()+'. Click here to download: http://m.onelink.me/32660e84';
+    let message = `Try out ${(this.state.isPrime) ? 'Fisdom Prime' : 'fisdom'}: a simple app to make smart investments with zero paperwork! Use my referral code ${this.state.referral_code.toUpperCase()}. Click here to download: ${(this.state.isPrime) ? 'https://go.onelink.me/OFQN/FisdomPrime' : 'http://m.onelink.me/32660e84'}`;
     let eventObj = {
       "event_name": "share_clicked",
       "properties": {
@@ -137,6 +138,7 @@ class Details extends Component {
         showLoader={this.state.show_loader}
         title={'Refer & Earn'}
         background='GreyBackground'
+        isPrime={this.state.isPrime}
         >
         <div className="Refer pad15">
           <Card>

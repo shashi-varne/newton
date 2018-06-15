@@ -10,6 +10,7 @@ import { nativeCallback } from 'utils/native_callback';
 import axios from 'axios';
 import Api from 'utils/api';
 import InfiniteScroll from 'react-infinite-scroller';
+import qs from 'qs';
 
 class Earnings extends Component {
   constructor(props) {
@@ -25,7 +26,9 @@ class Earnings extends Component {
       type_of_referee_identifier: '',
       total_earnings: 0.00,
       hasMoreItems: false,
-      nextPage: null
+      nextPage: null,
+      params: qs.parse(props.history.location.search.slice(1)),
+      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0
     }
   }
 
@@ -90,7 +93,7 @@ class Earnings extends Component {
   }
 
   shareHandler = () => {
-    let message = 'Try out fisdom: a simple app to make smart investments with zero paperwork! Use my referral code '+this.state.referral_code.toUpperCase()+'. Click here to download: http://m.onelink.me/32660e84';
+    let message = `Try out ${(this.state.isPrime) ? 'Fisdom Prime' : 'fisdom'}: a simple app to make smart investments with zero paperwork! Use my referral code ${this.state.referral_code.toUpperCase()}. Click here to download: ${(this.state.isPrime) ? 'https://go.onelink.me/OFQN/FisdomPrime' : 'http://m.onelink.me/32660e84'}`;
     let eventObj = {
       "event_name": "share_clicked",
       "properties": {
@@ -103,7 +106,7 @@ class Earnings extends Component {
   }
 
   remindHandler = (length, item, index) => {
-    let message = 'Hey, looks like you have downloaded the fisdom app but have not started investing yet. Waiting will cost you severely in potential returns so begin today! Tap: http://m.onelink.me/32660e84';
+    let message = `Hey, looks like you have downloaded the ${(this.state.isPrime) ? 'Fisdom Prime' : 'fisdom'} app but have not started investing yet. Waiting will cost you severely in potential returns so begin today! Tap: ${(this.state.isPrime) ? 'https://go.onelink.me/OFQN/FisdomPrime' : 'http://m.onelink.me/32660e84'}`;
     let eventObj = {
       "event_name": "remind_clicked",
       "properties": {
@@ -244,7 +247,7 @@ class Earnings extends Component {
       return (
         <div className="List pad15">
           <h1>Remind and Earn</h1>
-          <p>Remind your friends and family to invest with Fisdom and you get ₹{this.state.amount_per_referral} when they invest.</p>
+          <p>Remind your friends and family to invest with {(this.state.isPrime) ? 'Fisdom Prime' : 'fisdom'} and you get ₹{this.state.amount_per_referral} when they invest.</p>
           <div className="Referres">
             {this.renderList()}
           </div>
@@ -257,7 +260,7 @@ class Earnings extends Component {
       return (
         <div className="List pad15">
           <h1>Earn more</h1>
-          <p>by reminding your friends who already signed up on fisdom with your code</p>
+          <p>by reminding your friends who already signed up on {(this.state.isPrime) ? 'Fisdom Prime' : 'fisdom'} with your code</p>
           <div className="Referres">
             {this.renderList()}
           </div>
@@ -271,6 +274,7 @@ class Earnings extends Component {
       <Container
         showLoader={this.state.show_loader}
         title={'Earnings'}
+        isPrime={this.state.isPrime}
         >
         <div className="Earning">
           <div className={`ReferPaytmGrid pad25 GreyBackground ${(this.state.total_earnings > 0) ? '' : 'EarningsPaytmGrid'}`}>

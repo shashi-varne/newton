@@ -402,7 +402,7 @@ class Resume extends Component {
       >
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to exit the application process?
+            Are you sure you want to exit the application process? Not recommended if you already have done the payment
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -665,7 +665,7 @@ class Resume extends Component {
   render() {
     return (
       <Container
-        resetpage={(this.state.status === 'init') ? true : false}
+        resetpage={(this.state.status === 'init' || this.state.status === 'plutus_submitted') ? true : false}
         handleReset={this.showDialog}
         showLoader={this.state.show_loader}
         title={'Resume Application'}
