@@ -8,7 +8,7 @@ import Container from '../../common/Container';
 import InputWithIcon from '../../ui/InputWithIcon';
 import location from 'assets/location_dark_icn.png';
 import Api from 'utils/api';
-import { validateNumber, validateStreetName, validateLength, validate2ConsecutiveDigits, validateConsecutiveChar, validateEmpty } from 'utils/validators';
+import { validateNumber, validateStreetName, validateLength, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import Dialog, {
   DialogActions,
@@ -154,9 +154,9 @@ class ContactDetails2 extends Component {
       this.setState({
         house_no_error: 'Maximum length of address is 30'
       });
-    } else if (!validate2ConsecutiveDigits(this.state.house_no)) {
+    } else if (!validateMinChar(this.state.house_no)) {
       this.setState({
-        house_no_error: 'House number should contain two digits'
+        house_no_error: 'Address should contain minimum two characters'
       });
     } else if (!validateEmpty(this.state.street)) {
       this.setState({
@@ -198,9 +198,9 @@ class ContactDetails2 extends Component {
       this.setState({
         chouse_no_error: 'Address can not contain more than 3 same consecutive characters'
       });
-    } else if (!this.state.checked && !validate2ConsecutiveDigits(this.state.chouse_no)) {
+    } else if (!this.state.checked && !validateMinChar(this.state.chouse_no)) {
       this.setState({
-        chouse_no_error: 'House number should contain two digits'
+        chouse_no_error: 'Address should contain minimum two characters'
       });
     } else if (!this.state.checked && !validateEmpty(this.state.cstreet)) {
       this.setState({
@@ -372,7 +372,7 @@ class ContactDetails2 extends Component {
                   helperText={this.state.house_no_error || "House No, Society"}
                   type="text"
                   id="house_no"
-                  label="Address line 1 (with house number)*"
+                  label="Address line 1 *"
                   name="house_no"
                   placeholder="ex: 16/1 Queens paradise"
                   value={this.state.house_no}
@@ -464,7 +464,7 @@ class ContactDetails2 extends Component {
                 helperText={this.state.chouse_no_error || "House No, Society"}
                 type="text"
                 id="chouse_no"
-                label="Address line 1 (with house number)*"
+                label="Address line 1 *"
                 placeholder="ex: 16/1 Queens paradise"
                 value={this.state.chouse_no}
                 name="chouse_no"

@@ -9,7 +9,6 @@ import RadioWithoutIcon from '../../ui/RadioWithoutIcon';
 import pan from 'assets/pan_dark_icn.png';
 import education from 'assets/education_dark_icn.png';
 import occupation from 'assets/occupation_details_dark_icn.png';
-import designation from 'assets/designation_dark_icn.png';
 import income from 'assets/annual_income_dark_icn.png';
 import Dropdown from '../../ui/Select';
 import Api from 'utils/api';
@@ -32,8 +31,6 @@ class ProfessionalDetails1 extends Component {
       pan_number_error: '',
       education_qualification: '',
       education_qualification_error: '',
-      designation: '',
-      designation_error: '',
       is_politically_exposed: 'N',
       is_criminal: 'N',
       image: '',
@@ -46,7 +43,7 @@ class ProfessionalDetails1 extends Component {
     Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
       groups: 'professional,misc'
     }).then(res => {
-      const { annual_income, designation, education_qualification, occupation_category, occupation_detail, is_criminal, is_politically_exposed, pan_number } = res.pfwresponse.result.profile;
+      const { annual_income, education_qualification, occupation_category, occupation_detail, is_criminal, is_politically_exposed, pan_number } = res.pfwresponse.result.profile;
       const { image, provider } = res.pfwresponse.result.quote_desc;
 
       this.setState({
@@ -56,7 +53,6 @@ class ProfessionalDetails1 extends Component {
         annual_income: annual_income || '',
         pan_number: pan_number || '',
         education_qualification: education_qualification || '',
-        designation: designation || '',
         is_politically_exposed: (is_criminal) ? 'Y' : 'N',
         is_criminal: (is_politically_exposed) ? 'Y' : 'N',
         image: image,
@@ -132,14 +128,6 @@ class ProfessionalDetails1 extends Component {
       this.setState({
         occupation_category_error: 'Mandatory'
       });
-    } else if (this.state.occupation_detail === 'SALRIED' && !this.state.designation) {
-      this.setState({
-        designation_error: 'Invalid designation'
-      });
-    } else if (this.state.occupation_detail === 'SELF-EMPLOYED' && !this.state.designation) {
-      this.setState({
-        designation_error: 'Invalid designation'
-      });
     } else if (this.state.occupation_detail === 'SALRIED' && !this.state.annual_income) {
       this.setState({
         annual_income_error: 'Annual income cannot be empty'
@@ -168,12 +156,8 @@ class ProfessionalDetails1 extends Component {
       data['education_qualification'] = this.state.education_qualification;
 
       if (this.state.occupation_detail === 'SELF-EMPLOYED') {
-        data['designation'] = this.state.designation;
         data['is_politically_exposed'] = this.state.is_politically_exposed;
         data['is_criminal'] = this.state.is_criminal;
-      }
-      if (this.state.occupation_detail === 'SALRIED') {
-        data['designation'] = this.state.designation;
       }
 
       this.setState({show_loader: true});
@@ -200,7 +184,6 @@ class ProfessionalDetails1 extends Component {
             "occu": sector_ev,
             "sector": this.state.occupation_category.toLowerCase(),
             "income": this.state.annual_income,
-            "designation": this.state.designation,
             "political": (this.state.is_politically_exposed) ? 1 : 0,
             "criminal": (this.state.is_criminal) ? 1 : 0,
             "from_edit": (this.state.edit) ? 1 : 0
@@ -211,21 +194,13 @@ class ProfessionalDetails1 extends Component {
 
         this.setState({show_loader: false});
         if (this.props.edit) {
-          if (this.state.occupation_detail === 'SALRIED') {
-            this.navigate('/insurance/edit-professional1');
-          } else {
-            if (this.state.params.resume === "yes") {
-              this.navigate('/insurance/resume');
-            } else {
-              this.navigate('/insurance/summary');
-            }
-          }
-        } else {
-          if (this.state.occupation_detail === 'SALRIED') {
-            this.navigate('/insurance/professional1');
+          if (this.state.params.resume === "yes") {
+            this.navigate('/insurance/resume');
           } else {
             this.navigate('/insurance/summary');
           }
+        } else {
+          this.navigate('/insurance/summary');
         }
       } else {
         this.setState({show_loader: false});
@@ -235,29 +210,6 @@ class ProfessionalDetails1 extends Component {
           });
         }
       }
-    }
-  }
-
-  renderDesignation = () => {
-    if (this.state.occupation_detail === 'SELF-EMPLOYED' || this.state.occupation_detail === 'SALRIED') {
-      return (
-        <div className="InputField">
-          <InputWithIcon
-            error={(this.state.designation_error) ? true : false}
-            helperText={this.state.designation_error}
-            type="text"
-            icon={designation}
-            width="40"
-            label="Designation *"
-            class="Designation"
-            id="designation"
-            name="designation"
-            value={this.state.designation}
-            onChange={this.handleChange('designation')} />
-        </div>
-      );
-    } else {
-      return null;
     }
   }
 
@@ -394,7 +346,6 @@ class ProfessionalDetails1 extends Component {
               onChange={this.handleOccDetailRadioValue('occupation_detail')} />
           </div>
           {this.renderCategory()}
-          {this.renderDesignation()}
           {this.renderIncome()}
         </FormControl>
         {this.renderDeclaration()}

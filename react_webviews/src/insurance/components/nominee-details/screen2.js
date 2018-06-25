@@ -17,7 +17,7 @@ import Dropdown from '../../ui/Select';
 import Button from 'material-ui/Button';
 import Api from 'utils/api';
 import { maritalOptions, genderOptions, appointeeRelationshipOptions } from '../../constants';
-import { validateAlphabets, validateNumber, validateStreetName, validateLength, validate2ConsecutiveDigits, validateConsecutiveChar, validateEmpty } from 'utils/validators';
+import { validateAlphabets, validateNumber, validateStreetName, validateLength, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import Dialog, {
   DialogActions,
@@ -232,9 +232,9 @@ class AppointeeDetails extends Component {
       this.setState({
         house_no_error: 'Maximum length of address is 30'
       });
-  }  else if (!this.state.checked && !validate2ConsecutiveDigits(this.state.house_no)) {
+  }  else if (!this.state.checked && !validateMinChar(this.state.house_no)) {
       this.setState({
-        house_no_error: 'House number should contain two digits'
+        house_no_error: 'Address should contain minimum two characters'
       });
     } else if (!this.state.checked && !validateEmpty(this.state.street)) {
       this.setState({
@@ -503,7 +503,7 @@ class AppointeeDetails extends Component {
                 helperText={this.state.house_no_error || "House No, Society"}
                 type="text"
                 id="house_no"
-                label="Address line 1 (with house number)*"
+                label="Address line 1 *"
                 placeholder="ex: 16 Queens paradise"
                 value={this.state.house_no}
                 name="house_no"

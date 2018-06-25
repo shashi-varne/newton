@@ -16,6 +16,15 @@ export function validateLength(string) {
   return true;
 }
 
+export function validateMinChar(string) {
+  let nameSplit = string.trim(" ");
+  if (nameSplit.length < 2) {
+    return false;
+  }
+
+  return true; 
+}
+
 export function validateConsecutiveChar(string) {
   let nameSplit = string.trim(" ");
   let name = nameSplit.toLowerCase();
@@ -68,6 +77,11 @@ export function validatePan(string) {
   // eslint-disable-next-line
   let rule = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/;
   return rule.test(string);
+}
+
+export function numberShouldStartWith(number) {
+  let rule = /(6|7|8|9)\d{9}/;
+  return rule.test(number);
 }
 
 export function formatAmount(amount) {

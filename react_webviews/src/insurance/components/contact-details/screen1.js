@@ -8,7 +8,7 @@ import MobileInputWithIcon from '../../ui/MobileInputWithIcon';
 import email from 'assets/email_dark_icn.png';
 import phone from 'assets/phone_dark_icn.png';
 import Api from 'utils/api';
-import { validateEmail, validateNumber } from 'utils/validators';
+import { validateEmail, validateNumber, numberShouldStartWith } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 
 class ContactDetails1 extends Component {
@@ -75,6 +75,10 @@ class ContactDetails1 extends Component {
         email_error: 'Please enter valid email'
       });
     } else if (this.state.mobile_no.length !== 10 || !validateNumber(this.state.mobile_no)) {
+      this.setState({
+        mobile_no_error: 'Please enter valid mobile no'
+      });
+    } else if (!numberShouldStartWith(this.state.mobile_no)) {
       this.setState({
         mobile_no_error: 'Please enter valid mobile no'
       });
