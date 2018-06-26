@@ -144,7 +144,7 @@ class ContactDetails2 extends Component {
       });
     } else if (!validateEmpty(this.state.house_no)) {
       this.setState({
-        house_no_error: 'Enter your house number and society'
+        house_no_error: 'Enter your address'
       });
     } else if (!validateConsecutiveChar(this.state.house_no)) {
       this.setState({
@@ -188,7 +188,7 @@ class ContactDetails2 extends Component {
       });
     } else if (!this.state.checked && !validateEmpty(this.state.chouse_no)) {
       this.setState({
-        chouse_no_error: 'Enter your house number and society'
+        chouse_no_error: 'Enter your address'
       });
     } else if (!this.state.checked && !validateLength(this.state.chouse_no)) {
       this.setState({

@@ -218,7 +218,7 @@ class NomineeDetails extends Component {
       });
     } else if (!this.state.checked && !validateEmpty(this.state.house_no)) {
       this.setState({
-        house_no_error: 'Enter your house number and society'
+        house_no_error: 'Enter your address'
       });
     } else if (!this.state.checked && !validateConsecutiveChar(this.state.house_no)) {
       this.setState({
