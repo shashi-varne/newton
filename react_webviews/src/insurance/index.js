@@ -114,7 +114,6 @@ const Insurance = (props) => {
           <Route path={`${url}/nominee`} component={ NomineeDetails } />
           <Route path={`${url}/appointee`} component={ AppointeeDetails } />
           <Route path={`${url}/professional`} component={ ProfessionalDetails1 } />
-          <Route path={`${url}/professional1`} component={ ProfessionalDetails2 } />
           <Route path={`${url}/summary`} component={ Summary } />
           {/* Edit paths */}
           <Route path={`${url}/edit-personal`} render={ (props) => <PersonalDetails1 {...props} edit={true} /> } />
@@ -124,7 +123,6 @@ const Insurance = (props) => {
           <Route path={`${url}/edit-nominee`} render={ (props) => <NomineeDetails {...props} edit={true} /> } />
           <Route path={`${url}/edit-appointee`} render={ (props) => <AppointeeDetails {...props} edit={true} /> } />
           <Route path={`${url}/edit-professional`} render={ (props) => <ProfessionalDetails1 {...props} edit={true} /> } />
-          <Route path={`${url}/edit-professional1`} render={ (props) => <ProfessionalDetails2 {...props} edit={true} /> } />
           <Route component={ NotFound } />
         </Switch>
       </MuiThemeProvider>
