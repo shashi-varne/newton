@@ -29,7 +29,7 @@ class Terms extends Component {
           <div className="List">
             <div className="Number">2.</div>
             <div className="Text">
-              You will be eligible to receive the referral amount only if the person you refer starts investment for at <span className="BoldText">least ₹ 500</span>, if investing in <span className="BoldText">SIP</span> or for at least <span className="BoldText">₹ 1000</span>, if investing in one time.
+              You will be eligible to receive the referral amount only if the person you refer starts investment for at <span className="BoldText">least ₹ 1000</span>, if investing in <span className="BoldText">SIP</span> or for at least <span className="BoldText">₹ 5000</span>, if investing in one time.
             </div>
           </div>
           <div className="List">
