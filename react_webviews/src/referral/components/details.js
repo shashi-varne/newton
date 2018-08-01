@@ -31,7 +31,7 @@ class Details extends Component {
       total_earnings: 0.00,
       openDialog: false,
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0
+      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("myway.fisdom.com") >= 0
     }
   }
 

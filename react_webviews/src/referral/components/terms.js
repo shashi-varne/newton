@@ -8,7 +8,8 @@ class Terms extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      params: qs.parse(props.history.location.search.slice(1))
+      params: qs.parse(props.history.location.search.slice(1)),
+      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("myway.fisdom.com") >= 0
     }
   }
 
@@ -17,6 +18,7 @@ class Terms extends Component {
       <Container
         showLoader={this.state.show_loader}
         title={'Terms & Conditions'}
+        isPrime={this.state.isPrime}
         background='GreyBackground'
         >
         <div className="Terms pad25">
