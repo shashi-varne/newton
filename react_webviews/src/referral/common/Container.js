@@ -87,7 +87,7 @@ class Container extends Component {
         <Header
           title={this.props.title}
           goBack={this.historyGoBack}
-          isPrime={this.props.isPrime} />
+          ismyway={this.props.ismyway} />
 
         {/* Below Header Block */}
         <div style={{height: 56}}></div>
