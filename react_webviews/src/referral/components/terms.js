@@ -9,7 +9,29 @@ class Terms extends Component {
     this.state = {
       show_loader: false,
       params: qs.parse(props.history.location.search.slice(1)),
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0
+      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
+      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
+      type: '',
+      link: ''
+    }
+  }
+
+  componentWillMount() {
+    if (this.state.ismyway) {
+      this.setState({
+        type: 'myway',
+        link: 'https://go.onelink.me/6fHB/b750d9ac'
+      });
+    } else if (this.state.isPrime) {
+      this.setState({
+        type: 'Fisdom Prime',
+        link: 'https://go.onelink.me/OFQN/FisdomPrime'
+      });
+    } else {
+      this.setState({
+        type: 'fisdom',
+        link: 'http://m.onelink.me/32660e84'
+      });
     }
   }
 
@@ -18,7 +40,7 @@ class Terms extends Component {
       <Container
         showLoader={this.state.show_loader}
         title={'Terms & Conditions'}
-        ismyway={this.state.ismyway}
+        type={this.state.type}
         background='GreyBackground'
         >
         <div className="Terms pad25">

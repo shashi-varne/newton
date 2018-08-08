@@ -31,7 +31,29 @@ class Details extends Component {
       total_earnings: 0.00,
       openDialog: false,
       params: qs.parse(props.history.location.search.slice(1)),
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0
+      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
+      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
+      type: '',
+      link: ''
+    }
+  }
+
+  componentWillMount() {
+    if (this.state.ismyway) {
+      this.setState({
+        type: 'myway',
+        link: 'https://go.onelink.me/6fHB/b750d9ac'
+      });
+    } else if (this.state.isPrime) {
+      this.setState({
+        type: 'Fisdom Prime',
+        link: 'https://go.onelink.me/OFQN/FisdomPrime'
+      });
+    } else {
+      this.setState({
+        type: 'fisdom',
+        link: 'http://m.onelink.me/32660e84'
+      });
     }
   }
 
@@ -120,7 +142,7 @@ class Details extends Component {
   }
 
   shareHandler = () => {
-    let message = `Try out ${(this.state.ismyway) ? 'myway' : 'fisdom'}: a simple app to make smart investments with zero paperwork! Use my referral code ${this.state.referral_code.toUpperCase()}. Click here to download: ${(this.state.ismyway) ? 'https://play.google.com/store/apps/details?id=com.finwizard.myway' : 'http://m.onelink.me/32660e84'}`;
+    let message = `Try out ${this.state.type}: a simple app to make smart investments with zero paperwork! Use my referral code ${this.state.referral_code.toUpperCase()}. Click here to download: ${this.state.link}`;
     let eventObj = {
       "event_name": "share_clicked",
       "properties": {
@@ -138,7 +160,7 @@ class Details extends Component {
         showLoader={this.state.show_loader}
         title={'Refer & Earn'}
         background='GreyBackground'
-        ismyway={this.state.ismyway}
+        type={this.state.type}
         >
         <div className="Refer pad15">
           <Card>
