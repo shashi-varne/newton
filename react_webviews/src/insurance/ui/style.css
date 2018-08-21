@@ -14,6 +14,14 @@
   border: 1px solid #4f2da7;
   color: #fff;
 }
+.RadioButton.unchecked label {
+  color: #3792fc;
+  border: 1px solid #3792fc;
+}
+.RadioButton.checked label {
+  background: #3792fc;
+  border: 1px solid #3792fc;
+}
 .RadioButton label.professional {
   padding: 4px;
   display: inline-block;

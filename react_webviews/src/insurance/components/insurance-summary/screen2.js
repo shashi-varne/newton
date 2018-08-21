@@ -75,8 +75,27 @@ class Resume extends Component {
       plutus_status: '',
       apiError: '',
       openResponseDialog: false,
-      params: qs.parse(props.history.location.search.slice(1))
-    };
+      params: qs.parse(props.history.location.search.slice(1)),
+      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
+      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
+      type: '',
+    }
+  }
+
+  componentWillMount() {
+    if (this.state.ismyway) {
+      this.setState({
+        type: 'myway'
+      });
+    } else if (this.state.isPrime) {
+      this.setState({
+        type: 'Fisdom Prime'
+      });
+    } else {
+      this.setState({
+        type: 'fisdom'
+      });
+    }
   }
 
   componentDidMount() {
@@ -674,6 +693,7 @@ class Resume extends Component {
         premium={this.state.premium}
         provider={this.state.provider}
         paymentFrequency={this.state.payment_frequency}
+        type={this.state.type}
         buttonTitle={
           (this.state.status !== 'init') ? "Resume" : ((this.state.status === 'init' && this.state.plutus_status === 'complete') ? "Pay Now" : "Resume") } >
         <div style={{marginBottom: 20}}>

@@ -1,3 +1,10 @@
+header.blue {
+  color: #fff;
+  background-color: #3792fc;
+}
+.Step.blue span.active {
+  background-color: #3792fc; 
+}
 .ContainerWrapper {
   background-color: #fff;
 }

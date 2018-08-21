@@ -109,7 +109,7 @@ class Container extends Component {
     }
 
     return (
-      <div className="ContainerWrapper">
+      <div className={`ContainerWrapper ${(this.props.type !== 'fisdom') ? 'blue' : ''}`} >
         {/* Header Block */}
         <Header
           title={this.props.title}
@@ -117,7 +117,8 @@ class Container extends Component {
           total={this.props.total}
           current={this.props.current}
           goBack={this.historyGoBack}
-          edit={this.props.edit} />
+          edit={this.props.edit}
+          type={this.props.type} />
 
         {/* Below Header Block */}
         <div style={{height: 56}}></div>
@@ -125,7 +126,7 @@ class Container extends Component {
         {/* Loader Block */}
         {this.renderPageLoader()}
 
-        <div className="Step">
+        <div className={`Step ${(this.props.type !== 'fisdom') ? 'blue' : ''}`}>
           {steps}
         </div>
 

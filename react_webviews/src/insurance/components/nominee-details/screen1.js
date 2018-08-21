@@ -56,7 +56,26 @@ class NomineeDetails extends Component {
       provider: '',
       apiError: '',
       openDialog: false,
-      params: qs.parse(props.history.location.search.slice(1))
+      params: qs.parse(props.history.location.search.slice(1)),
+      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
+      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
+      type: '',
+    }
+  }
+
+  componentWillMount() {
+    if (this.state.ismyway) {
+      this.setState({
+        type: 'myway'
+      });
+    } else if (this.state.isPrime) {
+      this.setState({
+        type: 'Fisdom Prime'
+      });
+    } else {
+      this.setState({
+        type: 'fisdom'
+      });
     }
   }
 
@@ -393,6 +412,7 @@ class NomineeDetails extends Component {
         edit={this.props.edit}
         buttonTitle={(this.state.age < 18) ? "Save & Continue" : "Save Details"}
         logo={this.state.image}
+        type={this.state.type}
         >
         <FormControl fullWidth>
           <div className="InputField">
