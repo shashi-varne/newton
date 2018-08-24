@@ -47,7 +47,7 @@ class Terms extends Component {
           <div className="List">
             <div className="Number">1.</div>
             <div className="Text">
-              `The recommended amount per each referral is a special offer for you and may not applicable for other investors. ${this.state.type} decides and has the right to allocate or terminate any special offer.`
+              The recommended amount per each referral is a special offer for you and may not applicable for other investors. {this.state.type} decides and has the right to allocate or terminate any special offer.
             </div>
           </div>
           <div className="List">
