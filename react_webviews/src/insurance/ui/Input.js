@@ -43,6 +43,7 @@ const Input = (props) => {
         onFocus={props.onFocus}
         name={props.name}
         onChange={props.onChange}
+        onKeyPress={props.onKeyChange}
          />
     );
   }

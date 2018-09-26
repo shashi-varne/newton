@@ -104,6 +104,21 @@ class ProfessionalDetails1 extends Component {
     }
   };
 
+  handleKeyChange = name => event => {    
+    var number = /^\d*$/gm;
+    var preVal = '';
+    if (event.target.value.replace (/,/g, "") === '') {
+      preVal = event.target.value.replace (/,/g, "")
+    }
+    
+    if (!number.test(event.target.value.replace (/,/g, ""))) {
+      this.setState({
+        [name]: preVal
+      });
+      event.preventDefault();
+    }
+  }
+
   handleOccCategoryRadioValue = name => index => {
     this.setState({
       [name]: occupationCategoryOptions[index]['value'],
@@ -126,6 +141,8 @@ class ProfessionalDetails1 extends Component {
   }
 
   handleClick = async () => {
+    var number = /^\d*$/gm;
+
     if (!validateEmpty(this.state.pan_number)) {
       this.setState({
         pan_number_error: 'PAN number cannot be empty'
@@ -150,9 +167,17 @@ class ProfessionalDetails1 extends Component {
       this.setState({
         annual_income_error: 'Annual income cannot be empty'
       });
+    } else if (this.state.occupation_detail === 'SALRIED' && !number.test(this.state.annual_income)) {
+      this.setState({
+        annual_income_error: 'Annual income must contain only numbers'
+      });
     } else if (this.state.occupation_detail === 'SELF-EMPLOYED' && !this.state.annual_income) {
       this.setState({
         annual_income_error: 'Annual income cannot be empty'
+      });
+    } else if (this.state.occupation_detail === 'SELF-EMPLOYED' && !number.test(this.state.annual_income)) {
+      this.setState({
+        annual_income_error: 'Annual income must contain only numbers'
       });
     } else if (this.state.occupation_detail === 'SALRIED' && (!validateNumber(this.state.annual_income) || !this.state.annual_income)) {
       this.setState({
@@ -298,7 +323,8 @@ class ProfessionalDetails1 extends Component {
             id="income"
             name="annual_income"
             value={formatAmount(this.state.annual_income)}
-            onChange={this.handleChange('annual_income')} />
+            onChange={this.handleChange('annual_income')}
+            onKeyChange={this.handleKeyChange('annual_income')} />
         </div>
       );
     } else {
