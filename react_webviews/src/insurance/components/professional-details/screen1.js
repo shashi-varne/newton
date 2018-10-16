@@ -104,17 +104,11 @@ class ProfessionalDetails1 extends Component {
     }
   };
 
-  handleKeyChange = name => event => {    
-    var number = /^\d*$/gm;
-    var preVal = '';
-    if (event.target.value.replace (/,/g, "") === '') {
-      preVal = event.target.value.replace (/,/g, "")
-    }
-    
-    if (!number.test(event.target.value.replace (/,/g, ""))) {
-      this.setState({
-        [name]: preVal
-      });
+  handleKeyChange = name => event => {
+    if (event.charCode >= 48 && event.charCode <= 57) {
+      // valid
+    } else {
+      // invalid
       event.preventDefault();
     }
   }
