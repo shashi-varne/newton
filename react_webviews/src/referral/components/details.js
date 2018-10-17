@@ -37,7 +37,7 @@ class Details extends Component {
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
       link: '',
-      campaign_id: '6689185334296576'
+      campaign_id: '5319998917574656'
     }
   }
 
@@ -159,7 +159,7 @@ class Details extends Component {
   }
 
   renderBanner = () => {
-    if (this.state.current_campaign_id === this.state.campaign_id) {
+    if (this.state.type === 'fisdom' && (this.state.current_campaign_id !== this.state.campaign_id)) {
       return (
         <img src={diwali_banner} alt="" />
         );
@@ -181,10 +181,11 @@ class Details extends Component {
         <div className="Refer pad15">
           <Card nopadding={true}>
             {this.state.current_campaign_id && this.renderBanner()}
-            <div className={`margin_top ${(this.state.current_campaign_id === this.state.campaign_id) ? 'nomargin' : ''}`} style={{ padding: '15px' }}>
+            <div className={`margin_top ${(this.state.type === 'fisdom' && (this.state.current_campaign_id !== this.state.campaign_id)) ? 'nomargin' : ''}`} style={{ padding: '15px' }}>
               <h1>{this.state.refer_message_1}</h1>
               <p>
-                {this.state.refer_message_2}
+                {this.state.refer_message_2}&nbsp;
+                { (this.state.type === 'fisdom' && (this.state.current_campaign_id !== this.state.campaign_id)) && <span>(Minimum <strong>₹1000</strong> SIP)</span>}
               </p>
               <div className="Share">
                 <p>Share your code</p>
