@@ -5,6 +5,7 @@ import Card from '../common/Card';
 import Api from 'utils/api';
 import wallet from 'assets/earning_wallet_icon.png';
 import gift from 'assets/refer_gift_icon.png';
+import diwali_banner from 'assets/diwali_banner.svg';
 import hand from 'assets/hand_icon.png';
 import Button from 'material-ui/Button';
 import Grid from '@material-ui/core/Grid';
@@ -27,6 +28,7 @@ class Details extends Component {
       refer_message_1: '',
       refer_message_2: '',
       referral_code: '',
+      current_campaign_id: '',
       mobile: '',
       total_earnings: 0.00,
       openDialog: false,
@@ -34,7 +36,8 @@ class Details extends Component {
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
-      link: ''
+      link: '',
+      campaign_id: '6689185334296576'
     }
   }
 
@@ -59,7 +62,7 @@ class Details extends Component {
 
   componentDidMount() {
     Api.get('/api/referral/v2/getactivecampaign/mine').then(res => {
-      const { amount_per_referral, campaign_expiry_date, refer_message_1, refer_message_2, referral_code, mobile, total_earnings } = res.pfwresponse.result;
+      const { amount_per_referral, campaign_expiry_date, refer_message_1, refer_message_2, referral_code, mobile, total_earnings,current_campaign_id } = res.pfwresponse.result;
 
       this.setState({
         show_loader: false,
@@ -69,7 +72,8 @@ class Details extends Component {
         refer_message_2,
         referral_code,
         mobile,
-        total_earnings
+        total_earnings,
+        current_campaign_id
       });
     }).catch(error => {
       this.setState({show_loader: false});
@@ -154,6 +158,18 @@ class Details extends Component {
     nativeCallback({ action: 'share', message: { message: message }, events: eventObj });
   }
 
+  renderBanner = () => {
+    if (this.state.current_campaign_id === this.state.campaign_id) {
+      return (
+        <img src={diwali_banner} alt="" />
+        );
+    } else {
+      return (
+        <img src={gift} alt="" />
+      );
+    }
+  } 
+
   render() {
     return (
       <Container
@@ -163,9 +179,9 @@ class Details extends Component {
         type={this.state.type}
         >
         <div className="Refer pad15">
-          <Card>
-            <img src={gift} alt="" />
-            <div className="margin_top">
+          <Card nopadding={true}>
+            {this.state.current_campaign_id && this.renderBanner()}
+            <div className={`margin_top ${(this.state.current_campaign_id === this.state.campaign_id) ? 'nomargin' : ''}`} style={{ padding: '15px' }}>
               <h1>{this.state.refer_message_1}</h1>
               <p>
                 {this.state.refer_message_2}
