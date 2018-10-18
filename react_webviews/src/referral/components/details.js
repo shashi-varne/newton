@@ -38,7 +38,7 @@ class Details extends Component {
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
       link: '',
-      campaign_id: '5319998917574656'
+      campaign_id: 5319998917574656
     }
   }
 
@@ -61,26 +61,31 @@ class Details extends Component {
     }
   }
 
-  componentDidMount() {
-    Api.get('/api/referral/v2/getactivecampaign/mine').then(res => {
-      const { amount_per_referral, campaign_expiry_date, refer_message_1, refer_message_2, referral_code, mobile, total_earnings,current_campaign_id, campaign_start_date } = res.pfwresponse.result;
-
-      this.setState({
-        show_loader: false,
-        amount_per_referral,
-        campaign_expiry_date,
-        refer_message_1,
-        refer_message_2,
-        referral_code,
-        mobile,
-        total_earnings,
-        current_campaign_id,
-        campaign_start_date
+  async componentDidMount() {
+    try {
+      await Api.get('/api/referral/v2/getactivecampaign/mine').then(res => {
+        const { amount_per_referral, campaign_expiry_date, refer_message_1, refer_message_2, referral_code, mobile, total_earnings,current_campaign_id, campaign_start_date } = res.pfwresponse.result;
+  
+        this.setState({
+          show_loader: false,
+          amount_per_referral,
+          campaign_expiry_date,
+          refer_message_1,
+          refer_message_2,
+          referral_code,
+          mobile,
+          total_earnings,
+          current_campaign_id,
+          campaign_start_date
+        });
+      }).catch(error => {
+        this.setState({show_loader: false});
+        console.log(error);
       });
-    }).catch(error => {
+    } catch (error) {
       this.setState({show_loader: false});
       console.log(error);
-    });
+    }
   }
 
   renderDialog = () => {
@@ -160,18 +165,6 @@ class Details extends Component {
     nativeCallback({ action: 'share', message: { message: message }, events: eventObj });
   }
 
-  renderBanner = () => {
-    if (this.state.type === 'fisdom' && (this.state.current_campaign_id === this.state.campaign_id)) {
-      return (
-        <img src={diwali_banner} alt="" />
-        );
-    } else {
-      return (
-        <img src={gift} alt="" />
-      );
-    }
-  }
-
   getExpiryDate = () => {
     if (this.state.campaign_start_date) {
       let d = new Date(this.state.campaign_start_date);
@@ -191,12 +184,12 @@ class Details extends Component {
         >
         <div className="Refer pad15">
           <Card nopadding={true}>
-            {this.state.current_campaign_id && this.renderBanner()}
-            <div className={`margin_top ${(this.state.type === 'fisdom' && (this.state.current_campaign_id === this.state.campaign_id)) ? 'nomargin' : ''}`} style={{ padding: '15px' }}>
+          {(this.state.type === 'fisdom' && this.state.current_campaign_id === this.state.campaign_id) ? <img src={diwali_banner} alt="" /> : <img src={gift} alt="" />}
+            <div className={`margin_top ${(this.state.type === 'fisdom' && this.state.current_campaign_id === this.state.campaign_id) ? 'nomargin' : ''}`} style={{ padding: '15px' }}>
               <h1>{this.state.refer_message_1}</h1>
               <p>
                 {this.state.refer_message_2}&nbsp;
-                { (this.state.type === 'fisdom' && (this.state.current_campaign_id === this.state.campaign_id)) && <span>(Minimum <strong>₹1000</strong> SIP)</span>}
+                { this.state.type === 'fisdom' && this.state.current_campaign_id === this.state.campaign_id && <span>(Minimum <strong>₹1000</strong> SIP)</span>}
               </p>
               <div className="Share">
                 <p>Share your code</p>
@@ -217,7 +210,7 @@ class Details extends Component {
             </div>
           </Card>
 
-          <Card nopadding={(!this.state.campaign_expiry_date) ?   true : false}>
+          <Card nopadding={(!this.state.campaign_expiry_date) ? true : false}>
             <Grid container spacing={24} alignItems="center" className={`ReferPaytmGrid (!this.state.campaign_expiry_date) ? ReferTermsGrid : ''`} onClick={() => this.navigate('/referral/earnings')}>
               <Grid item xs>
                 <img src={wallet} alt="" />
@@ -246,7 +239,7 @@ class Details extends Component {
                   <img src={hand} alt="" />
                 </Grid>
                 <Grid item xs={9}>
-                  { this.state.campaign_start_date ? <p>Offer is valid from:</p> : <p>Your friends should invest before</p>  }
+                  { (this.state.type === 'fisdom' && this.state.current_campaign_id === this.state.campaign_id && this.state.campaign_start_date) ? <p>Offer is valid from:</p> : <p>Your friends should invest before</p>  }
                   {this.getExpiryDate()}
                 </Grid>
               </Grid>
