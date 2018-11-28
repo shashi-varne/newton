@@ -49,28 +49,28 @@ export const appointeeRelationshipOptions = ["BROTHER", "UNCLE", "AUNT", "FATHER
 
 export const income_pairs = [
   {
-    "name" : "upto3",
-    "value" : "upto 3 lakhs"
+    "name": "upto3",
+    "value": "upto 3 lakhs"
   },
   {
-    "name" : "3-5",
-    "value" : "3-5 lakhs"
+    "name": "3-5",
+    "value": "3-5 lakhs"
   },
   {
-    "name" : "5-7",
-    "value" : "5-7 lakhs"
+    "name": "5-7",
+    "value": "5-7 lakhs"
   },
   {
-    "name" : "7-10",
-    "value" : "7-10 lakhs"
+    "name": "7-10",
+    "value": "7-10 lakhs"
   },
   {
-    "name" : "10-15",
-    "value" : "10-15 lakhs"
+    "name": "10-15",
+    "value": "10-15 lakhs"
   },
   {
-    "name" : "above15",
-    "value" : "15 lakhs +"
+    "name": "above15",
+    "value": "15 lakhs +"
   }
 ];
 
@@ -93,11 +93,12 @@ export const occupationDetailOptions = [
   {
     'name': 'Salaried',
     'value': 'SALRIED'
-  },
-  {
-    'name': 'Student',
-    'value': 'STUDENT'
   }
+  // ,
+  // {
+  //   'name': 'Student',
+  //   'value': 'STUDENT'
+  // }
 ];
 
 export const occupationCategoryOptions = [

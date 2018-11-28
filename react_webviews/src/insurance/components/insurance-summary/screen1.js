@@ -77,98 +77,98 @@ class Summary extends Component {
   componentDidMount() {
     Api.get('/api/insurance/all/summary')
       .then(res => {
-      let application;
-      if (res.pfwresponse.status_code === 200) {
-        if (res.pfwresponse.result.insurance_apps.init.length > 0) {
-          application = res.pfwresponse.result.insurance_apps.init[0];
-        } else {
-          application = res.pfwresponse.result.insurance_apps.submitted[0];
-        }
-
-        let income_value = income_pairs.filter(item => item.name === application.quote.annual_income);
-
-        let age = application.profile.nominee.dob && this.calculateAge(application.profile.nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
-
-        this.setState({
-          application_id: application.application_number,
-          status: application.status,
-          show_loader: false,
-          payment_link: application.payment_link,
-          resume_link: application.resume_link,
-          edit_allowed: (res.pfwresponse.result.insurance_apps.init.length > 0) ? true : false,
-          show_appointee: (age < 18) ? true : false,
-          tobacco_choice: application.quote.tobacco_choice,
-          annual_income: income_value[0].value,
-          term: application.quote.term,
-          cover_amount: numDifferentiation(application.quote.cover_amount),
-          payment_frequency: application.quote.payment_frequency,
-          provider: application.provider,
-          cover_plan: application.quote.quote_json.cover_plan,
-          premium: application.quote.quote_json.premium,
-          image: application.quote.quote_describer.image,
-          quote_provider: application.quote.quote_provider,
-          benefits: {
-            is_open: true,
-            accident_benefit: application.quote.accident_benefit || '',
-            payout_option: application.quote.payout_option || ''
-          },
-          personal: {
-            is_open: false,
-            name: application.profile.name || '',
-            dob: (application.profile.dob) ? application.profile.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
-            marital_status: application.profile.marital_status || '',
-            birth_place: application.profile.birth_place || '',
-            mother_name: application.profile.mother_name || '',
-            father_name: application.profile.father_name || '',
-            gender: application.profile.gender || ''
-          },
-          contact: {
-            is_open: false,
-            email: application.profile.email || '',
-            mobile_no: application.profile.mobile_no || '',
-            permanent_addr: application.profile.permanent_addr || '',
-            corr_addr: application.profile.corr_addr || '',
-            corr_address_same: application.profile.corr_address_same
-          },
-          nominee: {
-            is_open: false,
-            name: application.profile.nominee.name  || '',
-            dob: (application.profile.nominee.dob) ? application.profile.nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
-            marital_status: application.profile.nominee.marital_status  || '',
-            relationship: application.profile.nominee.relationship  || '',
-            nominee_address: application.profile.nominee_address  || '',
-            nominee_address_same: application.profile.nominee_address_same
-          },
-          appointee: {
-            is_open: false,
-            name: application.profile.appointee.name || '',
-            dob: (application.profile.appointee.dob) ? application.profile.appointee.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
-            marital_status: application.profile.appointee.marital_status || '',
-            relationship: application.profile.appointee.relationship || '',
-            appointee_address: application.profile.appointee_address || '',
-            appointee_address_same: application.profile.appointee_address_same
-          },
-          professional: {
-            is_open: false,
-            pan_number: application.profile.pan_number || '',
-            occupation_category: application.profile.occupation_category || '',
-            occupation_detail: application.profile.occupation_detail || '',
-            is_criminal: application.profile.is_criminal || '',
-            is_politically_exposed: application.profile.is_politically_exposed || '',
-            employer_name: application.profile.employer_name || '',
-            employer_address: application.profile.employer_address || '',
-            education_qualification: application.profile.education_qualification || '',
-            designation: application.profile.designation || '',
-            annual_income: application.profile.annual_income || ''
+        let application;
+        if (res.pfwresponse.status_code === 200) {
+          if (res.pfwresponse.result.insurance_apps.init.length > 0) {
+            application = res.pfwresponse.result.insurance_apps.init[0];
+          } else {
+            application = res.pfwresponse.result.insurance_apps.submitted[0];
           }
-        });
-      } else {
+
+          let income_value = income_pairs.filter(item => item.name === application.quote.annual_income);
+
+          let age = application.profile.nominee.dob && this.calculateAge(application.profile.nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
+
+          this.setState({
+            application_id: application.application_number,
+            status: application.status,
+            show_loader: false,
+            payment_link: application.payment_link,
+            resume_link: application.resume_link,
+            edit_allowed: (res.pfwresponse.result.insurance_apps.init.length > 0) ? true : false,
+            show_appointee: (age < 18) ? true : false,
+            tobacco_choice: application.quote.tobacco_choice,
+            annual_income: income_value[0].value,
+            term: application.quote.term,
+            cover_amount: numDifferentiation(application.quote.cover_amount),
+            payment_frequency: application.quote.payment_frequency,
+            provider: application.provider,
+            cover_plan: application.quote.quote_json.cover_plan,
+            premium: application.quote.quote_json.premium,
+            image: application.quote.quote_describer.image,
+            quote_provider: application.quote.quote_provider,
+            benefits: {
+              is_open: true,
+              accident_benefit: application.quote.accident_benefit || '',
+              payout_option: application.quote.payout_option || ''
+            },
+            personal: {
+              is_open: false,
+              name: application.profile.name || '',
+              dob: (application.profile.dob) ? application.profile.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
+              marital_status: application.profile.marital_status || '',
+              birth_place: application.profile.birth_place || '',
+              mother_name: application.profile.mother_name || '',
+              father_name: application.profile.father_name || '',
+              gender: application.profile.gender || ''
+            },
+            contact: {
+              is_open: false,
+              email: application.profile.email || '',
+              mobile_no: application.profile.mobile_no || '',
+              permanent_addr: application.profile.permanent_addr || '',
+              corr_addr: application.profile.corr_addr || '',
+              corr_address_same: application.profile.corr_address_same
+            },
+            nominee: {
+              is_open: false,
+              name: application.profile.nominee.name || '',
+              dob: (application.profile.nominee.dob) ? application.profile.nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
+              marital_status: application.profile.nominee.marital_status || '',
+              relationship: application.profile.nominee.relationship || '',
+              nominee_address: application.profile.nominee_address || '',
+              nominee_address_same: application.profile.nominee_address_same
+            },
+            appointee: {
+              is_open: false,
+              name: application.profile.appointee.name || '',
+              dob: (application.profile.appointee.dob) ? application.profile.appointee.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
+              marital_status: application.profile.appointee.marital_status || '',
+              relationship: application.profile.appointee.relationship || '',
+              appointee_address: application.profile.appointee_address || '',
+              appointee_address_same: application.profile.appointee_address_same
+            },
+            professional: {
+              is_open: false,
+              pan_number: application.profile.pan_number || '',
+              occupation_category: application.profile.occupation_category || '',
+              occupation_detail: application.profile.occupation_detail || '',
+              is_criminal: application.profile.is_criminal || '',
+              is_politically_exposed: application.profile.is_politically_exposed || '',
+              employer_name: application.profile.employer_name || '',
+              employer_address: application.profile.employer_address || '',
+              education_qualification: application.profile.education_qualification || '',
+              designation: application.profile.designation || '',
+              annual_income: application.profile.annual_income || ''
+            }
+          });
+        } else {
+          this.setState({ show_loader: false });
+        }
+      }).catch(error => {
         this.setState({ show_loader: false });
-      }
-    }).catch(error => {
-      this.setState({show_loader: false});
-      console.log(error);
-    });
+        console.log(error);
+      });
   }
 
   calculateAge = (birthday) => {
@@ -178,7 +178,7 @@ class Summary extends Component {
 
     var m = today.getMonth() - birthDate.getMonth();
     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
+      age--;
     }
     return age;
   }
@@ -238,7 +238,7 @@ class Summary extends Component {
   }
 
   handleClick = async () => {
-    this.setState({openModal: true});
+    this.setState({ openModal: true });
     let provider;
 
     if (this.state.provider === 'HDFC') {
@@ -253,45 +253,45 @@ class Summary extends Component {
       });
 
       if (res.pfwresponse.status_code === 200) {
-          let eventObj;
+        let eventObj;
 
-          if (this.state.status === 'init') {
-            eventObj = {
-              "event_name": 'make_payment_clicked',
-              "properties": {
-                "provider": this.state.provider,
-                "benefits": (this.state.benefits.accident_benefit !== '' && this.state.benefits.payout_option !== '') ? 1 : 0,
-                "personal_d": (this.renderPersonalPercentage() === 100) ? 1 : 0,
-                "contact_d": (this.renderContactPercentage() === 100) ? 1 : 0,
-                "nominee": (this.renderNomineePercentage() === 100) ? 1 : 0,
-                "professonal": (this.renderProfessionalPercentage() === 100) ? 1 : 0,
-                "appointee": (this.renderAppointeePercentage() === 100) ? 1 : 0
-              }
-            };
-          } else {
-            eventObj = {
-              "event_name": 'resume_clicked',
-              "properties": {
-                "overall_progress": this.renderTotalPercentage(),
-                "personal_d": this.renderPersonalPercentage(),
-                "contact_d": this.renderContactPercentage(),
-                "nominee_d": this.renderNomineePercentage(),
-                "professional": this.renderProfessionalPercentage(),
-                "professonal_edit": 0,
-                "pd_view": 0,
-                "cd_view": 0,
-                "nd_view": 0,
-                "professional_view": 0
-              }
-            };
-          }
+        if (this.state.status === 'init') {
+          eventObj = {
+            "event_name": 'make_payment_clicked',
+            "properties": {
+              "provider": this.state.provider,
+              "benefits": (this.state.benefits.accident_benefit !== '' && this.state.benefits.payout_option !== '') ? 1 : 0,
+              "personal_d": (this.renderPersonalPercentage() === 100) ? 1 : 0,
+              "contact_d": (this.renderContactPercentage() === 100) ? 1 : 0,
+              "nominee": (this.renderNomineePercentage() === 100) ? 1 : 0,
+              "professonal": (this.renderProfessionalPercentage() === 100) ? 1 : 0,
+              "appointee": (this.renderAppointeePercentage() === 100) ? 1 : 0
+            }
+          };
+        } else {
+          eventObj = {
+            "event_name": 'resume_clicked',
+            "properties": {
+              "overall_progress": this.renderTotalPercentage('event'),
+              "personal_d": this.renderPersonalPercentage(),
+              "contact_d": this.renderContactPercentage(),
+              "nominee_d": this.renderNomineePercentage(),
+              "professional": this.renderProfessionalPercentage(),
+              "professonal_edit": 0,
+              "pd_view": 0,
+              "cd_view": 0,
+              "nd_view": 0,
+              "professional_view": 0
+            }
+          };
+        }
 
-          nativeCallback({ events: eventObj, action: 'payment', message: { payment_link: res.pfwresponse.result.insurance_app.payment_link, provider: provider } });
+        nativeCallback({ events: eventObj, action: 'payment', message: { payment_link: res.pfwresponse.result.insurance_app.payment_link, provider: provider } });
       } else {
         this.setState({ openModal: false, openDialog: true, apiError: res.pfwresponse.result.error });
       }
     } else {
-        nativeCallback({ action: 'resume_payment', message: { resume_link: this.state.resume_link, provider: provider } });
+      nativeCallback({ action: 'resume_payment', message: { resume_link: this.state.resume_link, provider: provider } });
     }
   }
 
@@ -302,11 +302,11 @@ class Summary extends Component {
         aria-describedby="simple-modal-description"
         open={this.state.openModal}
       >
-        <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor:'#fff', borderRadius: 4, minWidth: 320, padding: 25, textAlign: 'center'}}>
-          <div style={{padding: '20px 0 30px'}}>
-            <img src={loader} alt=""/>
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: '#fff', borderRadius: 4, minWidth: 320, padding: 25, textAlign: 'center' }}>
+          <div style={{ padding: '20px 0 30px' }}>
+            <img src={loader} alt="" />
           </div>
-          <Typography variant="subheading" id="simple-modal-description" style={{color: '#444'}}>
+          <Typography variant="subheading" id="simple-modal-description" style={{ color: '#444' }}>
             Wait a moment, you will be redirected to <b>{this.state.quote_provider}</b> for the payment.
           </Typography>
         </div>
@@ -317,14 +317,49 @@ class Summary extends Component {
   getAddress = (addr) => {
     return (
       <div>
-        {addr.house_no +', '+
-          addr.street +', '+
-          addr.landmark +', '+
-          addr.pincode +', '+
-          addr.city +', '+
-          this.capitalize(addr.state) +', '+
+        {addr.house_no + ', ' +
+          addr.street + ', ' +
+          addr.landmark + ', ' +
+          addr.pincode + ', ' +
+          addr.city + ', ' +
+          this.capitalize(addr.state) + ', ' +
           this.capitalize(addr.country)
         }
+      </div>
+    );
+  }
+
+  renderTotalPercentage = (type) => {
+    let number = 50;
+    if (!this.state.required.personal.not_submitted) {
+      number += 5;
+    }
+    if (!this.state.required.contact.not_submitted) {
+      number += 5;
+    }
+    if (!this.state.required.nominee.not_submitted) {
+      number += 5;
+    }
+    if (!this.state.required.professional.not_submitted) {
+      number += 5;
+    }
+    if (this.state.status === 'plutus_submitted' || this.state.status === 'complete') {
+      number += 20;
+    }
+    if (this.state.status === 'success') {
+      number += 30;
+    }
+
+    if (type == 'event') {
+      return number;
+    }
+
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', width: 170 }}>
+        <div className="Progress">
+          <span style={{ width: `${number}%` }}></span>
+        </div>
+        <div style={{ flex: 1, color: '#878787', fontSize: 14, fontWeight: 400, textAlign: 'center' }}>{`${number}%`}</div>
       </div>
     );
   }
@@ -455,9 +490,9 @@ class Summary extends Component {
           (professional.occupation_detail === 'SELF-EMPLOYED' && professional.designation && professional.annual_income !== '') ||
           (
             (professional.occupation_detail === 'SALRIED' && professional.occupation_category && professional.designation && professional.annual_income !== '' && professional.employer_address.hasOwnProperty('pincode') &&
-            professional.employer_address.hasOwnProperty('house_no') &&
-            professional.employer_address.hasOwnProperty('street') &&
-            professional.employer_address.hasOwnProperty('landmark'))
+              professional.employer_address.hasOwnProperty('house_no') &&
+              professional.employer_address.hasOwnProperty('street') &&
+              professional.employer_address.hasOwnProperty('landmark'))
           ) ||
           (professional.occupation_detail === 'STUDENT')
         )) {
@@ -468,10 +503,10 @@ class Summary extends Component {
           (professional.occupation_detail === 'SELF-EMPLOYED' && (professional.designation || professional.annual_income !== '')) ||
           (
             (professional.occupation_detail === 'SALRIED' && (professional.occupation_category || professional.designation || professional.annual_income !== '' || professional.employer_name ||
-            professional.employer_address.hasOwnProperty('pincode') ||
-            professional.employer_address.hasOwnProperty('house_no') ||
-            professional.employer_address.hasOwnProperty('street') ||
-            professional.employer_address.hasOwnProperty('landmark')))
+              professional.employer_address.hasOwnProperty('pincode') ||
+              professional.employer_address.hasOwnProperty('house_no') ||
+              professional.employer_address.hasOwnProperty('street') ||
+              professional.employer_address.hasOwnProperty('landmark')))
           ) ||
           (professional.occupation_detail === 'STUDENT')
         )) {
@@ -517,29 +552,29 @@ class Summary extends Component {
             <li>
               Permanent address:
               <div>
-                <span style={{wordWrap: 'break-word'}}>
+                <span style={{ wordWrap: 'break-word' }}>
                   {this.getAddress(this.state.contact.permanent_addr)}
                 </span>
               </div>
             </li>
             {
               (this.state.contact.corr_address_same)
-              ? <li>
-                Correspondence address:
+                ? <li>
+                  Correspondence address:
                 <div>
-                  <span style={{wordWrap: 'break-word'}}>
-                    {this.getAddress(this.state.contact.permanent_addr)}
-                  </span>
-                </div>
-              </li>
-              : <li>
-                Correspondence address:
+                    <span style={{ wordWrap: 'break-word' }}>
+                      {this.getAddress(this.state.contact.permanent_addr)}
+                    </span>
+                  </div>
+                </li>
+                : <li>
+                  Correspondence address:
                 <div>
-                  <span style={{wordWrap: 'break-word'}}>
-                    {this.getAddress(this.state.contact.corr_addr)}
-                  </span>
-                </div>
-              </li>
+                    <span style={{ wordWrap: 'break-word' }}>
+                      {this.getAddress(this.state.contact.corr_addr)}
+                    </span>
+                  </div>
+                </li>
             }
           </ul>
         </div>
@@ -554,22 +589,22 @@ class Summary extends Component {
             <li>Relationship: <span>{this.capitalize(this.state.nominee.relationship)}</span></li>
             {
               (this.state.nominee.nominee_address_same)
-              ? <li>
-                Address:
+                ? <li>
+                  Address:
                 <div>
-                  <span style={{wordWrap: 'break-word'}}>
-                    {this.getAddress(this.state.contact.permanent_addr)}
-                  </span>
-                </div>
-              </li>
-              : <li>
-                Address:
+                    <span style={{ wordWrap: 'break-word' }}>
+                      {this.getAddress(this.state.contact.permanent_addr)}
+                    </span>
+                  </div>
+                </li>
+                : <li>
+                  Address:
                 <div>
-                  <span style={{wordWrap: 'break-word'}}>
-                    {this.getAddress(this.state.nominee.nominee_address)}
-                  </span>
-                </div>
-              </li>
+                    <span style={{ wordWrap: 'break-word' }}>
+                      {this.getAddress(this.state.nominee.nominee_address)}
+                    </span>
+                  </div>
+                </li>
             }
           </ul>
         </div>
@@ -582,12 +617,12 @@ class Summary extends Component {
             <li>DOB: <span>{this.state.appointee.dob}</span></li>
             <li>Marital status: <span>{this.capitalize(this.state.appointee.marital_status)}</span></li>
             <li>Relationship: <span>{this.capitalize(this.state.appointee.relationship)}</span></li>
-              {
-                (this.state.appointee.appointee_address_same)
+            {
+              (this.state.appointee.appointee_address_same)
                 ? <li>
                   Address:
                   <div>
-                    <span style={{wordWrap: 'break-word'}}>
+                    <span style={{ wordWrap: 'break-word' }}>
                       {this.getAddress(this.state.contact.permanent_addr)}
                     </span>
                   </div>
@@ -595,12 +630,12 @@ class Summary extends Component {
                 : <li>
                   Address:
                   <div>
-                    <span style={{wordWrap: 'break-word'}}>
+                    <span style={{ wordWrap: 'break-word' }}>
                       {this.getAddress(this.state.appointee.appointee_address)}
                     </span>
                   </div>
                 </li>
-              }
+            }
           </ul>
         </div>
       );
@@ -618,8 +653,8 @@ class Summary extends Component {
               <li>
                 Employer address:
                 <div>
-                  <span style={{wordWrap: 'break-word'}}>
-                    {this.state.professional.employer_address.house_no+', '+ this.state.professional.employer_address.street+', '+this.state.professional.employer_address.landmark+', '+ this.capitalize(this.state.professional.employer_address.city)+', '+ this.capitalize(this.state.professional.employer_address.state)+', '+ this.state.professional.employer_address.pincode+', '+ this.capitalize(this.state.professional.employer_address.country)}
+                  <span style={{ wordWrap: 'break-word' }}>
+                    {this.state.professional.employer_address.house_no + ', ' + this.state.professional.employer_address.street + ', ' + this.state.professional.employer_address.landmark + ', ' + this.capitalize(this.state.professional.employer_address.city) + ', ' + this.capitalize(this.state.professional.employer_address.state) + ', ' + this.state.professional.employer_address.pincode + ', ' + this.capitalize(this.state.professional.employer_address.country)}
                   </span>
                 </div>
               </li>
@@ -661,13 +696,13 @@ class Summary extends Component {
   }
 
   capitalize = (string) => {
-    return string.toLowerCase().replace(/(^|\s)[a-z]/g,function(f){return f.toUpperCase();})
+    return string.toLowerCase().replace(/(^|\s)[a-z]/g, function (f) { return f.toUpperCase(); })
   }
 
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id='+this.state.params.insurance_id+'&base_url='+this.state.params.base_url
+      search: '?insurance_id=' + this.state.params.insurance_id + '&base_url=' + this.state.params.base_url
     });
   }
 
@@ -715,44 +750,44 @@ class Summary extends Component {
         <div>
           <Grid container spacing={8} alignItems="center">
             <Grid item xs={5}>
-              <img src={this.state.image} alt="" style={{width: '100%'}} />
+              <img src={this.state.image} alt="" style={{ width: '100%' }} />
             </Grid>
             <Grid item xs={7}>
-              <div className="Title" style={{color: '#444', fontFamily: 'Roboto', fontWeight: 500, fontSize: 18}}>
+              <div className="Title" style={{ color: '#444', fontFamily: 'Roboto', fontWeight: 500, fontSize: 18 }}>
                 {this.state.cover_plan}
-                <div style={{marginTop: 7, marginBottom: 7}}>{
-                    this.state.application_id &&
-                    `ID: ${this.state.application_id}`
-                  }</div>
+                <div style={{ marginTop: 7, marginBottom: 7 }}>{
+                  this.state.application_id &&
+                  `ID: ${this.state.application_id}`
+                }</div>
               </div>
             </Grid>
           </Grid>
         </div>
-        <div style={{marginTop: 30}}>
-          <div className="Title" style={{color: '#444', fontFamily: 'Roboto', fontWeight: 500, fontSize: 18, marginBottom: 20}}>
+        <div style={{ marginTop: 30 }}>
+          <div className="Title" style={{ color: '#444', fontFamily: 'Roboto', fontWeight: 500, fontSize: 18, marginBottom: 20 }}>
             Insurance details
           </div>
           <Grid container spacing={8} alignItems="center">
             <Grid item xs={6}>
-              <div className="Item" style={{display: 'flex', alignItems: 'center'}}>
-                <div className="Icon" style={{marginRight: 15}}>
-                  <img src={cover_period} alt="" width="40"/>
+              <div className="Item" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="Icon" style={{ marginRight: 15 }}>
+                  <img src={cover_period} alt="" width="40" />
                 </div>
                 <div className="Text">
-                  <div style={{color: '#4a4a4a', fontFamily: 'Roboto', fontWeight: 500, fontSize: 14}}>Cover period</div>
-                  <div style={{color: '#4a4a4a'}}>{this.state.term} years</div>
+                  <div style={{ color: '#4a4a4a', fontFamily: 'Roboto', fontWeight: 500, fontSize: 14 }}>Cover period</div>
+                  <div style={{ color: '#4a4a4a' }}>{this.state.term} years</div>
                 </div>
               </div>
             </Grid>
             <Grid item xs={6}>
               <div className="Title">
-                <div className="Item" style={{display: 'flex', alignItems: 'center'}}>
-                  <div className="Icon" style={{marginRight: 15}}>
-                    <img src={life_cover} alt="" width="40"/>
+                <div className="Item" style={{ display: 'flex', alignItems: 'center' }}>
+                  <div className="Icon" style={{ marginRight: 15 }}>
+                    <img src={life_cover} alt="" width="40" />
                   </div>
                   <div className="Text">
-                    <div style={{color: '#4a4a4a', fontFamily: 'Roboto', fontWeight: 500, fontSize: 14}}>Life cover</div>
-                    <div style={{color: '#4a4a4a'}}>{this.state.cover_amount}</div>
+                    <div style={{ color: '#4a4a4a', fontFamily: 'Roboto', fontWeight: 500, fontSize: 14 }}>Life cover</div>
+                    <div style={{ color: '#4a4a4a' }}>{this.state.cover_amount}</div>
                   </div>
                 </div>
               </div>
@@ -761,13 +796,13 @@ class Summary extends Component {
           <br />
           <Grid container spacing={8} alignItems="center">
             <Grid item xs={6}>
-              <div className="Item" style={{display: 'flex', alignItems: 'center'}}>
-                <div className="Icon" style={{marginRight: 15}}>
-                  <img src={income} alt="" width="40"/>
+              <div className="Item" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="Icon" style={{ marginRight: 15 }}>
+                  <img src={income} alt="" width="40" />
                 </div>
                 <div className="Text">
-                  <div style={{color: '#4a4a4a', fontFamily: 'Roboto', fontWeight: 500, fontSize: 14}}>Annual income</div>
-                  <div style={{color: '#4a4a4a'}}>
+                  <div style={{ color: '#4a4a4a', fontFamily: 'Roboto', fontWeight: 500, fontSize: 14 }}>Annual income</div>
+                  <div style={{ color: '#4a4a4a' }}>
                     {this.state.annual_income}
                   </div>
                 </div>
@@ -775,26 +810,26 @@ class Summary extends Component {
             </Grid>
             <Grid item xs={6}>
               <div className="Title">
-                <div className="Item" style={{display: 'flex', alignItems: 'center'}}>
-                  <div className="Icon" style={{marginRight: 15}}>
-                    <img src={smoking} alt="" width="40"/>
+                <div className="Item" style={{ display: 'flex', alignItems: 'center' }}>
+                  <div className="Icon" style={{ marginRight: 15 }}>
+                    <img src={smoking} alt="" width="40" />
                   </div>
                   <div className="Text">
-                    <div style={{color: '#4a4a4a', fontFamily: 'Roboto', fontWeight: 500, fontSize: 14}}>Use tobacco</div>
-                    <div style={{color: '#4a4a4a'}}>{(this.state.tobacco_choice === 'N') ? 'No' : 'Yes'}</div>
+                    <div style={{ color: '#4a4a4a', fontFamily: 'Roboto', fontWeight: 500, fontSize: 14 }}>Use tobacco</div>
+                    <div style={{ color: '#4a4a4a' }}>{(this.state.tobacco_choice === 'N') ? 'No' : 'Yes'}</div>
                   </div>
                 </div>
               </div>
             </Grid>
           </Grid>
         </div>
-        <div style={{marginTop: 30, marginBottom: 30}}>
+        <div style={{ marginTop: 30, marginBottom: 30 }}>
           <div className="accordion-container">
             <div className="Accordion">
               <div className="AccordionTitle" onClick={() => this.togglebenefitsAccordion('benefits')}>
-                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative'}}>
-                  <span style={{marginRight: 10}}>
-                    <img style={{position: 'relative', top: 2}} src={(this.state.benefits.is_open) ? shrink : expand} alt="" width="20"/>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative' }}>
+                  <span style={{ marginRight: 10 }}>
+                    <img style={{ position: 'relative', top: 2 }} src={(this.state.benefits.is_open) ? shrink : expand} alt="" width="20" />
                   </span>
                   <span>Benefits</span>
                 </div>
@@ -803,36 +838,36 @@ class Summary extends Component {
             </div>
             <div className="Accordion">
               <div className="AccordionTitle" onClick={() => this.togglepersonalAccordion('personal')}>
-                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative'}}>
-                  <span style={{marginRight: 10}}>
-                    <img style={{position: 'relative', top: 2}} src={(this.state.personal.is_open) ? shrink : expand} alt="" width="20"/>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative' }}>
+                  <span style={{ marginRight: 10 }}>
+                    <img style={{ position: 'relative', top: 2 }} src={(this.state.personal.is_open) ? shrink : expand} alt="" width="20" />
                   </span>
                   <span>Personal details</span>
-                  {this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.navigate('/insurance/edit-personal')}>Edit</span>}
+                  {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline' }} onClick={() => this.navigate('/insurance/edit-personal')}>Edit</span>}
                 </div>
               </div>
               {this.renderAccordionBody('personal')}
             </div>
             <div className="Accordion">
               <div className="AccordionTitle" onClick={() => this.togglecontactAccordion('contact')}>
-                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative'}}>
-                  <span style={{marginRight: 10}}>
-                    <img style={{position: 'relative', top: 2}} src={(this.state.contact.is_open) ? shrink : expand} alt="" width="20"/>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative' }}>
+                  <span style={{ marginRight: 10 }}>
+                    <img style={{ position: 'relative', top: 2 }} src={(this.state.contact.is_open) ? shrink : expand} alt="" width="20" />
                   </span>
                   <span>Contact details</span>
-                  {this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.navigate('/insurance/edit-contact')}>Edit</span>}
+                  {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline' }} onClick={() => this.navigate('/insurance/edit-contact')}>Edit</span>}
                 </div>
               </div>
               {this.renderAccordionBody('contact')}
             </div>
             <div className="Accordion">
               <div className="AccordionTitle" onClick={() => this.togglenomineeAccordion('nominee')}>
-                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative'}}>
-                  <span style={{marginRight: 10}}>
-                    <img style={{position: 'relative', top: 2}} src={(this.state.nominee.is_open) ? shrink : expand} alt="" width="20"/>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative' }}>
+                  <span style={{ marginRight: 10 }}>
+                    <img style={{ position: 'relative', top: 2 }} src={(this.state.nominee.is_open) ? shrink : expand} alt="" width="20" />
                   </span>
                   <span>Nominee details</span>
-                  {this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.navigate('/insurance/edit-nominee')}>Edit</span>}
+                  {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline' }} onClick={() => this.navigate('/insurance/edit-nominee')}>Edit</span>}
                 </div>
               </div>
               {this.renderAccordionBody('nominee')}
@@ -840,12 +875,12 @@ class Summary extends Component {
             {this.state.show_appointee &&
               <div className="Accordion">
                 <div className="AccordionTitle" onClick={() => this.toggleappointeeAccordion('appointee')}>
-                  <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative'}}>
-                    <span style={{marginRight: 10}}>
-                      <img style={{position: 'relative', top: 2}} src={(this.state.appointee.is_open) ? shrink : expand} alt="" width="20"/>
+                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative' }}>
+                    <span style={{ marginRight: 10 }}>
+                      <img style={{ position: 'relative', top: 2 }} src={(this.state.appointee.is_open) ? shrink : expand} alt="" width="20" />
                     </span>
                     <span>Appointee details</span>
-                    {this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.navigate('/insurance/edit-appointee')}>Edit</span>}
+                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline' }} onClick={() => this.navigate('/insurance/edit-appointee')}>Edit</span>}
                   </div>
                 </div>
                 {this.renderAccordionBody('appointee')}
@@ -853,12 +888,12 @@ class Summary extends Component {
             }
             <div className="Accordion">
               <div className="AccordionTitle" onClick={() => this.toggleprofessionalAccordion('professional')}>
-                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative'}}>
-                  <span style={{marginRight: 10}}>
-                    <img style={{position: 'relative', top: 2}} src={(this.state.professional.is_open) ? shrink : expand} alt="" width="20"/>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative' }}>
+                  <span style={{ marginRight: 10 }}>
+                    <img style={{ position: 'relative', top: 2 }} src={(this.state.professional.is_open) ? shrink : expand} alt="" width="20" />
                   </span>
                   <span>Professional details</span>
-                  {this.state.edit_allowed && <span style={{position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline'}} onClick={() => this.navigate('/insurance/edit-professional')}>Edit</span>}
+                  {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline' }} onClick={() => this.navigate('/insurance/edit-professional')}>Edit</span>}
                 </div>
               </div>
               {this.renderAccordionBody('professional')}
