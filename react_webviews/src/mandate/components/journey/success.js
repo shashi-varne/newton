@@ -29,7 +29,6 @@ class MandateSuccess extends Component {
       disableBack: params ? params.disableBack : false
     })
     console.log(params);
-
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'

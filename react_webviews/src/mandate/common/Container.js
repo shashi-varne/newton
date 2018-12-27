@@ -144,6 +144,10 @@ class Container extends Component {
 
         {/* Below Header Block */}
         <div style={{ height: 56 }}></div>
+        type={this.props.type} />
+
+        {/* Below Header Block */}
+        <div style={{ height: 56 }}></div>
 
         {/* Loader Block */}
         {this.renderPageLoader()}
