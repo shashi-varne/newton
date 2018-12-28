@@ -3,9 +3,11 @@ import { FormControl } from 'material-ui/Form';
 import Checkbox from 'material-ui/Checkbox';
 import qs from 'qs';
 import Grid from 'material-ui/Grid';
+import TitleWithIcon from '../../ui/TitleWithIcon';
+import contact from 'assets/address_details_icon.svg';
 
 import Container from '../../common/Container';
-import InputWithIcon from '../../ui/InputWithIcon';
+import Input from '../../ui/Input';
 import location from 'assets/location_dark_icn.png';
 import Api from 'utils/api';
 import { validateNumber, validateStreetName, validateLength, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';
@@ -17,35 +19,22 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 
-class ContactDetails2 extends Component {
+class AddEditAddress extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
+      openDialogReset: false,
       pincode: '',
       pincode_error: '',
-      house_no: '',
-      house_no_error: '',
-      street: '',
-      street_error: '',
-      landmark: '',
-      landmark_error: '',
+      addressline1: '',
+      addressline1_error: '',
+      addressline2: '',
+      addressline2_error: '',
       city: '',
       state: '',
       checked: true,
-      cpincode: '',
-      cpincode_error: '',
-      chouse_no: '',
-      chouse_no_error: '',
-      cstreet: '',
-      cstreet_error: '',
-      clandmark: '',
-      clandmark_error: '',
-      ccity: '',
-      cstate: '',
-      image: '',
       error: '',
-      provider: '',
       apiError: '',
       openDialog: false,
       params: qs.parse(props.history.location.search.slice(1)),
@@ -72,36 +61,37 @@ class ContactDetails2 extends Component {
   }
 
   componentDidMount() {
-    // Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
-    //   groups: 'contact'
-    // }).then(res => {
-    //   const { permanent_addr, corr_addr } = res.pfwresponse.result.profile;
-    //   const { image, provider } = res.pfwresponse.result.quote_desc;
 
-    //   this.setState({
-    //     show_loader: false,
-    //     pincode: permanent_addr.pincode || '',
-    //     house_no: permanent_addr.house_no || '',
-    //     street: permanent_addr.street || '',
-    //     landmark: permanent_addr.landmark || '',
-    //     city: permanent_addr.city || '',
-    //     state: permanent_addr.state || '',
-    //     checked: (Object.keys(corr_addr).length === 0) ? true : false,
-    //     cpincode: corr_addr.pincode || '',
-    //     chouse_no: corr_addr.house_no || '',
-    //     cstreet: corr_addr.street || '',
-    //     clandmark: corr_addr.landmark || '',
-    //     ccity: corr_addr.city || '',
-    //     cstate: corr_addr.state || '',
-    //     image: image,
-    //     provider: provider
-    //   });
-    // }).catch(error => {
-    //   this.setState({show_loader: false});
-    //   console.log(error);
-    // });
-    console.log(this.props);
-    this.setState({ show_loader: false });
+    if (this.props.edit) {
+      if (this.state.params.address_id) {
+        Api.get('/api/mandate/otm/address?address_id=' + this.state.params.address_id).then(res => {
+          if (res.pfwresponse.result) {
+            let address = res.pfwresponse.result[0];
+            this.setState({
+              show_loader: false,
+              pincode: address.pincode || '',
+              addressline1: address.addressline1 || '',
+              addressline2: address.addressline2 || '',
+              city: address.city || '',
+              state: address.state || '',
+            });
+          }
+          else {
+            this.setState({ show_loader: false });
+          }
+
+
+        }).catch(error => {
+          this.setState({ show_loader: false });
+          console.log(error);
+        });
+      } else {
+        this.setState({ show_loader: false });
+      }
+    } else {
+      this.setState({ show_loader: false });
+    }
+
   }
 
   handleChange = () => event => {
@@ -163,155 +153,61 @@ class ContactDetails2 extends Component {
       this.setState({
         pincode_error: 'Please enter valid pincode'
       });
-    } else if (!validateEmpty(this.state.house_no)) {
+    } else if (!validateEmpty(this.state.addressline1)) {
       this.setState({
-        house_no_error: 'Enter your address'
+        addressline1_error: 'Enter your address'
       });
-    } else if (!validateConsecutiveChar(this.state.house_no)) {
+    } else if (!validateConsecutiveChar(this.state.addressline1)) {
       this.setState({
-        house_no_error: 'Address can not contain more than 3 same consecutive characters'
+        addressline1_error: 'Address can not contain more than 3 same consecutive characters'
       });
-    } else if (!validateLength(this.state.house_no)) {
+    } else if (!validateLength(this.state.addressline1)) {
       this.setState({
-        house_no_error: 'Maximum length of address is 30'
+        addressline1_error: 'Maximum length of address is 30'
       });
-    } else if (!validateMinChar(this.state.house_no)) {
+    } else if (!validateMinChar(this.state.addressline1)) {
       this.setState({
-        house_no_error: 'Address should contain minimum two characters'
+        addressline1_error: 'Address should contain minimum two characters'
       });
-    } else if (!validateEmpty(this.state.street)) {
+    } else if (!validateEmpty(this.state.addressline2)) {
       this.setState({
-        street_error: 'Enter your street and locality'
+        addressline2_error: 'Enter your street and locality'
       });
-    } else if (!validateConsecutiveChar(this.state.street)) {
+    } else if (!validateConsecutiveChar(this.state.addressline2)) {
       this.setState({
-        street_error: 'Address can not contain more than 3 same consecutive characters'
+        addressline2_error: 'Address can not contain more than 3 same consecutive characters'
       });
-    } else if (!validateLength(this.state.street)) {
+    } else if (!validateLength(this.state.addressline2)) {
       this.setState({
-        street_error: 'Maximum length of address is 30'
-      });
-    } else if (!validateEmpty(this.state.landmark)) {
-      this.setState({
-        landmark_error: 'Enter nearest landmark'
-      });
-    } else if (!validateLength(this.state.landmark)) {
-      this.setState({
-        landmark_error: 'Maximum length of landmark is 30'
-      });
-    } else if (!validateStreetName(this.state.landmark)) {
-      this.setState({
-        landmark_error: 'Please enter valid landmark'
-      });
-    } else if (!this.state.checked && (this.state.cpincode.length !== 6 || !validateNumber(this.state.cpincode))) {
-      this.setState({
-        cpincode_error: 'Please enter valid pincode'
-      });
-    } else if (!this.state.checked && !validateEmpty(this.state.chouse_no)) {
-      this.setState({
-        chouse_no_error: 'Enter your address'
-      });
-    } else if (!this.state.checked && !validateLength(this.state.chouse_no)) {
-      this.setState({
-        chouse_no_error: 'Maximum length of name is 30 characters'
-      });
-    } else if (!this.state.checked && !validateConsecutiveChar(this.state.chouse_no)) {
-      this.setState({
-        chouse_no_error: 'Address can not contain more than 3 same consecutive characters'
-      });
-    } else if (!this.state.checked && !validateMinChar(this.state.chouse_no)) {
-      this.setState({
-        chouse_no_error: 'Address should contain minimum two characters'
-      });
-    } else if (!this.state.checked && !validateEmpty(this.state.cstreet)) {
-      this.setState({
-        cstreet_error: 'Enter your street and locality'
-      });
-    } else if (!this.state.checked && !validateLength(this.state.cstreet)) {
-      this.setState({
-        cstreet_error: 'Maximum length of name is 30 characters'
-      });
-    } else if (!this.state.checked && !validateConsecutiveChar(this.state.cstreet)) {
-      this.setState({
-        cstreet_error: 'Address can not contain more than 3 same consecutive characters'
-      });
-    } else if (!this.state.checked && !validateEmpty(this.state.clandmark)) {
-      this.setState({
-        clandmark_error: 'Enter nearest landmark'
-      });
-    } else if (!this.state.checked && !validateLength(this.state.clandmark)) {
-      this.setState({
-        clandmark_error: 'Maximum length of landmark is 30'
-      });
-    } else if (!this.state.checked && !validateStreetName(this.state.clandmark)) {
-      this.setState({
-        clandmark_error: 'Please enter valid landmark'
+        addressline2_error: 'Maximum length of address is 30'
       });
     } else {
       this.setState({ show_loader: true });
-      let permanent_address, address = {};
+      let addressline = {
+        "pincode": this.state.pincode,
+        "country": "india",
+        'addressline1': this.state.addressline1,
+        'addressline2': this.state.addressline2,
 
-      permanent_address = {
-        'pincode': this.state.pincode,
-        'house_no': this.state.house_no,
-        'street': this.state.street,
-        'landmark': this.state.landmark
       };
 
-      if (this.state.checked) {
-        address['insurance_app_id'] = this.state.params.insurance_id;
-        address['p_addr'] = permanent_address;
-        address['c_addr_same'] = 'Y';
+      let res;
+      if (this.props.edit) {
+        addressline.address_id = this.state.params.address_id;
+        res = await Api.put('/api/account/address', addressline);
       } else {
-        address['insurance_app_id'] = this.state.params.insurance_id;
-        address['p_addr'] = permanent_address;
-        address['c_addr'] = {
-          'pincode': this.state.cpincode,
-          'house_no': this.state.chouse_no,
-          'street': this.state.cstreet,
-          'landmark': this.state.clandmark
-        }
+        res = await Api.post('/api/mandate/otm/address', addressline);
       }
-
-      const res = await Api.post('/api/insurance/profile', address);
 
       if (res.pfwresponse.status_code === 200) {
 
-        let eventObj = {
-          "event_name": "contact_two_save",
-          "properties": {
-            "provider": this.state.provider,
-            "address_same_option": (this.state.checked) ? 1 : 0,
-            "pin_correspondance": this.state.cpincode,
-            "add_correspondance": this.state.chouse_no,
-            "city_correspondance": this.state.ccity,
-            "state_correspondance": this.state.cstate,
-            "pin_permanent": this.state.pincode,
-            "add_permanent": this.state.house_no,
-            "city_permanent": this.state.city,
-            "state_permanent": this.state.state,
-            "from_edit": (this.state.edit) ? 1 : 0
-          }
-        };
-
-        nativeCallback({ events: eventObj });
 
         this.setState({ show_loader: false });
-        if (this.props.edit) {
-          if (this.state.params.resume === "yes") {
-            this.navigate('/insurance/resume');
-          } else {
-            this.navigate('/insurance/summary');
-          }
-        } else {
-          this.navigate('/insurance/nominee');
-        }
+        this.navigate('/mandate/select-address');
       } else {
         this.setState({ show_loader: false });
         for (let error of res.pfwresponse.result.errors) {
-          if (error.field === 'p_addr' || error.field === 'c_addr') {
-            this.setState({ openDialog: true, apiError: error.message });
-          }
+          this.setState({ openDialog: true, apiError: error.message });
           this.setState({
             [error.field + '_error']: error.message
           });
@@ -323,18 +219,68 @@ class ContactDetails2 extends Component {
   bannerText = () => {
     return (
       <span>
-        We will courier your policy paper at <em><b>your residence</b></em> too.
+        Delivery address for <b>Mandate Form</b>
       </span>
     );
   }
 
   handleClose = () => {
     this.setState({
-      openDialog: false
+      openDialog: false,
+      openDialogReset: false
     });
   }
 
+  handleReset = async () => {
+    this.setState({
+      openResponseDialog: false,
+      show_loader: true,
+      apiError: '', openDialog: false, openDialogReset: false,
+      openModalMessage: 'Wait a moment while we reset your application'
+    });
+    const res = await Api.delete('api/account/address?address_id=' + this.state.params.address_id);
+    if (res.pfwresponse.status_code === 200) {
+      // this.setState({ openModal: false });
+      this.navigate('/mandate/select-address');
+    } else {
+      this.setState({ openModal: false, openModalMessage: '', openResponseDialog: true, apiError: res.pfwresponse.result.error });
+    }
+  }
+
+  showDialog = () => {
+    this.setState({ openDialogReset: true });
+  }
+
+  showDialog = () => {
+    this.setState({ openDialogReset: true });
+  }
+
   renderDialog = () => {
+    return (
+      <Dialog
+        fullScreen={false}
+        open={this.state.openDialogReset}
+        onClose={this.handleClose}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogContent>
+          <DialogContentText>
+            Are you sure, you want to delete this address?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClose} color="primary">
+            No
+          </Button>
+          <Button onClick={this.handleReset} color="primary" autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  }
+
+  renderResponseDialog = () => {
     return (
       <Dialog
         open={this.state.openDialog}
@@ -360,10 +306,10 @@ class ContactDetails2 extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title={(this.props.edit) ? 'Edit Contact Details' : 'Contact Details'}
-        count={true}
-        total={4}
-        current={2}
+        title={(this.props.edit) ? 'Edit Address' : 'Add New Address'}
+        rightIcon={this.props.edit ? 'delete' : ''}
+        resetpage={this.props.edit ? true : false}
+        handleReset={this.showDialog}
         banner={true}
         bannerText={this.bannerText()}
         handleClick={this.handleClick}
@@ -373,10 +319,34 @@ class ContactDetails2 extends Component {
         type={this.state.type}
       >
         {/* Permanent Address Block */}
-        <div className="SectionHead">Permanent address</div>
         <FormControl fullWidth>
+          <TitleWithIcon width="16" icon={contact} title="Address Details" />
           <div className="InputField">
-            <InputWithIcon
+            <Input
+              error={(this.state.addressline1_error) ? true : false}
+              helperText={this.state.addressline1_error}
+              type="text"
+              id="addressline1"
+              label="Address line 1 *"
+              name="addressline1"
+              placeholder="ex: 16/1 Queens paradise"
+              value={this.state.addressline1}
+              onChange={this.handleChange()} />
+          </div>
+          <div className="InputField">
+            <Input
+              error={(this.state.addressline2_error) ? true : false}
+              helperText={this.state.addressline2_error}
+              type="text"
+              id="addressline2"
+              label="Address line 2 *"
+              name="addressline2"
+              placeholder="ex: Curve Road, Shivaji Nagar"
+              value={this.state.addressline2}
+              onChange={this.handleChange()} />
+          </div>
+          <div className="InputField">
+            <Input
               error={(this.state.pincode_error) ? true : false}
               helperText={this.state.pincode_error}
               type="number"
@@ -389,42 +359,7 @@ class ContactDetails2 extends Component {
               onChange={this.handlePincode('pincode')} />
           </div>
           <div className="InputField">
-            <InputWithIcon
-              error={(this.state.house_no_error) ? true : false}
-              helperText={this.state.house_no_error || "House No, Society"}
-              type="text"
-              id="house_no"
-              label="Address line 1 *"
-              name="house_no"
-              placeholder="ex: 16/1 Queens paradise"
-              value={this.state.house_no}
-              onChange={this.handleChange()} />
-          </div>
-          <div className="InputField">
-            <InputWithIcon
-              error={(this.state.street_error) ? true : false}
-              helperText={this.state.street_error || "Street, Locality"}
-              type="text"
-              id="street"
-              label="Address line 2 *"
-              name="street"
-              placeholder="ex: Curve Road, Shivaji Nagar"
-              value={this.state.street}
-              onChange={this.handleChange()} />
-          </div>
-          <div className="InputField">
-            <InputWithIcon
-              error={(this.state.landmark_error) ? true : false}
-              helperText={this.state.landmark_error}
-              type="text"
-              id="landmark"
-              label="Landmark *"
-              name="landmark"
-              value={this.state.landmark}
-              onChange={this.handleChange()} />
-          </div>
-          <div className="InputField">
-            <InputWithIcon
+            <Input
               disabled={true}
               id="city"
               label="City *"
@@ -433,7 +368,7 @@ class ContactDetails2 extends Component {
               onChange={this.handleChange()} />
           </div>
           <div className="InputField">
-            <InputWithIcon
+            <Input
               disabled={true}
               id="state"
               label="State *"
@@ -443,102 +378,11 @@ class ContactDetails2 extends Component {
           </div>
         </FormControl>
 
-        {/* Correspondence Address Block */}
-        <div className="SectionHead">Correspondence address</div>
-        <div className="CheckBlock">
-          <Grid container spacing={16} alignItems="center">
-            <Grid item xs={2} className="TextCenter">
-              <Checkbox
-                defaultChecked
-                checked={this.state.checked}
-                color="default"
-                value="checked"
-                name="checked"
-                onChange={this.handleChange()}
-                className="Checkbox" />
-            </Grid>
-            <Grid item xs={10}>
-              <span className="SameAddress">Correspondence address same as permanent address</span>
-            </Grid>
-          </Grid>
-        </div>
-
-        {/* Correspondence Address */}
-        {
-          !this.state.checked &&
-          <FormControl fullWidth>
-            <div className="InputField">
-              <InputWithIcon
-                error={(this.state.cpincode_error) ? true : false}
-                helperText={this.state.cpincode_error}
-                type="number"
-                icon={location}
-                width="40"
-                label="Pincode *"
-                id="cpincode"
-                name="cpincode"
-                value={this.state.cpincode}
-                onChange={this.handlePincode('cpincode')} />
-            </div>
-            <div className="InputField">
-              <InputWithIcon
-                error={(this.state.chouse_no_error) ? true : false}
-                helperText={this.state.chouse_no_error || "House No, Society"}
-                type="text"
-                id="chouse_no"
-                label="Address line 1 *"
-                placeholder="ex: 16/1 Queens paradise"
-                value={this.state.chouse_no}
-                name="chouse_no"
-                onChange={this.handleChange()} />
-            </div>
-            <div className="InputField">
-              <InputWithIcon
-                error={(this.state.cstreet_error) ? true : false}
-                helperText={this.state.cstreet_error || "Street, Locality"}
-                type="text"
-                id="cstreet"
-                placeholder="ex: Curve Road, Shivaji Nagar"
-                label="Address line 2 *"
-                value={this.state.cstreet}
-                name="cstreet"
-                onChange={this.handleChange()} />
-            </div>
-            <div className="InputField">
-              <InputWithIcon
-                error={(this.state.clandmark_error) ? true : false}
-                helperText={this.state.clandmark_error}
-                type="text"
-                id="clandmark"
-                label="Landmark *"
-                name="clandmark"
-                value={this.state.clandmark}
-                onChange={this.handleChange()} />
-            </div>
-            <div className="InputField">
-              <InputWithIcon
-                disabled={true}
-                id="ccity"
-                label="City *"
-                value={this.state.ccity}
-                name="ccity"
-                onChange={this.handleChange()} />
-            </div>
-            <div className="InputField">
-              <InputWithIcon
-                disabled={true}
-                id="cstate"
-                label="State *"
-                value={this.state.cstate}
-                name="cstate"
-                onChange={this.handleChange()} />
-            </div>
-          </FormControl>
-        }
         {this.renderDialog()}
-      </Container>
+        {this.renderResponseDialog()}
+      </Container >
     );
   }
 }
 
-export default ContactDetails2;
+export default AddEditAddress;

@@ -68,8 +68,45 @@ class MandateProcess extends Component {
         handleClick={() => this.navigate('/mandate/select-address')}
         fullWidthButton={true}
         onlyButton={true}
-        buttonTitle="Continue"
+        buttonTitle="Continue to Select Address"
         type={this.state.type} >
+        <div>
+          <div className="process-tile">
+            <div className="process-tile1" style={{ marginTop: 10 }}>
+              1.
+            </div>
+            <div className="process-tile2">
+              Get a bank mandate delivered at your doorstep
+            </div>
+          </div>
+
+          <div className="process-tile" style={{ marginBottom: 10 }}>
+            <div className="process-tile1">
+              2.
+            </div>
+            <div className="process-tile2">
+              Sign and send us back for bank's approval
+            </div>
+
+          </div>
+          <div className="process-address">
+            <div className="process-address1">Courier to:</div>
+            <div className="process-address2">
+              Queens Paradise, No. 16/1, 1st Floor, Curve Road, Shivaji Nagar,
+               Bengaluru, Karnataka 560051
+              </div>
+          </div>
+
+          <div className="process-tile">
+            <div className="process-tile1">
+              3.
+            </div>
+            <div className="process-tile2">
+              Mandate processed post bank's approval
+            </div>
+          </div>
+
+        </div>
       </Container >
     );
   }

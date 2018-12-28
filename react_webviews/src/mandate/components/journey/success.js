@@ -7,6 +7,8 @@ import Typography from 'material-ui/Typography';
 import qs from 'qs';
 import { nativeCallback } from 'utils/native_callback';
 import Button from 'material-ui/Button';
+import thumb from 'assets/thumb.svg';
+import eta_icon from 'assets/eta_icon.svg';
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -31,7 +33,7 @@ class MandateSuccess extends Component {
       disableBack: params ? params.disableBack : false
     })
     console.log(params);
-    console.log(this.state.params);
+
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -62,14 +64,51 @@ class MandateSuccess extends Component {
   render() {
     return (
       <Container
-        summarypage={true}
         showLoader={this.state.show_loader}
-        title="Bank Mandate Process"
+        title="Bank Mandate"
         handleClick={this.handleClick}
         fullWidthButton={true}
         onlyButton={true}
-        buttonTitle="Continue"
+        disableBack={this.state.disableBack}
+        buttonTitle="Ok"
         type={this.state.type} >
+        <div>
+          <div className="success-img">
+            <img src={thumb} width="130" />
+          </div>
+          <div className="success-great">
+            Great!
+          </div>
+          <div className="success-text-info">
+            You will receive a Bank Mandate form.
+          </div>
+          <div className="success-text-info">
+            Please put your signature and send back to us.
+          </div>
+          <div className="success-bottom-timer">
+            <div>
+              <img className="success-img-timer" src={eta_icon} width="20" />
+              Usually takes 3-4 working day
+            </div>
+          </div>
+
+          <div className="success-bottom">
+            <div className="success-bottom1">
+              For any query, reach us at
+            </div>
+            <div className="success-bottom2">
+              <div className="success-bottom2a">
+                +80-30-408363
+              </div>
+              <div className="success-bottom2b">
+                |
+              </div>
+              <div className="success-bottom2a">
+                ask@fisdom.com
+              </div>
+            </div>
+          </div>
+        </div>
       </Container >
     );
   }

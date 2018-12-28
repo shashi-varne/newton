@@ -13,11 +13,12 @@ class CustomButton extends Component {
           variant="raised"
           size="large"
           color="secondary"
+          disabled={props.isDisabled}
           className={props.classes.button} >
           {props.buttonTitle}
           {
             props.arrow &&
-            <img alt="" src={arrow} width={20} className="FooterButtonArrow"/>
+            <img alt="" src={arrow} width={20} className="FooterButtonArrow" />
           }
         </Button>
       </div>
