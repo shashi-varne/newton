@@ -59,13 +59,39 @@ class MandateProcess extends Component {
     });
   }
 
+  handleClick = async () => {
+    this.setState({
+      show_loader: true
+    })
+    Api.get('/api/mandate/otm/address').then(res => {
+      if (res.pfwresponse.status_code == 200) {
+        this.setState({
+          show_loader: false
+        })
+
+        if (!res.pfwresponse.result || res.pfwresponse.result.length == 0) {
+          this.navigate('/mandate/add-address')
+        } else {
+          this.navigate('/mandate/select-address')
+        }
+      } else {
+        this.setState({
+          show_loader: false
+        });
+      }
+    }).catch(error => {
+      this.setState({ show_loader: false });
+      console.log(error);
+    });
+  }
+
   render() {
     return (
       <Container
         summarypage={true}
         showLoader={this.state.show_loader}
         title="Bank Mandate Process"
-        handleClick={() => this.navigate('/mandate/select-address')}
+        handleClick={this.handleClick}
         fullWidthButton={true}
         onlyButton={true}
         buttonTitle="Continue to Select Address"

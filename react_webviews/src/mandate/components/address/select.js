@@ -265,7 +265,7 @@ class SelectAddress extends Component {
         <Container
           summarypage={true}
           showLoader={this.state.show_loader}
-          title="Bank Mandate Process"
+          title="Select Address"
           handleClick={this.handleClick}
           fullWidthButton={true}
           onlyButton={true}
