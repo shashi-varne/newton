@@ -23,6 +23,11 @@ class Container extends Component {
   }
 
   historyGoBack = () => {
+    let { params } = this.props.location
+    if (params && params.disableBack) {
+      nativeCallback({ action: 'native_back' });
+      return;
+    }
     let pathname = this.props.history.location.pathname;
     switch (pathname) {
       case "/insurance":
@@ -30,13 +35,13 @@ class Container extends Component {
         nativeCallback({ action: 'native_back' });
         break;
       default:
-      if (navigator.onLine) {
-        this.props.history.goBack();
-      } else {
-        this.setState({
-          openDialog: true
-        });
-      }
+        if (navigator.onLine) {
+          this.props.history.goBack();
+        } else {
+          this.setState({
+            openDialog: true
+          });
+        }
     }
   }
 
@@ -49,10 +54,10 @@ class Container extends Component {
   renderDialog = () => {
     return (
       <Dialog
-          fullScreen={false}
-          open={this.state.openDialog}
-          onClose={this.handleClose}
-          aria-labelledby="responsive-dialog-title"
+        fullScreen={false}
+        open={this.state.openDialog}
+        onClose={this.handleClose}
+        aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="form-dialog-title">No Internet Found</DialogTitle>
         <DialogContent>
@@ -74,7 +79,7 @@ class Container extends Component {
       return (
         <div className="Loader">
           <div className="LoaderOverlay">
-            <img src={loader} alt=""/>
+            <img src={loader} alt="" />
           </div>
         </div>
       );
@@ -92,7 +97,7 @@ class Container extends Component {
     let bannerHeight = (banner) ? banner.offsetHeight : 0;
 
     if (client > body) {
-      document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 40+'px';
+      document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 40 + 'px';
     } else {
       document.getElementsByClassName('Container')[0].style.height = document.getElementsByClassName('Container')[0].offsetHeight;
     }
@@ -118,10 +123,14 @@ class Container extends Component {
           current={this.props.current}
           goBack={this.historyGoBack}
           edit={this.props.edit}
-          type={this.props.type} />
+          type={this.props.type}
+          resetpage={this.props.resetpage}
+          disableBack={this.props.disableBack}
+          handleReset={this.props.handleReset}
+          rightIcon={this.props.rightIcon} />
 
         {/* Below Header Block */}
-        <div style={{height: 56}}></div>
+        <div style={{ height: 56 }}></div>
 
         {/* Loader Block */}
         {this.renderPageLoader()}
@@ -131,11 +140,11 @@ class Container extends Component {
         </div>
 
         {/* Banner Block */}
-        { this.props.banner && <Banner text={this.props.bannerText}/> }
+        {this.props.banner && <Banner text={this.props.bannerText} />}
 
         {/* Children Block */}
         <div className='Container'>
-          { this.props.children }
+          {this.props.children}
         </div>
 
         {/* Footer Block */}
@@ -149,10 +158,11 @@ class Container extends Component {
           edit={this.props.edit}
           resetpage={this.props.resetpage}
           handleClick={this.props.handleClick}
-          handleReset={this.props.handleReset} />
+          handleReset={this.props.handleReset}
+          isDisabled={this.props.isDisabled} />
 
-          {/* No Internet */}
-          {this.renderDialog()}
+        {/* No Internet */}
+        {this.renderDialog()}
       </div>
     );
   }

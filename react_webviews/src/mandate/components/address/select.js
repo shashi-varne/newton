@@ -18,13 +18,18 @@ class SelectAddress extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false,
+      show_loader: true,
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
-      checked: true
+      checked: true,
+      indexCheckBox: -1,
+      openDialogConfirm: false
     }
+
+    this.renderAddress = this.renderAddress.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   componentWillMount() {
@@ -52,25 +57,17 @@ class SelectAddress extends Component {
 
   componentDidMount() {
 
-    var data = {
-      "addressline": "kolkata howrah road",
-      "landmark": "bda complex",
-      "pincode": "560097",
-      "country": "india",
-      "house_no": "1222",
-      "street": "2nd cross",
-    }
-
-    Api.post('/api/mandate/otm/address', data).then(res => {
-      Api.get('/api/mandate/otm/address').then(res => {
-
-      }).catch(error => {
-        this.setState({ show_loader: false });
-        console.log(error);
-      });
-      this.setState({
-        show_loader: false
-      });
+    Api.get('/api/mandate/otm/address').then(res => {
+      if (res.pfwresponse.status_code == 200) {
+        this.setState({
+          addressData: res.pfwresponse.result,
+          show_loader: false
+        })
+      } else {
+        this.setState({
+          show_loader: false
+        });
+      }
     }).catch(error => {
       this.setState({ show_loader: false });
       console.log(error);
@@ -84,10 +81,25 @@ class SelectAddress extends Component {
     });
   }
 
-  handleChange = () => event => {
+  navigateSuccess = (pathname) => {
+    this.props.history.push({
+      pathname: pathname,
+      search: 'base_url=' + this.state.params.base_url,
+      params: {
+        disableBack: true
+      }
+    });
+  }
+
+  handleChange = (index) => event => {
     if (event.target.name === 'checked') {
+      let changedIndex = index;
+      if (this.state.indexCheckBox == changedIndex) {
+        changedIndex = -1;
+      }
       this.setState({
-        [event.target.name]: event.target.checked
+        [event.target.name]: event.target.checked,
+        indexCheckBox: changedIndex
       });
     } else {
       this.setState({
@@ -97,6 +109,92 @@ class SelectAddress extends Component {
     }
   };
 
+  handleClose() {
+    this.setState({
+      openDialogConfirm: false
+    })
+  }
+
+  handleConfirm = () => {
+    this.setState({
+      openDialogConfirm: false
+    })
+
+    this.handleClick(true);
+    return;
+  }
+
+  openDialogConfirmModal = () => {
+
+    if (this.state.openDialogConfirm) {
+      return (
+        <Dialog
+          id="payment"
+          open={this.state.openDialogConfirm}
+          onClose={this.handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              <span>
+                Please make sure you will be available to collect courier.
+             </span>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button style={{ textTransform: 'capitalize' }}
+              fullWidth={true}
+              variant="raised"
+              size="large"
+              color="secondary"
+              onClick={() => this.handleConfirm()}
+              autoFocus>Yes I'll be available
+            </Button>
+          </DialogActions>
+        </Dialog>
+      );
+    }
+    return null;
+
+  }
+
+  handleClick = async () => {
+    if (!this.state.openDialogConfirm) {
+      console.log("yo yo");
+      this.setState({
+        openDialogConfirm: true
+      })
+      return;
+
+    }
+    this.setState({
+      show_loader: true,
+      openDialogConfirm: false
+    });
+    let mandateAddress = this.state.addressData[this.state.indexCheckBox];
+    let addressline = {
+      "pincode": mandateAddress.pincode,
+      "country": "india",
+      'addressline1': mandateAddress.addressline1,
+      'addressline2': mandateAddress.addressline2,
+      'address_id': mandateAddress.id
+
+    };
+
+    let res = await Api.post('/api/mandate/otm/address', addressline);
+
+    if (res.pfwresponse.status_code === 200) {
+
+      this.setState({ show_loader: false });
+      this.navigateSuccess('/mandate/success');
+    } else {
+      this.setState({ show_loader: false });
+      this.setState({ openDialog: true, apiError: res.pfwresponse.result.message });
+
+    }
+  }
+
   bannerText = () => {
     return (
       <span>
@@ -105,46 +203,96 @@ class SelectAddress extends Component {
     );
   }
 
+  getFullAddress(address) {
+    let addressline = '';
+    if (address.addressline1) {
+      addressline += address.addressline1;
+    }
+
+    if (address.addressline2) {
+      addressline += ', ' + address.addressline2;
+    }
+
+    if (address.city) {
+      addressline += ', ' + address.city;
+    }
+
+    if (address.state) {
+      addressline += ', ' + address.state;
+    }
+
+    if (address.pincode) {
+      addressline += '- ' + address.pincode;
+    }
+
+    return addressline;
+  }
+
+  editAddress(id) {
+    this.props.history.push({
+      pathname: '/mandate/edit-address',
+      search: 'base_url=' + this.state.params.base_url + '&address_id=' + id
+    });
+  }
+
+  renderAddress(props, index) {
+    return (
+      <div key={index} style={{ display: 'flex', margin: '10px 0 20px 0' }}>
+        <div >
+          <Checkbox style={{ height: 'auto' }}
+            defaultChecked
+            checked={this.state.indexCheckBox == index}
+            color="default"
+            value="checked"
+            name="checked"
+            onChange={this.handleChange(index)}
+            className="Checkbox" />
+
+        </div>
+        <div className="select-addressline">
+          {this.getFullAddress(props)}
+        </div>
+        <div onClick={() => this.editAddress(props.id)} className="select-edit-button">
+          Edit
+        </div>
+      </div>
+    )
+  }
+
+  renderMainUi() {
+    if (this.state.openDialogConfirm == false) {
+      return (
+        <Container
+          summarypage={true}
+          showLoader={this.state.show_loader}
+          title="Bank Mandate Process"
+          handleClick={this.handleClick}
+          fullWidthButton={true}
+          onlyButton={true}
+          buttonTitle="Continue"
+          banner={true}
+          bannerText={this.bannerText()}
+          isDisabled={this.state.indexCheckBox == -1 ? true : false}
+          type={this.state.type} >
+          {this.state.addressData && this.state.addressData.map(this.renderAddress)}
+          {this.state.addressData && this.state.addressData.length < 3 &&
+            <div
+              onClick={() => this.navigate('/mandate/add-address')}
+              className="select-add-new-button">
+              + Add New Address
+        </div>}
+        </Container >
+      );
+    }
+    return null;
+  }
 
   render() {
     return (
-      <Container
-        summarypage={true}
-        showLoader={this.state.show_loader}
-        title="Bank Mandate Process"
-        handleClick={() => this.navigate('/mandate/select-address')}
-        fullWidthButton={true}
-        onlyButton={true}
-        buttonTitle="Continue"
-        banner={true}
-        bannerText={this.bannerText()}
-        type={this.state.type} >
-        <div style={{ display: 'flex' }}>
-          <div >
-            <Checkbox style={{ height: 'auto' }}
-              defaultChecked
-              checked={this.state.checked}
-              color="default"
-              value="checked"
-              name="checked"
-              onChange={this.handleChange()}
-              className="Checkbox" />
-
-          </div>
-          <div className="select-addressline">
-            Annaya 28, ground floor, 10th a cross road, ejipoura,
-            bangalore, karnataka - 560064
-          </div>
-          <div className="select-edit-button">
-            Edit
-            </div>
-        </div>
-        <div
-          onClick={() => this.navigate('/mandate/add-address')}
-          className="select-add-new-button">
-          + Add New Address
-        </div>
-      </Container >
+      <div>
+        {this.renderMainUi()}
+        {this.openDialogConfirmModal()}
+      </div>
     );
   }
 }

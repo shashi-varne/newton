@@ -65,6 +65,7 @@ export class SummaryLayout extends Component {
           <div className="FlexItem2">
             <Button
               type={props.type}
+              isDisabled={props.isDisabled}
               {...props} />
           </div>
         </div>
@@ -135,6 +136,7 @@ export class DefaultLayout extends Component {
         <div className="FlexItem2">
           <Button
             type={props.type}
+            isDisabled={props.isDisabled}
             arrow={(props.edit) ? false : true}
             {...props} />
         </div>
