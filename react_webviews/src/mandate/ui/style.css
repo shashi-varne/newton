@@ -140,31 +140,31 @@
   margin: 20px 0 40px 0;
 }
 .process-tile1 {
-  font-size: 22px;
+  font-size: 17px;
   color: grey;
-  /* margin: 9px 0 0 0; */
+  margin: -2px 0 0 0;
 }
 .process-tile2 {
-  font-size: 17px;
-  max-width: 91%;
+  font-size: 14px;
+  max-width: 89%;
   margin-left: 10px;
-  color: #4b4343;
+  color: #4a4a4a;
   line-height: 1.4;
 }
 .process-address {
-  margin: 0 0 30px 28px;
+  margin: 0 0 30px 24px;
     border: 1px dashed #b4b1b2;
     padding: 13px;
-    max-width: 76%;
+    max-width: 79%;
 }
 .process-address1 {
-  font-size: 15px;
+  font-size: 14px;
     color: #5b5a5a;
     font-weight: 500;
     margin: 0 0 8px 0;
 }
 .process-address2 {
-  font-size: 15px;
+  font-size: 14px;
     color: #7a7575;
 }
 

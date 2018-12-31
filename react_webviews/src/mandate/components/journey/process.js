@@ -98,7 +98,7 @@ class MandateProcess extends Component {
         type={this.state.type} >
         <div>
           <div className="process-tile">
-            <div className="process-tile1" style={{ marginTop: 10 }}>
+            <div className="process-tile1">
               1.
             </div>
             <div className="process-tile2">
