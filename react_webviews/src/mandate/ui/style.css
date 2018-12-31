@@ -177,7 +177,7 @@
   text-align: center;
     margin: 0 0 20px 0;
     color: #6fdb4f;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 500;
 }
 .success-text-info {
@@ -192,7 +192,7 @@
 }
 .success-bottom1 {
   font-size: 14px;
-    color: grey;
+    color: #b4b4b4;
     margin-bottom: 11px;
 }
 .success-bottom2 {
@@ -200,19 +200,19 @@
 }
 .success-bottom2a {
   font-size: 14px;
-    color: #464444;
+    color: #b4b4b4;
     font-weight: 500;
 }
 .success-bottom2b {
   margin: 0 20px 0 20px;
-    color: #5d5c5c;
+    color: #d6d6d6;
 }
 .success-bottom-timer {
   text-align: center;
     margin: 20px 0 0 0;
     font-size: 14px;
     font-weight: 500;
-    color: #595656;
+    color: #878787;
 }
 .success-img-timer {
   width: 24px;

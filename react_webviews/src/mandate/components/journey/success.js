@@ -54,6 +54,10 @@ class MandateSuccess extends Component {
 
   }
 
+  handleClick = () => {
+    nativeCallback({ action: 'native_back' });
+  }
+
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,

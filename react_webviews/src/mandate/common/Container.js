@@ -30,8 +30,8 @@ class Container extends Component {
     }
     let pathname = this.props.history.location.pathname;
     switch (pathname) {
-      case "/insurance":
-      case "/insurance/resume":
+      case "/mandate":
+      case "/mandate/success":
         nativeCallback({ action: 'native_back' });
         break;
       default:
