@@ -25,7 +25,8 @@ class SelectAddress extends Component {
       type: '',
       checked: true,
       indexCheckBox: -1,
-      openDialogConfirm: false
+      openDialogConfirm: false,
+      openDialog: false
     }
 
     this.renderAddress = this.renderAddress.bind(this);
@@ -111,7 +112,8 @@ class SelectAddress extends Component {
 
   handleClose() {
     this.setState({
-      openDialogConfirm: false
+      openDialogConfirm: false,
+      openDialog: false
     })
   }
 
@@ -287,11 +289,34 @@ class SelectAddress extends Component {
     return null;
   }
 
+  renderResponseDialog = () => {
+    return (
+      <Dialog
+        open={this.state.openDialog}
+        onClose={this.handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {this.state.apiError}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClose} color="primary" autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  }
+
   render() {
     return (
       <div>
         {this.renderMainUi()}
         {this.openDialogConfirmModal()}
+        {this.renderResponseDialog()}
       </div>
     );
   }

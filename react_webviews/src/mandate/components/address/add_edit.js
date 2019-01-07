@@ -83,6 +83,7 @@ class AddEditAddress extends Component {
 
         }).catch(error => {
           this.setState({ show_loader: false });
+          this.setState({ openDialog: true, apiError: error });
           console.log(error);
         });
       } else {
