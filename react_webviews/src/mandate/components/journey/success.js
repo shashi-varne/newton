@@ -20,6 +20,7 @@ class MandateSuccess extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      openDialog: false,
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
@@ -63,6 +64,34 @@ class MandateSuccess extends Component {
       pathname: pathname,
       search: 'base_url=' + this.state.params.base_url
     });
+  }
+
+  handleClose() {
+    this.setState({
+      openDialog: false
+    })
+  }
+
+  renderResponseDialog = () => {
+    return (
+      <Dialog
+        open={this.state.openDialog}
+        onClose={this.handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {this.state.apiError}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClose} color="primary" autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
   }
 
   render() {
