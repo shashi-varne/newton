@@ -1,0 +1,27 @@
+/* -----------------------------------------------------------------*/
+/*  Module: PlutusSdk
+/*  Apis for sending/receiving `native` callbacks
+/* -----------------------------------------------------------------*/
+
+(function (exports) {
+  var listeners = [];
+
+  exports.add_listener = function (listener) {
+    listeners.push(listener);
+  }
+
+  exports.remove_listener = function (listener) {
+    listeners = [];
+  }
+
+  exports.back_pressed = function () {
+    for (var i = 0, j = listeners.length; i < j; i++) {
+      var l = listeners[i];
+
+      if (l.type === 'back_pressed') {
+        l.go_back();
+      }
+    }
+  }
+
+})(window.PlutusSdk ? window.PlutusSdk : (window.PlutusSdk = {}));
