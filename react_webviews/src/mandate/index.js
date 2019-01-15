@@ -35,7 +35,7 @@ const theme = createMuiTheme({
     },
     secondary: {
       // light: '#0066ff',
-      main: '#1bda4e',
+      main: '#35cb5d',
       // dark: will be calculated from palette.secondary.main,
       contrastText: '#ffffff',
     },
@@ -66,7 +66,7 @@ const theme = createMuiTheme({
     MuiButton: {
       raisedSecondary: {
         '&:hover': {
-          backgroundColor: '#1bda4e'
+          backgroundColor: '#35cb5d'
         }
       }
     },
