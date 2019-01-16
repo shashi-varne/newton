@@ -52,7 +52,7 @@ class MandateProcess extends Component {
 
 
   componentDidMount() {
-    Api.get('/api/mandate/otm/address').then(res => {
+    Api.get('/api/mandate/campaign/address/' + this.state.params.key).then(res => {
       if (res.pfwresponse.status_code == 200) {
         this.setState({
           show_loader: false,
@@ -76,7 +76,9 @@ class MandateProcess extends Component {
         }
       }
     }).catch(error => {
-      this.setState({ show_loader: false });
+      this.setState({
+        show_loader: false, showLoader: false
+      });
       console.log(error);
     });
   }
@@ -84,7 +86,7 @@ class MandateProcess extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: 'base_url=' + this.state.params.base_url
+      search: 'base_url=' + this.state.params.base_url + '&key=' + this.state.params.key
     });
   }
 
@@ -92,7 +94,7 @@ class MandateProcess extends Component {
     this.setState({
       show_loader: true
     })
-    Api.get('/api/mandate/otm/address').then(res => {
+    Api.get('/api/mandate/campaign/address/' + this.state.params.key).then(res => {
       if (res.pfwresponse.status_code == 200) {
         this.setState({
           show_loader: false
