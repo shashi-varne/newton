@@ -64,7 +64,7 @@ class AddEditAddress extends Component {
 
     if (this.props.edit) {
       if (this.state.params.address_id) {
-        Api.get('/api/mandate/otm/address?address_id=' + this.state.params.address_id).then(res => {
+        Api.get('/api/mandate/campaign/address/' + this.state.params.key + '?address_id=' + this.state.params.address_id).then(res => {
           if (res.pfwresponse.result) {
             let address = res.pfwresponse.result[0];
             this.setState({
@@ -147,7 +147,7 @@ class AddEditAddress extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id=' + this.state.params.insurance_id + '&resume=' + this.state.params.resume + '&base_url=' + this.state.params.base_url
+      search: 'base_url=' + this.state.params.base_url + '&key=' + this.state.params.key
     });
   }
 
@@ -197,9 +197,9 @@ class AddEditAddress extends Component {
       let res;
       if (this.props.edit) {
         addressline.address_id = this.state.params.address_id;
-        res = await Api.put('/api/account/address', addressline);
+        res = await Api.put('/api/account/address/' + this.state.params.key, addressline);
       } else {
-        res = await Api.post('/api/mandate/otm/address', addressline);
+        res = await Api.post('/api/mandate/campaign/address/' + this.state.params.key, addressline);
       }
 
       if (res.pfwresponse.status_code === 200) {

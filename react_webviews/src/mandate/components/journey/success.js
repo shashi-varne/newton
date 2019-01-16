@@ -64,7 +64,7 @@ class MandateSuccess extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: 'base_url=' + this.state.params.base_url
+      search: 'base_url=' + this.state.params.base_url + '&key=' + this.state.params.key
     });
   }
 

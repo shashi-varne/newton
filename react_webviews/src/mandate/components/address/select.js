@@ -58,7 +58,7 @@ class SelectAddress extends Component {
 
   componentDidMount() {
 
-    Api.get('/api/mandate/otm/address').then(res => {
+    Api.get('/api/mandate/campaign/address/' + this.state.params.key).then(res => {
       if (res.pfwresponse.status_code == 200) {
         this.setState({
           addressData: res.pfwresponse.result,
@@ -79,14 +79,14 @@ class SelectAddress extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: 'base_url=' + this.state.params.base_url
+      search: 'base_url=' + this.state.params.base_url + '&key=' + this.state.params.key,
     });
   }
 
   navigateSuccess = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: 'base_url=' + this.state.params.base_url,
+      search: 'base_url=' + this.state.params.base_url + '&key=' + this.state.params.key,
       params: {
         disableBack: true
       }
@@ -185,7 +185,7 @@ class SelectAddress extends Component {
 
     };
 
-    let res = await Api.post('/api/mandate/otm/address', addressline);
+    let res = await Api.post('/api/mandate/campaign/address/' + this.state.params.key, addressline);
 
     if (res.pfwresponse.status_code === 200) {
 
@@ -236,7 +236,7 @@ class SelectAddress extends Component {
   editAddress(id) {
     this.props.history.push({
       pathname: '/mandate/edit-address',
-      search: 'base_url=' + this.state.params.base_url + '&address_id=' + id
+      search: 'base_url=' + this.state.params.base_url + '&address_id=' + id + '&key=' + this.state.params.key
     });
   }
 
