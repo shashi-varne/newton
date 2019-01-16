@@ -353,7 +353,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                previous gold price has expired.
+                                        previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -403,11 +403,11 @@ class GoldSummary extends Component {
               <div className="my-gold-details-header1">
                 <div className="my-gold-details-header2">
                   <div className="my-gold-details-header2a">Weight</div>
-                  <div className="my-gold-details-header2b">3.3266 gm</div>
+                  <div className="my-gold-details-header2b">{this.state.goldInfo.gold_balance || 0} gm</div>
                 </div>
                 <div className="my-gold-details-header3">
                   <div className="my-gold-details-header2a">Selling Value</div>
-                  <div className="my-gold-details-header2b">₹ 10,325.64</div>
+                  <div className="my-gold-details-header2b">₹ {this.state.goldInfo.sell_value || 0}</div>
                 </div>
               </div>
             </div>
@@ -417,11 +417,11 @@ class GoldSummary extends Component {
               <div className="FlexRow">
                 <span className="buy-info2a">Current Buying Price</span>
                 <span className="buy-info2b">Price valid for
-                  <span className="timer-green">1:45</span>
+                  <span className="timer-green">{this.state.minutes || 0}:{this.state.seconds || 0}</span>
                 </span>
               </div>
               <div className="buy-info3">
-                ₹ 3,998.25/gm
+                ₹{this.state.goldBuyInfo.plutus_rate || 0}/gm
               </div>
               <div className="buy-info4">
                 All prices are inclusive of 3% GST
