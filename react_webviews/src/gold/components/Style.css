@@ -1,0 +1,126 @@
+.Banner {
+  position: relative;
+  text-align: center;
+}
+
+.Banner img {
+  width: 100%;
+}
+
+.BannerContent {
+  top: 50%;
+  position: absolute;
+  color: white;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.BannerText {
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: small;
+}
+
+.SafeGoldImage {
+  margin: 5px 0;
+}
+
+.SafeGoldImage img {
+  widows: 150px;
+}
+
+.FlexRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.helper {
+  color: #8ab9e3;
+  margin-top: 10px;
+  text-decoration: underline;
+}
+
+.gold-about-text-know-more {
+    margin: 20px 0 20px 0;
+    text-align: center;
+}
+
+.gold-about-text {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  line-height: 1.3rem;
+}
+
+.gold-about-text:last-child {
+  margin-bottom: 0;
+}
+
+.gold-about-text img {
+  margin-right: 15px;
+}
+
+.gold-dot {
+  min-height: 7px;
+  min-width: 7px;
+  margin-right: 20px;
+  border-radius: 50%;
+  border: 2px solid #f0c82f;
+}
+
+.about-img-span2 {
+  font-size: 14px;
+  color: #888181;
+}
+
+.about-img-tile-know-more {
+  text-align: justify;
+}
+
+.gold-about-card {
+  position: relative;
+  background: #fff;
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  padding: 0px 0px 10px 0px;
+  margin: 0px;
+  margin-bottom: 20px;
+  border: 1px solid #ececec;
+}
+
+.gold-about-card h3 {
+  font-size: 16px;
+  color: black;
+  font-weight: normal;
+  margin-top: 0;
+}
+
+.BannerBody {
+  padding: 15px;
+}
+
+.card-padding {
+  padding: 15px;
+}
+
+.know-more-buy {
+  color: #3c3c3c;
+}
+
+.about-img-span-know-more {
+  font-size: 14px;
+  color: #888181;
+  line-height: 1.3rem;
+}
+
+.gold-about-text-know-more {
+  border-bottom: 1px solid #e8e8e8;
+  padding-bottom: 15px;
+  text-align: left;
+}
+
+.gold-about-text-know-more img {
+  width: 35%;
+  margin-bottom: 10px;
+}

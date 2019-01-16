@@ -4,6 +4,13 @@ import qs from 'qs';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
+import intro_gold from 'assets/intro_gold@2x.png';
+import safegold_logo from 'assets/safegold_logo@2x.png';
+import buy_gold_icon from 'assets/buy_gold_icon@2x.png';
+import track_gold_icon from 'assets/track_gold_icon@2x.png';
+import sell_gold_icon from 'assets/sell_gold_icon@2x.png';
+import deliver_gold_icon from 'assets/deliver_gold_icon@2x.png';
+import '../Style.css';
 
 class About extends Component {
   constructor(props) {
@@ -46,21 +53,98 @@ class About extends Component {
     });
   }
 
-  handleClick = async () => {
-    this.navigate('my-gold');
-  }
-
   render() {
     return (
       <Container
         showLoader={this.state.show_loader}
         title="Gold"
-        handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="Proceed"
         type={this.state.type}
       >
-        <div>Lorum Ipsum</div>
+        <div className="gold-about-card">
+          <div className="Banner">
+            <img src={intro_gold} />
+            <div className="BannerContent">
+              <div className="BannerText">Introducing Gold</div>
+              <div className="SafeGoldImage">
+                <img src={safegold_logo} />
+              </div>
+              <div className="FlexRow">
+                <div>24 Karat</div>
+                <div>|</div>
+                <div>99.5% Purity</div>
+              </div>
+              <div className="helper" onClick={() => this.navigate('details')} >Know More</div>
+            </div>
+          </div>
+          <div className="BannerBody">
+            <div className="gold-about-text">
+              <div className="gold-dot"></div>
+              <div className="about-img-tile">
+                <span className="about-img-span2">Buy 24K gold & skip the responsibility of safe-keeping & traditional lockers.
+                </span>
+              </div>
+            </div>
+            <div className="gold-about-text">
+              <div className="gold-dot"></div>
+              <div className="about-img-tile">
+                <span className="about-img-span2">You get a free & secure locker from <span className="know-more-buy">BRINK's</span>, global leader in gold custodian services with 100% insurance cover.
+                </span>
+              </div>
+            </div>
+            <div className="gold-about-text">
+              <div className="gold-dot"></div>
+              <div className="about-img-tile">
+                <span className="about-img-span2">Sell your gold with one click, anywhere and anytime.
+                </span>
+              </div>
+            </div>
+            <div className="gold-about-text">
+              <div className="gold-dot"></div>
+              <div className="about-img-tile">
+                <span className="about-img-span2">Get your gold delivered to your doorstep, hassle-free.
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="gold-about-card card-padding">
+          <div>
+            <h3>How It Works?</h3>
+          </div>
+          <div >
+            <div className="gold-about-text">
+              <img className="about-img" src={buy_gold_icon} width="54" />
+              <div className="about-img-tile">
+                <span className="about-img-span2"> <span className="know-more-buy">Buy</span> the desired quantity or amount of gold above Re.1 and purchase it at the live price quoted.
+                </span>
+              </div>
+            </div>
+            <div className="gold-about-text">
+              <img className="about-img" src={track_gold_icon} width="54" />
+              <div className="about-img-tile">
+                <span className="about-img-span2"><span className="know-more-buy">Track</span> your gold value & transactions anytime from your gold locker. 
+                </span>
+              </div>
+            </div>
+            <div className="gold-about-text">
+              <img className="about-img" src={sell_gold_icon} width="54" />
+              <div className="about-img-tile">
+                <span className="about-img-span2"><span className="know-more-buy">Sell</span> any amount of gold above Rs. 5 & get the amount credited in your bank account within 72 hours.
+                </span>
+              </div>
+            </div>
+            <div className="gold-about-text">
+              <img className="about-img" src={deliver_gold_icon} width="54" />
+              <div className="about-img-tile">
+                <span className="about-img-span2">Select any gold product of your choice when you have more than 1 gm in 
+                  your gold locker & track your <span className="know-more-buy">Delivery</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
       </Container>
     );
   }

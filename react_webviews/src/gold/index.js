@@ -112,20 +112,20 @@ const Gold = (props) => {
         <Switch>
           <Route exact path={`${url}`} component={About} />
           <Route path={`${url}/about`} component={About} />
-          <Route path={`${url}//gold/details`} component={KnowMore} />
+          <Route path={`${url}/details`} component={KnowMore} />
           <Route path={`${url}/my-gold`} component={GoldSummary} />
           <Route path={`${url}/my-gold-locker`} component={GoldLocker} />
           <Route path={`${url}/gold-transactions`} component={Transactions} />
 
           <Route path={`${url}/gold-register`} component={GoldRegister} />
           <Route path={`${url}/buy-gold-order`} component={BuyOrder} />
-          <Route path={`${url}/gold/bank-details`} component={GoldBank} />
+          <Route path={`${url}/bank-details`} component={GoldBank} />
           <Route path={`${url}/sell-gold-order`} component={SellOrder} />
           <Route path={`${url}/gold-delivery-address`} component={DeliveryAddress} />
           <Route path={`${url}/gold-delivery-order`} component={DeliveryOrder} />
           <Route path={`${url}/select-gold-product`} component={DeliverySelectedProduct} />
-          <Route path={`${url}/gold/:orderType/payment/:status`} component={Payment} />
-          <Route path={`${url}/gold/verify`} component={Otp} />
+          <Route path={`${url}/:orderType/payment/:status`} component={Payment} />
+          <Route path={`${url}/verify`} component={Otp} />
 
           {/* Edit paths */}
           {/* <Route path={`${url}/edit-personal`} render={(props) => <PersonalDetails1 {...props} edit={true} />} /> */}
