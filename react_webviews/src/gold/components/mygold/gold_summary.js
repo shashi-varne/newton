@@ -6,12 +6,37 @@ import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
 import safegold_logo from 'assets/safegold_logo_60x60.png';
 import arrow from 'assets/arrow.png';
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
+} from 'material-ui/Dialog';
+import Button from 'material-ui/Button';
 
 class GoldSummary extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
+      openDialog: false,
+      openPopup: false,
+      popupText: '',
+      apiError: '',
+      goldInfo: {},
+      userInfo: {},
+      goldSellInfo: {},
+      new_rate: {},
+      amountUpdated: '',
+      weightUpdated: '',
+      maxWeight: '',
+      isRegistered: false,
+      isWeight: false,
+      isAmount: false,
+      amountError: false,
+      weightError: false,
+      weight: '',
+      amount: '',
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
@@ -39,6 +64,310 @@ class GoldSummary extends Component {
     this.setState({
       show_loader: false,
     });
+
+    Api.get('/api/gold/user/account').then(res => {
+      if (res.pfwresponse.status_code == 200) {
+        let result = res.pfwresponse.result;
+        let isRegistered = true;
+        if (result.gold_user_info.user_info.registration_status == "pending" ||
+          !result.gold_user_info.user_info.registration_status ||
+          result.gold_user_info.is_new_gold_user) {
+          isRegistered = false;
+        }
+        this.setState({
+          show_loader: false,
+          goldInfo: result.gold_user_info.safegold_info,
+          userInfo: result.gold_user_info.user_info,
+          maxWeight: parseFloat(((30 - result.gold_user_info.safegold_info.gold_balance) || 30).toFixed(4)),
+          isRegistered: isRegistered
+        });
+      } else {
+        this.setState({
+          show_loader: false, openDialog: true,
+          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+        });
+      }
+
+    }).catch(error => {
+      this.setState({ show_loader: false });
+      console.log(error);
+    });
+
+    Api.get('/api/gold/sell/currentprice').then(res => {
+      if (res.pfwresponse.status_code == 200) {
+        let goldInfo = this.state.goldInfo;
+        let result = res.pfwresponse.result;
+        goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
+        this.setState({
+          show_loader: false,
+          goldSellInfo: result.sell_info,
+          goldInfo: goldInfo
+        });
+      } else {
+        this.setState({
+          show_loader: false, openDialog: true,
+          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+        });
+      }
+
+    }).catch(error => {
+      this.setState({ show_loader: false });
+      console.log(error);
+    });
+
+    Api.get('/api/gold/buy/currentprice').then(res => {
+
+      if (res.pfwresponse.status_code == 200) {
+        let result = res.pfwresponse.result;
+        let goldBuyInfo = result.buy_info;
+        var currentDate = new Date();
+        var validityDate = new Date(goldBuyInfo.rate_validity);
+        let timeAvailable = ((validityDate.getTime() - currentDate.getTime()) / 1000);
+        if (timeAvailable >= 0 && goldBuyInfo.plutus_rate) {
+          this.countdown();
+        }
+
+        let amount = '', weight = '';
+        if (window.localStorage.getItem('buyAmountRegister')) {
+
+          amount = window.localStorage.getItem('buyAmountRegister');
+          window.localStorage.setItem('buyAmountRegister', 0);
+          weight = this.calculate_gold_wt(goldBuyInfo.plutus_rate,
+            goldBuyInfo.applicable_tax, amount);
+        }
+
+        this.setState({
+          show_loader: false,
+          goldBuyInfo: result.buy_info,
+          plutusRateID: result.buy_info.plutus_rate_id,
+          amount: amount,
+          weight: weight,
+          timeAvailable: timeAvailable
+
+        });
+      } else {
+        this.setState({
+          show_loader: false, openDialog: true,
+          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+        });
+      }
+
+    }).catch(error => {
+      this.setState({ show_loader: false });
+      console.log(error);
+    });
+
+  }
+
+  countdown() {
+    let timeAvailable = this.state.timeAvailable;
+    if (timeAvailable <= 0) {
+      this.setState({
+        minutes: '',
+        seconds: ''
+      })
+      window.location.reload();
+      return;
+    }
+
+    setTimeout(
+      function () {
+        let minutes = Math.floor(timeAvailable / 60);
+        let seconds = Math.floor(timeAvailable - minutes * 60);
+        timeAvailable--;
+        this.setState({
+          timeAvailable: timeAvailable,
+          minutes: minutes,
+          seconds: seconds
+        })
+        this.countdown();
+      }
+        .bind(this),
+      3000
+    );
+  };
+
+  calculate_gold_wt(current_gold_price, tax, buy_price) {
+    tax = 1.0 + parseFloat(tax) / 100.0
+    var current_gold_price_with_tax = (current_gold_price * tax).toFixed(2);
+    var gold_wt = (buy_price / current_gold_price_with_tax).toFixed(4);
+    return gold_wt
+
+  }
+
+  calculate_gold_amount(current_gold_price, tax, weight) {
+    console.log(current_gold_price);
+    tax = 1.0 + parseFloat(tax) / 100.0
+    var current_gold_price_with_tax = (current_gold_price * tax).toFixed(2)
+    var gold_amount = (weight * current_gold_price_with_tax).toFixed(2);
+    return gold_amount
+  }
+
+  buyGold = async (plutus_rate_id, amount) => {
+
+    if (this.state.userInfo.mobile_verified == false ||
+      this.state.isRegistered == false) {
+      window.localStorage.setItem('buyAmountRegister', amount);
+      this.navigate('gold-register')
+      return;
+    }
+
+    var options = {
+      plutus_rate_id: plutus_rate_id,
+      buy_price: parseFloat(amount)
+    }
+
+    if (parseFloat(this.state.weight) > this.state.maxWeight) {
+      // toast('You can not buy more than ' + this.state.maxWeight + ' gm');
+      return;
+    }
+
+    if (!parseFloat(this.state.weight) || parseFloat(this.state.weight) < 0) {
+      // toast('Please enter a correct value for the weight');
+      return;
+    }
+
+    if (!parseFloat(this.state.amount) || parseFloat(this.state.amount) < 0) {
+      // toast('Please enter a correct value for the amount');
+      return;
+    }
+
+    if (parseFloat(this.state.amount) >= 0 && parseFloat(this.state.amount) < 1) {
+      // toast('Minimum amount should be Rs. 1');
+      return;
+    }
+
+    this.setState({
+      show_loader: true
+    });
+
+
+    const res = await Api.post('/api/gold/user/redeem/verify', options);
+
+    if (res.pfwresponse.status_code === 200 &&
+      res.pfwresponse.result.payment_details.plutus_rate === this.state.goldBuyInfo.plutus_rate) {
+      let result = res.pfwresponse.result;
+      var buyData = result.payment_details;
+      window.localStorage.setItem('buyData', buyData);
+      window.localStorage.setItem('timeAvailable', this.state.timeAvailable);
+
+      this.navigate('buy-gold-order');
+      this.setState({
+        show_loader: false,
+      });
+    } else if (res.pfwresponse.result.is_gold_rate_changed) {
+      let new_rate = res.pfwresponse.result.new_rate;
+      let amountUpdated, weightUpdated;
+      if (this.state.isAmount) {
+        amountUpdated = this.state.amount;
+        weightUpdated = this.calculate_gold_wt(new_rate.plutus_rate,
+          new_rate.applicable_tax, this.state.amount);
+      } else {
+        weightUpdated = this.state.weight;
+        amountUpdated = this.calculate_gold_amount(new_rate.plutus_rate,
+          new_rate.applicable_tax, this.state.weight);
+      }
+      this.setState({
+        show_loader: false,
+        amountUpdated: amountUpdated,
+        weightUpdated: weightUpdated,
+        new_rate: new_rate,
+        openPopup: true
+      });
+    } else {
+      this.setState({
+        show_loader: false, openDialog: true,
+        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+      });
+    }
+
+  }
+
+
+  handleClose = () => {
+    this.setState({
+      openDialog: false,
+      openPopup: false
+    });
+  }
+
+  renderResponseDialog = () => {
+    return (
+      <Dialog
+        open={this.state.openDialog}
+        onClose={this.handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {this.state.apiError}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClose} color="primary" autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  }
+
+  handlePopup = () => {
+    this.setState({
+      openPopup: false
+    });
+
+    if (this.state.isAmount) {
+      this.buyGold(this.state.new_rate.plutus_rate_id, this.state.amount);
+    } else {
+      this.buyGold(this.state.new_rate.plutus_rate_id, this.state.amountUpdated);
+    }
+  }
+
+  renderPopup = () => {
+    return (
+      <Dialog
+        fullScreen={false}
+        open={this.state.openPopup}
+        onClose={this.handleClose}
+        aria-labelledby="responsive-dialog-title"
+      >
+
+        {this.state.isAmount &&
+          <div>
+            <DialogTitle id="form-dialog-title">Confirm Updated Price</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Your checkout value has been updated to
+                Rs.{this.state.amountUpdated} ({this.state.weightUpdated}gm) as the
+                previous gold price has expired.
+              </DialogContentText>
+            </DialogContent>
+          </div>
+        }
+        {this.state.isWeight &&
+          <div>
+            <DialogTitle id="form-dialog-title">Confirm Updated Weight</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Your checkout value has been updated to
+              {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
+                                previous gold price has expired.
+              </DialogContentText>
+            </DialogContent>
+          </div>
+        }
+        <DialogActions>
+          <Button onClick={this.handleClose} color="primary">
+            CANCEL
+          </Button>
+          <Button onClick={this.handlePopup} color="primary" autoFocus>
+            CONTINUE
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
   }
 
   navigate = (pathname) => {
@@ -68,7 +397,7 @@ class GoldSummary extends Component {
               <div className="FlexRow row1" >
                 <img className="img-mygold" src={safegold_logo} />
                 <span className="my-gold-title-header">My 24K Safegold Gold Locker</span>
-                <img  className="img-mygold2" src={arrow} />
+                <img className="img-mygold2" src={arrow} />
               </div>
               <div className="spacer-header"></div>
               <div className="my-gold-details-header1">
@@ -122,10 +451,11 @@ class GoldSummary extends Component {
                     <div className="input-below-text">Max 00.000 gm</div>
                   </div>
                 </div>
-              </div> 
+              </div>
             </div>
           </div>
         </div>
+        {this.renderResponseDialog()}
       </Container>
     );
   }

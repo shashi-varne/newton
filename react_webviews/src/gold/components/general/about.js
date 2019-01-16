@@ -124,7 +124,7 @@ class About extends Component {
             <div className="gold-about-text">
               <img className="about-img" src={track_gold_icon} width="54" />
               <div className="about-img-tile">
-                <span className="about-img-span2"><span className="know-more-buy">Track</span> your gold value & transactions anytime from your gold locker. 
+                <span className="about-img-span2"><span className="know-more-buy">Track</span> your gold value & transactions anytime from your gold locker.
                 </span>
               </div>
             </div>
@@ -138,7 +138,7 @@ class About extends Component {
             <div className="gold-about-text">
               <img className="about-img" src={deliver_gold_icon} width="54" />
               <div className="about-img-tile">
-                <span className="about-img-span2">Select any gold product of your choice when you have more than 1 gm in 
+                <span className="about-img-span2">Select any gold product of your choice when you have more than 1 gm in
                   your gold locker & track your <span className="know-more-buy">Delivery</span>
                 </span>
               </div>

@@ -34,9 +34,43 @@ class GoldRegister extends Component {
   }
 
   componentDidMount() {
-    this.setState({
-      show_loader: false,
+    Api.get('/api/gold/user/account').then(res => {
+      if (res.pfwresponse.status_code == 200) {
+        let result = res.pfwresponse.result;
+        let isRegistered = true;
+        let userInfo = result.gold_user_info.user_info;
+        if (userInfo.registration_status == "pending" ||
+          !userInfo.registration_status ||
+          result.gold_user_info.is_new_gold_user) {
+          isRegistered = false;
+        }
+
+        this.setState({
+          show_loader: false,
+          goldInfo: result.gold_user_info.safegold_info,
+          userInfo: userInfo,
+          isRegistered: isRegistered
+        });
+
+        if (userInfo.mobile_verified == false &&
+          isRegistered == false) {
+          // $state.go('my-gold');
+          return;
+        }
+        // this.checkPincode();
+
+      } else {
+        this.setState({
+          show_loader: false, openDialog: true,
+          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+        });
+      }
+
+    }).catch(error => {
+      this.setState({ show_loader: false });
+      console.log(error);
     });
+
   }
 
   navigate = (pathname) => {
