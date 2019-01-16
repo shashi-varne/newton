@@ -56,7 +56,9 @@ class MandateSuccess extends Component {
   }
 
   handleClick = () => {
-    nativeCallback({ action: 'native_back' });
+    // nativeCallback({ action: 'native_back' });
+    let url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate&message=success&code=200&destination=';
+    window.location.replace(url);
   }
 
   navigate = (pathname) => {
