@@ -22,17 +22,30 @@ class Container extends Component {
     }
   }
 
+  redirectCallback(type) {
+    console.log("back")
+    let url;
+    if (type == 'back') {
+      url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate&message=back&code=400&destination=';
+    } else {
+      url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate&message=success&code=200&destination=';
+    }
+    window.location.replace(url);
+  }
+
   historyGoBack = () => {
     let { params } = this.props.location
     if (params && params.disableBack) {
-      nativeCallback({ action: 'native_back' });
+      this.redirectCallback('success');
       return;
     }
     let pathname = this.props.history.location.pathname;
     switch (pathname) {
       case "/mandate":
+        this.redirectCallback('back');
+        break;
       case "/mandate/success":
-        nativeCallback({ action: 'native_back' });
+        this.redirectCallback('success');
         break;
       default:
         if (navigator.onLine) {
