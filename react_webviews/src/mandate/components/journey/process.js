@@ -24,6 +24,7 @@ class MandateProcess extends Component {
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
     }
+    this.handleClose = this.handleClose.bind(this);
   }
 
   componentWillMount() {
@@ -31,8 +32,6 @@ class MandateProcess extends Component {
     this.setState({
       disableBack: params ? params.disableBack : false
     })
-    console.log(params);
-    console.log(this.state.params);
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -77,7 +76,8 @@ class MandateProcess extends Component {
         }
       } else {
         this.setState({
-          show_loader: false
+          show_loader: false,
+          openDialog: true, apiError: res.pfwresponse.result.error
         });
       }
     }).catch(error => {
@@ -162,6 +162,7 @@ class MandateProcess extends Component {
           </div>
 
         </div>
+        {this.renderResponseDialog()}
       </Container >
     );
   }
