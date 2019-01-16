@@ -5,6 +5,15 @@ import Container from '../../common/Container';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
 import safegold_logo from 'assets/safegold_logo_60x60.png';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import one_gm_front from 'assets/1gm_front.png';
+import two_gm_front from 'assets/2gm_front.png';
+import five_gm_front from 'assets/5gm_front.png';
+import five_gmbar_front from 'assets/5gmbar_front.png';
+import ten_gm_front from 'assets/10gm_front.png';
+import ten_gmbar_front from 'assets/10gmbar_front.png';
+import twenty_gmbar_front from 'assets/20gmbar_front.png';
 
 class GoldLocker extends Component {
   constructor(props) {
@@ -15,6 +24,7 @@ class GoldLocker extends Component {
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
+      value: 0
     }
   }
 
@@ -47,16 +57,32 @@ class GoldLocker extends Component {
     });
   }
 
-  handleClick = async () => {
-    this.navigate('my-gold');
+  handleChange = (event, value) => {
+    this.setState({ value });
+  }
+
+  productImgMap = () => {
+    const prod_image_map = {
+      2: one_gm_front,
+      3: two_gm_front,
+      1: five_gm_front,
+      14: five_gmbar_front,
+      8: ten_gm_front,
+      12: ten_gmbar_front,
+      15: twenty_gmbar_front,
+    };
+    
+    return (
+      <img alt="Gold" className="delivery-icon" src={prod_image_map[3]} width="80" />
+    );
   }
 
   render() {
+
     return (
       <Container
         showLoader={this.state.show_loader}
         title="My 24K Safegold Locker"
-        handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="Proceed"
         type={this.state.type}
@@ -74,7 +100,17 @@ class GoldLocker extends Component {
             <div>₹ 10,498.64</div>
           </div>
         </div>
-        <div className="page home" id="goldSection">
+        <Tabs
+            value={this.state.value}
+            onChange={this.handleChange}
+            indicatorColor="primary"
+            textColor="primary"
+            variant="fullWidth"
+          >
+            <Tab label="Sell" />
+            <Tab label="Deliver" />
+          </Tabs>
+          {this.state.value === 0 && <div className="page home" id="goldSection">
           <div className="page-body-gold" id="goldInput">
             <div className="buy-info1">
               <div className="FlexRow">
@@ -117,7 +153,35 @@ class GoldLocker extends Component {
               </div> 
             </div>
           </div>
-        </div>
+        </div>}
+        {this.state.value === 1 && <div>
+          <div className="FlexRow" style={{justifyContent: 'center', flexWrap: 'wrap'}}>
+            <div className="delivery-tile">
+              {this.productImgMap()}
+              
+              <div className="">1gm SafeGold Gold Coin</div>
+              <div className="">Charges Rs. 360</div>
+            </div>
+            <div className="delivery-tile">
+              {this.productImgMap()}
+              
+              <div className="">1gm SafeGold Gold Coin</div>
+              <div className="">Charges Rs. 360</div>
+            </div>
+            <div className="delivery-tile">
+              {this.productImgMap()}
+              
+              <div className="">1gm SafeGold Gold Coin</div>
+              <div className="">Charges Rs. 360</div>
+            </div>
+            <div className="delivery-tile">
+              {this.productImgMap()}
+              
+              <div className="">1gm SafeGold Gold Coin</div>
+              <div className="">Charges Rs. 360</div>
+            </div>
+          </div>
+        </div>}
       </Container>
     );
   }

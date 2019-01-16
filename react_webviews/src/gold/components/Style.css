@@ -248,3 +248,15 @@
 .grey-color {
   color: #6e6e6e;
 }
+
+.delivery-tile {
+  background-color: #f6f6f6;
+  flex: 1;
+  text-align: center;
+  margin: 15px;
+  text-align: center;
+  margin: 5px;
+  padding: 15px;
+  min-height: 150px;
+  flex-basis: calc(50% - 50px);
+}

@@ -84,7 +84,12 @@ const theme = createMuiTheme({
       root: {
         height: '56px'
       }
-    }
+    },
+    MuiTab: {
+      root: {
+        width: '50%'
+      }
+    },
   }
 });
 
