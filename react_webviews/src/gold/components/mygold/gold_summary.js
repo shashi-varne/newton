@@ -4,10 +4,8 @@ import qs from 'qs';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
-<<<<<<< 63ab78fe21794174ce6da8c215cb0e1d171a6753
 import safegold_logo from 'assets/safegold_logo_60x60.png';
 import arrow from 'assets/arrow.png';
-=======
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -15,7 +13,6 @@ import Dialog, {
   DialogTitle
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
->>>>>>> gold summary
 
 class GoldSummary extends Component {
   constructor(props) {
@@ -356,7 +353,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                              previous gold price has expired.
+                                previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -394,14 +391,13 @@ class GoldSummary extends Component {
         buttonTitle="Proceed"
         type={this.state.type}
       >
-<<<<<<< 63ab78fe21794174ce6da8c215cb0e1d171a6753
         <div className="page home" id="goldSection">
           <div className="text-center goldheader">
             <div className="my-gold-header">
               <div className="FlexRow row1" >
                 <img className="img-mygold" src={safegold_logo} />
                 <span className="my-gold-title-header">My 24K Safegold Gold Locker</span>
-                <img  className="img-mygold2" src={arrow} />
+                <img className="img-mygold2" src={arrow} />
               </div>
               <div className="spacer-header"></div>
               <div className="my-gold-details-header1">
@@ -455,13 +451,11 @@ class GoldSummary extends Component {
                     <div className="input-below-text">Max 00.000 gm</div>
                   </div>
                 </div>
-              </div> 
+              </div>
             </div>
           </div>
         </div>
-=======
         {this.renderResponseDialog()}
->>>>>>> gold summary
       </Container>
     );
   }

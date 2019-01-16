@@ -4,9 +4,7 @@ import qs from 'qs';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
-<<<<<<< 7dfad58e5bbc884c903cd51a3e624f448a5ec32d
 import safegold_logo from 'assets/safegold_logo_60x60.png';
-=======
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -14,7 +12,6 @@ import Dialog, {
   DialogTitle
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
->>>>>>> gold locker and registeration
 
 class GoldSummary extends Component {
   constructor(props) {
@@ -305,17 +302,16 @@ class GoldSummary extends Component {
         buttonTitle="Proceed"
         type={this.state.type}
       >
-<<<<<<< 7dfad58e5bbc884c903cd51a3e624f448a5ec32d
         <div className="FlexRow">
-          <div className="FlexRow" style={{justifyContent: 'flex-start', flex: 1, marginRight: '2px', background: '#fff', padding: '10px'}}>
-            <img className="img-mygold" src={safegold_logo} width="35" style={{marginRight: 10}} />
+          <div className="FlexRow" style={{ justifyContent: 'flex-start', flex: 1, marginRight: '2px', background: '#fff', padding: '10px' }}>
+            <img className="img-mygold" src={safegold_logo} width="35" style={{ marginRight: 10 }} />
             <div>
-              <div className="grey-color" style={{marginBottom: 5}}>Gold Quantity</div>
+              <div className="grey-color" style={{ marginBottom: 5 }}>Gold Quantity</div>
               <div>3.3329 gm</div>
             </div>
           </div>
-          <div style={{flex: 1, background: '#fff', padding: '10px'}}>
-            <div className="grey-color" style={{marginBottom: 5}}>Gold Value</div>
+          <div style={{ flex: 1, background: '#fff', padding: '10px' }}>
+            <div className="grey-color" style={{ marginBottom: 5 }}>Gold Value</div>
             <div>₹ 10,498.64</div>
           </div>
         </div>
@@ -359,13 +355,11 @@ class GoldSummary extends Component {
                 <div className="disclaimer">
                   *You can place your order for sell/delivery after 2 working day from your buying transaction date
                 </div>
-              </div> 
+              </div>
             </div>
           </div>
         </div>
-=======
         {this.renderResponseDialog()}
->>>>>>> gold locker and registeration
       </Container>
     );
   }
