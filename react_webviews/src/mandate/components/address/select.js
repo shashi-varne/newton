@@ -66,7 +66,8 @@ class SelectAddress extends Component {
         })
       } else {
         this.setState({
-          show_loader: false
+          show_loader: false,
+          openDialog: true, apiError: res.pfwresponse.result.error
         });
       }
     }).catch(error => {
@@ -191,8 +192,10 @@ class SelectAddress extends Component {
       this.setState({ show_loader: false });
       this.navigateSuccess('/mandate/success');
     } else {
-      this.setState({ show_loader: false });
-      this.setState({ openDialog: true, apiError: res.pfwresponse.result.message });
+      this.setState({
+        show_loader: false,
+        openDialog: true, apiError: res.pfwresponse.result.error
+      });
 
     }
   }

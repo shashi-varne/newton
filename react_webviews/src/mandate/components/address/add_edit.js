@@ -77,13 +77,15 @@ class AddEditAddress extends Component {
             });
           }
           else {
-            this.setState({ show_loader: false });
+            this.setState({
+              show_loader: false,
+              openDialog: true, apiError: res.pfwresponse.result.error
+            });
           }
 
 
         }).catch(error => {
           this.setState({ show_loader: false });
-          this.setState({ openDialog: true, apiError: error });
           console.log(error);
         });
       } else {
@@ -211,6 +213,12 @@ class AddEditAddress extends Component {
           this.setState({ openDialog: true, apiError: error.message });
           this.setState({
             [error.field + '_error']: error.message
+          });
+        }
+
+        if (!res.pfwresponse.result.errors) {
+          this.setState({
+            openDialog: true, apiError: res.pfwresponse.result.error
           });
         }
       }
