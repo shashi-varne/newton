@@ -320,3 +320,38 @@
   color: green;
   padding-left: 5px;
 }
+
+.invest-success {
+  text-align: center;
+}
+
+.invest-success h3 {
+  color: #35cb5d;
+  font-size: 20px;
+  margin: 0;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.invest-success p {
+  color: #878787;
+  font-size: 16px;
+}
+
+.invoice {
+  margin: 0 auto;
+  border: 1px solid #c4c4c4;
+  padding: 4px 10px 4px 10px;
+  margin-top: 12px;
+  color: #3d3d3d;
+  border-radius: 11px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.success-card {
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
