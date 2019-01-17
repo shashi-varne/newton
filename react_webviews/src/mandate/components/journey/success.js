@@ -133,7 +133,7 @@ class MandateSuccess extends Component {
             </div>
             <div className="success-bottom2">
               <div className="success-bottom2a">
-                +80-30-408363
+                +080-48-039999
               </div>
               <div className="success-bottom2b">
                 |
