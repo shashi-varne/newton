@@ -199,7 +199,7 @@ class AddEditAddress extends Component {
         addressline.address_id = this.state.params.address_id;
         res = await Api.put('/api/account/address/' + this.state.params.key, addressline);
       } else {
-        res = await Api.post('/api/mandate/campaign/address/' + this.state.params.key, addressline);
+        res = await Api.post('/api/account/address/' + this.state.params.key, addressline);
       }
 
       if (res.pfwresponse.status_code === 200) {
