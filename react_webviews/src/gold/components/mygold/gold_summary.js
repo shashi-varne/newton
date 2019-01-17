@@ -356,7 +356,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                              previous gold price has expired.
+                                                                                                  previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -396,34 +396,19 @@ class GoldSummary extends Component {
         this.state.goldBuyInfo.applicable_tax, amount);
       isWeight = false;
       isAmount = true;
-      // this.setState({
-      //   [event.target.name]: event.target.value,
-      //   [event.target.name+'_error']: '',
-      // });
     } else if (event.target.name === 'weight' && event.target.value) {
       weight = event.target.value;
       amount = this.calculate_gold_amount(this.state.goldBuyInfo.plutus_rate,
         this.state.goldBuyInfo.applicable_tax, weight);
       isWeight = true;
       isAmount = false;
-      // this.setState({
-      //   [event.target.name]: event.target.value,
-      //   [event.target.name+'_error']: ''
-      // });
     } else {
       isWeight = false;
       isAmount = false;
       amount = '';
       weight = '';
-      // this.setState({
-      //   [event.target.name]: event.target.value,
-      //   [event.target.name+'_error']: ''
-      // });
     }
 
-    console.log(amount);
-    console.log(weight);
-    console.log(this.state);
     if (parseFloat(weight) > this.state.maxWeight) {
       weightError = true;
     }
@@ -463,7 +448,7 @@ class GoldSummary extends Component {
         <div className="page home" id="goldSection">
           <div className="text-center goldheader">
             <div className="my-gold-header">
-              <div className="FlexRow row1" >
+              <div className="FlexRow row1" onClick={this.navigate('my-gold-locker')}>
                 <img className="img-mygold" src={safegold_logo} />
                 <span className="my-gold-title-header">My 24K Safegold Gold Locker</span>
                 <img className="img-mygold2" src={arrow} />

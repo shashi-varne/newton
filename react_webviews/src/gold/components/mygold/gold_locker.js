@@ -105,12 +105,20 @@ class GoldSummary extends Component {
       if (res.pfwresponse.status_code == 200) {
         let goldInfo = this.state.goldInfo;
         let result = res.pfwresponse.result;
+        var currentDate = new Date();
+        var validityDate = new Date(result.sell_info.rate_validity);
+        let timeAvailable = ((validityDate.getTime() - currentDate.getTime()) / 1000);
         goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
         this.setState({
           show_loader: false,
           goldSellInfo: result.sell_info,
-          goldInfo: goldInfo
+          goldInfo: goldInfo,
+          timeAvailable: timeAvailable
         });
+
+        if (timeAvailable >= 0 && result.sell_info.plutus_rate) {
+          this.countdown();
+        }
       } else {
         this.setState({
           show_loader: false, openDialog: true,
@@ -127,12 +135,12 @@ class GoldSummary extends Component {
 
       if (res.pfwresponse.status_code == 200) {
         let result = res.pfwresponse.result;
-        let maxWeight = result.sellable_gold_balance || 0;
-        let maxAmount = ((this.state.goldSellInfo.plutus_rate) * (maxWeight)).toFixed(2);
-
+        // let maxWeight = result.sellable_gold_balance || 0;
+        let maxWeight = this.state.maxWeight;
+        let maxAmount = ((this.state.goldSellInfo.plutus_rate) * (maxWeight || 0)).toFixed(2);
         this.setState({
           show_loader: false,
-          maxWeight: maxWeight,
+          // maxWeight: maxWeight,
           maxAmount: maxAmount
         });
       } else {
@@ -211,8 +219,10 @@ class GoldSummary extends Component {
     return gold_amount
   }
 
-  buyGold = async (amount, weight) => {
+  sellGold = async () => {
 
+    let amount = this.state.amount;
+    let weight = this.state.weight;
     if (!weight || weight < 0) {
       // toast('Please enter a correct value for the weight');
       return;
@@ -302,6 +312,60 @@ class GoldSummary extends Component {
     this.setState({ value });
   }
 
+  setAmountGms = () => event => {
+    let amountError = false;
+    let weightError = false;
+    let isWeight = this.state.isWeight;
+    let isAmount = this.state.isAmount;
+    let amount = '', weight = '';
+    if (event.target.name === 'amount' && event.target.value) {
+      amount = Math.floor(event.target.value);
+      isWeight = false;
+      isAmount = true;
+      weight = ((amount) / (this.state.goldSellInfo.plutus_rate)).toFixed(4);
+
+    } else if (event.target.name === 'weight' && event.target.value) {
+      weight = event.target.value;
+      amount = ((this.state.goldSellInfo.plutus_rate) * (weight)).toFixed(2);
+      isWeight = true;
+      isAmount = false;
+    } else {
+      isWeight = false;
+      isAmount = false;
+      amount = '';
+      weight = '';
+    }
+
+    console.log(amount);
+    console.log(weight);
+    if (!weight || parseFloat(weight) < 0 ||
+      parseFloat(weight) > this.state.maxWeight) {
+      weightError = true;
+    }
+
+    if (!amount || parseFloat(amount) < 0) {
+      amountError = true;
+    }
+
+    if (amount >= 0 && parseFloat(amount) < 1) {
+      amountError = true;
+    }
+
+    if (parseFloat(amount) > parseFloat(this.state.maxAmount) ||
+      parseFloat(weight) > parseFloat(this.state.maxWeight)) {
+      amountError = true;
+    }
+
+    this.setState({
+      isWeight: isWeight,
+      isAmount: isAmount,
+      amountError: amountError,
+      weightError: weightError,
+      amount: amount,
+      weight: weight
+    })
+  };
+
   productImgMap = () => {
     const prod_image_map = {
       2: one_gm_front,
@@ -312,7 +376,7 @@ class GoldSummary extends Component {
       12: ten_gmbar_front,
       15: twenty_gmbar_front,
     };
-    
+
     return (
       <img alt="Gold" className="delivery-icon" src={prod_image_map[3]} width="80" />
     );
@@ -327,41 +391,42 @@ class GoldSummary extends Component {
         edit={this.props.edit}
         buttonTitle="Proceed"
         type={this.state.type}
+        handleClick={this.sellGold}
       >
         <div className="FlexRow">
           <div className="FlexRow" style={{ justifyContent: 'flex-start', flex: 1, marginRight: '2px', background: '#fff', padding: '10px' }}>
             <img className="img-mygold" src={safegold_logo} width="35" style={{ marginRight: 10 }} />
             <div>
               <div className="grey-color" style={{ marginBottom: 5 }}>Gold Quantity</div>
-              <div>3.3329 gm</div>
+              <div>{this.state.goldInfo.gold_balance || 0} gm</div>
             </div>
           </div>
           <div style={{ flex: 1, background: '#fff', padding: '10px' }}>
             <div className="grey-color" style={{ marginBottom: 5 }}>Gold Value</div>
-            <div>₹ 10,498.64</div>
+            <div>₹ {this.state.goldInfo.sell_value || 0}</div>
           </div>
         </div>
         <Tabs
-            value={this.state.value}
-            onChange={this.handleChange}
-            indicatorColor="primary"
-            textColor="primary"
-            variant="fullWidth"
-          >
-            <Tab label="Sell" />
-            <Tab label="Deliver" />
-          </Tabs>
-          {this.state.value === 0 && <div className="page home" id="goldSection">
+          value={this.state.value}
+          onChange={this.handleChange}
+          indicatorColor="primary"
+          textColor="primary"
+          variant="fullWidth"
+        >
+          <Tab label="Sell" />
+          <Tab label="Deliver" />
+        </Tabs>
+        {this.state.value === 0 && <div className="page home" id="goldSection">
           <div className="page-body-gold" id="goldInput">
             <div className="buy-info1">
               <div className="FlexRow">
                 <span className="buy-info2a">Current Buying Price</span>
                 <span className="buy-info2b">Price valid for
-                  <span className="timer-green">1:45</span>
+                  <span className="timer-green">{this.state.minutes}:{this.state.seconds}</span>
                 </span>
               </div>
               <div className="buy-info3">
-                ₹ 3,998.25/gm
+                ₹ {this.state.goldSellInfo.plutus_rate}/gm
               </div>
             </div>
             <div className="buy-input">
@@ -373,9 +438,10 @@ class GoldSummary extends Component {
                   <div>
                     <div className="input-above-text">In Rupees (₹)</div>
                     <div className="input-box">
-                      <input type="text" placeholder="Amount" />
+                      <input type="text" placeholder="Amount" name="amount"
+                        onChange={this.setAmountGms()} value={this.state.amount} />
                     </div>
-                    <div className="input-below-text">Min ₹1.00 - *Max ₹-0.757.95</div>
+                    <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>Min ₹1.00 - *Max ₹ {this.state.maxAmount}</div>
                   </div>
                   <div className="symbol">
                     =
@@ -383,9 +449,10 @@ class GoldSummary extends Component {
                   <div>
                     <div className="input-above-text">In Grams (gm)</div>
                     <div className="input-box">
-                      <input type="text" placeholder="Weight" />
+                      <input type="text" placeholder="Weight" name="weight"
+                        onChange={this.setAmountGms()} value={this.state.weight} />
                     </div>
-                    <div className="input-below-text">*Max -0.234 gm</div>
+                    <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>*Max {this.state.maxWeight} gm</div>
                   </div>
                 </div>
                 <div className="disclaimer">
@@ -396,28 +463,28 @@ class GoldSummary extends Component {
           </div>
         </div>}
         {this.state.value === 1 && <div>
-          <div className="FlexRow" style={{justifyContent: 'center', flexWrap: 'wrap'}}>
+          <div className="FlexRow" style={{ justifyContent: 'center', flexWrap: 'wrap' }}>
             <div className="delivery-tile">
               {this.productImgMap()}
-              
+
               <div className="">1gm SafeGold Gold Coin</div>
               <div className="">Charges Rs. 360</div>
             </div>
             <div className="delivery-tile">
               {this.productImgMap()}
-              
+
               <div className="">1gm SafeGold Gold Coin</div>
               <div className="">Charges Rs. 360</div>
             </div>
             <div className="delivery-tile">
               {this.productImgMap()}
-              
+
               <div className="">1gm SafeGold Gold Coin</div>
               <div className="">Charges Rs. 360</div>
             </div>
             <div className="delivery-tile">
               {this.productImgMap()}
-              
+
               <div className="">1gm SafeGold Gold Coin</div>
               <div className="">Charges Rs. 360</div>
             </div>

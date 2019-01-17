@@ -203,6 +203,7 @@
 .input-below-text {
   color: #6e6e6e;
   flex: 1;
+  font-size: 11px;
 }
 
 .input-box {
