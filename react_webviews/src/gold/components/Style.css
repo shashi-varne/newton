@@ -249,6 +249,14 @@
   color: #6e6e6e;
 }
 
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
 .delivery-tile {
   background-color: #f6f6f6;
   flex: 1;
@@ -354,4 +362,51 @@
   padding: 10px;
   border-radius: 5px;
   margin-bottom: 20px;
+}
+
+.seller-name {
+  border-top: 1px solid #e6e6e6;
+  border-bottom: 1px solid #e6e6e6;
+  padding: 7px 5px;
+  margin: 10px 0;
+}
+
+.delivery-select-logo {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.product-details-content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  color: #6e6e6e;
+  margin-bottom: 7px;
+}
+
+.product-details-heading {
+  font-size: 15px;
+  color: black;
+  margin: 0 0 20px 0;
+}
+
+.delivery.block {
+  margin-bottom: 40px;
+}
+
+.product-name {
+  margin-right: 10px;
+  flex: 1;
+}
+
+.product-value {
+  flex: 1;
+}
+
+.delivery ul {
+  padding-left: 15px;
+}
+
+.delivery ul li {
+  line-height: 1.3rem;
 }
