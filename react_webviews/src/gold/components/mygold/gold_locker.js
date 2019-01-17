@@ -34,7 +34,7 @@ class GoldSummary extends Component {
       goldInfo: {},
       userInfo: {},
       goldSellInfo: {},
-      gold_products: {},
+      gold_products: [],
       maxWeight: '',
       maxAmount: '',
       isRegistered: false,
@@ -50,6 +50,7 @@ class GoldSummary extends Component {
       type: '',
       value: 0
     }
+    this.renderDeliveryProducts = this.renderDeliveryProducts.bind(this);
   }
 
   componentWillMount() {
@@ -382,6 +383,17 @@ class GoldSummary extends Component {
     );
   }
 
+  renderDeliveryProducts(props, index) {
+    return (
+      <div key={index} className="delivery-tile">
+        {this.productImgMap()}
+
+        <div className="">{props.description}</div>
+        <div className="">Charges Rs. {props.delivery_minting_cost}</div>
+      </div>
+    )
+  }
+
   render() {
 
     return (
@@ -464,30 +476,7 @@ class GoldSummary extends Component {
         </div>}
         {this.state.value === 1 && <div>
           <div className="FlexRow" style={{ justifyContent: 'center', flexWrap: 'wrap' }}>
-            <div className="delivery-tile">
-              {this.productImgMap()}
-
-              <div className="">1gm SafeGold Gold Coin</div>
-              <div className="">Charges Rs. 360</div>
-            </div>
-            <div className="delivery-tile">
-              {this.productImgMap()}
-
-              <div className="">1gm SafeGold Gold Coin</div>
-              <div className="">Charges Rs. 360</div>
-            </div>
-            <div className="delivery-tile">
-              {this.productImgMap()}
-
-              <div className="">1gm SafeGold Gold Coin</div>
-              <div className="">Charges Rs. 360</div>
-            </div>
-            <div className="delivery-tile">
-              {this.productImgMap()}
-
-              <div className="">1gm SafeGold Gold Coin</div>
-              <div className="">Charges Rs. 360</div>
-            </div>
+            {this.state.gold_products && this.state.gold_products.map(this.renderDeliveryProducts)}
           </div>
         </div>}
         {this.renderResponseDialog()}
