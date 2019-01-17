@@ -87,7 +87,8 @@ const theme = createMuiTheme({
     },
     MuiTab: {
       root: {
-        width: '50%'
+        // width: '50%'
+        flex: 1
       }
     },
   }

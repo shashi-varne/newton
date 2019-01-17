@@ -415,3 +415,8 @@
 .error {
   color: red;
 }
+
+.MuiTabs-flexContainer {
+  display: flex;
+  justify-content: space-around;
+}
