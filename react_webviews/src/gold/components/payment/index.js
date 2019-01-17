@@ -22,6 +22,7 @@ class Payment extends Component {
   }
 
   componentWillMount() {
+    this.state.params.base_url = window.localStorage.getItem('base_url');
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -111,20 +112,20 @@ class Payment extends Component {
               <h3>Payment Failed</h3>
               <p>
                 Oops! Your buy order for 2.134 grams could not be placed.
-                <br/>
-                <br/>
+                <br />
+                <br />
                 Sorry for the inconvenience.
               </p>
               <p>
                 Oops! Your sell order for 2.134 grams could not be placed.
-                <br/>
-                <br/>
+                <br />
+                <br />
                 Sorry for the inconvenience.
               </p>
               <p>
                 Oops! Your delivery order for 'PRODUCTDISC' could not be placed.
-                <br/>
-                <br/>
+                <br />
+                <br />
                 Sorry for the inconvenience.
               </p>
             </div>
@@ -137,24 +138,24 @@ class Payment extends Component {
                 Oops! Your buy order for 2.134 grams is in pending state. We will try placing
                 the order again in the next 24 hrs. The amount will be refunded if the order
                 doesn't go through
-                <br/>
-                <br/>
+                <br />
+                <br />
                 Sorry for the inconvenience.
               </p>
               <p>
                 Oops! Your sell order for 2.134 grams could not be placed. We will try placing
                 the order again in the next 24 hrs. The amount will be refunded if the order
                 doesn't go through
-                <br/>
-                <br/>
+                <br />
+                <br />
                 Sorry for the inconvenience.
               </p>
               <p>
                 Oops! Your delivery order for 'PRODUCTDISC' could not be placed. We will try placing
                 the order again in the next 24 hrs. The amount will be refunded if the order
                 doesn't go through
-                <br/>
-                <br/>
+                <br />
+                <br />
                 Sorry for the inconvenience.
               </p>
             </div>

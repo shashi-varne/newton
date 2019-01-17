@@ -251,8 +251,9 @@ class GoldSummary extends Component {
       res.pfwresponse.result.payment_details.plutus_rate === this.state.goldBuyInfo.plutus_rate) {
       let result = res.pfwresponse.result;
       var buyData = result.payment_details;
-      window.localStorage.setItem('buyData', buyData);
+      window.localStorage.setItem('buyData', JSON.stringify(buyData));
       window.localStorage.setItem('timeAvailable', this.state.timeAvailable);
+      window.localStorage.setItem('base_url', this.state.params.base_url);
 
       this.navigate('buy-gold-order');
       this.setState({
@@ -356,7 +357,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                  previous gold price has expired.
+                                                                                                            previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -378,10 +379,6 @@ class GoldSummary extends Component {
       pathname: pathname,
       search: '?base_url=' + this.state.params.base_url
     });
-  }
-
-  handleClick = async () => {
-    this.navigate('my-gold');
   }
 
   setAmountGms = () => event => {
@@ -448,7 +445,7 @@ class GoldSummary extends Component {
         <div className="page home" id="goldSection">
           <div className="text-center goldheader">
             <div className="my-gold-header">
-              <div className="FlexRow row1" onClick={this.navigate('my-gold-locker')}>
+              <div className="FlexRow row1">
                 <img className="img-mygold" src={safegold_logo} />
                 <span className="my-gold-title-header">My 24K Safegold Gold Locker</span>
                 <img className="img-mygold2" src={arrow} />
