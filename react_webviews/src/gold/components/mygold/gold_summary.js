@@ -206,18 +206,18 @@ class GoldSummary extends Component {
     return gold_amount
   }
 
-  buyGold = async (plutus_rate_id, amount) => {
+  buyGold = async () => {
 
     if (this.state.userInfo.mobile_verified == false ||
       this.state.isRegistered == false) {
-      window.localStorage.setItem('buyAmountRegister', amount);
+      window.localStorage.setItem('buyAmountRegister', this.state.amount);
       this.navigate('gold-register')
       return;
     }
 
     var options = {
-      plutus_rate_id: plutus_rate_id,
-      buy_price: parseFloat(amount)
+      plutus_rate_id: this.state.goldBuyInfo.plutus_rate_id,
+      buy_price: parseFloat(this.state.amount)
     }
 
     if (parseFloat(this.state.weight) > this.state.maxWeight) {
@@ -245,7 +245,7 @@ class GoldSummary extends Component {
     });
 
 
-    const res = await Api.post('/api/gold/user/redeem/verify', options);
+    const res = await Api.post('/api/gold/user/buy/verify', options);
 
     if (res.pfwresponse.status_code === 200 &&
       res.pfwresponse.result.payment_details.plutus_rate === this.state.goldBuyInfo.plutus_rate) {
@@ -356,7 +356,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                        previous gold price has expired.
+                                                                                              previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -455,7 +455,7 @@ class GoldSummary extends Component {
       <Container
         showLoader={this.state.show_loader}
         title="Gold Summary"
-        handleClick={this.handleClick}
+        handleClick={this.buyGold}
         edit={this.props.edit}
         buttonTitle="Proceed"
         type={this.state.type}
