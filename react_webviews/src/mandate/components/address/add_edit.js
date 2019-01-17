@@ -247,7 +247,7 @@ class AddEditAddress extends Component {
       apiError: '', openDialog: false, openDialogReset: false,
       openModalMessage: 'Wait a moment while we reset your application'
     });
-    const res = await Api.delete('api/account/address?address_id=' + this.state.params.address_id);
+    const res = await Api.delete('api/account/address/' + this.state.params.key + '?address_id=' + this.state.params.address_id);
     if (res.pfwresponse.status_code === 200) {
       // this.setState({ openModal: false });
       this.navigate('/mandate/select-address');
