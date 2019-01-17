@@ -25,6 +25,7 @@ class GoldSummary extends Component {
       apiError: '',
       goldInfo: {},
       userInfo: {},
+      goldBuyInfo: {},
       goldSellInfo: {},
       new_rate: {},
       amountUpdated: '',
@@ -35,6 +36,8 @@ class GoldSummary extends Component {
       isAmount: false,
       amountError: false,
       weightError: false,
+      minutes: "",
+      seconds: "",
       weight: '',
       amount: '',
       params: qs.parse(props.history.location.search.slice(1)),
@@ -42,6 +45,7 @@ class GoldSummary extends Component {
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
     }
+    this.countdown = this.countdown.bind(this);
   }
 
   componentWillMount() {
@@ -123,9 +127,6 @@ class GoldSummary extends Component {
         var currentDate = new Date();
         var validityDate = new Date(goldBuyInfo.rate_validity);
         let timeAvailable = ((validityDate.getTime() - currentDate.getTime()) / 1000);
-        if (timeAvailable >= 0 && goldBuyInfo.plutus_rate) {
-          this.countdown();
-        }
 
         let amount = '', weight = '';
         if (window.localStorage.getItem('buyAmountRegister')) {
@@ -145,6 +146,9 @@ class GoldSummary extends Component {
           timeAvailable: timeAvailable
 
         });
+        if (timeAvailable >= 0 && goldBuyInfo.plutus_rate) {
+          this.countdown();
+        }
       } else {
         this.setState({
           show_loader: false, openDialog: true,
@@ -169,7 +173,6 @@ class GoldSummary extends Component {
       window.location.reload();
       return;
     }
-
     setTimeout(
       function () {
         let minutes = Math.floor(timeAvailable / 60);
@@ -183,7 +186,7 @@ class GoldSummary extends Component {
         this.countdown();
       }
         .bind(this),
-      3000
+      1000
     );
   };
 
@@ -353,7 +356,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                        previous gold price has expired.
+                                                                                        previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -380,6 +383,72 @@ class GoldSummary extends Component {
   handleClick = async () => {
     this.navigate('my-gold');
   }
+
+  setAmountGms = () => event => {
+    let amountError = false;
+    let weightError = false;
+    let isWeight = this.state.isWeight;
+    let isAmount = this.state.isAmount;
+    let amount = '', weight = '';
+    if (event.target.name === 'amount' && event.target.value) {
+      amount = Math.floor(event.target.value);
+      weight = this.calculate_gold_wt(this.state.goldBuyInfo.plutus_rate,
+        this.state.goldBuyInfo.applicable_tax, amount);
+      isWeight = false;
+      isAmount = true;
+      // this.setState({
+      //   [event.target.name]: event.target.value,
+      //   [event.target.name+'_error']: '',
+      // });
+    } else if (event.target.name === 'weight' && event.target.value) {
+      weight = event.target.value;
+      amount = this.calculate_gold_amount(this.state.goldBuyInfo.plutus_rate,
+        this.state.goldBuyInfo.applicable_tax, weight);
+      isWeight = true;
+      isAmount = false;
+      // this.setState({
+      //   [event.target.name]: event.target.value,
+      //   [event.target.name+'_error']: ''
+      // });
+    } else {
+      isWeight = false;
+      isAmount = false;
+      amount = '';
+      weight = '';
+      // this.setState({
+      //   [event.target.name]: event.target.value,
+      //   [event.target.name+'_error']: ''
+      // });
+    }
+
+    console.log(amount);
+    console.log(weight);
+    console.log(this.state);
+    if (parseFloat(weight) > this.state.maxWeight) {
+      weightError = true;
+    }
+
+    if (!weight || parseFloat(weight) < 0) {
+      weightError = true;
+    }
+
+    if (!amount || parseFloat(amount) < 0) {
+      amountError = true;
+    }
+
+    if (parseFloat(amount) >= 0 && parseFloat(amount) < 1) {
+      amountError = true;
+    }
+
+    this.setState({
+      isWeight: isWeight,
+      isAmount: isAmount,
+      amountError: amountError,
+      weightError: weightError,
+      amount: amount,
+      weight: weight
+    })
+  };
 
   render() {
     return (
@@ -417,7 +486,7 @@ class GoldSummary extends Component {
               <div className="FlexRow">
                 <span className="buy-info2a">Current Buying Price</span>
                 <span className="buy-info2b">Price valid for
-                  <span className="timer-green">{this.state.minutes || 0}:{this.state.seconds || 0}</span>
+                &nbsp;<span className="timer-green">{this.state.minutes || 0}:{this.state.seconds || 0}</span>
                 </span>
               </div>
               <div className="buy-info3">
@@ -436,9 +505,10 @@ class GoldSummary extends Component {
                   <div>
                     <div className="input-above-text">In Rupees (₹)</div>
                     <div className="input-box">
-                      <input type="text" placeholder="Amount" />
+                      <input type="text" name="amount" placeholder="Amount"
+                        onChange={this.setAmountGms()} value={this.state.amount} />
                     </div>
-                    <div className="input-below-text">Min ₹1.00</div>
+                    <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>Min ₹1.00</div>
                   </div>
                   <div className="symbol">
                     =
@@ -446,9 +516,10 @@ class GoldSummary extends Component {
                   <div>
                     <div className="input-above-text">In Grams (gm)</div>
                     <div className="input-box">
-                      <input type="text" placeholder="Weight" />
+                      <input type="text" name="weight" placeholder="Weight"
+                        onChange={this.setAmountGms()} value={this.state.weight} />
                     </div>
-                    <div className="input-below-text">Max 00.000 gm</div>
+                    <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>Max 00.000 gm</div>
                   </div>
                 </div>
               </div>
