@@ -2,7 +2,10 @@
   font-size: 14px !important;
 }
 .InputField {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+}
+.Checkbox {
+  padding: 0;
 }
 .RadioButton.unchecked label {
   background: #fff;

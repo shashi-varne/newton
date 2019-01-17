@@ -4,6 +4,7 @@ import qs from 'qs';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
+import Input from '../../ui/Input';
 
 class Otp extends Component {
   constructor(props) {
@@ -50,6 +51,10 @@ class Otp extends Component {
     this.navigate('my-gold');
   }
 
+  handleChange = (field) => (value) => {
+    // field == name
+  }
+
   render() {
     return (
       <Container
@@ -60,7 +65,25 @@ class Otp extends Component {
         buttonTitle="Proceed"
         type={this.state.type}
       >
-        <div>Lorum Ipsum</div>
+        <div className="otp-body">
+          <div className="otp-input">
+            <div className="InputField">
+              <Input
+                error={false}
+                helperText=''
+                type="text"
+                width="40"
+                label="Enter OTP"
+                class="otp"
+                id="otp"
+                name="otp"
+                value=''
+                onChange={this.handleChange('otp')} />
+            </div>
+            <p className="resend-otp text-center">Resend OTP</p>
+            <div className="text-center">An OTp has been sent blah... blah.. blah...</div>
+          </div>
+        </div>
       </Container>
     );
   }
