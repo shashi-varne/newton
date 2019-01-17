@@ -163,8 +163,12 @@ class SelectAddress extends Component {
   }
 
   handleClick = async () => {
+
+    if (this.state.indexCheckBox == -1) {
+      return;
+    }
+
     if (!this.state.openDialogConfirm) {
-      console.log("yo yo");
       this.setState({
         openDialogConfirm: true
       })
