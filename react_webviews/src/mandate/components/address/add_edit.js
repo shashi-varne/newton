@@ -147,7 +147,7 @@ class AddEditAddress extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: 'base_url=' + this.state.params.base_url + '&key=' + this.state.params.key
+      search: 'base_url=' + this.state.params.base_url + '&key=' + this.state.params.key + '&pc_key=' + this.state.params.pc_key
     });
   }
 
@@ -197,9 +197,9 @@ class AddEditAddress extends Component {
       let res;
       if (this.props.edit) {
         addressline.address_id = this.state.params.address_id;
-        res = await Api.put('/api/account/address/' + this.state.params.key, addressline);
+        res = await Api.put('/api/mandate/campaign/address/' + this.state.params.key, addressline);
       } else {
-        res = await Api.post('/api/account/address/' + this.state.params.key, addressline);
+        res = await Api.post('/api/mandate/campaign/address/' + this.state.params.key, addressline);
       }
 
       if (res.pfwresponse.status_code === 200) {
@@ -208,19 +208,10 @@ class AddEditAddress extends Component {
         this.setState({ show_loader: false });
         this.navigate('/mandate/select-address');
       } else {
-        this.setState({ show_loader: false });
-        for (let error of res.pfwresponse.result.errors) {
-          this.setState({ openDialog: true, apiError: error.message });
-          this.setState({
-            [error.field + '_error']: error.message
-          });
-        }
-
-        if (!res.pfwresponse.result.errors) {
-          this.setState({
-            openDialog: true, apiError: res.pfwresponse.result.error
-          });
-        }
+        this.setState({
+          show_loader: false,
+          openDialog: true, apiError: res.pfwresponse.result.error
+        });
       }
     }
   }
@@ -247,7 +238,7 @@ class AddEditAddress extends Component {
       apiError: '', openDialog: false, openDialogReset: false,
       openModalMessage: 'Wait a moment while we reset your application'
     });
-    const res = await Api.delete('api/account/address/' + this.state.params.key + '?address_id=' + this.state.params.address_id);
+    const res = await Api.delete('/api/mandate/campaign/address/' + this.state.params.key + '?address_id=' + this.state.params.address_id);
     if (res.pfwresponse.status_code === 200) {
       // this.setState({ openModal: false });
       this.navigate('/mandate/select-address');
@@ -323,7 +314,7 @@ class AddEditAddress extends Component {
         bannerText={this.bannerText()}
         handleClick={this.handleClick}
         edit={this.props.edit}
-        buttonTitle="Save Details"
+        buttonTitle="Save Address"
         logo={this.state.image}
         type={this.state.type}
       >

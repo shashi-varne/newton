@@ -79,14 +79,14 @@ class SelectAddress extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: 'base_url=' + this.state.params.base_url + '&key=' + this.state.params.key,
+      search: 'base_url=' + this.state.params.base_url + '&key=' + this.state.params.key + '&pc_key=' + this.state.params.pc_key,
     });
   }
 
   navigateSuccess = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: 'base_url=' + this.state.params.base_url + '&key=' + this.state.params.key,
+      search: 'base_url=' + this.state.params.base_url + '&key=' + this.state.params.key + '&pc_key=' + this.state.params.pc_key,
       params: {
         disableBack: true
       }
@@ -141,7 +141,7 @@ class SelectAddress extends Component {
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               <span>
-                Please make sure you will be available to collect courier.
+                Please make sure that you will be available to collect the courier
              </span>
             </DialogContentText>
           </DialogContent>
@@ -189,7 +189,9 @@ class SelectAddress extends Component {
 
     };
 
-    let res = await Api.post('/api/mandate/campaign/address/' + this.state.params.key, addressline);
+    // let res = await Api.post('/api/mandate/campaign/address/' + this.state.params.pc_key, addressline);
+    let res = await Api.get('/api/mandate/campaign/address/confirm/' + this.state.params.key +
+      '?address_id=' + mandateAddress.id);
 
     if (res.pfwresponse.status_code === 200) {
 
@@ -240,7 +242,7 @@ class SelectAddress extends Component {
   editAddress(id) {
     this.props.history.push({
       pathname: '/mandate/edit-address',
-      search: 'base_url=' + this.state.params.base_url + '&address_id=' + id + '&key=' + this.state.params.key
+      search: 'base_url=' + this.state.params.base_url + '&address_id=' + id + '&key=' + this.state.params.key + '&pc_key=' + this.state.params.pc_key
     });
   }
 
