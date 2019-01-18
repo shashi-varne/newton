@@ -429,3 +429,11 @@
   margin-top: 5px;
   color: #6e6e6e;
 }
+
+.download-invoice {
+  color: #5346a7;
+  border: 1px solid #5346a7;
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 5px;
+}
