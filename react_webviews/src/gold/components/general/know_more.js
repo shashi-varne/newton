@@ -7,12 +7,15 @@ import { nativeCallback } from 'utils/native_callback';
 import safegold_logo from 'assets/safegold_logo@2x.png';
 import idbi from 'assets/idbi_trustee2.png';
 import brinks from 'assets/brinks-logo.png';
+import { ToastContainer } from 'react-toastify';
+import toast from '../../ui/Toast';
 
 class KnowMore extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
+      openResponseDialog: false,
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
@@ -81,6 +84,7 @@ class KnowMore extends Component {
             </div>
           </div>
         </div>
+        <ToastContainer autoClose={3000} />
       </Container>
     );
   }

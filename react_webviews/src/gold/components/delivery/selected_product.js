@@ -11,6 +11,8 @@ import five_gmbar_front from 'assets/5gmbar_front.png';
 import ten_gm_front from 'assets/10gm_front.png';
 import ten_gmbar_front from 'assets/10gmbar_front.png';
 import twenty_gmbar_front from 'assets/20gmbar_front.png';
+import { ToastContainer } from 'react-toastify';
+import toast from '../../ui/Toast';
 
 class DeliverySelectedProduct extends Component {
   constructor(props) {
@@ -20,6 +22,7 @@ class DeliverySelectedProduct extends Component {
       product: {
         product_highlights: []
       },
+      openResponseDialog: false,
       disabledText: 'Continue',
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
@@ -44,7 +47,7 @@ class DeliverySelectedProduct extends Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
 
     if (window.localStorage.getItem('goldProduct')) {
       let product = JSON.parse(window.localStorage.getItem('goldProduct'));
@@ -56,34 +59,29 @@ class DeliverySelectedProduct extends Component {
       this.navigate('my-gold-locker');
     }
 
-    Api.get('/api/gold/user/sell/balance').then(res => {
+    const res = await Api.get('/api/gold/user/sell/balance');
 
-      if (res.pfwresponse.status_code == 200) {
-        let result = res.pfwresponse.result;
-        let maxWeight = result.sellable_gold_balance || 0;
-        let product = this.state.product;
-        let disabled, disabledText;
-        if (parseFloat(product.metal_weight) > maxWeight) {
-          disabled = true;
-          disabledText = 'Minimum ' + (parseFloat(product.metal_weight)).toFixed(2) + ' GM gold required';
-        }
-        this.setState({
-          show_loader: false,
-          maxWeight: maxWeight,
-          disabled: disabled,
-          disabledText: disabledText
-        });
-      } else {
-        this.setState({
-          show_loader: false, openDialog: true,
-          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-        });
+    if (res.pfwresponse.status_code == 200) {
+      let result = res.pfwresponse.result;
+      let maxWeight = result.sellable_gold_balance || 0;
+      let product = this.state.product;
+      let disabled, disabledText;
+      if (parseFloat(product.metal_weight) > maxWeight) {
+        disabled = true;
+        disabledText = 'Minimum ' + (parseFloat(product.metal_weight)).toFixed(2) + ' GM gold required';
       }
-
-    }).catch(error => {
-      this.setState({ show_loader: false });
-      console.log(error);
-    });
+      this.setState({
+        show_loader: false,
+        maxWeight: maxWeight,
+        disabled: disabled,
+        disabledText: disabledText
+      });
+    } else {
+      this.setState({
+        show_loader: false, openResponseDialog: true,
+        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+      });
+    }
   }
 
   navigate = (pathname) => {
@@ -191,6 +189,7 @@ class DeliverySelectedProduct extends Component {
             *You can place your order for sell/delivery after 2 working day from your buying transaction date
           </div>
         </div>
+        <ToastContainer autoClose={3000} />
       </Container>
     );
   }

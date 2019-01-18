@@ -15,6 +15,8 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import { validateNumber, validateEmail, numberShouldStartWith } from 'utils/validators';
+import { ToastContainer } from 'react-toastify';
+import toast from '../../ui/Toast';
 
 class GoldRegister extends Component {
   constructor(props) {
@@ -29,7 +31,7 @@ class GoldRegister extends Component {
       mobile_no: "",
       goldInfo: {},
       isRegistered: false,
-      openDialog: false,
+      openResponseDialog: false,
       openPopup: false,
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
@@ -60,50 +62,44 @@ class GoldRegister extends Component {
     }
   }
 
-  componentDidMount() {
-    Api.get('/api/gold/user/account').then(res => {
-      if (res.pfwresponse.status_code == 200) {
-        let result = res.pfwresponse.result;
-        let isRegistered = true;
-        let userInfo = result.gold_user_info.user_info;
-        if (userInfo.registration_status == "pending" ||
-          !userInfo.registration_status ||
-          result.gold_user_info.is_new_gold_user) {
-          isRegistered = false;
-        }
-
-        const { name, email, pin_code, mobile_no } = userInfo;
-
-        this.setState({
-          show_loader: false,
-          goldInfo: result.gold_user_info.safegold_info,
-          userInfo: userInfo,
-          isRegistered: isRegistered,
-          name: name || "",
-          email: email || "",
-          pin_code: pin_code || "",
-          mobile_no: mobile_no || "",
-        });
-
-        if (userInfo.mobile_verified == false &&
-          isRegistered == false) {
-          // $state.go('my-gold');
-          return;
-        }
-        // this.checkPincode();
-
-      } else {
-        this.setState({
-          show_loader: false, openDialog: true,
-          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-        });
+  async componentDidMount() {
+    const res = await Api.get('/api/gold/user/account');
+    if (res.pfwresponse.status_code == 200) {
+      let result = res.pfwresponse.result;
+      let isRegistered = true;
+      let userInfo = result.gold_user_info.user_info;
+      if (userInfo.registration_status == "pending" ||
+        !userInfo.registration_status ||
+        result.gold_user_info.is_new_gold_user) {
+        isRegistered = false;
       }
 
-    }).catch(error => {
-      this.setState({ show_loader: false });
-      console.log(error);
-    });
+      const { name, email, pin_code, mobile_no } = userInfo;
 
+      this.setState({
+        show_loader: false,
+        goldInfo: result.gold_user_info.safegold_info,
+        userInfo: userInfo,
+        isRegistered: isRegistered,
+        name: name || "",
+        email: email || "",
+        pin_code: pin_code || "",
+        mobile_no: mobile_no || "",
+      });
+
+      if (userInfo.mobile_verified == false &&
+        isRegistered == false) {
+        // $state.go('my-gold');
+        return;
+      }
+      // this.checkPincode();
+
+    } else {
+      this.setState({
+        show_loader: false, openResponseDialog: true,
+        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+      });
+    }
   }
 
   navigate = (pathname) => {
@@ -132,11 +128,11 @@ class GoldRegister extends Component {
 
     this.setState({
       [name]: pincode,
-      [name+'_error']: ''
+      [name + '_error']: ''
     });
 
     if (pincode.length === 6) {
-      const res = await Api.get('https://nitish-dot-plutus-staging.appspot.com/api/pincode/' + pincode);
+      const res = await Api.get('/api/pincode/' + pincode);
 
       if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
         this.setState({
@@ -183,7 +179,7 @@ class GoldRegister extends Component {
       });
     } else {
       this.setState({
-        show_loader: false, openDialog: true,
+        show_loader: false, openResponseDialog: true,
         apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
       });
     }
@@ -191,7 +187,7 @@ class GoldRegister extends Component {
 
   handleClose = () => {
     this.setState({
-      openDialog: false,
+      openResponseDialog: false,
       openPopup: false
     });
   }
@@ -199,7 +195,7 @@ class GoldRegister extends Component {
   renderResponseDialog = () => {
     return (
       <Dialog
-        open={this.state.openDialog}
+        open={this.state.openResponseDialog}
         onClose={this.handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
@@ -263,7 +259,7 @@ class GoldRegister extends Component {
           this.verifyMobile();
         } else {
           this.setState({
-            show_loader: false, openDialog: true,
+            show_loader: false, openResponseDialog: true,
             apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
           });
         }
@@ -334,9 +330,9 @@ class GoldRegister extends Component {
               name="pin_code"
               value={this.state.pin_code}
               onChange={this.handlePincode('pin_code')} />
-              <div className="filler">
-                {(this.state.city && this.state.state) && <span>{this.state.city} , {this.state.state}</span>}
-              </div>
+            <div className="filler">
+              {(this.state.city && this.state.state) && <span>{this.state.city} , {this.state.state}</span>}
+            </div>
           </div>
           <div className="CheckBlock">
             <Grid container spacing={16} alignItems="center">
@@ -357,6 +353,7 @@ class GoldRegister extends Component {
           </div>
         </div>
         {this.renderResponseDialog()}
+        <ToastContainer autoClose={3000} />
       </Container>
     );
   }

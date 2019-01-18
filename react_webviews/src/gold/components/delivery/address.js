@@ -7,12 +7,15 @@ import { nativeCallback } from 'utils/native_callback';
 import Input from '../../ui/Input';
 import { validateNumber, validateStreetName, validateLength, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';
 import { options } from 'sw-toolbox';
+import { ToastContainer } from 'react-toastify';
+import toast from '../../ui/Toast';
 
 class DeliveryAddress extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
+      openResponseDialog: false,
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
@@ -55,46 +58,38 @@ class DeliveryAddress extends Component {
     }
   }
 
-  componentDidMount() {
-
-    Api.get('/api/gold/user/address').then(res => {
-      if (res.pfwresponse.status_code == 200) {
-        this.setState({
-          show_loader: false
-        })
-        let result = res.pfwresponse.result;
-        let addressMain = {}, pincode = '', address = '',
-          city = '', landmark = '', userInfo = {};
-        if (result.address && result.address.length != 0) {
-          addressMain = result.address[result.address.length - 1];
-          pincode = addressMain.pincode;
-          address = addressMain.addressline;
-          landmark = addressMain.landmark;
-          city = addressMain.city;
-        }
-        userInfo = result.gold_user.user_info;
-        this.setState({
-          address: address,
-          addressMain: addressMain,
-          pincode: pincode,
-          city: city,
-          userInfo: userInfo,
-          landmark: landmark
-        })
-
-      } else {
-        this.setState({
-          show_loader: false, openDialog: true,
-          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-        });
+  async componentDidMount() {
+    const res = await Api.get('/api/gold/user/address');
+    if (res.pfwresponse.status_code == 200) {
+      this.setState({
+        show_loader: false
+      })
+      let result = res.pfwresponse.result;
+      let addressMain = {}, pincode = '', address = '',
+        city = '', landmark = '', userInfo = {};
+      if (result.address && result.address.length != 0) {
+        addressMain = result.address[result.address.length - 1];
+        pincode = addressMain.pincode;
+        address = addressMain.addressline;
+        landmark = addressMain.landmark;
+        city = addressMain.city;
       }
+      userInfo = result.gold_user.user_info;
+      this.setState({
+        address: address,
+        addressMain: addressMain,
+        pincode: pincode,
+        city: city,
+        userInfo: userInfo,
+        landmark: landmark
+      })
 
-    }).catch(error => {
-      this.setState({ show_loader: false });
-      console.log(error);
-    });
-
-
+    } else {
+      this.setState({
+        show_loader: false, openResponseDialog: true,
+        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+      });
+    }
   }
 
   navigate = (pathname) => {
@@ -167,7 +162,7 @@ class DeliveryAddress extends Component {
       });
     } else {
       this.setState({
-        show_loader: false, openDialog: true,
+        show_loader: false, openResponseDialog: true,
         apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
       });
     }
@@ -215,7 +210,7 @@ class DeliveryAddress extends Component {
         window.localStorage.setItem('goldProduct', JSON.stringify(product));
       } else {
         this.setState({
-          show_loader: false, openDialog: true,
+          show_loader: false, openResponseDialog: true,
           apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
         });
       }
@@ -275,6 +270,7 @@ class DeliveryAddress extends Component {
               onChange={this.handleChange('landmark')} />
           </div>
         </div>
+        <ToastContainer autoClose={3000} />
       </Container>
     );
   }

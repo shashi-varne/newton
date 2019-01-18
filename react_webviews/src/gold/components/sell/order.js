@@ -12,13 +12,15 @@ import Dialog, {
   DialogTitle
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
+import { ToastContainer } from 'react-toastify';
+import toast from '../../ui/Toast';
 
 class About extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
-      openDialog: false,
+      openResponseDialog: false,
       openPopup: false,
       minutes: "",
       seconds: "",
@@ -113,56 +115,50 @@ class About extends Component {
       show_loader: true,
     });
 
-    Api.post('/api/gold/user/sell/confirm', options).then(res => {
-      if (res.pfwresponse.status_code == 200) {
-        let result = res.pfwresponse.result;
-        var sellDetails = result.sell_confirmation_info;
-        var options2 = {
-          orderType: 'sell',
-          weight: sellDetails.gold_weight,
-          status: sellDetails.provider_sell_order_status,
-          message: result.message
-        }
-        window.localStorage.setItem('sellDetails', JSON.stringify(sellDetails));
-        this.navigate('/gold/sell/payment/' + sellDetails.provider_sell_order_status)
-        // $state.go('gold-payment-callback', options2);
-        this.setState({
-          show_loader: false,
-        });
-      } else if (res.pfwresponse.result.is_gold_rate_changed) {
-        let new_rate = res.pfwresponse.result.new_rate;
-        let amountUpdated, weightUpdated;
-        let sellData = this.state.sellData;
-        if (sellData.isAmount) {
-          amountUpdated = sellData.amount;
-          weightUpdated = (sellData.amount) * (new_rate.plutus_rate);
-        } else {
-          weightUpdated = sellData.weight;
-          amountUpdated = (sellData.weight) / (new_rate.plutus_rate);
-        }
-        this.setState({
-          show_loader: false,
-          amountUpdated: amountUpdated,
-          weightUpdated: weightUpdated,
-          new_rate: new_rate,
-          openPopup: true
-        });
-      } else {
-        this.setState({
-          show_loader: false, openDialog: true,
-          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-        });
+    const res = await Api.post('/api/gold/user/sell/confirm', options);
+    if (res.pfwresponse.status_code == 200) {
+      let result = res.pfwresponse.result;
+      var sellDetails = result.sell_confirmation_info;
+      var options2 = {
+        orderType: 'sell',
+        weight: sellDetails.gold_weight,
+        status: sellDetails.provider_sell_order_status,
+        message: result.message
       }
-
-    }).catch(error => {
-      this.setState({ show_loader: false });
-      console.log(error);
-    });
-
+      window.localStorage.setItem('sellDetails', JSON.stringify(sellDetails));
+      this.navigate('/gold/sell/payment/' + sellDetails.provider_sell_order_status)
+      // $state.go('gold-payment-callback', options2);
+      this.setState({
+        show_loader: false,
+      });
+    } else if (res.pfwresponse.result.is_gold_rate_changed) {
+      let new_rate = res.pfwresponse.result.new_rate;
+      let amountUpdated, weightUpdated;
+      let sellData = this.state.sellData;
+      if (sellData.isAmount) {
+        amountUpdated = sellData.amount;
+        weightUpdated = (sellData.amount) * (new_rate.plutus_rate);
+      } else {
+        weightUpdated = sellData.weight;
+        amountUpdated = (sellData.weight) / (new_rate.plutus_rate);
+      }
+      this.setState({
+        show_loader: false,
+        amountUpdated: amountUpdated,
+        weightUpdated: weightUpdated,
+        new_rate: new_rate,
+        openPopup: true
+      });
+    } else {
+      this.setState({
+        show_loader: false, openResponseDialog: true,
+        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+      });
+    }
   }
   handleClose = () => {
     this.setState({
-      openDialog: false,
+      openResponseDialog: false,
       openPopup: false
     });
   }
@@ -170,7 +166,7 @@ class About extends Component {
   renderResponseDialog = () => {
     return (
       <Dialog
-        open={this.state.openDialog}
+        open={this.state.openResponseDialog}
         onClose={this.handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
@@ -229,7 +225,7 @@ class About extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                    previous gold price has expired.
+                                                                                                                                                                previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -292,6 +288,7 @@ class About extends Component {
         </div>
         {this.renderResponseDialog()}
         {this.renderPopup()}
+        <ToastContainer autoClose={3000} />
       </Container>
     );
   }

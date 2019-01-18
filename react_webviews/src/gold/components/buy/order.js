@@ -5,12 +5,15 @@ import Container from '../../common/Container';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
 import stopwatch from 'assets/stopwatch.png';
+import { ToastContainer } from 'react-toastify';
+import toast from '../../ui/Toast';
 
 class BuyOrder extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
+      openResponseDialog: false,
       minutes: "",
       seconds: "",
       buyData: {},
@@ -147,6 +150,7 @@ class BuyOrder extends Component {
             </div>
           </div>
         </div>
+        <ToastContainer autoClose={3000} />
       </Container>
     );
   }

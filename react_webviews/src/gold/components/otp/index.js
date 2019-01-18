@@ -12,6 +12,8 @@ import Dialog, {
   DialogTitle
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
+import { ToastContainer } from 'react-toastify';
+import toast from '../../ui/Toast';
 
 class Otp extends Component {
   constructor(props) {
@@ -20,7 +22,7 @@ class Otp extends Component {
       show_loader: true,
       otpnumber: '',
       messageOtp: '',
-      openDialog: false,
+      openResponseDialog: false,
       otpVerified: false,
       messageOtp: '',
       params: qs.parse(props.history.location.search.slice(1)),
@@ -86,12 +88,12 @@ class Otp extends Component {
       this.setState({
         show_loader: false,
         otpVerified: true,
-        openDialog: true,
+        openResponseDialog: true,
         apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
       });
     } else {
       this.setState({
-        show_loader: false, openDialog: true,
+        show_loader: false, openResponseDialog: true,
         apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
       });
     }
@@ -124,7 +126,7 @@ class Otp extends Component {
       });
     } else {
       this.setState({
-        show_loader: false, openDialog: true,
+        show_loader: false, openResponseDialog: true,
         apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
       });
     }
@@ -133,7 +135,7 @@ class Otp extends Component {
 
   handleClose = () => {
     this.setState({
-      openDialog: false,
+      openResponseDialog: false,
       openPopup: false
     });
   }
@@ -159,7 +161,7 @@ class Otp extends Component {
   renderResponseDialog = () => {
     return (
       <Dialog
-        open={this.state.openDialog}
+        open={this.state.openResponseDialog}
         onClose={this.handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
@@ -211,6 +213,7 @@ class Otp extends Component {
           </div>
         </div>
         {this.renderResponseDialog()}
+        <ToastContainer autoClose={3000} />
       </Container>
     );
   }

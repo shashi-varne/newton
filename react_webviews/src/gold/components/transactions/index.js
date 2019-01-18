@@ -12,12 +12,15 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Grid from 'material-ui/Grid';
+import { ToastContainer } from 'react-toastify';
+import toast from '../../ui/Toast';
 
 class Transactions extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
+      openResponseDialog: false,
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
@@ -54,7 +57,7 @@ class Transactions extends Component {
 
     const trans = await Api.get('/api/gold/user/list/transactions');
 
-    if (trans) {
+    if (trans.pfwresponse.status_code == 200) {
       this.setState({
         show_loader: false,
         transactions: {
@@ -62,6 +65,11 @@ class Transactions extends Component {
           sell: trans.pfwresponse.result.orders.sell,
           delivery: trans.pfwresponse.result.orders.delivery
         }
+      });
+    } else {
+      this.setState({
+        show_loader: false, openResponseDialog: true,
+        apiError: trans.pfwresponse.result.error || trans.pfwresponse.result.message
       });
     }
   }
@@ -98,7 +106,7 @@ class Transactions extends Component {
           </TableRow>
         ))}</TableBody>
       } else {
-        <div className="error" style={{textAlign: 'center', margin: '10px 0'}}>No Transaction Found!</div>
+        <div className="error" style={{ textAlign: 'center', margin: '10px 0' }}>No Transaction Found!</div>
       }
     } else if (type == 'sell') {
       const sellData = this.state.transactions.sell;
@@ -114,7 +122,7 @@ class Transactions extends Component {
         ))}</TableBody>
       } else {
         return (
-          <div className="error" style={{textAlign: 'center', margin: '10px 0'}}>No Transaction Found!</div>
+          <div className="error" style={{ textAlign: 'center', margin: '10px 0' }}>No Transaction Found!</div>
         );
       }
     } else {
@@ -131,7 +139,7 @@ class Transactions extends Component {
           </TableRow>
         ))}</TableBody>
       } else {
-        <div className="error" style={{textAlign: 'center', margin: '10px 0'}}>No Transaction Found!</div>
+        <div className="error" style={{ textAlign: 'center', margin: '10px 0' }}>No Transaction Found!</div>
       }
     }
   }
@@ -157,7 +165,7 @@ class Transactions extends Component {
           <Tab label="Sell" />
           <Tab label="Delivery" />
         </Tabs>
-        {this.state.value === 0 && <div style={{overflowX: 'scroll'}}>
+        {this.state.value === 0 && <div style={{ overflowX: 'scroll' }}>
           <Grid item xs={12}>
             <Table>
               <TableHead>
@@ -175,7 +183,7 @@ class Transactions extends Component {
             </Table>
           </Grid>
         </div>}
-        {this.state.value === 1 && <div style={{overflowX: 'scroll'}}>
+        {this.state.value === 1 && <div style={{ overflowX: 'scroll' }}>
           <Grid item xs={12}>
             <Table>
               <TableHead>
@@ -191,7 +199,7 @@ class Transactions extends Component {
             </Table>
           </Grid>
         </div>}
-        {this.state.value === 2 && <div style={{overflowX: 'scroll'}}>
+        {this.state.value === 2 && <div style={{ overflowX: 'scroll' }}>
           <Grid item xs={12}>
             <Table>
               <TableHead>
@@ -208,6 +216,7 @@ class Transactions extends Component {
             </Table>
           </Grid>
         </div>}
+        <ToastContainer autoClose={3000} />
       </Container>
     );
   }

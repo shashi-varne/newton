@@ -11,12 +11,15 @@ import track_gold_icon from 'assets/track_gold_icon@2x.png';
 import sell_gold_icon from 'assets/sell_gold_icon@2x.png';
 import deliver_gold_icon from 'assets/deliver_gold_icon@2x.png';
 import '../Style.css';
+import { ToastContainer } from 'react-toastify';
+import toast from '../../ui/Toast';
 
 class About extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
+      openResponseDialog: false,
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
@@ -145,6 +148,7 @@ class About extends Component {
             </div>
           </div>
         </div>
+        <ToastContainer autoClose={3000} />
       </Container>
     );
   }

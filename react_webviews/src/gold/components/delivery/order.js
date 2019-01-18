@@ -11,7 +11,8 @@ import five_gmbar_front from 'assets/5gmbar_front.png';
 import ten_gm_front from 'assets/10gm_front.png';
 import ten_gmbar_front from 'assets/10gmbar_front.png';
 import twenty_gmbar_front from 'assets/20gmbar_front.png';
-import { toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+import toast from '../../ui/Toast';
 
 class DeliveryOrder extends Component {
   constructor(props) {
@@ -19,6 +20,7 @@ class DeliveryOrder extends Component {
     this.state = {
       show_loader: true,
       redeemProduct: {},
+      openResponseDialog: false,
       disabled: false,
       product: {},
       address: {},
@@ -83,37 +85,32 @@ class DeliveryOrder extends Component {
 
     }
 
-    Api.post('/api/gold/user/redeem/verify', options).then(res => {
-      if (res.pfwresponse.status_code == 200 && res.pfwresponse.result.message == 'success') {
-        this.setState({
-          show_loader: false
-        })
-        let result = res.pfwresponse.result;
-        let redeemProduct = result.redeem_body;
-        window.localStorage.setItem('redeemProduct', JSON.stringify(redeemProduct));
-        this.setState({
-          redeemProduct: redeemProduct,
-          disabled: false
-        })
+    const res = await Api.post('/api/gold/user/redeem/verify', options);
+    if (res.pfwresponse.status_code == 200 && res.pfwresponse.result.message == 'success') {
+      this.setState({
+        show_loader: false
+      })
+      let result = res.pfwresponse.result;
+      let redeemProduct = result.redeem_body;
+      window.localStorage.setItem('redeemProduct', JSON.stringify(redeemProduct));
+      this.setState({
+        redeemProduct: redeemProduct,
+        disabled: false
+      })
 
-      } else {
-        let product = this.state.product;
-        let redeemProduct = this.state.redeemProduct;
-        let disabledText = res.pfwresponse.result.message || res.pfwresponse.result.error || 'Insufficient Balance';
-        redeemProduct.delivery_address = product.address;
-        redeemProduct.product_details = product
-        this.setState({
-          show_loader: false, openDialog: true,
-          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message,
-          disabled: true,
-          redeemProduct: redeemProduct
-        });
-      }
-
-    }).catch(error => {
-      this.setState({ show_loader: false });
-      console.log(error);
-    });
+    } else {
+      let product = this.state.product;
+      let redeemProduct = this.state.redeemProduct;
+      let disabledText = res.pfwresponse.result.message || res.pfwresponse.result.error || 'Insufficient Balance';
+      redeemProduct.delivery_address = product.address;
+      redeemProduct.product_details = product
+      this.setState({
+        show_loader: false, openResponseDialog: true,
+        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message,
+        disabled: true,
+        redeemProduct: redeemProduct
+      });
+    }
   }
 
   navigate = (pathname) => {
@@ -210,6 +207,7 @@ class DeliveryOrder extends Component {
             <span className="float-right order-tile-other-text">Karnataka</span>
           </div>
         </div>
+        <ToastContainer autoClose={3000} />
       </Container>
     );
   }

@@ -13,6 +13,7 @@ class SellOrder extends Component {
     super(props);
     this.state = {
       show_loader: true,
+      openResponseDialog: false,
       minutes: "",
       seconds: "",
       timeAvailable: "",
@@ -49,7 +50,7 @@ class SellOrder extends Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     let timeAvailable = window.localStorage.getItem('timeAvailableSell');
     console.log("timeva " + timeAvailable);
     let sellData = JSON.parse(window.localStorage.getItem('sellData'));
@@ -60,41 +61,37 @@ class SellOrder extends Component {
     if (timeAvailable >= 0 && sellData) {
       this.countdown(timeAvailable);
     }
-    Api.get('/api/gold/user/bank/details').then(res => {
-      if (res.pfwresponse.status_code == 200) {
-        let result = res.pfwresponse.result;
-        let bankDetails, account_no, confirm_account_no, ifsc_code;
-        console.log(result);
-        if (result.banks.length != 0) {
-          account_no = result.banks[0].account_number;
-          confirm_account_no = result.banks[0].account_number;
-          ifsc_code = result.banks[0].ifsc_code;
-          // this.checkIFSCFormat(result.banks[0].ifsc_code);
-        } else {
-          bankDetails = {
-            account_no: '',
-            confirm_account_no: '',
-            ifsc_code: ''
-          };
-        }
-        this.setState({
-          show_loader: false,
-          bankDetails: bankDetails,
-          account_no: account_no,
-          confirm_account_no: confirm_account_no,
-          ifsc_code: ifsc_code
-        });
-      } else {
-        this.setState({
-          show_loader: false, openDialog: true,
-          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-        });
-      }
 
-    }).catch(error => {
-      this.setState({ show_loader: false });
-      console.log(error);
-    });
+    const res = await Api.get('/api/gold/user/bank/details');
+    if (res.pfwresponse.status_code == 200) {
+      let result = res.pfwresponse.result;
+      let bankDetails, account_no, confirm_account_no, ifsc_code;
+      console.log(result);
+      if (result.banks.length != 0) {
+        account_no = result.banks[0].account_number;
+        confirm_account_no = result.banks[0].account_number;
+        ifsc_code = result.banks[0].ifsc_code;
+        // this.checkIFSCFormat(result.banks[0].ifsc_code);
+      } else {
+        bankDetails = {
+          account_no: '',
+          confirm_account_no: '',
+          ifsc_code: ''
+        };
+      }
+      this.setState({
+        show_loader: false,
+        bankDetails: bankDetails,
+        account_no: account_no,
+        confirm_account_no: confirm_account_no,
+        ifsc_code: ifsc_code
+      });
+    } else {
+      this.setState({
+        show_loader: false, openResponseDialog: true,
+        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+      });
+    }
   }
 
   countdown(timeAvailable) {
@@ -127,39 +124,34 @@ class SellOrder extends Component {
   async checkIFSCFormat() {
     if (this.state.ifsc_code && ('' + this.state.ifsc_code).length == 11) {
 
-      Api.get('/api/ifsc/' + (this.state.ifsc_code).toUpperCase()).then(res => {
-        if (res.pfwresponse.status_code == 200) {
-          let result = res.pfwresponse.result;
-          let bankDetails, ifsc_error, bank_name, branch_name;
-          if (result.length == 0) {
-            ifsc_error = true;
-            bank_name = '';
-            branch_name = '';
-            return;
-          }
-
-          if (result[0]) {
-            ifsc_error = false;
-            bank_name = result[0].bank;
-            branch_name = result[0].branch;
-          }
-          this.setState({
-            show_loader: false,
-            bank_name: bank_name,
-            branch_name: branch_name,
-            ifsc_error: ifsc_error
-          });
-        } else {
-          this.setState({
-            show_loader: false, openDialog: true,
-            apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-          });
+      const res = await Api.get('/api/ifsc/' + (this.state.ifsc_code).toUpperCase());
+      if (res.pfwresponse.status_code == 200) {
+        let result = res.pfwresponse.result;
+        let bankDetails, ifsc_error, bank_name, branch_name;
+        if (result.length == 0) {
+          ifsc_error = true;
+          bank_name = '';
+          branch_name = '';
+          return;
         }
 
-      }).catch(error => {
-        this.setState({ show_loader: false });
-        console.log(error);
-      });
+        if (result[0]) {
+          ifsc_error = false;
+          bank_name = result[0].bank;
+          branch_name = result[0].branch;
+        }
+        this.setState({
+          show_loader: false,
+          bank_name: bank_name,
+          branch_name: branch_name,
+          ifsc_error: ifsc_error
+        });
+      } else {
+        this.setState({
+          show_loader: false, openResponseDialog: true,
+          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+        });
+      }
     }
 
   };
@@ -219,28 +211,24 @@ class SellOrder extends Component {
         'ifsc_code': this.state.ifsc_code
       };
 
-      Api.post('/api/gold/user/bank/details', options).then(res => {
-        if (res.pfwresponse.status_code == 200) {
-          let result = res.pfwresponse.result;
-          let sellData = this.state.sellData;
-          sellData.account_number = this.state.account_no;
-          sellData.ifsc_code = this.state.ifsc_code;
-          window.localStorage.setItem('sellData', JSON.stringify(sellData));
-          this.navigate('sell-gold-order');
-          this.setState({
-            show_loader: false,
-          });
-        } else {
-          this.setState({
-            show_loader: false, openDialog: true,
-            apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-          });
-        }
+      const res = await Api.post('/api/gold/user/bank/details', options);
+      if (res.pfwresponse.status_code == 200) {
+        let result = res.pfwresponse.result;
+        let sellData = this.state.sellData;
+        sellData.account_number = this.state.account_no;
+        sellData.ifsc_code = this.state.ifsc_code;
+        window.localStorage.setItem('sellData', JSON.stringify(sellData));
+        this.navigate('sell-gold-order');
+        this.setState({
+          show_loader: false,
+        });
+      } else {
+        this.setState({
+          show_loader: false, openResponseDialog: true,
+          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+        });
+      }
 
-      }).catch(error => {
-        this.setState({ show_loader: false });
-        console.log(error);
-      });
     }
   }
 
@@ -296,7 +284,7 @@ class SellOrder extends Component {
           </div>
           <div className="bank-timer">Price expires in <b>{this.state.minutes}:{this.state.seconds}</b></div>
         </div>
-        <ToastContainer autoClose={8000} />
+        <ToastContainer autoClose={3000} />
       </Container>
     );
   }
