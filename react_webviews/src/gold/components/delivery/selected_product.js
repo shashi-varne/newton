@@ -17,6 +17,10 @@ class DeliverySelectedProduct extends Component {
     super(props);
     this.state = {
       show_loader: true,
+      product: {
+        product_highlights: []
+      },
+      disabledText: 'Continue',
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
@@ -41,8 +45,44 @@ class DeliverySelectedProduct extends Component {
   }
 
   componentDidMount() {
-    this.setState({
-      show_loader: false,
+
+    if (window.localStorage.getItem('goldProduct')) {
+      let product = JSON.parse(window.localStorage.getItem('goldProduct'));
+      console.log(product);
+      this.setState({
+        product: product
+      })
+    } else {
+      this.navigate('my-gold-locker');
+    }
+
+    Api.get('/api/gold/user/sell/balance').then(res => {
+
+      if (res.pfwresponse.status_code == 200) {
+        let result = res.pfwresponse.result;
+        let maxWeight = result.sellable_gold_balance || 0;
+        let product = this.state.product;
+        let disabled, disabledText;
+        if (parseFloat(product.metal_weight) > maxWeight) {
+          disabled = true;
+          disabledText = 'Minimum ' + (parseFloat(product.metal_weight)).toFixed(2) + ' GM gold required';
+        }
+        this.setState({
+          show_loader: false,
+          maxWeight: maxWeight,
+          disabled: disabled,
+          disabledText: disabledText
+        });
+      } else {
+        this.setState({
+          show_loader: false, openDialog: true,
+          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+        });
+      }
+
+    }).catch(error => {
+      this.setState({ show_loader: false });
+      console.log(error);
     });
   }
 
@@ -54,10 +94,14 @@ class DeliverySelectedProduct extends Component {
   }
 
   handleClick = async () => {
-    this.navigate('my-gold');
+    if (parseFloat(this.state.product.metal_weight) <= this.state.maxWeight) {
+      this.navigate('gold-delivery-address');
+    } else {
+      // toast("Insufficient Gold Balance");
+    }
   }
 
-   productImgMap = () => {
+  productImgMap = () => {
     const prod_image_map = {
       2: one_gm_front,
       3: two_gm_front,
@@ -67,10 +111,16 @@ class DeliverySelectedProduct extends Component {
       12: ten_gmbar_front,
       15: twenty_gmbar_front,
     };
-    
+
     return (
-      <img alt="Gold" className="delivery-icon" src={prod_image_map[3]} width="150" />
+      <img alt="Gold" className="delivery-icon" src={prod_image_map[this.state.product.id]} width="150" />
     );
+  }
+
+  renderProductHIghlights(props, index) {
+    return (
+      <li key={index}>{props}</li>
+    )
   }
 
   render() {
@@ -88,15 +138,15 @@ class DeliverySelectedProduct extends Component {
             {this.productImgMap()}
           </div>
           <div className="">
-            <div>2gm SafeGold Gold Coin</div>
-            <div style={{fontSize: '16px', color: 'black', marginTop: '5px'}}>Charges 390</div>
-          </div>          
+            <div>{this.state.product.description}</div>
+            <div style={{ fontSize: '16px', color: 'black', marginTop: '5px' }}>Charges {this.state.product.delivery_minting_cost}</div>
+          </div>
           <div className="seller-name">
-            Seller : Digital Gold India Private Limited
+            Seller : {this.state.product.brand}
           </div>
           <div className="instock">
-            <span className="green">*(In Stock)</span>
-            <span className="red">(Out of Stock)</span>
+            {this.state.product.in_stock == 'Y' && <span className="green">*(In Stock)</span>}
+            {this.state.product.in_stock == 'N' && <span className="red">(Out of Stock)</span>}
           </div>
         </div>
 
@@ -104,29 +154,29 @@ class DeliverySelectedProduct extends Component {
           <div className="product-details-heading">
             Product Details
           </div>
-          <div class="product-details-content">
+          <div className="product-details-content">
             <div className="product-name">Model</div>
-            <div className="product-value">: 21dd</div>
+            <div className="product-value">: {this.state.product.sku_number}</div>
           </div>
-          <div class="product-details-content">
+          <div className="product-details-content">
             <div className="product-name">Metal Purity</div>
-            <div className="product-value">: 21dd</div>
+            <div className="product-value">: {this.state.product.metal_stamp}</div>
           </div>
-          <div class="product-details-content">
+          <div className="product-details-content">
             <div className="product-name">Packaging</div>
-            <div className="product-value">: 21dd</div>
+            <div className="product-value">: {this.state.product.packaging}</div>
           </div>
-          <div class="product-details-content">
+          <div className="product-details-content">
             <div className="product-name">Weight</div>
-            <div className="product-value">: 21dd</div>
+            <div className="product-value">: {this.state.product.metal_weight}</div>
           </div>
-          <div class="product-details-content">
+          <div className="product-details-content">
             <div className="product-name">Est. Arrival</div>
-            <div className="product-value">: 21dd</div>
+            <div className="product-value">: {this.state.product.estimated_days_for_dispatch}</div>
           </div>
-          <div class="product-details-content">
+          <div className="product-details-content">
             <div className="product-name">Refund Policy</div>
-            <div className="product-value">: 21dd</div>
+            <div className="product-value">: {this.state.product.refund_policy}</div>
           </div>
         </div>
 
@@ -135,9 +185,7 @@ class DeliverySelectedProduct extends Component {
             Product Hightlight
           </div>
           <ul>
-            <li>SafeGold coins are set in 24 Karat Yellow Gold</li>
-            <li>Guaranteed weight and purity: Specially manufactured in state of the art facilities, independent assay certification  with zero negative tolerance for weight and purity</li>
-            <li>Sealed in international quality packaging with a unique serial number, ensures foolproof quality and complete traceability for each coin</li>
+            {this.state.product.product_highlights.map(this.renderProductHIghlights)}
           </ul>
           <div className="grey-color">
             *You can place your order for sell/delivery after 2 working day from your buying transaction date

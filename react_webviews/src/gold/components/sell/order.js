@@ -75,8 +75,6 @@ class About extends Component {
   }
 
   countdown(timeAvailable) {
-    console.log(this.state)
-    console.log('timeava ' + timeAvailable);
     if (timeAvailable <= 0) {
       this.setState({
         minutes: '',
@@ -89,7 +87,7 @@ class About extends Component {
       function () {
         let minutes = Math.floor(timeAvailable / 60);
         let seconds = Math.floor(timeAvailable - minutes * 60);
-        timeAvailable--;
+        --timeAvailable;
         this.setState({
           timeAvailable: timeAvailable,
           minutes: minutes,
@@ -231,7 +229,7 @@ class About extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                              previous gold price has expired.
+                                                                                                                                                    previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>

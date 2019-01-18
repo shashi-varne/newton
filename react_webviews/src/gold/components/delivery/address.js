@@ -6,6 +6,7 @@ import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
 import Input from '../../ui/Input';
 import { validateNumber, validateStreetName, validateLength, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';
+import { options } from 'sw-toolbox';
 
 class DeliveryAddress extends Component {
   constructor(props) {
@@ -25,9 +26,20 @@ class DeliveryAddress extends Component {
       city: '',
       state: '',
     }
+    this.verifyMobile = this.verifyMobile.bind(this);
   }
 
   componentWillMount() {
+    let product = {};
+    if (window.localStorage.getItem('goldProduct')) {
+      product = JSON.parse(window.localStorage.getItem('goldProduct'));
+      console.log(product);
+    } else {
+      this.navigate('my-gold-locker');
+    }
+    this.setState({
+      product: product
+    })
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -44,9 +56,45 @@ class DeliveryAddress extends Component {
   }
 
   componentDidMount() {
-    this.setState({
-      show_loader: false,
+
+    Api.get('/api/gold/user/address').then(res => {
+      if (res.pfwresponse.status_code == 200) {
+        this.setState({
+          show_loader: false
+        })
+        let result = res.pfwresponse.result;
+        let addressMain = {}, pincode = '', address = '',
+          city = '', landmark = '', userInfo = {};
+        if (result.address && result.address.length != 0) {
+          addressMain = result.address[result.address.length - 1];
+          pincode = addressMain.pincode;
+          address = addressMain.addressline;
+          landmark = addressMain.landmark;
+          city = addressMain.city;
+        }
+        userInfo = result.gold_user.user_info;
+        this.setState({
+          address: address,
+          addressMain: addressMain,
+          pincode: pincode,
+          city: city,
+          userInfo: userInfo,
+          landmark: landmark
+        })
+
+      } else {
+        this.setState({
+          show_loader: false, openDialog: true,
+          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+        });
+      }
+
+    }).catch(error => {
+      this.setState({ show_loader: false });
+      console.log(error);
     });
+
+
   }
 
   navigate = (pathname) => {
@@ -59,7 +107,7 @@ class DeliveryAddress extends Component {
   handleChange = (field) => (event) => {
     this.setState({
       [event.target.name]: event.target.value,
-      [event.target.name+'_error']: ''
+      [event.target.name + '_error']: ''
     });
   }
 
@@ -68,11 +116,11 @@ class DeliveryAddress extends Component {
 
     this.setState({
       [name]: pincode,
-      [name+'_error']: ''
+      [name + '_error']: ''
     });
 
     if (pincode.length === 6) {
-      const res = await Api.get('https://nitish-dot-plutus-staging.appspot.com/api/pincode/' + pincode);
+      const res = await Api.get('/api/pincode/' + pincode);
 
       if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
         this.setState({
@@ -88,7 +136,45 @@ class DeliveryAddress extends Component {
     }
   }
 
+  verifyMobile = async () => {
+    this.setState({
+      show_loader: true
+    });
+
+    let options = {
+      mobile_number: this.state.userInfo.mobile_no,
+    }
+    const res = await Api.post('/api/gold/user/verify/delivery/mobilenumber', options);
+
+    if (res.pfwresponse.status_code === 200) {
+
+      let result = res.pfwresponse.result;
+      if (result.resend_verification_otp_link != '' && result.verification_link != '') {
+        window.localStorage.setItem('fromType', 'delivery')
+        var message = 'An OTP is sent to your mobile number ' + this.state.userInfo.mobile_no + ', please verify to complete registration.'
+        this.props.history.push({
+          pathname: 'verify',
+          search: '?base_url=' + this.state.params.base_url,
+          params: {
+            resend_link: result.resend_verification_otp_link,
+            verify_link: result.verification_link, message: message, fromType: 'delivery',
+            message: message
+          }
+        });
+      }
+      this.setState({
+        show_loader: false,
+      });
+    } else {
+      this.setState({
+        show_loader: false, openDialog: true,
+        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+      });
+    }
+  }
+
   handleClick = async () => {
+    console.log("handlec")
     if (this.state.pincode.length !== 6 || !validateNumber(this.state.pincode)) {
       this.setState({
         pincode_error: 'Please enter valid pincode'
@@ -109,22 +195,32 @@ class DeliveryAddress extends Component {
       this.setState({
         address_error: 'Address should contain minimum two characters'
       });
-    } else if (!validateEmpty(this.state.landmark)) {
-      this.setState({
-        landmark_error: 'Enter nearest landmark'
-      });
-    } else if (!validateLength(this.state.landmark)) {
-      this.setState({
-        landmark_error: 'Maximum length of landmark is 30'
-      });
-    } else if (!validateStreetName(this.state.landmark)) {
-      this.setState({
-        landmark_error: 'Please enter valid landmark'
-      });
     } else {
-      // To-do
+      this.setState({
+        show_loader: true
+      });
+
+      let addressMain = this.state.addressMain;
+      addressMain.pincode = this.state.pincode;
+      addressMain.city = this.state.city;
+      addressMain.address = this.state.address;
+      addressMain.landmark = this.state.landmark;
+
+      const res = await Api.post('/api/gold/user/address', addressMain);
+
+      let product = this.state.product;
+      if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.message == 'success') {
+        this.verifyMobile();
+        product.address = addressMain;
+        window.localStorage.setItem('goldProduct', JSON.stringify(product));
+      } else {
+        this.setState({
+          show_loader: false, openDialog: true,
+          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+        });
+      }
     }
-  } 
+  }
 
   render() {
     return (
@@ -148,9 +244,9 @@ class DeliveryAddress extends Component {
               name="pincode"
               value={this.state.pincode}
               onChange={this.handlePincode('pincode')} />
-              <div className="filler">
-                {(this.state.city && this.state.state) && <span>{this.state.city} , {this.state.state}</span>}
-              </div>
+            <div className="filler">
+              {(this.state.city && this.state.state) && <span>{this.state.city} , {this.state.state}</span>}
+            </div>
           </div>
           <div className="InputField">
             <Input

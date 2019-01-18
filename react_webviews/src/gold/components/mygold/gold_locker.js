@@ -268,7 +268,7 @@ class GoldSummary extends Component {
 
   selectGoldProduct(index) {
     let selectedProduct = this.state.gold_products[index];
-    window.localStorage.setItem('goldProduct', selectedProduct);
+    window.localStorage.setItem('goldProduct', JSON.stringify(selectedProduct));
     this.navigate('select-gold-product');
   };
 
@@ -385,7 +385,7 @@ class GoldSummary extends Component {
 
   renderDeliveryProducts(props, index) {
     return (
-      <div key={index} className="delivery-tile">
+      <div key={index} onClick={() => this.selectGoldProduct(index)} className="delivery-tile">
         {this.productImgMap()}
 
         <div className="">{props.description}</div>

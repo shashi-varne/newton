@@ -51,13 +51,14 @@ class SellOrder extends Component {
 
   componentDidMount() {
     let timeAvailable = window.localStorage.getItem('timeAvailableSell');
+    console.log("timeva " + timeAvailable);
     let sellData = JSON.parse(window.localStorage.getItem('sellData'));
     this.setState({
       timeAvailable: timeAvailable,
       sellData: sellData
     })
     if (timeAvailable >= 0 && sellData) {
-      this.countdown();
+      this.countdown(timeAvailable);
     }
     Api.get('/api/gold/user/bank/details').then(res => {
       if (res.pfwresponse.status_code == 200) {
@@ -96,9 +97,7 @@ class SellOrder extends Component {
     });
   }
 
-  countdown() {
-    let timeAvailable = this.state.timeAvailable;
-    console.log(timeAvailable);
+  countdown(timeAvailable) {
     if (timeAvailable <= 0) {
       this.setState({
         minutes: '',
@@ -111,14 +110,14 @@ class SellOrder extends Component {
       function () {
         let minutes = Math.floor(timeAvailable / 60);
         let seconds = Math.floor(timeAvailable - minutes * 60);
-        timeAvailable--;
+        --timeAvailable;
         this.setState({
           timeAvailable: timeAvailable,
           minutes: minutes,
           seconds: seconds
         })
         window.localStorage.setItem('timeAvailableSell', timeAvailable);
-        this.countdown();
+        this.countdown(timeAvailable);
       }
         .bind(this),
       1000
@@ -192,27 +191,27 @@ class SellOrder extends Component {
 
     if (!this.state.account_no) {
       this.setState({
-        account_no_error: 'Please enter account number' 
+        account_no_error: 'Please enter account number'
       });
     } else if (!this.state.confirm_account_no) {
       this.setState({
-        confirm_account_no_error: 'This field is required' 
+        confirm_account_no_error: 'This field is required'
       });
     } else if (this.state.account_no !== this.state.confirm_account_no) {
       this.setState({
-        confirm_account_no_error: 'Account number mismatch' 
+        confirm_account_no_error: 'Account number mismatch'
       });
     } else if (!this.state.ifsc_code) {
       this.setState({
-        ifsc_error: 'Please enter IFSC Code' 
+        ifsc_error: 'Please enter IFSC Code'
       });
     } else if (this.state.ifsc_code && (this.state.ifsc_code.length < 11 || this.state.ifsc_code.length > 11)) {
       this.setState({
-        ifsc_error: 'Invalid IFSC Code' 
+        ifsc_error: 'Invalid IFSC Code'
       });
     } else if (this.state.ifsc_code && !ifsc_regex.test(this.state.ifsc_code)) {
       this.setState({
-        ifsc_error: 'Invalid IFSC Code' 
+        ifsc_error: 'Invalid IFSC Code'
       });
     } else {
       var options = {
