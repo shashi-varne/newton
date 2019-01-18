@@ -13,6 +13,12 @@ class SellOrder extends Component {
     super(props);
     this.state = {
       show_loader: true,
+      minutes: "",
+      seconds: "",
+      timeAvailable: "",
+      ifsc_code: '',
+      bank_name: '',
+      branch_name: '',
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
@@ -21,12 +27,13 @@ class SellOrder extends Component {
       account_no_error: '',
       confirm_account_no: '',
       confirm_account_no_error: '',
-      ifsc: '',
       ifsc_error: ''
     }
+    this.countdown = this.countdown.bind(this);
   }
 
   componentWillMount() {
+
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -43,10 +50,120 @@ class SellOrder extends Component {
   }
 
   componentDidMount() {
+    let timeAvailable = window.localStorage.getItem('timeAvailableSell');
+    let sellData = JSON.parse(window.localStorage.getItem('sellData'));
     this.setState({
-      show_loader: false,
+      timeAvailable: timeAvailable,
+      sellData: sellData
+    })
+    if (timeAvailable >= 0 && sellData) {
+      this.countdown();
+    }
+    Api.get('/api/gold/user/bank/details').then(res => {
+      if (res.pfwresponse.status_code == 200) {
+        let result = res.pfwresponse.result;
+        let bankDetails, account_no, confirm_account_no, ifsc_code;
+        console.log(result);
+        if (result.banks.length != 0) {
+          account_no = result.banks[0].account_number;
+          confirm_account_no = result.banks[0].account_number;
+          ifsc_code = result.banks[0].ifsc_code;
+          // this.checkIFSCFormat(result.banks[0].ifsc_code);
+        } else {
+          bankDetails = {
+            account_no: '',
+            confirm_account_no: '',
+            ifsc_code: ''
+          };
+        }
+        this.setState({
+          show_loader: false,
+          bankDetails: bankDetails,
+          account_no: account_no,
+          confirm_account_no: confirm_account_no,
+          ifsc_code: ifsc_code
+        });
+      } else {
+        this.setState({
+          show_loader: false, openDialog: true,
+          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+        });
+      }
+
+    }).catch(error => {
+      this.setState({ show_loader: false });
+      console.log(error);
     });
   }
+
+  countdown() {
+    let timeAvailable = this.state.timeAvailable;
+    console.log(timeAvailable);
+    if (timeAvailable <= 0) {
+      this.setState({
+        minutes: '',
+        seconds: ''
+      })
+      // window.location.reload();
+      return;
+    }
+    setTimeout(
+      function () {
+        let minutes = Math.floor(timeAvailable / 60);
+        let seconds = Math.floor(timeAvailable - minutes * 60);
+        timeAvailable--;
+        this.setState({
+          timeAvailable: timeAvailable,
+          minutes: minutes,
+          seconds: seconds
+        })
+        window.localStorage.setItem('timeAvailableSell', timeAvailable);
+        this.countdown();
+      }
+        .bind(this),
+      1000
+    );
+  };
+
+  async checkIFSCFormat() {
+    if (this.state.ifsc_code && ('' + this.state.ifsc_code).length == 11) {
+
+      Api.get('/api/ifsc/' + (this.state.ifsc_code).toUpperCase()).then(res => {
+        if (res.pfwresponse.status_code == 200) {
+          let result = res.pfwresponse.result;
+          let bankDetails, ifsc_error, bank_name, branch_name;
+          if (result.length == 0) {
+            ifsc_error = true;
+            bank_name = '';
+            branch_name = '';
+            return;
+          }
+
+          if (result[0]) {
+            ifsc_error = false;
+            bank_name = result[0].bank;
+            branch_name = result[0].branch;
+          }
+          this.setState({
+            show_loader: false,
+            bank_name: bank_name,
+            branch_name: branch_name,
+            ifsc_error: ifsc_error
+          });
+        } else {
+          this.setState({
+            show_loader: false, openDialog: true,
+            apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+          });
+        }
+
+      }).catch(error => {
+        this.setState({ show_loader: false });
+        console.log(error);
+      });
+    }
+
+  };
 
   navigate = (pathname) => {
     this.props.history.push({
@@ -56,10 +173,18 @@ class SellOrder extends Component {
   }
 
   handleChange = (field) => (event) => {
-    this.setState({
-      [event.target.name]: event.target.value,
-      [event.target.name+'_error']: ''
-    });
+    if (event.target.name === 'ifsc_code') {
+      this.checkIFSCFormat(event.target.value);
+      this.setState({
+        [event.target.name]: event.target.value
+      });
+
+    } else {
+      this.setState({
+        [event.target.name]: event.target.value,
+        [event.target.name + '_error']: ''
+      });
+    }
   }
 
   handleClick = async () => {
@@ -77,20 +202,46 @@ class SellOrder extends Component {
       this.setState({
         confirm_account_no_error: 'Account number mismatch' 
       });
-    } else if (!this.state.ifsc) {
+    } else if (!this.state.ifsc_code) {
       this.setState({
         ifsc_error: 'Please enter IFSC Code' 
       });
-    } else if (this.state.ifsc && (this.state.ifsc.length < 11 || this.state.ifsc.length > 11)) {
+    } else if (this.state.ifsc_code && (this.state.ifsc_code.length < 11 || this.state.ifsc_code.length > 11)) {
       this.setState({
         ifsc_error: 'Invalid IFSC Code' 
       });
-    } else if (this.state.ifsc && !ifsc_regex.test(this.state.ifsc)) {
+    } else if (this.state.ifsc_code && !ifsc_regex.test(this.state.ifsc_code)) {
       this.setState({
         ifsc_error: 'Invalid IFSC Code' 
       });
     } else {
-      // To-do
+      var options = {
+        'account_number': this.state.account_no,
+        'ifsc_code': this.state.ifsc_code
+      };
+
+      Api.post('/api/gold/user/bank/details', options).then(res => {
+        if (res.pfwresponse.status_code == 200) {
+          let result = res.pfwresponse.result;
+          let sellData = this.state.sellData;
+          sellData.account_number = this.state.account_no;
+          sellData.ifsc_code = this.state.ifsc_code;
+          window.localStorage.setItem('sellData', JSON.stringify(sellData));
+          this.navigate('sell-gold-order');
+          this.setState({
+            show_loader: false,
+          });
+        } else {
+          this.setState({
+            show_loader: false, openDialog: true,
+            apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+          });
+        }
+
+      }).catch(error => {
+        this.setState({ show_loader: false });
+        console.log(error);
+      });
     }
   }
 
@@ -139,12 +290,12 @@ class SellOrder extends Component {
               width="40"
               label="IFSC Code *"
               class="ifsc"
-              id="ifsc"
-              name="ifsc"
-              value={this.state.ifsc}
-              onChange={this.handleChange('ifsc')} />
+              id="ifsc_code"
+              name="ifsc_code"
+              value={this.state.ifsc_code}
+              onChange={this.handleChange('ifsc_code')} />
           </div>
-          <div className="bank-timer">Price expires in <b>00:00</b></div>
+          <div className="bank-timer">Price expires in <b>{this.state.minutes}:{this.state.seconds}</b></div>
         </div>
         <ToastContainer autoClose={8000} />
       </Container>
