@@ -330,6 +330,10 @@
   padding-left: 5px;
 }
 
+.bank-timer {
+  
+}
+
 .invest-success {
   text-align: center;
 }
@@ -372,7 +376,7 @@
   margin: 10px 0;
 }
 
-.delivery-select-logo {
+.delivery-select-logo, .delivery-order-logo {
   text-align: center;
   padding: 10px 0;
 }

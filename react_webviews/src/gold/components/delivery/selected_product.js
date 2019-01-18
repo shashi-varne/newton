@@ -69,7 +69,7 @@ class DeliverySelectedProduct extends Component {
     };
     
     return (
-      <img alt="Gold" className="delivery-icon" src={prod_image_map[3]} width="200" />
+      <img alt="Gold" className="delivery-icon" src={prod_image_map[3]} width="150" />
     );
   }
 

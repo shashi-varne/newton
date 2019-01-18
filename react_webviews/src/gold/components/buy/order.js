@@ -61,40 +61,38 @@ class BuyOrder extends Component {
         buttonTitle="Proceed"
         type={this.state.type}
       >
-        <div>
-          <div className="order-tile">
-            <div className="FlexRow order-heading">
-              <div className="order-tile-head">
-                Order Summary
-              </div>
-              <div className="">
-                <div className="stopwatch-title">Price valid for </div>
-                <div className="FlexRow stopwatch">
-                  <img className="stopwatch-order" src={stopwatch} width="15" />
-                  <span className="timer">3:13</span>
-                </div>
+        <div className="order-tile">
+          <div className="FlexRow order-heading">
+            <div className="order-tile-head">
+              Order Summary
+            </div>
+            <div className="">
+              <div className="stopwatch-title">Price valid for </div>
+              <div className="FlexRow stopwatch">
+                <img className="stopwatch-order" src={stopwatch} width="15" />
+                <span className="timer">3:13</span>
               </div>
             </div>
-            <div className="order-tile2">
-              <span className="order-tile-total1">Total payble amount</span>
-              <span className="float-right order-tile-total1">10000</span>
-            </div>
-            <div className="order-tile2">
-              <span className="order-tile-other-text">Gold grams to be added to your vault</span>
-              <span className="float-right order-tile-other-text">2.8776 gm</span>
-            </div>
-            <div className="order-tile2">
-              <span className="order-tile-other-text">Rate</span>
-              <span className="float-right order-tile-other-text">3900/gm</span>
-            </div>
-            <div className="order-tile2">
-              <span className="order-tile-other-text">Total GST (3%)</span>
-              <span className="float-right order-tile-other-text">291.98</span>
-            </div>
-            <div className="order-tile2">
-              <span className="order-tile-other-text">Net purchase amount</span>
-              <span className="float-right order-tile-other-text">9708.23</span>
-            </div>
+          </div>
+          <div className="order-tile2">
+            <span className="order-tile-total1">Total payble amount</span>
+            <span className="float-right order-tile-total1">10000</span>
+          </div>
+          <div className="order-tile2">
+            <span className="order-tile-other-text">Gold grams to be added to your vault</span>
+            <span className="float-right order-tile-other-text">2.8776 gm</span>
+          </div>
+          <div className="order-tile2">
+            <span className="order-tile-other-text">Rate</span>
+            <span className="float-right order-tile-other-text">3900/gm</span>
+          </div>
+          <div className="order-tile2">
+            <span className="order-tile-other-text">Total GST (3%)</span>
+            <span className="float-right order-tile-other-text">291.98</span>
+          </div>
+          <div className="order-tile2">
+            <span className="order-tile-other-text">Net purchase amount</span>
+            <span className="float-right order-tile-other-text">9708.23</span>
           </div>
         </div>
       </Container>

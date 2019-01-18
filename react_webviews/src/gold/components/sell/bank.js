@@ -4,6 +4,7 @@ import qs from 'qs';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
+import Input from '../../ui/Input';
 
 class SellOrder extends Component {
   constructor(props) {
@@ -46,8 +47,8 @@ class SellOrder extends Component {
     });
   }
 
-  handleClick = async () => {
-    this.navigate('my-gold');
+  handleChange = (field) => (value) => {
+    // field == name
   }
 
   render() {
@@ -55,12 +56,52 @@ class SellOrder extends Component {
       <Container
         showLoader={this.state.show_loader}
         title="Bank Details"
-        handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="Proceed"
         type={this.state.type}
       >
-        <div>Lorum Ipsum</div>
+        <div className="bank-details">
+          <div className="InputField">
+            <Input
+              error={false}
+              helperText=''
+              type="text"
+              width="40"
+              label="Your Account Number *"
+              class="account_no"
+              id="account_no"
+              name="account_no"
+              value='1234567890'
+              onChange={this.handleChange('account_no')} />
+          </div>
+          <div className="InputField">
+            <Input
+              error={false}
+              helperText=''
+              type="text"
+              width="40"
+              label="Confirm Account Number *"
+              class="confirm_account_no"
+              id="confirm_account_no"
+              name="confirm_account_no"
+              value='1234567890'
+              onChange={this.handleChange('confirm_account_no')} />
+          </div>
+          <div className="InputField">
+            <Input
+              error={false}
+              helperText=''
+              type="text"
+              width="40"
+              label="IFSC Code *"
+              class="ifsc"
+              id="ifsc"
+              name="ifsc"
+              value='SBIN0013159'
+              onChange={this.handleChange('ifsc')} />
+          </div>
+          <div className="bank-timer">Price expires in <b>00:00</b></div>
+        </div>
       </Container>
     );
   }
