@@ -5,6 +5,8 @@ import Container from '../../common/Container';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
 import Input from '../../ui/Input';
+import { ToastContainer } from 'react-toastify';
+import toast from '../../ui/Toast';
 
 class SellOrder extends Component {
   constructor(props) {
@@ -102,6 +104,7 @@ class SellOrder extends Component {
           </div>
           <div className="bank-timer">Price expires in <b>00:00</b></div>
         </div>
+        <ToastContainer autoClose={8000} />
       </Container>
     );
   }
