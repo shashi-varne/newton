@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import qs from 'qs';
+import createBrowserHistory from 'history/createBrowserHistory';
+
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
@@ -9,19 +11,69 @@ import error from 'assets/error.png';
 import thumpsup from 'assets/thumpsup.png';
 import arrow from 'assets/arrow.png';
 
+const myHistory = createBrowserHistory();
+console.log(window.localStorage.getItem('base_url'))
+const base_url = window.localStorage.getItem('base_url');
+console.log(base_url);
 class Payment extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
+      goldInfo: {},
+      sellDetails: {},
+      weight: "",
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
+      isPrime: base_url.indexOf("mypro.fisdom.com") >= 0,
+      ismyway: base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
     }
+    this.sendInvoiceEmail = this.sendInvoiceEmail.bind(this);
+    this.trackDelivery = this.trackDelivery.bind(this);
   }
 
   componentWillMount() {
+    let { params } = this.props.location;
+    let { status, orderType } = this.props.match.params;
+    let weight, sellDetails, buyDetails, redeemProduct,
+      productDisc, paymentError, paymentMessage, paymentPending;
+    if (orderType == 'sell') {
+      let sellDetails = JSON.parse(window.localStorage.getItem('sellDetails'));
+      weight = sellDetails.gold_weight;
+      console.log(sellDetails);
+      let invoiceLink = sellDetails.invoice_link;
+    } else if (orderType == 'buy') {
+      buyDetails = JSON.parse(window.localStorage.getItem('buyData'));
+      console.log(buyDetails);
+      weight = buyDetails.gold_weight;
+    } else if (orderType == 'delivery') {
+      redeemProduct = JSON.parse(window.localStorage.getItem('redeemProduct'));
+      productDisc = redeemProduct.product_details.description;
+      console.log(redeemProduct);
+    }
+
+    if (status == 'failed' || status == 'error') {
+      paymentError = true;
+    } else if (status == 'success') {
+      paymentError = false;
+      if (orderType == 'buy') {
+        this.getInvoice(buyDetails.transact_id);
+      }
+    } else if (status == 'pending') {
+      paymentPending = true;
+    }
+    this.setState({
+      status: status,
+      orderType: orderType,
+      weight: weight,
+      sellDetails: sellDetails,
+      buyDetails: buyDetails,
+      redeemProduct: redeemProduct,
+      productDisc: productDisc,
+      paymentError: paymentError,
+      paymentMessage: paymentMessage
+    })
+    this.state.params.base_url = window.localStorage.getItem('base_url');
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -38,8 +90,55 @@ class Payment extends Component {
   }
 
   componentDidMount() {
-    this.setState({
-      show_loader: false,
+    Api.get('/api/gold/user/account').then(res => {
+      if (res.pfwresponse.status_code == 200) {
+        let result = res.pfwresponse.result;
+        let isRegistered = true;
+        if (result.gold_user_info.user_info.registration_status == "pending" ||
+          !result.gold_user_info.user_info.registration_status ||
+          result.gold_user_info.is_new_gold_user) {
+          isRegistered = false;
+        }
+        this.setState({
+          show_loader: false,
+          goldInfo: result.gold_user_info.safegold_info,
+          userInfo: result.gold_user_info.user_info,
+          maxWeight: parseFloat(((30 - result.gold_user_info.safegold_info.gold_balance) || 30).toFixed(4)),
+          isRegistered: isRegistered
+        });
+      } else {
+        this.setState({
+          show_loader: false, openDialog: true,
+          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+        });
+      }
+
+    }).catch(error => {
+      this.setState({ show_loader: false });
+      console.log(error);
+    });
+
+    Api.get('/api/gold/sell/currentprice').then(res => {
+      if (res.pfwresponse.status_code == 200) {
+        let goldInfo = this.state.goldInfo;
+        let result = res.pfwresponse.result;
+        goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
+        this.setState({
+          show_loader: false,
+          goldSellInfo: result.sell_info,
+          goldInfo: goldInfo,
+        });
+
+      } else {
+        this.setState({
+          show_loader: false, openDialog: true,
+          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+        });
+      }
+
+    }).catch(error => {
+      this.setState({ show_loader: false });
+      console.log(error);
     });
   }
 
@@ -48,6 +147,69 @@ class Payment extends Component {
       pathname: pathname,
       search: '?base_url=' + this.state.params.base_url
     });
+  }
+
+  trackDelivery() {
+    window.localStorage.setItem('deliveryTransaction', 'delivery');
+    this.navigate('gold-transactions')
+  }
+
+  async sendInvoiceEmail(path) {
+
+    console.log(path);
+    this.setState({
+      show_loader: true,
+    });
+
+    Api.get('/api/gold/invoice/download/mail', { url: path }).then(res => {
+      if (res.pfwresponse.status_code == 200) {
+        let result = res.pfwresponse.result;
+        if (result.message == 'success') {
+          // toast('Invoice has been sent succesfully to your registered email');
+        } else {
+          // toast(result.message || result.error);
+        }
+        this.setState({
+          show_loader: false,
+        });
+      } else {
+        this.setState({
+          show_loader: false, openDialog: true,
+          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+        });
+      }
+
+    }).catch(error => {
+      this.setState({ show_loader: false });
+      console.log(error);
+    });
+
+  }
+
+  async getInvoice(txn_id) {
+
+    this.setState({
+      show_loader: true,
+    });
+
+    Api.get('/api/gold/user/getinvoice', { txn_id: txn_id }).then(res => {
+      if (res.pfwresponse.status_code == 200) {
+        this.setState({
+          show_loader: false,
+          invoiceLink: res.pfwresponse.result.invoice_link
+        });
+      } else {
+        this.setState({
+          show_loader: false, openDialog: true,
+          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+        });
+      }
+
+    }).catch(error => {
+      this.setState({ show_loader: false });
+      console.log(error);
+    });
+
   }
 
   handleClick = async () => {
@@ -66,7 +228,7 @@ class Payment extends Component {
       >
         <div className="page home" id="goldSection">
           <div className="text-center goldheader">
-            <div className="my-gold-header">
+            <div className="my-gold-header" onClick={() => this.navigate('/gold/my-gold')}>
               <div className="FlexRow row1" >
                 <img className="img-mygold" src={safegold_logo} />
                 <span className="my-gold-title-header">Updated Gold Locker</span>
@@ -76,88 +238,99 @@ class Payment extends Component {
               <div className="my-gold-details-header1">
                 <div className="my-gold-details-header2">
                   <div className="my-gold-details-header2a">Weight</div>
-                  <div className="my-gold-details-header2b">3.3266 gm</div>
+                  <div className="my-gold-details-header2b">{this.state.goldInfo.gold_balance} gm</div>
                 </div>
                 <div className="my-gold-details-header3">
                   <div className="my-gold-details-header2a">Selling Value</div>
-                  <div className="my-gold-details-header2b">₹ 10,325.64</div>
+                  <div className="my-gold-details-header2b">₹ {this.state.goldInfo.sell_value}</div>
                 </div>
               </div>
             </div>
           </div>
           <div className="invest-success container-padding" id="goldPayment">
-            <div className="success-card">
-              <div className="icon">
-                <img src={thumpsup} width="80" />
-              </div>
-              <h3>Payment Successful</h3>
-              <h3>Successful</h3>
-              <h3>Order Successful</h3>
+            {this.state.paymentError == false &&
+              <div>
+                <div className="success-card">
+                  <div className="icon">
+                    <img src={thumpsup} width="80" />
+                  </div>
+                  {this.state.orderType == 'buy' && <h3>Payment Successful</h3>}
+                  {this.state.orderType == 'sell' && <h3>Successful</h3>}
+                  {this.state.orderType == 'delivery' && <h3>Order Successful</h3>}
 
-              <p> 2.134 grams gold has been purchased and the invoice has been sent to your registered email id.</p>
-              <p> 2.134 grams gold has been sold and the invoice has been sent to your registered email id.</p>
-              <p>Your delivery order for 'PRODUCTDISC' has been placed successfully</p>
-            </div>
-            <div className="invoice">
-              <a>Download Invoice</a>
-            </div>
-            <div className="invoice">
-              <a>Track Now</a>
-            </div>
-            <div className="invest-error success-card">
-              <div className="icon">
-                <img src={error} width="80" />
+                  {this.state.orderType == 'buy' && <p> {this.state.weight} grams gold has been purchased and the invoice has been sent to your registered email id.</p>}
+                  {this.state.orderType == 'sell' && <p> {this.state.weight} grams gold has been sold and the invoice has been sent to your registered email id.</p>}
+                  {this.state.orderType == 'delivery' && <p>Your delivery order for {this.state.productDisc} has been placed successfully</p>}
+                </div>
+                {this.state.orderType != 'delivery' && <div className="invoice">
+                  <a onClick={() => this.sendInvoiceEmail(this.state.invoiceLink)}>Download Invoice</a>
+                </div>}
+                {this.state.orderType == 'delivery' && <div className="invoice">
+                  <a onClick={() => this.trackDelivery(this.state.invoiceLink)}>Track Now</a>
+                </div>}
               </div>
-              <h3>Payment Failed</h3>
-              <p>
-                Oops! Your buy order for 2.134 grams could not be placed.
-                <br/>
-                <br/>
-                Sorry for the inconvenience.
-              </p>
-              <p>
-                Oops! Your sell order for 2.134 grams could not be placed.
-                <br/>
-                <br/>
-                Sorry for the inconvenience.
-              </p>
-              <p>
-                Oops! Your delivery order for 'PRODUCTDISC' could not be placed.
-                <br/>
-                <br/>
-                Sorry for the inconvenience.
-              </p>
-            </div>
-            <div className="invest-error success-card">
-              <div className="icon">
-                <img src={error} width="80" height="80" />
-              </div>
-              <h3>Order Pending</h3>
-              <p>
-                Oops! Your buy order for 2.134 grams is in pending state. We will try placing
-                the order again in the next 24 hrs. The amount will be refunded if the order
-                doesn't go through
-                <br/>
-                <br/>
-                Sorry for the inconvenience.
-              </p>
-              <p>
-                Oops! Your sell order for 2.134 grams could not be placed. We will try placing
-                the order again in the next 24 hrs. The amount will be refunded if the order
-                doesn't go through
-                <br/>
-                <br/>
-                Sorry for the inconvenience.
-              </p>
-              <p>
-                Oops! Your delivery order for 'PRODUCTDISC' could not be placed. We will try placing
-                the order again in the next 24 hrs. The amount will be refunded if the order
-                doesn't go through
-                <br/>
-                <br/>
-                Sorry for the inconvenience.
-              </p>
-            </div>
+            }
+            {this.state.paymentError == true &&
+              <div className="invest-error success-card">
+                <div className="icon">
+                  <img src={error} width="80" />
+                </div>
+                <h3>Payment Failed</h3>
+                {this.state.orderType == 'buy' && <p>
+                  Oops! Your buy order for 2.134 grams could not be placed.
+                <br />
+                  <br />
+                  Sorry for the inconvenience.
+                </p>}
+                {this.state.orderType == 'sell' &&
+                  <p>
+                    Oops! Your sell order for 2.134 grams could not be placed.
+                <br />
+                    <br />
+                    Sorry for the inconvenience.
+                  </p>}
+                {this.state.orderType == 'delivery' &&
+                  <p>
+                    Oops! Your delivery order for 'PRODUCTDISC' could not be placed.
+                <br />
+                    <br />
+                    Sorry for the inconvenience.
+                </p>}
+              </div>}
+            {this.state.paymentPending == true &&
+              <div className="invest-error success-card">
+                <div className="icon">
+                  <img src={error} width="80" height="80" />
+                </div>
+                <h3>Order Pending</h3>
+                {this.state.orderType == 'buy' &&
+                  <p>
+                    Oops! Your buy order for 2.134 grams is in pending state. We will try placing
+                    the order again in the next 24 hrs. The amount will be refunded if the order
+                    doesn't go through
+                <br />
+                    <br />
+                    Sorry for the inconvenience.
+                </p>}
+                {this.state.orderType == 'sell' &&
+                  <p>
+                    Oops! Your sell order for 2.134 grams could not be placed. We will try placing
+                    the order again in the next 24 hrs. The amount will be refunded if the order
+                    doesn't go through
+                <br />
+                    <br />
+                    Sorry for the inconvenience.
+                </p>}
+                {this.state.orderType == 'delivery' &&
+                  <p>
+                    Oops! Your delivery order for 'PRODUCTDISC' could not be placed. We will try placing
+                    the order again in the next 24 hrs. The amount will be refunded if the order
+                    doesn't go through
+                <br />
+                    <br />
+                    Sorry for the inconvenience.
+                </p>}
+              </div>}
           </div>
         </div>
       </Container>

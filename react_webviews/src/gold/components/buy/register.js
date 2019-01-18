@@ -7,12 +7,28 @@ import { nativeCallback } from 'utils/native_callback';
 import Input from '../../ui/Input';
 import Grid from 'material-ui/Grid';
 import Checkbox from 'material-ui/Checkbox';
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
+} from 'material-ui/Dialog';
+import Button from 'material-ui/Button';
 
 class GoldRegister extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
+      userInfo: {},
+      name: "",
+      email: "",
+      pin_code: "",
+      mobile_no: "",
+      goldInfo: {},
+      isRegistered: false,
+      openDialog: false,
+      openPopup: false,
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
@@ -49,11 +65,17 @@ class GoldRegister extends Component {
           isRegistered = false;
         }
 
+        const { name, email, pin_code, mobile_no } = userInfo;
+
         this.setState({
           show_loader: false,
           goldInfo: result.gold_user_info.safegold_info,
           userInfo: userInfo,
-          isRegistered: isRegistered
+          isRegistered: isRegistered,
+          name: name || "",
+          email: email || "",
+          pin_code: pin_code || "",
+          mobile_no: mobile_no || "",
         });
 
         if (userInfo.mobile_verified == false &&
@@ -84,11 +106,21 @@ class GoldRegister extends Component {
     });
   }
 
-  handleChange = (field) => (value) => {
-    // field == name
+  handleChange = (field) => (event) => {
+    if (event.target.name === 'checked') {
+      this.setState({
+        [event.target.name]: event.target.checked
+      });
+    } else {
+      this.setState({
+        [event.target.name]: event.target.value,
+        [event.target.name + '_error']: ''
+      });
+    }
   }
 
-  handlePincode = name => async (event) => {
+
+  handlePincode = (name) => async (event) => {
     // const pincode = event.target.value;
 
     // this.setState({
@@ -122,6 +154,103 @@ class GoldRegister extends Component {
     // }
   }
 
+  verifyMobile = async () => {
+    this.setState({
+      show_loader: true
+    });
+
+    let options = {
+      mobile_number: this.state.mobile_no,
+    }
+    const res = await Api.post('/api/gold/user/verify/mobilenumber', options);
+
+    if (res.pfwresponse.status_code === 200) {
+
+      let result = res.pfwresponse.result;
+      if (result.resend_verification_otp_link != '' && result.verification_link != '') {
+        window.localStorage.setItem('fromType', 'buy')
+        var message = 'An OTP is sent to your mobile number ' + this.state.mobile_no + ', please verify to complete registration.'
+        this.props.history.push({
+          pathname: 'verify',
+          search: '?base_url=' + this.state.params.base_url,
+          params: {
+            resend_link: result.resend_verification_otp_link,
+            verify_link: result.verification_link, message: message, fromType: 'buy',
+            message: message
+          }
+        });
+      }
+      this.setState({
+        show_loader: false,
+      });
+    } else {
+      this.setState({
+        show_loader: false, openDialog: true,
+        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+      });
+    }
+  }
+
+  handleClose = () => {
+    this.setState({
+      openDialog: false,
+      openPopup: false
+    });
+  }
+
+  renderResponseDialog = () => {
+    return (
+      <Dialog
+        open={this.state.openDialog}
+        onClose={this.handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {this.state.apiError}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClose} color="primary" autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  }
+
+  handleClick = async () => {
+    this.setState({
+      show_loader: true
+    });
+
+    let options = this.state.userInfo;
+
+    options.name = this.state.name;
+    options.mobile_no = this.state.mobile_no;
+    options.email = this.state.email;
+    options.pin_code = this.state.pin_code;
+
+    const res = await Api.post('/api/gold/user/account', options);
+
+    if (res.pfwresponse.status_code === 200) {
+      this.verifyMobile();
+    } else {
+
+      if (res.pfwresponse.result.error != 'User with the same mobile number exists!' &&
+        (this.state.userInfo.mobile_verified == false || res.pfwresponse.resultmobile_verified == false)) {
+        this.verifyMobile();
+      } else {
+        this.setState({
+          show_loader: false, openDialog: true,
+          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+        });
+      }
+
+    }
+  }
+
   render() {
     return (
       <Container
@@ -143,7 +272,7 @@ class GoldRegister extends Component {
               class="name"
               id="name"
               name="name"
-              value='Vinod'
+              value={this.state.name}
               onChange={this.handleChange('name')} />
           </div>
           <div className="InputField">
@@ -156,8 +285,8 @@ class GoldRegister extends Component {
               class="Mobile"
               id="number"
               name="mobile_no"
-              value='9595959595'
-              onChange={this.handleChange('mobile')} />
+              value={this.state.mobile_no}
+              onChange={this.handleChange('mobile_no')} />
           </div>
           <div className="InputField">
             <Input
@@ -169,7 +298,7 @@ class GoldRegister extends Component {
               class="Email"
               id="email"
               name="email"
-              value='vinod@vinod.com'
+              value={this.state.email}
               onChange={this.handleChange('email')} />
           </div>
           <div className="InputField">
@@ -180,9 +309,9 @@ class GoldRegister extends Component {
               width="40"
               label="Pincode *"
               id="pincode"
-              name="pincode"
-              value='560052'
-              onChange={this.handlePincode('pincode')} />
+              name="pin_code"
+              value={this.state.pin_code}
+              onChange={this.handleChange('pin_code')} />
           </div>
           <div className="CheckBlock">
             <Grid container spacing={16} alignItems="center">
@@ -202,6 +331,7 @@ class GoldRegister extends Component {
             </Grid>
           </div>
         </div>
+        {this.renderResponseDialog()}
       </Container>
     );
   }
