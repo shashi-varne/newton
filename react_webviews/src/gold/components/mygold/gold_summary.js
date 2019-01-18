@@ -357,7 +357,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                            previous gold price has expired.
+                                                                                                              previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -443,7 +443,7 @@ class GoldSummary extends Component {
         type={this.state.type}
       >
         <div className="page home" id="goldSection">
-          <div className="text-center goldheader">
+          <div className="text-center goldheader" onClick={() => this.navigate('/gold/my-gold-locker')}>
             <div className="my-gold-header">
               <div className="FlexRow row1">
                 <img className="img-mygold" src={safegold_logo} />

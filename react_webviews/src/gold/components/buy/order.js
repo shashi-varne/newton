@@ -66,7 +66,7 @@ class BuyOrder extends Component {
       show_loader: true,
     });
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.protocol + '//' + window.location.host + '/gold/buy/payment?' + this.state.params.base_url
+      window.location.protocol + '//' + window.location.host + '/gold/buy/payment'
     );
 
     var pgLink = this.state.buyData.payment_link;

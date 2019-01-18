@@ -4,7 +4,10 @@ import qs from 'qs';
 import createBrowserHistory from 'history/createBrowserHistory';
 
 const myHistory = createBrowserHistory();
-const { base_url } = qs.parse(myHistory.location.search.slice(1))
+let base_url = qs.parse(myHistory.location.search.slice(1));
+if (Object.keys(base_url).length === 0) {
+  base_url = window.localStorage.getItem('base_url');
+}
 
 axios.defaults.baseURL = decodeURIComponent(base_url).replace(/\/$/, "");
 
