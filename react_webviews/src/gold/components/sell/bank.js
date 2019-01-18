@@ -17,6 +17,12 @@ class SellOrder extends Component {
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
+      account_no: '',
+      account_no_error: '',
+      confirm_account_no: '',
+      confirm_account_no_error: '',
+      ifsc: '',
+      ifsc_error: ''
     }
   }
 
@@ -49,8 +55,43 @@ class SellOrder extends Component {
     });
   }
 
-  handleChange = (field) => (value) => {
-    // field == name
+  handleChange = (field) => (event) => {
+    this.setState({
+      [event.target.name]: event.target.value,
+      [event.target.name+'_error']: ''
+    });
+  }
+
+  handleClick = async () => {
+    let ifsc_regex = /^[A-Za-z]{4}\d{7}$/;
+
+    if (!this.state.account_no) {
+      this.setState({
+        account_no_error: 'Please enter account number' 
+      });
+    } else if (!this.state.confirm_account_no) {
+      this.setState({
+        confirm_account_no_error: 'This field is required' 
+      });
+    } else if (this.state.account_no !== this.state.confirm_account_no) {
+      this.setState({
+        confirm_account_no_error: 'Account number mismatch' 
+      });
+    } else if (!this.state.ifsc) {
+      this.setState({
+        ifsc_error: 'Please enter IFSC Code' 
+      });
+    } else if (this.state.ifsc && (this.state.ifsc.length < 11 || this.state.ifsc.length > 11)) {
+      this.setState({
+        ifsc_error: 'Invalid IFSC Code' 
+      });
+    } else if (this.state.ifsc && !ifsc_regex.test(this.state.ifsc)) {
+      this.setState({
+        ifsc_error: 'Invalid IFSC Code' 
+      });
+    } else {
+      // To-do
+    }
   }
 
   render() {
@@ -59,47 +100,48 @@ class SellOrder extends Component {
         showLoader={this.state.show_loader}
         title="Bank Details"
         edit={this.props.edit}
+        handleClick={this.handleClick}
         buttonTitle="Proceed"
         type={this.state.type}
       >
         <div className="bank-details">
           <div className="InputField">
             <Input
-              error={false}
-              helperText=''
+              error={(this.state.account_no_error) ? true : false}
+              helperText={this.state.account_no_error}
               type="text"
               width="40"
               label="Your Account Number *"
               class="account_no"
               id="account_no"
               name="account_no"
-              value='1234567890'
+              value={this.state.account_no}
               onChange={this.handleChange('account_no')} />
           </div>
           <div className="InputField">
             <Input
-              error={false}
-              helperText=''
+              error={(this.state.confirm_account_no_error) ? true : false}
+              helperText={this.state.confirm_account_no_error}
               type="text"
               width="40"
               label="Confirm Account Number *"
               class="confirm_account_no"
               id="confirm_account_no"
               name="confirm_account_no"
-              value='1234567890'
+              value={this.state.confirm_account_no}
               onChange={this.handleChange('confirm_account_no')} />
           </div>
           <div className="InputField">
             <Input
-              error={false}
-              helperText=''
+              error={(this.state.ifsc_error) ? true : false}
+              helperText={this.state.ifsc_error}
               type="text"
               width="40"
               label="IFSC Code *"
               class="ifsc"
               id="ifsc"
               name="ifsc"
-              value='SBIN0013159'
+              value={this.state.ifsc}
               onChange={this.handleChange('ifsc')} />
           </div>
           <div className="bank-timer">Price expires in <b>00:00</b></div>
