@@ -22,8 +22,6 @@ class DeliveryAddress extends Component {
       landmark_error: '',
       pincode: '',
       pincode_error: '',
-      ccity: '',
-      cstate: '',
       city: '',
       state: '',
     }
@@ -77,23 +75,14 @@ class DeliveryAddress extends Component {
       const res = await Api.get('https://nitish-dot-plutus-staging.appspot.com/api/pincode/' + pincode);
 
       if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
-        if (name === 'pincode') {
-          this.setState({
-            city: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
-            state: res.pfwresponse.result[0].state_name
-          });
-        } else {
-          this.setState({
-            ccity: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
-            cstate: res.pfwresponse.result[0].state_name
-          });
-        }
+        this.setState({
+          city: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
+          state: res.pfwresponse.result[0].state_name
+        });
       } else {
         this.setState({
           city: '',
-          state: '',
-          ccity: '',
-          cstate: ''
+          state: ''
         });
       }
     }

@@ -13,7 +13,8 @@ class CustomButton extends Component {
           variant="raised"
           size="large"
           color="secondary"
-          className={props.classes.button} >
+          className={props.classes.button}
+          disabled={props.disable} >
           {props.buttonTitle}
           {
             props.arrow &&

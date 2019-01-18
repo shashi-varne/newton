@@ -14,6 +14,7 @@ import Dialog, {
   DialogTitle
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
+import { validateNumber, validateEmail, numberShouldStartWith } from 'utils/validators';
 
 class GoldRegister extends Component {
   constructor(props) {
@@ -24,6 +25,7 @@ class GoldRegister extends Component {
       name: "",
       email: "",
       pin_code: "",
+      pin_code_error: "",
       mobile_no: "",
       goldInfo: {},
       isRegistered: false,
@@ -33,7 +35,12 @@ class GoldRegister extends Component {
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
-      checked: false
+      checked: false,
+      name_error: '',
+      email_error: '',
+      mobile_no_error: '',
+      city: '',
+      state: '',
     }
   }
 
@@ -121,37 +128,28 @@ class GoldRegister extends Component {
 
 
   handlePincode = (name) => async (event) => {
-    // const pincode = event.target.value;
+    const pincode = event.target.value;
 
-    // this.setState({
-    //   [name]: pincode,
-    //   [name+'_error']: ''
-    // });
+    this.setState({
+      [name]: pincode,
+      [name+'_error']: ''
+    });
 
-    // if (pincode.length === 6) {
-    //   const res = await Api.get('/api/pincode/' + pincode);
+    if (pincode.length === 6) {
+      const res = await Api.get('https://nitish-dot-plutus-staging.appspot.com/api/pincode/' + pincode);
 
-    //   if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
-    //     if (name === 'pincode') {
-    //       this.setState({
-    //         city: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
-    //         state: res.pfwresponse.result[0].state_name
-    //       });
-    //     } else {
-    //       this.setState({
-    //         ccity: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
-    //         cstate: res.pfwresponse.result[0].state_name
-    //       });
-    //     }
-    //   } else {
-    //     this.setState({
-    //       city: '',
-    //       state: '',
-    //       ccity: '',
-    //       cstate: ''
-    //     });
-    //   }
-    // }
+      if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
+        this.setState({
+          city: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
+          state: res.pfwresponse.result[0].state_name
+        });
+      } else {
+        this.setState({
+          city: '',
+          state: ''
+        });
+      }
+    }
   }
 
   verifyMobile = async () => {
@@ -221,33 +219,56 @@ class GoldRegister extends Component {
   }
 
   handleClick = async () => {
-    this.setState({
-      show_loader: true
-    });
-
-    let options = this.state.userInfo;
-
-    options.name = this.state.name;
-    options.mobile_no = this.state.mobile_no;
-    options.email = this.state.email;
-    options.pin_code = this.state.pin_code;
-
-    const res = await Api.post('/api/gold/user/account', options);
-
-    if (res.pfwresponse.status_code === 200) {
-      this.verifyMobile();
+    if (this.state.name.split(" ").filter(e => e).length < 2) {
+      this.setState({
+        name_error: 'Enter valid full name'
+      });
+    } else if (this.state.mobile_no.length !== 10 || !validateNumber(this.state.mobile_no)) {
+      this.setState({
+        mobile_no_error: 'Please enter valid mobile no'
+      });
+    } else if (!numberShouldStartWith(this.state.mobile_no)) {
+      this.setState({
+        mobile_no_error: 'Please enter valid mobile no'
+      });
+    } else if (this.state.email.length < 10 || !validateEmail(this.state.email)) {
+      this.setState({
+        email_error: 'Please enter valid email'
+      });
+    } else if (this.state.pin_code.length !== 6 || !validateNumber(this.state.pin_code)) {
+      this.setState({
+        pin_code_error: 'Please enter valid pincode'
+      });
     } else {
 
-      if (res.pfwresponse.result.error != 'User with the same mobile number exists!' &&
-        (this.state.userInfo.mobile_verified == false || res.pfwresponse.resultmobile_verified == false)) {
+      this.setState({
+        show_loader: true
+      });
+
+      let options = this.state.userInfo;
+
+      options.name = this.state.name;
+      options.mobile_no = this.state.mobile_no;
+      options.email = this.state.email;
+      options.pin_code = this.state.pin_code;
+
+      const res = await Api.post('/api/gold/user/account', options);
+
+      if (res.pfwresponse.status_code === 200) {
         this.verifyMobile();
       } else {
-        this.setState({
-          show_loader: false, openDialog: true,
-          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-        });
-      }
 
+        if (res.pfwresponse.result.error != 'User with the same mobile number exists!' &&
+          (this.state.userInfo.mobile_verified == false || res.pfwresponse.resultmobile_verified == false)) {
+          this.verifyMobile();
+        } else {
+          this.setState({
+            show_loader: false, openDialog: true,
+            apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+          });
+        }
+
+      }
     }
   }
 
@@ -260,12 +281,13 @@ class GoldRegister extends Component {
         edit={this.props.edit}
         buttonTitle="Proceed"
         type={this.state.type}
+        disable={!this.state.checked}
       >
         <div className="register-form">
           <div className="InputField">
             <Input
-              error={false}
-              helperText=''
+              error={(this.state.name_error) ? true : false}
+              helperText={this.state.name_error}
               type="text"
               width="40"
               label="Name *"
@@ -277,8 +299,8 @@ class GoldRegister extends Component {
           </div>
           <div className="InputField">
             <Input
-              error={false}
-              helperText=''
+              error={(this.state.mobile_no_error) ? true : false}
+              helperText={this.state.mobile_no_error}
               type="number"
               width="40"
               label="Mobile number *"
@@ -290,8 +312,8 @@ class GoldRegister extends Component {
           </div>
           <div className="InputField">
             <Input
-              error={false}
-              helperText=''
+              error={(this.state.email_error) ? true : false}
+              helperText={this.state.email_error}
               type="email"
               width="40"
               label="Email address *"
@@ -303,15 +325,18 @@ class GoldRegister extends Component {
           </div>
           <div className="InputField">
             <Input
-              error={false}
-              helperText=''
+              error={(this.state.pin_code_error) ? true : false}
+              helperText={this.state.pin_code_error}
               type="number"
               width="40"
               label="Pincode *"
               id="pincode"
               name="pin_code"
               value={this.state.pin_code}
-              onChange={this.handleChange('pin_code')} />
+              onChange={this.handlePincode('pin_code')} />
+              <div className="filler">
+                {(this.state.city && this.state.state) && <span>{this.state.city} , {this.state.state}</span>}
+              </div>
           </div>
           <div className="CheckBlock">
             <Grid container spacing={16} alignItems="center">
