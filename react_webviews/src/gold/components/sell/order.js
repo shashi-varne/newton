@@ -11,14 +11,28 @@ class About extends Component {
     super(props);
     this.state = {
       show_loader: true,
+      minutes: "",
+      seconds: "",
+      timeAvailable: "",
+      sellData: {},
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
     }
+    this.countdown = this.countdown.bind(this);
   }
 
   componentWillMount() {
+    let timeAvailable = window.localStorage.getItem('timeAvailableSell');
+    let sellData = JSON.parse(window.localStorage.getItem('sellData'));
+    this.setState({
+      timeAvailable: timeAvailable,
+      sellData: sellData
+    })
+    if (timeAvailable >= 0 && sellData) {
+      this.countdown();
+    }
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -46,6 +60,35 @@ class About extends Component {
       search: '?base_url=' + this.state.params.base_url
     });
   }
+
+  countdown() {
+    let timeAvailable = this.state.timeAvailable;
+    console.log(timeAvailable);
+    if (timeAvailable <= 0) {
+      this.setState({
+        minutes: '',
+        seconds: ''
+      })
+      // window.location.reload();
+      return;
+    }
+    setTimeout(
+      function () {
+        let minutes = Math.floor(timeAvailable / 60);
+        let seconds = Math.floor(timeAvailable - minutes * 60);
+        timeAvailable--;
+        this.setState({
+          timeAvailable: timeAvailable,
+          minutes: minutes,
+          seconds: seconds
+        })
+        window.localStorage.setItem('timeAvailableSell', timeAvailable);
+        this.countdown();
+      }
+        .bind(this),
+      1000
+    );
+  };
 
   handleClick = async () => {
     this.navigate('my-gold');

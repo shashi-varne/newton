@@ -65,9 +65,6 @@ class GoldSummary extends Component {
   }
 
   componentDidMount() {
-    this.setState({
-      show_loader: false,
-    });
 
     Api.get('/api/gold/user/account').then(res => {
       if (res.pfwresponse.status_code == 200) {
@@ -357,7 +354,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                              previous gold price has expired.
+                                                                                                                previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>

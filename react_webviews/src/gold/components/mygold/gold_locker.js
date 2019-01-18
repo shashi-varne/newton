@@ -257,7 +257,7 @@ class GoldSummary extends Component {
 
 
     window.localStorage.setItem('timeAvailableSell', this.state.timeAvailable);
-    window.localStorage.setItem('sellData', goldSellInfo);
+    window.localStorage.setItem('sellData', JSON.stringify(goldSellInfo));
 
     this.navigate('bank-details');
     this.setState({
