@@ -86,7 +86,7 @@ class MandateProcess extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: 'base_url=' + this.state.params.base_url + '&key=' + this.state.params.key
+      search: 'base_url=' + this.state.params.base_url + '&key=' + this.state.params.key + '&pc_key=' + this.state.params.pc_key
     });
   }
 
@@ -165,7 +165,7 @@ class MandateProcess extends Component {
         <Container
           summarypage={true}
           showLoader={this.state.show_loader}
-          title="Bank Mandate Process"
+          title="OTM Process"
           handleClick={this.handleClick}
           fullWidthButton={true}
           onlyButton={true}
@@ -177,7 +177,7 @@ class MandateProcess extends Component {
                 1.
             </div>
               <div className="process-tile2">
-                Get a bank mandate delivered at your doorstep
+                Get a mandate form delivered at your doorstep
             </div>
             </div>
 
@@ -186,7 +186,7 @@ class MandateProcess extends Component {
                 2.
             </div>
               <div className="process-tile2">
-                Sign and send us back for bank's approval
+                Sign the form and send it back to us
             </div>
 
             </div>
@@ -203,7 +203,7 @@ class MandateProcess extends Component {
                 3.
             </div>
               <div className="process-tile2">
-                Mandate processed post bank's approval
+                Signed form will be sent to your bank for approval
             </div>
             </div>
 

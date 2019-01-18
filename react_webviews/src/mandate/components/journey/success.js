@@ -64,7 +64,7 @@ class MandateSuccess extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: 'base_url=' + this.state.params.base_url + '&key=' + this.state.params.key
+      search: 'base_url=' + this.state.params.base_url + '&key=' + this.state.params.key + '&pc_key=' + this.state.params.pc_key
     });
   }
 
@@ -115,10 +115,10 @@ class MandateSuccess extends Component {
             Great!
           </div>
           <div className="success-text-info">
-            You will receive a Bank Mandate form.
+            You will be receiving a mandate form.
           </div>
           <div className="success-text-info">
-            Please put your signature and send back to us.
+            Please sign the mandate form and send it back to us.
           </div>
           <div className="success-bottom-timer">
             <div>
