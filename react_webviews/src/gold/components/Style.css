@@ -424,3 +424,8 @@
   display: flex;
   justify-content: space-around;
 }
+
+.filler {
+  margin-top: 5px;
+  color: #6e6e6e;
+}
