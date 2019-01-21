@@ -23,6 +23,7 @@ import Dialog, {
 import Button from 'material-ui/Button';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../ui/Toast';
+import { inrFormatDecimal } from 'utils/validators';
 
 class GoldSummary extends Component {
   constructor(props) {
@@ -106,7 +107,7 @@ class GoldSummary extends Component {
           // show_loader: false,
           error: true,
           errorMessage: res.pfwresponse.result.error || res.pfwresponse.result.message ||
-          'Something went wrong'
+            'Something went wrong'
         });
         // toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
         //   'Something went wrong', 'error');
@@ -134,7 +135,7 @@ class GoldSummary extends Component {
           // show_loader: false,
           error: true,
           errorMessage: res2.pfwresponse.result.error || res2.pfwresponse.result.message ||
-          'Something went wrong'
+            'Something went wrong'
         });
         // toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message ||
         //   'Something went wrong', 'error');
@@ -156,7 +157,7 @@ class GoldSummary extends Component {
           // show_loader: false,
           error: true,
           errorMessage: res3.pfwresponse.result.error || res3.pfwresponse.result.message ||
-          'Something went wrong'
+            'Something went wrong'
         });
         // toast(res3.pfwresponse.result.error || res3.pfwresponse.result.message ||
         //   'Something went wrong', 'error');
@@ -170,11 +171,11 @@ class GoldSummary extends Component {
         });
       } else {
         this.setState({
-        // show_loader: false,
-        error: true,
-        errorMessage: res4.pfwresponse.result.error || res4.pfwresponse.result.message ||
-          'Something went wrong'
-      });
+          // show_loader: false,
+          error: true,
+          errorMessage: res4.pfwresponse.result.error || res4.pfwresponse.result.message ||
+            'Something went wrong'
+        });
         // toast(res4.pfwresponse.result.error || res4.pfwresponse.result.message ||
         //   'Something went wrong', 'error');
       }

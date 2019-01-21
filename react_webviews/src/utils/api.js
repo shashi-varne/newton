@@ -4,12 +4,7 @@ import qs from 'qs';
 import createBrowserHistory from 'history/createBrowserHistory';
 
 const myHistory = createBrowserHistory();
-let base_url = qs.parse(myHistory.location.search.slice(1));
-if (Object.keys(base_url).length === 0) {
-  console.log("no base_url")
-  base_url = window.localStorage.getItem('base_url');
-}
-base_url = 'https://nitish-dot-plutus-staging.appspot.com';
+let { base_url } = qs.parse(myHistory.location.search.slice(1));
 axios.defaults.baseURL = decodeURIComponent(base_url).replace(/\/$/, "");
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';

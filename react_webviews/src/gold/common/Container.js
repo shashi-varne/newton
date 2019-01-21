@@ -62,31 +62,13 @@ class Container extends Component {
   historyGoBack = () => {
     let { params } = this.props.location;
 
-    // if (this.props.isJourney) {
-    //   this.setState({
-    //     callbackType: 'show_quotes',
-    //     openPopup: true,
-    //     popupText: 'Are you sure you want to explore more options? We will save your information securely.'
-    //   })
-    //   return;
-    // }
-
-    // if (params && params.disableBack) {
-    //   this.setState({
-    //     callbackType: 'exit',
-    //     openPopup: true,
-    //     popupText: 'Are you sure you want to exit the application process? You can resume it later.'
-    //   })
-    //   return;
-    // }
-
     let pathname = this.props.history.location.pathname;
-
+    if (pathname.indexOf('payment') >= 0) {
+      this.navigate('/gold/my-gold');
+      return;
+    }
     switch (pathname) {
 
-      case '/gold/gold-payment-callback':
-        this.navigate('/gold/my-gold');
-        break;
       case '/gold/select-gold-product':
         this.props.history.push({
           pathname: '/gold/my-gold-locker',
@@ -153,7 +135,7 @@ class Container extends Component {
       openPopup: false
     });
 
-    nativeCallback({ action: this.state.callbackType });
+    nativeCallback({ action: 'native_back' });
 
   }
 

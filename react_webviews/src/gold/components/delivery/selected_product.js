@@ -13,6 +13,7 @@ import ten_gmbar_front from 'assets/10gmbar_front.png';
 import twenty_gmbar_front from 'assets/20gmbar_front.png';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../ui/Toast';
+import { inrFormatDecimal } from 'utils/validators';
 
 class DeliverySelectedProduct extends Component {
   constructor(props) {
@@ -163,7 +164,7 @@ class DeliverySelectedProduct extends Component {
           </div>
           <div className="">
             <div>{this.state.product.description}</div>
-            <div style={{ fontSize: '16px', color: 'black', marginTop: '5px' }}>Charges {this.state.product.delivery_minting_cost}</div>
+            <div style={{ fontSize: '16px', color: 'black', marginTop: '5px' }}>Charges : {inrFormatDecimal(this.state.product.delivery_minting_cost)}</div>
           </div>
           <div className="seller-name">
             Seller : {this.state.product.brand}
@@ -192,7 +193,7 @@ class DeliverySelectedProduct extends Component {
           </div>
           <div className="product-details-content">
             <div className="product-name">Weight</div>
-            <div className="product-value">: {this.state.product.metal_weight}</div>
+            <div className="product-value">: {this.state.product.metal_weight} gm</div>
           </div>
           <div className="product-details-content">
             <div className="product-name">Est. Arrival</div>

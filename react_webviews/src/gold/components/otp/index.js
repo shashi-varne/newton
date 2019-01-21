@@ -82,17 +82,25 @@ class Otp extends Component {
     let url = this.state.params.base_url + this.state.verify_link + '?otp=' + this.state.otpnumber;
 
     try {
+      this.setState({
+        show_loader: true
+      })
       const res = await Api.post(url);
 
       if (res.pfwresponse.status_code === 200) {
 
         let result = res.pfwresponse.result;
-        this.setState({
-          show_loader: false,
-          otpVerified: true,
-          openResponseDialog: true,
-          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-        });
+        if (result.message == 'success' || result.message == 'Success!!') {
+          this.handleOtpVerified();
+        } else {
+          this.setState({
+            show_loader: false,
+            otpVerified: false,
+            openResponseDialog: true,
+            apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+          });
+        }
+
       } else {
         this.setState({
           show_loader: false

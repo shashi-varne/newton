@@ -14,6 +14,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Grid from 'material-ui/Grid';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../ui/Toast';
+import { inrFormatDecimal } from 'utils/validators';
 
 class Transactions extends Component {
   constructor(props) {
@@ -92,14 +93,40 @@ class Transactions extends Component {
     this.setState({ value });
   }
 
-  downloadInvoice = (link) => {
-    // To-do
+  async downloadInvoice(path) {
+    this.setState({
+      show_loader: true,
+    });
+
+    try {
+      const res = await Api.get('/api/gold/invoice/download/mail', { url: path });
+      if (res.pfwresponse.status_code == 200) {
+        let result = res.pfwresponse.result;
+        if (result.message == 'success') {
+          toast('Invoice has been sent succesfully to your registered email');
+        } else {
+          toast(result.message || result.error);
+        }
+        this.setState({
+          show_loader: false,
+        });
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
+      }
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong', 'error');
+    }
   }
 
   renderRows = (type) => {
     if (type == 'buy') {
       const buyData = this.state.transactions.buy;
-      console.log(buyData)
       if (buyData !== null) {
         return <TableBody>{buyData.map((row, i) => (
           <TableRow key={i}>
@@ -109,7 +136,7 @@ class Transactions extends Component {
             <TableCell align="justify" padding='dense'>{row.total_amount}</TableCell>
             <TableCell align="justify" padding='dense'>{row.provider_buy_order_status || row.provider_buy_order_error}</TableCell>
             <TableCell align="justify" padding='dense'>{row.dt_created.split(' ')[0]}</TableCell>
-            <TableCell align="justify" padding='dense'><div className="download-invoice" onClick={this.downloadInvoice(row.invoice_link)}>Download</div></TableCell>
+            <TableCell align="justify" padding='dense'><div className="download-invoice" onClick={() => this.downloadInvoice(row.invoice_link)}>Download</div></TableCell>
           </TableRow>
         ))}</TableBody>
       } else {
@@ -124,7 +151,7 @@ class Transactions extends Component {
             <TableCell align="justify" padding='dense'>{row.total_amount}</TableCell>
             <TableCell align="justify" padding='dense'>{row.provider_sell_order_status || row.provider_sell_order_error}</TableCell>
             <TableCell align="justify" padding='dense'>{row.date_created.split(' ')[0]}</TableCell>
-            <TableCell align="justify" padding='dense'><div className="download-invoice" onClick={this.downloadInvoice(row.invoice_link)}>Download</div></TableCell>
+            <TableCell align="justify" padding='dense'><div className="download-invoice" onClick={() => this.downloadInvoice(row.invoice_link)}>Download</div></TableCell>
           </TableRow>
         ))}</TableBody>
       } else {
@@ -142,7 +169,7 @@ class Transactions extends Component {
             <TableCell align="justify" padding='dense'>{row.delivery_status_message}</TableCell>
             <TableCell align="justify" padding='dense'>{row.dt_created.split(' ')[0]}</TableCell>
             <TableCell align="justify" padding='dense'>{row.delivery_address.addressline}, {row.delivery_address.city}</TableCell>
-            <TableCell align="justify" padding='dense'><div className="download-invoice" onClick={this.downloadInvoice(row.invoice_link)}>Download</div></TableCell>
+            <TableCell align="justify" padding='dense'><div className="download-invoice" onClick={() => this.downloadInvoice(row.invoice_link)}>Download</div></TableCell>
           </TableRow>
         ))}</TableBody>
       } else {

@@ -13,6 +13,7 @@ import ten_gmbar_front from 'assets/10gmbar_front.png';
 import twenty_gmbar_front from 'assets/20gmbar_front.png';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../ui/Toast';
+import { inrFormatDecimal } from 'utils/validators';
 
 class DeliveryOrder extends Component {
   constructor(props) {
@@ -182,7 +183,7 @@ class DeliveryOrder extends Component {
           </div>
           <div className="order-tile2">
             <span className="order-tile-total1">Total payble amount</span>
-            <span className="float-right order-tile-total1">{this.state.redeemProduct.mint_delivery_price}</span>
+            <span className="float-right order-tile-total1">{inrFormatDecimal(this.state.redeemProduct.mint_delivery_price)}</span>
           </div>
           <div className="order-tile2">
             <span className="order-tile-other-text">Estimated Dispatch Period</span>

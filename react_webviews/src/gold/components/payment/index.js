@@ -12,6 +12,7 @@ import thumpsup from 'assets/thumpsup.png';
 import arrow from 'assets/arrow.png';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../ui/Toast';
+import { inrFormatDecimal } from 'utils/validators';
 
 class Payment extends Component {
   constructor(props) {
@@ -148,12 +149,11 @@ class Payment extends Component {
 
   trackDelivery() {
     window.localStorage.setItem('deliveryTransaction', 'delivery');
-    this.navigate('gold-transactions')
+    this.navigate('/gold/gold-transactions')
   }
 
   async sendInvoiceEmail(path) {
 
-    console.log(path);
     this.setState({
       show_loader: true,
     });
@@ -242,7 +242,7 @@ class Payment extends Component {
                 </div>
                 <div className="my-gold-details-header3">
                   <div className="my-gold-details-header2a">Selling Value</div>
-                  <div className="my-gold-details-header2b">₹ {this.state.goldInfo.sell_value}</div>
+                  <div className="my-gold-details-header2b">{inrFormatDecimal(this.state.goldInfo.sell_value)}</div>
                 </div>
               </div>
             </div>
