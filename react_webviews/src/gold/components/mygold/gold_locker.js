@@ -126,7 +126,7 @@ class GoldSummary extends Component {
         this.setState({
           show_loader: false
         });
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+        toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message ||
           'Something went wrong', 'error');
       }
 
@@ -145,7 +145,7 @@ class GoldSummary extends Component {
         this.setState({
           show_loader: false
         });
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+        toast(res3.pfwresponse.result.error || res3.pfwresponse.result.message ||
           'Something went wrong', 'error');
       }
 
@@ -159,7 +159,7 @@ class GoldSummary extends Component {
         this.setState({
           show_loader: false
         });
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+        toast(res4.pfwresponse.result.error || res4.pfwresponse.result.message ||
           'Something went wrong', 'error');
       }
     } catch (err) {
