@@ -223,7 +223,7 @@ class Container extends Component {
         {this.props.banner && <Banner text={this.props.bannerText} />}
 
         {/* Children Block */}
-        <div className='Container'>
+        <div className={`Container ${(this.props.noPadding) ? 'no-padding' : ''}`}>
           {this.props.children}
         </div>
 

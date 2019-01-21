@@ -425,6 +425,7 @@ class GoldSummary extends Component {
         edit={this.props.edit}
         buttonTitle="Proceed"
         type={this.state.type}
+        noPadding={true}
       >
         <div className="page home" id="goldSection">
           <div className="text-center goldheader" onClick={() => this.navigate('/gold/my-gold-locker')}>
@@ -447,7 +448,7 @@ class GoldSummary extends Component {
               </div>
             </div>
           </div>
-          <div className="page-body-gold" id="goldInput">
+          <div className="page-body-gold container-padding" id="goldInput">
             <div className="buy-info1">
               <div className="FlexRow">
                 <span className="buy-info2a">Current Buying Price</span>

@@ -14,7 +14,7 @@ const Header = ({ classes, title, count, total, current, goBack, edit, type, res
         {!disableBack && <Arrow />}
         {(disableBack === true) && <Close />}
       </IconButton>
-      <Typography variant="subheading" color="inherit" className={classes.flex}>
+      <Typography variant="subheading" color="inherit" className={classes.flex, 'PageTitle'}>
         {smallTitle && smallTitle !== undefined &&
           smallTitle
         }

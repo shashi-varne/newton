@@ -386,19 +386,23 @@ class GoldSummary extends Component {
         buttonTitle="Proceed"
         type={this.state.type}
         handleClick={this.sellGold}
+        noPadding={true}
       >
-        <div className="FlexRow">
-          <div className="FlexRow" style={{ justifyContent: 'flex-start', flex: 1, marginRight: '2px', background: '#fff', padding: '10px' }}>
+        <div className="FlexRow locker-head">
+          <div className="FlexRow block1">
             <img className="img-mygold" src={safegold_logo} width="35" style={{ marginRight: 10 }} />
             <div>
               <div className="grey-color" style={{ marginBottom: 5 }}>Gold Quantity</div>
               <div>{this.state.goldInfo.gold_balance || 0} gm</div>
             </div>
           </div>
-          <div style={{ flex: 1, background: '#fff', padding: '10px' }}>
+          <div className="block2">
             <div className="grey-color" style={{ marginBottom: 5 }}>Gold Value</div>
             <div>₹ {this.state.goldInfo.sell_value || 0}</div>
           </div>
+        </div>
+        <div className="FlexRow locker-head">
+          <div className="link" onClick={() => this.navigate('gold-transactions')}>Transactions History</div>
         </div>
         <Tabs
           value={this.state.value}
@@ -410,13 +414,13 @@ class GoldSummary extends Component {
           <Tab label="Sell" />
           <Tab label="Deliver" />
         </Tabs>
-        {this.state.value === 0 && <div className="page home" id="goldSection">
+        {this.state.value === 0 && <div className="page home container-padding" id="goldSection">
           <div className="page-body-gold" id="goldInput">
             <div className="buy-info1">
               <div className="FlexRow">
                 <span className="buy-info2a">Current Buying Price</span>
                 <span className="buy-info2b">Price valid for
-                  <span className="timer-green">{this.state.minutes}:{this.state.seconds}</span>
+                  &nbsp;<span className="timer-green">{this.state.minutes}:{this.state.seconds}</span>
                 </span>
               </div>
               <div className="buy-info3">

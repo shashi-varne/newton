@@ -153,6 +153,7 @@ class Transactions extends Component {
         buttonTitle="Proceed"
         type={this.state.type}
         noFooter={true}
+        noPadding={true}
       >
         <Tabs
           value={this.state.value}
@@ -165,7 +166,7 @@ class Transactions extends Component {
           <Tab label="Sell" />
           <Tab label="Delivery" />
         </Tabs>
-        {this.state.value === 0 && <div style={{ overflowX: 'scroll' }}>
+        {this.state.value === 0 && <div className="container-padding" style={{ overflowX: 'scroll' }}>
           <Grid item xs={12}>
             <Table>
               <TableHead>
@@ -183,7 +184,7 @@ class Transactions extends Component {
             </Table>
           </Grid>
         </div>}
-        {this.state.value === 1 && <div style={{ overflowX: 'scroll' }}>
+        {this.state.value === 1 && <div className="container-padding" style={{ overflowX: 'scroll' }}>
           <Grid item xs={12}>
             <Table>
               <TableHead>
@@ -199,7 +200,7 @@ class Transactions extends Component {
             </Table>
           </Grid>
         </div>}
-        {this.state.value === 2 && <div style={{ overflowX: 'scroll' }}>
+        {this.state.value === 2 && <div className="container-padding" style={{ overflowX: 'scroll' }}>
           <Grid item xs={12}>
             <Table>
               <TableHead>

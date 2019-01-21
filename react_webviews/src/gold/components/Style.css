@@ -128,12 +128,13 @@
 .goldheader {
   position: relative;
   margin: 0px;
+  padding: 20px 15px;
+  background: #4f2da7;
 }
 
 .goldheader .my-gold-header {
   background: #fff;
   border-radius: 7px;
-  margin-bottom: 20px;
   padding-bottom: 20px;
   cursor: pointer;
   box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
@@ -171,7 +172,6 @@
   border-bottom: 1px solid #e8e8e8;
   padding-bottom: 15px;
   margin-bottom: 25px;
-  margin-top: 30px;
 }
 
 .buy-info2b {
@@ -436,4 +436,29 @@
   cursor: pointer;
   border-radius: 2px;
   padding: 5px;
+}
+
+.locker-head {
+  padding: 10px 15px;
+  border-bottom: 8px solid #ecebeb;
+}
+
+.locker-head .link {
+  color: #5346a7;
+  border-bottom: 1px solid #5346a7;
+  cursor: pointer;
+}
+
+.locker-head .block1 {
+  justify-content: flex-start;
+  flex: 1;
+  margin-right: 2px;
+  background: #fff;
+  border-right: 2px solid #ecebeb;
+}
+
+.locker-head .block2 {
+  flex: 1;
+  background: #fff;
+  padding: 10px;
 }
