@@ -75,85 +75,96 @@ class GoldSummary extends Component {
     this.setState({
       show_loader: false,
     });
+    try {
 
-    const res = await Api.get('/api/gold/user/account');
-    if (res.pfwresponse.status_code == 200) {
-      let result = res.pfwresponse.result;
-      let isRegistered = true;
-      if (result.gold_user_info.user_info.registration_status == "pending" ||
-        !result.gold_user_info.user_info.registration_status ||
-        result.gold_user_info.is_new_gold_user) {
-        isRegistered = false;
+      const res = await Api.get('/api/gold/user/account');
+      if (res.pfwresponse.status_code == 200) {
+        let result = res.pfwresponse.result;
+        let isRegistered = true;
+        if (result.gold_user_info.user_info.registration_status == "pending" ||
+          !result.gold_user_info.user_info.registration_status ||
+          result.gold_user_info.is_new_gold_user) {
+          isRegistered = false;
+        }
+        this.setState({
+          show_loader: false,
+          goldInfo: result.gold_user_info.safegold_info,
+          userInfo: result.gold_user_info.user_info,
+          maxWeight: parseFloat(((30 - result.gold_user_info.safegold_info.gold_balance) || 30).toFixed(4)),
+          isRegistered: isRegistered
+        });
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+          'Something went wrong', 'error');
       }
-      this.setState({
-        show_loader: false,
-        goldInfo: result.gold_user_info.safegold_info,
-        userInfo: result.gold_user_info.user_info,
-        maxWeight: parseFloat(((30 - result.gold_user_info.safegold_info.gold_balance) || 30).toFixed(4)),
-        isRegistered: isRegistered
-      });
-    } else {
-      this.setState({
-        show_loader: false, openResponseDialog: true,
-        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-      });
-    }
 
-    const res2 = await Api.get('/api/gold/sell/currentprice');
-    if (res2.pfwresponse.status_code == 200) {
-      let goldInfo = this.state.goldInfo;
-      let result = res2.pfwresponse.result;
-      var currentDate = new Date();
-      var validityDate = new Date(result.sell_info.rate_validity);
-      let timeAvailable = ((validityDate.getTime() - currentDate.getTime()) / 1000);
-      goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
-      this.setState({
-        show_loader: false,
-        goldSellInfo: result.sell_info,
-        goldInfo: goldInfo,
-        timeAvailable: timeAvailable
-      });
+      const res2 = await Api.get('/api/gold/sell/currentprice');
+      if (res2.pfwresponse.status_code == 200) {
+        let goldInfo = this.state.goldInfo;
+        let result = res2.pfwresponse.result;
+        var currentDate = new Date();
+        var validityDate = new Date(result.sell_info.rate_validity);
+        let timeAvailable = ((validityDate.getTime() - currentDate.getTime()) / 1000);
+        goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
+        this.setState({
+          show_loader: false,
+          goldSellInfo: result.sell_info,
+          goldInfo: goldInfo,
+          timeAvailable: timeAvailable
+        });
 
-      if (timeAvailable >= 0 && result.sell_info.plutus_rate) {
-        this.countdown();
+        if (timeAvailable >= 0 && result.sell_info.plutus_rate) {
+          this.countdown();
+        }
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+          'Something went wrong', 'error');
       }
-    } else {
-      this.setState({
-        show_loader: false, openResponseDialog: true,
-        apiError: res2.pfwresponse.result.error || res2.pfwresponse.result.message
-      });
-    }
 
-    const res3 = await Api.get('/api/gold/user/sell/balance');
+      const res3 = await Api.get('/api/gold/user/sell/balance');
 
-    if (res3.pfwresponse.status_code == 200) {
-      let result = res3.pfwresponse.result;
-      // let maxWeight = result.sellable_gold_balance || 0;
-      let maxWeight = this.state.maxWeight;
-      let maxAmount = ((this.state.goldSellInfo.plutus_rate) * (maxWeight || 0)).toFixed(2);
-      this.setState({
-        show_loader: false,
-        // maxWeight: maxWeight,
-        maxAmount: maxAmount
-      });
-    } else {
-      this.setState({
-        show_loader: false, openResponseDialog: true,
-        apiError: res3.pfwresponse.result.error || res3.pfwresponse.result.message
-      });
-    }
+      if (res3.pfwresponse.status_code == 200) {
+        let result = res3.pfwresponse.result;
+        // let maxWeight = result.sellable_gold_balance || 0;
+        let maxWeight = this.state.maxWeight;
+        let maxAmount = ((this.state.goldSellInfo.plutus_rate) * (maxWeight || 0)).toFixed(2);
+        this.setState({
+          show_loader: false,
+          // maxWeight: maxWeight,
+          maxAmount: maxAmount
+        });
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+          'Something went wrong', 'error');
+      }
 
-    const res4 = await Api.get('/api/gold/delivery/products');
-    if (res4.pfwresponse.status_code == 200) {
+      const res4 = await Api.get('/api/gold/delivery/products');
+      if (res4.pfwresponse.status_code == 200) {
+        this.setState({
+          show_loader: false,
+          gold_products: res4.pfwresponse.result.safegold_products
+        });
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+          'Something went wrong', 'error');
+      }
+    } catch (err) {
       this.setState({
-        show_loader: false,
-        gold_products: res4.pfwresponse.result.safegold_products
+        show_loader: false
       });
-    } else {
-      this.setState({
-        show_loader: false, openResponseDialog: true,
-        apiError: res4.pfwresponse.result.error || res4.pfwresponse.result.message
-      });
+      toast('Something went wrong', 'error');
     }
 
   }

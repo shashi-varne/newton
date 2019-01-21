@@ -63,42 +63,51 @@ class GoldRegister extends Component {
   }
 
   async componentDidMount() {
-    const res = await Api.get('/api/gold/user/account');
-    if (res.pfwresponse.status_code == 200) {
-      let result = res.pfwresponse.result;
-      let isRegistered = true;
-      let userInfo = result.gold_user_info.user_info;
-      if (userInfo.registration_status == "pending" ||
-        !userInfo.registration_status ||
-        result.gold_user_info.is_new_gold_user) {
-        isRegistered = false;
+    try {
+
+      const res = await Api.get('/api/gold/user/account');
+      if (res.pfwresponse.status_code == 200) {
+        let result = res.pfwresponse.result;
+        let isRegistered = true;
+        let userInfo = result.gold_user_info.user_info;
+        if (userInfo.registration_status == "pending" ||
+          !userInfo.registration_status ||
+          result.gold_user_info.is_new_gold_user) {
+          isRegistered = false;
+        }
+
+        const { name, email, pin_code, mobile_no } = userInfo;
+
+        this.setState({
+          show_loader: false,
+          goldInfo: result.gold_user_info.safegold_info,
+          userInfo: userInfo,
+          isRegistered: isRegistered,
+          name: name || "",
+          email: email || "",
+          pin_code: pin_code || "",
+          mobile_no: mobile_no || "",
+        });
+
+        if (userInfo.mobile_verified == false &&
+          isRegistered == false) {
+          // $state.go('my-gold');
+          return;
+        }
+        // this.checkPincode();
+
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+          'Something went wrong', 'error');
       }
-
-      const { name, email, pin_code, mobile_no } = userInfo;
-
+    } catch (err) {
       this.setState({
-        show_loader: false,
-        goldInfo: result.gold_user_info.safegold_info,
-        userInfo: userInfo,
-        isRegistered: isRegistered,
-        name: name || "",
-        email: email || "",
-        pin_code: pin_code || "",
-        mobile_no: mobile_no || "",
+        show_loader: false
       });
-
-      if (userInfo.mobile_verified == false &&
-        isRegistered == false) {
-        // $state.go('my-gold');
-        return;
-      }
-      // this.checkPincode();
-
-    } else {
-      this.setState({
-        show_loader: false, openResponseDialog: true,
-        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-      });
+      toast('Something went wrong', 'error');
     }
   }
 
@@ -132,18 +141,25 @@ class GoldRegister extends Component {
     });
 
     if (pincode.length === 6) {
-      const res = await Api.get('/api/pincode/' + pincode);
+      try {
+        const res = await Api.get('/api/pincode/' + pincode);
 
-      if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
+        if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
+          this.setState({
+            city: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
+            state: res.pfwresponse.result[0].state_name
+          });
+        } else {
+          this.setState({
+            city: '',
+            state: ''
+          });
+        }
+      } catch (err) {
         this.setState({
-          city: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
-          state: res.pfwresponse.result[0].state_name
+          show_loader: false
         });
-      } else {
-        this.setState({
-          city: '',
-          state: ''
-        });
+        toast('Something went wrong', 'error');
       }
     }
   }
@@ -156,32 +172,40 @@ class GoldRegister extends Component {
     let options = {
       mobile_number: this.state.mobile_no,
     }
-    const res = await Api.post('/api/gold/user/verify/mobilenumber', options);
+    try {
+      const res = await Api.post('/api/gold/user/verify/mobilenumber', options);
 
-    if (res.pfwresponse.status_code === 200) {
+      if (res.pfwresponse.status_code === 200) {
 
-      let result = res.pfwresponse.result;
-      if (result.resend_verification_otp_link != '' && result.verification_link != '') {
-        window.localStorage.setItem('fromType', 'buy')
-        var message = 'An OTP is sent to your mobile number ' + this.state.mobile_no + ', please verify to complete registration.'
-        this.props.history.push({
-          pathname: 'verify',
-          search: '?base_url=' + this.state.params.base_url,
-          params: {
-            resend_link: result.resend_verification_otp_link,
-            verify_link: result.verification_link, message: message, fromType: 'buy',
-            message: message
-          }
+        let result = res.pfwresponse.result;
+        if (result.resend_verification_otp_link != '' && result.verification_link != '') {
+          window.localStorage.setItem('fromType', 'buy')
+          var message = 'An OTP is sent to your mobile number ' + this.state.mobile_no + ', please verify to complete registration.'
+          this.props.history.push({
+            pathname: 'verify',
+            search: '?base_url=' + this.state.params.base_url,
+            params: {
+              resend_link: result.resend_verification_otp_link,
+              verify_link: result.verification_link, message: message, fromType: 'buy',
+              message: message
+            }
+          });
+        }
+        this.setState({
+          show_loader: false,
         });
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+          'Something went wrong', 'error');
       }
+    } catch (err) {
       this.setState({
-        show_loader: false,
+        show_loader: false
       });
-    } else {
-      this.setState({
-        show_loader: false, openResponseDialog: true,
-        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-      });
+      toast('Something went wrong', 'error');
     }
   }
 
@@ -248,22 +272,30 @@ class GoldRegister extends Component {
       options.email = this.state.email;
       options.pin_code = this.state.pin_code;
 
-      const res = await Api.post('/api/gold/user/account', options);
+      try {
+        const res = await Api.post('/api/gold/user/account', options);
 
-      if (res.pfwresponse.status_code === 200) {
-        this.verifyMobile();
-      } else {
-
-        if (res.pfwresponse.result.error != 'User with the same mobile number exists!' &&
-          (this.state.userInfo.mobile_verified == false || res.pfwresponse.resultmobile_verified == false)) {
+        if (res.pfwresponse.status_code === 200) {
           this.verifyMobile();
         } else {
-          this.setState({
-            show_loader: false, openResponseDialog: true,
-            apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-          });
-        }
 
+          if (res.pfwresponse.result.error != 'User with the same mobile number exists!' &&
+            (this.state.userInfo.mobile_verified == false || res.pfwresponse.resultmobile_verified == false)) {
+            this.verifyMobile();
+          } else {
+            this.setState({
+              show_loader: false
+            });
+            toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+              'Something went wrong', 'error');
+          }
+
+        }
+      } catch (err) {
+        this.setState({
+          show_loader: false
+        });
+        toast('Something went wrong', 'error');
       }
     }
   }

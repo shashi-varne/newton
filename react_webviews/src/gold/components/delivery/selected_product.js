@@ -59,28 +59,36 @@ class DeliverySelectedProduct extends Component {
       this.navigate('my-gold-locker');
     }
 
-    const res = await Api.get('/api/gold/user/sell/balance');
+    try {
+      const res = await Api.get('/api/gold/user/sell/balance');
 
-    if (res.pfwresponse.status_code == 200) {
-      let result = res.pfwresponse.result;
-      let maxWeight = result.sellable_gold_balance || 0;
-      let product = this.state.product;
-      let disabled, disabledText;
-      if (parseFloat(product.metal_weight) > maxWeight) {
-        disabled = true;
-        disabledText = 'Minimum ' + (parseFloat(product.metal_weight)).toFixed(2) + ' GM gold required';
+      if (res.pfwresponse.status_code == 200) {
+        let result = res.pfwresponse.result;
+        let maxWeight = result.sellable_gold_balance || 0;
+        let product = this.state.product;
+        let disabled, disabledText;
+        if (parseFloat(product.metal_weight) > maxWeight) {
+          disabled = true;
+          disabledText = 'Minimum ' + (parseFloat(product.metal_weight)).toFixed(2) + ' GM gold required';
+        }
+        this.setState({
+          show_loader: false,
+          maxWeight: maxWeight,
+          disabled: disabled,
+          disabledText: disabledText
+        });
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+          'Something went wrong', 'error');
       }
+    } catch (err) {
       this.setState({
-        show_loader: false,
-        maxWeight: maxWeight,
-        disabled: disabled,
-        disabledText: disabledText
+        show_loader: false
       });
-    } else {
-      this.setState({
-        show_loader: false, openResponseDialog: true,
-        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-      });
+      toast('Something went wrong', 'error');
     }
   }
 

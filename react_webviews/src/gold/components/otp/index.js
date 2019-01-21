@@ -80,22 +80,30 @@ class Otp extends Component {
 
   handleClick = async () => {
     let url = this.state.params.base_url + this.state.verify_link + '?otp=' + this.state.otpnumber;
-    const res = await Api.post(url);
 
-    if (res.pfwresponse.status_code === 200) {
+    try {
+      const res = await Api.post(url);
 
-      let result = res.pfwresponse.result;
+      if (res.pfwresponse.status_code === 200) {
+
+        let result = res.pfwresponse.result;
+        this.setState({
+          show_loader: false,
+          otpVerified: true,
+          openResponseDialog: true,
+          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+        });
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
+      }
+    } catch (err) {
       this.setState({
-        show_loader: false,
-        otpVerified: true,
-        openResponseDialog: true,
-        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+        show_loader: false
       });
-    } else {
-      this.setState({
-        show_loader: false, openResponseDialog: true,
-        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-      });
+      toast('Something went wrong', 'error');
     }
   }
 
@@ -107,28 +115,35 @@ class Otp extends Component {
   }
 
   resendOtp = async () => {
-    let url = this.state.params.base_url + this.state.resend_link
-    const res = await Api.post(url);
+    let url = this.state.params.base_url + this.state.resend_link;
+    try {
+      const res = await Api.post(url);
 
-    if (res.pfwresponse.status_code === 200) {
+      if (res.pfwresponse.status_code === 200) {
 
-      let result = res.pfwresponse.result;
-      if (result.resend_verification_otp_link != '' && result.verification_link != '') {
-        var message = 'An OTP is sent to your mobile number ' + this.state.mobile_no + ', please verify to complete registration.'
+        let result = res.pfwresponse.result;
+        if (result.resend_verification_otp_link != '' && result.verification_link != '') {
+          var message = 'An OTP is sent to your mobile number ' + this.state.mobile_no + ', please verify to complete registration.'
+          this.setState({
+            show_loader: false,
+            resend_link: result.resend_verification_otp_link,
+            verify_link: result.verification_link, message: message
+          })
+        }
         this.setState({
           show_loader: false,
-          resend_link: result.resend_verification_otp_link,
-          verify_link: result.verification_link, message: message
-        })
+        });
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
       }
+    } catch (err) {
       this.setState({
-        show_loader: false,
+        show_loader: false
       });
-    } else {
-      this.setState({
-        show_loader: false, openResponseDialog: true,
-        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-      });
+      toast('Something went wrong', 'error');
     }
 
   };

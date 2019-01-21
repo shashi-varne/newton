@@ -59,36 +59,44 @@ class DeliveryAddress extends Component {
   }
 
   async componentDidMount() {
-    const res = await Api.get('/api/gold/user/address');
-    if (res.pfwresponse.status_code == 200) {
+    try {
+      const res = await Api.get('/api/gold/user/address');
+      if (res.pfwresponse.status_code == 200) {
+        this.setState({
+          show_loader: false
+        })
+        let result = res.pfwresponse.result;
+        let addressMain = {}, pincode = '', address = '',
+          city = '', landmark = '', userInfo = {};
+        if (result.address && result.address.length != 0) {
+          addressMain = result.address[result.address.length - 1];
+          pincode = addressMain.pincode;
+          address = addressMain.addressline;
+          landmark = addressMain.landmark;
+          city = addressMain.city;
+        }
+        userInfo = result.gold_user.user_info;
+        this.setState({
+          address: address,
+          addressMain: addressMain,
+          pincode: pincode,
+          city: city,
+          userInfo: userInfo,
+          landmark: landmark
+        })
+
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+          'Something went wrong', 'error');
+      }
+    } catch (err) {
       this.setState({
         show_loader: false
-      })
-      let result = res.pfwresponse.result;
-      let addressMain = {}, pincode = '', address = '',
-        city = '', landmark = '', userInfo = {};
-      if (result.address && result.address.length != 0) {
-        addressMain = result.address[result.address.length - 1];
-        pincode = addressMain.pincode;
-        address = addressMain.addressline;
-        landmark = addressMain.landmark;
-        city = addressMain.city;
-      }
-      userInfo = result.gold_user.user_info;
-      this.setState({
-        address: address,
-        addressMain: addressMain,
-        pincode: pincode,
-        city: city,
-        userInfo: userInfo,
-        landmark: landmark
-      })
-
-    } else {
-      this.setState({
-        show_loader: false, openResponseDialog: true,
-        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
       });
+      toast('Something went wrong', 'error');
     }
   }
 
@@ -115,18 +123,25 @@ class DeliveryAddress extends Component {
     });
 
     if (pincode.length === 6) {
-      const res = await Api.get('/api/pincode/' + pincode);
+      try {
+        const res = await Api.get('/api/pincode/' + pincode);
 
-      if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
+        if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
+          this.setState({
+            city: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
+            state: res.pfwresponse.result[0].state_name
+          });
+        } else {
+          this.setState({
+            city: '',
+            state: ''
+          });
+        }
+      } catch (err) {
         this.setState({
-          city: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
-          state: res.pfwresponse.result[0].state_name
+          show_loader: false
         });
-      } else {
-        this.setState({
-          city: '',
-          state: ''
-        });
+        toast('Something went wrong', 'error');
       }
     }
   }
@@ -139,32 +154,40 @@ class DeliveryAddress extends Component {
     let options = {
       mobile_number: this.state.userInfo.mobile_no,
     }
-    const res = await Api.post('/api/gold/user/verify/delivery/mobilenumber', options);
+    try {
+      const res = await Api.post('/api/gold/user/verify/delivery/mobilenumber', options);
 
-    if (res.pfwresponse.status_code === 200) {
+      if (res.pfwresponse.status_code === 200) {
 
-      let result = res.pfwresponse.result;
-      if (result.resend_verification_otp_link != '' && result.verification_link != '') {
-        window.localStorage.setItem('fromType', 'delivery')
-        var message = 'An OTP is sent to your mobile number ' + this.state.userInfo.mobile_no + ', please verify to complete registration.'
-        this.props.history.push({
-          pathname: 'verify',
-          search: '?base_url=' + this.state.params.base_url,
-          params: {
-            resend_link: result.resend_verification_otp_link,
-            verify_link: result.verification_link, message: message, fromType: 'delivery',
-            message: message
-          }
+        let result = res.pfwresponse.result;
+        if (result.resend_verification_otp_link != '' && result.verification_link != '') {
+          window.localStorage.setItem('fromType', 'delivery')
+          var message = 'An OTP is sent to your mobile number ' + this.state.userInfo.mobile_no + ', please verify to complete registration.'
+          this.props.history.push({
+            pathname: 'verify',
+            search: '?base_url=' + this.state.params.base_url,
+            params: {
+              resend_link: result.resend_verification_otp_link,
+              verify_link: result.verification_link, message: message, fromType: 'delivery',
+              message: message
+            }
+          });
+        }
+        this.setState({
+          show_loader: false,
         });
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+          'Something went wrong', 'error');
       }
+    } catch (err) {
       this.setState({
-        show_loader: false,
+        show_loader: false
       });
-    } else {
-      this.setState({
-        show_loader: false, openResponseDialog: true,
-        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-      });
+      toast('Something went wrong', 'error');
     }
   }
 
@@ -201,18 +224,26 @@ class DeliveryAddress extends Component {
       addressMain.address = this.state.address;
       addressMain.landmark = this.state.landmark;
 
-      const res = await Api.post('/api/gold/user/address', addressMain);
+      try {
+        const res = await Api.post('/api/gold/user/address', addressMain);
 
-      let product = this.state.product;
-      if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.message == 'success') {
-        this.verifyMobile();
-        product.address = addressMain;
-        window.localStorage.setItem('goldProduct', JSON.stringify(product));
-      } else {
+        let product = this.state.product;
+        if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.message == 'success') {
+          this.verifyMobile();
+          product.address = addressMain;
+          window.localStorage.setItem('goldProduct', JSON.stringify(product));
+        } else {
+          this.setState({
+            show_loader: false
+          });
+          toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+            'Something went wrong', 'error');
+        }
+      } catch (err) {
         this.setState({
-          show_loader: false, openResponseDialog: true,
-          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+          show_loader: false
         });
+        toast('Something went wrong', 'error');
       }
     }
   }

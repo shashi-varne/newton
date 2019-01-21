@@ -55,22 +55,29 @@ class Transactions extends Component {
       show_loader: true,
     });
 
-    const trans = await Api.get('/api/gold/user/list/transactions');
+    try {
+      const trans = await Api.get('/api/gold/user/list/transactions');
 
-    if (trans.pfwresponse.status_code == 200) {
+      if (trans.pfwresponse.status_code == 200) {
+        this.setState({
+          show_loader: false,
+          transactions: {
+            buy: trans.pfwresponse.result.orders.buy,
+            sell: trans.pfwresponse.result.orders.sell,
+            delivery: trans.pfwresponse.result.orders.delivery
+          }
+        });
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(trans.pfwresponse.result.error || trans.pfwresponse.result.message || 'Something went wrong', 'error');
+      }
+    } catch (err) {
       this.setState({
-        show_loader: false,
-        transactions: {
-          buy: trans.pfwresponse.result.orders.buy,
-          sell: trans.pfwresponse.result.orders.sell,
-          delivery: trans.pfwresponse.result.orders.delivery
-        }
+        show_loader: false
       });
-    } else {
-      this.setState({
-        show_loader: false, openResponseDialog: true,
-        apiError: trans.pfwresponse.result.error || trans.pfwresponse.result.message
-      });
+      toast('Something went wrong', 'error');
     }
   }
 
