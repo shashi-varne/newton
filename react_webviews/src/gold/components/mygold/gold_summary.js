@@ -67,81 +67,90 @@ class GoldSummary extends Component {
   }
 
   async componentDidMount() {
-    const res = await Api.get('/api/gold/user/account');
-    if (res.pfwresponse.status_code == 200) {
-      let result = res.pfwresponse.result;
-      let isRegistered = true;
-      if (result.gold_user_info.user_info.registration_status == "pending" ||
-        !result.gold_user_info.user_info.registration_status ||
-        result.gold_user_info.is_new_gold_user) {
-        isRegistered = false;
-      }
-      this.setState({
-        // show_loader: false,
-        goldInfo: result.gold_user_info.safegold_info,
-        userInfo: result.gold_user_info.user_info,
-        maxWeight: parseFloat(((30 - result.gold_user_info.safegold_info.gold_balance) || 30).toFixed(4)),
-        isRegistered: isRegistered
-      });
-    } else {
-      this.setState({
-        show_loader: false, openResponseDialog: true,
-        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-      });
-    }
-
-    const res2 = await Api.get('/api/gold/sell/currentprice');
-    if (res2.pfwresponse.status_code == 200) {
-      let goldInfo = this.state.goldInfo;
-      let result = res2.pfwresponse.result;
-      goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
-      this.setState({
-        // show_loader: false,
-        goldSellInfo: result.sell_info,
-        goldInfo: goldInfo
-      });
-    } else {
-      this.setState({
-        show_loader: false, openResponseDialog: true,
-        apiError: res2.pfwresponse.result.error || res2.pfwresponse.result.message
-      });
-    }
+    try {
 
 
-    const res3 = await Api.get('/api/gold/buy/currentprice');
-
-    if (res3.pfwresponse.status_code == 200) {
-      let result = res3.pfwresponse.result;
-      let goldBuyInfo = result.buy_info;
-      var currentDate = new Date();
-      var validityDate = new Date(goldBuyInfo.rate_validity);
-      let timeAvailable = ((validityDate.getTime() - currentDate.getTime()) / 1000);
-
-      let amount = '', weight = '';
-      if (window.localStorage.getItem('buyAmountRegister')) {
-
-        amount = window.localStorage.getItem('buyAmountRegister');
-        window.localStorage.setItem('buyAmountRegister', 0);
-        weight = this.calculate_gold_wt(goldBuyInfo.plutus_rate,
-          goldBuyInfo.applicable_tax, amount);
+      const res = await Api.get('/api/gold/user/account');
+      if (res.pfwresponse.status_code == 200) {
+        let result = res.pfwresponse.result;
+        let isRegistered = true;
+        if (result.gold_user_info.user_info.registration_status == "pending" ||
+          !result.gold_user_info.user_info.registration_status ||
+          result.gold_user_info.is_new_gold_user) {
+          isRegistered = false;
+        }
+        this.setState({
+          // show_loader: false,
+          goldInfo: result.gold_user_info.safegold_info,
+          userInfo: result.gold_user_info.user_info,
+          maxWeight: parseFloat(((30 - result.gold_user_info.safegold_info.gold_balance) || 30).toFixed(4)),
+          isRegistered: isRegistered
+        });
+      } else {
+        this.setState({
+          show_loader: false, openResponseDialog: true,
+          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+        });
       }
 
+      const res2 = await Api.get('/api/gold/sell/currentprice');
+      if (res2.pfwresponse.status_code == 200) {
+        let goldInfo = this.state.goldInfo;
+        let result = res2.pfwresponse.result;
+        goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
+        this.setState({
+          // show_loader: false,
+          goldSellInfo: result.sell_info,
+          goldInfo: goldInfo
+        });
+      } else {
+        this.setState({
+          show_loader: false, openResponseDialog: true,
+          apiError: res2.pfwresponse.result.error || res2.pfwresponse.result.message
+        });
+      }
+
+
+      const res3 = await Api.get('/api/gold/buy/currentprice');
+
+      if (res3.pfwresponse.status_code == 200) {
+        let result = res3.pfwresponse.result;
+        let goldBuyInfo = result.buy_info;
+        var currentDate = new Date();
+        var validityDate = new Date(goldBuyInfo.rate_validity);
+        let timeAvailable = ((validityDate.getTime() - currentDate.getTime()) / 1000);
+
+        let amount = '', weight = '';
+        if (window.localStorage.getItem('buyAmountRegister')) {
+
+          amount = window.localStorage.getItem('buyAmountRegister');
+          window.localStorage.setItem('buyAmountRegister', 0);
+          weight = this.calculate_gold_wt(goldBuyInfo.plutus_rate,
+            goldBuyInfo.applicable_tax, amount);
+        }
+
+        this.setState({
+          show_loader: false,
+          goldBuyInfo: result.buy_info,
+          plutusRateID: result.buy_info.plutus_rate_id,
+          amount: amount,
+          weight: weight,
+          timeAvailable: timeAvailable
+
+        });
+        if (timeAvailable >= 0 && goldBuyInfo.plutus_rate) {
+          this.countdown();
+        }
+      } else {
+        this.setState({
+          show_loader: false, openResponseDialog: true,
+          apiError: res3.pfwresponse.result.error || res3.pfwresponse.result.message
+        });
+      }
+    } catch (err) {
       this.setState({
         show_loader: false,
-        goldBuyInfo: result.buy_info,
-        plutusRateID: result.buy_info.plutus_rate_id,
-        amount: amount,
-        weight: weight,
-        timeAvailable: timeAvailable
-
-      });
-      if (timeAvailable >= 0 && goldBuyInfo.plutus_rate) {
-        this.countdown();
-      }
-    } else {
-      this.setState({
-        show_loader: false, openResponseDialog: true,
-        apiError: res3.pfwresponse.result.error || res3.pfwresponse.result.message
+        apiError: 'Something went wrong'
       });
     }
 
@@ -157,29 +166,32 @@ class GoldSummary extends Component {
       window.location.reload();
       return;
     }
-    setTimeout(
-      function () {
-        let minutes = Math.floor(timeAvailable / 60);
-        let seconds = Math.floor(timeAvailable - minutes * 60);
-        timeAvailable--;
-        this.setState({
-          timeAvailable: timeAvailable,
-          minutes: minutes,
-          seconds: seconds
-        })
-        this.countdown();
-      }
-        .bind(this),
-      1000
-    );
-  };
+    this.timerHandle = setTimeout(() => {
+      let minutes = Math.floor(timeAvailable / 60);
+      let seconds = Math.floor(timeAvailable - minutes * 60);
+      timeAvailable--;
+      this.setState({
+        timeAvailable: timeAvailable,
+        minutes: minutes,
+        seconds: seconds
+      })
+      this.countdown();
+      this.timerHandle = 0;
+    }, 1000);
+  }
+
+  componentWillUnmount = () => {
+    if (this.timerHandle) {
+      clearTimeout(this.timerHandle);
+      this.timerHandle = 0;
+    }
+  }
 
   calculate_gold_wt(current_gold_price, tax, buy_price) {
     tax = 1.0 + parseFloat(tax) / 100.0
     var current_gold_price_with_tax = (current_gold_price * tax).toFixed(2);
     var gold_wt = (buy_price / current_gold_price_with_tax).toFixed(4);
     return gold_wt
-
   }
 
   calculate_gold_amount(current_gold_price, tax, weight) {
@@ -341,7 +353,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                    previous gold price has expired.
+                                                                                                                                                            previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
