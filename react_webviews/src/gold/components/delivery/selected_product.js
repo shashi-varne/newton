@@ -86,9 +86,6 @@ class DeliverySelectedProduct extends Component {
           maxWeight: maxWeight
         });
       } else {
-        this.setState({
-          show_loader: false
-        });
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
           'Something went wrong', 'error');
       }
@@ -98,6 +95,10 @@ class DeliverySelectedProduct extends Component {
       });
       toast('Something went wrong', 'error');
     }
+    
+    this.setState({
+      show_loader: false
+    });
   }
 
   navigate = (pathname) => {

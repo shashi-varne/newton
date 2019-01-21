@@ -50,7 +50,9 @@ class GoldSummary extends Component {
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
-      value: 0
+      value: 0,
+      error: false,
+      errorMessage: ''
     }
     this.renderDeliveryProducts = this.renderDeliveryProducts.bind(this);
   }
@@ -78,8 +80,10 @@ class GoldSummary extends Component {
 
   async componentDidMount() {
     this.setState({
-      show_loader: false,
+      error: false,
+      errorMessage: ''
     });
+
     try {
 
       const res = await Api.get('/api/gold/user/account');
@@ -99,10 +103,13 @@ class GoldSummary extends Component {
         });
       } else {
         this.setState({
-          show_loader: false
+          // show_loader: false,
+          error: true,
+          errorMessage: res.pfwresponse.result.error || res.pfwresponse.result.message ||
+          'Something went wrong'
         });
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-          'Something went wrong', 'error');
+        // toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+        //   'Something went wrong', 'error');
       }
 
       const res2 = await Api.get('/api/gold/sell/currentprice');
@@ -124,10 +131,13 @@ class GoldSummary extends Component {
         }
       } else {
         this.setState({
-          show_loader: false
+          // show_loader: false,
+          error: true,
+          errorMessage: res2.pfwresponse.result.error || res2.pfwresponse.result.message ||
+          'Something went wrong'
         });
-        toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message ||
-          'Something went wrong', 'error');
+        // toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message ||
+        //   'Something went wrong', 'error');
       }
 
       const res3 = await Api.get('/api/gold/user/sell/balance');
@@ -143,10 +153,13 @@ class GoldSummary extends Component {
         });
       } else {
         this.setState({
-          show_loader: false
+          // show_loader: false,
+          error: true,
+          errorMessage: res3.pfwresponse.result.error || res3.pfwresponse.result.message ||
+          'Something went wrong'
         });
-        toast(res3.pfwresponse.result.error || res3.pfwresponse.result.message ||
-          'Something went wrong', 'error');
+        // toast(res3.pfwresponse.result.error || res3.pfwresponse.result.message ||
+        //   'Something went wrong', 'error');
       }
 
       const res4 = await Api.get('/api/gold/delivery/products');
@@ -157,18 +170,26 @@ class GoldSummary extends Component {
         });
       } else {
         this.setState({
-          show_loader: false
-        });
-        toast(res4.pfwresponse.result.error || res4.pfwresponse.result.message ||
-          'Something went wrong', 'error');
+        // show_loader: false,
+        error: true,
+        errorMessage: res4.pfwresponse.result.error || res4.pfwresponse.result.message ||
+          'Something went wrong'
+      });
+        // toast(res4.pfwresponse.result.error || res4.pfwresponse.result.message ||
+        //   'Something went wrong', 'error');
       }
     } catch (err) {
       this.setState({
-        show_loader: false
+        show_loader: false,
+        error: true,
+        errorMessage: 'Something went wrong'
       });
-      toast('Something went wrong', 'error');
+      // toast('Something went wrong', 'error');
     }
 
+    this.setState({
+      show_loader: false
+    });
   }
 
   countdown() {
@@ -405,6 +426,7 @@ class GoldSummary extends Component {
         type={this.state.type}
         handleClick={this.sellGold}
         noPadding={true}
+        disable={!this.state.isRegistered}
       >
         <div className="FlexRow locker-head">
           <div className="FlexRow block1">
@@ -436,7 +458,7 @@ class GoldSummary extends Component {
           <div className="page-body-gold" id="goldInput">
             <div className="buy-info1">
               <div className="FlexRow">
-                <span className="buy-info2a">Current Buying Price</span>
+                <span className="buy-info2a">Current Selling Price</span>
                 <span className="buy-info2b">Price valid for
                   &nbsp;<span className="timer-green">{this.state.minutes}:{this.state.seconds}</span>
                 </span>
@@ -455,7 +477,7 @@ class GoldSummary extends Component {
                     <div className="input-above-text">In Rupees (₹)</div>
                     <div className="input-box">
                       <input type="text" placeholder="Amount" name="amount"
-                        onChange={this.setAmountGms()} value={this.state.amount} />
+                        onChange={this.setAmountGms()} value={this.state.amount} disabled={!this.state.isRegistered} />
                     </div>
                     <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>Min ₹1.00 - *Max ₹ {this.state.maxAmount}</div>
                   </div>
@@ -466,7 +488,7 @@ class GoldSummary extends Component {
                     <div className="input-above-text">In Grams (gm)</div>
                     <div className="input-box">
                       <input type="text" placeholder="Weight" name="weight"
-                        onChange={this.setAmountGms()} value={this.state.weight} />
+                        onChange={this.setAmountGms()} value={this.state.weight} disabled={!this.state.isRegistered} />
                     </div>
                     <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>*Max {this.state.maxWeight} gm</div>
                   </div>
@@ -477,6 +499,8 @@ class GoldSummary extends Component {
               </div>
             </div>
           </div>
+          {this.state.error && this.state.isRegistered && <p className="error">{this.state.errorMessage}</p>}
+          {!this.state.isRegistered && <p className="error">Click <b><span onClick={() => this.navigate('gold-register')}>here</span></b> to register yourself for gold account</p>}
         </div>}
         {this.state.value === 1 && <div>
           <div className="FlexRow" style={{ justifyContent: 'center', flexWrap: 'wrap' }}>
