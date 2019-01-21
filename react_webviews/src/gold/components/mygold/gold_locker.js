@@ -427,6 +427,7 @@ class GoldSummary extends Component {
         handleClick={this.sellGold}
         noPadding={true}
         disable={!this.state.isRegistered}
+        noFooter={this.state.value == 1}
       >
         <div className="FlexRow locker-head">
           <div className="FlexRow block1">

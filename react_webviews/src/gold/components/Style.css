@@ -221,7 +221,7 @@
   height: 30px;
   padding: 5px 10px;
   border: 1px solid #cfcfcf;
-  width: 150px;
+  width: 85%;
 }
 
 .or {
@@ -444,7 +444,7 @@
 }
 
 .locker-head .link {
-  color: #5346a7;
+  /*color: #5346a7;*/
   /*border-bottom: 1px solid #5346a7;*/
   cursor: pointer;
 }
