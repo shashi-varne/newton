@@ -62,35 +62,42 @@ class SellOrder extends Component {
       this.countdown(timeAvailable);
     }
 
-    const res = await Api.get('/api/gold/user/bank/details');
-    if (res.pfwresponse.status_code == 200) {
-      let result = res.pfwresponse.result;
-      let bankDetails, account_no, confirm_account_no, ifsc_code;
-      console.log(result);
-      if (result.banks.length != 0) {
-        account_no = result.banks[0].account_number;
-        confirm_account_no = result.banks[0].account_number;
-        ifsc_code = result.banks[0].ifsc_code;
-        // this.checkIFSCFormat(result.banks[0].ifsc_code);
+    try {
+      const res = await Api.get('/api/gold/user/bank/details');
+      if (res.pfwresponse.status_code == 200) {
+        let result = res.pfwresponse.result;
+        let bankDetails, account_no, confirm_account_no, ifsc_code;
+        console.log(result);
+        if (result.banks.length != 0) {
+          account_no = result.banks[0].account_number;
+          confirm_account_no = result.banks[0].account_number;
+          ifsc_code = result.banks[0].ifsc_code;
+          // this.checkIFSCFormat(result.banks[0].ifsc_code);
+        } else {
+          bankDetails = {
+            account_no: '',
+            confirm_account_no: '',
+            ifsc_code: ''
+          };
+        }
+        this.setState({
+          show_loader: false,
+          bankDetails: bankDetails,
+          account_no: account_no,
+          confirm_account_no: confirm_account_no,
+          ifsc_code: ifsc_code
+        });
       } else {
-        bankDetails = {
-          account_no: '',
-          confirm_account_no: '',
-          ifsc_code: ''
-        };
+        this.setState({
+          show_loader: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
       }
+    } catch (err) {
       this.setState({
-        show_loader: false,
-        bankDetails: bankDetails,
-        account_no: account_no,
-        confirm_account_no: confirm_account_no,
-        ifsc_code: ifsc_code
+        show_loader: false
       });
-    } else {
-      this.setState({
-        show_loader: false, openResponseDialog: true,
-        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-      });
+      toast('Something went wrong', 'error');
     }
   }
 
@@ -124,33 +131,40 @@ class SellOrder extends Component {
   async checkIFSCFormat() {
     if (this.state.ifsc_code && ('' + this.state.ifsc_code).length == 11) {
 
-      const res = await Api.get('/api/ifsc/' + (this.state.ifsc_code).toUpperCase());
-      if (res.pfwresponse.status_code == 200) {
-        let result = res.pfwresponse.result;
-        let bankDetails, ifsc_error, bank_name, branch_name;
-        if (result.length == 0) {
-          ifsc_error = true;
-          bank_name = '';
-          branch_name = '';
-          return;
-        }
+      try {
+        const res = await Api.get('/api/ifsc/' + (this.state.ifsc_code).toUpperCase());
+        if (res.pfwresponse.status_code == 200) {
+          let result = res.pfwresponse.result;
+          let bankDetails, ifsc_error, bank_name, branch_name;
+          if (result.length == 0) {
+            ifsc_error = true;
+            bank_name = '';
+            branch_name = '';
+            return;
+          }
 
-        if (result[0]) {
-          ifsc_error = false;
-          bank_name = result[0].bank;
-          branch_name = result[0].branch;
+          if (result[0]) {
+            ifsc_error = false;
+            bank_name = result[0].bank;
+            branch_name = result[0].branch;
+          }
+          this.setState({
+            show_loader: false,
+            bank_name: bank_name,
+            branch_name: branch_name,
+            ifsc_error: ifsc_error
+          });
+        } else {
+          this.setState({
+            show_loader: false, openResponseDialog: true,
+            apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+          });
         }
+      } catch (err) {
         this.setState({
-          show_loader: false,
-          bank_name: bank_name,
-          branch_name: branch_name,
-          ifsc_error: ifsc_error
+          show_loader: false
         });
-      } else {
-        this.setState({
-          show_loader: false, openResponseDialog: true,
-          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-        });
+        toast('Something went wrong', 'error');
       }
     }
 
@@ -211,22 +225,29 @@ class SellOrder extends Component {
         'ifsc_code': this.state.ifsc_code
       };
 
-      const res = await Api.post('/api/gold/user/bank/details', options);
-      if (res.pfwresponse.status_code == 200) {
-        let result = res.pfwresponse.result;
-        let sellData = this.state.sellData;
-        sellData.account_number = this.state.account_no;
-        sellData.ifsc_code = this.state.ifsc_code;
-        window.localStorage.setItem('sellData', JSON.stringify(sellData));
-        this.navigate('sell-gold-order');
+      try {
+        const res = await Api.post('/api/gold/user/bank/details', options);
+        if (res.pfwresponse.status_code == 200) {
+          let result = res.pfwresponse.result;
+          let sellData = this.state.sellData;
+          sellData.account_number = this.state.account_no;
+          sellData.ifsc_code = this.state.ifsc_code;
+          window.localStorage.setItem('sellData', JSON.stringify(sellData));
+          this.navigate('sell-gold-order');
+          this.setState({
+            show_loader: false,
+          });
+        } else {
+          this.setState({
+            show_loader: false, openResponseDialog: true,
+            apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+          });
+        }
+      } catch (err) {
         this.setState({
-          show_loader: false,
+          show_loader: false
         });
-      } else {
-        this.setState({
-          show_loader: false, openResponseDialog: true,
-          apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-        });
+        toast('Something went wrong', 'error');
       }
 
     }

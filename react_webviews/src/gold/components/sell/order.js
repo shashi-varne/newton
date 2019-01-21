@@ -115,45 +115,52 @@ class About extends Component {
       show_loader: true,
     });
 
-    const res = await Api.post('/api/gold/user/sell/confirm', options);
-    if (res.pfwresponse.status_code == 200) {
-      let result = res.pfwresponse.result;
-      var sellDetails = result.sell_confirmation_info;
-      var options2 = {
-        orderType: 'sell',
-        weight: sellDetails.gold_weight,
-        status: sellDetails.provider_sell_order_status,
-        message: result.message
-      }
-      window.localStorage.setItem('sellDetails', JSON.stringify(sellDetails));
-      this.navigate('/gold/sell/payment/' + sellDetails.provider_sell_order_status)
-      // $state.go('gold-payment-callback', options2);
-      this.setState({
-        show_loader: false,
-      });
-    } else if (res.pfwresponse.result.is_gold_rate_changed) {
-      let new_rate = res.pfwresponse.result.new_rate;
-      let amountUpdated, weightUpdated;
-      let sellData = this.state.sellData;
-      if (sellData.isAmount) {
-        amountUpdated = sellData.amount;
-        weightUpdated = (sellData.amount) * (new_rate.plutus_rate);
+    try {
+      const res = await Api.post('/api/gold/user/sell/confirm', options);
+      if (res.pfwresponse.status_code == 200) {
+        let result = res.pfwresponse.result;
+        var sellDetails = result.sell_confirmation_info;
+        var options2 = {
+          orderType: 'sell',
+          weight: sellDetails.gold_weight,
+          status: sellDetails.provider_sell_order_status,
+          message: result.message
+        }
+        window.localStorage.setItem('sellDetails', JSON.stringify(sellDetails));
+        this.navigate('/gold/sell/payment/' + sellDetails.provider_sell_order_status)
+        // $state.go('gold-payment-callback', options2);
+        this.setState({
+          show_loader: false,
+        });
+      } else if (res.pfwresponse.result.is_gold_rate_changed) {
+        let new_rate = res.pfwresponse.result.new_rate;
+        let amountUpdated, weightUpdated;
+        let sellData = this.state.sellData;
+        if (sellData.isAmount) {
+          amountUpdated = sellData.amount;
+          weightUpdated = (sellData.amount) * (new_rate.plutus_rate);
+        } else {
+          weightUpdated = sellData.weight;
+          amountUpdated = (sellData.weight) / (new_rate.plutus_rate);
+        }
+        this.setState({
+          show_loader: false,
+          amountUpdated: amountUpdated,
+          weightUpdated: weightUpdated,
+          new_rate: new_rate,
+          openPopup: true
+        });
       } else {
-        weightUpdated = sellData.weight;
-        amountUpdated = (sellData.weight) / (new_rate.plutus_rate);
+        this.setState({
+          show_loader: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
       }
+    } catch (err) {
       this.setState({
-        show_loader: false,
-        amountUpdated: amountUpdated,
-        weightUpdated: weightUpdated,
-        new_rate: new_rate,
-        openPopup: true
+        show_loader: false
       });
-    } else {
-      this.setState({
-        show_loader: false, openResponseDialog: true,
-        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-      });
+      toast('Something went wrong', 'error');
     }
   }
   handleClose = () => {
@@ -225,7 +232,7 @@ class About extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                previous gold price has expired.
+                                                                                                                                                                          previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>

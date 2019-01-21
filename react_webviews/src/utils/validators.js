@@ -22,7 +22,7 @@ export function validateMinChar(string) {
     return false;
   }
 
-  return true; 
+  return true;
 }
 
 export function validateConsecutiveChar(string) {
@@ -86,19 +86,57 @@ export function numberShouldStartWith(number) {
 
 export function formatAmount(amount) {
   amount = amount.toString();
-  let lastThree = amount.substring(amount.length-3);
-  let otherNumbers = amount.substring(0,amount.length-3);
+  let lastThree = amount.substring(amount.length - 3);
+  let otherNumbers = amount.substring(0, amount.length - 3);
   if (otherNumbers !== '')
-      lastThree = ',' + lastThree;
+    lastThree = ',' + lastThree;
   let res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
 
   return res;
 }
 
+export function inrFormatDecimal(number) {
+  if (number) {
+    number = number.toString();
+    var afterPoint = '';
+    if (number.indexOf('.') > 0)
+      afterPoint = number.substring(number.indexOf('.'), number.length);
+    number = Math.floor(number);
+    number = number.toString();
+    var lastThree = number.substring(number.length - 3);
+    var otherNumbers = number.substring(0, number.length - 3);
+    if (otherNumbers != '')
+      lastThree = ',' + lastThree;
+    var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
+    return '₹' + ' ' + res;
+  } else {
+    return '₹';
+  }
+}
+
+export function inrFormatDecimalWithoutIcon(number) {
+  if (number) {
+    number = number.toString();
+    var afterPoint = '';
+    if (number.indexOf('.') > 0)
+      afterPoint = number.substring(number.indexOf('.'), number.length);
+    number = Math.floor(number);
+    number = number.toString();
+    var lastThree = number.substring(number.length - 3);
+    var otherNumbers = number.substring(0, number.length - 3);
+    if (otherNumbers != '')
+      lastThree = ',' + lastThree;
+    var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
+    return res;
+  } else {
+    return '';
+  }
+}
+
 export function numDifferentiation(val) {
-  if(val >= 10000000) val = (val/10000000).toFixed(1) + ' Crores';
-  else if(val >= 100000) val = (val/100000).toFixed(1) + ' Lakhs';
-  else if(val >= 1000) val = (val/1000).toFixed(1) + ' Thousand';
+  if (val >= 10000000) val = (val / 10000000).toFixed(1) + ' Crores';
+  else if (val >= 100000) val = (val / 100000).toFixed(1) + ' Lakhs';
+  else if (val >= 1000) val = (val / 1000).toFixed(1) + ' Thousand';
   return val;
 }
 
@@ -107,7 +145,7 @@ export function validateName(string) {
 }
 
 export function capitalize(string) {
-  return string.toLowerCase().replace(/(^|\s)[a-z]/g,function(f){return f.toUpperCase()});
+  return string.toLowerCase().replace(/(^|\s)[a-z]/g, function (f) { return f.toUpperCase() });
 }
 
 export function validate2ConsecutiveDigits(string) {

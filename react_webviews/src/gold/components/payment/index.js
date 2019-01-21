@@ -93,45 +93,52 @@ class Payment extends Component {
   }
 
   async componentDidMount() {
-    const res = await Api.get('/api/gold/user/account');
-    if (res.pfwresponse.status_code == 200) {
-      let result = res.pfwresponse.result;
-      let isRegistered = true;
-      if (result.gold_user_info.user_info.registration_status == "pending" ||
-        !result.gold_user_info.user_info.registration_status ||
-        result.gold_user_info.is_new_gold_user) {
-        isRegistered = false;
+    try {
+      const res = await Api.get('/api/gold/user/account');
+      if (res.pfwresponse.status_code == 200) {
+        let result = res.pfwresponse.result;
+        let isRegistered = true;
+        if (result.gold_user_info.user_info.registration_status == "pending" ||
+          !result.gold_user_info.user_info.registration_status ||
+          result.gold_user_info.is_new_gold_user) {
+          isRegistered = false;
+        }
+        this.setState({
+          show_loader: false,
+          goldInfo: result.gold_user_info.safegold_info,
+          userInfo: result.gold_user_info.user_info,
+          maxWeight: parseFloat(((30 - result.gold_user_info.safegold_info.gold_balance) || 30).toFixed(4)),
+          isRegistered: isRegistered
+        });
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
       }
-      this.setState({
-        show_loader: false,
-        goldInfo: result.gold_user_info.safegold_info,
-        userInfo: result.gold_user_info.user_info,
-        maxWeight: parseFloat(((30 - result.gold_user_info.safegold_info.gold_balance) || 30).toFixed(4)),
-        isRegistered: isRegistered
-      });
-    } else {
-      this.setState({
-        show_loader: false, openResponseDialog: true,
-        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-      });
-    }
 
-    const res2 = await Api.get('/api/gold/sell/currentprice');
-    if (res2.pfwresponse.status_code == 200) {
-      let goldInfo = this.state.goldInfo;
-      let result = res2.pfwresponse.result;
-      goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
-      this.setState({
-        show_loader: false,
-        goldSellInfo: result.sell_info,
-        goldInfo: goldInfo,
-      });
+      const res2 = await Api.get('/api/gold/sell/currentprice');
+      if (res2.pfwresponse.status_code == 200) {
+        let goldInfo = this.state.goldInfo;
+        let result = res2.pfwresponse.result;
+        goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
+        this.setState({
+          show_loader: false,
+          goldSellInfo: result.sell_info,
+          goldInfo: goldInfo,
+        });
 
-    } else {
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
+      }
+    } catch (err) {
       this.setState({
-        show_loader: false, openResponseDialog: true,
-        apiError: res2.pfwresponse.result.error || res2.pfwresponse.result.message
+        show_loader: false
       });
+      toast('Something went wrong', 'error');
     }
 
   }
@@ -155,22 +162,29 @@ class Payment extends Component {
       show_loader: true,
     });
 
-    const res = await Api.get('/api/gold/invoice/download/mail', { url: path });
-    if (res.pfwresponse.status_code == 200) {
-      let result = res.pfwresponse.result;
-      if (result.message == 'success') {
-        // toast('Invoice has been sent succesfully to your registered email');
+    try {
+      const res = await Api.get('/api/gold/invoice/download/mail', { url: path });
+      if (res.pfwresponse.status_code == 200) {
+        let result = res.pfwresponse.result;
+        if (result.message == 'success') {
+          // toast('Invoice has been sent succesfully to your registered email');
+        } else {
+          // toast(result.message || result.error);
+        }
+        this.setState({
+          show_loader: false,
+        });
       } else {
-        // toast(result.message || result.error);
+        this.setState({
+          show_loader: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
       }
+    } catch (err) {
       this.setState({
-        show_loader: false,
+        show_loader: false
       });
-    } else {
-      this.setState({
-        show_loader: false, openResponseDialog: true,
-        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-      });
+      toast('Something went wrong', 'error');
     }
   }
 
@@ -180,17 +194,24 @@ class Payment extends Component {
       show_loader: true,
     });
 
-    const res = await Api.get('/api/gold/user/getinvoice', { txn_id: txn_id });
-    if (res.pfwresponse.status_code == 200) {
+    try {
+      const res = await Api.get('/api/gold/user/getinvoice', { txn_id: txn_id });
+      if (res.pfwresponse.status_code == 200) {
+        this.setState({
+          show_loader: false,
+          invoiceLink: res.pfwresponse.result.invoice_link
+        });
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
+      }
+    } catch (err) {
       this.setState({
-        show_loader: false,
-        invoiceLink: res.pfwresponse.result.invoice_link
+        show_loader: false
       });
-    } else {
-      this.setState({
-        show_loader: false, openResponseDialog: true,
-        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-      });
+      toast('Something went wrong', 'error');
     }
   }
 
