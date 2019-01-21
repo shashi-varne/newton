@@ -38,18 +38,25 @@ class Container extends Component {
         that.historyGoBack();
       }
     });
-    
+
     let body = document.getElementsByTagName('body')[0].offsetHeight;
     let container_wrapper = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
     let header = document.getElementsByClassName('Header')[0].offsetHeight;
     let footer = document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight : 0;
 
     // Add margin of footer: 7px (Style.css)
-    document.getElementsByClassName('Container')[0].style.marginBottom =  footer + 7 + 'px';
+    document.getElementsByClassName('Container')[0].style.marginBottom = footer + 7 + 'px';
   }
 
   componentWillUnmount() {
     window.PlutusSdk.remove_listener({});
+  }
+
+  navigate = (pathname) => {
+    this.props.history.push({
+      pathname: pathname,
+      search: this.props.location.search + '&isDelivery=' + false
+    });
   }
 
   historyGoBack = () => {
@@ -76,6 +83,22 @@ class Container extends Component {
     let pathname = this.props.history.location.pathname;
 
     switch (pathname) {
+
+      case '/gold/gold-payment-callback':
+        this.navigate('/gold/my-gold');
+        break;
+      case '/gold/select-gold-product':
+        this.props.history.push({
+          pathname: '/gold/my-gold-locker',
+          search: this.props.location.search + '&isDelivery=' + true
+        });
+        break;
+      case '/gold/my-gold':
+        this.navigate('/gold/about');
+        break;
+      case '/gold/my-gold-locker':
+        this.navigate('/gold/my-gold');
+        break;
       case "/gold":
       case "/gold/about":
         this.setState({

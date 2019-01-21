@@ -163,9 +163,9 @@ class Payment extends Component {
       if (res.pfwresponse.status_code == 200) {
         let result = res.pfwresponse.result;
         if (result.message == 'success') {
-          // toast('Invoice has been sent succesfully to your registered email');
+          toast('Invoice has been sent succesfully to your registered email');
         } else {
-          // toast(result.message || result.error);
+          toast(result.message || result.error);
         }
         this.setState({
           show_loader: false,
@@ -211,8 +211,8 @@ class Payment extends Component {
     }
   }
 
-  handleClick = async () => {
-    this.navigate('my-gold');
+  handleClick = () => {
+    this.navigate('/gold/my-gold');
   }
 
   render() {
