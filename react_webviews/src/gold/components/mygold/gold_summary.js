@@ -48,7 +48,6 @@ class GoldSummary extends Component {
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
     }
-    this.countdown = this.countdown.bind(this);
   }
 
   componentWillMount() {
@@ -69,8 +68,6 @@ class GoldSummary extends Component {
 
   async componentDidMount() {
     try {
-
-
       const res = await Api.get('/api/gold/user/account');
       if (res.pfwresponse.status_code == 200) {
         let result = res.pfwresponse.result;
@@ -157,7 +154,7 @@ class GoldSummary extends Component {
 
   }
 
-  countdown() {
+  countdown = () => {
     let timeAvailable = this.state.timeAvailable;
     if (timeAvailable <= 0) {
       this.setState({
@@ -167,6 +164,7 @@ class GoldSummary extends Component {
       window.location.reload();
       return;
     }
+    
     this.timerHandle = setTimeout(() => {
       let minutes = Math.floor(timeAvailable / 60);
       let seconds = Math.floor(timeAvailable - minutes * 60);
@@ -182,7 +180,7 @@ class GoldSummary extends Component {
     }, 1000);
   }
 
-  componentWillUnmount = () => {
+  componentWillUnmount() {
     if (this.timerHandle) {
       clearTimeout(this.timerHandle);
       this.timerHandle = 0;
@@ -381,6 +379,9 @@ class GoldSummary extends Component {
   }
 
   navigate = (pathname) => {
+    clearTimeout(this.timerHandle);
+    this.timerHandle = 0;
+
     this.props.history.push({
       pathname: pathname,
       search: '?base_url=' + this.state.params.base_url

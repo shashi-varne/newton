@@ -127,33 +127,64 @@ class Transactions extends Component {
   renderRows = (type) => {
     if (type == 'buy') {
       const buyData = this.state.transactions.buy;
-      if (buyData !== null) {
-        return <TableBody>{buyData.map((row, i) => (
-          <TableRow key={i}>
-            <TableCell align="justify" padding='dense'>{row.gold_weight}</TableCell>
-            <TableCell align="justify" padding='dense'>{row.amount}</TableCell>
-            <TableCell align="justify" padding='dense'>{row.gst_amount}</TableCell>
-            <TableCell align="justify" padding='dense'>{row.total_amount}</TableCell>
-            <TableCell align="justify" padding='dense'>{row.provider_buy_order_status || row.provider_buy_order_error}</TableCell>
-            <TableCell align="justify" padding='dense'>{row.dt_created.split(' ')[0]}</TableCell>
-            <TableCell align="justify" padding='dense'><div className="download-invoice" onClick={() => this.downloadInvoice(row.invoice_link)}>Download</div></TableCell>
-          </TableRow>
-        ))}</TableBody>
+      console.log(buyData)
+      if (buyData && buyData !== null && buyData.length) {
+        return (
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell align="justify" padding='dense'>Weight (gms)</TableCell>
+                <TableCell align="justify" padding='dense'>Amount (Rs)</TableCell>
+                <TableCell align="justify" padding='dense'>GST Amount (Rs)</TableCell>
+                <TableCell align="justify" padding='dense'>Total Amount (Rs)</TableCell>
+                <TableCell align="justify" padding='dense'>Status</TableCell>
+                <TableCell align="justify" padding='dense'>Date</TableCell>
+                <TableCell align="justify" padding='dense'>Invoice link</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>{buyData.map((row, i) => (
+              <TableRow key={i}>
+                <TableCell align="justify" padding='dense'>{row.gold_weight}</TableCell>
+                <TableCell align="justify" padding='dense'>{row.amount}</TableCell>
+                <TableCell align="justify" padding='dense'>{row.gst_amount}</TableCell>
+                <TableCell align="justify" padding='dense'>{row.total_amount}</TableCell>
+                <TableCell align="justify" padding='dense'>{row.provider_buy_order_status || row.provider_buy_order_error}</TableCell>
+                <TableCell align="justify" padding='dense'>{row.dt_created.split(' ')[0]}</TableCell>
+                <TableCell align="justify" padding='dense'><div className="download-invoice" onClick={() => this.downloadInvoice(row.invoice_link)}>Download</div></TableCell>
+              </TableRow>
+            ))}</TableBody>
+          </Table>
+        )
       } else {
-        <div className="error" style={{ textAlign: 'center', margin: '10px 0' }}>No Transaction Found!</div>
+        return <div className="error" style={{ textAlign: 'center', margin: '10px 0' }}>No Transaction Found!</div>
       }
     } else if (type == 'sell') {
       const sellData = this.state.transactions.sell;
-      if (sellData !== null) {
-        return <TableBody>{sellData.map((row, i) => (
-          <TableRow key={i}>
-            <TableCell align="justify" padding='dense'>{row.gold_weight}</TableCell>
-            <TableCell align="justify" padding='dense'>{row.total_amount}</TableCell>
-            <TableCell align="justify" padding='dense'>{row.provider_sell_order_status || row.provider_sell_order_error}</TableCell>
-            <TableCell align="justify" padding='dense'>{row.date_created.split(' ')[0]}</TableCell>
-            <TableCell align="justify" padding='dense'><div className="download-invoice" onClick={() => this.downloadInvoice(row.invoice_link)}>Download</div></TableCell>
-          </TableRow>
-        ))}</TableBody>
+      if (sellData && sellData !== null && sellData.length) {
+        return (
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell align="justify" padding='dense'>Weight (gms)</TableCell>
+                <TableCell align="justify" padding='dense'>Amount (Rs)</TableCell>
+                <TableCell align="justify" padding='dense'>GST Amount (Rs)</TableCell>
+                <TableCell align="justify" padding='dense'>Total Amount (Rs)</TableCell>
+                <TableCell align="justify" padding='dense'>Status</TableCell>
+                <TableCell align="justify" padding='dense'>Date</TableCell>
+                <TableCell align="justify" padding='dense'>Invoice link</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>{sellData.map((row, i) => (
+              <TableRow key={i}>
+                <TableCell align="justify" padding='dense'>{row.gold_weight}</TableCell>
+                <TableCell align="justify" padding='dense'>{row.total_amount}</TableCell>
+                <TableCell align="justify" padding='dense'>{row.provider_sell_order_status || row.provider_sell_order_error}</TableCell>
+                <TableCell align="justify" padding='dense'>{row.date_created.split(' ')[0]}</TableCell>
+                <TableCell align="justify" padding='dense'><div className="download-invoice" onClick={() => this.downloadInvoice(row.invoice_link)}>Download</div></TableCell>
+              </TableRow>
+            ))}</TableBody>
+          </Table>
+        )
       } else {
         return (
           <div className="error" style={{ textAlign: 'center', margin: '10px 0' }}>No Transaction Found!</div>
@@ -161,19 +192,34 @@ class Transactions extends Component {
       }
     } else {
       const deliveryData = this.state.transactions.delivery;
-      if (deliveryData !== null) {
-        return <TableBody>{deliveryData.map((row, i) => (
-          <TableRow key={i}>
-            <TableCell align="justify" padding='dense'>{row.metal_weight}</TableCell>
-            <TableCell align="justify" padding='dense'>{row.order_status}</TableCell>
-            <TableCell align="justify" padding='dense'>{row.delivery_status_message}</TableCell>
-            <TableCell align="justify" padding='dense'>{row.dt_created.split(' ')[0]}</TableCell>
-            <TableCell align="justify" padding='dense'>{row.delivery_address.addressline}, {row.delivery_address.city}</TableCell>
-            <TableCell align="justify" padding='dense'><div className="download-invoice" onClick={() => this.downloadInvoice(row.invoice_link)}>Download</div></TableCell>
-          </TableRow>
-        ))}</TableBody>
+      if (deliveryData && deliveryData !== null && deliveryData.length) {
+        return (
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell align="justify" padding='dense'>Weight (gms)</TableCell>
+                <TableCell align="justify" padding='dense'>Amount (Rs)</TableCell>
+                <TableCell align="justify" padding='dense'>GST Amount (Rs)</TableCell>
+                <TableCell align="justify" padding='dense'>Total Amount (Rs)</TableCell>
+                <TableCell align="justify" padding='dense'>Status</TableCell>
+                <TableCell align="justify" padding='dense'>Date</TableCell>
+                <TableCell align="justify" padding='dense'>Invoice link</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>{deliveryData.map((row, i) => (
+              <TableRow key={i}>
+                <TableCell align="justify" padding='dense'>{row.metal_weight}</TableCell>
+                <TableCell align="justify" padding='dense'>{row.order_status}</TableCell>
+                <TableCell align="justify" padding='dense'>{row.delivery_status_message}</TableCell>
+                <TableCell align="justify" padding='dense'>{row.dt_created.split(' ')[0]}</TableCell>
+                <TableCell align="justify" padding='dense'>{row.delivery_address.addressline}, {row.delivery_address.city}</TableCell>
+                <TableCell align="justify" padding='dense'><div className="download-invoice" onClick={() => this.downloadInvoice(row.invoice_link)}>Download</div></TableCell>
+              </TableRow>
+            ))}</TableBody>
+          </Table>
+        )
       } else {
-        <div className="error" style={{ textAlign: 'center', margin: '10px 0' }}>No Transaction Found!</div>
+        return <div className="error" style={{ textAlign: 'center', margin: '10px 0' }}>No Transaction Found!</div>
       }
     }
   }
@@ -202,53 +248,17 @@ class Transactions extends Component {
         </Tabs>
         {this.state.value === 0 && <div className="container-padding" style={{ overflowX: 'scroll' }}>
           <Grid item xs={12}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell align="justify" padding='dense'>Weight (gms)</TableCell>
-                  <TableCell align="justify" padding='dense'>Amount (Rs)</TableCell>
-                  <TableCell align="justify" padding='dense'>GST Amount (Rs)</TableCell>
-                  <TableCell align="justify" padding='dense'>Total Amount (Rs)</TableCell>
-                  <TableCell align="justify" padding='dense'>Status</TableCell>
-                  <TableCell align="justify" padding='dense'>Date</TableCell>
-                  <TableCell align="justify" padding='dense'>Invoice link</TableCell>
-                </TableRow>
-              </TableHead>
-              {this.renderRows('buy')}
-            </Table>
+            {this.renderRows('buy')}
           </Grid>
         </div>}
         {this.state.value === 1 && <div className="container-padding" style={{ overflowX: 'scroll' }}>
           <Grid item xs={12}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell align="justify" padding='dense'>Weight (gms)</TableCell>
-                  <TableCell align="justify" padding='dense'>Total Amount (Rs)</TableCell>
-                  <TableCell align="justify" padding='dense'>Status</TableCell>
-                  <TableCell align="justify" padding='dense'>Date</TableCell>
-                  <TableCell align="justify" padding='dense'>Invoice link</TableCell>
-                </TableRow>
-              </TableHead>
-              {this.renderRows('sell')}
-            </Table>
+            {this.renderRows('sell')}
           </Grid>
         </div>}
         {this.state.value === 2 && <div className="container-padding" style={{ overflowX: 'scroll' }}>
           <Grid item xs={12}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell align="justify" padding='dense'>Weight (gms)</TableCell>
-                  <TableCell align="justify" padding='dense'>Order Status</TableCell>
-                  <TableCell align="justify" padding='dense'>Delivery Status</TableCell>
-                  <TableCell align="justify" padding='dense'>Date</TableCell>
-                  <TableCell align="justify" padding='dense'>Delivery Address</TableCell>
-                  <TableCell align="justify" padding='dense'>Invoice link</TableCell>
-                </TableRow>
-              </TableHead>
-              {this.renderRows('delivery')}
-            </Table>
+            {this.renderRows('delivery')}
           </Grid>
         </div>}
         <ToastContainer autoClose={3000} />
