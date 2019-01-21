@@ -87,22 +87,28 @@ class BuyOrder extends Component {
       window.location.reload();
       return;
     }
-    setTimeout(
-      function () {
-        let minutes = Math.floor(timeAvailable / 60);
-        let seconds = Math.floor(timeAvailable - minutes * 60);
-        timeAvailable--;
-        this.setState({
-          timeAvailable: timeAvailable,
-          minutes: minutes,
-          seconds: seconds
-        })
-        this.countdown();
-      }
-        .bind(this),
-      1000
-    );
+
+    this.timerHandle = setTimeout(() => {
+      let minutes = Math.floor(timeAvailable / 60);
+      let seconds = Math.floor(timeAvailable - minutes * 60);
+      timeAvailable--;
+      this.setState({
+        timeAvailable: timeAvailable,
+        minutes: minutes,
+        seconds: seconds
+      })
+      window.localStorage.setItem('timeAvailable', timeAvailable);
+      this.countdown();
+      this.timerHandle = 0;
+    }, 1000);
   };
+
+  componentWillUnmount = () => {
+    if (this.timerHandle) {
+      clearTimeout(this.timerHandle);
+      this.timerHandle = 0;
+    }
+  }
 
   render() {
     return (

@@ -110,23 +110,27 @@ class SellOrder extends Component {
       // window.location.reload();
       return;
     }
-    setTimeout(
-      function () {
-        let minutes = Math.floor(timeAvailable / 60);
-        let seconds = Math.floor(timeAvailable - minutes * 60);
-        --timeAvailable;
-        this.setState({
-          timeAvailable: timeAvailable,
-          minutes: minutes,
-          seconds: seconds
-        })
-        window.localStorage.setItem('timeAvailableSell', timeAvailable);
-        this.countdown(timeAvailable);
-      }
-        .bind(this),
-      1000
-    );
+    this.timerHandle = setTimeout(() => {
+      let minutes = Math.floor(timeAvailable / 60);
+      let seconds = Math.floor(timeAvailable - minutes * 60);
+      --timeAvailable;
+      this.setState({
+        timeAvailable: timeAvailable,
+        minutes: minutes,
+        seconds: seconds
+      })
+      window.localStorage.setItem('timeAvailableSell', timeAvailable);
+      this.countdown(timeAvailable);
+      this.timerHandle = 0;
+    }, 1000);
   };
+
+  componentWillUnmount = () => {
+    if (this.timerHandle) {
+      clearTimeout(this.timerHandle);
+      this.timerHandle = 0;
+    }
+  }
 
   async checkIFSCFormat() {
     if (this.state.ifsc_code && ('' + this.state.ifsc_code).length == 11) {

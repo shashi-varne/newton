@@ -56,6 +56,11 @@ class GoldSummary extends Component {
   }
 
   componentWillMount() {
+    if (this.state.params.isDelivery) {
+      this.setState({
+        value: 1
+      });
+    }
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -87,7 +92,6 @@ class GoldSummary extends Component {
           isRegistered = false;
         }
         this.setState({
-          show_loader: false,
           goldInfo: result.gold_user_info.safegold_info,
           userInfo: result.gold_user_info.user_info,
           maxWeight: parseFloat(((30 - result.gold_user_info.safegold_info.gold_balance) || 30).toFixed(4)),
@@ -110,7 +114,6 @@ class GoldSummary extends Component {
         let timeAvailable = ((validityDate.getTime() - currentDate.getTime()) / 1000);
         goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
         this.setState({
-          show_loader: false,
           goldSellInfo: result.sell_info,
           goldInfo: goldInfo,
           timeAvailable: timeAvailable
@@ -135,7 +138,6 @@ class GoldSummary extends Component {
         let maxWeight = this.state.maxWeight;
         let maxAmount = ((this.state.goldSellInfo.plutus_rate) * (maxWeight || 0)).toFixed(2);
         this.setState({
-          show_loader: false,
           // maxWeight: maxWeight,
           maxAmount: maxAmount
         });
@@ -180,22 +182,27 @@ class GoldSummary extends Component {
       return;
     }
 
-    setTimeout(
-      function () {
-        let minutes = Math.floor(timeAvailable / 60);
-        let seconds = Math.floor(timeAvailable - minutes * 60);
-        timeAvailable--;
-        this.setState({
-          timeAvailable: timeAvailable,
-          minutes: minutes,
-          seconds: seconds
-        })
-        this.countdown();
-      }
-        .bind(this),
-      3000
-    );
+    this.timerHandle = setTimeout(() => {
+      let minutes = Math.floor(timeAvailable / 60);
+      let seconds = Math.floor(timeAvailable - minutes * 60);
+      timeAvailable--;
+      this.setState({
+        timeAvailable: timeAvailable,
+        minutes: minutes,
+        seconds: seconds
+      })
+      window.localStorage.setItem('timeAvailableSell', timeAvailable);
+      this.countdown();
+      this.timerHandle = 0;
+    }, 1000);
   };
+
+  componentWillUnmount = () => {
+    if (this.timerHandle) {
+      clearTimeout(this.timerHandle);
+      this.timerHandle = 0;
+    }
+  }
 
   calculate_gold_wt(current_gold_price, tax, buy_price) {
     tax = 1.0 + parseFloat(tax) / 100.0
@@ -218,23 +225,23 @@ class GoldSummary extends Component {
     let amount = this.state.amount;
     let weight = this.state.weight;
     if (!weight || weight < 0) {
-      // toast('Please enter a correct value for the weight');
+      toast('Please enter a correct value for the weight', 'error');
       return;
     }
 
     if (!amount || amount < 0) {
-      // toast('Please enter a correct value for the amount');
+      toast('Please enter a correct value for the amount', 'error');
       return;
     }
 
     if (amount >= 0 && amount < 1) {
-      // toast('Minimum amount should be Rs. 1');
+      toast('Minimum amount should be Rs. 1', 'error');
       return;
     }
 
     if (amount > parseFloat(this.state.maxAmount) ||
       weight > parseFloat(this.state.maxWeight)) {
-      // toast("You don't have enough gold");
+      toast("You don't have enough gold", 'error');
       return;
     }
 

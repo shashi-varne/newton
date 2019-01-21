@@ -18,7 +18,7 @@ class CustomButton extends Component {
           {props.buttonTitle}
           {
             props.arrow &&
-            <img alt="" src={arrow} width={20} className="FooterButtonArrow"/>
+            <img alt="" src={arrow} width={20} className="FooterButtonArrow" />
           }
         </Button>
       </div>

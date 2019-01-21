@@ -24,6 +24,7 @@ class DeliverySelectedProduct extends Component {
       },
       openResponseDialog: false,
       disabledText: 'Continue',
+      disabled: false,
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
@@ -51,6 +52,12 @@ class DeliverySelectedProduct extends Component {
 
     if (window.localStorage.getItem('goldProduct')) {
       let product = JSON.parse(window.localStorage.getItem('goldProduct'));
+      if (product.in_stock == 'N') {
+        this.setState({
+          disabled: true,
+          disabledText: 'Out of Stock'
+        })
+      }
       console.log(product);
       this.setState({
         product: product
@@ -66,16 +73,17 @@ class DeliverySelectedProduct extends Component {
         let result = res.pfwresponse.result;
         let maxWeight = result.sellable_gold_balance || 0;
         let product = this.state.product;
-        let disabled, disabledText;
+        let disabledText;
         if (parseFloat(product.metal_weight) > maxWeight) {
-          disabled = true;
           disabledText = 'Minimum ' + (parseFloat(product.metal_weight)).toFixed(2) + ' GM gold required';
+          this.setState({
+            disabled: true,
+            disabledText: disabledText
+          });
         }
         this.setState({
           show_loader: false,
-          maxWeight: maxWeight,
-          disabled: disabled,
-          disabledText: disabledText
+          maxWeight: maxWeight
         });
       } else {
         this.setState({
@@ -100,10 +108,14 @@ class DeliverySelectedProduct extends Component {
   }
 
   handleClick = async () => {
+
+    if (this.state.disabled) {
+      return;
+    }
     if (parseFloat(this.state.product.metal_weight) <= this.state.maxWeight) {
       this.navigate('gold-delivery-address');
     } else {
-      // toast("Insufficient Gold Balance");
+      toast("Insufficient Gold Balance", 'error');
     }
   }
 
@@ -136,7 +148,8 @@ class DeliverySelectedProduct extends Component {
         title="Select Gold Product"
         handleClick={this.handleClick}
         edit={this.props.edit}
-        buttonTitle="Proceed"
+        buttonTitle={this.state.disabledText}
+        disable={this.state.disabled}
         type={this.state.type}
       >
         <div className="delivery block">

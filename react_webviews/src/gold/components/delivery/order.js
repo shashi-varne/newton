@@ -22,6 +22,7 @@ class DeliveryOrder extends Component {
       redeemProduct: {},
       openResponseDialog: false,
       disabled: false,
+      disabledText: 'Proceed to payment',
       product: {},
       address: {},
       redeemProduct: {
@@ -108,7 +109,8 @@ class DeliveryOrder extends Component {
         this.setState({
           show_loader: false,
           disabled: true,
-          redeemProduct: redeemProduct
+          redeemProduct: redeemProduct,
+          disabledText: disabledText
         });
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
           'Something went wrong', 'error');
@@ -165,7 +167,8 @@ class DeliveryOrder extends Component {
         title="Gold Delivery Order"
         handleClick={this.handleClick}
         edit={this.props.edit}
-        buttonTitle="Proceed"
+        buttonTitle={this.state.disabledText}
+        disable={this.state.disabled}
         type={this.state.type}
       >
         <div className="order-tile">
