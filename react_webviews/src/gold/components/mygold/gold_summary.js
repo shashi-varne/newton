@@ -164,7 +164,7 @@ class GoldSummary extends Component {
       window.location.reload();
       return;
     }
-    
+
     this.timerHandle = setTimeout(() => {
       let minutes = Math.floor(timeAvailable / 60);
       let seconds = Math.floor(timeAvailable - minutes * 60);
@@ -361,7 +361,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                                      previous gold price has expired.
+                                                                                                                                                                                                                        previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -491,7 +491,7 @@ class GoldSummary extends Component {
                 <div className="FlexRow">
                   <div>
                     <div className="input-above-text">In Rupees (₹)</div>
-                    <div className="input-box">
+                    <div className="input-box InputField">
                       <input type="text" name="amount" placeholder="Amount"
                         onChange={this.setAmountGms()} value={this.state.amount} />
                     </div>
@@ -502,7 +502,7 @@ class GoldSummary extends Component {
                   </div>
                   <div>
                     <div className="input-above-text">In Grams (gm)</div>
-                    <div className="input-box">
+                    <div className="input-box InputField">
                       <input type="text" name="weight" placeholder="Weight"
                         onChange={this.setAmountGms()} value={this.state.weight} />
                     </div>

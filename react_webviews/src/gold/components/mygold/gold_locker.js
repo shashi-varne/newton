@@ -483,7 +483,7 @@ class GoldSummary extends Component {
                 <div className="FlexRow">
                   <div>
                     <div className="input-above-text">In Rupees (₹)</div>
-                    <div className="input-box">
+                    <div className="input-box InputField">
                       <input type="text" placeholder="Amount" name="amount"
                         onChange={this.setAmountGms()} value={this.state.amount} disabled={!this.state.isRegistered} />
                     </div>
@@ -494,7 +494,7 @@ class GoldSummary extends Component {
                   </div>
                   <div>
                     <div className="input-above-text">In Grams (gm)</div>
-                    <div className="input-box">
+                    <div className="input-box InputField">
                       <input type="text" placeholder="Weight" name="weight"
                         onChange={this.setAmountGms()} value={this.state.weight} disabled={!this.state.isRegistered} />
                     </div>

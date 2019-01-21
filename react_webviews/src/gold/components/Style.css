@@ -470,3 +470,6 @@
 .transaction-history .arrow {
   font-size: 16px;
 }
+.input-box.InputField {
+  margin-bottom: 0px;
+}
