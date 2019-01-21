@@ -52,6 +52,10 @@ class KnowMore extends Component {
     });
   }
 
+  handleClick = () => {
+    this.navigate('my-gold');
+  }
+
   render() {
     return (
       <Container
@@ -59,6 +63,7 @@ class KnowMore extends Component {
         title="About Safegold"
         edit={this.props.edit}
         buttonTitle="Proceed"
+        handleClick={this.handleClick}
         type={this.state.type}
       >
         <div className="Knowmore">
