@@ -480,9 +480,6 @@ class GoldSummary extends Component {
               <div className="buy-info3">
                 {inrFormatDecimal(this.state.goldBuyInfo.plutus_rate) || 0}/gm
               </div>
-              <div className="buy-info4">
-                All prices are inclusive of 3% GST
-              </div>
             </div>
             <div className="buy-input">
               <div className="buy-input1">
@@ -510,6 +507,9 @@ class GoldSummary extends Component {
                     <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>Max {this.state.maxWeight} gm</div>
                   </div>
                 </div>
+              </div>
+              <div className="disclaimer">
+                Purchase amount is inclusive of 3% GST
               </div>
             </div>
           </div>

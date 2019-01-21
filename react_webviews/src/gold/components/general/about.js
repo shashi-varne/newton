@@ -56,12 +56,17 @@ class About extends Component {
     });
   }
 
+  handleClick = () => {
+    this.navigate('my-gold');
+  }
+
   render() {
     return (
       <Container
         showLoader={this.state.show_loader}
         title="Gold"
         edit={this.props.edit}
+        handleClick={this.handleClick}
         buttonTitle="Proceed"
         type={this.state.type}
       >
