@@ -38,6 +38,14 @@ class Container extends Component {
         that.historyGoBack();
       }
     });
+    
+    let body = document.getElementsByTagName('body')[0].offsetHeight;
+    let container_wrapper = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
+    let header = document.getElementsByClassName('Header')[0].offsetHeight;
+    let footer = document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight : 0;
+
+    // Add margin of footer: 7px (Style.css)
+    document.getElementsByClassName('Container')[0].style.marginBottom =  footer + 7 + 'px';
   }
 
   componentWillUnmount() {
@@ -168,18 +176,7 @@ class Container extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    let body = document.getElementsByTagName('body')[0].offsetHeight;
-    let client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
-    let head = document.getElementsByClassName('Header')[0].offsetHeight;
-    let foot = document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight : 0;
-    let banner = document.getElementsByClassName('Banner')[0];
-    let bannerHeight = (banner) ? banner.offsetHeight : 0;
 
-    if (client > body) {
-      document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 40 + 'px';
-    } else {
-      document.getElementsByClassName('Container')[0].style.height = document.getElementsByClassName('Container')[0].offsetHeight;
-    }
   }
 
   render() {
@@ -214,13 +211,6 @@ class Container extends Component {
 
         {/* Loader Block */}
         {this.renderPageLoader()}
-
-        <div className={`Step ${(this.props.type !== 'fisdom') ? 'blue' : ''}`}>
-          {steps}
-        </div>
-
-        {/* Banner Block */}
-        {this.props.banner && <Banner text={this.props.bannerText} />}
 
         {/* Children Block */}
         <div className={`Container ${(this.props.noPadding) ? 'no-padding' : ''}`}>
