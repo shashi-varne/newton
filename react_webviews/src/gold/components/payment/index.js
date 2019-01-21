@@ -261,13 +261,13 @@ class Payment extends Component {
                   {this.state.orderType == 'buy' && <p> {this.state.weight} grams gold has been purchased and the invoice has been sent to your registered email id.</p>}
                   {this.state.orderType == 'sell' && <p> {this.state.weight} grams gold has been sold and the invoice has been sent to your registered email id.</p>}
                   {this.state.orderType == 'delivery' && <p>Your delivery order for {this.state.productDisc} has been placed successfully</p>}
+                  {this.state.orderType != 'delivery' && <div className="invoice">
+                    <a onClick={() => this.sendInvoiceEmail(this.state.invoiceLink)}>Download Invoice</a>
+                  </div>}
+                  {this.state.orderType == 'delivery' && <div className="invoice">
+                    <a onClick={() => this.trackDelivery(this.state.invoiceLink)}>Track Now</a>
+                  </div>}
                 </div>
-                {this.state.orderType != 'delivery' && <div className="invoice">
-                  <a onClick={() => this.sendInvoiceEmail(this.state.invoiceLink)}>Download Invoice</a>
-                </div>}
-                {this.state.orderType == 'delivery' && <div className="invoice">
-                  <a onClick={() => this.trackDelivery(this.state.invoiceLink)}>Track Now</a>
-                </div>}
               </div>
             }
             {this.state.paymentError == true &&
