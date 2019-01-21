@@ -14,6 +14,7 @@ import five_gmbar_front from 'assets/5gmbar_front.png';
 import ten_gm_front from 'assets/10gm_front.png';
 import ten_gmbar_front from 'assets/10gmbar_front.png';
 import twenty_gmbar_front from 'assets/20gmbar_front.png';
+import ArrowRight from '@material-ui/icons/ChevronRight';
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -192,7 +193,7 @@ class GoldSummary extends Component {
     });
   }
 
-  countdown() {
+  countdown = () => {
     let timeAvailable = this.state.timeAvailable;
     if (timeAvailable <= 0) {
       this.setState({
@@ -211,14 +212,18 @@ class GoldSummary extends Component {
         timeAvailable: timeAvailable,
         minutes: minutes,
         seconds: seconds
-      })
+      });
       window.localStorage.setItem('timeAvailableSell', timeAvailable);
       this.countdown();
       this.timerHandle = 0;
     }, 1000);
   };
 
-  componentWillUnmount = () => {
+  componentWillUnmount() {
+    this.clearTimeout();
+  }
+
+  clearTimeout = () => {
     if (this.timerHandle) {
       clearTimeout(this.timerHandle);
       this.timerHandle = 0;
@@ -442,8 +447,9 @@ class GoldSummary extends Component {
             <div>₹ {this.state.goldInfo.sell_value || 0}</div>
           </div>
         </div>
-        <div className="FlexRow locker-head">
-          <div className="link" onClick={() => this.navigate('gold-transactions')}>Transactions History</div>
+        <div className="FlexRow locker-head transaction-history" onClick={() => this.navigate('gold-transactions')}>
+          <div className="link">Transactions History</div>
+          <div className="arrow"><ArrowRight /></div>
         </div>
         <Tabs
           value={this.state.value}

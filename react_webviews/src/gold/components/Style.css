@@ -462,3 +462,11 @@
   background: #fff;
   padding: 10px;
 }
+
+.transaction-history {
+  justify-content: space-between;
+}
+
+.transaction-history .arrow {
+  font-size: 16px;
+}
