@@ -13,10 +13,6 @@ import arrow from 'assets/arrow.png';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../ui/Toast';
 
-const myHistory = createBrowserHistory();
-console.log(window.localStorage.getItem('base_url'))
-const base_url = window.localStorage.getItem('base_url');
-console.log(base_url);
 class Payment extends Component {
   constructor(props) {
     super(props);
@@ -27,8 +23,8 @@ class Payment extends Component {
       sellDetails: {},
       weight: "",
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: base_url.indexOf("api.mywaywealth.com") >= 0,
+      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
+      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
     }
     this.sendInvoiceEmail = this.sendInvoiceEmail.bind(this);
@@ -228,6 +224,7 @@ class Payment extends Component {
         edit={this.props.edit}
         buttonTitle="Proceed"
         type={this.state.type}
+        noPadding={true}
       >
         <div className="page home" id="goldSection">
           <div className="text-center goldheader">
