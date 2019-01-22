@@ -67,7 +67,6 @@ class Container extends Component {
       return;
     }
     switch (pathname) {
-
       case '/gold/select-gold-product':
         this.props.history.push({
           pathname: '/gold/my-gold-locker',
@@ -79,6 +78,9 @@ class Container extends Component {
         break;
       case '/gold/my-gold-locker':
         this.navigate('/gold/my-gold');
+        break;
+      case '/gold/gold-delivery-order':
+        this.navigate('/gold/gold-delivery-address');
         break;
       case "/gold":
       case "/gold/about":
