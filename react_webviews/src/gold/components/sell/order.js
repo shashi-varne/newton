@@ -31,8 +31,8 @@ class About extends Component {
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
+      countdownInterval: null
     }
-    this.countdown = this.countdown.bind(this);
   }
 
   componentWillMount() {
@@ -66,8 +66,15 @@ class About extends Component {
       sellData: sellData
     })
     if (timeAvailable >= 0 && sellData) {
-      this.countdown(timeAvailable);
+      let intervalId = setInterval(this.countdown, 1000);
+      this.setState({
+        countdownInterval: intervalId
+      });
     }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.countdownInterval);
   }
 
   navigate = (pathname) => {
@@ -77,7 +84,8 @@ class About extends Component {
     });
   }
 
-  countdown(timeAvailable) {
+  countdown = () => {
+    let timeAvailable = this.state.timeAvailable;
     if (timeAvailable <= 0) {
       this.setState({
         minutes: '',
@@ -87,27 +95,16 @@ class About extends Component {
       return;
     }
 
-    this.timerHandle = setTimeout(() => {
-      let minutes = Math.floor(timeAvailable / 60);
-      let seconds = Math.floor(timeAvailable - minutes * 60);
-      --timeAvailable;
-      this.setState({
-        timeAvailable: timeAvailable,
-        minutes: minutes,
-        seconds: seconds
-      })
-      window.localStorage.setItem('timeAvailableSell', timeAvailable);
-      this.countdown(timeAvailable);
-      this.timerHandle = 0;
-    }, 1000);
+    let minutes = Math.floor(timeAvailable / 60);
+    let seconds = Math.floor(timeAvailable - minutes * 60);
+    --timeAvailable;
+    this.setState({
+      timeAvailable: timeAvailable,
+      minutes: minutes,
+      seconds: seconds
+    })
+    window.localStorage.setItem('timeAvailableSell', timeAvailable);
   };
-
-  componentWillUnmount = () => {
-    if (this.timerHandle) {
-      clearTimeout(this.timerHandle);
-      this.timerHandle = 0;
-    }
-  }
 
   handleClick = async () => {
     var options = {

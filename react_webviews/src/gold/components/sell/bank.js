@@ -28,7 +28,8 @@ class SellOrder extends Component {
       account_no_error: '',
       confirm_account_no: '',
       confirm_account_no_error: '',
-      ifsc_error: ''
+      ifsc_error: '',
+      countdownInterval: null
     }
     this.countdown = this.countdown.bind(this);
   }
@@ -59,7 +60,10 @@ class SellOrder extends Component {
       sellData: sellData
     })
     if (timeAvailable >= 0 && sellData) {
-      this.countdown(timeAvailable);
+      let intervalId = setInterval(this.countdown, 1000);
+      this.setState({
+        countdownInterval: intervalId
+      });
     }
 
     try {
@@ -101,7 +105,13 @@ class SellOrder extends Component {
     }
   }
 
-  countdown(timeAvailable) {
+  componentWillUnmount() {
+    clearInterval(this.state.countdownInterval);
+  }
+
+
+  countdown = () => {
+    let timeAvailable = this.state.timeAvailable;
     if (timeAvailable <= 0) {
       this.setState({
         minutes: '',
@@ -110,27 +120,17 @@ class SellOrder extends Component {
       // window.location.reload();
       return;
     }
-    this.timerHandle = setTimeout(() => {
-      let minutes = Math.floor(timeAvailable / 60);
-      let seconds = Math.floor(timeAvailable - minutes * 60);
-      --timeAvailable;
-      this.setState({
-        timeAvailable: timeAvailable,
-        minutes: minutes,
-        seconds: seconds
-      })
-      window.localStorage.setItem('timeAvailableSell', timeAvailable);
-      this.countdown(timeAvailable);
-      this.timerHandle = 0;
-    }, 1000);
-  };
 
-  componentWillUnmount = () => {
-    if (this.timerHandle) {
-      clearTimeout(this.timerHandle);
-      this.timerHandle = 0;
-    }
-  }
+    let minutes = Math.floor(timeAvailable / 60);
+    let seconds = Math.floor(timeAvailable - minutes * 60);
+    --timeAvailable;
+    this.setState({
+      timeAvailable: timeAvailable,
+      minutes: minutes,
+      seconds: seconds
+    })
+    window.localStorage.setItem('timeAvailableSell', timeAvailable);
+  };
 
   async checkIFSCFormat() {
     if (this.state.ifsc_code && ('' + this.state.ifsc_code).length == 11) {

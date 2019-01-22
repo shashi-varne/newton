@@ -47,6 +47,7 @@ class GoldSummary extends Component {
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
+      countdownInterval: null
     }
   }
 
@@ -137,7 +138,10 @@ class GoldSummary extends Component {
 
         });
         if (timeAvailable >= 0 && goldBuyInfo.plutus_rate) {
-          this.countdown();
+          let intervalId = setInterval(this.countdown, 1000);
+          this.setState({
+            countdownInterval: intervalId
+          });
         }
       } else {
         this.setState({
@@ -154,6 +158,10 @@ class GoldSummary extends Component {
 
   }
 
+  componentWillUnmount() {
+    clearInterval(this.state.countdownInterval);
+  }
+
   countdown = () => {
     let timeAvailable = this.state.timeAvailable;
     if (timeAvailable <= 0) {
@@ -165,19 +173,15 @@ class GoldSummary extends Component {
       return;
     }
 
-    this.timerHandle = setTimeout(() => {
-      let minutes = Math.floor(timeAvailable / 60);
-      let seconds = Math.floor(timeAvailable - minutes * 60);
-      timeAvailable--;
-      this.setState({
-        timeAvailable: timeAvailable,
-        minutes: minutes,
-        seconds: seconds
-      })
-      window.localStorage.setItem('timeAvailable', timeAvailable);
-      this.countdown();
-      this.timerHandle = 0;
-    }, 1000);
+    let minutes = Math.floor(timeAvailable / 60);
+    let seconds = Math.floor(timeAvailable - minutes * 60);
+    timeAvailable--;
+    this.setState({
+      timeAvailable: timeAvailable,
+      minutes: minutes,
+      seconds: seconds
+    })
+    window.localStorage.setItem('timeAvailable', timeAvailable);
   }
 
   componentWillUnmount() {

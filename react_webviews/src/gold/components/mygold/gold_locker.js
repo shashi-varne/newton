@@ -54,7 +54,8 @@ class GoldSummary extends Component {
       type: '',
       value: 0,
       error: false,
-      errorMessage: ''
+      errorMessage: '',
+      countdownInterval: null
     }
     this.renderDeliveryProducts = this.renderDeliveryProducts.bind(this);
   }
@@ -129,7 +130,10 @@ class GoldSummary extends Component {
         });
 
         if (timeAvailable >= 0 && result.sell_info.plutus_rate) {
-          this.countdown();
+          let intervalId = setInterval(this.countdown, 1000);
+          this.setState({
+            countdownInterval: intervalId
+          });
         }
       } else {
         this.setState({
@@ -194,6 +198,10 @@ class GoldSummary extends Component {
     });
   }
 
+  componentWillUnmount() {
+    clearInterval(this.state.countdownInterval);
+  }
+
   countdown = () => {
     let timeAvailable = this.state.timeAvailable;
     if (timeAvailable <= 0) {
@@ -205,31 +213,17 @@ class GoldSummary extends Component {
       return;
     }
 
-    this.timerHandle = setTimeout(() => {
-      let minutes = Math.floor(timeAvailable / 60);
-      let seconds = Math.floor(timeAvailable - minutes * 60);
-      timeAvailable--;
-      this.setState({
-        timeAvailable: timeAvailable,
-        minutes: minutes,
-        seconds: seconds
-      });
-      window.localStorage.setItem('timeAvailableSell', timeAvailable);
-      this.countdown();
-      this.timerHandle = 0;
-    }, 1000);
+    let minutes = Math.floor(timeAvailable / 60);
+    let seconds = Math.floor(timeAvailable - minutes * 60);
+    timeAvailable--;
+
+    this.setState({
+      timeAvailable: timeAvailable,
+      minutes: minutes,
+      seconds: seconds
+    });
+    window.localStorage.setItem('timeAvailableSell', timeAvailable);
   };
-
-  componentWillUnmount() {
-    this.clearTimeout();
-  }
-
-  clearTimeout = () => {
-    if (this.timerHandle) {
-      clearTimeout(this.timerHandle);
-      this.timerHandle = 0;
-    }
-  }
 
   calculate_gold_wt(current_gold_price, tax, buy_price) {
     tax = 1.0 + parseFloat(tax) / 100.0
