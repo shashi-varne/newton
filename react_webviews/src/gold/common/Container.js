@@ -45,6 +45,7 @@ class Container extends Component {
     let footer = document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight : 0;
 
     // Add margin of footer: 7px (Style.css)
+    document.getElementsByClassName('Container')[0].style.height = document.getElementsByClassName('Container')[0].offsetHeight + 'px';
     document.getElementsByClassName('Container')[0].style.marginBottom = footer + 7 + 'px';
   }
 

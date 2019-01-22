@@ -5,6 +5,7 @@ import Container from '../../common/Container';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
 import { inrFormatDecimal } from 'utils/validators';
+import { FormControl } from 'material-ui/Form';
 import safegold_logo from 'assets/safegold_logo_60x60.png';
 import arrow from 'assets/arrow.png';
 import Dialog, {
@@ -182,13 +183,6 @@ class GoldSummary extends Component {
       seconds: seconds
     })
     window.localStorage.setItem('timeAvailable', timeAvailable);
-  }
-
-  componentWillUnmount() {
-    if (this.timerHandle) {
-      clearTimeout(this.timerHandle);
-      this.timerHandle = 0;
-    }
   }
 
   calculate_gold_wt(current_gold_price, tax, buy_price) {
@@ -383,9 +377,6 @@ class GoldSummary extends Component {
   }
 
   navigate = (pathname) => {
-    clearTimeout(this.timerHandle);
-    this.timerHandle = 0;
-
     this.props.history.push({
       pathname: pathname,
       search: '?base_url=' + this.state.params.base_url
@@ -443,6 +434,18 @@ class GoldSummary extends Component {
     })
   };
 
+  onFocus = () => {
+    let body = document.getElementsByTagName('body')[0].offsetHeight;
+    let container_wrapper = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
+    
+    console.log(body)
+    console.log(container_wrapper)
+
+    if (container_wrapper > body) {
+      window.scrollTo(0, 0);
+    }
+  }
+
   render() {
     return (
       <Container
@@ -495,9 +498,15 @@ class GoldSummary extends Component {
                 <div className="FlexRow">
                   <div>
                     <div className="input-above-text">In Rupees (₹)</div>
-                    <div className="input-box InputField">
-                      <input type="text" name="amount" placeholder="Amount"
-                        onChange={this.setAmountGms()} value={this.state.amount} />
+                    <div className="input-box">
+                    <FormControl fullWidth>
+                      <div className="InputField">
+                        <div>
+                          <input type="text" name="amount" placeholder="Amount"
+                            onFocus={this.onFocus} onChange={this.setAmountGms()} value={this.state.amount} />
+                        </div>
+                      </div>
+                    </FormControl>
                     </div>
                     <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>Min ₹1.00</div>
                   </div>
@@ -506,9 +515,15 @@ class GoldSummary extends Component {
                   </div>
                   <div>
                     <div className="input-above-text">In Grams (gm)</div>
-                    <div className="input-box InputField">
-                      <input type="text" name="weight" placeholder="Weight"
-                        onChange={this.setAmountGms()} value={this.state.weight} />
+                    <div className="input-box">
+                    <FormControl fullWidth>
+                      <div className="InputField">
+                        <div>
+                          <input type="text" name="weight" placeholder="Weight"
+                            onFocus={this.onFocus} onChange={this.setAmountGms()} value={this.state.weight} />
+                        </div>
+                      </div>
+                    </FormControl>
                     </div>
                     <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>Max {this.state.maxWeight} gm</div>
                   </div>

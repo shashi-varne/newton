@@ -34,7 +34,7 @@ class Otp extends Component {
 
   componentWillMount() {
     let { params } = this.props.location;
-    console.log(params);
+
     if (!params) {
       this.navigate('my-gold');
       return;
