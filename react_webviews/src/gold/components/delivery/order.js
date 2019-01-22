@@ -66,7 +66,7 @@ class DeliveryOrder extends Component {
       if (product.isFisdomVerified) {
         this.onload(product, address);
       } else {
-        toast('Please verify your mobile number to proceed')
+        toast('Please verify your mobile number to proceed', 'error')
         this.navigate('gold-delivery-address');
       }
     } else {
