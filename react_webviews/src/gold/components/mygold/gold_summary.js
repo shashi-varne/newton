@@ -357,7 +357,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                                                                  previous gold price has expired.
+                                                                                                                                                                                                                                                        previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -484,38 +484,38 @@ class GoldSummary extends Component {
                 <div className="FlexRow">
                   <ScrollTo>
                     {({ scrollTo }) => (
-                  <div>
-                    <div className="input-above-text">In Rupees (₹)</div>
-                    <div className="input-box">
-                    
-                             
-                            <input type="number" name="amount" placeholder="Amount" disabled={this.state.isWeight}
-                              onFocus={() => document.getElementsByClassName('Container')[0].scrollTo(0, document.getElementsByTagName('body')[0].offsetHeight)} onChange={this.setAmountGms()} value={this.state.amount} />
-                            
-                    </div>
-                    <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>Min ₹1.00</div>
-                  </div>
+                      <div>
+                        <div className="input-above-text">In Rupees (₹)</div>
+                        <div className="input-box">
+
+
+                          <input type="number" autoComplete="off" name="amount" placeholder="Amount" disabled={this.state.isWeight}
+                            onFocus={() => document.getElementsByClassName('Container')[0].scrollTo(0, document.getElementsByTagName('body')[0].offsetHeight)} onChange={this.setAmountGms()} value={this.state.amount} />
+
+                        </div>
+                        <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>Min ₹1.00</div>
+                      </div>
                     )}
                   </ScrollTo>
                   <div className="symbol">
                     =
                   </div>
-                         <ScrollTo>
-                          {({ scrollTo }) => (
-                             
-                  <div>
-                    <div className="input-above-text">In Grams (gm)</div>
-                    <div className="input-box">
-                    
-                          <input type="number" name="weight" placeholder="Weight" disabled={this.state.isAmount}
+                  <ScrollTo>
+                    {({ scrollTo }) => (
+
+                      <div>
+                        <div className="input-above-text">In Grams (gm)</div>
+                        <div className="input-box">
+
+                          <input type="number" autoComplete="off" name="weight" placeholder="Weight" disabled={this.state.isAmount}
                             onFocus={() => document.getElementsByClassName('Container')[0].scrollTo(0, document.getElementsByTagName('body')[0].offsetHeight)} onChange={this.setAmountGms()} value={this.state.weight} />
-                            
-                    
-                    </div>
-                    <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>Max {this.state.maxWeight} gm</div>
-                  </div>
-                      )}
-                    </ScrollTo>
+
+
+                        </div>
+                        <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>Max {this.state.maxWeight} gm</div>
+                      </div>
+                    )}
+                  </ScrollTo>
                 </div>
               </div>
               <div className="disclaimer">
