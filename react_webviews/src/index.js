@@ -20,12 +20,12 @@ $(document).ready(function() {
     });
 
   }
-  $(document).on('focus', "input[type='text'], input[type='number']", function () {
-    let element = $(this).parent().closest('.InputField')[0];
-    if (element) {
-      element.scrollIntoView({behavior: "smooth", block: "start"});
-    }
-  });
+});
+$(document).on('focus', "input[type='text'], input[type='number']", function () {
+  let element = $(this).parent().closest('.InputField')[0];
+  if (element) {
+    element.scrollIntoView({behavior: "smooth", block: "start"});
+  }
 });
 
 ReactDOM.render(<App />, document.getElementById('root'));
