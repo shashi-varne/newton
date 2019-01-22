@@ -3,7 +3,6 @@ import qs from 'qs';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import { nativeCallback } from 'utils/native_callback';
 import stopwatch from 'assets/stopwatch.png';
 import Dialog, {
   DialogActions,
@@ -57,10 +56,8 @@ class About extends Component {
       show_loader: false,
     });
     let timeAvailable = window.localStorage.getItem('timeAvailableSell');
-    console.log(timeAvailable);
 
     let sellData = JSON.parse(window.localStorage.getItem('sellData'));
-    console.log(sellData);
     this.setState({
       timeAvailable: timeAvailable,
       sellData: sellData
@@ -91,7 +88,7 @@ class About extends Component {
         minutes: '',
         seconds: ''
       })
-      // window.location.reload();
+      this.navigate('my-gold-locker');
       return;
     }
 
@@ -120,18 +117,12 @@ class About extends Component {
 
     try {
       const res = await Api.post('/api/gold/user/sell/confirm', options);
-      if (res.pfwresponse.status_code == 200) {
+      if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
         var sellDetails = result.sell_confirmation_info;
-        var options2 = {
-          orderType: 'sell',
-          weight: sellDetails.gold_weight,
-          status: sellDetails.provider_sell_order_status,
-          message: result.message
-        }
+
         window.localStorage.setItem('sellDetails', JSON.stringify(sellDetails));
         this.navigate('/gold/sell/payment/' + sellDetails.provider_sell_order_status)
-        // $state.go('gold-payment-callback', options2);
         this.setState({
           show_loader: false,
         });
@@ -235,7 +226,7 @@ class About extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                previous gold price has expired.
+                                                                                                                                                                                                previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -270,14 +261,14 @@ class About extends Component {
             <div className="">
               <div className="stopwatch-title">Price valid for </div>
               <div className="FlexRow stopwatch">
-                <img className="stopwatch-order" src={stopwatch} width="15" />
+                <img className="stopwatch-order" alt="Gold" src={stopwatch} width="15" />
                 <span className="timer">{this.state.minutes}:{this.state.seconds}</span>
               </div>
             </div>
           </div>
           <div className="order-tile2">
             <span className="order-tile-total1">Net Sell Value</span>
-            <span className="float-right order-tile-total1">{this.state.sellData.amount}</span>
+            <span className="float-right order-tile-total1">{inrFormatDecimal(this.state.sellData.amount)}</span>
           </div>
           <div className="order-tile2">
             <span className="order-tile-other-text">Gold grams to be deducted from your vault</span>
@@ -285,7 +276,7 @@ class About extends Component {
           </div>
           <div className="order-tile2">
             <span className="order-tile-other-text">Rate</span>
-            <span className="float-right order-tile-other-text">{this.state.sellData.plutus_rate}/gm</span>
+            <span className="float-right order-tile-other-text">{inrFormatDecimal(this.state.sellData.plutus_rate)}/gm</span>
           </div>
           <div className="order-tile2">
             <span className="order-tile-other-text">Bank Account Number</span>

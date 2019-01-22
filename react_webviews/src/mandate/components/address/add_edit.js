@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
-import Checkbox from 'material-ui/Checkbox';
 import qs from 'qs';
-import Grid from 'material-ui/Grid';
 import TitleWithIcon from '../../ui/TitleWithIcon';
 import contact from 'assets/address_details_icon.svg';
 
@@ -10,8 +8,7 @@ import Container from '../../common/Container';
 import Input from '../../ui/Input';
 import location from 'assets/location_dark_icn.png';
 import Api from 'utils/api';
-import { validateNumber, validateStreetName, validateLength, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';
-import { nativeCallback } from 'utils/native_callback';
+import { validateNumber, validateLength, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';
 import Dialog, {
   DialogActions,
   DialogContent,

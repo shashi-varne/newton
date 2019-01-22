@@ -3,10 +3,8 @@ import qs from 'qs';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import { nativeCallback } from 'utils/native_callback';
 import Input from '../../ui/Input';
-import { validateNumber, validateStreetName, validateLength, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';
-import { options } from 'sw-toolbox';
+import { validateNumber, validateLength, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../ui/Toast';
 
@@ -36,7 +34,6 @@ class DeliveryAddress extends Component {
     let product = {};
     if (window.localStorage.getItem('goldProduct')) {
       product = JSON.parse(window.localStorage.getItem('goldProduct'));
-      console.log(product);
     } else {
       this.navigate('my-gold-locker');
     }
@@ -61,28 +58,22 @@ class DeliveryAddress extends Component {
   async componentDidMount() {
     try {
       const res = await Api.get('/api/gold/user/address');
-      if (res.pfwresponse.status_code == 200) {
+      if (res.pfwresponse.status_code === 200) {
         this.setState({
           show_loader: false
         })
         let result = res.pfwresponse.result;
-        let addressMain = {}, pincode = '', address = '',
-          city = '', landmark = '', userInfo = {};
-        if (result.address && result.address.length != 0) {
-          addressMain = result.address[result.address.length - 1];
-          pincode = addressMain.pincode;
-          address = addressMain.addressline;
-          landmark = addressMain.landmark;
-          city = addressMain.city;
-        }
-        userInfo = result.gold_user.user_info;
+        let addressMain = {};
+        addressMain = result.address[result.address.length - 1];
+
+        this.checkPincode(addressMain.pincode);
         this.setState({
-          address: address,
-          addressMain: addressMain,
-          pincode: pincode,
-          city: city,
-          userInfo: userInfo,
-          landmark: landmark
+          address: addressMain.addressline || '',
+          addressMain: addressMain || {},
+          pincode: addressMain.pincode || '',
+          city: addressMain.city || '',
+          userInfo: result.gold_user.user_info || {},
+          landmark: addressMain.landmark || ''
         })
 
       } else {
@@ -114,14 +105,7 @@ class DeliveryAddress extends Component {
     });
   }
 
-  handlePincode = name => async (event) => {
-    const pincode = event.target.value;
-
-    this.setState({
-      [name]: pincode,
-      [name + '_error']: ''
-    });
-
+  checkPincode = async (pincode) => {
     if (pincode.length === 6) {
       try {
         const res = await Api.get('/api/pincode/' + pincode);
@@ -146,6 +130,19 @@ class DeliveryAddress extends Component {
     }
   }
 
+  handlePincode = name => async (event) => {
+    const pincode = event.target.value;
+    if (pincode.length > 6) {
+      return;
+    }
+
+    this.checkPincode(pincode);
+    this.setState({
+      [name]: pincode,
+      [name + '_error']: ''
+    });
+  }
+
   verifyMobile = async () => {
     this.setState({
       show_loader: true
@@ -160,7 +157,7 @@ class DeliveryAddress extends Component {
       if (res.pfwresponse.status_code === 200) {
 
         let result = res.pfwresponse.result;
-        if (result.resend_verification_otp_link != '' && result.verification_link != '') {
+        if (result.resend_verification_otp_link !== '' && result.verification_link !== '') {
           window.localStorage.setItem('fromType', 'delivery')
           var message = 'An OTP is sent to your mobile number ' + this.state.userInfo.mobile_no + ', please verify to complete registration.'
           this.props.history.push({
@@ -168,8 +165,8 @@ class DeliveryAddress extends Component {
             search: '?base_url=' + this.state.params.base_url,
             params: {
               resend_link: result.resend_verification_otp_link,
-              verify_link: result.verification_link, message: message, fromType: 'delivery',
-              message: message
+              verify_link: result.verification_link,
+              message: message, fromType: 'delivery'
             }
           });
         }
@@ -192,10 +189,9 @@ class DeliveryAddress extends Component {
   }
 
   handleClick = async () => {
-    console.log("handlec")
     if (this.state.pincode.length !== 6 || !validateNumber(this.state.pincode)) {
       this.setState({
-        pincode_error: 'Please enter valid pincode'
+        pincode_error: 'Please enter valid pincode',
       });
     } else if (!validateEmpty(this.state.address)) {
       this.setState({
@@ -228,7 +224,7 @@ class DeliveryAddress extends Component {
         const res = await Api.post('/api/gold/user/address', addressMain);
 
         let product = this.state.product;
-        if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.message == 'success') {
+        if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.message === 'success') {
           this.verifyMobile();
           product.address = addressMain;
           window.localStorage.setItem('goldProduct', JSON.stringify(product));
@@ -271,7 +267,7 @@ class DeliveryAddress extends Component {
               value={this.state.pincode}
               onChange={this.handlePincode('pincode')} />
             <div className="filler">
-              {(this.state.city && this.state.state) && <span>{this.state.city} , {this.state.state}</span>}
+              {(this.state.city && this.state.state && !this.state.pincode_error) && <span>{this.state.city} , {this.state.state}</span>}
             </div>
           </div>
           <div className="InputField">

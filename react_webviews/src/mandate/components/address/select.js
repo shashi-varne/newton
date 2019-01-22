@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
-import Grid from 'material-ui/Grid';
 import Api from 'utils/api';
-import Modal from 'material-ui/Modal';
-import Typography from 'material-ui/Typography';
 import qs from 'qs';
 import Checkbox from 'material-ui/Checkbox';
-import { nativeCallback } from 'utils/native_callback';
 import Button from 'material-ui/Button';
 import Dialog, {
   DialogActions,
@@ -59,7 +55,7 @@ class SelectAddress extends Component {
   componentDidMount() {
 
     Api.get('/api/mandate/campaign/address/' + this.state.params.key).then(res => {
-      if (res.pfwresponse.status_code == 200) {
+      if (res.pfwresponse.status_code === 200) {
         this.setState({
           addressData: res.pfwresponse.result,
           show_loader: false
@@ -96,7 +92,7 @@ class SelectAddress extends Component {
   handleChange = (index) => event => {
     if (event.target.name === 'checked') {
       let changedIndex = index;
-      if (this.state.indexCheckBox == changedIndex) {
+      if (this.state.indexCheckBox === changedIndex) {
         changedIndex = -1;
       }
       this.setState({
@@ -164,7 +160,7 @@ class SelectAddress extends Component {
 
   handleClick = async () => {
 
-    if (this.state.indexCheckBox == -1) {
+    if (this.state.indexCheckBox === -1) {
       return;
     }
 
@@ -180,14 +176,14 @@ class SelectAddress extends Component {
       openDialogConfirm: false
     });
     let mandateAddress = this.state.addressData[this.state.indexCheckBox];
-    let addressline = {
-      "pincode": mandateAddress.pincode,
-      "country": "india",
-      'addressline1': mandateAddress.addressline1,
-      'addressline2': mandateAddress.addressline2,
-      'address_id': mandateAddress.id
+    // let addressline = {
+    //   "pincode": mandateAddress.pincode,
+    //   "country": "india",
+    //   'addressline1': mandateAddress.addressline1,
+    //   'addressline2': mandateAddress.addressline2,
+    //   'address_id': mandateAddress.id
 
-    };
+    // };
 
     // let res = await Api.post('/api/mandate/campaign/address/' + this.state.params.pc_key, addressline);
     let res = await Api.get('/api/mandate/campaign/address/confirm/' + this.state.params.key +
@@ -252,7 +248,7 @@ class SelectAddress extends Component {
         <div >
           <Checkbox style={{ height: 'auto' }}
             defaultChecked
-            checked={this.state.indexCheckBox == index}
+            checked={this.state.indexCheckBox === index}
             color="default"
             value="checked"
             name="checked"
@@ -271,7 +267,7 @@ class SelectAddress extends Component {
   }
 
   renderMainUi() {
-    if (this.state.openDialogConfirm == false) {
+    if (this.state.openDialogConfirm === false) {
       return (
         <Container
           summarypage={true}
@@ -283,7 +279,7 @@ class SelectAddress extends Component {
           buttonTitle="Continue"
           banner={true}
           bannerText={this.bannerText()}
-          isDisabled={this.state.indexCheckBox == -1 ? true : false}
+          isDisabled={this.state.indexCheckBox === -1 ? true : false}
           type={this.state.type} >
           {this.state.addressData && this.state.addressData.map(this.renderAddress)}
           {this.state.addressData && this.state.addressData.length < 3 &&

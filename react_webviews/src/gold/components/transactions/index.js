@@ -3,7 +3,6 @@ import qs from 'qs';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import { nativeCallback } from 'utils/native_callback';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Table from '@material-ui/core/Table';
@@ -14,7 +13,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Grid from 'material-ui/Grid';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../ui/Toast';
-import { inrFormatDecimal } from 'utils/validators';
+// import { inrFormatDecimal } from 'utils/validators';
 
 class Transactions extends Component {
   constructor(props) {
@@ -59,7 +58,7 @@ class Transactions extends Component {
     try {
       const trans = await Api.get('/api/gold/user/list/transactions');
 
-      if (trans.pfwresponse.status_code == 200) {
+      if (trans.pfwresponse.status_code === 200) {
         this.setState({
           show_loader: false,
           transactions: {
@@ -100,9 +99,9 @@ class Transactions extends Component {
 
     try {
       const res = await Api.get('/api/gold/invoice/download/mail', { url: path });
-      if (res.pfwresponse.status_code == 200) {
+      if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
-        if (result.message == 'success') {
+        if (result.message === 'success') {
           toast('Invoice has been sent succesfully to your registered email');
         } else {
           toast(result.message || result.error);
@@ -125,9 +124,8 @@ class Transactions extends Component {
   }
 
   renderRows = (type) => {
-    if (type == 'buy') {
+    if (type === 'buy') {
       const buyData = this.state.transactions.buy;
-      console.log(buyData)
       if (buyData && buyData !== null && buyData.length) {
         return (
           <Table>
@@ -158,7 +156,7 @@ class Transactions extends Component {
       } else {
         return <div className="error" style={{ textAlign: 'center', margin: '10px 0' }}>No Transaction Found!</div>
       }
-    } else if (type == 'sell') {
+    } else if (type === 'sell') {
       const sellData = this.state.transactions.sell;
       if (sellData && sellData !== null && sellData.length) {
         return (

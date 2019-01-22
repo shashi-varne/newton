@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import Button from '../../ui/Button';
-import { capitalize } from 'utils/validators';
+// import { capitalize } from 'utils/validators';
 import Dialog, {
   DialogActions,
   DialogTitle,

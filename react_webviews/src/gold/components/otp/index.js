@@ -3,13 +3,11 @@ import qs from 'qs';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import { nativeCallback } from 'utils/native_callback';
 import Input from '../../ui/Input';
 import Dialog, {
   DialogActions,
   DialogContent,
-  DialogContentText,
-  DialogTitle
+  DialogContentText
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import { ToastContainer } from 'react-toastify';
@@ -21,10 +19,10 @@ class Otp extends Component {
     this.state = {
       show_loader: true,
       otpnumber: '',
+      otpnumber_error: '',
       messageOtp: '',
       openResponseDialog: false,
       otpVerified: false,
-      messageOtp: '',
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
@@ -34,12 +32,11 @@ class Otp extends Component {
 
   componentWillMount() {
     let { params } = this.props.location;
-    console.log(params);
     if (!params) {
       this.navigate('my-gold');
       return;
     }
-    if (params.resend_link == null || params.verify_link == null) {
+    if (params.resend_link === null || params.verify_link === null) {
       this.navigate('my-gold');
       return;
     }
@@ -48,7 +45,7 @@ class Otp extends Component {
       resend_link: params ? params.resend_link : '',
       verify_link: params ? params.verify_link : '',
       fromTypeDeliveryOtp: params ? params.fromType : '',
-      messageOtp: params ? params.message : '',
+      messageOtp: params ? params.message : 'An OTP is sent to your registered mobile number, please verify to complete the process.',
     })
     if (this.state.ismyway) {
       this.setState({
@@ -79,6 +76,19 @@ class Otp extends Component {
   }
 
   handleClick = async () => {
+    if (!this.state.otpnumber) {
+      this.setState({
+        otpnumber_error: 'Please enter OTP'
+      })
+      return;
+    }
+
+    if (this.state.otpnumber.length !== 4) {
+      this.setState({
+        otpnumber_error: 'OTP is a 4 digit number'
+      })
+      return;
+    }
     let url = this.state.params.base_url + this.state.verify_link + '?otp=' + this.state.otpnumber;
 
     try {
@@ -90,7 +100,7 @@ class Otp extends Component {
       if (res.pfwresponse.status_code === 200) {
 
         let result = res.pfwresponse.result;
-        if (result.message == 'success' || result.message == 'Success!!') {
+        if (result.message === 'success' || result.message === 'Success!!') {
           this.handleOtpVerified();
         } else {
           this.setState({
@@ -116,6 +126,10 @@ class Otp extends Component {
   }
 
   handleChange = (field) => (event) => {
+    if (event.target.value.length > 4) {
+      return;
+    }
+
     this.setState({
       [event.target.name]: event.target.value,
       [event.target.name + '_error']: ''
@@ -125,12 +139,15 @@ class Otp extends Component {
   resendOtp = async () => {
     let url = this.state.params.base_url + this.state.resend_link;
     try {
+      this.setState({
+        show_loader: true
+      });
       const res = await Api.post(url);
 
       if (res.pfwresponse.status_code === 200) {
 
         let result = res.pfwresponse.result;
-        if (result.resend_verification_otp_link != '' && result.verification_link != '') {
+        if (result.resend_verification_otp_link !== '' && result.verification_link !== '') {
           var message = 'An OTP is sent to your mobile number ' + this.state.mobile_no + ', please verify to complete registration.'
           this.setState({
             show_loader: false,
@@ -139,7 +156,7 @@ class Otp extends Component {
           })
         }
         this.setState({
-          show_loader: false,
+          show_loader: false
         });
       } else {
         this.setState({
@@ -164,9 +181,9 @@ class Otp extends Component {
   }
 
   handleOtpVerified = () => {
-    if (this.state.fromTypeDeliveryOtp == 'buy') {
+    if (this.state.fromTypeDeliveryOtp === 'buy') {
       this.navigate('my-gold');
-    } else if (this.state.fromTypeDeliveryOtp == 'delivery') {
+    } else if (this.state.fromTypeDeliveryOtp === 'delivery') {
       if (window.localStorage.getItem('goldProduct')) {
         let product = JSON.parse(window.localStorage.getItem('goldProduct'));
         product.isFisdomVerified = true;
@@ -220,8 +237,8 @@ class Otp extends Component {
           <div className="otp-input">
             <div className="InputField">
               <Input
-                error={false}
-                helperText=''
+                error={(this.state.otpnumber_error) ? true : false}
+                helperText={this.state.otpnumber_error}
                 type="text"
                 width="40"
                 label="Enter OTP"
@@ -231,7 +248,7 @@ class Otp extends Component {
                 value={this.state.otpnumber}
                 onChange={this.handleChange('otpnumber')} />
             </div>
-            <p className="resend-otp text-center" onClick={this.resendOtp}>Resend OTP</p>
+            <p className="resend-otp text-center" style={{ color: '#4f2da7', fontWeight: 500 }} color="primary" onClick={this.resendOtp}>Resend OTP</p>
             <div className="text-center">{this.state.messageOtp}</div>
           </div>
         </div>

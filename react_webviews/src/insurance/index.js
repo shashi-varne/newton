@@ -15,7 +15,7 @@ import ContactDetails2 from './components/contact-details/screen2';
 import NomineeDetails from './components/nominee-details/screen1';
 import AppointeeDetails from './components/nominee-details/screen2';
 import ProfessionalDetails1 from './components/professional-details/screen1';
-import ProfessionalDetails2 from './components/professional-details/screen2';
+// import ProfessionalDetails2 from './components/professional-details/screen2';
 import Summary from './components/insurance-summary/screen1';
 import Resume from './components/insurance-summary/screen2';
 

@@ -3,7 +3,6 @@ import qs from 'qs';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import { nativeCallback } from 'utils/native_callback';
 import { inrFormatDecimal } from 'utils/validators';
 import safegold_logo from 'assets/safegold_logo_60x60.png';
 import arrow from 'assets/arrow.png';
@@ -70,10 +69,10 @@ class GoldSummary extends Component {
   async componentDidMount() {
     try {
       const res = await Api.get('/api/gold/user/account');
-      if (res.pfwresponse.status_code == 200) {
+      if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
         let isRegistered = true;
-        if (result.gold_user_info.user_info.registration_status == "pending" ||
+        if (result.gold_user_info.user_info.registration_status === "pending" ||
           !result.gold_user_info.user_info.registration_status ||
           result.gold_user_info.is_new_gold_user) {
           isRegistered = false;
@@ -93,7 +92,7 @@ class GoldSummary extends Component {
       }
 
       const res2 = await Api.get('/api/gold/sell/currentprice');
-      if (res2.pfwresponse.status_code == 200) {
+      if (res2.pfwresponse.status_code === 200) {
         let goldInfo = this.state.goldInfo;
         let result = res2.pfwresponse.result;
         goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
@@ -112,7 +111,7 @@ class GoldSummary extends Component {
 
       const res3 = await Api.get('/api/gold/buy/currentprice');
 
-      if (res3.pfwresponse.status_code == 200) {
+      if (res3.pfwresponse.status_code === 200) {
         let result = res3.pfwresponse.result;
         let goldBuyInfo = result.buy_info;
         var currentDate = new Date();
@@ -184,12 +183,6 @@ class GoldSummary extends Component {
     window.localStorage.setItem('timeAvailable', timeAvailable);
   }
 
-  componentWillUnmount() {
-    if (this.timerHandle) {
-      clearTimeout(this.timerHandle);
-      this.timerHandle = 0;
-    }
-  }
 
   calculate_gold_wt(current_gold_price, tax, buy_price) {
     tax = 1.0 + parseFloat(tax) / 100.0
@@ -199,7 +192,6 @@ class GoldSummary extends Component {
   }
 
   calculate_gold_amount(current_gold_price, tax, weight) {
-    console.log(current_gold_price);
     tax = 1.0 + parseFloat(tax) / 100.0
     var current_gold_price_with_tax = (current_gold_price * tax).toFixed(2)
     var gold_amount = (weight * current_gold_price_with_tax).toFixed(2);
@@ -208,8 +200,8 @@ class GoldSummary extends Component {
 
   buyGold = async () => {
 
-    if (this.state.userInfo.mobile_verified == false ||
-      this.state.isRegistered == false) {
+    if (this.state.userInfo.mobile_verified === false ||
+      this.state.isRegistered === false) {
       window.localStorage.setItem('buyAmountRegister', this.state.amount);
       this.navigate('gold-register')
       return;
@@ -365,7 +357,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                                        previous gold price has expired.
+                                                                                                                                                                                                                                  previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -458,9 +450,9 @@ class GoldSummary extends Component {
           <div className="text-center goldheader" onClick={() => this.navigate('/gold/my-gold-locker')}>
             <div className="my-gold-header">
               <div className="FlexRow row1">
-                <img className="img-mygold" src={safegold_logo} />
+                <img alt="Gold" className="img-mygold" src={safegold_logo} />
                 <span className="my-gold-title-header">My 24K Safegold Gold Locker</span>
-                <img className="img-mygold2" src={arrow} />
+                <img alt="Gold" className="img-mygold2" src={arrow} />
               </div>
               <div className="spacer-header"></div>
               <div className="my-gold-details-header1">

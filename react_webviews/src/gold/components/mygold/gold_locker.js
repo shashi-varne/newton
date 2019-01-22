@@ -3,7 +3,6 @@ import qs from 'qs';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import { nativeCallback } from 'utils/native_callback';
 import safegold_logo from 'assets/safegold_logo_60x60.png';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -18,8 +17,7 @@ import ArrowRight from '@material-ui/icons/ChevronRight';
 import Dialog, {
   DialogActions,
   DialogContent,
-  DialogContentText,
-  DialogTitle
+  DialogContentText
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import { ToastContainer } from 'react-toastify';
@@ -90,10 +88,10 @@ class GoldSummary extends Component {
     try {
 
       const res = await Api.get('/api/gold/user/account');
-      if (res.pfwresponse.status_code == 200) {
+      if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
         let isRegistered = true;
-        if (result.gold_user_info.user_info.registration_status == "pending" ||
+        if (result.gold_user_info.user_info.registration_status === "pending" ||
           !result.gold_user_info.user_info.registration_status ||
           result.gold_user_info.is_new_gold_user) {
           isRegistered = false;
@@ -101,7 +99,7 @@ class GoldSummary extends Component {
         this.setState({
           goldInfo: result.gold_user_info.safegold_info,
           userInfo: result.gold_user_info.user_info,
-          maxWeight: parseFloat(((30 - result.gold_user_info.safegold_info.gold_balance) || 30).toFixed(4)),
+          maxWeight: parseFloat(result.gold_user_info.safegold_info.gold_balance).toFixed(4),
           isRegistered: isRegistered
         });
       } else {
@@ -116,7 +114,7 @@ class GoldSummary extends Component {
       }
 
       const res2 = await Api.get('/api/gold/sell/currentprice');
-      if (res2.pfwresponse.status_code == 200) {
+      if (res2.pfwresponse.status_code === 200) {
         let goldInfo = this.state.goldInfo;
         let result = res2.pfwresponse.result;
         var currentDate = new Date();
@@ -148,8 +146,10 @@ class GoldSummary extends Component {
 
       const res3 = await Api.get('/api/gold/user/sell/balance');
 
-      if (res3.pfwresponse.status_code == 200) {
-        let result = res3.pfwresponse.result;
+      if (res3.pfwresponse.status_code === 200) {
+
+        // todo*
+        // let result = res3.pfwresponse.result;
         // let maxWeight = result.sellable_gold_balance || 0;
         let maxWeight = this.state.maxWeight;
         let maxAmount = ((this.state.goldSellInfo.plutus_rate) * (maxWeight || 0)).toFixed(2);
@@ -169,7 +169,7 @@ class GoldSummary extends Component {
       }
 
       const res4 = await Api.get('/api/gold/delivery/products');
-      if (res4.pfwresponse.status_code == 200) {
+      if (res4.pfwresponse.status_code === 200) {
         this.setState({
           show_loader: false,
           gold_products: res4.pfwresponse.result.safegold_products
@@ -234,7 +234,6 @@ class GoldSummary extends Component {
   }
 
   calculate_gold_amount(current_gold_price, tax, weight) {
-    console.log(current_gold_price);
     tax = 1.0 + parseFloat(tax) / 100.0
     var current_gold_price_with_tax = (current_gold_price * tax).toFixed(2)
     var gold_amount = (weight * current_gold_price_with_tax).toFixed(2);
@@ -358,8 +357,6 @@ class GoldSummary extends Component {
       weight = '';
     }
 
-    console.log(amount);
-    console.log(weight);
     if (!weight || parseFloat(weight) < 0 ||
       parseFloat(weight) > this.state.maxWeight) {
       weightError = true;
@@ -427,11 +424,11 @@ class GoldSummary extends Component {
         handleClick={this.sellGold}
         noPadding={true}
         disable={!this.state.isRegistered}
-        noFooter={this.state.value == 1}
+        noFooter={this.state.value === 1}
       >
         <div className="FlexRow locker-head">
           <div className="FlexRow block1">
-            <img className="img-mygold" src={safegold_logo} width="35" style={{ marginRight: 10 }} />
+            <img alt="Gold" className="img-mygold" src={safegold_logo} width="35" style={{ marginRight: 10 }} />
             <div>
               <div className="grey-color" style={{ marginBottom: 5 }}>Gold Quantity</div>
               <div>{this.state.goldInfo.gold_balance || 0} gm</div>
@@ -439,7 +436,7 @@ class GoldSummary extends Component {
           </div>
           <div className="block2">
             <div className="grey-color" style={{ marginBottom: 5 }}>Gold Value</div>
-            <div>₹ {this.state.goldInfo.sell_value || 0}</div>
+            <div>{inrFormatDecimal(this.state.goldInfo.sell_value || 0)}</div>
           </div>
         </div>
         <div className="FlexRow locker-head transaction-history" onClick={() => this.navigate('gold-transactions')}>
@@ -466,7 +463,7 @@ class GoldSummary extends Component {
                 </span>
               </div>
               <div className="buy-info3">
-                ₹ {this.state.goldSellInfo.plutus_rate}/gm
+                {inrFormatDecimal(this.state.goldSellInfo.plutus_rate)}/gm
               </div>
             </div>
             <div className="buy-input">

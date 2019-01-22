@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { DefaultLayout, SummaryLayout } from './layout';
+import { SummaryLayout } from './layout';
 
 const Footer = (props) => {
   // if (props.fullWidthButton) {

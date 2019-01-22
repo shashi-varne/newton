@@ -3,20 +3,19 @@ import qs from 'qs';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import { nativeCallback } from 'utils/native_callback';
 import Input from '../../ui/Input';
 import Grid from 'material-ui/Grid';
 import Checkbox from 'material-ui/Checkbox';
 import Dialog, {
   DialogActions,
   DialogContent,
-  DialogContentText,
-  DialogTitle
+  DialogContentText
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import { validateNumber, validateEmail, numberShouldStartWith } from 'utils/validators';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../ui/Toast';
+import { nativeCallback } from 'utils/native_callback';
 
 class GoldRegister extends Component {
   constructor(props) {
@@ -66,17 +65,18 @@ class GoldRegister extends Component {
     try {
 
       const res = await Api.get('/api/gold/user/account');
-      if (res.pfwresponse.status_code == 200) {
+      if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
         let isRegistered = true;
         let userInfo = result.gold_user_info.user_info;
-        if (userInfo.registration_status == "pending" ||
+        if (userInfo.registration_status === "pending" ||
           !userInfo.registration_status ||
           result.gold_user_info.is_new_gold_user) {
           isRegistered = false;
         }
 
         const { name, email, pin_code, mobile_no } = userInfo;
+        this.checkPincode(pin_code);
 
         this.setState({
           show_loader: false,
@@ -89,8 +89,8 @@ class GoldRegister extends Component {
           mobile_no: mobile_no || "",
         });
 
-        if (userInfo.mobile_verified == false &&
-          isRegistered == false) {
+        if (userInfo.mobile_verified === false &&
+          isRegistered === false) {
           // $state.go('my-gold');
           return;
         }
@@ -131,15 +131,7 @@ class GoldRegister extends Component {
     }
   }
 
-
-  handlePincode = (name) => async (event) => {
-    const pincode = event.target.value;
-
-    this.setState({
-      [name]: pincode,
-      [name + '_error']: ''
-    });
-
+  checkPincode = async (pincode) => {
     if (pincode.length === 6) {
       try {
         const res = await Api.get('/api/pincode/' + pincode);
@@ -164,6 +156,18 @@ class GoldRegister extends Component {
     }
   }
 
+  handlePincode = (name) => async (event) => {
+    const pincode = event.target.value;
+    if (pincode.length > 6) {
+      return;
+    }
+    this.checkPincode(pincode);
+    this.setState({
+      [name]: pincode,
+      [name + '_error']: ''
+    });
+  }
+
   verifyMobile = async () => {
     this.setState({
       show_loader: true
@@ -178,7 +182,7 @@ class GoldRegister extends Component {
       if (res.pfwresponse.status_code === 200) {
 
         let result = res.pfwresponse.result;
-        if (result.resend_verification_otp_link != '' && result.verification_link != '') {
+        if (result.resend_verification_otp_link !== '' && result.verification_link !== '') {
           window.localStorage.setItem('fromType', 'buy')
           var message = 'An OTP is sent to your mobile number ' + this.state.mobile_no + ', please verify to complete registration.'
           this.props.history.push({
@@ -186,8 +190,8 @@ class GoldRegister extends Component {
             search: '?base_url=' + this.state.params.base_url,
             params: {
               resend_link: result.resend_verification_otp_link,
-              verify_link: result.verification_link, message: message, fromType: 'buy',
-              message: message
+              verify_link: result.verification_link,
+              message: message, fromType: 'buy'
             }
           });
         }
@@ -238,6 +242,28 @@ class GoldRegister extends Component {
     );
   }
 
+  openTermsAndCondition() {
+    this.setState({
+      show_loader: true
+    })
+    let redirectUrl = encodeURIComponent(
+      window.location.protocol + '//' + window.location.host + '/gold/gold-register'
+    );
+    nativeCallback({
+      action: 'take_control', message: {
+        back_url: redirectUrl,
+        show_top_bar: false,
+        top_bar_title: "Safegold Terms & Conditions",
+        back_text: ""
+      }
+    });
+
+    nativeCallback({
+      action: 'resume_provider',
+      message: { resume_link: 'https://www.safegold.com/assets/terms-and-conditions.pdf' }
+    });
+  }
+
   handleClick = async () => {
     if (this.state.name.split(" ").filter(e => e).length < 2) {
       this.setState({
@@ -279,8 +305,8 @@ class GoldRegister extends Component {
           this.verifyMobile();
         } else {
 
-          if (res.pfwresponse.result.error != 'User with the same mobile number exists!' &&
-            (this.state.userInfo.mobile_verified == false || res.pfwresponse.resultmobile_verified == false)) {
+          if (res.pfwresponse.result.error !== 'User with the same mobile number exists!' &&
+            (this.state.userInfo.mobile_verified === false || res.pfwresponse.resultmobile_verified === false)) {
             this.verifyMobile();
           } else {
             this.setState({
@@ -363,7 +389,7 @@ class GoldRegister extends Component {
               value={this.state.pin_code}
               onChange={this.handlePincode('pin_code')} />
             <div className="filler">
-              {(this.state.city && this.state.state) && <span>{this.state.city} , {this.state.state}</span>}
+              {(this.state.city && this.state.state && !this.state.pin_code_error) && <span>{this.state.city} , {this.state.state}</span>}
             </div>
           </div>
           <div className="CheckBlock">
@@ -379,7 +405,7 @@ class GoldRegister extends Component {
                   className="Checkbox" />
               </Grid>
               <Grid item xs={10}>
-                <span className="Terms">I agree to the <a href="#">Terms and Conditions</a></span>
+                <span className="Terms">I agree to the <a style={{ textDecoration: 'underline', color: '#4f2da7' }} onClick={() => this.openTermsAndCondition()}>Terms and Conditions</a></span>
               </Grid>
             </Grid>
           </div>

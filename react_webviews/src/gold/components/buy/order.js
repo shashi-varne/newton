@@ -2,11 +2,7 @@ import React, { Component } from 'react';
 import qs from 'qs';
 
 import Container from '../../common/Container';
-import Api from 'utils/api';
-import { nativeCallback } from 'utils/native_callback';
 import stopwatch from 'assets/stopwatch.png';
-import { ToastContainer } from 'react-toastify';
-import toast from '../../ui/Toast';
 import { inrFormatDecimal } from 'utils/validators';
 
 class BuyOrder extends Component {
@@ -28,7 +24,6 @@ class BuyOrder extends Component {
 
   componentWillMount() {
     let buyData = JSON.parse(window.localStorage.getItem('buyData'));
-    console.log(buyData);
     let timeAvailable = window.localStorage.getItem('timeAvailable');
     this.setState({
       buyData: buyData,
@@ -54,14 +49,11 @@ class BuyOrder extends Component {
   }
 
   componentDidMount() {
-    this.setState({
-      show_loader: false,
-    });
-
     if (this.state.timeAvailable >= 0 && this.state.buyData) {
       let intervalId = setInterval(this.countdown, 1000);
       this.setState({
-        countdownInterval: intervalId
+        countdownInterval: intervalId,
+        show_loader: false
       });
     }
   }
@@ -82,6 +74,7 @@ class BuyOrder extends Component {
     );
 
     var pgLink = this.state.buyData.payment_link;
+    // eslint-disable-next-line
     pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl;
     window.location = pgLink;
   }
@@ -93,7 +86,7 @@ class BuyOrder extends Component {
         minutes: '',
         seconds: ''
       })
-      window.location.reload();
+      this.navigate('my-gold');
       return;
     }
 
@@ -127,7 +120,7 @@ class BuyOrder extends Component {
               <div className="">
                 <div className="stopwatch-title">Price valid for </div>
                 <div className="FlexRow stopwatch">
-                  <img className="stopwatch-order" src={stopwatch} width="15" />
+                  <img alt="Gold" className="stopwatch-order" src={stopwatch} width="15" />
                   <span className="timer">{this.state.minutes}:{this.state.seconds}</span>
                 </div>
               </div>
@@ -154,7 +147,6 @@ class BuyOrder extends Component {
             </div>
           </div>
         </div>
-        <ToastContainer autoClose={3000} />
       </Container>
     );
   }
