@@ -4,7 +4,6 @@ import qs from 'qs';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import { inrFormatDecimal } from 'utils/validators';
-import { FormControl } from 'material-ui/Form';
 import safegold_logo from 'assets/safegold_logo_60x60.png';
 import arrow from 'assets/arrow.png';
 import Dialog, {
@@ -16,6 +15,7 @@ import Dialog, {
 import Button from 'material-ui/Button';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../ui/Toast';
+import { ScrollTo } from "react-scroll-to";
 
 class GoldSummary extends Component {
   constructor(props) {
@@ -495,11 +495,12 @@ class GoldSummary extends Component {
                     <div className="input-above-text">In Rupees (₹)</div>
                     <div className="input-box">
                     
-                        <div>
-                          <input type="text" name="amount" placeholder="Amount" disabled={this.state.isWeight}
-                            onClick={this.onFocus} onChange={this.setAmountGms()} value={this.state.amount} />
-                        </div>
-                    
+                        <ScrollTo>
+                          {({ scrollTo }) => (
+                            <input type="text" name="amount" placeholder="Amount" disabled={this.state.isWeight}
+                              onClick={() => scrollTo({ y:  document.getElementsByTagName('Body')[0].offsetHeight })} onChange={this.setAmountGms()} value={this.state.amount} />
+                          )}
+                        </ScrollTo>
                     </div>
                     <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>Min ₹1.00</div>
                   </div>
