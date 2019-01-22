@@ -309,7 +309,7 @@ class SellOrder extends Component {
           <div className="InputField">
             <Input
               error={(this.state.ifsc_error) ? true : false}
-              helperText={this.state.ifsc_error || this.state.ifsc_helper}
+              helperText={this.state.ifsc_error}
               type="text"
               width="40"
               label="IFSC Code *"

@@ -16,6 +16,15 @@ export function validateLength(string) {
   return true;
 }
 
+export function validateLengthDynamic(string, length) {
+  let nameSplit = string.trim(" ");
+  if (nameSplit.length > length) {
+    return false;
+  }
+
+  return true;
+}
+
 export function validateMinChar(string) {
   let nameSplit = string.trim(" ");
   if (nameSplit.length < 2) {

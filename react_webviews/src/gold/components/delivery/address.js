@@ -4,7 +4,7 @@ import qs from 'qs';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import Input from '../../ui/Input';
-import { validateNumber, validateLength, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';
+import { validateNumber, validateLengthDynamic, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../ui/Toast';
 
@@ -159,7 +159,7 @@ class DeliveryAddress extends Component {
         let result = res.pfwresponse.result;
         if (result.resend_verification_otp_link !== '' && result.verification_link !== '') {
           window.localStorage.setItem('fromType', 'delivery')
-          var message = 'An OTP is sent to your mobile number ' + this.state.userInfo.mobile_no + ', please verify to complete registration.'
+          var message = 'An OTP is sent to your mobile number ' + this.state.userInfo.mobile_no + ', please verify to place delivery order.'
           this.props.history.push({
             pathname: 'verify',
             search: '?base_url=' + this.state.params.base_url,
@@ -201,9 +201,9 @@ class DeliveryAddress extends Component {
       this.setState({
         address_error: 'Address can not contain more than 3 same consecutive characters'
       });
-    } else if (!validateLength(this.state.address)) {
+    } else if (!validateLengthDynamic(this.state.address, 90)) {
       this.setState({
-        address_error: 'Maximum length of address is 30'
+        address_error: 'Maximum length of address is 90'
       });
     } else if (!validateMinChar(this.state.address)) {
       this.setState({
@@ -217,7 +217,7 @@ class DeliveryAddress extends Component {
       let addressMain = this.state.addressMain;
       addressMain.pincode = this.state.pincode;
       addressMain.city = this.state.city;
-      addressMain.address = this.state.address;
+      addressMain.addressline = this.state.address;
       addressMain.landmark = this.state.landmark;
 
       try {

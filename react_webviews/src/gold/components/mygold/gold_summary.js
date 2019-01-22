@@ -120,21 +120,21 @@ class GoldSummary extends Component {
 
         let amount = '', weight = '';
         if (window.localStorage.getItem('buyAmountRegister')) {
-
           amount = window.localStorage.getItem('buyAmountRegister');
-          window.localStorage.setItem('buyAmountRegister', 0);
+          window.localStorage.setItem('buyAmountRegister', '');
           weight = this.calculate_gold_wt(goldBuyInfo.plutus_rate,
             goldBuyInfo.applicable_tax, amount);
+          this.setState({
+            amount: amount || '',
+            weight: weight || ''
+          })
         }
 
         this.setState({
           show_loader: false,
           goldBuyInfo: result.buy_info,
           plutusRateID: result.buy_info.plutus_rate_id,
-          amount: amount || '',
-          weight: weight || '',
           timeAvailable: timeAvailable
-
         });
         if (timeAvailable >= 0 && goldBuyInfo.plutus_rate) {
           let intervalId = setInterval(this.countdown, 1000);
@@ -357,7 +357,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                                                  previous gold price has expired.
+                                                                                                                                                                                                                                                  previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -488,8 +488,9 @@ class GoldSummary extends Component {
                   <div>
                     <div className="input-above-text">In Rupees (₹)</div>
                     <div className="input-box InputField">
-                      <input type="text" name="amount" placeholder="Amount"
-                        onChange={this.setAmountGms()} value={this.state.amount} />
+                      <input type="number" name="amount" placeholder="Amount"
+                        onChange={this.setAmountGms()} value={this.state.amount}
+                        disabled={this.state.isWeight} />
                     </div>
                     <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>Min ₹1.00</div>
                   </div>
@@ -499,8 +500,9 @@ class GoldSummary extends Component {
                   <div>
                     <div className="input-above-text">In Grams (gm)</div>
                     <div className="input-box InputField">
-                      <input type="text" name="weight" placeholder="Weight"
-                        onChange={this.setAmountGms()} value={this.state.weight} />
+                      <input type="number" name="weight" placeholder="Weight"
+                        onChange={this.setAmountGms()} value={this.state.weight}
+                        disabled={this.state.isAmount} />
                     </div>
                     <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>Max {this.state.maxWeight} gm</div>
                   </div>

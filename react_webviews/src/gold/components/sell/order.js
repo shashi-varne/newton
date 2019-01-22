@@ -226,7 +226,7 @@ class About extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                previous gold price has expired.
+                                                                                                                                                                                                  previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -271,7 +271,7 @@ class About extends Component {
             <span className="float-right order-tile-total1">{inrFormatDecimal(this.state.sellData.amount)}</span>
           </div>
           <div className="order-tile2">
-            <span className="order-tile-other-text">Gold grams to be deducted from your vault</span>
+            <span className="order-tile-other-text">Gold grams to be deducted</span>
             <span className="float-right order-tile-other-text">{this.state.sellData.weight} gm</span>
           </div>
           <div className="order-tile2">
