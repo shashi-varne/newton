@@ -1,8 +1,8 @@
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
-export default function(message, type = 'default') {
-  switch(type) {
+export default function (message, type = 'default') {
+  switch (type) {
     case 'success':
       toast.success(message, {
         position: toast.POSITION.BOTTOM_CENTER
@@ -23,7 +23,7 @@ export default function(message, type = 'default') {
         position: toast.POSITION.BOTTOM_CENTER
       });
       break;
-    case 'default':
+    default:
       toast(message, {
         position: toast.POSITION.BOTTOM_CENTER
       });

@@ -14,7 +14,7 @@ const Header = ({ classes, title, count, total, current, goBack, edit, type, res
         {!disableBack && <Arrow />}
         {(disableBack === true) && <Close />}
       </IconButton>
-      <Typography variant="subheading" color="inherit" className={classes.flex, 'PageTitle'}>
+      <Typography variant="subheading" color="inherit" className={`${classes.flex},PageTitle`}>
         {smallTitle && smallTitle !== undefined &&
           smallTitle
         }
@@ -22,15 +22,14 @@ const Header = ({ classes, title, count, total, current, goBack, edit, type, res
           title
         }
       </Typography>
-      {resetpage &&
-        <img onClick={handleReset}
-          alt=""
-          width={20}
-        />
-      }
-      {!edit && count && <span color="inherit">{current}/{total}</span>}
+      {/* {resetpage &&
+      <img onClick={handleReset}
+        alt=""
+        width={20}
+      />
+    } */}
     </Toolbar>
-  </AppBar>
+  </AppBar >
 );
 
 const styles = {

@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
-import Grid from 'material-ui/Grid';
-import Api from 'utils/api';
-import Modal from 'material-ui/Modal';
-import Typography from 'material-ui/Typography';
 import qs from 'qs';
-import { nativeCallback } from 'utils/native_callback';
 import Button from 'material-ui/Button';
 import thumb from 'assets/thumb.svg';
 import eta_icon from 'assets/eta_icon.svg';
@@ -109,7 +104,7 @@ class MandateSuccess extends Component {
         type={this.state.type} >
         <div>
           <div className="success-img">
-            <img src={thumb} width="130" />
+            <img alt="Mandate" src={thumb} width="130" />
           </div>
           <div className="success-great">
             Great!
@@ -122,7 +117,7 @@ class MandateSuccess extends Component {
           </div>
           <div className="success-bottom-timer">
             <div>
-              <img className="success-img-timer" src={eta_icon} width="20" />
+              <img alt="Mandate" className="success-img-timer" src={eta_icon} width="20" />
               Usually takes 3-4 working day
             </div>
           </div>

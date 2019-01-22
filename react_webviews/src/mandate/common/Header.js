@@ -13,12 +13,12 @@ const Header = ({ classes, title, count, total, current, goBack, edit, type, rig
     <Toolbar>
       <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={goBack}>
         {!disableBack && <Arrow />}
-        {disableBack == true && <Close />}
+        {disableBack === true && <Close />}
       </IconButton>
       <Typography variant="subheading" color="inherit" className={classes.flex}>
         {title}
       </Typography>
-      {rightIcon == 'close' && <Close />}
+      {rightIcon === 'close' && <Close />}
       {resetpage &&
         // <img onClick={handleReset}
         //   alt=""

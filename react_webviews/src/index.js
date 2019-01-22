@@ -22,7 +22,6 @@ $(document).ready(function() {
   }
   $(document).on('focus', "input[type='text'], input[type='number']", function () {
     let element = $(this).parent().closest('.InputField')[0];
-    console.log(element)
     element.scrollIntoView({behavior: "smooth", block: "start"});
   });
 });

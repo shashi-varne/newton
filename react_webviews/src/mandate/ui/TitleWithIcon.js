@@ -3,7 +3,6 @@ import React from 'react';
 import Grid from 'material-ui/Grid';
 
 import './style.css';
-import Input from './Input';
 import Icon from './Icon';
 
 const TitleWithIcon = (props) => (

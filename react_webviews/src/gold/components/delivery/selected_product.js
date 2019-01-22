@@ -3,7 +3,6 @@ import qs from 'qs';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import { nativeCallback } from 'utils/native_callback';
 import one_gm_front from 'assets/1gm_front.png';
 import two_gm_front from 'assets/2gm_front.png';
 import five_gm_front from 'assets/5gm_front.png';
@@ -53,13 +52,12 @@ class DeliverySelectedProduct extends Component {
 
     if (window.localStorage.getItem('goldProduct')) {
       let product = JSON.parse(window.localStorage.getItem('goldProduct'));
-      if (product.in_stock == 'N') {
+      if (product.in_stock === 'N') {
         this.setState({
           disabled: true,
           disabledText: 'Out of Stock'
         })
       }
-      console.log(product);
       this.setState({
         product: product
       })
@@ -70,7 +68,7 @@ class DeliverySelectedProduct extends Component {
     try {
       const res = await Api.get('/api/gold/user/sell/balance');
 
-      if (res.pfwresponse.status_code == 200) {
+      if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
         let maxWeight = result.sellable_gold_balance || 0;
         let product = this.state.product;
@@ -170,8 +168,8 @@ class DeliverySelectedProduct extends Component {
             Seller : {this.state.product.brand}
           </div>
           <div className="instock">
-            {this.state.product.in_stock == 'Y' && <span className="green">*(In Stock)</span>}
-            {this.state.product.in_stock == 'N' && <span className="red">(Out of Stock)</span>}
+            {this.state.product.in_stock === 'Y' && <span className="green">*(In Stock)</span>}
+            {this.state.product.in_stock === 'N' && <span className="red">(Out of Stock)</span>}
           </div>
         </div>
 

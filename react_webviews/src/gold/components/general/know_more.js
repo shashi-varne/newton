@@ -2,13 +2,10 @@ import React, { Component } from 'react';
 import qs from 'qs';
 
 import Container from '../../common/Container';
-import Api from 'utils/api';
-import { nativeCallback } from 'utils/native_callback';
 import safegold_logo from 'assets/safegold_logo@2x.png';
 import idbi from 'assets/idbi_trustee2.png';
 import brinks from 'assets/brinks-logo.png';
 import { ToastContainer } from 'react-toastify';
-import toast from '../../ui/Toast';
 
 class KnowMore extends Component {
   constructor(props) {
@@ -68,21 +65,21 @@ class KnowMore extends Component {
       >
         <div className="Knowmore">
           <div className="gold-about-text-know-more">
-            <img src={safegold_logo} />
+            <img alt="Gold" src={safegold_logo} />
             <div className="about-img-tile-know-more">
               <span className="about-img-span-know-more"> <span className="know-more-buy">SafeGold</span> is a product of Digital Gold India Private Limited, an institutionally owned company that is committed to using technology to improving transparency and efficiency of the gold market.
               </span>
             </div>
           </div>
           <div className="gold-about-text-know-more">
-            <img src={idbi} />
+            <img alt="Gold" src={idbi} />
             <div className="about-img-tile-know-more">
               <span className="about-img-span-know-more"><span className="know-more-buy">IDBI</span> Trusteeship Services Limited is India’s Leading Trusteeship Company. The company is jointly promoted by IDBI Bank Ltd., LIC of India, and GIC of India. Leading Independent Trusteeship helps us to place customer interests above anything else, at all times.
               </span>
             </div>
           </div>
           <div className="gold-about-text-know-more">
-            <img src={brinks} />
+            <img alt="Gold" src={brinks} />
             <div className="about-img-tile-know-more">
               <span className="about-img-span-know-more"><span className="know-more-buy">BRINK’s</span> Global is the leading provider of gold and cash custodianship. The security BRINK’s offer for their services is unmatched.
               </span>

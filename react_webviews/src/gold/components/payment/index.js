@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import qs from 'qs';
-import createBrowserHistory from 'history/createBrowserHistory';
-
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import { nativeCallback } from 'utils/native_callback';
 import safegold_logo from 'assets/safegold_logo_60x60.png';
 import error from 'assets/error.png';
 import thumpsup from 'assets/thumpsup.png';
@@ -33,33 +30,30 @@ class Payment extends Component {
   }
 
   componentWillMount() {
-    let { params } = this.props.location;
+    // let { params } = this.props.location;
     let { status, orderType } = this.props.match.params;
     let weight, sellDetails, buyDetails, redeemProduct,
-      productDisc, paymentError, paymentMessage, paymentPending;
-    if (orderType == 'sell') {
+      productDisc, paymentError, paymentMessage, paymentPending, invoiceLink;
+    if (orderType === 'sell') {
       let sellDetails = JSON.parse(window.localStorage.getItem('sellDetails'));
       weight = sellDetails.gold_weight;
-      console.log(sellDetails);
-      let invoiceLink = sellDetails.invoice_link;
-    } else if (orderType == 'buy') {
+      invoiceLink = sellDetails.invoice_link;
+    } else if (orderType === 'buy') {
       buyDetails = JSON.parse(window.localStorage.getItem('buyData'));
-      console.log(buyDetails);
       weight = buyDetails.gold_weight;
-    } else if (orderType == 'delivery') {
+    } else if (orderType === 'delivery') {
       redeemProduct = JSON.parse(window.localStorage.getItem('redeemProduct'));
       productDisc = redeemProduct.product_details.description;
-      console.log(redeemProduct);
     }
 
-    if (status == 'failed' || status == 'error') {
+    if (status === 'failed' || status === 'error') {
       paymentError = true;
-    } else if (status == 'success') {
+    } else if (status === 'success') {
       paymentError = false;
-      if (orderType == 'buy') {
+      if (orderType === 'buy') {
         this.getInvoice(buyDetails.transact_id);
       }
-    } else if (status == 'pending') {
+    } else if (status === 'pending') {
       paymentPending = true;
     }
     this.setState({
@@ -71,9 +65,11 @@ class Payment extends Component {
       redeemProduct: redeemProduct,
       productDisc: productDisc,
       paymentError: paymentError,
-      paymentMessage: paymentMessage
+      paymentMessage: paymentMessage,
+      paymentPending: paymentPending,
+      invoiceLink: invoiceLink
     })
-    this.state.params.base_url = window.localStorage.getItem('base_url');
+
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -92,16 +88,15 @@ class Payment extends Component {
   async componentDidMount() {
     try {
       const res = await Api.get('/api/gold/user/account');
-      if (res.pfwresponse.status_code == 200) {
+      if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
         let isRegistered = true;
-        if (result.gold_user_info.user_info.registration_status == "pending" ||
+        if (result.gold_user_info.user_info.registration_status === "pending" ||
           !result.gold_user_info.user_info.registration_status ||
           result.gold_user_info.is_new_gold_user) {
           isRegistered = false;
         }
         this.setState({
-          show_loader: false,
           goldInfo: result.gold_user_info.safegold_info,
           userInfo: result.gold_user_info.user_info,
           maxWeight: parseFloat(((30 - result.gold_user_info.safegold_info.gold_balance) || 30).toFixed(4)),
@@ -115,14 +110,14 @@ class Payment extends Component {
       }
 
       const res2 = await Api.get('/api/gold/sell/currentprice');
-      if (res2.pfwresponse.status_code == 200) {
+      if (res2.pfwresponse.status_code === 200) {
         let goldInfo = this.state.goldInfo;
         let result = res2.pfwresponse.result;
         goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
         this.setState({
-          show_loader: false,
           goldSellInfo: result.sell_info,
           goldInfo: goldInfo,
+          show_loader: false,
         });
 
       } else {
@@ -160,9 +155,9 @@ class Payment extends Component {
 
     try {
       const res = await Api.get('/api/gold/invoice/download/mail', { url: path });
-      if (res.pfwresponse.status_code == 200) {
+      if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
-        if (result.message == 'success') {
+        if (result.message === 'success') {
           toast('Invoice has been sent succesfully to your registered email');
         } else {
           toast(result.message || result.error);
@@ -192,7 +187,7 @@ class Payment extends Component {
 
     try {
       const res = await Api.get('/api/gold/user/getinvoice', { txn_id: txn_id });
-      if (res.pfwresponse.status_code == 200) {
+      if (res.pfwresponse.status_code === 200) {
         this.setState({
           show_loader: false,
           invoiceLink: res.pfwresponse.result.invoice_link
@@ -230,9 +225,9 @@ class Payment extends Component {
           <div className="text-center goldheader">
             <div className="my-gold-header" onClick={() => this.navigate('/gold/my-gold')}>
               <div className="FlexRow row1" >
-                <img className="img-mygold" src={safegold_logo} />
+                <img alt="Gold" className="img-mygold" src={safegold_logo} />
                 <span className="my-gold-title-header">Updated Gold Locker</span>
-                <img className="img-mygold2" src={arrow} />
+                <img alt="Gold" className="img-mygold2" src={arrow} />
               </div>
               <div className="spacer-header"></div>
               <div className="my-gold-details-header1">
@@ -248,48 +243,48 @@ class Payment extends Component {
             </div>
           </div>
           <div className="invest-success container-padding" id="goldPayment">
-            {this.state.paymentError == false &&
+            {this.state.paymentError === false &&
               <div>
                 <div className="success-card">
                   <div className="icon">
-                    <img src={thumpsup} width="80" />
+                    <img alt="Gold" src={thumpsup} width="80" />
                   </div>
-                  {this.state.orderType == 'buy' && <h3>Payment Successful</h3>}
-                  {this.state.orderType == 'sell' && <h3>Successful</h3>}
-                  {this.state.orderType == 'delivery' && <h3>Order Successful</h3>}
+                  {this.state.orderType === 'buy' && <h3>Payment Successful</h3>}
+                  {this.state.orderType === 'sell' && <h3>Successful</h3>}
+                  {this.state.orderType === 'delivery' && <h3>Order Successful</h3>}
 
-                  {this.state.orderType == 'buy' && <p> {this.state.weight} grams gold has been purchased and the invoice has been sent to your registered email id.</p>}
-                  {this.state.orderType == 'sell' && <p> {this.state.weight} grams gold has been sold and the invoice has been sent to your registered email id.</p>}
-                  {this.state.orderType == 'delivery' && <p>Your delivery order for {this.state.productDisc} has been placed successfully</p>}
-                  {this.state.orderType != 'delivery' && <div className="invoice">
+                  {this.state.orderType === 'buy' && <p> {this.state.weight} grams gold has been purchased and the invoice has been sent to your registered email id.</p>}
+                  {this.state.orderType === 'sell' && <p> {this.state.weight} grams gold has been sold and the invoice has been sent to your registered email id.</p>}
+                  {this.state.orderType === 'delivery' && <p>Your delivery order for {this.state.productDisc} has been placed successfully</p>}
+                  {this.state.orderType !== 'delivery' && <div className="invoice">
                     <a onClick={() => this.sendInvoiceEmail(this.state.invoiceLink)}>Download Invoice</a>
                   </div>}
-                  {this.state.orderType == 'delivery' && <div className="invoice">
+                  {this.state.orderType === 'delivery' && <div className="invoice">
                     <a onClick={() => this.trackDelivery(this.state.invoiceLink)}>Track Now</a>
                   </div>}
                 </div>
               </div>
             }
-            {this.state.paymentError == true &&
+            {this.state.paymentError === true &&
               <div className="invest-error success-card">
                 <div className="icon">
-                  <img src={error} width="80" />
+                  <img alt="Gold" src={error} width="80" />
                 </div>
                 <h3>Payment Failed</h3>
-                {this.state.orderType == 'buy' && <p>
+                {this.state.orderType === 'buy' && <p>
                   Oops! Your buy order for 2.134 grams could not be placed.
                 <br />
                   <br />
                   Sorry for the inconvenience.
                 </p>}
-                {this.state.orderType == 'sell' &&
+                {this.state.orderType === 'sell' &&
                   <p>
                     Oops! Your sell order for 2.134 grams could not be placed.
                 <br />
                     <br />
                     Sorry for the inconvenience.
                   </p>}
-                {this.state.orderType == 'delivery' &&
+                {this.state.orderType === 'delivery' &&
                   <p>
                     Oops! Your delivery order for 'PRODUCTDISC' could not be placed.
                 <br />
@@ -297,13 +292,13 @@ class Payment extends Component {
                     Sorry for the inconvenience.
                 </p>}
               </div>}
-            {this.state.paymentPending == true &&
+            {this.state.paymentPending === true &&
               <div className="invest-error success-card">
                 <div className="icon">
-                  <img src={error} width="80" height="80" />
+                  <img alt="Gold" src={error} width="80" height="80" />
                 </div>
                 <h3>Order Pending</h3>
-                {this.state.orderType == 'buy' &&
+                {this.state.orderType === 'buy' &&
                   <p>
                     Oops! Your buy order for 2.134 grams is in pending state. We will try placing
                     the order again in the next 24 hrs. The amount will be refunded if the order
@@ -312,7 +307,7 @@ class Payment extends Component {
                     <br />
                     Sorry for the inconvenience.
                 </p>}
-                {this.state.orderType == 'sell' &&
+                {this.state.orderType === 'sell' &&
                   <p>
                     Oops! Your sell order for 2.134 grams could not be placed. We will try placing
                     the order again in the next 24 hrs. The amount will be refunded if the order
@@ -321,7 +316,7 @@ class Payment extends Component {
                     <br />
                     Sorry for the inconvenience.
                 </p>}
-                {this.state.orderType == 'delivery' &&
+                {this.state.orderType === 'delivery' &&
                   <p>
                     Oops! Your delivery order for 'PRODUCTDISC' could not be placed. We will try placing
                     the order again in the next 24 hrs. The amount will be refunded if the order

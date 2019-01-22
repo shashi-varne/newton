@@ -3,7 +3,6 @@ import qs from 'qs';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import { nativeCallback } from 'utils/native_callback';
 import one_gm_front from 'assets/1gm_front.png';
 import two_gm_front from 'assets/2gm_front.png';
 import five_gm_front from 'assets/5gm_front.png';
@@ -20,7 +19,6 @@ class DeliveryOrder extends Component {
     super(props);
     this.state = {
       show_loader: true,
-      redeemProduct: {},
       openResponseDialog: false,
       disabled: false,
       disabledText: 'Proceed to payment',
@@ -89,7 +87,7 @@ class DeliveryOrder extends Component {
 
     try {
       const res = await Api.post('/api/gold/user/redeem/verify', options);
-      if (res.pfwresponse.status_code == 200 && res.pfwresponse.result.message == 'success') {
+      if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.message === 'success') {
         this.setState({
           show_loader: false
         })
@@ -141,6 +139,7 @@ class DeliveryOrder extends Component {
     );
 
     var pgLink = this.state.redeemProduct.payment_link;
+    // eslint-disable-next-line
     pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl;
     window.location = pgLink;
   }
