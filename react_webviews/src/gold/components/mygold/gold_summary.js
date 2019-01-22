@@ -15,7 +15,7 @@ import Dialog, {
 import Button from 'material-ui/Button';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../ui/Toast';
-import { ScrollTo } from "react-scroll-to";
+import { ScrollTo, ScrollArea } from "react-scroll-to";
 
 class GoldSummary extends Component {
   constructor(props) {
@@ -432,15 +432,6 @@ class GoldSummary extends Component {
     })
   };
 
-  onFocus = () => {
-    let body = document.getElementsByTagName('body')[0].offsetHeight;
-    let container_wrapper = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
-
-    if (container_wrapper < body) {
-      window.scrollTo(0, 0);
-    }
-  }
-
   render() {
     return (
       <Container
@@ -491,34 +482,40 @@ class GoldSummary extends Component {
               </div>
               <div className="label">
                 <div className="FlexRow">
+                  <ScrollTo>
+                    {({ scrollTo }) => (
                   <div>
                     <div className="input-above-text">In Rupees (₹)</div>
                     <div className="input-box">
                     
-                        <ScrollTo>
-                          {({ scrollTo }) => (
-                            <input type="text" name="amount" placeholder="Amount" disabled={this.state.isWeight}
-                              onClick={() => scrollTo({ y:  document.getElementsByTagName('Body')[0].offsetHeight })} onChange={this.setAmountGms()} value={this.state.amount} />
-                          )}
-                        </ScrollTo>
+                             
+                            <input type="number" name="amount" placeholder="Amount" disabled={this.state.isWeight}
+                              onFocus={() => document.getElementsByClassName('Container')[0].scrollTo(0, document.getElementsByTagName('body')[0].offsetHeight)} onChange={this.setAmountGms()} value={this.state.amount} />
+                            
                     </div>
                     <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>Min ₹1.00</div>
                   </div>
+                    )}
+                  </ScrollTo>
                   <div className="symbol">
                     =
                   </div>
+                         <ScrollTo>
+                          {({ scrollTo }) => (
+                             
                   <div>
                     <div className="input-above-text">In Grams (gm)</div>
                     <div className="input-box">
                     
-                        <div>
-                          <input type="text" name="weight" placeholder="Weight" disabled={this.state.isAmount}
-                            onClick={this.onFocus} onChange={this.setAmountGms()} value={this.state.weight} />
-                        </div>
+                          <input type="number" name="weight" placeholder="Weight" disabled={this.state.isAmount}
+                            onFocus={() => document.getElementsByClassName('Container')[0].scrollTo(0, document.getElementsByTagName('body')[0].offsetHeight)} onChange={this.setAmountGms()} value={this.state.weight} />
+                            
                     
                     </div>
                     <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>Max {this.state.maxWeight} gm</div>
                   </div>
+                      )}
+                    </ScrollTo>
                 </div>
               </div>
               <div className="disclaimer">
