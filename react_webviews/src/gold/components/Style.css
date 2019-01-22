@@ -293,11 +293,13 @@
 .order-tile-total1 {
   font-size: 17px;
   color: black;
+  flex: 1;
 }
 
 .order-tile-other-text {
   color: #6e6e6e;
   font-size: 14px;
+  flex: 1;
 }
 
 .order-tile2 {

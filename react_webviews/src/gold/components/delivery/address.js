@@ -112,7 +112,7 @@ class DeliveryAddress extends Component {
 
         if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
           this.setState({
-            city: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
+            city: res.pfwresponse.result[0].district_name || res.pfwresponse.result[0].taluk,
             state: res.pfwresponse.result[0].state_name
           });
         } else {

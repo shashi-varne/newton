@@ -57,6 +57,7 @@ class DeliveryOrder extends Component {
 
     if (window.localStorage.getItem('goldProduct')) {
       let product = JSON.parse(window.localStorage.getItem('goldProduct'));
+      console.log(product);
       let address = product.address;
       this.setState({
         product: product,
