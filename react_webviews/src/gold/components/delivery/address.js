@@ -27,7 +27,6 @@ class DeliveryAddress extends Component {
       city: '',
       state: '',
     }
-    this.verifyMobile = this.verifyMobile.bind(this);
   }
 
   componentWillMount() {
@@ -155,6 +154,9 @@ class DeliveryAddress extends Component {
       const res = await Api.post('/api/gold/user/verify/delivery/mobilenumber', options);
 
       if (res.pfwresponse.status_code === 200) {
+        this.setState({
+          show_loader: false,
+        });
 
         let result = res.pfwresponse.result;
         if (result.resend_verification_otp_link !== '' && result.verification_link !== '') {
@@ -170,9 +172,6 @@ class DeliveryAddress extends Component {
             }
           });
         }
-        this.setState({
-          show_loader: false,
-        });
       } else {
         this.setState({
           show_loader: false

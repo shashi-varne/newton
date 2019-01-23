@@ -63,6 +63,7 @@ class DeliverySelectedProduct extends Component {
       })
     } else {
       this.navigate('my-gold-locker');
+      return;
     }
 
     try {

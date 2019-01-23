@@ -38,14 +38,16 @@ class Container extends Component {
       }
     });
 
-    // let body = document.getElementsByTagName('body')[0].offsetHeight;
-    // let container_wrapper = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
+    let body = document.getElementsByTagName('body')[0].offsetHeight;
+    let container_wrapper = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
+    // let container = document.getElementsByClassName('Container')[0].offsetHeight;
     // let header = document.getElementsByClassName('Header')[0].offsetHeight;
-    // let footer = document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight : 0;
+    let footer = document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight : 0;
 
-    // Add margin of footer: 7px (Style.css)
-    document.getElementsByClassName('Container')[0].style.height = document.getElementsByClassName('Container')[0].offsetHeight + 'px';
-    // document.getElementsByClassName('Container')[0].style.paddingBottom = footer + 'px';
+    if (container_wrapper > body) {
+      // 40 for conatiner's padding
+      document.getElementsByClassName('Container')[0].style.height = container_wrapper + footer + 40 + 'px';
+    }
   }
 
   componentWillUnmount() {

@@ -249,10 +249,10 @@ class SellOrder extends Component {
           sellData.account_number = this.state.account_no;
           sellData.ifsc_code = this.state.ifsc_code;
           window.localStorage.setItem('sellData', JSON.stringify(sellData));
-          this.navigate('sell-gold-order');
           this.setState({
             show_loader: false
           });
+          this.navigate('sell-gold-order');
         } else {
           this.setState({
             show_loader: false, openResponseDialog: true,

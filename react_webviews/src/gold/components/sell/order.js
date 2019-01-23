@@ -51,7 +51,7 @@ class About extends Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.setState({
       show_loader: false,
     });
@@ -122,10 +122,10 @@ class About extends Component {
         var sellDetails = result.sell_confirmation_info;
 
         window.localStorage.setItem('sellDetails', JSON.stringify(sellDetails));
-        this.navigate('/gold/sell/payment/' + sellDetails.provider_sell_order_status)
         this.setState({
           show_loader: false,
         });
+        this.navigate('/gold/sell/payment/' + sellDetails.provider_sell_order_status)
       } else if (res.pfwresponse.result.is_gold_rate_changed) {
         let new_rate = res.pfwresponse.result.new_rate;
         let amountUpdated, weightUpdated;
@@ -226,7 +226,7 @@ class About extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                  previous gold price has expired.
+                                                                                                                                                                                                    previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>

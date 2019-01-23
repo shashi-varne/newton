@@ -246,11 +246,11 @@ class GoldSummary extends Component {
         window.localStorage.setItem('buyData', JSON.stringify(buyData));
         window.localStorage.setItem('timeAvailable', this.state.timeAvailable);
         window.localStorage.setItem('base_url', this.state.params.base_url);
-
-        this.navigate('buy-gold-order');
         this.setState({
           show_loader: false,
         });
+        this.navigate('buy-gold-order');
+        return;
       } else if (res.pfwresponse.result.is_gold_rate_changed) {
         let new_rate = res.pfwresponse.result.new_rate;
         let amountUpdated, weightUpdated;
@@ -356,7 +356,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                                                                        previous gold price has expired.
+                                                                                                                                                                                                                                                          previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -485,7 +485,7 @@ class GoldSummary extends Component {
                     <div className="input-above-text">In Rupees (₹)</div>
                     <div className="input-box">
                       <input type="number" name="amount" placeholder="Amount" disabled={this.state.isWeight}
-                       onChange={this.setAmountGms()} value={this.state.amount} />
+                        onChange={this.setAmountGms()} value={this.state.amount} />
                     </div>
                     <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>Min ₹1.00</div>
                   </div>
@@ -496,7 +496,7 @@ class GoldSummary extends Component {
                     <div className="input-above-text">In Grams (gm)</div>
                     <div className="input-box">
                       <input type="number" name="weight" placeholder="Weight" disabled={this.state.isAmount}
-                       onChange={this.setAmountGms()} value={this.state.weight} />
+                        onChange={this.setAmountGms()} value={this.state.weight} />
                     </div>
                     <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>Max {this.state.maxWeight} gm</div>
                   </div>

@@ -180,7 +180,9 @@ class GoldRegister extends Component {
       const res = await Api.post('/api/gold/user/verify/mobilenumber', options);
 
       if (res.pfwresponse.status_code === 200) {
-
+        this.setState({
+          show_loader: false,
+        });
         let result = res.pfwresponse.result;
         if (result.resend_verification_otp_link !== '' && result.verification_link !== '') {
           window.localStorage.setItem('fromType', 'buy')
@@ -195,9 +197,7 @@ class GoldRegister extends Component {
             }
           });
         }
-        this.setState({
-          show_loader: false,
-        });
+
       } else {
         this.setState({
           show_loader: false

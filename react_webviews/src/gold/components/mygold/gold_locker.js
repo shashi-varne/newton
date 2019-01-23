@@ -275,15 +275,13 @@ class GoldSummary extends Component {
       goldSellInfo: goldSellInfo
     });
 
-
     window.localStorage.setItem('timeAvailableSell', this.state.timeAvailable);
     window.localStorage.setItem('sellData', JSON.stringify(goldSellInfo));
 
-    this.navigate('bank-details');
     this.setState({
       show_loader: false
     });
-
+    this.navigate('bank-details');
   }
 
   selectGoldProduct(index) {

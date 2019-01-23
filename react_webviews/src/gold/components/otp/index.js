@@ -76,6 +76,7 @@ class Otp extends Component {
   }
 
   handleClick = async () => {
+
     if (!this.state.otpnumber) {
       this.setState({
         otpnumber_error: 'Please enter OTP'
