@@ -23,8 +23,11 @@ class BuyOrder extends Component {
   }
 
   componentWillMount() {
+    console.log("buy order*************");
     let buyData = JSON.parse(window.localStorage.getItem('buyData'));
+    console.log(buyData);
     let timeAvailable = window.localStorage.getItem('timeAvailable');
+    // let timeAvailable = 3456;
     this.setState({
       buyData: buyData,
       timeAvailable: timeAvailable

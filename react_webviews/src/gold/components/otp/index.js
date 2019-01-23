@@ -143,18 +143,19 @@ class Otp extends Component {
       this.setState({
         show_loader: true
       });
-      const res = await Api.post(url);
+      const res = await Api.get(url);
 
       if (res.pfwresponse.status_code === 200) {
 
         let result = res.pfwresponse.result;
         if (result.resend_verification_otp_link !== '' && result.verification_link !== '') {
-          var message = 'An OTP is sent to your mobile number ' + this.state.mobile_no + ', please verify to complete registration.'
+          var message = 'An OTP is sent to your mobile number ' + this.state.mobile_no + ', please verify.'
           this.setState({
             show_loader: false,
             resend_link: result.resend_verification_otp_link,
-            verify_link: result.verification_link, message: message
+            verify_link: result.verification_link[0], message: message
           })
+          toast(message);
         }
         this.setState({
           show_loader: false

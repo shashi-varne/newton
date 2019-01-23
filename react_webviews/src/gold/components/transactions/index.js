@@ -35,6 +35,12 @@ class Transactions extends Component {
   }
 
   componentWillMount() {
+    let { params } = this.props.location;
+    if (params && params.isDelivery) {
+      this.setState({
+        value: 2
+      })
+    }
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -164,8 +170,6 @@ class Transactions extends Component {
             <TableHead>
               <TableRow>
                 <TableCell align="justify" padding='dense'>Weight (gms)</TableCell>
-                <TableCell align="justify" padding='dense'>Amount (Rs)</TableCell>
-                <TableCell align="justify" padding='dense'>GST Amount (Rs)</TableCell>
                 <TableCell align="justify" padding='dense'>Total Amount (Rs)</TableCell>
                 <TableCell align="justify" padding='dense'>Status</TableCell>
                 <TableCell align="justify" padding='dense'>Date</TableCell>
@@ -196,11 +200,10 @@ class Transactions extends Component {
             <TableHead>
               <TableRow>
                 <TableCell align="justify" padding='dense'>Weight (gms)</TableCell>
-                <TableCell align="justify" padding='dense'>Amount (Rs)</TableCell>
-                <TableCell align="justify" padding='dense'>GST Amount (Rs)</TableCell>
-                <TableCell align="justify" padding='dense'>Total Amount (Rs)</TableCell>
                 <TableCell align="justify" padding='dense'>Status</TableCell>
+                <TableCell align="justify" padding='dense'>Delivery Status</TableCell>
                 <TableCell align="justify" padding='dense'>Date</TableCell>
+                <TableCell align="justify" padding='dense'>Address</TableCell>
                 <TableCell align="justify" padding='dense'>Invoice link</TableCell>
               </TableRow>
             </TableHead>

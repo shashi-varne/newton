@@ -252,7 +252,7 @@ class GoldRegister extends Component {
     nativeCallback({
       action: 'take_control', message: {
         back_url: redirectUrl,
-        show_top_bar: false,
+        show_top_bar: true,
         top_bar_title: "Safegold Terms & Conditions",
         back_text: ""
       }
@@ -260,7 +260,10 @@ class GoldRegister extends Component {
 
     nativeCallback({
       action: 'resume_provider',
-      message: { resume_link: 'https://www.safegold.com/assets/terms-and-conditions.pdf' }
+      message: {
+        resume_link: 'https://www.safegold.com/assets/terms-and-conditions.pdf',
+        provider: "Safegold"
+      }
     });
   }
 

@@ -473,7 +473,7 @@ class GoldSummary extends Component {
                   <div>
                     <div className="input-above-text">In Rupees (₹)</div>
                     <div className="input-box InputField">
-                      <input type="number" placeholder="Amount" name="amount"
+                      <input type="number" autoComplete="off" placeholder="Amount" name="amount"
                         onChange={this.setAmountGms()} value={this.state.amount} disabled={!this.state.isRegistered || this.state.isWeight} />
                     </div>
                     <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>Min ₹1.00 - *Max ₹ {this.state.maxAmount}</div>
@@ -484,7 +484,7 @@ class GoldSummary extends Component {
                   <div>
                     <div className="input-above-text">In Grams (gm)</div>
                     <div className="input-box InputField">
-                      <input type="number" placeholder="Weight" name="weight"
+                      <input type="number" autoComplete="off" placeholder="Weight" name="weight"
                         onChange={this.setAmountGms()} value={this.state.weight} disabled={!this.state.isRegistered || this.state.isAmount} />
                     </div>
                     <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>*Max {this.state.maxWeight} gm</div>

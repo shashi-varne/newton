@@ -3,6 +3,8 @@ import { isMobile } from './functions';
 export const nativeCallback = ({ action = null, message = null, events = null } = {}) => {
   let callbackData = {};
 
+  console.log(action);
+  console.log(JSON.stringify(message));
   if (action) {
     callbackData.action = action;
   }

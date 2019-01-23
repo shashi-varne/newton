@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import qs from 'qs';
 
+// import { FormControl } from 'material-ui/Form';
+// import Input from '../../ui/Input';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import { inrFormatDecimal } from 'utils/validators';
@@ -116,6 +118,7 @@ class GoldSummary extends Component {
         let goldBuyInfo = result.buy_info;
         var currentDate = new Date();
         var validityDate = new Date(goldBuyInfo.rate_validity);
+        // var validityDate = new Date(result.buy_info.rate_validity.replace(/-/g, '/'));
         let timeAvailable = ((validityDate.getTime() - currentDate.getTime()) / 1000);
 
         let amount = '', weight = '';
@@ -356,7 +359,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                                                                          previous gold price has expired.
+                                                                                                                                                                                                                                                                                                previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -479,12 +482,13 @@ class GoldSummary extends Component {
               <div className="buy-input1">
                 Enter amount of gold you want to buy
               </div>
+              {/* <FormControl fullWidth> */}
               <div className="label">
                 <div className="FlexRow">
                   <div className="InputField">
                     <div className="input-above-text">In Rupees (₹)</div>
                     <div className="input-box">
-                      <input type="number" name="amount" placeholder="Amount" disabled={this.state.isWeight}
+                      <input type="number" autoComplete="off" name="amount" placeholder="Amount" disabled={this.state.isWeight}
                         onChange={this.setAmountGms()} value={this.state.amount} />
                     </div>
                     <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>Min ₹1.00</div>
@@ -495,13 +499,26 @@ class GoldSummary extends Component {
                   <div className="InputField">
                     <div className="input-above-text">In Grams (gm)</div>
                     <div className="input-box">
-                      <input type="number" name="weight" placeholder="Weight" disabled={this.state.isAmount}
+                      <input type="number" autoComplete="off" name="weight" placeholder="Weight" disabled={this.state.isAmount}
                         onChange={this.setAmountGms()} value={this.state.weight} />
                     </div>
                     <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>Max {this.state.maxWeight} gm</div>
                   </div>
                 </div>
               </div>
+              {/* </FormControl> */}
+              {/* <FormControl fullWidth>
+                <div className="InputField">
+                  <Input
+                    type="number" autoComplete="off" label="Amount" name="amount" placeholder="Amount" disabled={this.state.isWeight}
+                    onChange={this.setAmountGms()} value={this.state.amount} />
+                </div>
+                <div className="InputField">
+                  <Input
+                    type="number" autoComplete="off" label="Weight" name="weight" placeholder="Weight" disabled={this.state.isAmount}
+                    onChange={this.setAmountGms()} value={this.state.weight} />
+                </div>
+              </FormControl> */}
               <div className="disclaimer">
                 Purchase amount is inclusive of 3% GST
               </div>

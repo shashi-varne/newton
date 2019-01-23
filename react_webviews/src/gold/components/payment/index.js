@@ -145,6 +145,13 @@ class Payment extends Component {
   trackDelivery() {
     window.localStorage.setItem('deliveryTransaction', 'delivery');
     this.navigate('/gold/gold-transactions')
+    this.props.history.push({
+      pathname: '/gold/gold-transactions',
+      search: '?base_url=' + this.state.params.base_url,
+      params: {
+        isDelivery: true
+      }
+    });
   }
 
   async sendInvoiceEmail(path) {
@@ -260,7 +267,7 @@ class Payment extends Component {
                     <a onClick={() => this.sendInvoiceEmail(this.state.invoiceLink)}>Download Invoice</a>
                   </div>}
                   {this.state.orderType === 'delivery' && <div className="invoice">
-                    <a onClick={() => this.trackDelivery(this.state.invoiceLink)}>Track Now</a>
+                    <a onClick={() => this.trackDelivery(this.state.invoiceLink)}>Track all Delivery Orders</a>
                   </div>}
                 </div>
               </div>
