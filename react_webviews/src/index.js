@@ -18,12 +18,21 @@ $(document).ready(function () {
 
       document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 40 + 'px';
     });
-    $(document).on('focus', "input[type='text'], input[type='number']", function () {
-      let element = $(this).parent().closest('.InputField')[0];
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth", block: "start" });
+    // $(document).on('focus', "input[type='text'], input[type='number']", function () {
+    //   let element = $(this).parent().closest('.InputField')[0];
+    //   if (element) {
+    //     element.scrollIntoView({ behavior: "smooth", block: "start" });
+    //   }
+    // });
+    function scrollToActiveElement() {
+      if (document.activeElement && document.activeElement.scrollIntoViewIfNeeded) {
+        document.activeElement.scrollIntoViewIfNeeded()
       }
-    });
+    }
+    window.addEventListener("resize", () => {
+      setTimeout(scrollToActiveElement, 100)
+      setTimeout(scrollToActiveElement, 1000) // just in case browser is slow
+    }, false)
   }
 });
 
