@@ -4,6 +4,7 @@ import qs from 'qs';
 import Container from '../../common/Container';
 import stopwatch from 'assets/stopwatch.png';
 import { inrFormatDecimal } from 'utils/validators';
+import { nativeCallback } from 'utils/native_callback';
 
 class BuyOrder extends Component {
   constructor(props) {
@@ -72,6 +73,17 @@ class BuyOrder extends Component {
     this.setState({
       show_loader: true,
     });
+
+    let nativeRedirectUrl = window.location.protocol + '//' + window.location.host +
+      '/gold/buy-gold-order?base_url=' + this.state.params.base_url;
+
+    nativeCallback({
+      action: 'take_control', message: {
+        back_url: nativeRedirectUrl,
+        back_text: 'Are you sure you want to exit the payment process?'
+      }
+    });
+
     let paymentRedirectUrl = encodeURIComponent(
       window.location.protocol + '//' + window.location.host + '/gold/buy/payment'
     );

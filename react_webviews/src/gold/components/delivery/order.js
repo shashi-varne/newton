@@ -13,6 +13,7 @@ import twenty_gmbar_front from 'assets/20gmbar_front.png';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../ui/Toast';
 import { inrFormatDecimal } from 'utils/validators';
+import { nativeCallback } from 'utils/native_callback';
 
 class DeliveryOrder extends Component {
   constructor(props) {
@@ -134,6 +135,18 @@ class DeliveryOrder extends Component {
     this.setState({
       show_loader: true
     })
+
+    let nativeRedirectUrl = encodeURIComponent(
+      window.location.protocol + '//' + window.location.host +
+      '/gold/gold-delivery-order?base_url=' + this.state.params.base_url
+    );
+
+    nativeCallback({
+      action: 'take_control', message: {
+        back_url: nativeRedirectUrl,
+        back_text: 'Are you sure you want to exit the payment process?'
+      }
+    });
 
     let paymentRedirectUrl = encodeURIComponent(
       window.location.protocol + '//' + window.location.host + '/gold/delivery/payment'
