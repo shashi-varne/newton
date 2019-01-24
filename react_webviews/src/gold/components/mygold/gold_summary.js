@@ -202,18 +202,6 @@ class GoldSummary extends Component {
 
   buyGold = async () => {
 
-    if (this.state.userInfo.mobile_verified === false ||
-      this.state.isRegistered === false) {
-      window.localStorage.setItem('buyAmountRegister', this.state.amount);
-      this.navigate('gold-register')
-      return;
-    }
-
-    var options = {
-      plutus_rate_id: this.state.goldBuyInfo.plutus_rate_id,
-      buy_price: parseFloat(this.state.amount)
-    }
-
     if (parseFloat(this.state.weight) > this.state.maxWeight) {
       toast('You can not buy more than ' + this.state.maxWeight + ' gm', 'error');
       return;
@@ -232,6 +220,18 @@ class GoldSummary extends Component {
     if (parseFloat(this.state.amount) >= 0 && parseFloat(this.state.amount) < 1) {
       toast('Minimum amount should be Rs. 1', 'error');
       return;
+    }
+
+    if (this.state.userInfo.mobile_verified === false ||
+      this.state.isRegistered === false) {
+      window.localStorage.setItem('buyAmountRegister', this.state.amount);
+      this.navigate('gold-register')
+      return;
+    }
+
+    var options = {
+      plutus_rate_id: this.state.goldBuyInfo.plutus_rate_id,
+      buy_price: parseFloat(this.state.amount)
     }
 
     this.setState({
@@ -359,7 +359,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                                                                                                                previous gold price has expired.
+                                                                                                                                                                                                                                                                                                      previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>

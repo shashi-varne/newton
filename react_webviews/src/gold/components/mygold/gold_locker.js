@@ -99,7 +99,7 @@ class GoldSummary extends Component {
         this.setState({
           goldInfo: result.gold_user_info.safegold_info,
           userInfo: result.gold_user_info.user_info,
-          maxWeight: parseFloat(result.gold_user_info.safegold_info.gold_balance).toFixed(4),
+          // maxWeight: parseFloat(result.gold_user_info.safegold_info.gold_balance).toFixed(4),
           isRegistered: isRegistered
         });
       } else {
@@ -149,12 +149,11 @@ class GoldSummary extends Component {
       if (res3.pfwresponse.status_code === 200) {
 
         // todo*
-        // let result = res3.pfwresponse.result;
-        // let maxWeight = result.sellable_gold_balance || 0;
-        let maxWeight = this.state.maxWeight;
+        let result = res3.pfwresponse.result;
+        let maxWeight = result.sellable_gold_balance || 0;
         let maxAmount = ((this.state.goldSellInfo.plutus_rate) * (maxWeight || 0)).toFixed(2);
         this.setState({
-          // maxWeight: maxWeight,
+          maxWeight: maxWeight,
           maxAmount: maxAmount
         });
       } else {
@@ -383,7 +382,7 @@ class GoldSummary extends Component {
     })
   };
 
-  productImgMap = () => {
+  productImgMap = (product) => {
     const prod_image_map = {
       2: one_gm_front,
       3: two_gm_front,
@@ -395,14 +394,14 @@ class GoldSummary extends Component {
     };
 
     return (
-      <img alt="Gold" className="delivery-icon" src={prod_image_map[3]} width="80" />
+      <img alt="Gold" className="delivery-icon" src={prod_image_map[product.id]} width="80" />
     );
   }
 
   renderDeliveryProducts(props, index) {
     return (
       <div key={index} onClick={() => this.selectGoldProduct(index)} className="delivery-tile">
-        {this.productImgMap()}
+        {this.productImgMap(props)}
 
         <div className="">{props.description}</div>
         <div className="">Charges Rs. {props.delivery_minting_cost}</div>
@@ -490,9 +489,9 @@ class GoldSummary extends Component {
                     <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>*Max {this.state.maxWeight} gm</div>
                   </div>
                 </div>
-                <div className="disclaimer">
+                {/* <div className="disclaimer">
                   *You can place your order for sell/delivery after 2 working day from your buying transaction date
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
