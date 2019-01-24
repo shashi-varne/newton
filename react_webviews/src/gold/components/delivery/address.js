@@ -105,7 +105,7 @@ class DeliveryAddress extends Component {
   }
 
   checkPincode = async (pincode) => {
-    if (pincode.length === 6) {
+    if (pincode && pincode.length === 6) {
       try {
         const res = await Api.get('/api/pincode/' + pincode);
 

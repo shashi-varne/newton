@@ -82,8 +82,14 @@ class Container extends Component {
       case '/gold/my-gold-locker':
         this.navigate('/gold/my-gold');
         break;
+      case '/gold/buy-gold-order':
+        this.navigate('/gold/my-gold');
+        break;
       case '/gold/gold-delivery-order':
         this.navigate('/gold/gold-delivery-address');
+        break;
+      case '/gold/gold-delivery-address':
+        this.navigate('/gold/select-gold-product');
         break;
       case "/gold":
       case "/gold/about":
