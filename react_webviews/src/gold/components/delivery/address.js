@@ -216,6 +216,7 @@ class DeliveryAddress extends Component {
       let addressMain = this.state.addressMain;
       addressMain.pincode = this.state.pincode;
       addressMain.city = this.state.city;
+      addressMain.state = this.state.state;
       addressMain.addressline = this.state.address;
       addressMain.landmark = this.state.landmark;
 

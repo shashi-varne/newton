@@ -37,7 +37,9 @@ class Container extends Component {
         that.historyGoBack();
       }
     });
+  }
 
+  setHeight = () => {
     let body = document.getElementsByTagName('body')[0].offsetHeight;
     let container_wrapper = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
     // let container = document.getElementsByClassName('Container')[0].offsetHeight;

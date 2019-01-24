@@ -117,9 +117,9 @@ class GoldSummary extends Component {
         let result = res3.pfwresponse.result;
         let goldBuyInfo = result.buy_info;
         var currentDate = new Date();
-        var validityDate = new Date(goldBuyInfo.rate_validity);
+        // var validityDate = new Date(goldBuyInfo.rate_validity);
         // var validityDate = new Date(result.buy_info.rate_validity.replace(/-/g, '/'));
-        let timeAvailable = ((validityDate.getTime() - currentDate.getTime()) / 1000);
+        let timeAvailable = ((goldBuyInfo.rate_validity - currentDate.getTime()) / 1000 - 330 * 60);
 
         let amount = '', weight = '';
         if (window.localStorage.getItem('buyAmountRegister')) {
@@ -359,7 +359,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                                                                                                                      previous gold price has expired.
+                                                                                                                                                                                                                                                                                                                                                              previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -484,7 +484,7 @@ class GoldSummary extends Component {
               </div>
               {/* <FormControl fullWidth> */}
               <div className="label">
-                <div className="FlexRow">
+                <div className="FlexRow2">
                   <div className="InputField">
                     <div className="input-above-text">In Rupees (₹)</div>
                     <div className="input-box">

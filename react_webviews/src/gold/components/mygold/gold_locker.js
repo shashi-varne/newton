@@ -118,8 +118,8 @@ class GoldSummary extends Component {
         let goldInfo = this.state.goldInfo;
         let result = res2.pfwresponse.result;
         var currentDate = new Date();
-        var validityDate = new Date(result.sell_info.rate_validity);
-        let timeAvailable = ((validityDate.getTime() - currentDate.getTime()) / 1000);
+        // var validityDate = new Date('2019-01-24 14:41:14');
+        let timeAvailable = ((result.sell_info.rate_validity - currentDate.getTime()) / 1000 - 330 * 60);
         goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
         this.setState({
           goldSellInfo: result.sell_info,
@@ -468,12 +468,14 @@ class GoldSummary extends Component {
                 Enter amount of gold you want to buy
               </div>
               <div className="label">
-                <div className="FlexRow">
+                <div className="FlexRow2">
                   <div>
-                    <div className="input-above-text">In Rupees (₹)</div>
-                    <div className="input-box InputField">
-                      <input type="number" autoComplete="off" placeholder="Amount" name="amount"
-                        onChange={this.setAmountGms()} value={this.state.amount} disabled={!this.state.isRegistered || this.state.isWeight} />
+                    <div>
+                      <div className="input-above-text">In Rupees (₹)</div>
+                      <div className="input-box InputField">
+                        <input type="number" autoComplete="off" placeholder="Amount" name="amount"
+                          onChange={this.setAmountGms()} value={this.state.amount} disabled={!this.state.isRegistered || this.state.isWeight} />
+                      </div>
                     </div>
                     <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>Min ₹1.00 - *Max ₹ {this.state.maxAmount}</div>
                   </div>
