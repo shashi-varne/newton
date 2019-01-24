@@ -96,6 +96,11 @@ header.blue {
   color: #fff !important;
   background-color: #b4ebc3 !important;
 }
+.MuiButton-raisedSecondary {
+  color: #ffffff !important;
+  background-color: #35cb5d !important;
+}
+
 
 .FooterButtonArrow {
   margin-left: 20px;

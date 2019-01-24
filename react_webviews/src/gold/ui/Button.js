@@ -28,12 +28,12 @@ class CustomButton extends Component {
 
 const styles = {
   button: {
-    padding: '16px 24px',
+    padding: '16px 24px !important',
     borderRadius: 0,
     textTransform: 'capitalize',
-    fontSize: '16px',
+    fontSize: '16px !important',
     boxShadow: 'none',
-    width: '100%'
+    width: '100% !important'
   }
 }
 
