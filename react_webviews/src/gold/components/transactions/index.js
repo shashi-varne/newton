@@ -21,6 +21,7 @@ class Transactions extends Component {
     this.state = {
       show_loader: true,
       openResponseDialog: false,
+      loadingMore: false,
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
@@ -56,22 +57,40 @@ class Transactions extends Component {
     }
   }
 
-  componentDidMount = async () => {
+  setNextPage(type, next_page) {
+    if (type == 'buy') {
+      this.setState({
+        next_page_buy: next_page
+      })
+    } else if (type == 'sell') {
+      this.setState({
+        next_page_sell: next_page
+      })
+    } else {
+      this.setState({
+        next_page_delivery: next_page
+      })
+    }
+  }
+
+  getTransaction = async (type) => {
+
+    if (this.state.transactions[type]) {
+      return;
+    }
     this.setState({
       show_loader: true,
     });
-
     try {
-      const trans = await Api.get('/api/gold/user/list/transactions');
+      const trans = await Api.get('/api/gold/list/orders/mine?order_type=' + type);
 
       if (trans.pfwresponse.status_code === 200) {
+        let transactions = this.state.transactions;
+        transactions[type] = trans.pfwresponse.result.orders[type];
+        this.setNextPage(type, trans.pfwresponse.result.orders.next_page);
         this.setState({
           show_loader: false,
-          transactions: {
-            buy: trans.pfwresponse.result.orders.buy,
-            sell: trans.pfwresponse.result.orders.sell,
-            delivery: trans.pfwresponse.result.orders.delivery
-          }
+          transactions: transactions,
         });
       } else {
         this.setState({
@@ -87,6 +106,12 @@ class Transactions extends Component {
     }
   }
 
+  componentDidMount = async () => {
+
+
+    this.getTransaction('buy');
+  }
+
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
@@ -94,8 +119,47 @@ class Transactions extends Component {
     });
   }
 
+  loadMoreEnteries = async (type, next_page) => {
+    if (!next_page) {
+      return;
+    }
+    try {
+      this.setState({
+        loadingMore: true
+      })
+      const trans = await Api.get(next_page);
+
+      if (trans.pfwresponse.status_code === 200) {
+        let transactions = this.state.transactions;
+        transactions[type] = transactions[type].concat(trans.pfwresponse.result.orders[type]);
+        this.setNextPage(type, trans.pfwresponse.result.orders.next_page);
+        this.setState({
+          show_loader: false,
+          loadingMore: false,
+          transactions: transactions,
+        });
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(trans.pfwresponse.result.error || trans.pfwresponse.result.message || 'Something went wrong', 'error');
+      }
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong', 'error');
+    }
+  }
+
   handleChange = (event, value) => {
     this.setState({ value });
+    let valueToType = {
+      0: 'buy',
+      1: 'sell',
+      2: 'delivery'
+    };
+    this.getTransaction(valueToType[value]);
   }
 
   async downloadInvoice(path) {
@@ -134,30 +198,41 @@ class Transactions extends Component {
       const buyData = this.state.transactions.buy;
       if (buyData && buyData !== null && buyData.length) {
         return (
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell align="justify" padding='dense'>Weight (gms)</TableCell>
-                <TableCell align="justify" padding='dense'>Amount (Rs)</TableCell>
-                <TableCell align="justify" padding='dense'>GST Amount (Rs)</TableCell>
-                <TableCell align="justify" padding='dense'>Total Amount (Rs)</TableCell>
-                <TableCell align="justify" padding='dense'>Status</TableCell>
-                <TableCell align="justify" padding='dense'>Date</TableCell>
-                <TableCell align="justify" padding='dense'>Invoice link</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>{buyData.map((row, i) => (
-              <TableRow key={i}>
-                <TableCell align="justify" padding='dense'>{row.gold_weight}</TableCell>
-                <TableCell align="justify" padding='dense'>{row.amount}</TableCell>
-                <TableCell align="justify" padding='dense'>{row.gst_amount}</TableCell>
-                <TableCell align="justify" padding='dense'>{row.total_amount}</TableCell>
-                <TableCell align="justify" padding='dense'>{row.provider_buy_order_status || row.provider_buy_order_error}</TableCell>
-                <TableCell align="justify" padding='dense'>{row.dt_created.split(' ')[0]}</TableCell>
-                <TableCell align="justify" padding='dense'><div className="download-invoice" onClick={() => this.downloadInvoice(row.invoice_link)}>Download</div></TableCell>
-              </TableRow>
-            ))}</TableBody>
-          </Table>
+          <div>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell align="justify" padding='dense'>Weight (gms)</TableCell>
+                  <TableCell align="justify" padding='dense'>Amount (Rs)</TableCell>
+                  <TableCell align="justify" padding='dense'>GST Amount (Rs)</TableCell>
+                  <TableCell align="justify" padding='dense'>Total Amount (Rs)</TableCell>
+                  <TableCell align="justify" padding='dense'>Status</TableCell>
+                  <TableCell align="justify" padding='dense'>Date</TableCell>
+                  <TableCell align="justify" padding='dense'>Invoice link</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>{buyData.map((row, i) => (
+                <TableRow key={i}>
+                  <TableCell align="justify" padding='dense'>{row.gold_weight}</TableCell>
+                  <TableCell align="justify" padding='dense'>{row.amount}</TableCell>
+                  <TableCell align="justify" padding='dense'>{row.gst_amount}</TableCell>
+                  <TableCell align="justify" padding='dense'>{row.total_amount}</TableCell>
+                  <TableCell align="justify" padding='dense'>{row.provider_buy_order_status || row.provider_buy_order_error}</TableCell>
+                  <TableCell align="justify" padding='dense'>{row.dt_created.split(' ')[0]}</TableCell>
+                  <TableCell align="justify" padding='dense'><div className="download-invoice" onClick={() => this.downloadInvoice(row.invoice_link)}>Download</div></TableCell>
+                </TableRow>
+              ))}</TableBody>
+            </Table>
+            {this.state.next_page_buy && !this.state.loadingMore &&
+              <div className="load-more"
+                onClick={() => this.loadMoreEnteries('buy', this.state.next_page_buy)}>Load More</div>
+            }
+            {this.state.loadingMore &&
+              <div className="load-more"
+              >Loading More Enteries...</div>
+            }
+          </div>
+
         )
       } else {
         return <div className="error" style={{ textAlign: 'center', margin: '10px 0' }}>No Transaction Found!</div>

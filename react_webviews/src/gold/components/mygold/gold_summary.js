@@ -359,7 +359,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                                                                                                                                                                              previous gold price has expired.
+                                                                                                                                                                                                                                                                                                                                                                  previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -484,7 +484,7 @@ class GoldSummary extends Component {
               </div>
               {/* <FormControl fullWidth> */}
               <div className="label">
-                <div className="FlexRow2">
+                <div className="FlexRow">
                   <div className="InputField">
                     <div className="input-above-text">In Rupees (₹)</div>
                     <div className="input-box">

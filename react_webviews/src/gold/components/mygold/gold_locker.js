@@ -468,7 +468,7 @@ class GoldSummary extends Component {
                 Enter amount of gold you want to buy
               </div>
               <div className="label">
-                <div className="FlexRow2">
+                <div className="FlexRow">
                   <div>
                     <div>
                       <div className="input-above-text">In Rupees (₹)</div>
@@ -477,7 +477,7 @@ class GoldSummary extends Component {
                           onChange={this.setAmountGms()} value={this.state.amount} disabled={!this.state.isRegistered || this.state.isWeight} />
                       </div>
                     </div>
-                    <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>Min ₹1.00 - *Max ₹ {this.state.maxAmount}</div>
+                    <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>Min ₹1.00-*Max ₹ {this.state.maxAmount}</div>
                   </div>
                   <div className="symbol">
                     =
