@@ -243,26 +243,10 @@ class GoldRegister extends Component {
   }
 
   openTermsAndCondition() {
-    this.setState({
-      show_loader: true
-    })
-    let redirectUrl = encodeURIComponent(
-      window.location.protocol + '//' + window.location.host + '/gold/gold-register'
-    );
     nativeCallback({
-      action: 'take_control', message: {
-        back_url: redirectUrl,
-        show_top_bar: true,
-        top_bar_title: "Safegold Terms & Conditions",
-        back_text: ""
-      }
-    });
-
-    nativeCallback({
-      action: 'resume_provider',
+      action: 'open_in_browser',
       message: {
-        resume_link: 'https://www.safegold.com/assets/terms-and-conditions.pdf',
-        provider: "Safegold"
+        url: 'https://www.safegold.com/assets/terms-and-conditions.pdf'
       }
     });
   }
