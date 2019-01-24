@@ -160,7 +160,7 @@ class About extends Component {
             <div className="gold-about-text">
               <img alt="Gold" className="about-img" src={sell_gold_icon} width="54" />
               <div className="about-img-tile">
-                <span className="about-img-span2"><span className="know-more-buy">Sell</span> any amount of gold above Rs. 5 & get the amount credited in your bank account within 72 hours.
+                <span className="about-img-span2"><span className="know-more-buy">Sell</span> any amount of gold above Rs. 1 & get the amount credited in your bank account within 72 hours.
                 </span>
               </div>
             </div>

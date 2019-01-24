@@ -241,26 +241,36 @@ class Transactions extends Component {
       const sellData = this.state.transactions.sell;
       if (sellData && sellData !== null && sellData.length) {
         return (
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell align="justify" padding='dense'>Weight (gms)</TableCell>
-                <TableCell align="justify" padding='dense'>Total Amount (Rs)</TableCell>
-                <TableCell align="justify" padding='dense'>Status</TableCell>
-                <TableCell align="justify" padding='dense'>Date</TableCell>
-                <TableCell align="justify" padding='dense'>Invoice link</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>{sellData.map((row, i) => (
-              <TableRow key={i}>
-                <TableCell align="justify" padding='dense'>{row.gold_weight}</TableCell>
-                <TableCell align="justify" padding='dense'>{row.total_amount}</TableCell>
-                <TableCell align="justify" padding='dense'>{row.provider_sell_order_status || row.provider_sell_order_error}</TableCell>
-                <TableCell align="justify" padding='dense'>{row.date_created.split(' ')[0]}</TableCell>
-                <TableCell align="justify" padding='dense'><div className="download-invoice" onClick={() => this.downloadInvoice(row.invoice_link)}>Download</div></TableCell>
-              </TableRow>
-            ))}</TableBody>
-          </Table>
+          <div>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell align="justify" padding='dense'>Weight (gms)</TableCell>
+                  <TableCell align="justify" padding='dense'>Total Amount (Rs)</TableCell>
+                  <TableCell align="justify" padding='dense'>Status</TableCell>
+                  <TableCell align="justify" padding='dense'>Date</TableCell>
+                  <TableCell align="justify" padding='dense'>Invoice link</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>{sellData.map((row, i) => (
+                <TableRow key={i}>
+                  <TableCell align="justify" padding='dense'>{row.gold_weight}</TableCell>
+                  <TableCell align="justify" padding='dense'>{row.total_amount}</TableCell>
+                  <TableCell align="justify" padding='dense'>{row.provider_sell_order_status || row.provider_sell_order_error}</TableCell>
+                  <TableCell align="justify" padding='dense'>{row.date_created.split(' ')[0]}</TableCell>
+                  <TableCell align="justify" padding='dense'><div className="download-invoice" onClick={() => this.downloadInvoice(row.invoice_link)}>Download</div></TableCell>
+                </TableRow>
+              ))}</TableBody>
+            </Table>
+            {this.state.next_page_sell && !this.state.loadingMore &&
+              <div className="load-more"
+                onClick={() => this.loadMoreEnteries('sell', this.state.next_page_sell)}>Load More</div>
+            }
+            {this.state.loadingMore &&
+              <div className="load-more"
+              >Loading More Enteries...</div>
+            }
+          </div>
         )
       } else {
         return (
@@ -271,28 +281,38 @@ class Transactions extends Component {
       const deliveryData = this.state.transactions.delivery;
       if (deliveryData && deliveryData !== null && deliveryData.length) {
         return (
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell align="justify" padding='dense'>Weight (gms)</TableCell>
-                <TableCell align="justify" padding='dense'>Status</TableCell>
-                <TableCell align="justify" padding='dense'>Delivery Status</TableCell>
-                <TableCell align="justify" padding='dense'>Date</TableCell>
-                <TableCell align="justify" padding='dense'>Address</TableCell>
-                <TableCell align="justify" padding='dense'>Invoice link</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>{deliveryData.map((row, i) => (
-              <TableRow key={i}>
-                <TableCell align="justify" padding='dense'>{row.metal_weight}</TableCell>
-                <TableCell align="justify" padding='dense'>{row.order_status}</TableCell>
-                <TableCell align="justify" padding='dense'>{row.delivery_status_message}</TableCell>
-                <TableCell align="justify" padding='dense'>{row.dt_created.split(' ')[0]}</TableCell>
-                <TableCell align="justify" padding='dense'>{row.delivery_address.addressline}, {row.delivery_address.city}</TableCell>
-                <TableCell align="justify" padding='dense'><div className="download-invoice" onClick={() => this.downloadInvoice(row.invoice_link)}>Download</div></TableCell>
-              </TableRow>
-            ))}</TableBody>
-          </Table>
+          <div>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell align="justify" padding='dense'>Weight (gms)</TableCell>
+                  <TableCell align="justify" padding='dense'>Status</TableCell>
+                  <TableCell align="justify" padding='dense'>Delivery Status</TableCell>
+                  <TableCell align="justify" padding='dense'>Date</TableCell>
+                  <TableCell align="justify" padding='dense'>Address</TableCell>
+                  <TableCell align="justify" padding='dense'>Invoice link</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>{deliveryData.map((row, i) => (
+                <TableRow key={i}>
+                  <TableCell align="justify" padding='dense'>{row.metal_weight}</TableCell>
+                  <TableCell align="justify" padding='dense'>{row.order_status}</TableCell>
+                  <TableCell align="justify" padding='dense'>{row.delivery_status_message}</TableCell>
+                  <TableCell align="justify" padding='dense'>{row.dt_created.split(' ')[0]}</TableCell>
+                  <TableCell align="justify" padding='dense'>{row.delivery_address.addressline}, {row.delivery_address.city}</TableCell>
+                  <TableCell align="justify" padding='dense'><div className="download-invoice" onClick={() => this.downloadInvoice(row.invoice_link)}>Download</div></TableCell>
+                </TableRow>
+              ))}</TableBody>
+            </Table>
+            {this.state.next_page_delivery && !this.state.loadingMore &&
+              <div className="load-more"
+                onClick={() => this.loadMoreEnteries('delivery', this.state.next_page_delivery)}>Load More</div>
+            }
+            {this.state.loadingMore &&
+              <div className="load-more"
+              >Loading More Enteries...</div>
+            }
+          </div>
         )
       } else {
         return <div className="error" style={{ textAlign: 'center', margin: '10px 0' }}>No Transaction Found!</div>
