@@ -35,6 +35,7 @@ class GoldSummary extends Component {
       amountUpdated: '',
       weightUpdated: '',
       maxWeight: '',
+      minAmount: '',
       isRegistered: false,
       isWeight: false,
       isAmount: false,
@@ -137,7 +138,8 @@ class GoldSummary extends Component {
           show_loader: false,
           goldBuyInfo: result.buy_info,
           plutusRateID: result.buy_info.plutus_rate_id,
-          timeAvailable: timeAvailable
+          timeAvailable: timeAvailable,
+          minAmount: goldBuyInfo.minimum_buy_price
         });
         if (timeAvailable >= 0 && goldBuyInfo.plutus_rate) {
           let intervalId = setInterval(this.countdown, 1000);
@@ -212,13 +214,13 @@ class GoldSummary extends Component {
       return;
     }
 
-    if (!parseFloat(this.state.amount) || parseFloat(this.state.amount) < 0) {
+    if (!parseFloat(this.state.amount)) {
       toast('Please enter a correct value for the amount', 'error');
       return;
     }
 
-    if (parseFloat(this.state.amount) >= 0 && parseFloat(this.state.amount) < 1) {
-      toast('Minimum amount should be Rs. 1', 'error');
+    if (parseFloat(this.state.amount) >= 0 && parseFloat(this.state.amount) < this.state.minAmount) {
+      toast('Minimum amount should be Rs. ' + this.state.minAmount, 'error');
       return;
     }
 
@@ -359,7 +361,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                                                                                                                                                                                  previous gold price has expired.
+                                                                                                                                                                                                                                                                                                                                                                                  previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -420,7 +422,7 @@ class GoldSummary extends Component {
       amountError = true;
     }
 
-    if (parseFloat(amount) >= 0 && parseFloat(amount) < 1) {
+    if (parseFloat(amount) >= 0 && parseFloat(amount) < this.state.minAmount) {
       amountError = true;
     }
 
@@ -491,7 +493,7 @@ class GoldSummary extends Component {
                       <input type="number" autoComplete="off" name="amount" placeholder="Amount" disabled={this.state.isWeight}
                         onChange={this.setAmountGms()} value={this.state.amount} />
                     </div>
-                    <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>Min ₹1.00</div>
+                    <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>Min {inrFormatDecimal(this.state.minAmount)}</div>
                   </div>
                   <div className="symbol">
                     =

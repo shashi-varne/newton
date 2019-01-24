@@ -10,6 +10,9 @@ import sell_gold_icon from 'assets/sell_gold_icon@2x.png';
 import deliver_gold_icon from 'assets/deliver_gold_icon@2x.png';
 import '../Style.css';
 import { ToastContainer } from 'react-toastify';
+import Api from 'utils/api';
+import toast from '../../ui/Toast';
+import { inrFormatDecimal } from 'utils/validators';
 
 class About extends Component {
   constructor(props) {
@@ -17,6 +20,7 @@ class About extends Component {
     this.state = {
       show_loader: true,
       openResponseDialog: false,
+      minAmount: '',
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
@@ -40,10 +44,30 @@ class About extends Component {
     }
   }
 
-  componentDidMount() {
-    this.setState({
-      show_loader: false,
-    });
+  async componentDidMount() {
+    try {
+      const res = await Api.get('/api/gold/buy/currentprice');
+
+      if (res.pfwresponse.status_code === 200) {
+        let result = res.pfwresponse.result;
+        this.setState({
+          show_loader: false,
+          minAmount: result.buy_info.minimum_buy_price
+        });
+
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
+      }
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong', 'error');
+    }
+
   }
 
   navigate = (pathname) => {
@@ -122,7 +146,7 @@ class About extends Component {
             <div className="gold-about-text">
               <img alt="Gold" className="about-img" src={buy_gold_icon} width="54" />
               <div className="about-img-tile">
-                <span className="about-img-span2"> <span className="know-more-buy">Buy</span> the desired quantity or amount of gold above Re.1 and purchase it at the live price quoted.
+                <span className="about-img-span2"> <span className="know-more-buy">Buy</span> the desired quantity or amount of gold above {inrFormatDecimal(this.state.minAmount)} and purchase it at the live price quoted.
                 </span>
               </div>
             </div>
