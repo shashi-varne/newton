@@ -21,7 +21,7 @@ class GoldRegister extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      show_loader: false,
       userInfo: {},
       name: "",
       email: "",
@@ -144,7 +144,8 @@ class GoldRegister extends Component {
         } else {
           this.setState({
             city: '',
-            state: ''
+            state: '',
+            pin_code_error: 'Invalid Pincode'
           });
         }
       } catch (err) {
@@ -196,6 +197,7 @@ class GoldRegister extends Component {
               message: message, fromType: 'buy'
             }
           });
+          toast(message);
         }
 
       } else {
@@ -234,7 +236,7 @@ class GoldRegister extends Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleClose} color="primary" autoFocus>
+          <Button onClick={this.handleClose} color={this.state.type !== 'fisdom' ? 'secondary' : 'primary'} autoFocus>
             OK
           </Button>
         </DialogActions>
@@ -268,10 +270,13 @@ class GoldRegister extends Component {
       this.setState({
         email_error: 'Please enter valid email'
       });
-    } else if (this.state.pin_code.length !== 6 || !validateNumber(this.state.pin_code)) {
+    } else if (this.state.pin_code.length !== 6 || !validateNumber(this.state.pin_code) ||
+      this.state.pin_code_error) {
       this.setState({
         pin_code_error: 'Please enter valid pincode'
       });
+    } else if (!this.state.checked) {
+      return;
     } else {
 
       this.setState({
@@ -293,7 +298,7 @@ class GoldRegister extends Component {
         } else {
 
           if (res.pfwresponse.result.error !== 'User with the same mobile number exists!' &&
-            (this.state.userInfo.mobile_verified === false || res.pfwresponse.resultmobile_verified === false)) {
+            (this.state.userInfo.mobile_verified === false || res.pfwresponse.result.mobile_verified === false)) {
             this.verifyMobile();
           } else {
             this.setState({
@@ -383,6 +388,9 @@ class GoldRegister extends Component {
             <Grid container spacing={16} alignItems="center">
               <Grid item xs={2} className="TextCenter">
                 <Checkbox
+                  style={{
+                    color: `${(this.state.type !== 'fisdom') ? '#3792fc' : '#4f2da7'}`,
+                  }}
                   defaultChecked
                   checked={this.state.checked}
                   color="default"
@@ -392,7 +400,9 @@ class GoldRegister extends Component {
                   className="Checkbox" />
               </Grid>
               <Grid item xs={10}>
-                <span className="Terms">I agree to the <a style={{ textDecoration: 'underline', color: '#4f2da7' }} onClick={() => this.openTermsAndCondition()}>Terms and Conditions</a></span>
+                <span className="Terms">I agree to the <a
+                  className={`${(this.state.type !== 'fisdom') ? 'mywayColor' : 'fisdomColor'}`}
+                  style={{ textDecoration: 'underline' }} onClick={() => this.openTermsAndCondition()}>Terms and Conditions</a></span>
               </Grid>
             </Grid>
           </div>

@@ -195,41 +195,41 @@ class DeliveryOrder extends Component {
             {this.productImgMap()}
           </div>
           <div className="order-tile2">
-            <span className="order-tile-total1">Total payble amount</span>
-            <span className="float-right order-tile-total1">{inrFormatDecimal(this.state.redeemProduct.mint_delivery_price)}</span>
+            <span className="order-tile-total1-delivery">Total payble amount</span>
+            <span className="float-right order-tile-total1-delivery"> &nbsp;&nbsp;{inrFormatDecimal(this.state.redeemProduct.mint_delivery_price)}</span>
           </div>
           <div className="order-tile2">
-            <span className="order-tile-other-text">Estimated Dispatch Period</span>
-            <span className="float-right order-tile-total1">{this.state.redeemProduct.estimated_dispatch_period}</span>
+            <span className="order-tile-other-text-delivery">Estimated Dispatch Period</span>
+            <span className="float-right order-tile-other-text-delivery">{this.state.redeemProduct.estimated_dispatch_period}</span>
           </div>
           <div className="order-tile2">
-            <span className="order-tile-other-text">Estimated Delivery Period</span>
-            <span className="float-right order-tile-other-text">{this.state.redeemProduct.product_details.estimated_days_for_dispatch}</span>
+            <span className="order-tile-other-text-delivery">Estimated Delivery Period</span>
+            <span className="float-right order-tile-other-text-delivery">{this.state.redeemProduct.product_details.estimated_days_for_dispatch}</span>
           </div>
           <div className="order-tile2">
-            <span className="order-tile-other-text">Product </span>
-            <span className="float-right order-tile-other-text">{this.state.redeemProduct.product_details.description}</span>
+            <span className="order-tile-other-text-delivery">Product </span>
+            <span className="float-right order-tile-other-text-delivery">{this.state.redeemProduct.product_details.description}</span>
           </div>
           <div className="order-tile2">
-            <span className="order-tile-other-text">Address</span>
-            <span className="float-right order-tile-other-text">{this.state.redeemProduct.delivery_address.addressline}</span>
+            <span className="order-tile-other-text-delivery">Address</span>
+            <span className="float-right order-tile-other-text-delivery">{this.state.redeemProduct.delivery_address.addressline}</span>
           </div>
           <div className="order-tile2">
-            <span className="order-tile-other-text">Pincode</span>
-            <span className="float-right order-tile-other-text">{this.state.redeemProduct.delivery_address.pincode}</span>
+            <span className="order-tile-other-text-delivery">Pincode</span>
+            <span className="float-right order-tile-other-text-delivery">{this.state.redeemProduct.delivery_address.pincode}</span>
           </div>
           {this.state.redeemProduct.delivery_address.landmark &&
             <div className="order-tile2">
-              <span className="order-tile-other-text">Landmark</span>
-              <span className="float-right order-tile-other-text">{this.state.redeemProduct.delivery_address.landmark}</span>
+              <span className="order-tile-other-text-delivery">Landmark</span>
+              <span className="float-right order-tile-other-text-delivery">{this.state.redeemProduct.delivery_address.landmark}</span>
             </div>}
           <div className="order-tile2">
-            <span className="order-tile-other-text">City</span>
-            <span className="float-right order-tile-other-text">{this.state.redeemProduct.delivery_address.city}</span>
+            <span className="order-tile-other-text-delivery">City</span>
+            <span className="float-right order-tile-other-text-delivery">{this.state.redeemProduct.delivery_address.city}</span>
           </div>
           <div className="order-tile2">
-            <span className="order-tile-other-text">{this.state.redeemProduct.delivery_address.state}</span>
-            <span className="float-right order-tile-other-text">Karnataka</span>
+            <span className="order-tile-other-text-delivery">{this.state.redeemProduct.delivery_address.state}</span>
+            <span className="float-right order-tile-other-text-delivery">Karnataka</span>
           </div>
         </div>
         <ToastContainer autoClose={3000} />

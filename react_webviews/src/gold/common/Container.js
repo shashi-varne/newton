@@ -166,10 +166,10 @@ class Container extends Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleClose} color="primary">
+          <Button onClick={this.handleClose} color={this.props.type !== 'fisdom' ? 'secondary' : 'primary'}>
             No
           </Button>
-          <Button onClick={this.handlePopup} color="primary" autoFocus>
+          <Button onClick={this.handlePopup} color={this.props.type !== 'fisdom' ? 'secondary' : 'primary'} autoFocus>
             Yes
           </Button>
         </DialogActions>

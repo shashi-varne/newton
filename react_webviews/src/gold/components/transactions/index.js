@@ -58,11 +58,11 @@ class Transactions extends Component {
   }
 
   setNextPage(type, next_page) {
-    if (type == 'buy') {
+    if (type === 'buy') {
       this.setState({
         next_page_buy: next_page
       })
-    } else if (type == 'sell') {
+    } else if (type === 'sell') {
       this.setState({
         next_page_sell: next_page
       })
@@ -334,8 +334,8 @@ class Transactions extends Component {
         <Tabs
           value={this.state.value}
           onChange={this.handleChange}
-          indicatorColor="primary"
-          textColor="primary"
+          indicatorColor={this.state.type !== 'fisdom' ? 'secondary' : 'primary'}
+          textColor={this.state.type !== 'fisdom' ? 'secondary' : 'primary'}
           variant="fullWidth"
         >
           <Tab label="Buy" />

@@ -1,5 +1,5 @@
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
+// import { toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.min.css';
 import { nativeCallback } from 'utils/native_callback';
 
 export default function (message, type = 'default') {

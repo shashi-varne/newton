@@ -2,6 +2,18 @@ header.blue {
   color: #fff;
   background-color: #3792fc;
 }
+.fisdomColor {
+  color: #4f2da7 !important;
+}
+.mywayColor {
+  color: #3792fc !important;
+}
+.fisdomBackColor {
+  background-color: #4f2da7 !important;
+}
+.mywayBackColor {
+  background: #3792fc !important;
+}
 .Step.blue span.active {
   background-color: #3792fc; 
 }

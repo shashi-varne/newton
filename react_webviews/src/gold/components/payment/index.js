@@ -10,6 +10,8 @@ import arrow from 'assets/arrow.png';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../ui/Toast';
 import { inrFormatDecimal } from 'utils/validators';
+// eslint-disable-next-line
+import { nativeCallback } from 'utils/native_callback';
 
 class Payment extends Component {
   constructor(props) {
@@ -31,6 +33,7 @@ class Payment extends Component {
 
   componentWillMount() {
     // let { params } = this.props.location;
+    nativeCallback({ action: 'take_control_reset' });
     let { status, orderType } = this.props.match.params;
     let weight, sellDetails, buyDetails, redeemProduct,
       productDisc, paymentError, paymentMessage, paymentPending, invoiceLink;
@@ -229,7 +232,7 @@ class Payment extends Component {
         noPadding={true}
       >
         <div className="page home" id="goldSection">
-          <div className="text-center goldheader">
+          <div className={`text-center goldheader  ${(this.state.type !== 'fisdom') ? 'blue' : ''}`}>
             <div className="my-gold-header" onClick={() => this.navigate('/gold/my-gold')}>
               <div className="FlexRow row1" >
                 <img alt="Gold" className="img-mygold" src={safegold_logo} />
@@ -279,21 +282,21 @@ class Payment extends Component {
                 </div>
                 <h3>Payment Failed</h3>
                 {this.state.orderType === 'buy' && <p>
-                  Oops! Your buy order for 2.134 grams could not be placed.
+                  Oops! Your buy order for {this.state.weight} grams could not be placed.
                 <br />
                   <br />
                   Sorry for the inconvenience.
                 </p>}
                 {this.state.orderType === 'sell' &&
                   <p>
-                    Oops! Your sell order for 2.134 grams could not be placed.
+                    Oops! Your sell order for {this.state.weight} grams could not be placed.
                 <br />
                     <br />
                     Sorry for the inconvenience.
                   </p>}
                 {this.state.orderType === 'delivery' &&
                   <p>
-                    Oops! Your delivery order for 'PRODUCTDISC' could not be placed.
+                    Oops! Your delivery order for {this.state.productDisc} could not be placed.
                 <br />
                     <br />
                     Sorry for the inconvenience.
@@ -307,7 +310,7 @@ class Payment extends Component {
                 <h3>Order Pending</h3>
                 {this.state.orderType === 'buy' &&
                   <p>
-                    Oops! Your buy order for 2.134 grams is in pending state. We will try placing
+                    Oops! Your buy order for {this.state.weight} grams is in pending state. We will try placing
                     the order again in the next 24 hrs. The amount will be refunded if the order
                     doesn't go through
                 <br />
@@ -316,7 +319,7 @@ class Payment extends Component {
                 </p>}
                 {this.state.orderType === 'sell' &&
                   <p>
-                    Oops! Your sell order for 2.134 grams could not be placed. We will try placing
+                    Oops! Your sell order for {this.state.weight} grams could not be placed. We will try placing
                     the order again in the next 24 hrs. The amount will be refunded if the order
                     doesn't go through
                 <br />
@@ -325,7 +328,7 @@ class Payment extends Component {
                 </p>}
                 {this.state.orderType === 'delivery' &&
                   <p>
-                    Oops! Your delivery order for 'PRODUCTDISC' could not be placed. We will try placing
+                    Oops! Your delivery order for {this.state.productDisc} could not be placed. We will try placing
                     the order again in the next 24 hrs. The amount will be refunded if the order
                     doesn't go through
                 <br />

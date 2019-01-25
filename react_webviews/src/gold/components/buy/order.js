@@ -142,23 +142,23 @@ class BuyOrder extends Component {
             </div>
             <div className="order-tile2">
               <span className="order-tile-total1">Total payble amount</span>
-              <span className="float-right order-tile-total1">{inrFormatDecimal(this.state.buyData.total_amount || 0)}</span>
+              <span className="float-right order-tile-total1 buy-order-tile22">{inrFormatDecimal(this.state.buyData.total_amount || 0)}</span>
             </div>
             <div className="order-tile2">
               <span className="order-tile-other-text">Gold grams to be added to your vault</span>
-              <span className="float-right order-tile-other-text">{this.state.buyData.gold_weight} gm</span>
+              <span className="float-right order-tile-other-text buy-order-tile22">{this.state.buyData.gold_weight} gm</span>
             </div>
             <div className="order-tile2">
               <span className="order-tile-other-text">Rate</span>
-              <span className="float-right order-tile-other-text">{inrFormatDecimal(this.state.buyData.plutus_rate)}/gm</span>
+              <span className="float-right order-tile-other-text buy-order-tile22">{inrFormatDecimal(this.state.buyData.plutus_rate)}/gm</span>
             </div>
             <div className="order-tile2">
               <span className="order-tile-other-text">Total GST (3%)</span>
-              <span className="float-right order-tile-other-text">{inrFormatDecimal(this.state.buyData.gst_amount || 0)}</span>
+              <span className="float-right order-tile-other-text buy-order-tile22">{inrFormatDecimal(this.state.buyData.gst_amount || 0)}</span>
             </div>
             <div className="order-tile2">
               <span className="order-tile-other-text">Net purchase amount</span>
-              <span className="float-right order-tile-other-text">{inrFormatDecimal(this.state.buyData.purchase_price || 0)}</span>
+              <span className="float-right order-tile-other-text buy-order-tile22">{inrFormatDecimal(this.state.buyData.purchase_price || 0)}</span>
             </div>
           </div>
         </div>

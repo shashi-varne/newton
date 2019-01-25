@@ -117,7 +117,8 @@ class DeliveryAddress extends Component {
         } else {
           this.setState({
             city: '',
-            state: ''
+            state: '',
+            pincode_error: "Invalid Pincode"
           });
         }
       } catch (err) {
@@ -171,6 +172,7 @@ class DeliveryAddress extends Component {
               message: message, fromType: 'delivery'
             }
           });
+          toast(message);
         }
       } else {
         this.setState({
@@ -188,7 +190,8 @@ class DeliveryAddress extends Component {
   }
 
   handleClick = async () => {
-    if (this.state.pincode.length !== 6 || !validateNumber(this.state.pincode)) {
+    if (this.state.pincode.length !== 6 || !validateNumber(this.state.pincode) ||
+      this.state.pincode_error) {
       this.setState({
         pincode_error: 'Please enter valid pincode',
       });

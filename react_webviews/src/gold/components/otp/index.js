@@ -32,11 +32,22 @@ class Otp extends Component {
 
   componentWillMount() {
     let { params } = this.props.location;
-    if (!params) {
-      this.navigate('my-gold');
-      return;
-    }
-    if (params.resend_link === null || params.verify_link === null) {
+
+    if (!params || params.resend_link === null || params.verify_link === null) {
+      // let fromType = window.localStorage.getItem('fromType');
+      // if (fromType === 'buy') {
+      //   this.navigate('gold-register');
+
+      // } else if (fromType === 'sell') {
+      //   this.navigate('bank-details');
+
+      // } else if (fromType === 'delivery') {
+      //   this.navigate('gold-delivery-address');
+
+      // } else {
+      //   this.navigate('my-gold');
+      // }
+
       this.navigate('my-gold');
       return;
     }
@@ -47,6 +58,7 @@ class Otp extends Component {
       fromTypeDeliveryOtp: params ? params.fromType : '',
       messageOtp: params ? params.message : 'An OTP is sent to your registered mobile number, please verify to complete the process.',
     })
+    window.localStorage.setItem('fromType', params.fromType);
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -155,7 +167,7 @@ class Otp extends Component {
             resend_link: result.resend_verification_otp_link,
             verify_link: result.verification_link[0], message: message
           })
-          toast(message);
+          toast(this.state.messageOtp);
         }
         this.setState({
           show_loader: false
@@ -185,6 +197,9 @@ class Otp extends Component {
   handleOtpVerified = () => {
     if (this.state.fromTypeDeliveryOtp === 'buy') {
       this.navigate('my-gold');
+
+    } else if (this.state.fromTypeDeliveryOtp === 'sell') {
+      this.navigate('sell-gold-order');
     } else if (this.state.fromTypeDeliveryOtp === 'delivery') {
       if (window.localStorage.getItem('goldProduct')) {
         let product = JSON.parse(window.localStorage.getItem('goldProduct'));
@@ -214,10 +229,10 @@ class Otp extends Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          {!this.state.otpVerified && <Button onClick={this.handleClose} color="primary" autoFocus>
+          {!this.state.otpVerified && <Button onClick={this.handleClose} color={this.state.type !== 'fisdom' ? 'secondary' : 'primary'} autoFocus>
             OK
           </Button>}
-          {this.state.otpVerified && <Button onClick={this.handleOtpVerified} color="primary" autoFocus>
+          {this.state.otpVerified && <Button onClick={this.handleOtpVerified} color={this.state.type !== 'fisdom' ? 'secondary' : 'primary'} autoFocus>
             Proceed
           </Button>}
         </DialogActions>
@@ -250,7 +265,8 @@ class Otp extends Component {
                 value={this.state.otpnumber}
                 onChange={this.handleChange('otpnumber')} />
             </div>
-            <p className="resend-otp text-center" style={{ color: '#4f2da7', fontWeight: 500 }} color="primary" onClick={this.resendOtp}>Resend OTP</p>
+            <p className={`resend-otp text-center ${(this.state.type !== 'fisdom') ? 'mywayColor' : 'fisdomColor'}`}
+              style={{ fontWeight: 500 }} color={this.state.type !== 'fisdom' ? 'secondary' : 'primary'} onClick={this.resendOtp}>Resend OTP</p>
             <div className="text-center">{this.state.messageOtp}</div>
           </div>
         </div>

@@ -63,7 +63,7 @@ class About extends Component {
       }
     } catch (err) {
       this.setState({
-        show_loader: false
+        show_loader: true
       });
       toast('Something went wrong', 'error');
     }

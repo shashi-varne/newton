@@ -313,7 +313,7 @@ class GoldSummary extends Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleClose} color="primary" autoFocus>
+          <Button onClick={this.handleClose} color={this.state.type !== 'fisdom' ? 'secondary' : 'primary'} autoFocus>
             OK
           </Button>
         </DialogActions>
@@ -361,16 +361,16 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                                                                                                                                                                                                  previous gold price has expired.
+                                                                                                                                                                                                                                                                                                                                                                                            previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
         }
         <DialogActions>
-          <Button onClick={this.handleClose} color="primary">
+          <Button onClick={this.handleClose} color={this.state.type !== 'fisdom' ? 'secondary' : 'primary'}>
             CANCEL
           </Button>
-          <Button onClick={this.handlePopup} color="primary" autoFocus>
+          <Button onClick={this.handlePopup} color={this.state.type !== 'fisdom' ? 'secondary' : 'primary'} autoFocus>
             CONTINUE
           </Button>
         </DialogActions>
@@ -448,7 +448,7 @@ class GoldSummary extends Component {
         noPadding={true}
       >
         <div className="page home" id="goldSection">
-          <div className="text-center goldheader" onClick={() => this.navigate('/gold/my-gold-locker')}>
+          <div className={`text-center goldheader  ${(this.state.type !== 'fisdom') ? 'blue' : ''}`} onClick={() => this.navigate('/gold/my-gold-locker')}>
             <div className="my-gold-header">
               <div className="FlexRow row1">
                 <img alt="Gold" className="img-mygold" src={safegold_logo} />
@@ -471,7 +471,7 @@ class GoldSummary extends Component {
           <div className="page-body-gold container-padding" id="goldInput">
             <div className="buy-info1">
               <div className="FlexRow">
-                <span className="buy-info2a">Current Buying Price</span>
+                <span className="buy-info2a">Current Buy Price</span>
                 <span className="buy-info2b">Price valid for
                 &nbsp;<span className="timer-green">{this.state.minutes || 0}:{this.state.seconds || 0}</span>
                 </span>

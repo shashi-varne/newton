@@ -211,9 +211,9 @@ class DeliverySelectedProduct extends Component {
           <ul>
             {this.state.product.product_highlights.map(this.renderProductHIghlights)}
           </ul>
-          <div className="grey-color">
+          {/* <div className="grey-color">
             *You can place your order for sell/delivery after 2 working day from your buying transaction date
-          </div>
+          </div> */}
         </div>
         <ToastContainer autoClose={3000} />
       </Container>

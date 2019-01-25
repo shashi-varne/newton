@@ -99,7 +99,7 @@ class GoldSummary extends Component {
         this.setState({
           goldInfo: result.gold_user_info.safegold_info,
           userInfo: result.gold_user_info.user_info,
-          // maxWeight: parseFloat(result.gold_user_info.safegold_info.gold_balance).toFixed(4),
+          maxWeight: parseFloat(result.gold_user_info.safegold_info.gold_balance).toFixed(4),
           isRegistered: isRegistered
         });
       } else {
@@ -149,11 +149,12 @@ class GoldSummary extends Component {
       if (res3.pfwresponse.status_code === 200) {
 
         // todo*
-        let result = res3.pfwresponse.result;
-        let maxWeight = result.sellable_gold_balance || 0;
+        let maxWeight = this.state.maxWeight;
+        // let result = res3.pfwresponse.result;
+        // let maxWeight = result.sellable_gold_balance || 0;
         let maxAmount = ((this.state.goldSellInfo.plutus_rate) * (maxWeight || 0)).toFixed(2);
         this.setState({
-          maxWeight: maxWeight,
+          // maxWeight: maxWeight,
           maxAmount: maxAmount
         });
       } else {
@@ -311,7 +312,7 @@ class GoldSummary extends Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleClose} color="primary" autoFocus>
+          <Button onClick={this.handleClose} color={this.state.type !== 'fisdom' ? 'secondary' : 'primary'} autoFocus>
             OK
           </Button>
         </DialogActions>
@@ -443,8 +444,8 @@ class GoldSummary extends Component {
         <Tabs
           value={this.state.value}
           onChange={this.handleChange}
-          indicatorColor="primary"
-          textColor="primary"
+          indicatorColor={this.state.type !== 'fisdom' ? 'secondary' : 'primary'}
+          textColor={this.state.type !== 'fisdom' ? 'secondary' : 'primary'}
           variant="fullWidth"
         >
           <Tab label="Sell" />
@@ -454,7 +455,7 @@ class GoldSummary extends Component {
           <div className="page-body-gold" id="goldInput">
             <div className="buy-info1">
               <div className="FlexRow">
-                <span className="buy-info2a">Current Selling Price</span>
+                <span className="buy-info2a">Current Sell Price</span>
                 <span className="buy-info2b">Price valid for
                   &nbsp;<span className="timer-green">{this.state.minutes}:{this.state.seconds}</span>
                 </span>

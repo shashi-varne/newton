@@ -178,7 +178,7 @@ class About extends Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleClose} color="primary" autoFocus>
+          <Button onClick={this.handleClose} color={this.state.type !== 'fisdom' ? 'secondary' : 'primary'} autoFocus>
             OK
           </Button>
         </DialogActions>
@@ -226,16 +226,16 @@ class About extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                    previous gold price has expired.
+                                                                                                                                                                                                        previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
         }
         <DialogActions>
-          <Button onClick={this.handleClose} color="primary">
+          <Button onClick={this.handleClose} color={this.state.type !== 'fisdom' ? 'secondary' : 'primary'}>
             CANCEL
           </Button>
-          <Button onClick={this.handlePopup} color="primary" autoFocus>
+          <Button onClick={this.handlePopup} color={this.state.type !== 'fisdom' ? 'secondary' : 'primary'} autoFocus>
             CONTINUE
           </Button>
         </DialogActions>
@@ -268,23 +268,23 @@ class About extends Component {
           </div>
           <div className="order-tile2">
             <span className="order-tile-total1">Net Sell Value</span>
-            <span className="float-right order-tile-total1">{inrFormatDecimal(this.state.sellData.amount)}</span>
+            <span className="float-right order-tile-total1 buy-order-tile22">{inrFormatDecimal(this.state.sellData.amount)}</span>
           </div>
           <div className="order-tile2">
             <span className="order-tile-other-text">Gold grams to be deducted</span>
-            <span className="float-right order-tile-other-text">{this.state.sellData.weight} gm</span>
+            <span className="float-right order-tile-other-text buy-order-tile22">{this.state.sellData.weight} gm</span>
           </div>
           <div className="order-tile2">
             <span className="order-tile-other-text">Rate</span>
-            <span className="float-right order-tile-other-text">{inrFormatDecimal(this.state.sellData.plutus_rate)}/gm</span>
+            <span className="float-right order-tile-other-text buy-order-tile22">{inrFormatDecimal(this.state.sellData.plutus_rate)}/gm</span>
           </div>
           <div className="order-tile2">
             <span className="order-tile-other-text">Bank Account Number</span>
-            <span className="float-right order-tile-other-text">{this.state.sellData.account_number}</span>
+            <span className="float-right order-tile-other-text buy-order-tile22">{this.state.sellData.account_number}</span>
           </div>
           <div className="order-tile2">
             <span className="order-tile-other-text">IFSC Code</span>
-            <span className="float-right order-tile-other-text">{this.state.sellData.ifsc_code}</span>
+            <span className="float-right order-tile-other-text buy-order-tile22">{this.state.sellData.ifsc_code}</span>
           </div>
         </div>
         {this.renderResponseDialog()}

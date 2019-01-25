@@ -84,7 +84,7 @@ class SellOrder extends Component {
           };
         }
         this.setState({
-          show_loader: false,
+          // show_loader: false,
           bankDetails: bankDetails,
           account_no: account_no,
           confirm_account_no: confirm_account_no,
@@ -96,6 +96,29 @@ class SellOrder extends Component {
         });
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
       }
+
+      const res2 = await Api.get('/api/gold/user/account');
+      if (res2.pfwresponse.status_code === 200) {
+        let result = res2.pfwresponse.result;
+        let isRegistered = true;
+        if (result.gold_user_info.user_info.registration_status === "pending" ||
+          !result.gold_user_info.user_info.registration_status ||
+          result.gold_user_info.is_new_gold_user) {
+          isRegistered = false;
+        }
+        this.setState({
+          show_loader: false,
+          goldInfo: result.gold_user_info.safegold_info,
+          userInfo: result.gold_user_info.user_info,
+          isRegistered: isRegistered
+        });
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message || 'Something went wrong', 'error');
+      }
+
     } catch (err) {
       this.setState({
         show_loader: false
@@ -202,6 +225,53 @@ class SellOrder extends Component {
     }
   }
 
+  verifyMobile = async () => {
+    this.setState({
+      show_loader: true
+    });
+
+    let options = {
+      mobile_number: this.state.userInfo.mobile_no,
+    }
+    try {
+      const res = await Api.post('/api/gold/user/verify/mobilenumber', options);
+
+      if (res.pfwresponse.status_code === 200) {
+        this.setState({
+          show_loader: false,
+        });
+        let result = res.pfwresponse.result;
+        if (result.resend_verification_otp_link !== '' && result.verification_link !== '') {
+          window.localStorage.setItem('fromType', 'sell')
+          var message = 'An OTP is sent to your mobile number ' + this.state.userInfo.mobile_no + ', please verify to place sell order.'
+          this.props.history.push({
+            pathname: 'verify',
+            search: '?base_url=' + this.state.params.base_url,
+            params: {
+              resend_link: result.resend_verification_otp_link,
+              verify_link: result.verification_link,
+              message: message, fromType: 'sell'
+            }
+          });
+          toast(message);
+        }
+
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+          'Something went wrong', 'error');
+      }
+
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong', 'error');
+    }
+  }
+
   handleClick = async () => {
     let ifsc_regex = /^[A-Za-z]{4}\d{7}$/;
 
@@ -249,10 +319,11 @@ class SellOrder extends Component {
           sellData.account_number = this.state.account_no;
           sellData.ifsc_code = this.state.ifsc_code;
           window.localStorage.setItem('sellData', JSON.stringify(sellData));
-          this.setState({
-            show_loader: false
-          });
-          this.navigate('sell-gold-order');
+          this.verifyMobile();
+          // this.setState({
+          //   show_loader: false
+          // });
+          // this.navigate('sell-gold-order');
         } else {
           this.setState({
             show_loader: false, openResponseDialog: true,
@@ -284,7 +355,7 @@ class SellOrder extends Component {
             <Input
               error={(this.state.account_no_error) ? true : false}
               helperText={this.state.account_no_error}
-              type="text"
+              type="password"
               width="40"
               label="Your Account Number *"
               class="account_no"

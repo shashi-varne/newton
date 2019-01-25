@@ -124,9 +124,9 @@ header.blue {
 }
 
 .FooterImage {
-  width: 80%;
+  width: 100%;
   position: relative;
-  top: 2px;
+  top: 0px;
 }
 
 .FooterDefaultLayout, .FooterSummaryLayout {

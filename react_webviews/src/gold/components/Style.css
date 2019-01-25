@@ -137,6 +137,9 @@
   padding: 20px 15px;
   background: #4f2da7;
 }
+.goldheader.blue {
+  background-color: #3792fc;
+}
 
 .goldheader .my-gold-header {
   background: #fff;
@@ -303,10 +306,22 @@
 .order-tile-total1 {
   font-size: 17px;
   color: black;
-  flex: 1;
+  /* flex: 1; */
 }
 
 .order-tile-other-text {
+  color: #6e6e6e;
+  font-size: 14px;
+  /* flex: 1; */
+}
+
+.order-tile-total1-delivery {
+  font-size: 17px;
+  color: black;
+  flex: 1;
+}
+
+.order-tile-other-text-delivery {
   color: #6e6e6e;
   font-size: 14px;
   flex: 1;
@@ -489,6 +504,10 @@
   text-align: center;
     margin-top: 13px;
     font-weight: 500;
-    color: #5346a7;
+    /* color: #5346a7; */
     border: 1px;
+}
+.buy-order-tile22 {
+  margin-left: 20px;
+  margin-right: 6px;
 }
