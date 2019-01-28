@@ -1,0 +1,513 @@
+.Banner {
+  position: relative;
+  text-align: center;
+}
+
+.Banner img {
+  width: 100%;
+}
+
+.BannerContent {
+  top: 50%;
+  position: absolute;
+  color: white;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.BannerText {
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: small;
+}
+
+.SafeGoldImage {
+  margin: 5px 0;
+}
+
+.SafeGoldImage img {
+  widows: 150px;
+}
+
+.FlexRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.FlexRow2 {
+  display: inline-flex;
+  /* align-items: center; */
+  justify-content: space-between;
+}
+
+.helper {
+  color: #8ab9e3;
+  margin-top: 10px;
+  text-decoration: underline;
+}
+
+.gold-about-text-know-more {
+    margin: 20px 0 20px 0;
+    text-align: center;
+}
+
+.gold-about-text {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  line-height: 1.3rem;
+}
+
+.gold-about-text:last-child {
+  margin-bottom: 0;
+}
+
+.gold-about-text img {
+  margin-right: 15px;
+}
+
+.gold-dot {
+  min-height: 7px;
+  min-width: 7px;
+  margin-right: 20px;
+  border-radius: 50%;
+  border: 2px solid #f0c82f;
+}
+
+.about-img-span2 {
+  font-size: 14px;
+  color: #888181;
+}
+
+.about-img-tile-know-more {
+  text-align: justify;
+}
+
+.gold-about-card {
+  position: relative;
+  background: #fff;
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  padding: 0px 0px 10px 0px;
+  margin: 0px;
+  margin-bottom: 20px;
+  border: 1px solid #ececec;
+}
+
+.gold-about-card h3 {
+  font-size: 16px;
+  color: black;
+  font-weight: normal;
+  margin-top: 0;
+}
+
+.BannerBody {
+  padding: 15px;
+}
+
+.card-padding {
+  padding: 15px;
+}
+
+.know-more-buy {
+  color: #3c3c3c;
+}
+
+.about-img-span-know-more {
+  font-size: 14px;
+  color: #888181;
+  line-height: 1.3rem;
+}
+
+.gold-about-text-know-more {
+  border-bottom: 1px solid #e8e8e8;
+  padding-bottom: 15px;
+  text-align: left;
+}
+
+.gold-about-text-know-more img {
+  width: 35%;
+  margin-bottom: 10px;
+}
+
+.goldheader {
+  position: relative;
+  margin: 0px;
+  padding: 20px 15px;
+  background: #4f2da7;
+}
+.goldheader.blue {
+  background-color: #3792fc;
+}
+
+.goldheader .my-gold-header {
+  background: #fff;
+  border-radius: 7px;
+  padding-bottom: 20px;
+  cursor: pointer;
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  padding: 15px;
+}
+
+.my-gold-details-header1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.my-gold-details-header2a {
+  color: #6e6e6e;
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
+.my-gold-header .img-mygold {
+  width: 30px;
+}
+
+.row1 {
+  border-bottom: 1px solid #e8e8e8;
+  justify-content: space-between;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+}
+
+.my-gold-header .img-mygold2 {
+  width: 7px;
+}
+
+.buy-info1 {
+  border-bottom: 1px solid #e8e8e8;
+  padding-bottom: 15px;
+  margin-bottom: 25px;
+}
+
+.buy-info2b {
+  color: #6e6e6e;
+}
+
+.buy-info3 {
+  font-size: 22px;
+  margin: 10px 0;
+}
+
+.buy-info4 {
+  color: #6e6e6e;
+}
+
+.timer-green {
+  color: green;
+}
+
+.buy-input1 {
+  margin-bottom: 10px;
+}
+
+.input-above-text {
+  color: #6e6e6e;
+  flex: 1;
+}
+
+.input-below-text {
+  color: #6e6e6e;
+  flex: 1;
+  font-size: 11px;
+}
+
+.input-box {
+  padding: 15px 0;
+}
+
+.symbol {
+  /*flex: 1;*/
+  text-align: center;
+  margin: 0 15px;
+
+  /* margin-top: 1%;
+  display: flex;
+  align-items: center; */
+}
+
+.input-box input {
+  border-radius: 5px;
+  height: 30px;
+  padding: 5px 10px;
+  border: 1px solid #cfcfcf;
+  width: 85%;
+}
+
+.or {
+  margin-top: 34px;
+  width: 10%;
+  font-size: 18px;
+}
+
+.Input {
+  margin: 15px 0; 
+}
+
+.Input input {
+  border: 1px solid #cfcfcf;
+  border-radius: 5px;
+  padding: 5px;
+  height: 30px;
+}
+
+.disclaimer {
+  color: grey;
+  margin-top: 30px;
+}
+
+.grey-color {
+  color: #6e6e6e;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
+.delivery-tile {
+  background-color: #f6f6f6;
+  flex: 1;
+  text-align: center;
+  margin: 15px;
+  text-align: center;
+  margin: 5px;
+  padding: 15px;
+  min-height: 150px;
+  flex-basis: calc(50% - 50px);
+}
+
+.order-tile {
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  top: 100px;
+  padding: 10px;
+  border: 1px solid #ececec;
+}
+
+.order-heading {
+  background: #f5f5f5;
+  padding: 10px;
+  border-radius: 3px;
+}
+
+.order-tile-head {
+  text-align: left;
+  font-size: 20px;
+  display: -webkit-inline-box;
+}
+
+.order-tile-total1 {
+  font-size: 17px;
+  color: black;
+  /* flex: 1; */
+}
+
+.order-tile-other-text {
+  color: #6e6e6e;
+  font-size: 14px;
+  /* flex: 1; */
+}
+
+.order-tile-total1-delivery {
+  font-size: 17px;
+  color: black;
+  flex: 1;
+}
+
+.order-tile-other-text-delivery {
+  color: #6e6e6e;
+  font-size: 14px;
+  flex: 1;
+}
+
+.order-tile2 {
+  margin: 14px 0px 16px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stopwatch {
+  margin-top: 10px;
+  justify-content: flex-end;
+}
+
+.stopwatch-order {
+  width: 15px;
+  position: relative;
+  top: -3px;
+  right: 3px;
+}
+
+.stopwatch-title {
+  font-size: 12px;
+  color: #6e6e6e;
+}
+
+.timer {
+  font-size: 16px;
+  color: green;
+  padding-left: 5px;
+}
+
+.bank-timer {
+  
+}
+
+.invest-success {
+  text-align: center;
+}
+
+.invest-success h3 {
+  color: #35cb5d;
+  font-size: 20px;
+  margin: 0;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.invest-success p {
+  color: #878787;
+  font-size: 16px;
+}
+
+.invoice {
+  margin: 0 auto;
+  border: 1px solid #c4c4c4;
+  padding: 4px 10px 4px 10px;
+  margin-top: 12px;
+  color: #3d3d3d;
+  border-radius: 11px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.success-card {
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.seller-name {
+  border-top: 1px solid #e6e6e6;
+  border-bottom: 1px solid #e6e6e6;
+  padding: 7px 5px;
+  margin: 10px 0;
+}
+
+.delivery-select-logo, .delivery-order-logo {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.product-details-content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  color: #6e6e6e;
+  margin-bottom: 7px;
+}
+
+.product-details-heading {
+  font-size: 15px;
+  color: black;
+  margin: 0 0 20px 0;
+}
+
+.delivery.block {
+  margin-bottom: 40px;
+}
+
+.product-name {
+  margin-right: 10px;
+  flex: 1;
+}
+
+.product-value {
+  flex: 1;
+}
+
+.delivery ul {
+  padding-left: 15px;
+}
+
+.delivery ul li {
+  line-height: 1.3rem;
+}
+
+.error {
+  color: red;
+}
+
+.MuiTabs-flexContainer {
+  display: flex;
+  justify-content: space-around;
+}
+
+.filler {
+  margin-top: 5px;
+  color: #6e6e6e;
+}
+
+.download-invoice {
+  color: #5346a7;
+  border: 1px solid #5346a7;
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 5px;
+}
+
+.locker-head {
+  padding: 10px 15px;
+  border-bottom: 8px solid #ecebeb;
+}
+
+.locker-head .link {
+  /*color: #5346a7;*/
+  /*border-bottom: 1px solid #5346a7;*/
+  cursor: pointer;
+}
+
+.locker-head .block1 {
+  justify-content: flex-start;
+  flex: 1;
+  margin-right: 2px;
+  background: #fff;
+  border-right: 2px solid #ecebeb;
+}
+
+.locker-head .block2 {
+  flex: 1;
+  background: #fff;
+  padding: 10px;
+}
+
+.transaction-history {
+  justify-content: space-between;
+}
+
+.transaction-history .arrow {
+  font-size: 16px;
+}
+.input-box.InputField {
+  margin-bottom: 0px;
+}
+.load-more {
+  text-align: center;
+    margin-top: 13px;
+    font-weight: 500;
+    /* color: #5346a7; */
+    border: 1px;
+}
+.buy-order-tile22 {
+  margin-left: 20px;
+  margin-right: 6px;
+}

@@ -649,7 +649,7 @@ class Resume extends Component {
       number += 30;
     }
 
-    if (type == 'event') {
+    if (type === 'event') {
       return number;
     }
 

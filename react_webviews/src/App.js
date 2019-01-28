@@ -8,6 +8,7 @@ import {
 import NotFound from './NotFound';
 import Insurance from './insurance';
 import Referral from './referral';
+import Gold from './gold';
 import Mandate from './mandate';
 
 class App extends Component {
@@ -17,6 +18,7 @@ class App extends Component {
         <Switch>
           <Route path="/insurance" component={Insurance} />
           <Route path="/referral" component={Referral} />
+          <Route path="/gold" component={Gold} />
           <Route path="/mandate" component={Mandate} />
           <Route component={NotFound} />
         </Switch>
