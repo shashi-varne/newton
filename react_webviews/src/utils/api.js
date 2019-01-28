@@ -4,7 +4,8 @@ import qs from 'qs';
 import createBrowserHistory from 'history/createBrowserHistory';
 
 const myHistory = createBrowserHistory();
-const { base_url } = qs.parse(myHistory.location.search.slice(1))
+let { base_url } = qs.parse(myHistory.location.search.slice(1));
+// let base_url = 'https://nitish-dot-plutus-staging.appspot.com';
 
 axios.defaults.baseURL = decodeURIComponent(base_url).replace(/\/$/, "");
 

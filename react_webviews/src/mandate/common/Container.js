@@ -5,7 +5,7 @@ import Header from './Header';
 import Footer from './footer';
 import Banner from '../ui/Banner';
 import loader from 'assets/loader_gif.gif';
-import { nativeCallback } from 'utils/native_callback';
+// import { nativeCallback } from 'utils/native_callback';
 import Button from 'material-ui/Button';
 import Dialog, {
   DialogActions,
@@ -25,7 +25,7 @@ class Container extends Component {
   redirectCallback(type) {
     console.log("back")
     let url;
-    if (type == 'back') {
+    if (type === 'back') {
       url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate&message=back&code=400&destination=';
     } else {
       url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate&message=success&code=200&destination=';

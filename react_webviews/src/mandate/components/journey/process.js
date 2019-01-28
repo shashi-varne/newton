@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
-import Grid from 'material-ui/Grid';
 import Api from 'utils/api';
-import Modal from 'material-ui/Modal';
-import Typography from 'material-ui/Typography';
 import loader from 'assets/loader_gif.gif';
 import qs from 'qs';
-import { nativeCallback } from 'utils/native_callback';
 import Button from 'material-ui/Button';
 import Dialog, {
   DialogActions,
@@ -53,7 +49,7 @@ class MandateProcess extends Component {
 
   componentDidMount() {
     Api.get('/api/mandate/campaign/address/' + this.state.params.key).then(res => {
-      if (res.pfwresponse.status_code == 200) {
+      if (res.pfwresponse.status_code === 200) {
         this.setState({
           show_loader: false,
           showLoader: false
@@ -95,12 +91,12 @@ class MandateProcess extends Component {
       show_loader: true
     })
     Api.get('/api/mandate/campaign/address/' + this.state.params.key).then(res => {
-      if (res.pfwresponse.status_code == 200) {
+      if (res.pfwresponse.status_code === 200) {
         this.setState({
           show_loader: false
         })
 
-        if (!res.pfwresponse.result || res.pfwresponse.result.length == 0) {
+        if (!res.pfwresponse.result || res.pfwresponse.result.length === 0) {
           this.navigate('/mandate/add-address')
         } else {
           this.navigate('/mandate/select-address')
