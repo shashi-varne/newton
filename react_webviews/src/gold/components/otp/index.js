@@ -262,6 +262,7 @@ class Otp extends Component {
                 class="otp"
                 id="otp"
                 name="otpnumber"
+                autoComplete="off"
                 value={this.state.otpnumber}
                 onChange={this.handleChange('otpnumber')} />
             </div>

@@ -123,12 +123,22 @@ class GoldRegister extends Component {
       this.setState({
         [event.target.name]: event.target.checked
       });
+    } else if (event.target.name === 'mobile_no') {
+      if (event.target.value.length > 10) {
+        return;
+      }
+      this.setState({
+        [event.target.name]: event.target.value,
+        [event.target.name + '_error']: ''
+      });
     } else {
       this.setState({
         [event.target.name]: event.target.value,
         [event.target.name + '_error']: ''
       });
     }
+
+
   }
 
   checkPincode = async (pincode) => {

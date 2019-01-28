@@ -14,6 +14,7 @@ import Button from 'material-ui/Button';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../ui/Toast';
 import { inrFormatDecimal } from 'utils/validators';
+import { nativeCallback } from 'utils/native_callback';
 
 class About extends Component {
   constructor(props) {
@@ -226,7 +227,7 @@ class About extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                        previous gold price has expired.
+                                                                                                                                                                                                                  previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
