@@ -10,6 +10,7 @@ import Insurance from './insurance';
 import Referral from './referral';
 import Gold from './gold';
 import Mandate from './mandate';
+import RiskProfiler from './risk_profiler';
 
 class App extends Component {
   render() {
@@ -20,6 +21,7 @@ class App extends Component {
           <Route path="/referral" component={Referral} />
           <Route path="/gold" component={Gold} />
           <Route path="/mandate" component={Mandate} />
+          <Route path="/risk" component={RiskProfiler} />
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>
