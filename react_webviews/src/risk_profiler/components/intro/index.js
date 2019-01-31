@@ -54,7 +54,6 @@ class Intro extends Component {
         openDialogConfirm: true
       })
       return;
-
     }
   }
 
@@ -106,7 +105,7 @@ class Intro extends Component {
       openDialogConfirm: false
     })
 
-    this.handleClick(true);
+    this.navigate('question1');
     return;
   }
 

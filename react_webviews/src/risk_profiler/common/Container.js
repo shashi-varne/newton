@@ -44,6 +44,13 @@ class Container extends Component {
     window.PlutusSdk.remove_listener({});
   }
 
+  navigate = (pathname) => {
+    this.props.history.push({
+      pathname: pathname,
+      search: this.props.location.search
+    });
+  }
+
   historyGoBack = () => {
     this.setState({
       back_pressed: true
@@ -62,14 +69,19 @@ class Container extends Component {
 
     let pathname = this.props.history.location.pathname;
 
-    // if (pathname.indexOf('question') >= 0) {
-    //   this.setState({
-    //     callbackType: 'exit',
-    //     openPopup: true,
-    //     popupText: 'Are you sure you want to exit ?.'
-    //   })
-    //   return;
-    // }
+    if (pathname.indexOf('result') >= 0) {
+      this.setState({
+        callbackType: 'exit',
+        openPopup: true,
+        popupText: 'Are you sure you want to exit ?.'
+      })
+      return;
+    }
+
+    if (pathname.indexOf('question1') >= 0) {
+      this.navigate('intro');
+      return;
+    }
 
     switch (pathname) {
       case "/risk":

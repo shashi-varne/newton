@@ -7,7 +7,7 @@ import Input from '../../ui/Input';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import { inrFormatDecimal } from 'utils/validators';
-// import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback } from 'utils/native_callback';
 
 class Recommendation extends Component {
   constructor(props) {
@@ -45,7 +45,7 @@ class Recommendation extends Component {
 
   async getFunds(duration, amount, type) {
     try {
-      let type_choices = ['sip', 'one_time'];
+      let type_choices = ['sip', 'onetime'];
       let timeChoices = ['0m', '6m', '1y', '3y', '5y'];
 
       this.setState({
@@ -57,7 +57,8 @@ class Recommendation extends Component {
 
       if (res.pfwresponse.result.funds) {
         this.setState({
-          funds: res.pfwresponse.result.funds
+          funds: res.pfwresponse.result.funds,
+          amount_error: ''
         })
       } else {
         toast(res.pfwresponse.result.message || res.pfwresponse.result.error)
@@ -78,7 +79,18 @@ class Recommendation extends Component {
   }
 
   async componentDidMount() {
-    this.getFunds(this.state.yearTab, this.state.amount, this.state.mfTab)
+    if (window.localStorage.getItem('backData')) {
+      let backData = JSON.parse(window.localStorage.getItem('backData'));
+      window.localStorage.setItem('backData', '');
+      this.setState({
+        mfTab: backData.mfTab,
+        yearTab: backData.yearTab,
+        amount: backData.amount
+      })
+      this.getFunds(backData.yearTab, backData.amount, backData.mfTab);
+    } else {
+      this.getFunds(this.state.yearTab, this.state.amount, this.state.mfTab);
+    }
   }
 
   navigate = (pathname) => {
@@ -110,7 +122,23 @@ class Recommendation extends Component {
 
   handleClick = async () => {
 
-    // this.navigate('/question2');
+    let nativeRedirectUrl = window.location.protocol + '//' + window.location.host +
+      '/risk/recommendation?base_url=' + this.state.params.base_url;
+
+    nativeCallback({
+      action: 'take_control', message: {
+        back_url: nativeRedirectUrl
+      }
+    });
+  }
+
+  showFundDetails(isin) {
+    let backData = {
+      mfTab: this.state.mfTab,
+      yearTab: this.state.yearTab,
+      amount: this.amount
+    }
+    window.localStorage.setItem('backData', JSON.stringify(backData));
   }
 
   getTabClassName(type, value) {
@@ -121,13 +149,32 @@ class Recommendation extends Component {
   }
 
   onBlurAmount = (event) => {
-    // this.getFunds(this.state.yearTab, this.state.amount, this.state.mfTab);
+
+    if (this.state.mfTab === 0 && this.state.amount < 500) {
+      this.setState({
+        amount_error: 'Minimum amount is 500 for SIP'
+      })
+    } else if (this.state.mfTab === 0 && this.state.amount > 500000) {
+      this.setState({
+        amount_error: 'Maximum amount is 5 Lakh for SIP'
+      })
+    } else if (this.state.mfTab === 1 && this.state.amount < 5000) {
+      this.setState({
+        amount_error: 'Minimum amount is 5,000 for One Time'
+      })
+    } else if (this.state.mfTab === 1 && this.state.amount > 5000000) {
+      this.setState({
+        amount_error: 'Maximum amount is 50 Lakh for One Time'
+      })
+    } else {
+      this.getFunds(this.state.yearTab, this.state.amount, this.state.mfTab);
+    }
 
   }
 
   renderFunds(props, index) {
     return (
-      <div key={index} className="fund-details">
+      <div key={index} className="fund-details" onClick={() => this.showFundDetails(props.isin)}>
         <div>
           <img style={{ border: '1px solid #ededed' }} alt="Risk Profile" src={props.amc_logo_big} width={75} />
         </div>

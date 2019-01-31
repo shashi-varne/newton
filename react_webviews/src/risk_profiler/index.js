@@ -41,9 +41,9 @@ if (ismyway) {
 }
 
 let mainColor = '#4f2da7';
-// if (productType !== 'fisdom') {
-mainColor = '#3792fc';
-// }
+if (productType !== 'fisdom') {
+  mainColor = '#3792fc';
+}
 
 const theme = createMuiTheme({
   palette: {
