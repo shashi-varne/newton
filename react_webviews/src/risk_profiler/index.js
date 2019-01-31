@@ -29,11 +29,27 @@ const jss = create(jssPreset());
 // We define a custom insertion point that JSS will look for injecting the styles in the DOM.
 // jss.options.insertionPoint = 'jss-insertion-point';
 
+
+let search = window.location.search;
+const isPrime = window.location.search.indexOf("mypro.fisdom.com") >= 0;
+const ismyway = window.location.search.indexOf("api.mywaywealth.com") >= 0
+let productType = 'fisdom';
+if (ismyway) {
+  productType = 'myway';
+} else if (isPrime) {
+  productType = 'Fisdom Prime';
+}
+
+let mainColor = '#4f2da7';
+// if (productType !== 'fisdom') {
+mainColor = '#3792fc';
+// }
+
 const theme = createMuiTheme({
   palette: {
     primary: {
       // light: will be calculated from palette.primary.main,
-      main: '#4f2da7',
+      main: mainColor,
       // dark: will be calculated from palette.primary.main,
       contrastText: '#ffffff',
     },

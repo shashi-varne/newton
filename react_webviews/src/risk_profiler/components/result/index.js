@@ -8,13 +8,22 @@ import meter2 from 'assets/meter2.svg';
 import meter3 from 'assets/meter3.svg';
 import meter4 from 'assets/meter4.svg';
 import meter5 from 'assets/meter5.svg';
-// import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback } from 'utils/native_callback';
+import Api from 'utils/api';
+import Button from 'material-ui/Button';
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogContentText
+} from 'material-ui/Dialog';
+
 
 class Result extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
+      openDialogReset: false,
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
@@ -56,7 +65,6 @@ class Result extends Component {
     }
   }
 
-
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
@@ -67,6 +75,53 @@ class Result extends Component {
   handleClick = async () => {
 
     this.navigate('recommendation');
+  }
+
+  renderDialog = () => {
+    return (
+      <Dialog
+        fullScreen={false}
+        open={this.state.openDialogReset}
+        onClose={this.handleClose}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to exit the application process? Not recommended if you already have done the payment
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClose} color="default">
+            No
+          </Button>
+          <Button onClick={this.handleReset} color="default" autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  }
+
+  showDialog = () => {
+    this.setState({ openDialogReset: true });
+  }
+
+  handleClose = () => {
+    this.setState({
+      openDialog: false,
+      openDialogReset: false,
+      show_loader: false
+    });
+  }
+
+  handleReset = async () => {
+    this.setState({ openResponseDialog: false, apiError: '', openDialog: false, openModal: true, openModalMessage: 'Wait a moment while we reset your application' });
+    window.localStorage.setItem('questionnaireResponse', '');
+    this.navigate('question1');
+  }
+
+  showDialog = () => {
+    this.setState({ openDialogReset: true });
   }
 
   getImg(score) {
@@ -92,6 +147,8 @@ class Result extends Component {
         buttonTitle="Fund Recommendation"
         type={this.state.type}
         topIcon="restart"
+        handleReset={this.showDialog}
+        resetpage={true}
       >
         <div className="meter-img">
           {this.state.score && <img style={{ width: '70%' }} src={this.getImg(this.state.score.score)} alt="meter" />}
@@ -104,6 +161,7 @@ class Result extends Component {
   primarly seeks to minimize risk and loss of
 money.</div>
         </div>
+        {this.renderDialog()}
       </Container>
     );
   }

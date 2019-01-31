@@ -26,7 +26,7 @@ class Container extends Component {
       popupText: '',
       callbackType: '',
     }
-
+    this.handleTopIcon = this.handleTopIcon.bind(this);
   }
 
   componentDidMount() {
@@ -45,37 +45,39 @@ class Container extends Component {
   }
 
   historyGoBack = () => {
+    this.setState({
+      back_pressed: true
+    })
     let { params } = this.props.location;
     console.log(params);
-
-    if (this.props.isJourney) {
-      this.setState({
-        callbackType: 'show_quotes',
-        openPopup: true,
-        popupText: 'Are you sure you want to explore more options? We will save your information securely.'
-      })
-      return;
-    }
 
     if (params && params.disableBack) {
       this.setState({
         callbackType: 'exit',
         openPopup: true,
-        popupText: 'Are you sure you want to exit the application process? You can resume it later.'
+        popupText: 'Are you sure you want to exit ?.'
       })
       return;
     }
 
     let pathname = this.props.history.location.pathname;
-    console.log(pathname);
+
+    // if (pathname.indexOf('question') >= 0) {
+    //   this.setState({
+    //     callbackType: 'exit',
+    //     openPopup: true,
+    //     popupText: 'Are you sure you want to exit ?.'
+    //   })
+    //   return;
+    // }
+
     switch (pathname) {
-      case "/insurance":
-      case "/insurance/resume":
-      case "/insurance/journey":
+      case "/risk":
+      case "/risk/intro":
         this.setState({
           callbackType: 'exit',
           openPopup: true,
-          popupText: 'Are you sure you want to exit the application process? You can resume it later.'
+          popupText: 'Are you sure you want to exit ?.'
         })
         break;
       default:
@@ -154,6 +156,14 @@ class Container extends Component {
     );
   }
 
+  handleTopIcon() {
+    this.setState({
+      callbackType: 'exit',
+      openPopup: true,
+      popupText: 'Are you sure you want to exit ?.'
+    })
+  }
+
   renderPageLoader = () => {
     if (this.props.showLoader) {
       return (
@@ -209,7 +219,8 @@ class Container extends Component {
           type={this.props.type}
           resetpage={this.props.resetpage}
           handleReset={this.props.handleReset}
-          topIcon={this.props.topIcon} />
+          topIcon={this.props.topIcon}
+          handleTopIcon={this.handleTopIcon} />
 
         {/* Below Header Block */}
         <div style={{ height: 56 }}></div>

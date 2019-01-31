@@ -6,6 +6,7 @@ import toast from '../../ui/Toast';
 import Input from '../../ui/Input';
 import Container from '../../common/Container';
 import Api from 'utils/api';
+import { inrFormatDecimal } from 'utils/validators';
 // import { nativeCallback } from 'utils/native_callback';
 
 class Recommendation extends Component {
@@ -120,9 +121,7 @@ class Recommendation extends Component {
   }
 
   onBlurAmount = (event) => {
-    console.log('blue');
-    console.log(this.state);
-    this.getFunds(this.state.yearTab, this.state.amount, this.state.mfTab);
+    // this.getFunds(this.state.yearTab, this.state.amount, this.state.mfTab);
 
   }
 
@@ -134,7 +133,7 @@ class Recommendation extends Component {
         </div>
         <div style={{ marginLeft: 10 }}>
           <div className="fund-details-head">{props.name}</div>
-          <div className="fund-details-below">Rs {props.amount}</div>
+          <div className="fund-details-below">{inrFormatDecimal(props.amount)}</div>
         </div>
       </div>
     )
@@ -151,7 +150,7 @@ class Recommendation extends Component {
         buttonTitle="Invest"
         type={this.state.type}
       >
-        <div style={{ backgroundColor: '#ffffff', padding: '1px 10px 10px 10px' }}>
+        <div style={{ backgroundColor: '#ffffff', padding: '1px 10px 1px 10px' }}>
           <p style={{ color: '#4a4a4a', fontSize: 14 }}>Investment type</p>
           <div className="ui-tabs">
             <div className={`ui-tab ${this.getTabClassName('mfTab', 0)}`} value={0} onClick={() => this.handleChangeTabs('mfTab', 0)}>SIP</div>
@@ -179,7 +178,8 @@ class Recommendation extends Component {
                 id="number"
                 name="amount"
                 value={this.state.amount}
-                onChange={this.handleChange('amount')} />
+                onChange={this.handleChange('amount')}
+                productType={this.state.type} />
             </div>
           </FormControl>
           <p style={{ color: '#4a4a4a', fontSize: 14 }}>Recommended Funds  </p>
