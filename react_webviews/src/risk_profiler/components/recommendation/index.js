@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
 
-import toast from '../../ui/Toast';
-import Input from '../../ui/Input';
+import toast from '../../../common/ui/Toast';
+import Input from '../../../common/ui/Input';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import { inrFormatDecimal } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
+import { getConfig } from 'utils/functions';
 
 class Recommendation extends Component {
   constructor(props) {
@@ -157,7 +158,7 @@ class Recommendation extends Component {
 
   getTabClassName(type, value) {
     if (value === this.state[type]) {
-      return this.state.type !== 'fisdom' ? 'mywayColor' : 'fisdomColor'
+      return getConfig().type !== 'fisdom' ? 'mywayColor' : 'fisdomColor'
     }
     return '';
   }

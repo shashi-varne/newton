@@ -5,7 +5,7 @@ import {
   Switch
 } from 'react-router-dom';
 
-import NotFound from './NotFound';
+import NotFound from './common/components/NotFound';
 import Insurance from './insurance';
 import Referral from './referral';
 import Gold from './gold';

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
-import toast from '../../ui/Toast';
+import toast from '../../../common/ui/Toast';
 
 import Container from '../../common/Container';
-import RadioOptions from '../../ui/RadioOptions';
+import RadioOptions from '../../../common/ui/RadioOptions';
 import Api from 'utils/api';
 // import { nativeCallback } from 'utils/native_callback';
 

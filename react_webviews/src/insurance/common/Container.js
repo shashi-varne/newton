@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 
 import Header from './Header';
 import Footer from './footer';
-import Banner from '../ui/Banner';
+import Banner from '../../common/ui/Banner';
 import loader from 'assets/loader_gif.gif';
 import { nativeCallback } from 'utils/native_callback';
 import Button from 'material-ui/Button';
@@ -13,6 +13,7 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
+import { getConfig } from 'utils/functions';
 
 class Container extends Component {
   constructor(props) {
@@ -30,13 +31,13 @@ class Container extends Component {
         nativeCallback({ action: 'native_back' });
         break;
       default:
-      if (navigator.onLine) {
-        this.props.history.goBack();
-      } else {
-        this.setState({
-          openDialog: true
-        });
-      }
+        if (navigator.onLine) {
+          this.props.history.goBack();
+        } else {
+          this.setState({
+            openDialog: true
+          });
+        }
     }
   }
 
@@ -49,10 +50,10 @@ class Container extends Component {
   renderDialog = () => {
     return (
       <Dialog
-          fullScreen={false}
-          open={this.state.openDialog}
-          onClose={this.handleClose}
-          aria-labelledby="responsive-dialog-title"
+        fullScreen={false}
+        open={this.state.openDialog}
+        onClose={this.handleClose}
+        aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="form-dialog-title">No Internet Found</DialogTitle>
         <DialogContent>
@@ -74,7 +75,7 @@ class Container extends Component {
       return (
         <div className="Loader">
           <div className="LoaderOverlay">
-            <img src={loader} alt=""/>
+            <img src={loader} alt="" />
           </div>
         </div>
       );
@@ -92,7 +93,7 @@ class Container extends Component {
     let bannerHeight = (banner) ? banner.offsetHeight : 0;
 
     if (client > body) {
-      document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 40+'px';
+      document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 40 + 'px';
     } else {
       document.getElementsByClassName('Container')[0].style.height = document.getElementsByClassName('Container')[0].offsetHeight;
     }
@@ -102,7 +103,8 @@ class Container extends Component {
     let steps = [];
     for (var i = 0; i < this.props.total; i++) {
       if (this.props.current > i) {
-        steps.push(<span className='active' key={i}></span>);
+        steps.push(<span className='active'
+          style={{ background: getConfig().primary }} key={i}></span>);
       } else {
         steps.push(<span key={i}></span>);
       }
@@ -121,7 +123,7 @@ class Container extends Component {
           type={this.props.type} />
 
         {/* Below Header Block */}
-        <div style={{height: 56}}></div>
+        <div style={{ height: 56 }}></div>
 
         {/* Loader Block */}
         {this.renderPageLoader()}
@@ -131,11 +133,11 @@ class Container extends Component {
         </div>
 
         {/* Banner Block */}
-        { this.props.banner && <Banner text={this.props.bannerText}/> }
+        {this.props.banner && <Banner text={this.props.bannerText} />}
 
         {/* Children Block */}
         <div className='Container'>
-          { this.props.children }
+          {this.props.children}
         </div>
 
         {/* Footer Block */}
@@ -151,8 +153,8 @@ class Container extends Component {
           handleClick={this.props.handleClick}
           handleReset={this.props.handleReset} />
 
-          {/* No Internet */}
-          {this.renderDialog()}
+        {/* No Internet */}
+        {this.renderDialog()}
       </div>
     );
   }

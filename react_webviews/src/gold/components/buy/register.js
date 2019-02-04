@@ -3,7 +3,7 @@ import qs from 'qs';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import Input from '../../ui/Input';
+import Input from '../../../common/ui/Input';
 import Grid from 'material-ui/Grid';
 import Checkbox from 'material-ui/Checkbox';
 import Dialog, {
@@ -14,8 +14,9 @@ import Dialog, {
 import Button from 'material-ui/Button';
 import { validateNumber, validateEmail, numberShouldStartWith } from 'utils/validators';
 import { ToastContainer } from 'react-toastify';
-import toast from '../../ui/Toast';
+import toast from '../../../common/ui/Toast';
 import { nativeCallback } from 'utils/native_callback';
+import { getConfig } from 'utils/functions';
 
 class GoldRegister extends Component {
   constructor(props) {
@@ -246,7 +247,7 @@ class GoldRegister extends Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleClose} color={this.state.type !== 'fisdom' ? 'secondary' : 'primary'} autoFocus>
+          <Button onClick={this.handleClose} color="default" autoFocus>
             OK
           </Button>
         </DialogActions>
@@ -399,7 +400,7 @@ class GoldRegister extends Component {
               <Grid item xs={2} className="TextCenter">
                 <Checkbox
                   style={{
-                    color: `${(this.state.type !== 'fisdom') ? '#3792fc' : '#4f2da7'}`,
+                    color: getConfig().primary
                   }}
                   defaultChecked
                   checked={this.state.checked}
@@ -411,8 +412,10 @@ class GoldRegister extends Component {
               </Grid>
               <Grid item xs={10}>
                 <span className="Terms">I agree to the <a
-                  className={`${(this.state.type !== 'fisdom') ? 'mywayColor' : 'fisdomColor'}`}
-                  style={{ textDecoration: 'underline' }} onClick={() => this.openTermsAndCondition()}>Terms and Conditions</a></span>
+                  style={{
+                    textDecoration: 'underline',
+                    color: getConfig().primary
+                  }} onClick={() => this.openTermsAndCondition()}>Terms and Conditions</a></span>
               </Grid>
             </Grid>
           </div>

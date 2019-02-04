@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Button from 'material-ui/Button';
 import { withStyles } from 'material-ui/styles';
 import arrow from 'assets/next_arrow.png';
+import './style.css';
 
 class CustomButton extends Component {
   render() {
@@ -13,11 +14,12 @@ class CustomButton extends Component {
           variant="raised"
           size="large"
           color="secondary"
-          className={props.classes.button} >
+          className={props.classes.button}
+          disabled={props.disable} >
           {props.buttonTitle}
           {
             props.arrow &&
-            <img alt="" src={arrow} width={20} className="FooterButtonArrow"/>
+            <img alt="" src={arrow} width={20} className="FooterButtonArrow" />
           }
         </Button>
       </div>
@@ -27,12 +29,12 @@ class CustomButton extends Component {
 
 const styles = {
   button: {
-    padding: '16px 24px',
+    padding: '16px 24px !important',
     borderRadius: 0,
     textTransform: 'capitalize',
-    fontSize: '16px',
+    fontSize: '16px !important',
     boxShadow: 'none',
-    width: '100%'
+    width: '100% !important'
   }
 }
 

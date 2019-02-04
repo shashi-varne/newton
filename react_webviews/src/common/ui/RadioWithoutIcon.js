@@ -3,6 +3,7 @@ import Grid from 'material-ui/Grid';
 
 import './style.css';
 import RadioBtn from './RadioBtn';
+import { getConfig } from 'utils/functions';
 
 class RadioGrp extends Component {
   constructor(props) {
@@ -27,31 +28,40 @@ class RadioGrp extends Component {
     const { options } = this.state;
 
     const allOptions = options.map((option, i) => {
-      return (
-        <Grid item xs={4} key={i} className="RadioGrpGrid" style={{
-          flexBasis: 'auto'
-        }}>
-          <RadioBtn
-            isChecked={(this.state.selectedIndex === i || option.value === this.props.value)}
-            text={option.name}
-            value={option.value}
-            index={i}
-            type={this.props.type}
-            handler={this.toggleRadioBtn} />
-        </Grid>
-      );
+      if (this.props.type === 'professional') {
+        return (
+          <Grid item xs={5} key={i} className="RadioGrpGrid" style={{ flexBasis: 'auto' }}>
+            <RadioBtn
+              isChecked={(this.state.selectedIndex === i || option.value === this.props.value)}
+              text={option.name}
+              value={option.value}
+              index={i}
+              type={this.props.type}
+              handler={this.toggleRadioBtn} />
+          </Grid>
+        );
+      } else {
+        return (
+          <Grid item xs={5} key={i}>
+            <RadioBtn
+              isChecked={(this.state.selectedIndex === i || option.value === this.props.value)}
+              text={option.name}
+              value={option.value}
+              index={i}
+              type={this.props.type}
+              handler={this.toggleRadioBtn} />
+          </Grid>
+        );
+      }
     });
 
     return (
-      <div style={{ display: '-webkit-box' }}>
-        <div className={'RadioWithIcon ' + (this.props.type)} style={{ width: '170px' }}>
-          <span >{this.props.label} *</span>
+      <div>
+        <div className="RadioWithIcon">
+          <span>{this.props.label} *</span>
           {/* <span className={(this.props.error) ? 'error' : ''}>{(this.props.error) ? 'Mandatory' : ''}</span> */}
         </div>
-        <Grid container style={{
-          position: 'relative',
-          // left: 40
-        }} spacing={16}>
+        <Grid container spacing={16}>
           {allOptions}
         </Grid>
         <span className='error-radiogrp'>{(this.props.error) ? 'Please select an option' : ''}</span>

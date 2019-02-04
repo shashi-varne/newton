@@ -1,31 +1,28 @@
+@value label: #a2a2a2;
+@value secondary: #35cb5d;
+
 .Select {
   font-size: 14px !important;
 }
 .InputField {
-  margin-bottom: 30px;
-}
-.Checkbox {
-  padding: 0;
+  margin-bottom: 20px;
 }
 .RadioButton.unchecked label {
   background: #fff;
-  color: #4f2da7;
-  border: 1px solid #4f2da7;
+  border: 1px solid;
 }
 .RadioButton.checked label {
-  background: #4f2da7;
-  border: 1px solid #4f2da7;
   color: #fff;
-}
-.ContainerWrapper.blue .RadioButton.unchecked label {
-  color: #3792fc;
-  border: 1px solid #3792fc;
-}
-.ContainerWrapper.blue .RadioButton.checked label {
-  background: #3792fc;
-  border: 1px solid #3792fc;
+  border: 1px solid;
 }
 .RadioButton label.professional {
+  /* padding: 8px;
+  display: inline-block;
+  border-radius: 4px;
+  width: auto;
+  min-width: 100px;
+  text-align: center;
+  font-size: 12px; */
   padding: 4px;
   display: inline-block;
   border-radius: 100px;
@@ -88,14 +85,21 @@
 }
 
 .RadioLabel {
-  color: #444;
+  color: label;
   font-size: 14px;
   font-family: 'Roboto';
   font-weight: 500;
 }
 
 .RadioWithIcon {
-  color: #444;
+  color: label;
+  font-size: 0.8rem;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.RadioWithIcon.professional2 {
+  color: #4a4a4a !important;
   font-size: 0.8rem;
   margin-bottom: 15px;
   position: relative;
@@ -110,6 +114,47 @@
 }
 .DialogButtonFullWidth {
   width: 100%;
-  background-color: #1bda4e !important;
+  background-color: secondary !important;
   color: #fff !important;
+}
+
+
+
+/* verify */
+
+.CheckBlock {
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.Checkbox {
+  width: auto;
+  height: auto;
+}
+
+.MuiCheckbox-root {
+  /* color: rgb(83, 70, 167) !important; */
+  position: relative;
+  left: -15px;
+}
+.MuiFormLabel-root.MuiFormLabel-error {
+  color: label !important;
+}
+.MuiFormLabel-root.MuiFormLabel-focused.MuiFormLabel-error {
+  color: rgb(55, 31, 116) !important;
+}
+.MuiInput-underline.MuiInput-error:after {
+  background-color: inherit !important;
+}
+.error-radiogrp {
+  margin: 0;
+  font-size: 0.75rem;
+  text-align: left;
+  margin-top: 8px;
+  min-height: 1em;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  line-height: 1em;
+  color: #f44336;
+  position: relative;
+  top: 5px;
 }

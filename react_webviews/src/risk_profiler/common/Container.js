@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 
 import Header from './Header';
 import Footer from './footer';
-import Banner from '../ui/Banner';
+import Banner from '../../common/ui/Banner';
 import loader from 'assets/loader_gif.gif';
 import { nativeCallback } from 'utils/native_callback';
 import Button from 'material-ui/Button';
@@ -14,6 +14,7 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import '../../utils/native_listner';
+import { getConfig } from 'utils/functions';
 
 
 class Container extends Component {
@@ -209,14 +210,15 @@ class Container extends Component {
     let steps = [];
     for (var i = 0; i < this.props.total; i++) {
       if (this.props.current > i) {
-        steps.push(<span className='active' key={i}></span>);
+        steps.push(<span className='active'
+          style={{ background: getConfig().primary }} key={i}></span>);
       } else {
         steps.push(<span key={i}></span>);
       }
     }
 
     return (
-      <div className={`ContainerWrapper ${(this.props.type !== 'fisdom') ? 'blue' : ''}`} >
+      <div className={`ContainerWrapper ${this.props.classOverRide}  ${(this.props.type !== 'fisdom') ? 'blue' : ''}`} >
         {/* Header Block */}
         <Header
           disableBack={this.props.disableBack}
@@ -240,7 +242,8 @@ class Container extends Component {
         {/* Loader Block */}
         {this.renderPageLoader()}
 
-        <div className={`Step ${(this.props.type !== 'fisdom') ? 'blue' : ''}`}>
+        <div className="Step"
+        >
           {steps}
         </div>
 

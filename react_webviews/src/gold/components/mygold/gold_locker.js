@@ -21,7 +21,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import { ToastContainer } from 'react-toastify';
-import toast from '../../ui/Toast';
+import toast from '../../../common/ui/Toast';
 import { inrFormatDecimal } from 'utils/validators';
 
 class GoldSummary extends Component {
@@ -312,7 +312,7 @@ class GoldSummary extends Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleClose} color={this.state.type !== 'fisdom' ? 'secondary' : 'primary'} autoFocus>
+          <Button onClick={this.handleClose} color="default" autoFocus>
             OK
           </Button>
         </DialogActions>
@@ -444,8 +444,8 @@ class GoldSummary extends Component {
         <Tabs
           value={this.state.value}
           onChange={this.handleChange}
-          indicatorColor={this.state.type !== 'fisdom' ? 'secondary' : 'primary'}
-          textColor={this.state.type !== 'fisdom' ? 'secondary' : 'primary'}
+          indicatorColor="primary"
+          textColor="primary"
           variant="fullWidth"
         >
           <Tab label="Sell" />

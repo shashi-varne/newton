@@ -1,5 +1,6 @@
 import React from 'react';
 import TextField from 'material-ui/TextField';
+import './style.css';
 
 const Input = (props) => {
   if (props.type === 'date' || props.shrink) {
@@ -35,11 +36,9 @@ const Input = (props) => {
         value={props.value}
         helperText={props.helperText}
         placeholder={props.placeholder}
-        style={props.style}
         fullWidth
         required={props.required}
-        color="secondary"
-        className={`${props.class} ${(props.productType !== 'fisdom') ? 'blue' : ''}`}
+        className={props.class}
         id={props.id}
         label={props.label}
         onFocus={props.onFocus}

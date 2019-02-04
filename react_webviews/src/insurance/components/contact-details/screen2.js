@@ -5,7 +5,7 @@ import qs from 'qs';
 import Grid from 'material-ui/Grid';
 
 import Container from '../../common/Container';
-import InputWithIcon from '../../ui/InputWithIcon';
+import InputWithIcon from '../../../common/ui/InputWithIcon';
 import location from 'assets/location_dark_icn.png';
 import Api from 'utils/api';
 import { validateNumber, validateStreetName, validateLength, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';

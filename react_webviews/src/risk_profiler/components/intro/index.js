@@ -10,6 +10,7 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
+import { getConfig } from 'utils/functions';
 
 class Intro extends Component {
   constructor(props) {
@@ -122,7 +123,7 @@ class Intro extends Component {
         <div style={{ padding: '10px' }}>
           <div className="meter-img">
             <img style={{ width: '100%' }}
-              src={this.state.type !== 'fisdom' ? intro : intro_myway} alt="Risk Profile" />
+              src={getConfig().type !== 'fisdom' ? intro : intro_myway} alt="Risk Profile" />
           </div>
           <div style={{
             textAlign: 'center', marginTop: 50,

@@ -3,7 +3,7 @@ import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
 
 import Container from '../../common/Container';
-import RadioOptions from '../../ui/RadioOptions';
+import RadioOptions from '../../../common/ui/RadioOptions';
 // import { nativeCallback } from 'utils/native_callback';
 
 class QuestionScreen3 extends Component {

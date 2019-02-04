@@ -8,10 +8,9 @@ import buy_gold_icon from 'assets/buy_gold_icon@2x.png';
 import track_gold_icon from 'assets/track_gold_icon@2x.png';
 import sell_gold_icon from 'assets/sell_gold_icon@2x.png';
 import deliver_gold_icon from 'assets/deliver_gold_icon@2x.png';
-import '../Style.css';
 import { ToastContainer } from 'react-toastify';
 import Api from 'utils/api';
-import toast from '../../ui/Toast';
+import toast from '../../../common/ui/Toast';
 import { inrFormatDecimal } from 'utils/validators';
 
 class About extends Component {

@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import qs from 'qs';
 
-import toast from '../../ui/Toast';
+import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import meter1 from 'assets/meter1.svg';
 import meter2 from 'assets/meter2.svg';
 import meter3 from 'assets/meter3.svg';
 import meter4 from 'assets/meter4.svg';
 import meter5 from 'assets/meter5.svg';
-import { nativeCallback } from 'utils/native_callback';
+// import { nativeCallback } from 'utils/native_callback';
 import loader from 'assets/loader_gif.gif';
 import Api from 'utils/api';
 import Button from 'material-ui/Button';
@@ -205,12 +205,13 @@ money.</div>
         </Container>
       )
     } else {
-      <Container
-        showLoader={true}
-      >
-      </Container>
+      return (
+        <Container
+          showLoader={true}
+        >
+        </Container>
+      )
     }
-    return null;
   }
 
   render() {

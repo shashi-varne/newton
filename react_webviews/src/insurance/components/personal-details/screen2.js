@@ -3,7 +3,7 @@ import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
 
 import Container from '../../common/Container';
-import InputWithIcon from '../../ui/InputWithIcon';
+import InputWithIcon from '../../../common/ui/InputWithIcon';
 import mother from 'assets/mother_dark_icn.png';
 import father from 'assets/father_dark_icn.png';
 import location from 'assets/location_dark_icn.png';

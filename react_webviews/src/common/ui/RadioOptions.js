@@ -7,6 +7,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 
 import CircleCheckedFilled from '@material-ui/icons/CheckCircle';
 import CircleUnchecked from '@material-ui/icons/RadioButtonUnchecked';
+import { getConfig } from 'utils/functions';
 
 // import CircleCheckedFilled from 'assets/check_green_pg.svg';
 // import CircleUnchecked from 'assets/not_done_yet_step.svg';
@@ -50,7 +51,7 @@ class RadioButtonsGroup extends Component {
           onChange={this.props.onChange}
           control={<Radio
             icon={<CircleUnchecked />}
-            checkedIcon={<CircleCheckedFilled style={{ color: '#35cb5d' }} />}
+            checkedIcon={<CircleCheckedFilled style={{ color: getConfig().secondary }} />}
           />} label={option.name} />
       );
     });

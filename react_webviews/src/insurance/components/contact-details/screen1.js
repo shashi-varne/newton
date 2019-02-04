@@ -3,8 +3,8 @@ import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
 
 import Container from '../../common/Container';
-import InputWithIcon from '../../ui/InputWithIcon';
-import MobileInputWithIcon from '../../ui/MobileInputWithIcon';
+import InputWithIcon from '../../../common/ui/InputWithIcon';
+import MobileInputWithIcon from '../../../common/ui/MobileInputWithIcon';
 import email from 'assets/email_dark_icn.png';
 import phone from 'assets/phone_dark_icn.png';
 import Api from 'utils/api';
@@ -46,7 +46,7 @@ class ContactDetails1 extends Component {
   }
 
   componentDidMount() {
-    Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
+    Api.get('/api/insurance/profile/' + this.state.params.insurance_id, {
       groups: 'contact'
     }).then(res => {
       const { email, mobile_no } = res.pfwresponse.result.profile;
@@ -60,7 +60,7 @@ class ContactDetails1 extends Component {
         provider: provider
       });
     }).catch(error => {
-      this.setState({show_loader: false});
+      this.setState({ show_loader: false });
       console.log(error);
     });
   }
@@ -70,13 +70,13 @@ class ContactDetails1 extends Component {
       if (event.target.value.length <= 10) {
         this.setState({
           [event.target.name]: event.target.value,
-          [event.target.name+'_error']: ''
+          [event.target.name + '_error']: ''
         });
       }
     } else {
       this.setState({
         [event.target.name]: event.target.value,
-        [event.target.name+'_error']: ''
+        [event.target.name + '_error']: ''
       });
     }
   };
@@ -84,7 +84,7 @@ class ContactDetails1 extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id='+this.state.params.insurance_id+'&resume='+this.state.params.resume+'&base_url='+this.state.params.base_url
+      search: '?insurance_id=' + this.state.params.insurance_id + '&resume=' + this.state.params.resume + '&base_url=' + this.state.params.base_url
     });
   }
 
@@ -102,7 +102,7 @@ class ContactDetails1 extends Component {
         mobile_no_error: 'Please enter valid mobile no'
       });
     } else {
-      this.setState({show_loader: true});
+      this.setState({ show_loader: true });
       const res = await Api.post('/api/insurance/profile', {
         insurance_app_id: this.state.params.insurance_id,
         email: this.state.email,
@@ -124,17 +124,17 @@ class ContactDetails1 extends Component {
 
         nativeCallback({ events: eventObj });
 
-        this.setState({show_loader: false});
+        this.setState({ show_loader: false });
         if (this.props.edit) {
           this.navigate('/insurance/edit-contact1');
         } else {
           this.navigate('/insurance/contact1');
         }
       } else {
-        this.setState({show_loader: false});
+        this.setState({ show_loader: false });
         for (let error of res.pfwresponse.result.errors) {
           this.setState({
-            [error.field+'_error']: error.message
+            [error.field + '_error']: error.message
           });
         }
       }
@@ -144,7 +144,7 @@ class ContactDetails1 extends Component {
   bannerText = () => {
     return (
       <span>
-        Your policy will be <em><b>emailed</b></em> to you.<br/>Let's stay connected!
+        Your policy will be <em><b>emailed</b></em> to you.<br />Let's stay connected!
       </span>
     );
   }
@@ -164,7 +164,7 @@ class ContactDetails1 extends Component {
         buttonTitle="Save & Continue"
         logo={this.state.image}
         type={this.state.type}
-        >
+      >
         <FormControl fullWidth>
           <div className="InputField">
             <InputWithIcon

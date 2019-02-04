@@ -248,12 +248,11 @@ class SelectAddress extends Component {
         <div >
           <Checkbox
             style={{
-              color: `${(this.state.type !== 'fisdom') ? '#3792fc' : '#4f2da7'}`,
               height: 'auto'
             }}
             defaultChecked
             checked={this.state.indexCheckBox === index}
-            color="default"
+            color="primary"
             value="checked"
             name="checked"
             onChange={this.handleChange(index)}

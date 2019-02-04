@@ -1,0 +1,59 @@
+.result-container {
+  background: #155acf;
+  /* autoprefixer: off */
+  height: -webkit-fill-available; 
+  margin-bottom: 0px;
+  padding-bottom: 0;
+  overflow-y: hidden;
+}
+.ui-tabs {
+  display: flex;
+  box-shadow: 0 1px 2px 0 #11000000, 0 1px 3px 1px rgba(60,64,67,0.149);
+}
+.ui-tab {
+  width: 50%;
+  color: #8b8b8b;
+  font-size: 15px;
+  text-align: center;
+  border-right: 1px solid #f2f2f2;
+  padding: 10px 0px 10px 0px;
+}
+.ui-tab2 {
+  width: 20%;
+  text-align: center;
+  border-right: 1px solid #f2f2f2;
+  padding: 10px 0px 10px 0px;
+  color: #8b8b8b;
+  font-size: 14px;
+}
+.funds-card {
+  /* box-shadow: 0 1px 2px 0 #11000000, 0 1px 3px 1px rgba(60,64,67,0.149); */
+}
+.meter-img {
+  text-align: center;
+    margin-top: 50px;
+}
+.fund-details {
+  display: flex;
+  padding: 10px 10px 10px 10px;
+  margin-bottom: 15px;
+  box-shadow: 0 1px 2px 0 #11000000, 0 1px 3px 1px rgba(60,64,67,0.149);
+}
+.fund-details-head {
+  color: #4a4a4a;
+  font-weight: 600;
+  font-size: 16px;
+}
+.fund-details-below {
+  font-size: 14px;
+  color: #525252;
+  margin-top: 10px;
+}
+.recommendation-container {
+  background-color: #f2f2f2;
+  /* autoprefixer: off */
+  height: -webkit-fill-available;
+  padding: 10px 7px 10px 7px;
+  margin-bottom: 0px !important;
+}
+

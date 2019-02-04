@@ -5,15 +5,15 @@ import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 
 import Container from '../../common/Container';
-import InputWithIcon from '../../ui/InputWithIcon';
-import RadioWithIcon from '../../ui/RadioWithIcon';
+import InputWithIcon from '../../../common/ui/InputWithIcon';
+import RadioWithIcon from '../../../common/ui/RadioWithIcon';
 import name from 'assets/full_name_dark_icn.png';
 import dob from 'assets/dob_dark_icn.png';
 import gender from 'assets/gender_dark_icn.png';
 import relationship from 'assets/relationship_dark_icn.png';
 import marital from 'assets/marital_status_dark_icn.png';
 import location from 'assets/location_dark_icn.png';
-import Dropdown from '../../ui/Select';
+import Dropdown from '../../../common/ui/Select';
 import Button from 'material-ui/Button';
 import Api from 'utils/api';
 import { maritalOptions, genderOptions, appointeeRelationshipOptions } from '../../constants';

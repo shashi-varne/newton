@@ -6,8 +6,10 @@ import {
 import { withRouter } from "react-router";
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 
+import '../common/theme/Style.css';
 import './common/Style.css';
-import NotFound from '../NotFound';
+import { getConfig } from 'utils/functions';
+import NotFound from '../common/components/NotFound';
 import Details from './components/details';
 import Earnings from './components/earnings';
 import Terms from './components/terms';
@@ -28,18 +30,18 @@ const theme = createMuiTheme({
   palette: {
     primary: {
       // light: will be calculated from palette.primary.main,
-      main: '#4f2da7',
+      main: getConfig().primary,
       // dark: will be calculated from palette.primary.main,
       contrastText: '#ffffff',
     },
     secondary: {
       // light: '#0066ff',
-      main: '#1bda4e',
+      main: getConfig().secondary,
       // dark: will be calculated from palette.secondary.main,
       contrastText: '#ffffff',
     },
     default: {
-      main: '#1bda4e',
+      main: getConfig().default,
       contrastText: '#ffffff'
     }
     // error: will us the default color
@@ -77,10 +79,10 @@ const Referral = (props) => {
       <MuiThemeProvider theme={theme}>
         <ScrollToTop />
         <Switch>
-          <Route exact path={`${url}`} component={ Details } />
-          <Route path={`${url}/earnings`} component={ Earnings } />
-          <Route path={`${url}/terms`} component={ Terms } />
-          <Route component={ NotFound } />
+          <Route exact path={`${url}`} component={Details} />
+          <Route path={`${url}/earnings`} component={Earnings} />
+          <Route path={`${url}/terms`} component={Terms} />
+          <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>
     </JssProvider>

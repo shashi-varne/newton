@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import qs from 'qs';
 
 // import { FormControl } from 'material-ui/Form';
-// import Input from '../../ui/Input';
+// import Input from '../../../common/ui/Input';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import { inrFormatDecimal } from 'utils/validators';
@@ -16,7 +16,8 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import { ToastContainer } from 'react-toastify';
-import toast from '../../ui/Toast';
+import toast from '../../../common/ui/Toast';
+import { getConfig } from 'utils/functions';
 
 class GoldSummary extends Component {
   constructor(props) {
@@ -313,7 +314,7 @@ class GoldSummary extends Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleClose} color={this.state.type !== 'fisdom' ? 'secondary' : 'primary'} autoFocus>
+          <Button onClick={this.handleClose} color="default" autoFocus>
             OK
           </Button>
         </DialogActions>
@@ -361,16 +362,16 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                                                                                                                                                                                                            previous gold price has expired.
+                                                                                                                                                                                                                                                                                                                                                                                                              previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
         }
         <DialogActions>
-          <Button onClick={this.handleClose} color={this.state.type !== 'fisdom' ? 'secondary' : 'primary'}>
+          <Button onClick={this.handleClose} color="default">
             CANCEL
           </Button>
-          <Button onClick={this.handlePopup} color={this.state.type !== 'fisdom' ? 'secondary' : 'primary'} autoFocus>
+          <Button onClick={this.handlePopup} color="default" autoFocus>
             CONTINUE
           </Button>
         </DialogActions>
@@ -448,7 +449,12 @@ class GoldSummary extends Component {
         noPadding={true}
       >
         <div className="page home" id="goldSection">
-          <div className={`text-center goldheader  ${(this.state.type !== 'fisdom') ? 'blue' : ''}`} onClick={() => this.navigate('/gold/my-gold-locker')}>
+          <div className="text-center goldheader"
+            onClick={() => this.navigate('/gold/my-gold-locker')}
+            style={{
+              background: getConfig().primary
+            }}
+          >
             <div className="my-gold-header">
               <div className="FlexRow row1">
                 <img alt="Gold" className="img-mygold" src={safegold_logo} />
