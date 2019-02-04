@@ -120,25 +120,39 @@ class Recommendation extends Component {
 
   }
 
-  handleClick = async () => {
+  handleClick = async (isin) => {
 
     let nativeRedirectUrl = window.location.protocol + '//' + window.location.host +
       '/risk/recommendation?base_url=' + this.state.params.base_url;
 
-    nativeCallback({
-      action: 'take_control', message: {
-        back_url: nativeRedirectUrl
-      }
-    });
-  }
-
-  showFundDetails(isin) {
     let backData = {
       mfTab: this.state.mfTab,
       yearTab: this.state.yearTab,
       amount: this.amount
     }
     window.localStorage.setItem('backData', JSON.stringify(backData));
+
+    if (isin) {
+      nativeCallback({
+        action: 'show_fund', message: {
+          back_url: nativeRedirectUrl,
+          recommendation_result: this.state.funds,
+          isin: isin || ''
+        }
+      });
+      return;
+    }
+
+    nativeCallback({
+      action: 'invest', message: {
+        back_url: nativeRedirectUrl,
+        recommendation_result: this.state.funds
+      }
+    });
+  }
+
+  showFundDetails(isin) {
+    this.handleClick(isin);
   }
 
   getTabClassName(type, value) {

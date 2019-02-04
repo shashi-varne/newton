@@ -47,7 +47,7 @@ class QuestionScreen2 extends Component {
     let questionnaire = JSON.parse(window.localStorage.getItem('questionnaire'));
     console.log(questionnaire)
     let question1Options = [], question2Options = [];
-    question1Options = questionnaire[0].choices;
+    question1Options = questionnaire[this.state.indexMain].choices;
 
     if (questionnaire[this.state.indexMain + 1]) {
       question2Options = questionnaire[this.state.indexMain + 1].choices;
