@@ -51,6 +51,7 @@ class Recommendation extends Component {
 
       this.setState({
         show_loader: true,
+        order_type: type_choices[type]
       });
       let url = '/api/risk/profile/user/recommendation?duration=' + timeChoices[duration] +
         '&amount=' + amount + '&type=' + type_choices[type];
@@ -73,7 +74,8 @@ class Recommendation extends Component {
       });
     } catch (err) {
       this.setState({
-        show_loader: false
+        show_loader: false,
+        funds: []
       });
       toast('Something went wrong');
     }
@@ -121,8 +123,17 @@ class Recommendation extends Component {
 
   }
 
-  handleClick = async (isin) => {
+  handleClick = async (event, isin) => {
 
+    if (!this.state.funds) {
+
+      this.setState({
+        amount_error: 'No funds found, try chaning Amount/Type/Term'
+      })
+      return;
+    }
+
+    // eslint-disable-next-line
     let nativeRedirectUrl = window.location.protocol + '//' + window.location.host +
       '/risk/recommendation?base_url=' + this.state.params.base_url;
 
@@ -133,27 +144,51 @@ class Recommendation extends Component {
     }
     window.localStorage.setItem('backData', JSON.stringify(backData));
 
+    let investment = {
+      name: 'diy',
+      bondstock: '',
+      amount: this.state.amount,
+      term: 15,
+      type: 'diy',
+      order_type: this.state.order_type,
+      subtype: ''
+    }
+
+    let allocations = [];
+    let isins = [];
+    let fundsData = this.state.funds;
+    for (var i in fundsData) {
+      let obj = {
+        "amount": fundsData[i].amount,
+        "mfid": fundsData[i].isin,
+        "mfname": fundsData[i].name
+      };
+      allocations.push(obj);
+      isins.push(fundsData[i].isin)
+    }
+    investment.allocations = allocations;
+
     if (isin) {
       nativeCallback({
         action: 'show_fund', message: {
-          back_url: nativeRedirectUrl,
-          recommendation_result: this.state.funds,
-          isin: isin || ''
+          investment: investment,
+          isins: isins,
+          selected_isin: isin || ''
         }
       });
       return;
     }
-
     nativeCallback({
       action: 'invest', message: {
-        back_url: nativeRedirectUrl,
-        recommendation_result: this.state.funds
+        investment: investment,
+        isins: isins
       }
     });
   }
 
   showFundDetails(isin) {
-    this.handleClick(isin);
+    console.log(isin)
+    this.handleClick('', isin);
   }
 
   getTabClassName(type, value) {

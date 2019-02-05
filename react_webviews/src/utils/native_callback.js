@@ -15,6 +15,8 @@ export const nativeCallback = ({ action = null, message = null, events = null } 
     callbackData.events = events;
   }
 
+  console.log(JSON.stringify(callbackData));
+
   if (isMobile.Android()) {
     if (typeof window.Android !== 'undefined') window.Android.callbackNative(JSON.stringify(callbackData));
   }
