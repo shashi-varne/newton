@@ -3,12 +3,20 @@ import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
 
 import toast from '../../../common/ui/Toast';
-import Input from '../../../common/ui/Input';
+// import Input from '../../../common/ui/Input';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import { inrFormatDecimal } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
+
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog, {
+  DialogActions,
+  DialogTitle,
+  DialogContent
+} from 'material-ui/Dialog';
 
 class Recommendation extends Component {
   constructor(props) {
@@ -20,12 +28,17 @@ class Recommendation extends Component {
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
       mfTab: 0,
-      yearTab: 4,
-      amount: 50000,
+      yearTab: 1,
+      amount: 5000,
       amount_error: '',
-      funds: []
+      funds: [],
+      oepnDialog: false,
+      amountModal: ''
     }
     this.renderFunds = this.renderFunds.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.handleClickOpen = this.handleClickOpen.bind(this);
+    this.setNewAmount = this.setNewAmount.bind(this);
   }
 
   componentWillMount() {
@@ -49,6 +62,9 @@ class Recommendation extends Component {
       let type_choices = ['sip', 'onetime'];
       let timeChoices = ['0m', '6m', '1y', '3y', '5y'];
 
+      if (this.state.amount_error) {
+        return;
+      }
       this.setState({
         show_loader: true,
         order_type: type_choices[type]
@@ -94,6 +110,10 @@ class Recommendation extends Component {
     } else {
       this.getFunds(this.state.yearTab, this.state.amount, this.state.mfTab);
     }
+
+    this.setState({
+      amountModal: this.state.amount
+    })
   }
 
   navigate = (pathname) => {
@@ -111,6 +131,27 @@ class Recommendation extends Component {
     });
   }
 
+  handleClickOpen = () => {
+    this.setState({
+      oepnDialog: true,
+      amountModal: this.state.amount
+    })
+  }
+
+  handleClose() {
+    this.setState({
+      oepnDialog: false
+    })
+  }
+
+  setNewAmount(amount) {
+    this.setState({
+      amount: this.state.amountModal,
+      oepnDialog: false
+    })
+    this.onBlurAmount(true, this.state.amountModal);
+  }
+
   handleChangeTabs = (type, value) => {
     this.setState({
       [type]: value
@@ -125,13 +166,14 @@ class Recommendation extends Component {
 
   handleClick = async (event, isin) => {
 
-    if (!this.state.funds) {
+    if (this.state.funds.length === 0) {
 
       this.setState({
         amount_error: 'No funds found, try chaning Amount/Type/Term'
       })
       return;
     }
+
 
     // eslint-disable-next-line
     let nativeRedirectUrl = window.location.protocol + '//' + window.location.host +
@@ -145,16 +187,15 @@ class Recommendation extends Component {
     window.localStorage.setItem('backData', JSON.stringify(backData));
 
     let investment = {
-      name: 'diy',
+      name: this.state.funds[0].itag,
       bondstock: '',
       // eslint-disable-next-line
       amount: parseInt(this.state.amount),
       term: 15,
-      type: 'diy',
+      type: this.state.funds[0].itag,
       order_type: this.state.order_type,
       subtype: ''
     }
-    console.log(this.state.amount);
 
     let allocations = [];
     let isins = [];
@@ -189,7 +230,6 @@ class Recommendation extends Component {
   }
 
   showFundDetails(isin) {
-    console.log(isin)
     this.handleClick('', isin);
   }
 
@@ -200,26 +240,35 @@ class Recommendation extends Component {
     return '';
   }
 
-  onBlurAmount = (event) => {
+  onBlurAmount(modal, amount) {
 
-    if (this.state.mfTab === 0 && this.state.amount < 500) {
+    if (!modal) {
+      amount = this.state.amount;
+    }
+    console.log("on blur amount");
+    console.log(amount);
+    if (this.state.mfTab === 0 && amount < 500) {
       this.setState({
-        amount_error: 'Minimum amount is 500 for SIP'
+        amount_error: 'Minimum amount is 500 for SIP',
+        funds: []
       })
-    } else if (this.state.mfTab === 0 && this.state.amount > 500000) {
+    } else if (this.state.mfTab === 0 && amount > 500000) {
       this.setState({
-        amount_error: 'Maximum amount is 5 Lakh for SIP'
+        amount_error: 'Maximum amount is 5 Lakh for SIP',
+        funds: []
       })
-    } else if (this.state.mfTab === 1 && this.state.amount < 5000) {
+    } else if (this.state.mfTab === 1 && amount < 5000) {
       this.setState({
-        amount_error: 'Minimum amount is 5,000 for One Time'
+        amount_error: 'Minimum amount is 5,000 for One Time',
+        funds: []
       })
-    } else if (this.state.mfTab === 1 && this.state.amount > 5000000) {
+    } else if (this.state.mfTab === 1 && amount > 5000000) {
       this.setState({
-        amount_error: 'Maximum amount is 50 Lakh for One Time'
+        amount_error: 'Maximum amount is 50 Lakh for One Time',
+        funds: []
       })
     } else {
-      this.getFunds(this.state.yearTab, this.state.amount, this.state.mfTab);
+      this.getFunds(this.state.yearTab, amount, this.state.mfTab);
     }
 
   }
@@ -238,16 +287,52 @@ class Recommendation extends Component {
     )
   }
 
+  renderAmountDialog() {
+    return (
+      <Dialog fullScreen={false} open={this.state.oepnDialog} onClose={this.handleClose} aria-labelledby="responsive-dialog-title">
+        <DialogTitle id="form-dialog-title">Enter Amount</DialogTitle>
+        <DialogContent>
+          {/* <DialogContentText>
+            To subscribe to this website, please enter your email address here. We will send updates
+            occasionally.
+          </DialogContentText> */}
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Amount"
+            type="number"
+            autoComplete="off"
+            name="amountModal"
+            value={this.state.amountModal}
+            onChange={this.handleChange('amountModal')}
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClose} color="default">
+            Cancel
+          </Button>
+          <Button onClick={this.setNewAmount} color="default">
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+    )
+  }
+
   render() {
     return (
       <Container
         showLoader={this.state.show_loader}
         title="Fund Recommendation"
         handleClick={this.handleClick}
-        classOverRide="recommendation-container"
+        classOverRide="recommendation-containerWrapper"
+        classOverRideContainer="recommendation-container"
         edit={this.props.edit}
         buttonTitle="Invest"
         type={this.state.type}
+        isDisabled={!(this.state.funds)}
       >
         <div style={{ backgroundColor: '#ffffff', padding: '1px 10px 1px 10px' }}>
           <p style={{ color: '#4a4a4a', fontSize: 14 }}>Investment type</p>
@@ -264,9 +349,10 @@ class Recommendation extends Component {
             <div className={`ui-tab2 ${this.getTabClassName('yearTab', 3)}`} onClick={() => this.handleChangeTabs('yearTab', 3)}>3y-5y</div>
             <div className={`ui-tab2 ${this.getTabClassName('yearTab', 4)}`} onClick={() => this.handleChangeTabs('yearTab', 4)}>>5y</div>
           </div>
-          <FormControl fullWidth style={{ marginTop: '20px' }} onBlur={(event) => this.onBlurAmount()}>
-            <div className="InputField">
+          <FormControl fullWidth style={{ marginTop: '20px' }} >
+            {/* <div className="InputField" >
               <Input
+                autoFocus={false}
                 error={(this.state.amount_error) ? true : false}
                 helperText={this.state.amount_error}
                 type="number"
@@ -274,11 +360,22 @@ class Recommendation extends Component {
                 label="Amount"
                 style={{ color: '#4a4a4a', fontSize: 14 }}
                 class=""
-                id="number"
+                id="yo"
                 name="amount"
                 value={this.state.amount}
-                onChange={this.handleChange('amount')}
-                productType={this.state.type} />
+                // onFocus={() => this.handleClickOpen()}
+                onClick={() => this.handleClickOpen()}
+                onChange={() => this.handleClickOpen()}
+                // onChange={this.handleChange('amount')}
+                productType={this.state.type}
+              // onKeyChange={this.onBlurAmount()}
+              />
+            </div> */}
+            <div onClick={() => this.handleClickOpen()} >
+              <p style={{ color: '#4a4a4a', fontSize: 14 }}>Amount</p>
+              <div style={{ color: getConfig().primary }}>{inrFormatDecimal(this.state.amount)}</div>
+              <div style={{ border: '1px solid #f2f2f2', marginTop: 3 }}></div>
+              <p style={{ color: 'red', fontSize: 12 }}>{this.state.amount_error}</p>
             </div>
           </FormControl>
           <p style={{ color: '#4a4a4a', fontSize: 14 }}>Recommended Funds  </p>
@@ -286,6 +383,7 @@ class Recommendation extends Component {
             {this.state.funds && this.state.funds.map(this.renderFunds)}
           </div>
         </div>
+        {this.renderAmountDialog()}
       </Container>
     );
   }

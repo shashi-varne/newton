@@ -158,6 +158,7 @@ class QuestionScreen1 extends Component {
         buttonTitle="Save and Continue"
         type={this.state.type}
         topIcon="close"
+        classOverRideContainer="question-container"
       >
         <FormControl fullWidth>
           <div className="InputField">

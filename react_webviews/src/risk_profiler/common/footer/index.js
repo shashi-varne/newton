@@ -6,7 +6,7 @@ const Footer = (props) => {
 
   return (
     <div className="Footer">
-      <DefaultLayout type="default" {...props} />
+      <DefaultLayout type="default" isDisabled={props.isDisabled} {...props} />
     </div>
   );
 };
