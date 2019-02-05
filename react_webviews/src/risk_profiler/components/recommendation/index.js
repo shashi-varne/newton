@@ -20,7 +20,7 @@ class Recommendation extends Component {
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
       mfTab: 0,
-      yearTab: 1,
+      yearTab: 4,
       amount: 50000,
       amount_error: '',
       funds: []
@@ -140,19 +140,21 @@ class Recommendation extends Component {
     let backData = {
       mfTab: this.state.mfTab,
       yearTab: this.state.yearTab,
-      amount: this.amount
+      amount: this.state.amount
     }
     window.localStorage.setItem('backData', JSON.stringify(backData));
 
     let investment = {
       name: 'diy',
       bondstock: '',
-      amount: this.state.amount,
+      // eslint-disable-next-line
+      amount: parseInt(this.state.amount),
       term: 15,
       type: 'diy',
       order_type: this.state.order_type,
       subtype: ''
     }
+    console.log(this.state.amount);
 
     let allocations = [];
     let isins = [];
