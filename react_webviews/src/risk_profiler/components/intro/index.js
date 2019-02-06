@@ -24,7 +24,9 @@ class Intro extends Component {
       openDialogConfirm: false,
       openDialog: false
     }
+    this.handleClose = this.handleClose.bind(this);
   }
+
 
   componentWillMount() {
     if (this.state.ismyway) {
