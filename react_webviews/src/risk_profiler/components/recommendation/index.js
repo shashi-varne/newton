@@ -187,14 +187,14 @@ class Recommendation extends Component {
     window.localStorage.setItem('backData', JSON.stringify(backData));
 
     let investment = {
-      name: this.state.funds[0].itag,
+      name: this.state.funds[0].itype,
       bondstock: '',
       // eslint-disable-next-line
       amount: parseInt(this.state.amount),
       term: 15,
-      type: this.state.funds[0].itag,
+      type: this.state.funds[0].itype,
       order_type: this.state.order_type,
-      subtype: ''
+      subtype: this.state.funds[0].subtype
     }
 
     let allocations = [];
