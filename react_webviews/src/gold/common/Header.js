@@ -8,7 +8,7 @@ import Arrow from '@material-ui/icons/ArrowBack';
 import Close from '@material-ui/icons/Close';
 
 const Header = ({ classes, title, count, total, current, goBack, edit, type, resetpage, handleReset, smallTitle, disableBack, provider }) => (
-  <AppBar position="fixed" color="primary" className={`Header ${classes.root} ${(type !== 'fisdom') ? 'blue' : ''}`}>
+  <AppBar position="fixed" color="primary" className={`Header ${classes.root}`}>
     <Toolbar>
       <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={goBack}>
         {!disableBack && <Arrow />}

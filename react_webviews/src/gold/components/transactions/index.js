@@ -12,7 +12,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Grid from 'material-ui/Grid';
 import { ToastContainer } from 'react-toastify';
-import toast from '../../ui/Toast';
+import toast from '../../../common/ui/Toast';
 // import { inrFormatDecimal } from 'utils/validators';
 
 class Transactions extends Component {
@@ -334,8 +334,8 @@ class Transactions extends Component {
         <Tabs
           value={this.state.value}
           onChange={this.handleChange}
-          indicatorColor={this.state.type !== 'fisdom' ? 'secondary' : 'primary'}
-          textColor={this.state.type !== 'fisdom' ? 'secondary' : 'primary'}
+          indicatorColor="primary"
+          textColor="primary"
           variant="fullWidth"
         >
           <Tab label="Buy" />

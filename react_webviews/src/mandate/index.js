@@ -5,9 +5,12 @@ import {
 } from 'react-router-dom';
 import { withRouter } from "react-router";
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import '../common/theme/Style.css';
+import './components/Style.css';
+import { getConfig } from 'utils/functions';
 
 import './common/Style.css';
-import NotFound from '../NotFound';
+import NotFound from '../common/components/NotFound';
 import MandateProcess from './components/journey/process';
 import MandateSuccess from './components/journey/success';
 import SelectAddress from './components/address/select';
@@ -29,16 +32,22 @@ const theme = createMuiTheme({
   palette: {
     primary: {
       // light: will be calculated from palette.primary.main,
-      main: '#4f2da7',
+      main: getConfig().primary,
       // dark: will be calculated from palette.primary.main,
       contrastText: '#ffffff',
     },
     secondary: {
       // light: '#0066ff',
-      main: '#35cb5d',
+      main: getConfig().secondary,
       // dark: will be calculated from palette.secondary.main,
       contrastText: '#ffffff',
     },
+    default: {
+      // light: '#0066ff',
+      main: getConfig().default,
+      // dark: will be calculated from palette.secondary.main,
+      contrastText: '#ffffff',
+    }
     // error: will us the default color
   },
   overrides: {
@@ -56,7 +65,7 @@ const theme = createMuiTheme({
     MuiInputLabel: {
       root: {
         fontSize: '0.9rem',
-        color: '#444',
+        color: getConfig().default,
         fontWeight: 'normal'
       },
       shrink: {
@@ -66,7 +75,7 @@ const theme = createMuiTheme({
     MuiButton: {
       raisedSecondary: {
         '&:hover': {
-          backgroundColor: '#35cb5d'
+          backgroundColor: getConfig().secondary
         }
       }
     },

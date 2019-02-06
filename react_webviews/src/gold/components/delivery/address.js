@@ -3,10 +3,10 @@ import qs from 'qs';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import Input from '../../ui/Input';
+import Input from '../../../common/ui/Input';
 import { validateNumber, validateLengthDynamic, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';
 import { ToastContainer } from 'react-toastify';
-import toast from '../../ui/Toast';
+import toast from '../../../common/ui/Toast';
 
 class DeliveryAddress extends Component {
   constructor(props) {

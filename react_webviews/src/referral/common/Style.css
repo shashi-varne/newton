@@ -1,7 +1,4 @@
-header.blue {
-  color: #fff;
-  background-color: #3792fc;
-}
+@value secondary: #35cb5d;
 .ReferralContainer {
   padding: 0px;
 }
@@ -85,7 +82,7 @@ header.blue {
   font-weight: 400;
 }
 .ReferPaytmGrid h2 {
-  color: #35cb5d;
+  color: secondary;
   font-size: 16px;
   text-align: right;
 }
@@ -142,7 +139,7 @@ header.blue {
   font-size: 18px;
 }
 .Earning .List .Item .action {
-  color: #35cb5d;
+  color: secondary;
   font-size: 16px;
   margin: 0;
 }

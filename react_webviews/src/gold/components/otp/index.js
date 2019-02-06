@@ -3,7 +3,7 @@ import qs from 'qs';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import Input from '../../ui/Input';
+import Input from '../../../common/ui/Input';
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -11,7 +11,8 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import { ToastContainer } from 'react-toastify';
-import toast from '../../ui/Toast';
+import toast from '../../../common/ui/Toast';
+import { getConfig } from 'utils/functions';
 
 class Otp extends Component {
   constructor(props) {
@@ -229,10 +230,10 @@ class Otp extends Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          {!this.state.otpVerified && <Button onClick={this.handleClose} color={this.state.type !== 'fisdom' ? 'secondary' : 'primary'} autoFocus>
+          {!this.state.otpVerified && <Button onClick={this.handleClose} color="primary" autoFocus>
             OK
           </Button>}
-          {this.state.otpVerified && <Button onClick={this.handleOtpVerified} color={this.state.type !== 'fisdom' ? 'secondary' : 'primary'} autoFocus>
+          {this.state.otpVerified && <Button onClick={this.handleOtpVerified} color="primary" autoFocus>
             Proceed
           </Button>}
         </DialogActions>
@@ -266,8 +267,12 @@ class Otp extends Component {
                 value={this.state.otpnumber}
                 onChange={this.handleChange('otpnumber')} />
             </div>
-            <p className={`resend-otp text-center ${(this.state.type !== 'fisdom') ? 'mywayColor' : 'fisdomColor'}`}
-              style={{ fontWeight: 500 }} color={this.state.type !== 'fisdom' ? 'secondary' : 'primary'} onClick={this.resendOtp}>Resend OTP</p>
+            <p
+              className="resend-otp text-center"
+              style={{
+                fontWeight: 500,
+                background: getConfig().primary
+              }} color="primary" onClick={this.resendOtp}>Resend OTP</p>
             <div className="text-center">{this.state.messageOtp}</div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import Button from '../../ui/Button';
+import Button from '../../../common/ui/Button';
 // import { capitalize } from 'utils/validators';
 import Dialog, {
   DialogActions,
@@ -49,7 +49,7 @@ export class DefaultLayout extends Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button className="DialogButtonFullWidth" onClick={this.handleClose} color="secondary" autoFocus>
+          <Button className="DialogButtonFullWidth" onClick={this.handleClose} color="default" autoFocus>
             OK
           </Button>
         </DialogActions>

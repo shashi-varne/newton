@@ -1,3 +1,4 @@
+@value secondary: #35cb5d;
 .Banner {
   position: relative;
   text-align: center;
@@ -135,10 +136,6 @@
   position: relative;
   margin: 0px;
   padding: 20px 15px;
-  background: #4f2da7;
-}
-.goldheader.blue {
-  background-color: #3792fc;
 }
 
 .goldheader .my-gold-header {
@@ -366,7 +363,14 @@
 }
 
 .invest-success h3 {
-  color: #35cb5d;
+  color: secondary;
+  font-size: 20px;
+  margin: 0;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+.invest-error h3 {
+  color: red;
   font-size: 20px;
   margin: 0;
   margin-top: 30px;

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
-import TitleWithIcon from '../../ui/TitleWithIcon';
+import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import contact from 'assets/address_details_icon.svg';
 
 import Container from '../../common/Container';
-import Input from '../../ui/Input';
+import Input from '../../../common/ui/Input';
 import location from 'assets/location_dark_icn.png';
 import Api from 'utils/api';
 import { validateNumber, validateLength, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';

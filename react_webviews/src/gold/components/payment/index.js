@@ -8,10 +8,11 @@ import error from 'assets/error.png';
 import thumpsup from 'assets/thumpsup.png';
 import arrow from 'assets/arrow.png';
 import { ToastContainer } from 'react-toastify';
-import toast from '../../ui/Toast';
+import toast from '../../../common/ui/Toast';
 import { inrFormatDecimal } from 'utils/validators';
 // eslint-disable-next-line
 import { nativeCallback } from 'utils/native_callback';
+import { getConfig } from 'utils/functions';
 
 class Payment extends Component {
   constructor(props) {
@@ -232,7 +233,12 @@ class Payment extends Component {
         noPadding={true}
       >
         <div className="page home" id="goldSection">
-          <div className={`text-center goldheader  ${(this.state.type !== 'fisdom') ? 'blue' : ''}`}>
+          <div className="text-center goldheader"
+            onClick={() => this.navigate('/gold/my-gold-locker')}
+            style={{
+              background: getConfig().primary
+            }}
+          >
             <div className="my-gold-header" onClick={() => this.navigate('/gold/my-gold')}>
               <div className="FlexRow row1" >
                 <img alt="Gold" className="img-mygold" src={safegold_logo} />

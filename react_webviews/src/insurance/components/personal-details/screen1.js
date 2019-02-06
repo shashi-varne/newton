@@ -3,8 +3,8 @@ import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
 
 import Container from '../../common/Container';
-import InputWithIcon from '../../ui/InputWithIcon';
-import RadioWithIcon from '../../ui/RadioWithIcon';
+import InputWithIcon from '../../../common/ui/InputWithIcon';
+import RadioWithIcon from '../../../common/ui/RadioWithIcon';
 import name from 'assets/full_name_dark_icn.png';
 import marital from 'assets/marital_status_dark_icn.png';
 import Api from 'utils/api';

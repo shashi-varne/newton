@@ -3,9 +3,9 @@ import qs from 'qs';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import Input from '../../ui/Input';
+import Input from '../../../common/ui/Input';
 import { ToastContainer } from 'react-toastify';
-import toast from '../../ui/Toast';
+import toast from '../../../common/ui/Toast';
 
 class SellOrder extends Component {
   constructor(props) {

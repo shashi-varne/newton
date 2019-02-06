@@ -27,23 +27,23 @@ class Container extends Component {
         nativeCallback({ action: 'native_back' });
         break;
       default:
-      if (navigator.onLine) {
-        this.props.history.goBack();
-      } else {
-        this.setState({
-          openDialog: true
-        });
-      }
+        if (navigator.onLine) {
+          this.props.history.goBack();
+        } else {
+          this.setState({
+            openDialog: true
+          });
+        }
     }
   }
 
   renderDialog = () => {
     return (
       <Dialog
-          fullScreen={false}
-          open={this.state.openDialog}
-          onClose={this.handleClose}
-          aria-labelledby="responsive-dialog-title"
+        fullScreen={false}
+        open={this.state.openDialog}
+        onClose={this.handleClose}
+        aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="form-dialog-title">No Internet Found</DialogTitle>
         <DialogContent>
@@ -52,7 +52,7 @@ class Container extends Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button className="DialogButtonFullWidth" onClick={this.handleClose} color="secondary" autoFocus>
+          <Button className="DialogButtonFullWidth" onClick={this.handleClose} color="default" autoFocus>
             OK
           </Button>
         </DialogActions>
@@ -71,7 +71,7 @@ class Container extends Component {
       return (
         <div className="Loader">
           <div className="LoaderOverlay">
-            <img src={loader} alt=""/>
+            <img src={loader} alt="" />
           </div>
         </div>
       );
@@ -90,14 +90,14 @@ class Container extends Component {
           type={this.props.type} />
 
         {/* Below Header Block */}
-        <div style={{height: 56}}></div>
+        <div style={{ height: 56 }}></div>
 
         {/* Loader Block */}
         {this.renderPageLoader()}
 
         {/* Children Block */}
         <div className={`ReferralContainer ${this.props.background}`}>
-          { this.props.children }
+          {this.props.children}
         </div>
 
         {/* No Internet */}

@@ -12,7 +12,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import { ToastContainer } from 'react-toastify';
-import toast from '../../ui/Toast';
+import toast from '../../../common/ui/Toast';
 import { inrFormatDecimal } from 'utils/validators';
 
 class About extends Component {
@@ -178,7 +178,7 @@ class About extends Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleClose} color={this.state.type !== 'fisdom' ? 'secondary' : 'primary'} autoFocus>
+          <Button onClick={this.handleClose} color="default" autoFocus>
             OK
           </Button>
         </DialogActions>
@@ -226,16 +226,16 @@ class About extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                                      previous gold price has expired.
+                                                                                                                                                                                                                          previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
         }
         <DialogActions>
-          <Button onClick={this.handleClose} color={this.state.type !== 'fisdom' ? 'secondary' : 'primary'}>
+          <Button onClick={this.handleClose} color="default">
             CANCEL
           </Button>
-          <Button onClick={this.handlePopup} color={this.state.type !== 'fisdom' ? 'secondary' : 'primary'} autoFocus>
+          <Button onClick={this.handlePopup} color="default" autoFocus>
             CONTINUE
           </Button>
         </DialogActions>

@@ -134,7 +134,7 @@ class Container extends Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button className="DialogButtonFullWidth" onClick={this.handleClose} color="secondary" autoFocus>
+          <Button className="DialogButtonFullWidth" onClick={this.handleClose} color="default" autoFocus>
             OK
           </Button>
         </DialogActions>
@@ -166,10 +166,10 @@ class Container extends Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleClose} color={this.props.type !== 'fisdom' ? 'secondary' : 'primary'}>
+          <Button onClick={this.handleClose} color="default">
             No
           </Button>
-          <Button onClick={this.handlePopup} color={this.props.type !== 'fisdom' ? 'secondary' : 'primary'} autoFocus>
+          <Button onClick={this.handlePopup} color="default" autoFocus>
             Yes
           </Button>
         </DialogActions>

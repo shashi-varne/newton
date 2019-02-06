@@ -3,14 +3,14 @@ import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
 
 import Container from '../../common/Container';
-import InputWithIcon from '../../ui/InputWithIcon';
-import RadioWithIcon from '../../ui/RadioWithIcon';
-import RadioWithoutIcon from '../../ui/RadioWithoutIcon';
+import InputWithIcon from '../../../common/ui/InputWithIcon';
+import RadioWithIcon from '../../../common/ui/RadioWithIcon';
+import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon2';
 import pan from 'assets/pan_dark_icn.png';
 import education from 'assets/education_dark_icn.png';
 import occupation from 'assets/occupation_details_dark_icn.png';
 import income from 'assets/annual_income_dark_icn.png';
-import Dropdown from '../../ui/Select';
+import Dropdown from '../../../common/ui/Select';
 import Api from 'utils/api';
 import { declareOptions, occupationDetailOptions, occupationCategoryOptions, qualification } from '../../constants';
 import { validatePan, validateNumber, formatAmount, validateEmpty } from 'utils/validators';
@@ -58,7 +58,7 @@ class ProfessionalDetails1 extends Component {
     }
   }
   componentDidMount() {
-    Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
+    Api.get('/api/insurance/profile/' + this.state.params.insurance_id, {
       groups: 'professional,misc'
     }).then(res => {
       const { annual_income, education_qualification, occupation_category, occupation_detail, is_criminal, is_politically_exposed, pan_number } = res.pfwresponse.result.profile;
@@ -77,7 +77,7 @@ class ProfessionalDetails1 extends Component {
         provider: provider
       });
     }).catch(error => {
-      this.setState({show_loader: false});
+      this.setState({ show_loader: false });
       console.log(error);
     });
   }
@@ -90,7 +90,7 @@ class ProfessionalDetails1 extends Component {
     } else if (name === 'education_qualification') {
       this.setState({
         [name]: event,
-        [name+'_error']: ''
+        [name + '_error']: ''
       });
     } else if (name === 'is_politically_exposed' || name === 'is_criminal') {
       this.setState({
@@ -98,8 +98,8 @@ class ProfessionalDetails1 extends Component {
       });
     } else {
       this.setState({
-        [name]: event.target.value.replace (/,/g, ""),
-        [name+'_error']: ''
+        [name]: event.target.value.replace(/,/g, ""),
+        [name + '_error']: ''
       });
     }
   };
@@ -116,21 +116,21 @@ class ProfessionalDetails1 extends Component {
   handleOccCategoryRadioValue = name => index => {
     this.setState({
       [name]: occupationCategoryOptions[index]['value'],
-      [name+'_error']: ''
+      [name + '_error']: ''
     });
   };
 
   handleOccDetailRadioValue = name => index => {
     this.setState({
       [name]: occupationDetailOptions[index]['value'],
-      [name+'_error']: ''
+      [name + '_error']: ''
     });
   };
 
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id='+this.state.params.insurance_id+'&resume='+this.state.params.resume+'&base_url='+this.state.params.base_url
+      search: '?insurance_id=' + this.state.params.insurance_id + '&resume=' + this.state.params.resume + '&base_url=' + this.state.params.base_url
     });
   }
 
@@ -182,10 +182,10 @@ class ProfessionalDetails1 extends Component {
         annual_income_error: 'Invalid annual income'
       });
     } else {
-      this.setState({show_loader: true});
+      this.setState({ show_loader: true });
       let data = {};
 
-      data['insurance_app_id'] =  this.state.params.insurance_id;
+      data['insurance_app_id'] = this.state.params.insurance_id;
       data['occupation_detail'] = this.state.occupation_detail;
       data['occupation_category'] = this.state.occupation_category;
       data['annual_income'] = this.state.annual_income;
@@ -197,7 +197,7 @@ class ProfessionalDetails1 extends Component {
         data['is_criminal'] = this.state.is_criminal;
       }
 
-      this.setState({show_loader: true});
+      this.setState({ show_loader: true });
 
       const res = await Api.post('/api/insurance/profile', data);
 
@@ -229,7 +229,7 @@ class ProfessionalDetails1 extends Component {
 
         nativeCallback({ events: eventObj });
 
-        this.setState({show_loader: false});
+        this.setState({ show_loader: false });
         if (this.props.edit) {
           if (this.state.params.resume === "yes") {
             this.navigate('/insurance/resume');
@@ -240,10 +240,10 @@ class ProfessionalDetails1 extends Component {
           this.navigate('/insurance/summary');
         }
       } else {
-        this.setState({show_loader: false});
+        this.setState({ show_loader: false });
         for (let error of res.pfwresponse.result.errors) {
           this.setState({
-            [error.field+'_error']: error.message
+            [error.field + '_error']: error.message
           });
         }
       }
@@ -275,11 +275,11 @@ class ProfessionalDetails1 extends Component {
   renderDeclaration = () => {
     return (
       <div>
-        <div className="SectionHead" style={{marginBottom: 30, color: 'rgb(68,68,68)', fontSize: 14, fontFamily: 'Roboto'}}>
+        <div className="SectionHead" style={{ marginBottom: 30, color: 'rgb(68,68,68)', fontSize: 14, fontFamily: 'Roboto' }}>
           By tapping continue, you declare that you’re -
         </div>
         <div className="RadioBlock">
-          <div className="RadioWithoutIcon" style={{marginBottom: 20, borderBottom: '1px solid #c6c6c6', paddingBottom: 20}}>
+          <div className="RadioWithoutIcon" style={{ marginBottom: 20, borderBottom: '1px solid #c6c6c6', paddingBottom: 20 }}>
             <RadioWithoutIcon
               options={declareOptions}
               type="professional2"
@@ -339,7 +339,7 @@ class ProfessionalDetails1 extends Component {
         buttonTitle="Save & Continue"
         logo={this.state.image}
         type={this.state.type}
-        >
+      >
         <FormControl fullWidth>
           <div className="InputField">
             <InputWithIcon
