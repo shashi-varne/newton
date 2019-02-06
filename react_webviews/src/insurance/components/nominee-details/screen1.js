@@ -520,7 +520,7 @@ class NomineeDetails extends Component {
                 width="40"
                 label="Pincode *"
                 id="pincode"
-                name="pincode" addressline
+                name="pincode"
                 value={this.state.pincode}
                 onChange={this.handlePincode('pincode')} />
             </div>

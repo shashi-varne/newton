@@ -49,11 +49,21 @@
   color: #525252;
   margin-top: 10px;
 }
-.recommendation-container {
+.recommendation-containerWrapper {
   background-color: #f2f2f2;
   /* autoprefixer: off */
-  height: -webkit-fill-available;
+  /* height: -webkit-fill-available; */
+  /* height: 100%; */
   padding: 10px 7px 10px 7px;
   margin-bottom: 0px !important;
 }
-
+.recommendation-container {
+  background-color: #f2f2f2;
+  /* autoprefixer: off */
+  /* height: -webkit-fill-available; */
+  padding: 10px 0px 10px 0px;
+  margin-bottom: 60px !important;
+}
+.question-container {
+  margin-top: 20px;
+}

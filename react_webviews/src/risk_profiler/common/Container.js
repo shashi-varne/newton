@@ -63,7 +63,7 @@ class Container extends Component {
       this.setState({
         callbackType: 'exit',
         openPopup: true,
-        popupText: 'Are you sure you want to exit ?.'
+        popupText: 'Are you sure you want to exit ?'
       })
       return;
     }
@@ -74,7 +74,7 @@ class Container extends Component {
       this.setState({
         callbackType: 'exit',
         openPopup: true,
-        popupText: 'Are you sure you want to exit ?.'
+        popupText: 'Are you sure you want to exit ?'
       })
       return;
     }
@@ -90,7 +90,7 @@ class Container extends Component {
         this.setState({
           callbackType: 'exit',
           openPopup: true,
-          popupText: 'Are you sure you want to exit ?.'
+          popupText: 'Are you sure you want to exit ?'
         })
         break;
       default:
@@ -173,7 +173,7 @@ class Container extends Component {
     this.setState({
       callbackType: 'exit',
       openPopup: true,
-      popupText: 'Are you sure you want to exit ?.'
+      popupText: 'Are you sure you want to exit ?'
     })
   }
 
@@ -211,9 +211,9 @@ class Container extends Component {
     for (var i = 0; i < this.props.total; i++) {
       if (this.props.current > i) {
         steps.push(<span className='active'
-          style={{ background: getConfig().primary }} key={i}></span>);
+          style={{ background: getConfig().primary, marginRight: 0 }} key={i}></span>);
       } else {
-        steps.push(<span key={i}></span>);
+        steps.push(<span key={i} style={{ marginRight: 0 }}></span>);
       }
     }
 
@@ -251,7 +251,7 @@ class Container extends Component {
         {this.props.banner && <Banner text={this.props.bannerText} />}
 
         {/* Children Block */}
-        <div className={`Container ${this.props.classOverRide}`}>
+        <div className={`Container ${this.props.classOverRideContainer}`}>
           {this.props.children}
         </div>
 
@@ -269,7 +269,8 @@ class Container extends Component {
             handleClick={this.props.handleClick}
             handleReset={this.props.handleReset}
             onlyButton={this.props.onlyButton}
-            noFooter={this.props.noFooter} />
+            noFooter={this.props.noFooter}
+            isDisabled={this.props.isDisabled} />
         }
         {/* No Internet */}
         {this.renderDialog()}

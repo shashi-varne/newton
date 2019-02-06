@@ -120,6 +120,7 @@ class QuestionScreen4 extends Component {
         buttonTitle="Save and Continue"
         type={this.state.type}
         topIcon="close"
+        classOverRideContainer="question-container"
       >
         <FormControl fullWidth>
           {this.state.questionnaire.length !== 0 &&

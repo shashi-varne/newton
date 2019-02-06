@@ -57,8 +57,8 @@ class Result extends Component {
       if (res.pfwresponse.result.score) {
         score = res.pfwresponse.result.score;
         this.setState({
-          show_loader: false,
-          score: score
+          score: score,
+          show_loader: false
         });
       } else {
         this.navigate('intro');
@@ -127,7 +127,7 @@ class Result extends Component {
 
     try {
 
-      const res = await Api.get('/api/risk/profile/user/recommendation');
+      const res = await Api.delete('/api/risk/profile/user/questionnaire');
       this.setState({
         show_loader: false
       });
@@ -148,6 +148,38 @@ class Result extends Component {
 
   showDialog = () => {
     this.setState({ openDialogReset: true });
+  }
+
+  getScoreData(score) {
+    let map = {
+      1: {
+        title: 'Conservative Investor',
+        contennt: 'Investor like you are comfortable in accepting lower returns for a higher degree of liquidity or stability. Typlically, a Conservative investor primarly seeks to minimize risk and loss of money.',
+        img: meter1
+      },
+      2: {
+        title: 'Low risk Investor',
+        contennt: 'You have a low risk appetite. Consistent and sustainable returns are what you as an investor need.',
+        img: meter2
+      },
+      3: {
+        title: 'Moderate Investor',
+        contennt: 'You have a moderate tolerance for risk, investors like you values reducing risks and enhancing returns equally. Also, moderate investors are willing to accept modest risks to seek higher long-term returns.',
+        img: meter3
+      },
+      4: {
+        title: 'High risk Investor',
+        contennt: 'You are ready to take high risk by investing in risky bets. You seem to be okay with risks as long as the reward compensates well.',
+        img: meter4
+      },
+      5: {
+        title: 'Aggressive Investor',
+        contennt: 'You have a very high tolerance for risk, investors like you prefer to stay in the market in times of extreme volatility in exchange for the possibility of receiving high relative returns over the time to outpace inflation.',
+        img: meter5
+      }
+    }
+
+    return map[score];
   }
 
   getImg(score) {
@@ -183,6 +215,7 @@ class Result extends Component {
           showLoader={this.state.show_loader}
           title="Risk Tolerance"
           classOverRide="result-container"
+          classOverRideContainer="result-container"
           handleClick={this.handleClick}
           edit={this.props.edit}
           buttonTitle="Fund Recommendation"
@@ -192,15 +225,11 @@ class Result extends Component {
           resetpage={true}
         >
           <div className="meter-img">
-            {this.state.score && <img style={{ width: '70%' }} src={this.getImg(this.state.score.score)} alt="meter" />}
+            {this.state.score && <img style={{ width: '70%' }} src={this.getScoreData(this.state.score.score).img} alt="meter" />}
           </div>
           <div style={{ textAlign: 'center', marginTop: 50 }}>
-            <div style={{ color: '#ffffff', fontSize: 16, marginBottom: 20 }}>Conservative Investor</div>
-            <div style={{ color: '#f2f2f2', fontSize: 14 }}>Investor like you are comfortable in accepting
-    lower returns for a higher degree of liquidity or
-    stability. Typlically, a Conservative investor
-    primarly seeks to minimize risk and loss of
-money.</div>
+            <div style={{ color: '#ffffff', fontSize: 16, marginBottom: 20 }}>{this.getScoreData(this.state.score.score).title}</div>
+            <div style={{ color: '#f2f2f2', fontSize: 14 }}>{this.getScoreData(this.state.score.score).contennt}</div>
           </div>
         </Container>
       )

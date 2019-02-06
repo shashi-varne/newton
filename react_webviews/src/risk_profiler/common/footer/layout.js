@@ -65,6 +65,7 @@ export class DefaultLayout extends Component {
         <div className="FlexItem2">
           <Button
             type={props.type}
+            disable={props.isDisabled}
             // arrow={(props.edit) ? false : true}
             {...props} />
         </div>
