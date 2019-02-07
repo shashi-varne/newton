@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
+import toast from '../../../common/ui/Toast';
 
 import Container from '../../common/Container';
 import InputWithIcon from '../../../common/ui/InputWithIcon';
@@ -59,12 +60,13 @@ class ProfessionalDetails2 extends Component {
       });
     }
   }
-  componentDidMount() {
-    Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
-      groups: 'professional'
-    }).then(res => {
+  async componentDidMount() {
+    try {
+      const res = await Api.get('/api/insurance/profile/' + this.state.params.insurance_id, {
+        groups: 'professional'
+      })
       const { employer_name, employer_address } = res.pfwresponse.result.profile;
-      const { image, provider } = res.pfwresponse.result.quote_desc;
+      const { image, provider, cover_plan } = res.pfwresponse.result.quote_desc;
 
       this.setState({
         show_loader: false,
@@ -76,18 +78,21 @@ class ProfessionalDetails2 extends Component {
         city: employer_address.city || '',
         state: employer_address.state || '',
         image: image,
-        provider: provider
+        provider: provider,
+        cover_plan: cover_plan
       });
-    }).catch(error => {
-      this.setState({show_loader: false});
-      console.log(error);
-    });
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
+    }
   }
 
   handleChange = () => event => {
     this.setState({
       [event.target.name]: event.target.value,
-      [event.target.name+'_error']: ''
+      [event.target.name + '_error']: ''
     });
   };
 
@@ -96,22 +101,29 @@ class ProfessionalDetails2 extends Component {
 
     this.setState({
       [name]: pincode,
-      [name+'_error']: ''
+      [name + '_error']: ''
     });
 
     if (pincode.length === 6) {
-      const res = await Api.get('/api/pincode/' + pincode);
+      try {
+        const res = await Api.get('/api/pincode/' + pincode);
 
-      if (res.pfwresponse.status_code === 200  && res.pfwresponse.result.length > 0) {
+        if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
+          this.setState({
+            city: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
+            state: res.pfwresponse.result[0].state_name
+          });
+        } else {
+          this.setState({
+            city: '',
+            state: ''
+          });
+        }
+      } catch (err) {
         this.setState({
-          city: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
-          state: res.pfwresponse.result[0].state_name
+          show_loader: false
         });
-      } else {
-        this.setState({
-          city: '',
-          state: ''
-        });
+        toast('Something went wrong');
       }
     }
   }
@@ -119,7 +131,7 @@ class ProfessionalDetails2 extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id='+this.state.params.insurance_id+'&resume='+this.state.params.resume+'&base_url='+this.state.params.base_url
+      search: '?insurance_id=' + this.state.params.insurance_id + '&resume=' + this.state.params.resume + '&base_url=' + this.state.params.base_url
     });
   }
 
@@ -156,7 +168,7 @@ class ProfessionalDetails2 extends Component {
       this.setState({
         house_no_error: 'Address can not contain more than 3 same consecutive characters'
       });
-    }  else if (!validateLength(this.state.house_no)) {
+    } else if (!validateLength(this.state.house_no)) {
       this.setState({
         house_no_error: 'Maximum length of address is 30'
       });
@@ -172,7 +184,7 @@ class ProfessionalDetails2 extends Component {
       this.setState({
         street_error: 'Address can not contain more than 3 same consecutive characters'
       });
-    }  else if (!validateLength(this.state.street)) {
+    } else if (!validateLength(this.state.street)) {
       this.setState({
         street_error: 'Maximum length of address is 30'
       });
@@ -189,54 +201,65 @@ class ProfessionalDetails2 extends Component {
         landmark_error: 'Please enter valid landmark'
       });
     } else {
-      this.setState({show_loader: true});
-      let data = {};
+      try {
+        this.setState({ show_loader: true });
+        let data = {};
 
-      data['insurance_app_id'] =  this.state.params.insurance_id;
-      data['employer_name'] = this.state.employer_name;
-      data['employer_address'] = {
-        'pincode': this.state.pincode,
-        'house_no': this.state.house_no,
-        'street': this.state.street,
-        'landmark': this.state.landmark
-      }
+        data['insurance_app_id'] = this.state.params.insurance_id;
+        data['employer_name'] = this.state.employer_name;
+        data['employer_address'] = {
+          'pincode': this.state.pincode,
+          'house_no': this.state.house_no,
+          'street': this.state.street,
+          'landmark': this.state.landmark
+        }
 
-      const res = await Api.post('/api/insurance/profile', data);
+        const res = await Api.post('/api/insurance/profile', data);
 
-      if (res.pfwresponse.status_code === 200) {
+        if (res.pfwresponse.status_code === 200) {
 
-        let eventObj = {
-          "event_name": "employer_save",
-          "properties": {
-            "provider": this.state.provider,
-            "employer": this.state.employer_name,
-            "address": this.state.addressline,
-            "state": this.state.state,
-            "city": this.state.city,
-            "political": (this.state.is_politically_exposed) ? 1 : 0,
-            "criminal": (this.state.is_criminal) ? 1 : 0,
-            "from_edit": (this.state.edit) ? 1 : 0
+          let eventObj = {
+            "event_name": "employer_save",
+            "properties": {
+              "provider": this.state.provider,
+              "employer": this.state.employer_name,
+              "address": this.state.addressline,
+              "state": this.state.state,
+              "city": this.state.city,
+              "political": (this.state.is_politically_exposed) ? 1 : 0,
+              "criminal": (this.state.is_criminal) ? 1 : 0,
+              "from_edit": (this.state.edit) ? 1 : 0
+            }
+          };
+
+          nativeCallback({ events: eventObj });
+
+          this.setState({ show_loader: false });
+          if (this.props.edit) {
+            if (this.state.params.resume === "yes") {
+              this.navigate('/insurance/resume');
+            } else {
+              this.navigate('/insurance/summary');
+            }
+          } else {
+            this.navigate('/insurance/nominee');
           }
-        };
-
-        nativeCallback({ events: eventObj });
-
-        this.setState({show_loader: false});
-        if (this.state.params.resume === "yes") {
-          this.navigate('/insurance/resume');
         } else {
-          this.navigate('/insurance/summary');
-        }
-      } else {
-        this.setState({show_loader: false});
-        for (let error of res.pfwresponse.result.errors) {
-          if (error.field === 'employer_address') {
-            this.setState({ openDialog: true, apiError: error.message });
+          this.setState({ show_loader: false });
+          for (let error of res.pfwresponse.result.errors) {
+            if (error.field === 'employer_address') {
+              this.setState({ openDialog: true, apiError: error.message });
+            }
+            this.setState({
+              [error.field + '_error']: error.message
+            });
           }
-          this.setState({
-            [error.field+'_error']: error.message
-          });
         }
+      } catch (err) {
+        this.setState({
+          show_loader: false
+        });
+        toast('Something went wrong');
       }
     }
   }
@@ -261,7 +284,7 @@ class ProfessionalDetails2 extends Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleClose} color="primary" autoFocus>
+          <Button onClick={this.handleClose} color="default" autoFocus>
             OK
           </Button>
         </DialogActions>
@@ -273,16 +296,17 @@ class ProfessionalDetails2 extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title={(this.props.edit) ? 'Edit Professional Details' : 'Professional Details'}
+        title="Application Form"
+        smallTitle={this.state.provider}
         count={true}
-        total={4}
+        total={this.state.provider === 'IPRU' ? 5 : 4}
         current={4}
         handleClick={this.handleClick}
         edit={this.props.edit}
-        buttonTitle="Save Details"
+        buttonTitle="Save & Continue"
         logo={this.state.image}
         type={this.state.type}
-        >
+      >
         <FormControl fullWidth>
           <div className="InputField">
             <InputWithIcon

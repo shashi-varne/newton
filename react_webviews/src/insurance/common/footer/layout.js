@@ -36,10 +36,10 @@ export class SummaryLayout extends Component {
   renderDialog = () => {
     return (
       <Dialog
-          fullScreen={false}
-          open={this.state.openDialog}
-          onClose={this.handleClose}
-          aria-labelledby="responsive-dialog-title"
+        fullScreen={false}
+        open={this.state.openDialog}
+        onClose={this.handleClose}
+        aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="form-dialog-title">No Internet Found</DialogTitle>
         <DialogContent>
@@ -61,28 +61,30 @@ export class SummaryLayout extends Component {
 
     return (
       <div>
-        <div className="FooterSummaryLayout"  onClick={props.handleClick}>
-          <div className="FlexItem2 padLR15">
-            <div className="FooterSummaryLayout_title">Premium</div>
-            <div className="FooterSummaryLayout_subtitle">₹ {props.premium} {capitalize(props.paymentFrequency)}</div>
-            {
+        {!props.noFooter &&
+          <div className="FooterSummaryLayout" onClick={props.handleClick}>
+
+            {!props.onlyButton && <div className="FlexItem1 padLR15">
+              <div className="FooterSummaryLayout_title">Premium</div>
+              <div className="FooterSummaryLayout_subtitle">₹ {props.premium} {capitalize(props.paymentFrequency)}</div>
+              {/* {
               (props.provider === 'HDFC' && props.paymentFrequency === 'MONTHLY') &&
               <div className="FooterSummaryLayout_hint">*You’ve to pay <b>3 months premiums</b>.</div>
-            }
-          </div>
-          <div className="FlexItem2">
-            <Button
-              type={props.type}
-              {...props} />
-          </div>
-        </div>
-        {
+            } */}
+            </div>}
+            <div className="FlexItem2">
+              <Button
+                type={props.type}
+                {...props} />
+            </div>
+          </div>}
+        {/* {
           props.reset &&
           <div className="FooterReset">
             <div className="FooterReset_title" onClick={props.handleReset}>Start Again</div>
             <div className="FooterReset_subtitle">By restart, you will loose all your progress!</div>
           </div>
-        }
+        } */}
         {this.renderDialog()}
       </div>
     );
@@ -116,10 +118,10 @@ export class DefaultLayout extends Component {
   renderDialog = () => {
     return (
       <Dialog
-          fullScreen={false}
-          open={this.state.openDialog}
-          onClose={this.handleClose}
-          aria-labelledby="responsive-dialog-title"
+        fullScreen={false}
+        open={this.state.openDialog}
+        onClose={this.handleClose}
+        aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="form-dialog-title">No Internet Found</DialogTitle>
         <DialogContent>

@@ -6,7 +6,6 @@ import { InputLabel } from 'material-ui/Input';
 import { FormControl } from 'material-ui/Form';
 
 import './style.css';
-import Icon from './Icon';
 
 class SelectGrp extends Component {
   constructor(props) {
