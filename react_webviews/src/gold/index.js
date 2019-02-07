@@ -75,7 +75,7 @@ const theme = createMuiTheme({
     MuiInputLabel: {
       root: {
         fontSize: '0.9rem',
-        color: '#a2a2a2',
+        color: getConfig().label,
         fontWeight: 'normal'
       },
       shrink: {

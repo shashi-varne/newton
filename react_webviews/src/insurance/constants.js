@@ -1,6 +1,6 @@
 export const maritalOptions = [
   {
-    'name': 'Unmarried',
+    'name': 'Single',
     'value': 'UNMARRIED'
   },
   {
@@ -99,6 +99,59 @@ export const occupationDetailOptions = [
   //   'name': 'Student',
   //   'value': 'STUDENT'
   // }
+];
+
+export const occupationDetailOptionsIpru = [
+  {
+    'name': 'Self-Employed',
+    'value': 'SELF-EMPLOYED'
+  },
+  {
+    'name': 'Salaried',
+    'value': 'SALRIED'
+  },
+  {
+    'name': 'Buisness',
+    'value': 'BUISNESS'
+  },
+  {
+    'name': 'Agriculturist',
+    'value': 'AGRICULTURIST'
+  },
+  {
+    'name': 'Professional',
+    'value': 'PROFESSIONAL'
+  }
+];
+
+export const occupationDetailOptionsHdfc = [
+  {
+    'name': 'Self-Employed',
+    'value': 'SELF-EMPLOYED'
+  },
+  {
+    'name': 'Salaried',
+    'value': 'SALRIED'
+  }
+];
+
+export const educationQualificationsOptionsIpru = [
+  {
+    'name': 'Post-Graduate',
+    'value': 'POST-GRADUATE'
+  },
+  {
+    'name': 'Graduate',
+    'value': 'GRADUATE'
+  },
+  {
+    'name': 'Diploma',
+    'value': 'DIPLOMA'
+  },
+  {
+    'name': 'Higher Secondary',
+    'value': 'HIGHER-SECONDARY'
+  }
 ];
 
 export const occupationCategoryOptions = [

@@ -16,6 +16,15 @@ export function validateLength(string) {
   return true;
 }
 
+export function validateLengthAddress(string) {
+  let nameSplit = string.trim(" ");
+  if (nameSplit.length > 90) {
+    return false;
+  }
+
+  return true;
+}
+
 export function validateLengthDynamic(string, length) {
   let nameSplit = string.trim(" ");
   if (nameSplit.length > length) {
@@ -143,10 +152,47 @@ export function inrFormatDecimalWithoutIcon(number) {
 }
 
 export function numDifferentiation(val) {
-  if (val >= 10000000) val = (val / 10000000).toFixed(1) + ' Crores';
+  if (val >= 10000000) val = (val / 10000000).toFixed(1) + ' Cr';
   else if (val >= 100000) val = (val / 100000).toFixed(1) + ' Lakhs';
   else if (val >= 1000) val = (val / 1000).toFixed(1) + ' Thousand';
   return val;
+}
+
+export function isValidDate(dateInput) {
+  var objDate,
+    mSeconds,
+    day,
+    month,
+    year;
+
+  if (dateInput.length !== 10) {
+    return false;
+  }
+
+  if (dateInput.substring(2, 3) !== '/' || dateInput.substring(5, 6) !== '/') {
+    return false;
+  }
+
+  day = dateInput.substring(0, 2) - 0;
+  month = dateInput.substring(3, 5) - 1;
+  year = dateInput.substring(6, 10) - 0;
+  // test year range 		
+  if (year < 1900 || year > 3000) {
+    return false;
+  }
+  // convert dateInput to milliseconds 		
+  mSeconds = (new Date(year, month, day)).getTime();
+  // initialize Date() object from calculated milliseconds 		
+  objDate = new Date();
+  objDate.setTime(mSeconds);
+
+  if (objDate.getFullYear() !== year ||
+    objDate.getMonth() !== month ||
+    objDate.getDate() !== day) {
+    return false;
+  }
+
+  return true;
 }
 
 export function validateName(string) {

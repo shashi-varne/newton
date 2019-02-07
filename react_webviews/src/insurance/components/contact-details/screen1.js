@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
+import toast from '../../../common/ui/Toast';
 
 import Container from '../../common/Container';
-import InputWithIcon from '../../../common/ui/InputWithIcon';
-import MobileInputWithIcon from '../../../common/ui/MobileInputWithIcon';
+import MobileInputWithoutIcon from '../../../common/ui/MobileInputWithoutIcon';
+import TitleWithIcon from '../../../common/ui/TitleWithIcon';
+import contact from 'assets/contact_details_icon.svg';
+import contact_myway from 'assets/contact_details_icn.svg';
+import Input from '../../../common/ui/Input';
 import email from 'assets/email_dark_icn.png';
 import phone from 'assets/phone_dark_icn.png';
 import Api from 'utils/api';
@@ -45,24 +49,28 @@ class ContactDetails1 extends Component {
     }
   }
 
-  componentDidMount() {
-    Api.get('/api/insurance/profile/' + this.state.params.insurance_id, {
-      groups: 'contact'
-    }).then(res => {
+  async componentDidMount() {
+    try {
+      const res = await Api.get('/api/insurance/profile/' + this.state.params.insurance_id, {
+        groups: 'contact'
+      });
       const { email, mobile_no } = res.pfwresponse.result.profile;
-      const { image, provider } = res.pfwresponse.result.quote_desc;
+      const { image, provider, cover_plan } = res.pfwresponse.result.quote_desc;
 
       this.setState({
         show_loader: false,
         email: email || '',
         mobile_no: mobile_no || '',
         image: image,
-        provider: provider
+        provider: provider,
+        cover_plan: cover_plan
       });
-    }).catch(error => {
-      this.setState({ show_loader: false });
-      console.log(error);
-    });
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
+    }
   }
 
   handleChange = () => event => {
@@ -102,41 +110,69 @@ class ContactDetails1 extends Component {
         mobile_no_error: 'Please enter valid mobile no'
       });
     } else {
-      this.setState({ show_loader: true });
-      const res = await Api.post('/api/insurance/profile', {
-        insurance_app_id: this.state.params.insurance_id,
-        email: this.state.email,
-        mobile_no: this.state.mobile_no
-      });
+      try {
+        this.setState({ show_loader: true });
+        const res = await Api.post('/api/insurance/profile', {
+          insurance_app_id: this.state.params.insurance_id,
+          email: this.state.email,
+          mobile_no: this.state.mobile_no
+        });
 
-      if (res.pfwresponse.status_code === 200) {
+        if (res.pfwresponse.status_code === 200) {
 
-        let eventObj = {
-          "event_name": "contact_one_save",
-          "properties": {
-            "provider": this.state.provider,
-            "email": this.state.email,
-            "mobile": this.state.mobile_no,
-            "closed_popup": "",
-            "from_edit": (this.state.edit) ? 1 : 0
+          let eventObj = {
+            "event_name": "contact_one_save",
+            "properties": {
+              "provider": this.state.provider,
+              "email": this.state.email,
+              "mobile": this.state.mobile_no,
+              "closed_popup": "",
+              "from_edit": (this.state.edit) ? 1 : 0
+            }
+          };
+
+          nativeCallback({ events: eventObj });
+
+          this.setState({ show_loader: false });
+          if (this.props.edit) {
+
+            if (this.state.provider === 'HDFC' && this.state.plutus_payment_status !== 'payment_done') {
+              if (this.state.plutus_payment_status !== 'payment_done') {
+                this.navigate('/insurance/summary');
+              } else {
+                this.navigate('/insurance/edit-contact1');
+              }
+
+            } else {
+              this.navigate('/insurance/summary');
+            }
+          } else {
+            if (this.state.provider === 'HDFC' && this.state.plutus_payment_status !== 'payment_done') {
+              if (this.state.plutus_payment_status !== 'payment_done') {
+                this.navigate('/insurance/professional');
+              } else {
+                this.navigate('/insurance/contact1');
+              }
+
+            } else {
+              this.navigate('/insurance/professional');
+            }
           }
-        };
 
-        nativeCallback({ events: eventObj });
-
-        this.setState({ show_loader: false });
-        if (this.props.edit) {
-          this.navigate('/insurance/edit-contact1');
         } else {
-          this.navigate('/insurance/contact1');
+          this.setState({ show_loader: false });
+          for (let error of res.pfwresponse.result.errors) {
+            this.setState({
+              [error.field + '_error']: error.message
+            });
+          }
         }
-      } else {
-        this.setState({ show_loader: false });
-        for (let error of res.pfwresponse.result.errors) {
-          this.setState({
-            [error.field + '_error']: error.message
-          });
-        }
+
+      } catch (err) {
+        this.setState({
+          show_loader: false
+        });
+        toast('Something went wrong');
       }
     }
   }
@@ -144,7 +180,7 @@ class ContactDetails1 extends Component {
   bannerText = () => {
     return (
       <span>
-        Your policy will be <em><b>emailed</b></em> to you.<br />Let's stay connected!
+        Your policy will be <b>emailed</b> to you.<br />Let's stay connected!
       </span>
     );
   }
@@ -153,11 +189,12 @@ class ContactDetails1 extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title={(this.props.edit) ? 'Edit Contact Details' : 'Contact Details'}
+        title="Application Form"
+        smallTitle={this.state.provider}
         count={true}
-        total={4}
+        total={this.state.provider === 'IPRU' ? 5 : 4}
         current={2}
-        banner={true}
+        banner={false}
         bannerText={this.bannerText()}
         handleClick={this.handleClick}
         edit={this.props.edit}
@@ -166,8 +203,10 @@ class ContactDetails1 extends Component {
         type={this.state.type}
       >
         <FormControl fullWidth>
+          <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? contact_myway : contact}
+            title={(this.props.edit) ? 'Edit Contact Details' : 'Contact Details'} />
           <div className="InputField">
-            <InputWithIcon
+            <Input
               error={(this.state.email_error) ? true : false}
               helperText={this.state.email_error}
               type="email"
@@ -181,7 +220,7 @@ class ContactDetails1 extends Component {
               onChange={this.handleChange()} />
           </div>
           <div className="InputField">
-            <MobileInputWithIcon
+            <MobileInputWithoutIcon
               error={(this.state.mobile_no_error) ? true : false}
               helperText={this.state.mobile_no_error}
               type="number"

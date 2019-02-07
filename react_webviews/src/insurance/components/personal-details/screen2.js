@@ -1,17 +1,23 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
+import toast from '../../../common/ui/Toast';
 
 import Container from '../../common/Container';
-import InputWithIcon from '../../../common/ui/InputWithIcon';
+import TitleWithIcon from '../../../common/ui/TitleWithIcon';
+import personal from 'assets/personal_details_icon.svg';
+import personal_myway from 'assets/personal_details_icn.svg';
+import Input from '../../../common/ui/Input';
 import mother from 'assets/mother_dark_icn.png';
 import father from 'assets/father_dark_icn.png';
 import location from 'assets/location_dark_icn.png';
 import Api from 'utils/api';
-import { validateEmpty,
-validateLength,
-validateConsecutiveChar,
-validateAlphabets } from 'utils/validators';
+import {
+  validateEmpty,
+  validateLength,
+  validateConsecutiveChar,
+  validateAlphabets
+} from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 
 class PersonalDetails2 extends Component {
@@ -20,14 +26,11 @@ class PersonalDetails2 extends Component {
     this.state = {
       mother_name: '',
       father_name: '',
-      spouse_name: '',
-      marital_status: '',
       birth_place: '',
       show_loader: true,
       image: '',
       mother_name_error: '',
       father_name_error: '',
-      spouse_name_error: '',
       birth_place_error: '',
       provider: '',
       params: qs.parse(props.history.location.search.slice(1)),
@@ -53,51 +56,50 @@ class PersonalDetails2 extends Component {
     }
   }
 
-  componentDidMount() {
-    Api.get('/api/insurance/profile/'+this.state.params.insurance_id, {
-      groups: 'personal'
-    }).then(res => {
-      const { mother_name, father_name, spouse_name,  birth_place, marital_status } = res.pfwresponse.result.profile;
-      const { image, provider } = res.pfwresponse.result.quote_desc;
+  async componentDidMount() {
+    try {
+      const res = await Api.get('/api/insurance/profile/' + this.state.params.insurance_id, {
+        groups: 'personal'
+      })
+      const { mother_name, father_name, birth_place, marital_status } = res.pfwresponse.result.profile;
+      const { image, provider, cover_plan } = res.pfwresponse.result.quote_desc;
 
       this.setState({
         show_loader: false,
         mother_name: mother_name || '',
         father_name: father_name || '',
         marital_status: marital_status || '',
-        spouse_name: spouse_name || '',
         birth_place: birth_place || '',
         image: image,
-        provider: provider
+        provider: provider,
+        cover_plan: cover_plan
       });
-    }).catch(error => {
-      this.setState({show_loader: false});
-      console.log(error);
-    });
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
+    }
   }
 
   handleChange = () => event => {
     this.setState({
       [event.target.name]: event.target.value,
-      [event.target.name+'_error']: ''
+      [event.target.name + '_error']: ''
     });
   };
 
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id='+this.state.params.insurance_id+'&resume='+this.state.params.resume+'&base_url='+this.state.params.base_url
+      search: '?insurance_id=' + this.state.params.insurance_id + '&resume=' + this.state.params.resume + '&base_url=' + this.state.params.base_url
     });
   }
 
   handleClick = async () => {
-    if (this.state.mother_name.split(" ").filter(e => e).length < 2) {
+    if (!validateEmpty(this.state.mother_name)) {
       this.setState({
-        mother_name_error: 'Enter valid full name'
-      });
-    } else if (!validateEmpty(this.state.mother_name)) {
-      this.setState({
-        mother_name_error: 'Enter valid full name'
+        mother_name_error: 'Enter valid name'
       });
     } else if (!validateLength(this.state.mother_name)) {
       this.setState({
@@ -111,33 +113,9 @@ class PersonalDetails2 extends Component {
       this.setState({
         mother_name_error: 'Name can contain only alphabets'
       });
-    } else if (this.state.marital_status === 'MARRIED' && this.state.spouse_name.split(" ").length < 2) {
-      this.setState({
-        spouse_name_error: 'Enter valid full name'
-      });
-    } else if (this.state.marital_status === 'MARRIED' && !validateEmpty(this.state.spouse_name)) {
-      this.setState({
-        spouse_name_error: 'Enter valid full name'
-      });
-    } else if (this.state.marital_status === 'MARRIED' && !validateLength(this.state.spouse_name)) {
-      this.setState({
-        spouse_name_error: 'Maximum length of name is 30 characters'
-      });
-    } else if (this.state.marital_status === 'MARRIED' && !validateConsecutiveChar(this.state.spouse_name)) {
-      this.setState({
-        spouse_name_error: 'Name can not contain more than 3 same consecutive characters'
-      });
-    } else if (this.state.marital_status === 'MARRIED' && !validateAlphabets(this.state.spouse_name)) {
-      this.setState({
-        spouse_name_error: 'Name can contain only alphabets'
-      });
-    } else if (this.state.father_name.split(" ").length < 2) {
-      this.setState({
-        father_name_error: 'Enter valid full name'
-      });
     } else if (!validateEmpty(this.state.father_name)) {
       this.setState({
-        father_name_error: 'Enter valid full name'
+        father_name_error: 'Enter valid name'
       });
     } else if (!validateLength(this.state.father_name)) {
       this.setState({
@@ -160,47 +138,53 @@ class PersonalDetails2 extends Component {
         birth_place_error: 'Enter a valid city name - alphabets only'
       });
     } else {
-      this.setState({show_loader: true});
-      const res = await Api.post('/api/insurance/profile', {
-        insurance_app_id: this.state.params.insurance_id,
-        father_name: this.state.father_name,
-        spouse_name: this.state.spouse_name,
-        mother_name: this.state.mother_name,
-        birth_place: this.state.birth_place
-      });
+      try {
+        this.setState({ show_loader: true });
+        const res = await Api.post('/api/insurance/profile', {
+          insurance_app_id: this.state.params.insurance_id,
+          father_name: this.state.father_name,
+          mother_name: this.state.mother_name,
+          birth_place: this.state.birth_place
+        });
 
-      if (res.pfwresponse.status_code === 200) {
+        if (res.pfwresponse.status_code === 200) {
 
-        let eventObj = {
-          "event_name": "personal_three_save",
-          "properties": {
-            "provider": this.state.provider,
-            "mother_name": this.state.mother_name,
-            "father_name": this.state.father_name,
-            "place_birth": this.state.birth_place,
-            "from_edit": (this.props.edit) ? 1 : 0
-          }
-        };
+          let eventObj = {
+            "event_name": "personal_three_save",
+            "properties": {
+              "provider": this.state.provider,
+              "mother_name": this.state.mother_name,
+              "father_name": this.state.father_name,
+              "place_birth": this.state.birth_place,
+              "from_edit": (this.props.edit) ? 1 : 0
+            }
+          };
 
-        nativeCallback({ events: eventObj });
+          nativeCallback({ events: eventObj });
 
-        this.setState({show_loader: false});
-        if (this.props.edit) {
-          if (this.state.params.resume === "yes") {
-            this.navigate('/insurance/resume');
+          this.setState({ show_loader: false });
+          if (this.props.edit) {
+            if (this.state.params.resume === "yes") {
+              this.navigate('/insurance/resume');
+            } else {
+              this.navigate('/insurance/summary');
+            }
           } else {
-            this.navigate('/insurance/summary');
+            this.navigate('/insurance/contact');
           }
         } else {
-          this.navigate('/insurance/contact');
+          this.setState({ show_loader: false });
+          for (let error of res.pfwresponse.result.errors) {
+            this.setState({
+              [error.field + '_error']: error.message
+            });
+          }
         }
-      } else {
-        this.setState({show_loader: false});
-        for (let error of res.pfwresponse.result.errors) {
-          this.setState({
-            [error.field+'_error']: error.message
-          });
-        }
+      } catch (err) {
+        this.setState({
+          show_loader: false
+        });
+        toast('Something went wrong');
       }
     }
   }
@@ -209,21 +193,23 @@ class PersonalDetails2 extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title={(this.props.edit) ? 'Edit Personal Details' : 'Personal Details'}
+        title="Application Form"
+        smallTitle={this.state.provider}
         count={true}
-        total={4}
+        total={this.state.provider === 'IPRU' ? 5 : 4}
         current={1}
         handleClick={this.handleClick}
         edit={this.props.edit}
-        buttonTitle="Save Details"
+        buttonTitle="Save & Continue"
         logo={this.state.image}
         type={this.state.type}
-        >
+      >
         <FormControl fullWidth>
+          <TitleWithIcon width="20" icon={this.state.type !== 'fisdom' ? personal_myway : personal} title={(this.props.edit) ? 'Edit Personal Details' : 'Personal Details'} />
           <div className="InputField">
-            <InputWithIcon
+            <Input
               error={(this.state.mother_name_error) ? true : false}
-              helperText={this.state.mother_name_error || "Please enter full name"}
+              helperText={this.state.mother_name_error}
               type="text"
               icon={mother}
               width="40"
@@ -235,9 +221,9 @@ class PersonalDetails2 extends Component {
               onChange={this.handleChange()} />
           </div>
           <div className="InputField">
-            <InputWithIcon
+            <Input
               error={(this.state.father_name_error) ? true : false}
-              helperText={this.state.father_name_error || "Please enter full name"}
+              helperText={this.state.father_name_error}
               type="text"
               icon={father}
               width="40"
@@ -248,25 +234,8 @@ class PersonalDetails2 extends Component {
               value={this.state.father_name}
               onChange={this.handleChange()} />
           </div>
-          {
-            this.state.marital_status === 'MARRIED' &&
-            <div className="InputField">
-              <InputWithIcon
-                error={(this.state.spouse_name_error) ? true : false}
-                helperText={this.state.spouse_name_error || "Please enter full name"}
-                type="text"
-                icon={father}
-                width="40"
-                label="Spouse name *"
-                class="SpouseName"
-                id="spouse-name"
-                name="spouse_name"
-                value={this.state.spouse_name}
-                onChange={this.handleChange()} />
-            </div>
-          }
           <div className="InputField">
-            <InputWithIcon
+            <Input
               error={(this.state.birth_place_error) ? true : false}
               helperText={this.state.birth_place_error}
               icon={location}

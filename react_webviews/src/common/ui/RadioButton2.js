@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Grid from 'material-ui/Grid';
 
 import './style.css';
-import Icon from './Icon';
 import RadioBtn from './RadioBtn';
 
 class RadioGrp extends Component {
