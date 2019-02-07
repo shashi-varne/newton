@@ -52,7 +52,7 @@
 .recommendation-containerWrapper {
   background-color: #f2f2f2;
   /* autoprefixer: off */
-  /* height: -webkit-fill-available; */
+  height: -webkit-fill-available;
   /* height: 100%; */
   padding: 10px 7px 10px 7px;
   margin-bottom: 0px !important;

@@ -29,7 +29,7 @@ class Recommendation extends Component {
       type: '',
       mfTab: 0,
       yearTab: 1,
-      amount: 5000,
+      amount: 1000,
       amount_error: '',
       funds: [],
       oepnDialog: false,
@@ -62,9 +62,10 @@ class Recommendation extends Component {
       let type_choices = ['sip', 'onetime'];
       let timeChoices = ['0m', '6m', '1y', '3y', '5y'];
 
-      if (this.state.amount_error) {
+      if (!this.amountValidation(type, amount)) {
         return;
       }
+
       this.setState({
         show_loader: true,
         order_type: type_choices[type]
@@ -156,6 +157,9 @@ class Recommendation extends Component {
     this.setState({
       [type]: value
     });
+
+
+
     if (type === 'mfTab') {
       this.getFunds(this.state.yearTab, this.state.amount, value);
     } else {
@@ -240,37 +244,52 @@ class Recommendation extends Component {
     return '';
   }
 
+  amountValidation(type, amount) {
+
+    this.setState({
+      amount_error_validation: false
+    })
+
+    if (type === 0 && amount < 1000) {
+      this.setState({
+        amount_error: 'Minimum amount is 1000 for SIP',
+        funds: [],
+        amount_error_validation: true
+      })
+      return false;
+    } else if (type === 0 && amount > 500000) {
+      this.setState({
+        amount_error: 'Maximum amount is 5 Lakh for SIP',
+        funds: [],
+        amount_error_validation: true
+      })
+      return false;
+    } else if (type === 1 && amount < 5000) {
+      this.setState({
+        amount_error: 'Minimum amount is 5,000 for One Time',
+        funds: [],
+        amount_error_validation: true
+      })
+      return false;
+    } else if (type === 1 && amount > 2000000) {
+      this.setState({
+        amount_error: 'Maximum amount is 20 Lakh for One Time',
+        funds: [],
+        amount_error_validation: true
+      })
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   onBlurAmount(modal, amount) {
 
     if (!modal) {
       amount = this.state.amount;
     }
-    console.log("on blur amount");
-    console.log(amount);
-    if (this.state.mfTab === 0 && amount < 500) {
-      this.setState({
-        amount_error: 'Minimum amount is 500 for SIP',
-        funds: []
-      })
-    } else if (this.state.mfTab === 0 && amount > 500000) {
-      this.setState({
-        amount_error: 'Maximum amount is 5 Lakh for SIP',
-        funds: []
-      })
-    } else if (this.state.mfTab === 1 && amount < 5000) {
-      this.setState({
-        amount_error: 'Minimum amount is 5,000 for One Time',
-        funds: []
-      })
-    } else if (this.state.mfTab === 1 && amount > 5000000) {
-      this.setState({
-        amount_error: 'Maximum amount is 50 Lakh for One Time',
-        funds: []
-      })
-    } else {
-      this.getFunds(this.state.yearTab, amount, this.state.mfTab);
-    }
 
+    this.getFunds(this.state.yearTab, amount, this.state.mfTab);
   }
 
   renderFunds(props, index) {
