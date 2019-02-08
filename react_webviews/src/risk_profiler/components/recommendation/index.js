@@ -29,7 +29,7 @@ class Recommendation extends Component {
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
       mfTab: 0,
-      yearTab: 1,
+      yearTab: 4,
       amount: 1000,
       amount_error: '',
       funds: [],
