@@ -58,8 +58,9 @@ class Container extends Component {
     })
     let pathname = this.props.history.location.pathname;
     let { params } = this.props.location;
-
-    if (!params || (params && !params.goBack)) {
+    let { search } = this.props.location;
+    console.log(search);
+    if (search.indexOf('goBack') < 0) {
       if (pathname.indexOf('result') >= 0) {
 
         nativeCallback({ action: 'exit' });
