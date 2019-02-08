@@ -132,7 +132,7 @@ class Intro extends Component {
             textAlign: 'center', marginTop: 50,
             color: '#4a4a4a', fontSize: 16, fontWeight: 500
           }}>
-            Check your risk tolerance, and get the right mix of funds to invest.
+            Answer a few questions to check risk tolerance and get the right mutual funds to invest.
         </div>
         </div>
         {this.openDialogConfirmModal()}

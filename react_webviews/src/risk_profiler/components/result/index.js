@@ -33,6 +33,12 @@ class Result extends Component {
   }
 
   componentWillMount() {
+    let { params } = this.props.location;
+    this.setState({
+      goBack: params ? params.goBack : ''
+    })
+
+    console.log(params)
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -223,6 +229,7 @@ class Result extends Component {
           topIcon="restart"
           handleReset={this.showDialog}
           resetpage={true}
+          disableBack={this.state.goBack ? false : true}
         >
           <div className="meter-img">
             {this.state.score && <img style={{ width: '70%' }} src={this.getScoreData(this.state.score.score).img} alt="meter" />}

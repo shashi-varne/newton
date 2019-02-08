@@ -56,21 +56,18 @@ class Container extends Component {
     this.setState({
       back_pressed: true
     })
+    let pathname = this.props.history.location.pathname;
     let { params } = this.props.location;
 
-    if (params && params.disableBack) {
-      // this.setState({
-      //   callbackType: 'exit',
-      //   openPopup: true,
-      //   popupText: 'Are you sure you want to exit ?'
-      // })
-      nativeCallback({ action: 'exit' });
-      return;
+    if (!params || (params && !params.goBack)) {
+      if (pathname.indexOf('result') >= 0) {
+
+        nativeCallback({ action: 'exit' });
+        return;
+      }
     }
 
-    let pathname = this.props.history.location.pathname;
-
-    if (pathname.indexOf('result') >= 0) {
+    if (params && params.disableBack) {
       // this.setState({
       //   callbackType: 'exit',
       //   openPopup: true,
