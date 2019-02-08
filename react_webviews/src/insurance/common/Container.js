@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
+import { getConfig } from 'utils/functions';
 
 import Header from './Header';
 import Footer from './footer';
@@ -46,37 +47,49 @@ class Container extends Component {
 
   historyGoBack = () => {
     let { params } = this.props.location;
-    console.log(params);
+    let insurance_v2 = getConfig().insurance_v2;
 
     if (this.props.isJourney) {
-      this.setState({
-        callbackType: 'show_quotes',
-        openPopup: true,
-        popupText: 'Are you sure you want to explore more options? We will save your information securely.'
-      })
+      if (!insurance_v2) {
+        nativeCallback({ action: 'native_back' });
+      } else {
+        this.setState({
+          callbackType: 'show_quotes',
+          openPopup: true,
+          popupText: 'Are you sure you want to explore more options? We will save your information securely.'
+        })
+      }
+
       return;
     }
 
     if (params && params.disableBack) {
-      this.setState({
-        callbackType: 'exit',
-        openPopup: true,
-        popupText: 'Are you sure you want to exit the application process? You can resume it later.'
-      })
-      return;
-    }
-
-    let pathname = this.props.history.location.pathname;
-    console.log(pathname);
-    switch (pathname) {
-      case "/insurance":
-      case "/insurance/resume":
-      case "/insurance/journey":
+      if (!insurance_v2) {
+        nativeCallback({ action: 'native_back' });
+      } else {
         this.setState({
           callbackType: 'exit',
           openPopup: true,
           popupText: 'Are you sure you want to exit the application process? You can resume it later.'
         })
+      }
+      return;
+    }
+
+    let pathname = this.props.history.location.pathname;
+    switch (pathname) {
+      case "/insurance":
+      case "/insurance/resume":
+      case "/insurance/journey":
+        if (!insurance_v2) {
+          nativeCallback({ action: 'native_back' });
+        } else {
+          this.setState({
+            callbackType: 'exit',
+            openPopup: true,
+            popupText: 'Are you sure you want to exit the application process? You can resume it later.'
+          })
+        }
         break;
       default:
         if (navigator.onLine) {
@@ -125,33 +138,35 @@ class Container extends Component {
     });
 
     nativeCallback({ action: this.state.callbackType });
-
   }
 
   renderPopup = () => {
-    return (
-      <Dialog
-        fullScreen={false}
-        open={this.state.openPopup}
-        onClose={this.handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        {/* <DialogTitle id="form-dialog-title">No Internet Found</DialogTitle> */}
-        <DialogContent>
-          <DialogContentText>
-            {this.state.popupText}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleClose} color="default">
-            No
-          </Button>
-          <Button onClick={this.handlePopup} color="default" autoFocus>
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
+    if (getConfig().insurance_v2) {
+      return (
+        <Dialog
+          fullScreen={false}
+          open={this.state.openPopup}
+          onClose={this.handleClose}
+          aria-labelledby="responsive-dialog-title"
+        >
+          {/* <DialogTitle id="form-dialog-title">No Internet Found</DialogTitle> */}
+          <DialogContent>
+            <DialogContentText>
+              {this.state.popupText}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="default">
+              No
+            </Button>
+            <Button onClick={this.handlePopup} color="default" autoFocus>
+              Yes
+            </Button>
+          </DialogActions>
+        </Dialog>
+      );
+    }
+    return null;
   }
 
   renderPageLoader = () => {

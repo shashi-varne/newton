@@ -45,7 +45,6 @@ class QuestionScreen2 extends Component {
 
   async componentDidMount() {
     let questionnaire = JSON.parse(window.localStorage.getItem('questionnaire'));
-    console.log(questionnaire)
     let question1Options = [], question2Options = [];
     question1Options = questionnaire[this.state.indexMain].choices;
 
@@ -89,7 +88,6 @@ class QuestionScreen2 extends Component {
   handleClick = async () => {
 
 
-    console.log(this.state);
     if (!this.state.question1) {
       this.setState({
         question1_error: 'Mandatory'

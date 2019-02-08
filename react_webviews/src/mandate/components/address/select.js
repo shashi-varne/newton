@@ -34,8 +34,6 @@ class SelectAddress extends Component {
     this.setState({
       disableBack: params ? params.disableBack : false
     })
-    console.log(params);
-    console.log(this.state.params);
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -68,7 +66,6 @@ class SelectAddress extends Component {
       }
     }).catch(error => {
       this.setState({ show_loader: false });
-      console.log(error);
     });
   }
 

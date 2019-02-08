@@ -195,9 +195,9 @@ button.MuiButtonBase-root.MuiButton-root.MuiButton-raised.MuiButton-raisedSecond
   align-items: center;
 }
 
-/* .FooterSummaryLayout {
+.FooterSummaryLayout {
   background: #2ec155;
-} */
+}
 
 .FooterDefaultLayout .FlexItem3, .FooterDefaultLayout .FlexItem2, .FooterDefaultLayout .FlexItem1 {
   text-align: center;

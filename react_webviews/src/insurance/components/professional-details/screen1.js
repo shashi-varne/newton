@@ -162,7 +162,6 @@ class ProfessionalDetails1 extends Component {
 
   handleClick = async () => {
     // var number = /^\d*$/gm;
-    console.log(this.state);
 
     if (!validateEmpty(this.state.pan_number) &&
       this.state.provider === 'HDFC') {

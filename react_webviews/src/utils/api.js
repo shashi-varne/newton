@@ -6,15 +6,6 @@ import createBrowserHistory from 'history/createBrowserHistory';
 const myHistory = createBrowserHistory();
 let { base_url } = qs.parse(myHistory.location.search.slice(1));
 
-// remove this after backend changes
-if (!base_url) {
-  if (window.localStorage.getItem('insurance_search')) {
-    let insurance_search = JSON.parse(localStorage.getItem('insurance_search'));
-    base_url = insurance_search.base_url;
-  }
-}
-
-
 axios.defaults.baseURL = decodeURIComponent(base_url).replace(/\/$/, "");
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';

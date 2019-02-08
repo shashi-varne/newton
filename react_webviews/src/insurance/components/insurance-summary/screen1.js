@@ -65,7 +65,6 @@ class Summary extends Component {
 
   componentWillMount() {
     let { params } = this.props.location;
-    console.log(params);
     this.setState({
       disableBack: params ? params.disableBack : false
     })
@@ -101,7 +100,6 @@ class Summary extends Component {
       return;
     }
 
-    console.log(payment_link);
     this.setState({
       show_loader: true
     });
@@ -116,8 +114,6 @@ class Summary extends Component {
   }
 
   async paymentRedirect() {
-    console.log("payment redirect");
-    console.log(this.state.params.insurance_id);
     this.setState({
       show_loader: true
     });
@@ -125,7 +121,6 @@ class Summary extends Component {
       const res = await Api.get('api/insurance/start/payment/' + this.state.params.insurance_id)
 
       if (res.pfwresponse && res.pfwresponse.status_code === 200) {
-        console.log(res.pfwresponse.result);
         let result = res.pfwresponse.result
         this.setState({
           payment_link: result.payment_link,
@@ -154,7 +149,6 @@ class Summary extends Component {
     try {
       const res = await Api.get('api/insurance/start/payment/' + application.id)
       if (res.pfwresponse && res.pfwresponse.status_code === 200) {
-        console.log(res.pfwresponse.result);
         let result = res.pfwresponse.result
         this.setState({
           payment_link: result.payment_link,
@@ -196,11 +190,6 @@ class Summary extends Component {
           providerName = 'ICICI';
         }
 
-        let insurance_search = {};
-        insurance_search.insurance_id = application.id;
-        insurance_search.base_url = this.state.params.base_url;
-        insurance_search.provider = application.provider;
-        window.localStorage.setItem('insurance_search', JSON.stringify(insurance_search));
         // if (application.provider === 'HDFC' && application.plutus_payment_status === 'payment_ready') {
         //   this.handlePayment(application);
         // }
@@ -295,8 +284,6 @@ class Summary extends Component {
           }
         });
 
-        console.log("nominee percennt");
-        console.log(this.renderNomineePercentage());
       } else {
         this.setState({ show_loader: false });
       }
@@ -333,7 +320,6 @@ class Summary extends Component {
   }
 
   handleClick = async () => {
-    console.log(this.state.plutus_payment_status);
     if (this.state.plutus_payment_status === 'payment_ready' ||
       this.state.plutus_payment_status === 'failed') {
       this.paymentRedirect();
@@ -974,7 +960,7 @@ class Summary extends Component {
               fullWidth={true}
               variant="raised"
               size="large"
-              color="default"
+              color="secondary"
               onClick={this.handleClosePayment}
               autoFocus>Ok
             </Button>

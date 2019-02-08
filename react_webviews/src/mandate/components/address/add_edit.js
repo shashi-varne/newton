@@ -83,7 +83,6 @@ class AddEditAddress extends Component {
 
         }).catch(error => {
           this.setState({ show_loader: false });
-          console.log(error);
         });
       } else {
         this.setState({ show_loader: false });

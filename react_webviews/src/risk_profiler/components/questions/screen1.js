@@ -126,7 +126,6 @@ class QuestionScreen1 extends Component {
   handleClick = async () => {
 
 
-    console.log(this.state);
     if (!this.state.question1) {
       this.setState({
         question1_error: 'Mandatory'

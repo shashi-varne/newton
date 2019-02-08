@@ -267,7 +267,6 @@ class Pincode extends Component {
       const res = await Api.get('api/insurance/start/payment/' + insurance_id)
 
       if (res.pfwresponse && res.pfwresponse.status_code === 200) {
-        console.log(res.pfwresponse.result);
         let result = res.pfwresponse.result
 
         this.setState({
@@ -300,7 +299,6 @@ class Pincode extends Component {
         "quote_id": this.state.otherProvider.id
       };
       const res = await Api.post('/api/insurance/create/hdfc_app/from/ipru', data);
-      console.log(res);
 
       if (res.pfwresponse.status_code === 200) {
 
@@ -334,7 +332,6 @@ class Pincode extends Component {
         "change_provider": true
       };
       const res = await Api.post('/api/insurance/quote', data);
-      console.log(res);
 
       if (res.pfwresponse.status_code === 200) {
 

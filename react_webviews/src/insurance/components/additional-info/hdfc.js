@@ -79,7 +79,6 @@ class AdditionalInfo extends Component {
         type: 'fisdom'
       });
     }
-    console.log("yo yo");
   }
 
   async componentDidMount() {
@@ -292,7 +291,6 @@ class AdditionalInfo extends Component {
         occupation_category_error: 'Mandatory'
       });
     } else {
-      console.log(this.state.education_qualification);
       try {
         this.setState({ show_loader: true });
 

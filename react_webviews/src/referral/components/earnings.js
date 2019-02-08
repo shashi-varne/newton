@@ -59,41 +59,39 @@ class Earnings extends Component {
       axios.get('/api/referral/v2/listreferees/mine'),
       axios.get('/api/referral/v2/getactivecampaign/mine')
     ])
-    .then(axios.spread((listRes, campaignRes) => {
-      const { data, next_page } = listRes.data.pfwresponse.result;
-      const { amount_per_referral, campaign_expiry_date, refer_message_1, refer_message_2, referral_code, type_of_referee_identifier, total_earnings } = campaignRes.data.pfwresponse.result;
+      .then(axios.spread((listRes, campaignRes) => {
+        const { data, next_page } = listRes.data.pfwresponse.result;
+        const { amount_per_referral, campaign_expiry_date, refer_message_1, refer_message_2, referral_code, type_of_referee_identifier, total_earnings } = campaignRes.data.pfwresponse.result;
 
-      this.setState({
-        show_loader: false,
-        data,
-        amount_per_referral,
-        campaign_expiry_date,
-        refer_message_1,
-        refer_message_2,
-        referral_code,
-        type_of_referee_identifier,
-        total_earnings,
-        hasMoreItems: (next_page) ? true : false,
-        nextPage: (next_page) ? next_page : null
+        this.setState({
+          show_loader: false,
+          data,
+          amount_per_referral,
+          campaign_expiry_date,
+          refer_message_1,
+          refer_message_2,
+          referral_code,
+          type_of_referee_identifier,
+          total_earnings,
+          hasMoreItems: (next_page) ? true : false,
+          nextPage: (next_page) ? next_page : null
+        });
+
+        let eventObj = {
+          "event_name": "earnings_view",
+          "properties": {
+            "earnings_value": total_earnings,
+            "list_size": data.length
+          }
+        };
+
+        nativeCallback({ events: eventObj });
+      }, error => {
+        this.setState({ show_loader: false });
+      }))
+      .catch(error => {
+        this.setState({ show_loader: false });
       });
-
-      let eventObj = {
-        "event_name": "earnings_view",
-        "properties": {
-          "earnings_value": total_earnings,
-          "list_size": data.length
-        }
-      };
-
-      nativeCallback({ events: eventObj });
-    }, error => {
-      this.setState({show_loader: false});
-      console.log(error);
-    }))
-    .catch(error => {
-      this.setState({show_loader: false});
-      console.log(error);
-    });
   }
 
   loadItems = (page) => {
@@ -106,12 +104,11 @@ class Earnings extends Component {
         nextPage: (next_page) ? next_page : null
       });
     }).catch(error => {
-      console.log(error);
     });
   }
 
   capitalize = (string) => {
-    return string.toLowerCase().replace(/(^|\s)[a-z]/g,function(f){return f.toUpperCase();})
+    return string.toLowerCase().replace(/(^|\s)[a-z]/g, function (f) { return f.toUpperCase(); })
   }
 
   shareHandler = () => {
@@ -170,7 +167,7 @@ class Earnings extends Component {
   }
 
   renderList = () => {
-    const dataLength = this.state.data.filter(item => item.investment_status === 'pending' );
+    const dataLength = this.state.data.filter(item => item.investment_status === 'pending');
     const loader = <div className="loader" key={0}>Loading...</div>
 
     let items = [];
@@ -183,7 +180,7 @@ class Earnings extends Component {
               {this.renderIcon(item)}
             </Grid>
             <Grid item xs={6}>
-              <span className="name">{this.capitalize((item.referee_name.length > 10) ? item.referee_name.replace('91|', '').substring(0,10)+'...' : item.referee_name)}</span>
+              <span className="name">{this.capitalize((item.referee_name.length > 10) ? item.referee_name.replace('91|', '').substring(0, 10) + '...' : item.referee_name)}</span>
             </Grid>
             <Grid item xs={3}>
               {this.renderAction(dataLength, item, i)}
@@ -297,7 +294,7 @@ class Earnings extends Component {
         showLoader={this.state.show_loader}
         title={'Earnings'}
         type={this.state.type}
-        >
+      >
         <div className="Earning">
           <div className={`ReferPaytmGrid pad25 GreyBackground ${(this.state.total_earnings > 0) ? '' : 'EarningsPaytmGrid'}`}>
             <Grid container spacing={24} alignItems="center">
