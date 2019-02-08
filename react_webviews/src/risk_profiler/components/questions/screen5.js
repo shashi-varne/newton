@@ -83,7 +83,10 @@ class QuestionScreen5 extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?base_url=' + this.state.params.base_url
+      search: '?base_url=' + this.state.params.base_url,
+      params: {
+        goBack: true
+      }
     });
   }
 
