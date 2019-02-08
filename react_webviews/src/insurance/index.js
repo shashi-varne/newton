@@ -6,10 +6,10 @@ import {
 import { withRouter } from "react-router";
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import '../common/theme/Style.css';
-import './components/Style.css';
 import { getConfig } from 'utils/functions';
 
 import './common/Style.css';
+import './components/Style.css';
 import NotFound from '../common/components/NotFound';
 import PersonalDetails1 from './components/personal-details/screen1';
 import PersonalDetails2 from './components/personal-details/screen2';
@@ -18,8 +18,12 @@ import ContactDetails2 from './components/contact-details/screen2';
 import NomineeDetails from './components/nominee-details/screen1';
 import AppointeeDetails from './components/nominee-details/screen2';
 import ProfessionalDetails1 from './components/professional-details/screen1';
-// import ProfessionalDetails2 from './components/professional-details/screen2';
+import ProfessionalDetails2 from './components/professional-details/screen2';
+import AdditionalInfo from './components/additional-info/hdfc';
 import Summary from './components/insurance-summary/screen1';
+import Journey from './components/insurance-summary/screen3';
+import Payment from './components/payment/index';
+import Pincode from './components/pincode/screen1';
 import Resume from './components/insurance-summary/screen2';
 
 import { create } from 'jss';
@@ -115,15 +119,21 @@ const Insurance = (props) => {
       <MuiThemeProvider theme={theme}>
         <ScrollToTop />
         <Switch>
-          <Route exact path={`${url}`} component={PersonalDetails1} />
+          <Route exact path={`${url}`} component={Journey} />
           <Route path={`${url}/resume`} component={Resume} />
-          <Route path={`${url}/personal`} component={PersonalDetails2} />
+          <Route path={`${url}/personal`} component={PersonalDetails1} />
+          <Route path={`${url}/personal1`} component={PersonalDetails2} />
           <Route path={`${url}/contact`} component={ContactDetails1} />
           <Route path={`${url}/contact1`} component={ContactDetails2} />
           <Route path={`${url}/nominee`} component={NomineeDetails} />
           <Route path={`${url}/appointee`} component={AppointeeDetails} />
           <Route path={`${url}/professional`} component={ProfessionalDetails1} />
+          <Route path={`${url}/professional1`} component={ProfessionalDetails2} />
+          <Route path={`${url}/additional-info`} component={AdditionalInfo} />
           <Route path={`${url}/summary`} component={Summary} />
+          <Route path={`${url}/journey`} component={Journey} />
+          <Route path={`${url}/payment/:insurance_id/:status`} component={Payment} />
+          <Route path={`${url}/Pincode`} component={Pincode} />
           {/* Edit paths */}
           <Route path={`${url}/edit-personal`} render={(props) => <PersonalDetails1 {...props} edit={true} />} />
           <Route path={`${url}/edit-personal1`} render={(props) => <PersonalDetails2 {...props} edit={true} />} />
@@ -132,6 +142,7 @@ const Insurance = (props) => {
           <Route path={`${url}/edit-nominee`} render={(props) => <NomineeDetails {...props} edit={true} />} />
           <Route path={`${url}/edit-appointee`} render={(props) => <AppointeeDetails {...props} edit={true} />} />
           <Route path={`${url}/edit-professional`} render={(props) => <ProfessionalDetails1 {...props} edit={true} />} />
+          <Route path={`${url}/edit-professional1`} render={(props) => <ProfessionalDetails2 {...props} edit={true} />} />
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>

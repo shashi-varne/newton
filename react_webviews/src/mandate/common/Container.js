@@ -23,7 +23,6 @@ class Container extends Component {
   }
 
   redirectCallback(type) {
-    console.log("back")
     let url;
     if (type === 'back') {
       url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate&message=back&code=400&destination=';

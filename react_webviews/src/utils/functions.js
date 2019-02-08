@@ -65,5 +65,10 @@ export const getConfig = () => {
     productType = 'Fisdom Prime';
   }
 
-  return config[productType];
+  let returnConfig = config[productType];
+  if (search.insurance_v2) {
+    returnConfig.insurance_v2 = true;
+  }
+
+  return returnConfig;
 }

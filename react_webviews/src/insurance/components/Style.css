@@ -1,0 +1,205 @@
+.img-payment {
+  /* display: -webkit-box; */
+  text-align: center;
+  width: 70px;
+  left: 34%;
+  margin-bottom: 16px;
+  position: relative;
+}
+.text-payment1 {
+  color: black;
+  font-weight: 500;
+  display: block;
+  text-align: center;
+}
+.text-payment2 {
+  margin-top: 7px !important;
+  display: block;
+  text-align: center;
+}
+.pincode-footer-img-tile {
+  margin: 30px 10px 20px 10px;
+    border: 1px solid beige;
+    padding: 10px 0px 20px 10px;
+    border-radius: 5px;
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+    background: white;
+}
+.pincode-provider-title {
+  font-size: 14px;
+    max-width: 219px;
+    padding: 0 0 0 30px;
+    text-align: -webkit-left !important;
+    font-weight: 500;
+}
+.pincode-details-tile1 {
+  width: 60%;
+  font-size: 13px;
+  color: #574c4c;
+  margin-bottom: 7px;
+}
+.pincode-details-tile2 {
+  font-size: 16px;
+    color: black;
+    margin-bottom: 7px;
+    font-weight: 500;
+}
+.pincode-details-tile {
+  display: -webkit-box;
+  width: 95%;
+}
+.pincode-button {
+  background: white;
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+    margin: 2px 0 0 0;
+    padding: 0 10px 10px 0px;
+}
+.pincode-footer-text {
+  text-align: -webkit-left !important;
+    padding: 0 0 0 15px;
+}
+
+/* journey */
+.journey-process1 {
+  padding: 20px 0 0 20px;
+}
+.journey-process2 {
+  display: -webkit-box;
+  border-left: 1px solid #e3e3e3;
+  min-height: 100px;
+  padding-bottom: 14px;
+}
+.journey-process2-unset {
+  border-left: unset;
+}
+.journey-process2-green {
+  border-left: 1px solid #7ed321;
+}
+img.journey-process4 {
+  width: 15px;
+  position: relative;
+  left: -8px;
+  top: -3px;
+  margin-right: 20px;
+}
+.journey-process6 {
+  margin-top: -10px;
+  margin-bottom: 10px;
+  color: #5d5858;
+  font-size: 12px;
+}
+.journey-process7 {
+  font-weight: 500;
+  font-size: 14px;
+}
+.journey-process7-black {
+color: black
+}
+.journey-process7-blue {
+  color: #4f2da7
+}
+.ContainerWrapper.blue .journey-process7-blue {
+  color: #3792fc;
+}
+.journey-process7-grey {
+  color: #b5b3b3
+}
+.journey-process5 {
+  width: 90%;
+}
+
+.pincode-footer-img-tile-journey {
+  margin: 20px 10px 20px 0px;
+    border: 1px solid beige;
+    padding: 10px 0px 10px 10px;
+  border-radius: 5px;
+  -webkit-box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  background: white;
+}
+.view-more-journey {
+  text-align: center;
+  color: #6fdb4f;
+  font-weight: 600;
+  padding: 6px 0 0 0;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+
+.journey-top-tile {
+  margin: -16px -7px 10px -7px;
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  padding: 20px 0 0 10px;
+}
+.journey-connector {
+  border-left: 1px solid #7ed321;
+    height: 56px;
+    position: relative;
+    left: 20px;
+    margin: -9px 0 -18px 0;
+}
+.journey-bottom {
+  text-align: center;
+    margin-bottom: 46px;
+    font-size: 14px;
+    color: grey;
+}
+.journey-image-top {
+  width: 23px;
+  margin-left: 8px;
+  margin-right: 8px;
+}
+.journey-top-text2 {
+  color: #4a4a4a;
+  font-family: 'Roboto';
+  font-weight: 500;
+  font-size: 14px;
+  text-transform: lowercase;
+  margin-top: 1px;
+}
+.CheckBlock {
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.Checkbox {
+  width: auto;
+  height: auto;
+}
+
+.MuiCheckbox-root {
+  color: rgb(83, 70, 167) !important;
+  position: relative;
+  left: -15px;
+}
+.MuiFormLabel-root.MuiFormLabel-error {
+  color: #a2a2a2 !important;
+}
+.MuiFormLabel-root.MuiFormLabel-focused.MuiFormLabel-error {
+  color: rgb(55, 31, 116) !important;
+}
+.MuiInput-underline.MuiInput-error:after {
+  background-color: inherit !important;
+}
+.error-radiogrp {
+  margin: 0;
+  font-size: 0.75rem;
+  text-align: left;
+  margin-top: 8px;
+  min-height: 1em;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  line-height: 1em;
+  color: #f44336;
+  position: relative;
+  top: 5px;
+}
+.payment-dialog {
+  font-size: 1rem;
+    font-weight: 400;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    line-height: 1.5em;
+    margin: 0;
+    display: block;
+    color: rgba(0, 0, 0, 0.54);
+}

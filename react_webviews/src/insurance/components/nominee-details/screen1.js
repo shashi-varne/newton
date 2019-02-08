@@ -1,23 +1,23 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
-import Grid from 'material-ui/Grid';
-import Checkbox from 'material-ui/Checkbox';
+import toast from '../../../common/ui/Toast';
 
 import Container from '../../common/Container';
-import InputWithIcon from '../../../common/ui/InputWithIcon';
-import RadioWithIcon from '../../../common/ui/RadioWithIcon';
+import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
+import TitleWithIcon from '../../../common/ui/TitleWithIcon';
+import personal from 'assets/personal_details_icon.svg';
+import personal_myway from 'assets/personal_details_icn.svg';
+import Input from '../../../common/ui/Input';
 import name from 'assets/full_name_dark_icn.png';
 import dob from 'assets/dob_dark_icn.png';
-import gender from 'assets/gender_dark_icn.png';
 import relationship from 'assets/relationship_dark_icn.png';
 import marital from 'assets/marital_status_dark_icn.png';
-import location from 'assets/location_dark_icn.png';
-import Dropdown from '../../../common/ui/Select';
+import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
 import Api from 'utils/api';
 import Button from 'material-ui/Button';
 import { maritalOptions, genderOptions, relationshipOptions } from '../../constants';
-import { validateAlphabets, validateNumber, validateStreetName, validateLength, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';
+import { validateAlphabets, isValidDate, validateLength, validateConsecutiveChar, validateEmpty } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import Dialog, {
   DialogActions,
@@ -35,10 +35,10 @@ class NomineeDetails extends Component {
       name_error: '',
       dob: '',
       dob_error: '',
-      gender: '',
-      gender_error: '',
       marital_status: '',
       marital_status_error: '',
+      gender: '',
+      gender_error: '',
       relationship: '',
       relationship_error: '',
       checked: true,
@@ -64,6 +64,7 @@ class NomineeDetails extends Component {
   }
 
   componentWillMount() {
+
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -83,19 +84,19 @@ class NomineeDetails extends Component {
     this.setState({ openDialog: false });
   };
 
-  componentDidMount() {
-    Api.get('/api/insurance/profile/' + this.state.params.insurance_id, {
-      groups: 'nominee'
-    }).then(res => {
+  async componentDidMount() {
+    try {
+      const res = await Api.get('/api/insurance/profile/' + this.state.params.insurance_id, {
+        groups: 'nominee'
+      })
       const { nominee, nominee_address } = res.pfwresponse.result.profile;
-      const { image, provider } = res.pfwresponse.result.quote_desc;
+      const { image, provider, cover_plan } = res.pfwresponse.result.quote_desc;
 
       this.setState({
         show_loader: false,
         age: (nominee.dob) ? this.calculateAge(nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('/')) : '',
         name: nominee.name || '',
-        dob: (nominee.dob) ? nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
-        gender: nominee.gender || '',
+        dob: (nominee.dob) ? nominee.dob.replace(/\\-/g, '/').split('/').join('/') : '',
         marital_status: nominee.marital_status || '',
         relationship: nominee.relationship || '',
         checked: (Object.keys(nominee_address).length === 0) ? true : false,
@@ -103,15 +104,19 @@ class NomineeDetails extends Component {
         house_no: nominee_address.house_no || '',
         street: nominee_address.street || '',
         landmark: nominee_address.landmark || '',
+        gender: nominee.gender || '',
         city: nominee_address.city || '',
         state: nominee_address.state || '',
         image: image,
-        provider: provider
+        provider: provider,
+        cover_plan: cover_plan
       });
-    }).catch(error => {
-      this.setState({ show_loader: false });
-      console.log(error);
-    });
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
+    }
   }
 
   handleChange = name => event => {
@@ -125,10 +130,58 @@ class NomineeDetails extends Component {
         [name + '_error']: ''
       });
     } else if (name === 'dob') {
+      let errorDate = '';
+      if (event.target.value.length > 10) {
+        return;
+      }
+
+      var input = document.getElementById('dob');
+
+      input.onkeyup = function (event) {
+        var key = event.keyCode || event.charCode;
+
+        var thisVal;
+
+        let slash = 0;
+        for (var i = 0; i < event.target.value.length; i++) {
+          if (event.target.value[i] === '/') {
+            slash += 1;
+          }
+        }
+
+        if (slash <= 1 && key !== 8 && key !== 46) {
+          var strokes = event.target.value.length;
+
+          if (strokes === 2 || strokes === 5) {
+            thisVal = event.target.value;
+            thisVal += '/';
+            event.target.value = thisVal;
+          }
+          // if someone deletes the first slash and then types a number this handles it
+          if (strokes >= 3 && strokes < 5) {
+            thisVal = event.target.value;
+            if (thisVal.charAt(2) !== '/') {
+              var txt1 = thisVal.slice(0, 2) + "/" + thisVal.slice(2);
+              event.target.value = txt1;
+            }
+          }
+          // if someone deletes the second slash and then types a number this handles it
+          if (strokes >= 6) {
+            thisVal = event.target.value;
+
+            if (thisVal.charAt(5) !== '/') {
+              var txt2 = thisVal.slice(0, 5) + "/" + thisVal.slice(5);
+              event.target.value = txt2;
+            }
+          }
+        };
+
+      }
+
       this.setState({
         [name]: event.target.value,
-        age: this.calculateAge(event.target.value),
-        [event.target.name + '_error']: ''
+        age: this.calculateAge(event.target.value.replace(/\\-/g, '/').split('/').reverse().join('/')),
+        [event.target.name + '_error']: errorDate
       })
     } else {
       this.setState({
@@ -161,18 +214,25 @@ class NomineeDetails extends Component {
     });
 
     if (pincode.length === 6) {
-      const res = await Api.get('/api/pincode/' + pincode);
+      try {
+        const res = await Api.get('/api/pincode/' + pincode);
 
-      if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
+        if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
+          this.setState({
+            city: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
+            state: res.pfwresponse.result[0].state_name
+          });
+        } else {
+          this.setState({
+            city: '',
+            state: ''
+          });
+        }
+      } catch (err) {
         this.setState({
-          city: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
-          state: res.pfwresponse.result[0].state_name
+          show_loader: false
         });
-      } else {
-        this.setState({
-          city: '',
-          state: ''
-        });
+        toast('Something went wrong');
       }
     }
   }
@@ -183,10 +243,13 @@ class NomineeDetails extends Component {
     document.getElementById("dob").max = currentDate;
   }
 
-  navigate = (pathname) => {
+  navigate = (pathname, disableBack) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id=' + this.state.params.insurance_id + '&resume=' + this.state.params.resume + '&base_url=' + this.state.params.base_url
+      search: '?insurance_id=' + this.state.params.insurance_id + '&resume=' + this.state.params.resume + '&base_url=' + this.state.params.base_url,
+      params: {
+        disableBack: disableBack
+      }
     });
   }
 
@@ -211,17 +274,18 @@ class NomineeDetails extends Component {
       this.setState({
         name_error: 'Name can contain only alphabets'
       });
+    } else if (!this.state.gender) {
+      this.setState({
+        gender_error: 'Mandatory'
+      });
+
     } else if (!this.state.dob) {
       this.setState({
         dob_error: 'Please select date'
       });
-    } else if (new Date(this.state.dob) > new Date()) {
+    } else if (new Date(this.state.dob) > new Date() || !isValidDate(this.state.dob)) {
       this.setState({
         dob_error: 'Please select valid date'
-      });
-    } else if (!this.state.gender) {
-      this.setState({
-        gender_error: 'Mandatory'
       });
     } else if (!this.state.marital_status) {
       this.setState({
@@ -231,126 +295,139 @@ class NomineeDetails extends Component {
       this.setState({
         relationship_error: 'Please select relationship'
       });
-    } else if (!this.state.checked && (this.state.pincode.length !== 6 || !validateNumber(this.state.pincode))) {
-      this.setState({
-        pincode_error: 'Please enter valid pincode'
-      });
-    } else if (!this.state.checked && !validateEmpty(this.state.house_no)) {
-      this.setState({
-        house_no_error: 'Enter your address'
-      });
-    } else if (!this.state.checked && !validateConsecutiveChar(this.state.house_no)) {
-      this.setState({
-        house_no_error: 'Address can not contain more than 3 same consecutive characters'
-      });
-    } else if (!this.state.checked && !validateLength(this.state.house_no)) {
-      this.setState({
-        house_no_error: 'Maximum length of address is 30'
-      });
-    } else if (!this.state.checked && !validateMinChar(this.state.house_no)) {
-      this.setState({
-        house_no_error: 'Address should contain minimum two characters'
-      });
-    } else if (!this.state.checked && !validateEmpty(this.state.street)) {
-      this.setState({
-        street_error: 'Enter your street and locality'
-      });
-    } else if (!this.state.checked && !validateConsecutiveChar(this.state.street)) {
-      this.setState({
-        street_error: 'Address can not contain more than 3 same consecutive characters'
-      });
-    } else if (!this.state.checked && !validateLength(this.state.street)) {
-      this.setState({
-        street_error: 'Maximum length of address is 30'
-      });
-    } else if (!this.state.checked && !validateEmpty(this.state.landmark)) {
-      this.setState({
-        landmark_error: 'Enter nearest landmark'
-      });
-    } else if (!this.state.checked && !validateLength(this.state.landmark)) {
-      this.setState({
-        landmark_error: 'Maximum length of landmark is 30'
-      });
-    } else if (!this.state.checked && !validateStreetName(this.state.landmark)) {
-      this.setState({
-        landmark_error: 'Please enter valid landmark'
-      });
-    } else {
-      this.setState({ show_loader: true });
+    }
+    // else if (!this.state.checked && (this.state.pincode.length !== 6 || !validateNumber(this.state.pincode))) {
+    //   this.setState({
+    //     pincode_error: 'Please enter valid pincode'
+    //   });
+    // } else if (!this.state.checked && !validateEmpty(this.state.house_no)) {
+    //   this.setState({
+    //     house_no_error: 'Enter your address'
+    //   });
+    // } else if (!this.state.checked && !validateConsecutiveChar(this.state.house_no)) {
+    //   this.setState({
+    //     house_no_error: 'Address can not contain more than 3 same consecutive characters'
+    //   });
+    // } else if (!this.state.checked && !validateLength(this.state.house_no)) {
+    //   this.setState({
+    //     house_no_error: 'Maximum length of address is 30'
+    //   });
+    // } else if (!this.state.checked && !validateMinChar(this.state.house_no)) {
+    //   this.setState({
+    //     house_no_error: 'Address should contain minimum two characters'
+    //   });
+    // } else if (!this.state.checked && !validateEmpty(this.state.street)) {
+    //   this.setState({
+    //     street_error: 'Enter your street and locality'
+    //   });
+    // } else if (!this.state.checked && !validateConsecutiveChar(this.state.street)) {
+    //   this.setState({
+    //     street_error: 'Address can not contain more than 3 same consecutive characters'
+    //   });
+    // } else if (!this.state.checked && !validateLength(this.state.street)) {
+    //   this.setState({
+    //     street_error: 'Maximum length of address is 30'
+    //   });
+    // } else if (!this.state.checked && !validateEmpty(this.state.landmark)) {
+    //   this.setState({
+    //     landmark_error: 'Enter nearest landmark'
+    //   });
+    // } else if (!this.state.checked && !validateLength(this.state.landmark)) {
+    //   this.setState({
+    //     landmark_error: 'Maximum length of landmark is 30'
+    //   });
+    // } else if (!this.state.checked && !validateStreetName(this.state.landmark)) {
+    //   this.setState({
+    //     landmark_error: 'Please enter valid landmark'
+    //   });
+    // } 
+    else {
+      try {
+        this.setState({ show_loader: true });
 
-      let data = {
-        nominee: {}
-      };
-      const formattedDob = this.state.dob.replace(/\\-/g, '/').split('-').reverse().join('/');
-
-      data['insurance_app_id'] = this.state.params.insurance_id;
-      data['nominee']['name'] = this.state.name;
-      data['nominee']['dob'] = formattedDob;
-      data['nominee']['gender'] = this.state.gender;
-      data['nominee']['marital_status'] = this.state.marital_status;
-      data['nominee']['relationship'] = this.state.relationship;
-
-      if (this.state.checked) {
-        data['n_addr_same'] = 'Y';
-      } else {
-        data['nominee_address'] = {
-          'pincode': this.state.pincode,
-          'house_no': this.state.house_no,
-          'street': this.state.street,
-          'landmark': this.state.landmark
+        let data = {
+          nominee: {}
         };
-      }
+        const formattedDob = this.state.dob.replace(/\\-/g, '/').split('-').reverse().join('/');
 
-      const res = await Api.post('/api/insurance/profile', data);
+        data['insurance_app_id'] = this.state.params.insurance_id;
+        data['nominee']['name'] = this.state.name;
+        data['nominee']['dob'] = formattedDob;
+        data['nominee']['marital_status'] = this.state.marital_status;
+        data['nominee']['relationship'] = this.state.relationship;
+        data['nominee']['gender'] = this.state.gender;
 
-      if (res.pfwresponse.status_code === 200) {
+        // if (this.state.checked) {
+        //   data['n_addr_same'] = 'Y';
+        // } else {
+        //   data['nominee_address'] = {
+        //     'pincode': this.state.pincode,
+        //     'house_no': this.state.house_no,
+        //     'street': this.state.street,
+        //     'landmark': this.state.landmark
+        //   };
+        // }
 
-        let eventObj = {
-          "event_name": "nominee_save",
-          "properties": {
-            "provider": this.state.provider,
-            "nominee_name": this.state.name,
-            "nominee_dob": this.state.dob,
-            "nominee_marital": this.state.marital_status.toLowerCase(),
-            "nominee_relation": this.state.relationship,
-            "address_same": (this.state.checked) ? 1 : 0,
-            "pin_nominee": this.state.pincode,
-            "city_nominee": this.state.city,
-            "state_nominee": this.state.state,
-            "from_edit": (this.state.edit) ? 1 : 0
-          }
-        };
+        const res = await Api.post('/api/insurance/profile', data);
 
-        nativeCallback({ events: eventObj });
+        if (res.pfwresponse.status_code === 200) {
 
-        this.setState({ show_loader: false });
-        if (this.props.edit) {
-          if (this.state.age < 18) {
-            this.navigate('/insurance/edit-appointee');
-          } else {
-            if (this.state.params.resume === "yes") {
-              this.navigate('/insurance/resume');
+          let eventObj = {
+            "event_name": "nominee_save",
+            "properties": {
+              "provider": this.state.provider,
+              "nominee_name": this.state.name,
+              "nominee_dob": this.state.dob,
+              "nominee_marital": this.state.marital_status.toLowerCase(),
+              "nominee_relation": this.state.relationship,
+              "address_same": (this.state.checked) ? 1 : 0,
+              "pin_nominee": this.state.pincode,
+              "city_nominee": this.state.city,
+              "state_nominee": this.state.state,
+              "from_edit": (this.state.edit) ? 1 : 0
+            }
+          };
+
+          nativeCallback({ events: eventObj });
+
+          this.setState({ show_loader: false });
+          if (this.props.edit) {
+            if (this.state.age < 18) {
+              this.navigate('/insurance/edit-appointee');
             } else {
-              this.navigate('/insurance/summary');
+              if (this.state.params.resume === "yes") {
+                this.navigate('/insurance/resume', true);
+              } else {
+                this.navigate('/insurance/summary', true);
+              }
+            }
+          } else {
+            if (this.state.age < 18) {
+              this.navigate('/insurance/appointee');
+            } else {
+              if (this.state.provider === 'IPRU') {
+                this.navigate('/insurance/pincode');
+              } else {
+                this.navigate('/insurance/summary', true);
+              }
             }
           }
         } else {
-          if (this.state.age < 18) {
-            this.navigate('/insurance/appointee');
-          } else {
-            this.navigate('/insurance/professional');
+          this.setState({ show_loader: false });
+          for (let error of res.pfwresponse.result.errors) {
+            if (error.field === 'nominee_address' || error.field === 'nominee' || error.field === 'n_addr_same') {
+              this.setState({ openDialog: true, apiError: error.message });
+            }
+            this.setState({
+              [error.field + '_error']: error.message
+            });
           }
         }
-      } else {
-        this.setState({ show_loader: false });
-        for (let error of res.pfwresponse.result.errors) {
-          if (error.field === 'nominee_address' || error.field === 'nominee' || error.field === 'n_addr_same') {
-            this.setState({ openDialog: true, apiError: error.message });
-          }
-          this.setState({
-            [error.field + '_error']: error.message
-          });
-        }
+      } catch (err) {
+        this.setState({
+          show_loader: false
+        });
+        toast('Something went wrong');
       }
     }
   }
@@ -369,7 +446,7 @@ class NomineeDetails extends Component {
   bannerText = () => {
     return (
       <span>
-        <em><b>Nominee</b></em> is the one - who will <em><b>get the benefits</b></em> as per the insurance. Please share his/her details correctly.
+        <b>Nominee</b> will <b>get the benefits,</b> so please share his/her details correctly.
       </span>
     );
   }
@@ -388,7 +465,7 @@ class NomineeDetails extends Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleClose} color="primary" autoFocus>
+          <Button onClick={this.handleClose} color="default" autoFocus>
             OK
           </Button>
         </DialogActions>
@@ -401,24 +478,27 @@ class NomineeDetails extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title={(this.props.edit) ? 'Edit Nominee Details' : 'Nominee Details'}
+        title="Application Form"
+        smallTitle={this.state.provider}
         count={true}
-        total={4}
-        current={3}
+        total={this.state.provider === 'IPRU' ? 5 : 4}
+        current={4}
         state={this.state}
         banner={true}
         bannerText={this.bannerText()}
         handleClick={this.handleClick}
         edit={this.props.edit}
-        buttonTitle={(this.state.age < 18) ? "Save & Continue" : "Save Details"}
+        buttonTitle={(this.state.age < 18) ? "Save & Continue" : "Save & Continue"}
         logo={this.state.image}
         type={this.state.type}
       >
         <FormControl fullWidth>
+          <TitleWithIcon width="20" icon={this.state.type !== 'fisdom' ? personal_myway : personal}
+            title={(this.props.edit) ? 'Edit Nominee Details' : 'Nominee Details'} />
           <div className="InputField">
-            <InputWithIcon
+            <Input
               error={(this.state.name_error) ? true : false}
-              helperText={this.state.name_error || "Please enter full name"}
+              helperText={this.state.name_error}
               type="text"
               icon={name}
               width="40"
@@ -430,10 +510,23 @@ class NomineeDetails extends Component {
               onChange={this.handleChange('name')} />
           </div>
           <div className="InputField">
-            <InputWithIcon
+            <RadioWithoutIcon
+              error={(this.state.gender_error) ? true : false}
+              helperText={this.state.gender_error}
+              icon={marital}
+              width="40"
+              label="Gender"
+              class="MaritalStatus"
+              options={genderOptions}
+              id="marital-status"
+              value={this.state.gender}
+              onChange={this.handleGenderRadioValue('gender')} />
+          </div>
+          <div className="InputField">
+            <Input
               error={(this.state.dob_error) ? true : false}
               helperText={this.state.dob_error}
-              type="date"
+              type="text"
               icon={dob}
               width="40"
               label="Date of birth *"
@@ -442,25 +535,14 @@ class NomineeDetails extends Component {
               name="dob"
               max={currentDate}
               value={this.state.dob}
-              onFocus={this.handleFocus()}
+              placeholder="DD/MM/YYYY"
+              maxLength="10"
+              // onFocus={this.handleFocus()}
+              // onKeyDown={this.onKeyDown()}
               onChange={this.handleChange('dob')} />
           </div>
           <div className="InputField">
-            <RadioWithIcon
-              error={(this.state.gender_error) ? true : false}
-              helperText={this.state.gender_error}
-              icon={gender}
-              width="40"
-              label="Gender"
-              class="Gender"
-              options={genderOptions}
-              id="gender"
-              value={this.state.gender}
-              name="gender"
-              onChange={this.handleGenderRadioValue('gender')} />
-          </div>
-          <div className="InputField">
-            <RadioWithIcon
+            <RadioWithoutIcon
               error={(this.state.marital_status_error) ? true : false}
               helperText={this.state.marital_status_error}
               icon={marital}
@@ -474,7 +556,7 @@ class NomineeDetails extends Component {
               onChange={this.handleMaritalRadioValue('marital_status')} />
           </div>
           <div className="InputField">
-            <Dropdown
+            <DropdownWithoutIcon
               error={(this.state.relationship_error) ? true : false}
               helperText={this.state.relationship_error}
               icon={relationship}
@@ -489,7 +571,7 @@ class NomineeDetails extends Component {
         </FormControl>
 
         {/* Correspondence Address Block */}
-        <div className="CheckBlock">
+        {/* <div className="CheckBlock">
           <Grid container spacing={16} alignItems="center">
             <Grid item xs={2} className="TextCenter">
               <Checkbox
@@ -505,10 +587,10 @@ class NomineeDetails extends Component {
               <span className="SameAddress">Nomniee’s address is same as my address</span>
             </Grid>
           </Grid>
-        </div>
+        </div> */}
 
         {/* Correspondence Address */}
-        {
+        {/* {
           !this.state.checked &&
           <FormControl fullWidth>
             <div className="InputField">
@@ -520,7 +602,7 @@ class NomineeDetails extends Component {
                 width="40"
                 label="Pincode *"
                 id="pincode"
-                name="pincode"
+                name="pincode" addressline
                 value={this.state.pincode}
                 onChange={this.handlePincode('pincode')} />
             </div>
@@ -578,7 +660,7 @@ class NomineeDetails extends Component {
                 onChange={this.handleChange('state')} />
             </div>
           </FormControl>
-        }
+        } */}
         {this.renderDialog()}
       </Container>
     );

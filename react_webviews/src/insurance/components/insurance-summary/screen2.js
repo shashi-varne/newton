@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import Grid from 'material-ui/Grid';
 import cover_period from 'assets/cover_period_icon.png';
@@ -55,15 +56,18 @@ class Resume extends Component {
         },
         contact: {
           not_submitted: true,
-          fields: ["email", "mobile_no", "permanent_addr", "corr_addr", "corr_address_same"]
+          fields: ["email", "mobile_no", "permanent_addr", "corr_addr", "corr_address_same"],
+          fieldsOurPay: ["email", "mobile_no"]
         },
         nominee: {
           not_submitted: true,
-          fields: ["nominee", "nominee_address", "nominee_address_same"]
+          fields: ["nominee", "nominee_address", "nominee_address_same"],
+          fieldsOurPay: ["nominee"]
         },
         appointee: {
           not_submitted: true,
-          fields: ["appointee_address", "appointee", "appointee_address_same"]
+          fields: ["appointee_address", "appointee", "appointee_address_same"],
+          fieldsOurPay: ["appointee"]
         },
         professional: {
           not_submitted: true,
@@ -82,7 +86,32 @@ class Resume extends Component {
     }
   }
 
+  async handlePayment(application, options) {
+    try {
+      const res = await Api.get('api/insurance/start/payment/' + application.id)
+      if (res.pfwresponse && res.pfwresponse.status_code === 200) {
+        let result = res.pfwresponse.result
+        this.setState({
+          payment_link: result.payment_link,
+          payment_type: result.payment_type
+        });
+        if (application.provider === 'IPRU') {
+          this.paymentRedirect();
+          options.message.payment_link = result.payment_link;
+          // nativeCallback(options);
+        }
+      }
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
+    }
+
+  }
+
   componentWillMount() {
+
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -98,129 +127,150 @@ class Resume extends Component {
     }
   }
 
-  componentDidMount() {
-    Api.get('/api/insurance/all/summary')
-      .then(res => {
-        let application, required_fields;
-        if (res.pfwresponse.status_code === 200) {
+  async componentDidMount() {
+    try {
+      const res = await Api.get('/api/insurance/all/summary')
+      let application, required_fields;
+      if (res.pfwresponse.status_code === 200) {
 
-          if (res.pfwresponse.result.insurance_apps.init.length > 0) {
-            application = res.pfwresponse.result.insurance_apps.init[0];
-          } else {
-            application = res.pfwresponse.result.insurance_apps.submitted[0];
-          }
+        if (res.pfwresponse.result.insurance_apps.init.length > 0) {
+          application = res.pfwresponse.result.insurance_apps.init[0];
+        } else {
+          application = res.pfwresponse.result.insurance_apps.submitted[0];
+        }
 
-          required_fields = res.pfwresponse.result.required;
+        if (application.plutus_payment_status === 'payment_ready' ||
+          application.plutus_payment_status === 'failed') {
+          this.handlePayment(application);
+        }
 
-          let income_value = income_pairs.filter(item => item.name === application.quote.annual_income);
+        required_fields = res.pfwresponse.result.required;
 
-          let age = application.profile.nominee.dob && this.calculateAge(application.profile.nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
+        let income_value = income_pairs.filter(item => item.name === application.quote.annual_income);
 
-          let personal_submitted = this.state.required.personal.fields.some(r => required_fields.includes(r));
-          let contact_submitted = this.state.required.contact.fields.some(r => required_fields.includes(r));
-          let nominee_submitted = this.state.required.nominee.fields.some(r => required_fields.includes(r));
-          let appointee_submitted = this.state.required.appointee.fields.some(r => required_fields.includes(r));
-          let professional_submitted = this.state.required.professional.fields.some(r => required_fields.includes(r));
+        let age = application.profile.nominee.dob && this.calculateAge(application.profile.nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
+        let contact_submitted, nominee_submitted, appointee_submitted;
+        let personal_submitted = this.state.required.personal.fields.some(r => required_fields.includes(r));
+        if (application.provider === 'HDFC' && application.plutus_payment_status === 'payment_done') {
+          contact_submitted = this.state.required.contact.fields.some(r => required_fields.includes(r));
+          nominee_submitted = this.state.required.nominee.fields.some(r => required_fields.includes(r));
+          appointee_submitted = this.state.required.appointee.fields.some(r => required_fields.includes(r));
+        } else if (application.provider === 'HDFC' && application.plutus_payment_status !== 'payment_done') {
+          contact_submitted = this.state.required.contact.fieldsOurPay.some(r => required_fields.includes(r));
+          nominee_submitted = this.state.required.nominee.fieldsOurPay.some(r => required_fields.includes(r));
+          appointee_submitted = this.state.required.appointee.fieldsOurPay.some(r => required_fields.includes(r));
+        } else if (application.provider === 'IPRU') {
+          contact_submitted = this.state.required.contact.fields.some(r => required_fields.includes(r));
+          nominee_submitted = this.state.required.nominee.fields.some(r => required_fields.includes(r));
+          appointee_submitted = this.state.required.appointee.fields.some(r => required_fields.includes(r));
+        }
 
-          this.setState({
-            required: {
-              personal: {
-                not_submitted: personal_submitted
-              },
-              contact: {
-                not_submitted: contact_submitted
-              },
-              nominee: {
-                not_submitted: nominee_submitted
-              },
-              appointee: {
-                not_submitted: appointee_submitted
-              },
-              professional: {
-                not_submitted: professional_submitted
-              }
-            },
-            application_id: application.application_number,
-            plutus_status: application.plutus_status,
-            required_fields: required_fields,
-            status: application.status,
-            show_loader: false,
-            payment_link: application.payment_link,
-            resume_link: application.resume_link,
-            edit_allowed: (res.pfwresponse.result.insurance_apps.init.length > 0) ? true : false,
-            show_appointee: (age < 18) ? true : false,
-            tobacco_choice: application.quote.tobacco_choice,
-            annual_income: income_value[0].value,
-            term: application.quote.term,
-            cover_amount: numDifferentiation(application.quote.cover_amount),
-            payment_frequency: application.quote.payment_frequency,
-            provider: application.provider,
-            cover_plan: application.quote.quote_json.cover_plan,
-            premium: application.quote.quote_json.premium,
-            image: application.quote.quote_describer.image,
-            quote_provider: application.quote.quote_provider,
-            benefits: {
-              is_open: true,
-              accident_benefit: application.quote.accident_benefit || '',
-              payout_option: application.quote.payout_option || ''
-            },
+
+        let professional_submitted = this.state.required.professional.fields.some(r => required_fields.includes(r));
+
+        this.setState({
+          required: {
             personal: {
-              is_open: false,
-              name: application.profile.name || '',
-              dob: (application.profile.dob) ? application.profile.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
-              marital_status: application.profile.marital_status || '',
-              birth_place: application.profile.birth_place || '',
-              mother_name: application.profile.mother_name || '',
-              father_name: application.profile.father_name || '',
-              gender: application.profile.gender || ''
+              not_submitted: personal_submitted
             },
             contact: {
-              is_open: false,
-              email: application.profile.email || '',
-              mobile_no: application.profile.mobile_no || '',
-              permanent_addr: application.profile.permanent_addr || {},
-              corr_addr: application.profile.corr_addr || {},
-              corr_address_same: application.profile.corr_address_same
+              not_submitted: contact_submitted
             },
             nominee: {
-              is_open: false,
-              name: application.profile.nominee.name || '',
-              dob: (application.profile.nominee.dob) ? application.profile.nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
-              marital_status: application.profile.nominee.marital_status || '',
-              relationship: application.profile.nominee.relationship || '',
-              nominee_address: application.profile.nominee_address || {},
-              nominee_address_same: application.profile.nominee_address_same
+              not_submitted: nominee_submitted
             },
             appointee: {
-              is_open: false,
-              name: application.profile.appointee.name || '',
-              dob: (application.profile.appointee.dob) ? application.profile.appointee.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
-              marital_status: application.profile.appointee.marital_status || '',
-              relationship: application.profile.appointee.relationship || '',
-              appointee_address: application.profile.appointee_address || {},
-              appointee_address_same: application.profile.appointee_address_same
+              not_submitted: appointee_submitted
             },
             professional: {
-              is_open: false,
-              pan_number: application.profile.pan_number || '',
-              occupation_category: application.profile.occupation_category || '',
-              occupation_detail: application.profile.occupation_detail || '',
-              is_criminal: application.profile.is_criminal || '',
-              is_politically_exposed: application.profile.is_politically_exposed || '',
-              employer_name: application.profile.employer_name || '',
-              employer_address: application.profile.employer_address || '',
-              education_qualification: application.profile.education_qualification || '',
-              designation: application.profile.designation || '',
-              annual_income: application.profile.annual_income || ''
+              not_submitted: professional_submitted
             }
-          });
-        } else {
-          this.setState({ show_loader: false });
-        }
-      }).catch(error => {
+          },
+          application_id: application.application_number,
+          plutus_status: application.plutus_status,
+          plutus_payment_status: application.plutus_payment_status,
+          required_fields: required_fields,
+          status: application.status,
+          show_loader: false,
+          payment_link: application.payment_link,
+          resume_link: application.resume_link,
+          edit_allowed: (res.pfwresponse.result.insurance_apps.init.length > 0) ? true : false,
+          show_appointee: (age < 18) ? true : false,
+          tobacco_choice: application.quote.tobacco_choice,
+          annual_income: income_value[0].value,
+          term: application.quote.term,
+          cover_amount: numDifferentiation(application.quote.cover_amount),
+          payment_frequency: application.quote.payment_frequency,
+          provider: application.provider,
+          cover_plan: application.quote.quote_json.cover_plan,
+          premium: application.quote.quote_json.premium,
+          image: application.quote.quote_describer.image,
+          quote_provider: application.quote.quote_provider,
+          benefits: {
+            is_open: true,
+            accident_benefit: application.quote.accident_benefit || '',
+            payout_option: application.quote.payout_option || ''
+          },
+          personal: {
+            is_open: false,
+            name: application.profile.name || '',
+            dob: (application.profile.dob) ? application.profile.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
+            marital_status: application.profile.marital_status || '',
+            birth_place: application.profile.birth_place || '',
+            mother_name: application.profile.mother_name || '',
+            father_name: application.profile.father_name || '',
+            gender: application.profile.gender || ''
+          },
+          contact: {
+            is_open: false,
+            email: application.profile.email || '',
+            mobile_no: application.profile.mobile_no || '',
+            permanent_addr: application.profile.permanent_addr || {},
+            corr_addr: application.profile.corr_addr || {},
+            corr_address_same: application.profile.corr_address_same
+          },
+          nominee: {
+            is_open: false,
+            name: application.profile.nominee.name || '',
+            dob: (application.profile.nominee.dob) ? application.profile.nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
+            marital_status: application.profile.nominee.marital_status || '',
+            relationship: application.profile.nominee.relationship || '',
+            nominee_address: application.profile.nominee_address || {},
+            nominee_address_same: application.profile.nominee_address_same
+          },
+          appointee: {
+            is_open: false,
+            name: application.profile.appointee.name || '',
+            dob: (application.profile.appointee.dob) ? application.profile.appointee.dob.replace(/\\-/g, '/').split('/').reverse().join('-') : '',
+            marital_status: application.profile.appointee.marital_status || '',
+            relationship: application.profile.appointee.relationship || '',
+            appointee_address: application.profile.appointee_address || {},
+            appointee_address_same: application.profile.appointee_address_same
+          },
+          professional: {
+            is_open: false,
+            pan_number: application.profile.pan_number || '',
+            occupation_category: application.profile.occupation_category || '',
+            occupation_detail: application.profile.occupation_detail || '',
+            is_criminal: application.profile.is_criminal || '',
+            is_politically_exposed: application.profile.is_politically_exposed || '',
+            employer_name: application.profile.employer_name || '',
+            employer_address: application.profile.employer_address || '',
+            education_qualification: application.profile.education_qualification || '',
+            designation: application.profile.designation || '',
+            annual_income: application.profile.annual_income || ''
+          }
+        });
+      } else {
         this.setState({ show_loader: false });
-        console.log(error);
+      }
+    } catch (err) {
+      this.setState({
+        show_loader: false
       });
+      toast('Something went wrong');
+    }
+
   }
 
   calculateAge = (birthday) => {
@@ -322,10 +372,25 @@ class Resume extends Component {
     });
   }
 
+  paymentRedirect() {
+    this.setState({
+      show_loader: true
+    });
+    let paymentRedirectUrl = encodeURIComponent(
+      window.location.protocol + '//' + window.location.host + '/insurance/payment'
+    );
+    var pgLink = this.state.payment_link;
+    // eslint-disable-next-line
+    pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl;
+    window.location.href = pgLink;
+    return;
+  }
+
   handleClick = async () => {
     if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.personal.not_submitted) {
       this.navigate("/insurance");
-    } else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.contact.not_submitted) {
+    } else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.contact.not_submitted &&
+      (this.state.provider !== 'HDFC' || (this.state.provider === 'HDFC' && this.state.plutus_payment_status === 'payment_done'))) {
       this.navigate("/insurance/contact");
     } else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.nominee.not_submitted) {
       this.navigate("/insurance/nominee");
@@ -333,61 +398,91 @@ class Resume extends Component {
       this.navigate("/insurance/appointee");
     } else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.professional.not_submitted) {
       this.navigate("/insurance/professional");
+    } else if (this.state.provider === 'HDFC' && this.state.plutus_payment_status === 'payment_ready') {
+      this.paymentRedirect();
+      return;
+    } else if (this.state.provider === 'IPRU' && this.state.plutus_payment_status === 'payment_ready') {
+      this.paymentRedirect();
+      return;
     } else {
-      this.setState({ openModal: true, openModalMessage: this.modelMessage() });
+
       let provider;
 
       if (this.state.provider === 'HDFC') {
         provider = 'HDFC Life';
+        this.setState({ openModal: true, openModalMessage: this.modelMessage() });
+        // this.setState({ show_loader: true });
       } else {
         provider = 'ICICI Pru';
+        this.setState({ openModal: true, openModalMessage: this.modelMessage() });
       }
 
-      if (this.state.status === 'init') {
-        const res = await Api.post('/api/insurance/profile/submit', {
-          insurance_app_id: this.state.params.insurance_id
-        });
+      if (this.state.status === 'init' && this.state.provider !== 'IPRU') {
+        try {
+          const res = await Api.post('/api/insurance/profile/submit', {
+            insurance_app_id: this.state.params.insurance_id
+          });
+          this.setState({ show_loader: false });
 
-        if (res.pfwresponse.status_code === 200) {
-          let eventObj;
+          if (res.pfwresponse.status_code === 200) {
+            let eventObj;
+            let result = res.pfwresponse.result;
 
-          if (this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') {
-            eventObj = {
-              "event_name": 'resume_clicked',
-              "properties": {
-                "overall_progress": this.renderTotalPercentage('event'),
-                "personal_d": this.renderPersonalPercentage(),
-                "contact_d": this.renderContactPercentage(),
-                "nominee_d": this.renderNomineePercentage(),
-                "professional": this.renderProfessionalPercentage(),
-                "professonal_edit": 0,
-                "pd_view": 0,
-                "cd_view": 0,
-                "nd_view": 0,
-                "professional_view": 0
+            if (this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') {
+              eventObj = {
+                "event_name": 'resume_clicked',
+                "properties": {
+                  "overall_progress": this.renderTotalPercentage(),
+                  "personal_d": this.renderPersonalPercentage(),
+                  "contact_d": this.renderContactPercentage(),
+                  "nominee_d": this.renderNomineePercentage(),
+                  "professional": this.renderProfessionalPercentage(),
+                  "professonal_edit": 0,
+                  "pd_view": 0,
+                  "cd_view": 0,
+                  "nd_view": 0,
+                  "professional_view": 0
+                }
+              };
+            } else {
+              eventObj = {
+                "event_name": 'make_payment_clicked',
+                "properties": {
+                  "provider": this.state.provider,
+                  "benefits": (this.state.benefits.accident_benefit !== '' && this.state.benefits.payout_option !== '') ? 1 : 0,
+                  "personal_d": (this.renderPersonalPercentage() === 100) ? 1 : 0,
+                  "contact_d": (this.renderContactPercentage() === 100) ? 1 : 0,
+                  "nominee": (this.renderNomineePercentage() === 100) ? 1 : 0,
+                  "professonal": (this.renderProfessionalPercentage() === 100) ? 1 : 0,
+                  "appointee": (this.renderAppointeePercentage() === 100) ? 1 : 0
+                }
+              };
+            }
+            if (result.insurance_app.plutus_payment_status === 'payment_ready') {
+              this.handlePayment(result.insurance_app);
+            }
+
+            if (result.insurance_app.provider === 'HDFC') {
+              // window.location.href = result.insurance_app.resume_link;
+              nativeCallback({ action: 'resume_provider', message: { resume_link: result.insurance_app.resume_link, provider: provider } });
+            } else {
+              let options = { events: eventObj, action: 'payment', message: { payment_link: '', provider: provider } };
+              if (result.insurance_app.plutus_payment_status === 'payment_ready') {
+                this.handlePayment(result.insurance_app, options);
               }
-            };
+            }
           } else {
-            eventObj = {
-              "event_name": 'make_payment_clicked',
-              "properties": {
-                "provider": this.state.provider,
-                "benefits": (this.state.benefits.accident_benefit !== '' && this.state.benefits.payout_option !== '') ? 1 : 0,
-                "personal_d": (this.renderPersonalPercentage() === 100) ? 1 : 0,
-                "contact_d": (this.renderContactPercentage() === 100) ? 1 : 0,
-                "nominee": (this.renderNomineePercentage() === 100) ? 1 : 0,
-                "professonal": (this.renderProfessionalPercentage() === 100) ? 1 : 0,
-                "appointee": (this.renderAppointeePercentage() === 100) ? 1 : 0
-              }
-            };
+            this.setState({ openModal: false, openModalMessage: '', openResponseDialog: true, apiError: res.pfwresponse.result.error });
           }
-
-          nativeCallback({ events: eventObj, action: 'payment', message: { payment_link: res.pfwresponse.result.insurance_app.payment_link, provider: provider } });
-        } else {
-          this.setState({ openModal: false, openModalMessage: '', openResponseDialog: true, apiError: res.pfwresponse.result.error });
+        } catch (err) {
+          this.setState({
+            show_loader: false
+          });
+          toast('Something went wrong');
         }
       } else {
-        nativeCallback({ action: 'resume_payment', message: { resume_link: this.state.resume_link, provider: provider } });
+        // window.location.href = this.state.resume_link;
+        nativeCallback({ action: 'resume_provider', message: { resume_link: this.state.resume_link, provider: provider } });
       }
     }
   }
@@ -425,10 +520,10 @@ class Resume extends Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleClose} color="primary">
+          <Button onClick={this.handleClose} color="default">
             No
           </Button>
-          <Button onClick={this.handleReset} color="primary" autoFocus>
+          <Button onClick={this.handleReset} color="default" autoFocus>
             Yes
           </Button>
         </DialogActions>
@@ -628,7 +723,7 @@ class Resume extends Component {
     );
   }
 
-  renderTotalPercentage = (type) => {
+  renderTotalPercentage = () => {
     let number = 50;
     if (!this.state.required.personal.not_submitted) {
       number += 5;
@@ -647,10 +742,6 @@ class Resume extends Component {
     }
     if (this.state.status === 'success') {
       number += 30;
-    }
-
-    if (type === 'event') {
-      return number;
     }
 
     return (
@@ -677,7 +768,7 @@ class Resume extends Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleResponseClose} color="primary" autoFocus>
+          <Button onClick={this.handleResponseClose} color="default" autoFocus>
             OK
           </Button>
         </DialogActions>
@@ -688,7 +779,7 @@ class Resume extends Component {
   render() {
     return (
       <Container
-        resetpage={(this.state.status === 'init' || this.state.status === 'plutus_submitted') ? true : false}
+        resetpage={((this.state.status === 'init' || this.state.status === 'plutus_submitted') && this.state.plutus_payment_status !== 'payment_done') ? true : false}
         handleReset={this.showDialog}
         showLoader={this.state.show_loader}
         title={'Resume Application'}
@@ -699,7 +790,14 @@ class Resume extends Component {
         paymentFrequency={this.state.payment_frequency}
         type={this.state.type}
         buttonTitle={
-          (this.state.status !== 'init') ? "Resume" : ((this.state.status === 'init' && this.state.plutus_status === 'complete') ? "Pay Now" : "Resume")} >
+          (this.state.status !== 'init') ? "Resume" :
+            ((this.state.status === 'init' && this.state.plutus_status === 'complete' && (this.state.plutus_payment_status !== 'payment_done' ||
+              this.state.plutus_payment_status === 'failed')) ? "Pay Now" :
+              (this.state.provider === 'HDFC' && this.state.plutus_payment_status === 'payment_ready') ? "Pay Now" :
+                (this.state.provider === 'HDFC' && this.state.plutus_payment_status === 'payment_done' && (this.state.status === 'init'
+                  || this.state.plutus_status === 'complete')) ? "Submit" :
+                  "Resume")
+        } >
         <div style={{ marginBottom: 20 }}>
           <div style={{ color: '#4a4a4a', fontSize: 20, fontWeight: 700, marginBottom: 7 }}>
             Hey {this.state.personal.name}
@@ -846,7 +944,7 @@ class Resume extends Component {
         {this.renderModal()}
         {this.renderDialog()}
         {this.renderResponseDialog()}
-      </Container>
+      </Container >
     );
   }
 }

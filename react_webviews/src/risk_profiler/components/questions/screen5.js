@@ -47,7 +47,6 @@ class QuestionScreen5 extends Component {
 
   async componentDidMount() {
     let questionnaire = JSON.parse(window.localStorage.getItem('questionnaire'));
-    console.log(questionnaire)
     let question1Options = [], question2Options = [];
     question1Options = questionnaire[this.state.indexMain].choices;
 
@@ -91,7 +90,6 @@ class QuestionScreen5 extends Component {
   handleClick = async () => {
 
     // this.navigate('/question2');
-    console.log(this.state);
     if (!this.state.question1) {
       this.setState({
         question1_error: 'Mandatory'
@@ -114,13 +112,11 @@ class QuestionScreen5 extends Component {
         options.push(obj)
       }
       // api
-      console.log(options);
       try {
         this.setState({
           show_loader: true
         });
         const res = await Api.post('/api/risk/profile/user/questionnaire', options);
-        console.log(res.pfwresponse.result);
         if (res.pfwresponse.result.message === 'success') {
           let score = res.pfwresponse.result.score;
           window.localStorage.setItem('score', JSON.stringify(score));

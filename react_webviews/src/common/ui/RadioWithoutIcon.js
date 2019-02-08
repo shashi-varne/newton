@@ -3,7 +3,6 @@ import Grid from 'material-ui/Grid';
 
 import './style.css';
 import RadioBtn from './RadioBtn';
-import { getConfig } from 'utils/functions';
 
 class RadioGrp extends Component {
   constructor(props) {

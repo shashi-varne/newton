@@ -57,7 +57,6 @@ class Container extends Component {
       back_pressed: true
     })
     let { params } = this.props.location;
-    console.log(params);
 
     if (params && params.disableBack) {
       this.setState({
