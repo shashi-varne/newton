@@ -557,7 +557,8 @@ class Journey extends Component {
 
     if (this.state.provider === 'HDFC' &&
       (this.state.status === 'init') &&
-      (this.state.plutus_payment_status !== 'payment_ready' && this.state.plutus_payment_status !== 'failed')) {
+      (this.state.plutus_payment_status !== 'payment_ready' && this.state.plutus_payment_status !== 'failed' &&
+        this.state.plutus_payment_status !== 'payment_done')) {
       this.navigate("/insurance/personal");
       return;
     }
