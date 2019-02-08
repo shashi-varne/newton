@@ -59,22 +59,24 @@ class Container extends Component {
     let { params } = this.props.location;
 
     if (params && params.disableBack) {
-      this.setState({
-        callbackType: 'exit',
-        openPopup: true,
-        popupText: 'Are you sure you want to exit ?'
-      })
+      // this.setState({
+      //   callbackType: 'exit',
+      //   openPopup: true,
+      //   popupText: 'Are you sure you want to exit ?'
+      // })
+      nativeCallback({ action: 'exit' });
       return;
     }
 
     let pathname = this.props.history.location.pathname;
 
     if (pathname.indexOf('result') >= 0) {
-      this.setState({
-        callbackType: 'exit',
-        openPopup: true,
-        popupText: 'Are you sure you want to exit ?'
-      })
+      // this.setState({
+      //   callbackType: 'exit',
+      //   openPopup: true,
+      //   popupText: 'Are you sure you want to exit ?'
+      // })
+      nativeCallback({ action: 'exit' });
       return;
     }
 
@@ -86,11 +88,12 @@ class Container extends Component {
     switch (pathname) {
       case "/risk":
       case "/risk/intro":
-        this.setState({
-          callbackType: 'exit',
-          openPopup: true,
-          popupText: 'Are you sure you want to exit ?'
-        })
+        // this.setState({
+        //   callbackType: 'exit',
+        //   openPopup: true,
+        //   popupText: 'Are you sure you want to exit ?'
+        // })
+        nativeCallback({ action: 'exit' });
         break;
       default:
         if (navigator.onLine) {
@@ -169,11 +172,12 @@ class Container extends Component {
   }
 
   handleTopIcon() {
-    this.setState({
-      callbackType: 'exit',
-      openPopup: true,
-      popupText: 'Are you sure you want to exit ?'
-    })
+    // this.setState({
+    //   callbackType: 'exit',
+    //   openPopup: true,
+    //   popupText: 'Are you sure you want to exit ?'
+    // })
+    nativeCallback({ action: 'exit' });
   }
 
   renderPageLoader = () => {

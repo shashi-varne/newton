@@ -52,12 +52,14 @@ class Intro extends Component {
   }
 
   handleClick = async () => {
-    if (!this.state.openDialogConfirm) {
-      this.setState({
-        openDialogConfirm: true
-      })
-      return;
-    }
+    // if (!this.state.openDialogConfirm) {
+    //   this.setState({
+    //     openDialogConfirm: true
+    //   })
+    //   return;
+    // }
+
+    this.navigate('question1');
   }
 
   openDialogConfirmModal = () => {
@@ -74,8 +76,7 @@ class Intro extends Component {
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               <span style={{ color: '#4a4a4a' }}>
-                Answer few questions, sit and relax while
-  we find out your ability to bear risk.
+                Answer a few questions to check risk tolerance and get the right mutual funds to invest.
              </span>
             </DialogContentText>
           </DialogContent>

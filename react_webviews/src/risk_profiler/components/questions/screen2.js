@@ -90,11 +90,11 @@ class QuestionScreen2 extends Component {
 
     if (!this.state.question1) {
       this.setState({
-        question1_error: 'Mandatory'
+        question1_error: 'Please select an option'
       })
     } else if (!this.state.question2) {
       this.setState({
-        question2_error: 'Mandatory'
+        question2_error: 'Please select an option'
       })
     } else {
       let questionnaireResponse = JSON.parse(window.localStorage.getItem('questionnaireResponse'));
