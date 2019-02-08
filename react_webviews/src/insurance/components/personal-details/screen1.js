@@ -76,8 +76,6 @@ class PersonalDetails1 extends Component {
       const { name, dob, gender, marital_status,
         email, mobile_no, pan_number, spouse_name } = res.pfwresponse.result.profile;
       const { image, provider, cover_plan } = res.pfwresponse.result.quote_desc;
-      console.log(provider);
-      console.log(marital_status);
 
       this.setState({
         show_loader: false,

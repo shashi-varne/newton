@@ -132,7 +132,7 @@ const Insurance = (props) => {
           <Route path={`${url}/additional-info`} component={AdditionalInfo} />
           <Route path={`${url}/summary`} component={Summary} />
           <Route path={`${url}/journey`} component={Journey} />
-          <Route path={`${url}/payment/:status`} component={Payment} />
+          <Route path={`${url}/payment/:insurance_id/:status`} component={Payment} />
           <Route path={`${url}/Pincode`} component={Pincode} />
           {/* Edit paths */}
           <Route path={`${url}/edit-personal`} render={(props) => <PersonalDetails1 {...props} edit={true} />} />

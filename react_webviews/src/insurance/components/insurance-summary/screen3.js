@@ -127,13 +127,13 @@ class Journey extends Component {
 
     } else if (journeyData[3].status === 'init' && application.provider === 'HDFC' &&
       application.plutus_payment_status === 'payment_done' &&
-      application.plutus_status !== 'plutus_submitted') {
+      application.status !== 'plutus_submitted') {
       buttonTitle = 'Continue to Address Details';
     } else if (journeyData[3].status === 'init' && application.provider === 'IPRU') {
       buttonTitle = 'Continue to ICICI Pru';
     } else if (application.provider === 'HDFC' &&
       application.plutus_payment_status === 'payment_done' && application.status !== 'complete' &&
-      application.plutus_status === 'plutus_submitted') {
+      application.status === 'plutus_submitted') {
       buttonTitle = 'Continue to HDFC Life';
     } else if (application.plutus_payment_status === 'payment_done' &&
       application.status === 'complete') {
@@ -171,7 +171,7 @@ class Journey extends Component {
       }
     });
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.protocol + '//' + window.location.host + '/insurance/payment'
+      window.location.protocol + '//' + window.location.host + '/insurance/payment/' + this.state.params.insurance_id
     );
     var pgLink = payment_link;
     // eslint-disable-next-line
@@ -281,23 +281,22 @@ class Journey extends Component {
           journeyData[0]['status'] = 'complete';
           journeyData[1]['status'] = 'init';
         }
-
-        if ((application.plutus_status === 'complete' || application.plutus_status === 'complete') ||
+        if (((application.plutus_status === 'complete' && application.provider === 'IPRU' && (application.plutus_payment_status === 'payment_ready' ||
+          application.plutus_payment_status === 'failed'))
+          ||
           (application.provider === 'HDFC' &&
-            application.plutus_status === 'incomplete' && (application.plutus_payment_status === 'payment_ready' ||
-              application.plutus_payment_status === 'failed'))) {
+            (application.plutus_payment_status === 'payment_ready' ||
+              application.plutus_payment_status === 'failed'))) && application.plutus_status !== 'init') {
           journeyData[0]['status'] = 'complete';
           journeyData[1]['status'] = 'complete';
           journeyData[2]['status'] = 'init';
         }
-
         if (application.plutus_payment_status === 'payment_done') {
           journeyData[0]['status'] = 'complete';
           journeyData[1]['status'] = 'complete';
           journeyData[2]['status'] = 'complete';
           journeyData[3]['status'] = 'init';
         }
-
         if ((application.status === 'complete') &&
           application.plutus_payment_status === 'payment_done') {
           journeyData[0]['status'] = 'complete';
@@ -319,11 +318,6 @@ class Journey extends Component {
         //   journeyData: journeyData
         // });
 
-        let insurance_search = {};
-        insurance_search.insurance_id = application.id;
-        insurance_search.base_url = this.state.params.base_url;
-        insurance_search.provider = application.provider;
-        window.localStorage.setItem('insurance_search', JSON.stringify(insurance_search));
 
         // if (application.plutus_payment_status === 'payment_ready') {
         //   this.handlePayment(application);
@@ -549,6 +543,11 @@ class Journey extends Component {
       nativeCallback({ action: 'native_back' });
       return;
     }
+
+    if (this.state.plutus_status === 'init') {
+      this.navigate("/insurance/personal");
+      return;
+    }
     if (this.state.plutus_status !== 'complete' &&
       this.state.plutus_payment_status !== 'payment_ready' && this.state.plutus_payment_status !== 'payment_done' &&
       this.state.plutus_payment_status !== 'failed') {
@@ -556,12 +555,14 @@ class Journey extends Component {
       return;
     }
 
-    if (
-      (this.state.plutus_status !== 'incomplete' && this.state.plutus_status === 'init') &&
-      (this.state.plutus_payment_status !== 'payment_done' || this.state.plutus_payment_status !== 'failed')) {
+    if (this.state.provider === 'HDFC' &&
+      (this.state.status === 'init') &&
+      (this.state.plutus_payment_status !== 'payment_ready' && this.state.plutus_payment_status !== 'failed' &&
+        this.state.plutus_payment_status !== 'payment_done')) {
       this.navigate("/insurance/personal");
       return;
     }
+
     // if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.personal.not_submitted) {
     //   this.navigate("/insurance/personal");
     // } else 
@@ -672,8 +673,6 @@ class Journey extends Component {
           toast('Something went wrong');
         }
       } else {
-        console.log("resume link***********************88")
-        console.log(this.state.resume_link);
         if (!this.state.resume_link) {
           this.handleClick();
           return;
@@ -854,7 +853,7 @@ class Journey extends Component {
           aria-describedby="alert-dialog-description"
         >
           <DialogContent>
-            <DialogContentText id="alert-dialog-description">
+            <div className="payment-dialog" id="alert-dialog-description">
               {/* {this.state.apiError} */}
               <div style={{ fontWeight: 500, color: 'black' }}>Hey {this.state.name},</div>
               <div style={{ fontWeight: 400, color: 'rgb(56, 55, 55)' }}>
@@ -908,14 +907,14 @@ class Journey extends Component {
                 }
 
               </div>
-            </DialogContentText>
+            </div>
           </DialogContent>
           <DialogActions>
             <Button
               fullWidth={true}
               variant="raised"
               size="large"
-              color="default"
+              color="secondary"
               onClick={this.handleClosePayment}
               autoFocus>Ok
             </Button>

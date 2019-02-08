@@ -194,3 +194,12 @@ color: black
   position: relative;
   top: 5px;
 }
+.payment-dialog {
+  font-size: 1rem;
+    font-weight: 400;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    line-height: 1.5em;
+    margin: 0;
+    display: block;
+    color: rgba(0, 0, 0, 0.54);
+}

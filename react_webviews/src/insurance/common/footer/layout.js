@@ -72,11 +72,16 @@ export class SummaryLayout extends Component {
               <div className="FooterSummaryLayout_hint">*You’ve to pay <b>3 months premiums</b>.</div>
             } */}
             </div>}
-            <div className="FlexItem2">
+            {!props.onlyButton && <div className="FlexItem2">
               <Button
                 type={props.type}
                 {...props} />
-            </div>
+            </div>}
+            {props.onlyButton && <div className="FlexItem2">
+              <Button
+                type={props.type}
+                {...props} />
+            </div>}
           </div>}
         {/* {
           props.reset &&

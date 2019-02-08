@@ -75,7 +75,6 @@ class MandateProcess extends Component {
       this.setState({
         show_loader: false, showLoader: false
       });
-      console.log(error);
     });
   }
 
@@ -109,7 +108,6 @@ class MandateProcess extends Component {
       }
     }).catch(error => {
       this.setState({ show_loader: false });
-      console.log(error);
     });
   }
 

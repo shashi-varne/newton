@@ -64,8 +64,8 @@ class Details extends Component {
   async componentDidMount() {
     try {
       await Api.get('/api/referral/v2/getactivecampaign/mine').then(res => {
-        const { amount_per_referral, campaign_expiry_date, refer_message_1, refer_message_2, referral_code, mobile, total_earnings,current_campaign_id, campaign_start_date } = res.pfwresponse.result;
-  
+        const { amount_per_referral, campaign_expiry_date, refer_message_1, refer_message_2, referral_code, mobile, total_earnings, current_campaign_id, campaign_start_date } = res.pfwresponse.result;
+
         this.setState({
           show_loader: false,
           amount_per_referral,
@@ -79,22 +79,20 @@ class Details extends Component {
           campaign_start_date
         });
       }).catch(error => {
-        this.setState({show_loader: false});
-        console.log(error);
+        this.setState({ show_loader: false });
       });
     } catch (error) {
-      this.setState({show_loader: false});
-      console.log(error);
+      this.setState({ show_loader: false });
     }
   }
 
   renderDialog = () => {
     return (
       <Dialog
-          fullScreen={false}
-          open={this.state.openDialog}
-          onClose={this.handleClose}
-          aria-labelledby="responsive-dialog-title"
+        fullScreen={false}
+        open={this.state.openDialog}
+        onClose={this.handleClose}
+        aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="form-dialog-title">No Internet Found</DialogTitle>
         <DialogContent>
@@ -130,7 +128,7 @@ class Details extends Component {
 
       this.props.history.push({
         pathname: pathname,
-        search: '?base_url='+this.state.params.base_url
+        search: '?base_url=' + this.state.params.base_url
       });
     } else {
       this.setState({
@@ -148,7 +146,7 @@ class Details extends Component {
 
     this.props.history.push({
       pathname: pathname,
-      search: '?mobile='+this.state.mobile+'&base_url='+this.state.params.base_url
+      search: '?mobile=' + this.state.mobile + '&base_url=' + this.state.params.base_url
     });
   }
 
@@ -181,15 +179,15 @@ class Details extends Component {
         title={'Refer & Earn'}
         background='GreyBackground'
         type={this.state.type}
-        >
+      >
         <div className="Refer pad15">
           <Card nopadding={true}>
-          {(this.state.type === 'fisdom' && this.state.current_campaign_id === this.state.campaign_id) ? <img src={diwali_banner} alt="" /> : <img src={gift} alt="" />}
+            {(this.state.type === 'fisdom' && this.state.current_campaign_id === this.state.campaign_id) ? <img src={diwali_banner} alt="" /> : <img src={gift} alt="" />}
             <div className={`margin_top ${(this.state.type === 'fisdom' && this.state.current_campaign_id === this.state.campaign_id) ? 'nomargin' : ''}`} style={{ padding: '15px' }}>
               <h1>{this.state.refer_message_1}</h1>
               <p>
                 {this.state.refer_message_2}&nbsp;
-                { this.state.type === 'fisdom' && this.state.current_campaign_id === this.state.campaign_id && <span>(Minimum <strong>₹1000</strong> SIP)</span>}
+                {this.state.type === 'fisdom' && this.state.current_campaign_id === this.state.campaign_id && <span>(Minimum <strong>₹1000</strong> SIP)</span>}
               </p>
               <div className="Share">
                 <p>Share your code</p>
@@ -239,7 +237,7 @@ class Details extends Component {
                   <img src={hand} alt="" />
                 </Grid>
                 <Grid item xs={9}>
-                  { (this.state.type === 'fisdom' && this.state.current_campaign_id === this.state.campaign_id && this.state.campaign_start_date) ? <p>Offer is valid from:</p> : <p>Your friends should invest before</p>  }
+                  {(this.state.type === 'fisdom' && this.state.current_campaign_id === this.state.campaign_id && this.state.campaign_start_date) ? <p>Offer is valid from:</p> : <p>Your friends should invest before</p>}
                   {this.getExpiryDate()}
                 </Grid>
               </Grid>

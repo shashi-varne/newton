@@ -90,7 +90,6 @@ class Resume extends Component {
     try {
       const res = await Api.get('api/insurance/start/payment/' + application.id)
       if (res.pfwresponse && res.pfwresponse.status_code === 200) {
-        console.log(res.pfwresponse.result);
         let result = res.pfwresponse.result
         this.setState({
           payment_link: result.payment_link,
@@ -99,8 +98,6 @@ class Resume extends Component {
         if (application.provider === 'IPRU') {
           this.paymentRedirect();
           options.message.payment_link = result.payment_link;
-          console.log("ipru");
-          console.log(options);
           // nativeCallback(options);
         }
       }
@@ -142,12 +139,6 @@ class Resume extends Component {
           application = res.pfwresponse.result.insurance_apps.submitted[0];
         }
 
-        let insurance_search = {};
-        insurance_search.insurance_id = application.id;
-        insurance_search.base_url = this.state.params.base_url;
-        insurance_search.provider = application.provider;
-        window.localStorage.setItem('insurance_search', JSON.stringify(insurance_search));
-
         if (application.plutus_payment_status === 'payment_ready' ||
           application.plutus_payment_status === 'failed') {
           this.handlePayment(application);
@@ -160,7 +151,6 @@ class Resume extends Component {
         let age = application.profile.nominee.dob && this.calculateAge(application.profile.nominee.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
         let contact_submitted, nominee_submitted, appointee_submitted;
         let personal_submitted = this.state.required.personal.fields.some(r => required_fields.includes(r));
-        console.log(application);
         if (application.provider === 'HDFC' && application.plutus_payment_status === 'payment_done') {
           contact_submitted = this.state.required.contact.fields.some(r => required_fields.includes(r));
           nominee_submitted = this.state.required.nominee.fields.some(r => required_fields.includes(r));
@@ -397,8 +387,6 @@ class Resume extends Component {
   }
 
   handleClick = async () => {
-    console.log(this.state.provider);
-    console.log(this.state.plutus_payment_status);
     if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.personal.not_submitted) {
       this.navigate("/insurance");
     } else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.contact.not_submitted &&

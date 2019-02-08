@@ -153,7 +153,6 @@ class DeliveryAddress extends Component {
     }
     try {
       const res = await Api.post('/api/gold/user/verify/delivery/mobilenumber', options);
-      console.log(res);
       if (res.pfwresponse.status_code === 200) {
         this.setState({
           show_loader: false,

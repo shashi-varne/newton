@@ -10,30 +10,27 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
+import qs from 'qs';
 
 class Payment extends Component {
   constructor(props) {
     super(props);
     this.state = {
       openDialog: true,
+      params: qs.parse(props.history.location.search.slice(1)),
+      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
+      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
+      type: '',
     };
   }
 
   componentWillMount() {
     const { status } = this.props.match.params;
-    let insurance_search = {};
-    if (window.localStorage.getItem('insurance_search')) {
-      insurance_search = JSON.parse(localStorage.getItem('insurance_search'));
-    }
-
-    // let search = '?insurance_id=' + insurance_search.insurance_id + '&resume=yes&base_url=' + insurance_search.base_url;
-    // this.props.history.push({
-    //   search: search
-    // });
+    const { insurance_id } = this.props.match.params;
 
     this.setState({
       paymentStatus: status,
-      insurance_search: insurance_search
+      insurance_id: insurance_id
     })
 
   }
@@ -74,12 +71,12 @@ class Payment extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id=' + this.state.insurance_search.insurance_id + '&base_url=' + this.state.insurance_search.base_url
+      search: '?insurance_id=' + this.state.insurance_id + '&base_url=' + this.state.params.base_url
     });
   }
 
   navigateResume = (pathname) => {
-    let search = '?insurance_id=' + this.state.insurance_search.insurance_id + '&resume=yes&base_url=' + this.state.insurance_search.base_url;
+    let search = '?insurance_id=' + this.state.insurance_id + '&resume=yes&base_url=' + this.state.params.base_url;
     this.props.history.push({
       pathname: pathname,
       search: search,
@@ -95,7 +92,7 @@ class Payment extends Component {
       show_loader: true
     });
     if (this.state.paymentStatus === 'success') {
-      // if (this.state.insurance_search.provider === 'HDFC') {
+      // if (this.state.params.provider === 'HDFC') {
       //   this.navigateResume('/insurance/edit-contact1');
       // } else {
       //   this.navigateResume('/insurance/journey');
@@ -104,10 +101,9 @@ class Payment extends Component {
     } else if (this.state.paymentStatus === 'pending') {
       this.navigateResume('/insurance/journey');
     } else if (this.state.paymentStatus === 'failed') {
-      //   Api.get('api/insurance/start/payment/' + this.state.insurance_search.insurance_id)
+      //   Api.get('api/insurance/start/payment/' + this.state.insurance_id)
       //     .then(res => {
       //       if (res.pfwresponse.status_code === 200) {
-      //         console.log(res.pfwresponse.result);
       //         let result = res.pfwresponse.result
       //         this.setState({
       //           payment_link: result.payment_link,
@@ -151,7 +147,7 @@ class Payment extends Component {
               fullWidth={true}
               variant="raised"
               size="large"
-              color="default"
+              color="secondary"
               onClick={this.handleClose}
               autoFocus>Ok
             </Button>
@@ -183,7 +179,7 @@ class Payment extends Component {
               fullWidth={true}
               variant="raised"
               size="large"
-              color="default"
+              color="secondary"
               onClick={this.handleClose}
               autoFocus>Ok
             </Button>
@@ -213,7 +209,7 @@ class Payment extends Component {
               fullWidth={true}
               variant="raised"
               size="large"
-              color="default"
+              color="secondary"
               onClick={this.handleClose}
               autoFocus>Retry Payment
             </Button>
