@@ -41,7 +41,7 @@ const Header = ({ classes, title, count, total, current, goBack, edit, type, res
           src={restart}
         />
       }
-      {/* {topIcon === 'close' && <Close onClick={handleTopIcon} />} */}
+      {topIcon === 'close' && <Close onClick={handleTopIcon} />}
       {!edit && count && <span color="inherit">{current}/{total}</span>}
     </Toolbar>
   </AppBar>

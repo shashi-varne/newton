@@ -68,7 +68,7 @@ class RadioButtonsGroup extends Component {
         >
           {allOptions}
         </RadioGroup>
-        <p style={{ color: 'red' }}>{this.props.helperText}</p>
+        <p style={{ color: 'red', marginTop: '-10px' }}>{this.props.helperText}</p>
         {/* <FormHelperText>{this.props.helperText}</FormHelperText> */}
       </FormControl>
     );
