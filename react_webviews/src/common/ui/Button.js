@@ -29,7 +29,7 @@ class CustomButton extends Component {
 
 const styles = {
   button: {
-    padding: '16px 24px !important',
+    padding: '16px 0px !important',
     borderRadius: 0,
     textTransform: 'capitalize',
     fontSize: '16px !important',

@@ -104,7 +104,7 @@ class Summary extends Component {
       show_loader: true
     });
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.protocol + '//' + window.location.host + '/insurance/payment'
+      window.location.protocol + '//' + window.location.host + '/insurance/payment/' + this.state.params.insurance_id
     );
     var pgLink = payment_link;
     // eslint-disable-next-line
@@ -899,7 +899,7 @@ class Summary extends Component {
           aria-describedby="alert-dialog-description"
         >
           <DialogContent>
-            <DialogContentText id="alert-dialog-description">
+            <div className="payment-dialog" id="alert-dialog-description">
               {/* {this.state.apiError} */}
               <div style={{ fontWeight: 500, color: 'black' }}>Hey {this.state.name},</div>
               <div style={{ fontWeight: 400, color: 'rgb(56, 55, 55)' }}>
@@ -953,7 +953,7 @@ class Summary extends Component {
                 }
 
               </div>
-            </DialogContentText>
+            </div>
           </DialogContent>
           <DialogActions>
             <Button

@@ -26,9 +26,11 @@ class Payment extends Component {
 
   componentWillMount() {
     const { status } = this.props.match.params;
+    const { insurance_id } = this.props.match.params;
 
     this.setState({
-      paymentStatus: status
+      paymentStatus: status,
+      insurance_id: insurance_id
     })
 
   }
@@ -69,12 +71,12 @@ class Payment extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id=' + this.state.params.insurance_id + '&base_url=' + this.state.params.base_url
+      search: '?insurance_id=' + this.state.insurance_id + '&base_url=' + this.state.params.base_url
     });
   }
 
   navigateResume = (pathname) => {
-    let search = '?insurance_id=' + this.state.params.insurance_id + '&resume=yes&base_url=' + this.state.params.base_url;
+    let search = '?insurance_id=' + this.state.insurance_id + '&resume=yes&base_url=' + this.state.params.base_url;
     this.props.history.push({
       pathname: pathname,
       search: search,
@@ -99,7 +101,7 @@ class Payment extends Component {
     } else if (this.state.paymentStatus === 'pending') {
       this.navigateResume('/insurance/journey');
     } else if (this.state.paymentStatus === 'failed') {
-      //   Api.get('api/insurance/start/payment/' + this.state.params.insurance_id)
+      //   Api.get('api/insurance/start/payment/' + this.state.insurance_id)
       //     .then(res => {
       //       if (res.pfwresponse.status_code === 200) {
       //         let result = res.pfwresponse.result

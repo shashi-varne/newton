@@ -131,6 +131,7 @@ button.MuiButtonBase-root.MuiButton-root.MuiButton-raised.MuiButton-raisedSecond
 
 .FlexItem2 {
   flex: 2;
+  /* flex: inherit; */
 }
 
 .FooterSummaryLayout .FlexItem3 {

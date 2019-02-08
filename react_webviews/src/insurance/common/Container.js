@@ -202,7 +202,8 @@ class Container extends Component {
     let steps = [];
     for (var i = 0; i < this.props.total; i++) {
       if (this.props.current > i) {
-        steps.push(<span className='active' key={i}></span>);
+        steps.push(<span className='active'
+          style={{ background: getConfig().primary }} key={i}></span>);
       } else {
         steps.push(<span key={i}></span>);
       }
