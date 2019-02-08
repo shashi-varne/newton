@@ -9,6 +9,7 @@ import Api from 'utils/api';
 import { inrFormatDecimal } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
+import check from 'assets/check_mark.png';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -340,6 +341,30 @@ class Recommendation extends Component {
     )
   }
 
+  openTermsAndCondition(type) {
+    let url = '';
+    if (type === 'terms') {
+      if (this.state.type !== 'fisdom') {
+        url = 'https://mywaywealth.com/terms/';
+      } else {
+        url = 'https://www.fisdom.com/terms/';
+      }
+    } else {
+      if (this.state.type !== 'fisdom') {
+        url = 'https://mywaywealth.com/scheme/';
+      } else {
+        url = 'https://www.fisdom.com/scheme-offer-documents/';
+      }
+    }
+
+    nativeCallback({
+      action: 'open_in_browser',
+      message: {
+        url: url
+      }
+    });
+  }
+
   render() {
     return (
       <Container
@@ -400,6 +425,14 @@ class Recommendation extends Component {
           <p style={{ color: '#4a4a4a', fontSize: 14 }}>Recommended Funds  </p>
           <div className="funds-card">
             {this.state.funds && this.state.funds.map(this.renderFunds)}
+          </div>
+          <div style={{ display: '-webkit-box', marginBottom: 10, fontSize: 10 }}>
+            <img style={{ verticalAlign: '-webkit-baseline-middle' }} width={15} src={check} alt="Invest" />
+            <div style={{ width: '94%', marginLeft: 8, color: '#4a4a4a' }}>I agree that I have read and accepted the
+              <span onClick={() => this.openTermsAndCondition('terms')} style={{ textDecoration: 'underline', margin: '0 2px 0px 2px' }}> terms & conditions
+              </span> and understood the
+              <span onClick={() => this.openTermsAndCondition('offer')} style={{ textDecoration: 'underline', margin: '0 2px 0px 2px' }}> scheme offer documents </span>
+            </div>
           </div>
         </div>
         {this.renderAmountDialog()}
