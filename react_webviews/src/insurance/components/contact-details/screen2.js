@@ -490,7 +490,7 @@ class ContactDetails2 extends Component {
 
             nativeCallback({
               action: 'resume_provider',
-              message: { resume_link: result.insurance_app.resume_link, provider: this.state.provider }
+              message: { resume_link: result.pfwresponse.result.insurance_app.resume_link, provider: this.state.provider }
             });
             this.setState({ show_loader: false });
             // if (this.props.edit) {
@@ -550,6 +550,7 @@ class ContactDetails2 extends Component {
         this.setState({
           show_loader: false
         });
+        console.log(err);
         toast('Something went wrong');
       }
     }
