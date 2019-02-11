@@ -20,6 +20,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import { nativeCallback } from 'utils/native_callback';
+import { getConfig } from 'utils/functions';
 
 class Resume extends Component {
   constructor(props) {
@@ -342,7 +343,7 @@ class Resume extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id=' + this.state.params.insurance_id + '&resume=yes&base_url=' + this.state.params.base_url
+      search: getConfig().searchParams + '&resume=yes'
     });
   }
 

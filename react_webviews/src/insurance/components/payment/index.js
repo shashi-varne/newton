@@ -11,6 +11,7 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import qs from 'qs';
+import { getConfig } from 'utils/functions';
 
 class Payment extends Component {
   constructor(props) {
@@ -71,12 +72,12 @@ class Payment extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id=' + this.state.insurance_id + '&base_url=' + this.state.params.base_url
+      search: getConfig().searchParams
     });
   }
 
   navigateResume = (pathname) => {
-    let search = '?insurance_id=' + this.state.insurance_id + '&resume=yes&base_url=' + this.state.params.base_url;
+    let search = getConfig().searchParams + '&resume=yes';
     this.props.history.push({
       pathname: pathname,
       search: search,

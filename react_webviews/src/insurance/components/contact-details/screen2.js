@@ -20,6 +20,7 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
+import { getConfig } from 'utils/functions';
 
 class ContactDetails2 extends Component {
   constructor(props) {
@@ -266,7 +267,7 @@ class ContactDetails2 extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id=' + this.state.params.insurance_id + '&resume=' + this.state.params.resume + '&base_url=' + this.state.params.base_url
+      search: getConfig().searchParams + '&resume=' + this.state.params.resume
     });
   }
 

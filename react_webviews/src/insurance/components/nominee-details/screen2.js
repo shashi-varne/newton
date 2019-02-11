@@ -24,6 +24,7 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
+import { getConfig } from 'utils/functions';
 
 class AppointeeDetails extends Component {
   constructor(props) {
@@ -249,7 +250,7 @@ class AppointeeDetails extends Component {
   navigate = (pathname, disableBack) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id=' + this.state.params.insurance_id + '&resume=' + this.state.params.resume + '&base_url=' + this.state.params.base_url,
+      search: getConfig().searchParams + '&resume=' + this.state.params.resume,
       params: {
         disableBack: disableBack
       }

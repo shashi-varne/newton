@@ -104,7 +104,7 @@ export function numberShouldStartWith(number) {
 
 export function formatAmount(amount) {
   if (!amount) {
-    return;
+    return '';
   }
   amount = amount.toString();
   let lastThree = amount.substring(amount.length - 3);

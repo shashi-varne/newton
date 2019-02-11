@@ -23,6 +23,7 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
+import { getConfig } from 'utils/functions';
 
 class Journey extends Component {
   constructor(props) {
@@ -503,8 +504,7 @@ class Journey extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id=' + this.state.params.insurance_id + '&resume=yes&base_url=' +
-        this.state.params.base_url + '&isKyc=' + this.state.isKyc,
+      search: getConfig().searchParams + '&resume=yes&isKyc=' + this.state.isKyc,
     });
   }
 
