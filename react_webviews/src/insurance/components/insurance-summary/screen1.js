@@ -104,8 +104,9 @@ class Summary extends Component {
     this.setState({
       show_loader: true
     });
+    let insurance_v2 = this.state.params.insurance_v2 ? true : '';
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.protocol + '//' + window.location.host + '/insurance/payment/' + this.state.params.insurance_id
+      window.location.protocol + '//' + window.location.host + '/insurance/payment/' + this.state.params.insurance_id + '/' + insurance_v2
     );
     var pgLink = payment_link;
     // eslint-disable-next-line

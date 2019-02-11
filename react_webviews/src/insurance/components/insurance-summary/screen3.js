@@ -171,8 +171,9 @@ class Journey extends Component {
         back_text: 'Are you sure you want to exit the payment process?'
       }
     });
+    let insurance_v2 = this.state.params.insurance_v2 ? true : '';
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.protocol + '//' + window.location.host + '/insurance/payment/' + this.state.params.insurance_id
+      window.location.protocol + '//' + window.location.host + '/insurance/payment/' + this.state.params.insurance_id + '/' + insurance_v2
     );
     var pgLink = payment_link;
     // eslint-disable-next-line
@@ -504,7 +505,8 @@ class Journey extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams + '&resume=yes&isKyc=' + this.state.isKyc,
+      search: 'insurance_id=' + this.state.params.insurance_id + '&base_url=' + this.state.params.base_url +
+        '&insurance_v2=' + this.state.insurance_v2 + '&resume=yes&isKyc=' + this.state.isKyc,
     });
   }
 
