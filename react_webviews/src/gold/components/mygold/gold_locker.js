@@ -466,7 +466,7 @@ class GoldSummary extends Component {
             </div>
             <div className="buy-input">
               <div className="buy-input1">
-                Enter amount of gold you want to buy
+                Enter amount of gold you want to sell
               </div>
               <div className="label">
                 <div className="FlexRow">
