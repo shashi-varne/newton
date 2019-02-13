@@ -133,7 +133,7 @@ class Result extends Component {
       });
       if (res.pfwresponse.result.message === 'success') {
         window.localStorage.setItem('questionnaireResponse', '');
-        this.navigate('question1');
+        this.navigate('intro');
       } else {
         toast(res.pfwresponse.result.message || res.pfwresponse.result.console.error
           || 'Something went wrong');
