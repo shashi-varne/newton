@@ -53,6 +53,14 @@ class Container extends Component {
       if (!insurance_v2) {
         nativeCallback({ action: 'native_back' });
       } else {
+        let eventObj = {
+          "event_name": 'make_payment_clicked',
+          "properties": {
+            "user_action": 'close',
+            "source": 'summary'
+          }
+        };
+        nativeCallback({ events: eventObj });
         this.setState({
           callbackType: 'show_quotes',
           openPopup: true,
@@ -107,6 +115,17 @@ class Container extends Component {
       openDialog: false,
       openPopup: false
     });
+
+    if (this.state.callbackType === 'show_quotes') {
+      let eventObj = {
+        "event_name": 'exit_from_payment',
+        "properties": {
+          "user_action": 'no',
+          "source": 'summary'
+        }
+      };
+      nativeCallback({ events: eventObj });
+    }
   }
 
   renderDialog = () => {
@@ -137,6 +156,16 @@ class Container extends Component {
       openPopup: false
     });
 
+    if (this.state.callbackType === 'show_quotes') {
+      let eventObj = {
+        "event_name": 'exit_from_payment',
+        "properties": {
+          "user_action": 'yes',
+          "source": 'summary'
+        }
+      };
+      nativeCallback({ events: eventObj });
+    }
     nativeCallback({ action: this.state.callbackType });
   }
 

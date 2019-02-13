@@ -23,7 +23,6 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
-import { getConfig } from 'utils/functions';
 
 class Journey extends Component {
   constructor(props) {
@@ -103,6 +102,9 @@ class Journey extends Component {
 
   componentWillMount() {
     let { params } = this.props.location;
+    console.log('insurance v2');
+    console.log(this.state.params);
+    nativeCallback({ action: 'take_control_reset' });
     this.setState({
       disableBack: params ? params.disableBack : false
     })
@@ -167,7 +169,7 @@ class Journey extends Component {
     });
     nativeCallback({
       action: 'take_control', message: {
-        back_url: this.state.profile_link,
+        back_url: this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2,
         back_text: 'Are you sure you want to exit the payment process?'
       }
     });
@@ -186,6 +188,14 @@ class Journey extends Component {
     this.setState({
       show_loader: true
     });
+    let eventObj = {
+      "event_name": 'make_payment_clicked',
+      "properties": {
+        "user_action": 'next',
+        "source": 'resume'
+      }
+    };
+    nativeCallback({ events: eventObj });
     Api.get('api/insurance/start/payment/' + this.state.params.insurance_id)
       .then(res => {
         if (res.pfwresponse && res.pfwresponse.status_code === 200) {
@@ -620,7 +630,6 @@ class Journey extends Component {
 
           if (res.pfwresponse.status_code === 200) {
             // eslint-disable-next-line
-            let eventObj;
             let result = res.pfwresponse.result;
 
             // if (this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') {
@@ -656,9 +665,17 @@ class Journey extends Component {
             // if (result.insurance_app.plutus_payment_status === 'payment_ready') {
             //   this.handlePayment(result.insurance_app);
             // }
+            let eventObj = {
+              "event_name": 'resume_clicked',
+              "properties": {
+                "user_action": 'next',
+                "source": 'resume'
+              }
+            };
+            nativeCallback({ events: eventObj });
             nativeCallback({
               action: 'take_control', message: {
-                back_url: this.state.profile_link,
+                back_url: this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2,
                 show_top_bar: false,
                 top_bar_title: provider,
                 back_text: "We suggest you to complete the application process for fast issuance of your insurance.Do you still want to exit the application process"
@@ -679,9 +696,18 @@ class Journey extends Component {
           this.handleClick();
           return;
         }
+
+        let eventObj = {
+          "event_name": 'resume_clicked',
+          "properties": {
+            "user_action": 'next',
+            "source": 'resume'
+          }
+        };
+        nativeCallback({ events: eventObj });
         nativeCallback({
           action: 'take_control', message: {
-            back_url: this.state.profile_link,
+            back_url: this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2,
             show_top_bar: false,
             top_bar_title: provider,
             back_text: "We suggest you to complete the application process for fast issuance of your insurance.Do you still want to exit the application process"
@@ -743,7 +769,7 @@ class Journey extends Component {
       >
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to exit the application process? Not recommended if you already have done the payment
+            Are you sure you want to restart the insurance application?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

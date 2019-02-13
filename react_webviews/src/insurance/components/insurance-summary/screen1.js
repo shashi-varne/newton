@@ -69,6 +69,7 @@ class Summary extends Component {
     this.setState({
       disableBack: params ? params.disableBack : false
     })
+    nativeCallback({ action: 'take_control_reset' });
 
     if (this.state.ismyway) {
       this.setState({
@@ -104,6 +105,14 @@ class Summary extends Component {
     this.setState({
       show_loader: true
     });
+
+    nativeCallback({
+      action: 'take_control', message: {
+        back_url: this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2,
+        back_text: 'Are you sure you want to exit the payment process?'
+      }
+    });
+
     let insurance_v2 = this.state.params.insurance_v2 ? true : '';
     let paymentRedirectUrl = encodeURIComponent(
       window.location.protocol + '//' + window.location.host + '/insurance/payment/' + this.state.params.insurance_id + '/' + insurance_v2
@@ -119,6 +128,16 @@ class Summary extends Component {
     this.setState({
       show_loader: true
     });
+
+    let eventObj = {
+      "event_name": 'make_payment_clicked',
+      "properties": {
+        "user_action": 'next',
+        "source": 'summary'
+      }
+    };
+    nativeCallback({ events: eventObj });
+
     try {
       const res = await Api.get('api/insurance/start/payment/' + this.state.params.insurance_id)
 
@@ -348,38 +367,38 @@ class Summary extends Component {
 
         if (res.pfwresponse.status_code === 200) {
           // eslint-disable-next-line
-          let eventObj;
+          // let eventObj;
 
-          if (this.state.status === 'init') {
-            eventObj = {
-              "event_name": 'make_payment_clicked',
-              "properties": {
-                "provider": this.state.provider,
-                "benefits": (this.state.benefits.accident_benefit !== '' && this.state.benefits.payout_option !== '') ? 1 : 0,
-                "personal_d": (this.renderPersonalPercentage() === 100) ? 1 : 0,
-                "contact_d": (this.renderContactPercentage() === 100) ? 1 : 0,
-                "nominee": (this.renderNomineePercentage() === 100) ? 1 : 0,
-                "professonal": (this.renderProfessionalPercentage() === 100) ? 1 : 0,
-                "appointee": (this.renderAppointeePercentage() === 100) ? 1 : 0
-              }
-            };
-          } else {
-            eventObj = {
-              "event_name": 'resume_clicked',
-              "properties": {
-                "overall_progress": this.renderTotalPercentage(),
-                "personal_d": this.renderPersonalPercentage(),
-                "contact_d": this.renderContactPercentage(),
-                "nominee_d": this.renderNomineePercentage(),
-                "professional": this.renderProfessionalPercentage(),
-                "professonal_edit": 0,
-                "pd_view": 0,
-                "cd_view": 0,
-                "nd_view": 0,
-                "professional_view": 0
-              }
-            };
-          }
+          // if (this.state.status === 'init') {
+          //   eventObj = {
+          //     "event_name": 'make_payment_clicked',
+          //     "properties": {
+          //       "provider": this.state.provider,
+          //       "benefits": (this.state.benefits.accident_benefit !== '' && this.state.benefits.payout_option !== '') ? 1 : 0,
+          //       "personal_d": (this.renderPersonalPercentage() === 100) ? 1 : 0,
+          //       "contact_d": (this.renderContactPercentage() === 100) ? 1 : 0,
+          //       "nominee": (this.renderNomineePercentage() === 100) ? 1 : 0,
+          //       "professonal": (this.renderProfessionalPercentage() === 100) ? 1 : 0,
+          //       "appointee": (this.renderAppointeePercentage() === 100) ? 1 : 0
+          //     }
+          //   };
+          // } else {
+          //   eventObj = {
+          //     "event_name": 'resume_clicked',
+          //     "properties": {
+          //       "overall_progress": this.renderTotalPercentage(),
+          //       "personal_d": this.renderPersonalPercentage(),
+          //       "contact_d": this.renderContactPercentage(),
+          //       "nominee_d": this.renderNomineePercentage(),
+          //       "professional": this.renderProfessionalPercentage(),
+          //       "professonal_edit": 0,
+          //       "pd_view": 0,
+          //       "cd_view": 0,
+          //       "nd_view": 0,
+          //       "professional_view": 0
+          //     }
+          //   };
+          // }
 
           // if (res.pfwresponse.result.insurance_app.plutus_payment_status === 'payment_ready') {
           //   this.handlePayment(res.pfwresponse.result.insurance_app);
@@ -406,15 +425,29 @@ class Summary extends Component {
       }
 
     } else {
+
+      let eventObj = {
+        "event_name": 'resume_clicked',
+        "properties": {
+          "user_action": 'next',
+          "source": 'summary'
+        }
+      };
+      nativeCallback({ events: eventObj });
+
       nativeCallback({
         action: 'take_control', message: {
-          back_url: this.state.profile_link,
+          back_url: this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2,
           show_top_bar: false,
           top_bar_title: provider,
           back_text: "We suggest you to complete the application process for fast issuance of your insurance.Do you still want to exit the application process"
-        }
+        },
+
       });
-      nativeCallback({ action: 'resume_provider', message: { resume_link: this.state.resume_link, provider: provider } });
+      nativeCallback({
+        action: 'resume_provider',
+        message: { resume_link: this.state.resume_link, provider: provider }
+      });
     }
   }
 

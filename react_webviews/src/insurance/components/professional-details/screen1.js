@@ -22,7 +22,7 @@ import {
   occupationCategoryOptions, educationQualificationsOptionsIpru, qualification
 } from '../../constants';
 import { validatePan, validateNumber, formatAmount, validateEmpty } from 'utils/validators';
-// import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 
 class ProfessionalDetails1 extends Component {
@@ -242,22 +242,22 @@ class ProfessionalDetails1 extends Component {
             sector_ev = 'student';
           }
 
-          // let eventObj = {
-          //   "event_name": "professional_save",
-          //   "properties": {
-          //     "provider": this.state.provider,
-          //     "PAN": this.state.pan_number,
-          //     "education": this.state.education_qualification,
-          //     "occu": sector_ev,
-          //     "sector": this.state.occupation_category.toLowerCase(),
-          //     "income": this.state.annual_income,
-          //     "political": (this.state.is_politically_exposed) ? 1 : 0,
-          //     "criminal": (this.state.is_criminal) ? 1 : 0,
-          //     "from_edit": (this.state.edit) ? 1 : 0
-          //   }
-          // };
+          let eventObj = {
+            "event_name": "professional_save",
+            "properties": {
+              "provider": this.state.provider,
+              "PAN": this.state.pan_number || '',
+              "education": this.state.education_qualification || '',
+              "occu": sector_ev || '',
+              "sector": this.state.occupation_category.toLowerCase() || '',
+              "income": this.state.annual_income,
+              "political": (this.state.is_politically_exposed) ? 1 : 0,
+              "criminal": (this.state.is_criminal) ? 1 : 0,
+              "from_edit": (this.state.edit) ? 1 : 0
+            }
+          };
 
-          // nativeCallback({ events: eventObj });
+          nativeCallback({ events: eventObj });
 
           this.setState({ show_loader: false });
           if (this.props.edit) {

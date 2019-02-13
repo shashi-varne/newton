@@ -71,9 +71,10 @@ export const getConfig = () => {
 
   let search = window.location.search;
 
+
   const isPrime = search.indexOf("mypro.fisdom.com") >= 0;
   const ismyway = search.indexOf("api.mywaywealth.com") >= 0;
-  // const ismyway = true;
+  const insurance_v2 = search.indexOf("insurance_v2") >= 0;
   let productType = 'fisdom';
 
   if (ismyway) {
@@ -83,7 +84,7 @@ export const getConfig = () => {
   }
 
   let returnConfig = config[productType];
-  if (search.insurance_v2) {
+  if (insurance_v2) {
     returnConfig.insurance_v2 = true;
   }
 

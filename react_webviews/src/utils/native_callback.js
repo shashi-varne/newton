@@ -6,6 +6,7 @@ export const nativeCallback = ({ action = null, message = null, events = null } 
 
   console.log(action);
   console.log(JSON.stringify(message));
+  console.log(JSON.stringify(events))
 
   let notInInsuranceV2 = ['take_control', 'take_control_reset'];
   let insurance_v2 = getConfig().insurance_v2;
@@ -33,7 +34,6 @@ export const nativeCallback = ({ action = null, message = null, events = null } 
   if (events) {
     callbackData.events = events;
   }
-  console.log(JSON.stringify(callbackData));
 
   if (isMobile.Android()) {
     if (typeof window.Android !== 'undefined') window.Android.callbackNative(JSON.stringify(callbackData));
