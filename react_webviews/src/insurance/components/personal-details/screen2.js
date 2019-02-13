@@ -19,6 +19,7 @@ import {
   validateAlphabets
 } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
+import { getConfig } from 'utils/functions';
 
 class PersonalDetails2 extends Component {
   constructor(props) {
@@ -92,7 +93,7 @@ class PersonalDetails2 extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id=' + this.state.params.insurance_id + '&resume=' + this.state.params.resume + '&base_url=' + this.state.params.base_url
+      search: getConfig().searchParams + '&resume=' + this.state.params.resume
     });
   }
 

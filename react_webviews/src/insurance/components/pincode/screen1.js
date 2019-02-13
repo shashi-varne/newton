@@ -19,6 +19,7 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
+import { getConfig } from 'utils/functions';
 
 class Pincode extends Component {
   constructor(props) {
@@ -185,7 +186,7 @@ class Pincode extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id=' + this.state.params.insurance_id + '&resume=' + this.state.params.resume + '&base_url=' + this.state.params.base_url,
+      search: getConfig().searchParams+ '&resume=' + this.state.params.resume,
       params: {
         disableBack: true
       }
@@ -195,7 +196,7 @@ class Pincode extends Component {
   navigateNew = (pathname, insurance_id) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id=' + insurance_id + '&resume=' + this.state.params.resume + '&base_url=' + this.state.params.base_url,
+      search: getConfig().searchParams + '&resume=' + this.state.params.resume,
       params: {
         disableBack: true
       }

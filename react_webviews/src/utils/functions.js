@@ -1,4 +1,9 @@
 import colors from '../common/theme/Style.css';
+import qs from 'qs';
+import createBrowserHistory from 'history/createBrowserHistory';
+
+const myHistory = createBrowserHistory();
+
 
 export const getHost = (pathname) => {
   return window.location.protocol + '//' + window.location.host + pathname;
@@ -23,6 +28,17 @@ export const isMobile = {
 
 
 export const getConfig = () => {
+
+  let { base_url } = qs.parse(myHistory.location.search.slice(1));
+  let searchParams;
+  let isInsurance = myHistory.location.pathname.indexOf('insurance') >= 0 ? true : false;
+  if (isInsurance) {
+    let { insurance_v2 } = qs.parse(myHistory.location.search.slice(1));
+    let { insurance_id } = qs.parse(myHistory.location.search.slice(1));
+    searchParams = '?insurance_id=' + insurance_id + '&base_url=' + base_url +
+      '&insurance_v2=' + insurance_v2;
+  }
+
   let config = {
     'fisdom': {
       primary: colors.fisdom,
@@ -54,9 +70,11 @@ export const getConfig = () => {
   }
 
   let search = window.location.search;
+
+
   const isPrime = search.indexOf("mypro.fisdom.com") >= 0;
   const ismyway = search.indexOf("api.mywaywealth.com") >= 0;
-  // const ismyway = true;
+  const insurance_v2 = search.indexOf("insurance_v2") >= 0;
   let productType = 'fisdom';
 
   if (ismyway) {
@@ -66,8 +84,12 @@ export const getConfig = () => {
   }
 
   let returnConfig = config[productType];
-  if (search.insurance_v2) {
+  if (insurance_v2) {
     returnConfig.insurance_v2 = true;
+  }
+
+  if (isInsurance) {
+    returnConfig.searchParams = searchParams;
   }
 
   return returnConfig;

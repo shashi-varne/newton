@@ -27,10 +27,12 @@ class Payment extends Component {
   componentWillMount() {
     const { status } = this.props.match.params;
     const { insurance_id } = this.props.match.params;
+    const { insurance_v2 } = this.props.match.params;
 
     this.setState({
       paymentStatus: status,
-      insurance_id: insurance_id
+      insurance_id: insurance_id,
+      insurance_v2: insurance_v2
     })
 
   }
@@ -71,12 +73,14 @@ class Payment extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id=' + this.state.insurance_id + '&base_url=' + this.state.params.base_url
+      search: '?insurance_id=' + this.state.insurance_id + '&base_url=' + this.state.params.base_url +
+        '&insurance_v2=' + this.state.insurance_v2
     });
   }
 
   navigateResume = (pathname) => {
-    let search = '?insurance_id=' + this.state.insurance_id + '&resume=yes&base_url=' + this.state.params.base_url;
+    let search = '?insurance_id=' + this.state.insurance_id + '&resume=yes&base_url=' + this.state.params.base_url +
+      '&insurance_v2=' + this.state.insurance_v2;
     this.props.history.push({
       pathname: pathname,
       search: search,

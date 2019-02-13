@@ -14,6 +14,7 @@ import phone from 'assets/phone_dark_icn.png';
 import Api from 'utils/api';
 import { validateEmail, validateNumber, numberShouldStartWith } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
+import { getConfig } from 'utils/functions';
 
 class ContactDetails1 extends Component {
   constructor(props) {
@@ -92,7 +93,7 @@ class ContactDetails1 extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id=' + this.state.params.insurance_id + '&resume=' + this.state.params.resume + '&base_url=' + this.state.params.base_url
+      search: getConfig().searchParams + '&resume=' + this.state.params.resume
     });
   }
 

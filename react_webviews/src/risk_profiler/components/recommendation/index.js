@@ -11,8 +11,8 @@ import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import check from 'assets/check_mark.png';
 
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import Button from 'material-ui/Button';
+import TextField from 'material-ui/TextField';
 import Dialog, {
   DialogActions,
   DialogTitle,

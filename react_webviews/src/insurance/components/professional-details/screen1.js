@@ -22,7 +22,8 @@ import {
   occupationCategoryOptions, educationQualificationsOptionsIpru, qualification
 } from '../../constants';
 import { validatePan, validateNumber, formatAmount, validateEmpty } from 'utils/validators';
-// import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback } from 'utils/native_callback';
+import { getConfig } from 'utils/functions';
 
 class ProfessionalDetails1 extends Component {
   constructor(props) {
@@ -48,6 +49,7 @@ class ProfessionalDetails1 extends Component {
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
     }
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentWillMount() {
@@ -72,7 +74,7 @@ class ProfessionalDetails1 extends Component {
       });
       const { annual_income, education_qualification, occupation_category, occupation_detail, is_criminal, is_politically_exposed, pan_number } = res.pfwresponse.result.profile;
       const { image, provider, cover_plan } = res.pfwresponse.result.quote_desc;
-
+      console.log(annual_income);
       this.setState({
         show_loader: false,
         occupation_detail: occupation_detail || '',
@@ -156,7 +158,7 @@ class ProfessionalDetails1 extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id=' + this.state.params.insurance_id + '&resume=' + this.state.params.resume + '&base_url=' + this.state.params.base_url
+      search: getConfig().searchParams + '&resume=' + this.state.params.resume
     });
   }
 
@@ -240,22 +242,22 @@ class ProfessionalDetails1 extends Component {
             sector_ev = 'student';
           }
 
-          // let eventObj = {
-          //   "event_name": "professional_save",
-          //   "properties": {
-          //     "provider": this.state.provider,
-          //     "PAN": this.state.pan_number,
-          //     "education": this.state.education_qualification,
-          //     "occu": sector_ev,
-          //     "sector": this.state.occupation_category.toLowerCase(),
-          //     "income": this.state.annual_income,
-          //     "political": (this.state.is_politically_exposed) ? 1 : 0,
-          //     "criminal": (this.state.is_criminal) ? 1 : 0,
-          //     "from_edit": (this.state.edit) ? 1 : 0
-          //   }
-          // };
+          let eventObj = {
+            "event_name": "professional_save",
+            "properties": {
+              "provider": this.state.provider,
+              "PAN": this.state.pan_number || '',
+              "education": this.state.education_qualification || '',
+              "occu": sector_ev || '',
+              "sector": this.state.occupation_category.toLowerCase() || '',
+              "income": this.state.annual_income,
+              "political": (this.state.is_politically_exposed) ? 1 : 0,
+              "criminal": (this.state.is_criminal) ? 1 : 0,
+              "from_edit": (this.state.edit) ? 1 : 0
+            }
+          };
 
-          // nativeCallback({ events: eventObj });
+          nativeCallback({ events: eventObj });
 
           this.setState({ show_loader: false });
           if (this.props.edit) {
@@ -354,7 +356,7 @@ class ProfessionalDetails1 extends Component {
             class="Income"
             id="income"
             name="annual_income"
-            value={formatAmount(this.state.annual_income)}
+            value={formatAmount(this.state.annual_income || '')}
             onChange={this.handleChange('annual_income')}
             onKeyChange={this.handleKeyChange('annual_income')} />
         </div>

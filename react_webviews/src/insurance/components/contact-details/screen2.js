@@ -20,6 +20,7 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
+import { getConfig } from 'utils/functions';
 
 class ContactDetails2 extends Component {
   constructor(props) {
@@ -266,7 +267,7 @@ class ContactDetails2 extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id=' + this.state.params.insurance_id + '&resume=' + this.state.params.resume + '&base_url=' + this.state.params.base_url
+      search: getConfig().searchParams + '&resume=' + this.state.params.resume
     });
   }
 
@@ -481,9 +482,9 @@ class ContactDetails2 extends Component {
 
             nativeCallback({
               action: 'take_control', message: {
-                back_url: this.state.profile_link,
+                back_url: result.pfwresponse.result.insurance_app.profile_link + '&insurance_v2=' + this.state.params.insurance_v2,
                 show_top_bar: false,
-                top_bar_title: this.state.provider,
+                top_bar_title: result.pfwresponse.result.insurance_app.provider,
                 back_text: "We suggest you to complete the application process for fast issuance of your insurance.Do you still want to exit the application process"
               }
             });
