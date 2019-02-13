@@ -59,6 +59,7 @@ class Container extends Component {
     let pathname = this.props.history.location.pathname;
     let { params } = this.props.location;
     let { search } = this.props.location;
+    console.log(search);
     if (search.indexOf('goBack') < 0) {
       if (pathname.indexOf('result') >= 0) {
 
@@ -68,11 +69,12 @@ class Container extends Component {
     }
 
     if (params && params.disableBack) {
-      this.setState({
-        callbackType: 'exit',
-        openPopup: true,
-        popupText: 'Are you sure you want to exit ?'
-      })
+      // this.setState({
+      //   callbackType: 'exit',
+      //   openPopup: true,
+      //   popupText: 'Are you sure you want to exit ?'
+      // })
+      nativeCallback({ action: 'exit' });
       return;
     }
 
@@ -168,12 +170,11 @@ class Container extends Component {
   }
 
   handleTopIcon() {
-    // this.setState({
-    //   callbackType: 'exit',
-    //   openPopup: true,
-    //   popupText: 'Are you sure you want to exit ?'
-    // })
-    nativeCallback({ action: 'exit' });
+    this.setState({
+      callbackType: 'exit',
+      openPopup: true,
+      popupText: 'Are you sure you want to exit ?'
+    })
   }
 
   renderPageLoader = () => {

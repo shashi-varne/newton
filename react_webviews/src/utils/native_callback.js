@@ -4,14 +4,18 @@ import { getConfig } from './functions';
 export const nativeCallback = ({ action = null, message = null, events = null } = {}) => {
   let callbackData = {};
 
+  console.log("Nativecallback..........(action, message, events)");
   console.log(action);
   console.log(JSON.stringify(message));
   console.log(JSON.stringify(events))
 
-  let notInInsuranceV2 = ['take_control', 'take_control_reset'];
+
+  let project = getConfig().project;
   let insurance_v2 = getConfig().insurance_v2;
   console.log('insurance_v2 :' + insurance_v2);
-  if (!insurance_v2) {
+  if (!insurance_v2 && project === 'insurance') {
+
+    let notInInsuranceV2 = ['take_control', 'take_control_reset'];
     if (notInInsuranceV2.indexOf(action) !== -1) {
       return;
     }
