@@ -9,7 +9,8 @@ import NotFound from './common/components/NotFound';
 import Insurance from './insurance';
 import Referral from './referral';
 import Gold from './gold';
-import Mandate from './mandate';
+import Mandate from './mandate_address';
+import Mandate_OTM from './mandate_otm';
 import RiskProfiler from './risk_profiler';
 
 class App extends Component {
@@ -21,6 +22,7 @@ class App extends Component {
           <Route path="/referral" component={Referral} />
           <Route path="/gold" component={Gold} />
           <Route path="/mandate" component={Mandate} />
+          <Route path="/mandate-otm" component={Mandate_OTM} />
           <Route path="/risk" component={RiskProfiler} />
           <Route component={NotFound} />
         </Switch>
