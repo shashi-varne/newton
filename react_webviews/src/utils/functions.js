@@ -69,13 +69,24 @@ export const getConfig = () => {
     }
   }
 
-  let search = window.location.search;
 
+  let search = window.location.search;
 
   const isPrime = search.indexOf("mypro.fisdom.com") >= 0;
   const ismyway = search.indexOf("api.mywaywealth.com") >= 0;
   const insurance_v2 = search.indexOf("insurance_v2") >= 0;
   let productType = 'fisdom';
+  let returnConfig = config[productType];
+
+  let project = 'insurance';
+  if (myHistory.location.pathname.indexOf('risk') >= 0) {
+    project = 'risk';
+  } else if (myHistory.location.pathname.indexOf('mandate') >= 0) {
+    project = 'mandate';
+  } else if (myHistory.location.pathname.indexOf('gold') >= 0) {
+    project = 'gold';
+  }
+  returnConfig.project = project;
 
   if (ismyway) {
     productType = 'myway';
@@ -83,7 +94,7 @@ export const getConfig = () => {
     productType = 'Fisdom Prime';
   }
 
-  let returnConfig = config[productType];
+
   if (insurance_v2) {
     returnConfig.insurance_v2 = true;
   }
