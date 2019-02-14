@@ -138,9 +138,13 @@ class Upload extends Component {
     // })
     console.log('uploadDocs')
     var uploadurl = '/api/mandate/upload/image/' + this.state.params.key;
-    var data = {
-      res: file
-    }
+    // var data = {
+    //   res: file
+    // }
+
+    const data = new FormData()
+    data.append('res', file, file.doc_type)
+    console.log(file);
 
     try {
       const res = await Api.post(uploadurl, data);

@@ -74,7 +74,10 @@ class SendEmail extends Component {
       });
     } else {
       try {
-        const res = await Api.get('/api/mandate/mine/mail/mandate?email=' + this.state.ema);
+        this.setState({
+          show_loader: true
+        });
+        const res = await Api.get('/api/mandate/mine/mail/mandate?email=' + this.state.email);
         if (res.pfwresponse.result.message === 'success') {
           this.setState({
             show_loader: false
@@ -122,14 +125,14 @@ upload the signed copy of it:
         </div>
         <div style={{ marginTop: 30 }}>
           <div style={{ width: '80%', float: 'left' }}>
-            <div style={{ fontSize: 13, color: '#a2a2a2' }}>Email</div>
+            {!this.state.change_email && <div style={{ fontSize: 13, color: '#a2a2a2' }}>Email</div>}
             {this.state.change_email && <div className="InputField" style={{ marginTop: '-6px' }}>
               <Input
                 error={(this.state.email_error) ? true : false}
                 helperText={this.state.email_error}
                 type="email"
                 width="40"
-                // label="Email address *"
+                label="Email"
                 class="Email"
                 id="email"
                 name="email"

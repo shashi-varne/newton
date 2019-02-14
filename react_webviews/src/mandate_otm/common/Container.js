@@ -78,14 +78,12 @@ class Container extends Component {
       return;
     }
 
-    if (pathname.indexOf('question1') >= 0) {
-      this.navigate('intro');
-      return;
-    }
-
     switch (pathname) {
-      case "/risk":
-      case "/risk/intro":
+      case "/mandate-otm":
+      case "/mandate-otm/form-request/about":
+      case "/mandate-otm/form-request/success":
+      case "/mandate-otm/form-upload/upload":
+      case "/mandate-otm/form-upload/success":
         // this.setState({
         //   callbackType: 'exit',
         //   openPopup: true,

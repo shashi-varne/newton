@@ -4,6 +4,8 @@ import { getConfig } from './functions';
 export const nativeCallback = ({ action = null, message = null, events = null } = {}) => {
   let callbackData = {};
 
+
+
   console.log("Nativecallback..........(action, message, events)");
   console.log(action);
   console.log(JSON.stringify(message));
@@ -11,6 +13,12 @@ export const nativeCallback = ({ action = null, message = null, events = null } 
 
 
   let project = getConfig().project;
+
+  if (project === 'mandate-otm') {
+    // window.Android.performAction('close_webview');
+    return
+  }
+
   let insurance_v2 = getConfig().insurance_v2;
   console.log('insurance_v2 :' + insurance_v2);
   if (!insurance_v2 && project === 'insurance') {
@@ -41,9 +49,8 @@ export const nativeCallback = ({ action = null, message = null, events = null } 
 
   if (isMobile.Android()) {
     console.log("Android")
-    if (typeof window.Android !== 'undefined')
-      window.Android.performAction('open_picture_gallery', 'heloo');
-    // window.Android.performAction(JSON.stringify(callbackData));
+    if (typeof window.Android !== 'undefined') window.Android.callbackNative(JSON.stringify(callbackData));
+
   }
 
   if (isMobile.iOS()) {
