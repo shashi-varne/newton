@@ -31,13 +31,15 @@ import { nativeCallback } from 'utils/native_callback'
     return blob;
   }
   exports.upload_doc = function (data_json_str) {
+    console.log("from andorid............");
     var d
     if (typeof window.Android !== 'undefined') {
       d = JSON.parse(data_json_str);  // Handle Exception
     } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
       d = data_json_str;
     }
-
+    console.log(JSON.stringify(d));
+    console.log(JSON.stringify(listeners));
     for (var i = 0; i < listeners.length; i++) {
       var l = listeners[i];
       if (l.type === 'doc' && l.doc_type === d.doc_type) {
@@ -57,7 +59,7 @@ import { nativeCallback } from 'utils/native_callback'
       //   args: 'otm'
 
       // })
-      window.Android.performAction('take_picture', 'heloo');
+      window.Android.performAction('take_picture', listener.doc_type);
     } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
       let callbackData = {};
       callbackData.action = 'open_camera';
@@ -74,7 +76,7 @@ import { nativeCallback } from 'utils/native_callback'
       //     fileName: 'otm'
       //   }
       // })
-      window.Android.performAction('open_picture_gallery', 'heloo');
+      window.Android.performAction('open_picture_gallery', listener.doc_type);
       // window.Android.openGallery(listener.doc_type);
     } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
       let callbackData = {};
@@ -104,4 +106,4 @@ import { nativeCallback } from 'utils/native_callback'
     }
   }
 
-})(window.PlutusSdk ? window.PlutusSdk : (window.PlutusSdk = {}));
+})(window.PaymentCallback ? window.PaymentCallback : (window.PaymentCallback = {}));

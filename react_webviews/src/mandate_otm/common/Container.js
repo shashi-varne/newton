@@ -32,7 +32,7 @@ class Container extends Component {
 
   componentDidMount() {
     let that = this;
-    window.PlutusSdk.add_listener({
+    window.PaymentCallback.add_listener({
       type: 'back_pressed',
       go_back: function () {
         console.log("goback from plutussdk");
@@ -42,7 +42,7 @@ class Container extends Component {
   }
 
   componentWillUnmount() {
-    window.PlutusSdk.remove_listener({});
+    window.PaymentCallback.remove_listener({});
   }
 
   navigate = (pathname) => {

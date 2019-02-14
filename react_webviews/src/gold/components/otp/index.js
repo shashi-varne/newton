@@ -271,7 +271,7 @@ class Otp extends Component {
               className="resend-otp text-center"
               style={{
                 fontWeight: 500,
-                background: getConfig().primary
+                color: getConfig().primary
               }} color="primary" onClick={this.resendOtp}>Resend OTP</p>
             <div className="text-center">{this.state.messageOtp}</div>
           </div>
