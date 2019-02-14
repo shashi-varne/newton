@@ -86,6 +86,8 @@ export const getConfig = () => {
   let project = 'insurance';
   if (myHistory.location.pathname.indexOf('risk') >= 0) {
     project = 'risk';
+  } else if (myHistory.location.pathname.indexOf('mandate-otm') >= 0) {
+    project = 'mandate-otm';
   } else if (myHistory.location.pathname.indexOf('mandate') >= 0) {
     project = 'mandate';
   } else if (myHistory.location.pathname.indexOf('gold') >= 0) {
@@ -101,6 +103,10 @@ export const getConfig = () => {
   }
 
   if (isInsurance) {
+    returnConfig.searchParams = searchParams;
+  }
+  if (project === 'mandate-otm') {
+    searchParams = '?base_url=' + base_url;
     returnConfig.searchParams = searchParams;
   }
 

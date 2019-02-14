@@ -63,6 +63,7 @@ class About extends Component {
   }
 
   navigate = (pathname) => {
+    console.log(getConfig().searchParams);
     this.props.history.push({
       pathname: pathname,
       search: getConfig().searchParams
@@ -70,11 +71,11 @@ class About extends Component {
   }
 
   handleClick = async () => {
-    this.navigate('question1');
+    this.navigate('address');
   }
 
   showAnswers(index) {
-    if (this.state.questionIndex == index) {
+    if (this.state.questionIndex === index) {
       this.setState({
         questionIndex: -1
       })

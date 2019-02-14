@@ -1,21 +1,40 @@
 import React, { Component } from 'react';
+import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
+import TitleWithIcon from '../../../common/ui/TitleWithIcon';
+import contact from 'assets/address_details_icon.svg';
 
 import Container from '../../common/Container';
-import { getConfig } from 'utils/functions';
+import Input from '../../../common/ui/Input';
+import location from 'assets/location_dark_icn.png';
+import Api from 'utils/api';
+import { validateNumber, validateLength, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';
 
-class Address extends Component {
+
+class AddEditAddress extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false,
+      show_loader: true,
+      openDialogReset: false,
+      pincode: '',
+      pincode_error: '',
+      addressline1: '',
+      addressline1_error: '',
+      addressline2: '',
+      addressline2_error: '',
+      city: '',
+      state: '',
+      checked: true,
+      error: '',
+      apiError: '',
+      openDialog: false,
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
     }
   }
-
 
   componentWillMount() {
     if (this.state.ismyway) {
@@ -33,15 +52,167 @@ class Address extends Component {
     }
   }
 
+  async componentDidMount() {
+    try {
+      const res = await Api.get('/api/mandate/address');
+      if (res.pfwresponse.result) {
+        let address = res.pfwresponse.result[0];
+        this.setState({
+          show_loader: false,
+          pincode: address.pincode || '',
+          addressline1: address.addressline1 || '',
+          addressline2: address.addressline2 || '',
+          city: address.city || '',
+          state: address.state || '',
+        });
+      }
+      else {
+        this.setState({
+          show_loader: false,
+          openDialog: true, apiError: res.pfwresponse.result.error
+        });
+      }
+
+
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      })
+    }
+
+  }
+
+  handleChange = () => event => {
+    if (event.target.name === 'checked') {
+      this.setState({
+        [event.target.name]: event.target.checked
+      });
+    } else {
+      this.setState({
+        [event.target.name]: event.target.value,
+        [event.target.name + '_error']: ''
+      });
+    }
+  };
+
+  handlePincode = name => async (event) => {
+    const pincode = event.target.value;
+
+    this.setState({
+      [name]: pincode,
+      [name + '_error']: ''
+    });
+
+    if (pincode.length === 6) {
+      try {
+        const res = await Api.get('/api/pincode/' + pincode);
+
+        if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
+          if (name === 'pincode') {
+            this.setState({
+              city: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
+              state: res.pfwresponse.result[0].state_name
+            });
+          } else {
+            this.setState({
+              ccity: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
+              cstate: res.pfwresponse.result[0].state_name
+            });
+          }
+        } else {
+          this.setState({
+            city: '',
+            state: '',
+            ccity: '',
+            cstate: ''
+          });
+        }
+      } catch (err) {
+        this.setState({
+          show_loader: false
+        })
+      }
+    }
+  }
+
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams
+      search: 'base_url=' + this.state.params.base_url + '&key=' + this.state.params.key + '&pc_key=' + this.state.params.pc_key
     });
   }
 
   handleClick = async () => {
-    this.navigate('question1');
+    if (!validateEmpty(this.state.addressline1)) {
+      this.setState({
+        addressline1_error: 'Enter your address'
+      });
+    } else if (!validateConsecutiveChar(this.state.addressline1)) {
+      this.setState({
+        addressline1_error: 'Address can not contain more than 3 same consecutive characters'
+      });
+    } else if (!validateLength(this.state.addressline1)) {
+      this.setState({
+        addressline1_error: 'Maximum length of address is 30'
+      });
+    } else if (!validateMinChar(this.state.addressline1)) {
+      this.setState({
+        addressline1_error: 'Address should contain minimum two characters'
+      });
+    } else if (!validateEmpty(this.state.addressline2)) {
+      this.setState({
+        addressline2_error: 'Enter your street and locality'
+      });
+    } else if (!validateConsecutiveChar(this.state.addressline2)) {
+      this.setState({
+        addressline2_error: 'Address can not contain more than 3 same consecutive characters'
+      });
+    } else if (!validateLength(this.state.addressline2)) {
+      this.setState({
+        addressline2_error: 'Maximum length of address is 30'
+      });
+    } else if (this.state.pincode.length !== 6 || !validateNumber(this.state.pincode)) {
+      this.setState({
+        pincode_error: 'Please enter valid pincode'
+      });
+    } else {
+      this.setState({ show_loader: true });
+      let addressline = {
+        "pincode": this.state.pincode,
+        "country": "india",
+        'addressline1': this.state.addressline1,
+        'addressline2': this.state.addressline2,
+
+      };
+
+      let res;
+      if (this.props.edit) {
+        addressline.address_id = this.state.params.address_id;
+        res = await Api.put('/api/mandate/campaign/address/' + this.state.params.key, addressline);
+      } else {
+        res = await Api.post('/api/mandate/campaign/address/' + this.state.params.key, addressline);
+      }
+
+      if (res.pfwresponse.status_code === 200) {
+
+
+        this.setState({ show_loader: false });
+        this.navigate('/mandate/select-address');
+      } else {
+        this.setState({
+          show_loader: false,
+          openDialog: true, apiError: res.pfwresponse.result.error
+        });
+      }
+    }
+  }
+
+  bannerText = () => {
+    return (
+      <span>
+        Communication address for <b>OTM Form</b>
+      </span>
+    );
   }
 
   render() {
@@ -49,15 +220,76 @@ class Address extends Component {
       <Container
         showLoader={this.state.show_loader}
         title="Bank Mandate(OTM)"
+        banner={true}
+        bannerText={this.bannerText()}
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="Save and Continue"
         type={this.state.type}
       >
-      </Container>
+        {/* Permanent Address Block */}
+        <FormControl fullWidth>
+          <TitleWithIcon width="16" icon={contact} title="Address Details" />
+          <div className="InputField">
+            <Input
+              error={(this.state.addressline1_error) ? true : false}
+              helperText={this.state.addressline1_error}
+              type="text"
+              id="addressline1"
+              label="Address line 1 *"
+              name="addressline1"
+              placeholder="ex: 16/1 Queens paradise"
+              value={this.state.addressline1}
+              onChange={this.handleChange()} />
+          </div>
+          <div className="InputField">
+            <Input
+              error={(this.state.addressline2_error) ? true : false}
+              helperText={this.state.addressline2_error}
+              type="text"
+              id="addressline2"
+              label="Address line 2 *"
+              name="addressline2"
+              placeholder="ex: Curve Road, Shivaji Nagar"
+              value={this.state.addressline2}
+              onChange={this.handleChange()} />
+          </div>
+          <div className="InputField">
+            <Input
+              error={(this.state.pincode_error) ? true : false}
+              helperText={this.state.pincode_error}
+              type="number"
+              icon={location}
+              width="40"
+              label="Pincode *"
+              id="pincode"
+              name="pincode"
+              value={this.state.pincode}
+              onChange={this.handlePincode('pincode')} />
+          </div>
+          <div className="InputField">
+            <Input
+              disabled={true}
+              id="city"
+              label="City *"
+              value={this.state.city}
+              name="city"
+              onChange={this.handleChange()} />
+          </div>
+          <div className="InputField">
+            <Input
+              disabled={true}
+              id="state"
+              label="State *"
+              value={this.state.state}
+              name="state"
+              onChange={this.handleChange()} />
+          </div>
+        </FormControl>
 
+      </Container >
     );
   }
 }
 
-export default Address;
+export default AddEditAddress;
