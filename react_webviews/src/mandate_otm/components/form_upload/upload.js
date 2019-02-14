@@ -15,11 +15,12 @@ import Dialog, {
 import Button from 'material-ui/Button';
 // import { nativeCallback } from 'utils/native_callback';
 import Api from 'utils/api';
+import { getConfig } from 'utils/functions';
 class Upload extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      show_loader: false,
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
@@ -46,42 +47,10 @@ class Upload extends Component {
     }
   }
 
-  async componentDidMount() {
-    try {
-
-      // let score = JSON.parse(window.localStorage.getItem('score'));
-      let score;
-      const res = await Api.get('/api/risk/profile/user/recommendation');
-      if (res.pfwresponse.Upload.score) {
-        score = res.pfwresponse.Upload.score;
-        this.setState({
-          score: score,
-          show_loader: false
-        });
-      } else {
-        this.navigate('intro');
-      }
-    } catch (err) {
-      this.setState({
-        show_loader: false
-      });
-      toast('Something went wrong');
-    }
-
-    // window.PaymentCallback.add_listener({
-    //   type: 'upload_doc',
-    //   upload: function (file) {
-    //     console.log("file from native");
-    //     console.log(file)
-    //     // that.historyGoBack();
-    //   }
-    // });
-  }
-
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?base_url=' + this.state.params.base_url
+      search: getConfig().searchParams
     });
   }
 
@@ -126,7 +95,6 @@ class Upload extends Component {
       upload: function upload(file) {
         console.log("file uploaded");
         console.log(file.type);
-        that.mergeDocs(file);
         try {
           that.setState({
             docType: this.doc_type,
@@ -174,11 +142,22 @@ class Upload extends Component {
       res: file
     }
 
-    // const res = await Api.post(uploadurl, data);
-
-    // if (res.pfwresponse.result.message === 'success') {
-
-    // }
+    try {
+      const res = await Api.post(uploadurl, data);
+      this.setState({
+        show_loader: false
+      });
+      if (res.pfwresponse.result.message === 'success') {
+        this.navigate('upload-success');
+      } else {
+        toast(res.pfwresponse.result.error || 'Something went wrong');
+      }
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
+    }
 
   }
 
@@ -309,7 +288,7 @@ class Upload extends Component {
             <div style={{ color: '#4a4a4a', fontSize: 14, fontWeight: 500 }}>
               Didn’t recieve my OTM form?
           </div>
-            <div style={{ color: '#28b24d', fontSize: 14, fontWeight: 500, marginTop: 10 }}>
+            <div onClick={() => this.navigate('send-email')} style={{ color: '#28b24d', fontSize: 14, fontWeight: 500, marginTop: 10 }}>
               Send me again.
           </div>
           </div>

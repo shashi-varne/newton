@@ -4,8 +4,8 @@ import qs from 'qs';
 import Container from '../../common/Container';
 import { getConfig } from 'utils/functions';
 import expand from 'assets/expand_icn.png';
-import icon from 'assets/claim_settle_icn.png';
 import shrink from 'assets/shrink_icn.png';
+import icon from 'assets/mandate_pending_icon.svg';
 
 const aboutQuestions = [
   {

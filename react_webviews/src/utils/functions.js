@@ -106,7 +106,8 @@ export const getConfig = () => {
     returnConfig.searchParams = searchParams;
   }
   if (project === 'mandate-otm') {
-    searchParams = '?base_url=' + base_url;
+    let { key } = qs.parse(myHistory.location.search.slice(1))
+    searchParams = '?base_url=' + base_url + '&key=' + key;
     returnConfig.searchParams = searchParams;
   }
 

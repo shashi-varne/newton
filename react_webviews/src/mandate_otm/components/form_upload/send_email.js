@@ -3,6 +3,10 @@ import qs from 'qs';
 
 import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
+import icon from 'assets/mandate_pending_icon.svg';
+import { getConfig } from 'utils/functions';
+import Input from '../../../common/ui/Input';
+import { validateEmail } from 'utils/validators';
 // import { nativeCallback } from 'utils/native_callback';
 import Api from 'utils/api';
 class SendEmail extends Component {
@@ -10,6 +14,9 @@ class SendEmail extends Component {
     super(props);
     this.state = {
       show_loader: true,
+      email: "",
+      email_error: '',
+      change_email: false,
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
@@ -34,38 +41,56 @@ class SendEmail extends Component {
   }
 
   async componentDidMount() {
-    try {
+    this.setState({
+      show_loader: false
+    });
+  }
 
-      // let score = JSON.parse(window.localStorage.getItem('score'));
-      let score;
-      const res = await Api.get('/api/risk/profile/user/recommendation');
-      if (res.pfwresponse.Upload.score) {
-        score = res.pfwresponse.Upload.score;
-        this.setState({
-          score: score,
-          show_loader: false
-        });
-      } else {
-        this.navigate('intro');
-      }
-    } catch (err) {
-      this.setState({
-        show_loader: false
-      });
-      toast('Something went wrong');
-    }
+  handleChange = (field) => (event) => {
+    this.setState({
+      [event.target.name]: event.target.value,
+      [event.target.name + '_error']: ''
+    });
+
   }
 
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?base_url=' + this.state.params.base_url
+      search: getConfig().searchParams
     });
   }
 
-  handleClick = async () => {
+  changeEmail() {
+    this.setState({
+      change_email: true
+    })
+  }
 
-    this.navigate('recommendation');
+  handleClick = async () => {
+    if (!validateEmail(this.state.email)) {
+      this.setState({
+        email_error: 'Please enter valid email'
+      });
+    } else {
+      try {
+        const res = await Api.get('/api/mandate/mine/mail/mandate?email=' + this.state.ema);
+        if (res.pfwresponse.result.message === 'success') {
+          this.setState({
+            show_loader: false
+          });
+          this.navigate('email-success');
+        } else {
+          toast(res.pfwresponse.result.error || 'Something went wrong');
+        }
+      } catch (err) {
+        this.setState({
+          show_loader: false
+        });
+        toast('Something went wrong');
+      }
+    }
+
   }
 
   render() {
@@ -78,6 +103,50 @@ class SendEmail extends Component {
         buttonTitle="Continue"
         type={this.state.type}
       >
+        <div style={{ textAlign: 'center' }}>
+          <img style={{ width: '25%' }} src={icon} alt="OTM" />
+        </div>
+        <div style={{
+          color: getConfig().default,
+          fontSize: 16, textAlign: 'center', fontWeight: 500,
+          margin: '20px 0 10px 0'
+        }}>
+          Hey Uttam,
+        </div>
+        <div style={{
+          color: getConfig().default, margin: '10px 0px 10px 19px',
+          fontSize: 16, textAlign: 'center'
+        }}>
+          We will email you a Bank Mandate(OTM) form,
+upload the signed copy of it:
+        </div>
+        <div style={{ marginTop: 30 }}>
+          <div style={{ width: '80%', float: 'left' }}>
+            <div style={{ fontSize: 13, color: '#a2a2a2' }}>Email</div>
+            {this.state.change_email && <div className="InputField" style={{ marginTop: '-6px' }}>
+              <Input
+                error={(this.state.email_error) ? true : false}
+                helperText={this.state.email_error}
+                type="email"
+                width="40"
+                // label="Email address *"
+                class="Email"
+                id="email"
+                name="email"
+                value={this.state.email}
+                onChange={this.handleChange('email')} />
+            </div>}
+            {!this.state.change_email && <div style={{ fontSize: 16, color: '#4a4a4a', marginTop: 8 }}>
+              uttampaswan@live.com
+            </div>}
+          </div>
+          {!this.state.change_email && <div style={{
+            fontSize: 13, color: '#3792fc', position: 'relative',
+            marginTop: 10, fontWeight: 500
+          }} onClick={() => this.changeEmail()}>
+            Change
+          </div>}
+        </div>
       </Container>
     );
   }

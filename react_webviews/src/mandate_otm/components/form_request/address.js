@@ -3,6 +3,8 @@ import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import contact from 'assets/address_details_icon.svg';
+import toast from '../../../common/ui/Toast';
+import { getConfig } from 'utils/functions';
 
 import Container from '../../common/Container';
 import Input from '../../../common/ui/Input';
@@ -29,6 +31,7 @@ class AddEditAddress extends Component {
       error: '',
       apiError: '',
       openDialog: false,
+      address_present: false,
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
@@ -54,7 +57,7 @@ class AddEditAddress extends Component {
 
   async componentDidMount() {
     try {
-      const res = await Api.get('/api/mandate/address');
+      const res = await Api.get('/api/mandate/campaign/address/' + this.state.params.key);
       if (res.pfwresponse.result) {
         let address = res.pfwresponse.result[0];
         this.setState({
@@ -64,6 +67,8 @@ class AddEditAddress extends Component {
           addressline2: address.addressline2 || '',
           city: address.city || '',
           state: address.state || '',
+          address_id: address.id || '',
+          address_present: true
         });
       }
       else {
@@ -78,6 +83,7 @@ class AddEditAddress extends Component {
       this.setState({
         show_loader: false
       })
+      toast("Something went wrong");
     }
 
   }
@@ -131,6 +137,7 @@ class AddEditAddress extends Component {
         this.setState({
           show_loader: false
         })
+        toast("Something went wrong");
       }
     }
   }
@@ -138,7 +145,7 @@ class AddEditAddress extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: 'base_url=' + this.state.params.base_url + '&key=' + this.state.params.key + '&pc_key=' + this.state.params.pc_key
+      search: getConfig().searchParams
     });
   }
 
@@ -186,8 +193,8 @@ class AddEditAddress extends Component {
       };
 
       let res;
-      if (this.props.edit) {
-        addressline.address_id = this.state.params.address_id;
+      if (this.state.address_present) {
+        addressline.address_id = this.state.address_id;
         res = await Api.put('/api/mandate/campaign/address/' + this.state.params.key, addressline);
       } else {
         res = await Api.post('/api/mandate/campaign/address/' + this.state.params.key, addressline);
@@ -195,14 +202,20 @@ class AddEditAddress extends Component {
 
       if (res.pfwresponse.status_code === 200) {
 
-
+        let res2 = await Api.get('/api/mandate/campaign/address/confirm/' + this.state.params.key +
+          '?address_id=' + addressline.address_id);
         this.setState({ show_loader: false });
-        this.navigate('/mandate/select-address');
+        if (res2.pfwresponse.status_code === 200) {
+
+          this.navigate('success');
+        } else {
+          toast(res2.pfwresponse.result.error || "Something went wrong");
+        }
       } else {
         this.setState({
-          show_loader: false,
-          openDialog: true, apiError: res.pfwresponse.result.error
+          show_loader: false
         });
+        toast(res.pfwresponse.result.error || "Something went wrong");
       }
     }
   }

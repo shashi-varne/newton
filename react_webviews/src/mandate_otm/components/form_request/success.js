@@ -116,7 +116,7 @@ class Success extends Component {
             size="large"
             color="secondary"
             onClick={this.handleClose}
-            autoFocus>Retry Payment
+            autoFocus>Continue to SIPs date
         </Button>
         </DialogActions>
       </Dialog>

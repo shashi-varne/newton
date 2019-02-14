@@ -1,23 +1,34 @@
 import React, { Component } from 'react';
-import qs from 'qs';
-
-import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
-// import { nativeCallback } from 'utils/native_callback';
-import Api from 'utils/api';
+import qs from 'qs';
+import Button from 'material-ui/Button';
+import thumb from 'assets/thumb.svg';
+import eta_icon from 'assets/eta_icon.svg';
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogContentText
+} from 'material-ui/Dialog';
+import { getConfig } from 'utils/functions';
+
 class UploadSuccess extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      show_loader: false,
+      openDialog: false,
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: ''
+      type: '',
     }
   }
 
   componentWillMount() {
+    let { params } = this.props.location;
+    this.setState({
+      disableBack: params ? params.disableBack : false
+    })
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -33,39 +44,50 @@ class UploadSuccess extends Component {
     }
   }
 
-  async componentDidMount() {
-    try {
 
-      // let score = JSON.parse(window.localStorage.getItem('score'));
-      let score;
-      const res = await Api.get('/api/risk/profile/user/recommendation');
-      if (res.pfwresponse.Upload.score) {
-        score = res.pfwresponse.Upload.score;
-        this.setState({
-          score: score,
-          show_loader: false
-        });
-      } else {
-        this.navigate('intro');
-      }
-    } catch (err) {
-      this.setState({
-        show_loader: false
-      });
-      toast('Something went wrong');
-    }
+  componentDidMount() {
+
+  }
+
+  handleClick = () => {
+    // nativeCallback({ action: 'native_back' });
+    let url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate&message=success&code=200&destination=';
+    window.location.replace(url);
   }
 
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?base_url=' + this.state.params.base_url
+      search: getConfig().searchParams
     });
   }
 
-  handleClick = async () => {
+  handleClose() {
+    this.setState({
+      openDialog: false
+    })
+  }
 
-    this.navigate('recommendation');
+  renderResponseDialog = () => {
+    return (
+      <Dialog
+        open={this.state.openDialog}
+        onClose={this.handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {this.state.apiError}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClose} color="primary" autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
   }
 
   render() {
@@ -74,13 +96,50 @@ class UploadSuccess extends Component {
         showLoader={this.state.show_loader}
         title="OTM"
         handleClick={this.handleClick}
-        edit={this.props.edit}
+        fullWidthButton={true}
+        onlyButton={true}
+        disableBack={true}
         buttonTitle="Done"
-        type={this.state.type}
-      >
-      </Container>
+        type={this.state.type} >
+        <div>
+          <div className="success-img">
+            <img alt="Mandate" src={thumb} width="130" />
+          </div>
+          <div className="success-great">
+            Great!
+          </div>
+          <div className="success-text-info">
+            Bank Mandate(OTM) form has been uploaded
+  successfully.
+          </div>
+          <div className="success-bottom-timer">
+            <div>
+              <img alt="Mandate" className="success-img-timer" src={eta_icon} width="20" />
+              Usually takes ~20 days to get approved
+            </div>
+          </div>
+
+          <div className="success-bottom">
+            <div className="success-bottom1">
+              For any query, reach us at
+            </div>
+            <div className="success-bottom2">
+              <div className="success-bottom2a">
+                +080-48-039999
+              </div>
+              <div className="success-bottom2b">
+                |
+              </div>
+              <div className="success-bottom2a">
+                ask@fisdom.com
+              </div>
+            </div>
+          </div>
+        </div>
+      </Container >
     );
   }
 }
+
 
 export default UploadSuccess;
