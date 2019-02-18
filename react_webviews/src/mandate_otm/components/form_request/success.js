@@ -49,7 +49,7 @@ class Success extends Component {
   }
 
   handleClick = async () => {
-    nativeCallback({ action: 'show_sip' });
+    nativeCallback({ action: 'exit' });
   }
 
   handleClose() {
@@ -85,8 +85,8 @@ class Success extends Component {
               <div className="success-text-info">
                 You will recieve a Bank Mandate form on your
               registered email ({this.state.params.email})
-                Please sign (as per bank records) on OTM form
-                and upload on the app.
+                    Please sign (as per bank records) on OTM form
+                    and upload on the app.
               </div>
               <div className="success-bottom-timer">
               </div>
@@ -119,7 +119,7 @@ class Success extends Component {
             color="secondary"
             onClick={this.handleClick}
             style={{ textTransform: 'capitalize' }}
-            autoFocus>Continue to SIPs date
+            autoFocus>Continue
         </Button>
 
         </DialogActions>

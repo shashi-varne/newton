@@ -114,8 +114,9 @@ export const getConfig = () => {
       + '&email=' + email + '&campaign_version=' + campaign_version;
 
     returnConfig.campaign_version = campaign_version;
+    // returnConfig.campaign_version = 1;
+    returnConfig.searchParams = searchParams;
   }
-
   returnConfig.iOS = isMobile.iOS();
   returnConfig.Android = isMobile.Android();
 

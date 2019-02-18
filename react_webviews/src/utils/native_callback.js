@@ -15,24 +15,41 @@ export const nativeCallback = ({ action = null, message = null, events = null } 
   let project = getConfig().project;
 
   if (project === 'mandate-otm') {
+
+
     let campaign_version = getConfig().campaign_version;
-    if (isMobile.Android() && campaign_version >= 1) {
-      if (typeof window.Android !== 'undefined') {
-        if (action === 'show_toast') {
-          window.Android.performAction('show_toast', message.data.message);
+
+    if (campaign_version >= 1) {
+      if (isMobile.Android()) {
+        if (typeof window.Android !== 'undefined') {
+          if (action === 'show_toast') {
+            window.Android.performAction('show_toast', message.message);
+            return;
+          }
+
+          if (action === 'open_in_browser') {
+            window.Android.performAction('open_in_browser', message.url);
+            return;
+          }
+
+          window.Android.performAction('close_webview', null);
           return;
         }
-        window.Android.performAction('close_webview', null);
+      }
+
+      if (isMobile.iOS()) {
+        if (typeof window.webkit !== 'undefined') {
+          window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+        }
         return;
       }
+    } else {
+      let message = 'back', status_code = 200;
+      let url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate-otm&message=' +
+        message + '&code=' + status_code + '&destination=';
+      window.location.replace(url);
     }
 
-    if (isMobile.iOS() && campaign_version >= 1) {
-      if (typeof window.webkit !== 'undefined') {
-        window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
-      }
-      return;
-    }
     return;
   }
 

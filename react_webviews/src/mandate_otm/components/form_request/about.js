@@ -63,7 +63,6 @@ class About extends Component {
   }
 
   navigate = (pathname) => {
-    console.log(getConfig().searchParams);
     this.props.history.push({
       pathname: pathname,
       search: getConfig().searchParams

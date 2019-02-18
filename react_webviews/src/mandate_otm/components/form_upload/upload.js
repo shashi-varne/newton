@@ -33,21 +33,25 @@ class Upload extends Component {
       openDialogOldClient: false
     }
     this.handleContinue = this.handleContinue.bind(this);
+    this.native_call_handler = this.native_call_handler.bind(this);
     this.handleClose = this.handleClose.bind(this);
   }
 
   componentWillMount() {
     if (this.state.ismyway) {
       this.setState({
-        type: 'myway'
+        type: 'myway',
+        link: 'https://go.onelink.me/6fHB/b750d9ac'
       });
     } else if (this.state.isPrime) {
       this.setState({
-        type: 'Fisdom Prime'
+        type: 'Fisdom Prime',
+        link: 'https://go.onelink.me/OFQN/FisdomPrime'
       });
     } else {
       this.setState({
-        type: 'fisdom'
+        type: 'fisdom',
+        link: 'http://m.onelink.me/32660e84'
       });
     }
 
@@ -67,7 +71,7 @@ class Upload extends Component {
 
   handleClick = async () => {
 
-    this.navigate('recommendation');
+    this.uploadDocs(this.state.imageBaseFile);
   }
 
   getBase64(file, callback) {
@@ -91,7 +95,17 @@ class Upload extends Component {
     this.getBase64(file, function (img) {
       document.getElementById('single').setAttribute('src', img);
     });
-    this.uploadDocs(file);
+
+    setTimeout(
+      function () {
+        this.setState({
+          show_loader: false
+        })
+      }
+        .bind(this),
+      1000
+    );
+
   };
 
   native_call_handler(method_name, doc_type, doc_name, doc_side) {
@@ -133,6 +147,7 @@ class Upload extends Component {
 
     this.setState({
       openDialog: true,
+      method_name: method_name,
       doc_type: doc_type,
       doc_name: doc_name,
       doc_side: doc_side
@@ -154,12 +169,14 @@ class Upload extends Component {
 
     try {
       const res = await Api.post(uploadurl, data);
+      console.log(JSON.stringify(res.pfwresponse.result));
       this.setState({
         show_loader: false
       });
       if (res.pfwresponse.result.message === 'success') {
         this.navigate('upload-success');
       } else {
+
         toast(res.pfwresponse.result.error || 'Something went wrong');
       }
     } catch (err) {
@@ -186,10 +203,30 @@ class Upload extends Component {
     //   openDialog: false
     // });
     if (this.state.openDialogOldClient) {
-      nativeCallback({ action: 'exit' });
+      if (getConfig().Android) {
+        nativeCallback({
+          action: 'open_in_browser', message: {
+            url: this.state.link
+          }
+        });
+      } else {
+        nativeCallback({ action: 'exit' });
+      }
+
       return;
     }
-    this.native_call_handler(this.state.method_name, this.state.doc_type, this.state.doc_name, this.state.doc_side);
+    this.setState({
+      openDialog: false,
+      show_loader: true
+    })
+    setTimeout(
+      function () {
+        this.native_call_handler(this.state.method_name, this.state.doc_type, this.state.doc_name, this.state.doc_side);
+      }
+        .bind(this),
+      1000
+    );
+    // this.native_call_handler(this.state.method_name, this.state.doc_type, this.state.doc_name, this.state.doc_side);
   }
 
   renderDialog() {
@@ -296,7 +333,7 @@ class Upload extends Component {
           handleClick={this.handleClick}
           edit={this.props.edit}
           type={this.state.type}
-          noFooter={true}
+          buttonTitle="Save and Continue"
         >
           {!this.state.fileUploaded && <div style={{
             border: '1px dashed #e1e1e1', padding: '10px 0px 0px 0px',
@@ -322,7 +359,8 @@ class Upload extends Component {
             textAlign: 'center'
           }}>
             <div>
-              <img style={{ width: 300, height: 300 }} src="" id="single" alt="Aa" />
+              {this.state.imageBaseFile &&
+                <img style={{ width: 300, height: 300 }} src="" id="single" alt="OTM" />}
             </div>
             <div style={{ margin: '20px 0 20px 0' }}>
               <div onClick={() => this.startUpload('open_camera', 'otm', 'otm.jpg')} style={{
@@ -338,13 +376,13 @@ class Upload extends Component {
               </div>
             </div>
           </div>}
-          <div style={{ margin: '20px 0 20px 0', textAlign: 'center' }}>
-            <div style={{ borderBottom: '1px solid #e1e1e1' }}></div>
+          <div style={{ margin: '20px 0 20px 0', textAlign: 'center', display: 'flex' }}>
+            <div style={{ borderBottom: '1px solid #e1e1e1', width: '45%' }}></div>
             <span style={{
-              position: 'absolute', backgroundColor: 'white', width: '10%',
-              marginTop: '-10px', right: '45%'
+              backgroundColor: 'white', width: '12%',
+              top: 6, position: 'relative'
             }}>OR</span>
-            <div></div>
+            <div style={{ borderBottom: '1px solid #e1e1e1', width: '45%' }}></div>
           </div>
           <div style={{
             border: '1px dashed #e1e1e1', padding: '30px 0px 30px 0px',
