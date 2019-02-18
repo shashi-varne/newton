@@ -10,6 +10,7 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 class UploadSuccess extends Component {
   constructor(props) {
@@ -51,8 +52,10 @@ class UploadSuccess extends Component {
 
   handleClick = () => {
     // nativeCallback({ action: 'native_back' });
-    let url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate&message=success&code=200&destination=';
-    window.location.replace(url);
+    // let url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate&message=success&code=200&destination=';
+    // window.location.replace(url);
+
+    nativeCallback({ action: 'exit' });
 
   }
 

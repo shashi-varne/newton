@@ -10,23 +10,23 @@ import icon from 'assets/mandate_pending_icon.svg';
 const aboutQuestions = [
   {
     id: 1,
-    question: 'What is OTM',
-    answer: 'A Bank Mandate(OTM) is your authorization given to a third party (e.g BSE) to debit a specific sum from bank account at a regular interval.'
+    question: 'What is bank mandate(OTM)?',
+    answer: 'A Bank Mandate is your authorization to a third party (e.g BSE) to debit a specific sum from bank account at a regular interval.'
   },
   {
     id: 2,
-    question: 'What is OTM',
+    question: 'How to create Bank mandate(OTM)?',
     answer: 'A Bank Mandate(OTM) is your authorization given to a third party (e.g BSE) to debit a specific sum from bank account at a regular interval.'
   },
   {
     id: 3,
-    question: 'What is OTM',
-    answer: 'A Bank Mandate(OTM) is your authorization given to a third party (e.g BSE) to debit a specific sum from bank account at a regular interval.'
+    question: 'What is the default OTM amount?',
+    answer: 'It will be Rs. 50,000. But only the amount limited the your SIP value per month will be auto debited.'
   },
   {
     id: 4,
-    question: 'What is OTM',
-    answer: 'A Bank Mandate(OTM) is your authorization given to a third party (e.g BSE) to debit a specific sum from bank account at a regular interval.'
+    question: 'Why Rs. 50000 and not the exact SIP amount?',
+    answer: 'To make your future SIPs hassle-free, same OTM will be used.'
   }
 ]
 
@@ -89,17 +89,26 @@ class About extends Component {
   renderQuestions(props, index) {
     return (
       <div style={{ marginTop: 30 }} key={index}>
-        <div style={{ display: '-webkit-box' }}>
-          <img onClick={() => this.showAnswers(index)}
+        <div style={{ display: '-webkit-box' }} onClick={() => this.showAnswers(index)}>
+          <img
             src={this.state.questionIndex === index ? shrink : expand} style={{ verticalAlign: 'bottom' }} width={14} alt="OTM" />
           <div style={{
             color: '#878787', margin: '0 0 0 7px',
             fontSize: 16, fontWeight: 'bold'
           }}>{props.question}</div>
         </div>
-        {this.state.questionIndex === index &&
+        {this.state.questionIndex === index && props.id !== 2 &&
           <div style={{ fontSize: 15, color: '#878787', margin: '10px 0  0 21px' }}>
             {props.answer}
+          </div>}
+        {this.state.questionIndex === index && props.id === 2 &&
+          <div style={{
+            fontSize: 15, color: '#878787',
+            margin: '10px 0  0 21px', display: 'grid'
+          }}>
+            <span style={{ marginBottom: 8 }}><span style={{ fontWeight: 700 }}>1:</span> Share your <span style={{ fontWeight: 700 }}>bank</span> and <span style={{ fontWeight: 700 }}>address</span> details.</span>
+            <span style={{ marginBottom: 8 }}><span style={{ fontWeight: 700 }}>2:</span> Check your email for the Bank Mandate form in few hours.</span>
+            <span style={{ marginBottom: 8 }}><span style={{ fontWeight: 700 }}>3:</span> Download form, put your signature and upload it from <span style={{ fontWeight: 700 }}>Profile</span> section on the app.</span>
           </div>}
       </div>
 
@@ -117,7 +126,7 @@ class About extends Component {
         type={this.state.type}
       >
         <div style={{ textAlign: 'center' }}>
-          <img src={icon} alt="OTM" />
+          <img width={100} src={icon} alt="OTM" />
         </div>
         <div style={{
           color: getConfig().default, margin: '10px 0px 10px 19px',

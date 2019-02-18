@@ -9,6 +9,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import thumb from 'assets/thumb.svg';
+import { nativeCallback } from 'utils/native_callback';
 
 class Success extends Component {
   constructor(props) {
@@ -48,7 +49,7 @@ class Success extends Component {
   }
 
   handleClick = async () => {
-    this.navigate('question1');
+    nativeCallback({ action: 'show_sip' });
   }
 
   handleClose() {
@@ -64,7 +65,7 @@ class Success extends Component {
         fullWidth={true}
         id="succes"
         open={this.state.openDialog}
-        onClose={this.handleClose}
+        onClose={this.handleClick}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -83,9 +84,9 @@ class Success extends Component {
               </div>
               <div className="success-text-info">
                 You will recieve a Bank Mandate form on your
-              registered email (uttampaswan@live.com)
-              Please sign (as per bank records) on OTM form
-              and upload on the app.
+              registered email ({this.state.params.email})
+                Please sign (as per bank records) on OTM form
+                and upload on the app.
               </div>
               <div className="success-bottom-timer">
               </div>
@@ -108,6 +109,7 @@ class Success extends Component {
               </div>
             </div>
           </div>
+
         </DialogContent>
         <DialogActions>
           <Button
@@ -115,11 +117,14 @@ class Success extends Component {
             variant="raised"
             size="large"
             color="secondary"
-            onClick={this.handleClose}
+            onClick={this.handleClick}
+            style={{ textTransform: 'capitalize' }}
             autoFocus>Continue to SIPs date
         </Button>
+
         </DialogActions>
       </Dialog>
+
     )
   }
 

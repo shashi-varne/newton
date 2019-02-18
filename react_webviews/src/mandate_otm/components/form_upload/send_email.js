@@ -44,6 +44,11 @@ class SendEmail extends Component {
     this.setState({
       show_loader: false
     });
+
+    this.setState({
+      email: this.state.params.email,
+      updatedEmail: this.state.params.email
+    })
   }
 
   handleChange = (field) => (event) => {
@@ -57,7 +62,8 @@ class SendEmail extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams
+      search: '?base_url=' + this.state.params.base_url + '&key=' + this.state.params.key +
+        '&name=' + this.state.params.name + '&email=' + this.state.updatedEmail
     });
   }
 
@@ -77,6 +83,9 @@ class SendEmail extends Component {
         this.setState({
           show_loader: true
         });
+        this.setState({
+          updatedEmail: this.state.email
+        })
         const res = await Api.get('/api/mandate/mine/mail/mandate?email=' + this.state.email);
         if (res.pfwresponse.result.message === 'success') {
           this.setState({
@@ -84,6 +93,9 @@ class SendEmail extends Component {
           });
           this.navigate('email-success');
         } else {
+          this.setState({
+            updatedEmail: this.state.params.email
+          })
           toast(res.pfwresponse.result.error || 'Something went wrong');
         }
       } catch (err) {
@@ -140,7 +152,7 @@ upload the signed copy of it:
                 onChange={this.handleChange('email')} />
             </div>}
             {!this.state.change_email && <div style={{ fontSize: 16, color: '#4a4a4a', marginTop: 8 }}>
-              uttampaswan@live.com
+              {this.state.email}
             </div>}
           </div>
           {!this.state.change_email && <div style={{

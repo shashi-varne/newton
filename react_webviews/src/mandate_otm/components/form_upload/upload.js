@@ -7,7 +7,9 @@ import camera_green from 'assets/take_pic_green.svg';
 import camera_grey from 'assets/take_pic_grey.svg';
 import gallery_green from 'assets/go_to_gallery_green.svg';
 import gallery_grey from 'assets/go_to_gallery_grey.svg';
-import sample from 'assets/mandate_pending_icon.svg';
+import correct from 'assets/correct_otm_sample_image.svg';
+import incorrect from 'assets/incorrect_otm_sample_image.svg';
+
 import Dialog, {
   DialogActions,
   DialogContent
@@ -16,6 +18,7 @@ import Button from 'material-ui/Button';
 // import { nativeCallback } from 'utils/native_callback';
 import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from '../../../utils/native_callback';
 class Upload extends Component {
   constructor(props) {
     super(props);
@@ -26,9 +29,11 @@ class Upload extends Component {
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
       openDialog: false,
-      fileUploaded: false
+      fileUploaded: false,
+      openDialogOldClient: false
     }
     this.handleContinue = this.handleContinue.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   componentWillMount() {
@@ -44,6 +49,12 @@ class Upload extends Component {
       this.setState({
         type: 'fisdom'
       });
+    }
+
+    if (!getConfig().campaign_version) {
+      this.setState({
+        openDialogOldClient: true
+      })
     }
   }
 
@@ -120,31 +131,26 @@ class Upload extends Component {
 
   startUpload(method_name, doc_type, doc_name, doc_side) {
 
-    // this.setState({
-    //   openDialog: true,
-    //   doc_type: doc_type,
-    //   doc_name: doc_name,
-    //   doc_side: doc_side
-    // })
+    this.setState({
+      openDialog: true,
+      doc_type: doc_type,
+      doc_name: doc_name,
+      doc_side: doc_side
+    })
 
-    this.native_call_handler(method_name, doc_type, doc_name, doc_side);
+    // this.native_call_handler(method_name, doc_type, doc_name, doc_side);
   }
 
 
   async uploadDocs(file) {
 
-    // this.setState({
-    //   show_loader: true
-    // })
+    this.setState({
+      show_loader: true
+    })
     console.log('uploadDocs')
     var uploadurl = '/api/mandate/upload/image/' + this.state.params.key;
-    // var data = {
-    //   res: file
-    // }
-
     const data = new FormData()
     data.append('res', file, file.doc_type)
-    console.log(file);
 
     try {
       const res = await Api.post(uploadurl, data);
@@ -169,12 +175,20 @@ class Upload extends Component {
     this.setState({
       openDialog: false
     });
+
+    if (this.state.openDialogOldClient) {
+      nativeCallback({ action: 'exit' });
+    }
   }
 
   handleContinue() {
     // this.setState({
     //   openDialog: false
     // });
+    if (this.state.openDialogOldClient) {
+      nativeCallback({ action: 'exit' });
+      return;
+    }
     this.native_call_handler(this.state.method_name, this.state.doc_type, this.state.doc_name, this.state.doc_side);
   }
 
@@ -207,8 +221,55 @@ class Upload extends Component {
               2. Ensure that the edges are NOT cropped
             </div>
             <div style={{ display: 'inline-flex' }}>
-              <img src={sample} alt="OTM" />
-              <img style={{ marginLeft: 20 }} src={sample} alt="OTM" />
+              <img style={{ width: '48%', marginRight: 7 }} src={correct} alt="OTM" />
+              <img style={{ width: '48%' }} src={incorrect} alt="OTM" />
+            </div>
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            fullWidth={true}
+            variant="raised"
+            size="large"
+            color="secondary"
+            onClick={this.handleContinue}
+            autoFocus>Continue
+      </Button>
+        </DialogActions>
+      </Dialog>
+    )
+  }
+
+  renderDialogOldClient() {
+    return (
+      <Dialog
+        fullWidth={true}
+        id="succes"
+        open={this.state.openDialogOldClient}
+        onClose={this.handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <div className="payment-dialog" id="alert-dialog-description">
+            <div style={{
+              color: '#4a4a4a', fontSize: 16, margin: '10px 0 10px 0',
+              fontWeight: 500, textAlign: 'center'
+            }}>
+              Upload/Send signed OTM form
+            </div>
+            <div style={{ color: '#878787', fontSize: 16, marginBottom: 8 }}>
+              This version of MyWay app doesn’t support upload feature.
+              {getConfig().Android && <span>Either update your app to the latest version to upload,
+              or you can courier the signed bank mandate form to the following address.</span>}
+              {getConfig().iOS && <span>You can courier the signed bank mandate form to the following address.</span>}
+            </div>
+            <div className="process-address">
+              <div className="process-address1">Courier to:</div>
+              <div className="process-address2">
+                Queens Paradise, No. 16/1, 1st Floor, Curve Road, Shivaji Nagar,
+                 Bengaluru, Karnataka 560051
+              </div>
             </div>
           </div>
         </DialogContent>
@@ -227,7 +288,7 @@ class Upload extends Component {
   }
 
   renderMainUi() {
-    if (!this.state.openDialog) {
+    if (!this.state.openDialog && !this.state.openDialogOldClient) {
       return (
         <Container
           showLoader={this.state.show_loader}
@@ -238,7 +299,7 @@ class Upload extends Component {
           noFooter={true}
         >
           {!this.state.fileUploaded && <div style={{
-            border: '1px dashed #e1e1e1', padding: '10px 0px 10px 30px',
+            border: '1px dashed #e1e1e1', padding: '10px 0px 0px 0px',
             textAlign: 'center'
           }}>
             <div>Upload OTM Form</div>
@@ -257,11 +318,11 @@ class Upload extends Component {
             </div>
           </div>}
           {this.state.fileUploaded && <div style={{
-            border: '1px dashed #e1e1e1', padding: '10px 0px 10px 30px',
+            border: '1px dashed #e1e1e1', padding: '10px 0px 0px 0px',
             textAlign: 'center'
           }}>
-            <div style={{ marginRight: 30 }}>
-              <img style={{ width: 308, height: 84 }} src={sample} id="single" alt="Aa" />
+            <div>
+              <img style={{ width: 300, height: 300 }} src="" id="single" alt="Aa" />
             </div>
             <div style={{ margin: '20px 0 20px 0' }}>
               <div onClick={() => this.startUpload('open_camera', 'otm', 'otm.jpg')} style={{
@@ -280,13 +341,13 @@ class Upload extends Component {
           <div style={{ margin: '20px 0 20px 0', textAlign: 'center' }}>
             <div style={{ borderBottom: '1px solid #e1e1e1' }}></div>
             <span style={{
-              position: 'absolute', backgroundColor: 'white', width: '8%',
-              marginTop: '-10px'
+              position: 'absolute', backgroundColor: 'white', width: '10%',
+              marginTop: '-10px', right: '45%'
             }}>OR</span>
             <div></div>
           </div>
           <div style={{
-            border: '1px dashed #e1e1e1', padding: '30px 0px 30px 20px',
+            border: '1px dashed #e1e1e1', padding: '30px 0px 30px 0px',
             textAlign: 'center'
           }}>
             <div style={{ color: '#4a4a4a', fontSize: 14, fontWeight: 500 }}>
@@ -309,6 +370,7 @@ class Upload extends Component {
       <div>
         {this.renderMainUi()}
         {this.renderDialog()}
+        {this.renderDialogOldClient()}
       </div>
     );
   }

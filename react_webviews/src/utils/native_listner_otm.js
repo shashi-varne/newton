@@ -54,11 +54,6 @@ import { nativeCallback } from 'utils/native_callback'
   exports.open_camera = function (listener) {
     listeners.push(listener);
     if (typeof window.Android !== 'undefined') {
-      // nativeCallback({
-      //   action: 'take_picture',
-      //   args: 'otm'
-
-      // })
       window.Android.performAction('take_picture', listener.doc_type);
     } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
       let callbackData = {};
@@ -71,13 +66,7 @@ import { nativeCallback } from 'utils/native_callback'
   exports.open_gallery = function (listener) {
     listeners.push(listener);
     if (typeof window.Android !== 'undefined') {
-      // nativeCallback({
-      //   action: 'open_picture_gallery', message: {
-      //     fileName: 'otm'
-      //   }
-      // })
       window.Android.performAction('open_picture_gallery', listener.doc_type);
-      // window.Android.openGallery(listener.doc_type);
     } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
       let callbackData = {};
       callbackData.action = 'open_gallery';

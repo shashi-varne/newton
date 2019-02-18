@@ -9,6 +9,7 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 class EmailSuccess extends Component {
   constructor(props) {
@@ -49,9 +50,10 @@ class EmailSuccess extends Component {
   }
 
   handleClick = () => {
-    // nativeCallback({ action: 'native_back' });
-    let url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate&message=success&code=200&destination=';
-    window.location.replace(url);
+    // let url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate&message=success&code=200&destination=';
+    // window.location.replace(url);
+
+    nativeCallback({ action: 'exit' });
   }
 
   navigate = (pathname) => {
@@ -109,9 +111,9 @@ class EmailSuccess extends Component {
           </div>
           <div className="success-text-info">
             You will recieve a Bank Mandate(OTM) form on
-  your registered email(<span style={{ fontWeight: 600 }}>uttampaswan@live.com</span>)
-                                                              Please sign (as per bank records) on OTM form
-                                                              and upload on the app.
+  your registered email(<span style={{ fontWeight: 600 }}>{this.state.params.email}</span>)
+                                                                                  Please sign (as per bank records) on OTM form
+                                                                                  and upload on the app.
           </div>
           <div className="success-bottom">
             <div className="success-bottom1">

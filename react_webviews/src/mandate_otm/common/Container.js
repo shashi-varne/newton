@@ -58,22 +58,8 @@ class Container extends Component {
     })
     let pathname = this.props.history.location.pathname;
     let { params } = this.props.location;
-    let { search } = this.props.location;
-    console.log(search);
-    if (search.indexOf('goBack') < 0) {
-      if (pathname.indexOf('result') >= 0) {
-
-        nativeCallback({ action: 'exit' });
-        return;
-      }
-    }
-
-    if (params && params.disableBack) {
-      // this.setState({
-      //   callbackType: 'exit',
-      //   openPopup: true,
-      //   popupText: 'Are you sure you want to exit ?'
-      // })
+    console.log(this.props);
+    if ((params && params.disableBack) || this.props.disableBack) {
       nativeCallback({ action: 'exit' });
       return;
     }
@@ -84,11 +70,6 @@ class Container extends Component {
       case "/mandate-otm/form-request/success":
       case "/mandate-otm/form-upload/upload":
       case "/mandate-otm/form-upload/success":
-        // this.setState({
-        //   callbackType: 'exit',
-        //   openPopup: true,
-        //   popupText: 'Are you sure you want to exit ?'
-        // })
         nativeCallback({ action: 'exit' });
         break;
       default:
