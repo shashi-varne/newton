@@ -104,7 +104,7 @@
   /* box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149); */
   margin: 0px 7px 7px 7px;
   border-radius: 4px;
-  border: 1px solid secondary;
+  /* border: 1px solid secondary; */
 }
 button.MuiButtonBase-root.MuiButton-root.MuiButton-raised.MuiButton-raisedSecondary.MuiButton-sizeLarge.CustomButton-button-100 {
   border-radius: 6px;

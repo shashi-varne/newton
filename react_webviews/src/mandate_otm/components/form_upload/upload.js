@@ -9,6 +9,7 @@ import gallery_green from 'assets/go_to_gallery_green.svg';
 import gallery_grey from 'assets/go_to_gallery_grey.svg';
 import correct from 'assets/correct_otm_sample_image.svg';
 import incorrect from 'assets/incorrect_otm_sample_image.svg';
+import '../../../utils/native_listner_otm';
 
 import Dialog, {
   DialogActions,
@@ -35,6 +36,7 @@ class Upload extends Component {
     this.handleContinue = this.handleContinue.bind(this);
     this.native_call_handler = this.native_call_handler.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.showLoaderNative = this.showLoaderNative.bind(this);
   }
 
   componentWillMount() {
@@ -62,6 +64,27 @@ class Upload extends Component {
     }
   }
 
+  componentDidMount() {
+    let that = this;
+    window.PaymentCallback.add_listener({
+      type: 'back_pressed',
+      go_back: function () {
+        console.log("goback from plutussdk");
+        that.setState({
+          openDialog: false
+        });
+      }
+    });
+
+    window.PaymentCallback.add_listener({
+      type: 'native_receiver_image',
+      show_loader: function (show_loader) {
+
+        that.showLoaderNative();
+      }
+    });
+  }
+
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
@@ -71,6 +94,9 @@ class Upload extends Component {
 
   handleClick = async () => {
 
+    if (!this.state.imageBaseFile) {
+      return;
+    }
     this.uploadDocs(this.state.imageBaseFile);
   }
 
@@ -89,11 +115,18 @@ class Upload extends Component {
 
     console.log("mergedocs");
     this.setState({
+      openDialog: false,
       imageBaseFile: file,
-      fileUploaded: true
+      fileUploaded: true,
+      show_loader: true
     })
+
+    let that = this
     this.getBase64(file, function (img) {
-      document.getElementById('single').setAttribute('src', img);
+      that.setState({
+        imageBaseFileShow: img
+      })
+      // document.getElementById('single').setAttribute('src', img);
     });
 
     setTimeout(
@@ -107,6 +140,14 @@ class Upload extends Component {
     );
 
   };
+
+  showLoaderNative() {
+    console.log("showloader from plutussdk");
+    console.log(this);
+    this.setState({
+      show_loader: true
+    })
+  }
 
   native_call_handler(method_name, doc_type, doc_name, doc_side) {
 
@@ -124,7 +165,9 @@ class Upload extends Component {
           that.setState({
             docType: this.doc_type,
             docName: this.docName,
-            doc_side: this.doc_side
+            doc_side: this.doc_side,
+            openDialog: false,
+            show_loader: true
           })
           switch (file.type) {
             case 'image/jpeg':
@@ -141,6 +184,19 @@ class Upload extends Component {
         }
       }
     });
+
+    window.PaymentCallback.add_listener({
+      type: 'native_receiver_image',
+      show_loader: function (show_loader) {
+        that.setState({
+          show_loader: true
+        })
+        that.showLoaderNative();
+      }
+    });
+
+
+
   }
 
   startUpload(method_name, doc_type, doc_name, doc_side) {
@@ -190,8 +246,10 @@ class Upload extends Component {
 
   handleClose() {
     this.setState({
-      openDialog: false
+      openDialog: false,
+      show_loader: false
     });
+    console.log(this.state.imageBaseFile);
 
     if (this.state.openDialogOldClient) {
       nativeCallback({ action: 'exit' });
@@ -204,11 +262,13 @@ class Upload extends Component {
     // });
     if (this.state.openDialogOldClient) {
       if (getConfig().Android) {
-        nativeCallback({
-          action: 'open_in_browser', message: {
-            url: this.state.link
-          }
-        });
+        // nativeCallback({
+        //   action: 'open_in_browser', message: {
+        //     url: this.state.link
+        //   }
+        // });
+        // window.location.replace('market://details?id=com.finwizard.fisdom');
+        nativeCallback({ action: 'exit' });
       } else {
         nativeCallback({ action: 'exit' });
       }
@@ -216,8 +276,7 @@ class Upload extends Component {
       return;
     }
     this.setState({
-      openDialog: false,
-      show_loader: true
+      openDialog: false
     })
     setTimeout(
       function () {
@@ -226,7 +285,8 @@ class Upload extends Component {
         .bind(this),
       1000
     );
-    // this.native_call_handler(this.state.method_name, this.state.doc_type, this.state.doc_name, this.state.doc_side);
+    // this.native_call_handler(this.state.method_name, this.state.doc_type,
+    //   this.state.doc_name, this.state.doc_side);
   }
 
   renderDialog() {
@@ -243,7 +303,7 @@ class Upload extends Component {
           <div className="payment-dialog" id="alert-dialog-description">
             <div style={{
               color: '#4a4a4a', fontSize: 16, margin: '10px 0 10px 0',
-              fontWeight: 500, textAlign: 'center'
+              fontWeight: 600, textAlign: 'center'
             }}>
               Upload signed OTM form
             </div>
@@ -291,13 +351,13 @@ class Upload extends Component {
           <div className="payment-dialog" id="alert-dialog-description">
             <div style={{
               color: '#4a4a4a', fontSize: 16, margin: '10px 0 10px 0',
-              fontWeight: 500, textAlign: 'center'
+              fontWeight: 600, textAlign: 'center'
             }}>
               Upload/Send signed OTM form
             </div>
             <div style={{ color: '#878787', fontSize: 16, marginBottom: 8 }}>
               This version of MyWay app doesn’t support upload feature.
-              {getConfig().Android && <span>Either update your app to the latest version to upload,
+              {getConfig().Android && <span>Either go to Play store and update your app to the latest version to upload,
               or you can courier the signed bank mandate form to the following address.</span>}
               {getConfig().iOS && <span>You can courier the signed bank mandate form to the following address.</span>}
             </div>
@@ -317,7 +377,7 @@ class Upload extends Component {
             size="large"
             color="secondary"
             onClick={this.handleContinue}
-            autoFocus>Continue
+            autoFocus>Ok
       </Button>
         </DialogActions>
       </Dialog>
@@ -327,17 +387,11 @@ class Upload extends Component {
   renderMainUi() {
     if (!this.state.openDialog && !this.state.openDialogOldClient) {
       return (
-        <Container
-          showLoader={this.state.show_loader}
-          title="Upload Bank Mandate(OTM) Form"
-          handleClick={this.handleClick}
-          edit={this.props.edit}
-          type={this.state.type}
-          buttonTitle="Save and Continue"
-        >
+
+        <div>
           {!this.state.fileUploaded && <div style={{
             border: '1px dashed #e1e1e1', padding: '10px 0px 0px 0px',
-            textAlign: 'center'
+            textAlign: 'center', fontWeight: 600
           }}>
             <div>Upload OTM Form</div>
             <div style={{ margin: '20px 0 20px 0' }}>
@@ -359,8 +413,7 @@ class Upload extends Component {
             textAlign: 'center'
           }}>
             <div>
-              {this.state.imageBaseFile &&
-                <img style={{ width: 300, height: 300 }} src="" id="single" alt="OTM" />}
+              <img style={{ width: 300, height: 300 }} src={this.state.imageBaseFileShow} alt="OTM" />
             </div>
             <div style={{ margin: '20px 0 20px 0' }}>
               <div onClick={() => this.startUpload('open_camera', 'otm', 'otm.jpg')} style={{
@@ -388,15 +441,14 @@ class Upload extends Component {
             border: '1px dashed #e1e1e1', padding: '30px 0px 30px 0px',
             textAlign: 'center'
           }}>
-            <div style={{ color: '#4a4a4a', fontSize: 14, fontWeight: 500 }}>
+            <div style={{ color: '#4a4a4a', fontSize: 14, fontWeight: 600 }}>
               Didn’t recieve my OTM form?
-          </div>
+</div>
             <div onClick={() => this.navigate('send-email')} style={{ color: '#28b24d', fontSize: 14, fontWeight: 500, marginTop: 10 }}>
               Send me again.
+</div>
           </div>
-          </div>
-
-        </Container >
+        </div>
       )
     }
     return null;
@@ -405,11 +457,29 @@ class Upload extends Component {
 
   render() {
     return (
-      <div>
+      // <div>
+      //   {this.renderMainUi()}
+      //   {this.renderDialog()}
+      //   {this.renderDialogOldClient()}
+      // </div>
+
+      <Container
+        showLoader={this.state.show_loader}
+        title="Upload Bank Mandate(OTM) Form"
+        handleClick={this.handleClick}
+        edit={this.props.edit}
+        type={this.state.type}
+        buttonTitle="Save and Continue"
+        isDisabled={!this.state.imageBaseFile}
+        popupOpen={this.state.openDialog}
+        noFooter={this.state.openDialog}
+        noHeader={this.state.openDialog}
+      >
         {this.renderMainUi()}
         {this.renderDialog()}
         {this.renderDialogOldClient()}
-      </div>
+
+      </Container >
     );
   }
 }

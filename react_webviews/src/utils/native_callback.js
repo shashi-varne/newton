@@ -1,6 +1,21 @@
 import { isMobile } from './functions';
 import { getConfig } from './functions';
 
+export const nativeCallbackOld = (status_code, message, action) => {
+  if (!message) {
+    message = null;
+  }
+  if (!status_code) {
+    status_code = 200;
+  }
+  let url = 'http://app.fisdom.com/page/invest/campaign/callback?name=mandate-otm&message=' +
+    message + '&code=' + status_code + '&destination=' + null;
+  console.log('status_code ' + status_code);
+  console.log(url);
+  window.location.replace(url);
+};
+
+
 export const nativeCallback = ({ action = null, message = null, events = null } = {}) => {
   let callbackData = {};
 
@@ -19,6 +34,7 @@ export const nativeCallback = ({ action = null, message = null, events = null } 
 
     let campaign_version = getConfig().campaign_version;
 
+    console.log("campaign_version...................." + campaign_version);
     if (campaign_version >= 1) {
       if (isMobile.Android()) {
         if (typeof window.Android !== 'undefined') {
@@ -29,6 +45,16 @@ export const nativeCallback = ({ action = null, message = null, events = null } 
 
           if (action === 'open_in_browser') {
             window.Android.performAction('open_in_browser', message.url);
+            return;
+          }
+
+          if (action === 'native_back') {
+            nativeCallbackOld(400);
+            return;
+          }
+
+          if (action === 'exit') {
+            nativeCallbackOld(200);
             return;
           }
 
@@ -44,10 +70,11 @@ export const nativeCallback = ({ action = null, message = null, events = null } 
         return;
       }
     } else {
-      let message = 'back', status_code = 200;
-      let url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate-otm&message=' +
-        message + '&code=' + status_code + '&destination=';
-      window.location.replace(url);
+      if (action === 'show_toast' || action === 'open_in_browser') {
+        return;
+      }
+
+      nativeCallbackOld(200)
     }
 
     return;

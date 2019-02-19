@@ -126,7 +126,7 @@ class SendEmail extends Component {
           fontSize: 16, textAlign: 'center', fontWeight: 500,
           margin: '20px 0 10px 0'
         }}>
-          Hey {this.state.name},
+          Hey {this.state.params.name},
         </div>
         <div style={{
           color: getConfig().default, margin: '10px 0px 10px 19px',

@@ -30,8 +30,23 @@ import { nativeCallback } from 'utils/native_callback'
     var blob = new Blob(byteArrays, { type: contentType });
     return blob;
   }
+
+  exports.native_receiver_image = function (listener) {
+    listeners.push(listener);
+  }
+
   exports.upload_doc = function (data_json_str) {
-    console.log("from andorid............");
+    console.log("from android............");
+
+    for (var j = 0; j < listeners.length; j++) {
+      var lis = listeners[j];
+      if (lis.type === 'native_receiver_image') {
+        lis.show_loader(true);
+        listeners.splice(j, 1);
+        break;
+      }
+    }
+    // native_receiver_image({ type: 'native_receiver_image' })
     var d
     if (typeof window.Android !== 'undefined') {
       d = JSON.parse(data_json_str);  // Handle Exception

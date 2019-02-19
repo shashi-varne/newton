@@ -84,9 +84,9 @@ class Success extends Component {
               </div>
               <div className="success-text-info">
                 You will recieve a Bank Mandate form on your
-              registered email ({this.state.params.email})
-                    Please sign (as per bank records) on OTM form
-                    and upload on the app.
+              registered email (<span style={{ fontWeight: 600 }}>{this.state.params.email}</span>)
+                      Please sign (as per bank records) on OTM form
+                      and upload on the app.
               </div>
               <div className="success-bottom-timer">
               </div>

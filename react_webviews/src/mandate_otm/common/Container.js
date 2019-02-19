@@ -56,6 +56,9 @@ class Container extends Component {
     this.setState({
       back_pressed: true
     })
+    if (this.props.popupOpen) {
+      return;
+    }
     let pathname = this.props.history.location.pathname;
     let { params } = this.props.location;
     console.log(this.props);
@@ -173,7 +176,7 @@ class Container extends Component {
   componentDidUpdate(prevProps) {
     let body = document.getElementsByTagName('body')[0].offsetHeight;
     let client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
-    let head = document.getElementsByClassName('Header')[0].offsetHeight;
+    let head = document.getElementsByClassName('Header')[0] ? document.getElementsByClassName('Header')[0].offsetHeight : 0;
     let foot = document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight : 0;
     let banner = document.getElementsByClassName('Banner')[0];
     let bannerHeight = (banner) ? banner.offsetHeight : 0;
@@ -199,7 +202,7 @@ class Container extends Component {
     return (
       <div className={`ContainerWrapper ${this.props.classOverRide}  ${(this.props.type !== 'fisdom') ? 'blue' : ''}`} >
         {/* Header Block */}
-        <Header
+        {!this.props.noHeader && <Header
           disableBack={this.props.disableBack}
           title={this.props.title}
           smallTitle={this.props.smallTitle}
@@ -214,7 +217,7 @@ class Container extends Component {
           handleReset={this.props.handleReset}
           topIcon={this.props.topIcon}
           handleTopIcon={this.handleTopIcon} />
-
+        }
         {/* Below Header Block */}
         <div style={{ height: 56 }}></div>
 

@@ -72,6 +72,7 @@ export const getConfig = () => {
 
   let search = window.location.search;
   // console.log(search);
+
   const isPrime = search.indexOf("mypro.fisdom.com") >= 0;
   const ismyway = search.indexOf("api.mywaywealth.com") >= 0;
   const insurance_v2 = search.indexOf("insurance_v2") >= 0;
@@ -114,7 +115,7 @@ export const getConfig = () => {
       + '&email=' + email + '&campaign_version=' + campaign_version;
 
     returnConfig.campaign_version = campaign_version;
-    // returnConfig.campaign_version = 1;
+    // returnConfig.campaign_version = 0;
     returnConfig.searchParams = searchParams;
   }
   returnConfig.iOS = isMobile.iOS();

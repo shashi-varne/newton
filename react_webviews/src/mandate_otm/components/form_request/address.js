@@ -68,7 +68,7 @@ class AddEditAddress extends Component {
           city: address.city || '',
           state: address.state || '',
           address_id: address.id || '',
-          address_present: true
+          address_present: address.id ? true : false
         });
       }
       else {
@@ -83,7 +83,7 @@ class AddEditAddress extends Component {
       this.setState({
         show_loader: false
       })
-      toast("Something went wrong");
+      // toast("Something went wrong");
     }
 
   }
@@ -192,18 +192,25 @@ class AddEditAddress extends Component {
 
       };
 
-      let res;
       if (this.state.address_present) {
         addressline.address_id = this.state.address_id;
+      }
+
+      let res;
+      if (this.state.address_present) {
         res = await Api.put('/api/mandate/campaign/address/' + this.state.params.key, addressline);
       } else {
         res = await Api.post('/api/mandate/campaign/address/' + this.state.params.key, addressline);
       }
 
       if (res.pfwresponse.status_code === 200) {
+        let address_id_send = res.pfwresponse.result.address_id;
+        // if (this.state.address_present) {
+        //   address_id_send = this.state.address_id;
+        // }
 
         let res2 = await Api.get('/api/mandate/campaign/address/confirm/' + this.state.params.key +
-          '?address_id=' + addressline.address_id);
+          '?address_id=' + address_id_send);
         this.setState({ show_loader: false });
         if (res2.pfwresponse.status_code === 200) {
 
