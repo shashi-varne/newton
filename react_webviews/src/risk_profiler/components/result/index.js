@@ -8,7 +8,7 @@ import meter2 from 'assets/meter2.svg';
 import meter3 from 'assets/meter3.svg';
 import meter4 from 'assets/meter4.svg';
 import meter5 from 'assets/meter5.svg';
-// import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback } from 'utils/native_callback';
 import loader from 'assets/loader_gif.gif';
 import Api from 'utils/api';
 import Button from 'material-ui/Button';
@@ -74,12 +74,27 @@ class Result extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?base_url=' + this.state.params.base_url
+      search: '?base_url=' + this.state.params.base_url,
+      params: {
+        indicator: this.state.score.indicator
+      }
     });
   }
 
-  handleClick = async () => {
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'Risk Analyser',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Result',
+        "risk_tolerance": this.state.score.indicator
+      }
+    };
+    nativeCallback({ events: eventObj });
+  }
 
+  handleClick = async () => {
+    this.sendEvents('next');
     this.navigate('recommendation');
   }
 
@@ -118,9 +133,11 @@ class Result extends Component {
       openDialogReset: false,
       show_loader: false
     });
+    this.sendEvents('restart_no');
   }
 
   handleReset = async () => {
+    this.sendEvents('restart_yes');
     this.setState({
       openDialog: false, openDialogReset: false, show_loader: true
     });
