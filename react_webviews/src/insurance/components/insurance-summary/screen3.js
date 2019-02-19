@@ -102,6 +102,8 @@ class Journey extends Component {
 
   componentWillMount() {
     let { params } = this.props.location;
+    console.log('insurance v2');
+    console.log(this.state.params);
     nativeCallback({ action: 'take_control_reset' });
     this.setState({
       disableBack: params ? params.disableBack : false

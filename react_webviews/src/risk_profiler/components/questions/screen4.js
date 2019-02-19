@@ -4,7 +4,7 @@ import qs from 'qs';
 
 import Container from '../../common/Container';
 import RadioOptions from '../../../common/ui/RadioOptions';
-import { nativeCallback } from 'utils/native_callback';
+// import { nativeCallback } from 'utils/native_callback';
 
 class QuestionScreen4 extends Component {
   constructor(props) {
@@ -85,33 +85,17 @@ class QuestionScreen4 extends Component {
     });
   }
 
-  sendEventsForInputsNextClick() {
-    let eventObj = {
-      "event_name": 'Risk Analyser',
-      "properties": {
-        "user_action": 'next',
-        "screen_name": 'Stock',
-        "q1": this.state.question1 ? 'answered' : 'empty',
-        "q2": this.state.question2 ? 'answered' : 'empty'
-      }
-    };
-    nativeCallback({ events: eventObj });
-  }
-
   handleClick = async () => {
 
     if (!this.state.question1) {
       this.setState({
         question1_error: 'Please select an option'
       })
-      this.sendEventsForInputsNextClick();
     } else if (!this.state.question2) {
       this.setState({
         question2_error: 'Please select an option'
       })
-      this.sendEventsForInputsNextClick();
     } else {
-      this.sendEventsForInputsNextClick();
       let questionnaireResponse = JSON.parse(window.localStorage.getItem('questionnaireResponse'));
       questionnaireResponse[this.state.indexMain].choice_id = this.state.question1;
       questionnaireResponse[this.state.indexMain + 1].choice_id = this.state.question2;
