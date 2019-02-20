@@ -130,7 +130,24 @@ class DeliveryOrder extends Component {
     });
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'GOLD',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Delivery Order Summary'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   handleClick = async () => {
+    this.sendEvents('next');
     this.setState({
       show_loader: true
     })
@@ -183,6 +200,7 @@ class DeliveryOrder extends Component {
         buttonTitle={this.state.disabledText}
         disable={this.state.disabled}
         type={this.state.type}
+        events={this.sendEvents('just_set_events')}
       >
         <div className="order-tile">
           <div className="order-heading">

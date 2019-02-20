@@ -7,6 +7,7 @@ import Input from '../../../common/ui/Input';
 import { validateNumber, validateLengthDynamic, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../../common/ui/Toast';
+import { nativeCallback } from 'utils/native_callback';
 
 class DeliveryAddress extends Component {
   constructor(props) {
@@ -188,6 +189,25 @@ class DeliveryAddress extends Component {
     }
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'GOLD',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Delivery address details',
+        'pincode': this.state.pincode_error ? 'invalid' : this.state.pincode ? 'valid' : 'empty',
+        'address': this.state.address_error ? 'invalid' : this.state.address ? 'valid' : 'empty',
+        'landmark': this.state.landmark_error ? 'invalid' : this.state.landmark ? 'valid' : 'empty'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   handleClick = async () => {
     if (this.state.pincode.length !== 6 || !validateNumber(this.state.pincode) ||
       this.state.pincode_error) {
@@ -255,6 +275,7 @@ class DeliveryAddress extends Component {
         handleClick={this.handleClick}
         buttonTitle="Proceed"
         type={this.state.type}
+        events={this.sendEvents('just_set_events')}
       >
         <div className="delivery-address">
           <div className="InputField">

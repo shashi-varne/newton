@@ -18,6 +18,7 @@ import Button from 'material-ui/Button';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 class GoldSummary extends Component {
   constructor(props) {
@@ -203,8 +204,27 @@ class GoldSummary extends Component {
     return gold_amount
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'GOLD',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Gold Summary',
+        "amount": this.state.amountError ? 'invalid' : this.state.amount ? 'valid' : 'empty',
+        "weight": this.state.weightError ? 'invalid' : this.state.weight ? 'valid' : 'empty',
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   buyGold = async () => {
 
+    this.sendEvents('next');
     if (parseFloat(this.state.weight) > this.state.maxWeight) {
       toast('You can not buy more than ' + this.state.maxWeight + ' gm', 'error');
       return;
@@ -362,7 +382,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                                                                                                                                                                                                                              previous gold price has expired.
+                                                                                                                                                                                                                                                                                                                                                                                                                          previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -380,6 +400,9 @@ class GoldSummary extends Component {
   }
 
   navigate = (pathname) => {
+    if (pathname === '/gold/my-gold-locker') {
+      this.sendEvents('gold-locker');
+    }
     this.props.history.push({
       pathname: pathname,
       search: '?base_url=' + this.state.params.base_url
@@ -447,6 +470,7 @@ class GoldSummary extends Component {
         buttonTitle="Proceed"
         type={this.state.type}
         noPadding={true}
+        events={this.sendEvents('just_set_events')}
       >
         <div className="page home" id="goldSection">
           <div className="text-center goldheader"

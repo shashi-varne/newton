@@ -54,14 +54,11 @@ class Container extends Component {
   }
 
   getEvents(user_action) {
-    console.log(this.props);
     if (!this || !this.props || !this.props.events) {
       return;
     }
     let events = this.props.events;
     events.user_action = user_action;
-    console.log("get events");
-    console.log(events);
     return events;
   }
 

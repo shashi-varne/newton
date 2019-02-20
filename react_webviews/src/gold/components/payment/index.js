@@ -140,6 +140,9 @@ class Payment extends Component {
   }
 
   navigate = (pathname) => {
+    if (pathname === '/gold/my-gold') {
+      this.sendEvents('gold_summary')
+    }
     this.props.history.push({
       pathname: pathname,
       search: '?base_url=' + this.state.params.base_url
@@ -217,7 +220,26 @@ class Payment extends Component {
     }
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'GOLD',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Payment Summary',
+        'type': this.state.orderType,
+        'status': this.state.status
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   handleClick = () => {
+    this.sendEvents('next');
     this.navigate('/gold/my-gold');
   }
 
@@ -231,10 +253,11 @@ class Payment extends Component {
         buttonTitle="Proceed"
         type={this.state.type}
         noPadding={true}
+        events={this.sendEvents('just_set_events')}
       >
         <div className="page home" id="goldSection">
           <div className="text-center goldheader"
-            onClick={() => this.navigate('/gold/my-gold-locker')}
+            onClick={() => this.navigate('/gold/my-gold')}
             style={{
               background: getConfig().primary
             }}

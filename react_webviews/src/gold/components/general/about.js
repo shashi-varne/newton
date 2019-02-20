@@ -12,6 +12,7 @@ import { ToastContainer } from 'react-toastify';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { inrFormatDecimal } from 'utils/validators';
+import { nativeCallback } from 'utils/native_callback';
 
 class About extends Component {
   constructor(props) {
@@ -70,13 +71,33 @@ class About extends Component {
   }
 
   navigate = (pathname) => {
+    if (pathname === 'details') {
+      this.sendEvents('know_more')
+    }
     this.props.history.push({
       pathname: pathname,
       search: '?base_url=' + this.state.params.base_url
     });
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'GOLD',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Intro'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   handleClick = () => {
+    this.sendEvents('next')
     this.navigate('my-gold');
   }
 
@@ -89,6 +110,7 @@ class About extends Component {
         handleClick={this.handleClick}
         buttonTitle="Proceed"
         type={this.state.type}
+        events={this.sendEvents('just_set_events')}
       >
         <div className="gold-about-card">
           <div className="Banner">

@@ -13,6 +13,7 @@ import twenty_gmbar_front from 'assets/20gmbar_front.png';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../../common/ui/Toast';
 import { inrFormatDecimal } from 'utils/validators';
+import { nativeCallback } from 'utils/native_callback';
 
 class DeliverySelectedProduct extends Component {
   constructor(props) {
@@ -112,8 +113,27 @@ class DeliverySelectedProduct extends Component {
     });
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'GOLD',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Select Gold Product',
+        'product_name': this.state.product.description,
+        'in_stock': this.state.product.in_stock
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   handleClick = async () => {
 
+    this.sendEvents('next');
     if (this.state.disabled) {
       return;
     }
@@ -156,6 +176,7 @@ class DeliverySelectedProduct extends Component {
         buttonTitle={this.state.disabledText}
         disable={this.state.disabled}
         type={this.state.type}
+        events={this.sendEvents('just_set_events')}
       >
         <div className="delivery block">
           <div className="delivery-select-logo">

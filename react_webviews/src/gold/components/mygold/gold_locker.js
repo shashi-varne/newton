@@ -23,6 +23,7 @@ import Button from 'material-ui/Button';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../../common/ui/Toast';
 import { inrFormatDecimal } from 'utils/validators';
+import { nativeCallback } from 'utils/native_callback';
 
 class GoldSummary extends Component {
   constructor(props) {
@@ -240,7 +241,29 @@ class GoldSummary extends Component {
     return gold_amount
   }
 
+  sendEvents(user_action, product_name) {
+    let eventObj = {
+      "event_name": 'GOLD',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Gold Locker',
+        "trade": this.state.value === 0 ? 'sell' : 'delivery',
+        "amount": this.state.amountError ? 'invalid' : this.state.amount ? 'valid' : 'empty',
+        "weight": this.state.weightError ? 'invalid' : this.state.weight ? 'valid' : 'empty',
+        "product_name": product_name
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   sellGold = async () => {
+
+    this.sendEvents('next');
 
     let amount = this.state.amount;
     let weight = this.state.weight;
@@ -285,6 +308,7 @@ class GoldSummary extends Component {
   }
 
   selectGoldProduct(index) {
+    this.sendEvents('next', this.state.gold_products[index].disc);
     let selectedProduct = this.state.gold_products[index];
     window.localStorage.setItem('goldProduct', JSON.stringify(selectedProduct));
     this.navigate('select-gold-product');
@@ -321,6 +345,13 @@ class GoldSummary extends Component {
   }
 
   navigate = (pathname) => {
+    if (pathname === 'gold-register') {
+      this.sendEvents('registeration')
+    }
+    if (pathname === 'gold-transactions') {
+      this.sendEvents('transaction history')
+    }
+
     this.props.history.push({
       pathname: pathname,
       search: '?base_url=' + this.state.params.base_url
@@ -423,6 +454,7 @@ class GoldSummary extends Component {
         noPadding={true}
         disable={!this.state.isRegistered}
         noFooter={this.state.value === 1}
+        events={this.sendEvents('just_set_events')}
       >
         <div className="FlexRow locker-head">
           <div className="FlexRow block1">

@@ -13,6 +13,7 @@ import Button from 'material-ui/Button';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 class Otp extends Component {
   constructor(props) {
@@ -196,6 +197,7 @@ class Otp extends Component {
   }
 
   handleOtpVerified = () => {
+    this.sendEvents('next');
     if (this.state.fromTypeDeliveryOtp === 'buy') {
       this.navigate('my-gold');
 
@@ -213,6 +215,23 @@ class Otp extends Component {
 
     } else {
       this.navigate('my-gold');
+    }
+  }
+
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'GOLD',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'OTP',
+        'verification_type': this.state.fromTypeDeliveryOtp
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
     }
   }
 
@@ -250,6 +269,7 @@ class Otp extends Component {
         edit={this.props.edit}
         buttonTitle="Proceed"
         type={this.state.type}
+        events={this.sendEvents('just_set_events')}
       >
         <div className="otp-body">
           <div className="otp-input">
@@ -271,7 +291,7 @@ class Otp extends Component {
               className="resend-otp text-center"
               style={{
                 fontWeight: 500,
-                background: getConfig().primary
+                color: getConfig().primary
               }} color="primary" onClick={this.resendOtp}>Resend OTP</p>
             <div className="text-center">{this.state.messageOtp}</div>
           </div>

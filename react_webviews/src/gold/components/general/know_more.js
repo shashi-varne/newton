@@ -6,6 +6,7 @@ import safegold_logo from 'assets/safegold_logo@2x.png';
 import idbi from 'assets/idbi_trustee2.png';
 import brinks from 'assets/brinks-logo.png';
 import { ToastContainer } from 'react-toastify';
+import { nativeCallback } from 'utils/native_callback';
 
 class KnowMore extends Component {
   constructor(props) {
@@ -49,7 +50,24 @@ class KnowMore extends Component {
     });
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'GOLD',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Know More'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   handleClick = () => {
+    this.sendEvents('next');
     this.navigate('my-gold');
   }
 
@@ -62,6 +80,7 @@ class KnowMore extends Component {
         buttonTitle="Proceed"
         handleClick={this.handleClick}
         type={this.state.type}
+        events={this.sendEvents('just_set_events')}
       >
         <div className="Knowmore">
           <div className="gold-about-text-know-more">
