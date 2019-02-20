@@ -28,6 +28,7 @@ class Container extends Component {
       callbackType: '',
     }
     this.handleTopIcon = this.handleTopIcon.bind(this);
+    this.handlePopup = this.handlePopup.bind(this);
   }
 
   componentDidMount() {
@@ -52,6 +53,15 @@ class Container extends Component {
     });
   }
 
+  getEvents(user_action) {
+    if (!this || !this.props || !this.props.events) {
+      return;
+    }
+    let events = this.props.events;
+    events.user_action = user_action;
+    return events;
+  }
+
   historyGoBack = () => {
     this.setState({
       back_pressed: true
@@ -59,26 +69,22 @@ class Container extends Component {
     let pathname = this.props.history.location.pathname;
     let { params } = this.props.location;
     let { search } = this.props.location;
-    console.log(search);
+
     if (search.indexOf('goBack') < 0) {
       if (pathname.indexOf('result') >= 0) {
 
-        nativeCallback({ action: 'exit' });
+        nativeCallback({ action: 'exit', events: this.getEvents('back') });
         return;
       }
     }
 
     if (params && params.disableBack) {
-      // this.setState({
-      //   callbackType: 'exit',
-      //   openPopup: true,
-      //   popupText: 'Are you sure you want to exit ?'
-      // })
       nativeCallback({ action: 'exit' });
       return;
     }
 
     if (pathname.indexOf('question1') >= 0) {
+      nativeCallback({ events: this.getEvents('back') });
       this.navigate('intro');
       return;
     }
@@ -86,15 +92,11 @@ class Container extends Component {
     switch (pathname) {
       case "/risk":
       case "/risk/intro":
-        // this.setState({
-        //   callbackType: 'exit',
-        //   openPopup: true,
-        //   popupText: 'Are you sure you want to exit ?'
-        // })
-        nativeCallback({ action: 'exit' });
+        nativeCallback({ action: 'exit', events: this.getEvents('back') });
         break;
       default:
         if (navigator.onLine) {
+          nativeCallback({ events: this.getEvents('back') });
           this.props.history.goBack();
         } else {
           this.setState({
@@ -105,10 +107,14 @@ class Container extends Component {
   }
 
   handleClose = () => {
+    if (this.state.openPopup) {
+      nativeCallback({ events: this.getEvents('exit_no') });
+    }
     this.setState({
       openDialog: false,
       openPopup: false
     });
+
   }
 
   renderDialog = () => {
@@ -139,7 +145,7 @@ class Container extends Component {
       openPopup: false
     });
 
-    nativeCallback({ action: this.state.callbackType });
+    nativeCallback({ action: this.state.callbackType, events: this.getEvents('exit_yes') });
 
   }
 
@@ -170,6 +176,7 @@ class Container extends Component {
   }
 
   handleTopIcon() {
+    console.log(this.props);
     this.setState({
       callbackType: 'exit',
       openPopup: true,

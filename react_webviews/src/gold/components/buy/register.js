@@ -43,6 +43,7 @@ class GoldRegister extends Component {
       mobile_no_error: '',
       city: '',
       state: '',
+      terms_opened: 'no'
     }
   }
 
@@ -256,12 +257,36 @@ class GoldRegister extends Component {
   }
 
   openTermsAndCondition() {
+    this.setState({
+      terms_opened: true
+    })
     nativeCallback({
       action: 'open_in_browser',
       message: {
         url: 'https://www.safegold.com/assets/terms-and-conditions.pdf'
       }
     });
+  }
+
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'GOLD',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Registeration',
+        'name': this.state.name_error ? 'invalid' : this.state.name ? 'valid' : 'empty',
+        'email': this.state.email_error ? 'invalid' : this.state.email ? 'valid' : 'empty',
+        'pin_code': this.state.pin_code_error ? 'invalid' : this.state.pin_code ? 'valid' : 'empty',
+        'agree': this.state.checked ? 'yes' : 'no',
+        'terms_opened': this.state.terms_opened
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   }
 
   handleClick = async () => {
@@ -339,6 +364,7 @@ class GoldRegister extends Component {
         buttonTitle="Proceed"
         type={this.state.type}
         disable={!this.state.checked}
+        events={this.sendEvents('just_set_events')}
       >
         <div className="register-form">
           <div className="InputField">

@@ -11,6 +11,7 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 class Intro extends Component {
   constructor(props) {
@@ -58,6 +59,7 @@ class Intro extends Component {
     //   })
     //   return;
     // }
+    this.sendEvents('next');
 
     this.navigate('question1');
   }
@@ -104,10 +106,28 @@ class Intro extends Component {
     })
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'Risk Analyser',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Intro'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   handleConfirm = () => {
+
     this.setState({
       openDialogConfirm: false
     })
+
 
     this.navigate('question1');
     return;
@@ -122,6 +142,7 @@ class Intro extends Component {
         edit={this.props.edit}
         buttonTitle="Let’s get started"
         type={this.state.type}
+        events={this.sendEvents('just_set_events')}
       >
         <div style={{ padding: '10px' }}>
           <div className="meter-img">

@@ -14,6 +14,7 @@ import Button from 'material-ui/Button';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../../common/ui/Toast';
 import { inrFormatDecimal } from 'utils/validators';
+import { nativeCallback } from 'utils/native_callback';
 
 class About extends Component {
   constructor(props) {
@@ -104,6 +105,7 @@ class About extends Component {
   };
 
   handleClick = async () => {
+    this.sendEvents('next');
     var options = {
       "plutus_rate_id": this.state.sellData.plutus_rate_id,
       "sell_price": this.state.sellData.amount,
@@ -198,6 +200,22 @@ class About extends Component {
     }
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'GOLD',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Sell Order Summary'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   renderPopup = () => {
     return (
       <Dialog
@@ -226,7 +244,7 @@ class About extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                                          previous gold price has expired.
+                                                                                                                                                                                                                                      previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -252,6 +270,7 @@ class About extends Component {
         edit={this.props.edit}
         buttonTitle="Proceed"
         type={this.state.type}
+        events={this.sendEvents('just_set_events')}
       >
         <div className="order-tile">
           <div className="FlexRow order-heading">

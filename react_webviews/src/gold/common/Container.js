@@ -63,8 +63,20 @@ class Container extends Component {
     });
   }
 
+  getEvents(user_action) {
+    if (!this || !this.props || !this.props.events) {
+      return;
+    }
+    let events = this.props.events;
+    events.user_action = user_action;
+    return events;
+  }
+
   historyGoBack = () => {
     // let { params } = this.props.location;
+    if (this.getEvents('back')) {
+      nativeCallback({ events: this.getEvents('back') });
+    }
 
     let pathname = this.props.history.location.pathname;
     if (pathname.indexOf('payment') >= 0) {
@@ -147,7 +159,7 @@ class Container extends Component {
       openPopup: false
     });
 
-    nativeCallback({ action: 'native_back' });
+    nativeCallback({ action: 'native_back', events: this.getEvents('back') });
 
   }
 

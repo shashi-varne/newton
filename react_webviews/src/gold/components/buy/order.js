@@ -67,7 +67,24 @@ class BuyOrder extends Component {
     });
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'GOLD',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Buy Order Summary'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   handleClick = async () => {
+    this.sendEvents('next');
     this.setState({
       show_loader: true,
     });
@@ -123,6 +140,7 @@ class BuyOrder extends Component {
         edit={this.props.edit}
         buttonTitle="Proceed"
         type={this.state.type}
+        events={this.sendEvents('just_set_events')}
       >
         <div>
           <div className="order-tile">

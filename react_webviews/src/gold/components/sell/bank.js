@@ -6,6 +6,7 @@ import Api from 'utils/api';
 import Input from '../../../common/ui/Input';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../../common/ui/Toast';
+import { nativeCallback } from 'utils/native_callback';
 
 class SellOrder extends Component {
   constructor(props) {
@@ -272,7 +273,28 @@ class SellOrder extends Component {
     }
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'GOLD',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Sell Bank Details',
+        'account_no': this.state.account_no_error ? 'invalid' : this.state.account_no ? 'valid' : 'empty',
+        'confirm_account_no': this.state.confirm_account_no_error ? 'invalid' : this.state.confirm_account_no ? 'valid' : 'empty',
+        'ifsc_code': this.state.ifsc_code_error ? 'invalid' : this.state.ifsc_code ? 'valid' : 'empty'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   handleClick = async () => {
+
+    this.sendEvents('next');
     let ifsc_regex = /^[A-Za-z]{4}\d{7}$/;
 
     if (this.state.ifsc_error) {
@@ -349,6 +371,7 @@ class SellOrder extends Component {
         handleClick={this.handleClick}
         buttonTitle="Proceed"
         type={this.state.type}
+        events={this.sendEvents('just_set_events')}
       >
         <div className="bank-details">
           <div className="InputField">

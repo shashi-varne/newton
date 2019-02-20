@@ -6,7 +6,7 @@ import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import RadioOptions from '../../../common/ui/RadioOptions';
 import Api from 'utils/api';
-// import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback } from 'utils/native_callback';
 
 class QuestionScreen5 extends Component {
   constructor(props) {
@@ -87,18 +87,38 @@ class QuestionScreen5 extends Component {
     });
   }
 
+  sendEventsForInputsNextClick(user_action) {
+    let eventObj = {
+      "event_name": 'Risk Analyser',
+      "properties": {
+        "user_action": 'next',
+        "screen_name": 'Investment',
+        "q1": this.state.question1 ? 'answered' : 'empty',
+        "q2": this.state.question2 ? 'answered' : 'empty'
+      }
+    };
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   handleClick = async () => {
 
-    // this.navigate('/question2');
     if (!this.state.question1) {
       this.setState({
         question1_error: 'Please select an option'
       })
+      this.sendEventsForInputsNextClick();
     } else if (!this.state.question2) {
       this.setState({
         question2_error: 'Please select an option'
       })
+      this.sendEventsForInputsNextClick();
     } else {
+      this.sendEventsForInputsNextClick();
+
       let questionnaireResponse = JSON.parse(window.localStorage.getItem('questionnaireResponse'));
       questionnaireResponse[this.state.indexMain].choice_id = this.state.question1;
       questionnaireResponse[this.state.indexMain + 1].choice_id = this.state.question2;
@@ -147,6 +167,7 @@ class QuestionScreen5 extends Component {
         type={this.state.type}
         topIcon="close"
         classOverRideContainer="question-container"
+        events={this.sendEventsForInputsNextClick('just_set_events')}
       >
         <FormControl fullWidth>
           {this.state.questionnaire.length !== 0 &&

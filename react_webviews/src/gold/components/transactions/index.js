@@ -14,6 +14,7 @@ import Grid from 'material-ui/Grid';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../../common/ui/Toast';
 // import { inrFormatDecimal } from 'utils/validators';
+import { nativeCallback } from 'utils/native_callback';
 
 class Transactions extends Component {
   constructor(props) {
@@ -149,6 +150,22 @@ class Transactions extends Component {
         show_loader: false
       });
       toast('Something went wrong', 'error');
+    }
+  }
+
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'GOLD',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Transactions'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
     }
   }
 
@@ -330,6 +347,7 @@ class Transactions extends Component {
         type={this.state.type}
         noFooter={true}
         noPadding={true}
+        events={this.sendEvents('just_set_events')}
       >
         <Tabs
           value={this.state.value}

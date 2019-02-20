@@ -34,7 +34,9 @@ class Recommendation extends Component {
       amount_error: '',
       funds: [],
       oepnDialog: false,
-      amountModal: ''
+      amountModal: '',
+      amount_changed: false,
+      edit_amount: false
     }
     this.renderFunds = this.renderFunds.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -43,6 +45,11 @@ class Recommendation extends Component {
   }
 
   componentWillMount() {
+    let { params } = this.props.location;
+    this.setState({
+      indicator: params ? params.indicator : false
+    })
+
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -69,7 +76,8 @@ class Recommendation extends Component {
 
       this.setState({
         show_loader: true,
-        order_type: type_choices[type]
+        order_type: type_choices[type],
+        period: timeChoices[duration]
       });
       let url = '/api/risk/profile/user/recommendation?duration=' + timeChoices[duration] +
         '&amount=' + amount + '&type=' + type_choices[type];
@@ -136,7 +144,8 @@ class Recommendation extends Component {
   handleClickOpen = () => {
     this.setState({
       oepnDialog: true,
-      amountModal: this.state.amount
+      amountModal: this.state.amount,
+      edit_amount: true
     })
   }
 
@@ -149,7 +158,8 @@ class Recommendation extends Component {
   setNewAmount(amount) {
     this.setState({
       amount: this.state.amountModal,
-      oepnDialog: false
+      oepnDialog: false,
+      amount_changed: true
     })
     this.onBlurAmount(true, this.state.amountModal);
   }
@@ -169,8 +179,30 @@ class Recommendation extends Component {
 
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'Risk Analyser',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Fund Recommendation',
+        "risk_tolerance": this.state.indicator,
+        "order_type": this.state.order_type,
+        "period": this.state.period,
+        "edit_amount": this.state.edit_amount,
+        "amount_changed": this.state.amount_changed,
+        "amount": this.state.amount
+      }
+    };
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   handleClick = async (event, isin) => {
 
+    this.sendEvents('next');
     if (this.state.funds.length === 0) {
 
       this.setState({
@@ -235,6 +267,7 @@ class Recommendation extends Component {
   }
 
   showFundDetails(isin) {
+    this.sendEvents('fund_clicked');
     this.handleClick('', isin);
   }
 
@@ -377,6 +410,7 @@ class Recommendation extends Component {
         buttonTitle="Invest"
         type={this.state.type}
         isDisabled={!(this.state.funds)}
+        events={this.sendEvents('just_set_events')}
       >
         <div style={{ backgroundColor: '#ffffff', padding: '1px 10px 1px 10px' }}>
           <p style={{ color: '#4a4a4a', fontSize: 14 }}>Investment type</p>
