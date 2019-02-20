@@ -10,7 +10,7 @@ import Container from '../../common/Container';
 import Input from '../../../common/ui/Input';
 import location from 'assets/location_dark_icn.png';
 import Api from 'utils/api';
-import { validateNumber, validateLength, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';
+import { validateNumber, validateLengthDynamic, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';
 
 
 class AddEditAddress extends Component {
@@ -104,6 +104,10 @@ class AddEditAddress extends Component {
   handlePincode = name => async (event) => {
     const pincode = event.target.value;
 
+    if (event.target.value.length > 6) {
+      return;
+    }
+
     this.setState({
       [name]: pincode,
       [name + '_error']: ''
@@ -117,12 +121,14 @@ class AddEditAddress extends Component {
           if (name === 'pincode') {
             this.setState({
               city: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
-              state: res.pfwresponse.result[0].state_name
+              state: res.pfwresponse.result[0].state_name,
+              pincode_error: ''
             });
           } else {
             this.setState({
               ccity: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
-              cstate: res.pfwresponse.result[0].state_name
+              cstate: res.pfwresponse.result[0].state_name,
+              pincode_error: ''
             });
           }
         } else {
@@ -130,7 +136,8 @@ class AddEditAddress extends Component {
             city: '',
             state: '',
             ccity: '',
-            cstate: ''
+            cstate: '',
+            pincode_error: 'Pincode not found'
           });
         }
       } catch (err) {
@@ -150,39 +157,52 @@ class AddEditAddress extends Component {
   }
 
   handleClick = async () => {
+    let can_submit = true;
     if (!validateEmpty(this.state.addressline1)) {
       this.setState({
         addressline1_error: 'Enter your address'
       });
+      can_submit = false;
     } else if (!validateConsecutiveChar(this.state.addressline1)) {
       this.setState({
         addressline1_error: 'Address can not contain more than 3 same consecutive characters'
       });
-    } else if (!validateLength(this.state.addressline1)) {
+      can_submit = false;
+    } else if (!validateLengthDynamic(this.state.addressline1, 160)) {
       this.setState({
-        addressline1_error: 'Maximum length of address is 30'
+        addressline1_error: 'Maximum length of address is 160'
       });
+      can_submit = false;
     } else if (!validateMinChar(this.state.addressline1)) {
       this.setState({
         addressline1_error: 'Address should contain minimum two characters'
       });
-    } else if (!validateEmpty(this.state.addressline2)) {
-      this.setState({
-        addressline2_error: 'Enter your street and locality'
-      });
-    } else if (!validateConsecutiveChar(this.state.addressline2)) {
+      can_submit = false;
+    }
+
+    if (this.state.addressline2 && !validateConsecutiveChar(this.state.addressline2)) {
       this.setState({
         addressline2_error: 'Address can not contain more than 3 same consecutive characters'
       });
-    } else if (!validateLength(this.state.addressline2)) {
+      can_submit = false;
+    } else if (this.state.addressline2 && !validateLengthDynamic(this.state.addressline2, 160)) {
       this.setState({
-        addressline2_error: 'Maximum length of address is 30'
+        addressline2_error: 'Maximum length of address is 160'
       });
-    } else if (this.state.pincode.length !== 6 || !validateNumber(this.state.pincode)) {
+      can_submit = false;
+    }
+
+    if (this.state.pincode.length !== 6 || !validateNumber(this.state.pincode)) {
       this.setState({
         pincode_error: 'Please enter valid pincode'
       });
-    } else {
+      can_submit = false;
+    } else if (this.state.pincode_error) {
+      can_submit = false;
+      return;
+    }
+
+    if (can_submit) {
       this.setState({ show_loader: true });
       let addressline = {
         "pincode": this.state.pincode,
@@ -268,7 +288,7 @@ class AddEditAddress extends Component {
               helperText={this.state.addressline2_error}
               type="text"
               id="addressline2"
-              label="Address line 2 *"
+              label="Address line 2 (optional)"
               name="addressline2"
               placeholder="ex: Curve Road, Shivaji Nagar"
               value={this.state.addressline2}
