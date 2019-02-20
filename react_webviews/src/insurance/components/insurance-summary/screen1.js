@@ -90,6 +90,14 @@ class Summary extends Component {
     // this.setState({
     //   paymentModal: false
     // })
+    let eventObj = {
+      "event_name": 'popup_post_payment_click',
+      "properties": {
+        "user_action": 'next',
+        "source": 'summary'
+      }
+    };
+    nativeCallback({ events: eventObj });
     this.redirect(this.state.payment_link, true);
   }
 
@@ -893,6 +901,16 @@ class Summary extends Component {
   }
 
   handleClose = () => {
+    if (this.state.paymentModal) {
+      let eventObj = {
+        "event_name": 'popup_post_payment_click',
+        "properties": {
+          "user_action": 'back',
+          "source": 'summary'
+        }
+      };
+      nativeCallback({ events: eventObj });
+    }
     this.setState({
       openDialog: false,
       paymentModal: false,
