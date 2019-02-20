@@ -90,7 +90,11 @@ class Result extends Component {
         "risk_tolerance": this.state.score.indicator
       }
     };
-    nativeCallback({ events: eventObj });
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   }
 
   handleClick = async () => {
@@ -240,6 +244,7 @@ class Result extends Component {
           topIcon="restart"
           handleReset={this.showDialog}
           resetpage={true}
+          events={this.sendEvents('just_set_events')}
         >
           <div className="meter-img">
             {this.state.score && <img style={{ width: '70%' }} src={this.getScoreData(this.state.score.score).img} alt="meter" />}

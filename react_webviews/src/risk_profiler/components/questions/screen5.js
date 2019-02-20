@@ -87,7 +87,7 @@ class QuestionScreen5 extends Component {
     });
   }
 
-  sendEventsForInputsNextClick() {
+  sendEventsForInputsNextClick(user_action) {
     let eventObj = {
       "event_name": 'Risk Analyser',
       "properties": {
@@ -97,7 +97,11 @@ class QuestionScreen5 extends Component {
         "q2": this.state.question2 ? 'answered' : 'empty'
       }
     };
-    nativeCallback({ events: eventObj });
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   }
 
   handleClick = async () => {
@@ -163,6 +167,7 @@ class QuestionScreen5 extends Component {
         type={this.state.type}
         topIcon="close"
         classOverRideContainer="question-container"
+        events={this.sendEventsForInputsNextClick('just_set_events')}
       >
         <FormControl fullWidth>
           {this.state.questionnaire.length !== 0 &&

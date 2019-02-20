@@ -59,6 +59,7 @@ class Intro extends Component {
     //   })
     //   return;
     // }
+    this.sendEvents('next');
 
     this.navigate('question1');
   }
@@ -122,11 +123,12 @@ class Intro extends Component {
   }
 
   handleConfirm = () => {
+
     this.setState({
       openDialogConfirm: false
     })
 
-    this.sendEvents('next');
+
     this.navigate('question1');
     return;
   }

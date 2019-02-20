@@ -55,8 +55,13 @@ class Container extends Component {
 
   getEvents(user_action) {
     console.log(this.props);
+    if (!this || !this.props || !this.props.events) {
+      return;
+    }
     let events = this.props.events;
     events.user_action = user_action;
+    console.log("get events");
+    console.log(events);
     return events;
   }
 
@@ -64,12 +69,10 @@ class Container extends Component {
     this.setState({
       back_pressed: true
     })
-    console.log(this.props);
-    this.sendEvents()
     let pathname = this.props.history.location.pathname;
     let { params } = this.props.location;
     let { search } = this.props.location;
-    console.log(search);
+
     if (search.indexOf('goBack') < 0) {
       if (pathname.indexOf('result') >= 0) {
 

@@ -178,6 +178,7 @@ class QuestionScreen1 extends Component {
         type={this.state.type}
         topIcon="close"
         classOverRideContainer="question-container"
+        events={this.sendEventsForInputsNextClick('just_set_events')}
       >
         <FormControl fullWidth>
           <div className="InputField">

@@ -193,7 +193,11 @@ class Recommendation extends Component {
         "amount": this.state.amount
       }
     };
-    nativeCallback({ events: eventObj });
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   }
 
   handleClick = async (event, isin) => {
@@ -406,6 +410,7 @@ class Recommendation extends Component {
         buttonTitle="Invest"
         type={this.state.type}
         isDisabled={!(this.state.funds)}
+        events={this.sendEvents('just_set_events')}
       >
         <div style={{ backgroundColor: '#ffffff', padding: '1px 10px 1px 10px' }}>
           <p style={{ color: '#4a4a4a', fontSize: 14 }}>Investment type</p>
