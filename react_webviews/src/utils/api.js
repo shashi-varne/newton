@@ -33,7 +33,8 @@ class Api {
       method: verb,
       url: route,
       params: (verb === 'get') ? params : null,
-      data: (verb !== 'get') ? params : null
+      data: (verb !== 'get') ? params : null,
+      res: (verb !== 'get') ? params : null
     });
 
     return axios(options)

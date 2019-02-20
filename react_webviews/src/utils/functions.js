@@ -72,6 +72,7 @@ export const getConfig = () => {
 
   let search = window.location.search;
   // console.log(search);
+
   const isPrime = search.indexOf("mypro.fisdom.com") >= 0;
   const ismyway = search.indexOf("api.mywaywealth.com") >= 0;
   const insurance_v2 = search.indexOf("insurance_v2") >= 0;
@@ -86,6 +87,8 @@ export const getConfig = () => {
   let project = 'insurance';
   if (myHistory.location.pathname.indexOf('risk') >= 0) {
     project = 'risk';
+  } else if (myHistory.location.pathname.indexOf('mandate-otm') >= 0) {
+    project = 'mandate-otm';
   } else if (myHistory.location.pathname.indexOf('mandate') >= 0) {
     project = 'mandate';
   } else if (myHistory.location.pathname.indexOf('gold') >= 0) {
@@ -103,6 +106,20 @@ export const getConfig = () => {
   if (isInsurance) {
     returnConfig.searchParams = searchParams;
   }
+  if (project === 'mandate-otm') {
+    let { key } = qs.parse(myHistory.location.search.slice(1));
+    let { name } = qs.parse(myHistory.location.search.slice(1));
+    let { email } = qs.parse(myHistory.location.search.slice(1));
+    let { campaign_version } = qs.parse(myHistory.location.search.slice(1));
+    searchParams = '?base_url=' + base_url + '&key=' + key + '&name=' + name
+      + '&email=' + email + '&campaign_version=' + campaign_version;
+
+    returnConfig.campaign_version = campaign_version;
+    // returnConfig.campaign_version = 0;
+    returnConfig.searchParams = searchParams;
+  }
+  returnConfig.iOS = isMobile.iOS();
+  returnConfig.Android = isMobile.Android();
 
   return returnConfig;
 }
