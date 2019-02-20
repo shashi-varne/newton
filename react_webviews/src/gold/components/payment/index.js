@@ -240,7 +240,10 @@ class Payment extends Component {
 
   handleClick = () => {
     this.sendEvents('next');
-    this.navigate('/gold/my-gold');
+    this.props.history.push({
+      pathname: '/gold/my-gold',
+      search: '?base_url=' + this.state.params.base_url
+    });
   }
 
   render() {

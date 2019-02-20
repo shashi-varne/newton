@@ -209,6 +209,7 @@ class DeliveryAddress extends Component {
   }
 
   handleClick = async () => {
+    this.sendEvents('next');
     if (this.state.pincode.length !== 6 || !validateNumber(this.state.pincode) ||
       this.state.pincode_error) {
       this.setState({

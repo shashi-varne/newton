@@ -382,7 +382,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                                                                                                                                                                                                                                          previous gold price has expired.
+                                                                                                                                                                                                                                                                                                                                                                                                                            previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -470,7 +470,7 @@ class GoldSummary extends Component {
         buttonTitle="Proceed"
         type={this.state.type}
         noPadding={true}
-        // events={this.sendEvents('just_set_events')}
+        events={this.sendEvents('just_set_events')}
       >
         <div className="page home" id="goldSection">
           <div className="text-center goldheader"
