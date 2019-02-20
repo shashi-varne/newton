@@ -74,7 +74,9 @@ class Container extends Component {
 
   historyGoBack = () => {
     // let { params } = this.props.location;
-    nativeCallback({ events: this.getEvents('back') });
+    if (this.getEvents('back')) {
+      nativeCallback({ events: this.getEvents('back') });
+    }
 
     let pathname = this.props.history.location.pathname;
     if (pathname.indexOf('payment') >= 0) {

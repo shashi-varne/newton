@@ -470,7 +470,7 @@ class GoldSummary extends Component {
         buttonTitle="Proceed"
         type={this.state.type}
         noPadding={true}
-        events={this.sendEvents('just_set_events')}
+        // events={this.sendEvents('just_set_events')}
       >
         <div className="page home" id="goldSection">
           <div className="text-center goldheader"
