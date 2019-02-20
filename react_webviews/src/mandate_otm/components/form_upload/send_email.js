@@ -129,7 +129,7 @@ class SendEmail extends Component {
           Hey {this.state.params.name},
         </div>
         <div style={{
-          color: getConfig().default, margin: '10px 0px 10px 19px',
+          color: getConfig().default, margin: '10px 0px 10px 0px',
           fontSize: 16, textAlign: 'center'
         }}>
           We will email you a Bank Mandate(OTM) form,

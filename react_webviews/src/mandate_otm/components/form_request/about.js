@@ -128,7 +128,7 @@ class About extends Component {
           <img width={100} src={icon} alt="OTM" />
         </div>
         <div style={{
-          color: getConfig().default, margin: '10px 0px 10px 19px',
+          color: getConfig().default, margin: '10px 0px 10px 0px',
           fontSize: 16, textAlign: 'center'
         }}>
           One-time Bank Mandate (OTM) automates monthly debits from bank account to SIP
