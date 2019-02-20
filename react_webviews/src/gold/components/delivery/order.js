@@ -140,12 +140,12 @@ class DeliveryOrder extends Component {
       '/gold/gold-delivery-order?base_url=' + this.state.params.base_url
     );
 
-    // nativeCallback({
-    //   action: 'take_control', message: {
-    //     back_url: nativeRedirectUrl,
-    //     back_text: 'Are you sure you want to exit the payment process?'
-    //   }
-    // });
+    nativeCallback({
+      action: 'take_control', message: {
+        back_url: nativeRedirectUrl,
+        back_text: 'Are you sure you want to exit the payment process?'
+      }
+    });
 
     let paymentRedirectUrl = encodeURIComponent(
       window.location.protocol + '//' + window.location.host + '/gold/delivery/payment'
@@ -153,7 +153,7 @@ class DeliveryOrder extends Component {
 
     var pgLink = this.state.redeemProduct.payment_link;
     // eslint-disable-next-line
-    pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl + '&back_url=' + encodeURIComponent(nativeRedirectUrl) + '&order_type=delivery';
+    pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl;
     window.location = pgLink;
   }
 
