@@ -75,12 +75,12 @@ class BuyOrder extends Component {
     let nativeRedirectUrl = window.location.protocol + '//' + window.location.host +
       '/gold/buy-gold-order?base_url=' + this.state.params.base_url;
 
-    nativeCallback({
-      action: 'take_control', message: {
-        back_url: nativeRedirectUrl,
-        back_text: 'Are you sure you want to exit the payment process?'
-      }
-    });
+    // nativeCallback({
+    //   action: 'take_control', message: {
+    //     back_url: nativeRedirectUrl,
+    //     back_text: 'Are you sure you want to exit the payment process?'
+    //   }
+    // });
 
     let paymentRedirectUrl = encodeURIComponent(
       window.location.protocol + '//' + window.location.host + '/gold/buy/payment'
@@ -88,7 +88,7 @@ class BuyOrder extends Component {
 
     var pgLink = this.state.buyData.payment_link;
     // eslint-disable-next-line
-    pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl;
+    pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl + '&back_url=' + encodeURIComponent(nativeRedirectUrl) + '&order_type=buy';
     window.location = pgLink;
   }
 
