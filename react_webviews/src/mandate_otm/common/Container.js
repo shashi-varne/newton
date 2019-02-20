@@ -76,13 +76,14 @@ class Container extends Component {
         nativeCallback({ action: 'exit' });
         break;
       default:
-        if (navigator.onLine) {
-          this.props.history.goBack();
-        } else {
-          this.setState({
-            openDialog: true
-          });
-        }
+        // if (navigator.onLine) {
+        //   this.props.history.goBack();
+        // } else {
+        //   this.setState({
+        //     openDialog: true
+        //   });
+        // }
+        this.props.history.goBack();
     }
   }
 
