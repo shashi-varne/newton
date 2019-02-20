@@ -7,7 +7,7 @@ import icon from 'assets/mandate_pending_icon.svg';
 import { getConfig } from 'utils/functions';
 import Input from '../../../common/ui/Input';
 import { validateEmail } from 'utils/validators';
-// import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback } from 'utils/native_callback';
 import Api from 'utils/api';
 class SendEmail extends Component {
   constructor(props) {
@@ -73,6 +73,24 @@ class SendEmail extends Component {
     })
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'Campaign OTM Upload',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Resend OTM',
+        'email_changed': this.state.change_email ? 'yes' : 'no',
+        'email': this.state.email_error ? 'invalid' : this.state.email ? 'valid' : 'empty',
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   handleClick = async () => {
     if (!validateEmail(this.state.email)) {
       this.setState({
@@ -117,6 +135,7 @@ class SendEmail extends Component {
         edit={this.props.edit}
         buttonTitle="Continue"
         type={this.state.type}
+        events={this.sendEvents('just_set_events')}
       >
         <div style={{ textAlign: 'center' }}>
           <img style={{ width: '25%' }} src={icon} alt="OTM" />

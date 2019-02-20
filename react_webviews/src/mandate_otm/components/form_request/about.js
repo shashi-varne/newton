@@ -6,6 +6,7 @@ import { getConfig } from 'utils/functions';
 import expand from 'assets/expand_icn.png';
 import shrink from 'assets/shrink_icn.png';
 import icon from 'assets/mandate_pending_icon.svg';
+import { nativeCallback } from 'utils/native_callback';
 
 const aboutQuestions = [
   {
@@ -69,7 +70,24 @@ class About extends Component {
     });
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'Campaign OTM Address',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Intro'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   handleClick = async () => {
+    this.sendEvents('next');
     this.navigate('address');
   }
 
@@ -123,6 +141,7 @@ class About extends Component {
         edit={this.props.edit}
         buttonTitle="Continue"
         type={this.state.type}
+        events={this.sendEvents('just_set_events')}
       >
         <div style={{ textAlign: 'center' }}>
           <img width={100} src={icon} alt="OTM" />

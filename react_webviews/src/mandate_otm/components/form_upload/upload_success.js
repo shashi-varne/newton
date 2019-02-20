@@ -50,11 +50,27 @@ class UploadSuccess extends Component {
 
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'Campaign OTM Upload',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Feedback OTM Upload'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   handleClick = () => {
     // nativeCallback({ action: 'native_back' });
     // let url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate&message=success&code=200&destination=';
     // window.location.replace(url);
-
+    this.sendEvents('next');
     nativeCallback({ action: 'exit' });
 
   }
@@ -104,7 +120,8 @@ class UploadSuccess extends Component {
         onlyButton={true}
         disableBack={true}
         buttonTitle="Done"
-        type={this.state.type} >
+        type={this.state.type}
+        events={this.sendEvents('just_set_events')}>
         <div>
           <div className="success-img">
             <img alt="Mandate" src={thumb} width="130" />

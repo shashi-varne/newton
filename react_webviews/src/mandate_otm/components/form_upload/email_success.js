@@ -49,10 +49,26 @@ class EmailSuccess extends Component {
 
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'Campaign OTM Upload',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Feedback OTM Resend'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   handleClick = () => {
     // let url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate&message=success&code=200&destination=';
     // window.location.replace(url);
-
+    this.sendEvents('next');
     nativeCallback({ action: 'exit' });
   }
 
@@ -101,7 +117,8 @@ class EmailSuccess extends Component {
         onlyButton={true}
         disableBack={true}
         buttonTitle="Done"
-        type={this.state.type} >
+        type={this.state.type}
+        events={this.sendEvents('just_set_events')} >
         <div>
           <div className="success-img">
             <img alt="Mandate" src={thumb} width="130" />
@@ -112,7 +129,7 @@ class EmailSuccess extends Component {
           <div className="success-text-info">
             You will recieve a Bank Mandate(OTM) form on
   your registered email (<span style={{ fontWeight: 600 }}>{this.state.params.email}</span>)
-            Please sign (as per bank records) on OTM form and upload on the app.
+                      Please sign (as per bank records) on OTM form and upload on the app.
           </div>
           <div className="success-bottom">
             <div className="success-bottom1">

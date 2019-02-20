@@ -48,7 +48,24 @@ class Success extends Component {
     });
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'Campaign OTM Address',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Feedback Popup'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   handleClick = async () => {
+    this.sendEvents('next');
     nativeCallback({ action: 'exit' });
   }
 
@@ -85,8 +102,8 @@ class Success extends Component {
               <div className="success-text-info">
                 You will recieve a Bank Mandate form on your
               registered email (<span style={{ fontWeight: 600 }}>{this.state.params.email}</span>)
-                      Please sign (as per bank records) on OTM form
-                      and upload on the app.
+                            Please sign (as per bank records) on OTM form
+                            and upload on the app.
               </div>
               <div className="success-bottom-timer">
               </div>

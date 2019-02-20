@@ -1,5 +1,6 @@
 import { isMobile } from './functions';
 import { getConfig } from './functions';
+import Api from 'utils/api';
 
 export const nativeCallbackOld = (status_code, message, action) => {
   if (!message) {
@@ -30,6 +31,12 @@ export const nativeCallback = ({ action = null, message = null, events = null } 
   let project = getConfig().project;
 
   if (project === 'mandate-otm') {
+
+
+    if (events) {
+      // clevertap api
+
+    }
 
 
     let campaign_version = getConfig().campaign_version;

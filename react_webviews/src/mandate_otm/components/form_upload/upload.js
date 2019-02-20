@@ -86,10 +86,47 @@ class Upload extends Component {
   }
 
   navigate = (pathname) => {
+    if (pathname === 'send-email') {
+      this.sendEvents('resend otm');
+    }
     this.props.history.push({
       pathname: pathname,
       search: getConfig().searchParams
     });
+  }
+
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'Campaign OTM Upload',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Upload Form',
+        'form_image': !this.state.fileUploaded ? 'empty' : this.state.method_name === 'open_camera' ? 'camera' : 'gallery'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
+
+  sendEventsPopup(user_action) {
+    let eventObj = {
+      "event_name": 'Campaign OTM Upload',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Instruction Popup'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   }
 
   handleClick = async () => {
@@ -201,6 +238,7 @@ class Upload extends Component {
 
   startUpload(method_name, doc_type, doc_name, doc_side) {
 
+    this.sendEvents(method_name);
     this.setState({
       openDialog: true,
       method_name: method_name,
@@ -218,6 +256,7 @@ class Upload extends Component {
     this.setState({
       show_loader: true
     })
+    this.sendEvents('next');
     console.log('uploadDocs')
     var uploadurl = '/api/mandate/upload/image/' + this.state.params.key;
     const data = new FormData()
@@ -245,6 +284,7 @@ class Upload extends Component {
   }
 
   handleClose() {
+    this.sendEventsPopup('back');
     this.setState({
       openDialog: false,
       show_loader: false
@@ -260,6 +300,7 @@ class Upload extends Component {
     // this.setState({
     //   openDialog: false
     // });
+    this.sendEventsPopup('next');
     if (this.state.openDialogOldClient) {
       if (getConfig().Android) {
         // nativeCallback({
@@ -474,6 +515,7 @@ class Upload extends Component {
         popupOpen={this.state.openDialog}
         noFooter={this.state.openDialog}
         noHeader={this.state.openDialog}
+        events={this.sendEvents('just_set_events')}
       >
         {this.renderMainUi()}
         {this.renderDialog()}

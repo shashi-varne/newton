@@ -52,6 +52,15 @@ class Container extends Component {
     });
   }
 
+  getEvents(user_action) {
+    if (!this || !this.props || !this.props.events) {
+      return;
+    }
+    let events = this.props.events;
+    events.properties.user_action = user_action;
+    return events;
+  }
+
   historyGoBack = () => {
     this.setState({
       back_pressed: true
@@ -63,7 +72,7 @@ class Container extends Component {
     let { params } = this.props.location;
     console.log(this.props);
     if ((params && params.disableBack) || this.props.disableBack) {
-      nativeCallback({ action: 'exit' });
+      nativeCallback({ action: 'exit', events: this.getEvents('exit') });
       return;
     }
 
@@ -73,7 +82,7 @@ class Container extends Component {
       case "/mandate-otm/form-request/success":
       case "/mandate-otm/form-upload/upload":
       case "/mandate-otm/form-upload/success":
-        nativeCallback({ action: 'exit' });
+        nativeCallback({ action: 'exit', events: this.getEvents('exit') });
         break;
       default:
         // if (navigator.onLine) {
@@ -83,6 +92,9 @@ class Container extends Component {
         //     openDialog: true
         //   });
         // }
+        if (this.getEvents('back')) {
+          nativeCallback({ events: this.getEvents('back') });
+        }
         this.props.history.goBack();
     }
   }

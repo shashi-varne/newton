@@ -10,6 +10,7 @@ import Container from '../../common/Container';
 import Input from '../../../common/ui/Input';
 import location from 'assets/location_dark_icn.png';
 import Api from 'utils/api';
+import { nativeCallback } from 'utils/native_callback';
 import { validateNumber, validateLengthDynamic, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';
 
 
@@ -156,6 +157,25 @@ class AddEditAddress extends Component {
     });
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'Campaign OTM Address',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Address',
+        'addressline1': this.state.addressline1_error ? 'invalid' : this.state.addressline1 ? 'valid' : 'empty',
+        'addressline2': this.state.addressline2_error ? 'invalid' : this.state.addressline2 ? 'valid' : 'empty',
+        'pincode': this.state.pincode_error ? 'invalid' : this.state.pincode ? 'valid' : 'empty',
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   handleClick = async () => {
     let can_submit = true;
     if (!validateEmpty(this.state.addressline1)) {
@@ -199,8 +219,10 @@ class AddEditAddress extends Component {
       can_submit = false;
     } else if (this.state.pincode_error) {
       can_submit = false;
-      return;
+
     }
+
+    this.sendEvents('next');
 
     if (can_submit) {
       this.setState({ show_loader: true });
@@ -266,6 +288,7 @@ class AddEditAddress extends Component {
         edit={this.props.edit}
         buttonTitle="Save and Continue"
         type={this.state.type}
+        events={this.sendEvents('just_set_events')}
       >
         {/* Permanent Address Block */}
         <FormControl fullWidth>

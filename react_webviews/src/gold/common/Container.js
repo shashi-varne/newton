@@ -68,7 +68,7 @@ class Container extends Component {
       return;
     }
     let events = this.props.events;
-    events.user_action = user_action;
+    events.properties.user_action = user_action;
     return events;
   }
 
