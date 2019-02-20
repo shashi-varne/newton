@@ -18,6 +18,9 @@
   color: #fff;
   border: 1px solid;
 }
+.MuiDialogContent-root:first-child {
+  padding-top: 24px !important;
+}
 .RadioButton label.professional {
   padding: 8px;
   display: inline-block;
@@ -156,4 +159,14 @@
 }
 .MuiInput-input {
   color: default !important;
+}
+
+.MuiDialog-paper {
+  margin: 0 20px 0px 20px !important;
+}
+.MuiDialogContent-root {
+  padding: 0 14px 24px 14px !important;
+}
+.MuiButton-label {
+  text-transform: capitalize !important;
 }

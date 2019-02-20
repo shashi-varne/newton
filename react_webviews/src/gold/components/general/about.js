@@ -114,7 +114,7 @@ class About extends Component {
       >
         <div className="gold-about-card">
           <div className="Banner">
-            <img alt="Gold" src={intro_gold} />
+            <img alt="Gold" style={{ width: '100%' }} src={intro_gold} />
             <div className="BannerContent">
               <div className="BannerText">Introducing Gold</div>
               <div className="SafeGoldImage">

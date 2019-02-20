@@ -165,19 +165,22 @@ class Journey extends Component {
     this.setState({
       show_loader: true
     });
-    nativeCallback({
-      action: 'take_control', message: {
-        back_url: this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2,
-        back_text: 'Are you sure you want to exit the payment process?'
-      }
-    });
+    
+    // nativeCallback({
+    //   action: 'take_control', message: {
+    //     back_url: this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2,
+    //     back_text: 'Are you sure you want to exit the payment process?'
+    //   }
+    // });
+
     let insurance_v2 = this.state.params.insurance_v2 ? true : '';
     let paymentRedirectUrl = encodeURIComponent(
       window.location.protocol + '//' + window.location.host + '/insurance/payment/' + this.state.params.insurance_id + '/' + insurance_v2
     );
     var pgLink = payment_link;
+    var back_url = encodeURIComponent(this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2);
     // eslint-disable-next-line
-    pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl;
+    pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl + '&back_url=' + back_url;
     window.location.href = pgLink;
     return;
   }
