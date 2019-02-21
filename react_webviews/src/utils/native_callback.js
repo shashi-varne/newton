@@ -35,11 +35,13 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     if (events) {
       // clevertap api
 
-      try {
-        await Api.post('/api/clevertap/events', events);
-      } catch (error) {
-        console.log(error);
+      if (isMobile.Android()) {
+        if (typeof window.Android !== 'undefined') window.Android.eventCallback(JSON.stringify(events));
       }
+    
+      // if (isMobile.iOS()) {
+      //   if (typeof window.webkit !== 'undefined') window.webkit.messageHandlers.callbackNative.postMessage(events);
+      // }
     }
 
     let campaign_version = getConfig().campaign_version;
