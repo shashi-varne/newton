@@ -76,7 +76,7 @@ class Result extends Component {
       pathname: pathname,
       search: '?base_url=' + this.state.params.base_url,
       params: {
-        indicator: this.state.score.indicator
+        indicator: (this.state.score) ? this.state.score.indicator : false
       }
     });
   }
