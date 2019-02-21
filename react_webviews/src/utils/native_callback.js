@@ -17,7 +17,7 @@ export const nativeCallbackOld = (status_code, message, action) => {
 };
 
 
-export const nativeCallback = ({ action = null, message = null, events = null } = {}) => {
+export const nativeCallback = async ({ action = null, message = null, events = null } = {}) => {
   let callbackData = {};
 
 
@@ -32,12 +32,15 @@ export const nativeCallback = ({ action = null, message = null, events = null } 
 
   if (project === 'mandate-otm') {
 
-
     if (events) {
       // clevertap api
 
+      try {
+        await Api.post('/api/clevertap/events', events);
+      } catch (error) {
+        console.log(error);
+      }
     }
-
 
     let campaign_version = getConfig().campaign_version;
 
