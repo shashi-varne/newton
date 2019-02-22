@@ -104,7 +104,7 @@ class SendEmail extends Component {
         this.setState({
           updatedEmail: this.state.email
         })
-        const res = await Api.get('/api/mandate/mine/mail/mandate?email=' + this.state.email);
+        const res = await Api.get('/api/mandate/mine/mail/mandate?email=' + this.state.email + '&mandate_urlsafe=' + this.state.params.key);
         if (res.pfwresponse.result.message === 'success') {
           this.setState({
             show_loader: false
