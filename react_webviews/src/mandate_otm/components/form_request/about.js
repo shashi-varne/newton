@@ -22,12 +22,12 @@ const aboutQuestions = [
   {
     id: 3,
     question: 'What is the default OTM amount?',
-    answer: 'It will be Rs. 50,000. But only the amount limited the your SIP value per month will be auto debited.'
+    answer: 'It will be Rs. 50,000. But only the amount limited to your monthly SIP value be will be auto debited.'
   },
   {
     id: 4,
     question: 'Why Rs. 50000 and not the exact SIP amount?',
-    answer: 'To make your future SIPs hassle-free, same OTM will be used.'
+    answer: 'To make your future SIPs hassle-free. Incase you start additional SIP in future, same OTM can be reused for the new one too.'
   }
 ]
 
@@ -150,7 +150,7 @@ class About extends Component {
           color: getConfig().default, margin: '10px 0px 10px 0px',
           fontSize: 16, textAlign: 'center'
         }}>
-          One-time Bank Mandate (OTM) automates monthly debits from bank account to SIP
+          One Time Bank Mandate (OTM) automates monthly debits from your bank account for monthly SIP payments. Know more..
         </div>
         {aboutQuestions.map(this.renderQuestions)}
 

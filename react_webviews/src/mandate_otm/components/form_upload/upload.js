@@ -472,10 +472,10 @@ class Upload extends Component {
           </div>}
           <div style={{ margin: '20px 0 20px 0', textAlign: 'center', display: 'flex' }}>
             <div style={{ borderBottom: '1px solid #e1e1e1', width: '45%' }}></div>
-            <span style={{
+            {/* <span style={{
               backgroundColor: 'white', width: '12%',
               top: 6, position: 'relative'
-            }}>OR</span>
+            }}>OR</span> */}
             <div style={{ borderBottom: '1px solid #e1e1e1', width: '45%' }}></div>
           </div>
           <div style={{
