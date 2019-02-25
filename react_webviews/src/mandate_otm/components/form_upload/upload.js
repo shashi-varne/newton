@@ -450,11 +450,11 @@ class Upload extends Component {
             </div>
           </div>}
           {this.state.fileUploaded && <div style={{
-            border: '1px dashed #e1e1e1', padding: '10px 0px 0px 0px',
+            border: '1px dashed #e1e1e1', padding: '0px 0px 0px 0px',
             textAlign: 'center'
           }}>
             <div>
-              <img style={{ width: 300, height: 300 }} src={this.state.imageBaseFileShow} alt="OTM" />
+              <img style={{ width: '100%', height: 300 }} src={this.state.imageBaseFileShow} alt="OTM" />
             </div>
             <div style={{ margin: '20px 0 20px 0' }}>
               <div onClick={() => this.startUpload('open_camera', 'otm', 'otm.jpg')} style={{

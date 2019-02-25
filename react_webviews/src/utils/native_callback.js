@@ -32,9 +32,11 @@ export const nativeCallback = async ({ action = null, message = null, events = n
 
   if (project === 'mandate-otm') {
 
-    if (events) {
+    // For only events, if actions is present, then proceed to next block
+    if (events && action == null) {
       // clevertap api
-
+      
+      // Do not send any other keys apart from event object to eventCallback
       if (isMobile.Android()) {
         if (typeof window.Android !== 'undefined') window.Android.eventCallback(JSON.stringify(events));
       }
@@ -42,6 +44,8 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       // if (isMobile.iOS()) {
       //   if (typeof window.webkit !== 'undefined') window.webkit.messageHandlers.callbackNative.postMessage(events);
       // }
+
+      return;
     }
 
     let campaign_version = getConfig().campaign_version;
