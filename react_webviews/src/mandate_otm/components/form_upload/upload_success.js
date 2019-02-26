@@ -146,7 +146,7 @@ class UploadSuccess extends Component {
             </div>
             <div className="success-bottom2">
               <div className="success-bottom2a">
-                +080-48-039999
+                +9180480-39999
               </div>
               <div className="success-bottom2b">
                 |

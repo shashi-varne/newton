@@ -125,7 +125,7 @@ class About extends Component {
           }}>
             <span style={{ marginBottom: 8 }}><span style={{ fontWeight: 700 }}>1:</span> Share your <span style={{ fontWeight: 700 }}>bank</span> and <span style={{ fontWeight: 700 }}>address</span> details.</span>
             <span style={{ marginBottom: 8 }}><span style={{ fontWeight: 700 }}>2:</span> Check your email for the Bank Mandate form in few hours.</span>
-            <span style={{ marginBottom: 8 }}><span style={{ fontWeight: 700 }}>3:</span> Download form, put your signature and upload it from <span style={{ fontWeight: 700 }}>Profile</span> section on the app.</span>
+            <span style={{ marginBottom: 8 }}><span style={{ fontWeight: 700 }}>3:</span> Download form, put your signature and upload it from <span style={{ fontWeight: 700 }}>Notification</span> center</span>
           </div>}
       </div>
 
@@ -150,7 +150,7 @@ class About extends Component {
           color: getConfig().default, margin: '10px 0px 10px 0px',
           fontSize: 16, textAlign: 'center'
         }}>
-          One Time Bank Mandate (OTM) automates monthly debits from your bank account for monthly SIP payments. Know more..
+          One Time Bank Mandate (OTM) automates monthly debits from your bank account for monthly SIP payments. Check below for more information
         </div>
         {aboutQuestions.map(this.renderQuestions)}
 
