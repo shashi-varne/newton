@@ -108,15 +108,18 @@ class Journey extends Component {
     })
     if (this.state.ismyway) {
       this.setState({
-        type: 'myway'
+        type: 'myway',
+        askEmail: 'ask@myway.com'
       });
     } else if (this.state.isPrime) {
       this.setState({
-        type: 'Fisdom Prime'
+        type: 'Fisdom Prime',
+        askEmail: 'ask@fisdom.com'
       });
     } else {
       this.setState({
-        type: 'fisdom'
+        type: 'fisdom',
+        askEmail: 'ask@fisdom.com'
       });
     }
   }
@@ -150,6 +153,15 @@ class Journey extends Component {
     // this.setState({
     //   paymentModal: false
     // })
+
+    let eventObj = {
+      "event_name": 'popup_post_payment_click',
+      "properties": {
+        "user_action": 'next',
+        "source": 'resume'
+      }
+    };
+    nativeCallback({ events: eventObj });
     this.redirect(this.state.payment_link, true);
   }
 
@@ -246,6 +258,7 @@ class Journey extends Component {
 
   async  componentDidMount() {
     try {
+
       const res = await Api.get('/api/insurance/all/summary')
       let application, required_fields;
       if (res.pfwresponse.status_code === 200) {
@@ -389,6 +402,7 @@ class Journey extends Component {
           providerName: providerName,
           isKyc: isKyc,
           name: application.profile.name,
+          payment_confirmed: application.payment_confirmed,
           profile_link: application.profile_link,
           application_id: application.application_number,
           permanent_addr: application.profile.permanent_addr,
@@ -480,6 +494,16 @@ class Journey extends Component {
 
 
   handleClose = () => {
+    if (this.state.paymentModal) {
+      let eventObj = {
+        "event_name": 'popup_post_payment_click',
+        "properties": {
+          "user_action": 'back',
+          "source": 'resume'
+        }
+      };
+      nativeCallback({ events: eventObj });
+    }
     this.setState({
       openDialog: false,
       openDialogReset: false,
@@ -543,6 +567,36 @@ class Journey extends Component {
     });
   }
 
+  async confirmPyamentWithProvider() {
+    try {
+      this.setState({
+        show_loader: true
+      })
+      const res = await Api.get('api/insurance/confirm/payment/' + this.state.params.insurance_id);
+
+      this.setState({
+        show_loader: false
+      })
+      if (res.pfwresponse.status_code === 200 &&
+        res.pfwresponse.result.payment_confirmed === true) {
+        this.navigate('/insurance/contact1')
+      } else {
+        //opoen modal
+        this.setState({
+          openResponseDialog: true,
+          apiError: 'Oops! Seems like there is some technical issues. Don’t worry we have received your payment, please retry after sometime. Or you can reach us at ' +
+            this.state.askEmail + '.'
+        })
+        // toast(res.pfwresponse.result.error || 'Something went wrong');
+      }
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      })
+      toast('Something went wrong');
+    }
+  }
+
   handleClick = async () => {
     let provider;
 
@@ -581,7 +635,12 @@ class Journey extends Component {
     // } else 
     if (this.state.provider === 'HDFC' && this.state.plutus_payment_status === 'payment_done' &&
       this.state.status !== 'plutus_submitted') {
-      this.navigate('/insurance/contact1')
+      if (this.state.payment_confirmed) {
+        this.navigate('/insurance/contact1')
+      } else {
+        this.confirmPyamentWithProvider();
+      }
+
       return;
     }
     // else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.contact.not_submitted &&
