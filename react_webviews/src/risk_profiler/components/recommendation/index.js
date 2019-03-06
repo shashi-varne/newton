@@ -241,7 +241,8 @@ class Recommendation extends Component {
       let obj = {
         "amount": fundsData[i].amount,
         "mfid": fundsData[i].isin,
-        "mfname": fundsData[i].name
+        "mfname": fundsData[i].name,
+        "amc_logo_big": fundsData[i].amc_logo_big
       };
       allocations.push(obj);
       isins.push(fundsData[i].isin)
