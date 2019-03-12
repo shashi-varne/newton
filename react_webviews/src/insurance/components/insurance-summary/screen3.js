@@ -109,7 +109,7 @@ class Journey extends Component {
     if (this.state.ismyway) {
       this.setState({
         type: 'myway',
-        askEmail: 'ask@myway.com'
+        askEmail: 'ask@mywaywealth.com'
       });
     } else if (this.state.isPrime) {
       this.setState({

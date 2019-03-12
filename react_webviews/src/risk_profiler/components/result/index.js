@@ -175,7 +175,7 @@ class Result extends Component {
     let map = {
       1: {
         title: 'Conservative Investor',
-        contennt: 'Investor like you are comfortable in accepting lower returns for a higher degree of liquidity or stability. Typlically, a Conservative investor primarly seeks to minimize risk and loss of money.',
+        contennt: 'Investor like you are comfortable in accepting lower returns for a higher degree of liquidity or stability. Typically, a Conservative investor primarly seeks to minimize risk and loss of money.',
         img: meter1
       },
       2: {
