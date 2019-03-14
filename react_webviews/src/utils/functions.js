@@ -111,11 +111,13 @@ export const getConfig = () => {
     let { name } = qs.parse(myHistory.location.search.slice(1));
     let { email } = qs.parse(myHistory.location.search.slice(1));
     let { campaign_version } = qs.parse(myHistory.location.search.slice(1));
+    let { html_camera } = qs.parse(myHistory.location.search.slice(1));
     searchParams = '?base_url=' + encodeURIComponent(base_url) + '&key=' + key + '&name=' + name
       + '&email=' + email + '&campaign_version=' + campaign_version;
 
     returnConfig.campaign_version = campaign_version;
-    // returnConfig.campaign_version = 0;
+    returnConfig.html_camera = html_camera;
+    // returnConfig.html_camera = true;
     returnConfig.searchParams = searchParams;
   }
   returnConfig.iOS = isMobile.iOS();

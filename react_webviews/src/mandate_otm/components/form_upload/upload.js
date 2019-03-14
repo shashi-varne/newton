@@ -10,6 +10,7 @@ import gallery_grey from 'assets/go_to_gallery_grey.svg';
 import correct from 'assets/correct_otm_sample_image.svg';
 import incorrect from 'assets/incorrect_otm_sample_image.svg';
 import '../../../utils/native_listner_otm';
+import $ from 'jquery';
 
 import Dialog, {
   DialogActions,
@@ -37,6 +38,7 @@ class Upload extends Component {
     this.native_call_handler = this.native_call_handler.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.showLoaderNative = this.showLoaderNative.bind(this);
+    this.getPhoto = this.getPhoto.bind(this);
   }
 
   componentWillMount() {
@@ -57,7 +59,7 @@ class Upload extends Component {
       });
     }
 
-    if (!getConfig().campaign_version) {
+    if (!getConfig().campaign_version && !getConfig().html_camera) {
       this.setState({
         openDialogOldClient: true
       })
@@ -150,7 +152,6 @@ class Upload extends Component {
 
   mergeDocs(file) {
 
-    console.log("mergedocs");
     this.setState({
       openDialog: false,
       imageBaseFile: file,
@@ -179,8 +180,6 @@ class Upload extends Component {
   };
 
   showLoaderNative() {
-    console.log("showloader from plutussdk");
-    console.log(this);
     this.setState({
       show_loader: true
     })
@@ -196,8 +195,6 @@ class Upload extends Component {
       doc_side: doc_side,
       // callbacks from native
       upload: function upload(file) {
-        console.log("file uploaded");
-        console.log(file.type);
         try {
           that.setState({
             docType: this.doc_type,
@@ -237,7 +234,9 @@ class Upload extends Component {
   }
 
   startUpload(method_name, doc_type, doc_name, doc_side) {
-
+    if (this.state.cameraOpened) {
+      return;
+    }
     this.sendEvents(method_name);
     this.setState({
       openDialog: true,
@@ -247,7 +246,6 @@ class Upload extends Component {
       doc_side: doc_side
     })
 
-    // this.native_call_handler(method_name, doc_type, doc_name, doc_side);
   }
 
 
@@ -257,14 +255,12 @@ class Upload extends Component {
       show_loader: true
     })
     this.sendEvents('next');
-    console.log('uploadDocs')
     var uploadurl = '/api/mandate/upload/image/' + this.state.params.key;
     const data = new FormData()
     data.append('res', file, file.doc_type)
 
     try {
       const res = await Api.post(uploadurl, data);
-      console.log(JSON.stringify(res.pfwresponse.result));
       this.setState({
         show_loader: false
       });
@@ -289,26 +285,23 @@ class Upload extends Component {
       openDialog: false,
       show_loader: false
     });
-    console.log(this.state.imageBaseFile);
 
     if (this.state.openDialogOldClient) {
       nativeCallback({ action: 'exit' });
     }
   }
 
+  openCameraWeb() {
+    $("input").trigger("click");
+    this.setState({
+      cameraOpened: false
+    })
+  }
+
   handleContinue() {
-    // this.setState({
-    //   openDialog: false
-    // });
     this.sendEventsPopup('next');
     if (this.state.openDialogOldClient) {
       if (getConfig().Android) {
-        // nativeCallback({
-        //   action: 'open_in_browser', message: {
-        //     url: this.state.link
-        //   }
-        // });
-        // window.location.replace('market://details?id=com.finwizard.fisdom');
         nativeCallback({ action: 'exit' });
       } else {
         nativeCallback({ action: 'exit' });
@@ -317,17 +310,109 @@ class Upload extends Component {
       return;
     }
     this.setState({
-      openDialog: false
+      openDialog: false,
+      cameraOpened: true
     })
     setTimeout(
       function () {
-        this.native_call_handler(this.state.method_name, this.state.doc_type, this.state.doc_name, this.state.doc_side);
+        if (getConfig().html_camera) {
+          this.openCameraWeb();
+        } else {
+          this.native_call_handler(this.state.method_name, this.state.doc_type, this.state.doc_name, this.state.doc_side);
+        }
       }
         .bind(this),
-      1000
+      100
     );
-    // this.native_call_handler(this.state.method_name, this.state.doc_type,
-    //   this.state.doc_name, this.state.doc_side);
+
+  }
+
+
+  renderHtmlCamera() {
+    return (
+      <div>
+        {!this.state.fileUploaded && <div style={{
+          border: '1px dashed #e1e1e1', padding: '10px 0px 0px 0px',
+          textAlign: 'center', fontWeight: 600
+        }}>
+          <div>Upload OTM Form</div>
+          <div style={{ margin: '20px 0 20px 0' }}>
+            <div onClick={() => this.startUpload('open_camera', 'otm', 'otm.jpg')} style={{
+              textAlign: 'center',
+            }}>
+              <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" />
+              <img src={camera_green} alt="OTM"></img>
+              <div style={{ color: '#28b24d' }}>Open Camera</div>
+            </div>
+          </div>
+        </div>}
+        {this.state.fileUploaded && <div style={{
+          border: '1px dashed #e1e1e1', padding: '0px 0px 0px 0px',
+          textAlign: 'center'
+        }}>
+          <div>
+            <img style={{ width: '100%', height: 300 }} src={this.state.imageBaseFileShow} alt="OTM" />
+          </div>
+          <div style={{ margin: '20px 0 20px 0' }}>
+            <div onClick={() => this.startUpload('open_camera', 'otm', 'otm.jpg')} style={{
+              textAlign: 'center'
+            }}>
+              {/* <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" /> */}
+              <img src={camera_grey} alt="OTM"></img>
+              <div style={{ color: '#b4b4b4' }}>Open Camera</div>
+            </div>
+          </div>
+        </div>}
+      </div>
+    );
+  }
+
+  renderNativeCamera() {
+    return (
+      <div>
+        {!this.state.fileUploaded && <div style={{
+          border: '1px dashed #e1e1e1', padding: '10px 0px 0px 0px',
+          textAlign: 'center', fontWeight: 600
+        }}>
+          <div>Upload OTM Form</div>
+          <div style={{ margin: '20px 0 20px 0' }}>
+            <div onClick={() => this.startUpload('open_camera', 'otm', 'otm.jpg')} style={{
+              width: '50%', float: 'left',
+              textAlign: 'center', borderRight: '1px solid #e1e1e1'
+
+            }}>
+              <img src={camera_green} alt="OTM"></img>
+              <div style={{ color: '#28b24d' }}>Open Camera</div>
+            </div>
+            <div onClick={() => this.startUpload('open_gallery', 'otm', 'otm.jpg')} style={{ textAlign: 'center' }}>
+              <img src={gallery_green} alt="OTM"></img>
+              <div style={{ color: '#28b24d' }}>Open Gallery</div>
+            </div>
+          </div>
+        </div>}
+        {this.state.fileUploaded && <div style={{
+          border: '1px dashed #e1e1e1', padding: '0px 0px 0px 0px',
+          textAlign: 'center'
+        }}>
+          <div>
+            <img style={{ width: '100%', height: 300 }} src={this.state.imageBaseFileShow} alt="OTM" />
+          </div>
+          <div style={{ margin: '20px 0 20px 0' }}>
+            <div onClick={() => this.startUpload('open_camera', 'otm', 'otm.jpg')} style={{
+              width: '50%', float: 'left',
+              textAlign: 'center', borderRight: '1px solid #e1e1e1'
+            }}>
+              <img src={camera_grey} alt="OTM"></img>
+              <div style={{ color: '#b4b4b4' }}>Open Camera</div>
+            </div>
+            <div onClick={() => this.startUpload('open_gallery', 'otm', 'otm.jpg')} style={{ textAlign: 'center' }}>
+              <img src={gallery_grey} alt="OTM"></img>
+              <div style={{ color: '#b4b4b4' }}>Open Gallery</div>
+            </div>
+          </div>
+        </div>}
+      </div>
+    );
   }
 
   renderDialog() {
@@ -425,51 +510,40 @@ class Upload extends Component {
     )
   }
 
+  getPhoto(e) {
+
+    e.preventDefault();
+
+    let file = e.target.files[0];
+
+    let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp'];
+
+    if (acceptedType.indexOf(file.type) === -1) {
+      toast('Please select image file only');
+      return;
+    }
+
+    let that = this;
+    file.doc_type = file.type;
+    this.setState({
+      imageBaseFile: file
+    })
+    this.getBase64(file, function (img) {
+      that.setState({
+        imageBaseFileShow: img,
+        fileUploaded: true
+      })
+    });
+
+  }
+
   renderMainUi() {
     if (!this.state.openDialog && !this.state.openDialogOldClient) {
       return (
 
         <div>
-          {!this.state.fileUploaded && <div style={{
-            border: '1px dashed #e1e1e1', padding: '10px 0px 0px 0px',
-            textAlign: 'center', fontWeight: 600
-          }}>
-            <div>Upload OTM Form</div>
-            <div style={{ margin: '20px 0 20px 0' }}>
-              <div onClick={() => this.startUpload('open_camera', 'otm', 'otm.jpg')} style={{
-                width: '50%', float: 'left',
-                textAlign: 'center', borderRight: '1px solid #e1e1e1'
-              }}>
-                <img src={camera_green} alt="OTM"></img>
-                <div style={{ color: '#28b24d' }}>Open Camera</div>
-              </div>
-              <div onClick={() => this.startUpload('open_gallery', 'otm', 'otm.jpg')} style={{ textAlign: 'center' }}>
-                <img src={gallery_green} alt="OTM"></img>
-                <div style={{ color: '#28b24d' }}>Open Gallery</div>
-              </div>
-            </div>
-          </div>}
-          {this.state.fileUploaded && <div style={{
-            border: '1px dashed #e1e1e1', padding: '0px 0px 0px 0px',
-            textAlign: 'center'
-          }}>
-            <div>
-              <img style={{ width: '100%', height: 300 }} src={this.state.imageBaseFileShow} alt="OTM" />
-            </div>
-            <div style={{ margin: '20px 0 20px 0' }}>
-              <div onClick={() => this.startUpload('open_camera', 'otm', 'otm.jpg')} style={{
-                width: '50%', float: 'left',
-                textAlign: 'center', borderRight: '1px solid #e1e1e1'
-              }}>
-                <img src={camera_grey} alt="OTM"></img>
-                <div style={{ color: '#b4b4b4' }}>Open Camera</div>
-              </div>
-              <div onClick={() => this.startUpload('open_gallery', 'otm', 'otm.jpg')} style={{ textAlign: 'center' }}>
-                <img src={gallery_grey} alt="OTM"></img>
-                <div style={{ color: '#b4b4b4' }}>Open Gallery</div>
-              </div>
-            </div>
-          </div>}
+          {getConfig().html_camera && this.renderHtmlCamera()}
+          {!getConfig().html_camera && this.renderNativeCamera()}
           <div style={{ margin: '20px 0 20px 0', textAlign: 'center', display: 'flex' }}>
             <div style={{ borderBottom: '1px solid #e1e1e1', width: '100%' }}></div>
             {/* <span style={{
@@ -484,10 +558,10 @@ class Upload extends Component {
           }}>
             <div style={{ color: '#4a4a4a', fontSize: 14, fontWeight: 600 }}>
               Didn’t recieve my OTM form?
-</div>
+            </div>
             <div onClick={() => this.navigate('send-email')} style={{ color: '#28b24d', fontSize: 14, fontWeight: 500, marginTop: 10 }}>
               Send me again.
-</div>
+          </div>
           </div>
         </div>
       )
