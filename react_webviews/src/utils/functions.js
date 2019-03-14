@@ -128,7 +128,6 @@ export const getConfig = () => {
 
     returnConfig.campaign_version = campaign_version;
     returnConfig.html_camera = html_camera;
-    returnConfig.html_camera = true;
     returnConfig.searchParams = searchParams;
   }
   returnConfig.iOS = isMobile.iOS();
