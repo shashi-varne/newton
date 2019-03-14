@@ -20,6 +20,7 @@ import Button from 'material-ui/Button';
 // import { nativeCallback } from 'utils/native_callback';
 import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
+import { getBase64 } from 'utils/functions';
 import { nativeCallback } from '../../../utils/native_callback';
 class Upload extends Component {
   constructor(props) {
@@ -139,17 +140,6 @@ class Upload extends Component {
     this.uploadDocs(this.state.imageBaseFile);
   }
 
-  getBase64(file, callback) {
-    var reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function () {
-      callback(reader.result);
-    };
-    reader.onerror = function (error) {
-      callback(null);
-    };
-  }
-
   mergeDocs(file) {
 
     this.setState({
@@ -160,11 +150,10 @@ class Upload extends Component {
     })
 
     let that = this
-    this.getBase64(file, function (img) {
+    getBase64(file, function (img) {
       that.setState({
         imageBaseFileShow: img
       })
-      // document.getElementById('single').setAttribute('src', img);
     });
 
     setTimeout(
@@ -357,7 +346,7 @@ class Upload extends Component {
             <div onClick={() => this.startUpload('open_camera', 'otm', 'otm.jpg')} style={{
               textAlign: 'center'
             }}>
-              {/* <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" /> */}
+              <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" />
               <img src={camera_grey} alt="OTM"></img>
               <div style={{ color: '#b4b4b4' }}>Open Camera</div>
             </div>
@@ -528,7 +517,7 @@ class Upload extends Component {
     this.setState({
       imageBaseFile: file
     })
-    this.getBase64(file, function (img) {
+    getBase64(file, function (img) {
       that.setState({
         imageBaseFileShow: img,
         fileUploaded: true
