@@ -474,7 +474,8 @@ class Upload extends Component {
               This version of MyWay app doesn’t support upload feature.
               {getConfig().Android && <span>Either go to Play store and update your app to the latest version to upload,
               or you can courier the signed bank mandate form to the following address.</span>}
-              {getConfig().iOS && <span>You can courier the signed bank mandate form to the following address.</span>}
+              {getConfig().iOS && <span>Either go to App store and update your app to the latest version to upload,
+              or you can courier the signed bank mandate form to the following address.</span>}
             </div>
             <div className="process-address">
               <div className="process-address1">Courier to:</div>
