@@ -1,6 +1,6 @@
 import { isMobile } from './functions';
 import { getConfig } from './functions';
-// import Api from 'utils/api';
+import Api from 'utils/api';
 
 export const nativeCallbackOld = (status_code, message, action) => {
   if (!message) {
@@ -33,13 +33,20 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   if (project === 'mandate-otm') {
 
     // For only events, if actions is present, then proceed to next block
-    if (events && action == null) {
+    if (events) {
       // clevertap api
 
       // Do not send any other keys apart from event object to eventCallback
-      if (isMobile.Android()) {
-        if (typeof window.Android !== 'undefined') window.Android.eventCallback(JSON.stringify(events));
+      // if (isMobile.Android()) {
+      //   if (typeof window.Android !== 'undefined') window.Android.eventCallback(JSON.stringify(events));
+      // }
+
+      try {
+        await Api.post('/api/clevertap/events', events);
+      } catch (error) {
+        console.log(error);
       }
+
 
       // if (isMobile.iOS()) {
       //   if (typeof window.webkit !== 'undefined') window.webkit.messageHandlers.callbackNative.postMessage(events);
