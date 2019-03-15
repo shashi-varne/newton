@@ -196,7 +196,8 @@ class Pincode extends Component {
   navigateNew = (pathname, insurance_id) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams + '&resume=' + this.state.params.resume,
+      search: '?insurance_id=' + insurance_id + '&base_url=' + this.state.params.base_url +
+        '&insurance_v2=' + this.state.params.insurance_v2 + '&resume=' + this.state.params.resume,
       params: {
         disableBack: true
       }
@@ -491,8 +492,10 @@ class Pincode extends Component {
             <div className="pincode-button">
               <div className="FooterDefaultLayout">
                 <div className="FlexItem1 pincode-footer-text ">
-                  <div style={{ fontWeight: 500 }}>₹ {formatAmount(this.state.otherProvider.quote_json['premium'])}</div>
-                  <div style={{ color: '#919090' }}>₹  formatAmount(1460)</div>
+                  <div style={{ fontWeight: 500, fontSize: 17 }}>₹ {formatAmount(this.state.otherProvider.quote_json['premium'])}</div>
+                  {this.state.otherProvider.quote_json['payment_frequency'] === 'Annual' &&
+                    this.state.otherProvider.annual_quote_json &&
+                    <div style={{ color: '#919090' }}>Save ₹  {formatAmount(this.state.otherProvider.annual_quote_json['total_savings'])}</div>}
                 </div>
                 <div className="FlexItem2">
                   <Button
