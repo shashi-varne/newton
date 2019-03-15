@@ -579,7 +579,7 @@ class Journey extends Component {
       })
       if (res.pfwresponse.status_code === 200 &&
         res.pfwresponse.result.payment_confirmed === true) {
-        if (this.state.provider == 'HDFC') {
+        if (this.state.provider === 'HDFC') {
           this.navigate('/insurance/contact1');
         } else {
           this.setState({
