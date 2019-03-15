@@ -177,7 +177,7 @@ class Journey extends Component {
     this.setState({
       show_loader: true
     });
-    
+
     // nativeCallback({
     //   action: 'take_control', message: {
     //     back_url: this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2,
@@ -579,7 +579,15 @@ class Journey extends Component {
       })
       if (res.pfwresponse.status_code === 200 &&
         res.pfwresponse.result.payment_confirmed === true) {
-        this.navigate('/insurance/contact1')
+        if (this.state.provider == 'HDFC') {
+          this.navigate('/insurance/contact1');
+        } else {
+          this.setState({
+            payment_confirmed: res.pfwresponse.result.payment_confirmed
+          });
+          this.handleClick();
+        }
+
       } else {
         //opoen modal
         this.setState({
@@ -643,6 +651,13 @@ class Journey extends Component {
 
       return;
     }
+
+    if (this.state.provider === 'IPRU' && this.state.plutus_payment_status === 'payment_done' &&
+      !this.state.payment_confirmed) {
+      this.confirmPyamentWithProvider();
+      return;
+    }
+
     // else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.contact.not_submitted &&
     //   this.state.plutus_payment_status !== 'payment_done') {
     //   this.navigate("/insurance/contact");
