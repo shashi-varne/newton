@@ -18,7 +18,7 @@
   text-align: center;
 }
 .pincode-footer-img-tile {
-  margin: 30px 10px 20px 10px;
+  margin: 20px 10px 20px 10px;
     border: 1px solid beige;
     padding: 10px 0px 20px 10px;
     border-radius: 5px;
@@ -52,7 +52,7 @@
   background: white;
     box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
     margin: 2px 0 0 0;
-    padding: 0 10px 10px 0px;
+    padding: 10px 10px 10px 0px;
 }
 .pincode-footer-text {
   text-align: -webkit-left !important;

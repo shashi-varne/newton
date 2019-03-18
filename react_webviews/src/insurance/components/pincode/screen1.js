@@ -12,7 +12,7 @@ import Api from 'utils/api';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import pincode from 'assets/address_details_icon.svg';
 import pincode_myway from 'assets/address_details_icn.svg';
-import { validateNumber } from 'utils/validators';
+import { validateNumber, formatAmount } from 'utils/validators';
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -186,7 +186,7 @@ class Pincode extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams+ '&resume=' + this.state.params.resume,
+      search: getConfig().searchParams + '&resume=' + this.state.params.resume,
       params: {
         disableBack: true
       }
@@ -196,7 +196,8 @@ class Pincode extends Component {
   navigateNew = (pathname, insurance_id) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams + '&resume=' + this.state.params.resume,
+      search: '?insurance_id=' + insurance_id + '&base_url=' + this.state.params.base_url +
+        '&insurance_v2=' + this.state.params.insurance_v2 + '&resume=' + this.state.params.resume,
       params: {
         disableBack: true
       }
@@ -440,52 +441,61 @@ class Pincode extends Component {
           <div ref={this.setWrapperRef} style={{
             position: 'fixed',
             bottom: 0,
-            background: '#fffcfc'
+            background: '#f9f9f9',
+            borderTopRightRadius: '8px',
+            borderTopLeftRadius: '8px'
           }}>
             <div style={{
               fontSize: 17,
               padding: 14,
-              color: '#574c4c'
+              color: '#574c4c',
+              background: 'white',
+              borderTopRightRadius: '8px',
+              borderTopLeftRadius: '8px'
             }}>
               ICICI Pru <b>doesn't dispatch insurance</b> to your currnet location,
              go ahead with <b>HDFC Life-</b>
             </div>
-            <div className="pincode-footer-img-tile">
-              <div className="FooterDefaultLayout">
-                <div className="FlexItem1">
-                  <img
-                    alt=""
-                    src={this.state.otherProvider.quote_describer.image}
-                    className="FooterImage" />
+            <div>
+              <div className="pincode-footer-img-tile">
+                <div className="FooterDefaultLayout">
+                  <div className="FlexItem1">
+                    <img
+                      alt=""
+                      src={this.state.otherProvider.quote_describer.image}
+                      className="FooterImage" />
+                  </div>
+                  <div className="FlexItem2 pincode-provider-title">
+                    {this.state.otherProvider.quote_json['cover_plan']}
+                  </div>
                 </div>
-                <div className="FlexItem2 pincode-provider-title">
-                  {this.state.otherProvider.quote_json['cover_plan']}
-                </div>
-              </div>
-              <div style={{ margin: '30px 0px 0px 10px' }}>
-                <div className="pincode-details-tile">
-                  <div className="pincode-details-tile1">Cover Amount</div>
-                  <div className="pincode-details-tile2">{numDifferentiation(this.state.otherProvider.quote_json['cover_amount'])}</div>
-                </div>
-                <div className="pincode-details-tile">
-                  <div className="pincode-details-tile1">Cover Period</div>
-                  <div className="pincode-details-tile2">{this.state.otherProvider.term} yrs.</div>
-                </div>
-                <div className="pincode-details-tile">
-                  <div className="pincode-details-tile1">Premium frequency</div>
-                  <div className="pincode-details-tile2">{this.state.otherProvider.quote_json['payment_frequency']}</div>
-                </div>
-                <div className="pincode-details-tile">
-                  <div className="pincode-details-tile1">Payout</div>
-                  <div className="pincode-details-tile2">{this.state.otherProvider.payout_option}</div>
+                <div style={{ margin: '30px 0px 0px 10px' }}>
+                  <div className="pincode-details-tile">
+                    <div className="pincode-details-tile1">Cover Amount</div>
+                    <div className="pincode-details-tile2">{numDifferentiation(this.state.otherProvider.quote_json['cover_amount'])}</div>
+                  </div>
+                  <div className="pincode-details-tile">
+                    <div className="pincode-details-tile1">Cover Period</div>
+                    <div className="pincode-details-tile2">{this.state.otherProvider.term} yrs.</div>
+                  </div>
+                  <div className="pincode-details-tile">
+                    <div className="pincode-details-tile1">Premium frequency</div>
+                    <div className="pincode-details-tile2">{this.state.otherProvider.quote_json['payment_frequency']}</div>
+                  </div>
+                  <div className="pincode-details-tile">
+                    <div className="pincode-details-tile1">Payout</div>
+                    <div className="pincode-details-tile2">{this.state.otherProvider.payout_option}</div>
+                  </div>
                 </div>
               </div>
             </div>
             <div className="pincode-button">
               <div className="FooterDefaultLayout">
                 <div className="FlexItem1 pincode-footer-text ">
-                  <div style={{ fontWeight: 500 }}>Rs. {this.state.otherProvider.quote_json['premium']}</div>
-                  {/* <div style={{ color: '#919090' }}>Save Rs. 1,460</div> */}
+                  <div style={{ fontWeight: 500, fontSize: 17 }}>₹ {formatAmount(this.state.otherProvider.quote_json['premium'])}</div>
+                  {this.state.otherProvider.quote_json['payment_frequency'] === 'Annual' &&
+                    this.state.otherProvider.annual_quote_json &&
+                    <div style={{ color: '#919090' }}>Save ₹  {formatAmount(this.state.otherProvider.annual_quote_json['total_savings'])}</div>}
                 </div>
                 <div className="FlexItem2">
                   <Button
@@ -493,7 +503,7 @@ class Pincode extends Component {
                     fullWidth={true}
                     variant="raised"
                     size="large"
-                    color="default"
+                    color="secondary"
                     onClick={() => this.changeProvider(this.state.params.insurance_id)}
                   >Secure My Family</Button>
                 </div>
