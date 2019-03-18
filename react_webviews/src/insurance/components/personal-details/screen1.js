@@ -139,13 +139,14 @@ class PersonalDetails1 extends Component {
   handleClick = async () => {
 
 
-    if (this.state.name.split(" ").filter(e => e).length < 2) {
+    // if (this.state.name.split(" ").filter(e => e).length < 2) {
+    //   this.setState({
+    //     name_error: 'Enter valid full name'
+    //   });
+    // } else 
+    if (!validateEmpty(this.state.name)) {
       this.setState({
-        name_error: 'Enter valid full name'
-      });
-    } else if (!validateEmpty(this.state.name)) {
-      this.setState({
-        name_error: 'Enter valid full name'
+        name_error: 'Enter valid name'
       });
     } else if (!validateAlphabets(this.state.name)) {
       this.setState({
