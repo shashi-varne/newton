@@ -63,7 +63,6 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       // if (isMobile.iOS()) {
       //   if (typeof window.webkit !== 'undefined') window.webkit.messageHandlers.callbackNative.postMessage(events);
       // }
-
     }
 
     let campaign_version = getConfig().campaign_version;
