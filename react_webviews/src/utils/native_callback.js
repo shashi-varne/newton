@@ -26,7 +26,19 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   console.log(action);
   console.log(JSON.stringify(message));
   console.log(JSON.stringify(events))
+  if (action) {
+    callbackData.action = action;
+  }
+  if (message) {
+    callbackData.data = message;
+  }
+  if (events) {
+    callbackData.events = events;
+  }
 
+  if (!action && !events) {
+    return;
+  }
 
   let project = getConfig().project;
 
@@ -118,19 +130,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     }
   }
 
-  if (action) {
-    callbackData.action = action;
-  }
-  if (message) {
-    callbackData.data = message;
-  }
-  if (events) {
-    callbackData.events = events;
-  }
 
-  if (!action && !events) {
-    return;
-  }
 
   if (isMobile.Android()) {
     console.log("Android")

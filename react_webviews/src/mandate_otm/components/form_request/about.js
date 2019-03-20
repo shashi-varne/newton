@@ -40,7 +40,7 @@ class About extends Component {
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
-      questionIndex: 0
+      questionIndex: -1
     }
 
     this.renderQuestions = this.renderQuestions.bind(this);
@@ -105,7 +105,7 @@ class About extends Component {
 
   renderQuestions(props, index) {
     return (
-      <div style={{ marginTop: 30 }} key={index}>
+      <div style={{ marginTop: 26, marginBottom: 5 }} key={index}>
         <div style={{ display: '-webkit-box' }} onClick={() => this.showAnswers(index)}>
           <img
             src={this.state.questionIndex === index ? shrink : expand} style={{ verticalAlign: 'bottom' }} width={14} alt="OTM" />

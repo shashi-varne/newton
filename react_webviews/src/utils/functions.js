@@ -106,9 +106,8 @@ export const getConfig = () => {
     project = 'gold';
   }
   returnConfig.project = project;
-
-
-
+  returnConfig.iOS = isMobile.iOS();
+  returnConfig.Android = isMobile.Android();
 
   if (insurance_v2) {
     returnConfig.insurance_v2 = true;
@@ -127,11 +126,14 @@ export const getConfig = () => {
       + '&email=' + email + '&campaign_version=' + campaign_version;
 
     returnConfig.campaign_version = campaign_version;
-    returnConfig.html_camera = html_camera;
+    returnConfig.html_camera = (returnConfig.iOS && returnConfig.campaign_version) ? true : html_camera;
+    if (returnConfig.iOS && !returnConfig.campaign_version) {
+      returnConfig.hide_header = true;
+    }
+
     returnConfig.searchParams = searchParams;
   }
-  returnConfig.iOS = isMobile.iOS();
-  returnConfig.Android = isMobile.Android();
+
 
   return returnConfig;
 }

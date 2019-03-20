@@ -25,8 +25,8 @@
   padding: 20px 15px;
   background-color: #fff;
   overflow-y: scroll;
-  margin-bottom: 50px;
-  /* padding-bottom: 10px !important; */
+  margin-bottom: 60px;
+  padding-bottom: 20px !important;
 }
 
 .Container .container-padding {

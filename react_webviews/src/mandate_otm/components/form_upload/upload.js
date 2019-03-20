@@ -331,7 +331,7 @@ class Upload extends Component {
             }}>
               <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" />
               <img src={camera_green} alt="OTM"></img>
-              <div style={{ color: '#28b24d' }}>Open Camera</div>
+              <div style={{ color: '#28b24d' }}>Click here to upload</div>
             </div>
           </div>
         </div>}
@@ -348,7 +348,7 @@ class Upload extends Component {
             }}>
               <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" />
               <img src={camera_grey} alt="OTM"></img>
-              <div style={{ color: '#b4b4b4' }}>Open Camera</div>
+              <div style={{ color: '#b4b4b4' }}>Click here to upload</div>
             </div>
           </div>
         </div>}
@@ -474,7 +474,8 @@ class Upload extends Component {
               This version of MyWay app doesn’t support upload feature.
               {getConfig().Android && <span>Either go to Play store and update your app to the latest version to upload,
               or you can courier the signed bank mandate form to the following address.</span>}
-              {getConfig().iOS && <span>You can courier the signed bank mandate form to the following address.</span>}
+              {getConfig().iOS && <span>Either go to App store and update your app to the latest version to upload,
+              or you can courier the signed bank mandate form to the following address.</span>}
             </div>
             <div className="process-address">
               <div className="process-address1">Courier to:</div>

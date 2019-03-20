@@ -188,17 +188,18 @@ class Container extends Component {
 
   componentDidUpdate(prevProps) {
     let body = document.getElementsByTagName('body')[0].offsetHeight;
-    let client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
+    // let client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
     let head = document.getElementsByClassName('Header')[0] ? document.getElementsByClassName('Header')[0].offsetHeight : 0;
     let foot = document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight : 0;
     let banner = document.getElementsByClassName('Banner')[0];
     let bannerHeight = (banner) ? banner.offsetHeight : 0;
 
-    if (client > body) {
-      document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 50 + 'px';
-    } else {
-      document.getElementsByClassName('Container')[0].style.height = document.getElementsByClassName('Container')[0].offsetHeight;
-    }
+    // if (client > body) {
+    //   document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 50 + 'px';
+    // } else {
+    //   document.getElementsByClassName('Container')[0].style.height = document.getElementsByClassName('Container')[0].offsetHeight;
+    // }
+    document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 50 + 'px';
   }
 
   render() {
@@ -215,7 +216,7 @@ class Container extends Component {
     return (
       <div className={`ContainerWrapper ${this.props.classOverRide}  ${(this.props.type !== 'fisdom') ? 'blue' : ''}`} >
         {/* Header Block */}
-        {!this.props.noHeader && <Header
+        {(!this.props.noHeader && !getConfig().hide_header) && <Header
           disableBack={this.props.disableBack}
           title={this.props.title}
           smallTitle={this.props.smallTitle}
