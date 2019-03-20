@@ -64,7 +64,6 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       //   if (typeof window.webkit !== 'undefined') window.webkit.messageHandlers.callbackNative.postMessage(events);
       // }
 
-      return;
     }
 
     let campaign_version = getConfig().campaign_version;

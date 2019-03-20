@@ -331,7 +331,7 @@ class Upload extends Component {
             }}>
               <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" />
               <img src={camera_green} alt="OTM"></img>
-              <div style={{ color: '#28b24d' }}>Open Camera</div>
+              <div style={{ color: '#28b24d' }}>Click here to upload</div>
             </div>
           </div>
         </div>}
@@ -348,7 +348,7 @@ class Upload extends Component {
             }}>
               <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" />
               <img src={camera_grey} alt="OTM"></img>
-              <div style={{ color: '#b4b4b4' }}>Open Camera</div>
+              <div style={{ color: '#b4b4b4' }}>Click here to upload</div>
             </div>
           </div>
         </div>}
