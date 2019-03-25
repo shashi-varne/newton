@@ -23,7 +23,6 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
-import { getConfig } from '../../../utils/functions';
 
 class Journey extends Component {
   constructor(props) {
@@ -186,18 +185,7 @@ class Journey extends Component {
     //   }
     // });
 
-    if (getConfig().iOS) {
-      nativeCallback({
-        action: 'callback_to_web', message: {
-          method: "PlutusSdk.back_pressed()"
-        }
-      });
-      nativeCallback({
-        action: 'show_top_bar'
-      });
-    }
-
-    let insurance_v2 = this.state.params.insurance_v2 ? true : '';
+    let insurance_v2 = this.state.params.insurance_v2 ? true : null;
     let paymentRedirectUrl = encodeURIComponent(
       window.location.protocol + '//' + window.location.host + '/insurance/payment/' + this.state.params.insurance_id + '/' + insurance_v2
     );
