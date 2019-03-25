@@ -11,6 +11,7 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import qs from 'qs';
+import { nativeCallback } from '../../../utils/native_callback';
 
 class Payment extends Component {
   constructor(props) {
@@ -34,6 +35,9 @@ class Payment extends Component {
       insurance_id: insurance_id,
       insurance_v2: insurance_v2
     })
+
+    nativeCallback({ action: 'take_control_reset' });
+
 
   }
 
