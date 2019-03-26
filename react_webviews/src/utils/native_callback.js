@@ -69,7 +69,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
 
     console.log("campaign_version...................." + campaign_version);
     if (campaign_version >= 1) {
-      if (isMobile.Android()) {
+      if (isMobile.Android() && action) {
         if (typeof window.Android !== 'undefined') {
           if (action === 'show_toast') {
             window.Android.performAction('show_toast', message.message);
@@ -91,12 +91,12 @@ export const nativeCallback = async ({ action = null, message = null, events = n
             return;
           }
 
-          window.Android.performAction('close_webview', null);
-          return;
+          // window.Android.performAction('close_webview', null);
+          // return;
         }
       }
 
-      if (isMobile.iOS()) {
+      if (isMobile.iOS() && action) {
         if (typeof window.webkit !== 'undefined') {
           window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
         }
