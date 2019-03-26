@@ -223,7 +223,10 @@ class Upload extends Component {
   }
 
   startUpload(method_name, doc_type, doc_name, doc_side) {
-    if (this.state.cameraOpened) {
+    if (this.state.cameraOpened && !getConfig().Android) {
+      this.setState({
+        cameraOpened: false
+      })
       return;
     }
     this.sendEvents(method_name);
