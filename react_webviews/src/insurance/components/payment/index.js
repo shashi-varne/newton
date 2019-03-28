@@ -30,13 +30,14 @@ class Payment extends Component {
     const { insurance_id } = this.props.match.params;
     const { insurance_v2 } = this.props.match.params;
 
+    if (insurance_v2) {
+      nativeCallback({ action: 'take_control_reset_hard' });
+    }
     this.setState({
       paymentStatus: status,
       insurance_id: insurance_id,
       insurance_v2: insurance_v2
     })
-
-    nativeCallback({ action: 'take_control_reset' });
 
 
   }
