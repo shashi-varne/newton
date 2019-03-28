@@ -114,6 +114,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   }
 
   let insurance_v2 = getConfig().insurance_v2;
+  console.log('insurance_v2 :' + insurance_v2);
   if (!insurance_v2 && project === 'insurance') {
 
     let notInInsuranceV2 = ['take_control', 'take_control_reset'];
@@ -121,12 +122,16 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       return;
     }
 
+    if (action === 'take_control_reset_hard') {
+      callbackData.action = 'take_control_reset';
+    }
+
     if (action === 'resume_provider') {
-      action = 'resume_payment';
+      callbackData.action = 'resume_payment';
     }
 
     if (action === 'show_quotes') {
-      action = 'native_back';
+      callbackData.action = 'native_back';
     }
   }
 
