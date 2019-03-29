@@ -523,12 +523,16 @@ class ContactDetails2 extends Component {
           for (let error of res.pfwresponse.result.errors) {
             if (error.field === 'p_addr') {
               this.setState({ openDialog: true, apiError: 'error in permanent address : ' + error.message });
+              break;
             } else if (error.field === 'c_addr') {
               this.setState({ openDialog: true, apiError: 'error in correspondence address : ' + error.message });
+              break;
             } else if (error.field === 'nominee_address') {
               this.setState({ openDialog: true, apiError: 'error in nominee address : ' + error.message });
+              break;
             } else if (error.field === 'appointee_address') {
               this.setState({ openDialog: true, apiError: 'error in appointee address : ' + error.message });
+              break;
             } else {
               this.setState({ openDialog: true, apiError: error.message });
             }
