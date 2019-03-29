@@ -12,7 +12,7 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
-import { validateNumber, validateEmail, numberShouldStartWith } from 'utils/validators';
+import { validateNumber, validateEmail } from 'utils/validators';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../../common/ui/Toast';
 import { nativeCallback } from 'utils/native_callback';
@@ -295,10 +295,6 @@ class GoldRegister extends Component {
         name_error: 'Enter valid full name'
       });
     } else if (this.state.mobile_no.length !== 10 || !validateNumber(this.state.mobile_no)) {
-      this.setState({
-        mobile_no_error: 'Please enter valid mobile no'
-      });
-    } else if (!numberShouldStartWith(this.state.mobile_no)) {
       this.setState({
         mobile_no_error: 'Please enter valid mobile no'
       });

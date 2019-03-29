@@ -12,7 +12,7 @@ import contact from 'assets/contact_details_icon.svg';
 import contact_myway from 'assets/contact_details_icn.svg';
 import location from 'assets/location_dark_icn.png';
 import Api from 'utils/api';
-import { validateNumber, validateStreetName, validateLengthAddress, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';
+import { validateNumber, validateStreetName, validateLengthDynamic, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import Dialog, {
   DialogActions,
@@ -284,9 +284,9 @@ class ContactDetails2 extends Component {
       this.setState({
         addressline_error: 'Address can not contain more than 3 same consecutive characters'
       });
-    } else if (!validateLengthAddress(this.state.addressline)) {
+    } else if (!validateLengthDynamic(this.state.addressline, 30)) {
       this.setState({
-        addressline_error: 'Maximum length of address is 90'
+        addressline_error: 'Maximum length of address is 30'
       });
     } else if (!validateMinChar(this.state.addressline)) {
       this.setState({
@@ -296,9 +296,9 @@ class ContactDetails2 extends Component {
       this.setState({
         landmark_error: 'Enter nearest landmark'
       });
-    } else if (!validateLengthAddress(this.state.landmark)) {
+    } else if (!validateLengthDynamic(this.state.landmark, 30)) {
       this.setState({
-        landmark_error: 'Maximum length of landmark is 90'
+        landmark_error: 'Maximum length of landmark is 30'
       });
     } else if (!validateStreetName(this.state.landmark)) {
       this.setState({
@@ -313,9 +313,9 @@ class ContactDetails2 extends Component {
       this.setState({
         caddressline_error: 'Enter your address'
       });
-    } else if (!this.state.checked && !validateLengthAddress(this.state.caddressline)) {
+    } else if (!this.state.checked && !validateLengthDynamic(this.state.caddressline, 30)) {
       this.setState({
-        caddressline_error: 'Maximum length of name is 90 characters'
+        caddressline_error: 'Maximum length of name is 30 characters'
       });
     } else if (!this.state.checked && !validateConsecutiveChar(this.state.caddressline)) {
       this.setState({
@@ -329,18 +329,16 @@ class ContactDetails2 extends Component {
       this.setState({
         clandmark_error: 'Enter nearest landmark'
       });
-    } else if (!this.state.checked && !validateLengthAddress(this.state.clandmark)) {
+    } else if (!this.state.checked && !validateLengthDynamic(this.state.clandmark, 30)) {
       this.setState({
-        clandmark_error: 'Maximum length of landmark is 90'
+        clandmark_error: 'Maximum length of landmark is 30'
       });
     } else if (!this.state.checked && !validateStreetName(this.state.clandmark)) {
       this.setState({
         clandmark_error: 'Please enter valid landmark'
       });
-    } else if (!this.state.nominee_checked &&
-      (this.state.nominee_pincode.length !== 6 || !validateNumber(this.state.nominee_pincode
-        || this.state.nominee_pincode_error))
-    ) {
+    } else if (!this.state.nominee_checked && (this.state.nominee_pincode.length !== 6 || !validateNumber(this.state.nominee_pincode
+      || this.state.nominee_pincode_error))) {
       // nominee start
 
       this.setState({
@@ -350,9 +348,9 @@ class ContactDetails2 extends Component {
       this.setState({
         nominee_addressline_error: 'Enter your address'
       });
-    } else if (!this.state.nominee_checked && !validateLengthAddress(this.state.nominee_addressline)) {
+    } else if (!this.state.nominee_checked && !validateLengthDynamic(this.state.nominee_addressline, 30)) {
       this.setState({
-        nominee_addressline_error: 'Maximum length of name is 90 characters'
+        nominee_addressline_error: 'Maximum length of name is 30 characters'
       });
     } else if (!this.state.nominee_checked && !validateConsecutiveChar(this.state.nominee_addressline)) {
       this.setState({
@@ -366,9 +364,9 @@ class ContactDetails2 extends Component {
       this.setState({
         nominee_landmark_error: 'Enter nearest landmark'
       });
-    } else if (!this.state.nominee_checked && !validateLengthAddress(this.state.nominee_landmark)) {
+    } else if (!this.state.nominee_checked && !validateLengthDynamic(this.state.nominee_landmark, 30)) {
       this.setState({
-        nominee_landmark_error: 'Maximum length of landmark is 90'
+        nominee_landmark_error: 'Maximum length of landmark is 30'
       });
     } else if (!this.state.nominee_checked && !validateStreetName(this.state.nominee_landmark)) {
       this.setState({
@@ -387,9 +385,9 @@ class ContactDetails2 extends Component {
       this.setState({
         a_addressline_error: 'Enter your address'
       });
-    } else if (!this.state.a_checked && !validateLengthAddress(this.state.a_addressline)) {
+    } else if (!this.state.a_checked && !validateLengthDynamic(this.state.a_addressline, 30)) {
       this.setState({
-        a_addressline_error: 'Maximum length of name is 90 characters'
+        a_addressline_error: 'Maximum length of name is 30 characters'
       });
     } else if (!this.state.a_checked && !validateConsecutiveChar(this.state.a_addressline)) {
       this.setState({
@@ -403,9 +401,9 @@ class ContactDetails2 extends Component {
       this.setState({
         a_landmark_error: 'Enter nearest landmark'
       });
-    } else if (!this.state.a_checked && !validateLengthAddress(this.state.a_landmark)) {
+    } else if (!this.state.a_checked && !validateLengthDynamic(this.state.a_landmark, 30)) {
       this.setState({
-        a_landmark_error: 'Maximum length of landmark is 90'
+        a_landmark_error: 'Maximum length of landmark is 30'
       });
     } else if (!this.state.a_checked && !validateStreetName(this.state.a_landmark)) {
       this.setState({
