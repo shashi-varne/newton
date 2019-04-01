@@ -12,6 +12,7 @@ import Gold from './gold';
 import Mandate from './mandate_address';
 import Mandate_OTM from './mandate_otm';
 import RiskProfiler from './risk_profiler';
+import IsipBIller from './isip';
 
 class App extends Component {
   render() {
@@ -24,6 +25,7 @@ class App extends Component {
           <Route path="/mandate" component={Mandate} />
           <Route path="/mandate-otm" component={Mandate_OTM} />
           <Route path="/risk" component={RiskProfiler} />
+          <Route path="/isip" component={IsipBIller} />
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>
