@@ -26,7 +26,6 @@ import {
   validateAlphabets, validateEmpty, validateLength, validateConsecutiveChar
 } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
-import { getConfig } from 'utils/functions';
 
 class AdditionalInfo extends Component {
   constructor(props) {
@@ -198,7 +197,8 @@ class AdditionalInfo extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams + '&resume=' + this.state.params.resume,
+      search: '?insurance_id=' + this.state.params.insurance_id + '&base_url=' + this.state.params.base_url +
+        '&insurance_v2=' + this.state.params.insurance_v2 + '&resume=' + this.state.params.resume,
       params: {
         disableBack: true
       }
