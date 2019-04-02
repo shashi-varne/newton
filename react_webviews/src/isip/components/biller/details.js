@@ -101,7 +101,10 @@ class AddEditAddress extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams
+      search: getConfig().searchParams,
+      params: {
+        bank_code: this.state.bank_code
+      }
     });
   }
 
@@ -125,8 +128,8 @@ class AddEditAddress extends Component {
   }
 
   handleClick = async () => {
-
-    this.sendEvents('next');
+    // this.sendEvents('next');
+    this.navigate('steps');
 
   }
 
@@ -134,7 +137,7 @@ class AddEditAddress extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="Bank Mandate(OTM)"
+        title="i-SIP Biller"
         handleClick={this.handleClick}
         classOverRide="result-container"
         classOverRideContainer="result-container"
@@ -164,8 +167,8 @@ class AddEditAddress extends Component {
             <div className="biller-accountnumber">URN Number: {this.state.biller_id}</div>
             <div className="biller-accountnumber">Status: {this.state.status}</div>
           </div>
-          <div style={{ marginTop: 30 }}>
-            <Button style={{ borderRadius: 6 }} buttonTitle="Proceed" onClick={this.handleClose} color="primary" autoFocus>
+          <div style={{ marginTop: 30 }} onClick={this.handleClick}>
+            <Button style={{ borderRadius: 6 }} buttonTitle="Add Biller" color="primary" autoFocus>
               OK
           </Button>
           </div>

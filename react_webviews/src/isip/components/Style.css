@@ -13,7 +13,7 @@
   height: -webkit-fill-available; 
   margin-bottom: 0px;
   padding-bottom: 0;
-  overflow-y: hidden;
+  overflow-y: scroll;
 }
 .biller-details-tile {
   padding: 10px;
@@ -46,4 +46,33 @@
     color: rgb(135, 135, 135);
     margin: 10px 0px 0px 0px;
     display: -webkit-box;
+}
+.biller-steps-title {
+    font-size: 23px;
+    text-align: center;
+    color: black;
+}
+.biller-steps-small-title {
+  text-align: center;
+    margin: 3px 0 40px 0;
+    color: rgb(135, 135, 135);
+    font-weight: 400;
+}
+.biller-steps-footer-title {
+  margin: 20px 0px 0 0;
+    text-align: left;
+    color: rgb(135, 135, 135);
+    font-weight: 400;
+}
+.step-tiles-title {
+  font-size: 18px;
+    margin: 40px 0 20px 0px;
+    color: black;
+    font-weight: 500;
+}
+.steps-tiles-image-tag {
+  border-radius: 3px;
+  box-shadow: 0px 2px 6px 0px rgba(102,120,121,0.25);
+  border: 1px solid beige;
+  padding: 3px;
 }

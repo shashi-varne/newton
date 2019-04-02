@@ -62,26 +62,13 @@ class Container extends Component {
   }
 
   historyGoBack = () => {
-    this.setState({
-      back_pressed: true
-    })
-    if (this.props.popupOpen) {
-      return;
-    }
+
     let pathname = this.props.history.location.pathname;
-    let { params } = this.props.location;
-    console.log(this.props);
-    if ((params && params.disableBack) || this.props.disableBack) {
-      nativeCallback({ action: 'exit', events: this.getEvents('exit') });
-      return;
-    }
+    // let { params } = this.props.location;
 
     switch (pathname) {
-      case "/mandate-otm":
-      case "/mandate-otm/form-request/about":
-      case "/mandate-otm/form-request/success":
-      case "/mandate-otm/form-upload/upload":
-      case "/mandate-otm/form-upload/success":
+      case "/isip":
+      case "/isip/biller/about":
         nativeCallback({ action: 'exit', events: this.getEvents('exit') });
         break;
       default:
@@ -187,19 +174,19 @@ class Container extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    let body = document.getElementsByTagName('body')[0].offsetHeight;
+    // let body = document.getElementsByTagName('body')[0].offsetHeight;
     // let client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
-    let head = document.getElementsByClassName('Header')[0] ? document.getElementsByClassName('Header')[0].offsetHeight : 0;
-    let foot = document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight : 0;
-    let banner = document.getElementsByClassName('Banner')[0];
-    let bannerHeight = (banner) ? banner.offsetHeight : 0;
+    // let head = document.getElementsByClassName('Header')[0] ? document.getElementsByClassName('Header')[0].offsetHeight : 0;
+    // let foot = document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight : 0;
+    // let banner = document.getElementsByClassName('Banner')[0];
+    // let bannerHeight = (banner) ? banner.offsetHeight : 0;
 
     // if (client > body) {
     //   document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 50 + 'px';
     // } else {
     //   document.getElementsByClassName('Container')[0].style.height = document.getElementsByClassName('Container')[0].offsetHeight;
     // }
-    document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 50 + 'px';
+    // document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 50 + 'px';
   }
 
   render() {

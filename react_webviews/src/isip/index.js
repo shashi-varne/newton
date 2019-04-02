@@ -14,6 +14,7 @@ import NotFound from '../common/components/NotFound';
 
 import BillerAbout from './components/biller/about';
 import BillerDetails from './components/biller/details';
+import BillerSteps from './components/biller/steps';
 
 import { create } from 'jss';
 import JssProvider from 'react-jss/lib/JssProvider';
@@ -111,6 +112,7 @@ const IsipBIller = (props) => {
           <Route exact path={`${url}`} component={BillerDetails} />
           <Route path={`${url}/biller/about`} component={BillerAbout} />
           <Route path={`${url}/biller/details`} component={BillerDetails} />
+          <Route path={`${url}/biller/steps`} component={BillerSteps} />
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>
