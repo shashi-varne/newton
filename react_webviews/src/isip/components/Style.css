@@ -1,69 +1,49 @@
+.biller-margin {
+  margin-top: 10px;
+    border-bottom: 1px solid #e8e8e8;
+    margin: 10px 0px 10px 0px;
+    padding-bottom: 3px;
+    color: #4a4a4a;
+    font-size: 14px;
+    font-weight: 400;
+}
 .result-container {
-  background: #155acf;
+  background: #f9f9f9;
   /* autoprefixer: off */
   height: -webkit-fill-available; 
   margin-bottom: 0px;
   padding-bottom: 0;
   overflow-y: hidden;
 }
-.ui-tabs {
-  display: flex;
-  box-shadow: 0 1px 2px 0 #11000000, 0 1px 3px 1px rgba(60,64,67,0.149);
+.biller-details-tile {
+  padding: 10px;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0px 2px 6px 0px rgba(102,120,121,0.25);
 }
-.ui-tab {
-  width: 50%;
-  color: #8b8b8b;
+.biller-bankname {
+  color: rgb(135, 135, 135);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 2.1;
+    text-transform: uppercase;
+}
+.biller-accountnumber {
+  color: #9e9e9e;
+    line-height: 19px;
+    font-weight: 400;
+}
+.biller-dot {
+  height: 5px;
+    width: 5px;
+    margin-right: 20px;
+    border-radius: 50%;
+    border: 2px solid #b4b4b4;
+    margin-top: 10px;
+}
+.biller-about-points {
   font-size: 15px;
-  text-align: center;
-  border-right: 1px solid #f2f2f2;
-  padding: 10px 0px 10px 0px;
-}
-.ui-tab2 {
-  width: 20%;
-  text-align: center;
-  border-right: 1px solid #f2f2f2;
-  padding: 10px 0px 10px 0px;
-  color: #8b8b8b;
-  font-size: 14px;
-}
-.funds-card {
-  /* box-shadow: 0 1px 2px 0 #11000000, 0 1px 3px 1px rgba(60,64,67,0.149); */
-}
-.meter-img {
-  text-align: center;
-    margin-top: 50px;
-}
-.fund-details {
-  display: flex;
-  padding: 10px 10px 10px 10px;
-  margin-bottom: 15px;
-  box-shadow: 0 1px 2px 0 #11000000, 0 1px 3px 1px rgba(60,64,67,0.149);
-}
-.fund-details-head {
-  color: #4a4a4a;
-  font-weight: 600;
-  font-size: 16px;
-}
-.fund-details-below {
-  font-size: 14px;
-  color: #525252;
-  margin-top: 10px;
-}
-.recommendation-containerWrapper {
-  background-color: #f2f2f2;
-  /* autoprefixer: off */
-  height: -webkit-fill-available;
-  /* height: 100%; */
-  padding: 10px 7px 10px 7px;
-  margin-bottom: 0px !important;
-}
-.recommendation-container {
-  background-color: #f2f2f2;
-  /* autoprefixer: off */
-  /* height: -webkit-fill-available; */
-  padding: 10px 0px 10px 0px;
-  margin-bottom: 60px !important;
-}
-.question-container {
-  margin-top: 20px;
+    color: rgb(135, 135, 135);
+    margin: 10px 0px 0px 0px;
+    display: -webkit-box;
 }

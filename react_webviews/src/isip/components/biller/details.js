@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import qs from 'qs';
-import contact from 'assets/address_details_icon.svg';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
+import Button from '../../../common/ui/Button';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
@@ -53,18 +53,19 @@ class AddEditAddress extends Component {
 
   async componentDidMount() {
     try {
-      const res = await Api.get('/api/mandate/campaign/address/' + this.state.params.key);
+      const res = await Api.get('/api/mandate/' + this.state.params.pc_urlsafe +
+        '/fetch/biller/information');
       if (res.pfwresponse.result) {
-        let address = res.pfwresponse.result[0];
+        let result = res.pfwresponse.result;
         this.setState({
           show_loader: false,
-          pincode: address.pincode || '',
-          addressline1: address.addressline1 || '',
-          addressline2: address.addressline2 || '',
-          city: address.city || '',
-          state: address.state || '',
-          address_id: address.id || '',
-          address_present: address.id ? true : false
+          account_number: result.account_number || '',
+          bank_code: result.bank_code || '',
+          bank_image: result.bank_image || '',
+          bank_name: result.bank_name || '',
+          biller_id: result.biller_id || 546378444292284,
+          ifsc_code: result.ifsc_code || '',
+          status: result.status || ''
         });
       }
       else {
@@ -135,33 +136,38 @@ class AddEditAddress extends Component {
         showLoader={this.state.show_loader}
         title="Bank Mandate(OTM)"
         handleClick={this.handleClick}
+        classOverRide="result-container"
+        classOverRideContainer="result-container"
         edit={this.props.edit}
         buttonTitle="Add Biller"
         type={this.state.type}
         events={this.sendEvents('just_set_events')}
+        noFooter={true}
       >
-        <div style={{
-          border: '1px solid red',
-          padding: '10px'
-        }}>
-          <div style={{ fontSize: 14, color: 'blue', marginBottom: 8 }}>Primary Account</div>
-          <div>
+        <div className="biller-details-tile">
+          <div style={{ fontSize: 14, color: getConfig().primary, marginBottom: 8 }}>Primary Account</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div>
-              <div style={{ color: '#878787', fontSize: 14 }}>State Bank of India</div>
-              <div>Account Number: XXXXXXXXXX</div>
-              <div>IFSC Code: XXXXXX</div>
+              <div className="biller-bankname ">{this.state.bank_name}</div>
+              <div className="biller-accountnumber">Account Number: {this.state.account_number}</div>
+              <div className="biller-accountnumber">IFSC Code: {this.state.ifsc_code}</div>
             </div>
-            <div>
-              <img width="20" src={contact} alt="Biller" />
+            <div style={{ width: '20%', right: '13px', position: 'relative' }}>
+              <img style={{ width: '100%', height: '64px' }} src={this.state.bank_image} alt="Biller" />
             </div>
           </div>
 
-          <div>
+          <div className="biller-margin">
             Biller Details
           </div>
           <div>
-            <div>URN Number: XXXXXX</div>
-            <div>Status: Initialized</div>
+            <div className="biller-accountnumber">URN Number: {this.state.biller_id}</div>
+            <div className="biller-accountnumber">Status: {this.state.status}</div>
+          </div>
+          <div style={{ marginTop: 30 }}>
+            <Button style={{ borderRadius: 6 }} buttonTitle="Proceed" onClick={this.handleClose} color="primary" autoFocus>
+              OK
+          </Button>
           </div>
         </div>
       </Container >

@@ -100,7 +100,8 @@
   left: 0;
   right: 0;
   border: 0;
-  box-shadow: 0 -3px 5px -2px rgba(0,0,0,.1);
+  box-shadow: 0px 2px 6px 0px rgba(102,120,121,0.25);
+  /* box-shadow: 0 -3px 5px -2px rgba(0,0,0,.1); */
   /* box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149); */
   margin: 0px 7px 7px 7px;
   border-radius: 4px;
@@ -198,6 +199,7 @@ button.MuiButtonBase-root.MuiButton-root.MuiButton-raised.MuiButton-raisedSecond
 
 .FooterSummaryLayout {
   background: #2ec155;
+  border-radius: 6px;
 }
 
 .FooterDefaultLayout .FlexItem3, .FooterDefaultLayout .FlexItem2, .FooterDefaultLayout .FlexItem1 {

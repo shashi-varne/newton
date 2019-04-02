@@ -138,9 +138,9 @@ export const getConfig = () => {
 
 
   if (project === 'isip') {
-    let { key } = qs.parse(myHistory.location.search.slice(1));
+    let { pc_urlsafe } = qs.parse(myHistory.location.search.slice(1));
     let { campaign_version } = qs.parse(myHistory.location.search.slice(1));
-    searchParams = '?base_url=' + encodeURIComponent(base_url) + '&key=' + key +
+    searchParams = '?base_url=' + encodeURIComponent(base_url) + '&pc_urlsafe=' + pc_urlsafe +
       '&campaign_version=' + campaign_version;
 
     returnConfig.campaign_version = campaign_version;

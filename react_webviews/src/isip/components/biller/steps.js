@@ -1,22 +1,27 @@
 import React, { Component } from 'react';
 import qs from 'qs';
 
-import Container from '../../common/Container';
+// import Container from '../../common/Container';
 import { getConfig } from 'utils/functions';
-import icon from 'assets/mandate_pending_icon.svg';
+import Dialog, {
+  DialogActions,
+  DialogContent
+} from 'material-ui/Dialog';
+import Button from 'material-ui/Button';
+import thumb from 'assets/thumb.svg';
 import { nativeCallback } from 'utils/native_callback';
 
-class About extends Component {
+class Success extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
+      openDialog: true,
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
     }
-
   }
 
 
@@ -48,7 +53,7 @@ class About extends Component {
       "event_name": 'Campaign OTM Address',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'Intro'
+        "screen_name": 'Feedback Popup'
       }
     };
 
@@ -60,45 +65,37 @@ class About extends Component {
   }
 
   handleClick = async () => {
-    // this.sendEvents('next');
-    this.navigate('details');
+    this.sendEvents('next');
+    nativeCallback({ action: 'exit' });
   }
+
+  handleClose() {
+    this.setState({
+      openDialog: false,
+      show_loader: true
+    });
+  }
+
+
 
   render() {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="About i-SIP Biller"
+        title="Bank Mandate(OTM)"
         handleClick={this.handleClick}
+        classOverRide="result-container"
+        classOverRideContainer="result-container"
         edit={this.props.edit}
-        buttonTitle="Continue"
+        buttonTitle="Add Biller"
         type={this.state.type}
-      // events={this.sendEvents('just_set_events')}
+        events={this.sendEvents('just_set_events')}
+        noFooter={true}
       >
-        <div style={{ textAlign: 'center', margin: '60px 0px 60px 0px' }}>
-          <img width={100} src={icon} alt="OTM" />
-        </div>
-        <div style={{ marginTop: 26, marginBottom: 5 }}>
-          <div className="biller-about-points">
-            <div className="biller-dot"></div>
-            <div style={{ width: '90%' }}>Biller is a completely paperless, secure and the easiest method for paying monthly
-              SIP installments.
-            </div>
-          </div>
-
-          <div className="biller-about-points">
-            <div className="biller-dot"></div>
-            <div style={{ width: '90%' }}>  On successful addition of biller, your bank will notify you before the SIP
-              dates and debit SIP instalment from your account.
-            </div>
-          </div>
-
-        </div>
-
       </Container>
 
     );
   }
 }
 
-export default About;
+export default Success;

@@ -3,6 +3,7 @@ import Button from 'material-ui/Button';
 import { withStyles } from 'material-ui/styles';
 import arrow from 'assets/next_arrow.png';
 import './style.css';
+import { getConfig } from 'utils/functions';
 
 class CustomButton extends Component {
   render() {
@@ -30,7 +31,7 @@ class CustomButton extends Component {
 const styles = {
   button: {
     padding: '16px 0px !important',
-    borderRadius: 0,
+    borderRadius: getConfig().project !== 'insurance' ? 6 : 0,
     textTransform: 'capitalize',
     fontSize: '16px !important',
     boxShadow: 'none',
