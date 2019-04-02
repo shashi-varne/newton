@@ -3,6 +3,7 @@ import qs from 'qs';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import Button from '../../../common/ui/Button';
+import $ from 'jquery';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
@@ -28,6 +29,7 @@ class AddEditAddress extends Component {
       apiError: '',
       openDialog: false,
       address_present: false,
+      copyText: 'Copy',
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
@@ -36,6 +38,8 @@ class AddEditAddress extends Component {
   }
 
   componentWillMount() {
+
+
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -107,15 +111,15 @@ class AddEditAddress extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'Campaign OTM Address',
+      "event_name": 'Biller',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'Address',
-        'addressline1': this.state.addressline1_error ? 'invalid' : this.state.addressline1 ? 'valid' : 'empty',
-        'addressline2': this.state.addressline2_error ? 'invalid' : this.state.addressline2 ? 'valid' : 'empty',
-        'pincode': this.state.pincode_error ? 'invalid' : this.state.pincode ? 'valid' : 'empty',
+        "screen_name": 'Biller Details',
+        'bank_code': this.state.bank_code ? this.state.bank_code : 'empty',
+        'biller_id': this.state.biller_id ? this.state.biller_id : 'empty'
       }
     };
+
 
     if (user_action === 'just_set_events') {
       return eventObj;
@@ -125,21 +129,27 @@ class AddEditAddress extends Component {
   }
 
   handleClick = async () => {
-    // this.sendEvents('next');
-    // this.navigate('steps');
-    window.open('https://retail.onlinesbi.com/retail/login.htm', '_blank', 'location=yes');
-    // nativeCallback({
-    //   action: 'open_in_browser', message: {
-    //     url: 'https://retail.onlinesbi.com/retail/login.htm'
-    //   }
-    // })
+    this.sendEvents('next');
+    this.navigate('steps');
+  }
+
+  copyItem = (element) => {
+    var $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val($(element).text()).select();
+    document.execCommand("copy");
+    $temp.remove();
+    this.setState({
+      copyText: 'Copied'
+    })
+    this.sendEvents('copy');
   }
 
   render() {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="i-SIP Biller"
+        title="Biller"
         handleClick={this.handleClick}
         classOverRide="result-container"
         classOverRideContainer="result-container"
@@ -166,7 +176,9 @@ class AddEditAddress extends Component {
             Biller Details
           </div>
           <div>
-            <div className="biller-accountnumber">URN Number: {this.state.biller_id}</div>
+            <div className="biller-accountnumber">URN Number: <span id="billerId">{this.state.biller_id}</span>
+              <div className="biller-id-copy" onClick={() => this.copyItem('#billerId')}>{this.state.copyText}</div>
+            </div>
             <div className="biller-accountnumber">Status: {this.state.status}</div>
           </div>
           <div style={{ marginTop: 30 }} onClick={this.handleClick}>

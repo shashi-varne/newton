@@ -67,9 +67,8 @@ class Container extends Component {
     // let { params } = this.props.location;
 
     switch (pathname) {
-      case "/isip":
       case "/isip/biller/about":
-        nativeCallback({ action: 'exit', events: this.getEvents('exit') });
+        nativeCallback({ action: 'exit', events: this.getEvents('back') });
         break;
       default:
         // if (navigator.onLine) {

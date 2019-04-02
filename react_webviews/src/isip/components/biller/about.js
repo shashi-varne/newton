@@ -45,10 +45,10 @@ class About extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'Campaign OTM Address',
+      "event_name": 'Biller',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'Intro'
+        "screen_name": 'About'
       }
     };
 
@@ -60,7 +60,7 @@ class About extends Component {
   }
 
   handleClick = async () => {
-    // this.sendEvents('next');
+    this.sendEvents('next');
     this.navigate('details');
   }
 
@@ -68,12 +68,12 @@ class About extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="About i-SIP Biller"
+        title="About Biller"
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="Continue"
         type={this.state.type}
-      // events={this.sendEvents('just_set_events')}
+        events={this.sendEvents('just_set_events')}
       >
         <div style={{ textAlign: 'center', margin: '60px 0px 60px 0px' }}>
           <img width={100} src={icon} alt="OTM" />
