@@ -122,13 +122,15 @@ class Summary extends Component {
     // });
 
     let insurance_v2 = this.state.params.insurance_v2 ? true : null;
+    let app = getConfig().app;
     let paymentRedirectUrl = encodeURIComponent(
       window.location.protocol + '//' + window.location.host + '/insurance/payment/' + this.state.params.insurance_id + '/' + insurance_v2
     );
     var pgLink = payment_link;
     var back_url = encodeURIComponent(this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2);
     // eslint-disable-next-line
-    pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl + '&back_url=' + back_url;
+    pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
+      '&app=' + app + '&back_url=' + back_url;
     window.location.href = pgLink;
     return;
   }
