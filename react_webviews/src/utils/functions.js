@@ -110,6 +110,7 @@ export const getConfig = () => {
   returnConfig.project = project;
   returnConfig.iOS = isMobile.iOS();
   returnConfig.Android = isMobile.Android();
+  returnConfig.app = isMobile.Android() ? 'android' : isMobile.iOS() ? 'ios' : 'web';
 
   if (insurance_v2) {
     returnConfig.insurance_v2 = true;

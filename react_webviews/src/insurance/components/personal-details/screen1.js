@@ -180,23 +180,23 @@ class PersonalDetails1 extends Component {
         marital_status_error: 'Mandatory'
       });
 
-    } else if (this.state.marital_status === 'MARRIED' && this.state.spouse_name.split(" ").length < 2) {
+    } else if (this.state.provider === 'HDFC' && this.state.marital_status === 'MARRIED' && this.state.spouse_name.split(" ").length < 2) {
       this.setState({
         spouse_name_error: 'Enter valid full name'
       });
-    } else if (this.state.marital_status === 'MARRIED' && !validateEmpty(this.state.spouse_name)) {
+    } else if (this.state.provider === 'HDFC' && this.state.marital_status === 'MARRIED' && !validateEmpty(this.state.spouse_name)) {
       this.setState({
         spouse_name_error: 'Enter valid full name'
       });
-    } else if (this.state.marital_status === 'MARRIED' && !validateLength(this.state.spouse_name)) {
+    } else if (this.state.provider === 'HDFC' && this.state.marital_status === 'MARRIED' && !validateLength(this.state.spouse_name)) {
       this.setState({
         spouse_name_error: 'Maximum length of name is 30 characters'
       });
-    } else if (this.state.marital_status === 'MARRIED' && !validateConsecutiveChar(this.state.spouse_name)) {
+    } else if (this.state.provider === 'HDFC' && this.state.marital_status === 'MARRIED' && !validateConsecutiveChar(this.state.spouse_name)) {
       this.setState({
         spouse_name_error: 'Name can not contain more than 3 same consecutive characters'
       });
-    } else if (this.state.marital_status === 'MARRIED' && !validateAlphabets(this.state.spouse_name)) {
+    } else if (this.state.provider === 'HDFC' && this.state.marital_status === 'MARRIED' && !validateAlphabets(this.state.spouse_name)) {
       this.setState({
         spouse_name_error: 'Name can contain only alphabets'
       });
