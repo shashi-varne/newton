@@ -122,7 +122,7 @@ class Summary extends Component {
     // });
 
     let insurance_v2 = this.state.params.insurance_v2 ? true : null;
-    let app = getConfig().Android ? 'android' : 'ios';
+    let app = getConfig().app;
     let paymentRedirectUrl = encodeURIComponent(
       window.location.protocol + '//' + window.location.host + '/insurance/payment/' + this.state.params.insurance_id + '/' + insurance_v2
     );
