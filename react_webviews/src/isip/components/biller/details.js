@@ -101,10 +101,7 @@ class AddEditAddress extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams,
-      params: {
-        bank_code: this.state.bank_code
-      }
+      search: getConfig().searchParams + '&bank_code=' + this.state.bank_code
     });
   }
 
@@ -129,8 +126,13 @@ class AddEditAddress extends Component {
 
   handleClick = async () => {
     // this.sendEvents('next');
-    this.navigate('steps');
-
+    // this.navigate('steps');
+    window.open('https://retail.onlinesbi.com/retail/login.htm', '_blank', 'location=yes');
+    // nativeCallback({
+    //   action: 'open_in_browser', message: {
+    //     url: 'https://retail.onlinesbi.com/retail/login.htm'
+    //   }
+    // })
   }
 
   render() {
@@ -155,8 +157,8 @@ class AddEditAddress extends Component {
               <div className="biller-accountnumber">Account Number: {this.state.account_number}</div>
               <div className="biller-accountnumber">IFSC Code: {this.state.ifsc_code}</div>
             </div>
-            <div style={{ width: '20%', right: '13px', position: 'relative' }}>
-              <img style={{ width: '100%', height: '64px' }} src={this.state.bank_image} alt="Biller" />
+            <div style={{ width: '20%', position: 'relative' }}>
+              <img src={this.state.bank_image} alt="Biller" />
             </div>
           </div>
 

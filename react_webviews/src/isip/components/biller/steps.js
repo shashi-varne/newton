@@ -163,10 +163,14 @@ class BillerSteps extends Component {
 
 
   componentWillMount() {
-    let { params } = this.props.location;
+    // this.setState({
+    //   bank_code: this.state.params.bank_code ? this.state.params.bank_code : 'SBI'
+    // })
+
     this.setState({
-      bank_code: params && params.bank_code ? params.bank_code : 'SBI'
+      bank_code: 'ICI'
     })
+
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -248,7 +252,7 @@ class BillerSteps extends Component {
           <div className="biller-steps-small-title">
             {banks_details[this.state.bank_code].head_small_title}
           </div>
-          <div style={{ margin: '0 10px 0px 10px' }}>
+          <div style={{ margin: '0 10px 0px 0px' }}>
             {banks_details[this.state.bank_code].steps.map(this.renderBankSteps)}
           </div>
           <div className="biller-steps-footer-title">

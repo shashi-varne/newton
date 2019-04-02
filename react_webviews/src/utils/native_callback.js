@@ -113,6 +113,64 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     return;
   }
 
+
+  if (project === 'isip') {
+
+    if (events) {
+
+      try {
+        await Api.post('/api/clevertap/events', events);
+      } catch (error) {
+        console.log(error);
+      }
+
+    }
+
+    let campaign_version = getConfig().campaign_version;
+
+    console.log("campaign_version...................." + campaign_version);
+    if (campaign_version >= 1) {
+      if (isMobile.Android() && action) {
+        if (typeof window.Android !== 'undefined') {
+          if (action === 'show_toast') {
+            window.Android.performAction('show_toast', message.message);
+            return;
+          }
+
+          if (action === 'open_in_browser') {
+            window.Android.performAction('open_in_browser', message.url);
+            return;
+          }
+
+          if (action === 'native_back') {
+            nativeCallbackOld(400);
+            return;
+          }
+
+          if (action === 'exit') {
+            nativeCallbackOld(200);
+            return;
+          }
+        }
+      }
+
+      if (isMobile.iOS() && action) {
+        if (typeof window.webkit !== 'undefined') {
+          window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+        }
+        return;
+      }
+    } else {
+      if (action === 'show_toast' || action === 'open_in_browser') {
+        return;
+      }
+
+      nativeCallbackOld(200)
+    }
+
+    return;
+  }
+
   let insurance_v2 = getConfig().insurance_v2;
   console.log('insurance_v2 :' + insurance_v2);
   if (!insurance_v2 && project === 'insurance') {
