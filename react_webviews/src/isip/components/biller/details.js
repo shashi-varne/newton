@@ -3,11 +3,11 @@ import qs from 'qs';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import Button from '../../../common/ui/Button';
-import $ from 'jquery';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
+import { copyToClipboard } from 'utils/validators';
 
 
 class AddEditAddress extends Component {
@@ -133,23 +133,22 @@ class AddEditAddress extends Component {
     this.navigate('steps');
   }
 
-  copyItem = (element) => {
-    var $temp = $("<input>");
-    $("body").append($temp);
-    $temp.val($(element).text()).select();
-    document.execCommand("copy");
-    $temp.remove();
-    this.setState({
-      copyText: 'Copied'
-    })
-    this.sendEvents('copy');
+  copyItem = (string) => {
+    if (copyToClipboard(string)) {
+      toast('Copied');
+      this.setState({
+        copyText: 'Copied'
+      })
+      this.sendEvents('copy');
+    }
+
   }
 
   render() {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="Biller"
+        title="iSIP Biller"
         handleClick={this.handleClick}
         classOverRide="result-container"
         classOverRideContainer="result-container"
@@ -176,10 +175,18 @@ class AddEditAddress extends Component {
             Biller Details
           </div>
           <div>
-            <div className="biller-accountnumber">URN Number: <span id="billerId">{this.state.biller_id}</span>
-              <div className="biller-id-copy" onClick={() => this.copyItem('#billerId')}>{this.state.copyText}</div>
+            <div className="biller-accountnumber2">
+              <span style={{ float: 'left' }}>URN Number:</span>
+              <span className="copy-item-billder-details" id="billerId">{this.state.biller_id}
+                <span onClick={() => this.copyItem(this.state.biller_id)} style={{ color: getConfig().secondary }}>{this.state.copyText}</span>
+              </span>
             </div>
-            <div className="biller-accountnumber">Status: {this.state.status}</div>
+
+            <div className="biller-accountnumber2">
+              <span style={{ float: 'left' }}>Status :</span>
+              <span className="copy-item-billder-details" id="billerId">{this.state.status}
+              </span>
+            </div>
           </div>
           <div style={{ marginTop: 30 }} onClick={this.handleClick}>
             <Button style={{ borderRadius: 6 }} buttonTitle="Add Biller" color="primary" autoFocus>

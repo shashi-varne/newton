@@ -68,7 +68,7 @@ class About extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="About Biller"
+        title="About iSIP Biller"
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="Continue"

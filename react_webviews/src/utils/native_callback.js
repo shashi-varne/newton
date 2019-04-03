@@ -52,6 +52,10 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       }
     }
 
+    if (!action) {
+      return;
+    }
+
     let campaign_version = getConfig().campaign_version;
 
     console.log("campaign_version...................." + campaign_version);
@@ -94,7 +98,10 @@ export const nativeCallback = async ({ action = null, message = null, events = n
         return;
       }
 
-      nativeCallbackOld(200)
+      if (action) {
+        nativeCallbackOld(200)
+      }
+
     }
 
     return;
@@ -111,6 +118,10 @@ export const nativeCallback = async ({ action = null, message = null, events = n
         console.log(error);
       }
 
+    }
+
+    if (!action) {
+      return;
     }
 
     let campaign_version = getConfig().campaign_version;
@@ -152,7 +163,9 @@ export const nativeCallback = async ({ action = null, message = null, events = n
         return;
       }
 
-      nativeCallbackOld(200)
+      if (!isMobile.iOS() && action) {
+        nativeCallbackOld(200)
+      }
     }
 
     return;

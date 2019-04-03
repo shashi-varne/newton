@@ -144,7 +144,11 @@ export const getConfig = () => {
     searchParams = '?base_url=' + encodeURIComponent(base_url) + '&pc_urlsafe=' + pc_urlsafe +
       '&campaign_version=' + campaign_version;
 
-    returnConfig.campaign_version = 1;
+    // eslint-disable-next-line
+    returnConfig.campaign_version = parseInt(campaign_version);
+    if (returnConfig.iOS && !returnConfig.campaign_version) {
+      returnConfig.hide_header = true;
+    }
     returnConfig.searchParams = searchParams;
   }
 

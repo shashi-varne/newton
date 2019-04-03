@@ -4,7 +4,8 @@ import qs from 'qs';
 import Container from '../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import $ from 'jquery';
+import { copyToClipboard } from 'utils/validators';
+import toast from '../../../common/ui/Toast';
 
 import SBI_icon2 from '../../../assets/banks/SBI/2.png';
 import SBI_icon3 from '../../../assets/banks/SBI/3.png';
@@ -30,9 +31,9 @@ import UTI_icon5 from '../../../assets/banks/UTI/5.png';
 const banks_details = {
   'HDF': {
     'name': 'HDFC',
-    'head_title': 'How To Add Biller In HDFC Bank',
+    'head_title': 'How To Add iSIP Biller In HDFC Bank',
     'head_small_title': 'Steps to activate your SIP through HDFC Netbanking:',
-    'footer_title': 'Congratulations! Your biller request has been registered. You will hear from your bank within 2-3 business days.',
+    'footer_title': 'Congratulations! Your iSIP Biller request has been registered. You will hear from your bank within 2-3 business days.',
     'netbanking_link': 'https://netbanking.hdfcbank.com/netbanking/',
     'steps': [
       {
@@ -59,9 +60,9 @@ const banks_details = {
   },
   'ICI': {
     'name': 'ICICI',
-    'head_title': 'How To Add Biller In ICICI',
+    'head_title': 'How To Add iSIP Biller In ICICI',
     'head_small_title': 'Steps to activate your SIP through ICICI Netbanking:',
-    'footer_title': 'Congratulations! Your biller request has been registered. You will hear from your bank within 2-3 business days.',
+    'footer_title': 'Congratulations! Your iSIP Biller request has been registered. You will hear from your bank within 2-3 business days.',
     'netbanking_link': 'https://www.icicibank.com/safe-online-banking/safe-online-banking.page?',
     'steps': [
       {
@@ -88,9 +89,9 @@ const banks_details = {
   },
   'SBI': {
     'name': 'SBI',
-    'head_title': 'How To Add Biller In SBI',
+    'head_title': 'How To Add iSIP Biller In SBI',
     'head_small_title': 'Steps to activate your SIP through SBI Netbanking:',
-    'footer_title': 'Congratulations! Your biller request has been registered. You will hear from your bank within 2-3 business days.',
+    'footer_title': 'Congratulations! Your iSIP Biller request has been registered. You will hear from your bank within 2-3 business days.',
     'netbanking_link': 'https://retail.onlinesbi.com/retail/login.htm',
     'steps': [
       {
@@ -121,9 +122,9 @@ const banks_details = {
   },
   'UTI': {
     'name': 'Axis Bank',
-    'head_title': 'How To Add Biller In Axis Bank',
+    'head_title': 'How To Add iSIP Biller In Axis Bank',
     'head_small_title': 'Steps to activate your SIP through Axis Bank Netbanking:',
-    'footer_title': 'Congratulations! Your biller request has been registered. You will hear from your bank within 2-3 business days.',
+    'footer_title': 'Congratulations! Your iSIP Biller request has been registered. You will hear from your bank within 2-3 business days.',
     'netbanking_link': 'https://www.axisbank.com/bank-smart/internet-banking/getting-started',
     'steps': [
       {
@@ -135,7 +136,7 @@ const banks_details = {
         'image': UTI_icon2
       },
       {
-        'title': 'Step 3: Click on Add Biller',
+        'title': 'Step 3: Click on Add iSIP Biller',
         'image': UTI_icon3
       },
       {
@@ -158,7 +159,7 @@ class BillerSteps extends Component {
       openDialog: true,
       bank_code: '',
       copyText: 'Copy',
-      callback_supported: getConfig().campaign_version ? true : false,
+      callback_supported: getConfig().campaign_version === 1 ? true : false,
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
@@ -174,6 +175,7 @@ class BillerSteps extends Component {
       bank_code: this.state.params.bank_code ? this.state.params.bank_code : 'SBI'
     })
 
+    console.log(getConfig().campaign_version)
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -201,7 +203,8 @@ class BillerSteps extends Component {
       "event_name": 'Biller',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'Add Biller Steps'
+        "screen_name": 'Add iSIP Biller Steps',
+        'netbanking_link': banks_details[this.state.bank_code].netbanking_link || 'empty'
       }
     };
 
@@ -229,16 +232,14 @@ class BillerSteps extends Component {
     });
   }
 
-  copyItem = (element) => {
-    var $temp = $("<input>");
-    $("body").append($temp);
-    $temp.val($(element).text()).select();
-    document.execCommand("copy");
-    $temp.remove();
-    this.setState({
-      copyText: 'Copied'
-    })
-    this.sendEvents('copy');
+  copyItem = (string) => {
+    if (copyToClipboard(string)) {
+      toast('Copied');
+      this.setState({
+        copyText: 'Copied'
+      })
+      this.sendEvents('copy');
+    }
   }
 
   renderBankSteps(props, index) {
@@ -258,21 +259,26 @@ class BillerSteps extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title={"How to add a biller in " + banks_details[this.state.bank_code].name}
+        title={"How to add a iSIP Biller in " + banks_details[this.state.bank_code].name + ' Bank'}
         handleClick={this.handleClick}
+        classOverRide="result-container2"
+        classOverRideContainer="result-container2"
         edit={this.props.edit}
         type={this.state.type}
         events={this.sendEvents('just_set_events')}
-        buttonTitle="Continue"
+        buttonTitle={"Continue to " + banks_details[this.state.bank_code].name}
         noFooter={!this.state.callback_supported}
       >
         <div>
-          <div className="biller-steps-title">
+          {/* <div className="biller-steps-title">
             {banks_details[this.state.bank_code].head_title}
-          </div>
+          </div> */}
           <div className="biller-steps-small-title">
             {banks_details[this.state.bank_code].head_small_title}
           </div>
+          {/* <div className="biller-steps-title">
+            {banks_details[this.state.bank_code].head_small_title}
+          </div> */}
           <div style={{ margin: '0 10px 0px 0px' }}>
             {banks_details[this.state.bank_code].steps.map(this.renderBankSteps)}
           </div>
@@ -280,13 +286,17 @@ class BillerSteps extends Component {
             {banks_details[this.state.bank_code].footer_title}
           </div>
           {!this.state.callback_supported && <div>
-            <div style={{ margin: '20px 0 8px 0', color: 'black' }}>HDFC Net Banking Link:
-            <div onClick={() => this.copyItem('#netbanking_link')} className="biller-id-copy">
+            <div style={{ margin: '20px 0px 12px', color: '#4a4a4a', fontSize: 14 }}>
+              Copy {banks_details[this.state.bank_code].name} net banking link to create i-SIP biller
+            </div>
+            <div className="biller-netbank-tile">
+              <div className="biller-netbank-link">
+                {banks_details[this.state.bank_code].netbanking_link}
+              </div>
+              <div className="biller-netbnak-copy"
+                onClick={() => this.copyItem(banks_details[this.state.bank_code].netbanking_link)}>
                 {this.state.copyText}
               </div>
-            </div>
-            <div style={{ color: 'rgb(135, 135, 135)' }} id="netbanking_link">
-              {banks_details[this.state.bank_code].netbanking_link}
             </div>
 
           </div>}

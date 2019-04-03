@@ -181,11 +181,11 @@ class Container extends Component {
     // let bannerHeight = (banner) ? banner.offsetHeight : 0;
 
     // if (client > body) {
-    //   document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 50 + 'px';
+    //   document.getElementsByClassName('Container')[0].style.height = body - head - foot - 50 + 'px';
     // } else {
     //   document.getElementsByClassName('Container')[0].style.height = document.getElementsByClassName('Container')[0].offsetHeight;
     // }
-    // document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 50 + 'px';
+    // document.getElementsByClassName('Container')[0].style.height = body - head - foot - 50 + 'px';
   }
 
   render() {
@@ -219,7 +219,10 @@ class Container extends Component {
           handleTopIcon={this.handleTopIcon} />
         }
         {/* Below Header Block */}
-        <div style={{ height: 56 }}></div>
+
+        {!this.props.noHeader && !getConfig().hide_header &&
+          <div style={{ height: 56 }}></div>
+        }
 
         {/* Loader Block */}
         {this.renderPageLoader()}
