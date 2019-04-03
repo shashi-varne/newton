@@ -89,7 +89,7 @@ class About extends Component {
           <div className="biller-about-points">
             <div className="biller-dot"></div>
             <div style={{ width: '90%' }}>  On successful addition of biller, your bank will notify you before the SIP
-              dates and debit SIP instalment from your account.
+              dates and debit SIP installments from your account.
             </div>
           </div>
 
