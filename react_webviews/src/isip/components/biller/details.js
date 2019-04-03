@@ -153,7 +153,7 @@ class AddEditAddress extends Component {
         classOverRide="result-container"
         classOverRideContainer="result-container"
         edit={this.props.edit}
-        buttonTitle="Add Biller"
+        buttonTitle="Proceed"
         type={this.state.type}
         events={this.sendEvents('just_set_events')}
         noFooter={true}
