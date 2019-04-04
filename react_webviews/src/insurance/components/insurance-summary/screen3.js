@@ -188,7 +188,7 @@ class Journey extends Component {
 
     let insurance_v2 = this.state.params.insurance_v2 ? true : null;
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.protocol + '//' + window.location.host + '/insurance/payment/' + this.state.params.insurance_id + '/' + insurance_v2
+      window.location.protocol + '//' + window.location.host + '/insurance/payment/' + this.state.insurance_id + '/' + insurance_v2
     );
     var pgLink = payment_link;
     let app = getConfig().app;
@@ -212,7 +212,7 @@ class Journey extends Component {
       }
     };
     nativeCallback({ events: eventObj });
-    Api.get('api/insurance/start/payment/' + this.state.params.insurance_id)
+    Api.get('api/insurance/start/payment/' + this.state.insurance_id)
       .then(res => {
         if (res.pfwresponse && res.pfwresponse.status_code === 200) {
           let result = res.pfwresponse.result
@@ -404,6 +404,7 @@ class Journey extends Component {
           },
           providerName: providerName,
           isKyc: isKyc,
+          insurance_id: application.id || this.state.params.insurance_id,
           name: application.profile.name,
           payment_confirmed: application.payment_confirmed,
           profile_link: application.profile_link,
@@ -541,9 +542,10 @@ class Journey extends Component {
   }
 
   navigate = (pathname) => {
+    let insurance_id = this.state.insurance_id || this.state.params.insurance_id;
     this.props.history.push({
       pathname: pathname,
-      search: 'insurance_id=' + this.state.params.insurance_id + '&base_url=' + this.state.params.base_url +
+      search: 'insurance_id=' + insurance_id + '&base_url=' + this.state.params.base_url +
         '&insurance_v2=' + this.state.insurance_v2 + '&resume=yes&isKyc=' + this.state.isKyc,
     });
   }
@@ -575,7 +577,7 @@ class Journey extends Component {
       this.setState({
         show_loader: true
       })
-      const res = await Api.get('api/insurance/confirm/payment/' + this.state.params.insurance_id);
+      const res = await Api.get('api/insurance/confirm/payment/' + this.state.insurance_id);
 
       this.setState({
         show_loader: false
@@ -702,7 +704,7 @@ class Journey extends Component {
       if (this.state.status === 'init' && this.state.provider === 'HDFC') {
         try {
           const res = await Api.post('/api/insurance/profile/submit', {
-            insurance_app_id: this.state.params.insurance_id
+            insurance_app_id: this.state.insurance_id
           });
           this.setState({ show_loader: false });
 
@@ -865,7 +867,7 @@ class Journey extends Component {
   handleReset = async () => {
     this.setState({ openResponseDialog: false, apiError: '', openDialog: false, openModal: true, openModalMessage: 'Wait a moment while we reset your application' });
     const res = await Api.post('/api/insurance/profile/reset', {
-      insurance_app_id: this.state.params.insurance_id
+      insurance_app_id: this.state.insurance_id
     });
     if (res.pfwresponse.status_code === 200) {
       nativeCallback({ action: 'native_reset' });
