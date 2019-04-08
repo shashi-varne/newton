@@ -13,6 +13,7 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { inrFormatDecimal } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
+import { getConfig } from 'utils/functions';
 
 class About extends Component {
   constructor(props) {
@@ -76,7 +77,7 @@ class About extends Component {
     }
     this.props.history.push({
       pathname: pathname,
-      search: '?base_url=' + this.state.params.base_url
+      search: getConfig().searchParams
     });
   }
 

@@ -7,6 +7,7 @@ import Input from '../../../common/ui/Input';
 import { ToastContainer } from 'react-toastify';
 import toast from '../../../common/ui/Toast';
 import { nativeCallback } from 'utils/native_callback';
+import { getConfig } from 'utils/functions';
 
 class SellOrder extends Component {
   constructor(props) {
@@ -204,7 +205,7 @@ class SellOrder extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?base_url=' + this.state.params.base_url
+      search: getConfig().searchParams
     });
   }
 
@@ -247,7 +248,7 @@ class SellOrder extends Component {
           var message = 'An OTP is sent to your mobile number ' + this.state.userInfo.mobile_no + ', please verify to place sell order.'
           this.props.history.push({
             pathname: 'verify',
-            search: '?base_url=' + this.state.params.base_url,
+            search: getConfig().searchParams,
             params: {
               resend_link: result.resend_verification_otp_link,
               verify_link: result.verification_link,

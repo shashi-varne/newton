@@ -193,15 +193,21 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     }
   }
 
+  if (getConfig().app === 'android') {
+    console.log("Android Device")
+    window.Android.callbackNative(JSON.stringify(callbackData));
 
-
-  if (isMobile.Android()) {
-    console.log("Android")
-    if (typeof window.Android !== 'undefined') window.Android.callbackNative(JSON.stringify(callbackData));
-
+  } else if (getConfig().app === 'ios') {
+    console.log("iOS Device")
+    window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+  } else {
+    if (action === 'native_back' || action === 'exit') {
+      let redirect_url = getConfig().searchParams;
+      redirect_url = new URLSearchParams(redirect_url).get('redirect_url');
+      window.location.href = redirect_url;
+    } else {
+      return;
+    }
   }
 
-  if (isMobile.iOS()) {
-    if (typeof window.webkit !== 'undefined') window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
-  }
 };

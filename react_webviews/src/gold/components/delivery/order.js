@@ -14,6 +14,7 @@ import { ToastContainer } from 'react-toastify';
 import toast from '../../../common/ui/Toast';
 import { inrFormatDecimal } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
+import { getConfig } from 'utils/functions';
 
 class DeliveryOrder extends Component {
   constructor(props) {
@@ -126,7 +127,7 @@ class DeliveryOrder extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?base_url=' + this.state.params.base_url
+      search: getConfig().searchParams
     });
   }
 
@@ -154,7 +155,7 @@ class DeliveryOrder extends Component {
 
     let nativeRedirectUrl = encodeURIComponent(
       window.location.protocol + '//' + window.location.host +
-      '/gold/gold-delivery-order?base_url=' + this.state.params.base_url
+      '/gold/gold-delivery-order' + getConfig().searchParams
     );
 
     // nativeCallback({
