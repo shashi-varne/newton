@@ -146,7 +146,6 @@ export const getConfig = () => {
   }
 
   if (project === 'gold') {
-    let { base_url } = main_query_params;
     let { redirect_url } = main_query_params;
 
     searchParams = '?base_url=' + encodeURIComponent(base_url) + '&redirect_url=' + redirect_url;
