@@ -15,6 +15,7 @@ import { ToastContainer } from 'react-toastify';
 import toast from '../../../common/ui/Toast';
 // import { inrFormatDecimal } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
+import { getConfig } from 'utils/functions';
 
 class Transactions extends Component {
   constructor(props) {
@@ -116,7 +117,7 @@ class Transactions extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?base_url=' + this.state.params.base_url
+      search: getConfig().searchParams
     });
   }
 

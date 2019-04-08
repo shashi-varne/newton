@@ -116,7 +116,7 @@ class GoldRegister extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?base_url=' + this.state.params.base_url
+      search: getConfig().searchParams
     });
   }
 
@@ -202,7 +202,7 @@ class GoldRegister extends Component {
           var message = 'An OTP is sent to your mobile number ' + this.state.mobile_no + ', please verify to complete registration.'
           this.props.history.push({
             pathname: 'verify',
-            search: '?base_url=' + this.state.params.base_url,
+            search: getConfig().searchParams,
             params: {
               resend_link: result.resend_verification_otp_link,
               verify_link: result.verification_link,

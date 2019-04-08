@@ -382,7 +382,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                                                                                                                                                                                                                                            previous gold price has expired.
+                                                                                                                                                                                                                                                                                                                                                                                                                                  previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -405,7 +405,7 @@ class GoldSummary extends Component {
     }
     this.props.history.push({
       pathname: pathname,
-      search: '?base_url=' + this.state.params.base_url
+      search: getConfig().searchParams
     });
   }
 

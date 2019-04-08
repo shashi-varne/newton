@@ -15,6 +15,7 @@ import { ToastContainer } from 'react-toastify';
 import toast from '../../../common/ui/Toast';
 import { inrFormatDecimal } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
+import { getConfig } from 'utils/functions';
 
 class About extends Component {
   constructor(props) {
@@ -78,7 +79,7 @@ class About extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?base_url=' + this.state.params.base_url
+      search: getConfig().searchParams
     });
   }
 
@@ -244,7 +245,7 @@ class About extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                                                      previous gold price has expired.
+                                                                                                                                                                                                                                        previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>

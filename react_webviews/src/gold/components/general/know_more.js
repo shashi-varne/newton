@@ -7,6 +7,7 @@ import idbi from 'assets/idbi_trustee2.png';
 import brinks from 'assets/brinks-logo.png';
 import { ToastContainer } from 'react-toastify';
 import { nativeCallback } from 'utils/native_callback';
+import { getConfig } from 'utils/functions';
 
 class KnowMore extends Component {
   constructor(props) {
@@ -46,7 +47,7 @@ class KnowMore extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?base_url=' + this.state.params.base_url
+      search: getConfig().searchParams
     });
   }
 

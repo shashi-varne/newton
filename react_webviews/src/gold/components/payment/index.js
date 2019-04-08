@@ -145,7 +145,7 @@ class Payment extends Component {
     }
     this.props.history.push({
       pathname: pathname,
-      search: '?base_url=' + this.state.params.base_url
+      search: getConfig().searchParams
     });
   }
 
@@ -154,7 +154,7 @@ class Payment extends Component {
     this.navigate('/gold/gold-transactions')
     this.props.history.push({
       pathname: '/gold/gold-transactions',
-      search: '?base_url=' + this.state.params.base_url,
+      search: getConfig().searchParams,
       params: {
         isDelivery: true
       }
@@ -242,7 +242,7 @@ class Payment extends Component {
     this.sendEvents('next');
     this.props.history.push({
       pathname: '/gold/my-gold',
-      search: '?base_url=' + this.state.params.base_url
+      search: getConfig().searchParams
     });
   }
 

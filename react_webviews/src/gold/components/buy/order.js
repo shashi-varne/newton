@@ -5,6 +5,7 @@ import Container from '../../common/Container';
 import stopwatch from 'assets/stopwatch.png';
 import { inrFormatDecimal } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
+import { getConfig } from 'utils/functions';
 
 class BuyOrder extends Component {
   constructor(props) {
@@ -63,7 +64,7 @@ class BuyOrder extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?base_url=' + this.state.params.base_url
+      search: getConfig().searchParams
     });
   }
 
@@ -90,7 +91,7 @@ class BuyOrder extends Component {
     });
 
     let nativeRedirectUrl = window.location.protocol + '//' + window.location.host +
-      '/gold/buy-gold-order?base_url=' + this.state.params.base_url;
+      '/gold/buy-gold-order' + getConfig().searchParams;
 
     // nativeCallback({
     //   action: 'take_control', message: {

@@ -40,12 +40,13 @@ export const isMobile = {
 
 export const getConfig = () => {
 
-  let { base_url } = qs.parse(myHistory.location.search.slice(1));
+  let main_query_params = qs.parse(myHistory.location.search.slice(1));
+  let { base_url } = main_query_params;
   let searchParams;
   let isInsurance = myHistory.location.pathname.indexOf('insurance') >= 0 ? true : false;
   if (isInsurance) {
-    let { insurance_v2 } = qs.parse(myHistory.location.search.slice(1));
-    let { insurance_id } = qs.parse(myHistory.location.search.slice(1));
+    let { insurance_v2 } = main_query_params;
+    let { insurance_id } = main_query_params;
     searchParams = '?insurance_id=' + insurance_id + '&base_url=' + base_url +
       '&insurance_v2=' + insurance_v2;
   }
@@ -106,9 +107,18 @@ export const getConfig = () => {
     project = 'gold';
   }
   returnConfig.project = project;
-  returnConfig.iOS = isMobile.iOS();
-  returnConfig.Android = isMobile.Android();
-  returnConfig.app = isMobile.Android() ? 'android' : isMobile.iOS() ? 'ios' : 'web';
+
+
+  if (isMobile.Android() && typeof window.Android !== 'undefined') {
+    returnConfig.app = 'android';
+    returnConfig.Android = true;
+  } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
+    returnConfig.app = 'ios';
+    returnConfig.iOS = true;
+  } else {
+    returnConfig.app = 'web';
+    returnConfig.Android = true;
+  }
 
   if (insurance_v2) {
     returnConfig.insurance_v2 = true;
@@ -118,11 +128,11 @@ export const getConfig = () => {
     returnConfig.searchParams = searchParams;
   }
   if (project === 'mandate-otm') {
-    let { key } = qs.parse(myHistory.location.search.slice(1));
-    let { name } = qs.parse(myHistory.location.search.slice(1));
-    let { email } = qs.parse(myHistory.location.search.slice(1));
-    let { campaign_version } = qs.parse(myHistory.location.search.slice(1));
-    let { html_camera } = qs.parse(myHistory.location.search.slice(1));
+    let { key } = main_query_params;
+    let { name } = main_query_params;
+    let { email } = main_query_params;
+    let { campaign_version } = main_query_params;
+    let { html_camera } = main_query_params;
     searchParams = '?base_url=' + encodeURIComponent(base_url) + '&key=' + key + '&name=' + name
       + '&email=' + email + '&campaign_version=' + campaign_version;
 
@@ -132,6 +142,14 @@ export const getConfig = () => {
       returnConfig.hide_header = true;
     }
 
+    returnConfig.searchParams = searchParams;
+  }
+
+  if (project === 'gold') {
+    let { base_url } = main_query_params;
+    let { redirect_url } = main_query_params;
+
+    searchParams = '?base_url=' + encodeURIComponent(base_url) + '&redirect_url=' + redirect_url;
     returnConfig.searchParams = searchParams;
   }
 

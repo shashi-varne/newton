@@ -24,6 +24,7 @@ import { ToastContainer } from 'react-toastify';
 import toast from '../../../common/ui/Toast';
 import { inrFormatDecimal } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
+import { getConfig } from 'utils/functions';
 
 class GoldSummary extends Component {
   constructor(props) {
@@ -354,7 +355,7 @@ class GoldSummary extends Component {
 
     this.props.history.push({
       pathname: pathname,
-      search: '?base_url=' + this.state.params.base_url
+      search: getConfig().searchParams
     });
   }
 
