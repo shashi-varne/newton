@@ -143,7 +143,13 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     console.log("iOS Device")
     window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
   } else {
-    //web code;
+    if (action === 'native_back' || action === 'exit') {
+      let redirect_url = getConfig().searchParams;
+      redirect_url = new URLSearchParams(redirect_url).get('redirect_url');
+      window.location.href = redirect_url;
+    } else {
+      return;
+    }
   }
 
 };
