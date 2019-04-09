@@ -5,43 +5,58 @@ export default function (message, type = 'default') {
 
   switch (type) {
     case 'success':
-      toast.success(message, {
-        position: toast.POSITION.BOTTOM_CENTER,
-        className: 'custom-toast',
-        hideProgressBar: true,
-        closeButton: false
-      });
+      if (!toast.isActive('success')) {
+        toast.success(message, {
+          toastId: 'success',
+          position: toast.POSITION.BOTTOM_CENTER,
+          className: 'custom-toast',
+          hideProgressBar: true,
+          closeButton: false
+        });
+      }
       break;
     case 'error':
-      toast.error(message, {
-        position: toast.POSITION.BOTTOM_CENTER,
-        className: 'custom-toast',
-        hideProgressBar: true,
-        closeButton: false
-      });
+      if (!toast.isActive('error')) {
+        toast.error(message, {
+          toastId: 'error',
+          position: toast.POSITION.BOTTOM_CENTER,
+          className: 'custom-toast',
+          hideProgressBar: true,
+          closeButton: false
+        });
+      }
       break;
     case 'warn':
-      toast.warn(message, {
-        position: toast.POSITION.BOTTOM_CENTER,
-        className: 'custom-toast',
-        hideProgressBar: true,
-        closeButton: false
-      });
+      if (!toast.isActive('warn')) {
+        toast.warn(message, {
+          toastId: 'warn',
+          position: toast.POSITION.BOTTOM_CENTER,
+          className: 'custom-toast',
+          hideProgressBar: true,
+          closeButton: false
+        });
+      }
       break;
     case 'info':
-      toast.info(message, {
-        position: toast.POSITION.BOTTOM_CENTER,
-        className: 'custom-toast',
-        hideProgressBar: true,
-        closeButton: false
-      });
+      if (!toast.isActive('info')) {
+        toast.info(message, {
+          toastId: 'info',
+          position: toast.POSITION.BOTTOM_CENTER,
+          className: 'custom-toast',
+          hideProgressBar: true,
+          closeButton: false
+        });
+      }
       break;
     default:
-      toast(message, {
-        position: toast.POSITION.BOTTOM_CENTER,
-        className: 'custom-toast',
-        hideProgressBar: true,
-        closeButton: false
-      });
+      if (!toast.isActive('default')) {
+        toast(message, {
+          toastId: 'default',
+          position: toast.POSITION.BOTTOM_CENTER,
+          className: 'custom-toast',
+          hideProgressBar: true,
+          closeButton: false
+        });
+      }
   }
 }
