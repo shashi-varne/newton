@@ -42,12 +42,13 @@ export const getConfig = () => {
 
   let main_query_params = qs.parse(myHistory.location.search.slice(1));
   let { base_url } = main_query_params;
-  let searchParams;
+  let { next_generation } = main_query_params;
+  let searchParams = `?base_url=${base_url}&next_generation=${next_generation}`;
   let isInsurance = myHistory.location.pathname.indexOf('insurance') >= 0 ? true : false;
   if (isInsurance) {
     let { insurance_v2 } = main_query_params;
     let { insurance_id } = main_query_params;
-    searchParams = '?insurance_id=' + insurance_id + '&base_url=' + base_url +
+    searchParams += '&insurance_id=' + insurance_id +
       '&insurance_v2=' + insurance_v2;
   }
 
@@ -133,7 +134,7 @@ export const getConfig = () => {
     let { email } = main_query_params;
     let { campaign_version } = main_query_params;
     let { html_camera } = main_query_params;
-    searchParams = '?base_url=' + encodeURIComponent(base_url) + '&key=' + key + '&name=' + name
+    searchParams += '&key=' + key + '&name=' + name
       + '&email=' + email + '&campaign_version=' + campaign_version;
 
     returnConfig.campaign_version = campaign_version;
@@ -148,7 +149,7 @@ export const getConfig = () => {
   if (project === 'gold') {
     let { redirect_url } = main_query_params;
 
-    searchParams = '?base_url=' + encodeURIComponent(base_url) + '&redirect_url=' + redirect_url;
+    searchParams += '&redirect_url=' + redirect_url;
     returnConfig.searchParams = searchParams;
   }
 

@@ -40,98 +40,111 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     return;
   }
 
-  let project = getConfig().project;
+  let next_generation = getConfig().next_generation;
+  if (!next_generation) {
+    let project = getConfig().project;
 
-  if (project === 'mandate-otm') {
+    if (project === 'mandate-otm') {
 
-    // For only events, if actions is present, then proceed to next block
-    if (events) {
-      // clevertap api
+      // For only events, if actions is present, then proceed to next block
+      if (events) {
+        // clevertap api
 
-      // Do not send any other keys apart from event object to eventCallback
-      // if (isMobile.Android()) {
-      //   if (typeof window.Android !== 'undefined') window.Android.eventCallback(JSON.stringify(events));
-      // }
+        // Do not send any other keys apart from event object to eventCallback
+        // if (isMobile.Android()) {
+        //   if (typeof window.Android !== 'undefined') window.Android.eventCallback(JSON.stringify(events));
+        // }
 
-      try {
-        await Api.post('/api/clevertap/events', events);
-      } catch (error) {
-        console.log(error);
-      }
-
-
-      // if (isMobile.iOS()) {
-      //   if (typeof window.webkit !== 'undefined') window.webkit.messageHandlers.callbackNative.postMessage(events);
-      // }
-    }
-
-    let campaign_version = getConfig().campaign_version;
-
-    console.log("campaign_version...................." + campaign_version);
-    if (campaign_version >= 1) {
-      if (isMobile.Android() && action) {
-        if (typeof window.Android !== 'undefined') {
-          if (action === 'show_toast') {
-            window.Android.performAction('show_toast', message.message);
-            return;
-          }
-
-          if (action === 'open_in_browser') {
-            window.Android.performAction('open_in_browser', message.url);
-            return;
-          }
-
-          if (action === 'native_back') {
-            nativeCallbackOld(400);
-            return;
-          }
-
-          if (action === 'exit') {
-            nativeCallbackOld(200);
-            return;
-          }
-
-          // window.Android.performAction('close_webview', null);
-          // return;
+        try {
+          await Api.post('/api/clevertap/events', events);
+        } catch (error) {
+          console.log(error);
         }
+
+
+        // if (isMobile.iOS()) {
+        //   if (typeof window.webkit !== 'undefined') window.webkit.messageHandlers.callbackNative.postMessage(events);
+        // }
       }
 
-      if (isMobile.iOS() && action) {
-        if (typeof window.webkit !== 'undefined') {
-          window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+      let campaign_version = getConfig().campaign_version;
+
+      console.log("campaign_version...................." + campaign_version);
+      if (campaign_version >= 1) {
+        if (isMobile.Android() && action) {
+          if (typeof window.Android !== 'undefined') {
+            if (action === 'show_toast') {
+              window.Android.performAction('show_toast', message.message);
+              return;
+            }
+
+            if (action === 'open_in_browser') {
+              window.Android.performAction('open_in_browser', message.url);
+              return;
+            }
+
+            if (action === 'native_back') {
+              nativeCallbackOld(400);
+              return;
+            }
+
+            if (action === 'exit') {
+              nativeCallbackOld(200);
+              return;
+            }
+
+            // window.Android.performAction('close_webview', null);
+            // return;
+          }
         }
-        return;
+
+        if (isMobile.iOS() && action) {
+          if (typeof window.webkit !== 'undefined') {
+            window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+          }
+          return;
+        }
+      } else {
+        if (action === 'show_toast' || action === 'open_in_browser') {
+          return;
+        }
+
+        nativeCallbackOld(200)
       }
-    } else {
-      if (action === 'show_toast' || action === 'open_in_browser') {
-        return;
-      }
 
-      nativeCallbackOld(200)
-    }
-
-    return;
-  }
-
-  let insurance_v2 = getConfig().insurance_v2;
-  console.log('insurance_v2 :' + insurance_v2);
-  if (!insurance_v2 && project === 'insurance') {
-
-    let notInInsuranceV2 = ['take_control', 'take_control_reset'];
-    if (notInInsuranceV2.indexOf(action) !== -1) {
       return;
     }
 
+    let insurance_v2 = getConfig().insurance_v2;
+    console.log('insurance_v2 :' + insurance_v2);
+    if (!insurance_v2 && project === 'insurance') {
+
+      let notInInsuranceV2 = ['take_control', 'take_control_reset'];
+      if (notInInsuranceV2.indexOf(action) !== -1) {
+        return;
+      }
+
+      if (action === 'take_control_reset_hard') {
+        callbackData.action = 'take_control_reset';
+      }
+
+      if (action === 'resume_provider') {
+        callbackData.action = 'resume_payment';
+      }
+
+      if (action === 'show_quotes') {
+        callbackData.action = 'native_back';
+      }
+    }
+  } else {
     if (action === 'take_control_reset_hard') {
-      callbackData.action = 'take_control_reset';
+      callbackData.action = 'reset_back_button_control';
     }
-
-    if (action === 'resume_provider') {
-      callbackData.action = 'resume_payment';
+    if(action === 'take_control') {
+      callbackData.action = 'take_back_button_control';
     }
-
-    if (action === 'show_quotes') {
-      callbackData.action = 'native_back';
+    if (message) {
+      callbackData.action_data = {message: message};
     }
   }
 
@@ -143,11 +156,11 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     console.log("iOS Device")
     window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
   } else {
-    if (action === 'native_back' || action === 'exit') {
+    if (action === 'native_back' || action === 'exit' || action === 'exit_web') {
       let redirect_url = getConfig().searchParams;
       redirect_url = new URLSearchParams(redirect_url).get('redirect_url');
       window.location.href = redirect_url;
-    } else if (action === 'open_in_browser') {
+    } else if (action === 'open_in_browser' || action === 'open_browser') {
       let a = document.createElement('a');
       a.target = "_blank";
       a.href = message.url;
