@@ -140,9 +140,18 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     if (action === 'take_control_reset_hard') {
       callbackData.action = 'reset_back_button_control';
     }
+
     if(action === 'take_control') {
       callbackData.action = 'take_back_button_control';
     }
+    if (action === 'open_in_browser') {
+      callbackData.action = 'open_browser';
+    }
+
+    if(action === 'exit') {
+      callbackData.action = 'exit_web';
+    }
+    
     if (message) {
       callbackData.action_data = {message: message};
     }
@@ -156,11 +165,11 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     console.log("iOS Device")
     window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
   } else {
-    if (action === 'native_back' || action === 'exit' || action === 'exit_web') {
+    if (action === 'native_back' || action === 'exit_web') {
       let redirect_url = getConfig().searchParams;
       redirect_url = new URLSearchParams(redirect_url).get('redirect_url');
       window.location.href = redirect_url;
-    } else if (action === 'open_in_browser' || action === 'open_browser') {
+    } else if (action === 'open_browser') {
       let a = document.createElement('a');
       a.target = "_blank";
       a.href = message.url;
