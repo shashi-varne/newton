@@ -1,43 +1,62 @@
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-import { nativeCallback } from 'utils/native_callback';
-import { getConfig } from '../../utils/functions';
 
 export default function (message, type = 'default') {
 
-  if (getConfig().app === 'android' || getConfig().app === 'ios') {
-    nativeCallback({
-      action: 'show_toast',
-      message: {
-        message: message
-      }
-    });
-  } else {
-    switch (type) {
-      case 'success':
+  switch (type) {
+    case 'success':
+      if (!toast.isActive('success')) {
         toast.success(message, {
-          position: toast.POSITION.BOTTOM_CENTER
+          toastId: 'success',
+          position: toast.POSITION.BOTTOM_CENTER,
+          className: 'custom-toast',
+          hideProgressBar: true,
+          closeButton: false
         });
-        break;
-      case 'error':
+      }
+      break;
+    case 'error':
+      if (!toast.isActive('error')) {
         toast.error(message, {
-          position: toast.POSITION.BOTTOM_CENTER
+          toastId: 'error',
+          position: toast.POSITION.BOTTOM_CENTER,
+          className: 'custom-toast',
+          hideProgressBar: true,
+          closeButton: false
         });
-        break;
-      case 'warn':
+      }
+      break;
+    case 'warn':
+      if (!toast.isActive('warn')) {
         toast.warn(message, {
-          position: toast.POSITION.BOTTOM_CENTER
+          toastId: 'warn',
+          position: toast.POSITION.BOTTOM_CENTER,
+          className: 'custom-toast',
+          hideProgressBar: true,
+          closeButton: false
         });
-        break;
-      case 'info':
+      }
+      break;
+    case 'info':
+      if (!toast.isActive('info')) {
         toast.info(message, {
-          position: toast.POSITION.BOTTOM_CENTER
+          toastId: 'info',
+          position: toast.POSITION.BOTTOM_CENTER,
+          className: 'custom-toast',
+          hideProgressBar: true,
+          closeButton: false
         });
-        break;
-      default:
+      }
+      break;
+    default:
+      if (!toast.isActive('default')) {
         toast(message, {
-          position: toast.POSITION.BOTTOM_CENTER
+          toastId: 'default',
+          position: toast.POSITION.BOTTOM_CENTER,
+          className: 'custom-toast',
+          hideProgressBar: true,
+          closeButton: false
         });
-    }
+      }
   }
 }
