@@ -1,5 +1,6 @@
 import { isMobile } from './functions';
 import { getConfig } from './functions';
+import { open_browser_web } from 'utils/validators';
 import Api from 'utils/api';
 
 export const nativeCallbackOld = (status_code, message, action) => {
@@ -19,8 +20,6 @@ export const nativeCallbackOld = (status_code, message, action) => {
 
 export const nativeCallback = async ({ action = null, message = null, events = null } = {}) => {
   let callbackData = {};
-
-
 
   console.log("Nativecallback..........(action, message, events)");
   console.log(action);
@@ -42,27 +41,18 @@ export const nativeCallback = async ({ action = null, message = null, events = n
 
   let project = getConfig().project;
 
-  if (project === 'mandate-otm') {
+  if (project === 'mandate-otm' || project === 'isip') {
 
-    // For only events, if actions is present, then proceed to next block
     if (events) {
-      // clevertap api
-
-      // Do not send any other keys apart from event object to eventCallback
-      // if (isMobile.Android()) {
-      //   if (typeof window.Android !== 'undefined') window.Android.eventCallback(JSON.stringify(events));
-      // }
-
       try {
         await Api.post('/api/clevertap/events', events);
       } catch (error) {
         console.log(error);
       }
+    }
 
-
-      // if (isMobile.iOS()) {
-      //   if (typeof window.webkit !== 'undefined') window.webkit.messageHandlers.callbackNative.postMessage(events);
-      // }
+    if (!action) {
+      return;
     }
 
     let campaign_version = getConfig().campaign_version;
@@ -90,9 +80,6 @@ export const nativeCallback = async ({ action = null, message = null, events = n
             nativeCallbackOld(200);
             return;
           }
-
-          // window.Android.performAction('close_webview', null);
-          // return;
         }
       }
 
@@ -107,14 +94,15 @@ export const nativeCallback = async ({ action = null, message = null, events = n
         return;
       }
 
-      nativeCallbackOld(200)
-    }
+      if (action) {
+        nativeCallbackOld(200)
+      }
 
+    }
     return;
   }
 
   let insurance_v2 = getConfig().insurance_v2;
-  console.log('insurance_v2 :' + insurance_v2);
   if (!insurance_v2 && project === 'insurance') {
 
     let notInInsuranceV2 = ['take_control', 'take_control_reset'];
@@ -148,10 +136,8 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       redirect_url = new URLSearchParams(redirect_url).get('redirect_url');
       window.location.href = redirect_url;
     } else if (action === 'open_in_browser') {
-      let a = document.createElement('a');
-      a.target = "_blank";
-      a.href = message.url;
-      a.click();
+
+      open_browser_web(message.url, '_blank')
     } else {
       return;
     }
