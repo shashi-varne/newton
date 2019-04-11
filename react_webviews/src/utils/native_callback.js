@@ -205,6 +205,11 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       let redirect_url = getConfig().searchParams;
       redirect_url = new URLSearchParams(redirect_url).get('redirect_url');
       window.location.href = redirect_url;
+    } else if (action === 'open_in_browser') {
+      let a = document.createElement('a');
+      a.target = "_blank";
+      a.href = message.url;
+      a.click();
     } else {
       return;
     }
