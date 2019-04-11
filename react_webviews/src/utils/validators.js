@@ -253,3 +253,10 @@ export function copyToClipboard(string) {
   }
   return true;
 }
+
+export function open_browser_web(url, tab_type) {
+  let a = document.createElement('a');
+  a.target = tab_type;
+  a.href = url;
+  a.click();
+}
