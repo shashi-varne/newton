@@ -33,7 +33,7 @@ const banks_details = {
     'name': 'HDFC',
     'head_title': 'How To Add iSIP Biller In HDFC Bank',
     'head_small_title': 'Steps to activate your SIP through HDFC Netbanking:',
-    'footer_title': 'Congratulations! Your iSIP Biller request has been registered. You will hear from your bank within 2-3 business days.',
+    'footer_title': 'Follow these above steps and add your iSIP Biller successfully.',
     'netbanking_link': 'https://netbanking.hdfcbank.com/netbanking/',
     'steps': [
       {
@@ -62,7 +62,7 @@ const banks_details = {
     'name': 'ICICI',
     'head_title': 'How To Add iSIP Biller In ICICI',
     'head_small_title': 'Steps to activate your SIP through ICICI Netbanking:',
-    'footer_title': 'Congratulations! Your iSIP Biller request has been registered. You will hear from your bank within 2-3 business days.',
+    'footer_title': 'Follow these above steps and add your iSIP Biller successfully.',
     'netbanking_link': 'https://www.icicibank.com/safe-online-banking/safe-online-banking.page?',
     'steps': [
       {
@@ -91,7 +91,7 @@ const banks_details = {
     'name': 'SBI',
     'head_title': 'How To Add iSIP Biller In SBI',
     'head_small_title': 'Steps to activate your SIP through SBI Netbanking:',
-    'footer_title': 'Congratulations! Your iSIP Biller request has been registered. You will hear from your bank within 2-3 business days.',
+    'footer_title': 'Follow these above steps and add your iSIP Biller successfully.',
     'netbanking_link': 'https://retail.onlinesbi.com/retail/login.htm',
     'steps': [
       {
@@ -124,7 +124,7 @@ const banks_details = {
     'name': 'Axis Bank',
     'head_title': 'How To Add iSIP Biller In Axis Bank',
     'head_small_title': 'Steps to activate your SIP through Axis Bank Netbanking:',
-    'footer_title': 'Congratulations! Your iSIP Biller request has been registered. You will hear from your bank within 2-3 business days.',
+    'footer_title': 'Follow these above steps and add your iSIP Biller successfully.',
     'netbanking_link': 'https://www.axisbank.com/bank-smart/internet-banking/getting-started',
     'steps': [
       {
