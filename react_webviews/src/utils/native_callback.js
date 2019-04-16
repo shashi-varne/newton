@@ -40,8 +40,28 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     return;
   }
 
-  let next_generation = getConfig().next_generation;
-  if (!next_generation) {
+  let next_generation = new URLSearchParams(getConfig().searchParams).get('next_generation');
+  if (next_generation === "true") {
+    if (action === 'take_control_reset_hard') {
+      callbackData.action = 'reset_back_button_control';
+    }
+
+    if (action === 'take_control') {
+      callbackData.action = 'take_back_button_control';
+    }
+    if (action === 'open_in_browser') {
+      callbackData.action = 'open_browser';
+    }
+
+    if (action === 'exit') {
+      callbackData.action = 'exit_web';
+    }
+
+    if (message) {
+      callbackData.action_data = { message: message };
+    }
+  }
+  else {
     let project = getConfig().project;
 
     if (project === 'mandate-otm') {
@@ -135,25 +155,6 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       if (action === 'show_quotes') {
         callbackData.action = 'native_back';
       }
-    }
-  } else {
-    if (action === 'take_control_reset_hard') {
-      callbackData.action = 'reset_back_button_control';
-    }
-
-    if(action === 'take_control') {
-      callbackData.action = 'take_back_button_control';
-    }
-    if (action === 'open_in_browser') {
-      callbackData.action = 'open_browser';
-    }
-
-    if(action === 'exit') {
-      callbackData.action = 'exit_web';
-    }
-    
-    if (message) {
-      callbackData.action_data = {message: message};
     }
   }
 
