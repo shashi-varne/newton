@@ -6,8 +6,8 @@ import { isMobile } from './functions';
 import { getConfig } from './functions';
 
 
-let next_generation = new URLSearchParams(getConfig().searchParams).get('next_generation');
-if (next_generation === "true") {
+let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
+if (generic_callback === "true") {
   (function (exports) {
 
     function b64toBlob(b64Data, contentType, sliceSize) {

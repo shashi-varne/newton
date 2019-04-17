@@ -29,9 +29,9 @@ class Container extends Component {
   }
 
   componentDidMount() {
-    let next_generation = new URLSearchParams(getConfig().searchParams).get('next_generation');
+    let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
     let that = this;
-    if (next_generation === "true") {
+    if (generic_callback === "true") {
       window.callbackWeb.add_listener({
         type: 'back_pressed',
         go_back: function () {
@@ -64,8 +64,8 @@ class Container extends Component {
   }
 
   componentWillUnmount() {
-    let next_generation = new URLSearchParams(getConfig().searchParams).get('next_generation');
-    if (next_generation === "true") {
+    let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
+    if (generic_callback === "true") {
       window.callbackWeb.remove_listener({});
     } else {
       window.PlutusSdk.remove_listener({});

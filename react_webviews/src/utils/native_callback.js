@@ -40,8 +40,8 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     return;
   }
 
-  let next_generation = new URLSearchParams(getConfig().searchParams).get('next_generation');
-  if (next_generation === "true") {
+  let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
+  if (generic_callback === "true") {
     if (action === 'take_control_reset_hard') {
       callbackData.action = 'reset_back_button_control';
     }

@@ -42,8 +42,8 @@ export const getConfig = () => {
 
   let main_query_params = qs.parse(myHistory.location.search.slice(1));
   let { base_url } = main_query_params;
-  let { next_generation } = main_query_params;
-  let searchParams = `?base_url=${base_url}&next_generation=${next_generation}`;
+  let { generic_callback } = main_query_params;
+  let searchParams = `?base_url=${base_url}&generic_callback=${generic_callback}`;
   let isInsurance = myHistory.location.pathname.indexOf('insurance') >= 0 ? true : false;
   if (isInsurance) {
     let { insurance_v2 } = main_query_params;
