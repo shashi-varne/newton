@@ -29,6 +29,11 @@ if (generic_callback === "true") {
       }
     }
 
+    exports.post_error = function (data) {
+      console.log("action_name =>"+data.err_action_name)
+      console.log("error =>"+data.err_message)
+    }
+
   })(window.callbackWeb ? window.callbackWeb : (window.callbackWeb = {}));
 } else {
   (function (exports) {
