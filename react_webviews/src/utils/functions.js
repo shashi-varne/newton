@@ -106,6 +106,8 @@ export const getConfig = () => {
     project = 'mandate';
   } else if (myHistory.location.pathname.indexOf('gold') >= 0) {
     project = 'gold';
+  } else if (myHistory.location.pathname.indexOf('isip') >= 0) {
+    project = 'isip';
   }
   returnConfig.project = project;
 
@@ -150,6 +152,21 @@ export const getConfig = () => {
     let { redirect_url } = main_query_params;
 
     searchParams += '&redirect_url=' + redirect_url;
+    returnConfig.searchParams = searchParams;
+  }
+
+
+  if (project === 'isip') {
+    let { pc_urlsafe } = qs.parse(myHistory.location.search.slice(1));
+    let { campaign_version } = qs.parse(myHistory.location.search.slice(1));
+    searchParams = '?base_url=' + encodeURIComponent(base_url) + '&pc_urlsafe=' + pc_urlsafe +
+      '&campaign_version=' + campaign_version;
+
+    // eslint-disable-next-line
+    returnConfig.campaign_version = parseInt(campaign_version);
+    if (returnConfig.iOS && !returnConfig.campaign_version) {
+      returnConfig.hide_header = true;
+    }
     returnConfig.searchParams = searchParams;
   }
 
