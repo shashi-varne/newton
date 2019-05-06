@@ -60,8 +60,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     if (message) {
       callbackData.action_data = { message: message };
     }
-  }
-  else {
+  } else {
     let project = getConfig().project;
 
     if (project === 'mandate-otm') {
