@@ -53,7 +53,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       callbackData.action = 'open_browser';
     }
 
-    if (action === 'exit') {
+    if (action === 'exit' || action === 'native_back') {
       callbackData.action = 'exit_web';
     }
 
