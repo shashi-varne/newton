@@ -43,7 +43,8 @@ export const getConfig = () => {
   let main_query_params = qs.parse(myHistory.location.search.slice(1));
   let { base_url } = main_query_params;
   let { generic_callback } = main_query_params;
-  let searchParams = `?base_url=${base_url}&generic_callback=${generic_callback}`;
+  let { redirect_url } = main_query_params;
+  let searchParams = `?base_url=${base_url}&generic_callback=${generic_callback}&redirect_url=${redirect_url}`;
   let isInsurance = myHistory.location.pathname.indexOf('insurance') >= 0 ? true : false;
   if (isInsurance) {
     let { insurance_v2 } = main_query_params;
@@ -127,9 +128,6 @@ export const getConfig = () => {
     returnConfig.insurance_v2 = true;
   }
 
-  if (isInsurance) {
-    returnConfig.searchParams = searchParams;
-  }
   if (project === 'mandate-otm') {
     let { key } = main_query_params;
     let { name } = main_query_params;
@@ -144,17 +142,7 @@ export const getConfig = () => {
     if (returnConfig.iOS && !returnConfig.campaign_version) {
       returnConfig.hide_header = true;
     }
-
-    returnConfig.searchParams = searchParams;
   }
-
-  if (project === 'gold') {
-    let { redirect_url } = main_query_params;
-
-    searchParams += '&redirect_url=' + redirect_url;
-    returnConfig.searchParams = searchParams;
-  }
-
 
   if (project === 'isip') {
     let { pc_urlsafe } = qs.parse(myHistory.location.search.slice(1));
@@ -167,9 +155,8 @@ export const getConfig = () => {
     if (returnConfig.iOS && !returnConfig.campaign_version) {
       returnConfig.hide_header = true;
     }
-    returnConfig.searchParams = searchParams;
   }
 
-
+  returnConfig.searchParams = searchParams;
   return returnConfig;
 }

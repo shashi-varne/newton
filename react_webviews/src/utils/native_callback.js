@@ -50,13 +50,14 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     }
     if (action === 'open_in_browser') {
       callbackData.action = 'open_browser';
+      callbackData.action_data = message;
     }
 
     if (action === 'exit' || action === 'native_back') {
       callbackData.action = 'exit_web';
     }
 
-    if (message) {
+    if (message && action != 'open_in_browser') {
       callbackData.action_data = { message: message };
     }
   } else {
