@@ -107,6 +107,9 @@ class BuyOrder extends Component {
     var pgLink = this.state.buyData.payment_link;
     // eslint-disable-next-line
     pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl + '&back_url=' + encodeURIComponent(nativeRedirectUrl) + '&order_type=buy';
+    if (getConfig().generic_callback) {
+      pgLink += '&generic_callback=' + getConfig().generic_callback;
+    }
     window.location = pgLink;
   }
 

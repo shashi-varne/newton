@@ -1,5 +1,6 @@
 import { isMobile } from './functions';
 import { getConfig } from './functions';
+import { open_browser_web } from 'utils/validators';
 import Api from 'utils/api';
 
 export const nativeCallbackOld = (status_code, message, action) => {
@@ -19,8 +20,6 @@ export const nativeCallbackOld = (status_code, message, action) => {
 
 export const nativeCallback = async ({ action = null, message = null, events = null } = {}) => {
   let callbackData = {};
-
-
 
   console.log("Nativecallback..........(action, message, events)");
   console.log(action);
@@ -60,11 +59,10 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     if (message) {
       callbackData.action_data = { message: message };
     }
-  }
-  else {
+  } else {
     let project = getConfig().project;
 
-    if (project === 'mandate-otm') {
+    if (project === 'mandate-otm' || project === 'isip') {
 
       // For only events, if actions is present, then proceed to next block
       if (events) {
@@ -85,6 +83,10 @@ export const nativeCallback = async ({ action = null, message = null, events = n
         // if (isMobile.iOS()) {
         //   if (typeof window.webkit !== 'undefined') window.webkit.messageHandlers.callbackNative.postMessage(events);
         // }
+      }
+
+      if (!action) {
+        return;
       }
 
       let campaign_version = getConfig().campaign_version;
@@ -129,7 +131,9 @@ export const nativeCallback = async ({ action = null, message = null, events = n
           return;
         }
 
-        nativeCallbackOld(200)
+        if (action) {
+          nativeCallbackOld(200)
+        }
       }
 
       return;
@@ -170,11 +174,9 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       let redirect_url = getConfig().searchParams;
       redirect_url = new URLSearchParams(redirect_url).get('redirect_url');
       window.location.href = redirect_url;
-    } else if (action === 'open_browser') {
-      let a = document.createElement('a');
-      a.target = "_blank";
-      a.href = message.url;
-      a.click();
+    } else if (action === 'open_in_browser') {
+
+      open_browser_web(message.url, '_blank')
     } else {
       return;
     }
