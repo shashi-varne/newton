@@ -1,6 +1,6 @@
 import { isMobile } from './functions';
 import { getConfig } from './functions';
-import { open_browser_web } from 'utils/validators';
+import { open_browser_web, renameObjectKeys } from 'utils/validators';
 import Api from 'utils/api';
 
 export const nativeCallbackOld = (status_code, message, action) => {
@@ -20,6 +20,7 @@ export const nativeCallbackOld = (status_code, message, action) => {
 
 export const nativeCallback = async ({ action = null, message = null, events = null } = {}) => {
   let callbackData = {};
+  let project = getConfig().project;
 
   console.log("Nativecallback..........(action, message, events)");
   console.log(action);
@@ -40,12 +41,20 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   }
 
   let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
+  generic_callback = "true";
   if (generic_callback === "true") {
     if (action === 'take_control_reset_hard') {
       callbackData.action = 'reset_back_button_control';
     }
 
     if (action === 'take_control') {
+      let keysMap = {
+        'back_url': 'url',
+        'show_top_bar': 'show_back_top_bar',
+        'top_bar_title': 'title',
+        'back_text': 'message'
+      };
+      message = renameObjectKeys(message, keysMap);
       callbackData.action = 'take_back_button_control';
     }
     if (action === 'open_in_browser') {
@@ -56,11 +65,24 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       callbackData.action = 'exit_web';
     }
 
+    if (action === 'native_reset') {
+      callbackData.action = 'restart_module';
+    }
+
+    if (project === 'insurance') {
+
+      if (action === 'resume_provider') {
+        message = {
+          url: message.resume_link
+        }
+      }
+    }
+
     if (message) {
       callbackData.action_data = message;
     }
   } else {
-    let project = getConfig().project;
+
 
     if (project === 'mandate-otm' || project === 'isip') {
 

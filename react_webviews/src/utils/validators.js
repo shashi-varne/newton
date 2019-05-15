@@ -1,3 +1,5 @@
+// import { func } from "prop-types";
+
 export function validateEmpty(string) {
   let nameSplit = string.split(" ").filter(e => e);
   if (nameSplit.length > 0) {
@@ -259,4 +261,18 @@ export function open_browser_web(url, tab_type) {
   a.target = tab_type;
   a.href = url;
   a.click();
+}
+
+export function renameObjectKeys(obj, newKeys) {
+
+  for (var key in obj) {
+    let keyValue = newKeys[key];
+
+    if (keyValue) {
+      obj[keyValue] = obj[key];
+      delete obj[key];
+    }
+  }
+
+  return obj;
 }
