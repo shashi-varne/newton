@@ -111,6 +111,7 @@ export const getConfig = () => {
     project = 'isip';
   }
   returnConfig.project = project;
+  returnConfig.generic_callback = generic_callback;
 
 
   if (isMobile.Android() && typeof window.Android !== 'undefined') {

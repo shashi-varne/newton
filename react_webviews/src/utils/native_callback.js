@@ -29,13 +29,9 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   if (action) {
     callbackData.action = action;
   }
-  if (message) {
-    callbackData.data = message;
-  }
   if (events) {
     callbackData.events = events;
   }
-
   if (!action && !events) {
     return;
   }
@@ -43,7 +39,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
   generic_callback = "true";
   if (generic_callback === "true") {
-    if (action === 'take_control_reset_hard') {
+    if (action === 'take_control_reset_hard' || action === 'take_control_reset') {
       callbackData.action = 'reset_back_button_control';
     }
 
@@ -62,7 +58,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     }
 
     if (action === 'exit' || action === 'native_back') {
-      callbackData.action = 'exit_web';
+      callbackData.action = project === 'insurance' ? 'exit_module' : 'exit_web';
     }
 
     if (action === 'native_reset') {
@@ -70,7 +66,6 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     }
 
     if (project === 'insurance') {
-
       if (action === 'resume_provider') {
         message = {
           url: message.resume_link
@@ -82,7 +77,9 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       callbackData.action_data = message;
     }
   } else {
-
+    if (message) {
+      callbackData.data = message;
+    }
 
     if (project === 'mandate-otm' || project === 'isip') {
 
