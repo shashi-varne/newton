@@ -275,7 +275,7 @@ class Transactions extends Component {
                   <TableCell align="justify" padding='dense'>{row.gold_weight}</TableCell>
                   <TableCell align="justify" padding='dense'>{row.total_amount}</TableCell>
                   <TableCell align="justify" padding='dense'>{row.provider_sell_order_status || row.provider_sell_order_error}</TableCell>
-                  <TableCell align="justify" padding='dense'>{row.date_created.split(' ')[0]}</TableCell>
+                  <TableCell align="justify" padding='dense'>{row.dt_created.split(' ')[0]}</TableCell>
                   <TableCell align="justify" padding='dense'><div className="download-invoice" onClick={() => this.downloadInvoice(row.invoice_link)}>Download</div></TableCell>
                 </TableRow>
               ))}</TableBody>
