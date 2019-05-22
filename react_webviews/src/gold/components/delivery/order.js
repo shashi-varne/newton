@@ -39,7 +39,7 @@ class DeliveryOrder extends Component {
   }
 
   componentWillMount() {
-
+    nativeCallback({ action: 'take_control_reset' });
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
