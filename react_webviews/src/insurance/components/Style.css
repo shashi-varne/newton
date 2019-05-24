@@ -203,3 +203,34 @@ color: black
     display: block;
     color: rgba(0, 0, 0, 0.54);
 }
+.ins-row-scroll {
+  height: 30px;
+  font-size: 14px;
+  color: #4a4a4a;
+  padding: 20px 0px 10px 10px;
+  width: 105%;
+  margin: 0px -13px 0 -15px;
+}
+.ins-row-scroll-selected {
+  background: #f4f4f4;
+}
+.intro-empty-dot {
+  height: 5px;
+  width: 5px;
+  border-radius: 50%;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  border: 1px solid #4a4a4a;
+  margin: 0px 0 0 6px;
+  vertical-align: middle;
+}
+.intro-filled-dot {
+    height: 9px;
+    width: 9px;
+    background-color: #4a4a4a;
+    border-radius: 50%;
+    display: inline-flex;
+    border: 1px solid #4a4a4a;
+    margin: 0px 0 0 6px;
+    vertical-align: middle;
+}

@@ -26,6 +26,16 @@ import Payment from './components/payment/index';
 import Pincode from './components/pincode/screen1';
 import Resume from './components/insurance-summary/screen2';
 
+// quote selection
+import CoverAmount from './components/quote-selection/cover_amount';
+import AnnualIncome from './components/quote-selection/annual_income';
+import CoverPeriod from './components/quote-selection/cover_period';
+import Intro from './components/quote-selection/intro';
+import JourneyIntro from './components/quote-selection/journey';
+import LifeStyle from './components/quote-selection/lifestyle';
+import PersonalDetailsIntro from './components/quote-selection/personal_details';
+import QuoteGeneration from './components/quote-selection/quote_generation';
+
 import { create } from 'jss';
 import JssProvider from 'react-jss/lib/JssProvider';
 import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
@@ -134,6 +144,17 @@ const Insurance = (props) => {
           <Route path={`${url}/journey`} component={Journey} />
           <Route path={`${url}/payment/:insurance_id/:insurance_v2/:status`} component={Payment} />
           <Route path={`${url}/Pincode`} component={Pincode} />
+
+          {/* quote selection */}
+          <Route path={`${url}/cover-amount`} component={CoverAmount} />
+          <Route path={`${url}/annual-income`} component={AnnualIncome} />
+          <Route path={`${url}/cover-period`} component={CoverPeriod} />
+          <Route path={`${url}/intro`} component={Intro} />
+          <Route path={`${url}/journey-intro`} component={JourneyIntro} />
+          <Route path={`${url}/lifestyle`} component={LifeStyle} />
+          <Route path={`${url}/personal-details-intro`} component={PersonalDetailsIntro} />
+          <Route path={`${url}/quote`} component={QuoteGeneration} />
+
           {/* Edit paths */}
           <Route path={`${url}/edit-personal`} render={(props) => <PersonalDetails1 {...props} edit={true} />} />
           <Route path={`${url}/edit-personal1`} render={(props) => <PersonalDetails2 {...props} edit={true} />} />
