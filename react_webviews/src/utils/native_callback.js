@@ -67,7 +67,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
 
     if (project === 'insurance') {
       if (action === 'resume_provider') {
-        action = 'open_url';
+        callbackData.action = 'open_url';
         message = {
           url: message.resume_link
         }
