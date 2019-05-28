@@ -32,18 +32,34 @@ class Container extends Component {
   }
 
   componentDidMount() {
+    let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
     let that = this;
-    window.PlutusSdk.add_listener({
-      type: 'back_pressed',
-      go_back: function () {
-        console.log("goback from plutussdk");
-        that.historyGoBack();
-      }
-    });
+    if (generic_callback === "true") {
+      window.callbackWeb.add_listener({
+        type: 'back_pressed',
+        go_back: function () {
+          console.log("goback from callbackWeb");
+          that.historyGoBack();
+        }
+      });
+    } else {
+      window.PlutusSdk.add_listener({
+        type: 'back_pressed',
+        go_back: function () {
+          console.log("goback from plutussdk");
+          that.historyGoBack();
+        }
+      });
+    }
   }
 
   componentWillUnmount() {
-    window.PlutusSdk.remove_listener({});
+    let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
+    if (generic_callback === "true") {
+      window.callbackWeb.remove_listener({});
+    } else {
+      window.PlutusSdk.remove_listener({});
+    }
   }
 
   navigate = (pathname) => {

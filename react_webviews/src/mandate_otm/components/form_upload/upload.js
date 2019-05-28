@@ -68,24 +68,45 @@ class Upload extends Component {
   }
 
   componentDidMount() {
+    let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
     let that = this;
-    window.PaymentCallback.add_listener({
-      type: 'back_pressed',
-      go_back: function () {
-        console.log("goback from plutussdk");
-        that.setState({
-          openDialog: false
-        });
-      }
-    });
+    if (generic_callback === "true") {
+      window.callbackWeb.add_listener({
+        type: 'back_pressed',
+        go_back: function () {
+          console.log("goback from callbackWeb");
+          that.setState({
+            openDialog: false
+          });
+        }
+      });
 
-    window.PaymentCallback.add_listener({
-      type: 'native_receiver_image',
-      show_loader: function (show_loader) {
+      window.callbackWeb.add_listener({
+        type: 'native_receiver_image',
+        show_loader: function (show_loader) {
 
-        that.showLoaderNative();
-      }
-    });
+          that.showLoaderNative();
+        }
+      });
+    } else {
+      window.PaymentCallback.add_listener({
+        type: 'back_pressed',
+        go_back: function () {
+          console.log("goback from plutussdk");
+          that.setState({
+            openDialog: false
+          });
+        }
+      });
+
+      window.PaymentCallback.add_listener({
+        type: 'native_receiver_image',
+        show_loader: function (show_loader) {
+
+          that.showLoaderNative();
+        }
+      });
+    }
   }
 
   navigate = (pathname) => {
@@ -175,48 +196,95 @@ class Upload extends Component {
   }
 
   native_call_handler(method_name, doc_type, doc_name, doc_side) {
-
+    let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
     let that = this;
-    window.PaymentCallback[method_name]({
-      type: 'doc',
-      doc_type: doc_type,
-      doc_name: doc_name,
-      doc_side: doc_side,
-      // callbacks from native
-      upload: function upload(file) {
-        try {
+    if (generic_callback === "true") {
+      window.callbackWeb[method_name]({
+        type: 'doc',
+        doc_type: doc_type,
+        doc_name: doc_name,
+        doc_side: doc_side,
+        // callbacks from native
+        upload: function upload(file) {
+          try {
+            that.setState({
+              docType: this.doc_type,
+              docName: this.docName,
+              doc_side: this.doc_side,
+              openDialog: false,
+              show_loader: true
+            })
+            switch (file.type) {
+              case 'image/jpeg':
+              case 'image/jpg':
+              case 'image/png':
+              case 'image/bmp':
+                that.mergeDocs(file);
+                break;
+              default:
+                alert('Please select image file');
+                that.setState({
+                  docType: this.doc_type,
+                  show_loader: false
+                })
+            }
+          } catch (e) {
+            // 
+          }
+        }
+      });
+
+      window.callbackWeb.add_listener({
+        type: 'native_receiver_image',
+        show_loader: function (show_loader) {
           that.setState({
-            docType: this.doc_type,
-            docName: this.docName,
-            doc_side: this.doc_side,
-            openDialog: false,
             show_loader: true
           })
-          switch (file.type) {
-            case 'image/jpeg':
-            case 'image/jpg':
-            case 'image/png':
-            case 'image/bmp':
-              that.mergeDocs(file);
-              break;
-            default:
-              alert('Please select image file');
-          }
-        } catch (e) {
-          // 
+          that.showLoaderNative();
         }
-      }
-    });
+      });
+    } else {
+      window.PaymentCallback[method_name]({
+        type: 'doc',
+        doc_type: doc_type,
+        doc_name: doc_name,
+        doc_side: doc_side,
+        // callbacks from native
+        upload: function upload(file) {
+          try {
+            that.setState({
+              docType: this.doc_type,
+              docName: this.docName,
+              doc_side: this.doc_side,
+              openDialog: false,
+              show_loader: true
+            })
+            switch (file.type) {
+              case 'image/jpeg':
+              case 'image/jpg':
+              case 'image/png':
+              case 'image/bmp':
+                that.mergeDocs(file);
+                break;
+              default:
+                alert('Please select image file');
+            }
+          } catch (e) {
+            // 
+          }
+        }
+      });
 
-    window.PaymentCallback.add_listener({
-      type: 'native_receiver_image',
-      show_loader: function (show_loader) {
-        that.setState({
-          show_loader: true
-        })
-        that.showLoaderNative();
-      }
-    });
+      window.PaymentCallback.add_listener({
+        type: 'native_receiver_image',
+        show_loader: function (show_loader) {
+          that.setState({
+            show_loader: true
+          })
+          that.showLoaderNative();
+        }
+      });
+    }
 
 
 
