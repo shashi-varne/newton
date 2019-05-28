@@ -150,8 +150,8 @@ class AddEditAddress extends Component {
         showLoader={this.state.show_loader}
         title="iSIP Biller"
         handleClick={this.handleClick}
-        classOverRide="result-container"
-        classOverRideContainer="result-container"
+        classOverRide="result-container-isip"
+        classOverRideContainer="result-container-isip"
         edit={this.props.edit}
         buttonTitle="Proceed"
         type={this.state.type}
