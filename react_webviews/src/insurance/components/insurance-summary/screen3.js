@@ -717,39 +717,6 @@ class Journey extends Component {
             // eslint-disable-next-line
             let result = res.pfwresponse.result;
 
-            // if (this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') {
-            //   eventObj = {
-            //     "event_name": 'resume_clicked',
-            //     "properties": {
-            //       "overall_progress": this.renderTotalPercentage(),
-            //       "personal_d": this.renderPersonalPercentage(),
-            //       "contact_d": this.renderContactPercentage(),
-            //       "nominee_d": this.renderNomineePercentage(),
-            //       "professional": this.renderProfessionalPercentage(),
-            //       "professonal_edit": 0,
-            //       "pd_view": 0,
-            //       "cd_view": 0,
-            //       "nd_view": 0,
-            //       "professional_view": 0
-            //     }
-            //   };
-            // } else {
-            //   eventObj = {
-            //     "event_name": 'make_payment_clicked',
-            //     "properties": {
-            //       "provider": this.state.provider,
-            //       "benefits": (this.state.benefits.accident_benefit !== '' && this.state.benefits.payout_option !== '') ? 1 : 0,
-            //       "personal_d": (this.renderPersonalPercentage() === 100) ? 1 : 0,
-            //       "contact_d": (this.renderContactPercentage() === 100) ? 1 : 0,
-            //       "nominee": (this.renderNomineePercentage() === 100) ? 1 : 0,
-            //       "professonal": (this.renderProfessionalPercentage() === 100) ? 1 : 0,
-            //       "appointee": (this.renderAppointeePercentage() === 100) ? 1 : 0
-            //     }
-            //   };
-            // }
-            // if (result.insurance_app.plutus_payment_status === 'payment_ready') {
-            //   this.handlePayment(result.insurance_app);
-            // }
             let eventObj = {
               "event_name": 'resume_clicked',
               "properties": {

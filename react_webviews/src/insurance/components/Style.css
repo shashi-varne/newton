@@ -234,3 +234,45 @@ color: black
     margin: 0px 0 0 6px;
     vertical-align: middle;
 }
+.annual-income-data-mid {
+  font-size: 16px;
+    color: #4a4a4a;
+    font-weight: 500;
+    margin: 5px 0 5px 0;
+    border-bottom: 1px solid #878787;
+    width: 60%;
+}
+.annual-income-info-button {
+  color: #4f2da7;
+    font-size: 11px;
+    font-weight: 500;
+    border: 1px solid;
+    height: fit-content;
+    padding: 3px 5px 3px 5px;
+    border-radius: 4px;
+}
+img.per-det-img {
+  width: 44%;
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+  height: 44%;
+  margin-top: 10px;
+}
+.header-annual-inc-info {
+  display: flex;
+    margin: 0;
+    position: absolute;
+    z-index: 10;
+    background: #fff;
+    left: 0;
+    right: 0;
+    top: 60px;
+    padding: 10px 10px 0px 10px;
+}
+.selected-gender {
+  width: 10px;
+    position: relative;
+    right: 7%;
+    vertical-align: top;
+    top: 15px;
+}
