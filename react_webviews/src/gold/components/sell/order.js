@@ -37,7 +37,7 @@ class About extends Component {
   }
 
   componentWillMount() {
-
+    nativeCallback({ action: 'take_control_reset' });
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -245,7 +245,7 @@ class About extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                                                        previous gold price has expired.
+                                                                                                                                                                                                                                          previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
