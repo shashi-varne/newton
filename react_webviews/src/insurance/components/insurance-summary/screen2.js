@@ -99,6 +99,7 @@ class Resume extends Component {
         if (application.provider === 'IPRU') {
           this.paymentRedirect();
           options.message.payment_link = result.payment_link;
+          // nativeCallback(options);
         }
       }
     } catch (err) {
@@ -466,7 +467,7 @@ class Resume extends Component {
               // window.location.href = result.insurance_app.resume_link;
               nativeCallback({ action: 'resume_provider', message: { resume_link: result.insurance_app.resume_link, provider: provider } });
             } else {
-              let options = { events: eventObj, message: { payment_link: '', provider: provider } };
+              let options = { events: eventObj, action: 'payment', message: { payment_link: '', provider: provider } };
               if (result.insurance_app.plutus_payment_status === 'payment_ready') {
                 this.handlePayment(result.insurance_app, options);
               }

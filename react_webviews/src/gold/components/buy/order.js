@@ -25,7 +25,6 @@ class BuyOrder extends Component {
   }
 
   componentWillMount() {
-    nativeCallback({ action: 'take_control_reset' });
     let buyData = JSON.parse(window.localStorage.getItem('buyData'));
     let timeAvailable = window.localStorage.getItem('timeAvailable');
     // let timeAvailable = 3456;
@@ -108,9 +107,6 @@ class BuyOrder extends Component {
     var pgLink = this.state.buyData.payment_link;
     // eslint-disable-next-line
     pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl + '&back_url=' + encodeURIComponent(nativeRedirectUrl) + '&order_type=buy';
-    if (getConfig().generic_callback) {
-      pgLink += '&generic_callback=' + getConfig().generic_callback;
-    }
     window.location = pgLink;
   }
 

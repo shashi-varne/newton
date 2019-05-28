@@ -480,8 +480,7 @@ class ContactDetails2 extends Component {
 
             nativeCallback({
               action: 'take_control', message: {
-                back_url: result.pfwresponse.result.insurance_app.profile_link + '&insurance_v2=' + this.state.params.insurance_v2 + '&generic_callback=' +
-                  this.state.params.generic_callback,
+                back_url: result.pfwresponse.result.insurance_app.profile_link + '&insurance_v2=' + this.state.params.insurance_v2,
                 show_top_bar: false,
                 top_bar_title: result.pfwresponse.result.insurance_app.provider,
                 back_text: "We suggest you to complete the application process for fast issuance of your insurance.Do you still want to exit the application process"

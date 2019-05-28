@@ -79,13 +79,13 @@ class Payment extends Component {
     this.props.history.push({
       pathname: pathname,
       search: '?insurance_id=' + this.state.insurance_id + '&base_url=' + this.state.params.base_url +
-        '&insurance_v2=' + this.state.insurance_v2 + '&generic_callback=' + this.state.params.generic_callback
+        '&insurance_v2=' + this.state.insurance_v2
     });
   }
 
   navigateResume = (pathname) => {
     let search = '?insurance_id=' + this.state.insurance_id + '&resume=yes&base_url=' + this.state.params.base_url +
-      '&insurance_v2=' + this.state.insurance_v2 + '&generic_callback=' + this.state.params.generic_callback;
+      '&insurance_v2=' + this.state.insurance_v2;
     this.props.history.push({
       pathname: pathname,
       search: search,

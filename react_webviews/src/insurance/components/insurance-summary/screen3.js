@@ -192,14 +192,10 @@ class Journey extends Component {
     );
     var pgLink = payment_link;
     let app = getConfig().app;
-    var back_url = encodeURIComponent(this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2 + '&generic_callback=' +
-      this.state.params.generic_callback);
+    var back_url = encodeURIComponent(this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2);
     // eslint-disable-next-line
     pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
       '&app=' + app + '&back_url=' + back_url;
-    if (getConfig().generic_callback) {
-      pgLink += '&generic_callback=' + getConfig().generic_callback;
-    }
     window.location.href = pgLink;
     return;
   }
@@ -550,8 +546,7 @@ class Journey extends Component {
     this.props.history.push({
       pathname: pathname,
       search: 'insurance_id=' + insurance_id + '&base_url=' + this.state.params.base_url +
-        '&insurance_v2=' + this.state.insurance_v2 + '&resume=yes&isKyc=' + this.state.isKyc + '&generic_callback=' +
-        this.state.params.generic_callback,
+        '&insurance_v2=' + this.state.insurance_v2 + '&resume=yes&isKyc=' + this.state.isKyc,
     });
   }
 
@@ -760,8 +755,7 @@ class Journey extends Component {
             nativeCallback({ events: eventObj });
             nativeCallback({
               action: 'take_control', message: {
-                back_url: this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2 + '&generic_callback=' +
-                  this.state.params.generic_callback,
+                back_url: this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2,
                 show_top_bar: false,
                 top_bar_title: provider,
                 back_text: "We suggest you to complete the application process for fast issuance of your insurance.Do you still want to exit the application process"
@@ -793,8 +787,7 @@ class Journey extends Component {
         nativeCallback({ events: eventObj });
         nativeCallback({
           action: 'take_control', message: {
-            back_url: this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2 + '&generic_callback=' +
-              this.state.params.generic_callback,
+            back_url: this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2,
             show_top_bar: false,
             top_bar_title: provider,
             back_text: "We suggest you to complete the application process for fast issuance of your insurance.Do you still want to exit the application process"

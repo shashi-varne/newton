@@ -127,14 +127,10 @@ class Summary extends Component {
       window.location.protocol + '//' + window.location.host + '/insurance/payment/' + this.state.params.insurance_id + '/' + insurance_v2
     );
     var pgLink = payment_link;
-    var back_url = encodeURIComponent(this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2 + '&generic_callback=' +
-      this.state.params.generic_callback);
+    var back_url = encodeURIComponent(this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2);
     // eslint-disable-next-line
     pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
       '&app=' + app + '&back_url=' + back_url;
-    if (getConfig().generic_callback) {
-      pgLink += '&generic_callback=' + getConfig().generic_callback;
-    }
     window.location.href = pgLink;
     return;
   }
@@ -452,8 +448,7 @@ class Summary extends Component {
 
       nativeCallback({
         action: 'take_control', message: {
-          back_url: this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2 + '&generic_callback=' +
-          this.state.params.generic_callback,
+          back_url: this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2,
           show_top_bar: false,
           top_bar_title: provider,
           back_text: "We suggest you to complete the application process for fast issuance of your insurance.Do you still want to exit the application process"

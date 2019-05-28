@@ -39,7 +39,7 @@ class DeliveryOrder extends Component {
   }
 
   componentWillMount() {
-    nativeCallback({ action: 'take_control_reset' });
+
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -172,9 +172,6 @@ class DeliveryOrder extends Component {
     var pgLink = this.state.redeemProduct.payment_link;
     // eslint-disable-next-line
     pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl + '&back_url=' + encodeURIComponent(nativeRedirectUrl) + '&order_type=delivery';
-    if (getConfig().generic_callback) {
-      pgLink += '&generic_callback=' + getConfig().generic_callback;
-    }
     window.location = pgLink;
   }
 
