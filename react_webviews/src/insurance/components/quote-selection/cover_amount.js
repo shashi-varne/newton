@@ -6,11 +6,12 @@ import Container from '../../common/Container';
 import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
 
-import selected_option from 'assets/selected_option.png';
+// import selected_option from 'assets/selected_option.png';
 import comver_amount_icon from 'assets/life_cover_icon.png';
-import { FormControl } from 'material-ui/Form';
-import Input from '../../../common/ui/Input';
-import { validateNumber, inrFormatDecimal } from 'utils/validators';
+// import { FormControl } from 'material-ui/Form';
+// import Input from '../../../common/ui/Input';
+import { validateNumber, inrFormatDecimal, numDifferentiation } from 'utils/validators';
+import DropdownInPage from '../../../common/ui/DropdownInPage';
 
 class CoverAmount extends Component {
   constructor(props) {
@@ -22,27 +23,29 @@ class CoverAmount extends Component {
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
-      selectedIndex: quoteData.selectedIndexCoverAmount || 0,
-      // cover_amount: 0,
+      selectedIndex: quoteData.selectedIndexCoverAmount || '',
       coverAmountList: [{
         name: '', value: ''
       }],
       cover_amount_error: '',
-      quoteData: quoteData
+      quoteData: quoteData,
+      cover_amount: quoteData.cover_amount,
+      coverAmountToShow: quoteData.coverAmountToShow
     }
-    this.renderList = this.renderList.bind(this);
+    // this.renderList = this.renderList.bind(this);
+    this.setValue = this.setValue.bind(this);
   }
 
   componentWillMount() {
     let { params } = this.props.location || {};
-    console.log(params)
     let annual_income = params && params.annual_income ? params.annual_income : this.state.quoteData.annual_income;
     if (!annual_income) {
       this.navigate('annual-income');
       return;
     }
     this.setState({
-      annual_income: annual_income
+      annual_income: annual_income,
+      cover_amount: this.state.quoteData.cover_amount || ''
     })
 
 
@@ -70,21 +73,45 @@ class CoverAmount extends Component {
       let result = res.pfwresponse.result;
       if (res.pfwresponse.status_code === 200) {
         result.list.push({ name: 'Other' });
+
+        let cover_amount_min_max = 'Min ' + inrFormatDecimal(result.min) + ' - Max ' + inrFormatDecimal(result.max);
+
         this.setState({
           coverAmountList: result.list,
           min: result.min,
           max: result.max,
-          cover_amount_min_max: 'Min ' + inrFormatDecimal(result.min) + ' - Max ' + inrFormatDecimal(result.max)
+          cover_amount_min_max: cover_amount_min_max
         });
         for (var i in result.list) {
           if (result.recommendation.name === result.list[i].name) {
             this.setState({
-              selectedIndex: i,
+              selectedIndex: this.state.selectedIndex || i * 1,
               recommendedIndex: i * 1
             })
-            this.setValue(i);
+            this.setValue(this.state.selectedIndex, 'first');
           }
         }
+
+        let inputToRender = {
+          error: false,
+          helperText: this.state.cover_amount_error || cover_amount_min_max,
+          type: "text",
+          width: "40",
+          label: "Cover Amount",
+          class: "Income",
+          id: "income",
+          name: "cover_amount",
+          value: this.state.quoteData.cover_amount,
+          onChange: this.handleChange('cover_amount'),
+          onKeyChange: this.handleKeyChange('cover_amount'),
+          cover_amount_min_max: cover_amount_min_max,
+          min: result.min,
+          max: result.max,
+        }
+
+        this.setState({
+          inputToRender: inputToRender
+        });
 
       } else {
         toast(result.error || result.message);
@@ -108,8 +135,10 @@ class CoverAmount extends Component {
 
   redirectNow() {
     let quoteData = this.state.quoteData;
-    quoteData.cover_amount = this.state.coverAmountList[this.state.selectedIndex].value;
+    quoteData.cover_amount = this.state.coverAmountList[this.state.selectedIndex].value || this.state.cover_amount;
     quoteData.selectedIndexCoverAmount = this.state.selectedIndex;
+    quoteData.coverAmountList = this.state.coverAmountList;
+    quoteData.coverAmountToShow = this.state.coverAmountToShow;
     window.localStorage.setItem('quoteData', JSON.stringify(quoteData));
     this.navigate('cover-period')
   }
@@ -118,24 +147,34 @@ class CoverAmount extends Component {
 
     if (this.state.coverAmountList[this.state.selectedIndex].name === 'Other') {
       if (!this.state.cover_amount) {
+        let error = 'Cover Amount cannot be empty';
         this.setState({
-          cover_amount_error: 'Cover Amount cannot be empty'
+          cover_amount_error: error,
+          inputToRender: { ...this.state.inputToRender, helperText: error, error: true }
         });
       } else if ((!validateNumber(this.state.cover_amount) || !this.state.cover_amount)) {
+        let error = 'Invalid Cover Amount';
         this.setState({
-          cover_amount_error: 'Invalid Cover Amount'
+          cover_amount_error: error,
+          inputToRender: { ...this.state.inputToRender, helperText: error, error: true }
         });
       } else if (this.state.cover_amount < this.state.min) {
+        let error = 'Minimum Cover Amount is ' + inrFormatDecimal(this.state.min);
         this.setState({
-          cover_amount_error: 'Minimum Cover Amount is ' + inrFormatDecimal(this.state.min)
+          cover_amount_error: error,
+          inputToRender: { ...this.state.inputToRender, helperText: error, error: true }
         });
       } else if (this.state.cover_amount > this.state.max) {
+        let error = 'Maximum Cover Amount is ' + inrFormatDecimal(this.state.max);
         this.setState({
-          cover_amount_error: 'Maximum Cover Amount is ' + inrFormatDecimal(this.state.max)
+          cover_amount_error: error,
+          inputToRender: { ...this.state.inputToRender, helperText: error, error: true }
         });
       } else if ((!validateNumber(this.state.cover_amount) || !this.state.cover_amount)) {
+        let error = 'Invalid Cover Amount';
         this.setState({
-          cover_amount_error: 'Invalid Cover Amount'
+          cover_amount_error: error,
+          inputToRender: { ...this.state.inputToRender, helperText: error, error: true }
         });
       } else {
         this.redirectNow();
@@ -146,7 +185,8 @@ class CoverAmount extends Component {
 
   }
 
-  setValue(index) {
+  setValue(index, isFirst) {
+
     if (this.state.otherIndex === index) {
       return;
     } else {
@@ -155,10 +195,17 @@ class CoverAmount extends Component {
       })
     }
     let cover_amount = this.state.coverAmountList[index].name;
+    let coverAmountToShow = cover_amount;
     if (this.state.coverAmountList[index].name === 'Other') {
-      cover_amount = '';
+      cover_amount = 0;
+      if (isFirst) {
+        cover_amount = this.state.quoteData.cover_amount;
+      }
+
+      coverAmountToShow = this.state.quoteData.coverAmountToShow;
       this.setState({
-        otherIndex: index
+        otherIndex: index,
+        inputToRender: { ...this.state.inputToRender, value: cover_amount }
       })
     }
     // eslint-disable-next-line
@@ -166,6 +213,7 @@ class CoverAmount extends Component {
     this.setState({
       selectedIndex: index,
       cover_amount: cover_amount,
+      coverAmountToShow: coverAmountToShow,
       name: this.state.coverAmountList[index].name
     })
   }
@@ -174,9 +222,15 @@ class CoverAmount extends Component {
   }
 
   handleChange = name => event => {
+    let inputToRender = this.state.inputToRender;
+    inputToRender.helperText = this.state.cover_amount_min_max;
+    inputToRender.error = false;
+    inputToRender.value = event.target.value.replace(/,/g, "");
     this.setState({
       [name]: event.target.value.replace(/,/g, ""),
-      [name + '_error']: ''
+      [name + '_error']: '',
+      inputToRender: inputToRender,
+      coverAmountToShow: numDifferentiation(event.target.value.replace(/,/g, "") * 1)
     });
   };
 
@@ -189,51 +243,51 @@ class CoverAmount extends Component {
     }
   }
 
-  renderList(props, index) {
-    return (
-      <div key={index} onClick={() => this.setValue(index)}
-        style={{ height: 'auto' }}
-        className={'ins-row-scroll' + (this.state.selectedIndex === index ? ' ins-row-scroll-selected' : '')}>
-        {this.state.selectedIndex !== index &&
-          <div style={{ display: '-webkit-box' }}>
-            <div style={{ width: '28%' }}>{props.name}</div>
-            {props.name !== 'Other' && index === this.state.recommendedIndex &&
-              <div style={{ width: '60%', color: '#b9a8e6', fontSize: 13 }}>Recommended</div>
-            }
-          </div>
-        }
-        {this.state.selectedIndex === index &&
-          <div>
-            <div style={{ display: '-webkit-box' }}>
-              <div style={{ width: index === this.state.recommendedIndex ? '28%' : '88%', color: '#4f2da7', fontWeight: 500 }}>{props.name}</div>
-              {props.name !== 'Other' && index === this.state.recommendedIndex * 1 &&
-                <div style={{ width: '60%', color: '#b9a8e6', fontSize: 13 }}>Recommended</div>
-              }
-              < img width="20" src={selected_option} alt="Insurance" />
+  // renderList(props, index) {
+  //   return (
+  //     <div key={index} onClick={() => this.setValue(index)}
+  //       style={{ height: 'auto' }}
+  //       className={'ins-row-scroll' + (this.state.selectedIndex === index ? ' ins-row-scroll-selected' : '')}>
+  //       {this.state.selectedIndex !== index &&
+  //         <div style={{ display: '-webkit-box' }}>
+  //           <div style={{ width: '28%' }}>{props.name}</div>
+  //           {props.name !== 'Other' && index === this.state.recommendedIndex &&
+  //             <div style={{ width: '60%', color: '#b9a8e6', fontSize: 13 }}>Recommended</div>
+  //           }
+  //         </div>
+  //       }
+  //       {this.state.selectedIndex === index &&
+  //         <div>
+  //           <div style={{ display: '-webkit-box' }}>
+  //             <div style={{ width: index === this.state.recommendedIndex ? '28%' : '88%', color: '#4f2da7', fontWeight: 500 }}>{props.name}</div>
+  //             {props.name !== 'Other' && index === this.state.recommendedIndex * 1 &&
+  //               <div style={{ width: '60%', color: '#b9a8e6', fontSize: 13 }}>Recommended</div>
+  //             }
+  //             < img width="20" src={selected_option} alt="Insurance" />
 
-            </div>
-            {props.name === 'Other' &&
-              <FormControl >
-                <div style={{ margin: '10px 0 0 0' }} className="InputField">
-                  <Input
-                    error={(this.state.cover_amount_error) ? true : false}
-                    helperText={this.state.cover_amount_error || this.state.cover_amount_min_max}
-                    type="text"
-                    width="40"
-                    label="Cover Amount"
-                    class="Income"
-                    id="income"
-                    name="coveR_amount"
-                    value={this.state.cover_amount}
-                    onChange={this.handleChange('cover_amount')}
-                    onKeyChange={this.handleKeyChange('cover_amount')} />
-                </div>
-              </FormControl>}
-          </div>
-        }
-      </div>
-    )
-  }
+  //           </div>
+  //           {props.name === 'Other' &&
+  //             <FormControl >
+  //               <div style={{ margin: '10px 0 0 0' }} className="InputField">
+  //                 <Input
+  //                   error={(this.state.cover_amount_error) ? true : false}
+  //                   helperText={this.state.cover_amount_error || this.state.cover_amount_min_max}
+  //                   type="text"
+  //                   width="40"
+  //                   label="Cover Amount"
+  //                   class="Income"
+  //                   id="income"
+  //                   name="cover_amount"
+  //                   value={this.state.cover_amount}
+  //                   onChange={this.handleChange('cover_amount')}
+  //                   onKeyChange={this.handleKeyChange('cover_amount')} />
+  //               </div>
+  //             </FormControl>}
+  //         </div>
+  //       }
+  //     </div>
+  //   )
+  // }
 
   render() {
     return (
@@ -257,15 +311,27 @@ class CoverAmount extends Component {
           <div style={{ width: '76%' }}>
             <div style={{ color: '#4a4a4a', fontSize: 16 }}>I want my family to receive</div>
             <div style={{ display: 'flex' }}>
-              <div className="annual-income-data-mid" style={{ width: 'fit-content' }}>₹ {this.state.cover_amount}</div>
+              <div className="annual-income-data-mid" style={{ width: 'fit-content' }}>
+                {this.state.coverAmountToShow}</div>
               <div style={{ margin: '4px 0 0 8px', fontSize: 16, color: ' #4a4a4a' }}>In my absence</div>
             </div>
           </div>
-          <div className="annual-income-info-button" onClick={() => this.renderPopUp()}>INFO</div>
+          <div className="annual-income-info-button"
+            style={{ color: getConfig().primary }}
+            onClick={() => this.renderPopUp()}>INFO</div>
         </div>
 
         <div style={{ marginTop: 60 }}>
-          {this.state.coverAmountList.map(this.renderList)}
+          {/* {this.state.coverAmountList.map(this.renderList)} */}
+          {this.state.inputToRender && this.state.inputToRender.helperText && <DropdownInPage
+            options={this.state.coverAmountList}
+            value={this.state.selectedIndex}
+            onChange={this.setValue}
+            recommendedIndex={this.state.recommendedIndex}
+            dataType="AOB"
+            keyToShow="name"
+            inputKeyName="Other"
+            inputToRender={this.state.inputToRender} />}
         </div>
       </Container>
     );

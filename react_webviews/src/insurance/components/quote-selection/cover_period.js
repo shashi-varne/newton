@@ -6,8 +6,8 @@ import Container from '../../common/Container';
 import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
 
-import selected_option from 'assets/selected_option.png';
 import comver_amount_icon from 'assets/life_cover_icon.png';
+import DropdownInPage from '../../../common/ui/DropdownInPage';
 
 class CoverPeriod extends Component {
   constructor(props) {
@@ -19,12 +19,12 @@ class CoverPeriod extends Component {
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
-      selectedIndex: quoteData.selectedIndexCoverPeriod || 0,
+      selectedIndex: quoteData.selectedIndexCoverPeriod || '',
       cover_period: 0,
       coverPeriodList: [],
       quoteData: quoteData
     }
-    this.renderList = this.renderList.bind(this);
+    this.setValue = this.setValue.bind(this);
   }
 
   componentWillMount() {
@@ -44,6 +44,7 @@ class CoverPeriod extends Component {
   }
 
   async componentDidMount() {
+    console.log(this.state.selectedIndex)
     try {
       const res = await Api.get('/api/insurance/recommend/cover_term?dob=' + this.state.quoteData.dob)
       this.setState({
@@ -61,10 +62,10 @@ class CoverPeriod extends Component {
         for (i in coverPeriodList) {
           if (result.recommendation === coverPeriodList[i]) {
             this.setState({
-              selectedIndex: i * 1,
+              selectedIndex: this.state.selectedIndex || i * 1,
               recommendedIndex: i * 1
             })
-            this.setValue(i * 1);
+            this.setValue(this.state.selectedIndex);
           }
         }
       } else {
@@ -91,6 +92,7 @@ class CoverPeriod extends Component {
     let quoteData = this.state.quoteData;
     quoteData.cover_period = this.state.cover_period;
     quoteData.selectedIndexCoverPeriod = this.state.selectedIndex;
+    quoteData.coverPeriodList = this.state.coverPeriodList;
     window.localStorage.setItem('quoteData', JSON.stringify(quoteData));
     this.navigate('lifestyle')
   }
@@ -104,31 +106,6 @@ class CoverPeriod extends Component {
 
   renderPopUp() {
   }
-
-  renderList(props, index) {
-    return (
-      <div key={index} onClick={() => this.setValue(index)}
-        className={'ins-row-scroll' + (this.state.selectedIndex === index ? ' ins-row-scroll-selected' : '')}>
-        {this.state.selectedIndex !== index &&
-          <div style={{ display: '-webkit-box' }}>
-            <div style={{ width: '28%' }}>{props}</div>
-            {index === this.state.recommendedIndex &&
-              <div style={{ width: '60%', color: '#b9a8e6', fontSize: 13 }}>Recommended</div>
-            }
-          </div>
-        }
-        {this.state.selectedIndex === index &&
-          <div style={{ display: '-webkit-box' }}>
-            <div style={{ width: index === this.state.recommendedIndex ? '28%' : '88%', color: '#4f2da7', fontWeight: 500 }}>{props}</div>
-            {index === this.state.recommendedIndex &&
-              <div style={{ width: '60%', color: '#b9a8e6', fontSize: 13 }}>Recommended</div>
-            }
-            <img width="20" src={selected_option} alt="Insurance" />
-          </div>}
-      </div>
-    )
-  }
-
 
   render() {
     return (
@@ -163,11 +140,18 @@ class CoverPeriod extends Component {
               <div style={{ margin: '4px 0 0 8px', fontSize: 16, color: ' #4a4a4a' }}>years</div>
             </div>
           </div>
-          <div className="annual-income-info-button" onClick={() => this.renderPopUp()}>INFO</div>
+          <div className="annual-income-info-button"
+            style={{ color: getConfig().primary }}
+            onClick={() => this.renderPopUp()}>INFO</div>
         </div>
 
         <div style={{ marginTop: 60 }}>
-          {this.state.coverPeriodList.map(this.renderList)}
+          <DropdownInPage
+            options={this.state.coverPeriodList}
+            value={this.state.selectedIndex}
+            onChange={this.setValue}
+            recommendedIndex={this.state.recommendedIndex}
+            keyToShow="value" />
         </div>
       </Container>
     );

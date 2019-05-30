@@ -4,8 +4,8 @@ import qs from 'qs';
 import Container from '../../common/Container';
 import { getConfig } from 'utils/functions';
 
-import selected_option from 'assets/selected_option.png';
 import no_smoke_icon from 'assets/no_smoke_icon.png';
+import DropdownInPage from '../../../common/ui/DropdownInPage';
 
 class LifeStyle extends Component {
   constructor(props) {
@@ -20,7 +20,7 @@ class LifeStyle extends Component {
       smokeList: ['Yes', 'No'],
       quoteData: quoteData
     }
-    this.renderList = this.renderList.bind(this);
+    this.setValue = this.setValue.bind(this);
   }
 
   componentWillMount() {
@@ -55,6 +55,7 @@ class LifeStyle extends Component {
     let quoteData = this.state.quoteData;
     quoteData.tobacco_choice = this.state.tobacco_choice === 'Yes' ? 'Y' : 'N';
     quoteData.selectedIndexSmoke = this.state.selectedIndex;
+    quoteData.smokeList = this.state.smokeList;
     window.localStorage.setItem('quoteData', JSON.stringify(quoteData));
     this.navigate('lifestyle')
     this.navigate('quote')
@@ -68,21 +69,6 @@ class LifeStyle extends Component {
   }
 
   renderPopUp() {
-  }
-
-  renderList(props, index) {
-    return (
-      <div key={index} onClick={() => this.setValue(index)}
-        className={'ins-row-scroll' + (this.state.selectedIndex === index ? ' ins-row-scroll-selected' : '')}>
-        {this.state.selectedIndex !== index &&
-          <div> {props}</div>}
-        {this.state.selectedIndex === index &&
-          <div style={{ display: '-webkit-box' }}>
-            <div style={{ width: '88%', color: '#4f2da7', fontWeight: 500 }}>{props}</div>
-            <img width="20" src={selected_option} alt="Insurance" />
-          </div>}
-      </div>
-    )
   }
 
   render() {
@@ -106,7 +92,11 @@ class LifeStyle extends Component {
         </div>
 
         <div>
-          {this.state.smokeList.map(this.renderList)}
+          <DropdownInPage
+            options={this.state.smokeList}
+            value={this.state.selectedIndex}
+            onChange={this.setValue}
+          />
         </div>
       </Container>
     );

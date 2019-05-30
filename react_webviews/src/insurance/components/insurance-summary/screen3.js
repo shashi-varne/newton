@@ -865,8 +865,8 @@ class Journey extends Component {
         </div>
         <div className="journey-process5">
           <div className={'journey-process6 ' + (props.status === 'pending' ? 'journey-process7-grey' : '')}>{props.title}</div>
-          <div className={'journey-process7 ' + (props.status === 'complete' ? 'journey-process7-black' :
-            props.status === 'init' ? 'journey-process7-blue' : 'journey-process7-grey')}>{props.disc}</div>
+          <div className={'journey-process7 ' + (props.status === 'complete' ? 'journey-process7-black' : 'journey-process7-grey')}
+            style={{ color: props.status === 'init' ? getConfig().primary : '' }}>{props.disc}</div>
           {index === 1 && props.status !== 'pending' && this.state.plutus_payment_status !== 'payment_done' &&
             (this.state.plutus_status === 'init' || this.state.plutus_status === 'incomplete' ||
               this.state.plutus_status === 'complete') && !this.state.params.isJourney &&

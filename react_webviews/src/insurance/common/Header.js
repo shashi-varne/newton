@@ -19,7 +19,10 @@ const Header = ({ classes, title, count, total, current, goBack, edit, type, res
         {smallTitle && smallTitle !== undefined &&
           <div>
             <div style={{ fontWeight: 500 }}>{title}</div>
-            <div style={{ fontSize: 11, marginTop: -5, textTransform: 'uppercase' }}>
+            <div style={{
+              fontSize: 12, marginTop: -5,
+              textTransform: smallTitle === 'HDFC' || smallTitle === 'IPRU' ? 'uppercase' : ''
+            }}>
               {smallTitle === 'HDFC' &&
                 'HDFC Life Click 2 Protect 3D Plus'}
               {smallTitle === 'IPRU' &&

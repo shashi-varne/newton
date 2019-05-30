@@ -13,6 +13,8 @@ import Dialog, {
   DialogContent
 } from 'material-ui/Dialog';
 
+import DropdownInPage from '../../../common/ui/DropdownInPage';
+
 class AnnualIncome extends Component {
 
   constructor(props) {
@@ -31,10 +33,11 @@ class AnnualIncome extends Component {
           name: '', value: ''
         }
       ],
-      openPopUp: true,
+      openPopUp: false,
       quoteData: quoteData
     }
     this.renderList = this.renderList.bind(this);
+    this.setValue = this.setValue.bind(this);
   }
 
   componentWillMount() {
@@ -83,13 +86,16 @@ class AnnualIncome extends Component {
   }
 
   handleClick = async () => {
-    this.state.quoteData.annual_income = this.state.incomeList[this.state.selectedIndex].name;
-    this.state.quoteData.selectedIndexIncome = this.state.selectedIndex;
-    window.localStorage.setItem('quoteData', JSON.stringify(this.state.quoteData));
-    this.navigate('cover-amount', this.state.quoteData.annual_income);
+    let quoteData = this.state.quoteData;
+    quoteData.annual_income = this.state.incomeList[this.state.selectedIndex].name;
+    quoteData.selectedIndexIncome = this.state.selectedIndex;
+    quoteData.incomeList = this.state.incomeList;
+    window.localStorage.setItem('quoteData', JSON.stringify(quoteData));
+    this.navigate('cover-amount', quoteData.annual_income);
   }
 
   setValue(index) {
+    console.log("returned index : " + index)
     this.setState({
       selectedIndex: index,
       annual_income: this.state.incomeList[index].value
@@ -188,11 +194,18 @@ class AnnualIncome extends Component {
 
             <div style={{ color: '#878787', fontSize: 12 }}>Select an option from below</div>
           </div>
-          <div className="annual-income-info-button" onClick={() => this.renderPopUp()}>INFO</div>
+          <div className="annual-income-info-button"
+            style={{ color: getConfig().primary }}
+            onClick={() => this.renderPopUp()}>INFO</div>
         </div>
 
         <div style={{ marginTop: 60 }}>
-          {this.state.incomeList.map(this.renderList)}
+          <DropdownInPage
+            options={this.state.incomeList}
+            value={this.state.selectedIndex}
+            onChange={this.setValue}
+            dataType="AOB"
+            keyToShow="value" />
         </div>
         {this.renderPopUp()}
       </Container>
