@@ -9,6 +9,12 @@ import { getConfig } from 'utils/functions';
 import comver_amount_icon from 'assets/life_cover_icon.png';
 import DropdownInPage from '../../../common/ui/DropdownInPage';
 
+import Button from 'material-ui/Button';
+import Dialog, {
+  DialogActions,
+  DialogContent
+} from 'material-ui/Dialog';
+
 class CoverPeriod extends Component {
   constructor(props) {
     var quoteData = JSON.parse(window.localStorage.getItem('quoteData')) || {};
@@ -53,6 +59,7 @@ class CoverPeriod extends Component {
       let result = res.pfwresponse.result;
       let coverPeriodList = result.list;
       coverPeriodList.push(result.recommendation);
+      console.log(coverPeriodList)
       if (res.pfwresponse.status_code === 200) {
         this.setState({
           coverPeriodList: coverPeriodList,
@@ -61,6 +68,7 @@ class CoverPeriod extends Component {
         var i = 0;
         for (i in coverPeriodList) {
           if (result.recommendation === coverPeriodList[i]) {
+            console.log("fff :" + i)
             this.setState({
               selectedIndex: this.state.selectedIndex || i * 1,
               recommendedIndex: i * 1
@@ -93,6 +101,7 @@ class CoverPeriod extends Component {
     quoteData.cover_period = this.state.cover_period;
     quoteData.selectedIndexCoverPeriod = this.state.selectedIndex;
     quoteData.coverPeriodList = this.state.coverPeriodList;
+    quoteData.recommendedIndexCoverPeriod = this.state.recommendedIndex;
     window.localStorage.setItem('quoteData', JSON.stringify(quoteData));
     this.navigate('lifestyle')
   }
@@ -104,8 +113,69 @@ class CoverPeriod extends Component {
     })
   }
 
-  renderPopUp() {
+  handleClose = () => {
+    this.setState({
+      openPopUp: false
+    });
   }
+
+  openPopUp() {
+    this.setState({
+      openPopUp: true
+    })
+  }
+
+  renderPopUp() {
+    if (this.state.openPopUp) {
+      return (
+        <Dialog
+          style={{ borderRadius: 6 }}
+          id="payment"
+          open={this.state.openPopUp}
+          onClose={this.handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogContent>
+            <div className="annual-inc-dialog" id="alert-dialog-description">
+              <div className="annual-inc-popup-title">
+                Cover Period
+             </div>
+
+              <div className="annual-inc-popup-title-inside">
+                Cover period:
+             </div>
+              <div className="annual-inc-popup-content">
+                Cover defines the coverage period of the policy. In classNamesomething happens with
+                 your life within the covered period, your family will get the benefits as per
+                 policy.
+             </div>
+
+              <div className="annual-inc-popup-title-inside">
+                <span style={{ textTransform: 'capitalize' }}>{this.state.type}</span> recommendation
+             </div>
+              <div className="annual-inc-popup-content">
+                Get your family covered for atleast till the time you celebrate
+                your 70th Birthday.
+             </div>
+            </div>
+          </DialogContent>
+          <DialogActions className="annual-inc-dialog-button">
+            <Button
+              fullWidth={true}
+              variant="raised"
+              size="large"
+              color="secondary"
+              onClick={this.handleClose}
+              autoFocus>Got it!
+            </Button>
+          </DialogActions>
+        </Dialog >
+      );
+    }
+    return null;
+  }
+
 
   render() {
     return (
@@ -142,7 +212,7 @@ class CoverPeriod extends Component {
           </div>
           <div className="annual-income-info-button"
             style={{ color: getConfig().primary }}
-            onClick={() => this.renderPopUp()}>INFO</div>
+            onClick={() => this.openPopUp()}>INFO</div>
         </div>
 
         <div style={{ marginTop: 60 }}>
@@ -153,6 +223,7 @@ class CoverPeriod extends Component {
             recommendedIndex={this.state.recommendedIndex}
             keyToShow="value" />
         </div>
+        {this.renderPopUp()}
       </Container>
     );
   }

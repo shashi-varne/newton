@@ -24,11 +24,10 @@ class Intro extends Component {
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
-      selectedIndex: 0,
-      imageData: [
-        { src: '' }
-      ]
+      selectedItem: 0,
+      selectedIndex: 0
     }
+    this.renderTitle = this.renderTitle.bind(this);
   }
 
   componentWillMount() {
@@ -47,6 +46,19 @@ class Intro extends Component {
     }
   }
 
+  renderTitle(index) {
+    index = index * 1;
+    if (this.state.imageData) {
+      return (
+        <div style={{
+          color: '#4a4a4a', fontSize: 16, fontWeight: 500, textAlign: 'center',
+          marginTop: 20
+        }}>
+          {this.state.imageData[this.state.selectedIndex].text}
+        </div>
+      )
+    }
+  }
 
   async componentDidMount() {
 
@@ -54,21 +66,22 @@ class Intro extends Component {
     let imageData = [
       {
         text: 'Insurance is securing family',
-        src: this.state.type === 'fisdom' ? help_fisdom : help_myway
-      },
-      {
-        text: 'Insurance is securing family',
         src: this.state.type === 'fisdom' ? secure_family_fisdom : secure_family_myway
       },
       {
-        text: 'Insurance is securing family',
+        text: 'from unfortunate events',
         src: this.state.type === 'fisdom' ? unfortunate_events_fisdom : unfortunate_events_myway
+      },
+      {
+        text: '& we help you to choose right policy',
+        src: this.state.type === 'fisdom' ? help_fisdom : help_myway
       }
     ];
 
     this.setState({
       imageData: imageData
     })
+    this.renderTitle(0);
   }
 
 
@@ -83,18 +96,6 @@ class Intro extends Component {
     this.navigate('journey-intro')
   }
 
-  onChange() {
-
-  }
-
-  onClickItem() {
-
-  }
-
-  onClickThumb() {
-
-  }
-
   render() {
     return (
       <Container
@@ -107,40 +108,28 @@ class Intro extends Component {
         onlyButton={true}
       >
 
-        {/* <div>
-          <div>
-            <img style={{ width: 380 }} src={this.state.imageData[this.state.selectedIndex].src} alt="Insurance" />
-          </div>
-          <div style={{ textAlign: 'center' }}>
-            <span className={(this.state.selectedIndex === 0 ? 'intro-filled-dot' : 'intro-empty-dot')}></span>
-            <span className={(this.state.selectedIndex === 1 ? 'intro-filled-dot' : 'intro-empty-dot')}></span>
-            <span className={(this.state.selectedIndex === 2 ? 'intro-filled-dot' : 'intro-empty-dot')}></span>
-          </div>
-          <div style={{
-            color: '#4a4a4a', fontSize: 16, fontWeight: 500, textAlign: 'center',
-            marginTop: 50
-          }}>{this.state.imageData[this.state.selectedIndex].text}</div>
-        </div> */}
-
-
-        {/* <CarouselComponent  */}
-        <Carousel
+        {this.state.imageData && <Carousel
           showStatus={false} showThumbs={false}
-          showArrows={true} onChange={this.onChange} onClickItem={this.onClickItem}
-          onClickThumb={this.onClickThumb}>
+          showArrows={true}
+          infiniteLoop={false}
+          selectedItem={this.state.selectedIndex}
+          onChange={(index) => {
+            this.setState({
+              selectedIndex: index
+            });
+          }}
+        >
           <div>
-            <img src={help_fisdom} alt="Insurance" />
-            <p className="legend">Legend 1</p>
+            <img src={this.state.imageData[0].src} alt="Insurance" />
           </div>
           <div>
-            <img src={secure_family_myway} alt="Insurance" />
-            <p className="legend">Legend 2</p>
+            <img src={this.state.imageData[1].src} alt="Insurance" />
           </div>
           <div>
-            <img src={unfortunate_events_myway} alt="Insurance" />
-            <p className="legend">Legend 3</p>
+            <img src={this.state.imageData[2].src} alt="Insurance" />
           </div>
-        </Carousel>
+        </Carousel>}
+        {this.renderTitle(this.state.selectedIndex)}
       </Container>
     );
   }

@@ -44,6 +44,7 @@ class RadioButtonsGroup extends Component {
 
   render() {
     const { options } = this.props;
+    console.log(options);
     const allOptions = options.map((option, i) => {
       return (
         <FormControlLabel disabled={this.props.disabled}

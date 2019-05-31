@@ -12,10 +12,10 @@ class SelectGrp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedValue: this.props.value,
+      selectedValue: this.props.value * 1,
       options: this.props.options,
       onChange: this.props.onChange,
-      recommendedIndex: this.props.recommendedIndex,
+      recommendedIndex: this.props.recommendedIndex * 1,
       dataType: this.props.dataType,
       keyToShow: this.props.keyToShow,
       inputKeyName: this.props.inputKeyName,
@@ -29,7 +29,7 @@ class SelectGrp extends Component {
   componentDidUpdate(prevState) {
     if (prevState.value !== this.props.value) {
       this.setState({
-        selectedValue: this.props.value
+        selectedValue: this.props.value * 1
       })
     }
 
@@ -41,7 +41,7 @@ class SelectGrp extends Component {
 
     if (prevState.recommendedIndex !== this.props.recommendedIndex) {
       this.setState({
-        recommendedIndex: this.props.recommendedIndex
+        recommendedIndex: this.props.recommendedIndex * 1
       })
     }
 

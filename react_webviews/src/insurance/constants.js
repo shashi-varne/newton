@@ -237,3 +237,10 @@ export const qualification = [
   'S S C',
   'UNDER MATRIC (CLASS L TO LX)'
 ];
+
+
+export const payFreqOptionInsurance = [
+  { name: 'Half-yearly', value: 'HALF YEARLY' },
+  { name: 'Quarterly', value: 'Quarterly' },
+  { name: 'Monthly', value: 'Monthly' }
+]

@@ -270,7 +270,9 @@ class Container extends Component {
           edit={this.props.edit}
           type={this.props.type}
           resetpage={this.props.resetpage}
-          handleReset={this.props.handleReset} />
+          handleReset={this.props.handleReset}
+          filterPgae={this.props.filterPgae}
+          handleFilter={this.props.handleFilter} />
 
         {/* Below Header Block */}
         <div style={{ height: 56 }}></div>

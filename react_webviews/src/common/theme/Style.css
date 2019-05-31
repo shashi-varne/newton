@@ -367,3 +367,9 @@ input#pan {
     left: 0;
     right: 0;
 }
+.Toastify__toast--default {
+  background: #494747 !important;
+  color: white !important;
+  bottom: 80px !important;
+  /* position: relative; */
+}

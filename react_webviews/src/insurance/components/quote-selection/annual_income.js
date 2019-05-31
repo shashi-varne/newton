@@ -108,6 +108,11 @@ class AnnualIncome extends Component {
     });
   }
 
+  openPopUp() {
+    this.setState({
+      openPopUp: true
+    })
+  }
 
   renderPopUp() {
     if (this.state.openPopUp) {
@@ -125,9 +130,6 @@ class AnnualIncome extends Component {
               <div className="annual-inc-popup-title">
                 Why annual Income?
              </div>
-              <div className="annual-inc-popup-title-inside">
-                Cover period:
-             </div>
               <div className="annual-inc-popup-content">
                 Our goal is to recommend the best policy for your famliy. We need your total
                 annual income to determine the adequate cover amount for your family.
@@ -140,7 +142,7 @@ class AnnualIncome extends Component {
               variant="raised"
               size="large"
               color="secondary"
-              onClick={this.handleClosePayment}
+              onClick={this.handleClose}
               autoFocus>Got it!
             </Button>
           </DialogActions>
@@ -196,7 +198,7 @@ class AnnualIncome extends Component {
           </div>
           <div className="annual-income-info-button"
             style={{ color: getConfig().primary }}
-            onClick={() => this.renderPopUp()}>INFO</div>
+            onClick={() => this.openPopUp()}>INFO</div>
         </div>
 
         <div style={{ marginTop: 60 }}>

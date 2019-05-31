@@ -7,6 +7,7 @@ import { withRouter } from "react-router";
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import '../common/theme/Style.css';
 import { getConfig } from 'utils/functions';
+import { ToastContainer } from 'react-toastify';
 
 import './common/Style.css';
 import './components/Style.css';
@@ -128,6 +129,7 @@ const Insurance = (props) => {
     <JssProvider jss={jss} generateClassName={generateClassName}>
       <MuiThemeProvider theme={theme}>
         <ScrollToTop />
+        <ToastContainer autoClose={3000} />
         <Switch>
           <Route exact path={`${url}`} component={Journey} />
           <Route path={`${url}/resume`} component={Resume} />

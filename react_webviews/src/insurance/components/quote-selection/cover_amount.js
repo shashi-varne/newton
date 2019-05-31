@@ -13,6 +13,12 @@ import comver_amount_icon from 'assets/life_cover_icon.png';
 import { validateNumber, inrFormatDecimal, numDifferentiation } from 'utils/validators';
 import DropdownInPage from '../../../common/ui/DropdownInPage';
 
+import Button from 'material-ui/Button';
+import Dialog, {
+  DialogActions,
+  DialogContent
+} from 'material-ui/Dialog';
+
 class CoverAmount extends Component {
   constructor(props) {
     var quoteData = JSON.parse(window.localStorage.getItem('quoteData')) || {};
@@ -139,6 +145,8 @@ class CoverAmount extends Component {
     quoteData.selectedIndexCoverAmount = this.state.selectedIndex;
     quoteData.coverAmountList = this.state.coverAmountList;
     quoteData.coverAmountToShow = this.state.coverAmountToShow;
+    quoteData.recommendedIndexCoverAmount = this.state.recommendedIndex;
+    quoteData.inputToRender = this.state.inputToRender;
     window.localStorage.setItem('quoteData', JSON.stringify(quoteData));
     this.navigate('cover-period')
   }
@@ -218,7 +226,56 @@ class CoverAmount extends Component {
     })
   }
 
+  handleClose = () => {
+    this.setState({
+      openPopUp: false
+    });
+  }
+
+  openPopUp() {
+    this.setState({
+      openPopUp: true
+    })
+  }
+
   renderPopUp() {
+    if (this.state.openPopUp) {
+      return (
+        <Dialog
+          style={{ borderRadius: 6 }}
+          id="payment"
+          open={this.state.openPopUp}
+          onClose={this.handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogContent>
+            <div className="annual-inc-dialog" id="alert-dialog-description">
+              <div className="annual-inc-popup-title">
+                Cover Amount
+             </div>
+              <div className="annual-inc-popup-title-inside">
+                <span style={{ textTransform: 'capitalize' }}>{this.state.type}</span> recommendation
+             </div>
+              <div className="annual-inc-popup-content">
+                Get a Life Cover for atleast 12-14 times of your annual income.
+             </div>
+            </div>
+          </DialogContent>
+          <DialogActions className="annual-inc-dialog-button">
+            <Button
+              fullWidth={true}
+              variant="raised"
+              size="large"
+              color="secondary"
+              onClick={this.handleClose}
+              autoFocus>Got it!
+            </Button>
+          </DialogActions>
+        </Dialog >
+      );
+    }
+    return null;
   }
 
   handleChange = name => event => {
@@ -318,7 +375,7 @@ class CoverAmount extends Component {
           </div>
           <div className="annual-income-info-button"
             style={{ color: getConfig().primary }}
-            onClick={() => this.renderPopUp()}>INFO</div>
+            onClick={() => this.openPopUp()}>INFO</div>
         </div>
 
         <div style={{ marginTop: 60 }}>
@@ -333,6 +390,7 @@ class CoverAmount extends Component {
             inputKeyName="Other"
             inputToRender={this.state.inputToRender} />}
         </div>
+        {this.renderPopUp()}
       </Container>
     );
   }

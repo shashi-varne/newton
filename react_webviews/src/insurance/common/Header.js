@@ -7,8 +7,9 @@ import IconButton from 'material-ui/IconButton';
 import Arrow from '@material-ui/icons/ArrowBack';
 import Close from '@material-ui/icons/Close';
 import restart from 'assets/restart_nav_icn.svg';
+import filterIcon from  'assets/filter_nav_icon.png';
 
-const Header = ({ classes, title, count, total, current, goBack, edit, type, resetpage, handleReset, smallTitle, disableBack, provider }) => (
+const Header = ({ classes, title, count, total, current, goBack, edit, type, resetpage, handleReset, smallTitle, disableBack, provider, filterPgae, handleFilter }) => (
   <AppBar position="fixed" color="primary" className={`Header ${classes.root} ${(type !== 'fisdom') ? 'blue' : ''}`}>
     <Toolbar>
       <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={goBack}>
@@ -42,6 +43,14 @@ const Header = ({ classes, title, count, total, current, goBack, edit, type, res
           alt=""
           width={20}
           src={restart}
+        />
+      }
+
+      {filterPgae &&
+        <img onClick={handleFilter}
+          alt=""
+          width={20}
+          src={filterIcon}
         />
       }
       {!edit && count && <span color="inherit">{current}/{total}</span>}
