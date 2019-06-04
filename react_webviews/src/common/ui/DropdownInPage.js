@@ -58,6 +58,7 @@ class SelectGrp extends Component {
   };
 
   renderList(props, index) {
+    console.log(props);
     return (
       <div key={index} onClick={() => this.handleChange(index)}
         className={'ins-row-scroll' + (this.state.selectedValue === index ? ' ins-row-scroll-selected' : '')}>
@@ -98,7 +99,8 @@ class SelectGrp extends Component {
               <img width="20" src={this.state.tick_icon} alt="Insurance" />
             </div>
 
-            {props[this.state.keyToShow] === this.state.inputKeyName && this.state.inputToRender &&
+            {(props[this.state.keyToShow] === this.state.inputKeyName ||
+              props === this.state.inputKeyName) && this.state.inputToRender &&
               <FormControl >
                 <div style={{ margin: '10px 0 0 0' }} className="InputField">
                   <Input

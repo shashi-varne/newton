@@ -5,7 +5,8 @@ import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
-import dropdown_arrow from 'assets/down_arrow_fisdom.svg';
+import dropdown_arrow_fisdom from 'assets/down_arrow_fisdom.svg';
+import dropdown_arrow_myway from 'assets/down_arrow_myway.svg';
 import DropdownInPage from '../../../common/ui/DropdownInPage';
 import Button from 'material-ui/Button';
 import Dialog, {
@@ -56,7 +57,7 @@ class AddOnBenefits extends Component {
       const res = await Api.get('/api/insurance/fetch/riders/' + this.state.insurance_app_id + '?ci_amount=500000&adb=500000')
       let result = res.pfwresponse.result;
       let riders_info = result.riders_info;
-      console.log(riders_info);
+
       var i = 0;
 
       let inputToRender = {
@@ -74,6 +75,7 @@ class AddOnBenefits extends Component {
       }
 
       for (i in riders_info) {
+        (riders_info[i].cover_amount).push('Other');
         let row = riders_info[i];
         let cover_amount_min_max = 'Min ' + inrFormatDecimal(row.min) + ' - Max ' + inrFormatDecimal(row.max);
         inputToRender.cover_amount_min_max = cover_amount_min_max;
@@ -101,6 +103,10 @@ class AddOnBenefits extends Component {
   }
 
   async componentDidMount() {
+
+    this.setState({
+      dropdown_arrow: this.state.type !== 'fisdom' ? dropdown_arrow_myway : dropdown_arrow_fisdom
+    })
     this.getRiders()
   }
 
@@ -150,7 +156,7 @@ class AddOnBenefits extends Component {
             recommendedIndex={this.state.selectedRiderList.recommendedIndex || ''}
             dataType=""
             inputKeyName="Other"
-            inputToRender={this.state.inputToRender} />
+            inputToRender={this.state.selectedRiderList.inputToRender} />
         </div>
       )
     }
@@ -320,7 +326,7 @@ class AddOnBenefits extends Component {
           <div className="ins-riders-tiles2b">
             <div className="ins-riders-tiles2c">{props.recommended}</div>
             <div className="ins-riders-tiles2d">
-              <img className="ins-riders-tiles2e" src={dropdown_arrow} alt="Insurance" />
+              <img className="ins-riders-tiles2e" src={this.state.dropdown_arrow} alt="Insurance" />
             </div>
           </div>
         </div>

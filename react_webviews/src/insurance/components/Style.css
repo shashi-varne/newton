@@ -614,3 +614,25 @@ img.ins-riders-tiles2e {
   padding-bottom: 0;
   overflow-y: hidden;
 }
+.quote-addon-tiles11 {
+  border-top: 1px solid #efefef;
+  border-bottom: 1px solid #efefef;
+  padding: 10px 0 10px 0;
+  margin: 20px 0 20px 0;
+}
+.quote-addon-tiles1{
+  display: flex;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    margin: 0px 15px 0px 17px;
+   
+}
+.quote-addon-tiles1a{
+  color: #878787;
+  font-size: 13px;
+  font-weight: 600;
+}
+.quote-addon-tiles1c {
+  width: 10px;
+  vertical-align: middle;
+}

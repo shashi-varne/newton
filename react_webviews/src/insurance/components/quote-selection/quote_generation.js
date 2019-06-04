@@ -39,7 +39,8 @@ class QuoteGeneration extends Component {
       renderList: [],
       openDialogFilter: false,
       openPopUpQuote: false,
-      paymentFreqRadio: 'Monthly'
+      paymentFreqRadio: 'Monthly',
+      expendAddOnOpen: false
     }
 
     this.renderQuotes = this.renderQuotes.bind(this);
@@ -347,7 +348,6 @@ class QuoteGeneration extends Component {
   }
 
   renderQuotePoints(props, index) {
-    console.log(props)
     return (
       <div key={index}>
         <div className="quote-tiles2">
@@ -355,12 +355,32 @@ class QuoteGeneration extends Component {
         </div>
         {props.points && props.points.map((row, i) => (
           <div key={i} className="quote-tiles2">
-            {/* <span className="quote-tiles2b">-</span> */}
             <span className="quote-tiles2b">- {row}</span>
           </div>
         ))}
       </div>
     )
+  }
+
+  renderAddOnPoints(props, index) {
+    return (
+      <div key={index}>
+        <div className="quote-tiles2">
+          <span className="quote-tiles2a">{index + 1}. {props.title}</span>
+        </div>
+        {props.points && props.points.map((row, i) => (
+          <div key={i} className="quote-tiles2">
+            <span className="quote-tiles2b">- {row}</span>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  expendAddOn() {
+    this.setState({
+      expendAddOnOpen: !this.state.expendAddOnOpen
+    })
   }
 
   renderQuotes(props, index) {
@@ -386,6 +406,22 @@ class QuoteGeneration extends Component {
         {props.quote_describer.description.basic_benefits.map(this.renderQuotePoints)}
 
         {/* add on benefits */}
+        <div className="quote-addon-tiles11">
+          <div className="quote-addon-tiles1" onClick={() => this.expendAddOn()}>
+            <div className="quote-addon-tiles1a">
+              Add on Benifits
+          </div>
+            <div className="quote-addon-tiles1b">
+              <img className="quote-addon-tiles1c" src={this.state.dropdown_arrow} alt="Insurance" />
+            </div>
+          </div>
+          {this.state.expendAddOnOpen &&
+            <div style={{ marginTop: 10 }}>
+              {props.quote_describer.description.add_on_benefits.map(this.renderQuotePoints)
+              }
+            </div>
+          }
+        </div>
 
         <div className="quote-tiles3">
           <div className="quote-tiles3a" onClick={() => this.selectQuote(props, props.payment_frequency, index)}>
