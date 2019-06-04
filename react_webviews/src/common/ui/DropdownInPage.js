@@ -126,6 +126,7 @@ class SelectGrp extends Component {
   }
 
   render() {
+    console.log(this.state);
     // const { options } = this.state;
     return (
       <div style={{ marginBottom: 50 }}>

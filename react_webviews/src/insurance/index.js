@@ -37,6 +37,8 @@ import LifeStyle from './components/quote-selection/lifestyle';
 import PersonalDetailsIntro from './components/quote-selection/personal_details';
 import QuoteGeneration from './components/quote-selection/quote_generation';
 
+import AddOnBenefits from './components/add-on-benefits/index'
+
 import { create } from 'jss';
 import JssProvider from 'react-jss/lib/JssProvider';
 import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
@@ -156,6 +158,8 @@ const Insurance = (props) => {
           <Route path={`${url}/lifestyle`} component={LifeStyle} />
           <Route path={`${url}/personal-details-intro`} component={PersonalDetailsIntro} />
           <Route path={`${url}/quote`} component={QuoteGeneration} />
+
+          <Route path={`${url}/riders`} component={AddOnBenefits} />
 
           {/* Edit paths */}
           <Route path={`${url}/edit-personal`} render={(props) => <PersonalDetails1 {...props} edit={true} />} />

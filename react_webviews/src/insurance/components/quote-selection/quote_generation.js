@@ -21,7 +21,6 @@ import RadioOptions from '../../../common/ui/RadioOptions';
 import { FormControl } from 'material-ui/Form';
 
 import { payFreqOptionInsurance } from '../../constants';
-console.log(payFreqOptionInsurance)
 
 // import CoverAmount from './components/quote-selection/cover_amount';
 
@@ -347,6 +346,23 @@ class QuoteGeneration extends Component {
     })
   }
 
+  renderQuotePoints(props, index) {
+    console.log(props)
+    return (
+      <div key={index}>
+        <div className="quote-tiles2">
+          <span className="quote-tiles2a">{index + 1}. {props.title}</span>
+        </div>
+        {props.points && props.points.map((row, i) => (
+          <div key={i} className="quote-tiles2">
+            {/* <span className="quote-tiles2b">-</span> */}
+            <span className="quote-tiles2b">- {row}</span>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
   renderQuotes(props, index) {
     return (
       <div key={index} className="quote-tiles" style={{ marginTop: index !== 0 ? 18 : 42 }}>
@@ -356,24 +372,20 @@ class QuoteGeneration extends Component {
           </div>
           <div className="quote-tiles1b">{props.insurance_title}</div>
         </div>
-        <div className="quote-tiles2">
-          <span className="quote-tiles2a">Payout: </span>
-          <span className="quote-tiles2b">Lump sum in case of death</span>
+
+        <div className="quote-tiles4">
+          <div className="quote-tiles4a">
+            Basic Benifits
+            </div>
+          <div className="quote-tiles4b"
+            style={{ color: getConfig().primary }}
+            onClick={() => this.openPopUp()}>INFO</div>
         </div>
 
-        <div className="quote-tiles2">
-          <span className="quote-tiles2a">Full waiver of future premiums: </span>
-        </div>
+        {/* basic benefits */}
+        {props.quote_describer.description.basic_benefits.map(this.renderQuotePoints)}
 
-        <div className="quote-tiles2">
-          <span className="quote-tiles2a">A. </span>
-          <span className="quote-tiles2b">On Accidental Total Permanent Disability</span>
-        </div>
-
-        <div className="quote-tiles2">
-          <span className="quote-tiles2a">B. </span>
-          <span className="quote-tiles2b">In case of diagnosis of Terminal Illness</span>
-        </div>
+        {/* add on benefits */}
 
         <div className="quote-tiles3">
           <div className="quote-tiles3a" onClick={() => this.selectQuote(props, props.payment_frequency, index)}>

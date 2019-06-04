@@ -256,7 +256,7 @@ class Container extends Component {
     }
 
     return (
-      <div className={`ContainerWrapper ${(this.props.type !== 'fisdom') ? 'blue' : ''}`} >
+      <div className={`ContainerWrapper ${this.props.classOverRide}  ${(this.props.type !== 'fisdom') ? 'blue' : ''}`}  >
         {/* Header Block */}
         <Header
           disableBack={this.props.disableBack}
@@ -288,7 +288,7 @@ class Container extends Component {
         {this.props.banner && <Banner text={this.props.bannerText} />}
 
         {/* Children Block */}
-        <div className='Container'>
+        <div className={`Container ${this.props.classOverRideContainer}`}>
           {this.props.children}
         </div>
 
