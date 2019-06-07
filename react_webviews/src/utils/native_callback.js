@@ -64,6 +64,10 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       callbackData.action = 'restart_module';
     }
 
+    if (action === 'events') {
+      callbackData.action = 'event';
+    }
+
     if (project === 'insurance') {
       if (action === 'resume_provider') {
         nativeCallback({ action: 'show_top_bar', message: { title: message.provider } });
