@@ -17,7 +17,7 @@ import personal_myway from 'assets/personal_details_icn.svg';
 import Api from 'utils/api';
 import { maritalOptions, genderOptions } from '../../constants';
 import {
-  validatePan, validateAlphabets,
+  validatePan, validateAlphabets, providerAsIpru,
   validateEmail, validateNumber, numberShouldStartWith, validateEmpty, validateLength, validateConsecutiveChar
 } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
@@ -34,6 +34,10 @@ class PersonalDetails1 extends Component {
       marital_status: '',
       image: '',
       name_error: '',
+      first_name: '',
+      first_name_error: '',
+      last_name: '',
+      last_name_error: '',
       dob_error: '',
       gender_error: '',
       marital_status_error: '',
@@ -75,7 +79,8 @@ class PersonalDetails1 extends Component {
         groups: 'personal,professional,contact'
       })
       const { name, dob, gender, marital_status,
-        email, mobile_no, pan_number, spouse_name } = res.pfwresponse.result.profile;
+        email, mobile_no, pan_number, spouse_name,
+        last_name, first_name } = res.pfwresponse.result.profile;
       const { image, provider, cover_plan } = res.pfwresponse.result.quote_desc;
 
       this.setState({
@@ -90,7 +95,9 @@ class PersonalDetails1 extends Component {
         spouse_name: spouse_name || '',
         image: image,
         provider: provider,
-        cover_plan: cover_plan
+        cover_plan: cover_plan,
+        first_name: first_name || '',
+        last_name: last_name || ''
       });
     } catch (err) {
       this.setState({
@@ -139,33 +146,61 @@ class PersonalDetails1 extends Component {
   handleClick = async () => {
 
 
-    // if (this.state.name.split(" ").filter(e => e).length < 2) {
-    //   this.setState({
-    //     name_error: 'Enter valid full name'
-    //   });
-    // } else 
-    if (!validateEmpty(this.state.name)) {
+    console.log(this.state);
+    if (this.state.provider !== 'Maxlife' && !validateEmpty(this.state.name)) {
       this.setState({
         name_error: 'Enter valid name'
       });
-    } else if (!validateAlphabets(this.state.name)) {
+    } else if (this.state.provider !== 'Maxlife' && !validateAlphabets(this.state.name)) {
       this.setState({
         name_error: 'Name can contain only alphabets'
       });
-    } else if (!validateLength(this.state.name)) {
+    } else if (this.state.provider !== 'Maxlife' && !validateLength(this.state.name)) {
       this.setState({
         name_error: 'Maximum length of name is 30 characters'
       });
-    } else if (!validateConsecutiveChar(this.state.name)) {
+    } else if (this.state.provider !== 'Maxlife' && !validateConsecutiveChar(this.state.name)) {
       this.setState({
         name_error: 'Name can not contain more than 3 same consecutive characters'
       });
-    } else if (this.state.provider === 'IPRU' && !validateEmpty(this.state.pan_number)) {
+    } else if (this.state.provider === 'Maxlife' && !validateEmpty(this.state.first_name)) {
+      this.setState({
+        first_name_error: 'Enter valid first name'
+      });
+    } else if (this.state.provider === 'Maxlife' && !validateAlphabets(this.state.first_name)) {
+      this.setState({
+        first_name_error: 'First name can contain only alphabets'
+      });
+    } else if (this.state.provider === 'Maxlife' && !validateLength(this.state.first_name)) {
+      this.setState({
+        first_name_error: 'Maximum length of first name is 30 characters'
+      });
+    } else if (this.state.provider === 'Maxlife' && !validateConsecutiveChar(this.state.first_name)) {
+      this.setState({
+        first_name_error: 'First name can not contain more than 3 same consecutive characters'
+      });
+    } else if (this.state.provider === 'Maxlife' && !validateEmpty(this.state.last_name)) {
+      this.setState({
+        last_name_error: 'Enter valid last name'
+      });
+    } else if (this.state.provider === 'Maxlife' && !validateAlphabets(this.state.last_name)) {
+      this.setState({
+        last_name_error: 'Last name can contain only alphabets'
+      });
+    } else if (this.state.provider === 'Maxlife' && !validateLength(this.state.last_name)) {
+      this.setState({
+        last_name_error: 'Maximum length of last name is 30 characters'
+      });
+    } else if (this.state.provider === 'Maxlife' && !validateConsecutiveChar(this.state.last_name)) {
+      this.setState({
+        last_name_error: 'Last name can not contain more than 3 same consecutive characters'
+      });
+    } else if (providerAsIpru(this.state.proider) && !validateEmpty(this.state.pan_number)) {
       this.setState({
         pan_number_error: 'PAN number cannot be empty'
       });
       return;
-    } else if (this.state.provider === 'IPRU' && !validatePan(this.state.pan_number)) {
+    } else if (providerAsIpru(this.state.proider) && !validatePan(this.state.pan_number)) {
       this.setState({
         pan_number_error: 'Invalid PAN number'
       });
@@ -200,16 +235,16 @@ class PersonalDetails1 extends Component {
       this.setState({
         spouse_name_error: 'Name can contain only alphabets'
       });
-    } else if ((this.state.provider === 'IPRU' && this.state.params.isKyc) && (this.state.email.length < 10 || !validateEmail(this.state.email))) {
+    } else if ((providerAsIpru(this.state.proider) && this.state.params.isKyc) && (this.state.email.length < 10 || !validateEmail(this.state.email))) {
       this.setState({
         email_error: 'Please enter valid email'
       });
-    } else if ((this.state.provider === 'IPRU' && this.state.params.isKyc) &&
+    } else if ((providerAsIpru(this.state.proider) && this.state.params.isKyc) &&
       (this.state.mobile_no.length !== 10 || !validateNumber(this.state.mobile_no))) {
       this.setState({
         mobile_no_error: 'Please enter valid mobile no'
       });
-    } else if ((this.state.provider === 'IPRU' && this.state.params.isKyc) &&
+    } else if ((providerAsIpru(this.state.proider) && this.state.params.isKyc) &&
       !numberShouldStartWith(this.state.mobile_no)) {
       this.setState({
         mobile_no_error: 'Please enter valid mobile no'
@@ -229,8 +264,13 @@ class PersonalDetails1 extends Component {
           if (this.state.marital_status === 'MARRIED') {
             data['spouse_name'] = this.state.spouse_name;
           }
+        } else if (this.state.provider === 'IPRU') {
+          data['pan_number'] = this.state.pan_number;
         } else {
           data['pan_number'] = this.state.pan_number;
+          data['first_name'] = this.state.first_name;
+          data['last_name'] = this.state.last_name;
+          delete data['name'];
         }
 
         if (this.state.params.isKyc) {
@@ -396,7 +436,7 @@ class PersonalDetails1 extends Component {
         title="Application Form"
         smallTitle={this.state.provider}
         count={true}
-        total={this.state.provider === 'IPRU' ? 5 : 4}
+        total={providerAsIpru(this.state.provider) ? 5 : 4}
         current={this.state.params.isKyc ? 2 : 1}
         handleClick={this.handleClick}
         edit={this.props.edit}
@@ -406,8 +446,8 @@ class PersonalDetails1 extends Component {
       >
         <FormControl fullWidth>
           <TitleWithIcon width="20" icon={this.state.type !== 'fisdom' ? personal_myway : personal} title={(this.props.edit) ? 'Edit Personal Details' :
-            (this.state.params.isKyc && !this.props.edit && this.state.provider === 'IPRU') ? 'Verify Personal Details' : 'Personal Details'} />
-          <div className="InputField">
+            (this.state.params.isKyc && !this.props.edit && providerAsIpru(this.state.provider)) ? 'Verify Personal Details' : 'Personal Details'} />
+          {this.state.provider !== 'Maxlife' && <div className="InputField">
             <Input
               type="text"
               productType={this.state.type}
@@ -421,7 +461,35 @@ class PersonalDetails1 extends Component {
               name="name"
               value={this.state.name}
               onChange={this.handleChange()} />
-          </div>
+          </div>}
+          {this.state.provider === 'Maxlife' && <div className="InputField">
+            <Input
+              type="text"
+              productType={this.state.type}
+              error={(this.state.first_name_error) ? true : false}
+              helperText={this.state.first_name_error}
+              icon={name}
+              width="40"
+              label="First Name *"
+              class="FullName"
+              id="first_name"
+              name="first_name"
+              value={this.state.first_name}
+              onChange={this.handleChange()} />
+            <Input
+              type="text"
+              productType={this.state.type}
+              error={(this.state.last_name_error) ? true : false}
+              helperText={this.state.last_name_error}
+              icon={name}
+              width="40"
+              label="Last Name *"
+              class="FullName"
+              id="last_name"
+              name="last_name"
+              value={this.state.last_name}
+              onChange={this.handleChange()} />
+          </div>}
           <div className="InputField">
             <RadioWithoutIcon
               error={(this.state.gender_error) ? true : false}

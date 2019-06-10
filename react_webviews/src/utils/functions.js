@@ -91,7 +91,7 @@ export const getConfig = () => {
   // const ismyway = search.indexOf("api.mywaywealth.com") >= 0;
   const insurance_v2 = search.indexOf("insurance_v2") >= 0;
   let productType = 'fisdom';
-  const ismyway = true;
+  const ismyway = false;
   if (ismyway) {
     productType = 'myway';
   } else if (isPrime) {

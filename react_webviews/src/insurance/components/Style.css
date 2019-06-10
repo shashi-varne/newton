@@ -456,14 +456,15 @@ span.bold-premium {
     margin: 0 0 20px 0;
 }
 .quote-confirmation-dialog-head1 {
-  width: 80px;
+  width: 90px;
   margin: 0 0 0 30px;
 }
 .quote-confirmation-dialog-head2 {
   font-size: 16px;
   color: #4a4a4a;
   font-weight: 600;
-  margin: 0 0 0px 50px;
+  margin: 0 0 0px 0px;
+  max-width: 70%;
 }
 .confirm-quote-popup-content1 {
   display: flex;
@@ -606,13 +607,25 @@ img.ins-riders-tiles2e {
   border-radius: 4px;
   margin-top: -7px;
 }
+.ins-riders-tiles3e {
+  font-weight: bold;
+  font-size: 16px;
+  color: #d0021b;
+  border: 1px solid;
+  padding: 5px 26px 5px 26px;
+  border-radius: 4px;
+  margin-top: -7px;
+}
+.ins-riders-tiles3a {
+    display: flex;
+}
 .insurance-container-grey {
   background: #f8f8f8;
   /* autoprefixer: off */
   height: -webkit-fill-available; 
-  margin-bottom: 0px;
-  padding-bottom: 0;
-  overflow-y: hidden;
+  /* margin-bottom: 0px; */
+  /* padding-bottom: 0; */
+  /* overflow-y: hidden; */
 }
 .quote-addon-tiles11 {
   border-top: 1px solid #efefef;
@@ -635,4 +648,65 @@ img.ins-riders-tiles2e {
 .quote-addon-tiles1c {
   width: 10px;
   vertical-align: middle;
+}
+.ins-report-tiles {
+  background: white;
+  padding: 10px 10px 10px 10px;
+  border-radius: 4px;
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+}
+.ins-report-tiles1 {
+  font-size: 14px;
+  color: #878787;
+  margin: 0 0 20px 0;
+}
+.ins-report-tiles1a {
+  font-weight: 600;
+}
+.ins-report-bottom-dropdown {
+  border-top: 1px solid #f5f5f5;
+    padding: 10px 0 0px 0;
+    text-align: center;
+    margin: 20px -15px 0px -15px;
+}
+span.ins-report-bottom-dropdown1b {
+    font-size: 14px;
+    color: #878787;
+    margin: 0 6px 0 0;
+}
+span.ins-report-bottom-dropdown-opened2 {
+  font-size: 14px;
+  color: #4a4a4a;
+  font-weight: 500;
+}
+span.ins-report-bottom-dropdown-opened3 {
+  font-size: 14px;
+  color: #4a4a4a;
+  font-weight: 300;
+}
+.insurance-container-grey-report {
+  background: #f8f8f8;
+  height: 100%;
+  overflow-y: hidden;
+}
+.ins-report-tiles2 {
+  display: flex;
+}
+img.ins-report-tiles2b {
+  width: 118px;
+}
+.ins-report-tiles2c {
+  margin: 0 0 0 10px;
+}
+.ins-report-tiles2d {
+  color: #878787;
+  font-size: 14px;
+}
+.ins-report-tiles2e {
+  color: #4a4a4a;
+  font-size: 12px;
+  margin: 4px 0 4px 0;
+}
+.ins-report-tiles2f {
+  font-weight: 500;
 }

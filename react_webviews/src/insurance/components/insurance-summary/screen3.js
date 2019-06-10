@@ -15,7 +15,7 @@ import Modal from 'material-ui/Modal';
 import Typography from 'material-ui/Typography';
 import qs from 'qs';
 import { income_pairs } from '../..//constants';
-import { numDifferentiation, formatAmount } from 'utils/validators';
+import { numDifferentiation, formatAmount, providerAsIpru } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import Button from 'material-ui/Button';
 import Dialog, {
@@ -61,30 +61,35 @@ class Journey extends Component {
         personal: {
           not_submitted: true,
           fieldsHdfc: ["name", "dob", "father_name", "mother_name", "gender", "marital_status", "birth_place"],
-          fieldsIpru: ["name", 'pan_number']
+          fieldsIpru: ["name", 'pan_number'],
+          fieldsMaxlife: ["name", 'pan_number']
         },
         contact: {
           not_submitted: true,
           fieldsHdfc: ["email", "mobile_no", "permanent_addr", "corr_addr", "corr_address_same"],
           fieldsOurPay: ["email", "mobile_no"],
-          fieldsIpru: ["email", "mobile_no"]
+          fieldsIpru: ["email", "mobile_no"],
+          fieldsMaxlife: ["email", "mobile_no"]
         },
         nominee: {
           not_submitted: true,
           fieldsHdfc: ["nominee", "nominee_address", "nominee_address_same"],
           fieldsIpru: ["nominee"],
+          fieldsMaxlife: ["nominee"],
           fieldsOurPay: ["nominee"]
         },
         appointee: {
           not_submitted: true,
           fieldsHdfc: ["appointee_address", "appointee", "appointee_address_same"],
           fieldsIpru: ["appointee_address", "appointee", "appointee_address_same"],
+          fieldsMaxlife: ["appointee_address", "appointee", "appointee_address_same"],
           fieldsOurPay: ["appointee"]
         },
         professional: {
           not_submitted: true,
           fieldsHdfc: ["employer_name", "employer_address", "occupation_detail", "occupation_category", "annual_income", "designation", "education_qualification", "pan_number"],
-          fieldsIpru: ["occupation_detail", "annual_income", "education_qualification"]
+          fieldsIpru: ["occupation_detail", "annual_income", "education_qualification"],
+          fieldsMaxlife: ["occupation_detail", "annual_income", "education_qualification"]
         }
       },
       required_fields: [],
@@ -136,6 +141,8 @@ class Journey extends Component {
       buttonTitle = 'Continue to Address Details';
     } else if (journeyData[3].status === 'init' && application.provider === 'IPRU') {
       buttonTitle = 'Continue to ICICI Pru';
+    } else if (journeyData[3].status === 'init' && application.provider === 'Maxlife') {
+      buttonTitle = 'Continue to Maxlife';
     } else if (application.provider === 'HDFC' &&
       application.plutus_payment_status === 'payment_done' && application.status !== 'complete' &&
       application.status === 'plutus_submitted') {
@@ -151,10 +158,6 @@ class Journey extends Component {
   }
 
   handleClosePayment() {
-    // this.setState({
-    //   paymentModal: false
-    // })
-
     let eventObj = {
       "event_name": 'popup_post_payment_click',
       "properties": {
@@ -168,7 +171,7 @@ class Journey extends Component {
 
   redirect(payment_link, redirect) {
 
-    if (!redirect) {
+    if (!redirect && this.state.provider !== 'Maxlife') {
       this.setState({
         paymentModal: true
       });
@@ -178,13 +181,6 @@ class Journey extends Component {
     this.setState({
       show_loader: true
     });
-
-    // nativeCallback({
-    //   action: 'take_control', message: {
-    //     back_url: this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2,
-    //     back_text: 'Are you sure you want to exit the payment process?'
-    //   }
-    // });
 
     let insurance_v2 = this.state.params.insurance_v2 ? true : null;
     let paymentRedirectUrl = encodeURIComponent(
@@ -303,7 +299,8 @@ class Journey extends Component {
           {
             title: 'Step-4',
             disc: application.provider === 'HDFC' ? 'Share Address and relevant documents on ' + providerName + ' Life' :
-              'Share relevant documents on ' + providerName + ' Pru',
+              application.provider === 'IPRU' ? 'Share relevant documents on ' + providerName + ' Pru' :
+                'Share relevant documents on ' + providerName,
             status: 'pending'
           }
         ];
@@ -314,7 +311,7 @@ class Journey extends Component {
           journeyData[0]['status'] = 'complete';
           journeyData[1]['status'] = 'init';
         }
-        if (((application.plutus_status === 'complete' && application.provider === 'IPRU' && (application.plutus_payment_status === 'payment_ready' ||
+        if (((application.plutus_status === 'complete' && providerAsIpru(application.provider) && (application.plutus_payment_status === 'payment_ready' ||
           application.plutus_payment_status === 'failed'))
           ||
           (application.provider === 'HDFC' &&
@@ -347,15 +344,6 @@ class Journey extends Component {
 
         this.setButtonTitle(journeyData, application);
 
-        // this.setState({
-        //   journeyData: journeyData
-        // });
-
-
-        // if (application.plutus_payment_status === 'payment_ready') {
-        //   this.handlePayment(application);
-        // }
-
         required_fields = res.pfwresponse.result.required;
 
         let income_value = income_pairs.filter(item => item.name === application.quote.annual_income);
@@ -374,13 +362,20 @@ class Journey extends Component {
             appointee_submitted = this.state.required.appointee.fieldsOurPay.some(r => required_fields.includes(r));
           }
           professional_submitted = this.state.required.professional.fieldsHdfc.some(r => required_fields.includes(r));
-        } else {
+        } else if (application.provider === 'IPRU') {
           personal_submitted = this.state.required.personal.fieldsIpru.some(r => required_fields.includes(r));
 
           contact_submitted = this.state.required.contact.fieldsIpru.some(r => required_fields.includes(r));
           nominee_submitted = this.state.required.nominee.fieldsIpru.some(r => required_fields.includes(r));
           appointee_submitted = this.state.required.appointee.fieldsIpru.some(r => required_fields.includes(r));
           professional_submitted = this.state.required.professional.fieldsIpru.some(r => required_fields.includes(r));
+        } else if (application.provider === 'Maxlife') {
+          personal_submitted = this.state.required.personal.fieldsMaxlife.some(r => required_fields.includes(r));
+
+          contact_submitted = this.state.required.contact.fieldsMaxlife.some(r => required_fields.includes(r));
+          nominee_submitted = this.state.required.nominee.fieldsMaxlife.some(r => required_fields.includes(r));
+          appointee_submitted = this.state.required.appointee.fieldsMaxlife.some(r => required_fields.includes(r));
+          professional_submitted = this.state.required.professional.fieldsMaxlife.some(r => required_fields.includes(r));
         }
 
         let isKyc = '';
@@ -520,9 +515,6 @@ class Journey extends Component {
     });
   }
 
-
-
-
   renderResponseDialog = () => {
     return (
       <Dialog
@@ -605,7 +597,6 @@ class Journey extends Component {
           apiError: 'Oops! Seems like there is some technical issues. Don’t worry we have received your payment, please retry after sometime. Or you can reach us at ' +
             this.state.askEmail + '.'
         })
-        // toast(res.pfwresponse.result.error || 'Something went wrong');
       }
     } catch (err) {
       this.setState({
@@ -620,9 +611,12 @@ class Journey extends Component {
 
     if (this.state.provider === 'HDFC') {
       provider = 'HDFC Life';
-    } else {
+    } else if (this.state.provider === 'IPRU') {
       provider = 'ICICI Pru';
+    } else if (this.state.provider === 'Maxlife') {
+      provider = 'Maxlife';
     }
+
     if (this.state.plutus_payment_status === 'payment_done' &&
       this.state.status === 'complete') {
       nativeCallback({ action: 'native_back' });
@@ -648,9 +642,6 @@ class Journey extends Component {
       return;
     }
 
-    // if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.personal.not_submitted) {
-    //   this.navigate("/insurance/personal");
-    // } else 
     if (this.state.provider === 'HDFC' && this.state.plutus_payment_status === 'payment_done' &&
       this.state.status !== 'plutus_submitted') {
       if (this.state.payment_confirmed) {
@@ -662,32 +653,17 @@ class Journey extends Component {
       return;
     }
 
-    if (this.state.provider === 'IPRU' && this.state.plutus_payment_status === 'payment_done' &&
+    if (providerAsIpru(this.state.provider) && this.state.plutus_payment_status === 'payment_done' &&
       !this.state.payment_confirmed) {
       this.confirmPyamentWithProvider();
       return;
     }
 
-    // else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.contact.not_submitted &&
-    //   this.state.plutus_payment_status !== 'payment_done') {
-    //   this.navigate("/insurance/contact");
-    // } else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.professional.not_submitted) {
-    //   this.navigate("/insurance/professional");
-    // } else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.nominee.not_submitted) {
-    //   this.navigate("/insurance/nominee");
-    // } else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.appointee.not_submitted) {
-    //   this.navigate("/insurance/appointee");
-    // } 
-    // else if (this.state.provider === 'IPRU' && (this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') &&
-    //   (!this.state.permanent_addr || !this.state.permanent_addr.pincode)) {
-    //   this.navigate("/insurance/pincode");
-    // }
-
-    else if (this.state.provider === 'HDFC' && (this.state.plutus_payment_status === 'payment_ready' ||
+    if (this.state.provider === 'HDFC' && (this.state.plutus_payment_status === 'payment_ready' ||
       this.state.plutus_payment_status === 'failed')) {
       this.paymentRedirect();
       return;
-    } else if (this.state.provider === 'IPRU' && (this.state.plutus_payment_status === 'payment_ready' ||
+    } else if (providerAsIpru(this.state.provider) && (this.state.plutus_payment_status === 'payment_ready' ||
       this.state.plutus_payment_status === 'failed')) {
       this.paymentRedirect();
       return;
@@ -699,13 +675,6 @@ class Journey extends Component {
         this.setState({ openModal: true, openModalMessage: this.modelMessage() });
       }
 
-      // if (this.state.provider === 'IPRU') {
-      //   this.setState({
-      //     openModal: false, openModalMessage: '', openResponseDialog: true, openDialog: true,
-      //     apiError: 'Something went wrong, please try after sometime'
-      //   });
-      //   return;
-      // }
       if (this.state.status === 'init' && this.state.provider === 'HDFC') {
         try {
           const res = await Api.post('/api/insurance/profile/submit', {
@@ -892,7 +861,7 @@ class Journey extends Component {
                   <div className="pincode-details-tile2" style={{ color: 'grey' }}>{this.state.term} yrs.</div>
                 </div>
               </div>
-              {((this.state.provider === 'IPRU' && this.state.plutus_status === 'complete') ||
+              {((providerAsIpru(this.state.provider) && this.state.plutus_status === 'complete') ||
                 (this.state.provider === 'HDFC' && this.state.plutus_payment_status === 'payment_ready' &&
                   this.state.plutus_status !== 'init')) &&
                 <div className="view-more-journey" onClick={() => this.navigate('/insurance/summary')}>

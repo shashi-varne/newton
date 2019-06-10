@@ -12,7 +12,7 @@ import Api from 'utils/api';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import pincode from 'assets/address_details_icon.svg';
 import pincode_myway from 'assets/address_details_icn.svg';
-import { validateNumber, formatAmount } from 'utils/validators';
+import { validateNumber, formatAmount, clearInsuranceQuoteData } from 'utils/validators';
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -36,12 +36,14 @@ class Pincode extends Component {
       provider: '',
       apiError: '',
       openDialog: false,
+      openPopUpExploreOtherOptions: false,
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: (qs.parse(props.history.location.search.slice(1)).base_url || '').indexOf("mypro.fisdom.com") >= 0,
       ismyway: (qs.parse(props.history.location.search.slice(1)).base_url || '').indexOf("api.mywaywealth.com") >= 0,
     }
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.handleCloseOtherOptions = this.handleCloseOtherOptions.bind(this);
   }
 
   componentWillMount() {
@@ -66,7 +68,7 @@ class Pincode extends Component {
       const res = await Api.get('/api/insurance/profile/' + this.state.params.insurance_id, {
         groups: 'contact'
       })
-      const { email, mobile_no, permanent_addr } = res.pfwresponse.result.profile;
+      const { email, mobile_no, permanent_addr, name, first_name } = res.pfwresponse.result.profile;
       const { image, provider, cover_plan } = res.pfwresponse.result.quote_desc;
 
       this.setState({
@@ -76,7 +78,8 @@ class Pincode extends Component {
         image: image,
         provider: provider,
         'pincode': permanent_addr.pincode,
-        cover_plan: cover_plan
+        cover_plan: cover_plan,
+        name: provider === 'IPRU' ? name : first_name
       });
     } catch (err) {
       this.setState({
@@ -214,8 +217,8 @@ class Pincode extends Component {
       try {
         this.setState({ show_loader: true });
 
-        let url = '/api/insurance/ipru/pincode/support?insurance_app_id=' + this.state.params.insurance_id +
-          '&pincode=' + this.state.pincode
+        let url = '/api/insurance/pincode/support?insurance_app_id=' + this.state.params.insurance_id +
+          '&pincode=' + this.state.pincode + '&provider=' + this.state.provider;
         const res = await Api.get(url);
 
         if (res.pfwresponse.status_code === 200) {
@@ -232,7 +235,7 @@ class Pincode extends Component {
             // show_loader: false
           });
 
-          if (error === 'Pincode is not supported by IPRU') {
+          if (error) {
             this.checkOtherProvider(this.state.params.insurance_id);
           } else {
             this.setState({ show_loader: false });
@@ -252,7 +255,7 @@ class Pincode extends Component {
   bannerText = () => {
     return (
       <span>
-        Let's check if ICICI Pru can <b>dispatch insurance</b> to your
+        Let's check if {this.state.provider} can <b>dispatch insurance</b> to your
         <b> current location</b>.
       </span>
     );
@@ -260,7 +263,9 @@ class Pincode extends Component {
 
   handleClose = () => {
     this.setState({
-      openDialog: false
+      openDialog: false,
+      openDialogOtherProvider: false,
+      show_loader: false
     });
   }
 
@@ -328,45 +333,51 @@ class Pincode extends Component {
 
   async checkOtherProvider(insurance_id) {
 
-    try {
-      let data = {
-        'insurance_app_id': this.state.params.insurance_id,
-        "provider": "HDFC",
-        "change_provider": true
-      };
-      const res = await Api.post('/api/insurance/quote', data);
+    this.setState({
+      openDialogOtherProvider: true
+    })
 
-      if (res.pfwresponse.status_code === 200) {
+    // not using for now
 
-        this.setState({
-          show_loader: false,
+    // try {
+    //   let data = {
+    //     'insurance_app_id': this.state.params.insurance_id,
+    //     "provider": "HDFC",
+    //     "change_provider": true
+    //   };
+    //   const res = await Api.post('/api/insurance/quote', data);
 
-        });
+    //   if (res.pfwresponse.status_code === 200) {
 
-        if (res.pfwresponse.result.errors.length === 0) {
-          this.setState({
-            openDialogOtherProvider: true,
-            otherProvider: res.pfwresponse.result.quotes
-          });
-        }
+    //     this.setState({
+    //       show_loader: false,
+
+    //     });
+
+    //     if (res.pfwresponse.result.errors.length === 0) {
+    //       this.setState({
+    //         openDialogOtherProvider: true,
+    //         otherProvider: res.pfwresponse.result.quotes
+    //       });
+    //     }
 
 
-      } else {
-        let error = res.pfwresponse.result.error;
-        this.setState({ show_loader: false });
+    //   } else {
+    //     let error = res.pfwresponse.result.error;
+    //     this.setState({ show_loader: false });
 
-        this.setState({
-          pincode_error: error
-        });
-        this.setState({ openDialog: true, apiError: error });
-      }
+    //     this.setState({
+    //       pincode_error: error
+    //     });
+    //     this.setState({ openDialog: true, apiError: error });
+    //   }
 
-    } catch (err) {
-      this.setState({
-        show_loader: false
-      });
-      toast('Something went wrong');
-    }
+    // } catch (err) {
+    //   this.setState({
+    //     show_loader: false
+    //   });
+    //   toast('Something went wrong');
+    // }
   }
 
 
@@ -400,7 +411,7 @@ class Pincode extends Component {
           title="Application Form"
           smallTitle={this.state.provider}
           count={true}
-          total={this.state.provider === 'IPRU' ? 5 : 4}
+          total={5}
           current={5}
           banner={true}
           bannerText={this.bannerText()}
@@ -430,6 +441,60 @@ class Pincode extends Component {
           </FormControl>
         </Container>
       )
+    }
+    return null;
+  }
+
+  async handleCloseOtherOptions() {
+    // reset
+    this.setState({ show_loader: true });
+    const res = await Api.post('/api/insurance/profile/reset', {
+      insurance_app_id: this.state.params.insurance_id
+    });
+    if (res.pfwresponse.status_code === 200) {
+      clearInsuranceQuoteData();
+      this.navigate('quote');
+    } else {
+      this.setState({
+        show_loader: false,
+      });
+      toast(res.pfwresponse.result.error);
+    }
+
+  }
+
+  renderOtherOptions() {
+    if (this.state.openDialogOtherProvider) {
+      return (
+        <Dialog
+          id="payment"
+          open={this.state.openDialogOtherProvider}
+          onClose={this.handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogContent>
+            <div className="payment-dialog" id="alert-dialog-description">
+              <div style={{ fontWeight: 500, color: '#4a4a4a', fontSize: 18 }}>Hey {this.state.name},</div>
+              <div style={{ fontWeight: 300, color: '#4a4a4a', fontSize: 16 }}>
+                Max life <b>does not dispatch policy</b> to your
+                current location, you can choose other
+                insurance provider.
+              </div>
+            </div>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              fullWidth={true}
+              variant="raised"
+              size="large"
+              color="secondary"
+              onClick={this.handleCloseOtherOptions}
+              autoFocus>Explore other option
+            </Button>
+          </DialogActions>
+        </Dialog >
+      );
     }
     return null;
   }
@@ -522,7 +587,8 @@ class Pincode extends Component {
     return (
       <div>
         {this.renderUi()}
-        {this.renderChangeProvide()}
+        {/* {this.renderChangeProvide()} */}
+        {this.renderOtherOptions()}
         {this.renderDialog()}
       </div>
     );

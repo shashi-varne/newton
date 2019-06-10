@@ -154,6 +154,57 @@ export const educationQualificationsOptionsIpru = [
   }
 ];
 
+export const educationQualificationsOptionsMaxlife = [
+  {
+    'name': 'Post-Graduate',
+    'value': 'POST-GRADUATE'
+  },
+  {
+    'name': 'Graduate',
+    'value': 'GRADUATE'
+  },
+  {
+    'name': 'Higher Secondary',
+    'value': 'HIGHER-SECONDARY'
+  }
+];
+
+export const occupationDetailOptionsMaxlife = [
+  {
+    'name': 'SALARIED',
+    'value': 'SALARIED'
+  },
+  {
+    'name': 'RETIRED',
+    'value': 'RETIRED'
+  },
+  {
+    'name': 'STUDENT',
+    'value': 'STUDENT'
+  },
+  {
+    'name': 'PROFESSIONAL',
+    'value': 'PROFESSIONAL'
+  },
+  {
+    'name': 'SELF-EMPLOYED',
+    'value': 'SELF-EMPLOYED'
+  },
+
+  {
+    'name': 'SELF-EMPLOYED-HOME',
+    'value': 'SELF-EMPLOYED-HOME'
+  },
+  {
+    'name': 'HOUSEWIFE',
+    'value': 'HOUSEWIFE'
+  },
+  {
+    'name': 'OTHERS',
+    'value': 'OTHERS'
+  }
+];
+
 export const occupationCategoryOptions = [
   {
     'name': 'Government',

@@ -19,9 +19,10 @@ import Api from 'utils/api';
 import {
   declareOptions,
   occupationDetailOptionsHdfc, occupationDetailOptionsIpru,
-  occupationCategoryOptions, educationQualificationsOptionsIpru, qualification
+  occupationCategoryOptions, educationQualificationsOptionsIpru,
+  qualification, educationQualificationsOptionsMaxlife, occupationDetailOptionsMaxlife
 } from '../../constants';
-import { validatePan, validateNumber, formatAmount, validateEmpty } from 'utils/validators';
+import { validatePan, validateNumber, formatAmount, validateEmpty, providerAsIpru } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 
@@ -135,15 +136,19 @@ class ProfessionalDetails1 extends Component {
   };
 
   handleOccDetailRadioValueIpru = name => index => {
+    let options = this.state.provider === 'IPRU' ? occupationDetailOptionsIpru :
+      occupationDetailOptionsMaxlife;
     this.setState({
-      [name]: occupationDetailOptionsIpru[index]['value'],
+      [name]: options[index]['value'],
       [name + '_error']: ''
     });
   };
 
   handleEduDetailRadioValue = name => index => {
+    let options = this.state.provider === 'IPRU' ? educationQualificationsOptionsIpru :
+      educationQualificationsOptionsMaxlife;
     this.setState({
-      [name]: educationQualificationsOptionsIpru[index]['value'],
+      [name]: options[index]['value'],
       [name + '_error']: ''
     });
   };
@@ -200,7 +205,7 @@ class ProfessionalDetails1 extends Component {
       this.setState({
         annual_income_error: 'Minimum annual income is 3 Lakh'
       });
-    } else if (this.state.provider === 'IPRU' && this.state.annual_income < 500000) {
+    } else if ((this.state.provider === 'IPRU' || this.state.provider === 'Maxlife') && this.state.annual_income < 500000) {
       this.setState({
         annual_income_error: 'Minimum annual income is 5 Lakh'
       });
@@ -403,7 +408,7 @@ class ProfessionalDetails1 extends Component {
         title="Application Form"
         smallTitle={this.state.provider}
         count={true}
-        total={this.state.provider === 'IPRU' ? 5 : 4}
+        total={providerAsIpru(this.state.provider) ? 5 : 4}
         current={3}
         handleClick={this.handleClick}
         edit={this.props.edit}
@@ -415,6 +420,7 @@ class ProfessionalDetails1 extends Component {
           <TitleWithIcon width="20" icon={this.state.type !== 'fisdom' ? professional_myway : professional}
             title={(this.props.edit) ? 'Edit Professional Details' : 'Professional Details'} />
           {this.renderProvider()}
+          {this.renderIncome()}
           {this.state.provider === 'HDFC' &&
             <div>
               <div className="InputField">
@@ -449,23 +455,8 @@ class ProfessionalDetails1 extends Component {
               </div>
             </div>
           }
-          {this.state.provider === 'IPRU' &&
+          {providerAsIpru(this.state.provider) &&
             <div>
-              <div className="InputField">
-                <RadioWithoutIcon
-                  error={(this.state.occupation_detail_error) ? true : false}
-                  helperText={this.state.occupation_detail_error}
-                  icon={occupation}
-                  width="40"
-                  type="professional"
-                  label="Occupation Details"
-                  class="MaritalStatus"
-                  options={occupationDetailOptionsIpru}
-                  id="occupation"
-                  name="occupation_detail"
-                  value={this.state.occupation_detail}
-                  onChange={this.handleOccDetailRadioValueIpru('occupation_detail')} />
-              </div>
               <div className="InputField">
                 <RadioWithoutIcon
                   error={(this.state.education_qualification_error) ? true : false}
@@ -475,16 +466,33 @@ class ProfessionalDetails1 extends Component {
                   type="professional"
                   label="Educational qualification"
                   class="MaritalStatus"
-                  options={educationQualificationsOptionsIpru}
+                  options={(this.state.provider === 'IPRU' ? educationQualificationsOptionsIpru :
+                    educationQualificationsOptionsMaxlife)}
                   id="education"
                   name="education_qualification"
                   value={this.state.education_qualification}
                   onChange={this.handleEduDetailRadioValue('education_qualification')} />
               </div>
+              <div className="InputField">
+                <RadioWithoutIcon
+                  error={(this.state.occupation_detail_error) ? true : false}
+                  helperText={this.state.occupation_detail_error}
+                  icon={occupation}
+                  width="40"
+                  type="professional"
+                  label="Occupation Details"
+                  class="MaritalStatus"
+                  options={(this.state.provider === 'IPRU' ? occupationDetailOptionsIpru :
+                    occupationDetailOptionsMaxlife)}
+                  id="occupation"
+                  name="occupation_detail"
+                  value={this.state.occupation_detail}
+                  onChange={this.handleOccDetailRadioValueIpru('occupation_detail')} />
+              </div>
             </div>
           }
           {this.state.provider === 'HDFC' && this.renderCategory()}
-          {this.renderIncome()}
+
           {this.state.provider === 'HDFC' && this.renderDeclaration()}
         </FormControl>
 

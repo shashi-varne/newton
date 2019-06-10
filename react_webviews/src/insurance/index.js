@@ -38,6 +38,8 @@ import PersonalDetailsIntro from './components/quote-selection/personal_details'
 import QuoteGeneration from './components/quote-selection/quote_generation';
 
 import AddOnBenefits from './components/add-on-benefits/index'
+import FinalReport from './components/report/index'
+import InsuranceHome from './components/home/index'
 
 import { create } from 'jss';
 import JssProvider from 'react-jss/lib/JssProvider';
@@ -160,6 +162,8 @@ const Insurance = (props) => {
           <Route path={`${url}/quote`} component={QuoteGeneration} />
 
           <Route path={`${url}/riders`} component={AddOnBenefits} />
+          <Route path={`${url}/report`} component={FinalReport} />
+          <Route path={`${url}/home`} component={InsuranceHome} />
 
           {/* Edit paths */}
           <Route path={`${url}/edit-personal`} render={(props) => <PersonalDetails1 {...props} edit={true} />} />

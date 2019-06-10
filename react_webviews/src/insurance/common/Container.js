@@ -228,6 +228,10 @@ class Container extends Component {
     }
   }
 
+  resetQuoteData() {
+
+  }
+
   componentDidUpdate(prevProps) {
     let body = document.getElementsByTagName('body')[0].offsetHeight;
     // let client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;

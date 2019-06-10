@@ -17,7 +17,10 @@ import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
 import Api from 'utils/api';
 import Button from 'material-ui/Button';
 import { maritalOptions, genderOptions, relationshipOptions } from '../../constants';
-import { validateAlphabets, isValidDate, validateLength, validateConsecutiveChar, validateEmpty } from 'utils/validators';
+import {
+  validateAlphabets, isValidDate, validateLength, validateConsecutiveChar,
+  validateEmpty, providerAsIpru
+} from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import Dialog, {
   DialogActions,
@@ -406,7 +409,7 @@ class NomineeDetails extends Component {
             if (this.state.age < 18) {
               this.navigate('/insurance/appointee');
             } else {
-              if (this.state.provider === 'IPRU') {
+              if (providerAsIpru(this.state.provider)) {
                 this.navigate('/insurance/pincode');
               } else {
                 this.navigate('/insurance/summary', true);
@@ -482,14 +485,16 @@ class NomineeDetails extends Component {
         title="Application Form"
         smallTitle={this.state.provider}
         count={true}
-        total={this.state.provider === 'IPRU' ? 5 : 4}
+        total={providerAsIpru(this.state.provider) ? 5 : 4
+        }
         current={4}
         state={this.state}
         banner={true}
         bannerText={this.bannerText()}
         handleClick={this.handleClick}
         edit={this.props.edit}
-        buttonTitle={(this.state.age < 18) ? "Save & Continue" : "Save & Continue"}
+        buttonTitle={(this.state.age < 18) ? "Save & Continue" : "Save & Continue"
+        }
         logo={this.state.image}
         type={this.state.type}
       >
@@ -663,7 +668,7 @@ class NomineeDetails extends Component {
           </FormControl>
         } */}
         {this.renderDialog()}
-      </Container>
+      </Container >
     );
   }
 }

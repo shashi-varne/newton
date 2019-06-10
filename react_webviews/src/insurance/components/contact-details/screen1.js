@@ -12,7 +12,7 @@ import Input from '../../../common/ui/Input';
 import email from 'assets/email_dark_icn.png';
 import phone from 'assets/phone_dark_icn.png';
 import Api from 'utils/api';
-import { validateEmail, validateNumber, numberShouldStartWith } from 'utils/validators';
+import { validateEmail, validateNumber, numberShouldStartWith, providerAsIpru } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 
@@ -193,7 +193,7 @@ class ContactDetails1 extends Component {
         title="Application Form"
         smallTitle={this.state.provider}
         count={true}
-        total={this.state.provider === 'IPRU' ? 5 : 4}
+        total={providerAsIpru(this.state.provider) ? 5 : 4}
         current={2}
         banner={false}
         bannerText={this.bannerText()}

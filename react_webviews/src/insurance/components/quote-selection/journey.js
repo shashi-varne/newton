@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import qs from 'qs';
 
-import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
-import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
 
 import process_success from 'assets/completed_step.svg';
@@ -65,24 +63,9 @@ class JourneyIntro extends Component {
   }
 
   async componentDidMount() {
-    try {
-      const res = await Api.get('/api/insurance/profile/' + this.state.params.insurance_id, {
-        groups: 'personal,professional,contact'
-      })
-      const { name, } = res.pfwresponse.result.profile;
-      const { provider } = res.pfwresponse.result.quote_desc;
-
-      this.setState({
-        show_loader: false,
-        name: name || '',
-        provider: provider
-      });
-    } catch (err) {
-      this.setState({
-        show_loader: false
-      });
-      toast('Something went wrong');
-    }
+    this.setState({
+      show_loader: false,
+    });
   }
 
 

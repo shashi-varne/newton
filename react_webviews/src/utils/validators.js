@@ -276,3 +276,16 @@ export function renameObjectKeys(obj, newKeys) {
 
   return obj;
 }
+
+export function providerAsIpru(provider) {
+  if (provider === 'IPRU' || provider === 'Maxlife') {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
+export function clearInsuranceQuoteData() {
+  window.localStorage.setItem('quoteSelected', '');
+}

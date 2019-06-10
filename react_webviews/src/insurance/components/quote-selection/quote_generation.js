@@ -40,7 +40,8 @@ class QuoteGeneration extends Component {
       openDialogFilter: false,
       openPopUpQuote: false,
       paymentFreqRadio: 'Monthly',
-      expendAddOnOpen: false
+      expendAddOnOpen: false,
+      openPopUpInfo: false
     }
 
     this.renderQuotes = this.renderQuotes.bind(this);
@@ -125,7 +126,8 @@ class QuoteGeneration extends Component {
   }
 
   handleClick = async () => {
-    this.navigate('journey')
+
+    this.navigate('riders');
   }
 
   quotesAfterFilter(type, index) {
@@ -148,7 +150,8 @@ class QuoteGeneration extends Component {
     this.setState({
       openPopUp: false,
       openPopUpQuote: false,
-      openDialogFilter: false
+      openDialogFilter: false,
+      openPopUpInfo: false
     });
   }
 
@@ -161,30 +164,14 @@ class QuoteGeneration extends Component {
 
   handleCloseQuotes = async () => {
     this.setState({
-      openPopUpQuote: false,
-      show_loader: true
+      openPopUpQuote: false
     })
-    let insuranceData = {
-      quote_id: (this.state.payment_frequency).toLowerCase() === 'annually' ? this.state.quoteSelected.annual_quote_id :
-        this.state.quoteSelected.id
-    };
-    try {
-      const res = await Api.post('/api/insurance/quote/select', insuranceData)
-      this.setState({
-        show_loader: false
-      });
-      if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.quotes) {
-        // let result = res.pfwresponse.result.quotes;
-      } else {
-        toast(res.pfwresponse.result.error);
-      }
 
-    } catch (err) {
-      this.setState({
-        show_loader: false
-      });
-      toast('Something went wrong');
-    }
+    let quoteSelected = this.state.quoteSelected;
+    quoteSelected.payment_frequency_selected = this.state.payment_frequency;
+
+    window.localStorage.setItem('quoteSelected', JSON.stringify(quoteSelected));
+    this.navigate('riders');
   }
 
   renderPopUpQuote = () => {
@@ -245,6 +232,50 @@ class QuoteGeneration extends Component {
               color="secondary"
               onClick={this.handleCloseQuotes}
               autoFocus>OK
+            </Button>
+          </DialogActions>
+        </Dialog >
+      );
+    }
+    return null;
+  }
+
+  openPopUpInfo() {
+    this.setState({
+      openPopUpInfo: true
+    })
+  }
+
+  renderPopUpInfo() {
+    if (this.state.openPopUpInfo) {
+      return (
+        <Dialog
+          style={{ borderRadius: 6 }}
+          id="payment"
+          open={this.state.openPopUpInfo}
+          onClose={this.handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogContent>
+            <div className="annual-inc-dialog" id="alert-dialog-description">
+              <div className="annual-inc-popup-title">
+                Why annual Income?
+             </div>
+              <div className="annual-inc-popup-content">
+                Our goal is to recommend the best policy for your famliy. We need your total
+                annual income to determine the adequate cover amount for your family.
+             </div>
+            </div>
+          </DialogContent>
+          <DialogActions className="annual-inc-dialog-button">
+            <Button
+              fullWidth={true}
+              variant="raised"
+              size="large"
+              color="secondary"
+              onClick={this.handleClose}
+              autoFocus>Got it!
             </Button>
           </DialogActions>
         </Dialog >
@@ -399,11 +430,12 @@ class QuoteGeneration extends Component {
             </div>
           <div className="quote-tiles4b"
             style={{ color: getConfig().primary }}
-            onClick={() => this.openPopUp()}>INFO</div>
+            onClick={() => this.openPopUpInfo(index)}>INFO</div>
         </div>
 
         {/* basic benefits */}
-        {props.quote_describer.description.basic_benefits.map(this.renderQuotePoints)}
+        {props.quote_describer.description &&
+          props.quote_describer.description.basic_benefits.map(this.renderQuotePoints)}
 
         {/* add on benefits */}
         <div className="quote-addon-tiles11">
@@ -417,7 +449,7 @@ class QuoteGeneration extends Component {
           </div>
           {this.state.expendAddOnOpen &&
             <div style={{ marginTop: 10 }}>
-              {props.quote_describer.description.add_on_benefits.map(this.renderQuotePoints)
+              {props.quote_describer.description && props.quote_describer.description.add_on_benefits.map(this.renderQuotePoints)
               }
             </div>
           }
@@ -663,6 +695,7 @@ class QuoteGeneration extends Component {
         {this.renderPopUp()}
         {this.renderPopUpQuote()}
         {this.renderFilter()}
+        {this.renderPopUpInfo()}
       </Container>
     );
   }

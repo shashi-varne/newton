@@ -58,7 +58,6 @@ class SelectGrp extends Component {
   };
 
   renderList(props, index) {
-    console.log(props);
     return (
       <div key={index} onClick={() => this.handleChange(index)}
         className={'ins-row-scroll' + (this.state.selectedValue === index ? ' ins-row-scroll-selected' : '')}>
