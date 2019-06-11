@@ -150,7 +150,7 @@ export const getConfig = () => {
   if (project === 'isip') {
     let { pc_urlsafe } = qs.parse(myHistory.location.search.slice(1));
     let campaign_version = generic_callback === "true" ? 1 : main_query_params.campaign_version;
-    searchParams = '?base_url=' + encodeURIComponent(base_url) + '&pc_urlsafe=' + pc_urlsafe +
+    searchParams += '&pc_urlsafe=' + pc_urlsafe +
       '&campaign_version=' + campaign_version;
 
     // eslint-disable-next-line
