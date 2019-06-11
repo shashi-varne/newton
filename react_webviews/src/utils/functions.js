@@ -100,7 +100,9 @@ export const getConfig = () => {
   let returnConfig = config[productType];
 
   let project = 'insurance';
-  if (myHistory.location.pathname.indexOf('risk') >= 0) {
+  if (myHistory.location.pathname.indexOf('insurance') >= 0) {
+    project = 'insurance';
+  } else if (myHistory.location.pathname.indexOf('risk') >= 0) {
     project = 'risk';
   } else if (myHistory.location.pathname.indexOf('mandate-otm') >= 0) {
     project = 'mandate-otm';
@@ -110,6 +112,8 @@ export const getConfig = () => {
     project = 'gold';
   } else if (myHistory.location.pathname.indexOf('isip') >= 0) {
     project = 'isip';
+  } else if (myHistory.location.pathname.indexOf('referral') >= 0) {
+    project = 'referral';
   }
   returnConfig.project = project;
   returnConfig.generic_callback = generic_callback;
