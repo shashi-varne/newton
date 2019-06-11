@@ -6,7 +6,7 @@ import Container from '../../common/Container';
 import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
 
-import comver_amount_icon from 'assets/life_cover_icon.png';
+import cover_age_icn from 'assets/cover_age_icn.png';
 import DropdownInPage from '../../../common/ui/DropdownInPage';
 
 import Button from 'material-ui/Button';
@@ -195,7 +195,7 @@ class CoverPeriod extends Component {
 
         <div className="header-annual-inc-info">
           <div style={{ width: '13%' }}>
-            <img style={{ width: 40 }} src={comver_amount_icon} alt="Insurance" />
+            <img style={{ width: 40 }} src={cover_age_icn} alt="Insurance" />
           </div>
           <div style={{ width: '76%' }}>
             <div style={{ color: '#4a4a4a', fontSize: 16 }}>I would like to cover my family</div>

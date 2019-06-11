@@ -18,7 +18,7 @@ import DropdownInPage from '../../../common/ui/DropdownInPage';
 class AnnualIncome extends Component {
 
   constructor(props) {
-    var quoteData = JSON.parse(window.localStorage.getItem('quoteData')) || {};
+    var quoteData = JSON.parse(window.localStorage.getItem('quoteData') || {});
     super(props);
     this.state = {
       show_loader: true,
@@ -34,6 +34,7 @@ class AnnualIncome extends Component {
         }
       ],
       openPopUp: false,
+      annual_income_error: false,
       quoteData: quoteData
     }
     this.renderList = this.renderList.bind(this);
@@ -41,7 +42,7 @@ class AnnualIncome extends Component {
   }
 
   componentWillMount() {
-    console.log(this.state.quoteData);
+    console.log(this.state);
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -86,6 +87,13 @@ class AnnualIncome extends Component {
   }
 
   handleClick = async () => {
+
+    if (!this.state.selectedIndex && this.state.selectedIndex !== 0) {
+      this.setState({
+        annual_income_error: true
+      });
+      return;
+    }
     let quoteData = this.state.quoteData;
     quoteData.annual_income = this.state.incomeList[this.state.selectedIndex].name;
     quoteData.selectedIndexIncome = this.state.selectedIndex;
@@ -98,7 +106,8 @@ class AnnualIncome extends Component {
     console.log("returned index : " + index)
     this.setState({
       selectedIndex: index,
-      annual_income: this.state.incomeList[index].value
+      annual_income: this.state.incomeList[index].value,
+      annual_income_error: false
     })
   }
 
@@ -194,7 +203,8 @@ class AnnualIncome extends Component {
             {!this.state.incomeList[this.state.quoteData.selectedIndexIncome] &&
               <div className="annual-income-data-mid" style={{ width: '35%' }} >₹ {this.state.annual_income || ''}</div>}
 
-            <div style={{ color: '#878787', fontSize: 12 }}>Select an option from below</div>
+            {this.state.selectedIndex >= 0 &&
+              <div style={{ color: this.state.annual_income_error ? 'red' : '#878787', fontSize: 12 }}>Select an option from below</div>}
           </div>
           <div className="annual-income-info-button"
             style={{ color: getConfig().primary }}

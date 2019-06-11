@@ -369,7 +369,7 @@ class CoverAmount extends Component {
             <div style={{ color: '#4a4a4a', fontSize: 16 }}>I want my family to receive</div>
             <div style={{ display: 'flex' }}>
               <div className="annual-income-data-mid" style={{ width: 'fit-content' }}>
-                {this.state.coverAmountToShow}</div>
+                ₹ {this.state.coverAmountToShow}</div>
               <div style={{ margin: '4px 0 0 8px', fontSize: 16, color: ' #4a4a4a' }}>In my absence</div>
             </div>
           </div>

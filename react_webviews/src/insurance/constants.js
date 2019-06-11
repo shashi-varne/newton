@@ -295,3 +295,77 @@ export const payFreqOptionInsurance = [
   { name: 'Quarterly', value: 'Quarterly' },
   { name: 'Monthly', value: 'Monthly' }
 ]
+
+
+export const quotePoints = {
+  'HDFC': {
+    basic_benefits: [
+      'Lump sum payment of  ₹ 1 crore to your nominee',
+      'Early claim on terminal illness',
+      'Full premium waiver incase of  Total Permanent Disability',
+      'Get tax benefit on premium under sec 80(C)',
+      'No tax to be paid on claim amount under section 10 (10D)'
+    ],
+    add_on_benefits: [
+      'Extra payout on Accidental  death or disability',
+      'Full premium waiver incase of critical illness',
+      'Cover against 19 critical illness'
+    ],
+    popup_info: {
+      title: 'Plan benefits',
+      content: 'This plan will cover your death (till x years of age) in all cases except suicide for the first year. Plan benefit includes a payout of Rs 1 Crore to your nominee. Additionally, full payout will happen in case of terminal illness and your entire premium will be waived of incase of  Total Permanent Disability.'
+    }
+  },
+  'IPRU': {
+    basic_benefits: [
+      'Lump sum payment of  ₹ 1 crore to your nominee',
+      'Early claim on terminal illness',
+      'Full premium waiver incase of  Total Permanent Disability',
+      'Get tax benefit on premium under sec 80(C)',
+      'No tax to be paid on claim amount under section 10 (10D)'
+    ],
+    add_on_benefits: [
+      'Extra payout on Accidental  death or disability',
+      'Full premium waiver incase of critical illness',
+      'Cover against 34 critical illness'
+    ],
+    popup_info: {
+      title: 'Plan benefits',
+      content: 'This plan will cover your death (till x years of age) in all cases except suicide for the first year. Plan benefit includes a payout of Rs 1 Crore to your nominee. Additionally, full payout will happen in case of terminal illness and your entire premium will be waived of incase of  Total Permanent Disability.'
+    }
+  },
+  'Maxlife': {
+    basic_benefits: [
+      'Lump sum payment of  ₹ 1 crore to your nominee',
+      'Get tax benefit on premium under sec 80(C)',
+      'No tax to be paid on claim amount under section 10 (10D)'
+    ],
+    add_on_benefits: [
+      'Extra payout on Accidental  death or disability',
+      'Full premium waiver incase of critical illness',
+      'Cover against 40 critical illness'
+    ],
+    popup_info: {
+      title: 'Plan benefits',
+      content: 'This plan will cover your death (till x years of age) in all cases except suicide for the first year. Plan benefit includes a payout of Rs 1 Crore to your nominee.'
+    }
+  }
+};
+
+export const add_on_benefits_points = {
+  'ci_benefit': {
+    'title': 'Waiver of premium',
+    'benefit': 'All your future premium will be waived of in case you are diagnosed with critical illness or dismemberment (disability)',
+    'content': "This additional benefits gives you relief in case of critical illness and disability, by waiving of all your future premiums. So, let say you have taken a cover amount of Rs 1 Cr and paying Rs 656 monthly premium. In case you are diagnosed with critical illness or disability, you don't need to pay monthly premium of Rs 656, and your policy continues. "
+  },
+  'ci_amount': {
+    'title': 'Critical Illness Rider',
+    'benefit': 'On diagnosis of CI, get immediate payout of the critical illness cover amount',
+    'content': 'This additional benefit, cover yourself against 40 critical illness. Let say you have taken a coverage of Rs 1 crore, and Rs 15 Lakh as Critical Illness Rider. So, incase of diagnosis of critical illness you will get Rs 15 Lakh and policy will continue with remaining Rs 85 Lakh as cover amount. '
+  },
+  'accident_benefit': {
+    'title': 'Accidental Death Benefit',
+    'benefit': 'Get additional cover in case of Death or disability',
+    'content': 'Incase of death due to accident or disability due to accident, your family (nominee) gets an additional amount. For e.g  some one who has taken a life cover of Rs 1 Crore and added 10 Lakh of accidental benefit cover, will get Rs 10 Lakh cover immediately in case of disability due to accident and life cover of 1 crore remains intact. '
+  }
+}

@@ -260,21 +260,38 @@ class Journey extends Component {
   }
 
   async  componentDidMount() {
+    console.log("allllllllllllll")
+    console.log(getConfig().insurance_allweb)
     try {
-
-      const res = await Api.get('/api/insurance/all/summary')
       let application, required_fields;
-      if (res.pfwresponse.status_code === 200) {
-        if (res.pfwresponse.result.insurance_apps.init.length > 0) {
-          application = res.pfwresponse.result.insurance_apps.init[0];
-        } else if (res.pfwresponse.result.insurance_apps.submitted.length > 0) {
-          application = res.pfwresponse.result.insurance_apps.submitted[0];
-        } else if (res.pfwresponse.result.insurance_apps.complete.length > 0) {
-          application = res.pfwresponse.result.insurance_apps.complete[0];
-        } else {
-          application = res.pfwresponse.result.insurance_apps.failed[0];
-        }
 
+      let cameFromHome = window.localStorage.getItem('cameFromHome');
+      let homeApplication = JSON.parse(window.localStorage.getItem('homeApplication')) || [];
+      console.log("cameFromHome :" + cameFromHome)
+      if (cameFromHome && homeApplication.length !== 0) {
+        window.localStorage.setItem('cameFromHome', '');
+        application = homeApplication.application;
+        required_fields = homeApplication.required_fields;
+      } else {
+        const res = await Api.get('/api/insurance/all/summary');
+
+        if (res.pfwresponse.status_code === 200) {
+          required_fields = res.pfwresponse.result.required;
+          if (res.pfwresponse.result.insurance_apps.init.length > 0) {
+            application = res.pfwresponse.result.insurance_apps.init[0];
+          } else if (res.pfwresponse.result.insurance_apps.submitted.length > 0) {
+            application = res.pfwresponse.result.insurance_apps.submitted[0];
+          } else if (res.pfwresponse.result.insurance_apps.complete.length > 0) {
+            application = res.pfwresponse.result.insurance_apps.complete[0];
+          } else {
+            application = res.pfwresponse.result.insurance_apps.failed[0];
+          }
+        } else {
+          application = [];
+        }
+      }
+
+      if (application) {
         let providerName = application.provider;
         if (application.provider === 'IPRU') {
           providerName = 'ICICI';
@@ -343,8 +360,6 @@ class Journey extends Component {
 
 
         this.setButtonTitle(journeyData, application);
-
-        required_fields = res.pfwresponse.result.required;
 
         let income_value = income_pairs.filter(item => item.name === application.quote.annual_income);
 
@@ -416,7 +431,6 @@ class Journey extends Component {
           show_loader: false,
           payment_link: application.payment_link,
           resume_link: application.resume_link,
-          edit_allowed: (res.pfwresponse.result.insurance_apps.init.length > 0) ? true : false,
           tobacco_choice: application.quote.tobacco_choice,
           annual_income: income_value[0].value,
           term: application.quote.term,
@@ -488,6 +502,7 @@ class Journey extends Component {
         this.setState({ show_loader: false });
       }
     } catch (err) {
+      console.log(err);
       this.setState({
         show_loader: false
       });
@@ -813,7 +828,12 @@ class Journey extends Component {
       insurance_app_id: this.state.insurance_id
     });
     if (res.pfwresponse.status_code === 200) {
-      nativeCallback({ action: 'native_reset' });
+      if (this.state.params.insurance_allweb) {
+        this.navigate('journey-intro');
+      } else {
+        nativeCallback({ action: 'native_reset' });
+      }
+
     } else {
       this.setState({ openModal: false, openModalMessage: '', openResponseDialog: true, apiError: res.pfwresponse.result.error });
     }

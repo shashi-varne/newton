@@ -113,7 +113,11 @@ export const getConfig = () => {
   }
   returnConfig.project = project;
   returnConfig.generic_callback = generic_callback;
-
+  let { insurance_allweb } = main_query_params;
+  if (insurance_allweb) {
+    returnConfig.insurance_allweb = insurance_allweb;
+    searchParams += '&insurance_allweb=' + insurance_allweb;
+  }
 
   if (isMobile.Android() && typeof window.Android !== 'undefined') {
     returnConfig.app = 'android';

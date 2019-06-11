@@ -12,14 +12,14 @@ class SelectGrp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedValue: this.props.value * 1,
+      selectedValue: this.props.value,
       options: this.props.options,
       onChange: this.props.onChange,
-      recommendedIndex: this.props.recommendedIndex * 1,
+      recommendedIndex: this.props.recommendedIndex || '',
       dataType: this.props.dataType,
       keyToShow: this.props.keyToShow,
       inputKeyName: this.props.inputKeyName,
-      tick_icon: getConfig().productType !== 'fisdom' ? tick_icon_myway : tick_icon_fisdom,
+      tick_icon: getConfig().type !== 'fisdom' ? tick_icon_myway : tick_icon_fisdom,
       inputToRender: this.props.inputToRender
     };
 
@@ -29,7 +29,7 @@ class SelectGrp extends Component {
   componentDidUpdate(prevState) {
     if (prevState.value !== this.props.value) {
       this.setState({
-        selectedValue: this.props.value * 1
+        selectedValue: this.props.value
       })
     }
 
@@ -41,7 +41,7 @@ class SelectGrp extends Component {
 
     if (prevState.recommendedIndex !== this.props.recommendedIndex) {
       this.setState({
-        recommendedIndex: this.props.recommendedIndex * 1
+        recommendedIndex: this.props.recommendedIndex
       })
     }
 
@@ -127,7 +127,6 @@ class SelectGrp extends Component {
   }
 
   render() {
-    console.log(this.state);
     // const { options } = this.state;
     return (
       <div style={{ marginBottom: 50 }}>

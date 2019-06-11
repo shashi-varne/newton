@@ -16,7 +16,7 @@ import { isValidDate } from 'utils/validators';
 
 class PersonalDetailsIntro extends Component {
   constructor(props) {
-    var quoteData = JSON.parse(window.localStorage.getItem('quoteData')) || {};
+    var quoteData = window.localStorage.getItem('quoteData') ? JSON.parse(window.localStorage.getItem('quoteData')) : {};
     super(props);
     this.state = {
       show_loader: true,
@@ -27,6 +27,7 @@ class PersonalDetailsIntro extends Component {
       dob_error: '',
       gender_error: '',
       dob: '',
+      gender: '',
       quoteData: quoteData
     }
   }
@@ -57,10 +58,11 @@ class PersonalDetailsIntro extends Component {
 
       this.setState({
         show_loader: false,
-        dob: this.state.quoteData.dob || dob || '',
-        gender: this.state.quoteData.gender || gender.toLowerCase() || ''
+        dob: this.state.quoteData ? this.state.quoteData.dob : dob || '',
+        gender: this.state.quoteData.gender ? this.state.quoteData.gender : gender ? gender.toLowerCase() : ''
       });
     } catch (err) {
+      console.log(err)
       this.setState({
         show_loader: false
       });
@@ -237,7 +239,7 @@ class PersonalDetailsIntro extends Component {
               id="dob"
               name="dob"
               max={currentDate}
-              value={this.state.dob}
+              value={this.state.dob || ''}
               placeholder="DD/MM/YYYY"
               maxLength="10"
               onChange={this.handleChange('dob')} />
@@ -252,7 +254,7 @@ class PersonalDetailsIntro extends Component {
 
               <img className="per-det-img"
                 style={{
-                  marginLeft: 10,
+                  marginLeft: this.state.gender === 'female' ? 20 : 10,
                   border: (this.state.gender === 'female' ? '1px solid ' + getConfig().primary : "")
                 }} src={female_icon}
                 onClick={() => this.handleGender('female')} alt="Insurance" />

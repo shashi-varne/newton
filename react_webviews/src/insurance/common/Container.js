@@ -61,6 +61,13 @@ class Container extends Component {
     }
   }
 
+  navigate = (pathname) => {
+    this.props.history.push({
+      pathname: pathname,
+      search: this.props.location.search
+    });
+  }
+
   historyGoBack = () => {
     let { params } = this.props.location;
     let insurance_v2 = getConfig().insurance_v2;
@@ -101,6 +108,7 @@ class Container extends Component {
     }
 
     let pathname = this.props.history.location.pathname;
+    console.log(pathname)
     switch (pathname) {
       case "/insurance":
       case "/insurance/resume":
@@ -114,6 +122,12 @@ class Container extends Component {
             popupText: 'Are you sure you want to exit the application process? You can resume it later.'
           })
         }
+        break;
+      case '/insurance/journey-intro':
+        this.navigate("/insurance/intro");
+        break;
+      case '/insurance/intro':
+        nativeCallback({ action: 'native_back' });
         break;
       default:
         if (navigator.onLine) {
@@ -181,7 +195,12 @@ class Container extends Component {
         }
       };
       nativeCallback({ events: eventObj });
+      window.localStorage.setItem('show_quotes', true);
+      this.navigate('/insurance/quote');
     }
+
+    console.log(this.props);
+
     nativeCallback({ action: this.state.callbackType });
   }
 

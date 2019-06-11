@@ -7,7 +7,7 @@ import IconButton from 'material-ui/IconButton';
 import Arrow from '@material-ui/icons/ArrowBack';
 import Close from '@material-ui/icons/Close';
 import restart from 'assets/restart_nav_icn.svg';
-import filterIcon from  'assets/filter_nav_icon.png';
+import filterIcon from 'assets/filter_nav_icon.png';
 
 const Header = ({ classes, title, count, total, current, goBack, edit, type, resetpage, handleReset, smallTitle, disableBack, provider, filterPgae, handleFilter }) => (
   <AppBar position="fixed" color="primary" className={`Header ${classes.root} ${(type !== 'fisdom') ? 'blue' : ''}`}>
@@ -53,7 +53,10 @@ const Header = ({ classes, title, count, total, current, goBack, edit, type, res
           src={filterIcon}
         />
       }
-      {!edit && count && <span color="inherit">{current}/{total}</span>}
+      {!edit && count &&
+        <span color="inherit">
+          <span style={{ fontWeight: 600 }}>{current}</span>/<span>{total}</span>
+        </span>}
     </Toolbar>
   </AppBar>
 );

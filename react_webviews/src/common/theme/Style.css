@@ -199,7 +199,7 @@ button.MuiButtonBase-root.MuiButton-root.MuiButton-raised.MuiButton-raisedSecond
 
 .FooterSummaryLayout {
   background: #2ec155;
-  border-radius: 6px;
+  /* border-radius: 6px; */
 }
 
 .FooterDefaultLayout .FlexItem3, .FooterDefaultLayout .FlexItem2, .FooterDefaultLayout .FlexItem1 {

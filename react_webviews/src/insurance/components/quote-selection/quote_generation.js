@@ -20,7 +20,7 @@ import {
 import RadioOptions from '../../../common/ui/RadioOptions';
 import { FormControl } from 'material-ui/Form';
 
-import { payFreqOptionInsurance } from '../../constants';
+import { payFreqOptionInsurance, quotePoints } from '../../constants';
 
 // import CoverAmount from './components/quote-selection/cover_amount';
 
@@ -240,9 +240,23 @@ class QuoteGeneration extends Component {
     return null;
   }
 
-  openPopUpInfo() {
+  calculateAge = (birthday) => {
+    var today = new Date();
+    var birthDate = new Date(birthday);
+    var age = today.getFullYear() - birthDate.getFullYear();
+
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  }
+
+  openPopUpInfo(index) {
     this.setState({
-      openPopUpInfo: true
+      openPopUpInfo: true,
+      selectedIndexInfo: index,
+      selectedQuoteInfo: this.state.quotes[index]
     })
   }
 
@@ -250,6 +264,8 @@ class QuoteGeneration extends Component {
     if (this.state.openPopUpInfo) {
       return (
         <Dialog
+        fullWidth={true}
+          maxWidth={'md'}
           style={{ borderRadius: 6 }}
           id="payment"
           open={this.state.openPopUpInfo}
@@ -260,12 +276,27 @@ class QuoteGeneration extends Component {
           <DialogContent>
             <div className="annual-inc-dialog" id="alert-dialog-description">
               <div className="annual-inc-popup-title">
-                Why annual Income?
+                Plan Benefits
              </div>
-              <div className="annual-inc-popup-content">
-                Our goal is to recommend the best policy for your famliy. We need your total
-                annual income to determine the adequate cover amount for your family.
-             </div>
+              {this.state.selectedQuoteInfo.quote_provider !== 'Maxlife' &&
+                <div className="annual-inc-popup-content">
+                  This plan will cover your death (till 
+                   {this.calculateAge(this.state.selectedQuoteInfo.dob.replace(/\\-/g, '/').split('/').reverse().join('/')) + 
+                this.state.selectedQuoteInfo.term} years of age) in all cases
+                  except suicide for the first year. Plan benefit includes a payout of
+               Rs {numDifferentiation(this.state.selectedQuoteInfo.cover_amount)} to your nominee. Additionally, full payout will happen in case
+                  of terminal illness and your entire premium will be waived of incase of
+                 Total Permanent Disability.
+              </div>}
+              {this.state.selectedQuoteInfo.quote_provider === 'Maxlife' &&
+                <div className="annual-inc-popup-content">
+                  This plan will cover your death (till 
+                   {this.calculateAge(this.state.selectedQuoteInfo.dob.replace(/\\-/g, '/').split('/').reverse().join('/')) + 
+                this.state.selectedQuoteInfo.term} years of age) in all cases except suicide
+                   for the first year. Plan benefit includes a payout of
+ Rs {numDifferentiation(this.state.selectedQuoteInfo.cover_amount)} to your nominee.
+                 
+                </div>}
             </div>
           </DialogContent>
           <DialogActions className="annual-inc-dialog-button">
@@ -382,7 +413,7 @@ class QuoteGeneration extends Component {
     return (
       <div key={index}>
         <div className="quote-tiles2">
-          <span className="quote-tiles2a">{index + 1}. {props.title}</span>
+          <span className="quote-tiles2a">{index + 1}. {props}</span>
         </div>
         {props.points && props.points.map((row, i) => (
           <div key={i} className="quote-tiles2">
@@ -397,7 +428,7 @@ class QuoteGeneration extends Component {
     return (
       <div key={index}>
         <div className="quote-tiles2">
-          <span className="quote-tiles2a">{index + 1}. {props.title}</span>
+          <span className="quote-tiles2a">{index + 1}. {props}</span>
         </div>
         {props.points && props.points.map((row, i) => (
           <div key={i} className="quote-tiles2">
@@ -408,15 +439,17 @@ class QuoteGeneration extends Component {
     )
   }
 
-  expendAddOn() {
+  expendAddOn(index) {
+    let quotes = this.state.quotes;
+    quotes[index].expendAddOnOpen = !quotes[index].expendAddOnOpen;
     this.setState({
-      expendAddOnOpen: !this.state.expendAddOnOpen
+      quotes: quotes
     })
   }
 
   renderQuotes(props, index) {
     return (
-      <div key={index} className="quote-tiles" style={{ marginTop: index !== 0 ? 18 : 42 }}>
+      <div key={index} className="quote-tiles" style={{ marginTop: index !== 0 ? 18 : 50 }}>
         <div className="quote-tiles1">
           <div className="quote-tiles1a">
             <img style={{ width: 90 }} src={props.quote_provider_logo} alt="Insurance" />
@@ -424,6 +457,15 @@ class QuoteGeneration extends Component {
           <div className="quote-tiles1b">{props.insurance_title}</div>
         </div>
 
+        <div className="quote-tiles4" style={{padding: '0 11px 10px 17px',
+      margin: '0 0 10px 0px',borderBottom: '1px solid #efefef'}}>
+          <div className="quote-tiles4a">
+              Claim Settled
+          </div>
+          <div className="quote-tiles4a" style={{color:getConfig().primary,fontWeight:500}}>
+          {props.quote_describer.settlement_ratio}
+          </div>
+        </div>
         <div className="quote-tiles4">
           <div className="quote-tiles4a">
             Basic Benifits
@@ -434,12 +476,12 @@ class QuoteGeneration extends Component {
         </div>
 
         {/* basic benefits */}
-        {props.quote_describer.description &&
-          props.quote_describer.description.basic_benefits.map(this.renderQuotePoints)}
+        {props.quote_provider &&
+          quotePoints[props.quote_provider].basic_benefits.map(this.renderQuotePoints)}
 
         {/* add on benefits */}
         <div className="quote-addon-tiles11">
-          <div className="quote-addon-tiles1" onClick={() => this.expendAddOn()}>
+          <div className="quote-addon-tiles1" onClick={() => this.expendAddOn(index)}>
             <div className="quote-addon-tiles1a">
               Add on Benifits
           </div>
@@ -447,9 +489,9 @@ class QuoteGeneration extends Component {
               <img className="quote-addon-tiles1c" src={this.state.dropdown_arrow} alt="Insurance" />
             </div>
           </div>
-          {this.state.expendAddOnOpen &&
+          {props.expendAddOnOpen &&
             <div style={{ marginTop: 10 }}>
-              {props.quote_describer.description && props.quote_describer.description.add_on_benefits.map(this.renderQuotePoints)
+              {props.quote_provider && quotePoints[props.quote_provider].add_on_benefits.map(this.renderQuotePoints)
               }
             </div>
           }
@@ -658,6 +700,7 @@ class QuoteGeneration extends Component {
       >
 
         <div className="quote-top-tiles">
+        <div className="quote-top-tiles-container">
           <div className="quote-top-tiles1" onClick={() => this.filterHandler('cover-amount')}>
             <div className="quote-top-tiles1a" >
               <div className="quote-top-tiles1b">Cover</div>
@@ -668,7 +711,7 @@ class QuoteGeneration extends Component {
             </div>
           </div>
 
-          <div className="quote-top-tiles1" onClick={() => this.filterHandler('cover-period')}>
+          <div style={{borderLeft: ' 1px solid #f2eded', borderRight: ' 1px solid #f2eded'}} className="quote-top-tiles1" onClick={() => this.filterHandler('cover-period')}>
             <div className="quote-top-tiles1a">
               <div className="quote-top-tiles1b">Cover upto</div>
               <div className="quote-top-tiles1c">{this.state.quoteData.cover_period} years</div>
@@ -688,6 +731,7 @@ class QuoteGeneration extends Component {
             <div className="quote-top-tiles1d">
               <img className="quote-top-tiles1e" src={this.state.dropdown_arrow} alt="Insurance" />
             </div>
+          </div>
           </div>
         </div>
         {this.state.quotes && this.state.quotes.map(this.renderQuotes)}

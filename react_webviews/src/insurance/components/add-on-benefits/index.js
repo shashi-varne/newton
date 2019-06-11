@@ -15,6 +15,7 @@ import Dialog, {
   DialogContent
 } from 'material-ui/Dialog';
 import { validateNumber, inrFormatDecimal } from 'utils/validators';
+import { add_on_benefits_points } from '../../constants';
 
 class AddOnBenefits extends Component {
 
@@ -135,13 +136,10 @@ class AddOnBenefits extends Component {
   }
 
 
-  navigate = (pathname, annual_income) => {
+  navigate = (pathname, search) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams,
-      params: {
-        annual_income: annual_income
-      }
+      search: search ? search : getConfig().searchParams
     });
   }
 
@@ -150,17 +148,16 @@ class AddOnBenefits extends Component {
       show_loader: true
     })
 
-    let accident_benefit, ci_benefit = 'N', ci_amount, wop = 'N';
+    let accident_benefit, ci_benefit = 'N', ci_amount;
     let riders_info = this.state.riders_info;
     for (var i in this.state.riders_info) {
       if (riders_info[i].isAdded) {
-        if (riders_info[i].rider_type === 'adb') {
+        if (riders_info[i].rider_type === 'accident_benefit') {
           accident_benefit = riders_info[i].value || riders_info[i].recommended;
         } else if (riders_info[i].rider_type === 'ci_amount') {
           ci_amount = riders_info[i].value || riders_info[i].recommended;
+        } else if (riders_info[i].rider_type === 'ci_benefit') {
           ci_benefit = 'Y';
-        } else if (riders_info[i].rider_type === 'wop') {
-          wop = 'Y';
         }
       }
     }
@@ -177,7 +174,6 @@ class AddOnBenefits extends Component {
       ci_benefit: ci_benefit || '',
       ci_amount: ci_amount,
       annual_quote_required: true,
-      wop: wop
     };
     try {
       const res = await Api.post('/api/insurance/quote', insuranceData)
@@ -209,18 +205,30 @@ class AddOnBenefits extends Component {
       openPopUpQuote: false,
       show_loader: true
     })
+
     let insuranceData = {
       quote_id: id
     };
+
+    let show_quotes = window.localStorage.getItem('show_quotes');
+    if (show_quotes) {
+      insuranceData.create = 'Y';
+    }
     try {
       const res = await Api.post('/api/insurance/quote/select', insuranceData)
       this.setState({
         show_loader: false
       });
-      if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.quotes) {
+      if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.application) {
+        let url = res.pfwresponse.result.profile_start;
+        let search = url.split('?')[1];
+        search += '&insurance_v2=true&generic_callback=true';
+        // remove this
+        search += '&insurance_allweb=true';
+        this.navigate("journey", search);
         // let result = res.pfwresponse.result.quotes;
       } else {
-        toast(res.pfwresponse.result.error);
+        toast(res.pfwresponse.result.error || 'Something went wrong');
       }
 
     } catch (err) {
@@ -313,7 +321,6 @@ class AddOnBenefits extends Component {
 
   async handleCloseAction() {
 
-    console.log(this.state);
     var riders_info_current = this.state.riders_info;
     riders_info_current[this.state.selectedIndex].showDotDot = true;
     this.setState({
@@ -322,9 +329,13 @@ class AddOnBenefits extends Component {
     })
     try {
       let selectedRiderList = this.state.selectedRiderList;
+      let value = selectedRiderList.value;
+      if (selectedRiderList.cover_amount[selectedRiderList.selectedIndex] === 'Other') {
+        value = selectedRiderList.inputToRender.value;
+      }
+
       let url = '/api/insurance/fetch/riders/' + this.state.insurance_app_id + '?'
-        + selectedRiderList['rider_type'] + '=' + selectedRiderList.value;
-      console.log("send url after filter ::" + url);
+        + selectedRiderList['rider_type'] + '=' + value;
       const res = await Api.get(url);
 
       riders_info_current[this.state.selectedIndex].showDotDot = false;
@@ -399,9 +410,10 @@ class AddOnBenefits extends Component {
     });
   }
 
-  openPopUpInfo() {
+  openPopUpInfo(rider_type) {
     this.setState({
-      openPopUpInfo: true
+      openPopUpInfo: true,
+      popupRider: rider_type
     })
   }
 
@@ -419,12 +431,16 @@ class AddOnBenefits extends Component {
           <DialogContent>
             <div className="annual-inc-dialog" id="alert-dialog-description">
               <div className="annual-inc-popup-title">
-                Why annual Income?
-             </div>
+                {add_on_benefits_points[this.state.popupRider].title}
+              </div>
               <div className="annual-inc-popup-content">
-                Our goal is to recommend the best policy for your famliy. We need your total
-                annual income to determine the adequate cover amount for your family.
-             </div>
+                <div style={{ marginBottom: 20 }}>
+                  <span style={{ fontWeight: 500 }}>Benefit: </span> {add_on_benefits_points[this.state.popupRider].benefit}
+                </div>
+                <div>
+                  {add_on_benefits_points[this.state.popupRider].content}
+                </div>
+              </div>
             </div>
           </DialogContent>
           <DialogActions className="annual-inc-dialog-button">
@@ -510,6 +526,14 @@ class AddOnBenefits extends Component {
 
   }
 
+  getCoverAmount(props) {
+    if (props.inputToRender && props.cover_amount[props.selectedIndex] === 'Other') {
+      return props.inputToRender.value;
+    } else {
+      return props.value || props.recommended;
+    }
+  }
+
   renderList(props, index) {
     return (
       <div style={{ marginTop: index === 0 ? 0 : 20 }} key={index} className="ins-riders-tiles">
@@ -520,13 +544,13 @@ class AddOnBenefits extends Component {
           </div>
           <div className="ins-riders-tiles1b"
             style={{ color: getConfig().primary }}
-            onClick={() => this.openPopUpInfo()}>INFO</div>
+            onClick={() => this.openPopUpInfo(props.rider_type)}>INFO</div>
         </div>
 
-        {props.cover_amount && <div className="ins-riders-tiles2" onClick={() => this.changeAmount(index)}>
+        {props.cover_amount && props.cover_amount.length > 1 && <div className="ins-riders-tiles2" onClick={() => this.changeAmount(index)}>
           <div className="ins-riders-tiles2a">Cover Amount</div>
           <div className="ins-riders-tiles2b">
-            <div className="ins-riders-tiles2c">{props.value || props.recommended}</div>
+            <div className="ins-riders-tiles2c">{this.getCoverAmount(props)}</div>
             <div className="ins-riders-tiles2d">
               <img className="ins-riders-tiles2e" src={this.state.dropdown_arrow} alt="Insurance" />
             </div>
@@ -536,7 +560,10 @@ class AddOnBenefits extends Component {
         <div className="ins-riders-tiles3">
           <div className="ins-riders-tiles3a">
             <span className="ins-riders-tiles3b">Pay + </span>
-            {props.showDotDot && <DotDotLoader></DotDotLoader>}
+            {props.showDotDot &&
+              <div style={{ marginTop: 2 }}>
+                <DotDotLoader></DotDotLoader>
+              </div>}
             {!props.showDotDot && <span className="ins-riders-tiles3c">{inrFormatDecimal(props.pay_amount)} Monthly</span>}
           </div>
           {!props.isAdded && <div className="ins-riders-tiles3d" onClick={() => this.addExtraPremium(index, props, 'add')}>
@@ -564,7 +591,7 @@ class AddOnBenefits extends Component {
         classOverRide="insurance-container-grey"
         classOverRideContainer="insurance-container-grey"
         showLoader={this.state.show_loader}
-        title="Add on Benifits"
+        title="Add additional benefit"
         smallTitle={this.state.quoteSelected.insurance_title}
         handleClick={this.handleClick}
         buttonTitle={this.state.buttonTitle}

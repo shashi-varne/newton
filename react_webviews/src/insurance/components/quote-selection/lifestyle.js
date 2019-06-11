@@ -4,6 +4,7 @@ import qs from 'qs';
 import Container from '../../common/Container';
 import { getConfig } from 'utils/functions';
 
+import smoking_icon from 'assets/smoking_icon.png';
 import no_smoke_icon from 'assets/no_smoke_icon.png';
 import DropdownInPage from '../../../common/ui/DropdownInPage';
 
@@ -87,7 +88,8 @@ class LifeStyle extends Component {
         onlyButton={true}
       >
         <div style={{ display: '-webkit-box', margin: '0 0 20px 0' }}>
-          <img style={{ width: 40 }} src={no_smoke_icon} alt="Insurance" />
+          <img style={{ width: 40 }} src={this.state.smokeList[this.state.selectedIndex] === 'No' ?
+            no_smoke_icon : smoking_icon} alt="Insurance" />
           <div style={{ color: '#4a4a4a', fontSize: 16, margin: '10px 0 0 7px' }}>Do you smoke or chew tobacco?</div>
         </div>
 
