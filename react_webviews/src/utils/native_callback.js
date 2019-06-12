@@ -38,6 +38,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
 
   let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
   if (generic_callback === "true") {
+    console.log('GENERIC')
     if (action === 'take_control_reset_hard' || action === 'take_control_reset') {
       callbackData.action = 'reset_back_button_control';
     }
@@ -57,6 +58,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     }
 
     if (action === 'exit' || action === 'native_back') {
+      console.log('EXIT')
       callbackData.action = project === 'insurance' ? 'exit_module' : 'exit_web';
     }
 
@@ -78,6 +80,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     if (message) {
       callbackData.action_data = message;
     }
+
   } else {
     if (message) {
       callbackData.data = message;

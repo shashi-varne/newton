@@ -7,6 +7,9 @@ import { getConfig } from './functions';
 
 
 let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
+
+generic_callback = "true";
+
 if (generic_callback === "true") {
   (function (exports) {
 

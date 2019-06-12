@@ -4,7 +4,6 @@ import createBrowserHistory from 'history/createBrowserHistory';
 
 const myHistory = createBrowserHistory();
 
-
 export const getHost = (pathname) => {
   return window.location.protocol + '//' + window.location.host + pathname;
 };
@@ -36,7 +35,6 @@ export const isMobile = {
   Windows: () => navigator.userAgent.match(/IEMobile/i),
   any: () => (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows()),
 };
-
 
 export const getConfig = () => {
 
