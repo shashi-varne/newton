@@ -48,7 +48,8 @@ export const getConfig = () => {
   let searchParams = `?base_url=${base_url}&generic_callback=${generic_callback}&redirect_url=${redirect_url}`;
   let isInsurance = myHistory.location.pathname.indexOf('insurance') >= 0 ? true : false;
   if (isInsurance) {
-    let { insurance_v2 } = main_query_params;
+
+    let insurance_v2 = generic_callback === "true" ? true : main_query_params.insurance_v2;;
     let { insurance_id } = main_query_params;
     searchParams += '&insurance_id=' + insurance_id +
       '&insurance_v2=' + insurance_v2;
@@ -89,10 +90,9 @@ export const getConfig = () => {
   // console.log(search);
 
   const isPrime = search.indexOf("mypro.fisdom.com") >= 0;
-  // const ismyway = search.indexOf("api.mywaywealth.com") >= 0;
-  const insurance_v2 = search.indexOf("insurance_v2") >= 0;
+  const ismyway = search.indexOf("api.mywaywealth.com") >= 0;
+  const insurance_v2 = generic_callback === "true" ? true : search.indexOf("insurance_v2") >= 0;
   let productType = 'fisdom';
-  const ismyway = false;
   if (ismyway) {
     productType = 'myway';
   } else if (isPrime) {
@@ -101,7 +101,9 @@ export const getConfig = () => {
   let returnConfig = config[productType];
 
   let project = 'insurance';
-  if (myHistory.location.pathname.indexOf('risk') >= 0) {
+  if (myHistory.location.pathname.indexOf('insurance') >= 0) {
+    project = 'insurance';
+  } else if (myHistory.location.pathname.indexOf('risk') >= 0) {
     project = 'risk';
   } else if (myHistory.location.pathname.indexOf('mandate-otm') >= 0) {
     project = 'mandate-otm';
@@ -111,6 +113,8 @@ export const getConfig = () => {
     project = 'gold';
   } else if (myHistory.location.pathname.indexOf('isip') >= 0) {
     project = 'isip';
+  } else if (myHistory.location.pathname.indexOf('referral') >= 0) {
+    project = 'referral';
   }
   returnConfig.project = project;
   returnConfig.generic_callback = generic_callback;
@@ -139,12 +143,13 @@ export const getConfig = () => {
     let { key } = main_query_params;
     let { name } = main_query_params;
     let { email } = main_query_params;
-    let { campaign_version } = main_query_params;
+    let campaign_version = generic_callback === "true" ? 1 : main_query_params.campaign_version;
     let { html_camera } = main_query_params;
     searchParams += '&key=' + key + '&name=' + name
       + '&email=' + email + '&campaign_version=' + campaign_version;
 
-    returnConfig.campaign_version = campaign_version;
+    // eslint-disable-next-line
+    returnConfig.campaign_version = parseInt(campaign_version);
     returnConfig.html_camera = (returnConfig.iOS && returnConfig.campaign_version) ? true : html_camera;
     if (returnConfig.iOS && !returnConfig.campaign_version) {
       returnConfig.hide_header = true;
@@ -153,8 +158,8 @@ export const getConfig = () => {
 
   if (project === 'isip') {
     let { pc_urlsafe } = qs.parse(myHistory.location.search.slice(1));
-    let { campaign_version } = qs.parse(myHistory.location.search.slice(1));
-    searchParams = '?base_url=' + encodeURIComponent(base_url) + '&pc_urlsafe=' + pc_urlsafe +
+    let campaign_version = generic_callback === "true" ? 1 : main_query_params.campaign_version;
+    searchParams += '&pc_urlsafe=' + pc_urlsafe +
       '&campaign_version=' + campaign_version;
 
     // eslint-disable-next-line

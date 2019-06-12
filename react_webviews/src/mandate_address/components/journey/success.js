@@ -126,13 +126,13 @@ class MandateSuccess extends Component {
             </div>
             <div className="success-bottom2">
               <div className="success-bottom2a">
-                +080-48-039999
+                { this.state.type === "myway" ? "+91-8048039999" : "+91-8048093070" }
               </div>
               <div className="success-bottom2b">
                 |
               </div>
               <div className="success-bottom2a">
-                ask@fisdom.com
+                { this.state.type === "myway" ? "ask@mywaywealth.com" : "ask@fisdom.com" }
               </div>
             </div>
           </div>

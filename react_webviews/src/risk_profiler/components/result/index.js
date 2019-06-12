@@ -235,8 +235,8 @@ class Result extends Component {
         <Container
           showLoader={this.state.show_loader}
           title="Risk Tolerance"
-          classOverRide="result-container"
-          classOverRideContainer="result-container"
+          classOverRide="result-container-risk"
+          classOverRideContainer="result-container-risk"
           handleClick={this.handleClick}
           edit={this.props.edit}
           buttonTitle="Fund Recommendation"

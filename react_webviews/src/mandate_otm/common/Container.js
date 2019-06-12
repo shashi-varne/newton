@@ -34,6 +34,9 @@ class Container extends Component {
     let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
     let that = this;
     if (generic_callback === "true") {
+      if(getConfig().iOS) {
+        nativeCallback({ action: 'hide_top_bar' });
+      }
       window.callbackWeb.add_listener({
         type: 'back_pressed',
         go_back: function () {

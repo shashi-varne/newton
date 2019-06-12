@@ -40,14 +40,14 @@ class Payment extends Component {
       productDisc, paymentError, paymentMessage, paymentPending, invoiceLink;
     if (orderType === 'sell') {
       let sellDetails = JSON.parse(window.localStorage.getItem('sellDetails'));
-      weight = sellDetails.gold_weight;
-      invoiceLink = sellDetails.invoice_link;
+      weight = sellDetails ? sellDetails.gold_weight : '';
+      invoiceLink = sellDetails ? sellDetails.invoice_link : '';
     } else if (orderType === 'buy') {
-      buyDetails = JSON.parse(window.localStorage.getItem('buyData'));
-      weight = buyDetails.gold_weight;
+      buyDetails = JSON.parse(window.localStorage.getItem('buyData')) || {};
+      weight = buyDetails ? buyDetails.gold_weight : '';
     } else if (orderType === 'delivery') {
       redeemProduct = JSON.parse(window.localStorage.getItem('redeemProduct'));
-      productDisc = redeemProduct.product_details.description;
+      productDisc = redeemProduct ? redeemProduct.product_details.description : '';
     }
 
     if (status === 'failed' || status === 'error') {

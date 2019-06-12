@@ -436,7 +436,7 @@ class Journey extends Component {
           payment_link: application.payment_link,
           resume_link: application.resume_link,
           tobacco_choice: application.quote.tobacco_choice,
-          annual_income: income_value[0].value,
+          annual_income: income_value.length !== 0 ? income_value[0].value : '',
           term: application.quote.term,
           cover_amount: numDifferentiation(application.quote.cover_amount),
           payment_frequency: application.quote.payment_frequency,

@@ -223,6 +223,10 @@ class Upload extends Component {
                 break;
               default:
                 alert('Please select image file');
+                that.setState({
+                  docType: this.doc_type,
+                  show_loader: false
+                })
             }
           } catch (e) {
             // 

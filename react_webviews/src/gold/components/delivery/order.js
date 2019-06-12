@@ -153,10 +153,8 @@ class DeliveryOrder extends Component {
       show_loader: true
     })
 
-    let nativeRedirectUrl = encodeURIComponent(
-      window.location.protocol + '//' + window.location.host +
-      '/gold/gold-delivery-order' + getConfig().searchParams
-    );
+    let nativeRedirectUrl = window.location.protocol + '//' + window.location.host +
+      '/gold/gold-delivery-order' + getConfig().searchParams;
 
     // nativeCallback({
     //   action: 'take_control', message: {
