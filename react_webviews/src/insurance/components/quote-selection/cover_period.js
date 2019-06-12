@@ -4,7 +4,7 @@ import qs from 'qs';
 import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import { getConfig } from 'utils/functions';
+import { getConfig, manageDialog } from 'utils/functions';
 
 import cover_age_icn from 'assets/cover_age_icn.png';
 import DropdownInPage from '../../../common/ui/DropdownInPage';
@@ -123,6 +123,7 @@ class CoverPeriod extends Component {
     this.setState({
       openPopUp: true
     })
+    manageDialog('general-dialog', 'flex');
   }
 
   renderPopUp() {
@@ -130,7 +131,7 @@ class CoverPeriod extends Component {
       return (
         <Dialog
           style={{ borderRadius: 6 }}
-          id="payment"
+          id="general-dialog"
           open={this.state.openPopUp}
           onClose={this.handleClose}
           aria-labelledby="alert-dialog-title"

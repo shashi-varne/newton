@@ -65,7 +65,7 @@ class Summary extends Component {
   }
 
   componentWillMount() {
-    let current_url = window.location.protocol + '//' + window.location.host + '/insurance/journey/' + getConfig().searchParams;
+    let current_url = window.location.protocol + '//' + window.location.host + '/insurance/journey' + getConfig().searchParams;
     this.setState({
       current_url: current_url
     });
@@ -108,7 +108,7 @@ class Summary extends Component {
 
   redirect(payment_link, redirect) {
 
-    if (!redirect) {
+    if (!redirect && this.state.provider !== 'Maxlife') {
       this.setState({
         paymentModal: true
       });
@@ -241,7 +241,7 @@ class Summary extends Component {
           profile_link: application.profile_link,
           resume_link: application.resume_link,
           edit_allowed: (res.pfwresponse.result.insurance_apps.init.length > 0) ? true : false,
-          show_appointee: (age < 18) ? true : false,
+          show_appointee: (age < 18) && application.provider !== 'Maxlife' ? true : false,
           tobacco_choice: application.quote.tobacco_choice,
           annual_income: income_value[0].value,
           term: application.quote.term,
@@ -260,6 +260,8 @@ class Summary extends Component {
           personal: {
             is_open: false,
             name: application.profile.name || '',
+            first_name: application.profile.first_name || '',
+            last_name: application.profile.last_name || '',
             dob: (application.profile.dob) ? application.profile.dob.replace(/\\-/g, '/').split('/').join('/') : '',
             marital_status: application.profile.marital_status || '',
             birth_place: application.profile.birth_place || '',
@@ -819,11 +821,13 @@ class Summary extends Component {
             </ul>
           </div>
         );
-      } else if (this.state.accordianTab === 'personal' && name === 'personal' && this.renderPersonalPercentage() !== 0) {
+      } else if (this.state.accordianTab === 'personal' && name === 'personal') {
         return (
           <div className="AccordionBody">
             <ul>
-              <li>Name: <span>{this.state.personal.name}</span></li>
+              {this.state.provider === 'IPRU' && <li>Name: <span>{this.state.personal.name}</span></li>}
+              {this.state.provider === 'Maxlife' && <li>First name: <span>{this.state.personal.first_name}</span></li>}
+              {this.state.provider === 'Maxlife' && <li>Last name: <span>{this.state.personal.last_name}</span></li>}
               <li>Gender: <span>{this.capitalize(this.state.personal.gender)}</span></li>
               <li>DOB: <span>{this.state.personal.dob}</span></li>
               <li>Pincode: <span>{this.state.contact.permanent_addr.pincode}</span></li>

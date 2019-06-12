@@ -453,6 +453,10 @@ class Pincode extends Component {
     });
     if (res.pfwresponse.status_code === 200) {
       clearInsuranceQuoteData();
+      let excludedd_providers = window.localStorage.getItem('excludedd_providers') ?
+        JSON.parse(window.localStorage.getItem('excludedd_providers')) : [];
+      excludedd_providers.push(this.state.provider);
+      window.localStorage.setItem('excludedd_providers', JSON.stringify(excludedd_providers));
       this.navigate('quote');
     } else {
       this.setState({

@@ -172,3 +172,18 @@ export const getConfig = () => {
   returnConfig.searchParams = searchParams;
   return returnConfig;
 }
+
+
+export function manageDialog(id, display) {
+  let element = document.getElementById(id);
+  if (element !== null && element.style.display !== 'none') {
+    element.style.display = display;
+    return true;
+  } else if (element) {
+    element.style.display = display;
+    return false;
+  } else {
+    return false;
+  }
+
+}

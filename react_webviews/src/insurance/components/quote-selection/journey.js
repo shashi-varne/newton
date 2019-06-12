@@ -8,6 +8,9 @@ import process_success from 'assets/completed_step.svg';
 import wait_icn from 'assets/not_done_yet_step.svg';
 import in_process_icn from 'assets/current_step.svg';
 
+import easy_secure_icon from 'assets/easy_secure_icon.svg';
+import eta_icon from 'assets/eta_icon.png';
+
 class JourneyIntro extends Component {
   constructor(props) {
     super(props);
@@ -84,7 +87,8 @@ class JourneyIntro extends Component {
     return (
       <div key={index} className={'journey-process2 ' + (props.status === 'complete' ? 'journey-process2-green' :
         ((props.title === 'Step-4' && props.status !== 'complete') ||
-          (props.title === 'Step-5' && props.status === 'init')) ? 'journey-process2-unset' : '')}>
+          (props.title === 'Step-5' && props.status === 'init')) ? 'journey-process2-unset' : '')}
+        style={{ minHeight: 80 }}>
         <div className="journey-process3">
           <img className="journey-process4" src={props.status === 'complete' ? process_success :
             props.status === 'init' ? in_process_icn : wait_icn} alt="" />
@@ -112,6 +116,16 @@ class JourneyIntro extends Component {
       >
         <div className="journey-process1">
           {this.state.journeyData && this.state.journeyData.map(this.renderJourney)}
+        </div>
+        <div className="ins-journey-intro-bottom">
+          <div className="ins-journey-intro-bottom1">
+            <img className="ins-journey-intro-bottom1a" width="11" src={easy_secure_icon} alt="Insurance" />
+            <span className="ins-journey-intro-bottom1b">Easy & secure</span>
+          </div>
+          <div className="ins-journey-intro-bottom1">
+            <img className="ins-journey-intro-bottom1a" width="16" src={eta_icon} alt="Insurance" />
+            <span className="ins-journey-intro-bottom1b">5 mins </span>
+          </div>
         </div>
       </Container>
     );

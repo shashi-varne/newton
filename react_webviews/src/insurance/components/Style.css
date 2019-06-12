@@ -66,7 +66,7 @@
 .journey-process2 {
   display: -webkit-box;
   border-left: 1px solid #e3e3e3;
-  min-height: 100px;
+  min-height: 95px;
   padding-bottom: 14px;
 }
 .journey-process2-unset {
@@ -631,7 +631,7 @@ img.ins-riders-tiles2e {
 .insurance-container-grey {
   background: #f8f8f8;
   /* autoprefixer: off */
-  height: -webkit-fill-available; 
+  /* height: -webkit-fill-available;  */
   /* margin-bottom: 0px; */
   /* padding-bottom: 0; */
   /* overflow-y: hidden; */
@@ -717,5 +717,20 @@ img.ins-report-tiles2b {
   margin: 4px 0 4px 0;
 }
 .ins-report-tiles2f {
+  font-weight: 500;
+}
+.ins-journey-intro-bottom {
+  display: flex;
+  justify-content: center;
+  bottom: -20px;
+    position: relative;
+}
+.ins-journey-intro-bottom1 {
+  margin: 0 0 0 30px;
+}
+span.ins-journey-intro-bottom1b {
+  color: #bdbdbd;
+  font-size: 14px;
+  margin: 0px 10px 0 10px;
   font-weight: 500;
 }

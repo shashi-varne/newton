@@ -4,7 +4,7 @@ import qs from 'qs';
 import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import { getConfig } from 'utils/functions';
+import { getConfig, manageDialog } from 'utils/functions';
 import dropdown_arrow_fisdom from 'assets/down_arrow_fisdom.svg';
 import dropdown_arrow_myway from 'assets/down_arrow_myway.svg';
 import DropdownInPage from '../../../common/ui/DropdownInPage';
@@ -21,7 +21,7 @@ import RadioOptions from '../../../common/ui/RadioOptions';
 import { FormControl } from 'material-ui/Form';
 import '../../../utils/native_listner_otm';
 
-import { payFreqOptionInsurance, quotePoints } from '../../constants';
+import { payFreqOptionInsurance, quotePoints, all_providers } from '../../constants';
 
 class QuoteGeneration extends Component {
   constructor(props) {
@@ -52,6 +52,23 @@ class QuoteGeneration extends Component {
   }
 
   componentWillMount() {
+
+    let excluded_providers = window.localStorage.getItem('excluded_providers') ?
+        JSON.parse(window.localStorage.getItem('excluded_providers')) : [];
+      let required_providers = [];
+      if (excluded_providers.length > 0) {
+        for (var j in excluded_providers) {
+          delete all_providers[excluded_providers[j]];
+        }
+      }
+      for (var key in all_providers) {
+        (required_providers).push(key);
+      }
+
+      window.localStorage.setItem('required_providers', JSON.stringify(required_providers));
+      this.setState({
+        required_providers: required_providers
+      })
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -82,7 +99,8 @@ class QuoteGeneration extends Component {
       annual_income: this.state.quoteData.annual_income,
       accident_benefit: '',
       ci_benefit: '',
-      annual_quote_required: true//v2 only, always true
+      annual_quote_required: true,
+      required_providers: this.state.required_providers
     };
     try {
       const res = await Api.post('/api/insurance/quote', insuranceData)
@@ -114,21 +132,6 @@ class QuoteGeneration extends Component {
       dropdown_arrow: this.state.type !== 'fisdom' ? dropdown_arrow_myway : dropdown_arrow_fisdom
     })
     this.getQuotes();
-
-    let that = this;
-    window.callbackWeb.add_listener({
-      type: 'back_pressed',
-      go_back: function () {
-        console.log("goback from callbackWeb");
-        that.setState({
-          openDialog: false,
-          openPopUp: false,
-          openDialogFilter: false,
-          openPopUpQuote: false,
-          openPopUpInfo: false
-        });
-      }
-    });
   }
 
 
@@ -195,7 +198,7 @@ class QuoteGeneration extends Component {
           fullWidth={true}
           maxWidth={'md'}
           style={{ borderRadius: 6, width: '-webkit-fill-available' }}
-          id="payment"
+          id="general-dialog"
           open={this.state.openPopUpQuote}
           onClose={this.handleClose}
           aria-labelledby="alert-dialog-title"
@@ -272,6 +275,7 @@ class QuoteGeneration extends Component {
       selectedIndexInfo: index,
       selectedQuoteInfo: this.state.quotes[index]
     })
+    manageDialog('general-dialog', 'flex');
   }
 
   renderPopUpInfo() {
@@ -281,7 +285,7 @@ class QuoteGeneration extends Component {
         fullWidth={true}
           maxWidth={'md'}
           style={{ borderRadius: 6 }}
-          id="payment"
+          id="general-dialog"
           open={this.state.openPopUpInfo}
           onClose={this.handleClose}
           aria-labelledby="alert-dialog-title"
@@ -337,7 +341,7 @@ class QuoteGeneration extends Component {
           fullWidth={true}
           maxWidth={'md'}
           style={{ borderRadius: 6, width: '-webkit-fill-available' }}
-          id="payment"
+          id="general-dialog"
           open={this.state.openPopUp}
           onClose={this.handleClose}
           aria-labelledby="alert-dialog-title"
@@ -421,6 +425,7 @@ class QuoteGeneration extends Component {
       selectedIndexQuote: index,
       openPopUpQuote: true
     })
+    manageDialog('general-dialog', 'flex');
   }
 
   renderQuotePoints(props, index) {
@@ -616,12 +621,14 @@ class QuoteGeneration extends Component {
       selectedIndex: 0,
       filterType: type
     });
+    manageDialog('general-dialog', 'flex');
   }
 
   openFilter() {
     this.setState({
       openDialogFilter: true
     });
+    manageDialog('general-dialog', 'flex');
   }
 
   handleFilter = () => {
@@ -649,7 +656,7 @@ class QuoteGeneration extends Component {
           fullWidth={true}
           maxWidth={'md'}
           style={{ borderRadius: 6, width: '-webkit-fill-available' }}
-          id="payment"
+          id="general-dialog"
           open={this.state.openDialogFilter}
           onClose={this.handleClose}
           aria-labelledby="alert-dialog-title"

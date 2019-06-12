@@ -396,7 +396,7 @@ class NomineeDetails extends Component {
 
           this.setState({ show_loader: false });
           if (this.props.edit) {
-            if (this.state.age < 18) {
+            if (this.state.age < 18 && this.state.provider !== 'Maxlife') {
               this.navigate('/insurance/edit-appointee');
             } else {
               if (this.state.params.resume === "yes") {
@@ -406,7 +406,7 @@ class NomineeDetails extends Component {
               }
             }
           } else {
-            if (this.state.age < 18) {
+            if (this.state.age < 18 && this.state.provider !== 'Maxlife') {
               this.navigate('/insurance/appointee');
             } else {
               if (providerAsIpru(this.state.provider)) {

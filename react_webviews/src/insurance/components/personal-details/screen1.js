@@ -476,6 +476,8 @@ class PersonalDetails1 extends Component {
               name="first_name"
               value={this.state.first_name}
               onChange={this.handleChange()} />
+          </div>}
+          {this.state.provider === 'Maxlife' && <div className="InputField">
             <Input
               type="text"
               productType={this.state.type}

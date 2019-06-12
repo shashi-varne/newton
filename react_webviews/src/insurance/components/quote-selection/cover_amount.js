@@ -4,7 +4,7 @@ import qs from 'qs';
 import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import { getConfig } from 'utils/functions';
+import { getConfig, manageDialog } from 'utils/functions';
 
 // import selected_option from 'assets/selected_option.png';
 import comver_amount_icon from 'assets/life_cover_icon.png';
@@ -236,6 +236,7 @@ class CoverAmount extends Component {
     this.setState({
       openPopUp: true
     })
+    manageDialog('general-dialog', 'flex');
   }
 
   renderPopUp() {
@@ -243,7 +244,7 @@ class CoverAmount extends Component {
       return (
         <Dialog
           style={{ borderRadius: 6 }}
-          id="payment"
+          id="general-dialog"
           open={this.state.openPopUp}
           onClose={this.handleClose}
           aria-labelledby="alert-dialog-title"

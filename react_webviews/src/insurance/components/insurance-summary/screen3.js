@@ -108,7 +108,7 @@ class Journey extends Component {
 
   componentWillMount() {
 
-    let current_url = window.location.protocol + '//' + window.location.host + '/insurance/journey/' + getConfig().searchParams;
+    let current_url = window.location.protocol + '//' + window.location.host + '/insurance/journey' + getConfig().searchParams;
     this.setState({
       current_url: current_url
     });

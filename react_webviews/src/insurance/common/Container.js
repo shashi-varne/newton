@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
-import { getConfig } from 'utils/functions';
+import { getConfig, manageDialog } from 'utils/functions';
 
 import Header from './Header';
 import Footer from './footer';
@@ -16,6 +16,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import '../../utils/native_listner';
 
+import { back_button_mapper } from '../constants';
 
 class Container extends Component {
 
@@ -27,7 +28,7 @@ class Container extends Component {
       popupText: '',
       callbackType: ''
     }
-
+    this.historyGoBack = this.historyGoBack.bind(this);
   }
 
   componentDidMount() {
@@ -69,6 +70,10 @@ class Container extends Component {
   }
 
   historyGoBack = () => {
+
+    if (manageDialog('general-dialog', 'none')) {
+      return;
+    }
     let { params } = this.props.location;
     let insurance_v2 = getConfig().insurance_v2;
     let pathname = this.props.history.location.pathname;
@@ -110,9 +115,6 @@ class Container extends Component {
       }
     }
 
-
-
-    console.log(pathname)
     switch (pathname) {
       case "/insurance":
       case "/insurance/resume":
@@ -127,17 +129,13 @@ class Container extends Component {
           })
         }
         break;
-      case '/insurance/journey-intro':
-        this.navigate("/insurance/intro");
-        break;
-      case '/insurance/quote':
-        this.navigate("/insurance/lifestyle");
-        break;
       case '/insurance/intro':
         nativeCallback({ action: 'native_back' });
         break;
       default:
-        if (navigator.onLine) {
+        if (back_button_mapper[pathname] && back_button_mapper[pathname].length > 0) {
+          this.navigate(back_button_mapper[pathname]);
+        } else if (navigator.onLine) {
           this.props.history.goBack();
         } else {
           this.setState({
@@ -260,18 +258,20 @@ class Container extends Component {
 
   componentDidUpdate(prevProps) {
     let body = document.getElementsByTagName('body')[0].offsetHeight;
-    // let client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
+    let client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
     let head = document.getElementsByClassName('Header')[0].offsetHeight;
     let foot = document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight : 0;
     let banner = document.getElementsByClassName('Banner')[0];
     let bannerHeight = (banner) ? banner.offsetHeight : 0;
 
-    // if (client > body) {
-    //   document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 40 + 'px';
-    // } else {
-    //   document.getElementsByClassName('Container')[0].style.height = document.getElementsByClassName('Container')[0].offsetHeight ;
-    // }
-    document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 40 + 'px';
+    if (client > body) {
+      document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 40 + 'px';
+    } else {
+      document.getElementsByClassName('Container')[0].style.height = document.getElementsByClassName('Container')[0].offsetHeight;
+    }
+
+
+    // document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 40 + 'px';
   }
 
   render() {

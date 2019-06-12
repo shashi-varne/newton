@@ -369,3 +369,15 @@ export const add_on_benefits_points = {
     'content': 'Incase of death due to accident or disability due to accident, your family (nominee) gets an additional amount. For e.g  some one who has taken a life cover of Rs 1 Crore and added 10 Lakh of accidental benefit cover, will get Rs 10 Lakh cover immediately in case of disability due to accident and life cover of 1 crore remains intact. '
   }
 }
+
+export const all_providers = { 'HDFC': '', 'IPRU': '', 'Maxlife': '' };
+
+export const back_button_mapper = {
+  '/insurance/quote': '/insurance/lifestyle',
+  '/insurance/lifestyle': '/insurance/cover-period',
+  '/insurance/cover-period': '/insurance/cover-amount',
+  '/insurance/cover-amount': '/insurance/annual-income',
+  '/insurance/annual-income': '/insurance/personal-details-intro',
+  '/insurance/personal-details-intro': '/insurance/journey-intro',
+  '/insurance/journey-intro': '/insurance/intro'
+};

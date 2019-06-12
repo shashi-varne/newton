@@ -5,7 +5,7 @@ import toast from '../../../common/ui/Toast';
 import DotDotLoader from '../../../common/ui/DotDotLoader';
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import { getConfig } from 'utils/functions';
+import { getConfig, manageDialog } from 'utils/functions';
 import dropdown_arrow_fisdom from 'assets/down_arrow_fisdom.svg';
 import dropdown_arrow_myway from 'assets/down_arrow_myway.svg';
 import DropdownInPage from '../../../common/ui/DropdownInPage';
@@ -14,14 +14,18 @@ import Dialog, {
   DialogActions,
   DialogContent
 } from 'material-ui/Dialog';
-import { validateNumber, inrFormatDecimal } from 'utils/validators';
+import {
+  inrFormatDecimalWithoutIcon, numDifferentiation, formatAmount,
+  validateNumber, inrFormatDecimal
+} from '../../../utils/validators';
 import { add_on_benefits_points } from '../../constants';
 
 class AddOnBenefits extends Component {
 
   constructor(props) {
     var quoteSelected = JSON.parse(window.localStorage.getItem('quoteSelected')) || {};
-    console.log(quoteSelected);
+    let required_providers = window.localStorage.getItem('required_providers') ?
+      JSON.parse(window.localStorage.getItem('required_providers')) : [];
     super(props);
     this.state = {
       show_loader: true,
@@ -29,22 +33,26 @@ class AddOnBenefits extends Component {
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
-      openPopUp: false,
       insurance_app_id: (quoteSelected.payment_frequency_selected).toLowerCase() === 'annually' ? quoteSelected.annual_quote_id :
         quoteSelected.id,
       quoteSelected: quoteSelected,
       openPopUpCoverAmount: false,
+      required_providers: required_providers,
       buttonTitle: 'Skip & Continue',
       totalAddedAmount: 0,
       totalAddedBenefits: 0,
-      totalPremium: quoteSelected.quote_json.premium * 1,
-      basePremium: quoteSelected.quote_json.premium * 1,
-      openPopUpInfo: false
+      totalPremium: (quoteSelected.payment_frequency_selected).toLowerCase() === 'annually' ? quoteSelected.annual_quote_json.premium * 1 :
+        quoteSelected.quote_json.premium * 1,
+      basePremium: (quoteSelected.payment_frequency_selected).toLowerCase() === 'annually' ? quoteSelected.annual_quote_json.premium * 1 :
+        quoteSelected.quote_json.premium * 1,
+      openPopUpInfo: false,
+      openPopUpQuote: false
     }
     this.renderList = this.renderList.bind(this);
     this.setValue = this.setValue.bind(this);
     this.renderListCoverAmount = this.renderListCoverAmount.bind(this);
     this.handleCloseAction = this.handleCloseAction.bind(this);
+    this.handleCloseQuotes = this.handleCloseQuotes.bind(this);
   }
 
   componentWillMount() {
@@ -174,8 +182,10 @@ class AddOnBenefits extends Component {
       ci_benefit: ci_benefit || '',
       ci_amount: ci_amount,
       annual_quote_required: true,
+      required_providers: this.state.required_providers
     };
     try {
+
       const res = await Api.post('/api/insurance/quote', insuranceData)
       this.setState({
         show_loader: false
@@ -186,7 +196,12 @@ class AddOnBenefits extends Component {
           if (quotes[i].quote_provider === this.state.quoteSelected.quote_provider) {
             let final_id = (this.state.quoteSelected.payment_frequency_selected).toLowerCase() === 'annually' ? quotes[i].annual_quote_id :
               quotes[i].id;
-            this.submitQuote(final_id);
+            this.setState({
+              openPopUpQuote: true,
+              final_id: final_id
+            })
+            manageDialog('general-dialog', 'flex');
+            // this.submitQuote(final_id);
           }
       } else {
         toast(res.pfwresponse.result.error);
@@ -213,6 +228,7 @@ class AddOnBenefits extends Component {
     let show_quotes = window.localStorage.getItem('show_quotes');
     if (show_quotes) {
       insuranceData.create = 'Y';
+      window.localStorage.setItem('show_quotes', '');
     }
     try {
       const res = await Api.post('/api/insurance/quote/select', insuranceData)
@@ -259,6 +275,7 @@ class AddOnBenefits extends Component {
       selectedIndex: index,
       openPopUpCoverAmount: true
     })
+    manageDialog('general-dialog', 'flex');
   }
 
   renderListCoverAmount() {
@@ -404,9 +421,9 @@ class AddOnBenefits extends Component {
 
   handleClose = () => {
     this.setState({
-      openPopUp: false,
       openPopUpCoverAmount: false,
-      openPopUpInfo: false
+      openPopUpInfo: false,
+      openPopUpQuote: false
     });
   }
 
@@ -415,6 +432,7 @@ class AddOnBenefits extends Component {
       openPopUpInfo: true,
       popupRider: rider_type
     })
+    manageDialog('general-dialog', 'flex');
   }
 
   renderPopUpInfo() {
@@ -441,44 +459,6 @@ class AddOnBenefits extends Component {
                   {add_on_benefits_points[this.state.popupRider].content}
                 </div>
               </div>
-            </div>
-          </DialogContent>
-          <DialogActions className="annual-inc-dialog-button">
-            <Button
-              fullWidth={true}
-              variant="raised"
-              size="large"
-              color="secondary"
-              onClick={this.handleClose}
-              autoFocus>Got it!
-            </Button>
-          </DialogActions>
-        </Dialog >
-      );
-    }
-    return null;
-  }
-
-  renderPopUp() {
-    if (this.state.openPopUp) {
-      return (
-        <Dialog
-          style={{ borderRadius: 6 }}
-          id="payment"
-          open={this.state.openPopUp}
-          onClose={this.handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogContent>
-            <div className="annual-inc-dialog" id="alert-dialog-description">
-              <div className="annual-inc-popup-title">
-                Why annual Income?
-             </div>
-              <div className="annual-inc-popup-content">
-                Our goal is to recommend the best policy for your famliy. We need your total
-                annual income to determine the adequate cover amount for your family.
-             </div>
             </div>
           </DialogContent>
           <DialogActions className="annual-inc-dialog-button">
@@ -585,6 +565,81 @@ class AddOnBenefits extends Component {
     );
   }
 
+  handleCloseQuotes() {
+    this.submitQuote(this.state.final_id);
+  }
+
+  renderPopUpQuote = () => {
+    if (this.state.openPopUpQuote) {
+      return (
+        <Dialog
+          fullWidth={true}
+          maxWidth={'md'}
+          style={{ borderRadius: 6, width: '-webkit-fill-available' }}
+          id="general-dialog"
+          open={this.state.openPopUpQuote}
+          onClose={this.handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogContent>
+            <div className="quote-confirmation-dialog-head">
+              <img className="quote-confirmation-dialog-head1" src={this.state.quoteSelected.quote_provider_logo} alt="Insurance" />
+              <div className="quote-confirmation-dialog-head2">{this.state.quoteSelected.insurance_title}</div>
+            </div>
+            <div className="annual-inc-dialog" id="alert-dialog-description">
+              <div>
+                <div className="confirm-quote-popup-content1">
+                  <div className="confirm-quote-popup-content1a">Cover amount:</div>
+                  <div className="confirm-quote-popup-content1b">{numDifferentiation(this.state.quoteSelected.cover_amount)}</div>
+                </div>
+                <div className="confirm-quote-popup-content1">
+                  <div className="confirm-quote-popup-content1a">Cover period:</div>
+                  <div className="confirm-quote-popup-content1b">{this.state.quoteSelected.term}</div>
+                </div>
+                <div className="confirm-quote-popup-content1">
+                  <div className="confirm-quote-popup-content1a">Premium frequency:</div>
+                  <div className="confirm-quote-popup-content1b">{this.state.payment_frequency_selected}</div>
+                </div>
+                <div className="confirm-quote-popup-content1">
+                  <div className="confirm-quote-popup-content1a">Premium details:</div>
+                </div>
+                <div className="confirm-quote-popup-content1">
+                  <div className="confirm-quote-popup-content1c">Base premium</div>
+                  <div className="confirm-quote-popup-content1c">{formatAmount(this.state.quoteSelected.quote_json.base_premium)}</div>
+                </div>
+                <div className="confirm-quote-popup-content1">
+                  <div className="confirm-quote-popup-content1c">Add on benefits</div>
+                  <div className="confirm-quote-popup-content1c">{formatAmount(this.state.totalAddedAmount)}</div>
+                </div>
+                <div className="confirm-quote-popup-content1">
+                  <div className="confirm-quote-popup-content1c">GST & taxes</div>
+                  <div className="confirm-quote-popup-content1c">{formatAmount(this.state.quoteSelected.quote_json.total_tax)}</div>
+                </div>
+                <div className="confirm-quote-popup-content1 confirm-quote-popup-content1d">
+                  <div className="confirm-quote-popup-content1e">Total payable</div>
+                  <div className="confirm-quote-popup-content1b">{inrFormatDecimalWithoutIcon(this.state.totalPremium)}</div>
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+          <DialogActions className="annual-inc-dialog-button">
+            <Button
+              fullWidth={true}
+              variant="raised"
+              size="large"
+              color="secondary"
+              onClick={this.handleCloseQuotes}
+              autoFocus>OK
+            </Button>
+          </DialogActions>
+        </Dialog >
+      );
+    }
+    return null;
+  }
+
+
   render() {
     return (
       <Container
@@ -606,10 +661,9 @@ class AddOnBenefits extends Component {
       >
 
         {this.state.riders_info && this.state.riders_info.map(this.renderList)}
-        {this.renderPopUp()}
-
         {this.renderPopUpCoverAmount()}
         {this.renderPopUpInfo()}
+        {this.renderPopUpQuote()}
       </Container>
     );
   }
