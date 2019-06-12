@@ -40,7 +40,8 @@ export const isMobile = {
 
 export const getConfig = () => {
 
-  let main_query_params = qs.parse(myHistory.location.search.slice(1));
+  // let main_query_params = qs.parse(myHistory.location.search.slice(1));
+  let main_query_params = qs.parse(window.location.search.slice(1));
   let { base_url } = main_query_params;
   let { generic_callback } = main_query_params;
   let { redirect_url } = main_query_params;

@@ -65,6 +65,11 @@ class Summary extends Component {
   }
 
   componentWillMount() {
+    let current_url = window.location.protocol + '//' + window.location.host + '/insurance/journey/' + getConfig().searchParams;
+    this.setState({
+      current_url: current_url
+    });
+
     let { params } = this.props.location;
     this.setState({
       disableBack: params ? params.disableBack : false
@@ -114,21 +119,13 @@ class Summary extends Component {
       show_loader: true
     });
 
-    // nativeCallback({
-    //   action: 'take_control', message: {
-    //     back_url: this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2,
-    //     back_text: 'Are you sure you want to exit the payment process?'
-    //   }
-    // });
-
     let insurance_v2 = this.state.params.insurance_v2 ? true : null;
     let app = getConfig().app;
     let paymentRedirectUrl = encodeURIComponent(
       window.location.protocol + '//' + window.location.host + '/insurance/payment/' + this.state.params.insurance_id + '/' + insurance_v2
     );
     var pgLink = payment_link;
-    var back_url = encodeURIComponent(this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2 + '&generic_callback=' +
-      this.state.params.generic_callback);
+    var back_url = encodeURIComponent(this.state.current_url);
     // eslint-disable-next-line
     pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
       '&app=' + app + '&back_url=' + back_url;
@@ -452,8 +449,7 @@ class Summary extends Component {
 
       nativeCallback({
         action: 'take_control', message: {
-          back_url: this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2 + '&generic_callback=' +
-          this.state.params.generic_callback,
+          back_url: this.state.current_url,
           show_top_bar: false,
           top_bar_title: provider,
           back_text: "We suggest you to complete the application process for fast issuance of your insurance.Do you still want to exit the application process"

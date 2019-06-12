@@ -12,8 +12,6 @@ export const nativeCallbackOld = (status_code, message, action) => {
   }
   let url = 'http://app.fisdom.com/page/invest/campaign/callback?name=mandate-otm&message=' +
     message + '&code=' + status_code + '&destination=' + null;
-  console.log('status_code ' + status_code);
-  console.log(url);
   window.location.replace(url);
 };
 
@@ -22,10 +20,6 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   let callbackData = {};
   let project = getConfig().project;
 
-  console.log("Nativecallback..........(action, message, events)");
-  console.log(action);
-  console.log(JSON.stringify(message));
-  console.log(JSON.stringify(events))
   if (action) {
     callbackData.action = action;
   }
@@ -70,6 +64,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
         message = {
           url: message.resume_link
         }
+        callbackData.action = 'open_url';
       }
     }
 
@@ -183,6 +178,8 @@ export const nativeCallback = async ({ action = null, message = null, events = n
 
   if (getConfig().app === 'android') {
     console.log("Android Device")
+    console.log(generic_callback);
+    console.log(JSON.stringify(callbackData));
     window.Android.callbackNative(JSON.stringify(callbackData));
 
   } else if (getConfig().app === 'ios') {

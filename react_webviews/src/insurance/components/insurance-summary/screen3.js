@@ -107,6 +107,11 @@ class Journey extends Component {
   }
 
   componentWillMount() {
+
+    let current_url = window.location.protocol + '//' + window.location.host + '/insurance/journey/' + getConfig().searchParams;
+    this.setState({
+      current_url: current_url
+    });
     let { params } = this.props.location;
     nativeCallback({ action: 'take_control_reset' });
     this.setState({
@@ -188,8 +193,7 @@ class Journey extends Component {
     );
     var pgLink = payment_link;
     let app = getConfig().app;
-    var back_url = encodeURIComponent(this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2 + '&generic_callback=' +
-      this.state.params.generic_callback);
+    var back_url = encodeURIComponent(this.state.current_url);
     // eslint-disable-next-line
     pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
       '&app=' + app + '&back_url=' + back_url;
@@ -711,8 +715,7 @@ class Journey extends Component {
             nativeCallback({ events: eventObj });
             nativeCallback({
               action: 'take_control', message: {
-                back_url: this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2 + '&generic_callback=' +
-                  this.state.params.generic_callback,
+                back_url: this.state.current_url,
                 show_top_bar: false,
                 top_bar_title: provider,
                 back_text: "We suggest you to complete the application process for fast issuance of your insurance.Do you still want to exit the application process"
@@ -744,8 +747,7 @@ class Journey extends Component {
         nativeCallback({ events: eventObj });
         nativeCallback({
           action: 'take_control', message: {
-            back_url: this.state.profile_link + '&insurance_v2=' + this.state.params.insurance_v2 + '&generic_callback=' +
-              this.state.params.generic_callback,
+            back_url: this.state.current_url,
             show_top_bar: false,
             top_bar_title: provider,
             back_text: "We suggest you to complete the application process for fast issuance of your insurance.Do you still want to exit the application process"

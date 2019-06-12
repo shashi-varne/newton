@@ -19,10 +19,9 @@ import {
 } from '../../../utils/validators';
 import RadioOptions from '../../../common/ui/RadioOptions';
 import { FormControl } from 'material-ui/Form';
+import '../../../utils/native_listner_otm';
 
 import { payFreqOptionInsurance, quotePoints } from '../../constants';
-
-// import CoverAmount from './components/quote-selection/cover_amount';
 
 class QuoteGeneration extends Component {
   constructor(props) {
@@ -115,6 +114,21 @@ class QuoteGeneration extends Component {
       dropdown_arrow: this.state.type !== 'fisdom' ? dropdown_arrow_myway : dropdown_arrow_fisdom
     })
     this.getQuotes();
+
+    let that = this;
+    window.callbackWeb.add_listener({
+      type: 'back_pressed',
+      go_back: function () {
+        console.log("goback from callbackWeb");
+        that.setState({
+          openDialog: false,
+          openPopUp: false,
+          openDialogFilter: false,
+          openPopUpQuote: false,
+          openPopUpInfo: false
+        });
+      }
+    });
   }
 
 

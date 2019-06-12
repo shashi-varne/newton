@@ -71,43 +71,47 @@ class Container extends Component {
   historyGoBack = () => {
     let { params } = this.props.location;
     let insurance_v2 = getConfig().insurance_v2;
-
-    if (this.props.isJourney) {
-      if (!insurance_v2) {
-        nativeCallback({ action: 'native_back' });
-      } else {
-        let eventObj = {
-          "event_name": 'make_payment_clicked',
-          "properties": {
-            "user_action": 'close',
-            "source": 'summary'
-          }
-        };
-        nativeCallback({ events: eventObj });
-        this.setState({
-          callbackType: 'show_quotes',
-          openPopup: true,
-          popupText: 'Are you sure you want to explore more options? We will save your information securely.'
-        })
-      }
-
-      return;
-    }
-
-    if (params && params.disableBack) {
-      if (!insurance_v2) {
-        nativeCallback({ action: 'native_back' });
-      } else {
-        this.setState({
-          callbackType: 'exit',
-          openPopup: true,
-          popupText: 'Are you sure you want to exit the application process? You can resume it later.'
-        })
-      }
-      return;
-    }
-
     let pathname = this.props.history.location.pathname;
+
+    if (pathname === '/insurance/journey' || pathname === '/insurance/summary') {
+      if (this.props.isJourney) {
+        if (!insurance_v2) {
+          nativeCallback({ action: 'native_back' });
+        } else {
+          let eventObj = {
+            "event_name": 'make_payment_clicked',
+            "properties": {
+              "user_action": 'close',
+              "source": 'summary'
+            }
+          };
+          nativeCallback({ events: eventObj });
+          this.setState({
+            callbackType: 'show_quotes',
+            openPopup: true,
+            popupText: 'Are you sure you want to explore more options? We will save your information securely.'
+          })
+        }
+
+        return;
+      }
+
+      if (params && params.disableBack) {
+        if (!insurance_v2) {
+          nativeCallback({ action: 'native_back' });
+        } else {
+          this.setState({
+            callbackType: 'exit',
+            openPopup: true,
+            popupText: 'Are you sure you want to exit the application process? You can resume it later.'
+          })
+        }
+        return;
+      }
+    }
+
+
+
     console.log(pathname)
     switch (pathname) {
       case "/insurance":
@@ -125,6 +129,9 @@ class Container extends Component {
         break;
       case '/insurance/journey-intro':
         this.navigate("/insurance/intro");
+        break;
+      case '/insurance/quote':
+        this.navigate("/insurance/lifestyle");
         break;
       case '/insurance/intro':
         nativeCallback({ action: 'native_back' });
