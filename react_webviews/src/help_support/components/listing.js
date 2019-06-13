@@ -13,6 +13,7 @@ import Api from 'utils/api';
 import Container from '../common/Container';
 import Card from '../common/Card';
 import { nativeCallback } from 'utils/native_callback';
+import { getConfig } from 'utils/functions';
 
 let start_time = '';
 
@@ -146,7 +147,7 @@ class Listing extends Component {
     if (navigator.onLine) {
       this.props.history.push({
         pathname: pathname,
-				search: '?base_url=' + this.state.params.base_url,
+				search: getConfig().searchParams,
 				state: {
 					subcategories: data,
 					category: {

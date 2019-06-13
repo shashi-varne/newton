@@ -11,6 +11,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import { nativeCallback } from 'utils/native_callback';
+import { getConfig } from 'utils/functions';
 
 let start_time = '';
 
@@ -78,7 +79,7 @@ class Category extends Component {
     if (navigator.onLine) {
       this.props.history.push({
         pathname: pathname,
-				search: '?base_url=' + this.state.params.base_url,
+				search: getConfig().searchParams,
 				state: {
 					questions: data,
 					category: this.props.location.state.category,
@@ -93,6 +94,12 @@ class Category extends Component {
         openDialog: true
       });
     }
+	}
+	
+	handleClose = () => {
+    this.setState({
+      openDialog: false
+    });
   }
 	
 	renderDialog = () => {

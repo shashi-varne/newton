@@ -16,6 +16,7 @@ import thumb_down_fill from 'assets/thumb_down_fill.svg';
 import thumb_up_fill from 'assets/thumb_up_fill.svg';
 import launch from 'assets/launch.svg';
 import { nativeCallback } from 'utils/native_callback';
+import { getConfig } from 'utils/functions';
 
 let start_time = '';
 
@@ -63,7 +64,7 @@ class Answer extends Component {
     if (navigator.onLine) {
       this.props.history.push({
         pathname: pathname,
-				search: '?base_url=' + this.state.params.base_url,
+				search: getConfig().searchParams,
 				state: {
 					answer: data,
 					title: this.props.location.state.title,
@@ -76,6 +77,12 @@ class Answer extends Component {
         openDialog: true
       });
     }
+	}
+	
+	handleClose = () => {
+    this.setState({
+      openDialog: false
+    });
   }
 	
 	renderDialog = () => {

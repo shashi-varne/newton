@@ -19,6 +19,7 @@ import Writetous from './components/writetous';
 import { create } from 'jss';
 import JssProvider from 'react-jss/lib/JssProvider';
 import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
+import Thankyou from './components/thankyou';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -86,6 +87,7 @@ const HelpSupport = (props) => {
           <Route path={`${url}/questions`} component={Question} />
           <Route path={`${url}/answer`} component={Answer} />
           <Route path={`${url}/writetous`} component={Writetous} />
+          <Route path={`${url}/thankyou`} component={Thankyou} />
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>

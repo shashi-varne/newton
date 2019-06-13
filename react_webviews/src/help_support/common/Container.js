@@ -26,10 +26,11 @@ class Container extends Component {
   componentDidMount() {
     start_time = new Date();
 
+    let that = this;
     window.callbackWeb.add_listener({
       type: 'back_pressed',
       go_back: function () {
-        this.historyGoBack();
+        that.historyGoBack();
       }
     });
   }
@@ -54,6 +55,7 @@ class Container extends Component {
   }
 
   historyGoBack = () => {
+    console.log('Back Pressed')
     let pathname = this.props.history.location.pathname;
 
     switch (pathname) {
@@ -135,7 +137,7 @@ class Container extends Component {
         {this.renderPageLoader()}
 
         {/* Children Block */}
-        <div className={`HelpContainer ${this.props.background}`}>
+        <div className={`Container HelpContainer ${this.props.background}`}>
           {this.props.children}
         </div>
 

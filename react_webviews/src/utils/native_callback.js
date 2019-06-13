@@ -80,6 +80,9 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     if (message) {
       callbackData.action_data = message;
     }
+    if (events) {
+      callbackData.event = events;
+    }
 
   } else {
     if (message) {

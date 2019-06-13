@@ -13,8 +13,10 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import file from 'assets/file.svg';
+import cancel from 'assets/cancel.svg';
 import '../../utils/native_listner_otm';
 import { nativeCallback } from 'utils/native_callback';
+import { isMobile, getConfig } from 'utils/functions';
 
 let start_time = '';
 
@@ -22,6 +24,9 @@ class Writetous extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			imageBaseFile: '',
+			fileUploaded: false,
+			fileName: '',
 			show_loader: false,
 			subcategory: '',
 			query: '',
@@ -59,17 +64,26 @@ class Writetous extends Component {
 		});
 	}
 
-	navigate = (pathname) => {
+	navigate = (pathname, data) => {
     if (navigator.onLine) {
       this.props.history.push({
         pathname: pathname,
-				search: '?base_url=' + this.state.params.base_url
+				search: getConfig().searchParams,
+				state: {
+					user: data
+				}
       });
     } else {
       this.setState({
         openDialog: true
       });
     }
+	}
+	
+	handleClose = () => {
+    this.setState({
+      openDialog: false
+    });
   }
 	
 	renderDialog = () => {
@@ -113,7 +127,7 @@ class Writetous extends Component {
 			
 			try {
 				let bodyFormData = new FormData();
-				bodyFormData.set('category_id', this.props.location.state.category.i);
+				bodyFormData.set('category_id', this.props.location.state.category.id);
 				bodyFormData.set('subcategory_id', this.props.location.state.subcategory.id);
 				bodyFormData.set('question_id', '');
 				bodyFormData.set('question', '');
@@ -122,13 +136,15 @@ class Writetous extends Component {
 				bodyFormData.set('user_query', this.state.query);
 				bodyFormData.set('query_subject', this.state.subcategory);
 				if (this.state.fileUploaded) {
-					bodyFormData.append('res', this.state.imageBaseFile);
+					bodyFormData.append('res', this.state.imageBaseFile, this.state.imageBaseFile.doc_type);
 				}
 
 				this.setState({
 					show_loader: true
 				});
 				const feedback = await Api.post('/api/helpandsupport/writetous', bodyFormData);
+
+				console.log(feedback.pfwresponse)
 				
 				if (feedback.pfwresponse.status_code === 200) {
 					this.setState({
@@ -139,7 +155,7 @@ class Writetous extends Component {
 					show_loader: false
 				});
 
-				nativeCallback({ action: 'acknowledge_feedback' });
+				this.navigate('/help/thankyou', feedback.pfwresponse.result.user);
 			} catch (error) {
 				this.setState({
 					show_loader: false
@@ -158,7 +174,9 @@ class Writetous extends Component {
 	saveFile(file) {
     this.setState({
       imageBaseFile: file,
-      fileUploaded: true
+			fileUploaded: true,
+			show_loader: false,
+			fileName: '1 file attached'
 		});
   }
 
@@ -216,6 +234,71 @@ class Writetous extends Component {
 		return new_date.getUTCMinutes() + '.' + new_date.getUTCSeconds();
 	}
 
+	getPhoto = (e) => {
+    e.preventDefault();
+		let file = e.target.files[0];
+		
+		if (file) {
+			let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp', 'application/pdf'];
+
+			if (acceptedType.indexOf(file.type) === -1) {
+				toast('Please select image file only');
+				return;
+			}
+
+			file.doc_type = file.type;
+
+			this.setState({
+				imageBaseFile: file,
+				fileUploaded: true,
+				fileName: file.name
+			});
+		}
+	}
+
+	clearFile() {
+		this.setState({
+			imageBaseFile: null,
+			fileName: '',
+			fileUploaded: false
+		});
+	}
+
+	renderAttachment = () => {
+		if (isMobile.iOS()) {
+			return (
+				<div className="InputField">
+					<div className="upload">
+						<img src={file} alt=""/>
+						<span>Upload attachments</span>
+						<input type="file" onChange={(e) => this.getPhoto(e)} id="myFile" />
+					</div>
+					{this.state.fileName && 
+						<div className="filenameContainer">
+							<span className="filename">{this.state.fileName}</span>
+							<span><img onClick={() => this.clearFile()} src={cancel} alt=""/></span>
+						</div>
+					}
+				</div>
+			);
+		} else {
+			return (
+				<div className="InputField">
+					<div className="upload" onClick={() => this.handleImage()}>
+						<img src={file} alt=""/>
+						<span>Upload attachments</span>
+					</div>
+					{this.state.fileName && 
+						<div className="filenameContainer">
+							<span className="filename">{this.state.fileName}</span>
+							<span><img onClick={() => this.clearFile()} src={cancel} alt=""/></span>
+						</div>
+					}
+				</div>
+			);
+		}
+	}
+
 	render() {
 		return (
 			<Container
@@ -226,7 +309,7 @@ class Writetous extends Component {
 				handleClick={this.handleClick}
 				events={this.backButtonEvent()}
       >
-				<div className="Help pad20">
+				<div className="Help Form pad20">
 					<div className="InputField">
 						<div className="label">Subject</div>
 						<input type="text" value={this.state.subcategory} readOnly />
@@ -235,12 +318,7 @@ class Writetous extends Component {
 						<div className="label">Write the query/feedback</div>
 						<textarea rows="8" value={this.state.query} onChange={this.handleChange()}></textarea>
 					</div>
-					<div className="InputField">
-						<div className="upload" onClick={() => this.handleImage()}>
-							<img src={file} alt=""/>
-							<span>Upload attachments</span>
-						</div>
-					</div>
+					{this.renderAttachment()}
 				</div>
 				{this.renderDialog()}
 				<ToastContainer autoClose={3000} />

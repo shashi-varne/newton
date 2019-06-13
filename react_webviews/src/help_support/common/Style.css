@@ -5,6 +5,9 @@
 .HelpContainer {
 	background: #f8f8f8;
 	height: calc(100% - 56px);
+	padding: 0;
+	margin-bottom: 0;
+	padding-bottom: 0 !important;
 }
 
 .HelpContainer.white {
@@ -66,7 +69,7 @@
 
 .cta {
 	text-align: center;
-	margin-top: 60px;
+	margin-top: 40px;
 }
 
 .cta button {
@@ -157,7 +160,7 @@
 	line-height: 20px;
 }
 
-.HelpContainer input, .HelpContainer textarea {
+.HelpContainer .Form input, .HelpContainer .Form textarea {
 	border: 0;
 	border-radius: 5px;
 	padding: 15px;
@@ -175,6 +178,10 @@
 	color: #3792fc;
 	font-size: 14px;
 	line-height: 23px;
+}
+
+.InputField {
+	position: relative;
 }
 
 .InputField .upload {
@@ -222,11 +229,64 @@
 }
 
 .outlinebutton button {
-	background: transparent !important;
+	background: #fff !important;
 	color: #35cb5d !important;
 	border: 1px solid #35cb5d;
 }
 
 .FooterDefaultLayout .FlexItem2 button {
 	box-shadow: 0px 2px 6px 0px rgba(102,120,121,0.25);
+}
+
+.upload {
+	overflow: hidden;
+	position: relative;
+}
+
+.upload [type=file] {
+	cursor: inherit;
+	display: block;
+	margin: 0;
+	filter: alpha(opacity=0);
+	min-height: 100%;
+	min-width: 100%;
+	opacity: 0;
+	position: absolute;
+	right: 0;
+	text-align: right;
+	top: 0;
+}
+
+.filenameContainer {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.filename {
+	color: #4b4b4b;
+	font-size: 13px;
+	padding: 10px;
+}
+
+.thankyou .userdetail {
+	margin-top: 30px;
+	text-align: left;
+}
+
+.thankyou .userdetail .email, .thankyou .userdetail .mobile {
+	color: #595959;
+	font-size: 14px;
+	line-height: 23px;
+	margin-bottom: 5px;
+}
+
+.editicon img {
+	margin: 0;
+}
+
+.editicon {
+	position: absolute;
+	right: 10px;
+	bottom: 15px;
 }
