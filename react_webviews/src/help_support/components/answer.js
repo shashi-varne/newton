@@ -135,6 +135,40 @@ class Answer extends Component {
 	}
 
 	async updateVote(status) {
+		if (status) {
+			if (this.state.downvote) {
+				this.setState((state, props) => ({
+					downvote: false,
+					upvote: true,
+					feedback_text: 'Thank you for your feedback',
+					upvoteImg: thumb_up_fill,
+					downvoteImg: thumb_down
+				}));
+			} else {
+				this.setState((state, props) => ({
+					upvote: true,
+					upvoteImg: thumb_up_fill,
+					feedback_text: 'Thank you for your feedback'
+				}));
+			}
+		} else {
+			if (this.state.upvote) {
+				this.setState((state, props) => ({
+					upvote: false,
+					downvote: true,
+					upvoteImg: thumb_up,
+					downvoteImg: thumb_down_fill,
+					feedback_text: 'Thank you for your feedback'
+				}));
+			} else {
+				this.setState((state, props) => ({
+					downvote: true,
+					downvoteImg: thumb_down_fill,
+					feedback_text: 'Thank you for your feedback'
+				}));
+			}
+		}
+
     try {
 			let data = {};
 			data['category_id'] = this.props.location.state.category.id
@@ -149,38 +183,8 @@ class Answer extends Component {
 
 			if (feedback.pfwresponse.status_code === 200) {
 				if (status) {
-					if (this.state.downvote) {
-						this.setState((state, props) => ({
-							downvote: false,
-							upvote: true,
-							feedback_text: 'Thank you for your feedback',
-							upvoteImg: thumb_up_fill,
-							downvoteImg: thumb_down
-						}));
-					} else {
-						this.setState((state, props) => ({
-							upvote: true,
-							upvoteImg: thumb_up_fill,
-							feedback_text: 'Thank you for your feedback'
-						}));
-					}
 					this.sendEvent('up');
 				} else {
-					if (this.state.upvote) {
-						this.setState((state, props) => ({
-							upvote: false,
-							downvote: true,
-							upvoteImg: thumb_up,
-							downvoteImg: thumb_down_fill,
-							feedback_text: 'Thank you for your feedback'
-						}));
-					} else {
-						this.setState((state, props) => ({
-							downvote: true,
-							downvoteImg: thumb_down_fill,
-							feedback_text: 'Thank you for your feedback'
-						}));
-					}
 					this.sendEvent('down')
 				}
 			}

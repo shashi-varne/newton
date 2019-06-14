@@ -132,15 +132,15 @@ class Thankyou extends Component {
   }
 
   submitUserData = async (type) => {
-    if (this.state.email.length < 10 || !validateEmail(this.state.email)) {
+    if (!this.state.is_email_not_present && (this.state.email.length < 10 || !validateEmail(this.state.email))) {
       this.setState({
         email_error: 'Please enter valid email'
       });
-    } else if (this.state.mobile_no && (this.state.mobile_no.length !== 10 || !validateNumber(this.state.mobile_no))) {
+    } else if (!this.state.is_mobile_not_present && (this.state.mobile_no && (this.state.mobile_no.length !== 10 || !validateNumber(this.state.mobile_no)))) {
       this.setState({
         mobile_no_error: 'Please enter valid mobile no'
       });
-    } else if (!numberShouldStartWith(this.state.mobile_no)) {
+    } else if (!this.state.is_mobile_not_present && !numberShouldStartWith(this.state.mobile_no)) {
       this.setState({
         mobile_no_error: 'Please enter valid mobile no'
       });
@@ -223,13 +223,9 @@ class Thankyou extends Component {
 			<Container
         title={'Write to us'}
 				type={this.state.type}
-				buttonTitle="Any other query"
+				buttonTitle="OK"
         handleClick={this.handleClick}
         hideheader={true}
-        secondaryButton={true}
-        secondaryButtonTitle='Back to home'
-        secondaryHandleClick={this.secondaryHandleClick}
-        relativeFooter='relativeFooter'
       >
 				<div className="Help pad20">
 					<div className="thankyou">

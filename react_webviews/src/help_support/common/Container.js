@@ -12,6 +12,7 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
+import 'utils/native_listner_otm';
 
 let start_time = '';
 
@@ -55,7 +56,6 @@ class Container extends Component {
   }
 
   historyGoBack = () => {
-    console.log('Back Pressed')
     let pathname = this.props.history.location.pathname;
 
     switch (pathname) {
@@ -137,7 +137,7 @@ class Container extends Component {
         {this.renderPageLoader()}
 
         {/* Children Block */}
-        <div className={`Container HelpContainer ${this.props.background} ${this.props.relativeFooter}`}>
+        <div className={`Container HelpContainer ${this.props.background}`}>
           {this.props.children}
         </div>
 
@@ -148,11 +148,7 @@ class Container extends Component {
             buttonTitle={this.props.buttonTitle}
             handleClick={this.props.handleClick}
             noFooter={this.props.noFooter}
-            isDisabled={this.props.isDisabled}
-            secondaryButton={this.props.secondaryButton}
-            secondaryButtonTitle={this.props.secondaryButtonTitle}
-            secondaryHandleClick={this.props.secondaryHandleClick}
-            relativeFooter={this.props.relativeFooter} />
+            isDisabled={this.props.isDisabled} />
         }
 
         {/* No Internet */}

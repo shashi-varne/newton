@@ -62,14 +62,6 @@ export class DefaultLayout extends Component {
 
     return (
       <div>
-        {props.secondaryButton &&
-          <div className="FooterDefaultLayout" onClick={props.secondaryHandleClick}>
-            <div className="outlinebutton">
-              <Button
-                buttonTitle={props.secondaryButtonTitle} />
-            </div>
-          </div>
-        }
         <div className="FooterDefaultLayout" onClick={props.handleClick}>
           <div className="FlexItem2">
             <Button
