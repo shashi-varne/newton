@@ -290,3 +290,11 @@
 	right: 10px;
 	bottom: 15px;
 }
+
+.HelpContainer.relativeFooter {
+	height: auto;
+}
+
+.Footer.relativeFooter {
+	position: relative;
+}

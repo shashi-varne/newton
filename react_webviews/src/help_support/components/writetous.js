@@ -200,7 +200,7 @@ class Writetous extends Component {
 							that.saveFile(file);
 							break;
 						default:
-							toast('Please select image file');
+							toast('Please select an image/pdf file');
 							that.setState({
 								show_loader: false
 							})

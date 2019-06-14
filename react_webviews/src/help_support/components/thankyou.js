@@ -118,68 +118,80 @@ class Thankyou extends Component {
     if (this.state.is_email_not_present && this.state.is_mobile_not_present) {
       this.navigate('/help');
     } else {
-      if (this.state.email.length < 10 || !validateEmail(this.state.email)) {
-        this.setState({
-          email_error: 'Please enter valid email'
-        });
-      } else if (this.state.mobile_no && (this.state.mobile_no.length !== 10 || !validateNumber(this.state.mobile_no))) {
-        this.setState({
-          mobile_no_error: 'Please enter valid mobile no'
-        });
-      } else if (!numberShouldStartWith(this.state.mobile_no)) {
-        this.setState({
-          mobile_no_error: 'Please enter valid mobile no'
-        });
-      } else {
-        try {
-          this.setState({ show_loader: true });
-  
-          let data = {
-            'kyc': {
-              'address': {}
-            }
-          };
-  
-          if (!this.state.is_email_not_present) {
-            data['kyc']['address']['email'] = this.state.email;
-          }
-          if (!this.state.is_mobile_not_present) {
-            data['kyc']['address']['mobile_number'] = (this.state.mobile_no.indexOf('|') > 1) ? this.state.mobile_no : '91|' + this.state.mobile_no;
-          }
-          
-          const res = await Api.post('/api/kyc/v2/mine', data);
-  
-          if (res.pfwresponse.status_code === 200) {
-            let eventObj = {
-              "event_name": "help_n_support",
-              "properties": {
-                "screen_name": 'thank_you',
-                'user_action': 'another_query'
-              }
-            };
-        
-            nativeCallback({ events: eventObj });
-  
-            this.setState({ show_loader: false });
-  
-            this.navigate('/help');
-          } else {
-            this.setState({ show_loader: false });
-            toast(res.pfwresponse.result.error);
-          }
-        } catch (err) {
-          this.setState({
-            show_loader: false
-          });
-          toast('Something went wrong');
-        }
-      }
+      this.submitUserData('next');
     }
     
   }
   
   secondaryHandleClick = async () => {
-    nativeCallback({ action: 'exit'});
+    if (this.state.is_email_not_present && this.state.is_mobile_not_present) {
+      nativeCallback({ action: 'exit'});
+    } else {
+      this.submitUserData('home');
+    }
+  }
+
+  submitUserData = async (type) => {
+    if (this.state.email.length < 10 || !validateEmail(this.state.email)) {
+      this.setState({
+        email_error: 'Please enter valid email'
+      });
+    } else if (this.state.mobile_no && (this.state.mobile_no.length !== 10 || !validateNumber(this.state.mobile_no))) {
+      this.setState({
+        mobile_no_error: 'Please enter valid mobile no'
+      });
+    } else if (!numberShouldStartWith(this.state.mobile_no)) {
+      this.setState({
+        mobile_no_error: 'Please enter valid mobile no'
+      });
+    } else {
+      try {
+        this.setState({ show_loader: true });
+
+        let data = {
+          'kyc': {
+            'address': {}
+          }
+        };
+
+        if (!this.state.is_email_not_present) {
+          data['kyc']['address']['email'] = this.state.email;
+        }
+        if (!this.state.is_mobile_not_present) {
+          data['kyc']['address']['mobile_number'] = (this.state.mobile_no.indexOf('|') > 1) ? this.state.mobile_no : '91|' + this.state.mobile_no;
+        }
+        
+        const res = await Api.post('/api/kyc/v2/mine', data);
+
+        if (res.pfwresponse.status_code === 200) {
+          let eventObj = {
+            "event_name": "help_n_support",
+            "properties": {
+              "screen_name": 'thank_you',
+              'user_action': 'another_query'
+            }
+          };
+      
+          nativeCallback({ events: eventObj });
+
+          this.setState({ show_loader: false });
+
+          if (type === 'home') {
+            nativeCallback({ action: 'exit'});
+          } else if (type === 'next') {
+            this.navigate('/help');
+          }
+        } else {
+          this.setState({ show_loader: false });
+          toast(res.pfwresponse.result.error);
+        }
+      } catch (err) {
+        this.setState({
+          show_loader: false
+        });
+        toast('Something went wrong');
+      }
+    }
   }
 
   handleChange = () => event => {
@@ -217,6 +229,7 @@ class Thankyou extends Component {
         secondaryButton={true}
         secondaryButtonTitle='Back to home'
         secondaryHandleClick={this.secondaryHandleClick}
+        relativeFooter='relativeFooter'
       >
 				<div className="Help pad20">
 					<div className="thankyou">

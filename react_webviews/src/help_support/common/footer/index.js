@@ -5,7 +5,7 @@ import { DefaultLayout } from './layout';
 const Footer = (props) => {
 
   return (
-    <div className="Footer">
+    <div className={`Footer ${props.relativeFooter}`}>
       <DefaultLayout type="default" isDisabled={props.isDisabled} {...props} />
     </div>
   );

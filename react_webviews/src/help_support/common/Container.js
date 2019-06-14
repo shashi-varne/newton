@@ -137,7 +137,7 @@ class Container extends Component {
         {this.renderPageLoader()}
 
         {/* Children Block */}
-        <div className={`Container HelpContainer ${this.props.background}`}>
+        <div className={`Container HelpContainer ${this.props.background} ${this.props.relativeFooter}`}>
           {this.props.children}
         </div>
 
@@ -151,7 +151,8 @@ class Container extends Component {
             isDisabled={this.props.isDisabled}
             secondaryButton={this.props.secondaryButton}
             secondaryButtonTitle={this.props.secondaryButtonTitle}
-            secondaryHandleClick={this.props.secondaryHandleClick} />
+            secondaryHandleClick={this.props.secondaryHandleClick}
+            relativeFooter={this.props.relativeFooter} />
         }
 
         {/* No Internet */}
