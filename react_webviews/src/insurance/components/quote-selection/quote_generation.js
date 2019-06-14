@@ -49,6 +49,7 @@ class QuoteGeneration extends Component {
     this.renderPopUpQuote = this.renderPopUpQuote.bind(this);
     this.openFilter = this.openFilter.bind(this);
     this.handleFilter = this.handleFilter.bind(this);
+    this.renderQuotePoints = this.renderQuotePoints.bind(this);
   }
 
   componentWillMount() {
@@ -99,11 +100,12 @@ class QuoteGeneration extends Component {
       annual_income: this.state.quoteData.annual_income,
       accident_benefit: '',
       ci_benefit: '',
+      ci_amount: '',
       annual_quote_required: true,
       required_providers: this.state.required_providers
     };
     try {
-      const res = await Api.post('/api/insurance/quote', insuranceData)
+      const res = await Api.post('/api/insurance/quote', insuranceData);
       this.setState({
         show_loader: false
       });
@@ -160,6 +162,7 @@ class QuoteGeneration extends Component {
     this.setState({
       quoteData: quoteData
     });
+    window.localStorage.setItem('quoteData', JSON.stringify(quoteData));
     this.getQuotes();
   }
 
@@ -228,15 +231,15 @@ class QuoteGeneration extends Component {
                 </div>
                 <div className="confirm-quote-popup-content1">
                   <div className="confirm-quote-popup-content1c">Base premium</div>
-                  <div className="confirm-quote-popup-content1c">{formatAmount(this.state.quoteSelected.quote_json.base_premium)}</div>
+                  <div className="confirm-quote-popup-content1c">{formatAmount(this.state.popup_premium.base_premium)}</div>
                 </div>
                 <div className="confirm-quote-popup-content1">
                   <div className="confirm-quote-popup-content1c">GST & taxes</div>
-                  <div className="confirm-quote-popup-content1c">{formatAmount(this.state.quoteSelected.quote_json.total_tax)}</div>
+                  <div className="confirm-quote-popup-content1c">{formatAmount(this.state.popup_premium.base_premium_tax)}</div>
                 </div>
                 <div className="confirm-quote-popup-content1 confirm-quote-popup-content1d">
                   <div className="confirm-quote-popup-content1e">Total payable</div>
-                  <div className="confirm-quote-popup-content1b">{inrFormatDecimalWithoutIcon(this.state.quoteSelected.quote_json.premium)}</div>
+                  <div className="confirm-quote-popup-content1b">{inrFormatDecimalWithoutIcon(this.state.popup_premium.base_premium_total)}</div>
                 </div>
               </div>
             </div>
@@ -419,10 +422,15 @@ class QuoteGeneration extends Component {
   }
 
   selectQuote(quote, payment_frequency, index) {
+    let popup_premium = quote.quote_json;
+    if (payment_frequency === 'Annually') {
+      popup_premium = quote.annual_quote_json;
+    }
     this.setState({
       quoteSelected: quote,
       payment_frequency: payment_frequency,
       selectedIndexQuote: index,
+      popup_premium: popup_premium,
       openPopUpQuote: true
     })
     manageDialog('general-dialog', 'flex');
@@ -432,7 +440,8 @@ class QuoteGeneration extends Component {
     return (
       <div key={index}>
         <div className="quote-tiles2">
-          <span className="quote-tiles2a">{index + 1}. {props}</span>
+         {index === 0 && <span className="quote-tiles2a">{index + 1}. Lump sum payment of  {numDifferentiation(this.state.quoteData.cover_amount)} to your nominee</span>}
+         {index !== 0 && <span className="quote-tiles2a">{index + 1}. {props}</span>}
         </div>
         {props.points && props.points.map((row, i) => (
           <div key={i} className="quote-tiles2">
@@ -519,13 +528,13 @@ class QuoteGeneration extends Component {
         <div className="quote-tiles3">
           <div className="quote-tiles3a" onClick={() => this.selectQuote(props, props.payment_frequency, index)}>
             <div className="quote-tiles3aa">
-              <span className="bold-premium"> {inrFormatDecimal(props.quote_json.premium)}</span>
+              <span className="bold-premium"> {inrFormatDecimal(props.quote_json.base_premium_total)}</span>
               <span style={{ textTransform: 'lowercase', marginLeft: 4 }}>{props.payment_frequency}</span>
             </div>
           </div>
           <div className="quote-tiles3b" onClick={() => this.selectQuote(props, 'Annually', index)}>
             <div className="quote-tiles3ba">
-              <span className="bold-premium">{inrFormatDecimal(props.annual_quote_json.premium)}</span>
+              <span className="bold-premium">{inrFormatDecimal(props.annual_quote_json.base_premium_total)}</span>
               <span style={{ marginLeft: 4 }}>annually</span>
             </div>
             <div className="quote-tiles3bb">
@@ -674,6 +683,7 @@ class QuoteGeneration extends Component {
                 </div>
                   <div className="InputField">
                     <RadioOptions
+                    icon_type="blue_icon"
                       error={(this.state.paymentFreqRadio_error) ? true : false}
                       helperText={this.state.paymentFreqRadio_error}
                       width="40"

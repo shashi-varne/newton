@@ -163,7 +163,10 @@ class ProfessionalDetails1 extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams + '&resume=' + this.state.params.resume
+      search: getConfig().searchParams + '&resume=' + this.state.params.resume,
+      params: {
+        disableBack: true
+      }
     });
   }
 

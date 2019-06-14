@@ -108,6 +108,9 @@ export function formatAmount(amount) {
   if (!amount) {
     return '';
   }
+
+  amount = Number(amount);
+  amount = amount.toFixed(0);
   amount = amount.toString();
   let lastThree = amount.substring(amount.length - 3);
   let otherNumbers = amount.substring(0, amount.length - 3);
@@ -120,6 +123,8 @@ export function formatAmount(amount) {
 
 export function inrFormatDecimal(number) {
   if (number) {
+    number = parseFloat(number);
+    number = number.toFixed(0);
     number = number.toString();
     var afterPoint = '';
     if (number.indexOf('.') > 0)
@@ -288,4 +293,17 @@ export function providerAsIpru(provider) {
 
 export function clearInsuranceQuoteData() {
   window.localStorage.setItem('quoteSelected', '');
+}
+
+export function getRecommendedIndex(array, value, AOB, Key) {
+  for (var i = 0; i < array.length; i++) {
+    if (AOB && Key) {
+      if (array[i][Key] === value) {
+        return i;
+      }
+    } else if (array[i] === value) {
+      return i;
+    }
+  }
+  return '';
 }

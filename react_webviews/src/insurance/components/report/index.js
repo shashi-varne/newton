@@ -31,6 +31,7 @@ class FinalReport extends Component {
   }
 
   componentWillMount() {
+
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -47,32 +48,41 @@ class FinalReport extends Component {
   }
 
   async componentDidMount() {
+
     this.setState({
       dropdown_arrow: this.state.type !== 'fisdom' ? dropdown_arrow_myway : dropdown_arrow_fisdom,
       dropup_arrow: this.state.type !== 'fisdom' ? dropup_arrow_myway : dropup_arrow_fisdom
     })
     try {
       const res = await Api.get('/api/insurance/all/summary');
-
+      this.setState({
+        show_loader: false
+      });
       let application;
-      if (res.pfwresponse.result.insurance_apps.init.length > 0) {
-        application = res.pfwresponse.result.insurance_apps.init[0];
-      } else if (res.pfwresponse.result.insurance_apps.submitted.length > 0) {
-        application = res.pfwresponse.result.insurance_apps.submitted[0];
-      } else if (res.pfwresponse.result.insurance_apps.complete.length > 0) {
-        application = res.pfwresponse.result.insurance_apps.complete[0];
+
+      if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.insurance_apps) {
+        if (res.pfwresponse.result.insurance_apps.init.length > 0) {
+          application = res.pfwresponse.result.insurance_apps.init[0];
+        } else if (res.pfwresponse.result.insurance_apps.submitted.length > 0) {
+          application = res.pfwresponse.result.insurance_apps.submitted[0];
+        } else if (res.pfwresponse.result.insurance_apps.complete.length > 0) {
+          application = res.pfwresponse.result.insurance_apps.complete[0];
+        } else {
+          application = res.pfwresponse.result.insurance_apps.failed[0];
+        }
+
+        console.log(application);
+        this.setState({
+          application: application,
+          name: (application.provider === 'Maxlife' ? application.profile.first_name :
+            application.profile.name)
+        });
       } else {
-        application = res.pfwresponse.result.insurance_apps.failed[0];
+        toast(res.pfwresponse.result.error || 'Something went wrong');
       }
 
-      console.log(application);
-      this.setState({
-        show_loader: false,
-        application: application,
-        name: (application.provider === 'Maxlife' ? application.profile.first_name :
-          application.profile.name)
-      });
     } catch (err) {
+      console.log(err)
       this.setState({
         show_loader: false
       });

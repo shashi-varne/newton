@@ -314,6 +314,7 @@ class Summary extends Component {
           premiumData: {
             is_open: false,
             base_premium: application.quote.quote_json.base_premium,
+            riders_base_premium: application.quote.quote_json.riders_base_premium,
             premium: application.quote.quote_json.premium,
             total_tax: application.quote.quote_json.total_tax,
           }
@@ -803,6 +804,7 @@ class Summary extends Component {
           <div className="AccordionBody">
             <ul>
               <li>Base premium: <span style={{ float: 'right' }}>₹ {formatAmount(this.state.premiumData.base_premium)}</span></li>
+              <li>Add on benefits: <span style={{ float: 'right' }}>₹ {formatAmount(this.state.premiumData.riders_base_premium)}</span></li>
               <li>GST & taxes: <span style={{ float: 'right' }}>₹ {formatAmount(this.state.premiumData.total_tax)}</span></li>
               <li style={{ borderTop: '1px dashed #b8b8b8' }}>Total payable: <span style={{ float: 'right' }}>₹ {formatAmount(this.state.premiumData.premium)}</span></li>
             </ul>
@@ -849,7 +851,7 @@ class Summary extends Component {
             <ul>
               <li>Education qualification: <span>{this.state.professional.education_qualification}</span></li>
               <li>Occupation detail: <span>{this.capitalize(this.state.professional.occupation_detail)}</span></li>
-              <li>Occupation category: <span>{this.capitalize(this.state.professional.occupation_category)}</span></li>
+              {/* <li>Occupation category: <span>{this.capitalize(this.state.professional.occupation_category)}</span></li> */}
               <li>Annual income: <span>₹ {formatAmount(this.state.professional.annual_income)}</span></li>
             </ul>
           </div>
@@ -883,6 +885,7 @@ class Summary extends Component {
           <div className="AccordionBody">
             <ul>
               <li>Base premium: <span style={{ float: 'right' }}>₹ {formatAmount(this.state.premiumData.base_premium)}</span></li>
+              <li>Add on benefits: <span style={{ float: 'right' }}>₹ {formatAmount(this.state.premiumData.riders_base_premium)}</span></li>
               <li>GST & taxes: <span style={{ float: 'right' }}>₹ {formatAmount(this.state.premiumData.total_tax)}</span></li>
               <li style={{ borderTop: '1px dashed #b8b8b8' }}>Total payable: <span style={{ float: 'right' }}>₹ {formatAmount(this.state.premiumData.premium)}</span></li>
             </ul>
@@ -1061,7 +1064,7 @@ class Summary extends Component {
               </Grid>
               <Grid item xs={7}>
                 <div className="Title" style={{ color: '#444', fontFamily: 'Roboto', fontWeight: 500, fontSize: 18 }}>
-                  {this.state.providerName} {this.state.cover_plan}
+                  {this.state.provider !== 'Maxlife' && <span>{this.state.providerName}</span>} {this.state.cover_plan}
                   <div style={{ marginTop: 7, marginBottom: 7 }}>{
                     this.state.application_id &&
                     `ID: ${this.state.application_id}`

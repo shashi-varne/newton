@@ -172,7 +172,7 @@ export const educationQualificationsOptionsMaxlife = [
 export const occupationDetailOptionsMaxlife = [
   {
     'name': 'SALARIED',
-    'value': 'SALARIED'
+    'value': 'SALRIED'
   },
   {
     'name': 'RETIRED',

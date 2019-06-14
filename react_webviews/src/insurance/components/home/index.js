@@ -38,6 +38,10 @@ class InsuranceHome extends Component {
   }
 
   async componentDidMount() {
+    window.localStorage.setItem('excluded_providers', '');
+    window.localStorage.setItem('required_providers', '');
+    window.localStorage.setItem('quoteSelected', '');
+    window.localStorage.setItem('quoteData', '');
     try {
       const res = await Api.get('/api/insurance/all/summary')
 

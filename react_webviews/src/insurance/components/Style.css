@@ -464,14 +464,14 @@ span.bold-premium {
 }
 .quote-confirmation-dialog-head1 {
   width: 90px;
-  margin: 0 0 0 30px;
+  margin: 0 0 0 0px;
 }
 .quote-confirmation-dialog-head2 {
   font-size: 16px;
   color: #4a4a4a;
   font-weight: 600;
   margin: 6px 0 0px 7px;
-  max-width: 64%;
+  max-width: 68%;
 }
 .confirm-quote-popup-content1 {
   display: flex;

@@ -22,13 +22,15 @@ const Header = ({ classes, title, count, total, current, goBack, edit, type, res
             <div style={{ fontWeight: 500 }}>{title}</div>
             <div style={{
               fontSize: 12, marginTop: -5,
-              textTransform: smallTitle === 'HDFC' || smallTitle === 'IPRU' ? 'uppercase' : ''
+              textTransform: smallTitle === 'HDFC' || smallTitle === 'Maxlife' || smallTitle === 'IPRU' ? 'uppercase' : ''
             }}>
               {smallTitle === 'HDFC' &&
                 'HDFC Life Click 2 Protect 3D Plus'}
               {smallTitle === 'IPRU' &&
                 'ICICI Pru iProtect Smart'}
-              {smallTitle !== 'HDFC' && smallTitle !== 'IPRU' &&
+              {smallTitle === 'Maxlife' &&
+                'Maxlife Online Term Plus'}
+              {smallTitle !== 'HDFC' && smallTitle !== 'IPRU' && smallTitle !== 'Maxlife' &&
                 smallTitle
               }
             </div>

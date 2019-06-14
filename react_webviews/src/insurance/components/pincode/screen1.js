@@ -114,6 +114,9 @@ class Pincode extends Component {
 
 
   handleChange = () => event => {
+    if (event.target.value.length > 6) {
+      return;
+    }
     this.setState({
       [event.target.name]: event.target.value,
       [event.target.name + '_error']: ''
@@ -164,6 +167,9 @@ class Pincode extends Component {
   handlePincode = name => async (event) => {
     const pincode = event.target.value;
 
+    if (pincode.length > 6) {
+      return;
+    }
     this.setState({
       [name]: pincode,
       [name + '_error']: ''
@@ -435,7 +441,7 @@ class Pincode extends Component {
                 label="Pincode *"
                 id="pincode"
                 name="pincode"
-                value={this.state.pincode}
+                value={this.state.pincode || ''}
                 onChange={this.handlePincode('pincode')} />
             </div>
           </FormControl>
@@ -453,10 +459,10 @@ class Pincode extends Component {
     });
     if (res.pfwresponse.status_code === 200) {
       clearInsuranceQuoteData();
-      let excludedd_providers = window.localStorage.getItem('excludedd_providers') ?
-        JSON.parse(window.localStorage.getItem('excludedd_providers')) : [];
-      excludedd_providers.push(this.state.provider);
-      window.localStorage.setItem('excludedd_providers', JSON.stringify(excludedd_providers));
+      let excluded_providers = window.localStorage.getItem('excluded_providers') ?
+        JSON.parse(window.localStorage.getItem('excluded_providers')) : [];
+      excluded_providers.push(this.state.provider);
+      window.localStorage.setItem('excluded_providers', JSON.stringify(excluded_providers));
       this.navigate('quote');
     } else {
       this.setState({

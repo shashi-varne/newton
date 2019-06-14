@@ -7,6 +7,9 @@ import FormLabel from '@material-ui/core/FormLabel';
 
 import CircleCheckedFilled from '@material-ui/icons/CheckCircle';
 import CircleUnchecked from '@material-ui/icons/RadioButtonUnchecked';
+import RadioButtonUnchecked from '@material-ui/icons/RadioButtonUnchecked';
+import RadioButtonChecked from '@material-ui/icons/RadioButtonChecked';
+
 import { getConfig } from 'utils/functions';
 
 // import CircleCheckedFilled from 'assets/check_green_pg.svg';
@@ -44,21 +47,24 @@ class RadioButtonsGroup extends Component {
 
   render() {
     const { options } = this.props;
-    console.log(options);
     const allOptions = options.map((option, i) => {
       return (
         <FormControlLabel disabled={this.props.disabled}
           key={i} index={i} value={option.value}
           onChange={this.props.onChange}
+
           control={<Radio
-            icon={<CircleUnchecked />}
-            checkedIcon={<CircleCheckedFilled style={{ color: getConfig().secondary }} />}
-          />} label={option.name} />
+            color={this.props.icon_type === 'blue_icon' ? 'primary' : 'secondary'}
+            icon={this.props.icon_type === 'blue_icon' ? <RadioButtonUnchecked /> : <CircleUnchecked />}
+            checkedIcon={
+              this.props.icon_type === 'blue_icon' ? <RadioButtonChecked /> : <CircleCheckedFilled
+                style={{ color: (this.props.icon_type === 'blue_icon' ? getConfig().primary : getConfig().secondary) }} />
+            } />} label={option.name} />
       );
     });
 
     return (
-      <FormControl component="fieldset" className={styles.formControl}>
+      <FormControl component="fieldset" className={styles.formControl} >
         <FormLabel component="legend">{this.props.label}</FormLabel>
         <RadioGroup
           aria-label={this.props.label}
@@ -78,7 +84,7 @@ class RadioButtonsGroup extends Component {
 }
 
 const RadioOptions = (props) => (
-  <RadioButtonsGroup label={props.label} disabled={props.disabled}
+  <RadioButtonsGroup label={props.label} icon_type={props.icon_type} disabled={props.disabled}
     options={props.options} type={props.type} value={props.value}
     onChange={props.onChange} helperText={props.helperText} />
 );

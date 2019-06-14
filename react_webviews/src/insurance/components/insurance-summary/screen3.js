@@ -270,10 +270,16 @@ class Journey extends Component {
       let application, required_fields;
 
       let cameFromHome = window.localStorage.getItem('cameFromHome');
-      let homeApplication = JSON.parse(window.localStorage.getItem('homeApplication')) || [];
+
+      let homeApplication = []
+      if (window.localStorage.getItem('homeApplication')) {
+        homeApplication = JSON.parse(window.localStorage.getItem('homeApplication')) || [];
+      }
+
       console.log("cameFromHome :" + cameFromHome)
       if (cameFromHome && homeApplication.length !== 0) {
         window.localStorage.setItem('cameFromHome', '');
+        window.localStorage.setItem('homeApplication', '')
         application = homeApplication.application;
         required_fields = homeApplication.required_fields;
       } else {
@@ -830,6 +836,7 @@ class Journey extends Component {
       insurance_app_id: this.state.insurance_id
     });
     if (res.pfwresponse.status_code === 200) {
+      window.localStorage.setItem('excludedd_providers', '');
       if (this.state.params.insurance_allweb) {
         this.navigate('journey-intro');
       } else {

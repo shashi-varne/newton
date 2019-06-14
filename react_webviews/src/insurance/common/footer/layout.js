@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 
 import Button from '../../../common/ui/Button';
+import {
+  inrFormatDecimal
+} from '../../../utils/validators';
 import Dialog, {
   DialogActions,
   DialogTitle,
@@ -66,7 +69,7 @@ export class SummaryLayout extends Component {
             {!props.onlyButton && <div className="FlexItem1 padLR15">
               <div className="FooterSummaryLayout_title">Premium</div>
               {props.paymentFrequency &&
-                <div className="FooterSummaryLayout_subtitle">₹ {props.premium} {(props.paymentFrequency).toLowerCase()}</div>}
+                <div className="FooterSummaryLayout_subtitle"> {inrFormatDecimal(props.premium)} {(props.paymentFrequency).toLowerCase()}</div>}
               {/* {
               (props.provider === 'HDFC' && props.paymentFrequency === 'MONTHLY') &&
               <div className="FooterSummaryLayout_hint">*You’ve to pay <b>3 months premiums</b>.</div>

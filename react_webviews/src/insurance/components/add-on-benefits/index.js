@@ -15,8 +15,8 @@ import Dialog, {
   DialogContent
 } from 'material-ui/Dialog';
 import {
-  inrFormatDecimalWithoutIcon, numDifferentiation, formatAmount,
-  validateNumber, inrFormatDecimal
+  inrFormatDecimalWithoutIcon, numDifferentiation,
+  validateNumber, inrFormatDecimal, getRecommendedIndex
 } from '../../../utils/validators';
 import { add_on_benefits_points } from '../../constants';
 
@@ -26,6 +26,22 @@ class AddOnBenefits extends Component {
     var quoteSelected = JSON.parse(window.localStorage.getItem('quoteSelected')) || {};
     let required_providers = window.localStorage.getItem('required_providers') ?
       JSON.parse(window.localStorage.getItem('required_providers')) : [];
+    let insuranceData = {
+      tobacco_choice: quoteSelected.tobacco_choice,
+      cover: quoteSelected.cover_amount,
+      term: quoteSelected.term,
+      payment_frequency: quoteSelected.payment_frequency_selected === 'Annually' ? 'Yearly' : quoteSelected.payment_frequency,
+      death_benefit_option: '',
+      dob: quoteSelected.dob,
+      gender: quoteSelected.gender,
+      annual_income: quoteSelected.annual_income,
+      accident_benefit: '',
+      ci_benefit: '',
+      ci_amount: '',
+      annual_quote_required: true,
+      required_providers: required_providers,
+      generate_illustration: true
+    };
     super(props);
     this.state = {
       show_loader: true,
@@ -41,12 +57,14 @@ class AddOnBenefits extends Component {
       buttonTitle: 'Skip & Continue',
       totalAddedAmount: 0,
       totalAddedBenefits: 0,
-      totalPremium: (quoteSelected.payment_frequency_selected).toLowerCase() === 'annually' ? quoteSelected.annual_quote_json.premium * 1 :
-        quoteSelected.quote_json.premium * 1,
-      basePremium: (quoteSelected.payment_frequency_selected).toLowerCase() === 'annually' ? quoteSelected.annual_quote_json.premium * 1 :
-        quoteSelected.quote_json.premium * 1,
+      totalPremium: (quoteSelected.payment_frequency_selected).toLowerCase() === 'annually' ? Number(quoteSelected.annual_quote_json.base_premium_total) :
+        Number(quoteSelected.quote_json.base_premium_total),
+      basePremium: (quoteSelected.payment_frequency_selected).toLowerCase() === 'annually' ? Number(quoteSelected.annual_quote_json.base_premium_total) :
+        Number(quoteSelected.quote_json.base_premium_total),
       openPopUpInfo: false,
-      openPopUpQuote: false
+      openPopUpQuote: false,
+      payment_frequency: quoteSelected.payment_frequency_selected,
+      insuranceData: insuranceData
     }
     this.renderList = this.renderList.bind(this);
     this.setValue = this.setValue.bind(this);
@@ -56,8 +74,6 @@ class AddOnBenefits extends Component {
   }
 
   componentWillMount() {
-
-
     if (this.state.ismyway) {
       this.setState({
         type: 'myway'
@@ -94,32 +110,38 @@ class AddOnBenefits extends Component {
     return inputToRender;
   }
 
-  async getRiders(fromFilters) {
+  async getRiders() {
     try {
-      let url = '/api/insurance/fetch/riders/' + this.state.insurance_app_id;
-      if (fromFilters) {
-        let selectedRiderList = this.state.selectedRiderList;
 
-        url += '/' + [selectedRiderList.rider_type + '='] + selectedRiderList.value;
-      }
-      const res = await Api.get(url);
-      // const res = { "pfwuser_id": 4709613628817409, "pfwresponse": { "status_code": 200, "requestapi": "", "result": { "riders_info": [{ "pay_amount": 3109.0, "error": "", "rider_type": "ci_amount", "title": "Protection against 19 critical illness", "max": 30000000, "min": 25000, "cover_amount": [100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000, 900000, 1000000, 1100000, 1200000, 1300000, 1400000, 1500000, 1600000, 1700000, 1800000, 1900000, 2000000, 2100000, 2200000, 2300000, 2400000, 2500000, 2600000, 2700000, 2800000, 2900000, 3000000, 3100000, 3200000, 3300000, 3400000, 3500000, 3600000, 3700000, 3800000, 3900000, 4000000, 4100000, 4200000, 4300000, 4400000, 4500000, 4600000, 4700000, 4800000, 4900000, 5000000], "recommended": 500000 }, { "pay_amount": 2414.0, "error": "", "rider_type": "adb", "title": "Protection against accidental permanent disability", "max": 30000000, "min": 25000, "cover_amount": [100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000, 900000, 1000000, 1100000, 1200000, 1300000, 1400000, 1500000, 1600000, 1700000, 1800000, 1900000, 2000000, 2100000, 2200000, 2300000, 2400000, 2500000, 2600000, 2700000, 2800000, 2900000, 3000000, 3100000, 3200000, 3300000, 3400000, 3500000, 3600000, 3700000, 3800000, 3900000, 4000000, 4100000, 4200000, 4300000, 4400000, 4500000, 4600000, 4700000, 4800000, 4900000, 5000000], "recommended": 500000 }] } }, "pfwmessage": "Success", "pfwutime": "", "pfwstatus_code": 200, "pfwtime": "2019-06-06 07:30:35.845336" };
-      let result = res.pfwresponse.result;
+      let insuranceData = this.state.insuranceData;
+      insuranceData.required_providers = [this.state.quoteSelected.quote_provider];
+
+      this.setState({
+        insuranceData: insuranceData
+      });
+
+      const res = await Api.post('/api/insurance/quote', insuranceData);
+      let result = res.pfwresponse.result.quotes[0];
       let riders_info = result.riders_info;
 
-      var i = 0;
-      for (i in riders_info) {
+      for (var i = 0; i < riders_info.length; i++) {
+
         if (this.state.quoteSelected.quote_provider !== 'Maxlife' && riders_info[i].cover_amount) {
           (riders_info[i].cover_amount).push('Other');
         }
 
+        if (this.state.quoteSelected.quote_provider === 'Maxlife' &&
+          riders_info[i].rider_type === 'ci_benefit') {
+          this.setState({
+            ci_benefit_index: i
+          })
+        }
+
         riders_info[i].inputToRender = this.getInputToRender(riders_info[i]);
-        var j = 0;
-        for (j in riders_info[i].cover_amount) {
-          if (riders_info[i].cover_amount[j] === riders_info[i].recommended) {
-            riders_info[i].recommendedIndex = j;
-            riders_info[i].selectedIndex = j;
-          }
+        for (var j = 0; j < riders_info[i].cover_amount.length; j++) {
+          let recommendedIndex = getRecommendedIndex(riders_info[i].cover_amount[j], riders_info[i].recommended);
+          riders_info[i].recommendedIndex = recommendedIndex;
+          riders_info[i].selectedIndex = recommendedIndex;
         }
       }
       this.setState({
@@ -151,14 +173,10 @@ class AddOnBenefits extends Component {
     });
   }
 
-  handleClick = async () => {
-    this.setState({
-      show_loader: true
-    })
-
-    let accident_benefit, ci_benefit = 'N', ci_amount;
+  getInsuranceData() {
+    let accident_benefit, ci_benefit = '', ci_amount;
     let riders_info = this.state.riders_info;
-    for (var i in this.state.riders_info) {
+    for (var i = 0; i < this.state.riders_info.length; i++) {
       if (riders_info[i].isAdded) {
         if (riders_info[i].rider_type === 'accident_benefit') {
           accident_benefit = riders_info[i].value || riders_info[i].recommended;
@@ -169,21 +187,23 @@ class AddOnBenefits extends Component {
         }
       }
     }
-    let insuranceData = {
-      tobacco_choice: this.state.quoteSelected.tobacco_choice,
-      cover: this.state.quoteSelected.cover_amount,
-      term: this.state.quoteSelected.term,
-      payment_frequency: this.state.quoteSelected.payment_frequency || 'Monthly',
-      death_benefit_option: '',
-      dob: this.state.quoteSelected.dob,
-      gender: this.state.quoteSelected.gender,
-      annual_income: this.state.quoteSelected.annual_income,
-      accident_benefit: accident_benefit || '',
-      ci_benefit: ci_benefit || '',
-      ci_amount: ci_amount,
-      annual_quote_required: true,
-      required_providers: this.state.required_providers
-    };
+
+    let insuranceData = this.state.insuranceData;
+    insuranceData.generate_illustration = false;
+    insuranceData.ci_benefit = ci_benefit || '';
+    insuranceData.ci_amount = ci_amount || '';
+    insuranceData.accident_benefit = accident_benefit || '';
+    return insuranceData;
+  }
+
+  handleClick = async () => {
+    this.setState({
+      show_loader: true
+    })
+
+    let insuranceData = this.getInsuranceData();
+    insuranceData.generate_illustration = false;
+
     try {
 
       const res = await Api.post('/api/insurance/quote', insuranceData)
@@ -191,18 +211,13 @@ class AddOnBenefits extends Component {
         show_loader: false
       });
       if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.quotes) {
-        let quotes = res.pfwresponse.result.quotes;
-        for (let i in quotes)
-          if (quotes[i].quote_provider === this.state.quoteSelected.quote_provider) {
-            let final_id = (this.state.quoteSelected.payment_frequency_selected).toLowerCase() === 'annually' ? quotes[i].annual_quote_id :
-              quotes[i].id;
-            this.setState({
-              openPopUpQuote: true,
-              final_id: final_id
-            })
-            manageDialog('general-dialog', 'flex');
-            // this.submitQuote(final_id);
-          }
+        let quote = res.pfwresponse.result.quotes[0];
+        this.setState({
+          openPopUpQuote: true,
+          final_id: quote.id,
+          final_quote: quote
+        })
+        manageDialog('general-dialog', 'flex');
       } else {
         toast(res.pfwresponse.result.error);
       }
@@ -236,6 +251,7 @@ class AddOnBenefits extends Component {
         show_loader: false
       });
       if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.application) {
+        window.localStorage.setItem('cameFromHome', '');
         let url = res.pfwresponse.result.profile_start;
         let search = url.split('?')[1];
         search += '&insurance_v2=true&generic_callback=true';
@@ -244,7 +260,8 @@ class AddOnBenefits extends Component {
         this.navigate("journey", search);
         // let result = res.pfwresponse.result.quotes;
       } else {
-        toast(res.pfwresponse.result.error || 'Something went wrong');
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message
+          || 'Something went wrong');
       }
 
     } catch (err) {
@@ -270,6 +287,7 @@ class AddOnBenefits extends Component {
   }
 
   changeAmount(index) {
+    console.log(this.state.riders_info[index])
     this.setState({
       selectedRiderList: this.state.riders_info[index],
       selectedIndex: index,
@@ -279,14 +297,15 @@ class AddOnBenefits extends Component {
   }
 
   renderListCoverAmount() {
+    console.log(this.state.selectedRiderList)
     if (this.state.openPopUpCoverAmount) {
       return (
         <div style={{ marginTop: 60 }}>
           <DropdownInPage
             options={this.state.selectedRiderList.cover_amount}
-            value={this.state.selectedRiderList.selectedIndex || 0}
+            value={this.state.selectedRiderList.selectedIndex}
             onChange={this.setValue}
-            recommendedIndex={this.state.selectedRiderList.recommendedIndex || ''}
+            recommendedIndex={this.state.selectedRiderList.recommendedIndex}
             dataType=""
             inputKeyName="Other"
             inputToRender={this.state.selectedRiderList.inputToRender} />
@@ -336,44 +355,121 @@ class AddOnBenefits extends Component {
     }
   };
 
-  async handleCloseAction() {
+  async handleCloseAction(fromAdded, index) {
 
     var riders_info_current = this.state.riders_info;
-    riders_info_current[this.state.selectedIndex].showDotDot = true;
+    let selectedRiderList = this.state.selectedRiderList;
+    console.log(selectedRiderList);
+    console.log(fromAdded)
+    let insuranceData = this.state.insuranceData;
+    let which_keys_to_update = [];
+    insuranceData.generate_illustration = true;
+    if (fromAdded) {
+      riders_info_current[this.state.ci_benefit_index].showDotDot = true;
+    } else {
+
+      if (selectedRiderList.isAdded) {
+        which_keys_to_update.push(this.state.ci_benefit_index);
+        riders_info_current[this.state.ci_benefit_index].showDotDot = true;
+        insuranceData.generate_illustration = false;
+      }
+      riders_info_current[this.state.selectedIndex].showDotDot = true;
+    }
+
     this.setState({
       riders_info: riders_info_current,
       openPopUpCoverAmount: false
     })
+
     try {
-      let selectedRiderList = this.state.selectedRiderList;
-      let value = selectedRiderList.value;
-      if (selectedRiderList.cover_amount[selectedRiderList.selectedIndex] === 'Other') {
-        value = selectedRiderList.inputToRender.value;
+
+      if (fromAdded) {
+        if (fromAdded === 'add') {
+          which_keys_to_update.push(index);
+        }
+        which_keys_to_update.push(this.state.ci_benefit_index);
+      } else {
+        let value = selectedRiderList.value;
+        let key = riders_info_current[this.state.selectedIndex].rider_type;
+        if (selectedRiderList.cover_amount[selectedRiderList.selectedIndex] === 'Other') {
+          value = selectedRiderList.inputToRender.value;
+        }
+        insuranceData[key] = value;
+        which_keys_to_update.push(this.state.selectedIndex);
       }
 
-      let url = '/api/insurance/fetch/riders/' + this.state.insurance_app_id + '?'
-        + selectedRiderList['rider_type'] + '=' + value;
-      const res = await Api.get(url);
+      if (this.state.quoteSelected.quote_provider === 'Maxlife') {
 
-      riders_info_current[this.state.selectedIndex].showDotDot = false;
-      this.setState({
-        riders_info: riders_info_current
-      });
-      let result = res.pfwresponse.result;
-      let riders_info = result.riders_info;
+        if (fromAdded) {
+          insuranceData.generate_illustration = false;
+          insuranceData.ci_amount = '';
+          insuranceData.accident_benefit = '';
+          let accident_benefit, ci_benefit = 'Y', ci_amount;
+          let riders_info = this.state.riders_info;
 
-      var i = 0;
-      let riders_info_currnet = this.state.riders_info;
-      for (i in riders_info) {
-        if (riders_info[i].rider_type === selectedRiderList.rider_type) {
-          riders_info_currnet[i].pay_amount = riders_info[i].pay_amount;
-          this.setState({
-            riders_info: riders_info_currnet
-          })
+          for (var i = 0; i < this.state.riders_info.length; i++) {
+            if (riders_info[i].isAdded) {
+              if (riders_info[i].rider_type === 'accident_benefit') {
+                accident_benefit = riders_info[i].value || riders_info[i].recommended;
+              } else if (riders_info[i].rider_type === 'ci_amount') {
+                ci_amount = riders_info[i].value || riders_info[i].recommended;
+              } else if (riders_info[i].rider_type === 'ci_benefit') {
+                ci_benefit = 'Y';
+              }
+            }
+          }
+
+          if (ci_amount) {
+            insuranceData.ci_amount = ci_amount;
+          }
+          if (accident_benefit) {
+            insuranceData.accident_benefit = accident_benefit;
+          }
+
+          insuranceData.ci_benefit = ci_benefit;
         }
       }
 
+      this.setState({
+        insuranceData: insuranceData
+      })
+
+      const res = await Api.post('/api/insurance/quote', insuranceData);
+
+      if (res.pfwresponse.status_code === 200) {
+        if (!fromAdded) {
+          riders_info_current[this.state.selectedIndex].showDotDot = false;
+        }
+        riders_info_current[this.state.ci_benefit_index].showDotDot = false;
+
+        this.setState({
+          riders_info: riders_info_current
+        });
+        let result = res.pfwresponse.result.quotes[0];
+        let riders_info = result.riders_info;
+
+        let riders_info_currnet = this.state.riders_info;
+        for (let i = 0; i < riders_info.length; i++) {
+          if (which_keys_to_update.indexOf(i) !== -1) {
+            riders_info_currnet[i].pay_amount = riders_info[i].pay_amount;
+          }
+        }
+        this.setState({
+          riders_info: riders_info_currnet
+        });
+
+        if (fromAdded && riders_info[this.state.ci_benefit_index].isAdded) {
+          this.addExtraPremium(this.state.ci_benefit_index, riders_info[this.state.ci_benefit_index], 'remove', true);
+          this.addExtraPremium(this.state.ci_benefit_index, riders_info[this.state.ci_benefit_index], 'add', true);
+        }
+      } else {
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message
+          || 'Something went wrong');
+      }
+
+
     } catch (err) {
+      console.log(err);
       this.setState({
         show_loader: false
       });
@@ -409,7 +505,7 @@ class AddOnBenefits extends Component {
               variant="raised"
               size="large"
               color="secondary"
-              onClick={this.handleCloseAction}
+              onClick={() => this.handleCloseAction()}
               autoFocus>OK
             </Button>
           </DialogActions>
@@ -477,8 +573,9 @@ class AddOnBenefits extends Component {
     return null;
   }
 
-  addExtraPremium(index, benefit, whatTo) {
+  addExtraPremium = (index, benefit, whatTo, fromApi) => {
 
+    console.log("aaa")
     let totalAddedBenefits = this.state.totalAddedBenefits;
     let totalAddedAmount = this.state.totalAddedAmount;
     let riders_info = this.state.riders_info;
@@ -491,6 +588,10 @@ class AddOnBenefits extends Component {
       totalAddedBenefits -= 1;
       totalAddedAmount -= benefit.pay_amount;
       riders_info[index].isAdded = false;
+    }
+
+    if (this.state.quoteSelected.quote_provider === 'Maxlife' && !fromApi) {
+      this.handleCloseAction(whatTo, index, benefit);
     }
 
     if (totalAddedBenefits > 0) {
@@ -544,7 +645,7 @@ class AddOnBenefits extends Component {
               <div style={{ marginTop: 2 }}>
                 <DotDotLoader></DotDotLoader>
               </div>}
-            {!props.showDotDot && <span className="ins-riders-tiles3c">{inrFormatDecimal(props.pay_amount)} Monthly</span>}
+            {!props.showDotDot && <span className="ins-riders-tiles3c">{inrFormatDecimal(props.pay_amount)} {this.state.payment_frequency}</span>}
           </div>
           {!props.isAdded && <div className="ins-riders-tiles3d" onClick={() => this.addExtraPremium(index, props, 'add')}>
             Add
@@ -584,41 +685,41 @@ class AddOnBenefits extends Component {
         >
           <DialogContent>
             <div className="quote-confirmation-dialog-head">
-              <img className="quote-confirmation-dialog-head1" src={this.state.quoteSelected.quote_provider_logo} alt="Insurance" />
-              <div className="quote-confirmation-dialog-head2">{this.state.quoteSelected.insurance_title}</div>
+              <img className="quote-confirmation-dialog-head1" src={this.state.final_quote.quote_provider_logo} alt="Insurance" />
+              <div className="quote-confirmation-dialog-head2">{this.state.final_quote.insurance_title}</div>
             </div>
             <div className="annual-inc-dialog" id="alert-dialog-description">
               <div>
                 <div className="confirm-quote-popup-content1">
                   <div className="confirm-quote-popup-content1a">Cover amount:</div>
-                  <div className="confirm-quote-popup-content1b">{numDifferentiation(this.state.quoteSelected.cover_amount)}</div>
+                  <div className="confirm-quote-popup-content1b">{numDifferentiation(this.state.final_quote.cover_amount)}</div>
                 </div>
                 <div className="confirm-quote-popup-content1">
                   <div className="confirm-quote-popup-content1a">Cover period:</div>
-                  <div className="confirm-quote-popup-content1b">{this.state.quoteSelected.term}</div>
+                  <div className="confirm-quote-popup-content1b">{this.state.final_quote.term}</div>
                 </div>
                 <div className="confirm-quote-popup-content1">
                   <div className="confirm-quote-popup-content1a">Premium frequency:</div>
-                  <div className="confirm-quote-popup-content1b">{this.state.payment_frequency_selected}</div>
+                  <div className="confirm-quote-popup-content1b">{this.state.payment_frequency}</div>
                 </div>
                 <div className="confirm-quote-popup-content1">
                   <div className="confirm-quote-popup-content1a">Premium details:</div>
                 </div>
                 <div className="confirm-quote-popup-content1">
                   <div className="confirm-quote-popup-content1c">Base premium</div>
-                  <div className="confirm-quote-popup-content1c">{formatAmount(this.state.quoteSelected.quote_json.base_premium)}</div>
+                  <div className="confirm-quote-popup-content1c">{inrFormatDecimal(this.state.final_quote.quote_json.base_premium)}</div>
                 </div>
                 <div className="confirm-quote-popup-content1">
                   <div className="confirm-quote-popup-content1c">Add on benefits</div>
-                  <div className="confirm-quote-popup-content1c">{formatAmount(this.state.totalAddedAmount)}</div>
+                  <div className="confirm-quote-popup-content1c">{inrFormatDecimal(this.state.final_quote.quote_json.riders_base_premium)}</div>
                 </div>
                 <div className="confirm-quote-popup-content1">
                   <div className="confirm-quote-popup-content1c">GST & taxes</div>
-                  <div className="confirm-quote-popup-content1c">{formatAmount(this.state.quoteSelected.quote_json.total_tax)}</div>
+                  <div className="confirm-quote-popup-content1c">{inrFormatDecimal(this.state.final_quote.quote_json.total_tax)}</div>
                 </div>
                 <div className="confirm-quote-popup-content1 confirm-quote-popup-content1d">
                   <div className="confirm-quote-popup-content1e">Total payable</div>
-                  <div className="confirm-quote-popup-content1b">{inrFormatDecimalWithoutIcon(this.state.totalPremium)}</div>
+                  <div className="confirm-quote-popup-content1b">{inrFormatDecimalWithoutIcon(this.state.final_quote.quote_json.premium)}</div>
                 </div>
               </div>
             </div>

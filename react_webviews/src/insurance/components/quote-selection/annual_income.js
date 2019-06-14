@@ -202,7 +202,7 @@ class AnnualIncome extends Component {
             {this.state.incomeList[this.state.quoteData.selectedIndexIncome] && <div className="annual-income-data-mid" style={{ width: '35%' }} >₹ {this.state.annual_income ||
               this.state.incomeList[this.state.quoteData.selectedIndexIncome].value || ''}</div>}
             {!this.state.incomeList[this.state.quoteData.selectedIndexIncome] &&
-              <div className="annual-income-data-mid" style={{ width: '35%' }} >₹ {this.state.annual_income || ''}</div>}
+              <div className="annual-income-data-mid" style={{ width: 'fit-content', minWidth: 20 }} >₹ {this.state.annual_income || ''}</div>}
 
             {this.state.selectedIndex >= 0 &&
               <div style={{ color: this.state.annual_income_error ? 'red' : '#878787', fontSize: 12 }}>Select an option from below</div>}

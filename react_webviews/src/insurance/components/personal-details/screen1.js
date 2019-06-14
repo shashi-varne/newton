@@ -145,8 +145,6 @@ class PersonalDetails1 extends Component {
 
   handleClick = async () => {
 
-
-    console.log(this.state);
     if (this.state.provider !== 'Maxlife' && !validateEmpty(this.state.name)) {
       this.setState({
         name_error: 'Enter valid name'
@@ -195,12 +193,12 @@ class PersonalDetails1 extends Component {
       this.setState({
         last_name_error: 'Last name can not contain more than 3 same consecutive characters'
       });
-    } else if (providerAsIpru(this.state.proider) && !validateEmpty(this.state.pan_number)) {
+    } else if (providerAsIpru(this.state.provider) && !validateEmpty(this.state.pan_number)) {
       this.setState({
         pan_number_error: 'PAN number cannot be empty'
       });
       return;
-    } else if (providerAsIpru(this.state.proider) && !validatePan(this.state.pan_number)) {
+    } else if (providerAsIpru(this.state.provider) && !validatePan(this.state.pan_number)) {
       this.setState({
         pan_number_error: 'Invalid PAN number'
       });
@@ -235,16 +233,16 @@ class PersonalDetails1 extends Component {
       this.setState({
         spouse_name_error: 'Name can contain only alphabets'
       });
-    } else if ((providerAsIpru(this.state.proider) && this.state.params.isKyc) && (this.state.email.length < 10 || !validateEmail(this.state.email))) {
+    } else if ((providerAsIpru(this.state.provider) && this.state.params.isKyc) && (this.state.email.length < 10 || !validateEmail(this.state.email))) {
       this.setState({
         email_error: 'Please enter valid email'
       });
-    } else if ((providerAsIpru(this.state.proider) && this.state.params.isKyc) &&
+    } else if ((providerAsIpru(this.state.provider) && this.state.params.isKyc) &&
       (this.state.mobile_no.length !== 10 || !validateNumber(this.state.mobile_no))) {
       this.setState({
         mobile_no_error: 'Please enter valid mobile no'
       });
-    } else if ((providerAsIpru(this.state.proider) && this.state.params.isKyc) &&
+    } else if ((providerAsIpru(this.state.provider) && this.state.params.isKyc) &&
       !numberShouldStartWith(this.state.mobile_no)) {
       this.setState({
         mobile_no_error: 'Please enter valid mobile no'

@@ -12,10 +12,10 @@ class SelectGrp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedValue: this.props.value,
+      selectedValue: this.props.value !== "" && this.props.value >= 0 ? Number(this.props.value) : '',
       options: this.props.options,
       onChange: this.props.onChange,
-      recommendedIndex: this.props.recommendedIndex || '',
+      recommendedIndex: Number(this.props.recommendedIndex),
       dataType: this.props.dataType,
       keyToShow: this.props.keyToShow,
       inputKeyName: this.props.inputKeyName,
@@ -24,13 +24,22 @@ class SelectGrp extends Component {
     };
 
     this.renderList = this.renderList.bind(this);
+    // this.handleShow.bind(this, this.props.value)
+
+  }
+
+
+  componentDidMount() {
+    // this.handleShow(this.state.selectedValue)
   }
 
   componentDidUpdate(prevState) {
+
     if (prevState.value !== this.props.value) {
       this.setState({
         selectedValue: this.props.value
       })
+      // this.handleShow(this.props.value);
     }
 
     if (prevState.options !== this.props.options) {
@@ -57,9 +66,20 @@ class SelectGrp extends Component {
     this.props.onChange(index);
   };
 
+  handleShow(i) {
+    // console.log("handleshow :" + i)
+    // console.log(this.refs);
+    if (!this.refs) {
+      return;
+    }
+    this.setState({ index: i });
+    this.refs[i].scrollIntoView({ behavior: 'smooth', block: 'center', inline: "nearest" });
+  }
+
   renderList(props, index) {
+
     return (
-      <div key={index} onClick={() => this.handleChange(index)}
+      <div key={index} ref={index} onClick={() => this.handleChange(index)}
         className={'ins-row-scroll' + (this.state.selectedValue === index ? ' ins-row-scroll-selected' : '')}>
         {this.state.selectedValue !== index &&
           <div style={{ display: '-webkit-box' }}>
