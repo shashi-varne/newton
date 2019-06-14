@@ -23,9 +23,6 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   if (action) {
     callbackData.action = action;
   }
-  if (events) {
-    callbackData.events = events;
-  }
   if (!action && !events) {
     return;
   }
@@ -77,6 +74,10 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     }
 
   } else {
+
+    if (events) {
+      callbackData.events = events;
+    }
     if (message) {
       callbackData.data = message;
     }
