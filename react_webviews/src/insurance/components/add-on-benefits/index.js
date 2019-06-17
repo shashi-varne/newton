@@ -116,10 +116,12 @@ class AddOnBenefits extends Component {
       let insuranceData = this.state.insuranceData;
       insuranceData.required_providers = [this.state.quoteSelected.quote_provider];
 
+
       this.setState({
         insuranceData: insuranceData
       });
 
+      insuranceData.set_defaults = true;
       const res = await Api.post('/api/insurance/quote', insuranceData);
       let result = res.pfwresponse.result.quotes[0];
       let riders_info = result.riders_info;
@@ -193,6 +195,7 @@ class AddOnBenefits extends Component {
     insuranceData.ci_benefit = ci_benefit || '';
     insuranceData.ci_amount = ci_amount || '';
     insuranceData.accident_benefit = accident_benefit || '';
+    insuranceData.set_defaults = false;
     return insuranceData;
   }
 
@@ -203,6 +206,7 @@ class AddOnBenefits extends Component {
 
     let insuranceData = this.getInsuranceData();
     insuranceData.generate_illustration = false;
+    insuranceData.set_defaults = false;
 
     try {
 
@@ -287,7 +291,6 @@ class AddOnBenefits extends Component {
   }
 
   changeAmount(index) {
-    console.log(this.state.riders_info[index])
     this.setState({
       selectedRiderList: this.state.riders_info[index],
       selectedIndex: index,
@@ -297,7 +300,6 @@ class AddOnBenefits extends Component {
   }
 
   renderListCoverAmount() {
-    console.log(this.state.selectedRiderList)
     if (this.state.openPopUpCoverAmount) {
       return (
         <div style={{ marginTop: 60 }}>
@@ -359,8 +361,6 @@ class AddOnBenefits extends Component {
 
     var riders_info_current = this.state.riders_info;
     let selectedRiderList = this.state.selectedRiderList;
-    console.log(selectedRiderList);
-    console.log(fromAdded)
     let insuranceData = this.state.insuranceData;
     let which_keys_to_update = [];
     insuranceData.generate_illustration = true;
@@ -434,6 +434,7 @@ class AddOnBenefits extends Component {
         insuranceData: insuranceData
       })
 
+      insuranceData.set_defaults = false;
       const res = await Api.post('/api/insurance/quote', insuranceData);
 
       if (res.pfwresponse.status_code === 200) {
@@ -458,9 +459,9 @@ class AddOnBenefits extends Component {
           riders_info: riders_info_currnet
         });
 
-        if (fromAdded && riders_info[this.state.ci_benefit_index].isAdded) {
-          this.addExtraPremium(this.state.ci_benefit_index, riders_info[this.state.ci_benefit_index], 'remove', true);
-          this.addExtraPremium(this.state.ci_benefit_index, riders_info[this.state.ci_benefit_index], 'add', true);
+        if (fromAdded && riders_info_currnet[this.state.ci_benefit_index].isAdded) {
+          this.addExtraPremium(this.state.ci_benefit_index, riders_info_currnet[this.state.ci_benefit_index], 'remove', true);
+          this.addExtraPremium(this.state.ci_benefit_index, riders_info_currnet[this.state.ci_benefit_index], 'add', true);
         }
       } else {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message
@@ -575,18 +576,30 @@ class AddOnBenefits extends Component {
 
   addExtraPremium = (index, benefit, whatTo, fromApi) => {
 
-    console.log("aaa")
     let totalAddedBenefits = this.state.totalAddedBenefits;
     let totalAddedAmount = this.state.totalAddedAmount;
     let riders_info = this.state.riders_info;
     let buttonTitle = 'Skip & Continue';
+
+    let last_pay_wop = this.state.last_pay_wop;
+    if (benefit.rider_type === 'ci_benefit') {
+      this.setState({
+        last_pay_wop: benefit.pay_amount
+      })
+    }
     if (whatTo === 'add') {
       totalAddedBenefits += 1;
       totalAddedAmount += benefit.pay_amount;
       riders_info[index].isAdded = true;
     } else {
       totalAddedBenefits -= 1;
-      totalAddedAmount -= benefit.pay_amount;
+      if (benefit.rider_type === 'ci_benefit') {
+
+        totalAddedAmount -= last_pay_wop;
+      } else {
+        totalAddedAmount -= benefit.pay_amount;
+      }
+
       riders_info[index].isAdded = false;
     }
 
