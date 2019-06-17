@@ -49,6 +49,8 @@ class PersonalDetails1 extends Component {
       mobile_no: '',
       email_error: '',
       mobile_no_error: '',
+      father_name: '',
+      father_name_error: '',
       provider: '',
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
@@ -80,7 +82,7 @@ class PersonalDetails1 extends Component {
       })
       const { name, dob, gender, marital_status,
         email, mobile_no, pan_number, spouse_name,
-        last_name, first_name } = res.pfwresponse.result.profile;
+        last_name, first_name, father_name } = res.pfwresponse.result.profile;
       const { image, provider, cover_plan } = res.pfwresponse.result.quote_desc;
 
       this.setState({
@@ -97,7 +99,8 @@ class PersonalDetails1 extends Component {
         provider: provider,
         cover_plan: cover_plan,
         first_name: first_name || '',
-        last_name: last_name || ''
+        last_name: last_name || '',
+        father_name: father_name || ''
       });
     } catch (err) {
       this.setState({
@@ -193,6 +196,23 @@ class PersonalDetails1 extends Component {
       this.setState({
         last_name_error: 'Last name can not contain more than 3 same consecutive characters'
       });
+    } else if (this.state.provider === 'Maxlife' && !validateLength(this.state.father_name)) {
+      this.setState({
+        father_name_error: 'Maximum length of name is 30 characters'
+      });
+    } else if (this.state.provider === 'Maxlife' && !validateConsecutiveChar(this.state.father_name)) {
+      this.setState({
+        father_name_error: 'Name can not contain more than 3 same consecutive characters'
+      });
+    } else if (this.state.provider === 'Maxlife' && !validateAlphabets(this.state.father_name)) {
+      this.setState({
+        father_name_error: 'Name can contain only alphabets'
+      });
+    } else if (!this.state.gender) {
+      this.setState({
+        gender_error: 'Mandatory'
+      });
+
     } else if (providerAsIpru(this.state.provider) && !validateEmpty(this.state.pan_number)) {
       this.setState({
         pan_number_error: 'PAN number cannot be empty'
@@ -203,11 +223,6 @@ class PersonalDetails1 extends Component {
         pan_number_error: 'Invalid PAN number'
       });
       return;
-    } else if (!this.state.gender) {
-      this.setState({
-        gender_error: 'Mandatory'
-      });
-
     } else if (this.state.provider === 'HDFC' && !this.state.marital_status) {
       this.setState({
         marital_status_error: 'Mandatory'
@@ -268,6 +283,7 @@ class PersonalDetails1 extends Component {
           data['pan_number'] = this.state.pan_number;
           data['first_name'] = this.state.first_name;
           data['last_name'] = this.state.last_name;
+          data['father_name'] = this.state.father_name;
           delete data['name'];
         }
 
@@ -488,6 +504,19 @@ class PersonalDetails1 extends Component {
               id="last_name"
               name="last_name"
               value={this.state.last_name}
+              onChange={this.handleChange()} />
+          </div>}
+          {this.state.provider === 'Maxlife' && <div className="InputField">
+            <Input
+              error={(this.state.father_name_error) ? true : false}
+              helperText={this.state.father_name_error}
+              type="text"
+              width="40"
+              label="Father's name *"
+              class="FatherName"
+              id="father-name"
+              name="father_name"
+              value={this.state.father_name}
               onChange={this.handleChange()} />
           </div>}
           <div className="InputField">
