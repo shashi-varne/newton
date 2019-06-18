@@ -213,7 +213,7 @@ class Writetous extends Component {
 	}
 
 	handleImage = () => {
-		this.native_call_handler('open_gallery', 'help_support');
+		this.native_call_handler('open_file', 'help_support');
 	}
 
 	backButtonEvent() {
