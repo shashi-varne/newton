@@ -259,7 +259,7 @@ img.per-det-img {
 .header-annual-inc-info {
   display: flex;
     margin: 0;
-    position: absolute;
+    position: fixed;
     z-index: 10;
     background: #fff;
     left: 0;
@@ -624,6 +624,7 @@ img.ins-riders-tiles2e {
   padding: 5px 26px 5px 26px;
   border-radius: 4px;
   margin-top: -7px;
+  display: inline-table;
 }
 .ins-riders-tiles3a {
     display: flex;
