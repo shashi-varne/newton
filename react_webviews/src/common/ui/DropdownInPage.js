@@ -6,7 +6,7 @@ import { getConfig } from 'utils/functions';
 
 import { FormControl } from 'material-ui/Form';
 import Input from './Input';
-import { inrFormatDecimalWithoutIcon } from 'utils/validators';
+import { inrFormatDecimalWithoutIcon, checkValidNumber } from 'utils/validators';
 
 class SelectGrp extends Component {
   constructor(props) {
@@ -15,7 +15,7 @@ class SelectGrp extends Component {
       selectedValue: this.props.value !== "" && this.props.value >= 0 ? Number(this.props.value) : '',
       options: this.props.options,
       onChange: this.props.onChange,
-      recommendedIndex: Number(this.props.recommendedIndex),
+      recommendedIndex: checkValidNumber(this.props.recommendedIndex, ''),
       dataType: this.props.dataType,
       keyToShow: this.props.keyToShow,
       inputKeyName: this.props.inputKeyName,

@@ -310,8 +310,8 @@ export function getRecommendedIndex(array, value, AOB, Key) {
 
 export function checkValidNumber(value, otherwise) {
   if (value === null || value === undefined || value === '') {
-    if (otherwise) {
-      return otherwise
+    if (otherwise !== null || otherwise !== undefined) {
+      return otherwise;
     }
     return false;
   } else {

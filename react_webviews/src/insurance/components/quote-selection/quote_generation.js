@@ -386,6 +386,21 @@ class QuoteGeneration extends Component {
     }
   }
 
+  setSelectedIndex(type, index) {
+    let quoteData = this.state.quoteData;
+    if (type === 'cover-amount') {
+      quoteData.selectedIndexCoverAmount = index;
+    } else if (type === 'cover-period') {
+      quoteData.selectedIndexCoverPeriod = index;
+    } else if (type === 'smoke') {
+      quoteData.selectedIndexSmoke = index;
+    } 
+
+    this.setState({
+      quoteData:quoteData
+    })
+  }
+
   getRecommendedIndex(type) {
     if (type === 'cover-amount') {
       return this.state.quoteData.recommendedIndexCoverAmount;
@@ -416,6 +431,8 @@ class QuoteGeneration extends Component {
   }
 
   setValue(index) {
+
+    this.setSelectedIndex(this.state.filterType, index);
     this.setState({
       selectedIndex: index
     })
@@ -627,7 +644,6 @@ class QuoteGeneration extends Component {
     this.setState({
       canRenderList: true,
       openPopUp: true,
-      selectedIndex: 0,
       filterType: type
     });
     manageDialog('general-dialog', 'flex');

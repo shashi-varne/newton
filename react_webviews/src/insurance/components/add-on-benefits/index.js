@@ -140,11 +140,9 @@ class AddOnBenefits extends Component {
         }
 
         riders_info[i].inputToRender = this.getInputToRender(riders_info[i]);
-        for (var j = 0; j < riders_info[i].cover_amount.length; j++) {
-          let recommendedIndex = getRecommendedIndex(riders_info[i].cover_amount[j], riders_info[i].recommended);
-          riders_info[i].recommendedIndex = recommendedIndex;
-          riders_info[i].selectedIndex = recommendedIndex;
-        }
+        let recommendedIndex = getRecommendedIndex(riders_info[i].cover_amount, riders_info[i].recommended);
+        riders_info[i].recommendedIndex = recommendedIndex;
+        riders_info[i].selectedIndex = recommendedIndex;
       }
       this.setState({
         show_loader: false,
@@ -358,7 +356,6 @@ class AddOnBenefits extends Component {
   };
 
   async handleCloseAction(fromAdded, index) {
-
     var riders_info_current = this.state.riders_info;
     let selectedRiderList = this.state.selectedRiderList;
     let insuranceData = this.state.insuranceData;
@@ -389,7 +386,7 @@ class AddOnBenefits extends Component {
         }
         which_keys_to_update.push(this.state.ci_benefit_index);
       } else {
-        let value = selectedRiderList.value;
+        let value = selectedRiderList.value || selectedRiderList.cover_amount[selectedRiderList.selectedIndex];
         let key = riders_info_current[this.state.selectedIndex].rider_type;
         if (selectedRiderList.cover_amount[selectedRiderList.selectedIndex] === 'Other') {
           value = selectedRiderList.inputToRender.value;
