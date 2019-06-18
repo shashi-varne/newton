@@ -307,3 +307,14 @@ export function getRecommendedIndex(array, value, AOB, Key) {
   }
   return '';
 }
+
+export function checkValidNumber(value, otherwise) {
+  if (value === null || value === undefined || value === '') {
+    if (otherwise) {
+      return otherwise
+    }
+    return false;
+  } else {
+    return Number(value);
+  }
+}
