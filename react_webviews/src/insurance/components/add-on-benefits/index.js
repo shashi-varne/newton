@@ -15,7 +15,7 @@ import Dialog, {
   DialogContent
 } from 'material-ui/Dialog';
 import {
-  inrFormatDecimalWithoutIcon, numDifferentiation,
+  numDifferentiation,
   validateNumber, inrFormatDecimal, getRecommendedIndex
 } from '../../../utils/validators';
 import { add_on_benefits_points } from '../../constants';
@@ -448,7 +448,6 @@ class AddOnBenefits extends Component {
         });
         let result = res.pfwresponse.result.quotes[0];
         let riders_info = result.riders_info;
-
         let riders_info_currnet = this.state.riders_info;
         for (let i = 0; i < riders_info.length; i++) {
           if (which_keys_to_update.indexOf(i) !== -1) {
@@ -463,6 +462,12 @@ class AddOnBenefits extends Component {
           this.addExtraPremium(this.state.ci_benefit_index, riders_info_currnet[this.state.ci_benefit_index], 'remove', true);
           this.addExtraPremium(this.state.ci_benefit_index, riders_info_currnet[this.state.ci_benefit_index], 'add', true);
         }
+
+        if (this.state.selectedIndex >= 0 && riders_info_current[this.state.selectedIndex].isAdded) {
+          this.addExtraPremium(this.state.selectedIndex, riders_info_currnet[this.state.selectedIndex], 'remove', true);
+          this.addExtraPremium(this.state.selectedIndex, riders_info_currnet[this.state.selectedIndex], 'add', true);
+        }
+
       } else {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message
           || 'Something went wrong');
@@ -576,30 +581,21 @@ class AddOnBenefits extends Component {
 
   addExtraPremium = (index, benefit, whatTo, fromApi) => {
 
+
     let totalAddedBenefits = this.state.totalAddedBenefits;
     let totalAddedAmount = this.state.totalAddedAmount;
     let riders_info = this.state.riders_info;
     let buttonTitle = 'Skip & Continue';
 
-    let last_pay_wop = this.state.last_pay_wop;
-    if (benefit.rider_type === 'ci_benefit') {
-      this.setState({
-        last_pay_wop: benefit.pay_amount
-      })
-    }
+    let last_pay_amounts = this.state.last_pay_amounts || {};
+
     if (whatTo === 'add') {
       totalAddedBenefits += 1;
       totalAddedAmount += benefit.pay_amount;
       riders_info[index].isAdded = true;
     } else {
       totalAddedBenefits -= 1;
-      if (benefit.rider_type === 'ci_benefit') {
-
-        totalAddedAmount -= last_pay_wop;
-      } else {
-        totalAddedAmount -= benefit.pay_amount;
-      }
-
+      totalAddedAmount -= last_pay_amounts[benefit.rider_type];
       riders_info[index].isAdded = false;
     }
 
@@ -610,12 +606,17 @@ class AddOnBenefits extends Component {
     if (totalAddedBenefits > 0) {
       buttonTitle = 'Buy now';
     }
+
+    last_pay_amounts[benefit.rider_type] = benefit.pay_amount;
+
+
     this.setState({
       totalAddedAmount: totalAddedAmount,
       totalAddedBenefits: totalAddedBenefits,
       riders_info: riders_info,
       totalPremium: this.state.basePremium + totalAddedAmount,
-      buttonTitle: buttonTitle
+      buttonTitle: buttonTitle,
+      last_pay_amounts: last_pay_amounts
     });
 
   }
@@ -732,7 +733,7 @@ class AddOnBenefits extends Component {
                 </div>
                 <div className="confirm-quote-popup-content1 confirm-quote-popup-content1d">
                   <div className="confirm-quote-popup-content1e">Total payable</div>
-                  <div className="confirm-quote-popup-content1b">{inrFormatDecimalWithoutIcon(this.state.final_quote.quote_json.premium)}</div>
+                  <div className="confirm-quote-popup-content1b">{inrFormatDecimal(this.state.final_quote.quote_json.premium)}</div>
                 </div>
               </div>
             </div>

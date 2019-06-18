@@ -14,7 +14,7 @@ import Dialog, {
   DialogContent
 } from 'material-ui/Dialog';
 import {
-  inrFormatDecimalWithoutIcon, numDifferentiation, formatAmount,
+   numDifferentiation,
   validateNumber, inrFormatDecimal
 } from '../../../utils/validators';
 import RadioOptions from '../../../common/ui/RadioOptions';
@@ -231,15 +231,15 @@ class QuoteGeneration extends Component {
                 </div>
                 <div className="confirm-quote-popup-content1">
                   <div className="confirm-quote-popup-content1c">Base premium</div>
-                  <div className="confirm-quote-popup-content1c">{formatAmount(this.state.popup_premium.base_premium)}</div>
+                  <div className="confirm-quote-popup-content1c">{inrFormatDecimal(this.state.popup_premium.base_premium)}</div>
                 </div>
                 <div className="confirm-quote-popup-content1">
                   <div className="confirm-quote-popup-content1c">GST & taxes</div>
-                  <div className="confirm-quote-popup-content1c">{formatAmount(this.state.popup_premium.base_premium_tax)}</div>
+                  <div className="confirm-quote-popup-content1c">{inrFormatDecimal(this.state.popup_premium.base_premium_tax)}</div>
                 </div>
                 <div className="confirm-quote-popup-content1 confirm-quote-popup-content1d">
                   <div className="confirm-quote-popup-content1e">Total payable</div>
-                  <div className="confirm-quote-popup-content1b">{inrFormatDecimalWithoutIcon(this.state.popup_premium.base_premium_total)}</div>
+                  <div className="confirm-quote-popup-content1b">{inrFormatDecimal(this.state.popup_premium.base_premium_total)}</div>
                 </div>
               </div>
             </div>

@@ -10,7 +10,10 @@ import { getConfig, manageDialog } from 'utils/functions';
 import comver_amount_icon from 'assets/life_cover_icon.png';
 // import { FormControl } from 'material-ui/Form';
 // import Input from '../../../common/ui/Input';
-import { validateNumber, inrFormatDecimal, numDifferentiation } from 'utils/validators';
+import {
+  validateNumber, inrFormatDecimal,
+  numDifferentiation, checkValidNumber
+} from 'utils/validators';
 import DropdownInPage from '../../../common/ui/DropdownInPage';
 
 import Button from 'material-ui/Button';
@@ -29,7 +32,7 @@ class CoverAmount extends Component {
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
-      selectedIndex: quoteData.selectedIndexCoverAmount || '',
+      selectedIndex: checkValidNumber(quoteData.selectedIndexCoverAmount, ''),
       coverAmountList: [{
         name: '', value: ''
       }],

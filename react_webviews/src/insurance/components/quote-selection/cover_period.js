@@ -15,6 +15,8 @@ import Dialog, {
   DialogContent
 } from 'material-ui/Dialog';
 
+import { checkValidNumber } from 'utils/validators';
+
 class CoverPeriod extends Component {
   constructor(props) {
     var quoteData = JSON.parse(window.localStorage.getItem('quoteData')) || {};
@@ -25,7 +27,7 @@ class CoverPeriod extends Component {
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
-      selectedIndex: quoteData.selectedIndexCoverPeriod || '',
+      selectedIndex: checkValidNumber(quoteData.selectedIndexCoverPeriod, ''),
       cover_period: 0,
       coverPeriodList: [],
       quoteData: quoteData

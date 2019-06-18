@@ -13,6 +13,7 @@ import Dialog, {
   DialogContent
 } from 'material-ui/Dialog';
 
+import { checkValidNumber } from 'utils/validators';
 import DropdownInPage from '../../../common/ui/DropdownInPage';
 
 class AnnualIncome extends Component {
@@ -26,7 +27,7 @@ class AnnualIncome extends Component {
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
-      selectedIndex: quoteData.selectedIndexIncome || '',
+      selectedIndex: checkValidNumber(quoteData.selectedIndexIncome, ''),
       annual_income: '',
       incomeList: [
         {
@@ -199,7 +200,7 @@ class AnnualIncome extends Component {
           <div style={{ width: '76%' }}>
             <div style={{ color: '#4a4a4a', fontSize: 16 }}>My current annual income is</div>
 
-            {this.state.incomeList[this.state.quoteData.selectedIndexIncome] && <div className="annual-income-data-mid" style={{ width: '35%' }} >₹ {this.state.annual_income ||
+            {this.state.incomeList[this.state.quoteData.selectedIndexIncome] && <div className="annual-income-data-mid" style={{ width: 'fit-content', minWidth: 20 }} >₹ {this.state.annual_income ||
               this.state.incomeList[this.state.quoteData.selectedIndexIncome].value || ''}</div>}
             {!this.state.incomeList[this.state.quoteData.selectedIndexIncome] &&
               <div className="annual-income-data-mid" style={{ width: 'fit-content', minWidth: 20 }} >₹ {this.state.annual_income || ''}</div>}
