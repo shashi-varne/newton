@@ -50,16 +50,24 @@ class Question extends Component {
 		start_time = new Date();
 	}
 
-	navigate = (pathname, data=[]) => {
+	navigate = (pathname, data, type) => {
+		let title = '';
+		if (type === 'write2us') {
+			title = this.props.location.state.questions.name + '/Others';
+		} else {
+			title = this.props.location.state.questions.name;
+		}
+		
 		if (navigator.onLine) {
       this.props.history.push({
         pathname: pathname,
 				search: getConfig().searchParams,
 				state: {
 					answer: data,
-					title: this.props.location.state.questions.name,
+					title: title,
 					category: this.props.location.state.category,
-					subcategory: this.props.location.state.subcategory
+					subcategory: this.props.location.state.subcategory,
+					from: 'question'
 				}
       });
     } else {
@@ -102,7 +110,7 @@ class Question extends Component {
 		return this.props.location.state.questions.questions.map((item, i) => {
 			return (
 				<div className="combine-list" key={i}>
-					<Grid container spacing={24} alignItems="center" className="HelpGrid" onClick={() => {this.navigate('/help/answer', item); this.sendQuestionEvent(item.question_id)}}>
+					<Grid container spacing={24} alignItems="center" className="HelpGrid" onClick={() => {this.navigate('/help/answer', item, 'answer'); this.sendQuestionEvent(item.question_id)}}>
 						<Grid item xs={12}>
 							<div className="card-title">{item.name}</div>
 						</Grid>
@@ -179,7 +187,7 @@ class Question extends Component {
 					{questions && this.renderQuestions()}
 				</div>
 				<div className="cta">
-					<button onClick={() => {this.navigate('/help/writetous'); this.sendEvent();}}>
+					<button onClick={() => {this.navigate('/help/writetous', [], 'write2us'); this.sendEvent();}}>
 						Unable to find my query
 					</button>
 				</div>

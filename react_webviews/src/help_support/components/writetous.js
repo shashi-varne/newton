@@ -32,6 +32,7 @@ class Writetous extends Component {
 			query: '',
 			type: '',
 			openDialog: false,
+			emptyForm: false,
 			params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0
@@ -59,9 +60,15 @@ class Writetous extends Component {
 
 	componentDidMount() {
 		start_time = new Date();
-		this.setState({
-			subcategory: this.props.location.state.subcategory.name
-		});
+		if (this.props.location.state.from === 'answer') {
+			this.setState({
+				subcategory: this.props.location.state.answer.name
+			});
+		} else {
+			this.setState({
+				subcategory: this.props.location.state.title
+			});
+		}
 	}
 
 	navigate = (pathname, data) => {
@@ -123,7 +130,7 @@ class Writetous extends Component {
 
 		nativeCallback({ events: eventObj });
 		
-		if (this.state.query) {
+		if (this.state.query || this.state.fileUploaded) {
 			
 			try {
 				let bodyFormData = new FormData();
@@ -162,12 +169,17 @@ class Writetous extends Component {
 				});
 				toast('Something went wrong');
 			}
+		} else {
+			this.setState({
+				emptyForm: true
+			})
 		}
 	}
 
 	handleChange = () => event => {
 		this.setState({
-			query: event.target.value
+			query: event.target.value,
+			emptyForm: false
 		});
 	}
 
@@ -176,7 +188,8 @@ class Writetous extends Component {
       imageBaseFile: file,
 			fileUploaded: true,
 			show_loader: false,
-			fileName: '1 file attached'
+			fileName: '1 file attached',
+			emptyForm: false
 		});
   }
 
@@ -251,7 +264,8 @@ class Writetous extends Component {
 			this.setState({
 				imageBaseFile: file,
 				fileUploaded: true,
-				fileName: file.name
+				fileName: file.name,
+				emptyForm: false
 			});
 		}
 	}
@@ -319,6 +333,7 @@ class Writetous extends Component {
 						<textarea rows="8" value={this.state.query} onChange={this.handleChange()}></textarea>
 					</div>
 					{this.renderAttachment()}
+					{this.state.emptyForm && <div className="error">Query/feedback cannot be empty</div>}
 				</div>
 				{this.renderDialog()}
 				<ToastContainer autoClose={3000} />

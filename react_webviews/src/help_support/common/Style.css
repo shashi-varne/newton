@@ -71,6 +71,7 @@
 .cta {
 	text-align: center;
 	margin-top: 40px;
+	margin-bottom: 40px;
 }
 
 .cta button {
@@ -289,5 +290,10 @@
 .editicon {
 	position: absolute;
 	right: 10px;
-	bottom: 15px;
+}
+
+.userdetail .InputField {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }

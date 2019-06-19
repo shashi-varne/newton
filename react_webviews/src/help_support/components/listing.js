@@ -70,6 +70,7 @@ class Listing extends Component {
 							var qObj = {};
 							qObj['question_id'] = v['question_id'];
 							qObj['question_detail'] = v;
+							qObj['category_name'] = val['name'];
 							questions_array.push(qObj);
 						});
 					})

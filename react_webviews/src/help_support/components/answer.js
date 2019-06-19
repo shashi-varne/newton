@@ -60,16 +60,17 @@ class Answer extends Component {
 		start_time = new Date();
 	}
 
-	navigate = (pathname, data) => {
+	navigate = (pathname, data, type) => {
     if (navigator.onLine) {
       this.props.history.push({
         pathname: pathname,
 				search: getConfig().searchParams,
 				state: {
-					answer: data,
-					title: this.props.location.state.title,
+					answer: (type === 'related') ? data.question_detail : data,
+					title: (type === 'related') ? data.category_name : this.props.location.state.title,
 					category: this.props.location.state.category,
-					subcategory: this.props.location.state.subcategory
+					subcategory: this.props.location.state.subcategory,
+					from: 'answer'
 				}
       });
     } else {
@@ -217,7 +218,7 @@ class Answer extends Component {
 
 	renderRelatedQuestions() {
 		let ques = JSON.parse(window.localStorage.getItem('helpsupport_questions'));
-		
+
 		let rel_ques_ids = [];
 		this.props.location.state.answer.related_question.forEach((val) => {
 			rel_ques_ids.push(val['question_id']);
@@ -232,7 +233,7 @@ class Answer extends Component {
 		
 		return rel_ques.map((item, i) => {
 			return (
-				<div key={i} className="related-question" onClick={() => {this.navigate('/help/answer', item.question_detail); this.sendRelatedEvent(item.question_detail.question_id)}}>{item.question_detail.name}</div>
+				<div key={i} className="related-question" onClick={() => {this.navigate('/help/answer', item, 'related'); this.sendRelatedEvent(item.question_detail.question_id)}}>{item.question_detail.name}</div>
 			);
 		})
 	}
@@ -270,10 +271,9 @@ class Answer extends Component {
 		if ((this.state.downvote && answer.query_type === 'TB' && answer.write_to_us_enabled === 1) || (answer.write_to_us_enabled === 1 && (answer.query_type === 'SR' || answer.query_type === 'HR'))) {
 			return (
 				<div>
-					<div className="downvotetext">Not satisfied with the answer provided, you can</div>
 					<div className="callback">
 						<img src={launch} alt=""/>
-						<div className="title" onClick={() => {this.navigate('/help/writetous'); this.sendWrite2UsEvent()}}>Write to us</div>
+						<div className="title" onClick={() => {this.navigate('/help/writetous', answer, 'write2us'); this.sendWrite2UsEvent()}}>Write to us</div>
 					</div>
 				</div>
 			);
