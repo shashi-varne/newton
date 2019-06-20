@@ -130,17 +130,17 @@ class Writetous extends Component {
 
 		nativeCallback({ events: eventObj });
 		
-		if (!this.state.query) {
+		if (!this.state.query.trim()) {
 			this.setState({
 				emptyForm: 'Query/feedback cannot be empty'
 			});
 			return;
-		} else if (this.state.query.length < 10) {
+		} else if (this.state.query.trim().length < 10) {
 			this.setState({
 				emptyForm: 'Minimum 10 characters required'
 			});
 			return;
-		} else if(/^[a-zA-Z0-9- ,_]*$/.test(this.state.query) === false) {
+		} else if(/^[a-zA-Z0-9- ,_]*$/.test(this.state.query.trim()) === false) {
 			this.setState({
 				emptyForm: 'Special characters are not allowed'
 			});
@@ -155,7 +155,7 @@ class Writetous extends Component {
 				bodyFormData.set('question', '');
 				bodyFormData.set('category', this.props.location.state.category.name);
 				bodyFormData.set('subcategory', this.props.location.state.subcategory.name);
-				bodyFormData.set('user_query', this.state.query);
+				bodyFormData.set('user_query', this.state.query.trim());
 				bodyFormData.set('query_subject', this.state.subcategory);
 				if (this.state.fileUploaded) {
 					bodyFormData.append('res', this.state.imageBaseFile, this.state.imageBaseFile.doc_type);
@@ -346,7 +346,7 @@ class Writetous extends Component {
 						<textarea rows="8" value={this.state.query} onChange={this.handleChange()}></textarea>
 					</div>
 					{this.renderAttachment()}
-					{this.state.emptyForm && <div className="error">{this.state.emptyForm}</div>}
+					<div className="error">{this.state.emptyForm}</div>
 				</div>
 				{this.renderDialog()}
 				<ToastContainer autoClose={3000} />
