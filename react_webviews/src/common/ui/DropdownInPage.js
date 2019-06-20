@@ -24,22 +24,20 @@ class SelectGrp extends Component {
     };
 
     this.renderList = this.renderList.bind(this);
-    // this.handleShow.bind(this, this.props.value)
-
+    this.handleShow.bind(this, this.props.value)
   }
 
 
   componentDidMount() {
-    // this.handleShow(this.state.selectedValue)
+    this.handleShow(this.state.selectedValue)
   }
 
   componentDidUpdate(prevState) {
-
+    this.handleShow(this.props.value);
     if (prevState.value !== this.props.value) {
       this.setState({
         selectedValue: this.props.value
       })
-      // this.handleShow(this.props.value);
     }
 
     if (prevState.options !== this.props.options) {
@@ -67,19 +65,20 @@ class SelectGrp extends Component {
   };
 
   handleShow(i) {
-    // console.log("handleshow :" + i)
-    // console.log(this.refs);
-    if (!this.refs) {
+
+    console.log("yo yo :" + i)
+    let element = document.getElementById(i);
+    console.log(element)
+    if (!element || element === null) {
       return;
     }
-    this.setState({ index: i });
-    this.refs[i].scrollIntoView({ behavior: 'smooth', block: 'center', inline: "nearest" });
+    element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: "nearest" });
   }
 
   renderList(props, index) {
 
     return (
-      <div key={index} ref={index} onClick={() => this.handleChange(index)}
+      <div key={index} id={index} ref={index} onClick={() => this.handleChange(index)}
         className={'ins-row-scroll' + (this.state.selectedValue === index ? ' ins-row-scroll-selected' : '')}>
         {this.state.selectedValue !== index &&
           <div style={{ display: '-webkit-box' }}>

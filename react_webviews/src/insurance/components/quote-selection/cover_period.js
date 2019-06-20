@@ -52,7 +52,6 @@ class CoverPeriod extends Component {
   }
 
   async componentDidMount() {
-    console.log(this.state.selectedIndex)
     try {
       const res = await Api.get('/api/insurance/recommend/cover_term?dob=' + this.state.quoteData.dob)
       this.setState({
@@ -61,7 +60,6 @@ class CoverPeriod extends Component {
       let result = res.pfwresponse.result;
       let coverPeriodList = result.list;
       coverPeriodList.push(result.recommendation);
-      console.log(coverPeriodList)
       if (res.pfwresponse.status_code === 200) {
         this.setState({
           coverPeriodList: coverPeriodList,
@@ -70,7 +68,6 @@ class CoverPeriod extends Component {
         var i = 0;
         for (i in coverPeriodList) {
           if (result.recommendation === coverPeriodList[i]) {
-            console.log("fff :" + i)
             this.setState({
               selectedIndex: this.state.selectedIndex || i * 1,
               recommendedIndex: i * 1
