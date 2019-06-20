@@ -13,6 +13,7 @@ import Mandate from './mandate_address';
 import Mandate_OTM from './mandate_otm';
 import RiskProfiler from './risk_profiler';
 import IsipBIller from './isip';
+import HelpSupport from './help_support';
 
 class App extends Component {
   render() {
@@ -26,6 +27,7 @@ class App extends Component {
           <Route path="/mandate-otm" component={Mandate_OTM} />
           <Route path="/risk" component={RiskProfiler} />
           <Route path="/isip" component={IsipBIller} />
+          <Route path="/help" component={HelpSupport} />
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>
