@@ -31,6 +31,7 @@ class Container extends Component {
   }
 
   componentDidMount() {
+    setHeights({ 'header': true, 'container': false });
     let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
     let that = this;
     if (generic_callback === "true") {
@@ -226,7 +227,7 @@ class Container extends Component {
           handleTopIcon={this.handleTopIcon} />
         }
         {/* Below Header Block */}
-        {!this.props.noHeader && !getConfig().hide_header && <div id="HeaderHeight" style={{  top: 56 }}>
+        {!this.props.noHeader && !getConfig().hide_header && <div id="HeaderHeight" style={{ top: 56 }}>
 
           {steps && <div className="Step">
             {steps}

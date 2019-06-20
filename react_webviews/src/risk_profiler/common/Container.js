@@ -32,6 +32,7 @@ class Container extends Component {
   }
 
   componentDidMount() {
+    setHeights({ 'header': true, 'container': false });
     let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
     let that = this;
     if (generic_callback === "true") {
@@ -249,7 +250,7 @@ class Container extends Component {
           handleTopIcon={this.handleTopIcon} />
 
         {/* Below Header Block */}
-        <div id="HeaderHeight" style={{  top: 56 }}>
+        <div id="HeaderHeight" style={{ top: 56 }}>
 
           {/* Loader Block */}
           {this.renderPageLoader()}
