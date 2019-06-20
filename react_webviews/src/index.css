@@ -1,5 +1,6 @@
 html, body, #root, .ReferralContainerWrapper {
   height: 100%;
+  
 }
 
 body {
@@ -9,6 +10,12 @@ body {
   font-size: 14px;
   -webkit-overflow-scrolling: touch;
   overflow: auto;
+  height: 100vh;
+}
+html {
+  margin: 0;
+  padding: 0;
+  /* height: 100vh; */
 }
 
 *:focus {

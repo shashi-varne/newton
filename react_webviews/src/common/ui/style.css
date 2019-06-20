@@ -73,10 +73,13 @@
   color: rgb(68,68,68);
 }
 .Banner {
+  position: fixed;
+    top: 59px;
   background: rgb(250, 247, 255);
   font-size: 14px;
   color: #444;
-  z-index: 100;
+  z-index: 1000;
+  width: 100%;
 }
 .Banner .Flex {
   align-items: center;

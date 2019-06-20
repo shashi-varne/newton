@@ -10,7 +10,7 @@ const Banner = (props) => (
       <div className="FlexItem1">
         <img src={hand} width={50} alt="" />
       </div>
-      <div className={`FlexItem5 ${props.classes.text}`}>
+      <div className={`FlexItem10 ${props.classes.text}`}>
         {props.text}
       </div>
     </div>

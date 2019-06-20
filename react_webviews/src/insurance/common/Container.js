@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 import { getConfig, manageDialog } from 'utils/functions';
-
 import Header from './Header';
 import Footer from './footer';
 import Banner from '../../common/ui/Banner';
@@ -17,6 +16,7 @@ import Dialog, {
 import '../../utils/native_listner';
 
 import { back_button_mapper } from '../constants';
+
 
 class Container extends Component {
 
@@ -38,7 +38,6 @@ class Container extends Component {
       window.callbackWeb.add_listener({
         type: 'back_pressed',
         go_back: function () {
-          console.log("goback from callbackWeb");
           that.historyGoBack();
         }
       });
@@ -46,11 +45,11 @@ class Container extends Component {
       window.PlutusSdk.add_listener({
         type: 'back_pressed',
         go_back: function () {
-          console.log("goback from plutussdk");
           that.historyGoBack();
         }
       });
     }
+
   }
 
   componentWillUnmount() {
@@ -71,7 +70,10 @@ class Container extends Component {
 
   historyGoBack = () => {
 
-    if (manageDialog('general-dialog', 'none')) {
+    if (manageDialog('general-dialog', 'none', 'enableScroll')) {
+      if (this.props.closePopup) {
+        this.props.closePopup();
+      }
       return;
     }
     let { params } = this.props.location;
@@ -204,7 +206,6 @@ class Container extends Component {
       this.navigate('/insurance/quote');
     }
 
-    console.log(this.props);
 
     nativeCallback({ action: this.state.callbackType });
   }
@@ -257,12 +258,19 @@ class Container extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    let body = document.getElementsByTagName('body')[0].offsetHeight;
+
+    // let body = document.getElementsByTagName('body')[0].offsetHeight;
     // let client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
+    // let foot = document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight : 0;
+
     let head = document.getElementsByClassName('Header')[0].offsetHeight;
-    let foot = document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight : 0;
     let banner = document.getElementsByClassName('Banner')[0];
     let bannerHeight = (banner) ? banner.offsetHeight : 0;
+    let step = document.getElementsByClassName('Step')[0];
+    let stepHeight = (step) ? step.offsetHeight : 0;
+
+    let HeaderHeight = bannerHeight + stepHeight + head + 'px';
+    document.getElementById('HeaderHeight').style.height = HeaderHeight;
 
     // if (client > body) {
     //   document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 40 + 'px';
@@ -270,7 +278,7 @@ class Container extends Component {
     //   document.getElementsByClassName('Container')[0].style.height = document.getElementsByClassName('Container')[0].offsetHeight;
     // }
 
-    document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 40 + 'px';
+    // document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 40 + 'px';
   }
 
   render() {
@@ -304,17 +312,20 @@ class Container extends Component {
           handleFilter={this.props.handleFilter} />
 
         {/* Below Header Block */}
-        <div style={{ height: 56 }}></div>
+        <div id="HeaderHeight">
+          {/* <div style={{ height: 56 }}></div> */}
 
-        {/* Loader Block */}
-        {this.renderPageLoader()}
+          {/* Loader Block */}
+          {this.renderPageLoader()}
 
-        <div className={`Step ${(this.props.type !== 'fisdom') ? 'blue' : ''}`}>
-          {steps}
+          {steps && <div className={`Step ${(this.props.type !== 'fisdom') ? 'blue' : ''}`}>
+            {steps}
+          </div>}
+
+          {/* Banner Block */}
+          {this.props.banner && <Banner text={this.props.bannerText} />}
+
         </div>
-
-        {/* Banner Block */}
-        {this.props.banner && <Banner text={this.props.bannerText} />}
 
         {/* Children Block */}
         <div className={`Container ${this.props.classOverRideContainer}`}>

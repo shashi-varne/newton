@@ -22,11 +22,18 @@
 }
 
 .Container {
-  padding: 20px 15px;
+  /* padding: 20px 15px;
   background-color: #fff;
   overflow-y: scroll;
   margin-bottom: 60px;
-  padding-bottom: 20px !important;
+  padding-bottom: 20px !important; */
+
+  padding: 20px 15px 0px 15px;
+    background-color: #fff;
+    overflow-y: scroll;
+    /* margin-bottom: 56px !important; */
+    height: 100% !important;
+    padding-bottom: 56px !important; 
 }
 
 .Container .container-padding {
@@ -91,6 +98,9 @@
 
 .FlexItem5 {
   flex: 5;
+}
+.FlexItem10 {
+  flex: 10
 }
 .Footer {
   position: fixed;
@@ -264,6 +274,12 @@ input#pan {
 .Step {
   flex-direction: row;
   display: flex;
+  position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: white;
 }
 .Step span {
   background: #cacaca;
@@ -372,4 +388,11 @@ input#pan {
   color: white !important;
   bottom: 80px !important;
   /* position: relative; */
+}
+.MuiModal-root {
+  z-index: 99999 !important;
+}
+.ReactModal__Body--open {
+  overflow-y: hidden;
+  position: fixed;
 }
