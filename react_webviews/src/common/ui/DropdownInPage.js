@@ -74,9 +74,9 @@ class SelectGrp extends Component {
     if (!element || element === null) {
       return;
     }
-    // this.setState({
-    //   view_scrolled: true
-    // })
+    this.setState({
+      view_scrolled: true
+    })
 
     scrollIntoView(element, {
       block: 'center',
