@@ -11,7 +11,8 @@ import DropdownInPage from '../../../common/ui/DropdownInPage';
 import Button from 'material-ui/Button';
 import Dialog, {
   DialogActions,
-  DialogContent
+  DialogContent,
+  DialogTitle
 } from 'material-ui/Dialog';
 import {
    numDifferentiation,
@@ -351,11 +352,14 @@ class QuoteGeneration extends Component {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
+
+          <DialogTitle id="form-dialog-title">
+          <div className="quote-filter-dialog-head">
+            {this.state.filterHead}
+          </div>
+          </DialogTitle>
           <DialogContent>
-            <div className="quote-filter-dialog-head">
-              {this.state.filterHead}
-            </div>
-            <div className="annual-inc-dialog" id="alert-dialog-description">
+            <div style={{marginTop:-60}} className="annual-inc-dialog" id="alert-dialog-description">
               {this.renderList()}
             </div>
           </DialogContent>

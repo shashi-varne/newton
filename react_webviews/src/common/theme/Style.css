@@ -388,6 +388,9 @@ input#pan {
 }
 .MuiModal-root {
   z-index: 99999 !important;
+    -webkit-transform: none;
+    -ms-transform: none; 
+    transform: none;
 }
 .ReactModal__Body--open {
   overflow-y: hidden;

@@ -12,7 +12,8 @@ import DropdownInPage from '../../../common/ui/DropdownInPage';
 import Button from 'material-ui/Button';
 import Dialog, {
   DialogActions,
-  DialogContent
+  DialogContent,
+  DialogTitle,
 } from 'material-ui/Dialog';
 import {
   numDifferentiation,
@@ -487,17 +488,19 @@ class AddOnBenefits extends Component {
           fullWidth={true}
           maxWidth={'md'}
           style={{ borderRadius: 6, width: '-webkit-fill-available' }}
-          id="payment"
+          id="general-dialog"
           open={this.state.openPopUpCoverAmount}
           onClose={this.handleClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogContent>
+          <DialogTitle id="form-dialog-title">
             <div className="quote-filter-dialog-head">
               Cover Amount
-            </div>
-            <div className="annual-inc-dialog" id="alert-dialog-description">
+          </div>
+          </DialogTitle>
+          <DialogContent>
+            <div style={{ marginTop: -60 }} className="annual-inc-dialog" id="alert-dialog-description">
               {this.renderListCoverAmount()}
             </div>
 
@@ -540,7 +543,7 @@ class AddOnBenefits extends Component {
       return (
         <Dialog
           style={{ borderRadius: 6 }}
-          id="payment"
+          id="general-dialog"
           open={this.state.openPopUpInfo}
           onClose={this.handleClose}
           aria-labelledby="alert-dialog-title"
