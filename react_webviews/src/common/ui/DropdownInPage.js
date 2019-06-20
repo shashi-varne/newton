@@ -3,6 +3,7 @@ import tick_icon_fisdom from 'assets/selected_option.png';
 import tick_icon_myway from 'assets/check_selected_blue.svg';
 import './style.css';
 import { getConfig } from 'utils/functions';
+import scrollIntoView from 'scroll-into-view-if-needed'
 
 import { FormControl } from 'material-ui/Form';
 import Input from './Input';
@@ -20,7 +21,8 @@ class SelectGrp extends Component {
       keyToShow: this.props.keyToShow || '',
       inputKeyName: this.props.inputKeyName || '',
       tick_icon: getConfig().type !== 'fisdom' ? tick_icon_myway : tick_icon_fisdom,
-      inputToRender: this.props.inputToRender
+      inputToRender: this.props.inputToRender,
+      view_scrolled: false
     };
 
     this.renderList = this.renderList.bind(this);
@@ -33,7 +35,10 @@ class SelectGrp extends Component {
   }
 
   componentDidUpdate(prevState) {
-    this.handleShow(this.props.value);
+    if (!this.state.view_scrolled) {
+      this.handleShow(this.props.value);
+    }
+
     if (prevState.value !== this.props.value) {
       this.setState({
         selectedValue: this.props.value
@@ -69,7 +74,15 @@ class SelectGrp extends Component {
     if (!element || element === null) {
       return;
     }
-    element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: "nearest" });
+    // this.setState({
+    //   view_scrolled: true
+    // })
+
+    scrollIntoView(element, {
+      block: 'center',
+      inline: 'nearest',
+    })
+
   }
 
   renderList(props, index) {
