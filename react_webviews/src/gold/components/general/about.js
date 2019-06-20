@@ -114,7 +114,7 @@ class About extends Component {
         events={this.sendEvents('just_set_events')}
       >
         <div className="gold-about-card">
-          <div className="Banner">
+          <div className="Banner-gold">
             <img alt="Gold" style={{ width: '100%' }} src={intro_gold} />
             <div className="BannerContent">
               <div className="BannerText">Introducing Gold</div>
