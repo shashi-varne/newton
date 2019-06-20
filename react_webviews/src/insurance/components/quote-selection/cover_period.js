@@ -65,12 +65,11 @@ class CoverPeriod extends Component {
           coverPeriodList: coverPeriodList,
           recommendation: result.recommendation
         });
-        var i = 0;
-        for (i in coverPeriodList) {
+        for (var i = 0; i < coverPeriodList.length; i++) {
           if (result.recommendation === coverPeriodList[i]) {
             this.setState({
-              selectedIndex: this.state.selectedIndex || i * 1,
-              recommendedIndex: i * 1
+              selectedIndex: this.state.selectedIndex || i,
+              recommendedIndex: i
             })
             this.setValue(this.state.selectedIndex);
           }

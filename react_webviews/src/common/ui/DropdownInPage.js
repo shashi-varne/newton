@@ -17,8 +17,8 @@ class SelectGrp extends Component {
       onChange: this.props.onChange,
       recommendedIndex: checkValidNumber(this.props.recommendedIndex, ''),
       dataType: this.props.dataType,
-      keyToShow: this.props.keyToShow,
-      inputKeyName: this.props.inputKeyName,
+      keyToShow: this.props.keyToShow || '',
+      inputKeyName: this.props.inputKeyName || '',
       tick_icon: getConfig().type !== 'fisdom' ? tick_icon_myway : tick_icon_fisdom,
       inputToRender: this.props.inputToRender
     };
@@ -65,10 +65,7 @@ class SelectGrp extends Component {
   };
 
   handleShow(i) {
-
-    console.log("yo yo :" + i)
     let element = document.getElementById(i);
-    console.log(element)
     if (!element || element === null) {
       return;
     }
@@ -146,7 +143,6 @@ class SelectGrp extends Component {
   }
 
   render() {
-    // const { options } = this.state;
     return (
       <div style={{ marginBottom: 50 }}>
         {this.state.options.map(this.renderList)}
