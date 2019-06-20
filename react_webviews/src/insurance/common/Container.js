@@ -254,10 +254,6 @@ class Container extends Component {
     }
   }
 
-  resetQuoteData() {
-
-  }
-
   componentDidUpdate(prevProps) {
     setHeights({ 'header': true, 'container': false });
   }
