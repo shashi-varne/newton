@@ -23,9 +23,6 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   if (action) {
     callbackData.action = action;
   }
-  if (events) {
-    callbackData.events = events;
-  }
   if (!action && !events) {
     return;
   }
@@ -75,7 +72,15 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     if (message) {
       callbackData.action_data = message;
     }
+    if (events) {
+      callbackData.event = events;
+    }
+
   } else {
+
+    if (events) {
+      callbackData.events = events;
+    }
     if (message) {
       callbackData.data = message;
     }
@@ -109,7 +114,6 @@ export const nativeCallback = async ({ action = null, message = null, events = n
 
       let campaign_version = getConfig().campaign_version;
 
-      console.log("campaign_version...................." + campaign_version);
       if (campaign_version >= 1) {
         if (isMobile.Android() && action) {
           if (typeof window.Android !== 'undefined') {
@@ -158,7 +162,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     }
 
     let insurance_v2 = getConfig().insurance_v2;
-    console.log('insurance_v2 :' + insurance_v2);
+
     if (!insurance_v2 && project === 'insurance') {
 
       let notInInsuranceV2 = ['take_control', 'take_control_reset'];
@@ -181,13 +185,9 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   }
 
   if (getConfig().app === 'android') {
-    console.log("Android Device")
-    console.log(generic_callback);
-    console.log(JSON.stringify(callbackData));
     window.Android.callbackNative(JSON.stringify(callbackData));
 
   } else if (getConfig().app === 'ios') {
-    console.log("iOS Device")
     window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
   } else {
     if (action === 'native_back' || action === 'exit_web') {

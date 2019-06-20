@@ -93,6 +93,18 @@ if (generic_callback === "true") {
       }
     }
 
+    exports.open_file = function (listener) {
+      listeners.push(listener);
+      let callbackData = {};
+      callbackData.action = 'get_blob';
+      callbackData.action_data = { file_name: listener.doc_type, mime_types: ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf', 'image/bmp'] };
+      if (typeof window.Android !== 'undefined') {
+        window.Android.callbackNative(JSON.stringify(callbackData));
+      } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
+        window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+      }
+    }
+
     var listeners = [];
 
     exports.add_listener = function (listener) {
