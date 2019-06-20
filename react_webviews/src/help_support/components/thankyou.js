@@ -132,7 +132,11 @@ class Thankyou extends Component {
   }
 
   submitUserData = async (type) => {
-    if (!this.state.is_email_not_present && (this.state.email.length < 10 || !validateEmail(this.state.email))) {
+    if (!this.state.is_email_not_present && !this.state.email) {
+      this.setState({
+        email_error: 'Please enter valid email'
+      });
+    } else if (!this.state.is_email_not_present && (this.state.email && (this.state.email.length < 10 || !validateEmail(this.state.email)))) {
       this.setState({
         email_error: 'Please enter valid email'
       });

@@ -32,7 +32,7 @@ class Writetous extends Component {
 			query: '',
 			type: '',
 			openDialog: false,
-			emptyForm: false,
+			emptyForm: '',
 			params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0
@@ -130,7 +130,22 @@ class Writetous extends Component {
 
 		nativeCallback({ events: eventObj });
 		
-		if (this.state.query || this.state.fileUploaded) {
+		if (!this.state.query) {
+			this.setState({
+				emptyForm: 'Query/feedback cannot be empty'
+			});
+			return;
+		} else if (this.state.query.length < 10) {
+			this.setState({
+				emptyForm: 'Minimum 10 characters required'
+			});
+			return;
+		} else if(/^[a-zA-Z0-9- ,_]*$/.test(this.state.query) === false) {
+			this.setState({
+				emptyForm: 'Special characters are not allowed'
+			});
+			return;
+		} else if (this.state.query || this.state.fileUploaded) {
 			
 			try {
 				let bodyFormData = new FormData();
@@ -150,8 +165,6 @@ class Writetous extends Component {
 					show_loader: true
 				});
 				const feedback = await Api.post('/api/helpandsupport/writetous', bodyFormData);
-
-				console.log(feedback.pfwresponse)
 				
 				if (feedback.pfwresponse.status_code === 200) {
 					this.setState({
@@ -171,7 +184,7 @@ class Writetous extends Component {
 			}
 		} else {
 			this.setState({
-				emptyForm: true
+				emptyForm: 'Query/feedback cannot be empty'
 			})
 		}
 	}
@@ -179,7 +192,7 @@ class Writetous extends Component {
 	handleChange = () => event => {
 		this.setState({
 			query: event.target.value,
-			emptyForm: false
+			emptyForm: ''
 		});
 	}
 
@@ -189,7 +202,7 @@ class Writetous extends Component {
 			fileUploaded: true,
 			show_loader: false,
 			fileName: '1 file attached',
-			emptyForm: false
+			emptyForm: ''
 		});
   }
 
@@ -265,7 +278,7 @@ class Writetous extends Component {
 				imageBaseFile: file,
 				fileUploaded: true,
 				fileName: file.name,
-				emptyForm: false
+				emptyForm: ''
 			});
 		}
 	}
@@ -333,7 +346,7 @@ class Writetous extends Component {
 						<textarea rows="8" value={this.state.query} onChange={this.handleChange()}></textarea>
 					</div>
 					{this.renderAttachment()}
-					{this.state.emptyForm && <div className="error">Query/feedback cannot be empty</div>}
+					{this.state.emptyForm && <div className="error">{this.state.emptyForm}</div>}
 				</div>
 				{this.renderDialog()}
 				<ToastContainer autoClose={3000} />

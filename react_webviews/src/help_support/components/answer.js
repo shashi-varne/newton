@@ -62,6 +62,14 @@ class Answer extends Component {
 
 	navigate = (pathname, data, type) => {
     if (navigator.onLine) {
+			this.setState({
+				upvote: false,
+				downvote: false,
+				upvoteImg: thumb_up,
+				downvoteImg: thumb_down,
+				feedback_text: 'Was this helpful'
+			});
+			
       this.props.history.push({
         pathname: pathname,
 				search: getConfig().searchParams,
