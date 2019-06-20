@@ -238,7 +238,7 @@ class Container extends Component {
           handleReset={this.props.handleReset} />
 
         {/* Below Header Block */}
-        <div id="HeaderHeight" style={{ background: 'white', top: 56 }}>
+        <div id="HeaderHeight" style={{  top: 56 }}>
           {/* Loader Block */}
           {this.renderPageLoader()}
         </div>

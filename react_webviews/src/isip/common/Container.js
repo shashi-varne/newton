@@ -226,7 +226,7 @@ class Container extends Component {
           handleTopIcon={this.handleTopIcon} />
         }
         {/* Below Header Block */}
-        {!this.props.noHeader && !getConfig().hide_header && <div id="HeaderHeight" style={{ background: 'white', top: 56 }}>
+        {!this.props.noHeader && !getConfig().hide_header && <div id="HeaderHeight" style={{  top: 56 }}>
 
           {steps && <div className="Step">
             {steps}

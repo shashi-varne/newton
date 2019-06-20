@@ -240,7 +240,7 @@ class Container extends Component {
           handleTopIcon={this.handleTopIcon} />
         }
         {/* Below Header Block */}
-        <div id="HeaderHeight" style={{ background: 'white', top: 56 }}>
+        <div id="HeaderHeight" style={{  top: 56 }}>
 
           {/* Loader Block */}
           {this.renderPageLoader()}
