@@ -6,10 +6,7 @@ import Container from '../../common/Container';
 import Api from 'utils/api';
 import { getConfig, manageDialog } from 'utils/functions';
 
-// import selected_option from 'assets/selected_option.png';
 import comver_amount_icon from 'assets/life_cover_icon.png';
-// import { FormControl } from 'material-ui/Form';
-// import Input from '../../../common/ui/Input';
 import {
   validateNumber, inrFormatDecimal,
   numDifferentiation, checkValidNumber
@@ -25,6 +22,7 @@ import Dialog, {
 class CoverAmount extends Component {
   constructor(props) {
     var quoteData = JSON.parse(window.localStorage.getItem('quoteData')) || {};
+    console.log(quoteData)
     super(props);
     this.state = {
       show_loader: true,
@@ -41,7 +39,6 @@ class CoverAmount extends Component {
       cover_amount: quoteData.cover_amount,
       coverAmountToShow: quoteData.coverAmountToShow
     }
-    // this.renderList = this.renderList.bind(this);
     this.setValue = this.setValue.bind(this);
   }
 
@@ -94,8 +91,8 @@ class CoverAmount extends Component {
         for (var i in result.list) {
           if (result.recommendation.name === result.list[i].name) {
             this.setState({
-              selectedIndex: this.state.selectedIndex || i * 1,
-              recommendedIndex: i * 1
+              selectedIndex: checkValidNumber(this.state.selectedIndex, i),
+              recommendedIndex: i
             })
             this.setValue(this.state.selectedIndex, 'first');
           }
@@ -306,52 +303,6 @@ class CoverAmount extends Component {
     }
   }
 
-  // renderList(props, index) {
-  //   return (
-  //     <div key={index} onClick={() => this.setValue(index)}
-  //       style={{ height: 'auto' }}
-  //       className={'ins-row-scroll' + (this.state.selectedIndex === index ? ' ins-row-scroll-selected' : '')}>
-  //       {this.state.selectedIndex !== index &&
-  //         <div style={{ display: '-webkit-box' }}>
-  //           <div style={{ width: '28%' }}>{props.name}</div>
-  //           {props.name !== 'Other' && index === this.state.recommendedIndex &&
-  //             <div style={{ width: '60%', color: '#b9a8e6', fontSize: 13 }}>Recommended</div>
-  //           }
-  //         </div>
-  //       }
-  //       {this.state.selectedIndex === index &&
-  //         <div>
-  //           <div style={{ display: '-webkit-box' }}>
-  //             <div style={{ width: index === this.state.recommendedIndex ? '28%' : '88%', color: '#4f2da7', fontWeight: 500 }}>{props.name}</div>
-  //             {props.name !== 'Other' && index === this.state.recommendedIndex * 1 &&
-  //               <div style={{ width: '60%', color: '#b9a8e6', fontSize: 13 }}>Recommended</div>
-  //             }
-  //             < img width="20" src={selected_option} alt="Insurance" />
-
-  //           </div>
-  //           {props.name === 'Other' &&
-  //             <FormControl >
-  //               <div style={{ margin: '10px 0 0 0' }} className="InputField">
-  //                 <Input
-  //                   error={(this.state.cover_amount_error) ? true : false}
-  //                   helperText={this.state.cover_amount_error || this.state.cover_amount_min_max}
-  //                   type="text"
-  //                   width="40"
-  //                   label="Cover Amount"
-  //                   class="Income"
-  //                   id="income"
-  //                   name="cover_amount"
-  //                   value={this.state.cover_amount}
-  //                   onChange={this.handleChange('cover_amount')}
-  //                   onKeyChange={this.handleKeyChange('cover_amount')} />
-  //               </div>
-  //             </FormControl>}
-  //         </div>
-  //       }
-  //     </div>
-  //   )
-  // }
-
   render() {
     return (
       <Container
@@ -386,7 +337,6 @@ class CoverAmount extends Component {
         </div>
 
         <div style={{ marginTop: 60 }}>
-          {/* {this.state.coverAmountList.map(this.renderList)} */}
           {this.state.inputToRender && this.state.inputToRender.helperText && <DropdownInPage
             options={this.state.coverAmountList}
             value={this.state.selectedIndex}
