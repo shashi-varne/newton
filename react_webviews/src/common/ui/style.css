@@ -74,7 +74,7 @@
 }
 .Banner {
   position: fixed;
-    top: 59px;
+    top: inherit;
   background: rgb(250, 247, 255);
   font-size: 14px;
   color: #444;

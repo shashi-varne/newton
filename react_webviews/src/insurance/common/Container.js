@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
-import { getConfig, manageDialog, getHeaderHeight } from 'utils/functions';
+import { getConfig, manageDialog, setHeights } from 'utils/functions';
 import Header from './Header';
 import Footer from './footer';
 import Banner from '../../common/ui/Banner';
@@ -258,10 +258,7 @@ class Container extends Component {
   }
 
   componentDidUpdate(prevProps) {
-
-    // to set header height
-    getHeaderHeight();
-
+    setHeights({ 'header': true, 'container': false });
   }
 
   render() {
@@ -295,8 +292,7 @@ class Container extends Component {
           handleFilter={this.props.handleFilter} />
 
         {/* Below Header Block */}
-        <div id="HeaderHeight">
-          {/* <div style={{ height: 56 }}></div> */}
+        <div id="HeaderHeight" style={{ background: 'white', top: 56 }}>
 
           {/* Loader Block */}
           {this.renderPageLoader()}

@@ -14,7 +14,7 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import '../../utils/native_listner_otm';
-import { getConfig } from 'utils/functions';
+import { getConfig, setHeights } from 'utils/functions';
 
 
 class Container extends Component {
@@ -34,7 +34,7 @@ class Container extends Component {
     let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
     let that = this;
     if (generic_callback === "true") {
-      if(getConfig().iOS) {
+      if (getConfig().iOS) {
         nativeCallback({ action: 'hide_top_bar' });
       }
       window.callbackWeb.add_listener({
@@ -206,19 +206,7 @@ class Container extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    let body = document.getElementsByTagName('body')[0].offsetHeight;
-    // let client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
-    let head = document.getElementsByClassName('Header')[0] ? document.getElementsByClassName('Header')[0].offsetHeight : 0;
-    let foot = document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight : 0;
-    let banner = document.getElementsByClassName('Banner')[0];
-    let bannerHeight = (banner) ? banner.offsetHeight : 0;
-
-    // if (client > body) {
-    //   document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 50 + 'px';
-    // } else {
-    //   document.getElementsByClassName('Container')[0].style.height = document.getElementsByClassName('Container')[0].offsetHeight;
-    // }
-    document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 50 + 'px';
+    setHeights({ 'header': true, 'container': false });
   }
 
   render() {
@@ -252,18 +240,19 @@ class Container extends Component {
           handleTopIcon={this.handleTopIcon} />
         }
         {/* Below Header Block */}
-        <div style={{ height: 56 }}></div>
+        <div id="HeaderHeight" style={{ background: 'white', top: 56 }}>
 
-        {/* Loader Block */}
-        {this.renderPageLoader()}
+          {/* Loader Block */}
+          {this.renderPageLoader()}
 
-        <div className="Step"
-        >
-          {steps}
+          {steps && <div className="Step">
+            {steps}
+          </div>}
+
+          {/* Banner Block */}
+          {this.props.banner && <Banner text={this.props.bannerText} />}
+
         </div>
-
-        {/* Banner Block */}
-        {this.props.banner && <Banner text={this.props.bannerText} />}
 
         {/* Children Block */}
         <div className={`Container ${this.props.classOverRideContainer}`}>

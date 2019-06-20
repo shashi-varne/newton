@@ -204,15 +204,33 @@ export function manageDialog(id, display, aboutScroll) {
 }
 
 
-export function getHeaderHeight() {
+export function setHeights(data) {
   let head = document.getElementsByClassName('Header')[0].offsetHeight;
   let banner = document.getElementsByClassName('Banner')[0];
   let bannerHeight = (banner) ? banner.offsetHeight : 0;
   let step = document.getElementsByClassName('Step')[0];
   let stepHeight = (step) ? step.offsetHeight : 0;
 
-  let HeaderHeight = bannerHeight + stepHeight + head + 'px';
-  document.getElementById('HeaderHeight').style.height = HeaderHeight;
+  let body = document.getElementsByTagName('body')[0].offsetHeight;
+  let client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
+  let foot = document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight : 0;
 
-  return HeaderHeight;
+  let HeaderHeight = bannerHeight + stepHeight + head + 'px';
+  if (data.header) {
+
+    document.getElementById('HeaderHeight').style.height = HeaderHeight;
+  }
+
+
+  // not using for now
+  if (data.container) {
+    if (client > body) {
+      document.getElementsByClassName('Container')[0].style.height = body - HeaderHeight - foot - 40 + 'px';
+    } else {
+      document.getElementsByClassName('Container')[0].style.height = document.getElementsByClassName('Container')[0].offsetHeight;
+    }
+
+    document.getElementsByClassName('Container')[0].style.height = body - HeaderHeight - foot - 40 + 'px';
+  }
+
 }

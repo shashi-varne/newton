@@ -13,7 +13,7 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import '../../utils/native_listner';
-import { getConfig } from 'utils/functions';
+import { getConfig, setHeights } from 'utils/functions';
 
 class Container extends Component {
 
@@ -47,19 +47,6 @@ class Container extends Component {
           that.historyGoBack();
         }
       });
-    }
-  }
-
-  setHeight = () => {
-    let body = document.getElementsByTagName('body')[0].offsetHeight;
-    let container_wrapper = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
-    // let container = document.getElementsByClassName('Container')[0].offsetHeight;
-    // let header = document.getElementsByClassName('Header')[0].offsetHeight;
-    let footer = document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight : 0;
-
-    if (container_wrapper > body) {
-      // 40 for conatiner's padding
-      document.getElementsByClassName('Container')[0].style.height = container_wrapper + footer + 40 + 'px';
     }
   }
 
@@ -220,7 +207,7 @@ class Container extends Component {
   }
 
   componentDidUpdate(prevProps) {
-
+    setHeights({ 'header': true, 'container': false });
   }
 
   render() {
@@ -251,10 +238,10 @@ class Container extends Component {
           handleReset={this.props.handleReset} />
 
         {/* Below Header Block */}
-        <div style={{ height: 56 }}></div>
-
-        {/* Loader Block */}
-        {this.renderPageLoader()}
+        <div id="HeaderHeight" style={{ background: 'white', top: 56 }}>
+          {/* Loader Block */}
+          {this.renderPageLoader()}
+        </div>
 
         {/* Children Block */}
         <div className={`Container ${(this.props.noPadding) ? 'no-padding' : ''}`}>
