@@ -13,6 +13,7 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import 'utils/native_listner_otm';
+import { setHeights } from 'utils/functions';
 
 let start_time = '';
 
@@ -25,6 +26,7 @@ class Container extends Component {
   }
 
   componentDidMount() {
+    setHeights({ 'header': true, 'container': false });
     start_time = new Date();
 
     let that = this;
@@ -40,16 +42,20 @@ class Container extends Component {
     window.callbackWeb.remove_listener({});
   }
 
+  componentDidUpdate(prevProps) {
+    setHeights({ 'header': true, 'container': false });
+  }
+
   calcReadtime = (endtime) => {
-		var new_date = new Date(endtime - start_time);
-		return new_date.getUTCMinutes() + '.' + new_date.getUTCSeconds();
-	}
+    var new_date = new Date(endtime - start_time);
+    return new_date.getUTCMinutes() + '.' + new_date.getUTCSeconds();
+  }
 
   getEvents() {
     if (!this || !this.props || !this.props.events) {
       return;
     }
-    
+
     let events = this.props.events;
     events.properties.time_spent = this.calcReadtime(new Date());
     return events;
@@ -123,15 +129,14 @@ class Container extends Component {
         {/* Header Block */}
         {!this.props.hideheader &&
           <Header
-          title={this.props.title}
-          goBack={this.historyGoBack}
-          type={this.props.type} />
+            title={this.props.title}
+            goBack={this.historyGoBack}
+            type={this.props.type} />
         }
 
         {/* Below Header Block */}
-        {!this.props.hideheader &&
-          <div style={{ height: 56 }}></div>
-        }
+        {!this.props.hideheader && <div id="HeaderHeight" style={{ top: 56 }}>
+        </div>}
 
         {/* Loader Block */}
         {this.renderPageLoader()}
