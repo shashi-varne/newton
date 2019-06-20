@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
-import { getConfig, manageDialog } from 'utils/functions';
+import { getConfig, manageDialog, getHeaderHeight } from 'utils/functions';
 import Header from './Header';
 import Footer from './footer';
 import Banner from '../../common/ui/Banner';
@@ -259,26 +259,9 @@ class Container extends Component {
 
   componentDidUpdate(prevProps) {
 
-    // let body = document.getElementsByTagName('body')[0].offsetHeight;
-    // let client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
-    // let foot = document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight : 0;
+    // to set header height
+    getHeaderHeight();
 
-    let head = document.getElementsByClassName('Header')[0].offsetHeight;
-    let banner = document.getElementsByClassName('Banner')[0];
-    let bannerHeight = (banner) ? banner.offsetHeight : 0;
-    let step = document.getElementsByClassName('Step')[0];
-    let stepHeight = (step) ? step.offsetHeight : 0;
-
-    let HeaderHeight = bannerHeight + stepHeight + head + 'px';
-    document.getElementById('HeaderHeight').style.height = HeaderHeight;
-
-    // if (client > body) {
-    //   document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 40 + 'px';
-    // } else {
-    //   document.getElementsByClassName('Container')[0].style.height = document.getElementsByClassName('Container')[0].offsetHeight;
-    // }
-
-    // document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 40 + 'px';
   }
 
   render() {

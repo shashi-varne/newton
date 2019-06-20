@@ -202,3 +202,17 @@ export function manageDialog(id, display, aboutScroll) {
   }
 
 }
+
+
+export function getHeaderHeight() {
+  let head = document.getElementsByClassName('Header')[0].offsetHeight;
+  let banner = document.getElementsByClassName('Banner')[0];
+  let bannerHeight = (banner) ? banner.offsetHeight : 0;
+  let step = document.getElementsByClassName('Step')[0];
+  let stepHeight = (step) ? step.offsetHeight : 0;
+
+  let HeaderHeight = bannerHeight + stepHeight + head + 'px';
+  document.getElementById('HeaderHeight').style.height = HeaderHeight;
+
+  return HeaderHeight;
+}
