@@ -113,6 +113,7 @@ class AnnualIncome extends Component {
   }
 
   handleClose = () => {
+    manageDialog('general-dialog', 'flex', 'enableScroll');
     this.setState({
       openPopUp: false
     });
@@ -122,7 +123,7 @@ class AnnualIncome extends Component {
     this.setState({
       openPopUp: true
     })
-    manageDialog('general-dialog', 'flex');
+    manageDialog('general-dialog', 'flex', 'disableScroll');
   }
 
   renderPopUp() {
@@ -192,6 +193,7 @@ class AnnualIncome extends Component {
         type={this.state.type}
         fullWidthButton={true}
         onlyButton={true}
+        closePopup={this.handleClose}
       >
         <div className="header-annual-inc-info">
           <div style={{ width: '13%' }}>

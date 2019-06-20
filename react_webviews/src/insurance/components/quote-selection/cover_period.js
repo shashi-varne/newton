@@ -116,6 +116,7 @@ class CoverPeriod extends Component {
   }
 
   handleClose = () => {
+    manageDialog('general-dialog', 'flex', 'enableScroll');
     this.setState({
       openPopUp: false
     });
@@ -125,7 +126,7 @@ class CoverPeriod extends Component {
     this.setState({
       openPopUp: true
     })
-    manageDialog('general-dialog', 'flex');
+    manageDialog('general-dialog', 'flex', 'disableScroll');
   }
 
   renderPopUp() {
@@ -194,6 +195,7 @@ class CoverPeriod extends Component {
         type={this.state.type}
         fullWidthButton={true}
         onlyButton={true}
+        closePopup={this.handleClose}
       >
 
         <div className="header-annual-inc-info">

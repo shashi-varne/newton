@@ -219,7 +219,7 @@ class AddOnBenefits extends Component {
           final_id: quote.id,
           final_quote: quote
         })
-        manageDialog('general-dialog', 'flex');
+        manageDialog('general-dialog', 'flex', 'disableScroll');
       } else {
         toast(res.pfwresponse.result.error);
       }
@@ -294,7 +294,7 @@ class AddOnBenefits extends Component {
       selectedIndex: index,
       openPopUpCoverAmount: true
     })
-    manageDialog('general-dialog', 'flex');
+    manageDialog('general-dialog', 'flex', 'disableScroll');
   }
 
   renderListCoverAmount() {
@@ -519,6 +519,7 @@ class AddOnBenefits extends Component {
   }
 
   handleClose = () => {
+    manageDialog('general-dialog', 'flex', 'enableScroll');
     this.setState({
       openPopUpCoverAmount: false,
       openPopUpInfo: false,
@@ -531,7 +532,7 @@ class AddOnBenefits extends Component {
       openPopUpInfo: true,
       popupRider: rider_type
     })
-    manageDialog('general-dialog', 'flex');
+    manageDialog('general-dialog', 'flex', 'disableScroll');
   }
 
   renderPopUpInfo() {
@@ -770,6 +771,7 @@ class AddOnBenefits extends Component {
         premium={this.state.totalPremium}
         provider={this.state.quoteSelected.quote_provider}
         paymentFrequency={this.state.quoteSelected.payment_frequency_selected}
+        closePopup={this.handleClose}
       >
 
         {this.state.riders_info && this.state.riders_info.map(this.renderList)}

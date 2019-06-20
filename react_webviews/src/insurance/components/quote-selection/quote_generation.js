@@ -167,6 +167,7 @@ class QuoteGeneration extends Component {
   }
 
   handleClose = () => {
+    manageDialog('general-dialog', 'flex', 'enableScroll');
     this.setState({
       openPopUp: false,
       openPopUpQuote: false,
@@ -278,7 +279,7 @@ class QuoteGeneration extends Component {
       selectedIndexInfo: index,
       selectedQuoteInfo: this.state.quotes[index]
     })
-    manageDialog('general-dialog', 'flex');
+    manageDialog('general-dialog', 'flex', 'disableScroll');
   }
 
   renderPopUpInfo() {
@@ -450,7 +451,7 @@ class QuoteGeneration extends Component {
       popup_premium: popup_premium,
       openPopUpQuote: true
     })
-    manageDialog('general-dialog', 'flex');
+    manageDialog('general-dialog', 'flex', 'disableScroll');
   }
 
   renderQuotePoints(props, index) {
@@ -646,14 +647,14 @@ class QuoteGeneration extends Component {
       openPopUp: true,
       filterType: type
     });
-    manageDialog('general-dialog', 'flex');
+    manageDialog('general-dialog', 'flex', 'disableScroll');
   }
 
   openFilter() {
     this.setState({
       openDialogFilter: true
     });
-    manageDialog('general-dialog', 'flex');
+    manageDialog('general-dialog', 'flex', 'disableScroll');
   }
 
   handleFilter = () => {
@@ -744,6 +745,7 @@ class QuoteGeneration extends Component {
         onlyButton={true}
         filterPgae={true}
         handleFilter={this.openFilter}
+        closePopup={this.handleClose}
       >
 
         <div className="quote-top-tiles">

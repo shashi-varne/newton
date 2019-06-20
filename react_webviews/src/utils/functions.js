@@ -174,7 +174,22 @@ export const getConfig = () => {
 }
 
 
-export function manageDialog(id, display) {
+export function manageDialog(id, display, aboutScroll) {
+
+  var body = document.getElementsByTagName('body')[0];
+  var html = document.getElementsByTagName('html')[0]
+
+  if (aboutScroll === 'disableScroll') {
+
+    html.style.overflowX = 'hidden';
+    html.style.overflowY = 'hidden';
+    body.style.overflowX = 'hidden';
+  } else if (aboutScroll === 'enableScroll') {
+    html.style.overflowX = 'inherit';
+    html.style.overflowY = 'inherit';
+    body.style.overflowX = 'inherit';
+  }
+
   let element = document.getElementById(id);
   if (element !== null && element.style.display !== 'none') {
     element.style.display = display;

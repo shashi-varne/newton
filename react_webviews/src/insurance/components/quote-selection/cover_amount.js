@@ -230,6 +230,7 @@ class CoverAmount extends Component {
   }
 
   handleClose = () => {
+    manageDialog('general-dialog', 'flex', 'enableScroll');
     this.setState({
       openPopUp: false
     });
@@ -239,7 +240,8 @@ class CoverAmount extends Component {
     this.setState({
       openPopUp: true
     })
-    manageDialog('general-dialog', 'flex');
+    manageDialog('general-dialog', 'flex', 'disableScroll');
+
   }
 
   renderPopUp() {
@@ -364,6 +366,7 @@ class CoverAmount extends Component {
         type={this.state.type}
         fullWidthButton={true}
         onlyButton={true}
+        closePopup={this.handleClose}
       >
         <div className="header-annual-inc-info">
           <div style={{ width: '13%' }}>
