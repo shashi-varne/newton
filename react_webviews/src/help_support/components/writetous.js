@@ -175,7 +175,7 @@ class Writetous extends Component {
 					show_loader: false
 				});
 
-				this.navigate('/help/thankyou', feedback.pfwresponse.result.user);
+				this.navigate('/help/thankyou', feedback.pfwresponse.result);
 			} catch (error) {
 				this.setState({
 					show_loader: false
