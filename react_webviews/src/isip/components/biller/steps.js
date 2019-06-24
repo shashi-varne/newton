@@ -160,10 +160,7 @@ class BillerSteps extends Component {
       bank_code: '',
       copyText: 'Copy',
       callback_supported: getConfig().campaign_version === 1 ? true : false,
-      params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
+      params: qs.parse(props.history.location.search.slice(1))
     }
 
     this.renderBankSteps = this.renderBankSteps.bind(this);
@@ -175,20 +172,6 @@ class BillerSteps extends Component {
       bank_code: this.state.params.bank_code ? this.state.params.bank_code : 'SBI'
     })
 
-    console.log(getConfig().campaign_version)
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
-    }
   }
 
   navigate = (pathname) => {
@@ -264,7 +247,6 @@ class BillerSteps extends Component {
         classOverRide="result-container2"
         classOverRideContainer="result-container2"
         edit={this.props.edit}
-        type={this.state.type}
         events={this.sendEvents('just_set_events')}
         buttonTitle={"Continue to " + banks_details[this.state.bank_code].name}
         noFooter={!this.state.callback_supported}

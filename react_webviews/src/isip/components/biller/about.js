@@ -11,30 +11,11 @@ class About extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
+      params: qs.parse(props.history.location.search.slice(1))
     }
 
   }
 
-
-  componentWillMount() {
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
-    }
-  }
 
   navigate = (pathname) => {
     this.props.history.push({
@@ -72,7 +53,6 @@ class About extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="Continue"
-        type={this.state.type}
         events={this.sendEvents('just_set_events')}
       >
         <div style={{ textAlign: 'center', margin: '60px 0px 60px 0px' }}>
