@@ -36,25 +36,6 @@ class Writetous extends Component {
     }
   }
 
-  componentWillMount() {
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway',
-        link: 'https://go.onelink.me/6fHB/b750d9ac'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime',
-        link: 'https://go.onelink.me/OFQN/FisdomPrime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom',
-        link: 'http://m.onelink.me/32660e84'
-      });
-    }
-  }
-
   componentDidMount() {
     start_time = new Date();
     if (this.props.location.state.from === 'answer') {

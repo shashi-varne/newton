@@ -26,19 +26,6 @@ class EmailSuccess extends Component {
     this.setState({
       disableBack: params ? params.disableBack : false
     })
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
-    }
   }
 
 
@@ -125,7 +112,7 @@ class EmailSuccess extends Component {
           <div className="success-text-info">
             You will recieve a Bank Mandate(OTM) form on
   your registered email (<span style={{ fontWeight: 600 }}>{this.state.params.email}</span>)
-                                          Please sign (as per bank records) on OTM form and upload on the app.
+                                                    Please sign (as per bank records) on OTM form and upload on the app.
           </div>
           <div className="success-bottom">
             <div className="success-bottom1">

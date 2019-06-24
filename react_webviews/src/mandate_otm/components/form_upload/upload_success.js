@@ -27,19 +27,6 @@ class UploadSuccess extends Component {
     this.setState({
       disableBack: params ? params.disableBack : false
     })
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
-    }
   }
 
 
