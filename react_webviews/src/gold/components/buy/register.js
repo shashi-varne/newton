@@ -34,9 +34,6 @@ class GoldRegister extends Component {
       openResponseDialog: false,
       openPopup: false,
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
       checked: false,
       name_error: '',
       email_error: '',
@@ -44,22 +41,6 @@ class GoldRegister extends Component {
       city: '',
       state: '',
       terms_opened: 'no'
-    }
-  }
-
-  componentWillMount() {
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
     }
   }
 
@@ -358,7 +339,6 @@ class GoldRegister extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="Proceed"
-        type={this.state.type}
         disable={!this.state.checked}
         events={this.sendEvents('just_set_events')}
       >

@@ -29,28 +29,13 @@ class About extends Component {
       timeAvailable: "",
       sellData: {},
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
       countdownInterval: null
     }
   }
 
   componentWillMount() {
     nativeCallback({ action: 'take_control_reset' });
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
-    }
+
   }
 
   async componentDidMount() {
@@ -245,7 +230,7 @@ class About extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                                                          previous gold price has expired.
+                                                                                                                                                                                                                                            previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -270,7 +255,6 @@ class About extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="Proceed"
-        type={this.state.type}
         events={this.sendEvents('just_set_events')}
       >
         <div className="order-tile">

@@ -24,9 +24,6 @@ class SellOrder extends Component {
       bank_name: '',
       branch_name: '',
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
       account_no: '',
       account_no_error: '',
       confirm_account_no: '',
@@ -35,23 +32,6 @@ class SellOrder extends Component {
     }
     this.countdown = this.countdown.bind(this);
     this.checkIFSCFormat = this.checkIFSCFormat.bind(this);
-  }
-
-  componentWillMount() {
-
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
-    }
   }
 
   async componentDidMount() {
@@ -371,7 +351,6 @@ class SellOrder extends Component {
         edit={this.props.edit}
         handleClick={this.handleClick}
         buttonTitle="Proceed"
-        type={this.state.type}
         events={this.sendEvents('just_set_events')}
       >
         <div className="bank-details">

@@ -222,7 +222,7 @@ class Container extends Component {
     }
 
     return (
-      <div className={`ContainerWrapper ${(this.props.type !== 'fisdom') ? 'blue' : ''}`} >
+      <div className={`ContainerWrapper ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`} >
         {/* Header Block */}
         <Header
           disableBack={this.props.disableBack}
@@ -234,7 +234,7 @@ class Container extends Component {
           current={this.props.current}
           goBack={this.historyGoBack}
           edit={this.props.edit}
-          type={this.props.type}
+          type={getConfig().productName}
           resetpage={this.props.resetpage}
           handleReset={this.props.handleReset} />
 

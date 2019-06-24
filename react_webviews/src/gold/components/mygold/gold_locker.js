@@ -49,9 +49,6 @@ class GoldSummary extends Component {
       weight: '',
       amount: '',
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
       value: 0,
       error: false,
       errorMessage: '',
@@ -64,19 +61,6 @@ class GoldSummary extends Component {
     if (this.state.params.isDelivery) {
       this.setState({
         value: 1
-      });
-    }
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
       });
     }
   }
@@ -450,7 +434,6 @@ class GoldSummary extends Component {
         title="My 24K Safegold Locker"
         edit={this.props.edit}
         buttonTitle="Proceed"
-        type={this.state.type}
         handleClick={this.sellGold}
         noPadding={true}
         disable={!this.state.isRegistered}
