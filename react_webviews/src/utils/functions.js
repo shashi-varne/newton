@@ -83,34 +83,20 @@ export const getConfig = () => {
       askEmail: 'ask@mywaywealth.com',
       colorClass: 'mywayColor',
       backgroundColorClass: 'mywayBackColor'
-    },
-    'Fisdom Prime': {
-      primary: colors.myway,
-      secondary: colors.secondary,
-      default: colors.default,
-      label: colors.label,
-      type: 'Fisdom Prime',
-      productName: 'Fisdom Prime',
-      appLink: 'https://go.onelink.me/OFQN/FisdomPrime',
-      colorClass: 'mywayColor',
-      backgroundColorClass: 'mywayBackColor'
     }
   }
 
 
   let search = window.location.search;
-  // console.log(search);
-
-  const isPrime = search.indexOf("mypro.fisdom.com") >= 0;
-  const ismyway = search.indexOf("api.mywaywealth.com") >= 0;
   const insurance_v2 = generic_callback === "true" ? true : search.indexOf("insurance_v2") >= 0;
+
+  const ismyway = search.indexOf("api.mywaywealth.com") >= 0;
   let productType = 'fisdom';
   if (ismyway) {
     productType = 'myway';
-  } else if (isPrime) {
-    productType = 'Fisdom Prime';
   }
   let returnConfig = config[productType];
+
 
   let project = 'insurance';
   if (myHistory.location.pathname.indexOf('insurance') >= 0) {
