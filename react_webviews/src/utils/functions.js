@@ -60,6 +60,8 @@ export const getConfig = () => {
       default: colors.default,
       label: colors.label,
       type: 'fisdom',
+      productName: 'fisdom',
+      askEmail: 'ask@fisdom.com',
       colorClass: 'fisdomColor',
       backgroundColorClass: 'fisdomBackColor'
     },
@@ -69,6 +71,8 @@ export const getConfig = () => {
       default: colors.default,
       label: colors.label,
       type: 'myway',
+      productName: 'myway',
+      askEmail: 'ask@mywaywealth.com',
       colorClass: 'mywayColor',
       backgroundColorClass: 'mywayBackColor'
     },
