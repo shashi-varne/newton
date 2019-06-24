@@ -62,6 +62,8 @@ export const getConfig = () => {
       type: 'fisdom',
       productName: 'fisdom',
       appLink: 'http://m.onelink.me/32660e84',
+      termsLink: 'https://www.fisdom.com/terms/',
+      schemeLink: 'https://www.fisdom.com/scheme-offer-documents/',
       askEmail: 'ask@fisdom.com',
       mobile: '+91-8048093070',
       colorClass: 'fisdomColor',
@@ -76,6 +78,8 @@ export const getConfig = () => {
       productName: 'myway',
       mobile: '+91-8048039999',
       appLink: 'https://go.onelink.me/6fHB/b750d9ac',
+      termsLink: 'https://mywaywealth.com/terms/',
+      schemeLink: 'https://mywaywealth.com/scheme/',
       askEmail: 'ask@mywaywealth.com',
       colorClass: 'mywayColor',
       backgroundColorClass: 'mywayBackColor'
