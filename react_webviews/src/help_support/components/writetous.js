@@ -140,11 +140,6 @@ class Writetous extends Component {
 				emptyForm: 'Minimum 10 characters required'
 			});
 			return;
-		} else if(/^[a-zA-Z0-9- ,_]*$/.test(this.state.query.trim()) === false) {
-			this.setState({
-				emptyForm: 'Special characters are not allowed'
-			});
-			return;
 		} else if (this.state.query || this.state.fileUploaded) {
 			
 			try {
@@ -339,7 +334,7 @@ class Writetous extends Component {
 				<div className="Help Form pad20">
 					<div className="InputField">
 						<div className="label">Subject</div>
-						<input type="text" value={this.state.subcategory} readOnly />
+						<div className="subject">{this.state.subcategory}</div>
 					</div>
 					<div className="InputField">
 						<div className="label">Write the query/feedback</div>
