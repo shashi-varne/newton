@@ -162,6 +162,15 @@
 	line-height: 20px;
 }
 
+.InputField .subject {
+	background: #fff;
+	border-radius: 5px;
+	padding: 15px;
+	font-size: 14px;
+	color: #4e4e4e;
+	margin-top: 10px;
+}
+
 .HelpContainer .Form input, .HelpContainer .Form textarea {
 	border: 0;
 	border-radius: 5px;

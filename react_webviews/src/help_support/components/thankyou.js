@@ -62,13 +62,16 @@ class Thankyou extends Component {
 	}
 
   componentDidMount() {
-    const user = this.props.location.state.user;
+    const {user, kyc_detail} = this.props.location.state.user;
+
+    let email = !user.email ? kyc_detail.email : user.email;
+    let mobile = !user.mobile ? kyc_detail.mobile : user.mobile;
 
     this.setState({
-      email: user.email,
-      mobile_no: user.mobile ? ((user.mobile.indexOf('|') > 1) ? user.mobile.split('|')[1] : user.mobile) : user.mobile,
-      is_email_not_present: user.email ? true : false,
-      is_mobile_not_present: user.mobile ? true : false
+      email: email,
+      mobile_no: mobile ? ((mobile.indexOf('|') > 1) ? mobile.split('|')[1] : mobile) : mobile,
+      is_email_not_present: email ? true : false,
+      is_mobile_not_present: mobile ? true : false
     })
   }
 
