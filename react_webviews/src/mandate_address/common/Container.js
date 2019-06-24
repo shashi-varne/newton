@@ -13,6 +13,7 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
+import { getConfig } from 'utils/functions';
 
 class Container extends Component {
   constructor(props) {
@@ -126,7 +127,7 @@ class Container extends Component {
     }
 
     return (
-      <div className={`ContainerWrapper ${(this.props.type !== 'fisdom') ? 'blue' : ''}`} >
+      <div className={`ContainerWrapper ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`} >
         {/* Header Block */}
         <Header
           title={this.props.title}
@@ -135,7 +136,7 @@ class Container extends Component {
           current={this.props.current}
           goBack={this.historyGoBack}
           edit={this.props.edit}
-          type={this.props.type}
+          type={getConfig().productName}
           resetpage={this.props.resetpage}
           disableBack={this.props.disableBack}
           handleReset={this.props.handleReset}
@@ -147,7 +148,7 @@ class Container extends Component {
         {/* Loader Block */}
         {this.renderPageLoader()}
 
-        <div className={`Step ${(this.props.type !== 'fisdom') ? 'blue' : ''}`}>
+        <div className={`Step ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`}>
           {steps}
         </div>
 

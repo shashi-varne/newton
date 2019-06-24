@@ -19,9 +19,6 @@ class MandateProcess extends Component {
       showLoader: true,
       address_present: false,
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
     }
     this.handleClose = this.handleClose.bind(this);
   }
@@ -31,19 +28,6 @@ class MandateProcess extends Component {
     this.setState({
       disableBack: params ? params.disableBack : false
     })
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
-    }
   }
 
 
@@ -164,7 +148,7 @@ class MandateProcess extends Component {
           fullWidthButton={true}
           onlyButton={true}
           buttonTitle="Continue to Select Address"
-          type={this.state.type} >
+        >
           <div>
             <div className="process-tile">
               <div className="process-tile1">

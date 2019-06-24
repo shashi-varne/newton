@@ -9,6 +9,7 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
+import { getConfig } from 'utils/functions';
 
 class MandateSuccess extends Component {
   constructor(props) {
@@ -17,9 +18,6 @@ class MandateSuccess extends Component {
       show_loader: false,
       openDialog: false,
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
     }
   }
 
@@ -28,19 +26,6 @@ class MandateSuccess extends Component {
     this.setState({
       disableBack: params ? params.disableBack : false
     })
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
-    }
   }
 
 
@@ -99,7 +84,7 @@ class MandateSuccess extends Component {
         onlyButton={true}
         disableBack={this.state.disableBack}
         buttonTitle="Ok"
-        type={this.state.type} >
+      >
         <div>
           <div className="success-img">
             <img alt="Mandate" src={thumb} width="130" />
@@ -126,13 +111,13 @@ class MandateSuccess extends Component {
             </div>
             <div className="success-bottom2">
               <div className="success-bottom2a">
-                { this.state.type === "myway" ? "+91-8048039999" : "+91-8048093070" }
+                {getConfig().mobile}
               </div>
               <div className="success-bottom2b">
                 |
               </div>
               <div className="success-bottom2a">
-                { this.state.type === "myway" ? "ask@mywaywealth.com" : "ask@fisdom.com" }
+                {getConfig().askEmail}
               </div>
             </div>
           </div>
