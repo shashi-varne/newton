@@ -18,28 +18,10 @@ class Success extends Component {
       show_loader: false,
       openDialog: true,
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
+      type: getConfig().productName
     }
   }
 
-
-  componentWillMount() {
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
-    }
-  }
 
   navigate = (pathname) => {
     this.props.history.push({
@@ -102,8 +84,8 @@ class Success extends Component {
               <div className="success-text-info">
                 You will recieve a Bank Mandate form on your
               registered email (<span style={{ fontWeight: 600 }}>{this.state.params.email}</span>)
-                            Please sign (as per bank records) on OTM form
-                            and upload on the app.
+                                  Please sign (as per bank records) on OTM form
+                                  and upload on the app.
               </div>
               <div className="success-bottom-timer">
               </div>
@@ -114,13 +96,13 @@ class Success extends Component {
                 </div>
                 <div className="success-bottom2">
                   <div className="success-bottom2a">
-                  { this.state.type === "myway" ? "+91-8048039999" : "+91-8048093070" }
+                    {getConfig().mobile}
                   </div>
                   <div className="success-bottom2b">
                     |
                   </div>
                   <div className="success-bottom2a">
-                    { this.state.type === "myway" ? "ask@mywaywealth.com" : "ask@fisdom.com" }
+                    {getConfig().askEmail}
                   </div>
                 </div>
               </div>

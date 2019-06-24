@@ -18,10 +18,7 @@ class UploadSuccess extends Component {
     this.state = {
       show_loader: false,
       openDialog: false,
-      params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
+      params: qs.parse(props.history.location.search.slice(1))
     }
   }
 
@@ -120,7 +117,6 @@ class UploadSuccess extends Component {
         onlyButton={true}
         disableBack={true}
         buttonTitle="Done"
-        type={this.state.type}
         events={this.sendEvents('just_set_events')}>
         <div>
           <div className="success-img">
@@ -146,13 +142,13 @@ class UploadSuccess extends Component {
             </div>
             <div className="success-bottom2">
               <div className="success-bottom2a">
-                { this.state.type === "myway" ? "+91-8048039999" : "+91-8048093070" }
+                {getConfig().mobile}
               </div>
               <div className="success-bottom2b">
                 |
               </div>
               <div className="success-bottom2a">
-                { this.state.type === "myway" ? "ask@mywaywealth.com" : "ask@fisdom.com" }
+                {getConfig().askEmail}
               </div>
             </div>
           </div>

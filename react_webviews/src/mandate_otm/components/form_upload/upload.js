@@ -28,9 +28,6 @@ class Upload extends Component {
     this.state = {
       show_loader: false,
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
       openDialog: false,
       fileUploaded: false,
       openDialogOldClient: false
@@ -43,22 +40,6 @@ class Upload extends Component {
   }
 
   componentWillMount() {
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway',
-        link: 'https://go.onelink.me/6fHB/b750d9ac'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime',
-        link: 'https://go.onelink.me/OFQN/FisdomPrime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom',
-        link: 'http://m.onelink.me/32660e84'
-      });
-    }
 
     if (!getConfig().campaign_version && !getConfig().html_camera) {
       this.setState({
@@ -644,7 +625,6 @@ class Upload extends Component {
         title="Upload Bank Mandate(OTM) Form"
         handleClick={this.handleClick}
         edit={this.props.edit}
-        type={this.state.type}
         buttonTitle="Save and Continue"
         isDisabled={!this.state.imageBaseFile}
         popupOpen={this.state.openDialog}
