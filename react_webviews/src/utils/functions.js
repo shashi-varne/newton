@@ -63,6 +63,7 @@ export const getConfig = () => {
       productName: 'fisdom',
       appLink: 'http://m.onelink.me/32660e84',
       askEmail: 'ask@fisdom.com',
+      mobile: '+91-8048093070',
       colorClass: 'fisdomColor',
       backgroundColorClass: 'fisdomBackColor'
     },
@@ -73,6 +74,7 @@ export const getConfig = () => {
       label: colors.label,
       type: 'myway',
       productName: 'myway',
+      mobile: '+91-8048039999',
       appLink: 'https://go.onelink.me/6fHB/b750d9ac',
       askEmail: 'ask@mywaywealth.com',
       colorClass: 'mywayColor',
