@@ -26,27 +26,9 @@ class Result extends Component {
       show_loader: true,
       openDialogReset: false,
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: ''
     }
   }
 
-  componentWillMount() {
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
-    }
-  }
 
   async componentDidMount() {
     try {
@@ -240,7 +222,6 @@ class Result extends Component {
           handleClick={this.handleClick}
           edit={this.props.edit}
           buttonTitle="Fund Recommendation"
-          type={this.state.type}
           topIcon="restart"
           handleReset={this.showDialog}
           resetpage={true}

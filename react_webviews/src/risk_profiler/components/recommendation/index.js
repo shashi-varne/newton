@@ -25,9 +25,7 @@ class Recommendation extends Component {
     this.state = {
       show_loader: true,
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
+      type: getConfig().productName,
       mfTab: 0,
       yearTab: 4,
       amount: 1000,
@@ -50,19 +48,6 @@ class Recommendation extends Component {
       indicator: params ? params.indicator : false
     })
 
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
-    }
   }
 
   async getFunds(duration, amount, type) {
@@ -274,7 +259,7 @@ class Recommendation extends Component {
 
   getTabClassName(type, value) {
     if (value === this.state[type]) {
-      return getConfig().type !== 'fisdom' ? 'mywayColor' : 'fisdomColor'
+      return getConfig().colorClass;
     }
     return '';
   }
@@ -378,17 +363,9 @@ class Recommendation extends Component {
   openTermsAndCondition(type) {
     let url = '';
     if (type === 'terms') {
-      if (this.state.type !== 'fisdom') {
-        url = 'https://mywaywealth.com/terms/';
-      } else {
-        url = 'https://www.fisdom.com/terms/';
-      }
+      url = getConfig().termsLink;
     } else {
-      if (this.state.type !== 'fisdom') {
-        url = 'https://mywaywealth.com/scheme/';
-      } else {
-        url = 'https://www.fisdom.com/scheme-offer-documents/';
-      }
+      url = getConfig().schemeLink;
     }
 
     nativeCallback({
@@ -409,7 +386,6 @@ class Recommendation extends Component {
         classOverRideContainer="recommendation-container"
         edit={this.props.edit}
         buttonTitle="Invest"
-        type={this.state.type}
         isDisabled={!(this.state.funds)}
         events={this.sendEvents('just_set_events')}
       >
@@ -446,7 +422,6 @@ class Recommendation extends Component {
                 onClick={() => this.handleClickOpen()}
                 onChange={() => this.handleClickOpen()}
                 // onChange={this.handleChange('amount')}
-                productType={this.state.type}
               // onKeyChange={this.onBlurAmount()}
               />
             </div> */}

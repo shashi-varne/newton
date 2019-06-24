@@ -21,27 +21,8 @@ class QuestionScreen5 extends Component {
       question2_error: '',
       question2Options: [],
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
       indexMain: 8,
       canGoBack: true
-    }
-  }
-
-  componentWillMount() {
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
     }
   }
 
@@ -164,7 +145,6 @@ class QuestionScreen5 extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="Save and Continue"
-        type={this.state.type}
         topIcon="close"
         classOverRideContainer="question-container"
         events={this.sendEventsForInputsNextClick('just_set_events')}
