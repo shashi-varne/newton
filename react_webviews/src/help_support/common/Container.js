@@ -14,6 +14,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import 'utils/native_listner_otm';
 import { setHeights } from 'utils/functions';
+import { getConfig } from '../../utils/functions';
 
 let start_time = '';
 
@@ -131,7 +132,7 @@ class Container extends Component {
           <Header
             title={this.props.title}
             goBack={this.historyGoBack}
-            type={this.props.type} />
+            type={getConfig().productName} />
         }
 
         {/* Below Header Block */}

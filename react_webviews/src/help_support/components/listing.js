@@ -18,69 +18,48 @@ import { getConfig } from 'utils/functions';
 let start_time = '';
 
 class Listing extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			show_loader: true,
-			categories: null,
-			type: '',
-			openDialog: false,
-			params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0
-		}
-	}
-
-	componentWillMount() {
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway',
-        link: 'https://go.onelink.me/6fHB/b750d9ac'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime',
-        link: 'https://go.onelink.me/OFQN/FisdomPrime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom',
-        link: 'http://m.onelink.me/32660e84'
-      });
+  constructor(props) {
+    super(props);
+    this.state = {
+      show_loader: true,
+      categories: null,
+      type: '',
+      openDialog: false,
+      params: qs.parse(props.history.location.search.slice(1))
     }
-	}
-	
-	calcReadtime = (endtime) => {
-		var new_date = new Date(endtime - start_time);
-		return new_date.getUTCMinutes() + '.' + new_date.getUTCSeconds();
-	}
+  }
 
-	async componentDidMount() {
-		start_time = new Date();
-	
+  calcReadtime = (endtime) => {
+    var new_date = new Date(endtime - start_time);
+    return new_date.getUTCMinutes() + '.' + new_date.getUTCSeconds();
+  }
+
+  async componentDidMount() {
+    start_time = new Date();
+
     try {
       await Api.get('/api/helpandsupport/category').then(res => {
-				const { data: {category} } = res.pfwresponse.result;
-				
-				let questions_array = [];
-				category.forEach((value) => {
-					value['sub_category'].forEach((val) => {
-						var ques = val['questions'];
-						ques.forEach((v) => {
-							var qObj = {};
-							qObj['question_id'] = v['question_id'];
-							qObj['question_detail'] = v;
-							qObj['category_name'] = val['name'];
-							questions_array.push(qObj);
-						});
-					})
-				});
+        const { data: { category } } = res.pfwresponse.result;
 
-				window.localStorage.setItem('helpsupport_questions', JSON.stringify(questions_array));
+        let questions_array = [];
+        category.forEach((value) => {
+          value['sub_category'].forEach((val) => {
+            var ques = val['questions'];
+            ques.forEach((v) => {
+              var qObj = {};
+              qObj['question_id'] = v['question_id'];
+              qObj['question_detail'] = v;
+              qObj['category_name'] = val['name'];
+              questions_array.push(qObj);
+            });
+          })
+        });
+
+        window.localStorage.setItem('helpsupport_questions', JSON.stringify(questions_array));
 
         this.setState({
-					show_loader: false,
-					categories: category
+          show_loader: false,
+          categories: category
         });
       }).catch(error => {
         this.setState({ show_loader: false });
@@ -88,21 +67,21 @@ class Listing extends Component {
     } catch (error) {
       this.setState({ show_loader: false });
     }
-	}
+  }
 
-	handleClose = () => {
+  handleClose = () => {
     this.setState({
       openDialog: false
     });
   }
 
-	renderDialog = () => {
+  renderDialog = () => {
     return (
       <Dialog
         fullScreen={false}
         open={this.state.openDialog}
         onClose={this.handleClose}
-				aria-labelledby="responsive-dialog-title"
+        aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="form-dialog-title">No Internet Found</DialogTitle>
         <DialogContent>
@@ -117,45 +96,45 @@ class Listing extends Component {
         </DialogActions>
       </Dialog>
     );
-	}
+  }
 
-	backButtonEvent() {
+  backButtonEvent() {
     let eventObj = {
       "event_name": 'help_n_support',
       "properties": {
         "user_action": 'back',
-				"screen_name": 'support_category',
-				'time_spent': ''
+        "screen_name": 'support_category',
+        'time_spent': ''
       }
     };
 
-		return eventObj;
+    return eventObj;
   }
 
-	navigate = (pathname, data) => {
-		let eventObj = {
-			"event_name": "help_n_support",
-			"properties": {
-				"screen_name": 'support_category',
-				"user_action": 'next',
-				'category_clicked': data.name,
-				'time_spent': this.calcReadtime(new Date())
-			}
-		};
+  navigate = (pathname, data) => {
+    let eventObj = {
+      "event_name": "help_n_support",
+      "properties": {
+        "screen_name": 'support_category',
+        "user_action": 'next',
+        'category_clicked': data.name,
+        'time_spent': this.calcReadtime(new Date())
+      }
+    };
 
-		nativeCallback({ events: eventObj });
+    nativeCallback({ events: eventObj });
 
     if (navigator.onLine) {
       this.props.history.push({
         pathname: pathname,
-				search: getConfig().searchParams,
-				state: {
-					subcategories: data,
-					category: {
-						id: data.category_id,
-						name: data.name
-					}
-				}
+        search: getConfig().searchParams,
+        state: {
+          subcategories: data,
+          category: {
+            id: data.category_id,
+            name: data.name
+          }
+        }
       });
     } else {
       this.setState({
@@ -163,44 +142,43 @@ class Listing extends Component {
       });
     }
   }
-	
-	renderCategories() {
-		return this.state.categories.map((item, i) => {
-			return (
-				<Card nopadding={false} key={i}>
-					<Grid container spacing={24} alignItems="center" className="HelpGrid" onClick={() => this.navigate('/help/category', item)}>
-						<Grid item xs={12}>
-							<div className="card-title">{item.name}</div>
-						</Grid>
-					</Grid>
-				</Card>
-			)
-		});
-	}
 
-	render() {
-		return (
-			<Container
+  renderCategories() {
+    return this.state.categories.map((item, i) => {
+      return (
+        <Card nopadding={false} key={i}>
+          <Grid container spacing={24} alignItems="center" className="HelpGrid" onClick={() => this.navigate('/help/category', item)}>
+            <Grid item xs={12}>
+              <div className="card-title">{item.name}</div>
+            </Grid>
+          </Grid>
+        </Card>
+      )
+    });
+  }
+
+  render() {
+    return (
+      <Container
         showLoader={this.state.show_loader}
         title={'Help & Support'}
-				type={this.state.type}
-				noFooter={true}
-				events={this.backButtonEvent()}
+        noFooter={true}
+        events={this.backButtonEvent()}
       >
-				<div className="Help pad20">
-					<div className="section-head">
-						<div className="main-title">
-							Category you need help with
+        <div className="Help pad20">
+          <div className="section-head">
+            <div className="main-title">
+              Category you need help with
 						</div>
-					</div>
-					<div className="section-card">
-						{this.state.categories && this.renderCategories()}
-					</div>
-				</div>
-				{this.renderDialog()}
-			</Container>
-		);
-	}
+          </div>
+          <div className="section-card">
+            {this.state.categories && this.renderCategories()}
+          </div>
+        </div>
+        {this.renderDialog()}
+      </Container>
+    );
+  }
 }
 
 export default Listing;

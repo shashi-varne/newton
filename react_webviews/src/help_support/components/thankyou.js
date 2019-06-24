@@ -22,11 +22,11 @@ import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
 
 class Thankyou extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			show_loader: false,
-			subcategory: '',
+  constructor(props) {
+    super(props);
+    this.state = {
+      show_loader: false,
+      subcategory: '',
       query: '',
       email: '',
       email_error: '',
@@ -34,32 +34,10 @@ class Thankyou extends Component {
       mobile_no_error: '',
       is_email_not_present: false,
       is_mobile_not_present: false,
-			type: '',
-			openDialog: false,
-			params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0
-		}
-	}
-
-	componentWillMount() {
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway',
-        link: 'https://go.onelink.me/6fHB/b750d9ac'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime',
-        link: 'https://go.onelink.me/OFQN/FisdomPrime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom',
-        link: 'http://m.onelink.me/32660e84'
-      });
+      openDialog: false,
+      params: qs.parse(props.history.location.search.slice(1)),
     }
-	}
+  }
 
   componentDidMount() {
     const user = this.props.location.state.user;
@@ -72,11 +50,11 @@ class Thankyou extends Component {
     })
   }
 
-	navigate = (pathname) => {
+  navigate = (pathname) => {
     if (navigator.onLine) {
       this.props.history.push({
         pathname: pathname,
-				search: getConfig().searchParams
+        search: getConfig().searchParams
       });
     } else {
       this.setState({
@@ -90,8 +68,8 @@ class Thankyou extends Component {
       openDialog: false
     });
   }
-	
-	renderDialog = () => {
+
+  renderDialog = () => {
     return (
       <Dialog
         fullScreen={false}
@@ -112,20 +90,20 @@ class Thankyou extends Component {
         </DialogActions>
       </Dialog>
     );
-	}
+  }
 
-	handleClick = async () => {
+  handleClick = async () => {
     if (this.state.is_email_not_present && this.state.is_mobile_not_present) {
       this.navigate('/help');
     } else {
       this.submitUserData('next');
     }
-    
+
   }
-  
+
   secondaryHandleClick = async () => {
     if (this.state.is_email_not_present && this.state.is_mobile_not_present) {
-      nativeCallback({ action: 'exit'});
+      nativeCallback({ action: 'exit' });
     } else {
       this.submitUserData('home');
     }
@@ -164,7 +142,7 @@ class Thankyou extends Component {
         if (!this.state.is_mobile_not_present) {
           data['kyc']['address']['mobile_number'] = (this.state.mobile_no.indexOf('|') > 1) ? this.state.mobile_no : '91|' + this.state.mobile_no;
         }
-        
+
         const res = await Api.post('/api/kyc/v2/mine', data);
 
         if (res.pfwresponse.status_code === 200) {
@@ -175,13 +153,13 @@ class Thankyou extends Component {
               'user_action': 'another_query'
             }
           };
-      
+
           nativeCallback({ events: eventObj });
 
           this.setState({ show_loader: false });
 
           if (type === 'home') {
-            nativeCallback({ action: 'exit'});
+            nativeCallback({ action: 'exit' });
           } else if (type === 'next') {
             this.navigate('/help');
           }
@@ -222,18 +200,17 @@ class Thankyou extends Component {
     );
   }
 
-	render() {
+  render() {
     return (
-			<Container
+      <Container
         title={'Write to us'}
-				type={this.state.type}
-				buttonTitle="OK"
+        buttonTitle="OK"
         handleClick={this.handleClick}
         hideheader={true}
       >
-				<div className="Help pad20">
-					<div className="thankyou">
-            <img src={thumb} width="80" alt=""/>
+        <div className="Help pad20">
+          <div className="thankyou">
+            <img src={thumb} width="80" alt="" />
             <div className="title">Thank you for writing to us</div>
             <div className="description">Our support team will update you on your query within the next 6 working hours. Please check and confirm your contact details.</div>
             <div className="userdetail">
@@ -250,7 +227,7 @@ class Thankyou extends Component {
                   value={this.state.email || ''}
                   onChange={this.handleChange()}
                   disabled={this.state.is_email_not_present} />
-                  {!this.state.email && this.showEdit()}
+                {!this.state.email && this.showEdit()}
               </div>
               <div className="InputField">
                 <MobileInputWithoutIcon
@@ -265,16 +242,16 @@ class Thankyou extends Component {
                   value={this.state.mobile_no || ''}
                   onChange={this.handleChange()}
                   disabled={this.state.is_mobile_not_present} />
-                  {!this.state.mobile_no && this.showEdit()}
+                {!this.state.mobile_no && this.showEdit()}
               </div>
             </div>
           </div>
-				</div>
+        </div>
         {this.renderDialog()}
         <ToastContainer autoClose={3000} />
-			</Container>
-		);
-	}
+      </Container>
+    );
+  }
 }
 
 export default Thankyou;

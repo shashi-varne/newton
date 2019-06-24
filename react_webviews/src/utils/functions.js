@@ -61,6 +61,7 @@ export const getConfig = () => {
       label: colors.label,
       type: 'fisdom',
       productName: 'fisdom',
+      appLink: 'http://m.onelink.me/32660e84',
       askEmail: 'ask@fisdom.com',
       colorClass: 'fisdomColor',
       backgroundColorClass: 'fisdomBackColor'
@@ -72,6 +73,7 @@ export const getConfig = () => {
       label: colors.label,
       type: 'myway',
       productName: 'myway',
+      appLink: 'https://go.onelink.me/6fHB/b750d9ac',
       askEmail: 'ask@mywaywealth.com',
       colorClass: 'mywayColor',
       backgroundColorClass: 'mywayBackColor'
@@ -82,6 +84,8 @@ export const getConfig = () => {
       default: colors.default,
       label: colors.label,
       type: 'Fisdom Prime',
+      productName: 'Fisdom Prime',
+      appLink: 'https://go.onelink.me/OFQN/FisdomPrime',
       colorClass: 'mywayColor',
       backgroundColorClass: 'mywayBackColor'
     }
