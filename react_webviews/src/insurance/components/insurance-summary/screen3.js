@@ -97,9 +97,8 @@ class Journey extends Component {
       plutus_status: '',
       apiError: '',
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
+      type: getConfig().productName,
+      askEmail: getConfig().askEmail
     }
     this.renderJourney = this.renderJourney.bind(this);
     this.handleClosePayment = this.handleClosePayment.bind(this);
@@ -117,22 +116,6 @@ class Journey extends Component {
     this.setState({
       disableBack: params ? params.disableBack : false
     })
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway',
-        askEmail: 'ask@mywaywealth.com'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime',
-        askEmail: 'ask@fisdom.com'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom',
-        askEmail: 'ask@fisdom.com'
-      });
-    }
   }
 
   setButtonTitle(journeyData, application) {
@@ -1044,7 +1027,7 @@ class Journey extends Component {
           buttonTitle={this.state.buttonTitle}
           noFooter={(this.state.plutus_payment_status === 'payment_done' &&
             this.state.status === 'complete') ? true : false}
-          type={this.state.type} >
+        >
           {
             this.state.plutus_payment_status === 'payment_done' && this.state.disableBack === false &&
             (this.state.status === 'plutus_submitted' || this.state.status === 'complete') &&

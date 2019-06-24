@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import loader from 'assets/loader_gif.gif';
 import Modal from 'material-ui/Modal';
 import Typography from 'material-ui/Typography';
-// import toast from '../../../common/ui/Toast';
-// import { nativeCallback } from 'utils/native_callback';
 import Button from 'material-ui/Button';
 import Dialog, {
   DialogActions,
@@ -19,9 +17,6 @@ class Payment extends Component {
     this.state = {
       openDialog: true,
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
     };
   }
 
@@ -38,8 +33,6 @@ class Payment extends Component {
       insurance_id: insurance_id,
       insurance_v2: insurance_v2
     })
-
-
   }
 
   renderPageLoader = () => {
@@ -100,35 +93,7 @@ class Payment extends Component {
       openDialog: false,
       show_loader: true
     });
-    if (this.state.paymentStatus === 'success') {
-      // if (this.state.params.provider === 'HDFC') {
-      //   this.navigateResume('/insurance/edit-contact1');
-      // } else {
-      //   this.navigateResume('/insurance/journey');
-      // }
-      this.navigateResume('/insurance/journey');
-    } else if (this.state.paymentStatus === 'pending') {
-      this.navigateResume('/insurance/journey');
-    } else if (this.state.paymentStatus === 'failed') {
-      //   Api.get('api/insurance/start/payment/' + this.state.insurance_id)
-      //     .then(res => {
-      //       if (res.pfwresponse.status_code === 200) {
-      //         let result = res.pfwresponse.result
-      //         this.setState({
-      //           payment_link: result.payment_link,
-      //           show_loader: false
-      //         });
-      //         let paymentRedirectUrl = encodeURIComponent(
-      //           window.location.protocol + '//' + window.location.host + '/insurance/payment'
-      //         );
-      //         var pgLink = this.state.payment_link;
-      //         pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl;
-      //         window.location.href = pgLink;
-      //       }
-      //     });
-      this.navigateResume('/insurance/journey');
-    }
-
+    this.navigateResume('/insurance/journey');
   }
 
   renderResponseDialog = () => {
@@ -144,7 +109,6 @@ class Payment extends Component {
         >
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              {/* {this.state.apiError} */}
               <img className="img-payment" src={'https://plutus-web.appspot.com/assets/img/thumpsup.png'} alt="" width="40" />
               <span className="text-payment1">Payment success.</span>
               <span className="text-payment2">Compete rest of the application.
@@ -174,7 +138,6 @@ class Payment extends Component {
         >
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              {/* {this.state.apiError} */}
               <img className="img-payment" src={'https://plutus-web.appspot.com/assets/img/error.png'} alt="" width="40" />
               <span className="text-payment1">Oh! looks like your payment failed.</span>
               <span className="text-payment2">No worries, you can try again. Incase your
@@ -206,7 +169,6 @@ class Payment extends Component {
         >
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              {/* {this.state.apiError} */}
               <img className="img-payment" src={'https://plutus-web.appspot.com/assets/img/error.png'} alt="" width="40" />
               <span className="text-payment1">Oh! looks like your payment failed.</span>
               <span className="text-payment2">You can give it another try.

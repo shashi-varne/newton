@@ -61,26 +61,7 @@ class NomineeDetails extends Component {
       apiError: '',
       openDialog: false,
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
-    }
-  }
-
-  componentWillMount() {
-
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
+      type: getConfig().productName
     }
   }
 
@@ -299,53 +280,7 @@ class NomineeDetails extends Component {
       this.setState({
         relationship_error: 'Please select relationship'
       });
-    }
-    // else if (!this.state.checked && (this.state.pincode.length !== 6 || !validateNumber(this.state.pincode))) {
-    //   this.setState({
-    //     pincode_error: 'Please enter valid pincode'
-    //   });
-    // } else if (!this.state.checked && !validateEmpty(this.state.house_no)) {
-    //   this.setState({
-    //     house_no_error: 'Enter your address'
-    //   });
-    // } else if (!this.state.checked && !validateConsecutiveChar(this.state.house_no)) {
-    //   this.setState({
-    //     house_no_error: 'Address can not contain more than 3 same consecutive characters'
-    //   });
-    // } else if (!this.state.checked && !validateLength(this.state.house_no)) {
-    //   this.setState({
-    //     house_no_error: 'Maximum length of address is 30'
-    //   });
-    // } else if (!this.state.checked && !validateMinChar(this.state.house_no)) {
-    //   this.setState({
-    //     house_no_error: 'Address should contain minimum two characters'
-    //   });
-    // } else if (!this.state.checked && !validateEmpty(this.state.street)) {
-    //   this.setState({
-    //     street_error: 'Enter your street and locality'
-    //   });
-    // } else if (!this.state.checked && !validateConsecutiveChar(this.state.street)) {
-    //   this.setState({
-    //     street_error: 'Address can not contain more than 3 same consecutive characters'
-    //   });
-    // } else if (!this.state.checked && !validateLength(this.state.street)) {
-    //   this.setState({
-    //     street_error: 'Maximum length of address is 30'
-    //   });
-    // } else if (!this.state.checked && !validateEmpty(this.state.landmark)) {
-    //   this.setState({
-    //     landmark_error: 'Enter nearest landmark'
-    //   });
-    // } else if (!this.state.checked && !validateLength(this.state.landmark)) {
-    //   this.setState({
-    //     landmark_error: 'Maximum length of landmark is 30'
-    //   });
-    // } else if (!this.state.checked && !validateStreetName(this.state.landmark)) {
-    //   this.setState({
-    //     landmark_error: 'Please enter valid landmark'
-    //   });
-    // } 
-    else {
+    } else {
       try {
         this.setState({ show_loader: true });
 
@@ -360,17 +295,6 @@ class NomineeDetails extends Component {
         data['nominee']['marital_status'] = this.state.marital_status;
         data['nominee']['relationship'] = this.state.relationship;
         data['nominee']['gender'] = this.state.gender;
-
-        // if (this.state.checked) {
-        //   data['n_addr_same'] = 'Y';
-        // } else {
-        //   data['nominee_address'] = {
-        //     'pincode': this.state.pincode,
-        //     'house_no': this.state.house_no,
-        //     'street': this.state.street,
-        //     'landmark': this.state.landmark
-        //   };
-        // }
 
         const res = await Api.post('/api/insurance/profile', data);
 
@@ -496,7 +420,6 @@ class NomineeDetails extends Component {
         buttonTitle={(this.state.age < 18) ? "Save & Continue" : "Save & Continue"
         }
         logo={this.state.image}
-        type={this.state.type}
       >
         <FormControl fullWidth>
           <TitleWithIcon width="20" icon={this.state.type !== 'fisdom' ? personal_myway : personal}
@@ -543,8 +466,6 @@ class NomineeDetails extends Component {
               value={this.state.dob}
               placeholder="DD/MM/YYYY"
               maxLength="10"
-              // onFocus={this.handleFocus()}
-              // onKeyDown={this.onKeyDown()}
               onChange={this.handleChange('dob')} />
           </div>
           <div className="InputField">
@@ -575,98 +496,6 @@ class NomineeDetails extends Component {
               onChange={this.handleChange('relationship')} />
           </div>
         </FormControl>
-
-        {/* Correspondence Address Block */}
-        {/* <div className="CheckBlock">
-          <Grid container spacing={16} alignItems="center">
-            <Grid item xs={2} className="TextCenter">
-              <Checkbox
-                defaultChecked
-                checked={this.state.checked}
-                color="default"
-                value="checked"
-                name="checked"
-                onChange={this.handleChange('checked')}
-                className="Checkbox" />
-            </Grid>
-            <Grid item xs={10}>
-              <span className="SameAddress">Nomniee’s address is same as my address</span>
-            </Grid>
-          </Grid>
-        </div> */}
-
-        {/* Correspondence Address */}
-        {/* {
-          !this.state.checked &&
-          <FormControl fullWidth>
-            <div className="InputField">
-              <InputWithIcon
-                error={(this.state.pincode_error) ? true : false}
-                helperText={this.state.pincode_error}
-                type="number"
-                icon={location}
-                width="40"
-                label="Pincode *"
-                id="pincode"
-                name="pincode" addressline
-                value={this.state.pincode}
-                onChange={this.handlePincode('pincode')} />
-            </div>
-            <div className="InputField">
-              <InputWithIcon
-                error={(this.state.house_no_error) ? true : false}
-                helperText={this.state.house_no_error || "House No, Society"}
-                type="text"
-                id="house_no"
-                label="Address line 1 *"
-                placeholder="ex: 16/1 Queens paradise"
-                value={this.state.house_no}
-                name="house_no"
-                onChange={this.handleChange('house_no')} />
-            </div>
-            <div className="InputField">
-              <InputWithIcon
-                error={(this.state.street_error) ? true : false}
-                helperText={this.state.street_error || "Street, Locality"}
-                type="text"
-                id="street"
-                label="Address line 2 *"
-                placeholder="ex: Curve Road, Shivaji Nagar"
-                value={this.state.street}
-                name="street"
-                onChange={this.handleChange('street')} />
-            </div>
-            <div className="InputField">
-              <InputWithIcon
-                error={(this.state.landmark_error) ? true : false}
-                helperText={this.state.landmark_error}
-                type="text"
-                id="landmark"
-                label="Landmark *"
-                value={this.state.landmark}
-                name="landmark"
-                onChange={this.handleChange('landmark')} />
-            </div>
-            <div className="InputField">
-              <InputWithIcon
-                disabled={true}
-                id="city"
-                label="City *"
-                value={this.state.city}
-                name="city"
-                onChange={this.handleChange('city')} />
-            </div>
-            <div className="InputField">
-              <InputWithIcon
-                disabled={true}
-                id="state"
-                label="State *"
-                value={this.state.state}
-                name="state"
-                onChange={this.handleChange('state')} />
-            </div>
-          </FormControl>
-        } */}
         {this.renderDialog()}
       </Container >
     );

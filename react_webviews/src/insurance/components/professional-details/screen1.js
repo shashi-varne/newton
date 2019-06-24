@@ -46,28 +46,11 @@ class ProfessionalDetails1 extends Component {
       image: '',
       provider: '',
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
+      type: getConfig().productName
     }
     this.handleChange = this.handleChange.bind(this);
   }
 
-  componentWillMount() {
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
-    }
-  }
   async componentDidMount() {
     try {
       const res = await Api.get('/api/insurance/profile/' + this.state.params.insurance_id, {
@@ -417,7 +400,6 @@ class ProfessionalDetails1 extends Component {
         edit={this.props.edit}
         buttonTitle="Save & Continue"
         logo={this.state.image}
-        type={this.state.type}
       >
         <FormControl fullWidth>
           <TitleWithIcon width="20" icon={this.state.type !== 'fisdom' ? professional_myway : professional}

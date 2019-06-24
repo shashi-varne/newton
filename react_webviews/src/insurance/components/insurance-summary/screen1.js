@@ -56,10 +56,7 @@ class Summary extends Component {
       apiError: '',
       openDialog: false,
       accordianTab: 'benefits',
-      params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
+      params: qs.parse(props.history.location.search.slice(1))
     }
     this.handleClosePayment = this.handleClosePayment.bind(this);
   }
@@ -75,20 +72,6 @@ class Summary extends Component {
       disableBack: params ? params.disableBack : false
     })
     nativeCallback({ action: 'take_control_reset' });
-
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
-    }
   }
 
   handleClosePayment() {
@@ -1056,7 +1039,7 @@ class Summary extends Component {
             'Resume'}
           noFooter={(this.state.plutus_payment_status === 'payment_ready' ||
             this.state.plutus_payment_status === 'failed') ? false : true}
-          type={this.state.type} >
+        >
           <div>
             <Grid container spacing={8} alignItems="center">
               <Grid item xs={5}>

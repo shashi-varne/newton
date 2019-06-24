@@ -38,28 +38,11 @@ class Pincode extends Component {
       openDialog: false,
       openPopUpExploreOtherOptions: false,
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: (qs.parse(props.history.location.search.slice(1)).base_url || '').indexOf("mypro.fisdom.com") >= 0,
-      ismyway: (qs.parse(props.history.location.search.slice(1)).base_url || '').indexOf("api.mywaywealth.com") >= 0,
+      type: getConfig().productName
     }
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.handleCloseOtherOptions = this.handleCloseOtherOptions.bind(this);
-  }
-
-  componentWillMount() {
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
-    }
   }
 
   async componentDidMount() {
@@ -174,22 +157,6 @@ class Pincode extends Component {
       [name]: pincode,
       [name + '_error']: ''
     });
-
-    // if (pincode.length === 6) {
-    //   const res = await Api.get('/api/pincode/' + pincode);
-
-    //   if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
-    //     this.setState({
-    //       city: res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name,
-    //       state: res.pfwresponse.result[0].state_name
-    //     });
-    //   } else {
-    //     this.setState({
-    //       city: '',
-    //       state: ''
-    //     });
-    //   }
-    // }
   }
 
   navigate = (pathname) => {
@@ -604,9 +571,5 @@ class Pincode extends Component {
     );
   }
 }
-
-// OutsideAlerter.propTypes = {
-//   children: PropTypes.element.isRequired,
-// };
 
 export default Pincode;

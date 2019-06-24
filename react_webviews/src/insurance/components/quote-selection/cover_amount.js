@@ -27,9 +27,7 @@ class CoverAmount extends Component {
     this.state = {
       show_loader: true,
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
+      type: getConfig().productName,
       selectedIndex: checkValidNumber(quoteData.selectedIndexCoverAmount, ''),
       coverAmountList: [{
         name: '', value: ''
@@ -53,21 +51,6 @@ class CoverAmount extends Component {
       annual_income: annual_income,
       cover_amount: this.state.quoteData.cover_amount || ''
     })
-
-
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
-    }
   }
 
   async componentDidMount() {
@@ -314,7 +297,6 @@ class CoverAmount extends Component {
         current={3}
         handleClick={this.handleClick}
         buttonTitle="Next"
-        type={this.state.type}
         fullWidthButton={true}
         onlyButton={true}
         closePopup={this.handleClose}

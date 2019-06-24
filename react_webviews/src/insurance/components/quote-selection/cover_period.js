@@ -24,31 +24,13 @@ class CoverPeriod extends Component {
     this.state = {
       show_loader: true,
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
+      type: getConfig().productName,
       selectedIndex: checkValidNumber(quoteData.selectedIndexCoverPeriod, ''),
       cover_period: 0,
       coverPeriodList: [],
       quoteData: quoteData
     }
     this.setValue = this.setValue.bind(this);
-  }
-
-  componentWillMount() {
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
-    }
   }
 
   async componentDidMount() {
@@ -188,7 +170,6 @@ class CoverPeriod extends Component {
         current={4}
         handleClick={this.handleClick}
         buttonTitle="Next"
-        type={this.state.type}
         fullWidthButton={true}
         onlyButton={true}
         closePopup={this.handleClose}

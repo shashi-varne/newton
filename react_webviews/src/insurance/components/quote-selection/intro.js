@@ -3,7 +3,6 @@ import qs from 'qs';
 
 import Container from '../../common/Container';
 import { getConfig } from 'utils/functions';
-// import $ from 'jquery';
 
 import help_myway from 'assets/help_myway.svg';
 import help_fisdom from 'assets/help_fisdom.svg';
@@ -14,36 +13,17 @@ import unfortunate_events_myway from 'assets/unfortunate_events_myway.svg';
 
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-// var CarouselComponent = Carousel.Carousel;
 
 class Intro extends Component {
   constructor(props) {
     super(props);
     this.state = {
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
+      type: getConfig().productName,
       selectedItem: 0,
       selectedIndex: 0
     }
     this.renderTitle = this.renderTitle.bind(this);
-  }
-
-  componentWillMount() {
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
-    }
   }
 
   renderTitle(index) {
@@ -103,7 +83,6 @@ class Intro extends Component {
         title="Term Insurance"
         handleClick={this.handleClick}
         buttonTitle="Protect Your Family"
-        type={this.state.type}
         fullWidthButton={true}
         onlyButton={true}
       >

@@ -26,6 +26,7 @@ import {
   validateAlphabets, validateEmpty, validateLength, validateConsecutiveChar
 } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
+import { getConfig } from 'utils/functions';
 
 class AdditionalInfo extends Component {
   constructor(props) {
@@ -59,25 +60,7 @@ class AdditionalInfo extends Component {
       is_politically_exposed: 'N',
       is_criminal: 'N',
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
-    }
-  }
-
-  componentWillMount() {
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
+      type: getConfig().productName
     }
   }
 
@@ -413,14 +396,10 @@ class AdditionalInfo extends Component {
         showLoader={this.state.show_loader}
         title="Additional Details"
         smallTitle={this.state.provider}
-        // count={true}
-        // total={4}
-        // current={1}
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="Save & Continue"
         logo={this.state.image}
-        type={this.state.type}
       >
         <FormControl fullWidth>
           <TitleWithIcon width="20" icon={this.state.type !== 'fisdom' ? personal_myway : personal} title={(this.props.edit) ? 'Edit Personal Details' : 'Personal Details'} />

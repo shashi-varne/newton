@@ -24,9 +24,6 @@ class AnnualIncome extends Component {
     this.state = {
       show_loader: true,
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
       selectedIndex: checkValidNumber(quoteData.selectedIndexIncome, ''),
       annual_income: '',
       incomeList: [
@@ -40,23 +37,6 @@ class AnnualIncome extends Component {
     }
     this.renderList = this.renderList.bind(this);
     this.setValue = this.setValue.bind(this);
-  }
-
-  componentWillMount() {
-    console.log(this.state);
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
-    }
   }
 
   async componentDidMount() {
@@ -190,7 +170,6 @@ class AnnualIncome extends Component {
         current={2}
         handleClick={this.handleClick}
         buttonTitle="Next"
-        type={this.state.type}
         fullWidthButton={true}
         onlyButton={true}
         closePopup={this.handleClose}

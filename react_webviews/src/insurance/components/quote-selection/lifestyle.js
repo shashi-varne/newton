@@ -14,30 +14,11 @@ class LifeStyle extends Component {
     super(props);
     this.state = {
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
       selectedIndex: quoteData.selectedIndexSmoke || 0,
       smokeList: ['Yes', 'No'],
       quoteData: quoteData
     }
     this.setValue = this.setValue.bind(this);
-  }
-
-  componentWillMount() {
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
-    }
   }
 
   async componentDidMount() {
@@ -83,7 +64,6 @@ class LifeStyle extends Component {
         current={5}
         handleClick={this.handleClick}
         buttonTitle="Show Best Insurance"
-        type={this.state.type}
         fullWidthButton={true}
         onlyButton={true}
       >

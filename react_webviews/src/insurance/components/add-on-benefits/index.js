@@ -47,9 +47,7 @@ class AddOnBenefits extends Component {
     this.state = {
       show_loader: true,
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
+      type: getConfig().productName,
       insurance_app_id: (quoteSelected.payment_frequency_selected).toLowerCase() === 'annually' ? quoteSelected.annual_quote_id :
         quoteSelected.id,
       quoteSelected: quoteSelected,
@@ -72,22 +70,6 @@ class AddOnBenefits extends Component {
     this.renderListCoverAmount = this.renderListCoverAmount.bind(this);
     this.handleCloseAction = this.handleCloseAction.bind(this);
     this.handleCloseQuotes = this.handleCloseQuotes.bind(this);
-  }
-
-  componentWillMount() {
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
-    }
   }
 
   getInputToRender(data) {
@@ -257,11 +239,8 @@ class AddOnBenefits extends Component {
         window.localStorage.setItem('cameFromHome', '');
         let url = res.pfwresponse.result.profile_start;
         let search = url.split('?')[1];
-        search += '&insurance_v2=true&generic_callback=true';
-        // remove this
-        search += '&insurance_allweb=true';
+        search += '&insurance_v2=true&generic_callback=true&insurance_allweb=true';
         this.navigate("journey", search);
-        // let result = res.pfwresponse.result.quotes;
       } else {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message
           || 'Something went wrong');
@@ -766,7 +745,6 @@ class AddOnBenefits extends Component {
         smallTitle={this.state.quoteSelected.insurance_title}
         handleClick={this.handleClick}
         buttonTitle={this.state.buttonTitle}
-        type={this.state.type}
         fullWidthButton={true}
         banner={true}
         bannerText={this.bannerText()}

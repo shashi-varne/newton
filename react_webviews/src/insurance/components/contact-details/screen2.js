@@ -76,27 +76,11 @@ class ContactDetails2 extends Component {
       apiError: '',
       openDialog: false,
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: (qs.parse(props.history.location.search.slice(1)).base_url || '').indexOf("mypro.fisdom.com") >= 0,
-      ismyway: (qs.parse(props.history.location.search.slice(1)).base_url || '').indexOf("api.mywaywealth.com") >= 0,
-      type: '',
+      type: getConfig().productName
     }
   }
 
-  componentWillMount() {
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom'
-      });
-    }
-  }
+
 
   calculateAge = (birthday) => {
     if (!birthday) {
