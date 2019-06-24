@@ -11,6 +11,7 @@ import axios from 'axios';
 import Api from 'utils/api';
 import InfiniteScroll from 'react-infinite-scroller';
 import qs from 'qs';
+import { getConfig } from '../../utils/functions';
 
 class Earnings extends Component {
   constructor(props) {
@@ -28,29 +29,8 @@ class Earnings extends Component {
       hasMoreItems: false,
       nextPage: null,
       params: qs.parse(props.history.location.search.slice(1)),
-      isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
-      ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
-      type: '',
-      link: ''
-    }
-  }
-
-  componentWillMount() {
-    if (this.state.ismyway) {
-      this.setState({
-        type: 'myway',
-        link: 'https://go.onelink.me/6fHB/b750d9ac'
-      });
-    } else if (this.state.isPrime) {
-      this.setState({
-        type: 'Fisdom Prime',
-        link: 'https://go.onelink.me/OFQN/FisdomPrime'
-      });
-    } else {
-      this.setState({
-        type: 'fisdom',
-        link: 'http://m.onelink.me/32660e84'
-      });
+      type: getConfig().productName,
+      link: getConfig().appLink
     }
   }
 
@@ -293,7 +273,6 @@ class Earnings extends Component {
       <Container
         showLoader={this.state.show_loader}
         title={'Earnings'}
-        type={this.state.type}
       >
         <div className="Earning">
           <div className={`ReferPaytmGrid pad25 GreyBackground ${(this.state.total_earnings > 0) ? '' : 'EarningsPaytmGrid'}`}>

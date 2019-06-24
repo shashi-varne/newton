@@ -11,6 +11,7 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
+import { getConfig } from '../../utils/functions';
 
 class Container extends Component {
   constructor(props) {
@@ -87,7 +88,7 @@ class Container extends Component {
         <Header
           title={this.props.title}
           goBack={this.historyGoBack}
-          type={this.props.type} />
+          type={getConfig().productName} />
 
         {/* Below Header Block */}
         <div style={{ height: 56 }}></div>
