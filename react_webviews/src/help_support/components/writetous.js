@@ -146,8 +146,8 @@ class Writetous extends Component {
 				let bodyFormData = new FormData();
 				bodyFormData.set('category_id', this.props.location.state.category.id);
 				bodyFormData.set('subcategory_id', this.props.location.state.subcategory.id);
-				bodyFormData.set('question_id', '');
-				bodyFormData.set('question', '');
+				bodyFormData.set('question_id', (this.props.location.state.from === 'answer') ? this.props.location.state.question.id : '');
+				bodyFormData.set('question', (this.props.location.state.from === 'answer') ? this.props.location.state.question.name : '');
 				bodyFormData.set('category', this.props.location.state.category.name);
 				bodyFormData.set('subcategory', this.props.location.state.subcategory.name);
 				bodyFormData.set('user_query', this.state.query.trim());

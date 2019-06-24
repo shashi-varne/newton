@@ -78,7 +78,11 @@ class Answer extends Component {
 					title: (type === 'related') ? data.category_name : this.props.location.state.title,
 					category: this.props.location.state.category,
 					subcategory: this.props.location.state.subcategory,
-					from: 'answer'
+					from: 'answer',
+					question: {
+						id: this.props.location.state.answer.question_id,
+						name: this.props.location.state.answer.name
+					}
 				}
       });
     } else {
