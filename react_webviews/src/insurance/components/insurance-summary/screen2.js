@@ -19,8 +19,8 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
-import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 class Resume extends Component {
   constructor(props) {

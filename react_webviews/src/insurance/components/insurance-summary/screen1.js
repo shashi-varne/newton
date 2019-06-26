@@ -15,7 +15,6 @@ import Typography from 'material-ui/Typography';
 import qs from 'qs';
 import { income_pairs } from '../..//constants';
 import { numDifferentiation, formatAmount } from 'utils/validators';
-import { nativeCallback } from 'utils/native_callback';
 import Button from 'material-ui/Button';
 import Dialog, {
   DialogActions,
@@ -23,6 +22,7 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 class Summary extends Component {
   constructor(props) {
@@ -56,7 +56,8 @@ class Summary extends Component {
       apiError: '',
       openDialog: false,
       accordianTab: 'benefits',
-      params: qs.parse(props.history.location.search.slice(1))
+      params: qs.parse(props.history.location.search.slice(1)),
+      time_spent: 0
     }
     this.handleClosePayment = this.handleClosePayment.bind(this);
   }
@@ -68,36 +69,43 @@ class Summary extends Component {
     });
 
     let { params } = this.props.location;
+
+    let intervalId = setInterval(this.countdown, 1000);
     this.setState({
+      countdownInterval: intervalId,
       disableBack: params ? params.disableBack : false
     })
     nativeCallback({ action: 'take_control_reset' });
   }
 
+  componentWillUnmount() {
+    clearInterval(this.state.countdownInterval);
+  }
+
+  countdown = () => {
+    this.setState({
+      time_spent: this.state.time_spent + 1
+    })
+  };
+
   handleClosePayment() {
     // this.setState({
     //   paymentModal: false
     // })
-    let eventObj = {
-      "event_name": 'popup_post_payment_click',
-      "properties": {
-        "user_action": 'next',
-        "source": 'summary'
-      }
-    };
-    nativeCallback({ events: eventObj });
     this.redirect(this.state.payment_link, true);
   }
 
   redirect(payment_link, redirect) {
 
     if (!redirect && this.state.provider !== 'Maxlife') {
+      this.sendEvents('next');
       this.setState({
         paymentModal: true
       });
       return;
     }
 
+    this.sendEvents('next', 'payment');
     this.setState({
       show_loader: true
     });
@@ -123,15 +131,6 @@ class Summary extends Component {
     this.setState({
       show_loader: true
     });
-
-    let eventObj = {
-      "event_name": 'make_payment_clicked',
-      "properties": {
-        "user_action": 'next',
-        "source": 'summary'
-      }
-    };
-    nativeCallback({ events: eventObj });
 
     try {
       const res = await Api.get('api/insurance/start/payment/' + this.state.params.insurance_id)
@@ -424,14 +423,7 @@ class Summary extends Component {
 
     } else {
 
-      let eventObj = {
-        "event_name": 'resume_clicked',
-        "properties": {
-          "user_action": 'next',
-          "source": 'summary'
-        }
-      };
-      nativeCallback({ events: eventObj });
+     this.sendEvents('next');
 
       nativeCallback({
         action: 'take_control', message: {
@@ -888,6 +880,19 @@ class Summary extends Component {
   }
 
   navigate = (pathname) => {
+
+    if (pathname === '/insurance/edit-personal') {
+      this.sendEvents('next', '', 'personal');
+    } else if (pathname === '/insurance/edit-contact') {
+      this.sendEvents('next', '', 'contact');
+    } else if (pathname === '/insurance/edit-professional') {
+      this.sendEvents('next', '', 'professional');
+    } else if (pathname === '/insurance/edit-nominee') {
+      this.sendEvents('next', '', 'nominee');
+    } else if (pathname === '/insurance/edit-appointee') {
+      this.sendEvents('next', '', 'appointee');
+    }
+
     this.props.history.push({
       pathname: pathname,
       search: getConfig().searchParams
@@ -895,16 +900,11 @@ class Summary extends Component {
   }
 
   handleClose = () => {
+
     if (this.state.paymentModal) {
-      let eventObj = {
-        "event_name": 'popup_post_payment_click',
-        "properties": {
-          "user_action": 'back',
-          "source": 'summary'
-        }
-      };
-      nativeCallback({ events: eventObj });
+      this.sendEvents('back', 'payment');
     }
+
     this.setState({
       openDialog: false,
       paymentModal: false,
@@ -1019,10 +1019,47 @@ class Summary extends Component {
 
   }
 
+  sendEvents(user_action, screen_name, which_one_edit) {
+
+    which_one_edit = which_one_edit || '';
+    let eventObj = {};
+    if (screen_name === 'payment') {
+      eventObj = {
+        "event_name": 'term_insurance ',
+        "properties": {
+          "user_action": user_action,
+          "screen_name": 'premium_amount_detail'
+        }
+      };
+    } else {
+      eventObj = {
+        "event_name": 'term_insurance ',
+        "properties": {
+          "user_action": user_action,
+          "screen_name": 'insurance_summary',
+          'personal_details_edit': which_one_edit === 'personal' ? 'yes' : 'no',
+          'contact_details_edit': which_one_edit === 'contact' ? 'yes' : 'no',
+          'professional_details_edit': which_one_edit === 'professional' ? 'yes' : 'no',
+          'nominee_details_edit': which_one_edit === 'nominee' ? 'yes' : 'no',
+          'appointee_details_edit': which_one_edit === 'appointee' ? 'yes' : 'no',
+          'time_spent': this.state.time_spent
+        }
+      };
+
+    }
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   renderMainUi() {
     if (!this.state.paymentModal) {
       return (
         <Container
+          events={this.sendEvents('just_set_events')}
           disableBack={this.state.disableBack === true ? true : false}
           isJourney={(this.state.params.isJourney || this.state.disableBack === true) ? true : false}
           summarypage={true}

@@ -5,6 +5,7 @@ import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 import Grid from 'material-ui/Grid';
 import cover_period from 'assets/cover_period_icon.png';
 import claim_settle_icn from 'assets/claim_settle_icn.png';
@@ -198,9 +199,26 @@ class FinalReport extends Component {
     }
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'term_insurance ',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Report'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         classOverRide="insurance-container-grey-report"
         classOverRideContainer="insurance-container-grey-report"
         showLoader={this.state.show_loader}

@@ -6,6 +6,7 @@ import DotDotLoader from '../../../common/ui/DotDotLoader';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import { getConfig, manageDialog } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 import dropdown_arrow_fisdom from 'assets/down_arrow_fisdom.svg';
 import dropdown_arrow_myway from 'assets/down_arrow_myway.svg';
 import DropdownInPage from '../../../common/ui/DropdownInPage';
@@ -63,7 +64,8 @@ class AddOnBenefits extends Component {
       openPopUpInfo: false,
       openPopUpQuote: false,
       payment_frequency: quoteSelected.payment_frequency_selected,
-      insuranceData: insuranceData
+      insuranceData: insuranceData,
+      infoClicks: {}
     }
     this.renderList = this.renderList.bind(this);
     this.setValue = this.setValue.bind(this);
@@ -184,6 +186,7 @@ class AddOnBenefits extends Component {
     this.setState({
       show_loader: true
     })
+    this.sendEvents('next');
 
     let insuranceData = this.getInsuranceData();
     insuranceData.generate_illustration = false;
@@ -501,6 +504,9 @@ class AddOnBenefits extends Component {
   }
 
   handleClose = () => {
+    if (this.state.openPopUpQuote) {
+      this.sendEvents('back', 'quote');
+    }
     manageDialog('general-dialog', 'flex', 'enableScroll');
     this.setState({
       openPopUpCoverAmount: false,
@@ -510,9 +516,12 @@ class AddOnBenefits extends Component {
   }
 
   openPopUpInfo(rider_type) {
+    let infoClicks = this.state.infoClicks || {};
+    infoClicks[rider_type] = true;
     this.setState({
       openPopUpInfo: true,
-      popupRider: rider_type
+      popupRider: rider_type,
+      infoClicks: infoClicks
     })
     manageDialog('general-dialog', 'flex', 'disableScroll');
   }
@@ -566,14 +575,17 @@ class AddOnBenefits extends Component {
     let totalAddedAmount = this.state.totalAddedAmount;
     let riders_info = this.state.riders_info;
     let buttonTitle = 'Skip & Continue';
+    let clicked_items = this.state.clicked_items || {};
 
     let last_pay_amounts = this.state.last_pay_amounts || {};
 
     if (whatTo === 'add') {
+      clicked_items[benefit.rider_type] = true;
       totalAddedBenefits += 1;
       totalAddedAmount += benefit.pay_amount;
       riders_info[index].isAdded = true;
     } else {
+      clicked_items[benefit.rider_type] = false;
       totalAddedBenefits -= 1;
       totalAddedAmount -= last_pay_amounts[benefit.rider_type];
       riders_info[index].isAdded = false;
@@ -596,7 +608,8 @@ class AddOnBenefits extends Component {
       riders_info: riders_info,
       totalPremium: this.state.basePremium + totalAddedAmount,
       buttonTitle: buttonTitle,
-      last_pay_amounts: last_pay_amounts
+      last_pay_amounts: last_pay_amounts,
+      clicked_items: clicked_items
     });
 
   }
@@ -661,6 +674,7 @@ class AddOnBenefits extends Component {
   }
 
   handleCloseQuotes() {
+    this.sendEvents('next', 'quote');
     this.submitQuote(this.state.final_id);
   }
 
@@ -734,10 +748,46 @@ class AddOnBenefits extends Component {
     return null;
   }
 
+  sendEvents(user_action, screen_name) {
+
+    let eventObj = {};
+    if (screen_name === 'quote') {
+      eventObj = {
+        "event_name": 'term_insurance ',
+        "properties": {
+          "user_action": user_action,
+          "screen_name": 'selected_quote_details',
+          'from': 'riders'
+        }
+      };
+    } else {
+      eventObj = {
+        "event_name": 'term_insurance ',
+        "properties": {
+          "user_action": user_action,
+          "screen_name": 'add_on_benefits',
+          '40_critical_ill_add_clicked': this.state.clicked_items && this.state.clicked_items.ci_amount ? 'yes' : 'no',
+          'disabilities_add_clicked': this.state.clicked_items && this.state.clicked_items.ci_benefit ? 'yes' : 'no',
+          'accidental_death_add_clicked': this.state.clicked_items && this.state.clicked_items.accident_benefit ? 'yes' : 'no',
+          'info_ci_amount': this.state.infoClicks['ci_amount'] ? 'yes' : 'no',
+          'info_ci_benefit': this.state.infoClicks['ci_benefit'] ? 'yes' : 'no',
+          'info_accident_benefit': this.state.infoClicks['accident_benefit'] ? 'yes' : 'no',
+        }
+      };
+
+    }
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         classOverRide="insurance-container-grey"
         classOverRideContainer="insurance-container-grey"
         showLoader={this.state.show_loader}

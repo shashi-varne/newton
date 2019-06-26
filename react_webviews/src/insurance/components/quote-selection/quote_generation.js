@@ -5,6 +5,7 @@ import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import { getConfig, manageDialog } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 import dropdown_arrow_fisdom from 'assets/down_arrow_fisdom.svg';
 import dropdown_arrow_myway from 'assets/down_arrow_myway.svg';
 import DropdownInPage from '../../../common/ui/DropdownInPage';
@@ -39,7 +40,12 @@ class QuoteGeneration extends Component {
       openPopUpQuote: false,
       paymentFreqRadio: 'Monthly',
       expendAddOnOpen: false,
-      openPopUpInfo: false
+      openPopUpInfo: false,
+      time_spent: 0,
+      infoClicks: {},
+      addOnInfoClicks: {},
+      filterAclick: {},
+      filterAchanges: {}
     }
 
     this.renderQuotes = this.renderQuotes.bind(this);
@@ -66,10 +72,24 @@ class QuoteGeneration extends Component {
       }
 
       window.localStorage.setItem('required_providers', JSON.stringify(required_providers));
+
+      let intervalId = setInterval(this.countdown, 1000);
+
       this.setState({
-        required_providers: required_providers
+        required_providers: required_providers,
+        countdownInterval: intervalId,
       })
   }
+
+  componentWillUnmount() {
+    clearInterval(this.state.countdownInterval);
+  }
+
+  countdown = () => {
+    this.setState({
+      time_spent: this.state.time_spent + 1
+    })
+  };
 
   async getQuotes() {
     this.setState({
@@ -136,6 +156,7 @@ class QuoteGeneration extends Component {
   }
 
   quotesAfterFilter(type, index) {
+    let filterAclick = this.state.filterAclick || {};
     let quoteData = this.state.quoteData;
     if (type === 'cover-amount' && quoteData.coverAmountList[index].name !== 'Other') {
       quoteData.cover_amount = quoteData.coverAmountList[index].value;
@@ -145,7 +166,10 @@ class QuoteGeneration extends Component {
       quoteData.tobacco_choice = quoteData.smokeList[index] === 'Yes' ? 'Y' : 'N';
     }
 
+    filterAclick[type] = true;
+
     this.setState({
+      filterAclick:filterAclick,
       quoteData: quoteData
     });
     window.localStorage.setItem('quoteData', JSON.stringify(quoteData));
@@ -153,12 +177,22 @@ class QuoteGeneration extends Component {
   }
 
   handleClose = () => {
+
+    let filterAchanges = this.state.filterAchanges || {};
+    if (this.state.openPopUp) {
+      filterAchanges[this.state.filterType] = true;
+    }
+    
+    if(this.state.openPopUpQuote) {
+      this.sendEvents('back', 'quote');
+    }
     manageDialog('general-dialog', 'flex', 'enableScroll');
     this.setState({
       openPopUp: false,
       openPopUpQuote: false,
       openDialogFilter: false,
-      openPopUpInfo: false
+      openPopUpInfo: false,
+      filterAchanges:filterAchanges,
     });
   }
 
@@ -170,6 +204,7 @@ class QuoteGeneration extends Component {
   }
 
   handleCloseQuotes = async () => {
+    this.sendEvents('next', 'quote');
     this.setState({
       openPopUpQuote: false
     })
@@ -259,11 +294,14 @@ class QuoteGeneration extends Component {
     return age;
   }
 
-  openPopUpInfo(index) {
+  openPopUpInfo(index, provider) {
+    let infoClicks = this.state.infoClicks || {};
+    infoClicks[provider] = true;
     this.setState({
       openPopUpInfo: true,
       selectedIndexInfo: index,
-      selectedQuoteInfo: this.state.quotes[index]
+      selectedQuoteInfo: this.state.quotes[index],
+      infoClicks:infoClicks
     })
     manageDialog('general-dialog', 'flex', 'disableScroll');
   }
@@ -440,6 +478,7 @@ class QuoteGeneration extends Component {
       popup_premium: popup_premium,
       openPopUpQuote: true
     })
+    this.sendEvents('next' , '', quote, payment_frequency);
     manageDialog('general-dialog', 'flex', 'disableScroll');
   }
 
@@ -474,11 +513,15 @@ class QuoteGeneration extends Component {
     )
   }
 
-  expendAddOn(index) {
+  expendAddOn(index, provider) {
+    let addOnInfoClicks = this.state.addOnInfoClicks || {};
+    addOnInfoClicks[provider] = true;
+
     let quotes = this.state.quotes;
     quotes[index].expendAddOnOpen = !quotes[index].expendAddOnOpen;
     this.setState({
-      quotes: quotes
+      quotes: quotes,
+      addOnInfoClicks:addOnInfoClicks
     })
   }
 
@@ -507,7 +550,7 @@ class QuoteGeneration extends Component {
             </div>
           <div className="quote-tiles4b"
             style={{ color: getConfig().primary }}
-            onClick={() => this.openPopUpInfo(index)}>INFO</div>
+            onClick={() => this.openPopUpInfo(index, props.quote_provider)}>INFO</div>
         </div>
 
         {/* basic benefits */}
@@ -516,7 +559,7 @@ class QuoteGeneration extends Component {
 
         {/* add on benefits */}
         <div className="quote-addon-tiles11">
-          <div className="quote-addon-tiles1" onClick={() => this.expendAddOn(index)}>
+          <div className="quote-addon-tiles1" onClick={() => this.expendAddOn(index,  props.quote_provider)}>
             <div className="quote-addon-tiles1a">
               Add on Benifits
           </div>
@@ -651,7 +694,8 @@ class QuoteGeneration extends Component {
     quoteData.payment_frequency = this.state.paymentFreqRadio
     this.setState({
       openDialogFilter: false,
-      quoteData: quoteData
+      quoteData: quoteData,
+      premium_payment_frequency_clicked: true
     });
     this.getQuotes();
   }
@@ -720,9 +764,56 @@ class QuoteGeneration extends Component {
     return null;
   }
 
+  sendEvents(user_action, screen_name, quote, payment_frequency) {
+
+    let eventObj = {};
+    if (screen_name === 'quote') {
+      eventObj = {
+        "event_name": 'term_insurance ',
+        "properties": {
+          "user_action": user_action,
+          "screen_name": 'selected_quote_details',
+          'from': 'quotes'
+        }
+      };
+    } else {
+      eventObj = {
+        "event_name": 'term_insurance ',
+        "properties": {
+          "user_action": user_action,
+          "screen_name": 'quote_page',
+          'provider':   quote? quote.quote_provider: this.state.quoteSelected && this.state.quoteSelected.quote_provider ? this.state.quoteSelected.quote_provider: '',
+          'premium':payment_frequency || this.state.payment_frequency,
+          'time_spent': this.state.time_spent,
+          'cover_amount_click': this.state.filterAclick && this.state.filterAclick['cover-amount'] ? 'yes': 'no',
+          'cover_amount_change': this.state.filterAchanges && this.state.filterAchanges['cover-amount'] ? 'yes': 'no',
+          'cover_period_click': this.state.filterAclick && this.state.filterAclick['cover-period'] ? 'yes': 'no',
+          'cover_period_change': this.state.filterAchanges && this.state.filterAchanges['cover-period'] ? 'yes': 'no',
+          'smoke_click': this.state.filterAclick && this.state.filterAclick['smoke'] ? 'yes': 'no',
+          'smoke_change': this.state.filterAchanges && this.state.filterAchanges['smoke'] ? 'yes': 'no',
+          'premium_payment_frequency_clicked': this.state.premium_payment_frequency_clicked ? 'yes':'no',
+          'info_hdfc': this.state.infoClicks['HDFC'] ? 'yes':'no',
+          'info_ipru': this.state.infoClicks['IPRU'] ? 'yes':'no',
+          'info_maxlife': this.state.infoClicks['Maxlife'] ? 'yes':'no',
+          'addOnInfo_hdfc': this.state.addOnInfoClicks['HDFC'] ? 'yes':'no',
+          'addOnInfo_ipru': this.state.addOnInfoClicks['IPRU'] ? 'yes':'no',
+          'addOnInfo_maxlife': this.state.addOnInfoClicks['Maxlife'] ? 'yes':'no'
+        }
+      };
+
+    }
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
     return (
       <Container
+      events={this.sendEvents('just_set_events')}
         noFooter={true}
         showLoader={this.state.show_loader}
         title="Select the Insurance"

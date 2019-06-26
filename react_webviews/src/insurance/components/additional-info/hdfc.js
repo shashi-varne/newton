@@ -25,8 +25,8 @@ import {
 import {
   validateAlphabets, validateEmpty, validateLength, validateConsecutiveChar
 } from 'utils/validators';
-import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 class AdditionalInfo extends Component {
   constructor(props) {
@@ -390,9 +390,26 @@ class AdditionalInfo extends Component {
     );
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'term_insurance ',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Intro'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Additional Details"
         smallTitle={this.state.provider}

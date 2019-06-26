@@ -18,8 +18,8 @@ import {
   validateConsecutiveChar,
   validateAlphabets
 } from 'utils/validators';
-import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 class PersonalDetails2 extends Component {
   constructor(props) {
@@ -80,6 +80,7 @@ class PersonalDetails2 extends Component {
   }
 
   handleClick = async () => {
+    this.sendEvents('next');
     if (!validateEmpty(this.state.mother_name)) {
       this.setState({
         mother_name_error: 'Enter valid name'
@@ -132,19 +133,6 @@ class PersonalDetails2 extends Component {
 
         if (res.pfwresponse.status_code === 200) {
 
-          let eventObj = {
-            "event_name": "personal_three_save",
-            "properties": {
-              "provider": this.state.provider,
-              "mother_name": this.state.mother_name,
-              "father_name": this.state.father_name,
-              "place_birth": this.state.birth_place,
-              "from_edit": (this.props.edit) ? 1 : 0
-            }
-          };
-
-          nativeCallback({ events: eventObj });
-
           this.setState({ show_loader: false });
           if (this.props.edit) {
             if (this.state.params.resume === "yes") {
@@ -172,9 +160,31 @@ class PersonalDetails2 extends Component {
     }
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'term_insurance ',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'personal_details_two',
+        "provider": this.state.provider,
+        "mother_name": this.state.mother_name ? 'yes' : 'no',
+        "father_name": this.state.father_name ? 'yes' : 'no',
+        "place_birth": this.state.birth_place ? 'yes' : 'no',
+        "from_edit": (this.props.edit) ? 'yes' : 'no'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Application Form"
         smallTitle={this.state.provider}

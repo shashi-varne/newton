@@ -69,6 +69,15 @@ class Container extends Component {
     });
   }
 
+  getEvents(user_action) {
+    if (!this || !this.props || !this.props.events) {
+      return;
+    }
+    let events = this.props.events;
+    events.properties.user_action = user_action;
+    return events;
+  }
+
   historyGoBack = () => {
 
     if (manageDialog('general-dialog', 'none', 'enableScroll')) {
@@ -84,13 +93,13 @@ class Container extends Component {
     if (pathname === '/insurance/journey' || pathname === '/insurance/summary') {
       if (this.props.isJourney) {
         if (!insurance_v2) {
-          nativeCallback({ action: 'native_back' });
+          nativeCallback({ action: 'native_back', events: this.getEvents('back') });
         } else {
           let eventObj = {
-            "event_name": 'make_payment_clicked',
+            "event_name": 'term_insurance',
             "properties": {
               "user_action": 'close',
-              "source": 'summary'
+              "screen_name": 'insurance_summary'
             }
           };
           nativeCallback({ events: eventObj });
@@ -106,7 +115,7 @@ class Container extends Component {
 
       if (params && params.disableBack) {
         if (!insurance_v2) {
-          nativeCallback({ action: 'native_back' });
+          nativeCallback({ action: 'native_back', events: this.getEvents('back') });
         } else {
           this.setState({
             callbackType: 'exit',
@@ -123,7 +132,7 @@ class Container extends Component {
       case "/insurance/resume":
       case "/insurance/journey":
         if (!insurance_v2) {
-          nativeCallback({ action: 'native_back' });
+          nativeCallback({ action: 'native_back', events: this.getEvents('back') });
         } else {
           this.setState({
             callbackType: 'exit',
@@ -133,12 +142,14 @@ class Container extends Component {
         }
         break;
       case '/insurance/intro':
-        nativeCallback({ action: 'native_back' });
+        nativeCallback({ action: 'native_back', events: this.getEvents('back') });
         break;
       default:
         if (back_button_mapper[pathname] && back_button_mapper[pathname].length > 0) {
+          nativeCallback({ events: this.getEvents('back') });
           this.navigate(back_button_mapper[pathname]);
         } else if (navigator.onLine) {
+          nativeCallback({ events: this.getEvents('back') });
           this.props.history.goBack();
         } else {
           this.setState({
@@ -154,16 +165,16 @@ class Container extends Component {
       openPopup: false
     });
 
-    if (this.state.callbackType === 'show_quotes') {
-      let eventObj = {
-        "event_name": 'exit_from_payment',
-        "properties": {
-          "user_action": 'no',
-          "source": 'summary'
-        }
-      };
-      nativeCallback({ events: eventObj });
-    }
+    // if (this.state.callbackType === 'show_quotes') {
+    //   let eventObj = {
+    //     "event_name": 'exit_from_payment',
+    //     "properties": {
+    //       "user_action": 'no',
+    //       "source": 'summary'
+    //     }
+    //   };
+    //   nativeCallback({ events: eventObj });
+    // }
   }
 
   renderDialog = () => {

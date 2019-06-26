@@ -3,6 +3,7 @@ import qs from 'qs';
 
 import Container from '../../common/Container';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 import smoking_icon from 'assets/smoking_icon.png';
 import no_smoke_icon from 'assets/no_smoke_icon.png';
@@ -34,6 +35,7 @@ class LifeStyle extends Component {
   }
 
   handleClick = async () => {
+    this.sendEvents('next');
     let quoteData = this.state.quoteData;
     quoteData.tobacco_choice = this.state.tobacco_choice === 'Yes' ? 'Y' : 'N';
     quoteData.selectedIndexSmoke = this.state.selectedIndex;
@@ -53,9 +55,27 @@ class LifeStyle extends Component {
   renderPopUp() {
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'term_insurance ',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'life_style',
+        'chew_tobacco': this.state.tobacco_choice
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Basic Details"
         smallTitle="Your Lifestyle"

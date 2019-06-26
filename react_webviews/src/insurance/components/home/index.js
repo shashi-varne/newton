@@ -4,8 +4,8 @@ import qs from 'qs';
 import toast from '../../../common/ui/Toast';
 import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
-import loader from 'assets/loader_gif.gif';
 import { nativeCallback } from 'utils/native_callback';
+import loader from 'assets/loader_gif.gif';
 
 class InsuranceHome extends Component {
 

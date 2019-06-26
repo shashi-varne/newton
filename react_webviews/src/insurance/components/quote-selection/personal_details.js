@@ -6,6 +6,7 @@ import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 import Input from '../../../common/ui/Input';
 
 import male_icon from 'assets/male_icon.svg';
@@ -141,7 +142,7 @@ class PersonalDetailsIntro extends Component {
   }
 
   handleClick = async () => {
-    console.log(this.state.age)
+    this.sendEvents('next');
     if (!this.state.dob) {
       this.setState({
         dob_error: 'Please enter date'
@@ -188,10 +189,29 @@ class PersonalDetailsIntro extends Component {
     );
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'term_insurance ',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'basic_details',
+        'DOB_entered': this.state.dob ? 'yes' : 'no',
+        'gender_click': this.state.gender ? 'yes' : 'no'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
     let currentDate = new Date().toISOString().slice(0, 10);
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Basic Details"
         smallTitle="Personal Details"

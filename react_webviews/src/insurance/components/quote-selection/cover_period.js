@@ -5,7 +5,7 @@ import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import { getConfig, manageDialog } from 'utils/functions';
-
+import { nativeCallback } from 'utils/native_callback';
 import cover_age_icn from 'assets/cover_age_icn.png';
 import DropdownInPage from '../../../common/ui/DropdownInPage';
 
@@ -28,7 +28,8 @@ class CoverPeriod extends Component {
       selectedIndex: checkValidNumber(quoteData.selectedIndexCoverPeriod, ''),
       cover_period: 0,
       coverPeriodList: [],
-      quoteData: quoteData
+      quoteData: quoteData,
+      info_clicked: 'no'
     }
     this.setValue = this.setValue.bind(this);
   }
@@ -77,6 +78,7 @@ class CoverPeriod extends Component {
   }
 
   handleClick = async () => {
+    this.sendEvents('next');
     let quoteData = this.state.quoteData;
     quoteData.cover_period = this.state.cover_period;
     quoteData.selectedIndexCoverPeriod = this.state.selectedIndex;
@@ -102,7 +104,8 @@ class CoverPeriod extends Component {
 
   openPopUp() {
     this.setState({
-      openPopUp: true
+      openPopUp: true,
+      info_clicked: 'yes'
     })
     manageDialog('general-dialog', 'flex', 'disableScroll');
   }
@@ -158,10 +161,28 @@ class CoverPeriod extends Component {
     return null;
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'term_insurance ',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'cover_period',
+        'cover_period': this.state.cover_period,
+        'info': this.state.info_clicked
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Basic Details"
         smallTitle="Cover Period"

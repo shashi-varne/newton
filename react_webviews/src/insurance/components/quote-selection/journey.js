@@ -3,6 +3,7 @@ import qs from 'qs';
 
 import Container from '../../common/Container';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 import process_success from 'assets/completed_step.svg';
 import wait_icn from 'assets/not_done_yet_step.svg';
@@ -64,6 +65,7 @@ class JourneyIntro extends Component {
   }
 
   handleClick = async () => {
+    this.sendEvents('next');
     this.navigate('personal-details-intro')
   }
 
@@ -87,9 +89,27 @@ class JourneyIntro extends Component {
     );
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'term_insurance ',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'insurance_journey',
+        'stage': 1
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Insurance Journey"
         handleClick={this.handleClick}

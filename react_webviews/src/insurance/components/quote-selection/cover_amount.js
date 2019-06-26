@@ -5,7 +5,7 @@ import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import { getConfig, manageDialog } from 'utils/functions';
-
+import { nativeCallback } from 'utils/native_callback';
 import comver_amount_icon from 'assets/life_cover_icon.png';
 import {
   validateNumber, inrFormatDecimal,
@@ -22,7 +22,6 @@ import Dialog, {
 class CoverAmount extends Component {
   constructor(props) {
     var quoteData = JSON.parse(window.localStorage.getItem('quoteData')) || {};
-    console.log(quoteData)
     super(props);
     this.state = {
       show_loader: true,
@@ -35,7 +34,8 @@ class CoverAmount extends Component {
       cover_amount_error: '',
       quoteData: quoteData,
       cover_amount: quoteData.cover_amount,
-      coverAmountToShow: quoteData.coverAmountToShow
+      coverAmountToShow: quoteData.coverAmountToShow,
+      info_clicked: 'no'
     }
     this.setValue = this.setValue.bind(this);
   }
@@ -136,6 +136,7 @@ class CoverAmount extends Component {
 
   handleClick = async () => {
 
+    this.sendEvents('next');
     if (this.state.coverAmountList[this.state.selectedIndex].name === 'Other') {
       if (!this.state.cover_amount) {
         let error = 'Cover Amount cannot be empty';
@@ -218,7 +219,8 @@ class CoverAmount extends Component {
 
   openPopUp() {
     this.setState({
-      openPopUp: true
+      openPopUp: true,
+      info_clicked: 'yes'
     })
     manageDialog('general-dialog', 'flex', 'disableScroll');
 
@@ -286,9 +288,29 @@ class CoverAmount extends Component {
     }
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'term_insurance ',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'cover_amount',
+        'cover_amount': this.state.coverAmountList && checkValidNumber(this.state.selectedIndex) && this.state.coverAmountList[this.state.selectedIndex]
+          ? numDifferentiation(this.state.coverAmountList[this.state.selectedIndex].value || this.state.cover_amount) : '',
+        'info': this.state.info_clicked
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Basic Details"
         smallTitle="Cover Amount"

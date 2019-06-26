@@ -3,6 +3,7 @@ import qs from 'qs';
 
 import Container from '../../common/Container';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 import help_myway from 'assets/help_myway.svg';
 import help_fisdom from 'assets/help_fisdom.svg';
@@ -14,6 +15,7 @@ import unfortunate_events_myway from 'assets/unfortunate_events_myway.svg';
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
+
 class Intro extends Component {
   constructor(props) {
     super(props);
@@ -21,10 +23,31 @@ class Intro extends Component {
       params: qs.parse(props.history.location.search.slice(1)),
       type: getConfig().productName,
       selectedItem: 0,
-      selectedIndex: 0
+      selectedIndex: 0,
+      card_swipe: 'no',
+      card_swipe_count: 0,
+      time_spent: 0
     }
     this.renderTitle = this.renderTitle.bind(this);
   }
+
+  componentWillMount() {
+    let intervalId = setInterval(this.countdown, 1000);
+    this.setState({
+      countdownInterval: intervalId,
+      show_loader: false
+    });
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.countdownInterval);
+  }
+
+  countdown = () => {
+    this.setState({
+      time_spent: this.state.time_spent + 1
+    })
+  };
 
   renderTitle(index) {
     index = index * 1;
@@ -73,7 +96,28 @@ class Intro extends Component {
   }
 
   handleClick = async () => {
+    this.sendEvents('next');
     this.navigate('journey-intro')
+  }
+
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'term_insurance ',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'term_insurance_intro',
+        "card_swipe": this.state.card_swipe,
+        'card_swipe_count': this.state.card_swipe_count / 2,
+        'current_card_pos': this.state.selectedIndex + 1,
+        'time_spent': this.state.time_spent
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   }
 
   render() {
@@ -85,6 +129,7 @@ class Intro extends Component {
         buttonTitle="Protect Your Family"
         fullWidthButton={true}
         onlyButton={true}
+        events={this.sendEvents('just_set_events')}
       >
 
         {this.state.imageData && <Carousel
@@ -94,7 +139,9 @@ class Intro extends Component {
           selectedItem={this.state.selectedIndex}
           onChange={(index) => {
             this.setState({
-              selectedIndex: index
+              selectedIndex: index,
+              card_swipe: 'yes',
+              card_swipe_count: this.state.card_swipe_count + 1
             });
           }}
         >

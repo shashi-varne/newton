@@ -20,6 +20,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 class Pincode extends Component {
   constructor(props) {
@@ -107,6 +108,7 @@ class Pincode extends Component {
   };
 
   async savePincode(pincode, insurance_id) {
+    this.sendEvents('next');
     this.setState({ show_loader: true });
     let address = {
       'insurance_app_id': insurance_id,
@@ -182,6 +184,7 @@ class Pincode extends Component {
   }
 
   handleClick = async () => {
+
     if (!this.state.pincode || this.state.pincode.length !== 6 || !validateNumber(this.state.pincode)) {
       this.setState({
         pincode_error: 'Please enter valid pincode'
@@ -200,6 +203,7 @@ class Pincode extends Component {
           // this.handlePayment(this.state.params.insurance_id);
           this.savePincode(this.state.pincode, this.state.params.insurance_id);
         } else {
+          this.sendEvents('next', true)
           let error = res.pfwresponse.result.error;
           // this.setState({ show_loader: false });
 
@@ -235,6 +239,10 @@ class Pincode extends Component {
   }
 
   handleClose = () => {
+
+    if (this.state.openDialogOtherProvider) {
+      this.sendEvents('back', '', 'pincode');
+    }
     this.setState({
       openDialog: false,
       openDialogOtherProvider: false,
@@ -376,10 +384,42 @@ class Pincode extends Component {
     );
   }
 
+  sendEvents(user_action, pincode_not_supported, screen_name) {
+    let eventObj = {};
+
+    if (screen_name === 'pincode') {
+      eventObj = {
+        "event_name": 'term_insurance ',
+        "properties": {
+          "user_action": user_action,
+          "screen_name": 'explore_other_option'
+        }
+      };
+    } else {
+      eventObj = {
+        "event_name": 'term_insurance ',
+        "properties": {
+          "user_action": user_action,
+          "screen_name": 'pincode',
+          'pincode': this.state.pincode ? 'yes' : 'no',
+          'negative_pincode': pincode_not_supported ? 'yes' : 'no',
+        }
+      };
+
+    }
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   renderUi() {
     if (!this.state.openDialogOtherProvider) {
       return (
         <Container
+          events={this.sendEvents('just_set_events')}
           showLoader={this.state.show_loader}
           title="Application Form"
           smallTitle={this.state.provider}
@@ -420,6 +460,7 @@ class Pincode extends Component {
 
   async handleCloseOtherOptions() {
     // reset
+    this.sendEvents('next', '', 'pincode');
     this.setState({ show_loader: true });
     const res = await Api.post('/api/insurance/profile/reset', {
       insurance_app_id: this.state.params.insurance_id
@@ -454,7 +495,7 @@ class Pincode extends Component {
             <div className="payment-dialog" id="alert-dialog-description">
               <div style={{ fontWeight: 500, color: '#4a4a4a', fontSize: 18 }}>Hey {this.state.name},</div>
               <div style={{ fontWeight: 300, color: '#4a4a4a', fontSize: 16 }}>
-                Max life <b>does not dispatch policy</b> to your
+                {this.state.provider} <b>does not dispatch policy</b> to your
                 current location, you can choose other
                 insurance provider.
               </div>

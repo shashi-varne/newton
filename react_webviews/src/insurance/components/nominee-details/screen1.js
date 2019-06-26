@@ -21,13 +21,13 @@ import {
   validateAlphabets, isValidDate, validateLength, validateConsecutiveChar,
   validateEmpty, providerAsIpru
 } from 'utils/validators';
-import { nativeCallback } from 'utils/native_callback';
 import Dialog, {
   DialogActions,
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 class NomineeDetails extends Component {
   constructor(props) {
@@ -239,6 +239,7 @@ class NomineeDetails extends Component {
   }
 
   handleClick = async () => {
+    this.sendEvents('next');
     if (this.state.name.split(" ").filter(e => e).length < 2) {
       this.setState({
         name_error: 'Enter valid full name'
@@ -299,24 +300,6 @@ class NomineeDetails extends Component {
         const res = await Api.post('/api/insurance/profile', data);
 
         if (res.pfwresponse.status_code === 200) {
-
-          let eventObj = {
-            "event_name": "nominee_save",
-            "properties": {
-              "provider": this.state.provider,
-              "nominee_name": this.state.name,
-              "nominee_dob": this.state.dob,
-              "nominee_marital": this.state.marital_status.toLowerCase(),
-              "nominee_relation": this.state.relationship,
-              "address_same": (this.state.checked) ? 1 : 0,
-              "pin_nominee": this.state.pincode,
-              "city_nominee": this.state.city,
-              "state_nominee": this.state.state,
-              "from_edit": (this.state.edit) ? 1 : 0
-            }
-          };
-
-          nativeCallback({ events: eventObj });
 
           this.setState({ show_loader: false });
           if (this.props.edit) {
@@ -401,10 +384,34 @@ class NomineeDetails extends Component {
     );
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'term_insurance ',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'nominee_details',
+        "provider": this.state.provider,
+        "nominee_name": this.state.name ? 'yes' : 'no',
+        "nominee_dob": this.state.dob ? 'yes' : 'no',
+        "nominee_marital": this.state.marital_status ? 'yes' : 'no',
+        "nominee_relation": this.state.relationship ? 'yes' : 'no',
+        "nominee_gender": this.state.gender ? 'yes' : 'no',
+        "from_edit": (this.state.edit) ? 'yes' : 'no',
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
     let currentDate = new Date().toISOString().slice(0, 10);
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Application Form"
         smallTitle={this.state.provider}

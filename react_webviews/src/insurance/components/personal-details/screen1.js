@@ -20,8 +20,8 @@ import {
   validatePan, validateAlphabets, providerAsIpru,
   validateEmail, validateNumber, numberShouldStartWith, validateEmpty, validateLength, validateConsecutiveChar
 } from 'utils/validators';
-import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 class PersonalDetails1 extends Component {
   constructor(props) {
@@ -130,6 +130,7 @@ class PersonalDetails1 extends Component {
 
   handleClick = async () => {
 
+    this.sendEvents('next');
     if (this.state.provider !== 'Maxlife' && !validateEmpty(this.state.name)) {
       this.setState({
         name_error: 'Enter valid name'
@@ -277,20 +278,6 @@ class PersonalDetails1 extends Component {
 
         if (res.pfwresponse.status_code === 200) {
 
-          let eventObj = {
-            "event_name": "personal_two_save",
-            "properties": {
-              "provider": this.state.provider,
-              "name": this.state.name,
-              "dob": this.state.dob,
-              "gender": this.state.gender.toLowerCase(),
-              "marital": this.state.marital_status.toLowerCase(),
-              "from_edit": (this.props.edit) ? 1 : 0
-            }
-          };
-
-          nativeCallback({ events: eventObj });
-
           this.setState({ show_loader: false });
 
           if (this.state.provider === 'HDFC') {
@@ -425,9 +412,57 @@ class PersonalDetails1 extends Component {
     }
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'term_insurance ',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'personal_details_one',
+        "provider": this.state.provider,
+        'gender': this.state.gender ? 'yes' : 'no',
+        'verify_details_flow': 'no',
+        "from_edit": (this.props.edit) ? 'yes' : 'no'
+      }
+    };
+
+
+    if (this.state.provider === 'HDFC') {
+      eventObj.properties.name = this.state.name ? 'yes' : 'no';
+      eventObj.properties['marital_status'] = this.state.marital_status ? 'yes' : 'no';
+
+      if (this.state.marital_status === 'MARRIED') {
+        eventObj.properties['spouse_name'] = this.state.spouse_name ? 'yes' : 'no';
+      }
+
+    } if (this.state.provider === 'IPRU') {
+      eventObj.properties['pan_number'] = this.state.pan_number ? 'yes' : 'no';
+      eventObj.properties.name = this.state.name ? 'yes' : 'no';
+
+    } else if (this.state.provider === 'Maxlife') {
+      eventObj.properties['pan_number'] = this.state.pan_number ? 'yes' : 'no';
+      eventObj.properties['first_name'] = this.state.first_name ? 'yes' : 'no';
+      eventObj.properties['last_name'] = this.state.last_name ? 'yes' : 'no';
+      eventObj.properties['father_name'] = this.state.father_name ? 'yes' : 'no';
+    }
+
+
+    if (this.state.params.isKyc) {
+      eventObj.properties.email = this.state.email ? 'yes' : 'no';
+      eventObj.properties.mobile_no = this.state.mobile_no ? 'yes' : 'no';
+      eventObj.properties.verify_details_flow = 'yes';
+    }
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Application Form"
         smallTitle={this.state.provider}

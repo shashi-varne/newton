@@ -83,6 +83,7 @@ class ContactDetails1 extends Component {
   }
 
   handleClick = async () => {
+    this.sendEvents('next');
     if (this.state.email.length < 10 || !validateEmail(this.state.email)) {
       this.setState({
         email_error: 'Please enter valid email'
@@ -105,19 +106,6 @@ class ContactDetails1 extends Component {
         });
 
         if (res.pfwresponse.status_code === 200) {
-
-          let eventObj = {
-            "event_name": "contact_one_save",
-            "properties": {
-              "provider": this.state.provider,
-              "email": this.state.email,
-              "mobile": this.state.mobile_no,
-              "closed_popup": "",
-              "from_edit": (this.state.edit) ? 1 : 0
-            }
-          };
-
-          nativeCallback({ events: eventObj });
 
           this.setState({ show_loader: false });
           if (this.props.edit) {
@@ -171,9 +159,30 @@ class ContactDetails1 extends Component {
     );
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'term_insurance ',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'contact_details_one',
+        "provider": this.state.provider,
+        "email": this.state.email ? 'yes' : 'no',
+        "mobile": this.state.mobile_no ? 'yes' : 'no',
+        "from_edit": (this.state.edit) ? 'yes' : 'no'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Application Form"
         smallTitle={this.state.provider}

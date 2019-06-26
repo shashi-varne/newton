@@ -9,7 +9,6 @@ import name from '../../../assets/name_present_employer_dark_icn.png';
 import location from '../../../assets/location_dark_icn.png';
 import Api from '../../../utils/api';
 import { validateAlphabets, validateNumber, validateStreetName, validateLength, validate2ConsecutiveDigits, validateConsecutiveChar, validateEmpty } from '../../../utils/validators';
-import { nativeCallback } from 'utils/native_callback';
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -17,6 +16,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 class ProfessionalDetails2 extends Component {
   constructor(props) {
@@ -276,9 +276,26 @@ class ProfessionalDetails2 extends Component {
     );
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'term_insurance ',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'Intro'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Application Form"
         smallTitle={this.state.provider}

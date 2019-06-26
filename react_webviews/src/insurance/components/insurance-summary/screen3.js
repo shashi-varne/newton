@@ -146,26 +146,21 @@ class Journey extends Component {
   }
 
   handleClosePayment() {
-    let eventObj = {
-      "event_name": 'popup_post_payment_click',
-      "properties": {
-        "user_action": 'next',
-        "source": 'resume'
-      }
-    };
-    nativeCallback({ events: eventObj });
+
     this.redirect(this.state.payment_link, true);
   }
 
   redirect(payment_link, redirect) {
 
     if (!redirect && this.state.provider !== 'Maxlife') {
+      this.sendEvents('next');
       this.setState({
         paymentModal: true
       });
       return;
     }
 
+    this.sendEvents('next', 'payment');
     this.setState({
       show_loader: true
     });
@@ -191,14 +186,7 @@ class Journey extends Component {
     this.setState({
       show_loader: true
     });
-    let eventObj = {
-      "event_name": 'make_payment_clicked',
-      "properties": {
-        "user_action": 'next',
-        "source": 'resume'
-      }
-    };
-    nativeCallback({ events: eventObj });
+
     Api.get('api/insurance/start/payment/' + this.state.insurance_id)
       .then(res => {
         if (res.pfwresponse && res.pfwresponse.status_code === 200) {
@@ -505,16 +493,15 @@ class Journey extends Component {
 
 
   handleClose = () => {
-    if (this.state.paymentModal) {
-      let eventObj = {
-        "event_name": 'popup_post_payment_click',
-        "properties": {
-          "user_action": 'back',
-          "source": 'resume'
-        }
-      };
-      nativeCallback({ events: eventObj });
+
+    if (this.state.openDialogReset) {
+      this.sendEvents('no', 'reset');
     }
+
+    if (this.state.paymentModal) {
+      this.sendEvents('back', 'payment');
+    }
+
     this.setState({
       openDialog: false,
       openDialogReset: false,
@@ -615,6 +602,7 @@ class Journey extends Component {
   }
 
   handleClick = async () => {
+    this.sendEvents('next');
     let provider;
 
     if (this.state.provider === 'HDFC') {
@@ -694,14 +682,7 @@ class Journey extends Component {
             // eslint-disable-next-line
             let result = res.pfwresponse.result;
 
-            let eventObj = {
-              "event_name": 'resume_clicked',
-              "properties": {
-                "user_action": 'next',
-                "source": 'resume'
-              }
-            };
-            nativeCallback({ events: eventObj });
+            this.sendEvents('next');
             nativeCallback({
               action: 'take_control', message: {
                 back_url: this.state.current_url,
@@ -726,14 +707,7 @@ class Journey extends Component {
           return;
         }
 
-        let eventObj = {
-          "event_name": 'resume_clicked',
-          "properties": {
-            "user_action": 'next',
-            "source": 'resume'
-          }
-        };
-        nativeCallback({ events: eventObj });
+        this.sendEvents('next');
         nativeCallback({
           action: 'take_control', message: {
             back_url: this.state.current_url,
@@ -814,6 +788,7 @@ class Journey extends Component {
   }
 
   handleReset = async () => {
+    this.sendEvents('yes', 'reset');
     this.setState({ openResponseDialog: false, apiError: '', openDialog: false, openModal: true, openModalMessage: 'Wait a moment while we reset your application' });
     const res = await Api.post('/api/insurance/profile/reset', {
       insurance_app_id: this.state.insurance_id
@@ -832,6 +807,7 @@ class Journey extends Component {
   }
 
   showDialog = () => {
+    this.sendEvents('reset');
     this.setState({ openDialogReset: true });
   }
 
@@ -1003,10 +979,48 @@ class Journey extends Component {
     return null;
   }
 
+  sendEvents(user_action, screen_name) {
+    let eventObj = {};
+    if (screen_name === 'reset') {
+      eventObj = {
+        "event_name": 'term_insurance ',
+        "properties": {
+          "user_action": user_action,
+          "screen_name": 'restart'
+        }
+      };
+    } else if (screen_name === 'payment') {
+      eventObj = {
+        "event_name": 'term_insurance ',
+        "properties": {
+          "user_action": user_action,
+          "screen_name": 'premium_amount_detail'
+        }
+      };
+    } else {
+      eventObj = {
+        "event_name": 'term_insurance ',
+        "properties": {
+          "user_action": user_action,
+          "screen_name": this.state.params.isJourney ? 'insurance_journey' : 'insurance_summary_resume',
+          'stage': this.state.plutus_payment_status === 'payment_done' ? 3 : 2
+        }
+      };
+    }
+
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   renderMainUi() {
     if (!this.state.paymentModal) {
       return (
         <Container
+          events={this.sendEvents('just_set_events')}
           disableBack={this.state.disableBack ? true : false}
           isJourney={this.state.params.isJourney ? true : false}
           resetpage={((this.state.status === 'init' || this.state.status === 'plutus_submitted') &&

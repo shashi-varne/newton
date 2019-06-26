@@ -23,8 +23,8 @@ import {
   qualification, educationQualificationsOptionsMaxlife, occupationDetailOptionsMaxlife
 } from '../../constants';
 import { validatePan, validateNumber, formatAmount, validateEmpty, providerAsIpru } from 'utils/validators';
-import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 class ProfessionalDetails1 extends Component {
   constructor(props) {
@@ -154,8 +154,8 @@ class ProfessionalDetails1 extends Component {
   }
 
   handleClick = async () => {
-    // var number = /^\d*$/gm;
 
+    this.sendEvents('next')
     if (!validateEmpty(this.state.pan_number) &&
       this.state.provider === 'HDFC') {
       this.setState({
@@ -232,23 +232,6 @@ class ProfessionalDetails1 extends Component {
           } else {
             sector_ev = 'student';
           }
-
-          let eventObj = {
-            "event_name": "professional_save",
-            "properties": {
-              "provider": this.state.provider,
-              "PAN": this.state.pan_number || '',
-              "education": this.state.education_qualification || '',
-              "occu": sector_ev || '',
-              "sector": this.state.occupation_category.toLowerCase() || '',
-              "income": this.state.annual_income,
-              "political": (this.state.is_politically_exposed) ? 1 : 0,
-              "criminal": (this.state.is_criminal) ? 1 : 0,
-              "from_edit": (this.state.edit) ? 1 : 0
-            }
-          };
-
-          nativeCallback({ events: eventObj });
 
           this.setState({ show_loader: false });
           if (this.props.edit) {
@@ -387,9 +370,38 @@ class ProfessionalDetails1 extends Component {
     }
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'term_insurance ',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'professional_details',
+        "provider": this.state.provider,
+        'occupation_detail': this.state.occupation_detail ? 'yes' : 'no',
+        'annual_income': this.state.annual_income ? 'yes' : 'no',
+        'education_qualification': this.state.education_qualification ? 'yes' : 'no',
+        "from_edit": (this.state.edit) ? 'yes' : 'no',
+      }
+    };
+
+    if (this.state.provider === 'HDFC') {
+      eventObj.properties.pan_number = this.state.pan_number ? 'yes' : 'no';
+      eventObj.properties.is_politically_exposed = this.state.is_politically_exposed ? 'yes' : 'no';
+      eventObj.properties.is_criminal = this.state.is_criminal ? 'yes' : 'no';
+      eventObj.properties.occupation_category = this.state.occupation_category ? 'yes' : 'no';
+    }
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Application Form"
         smallTitle={this.state.provider}

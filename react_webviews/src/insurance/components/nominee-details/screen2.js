@@ -18,13 +18,13 @@ import Button from 'material-ui/Button';
 import Api from 'utils/api';
 import { maritalOptions, genderOptions, appointeeRelationshipOptions } from '../../constants';
 import { validateAlphabets, isValidDate, validateLength, validateConsecutiveChar, validateEmpty } from 'utils/validators';
-import { nativeCallback } from 'utils/native_callback';
 import Dialog, {
   DialogActions,
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 class AppointeeDetails extends Component {
   constructor(props) {
@@ -240,6 +240,7 @@ class AppointeeDetails extends Component {
   }
 
   handleClick = async () => {
+    this.sendEvents('next');
     let age = this.calculateAge(this.state.dob.replace(/\\-/g, '/').split('-').reverse().join('/'));
     if (this.state.name.split(" ").filter(e => e).length < 2) {
       this.setState({
@@ -304,24 +305,6 @@ class AppointeeDetails extends Component {
         const res = await Api.post('/api/insurance/profile', data);
 
         if (res.pfwresponse.status_code === 200) {
-
-          let eventObj = {
-            "event_name": "apointee_save",
-            "properties": {
-              "provider": this.state.provider,
-              "name_appointee": this.state.name,
-              "dob_appointe": this.state.dob,
-              "marital": this.state.marital_status.toLowerCase(),
-              "relation": this.state.relationship,
-              "address_same": (this.state.checked) ? 1 : 0,
-              "pin": this.state.pincode,
-              "add": this.state.addressline,
-              "city": this.state.city,
-              "state": this.state.state
-            }
-          };
-
-          nativeCallback({ events: eventObj });
 
           this.setState({ show_loader: false });
           if (this.props.edit) {
@@ -399,9 +382,33 @@ class AppointeeDetails extends Component {
     );
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'term_insurance ',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'appointee_details',
+        "provider": this.state.provider,
+        "appointee_name": this.state.name ? 'yes' : 'no',
+        "appointee_dob": this.state.dob ? 'yes' : 'no',
+        "appointee_marital": this.state.marital_status ? 'yes' : 'no',
+        "appointee_relation": this.state.relationship ? 'yes' : 'no',
+        "appointee_gender": this.state.gender ? 'yes' : 'no',
+        "from_edit": (this.state.edit) ? 'yes' : 'no',
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Application Form"
         smallTitle={this.state.provider}

@@ -13,7 +13,6 @@ import contact_myway from 'assets/contact_details_icn.svg';
 import location from 'assets/location_dark_icn.png';
 import Api from 'utils/api';
 import { validateNumber, validateStreetName, validateLengthDynamic, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';
-import { nativeCallback } from 'utils/native_callback';
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -21,6 +20,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 class ContactDetails2 extends Component {
   constructor(props) {
@@ -445,22 +445,6 @@ class ContactDetails2 extends Component {
             insurance_app_id: this.state.params.insurance_id
           });
           if (result.pfwresponse.status_code === 200) {
-            // let eventObj = {
-            //   "event_name": "contact_two_save",
-            //   "properties": {
-            //     "provider": this.state.provider,
-            //     "address_same_option": (this.state.checked) ? 1 : 0,
-            //     "pin_correspondance": this.state.cpincode,
-            //     "add_correspondance": this.state.caddressline,
-            //     "city_correspondance": this.state.ccity,
-            //     "state_correspondance": this.state.cstate,
-            //     "pin_permanent": this.state.pincode,
-            //     "add_permanent": this.state.addressline,
-            //     "city_permanent": this.state.city,
-            //     "state_permanent": this.state.state,
-            //     "from_edit": (this.state.edit) ? 1 : 0
-            //   }
-            // };
 
             nativeCallback({
               action: 'take_control', message: {
@@ -580,9 +564,46 @@ class ContactDetails2 extends Component {
     );
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'term_insurance ',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'contact_details_two',
+        "provider": this.state.provider,
+        "pin_permanent": this.state.pincode ? 'yes' : 'no',
+        "add_permanent": this.state.addressline ? 'yes' : 'no',
+        "city_permanent": this.state.city ? 'yes' : 'no',
+        "state_permanent": this.state.state ? 'yes' : 'no',
+        "address_same_option_correspondence": (this.state.checked) ? 'yes' : 'no',
+        "pin_correspondence": this.state.cpincode ? 'yes' : 'no',
+        "add_correspondence": this.state.caddressline ? 'yes' : 'no',
+        "city_correspondence": this.state.ccity ? 'yes' : 'no',
+        "state_correspondence": this.state.cstate ? 'yes' : 'no',
+        "address_same_option_nominee": (this.state.nominee_checked) ? 'yes' : 'no',
+        "pin_nominee": this.state.nominee_pincode ? 'yes' : 'no',
+        "add_nominee": this.state.nominee_addressline ? 'yes' : 'no',
+        "city_nominee": this.state.nominee_city ? 'yes' : 'no',
+        "state_nominee": this.state.nominee_state ? 'yes' : 'no',
+        "address_same_option_appointee": (this.state.a_checked) ? 'yes' : 'no',
+        "pin_address_same_option_appointee": this.state.a_pincode ? 'yes' : 'no',
+        "add_address_same_option_appointee": this.state.a_addressline ? 'yes' : 'no',
+        "city_address_same_option_appointee": this.state.a_city ? 'yes' : 'no',
+        "state_address_same_option_appointee": this.state.a_state ? 'yes' : 'no',
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Application Form"
         smallTitle={this.state.provider}
