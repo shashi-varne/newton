@@ -28,9 +28,11 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   }
 
   let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
+
   if (generic_callback === "true") {
     if (action === 'take_control_reset_hard' || action === 'take_control_reset') {
       callbackData.action = 'reset_back_button_control';
+      nativeCallback({ action: 'hide_top_bar' });
     }
 
     if (action === 'take_control') {

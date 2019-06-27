@@ -10,6 +10,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import qs from 'qs';
 import { nativeCallback } from '../../../utils/native_callback';
+import { getConfig } from '../../../utils/functions';
 
 class Payment extends Component {
   constructor(props) {
@@ -27,6 +28,10 @@ class Payment extends Component {
 
     if (insurance_v2) {
       nativeCallback({ action: 'take_control_reset_hard' });
+    }
+
+    if (getConfig().generic_callback) {
+      nativeCallback({ action: 'take_control_reset' });
     }
     this.setState({
       paymentStatus: status,

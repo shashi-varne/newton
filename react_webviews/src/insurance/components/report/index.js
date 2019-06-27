@@ -204,7 +204,7 @@ class FinalReport extends Component {
       "event_name": 'term_insurance ',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'Report'
+        "screen_name": 'report'
       }
     };
 
