@@ -296,7 +296,6 @@ class SellOrder extends Component {
   handleClick = async () => {
 
     this.sendEvents('next');
-    let ifsc_regex = /^[A-Za-z]{4}\d{7}$/;
 
     if (this.state.ifsc_error) {
       return;
@@ -319,10 +318,6 @@ class SellOrder extends Component {
         ifsc_error: 'Please enter IFSC Code'
       });
     } else if (this.state.ifsc_code && (this.state.ifsc_code.length < 11 || this.state.ifsc_code.length > 11)) {
-      this.setState({
-        ifsc_error: 'Invalid IFSC Code'
-      });
-    } else if (this.state.ifsc_code && !ifsc_regex.test(this.state.ifsc_code)) {
       this.setState({
         ifsc_error: 'Invalid IFSC Code'
       });
