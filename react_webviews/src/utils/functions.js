@@ -4,7 +4,6 @@ import createBrowserHistory from 'history/createBrowserHistory';
 
 const myHistory = createBrowserHistory();
 
-
 export const getHost = (pathname) => {
   return window.location.protocol + '//' + window.location.host + pathname;
 };
@@ -36,7 +35,6 @@ export const isMobile = {
   Windows: () => navigator.userAgent.match(/IEMobile/i),
   any: () => (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows()),
 };
-
 
 export const getConfig = () => {
 
@@ -100,7 +98,9 @@ export const getConfig = () => {
   let returnConfig = config[productType];
 
   let project = 'insurance';
-  if (myHistory.location.pathname.indexOf('risk') >= 0) {
+  if (myHistory.location.pathname.indexOf('insurance') >= 0) {
+    project = 'insurance';
+  } else if (myHistory.location.pathname.indexOf('risk') >= 0) {
     project = 'risk';
   } else if (myHistory.location.pathname.indexOf('mandate-otm') >= 0) {
     project = 'mandate-otm';
@@ -110,6 +110,8 @@ export const getConfig = () => {
     project = 'gold';
   } else if (myHistory.location.pathname.indexOf('isip') >= 0) {
     project = 'isip';
+  } else if (myHistory.location.pathname.indexOf('referral') >= 0) {
+    project = 'referral';
   }
   returnConfig.project = project;
   returnConfig.generic_callback = generic_callback;
@@ -150,7 +152,7 @@ export const getConfig = () => {
   if (project === 'isip') {
     let { pc_urlsafe } = qs.parse(myHistory.location.search.slice(1));
     let campaign_version = generic_callback === "true" ? 1 : main_query_params.campaign_version;
-    searchParams = '?base_url=' + encodeURIComponent(base_url) + '&pc_urlsafe=' + pc_urlsafe +
+    searchParams += '&pc_urlsafe=' + pc_urlsafe +
       '&campaign_version=' + campaign_version;
 
     // eslint-disable-next-line

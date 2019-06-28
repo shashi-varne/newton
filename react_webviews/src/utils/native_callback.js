@@ -12,8 +12,6 @@ export const nativeCallbackOld = (status_code, message, action) => {
   }
   let url = 'http://app.fisdom.com/page/invest/campaign/callback?name=mandate-otm&message=' +
     message + '&code=' + status_code + '&destination=' + null;
-  console.log('status_code ' + status_code);
-  console.log(url);
   window.location.replace(url);
 };
 
@@ -22,15 +20,8 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   let callbackData = {};
   let project = getConfig().project;
 
-  console.log("Nativecallback..........(action, message, events)");
-  console.log(action);
-  console.log(JSON.stringify(message));
-  console.log(JSON.stringify(events))
   if (action) {
     callbackData.action = action;
-  }
-  if (events) {
-    callbackData.events = events;
   }
   if (!action && !events) {
     return;
@@ -64,6 +55,10 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       callbackData.action = 'restart_module';
     }
 
+    if (action === 'events') {
+      callbackData.action = 'event';
+    }
+
     if (project === 'insurance') {
       if (action === 'resume_provider') {
         nativeCallback({ action: 'show_top_bar', message: { title: message.provider } });
@@ -78,7 +73,15 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     if (message) {
       callbackData.action_data = message;
     }
+    if (events) {
+      callbackData.event = events;
+    }
+
   } else {
+
+    if (events) {
+      callbackData.events = events;
+    }
     if (message) {
       callbackData.data = message;
     }
@@ -112,7 +115,6 @@ export const nativeCallback = async ({ action = null, message = null, events = n
 
       let campaign_version = getConfig().campaign_version;
 
-      console.log("campaign_version...................." + campaign_version);
       if (campaign_version >= 1) {
         if (isMobile.Android() && action) {
           if (typeof window.Android !== 'undefined') {
@@ -161,7 +163,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     }
 
     let insurance_v2 = getConfig().insurance_v2;
-    console.log('insurance_v2 :' + insurance_v2);
+
     if (!insurance_v2 && project === 'insurance') {
 
       let notInInsuranceV2 = ['take_control', 'take_control_reset'];
@@ -184,11 +186,9 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   }
 
   if (getConfig().app === 'android') {
-    console.log("Android Device")
     window.Android.callbackNative(JSON.stringify(callbackData));
 
   } else if (getConfig().app === 'ios') {
-    console.log("iOS Device")
     window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
   } else {
     if (action === 'native_back' || action === 'exit_web') {

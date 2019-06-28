@@ -8,7 +8,6 @@ import $ from 'jquery';
 import { isMobile } from 'utils/functions';
 
 $(document).ready(function () {
-  console.log("isAndroid :" + isMobile.Android());
   if (isMobile.Android()) {
     window.addEventListener('resize', function () {
       let body = document.getElementsByTagName('body')[0].offsetHeight;

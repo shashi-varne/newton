@@ -31,18 +31,37 @@ class Container extends Component {
   }
 
   componentDidMount() {
+    let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
     let that = this;
-    window.PaymentCallback.add_listener({
-      type: 'back_pressed',
-      go_back: function () {
-        console.log("goback from plutussdk");
-        that.historyGoBack();
+    if (generic_callback === "true") {
+      if(getConfig().iOS) {
+        nativeCallback({ action: 'hide_top_bar' });
       }
-    });
+      window.callbackWeb.add_listener({
+        type: 'back_pressed',
+        go_back: function () {
+          console.log("goback from callbackWeb");
+          that.historyGoBack();
+        }
+      });
+    } else {
+      window.PaymentCallback.add_listener({
+        type: 'back_pressed',
+        go_back: function () {
+          console.log("goback from plutussdk");
+          that.historyGoBack();
+        }
+      });
+    }
   }
 
   componentWillUnmount() {
-    window.PaymentCallback.remove_listener({});
+    let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
+    if (generic_callback === "true") {
+      window.callbackWeb.remove_listener({});
+    } else {
+      window.PaymentCallback.remove_listener({});
+    }
   }
 
   navigate = (pathname) => {

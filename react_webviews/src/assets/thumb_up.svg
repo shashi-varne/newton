@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="27px" viewBox="0 0 30 27" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>outline-thumb_up_alt-24px</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="1.4_help_quesions_answer" transform="translate(-125.000000, -326.000000)">
+            <g id="outline-thumb_up_alt-24px" transform="translate(124.000000, 325.000000)">
+                <polygon id="Shape" opacity="0.87" points="0 0 32 0 32 32 0 32"></polygon>
+                <path d="M28,10.6666667 L19.5866667,10.6666667 L20.8533333,4.57333333 L20.8933333,4.14666667 C20.8933333,3.6 20.6666667,3.09333333 20.3066667,2.73333333 L18.8933333,1.33333333 L10.12,10.12 C9.62666667,10.6 9.33333333,11.2666667 9.33333333,12 L9.33333333,25.3333333 C9.33333333,26.8 10.5333333,28 12,28 L24,28 C25.1066667,28 26.0533333,27.3333333 26.4533333,26.3733333 L30.48,16.9733333 C30.6,16.6666667 30.6666667,16.3466667 30.6666667,16 L30.6666667,13.3333333 C30.6666667,11.8666667 29.4666667,10.6666667 28,10.6666667 Z M28,16 L24,25.3333333 L12,25.3333333 L12,12 L17.7866667,6.21333333 L16.3066667,13.3333333 L28,13.3333333 L28,16 Z M1.33333333,12 L6.66666667,12 L6.66666667,28 L1.33333333,28 L1.33333333,12 Z" id="Shape" fill="#878787" fill-rule="nonzero"></path>
+            </g>
+        </g>
+    </g>
+</svg>

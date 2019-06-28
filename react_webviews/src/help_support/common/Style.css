@@ -1,0 +1,309 @@
+.HelpContainerWrapper {
+	height: 100%;
+}
+
+.HelpContainer {
+	background: #f8f8f8;
+	height: calc(100% - 56px);
+	padding: 0;
+	margin-bottom: 0;
+	padding-bottom: 0 !important;
+}
+
+.HelpContainer.white {
+	background: #fff;
+}
+
+.section-head {
+	padding-top: 10px;
+}
+
+.section-card {
+	margin-top: 20px;
+}
+
+.main-title {
+	font-size: 18px;
+	color: #878787;
+}
+
+.sub-title {
+	font-size: 14px;
+	margin-top: 12px;
+	color: #878787;
+}
+
+.card-title {
+	font-size: 16px;
+	color: #535353;
+}
+
+.combine-card {
+	background-color: #fff;
+	border-radius: 0;
+	margin-bottom: 0;
+	border-bottom: 1px solid #e7e0e7;
+	padding: 20px 15px;
+	box-shadow: 0px 1.5px 3px 0px #c0c0c0;
+	line-height: 26px;
+}
+
+.combine-list {
+	background-color: #fff;
+	border-bottom: 1px solid #e7e0e7;
+	padding: 20px 15px;
+}
+
+.combine-list .card-title {
+	font-size: 16px;
+	line-height: 20px;
+	padding: 0 5px;
+}
+
+.main-title.dark {
+	color: #6d6d6d;
+}
+
+.no-margin {
+	margin: 0;
+}
+
+.cta {
+	text-align: center;
+	margin-top: 40px;
+	margin-bottom: 40px;
+}
+
+.cta button {
+	border: 1px solid #47cc48;
+	color: #35cb5d;
+	font-size: 16px;
+	border-radius: 5px;
+	padding: 10px 15px;
+	background: #fff;
+}
+
+.question {
+	font-size: 16px;
+	color: #4a4a4a;
+	margin-bottom: 16px;
+	line-height: 23px;
+	font-weight: 500;
+}
+
+.answer {
+	font-size: 16px;
+	color: #595959;
+	line-height: 26px;
+}
+
+.feedback {
+	margin-top: 50px;
+	text-align: center;
+}
+
+.feedback .text {
+	color: #878787;
+	font-size: 14px;
+	line-height: 20px;
+}
+
+.downvotetext {
+	color: #878787;
+	font-size: 14px;
+	line-height: 20px;
+}
+
+.divider {
+	border: 1px solid #e7e0e0;
+}
+
+.thumbs {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 20px 0;
+}
+
+.thumbs img {
+	margin: 0 10px;
+}
+
+.related {
+	margin-top: 10px;
+}
+
+.related .title {
+	font-size: 14px;
+	color: #4a4a4a;
+	line-height: 23px;
+	font-weight: 500;
+	margin-bottom: 10px;
+}
+
+.callback {
+	margin-top: 20px;
+	display: flex;
+}
+
+.callback img {
+	margin-right: 5px;
+}
+
+.callback .title {
+	color: #35cb5d;
+	font-size: 14px;
+	font-weight: 500;
+}
+
+.InputField .label {
+	color: #4a4a4a;
+	font-size: 16px;
+	line-height: 20px;
+}
+
+.InputField .subject {
+	background: #fff;
+	border-radius: 5px;
+	padding: 15px;
+	font-size: 14px;
+	color: #4e4e4e;
+	margin-top: 10px;
+}
+
+.HelpContainer .Form input, .HelpContainer .Form textarea {
+	border: 0;
+	border-radius: 5px;
+	padding: 15px;
+	width: 100%;
+	margin: 0;
+	margin-top: 10px;
+	font-size: 15px;
+	box-sizing : border-box;
+	resize: none;
+	font-family: inherit;
+	color: #4b4b4b;
+	text-overflow: ellipsis;
+}
+
+.related-question {
+	color: #3792fc;
+	font-size: 14px;
+	line-height: 23px;
+}
+
+.InputField {
+	position: relative;
+}
+
+.InputField .upload {
+	display: flex;
+	align-items: center;
+	background: #fff;
+	border-radius: 5px;
+	padding: 15px;
+	font-size: 14px;
+	color: #4e4e4e;
+}
+
+.InputField .upload img {
+	margin-right: 10px;
+}
+
+.thankyou {
+	text-align: center;
+}
+
+.thankyou img {
+	margin: 30px;
+}
+
+.thankyou .title {
+	color: #4a4a4a;
+	font-size: 16px;
+}
+
+.thankyou .description {
+	color: #8b8b8b;
+	font-size: 14px;
+	line-height: 23px;
+	text-align: left;
+	margin-top: 20px;
+}
+
+.Footer {
+	box-shadow: none;
+}
+
+.outlinebutton {
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+.outlinebutton button {
+	background: #fff !important;
+	color: #35cb5d !important;
+	border: 1px solid #35cb5d;
+}
+
+.FooterDefaultLayout .FlexItem2 button {
+	box-shadow: 0px 2px 6px 0px rgba(102,120,121,0.25);
+}
+
+.upload {
+	overflow: hidden;
+	position: relative;
+}
+
+.upload [type=file] {
+	cursor: inherit;
+	display: block;
+	margin: 0;
+	filter: alpha(opacity=0);
+	min-height: 100%;
+	min-width: 100%;
+	opacity: 0;
+	position: absolute;
+	right: 0;
+	text-align: right;
+	top: 0;
+}
+
+.filenameContainer {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.filename {
+	color: #4b4b4b;
+	font-size: 13px;
+	padding: 10px;
+}
+
+.thankyou .userdetail {
+	margin-top: 30px;
+	text-align: left;
+}
+
+.thankyou .userdetail .email, .thankyou .userdetail .mobile {
+	color: #595959;
+	font-size: 14px;
+	line-height: 23px;
+	margin-bottom: 5px;
+}
+
+.editicon img {
+	margin: 0;
+}
+
+.editicon {
+	position: absolute;
+	right: 10px;
+}
+
+.userdetail .InputField {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
