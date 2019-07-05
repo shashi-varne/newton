@@ -10,6 +10,7 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
+import DotDotLoader from '../../../common/ui/DotDotLoader';
 
 export class SummaryLayout extends Component {
   constructor(props) {
@@ -60,20 +61,30 @@ export class SummaryLayout extends Component {
 
   render() {
     const props = this.props;
-
     return (
       <div>
         {!props.noFooter &&
           <div className="FooterSummaryLayout" onClick={props.handleClick}>
 
             {!props.onlyButton && <div className="FlexItem1 padLR15">
-              <div className="FooterSummaryLayout_title">Premium</div>
-              {props.paymentFrequency &&
+
+
+              {props.showDotDot &&
+                <div style={{ marginTop: 8 }}>
+                  <DotDotLoader></DotDotLoader>
+                </div>}
+              {!props.showDotDot && <div className="FooterSummaryLayout_title">Premium</div>}
+              {props.paymentFrequency && !props.showDotDot &&
                 <div className="FooterSummaryLayout_subtitle"> {inrFormatDecimal(props.premium)} {(props.paymentFrequency).toLowerCase()}</div>}
+
+
+
+
               {/* {
               (props.provider === 'HDFC' && props.paymentFrequency === 'MONTHLY') &&
               <div className="FooterSummaryLayout_hint">*You’ve to pay <b>3 months premiums</b>.</div>
             } */}
+
             </div>}
             {!props.onlyButton && <div className="FlexItem2">
               <Button

@@ -333,6 +333,7 @@ class Container extends Component {
             handleClick={this.props.handleClick}
             handleReset={this.props.handleReset}
             onlyButton={this.props.onlyButton}
+            showDotDot={this.props.showDotDot}
             noFooter={this.props.noFooter} />
         }
         {/* No Internet */}

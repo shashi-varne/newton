@@ -364,7 +364,8 @@ class AddOnBenefits extends Component {
 
     this.setState({
       riders_info: riders_info_current,
-      openPopUpCoverAmount: false
+      openPopUpCoverAmount: false,
+      showDotDotMain: true
     })
 
     try {
@@ -442,7 +443,8 @@ class AddOnBenefits extends Component {
           }
         }
         this.setState({
-          riders_info: riders_info_currnet
+          riders_info: riders_info_currnet,
+          showDotDotMain: false
         });
 
         if (fromAdded && riders_info_currnet[this.state.ci_benefit_index].isAdded) {
@@ -464,7 +466,8 @@ class AddOnBenefits extends Component {
     } catch (err) {
       console.log(err);
       this.setState({
-        show_loader: false
+        show_loader: false,
+        showDotDotMain: false
       });
       toast('Something went wrong');
     }
@@ -794,6 +797,7 @@ class AddOnBenefits extends Component {
   render() {
     return (
       <Container
+        showDotDot={this.state.showDotDotMain}
         events={this.sendEvents('just_set_events')}
         classOverRide="insurance-container-grey"
         classOverRideContainer="insurance-container-grey"
