@@ -36,7 +36,7 @@
     "history": "^4.7.2",
     "html-webpack-plugin": "2.29.0",
     "jest": "20.0.4",
-    "jquery": "^3.4.1",
+    "jquery": "^3.3.1",
     "jss": "^9.8.1",
     "material-ui": "next",
     "object-assign": "4.1.1",
@@ -113,7 +113,7 @@
   },
   "homepage": "https://wv.fisdom.com",
   "devDependencies": {
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.9.0",
     "sass-loader": "^7.0.1"
   }
 }
