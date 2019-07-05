@@ -53,7 +53,6 @@ class FinalReport extends Component {
           application = res.pfwresponse.result.insurance_apps.failed[0];
         }
 
-        console.log(application);
         this.setState({
           application: application,
           name: (application.provider === 'Maxlife' ? application.profile.first_name :

@@ -5,7 +5,7 @@ import createBrowserHistory from 'history/createBrowserHistory';
 const myHistory = createBrowserHistory();
 
 export const getHost = (pathname) => {
-  return window.location.protocol + '//' + window.location.host + pathname;
+  return window.location.origin + pathname;
 };
 
 export const getBase64 = (file, callback) => {

@@ -61,7 +61,6 @@ class InsuranceHome extends Component {
 
           this.navigate(pathname, search);
         }
-        console.log(application);
       } else {
         // exit
         this.navigate('intro');

@@ -144,7 +144,7 @@ class AddOnBenefits extends Component {
     }
   }
 
-  async componentDidMount() {
+  componentDidMount() {
 
     this.setState({
       dropdown_arrow: this.state.type !== 'fisdom' ? dropdown_arrow_myway : dropdown_arrow_fisdom

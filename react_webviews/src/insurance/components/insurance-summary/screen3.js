@@ -107,7 +107,7 @@ class Journey extends Component {
 
   componentWillMount() {
 
-    let current_url = window.location.protocol + '//' + window.location.host + '/insurance/journey' + getConfig().searchParams;
+    let current_url = window.location.origin + '/insurance/journey' + getConfig().searchParams;
     this.setState({
       current_url: current_url
     });
@@ -167,7 +167,7 @@ class Journey extends Component {
 
     let insurance_v2 = this.state.params.insurance_v2 ? true : null;
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.protocol + '//' + window.location.host + '/insurance/payment/' + this.state.insurance_id + '/' + insurance_v2
+      window.location.origin + '/insurance/payment/' + this.state.insurance_id + '/' + insurance_v2
     );
     var pgLink = payment_link;
     let app = getConfig().app;
@@ -235,8 +235,6 @@ class Journey extends Component {
   }
 
   async  componentDidMount() {
-    console.log("allllllllllllll")
-    console.log(getConfig().insurance_allweb)
     try {
       let application, required_fields;
 
@@ -247,7 +245,6 @@ class Journey extends Component {
         homeApplication = JSON.parse(window.localStorage.getItem('homeApplication')) || [];
       }
 
-      console.log("cameFromHome :" + cameFromHome)
       if (cameFromHome && homeApplication.length !== 0) {
         window.localStorage.setItem('cameFromHome', '');
         window.localStorage.setItem('homeApplication', '')

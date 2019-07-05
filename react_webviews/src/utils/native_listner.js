@@ -19,7 +19,6 @@ if (generic_callback === "true") {
     }
 
     exports.back_pressed = function () {
-      console.log('callbackWeb ----')
       for (var i = 0, j = listeners.length; i < j; i++) {
         var l = listeners[i];
 
@@ -30,8 +29,6 @@ if (generic_callback === "true") {
     }
 
     exports.post_error = function (data) {
-      console.log("action_name =>"+data.err_action_name)
-      console.log("error =>"+data.err_message)
     }
 
   })(window.callbackWeb ? window.callbackWeb : (window.callbackWeb = {}));
@@ -48,7 +45,6 @@ if (generic_callback === "true") {
     }
 
     exports.back_pressed = function () {
-      console.log('PlutusSdk ----')
       for (var i = 0, j = listeners.length; i < j; i++) {
         var l = listeners[i];
 

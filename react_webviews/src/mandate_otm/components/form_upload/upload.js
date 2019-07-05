@@ -55,7 +55,6 @@ class Upload extends Component {
       window.callbackWeb.add_listener({
         type: 'back_pressed',
         go_back: function () {
-          console.log("goback from callbackWeb");
           that.setState({
             openDialog: false
           });
@@ -73,7 +72,6 @@ class Upload extends Component {
       window.PaymentCallback.add_listener({
         type: 'back_pressed',
         go_back: function () {
-          console.log("goback from plutussdk");
           that.setState({
             openDialog: false
           });

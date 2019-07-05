@@ -262,7 +262,7 @@ class Pincode extends Component {
           show_loader: true
         });
         let paymentRedirectUrl = encodeURIComponent(
-          window.location.protocol + '//' + window.location.host + '/insurance/payment'
+          window.location.origin + '/insurance/payment'
         );
         var pgLink = result.payment_link;
         // eslint-disable-next-line

@@ -41,7 +41,6 @@ class Container extends Component {
       window.callbackWeb.add_listener({
         type: 'back_pressed',
         go_back: function () {
-          console.log("goback from callbackWeb");
           that.historyGoBack();
         }
       });
@@ -49,7 +48,6 @@ class Container extends Component {
       window.PaymentCallback.add_listener({
         type: 'back_pressed',
         go_back: function () {
-          console.log("goback from plutussdk");
           that.historyGoBack();
         }
       });

@@ -137,7 +137,7 @@ class DeliveryOrder extends Component {
       show_loader: true
     })
 
-    let nativeRedirectUrl = window.location.protocol + '//' + window.location.host +
+    let nativeRedirectUrl = window.location.origin +
       '/gold/gold-delivery-order' + getConfig().searchParams;
 
     // nativeCallback({
@@ -148,7 +148,7 @@ class DeliveryOrder extends Component {
     // });
 
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.protocol + '//' + window.location.host + '/gold/delivery/payment'
+      window.location.origin + '/gold/delivery/payment'
     );
 
     var pgLink = this.state.redeemProduct.payment_link;

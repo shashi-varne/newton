@@ -58,7 +58,6 @@ class ProfessionalDetails1 extends Component {
       });
       const { annual_income, education_qualification, occupation_category, occupation_detail, is_criminal, is_politically_exposed, pan_number } = res.pfwresponse.result.profile;
       const { image, provider, cover_plan } = res.pfwresponse.result.quote_desc;
-      console.log(annual_income);
       this.setState({
         show_loader: false,
         occupation_detail: occupation_detail || '',

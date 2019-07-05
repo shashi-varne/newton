@@ -63,7 +63,7 @@ class Summary extends Component {
   }
 
   componentWillMount() {
-    let current_url = window.location.protocol + '//' + window.location.host + '/insurance/journey' + getConfig().searchParams;
+    let current_url = window.location.origin + '/insurance/journey' + getConfig().searchParams;
     this.setState({
       current_url: current_url
     });
@@ -113,7 +113,7 @@ class Summary extends Component {
     let insurance_v2 = this.state.params.insurance_v2 ? true : null;
     let app = getConfig().app;
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.protocol + '//' + window.location.host + '/insurance/payment/' + this.state.params.insurance_id + '/' + insurance_v2
+      window.location.origin + '/insurance/payment/' + this.state.params.insurance_id + '/' + insurance_v2
     );
     var pgLink = payment_link;
     var back_url = encodeURIComponent(this.state.current_url);
@@ -423,7 +423,7 @@ class Summary extends Component {
 
     } else {
 
-     this.sendEvents('next');
+      this.sendEvents('next');
 
       nativeCallback({
         action: 'take_control', message: {

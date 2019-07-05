@@ -76,7 +76,7 @@ class BuyOrder extends Component {
       show_loader: true,
     });
 
-    let nativeRedirectUrl = window.location.protocol + '//' + window.location.host +
+    let nativeRedirectUrl = window.location.origin +
       '/gold/buy-gold-order' + getConfig().searchParams;
 
     // nativeCallback({
@@ -87,7 +87,7 @@ class BuyOrder extends Component {
     // });
 
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.protocol + '//' + window.location.host + '/gold/buy/payment'
+      window.location.origin + '/gold/buy/payment'
     );
 
     var pgLink = this.state.buyData.payment_link;

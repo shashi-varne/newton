@@ -702,7 +702,6 @@ class QuoteGeneration extends Component {
   }
 
   handleRadio = name => event => {
-    console.log(event.target.value)
     this.setState({
       [name]: event.target.value,
       [name + '_error']: ''

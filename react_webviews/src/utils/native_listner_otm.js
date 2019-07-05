@@ -39,7 +39,6 @@ if (generic_callback === "true") {
     }
 
     exports.upload_blob = function (data_json_str) {
-      console.log("from android............");
 
       for (var j = 0; j < listeners.length; j++) {
         var lis = listeners[j];
@@ -56,8 +55,6 @@ if (generic_callback === "true") {
       } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
         d = data_json_str;
       }
-      console.log(JSON.stringify(d));
-      console.log(JSON.stringify(listeners));
       for (var i = 0; i < listeners.length; i++) {
         var l = listeners[i];
         if (l.type === 'doc' && l.doc_type === d.file_name) {
@@ -158,8 +155,6 @@ if (generic_callback === "true") {
     }
 
     exports.upload_doc = function (data_json_str) {
-      console.log("from android............");
-
       for (var j = 0; j < listeners.length; j++) {
         var lis = listeners[j];
         if (lis.type === 'native_receiver_image') {
@@ -175,8 +170,6 @@ if (generic_callback === "true") {
       } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
         d = data_json_str;
       }
-      console.log(JSON.stringify(d));
-      console.log(JSON.stringify(listeners));
       for (var i = 0; i < listeners.length; i++) {
         var l = listeners[i];
         if (l.type === 'doc' && l.doc_type === d.doc_type) {

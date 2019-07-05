@@ -2,7 +2,6 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
 export default function (message, type = 'default') {
-  console.log(message)
   switch (type) {
     case 'success':
       if (!toast.isActive('success')) {

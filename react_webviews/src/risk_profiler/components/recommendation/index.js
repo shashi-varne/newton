@@ -198,7 +198,7 @@ class Recommendation extends Component {
 
 
     // eslint-disable-next-line
-    let nativeRedirectUrl = window.location.protocol + '//' + window.location.host +
+    let nativeRedirectUrl = window.location.origin +
       '/risk/recommendation?base_url=' + this.state.params.base_url;
 
     let backData = {

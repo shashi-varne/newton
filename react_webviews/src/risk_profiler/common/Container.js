@@ -39,7 +39,6 @@ class Container extends Component {
       window.callbackWeb.add_listener({
         type: 'back_pressed',
         go_back: function () {
-          console.log("goback from callbackWeb");
           that.historyGoBack();
         }
       });
@@ -47,7 +46,6 @@ class Container extends Component {
       window.PlutusSdk.add_listener({
         type: 'back_pressed',
         go_back: function () {
-          console.log("goback from plutussdk");
           that.historyGoBack();
         }
       });
@@ -193,7 +191,6 @@ class Container extends Component {
   }
 
   handleTopIcon() {
-    console.log(this.props);
     this.setState({
       callbackType: 'exit',
       openPopup: true,
