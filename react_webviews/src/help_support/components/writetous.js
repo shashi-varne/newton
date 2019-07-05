@@ -118,19 +118,14 @@ class Writetous extends Component {
         emptyForm: 'Minimum 10 characters required'
       });
       return;
-    } else if (/^[a-zA-Z0-9- ,_]*$/.test(this.state.query.trim()) === false) {
-      this.setState({
-        emptyForm: 'Special characters are not allowed'
-      });
-      return;
     } else if (this.state.query || this.state.fileUploaded) {
 
       try {
         let bodyFormData = new FormData();
         bodyFormData.set('category_id', this.props.location.state.category.id);
         bodyFormData.set('subcategory_id', this.props.location.state.subcategory.id);
-        bodyFormData.set('question_id', '');
-        bodyFormData.set('question', '');
+        bodyFormData.set('question_id', (this.props.location.state.from === 'answer') ? this.props.location.state.question.id : '');
+        bodyFormData.set('question', (this.props.location.state.from === 'answer') ? this.props.location.state.question.name : '');
         bodyFormData.set('category', this.props.location.state.category.name);
         bodyFormData.set('subcategory', this.props.location.state.subcategory.name);
         bodyFormData.set('user_query', this.state.query.trim());
@@ -153,7 +148,7 @@ class Writetous extends Component {
           show_loader: false
         });
 
-        this.navigate('/help/thankyou', feedback.pfwresponse.result.user);
+        this.navigate('/help/thankyou', feedback.pfwresponse.result);
       } catch (error) {
         this.setState({
           show_loader: false
@@ -166,6 +161,7 @@ class Writetous extends Component {
       })
     }
   }
+
 
   handleChange = () => event => {
     this.setState({
@@ -316,7 +312,7 @@ class Writetous extends Component {
         <div className="Help Form pad20">
           <div className="InputField">
             <div className="label">Subject</div>
-            <input type="text" value={this.state.subcategory} readOnly />
+            <div className="subject">{this.state.subcategory}</div>
           </div>
           <div className="InputField">
             <div className="label">Write the query/feedback</div>

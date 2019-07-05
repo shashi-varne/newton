@@ -58,7 +58,11 @@ class Answer extends Component {
           title: (type === 'related') ? data.category_name : this.props.location.state.title,
           category: this.props.location.state.category,
           subcategory: this.props.location.state.subcategory,
-          from: 'answer'
+          from: 'answer',
+          question: {
+            id: this.props.location.state.answer.question_id,
+            name: this.props.location.state.answer.name
+          }
         }
       });
     } else {
@@ -253,6 +257,11 @@ class Answer extends Component {
     return eventObj;
   }
 
+  calcReadtime = (endtime) => {
+    var new_date = new Date(endtime - start_time);
+    return new_date.getUTCMinutes() + '.' + new_date.getUTCSeconds();
+  }
+
   showWrite2Us() {
     const answer = this.props.location.state.answer;
 
@@ -281,9 +290,10 @@ class Answer extends Component {
     nativeCallback({
       action: 'open_module', message: {
         // eslint-disable-next-line
-        action_url: (this.state.type === 'myway') ? 'https://w-ay.in/m/module' : 'https://fis.do/m/module' + '?action_type=native&native_module=' + this.props.location.state.answer.action_path
+        action_url: (this.state.type === 'myway') ? ('https://w-ay.in/m/module?action_type=native&native_module=' + this.props.location.state.answer.action_path) : ('https://fis.do/m/module?action_type=native&native_module=' + this.props.location.state.answer.action_path)
       }, events: eventObj
     });
+
   }
 
   calcReadtime = (endtime) => {
