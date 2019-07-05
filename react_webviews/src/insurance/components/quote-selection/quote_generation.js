@@ -108,7 +108,8 @@ class QuoteGeneration extends Component {
       ci_benefit: '',
       ci_amount: '',
       annual_quote_required: true,
-      required_providers: this.state.required_providers
+      required_providers: this.state.required_providers,
+      insurance_all_web:true
     };
     try {
       const res = await Api.post('/api/insurance/quote', insuranceData);

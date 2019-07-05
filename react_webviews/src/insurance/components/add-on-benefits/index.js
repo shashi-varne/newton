@@ -107,6 +107,8 @@ class AddOnBenefits extends Component {
       });
 
       insuranceData.set_defaults = true;
+      insuranceData.insurance_all_web = true;
+
       const res = await Api.post('/api/insurance/quote', insuranceData);
       let result = res.pfwresponse.result.quotes[0];
       let riders_info = result.riders_info;
@@ -191,6 +193,7 @@ class AddOnBenefits extends Component {
     let insuranceData = this.getInsuranceData();
     insuranceData.generate_illustration = false;
     insuranceData.set_defaults = false;
+    insuranceData.insurance_all_web = true;
 
     try {
 
@@ -233,6 +236,9 @@ class AddOnBenefits extends Component {
       insuranceData.create = 'Y';
       window.localStorage.setItem('show_quotes', '');
     }
+
+    insuranceData.insurance_all_web = true;
+
     try {
       const res = await Api.post('/api/insurance/quote/select', insuranceData)
       this.setState({
@@ -415,6 +421,7 @@ class AddOnBenefits extends Component {
       })
 
       insuranceData.set_defaults = false;
+      insuranceData.insurance_all_web = true;
       const res = await Api.post('/api/insurance/quote', insuranceData);
 
       if (res.pfwresponse.status_code === 200) {
