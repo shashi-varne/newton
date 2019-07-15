@@ -39,33 +39,33 @@ export function validateLengthDynamic(string, length) {
 export function validateLengthNames(string, type, provider) {
   let nameSplit = string.trim(" ");
 
-  let mapper = {
+  let lengthMapper = {
     'HDFC': {
       'name': 30,
-      'first_name': 30,
-      'middle_name': 30,
-      'last_name': 30,
+      'first_name': 30, //not using now
+      'middle_name': 30,//not using now
+      'last_name': 30,//not using now
       'father_name': 30,
       'mother_name': 30,
       'spouse_name': 30
     },
     'IPRU': {
       'name': 30,
-      'first_name': 30,
-      'middle_name': 30,
-      'last_name': 30,
-      'father_name': 30,
-      'mother_name': 30,
-      'spouse_name': 30
+      'first_name': 30,//not using now
+      'middle_name': 30,//not using now
+      'last_name': 30,//not using now
+      'father_name': 30,//not using now
+      'mother_name': 30,//not using now
+      'spouse_name': 30//not using now
     },
     'Maxlife': {
-      'name': 30,
+      'name': 30,//not using now
       'first_name': 25,
       'middle_name': 25,
       'last_name': 25,
       'father_name': 32,
-      'mother_name': 30,
-      'spouse_name': 30
+      'mother_name': 30,//not using now
+      'spouse_name': 30//not using now
     }
   }
 
@@ -81,11 +81,11 @@ export function validateLengthNames(string, type, provider) {
 
   let data = {
     error_msg: 'Maximum length of ' + nomenclatureMapper[type] + ' is ' +
-      mapper[provider][type] + ' characters',
+      lengthMapper[provider][type] + ' characters',
     isError: false
   }
 
-  if (nameSplit.length > mapper[provider][type]) {
+  if (nameSplit.length > lengthMapper[provider][type]) {
     data.isError = true;
     return data;
   }
