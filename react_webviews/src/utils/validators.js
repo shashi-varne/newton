@@ -36,6 +36,63 @@ export function validateLengthDynamic(string, length) {
   return true;
 }
 
+export function validateLengthNames(string, type, provider) {
+  let nameSplit = string.trim(" ");
+
+  let mapper = {
+    'HDFC': {
+      'name': 30,
+      'first_name': 30,
+      'middle_name': 30,
+      'last_name': 30,
+      'father_name': 30,
+      'mother_name': 30,
+      'spouse_name': 30
+    },
+    'IPRU': {
+      'name': 30,
+      'first_name': 30,
+      'middle_name': 30,
+      'last_name': 30,
+      'father_name': 30,
+      'mother_name': 30,
+      'spouse_name': 30
+    },
+    'Maxlife': {
+      'name': 30,
+      'first_name': 25,
+      'middle_name': 25,
+      'last_name': 25,
+      'father_name': 32,
+      'mother_name': 30,
+      'spouse_name': 30
+    }
+  }
+
+  let nomenclatureMapper = {
+    'name': 'name',
+    'first_name': 'first name',
+    'middle_name': 'middle_name',
+    'last_name': 'last name',
+    'father_name': 'father name',
+    'spouse_name': 'spouse name',
+    'mother_name': 'mother name'
+  }
+
+  let data = {
+    error_msg: 'Maximum length of ' + nomenclatureMapper[type] + ' is ' +
+      mapper[provider][type] + ' characters',
+    isError: false
+  }
+
+  if (nameSplit.length > mapper[provider][type]) {
+    data.isError = true;
+    return data;
+  }
+
+  return data;
+}
+
 export function validateMinChar(string) {
   let nameSplit = string.trim(" ");
   if (nameSplit.length < 2) {
