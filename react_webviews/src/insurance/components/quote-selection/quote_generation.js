@@ -483,12 +483,12 @@ class QuoteGeneration extends Component {
     manageDialog('general-dialog', 'flex', 'disableScroll');
   }
 
-  renderQuotePoints(props, index) {
+  renderQuotePoints(props, index, type) {
     return (
       <div key={index}>
         <div className="quote-tiles2">
-         {index === 0 && <span className="quote-tiles2a">{index + 1}. Lump sum payment of  {numDifferentiation(this.state.quoteData.cover_amount)} to your nominee</span>}
-         {index !== 0 && <span className="quote-tiles2a">{index + 1}. {props}</span>}
+         {type=== 'basic_benefits' && index === 0 && <span className="quote-tiles2a">{index + 1}. Lump sum payment of  {numDifferentiation(this.state.quoteData.cover_amount)} to your nominee</span>}
+         {(type !=='basic_benefits' || index !== 0) && <span className="quote-tiles2a">{index + 1}. {props}</span>}
         </div>
         {props.points && props.points.map((row, i) => (
           <div key={i} className="quote-tiles2">

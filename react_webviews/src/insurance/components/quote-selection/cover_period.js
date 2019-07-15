@@ -131,7 +131,7 @@ class CoverPeriod extends Component {
                 Cover period:
              </div>
               <div className="annual-inc-popup-content">
-                Cover defines the coverage period of the policy. In classNamesomething happens with
+                Cover defines the coverage period of the policy. In case something happens with
                  your life within the covered period, your family will get the benefits as per
                  policy.
              </div>
