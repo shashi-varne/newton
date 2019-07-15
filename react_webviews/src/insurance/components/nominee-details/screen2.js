@@ -17,7 +17,10 @@ import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
 import Button from 'material-ui/Button';
 import Api from 'utils/api';
 import { maritalOptions, genderOptions, appointeeRelationshipOptions } from '../../constants';
-import { validateAlphabets, isValidDate, validateLength, validateConsecutiveChar, validateEmpty } from 'utils/validators';
+import {
+  validateAlphabets, isValidDate,
+  validateConsecutiveChar, validateEmpty, validateLengthNames
+} from 'utils/validators';
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -250,9 +253,9 @@ class AppointeeDetails extends Component {
       this.setState({
         name_error: 'Enter valid full name'
       });
-    } else if (!validateLength(this.state.name)) {
+    } else if (validateLengthNames(this.state.name, 'name', this.state.provider).isError) {
       this.setState({
-        name_error: 'Maximum length of name is 30 characters'
+        name_error: validateLengthNames(this.state.name, 'name', this.state.provider).error_msg
       });
     } else if (!validateConsecutiveChar(this.state.name)) {
       this.setState({

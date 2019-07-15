@@ -14,9 +14,9 @@ import location from 'assets/location_dark_icn.png';
 import Api from 'utils/api';
 import {
   validateEmpty,
-  validateLength,
   validateConsecutiveChar,
-  validateAlphabets
+  validateAlphabets,
+  validateLengthNames
 } from 'utils/validators';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
@@ -85,9 +85,9 @@ class PersonalDetails2 extends Component {
       this.setState({
         mother_name_error: 'Enter valid name'
       });
-    } else if (!validateLength(this.state.mother_name)) {
+    } else if (validateLengthNames(this.state.mother_name, 'mother_name', this.state.provider).isError) {
       this.setState({
-        mother_name_error: 'Maximum length of name is 30 characters'
+        mother_name_error: validateLengthNames(this.state.mother_name, 'mother_name', this.state.provider).error_msg
       });
     } else if (!validateConsecutiveChar(this.state.mother_name)) {
       this.setState({
@@ -101,9 +101,9 @@ class PersonalDetails2 extends Component {
       this.setState({
         father_name_error: 'Enter valid name'
       });
-    } else if (!validateLength(this.state.father_name)) {
+    } else if (validateLengthNames(this.state.father_name, 'father_name', this.state.provider).isError) {
       this.setState({
-        father_name_error: 'Maximum length of name is 30 characters'
+        father_name_error: validateLengthNames(this.state.father_name, 'father_name', this.state.provider).error_msg
       });
     } else if (!validateConsecutiveChar(this.state.father_name)) {
       this.setState({

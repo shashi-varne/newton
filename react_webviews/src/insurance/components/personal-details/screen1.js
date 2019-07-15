@@ -18,7 +18,8 @@ import Api from 'utils/api';
 import { maritalOptions, genderOptions } from '../../constants';
 import {
   validatePan, validateAlphabets, providerAsIpru,
-  validateEmail, validateNumber, numberShouldStartWith, validateEmpty, validateLength, validateConsecutiveChar
+  validateEmail, validateNumber, numberShouldStartWith,
+  validateEmpty, validateConsecutiveChar, validateLengthNames
 } from 'utils/validators';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
@@ -64,7 +65,7 @@ class PersonalDetails1 extends Component {
       })
       const { name, dob, gender, marital_status,
         email, mobile_no, pan_number, spouse_name,
-        last_name, first_name, father_name } = res.pfwresponse.result.profile;
+        last_name, first_name, father_name, middle_name } = res.pfwresponse.result.profile;
       const { image, provider, cover_plan } = res.pfwresponse.result.quote_desc;
 
       this.setState({
@@ -81,6 +82,7 @@ class PersonalDetails1 extends Component {
         provider: provider,
         cover_plan: cover_plan,
         first_name: first_name || '',
+        middle_name: middle_name || '',
         last_name: last_name || '',
         father_name: father_name || ''
       });
@@ -139,9 +141,10 @@ class PersonalDetails1 extends Component {
       this.setState({
         name_error: 'Name can contain only alphabets'
       });
-    } else if (this.state.provider !== 'Maxlife' && !validateLength(this.state.name)) {
+    } else if (this.state.provider !== 'Maxlife' &&
+      validateLengthNames(this.state.name, 'name', this.state.provider).isError) {
       this.setState({
-        name_error: 'Maximum length of name is 30 characters'
+        name_error: validateLengthNames(this.state.name, 'name', this.state.provider).error_msg
       });
     } else if (this.state.provider !== 'Maxlife' && !validateConsecutiveChar(this.state.name)) {
       this.setState({
@@ -155,13 +158,19 @@ class PersonalDetails1 extends Component {
       this.setState({
         first_name_error: 'First name can contain only alphabets'
       });
-    } else if (this.state.provider === 'Maxlife' && !validateLength(this.state.first_name)) {
+    } else if (this.state.provider === 'Maxlife' &&
+      validateLengthNames(this.state.first_name, 'first_name', this.state.provider).isError) {
       this.setState({
-        first_name_error: 'Maximum length of first name is 30 characters'
+        first_name_error: validateLengthNames(this.state.first_name, 'first_name', this.state.provider).error_msg
       });
     } else if (this.state.provider === 'Maxlife' && !validateConsecutiveChar(this.state.first_name)) {
       this.setState({
         first_name_error: 'First name can not contain more than 3 same consecutive characters'
+      });
+    } else if (this.state.provider === 'Maxlife' && this.state.middle_name &&
+      validateLengthNames(this.state.middle_name, 'middle_name', this.state.provider).isError) {
+      this.setState({
+        middle_name_error: validateLengthNames(this.state.middle_name, 'middle_name', this.state.provider).error_msg
       });
     } else if (this.state.provider === 'Maxlife' && !validateEmpty(this.state.last_name)) {
       this.setState({
@@ -171,17 +180,19 @@ class PersonalDetails1 extends Component {
       this.setState({
         last_name_error: 'Last name can contain only alphabets'
       });
-    } else if (this.state.provider === 'Maxlife' && !validateLength(this.state.last_name)) {
+    } else if (this.state.provider === 'Maxlife' &&
+      validateLengthNames(this.state.last_name, 'last_name', this.state.provider).isError) {
       this.setState({
-        last_name_error: 'Maximum length of last name is 30 characters'
+        last_name_error: validateLengthNames(this.state.last_name, 'last_name', this.state.provider).error_msg
       });
     } else if (this.state.provider === 'Maxlife' && !validateConsecutiveChar(this.state.last_name)) {
       this.setState({
         last_name_error: 'Last name can not contain more than 3 same consecutive characters'
       });
-    } else if (this.state.provider === 'Maxlife' && !validateLength(this.state.father_name)) {
+    } else if (this.state.provider === 'Maxlife' &&
+      validateLengthNames(this.state.father_name, 'father_name', this.state.provider).isError) {
       this.setState({
-        father_name_error: 'Maximum length of name is 30 characters'
+        father_name_error: validateLengthNames(this.state.father_name, 'father_name', this.state.provider).error_msg
       });
     } else if (this.state.provider === 'Maxlife' && !validateConsecutiveChar(this.state.father_name)) {
       this.setState({
@@ -219,9 +230,10 @@ class PersonalDetails1 extends Component {
       this.setState({
         spouse_name_error: 'Enter valid full name'
       });
-    } else if (this.state.provider === 'HDFC' && this.state.marital_status === 'MARRIED' && !validateLength(this.state.spouse_name)) {
+    } else if (this.state.provider === 'HDFC' && this.state.marital_status === 'MARRIED' &&
+      validateLengthNames(this.state.spouse_name, 'spouse_name', this.state.provider).isError) {
       this.setState({
-        spouse_name_error: 'Maximum length of name is 30 characters'
+        spouse_name_error: validateLengthNames(this.state.spouse_name, 'spouse_name', this.state.provider).error_msg
       });
     } else if (this.state.provider === 'HDFC' && this.state.marital_status === 'MARRIED' && !validateConsecutiveChar(this.state.spouse_name)) {
       this.setState({
@@ -522,6 +534,24 @@ class PersonalDetails1 extends Component {
               value={this.state.last_name}
               onChange={this.handleChange()} />
           </div>}
+
+          {this.state.provider === 'Maxlife' &&
+            <div className="InputField">
+              <Input
+                type="text"
+                productType={this.state.type}
+                error={(this.state.middle_name_error) ? true : false}
+                helperText={this.state.middle_name_error}
+                icon={name}
+                width="40"
+                label="Middle Name (optional)"
+                class="FullName"
+                id="middle_name"
+                name="middle_name"
+                value={this.state.middle_name}
+                onChange={this.handleChange()} />
+            </div>
+          }
           {this.state.provider === 'Maxlife' && <div className="InputField">
             <Input
               error={(this.state.father_name_error) ? true : false}

@@ -18,8 +18,9 @@ import Api from 'utils/api';
 import Button from 'material-ui/Button';
 import { maritalOptions, genderOptions, relationshipOptions } from '../../constants';
 import {
-  validateAlphabets, isValidDate, validateLength, validateConsecutiveChar,
-  validateEmpty, providerAsIpru
+  validateAlphabets, isValidDate, validateConsecutiveChar,
+  validateEmpty, providerAsIpru,
+  validateLengthNames
 } from 'utils/validators';
 import Dialog, {
   DialogActions,
@@ -248,9 +249,9 @@ class NomineeDetails extends Component {
       this.setState({
         name_error: 'Enter valid full name'
       });
-    } else if (!validateLength(this.state.name)) {
+    } else if (validateLengthNames(this.state.name, 'name', this.state.provider).isError) {
       this.setState({
-        name_error: 'Maximum length of name is 30 characters'
+        name_error: validateLengthNames(this.state.name, 'name', this.state.provider).error_msg
       });
     } else if (!validateConsecutiveChar(this.state.name)) {
       this.setState({
