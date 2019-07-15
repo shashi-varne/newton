@@ -147,10 +147,6 @@ export const educationQualificationsOptionsIpru = [
   {
     'name': 'Diploma',
     'value': 'DIPLOMA'
-  },
-  {
-    'name': 'Higher Secondary',
-    'value': 'HIGHER-SECONDARY'
   }
 ];
 
@@ -162,10 +158,6 @@ export const educationQualificationsOptionsMaxlife = [
   {
     'name': 'Graduate',
     'value': 'GRADUATE'
-  },
-  {
-    'name': 'Higher Secondary',
-    'value': 'HIGHER-SECONDARY'
   }
 ];
 
@@ -177,10 +169,6 @@ export const occupationDetailOptionsMaxlife = [
   {
     'name': 'RETIRED',
     'value': 'RETIRED'
-  },
-  {
-    'name': 'STUDENT',
-    'value': 'STUDENT'
   },
   {
     'name': 'PROFESSIONAL',
