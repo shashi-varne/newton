@@ -243,6 +243,7 @@ class Summary extends Component {
             is_open: false,
             name: application.profile.name || '',
             first_name: application.profile.first_name || '',
+            middle_name: application.profile.middle_name || '',
             last_name: application.profile.last_name || '',
             dob: (application.profile.dob) ? application.profile.dob.replace(/\\-/g, '/').split('/').join('/') : '',
             marital_status: application.profile.marital_status || '',
@@ -804,6 +805,7 @@ class Summary extends Component {
             <ul>
               {this.state.provider === 'IPRU' && <li>Name: <span>{this.state.personal.name}</span></li>}
               {this.state.provider === 'Maxlife' && <li>First name: <span>{this.state.personal.first_name}</span></li>}
+              {this.state.provider === 'Maxlife' && <li>Middle name: <span>{this.state.personal.middle_name}</span></li>}
               {this.state.provider === 'Maxlife' && <li>Last name: <span>{this.state.personal.last_name}</span></li>}
               <li>Gender: <span>{this.capitalize(this.state.personal.gender)}</span></li>
               <li>DOB: <span>{this.state.personal.dob}</span></li>

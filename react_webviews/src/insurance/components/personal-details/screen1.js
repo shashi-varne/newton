@@ -277,6 +277,7 @@ class PersonalDetails1 extends Component {
         } else {
           data['pan_number'] = this.state.pan_number;
           data['first_name'] = this.state.first_name;
+          data['middle_name'] = this.state.middle_name;
           data['last_name'] = this.state.last_name;
           data['father_name'] = this.state.father_name;
           delete data['name'];
