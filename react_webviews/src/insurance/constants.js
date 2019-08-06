@@ -158,6 +158,10 @@ export const educationQualificationsOptionsMaxlife = [
   {
     'name': 'Graduate',
     'value': 'GRADUATE'
+  },
+  {
+    'name': 'Professional',
+    'value': 'PROFESSIONAL'
   }
 ];
 

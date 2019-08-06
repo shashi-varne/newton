@@ -63,7 +63,7 @@ export function validateLengthNames(string, type, provider) {
       'first_name': 25,
       'middle_name': 25,
       'last_name': 25,
-      'father_name': 32,
+      'father_name': 50,
       'mother_name': 30,//not using now
       'spouse_name': 30//not using now
     }

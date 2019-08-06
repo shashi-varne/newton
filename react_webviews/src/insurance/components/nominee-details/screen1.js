@@ -240,6 +240,7 @@ class NomineeDetails extends Component {
   }
 
   handleClick = async () => {
+
     this.sendEvents('next');
     if (this.state.name.split(" ").filter(e => e).length < 2) {
       this.setState({
@@ -270,9 +271,13 @@ class NomineeDetails extends Component {
       this.setState({
         dob_error: 'Please select date'
       });
-    } else if (new Date(this.state.dob) > new Date() || !isValidDate(this.state.dob)) {
+    } else if (!isValidDate(this.state.dob)) {
       this.setState({
         dob_error: 'Please select valid date'
+      });
+    } else if (this.calculateAge(this.state.dob.replace(/\\-/g, '/').split('/').reverse().join('/')) < 0) {
+      this.setState({
+        dob_error: 'Future date is not allowed'
       });
     } else if (!this.state.marital_status) {
       this.setState({

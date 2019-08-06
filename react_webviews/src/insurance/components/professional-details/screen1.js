@@ -190,9 +190,13 @@ class ProfessionalDetails1 extends Component {
       this.setState({
         annual_income_error: 'Minimum annual income is 3 Lakh'
       });
-    } else if ((this.state.provider === 'IPRU' || this.state.provider === 'Maxlife') && this.state.annual_income < 500000) {
+    } else if ((this.state.provider === 'IPRU') && this.state.annual_income < 500000) {
       this.setState({
         annual_income_error: 'Minimum annual income is 5 Lakh'
+      });
+    } else if ((this.state.provider === 'Maxlife') && this.state.annual_income < 240000) {
+      this.setState({
+        annual_income_error: 'Minimum annual income is 2 Lakh 40 Thousand'
       });
     } else if (this.state.occupation_detail === 'SELF-EMPLOYED' && (!validateNumber(this.state.annual_income) || !this.state.annual_income)) {
       this.setState({
