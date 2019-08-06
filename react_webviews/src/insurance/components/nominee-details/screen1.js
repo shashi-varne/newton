@@ -16,7 +16,7 @@ import marital from 'assets/marital_status_dark_icn.png';
 import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
 import Api from 'utils/api';
 import Button from 'material-ui/Button';
-import { maritalOptions, genderOptions, relationshipOptions } from '../../constants';
+import { maritalOptions, genderOptions, relationshipOptionsAll } from '../../constants';
 import {
   validateAlphabets, isValidDate, validateConsecutiveChar,
   validateEmpty, providerAsIpru,
@@ -62,7 +62,8 @@ class NomineeDetails extends Component {
       apiError: '',
       openDialog: false,
       params: qs.parse(props.history.location.search.slice(1)),
-      type: getConfig().productName
+      type: getConfig().productName,
+      relationshipOptions: []
     }
   }
 
@@ -73,9 +74,9 @@ class NomineeDetails extends Component {
   async componentDidMount() {
     try {
       const res = await Api.get('/api/insurance/profile/' + this.state.params.insurance_id, {
-        groups: 'nominee'
+        groups: 'nominee,personal'
       })
-      const { nominee, nominee_address } = res.pfwresponse.result.profile;
+      const { nominee, nominee_address, gender } = res.pfwresponse.result.profile;
       const { image, provider, cover_plan } = res.pfwresponse.result.quote_desc;
 
       this.setState({
@@ -95,8 +96,11 @@ class NomineeDetails extends Component {
         state: nominee_address.state || '',
         image: image,
         provider: provider,
-        cover_plan: cover_plan
+        cover_plan: cover_plan,
+        proposer_gender: gender
       });
+
+      this.setRelationshipOptions(gender, nominee.gender);
     } catch (err) {
       this.setState({
         show_loader: false
@@ -177,11 +181,37 @@ class NomineeDetails extends Component {
     }
   };
 
+  setRelationshipOptions(proposer_gender, nominee_gender) {
+    let options = [];
+    if (proposer_gender && proposer_gender.toLowerCase() === 'male') {
+      if (nominee_gender && nominee_gender.toLowerCase() === 'male') {
+        options = relationshipOptionsAll['male_to_male'];
+      } else {
+        options = relationshipOptionsAll['male_to_female'];
+      }
+    } else if (proposer_gender && proposer_gender.toLowerCase() === 'female') {
+      if (nominee_gender && nominee_gender.toLowerCase() === 'male') {
+        options = relationshipOptionsAll['female_to_male'];
+      } else {
+        options = relationshipOptionsAll['female_to_female'];
+      }
+    } else {
+      options = relationshipOptionsAll['male_to_male'];
+    }
+
+    this.setState({
+      relationshipOptions: options
+    })
+
+  }
+
   handleGenderRadioValue = name => index => {
     this.setState({
       [name]: genderOptions[index]['value'],
       [name + '_error']: ''
     });
+
+    this.setRelationshipOptions(this.state.proposer_gender, genderOptions[index]['value']);
   };
 
   handleMaritalRadioValue = name => index => {
@@ -501,7 +531,7 @@ class NomineeDetails extends Component {
               helperText={this.state.relationship_error}
               icon={relationship}
               width="40"
-              options={relationshipOptions}
+              options={this.state.relationshipOptions}
               id="relationship"
               label="Relationship"
               value={this.state.relationship}

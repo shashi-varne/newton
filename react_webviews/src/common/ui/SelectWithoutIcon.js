@@ -20,6 +20,10 @@ class SelectGrp extends Component {
     if (prevState.value !== this.props.value) {
       this.setState({ selectedValue: this.props.value })
     }
+
+    if (prevState.options !== this.props.options) {
+      this.setState({ options: this.props.options })
+    }
   }
 
   handleChange = (event) => {
@@ -28,9 +32,7 @@ class SelectGrp extends Component {
   };
 
   render() {
-    const { options } = this.state;
-
-    const allOptions = options.map((option, i) => {
+    const allOptions = this.state.options.map((option, i) => {
       return (
         <MenuItem key={i} value={option}>{option}</MenuItem>
       );

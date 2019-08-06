@@ -54,9 +54,9 @@ class ProfessionalDetails1 extends Component {
   async componentDidMount() {
     try {
       const res = await Api.get('/api/insurance/profile/' + this.state.params.insurance_id, {
-        groups: 'professional,misc'
+        groups: 'professional,misc,personal'
       });
-      const { annual_income, education_qualification, occupation_category, occupation_detail, is_criminal, is_politically_exposed, pan_number } = res.pfwresponse.result.profile;
+      const { annual_income, gender, education_qualification, occupation_category, occupation_detail, is_criminal, is_politically_exposed, pan_number } = res.pfwresponse.result.profile;
       const { image, provider, cover_plan } = res.pfwresponse.result.quote_desc;
       this.setState({
         show_loader: false,
@@ -69,7 +69,8 @@ class ProfessionalDetails1 extends Component {
         is_criminal: (is_politically_exposed) ? 'Y' : 'N',
         image: image,
         provider: provider,
-        cover_plan: cover_plan
+        cover_plan: cover_plan,
+        proposer_gender: gender
       });
     } catch (err) {
       this.setState({
@@ -172,6 +173,11 @@ class ProfessionalDetails1 extends Component {
     } else if (!this.state.occupation_detail) {
       this.setState({
         occupation_detail_error: 'Mandatory'
+      });
+    } else if (this.state.proposer_gender && this.state.proposer_gender.toLowerCase() &&
+      this.state.occupation_detail === 'HOUSEWIFE') {
+      this.setState({
+        occupation_detail_error: 'Housewife not allowed for Male proposer'
       });
     } else if (this.state.occupation_detail === 'SALRIED' && !this.state.occupation_category &&
       this.state.provider === 'HDFC') {

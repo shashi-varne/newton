@@ -45,7 +45,49 @@ export const relationshipOptions = [
   'WIFE'
 ];
 
+export const relationshipOptionsAll = {
+  'male_to_male': [
+    'BROTHER',
+    'FATHER',
+    'GRAND FATHER',
+    'GRAND SON',
+    'NEPHEW',
+    'SON',
+  ],
+  'male_to_female': [
+    'DAUGHTER',
+    'GRAND DAUGHTER',
+    'GRAND MOTHER',
+    'MOTHER',
+    'NIECE',
+    'SISTER',
+    'WIFE'
+  ],
+  'female_to_male': [
+    'BROTHER',
+    'FATHER',
+    'GRAND FATHER',
+    'GRAND SON',
+    'HUSBAND',
+    'NEPHEW',
+    'SON',
+  ],
+  'female_to_female': [
+    'DAUGHTER',
+    'GRAND DAUGHTER',
+    'GRAND MOTHER',
+    'MOTHER',
+    'NIECE',
+    'SISTER',
+  ]
+}
+
 export const appointeeRelationshipOptions = ["BROTHER", "UNCLE", "AUNT", "FATHER", "FATHER IN-LAW", "GRAND FATHER", "GRAND MOTHER", "MOTHER", "SISTER"];
+
+export const appointeeRelationshipOptionsAll = {
+  'male': ["BROTHER", "UNCLE", "FATHER", "FATHER IN-LAW", "GRAND FATHER"],
+  'female': ["AUNT", "GRAND MOTHER", "MOTHER", "SISTER"]
+}
 
 export const income_pairs = [
   {

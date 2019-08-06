@@ -16,7 +16,7 @@ import marital from 'assets/marital_status_dark_icn.png';
 import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
 import Button from 'material-ui/Button';
 import Api from 'utils/api';
-import { maritalOptions, genderOptions, appointeeRelationshipOptions } from '../../constants';
+import { maritalOptions, genderOptions, appointeeRelationshipOptionsAll } from '../../constants';
 import {
   validateAlphabets, isValidDate,
   validateConsecutiveChar, validateEmpty, validateLengthNames
@@ -60,7 +60,8 @@ class AppointeeDetails extends Component {
       apiError: '',
       openDialog: false,
       params: qs.parse(props.history.location.search.slice(1)),
-      type: getConfig().productName
+      type: getConfig().productName,
+      appointeeRelationshipOptions: []
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -94,6 +95,8 @@ class AppointeeDetails extends Component {
         provider: provider,
         cover_plan: cover_plan
       });
+
+      this.setRelationshipOptions(appointee.gender);
     } catch (err) {
       this.setState({
         show_loader: false
@@ -175,11 +178,28 @@ class AppointeeDetails extends Component {
     }
   };
 
+  setRelationshipOptions(appointee_gender) {
+    let options = [];
+    if (appointee_gender && appointee_gender.toLowerCase() === 'male') {
+      options = appointeeRelationshipOptionsAll['male'];
+    } else if (appointee_gender && appointee_gender.toLowerCase() === 'female') {
+      options = appointeeRelationshipOptionsAll['female'];
+    } else {
+      options = appointeeRelationshipOptionsAll['male'];
+    }
+    this.setState({
+      appointeeRelationshipOptions: options
+    })
+
+  }
+
   handleGenderRadioValue = name => index => {
     this.setState({
       [name]: genderOptions[index]['value'],
       [name + '_error']: ''
     });
+
+    this.setRelationshipOptions(genderOptions[index]['value']);
   };
 
   handleMaritalRadioValue = name => index => {
@@ -493,11 +513,12 @@ class AppointeeDetails extends Component {
               helperText={this.state.relationship_error}
               icon={relationship}
               width="40"
-              options={appointeeRelationshipOptions}
+              options={this.state.appointeeRelationshipOptions}
               id="relationship"
               name="relationship"
               label="Relationship"
               value={this.state.relationship}
+              onClick={() => this.checkAppointeeGender()}
               onChange={this.handleChange('relationship')} />
           </div>
         </FormControl>

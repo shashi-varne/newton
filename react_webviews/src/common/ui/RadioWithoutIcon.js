@@ -63,7 +63,7 @@ class RadioGrp extends Component {
         <Grid container spacing={16}>
           {allOptions}
         </Grid>
-        <span className='error-radiogrp'>{(this.props.error) ? 'Please select a valid option' : ''}</span>
+        <span className='error-radiogrp'>{this.props.helperText}</span>
       </div>
     );
   }
