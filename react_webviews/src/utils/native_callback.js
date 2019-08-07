@@ -191,7 +191,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   } else if (getConfig().app === 'ios') {
     window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
   } else {
-    if (action === 'native_back' || action === 'exit_web') {
+    if (action === 'native_back' || action === 'exit_web' || action === 'exit') {
       let redirect_url = getConfig().searchParams;
       redirect_url = new URLSearchParams(redirect_url).get('redirect_url');
       window.location.href = redirect_url;
