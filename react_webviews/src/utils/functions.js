@@ -42,7 +42,8 @@ export const getConfig = () => {
   let { base_url } = main_query_params;
   let { generic_callback } = main_query_params;
   let { redirect_url } = main_query_params;
-  let searchParams = `?base_url=${base_url}&generic_callback=${generic_callback}&redirect_url=${redirect_url}`;
+  redirect_url = encodeURIComponent(redirect_url)
+  let searchParams = `?base_url=${base_url}&generic_callback=${generic_callback}`;
   let isInsurance = myHistory.location.pathname.indexOf('insurance') >= 0 ? true : false;
   if (isInsurance) {
 
@@ -161,6 +162,6 @@ export const getConfig = () => {
     }
   }
 
-  returnConfig.searchParams = searchParams;
+  returnConfig.searchParams = searchParams += `&redirect_url=${redirect_url}`;
   return returnConfig;
 }
