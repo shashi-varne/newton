@@ -227,7 +227,7 @@ export const occupationDetailOptionsMaxlife = [
 
   {
     'name': 'SELF-EMPLOYED-HOME',
-    'value': 'SELF-EMPLOYED-HOME'
+    'value': 'SELF-EMPLOYED-FROM-HOME'
   },
   {
     'name': 'HOUSEWIFE',
