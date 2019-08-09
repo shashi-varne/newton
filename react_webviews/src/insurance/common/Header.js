@@ -29,7 +29,7 @@ const Header = ({ classes, title, count, total, current, goBack, edit, type, res
               {smallTitle === 'IPRU' &&
                 'ICICI Pru iProtect Smart'}
               {smallTitle === 'Maxlife' &&
-                'Maxlife Online Term Plus'}
+                'Maxlife Online Term Plan Plus'}
               {smallTitle !== 'HDFC' && smallTitle !== 'IPRU' && smallTitle !== 'Maxlife' &&
                 smallTitle
               }
