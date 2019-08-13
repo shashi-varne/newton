@@ -92,8 +92,8 @@ class AddEditAddress extends Component {
   handleClick = async () => {
     if (this.state.copyText === 'Copied') {
       this.sendEvents('next');
-      if (getConfig.redirect_url && !getConfig().Web) {
-        nativeCallback({ action: 'exit_web' });
+      if (getConfig().redirect_url && !getConfig().Web) {
+        nativeCallback({ action: 'exit_web_sdk' });
       } else {
         nativeCallback({
           action: 'open_in_browser', message: {
@@ -102,17 +102,19 @@ class AddEditAddress extends Component {
         });
       }
     } else {
-      toast('Please copy URN Number', 'error');
+      toast('Please copy URN Number');
     }
   }
 
   copyItem = (string) => {
-    if (copyToClipboard(string)) {
-      toast('URN Number Copied');
-      this.setState({
-        copyText: 'Copied'
-      })
-      this.sendEvents('copy');
+    if (this.state.copyText !== 'Copied') {
+      if (copyToClipboard(string)) {
+        toast('URN Number Copied');
+        this.setState({
+          copyText: 'Copied'
+        })
+        this.sendEvents('copy');
+      }
     }
 
   }

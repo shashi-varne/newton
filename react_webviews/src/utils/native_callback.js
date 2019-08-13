@@ -186,21 +186,25 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     }
   }
 
-  if (getConfig().app === 'android') {
+  if (getConfig().app !== 'web') {
     if (redirect_url && (callbackData.action === 'exit_web' || callbackData.action === 'exit_module')) {
       window.location.href = redirect_url
     } else {
-      window.Android.callbackNative(JSON.stringify(callbackData));
-    }
-  } else if (getConfig().app === 'ios') {
-    if (redirect_url && (callbackData.action === 'exit_web' || callbackData.action === 'exit_module')) {
-      window.location.href = redirect_url;
-    } else {
-      window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+      if (action === 'exit_web_sdk') {
+        callbackData.action = 'exit_web';
+      }
+
+      if (getConfig().app === 'android') {
+        window.Android.callbackNative(JSON.stringify(callbackData));
+      }
+
+      if (getConfig().app === 'ios') {
+        window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+      }
     }
   } else {
     if (action === 'native_back' || action === 'exit_web' || action === 'exit') {
-      if(!redirect_url) {
+      if (!redirect_url) {
         redirect_url = "https://app.fisdom.com/"
       }
       window.location.href = redirect_url;
