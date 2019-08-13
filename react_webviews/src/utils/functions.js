@@ -115,6 +115,7 @@ export const getConfig = () => {
   }
   returnConfig.project = project;
   returnConfig.generic_callback = generic_callback;
+  returnConfig.redirect_url = redirect_url;
 
 
   if (isMobile.Android() && typeof window.Android !== 'undefined') {
@@ -125,7 +126,7 @@ export const getConfig = () => {
     returnConfig.iOS = true;
   } else {
     returnConfig.app = 'web';
-    returnConfig.Android = true;
+    returnConfig.Web = true;
   }
 
   if (insurance_v2) {
