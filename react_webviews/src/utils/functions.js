@@ -42,7 +42,8 @@ export const getConfig = () => {
   let { base_url } = main_query_params;
   let { generic_callback } = main_query_params;
   let { redirect_url } = main_query_params;
-  let searchParams = `?base_url=${base_url}&generic_callback=${generic_callback}&redirect_url=${redirect_url}`;
+  redirect_url = encodeURIComponent(redirect_url)
+  let searchParams = `?base_url=${base_url}&generic_callback=${generic_callback}`;
   let isInsurance = myHistory.location.pathname.indexOf('insurance') >= 0 ? true : false;
   if (isInsurance) {
 
@@ -125,7 +126,7 @@ export const getConfig = () => {
     returnConfig.iOS = true;
   } else {
     returnConfig.app = 'web';
-    returnConfig.Android = true;
+    returnConfig.Web = true;
   }
 
   if (insurance_v2) {
@@ -140,10 +141,9 @@ export const getConfig = () => {
     let { html_camera } = main_query_params;
     searchParams += '&key=' + key + '&name=' + name
       + '&email=' + email + '&campaign_version=' + campaign_version;
-
     // eslint-disable-next-line
     returnConfig.campaign_version = parseInt(campaign_version);
-    returnConfig.html_camera = (returnConfig.iOS && returnConfig.campaign_version) ? true : html_camera;
+    returnConfig.html_camera = ((returnConfig.iOS || returnConfig.Web) && returnConfig.campaign_version) ? true : html_camera;
     if (returnConfig.iOS && !returnConfig.campaign_version) {
       returnConfig.hide_header = true;
     }
@@ -162,6 +162,6 @@ export const getConfig = () => {
     }
   }
 
-  returnConfig.searchParams = searchParams;
+  returnConfig.searchParams = searchParams += `&redirect_url=${redirect_url}`;
   return returnConfig;
 }
