@@ -3,8 +3,12 @@ import axios from 'axios';
 import qs from 'qs';
 import createBrowserHistory from 'history/createBrowserHistory';
 
+import { encrypt, decrypt } from './encryption';
+
 const myHistory = createBrowserHistory();
 let { base_url } = qs.parse(myHistory.location.search.slice(1));
+let { redirect_url } = qs.parse(myHistory.location.search.slice(1));
+let is_secure = false;
 
 axios.defaults.baseURL = decodeURIComponent(base_url).replace(/\/$/, "");
 
@@ -29,16 +33,30 @@ class Api {
   }
 
   static xhr(route, params, verb) {
+    if(redirect_url && verb !== 'get') {
+      if(params instanceof FormData) {
+        is_secure = false;
+      } else {
+        redirect_url = decodeURIComponent(redirect_url);
+        let redirect_url_data = redirect_url.split("?is_secure=")
+        if(redirect_url_data.length === 2) {
+          is_secure = redirect_url_data[1]
+        }
+      }
+    }
     let options = Object.assign({
       method: verb,
       url: route,
       params: (verb === 'get') ? params : null,
-      data: (verb !== 'get') ? params : null,
+      data: (verb !== 'get') ? (is_secure ? { _encr_payload: encrypt(JSON.stringify(params)) }: params): null,
       res: (verb !== 'get') ? params : null
     });
 
     return axios(options)
       .then(response => {
+        if (response.data._encr_payload) {
+          response.data = JSON.parse(decrypt(response.data._encr_payload));
+        }
         return response.data;
       }, error => {
         return error;
