@@ -93,6 +93,7 @@ class AddEditAddress extends Component {
     if (this.state.copyText === 'Copied') {
       this.sendEvents('next');
       if (getConfig().redirect_url && !getConfig().Web) {
+        // close webview for sdk
         nativeCallback({ action: 'exit_web_sdk' });
       } else {
         nativeCallback({

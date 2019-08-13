@@ -56,7 +56,6 @@ class BillerSteps extends Component {
           show_loader: false,
           account_number: result.account_number || '',
           bank_code: result.bank_code || '',
-          // bank_code: 'KTB',
           bank_image: result.bank_image || '',
           bank_name: result.bank_name || '',
           biller_id: result.biller_id || 546378444292284,
@@ -86,13 +85,15 @@ class BillerSteps extends Component {
     this.props.history.push({
       pathname: pathname,
       search: getConfig().searchParams,
-      state: {account_number: this.state.account_number,
-      bank_code: 'KTB',
-      bank_image: this.state.bank_image,
-      bank_name: this.state.bank_name,
-      biller_id: this.state.biller_id,
-      ifsc_code: this.state.ifsc_code,
-      status: this.state.status}
+      state: {
+        account_number: this.state.account_number,
+        bank_code: this.state.bank_code,
+        bank_image: this.state.bank_image,
+        bank_name: this.state.bank_name,
+        biller_id: this.state.biller_id,
+        ifsc_code: this.state.ifsc_code,
+        status: this.state.status
+      }
     });
   }
 
@@ -149,59 +150,49 @@ class BillerSteps extends Component {
   }
 
   render() {
-    if (this.state.bank_code) {
-      return (
-        <Container
-          showLoader={this.state.show_loader}
-          title={"How to add Biller"}
-          handleClick={this.handleClick}
-          classOverRide="result-container2"
-          classOverRideContainer="result-container2"
-          edit={this.props.edit}
-          type={this.state.type}
-          events={this.sendEvents('just_set_events')}
-          buttonTitle={"Get URN Number"}
-          noFooter={!this.state.callback_supported}
-        >
-          <div>
-            {/* <div className="biller-steps-title">
-            {banks_details[this.state.bank_code].head_title}
-          </div> */}
-            <div className="biller-steps-small-title">
-              {banks_details[this.state.bank_code].head_small_title}
-            </div>
-            {/* <div className="biller-steps-title">
+    return (
+      <Container
+        showLoader={this.state.show_loader}
+        title={"How to add Biller"}
+        handleClick={this.handleClick}
+        classOverRide="result-container2"
+        classOverRideContainer="result-container2"
+        edit={this.props.edit}
+        type={this.state.type}
+        events={this.sendEvents('just_set_events')}
+        buttonTitle={"Get URN Number"}
+        noFooter={!this.state.callback_supported}
+      >
+        {this.state.bank_code && <div>
+          <div className="biller-steps-small-title">
             {banks_details[this.state.bank_code].head_small_title}
-          </div> */}
-            <div style={{ margin: '0 10px 0px 0px' }}>
-              {banks_details[this.state.bank_code].steps.map(this.renderBankSteps)}
-            </div>
-            <div className="biller-steps-footer-title">
-              {banks_details[this.state.bank_code].footer_title}
-            </div>
-            {!this.state.callback_supported && <div>
-              <div style={{ margin: '20px 0px 12px', color: '#4a4a4a', fontSize: 14 }}>
-                Copy {banks_details[this.state.bank_code].name} net banking link to create i-SIP biller
-            </div>
-              <div className="biller-netbank-tile">
-                <div className="biller-netbank-link">
-                  {banks_details[this.state.bank_code].netbanking_link}
-                </div>
-                <div className="biller-netbnak-copy"
-                  onClick={() => this.copyItem(banks_details[this.state.bank_code].netbanking_link)}>
-                  {this.state.copyText}
-                </div>
-              </div>
-
-            </div>}
           </div>
-          <ToastContainer autoClose={3000} />
-        </Container >
+          <div style={{ margin: '0 10px 0px 0px' }}>
+            {banks_details[this.state.bank_code].steps.map(this.renderBankSteps)}
+          </div>
+          <div className="biller-steps-footer-title">
+            {banks_details[this.state.bank_code].footer_title}
+          </div>
+          {!this.state.callback_supported && <div>
+            <div style={{ margin: '20px 0px 12px', color: '#4a4a4a', fontSize: 14 }}>
+              Copy {banks_details[this.state.bank_code].name} net banking link to create i-SIP biller
+            </div>
+            <div className="biller-netbank-tile">
+              <div className="biller-netbank-link">
+                {banks_details[this.state.bank_code].netbanking_link}
+              </div>
+              <div className="biller-netbnak-copy"
+                onClick={() => this.copyItem(banks_details[this.state.bank_code].netbanking_link)}>
+                {this.state.copyText}
+              </div>
+            </div>
 
-      );
-    } else {
-      return null
-    }
+          </div>}
+        </div>}
+        <ToastContainer autoClose={3000} />
+      </Container >
+
+    );
   }
 }
 
