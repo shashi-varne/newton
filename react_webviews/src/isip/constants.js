@@ -152,7 +152,7 @@ export const banks_details = {
       'head_title': 'How To Add iSIP Biller In Karnataka Bank',
       'head_small_title': 'Process of adding a Biller in KBL Mobile Plus',
       'footer_title': 'Follow these above steps and add your iSIP Biller successfully.',
-      'netbanking_link': 'https://play.google.com/store/apps/details?id=com.lcode.kblmobileplus&hl=en_IN',
+      'netbanking_link': 'https://karnatakabank.com/personal/mobile-banking/mobile-plus-app',
       'steps': [
         {
           'title': 'Step 1: Tap ‘More’ on the home screen.',
