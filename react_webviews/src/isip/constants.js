@@ -147,7 +147,7 @@ export const banks_details = {
         }
       ]
     },
-    'KTB': {
+    'KBL': {
       'name': 'Karnataka Bank',
       'head_title': 'How To Add iSIP Biller In Karnataka Bank',
       'head_small_title': 'Process of adding a Biller in KBL Mobile Plus',
