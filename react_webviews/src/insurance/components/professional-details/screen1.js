@@ -174,7 +174,7 @@ class ProfessionalDetails1 extends Component {
       this.setState({
         occupation_detail_error: 'Mandatory'
       });
-    } else if (this.state.proposer_gender && this.state.proposer_gender.toLowerCase() &&
+    } else if (this.state.proposer_gender && this.state.proposer_gender.toLowerCase() === 'male' &&
       this.state.occupation_detail === 'HOUSEWIFE') {
       this.setState({
         occupation_detail_error: 'Housewife not allowed for Male proposer'
