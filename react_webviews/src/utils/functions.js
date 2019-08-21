@@ -116,6 +116,7 @@ export const getConfig = () => {
   }
   returnConfig.project = project;
   returnConfig.generic_callback = generic_callback;
+  returnConfig.redirect_url = redirect_url;
 
 
   if (isMobile.Android() && typeof window.Android !== 'undefined') {

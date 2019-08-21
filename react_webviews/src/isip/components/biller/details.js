@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import qs from 'qs';
+
+import { ToastContainer } from 'react-toastify';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import Button from '../../../common/ui/Button';
 
 import Container from '../../common/Container';
-import Api from 'utils/api';
+import { banks_details } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 import { copyToClipboard } from 'utils/validators';
 
@@ -14,21 +16,14 @@ class AddEditAddress extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
-      openDialogReset: false,
-      pincode: '',
-      pincode_error: '',
-      addressline1: '',
-      addressline1_error: '',
-      addressline2: '',
-      addressline2_error: '',
-      city: '',
-      state: '',
-      checked: true,
-      error: '',
-      apiError: '',
-      openDialog: false,
-      address_present: false,
+      show_loader: false,
+      account_number: props.history.location.state.account_number,
+      bank_code: props.history.location.state.bank_code,
+      bank_image: props.history.location.state.bank_image,
+      bank_name: props.history.location.state.bank_name,
+      biller_id: props.history.location.state.biller_id,
+      ifsc_code: props.history.location.state.ifsc_code,
+      status: props.history.location.state.status,
       copyText: 'Copy',
       params: qs.parse(props.history.location.search.slice(1)),
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
@@ -55,40 +50,6 @@ class AddEditAddress extends Component {
     }
   }
 
-  async componentDidMount() {
-    try {
-      const res = await Api.get('/api/mandate/' + this.state.params.pc_urlsafe +
-        '/fetch/biller/information');
-      if (res.pfwresponse.result) {
-        let result = res.pfwresponse.result;
-        this.setState({
-          show_loader: false,
-          account_number: result.account_number || '',
-          bank_code: result.bank_code || '',
-          bank_image: result.bank_image || '',
-          bank_name: result.bank_name || '',
-          biller_id: result.biller_id || 546378444292284,
-          ifsc_code: result.ifsc_code || '',
-          status: result.status || ''
-        });
-      }
-      else {
-        this.setState({
-          show_loader: false,
-          openDialog: true, apiError: res.pfwresponse.result.error
-        });
-      }
-
-
-    } catch (err) {
-      this.setState({
-        show_loader: false
-      })
-      toast("Something went wrong");
-    }
-
-  }
-
   handleChange = () => event => {
     if (event.target.name === 'checked') {
       this.setState({
@@ -105,7 +66,7 @@ class AddEditAddress extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams + '&bank_code=' + this.state.bank_code
+      search: getConfig().searchParams
     });
   }
 
@@ -129,17 +90,32 @@ class AddEditAddress extends Component {
   }
 
   handleClick = async () => {
-    this.sendEvents('next');
-    this.navigate('steps');
+    if (this.state.copyText === 'Copied') {
+      this.sendEvents('next');
+      if (getConfig().redirect_url && !getConfig().Web) {
+        // close webview for sdk
+        nativeCallback({ action: 'exit_web_sdk' });
+      } else {
+        nativeCallback({
+          action: 'open_in_browser', message: {
+            url: banks_details[this.state.bank_code].netbanking_link
+          }
+        });
+      }
+    } else {
+      toast('Please copy URN Number');
+    }
   }
 
   copyItem = (string) => {
-    if (copyToClipboard(string)) {
-      toast('Copied');
-      this.setState({
-        copyText: 'Copied'
-      })
-      this.sendEvents('copy');
+    if (this.state.copyText !== 'Copied') {
+      if (copyToClipboard(string)) {
+        toast('URN Number Copied');
+        this.setState({
+          copyText: 'Copied'
+        })
+        this.sendEvents('copy');
+      }
     }
 
   }
@@ -148,7 +124,7 @@ class AddEditAddress extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="iSIP Biller"
+        title="Biller URN Detail"
         handleClick={this.handleClick}
         classOverRide="result-container-isip"
         classOverRideContainer="result-container-isip"
@@ -189,11 +165,12 @@ class AddEditAddress extends Component {
             </div>
           </div>
           <div style={{ marginTop: 30 }} onClick={this.handleClick}>
-            <Button style={{ borderRadius: 6 }} buttonTitle="Add Biller" color="primary" autoFocus>
+            <Button style={{ borderRadius: 6 }} buttonTitle="Proceed to Add Biller" color="primary" disable={this.state.copyText !== 'Copied'} autoFocus>
               OK
           </Button>
           </div>
         </div>
+        <ToastContainer autoClose={3000} />
       </Container >
     );
   }
