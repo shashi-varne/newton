@@ -81,7 +81,7 @@ class About extends Component {
         <div style={{ marginTop: 26, marginBottom: 5 }}>
           <div className="biller-about-points">
             <div className="biller-dot"></div>
-            <div style={{ width: '90%' }}> Biller is completerly paperless, secure and the easiest method for oaying monthly SIP installments.
+            <div style={{ width: '90%' }}> Biller is completerly paperless, secure and the easiest method for paying monthly SIP installments.
             </div>
           </div>
 
