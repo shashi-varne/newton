@@ -187,7 +187,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   }
 
   if (getConfig().app !== 'web') {
-    if (redirect_url && (callbackData.action === 'exit_web' || callbackData.action === 'exit_module')) {
+    if (redirect_url !== 'undefined' && (callbackData.action === 'exit_web' || callbackData.action === 'exit_module')) {
       window.location.href = redirect_url
     } else {
       if (action === 'exit_web_sdk') {
