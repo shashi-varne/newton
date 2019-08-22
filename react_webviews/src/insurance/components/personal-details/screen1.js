@@ -217,7 +217,7 @@ class PersonalDetails1 extends Component {
         pan_number_error: 'Invalid PAN number'
       });
       return;
-    } else if (this.state.provider === 'HDFC' && !this.state.marital_status) {
+    } else if ((this.state.provider === 'HDFC' || this.state.provider === 'Maxlife') && !this.state.marital_status) {
       this.setState({
         marital_status_error: 'Mandatory'
       });
@@ -280,6 +280,7 @@ class PersonalDetails1 extends Component {
           data['middle_name'] = this.state.middle_name;
           data['last_name'] = this.state.last_name;
           data['father_name'] = this.state.father_name;
+          data['marital_status'] = this.state.marital_status;
           delete data['name'];
         }
 
@@ -352,7 +353,7 @@ class PersonalDetails1 extends Component {
               onChange={this.handleMaritalRadioValue('marital_status')} />
           </div>
           {
-            this.state.marital_status === 'MARRIED' &&
+            this.state.marital_status === 'MARRIED' && this.state.provider === 'HDFC' &&
             <div className="InputField">
               <Input
                 error={(this.state.spouse_name_error) ? true : false}
@@ -372,6 +373,21 @@ class PersonalDetails1 extends Component {
     } else {
       return (
         <div>
+          {this.state.provider === 'Maxlife' &&
+            <div className="InputField">
+              <RadioWithoutIcon
+                error={(this.state.marital_status_error) ? true : false}
+                helperText={this.state.marital_status_error}
+                icon={marital}
+                width="40"
+                label="Marital Status"
+                class="MaritalStatus"
+                options={maritalOptions}
+                id="marital-status"
+                value={this.state.marital_status}
+                onChange={this.handleMaritalRadioValue('marital_status')} />
+            </div>
+          }
           {this.state.params.isKyc &&
             <div>
               <div className="InputField">
@@ -456,6 +472,7 @@ class PersonalDetails1 extends Component {
       eventObj.properties['first_name'] = this.state.first_name ? 'yes' : 'no';
       eventObj.properties['last_name'] = this.state.last_name ? 'yes' : 'no';
       eventObj.properties['father_name'] = this.state.father_name ? 'yes' : 'no';
+      eventObj.properties['marital_status'] = this.state.marital_status ? 'yes' : 'no';
     }
 
 
