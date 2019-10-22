@@ -20,6 +20,9 @@ import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 
+import goldOfferImageFisdom from 'assets/gold_offer_fisdom.jpg';
+import goldOfferImageMyway from 'assets/gold_offer_myway.jpg';
+
 class GoldSummary extends Component {
   constructor(props) {
     super(props);
@@ -51,7 +54,8 @@ class GoldSummary extends Component {
       isPrime: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("mypro.fisdom.com") >= 0,
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
-      countdownInterval: null
+      countdownInterval: null,
+      openDialogOffer: false
     }
   }
 
@@ -69,6 +73,19 @@ class GoldSummary extends Component {
         type: 'fisdom'
       });
     }
+
+    var gold_offer_terms = [
+      'For a transaction to be valid, there must be a minimum purchase of Rs 1,000 for each offer.',
+      'Gold-back will be in the form of SafeGold balance and will be 5% of the value of gold purchased and upto a maximum of Rs 1000.',
+      "Gold-back will be credited to the customer's account within 14 days of the end date of the offer.",
+      "If an existing customer has transacted for purchase of Digital Gold through his/her Fisdom account prior to the launch of this gold-back offer, s/he will not be eligible for this offer",
+      "Any conditions which are not explicitly covered would be at the sole discretion of SafeGold. The decision of SafeGold in this regard will be final and the company has the right to change the terms and conditions at any time.",
+      "In case of any customer query or dispute, SafeGold reserves the right to resolve the same on the basis of the terms and conditions of the offer at its sole discretion."
+    ];
+
+    this.setState({
+      gold_offer_terms: gold_offer_terms
+    })
   }
 
   async componentDidMount() {
@@ -316,7 +333,8 @@ class GoldSummary extends Component {
   handleClose = () => {
     this.setState({
       openResponseDialog: false,
-      openPopup: false
+      openPopup: false,
+      openDialogOffer: false
     });
   }
 
@@ -340,6 +358,54 @@ class GoldSummary extends Component {
         </DialogActions>
       </Dialog>
     );
+  }
+
+  handleClickOffer() {
+    this.setState({
+      openDialogOffer: true
+    })
+  }
+
+  renderOfferTerms(props, index) {
+    return (
+      <span className="gold-offer-terms" key={index}>
+       {index + 1}. { props }
+      </span>
+    )
+  }
+
+  renderGoldOfferDialog = () => {
+
+    if (this.state.openDialogOffer) {
+      return (
+        <Dialog
+          id="payment"
+          open={this.state.openDialogOffer}
+          onClose={this.handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              <span style={{ fontWeight: 500, color: 'black' }}>Terms and Conditions:  </span>
+              {this.state.gold_offer_terms.map(this.renderOfferTerms)}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button style={{ textTransform: 'capitalize' }}
+              fullWidth={true}
+              variant="raised"
+              size="large"
+              color="secondary"
+              onClick={() => this.handleClose()}
+              autoFocus>Got It!
+            </Button>
+          </DialogActions>
+        </Dialog>
+      );
+    }
+    return null;
+
   }
 
   handlePopup = () => {
@@ -382,7 +448,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                                                                                                                                                                                                                                                  previous gold price has expired.
+                                                                                                                                                                                                                                                                                                                                                                                                                                      previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -555,9 +621,15 @@ class GoldSummary extends Component {
                 Purchase amount is inclusive of 3% GST
               </div>
             </div>
+            <div style={{ margin: '20px 0 0 0',cursor: 'pointer' }} onClick={() => this.handleClickOffer()}>
+              <img style={{ width: "100%", borderRadius: 8 }} src={this.state.type !== 'fisdom' ? goldOfferImageMyway : goldOfferImageFisdom} alt="" />
+            </div>
           </div>
+
+
         </div>
         {this.renderResponseDialog()}
+        {this.renderGoldOfferDialog()}
         {this.renderPopup()}
         <ToastContainer autoClose={3000} />
       </Container>
