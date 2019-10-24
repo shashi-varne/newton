@@ -527,3 +527,7 @@
   display: block;
   margin: 10px 0 10px 0;
 }
+img.gold-offer-slide-img {
+  width: 100%;
+  border-radius: 8px;
+}
