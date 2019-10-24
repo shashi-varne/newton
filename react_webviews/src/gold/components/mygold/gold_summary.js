@@ -596,7 +596,7 @@ class GoldSummary extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="Gold Summary"
+        title="24K Digital Gold"
         handleClick={this.buyGold}
         edit={this.props.edit}
         buttonTitle="Proceed"
