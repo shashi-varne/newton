@@ -170,3 +170,52 @@
 .MuiButton-label {
   text-transform: capitalize !important;
 }
+
+
+
+/* carousel */
+.carousel .control-dots .dot.selected, .carousel .control-dots .dot:hover {
+  opacity: 1;
+  background: black;
+  width: 10px;
+  height: 10px;
+}
+.carousel .control-dots .dot {
+  -webkit-transition: opacity .25s ease-in;
+  -o-transition: opacity .25s ease-in;
+  transition: opacity .25s ease-in;
+  opacity: .3;
+  /* -webkit-box-shadow: 1px 1px 2px rgba(0,0,0,.9); */
+  box-shadow: none !important;
+  background: #fff;
+  border-radius: 50%;
+  width: 8px;
+  height: 8px;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0 8px;
+  border: 1px solid black;
+  vertical-align: middle;
+}
+.carousel .control-dots {
+  position: inherit !important;
+  bottom: 0;
+  margin: 10px 0;
+  text-align: center;
+  width: 100%;
+}
+.carousel .slide img {
+  height: 205px;
+}
+.carousel .slide {
+  background: #fff;
+}
+.carousel .control-next.control-arrow:before {
+  border-left: 8px solid #514b4b !important;
+}
+.carousel .control-prev.control-arrow:before {
+  border-right: 8px solid #514b4b !important;
+}
+.carousel .control-arrow:before, .carousel.carousel-slider .control-arrow:before {
+  margin: 0 0px !important;
+}
