@@ -132,49 +132,8 @@ class GoldSummary extends Component {
 
   async componentDidMount() {
     try {
-      const res = await Api.get('/api/gold/user/account');
-      if (res.pfwresponse.status_code === 200) {
-        let result = res.pfwresponse.result;
-        let isRegistered = true;
-        if (result.gold_user_info.user_info.registration_status === "pending" ||
-          !result.gold_user_info.user_info.registration_status ||
-          result.gold_user_info.is_new_gold_user) {
-          isRegistered = false;
-        }
-        this.setState({
-          // show_loader: false,
-          goldInfo: result.gold_user_info.safegold_info,
-          userInfo: result.gold_user_info.user_info,
-          maxWeight: parseFloat(((30 - result.gold_user_info.safegold_info.gold_balance) || 30).toFixed(4)),
-          isRegistered: isRegistered
-        });
-      } else {
-        this.setState({
-          show_loader: false
-        });
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
-      }
-
-      const res2 = await Api.get('/api/gold/sell/currentprice');
-      if (res2.pfwresponse.status_code === 200) {
-        let goldInfo = this.state.goldInfo;
-        let result = res2.pfwresponse.result;
-        goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
-        this.setState({
-          // show_loader: false,
-          goldSellInfo: result.sell_info,
-          goldInfo: goldInfo
-        });
-      } else {
-        this.setState({
-          show_loader: false
-        });
-        toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message || 'Something went wrong', 'error');
-      }
-
 
       const res3 = await Api.get('/api/gold/buy/currentprice');
-
       if (res3.pfwresponse.status_code === 200) {
         let result = res3.pfwresponse.result;
         let goldBuyInfo = result.buy_info;
@@ -220,6 +179,48 @@ class GoldSummary extends Component {
       });
       toast('Something went wrong', 'error');
     }
+
+    const res = await Api.get('/api/gold/user/account');
+    if (res.pfwresponse.status_code === 200) {
+      let result = res.pfwresponse.result;
+      let isRegistered = true;
+      if (result.gold_user_info.user_info.registration_status === "pending" ||
+        !result.gold_user_info.user_info.registration_status ||
+        result.gold_user_info.is_new_gold_user) {
+        isRegistered = false;
+      }
+      this.setState({
+        goldInfo: result.gold_user_info.safegold_info,
+        userInfo: result.gold_user_info.user_info,
+        maxWeight: parseFloat(((30 - result.gold_user_info.safegold_info.gold_balance) || 30).toFixed(4)),
+        isRegistered: isRegistered
+      });
+    } else {
+      this.setState({
+        show_loader: false
+      });
+      toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
+    }
+
+
+    const res2 = await Api.get('/api/gold/sell/currentprice');
+    if (res2.pfwresponse.status_code === 200) {
+      let goldInfo = this.state.goldInfo;
+      let result = res2.pfwresponse.result;
+      goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
+      this.setState({
+        goldSellInfo: result.sell_info,
+        goldInfo: goldInfo
+      });
+    } else {
+      this.setState({
+        show_loader: false
+      });
+      toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message || 'Something went wrong', 'error');
+    }
+
+
+
 
   }
 
@@ -412,9 +413,6 @@ class GoldSummary extends Component {
   }
 
   handleClickOffer(offer, index) {
-
-    console.log("offf ")
-    console.log(offer)
     if (offer.key === '5buy' || offer.key === '50delivery') {
       this.setState({
         openDialogOffer: true,
@@ -517,7 +515,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                                                                                                                                                                                                                                                              previous gold price has expired.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -628,7 +626,7 @@ class GoldSummary extends Component {
                 </div>
                 <div className="my-gold-details-header3">
                   <div className="my-gold-details-header2a">Selling Value</div>
-                  <div className="my-gold-details-header2b">{inrFormatDecimal(this.state.goldInfo.sell_value) || 0}</div>
+                  <div className="my-gold-details-header2b">{inrFormatDecimal(this.state.goldInfo.sell_value ) || 0}</div>
                 </div>
               </div>
             </div>
