@@ -173,54 +173,53 @@ class GoldSummary extends Component {
         });
         toast(res3.pfwresponse.result.error || res3.pfwresponse.result.message || 'Something went wrong', 'error');
       }
+
+      const res = await Api.get('/api/gold/user/account');
+      if (res && res.pfwresponse.status_code === 200) {
+        let result = res.pfwresponse.result;
+        let isRegistered = true;
+        if (result.gold_user_info.user_info.registration_status === "pending" ||
+          !result.gold_user_info.user_info.registration_status ||
+          result.gold_user_info.is_new_gold_user) {
+          isRegistered = false;
+        }
+        this.setState({
+          goldInfo: result.gold_user_info.safegold_info,
+          userInfo: result.gold_user_info.user_info,
+          maxWeight: parseFloat(((30 - result.gold_user_info.safegold_info.gold_balance) || 30).toFixed(4)),
+          isRegistered: isRegistered
+        });
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
+      }
+  
+  
+      const res2 = await Api.get('/api/gold/sell/currentprice');
+      if (res2 && res2.pfwresponse.status_code === 200) {
+        let goldInfo = this.state.goldInfo;
+        let result = res2.pfwresponse.result;
+        goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
+        this.setState({
+          goldSellInfo: result.sell_info,
+          goldInfo: goldInfo
+        });
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message || 'Something went wrong', 'error');
+      }
+  
+  
     } catch (err) {
       this.setState({
         show_loader: false
       });
       toast('Something went wrong', 'error');
     }
-
-    const res = await Api.get('/api/gold/user/account');
-    if (res.pfwresponse.status_code === 200) {
-      let result = res.pfwresponse.result;
-      let isRegistered = true;
-      if (result.gold_user_info.user_info.registration_status === "pending" ||
-        !result.gold_user_info.user_info.registration_status ||
-        result.gold_user_info.is_new_gold_user) {
-        isRegistered = false;
-      }
-      this.setState({
-        goldInfo: result.gold_user_info.safegold_info,
-        userInfo: result.gold_user_info.user_info,
-        maxWeight: parseFloat(((30 - result.gold_user_info.safegold_info.gold_balance) || 30).toFixed(4)),
-        isRegistered: isRegistered
-      });
-    } else {
-      this.setState({
-        show_loader: false
-      });
-      toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
-    }
-
-
-    const res2 = await Api.get('/api/gold/sell/currentprice');
-    if (res2.pfwresponse.status_code === 200) {
-      let goldInfo = this.state.goldInfo;
-      let result = res2.pfwresponse.result;
-      goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
-      this.setState({
-        goldSellInfo: result.sell_info,
-        goldInfo: goldInfo
-      });
-    } else {
-      this.setState({
-        show_loader: false
-      });
-      toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message || 'Something went wrong', 'error');
-    }
-
-
-
 
   }
 
