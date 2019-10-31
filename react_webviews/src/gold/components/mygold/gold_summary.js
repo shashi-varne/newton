@@ -65,7 +65,9 @@ class GoldSummary extends Component {
       ismyway: qs.parse(props.history.location.search.slice(1)).base_url.indexOf("api.mywaywealth.com") >= 0,
       type: '',
       countdownInterval: null,
-      openDialogOffer: false
+      openDialogOffer: false,
+      showOffers: false,
+      offerImageData: []
     }
 
     this.renderOfferImages = this.renderOfferImages.bind(this);
@@ -687,10 +689,7 @@ class GoldSummary extends Component {
                 Purchase amount is inclusive of 3% GST
               </div>
             </div>
-            {/* <div style={{ margin: '20px 0 0 0',cursor: 'pointer' }} onClick={() => this.handleClickOffer()}>
-              <img style={{ width: "100%", borderRadius: 8 }} src={this.state.offerImageData[1].src} alt="" />
-            </div> */}
-            {this.state.offerImageData && <div style={{ margin: '20px 0 0 0', cursor: 'pointer' }}>
+            {this.state.showOffers && this.state.offerImageData && <div style={{ margin: '20px 0 0 0', cursor: 'pointer' }}>
               <Carousel
 
                 showStatus={false} showThumbs={false}
