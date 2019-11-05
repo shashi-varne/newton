@@ -12,34 +12,8 @@ import { ToastContainer } from 'react-toastify';
 import './common/Style.css';
 import './components/Style.css';
 import NotFound from '../common/components/NotFound';
-import PersonalDetails1 from './components/personal-details/screen1';
-import PersonalDetails2 from './components/personal-details/screen2';
-import ContactDetails1 from './components/contact-details/screen1';
-import ContactDetails2 from './components/contact-details/screen2';
-import NomineeDetails from './components/nominee-details/screen1';
-import AppointeeDetails from './components/nominee-details/screen2';
-import ProfessionalDetails1 from './components/professional-details/screen1';
-import ProfessionalDetails2 from './components/professional-details/screen2';
-import AdditionalInfo from './components/additional-info/hdfc';
-import Summary from './components/insurance-summary/screen1';
-import Journey from './components/insurance-summary/screen3';
-import Payment from './components/payment/index';
-import Pincode from './components/pincode/screen1';
-import Resume from './components/insurance-summary/screen2';
 
-// quote selection
-import CoverAmount from './components/quote-selection/cover_amount';
-import AnnualIncome from './components/quote-selection/annual_income';
-import CoverPeriod from './components/quote-selection/cover_period';
-import Intro from './components/quote-selection/intro';
-import JourneyIntro from './components/quote-selection/journey';
-import LifeStyle from './components/quote-selection/lifestyle';
-import PersonalDetailsIntro from './components/quote-selection/personal_details';
-import QuoteGeneration from './components/quote-selection/quote_generation';
-
-import AddOnBenefits from './components/add-on-benefits/index'
-import FinalReport from './components/report/index'
-import InsuranceHome from './components/home/index'
+import AppUpdateInfo from './components/app_update.js';
 
 import { create } from 'jss';
 import JssProvider from 'react-jss/lib/JssProvider';
@@ -135,45 +109,7 @@ const Insurance = (props) => {
         <ScrollToTop />
         <ToastContainer autoClose={3000} />
         <Switch>
-          <Route exact path={`${url}`} component={Journey} />
-          <Route path={`${url}/resume`} component={Resume} />
-          <Route path={`${url}/personal`} component={PersonalDetails1} />
-          <Route path={`${url}/personal1`} component={PersonalDetails2} />
-          <Route path={`${url}/contact`} component={ContactDetails1} />
-          <Route path={`${url}/contact1`} component={ContactDetails2} />
-          <Route path={`${url}/nominee`} component={NomineeDetails} />
-          <Route path={`${url}/appointee`} component={AppointeeDetails} />
-          <Route path={`${url}/professional`} component={ProfessionalDetails1} />
-          <Route path={`${url}/professional1`} component={ProfessionalDetails2} />
-          <Route path={`${url}/additional-info`} component={AdditionalInfo} />
-          <Route path={`${url}/summary`} component={Summary} />
-          <Route path={`${url}/journey`} component={Journey} />
-          <Route path={`${url}/payment/:insurance_id/:insurance_v2/:status`} component={Payment} />
-          <Route path={`${url}/Pincode`} component={Pincode} />
-
-          {/* quote selection */}
-          <Route path={`${url}/cover-amount`} component={CoverAmount} />
-          <Route path={`${url}/annual-income`} component={AnnualIncome} />
-          <Route path={`${url}/cover-period`} component={CoverPeriod} />
-          <Route path={`${url}/intro`} component={Intro} />
-          <Route path={`${url}/journey-intro`} component={JourneyIntro} />
-          <Route path={`${url}/lifestyle`} component={LifeStyle} />
-          <Route path={`${url}/personal-details-intro`} component={PersonalDetailsIntro} />
-          <Route path={`${url}/quote`} component={QuoteGeneration} />
-
-          <Route path={`${url}/riders`} component={AddOnBenefits} />
-          <Route path={`${url}/report`} component={FinalReport} />
-          <Route path={`${url}/home`} component={InsuranceHome} />
-
-          {/* Edit paths */}
-          <Route path={`${url}/edit-personal`} render={(props) => <PersonalDetails1 {...props} edit={true} />} />
-          <Route path={`${url}/edit-personal1`} render={(props) => <PersonalDetails2 {...props} edit={true} />} />
-          <Route path={`${url}/edit-contact`} render={(props) => <ContactDetails1 {...props} edit={true} />} />
-          <Route path={`${url}/edit-contact1`} render={(props) => <ContactDetails2 {...props} edit={true} />} />
-          <Route path={`${url}/edit-nominee`} render={(props) => <NomineeDetails {...props} edit={true} />} />
-          <Route path={`${url}/edit-appointee`} render={(props) => <AppointeeDetails {...props} edit={true} />} />
-          <Route path={`${url}/edit-professional`} render={(props) => <ProfessionalDetails1 {...props} edit={true} />} />
-          <Route path={`${url}/edit-professional1`} render={(props) => <ProfessionalDetails2 {...props} edit={true} />} />
+          <Route exact path={`${url}`} component={AppUpdateInfo} />
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>

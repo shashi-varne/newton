@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
-import { getConfig, setHeights } from 'utils/functions';
+import { getConfig, manageDialog, setHeights } from 'utils/functions';
 import Header from './Header';
 import Footer from './footer';
 import Banner from '../../common/ui/Banner';
@@ -14,6 +14,8 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import '../../utils/native_listner';
+
+import { back_button_mapper } from '../constants';
 
 
 class Container extends Component {
@@ -67,13 +69,63 @@ class Container extends Component {
     });
   }
 
+  getEvents(user_action) {
+    if (!this || !this.props || !this.props.events) {
+      return;
+    }
+    let events = this.props.events;
+    events.properties.user_action = user_action;
+    return events;
+  }
 
   historyGoBack = () => {
 
-   
+    if (manageDialog('general-dialog', 'none', 'enableScroll')) {
+      if (this.props.closePopup) {
+        this.props.closePopup();
+      }
+      return;
+    }
+    let { params } = this.props.location;
     let insurance_v2 = getConfig().insurance_v2;
     let pathname = this.props.history.location.pathname;
 
+    if (pathname === '/insurance/journey' || pathname === '/insurance/summary') {
+      if (this.props.isJourney) {
+        if (!insurance_v2) {
+          nativeCallback({ action: 'native_back', events: this.getEvents('back') });
+        } else {
+          let eventObj = {
+            "event_name": 'term_insurance',
+            "properties": {
+              "user_action": 'close',
+              "screen_name": 'insurance_summary'
+            }
+          };
+          nativeCallback({ events: eventObj });
+          this.setState({
+            callbackType: 'show_quotes',
+            openPopup: true,
+            popupText: 'Are you sure you want to explore more options? We will save your information securely.'
+          })
+        }
+
+        return;
+      }
+
+      if (params && params.disableBack) {
+        if (!insurance_v2) {
+          nativeCallback({ action: 'native_back', events: this.getEvents('back') });
+        } else {
+          this.setState({
+            callbackType: 'exit',
+            openPopup: true,
+            popupText: 'Are you sure you want to exit the application process? You can resume it later.'
+          })
+        }
+        return;
+      }
+    }
 
     switch (pathname) {
       case "/insurance":
@@ -89,8 +141,14 @@ class Container extends Component {
           })
         }
         break;
+      case '/insurance/intro':
+        nativeCallback({ action: 'native_back', events: this.getEvents('back') });
+        break;
       default:
-        if (navigator.onLine) {
+        if (back_button_mapper[pathname] && back_button_mapper[pathname].length > 0) {
+          nativeCallback({ events: this.getEvents('back') });
+          this.navigate(back_button_mapper[pathname]);
+        } else if (navigator.onLine) {
           nativeCallback({ events: this.getEvents('back') });
           this.props.history.goBack();
         } else {
@@ -107,6 +165,16 @@ class Container extends Component {
       openPopup: false
     });
 
+    // if (this.state.callbackType === 'show_quotes') {
+    //   let eventObj = {
+    //     "event_name": 'exit_from_payment',
+    //     "properties": {
+    //       "user_action": 'no',
+    //       "source": 'summary'
+    //     }
+    //   };
+    //   nativeCallback({ events: eventObj });
+    // }
   }
 
   renderDialog = () => {

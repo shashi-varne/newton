@@ -7,6 +7,7 @@ import {
 
 import NotFound from './common/components/NotFound';
 import Insurance from './insurance';
+import GroupInsurance from './group_insurance';
 import Referral from './referral';
 import Gold from './gold';
 import Mandate from './mandate_address';
@@ -21,6 +22,7 @@ class App extends Component {
       <BrowserRouter>
         <Switch>
           <Route path="/insurance" component={Insurance} />
+          <Route path="/group-insurance" component={GroupInsurance} />
           <Route path="/referral" component={Referral} />
           <Route path="/gold" component={Gold} />
           <Route path="/mandate" component={Mandate} />
