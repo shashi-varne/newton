@@ -53,11 +53,7 @@ class InsuranceHome extends Component {
           }
           window.localStorage.setItem('homeApplication', JSON.stringify(data));
           let search = application.profile_link.split('?')[1];
-          search += '&insurance_v2=true&generic_callback=true';
-
-          // remove this
-          search += '&insurance_allweb=true';
-
+          search += '&generic_callback=true';
 
           this.navigate(pathname, search);
         }

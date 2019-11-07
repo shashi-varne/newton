@@ -129,7 +129,7 @@ class CoverAmount extends Component {
     quoteData.coverAmountList = this.state.coverAmountList;
     quoteData.coverAmountToShow = this.state.coverAmountToShow;
     quoteData.recommendedIndexCoverAmount = this.state.recommendedIndex;
-    quoteData.inputToRender = this.state.inputToRender;
+    quoteData.inputToRender_cover_amount = this.state.inputToRender;
     window.localStorage.setItem('quoteData', JSON.stringify(quoteData));
     this.navigate('cover-period')
   }

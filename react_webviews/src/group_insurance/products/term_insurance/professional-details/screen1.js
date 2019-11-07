@@ -245,12 +245,12 @@ class ProfessionalDetails1 extends Component {
           this.setState({ show_loader: false });
           if (this.props.edit) {
             if (this.state.params.resume === "yes") {
-              this.navigate('/insurance/resume');
+              this.navigate('resume');
             } else {
-              this.navigate('/insurance/summary');
+              this.navigate('summary');
             }
           } else {
-            this.navigate('/insurance/nominee');
+            this.navigate('nominee');
           }
         } else {
           this.setState({ show_loader: false });

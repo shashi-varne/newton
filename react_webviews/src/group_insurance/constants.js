@@ -330,6 +330,12 @@ export const payFreqOptionInsurance = [
   { name: 'Monthly', value: 'Monthly' }
 ]
 
+export const ridersOptionInsurance = [
+  { name: 'Waiver of premium after Critical Illness', value: 'ci_benefit' },
+  { name: 'Accidental death benefits', value: 'accident_benefit' },
+  { name: 'No Rider', value: 'no_riders' }
+]
+
 
 export const quotePoints = {
   'HDFC': {

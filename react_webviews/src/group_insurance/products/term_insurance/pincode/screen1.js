@@ -123,9 +123,9 @@ class Pincode extends Component {
       if (res.pfwresponse.status_code === 200) {
         this.setState({ show_loader: false });
         if (this.props.edit) {
-          this.navigate('/insurance/summary');
+          this.navigate('summary');
         } else {
-          this.navigate('/insurance/summary');
+          this.navigate('summary');
         }
 
       } else {
@@ -262,7 +262,7 @@ class Pincode extends Component {
           show_loader: true
         });
         let paymentRedirectUrl = encodeURIComponent(
-          window.location.origin + '/insurance/payment'
+          window.location.origin + 'payment'
         );
         var pgLink = result.payment_link;
         // eslint-disable-next-line
@@ -292,7 +292,7 @@ class Pincode extends Component {
       if (res.pfwresponse.status_code === 200) {
 
         this.setState({ show_loader: false });
-        this.navigateNew('/insurance/additional-info', res.pfwresponse.result.application.id);
+        this.navigateNew('additional-info', res.pfwresponse.result.application.id);
 
       } else {
         let error = res.pfwresponse.result.error;

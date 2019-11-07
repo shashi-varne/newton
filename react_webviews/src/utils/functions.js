@@ -210,8 +210,8 @@ export function setHeights(data) {
   let stepHeight = (step) ? step.offsetHeight : 0;
 
   let body = document.getElementsByTagName('body')[0].offsetHeight;
-  let client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
-  let foot = document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight : 0;
+  let client = document.getElementsByClassName('ContainerWrapper') ?document.getElementsByClassName('ContainerWrapper')[0].offsetHeight: 0;
+  let foot = document.getElementsByClassName('Footer') && document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight : 0;
 
   let HeaderHeight = bannerHeight + stepHeight + head + 'px';
   if (data.header) {

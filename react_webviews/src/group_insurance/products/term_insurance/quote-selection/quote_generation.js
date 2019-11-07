@@ -23,7 +23,7 @@ import RadioOptions from '../../../../common/ui/RadioOptions';
 import { FormControl } from 'material-ui/Form';
 import '../../../../utils/native_listner_otm';
 
-import { payFreqOptionInsurance, quotePoints, all_providers } from '../../../constants';
+import { payFreqOptionInsurance, ridersOptionInsurance, quotePoints, all_providers } from '../../../constants';
 
 class QuoteGeneration extends Component {
   constructor(props) {
@@ -39,6 +39,7 @@ class QuoteGeneration extends Component {
       openDialogFilter: false,
       openPopUpQuote: false,
       paymentFreqRadio: 'Monthly',
+      ridersRadio: 'no_riders',
       expendAddOnOpen: false,
       openPopUpInfo: false,
       time_spent: 0,
@@ -104,12 +105,11 @@ class QuoteGeneration extends Component {
       dob: this.state.quoteData.dob,
       gender: this.state.quoteData.gender,
       annual_income: this.state.quoteData.annual_income,
-      accident_benefit: '',
-      ci_benefit: '',
-      ci_amount: '',
+      accident_benefit: this.state.quoteData.accident_benefit,
+      ci_benefit: this.state.quoteData.ci_benefit,
+      // ci_amount: this.state.quoteData.annual_income,
       annual_quote_required: true,
       required_providers: this.state.required_providers,
-      insurance_all_web:true
     };
     try {
       const res = await Api.post('/api/insurance/quote', insuranceData);
@@ -137,8 +137,11 @@ class QuoteGeneration extends Component {
   }
 
   componentDidMount() {
+    
+    let inputToRender_accident_benefit = this.getInputToRenderADB();
+    ridersOptionInsurance[1].inputToRender = inputToRender_accident_benefit;
     this.setState({
-      dropdown_arrow: this.state.type !== 'fisdom' ? dropdown_arrow_myway : dropdown_arrow_fisdom
+      dropdown_arrow: this.state.type !== 'fisdom' ? dropdown_arrow_myway : dropdown_arrow_fisdom,
     })
     this.getQuotes();
   }
@@ -156,19 +159,56 @@ class QuoteGeneration extends Component {
     this.navigate('riders');
   }
 
+  getInputToRenderADB() {
+    let inputToRender = {
+      error: false,
+      type: "text",
+      width: "40",
+      label: "Accidental death benefits",
+      class: "Income",
+      id: "income",
+      name: "accident_benefit",
+      onChange: this.handleChange('accident_benefit'),
+      inputKeyName: 'accident_benefit'
+    }
+    var min = 5000000;
+    var max =  this.state.quoteData.cover_amount > 30000000 ?  30000000 : this.state.quoteData.cover_amount;
+    let cover_amount_min_max = 'Min ' + inrFormatDecimal(min) + ' - Max ' + inrFormatDecimal(max);
+    inputToRender.cover_amount_min_max = cover_amount_min_max;
+    inputToRender.helperText = cover_amount_min_max;
+    inputToRender.min = min;
+    inputToRender.max = max;
+    this.setState({
+      inputToRender_accident_benefit: inputToRender
+    })
+
+    return inputToRender;
+  }
+
   quotesAfterFilter(type, index) {
+  
     let filterAclick = this.state.filterAclick || {};
     let quoteData = this.state.quoteData;
+    
     if (type === 'cover-amount' && quoteData.coverAmountList[index].name !== 'Other') {
       quoteData.cover_amount = quoteData.coverAmountList[index].value;
+     
     } else if (type === 'cover-period') {
       quoteData.cover_period = quoteData.coverPeriodList[index];
     } else if (type === 'smoke') {
       quoteData.tobacco_choice = quoteData.smokeList[index] === 'Yes' ? 'Y' : 'N';
     }
 
-    filterAclick[type] = true;
 
+    if(type === 'cover-amount' && this.state.ridersRadio === 'accident_benefit') {
+      this.getInputToRenderADB();
+      toast('Please select accidental amount again');
+      this.setState({
+        ridersRadio: 'no_riders'
+      })
+    }
+    
+    filterAclick[type] = true;
     this.setState({
       filterAclick:filterAclick,
       quoteData: quoteData
@@ -198,23 +238,70 @@ class QuoteGeneration extends Component {
   }
 
   handleCloseAction = () => {
+    if(this.state.filterType === 'cover-amount'
+     && this.state.quoteData.coverAmountList[this.state.selectedIndex].name === 'Other'
+     && this.state.quoteData.inputToRender_cover_amount.error) {
+      return;
+    }
     this.setState({
       openPopUp: false
     });
     this.quotesAfterFilter(this.state.filterType, this.state.selectedIndex)
   }
 
+  submitQuote = async (id) => {
+    this.setState({
+      openPopUpQuote: false,
+      show_loader: true
+    })
+
+    let insuranceData = {
+      quote_id: id
+    };
+
+    let show_quotes = window.localStorage.getItem('show_quotes');
+    show_quotes = true;
+    if (show_quotes) {
+      insuranceData.create = 'Y';
+      window.localStorage.setItem('show_quotes', '');
+    }
+
+    try {
+      const res = await Api.post('/api/insurance/quote/select', insuranceData)
+      this.setState({
+        show_loader: false
+      });
+      if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.application) {
+        window.localStorage.setItem('cameFromHome', '');
+        let url = res.pfwresponse.result.profile_start;
+        let search = url.split('?')[1];
+        search += '&generic_callback=true';
+        this.navigate("journey", search);
+      } else {
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message
+          || 'Something went wrong');
+      }
+
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
+    }
+  }
+
   handleCloseQuotes = async () => {
     this.sendEvents('next', 'quote');
     this.setState({
-      openPopUpQuote: false
+      openPopUpQuote: false,
+      show_loader: true
     })
 
     let quoteSelected = this.state.quoteSelected;
-    quoteSelected.payment_frequency_selected = this.state.payment_frequency;
+      let id = (this.state.payment_frequency).toLowerCase() === 'annually' ? quoteSelected.annual_quote_id :
+       quoteSelected.id;
 
-    window.localStorage.setItem('quoteSelected', JSON.stringify(quoteSelected));
-    this.navigate('riders');
+    this.submitQuote(id);
   }
 
   renderPopUpQuote = () => {
@@ -327,8 +414,8 @@ class QuoteGeneration extends Component {
              </div>
               {this.state.selectedQuoteInfo.quote_provider !== 'Maxlife' &&
                 <div className="annual-inc-popup-content">
-                  This plan will cover your death (till 
-                   {this.calculateAge(this.state.selectedQuoteInfo.dob.replace(/\\-/g, '/').split('/').reverse().join('/')) + 
+                  This plan will cover your death 
+                  (till  {this.calculateAge(this.state.selectedQuoteInfo.dob.replace(/\\-/g, '/').split('/').reverse().join('/')) + 
                 this.state.selectedQuoteInfo.term} years of age) in all cases
                   except suicide for the first year. Plan benefit includes a payout of
                Rs {numDifferentiation(this.state.selectedQuoteInfo.cover_amount)} to your nominee. Additionally, full payout will happen in case
@@ -452,7 +539,7 @@ class QuoteGeneration extends Component {
             dataType={this.state.filterType === 'cover-amount' ? 'AOB' : ''}
             keyToShow="name"
             inputKeyName="Other"
-            inputToRender={this.state.filterType === 'cover-amount' ? this.state.inputToRender : {}} />
+            inputToRender={this.state.filterType === 'cover-amount' ? this.state.inputToRender_cover_amount : {}} />
         </div>
       )
     }
@@ -466,6 +553,8 @@ class QuoteGeneration extends Component {
       selectedIndex: index
     })
   }
+
+ 
 
   selectQuote(quote, payment_frequency, index) {
     let popup_premium = quote.quote_json;
@@ -542,7 +631,7 @@ class QuoteGeneration extends Component {
               Claim Settled
           </div>
           <div className="quote-tiles4a" style={{color:getConfig().primary,fontWeight:500}}>
-          {props.quote_describer.settlement_ratio}
+          98%
           </div>
         </div>
         <div className="quote-tiles4">
@@ -597,68 +686,63 @@ class QuoteGeneration extends Component {
     )
   }
 
-
   handleChange = name => event => {
-    let value = event.target.value.replace(/,/g, "");
-    let inputToRender = this.state.inputToRender;
+    let value = event.target.value.replace(/,/g, "")*1;
+    let inputToRender = this.state['inputToRender_' + name];
+    
+    let error = "";
     if (!value) {
-      let error = 'Cover Amount cannot be empty';
-      this.setState({
-        cover_amount_error: error,
-        inputToRender: { ...this.state.inputToRender, helperText: error, error: true }
-      });
+      error = 'Cover Amount cannot be empty';
     } else if ((!validateNumber(value) || !value)) {
-      let error = 'Invalid Cover Amount';
-      this.setState({
-        cover_amount_error: error,
-        inputToRender: { ...this.state.inputToRender, helperText: error, error: true }
-      });
-    } else if (value < this.state.min) {
-      let error = 'Minimum Cover Amount is ' + inrFormatDecimal(inputToRender.min);
-      this.setState({
-        cover_amount_error: error,
-        inputToRender: { ...this.state.inputToRender, helperText: error, error: true }
-      });
-    } else if (value > this.state.max) {
-      let error = 'Maximum Cover Amount is ' + inrFormatDecimal(inputToRender.max);
-      this.setState({
-        cover_amount_error: error,
-        inputToRender: { ...this.state.inputToRender, helperText: error, error: true }
-      });
+      error = 'Invalid Cover Amount';
+    } else if (value < inputToRender.min) {
+      error = 'Minimum Cover Amount is ' + inrFormatDecimal(inputToRender.min);
+    } else if (value > inputToRender.max) {
+      error = 'Maximum Cover Amount is ' + inrFormatDecimal(inputToRender.max);
     } else if ((!validateNumber(value) || !value)) {
-      let error = 'Invalid Cover Amount';
+      error = 'Invalid Cover Amount';
+    } 
+
+    if(error) {
+      inputToRender.helperText = error;
+      inputToRender.error = true;
+      inputToRender.value = value;
       this.setState({
-        cover_amount_error: error,
-        inputToRender: { ...this.state.inputToRender, helperText: error, error: true }
-      });
-    } else {
-
-
-      let quoteData = this.state.quoteData;
-      quoteData.cover_amount = value;
-      inputToRender.helperText = this.state.cover_amount_min_max;
+        [name +'_error'] : error,
+        ['inputToRender_' + name]: inputToRender
+      })
+    }else  {
+      inputToRender.helperText = inputToRender.cover_amount_min_max;
       inputToRender.error = false;
       inputToRender.value = value;
       this.setState({
         [name]: value,
         [name + '_error']: '',
-        inputToRender: inputToRender,
-        quoteData: quoteData
+        ['inputToRender_' + name]: inputToRender
       });
     }
 
+    if (!error && value && name === 'cover_amount') {
+      let quoteData = this.state.quoteData;
+      quoteData.cover_amount = value;
+      this.setState({
+        quoteData: quoteData
+      })
+    }
+  
   };
 
   filterHandler(type) {
 
     if (type === 'cover-amount') {
-      let inputToRender = this.state.quoteData.inputToRender;
+      let inputToRender = this.state.quoteData.inputToRender_cover_amount;
       inputToRender.onChange = this.handleChange('cover_amount');
       inputToRender.value = this.state.quoteData.cover_amount;
+      inputToRender.error = false;
       this.setState({
         renderList: this.state.quoteData.coverAmountList,
         filterHead: 'Cover Amount',
-        inputToRender: inputToRender,
+        inputToRender_cover_amount: inputToRender,
         selectedIndex: this.state.quoteData.selectedIndexCoverAmount
       });
     } else if (type === 'cover-period') {
@@ -692,7 +776,17 @@ class QuoteGeneration extends Component {
 
   handleFilter = () => {
     let quoteData = this.state.quoteData;
-    quoteData.payment_frequency = this.state.paymentFreqRadio
+    quoteData.payment_frequency = this.state.paymentFreqRadio;
+    let ci_benefit, accident_benefit = '';
+    if(this.state.ridersRadio === 'accident_benefit') {
+      accident_benefit = this.state.inputToRender_accident_benefit.value;
+    }else if(this.state.ridersRadio === 'ci_benefit') {
+      ci_benefit = 'Y';
+    }
+
+    quoteData.ci_benefit = ci_benefit;
+    quoteData.accident_benefit = accident_benefit;
+
     this.setState({
       openDialogFilter: false,
       quoteData: quoteData,
@@ -733,7 +827,7 @@ class QuoteGeneration extends Component {
                 </div>
                   <div className="InputField">
                     <RadioOptions
-                    icon_type="blue_icon"
+                      icon_type="blue_icon"
                       error={(this.state.paymentFreqRadio_error) ? true : false}
                       helperText={this.state.paymentFreqRadio_error}
                       width="40"
@@ -743,6 +837,25 @@ class QuoteGeneration extends Component {
                       id="pay-freq"
                       value={this.state.paymentFreqRadio}
                       onChange={this.handleRadio('paymentFreqRadio')} />
+                  </div>
+                </FormControl>
+
+                <FormControl fullWidth>
+                  <div style={{ fontSize: 15, color: '#4a4a4a' }}>
+                    Riders
+                </div>
+                  <div className="InputField">
+                    <RadioOptions
+                     icon_type="blue_icon"
+                      error={(this.state.ridersRadio_error) ? true : false}
+                      helperText={this.state.ridersRadio_error}
+                      width="40"
+                      // label="Premium Payment Frequency"
+                      class="MaritalStatus"
+                      options={ridersOptionInsurance}
+                      id="pay-freq"
+                      value={this.state.ridersRadio}
+                      onChange={this.handleRadio('ridersRadio')} />
                   </div>
                 </FormControl>
               </div>

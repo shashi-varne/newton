@@ -98,7 +98,7 @@ class Payment extends Component {
       openDialog: false,
       show_loader: true
     });
-    this.navigateResume('/insurance/journey');
+    this.navigateResume('journey');
   }
 
   renderResponseDialog = () => {

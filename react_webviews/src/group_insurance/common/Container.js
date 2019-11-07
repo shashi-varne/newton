@@ -80,6 +80,7 @@ class Container extends Component {
 
   historyGoBack = () => {
 
+
     if (manageDialog('general-dialog', 'none', 'enableScroll')) {
       if (this.props.closePopup) {
         this.props.closePopup();
@@ -89,8 +90,8 @@ class Container extends Component {
     let { params } = this.props.location;
     let insurance_v2 = getConfig().insurance_v2;
     let pathname = this.props.history.location.pathname;
-
-    if (pathname === '/insurance/journey' || pathname === '/insurance/summary') {
+    console.log(pathname)
+    if (pathname === '/group-insurance/journey' || pathname === '/group-insurance/summary') {
       if (this.props.isJourney) {
         if (!insurance_v2) {
           nativeCallback({ action: 'native_back', events: this.getEvents('back') });
@@ -127,10 +128,12 @@ class Container extends Component {
       }
     }
 
+
+   
     switch (pathname) {
       case "/insurance":
-      case "/insurance/resume":
-      case "/insurance/journey":
+      case "/group-insurance/resume":
+      case "/group-insurance/journey":
         if (!insurance_v2) {
           nativeCallback({ action: 'native_back', events: this.getEvents('back') });
         } else {
@@ -141,7 +144,7 @@ class Container extends Component {
           })
         }
         break;
-      case '/insurance/intro':
+      case '/group-insurance/intro':
         nativeCallback({ action: 'native_back', events: this.getEvents('back') });
         break;
       default:
@@ -215,7 +218,7 @@ class Container extends Component {
       };
       nativeCallback({ events: eventObj });
       window.localStorage.setItem('show_quotes', true);
-      this.navigate('/insurance/quote');
+      this.navigate('/group-insurance/quote');
     }
 
 

@@ -332,15 +332,15 @@ class AppointeeDetails extends Component {
           this.setState({ show_loader: false });
           if (this.props.edit) {
             if (this.state.params.resume === "yes") {
-              this.navigate('/insurance/resume', true);
+              this.navigate('resume', true);
             } else {
-              this.navigate('/insurance/summary', true);
+              this.navigate('summary', true);
             }
           } else {
             if (this.state.provider === 'IPRU') {
-              this.navigate('/insurance/pincode');
+              this.navigate('pincode');
             } else {
-              this.navigate('/insurance/summary', true);
+              this.navigate('summary', true);
             }
           }
         } else {

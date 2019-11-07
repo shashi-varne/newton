@@ -317,7 +317,7 @@ class AdditionalInfo extends Component {
 
           this.setState({ show_loader: false });
 
-          this.navigate('/insurance/summary');
+          this.navigate('summary');
 
 
         } else {

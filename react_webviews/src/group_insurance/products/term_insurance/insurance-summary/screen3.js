@@ -107,7 +107,7 @@ class Journey extends Component {
 
   componentWillMount() {
 
-    let current_url = window.location.origin + '/insurance/journey' + getConfig().searchParams;
+    let current_url = window.location.origin + 'journey' + getConfig().searchParams;
     this.setState({
       current_url: current_url
     });
@@ -165,10 +165,10 @@ class Journey extends Component {
       show_loader: true
     });
 
-    let insurance_v2 = this.state.params.insurance_v2 ? true : null;
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.origin + '/insurance/payment/' + this.state.insurance_id + '/' + insurance_v2
+      window.location.origin + '/group-insurance/payment/' + getConfig().searchParams
     );
+
     var pgLink = payment_link;
     let app = getConfig().app;
     var back_url = encodeURIComponent(this.state.current_url);
@@ -574,7 +574,7 @@ class Journey extends Component {
       if (res.pfwresponse.status_code === 200 &&
         res.pfwresponse.result.payment_confirmed === true) {
         if (this.state.provider === 'HDFC') {
-          this.navigate('/insurance/contact1');
+          this.navigate('contact1');
         } else {
           this.setState({
             payment_confirmed: res.pfwresponse.result.payment_confirmed
@@ -617,13 +617,13 @@ class Journey extends Component {
     }
 
     if (this.state.plutus_status === 'init') {
-      this.navigate("/insurance/personal");
+      this.navigate("personal");
       return;
     }
     if (this.state.plutus_status !== 'complete' &&
       this.state.plutus_payment_status !== 'payment_ready' && this.state.plutus_payment_status !== 'payment_done' &&
       this.state.plutus_payment_status !== 'failed') {
-      this.navigate("/insurance/personal");
+      this.navigate("personal");
       return;
     }
 
@@ -631,14 +631,14 @@ class Journey extends Component {
       (this.state.status === 'init') &&
       (this.state.plutus_payment_status !== 'payment_ready' && this.state.plutus_payment_status !== 'failed' &&
         this.state.plutus_payment_status !== 'payment_done')) {
-      this.navigate("/insurance/personal");
+      this.navigate("personal");
       return;
     }
 
     if (this.state.provider === 'HDFC' && this.state.plutus_payment_status === 'payment_done' &&
       this.state.status !== 'plutus_submitted') {
       if (this.state.payment_confirmed) {
-        this.navigate('/insurance/contact1')
+        this.navigate('contact1')
       } else {
         this.confirmPyamentWithProvider();
       }
@@ -792,12 +792,7 @@ class Journey extends Component {
     });
     if (res.pfwresponse.status_code === 200) {
       window.localStorage.setItem('excludedd_providers', '');
-      if (this.state.params.insurance_allweb) {
-        this.navigate('journey-intro');
-      } else {
-        nativeCallback({ action: 'native_reset' });
-      }
-
+      this.navigate('journey-intro');
     } else {
       this.setState({ openModal: false, openModalMessage: '', openResponseDialog: true, apiError: res.pfwresponse.result.error });
     }
@@ -849,7 +844,7 @@ class Journey extends Component {
               {((providerAsIpru(this.state.provider) && this.state.plutus_status === 'complete') ||
                 (this.state.provider === 'HDFC' && this.state.plutus_payment_status === 'payment_ready' &&
                   this.state.plutus_status !== 'init')) &&
-                <div className="view-more-journey" onClick={() => this.navigate('/insurance/summary')}>
+                <div className="view-more-journey" onClick={() => this.navigate('summary')}>
                   <div>VIEW MORE</div>
                 </div>
               }

@@ -112,24 +112,24 @@ class ContactDetails1 extends Component {
 
             if (this.state.provider === 'HDFC' && this.state.plutus_payment_status !== 'payment_done') {
               if (this.state.plutus_payment_status !== 'payment_done') {
-                this.navigate('/insurance/summary');
+                this.navigate('summary');
               } else {
-                this.navigate('/insurance/edit-contact1');
+                this.navigate('edit-contact1');
               }
 
             } else {
-              this.navigate('/insurance/summary');
+              this.navigate('summary');
             }
           } else {
             if (this.state.provider === 'HDFC' && this.state.plutus_payment_status !== 'payment_done') {
               if (this.state.plutus_payment_status !== 'payment_done') {
-                this.navigate('/insurance/professional');
+                this.navigate('professional');
               } else {
-                this.navigate('/insurance/contact1');
+                this.navigate('contact1');
               }
 
             } else {
-              this.navigate('/insurance/professional');
+              this.navigate('professional');
             }
           }
 

@@ -357,7 +357,7 @@ class Resume extends Component {
       show_loader: true
     });
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.origin + '/insurance/payment'
+      window.location.origin + 'payment'
     );
     var pgLink = this.state.payment_link;
     // eslint-disable-next-line
@@ -371,13 +371,13 @@ class Resume extends Component {
       this.navigate("/insurance");
     } else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.contact.not_submitted &&
       (this.state.provider !== 'HDFC' || (this.state.provider === 'HDFC' && this.state.plutus_payment_status === 'payment_done'))) {
-      this.navigate("/insurance/contact");
+      this.navigate("contact");
     } else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.nominee.not_submitted) {
-      this.navigate("/insurance/nominee");
+      this.navigate("nominee");
     } else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.appointee.not_submitted) {
-      this.navigate("/insurance/appointee");
+      this.navigate("appointee");
     } else if ((this.state.status === 'plutus_submitted' || this.state.plutus_status !== 'complete') && this.state.required.professional.not_submitted) {
-      this.navigate("/insurance/professional");
+      this.navigate("professional");
     } else if (this.state.provider === 'HDFC' && this.state.plutus_payment_status === 'payment_ready') {
       this.paymentRedirect();
       return;
@@ -875,7 +875,7 @@ class Resume extends Component {
               <div className="AccordionTitle">
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative', marginBottom: 7 }}>
                   <span>Personal details</span>
-                  {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline' }} onClick={() => this.navigate('/insurance/edit-personal')}>Edit</span>}
+                  {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline' }} onClick={() => this.navigate('edit-personal')}>Edit</span>}
                 </div>
                 {this.renderPercentage(this.renderPersonalPercentage())}
               </div>
@@ -884,7 +884,7 @@ class Resume extends Component {
               <div className="AccordionTitle">
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative', marginBottom: 7 }}>
                   <span>Contact details</span>
-                  {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline' }} onClick={() => this.navigate('/insurance/edit-contact')}>Edit</span>}
+                  {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline' }} onClick={() => this.navigate('edit-contact')}>Edit</span>}
                 </div>
                 {this.renderPercentage(this.renderContactPercentage())}
               </div>
@@ -893,7 +893,7 @@ class Resume extends Component {
               <div className="AccordionTitle">
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative', marginBottom: 7 }}>
                   <span>Nominee details</span>
-                  {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline' }} onClick={() => this.navigate('/insurance/edit-nominee')}>Edit</span>}
+                  {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline' }} onClick={() => this.navigate('edit-nominee')}>Edit</span>}
                 </div>
                 {this.renderPercentage(this.renderNomineePercentage())}
               </div>
@@ -903,7 +903,7 @@ class Resume extends Component {
                 <div className="AccordionTitle">
                   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative', marginBottom: 7 }}>
                     <span>Appointee details</span>
-                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline' }} onClick={() => this.navigate('/insurance/edit-appointee')}>Edit</span>}
+                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline' }} onClick={() => this.navigate('edit-appointee')}>Edit</span>}
                   </div>
                   {this.renderPercentage(this.renderAppointeePercentage())}
                 </div>
@@ -913,7 +913,7 @@ class Resume extends Component {
               <div className="AccordionTitle">
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative', marginBottom: 7 }}>
                   <span>Professional details</span>
-                  {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline' }} onClick={() => this.navigate('/insurance/edit-professional')}>Edit</span>}
+                  {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: '#878787', fontSize: 12, textDecoration: 'underline' }} onClick={() => this.navigate('edit-professional')}>Edit</span>}
                 </div>
                 {this.renderPercentage(this.renderProfessionalPercentage())}
               </div>

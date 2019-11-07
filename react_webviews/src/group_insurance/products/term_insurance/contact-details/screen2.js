@@ -463,15 +463,15 @@ class ContactDetails2 extends Component {
             this.setState({ show_loader: false });
             // if (this.props.edit) {
             //   if (this.state.params.resume === "yes") {
-            //     this.navigate('/insurance/resume');
+            //     this.navigate('resume');
             //   } else {
-            //     this.navigate('/insurance/summary');
+            //     this.navigate('summary');
             //   }
             // } else {
             //   if (this.state.provider === 'HDFC') {
-            //     this.navigate('/insurance/journey');
+            //     this.navigate('journey');
             //   } else {
-            //     this.navigate('/insurance/professional');
+            //     this.navigate('professional');
             //   }
             // }
           } else {

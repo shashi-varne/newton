@@ -296,22 +296,22 @@ class PersonalDetails1 extends Component {
 
           if (this.state.provider === 'HDFC') {
             if (this.props.edit) {
-              this.navigate('/insurance/edit-personal1');
+              this.navigate('edit-personal1');
             } else {
-              this.navigate('/insurance/personal1');
+              this.navigate('personal1');
             }
           } else {
             if (this.props.edit) {
               if (this.state.params.resume === "yes") {
-                this.navigate('/insurance/resume');
+                this.navigate('resume');
               } else {
-                this.navigate('/insurance/pincode');
+                this.navigate('pincode');
               }
             } else {
               if (this.state.params.isKyc) {
-                this.navigate('/insurance/professional');
+                this.navigate('professional');
               } else {
-                this.navigate('/insurance/contact');
+                this.navigate('contact');
               }
 
             }

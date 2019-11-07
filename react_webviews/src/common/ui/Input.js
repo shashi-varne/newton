@@ -29,6 +29,7 @@ const Input = (props) => {
   } else {
     return (
       <TextField
+      inputref={props.inputref}
         error={props.error}
         disabled={props.disabled}
         type={props.type}

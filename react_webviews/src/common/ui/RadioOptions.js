@@ -11,6 +11,8 @@ import RadioButtonUnchecked from '@material-ui/icons/RadioButtonUnchecked';
 import RadioButtonChecked from '@material-ui/icons/RadioButtonChecked';
 
 import { getConfig } from 'utils/functions';
+import { inrFormatDecimalWithoutIcon } from 'utils/validators';
+import Input from './Input';
 
 // import CircleCheckedFilled from 'assets/check_green_pg.svg';
 // import CircleUnchecked from 'assets/not_done_yet_step.svg';
@@ -39,6 +41,24 @@ class RadioButtonsGroup extends Component {
       selectedValue: null,
       options: this.props.options
     };
+
+    this.inputref = React.createRef();
+  }
+
+  componentDidUpdate(prevState) {
+
+    if (prevState.value !== this.props.value) {
+      this.setState({
+        selectedValue: this.props.value
+      })
+    }
+
+    if (prevState.options !== this.props.options) {
+      this.setState({
+        options: this.props.options
+      })
+    }
+
   }
 
   handleChange = event => {
@@ -49,17 +69,55 @@ class RadioButtonsGroup extends Component {
     const { options } = this.props;
     const allOptions = options.map((option, i) => {
       return (
-        <FormControlLabel disabled={this.props.disabled}
-          key={i} index={i} value={option.value}
-          onChange={this.props.onChange}
-
-          control={<Radio
-            color={this.props.icon_type === 'blue_icon' ? 'primary' : 'secondary'}
-            icon={this.props.icon_type === 'blue_icon' ? <RadioButtonUnchecked /> : <CircleUnchecked />}
-            checkedIcon={
-              this.props.icon_type === 'blue_icon' ? <RadioButtonChecked /> : <CircleCheckedFilled
-                style={{ color: (this.props.icon_type === 'blue_icon' ? getConfig().primary : getConfig().secondary) }} />
-            } />} label={option.name} />
+          <FormControlLabel key={i} index={i} disabled={this.props.disabled}
+            value={option.value}
+            onChange={this.props.onChange}
+            control={<Radio
+              color={this.props.icon_type === 'blue_icon' ? 'primary' : 'secondary'}
+              icon={this.props.icon_type === 'blue_icon' ? <RadioButtonUnchecked /> : <CircleUnchecked />}
+              checkedIcon={
+                this.props.icon_type === 'blue_icon' ? <RadioButtonChecked /> : <CircleCheckedFilled
+                  style={{ color: (this.props.icon_type === 'blue_icon' ? getConfig().primary : getConfig().secondary) }} />
+              } />}
+            label={option.inputToRender && option.inputToRender.inputKeyName === this.props.value ? 
+              <Input
+                
+              error={option.inputToRender.error}
+              helperText={option.inputToRender.helperText}
+              type={option.inputToRender.type}
+              width={option.inputToRender.width}
+              label={option.inputToRender.label}
+              class={option.inputToRender.class}
+              id={option.inputToRender.id}
+              name={option.inputToRender.name}
+              value={inrFormatDecimalWithoutIcon(option.inputToRender.value || '')}
+              onChange={option.inputToRender.onChange}
+              min={option.inputToRender.min}
+              max={option.inputToRender.max}
+              autoComplete="off"
+            />:  option.name }
+              
+          />
+          // {/* {option.inputToRender && option.inputToRender.inputKeyName === this.props.value &&
+          //    <div   style={{ margin: '10px 0 0 0' }} className="InputField">
+          //    <Input
+                
+          //      error={option.inputToRender.error}
+          //      helperText={option.inputToRender.helperText}
+          //      type={option.inputToRender.type}
+          //      width={option.inputToRender.width}
+          //      label={option.inputToRender.label}
+          //      class={option.inputToRender.class}
+          //      id={option.inputToRender.id}
+          //      name={option.inputToRender.name}
+          //      value={inrFormatDecimalWithoutIcon(option.inputToRender.value || '')}
+          //      onChange={option.inputToRender.onChange}
+          //      min={option.inputToRender.min}
+          //      max={option.inputToRender.max}
+          //      autoComplete="off"
+          //    />
+          //  </div>
+          // } */}
       );
     });
 
