@@ -110,7 +110,6 @@ class Summary extends Component {
       show_loader: true
     });
 
-    let insurance_v2 = this.state.params.insurance_v2 ? true : null;
     let app = getConfig().app;
     let paymentRedirectUrl = encodeURIComponent(
       window.location.origin + '/group-insurance/payment/' + getConfig().searchParams

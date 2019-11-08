@@ -235,6 +235,7 @@ class Journey extends Component {
   }
 
   async  componentDidMount() {
+
     try {
       let application, required_fields;
 

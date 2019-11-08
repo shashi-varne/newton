@@ -90,7 +90,6 @@ class Container extends Component {
     let { params } = this.props.location;
     let insurance_v2 = getConfig().insurance_v2;
     let pathname = this.props.history.location.pathname;
-    console.log(pathname)
     if (pathname === '/group-insurance/journey' || pathname === '/group-insurance/summary') {
       if (this.props.isJourney) {
         if (!insurance_v2) {
@@ -115,15 +114,11 @@ class Container extends Component {
       }
 
       if (params && params.disableBack) {
-        if (!insurance_v2) {
-          nativeCallback({ action: 'native_back', events: this.getEvents('back') });
-        } else {
-          this.setState({
-            callbackType: 'exit',
-            openPopup: true,
-            popupText: 'Are you sure you want to exit the application process? You can resume it later.'
-          })
-        }
+        this.setState({
+          callbackType: 'exit',
+          openPopup: true,
+          popupText: 'Are you sure you want to exit the application process? You can resume it later.'
+        })
         return;
       }
     }
@@ -134,17 +129,14 @@ class Container extends Component {
       case "/insurance":
       case "/group-insurance/resume":
       case "/group-insurance/journey":
-        if (!insurance_v2) {
-          nativeCallback({ action: 'native_back', events: this.getEvents('back') });
-        } else {
           this.setState({
             callbackType: 'exit',
             openPopup: true,
             popupText: 'Are you sure you want to exit the application process? You can resume it later.'
           })
-        }
         break;
       case '/group-insurance/intro':
+      case '/group-insurance/journey-intro':
         nativeCallback({ action: 'native_back', events: this.getEvents('back') });
         break;
       default:

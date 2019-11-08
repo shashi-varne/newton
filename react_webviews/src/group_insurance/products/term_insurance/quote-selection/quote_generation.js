@@ -101,7 +101,7 @@ class QuoteGeneration extends Component {
       cover: this.state.quoteData.cover_amount,
       term: this.state.quoteData.cover_period,
       payment_frequency: this.state.quoteData.payment_frequency || 'Monthly',
-      death_benefit_option: '',
+      death_benefit_option: 'Lump sum',
       dob: this.state.quoteData.dob,
       gender: this.state.quoteData.gender,
       annual_income: this.state.quoteData.annual_income,
@@ -147,16 +147,11 @@ class QuoteGeneration extends Component {
   }
 
 
-  navigate = (pathname) => {
+  navigate = (pathname, search) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams
+      search: search
     });
-  }
-
-  handleClick = async () => {
-
-    this.navigate('riders');
   }
 
   getInputToRenderADB() {
@@ -260,7 +255,6 @@ class QuoteGeneration extends Component {
     };
 
     let show_quotes = window.localStorage.getItem('show_quotes');
-    show_quotes = true;
     if (show_quotes) {
       insuranceData.create = 'Y';
       window.localStorage.setItem('show_quotes', '');
@@ -779,6 +773,10 @@ class QuoteGeneration extends Component {
     quoteData.payment_frequency = this.state.paymentFreqRadio;
     let ci_benefit, accident_benefit = '';
     if(this.state.ridersRadio === 'accident_benefit') {
+      if(this.state.inputToRender_accident_benefit.error 
+        || !this.state.inputToRender_accident_benefit.value) {
+        return;
+      }
       accident_benefit = this.state.inputToRender_accident_benefit.value;
     }else if(this.state.ridersRadio === 'ci_benefit') {
       ci_benefit = 'Y';
@@ -931,7 +929,6 @@ class QuoteGeneration extends Component {
         showLoader={this.state.show_loader}
         title="Select the Insurance"
         smallTitle="Premiums are inclusive of GST"
-        handleClick={this.handleClick}
         buttonTitle="Save & Continue"
         fullWidthButton={true}
         onlyButton={true}

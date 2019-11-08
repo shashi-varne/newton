@@ -413,11 +413,11 @@ export const add_on_benefits_points = {
 export const all_providers = { 'HDFC': '', 'IPRU': '', 'Maxlife': '' };
 
 export const back_button_mapper = {
-  '/insurance/quote': '/insurance/lifestyle',
-  '/insurance/lifestyle': '/insurance/cover-period',
-  '/insurance/cover-period': '/insurance/cover-amount',
-  '/insurance/cover-amount': '/insurance/annual-income',
-  '/insurance/annual-income': '/insurance/personal-details-intro',
-  '/insurance/personal-details-intro': '/insurance/journey-intro',
-  '/insurance/journey-intro': '/insurance/intro'
+  '/group-insurance/quote': '/group-insurance/lifestyle',
+  '/group-insurance/lifestyle': '/group-insurance/cover-period',
+  '/group-insurance/cover-period': '/group-insurance/cover-amount',
+  '/group-insurance/cover-amount': '/group-insurance/annual-income',
+  '/group-insurance/annual-income': '/group-insurance/personal-details-intro',
+  '/group-insurance/personal-details-intro': '/group-insurance/journey-intro',
+  '/group-insurance/journey-intro': '/group-insurance/intro'
 };
