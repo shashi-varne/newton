@@ -112,7 +112,7 @@ class Summary extends Component {
 
     let app = getConfig().app;
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.origin + '/group-insurance/payment/' + getConfig().searchParams
+      window.location.origin + '/group-insurance/payment/' + this.state.params.insurance_id
     );
     var pgLink = payment_link;
     var back_url = encodeURIComponent(this.state.current_url);
@@ -1062,7 +1062,7 @@ class Summary extends Component {
         <Container
           events={this.sendEvents('just_set_events')}
           disableBack={this.state.disableBack === true ? true : false}
-          isJourney={(this.state.params.isJourney || this.state.disableBack === true) ? true : false}
+          isJourney={(this.state.params.isJourney ) ? true : false}
           summarypage={true}
           smallTitle={this.state.provider}
           showLoader={this.state.show_loader}

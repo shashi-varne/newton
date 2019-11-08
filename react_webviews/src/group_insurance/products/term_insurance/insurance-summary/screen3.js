@@ -166,7 +166,7 @@ class Journey extends Component {
     });
 
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.origin + '/group-insurance/payment/' + getConfig().searchParams
+      window.location.origin + '/group-insurance/payment/' + this.state.params.insurance_id
     );
 
     var pgLink = payment_link;
@@ -235,7 +235,7 @@ class Journey extends Component {
   }
 
   async  componentDidMount() {
-
+    
     try {
       let application, required_fields;
 
@@ -536,7 +536,7 @@ class Journey extends Component {
       pathname: pathname,
       search: 'insurance_id=' + insurance_id + '&base_url=' + this.state.params.base_url +
         '&insurance_v2=' + this.state.insurance_v2 + '&resume=yes&isKyc=' + this.state.isKyc + '&generic_callback=' +
-        this.state.params.generic_callback,
+        this.state.params.generic_callback +'&isJourney=' + this.state.params.isJourney,
     });
   }
 

@@ -10,7 +10,6 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import qs from 'qs';
 import { nativeCallback } from '../../../../utils/native_callback';
-import { getConfig } from '../../../../utils/functions';
 
 class Payment extends Component {
   constructor(props) {
@@ -24,19 +23,12 @@ class Payment extends Component {
   componentWillMount() {
     const { status } = this.props.match.params;
     const { insurance_id } = this.props.match.params;
-    const { insurance_v2 } = this.props.match.params;
 
-    if (insurance_v2) {
-      nativeCallback({ action: 'take_control_reset_hard' });
-    }
+    nativeCallback({ action: 'take_control_reset' });
 
-    if (getConfig().generic_callback) {
-      nativeCallback({ action: 'take_control_reset' });
-    }
     this.setState({
       paymentStatus: status,
-      insurance_id: insurance_id,
-      insurance_v2: insurance_v2
+      insurance_id: insurance_id
     })
   }
 
@@ -77,13 +69,13 @@ class Payment extends Component {
     this.props.history.push({
       pathname: pathname,
       search: '?insurance_id=' + this.state.insurance_id + '&base_url=' + this.state.params.base_url +
-        '&insurance_v2=' + this.state.insurance_v2 + '&generic_callback=' + this.state.params.generic_callback
+        '&generic_callback=' + this.state.params.generic_callback
     });
   }
 
   navigateResume = (pathname) => {
     let search = '?insurance_id=' + this.state.insurance_id + '&resume=yes&base_url=' + this.state.params.base_url +
-      '&insurance_v2=' + this.state.insurance_v2 + '&generic_callback=' + this.state.params.generic_callback;
+      '&generic_callback=' + this.state.params.generic_callback;
     this.props.history.push({
       pathname: pathname,
       search: search,
@@ -98,7 +90,7 @@ class Payment extends Component {
       openDialog: false,
       show_loader: true
     });
-    this.navigateResume('journey');
+    this.navigateResume('/group-insurance/journey');
   }
 
   renderResponseDialog = () => {

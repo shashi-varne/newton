@@ -419,5 +419,6 @@ export const back_button_mapper = {
   '/group-insurance/cover-amount': '/group-insurance/annual-income',
   '/group-insurance/annual-income': '/group-insurance/personal-details-intro',
   '/group-insurance/personal-details-intro': '/group-insurance/journey-intro',
-  '/group-insurance/journey-intro': '/group-insurance/intro'
+  '/group-insurance/journey-intro': '/group-insurance/intro',
+  '/group-insurance/summary': '/group-insurance/journey'
 };

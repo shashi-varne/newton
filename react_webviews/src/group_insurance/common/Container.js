@@ -79,7 +79,8 @@ class Container extends Component {
   }
 
   historyGoBack = () => {
-
+    console.log("go backkkkkkkkk")
+    console.log(this.props.isJourney)
 
     if (manageDialog('general-dialog', 'none', 'enableScroll')) {
       if (this.props.closePopup) {
@@ -88,27 +89,23 @@ class Container extends Component {
       return;
     }
     let { params } = this.props.location;
-    let insurance_v2 = getConfig().insurance_v2;
     let pathname = this.props.history.location.pathname;
+    console.log(this.props)
     if (pathname === '/group-insurance/journey' || pathname === '/group-insurance/summary') {
       if (this.props.isJourney) {
-        if (!insurance_v2) {
-          nativeCallback({ action: 'native_back', events: this.getEvents('back') });
-        } else {
-          let eventObj = {
-            "event_name": 'term_insurance',
-            "properties": {
-              "user_action": 'close',
-              "screen_name": 'insurance_summary'
-            }
-          };
-          nativeCallback({ events: eventObj });
-          this.setState({
-            callbackType: 'show_quotes',
-            openPopup: true,
-            popupText: 'Are you sure you want to explore more options? We will save your information securely.'
-          })
-        }
+        let eventObj = {
+          "event_name": 'term_insurance',
+          "properties": {
+            "user_action": 'close',
+            "screen_name": 'insurance_summary'
+          }
+        };
+        nativeCallback({ events: eventObj });
+        this.setState({
+          callbackType: 'show_quotes',
+          openPopup: true,
+          popupText: 'Are you sure you want to explore more options? We will save your information securely.'
+        })
 
         return;
       }
@@ -135,8 +132,10 @@ class Container extends Component {
             popupText: 'Are you sure you want to exit the application process? You can resume it later.'
           })
         break;
+      case "/group-insurance/summary":
+        this.navigate(back_button_mapper[pathname]);
+        break;
       case '/group-insurance/intro':
-      case '/group-insurance/journey-intro':
         nativeCallback({ action: 'native_back', events: this.getEvents('back') });
         break;
       default:

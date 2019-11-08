@@ -43,14 +43,21 @@ export const getConfig = () => {
   let { base_url } = main_query_params;
   let { generic_callback } = main_query_params;
   let { redirect_url } = main_query_params;
-  let searchParams = `?base_url=${base_url}&generic_callback=${generic_callback}&redirect_url=${redirect_url}`;
+  let searchParams = `?base_url=${base_url}&generic_callback=${generic_callback}`;
+  if(redirect_url) {
+    searchParams += `&redirect_url=${redirect_url}`;
+  }
   let isInsurance = myHistory.location.pathname.indexOf('insurance') >= 0 ? true : false;
   if (isInsurance) {
 
     let insurance_v2 = generic_callback === "true" ? true : main_query_params.insurance_v2;;
     let { insurance_id } = main_query_params;
+    let { isJourney } = main_query_params;
     searchParams += '&insurance_id=' + insurance_id +
       '&insurance_v2=' + insurance_v2;
+    if(isJourney) {
+      searchParams += '&isJourney=' + isJourney;
+    }
   }
 
   let config = {
