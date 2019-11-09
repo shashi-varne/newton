@@ -1,0 +1,15 @@
+.plan-summary {
+  background: #f8f8f8;
+}
+.plan-success .Accordion:last-child {
+  border-bottom: 0;
+}
+.plan-success .Accordion {
+  border-top-color: #eaeaea;
+}
+.accident-plan {
+  padding: 20px 0;
+}
+.activePlan {
+  border: 2px solid #4f2da7;
+}

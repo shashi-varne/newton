@@ -12,7 +12,7 @@ import { ToastContainer } from 'react-toastify';
 import './common/Style.css';
 import './products/term_insurance/Style.css';
 import NotFound from '../common/components/NotFound';
-
+import Landing from './home/landing';
 
 /***********************TERM INSURANCE START   **************/
 import PersonalDetails1 from './products/term_insurance/personal-details/screen1';
@@ -46,12 +46,18 @@ import InsuranceHome from './products/term_insurance/home/index'
 
 /***********************TERM INSURANCE END   **************/
 
-
-
+/* Accident */
+import Accident from './products/personal_accident';
+import AccidentForm from './products/personal_accident/form';
+import AccidentSummary from './products/personal_accident/summary';
 
 import { create } from 'jss';
 import JssProvider from 'react-jss/lib/JssProvider';
 import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
+import AccidentFailed from './products/personal_accident/failed';
+import AccidentPaymentSuccess from './products/personal_accident/success';
+import AccidentPlanSuccess from './products/personal_accident/plan-success';
+
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -136,6 +142,7 @@ const ScrollToTop = withRouter(
 
 const Insurance = (props) => {
   const { url } = props.match;
+  console.log(url)
 
   return (
     <JssProvider jss={jss} generateClassName={generateClassName}>
@@ -143,7 +150,9 @@ const Insurance = (props) => {
         <ScrollToTop />
         <ToastContainer autoClose={3000} />
         <Switch>
-          <Route exact path={`${url}`} component={Journey} />
+          <Route exact path={`${url}`} component={Landing} />
+
+          {/********** TERM INSURANCE **********/}
           <Route path={`${url}/resume`} component={Resume} />
           <Route path={`${url}/personal`} component={PersonalDetails1} />
           <Route path={`${url}/personal1`} component={PersonalDetails2} />
@@ -158,7 +167,6 @@ const Insurance = (props) => {
           <Route path={`${url}/journey`} component={Journey} />
           <Route path={`${url}/payment/:insurance_id/:insurance_v2/:status`} component={Payment} />
           <Route path={`${url}/Pincode`} component={Pincode} />
-
           {/* quote selection */}
           <Route path={`${url}/cover-amount`} component={CoverAmount} />
           <Route path={`${url}/annual-income`} component={AnnualIncome} />
@@ -168,11 +176,9 @@ const Insurance = (props) => {
           <Route path={`${url}/lifestyle`} component={LifeStyle} />
           <Route path={`${url}/personal-details-intro`} component={PersonalDetailsIntro} />
           <Route path={`${url}/quote`} component={QuoteGeneration} />
-
           <Route path={`${url}/riders`} component={AddOnBenefits} />
           <Route path={`${url}/report`} component={FinalReport} />
           <Route path={`${url}/home`} component={InsuranceHome} />
-
           {/* Edit paths */}
           <Route path={`${url}/edit-personal`} render={(props) => <PersonalDetails1 {...props} edit={true} />} />
           <Route path={`${url}/edit-personal1`} render={(props) => <PersonalDetails2 {...props} edit={true} />} />
@@ -182,6 +188,15 @@ const Insurance = (props) => {
           <Route path={`${url}/edit-appointee`} render={(props) => <AppointeeDetails {...props} edit={true} />} />
           <Route path={`${url}/edit-professional`} render={(props) => <ProfessionalDetails1 {...props} edit={true} />} />
           <Route path={`${url}/edit-professional1`} render={(props) => <ProfessionalDetails2 {...props} edit={true} />} />
+          
+          {/********** Accident **********/}
+          <Route path={`${url}/accident/plan`} component={Accident} />
+          <Route path={`${url}/accident/form`} component={AccidentForm} />
+          <Route path={`${url}/accident/summary`} component={AccidentSummary} />
+          <Route path={`${url}/accident/plan/success`} component={AccidentPlanSuccess} />
+          <Route path={`${url}/accident/success`} component={AccidentPaymentSuccess} />
+          <Route path={`${url}/accident/failed`} component={AccidentFailed} />
+
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>

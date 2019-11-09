@@ -415,3 +415,14 @@ export const back_button_mapper = {
   '/insurance/personal-details-intro': '/insurance/journey-intro',
   '/insurance/journey-intro': '/insurance/intro'
 };
+
+export const insuranceMaritalStatus = [
+  {
+    'name': 'Single',
+    'value': 'UNMARRIED'
+  },
+  {
+    'name': 'Married',
+    'value': 'MARRIED'
+  }
+]
