@@ -422,3 +422,14 @@ export const back_button_mapper = {
   '/group-insurance/journey-intro': '/group-insurance/intro',
   '/group-insurance/summary': '/group-insurance/journey'
 };
+
+export const insuranceMaritalStatus = [
+  {
+    'name': 'Single',
+    'value': 'UNMARRIED'
+  },
+  {
+    'name': 'Married',
+    'value': 'MARRIED'
+  }
+]
