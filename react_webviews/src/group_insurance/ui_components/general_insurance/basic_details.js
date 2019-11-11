@@ -8,7 +8,9 @@ import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 
-class BasicDetails extends Component {
+import ThemeContext from '../../ThemeContext'
+
+class BasicDetailsForm extends Component {
   state = {
     checked: false
   }
@@ -44,12 +46,18 @@ class BasicDetails extends Component {
   render() {
     let currentDate = new Date().toISOString().slice(0, 10);
 
+    console.log("basic details components")
+    console.log(this)
     return (
+      // <ThemeContext.Consumer>
+      // {value => ( 
+      
       <Container
         fullWidthButton={true}
         buttonTitle='Go to Summary'
         onlyButton={true}
         title="BasicDetails">
+          {/* {value} */}
           <div style={{  }}>
             <div style={{  }}>
               <div style={{ color: '#160d2e', fontSize: '16px', lineHeight: '20px', fontWeight: '500', marginBottom: '10px' }}>Basics Details</div>
@@ -145,9 +153,22 @@ class BasicDetails extends Component {
               { this.state.checked && this.renderNominee()}
             </div>
           </div>
+          {/* {this.getContextData()} */}
         </Container>
+        // )}
+        // </ThemeContext.Consumer>
     );
   }
 }
+
+
+const BasicDetails = (props) => (
+  <ThemeContext.Consumer>
+    {value => (
+      <BasicDetailsForm
+      value={value} />
+    )}
+  </ThemeContext.Consumer>
+);
 
 export default BasicDetails;
