@@ -49,11 +49,12 @@ class BasicDetails extends Component {
         fullWidthButton={true}
         buttonTitle='Go to Summary'
         onlyButton={true}
-        title="BasicDetails">
-          <div style={{  }}>
-            <div style={{  }}>
-              <div style={{ color: '#160d2e', fontSize: '16px', lineHeight: '20px', fontWeight: '500', marginBottom: '10px' }}>Basics Details</div>
-              <div style={{ color: '#878787', fontSize: '13px' }}>We only need your basic detail for verification</div>
+        title="BasicDetails"
+        classOverRideContainer="basic-details">
+          <div>
+            <div>
+              <div className="basic-details-heading">Basics Details</div>
+              <div className="basic-details-subtitle">We only need your basic detail for verification</div>
             </div>
             <div style={{ marginTop: '40px' }}>
               <div className="InputField">
@@ -137,7 +138,7 @@ class BasicDetails extends Component {
                         className="Checkbox" />
                     </Grid>
                     <Grid item xs={11}>
-                      <div style={{ color: '#a2a2a2', fontSize: '14px' }}>Do you want to add nominee details?</div>
+                      <div className="checkbox-text">Do you want to add nominee details?</div>
                     </Grid>
                   </Grid>
                 </div>
