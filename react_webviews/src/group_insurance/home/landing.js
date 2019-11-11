@@ -7,11 +7,72 @@ import accident from 'assets/ic_personal_accident.svg';
 import wallet from 'assets/ic_wallet.svg';
 import term from 'assets/ic_term_insurance.svg';
 
+
+import Api from 'utils/api';
+import toast from '../../common/ui/Toast';
+import { getConfig } from 'utils/functions';
+
 class Landing extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      show_loader: true,
+    }
+  }
+
+  async componentDidMount() {
+    try {
+      const res = await Api.get('/ins_service/api/insurance/application/summary')
+      
+      this.setState({
+        show_loader: false
+      })
+      if (res.pfwresponse.status_code === 200) {
+        
+        var resultData = res.pfwresponse.result;
+        console.log(resultData);
+       
+      } else {
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message
+          || 'Something went wrong');
+      }
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
+    }
+  }
+
+  navigate = (pathname, search) => {
+    this.props.history.push({
+      pathname: pathname,
+      search: search ? search : getConfig().searchParams
+    });
+  }
+
+  handleClick = (product_key) => {
+
+    console.log(product_key)
+    var stateMapper = {
+      'health' : '',
+      'smart_wallet': '',
+      'accident': 'accident/plan',
+      'hospicash': '',
+      'term_insurance': ''
+    }
+
+    var group_insurance_lead_id_selected = '5761475289284608';
+    window.localStorage.setItem('group_insurance_lead_id_selected', group_insurance_lead_id_selected || '');
+    this.navigate('group-insurance/'+ stateMapper[product_key]);
+  }
+
   render() {
     return (
       <Container
         noFooter={true}
+        showLoader={this.state.show_loader}
         title="Insurance">
         <div style={{ padding: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -30,7 +91,7 @@ class Landing extends Component {
                   <div style={{ color: '#7e7e7e', fontSize: '13px' }}>Starts from Rs 23 per month</div>
                 </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', borderBottomWidth: '1px', borderBottomColor: '#dfd8ef', borderBottomStyle: 'solid', paddingTop: '15px', paddingBottom: '15px' }}>
+              <div onClick={() => this.handleClick('accident')} style={{ display: 'flex', alignItems: 'center', borderBottomWidth: '1px', borderBottomColor: '#dfd8ef', borderBottomStyle: 'solid', paddingTop: '15px', paddingBottom: '15px' }}>
                 <img src={accident} alt="" style={{ marginRight: '15px' }} />
                 <div>
                   <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px' }}>Personal accident</div>
