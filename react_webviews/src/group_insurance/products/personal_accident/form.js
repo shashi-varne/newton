@@ -4,9 +4,6 @@ import BasicDetails from '../../ui_components/general_insurance/basic_details';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 
-import ThemeContext from '../../ThemeContext';
-
-
 
 class AccidentForm extends Component {
 
@@ -14,6 +11,7 @@ class AccidentForm extends Component {
     super(props);
     this.state = {
       show_loader: true,
+      basic_details_data: {}
     }
   }
 
@@ -104,6 +102,8 @@ class AccidentForm extends Component {
           Object.keys(basic_details_data).forEach((key) => {
             basic_details_data[key] = leadData[key]
           })
+
+          basic_details_data['dob'] = basic_details_data['dob'] ? basic_details_data['dob'].replace(/\\-/g, '/').split('-').join('/') : ''
         } else {
           toast(res.pfwresponse.result.error || res.pfwresponse.result.message
             || 'Something went wrong');
@@ -123,16 +123,38 @@ class AccidentForm extends Component {
 
   }
 
+  handleClick = async (data) => {
+    console.log("handle click parenttt")
+    console.log(data)
+    if (data) {
+      data.product_name = 'personal_accident';
+
+      let res2 = {};
+      if(this.state.lead_id) {
+        data.lead_id = this.state.lead_id;
+        res2 = await Api.post('api/insurance/bhartiaxa/lead/update', data)
+      }else {
+        res2 = await Api.post('api/insurance/bhartiaxa/lead/create', data)
+      }
+      
+
+      if (res2.pfwresponse.status_code === 200) {
+
+      } else {
+        toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
+          || 'Something went wrong');
+      }
+    }
+
+  }
  
 
   render() {
     return (
       <div>
-        <ThemeContext.Provider value={this.state.basic_details_data}>
         <BasicDetails
-
+          parent={this}
         />
-        </ThemeContext.Provider>
       </div>
     );
   }

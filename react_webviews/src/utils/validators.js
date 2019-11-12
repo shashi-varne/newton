@@ -39,6 +39,10 @@ export function validateLengthDynamic(string, length) {
 export function validateLengthNames(string, type, provider) {
   let nameSplit = string.trim(" ");
 
+
+  if(!provider) {
+    provider = "HDFC";
+  }
   let lengthMapper = {
     'HDFC': {
       'name': 30,

@@ -17,6 +17,17 @@ class Accident extends Component {
     checked: false
   }
 
+  componentWillMount() {
+
+    let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
+    let { params } = this.props.location;
+    this.setState({
+      premium_details: params ? params.premium_details : {},
+      lead_id: lead_id || ''
+    })
+
+  }
+
   async componentDidMount() {
     try {
       const res = await Api.get('ins_service/api/insurance/bhartiaxa/get/quote?product_name=personal_accident')
@@ -132,14 +143,35 @@ class Accident extends Component {
   
   }
 
-  handleClick =() => {
+  handleClick = async () => {
     var premium_details = {
       "premium": this.state.plan_data.premium_details[this.state.selectedPlan].premium,
       "cover_amount": this.state.plan_data.premium_details[this.state.selectedPlan].cover_amount,
       "tax_amount": this.state.plan_data.premium_details[this.state.selectedPlan].tax_amount
     }
 
-   this.navigate('form','', premium_details);
+    let res2 = {};
+      if (this.state.lead_id) {
+        premium_details.lead_id = this.state.lead_id;
+        res2 = await Api.post('api/insurance/bhartiaxa/lead/update', premium_details)
+      } else {
+        res2 = await Api.post('api/insurance/bhartiaxa/lead/create', premium_details)
+      }
+      
+
+      if (res2.pfwresponse.status_code === 200) {
+
+        if(!this.state.lead_id) {
+          var id = res2.pfwresponse.result.lead.id;
+          window.localStorage.setItem('group_insurance_lead_id_selected', id || '');
+        }
+        this.navigate('form','', premium_details);
+      } else {
+        toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
+          || 'Something went wrong');
+      }
+
+   
   }
 
   render() {
