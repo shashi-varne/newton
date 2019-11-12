@@ -47,7 +47,6 @@ import InsuranceHome from './products/term_insurance/home/index'
 /***********************TERM INSURANCE END   **************/
 
 /* Accident */
-import Accident from './products/personal_accident';
 import AccidentForm from './products/personal_accident/form';
 import AccidentSummary from './products/personal_accident/summary';
 
@@ -57,6 +56,9 @@ import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
 import AccidentFailed from './products/personal_accident/failed';
 import AccidentPaymentSuccess from './products/personal_accident/success';
 import AccidentPlanSuccess from './products/personal_accident/plan-success';
+import AccidentPlanDetails from './products/personal_accident';
+import Report from './report';
+import ReportDetails from './ui_components/general_insurance/report_check_details';
 
 
 const generateClassName = createGenerateClassName({
@@ -189,12 +191,14 @@ const Insurance = (props) => {
           <Route path={`${url}/edit-professional1`} render={(props) => <ProfessionalDetails2 {...props} edit={true} />} />
           
           {/********** Accident **********/}
-          <Route path={`${url}/accident/plan`} component={Accident} />
+          <Route path={`${url}/accident/plan`} component={AccidentPlanDetails} />
           <Route path={`${url}/accident/form`} component={AccidentForm} />
           <Route path={`${url}/accident/summary`} component={AccidentSummary} />
           <Route path={`${url}/accident/plan/success`} component={AccidentPlanSuccess} />
           <Route path={`${url}/accident/success`} component={AccidentPaymentSuccess} />
           <Route path={`${url}/accident/failed`} component={AccidentFailed} />
+          <Route path={`${url}/accident/report`} component={Report} />
+          <Route path={`${url}/accident/reportdetail`} component={ReportDetails} />
 
           <Route component={NotFound} />
         </Switch>

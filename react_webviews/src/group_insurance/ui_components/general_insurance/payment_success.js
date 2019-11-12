@@ -23,17 +23,17 @@ class PaymentSuccess extends Component {
         buttonTitle='Generate Policy'
         onlyButton={true}
         title="Paymnet Success"
-        classOverRideContainer="payment-Success"
+        classOverRideContainer="payment-success"
       >
-        <div style={{  }}>
-          <div style={{ display: 'flex', alignItems: 'center', padding: '20px 10px' }}>
-            <img src={thumb} alt="" width="60" style={{ marginRight: '15px' }} />
+        <div>
+          <div className="payment-success-heading">
+            <img className="payment-success-icon" src={thumb} alt="" width="60" />
             <div>
-              <div style={{ color: '#160d2e', fontSize: '16px', fontWeight: '700', marginBottom: '10px' }}>Payment successful</div>
-              <div style={{ color: '#a2a2a2', fontSize: '14px', lineHeight: '20px' }}>One final step! Share your address and you are insured. </div>
+              <div className="payment-success-title">Payment successful</div>
+              <div className="payment-success-subtitle">One final step! Share your address and you are insured. </div>
             </div>
           </div>
-          <div style={{ height: '2px', background: '#eaeaea', width: '100%' }}></div>
+          <div className="payment-success-divider"></div>
           <div style={{ marginTop: '30px' }}>
             <FormControl fullWidth>
               <TitleWithIcon width="15" icon={contact}

@@ -10,6 +10,406 @@
 .accident-plan {
   padding: 20px 0;
 }
-.activePlan {
+.plan-summary-heading {
+  display: flex;
+   align-items: center;
+   justify-content: space-between;
+}
+.plan-summary-heading-text {
+  color: #160d2e;
+   font-size: 20px;
+   line-height: 28px;
+   font-weight: 500;
+   padding: 10px;
+}
+.plan-summary-mid {
+  margin-top: 30px
+}
+.plan-summary-mid1 {
+  display: flex;
+   align-items: center;
+   justify-content: space-between;
+   padding: 15px;
+   background: #f8f8f8;
+}
+.plan-summary-mid1-bg {
+  background: #f8f8f8;
+}
+.plan-summary-mid11 {
+  color: #878787;
+   font-size: 14px;
+}
+.plan-summary-mid12 {
+  color: #4a4a4a;
+   font-size: 14px;
+   font-weight: 500;
+}
+.plan-summary-premium {
+  background: #fff;
+   margin-top: 20px;
+   padding: 15px 15px;
+}
+.plan-summary-premium-heading {
+  color: #4a4a4a;
+   font-size: 14px;
+   font-weight: 500;
+   margin-bottom: 10px;
+}
+.plan-summary-premium-list {
+  display: flex;
+   align-items: center;
+   justify-content: space-between;
+   padding: 10px 0;
+}
+.plan-summary-premium-list1 {
+  color: #878787;
+   font-size: 13px;
+}
+.plan-summary-premium-font {
+  font-size: 14px;
+}
+.plan-summary-premium-list2 {
+  color: #878787;
+   font-size: 14px;
+   font-weight: 500;
+}
+.plan-summary .divider {
+  height: 2px;
+  background: #cecece;
+  width: 100%;
+}
+.plan-success-heading {
+  margin: 30px 0;
+}
+.plan-success-heading-icon {
+  text-align: center;
+   margin-bottom: 30px;
+}
+.plan-success-heading-title {
+  color: #4a4a4a;
+   font-size: 16px;
+   font-weight: 700;
+   margin-bottom: 10px;
+   text-align: center;
+}
+.plan-success-heading-subtitle {
+  color: #878787;
+   font-size: 14px;
+   line-height: 22px;
+}
+.AccordionListIcon {
+  position: relative;
+   top: 2px;
+   margin-right: 10px;
+}
+.AccordionList1 {
+  margin-right: 10;
+}
+.AccordionList {
+  display: flex;
+   flex-direction: row;
+   align-items: center;
+   position: relative;
+}
+.plan-summary-accordion {
+  margin-top: 10;
+   margin-bottom: 30;
+}
+.AccordionBodyItem {
+  color: #878787;
+   font-size: 14px;
+   font-weight: 400;
+}
+.AccordionBodyItemBold {
+  font-weight: 500;
+}
+.plan-success-heading-subtitle {
+  font-weight: 500;
+}
+.payment-failed-icon {
+  text-align: center; margin-bottom: 30px;
+}
+.payment-failed-title {
+  color: #160d2e;
+   font-size: 14px;
+   font-weight: 700;
+   margin-bottom: 20px;
+   text-align: center;
+}
+.payment-failed-subtitle {
+  color: #878787;
+   font-size: 14px;
+   line-height: 22px;
+}
+.basic-details-heading {
+  color: #160d2e;
+   font-size: 16px;
+   line-height: 20px;
+   font-weight: 500;
+   margin-bottom: 10px;
+}
+.basic-details-subtitle {
+  color: #878787;
+   font-size: 13px;
+}
+.checkbox-text {
+  color: #a2a2a2;
+   font-size: 14px;
+}
+.payment-success-heading {
+  display: flex;
+   align-items: center;
+   padding: 20px 10px;
+}
+.payment-success-icon {
+  margin-right: 15px;
+}
+.payment-success-title {
+  color: #160d2e;
+   font-size: 16px;
+   font-weight: 700;
+   margin-bottom: 10px;
+}
+.payment-success-subtitle {
+  color: #a2a2a2;
+   font-size: 14px;
+   line-height: 20px;
+}
+.payment-success-divider {
+  height: 2px;
+   background: #eaeaea;
+   width: 100%;
+}
+.plan-details-item {
+  display: flex;
+   align-items: center;
+   padding-top: 15px;
+   padding-bottom: 15px;
+}
+.plan-details-icon {
+  margin-right: 15px;
+}
+.plan-details-text {
+  color: #160d2e;
+   font-size: 14px;
+   line-height: 22px;
+}
+.accident-plan-heading-container {
+  margin-top: 10px;
+   margin-bottom: 30px;
+   padding: 0 15px;
+}
+.accident-plan-heading {
+  display: flex;
+   align-items: center;
+   justify-content: space-between;
+   margin-bottom: 10px;
+}
+.accident-plan-title {
+  color: #160d2e;
+   font-size: 20px;
+   line-height: 28px;
+   font-weight: 500;
+}
+.accident-plan-subtitle {
+  color: #24154c;
+   font-size: 14px;
+   line-height: 22px;
+}
+.accident-plans {
+  background: #f4f3f6;
+   padding-top: 20px;
+   padding-bottom: 20px;
+}
+.accident-plan-heading-title {
+  padding: 0 15px;
+  color: #160d2e;
+  font-size: 16px;
+  font-weight: 500;
+}
+.accident-plan-heading {
+  color: #160d2e;
+   font-size: 16px;
+   font-weight: 500;
+}
+.accident-plan-list {
+  display: flex;
+   margin-top: 20px;
+   flex-direction: row;
+   box-sizing: border-box;
+   overflow-x: auto;
+   padding-bottom: 15px;
+   padding-left: 15px;
+   
+}
+.accident-plan-list .recommended {
+  background: #ff6868;
+  color: #fff;
+  font-weight: 700;
+  font-size: 8px;
+  padding: 5px;
+  border-radius: 3px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.accident-plan-list .activePlan {
   border: 2px solid #4f2da7;
+}
+.accident-plan-item {
+  background: #fff;
+   border-radius: 5px;
+   padding: 15px;
+   min-width: 100px;
+   box-shadow: 0px 2px 6px 0px rgba(102, 120, 121,0.25);
+   margin-right: 15px;
+   position: relative;
+}
+.accident-plan-item1 {
+  color: #6f6f6f;
+   font-size: 10px;
+   line-height: 16px;
+   margin-bottom: 5px;
+   margin-top: 15px;
+}
+.accident-plan-item2 {
+  color: #160d2e;
+   font-size: 14px;
+}
+.accident-plan-item3 {
+  margin-top: 30px;
+   display: flex;
+   align-items: center;
+}
+.accident-plan-item4 {
+  color: #6f6f6f;
+   font-size: 10px;
+   margin-right: 5px;
+}
+.accident-plan-item-color {
+  color: #4f2da7;
+}
+.accident-plan-benefit {
+  color: #6e54b7;
+   font-size: 10px;
+   margin-top: 10px;
+}
+.accident-plan-claim {
+  margin: 40px 0;
+   display: flex;
+   align-items: flex-start;
+   padding: 0 15px;
+}
+.accident-plan-claim-icon {
+  margin-right: 10px;
+}
+.accident-plan-claim-title {
+  color: #160d2e;
+   font-size: 14px;
+   margin-bottom: 10px;
+   font-weight: 500;
+}
+.accident-plan-claim-subtitle {
+  color: #6d7278;
+   font-size: 14px;
+}
+.accident-plan-read {
+  margin-top: 30px;
+   display: flex;
+   align-items: center;
+   padding: 0 15px;
+}
+.accident-plan-read-icon {
+  margin-right: 10px;
+}
+.accident-plan-read-text {
+  color: #4f2da7;
+   font-size: 14px;
+}
+.accident-plan-terms {
+  padding: 0 15px;
+  margin: 10px 0;
+}
+.accident-plan-terms-text {
+  color: #24154c;
+   font-size: 14px;
+}
+.accident-plan-terms-bold {
+  color: #4f2da7;
+   font-weight: 500;
+}
+.card {
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+.report-color-state {
+  font-size: 10px;
+  letter-spacing: 1.82px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+}
+.report-ins-name {
+  color: #160d2e;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+.report-cover {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.report-cover-amount {
+  color: #878787;
+  font-size: 14px;
+}
+.report-cover-amount span {
+  font-weight: 700;
+}
+.report-detail-header {
+  display: flex;
+}
+.report-detail-ins-name {
+  color: #160d2e;
+  font-size: 16px;
+  line-height: 22px;
+  margin-bottom: 10px;
+}
+.report-detail-status {
+  font-size: 14px;
+}
+.report-detail-header {
+  align-items: center;
+}
+.report-detail-icon {
+  background: #f4f4f4;
+  padding: 10px;
+  border-radius: 3px;
+  margin-right: 15px;
+}
+.report-detail-summary {
+  margin-top: 30px;
+}
+.report-detail-summary-item {
+  color: #878787;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+.report-detail-summary-item span {
+  font-weight: 700;
+}
+.report-detail-download {
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 15px;
+  padding-top: 15px;
+  margin-top: 30px;
+}
+.report-detail-download-text {
+  color: #35cb5d;
+  font-size: 14px;
+  font-weight: 700;
 }

@@ -13,42 +13,42 @@ class PlanSummary extends Component {
         title="Summary"
         classOverRideContainer="plan-summary"
       >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', }}>
-          <div style={{ color: '#160d2e', fontSize: '20px', lineHeight: '28px', fontWeight: '500', padding: '10px' }}>Personal Accident</div>
+        <div className="plan-summary-heading">
+          <div className="plan-summary-heading-text">Personal Accident</div>
           <img src={provider} alt="" />
         </div>
-        <div style={{ marginTop: '30px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '15px', background: '#f8f8f8' }}>
-            <div style={{ color: '#878787', fontSize: '14px' }}>Cover amount</div>
-            <div style={{ color: '#4a4a4a', fontSize: '14px', fontWeight: '500' }}>2Lacs</div>
+        <div className="plan-summary-mid">
+          <div className="plan-summary-mid1">
+            <div className="plan-summary-mid11">Cover amount</div>
+            <div className="plan-summary-mid12">2Lacs</div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '15px', background: '#fff' }}>
-            <div style={{ color: '#878787', fontSize: '14px' }}>Cover period</div>
-            <div style={{ color: '#4a4a4a', fontSize: '14px', fontWeight: '500' }}>1 year</div>
+          <div className="plan-summary-mid1">
+            <div className="plan-summary-mid11">Cover period</div>
+            <div className="plan-summary-mid12">1 year</div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '15px', background: '#f8f8f8' }}>
-            <div style={{ color: '#878787', fontSize: '14px' }}>Policy start date</div>
-            <div style={{ color: '#4a4a4a', fontSize: '14px', fontWeight: '500' }}>20 october 2019</div>
+          <div className="plan-summary-mid1 plan-summary-mid1-bg">
+            <div className="plan-summary-mid11">Policy start date</div>
+            <div className="plan-summary-mid12">20 october 2019</div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '15px', background: '#fff' }}>
-            <div style={{ color: '#878787', fontSize: '14px' }}>End date</div>
-            <div style={{ color: '#4a4a4a', fontSize: '14px', fontWeight: '500' }}>19 October 2020</div>
+          <div className="plan-summary-mid1">
+            <div className="plan-summary-mid11">End date</div>
+            <div className="plan-summary-mid12">19 October 2020</div>
           </div>
         </div>
-        <div style={{ background: '#fff', marginTop: '20px', padding: '15px 15px' }}>
-          <div style={{ color: '#4a4a4a', fontSize: '14px', fontWeight: '500', marginBottom: '10px' }}>Premium details:</div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0' }}>
-            <div style={{ color: '#878787', fontSize: '13px' }}>Base premium</div>
-            <div style={{ color: '#878787', fontSize: '14px', fontWeight: '500' }}>₹200</div>
+        <div className="plan-summary-premium">
+          <div className="plan-summary-premium-heading">Premium details:</div>
+          <div className="plan-summary-premium-list">
+            <div className="plan-summary-premium-list1">Base premium</div>
+            <div className="plan-summary-premium-list2">₹200</div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0' }}>
-            <div style={{ color: '#878787', fontSize: '13px' }}>GST & taxes</div>
-            <div style={{ color: '#878787', fontSize: '14px', fontWeight: '500' }}>₹36</div>
+          <div className="plan-summary-premium-list">
+            <div className="plan-summary-premium-list1">GST & taxes</div>
+            <div className="plan-summary-premium-list2">₹36</div>
           </div>
-          <div style={{ height: '2px', background: '#cecece', width: '100%' }}></div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '15px' }}>
-            <div style={{ color: '#878787', fontSize: '14px' }}>Total payable</div>
-            <div style={{ color: '#4a4a4a', fontSize: '14px', fontWeight: '500' }}>₹ 236</div>
+          <div className="divider"></div>
+          <div className="plan-summary-premium-list">
+            <div className="plan-summary-premium-list1 plan-summary-premium-font">Total payable</div>
+            <div className="plan-summary-premium-list2">₹ 236</div>
           </div>
         </div>
       </Container>

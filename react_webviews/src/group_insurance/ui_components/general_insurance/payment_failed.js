@@ -13,10 +13,10 @@ class PaymentFailed extends Component {
         title="Paymnet Failed"
         classOverRideContainer="payment-failed"
       >
-        <div style={{  }}>
-          <div style={{ textAlign: 'center', marginBottom: '30px' }}><img src={failed} alt="" /></div>
-          <div style={{ color: '#160d2e', fontSize: '14px', fontWeight: '700', marginBottom: '20px', textAlign: 'center' }}>Payment Failed!</div>
-          <div style={{ color: '#878787', fontSize: '14px', lineHeight: '22px' }}>Seems like an internal issue. Don’t worry we are on to it, please retry after sometime.</div>
+        <div>
+          <div className="payment-failed-icon"><img src={failed} alt="" /></div>
+          <div className="payment-failed-title">Payment Failed!</div>
+          <div className="payment-failed-subtitle">Seems like an internal issue. Don’t worry we are on to it, please retry after sometime.</div>
         </div>
       </Container>
     );
