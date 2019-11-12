@@ -5,10 +5,22 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 
+import ic_pa_b1 from 'assets/ic_pa_b1.svg';
+import ic_pa_b2 from 'assets/ic_pa_b2.svg';
+import ic_pa_b3 from 'assets/ic_pa_b3.svg';
+import ic_pa_b4 from 'assets/ic_pa_b4.svg';
+import ic_pa_b5 from 'assets/ic_pa_b5.svg';
+
 class AccidentPlanDetails extends Component {
-  state = {
-    selectedPlan: 1,
-    checked: false
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedIndex: 1,
+      checked: false,
+      plan_data: {},
+      recommendedInedx: 1
+    }
   }
 
   componentWillMount() {
@@ -49,32 +61,33 @@ class AccidentPlanDetails extends Component {
       {
         'disc': 'Lumpsum payout to your family in case of Accidental Death',
         'key' : 'lumpsum_payout',
-        'icon': ''
+        'icon': ic_pa_b1
       },
       {
         'disc': 'Coverage against Permanent Total or Partial Disablement',
         'key' : 'disablement_coverage',
-        'icon': ''
+        'icon': ic_pa_b2
       },
       {
         'disc': 'Protection against accidental burns',
         'key' : 'accidental_burns_protection',
-        'icon': ''
+        'icon': ic_pa_b3
       },
       {
         'disc': 'Allowances for ambulance and last rites (for plan 2 & 3 only)',
         'key' : 'last_rites',
-        'icon': ''
+        'icon': ic_pa_b4
       },
       {
         'disc': 'Allowances for purchase of blood (for plan 2 & 3 only)',
         'key' : 'blood_allowence',
-        'icon': ''
+        'icon': ic_pa_b5
       }
     ]
 
     var plan_data = {
-      'name': 'Personal Accident',
+      'product_name': 'Personal Accident',
+      'product_tag_line': 'Cover your financial losses  against accidental death and disability',
       'key': 'personal_accident',
       'logo': '',
       'premium_details': [
@@ -83,7 +96,7 @@ class AccidentPlanDetails extends Component {
           "product_benefits_included": ['lumpsum_payout', 'disablement_coverage', 
           'accidental_burns_protection'],
           "premium": "250",
-          "tax_amount": "",
+          "tax_amount": "36",
           "plus_benefit": ''
         },
         {
@@ -91,14 +104,16 @@ class AccidentPlanDetails extends Component {
           "product_benefits_included": ['lumpsum_payout', 'disablement_coverage', 
           'accidental_burns_protection', 'last_rites', 'blood_allowence'],
           "premium": "500",
-          "plus_benefit": ''
+          "tax_amount": "126",
+          "plus_benefit": '2'
         },
         {
           "sum_assured": 1000000,
           "product_benefits_included": ['lumpsum_payout', 'disablement_coverage', 
           'accidental_burns_protection', 'last_rites', 'blood_allowence'],
           "premium": "990",
-          "plus_benefit": ''
+          "tax_amount": "216",
+          "plus_benefit": '2'
         }
       ]
     }
@@ -133,37 +148,40 @@ class AccidentPlanDetails extends Component {
   }
 
   selectPlan = (index) => {
-    this.setState({ selectedPlan: index });
+    this.setState({ selectedIndex: index });
   
   }
 
-  handleClick = async () => {
-    var premium_details = {
-      "premium": this.state.plan_data.premium_details[this.state.selectedPlan].premium,
-      "cover_amount": this.state.plan_data.premium_details[this.state.selectedPlan].cover_amount,
-      "tax_amount": this.state.plan_data.premium_details[this.state.selectedPlan].tax_amount
-    }
+  handleClick = async (final_data) => {
+    
 
-    let res2 = {};
+    final_data.product_name = 'personal_accident';
+    try {
+      let res2;
       if (this.state.lead_id) {
-        premium_details.lead_id = this.state.lead_id;
-        res2 = await Api.post('api/insurance/bhartiaxa/lead/update', premium_details)
+        final_data.lead_id = this.state.lead_id;
+        res2 = await Api.post('ins_service/api/insurance/bhartiaxa/lead/update', final_data)
       } else {
-        res2 = await Api.post('api/insurance/bhartiaxa/lead/create', premium_details)
+        res2 = await Api.post('ins_service/api/insurance/bhartiaxa/lead/create', final_data)
       }
       
 
+      console.log(res2)
       if (res2.pfwresponse.status_code === 200) {
 
         if(!this.state.lead_id) {
           var id = res2.pfwresponse.result.lead.id;
           window.localStorage.setItem('group_insurance_lead_id_selected', id || '');
         }
-        this.navigate('form','', premium_details);
+        this.navigate('form','', final_data);
       } else {
         toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
           || 'Something went wrong');
       }
+
+    } catch(err) {
+      toast('Something went wrong');
+    }
 
    
   }
@@ -172,7 +190,7 @@ class AccidentPlanDetails extends Component {
     return (
       <div>
         <PlanDetails
-          
+          parent={this}
         />
       </div>
     );

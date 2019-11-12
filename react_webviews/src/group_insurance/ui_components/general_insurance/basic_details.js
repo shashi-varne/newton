@@ -15,11 +15,6 @@ import {
 } from 'utils/validators';
 
 class BasicDetailsForm extends Component {
-  state = {
-    checked: false,
-    parent: this.props.parent
-  }
-
   constructor(props) {
     super(props);
     this.state = {
@@ -28,7 +23,7 @@ class BasicDetailsForm extends Component {
       basic_details_data: this.props.parent.state.basic_details_data || {}
     };
 
-    this.handleClickCurrent = this.handleClickCurrent.bind(this)
+    this.handleClickCurrent = this.handleClickCurrent.bind(this);
 
   }
 

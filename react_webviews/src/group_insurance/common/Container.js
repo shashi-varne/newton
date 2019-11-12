@@ -277,7 +277,7 @@ class Container extends Component {
     return (
       <div className={`ContainerWrapper ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`}  >
         {/* Header Block */}
-        <Header
+        {!this.props.hide_header && <Header
           disableBack={this.props.disableBack}
           title={this.props.title}
           smallTitle={this.props.smallTitle}
@@ -291,7 +291,7 @@ class Container extends Component {
           resetpage={this.props.resetpage}
           handleReset={this.props.handleReset}
           filterPgae={this.props.filterPgae}
-          handleFilter={this.props.handleFilter} />
+          handleFilter={this.props.handleFilter} />}
 
         {/* Below Header Block */}
         <div id="HeaderHeight" style={{ top: 56 }}>

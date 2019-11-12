@@ -59,6 +59,7 @@ import AccidentPlanSuccess from './products/personal_accident/plan-success';
 import AccidentPlanDetails from './products/personal_accident';
 import Report from './report';
 import ReportDetails from './ui_components/general_insurance/report_check_details';
+import AccidentPlanPayment from './products/personal_accident/payment';
 
 
 const generateClassName = createGenerateClassName({
@@ -199,6 +200,7 @@ const Insurance = (props) => {
           <Route path={`${url}/accident/failed`} component={AccidentFailed} />
           <Route path={`${url}/accident/report`} component={Report} />
           <Route path={`${url}/accident/reportdetail`} component={ReportDetails} />
+          <Route path={`${url}/accident/payment/:status`} component={AccidentPlanPayment} />
 
           <Route component={NotFound} />
         </Switch>

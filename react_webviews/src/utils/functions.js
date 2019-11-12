@@ -210,7 +210,7 @@ export function manageDialog(id, display, aboutScroll) {
 
 
 export function setHeights(data) {
-  let head = document.getElementsByClassName('Header')[0].offsetHeight;
+  let head = document.getElementsByClassName('Header') && document.getElementsByClassName('Header')[0] ? document.getElementsByClassName('Header')[0].offsetHeight : 0;
   let banner = document.getElementsByClassName('Banner')[0];
   let bannerHeight = (banner) ? banner.offsetHeight : 0;
   let step = document.getElementsByClassName('Step')[0];
