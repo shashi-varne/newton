@@ -95,20 +95,21 @@ class PlanDetails extends Component {
           </div>
         </div>
         <div className="accident-plans">
-          <div className="accident-plan-heading">Select a plan</div>
+          <div className="accident-plan-heading-title">Select a plan</div>
           <div className="accident-plan-list">
-            <div className={'accident-plan-item', (this.state.selectedPlan == 1) ? 'activePlan': ''} onClick={() => this.selectPlan(1)}>
+            <div className={`accident-plan-item ${(this.state.selectedPlan == 1) ? 'activePlan': ''}`} onClick={() => this.selectPlan(1)}>
               <div className="accident-plan-item1">Cover amount</div>
               <div className="accident-plan-item2">2 Lakh</div>
               <div className="accident-plan-item3"><span className="accident-plan-item4">in</span> <span className="accident-plan-item-color">₹200/year</span></div>
             </div>
-            <div className={'accident-plan-item', (this.state.selectedPlan == 2) ? 'activePlan': ''} onClick={() => this.selectPlan(2)}>
+            <div className={`accident-plan-item ${(this.state.selectedPlan == 2) ? 'activePlan': ''}`} onClick={() => this.selectPlan(2)}>
               <div className="accident-plan-item1">Cover amount</div>
               <div className="accident-plan-item2">2 Lakh</div>
               <div className="accident-plan-item3"><span className="accident-plan-item4">in</span> <span className="accident-plan-item-color">₹200/year</span></div>
               <div className="accident-plan-benefit">+2 Benefits</div>
+              <div className="recommended">RECOMMENDED</div>
             </div>
-            <div className={'accident-plan-item', (this.state.selectedPlan == 3) ? 'activePlan': ''} onClick={() => this.selectPlan(3)}>
+            <div className={`accident-plan-item ${(this.state.selectedPlan == 3) ? 'activePlan': ''}`} onClick={() => this.selectPlan(3)}>
               <div className="accident-plan-item1">Cover amount</div>
               <div className="accident-plan-item2">2 Lakh</div>
               <div className="accident-plan-item3"><span className="accident-plan-item4">in</span> <span className="accident-plan-item-color">₹200/year</span></div>

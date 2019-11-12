@@ -99,7 +99,8 @@
 }
 .AccordionListIcon {
   position: relative;
-   top: 2;
+   top: 2px;
+   margin-right: 10px;
 }
 .AccordionList1 {
   margin-right: 10;
@@ -220,11 +221,16 @@
    padding-top: 20px;
    padding-bottom: 20px;
 }
+.accident-plan-heading-title {
+  padding: 0 15px;
+  color: #160d2e;
+  font-size: 16px;
+  font-weight: 500;
+}
 .accident-plan-heading {
   color: #160d2e;
    font-size: 16px;
    font-weight: 500;
-   padding: 0 15px;
 }
 .accident-plan-list {
   display: flex;
@@ -234,6 +240,20 @@
    overflow-x: auto;
    padding-bottom: 15px;
    padding-left: 15px;
+   
+}
+.accident-plan-list .recommended {
+  background: #ff6868;
+  color: #fff;
+  font-weight: 700;
+  font-size: 8px;
+  padding: 5px;
+  border-radius: 3px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 .accident-plan-list .activePlan {
   border: 2px solid #4f2da7;
@@ -245,12 +265,14 @@
    min-width: 100px;
    box-shadow: 0px 2px 6px 0px rgba(102, 120, 121,0.25);
    margin-right: 15px;
+   position: relative;
 }
 .accident-plan-item1 {
   color: #6f6f6f;
    font-size: 10px;
    line-height: 16px;
    margin-bottom: 5px;
+   margin-top: 15px;
 }
 .accident-plan-item2 {
   color: #160d2e;
@@ -317,4 +339,77 @@
 .accident-plan-terms-bold {
   color: #4f2da7;
    font-weight: 500;
+}
+.card {
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+.report-color-state {
+  font-size: 10px;
+  letter-spacing: 1.82px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+}
+.report-ins-name {
+  color: #160d2e;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+.report-cover {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.report-cover-amount {
+  color: #878787;
+  font-size: 14px;
+}
+.report-cover-amount span {
+  font-weight: 700;
+}
+.report-detail-header {
+  display: flex;
+}
+.report-detail-ins-name {
+  color: #160d2e;
+  font-size: 16px;
+  line-height: 22px;
+  margin-bottom: 10px;
+}
+.report-detail-status {
+  font-size: 14px;
+}
+.report-detail-header {
+  align-items: center;
+}
+.report-detail-icon {
+  background: #f4f4f4;
+  padding: 10px;
+  border-radius: 3px;
+  margin-right: 15px;
+}
+.report-detail-summary {
+  margin-top: 30px;
+}
+.report-detail-summary-item {
+  color: #878787;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+.report-detail-summary-item span {
+  font-weight: 700;
+}
+.report-detail-download {
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 15px;
+  padding-top: 15px;
+  margin-top: 30px;
+}
+.report-detail-download-text {
+  color: #35cb5d;
+  font-size: 14px;
+  font-weight: 700;
 }
