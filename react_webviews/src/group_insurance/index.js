@@ -53,8 +53,8 @@ import AccidentSummary from './products/personal_accident/summary';
 import { create } from 'jss';
 import JssProvider from 'react-jss/lib/JssProvider';
 import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
-import AccidentFailed from './products/personal_accident/failed';
-import AccidentPaymentSuccess from './products/personal_accident/success';
+import AccidentFailed from './products/personal_accident/payment-failed';
+import AccidentPaymentSuccess from './products/personal_accident/payment-success';
 import AccidentPlanSuccess from './products/personal_accident/plan-success';
 import AccidentPlanDetails from './products/personal_accident';
 import Report from './report';
@@ -195,11 +195,13 @@ const Insurance = (props) => {
           <Route path={`${url}/accident/plan`} component={AccidentPlanDetails} />
           <Route path={`${url}/accident/form`} component={AccidentForm} />
           <Route path={`${url}/accident/summary`} component={AccidentSummary} />
-          <Route path={`${url}/accident/plan/success`} component={AccidentPlanSuccess} />
-          <Route path={`${url}/accident/success`} component={AccidentPaymentSuccess} />
-          <Route path={`${url}/accident/failed`} component={AccidentFailed} />
-          <Route path={`${url}/accident/report`} component={Report} />
-          <Route path={`${url}/accident/reportdetail`} component={ReportDetails} />
+          <Route path={`${url}/accident/summary-success`} component={AccidentPlanSuccess} />
+          <Route path={`${url}/accident/payment-success`} component={AccidentPaymentSuccess} />
+          <Route path={`${url}/accident/payment-failed`} component={AccidentFailed} />
+
+
+          <Route path={`${url}/common/report`} component={Report} />
+          <Route path={`${url}/common/reportdetails/:policy_id`} component={ReportDetails} />
           <Route path={`${url}/accident/payment/:status`} component={AccidentPlanPayment} />
 
           <Route component={NotFound} />

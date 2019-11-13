@@ -6,6 +6,18 @@ import ic_claim_assist from 'assets/ic_claim_assist.svg';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 
+import Api from 'utils/api';
+import toast from '../../../common/ui/Toast';
+import { getConfig } from 'utils/functions';
+
+const coverAmountMapper = {
+  'PERSONAL_ACCIDENT' : {
+    200000: 0,
+    500000: 1,
+    1000000: 2
+  }
+}
+
 class PlanDetailsClass extends Component {
 
   constructor(props) {
@@ -25,6 +37,73 @@ class PlanDetailsClass extends Component {
 
   }
 
+  componentWillMount() {
+
+    let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
+    this.setState({
+      lead_id: lead_id || ''
+    })
+
+  }
+
+  async componentDidMount() {
+
+    let premium_details = {
+      "product_name":this.props.parent.state.product_key,
+      cover_amount: '',
+      premium: '',
+      tax_amount: ''
+    };
+
+    console.log(premium_details)
+    try {
+
+      if(this.state.lead_id) {
+        let res = await Api.get('ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+       
+        this.setState({
+          show_loader: false
+        })
+        if (res.pfwresponse.status_code === 200) {
+
+          var leadData = res.pfwresponse.result.lead;
+
+          Object.keys(premium_details).forEach((key) => {
+            premium_details[key] = leadData[key]
+          })
+
+          let selectedIndex = coverAmountMapper[this.props.parent.state.product_key][premium_details.cover_amount];
+
+          this.setState({
+            selectedIndex: selectedIndex
+          })
+
+        } else {
+          toast(res.pfwresponse.result.error || res.pfwresponse.result.message
+            || 'Something went wrong');
+        }
+      } else {
+        this.setState({
+          show_loader: false
+        })
+      }
+
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
+    }
+
+    this.setState({
+      premium_details: premium_details
+    })
+
+  }
+
+
+ 
+
   componentDidUpdate(prevState) {
 
     if (this.state.parent !== this.props.parent) {
@@ -37,6 +116,7 @@ class PlanDetailsClass extends Component {
 
   selectPlan = (index) => {
     console.log("selecting :" + index)
+    console.log(this.props.parent.state.plan_data.premium_details[index])
     this.setState({ 
       selectedIndex: index 
     });
@@ -73,13 +153,56 @@ class PlanDetailsClass extends Component {
     )
   }
 
-  handleClickCurrent() {
-    var premium_details = {
+  navigate = (pathname, search,premium_details) => {
+    this.props.parent.props.history.push({
+      pathname: pathname,
+      search: search ? search : getConfig().searchParams,
+      params: {
+        premium_details: premium_details || {}
+      }
+    });
+  }
+
+  handleClick = async (final_data) => {
+    
+    this.navigate('form','', final_data);
+   
+  }
+
+
+  async handleClickCurrent() {
+    var final_data = {
       "premium": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].premium,
       "cover_amount": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].sum_assured,
       "tax_amount": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].tax_amount
     }
-    this.props.parent.handleClick(premium_details);
+
+    
+
+    final_data.product_name = this.props.parent.state.product_key;
+
+    this.setState({
+      show_loader: true
+    })
+
+    let res2 = {};
+    if(this.state.lead_id) {
+      final_data.lead_id = this.state.lead_id;
+      res2 = await Api.post('ins_service/api/insurance/bhartiaxa/lead/update', final_data)
+
+      if (res2.pfwresponse.status_code === 200) {
+        this.navigate('form','', final_data);
+      } else {
+        toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
+          || 'Something went wrong');
+      }
+    } else {
+      this.navigate('form','', final_data);
+    }
+    
+
+    
+    
   }
 
   render() {
@@ -88,6 +211,7 @@ class PlanDetailsClass extends Component {
         fullWidthButton={true}
         buttonTitle='Get this Plan'
         onlyButton={true}
+        showLoader={this.state.show_loader || this.props.parent.state.show_loader}
         handleClick={()=> this.handleClickCurrent()}
         title="Accident"
         classOverRideContainer="accident-plan">

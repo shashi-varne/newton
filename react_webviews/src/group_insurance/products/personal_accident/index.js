@@ -18,8 +18,10 @@ class AccidentPlanDetails extends Component {
     this.state = {
       selectedIndex: 1,
       checked: false,
+      show_loader:true,
       plan_data: {},
-      recommendedInedx: 1
+      recommendedInedx: 1,
+      product_key: 'PERSONAL_ACCIDENT'
     }
   }
 
@@ -88,7 +90,7 @@ class AccidentPlanDetails extends Component {
     var plan_data = {
       'product_name': 'Personal Accident',
       'product_tag_line': 'Cover your financial losses  against accidental death and disability',
-      'key': 'personal_accident',
+      'key': 'PERSONAL_ACCIDENT',
       'logo': '',
       'premium_details': [
         {
@@ -130,7 +132,6 @@ class AccidentPlanDetails extends Component {
       });
     });
 
-    console.log(plan_data)
 
     this.setState({
       plan_data: plan_data
@@ -147,42 +148,9 @@ class AccidentPlanDetails extends Component {
     });
   }
 
-  selectPlan = (index) => {
-    this.setState({ selectedIndex: index });
-  
-  }
-
   handleClick = async (final_data) => {
     
-
-    final_data.product_name = 'personal_accident';
-    try {
-      let res2;
-      if (this.state.lead_id) {
-        final_data.lead_id = this.state.lead_id;
-        res2 = await Api.post('ins_service/api/insurance/bhartiaxa/lead/update', final_data)
-      } else {
-        res2 = await Api.post('ins_service/api/insurance/bhartiaxa/lead/create', final_data)
-      }
-      
-
-      console.log(res2)
-      if (res2.pfwresponse.status_code === 200) {
-
-        if(!this.state.lead_id) {
-          var id = res2.pfwresponse.result.lead.id;
-          window.localStorage.setItem('group_insurance_lead_id_selected', id || '');
-        }
-        this.navigate('form','', final_data);
-      } else {
-        toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
-          || 'Something went wrong');
-      }
-
-    } catch(err) {
-      toast('Something went wrong');
-    }
-
+    this.navigate('form','', final_data);
    
   }
 

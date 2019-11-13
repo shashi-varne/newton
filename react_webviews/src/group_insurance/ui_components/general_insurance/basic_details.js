@@ -7,6 +7,9 @@ import { genderOptions, insuranceMaritalStatus, relationshipOptions } from '../.
 import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
+import Api from 'utils/api';
+import toast from '../../../common/ui/Toast';
+import { getConfig } from 'utils/functions';
 
 import {
   isValidDate, validateAlphabets,
@@ -20,10 +23,26 @@ class BasicDetailsForm extends Component {
     this.state = {
       checked: false,
       parent: this.props.parent,
-      basic_details_data: this.props.parent.state.basic_details_data || {}
+      basic_details_data: {},
+      show_loader: true,
+      premium_details: {}
     };
 
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
+
+  }
+
+  componentWillMount() {
+
+    let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
+    let { params } = this.props.parent.props.location || {};
+    console.log(params)
+    this.setState({
+      premium_details: params ? params.premium_details: {},
+      lead_id: lead_id || ''
+    })
+
+    console.log(this.state)
 
   }
 
@@ -32,12 +51,6 @@ class BasicDetailsForm extends Component {
     if (prevState.parent !== this.props.parent) {
       this.setState({
         parent: this.props.parent || {}
-      })
-    }
-
-    if (this.state.basic_details_data !== this.props.parent.state.basic_details_data) {
-      this.setState({
-        basic_details_data: this.props.parent.state.basic_details_data
       })
     }
 
@@ -57,7 +70,7 @@ class BasicDetailsForm extends Component {
             error={(this.state.basic_details_data.nominee && this.state.basic_details_data.nominee.name_error) ? true : false}
             helperText={this.state.basic_details_data.nominee ?  this.state.basic_details_data.nominee.name_error :''}
             value={this.state.basic_details_data.nominee ? this.state.basic_details_data.nominee.name || '': ''}
-            onChange={this.handleChange()} />
+            onChange={this.handleChange('nominee_name')} />
         </div>
         <div className="InputField">
           <DropdownWithoutIcon
@@ -80,8 +93,9 @@ class BasicDetailsForm extends Component {
     if (!name) {
        name = event.target.name;
     }
-    let value = event.target ? event.target.value : '';
-    let basic_details_data = this.state.basic_details_data || {};
+    console.log(event)
+    var value = event.target ? event.target.value : '';
+    var basic_details_data = this.state.basic_details_data || {};
     if(name.indexOf('nominee_') >= 0) {
       if (!basic_details_data.nominee) {
         basic_details_data.nominee = {};
@@ -118,43 +132,46 @@ class BasicDetailsForm extends Component {
         var thisVal;
 
         let slash = 0;
-        for (var i = 0; i < value.length; i++) {
-          if (value[i] === '/') {
+        for (var i = 0; i < event.target.value.length; i++) {
+          if (event.target.value[i] === '/') {
             slash += 1;
           }
         }
 
         if (slash <= 1 && key !== 8 && key !== 46) {
-          var strokes = value.length;
+          var strokes = event.target.value.length;
 
           if (strokes === 2 || strokes === 5) {
-            thisVal = value;
+            thisVal = event.target.value;
             thisVal += '/';
-            value = thisVal;
+            event.target.value = thisVal;
           }
           // if someone deletes the first slash and then types a number this handles it
           if (strokes >= 3 && strokes < 5) {
-            thisVal = value;
+            thisVal = event.target.value;
             if (thisVal.charAt(2) !== '/') {
               var txt1 = thisVal.slice(0, 2) + "/" + thisVal.slice(2);
-              value = txt1;
+              event.target.value = txt1;
             }
           }
           // if someone deletes the second slash and then types a number this handles it
           if (strokes >= 6) {
-            thisVal = value;
+            thisVal = event.target.value;
 
             if (thisVal.charAt(5) !== '/') {
               var txt2 = thisVal.slice(0, 5) + "/" + thisVal.slice(5);
-              value = txt2;
+              event.target.value = txt2;
             }
           }
         };
 
+       
+
       }
 
-      basic_details_data[name] =  value;
+      basic_details_data[name] =  event.target.value;
       basic_details_data[name + '_error'] = errorDate;
+      
     }  else {
       basic_details_data[name] = value;
       basic_details_data[name + '_error'] = '';
@@ -163,9 +180,109 @@ class BasicDetailsForm extends Component {
     this.setState({
       basic_details_data: basic_details_data
     })
+
+    console.log(basic_details_data)
   };
 
-  handleClickCurrent() {
+  handleChangeRadio = name => event => {
+   
+    
+    var basic_details_data = this.state.basic_details_data || {};
+
+    let optionsMapper = {
+      'gender' : genderOptions,
+      'marital_status': insuranceMaritalStatus
+    }
+    basic_details_data[name] = optionsMapper[name][event].value;
+    basic_details_data[name + '_error'] = '';
+
+    this.setState({
+      basic_details_data: basic_details_data
+    })
+
+    console.log(basic_details_data)
+  };
+
+  async componentDidMount() {
+
+    let basic_details_data = {
+      "product_name":this.props.parent.state.product_key,
+      "name": "",
+      "gender": "",
+      "marital_status": "",
+      "mobile_no": "",
+      "email": "",
+      "dob": "",
+      "nominee": {
+        "name": "", 
+        "relation": ""
+      },
+      "nominee_checked" : false,
+      cover_amount: this.state.premium_details.cover_amount,
+      premium: this.state.premium_details.premium,
+      tax_amount: this.state.premium_details.tax_amount
+    }
+    console.log(basic_details_data)
+    try {
+
+      if(this.state.lead_id) {
+        let res = await Api.get('ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+       
+        this.setState({
+          show_loader: false
+        })
+        if (res.pfwresponse.status_code === 200) {
+
+          var leadData = res.pfwresponse.result.lead;
+
+          Object.keys(basic_details_data).forEach((key) => {
+            basic_details_data[key] = leadData[key]
+          })
+
+          basic_details_data['dob'] = basic_details_data['dob'] ? basic_details_data['dob'].replace(/\\-/g, '/').split('-').join('/') : ''
+        } else {
+          toast(res.pfwresponse.result.error || res.pfwresponse.result.message
+            || 'Something went wrong');
+        }
+      } else {
+        let res = await Api.get('ins_service/api/insurance/account/summary')
+       
+        this.setState({
+          show_loader: false
+        })
+        if (res.pfwresponse.status_code === 200) {
+
+          let result = res.pfwresponse.result.insurance_account;
+
+          basic_details_data.name = result.name || '';
+          basic_details_data.gender = result.gender || '';
+          basic_details_data.marital_status = result.marital_status || '';
+          basic_details_data.mobile_no = result.mobile_number || '';
+          basic_details_data.email = result.email || '';
+
+          basic_details_data['dob'] = result.dob ? result.dob.replace(/\\-/g, '/').split('-').join('/') : ''
+        } else {
+          toast(res.pfwresponse.result.error || res.pfwresponse.result.message
+            || 'Something went wrong');
+        }
+      }
+
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
+    }
+
+    this.setState({
+      basic_details_data: basic_details_data
+    })
+
+  }
+
+
+
+  async handleClickCurrent() {
     console.log("handle click child")
     
 
@@ -232,7 +349,7 @@ class BasicDetailsForm extends Component {
 
     if (canSubmitForm) {
       let final_data = {
-          "product_name": "smart_wallet",
+          "product_name": this.props.parent.state.product_key,
           "name": basic_details_data.name,
           "gender": basic_details_data.gender,
           "marital_status": basic_details_data.marital_status,
@@ -250,10 +367,42 @@ class BasicDetailsForm extends Component {
           "relation": basic_details_data.nominee.relationship
         }
         final_data['nominee'] = obj;
+      }else {
+        final_data['nominee'] = {};
       }
-      this.state.parent.handleClick(final_data)
+
+      final_data.product_name = this.props.parent.state.product_key;
+      
+        this.setState({
+          show_loader: true
+        })
+        let res2 = {};
+        if(this.state.lead_id) {
+          final_data.lead_id = this.state.lead_id;
+          res2 = await Api.post('ins_service/api/insurance/bhartiaxa/lead/update', final_data)
+        }else {
+          res2 = await Api.post('ins_service/api/insurance/bhartiaxa/lead/create', final_data)
+        }
+        
+  
+        if (res2.pfwresponse.status_code === 200) {
+          var lead_id_updated = this.state.lead_id || res2.pfwresponse.result.response_data.lead.id;
+          window.localStorage.setItem('group_insurance_lead_id_selected', lead_id_updated || '');
+          this.navigate('summary')
+        } else {
+          toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
+            || 'Something went wrong');
+        }
+      
     }
     
+  }
+
+  navigate = (pathname) => {
+    this.props.parent.props.history.push({
+      pathname: pathname,
+      search: getConfig().searchParams
+    });
   }
 
   render() {
@@ -264,8 +413,9 @@ class BasicDetailsForm extends Component {
         fullWidthButton={true}
         buttonTitle='Go to Summary'
         onlyButton={true}
+        showLoader={this.state.show_loader}
         handleClick={()=> this.handleClickCurrent()}
-        title="BasicDetails"
+        title="Basic Details"
         classOverRideContainer="basic-details">
           <div>
             <div>
@@ -339,7 +489,7 @@ class BasicDetailsForm extends Component {
                   error={(this.state.basic_details_data.gender_error) ? true : false}
                   helperText={this.state.basic_details_data.gender_error}
                   value={this.state.basic_details_data.gender || ''}
-                  onChange={this.handleChange()} />
+                  onChange={this.handleChangeRadio('gender')} />
               </div>
               <div className="InputField">
                 <RadioWithoutIcon
@@ -352,7 +502,7 @@ class BasicDetailsForm extends Component {
                   error={(this.state.basic_details_data.marital_status_error) ? true : false}
                   helperText={this.state.basic_details_data.marital_status_error}
                   value={this.state.basic_details_data.marital_status || ''}
-                  onChange={this.handleChange()} />
+                  onChange={this.handleChangeRadio('marital_status')} />
               </div>
               <div className="InputField">
                 <div className="CheckBlock2" style={{ padding: '0 15px',margin: '10px 0' }}>

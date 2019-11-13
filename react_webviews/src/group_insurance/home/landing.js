@@ -30,8 +30,26 @@ class Landing extends Component {
       })
       if (res.pfwresponse.status_code === 200) {
         
-        var resultData = res.pfwresponse.result;
+        var resultData = res.pfwresponse.result.response;
         console.log(resultData);
+
+        let group_insurance = resultData.group_insurance;
+        let term_insurance = resultData.term_insurance;
+
+        let BHARTIAXA = group_insurance.insurance_apps.BHARTIAXA;
+
+        let BHARTIAXA_APPS  = {
+          'PERSONAL_ACCIDENT' : BHARTIAXA['PERSONAL_ACCIDENT'],
+          'HOSPICASH' : BHARTIAXA['HOSPICASH'],
+          'SMART_WALLET' : BHARTIAXA['SMART_WALLET']
+        }
+
+        this.setState({
+          group_insurance: group_insurance,
+          term_insurance : term_insurance,
+          BHARTIAXA_APPS: BHARTIAXA_APPS
+        })
+
        
       } else {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message
@@ -52,18 +70,29 @@ class Landing extends Component {
     });
   }
 
+  getLeadId (product_key) {
+    let id = ''
+    if (product_key !== 'term_insurance') {
+      if(this.state.BHARTIAXA_APPS[product_key].length > 0) {
+        id = this.state.BHARTIAXA_APPS[product_key][0].lead_id;
+      }
+    }
+
+    return id;
+  }
+
   handleClick = (product_key) => {
 
     console.log(product_key)
     var stateMapper = {
-      'health' : '',
-      'smart_wallet': '',
-      'accident': 'accident/plan',
-      'hospicash': '',
+      'HEALTH' : '',
+      'SMART_WALLET': '',
+      'PERSONAL_ACCIDENT': 'accident/plan',
+      'HOSPICASH': '',
       'term_insurance': ''
     }
 
-    var group_insurance_lead_id_selected = '5761475289284608';
+    var group_insurance_lead_id_selected = this.getLeadId(product_key)
     window.localStorage.setItem('group_insurance_lead_id_selected', group_insurance_lead_id_selected || '');
     this.navigate('group-insurance/'+ stateMapper[product_key]);
   }
@@ -91,7 +120,7 @@ class Landing extends Component {
                   <div style={{ color: '#7e7e7e', fontSize: '13px' }}>Starts from Rs 23 per month</div>
                 </div>
               </div>
-              <div onClick={() => this.handleClick('accident')} style={{ display: 'flex', alignItems: 'center', borderBottomWidth: '1px', borderBottomColor: '#dfd8ef', borderBottomStyle: 'solid', paddingTop: '15px', paddingBottom: '15px' }}>
+              <div onClick={() => this.handleClick('PERSONAL_ACCIDENT')} style={{ display: 'flex', alignItems: 'center', borderBottomWidth: '1px', borderBottomColor: '#dfd8ef', borderBottomStyle: 'solid', paddingTop: '15px', paddingBottom: '15px' }}>
                 <img src={accident} alt="" style={{ marginRight: '15px' }} />
                 <div>
                   <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px' }}>Personal accident</div>
