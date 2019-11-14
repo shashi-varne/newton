@@ -14,7 +14,7 @@ class ReportDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      accordianTab: false,
+      accordionTab: false,
       policyData: {
         insured_details : {
           
@@ -76,6 +76,12 @@ class ReportDetails extends Component {
 
   }
 
+  toggleAccordion = () => {
+    this.setState(prevState => ({
+      accordionTab: !prevState.accordionTab
+    }));
+  }
+
 
   render() {
     return (
@@ -92,7 +98,7 @@ class ReportDetails extends Component {
             </div>
             <div>
             <div className="report-detail-ins-name">{this.state.policyData.product_title}</div>
-              <div className="report-detail-status">Status: <span>{this.state.policyData.status}</span></div>
+              <div className="report-detail-status">Status: <span className={`${(this.state.policyData.status === 'init') ? 'yellow' : (this.state.policyData.status === 'policy_issued') ? 'green' : 'red'}`}>{(this.state.policyData.status === 'init') ? 'Policy Pending' : (this.state.policyData.status === 'policy_issued' ? 'Policy Issued' : 'Policy Expired')}</span></div>
             </div>
           </div>
           <div className="report-detail-summary">
@@ -110,17 +116,25 @@ class ReportDetails extends Component {
           <div className="report-detail-download-text">Download Policy</div>
         </div>
         <div className="Accordion">
-          <div className="AccordionTitle" onClick={() => console.log('KK')}>
+          <div className="AccordionTitle" onClick={() => this.toggleAccordion()}>
             <div className="AccordionList">
               <span className="AccordionList1">
-                <img className="AccordionListIcon" src={(this.state.accordianTab) ? shrink : expand} alt="" width="20" />
+                <img className="AccordionListIcon" src={(this.state.accordionTab) ? shrink : expand} alt="" width="20" />
               </span>
-              <span>Benefits</span>
+              <span>How to claim the policy?</span>
             </div>
           </div>
-          <div>
-            {/* Render body */}
-          </div>
+          {this.state.accordionTab && <div className="AccordionDescription">
+            <p>Bharti Axa provides multiple options to intimate the claim to the company. By following ways:</p>
+            <ul>
+              <li>Call on toll free call centre of the insurance company (24x7) - <span>1800-103-2292</span></li>
+              <li>Login to the website of the insurance company and intimate the claim. <span><a href="http://www.bhartiaxagi.co.in/contact-us">http://www.bhartiaxagi.co.in/contact-us</a></span></li>
+              <li>Send an email to the insurance company on <span>customer.service@bharti-axagi.com</span></li>
+              <li>Post/courier to Bharti AXA General Insurance <span>Spectrum Towers, 3rd floor, Malad Link Road, Malad (west), Mumbai- 400064</span></li>
+              <li>Directly contact Bharti AXA office but in writing.</li>
+            </ul>
+            <p>In all the above, the intimations are directed to a central team for prompt and immediate action</p>
+          </div>}
         </div>
       </Container>
     );

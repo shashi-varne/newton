@@ -5,11 +5,16 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 
-import ic_pa_b1 from 'assets/ic_pa_b1.svg';
-import ic_pa_b2 from 'assets/ic_pa_b2.svg';
-import ic_pa_b3 from 'assets/ic_pa_b3.svg';
-import ic_pa_b4 from 'assets/ic_pa_b4.svg';
-import ic_pa_b5 from 'assets/ic_pa_b5.svg';
+import ic_pa_b1_fisdom from 'assets/ic_pa_b1_fisdom.svg';
+import ic_pa_b2_fisdom from 'assets/ic_pa_b2_fisdom.svg';
+import ic_pa_b3_fisdom from 'assets/ic_pa_b3_fisdom.svg';
+import ic_pa_b4_fisdom from 'assets/ic_pa_b4_fisdom.svg';
+import ic_pa_b5_fisdom from 'assets/ic_pa_b5_fisdom.svg';
+import ic_pa_b1_myway from 'assets/ic_pa_b1_myway.svg';
+import ic_pa_b2_myway from 'assets/ic_pa_b2_myway.svg';
+import ic_pa_b3_myway from 'assets/ic_pa_b3_myway.svg';
+import ic_pa_b4_myway from 'assets/ic_pa_b4_myway.svg';
+import ic_pa_b5_myway from 'assets/ic_pa_b5_myway.svg';
 
 class AccidentPlanDetails extends Component {
 
@@ -21,7 +26,8 @@ class AccidentPlanDetails extends Component {
       show_loader:true,
       plan_data: {},
       recommendedInedx: 1,
-      product_key: 'PERSONAL_ACCIDENT'
+      product_key: 'PERSONAL_ACCIDENT',
+      type: getConfig().productName
     }
   }
 
@@ -37,6 +43,14 @@ class AccidentPlanDetails extends Component {
   }
 
   async componentDidMount() {
+    this.setState({
+      ic_pa_b1: this.state.type !== 'fisdom' ? ic_pa_b1_myway : ic_pa_b1_fisdom,
+      ic_pa_b2: this.state.type !== 'fisdom' ? ic_pa_b2_myway : ic_pa_b2_fisdom,
+      ic_pa_b3: this.state.type !== 'fisdom' ? ic_pa_b3_myway : ic_pa_b3_fisdom,
+      ic_pa_b4: this.state.type !== 'fisdom' ? ic_pa_b4_myway : ic_pa_b4_fisdom,
+      ic_pa_b5: this.state.type !== 'fisdom' ? ic_pa_b5_myway : ic_pa_b5_fisdom,
+    })
+    
     try {
       const res = await Api.get('ins_service/api/insurance/bhartiaxa/get/quote?product_name=personal_accident')
 
@@ -63,27 +77,27 @@ class AccidentPlanDetails extends Component {
       {
         'disc': 'Lumpsum payout to your family in case of Accidental Death',
         'key' : 'lumpsum_payout',
-        'icon': ic_pa_b1
+        'icon': this.state.ic_pa_b1
       },
       {
         'disc': 'Coverage against Permanent Total or Partial Disablement',
         'key' : 'disablement_coverage',
-        'icon': ic_pa_b2
+        'icon': this.state.ic_pa_b2
       },
       {
         'disc': 'Protection against accidental burns',
         'key' : 'accidental_burns_protection',
-        'icon': ic_pa_b3
+        'icon': this.state.ic_pa_b3
       },
       {
         'disc': 'Allowances for ambulance and last rites (for plan 2 & 3 only)',
         'key' : 'last_rites',
-        'icon': ic_pa_b4
+        'icon': this.state.ic_pa_b4
       },
       {
         'disc': 'Allowances for purchase of blood (for plan 2 & 3 only)',
         'key' : 'blood_allowence',
-        'icon': ic_pa_b5
+        'icon': this.state.ic_pa_b5
       }
     ]
 
