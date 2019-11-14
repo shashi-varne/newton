@@ -233,7 +233,7 @@ class PaymentSuccessClass extends Component {
         })
         let res2 = {};
         res2 = await Api.post('ins_service/api/insurance/bhartiaxa/lead/update', final_data)
-        
+
 
         if (res2.pfwresponse.status_code === 200) {
 

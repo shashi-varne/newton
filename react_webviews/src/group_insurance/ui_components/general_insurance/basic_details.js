@@ -14,7 +14,7 @@ import { getConfig } from 'utils/functions';
 import {
   isValidDate, validateAlphabets,
   validateEmail, validateNumber, numberShouldStartWith,
-   validateConsecutiveChar, validateLengthNames
+  validateConsecutiveChar, validateLengthNames
 } from 'utils/validators';
 
 class BasicDetailsForm extends Component {
@@ -38,7 +38,7 @@ class BasicDetailsForm extends Component {
     let { params } = this.props.parent.props.location || {};
     console.log(params)
     this.setState({
-      premium_details: params ? params.premium_details: {},
+      premium_details: params ? params.premium_details : {},
       lead_id: lead_id || ''
     })
 
@@ -68,8 +68,8 @@ class BasicDetailsForm extends Component {
             id="nominee-name"
             name="nominee_name"
             error={(this.state.basic_details_data.nominee && this.state.basic_details_data.nominee.name_error) ? true : false}
-            helperText={this.state.basic_details_data.nominee ?  this.state.basic_details_data.nominee.name_error :''}
-            value={this.state.basic_details_data.nominee ? this.state.basic_details_data.nominee.name || '': ''}
+            helperText={this.state.basic_details_data.nominee ? this.state.basic_details_data.nominee.name_error : ''}
+            value={this.state.basic_details_data.nominee ? this.state.basic_details_data.nominee.name || '' : ''}
             onChange={this.handleChange('nominee_name')} />
         </div>
         <div className="InputField">
@@ -79,8 +79,8 @@ class BasicDetailsForm extends Component {
             id="relationship"
             label="Nominee's relationship"
             error={(this.state.basic_details_data.nominee && this.state.basic_details_data.nominee.relationship_error) ? true : false}
-            helperText={this.state.basic_details_data.nominee ? this.state.basic_details_data.nominee.relationship_error: ''}
-            value={this.state.basic_details_data.nominee ? this.state.basic_details_data.nominee.relationship || '': ''}
+            helperText={this.state.basic_details_data.nominee ? this.state.basic_details_data.nominee.relationship_error : ''}
+            value={this.state.basic_details_data.nominee ? this.state.basic_details_data.nominee.relationship || '' : ''}
             name="nominee_relationship"
             onChange={this.handleChange('nominee_relationship')} />
         </div>
@@ -91,19 +91,19 @@ class BasicDetailsForm extends Component {
   handleChange = name => event => {
     console.log(name)
     if (!name) {
-       name = event.target.name;
+      name = event.target.name;
     }
     console.log(event)
     var value = event.target ? event.target.value : '';
     var basic_details_data = this.state.basic_details_data || {};
-    if(name.indexOf('nominee_') >= 0) {
+    if (name.indexOf('nominee_') >= 0) {
       if (!basic_details_data.nominee) {
         basic_details_data.nominee = {};
       }
 
-      if(name === 'nominee_name') {
+      if (name === 'nominee_name') {
         name = 'name'
-      } else if(name === 'nominee_relationship') {
+      } else if (name === 'nominee_relationship') {
         name = 'relationship'
         value = event
       }
@@ -115,7 +115,7 @@ class BasicDetailsForm extends Component {
       })
     } else if (name === 'mobile_no') {
       if (value.length <= 10) {
-        basic_details_data[name] =  value;
+        basic_details_data[name] = value;
         basic_details_data[name + '_error'] = '';
       }
     } else if (name === 'dob') {
@@ -165,14 +165,14 @@ class BasicDetailsForm extends Component {
           }
         };
 
-       
+
 
       }
 
-      basic_details_data[name] =  event.target.value;
+      basic_details_data[name] = event.target.value;
       basic_details_data[name + '_error'] = errorDate;
-      
-    }  else {
+
+    } else {
       basic_details_data[name] = value;
       basic_details_data[name + '_error'] = '';
     }
@@ -185,12 +185,12 @@ class BasicDetailsForm extends Component {
   };
 
   handleChangeRadio = name => event => {
-   
-    
+
+
     var basic_details_data = this.state.basic_details_data || {};
 
     let optionsMapper = {
-      'gender' : genderOptions,
+      'gender': genderOptions,
       'marital_status': insuranceMaritalStatus
     }
     basic_details_data[name] = optionsMapper[name][event].value;
@@ -206,7 +206,7 @@ class BasicDetailsForm extends Component {
   async componentDidMount() {
 
     let basic_details_data = {
-      "product_name":this.props.parent.state.product_key,
+      "product_name": this.props.parent.state.product_key,
       "name": "",
       "gender": "",
       "marital_status": "",
@@ -214,10 +214,10 @@ class BasicDetailsForm extends Component {
       "email": "",
       "dob": "",
       "nominee": {
-        "name": "", 
+        "name": "",
         "relation": ""
       },
-      "nominee_checked" : false,
+      "nominee_checked": false,
       cover_amount: this.state.premium_details.cover_amount,
       premium: this.state.premium_details.premium,
       tax_amount: this.state.premium_details.tax_amount
@@ -225,9 +225,9 @@ class BasicDetailsForm extends Component {
     console.log(basic_details_data)
     try {
 
-      if(this.state.lead_id) {
+      if (this.state.lead_id) {
         let res = await Api.get('ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
-       
+
         this.setState({
           show_loader: false
         })
@@ -246,7 +246,7 @@ class BasicDetailsForm extends Component {
         }
       } else {
         let res = await Api.get('ins_service/api/insurance/account/summary')
-       
+
         this.setState({
           show_loader: false
         })
@@ -284,28 +284,28 @@ class BasicDetailsForm extends Component {
 
   async handleClickCurrent() {
     console.log("handle click child")
-    
+
 
     // this.sendEvents('next');
     let keysMapper = {
-      'name' : 'name',
-      'email' : 'email',
+      'name': 'name',
+      'email': 'email',
       'dob': 'dob',
-      'mobile_no' : 'mobile number',
+      'mobile_no': 'mobile number',
       'gender': 'gender',
       'marital_status': 'marital status'
     }
-    let keys_to_check = ['name', 'email', 'dob', 'mobile_no','gender', 'marital_status']
+    let keys_to_check = ['name', 'email', 'dob', 'mobile_no', 'gender', 'marital_status']
     let basic_details_data = this.state.basic_details_data;
 
-    for (var i=0; i < keys_to_check.length; i++) {
+    for (var i = 0; i < keys_to_check.length; i++) {
       let key_check = keys_to_check[i];
-      if(!basic_details_data[key_check]) {
+      if (!basic_details_data[key_check]) {
         basic_details_data[key_check + '_error'] = 'Please enter ' + keysMapper[key_check];
       }
     }
 
-    
+
     if (!validateAlphabets(basic_details_data.name)) {
       basic_details_data['name_error'] = 'Name can contain only alphabets';
     } else if (validateLengthNames(basic_details_data.name, 'name', this.state.provider).isError) {
@@ -314,23 +314,23 @@ class BasicDetailsForm extends Component {
     } else if (!validateConsecutiveChar(basic_details_data.name)) {
       basic_details_data['name_error'] = 'Name can not contain more than 3 same consecutive characters';
     }
-    
+
     if (new Date(basic_details_data.dob) > new Date() || !isValidDate(basic_details_data.dob)) {
       basic_details_data['dob_error'] = 'Please enter valid date';
     } else if (basic_details_data.age > 65 || basic_details_data.age < 18) {
       basic_details_data['dob_error'] = 'Valid age is between 18 and 65';
-    } 
+    }
 
-    
+
     if ((basic_details_data.email.length < 10 || !validateEmail(basic_details_data.email))) {
 
       basic_details_data['email_error'] = 'Please enter valid email';
     }
-    
+
     if ((basic_details_data.mobile_no.length !== 10 || !validateNumber(basic_details_data.mobile_no))
-    || !numberShouldStartWith(basic_details_data.mobile_no)) {
+      || !numberShouldStartWith(basic_details_data.mobile_no)) {
       basic_details_data['email_error'] = 'Please enter valid mobile number';
-      
+
     }
 
     this.setState({
@@ -339,7 +339,7 @@ class BasicDetailsForm extends Component {
 
     let canSubmitForm = true;
     for (var key in basic_details_data) {
-      if(key.indexOf('error') >= 0) {
+      if (key.indexOf('error') >= 0) {
         if (basic_details_data[key]) {
           canSubmitForm = false;
           break;
@@ -349,53 +349,53 @@ class BasicDetailsForm extends Component {
 
     if (canSubmitForm) {
       let final_data = {
-          "product_name": this.props.parent.state.product_key,
-          "name": basic_details_data.name,
-          "gender": basic_details_data.gender,
-          "marital_status": basic_details_data.marital_status,
-          "mobile_no": basic_details_data.mobile_no,
-          "email": basic_details_data.email,
-          "premium": basic_details_data.premium,
-          "dob": basic_details_data.dob,
-          "tax_amount": basic_details_data.tax_amount,
-          "cover_amount": basic_details_data.cover_amount
+        "product_name": this.props.parent.state.product_key,
+        "name": basic_details_data.name,
+        "gender": basic_details_data.gender,
+        "marital_status": basic_details_data.marital_status,
+        "mobile_no": basic_details_data.mobile_no,
+        "email": basic_details_data.email,
+        "premium": basic_details_data.premium,
+        "dob": basic_details_data.dob,
+        "tax_amount": basic_details_data.tax_amount,
+        "cover_amount": basic_details_data.cover_amount
       }
 
-      if(this.state.checked) {
+      if (this.state.checked) {
         let obj = {
-          "name":  basic_details_data.nominee.name,
+          "name": basic_details_data.nominee.name,
           "relation": basic_details_data.nominee.relationship
         }
         final_data['nominee'] = obj;
-      }else {
+      } else {
         final_data['nominee'] = {};
       }
 
       final_data.product_name = this.props.parent.state.product_key;
-      
-        this.setState({
-          show_loader: true
-        })
-        let res2 = {};
-        if(this.state.lead_id) {
-          final_data.lead_id = this.state.lead_id;
-          res2 = await Api.post('ins_service/api/insurance/bhartiaxa/lead/update', final_data)
-        }else {
-          res2 = await Api.post('ins_service/api/insurance/bhartiaxa/lead/create', final_data)
-        }
-        
-  
-        if (res2.pfwresponse.status_code === 200) {
-          var lead_id_updated = this.state.lead_id || res2.pfwresponse.result.response_data.lead.id;
-          window.localStorage.setItem('group_insurance_lead_id_selected', lead_id_updated || '');
-          this.navigate('summary')
-        } else {
-          toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
-            || 'Something went wrong');
-        }
-      
+
+      this.setState({
+        show_loader: true
+      })
+      let res2 = {};
+      if (this.state.lead_id) {
+        final_data.lead_id = this.state.lead_id;
+        res2 = await Api.post('ins_service/api/insurance/bhartiaxa/lead/update', final_data)
+      } else {
+        res2 = await Api.post('ins_service/api/insurance/bhartiaxa/lead/create', final_data)
+      }
+
+
+      if (res2.pfwresponse.status_code === 200) {
+        var lead_id_updated = this.state.lead_id || res2.pfwresponse.result.response_data.lead.id;
+        window.localStorage.setItem('group_insurance_lead_id_selected', lead_id_updated || '');
+        this.navigate('summary')
+      } else {
+        toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
+          || 'Something went wrong');
+      }
+
     }
-    
+
   }
 
   navigate = (pathname) => {
@@ -414,119 +414,119 @@ class BasicDetailsForm extends Component {
         buttonTitle='Go to Summary'
         onlyButton={true}
         showLoader={this.state.show_loader}
-        handleClick={()=> this.handleClickCurrent()}
+        handleClick={() => this.handleClickCurrent()}
         title="Basic Details"
         classOverRideContainer="basic-details">
+        <div>
           <div>
-            <div>
-              <div className="basic-details-heading">Basics Details</div>
-              <div className="basic-details-subtitle">We only need your basic detail for verification</div>
-            </div>
-            <div style={{ marginTop: '40px' }}>
-              <div className="InputField">
-                <Input
-                  type="text"
-                  width="40"
-                  label="Name"
-                  class="Name"
-                  id="name"
-                  name="name"
-                  error={(this.state.basic_details_data.name_error) ? true : false}
-                  helperText={this.state.basic_details_data.name_error}
-                  value={this.state.basic_details_data.name || ''}
-                  onChange={this.handleChange()} />
-              </div>
-              <div className="InputField">
-                <Input
-                  type="text"
-                  width="40"
-                  label="Date of birth (DD/MM/YYYY)"
-                  class="DOB"
-                  id="dob"
-                  name="dob"
-                  max={currentDate}
-                  error={(this.state.basic_details_data.dob_error) ? true : false}
-                  helperText={this.state.basic_details_data.dob_error}
-                  value={this.state.basic_details_data.dob || ''}
-                  placeholder="DD/MM/YYYY"
-                  maxLength="10"
-                  onChange={this.handleChange()} />
-              </div>
-              <div className="InputField">
-                <Input
-                  type="email"
-                  width="40"
-                  label="E-mail address"
-                  class="Email"
-                  id="email"
-                  name="email"
-                  error={(this.state.basic_details_data.email_error) ? true : false}
-                  helperText={this.state.basic_details_data.email_error}
-                  value={this.state.basic_details_data.email || ''}
-                  onChange={this.handleChange()} />
-              </div>
-              <div className="InputField">
-                <MobileInputWithoutIcon
-                  type="number"
-                  width="40"
-                  label="Mobile number"
-                  class="Mobile"
-                  id="number"
-                  name="mobile_no"
-                  error={(this.state.basic_details_data.mobile_no_error) ? true : false}
-                  helperText={this.state.basic_details_data.mobile_no_error}
-                  value={this.state.basic_details_data.mobile_no || ''}
-                  onChange={this.handleChange()} />
-              </div>
-              <div className="InputField">
-                <RadioWithoutIcon
-                  width="40"
-                  label="Gender"
-                  class="Gender:"
-                  options={genderOptions}
-                  id="gender"
-                  name="gender"
-                  error={(this.state.basic_details_data.gender_error) ? true : false}
-                  helperText={this.state.basic_details_data.gender_error}
-                  value={this.state.basic_details_data.gender || ''}
-                  onChange={this.handleChangeRadio('gender')} />
-              </div>
-              <div className="InputField">
-                <RadioWithoutIcon
-                  width="40"
-                  label="Marital Status"
-                  class="Marital status:"
-                  options={insuranceMaritalStatus}
-                  id="marital-status"
-                  name="marital_status"
-                  error={(this.state.basic_details_data.marital_status_error) ? true : false}
-                  helperText={this.state.basic_details_data.marital_status_error}
-                  value={this.state.basic_details_data.marital_status || ''}
-                  onChange={this.handleChangeRadio('marital_status')} />
-              </div>
-              <div className="InputField">
-                <div className="CheckBlock2" style={{ padding: '0 15px',margin: '10px 0' }}>
-                  <Grid container spacing={16} alignItems="center">
-                    <Grid item xs={1} className="TextCenter">
-                      <Checkbox
-                        defaultChecked
-                        checked={this.state.checked}
-                        color="default"
-                        value="checked"
-                        name="checked"
-                        onChange={this.handleChange()}
-                        className="Checkbox" />
-                    </Grid>
-                    <Grid item xs={11}>
-                      <div className="checkbox-text">Do you want to add nominee details?</div>
-                    </Grid>
-                  </Grid>
-                </div>
-              </div>
-              { this.state.checked && this.renderNominee()}
-            </div>
+            <div className="basic-details-heading">Basics Details</div>
+            <div className="basic-details-subtitle">We only need your basic detail for verification</div>
           </div>
-        </Container>
+          <div style={{ marginTop: '40px' }}>
+            <div className="InputField">
+              <Input
+                type="text"
+                width="40"
+                label="Name"
+                class="Name"
+                id="name"
+                name="name"
+                error={(this.state.basic_details_data.name_error) ? true : false}
+                helperText={this.state.basic_details_data.name_error}
+                value={this.state.basic_details_data.name || ''}
+                onChange={this.handleChange()} />
+            </div>
+            <div className="InputField">
+              <Input
+                type="text"
+                width="40"
+                label="Date of birth (DD/MM/YYYY)"
+                class="DOB"
+                id="dob"
+                name="dob"
+                max={currentDate}
+                error={(this.state.basic_details_data.dob_error) ? true : false}
+                helperText={this.state.basic_details_data.dob_error}
+                value={this.state.basic_details_data.dob || ''}
+                placeholder="DD/MM/YYYY"
+                maxLength="10"
+                onChange={this.handleChange()} />
+            </div>
+            <div className="InputField">
+              <Input
+                type="email"
+                width="40"
+                label="E-mail address"
+                class="Email"
+                id="email"
+                name="email"
+                error={(this.state.basic_details_data.email_error) ? true : false}
+                helperText={this.state.basic_details_data.email_error}
+                value={this.state.basic_details_data.email || ''}
+                onChange={this.handleChange()} />
+            </div>
+            <div className="InputField">
+              <MobileInputWithoutIcon
+                type="number"
+                width="40"
+                label="Mobile number"
+                class="Mobile"
+                id="number"
+                name="mobile_no"
+                error={(this.state.basic_details_data.mobile_no_error) ? true : false}
+                helperText={this.state.basic_details_data.mobile_no_error}
+                value={this.state.basic_details_data.mobile_no || ''}
+                onChange={this.handleChange()} />
+            </div>
+            <div className="InputField">
+              <RadioWithoutIcon
+                width="40"
+                label="Gender"
+                class="Gender:"
+                options={genderOptions}
+                id="gender"
+                name="gender"
+                error={(this.state.basic_details_data.gender_error) ? true : false}
+                helperText={this.state.basic_details_data.gender_error}
+                value={this.state.basic_details_data.gender || ''}
+                onChange={this.handleChangeRadio('gender')} />
+            </div>
+            <div className="InputField">
+              <RadioWithoutIcon
+                width="40"
+                label="Marital Status"
+                class="Marital status:"
+                options={insuranceMaritalStatus}
+                id="marital-status"
+                name="marital_status"
+                error={(this.state.basic_details_data.marital_status_error) ? true : false}
+                helperText={this.state.basic_details_data.marital_status_error}
+                value={this.state.basic_details_data.marital_status || ''}
+                onChange={this.handleChangeRadio('marital_status')} />
+            </div>
+            <div className="InputField">
+              <div className="CheckBlock2" style={{ padding: '0 15px', margin: '10px 0' }}>
+                <Grid container spacing={16} alignItems="center">
+                  <Grid item xs={1} className="TextCenter">
+                    <Checkbox
+                      defaultChecked
+                      checked={this.state.checked}
+                      color="default"
+                      value="checked"
+                      name="checked"
+                      onChange={this.handleChange()}
+                      className="Checkbox" />
+                  </Grid>
+                  <Grid item xs={11}>
+                    <div className="checkbox-text">Do you want to add nominee details?</div>
+                  </Grid>
+                </Grid>
+              </div>
+            </div>
+            {this.state.checked && this.renderNominee()}
+          </div>
+        </div>
+      </Container>
     );
   }
 }
@@ -534,7 +534,7 @@ class BasicDetailsForm extends Component {
 
 const BasicDetails = (props) => (
   <BasicDetailsForm
-  {...props} />
+    {...props} />
 );
 
 export default BasicDetails;

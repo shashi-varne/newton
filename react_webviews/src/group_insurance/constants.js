@@ -441,3 +441,16 @@ export const insuranceStateMapper = {
   'HOSPICASH': 'hospicash',
   'term_insurance': 'term'
 }
+
+export function getBhartiaxaStatusToState(policy) {
+  let status = policy.status;
+  let payment_status = policy.lead_payment_status;
+  let path = '';
+  if(status === 'complete') {
+    path = 'plan';
+  } else if (status === 'init' && payment_status === 'payment_done') {
+    path = 'payment-success';
+  }
+
+  return path;
+}

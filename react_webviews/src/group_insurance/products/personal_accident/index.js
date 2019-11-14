@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PlanDetails from '../../ui_components/general_insurance/plan_details';
 
-import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 
@@ -23,7 +22,7 @@ class AccidentPlanDetails extends Component {
     this.state = {
       selectedIndex: 1,
       checked: false,
-      show_loader:true,
+      show_loader: true,
       plan_data: {},
       recommendedInedx: 1,
       product_key: 'PERSONAL_ACCIDENT',
@@ -40,9 +39,6 @@ class AccidentPlanDetails extends Component {
       lead_id: lead_id || ''
     })
 
-  }
-
-  async componentDidMount() {
     this.setState({
       ic_pa_b1: this.state.type !== 'fisdom' ? ic_pa_b1_myway : ic_pa_b1_fisdom,
       ic_pa_b2: this.state.type !== 'fisdom' ? ic_pa_b2_myway : ic_pa_b2_fisdom,
@@ -50,22 +46,26 @@ class AccidentPlanDetails extends Component {
       ic_pa_b4: this.state.type !== 'fisdom' ? ic_pa_b4_myway : ic_pa_b4_fisdom,
       ic_pa_b5: this.state.type !== 'fisdom' ? ic_pa_b5_myway : ic_pa_b5_fisdom,
     })
-    
+  }
+
+  async componentDidMount() {
+
+
     try {
-      const res = await Api.get('ins_service/api/insurance/bhartiaxa/get/quote?product_name=personal_accident')
+      // const res = await Api.get('ins_service/api/insurance/bhartiaxa/get/quote?product_name=personal_accident')
 
-      this.setState({
-        show_loader: false
-      })
-      if (res.pfwresponse.status_code === 200) {
+      // this.setState({
+      //   show_loader: false
+      // })
+      // if (res.pfwresponse.status_code === 200) {
 
-        var resultData = res.pfwresponse.result;
-        console.log(resultData);
+      //   var resultData = res.pfwresponse.result;
+      //   console.log(resultData);
 
-      } else {
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong');
-      }
+      // } else {
+      //   toast(res.pfwresponse.result.error || res.pfwresponse.result.message
+      //     || 'Something went wrong');
+      // }
     } catch (err) {
       this.setState({
         show_loader: false
@@ -76,27 +76,27 @@ class AccidentPlanDetails extends Component {
     var product_benefits = [
       {
         'disc': 'Lumpsum payout to your family in case of Accidental Death',
-        'key' : 'lumpsum_payout',
+        'key': 'lumpsum_payout',
         'icon': this.state.ic_pa_b1
       },
       {
         'disc': 'Coverage against Permanent Total or Partial Disablement',
-        'key' : 'disablement_coverage',
+        'key': 'disablement_coverage',
         'icon': this.state.ic_pa_b2
       },
       {
         'disc': 'Protection against accidental burns',
-        'key' : 'accidental_burns_protection',
+        'key': 'accidental_burns_protection',
         'icon': this.state.ic_pa_b3
       },
       {
         'disc': 'Allowances for ambulance and last rites (for plan 2 & 3 only)',
-        'key' : 'last_rites',
+        'key': 'last_rites',
         'icon': this.state.ic_pa_b4
       },
       {
         'disc': 'Allowances for purchase of blood (for plan 2 & 3 only)',
-        'key' : 'blood_allowence',
+        'key': 'blood_allowence',
         'icon': this.state.ic_pa_b5
       }
     ]
@@ -109,24 +109,24 @@ class AccidentPlanDetails extends Component {
       'premium_details': [
         {
           "sum_assured": 200000,
-          "product_benefits_included": ['lumpsum_payout', 'disablement_coverage', 
-          'accidental_burns_protection'],
+          "product_benefits_included": ['lumpsum_payout', 'disablement_coverage',
+            'accidental_burns_protection'],
           "premium": "250",
           "tax_amount": "36",
           "plus_benefit": ''
         },
         {
           "sum_assured": 500000,
-          "product_benefits_included": ['lumpsum_payout', 'disablement_coverage', 
-          'accidental_burns_protection', 'last_rites', 'blood_allowence'],
+          "product_benefits_included": ['lumpsum_payout', 'disablement_coverage',
+            'accidental_burns_protection', 'last_rites', 'blood_allowence'],
           "premium": "500",
           "tax_amount": "126",
           "plus_benefit": '2'
         },
         {
           "sum_assured": 1000000,
-          "product_benefits_included": ['lumpsum_payout', 'disablement_coverage', 
-          'accidental_burns_protection', 'last_rites', 'blood_allowence'],
+          "product_benefits_included": ['lumpsum_payout', 'disablement_coverage',
+            'accidental_burns_protection', 'last_rites', 'blood_allowence'],
           "premium": "990",
           "tax_amount": "216",
           "plus_benefit": '2'
@@ -135,10 +135,10 @@ class AccidentPlanDetails extends Component {
     }
 
     plan_data.premium_details.forEach(function (premium, index) {
-      
+
       plan_data.premium_details[index].product_benefits = []
       product_benefits.forEach(function (benefit, index2) {
-        if(premium.product_benefits_included.indexOf(benefit.key) === -1) {
+        if (premium.product_benefits_included.indexOf(benefit.key) === -1) {
           benefit.isDisabled = true;
         }
 
@@ -152,7 +152,7 @@ class AccidentPlanDetails extends Component {
     })
   }
 
-  navigate = (pathname, search,premium_details) => {
+  navigate = (pathname, search, premium_details) => {
     this.props.history.push({
       pathname: pathname,
       search: search ? search : getConfig().searchParams,
@@ -163,9 +163,9 @@ class AccidentPlanDetails extends Component {
   }
 
   handleClick = async (final_data) => {
-    
-    this.navigate('form','', final_data);
-   
+
+    this.navigate('form', '', final_data);
+
   }
 
   render() {

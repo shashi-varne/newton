@@ -34,7 +34,7 @@ class PlanSummaryClass extends Component {
   async componentDidMount() {
     try {
       let res = await Api.get('ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
-     
+
       if (res.pfwresponse.status_code === 200) {
 
         var lead = res.pfwresponse.result.lead;
@@ -86,7 +86,7 @@ class PlanSummaryClass extends Component {
       search: getConfig().searchParams
     });
   }
-  
+
   async handleClickCurrent() {
     try {
       this.setState({
@@ -103,10 +103,10 @@ class PlanSummaryClass extends Component {
           window.location.origin + '/group-insurance/accident/payment'
         );
 
-        var payment_link  = res2.pfwresponse.result.payment_link;
+        var payment_link = res2.pfwresponse.result.payment_link;
         var pgLink = payment_link;
 
-        
+
         let app = getConfig().app;
         var back_url = encodeURIComponent(current_url);
         // eslint-disable-next-line
@@ -122,63 +122,63 @@ class PlanSummaryClass extends Component {
           || 'Something went wrong');
       }
 
-    } catch(err) {
+    } catch (err) {
       toast('Something went wrong');
     }
   }
 
   render() {
 
-      return (
-        <Container
-          fullWidthButton={true}
-          buttonTitle='Make Payment'
-          onlyButton={true}
-          showLoader={this.state.show_loader}
-          handleClick={() => this.handleClickCurrent()}
-          title="Summary"
-          classOverRideContainer="plan-summary"
-        >
-          <div className="plan-summary-heading">
-            <div className="plan-summary-heading-text">{this.state.summaryData.product_title}</div>
-            <img src={provider} alt="" />
+    return (
+      <Container
+        fullWidthButton={true}
+        buttonTitle='Make Payment'
+        onlyButton={true}
+        showLoader={this.state.show_loader}
+        handleClick={() => this.handleClickCurrent()}
+        title="Summary"
+        classOverRideContainer="plan-summary"
+      >
+        <div className="plan-summary-heading">
+          <div className="plan-summary-heading-text">{this.state.summaryData.product_title}</div>
+          <img src={provider} alt="" />
+        </div>
+        <div className="plan-summary-mid">
+          <div className="plan-summary-mid1">
+            <div className="plan-summary-mid11">Cover amount</div>
+            <div className="plan-summary-mid12">{numDifferentiation(this.state.summaryData.cover_amount || 0)}</div>
           </div>
-          <div className="plan-summary-mid">
-            <div className="plan-summary-mid1">
-              <div className="plan-summary-mid11">Cover amount</div>
-              <div className="plan-summary-mid12">{numDifferentiation(this.state.summaryData.cover_amount || 0)}</div>
-            </div>
-            <div className="plan-summary-mid1">
-              <div className="plan-summary-mid11">Cover period</div>
-              <div className="plan-summary-mid12">{this.state.summaryData.product_coverage} year</div>
-            </div>
-            <div className="plan-summary-mid1 plan-summary-mid1-bg">
-              <div className="plan-summary-mid11">Policy start date</div>
-              <div className="plan-summary-mid12">{this.state.summaryData.dt_policy_start}</div>
-            </div>
-            <div className="plan-summary-mid1">
-              <div className="plan-summary-mid11">End date</div>
-              <div className="plan-summary-mid12">{this.state.summaryData.dt_policy_end}</div>
-            </div>
+          <div className="plan-summary-mid1">
+            <div className="plan-summary-mid11">Cover period</div>
+            <div className="plan-summary-mid12">{this.state.summaryData.product_coverage} year</div>
           </div>
-          <div className="plan-summary-premium">
-            <div className="plan-summary-premium-heading">Premium details:</div>
-            <div className="plan-summary-premium-list">
-              <div className="plan-summary-premium-list1">Base premium</div>
-              <div className="plan-summary-premium-list2">₹{this.state.summaryData.base_premium}</div>
-            </div>
-            <div className="plan-summary-premium-list">
-              <div className="plan-summary-premium-list1">GST & taxes</div>
-              <div className="plan-summary-premium-list2">₹{this.state.summaryData.tax_amount}</div>
-            </div>
-            <div className="divider"></div>
-            <div className="plan-summary-premium-list">
-              <div className="plan-summary-premium-list1 plan-summary-premium-font">Total payable</div>
-              <div className="plan-summary-premium-list2">₹ {this.state.summaryData.premium}</div>
-            </div>
+          <div className="plan-summary-mid1 plan-summary-mid1-bg">
+            <div className="plan-summary-mid11">Policy start date</div>
+            <div className="plan-summary-mid12">{this.state.summaryData.dt_policy_start}</div>
           </div>
-        </Container>
-      );
+          <div className="plan-summary-mid1">
+            <div className="plan-summary-mid11">End date</div>
+            <div className="plan-summary-mid12">{this.state.summaryData.dt_policy_end}</div>
+          </div>
+        </div>
+        <div className="plan-summary-premium">
+          <div className="plan-summary-premium-heading">Premium details:</div>
+          <div className="plan-summary-premium-list">
+            <div className="plan-summary-premium-list1">Base premium</div>
+            <div className="plan-summary-premium-list2">₹{this.state.summaryData.base_premium}</div>
+          </div>
+          <div className="plan-summary-premium-list">
+            <div className="plan-summary-premium-list1">GST & taxes</div>
+            <div className="plan-summary-premium-list2">₹{this.state.summaryData.tax_amount}</div>
+          </div>
+          <div className="divider"></div>
+          <div className="plan-summary-premium-list">
+            <div className="plan-summary-premium-list1 plan-summary-premium-font">Total payable</div>
+            <div className="plan-summary-premium-list2">₹ {this.state.summaryData.premium}</div>
+          </div>
+        </div>
+      </Container>
+    );
 
 
   }

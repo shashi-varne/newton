@@ -10,9 +10,9 @@ import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 
 const product_config = {
-  'PERSONAL_ACCIDENT' : {
-    'top_title1' : 'You’re insured against any unfortunate accidental events with',
-    'top_title2' : 'Bharti AXA General Insurance.'
+  'PERSONAL_ACCIDENT': {
+    'top_title1': 'You’re insured against any unfortunate accidental events with',
+    'top_title2': 'Bharti AXA General Insurance.'
   }
 }
 
@@ -26,7 +26,7 @@ class PlanSuccessClass extends Component {
 
       },
       show_loader: true,
-      accordians_data : []
+      accordians_data: []
     };
 
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
@@ -60,27 +60,27 @@ class PlanSuccessClass extends Component {
 
         let accordians_data = [
           {
-            'key' : 'policy',
-            'name' : 'Policy Info'
+            'key': 'policy',
+            'name': 'Policy Info'
           },
           {
-            'key' : 'personal',
-            'name' : 'Personal'
+            'key': 'personal',
+            'name': 'Personal'
           },
           {
-            'key' : 'nominee',
-            'name' : 'Nominee'
+            'key': 'nominee',
+            'name': 'Nominee'
           },
           {
-            'key' : 'address',
-            'name' : 'Address'
+            'key': 'address',
+            'name': 'Address'
           }
         ]
 
-        if(lead_data.nominee) {
+        if (lead_data.nominee) {
           let obj = {
-            'key' : 'nominee',
-            'name' : 'Nominee'
+            'key': 'nominee',
+            'name': 'Nominee'
           };
 
           accordians_data.splice(1, 0, obj);
@@ -102,7 +102,7 @@ class PlanSuccessClass extends Component {
       toast('Something went wrong');
     }
 
-    
+
 
 
   }
@@ -158,11 +158,11 @@ class PlanSuccessClass extends Component {
       return (
         <div className="AccordionBody">
           <ul>
-          <li>Policy: <span>{this.state.lead_data.policy.product_title}</span></li>
-          <li>Issuer: <span>{this.state.lead_data.policy.issuer}</span></li>
-          <li>COI: <span>{this.state.lead_data.policy.master_policy_number}</span></li>
-          <li>Sum Assured: <span>{this.state.lead_data.cover_amount}</span></li>
-          <li>Cover period: <span>{this.state.lead_data.product_coverage}</span></li>
+            <li>Policy: <span>{this.state.lead_data.policy.product_title}</span></li>
+            <li>Issuer: <span>{this.state.lead_data.policy.issuer}</span></li>
+            <li>COI: <span>{this.state.lead_data.policy.master_policy_number}</span></li>
+            <li>Sum Assured: <span>{this.state.lead_data.cover_amount}</span></li>
+            <li>Cover period: <span>{this.state.lead_data.product_coverage}</span></li>
 
             {/* <li className="AccordionBodyItem"><span className="AccordionBodyItemBold">Policy</span>: Personal accident</li>
             <li className="AccordionBodyItem"><span className="AccordionBodyItemBold">Issuer</span>: Bharti AXA General Insurances</li>
@@ -215,28 +215,28 @@ class PlanSuccessClass extends Component {
 
   }
 
-  renderAccordions (props, index) {
-    return(
+  renderAccordions(props, index) {
+    return (
       <div key={index} className="plan-summary-accordion">
-          <div className="accordion-container">
-            <div className="Accordion">
-              <div className="AccordionTitle" onClick={() => this.toggleAccordian(props.key)}>
-                <div className="AccordionList">
-                  <span className="AccordionList1">
-                    <img className="AccordionListIcon" src={(this.state.accordianTab === props.key) ? shrink : expand} alt="" width="20" />
-                  </span>
-                    <span>{props.name}</span>
-                </div>
+        <div className="accordion-container">
+          <div className="Accordion">
+            <div className="AccordionTitle" onClick={() => this.toggleAccordian(props.key)}>
+              <div className="AccordionList">
+                <span className="AccordionList1">
+                  <img className="AccordionListIcon" src={(this.state.accordianTab === props.key) ? shrink : expand} alt="" width="20" />
+                </span>
+                <span>{props.name}</span>
               </div>
-              {this.state.accordianTab === props.key && this.renderAccordionBody(props.key)}
             </div>
+            {this.state.accordianTab === props.key && this.renderAccordionBody(props.key)}
           </div>
         </div>
+      </div>
     )
   }
 
   getProductKey() {
-    if(this.props.parent) {
+    if (this.props.parent) {
       return this.props.parent.state.product_key;
     }
 
@@ -255,7 +255,7 @@ class PlanSuccessClass extends Component {
           <div className="plan-success-heading-icon"><img src={congratulations} alt="" /></div>
           <div className="plan-success-heading-title">Congratulations!</div>
           <div className="plan-success-heading-subtitle">{product_config[this.getProductKey()].top_title1} <span className="plan-success-heading-subtitle-bold">
-          {product_config[this.getProductKey()].top_title2}</span>
+            {product_config[this.getProductKey()].top_title2}</span>
           </div>
         </div>
 
