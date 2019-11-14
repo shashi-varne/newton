@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
 import provider from 'assets/provider.svg';
-import ic_read from 'assets/ic_read.svg';
-import ic_claim_assist from 'assets/ic_claim_assist.svg';
+import ic_read_fisdom from 'assets/ic_read_fisdom.svg';
+import ic_read_myway from 'assets/ic_read_myway.svg';
+import ic_claim_assist_fisdom from 'assets/ic_claim_assist_fisdom.svg';
+import ic_claim_assist_myway from 'assets/ic_claim_assist_myway.svg';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 
@@ -30,6 +32,7 @@ class PlanDetailsClass extends Component {
 
         }
       },
+      type: getConfig().productName,
     };
 
     this.renderPlans = this.renderPlans.bind(this);
@@ -47,6 +50,10 @@ class PlanDetailsClass extends Component {
   }
 
   async componentDidMount() {
+    this.setState({
+      ic_claim_assist: this.state.type !== 'fisdom' ? ic_claim_assist_myway : ic_claim_assist_fisdom,
+      ic_read: this.state.type !== 'fisdom' ? ic_read_myway : ic_read_fisdom
+    })
 
     let premium_details = {
       "product_name":this.props.parent.state.product_key,
@@ -249,14 +256,14 @@ class PlanDetailsClass extends Component {
         </div>
 
         <div className="accident-plan-claim">
-          <img className="accident-plan-claim-icon" src={ic_claim_assist} alt="" />
+          <img className="accident-plan-claim-icon" src={this.state.ic_claim_assist} alt="" />
           <div>
             <div className="accident-plan-claim-title">Claim assistance</div>
             <div className="accident-plan-claim-subtitle">Call Bharti AXA on toll free 1800-103-2292</div>
           </div>
         </div>
         <div className="accident-plan-read">
-          <img className="accident-plan-read-icon" src={ic_read} alt="" />
+          <img className="accident-plan-read-icon" src={this.state.ic_read} alt="" />
           <div className="accident-plan-read-text">Read Detailed Document</div>
         </div>
 
