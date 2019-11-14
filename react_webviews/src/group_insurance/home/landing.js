@@ -3,8 +3,8 @@ import Container from '../common/Container';
 import { insuranceStateMapper } from '../constants';
 import insurance_fisdom from 'assets/ic_fisdom_insurance_fisdom.svg';
 import insurance_myway from 'assets/ic_fisdom_insurance_myway.svg';
-import health_fisdom from 'assets/ic_health_fisdom.svg';
-import health_myway from 'assets/ic_health_myway.svg';
+// import health_fisdom from 'assets/ic_health_fisdom.svg';
+// import health_myway from 'assets/ic_health_myway.svg';
 import hospicash_fisdom from 'assets/ic_hospicash_fisdom.svg';
 import hospicash_myway from 'assets/ic_hospicash_myway.svg';
 import accident_fisdom from 'assets/ic_personal_accident_fisdom.svg';
@@ -82,14 +82,6 @@ class Landing extends Component {
   }
 
   async componentDidMount() {
-    this.setState({
-      insurance: this.state.type !== 'fisdom' ? insurance_myway : insurance_fisdom,
-      health: this.state.type !== 'fisdom' ? health_myway : health_fisdom,
-      hospicash: this.state.type !== 'fisdom' ? hospicash_myway : hospicash_fisdom,
-      accident: this.state.type !== 'fisdom' ? accident_myway : accident_fisdom,
-      wallet: this.state.type !== 'fisdom' ? wallet_myway : wallet_fisdom,
-      term: this.state.type !== 'fisdom' ? term_myway : term_fisdom
-    })
 
     try {
       const res = await Api.get('/ins_service/api/insurance/application/summary')

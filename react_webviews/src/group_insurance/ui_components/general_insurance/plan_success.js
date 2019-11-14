@@ -3,7 +3,8 @@ import Container from '../../common/Container';
 import '../../common/Style.css';
 import expand from 'assets/expand_icn.png';
 import shrink from 'assets/shrink_icn.png';
-import congratulations from 'assets/congratulations_illustration.svg';
+import congratulations_fisdom from 'assets/congratulations_illustration.svg';
+import congratulations_myway from 'assets/congratulations_illustration_myway.svg';
 
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
@@ -34,7 +35,8 @@ class PlanSuccessClass extends Component {
         nominee : {}
       },
       show_loader: true,
-      accordians_data: []
+      accordians_data: [],
+      type: getConfig().productName
     };
 
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
@@ -43,6 +45,10 @@ class PlanSuccessClass extends Component {
   }
 
   componentWillMount() {
+
+    this.setState({
+      congratulations_icon: this.state.type !== 'fisdom' ? congratulations_myway : congratulations_fisdom
+    })
 
     let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
     this.setState({
@@ -257,7 +263,7 @@ class PlanSuccessClass extends Component {
         showLoader={this.state.show_loader}
       >
         <div className="plan-success-heading">
-          <div className="plan-success-heading-icon"><img src={congratulations} alt="" /></div>
+          <div className="plan-success-heading-icon"><img src={this.state.congratulations_icon} alt="" /></div>
           <div className="plan-success-heading-title">Congratulations!</div>
           <div className="plan-success-heading-subtitle">{product_config[this.getProductKey()].top_title1} <span className="plan-success-heading-subtitle-bold">
             {product_config[this.getProductKey()].top_title2}</span>
