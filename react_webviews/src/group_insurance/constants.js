@@ -450,6 +450,8 @@ export function getBhartiaxaStatusToState(policy) {
     path = 'plan';
   } else if (status === 'init' && payment_status === 'payment_done') {
     path = 'payment-success';
+  } else {
+    path = 'plan';
   }
 
   return path;
