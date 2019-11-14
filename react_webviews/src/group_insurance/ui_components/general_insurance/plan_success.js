@@ -256,6 +256,7 @@ class PlanSuccessClass extends Component {
     return (
       <Container
         title="Success"
+        disableBack={true}
         classOverRideContainer="plan-success"
         showLoader={this.state.show_loader}
       >

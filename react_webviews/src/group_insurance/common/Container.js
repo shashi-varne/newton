@@ -102,7 +102,8 @@ class Container extends Component {
       return;
     }
 
-    if(pathname.indexOf('payment-success') >= 0) {
+    if(pathname.indexOf('payment-success') >= 0 || 
+    pathname.indexOf('summary-success') >= 0) {
       this.navigate('/group-insurance');
       return;
     }
