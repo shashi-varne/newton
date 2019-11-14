@@ -60,6 +60,20 @@ import AccidentPlanDetails from './products/personal_accident';
 import Report from './report';
 import ReportDetails from './ui_components/general_insurance/report_check_details';
 import AccidentPlanPayment from './products/personal_accident/payment';
+import HospicashPlanDetails from './products/hospicash';
+import HospicashForm from './products/hospicash/form';
+import HospicashSummary from './products/hospicash/summary';
+import HospicashPlanSuccess from './products/hospicash/plan-success';
+import HospicashPaymentSuccess from './products/hospicash/payment-success';
+import HospicashFailed from './products/hospicash/payment-failed';
+import HospicashPlanPayment from './products/hospicash/payment';
+import SmartwalletForm from './products/smart_wallet/form';
+import SmartwalletSummary from './products/smart_wallet/summary';
+import SmartwalletPlanSuccess from './products/smart_wallet/plan-success';
+import SmartwalletPaymentSuccess from './products/smart_wallet/payment-success';
+import SmartwalletFailed from './products/smart_wallet/payment-failed';
+import SmartwalletPlanPayment from './products/smart_wallet/payment';
+import SmartwalletPlanDetails from './products/smart_wallet';
 
 
 const generateClassName = createGenerateClassName({
@@ -200,13 +214,28 @@ const Insurance = (props) => {
           <Route path={`${url}/accident/payment-failed`} component={AccidentFailed} />
           <Route path={`${url}/accident/payment/:status`} component={AccidentPlanPayment} />
 
+          {/********** Hospicash **********/}
+          <Route path={`${url}/hospicash/plan`} component={HospicashPlanDetails} />
+          <Route path={`${url}/hospicash/form`} component={HospicashForm} />
+          <Route path={`${url}/hospicash/summary`} component={HospicashSummary} />
+          <Route path={`${url}/hospicash/summary-success`} component={HospicashPlanSuccess} />
+          <Route path={`${url}/hospicash/payment-success`} component={HospicashPaymentSuccess} />
+          <Route path={`${url}/hospicash/payment-failed`} component={HospicashFailed} />
+          <Route path={`${url}/hospicash/payment/:status`} component={HospicashPlanPayment} />
+
+          {/********** Smart wallet **********/}
+          <Route path={`${url}/wallet/plan`} component={SmartwalletPlanDetails} />
+          <Route path={`${url}/wallet/form`} component={SmartwalletForm} />
+          <Route path={`${url}/wallet/summary`} component={SmartwalletSummary} />
+          <Route path={`${url}/wallet/summary-success`} component={SmartwalletPlanSuccess} />
+          <Route path={`${url}/wallet/payment-success`} component={SmartwalletPaymentSuccess} />
+          <Route path={`${url}/wallet/payment-failed`} component={SmartwalletFailed} />
+          <Route path={`${url}/wallet/payment/:status`} component={SmartwalletPlanPayment} />
+
 
           {/* common */}
-
-
           <Route path={`${url}/common/report`} component={Report} />
           <Route path={`${url}/common/reportdetails/:policy_id`} component={ReportDetails} />
-          
 
           <Route component={NotFound} />
         </Switch>

@@ -173,6 +173,8 @@ class Landing extends Component {
         path = 'plan';
       }
 
+      console.log("path :" + path)
+
       fullPath = insuranceStateMapper[product_key] + '/' + path;
     } else {
       this.setTermInsData();
