@@ -413,14 +413,14 @@ export const add_on_benefits_points = {
 export const all_providers = { 'HDFC': '', 'IPRU': '', 'Maxlife': '' };
 
 export const back_button_mapper = {
-  '/group-insurance/quote': '/group-insurance/lifestyle',
-  '/group-insurance/lifestyle': '/group-insurance/cover-period',
-  '/group-insurance/cover-period': '/group-insurance/cover-amount',
-  '/group-insurance/cover-amount': '/group-insurance/annual-income',
-  '/group-insurance/annual-income': '/group-insurance/personal-details-intro',
-  '/group-insurance/personal-details-intro': '/group-insurance/journey-intro',
-  '/group-insurance/journey-intro': '/group-insurance/intro',
-  '/group-insurance/summary': '/group-insurance/journey'
+  '/group-insurance/term/quote': '/group-insurance/term/lifestyle',
+  '/group-insurance/term/lifestyle': '/group-insurance/term/cover-period',
+  '/group-insurance/term/cover-period': '/group-insurance/term/cover-amount',
+  '/group-insurance/term/cover-amount': '/group-insurance/term/annual-income',
+  '/group-insurance/term/annual-income': '/group-insurance/term/personal-details-intro',
+  '/group-insurance/term/personal-details-intro': '/group-insurance/term/journey-intro',
+  '/group-insurance/term/journey-intro': '/group-insurance/term/intro',
+  '/group-insurance/term/summary': '/group-insurance/term/journey'
 };
 
 export const insuranceMaritalStatus = [
@@ -433,3 +433,11 @@ export const insuranceMaritalStatus = [
     'value': 'MARRIED'
   }
 ]
+
+export const insuranceStateMapper = {
+  'HEALTH' : 'health',
+  'SMART_WALLET': 'wallet',
+  'PERSONAL_ACCIDENT': 'accident',
+  'HOSPICASH': 'hospicash',
+  'term_insurance': 'term'
+}

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import Container from '../common/Container';
 import insurance from 'assets/ic_fisdom_insurance.svg';
-import health from 'assets/ic_health.svg';
+// import health from 'assets/ic_health.svg';
 import hospicash from 'assets/ic_hospicash.svg';
 import accident from 'assets/ic_personal_accident.svg';
 import wallet from 'assets/ic_wallet.svg';
 import term from 'assets/ic_term_insurance.svg';
-
+import {insuranceStateMapper} from '../constants';
 
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
@@ -36,6 +36,7 @@ class Landing extends Component {
         let group_insurance = resultData.group_insurance;
         let term_insurance = resultData.term_insurance;
 
+        
         let BHARTIAXA = group_insurance.insurance_apps.BHARTIAXA;
 
         let BHARTIAXA_APPS  = {
@@ -50,12 +51,12 @@ class Landing extends Component {
           BHARTIAXA_APPS: BHARTIAXA_APPS
         })
 
-       
       } else {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message
           || 'Something went wrong');
       }
     } catch (err) {
+      console.log(err)
       this.setState({
         show_loader: false
       });
@@ -73,7 +74,8 @@ class Landing extends Component {
   getLeadId (product_key) {
     let id = ''
     if (product_key !== 'term_insurance') {
-      if(this.state.BHARTIAXA_APPS[product_key].length > 0) {
+      if(this.state.BHARTIAXA_APPS[product_key] && 
+        this.state.BHARTIAXA_APPS[product_key].length > 0) {
         id = this.state.BHARTIAXA_APPS[product_key][0].lead_id;
       }
     }
@@ -81,20 +83,91 @@ class Landing extends Component {
     return id;
   }
 
-  handleClick = (product_key) => {
+  setTermInsData() {
 
-    console.log(product_key)
-    var stateMapper = {
-      'HEALTH' : '',
-      'SMART_WALLET': '',
-      'PERSONAL_ACCIDENT': 'accident/plan',
-      'HOSPICASH': '',
-      'term_insurance': ''
+    window.localStorage.setItem('excluded_providers', '');
+    window.localStorage.setItem('required_providers', '');
+    window.localStorage.setItem('quoteSelected', '');
+    window.localStorage.setItem('quoteData', '');
+    let termData =this.state.term_insurance;
+    let search;
+    let pathname = '';
+    if (!termData.error) {
+      let insurance_apps = termData.insurance_apps;
+      let application, required_fields;
+      required_fields = termData.required;
+      if (insurance_apps.complete.length > 0) {
+        application = insurance_apps.complete[0];
+        pathname = 'report';
+      } else if (insurance_apps.failed.length > 0) {
+        application = insurance_apps.failed[0];
+        pathname = 'report';
+      } else if (insurance_apps.init.length > 0) {
+        application = insurance_apps.init[0];
+        pathname = 'journey';
+      } else if (insurance_apps.submitted.length > 0) {
+        application = insurance_apps.submitted[0];
+        pathname = 'journey';
+      } else {
+        // intro
+        pathname = 'intro';
+        return;
+      }
+
+      if (application) {
+        let data = {
+          application: application,
+          required_fields: required_fields
+        }
+        window.localStorage.setItem('cameFromHome', true);
+        window.localStorage.setItem('homeApplication', JSON.stringify(data));
+        search = application.profile_link.split('?')[1];
+        search += '&generic_callback=true';
+
+        pathname = 'journey';
+      }
+    } else {
+      pathname = 'intro';
     }
 
-    var group_insurance_lead_id_selected = this.getLeadId(product_key)
-    window.localStorage.setItem('group_insurance_lead_id_selected', group_insurance_lead_id_selected || '');
-    this.navigate('group-insurance/'+ stateMapper[product_key]);
+    let fullPath = '/group-insurance/term/' + pathname; 
+    this.navigate(fullPath, search);
+
+  
+  }
+
+  handleClick = (product_key) => {
+
+    var BHARTIAXA_PRODUCTS = ['PERSONAL_ACCIDENT', 'HOSPICASH', 'SMART_WALLET', 'HEALTH'];
+
+    var lead_id = '';
+    var path = '';
+    var fullPath = '';
+    if(BHARTIAXA_PRODUCTS.indexOf(product_key) !== -1) {
+      if(this.state.BHARTIAXA_APPS[product_key] && 
+        this.state.BHARTIAXA_APPS[product_key].length > 0) {
+          let data  = this.state.BHARTIAXA_APPS[product_key][0];
+          lead_id = data.lead_id;
+          let status = data.status;
+          let payment_status = data.lead_payment_status;
+          if(status === 'complete') {
+            path = 'plan';
+          } else if (status === 'init' && payment_status === 'payment_done') {
+            path = 'payment-success';
+          }
+      } else {
+        path = 'plan';
+      }
+
+      fullPath  = insuranceStateMapper[product_key] + '/' + path;
+    } else {
+      this.setTermInsData();
+      return;
+    }
+
+
+    window.localStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
+    this.navigate('group-insurance/'+ fullPath);
   }
 
   render() {
@@ -113,13 +186,13 @@ class Landing extends Component {
           <div className='products' style={{ marginTop: '50px' }}>
             <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '20px' }}>Get started</h1>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', borderBottomWidth: '1px', borderBottomColor: '#dfd8ef', borderBottomStyle: 'solid', paddingTop: '15px', paddingBottom: '15px' }}>
+              {/* <div style={{ display: 'flex', alignItems: 'center', borderBottomWidth: '1px', borderBottomColor: '#dfd8ef', borderBottomStyle: 'solid', paddingTop: '15px', paddingBottom: '15px' }}>
                 <img src={health} alt="" style={{ marginRight: '15px' }} />
                 <div>
                   <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px' }}>Health (Idemnity)</div>
                   <div style={{ color: '#7e7e7e', fontSize: '13px' }}>Starts from Rs 23 per month</div>
                 </div>
-              </div>
+              </div> */}
               <div onClick={() => this.handleClick('PERSONAL_ACCIDENT')} style={{ display: 'flex', alignItems: 'center', borderBottomWidth: '1px', borderBottomColor: '#dfd8ef', borderBottomStyle: 'solid', paddingTop: '15px', paddingBottom: '15px' }}>
                 <img src={accident} alt="" style={{ marginRight: '15px' }} />
                 <div>
@@ -127,21 +200,21 @@ class Landing extends Component {
                   <div style={{ color: '#7e7e7e', fontSize: '13px' }}>Starts from Rs 200 annually</div>
                 </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', borderBottomWidth: '1px', borderBottomColor: '#dfd8ef', borderBottomStyle: 'solid', paddingTop: '15px', paddingBottom: '15px' }}>
+              <div onClick={() => this.handleClick('HOSPICASH')} style={{ display: 'flex', alignItems: 'center', borderBottomWidth: '1px', borderBottomColor: '#dfd8ef', borderBottomStyle: 'solid', paddingTop: '15px', paddingBottom: '15px' }}>
                 <img src={hospicash} alt="" style={{ marginRight: '15px' }} />
                 <div>
                   <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px' }}>Hospicash</div>
                   <div style={{ color: '#7e7e7e', fontSize: '13px' }}>Starts from Rs 133 annually</div>
                 </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', borderBottomWidth: '1px', borderBottomColor: '#dfd8ef', borderBottomStyle: 'solid', paddingTop: '15px', paddingBottom: '15px' }}>
+              <div onClick={() => this.handleClick('SMART_WALLET')} style={{ display: 'flex', alignItems: 'center', borderBottomWidth: '1px', borderBottomColor: '#dfd8ef', borderBottomStyle: 'solid', paddingTop: '15px', paddingBottom: '15px' }}>
                 <img src={wallet} alt="" style={{ marginRight: '15px' }} />
                 <div>
                   <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px' }}>Smart wallet</div>
                   <div style={{ color: '#7e7e7e', fontSize: '13px' }}>Starts from Rs 250 annually</div>
                 </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', paddingTop: '15px', paddingBottom: '15px' }}>
+              <div onClick={() => this.handleClick('TERM_INSURANCE')} style={{ display: 'flex', alignItems: 'center', paddingTop: '15px', paddingBottom: '15px' }}>
                 <img src={term} alt="" style={{ marginRight: '15px' }} />
                 <div>
                   <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px' }}>Term insurance</div>

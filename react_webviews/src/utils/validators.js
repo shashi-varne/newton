@@ -385,3 +385,11 @@ export function checkValidNumber(value, otherwise) {
     return Number(value);
   }
 }
+
+export function checkValidString(value) {
+  if (value === null || value === undefined || value === 'undefined' || value === '') {
+    return false;
+  } else {
+    return true;
+  }
+}

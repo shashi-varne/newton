@@ -1,6 +1,7 @@
 import colors from '../common/theme/Style.css';
 import qs from 'qs';
 import createBrowserHistory from 'history/createBrowserHistory';
+import {checkValidString} from './validators'
 
 const myHistory = createBrowserHistory();
 
@@ -50,14 +51,17 @@ export const getConfig = () => {
   let isInsurance = myHistory.location.pathname.indexOf('insurance') >= 0 ? true : false;
   if (isInsurance) {
 
+    
     let insurance_v2 = generic_callback === "true" ? true : main_query_params.insurance_v2;;
     let { insurance_id } = main_query_params;
     let { isJourney } = main_query_params;
     searchParams += '&insurance_id=' + insurance_id +
       '&insurance_v2=' + insurance_v2;
-    if(isJourney) {
+    if(checkValidString(isJourney)) {
+      console.log("going inside")
       searchParams += '&isJourney=' + isJourney;
     }
+
   }
 
   let config = {
@@ -106,8 +110,17 @@ export const getConfig = () => {
 
 
   let project = 'insurance';
-  if (myHistory.location.pathname.indexOf('insurance') >= 0) {
+  let project_child = '';
+  if (myHistory.location.pathname.indexOf('group-insurance') >= 0) {
+    project = 'group-insurance';
+    project_child = 'bhartiaxa';
+    if (myHistory.location.pathname.indexOf('term') >= 0) {
+      project_child = 'term';
+    } 
+
+  } else if (myHistory.location.pathname.indexOf('insurance') >= 0) {
     project = 'insurance';
+
   } else if (myHistory.location.pathname.indexOf('risk') >= 0) {
     project = 'risk';
   } else if (myHistory.location.pathname.indexOf('mandate-otm') >= 0) {
@@ -122,6 +135,7 @@ export const getConfig = () => {
     project = 'referral';
   }
   returnConfig.project = project;
+  returnConfig.project_child = project_child;
   returnConfig.generic_callback = generic_callback;
   let { insurance_allweb } = main_query_params;
   if (insurance_allweb) {

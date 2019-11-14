@@ -155,41 +155,41 @@ const Insurance = (props) => {
           <Route exact path={`${url}`} component={Landing} />
 
           {/********** TERM INSURANCE **********/}
-          <Route path={`${url}/resume`} component={Resume} />
-          <Route path={`${url}/personal`} component={PersonalDetails1} />
-          <Route path={`${url}/personal1`} component={PersonalDetails2} />
-          <Route path={`${url}/contact`} component={ContactDetails1} />
-          <Route path={`${url}/contact1`} component={ContactDetails2} />
-          <Route path={`${url}/nominee`} component={NomineeDetails} />
-          <Route path={`${url}/appointee`} component={AppointeeDetails} />
-          <Route path={`${url}/professional`} component={ProfessionalDetails1} />
-          <Route path={`${url}/professional1`} component={ProfessionalDetails2} />
-          <Route path={`${url}/additional-info`} component={AdditionalInfo} />
-          <Route path={`${url}/summary`} component={Summary} />
-          <Route path={`${url}/journey`} component={Journey} />
-          <Route path={`${url}/payment/:insurance_id/:status`} component={Payment} />
-          <Route path={`${url}/Pincode`} component={Pincode} />
+          <Route path={`${url}/term/resume`} component={Resume} />
+          <Route path={`${url}/term/personal`} component={PersonalDetails1} />
+          <Route path={`${url}/term/personal1`} component={PersonalDetails2} />
+          <Route path={`${url}/term/contact`} component={ContactDetails1} />
+          <Route path={`${url}/term/contact1`} component={ContactDetails2} />
+          <Route path={`${url}/term/nominee`} component={NomineeDetails} />
+          <Route path={`${url}/term/appointee`} component={AppointeeDetails} />
+          <Route path={`${url}/term/professional`} component={ProfessionalDetails1} />
+          <Route path={`${url}/term/professional1`} component={ProfessionalDetails2} />
+          <Route path={`${url}/term/additional-info`} component={AdditionalInfo} />
+          <Route path={`${url}/term/summary`} component={Summary} />
+          <Route path={`${url}/term/journey`} component={Journey} />
+          <Route path={`${url}/term/payment/:insurance_id/:status`} component={Payment} />
+          <Route path={`${url}/term/Pincode`} component={Pincode} />
           {/* quote selection */}
-          <Route path={`${url}/cover-amount`} component={CoverAmount} />
-          <Route path={`${url}/annual-income`} component={AnnualIncome} />
-          <Route path={`${url}/cover-period`} component={CoverPeriod} />
-          <Route path={`${url}/intro`} component={Intro} />
-          <Route path={`${url}/journey-intro`} component={JourneyIntro} />
-          <Route path={`${url}/lifestyle`} component={LifeStyle} />
-          <Route path={`${url}/personal-details-intro`} component={PersonalDetailsIntro} />
-          <Route path={`${url}/quote`} component={QuoteGeneration} />
-          <Route path={`${url}/riders`} component={AddOnBenefits} />
-          <Route path={`${url}/report`} component={FinalReport} />
-          <Route path={`${url}/home`} component={InsuranceHome} />
+          <Route path={`${url}/term/cover-amount`} component={CoverAmount} />
+          <Route path={`${url}/term/annual-income`} component={AnnualIncome} />
+          <Route path={`${url}/term/cover-period`} component={CoverPeriod} />
+          <Route path={`${url}/term/intro`} component={Intro} />
+          <Route path={`${url}/term/journey-intro`} component={JourneyIntro} />
+          <Route path={`${url}/term/lifestyle`} component={LifeStyle} />
+          <Route path={`${url}/term/personal-details-intro`} component={PersonalDetailsIntro} />
+          <Route path={`${url}/term/quote`} component={QuoteGeneration} />
+          <Route path={`${url}/term/riders`} component={AddOnBenefits} />
+          <Route path={`${url}/term/report`} component={FinalReport} />
+          <Route path={`${url}/term/home`} component={InsuranceHome} />
           {/* Edit paths */}
-          <Route path={`${url}/edit-personal`} render={(props) => <PersonalDetails1 {...props} edit={true} />} />
-          <Route path={`${url}/edit-personal1`} render={(props) => <PersonalDetails2 {...props} edit={true} />} />
-          <Route path={`${url}/edit-contact`} render={(props) => <ContactDetails1 {...props} edit={true} />} />
-          <Route path={`${url}/edit-contact1`} render={(props) => <ContactDetails2 {...props} edit={true} />} />
-          <Route path={`${url}/edit-nominee`} render={(props) => <NomineeDetails {...props} edit={true} />} />
-          <Route path={`${url}/edit-appointee`} render={(props) => <AppointeeDetails {...props} edit={true} />} />
-          <Route path={`${url}/edit-professional`} render={(props) => <ProfessionalDetails1 {...props} edit={true} />} />
-          <Route path={`${url}/edit-professional1`} render={(props) => <ProfessionalDetails2 {...props} edit={true} />} />
+          <Route path={`${url}/term/edit-personal`} render={(props) => <PersonalDetails1 {...props} edit={true} />} />
+          <Route path={`${url}/term/edit-personal1`} render={(props) => <PersonalDetails2 {...props} edit={true} />} />
+          <Route path={`${url}/term/edit-contact`} render={(props) => <ContactDetails1 {...props} edit={true} />} />
+          <Route path={`${url}/term/edit-contact1`} render={(props) => <ContactDetails2 {...props} edit={true} />} />
+          <Route path={`${url}/term/edit-nominee`} render={(props) => <NomineeDetails {...props} edit={true} />} />
+          <Route path={`${url}/term/edit-appointee`} render={(props) => <AppointeeDetails {...props} edit={true} />} />
+          <Route path={`${url}/term/edit-professional`} render={(props) => <ProfessionalDetails1 {...props} edit={true} />} />
+          <Route path={`${url}/term/edit-professional1`} render={(props) => <ProfessionalDetails2 {...props} edit={true} />} />
           
           {/********** Accident **********/}
           <Route path={`${url}/accident/plan`} component={AccidentPlanDetails} />
@@ -198,11 +198,15 @@ const Insurance = (props) => {
           <Route path={`${url}/accident/summary-success`} component={AccidentPlanSuccess} />
           <Route path={`${url}/accident/payment-success`} component={AccidentPaymentSuccess} />
           <Route path={`${url}/accident/payment-failed`} component={AccidentFailed} />
+          <Route path={`${url}/accident/payment/:status`} component={AccidentPlanPayment} />
+
+
+          {/* common */}
 
 
           <Route path={`${url}/common/report`} component={Report} />
           <Route path={`${url}/common/reportdetails/:policy_id`} component={ReportDetails} />
-          <Route path={`${url}/accident/payment/:status`} component={AccidentPlanPayment} />
+          
 
           <Route component={NotFound} />
         </Switch>

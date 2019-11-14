@@ -82,6 +82,9 @@ class Container extends Component {
     console.log("go backkkkkkkkk")
     console.log(this.props.isJourney)
 
+    let project_child = getConfig().project_child;
+
+
     if (manageDialog('general-dialog', 'none', 'enableScroll')) {
       if (this.props.closePopup) {
         this.props.closePopup();
@@ -91,52 +94,66 @@ class Container extends Component {
     let { params } = this.props.location;
     let pathname = this.props.history.location.pathname;
     console.log(this.props)
-    if (pathname === '/group-insurance/journey' || pathname === '/group-insurance/summary') {
-      if (this.props.isJourney) {
-        let eventObj = {
-          "event_name": 'term_insurance',
-          "properties": {
-            "user_action": 'close',
-            "screen_name": 'insurance_summary'
-          }
-        };
-        nativeCallback({ events: eventObj });
-        this.setState({
-          callbackType: 'show_quotes',
-          openPopup: true,
-          popupText: 'Are you sure you want to explore more options? We will save your information securely.'
-        })
+    console.log(this.props.isJourney)
 
-        return;
-      }
-
-      if (params && params.disableBack) {
-        this.setState({
-          callbackType: 'exit',
-          openPopup: true,
-          popupText: 'Are you sure you want to exit the application process? You can resume it later.'
-        })
-        return;
+    if((params && params.backToState === 'report') || 
+    (pathname === '/group-insurance/common/reportdetails')) {
+      this.navigate('/group-insurance/common/report');
+      return;
+    }
+    if (project_child === 'term') {
+      if (pathname === '/group-insurance/term/journey' || pathname === '/group-insurance/term/summary') {
+        if (this.props.isJourney) {
+          let eventObj = {
+            "event_name": 'term_insurance',
+            "properties": {
+              "user_action": 'close',
+              "screen_name": 'insurance_summary'
+            }
+          };
+          nativeCallback({ events: eventObj });
+          this.setState({
+            callbackType: 'show_quotes',
+            openPopup: true,
+            popupText: 'Are you sure you want to explore more options? We will save your information securely.'
+          })
+  
+          return;
+        }
+  
+        if (params && params.disableBack) {
+          this.setState({
+            callbackType: 'web_home',
+            openPopup: true,
+            popupText: 'Are you sure you want to exit the application process? You can resume it later.'
+          })
+          return;
+        }
       }
     }
-
-
+   
    
     switch (pathname) {
-      case "/insurance":
-      case "/group-insurance/resume":
-      case "/group-insurance/journey":
+      case "/group-insurance":
+          nativeCallback({action : 'exit', events: this.getEvents('back') });
+          break;
+      case "/group-insurance/common/report":
+          nativeCallback({action : 'exit', events: this.getEvents('back') });
+          break;
+      case "/group-insurance/term/resume":
+      case "/group-insurance/term/journey":
           this.setState({
-            callbackType: 'exit',
+            callbackType: 'web_home',
             openPopup: true,
             popupText: 'Are you sure you want to exit the application process? You can resume it later.'
           })
         break;
-      case "/group-insurance/summary":
+      case "/group-insurance/term/summary":
         this.navigate(back_button_mapper[pathname]);
         break;
-      case '/group-insurance/intro':
-        nativeCallback({ action: 'native_back', events: this.getEvents('back') });
+      case '/group-insurance/term/intro':
+        this.navigate('/group-insurance');
+        nativeCallback({events: this.getEvents('back') });
         break;
       default:
         if (back_button_mapper[pathname] && back_button_mapper[pathname].length > 0) {
@@ -209,7 +226,9 @@ class Container extends Component {
       };
       nativeCallback({ events: eventObj });
       window.localStorage.setItem('show_quotes', true);
-      this.navigate('/group-insurance/quote');
+      this.navigate('/group-insurance/term/quote');
+    } else if (this.state.callbackType === 'web_home') {
+      this.navigate('/group-insurance')
     }
 
 

@@ -20,6 +20,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   let callbackData = {};
   let project = getConfig().project;
 
+  console.log("action :"  +action)
   if (action) {
     callbackData.action = action;
   }

@@ -166,7 +166,7 @@ class Journey extends Component {
     });
 
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.origin + '/group-insurance/payment/' + this.state.params.insurance_id
+      window.location.origin + '/group-insurance/term/payment/' + this.state.params.insurance_id
     );
 
     var pgLink = payment_link;
@@ -532,11 +532,17 @@ class Journey extends Component {
 
   navigate = (pathname) => {
     let insurance_id = this.state.insurance_id || this.state.params.insurance_id;
+
+    let search = 'insurance_id=' + insurance_id + '&base_url=' + this.state.params.base_url +
+    '&insurance_v2=' + this.state.insurance_v2 + '&resume=yes&isKyc=' + this.state.isKyc + '&generic_callback=' +
+    this.state.params.generic_callback 
+
+    if (getConfig().isJourney) {
+      search+= '&isJourney=' + this.state.params.isJourney;
+    }
     this.props.history.push({
       pathname: pathname,
-      search: 'insurance_id=' + insurance_id + '&base_url=' + this.state.params.base_url +
-        '&insurance_v2=' + this.state.insurance_v2 + '&resume=yes&isKyc=' + this.state.isKyc + '&generic_callback=' +
-        this.state.params.generic_callback +'&isJourney=' + this.state.params.isJourney,
+      search: search
     });
   }
 

@@ -32,7 +32,7 @@ class QuoteGeneration extends Component {
       show_loader: true,
       params: qs.parse(props.history.location.search.slice(1)),
       type: getConfig().productName,
-      quoteData: JSON.parse(window.localStorage.getItem('quoteData')) || {},
+      quoteData: window.localStorage.getItem('quoteData') ? JSON.parse(window.localStorage.getItem('quoteData')) : '',
       canRenderList: false,
       openPopUp: false,
       renderList: [],
@@ -80,6 +80,12 @@ class QuoteGeneration extends Component {
         required_providers: required_providers,
         countdownInterval: intervalId,
       })
+
+    console.log(this.state.quoteData)
+    if (!this.state.quoteData) {
+      console.log("going inside")
+      this.navigate('intro');
+    }
   }
 
   componentWillUnmount() {
@@ -96,6 +102,7 @@ class QuoteGeneration extends Component {
     this.setState({
       show_loader: true
     })
+
     let insuranceData = {
       tobacco_choice: this.state.quoteData.tobacco_choice,
       cover: this.state.quoteData.cover_amount,
@@ -138,6 +145,9 @@ class QuoteGeneration extends Component {
 
   componentDidMount() {
     
+    if (!this.state.quoteData) {
+      return
+    }
     let inputToRender_accident_benefit = this.getInputToRenderADB();
     ridersOptionInsurance[1].inputToRender = inputToRender_accident_benefit;
     this.setState({
@@ -150,7 +160,7 @@ class QuoteGeneration extends Component {
   navigate = (pathname, search) => {
     this.props.history.push({
       pathname: pathname,
-      search: search
+      search: search ? search : getConfig().searchParams
     });
   }
 
@@ -667,7 +677,7 @@ class QuoteGeneration extends Component {
             </div>
           </div>
           <div className="quote-tiles3b" onClick={() => this.selectQuote(props, 'Annually', index)}>
-            <div className="quote-tiles3ba">
+            <div className="quote-tiles3ba">  
               <span className="bold-premium">{inrFormatDecimal(props.annual_quote_json.base_premium_total)}</span>
               <span style={{ marginLeft: 4 }}>annually</span>
             </div>

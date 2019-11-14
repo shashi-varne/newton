@@ -90,7 +90,7 @@ class Payment extends Component {
       openDialog: false,
       show_loader: true
     });
-    this.navigateResume('/group-insurance/journey');
+    this.navigateResume('/group-insurance/term/journey');
   }
 
   renderResponseDialog = () => {
