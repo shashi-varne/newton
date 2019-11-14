@@ -3,6 +3,7 @@ import Container from '../../common/Container';
 import provider from 'assets/provider.svg';
 import expand from 'assets/expand_icn.png';
 import shrink from 'assets/shrink_icn.png';
+import download from 'assets/download.svg';
 
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
@@ -112,7 +113,7 @@ class ReportDetails extends Component {
           </div>
         </div>
         <div className="report-detail-download">
-          {/* <img src={} alt="" /> */}
+          <img src={download} alt="" />
           <div className="report-detail-download-text">Download Policy</div>
         </div>
         <div className="Accordion">
