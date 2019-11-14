@@ -45,7 +45,7 @@ class Report extends Component {
           let policy = group_insurance_policies[i];
           let obj = {
             status: policy.status,
-            product_name: policy.product_name,
+            product_name: policy.product_title,
             cover_amount: policy.sum_assured,
             premium: policy.premium
           }
@@ -78,7 +78,10 @@ class Report extends Component {
   renderReportCards(props, index) {
     return (
       <div key={index} className="card">
-        <div className="report-color-state">{props.status}</div>
+        <div className={`report-color-state ${(props.status === 'init') ? 'yellow' : (props.status === 'policy_issued') ? 'green' : 'red'}`}>
+          <div className="circle"></div>
+          <div className="report-color-state-title">{(props.status === 'init') ? 'Policy Pending' : (props.status === 'policy_issued' ? 'Policy Issued' : 'Policy Expired')}</div>
+        </div>
         <div className="report-ins-name">{props.product_name}</div>
         <div className="report-cover">
           <div className="report-cover-amount"><span>Cover amount:</span> {props.cover_amount}</div>

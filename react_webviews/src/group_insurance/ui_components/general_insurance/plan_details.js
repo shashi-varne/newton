@@ -122,12 +122,12 @@ class PlanDetailsClass extends Component {
     });
   }
 
-  renderBenefits(props, index) {
+  renderBenefits = (props, index) => {
     return (
       <div key ={index} className="plan-details-item">
         <img className="plan-details-icon" src={props.icon} alt="" />
         <div>
-        <div className="plan-details-text">{props.disc}</div>
+        <div className={`plan-details-text ${(props.isDisabled && this.state.selectedIndex === 0) ? 'disabled' : ''}`}>{props.disc}</div>
         </div>
       </div>
     )
@@ -226,10 +226,12 @@ class PlanDetailsClass extends Component {
         </div>
         <div className="accident-plans">
           <div className="accident-plan-heading-title">Select a plan</div>
-          <div className="accident-plan-list">
-            {this.props.parent && this.props.parent.state.plan_data &&
-              this.props.parent.state.plan_data.premium_details &&
-              this.props.parent.state.plan_data.premium_details.map(this.renderPlans)}
+          <div className="accident-plan-list-container">
+            <div className="accident-plan-list">
+              {this.props.parent && this.props.parent.state.plan_data &&
+                this.props.parent.state.plan_data.premium_details &&
+                this.props.parent.state.plan_data.premium_details.map(this.renderPlans)}
+            </div>
           </div>
         </div>
 
