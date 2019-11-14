@@ -11,9 +11,10 @@ import Grid from 'material-ui/Grid';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 const coverAmountMapper = {
-  'PERSONAL_ACCIDENT' : {
+  'PERSONAL_ACCIDENT': {
     200000: 0,
     500000: 1,
     1000000: 2
@@ -28,17 +29,19 @@ class PlanDetailsClass extends Component {
     super(props);
     this.state = {
       selectedIndex: 1,
-      checked: false,
+      checked: true,
       parent: this.props.parent || {
-        'plan_data' : {
+        'plan_data': {
 
         }
       },
       type: getConfig().productName,
-      color: getConfig().primary
+      color: getConfig().primary,
+      quoteData: {}
     };
 
     this.renderPlans = this.renderPlans.bind(this);
+    this.openInBrowser = this.openInBrowser.bind(this);
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
 
   }
@@ -52,6 +55,15 @@ class PlanDetailsClass extends Component {
 
   }
 
+  openInBrowser(url) {
+    nativeCallback({
+      action: 'open_in_browser',
+      message: {
+        url: url
+      }
+    });
+  }
+
   async componentDidMount() {
     this.setState({
       ic_claim_assist: this.state.type !== 'fisdom' ? ic_claim_assist_myway : ic_claim_assist_fisdom,
@@ -59,7 +71,7 @@ class PlanDetailsClass extends Component {
     })
 
     let premium_details = {
-      "product_name":this.props.parent.state.product_key,
+      "product_name": this.props.parent.state.product_key,
       cover_amount: '',
       premium: '',
       tax_amount: ''
@@ -72,9 +84,29 @@ class PlanDetailsClass extends Component {
     console.log(premium_details)
     try {
 
-      if(this.state.lead_id) {
+      // const resQuote = await Api.get('ins_service/api/insurance/bhartiaxa/get/quote?product_name=' +
+      //  this.props.parent.state.product_key)
+      const resQuote = await Api.get('ins_service/api/insurance/bhartiaxa/get/quote?product_name=personal_accident')
+
+      this.setState({
+        show_loader: false
+      })
+      if (resQuote.pfwresponse.status_code === 200) {
+
+        let quoteData = resQuote.pfwresponse.result;
+        console.log(quoteData);
+        this.setState({
+          quoteData: quoteData
+        })
+
+      } else {
+        toast(resQuote.pfwresponse.result.error || resQuote.pfwresponse.result.message
+          || 'Something went wrong');
+      }
+
+      if (this.state.lead_id) {
         let res = await Api.get('ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
-       
+
         this.setState({
           show_loader: false
         })
@@ -116,7 +148,7 @@ class PlanDetailsClass extends Component {
   }
 
 
- 
+
 
   componentDidUpdate(prevState) {
 
@@ -131,17 +163,17 @@ class PlanDetailsClass extends Component {
   selectPlan = (index) => {
     console.log("selecting :" + index)
     console.log(this.props.parent.state.plan_data.premium_details[index])
-    this.setState({ 
-      selectedIndex: index 
+    this.setState({
+      selectedIndex: index
     });
   }
 
   renderBenefits = (props, index) => {
     return (
-      <div key ={index} className="plan-details-item">
+      <div key={index} className="plan-details-item">
         <img className="plan-details-icon" src={props.icon} alt="" />
         <div>
-        <div className={`plan-details-text ${(props.isDisabled && this.state.selectedIndex === 0) ? 'disabled' : ''}`}>{props.disc}</div>
+          <div className={`plan-details-text ${(props.isDisabled && this.state.selectedIndex === 0) ? 'disabled' : ''}`}>{props.disc}</div>
         </div>
       </div>
     )
@@ -168,17 +200,17 @@ class PlanDetailsClass extends Component {
         <div className="accident-plan-item3">
           <span className="accident-plan-item4">in</span>
           <span className="accident-plan-item-color">₹{props.premium}/year</span></div>
-        {props.plus_benefit && 
+        {props.plus_benefit &&
           <div className="accident-plan-benefit">+2 Benefits</div>
         }
-        {this.state.parent.state.recommendedInedx === index && 
+        {this.state.parent.state.recommendedInedx === index &&
           <div className="recommended">RECOMMENDED</div>
         }
       </div>
     )
   }
 
-  navigate = (pathname, search,premium_details) => {
+  navigate = (pathname, search, premium_details) => {
     this.props.parent.props.history.push({
       pathname: pathname,
       search: search ? search : getConfig().searchParams,
@@ -189,9 +221,9 @@ class PlanDetailsClass extends Component {
   }
 
   handleClick = async (final_data) => {
-    
-    this.navigate('form','', final_data);
-   
+
+    this.navigate('form', '', final_data);
+
   }
 
 
@@ -202,7 +234,7 @@ class PlanDetailsClass extends Component {
       "tax_amount": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].tax_amount
     }
 
-    
+
 
     final_data.product_name = this.props.parent.state.product_key;
 
@@ -211,23 +243,23 @@ class PlanDetailsClass extends Component {
     })
 
     let res2 = {};
-    if(this.state.lead_id) {
+    if (this.state.lead_id) {
       final_data.lead_id = this.state.lead_id;
       res2 = await Api.post('ins_service/api/insurance/bhartiaxa/lead/update', final_data)
 
       if (res2.pfwresponse.status_code === 200) {
-        this.navigate('form','', final_data);
+        this.navigate('form', '', final_data);
       } else {
         toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
           || 'Something went wrong');
       }
     } else {
-      this.navigate('form','', final_data);
+      this.navigate('form', '', final_data);
     }
-    
 
-    
-    
+
+
+
   }
 
   render() {
@@ -236,13 +268,13 @@ class PlanDetailsClass extends Component {
         fullWidthButton={true}
         buttonTitle='Get this Plan'
         onlyButton={true}
-        showLoader={this.state.show_loader || this.props.parent.state.show_loader}
-        handleClick={()=> this.handleClickCurrent()}
+        showLoader={this.state.show_loader}
+        handleClick={() => this.handleClickCurrent()}
         title="Accident"
         classOverRideContainer="accident-plan">
         <div className="accident-plan-heading-container">
           <div className="accident-plan-heading">
-    <h1 className="accident-plan-title">{this.props.parent.state.plan_data.product_name}</h1>
+            <h1 className="accident-plan-title">{this.props.parent.state.plan_data.product_name}</h1>
             <img src={provider} alt="" />
           </div>
           <div className="accident-plan-subtitle">
@@ -262,15 +294,15 @@ class PlanDetailsClass extends Component {
 
         <div style={{ marginTop: '40px', padding: '0 15px' }}>
           <div style={{ color: '#160d2e', fontSize: '16px', fontWeight: '500', marginBottom: '10px' }}>Benefits that are covered</div>
-         
-          
+
+
           <div className="plan-details">
-            
+
           </div>
 
           {this.props.parent && this.props.parent.state.plan_data &&
-              this.props.parent.state.plan_data.premium_details &&
-              this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].product_benefits.map(this.renderBenefits)}
+            this.props.parent.state.plan_data.premium_details &&
+            this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].product_benefits.map(this.renderBenefits)}
         </div>
 
         <div className="accident-plan-claim">
@@ -280,7 +312,8 @@ class PlanDetailsClass extends Component {
             <div className="accident-plan-claim-subtitle">Call Bharti AXA on toll free 1800-103-2292</div>
           </div>
         </div>
-        <div className="accident-plan-read">
+        <div className="accident-plan-read"
+          onClick={() => this.openInBrowser(this.state.quoteData.read_document)}>
           <img className="accident-plan-read-icon" src={this.state.ic_read} alt="" />
           <div className="accident-plan-read-text" style={styles.color}>Read Detailed Document</div>
         </div>
@@ -298,7 +331,7 @@ class PlanDetailsClass extends Component {
                 className="Checkbox" />
             </Grid>
             <Grid item xs={11}>
-              <div className="accident-plan-terms-text" style={{}}>I accept with the <span className="accident-plan-terms-bold" style={styles.color}>Terms and condition</span></div>
+              <div className="accident-plan-terms-text" style={{}}>I accept with the <span onClick={() => this.openInBrowser(this.state.quoteData.terms_and_conditions)} className="accident-plan-terms-bold" style={styles.color}>Terms and condition</span></div>
             </Grid>
           </Grid>
         </div>

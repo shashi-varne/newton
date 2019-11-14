@@ -6,7 +6,7 @@ class AccidentPlanSuccess extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      product_key : 'PERSONAL_ACCIDENT'
+      product_key: 'PERSONAL_ACCIDENT'
     };
 
   }

@@ -10,7 +10,7 @@ class AccidentPlanPayment extends Component {
         }
     }
 
-    
+
     render() {
         return (
             <div>

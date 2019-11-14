@@ -37,9 +37,6 @@ class AccidentPlanDetails extends Component {
       lead_id: lead_id || ''
     })
 
-  }
-
-  async componentDidMount() {
     this.setState({
       ic_pa_b1: this.state.type !== 'fisdom' ? ic_pa_b1_myway : ic_pa_b1_fisdom,
       ic_pa_b2: this.state.type !== 'fisdom' ? ic_pa_b2_myway : ic_pa_b2_fisdom,
@@ -51,27 +48,27 @@ class AccidentPlanDetails extends Component {
     var product_benefits = [
       {
         'disc': 'Lumpsum payout to your family in case of Accidental Death',
-        'key' : 'lumpsum_payout',
+        'key': 'lumpsum_payout',
         'icon': this.state.ic_pa_b1
       },
       {
         'disc': 'Coverage against Permanent Total or Partial Disablement',
-        'key' : 'disablement_coverage',
+        'key': 'disablement_coverage',
         'icon': this.state.ic_pa_b2
       },
       {
         'disc': 'Protection against accidental burns',
-        'key' : 'accidental_burns_protection',
+        'key': 'accidental_burns_protection',
         'icon': this.state.ic_pa_b3
       },
       {
         'disc': 'Allowances for ambulance and last rites (for plan 2 & 3 only)',
-        'key' : 'last_rites',
+        'key': 'last_rites',
         'icon': this.state.ic_pa_b4
       },
       {
         'disc': 'Allowances for purchase of blood (for plan 2 & 3 only)',
-        'key' : 'blood_allowence',
+        'key': 'blood_allowence',
         'icon': this.state.ic_pa_b5
       }
     ]
@@ -84,8 +81,8 @@ class AccidentPlanDetails extends Component {
       'premium_details': [
         {
           "sum_assured": 200000,
-          "product_benefits_included": ['lumpsum_payout', 'disablement_coverage', 
-          'accidental_burns_protection'],
+          "product_benefits_included": ['lumpsum_payout', 'disablement_coverage',
+            'accidental_burns_protection'],
           "premium": "250",
           "tax_amount": "36",
           "plus_benefit": ''
@@ -110,10 +107,10 @@ class AccidentPlanDetails extends Component {
     }
 
     plan_data.premium_details.forEach(function (premium, index) {
-      
+
       plan_data.premium_details[index].product_benefits = []
       product_benefits.forEach(function (benefit, index2) {
-        if(premium.product_benefits_included.indexOf(benefit.key) === -1) {
+        if (premium.product_benefits_included.indexOf(benefit.key) === -1) {
           benefit.isDisabled = true;
         }
 
@@ -127,7 +124,7 @@ class AccidentPlanDetails extends Component {
     })
   }
 
-  navigate = (pathname, search,premium_details) => {
+  navigate = (pathname, search, premium_details) => {
     this.props.history.push({
       pathname: pathname,
       search: search ? search : getConfig().searchParams,
@@ -138,9 +135,9 @@ class AccidentPlanDetails extends Component {
   }
 
   handleClick = async (final_data) => {
-    
-    this.navigate('form','', final_data);
-   
+
+    this.navigate('form', '', final_data);
+
   }
 
   render() {

@@ -22,7 +22,7 @@ class PaymentClass extends Component {
 
         console.log(status)
         let stateMapper = {
-            'PERSONAL_ACCIDENT' : 'accident'
+            'PERSONAL_ACCIDENT': 'accident'
         };
 
         let path = '/group-insurance/' + stateMapper[this.props.parent.state.product_key] + '/'
@@ -37,13 +37,13 @@ class PaymentClass extends Component {
 
     navigate = (pathname) => {
         this.props.parent.props.history.push({
-          pathname: pathname,
-          search: getConfig().searchParams,
-          params: {
-              disableBack : true
-          }
+            pathname: pathname,
+            search: getConfig().searchParams,
+            params: {
+                disableBack: true
+            }
         });
-      }
+    }
 
 
     render() {

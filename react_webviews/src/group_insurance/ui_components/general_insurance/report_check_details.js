@@ -9,6 +9,8 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { numDifferentiation } from '../../../utils/validators';
+import { insuranceStateMapper } from '../../constants';
+import { nativeCallback } from 'utils/native_callback';
 
 class ReportDetails extends Component {
 
@@ -17,12 +19,15 @@ class ReportDetails extends Component {
     this.state = {
       accordionTab: false,
       policyData: {
-        insured_details : {
-          
+        insured_details: {
+
         }
       },
-      show_loader: true
+      show_loader: true,
+      noFooter: true
     };
+
+    this.handleClick = this.handleClick.bind(this);
 
   }
 
@@ -49,23 +54,46 @@ class ReportDetails extends Component {
 
     try {
 
-        let res = await Api.get('ins_service/api/insurance/bhartiaxa/policy/get/' + this.state.policy_id)
-       
-        this.setState({
-          show_loader: false
-        })
-        if (res.pfwresponse.status_code === 200) {
+      let res = await Api.get('ins_service/api/insurance/bhartiaxa/policy/get/' + this.state.policy_id)
 
-          var policyData = res.pfwresponse.result.lead;
-          console.log(policyData)
-          this.setState({
-            policyData: policyData
-          })
+      this.setState({
+        show_loader: false
+      })
+      if (res.pfwresponse.status_code === 200) {
 
+        var policyData = res.pfwresponse.result.lead;
+        console.log(policyData);
+        let buttonTitle = 'Resume';
+
+        let path = '';
+        let noFooter = false;
+        if (policyData.status === 'expired') {
+          buttonTitle = 'Buy Again';
+          path = '';
+        } else if (policyData.status === 'init' && policyData.payment_status === 'payment_done') {
+          path = 'payment-success';
+        } else if (policyData.status === 'init') {
+          path = 'plan';
         } else {
-          toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-            || 'Something went wrong');
+          noFooter = true;
         }
+
+        let redirectPath = '/group-insurance';
+
+        if (path) {
+          redirectPath += '/' + insuranceStateMapper[policyData.product_name] + '/' + path;
+        }
+        this.setState({
+          policyData: policyData,
+          noFooter: noFooter,
+          redirectPath: redirectPath,
+          buttonTitle: buttonTitle
+        })
+
+      } else {
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message
+          || 'Something went wrong');
+      }
 
     } catch (err) {
       this.setState({
@@ -77,17 +105,44 @@ class ReportDetails extends Component {
 
   }
 
+  openInBrowser(url) {
+    nativeCallback({
+      action: 'open_in_browser',
+      message: {
+        url: url
+      }
+    });
+  }
+
   toggleAccordion = () => {
     this.setState(prevState => ({
       accordionTab: !prevState.accordionTab
     }));
   }
 
+  handleClick = () => {
+    let lead_id = this.state.policyData.lead_id;
+    window.localStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
+    this.navigate(this.state.redirectPath);
+  }
+
+  navigate = (pathname) => {
+    this.props.history.push({
+      pathname: pathname,
+      search: getConfig().searchParams
+    });
+  }
+
+
 
   render() {
     return (
       <Container
-        noFooter={true}
+        noFooter={this.state.noFooter}
+        handleClick={this.handleClick}
+        fullWidthButton={true}
+        buttonTitle={this.state.buttonTitle}
+        onlyButton={true}
         title={this.state.policyData.product_title}
         showLoader={this.state.show_loader}
         classOverRideContainer="report-detail"
@@ -98,25 +153,27 @@ class ReportDetails extends Component {
               <img src={provider} alt="" />
             </div>
             <div>
-            <div className="report-detail-ins-name">{this.state.policyData.product_title}</div>
+              <div className="report-detail-ins-name">{this.state.policyData.product_title}</div>
               <div className="report-detail-status">Status: <span className={`${(this.state.policyData.status === 'init') ? 'yellow' : (this.state.policyData.status === 'policy_issued') ? 'green' : 'red'}`}>{(this.state.policyData.status === 'init') ? 'Policy Pending' : (this.state.policyData.status === 'policy_issued' ? 'Policy Issued' : 'Policy Expired')}</span></div>
             </div>
           </div>
           <div className="report-detail-summary">
             <div className="report-detail-summary-item"><span>Policy:</span> {this.state.policyData.product_title} insurance</div>
             <div className="report-detail-summary-item"><span>Issuer:</span> {this.state.policyData.issuer}</div>
-            <div className="report-detail-summary-item"><span>Policy number:</span> {this.state.policyData.master_policy_number}</div>
+            {this.state.policyData.status === 'policy_issued' &&
+              <div className="report-detail-summary-item"><span>Policy number:</span> {this.state.policyData.master_policy_number}</div>}
             <div className="report-detail-summary-item"><span>Premium:</span> {this.state.policyData.premium}/yr</div>
             <div className="report-detail-summary-item"><span>Sum assured:</span> {numDifferentiation(this.state.policyData.sum_assured)}</div>
-            <div className="report-detail-summary-item"><span>Cover period:</span> {this.state.policyData.insured_details.product_coverage} yr 
+            <div className="report-detail-summary-item"><span>Cover period:</span> {this.state.policyData.insured_details.product_coverage} yr
             ({this.state.policyData.policy_start_date} {this.state.policyData.policy_end_date})</div>
           </div>
         </div>
-        <div className="report-detail-download">
-          <img src={download} alt="" />
-          <div className="report-detail-download-text">Download Policy</div>
-        </div>
-        <div className="Accordion">
+        {this.state.policyData.status === 'policy_issued' &&
+          <div onClick={() => this.openInBrowser(this.state.policyData.coi_blob_key)} className="report-detail-download">
+             <img src={download} alt="" />
+            <div className="report-detail-download-text">Download Policy</div>
+          </div>}
+        {this.state.policyData.status === 'policy_issued' && <div className="Accordion">
           <div className="AccordionTitle" onClick={() => this.toggleAccordion()}>
             <div className="AccordionList">
               <span className="AccordionList1">
@@ -136,7 +193,7 @@ class ReportDetails extends Component {
             </ul>
             <p>In all the above, the intimations are directed to a central team for prompt and immediate action</p>
           </div>}
-        </div>
+        </div>}
       </Container>
     );
   }
