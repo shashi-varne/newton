@@ -2,29 +2,58 @@ import React, { Component } from 'react';
 import Button from 'material-ui/Button';
 import { withStyles } from 'material-ui/styles';
 import arrow from 'assets/next_arrow.png';
+import download from 'assets/download.svg';
 import './style.css';
 import { getConfig } from 'utils/functions';
 
 class CustomButton extends Component {
   render() {
     const props = this.props;
-    return (
-      <div>
-        <Button
-          fullWidth={(props.reset || props.type === 'summary') ? true : false}
-          variant="raised"
-          size="large"
-          color="secondary"
-          className={props.classes.button}
-          disabled={props.disable} >
-          {props.buttonTitle}
-          {
-            props.arrow &&
-            <img alt="" src={arrow} width={20} className="FooterButtonArrow" />
-          }
-        </Button>
-      </div>
-    );
+
+    if (props.twoButton) {
+      return (
+        <div className="FlexButton">
+          <Button
+            onClick={props.handleClickOne}
+            fullWidth={false}
+            variant="raised"
+            size="large"
+            className={`${props.classes.button} borderButton`}
+            disabled={props.disable} >
+            <img alt="" src={download} />
+            {props.buttonOneTitle}
+          </Button>
+          <Button
+          onClick={props.handleClickTwo}
+            fullWidth={false}
+            variant="raised"
+            size="large"
+            className={`${props.classes.button} filledButton`}
+            disabled={props.disable} >
+            {props.buttonTwoTitle}
+          </Button>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <Button
+            fullWidth={(props.reset || props.type === 'summary') ? true : false}
+            variant="raised"
+            size="large"
+            color="secondary"
+            className={props.classes.button}
+            disabled={props.disable} >
+            {props.buttonTitle}
+            {
+              props.arrow &&
+              <img alt="" src={arrow} width={20} className="FooterButtonArrow" />
+            }
+          </Button>
+        </div>
+      );
+    }
+    
   }
 }
 

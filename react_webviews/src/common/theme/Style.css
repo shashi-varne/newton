@@ -209,8 +209,44 @@ button.MuiButtonBase-root.MuiButton-root.MuiButton-raised.MuiButton-raisedSecond
   /* border-radius: 6px; */
 }
 
+.Footer.no-border {
+  border: 0;
+}
+
+.FooterTwoButtonLayout .FlexButton {
+  display: flex;
+  align-items: center;
+}
+
+.FooterTwoButtonLayout .FlexItem1 {
+  margin-left: 5px;
+}
+
+.FooterTwoButtonLayout .FlexItem2 {
+  margin-right: 5px;
+}
+
 .FooterDefaultLayout .FlexItem3, .FooterDefaultLayout .FlexItem2, .FooterDefaultLayout .FlexItem1 {
   text-align: center;
+}
+
+.FooterTwoButtonLayout button.borderButton {
+  background: #fff;
+  color: #35cb5d;
+  border: 1px solid #35cb5d;
+  margin-right: 5px;
+  flex: 2;
+}
+
+.FooterTwoButtonLayout button.filledButton {
+  margin-left: 5px;
+  background: #35cb5d;
+  color: #fff;
+  flex: 1;
+}
+
+.FooterTwoButtonLayout button.borderButton img {
+  margin-right: 10px;
 }
 
 input#pan {

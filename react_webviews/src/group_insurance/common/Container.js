@@ -348,14 +348,19 @@ class Container extends Component {
         {!this.props.noFooter &&
           <Footer
             fullWidthButton={this.props.fullWidthButton}
+            twoButtons={this.props.twoButtons}
             logo={this.props.logo}
             buttonTitle={this.props.buttonTitle}
+            buttonOneTitle={this.props.buttonOneTitle}
+            buttonTwoTitle={this.props.buttonTwoTitle}
             provider={this.props.provider}
             premium={this.props.premium}
             paymentFrequency={this.props.paymentFrequency}
             edit={this.props.edit}
             resetpage={this.props.resetpage}
             handleClick={this.props.handleClick}
+            handleClickOne={this.props.handleClickOne}
+            handleClickTwo={this.props.handleClickTwo}
             handleReset={this.props.handleReset}
             onlyButton={this.props.onlyButton}
             showDotDot={this.props.showDotDot}

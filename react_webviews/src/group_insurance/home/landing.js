@@ -302,21 +302,7 @@ class Landing extends Component {
           <div className='products' style={{ marginTop: '50px' }}>
             <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '20px' }}>Get started</h1>
             <div>
-              {/* <div style={{ display: 'flex', alignItems: 'center', borderBottomWidth: '1px', borderBottomColor: '#dfd8ef', borderBottomStyle: 'solid', paddingTop: '15px', paddingBottom: '15px' }}>
-                <img src={this.state.health} alt="" style={{ marginRight: '15px' }} />
-                <div>
-                  <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px' }}>Health (Idemnity)</div>
-                  <div style={{ color: '#7e7e7e', fontSize: '13px' }}>Starts from Rs 23 per month</div>
-                </div>
-              </div> */}
-
-              {/* <div onClick={() => this.handleClick('TERM_INSURANCE')} style={{ display: 'flex', alignItems: 'center', paddingTop: '15px', paddingBottom: '15px' }}>
-                <img src={this.state.term} alt="" style={{ marginRight: '15px' }} />
-                <div>
-                  <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px' }}>Term insurance</div>
-                  <div style={{ color: '#7e7e7e', fontSize: '13px' }}>Get comprehensive life coverage</div>
-                </div>
-              </div> */}
+    
               {this.state.insuranceProducts.map(this.renderPorducts)}
 
             </div>
