@@ -142,7 +142,16 @@
   font-weight: 500;
 }
 .plan-success-heading-subtitle {
-  font-weight: 500;
+  font-weight: 400;
+}
+.plan-success-heading-subtitle-bold {
+  font-weight: 700;
+}
+.plan-success .AccordionBody ul li {
+  color: #878787;
+}
+.plan-success .AccordionBody ul li span {
+  color: #878787;
 }
 .payment-failed-icon {
   text-align: center; margin-bottom: 30px;
@@ -278,9 +287,6 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
-.accident-plan-list .activePlan {
-  border: 2px solid #4f2da7;
-}
 .accident-plan-item {
   background: #fff;
    border-radius: 5px;
@@ -311,9 +317,6 @@
   color: #6f6f6f;
    font-size: 10px;
    margin-right: 5px;
-}
-.accident-plan-item-color {
-  color: #4f2da7;
 }
 .accident-plan-benefit {
   color: #6e54b7;
@@ -349,7 +352,6 @@
   margin-right: 10px;
 }
 .accident-plan-read-text {
-  color: #4f2da7;
    font-size: 14px;
 }
 .accident-plan-terms {
@@ -361,7 +363,6 @@
    font-size: 14px;
 }
 .accident-plan-terms-bold {
-  color: #4f2da7;
    font-weight: 500;
 }
 .card {

@@ -13,6 +13,14 @@ const product_config = {
   'PERSONAL_ACCIDENT' : {
     'top_title1' : 'You’re insured against any unfortunate accidental events with',
     'top_title2' : 'Bharti AXA General Insurance.'
+  },
+  'HOSPICASH' : {
+    'top_title1' : 'You have successfully insured yourself against Hospital expenses with',
+    'top_title2' : 'Bharti AXA General Insurance.'
+  },
+  'SMART_WALLET' : {
+    'top_title1' : 'Your Bank cards & Mobile wallets are insured with',
+    'top_title2' : 'Bharti AXA General Insurance.'
   }
 }
 
