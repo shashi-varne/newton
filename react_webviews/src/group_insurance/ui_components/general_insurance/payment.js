@@ -3,7 +3,7 @@ import Container from '../../common/Container';
 import '../../common/Style.css';
 import qs from 'qs';
 import { getConfig } from 'utils/functions';
-
+import {insuranceStateMapper} from '../../constants';
 
 
 class PaymentClass extends Component {
@@ -20,12 +20,7 @@ class PaymentClass extends Component {
 
         const { status } = this.props.parent.props.match.params;
 
-        console.log(status)
-        let stateMapper = {
-            'PERSONAL_ACCIDENT': 'accident'
-        };
-
-        let path = '/group-insurance/' + stateMapper[this.props.parent.state.product_key] + '/'
+        let path = '/group-insurance/' + insuranceStateMapper[this.props.parent.state.product_key] + '/'
         if (status === 'success') {
             path += 'payment-success';
         } else {

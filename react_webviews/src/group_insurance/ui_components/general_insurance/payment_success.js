@@ -29,7 +29,8 @@ class PaymentSuccessClass extends Component {
       addressline: '',
       landmark: '',
       city: '',
-      state: ''
+      state: '',
+      leadData: {}
     };
 
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
@@ -38,9 +39,11 @@ class PaymentSuccessClass extends Component {
 
   componentWillMount() {
 
+    let { params } = this.props.parent.props.location || {};
     let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
     this.setState({
-      lead_id: lead_id || ''
+      lead_id: lead_id || '',
+      fromHome: params && params.fromHome ? true : false,
     })
 
   }
@@ -63,11 +66,15 @@ class PaymentSuccessClass extends Component {
       })
       if (res.pfwresponse.status_code === 200) {
 
-        // var leadData = res.pfwresponse.result.lead;
+        var leadData = res.pfwresponse.result.lead;
 
         // Object.keys(address_details_data).forEach((key) => {
         //   address_details_data[key] = leadData[key]
         // })
+
+        this.setState({
+          leadData: leadData
+        })
 
       } else {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message
@@ -266,11 +273,12 @@ class PaymentSuccessClass extends Component {
     return (
       <Container
         fullWidthButton={true}
+        disableBack={!this.state.fromHome}
         showLoader={this.state.show_loader}
         buttonTitle='Generate Policy'
         onlyButton={true}
         handleClick={() => this.handleClickCurrent()}
-        title="Payment Success"
+        title={this.state.leadData.product_title}
         classOverRideContainer="payment-success"
       >
         <div>

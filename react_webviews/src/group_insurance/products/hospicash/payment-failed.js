@@ -6,7 +6,7 @@ class HospicashFailed extends Component {
     return (
       <div>
         <PaymentFailed
-          
+          parent={this}
         />
       </div>
     );

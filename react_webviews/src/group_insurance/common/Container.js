@@ -79,8 +79,6 @@ class Container extends Component {
   }
 
   historyGoBack = () => {
-    console.log("go backkkkkkkkk")
-    console.log(this.props.isJourney)
 
     let project_child = getConfig().project_child;
 
@@ -93,8 +91,21 @@ class Container extends Component {
     }
     let { params } = this.props.location;
     let pathname = this.props.history.location.pathname;
-    console.log(this.props)
-    console.log(this.props.isJourney)
+
+    if(project_child === 'bhartiaxa' && pathname.indexOf('payment-success') >= 0
+     && this.props.disableBack) {
+      this.setState({
+        callbackType: 'web_home',
+        openPopup: true,
+        popupText: 'Address is mandatory for policy document, are you sure you want to go back?'
+      })
+      return;
+    }
+
+    if(pathname.indexOf('payment-success') >= 0) {
+      this.navigate('/group-insurance');
+      return;
+    }
 
     if((params && params.backToState === 'report') || 
     (pathname === '/group-insurance/common/reportdetails')) {

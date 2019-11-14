@@ -87,7 +87,7 @@ class Report extends Component {
       let policy = group_insurance_policies[i];
       let obj = {
         status: policy.status,
-        product_name: policy.product_name,
+        product_name: policy.product_title,
         cover_amount: policy.sum_assured,
         premium: policy.premium,
         key: 'BHARTIAXA',
@@ -103,7 +103,7 @@ class Report extends Component {
       reportData: reportData,
       termRedirectionPath : fullPath
     })
-  
+    console.log(getConfig())
   }
 
   async componentDidMount() {

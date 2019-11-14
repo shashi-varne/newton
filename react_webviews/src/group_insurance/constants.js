@@ -442,6 +442,14 @@ export const insuranceStateMapper = {
   'term_insurance': 'term'
 }
 
+export const insuranceProductTitleMapper = {
+  'HEALTH' : 'Health',
+  'SMART_WALLET': 'Smart Wallet',
+  'PERSONAL_ACCIDENT': 'Personal Accident',
+  'HOSPICASH': 'Hospicash',
+  'term_insurance': 'Term Insurance'
+}
+
 export function getBhartiaxaStatusToState(policy) {
   let status = policy.status;
   let payment_status = policy.lead_payment_status;
