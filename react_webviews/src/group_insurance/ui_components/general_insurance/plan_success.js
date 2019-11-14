@@ -31,7 +31,7 @@ class PlanSuccessClass extends Component {
     this.state = {
       accordianTab: 'policy',
       lead_data: {
-
+        nominee : {}
       },
       show_loader: true,
       accordians_data: []
@@ -74,10 +74,6 @@ class PlanSuccessClass extends Component {
           {
             'key': 'personal',
             'name': 'Personal'
-          },
-          {
-            'key': 'nominee',
-            'name': 'Nominee'
           },
           {
             'key': 'address',
@@ -197,8 +193,8 @@ class PlanSuccessClass extends Component {
       return (
         <div className="AccordionBody">
           <ul>
-            <li>Name: <span>{this.state.lead_data.name}</span></li>
-            <li>Relationship: <span>{this.capitalize(this.state.lead_data.relationship)}</span></li>
+            <li>Name: <span>{this.state.lead_data.nominee.name}</span></li>
+            <li>Relationship: <span>{this.capitalize(this.state.lead_data.nominee.relation)}</span></li>
           </ul>
         </div>
       );
