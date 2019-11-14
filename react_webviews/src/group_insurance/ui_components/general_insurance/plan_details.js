@@ -32,6 +32,8 @@ const coverAmountMapper = {
   }
 }
 
+let styles = {};
+
 class PlanDetailsClass extends Component {
 
   constructor(props) {
@@ -45,6 +47,7 @@ class PlanDetailsClass extends Component {
         }
       },
       type: getConfig().productName,
+      color: getConfig().primary,
       quoteData: {}
     };
 
@@ -84,6 +87,10 @@ class PlanDetailsClass extends Component {
       premium: '',
       tax_amount: ''
     };
+
+    styles.color = {
+      color: this.state.color
+    }
 
     console.log(premium_details)
     try {
@@ -184,9 +191,20 @@ class PlanDetailsClass extends Component {
   }
 
   renderPlans(props, index) {
+    if (this.state.selectedIndex === index) {
+      styles.activeplan = {
+        border: `2px solid ${this.state.color}`
+      }
+    } else {
+      styles.activeplan = {
+        border: `2px solid #fff`
+      }
+    }
+
     return (
       <div key={index}
-        className={`accident-plan-item ${(this.state.selectedIndex === index) ? 'activePlan' : ''}`}
+        style={styles.activeplan}
+        className={`accident-plan-item`}
         onClick={() => this.selectPlan(index)}>
         <div className="accident-plan-item1">Cover amount</div>
         <div className="accident-plan-item2">{props.sum_assured}</div>
@@ -308,7 +326,7 @@ class PlanDetailsClass extends Component {
         <div className="accident-plan-read"
           onClick={() => this.openInBrowser(this.state.quoteData.read_document)}>
           <img className="accident-plan-read-icon" src={this.state.ic_read} alt="" />
-          <div className="accident-plan-read-text">Read Detailed Document</div>
+          <div className="accident-plan-read-text" style={styles.color}>Read Detailed Document</div>
         </div>
 
         <div className="CheckBlock2 accident-plan-terms" style={{}}>
@@ -324,7 +342,7 @@ class PlanDetailsClass extends Component {
                 className="Checkbox" />
             </Grid>
             <Grid item xs={11}>
-              <div className="accident-plan-terms-text" style={{}}>I accept with the <span onClick={() => this.openInBrowser(this.state.quoteData.terms_and_conditions)} className="accident-plan-terms-bold" style={{}}>Terms and condition</span></div>
+              <div className="accident-plan-terms-text" style={{}}>I accept with the <span onClick={() => this.openInBrowser(this.state.quoteData.terms_and_conditions)} className="accident-plan-terms-bold" style={styles.color}>Terms and condition</span></div>
             </Grid>
           </Grid>
         </div>
