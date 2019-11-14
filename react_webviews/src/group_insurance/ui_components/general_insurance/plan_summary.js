@@ -7,6 +7,7 @@ import { numDifferentiation } from '../../../utils/validators';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
+import {insuranceStateMapper} from '../../constants';
 
 class PlanSummaryClass extends Component {
   constructor(props) {
@@ -24,6 +25,7 @@ class PlanSummaryClass extends Component {
 
   componentWillMount() {
 
+    
     let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
     this.setState({
       lead_id: lead_id || ''
@@ -100,7 +102,7 @@ class PlanSummaryClass extends Component {
 
         let current_url = window.location.origin + 'journey' + getConfig().searchParams;
         let paymentRedirectUrl = encodeURIComponent(
-          window.location.origin + '/group-insurance/accident/payment'
+          window.location.origin + '/group-insurance/' + insuranceStateMapper[this.props.parent.state.product_key] + '/payment'
         );
 
         var payment_link = res2.pfwresponse.result.payment_link;
@@ -115,7 +117,12 @@ class PlanSummaryClass extends Component {
         if (getConfig().generic_callback) {
           pgLink += '&generic_callback=' + getConfig().generic_callback;
         }
+
+        window.localStorage.setItem('group_insurance_payment_url', pgLink);
+
         window.location.href = pgLink;
+
+        
 
       } else {
         toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message

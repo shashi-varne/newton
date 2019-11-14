@@ -12,12 +12,23 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
+import {insuranceProductTitleMapper} from '../../constants';
 
 const coverAmountMapper = {
   'PERSONAL_ACCIDENT': {
     200000: 0,
     500000: 1,
     1000000: 2
+  },
+  'HOSPICASH': {
+    500: 0,
+    1500: 1,
+    5000: 2
+  },
+  'SMART_WALLET': {
+    40000: 0,
+    100000: 1,
+    150000: 2
   }
 }
 
@@ -84,9 +95,8 @@ class PlanDetailsClass extends Component {
     console.log(premium_details)
     try {
 
-      // const resQuote = await Api.get('ins_service/api/insurance/bhartiaxa/get/quote?product_name=' +
-      //  this.props.parent.state.product_key)
-      const resQuote = await Api.get('ins_service/api/insurance/bhartiaxa/get/quote?product_name=personal_accident')
+      const resQuote = await Api.get('ins_service/api/insurance/bhartiaxa/get/quote?product_name=' +
+       this.props.parent.state.product_key)
 
       this.setState({
         show_loader: false
@@ -135,6 +145,7 @@ class PlanDetailsClass extends Component {
       }
 
     } catch (err) {
+      console.log(err)
       this.setState({
         show_loader: false
       });
@@ -270,7 +281,7 @@ class PlanDetailsClass extends Component {
         onlyButton={true}
         showLoader={this.state.show_loader}
         handleClick={() => this.handleClickCurrent()}
-        title="Accident"
+        title={insuranceProductTitleMapper[this.props.parent ? this.props.parent.state.product_key : '']}
         classOverRideContainer="accident-plan">
         <div className="accident-plan-heading-container">
           <div className="accident-plan-heading">

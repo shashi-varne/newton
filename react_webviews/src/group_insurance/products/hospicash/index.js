@@ -32,17 +32,15 @@ class HospicashPlanDetails extends Component {
     let { params } = this.props.location;
     this.setState({
       premium_details: params ? params.premium_details : {},
-      lead_id: lead_id || ''
+      lead_id: lead_id || '',
+      ic_hospicash_b1: this.state.type !== 'fisdom' ? ic_hospicash_b1_myway : ic_hospicash_b1_fisdom,
+      ic_hospicash_b2: this.state.type !== 'fisdom' ? ic_hospicash_b2_myway : ic_hospicash_b2_fisdom,
+      ic_hospicash_b4: this.state.type !== 'fisdom' ? ic_hospicash_b4_myway : ic_hospicash_b4_fisdom
     })
 
   }
 
   async componentDidMount() {
-    this.setState({
-      ic_hospicash_b1: this.state.type !== 'fisdom' ? ic_hospicash_b1_myway : ic_hospicash_b1_fisdom,
-      ic_hospicash_b2: this.state.type !== 'fisdom' ? ic_hospicash_b2_myway : ic_hospicash_b2_fisdom,
-      ic_hospicash_b4: this.state.type !== 'fisdom' ? ic_hospicash_b4_myway : ic_hospicash_b4_fisdom,
-    })
 
     var product_benefits = [
       {

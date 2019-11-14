@@ -85,7 +85,10 @@ class Landing extends Component {
   navigate = (pathname, search) => {
     this.props.history.push({
       pathname: pathname,
-      search: search ? search : getConfig().searchParams
+      search: search ? search : getConfig().searchParams,
+      params : {
+        fromHome: true
+      }
     });
   }
 
@@ -168,6 +171,9 @@ class Landing extends Component {
         lead_id = data.lead_id;
 
         path = getBhartiaxaStatusToState(data);
+        if (data.status === 'complete') {
+          lead_id = '';
+        }
 
       } else {
         path = 'plan';

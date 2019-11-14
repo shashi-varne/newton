@@ -32,18 +32,15 @@ class SmartwalletPlanDetails extends Component {
     let { params } = this.props.location;
     this.setState({
       premium_details: params ? params.premium_details : {},
-      lead_id: lead_id || ''
+      lead_id: lead_id || '',
+      ic_wallet_b1: this.state.type !== 'fisdom' ? ic_wallet_b1_myway : ic_wallet_b1_fisdom,
+      ic_wallet_b2: this.state.type !== 'fisdom' ? ic_wallet_b2_myway : ic_wallet_b2_fisdom,
+      ic_wallet_b3: this.state.type !== 'fisdom' ? ic_wallet_b3_myway : ic_wallet_b3_fisdom
     })
 
   }
 
   async componentDidMount() {
-    this.setState({
-      ic_wallet_b1: this.state.type !== 'fisdom' ? ic_wallet_b1_myway : ic_wallet_b1_fisdom,
-      ic_wallet_b2: this.state.type !== 'fisdom' ? ic_wallet_b2_myway : ic_wallet_b2_fisdom,
-      ic_wallet_b3: this.state.type !== 'fisdom' ? ic_wallet_b3_myway : ic_wallet_b3_fisdom,
-    })
-    
 
     var product_benefits = [
       {
