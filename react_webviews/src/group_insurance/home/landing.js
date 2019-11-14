@@ -209,28 +209,28 @@ class Landing extends Component {
                   <div style={{ color: '#7e7e7e', fontSize: '13px' }}>Starts from Rs 23 per month</div>
                 </div>
               </div> */}
-              <div onClick={() => this.handleClick('PERSONAL_ACCIDENT')} style={{ display: 'flex', alignItems: 'center', borderBottomWidth: '1px', borderBottomColor: '#dfd8ef', borderBottomStyle: 'solid', paddingTop: '15px', paddingBottom: '15px' }}>
+              <div onClick={() => this.handleClick('PERSONAL_ACCIDENT')} style={{ position: 'relative', display: 'flex', alignItems: 'center', borderBottomWidth: '1px', borderBottomColor: '#dfd8ef', borderBottomStyle: 'solid', paddingTop: '15px', paddingBottom: '15px' }}>
                 <img src={this.state.accident} alt="" style={{ marginRight: '15px' }} />
                 <div>
                   <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px' }}>Personal accident</div>
                   <div style={{ color: '#7e7e7e', fontSize: '13px' }}>Starts from Rs 200 annually</div>
                 </div>
               </div>
-              <div onClick={() => this.handleClick('HOSPICASH')} style={{ display: 'flex', alignItems: 'center', borderBottomWidth: '1px', borderBottomColor: '#dfd8ef', borderBottomStyle: 'solid', paddingTop: '15px', paddingBottom: '15px' }}>
+              <div onClick={() => this.handleClick('HOSPICASH')} style={{ position: 'relative', display: 'flex', alignItems: 'center', borderBottomWidth: '1px', borderBottomColor: '#dfd8ef', borderBottomStyle: 'solid', paddingTop: '15px', paddingBottom: '15px' }}>
                 <img src={this.state.hospicash} alt="" style={{ marginRight: '15px' }} />
                 <div>
                   <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px' }}>Hospicash</div>
                   <div style={{ color: '#7e7e7e', fontSize: '13px' }}>Starts from Rs 133 annually</div>
                 </div>
               </div>
-              <div onClick={() => this.handleClick('SMART_WALLET')} style={{ display: 'flex', alignItems: 'center', borderBottomWidth: '1px', borderBottomColor: '#dfd8ef', borderBottomStyle: 'solid', paddingTop: '15px', paddingBottom: '15px' }}>
+              <div onClick={() => this.handleClick('SMART_WALLET')} style={{ position: 'relative', display: 'flex', alignItems: 'center', borderBottomWidth: '1px', borderBottomColor: '#dfd8ef', borderBottomStyle: 'solid', paddingTop: '15px', paddingBottom: '15px' }}>
                 <img src={this.state.wallet} alt="" style={{ marginRight: '15px' }} />
                 <div>
                   <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px' }}>Smart wallet</div>
                   <div style={{ color: '#7e7e7e', fontSize: '13px' }}>Starts from Rs 250 annually</div>
                 </div>
               </div>
-              <div onClick={() => this.handleClick('TERM_INSURANCE')} style={{ display: 'flex', alignItems: 'center', paddingTop: '15px', paddingBottom: '15px' }}>
+              <div onClick={() => this.handleClick('TERM_INSURANCE')} style={{ position: 'relative', display: 'flex', alignItems: 'center', paddingTop: '15px', paddingBottom: '15px' }}>
                 <img src={this.state.term} alt="" style={{ marginRight: '15px' }} />
                 <div>
                   <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px' }}>Term insurance</div>

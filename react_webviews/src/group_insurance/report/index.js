@@ -118,10 +118,15 @@ class Report extends Component {
       if (res.pfwresponse.status_code === 200) {
 
         var policyData = res.pfwresponse.result.response;
+        var next_page = policyData.group_insurance.next_page;
+        var has_more = policyData.group_insurance.more;
+
+        this.setState({
+          hasMoreItems: has_more,
+          nextPage: (has_more) ? next_page : null
+        })
 
         this.setReportData(policyData.term_insurance, policyData.group_insurance.ins_policies);
-        
-
       } else {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message
           || 'Something went wrong');
@@ -133,8 +138,6 @@ class Report extends Component {
       });
       toast('Something went wrong');
     }
-
-
   }
 
   redirectCards(policy) {
@@ -167,6 +170,55 @@ class Report extends Component {
     )
   }
 
+  loadMore = async () => {
+    try {
+      this.setState({
+        loading_more: true
+      });
+
+      let res = await Api.get(this.state.next_page);
+      
+      this.setState({
+        loading_more: false
+      });
+
+      if (res.pfwresponse.status_code === 200) {
+        var policyData = res.pfwresponse.result;
+        var next_page = policyData.group_insurance.next_page;
+        var has_more = policyData.group_insurance.more;
+
+        this.setState({
+          hasMoreItems: has_more,
+          nextPage: (has_more) ? next_page : null
+        });
+
+        var newReportData = [];
+
+        for (var i = 0; i < policyData.length; i++) {
+          let policy = policyData[i];
+          let obj = {
+            status: policy.status,
+            product_name: policy.product_name,
+            cover_amount: policy.sum_assured,
+            premium: policy.premium,
+            key: 'BHARTIAXA',
+            id: policy.id
+          }
+          newReportData.push(obj);
+        }
+
+        this.state.reportData.concat(newReportData);
+      } else {
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
+      }
+    } catch (err) {
+      this.setState({
+        loading_more: false
+      });
+      toast('Something went wrong');
+    }
+  }
+
   render() {
     return (
       <Container
@@ -177,6 +229,9 @@ class Report extends Component {
       >
         <div>
           {this.state.reportData.map(this.renderReportCards)}
+        </div>
+        <div>
+          <button onClick={() => this.loadMore()}>Load More</button>
         </div>
       </Container>
     );

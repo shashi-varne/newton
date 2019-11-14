@@ -255,7 +255,11 @@ class PlanSuccessClass extends Component {
     console.log(this.props)
     return (
       <Container
-        title="Success"
+        twoButtons={true}
+        buttonOneTitle="Download Policy"
+        buttonTwoTitle="Check details"
+        handleClickOne={() => console.log('One')}
+        handleClickTwo={() => console.log('Two')}
         classOverRideContainer="plan-success"
         showLoader={this.state.show_loader}
       >
