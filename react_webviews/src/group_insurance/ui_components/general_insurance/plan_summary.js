@@ -97,13 +97,14 @@ class PlanSummaryClass extends Component {
       this.setState({
         show_loader: true
       })
+      console.log("lead_id :kkkkkkkkkkkkkkkkkkkk" + this.state.lead_id)
       let res2;
       res2 = await Api.get('ins_service/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
 
       
       if (res2.pfwresponse.status_code === 200) {
 
-        let current_url = window.location.origin + 'journey' + getConfig().searchParams;
+        let current_url =  window.location.origin + '/group-insurance/' + insuranceStateMapper[this.props.parent.state.product_key] + '/summary'
 
         let nativeRedirectUrl = current_url;
 
@@ -113,6 +114,13 @@ class PlanSummaryClass extends Component {
             back_text: 'Are you sure you want to exit the payment process?'
           }
         });
+
+        nativeCallback({
+          action: 'show_top_bar', message: {
+            title: 'Payment'
+          }
+        });
+
         let paymentRedirectUrl = encodeURIComponent(
           window.location.origin + '/group-insurance/' + insuranceStateMapper[this.props.parent.state.product_key] + '/payment'
         );
