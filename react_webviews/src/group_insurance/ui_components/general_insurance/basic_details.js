@@ -3,7 +3,7 @@ import Container from '../../common/Container';
 import Input from '../../../common/ui/Input';
 import MobileInputWithoutIcon from '../../../common/ui/MobileInputWithoutIcon';
 import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
-import { genderOptions, insuranceMaritalStatus, relationshipOptions } from '../../constants';
+import { genderOptions, insuranceMaritalStatus, relationshipOptionsGroupInsurance } from '../../constants';
 import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
@@ -74,7 +74,7 @@ class BasicDetailsForm extends Component {
         <div className="InputField">
           <DropdownWithoutIcon
             width="40"
-            options={relationshipOptions}
+            options={relationshipOptionsGroupInsurance}
             id="relationship"
             label="Nominee's relationship"
             error={(this.state.basic_details_data.nominee && this.state.basic_details_data.nominee.relationship_error) ? true : false}
@@ -248,7 +248,7 @@ class BasicDetailsForm extends Component {
         })
         if (res.pfwresponse.status_code === 200) {
 
-          let result = res.pfwresponse.result.insurance_account;
+          let result = res.pfwresponse.result.insurance_account || {};
 
           basic_details_data.name = result.name || '';
           basic_details_data.gender = result.gender || '';

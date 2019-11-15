@@ -45,6 +45,11 @@ export const relationshipOptions = [
   'WIFE'
 ];
 
+export const relationshipOptionsGroupInsurance = [
+  "BROTHER", "SISTER", "MOTHER", "FATHER", "SON", "DAUGHTER", "GRANDSON", "GRANDDAUGHTER",
+  "NEPHEW", "NIECE", "GRANDFATHER", "GRANDMOTHER", "WIFE", "HUSBAND", "UNCLE", "AUNT"
+]
+
 export const relationshipOptionsAll = {
   'male_to_male': [
     'BROTHER',
@@ -435,7 +440,7 @@ export const insuranceMaritalStatus = [
 ]
 
 export const insuranceStateMapper = {
-  'HEALTH' : 'health',
+  'HEALTH': 'health',
   'SMART_WALLET': 'wallet',
   'PERSONAL_ACCIDENT': 'accident',
   'HOSPICASH': 'hospicash',
@@ -443,7 +448,7 @@ export const insuranceStateMapper = {
 }
 
 export const insuranceProductTitleMapper = {
-  'HEALTH' : 'Health',
+  'HEALTH': 'Health',
   'SMART_WALLET': 'Smart Wallet',
   'PERSONAL_ACCIDENT': 'Personal Accident',
   'HOSPICASH': 'Hospicash',
@@ -454,7 +459,7 @@ export function getBhartiaxaStatusToState(policy) {
   let status = policy.status;
   let payment_status = policy.lead_payment_status;
   let path = '';
-  if(status === 'complete') {
+  if (status === 'complete') {
     path = 'plan';
   } else if (status === 'init' && payment_status === 'payment_done') {
     path = 'payment-success';

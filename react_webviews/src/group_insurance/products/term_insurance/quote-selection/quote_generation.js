@@ -346,12 +346,16 @@ class QuoteGeneration extends Component {
                   <div className="confirm-quote-popup-content1c">{inrFormatDecimal(this.state.popup_premium.base_premium)}</div>
                 </div>
                 <div className="confirm-quote-popup-content1">
+                  <div className="confirm-quote-popup-content1c">Riders base premium</div>
+                  <div className="confirm-quote-popup-content1c">{inrFormatDecimal(this.state.popup_premium.riders_base_premium)}</div>
+                </div>
+                <div className="confirm-quote-popup-content1">
                   <div className="confirm-quote-popup-content1c">GST & taxes</div>
-                  <div className="confirm-quote-popup-content1c">{inrFormatDecimal(this.state.popup_premium.base_premium_tax)}</div>
+                  <div className="confirm-quote-popup-content1c">{inrFormatDecimal(this.state.popup_premium.total_tax)}</div>
                 </div>
                 <div className="confirm-quote-popup-content1 confirm-quote-popup-content1d">
                   <div className="confirm-quote-popup-content1e">Total payable</div>
-                  <div className="confirm-quote-popup-content1b">{inrFormatDecimal(this.state.popup_premium.base_premium_total)}</div>
+                  <div className="confirm-quote-popup-content1b">{inrFormatDecimal(this.state.popup_premium.premium)}</div>
                 </div>
               </div>
             </div>
@@ -670,13 +674,13 @@ class QuoteGeneration extends Component {
         <div className="quote-tiles3">
           <div className="quote-tiles3a" onClick={() => this.selectQuote(props, props.payment_frequency, index)}>
             <div className="quote-tiles3aa">
-              <span className="bold-premium"> {inrFormatDecimal(props.quote_json.base_premium_total)}</span>
+              <span className="bold-premium"> {inrFormatDecimal(props.quote_json.premium)}</span>
               <span style={{ textTransform: 'lowercase', marginLeft: 4 }}>{props.payment_frequency}</span>
             </div>
           </div>
           <div className="quote-tiles3b" onClick={() => this.selectQuote(props, 'Annually', index)}>
             <div className="quote-tiles3ba">  
-              <span className="bold-premium">{inrFormatDecimal(props.annual_quote_json.base_premium_total)}</span>
+              <span className="bold-premium">{inrFormatDecimal(props.annual_quote_json.premium)}</span>
               <span style={{ marginLeft: 4 }}>annually</span>
             </div>
             <div className="quote-tiles3bb">

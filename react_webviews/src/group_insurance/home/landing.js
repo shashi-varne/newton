@@ -105,6 +105,7 @@ class Landing extends Component {
           'TERM_INSURANCE': resumeFlagTerm
         }
         
+        console.log(JSON.stringify(BHARTIAXA));
         if (!BHARTIAXA) {
           BHARTIAXA = {};
         }
