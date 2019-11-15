@@ -22,7 +22,10 @@ class SmartwalletPlanDetails extends Component {
       plan_data: {},
       recommendedInedx: 1,
       product_key: 'SMART_WALLET',
-      type: getConfig().productName
+      type: getConfig().productName,
+      ic_wallet_b1: getConfig().productName !== 'fisdom' ? ic_wallet_b1_myway : ic_wallet_b1_fisdom,
+      ic_wallet_b2: getConfig().productName !== 'fisdom' ? ic_wallet_b2_myway : ic_wallet_b2_fisdom,
+      ic_wallet_b3: getConfig().productName !== 'fisdom' ? ic_wallet_b3_myway : ic_wallet_b3_fisdom
     }
   }
 
@@ -32,10 +35,7 @@ class SmartwalletPlanDetails extends Component {
     let { params } = this.props.location;
     this.setState({
       premium_details: params ? params.premium_details : {},
-      lead_id: lead_id || '',
-      ic_wallet_b1: this.state.type !== 'fisdom' ? ic_wallet_b1_myway : ic_wallet_b1_fisdom,
-      ic_wallet_b2: this.state.type !== 'fisdom' ? ic_wallet_b2_myway : ic_wallet_b2_fisdom,
-      ic_wallet_b3: this.state.type !== 'fisdom' ? ic_wallet_b3_myway : ic_wallet_b3_fisdom
+      lead_id: lead_id || ''
     })
 
   }

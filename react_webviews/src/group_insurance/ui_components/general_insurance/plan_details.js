@@ -282,7 +282,7 @@ class PlanDetailsClass extends Component {
         "screen_name": this.props.parent.state.product_key,
         "cover_amount": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].sum_assured,
         "premium": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].premium,
-        "cover_period": "",
+        "cover_period": 1,
         "tnc_checked": "yes"
       }
     };

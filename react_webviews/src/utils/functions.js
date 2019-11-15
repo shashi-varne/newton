@@ -106,6 +106,7 @@ export const getConfig = () => {
   if (ismyway) {
     productType = 'myway';
   }
+  productType = 'myway';
   let returnConfig = config[productType];
 
 
