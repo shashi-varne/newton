@@ -409,9 +409,15 @@ class BasicDetailsForm extends Component {
           window.localStorage.setItem('group_insurance_lead_id_selected', lead_id_updated || '');
           this.navigate('summary')
         } else {
-          toast(('error' in res2.pfwresponse.result && (res2.pfwresponse.result.error.length ? res2.pfwresponse.result.error[0]['message'] :
-           res2.pfwresponse.result.error)) || res2.pfwresponse.result.message || res2.pfwresponse.result.error
-            || 'Something went wrong');
+          if ('error' in res2.pfwresponse.result) {
+            if (Array.isArray(res2.pfwresponse.result.error)) {
+              toast(res2.pfwresponse.result.error[0]['message']);
+            } else {
+              toast(res2.pfwresponse.result.error);
+            }
+          } else {
+            toast(res2.pfwresponse.result.message || res2.pfwresponse.result.message || 'Something went wrong');
+          }
         }
 
       } catch (err) {
