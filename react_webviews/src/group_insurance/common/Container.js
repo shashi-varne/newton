@@ -65,7 +65,7 @@ class Container extends Component {
   navigate = (pathname, user_action) => {
 
     let action = user_action ? user_action : this.props.disableBack ? 'close' : 'back';
-    nativeCallback({events: this.getEvents(action) });
+    nativeCallback({ events: this.getEvents(action) });
     this.props.history.push({
       pathname: pathname,
       search: this.props.location.search
@@ -95,8 +95,8 @@ class Container extends Component {
     let { params } = this.props.location;
     let pathname = this.props.history.location.pathname;
     console.log("pathname :" + pathname)
-    if(project_child === 'bhartiaxa' && pathname.indexOf('payment-success') >= 0
-     && this.props.disableBack) {
+    if (project_child === 'bhartiaxa' && pathname.indexOf('payment-success') >= 0
+      && this.props.disableBack) {
       this.setState({
         callbackType: 'web_home',
         openPopup: true,
@@ -105,17 +105,29 @@ class Container extends Component {
       return;
     }
 
-    if(pathname.indexOf('payment-success') >= 0 || 
-    pathname.indexOf('summary-success') >= 0 || pathname.indexOf('payment-failed') >= 0) {
+    if (project_child === 'bhartiaxa' && pathname.indexOf('success') >= 0
+      && this.props.disableBack) {
+        this.navigate('/group-insurance');
+      return;
+    }
+
+    if (pathname.indexOf('payment-success') >= 0 ||
+      pathname.indexOf('summary-success') >= 0 || pathname.indexOf('payment-failed') >= 0) {
       this.navigate('/group-insurance');
       return;
     }
 
-    if((params && params.backToState === 'report') || 
-    (pathname.indexOf('reportdetails') >= 0)) {
+    if ((params && params.backToState === 'report') ||
+      (pathname.indexOf('reportdetails') >= 0)) {
       this.navigate('/group-insurance/common/report');
       return;
     }
+
+    if (project_child === 'bhartiaxa' && pathname.indexOf('summary') >= 0) {
+      this.navigate('/group-insurance');
+      return;
+    }
+
     if (project_child === 'term') {
       if (pathname === '/group-insurance/term/journey' || pathname === '/group-insurance/term/summary') {
         if (this.props.isJourney) {
@@ -132,10 +144,10 @@ class Container extends Component {
             openPopup: true,
             popupText: 'Are you sure you want to explore more options? We will save your information securely.'
           })
-  
+
           return;
         }
-  
+
         if (params && params.disableBack) {
           this.setState({
             callbackType: 'web_home',
@@ -146,22 +158,22 @@ class Container extends Component {
         }
       }
     }
-   
-   
+
+
     switch (pathname) {
       case "/group-insurance":
-          nativeCallback({action : 'exit', events: this.getEvents('back') });
-          break;
+        nativeCallback({ action: 'exit', events: this.getEvents('back') });
+        break;
       case "/group-insurance/common/report":
-          nativeCallback({action : 'exit', events: this.getEvents('back') });
-          break;
+        nativeCallback({ action: 'exit', events: this.getEvents('back') });
+        break;
       case "/group-insurance/term/resume":
       case "/group-insurance/term/journey":
-          this.setState({
-            callbackType: 'web_home',
-            openPopup: true,
-            popupText: 'Are you sure you want to exit the application process? You can resume it later.'
-          })
+        this.setState({
+          callbackType: 'web_home',
+          openPopup: true,
+          popupText: 'Are you sure you want to exit the application process? You can resume it later.'
+        })
         break;
       case "/group-insurance/term/summary":
         this.navigate(back_button_mapper[pathname]);
@@ -175,8 +187,22 @@ class Container extends Component {
         } else {
           nativeCallback({ events: this.getEvents('back') });
           this.props.history.goBack();
-        } 
+        }
     }
+  }
+
+  openNativeModule(module) {
+    let url = ''
+    if (module === 'portfolio') {
+      url = 'https://fis.do/m/module?action_type=native&native_module=app/portfolio';
+
+    }
+
+    nativeCallback({
+      action: 'open_module', message: {
+        action_url: url
+      }
+    });
   }
 
   handleClose = () => {

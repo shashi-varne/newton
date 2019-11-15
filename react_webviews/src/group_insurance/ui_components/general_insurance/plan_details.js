@@ -44,6 +44,7 @@ class PlanDetailsClass extends Component {
     this.state = {
       selectedIndex: 1,
       checked: true,
+      show_loader: true,
       parent: this.props.parent || {
         'plan_data': {
 
@@ -105,9 +106,6 @@ class PlanDetailsClass extends Component {
       const resQuote = await Api.get('ins_service/api/insurance/bhartiaxa/get/quote?product_name=' +
         this.props.parent.state.product_key)
 
-      this.setState({
-        show_loader: false
-      })
       if (resQuote && resQuote.pfwresponse.status_code === 200) {
 
         let quoteData = resQuote.pfwresponse.result;
@@ -123,9 +121,7 @@ class PlanDetailsClass extends Component {
       if (this.state.lead_id) {
         let res = await Api.get('ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
 
-        this.setState({
-          show_loader: false
-        })
+       
         if (res.pfwresponse.status_code === 200) {
 
           var leadData = res.pfwresponse.result.lead;
@@ -137,10 +133,14 @@ class PlanDetailsClass extends Component {
           let selectedIndex = coverAmountMapper[this.props.parent.state.product_key][premium_details.cover_amount];
 
           this.setState({
-            selectedIndex: selectedIndex
+            selectedIndex: selectedIndex,
+            show_loader: false
           })
 
         } else {
+          this.setState({
+            show_loader: false
+          })
           toast(res.pfwresponse.result.error || res.pfwresponse.result.message
             || 'Something went wrong');
         }
@@ -263,13 +263,14 @@ class PlanDetailsClass extends Component {
       if (this.state.lead_id) {
         final_data.lead_id = this.state.lead_id;
         res2 = await Api.post('ins_service/api/insurance/bhartiaxa/lead/update', final_data)
-        this.setState({
-          show_loader: false
-        })
+       
 
         if (res2.pfwresponse.status_code === 200) {
           this.navigate('form', '', final_data);
         } else {
+          this.setState({
+            show_loader: false
+          })
           toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
             || 'Something went wrong');
         }

@@ -85,7 +85,6 @@ export const getConfig = () => {
     searchParams += '&insurance_id=' + insurance_id +
       '&insurance_v2=' + insurance_v2;
     if(checkValidString(isJourney)) {
-      console.log("going inside")
       searchParams += '&isJourney=' + isJourney;
     }
 
@@ -192,7 +191,6 @@ export const getConfig = () => {
     }
   }
 
-  console.log("generic_callback :" + returnConfig.generic_callback)
 
   returnConfig.searchParams = searchParams;
   return returnConfig;
