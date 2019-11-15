@@ -388,7 +388,7 @@ class BasicDetailsForm extends Component {
           window.localStorage.setItem('group_insurance_lead_id_selected', lead_id_updated || '');
           this.navigate('summary')
         } else {
-          toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
+          toast(('error' in res2.pfwresponse.result && (res2.pfwresponse.result.error.length ? res2.pfwresponse.result.error[0]['message'] : res2.pfwresponse.result.error)) || res2.pfwresponse.result.message
             || 'Something went wrong');
         }
 
