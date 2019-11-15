@@ -84,7 +84,7 @@ class AccidentPlanDetails extends Component {
           "sum_assured": 200000,
           "product_benefits_included": ['lumpsum_payout', 'disablement_coverage',
             'accidental_burns_protection'],
-          "premium": "250",
+          "premium": "200",
           "tax_amount": "36",
           "plus_benefit": ''
         },

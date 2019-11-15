@@ -25,6 +25,9 @@
 .plan-summary-mid {
   margin-top: 30px
 }
+.plan-summary-mid1:nth-child(even) {
+  background: #fff;
+}
 .plan-summary-mid1 {
   display: flex;
    align-items: center;
@@ -67,16 +70,24 @@
 }
 .plan-summary-premium-font {
   font-size: 14px;
+  color: #4a4a4a;
 }
 .plan-summary-premium-list2 {
   color: #878787;
-   font-size: 14px;
-   font-weight: 500;
+  font-size: 14px;
+  font-weight: 500;
+}
+.plan-summary-premium-amount {
+  color: #4a4a4a;
 }
 .plan-summary .divider {
-  height: 2px;
+  height: 1px;
   background: #cecece;
   width: 100%;
+  margin: 10px 0;
+}
+.plan-success {
+  margin-bottom: 15px;
 }
 .plan-success-heading {
   margin: 30px 0;
@@ -319,7 +330,6 @@
    margin-right: 5px;
 }
 .accident-plan-benefit {
-  color: #6e54b7;
    font-size: 10px;
    margin-top: 10px;
 }
