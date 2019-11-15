@@ -115,11 +115,11 @@ class Report extends Component {
       if (res.pfwresponse.status_code === 200) {
 
         var policyData = res.pfwresponse.result.response;
-        var cursor = policyData.group_insurance.cursor;
+        var next_page = policyData.group_insurance.next_page;
         var has_more = policyData.group_insurance.more;
 
         this.setState({
-          nextPage: (has_more) ? cursor : null
+          nextPage: (has_more) ? next_page : null
         })
 
         this.setReportData(policyData.term_insurance, policyData.group_insurance.ins_policies);
@@ -182,7 +182,7 @@ class Report extends Component {
         loading_more: true
       });
 
-      let res = await Api.get('ins_service/api/insurance/get/report?cursor=' + this.state.nextPage)
+      let res = await Api.get(this.state.nextPage)
 
       this.setState({
         loading_more: false
@@ -190,11 +190,11 @@ class Report extends Component {
 
       if (res.pfwresponse.status_code === 200) {
         var policyData = res.pfwresponse.result.response;
-        var cursor = policyData.group_insurance.cursor;
+        var next_page = policyData.group_insurance.next_page;
         var has_more = policyData.group_insurance.more;
 
         this.setState({
-          nextPage: (has_more) ? cursor : null
+          nextPage: (has_more) ? next_page : null
         });
 
         var newReportData = [];
