@@ -3,7 +3,7 @@ import Container from '../../common/Container';
 import '../../common/Style.css';
 import qs from 'qs';
 import { getConfig } from 'utils/functions';
-import {insuranceStateMapper} from '../../constants';
+import { insuranceStateMapper } from '../../constants';
 
 
 class PaymentClass extends Component {

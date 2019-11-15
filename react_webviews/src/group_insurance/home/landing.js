@@ -19,6 +19,7 @@ import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { getBhartiaxaStatusToState } from '../constants';
+import { nativeCallback } from 'utils/native_callback';
 
 class Landing extends Component {
 
@@ -93,7 +94,6 @@ class Landing extends Component {
       if (res.pfwresponse.status_code === 200) {
 
         var resultData = res.pfwresponse.result.response;
-        console.log(resultData);
 
         let group_insurance = resultData.group_insurance;
         let term_insurance = resultData.term_insurance;
@@ -124,7 +124,7 @@ class Landing extends Component {
         }
 
         let insuranceProducts = this.state.insuranceProducts;
-        for (var i =0; i < insuranceProducts.length;i++) {
+        for (var i = 0; i < insuranceProducts.length; i++) {
           let key = insuranceProducts[i].key;
           insuranceProducts[i].resume_flag = resumeFlagAll[key];
         }
@@ -133,7 +133,7 @@ class Landing extends Component {
           group_insurance: group_insurance,
           term_insurance: term_insurance,
           BHARTIAXA_APPS: BHARTIAXA_APPS,
-          insuranceProducts:insuranceProducts
+          insuranceProducts: insuranceProducts
         })
 
       } else {
@@ -229,6 +229,7 @@ class Landing extends Component {
 
   handleClick = (product_key) => {
 
+    this.sendEvents('next', product_key)
     var BHARTIAXA_PRODUCTS = ['PERSONAL_ACCIDENT', 'HOSPICASH', 'SMART_WALLET', 'HEALTH'];
 
     var lead_id = '';
@@ -267,7 +268,7 @@ class Landing extends Component {
     return (
       <div key={index} onClick={() => this.handleClick(props.key)} style={{
         display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
-        borderBottomColor: '#dfd8ef', borderBottomStyle: this.state.insuranceProducts.length -1 !== index ?  'solid': '', paddingTop: '15px',
+        borderBottomColor: '#dfd8ef', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',
         paddingBottom: '15px', justifyContent: 'space-between'
       }}>
         <div style={{ display: 'flex' }}>
@@ -277,12 +278,31 @@ class Landing extends Component {
             <div style={{ color: '#7e7e7e', fontSize: '13px' }}>{props.subtitle}</div>
           </div>
         </div>
-        {props.resume_flag && 
-        <div style={{ background: '#ff6868', color: '#fff', fontSize: 8, letterSpacing: 0.1,
-         textTransform: 'uppercase', padding: '2px 5px', borderRadius: 3 }}>RESUME</div>
+        {props.resume_flag &&
+          <div style={{
+            background: '#ff6868', color: '#fff', fontSize: 8, letterSpacing: 0.1,
+            textTransform: 'uppercase', padding: '2px 5px', borderRadius: 3
+          }}>RESUME</div>
         }
       </div>
     )
+  }
+
+  sendEvents(user_action, insurance_type) {
+    let eventObj = {
+      "event_name": 'Group Insurance',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'insurance',
+        "insurance_type": insurance_type ? insurance_type : ''
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   }
 
   render() {
@@ -290,6 +310,7 @@ class Landing extends Component {
 
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         noFooter={true}
         showLoader={this.state.show_loader}
         title="Insurance">
@@ -303,7 +324,7 @@ class Landing extends Component {
           <div className='products' style={{ marginTop: '50px' }}>
             <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '20px' }}>Get started</h1>
             <div>
-    
+
               {this.state.insuranceProducts.map(this.renderPorducts)}
 
             </div>

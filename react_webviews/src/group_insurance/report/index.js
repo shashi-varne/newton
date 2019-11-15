@@ -6,8 +6,9 @@ import toast from '../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 
 import {
- inrFormatDecimal
+  inrFormatDecimal
 } from '../../utils/validators';
+import { nativeCallback } from 'utils/native_callback';
 
 class Report extends Component {
 
@@ -18,7 +19,7 @@ class Report extends Component {
       reportData: []
     };
 
-    this.renderReportCards  = this.renderReportCards.bind(this);
+    this.renderReportCards = this.renderReportCards.bind(this);
   }
 
 
@@ -27,14 +28,14 @@ class Report extends Component {
       pathname: pathname,
       search: getConfig().searchParams,
       params: {
-        backToState : 'report'
+        backToState: 'report'
       }
     });
   }
 
   setReportData(termData, group_insurance_policies) {
 
-   
+
     let canShowReport = false;
     let application;
     let pathname = ''
@@ -63,12 +64,12 @@ class Report extends Component {
     }
 
     let fullPath = '/group-insurance/term/' + pathname;
-    
+
     let reportData = [];
 
     console.log(application);
     console.log(canShowReport)
-    if(canShowReport && application) {
+    if (canShowReport && application) {
       console.log("going inside")
       let termReport = {
         status: application.status,
@@ -101,7 +102,7 @@ class Report extends Component {
 
     this.setState({
       reportData: reportData,
-      termRedirectionPath : fullPath
+      termRedirectionPath: fullPath
     })
     console.log(getConfig())
   }
@@ -142,13 +143,14 @@ class Report extends Component {
 
   redirectCards(policy) {
     console.log(policy);
+    this.sendEvents('next', policy.key);
     let path = '';
     if (policy.key === 'TERM_INSURANCE') {
       if (this.state.termRedirectionPath) {
-        path  = this.state.termRedirectionPath;
+        path = this.state.termRedirectionPath;
       }
-    }else {
-      path  = '/group-insurance/common/reportdetails/' + policy.id;
+    } else {
+      path = '/group-insurance/common/reportdetails/' + policy.id;
     }
 
     this.navigate(path);
@@ -157,7 +159,7 @@ class Report extends Component {
   renderReportCards(props, index) {
     return (
       <div onClick={() => this.redirectCards(props)} key={index} className="card">
-         <div className={`report-color-state ${(props.status === 'init') ? 'yellow' : (props.status === 'policy_issued') ? 'green' : 'red'}`}>
+        <div className={`report-color-state ${(props.status === 'init') ? 'yellow' : (props.status === 'policy_issued') ? 'green' : 'red'}`}>
           <div className="circle"></div>
           <div className="report-color-state-title">{(props.status === 'init') ? 'Policy Pending' : (props.status === 'policy_issued' ? 'Policy Issued' : 'Policy Expired')}</div>
         </div>
@@ -177,7 +179,7 @@ class Report extends Component {
       });
 
       let res = await Api.get(this.state.next_page);
-      
+
       this.setState({
         loading_more: false
       });
@@ -219,10 +221,35 @@ class Report extends Component {
     }
   }
 
+  sendEvents(user_action, insurance_type) {
+
+    let reportState = {};
+    for (var i = 0; i < this.state.reportData.length; i++) {
+      reportState[this.state.reportData[i].key] = this.state.reportData[i].status;
+    };
+
+    let eventObj = {
+      "event_name": 'Group Insurance',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'insurance_report',
+        "type": insurance_type ? insurance_type : '',
+        report: reportState
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
     return (
       <Container
         noFooter={true}
+        events={this.sendEvents('just_set_events')}
         title="Insurance report"
         showLoader={this.state.show_loader}
         classOverRideContainer="report"

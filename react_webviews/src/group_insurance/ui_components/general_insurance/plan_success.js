@@ -12,17 +12,17 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 
 const product_config = {
-  'PERSONAL_ACCIDENT' : {
-    'top_title1' : 'You’re insured against any unfortunate accidental events with',
-    'top_title2' : 'Bharti AXA General Insurance.'
+  'PERSONAL_ACCIDENT': {
+    'top_title1': 'You’re insured against any unfortunate accidental events with',
+    'top_title2': 'Bharti AXA General Insurance.'
   },
-  'HOSPICASH' : {
-    'top_title1' : 'You have successfully insured yourself against Hospital expenses with',
-    'top_title2' : 'Bharti AXA General Insurance.'
+  'HOSPICASH': {
+    'top_title1': 'You have successfully insured yourself against Hospital expenses with',
+    'top_title2': 'Bharti AXA General Insurance.'
   },
-  'SMART_WALLET' : {
-    'top_title1' : 'Your Bank cards & Mobile wallets are insured with',
-    'top_title2' : 'Bharti AXA General Insurance.'
+  'SMART_WALLET': {
+    'top_title1': 'Your Bank cards & Mobile wallets are insured with',
+    'top_title2': 'Bharti AXA General Insurance.'
   }
 }
 
@@ -33,7 +33,7 @@ class PlanSuccessClass extends Component {
     this.state = {
       accordianTab: 'policy',
       lead_data: {
-        nominee : {}
+        nominee: {}
       },
       show_loader: true,
       accordians_data: [],
@@ -98,7 +98,7 @@ class PlanSuccessClass extends Component {
           }
         ]
 
-        if (Object.keys(lead_data.nominee).length !== 0 ) {
+        if (Object.keys(lead_data.nominee).length !== 0) {
           let obj = {
             'key': 'nominee',
             'name': 'Nominee'
@@ -266,12 +266,31 @@ class PlanSuccessClass extends Component {
   }
 
   handleClickOne() {
+    this.sendEvents('download_policy');
     this.openInBrowser(this.state.lead_data.policy.coi_blob_key);
   }
 
   handleClickTwo() {
-   let path = '/group-insurance/common/reportdetails/' + this.state.lead_data.bhariaxa_policy_id;
-   this.navigate(path); 
+    this.sendEvents('check_details');
+    let path = '/group-insurance/common/reportdetails/' + this.state.lead_data.bhariaxa_policy_id;
+    this.navigate(path);
+  }
+
+  sendEvents(user_action, insurance_type) {
+    let eventObj = {
+      "event_name": 'Group Insurance',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'policy',
+        "type": this.props.parent.state.product_key
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   }
 
   render() {
@@ -279,6 +298,7 @@ class PlanSuccessClass extends Component {
     return (
       <Container
         twoButtons={true}
+        events={this.sendEvents('just_set_events')}
         buttonOneTitle="Download Policy"
         buttonTwoTitle="Check details"
         handleClickOne={() => this.handleClickOne()}

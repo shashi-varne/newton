@@ -12,7 +12,7 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import {insuranceProductTitleMapper} from '../../constants';
+import { insuranceProductTitleMapper } from '../../constants';
 
 const coverAmountMapper = {
   'PERSONAL_ACCIDENT': {
@@ -66,7 +66,8 @@ class PlanDetailsClass extends Component {
 
   }
 
-  openInBrowser(url) {
+  openInBrowser(url, type) {
+    this.sendEvents(type);
     nativeCallback({
       action: 'open_in_browser',
       message: {
@@ -96,7 +97,7 @@ class PlanDetailsClass extends Component {
     try {
 
       const resQuote = await Api.get('ins_service/api/insurance/bhartiaxa/get/quote?product_name=' +
-       this.props.parent.state.product_key)
+        this.props.parent.state.product_key)
 
       this.setState({
         show_loader: false
@@ -273,12 +274,33 @@ class PlanDetailsClass extends Component {
 
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'Group Insurance',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": this.props.parent.state.product_key,
+        "cover_amount": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].sum_assured,
+        "premium": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].premium,
+        "cover_period": "",
+        "tnc_checked": "yes"
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
     return (
       <Container
         fullWidthButton={true}
         buttonTitle='Get this Plan'
         onlyButton={true}
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         handleClick={() => this.handleClickCurrent()}
         title={insuranceProductTitleMapper[this.props.parent ? this.props.parent.state.product_key : '']}
@@ -324,7 +346,7 @@ class PlanDetailsClass extends Component {
           </div>
         </div>
         <div className="accident-plan-read"
-          onClick={() => this.openInBrowser(this.state.quoteData.read_document)}>
+          onClick={() => this.openInBrowser(this.state.quoteData.read_document, 'read_document')}>
           <img className="accident-plan-read-icon" src={this.state.ic_read} alt="" />
           <div className="accident-plan-read-text" style={styles.color}>Read Detailed Document</div>
         </div>
@@ -342,7 +364,7 @@ class PlanDetailsClass extends Component {
                 className="Checkbox" />
             </Grid>
             <Grid item xs={11}>
-              <div className="accident-plan-terms-text" style={{}}>I accept with the <span onClick={() => this.openInBrowser(this.state.quoteData.terms_and_conditions)} className="accident-plan-terms-bold" style={styles.color}>Terms and condition</span></div>
+              <div className="accident-plan-terms-text" style={{}}>I accept with the <span onClick={() => this.openInBrowser(this.state.quoteData.terms_and_conditions, 'terms_and_conditions')} className="accident-plan-terms-bold" style={styles.color}>Terms and condition</span></div>
             </Grid>
           </Grid>
         </div>

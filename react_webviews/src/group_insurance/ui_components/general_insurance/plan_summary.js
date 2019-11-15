@@ -7,7 +7,8 @@ import { numDifferentiation } from '../../../utils/validators';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
-import {insuranceStateMapper} from '../../constants';
+import { insuranceStateMapper } from '../../constants';
+import { nativeCallback } from 'utils/native_callback';
 
 class PlanSummaryClass extends Component {
   constructor(props) {
@@ -25,7 +26,7 @@ class PlanSummaryClass extends Component {
 
   componentWillMount() {
 
-    
+
     let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
     this.setState({
       lead_id: lead_id || ''
@@ -90,6 +91,7 @@ class PlanSummaryClass extends Component {
   }
 
   async handleClickCurrent() {
+
     try {
       this.setState({
         show_loader: true
@@ -117,12 +119,13 @@ class PlanSummaryClass extends Component {
         if (getConfig().generic_callback) {
           pgLink += '&generic_callback=' + getConfig().generic_callback;
         }
+        this.sendEvents('next');
 
         window.localStorage.setItem('group_insurance_payment_url', pgLink);
 
         window.location.href = pgLink;
 
-        
+
 
       } else {
         toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
@@ -134,6 +137,23 @@ class PlanSummaryClass extends Component {
     }
   }
 
+  sendEvents(user_action, insurance_type) {
+    let eventObj = {
+      "event_name": 'Group Insurance',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'summary',
+        "type": this.props.parent.state.product_key
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
 
     return (
@@ -141,6 +161,7 @@ class PlanSummaryClass extends Component {
         fullWidthButton={true}
         buttonTitle='Make Payment'
         onlyButton={true}
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         handleClick={() => this.handleClickCurrent()}
         title="Summary"

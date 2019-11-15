@@ -106,6 +106,8 @@ class ReportDetails extends Component {
   }
 
   openInBrowser(url) {
+
+    this.sendEvents('download');
     nativeCallback({
       action: 'open_in_browser',
       message: {
@@ -115,12 +117,15 @@ class ReportDetails extends Component {
   }
 
   toggleAccordion = () => {
+    this.sendEvents('how_to_claim')
     this.setState(prevState => ({
       accordionTab: !prevState.accordionTab
     }));
   }
 
   handleClick = () => {
+
+    this.sendEvents(this.state.buttonTitle);
     let lead_id = this.state.policyData.lead_id;
     window.localStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
     this.navigate(this.state.redirectPath);
@@ -133,11 +138,26 @@ class ReportDetails extends Component {
     });
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'Group Insurance',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'policy_details'
+      }
+    };
 
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         noFooter={this.state.noFooter}
         handleClick={this.handleClick}
         fullWidthButton={true}
@@ -170,7 +190,7 @@ class ReportDetails extends Component {
         </div>
         {this.state.policyData.status === 'policy_issued' &&
           <div onClick={() => this.openInBrowser(this.state.policyData.coi_blob_key)} className="report-detail-download">
-             <img src={download} alt="" />
+            <img src={download} alt="" />
             <div className="report-detail-download-text">Download Policy</div>
           </div>}
         {this.state.policyData.status === 'policy_issued' && <div className="Accordion">

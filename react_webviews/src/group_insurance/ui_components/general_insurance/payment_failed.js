@@ -3,6 +3,7 @@ import Container from '../../common/Container';
 import '../../common/Style.css';
 import failed from 'assets/error_illustration.svg';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 class PaymentFailedClass extends Component {
 
@@ -19,6 +20,7 @@ class PaymentFailedClass extends Component {
     })
     let pgLink = window.localStorage.getItem('group_insurance_payment_url');
     if (pgLink) {
+      this.sendEvents('next');
       window.location.href = pgLink;
     } else {
       this.navigate('/group-insurance');
@@ -27,17 +29,35 @@ class PaymentFailedClass extends Component {
 
   navigate = (pathname) => {
     this.props.parent.props.history.push({
-        pathname: pathname,
-        search: getConfig().searchParams,
-        params: {
-            disableBack: true
-        }
+      pathname: pathname,
+      search: getConfig().searchParams,
+      params: {
+        disableBack: true
+      }
     });
-}
+  }
+
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'Group Insurance',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'payment_failure',
+        "type": this.props.parent.state.product_key
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         fullWidthButton={true}
         buttonTitle='Retry Payment'
         onlyButton={true}

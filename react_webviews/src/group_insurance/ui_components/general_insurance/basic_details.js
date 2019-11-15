@@ -17,6 +17,8 @@ import {
   validateConsecutiveChar, validateLengthNames
 } from 'utils/validators';
 
+import { nativeCallback } from 'utils/native_callback';
+
 class BasicDetailsForm extends Component {
   constructor(props) {
     super(props);
@@ -239,6 +241,8 @@ class BasicDetailsForm extends Component {
             basic_details_data[key] = leadData[key]
           })
 
+          basic_details_data.nominee.relationship = leadData.nominee.relation;
+
           basic_details_data['dob'] = basic_details_data['dob'] ? basic_details_data['dob'].replace(/\\-/g, '/').split('-').join('/') : ''
         } else {
           toast(res.pfwresponse.result.error || res.pfwresponse.result.message
@@ -286,7 +290,7 @@ class BasicDetailsForm extends Component {
     console.log("handle click child")
 
 
-    // this.sendEvents('next');
+    this.sendEvents('next');
     let keysMapper = {
       'name': 'name',
       'email': 'email',
@@ -405,11 +409,41 @@ class BasicDetailsForm extends Component {
     });
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'Group Insurance',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'basic_details',
+        "type": this.props.parent.state.product_key,
+        "basic_details": {
+          "name": this.state.basic_details_data['name'] ? 'yes' : 'no',
+          "dob": this.state.basic_details_data['dob'] ? 'yes' : 'no',
+          "gender": this.state.basic_details_data['gender'] ? 'yes' : 'no',
+          "email": this.state.basic_details_data['email'] ? 'yes' : 'no',
+          "mobile": this.state.basic_details_data['mobile'] ? 'yes' : 'no',
+          "nominee_details": this.state.checked ? 'yes' : 'no',
+          "nominee_name": this.state.checked && this.state.basic_details_data.nominee &&
+            this.state.basic_details_data.nominee['name'] ? 'yes' : 'no',
+          "nominee_relation": this.state.checked && this.state.basic_details_data.nominee &&
+            this.state.basic_details_data.nominee['relationship'] ? 'yes' : 'no',
+        }
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
     let currentDate = new Date().toISOString().slice(0, 10);
 
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         fullWidthButton={true}
         buttonTitle='Go to Summary'
         onlyButton={true}

@@ -62,7 +62,10 @@ class Container extends Component {
     }
   }
 
-  navigate = (pathname) => {
+  navigate = (pathname, user_action) => {
+
+    let action = user_action ? user_action : this.props.disableBack ? 'close' : 'back';
+    nativeCallback({events: this.getEvents(action) });
     this.props.history.push({
       pathname: pathname,
       search: this.props.location.search
@@ -165,11 +168,9 @@ class Container extends Component {
         break;
       case '/group-insurance/term/intro':
         this.navigate('/group-insurance');
-        nativeCallback({events: this.getEvents('back') });
         break;
       default:
         if (back_button_mapper[pathname] && back_button_mapper[pathname].length > 0) {
-          nativeCallback({ events: this.getEvents('back') });
           this.navigate(back_button_mapper[pathname]);
         } else if (navigator.onLine) {
           nativeCallback({ events: this.getEvents('back') });

@@ -15,6 +15,7 @@ import {
   validateConsecutiveChar, validateStreetName, validateLengthDynamic,
   validateMinChar, validateEmpty
 } from 'utils/validators';
+import { nativeCallback } from 'utils/native_callback';
 
 class PaymentSuccessClass extends Component {
 
@@ -157,7 +158,7 @@ class PaymentSuccessClass extends Component {
 
   async handleClickCurrent() {
 
-    // this.sendEvents('next');
+    this.sendEvents('next');
     try {
       let keysMapper = {
         'addressline': 'address line',
@@ -268,10 +269,34 @@ class PaymentSuccessClass extends Component {
     });
   }
 
+  sendEvents(user_action, insurance_type) {
+    let eventObj = {
+      "event_name": 'Group Insurance',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'address_details',
+        "type": this.props.parent.state.product_key,
+        "address_details": {
+          "pincode": this.state.address_details_data['pincode'] ? 'yes' : 'no',
+          "addressline": this.state.address_details_data['dob'] ? 'yes' : 'no',
+          "landmark": this.state.address_details_data['landmark'] ? 'yes' : 'no',
+          "city": this.state.address_details_data['city'] ? 'yes' : 'no',
+          "state": this.state.address_details_data['state'] ? 'yes' : 'no'
+        }
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         fullWidthButton={true}
         disableBack={!this.state.fromHome}
         showLoader={this.state.show_loader}
