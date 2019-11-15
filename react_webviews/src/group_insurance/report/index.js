@@ -174,6 +174,10 @@ class Report extends Component {
 
   loadMore = async () => {
     try {
+
+      if(this.state.loading_more) {
+        return;
+      }
       this.setState({
         loading_more: true
       });
