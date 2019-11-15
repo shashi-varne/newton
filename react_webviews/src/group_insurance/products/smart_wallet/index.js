@@ -38,10 +38,6 @@ class SmartwalletPlanDetails extends Component {
       lead_id: lead_id || ''
     })
 
-  }
-
-  async componentDidMount() {
-
     var product_benefits = [
       {
         'disc': 'Protection against unauthorized use (transaction) of any lost or stolen Card(s)',
@@ -109,6 +105,7 @@ class SmartwalletPlanDetails extends Component {
     this.setState({
       plan_data: plan_data
     })
+
   }
 
   navigate = (pathname, search,premium_details) => {

@@ -41,12 +41,14 @@ class Report extends Component {
     let pathname = ''
 
     if (!termData.error) {
-      canShowReport = true;
+      
       let insurance_apps = termData.insurance_apps;
       if (insurance_apps.complete.length > 0) {
+        canShowReport = true;
         application = insurance_apps.complete[0];
         pathname = 'report';
       } else if (insurance_apps.failed.length > 0) {
+        canShowReport = true;
         application = insurance_apps.failed[0];
         pathname = 'report';
       } else if (insurance_apps.init.length > 0) {
@@ -67,10 +69,7 @@ class Report extends Component {
 
     let reportData = [];
 
-    console.log(application);
-    console.log(canShowReport)
     if (canShowReport && application) {
-      console.log("going inside")
       let termReport = {
         status: application.status,
         product_name: application.quote.insurance_title,
@@ -98,13 +97,10 @@ class Report extends Component {
       reportData.push(obj);
     }
 
-    console.log(reportData)
-
     this.setState({
       reportData: reportData,
       termRedirectionPath: fullPath
     })
-    console.log(getConfig())
   }
 
   async componentDidMount() {
@@ -142,7 +138,6 @@ class Report extends Component {
   }
 
   redirectCards(policy) {
-    console.log(policy);
     this.sendEvents('next', policy.key);
     let path = '';
     if (policy.key === 'TERM_INSURANCE') {

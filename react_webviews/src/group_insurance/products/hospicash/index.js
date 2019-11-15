@@ -38,10 +38,6 @@ class HospicashPlanDetails extends Component {
       lead_id: lead_id || ''
     })
 
-  }
-
-  async componentDidMount() {
-
     var product_benefits = [
       {
         'disc': 'Daily Cash benefits on hospitalization for 30 days.',
@@ -109,6 +105,7 @@ class HospicashPlanDetails extends Component {
     this.setState({
       plan_data: plan_data
     })
+
   }
 
   navigate = (pathname, search,premium_details) => {

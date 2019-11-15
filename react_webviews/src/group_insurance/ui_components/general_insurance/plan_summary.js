@@ -26,7 +26,7 @@ class PlanSummaryClass extends Component {
 
   componentWillMount() {
 
-
+    nativeCallback({ action: 'take_control_reset' });
     let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
     this.setState({
       lead_id: lead_id || ''
@@ -37,11 +37,12 @@ class PlanSummaryClass extends Component {
   async componentDidMount() {
     try {
       let res = await Api.get('ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
-
+      this.setState({
+        show_loader: false
+      });
       if (res.pfwresponse.status_code === 200) {
 
         var lead = res.pfwresponse.result.lead;
-        console.log(lead);
         let summaryData = {
           "product_title": lead.product_title || '',
           "cover_amount": lead.cover_amount || '',
@@ -99,18 +100,25 @@ class PlanSummaryClass extends Component {
       let res2;
       res2 = await Api.get('ins_service/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
 
-      console.log(res2)
+      
       if (res2.pfwresponse.status_code === 200) {
 
         let current_url = window.location.origin + 'journey' + getConfig().searchParams;
+
+        let nativeRedirectUrl = current_url;
+
+        nativeCallback({
+          action: 'take_control', message: {
+            back_url: nativeRedirectUrl,
+            back_text: 'Are you sure you want to exit the payment process?'
+          }
+        });
         let paymentRedirectUrl = encodeURIComponent(
           window.location.origin + '/group-insurance/' + insuranceStateMapper[this.props.parent.state.product_key] + '/payment'
         );
 
         var payment_link = res2.pfwresponse.result.payment_link;
         var pgLink = payment_link;
-
-
         let app = getConfig().app;
         var back_url = encodeURIComponent(current_url);
         // eslint-disable-next-line
@@ -128,6 +136,9 @@ class PlanSummaryClass extends Component {
 
 
       } else {
+        this.setState({
+          show_loader: false
+        })
         toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
           || 'Something went wrong');
       }

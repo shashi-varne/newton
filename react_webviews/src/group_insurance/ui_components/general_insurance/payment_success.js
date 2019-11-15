@@ -140,8 +140,6 @@ class PaymentSuccessClass extends Component {
   }
 
   handleChange = name => event => {
-    console.log(name)
-    console.log(event.target.name)
     if (!name) {
       name = event.target.name;
     }
@@ -222,7 +220,6 @@ class PaymentSuccessClass extends Component {
         }
       }
 
-      console.log(this.state.address_details_data)
       if (canSubmitForm) {
         let final_data = {
           "lead_id": this.state.lead_id,
@@ -241,15 +238,15 @@ class PaymentSuccessClass extends Component {
         })
         let res2 = {};
         res2 = await Api.post('ins_service/api/insurance/bhartiaxa/lead/update', final_data)
-
+        this.setState({
+          show_loader: false
+        })
 
         if (res2.pfwresponse.status_code === 200) {
 
           this.navigate('summary-success')
         } else {
-          this.setState({
-            show_loader: false
-          })
+        
           toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
             || 'Something went wrong');
         }

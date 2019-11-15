@@ -67,6 +67,9 @@ class PlanDetailsClass extends Component {
   }
 
   openInBrowser(url, type) {
+    if (!url) {
+      return;
+    }
     this.sendEvents(type);
     nativeCallback({
       action: 'open_in_browser',
@@ -93,7 +96,6 @@ class PlanDetailsClass extends Component {
       color: this.state.color
     }
 
-    console.log(premium_details)
     try {
 
       const resQuote = await Api.get('ins_service/api/insurance/bhartiaxa/get/quote?product_name=' +
@@ -102,10 +104,9 @@ class PlanDetailsClass extends Component {
       this.setState({
         show_loader: false
       })
-      if (resQuote.pfwresponse.status_code === 200) {
+      if (resQuote && resQuote.pfwresponse.status_code === 200) {
 
         let quoteData = resQuote.pfwresponse.result;
-        console.log(quoteData);
         this.setState({
           quoteData: quoteData
         })
@@ -173,8 +174,6 @@ class PlanDetailsClass extends Component {
   }
 
   selectPlan = (index) => {
-    console.log("selecting :" + index)
-    console.log(this.props.parent.state.plan_data.premium_details[index])
     this.setState({
       selectedIndex: index
     });
@@ -254,19 +253,27 @@ class PlanDetailsClass extends Component {
       show_loader: true
     })
 
-    let res2 = {};
-    if (this.state.lead_id) {
-      final_data.lead_id = this.state.lead_id;
-      res2 = await Api.post('ins_service/api/insurance/bhartiaxa/lead/update', final_data)
+    try {
 
-      if (res2.pfwresponse.status_code === 200) {
-        this.navigate('form', '', final_data);
+      let res2 = {};
+      if (this.state.lead_id) {
+        final_data.lead_id = this.state.lead_id;
+        res2 = await Api.post('ins_service/api/insurance/bhartiaxa/lead/update', final_data)
+        this.setState({
+          show_loader: false
+        })
+
+        if (res2.pfwresponse.status_code === 200) {
+          this.navigate('form', '', final_data);
+        } else {
+          toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
+            || 'Something went wrong');
+        }
       } else {
-        toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
-          || 'Something went wrong');
+        this.navigate('form', '', final_data);
       }
-    } else {
-      this.navigate('form', '', final_data);
+    } catch (err) {
+      toast('Something went wrong');
     }
 
 

@@ -62,7 +62,6 @@ class ReportDetails extends Component {
       if (res.pfwresponse.status_code === 200) {
 
         var policyData = res.pfwresponse.result.lead;
-        console.log(policyData);
         let buttonTitle = 'Resume';
 
         let path = '';

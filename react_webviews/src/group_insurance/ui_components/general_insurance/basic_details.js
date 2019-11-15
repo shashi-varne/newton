@@ -38,13 +38,10 @@ class BasicDetailsForm extends Component {
 
     let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
     let { params } = this.props.parent.props.location || {};
-    console.log(params)
     this.setState({
       premium_details: params ? params.premium_details : {},
       lead_id: lead_id || ''
     })
-
-    console.log(this.state)
 
   }
 
@@ -91,11 +88,9 @@ class BasicDetailsForm extends Component {
   }
 
   handleChange = name => event => {
-    console.log(name)
     if (!name) {
       name = event.target.name;
     }
-    console.log(event)
     var value = event.target ? event.target.value : '';
     var basic_details_data = this.state.basic_details_data || {};
     if (name.indexOf('nominee_') >= 0) {
@@ -183,7 +178,6 @@ class BasicDetailsForm extends Component {
       basic_details_data: basic_details_data
     })
 
-    console.log(basic_details_data)
   };
 
   handleChangeRadio = name => event => {
@@ -202,7 +196,6 @@ class BasicDetailsForm extends Component {
       basic_details_data: basic_details_data
     })
 
-    console.log(basic_details_data)
   };
 
   async componentDidMount() {
@@ -224,7 +217,6 @@ class BasicDetailsForm extends Component {
       premium: this.state.premium_details.premium,
       tax_amount: this.state.premium_details.tax_amount
     }
-    console.log(basic_details_data)
     try {
 
       if (this.state.lead_id) {
@@ -287,7 +279,6 @@ class BasicDetailsForm extends Component {
 
 
   async handleClickCurrent() {
-    console.log("handle click child")
 
 
     this.sendEvents('next');
@@ -377,25 +368,36 @@ class BasicDetailsForm extends Component {
 
       final_data.product_name = this.props.parent.state.product_key;
 
-      this.setState({
-        show_loader: true
-      })
-      let res2 = {};
-      if (this.state.lead_id) {
-        final_data.lead_id = this.state.lead_id;
-        res2 = await Api.post('ins_service/api/insurance/bhartiaxa/lead/update', final_data)
-      } else {
-        res2 = await Api.post('ins_service/api/insurance/bhartiaxa/lead/create', final_data)
-      }
+      try {
+        this.setState({
+          show_loader: true
+        })
+        let res2 = {};
+        if (this.state.lead_id) {
+          final_data.lead_id = this.state.lead_id;
+          res2 = await Api.post('ins_service/api/insurance/bhartiaxa/lead/update', final_data)
+        } else {
+          res2 = await Api.post('ins_service/api/insurance/bhartiaxa/lead/create', final_data)
+        }
 
+        this.setState({
+          show_loader: false
+        })
+        if (res2.pfwresponse.status_code === 200) {
+          var lead_id_updated = this.state.lead_id || res2.pfwresponse.result.response_data.lead.id;
+          window.localStorage.setItem('group_insurance_lead_id_selected', lead_id_updated || '');
+          this.navigate('summary')
+        } else {
+          toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
+            || 'Something went wrong');
+        }
 
-      if (res2.pfwresponse.status_code === 200) {
-        var lead_id_updated = this.state.lead_id || res2.pfwresponse.result.response_data.lead.id;
-        window.localStorage.setItem('group_insurance_lead_id_selected', lead_id_updated || '');
-        this.navigate('summary')
-      } else {
-        toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
-          || 'Something went wrong');
+      } catch (err) {
+        console.log(err)
+        this.setState({
+          show_loader: false
+        });
+        toast('Something went wrong');
       }
 
     }

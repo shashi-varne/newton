@@ -172,14 +172,10 @@ class Container extends Component {
       default:
         if (back_button_mapper[pathname] && back_button_mapper[pathname].length > 0) {
           this.navigate(back_button_mapper[pathname]);
-        } else if (navigator.onLine) {
+        } else {
           nativeCallback({ events: this.getEvents('back') });
           this.props.history.goBack();
-        } else {
-          this.setState({
-            openDialog: true
-          });
-        }
+        } 
     }
   }
 

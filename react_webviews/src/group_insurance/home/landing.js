@@ -36,6 +36,7 @@ class Landing extends Component {
 
   componentWillMount() {
 
+    nativeCallback({ action: 'take_control_reset' });
     window.localStorage.setItem('group_insurance_payment_url', '');
     let insurance = this.state.type !== 'fisdom' ? insurance_myway : insurance_fisdom;
     //  let  health_icon  = this.state.type !== 'fisdom' ? health_myway : health_fisdom;
@@ -97,14 +98,16 @@ class Landing extends Component {
 
         let group_insurance = resultData.group_insurance;
         let term_insurance = resultData.term_insurance;
-
-        let resumeFlagTerm = this.setTermInsData(term_insurance);
+        let BHARTIAXA = group_insurance && group_insurance.insurance_apps ? group_insurance.insurance_apps.BHARTIAXA : {};
+        let resumeFlagTerm = this.setTermInsData(term_insurance, BHARTIAXA);
 
         let resumeFlagAll = {
           'TERM_INSURANCE': resumeFlagTerm
         }
-        let BHARTIAXA = group_insurance.insurance_apps.BHARTIAXA;
-
+        
+        if (!BHARTIAXA) {
+          BHARTIAXA = {};
+        }
         let BHARTIAXA_APPS = {
           'PERSONAL_ACCIDENT': BHARTIAXA['PERSONAL_ACCIDENT'],
           'HOSPICASH': BHARTIAXA['HOSPICASH'],
@@ -236,7 +239,7 @@ class Landing extends Component {
     var path = '';
     var fullPath = '';
     if (BHARTIAXA_PRODUCTS.indexOf(product_key) !== -1) {
-      if (this.state.BHARTIAXA_APPS[product_key] &&
+      if (this.state.BHARTIAXA_APPS && this.state.BHARTIAXA_APPS[product_key] &&
         this.state.BHARTIAXA_APPS[product_key].length > 0) {
         let data = this.state.BHARTIAXA_APPS[product_key][0];
         lead_id = data.lead_id;
@@ -249,8 +252,6 @@ class Landing extends Component {
       } else {
         path = 'plan';
       }
-
-      console.log("path :" + path)
 
       fullPath = insuranceStateMapper[product_key] + '/' + path;
     } else {

@@ -4,7 +4,7 @@ import '../../common/Style.css';
 import qs from 'qs';
 import { getConfig } from 'utils/functions';
 import { insuranceStateMapper } from '../../constants';
-
+import { nativeCallback } from 'utils/native_callback';
 
 class PaymentClass extends Component {
 
@@ -18,6 +18,7 @@ class PaymentClass extends Component {
 
     componentWillMount() {
 
+        nativeCallback({ action: 'take_control_reset' });
         const { status } = this.props.parent.props.match.params;
 
         let path = '/group-insurance/' + insuranceStateMapper[this.props.parent.state.product_key] + '/'

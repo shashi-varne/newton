@@ -59,7 +59,6 @@ class PlanSuccessClass extends Component {
   }
 
   openInBrowser(url) {
-    console.log(url)
     nativeCallback({
       action: 'open_in_browser',
       message: {
@@ -81,7 +80,6 @@ class PlanSuccessClass extends Component {
 
 
         let lead_data = res.pfwresponse.result.lead;
-        console.log(lead_data);
 
         let accordians_data = [
           {
@@ -294,7 +292,6 @@ class PlanSuccessClass extends Component {
   }
 
   render() {
-    console.log(this.props)
     return (
       <Container
         twoButtons={true}

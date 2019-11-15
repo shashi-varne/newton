@@ -81,9 +81,7 @@ class QuoteGeneration extends Component {
         countdownInterval: intervalId,
       })
 
-    console.log(this.state.quoteData)
     if (!this.state.quoteData) {
-      console.log("going inside")
       this.navigate('intro');
     }
   }
