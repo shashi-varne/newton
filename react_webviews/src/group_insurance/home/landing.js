@@ -35,6 +35,7 @@ class Landing extends Component {
 
   componentWillMount() {
 
+    window.localStorage.setItem('group_insurance_payment_url', '');
     let insurance = this.state.type !== 'fisdom' ? insurance_myway : insurance_fisdom;
     //  let  health_icon  = this.state.type !== 'fisdom' ? health_myway : health_fisdom;
     let hospicash = this.state.type !== 'fisdom' ? hospicash_myway : hospicash_fisdom;

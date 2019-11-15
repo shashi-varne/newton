@@ -9,6 +9,7 @@ import congratulations_myway from 'assets/congratulations_illustration_myway.svg
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 const product_config = {
   'PERSONAL_ACCIDENT' : {
@@ -57,6 +58,16 @@ class PlanSuccessClass extends Component {
 
   }
 
+  openInBrowser(url) {
+    console.log(url)
+    nativeCallback({
+      action: 'open_in_browser',
+      message: {
+        url: url
+      }
+    });
+  }
+
   async componentDidMount() {
 
     try {
@@ -87,7 +98,7 @@ class PlanSuccessClass extends Component {
           }
         ]
 
-        if (lead_data.nominee) {
+        if (Object.keys(lead_data.nominee).length !== 0 ) {
           let obj = {
             'key': 'nominee',
             'name': 'Nominee'
@@ -106,6 +117,7 @@ class PlanSuccessClass extends Component {
       }
 
     } catch (err) {
+      console.log(err)
       this.setState({
         show_loader: false
       });
@@ -253,6 +265,15 @@ class PlanSuccessClass extends Component {
     return '';
   }
 
+  handleClickOne() {
+    this.openInBrowser(this.state.lead_data.policy.coi_blob_key);
+  }
+
+  handleClickTwo() {
+   let path = '/group-insurance/common/reportdetails/' + this.state.lead_data.bhariaxa_policy_id;
+   this.navigate(path); 
+  }
+
   render() {
     console.log(this.props)
     return (
@@ -260,8 +281,8 @@ class PlanSuccessClass extends Component {
         twoButtons={true}
         buttonOneTitle="Download Policy"
         buttonTwoTitle="Check details"
-        handleClickOne={() => console.log('One')}
-        handleClickTwo={() => console.log('Two')}
+        handleClickOne={() => this.handleClickOne()}
+        handleClickTwo={() => this.handleClickTwo()}
         title="Success"
         disableBack={true}
         classOverRideContainer="plan-success"

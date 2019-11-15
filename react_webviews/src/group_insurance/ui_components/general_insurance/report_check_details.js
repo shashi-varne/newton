@@ -165,7 +165,7 @@ class ReportDetails extends Component {
             <div className="report-detail-summary-item"><span>Premium:</span> {this.state.policyData.premium}/yr</div>
             <div className="report-detail-summary-item"><span>Sum assured:</span> {numDifferentiation(this.state.policyData.sum_assured)}</div>
             <div className="report-detail-summary-item"><span>Cover period:</span> {this.state.policyData.insured_details.product_coverage} yr
-            ({this.state.policyData.policy_start_date} {this.state.policyData.policy_end_date})</div>
+            ({this.state.policyData.policy_start_date} - {this.state.policyData.policy_end_date})</div>
           </div>
         </div>
         {this.state.policyData.status === 'policy_issued' &&

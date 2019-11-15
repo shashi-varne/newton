@@ -91,7 +91,7 @@ class Container extends Component {
     }
     let { params } = this.props.location;
     let pathname = this.props.history.location.pathname;
-
+    
     if(project_child === 'bhartiaxa' && pathname.indexOf('payment-success') >= 0
      && this.props.disableBack) {
       this.setState({
@@ -109,7 +109,7 @@ class Container extends Component {
     }
 
     if((params && params.backToState === 'report') || 
-    (pathname === '/group-insurance/common/reportdetails')) {
+    (pathname.indexOf('reportdetails') >= 0)) {
       this.navigate('/group-insurance/common/report');
       return;
     }
