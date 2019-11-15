@@ -384,7 +384,7 @@ class BasicDetailsForm extends Component {
           show_loader: false
         })
         if (res2.pfwresponse.status_code === 200) {
-          var lead_id_updated = this.state.lead_id || res2.pfwresponse.result.response_data.lead.id;
+          var lead_id_updated = this.state.lead_id || res2.pfwresponse.result.lead.id;
           window.localStorage.setItem('group_insurance_lead_id_selected', lead_id_updated || '');
           this.navigate('summary')
         } else {

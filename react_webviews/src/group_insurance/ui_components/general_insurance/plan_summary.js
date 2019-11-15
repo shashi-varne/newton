@@ -26,6 +26,12 @@ class PlanSummaryClass extends Component {
 
   componentWillMount() {
 
+      // nativeCallback({
+      //   action: 'set_web_interface', message: {
+      //     interface_name: 'callbackWeb'
+      //   }
+      // });
+
     nativeCallback({ action: 'take_control_reset' });
     let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
     this.setState({
@@ -101,25 +107,19 @@ class PlanSummaryClass extends Component {
       let res2;
       res2 = await Api.get('ins_service/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
 
+      // nativeCallback({
+      //   action: 'set_web_interface', message: {
+      //     interface_name: 'callbackWeb'
+      //   }
+      // });
+
       
       if (res2.pfwresponse.status_code === 200) {
 
-        let current_url =  window.location.origin + '/group-insurance/' + insuranceStateMapper[this.props.parent.state.product_key] + '/summary'
+        let current_url =  window.location.origin + '/group-insurance/' + 
+        insuranceStateMapper[this.props.parent.state.product_key] + '/summary' + getConfig().searchParams
 
         let nativeRedirectUrl = current_url;
-
-        nativeCallback({
-          action: 'take_control', message: {
-            back_url: nativeRedirectUrl,
-            back_text: 'Are you sure you want to exit the payment process?'
-          }
-        });
-
-        nativeCallback({
-          action: 'show_top_bar', message: {
-            title: 'Payment'
-          }
-        });
 
         let paymentRedirectUrl = encodeURIComponent(
           window.location.origin + '/group-insurance/' + insuranceStateMapper[this.props.parent.state.product_key] + '/payment'
@@ -138,6 +138,20 @@ class PlanSummaryClass extends Component {
         this.sendEvents('next');
 
         window.localStorage.setItem('group_insurance_payment_url', pgLink);
+
+        nativeCallback({
+          action: 'show_top_bar', message: {
+            title: 'Payment'
+          }
+        });
+
+        
+        nativeCallback({
+          action: 'take_control', message: {
+            back_url: nativeRedirectUrl,
+            back_text: 'Are you sure you want to exit the payment process?'
+          }
+        });
 
         window.location.href = pgLink;
 

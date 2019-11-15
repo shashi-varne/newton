@@ -6,7 +6,6 @@ import { getConfig } from './functions';
 
 
 let generic_callback = getConfig().generic_callback;
-console.log("###################### :" + generic_callback)
 if (generic_callback === "true") {
   (function (exports) {
     var listeners = [];
