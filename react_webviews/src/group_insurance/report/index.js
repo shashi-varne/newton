@@ -122,7 +122,10 @@ class Report extends Component {
           nextPage: (has_more) ? next_page : null
         })
 
-        this.setReportData(policyData.term_insurance, policyData.group_insurance.ins_policies);
+        let ins_policies = policyData.group_insurance && 
+        policyData.group_insurance.ins_policies ? policyData.group_insurance.ins_policies : {};
+
+        this.setReportData(policyData.term_insurance, ins_policies);
       } else {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message
           || 'Something went wrong');

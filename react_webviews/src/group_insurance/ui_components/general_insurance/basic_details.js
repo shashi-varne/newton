@@ -324,13 +324,9 @@ class BasicDetailsForm extends Component {
 
     if ((basic_details_data.mobile_no.length !== 10 || !validateNumber(basic_details_data.mobile_no))
       || !numberShouldStartWith(basic_details_data.mobile_no)) {
-      basic_details_data['email_error'] = 'Please enter valid mobile number';
+      basic_details_data['mobile_no_error'] = 'Please enter valid mobile number';
 
     }
-
-    this.setState({
-      basic_details_data: basic_details_data
-    })
 
     let canSubmitForm = true;
     for (var key in basic_details_data) {
@@ -341,6 +337,31 @@ class BasicDetailsForm extends Component {
         }
       }
     }
+
+    if(this.state.checked) {
+      if (!validateAlphabets(basic_details_data.nominee.name)) {
+        canSubmitForm = false;
+        basic_details_data.nominee['name_error'] = 'Name can contain only alphabets';
+      } else if (validateLengthNames(basic_details_data.nominee.name, 'name', this.state.provider).isError) {
+        canSubmitForm = false;
+        basic_details_data.nominee['name_error'] = validateLengthNames(basic_details_data.nominee.name,
+           'name', basic_details_data.provider).error_msg;
+      } else if (!validateConsecutiveChar(basic_details_data.nominee.name)) {
+        canSubmitForm = false;
+        basic_details_data.nominee['name_error'] = 'Name can not contain more than 3 same consecutive characters';
+      }
+
+      if(!basic_details_data.nominee.relationship) {
+        canSubmitForm = false;
+        basic_details_data.nominee['relationship_error'] = 'Please enter relationship';
+      }
+    }
+
+    this.setState({
+      basic_details_data: basic_details_data
+    })
+
+    
 
     if (canSubmitForm) {
       let final_data = {
@@ -388,7 +409,8 @@ class BasicDetailsForm extends Component {
           window.localStorage.setItem('group_insurance_lead_id_selected', lead_id_updated || '');
           this.navigate('summary')
         } else {
-          toast(('error' in res2.pfwresponse.result && (res2.pfwresponse.result.error.length ? res2.pfwresponse.result.error[0]['message'] : res2.pfwresponse.result.error)) || res2.pfwresponse.result.message
+          toast(('error' in res2.pfwresponse.result && (res2.pfwresponse.result.error.length ? res2.pfwresponse.result.error[0]['message'] :
+           res2.pfwresponse.result.error)) || res2.pfwresponse.result.message || res2.pfwresponse.result.error
             || 'Something went wrong');
         }
 
