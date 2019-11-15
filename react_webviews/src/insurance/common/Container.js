@@ -69,36 +69,8 @@ class Container extends Component {
 
 
   historyGoBack = () => {
-
-   
-    let insurance_v2 = getConfig().insurance_v2;
-    let pathname = this.props.history.location.pathname;
-
-
-    switch (pathname) {
-      case "/insurance":
-      case "/insurance/resume":
-      case "/insurance/journey":
-        if (!insurance_v2) {
-          nativeCallback({ action: 'native_back', events: this.getEvents('back') });
-        } else {
-          this.setState({
-            callbackType: 'exit',
-            openPopup: true,
-            popupText: 'Are you sure you want to exit the application process? You can resume it later.'
-          })
-        }
-        break;
-      default:
-        if (navigator.onLine) {
-          nativeCallback({ events: this.getEvents('back') });
-          this.props.history.goBack();
-        } else {
-          this.setState({
-            openDialog: true
-          });
-        }
-    }
+    // let insurance_v2 = getConfig().insurance_v2;
+    nativeCallback({ action: 'native_back' });
   }
 
   handleClose = () => {

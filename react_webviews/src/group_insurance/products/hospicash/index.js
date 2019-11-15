@@ -22,7 +22,10 @@ class HospicashPlanDetails extends Component {
       plan_data: {},
       recommendedInedx: 1,
       product_key: 'HOSPICASH',
-      type: getConfig().productName
+      type: getConfig().productName,
+      ic_hospicash_b1: getConfig().productName !== 'fisdom' ? ic_hospicash_b1_myway : ic_hospicash_b1_fisdom,
+      ic_hospicash_b2: getConfig().productName !== 'fisdom' ? ic_hospicash_b2_myway : ic_hospicash_b2_fisdom,
+      ic_hospicash_b4: getConfig().productName !== 'fisdom' ? ic_hospicash_b4_myway : ic_hospicash_b4_fisdom
     }
   }
 
@@ -32,10 +35,7 @@ class HospicashPlanDetails extends Component {
     let { params } = this.props.location;
     this.setState({
       premium_details: params ? params.premium_details : {},
-      lead_id: lead_id || '',
-      ic_hospicash_b1: this.state.type !== 'fisdom' ? ic_hospicash_b1_myway : ic_hospicash_b1_fisdom,
-      ic_hospicash_b2: this.state.type !== 'fisdom' ? ic_hospicash_b2_myway : ic_hospicash_b2_fisdom,
-      ic_hospicash_b4: this.state.type !== 'fisdom' ? ic_hospicash_b4_myway : ic_hospicash_b4_fisdom
+      lead_id: lead_id || ''
     })
 
   }

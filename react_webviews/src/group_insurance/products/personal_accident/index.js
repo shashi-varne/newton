@@ -24,7 +24,12 @@ class AccidentPlanDetails extends Component {
       plan_data: {},
       recommendedInedx: 1,
       product_key: 'PERSONAL_ACCIDENT',
-      type: getConfig().productName
+      type: getConfig().productName,
+      ic_pa_b1: getConfig().productName !== 'fisdom' ? ic_pa_b1_myway : ic_pa_b1_fisdom,
+      ic_pa_b2: getConfig().productName !== 'fisdom' ? ic_pa_b2_myway : ic_pa_b2_fisdom,
+      ic_pa_b3: getConfig().productName !== 'fisdom' ? ic_pa_b3_myway : ic_pa_b3_fisdom,
+      ic_pa_b4: getConfig().productName !== 'fisdom' ? ic_pa_b4_myway : ic_pa_b4_fisdom,
+      ic_pa_b5: getConfig().productName !== 'fisdom' ? ic_pa_b5_myway : ic_pa_b5_fisdom,
     }
   }
 
@@ -38,11 +43,7 @@ class AccidentPlanDetails extends Component {
     })
 
     this.setState({
-      ic_pa_b1: this.state.type !== 'fisdom' ? ic_pa_b1_myway : ic_pa_b1_fisdom,
-      ic_pa_b2: this.state.type !== 'fisdom' ? ic_pa_b2_myway : ic_pa_b2_fisdom,
-      ic_pa_b3: this.state.type !== 'fisdom' ? ic_pa_b3_myway : ic_pa_b3_fisdom,
-      ic_pa_b4: this.state.type !== 'fisdom' ? ic_pa_b4_myway : ic_pa_b4_fisdom,
-      ic_pa_b5: this.state.type !== 'fisdom' ? ic_pa_b5_myway : ic_pa_b5_fisdom,
+      
     })
 
     var product_benefits = [
