@@ -184,6 +184,7 @@ class PlanSummaryClass extends Component {
         showLoader={this.state.show_loader}
         handleClick={() => this.handleClickCurrent()}
         title="Summary"
+        classOverRide="fullHeight"
         classOverRideContainer="plan-summary"
       >
         <div className="plan-summary-heading">
@@ -193,7 +194,7 @@ class PlanSummaryClass extends Component {
         <div className="plan-summary-mid">
           <div className="plan-summary-mid1">
             <div className="plan-summary-mid11">Cover amount</div>
-            <div className="plan-summary-mid12">{numDifferentiation(this.state.summaryData.cover_amount || 0)}</div>
+            <div className="plan-summary-mid12">{numDifferentiation(String(this.state.summaryData.cover_amount || 0))}</div>
           </div>
           <div className="plan-summary-mid1">
             <div className="plan-summary-mid11">Cover period</div>

@@ -43,7 +43,7 @@ class PaymentFailedClass extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'payment_failure',
-        "type": this.props.parent.props.product_key
+        "type": this.props.parent.state.product_key
       }
     };
 
