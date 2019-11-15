@@ -5,7 +5,8 @@
 import { getConfig } from './functions';
 
 
-let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
+let generic_callback = getConfig().generic_callback;
+console.log("###################### :" + generic_callback)
 if (generic_callback === "true") {
   (function (exports) {
     var listeners = [];

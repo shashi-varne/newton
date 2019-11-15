@@ -48,6 +48,33 @@ export const getConfig = () => {
   if(redirect_url) {
     searchParams += `&redirect_url=${redirect_url}`;
   }
+
+  let project = 'insurance';
+  let project_child = '';
+  if (myHistory.location.pathname.indexOf('group-insurance') >= 0) {
+    project = 'group-insurance';
+    generic_callback = "true";
+    project_child = 'bhartiaxa';
+    if (myHistory.location.pathname.indexOf('term') >= 0) {
+      project_child = 'term';
+    } 
+
+  } else if (myHistory.location.pathname.indexOf('insurance') >= 0) {
+    project = 'insurance';
+
+  } else if (myHistory.location.pathname.indexOf('risk') >= 0) {
+    project = 'risk';
+  } else if (myHistory.location.pathname.indexOf('mandate-otm') >= 0) {
+    project = 'mandate-otm';
+  } else if (myHistory.location.pathname.indexOf('mandate') >= 0) {
+    project = 'mandate';
+  } else if (myHistory.location.pathname.indexOf('gold') >= 0) {
+    project = 'gold';
+  } else if (myHistory.location.pathname.indexOf('isip') >= 0) {
+    project = 'isip';
+  } else if (myHistory.location.pathname.indexOf('referral') >= 0) {
+    project = 'referral';
+  }
   let isInsurance = myHistory.location.pathname.indexOf('insurance') >= 0 ? true : false;
   if (isInsurance) {
 
@@ -110,31 +137,7 @@ export const getConfig = () => {
   let returnConfig = config[productType];
 
 
-  let project = 'insurance';
-  let project_child = '';
-  if (myHistory.location.pathname.indexOf('group-insurance') >= 0) {
-    project = 'group-insurance';
-    project_child = 'bhartiaxa';
-    if (myHistory.location.pathname.indexOf('term') >= 0) {
-      project_child = 'term';
-    } 
-
-  } else if (myHistory.location.pathname.indexOf('insurance') >= 0) {
-    project = 'insurance';
-
-  } else if (myHistory.location.pathname.indexOf('risk') >= 0) {
-    project = 'risk';
-  } else if (myHistory.location.pathname.indexOf('mandate-otm') >= 0) {
-    project = 'mandate-otm';
-  } else if (myHistory.location.pathname.indexOf('mandate') >= 0) {
-    project = 'mandate';
-  } else if (myHistory.location.pathname.indexOf('gold') >= 0) {
-    project = 'gold';
-  } else if (myHistory.location.pathname.indexOf('isip') >= 0) {
-    project = 'isip';
-  } else if (myHistory.location.pathname.indexOf('referral') >= 0) {
-    project = 'referral';
-  }
+  
   returnConfig.project = project;
   returnConfig.project_child = project_child;
   returnConfig.generic_callback = generic_callback;
@@ -188,6 +191,8 @@ export const getConfig = () => {
       returnConfig.hide_header = true;
     }
   }
+
+  console.log("generic_callback :" + returnConfig.generic_callback)
 
   returnConfig.searchParams = searchParams;
   return returnConfig;

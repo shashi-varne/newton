@@ -33,7 +33,7 @@ class Container extends Component {
 
   componentDidMount() {
     setHeights({ 'header': true, 'container': false });
-    let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
+    let generic_callback = "true";
     let that = this;
     if (generic_callback === "true") {
       window.callbackWeb.add_listener({
@@ -54,7 +54,7 @@ class Container extends Component {
   }
 
   componentWillUnmount() {
-    let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
+    let generic_callback = "true";
     if (generic_callback === "true") {
       window.callbackWeb.remove_listener({});
     } else {
@@ -94,7 +94,7 @@ class Container extends Component {
     }
     let { params } = this.props.location;
     let pathname = this.props.history.location.pathname;
-    
+    console.log("pathname :" + pathname)
     if(project_child === 'bhartiaxa' && pathname.indexOf('payment-success') >= 0
      && this.props.disableBack) {
       this.setState({
@@ -106,7 +106,7 @@ class Container extends Component {
     }
 
     if(pathname.indexOf('payment-success') >= 0 || 
-    pathname.indexOf('summary-success') >= 0) {
+    pathname.indexOf('summary-success') >= 0 || pathname.indexOf('payment-failed') >= 0) {
       this.navigate('/group-insurance');
       return;
     }
