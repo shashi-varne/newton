@@ -115,12 +115,11 @@ class Report extends Component {
       if (res.pfwresponse.status_code === 200) {
 
         var policyData = res.pfwresponse.result.response;
-        var next_page = policyData.group_insurance.next_page;
+        var cursor = policyData.group_insurance.cursor;
         var has_more = policyData.group_insurance.more;
 
         this.setState({
-          hasMoreItems: has_more,
-          nextPage: (has_more) ? next_page : null
+          nextPage: (has_more) ? cursor : null
         })
 
         this.setReportData(policyData.term_insurance, policyData.group_insurance.ins_policies);
@@ -135,6 +134,12 @@ class Report extends Component {
       });
       toast('Something went wrong');
     }
+
+    window.addEventListener("scroll", this.onScroll, false);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.onScroll, false);
   }
 
   redirectCards(policy) {
@@ -173,29 +178,28 @@ class Report extends Component {
         loading_more: true
       });
 
-      let res = await Api.get(this.state.next_page);
+      let res = await Api.get('ins_service/api/insurance/get/report?cursor=' + this.state.nextPage)
 
       this.setState({
         loading_more: false
       });
 
       if (res.pfwresponse.status_code === 200) {
-        var policyData = res.pfwresponse.result;
-        var next_page = policyData.group_insurance.next_page;
+        var policyData = res.pfwresponse.result.response;
+        var cursor = policyData.group_insurance.cursor;
         var has_more = policyData.group_insurance.more;
 
         this.setState({
-          hasMoreItems: has_more,
-          nextPage: (has_more) ? next_page : null
+          nextPage: (has_more) ? cursor : null
         });
 
         var newReportData = [];
 
-        for (var i = 0; i < policyData.length; i++) {
-          let policy = policyData[i];
+        for (var i = 0; i < policyData.group_insurance.ins_policies.length; i++) {
+          let policy = policyData.group_insurance.ins_policies[i];
           let obj = {
             status: policy.status,
-            product_name: policy.product_name,
+            product_name: policy.product_title,
             cover_amount: policy.sum_assured,
             premium: policy.premium,
             key: 'BHARTIAXA',
@@ -204,7 +208,9 @@ class Report extends Component {
           newReportData.push(obj);
         }
 
-        this.state.reportData.concat(newReportData);
+        this.setState((prevState) => ({
+          reportData: prevState.reportData.concat(newReportData)
+        }));
       } else {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
       }
@@ -240,6 +246,20 @@ class Report extends Component {
     }
   }
 
+  hasReachedBottom() {
+    var el = document.getElementsByClassName('Container')[0];
+    var height = el.getBoundingClientRect().bottom <= window.innerHeight;
+    console.log(el.getBoundingClientRect().bottom + ' <= ' + window.innerHeight);
+    return height;
+  }
+
+  onScroll = () => {
+    if (this.hasReachedBottom()) {
+      console.log('Has reached bottom: Yes')
+      this.loadMore();
+    }
+  };
+
   render() {
     return (
       <Container
@@ -249,12 +269,10 @@ class Report extends Component {
         showLoader={this.state.show_loader}
         classOverRideContainer="report"
       >
-        <div>
-          {this.state.reportData.map(this.renderReportCards)}
-        </div>
-        <div>
-          <button onClick={() => this.loadMore()}>Load More</button>
-        </div>
+        {this.state.reportData.map(this.renderReportCards)}
+        {this.state.loading_more && <div className="loader">
+          Loading...
+        </div>}
       </Container>
     );
   }
