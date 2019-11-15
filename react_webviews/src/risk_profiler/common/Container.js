@@ -33,7 +33,7 @@ class Container extends Component {
 
   componentDidMount() {
     setHeights({ 'header': true, 'container': false });
-    let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
+    let generic_callback = getConfig().generic_callback;
     let that = this;
     if (generic_callback === "true") {
       window.callbackWeb.add_listener({
@@ -53,7 +53,7 @@ class Container extends Component {
   }
 
   componentWillUnmount() {
-    let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
+    let generic_callback = getConfig().generic_callback;
     if (generic_callback === "true") {
       window.callbackWeb.remove_listener({});
     } else {
