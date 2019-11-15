@@ -56,8 +56,12 @@ class PaymentSuccessClass extends Component {
       "pincode": "",
       "landmark": "",
       "city": "",
-      "state": ""
+      "state": "",
+      "address_line": ""
     }
+    // this.setState({
+    //   address_details_data: address_details_data
+    // })
     try {
 
       let res = await Api.get('ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
@@ -68,13 +72,26 @@ class PaymentSuccessClass extends Component {
       if (res.pfwresponse.status_code === 200) {
 
         var leadData = res.pfwresponse.result.lead;
+        if(!leadData.permanent_address) {
+          leadData.permanent_address = {};
+        }
 
-        // Object.keys(address_details_data).forEach((key) => {
-        //   address_details_data[key] = leadData[key]
-        // })
+        console.log(leadData)
+
+        Object.keys(address_details_data).forEach((key) => {
+          if (leadData.permanent_address[key]) {
+            address_details_data[key] = leadData.permanent_address[key];
+          }
+          
+        })
+
+        address_details_data.addressline = leadData.permanent_address.address_line;
+
+        console.log(address_details_data)
 
         this.setState({
-          leadData: leadData
+          leadData: leadData,
+          address_details_data: address_details_data
         })
 
       } else {
@@ -89,9 +106,7 @@ class PaymentSuccessClass extends Component {
       toast('Something went wrong');
     }
 
-    this.setState({
-      address_details_data: address_details_data
-    })
+    
 
   }
 

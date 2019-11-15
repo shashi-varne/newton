@@ -248,7 +248,12 @@ class BasicDetailsForm extends Component {
         })
         if (res.pfwresponse.status_code === 200) {
 
-          let result = res.pfwresponse.result.insurance_account || {};
+          let result = {};
+          if(res.pfwresponse.result.response_data) {
+            result = res.pfwresponse.result.response_data.insurance_account || {};
+          }else {
+            result = res.pfwresponse.result.insurance_account || {};
+          }
 
           basic_details_data.name = result.name || '';
           basic_details_data.gender = result.gender || '';
