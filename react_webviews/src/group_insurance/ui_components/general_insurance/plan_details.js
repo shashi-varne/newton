@@ -13,6 +13,9 @@ import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { insuranceProductTitleMapper } from '../../constants';
+import {
+  inrFormatDecimal
+} from 'utils/validators';
 
 const coverAmountMapper = {
   'PERSONAL_ACCIDENT': {
@@ -208,12 +211,12 @@ class PlanDetailsClass extends Component {
         className={`accident-plan-item`}
         onClick={() => this.selectPlan(index)}>
         <div className="accident-plan-item1">Cover amount</div>
-        <div className="accident-plan-item2">{props.sum_assured}</div>
+        <div className="accident-plan-item2">{inrFormatDecimal(props.sum_assured)}</div>
         <div className="accident-plan-item3">
           <span className="accident-plan-item4">in</span>
           <span className="accident-plan-item-color">₹{props.premium}/year</span></div>
         {props.plus_benefit &&
-          <div className="accident-plan-benefit">+2 Benefits</div>
+          <div className="accident-plan-benefit" style={styles.color}>+2 Benefits</div>
         }
         {this.state.parent.state.recommendedInedx === index &&
           <div className="recommended">RECOMMENDED</div>

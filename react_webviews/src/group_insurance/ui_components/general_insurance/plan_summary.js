@@ -213,7 +213,7 @@ class PlanSummaryClass extends Component {
           <div className="divider"></div>
           <div className="plan-summary-premium-list">
             <div className="plan-summary-premium-list1 plan-summary-premium-font">Total payable</div>
-            <div className="plan-summary-premium-list2">₹ {this.state.summaryData.premium}</div>
+            <div className="plan-summary-premium-list2 plan-summary-premium-amount">₹ {this.state.summaryData.premium}</div>
           </div>
         </div>
       </Container>
