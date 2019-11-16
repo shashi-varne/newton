@@ -139,6 +139,9 @@ export function validateStreetName(string) {
 }
 
 export function validateAlphabets(string) {
+  if(!string) {
+    return false;
+  }
   return string.match(/^[a-z A-Z]+$/);
 }
 

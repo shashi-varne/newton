@@ -75,13 +75,13 @@ class BasicDetailsForm extends Component {
           <DropdownWithoutIcon
             width="40"
             options={relationshipOptionsGroupInsurance}
-            id="relationship"
+            id="relation"
             label="Nominee's relationship"
-            error={(this.state.basic_details_data.nominee && this.state.basic_details_data.nominee.relationship_error) ? true : false}
-            helperText={this.state.basic_details_data.nominee ? this.state.basic_details_data.nominee.relationship_error : ''}
-            value={this.state.basic_details_data.nominee ? this.state.basic_details_data.nominee.relationship || '' : ''}
-            name="nominee_relationship"
-            onChange={this.handleChange('nominee_relationship')} />
+            error={(this.state.basic_details_data.nominee && this.state.basic_details_data.nominee.relation_error) ? true : false}
+            helperText={this.state.basic_details_data.nominee ? this.state.basic_details_data.nominee.relation_error : ''}
+            value={this.state.basic_details_data.nominee ? this.state.basic_details_data.nominee.relation || '' : ''}
+            name="nominee_relation"
+            onChange={this.handleChange('nominee_relation')} />
         </div>
       </div>
     );
@@ -100,8 +100,8 @@ class BasicDetailsForm extends Component {
 
       if (name === 'nominee_name') {
         name = 'name'
-      } else if (name === 'nominee_relationship') {
-        name = 'relationship'
+      } else if (name === 'nominee_relation') {
+        name = 'relation'
         value = event
       }
       basic_details_data.nominee[name] = value;
@@ -233,7 +233,6 @@ class BasicDetailsForm extends Component {
             basic_details_data[key] = leadData[key]
           })
 
-          basic_details_data.nominee.relationship = leadData.nominee.relation;
 
           basic_details_data['dob'] = basic_details_data['dob'] ? basic_details_data['dob'].replace(/\\-/g, '/').split('-').join('/') : ''
         } else {
@@ -260,6 +259,7 @@ class BasicDetailsForm extends Component {
           basic_details_data.marital_status = result.marital_status || '';
           basic_details_data.mobile_no = result.mobile_number || '';
           basic_details_data.email = result.email || '';
+          basic_details_data.nominee = result.nominee ? result.nominee : {};
 
           basic_details_data['dob'] = result.dob ? result.dob.replace(/\\-/g, '/').split('-').join('/') : ''
         } else {
@@ -356,9 +356,9 @@ class BasicDetailsForm extends Component {
         basic_details_data.nominee['name_error'] = 'Name can not contain more than 3 same consecutive characters';
       }
 
-      if(!basic_details_data.nominee.relationship) {
+      if(!basic_details_data.nominee.relation) {
         canSubmitForm = false;
-        basic_details_data.nominee['relationship_error'] = 'Please enter relationship';
+        basic_details_data.nominee['relation_error'] = 'Please enter relationship';
       }
     }
 
@@ -385,7 +385,7 @@ class BasicDetailsForm extends Component {
       if (this.state.checked) {
         let obj = {
           "name": basic_details_data.nominee.name,
-          "relation": basic_details_data.nominee.relationship
+          "relation": basic_details_data.nominee.relation
         }
         final_data['nominee'] = obj;
       } else {
@@ -461,7 +461,7 @@ class BasicDetailsForm extends Component {
           "nominee_name": this.state.checked && this.state.basic_details_data.nominee &&
             this.state.basic_details_data.nominee['name'] ? 'yes' : 'no',
           "nominee_relation": this.state.checked && this.state.basic_details_data.nominee &&
-            this.state.basic_details_data.nominee['relationship'] ? 'yes' : 'no',
+            this.state.basic_details_data.nominee['relation'] ? 'yes' : 'no',
         }
       }
     };

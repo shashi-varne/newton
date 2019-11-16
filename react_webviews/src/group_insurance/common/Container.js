@@ -124,7 +124,9 @@ class Container extends Component {
       return;
     }
 
-    if (project_child === 'bhartiaxa' && pathname.indexOf('summary') >= 0) {
+    let payment_url =  window.localStorage.getItem('group_insurance_payment_url');
+    if (project_child === 'bhartiaxa' && pathname.indexOf('summary') >= 0 &&
+    payment_url) {
       this.navigate('/group-insurance');
       return;
     }
