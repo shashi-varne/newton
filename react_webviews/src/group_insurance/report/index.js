@@ -41,7 +41,7 @@ class Report extends Component {
     let pathname = ''
 
     if (!termData.error) {
-      
+      canShowReport = true;
       let insurance_apps = termData.insurance_apps;
       if (insurance_apps.complete.length > 0) {
         canShowReport = true;

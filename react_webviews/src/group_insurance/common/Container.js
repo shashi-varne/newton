@@ -95,6 +95,7 @@ class Container extends Component {
     let { params } = this.props.location;
     let pathname = this.props.history.location.pathname;
     console.log("pathname :" + pathname)
+    console.log(params)
     if (project_child === 'bhartiaxa' && pathname.indexOf('payment-success') >= 0
       && this.props.disableBack) {
       this.setState({
@@ -128,7 +129,13 @@ class Container extends Component {
       return;
     }
 
+   
+
     if (project_child === 'term') {
+      if(params && params.backToState === 'report') {
+        this.navigate('/group-insurance/common/report');
+        return;
+      }
       if (pathname === '/group-insurance/term/journey' || pathname === '/group-insurance/term/summary') {
         if (this.props.isJourney) {
           let eventObj = {

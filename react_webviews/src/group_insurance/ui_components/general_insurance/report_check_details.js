@@ -69,7 +69,7 @@ class ReportDetails extends Component {
         if (policyData.status === 'expired') {
           buttonTitle = 'Buy Again';
           path = '';
-        } else if (policyData.status === 'init' && policyData.payment_status === 'payment_done') {
+        } else if (policyData.status === 'init' && policyData.lead_payment_status === 'payment_done') {
           path = 'payment-success';
         } else if (policyData.status === 'init') {
           path = 'plan';
