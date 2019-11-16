@@ -79,6 +79,10 @@ class Report extends Component {
         id: application.id
       }
 
+      let data = this.statusMapper(termReport);
+      termReport.status  = data.status;
+      termReport.cssMapper = data.cssMapper;
+
       reportData.push(termReport)
     }
 
@@ -93,6 +97,10 @@ class Report extends Component {
         key: 'BHARTIAXA',
         id: policy.id
       }
+
+      let data = this.statusMapper(obj);
+      obj.status  = data.status;
+      obj.cssMapper = data.cssMapper;
 
       reportData.push(obj);
     }
@@ -159,12 +167,51 @@ class Report extends Component {
     this.navigate(path);
   }
 
+  statusMapper(policy) {
+
+    let cssMapper = {
+      'init' : {
+        color: 'yellow',
+        disc: 'Policy Pending'
+      },
+      'policy_issued' : {
+        color: 'green',
+        disc: 'Policy Issued'
+      },
+      'policy_expired' : {
+        color: 'red',
+        disc: 'Policy Expired'
+      },
+      'rejected' : {
+        color: 'red',
+        disc: 'Policy Rejected'
+      }
+    }
+
+    let obj = {}
+    if(policy.key === 'TERM_INSURANCE') {
+      if(policy.status === 'failed') {
+        obj.status = 'rejected';
+      } else if(policy.status === 'success') {
+        obj.status = 'policy_issued';
+      } else {
+        obj.status = 'init';
+      }
+    } else {
+      obj.status = policy.status;
+    }
+
+    obj.cssMapper = cssMapper[obj.status];
+
+    return obj;
+  }
+
   renderReportCards(props, index) {
     return (
       <div onClick={() => this.redirectCards(props)} key={index} className="card">
-        <div className={`report-color-state ${(props.status === 'init') ? 'yellow' : (props.status === 'policy_issued') ? 'green' : 'red'}`}>
+        <div className={`report-color-state ${(props.cssMapper.color)}`}>
           <div className="circle"></div>
-          <div className="report-color-state-title">{(props.status === 'init') ? 'Policy Pending' : (props.status === 'policy_issued' ? 'Policy Issued' : 'Policy Expired')}</div>
+          <div className="report-color-state-title">{(props.cssMapper.disc)}</div>
         </div>
         <div className="report-ins-name">{props.product_name}</div>
         <div className="report-cover">

@@ -114,7 +114,7 @@ class Journey extends Component {
     let { params } = this.props.location;
     nativeCallback({ action: 'take_control_reset' });
     this.setState({
-      disableBack: params ? params.disableBack : false
+      disableBack: params && params.disableBack ? params.disableBack : false
     })
   }
 
@@ -235,7 +235,6 @@ class Journey extends Component {
   }
 
   async  componentDidMount() {
-    
     try {
       let application, required_fields;
 

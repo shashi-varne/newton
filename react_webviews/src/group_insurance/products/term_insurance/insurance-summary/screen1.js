@@ -73,7 +73,7 @@ class Summary extends Component {
     let intervalId = setInterval(this.countdown, 1000);
     this.setState({
       countdownInterval: intervalId,
-      disableBack: params ? params.disableBack : false
+      disableBack: params && params.disableBack ? params.disableBack : false
     })
     nativeCallback({ action: 'take_control_reset' });
   }
