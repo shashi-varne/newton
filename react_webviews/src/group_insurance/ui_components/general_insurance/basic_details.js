@@ -3,7 +3,7 @@ import Container from '../../common/Container';
 import Input from '../../../common/ui/Input';
 import MobileInputWithoutIcon from '../../../common/ui/MobileInputWithoutIcon';
 import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
-import { genderOptions, insuranceMaritalStatus, relationshipOptionsGroupInsurance } from '../../constants';
+import { genderOptions, insuranceMaritalStatus, relationshipOptionsGroupInsuranceAll } from '../../constants';
 import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
@@ -25,7 +25,9 @@ class BasicDetailsForm extends Component {
     this.state = {
       checked: false,
       parent: this.props.parent,
-      basic_details_data: {},
+      basic_details_data: {
+        nominee: {}
+      },
       show_loader: true,
       premium_details: {}
     };
@@ -74,7 +76,7 @@ class BasicDetailsForm extends Component {
         <div className="InputField">
           <DropdownWithoutIcon
             width="40"
-            options={relationshipOptionsGroupInsurance}
+            options={this.state.relationshipOptions}
             id="relation"
             label="Nominee's relationship"
             error={(this.state.basic_details_data.nominee && this.state.basic_details_data.nominee.relation_error) ? true : false}
@@ -86,6 +88,26 @@ class BasicDetailsForm extends Component {
       </div>
     );
   }
+
+  setRelationshipOptions(proposer_gender) {
+    let options = [];
+    if (proposer_gender && proposer_gender.toLowerCase() === 'male') {
+      options = relationshipOptionsGroupInsuranceAll['male'];
+    } else if (proposer_gender && proposer_gender.toLowerCase() === 'female') {
+      options = relationshipOptionsGroupInsuranceAll['female'];
+    } else {
+      options = relationshipOptionsGroupInsuranceAll['male'];
+    }
+
+    let basic_details_data = this.state.basic_details_data;
+    basic_details_data.nominee.relation = '';
+    this.setState({
+      relationshipOptions: options,
+      basic_details_data:basic_details_data
+    })
+
+  }
+
 
   handleChange = name => event => {
     if (!name) {
@@ -196,10 +218,15 @@ class BasicDetailsForm extends Component {
       basic_details_data: basic_details_data
     })
 
+    if(name === 'gender') {
+      this.setRelationshipOptions(optionsMapper[name][event].value);
+    }
+
   };
 
   async componentDidMount() {
 
+    this.setRelationshipOptions('male');
     let basic_details_data = {
       "product_name": this.props.parent.state.product_key,
       "name": "",
@@ -233,7 +260,7 @@ class BasicDetailsForm extends Component {
             basic_details_data[key] = leadData[key]
           })
 
-
+          this.setRelationshipOptions(basic_details_data.gender);
           basic_details_data['dob'] = basic_details_data['dob'] ? basic_details_data['dob'].replace(/\\-/g, '/').split('-').join('/') : ''
         } else {
           toast(res.pfwresponse.result.error || res.pfwresponse.result.message
@@ -260,7 +287,7 @@ class BasicDetailsForm extends Component {
           basic_details_data.mobile_no = result.mobile_number || '';
           basic_details_data.email = result.email || '';
           basic_details_data.nominee = result.nominee ? result.nominee : {};
-
+          this.setRelationshipOptions(basic_details_data.gender);
           basic_details_data['dob'] = result.dob ? result.dob.replace(/\\-/g, '/').split('-').join('/') : ''
         } else {
           toast(res.pfwresponse.result.error || res.pfwresponse.result.message

@@ -241,6 +241,7 @@ class PaymentSuccessClass extends Component {
           "permanent_address": {
             'addressline': this.state.address_details_data.addressline,
             'pincode': this.state.address_details_data.pincode,
+            'landmark': this.state.address_details_data.landmark,
             'city': this.state.address_details_data.city,
             'state': this.state.address_details_data.state,
             'country': this.state.address_details_data.country,

@@ -45,6 +45,12 @@ export const relationshipOptions = [
   'WIFE'
 ];
 
+export const relationshipOptionsGroupInsuranceAll = {
+  'male' : ["WIFE", "BROTHER", "SISTER", "MOTHER", "FATHER", "SON", "DAUGHTER", "GRANDSON", "GRANDDAUGHTER",
+  "NEPHEW", "NIECE", "GRANDFATHER", "GRANDMOTHER",  "UNCLE", "AUNT"],
+  'female' : ["HUSBAND", "BROTHER", "SISTER", "MOTHER", "FATHER", "SON", "DAUGHTER", "GRANDSON", "GRANDDAUGHTER",
+  "NEPHEW", "NIECE", "GRANDFATHER", "GRANDMOTHER", "UNCLE", "AUNT"],
+}
 export const relationshipOptionsGroupInsurance = [
   "BROTHER", "SISTER", "MOTHER", "FATHER", "SON", "DAUGHTER", "GRANDSON", "GRANDDAUGHTER",
   "NEPHEW", "NIECE", "GRANDFATHER", "GRANDMOTHER", "WIFE", "HUSBAND", "UNCLE", "AUNT"
