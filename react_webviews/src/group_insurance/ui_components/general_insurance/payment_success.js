@@ -228,8 +228,6 @@ class PaymentSuccessClass extends Component {
         }
       }
 
-      canSubmitForm = false;
-
       if (canSubmitForm) {
         let final_data = {
           "lead_id": this.state.lead_id,
