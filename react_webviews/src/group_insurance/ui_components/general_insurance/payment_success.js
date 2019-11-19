@@ -13,7 +13,7 @@ import { getConfig } from 'utils/functions';
 import {
   validateNumber,
   validateConsecutiveChar, validateStreetName, validateLengthDynamic,
-  validateMinChar, validateEmpty
+  validateMinChar, validateEmpty, validateAddressWords
 } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 
@@ -189,35 +189,28 @@ class PaymentSuccessClass extends Component {
       }
 
       if (address_details_data.pincode.length !== 6 || !validateNumber(address_details_data.pincode) || address_details_data.pincode_error) {
-        this.setState({
-          pincode_error: 'Please enter valid pincode'
-        });
-      } else if (!validateConsecutiveChar(address_details_data.addressline)) {
-        this.setState({
-          addressline_error: 'Address can not contain more than 3 same consecutive characters'
-        });
+        address_details_data['pincode_error'] = 'Please enter valid pincode';
+      } 
+      
+      if (!validateConsecutiveChar(address_details_data.addressline)) {
+        
+        address_details_data['addressline_error'] = 'Address can not contain more than 3 same consecutive characters';
+      } else if (!validateAddressWords(address_details_data.addressline, 2)) {
+        address_details_data['addressline_error'] = 'Please enter at least 2 words containing minimum 2 letters';
       } else if (!validateLengthDynamic(address_details_data.addressline, 30)) {
-        this.setState({
-          addressline_error: 'Maximum length of address is 30'
-        });
+        address_details_data['addressline_error'] = 'Maximum length of address is 30';
       } else if (!validateMinChar(address_details_data.addressline)) {
-        this.setState({
-          addressline_error: 'Address should contain minimum two characters'
-        });
+        address_details_data['addressline_error'] = 'Address should contain minimum two characters';
       }
 
       if (!validateEmpty(address_details_data.landmark)) {
-        this.setState({
-          landmark_error: 'Enter nearest landmark'
-        });
+        address_details_data['landmark_error'] = 'Enter nearest landmark';
+      } else if (!validateAddressWords(address_details_data.landmark, 2)) {
+        address_details_data['landmark_error'] = 'Please enter at least 2 words containing minimum 2 letters';
       } else if (!validateLengthDynamic(address_details_data.landmark, 30)) {
-        this.setState({
-          landmark_error: 'Maximum length of landmark is 30'
-        });
+        address_details_data['landmark_error'] = 'Maximum length of landmark is 30';
       } else if (!validateStreetName(address_details_data.landmark)) {
-        this.setState({
-          landmark_error: 'Please enter valid landmark'
-        });
+        address_details_data['landmark_error'] = 'Please enter valid landmark';
       }
 
 
@@ -234,6 +227,8 @@ class PaymentSuccessClass extends Component {
           }
         }
       }
+
+      canSubmitForm = false;
 
       if (canSubmitForm) {
         let final_data = {

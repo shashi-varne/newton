@@ -185,10 +185,13 @@ class PlanDetailsClass extends Component {
 
   renderBenefits = (props, index) => {
     return (
-      <div key={index} className="plan-details-item">
+      <div key={index} className={`plan-details-item ${(props.isDisabled) ? 'disabled' : ''}`}
+       >
         <img className="plan-details-icon" src={props.icon} alt="" />
         <div>
-          <div className={`plan-details-text ${(props.isDisabled && this.state.selectedIndex === 0) ? 'disabled' : ''}`}>{props.disc}</div>
+          <div className="plan-details-text">{props.disc}</div>
+          {props.disc2 &&<div style={{color: '#6F6F6F', margin:'7px 0 0 0', fontSize:10}}>
+             {props.disc2}</div>}
         </div>
       </div>
     )
@@ -214,7 +217,7 @@ class PlanDetailsClass extends Component {
         <div className="accident-plan-item2">{inrFormatDecimal(props.sum_assured)}</div>
         <div className="accident-plan-item3">
           <span className="accident-plan-item4">in</span>
-          <span className="accident-plan-item-color">₹{props.premium}/year</span></div>
+          <span className="accident-plan-item-color" style={{color: getConfig().primary,fontWeight:'bold'}}>₹ {props.premium}/year</span></div>
         {props.plus_benefit &&
           <div className="accident-plan-benefit" style={styles.color}>+2 Benefits</div>
         }

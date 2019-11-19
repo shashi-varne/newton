@@ -63,12 +63,12 @@ class AccidentPlanDetails extends Component {
         'icon': this.state.ic_pa_b3
       },
       {
-        'disc': 'Allowances for ambulance and last rites (for plan 2 & 3 only)',
+        'disc': 'Allowances for ambulance and last rites',
         'key': 'last_rites',
         'icon': this.state.ic_pa_b4
       },
       {
-        'disc': 'Allowances for purchase of blood (for plan 2 & 3 only)',
+        'disc': 'Allowances for purchase of blood',
         'key': 'blood_allowence',
         'icon': this.state.ic_pa_b5
       }
@@ -111,11 +111,12 @@ class AccidentPlanDetails extends Component {
 
       plan_data.premium_details[index].product_benefits = []
       product_benefits.forEach(function (benefit, index2) {
-        if (premium.product_benefits_included.indexOf(benefit.key) === -1) {
-          benefit.isDisabled = true;
+        let benefit_data = Object.create(benefit);
+        if (premium.product_benefits_included.indexOf(benefit_data.key) === -1) {
+          benefit_data.isDisabled = true;
         }
 
-        plan_data.premium_details[index].product_benefits.push(benefit)
+        plan_data.premium_details[index].product_benefits.push(benefit_data)
       });
     });
 

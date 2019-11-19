@@ -49,25 +49,25 @@ class Landing extends Component {
       // {
       //   key: 'PERSONAL_ACCIDENT',
       //   title: 'Personal accident',
-      //   subtitle: 'Starts from Rs 200 annually',
+      //   subtitle: 'Starts from ₹ 200 annually',
       //   icon: health_icon
       // },
       {
         key: 'PERSONAL_ACCIDENT',
         title: 'Personal accident',
-        subtitle: 'Starts from Rs 200 annually',
+        subtitle: 'Starts from ₹ 200 annually',
         icon: accident_icon
       },
       {
         key: 'HOSPICASH',
         title: 'Hospicash',
-        subtitle: 'Starts from Rs 133 annually',
+        subtitle: 'Starts from ₹ 133 annually',
         icon: hospicash
       },
       {
         key: 'SMART_WALLET',
         title: 'Smart wallet',
-        subtitle: 'Starts from Rs 250 annually',
+        subtitle: 'Starts from ₹ 250 annually',
         icon: wallet_icon
       },
       {
@@ -269,7 +269,7 @@ class Landing extends Component {
     return (
       <div key={index} onClick={() => this.handleClick(props.key)} style={{
         display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
-        borderBottomColor: '#dfd8ef', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',
+        borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',
         paddingBottom: '15px', justifyContent: 'space-between'
       }}>
         <div style={{ display: 'flex' }}>

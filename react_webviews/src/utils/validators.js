@@ -36,6 +36,21 @@ export function validateLengthDynamic(string, length) {
   return true;
 }
 
+export function validateAddressWords(string, length) {
+  let nameSplit = string.split(" ");
+  if (nameSplit.length < length) {
+    return false;
+  } 
+
+  for(var i= 0; i < length; i++) {
+    if(nameSplit[i].length < length) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 export function validateLengthNames(string, type, provider) {
   let nameSplit = string.trim(" ");
 

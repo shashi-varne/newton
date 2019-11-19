@@ -26,12 +26,6 @@ class PlanSummaryClass extends Component {
 
   componentWillMount() {
 
-      // nativeCallback({
-      //   action: 'set_web_interface', message: {
-      //     interface_name: 'callbackWeb'
-      //   }
-      // });
-
     nativeCallback({ action: 'take_control_reset' });
     let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
     this.setState({
@@ -103,15 +97,8 @@ class PlanSummaryClass extends Component {
       this.setState({
         show_loader: true
       })
-      console.log("lead_id :kkkkkkkkkkkkkkkkkkkk" + this.state.lead_id)
       let res2;
       res2 = await Api.get('ins_service/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
-
-      // nativeCallback({
-      //   action: 'set_web_interface', message: {
-      //     interface_name: 'callbackWeb'
-      //   }
-      // });
 
       
       if (res2.pfwresponse.status_code === 200) {
@@ -139,12 +126,13 @@ class PlanSummaryClass extends Component {
 
         window.localStorage.setItem('group_insurance_payment_url', pgLink);
 
-        nativeCallback({
-          action: 'show_top_bar', message: {
-            title: 'Payment'
-          }
-        });
-
+        if (getConfig().app === 'ios') {
+          nativeCallback({
+            action: 'show_top_bar', message: {
+              title: 'Payment'
+            }
+          });
+        }
         
         nativeCallback({
           action: 'take_control', message: {
@@ -154,8 +142,6 @@ class PlanSummaryClass extends Component {
         });
 
         window.location.href = pgLink;
-
-
 
       } else {
         this.setState({

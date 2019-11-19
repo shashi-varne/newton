@@ -10,6 +10,7 @@ import Grid from 'material-ui/Grid';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
+import scrollIntoView from 'scroll-into-view-if-needed'
 
 import {
   isValidDate, validateAlphabets,
@@ -29,20 +30,32 @@ class BasicDetailsForm extends Component {
         nominee: {}
       },
       show_loader: true,
-      premium_details: {}
+      premium_details: {},
+      inputDisabled: {},
+      relationshipOptions: []
     };
 
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
+    this.nomineeRef = React.createRef()
 
   }
 
   componentWillMount() {
 
+    let inputDisabled = {
+
+    };
+
+    if (this.props.parent.state.product_key === 'SMART_WALLET') {
+      inputDisabled.marital_status = true;
+    }
+
     let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
     let { params } = this.props.parent.props.location || {};
     this.setState({
       premium_details: params ? params.premium_details : {},
-      lead_id: lead_id || ''
+      lead_id: lead_id || '',
+      inputDisabled: inputDisabled
     })
 
   }
@@ -59,7 +72,7 @@ class BasicDetailsForm extends Component {
 
   renderNominee = () => {
     return (
-      <div>
+      <div style={{ display: !this.state.checked ? 'none' : 'initial' }}>
         <div className="InputField">
           <Input
             type="text"
@@ -73,7 +86,8 @@ class BasicDetailsForm extends Component {
             value={this.state.basic_details_data.nominee ? this.state.basic_details_data.nominee.name || '' : ''}
             onChange={this.handleChange('nominee_name')} />
         </div>
-        <div className="InputField">
+        <div id="nomineeScroll" ref={this.nomineeRef} className="InputField">
+          {this.handleNomineeScroll(this.state.checked)}
           <DropdownWithoutIcon
             width="40"
             options={this.state.relationshipOptions}
@@ -86,7 +100,9 @@ class BasicDetailsForm extends Component {
             onChange={this.handleChange('nominee_relation')} />
         </div>
       </div>
+
     );
+
   }
 
   setRelationshipOptions(proposer_gender) {
@@ -103,11 +119,29 @@ class BasicDetailsForm extends Component {
     basic_details_data.nominee.relation = '';
     this.setState({
       relationshipOptions: options,
-      basic_details_data:basic_details_data
+      basic_details_data: basic_details_data
     })
 
   }
 
+  handleNomineeScroll(value) {
+
+    setTimeout(function () {
+      if (value) {
+        let element = document.getElementById('nomineeScroll');
+        if (!element || element === null) {
+          return;
+        }
+
+        scrollIntoView(element, {
+          block: 'start',
+          inline: 'nearest',
+          behavior: 'smooth'
+        })
+      }
+
+    }, 50);
+  }
 
   handleChange = name => event => {
     if (!name) {
@@ -199,7 +233,7 @@ class BasicDetailsForm extends Component {
     this.setState({
       basic_details_data: basic_details_data
     })
-
+  
   };
 
   handleChangeRadio = name => event => {
@@ -218,7 +252,7 @@ class BasicDetailsForm extends Component {
       basic_details_data: basic_details_data
     })
 
-    if(name === 'gender') {
+    if (name === 'gender') {
       this.setRelationshipOptions(optionsMapper[name][event].value);
     }
 
@@ -275,9 +309,9 @@ class BasicDetailsForm extends Component {
         if (res.pfwresponse.status_code === 200) {
 
           let result = {};
-          if(res.pfwresponse.result.response_data) {
+          if (res.pfwresponse.result.response_data) {
             result = res.pfwresponse.result.response_data.insurance_account || {};
-          }else {
+          } else {
             result = res.pfwresponse.result.insurance_account || {};
           }
 
@@ -322,9 +356,15 @@ class BasicDetailsForm extends Component {
       'gender': 'gender',
       'marital_status': 'marital status'
     }
-    let keys_to_check = ['name', 'email', 'dob', 'mobile_no', 'gender', 'marital_status']
-    let basic_details_data = this.state.basic_details_data;
 
+    let keys_to_check = ['name', 'email', 'dob', 'mobile_no', 'gender', 'marital_status']
+    for (var j = 0; j < keys_to_check.length; j++) {
+      if (this.state.inputDisabled[keys_to_check[j]]) {
+        keys_to_check.splice(j, 1);
+      }
+    }
+
+    let basic_details_data = this.state.basic_details_data;
     for (var i = 0; i < keys_to_check.length; i++) {
       let key_check = keys_to_check[i];
       if (!basic_details_data[key_check]) {
@@ -370,20 +410,20 @@ class BasicDetailsForm extends Component {
       }
     }
 
-    if(this.state.checked) {
+    if (this.state.checked) {
       if (!validateAlphabets(basic_details_data.nominee.name)) {
         canSubmitForm = false;
         basic_details_data.nominee['name_error'] = 'Name can contain only alphabets';
       } else if (validateLengthNames(basic_details_data.nominee.name, 'name', this.state.provider).isError) {
         canSubmitForm = false;
         basic_details_data.nominee['name_error'] = validateLengthNames(basic_details_data.nominee.name,
-           'name', basic_details_data.provider).error_msg;
+          'name', basic_details_data.provider).error_msg;
       } else if (!validateConsecutiveChar(basic_details_data.nominee.name)) {
         canSubmitForm = false;
         basic_details_data.nominee['name_error'] = 'Name can not contain more than 3 same consecutive characters';
       }
 
-      if(!basic_details_data.nominee.relation) {
+      if (!basic_details_data.nominee.relation) {
         canSubmitForm = false;
         basic_details_data.nominee['relation_error'] = 'Please enter relationship';
       }
@@ -393,14 +433,14 @@ class BasicDetailsForm extends Component {
       basic_details_data: basic_details_data
     })
 
-    
+
 
     if (canSubmitForm) {
       let final_data = {
         "product_name": this.props.parent.state.product_key,
         "name": basic_details_data.name,
         "gender": basic_details_data.gender,
-        "marital_status": basic_details_data.marital_status,
+        "marital_status": this.state.inputDisabled.marital_status ? '' : basic_details_data.marital_status,
         "mobile_no": basic_details_data.mobile_no,
         "email": basic_details_data.email,
         "premium": basic_details_data.premium,
@@ -587,10 +627,11 @@ class BasicDetailsForm extends Component {
                 value={this.state.basic_details_data.gender || ''}
                 onChange={this.handleChangeRadio('gender')} />
             </div>
-            <div className="InputField">
+
+            {!this.state.inputDisabled.marital_status && <div className="InputField">
               <RadioWithoutIcon
                 width="40"
-                label="Marital Status"
+                label="Marital status"
                 class="Marital status:"
                 options={insuranceMaritalStatus}
                 id="marital-status"
@@ -599,9 +640,9 @@ class BasicDetailsForm extends Component {
                 helperText={this.state.basic_details_data.marital_status_error}
                 value={this.state.basic_details_data.marital_status || ''}
                 onChange={this.handleChangeRadio('marital_status')} />
-            </div>
-            <div className="InputField">
-              <div className="CheckBlock2" style={{ padding: '0 15px', margin: '10px 0' }}>
+            </div>}
+            <div className="InputField" style={{ marginBottom: '0px !important' }}>
+              <div className="CheckBlock2" style={{ margin: '10px 0' }}>
                 <Grid container spacing={16} alignItems="center">
                   <Grid item xs={1} className="TextCenter">
                     <Checkbox
@@ -619,7 +660,7 @@ class BasicDetailsForm extends Component {
                 </Grid>
               </div>
             </div>
-            {this.state.checked && this.renderNominee()}
+            {this.renderNominee()}
           </div>
         </div>
       </Container>

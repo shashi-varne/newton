@@ -182,8 +182,9 @@ class PlanSuccessClass extends Component {
             <li>Issuer: <span>{this.state.lead_data.policy.issuer}</span></li>
             <li>COI: <span>{this.state.lead_data.policy.master_policy_number}</span></li>
             <li>Sum Assured: <span>{this.state.lead_data.cover_amount}</span></li>
-            <li>Cover period: <span>{this.state.lead_data.product_coverage}</span></li>
-
+            <li>Cover period: <span>{this.state.lead_data.product_coverage} yr 
+            ({this.state.lead_data.policy.policy_start_date} - {this.state.lead_data.policy.policy_end_date})</span></li>
+            
             {/* <li className="AccordionBodyItem"><span className="AccordionBodyItemBold">Policy</span>: Personal accident</li>
             <li className="AccordionBodyItem"><span className="AccordionBodyItemBold">Issuer</span>: Bharti AXA General Insurances</li>
             <li className="AccordionBodyItem"><span className="AccordionBodyItemBold">COI</span>: CXGHNPOPL456</li>

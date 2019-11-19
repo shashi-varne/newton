@@ -90,14 +90,21 @@ class HospicashPlanDetails extends Component {
     }
 
     plan_data.premium_details.forEach(function (premium, index) {
-      
+
       plan_data.premium_details[index].product_benefits = []
       product_benefits.forEach(function (benefit, index2) {
-        if(premium.product_benefits_included.indexOf(benefit.key) === -1) {
-          benefit.isDisabled = true;
+       
+        let benefit_data = Object.create(benefit);
+        if(index === 0 && benefit_data.key === 'daily_cash') {
+          benefit_data.disc = 'Daily Cash benefits on hospitalization for 5 days*.';
+          benefit_data.disc2 = '* to get cover for 30 days select a higher plan';
         }
 
-        plan_data.premium_details[index].product_benefits.push(benefit)
+        if (premium.product_benefits_included.indexOf(benefit_data.key) === -1) {
+          benefit_data.isDisabled = true;
+        }
+
+        plan_data.premium_details[index].product_benefits.push(benefit_data)
       });
     });
 

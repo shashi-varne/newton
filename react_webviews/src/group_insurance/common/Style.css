@@ -235,8 +235,8 @@
    font-size: 14px;
    line-height: 22px;
 }
-.plan-details-text.disabled {
-  color: rgba(22,13,46, 0.45);
+.plan-details-item.disabled {
+  opacity: 0.4;
 }
 .accident-plan-heading-container {
   margin-top: 10px;
@@ -285,7 +285,7 @@
   min-width: 100%;
   float: left;
   padding-top: 20px;
-  padding-bottom: 20px;
+  padding-bottom: 30px;
   padding-left: 15px;
 }
 .accident-plan-list .recommended {
@@ -307,7 +307,7 @@
    padding: 15px;
    min-width: 100px;
    box-shadow: 0px 2px 6px 0px rgba(102, 120, 121,0.25);
-   margin-right: 15px;
+   margin-right: 20px;
    position: relative;
    border: 2px solid #fff;
 }
@@ -330,7 +330,7 @@
 .accident-plan-item4 {
   color: #6f6f6f;
    font-size: 10px;
-   margin-right: 5px;
+   margin-right: 6px;
 }
 .accident-plan-benefit {
    font-size: 10px;
