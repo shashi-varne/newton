@@ -313,6 +313,7 @@ class PlanDetailsClass extends Component {
     return (
       <Container
         fullWidthButton={true}
+        product_key={this.props.parent ? this.props.parent.state.product_key : ''}
         buttonTitle='Get this Plan'
         onlyButton={true}
         events={this.sendEvents('just_set_events')}

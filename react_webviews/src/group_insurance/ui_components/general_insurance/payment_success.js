@@ -304,6 +304,7 @@ class PaymentSuccessClass extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         fullWidthButton={true}
+        product_key={this.props.parent ? this.props.parent.state.product_key : ''}
         disableBack={!this.state.fromHome}
         showLoader={this.state.show_loader}
         buttonTitle='Generate Policy'

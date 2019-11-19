@@ -547,6 +547,7 @@ class BasicDetailsForm extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         fullWidthButton={true}
+        product_key={this.props.parent ? this.props.parent.state.product_key : ''}
         buttonTitle='Go to Summary'
         onlyButton={true}
         showLoader={this.state.show_loader}

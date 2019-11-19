@@ -180,6 +180,7 @@ class PlanSummaryClass extends Component {
         fullWidthButton={true}
         buttonTitle='Make Payment'
         onlyButton={true}
+        product_key={this.props.parent ? this.props.parent.state.product_key : ''}
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         handleClick={() => this.handleClickCurrent()}

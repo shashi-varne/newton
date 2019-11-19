@@ -49,6 +49,7 @@ class PaymentClass extends Component {
                 classOverRideContainer="plan-success"
                 showLoader={true}
                 hide_header={true}
+                product_key={this.props.parent ? this.props.parent.state.product_key : ''}
             >
             </Container>
         );

@@ -81,6 +81,18 @@ class Container extends Component {
     return events;
   }
 
+  backMapperBharti(path) {
+    let backMapperBharti = {
+      '/summary': 'form',
+      '/form': 'plan',
+      '/plan' : ''
+    }
+
+    let redirectPath  = backMapperBharti[path] ? backMapperBharti[path] : '/group-insurance';
+
+    this.navigate(redirectPath);
+  }
+
   historyGoBack = () => {
 
     let project_child = getConfig().project_child;
@@ -94,8 +106,6 @@ class Container extends Component {
     }
     let { params } = this.props.location;
     let pathname = this.props.history.location.pathname;
-    console.log("pathname :" + pathname)
-    console.log(params)
     if (project_child === 'bhartiaxa' && pathname.indexOf('payment-success') >= 0
       && this.props.disableBack) {
       this.setState({
@@ -124,14 +134,21 @@ class Container extends Component {
       return;
     }
 
-    let payment_url =  window.localStorage.getItem('group_insurance_payment_url');
-    if (project_child === 'bhartiaxa' && pathname.indexOf('summary') >= 0 &&
-    payment_url) {
-      this.navigate('/group-insurance');
+    if (project_child === 'bhartiaxa' && pathname.indexOf('/summary') >= 0) {
+      this.backMapperBharti('/summary');
       return;
     }
 
-   
+    if (project_child === 'bhartiaxa' && pathname.indexOf('/form') >= 0) {
+      this.backMapperBharti('/form');
+      return;
+    }
+
+    if (project_child === 'bhartiaxa' && pathname.indexOf('/plan') >= 0) {
+      this.backMapperBharti('/plan');
+      return;
+    }
+
 
     if (project_child === 'term') {
       if(params && params.backToState === 'report') {
