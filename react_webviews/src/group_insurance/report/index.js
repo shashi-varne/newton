@@ -259,6 +259,10 @@ class Report extends Component {
             key: 'BHARTIAXA',
             id: policy.id
           }
+
+          let data = this.statusMapper(obj);
+          obj.status  = data.status;
+          obj.cssMapper = data.cssMapper;
           newReportData.push(obj);
         }
 
