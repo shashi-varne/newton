@@ -367,8 +367,10 @@ class BasicDetailsForm extends Component {
     let basic_details_data = this.state.basic_details_data;
     for (var i = 0; i < keys_to_check.length; i++) {
       let key_check = keys_to_check[i];
+      let first_error = key_check === 'gender' || key_check === 'marital_status' ? 'Please select ' :
+                                             'Please enter ';
       if (!basic_details_data[key_check]) {
-        basic_details_data[key_check + '_error'] = 'Please enter ' + keysMapper[key_check];
+        basic_details_data[key_check + '_error'] = first_error + keysMapper[key_check];
       }
     }
 
@@ -392,12 +394,13 @@ class BasicDetailsForm extends Component {
     // } 
 
     
-    if ((basic_details_data.email.length < 10 || !validateEmail(basic_details_data.email))) {
+    if (!basic_details_data.email || (basic_details_data.email.length < 10 || !validateEmail(basic_details_data.email))) {
 
       basic_details_data['email_error'] = 'Please enter valid email';
     }
 
-    if ((basic_details_data.mobile_no.length !== 10 || !validateNumber(basic_details_data.mobile_no))
+    if (!basic_details_data.mobile_no || 
+      (basic_details_data.mobile_no.length !== 10 || !validateNumber(basic_details_data.mobile_no))
       || !numberShouldStartWith(basic_details_data.mobile_no)) {
       basic_details_data['mobile_no_error'] = 'Please enter valid mobile number';
 

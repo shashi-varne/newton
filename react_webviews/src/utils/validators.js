@@ -263,6 +263,9 @@ export function IsFutureDate(idate) {
 }
 
 export function isValidDate(dateInput) {
+  if (!dateInput) {
+    return false;
+  }
   var objDate,
     mSeconds,
     day,
