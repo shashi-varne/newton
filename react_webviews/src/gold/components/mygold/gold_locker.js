@@ -85,7 +85,7 @@ class GoldSummary extends Component {
         this.setState({
           goldInfo: result.gold_user_info.safegold_info,
           userInfo: result.gold_user_info.user_info,
-          maxWeight: parseFloat(result.gold_user_info.safegold_info.gold_balance).toFixed(4),
+          // maxWeight: parseFloat(result.gold_user_info.safegold_info.gold_balance).toFixed(4),
           isRegistered: isRegistered
         });
       } else {
@@ -134,14 +134,19 @@ class GoldSummary extends Component {
 
       if (res3.pfwresponse.status_code === 200) {
 
-        // todo*
-        let maxWeight = this.state.maxWeight;
-        // let result = res3.pfwresponse.result;
-        // let maxWeight = result.sellable_gold_balance || 0;
+        let result = res3.pfwresponse.result;
+        
+        let maxWeight = parseFloat(result.sellable_gold_balance || 0).toFixed(4);
         let maxAmount = ((this.state.goldSellInfo.plutus_rate) * (maxWeight || 0)).toFixed(2);
+        let weightDiffrence = this.state.goldInfo.gold_balance - maxWeight;
+        let sellWeightDiffrence = false;
+        if(weightDiffrence > 0) {
+          sellWeightDiffrence = true
+        }
         this.setState({
-          // maxWeight: maxWeight,
-          maxAmount: maxAmount
+          maxWeight: maxWeight,
+          maxAmount: maxAmount,
+          sellWeightDiffrence: sellWeightDiffrence
         });
       } else {
         this.setState({
@@ -494,7 +499,10 @@ class GoldSummary extends Component {
                           onChange={this.setAmountGms()} value={this.state.amount} disabled={!this.state.isRegistered || this.state.isWeight} />
                       </div>
                     </div>
-                    <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>Min ₹1.00-*Max ₹ {this.state.maxAmount}</div>
+                  {this.state.isRegistered &&  <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}
+                    >Min ₹1.00 {this.state.sellWeightDiffrence && <span>*</span>}
+                    {this.state.maxAmount > 1 &&<span>- Max ₹ {this.state.maxAmount}</span>}
+                    </div>}
                   </div>
                   <div className="symbol">
                     =
@@ -505,12 +513,20 @@ class GoldSummary extends Component {
                       <input type="number" autoComplete="off" placeholder="Weight" name="weight"
                         onChange={this.setAmountGms()} value={this.state.weight} disabled={!this.state.isRegistered || this.state.isAmount} />
                     </div>
-                    <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>*Max {this.state.maxWeight} gm</div>
+                   {this.state.isRegistered && <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>
+                      {this.state.sellWeightDiffrence && <span>*</span>}Max {this.state.maxWeight} gm
+                      </div>}
                   </div>
                 </div>
-                {/* <div className="disclaimer">
-                  *You can place your order for sell/delivery after 2 working day from your buying transaction date
-                </div> */}
+                {this.state.sellWeightDiffrence && <div style={{ margin: '30px 0 0 0' }}>
+                  <div style={{ margin: '0 0 4px 0', color: '#6F6F6F', fontSize: 11, fontWeight: 600 }}>
+                    *Why is my Max Amount/Weight less than Locker quantity?
+                  </div>
+                  <div style={{ color: '#838383', fontSize: 10, fontWeight: 400 }}>
+                    You can sell your purchases after 24 hours i.e. If you buy gold today you can sell anytime
+                    after 24 hours have elapsed
+                  </div>
+                </div>}
               </div>
             </div>
           </div>
