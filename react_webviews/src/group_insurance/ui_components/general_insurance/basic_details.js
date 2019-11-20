@@ -15,7 +15,7 @@ import scrollIntoView from 'scroll-into-view-if-needed'
 import {
   isValidDate, validateAlphabets,
   validateEmail, validateNumber, numberShouldStartWith,
-  validateConsecutiveChar, validateLengthNames
+  validateConsecutiveChar, validateLengthNames, IsFutureDate
 } from 'utils/validators';
 
 import { nativeCallback } from 'utils/native_callback';
@@ -384,11 +384,14 @@ class BasicDetailsForm extends Component {
 
     if (new Date(basic_details_data.dob) > new Date() || !isValidDate(basic_details_data.dob)) {
       basic_details_data['dob_error'] = 'Please enter valid date';
-    } else if (basic_details_data.age > 65 || basic_details_data.age < 18) {
-      basic_details_data['dob_error'] = 'Valid age is between 18 and 65';
-    }
+    } else if (IsFutureDate(basic_details_data.dob)) {
+      basic_details_data['dob_error'] = 'Future date is not allowed';
+    } 
+    // else if (basic_details_data.age > 65 || basic_details_data.age < 18) {
+    //   basic_details_data['dob_error'] = 'Valid age is between 18 and 65';
+    // } 
 
-
+    
     if ((basic_details_data.email.length < 10 || !validateEmail(basic_details_data.email))) {
 
       basic_details_data['email_error'] = 'Please enter valid email';
@@ -542,7 +545,6 @@ class BasicDetailsForm extends Component {
 
   render() {
     let currentDate = new Date().toISOString().slice(0, 10);
-
     return (
       <Container
         events={this.sendEvents('just_set_events')}

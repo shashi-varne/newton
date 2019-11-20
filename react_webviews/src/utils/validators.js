@@ -40,10 +40,10 @@ export function validateAddressWords(string, length) {
   let nameSplit = string.split(" ");
   if (nameSplit.length < length) {
     return false;
-  } 
+  }
 
-  for(var i= 0; i < length; i++) {
-    if(nameSplit[i].length < length) {
+  for (var i = 0; i < length; i++) {
+    if (nameSplit[i].length < length) {
       return false;
     }
   }
@@ -55,7 +55,7 @@ export function validateLengthNames(string, type, provider) {
   let nameSplit = string.trim(" ");
 
 
-  if(!provider) {
+  if (!provider) {
     provider = "HDFC";
   }
   let lengthMapper = {
@@ -154,7 +154,7 @@ export function validateStreetName(string) {
 }
 
 export function validateAlphabets(string) {
-  if(!string) {
+  if (!string) {
     return false;
   }
   return string.match(/^[a-z A-Z]+$/);
@@ -249,8 +249,17 @@ export function numDifferentiation(val) {
   else if (val >= 1000) val = (val / 1000).toFixed(2) + ' Thousand';
 
   // remove .00
-  val = val.replace(/\.00([^\d])/g,'$1');
+  val = val.replace(/\.00([^\d])/g, '$1');
   return val;
+}
+
+export function IsFutureDate(idate) {
+  var today = new Date().getTime();
+  idate = idate.split("/");
+
+  idate = new Date(idate[2], idate[1] - 1, idate[0]).getTime();
+  return (today - idate) < 0;
+
 }
 
 export function isValidDate(dateInput) {
