@@ -191,7 +191,8 @@ class Container extends Component {
         nativeCallback({ action: 'exit', events: this.getEvents('back') });
         break;
       case "/group-insurance/common/report":
-        nativeCallback({ action: 'exit', events: this.getEvents('back') });
+        this.openNativeModule('portfolio');
+        // nativeCallback({ action: 'exit', events: this.getEvents('back') });
         break;
       case "/group-insurance/term/resume":
       case "/group-insurance/term/journey":
@@ -217,13 +218,9 @@ class Container extends Component {
     }
   }
 
-  openNativeModule(module) {
-    let url = ''
-    if (module === 'portfolio') {
-      url = 'https://fis.do/m/module?action_type=native&native_module=app/portfolio';
-
-    }
-
+  openNativeModule(moduleName) {
+    let url = 'https://fis.do/m/module?action_type=native';
+    url +=  '&native_module=' + encodeURIComponent('app/' + moduleName);
     nativeCallback({
       action: 'open_module', message: {
         action_url: url
