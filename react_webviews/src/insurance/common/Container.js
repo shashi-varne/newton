@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
-import { getConfig, setHeights } from 'utils/functions';
+import { getConfig } from 'utils/functions';
+
 import Header from './Header';
 import Footer from './footer';
 import Banner from '../../common/ui/Banner';
@@ -26,17 +27,17 @@ class Container extends Component {
       popupText: '',
       callbackType: ''
     }
-    this.historyGoBack = this.historyGoBack.bind(this);
+
   }
 
   componentDidMount() {
-    setHeights({ 'header': true, 'container': false });
     let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
     let that = this;
     if (generic_callback === "true") {
       window.callbackWeb.add_listener({
         type: 'back_pressed',
         go_back: function () {
+          console.log("goback from callbackWeb");
           that.historyGoBack();
         }
       });
@@ -44,11 +45,11 @@ class Container extends Component {
       window.PlutusSdk.add_listener({
         type: 'back_pressed',
         go_back: function () {
+          console.log("goback from plutussdk");
           that.historyGoBack();
         }
       });
     }
-
   }
 
   componentWillUnmount() {
@@ -60,17 +61,69 @@ class Container extends Component {
     }
   }
 
-  navigate = (pathname) => {
-    this.props.history.push({
-      pathname: pathname,
-      search: this.props.location.search
-    });
-  }
-
-
   historyGoBack = () => {
-    // let insurance_v2 = getConfig().insurance_v2;
-    nativeCallback({ action: 'native_back' });
+    let { params } = this.props.location;
+    let insurance_v2 = getConfig().insurance_v2;
+
+    if (this.props.isJourney) {
+      if (!insurance_v2) {
+        nativeCallback({ action: 'native_back' });
+      } else {
+        let eventObj = {
+          "event_name": 'make_payment_clicked',
+          "properties": {
+            "user_action": 'close',
+            "source": 'summary'
+          }
+        };
+        nativeCallback({ events: eventObj });
+        this.setState({
+          callbackType: 'show_quotes',
+          openPopup: true,
+          popupText: 'Are you sure you want to explore more options? We will save your information securely.'
+        })
+      }
+
+      return;
+    }
+
+    if (params && params.disableBack) {
+      if (!insurance_v2) {
+        nativeCallback({ action: 'native_back' });
+      } else {
+        this.setState({
+          callbackType: 'exit',
+          openPopup: true,
+          popupText: 'Are you sure you want to exit the application process? You can resume it later.'
+        })
+      }
+      return;
+    }
+
+    let pathname = this.props.history.location.pathname;
+    switch (pathname) {
+      case "/insurance":
+      case "/insurance/resume":
+      case "/insurance/journey":
+        if (!insurance_v2) {
+          nativeCallback({ action: 'native_back' });
+        } else {
+          this.setState({
+            callbackType: 'exit',
+            openPopup: true,
+            popupText: 'Are you sure you want to exit the application process? You can resume it later.'
+          })
+        }
+        break;
+      default:
+        if (navigator.onLine) {
+          this.props.history.goBack();
+        } else {
+          this.setState({
+            openDialog: true
+          });
+        }
+    }
   }
 
   handleClose = () => {
@@ -79,6 +132,16 @@ class Container extends Component {
       openPopup: false
     });
 
+    if (this.state.callbackType === 'show_quotes') {
+      let eventObj = {
+        "event_name": 'exit_from_payment',
+        "properties": {
+          "user_action": 'no',
+          "source": 'summary'
+        }
+      };
+      nativeCallback({ events: eventObj });
+    }
   }
 
   renderDialog = () => {
@@ -118,11 +181,7 @@ class Container extends Component {
         }
       };
       nativeCallback({ events: eventObj });
-      window.localStorage.setItem('show_quotes', true);
-      this.navigate('/insurance/quote');
     }
-
-
     nativeCallback({ action: this.state.callbackType });
   }
 
@@ -170,7 +229,19 @@ class Container extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    setHeights({ 'header': true, 'container': false });
+    let body = document.getElementsByTagName('body')[0].offsetHeight;
+    // let client = document.getElementsByClassName('ContainerWrapper')[0].offsetHeight;
+    let head = document.getElementsByClassName('Header')[0].offsetHeight;
+    let foot = document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight : 0;
+    let banner = document.getElementsByClassName('Banner')[0];
+    let bannerHeight = (banner) ? banner.offsetHeight : 0;
+
+    // if (client > body) {
+    //   document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 40 + 'px';
+    // } else {
+    //   document.getElementsByClassName('Container')[0].style.height = document.getElementsByClassName('Container')[0].offsetHeight ;
+    // }
+    document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 40 + 'px';
   }
 
   render() {
@@ -185,7 +256,7 @@ class Container extends Component {
     }
 
     return (
-      <div className={`ContainerWrapper ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`}  >
+      <div className={`ContainerWrapper ${(this.props.type !== 'fisdom') ? 'blue' : ''}`} >
         {/* Header Block */}
         <Header
           disableBack={this.props.disableBack}
@@ -197,29 +268,25 @@ class Container extends Component {
           current={this.props.current}
           goBack={this.historyGoBack}
           edit={this.props.edit}
-          type={getConfig().productName}
+          type={this.props.type}
           resetpage={this.props.resetpage}
-          handleReset={this.props.handleReset}
-          filterPgae={this.props.filterPgae}
-          handleFilter={this.props.handleFilter} />
+          handleReset={this.props.handleReset} />
 
         {/* Below Header Block */}
-        <div id="HeaderHeight" style={{ top: 56 }}>
+        <div style={{ height: 56 }}></div>
 
-          {/* Loader Block */}
-          {this.renderPageLoader()}
+        {/* Loader Block */}
+        {this.renderPageLoader()}
 
-          {steps && <div className={`Step ${(this.props.type !== 'fisdom') ? 'blue' : ''}`}>
-            {steps}
-          </div>}
-
-          {/* Banner Block */}
-          {this.props.banner && <Banner text={this.props.bannerText} />}
-
+        <div className={`Step ${(this.props.type !== 'fisdom') ? 'blue' : ''}`}>
+          {steps}
         </div>
 
+        {/* Banner Block */}
+        {this.props.banner && <Banner text={this.props.bannerText} />}
+
         {/* Children Block */}
-        <div className={`Container ${this.props.classOverRideContainer}`}>
+        <div className='Container'>
           {this.props.children}
         </div>
 
@@ -237,7 +304,6 @@ class Container extends Component {
             handleClick={this.props.handleClick}
             handleReset={this.props.handleReset}
             onlyButton={this.props.onlyButton}
-            showDotDot={this.props.showDotDot}
             noFooter={this.props.noFooter} />
         }
         {/* No Internet */}
