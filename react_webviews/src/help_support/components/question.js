@@ -166,7 +166,8 @@ class Question extends Component {
           {questions && this.renderQuestions()}
         </div>
         <div className="cta">
-          <button onClick={() => { this.navigate('/help/writetous', [], 'write2us'); this.sendEvent(); }}>
+          <button style={{border: '1px solid ' + getConfig().secondary, color: getConfig().secondary}}
+           onClick={() => { this.navigate('/help/writetous', [], 'write2us'); this.sendEvent(); }}>
             Unable to find my query
 					</button>
         </div>

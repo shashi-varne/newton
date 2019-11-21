@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { getConfig } from 'utils/functions';
 import { DefaultLayout, SummaryLayout } from './layout';
 
 const Footer = (props) => {
@@ -11,7 +11,7 @@ const Footer = (props) => {
     );
   } else {
     return (
-      <div className="Footer">
+      <div className="Footer" style={{borderColor :getConfig().secondary}}>
         <DefaultLayout type="default" {...props} />
       </div>
     );

@@ -1,7 +1,184 @@
 import colors from '../common/theme/Style.css';
 import qs from 'qs';
 import createBrowserHistory from 'history/createBrowserHistory';
-import {checkValidString} from './validators'
+import {checkValidString} from './validators';
+
+const partnersConfigBase = {
+  obc: {
+    logo: "obc.png",
+    primary_color: "#4DB848",
+    code: "obc",
+    email: "obc@fisdom.com",
+    mobile: "+11-41-134848",
+    message:
+      "Make smart investments with zero paper work, use OBC m-pay app if you're a registered user on m-pay app or download fisdom http:m.onelink.me/32660e84. Use my referral code ",
+    banner: "obc_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png"
+  },
+  lvb: {
+    logo: "lvb.png",
+    primary_color: "#CC0E00",
+    code: "lvb",
+    email: "lvb@fisdom.com",
+    mobile: "+80-48-093070",
+    message:
+      "Make smart investments with zero paper work, use LVB Mobile app if you're a registered user on lvb app or download fisdom http:m.onelink.me/32660e84. Use my referral code ",
+    banner: "obc_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png"
+  },
+  svc: {
+    logo: "svc.png",
+    primary_color: "#213B68",
+    code: "svc",
+    email: "svc@fisdom.com",
+    mobile: "+80-48-093070",
+    message:
+      "Make smart investments with zero paper work, use SVC app if you're a registered user on svc app or download fisdom http:m.onelink.me/32660e84. Use my referral code ",
+    banner: "obc_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png"
+  },
+  fisdom: {
+    logo: "logo_white.png",
+    primary_color: "#4f2da7",
+    code: "fisdom",
+    email: "ask@fisdom.com",
+    mobile: "+80-48-093070",
+    message: "",
+    banner: "obc_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png",
+    invest_screen_cards: {
+      nps: true,
+      gold: true
+    }
+  },
+  myway: {
+    logo: "myway_white_logo.png",
+    primary_color: "#3792FC",
+    code: "myway",
+    email: "ask@mywaywealth.com",
+    mobile: "+80-48-039999",
+    message: "",
+    banner: "obc_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png",
+    invest_screen_cards: {
+      nps: true,
+      gold: true
+    }
+  },
+  test: {
+    logo: "logo_white.png",
+    primary_color: "#4f2da7",
+    code: "fisdom",
+    email: "ask@fisdom.com",
+    mobile: "+80-48-093070",
+    message: "",
+    banner: "obc_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png",
+    invest_screen_cards: {
+      nps: true,
+      gold: true
+    }
+  },
+  bfdlmobile: {
+    logo: "bfdl_white_sdk_logo.svg",
+    primary_color: colors.bfdlmobilePrimary,
+    secondary_color: "#ff5928",
+    cta_disabled_color: "#ffffff",
+    code: "bfdlmobile",
+    email: "bajajfinserv@mywaywealth.com",
+    mobile: "+91-76191-71846",
+    message: "",
+    banner: "bfdl_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "bfdlmobile_search.png"
+  },
+  alb: {
+    logo: "alb.png",
+    primary_color: "#2E3192",
+    back_button_color: "#2E3192",
+    notifications_color: "#00aeef",
+    secondary_color: "#00aeef",
+    header_title_color: "#2E3192",
+    code: "alb",
+    email: "alb@fisdom.com",
+    mobile: "+91-76191-71839",
+    message:
+      "Make smart investments with zero paper work, use emPower app if you're a registered user on emPower app or download emPower app http://onelink.to/uuxsss. Use my referral code ",
+    banner: "alb_banner.png",
+    back_button: "alb_back_icon.png",
+    close_button: "alb_close_nav_icon.svg",
+    search_button: "alb_search.png"
+  },
+  tvscredit: {
+    logo: "tvs.png",
+    primary_color: "#2d2851",
+    code: "tvscredit",
+    email: "tvscredit@fisdom.com",
+    mobile: "+80-48-093070",
+    message:
+      "Make smart investments with zero paper work, use Tvs Credit app if you're a registered user on Tvs Credit app or download fisdom http:m.onelink.me/32660e84. Use my referral code ",
+    banner: "tvs_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png"
+  },
+  ktb: {
+    logo: "logo_white.png",
+    primary_color: "#8C0094",
+    code: "ktb",
+    email: "kbl@fisdom.com",
+    mobile: "+91-63663-70477",
+    message: "",
+    banner: "obc_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png"
+  },
+  cub: {
+    logo: "cub.png",
+    primary_color: "#000180",
+    code: "cub",
+    mobile: "+80-48-093070",
+    email: "cub@fisdom.com",
+    message: "",
+    banner: "bfdl_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png"
+  },
+  fpg: {
+    logo: "fpg.png",
+    primary_color: "#4f2da7",
+    secondary_color: "#5788B7",
+    cta_disabled_background: "#BFC1C1",
+    cta_disabled_color: "#ffffff",
+    code: "fpg",
+    mobile: "+80-48-093070",
+    email: "fpg@fisdom.com",
+    message: "",
+    banner: "bfdl_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png",
+    invest_screen_cards: {
+      nps: true,
+      gold: true
+    }
+  }
+};
 
 const myHistory = createBrowserHistory();
 
@@ -37,12 +214,90 @@ export const isMobile = {
   any: () => (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows()),
 };
 
+function getPartnerConfig(partner_code) {
+ 
+  
+  let search = window.location.search;
+  let baseConfig = {
+    'fisdom': {
+      primary: colors.fisdom,////////
+      secondary: colors.secondary,////////
+      default: colors.default,///////
+      label: colors.label,////////////
+      type: 'fisdom',
+      productName: 'fisdom',
+      appLink: 'http://m.onelink.me/32660e84',
+      termsLink: 'https://www.fisdom.com/terms/',
+      schemeLink: 'https://www.fisdom.com/scheme-offer-documents/',
+      askEmail: 'ask@fisdom.com',/////////
+      mobile: '+91-8048093070',///////////////
+      configColorClass: 'fisdomColor',///////
+      configBackgroundColorClass: 'fisdomBackColor'//////////
+    },
+    'myway': {
+      primary: colors.myway,
+      secondary: colors.secondary,
+      default: colors.default,
+      label: colors.label,
+      type: 'myway',
+      productName: 'myway',
+      mobile: '+91-8048039999',
+      appLink: 'https://go.onelink.me/6fHB/b750d9ac',
+      termsLink: 'https://mywaywealth.com/terms/',
+      schemeLink: 'https://mywaywealth.com/scheme/',
+      askEmail: 'ask@mywaywealth.com',
+      configColorClass: 'mywayColor',
+      configBackgroundColorClass: 'mywayBackColor'
+    }
+  }
+
+  const ismyway = search.indexOf("api.mywaywealth.com") >= 0;
+  let productType = 'fisdom';
+  if (ismyway) {
+    productType = 'myway';
+  }
+  productType = 'myway';
+
+  let config_to_return = baseConfig[productType];
+  
+  let partnerKeysMapper = {
+    'askEmail': 'email',
+    'mobile': 'mobile',
+    'primary': 'primary_color',
+    'secondary': 'secondary_color',
+    'cta_disabled_color': 'cta_disabled_color',
+    'cta_disabled_background': 'cta_disabled_background',
+    'back_button_color': 'back_button_color',
+    'notifications_color': 'notifications_color',
+    'header_title_color': 'header_title_color'
+  };
+
+
+  if(partner_code) {
+    let partnerData = partnersConfigBase[partner_code];
+    config_to_return.partner_code = partner_code;
+    for (var key in partnerKeysMapper) {
+
+      let key_to_copy = partnerKeysMapper[key];
+      if(partnerData[key_to_copy]) {
+        config_to_return[key] = partnerData[key_to_copy];
+      }
+    }
+
+    config_to_return.configColorClass = partner_code + 'Color';
+    config_to_return.configBackgroundColorClass = partner_code + 'BackColor';
+  }
+
+  return config_to_return;
+}
+
 export const getConfig = () => {
 
   // let main_query_params = qs.parse(myHistory.location.search.slice(1));
   let main_query_params = qs.parse(window.location.search.slice(1));
   let { base_url } = main_query_params;
   let { generic_callback } = main_query_params;
+  generic_callback= "true"
   let { redirect_url } = main_query_params;
   let searchParams = `?base_url=${base_url}&generic_callback=${generic_callback}`;
   if(redirect_url) {
@@ -79,7 +334,6 @@ export const getConfig = () => {
   let isInsurance = myHistory.location.pathname.indexOf('insurance') >= 0 ? true : false;
   if (isInsurance) {
 
-    
     let insurance_v2 = generic_callback === "true" ? true : main_query_params.insurance_v2;;
     let { insurance_id } = main_query_params;
     let { isJourney } = main_query_params;
@@ -91,52 +345,14 @@ export const getConfig = () => {
 
   }
 
-  let config = {
-    'fisdom': {
-      primary: colors.fisdom,
-      secondary: colors.secondary,
-      default: colors.default,
-      label: colors.label,
-      type: 'fisdom',
-      productName: 'fisdom',
-      appLink: 'http://m.onelink.me/32660e84',
-      termsLink: 'https://www.fisdom.com/terms/',
-      schemeLink: 'https://www.fisdom.com/scheme-offer-documents/',
-      askEmail: 'ask@fisdom.com',
-      mobile: '+91-8048093070',
-      colorClass: 'fisdomColor',
-      backgroundColorClass: 'fisdomBackColor'
-    },
-    'myway': {
-      primary: colors.myway,
-      secondary: colors.secondary,
-      default: colors.default,
-      label: colors.label,
-      type: 'myway',
-      productName: 'myway',
-      mobile: '+91-8048039999',
-      appLink: 'https://go.onelink.me/6fHB/b750d9ac',
-      termsLink: 'https://mywaywealth.com/terms/',
-      schemeLink: 'https://mywaywealth.com/scheme/',
-      askEmail: 'ask@mywaywealth.com',
-      colorClass: 'mywayColor',
-      backgroundColorClass: 'mywayBackColor'
-    }
-  }
-
-
+ 
   let search = window.location.search;
   const insurance_v2 = generic_callback === "true" ? true : search.indexOf("insurance_v2") >= 0;
 
-  const ismyway = search.indexOf("api.mywaywealth.com") >= 0;
-  let productType = 'fisdom';
-  if (ismyway) {
-    productType = 'myway';
-  }
-  let returnConfig = config[productType];
-
-
   
+  let returnConfig = getPartnerConfig('bfdlmobile');
+  
+
   returnConfig.project = project;
   returnConfig.redirect_url = redirect_url || '';
   returnConfig.project_child = project_child;
@@ -234,8 +450,10 @@ export function setHeights(data) {
   let step = document.getElementsByClassName('Step')[0];
   let stepHeight = (step) ? step.offsetHeight : 0;
 
-  let body = document.getElementsByTagName('body')[0].offsetHeight;
-  let client = document.getElementsByClassName('ContainerWrapper') ?document.getElementsByClassName('ContainerWrapper')[0].offsetHeight: 0;
+  let body = document.getElementsByTagName('body') && document.getElementsByTagName('body')[0]
+   ? document.getElementsByTagName('body')[0].offsetHeight : 0;
+  let client = document.getElementsByClassName('ContainerWrapper') && document.getElementsByClassName('ContainerWrapper')[0]
+   ? document.getElementsByClassName('ContainerWrapper')[0].offsetHeight: 0;
   let foot = document.getElementsByClassName('Footer') && document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight : 0;
 
   let HeaderHeight = bannerHeight + stepHeight + head + 'px';

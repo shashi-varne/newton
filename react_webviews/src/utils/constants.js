@@ -48,7 +48,13 @@ export const themeConfig = {
             raisedSecondary: {
                 '&:hover': {
                     backgroundColor: getConfig().secondary
-                }
+                },
+                backgroundColor: getConfig().secondary,
+                color: '#fff'
+            },
+            disabled: {
+                opacity: 0.4,
+                color: '#fff !important'
             }
         },
         MuiIconButton: {

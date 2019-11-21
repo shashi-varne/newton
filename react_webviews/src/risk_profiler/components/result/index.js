@@ -248,7 +248,7 @@ class Result extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{height:'inherit'}}>
         {this.renderUi()}
         {this.renderDialog()}
         {this.renderPageLoader()}

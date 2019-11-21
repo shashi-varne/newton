@@ -19,6 +19,7 @@ class CustomButton extends Component {
             variant="raised"
             size="large"
             className={`${props.classes.button} borderButton`}
+            style={{color: getConfig().secondary, borderColor: getConfig().secondary}}
             disabled={props.disable} >
             <img alt="" src={download} />
             {props.buttonOneTitle}
@@ -28,6 +29,7 @@ class CustomButton extends Component {
             fullWidth={false}
             variant="raised"
             size="large"
+            color="secondary"
             className={`${props.classes.button} filledButton`}
             disabled={props.disable} >
             {props.buttonTwoTitle}
@@ -42,6 +44,7 @@ class CustomButton extends Component {
             variant="raised"
             size="large"
             color="secondary"
+            style={{backgroundColor: getConfig().secondary}}
             className={props.classes.button}
             disabled={props.disable} >
             {props.buttonTitle}

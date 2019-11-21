@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import { getConfig } from 'utils/functions';
 import Button from '../../../common/ui/Button';
 import { capitalize } from 'utils/validators';
 import Dialog, {
@@ -62,7 +63,9 @@ export class SummaryLayout extends Component {
     return (
       <div>
         {!props.noFooter &&
-          <div className="FooterSummaryLayout" onClick={props.handleClick}>
+          <div className="FooterSummaryLayout"
+          style={{backgroundColor :getConfig().secondary}}
+          onClick={props.handleClick}>
 
             {!props.onlyButton && <div className="FlexItem1 padLR15">
               <div className="FooterSummaryLayout_title">Premium</div>

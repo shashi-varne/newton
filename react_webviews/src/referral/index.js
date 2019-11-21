@@ -8,7 +8,7 @@ import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 
 import '../common/theme/Style.css';
 import './common/Style.css';
-import { getConfig } from 'utils/functions';
+import { themeConfig } from 'utils/constants';
 import NotFound from '../common/components/NotFound';
 import Details from './components/details';
 import Earnings from './components/earnings';
@@ -26,36 +26,7 @@ const jss = create(jssPreset());
 // We define a custom insertion point that JSS will look for injecting the styles in the DOM.
 // jss.options.insertionPoint = 'jss-insertion-point';
 
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      // light: will be calculated from palette.primary.main,
-      main: getConfig().primary,
-      // dark: will be calculated from palette.primary.main,
-      contrastText: '#ffffff',
-    },
-    secondary: {
-      // light: '#0066ff',
-      main: getConfig().secondary,
-      // dark: will be calculated from palette.secondary.main,
-      contrastText: '#ffffff',
-    },
-    default: {
-      main: getConfig().default,
-      contrastText: '#ffffff'
-    }
-    // error: will us the default color
-  },
-  overrides: {
-    MuiButton: {
-      raisedSecondary: {
-        '&:hover': {
-          backgroundColor: '#1bda4e'
-        }
-      }
-    }
-  }
-});
+const theme = createMuiTheme(themeConfig);
 
 const ScrollToTop = withRouter(
   class ScrollToTopWithoutRouter extends Component {

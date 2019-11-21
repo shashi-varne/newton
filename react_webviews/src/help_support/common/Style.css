@@ -75,8 +75,6 @@
 }
 
 .cta button {
-	border: 1px solid #47cc48;
-	color: #35cb5d;
 	font-size: 16px;
 	border-radius: 5px;
 	padding: 10px 15px;
@@ -187,7 +185,6 @@
 }
 
 .related-question {
-	color: #3792fc;
 	font-size: 14px;
 	line-height: 23px;
 }

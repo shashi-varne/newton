@@ -401,9 +401,9 @@ class GoldRegister extends Component {
             <Grid container spacing={16} alignItems="center">
               <Grid item xs={2} className="TextCenter">
                 <Checkbox
-                  style={{
-                    color: getConfig().primary
-                  }}
+                  // style={{
+                  //   color: getConfig().primary
+                  // }}
                   defaultChecked
                   checked={this.state.checked}
                   color="default"
