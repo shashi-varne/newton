@@ -1,4 +1,4 @@
-@value secondary: #35cb5d;
+@value secondary: var(--secondary);
 .Banner-gold {
   position: relative;
   text-align: center;

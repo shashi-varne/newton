@@ -17,7 +17,7 @@ export default class RadioBtn extends Component {
           className={`ContainerWrapper ${this.props.isChecked ? "RadioButton checked" : "RadioButton unchecked"}`}
           data-value={this.props.value} >
           <label
-            className={`${this.props.type} ${this.props.isChecked ? getConfig().configColorClass + ' RadioLabelChecked' :
+            className={`${this.props.type} ${this.props.isChecked ? getConfig().configPrimaryColorClass + ' RadioLabelChecked' :
               ''}`}
           >{this.props.text}</label>
         </div>

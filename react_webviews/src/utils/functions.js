@@ -1,4 +1,4 @@
-import colors from '../common/theme/Style.css';
+// import colors from '../common/theme/Style.css';
 import qs from 'qs';
 import createBrowserHistory from 'history/createBrowserHistory';
 import {checkValidString} from './validators';
@@ -93,7 +93,7 @@ const partnersConfigBase = {
   },
   bfdlmobile: {
     logo: "bfdl_white_sdk_logo.svg",
-    primary_color: colors.bfdlmobilePrimary,
+    primary_color: '#004164',
     secondary_color: "#ff5928",
     cta_disabled_color: "#ffffff",
     code: "bfdlmobile",
@@ -103,7 +103,8 @@ const partnersConfigBase = {
     banner: "bfdl_banner.png",
     back_button: "back_icon_white.png",
     close_button: "close_nav_icon.svg",
-    search_button: "bfdlmobile_search.png"
+    search_button: "bfdlmobile_search.png",
+    inputFocusedColor : '#00ffbc'
   },
   alb: {
     logo: "alb.png",
@@ -220,34 +221,36 @@ function getPartnerConfig(partner_code) {
   let search = window.location.search;
   let baseConfig = {
     'fisdom': {
-      primary: colors.fisdom,////////
-      secondary: colors.secondary,////////
-      default: colors.default,///////
-      label: colors.label,////////////
+      primary: '#4f2da7',
+      secondary: '#35cb5d',
+      default: '#4a4a4a',
+      label: '#a2a2a2',
       type: 'fisdom',
+      // inputFocusedColor: '#4f2da7', 
       productName: 'fisdom',
       appLink: 'http://m.onelink.me/32660e84',
       termsLink: 'https://www.fisdom.com/terms/',
       schemeLink: 'https://www.fisdom.com/scheme-offer-documents/',
-      askEmail: 'ask@fisdom.com',/////////
-      mobile: '+91-8048093070',///////////////
-      configColorClass: 'fisdomColor',///////
-      configBackgroundColorClass: 'fisdomBackColor'//////////
+      askEmail: 'ask@fisdom.com',
+      mobile: '+91-8048093070',
+      configPrimaryColorClass: 'configPrimaryColorClass',
+      configPrimaryBackgroundColorClass: 'fisdomBackColor'
     },
     'myway': {
-      primary: colors.myway,
-      secondary: colors.secondary,
-      default: colors.default,
-      label: colors.label,
+      primary: '#3792fc',
+      secondary: '#35cb5d',
+      default: '#4a4a4a',
+      label: '#a2a2a2',
       type: 'myway',
+      // inputFocusedColor: '#3792fc',
       productName: 'myway',
       mobile: '+91-8048039999',
       appLink: 'https://go.onelink.me/6fHB/b750d9ac',
       termsLink: 'https://mywaywealth.com/terms/',
       schemeLink: 'https://mywaywealth.com/scheme/',
       askEmail: 'ask@mywaywealth.com',
-      configColorClass: 'mywayColor',
-      configBackgroundColorClass: 'mywayBackColor'
+      configPrimaryColorClass: 'configPrimaryColorClass',
+      configPrimaryBackgroundColorClass: 'mywayBackColor'
     }
   }
 
@@ -269,10 +272,12 @@ function getPartnerConfig(partner_code) {
     'cta_disabled_background': 'cta_disabled_background',
     'back_button_color': 'back_button_color',
     'notifications_color': 'notifications_color',
-    'header_title_color': 'header_title_color'
+    'header_title_color': 'header_title_color',
+    'inputFocusedColor' : 'inputFocusedColor'
   };
 
 
+  partner_code = '';
   if(partner_code) {
     let partnerData = partnersConfigBase[partner_code];
     config_to_return.partner_code = partner_code;
@@ -284,16 +289,21 @@ function getPartnerConfig(partner_code) {
       }
     }
 
-    config_to_return.configColorClass = partner_code + 'Color';
-    config_to_return.configBackgroundColorClass = partner_code + 'BackColor';
+    
   }
+
+
+  let html = document.querySelector(`html`);
+  html.style.setProperty(`--secondary`, `${config_to_return.secondary}`);
+  html.style.setProperty(`--primary`, `${config_to_return.primary}`);
+  html.style.setProperty(`--default`, `${config_to_return.default}`);
+  html.style.setProperty(`--label`, `${config_to_return.label}`);
 
   return config_to_return;
 }
 
 export const getConfig = () => {
 
-  // let main_query_params = qs.parse(myHistory.location.search.slice(1));
   let main_query_params = qs.parse(window.location.search.slice(1));
   let { base_url } = main_query_params;
   let { generic_callback } = main_query_params;

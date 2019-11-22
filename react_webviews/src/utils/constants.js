@@ -31,7 +31,24 @@ export const themeConfig = {
         MuiInput: {
             input: {
                 padding: '11px 0 7px',
-                fontSize: '14px'
+                fontSize: '14px',
+            },
+            focused: {
+                borderColor: getConfig().inputFocusedColor || getConfig().primary,
+            },
+            underline: {
+                '&:after': {
+                    backgroundColor: getConfig().inputFocusedColor || getConfig().primary
+                },
+                transform: 'inherit',
+                transition: 'transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms',
+            },
+            error: {
+                '&:after': {
+                    backgroundColor: 'green'
+                }
+            },
+            root: {
             }
         },
         MuiInputLabel: {

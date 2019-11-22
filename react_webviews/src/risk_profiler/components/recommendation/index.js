@@ -259,7 +259,7 @@ class Recommendation extends Component {
 
   getTabClassName(type, value) {
     if (value === this.state[type]) {
-      return getConfig().configColorClass;
+      return getConfig().configPrimaryColorClass;
     }
     return '';
   }

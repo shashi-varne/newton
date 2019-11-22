@@ -1,9 +1,3 @@
-@value fisdom: #4f2da7;
-@value myway: #3792fc;
-@value secondary: #35cb5d;
-@value default: #4a4a4a;
-@value label: #a2a2a2;
-
 .Select {
   font-size: 14px !important;
 }
@@ -96,14 +90,14 @@
 }
 
 .RadioLabel {
-  color: label;
+  color: var(--label);
   font-size: 14px;
   font-family: 'Roboto';
   font-weight: 500;
 }
 
 .RadioWithIcon {
-  color: label;
+  color: var(--label);
   font-size: 0.8rem;
   margin-bottom: 15px;
   position: relative;
@@ -125,7 +119,7 @@
 }
 .DialogButtonFullWidth {
   width: 100%;
-  background-color: secondary !important;
+  background-color: var(--secondary) !important;
   color: #fff !important;
 }
 
@@ -148,13 +142,10 @@
   left: -15px;
 }
 .MuiFormLabel-root.MuiFormLabel-error {
-  color: label !important;
+  color: var(--label) !important;
 }
 .MuiFormLabel-root.MuiFormLabel-focused.MuiFormLabel-error {
   color: rgb(55, 31, 116) !important;
-}
-.MuiInput-underline.MuiInput-error:after {
-  background-color: inherit !important;
 }
 .error-radiogrp {
   margin: 0;
@@ -169,7 +160,7 @@
   top: 5px;
 }
 .MuiInput-input {
-  color: default !important;
+  color: var(--default) !important;
 }
 
 .MuiDialog-paper {
@@ -189,11 +180,9 @@
 .MuiInput-input {
   padding: 3px 0 5px;
 }
-.MuiInput-underline:after {
-  transform: inherit;
-  transition: transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
-  pointer-events: none;
-  background-color: #cecece !important;
+
+.MuiInput-underline.MuiInput-error:after {
+  background-color: inherit !important;
 }
 
 /* dot dot loader */

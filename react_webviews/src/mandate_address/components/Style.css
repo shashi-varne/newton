@@ -61,7 +61,7 @@
 .success-great {
   text-align: center;
   margin: 0 0 20px 0;
-  color: #35cb5d;
+  color: var(--secondary);
   font-size: 16px;
   font-weight: 500;
 }

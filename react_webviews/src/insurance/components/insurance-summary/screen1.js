@@ -1150,7 +1150,7 @@ class Summary extends Component {
                       <img style={{ position: 'relative', top: 2 }} src={(this.state.accordianTab === 'personal') ? shrink : expand} alt="" width="20" />
                     </span>
                     <span>Personal details</span>
-                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: '#35cb5d', fontSize: 13 }} onClick={() => this.navigate('/insurance/edit-personal')}>Edit</span>}
+                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().secondary, fontSize: 13 }} onClick={() => this.navigate('/insurance/edit-personal')}>Edit</span>}
                   </div>
                 </div>
                 {this.renderAccordionBody('personal')}
@@ -1162,7 +1162,7 @@ class Summary extends Component {
                       <img style={{ position: 'relative', top: 2 }} src={(this.state.accordianTab === 'contact') ? shrink : expand} alt="" width="20" />
                     </span>
                     <span>Contact details</span>
-                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: '#35cb5d', fontSize: 13 }} onClick={() => this.navigate('/insurance/edit-contact')}>Edit</span>}
+                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().secondary, fontSize: 13 }} onClick={() => this.navigate('/insurance/edit-contact')}>Edit</span>}
                   </div>
                 </div>
                 {this.renderAccordionBody('contact')}
@@ -1174,7 +1174,7 @@ class Summary extends Component {
                       <img style={{ position: 'relative', top: 2 }} src={(this.state.accordianTab === 'professional') ? shrink : expand} alt="" width="20" />
                     </span>
                     <span>Professional details</span>
-                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: '#35cb5d', fontSize: 13 }} onClick={() => this.navigate('/insurance/edit-professional')}>Edit</span>}
+                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().secondary, fontSize: 13 }} onClick={() => this.navigate('/insurance/edit-professional')}>Edit</span>}
                   </div>
                 </div>
                 {this.renderAccordionBody('professional')}
@@ -1186,7 +1186,7 @@ class Summary extends Component {
                       <img style={{ position: 'relative', top: 2 }} src={(this.state.accordianTab === 'nominee') ? shrink : expand} alt="" width="20" />
                     </span>
                     <span>Nominee details</span>
-                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: '#35cb5d', fontSize: 13 }} onClick={() => this.navigate('/insurance/edit-nominee')}>Edit</span>}
+                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().secondary, fontSize: 13 }} onClick={() => this.navigate('/insurance/edit-nominee')}>Edit</span>}
                   </div>
                 </div>
                 {this.renderAccordionBody('nominee')}
@@ -1199,7 +1199,7 @@ class Summary extends Component {
                         <img style={{ position: 'relative', top: 2 }} src={(this.state.accordianTab === 'appointee') ? shrink : expand} alt="" width="20" />
                       </span>
                       <span>Appointee details</span>
-                      {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: '#35cb5d', fontSize: 13 }} onClick={() => this.navigate('/insurance/edit-appointee')}>Edit</span>}
+                      {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().secondary, fontSize: 13 }} onClick={() => this.navigate('/insurance/edit-appointee')}>Edit</span>}
                     </div>
                   </div>
                   {this.renderAccordionBody('appointee')}

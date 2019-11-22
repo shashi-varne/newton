@@ -63,7 +63,7 @@ class CustomButton extends Component {
 const styles = {
   button: {
     padding: '16px 0px !important',
-    borderRadius: getConfig().project !== 'insurance' ? 6 : 0,
+    borderRadius: 6,
     textTransform: 'capitalize',
     fontSize: '16px !important',
     boxShadow: 'none',

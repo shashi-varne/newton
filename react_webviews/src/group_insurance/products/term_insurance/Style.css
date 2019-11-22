@@ -73,7 +73,7 @@
     border-left: unset;
   }
   .journey-process2-green {
-    border-left: 1px solid #7ed321;
+    border-left: 1px solid var(--secondary);
   }
   img.journey-process4 {
     width: 15px;
@@ -96,7 +96,7 @@
   color: black
   }
   .journey-process7-blue {
-    color: #4f2da7
+    color: var(--primary);
   }
   .ContainerWrapper.blue .journey-process7-blue {
     color: #3792fc;
@@ -119,7 +119,7 @@
   }
   .view-more-journey {
     text-align: center;
-    color: #6fdb4f;
+    color: var(--secondary);
     font-weight: 600;
     padding: 6px 0 0 0;
     cursor: pointer;
@@ -133,7 +133,7 @@
     padding: 20px 0 0 10px;
   }
   .journey-connector {
-    border-left: 1px solid #7ed321;
+    border-left: 1px solid var(--secondary);
       height: 56px;
       position: relative;
       left: 20px;
@@ -173,9 +173,6 @@
   }
   .MuiFormLabel-root.MuiFormLabel-focused.MuiFormLabel-error {
     color: rgb(55, 31, 116) !important;
-  }
-  .MuiInput-underline.MuiInput-error:after {
-    background-color: inherit !important;
   }
   .error-radiogrp {
     margin: 0;
@@ -348,7 +345,7 @@
     /* border: 1px solid #f2f8fe; */
       padding: 20px 5px 5px 5px;
       border-radius: 4px;
-      color: #35cb5d;
+      color: var(--secondary);
       -webkit-box-shadow: 0px 2px 6px 0px rgba(102,120,121,0.25);
       box-shadow: 0px 2px 6px 0px rgba(102,120,121,0.25);
       width: 42%;
@@ -359,7 +356,7 @@
     /* border: 1px solid; */
       padding: 10px;
       border-radius: 4px;
-      background: #35cb5d;
+      background: var(--secondary);
       -webkit-box-shadow: 0px 2px 6px 0px rgba(102,120,121,0.25);
       box-shadow: 0px 2px 6px 0px rgba(102,120,121,0.25);
       width: 42%;
@@ -395,7 +392,7 @@
   }
   .quote-tiles3bb {
     font-size: 12px;
-    color: #3c46ff;
+    color: var(--primary);
     font-weight: 500;
     margin: 5px 0 0 0;
   }
@@ -610,7 +607,7 @@
   }
   .ins-riders-tiles3d {
     font-size: 16px;
-    color: #35cb5d;
+    color: var(--secondary);
     border: 1px solid;
     padding: 5px 26px 5px 26px;
     border-radius: 4px;

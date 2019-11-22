@@ -36,9 +36,6 @@ class Landing extends Component {
 
   componentWillMount() {
 
-    // #TODO
-    this.navigate('/gold');
-
     nativeCallback({ action: 'take_control_reset' });
     window.localStorage.setItem('group_insurance_payment_url', '');
     let insurance = this.state.type !== 'fisdom' ? insurance_myway : insurance_fisdom;
