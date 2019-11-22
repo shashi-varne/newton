@@ -45,11 +45,6 @@ class HospicashPlanDetails extends Component {
         'icon': this.state.ic_hospicash_b1
       },
       {
-        'disc': 'Enhanced accident , ICU and Convalescence benefit.',
-        'key' : 'enhanced_accident',
-        'icon': this.state.ic_hospicash_b4
-      },
-      {
         'disc': 'No medical examination required.',
         'key' : 'no_medical_examination',
         'icon': this.state.ic_hospicash_b2
@@ -64,24 +59,21 @@ class HospicashPlanDetails extends Component {
       'premium_details': [
         {
           "sum_assured": 500,
-          "product_benefits_included": ['daily_cash', 'enhanced_accident', 
-          'no_medical_examination'],
+          "product_benefits_included": ['daily_cash','no_medical_examination'],
           "premium": "133",
           "tax_amount": "23.94",
           "plus_benefit": ''
         },
         {
           "sum_assured": 1500,
-          "product_benefits_included": ['daily_cash', 'enhanced_accident', 
-          'no_medical_examination'],
+          "product_benefits_included": ['daily_cash','no_medical_examination'],
           "premium": "750",
           "tax_amount": "135",
           "plus_benefit": ''
         },
         {
           "sum_assured": 5000,
-          "product_benefits_included": ['daily_cash', 'enhanced_accident', 
-          'no_medical_examination'],
+          "product_benefits_included": ['daily_cash','no_medical_examination'],
           "premium": "2500",
           "tax_amount": "450",
           "plus_benefit": ''
