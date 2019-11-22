@@ -37,7 +37,6 @@ const Input = (props) => {
         value={props.value}
         helperText={props.helperText}
         placeholder={props.placeholder}
-        fullWidth
         required={props.required}
         className={props.class}
         id={props.id}

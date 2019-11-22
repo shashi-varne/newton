@@ -277,7 +277,6 @@ function getPartnerConfig(partner_code) {
   };
 
 
-  partner_code = '';
   if(partner_code) {
     let partnerData = partnersConfigBase[partner_code];
     config_to_return.partner_code = partner_code;

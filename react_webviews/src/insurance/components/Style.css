@@ -168,13 +168,6 @@ color: black
   height: auto;
 }
 
-.MuiFormLabel-root.MuiFormLabel-error {
-  color: #a2a2a2 !important;
-}
-.MuiFormLabel-root.MuiFormLabel-focused.MuiFormLabel-error {
-  color: rgb(55, 31, 116) !important;
-}
-
 .error-radiogrp {
   margin: 0;
   font-size: 0.75rem;

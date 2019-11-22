@@ -137,16 +137,6 @@
   height: auto;
 }
 
-.MuiCheckbox-root {
-  position: relative;
-  left: -15px;
-}
-.MuiFormLabel-root.MuiFormLabel-error {
-  color: var(--label) !important;
-}
-.MuiFormLabel-root.MuiFormLabel-focused.MuiFormLabel-error {
-  color: rgb(55, 31, 116) !important;
-}
 .error-radiogrp {
   margin: 0;
   font-size: 0.75rem;
@@ -159,30 +149,12 @@
   position: relative;
   top: 5px;
 }
-.MuiInput-input {
-  color: var(--default) !important;
-}
 
 .MuiDialog-paper {
   margin: 0 20px 0px 20px !important;
 }
 .MuiDialogContent-root {
   padding: 0 14px 24px 14px !important;
-}
-.MuiButton-label {
-  text-transform: capitalize !important;
-}
-
-.MuiInput-fullWidth {
-  /* margin-bottom: 12px; */
-}
-
-.MuiInput-input {
-  padding: 3px 0 5px;
-}
-
-.MuiInput-underline.MuiInput-error:after {
-  background-color: inherit !important;
 }
 
 /* dot dot loader */
