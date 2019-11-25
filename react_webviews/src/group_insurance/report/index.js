@@ -127,7 +127,7 @@ class Report extends Component {
         var has_more = policyData.group_insurance.more;
 
         this.setState({
-          nextPage: (has_more) ? next_page : null
+          nextPage: (has_more) ? next_page : ''
         })
 
         let ins_policies = policyData.group_insurance && 
@@ -312,7 +312,10 @@ class Report extends Component {
 
   onScroll = () => {
     if (this.hasReachedBottom()) {
-      this.loadMore();
+      if(this.state.nextPage) {
+        this.loadMore();
+      }
+      
     }
   };
 
