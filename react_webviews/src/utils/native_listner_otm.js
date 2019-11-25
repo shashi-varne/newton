@@ -5,9 +5,7 @@
 import { isMobile } from './functions';
 import { getConfig } from './functions';
 
-
-let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
-if (generic_callback === "true") {
+if (getConfig().generic_callback) {
   (function (exports) {
 
     function b64toBlob(b64Data, contentType, sliceSize) {

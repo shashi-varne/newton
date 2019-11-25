@@ -304,6 +304,7 @@ function getPartnerConfig(partner_code) {
 
 export const getConfig = () => {
 
+  let main_pathname = window.location.pathname;
   let main_query_params = qs.parse(window.location.search.slice(1));
   let { base_url } = main_query_params;
   let { generic_callback } = main_query_params;
@@ -313,28 +314,28 @@ export const getConfig = () => {
 
   let project = 'insurance';
   let project_child = '';
-  if (myHistory.location.pathname.indexOf('group-insurance') >= 0) {
+  if (main_pathname.indexOf('group-insurance') >= 0) {
     project = 'group-insurance';
     generic_callback = "true";
     project_child = 'bhartiaxa';
-    if (myHistory.location.pathname.indexOf('term') >= 0) {
+    if (main_pathname.indexOf('term') >= 0) {
       project_child = 'term';
     } 
 
-  } else if (myHistory.location.pathname.indexOf('insurance') >= 0) {
+  } else if (main_pathname.indexOf('insurance') >= 0) {
     project = 'insurance';
 
-  } else if (myHistory.location.pathname.indexOf('risk') >= 0) {
+  } else if (main_pathname.indexOf('risk') >= 0) {
     project = 'risk';
-  } else if (myHistory.location.pathname.indexOf('mandate-otm') >= 0) {
+  } else if (main_pathname.indexOf('mandate-otm') >= 0) {
     project = 'mandate-otm';
-  } else if (myHistory.location.pathname.indexOf('mandate') >= 0) {
+  } else if (main_pathname.indexOf('mandate') >= 0) {
     project = 'mandate';
-  } else if (myHistory.location.pathname.indexOf('gold') >= 0) {
+  } else if (main_pathname.indexOf('gold') >= 0) {
     project = 'gold';
-  } else if (myHistory.location.pathname.indexOf('isip') >= 0) {
+  } else if (main_pathname.indexOf('isip') >= 0) {
     project = 'isip';
-  } else if (myHistory.location.pathname.indexOf('referral') >= 0) {
+  } else if (main_pathname.indexOf('referral') >= 0) {
     project = 'referral';
   }
   
@@ -368,8 +369,7 @@ export const getConfig = () => {
     searchParamsMustAppend += `&partner_code=${partner_code}`;
   }
 
-  if (project === 'insurance') {
-
+  if (project === 'insurance' || project_child === 'term') {
     let insurance_v2 = generic_callback === "true" ? true : main_query_params.insurance_v2;;
     let { insurance_id } = main_query_params;
     let { isJourney } = main_query_params;
@@ -382,9 +382,6 @@ export const getConfig = () => {
       searchParams += '&isJourney=' + isJourney;
       searchParamsMustAppend += '&isJourney=' + isJourney;
     }
-
-    
-
   }
 
   returnConfig.project = project;
@@ -419,7 +416,7 @@ export const getConfig = () => {
     let { html_camera } = main_query_params;
     searchParams += '&key=' + key + '&name=' + name
       + '&email=' + email + '&campaign_version=' + campaign_version;
-      
+
     // eslint-disable-next-line
     returnConfig.campaign_version = parseInt(campaign_version);
     returnConfig.html_camera = ((returnConfig.iOS || returnConfig.Web) && returnConfig.campaign_version) ? true : html_camera;

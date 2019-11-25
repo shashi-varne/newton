@@ -49,9 +49,8 @@ class Upload extends Component {
   }
 
   componentDidMount() {
-    let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
     let that = this;
-    if (generic_callback === "true") {
+    if (getConfig().generic_callback) {
       window.callbackWeb.add_listener({
         type: 'back_pressed',
         go_back: function () {
@@ -175,9 +174,8 @@ class Upload extends Component {
   }
 
   native_call_handler(method_name, doc_type, doc_name, doc_side) {
-    let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
     let that = this;
-    if (generic_callback === "true") {
+    if (getConfig().generic_callback) {
       window.callbackWeb[method_name]({
         type: 'doc',
         doc_type: doc_type,

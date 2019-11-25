@@ -53,8 +53,8 @@ class InsuranceHome extends Component {
           }
           window.localStorage.setItem('homeApplication', JSON.stringify(data));
           let search = application.profile_link.split('?')[1];
-          search += '&generic_callback=true';
-
+          let searchParamsMustAppend = getConfig().searchParamsMustAppend.split('?')[1];
+          search +=  '&' + searchParamsMustAppend;
           this.navigate(pathname, search);
         }
       } else {

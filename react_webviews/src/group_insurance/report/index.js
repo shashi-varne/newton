@@ -307,13 +307,11 @@ class Report extends Component {
   hasReachedBottom() {
     var el = document.getElementsByClassName('Container')[0];
     var height = el.getBoundingClientRect().bottom <= window.innerHeight;
-    console.log(el.getBoundingClientRect().bottom + ' <= ' + window.innerHeight);
     return height;
   }
 
   onScroll = () => {
     if (this.hasReachedBottom()) {
-      console.log('Has reached bottom: Yes')
       this.loadMore();
     }
   };

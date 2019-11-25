@@ -32,9 +32,8 @@ class Container extends Component {
 
   componentDidMount() {
     setHeights({ 'header': true, 'container': false });
-    let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
     let that = this;
-    if (generic_callback === "true") {
+    if (getConfig().generic_callback) {
       if (getConfig().iOS) {
         nativeCallback({ action: 'hide_top_bar' });
       }
@@ -55,8 +54,7 @@ class Container extends Component {
   }
 
   componentWillUnmount() {
-    let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
-    if (generic_callback === "true") {
+    if (getConfig().generic_callback) {
       window.callbackWeb.remove_listener({});
     } else {
       window.PaymentCallback.remove_listener({});

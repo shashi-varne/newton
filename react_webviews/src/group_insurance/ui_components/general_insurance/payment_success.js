@@ -76,8 +76,6 @@ class PaymentSuccessClass extends Component {
           leadData.permanent_address = {};
         }
 
-        console.log(leadData)
-
         Object.keys(address_details_data).forEach((key) => {
           if (leadData.permanent_address[key]) {
             address_details_data[key] = leadData.permanent_address[key];
@@ -86,9 +84,6 @@ class PaymentSuccessClass extends Component {
         })
 
         address_details_data.addressline = leadData.permanent_address.address_line;
-
-        console.log(address_details_data)
-
         this.setState({
           leadData: leadData,
           address_details_data: address_details_data

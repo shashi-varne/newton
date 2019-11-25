@@ -28,9 +28,8 @@ class Container extends Component {
 
   componentDidMount() {
     setHeights({ 'header': true, 'container': false });
-    let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
     let that = this;
-    if (generic_callback === "true") {
+    if (getConfig().generic_callback) {
       window.callbackWeb.add_listener({
         type: 'back_pressed',
         go_back: function () {
@@ -48,10 +47,7 @@ class Container extends Component {
   }
 
   componentWillUnmount() {
-    let generic_callback = new URLSearchParams(getConfig().searchParams).get(
-      "generic_callback"
-    );
-    if (generic_callback === "true") {
+    if (getConfig().generic_callback) {
       window.callbackWeb.remove_listener({});
     } else {
       window.PlutusSdk.remove_listener({});

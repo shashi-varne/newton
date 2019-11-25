@@ -33,9 +33,8 @@ class Container extends Component {
 
   componentDidMount() {
     setHeights({ 'header': true, 'container': false });
-    let generic_callback = "true";
     let that = this;
-    if (generic_callback === "true") {
+    if (getConfig().generic_callback) {
       window.callbackWeb.add_listener({
         type: 'back_pressed',
         go_back: function () {
@@ -54,8 +53,8 @@ class Container extends Component {
   }
 
   componentWillUnmount() {
-    let generic_callback = "true";
-    if (generic_callback === "true") {
+  
+    if (getConfig().generic_callback) {
       window.callbackWeb.remove_listener({});
     } else {
       window.PlutusSdk.remove_listener({});
@@ -96,8 +95,6 @@ class Container extends Component {
   historyGoBack = () => {
 
     let project_child = getConfig().project_child;
-
-
     if (manageDialog('general-dialog', 'none', 'enableScroll')) {
       if (this.props.closePopup) {
         this.props.closePopup();
@@ -148,7 +145,6 @@ class Container extends Component {
       this.backMapperBharti('/plan');
       return;
     }
-
 
     if (project_child === 'term') {
       if(params && params.backToState === 'report') {

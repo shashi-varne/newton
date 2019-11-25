@@ -21,8 +21,6 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   let project = getConfig().project;
   let redirect_url = new URLSearchParams(getConfig().searchParams).get('redirect_url');
 
-  console.log("action :"  +action);
-  console.log(events);
   if (action) {
     callbackData.action = action;
   }
@@ -30,9 +28,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     return;
   }
 
-  let generic_callback = new URLSearchParams(getConfig().searchParams).get('generic_callback');
-
-  if (generic_callback === "true") {
+  if (getConfig().generic_callback) {
     if (action === 'take_control_reset_hard' || action === 'take_control_reset') {
       callbackData.action = 'reset_back_button_control';
       nativeCallback({ action: 'hide_top_bar' });

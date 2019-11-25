@@ -4,9 +4,7 @@
 /* -----------------------------------------------------------------*/
 import { getConfig } from './functions';
 
-
-let generic_callback = getConfig().generic_callback;
-if (generic_callback === "true") {
+if (getConfig().generic_callback) {
   (function (exports) {
     var listeners = [];
 
