@@ -217,7 +217,6 @@ export const isMobile = {
 
 function getPartnerConfig(partner_code) {
  
-  
   let search = window.location.search;
   let baseConfig = {
     'fisdom': {
@@ -292,7 +291,6 @@ function getPartnerConfig(partner_code) {
     
   }
 
-
   let html = document.querySelector(`html`);
   html.style.setProperty(`--secondary`, `${config_to_return.secondary}`);
   html.style.setProperty(`--primary`, `${config_to_return.primary}`);
@@ -339,14 +337,10 @@ export const getConfig = () => {
     project = 'referral';
   }
   
-
- 
   let search = window.location.search;
   const insurance_v2 = generic_callback === "true" ? true : search.indexOf("insurance_v2") >= 0;
-
   
-  let returnConfig = getPartnerConfig('bfdlmobile');
-  
+  let returnConfig = getPartnerConfig(partner_code);
 
   let searchParams = `?base_url=${base_url}`;
   let searchParamsMustAppend = `?base_url=${base_url}`;
