@@ -10,7 +10,7 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
-import { ToastContainer } from 'react-toastify';
+
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
@@ -280,7 +280,6 @@ class Otp extends Component {
           </div>
         </div>
         {this.renderResponseDialog()}
-        <ToastContainer autoClose={3000} />
       </Container>
     );
   }

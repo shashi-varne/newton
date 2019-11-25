@@ -10,7 +10,6 @@ import five_gmbar_front from 'assets/5gmbar_front.png';
 import ten_gm_front from 'assets/10gm_front.png';
 import ten_gmbar_front from 'assets/10gmbar_front.png';
 import twenty_gmbar_front from 'assets/20gmbar_front.png';
-import { ToastContainer } from 'react-toastify';
 import toast from '../../../common/ui/Toast';
 import { inrFormatDecimal } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
@@ -234,7 +233,6 @@ class DeliveryOrder extends Component {
             <span className="float-right order-tile-other-text-delivery">Karnataka</span>
           </div>
         </div>
-        <ToastContainer autoClose={3000} />
       </Container>
     );
   }

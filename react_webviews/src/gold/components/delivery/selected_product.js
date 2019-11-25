@@ -10,7 +10,6 @@ import five_gmbar_front from 'assets/5gmbar_front.png';
 import ten_gm_front from 'assets/10gm_front.png';
 import ten_gmbar_front from 'assets/10gmbar_front.png';
 import twenty_gmbar_front from 'assets/20gmbar_front.png';
-import { ToastContainer } from 'react-toastify';
 import toast from '../../../common/ui/Toast';
 import { inrFormatDecimal } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
@@ -217,7 +216,6 @@ class DeliverySelectedProduct extends Component {
             *You can place your order for sell/delivery after 2 working day from your buying transaction date
           </div> */}
         </div>
-        <ToastContainer autoClose={3000} />
       </Container>
     );
   }

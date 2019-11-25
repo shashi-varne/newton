@@ -15,6 +15,7 @@ import Question from './components/question';
 import Answer from './components/answer';
 import Writetous from './components/writetous';
 import { themeConfig } from 'utils/constants';
+import { ToastContainer } from 'react-toastify';
 
 import { create } from 'jss';
 import JssProvider from 'react-jss/lib/JssProvider';
@@ -52,6 +53,7 @@ const HelpSupport = (props) => {
     <JssProvider jss={jss} generateClassName={generateClassName}>
       <MuiThemeProvider theme={theme}>
         <ScrollToTop />
+        <ToastContainer autoClose={3000} />
         <Switch>
           <Route exact path={`${url}`} component={Listing} />
           <Route path={`${url}/category`} component={Category} />

@@ -15,7 +15,6 @@ import Dialog, {
   DialogTitle
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
-import { ToastContainer } from 'react-toastify';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
@@ -693,7 +692,6 @@ class GoldSummary extends Component {
         {this.renderResponseDialog()}
         {this.renderGoldOfferDialog()}
         {this.renderPopup()}
-        <ToastContainer autoClose={3000} />
       </Container>
     );
   }

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import qs from 'qs';
 
-import { ToastContainer } from 'react-toastify';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import Button from '../../../common/ui/Button';
@@ -148,7 +147,6 @@ class AddEditAddress extends Component {
           </Button>
           </div>
         </div>
-        <ToastContainer autoClose={3000} />
       </Container >
     );
   }

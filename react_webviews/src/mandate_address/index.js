@@ -8,6 +8,7 @@ import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import '../common/theme/Style.css';
 import './components/Style.css';
 import { themeConfig } from 'utils/constants';
+import { ToastContainer } from 'react-toastify';
 
 import './common/Style.css';
 import NotFound from '../common/components/NotFound';
@@ -51,6 +52,7 @@ const Mandate = (props) => {
     <JssProvider jss={jss} generateClassName={generateClassName}>
       <MuiThemeProvider theme={theme}>
         <ScrollToTop />
+        <ToastContainer autoClose={3000} />
         <Switch>
           <Route exact path={`${url}`} component={MandateProcess} />
           <Route path={`${url}/select-address`} component={SelectAddress} />

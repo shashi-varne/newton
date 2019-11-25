@@ -9,6 +9,8 @@ import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import '../common/theme/Style.css';
 import './common/Style.css';
 import { themeConfig } from 'utils/constants';
+import { ToastContainer } from 'react-toastify';
+
 import NotFound from '../common/components/NotFound';
 import Details from './components/details';
 import Earnings from './components/earnings';
@@ -49,6 +51,7 @@ const Referral = (props) => {
     <JssProvider jss={jss} generateClassName={generateClassName}>
       <MuiThemeProvider theme={theme}>
         <ScrollToTop />
+        <ToastContainer autoClose={3000} />
         <Switch>
           <Route exact path={`${url}`} component={Details} />
           <Route path={`${url}/earnings`} component={Earnings} />

@@ -20,7 +20,6 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
-import { ToastContainer } from 'react-toastify';
 import toast from '../../../common/ui/Toast';
 import { inrFormatDecimal } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
@@ -412,6 +411,7 @@ class GoldSummary extends Component {
       14: five_gmbar_front,
       8: ten_gm_front,
       12: ten_gmbar_front,
+      13: ten_gmbar_front,
       15: twenty_gmbar_front,
     };
 
@@ -467,7 +467,7 @@ class GoldSummary extends Component {
           onChange={this.handleChange}
           indicatorColor="primary"
           textColor="primary"
-          variant="fullWidth"
+          fullWidth
         >
           <Tab label="Sell" />
           <Tab label="Deliver" />
@@ -539,7 +539,6 @@ class GoldSummary extends Component {
           </div>
         </div>}
         {this.renderResponseDialog()}
-        <ToastContainer autoClose={3000} />
       </Container>
     );
   }

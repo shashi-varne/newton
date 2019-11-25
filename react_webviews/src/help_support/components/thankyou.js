@@ -16,7 +16,6 @@ import { nativeCallback } from 'utils/native_callback';
 import Input from '../../common/ui/Input';
 import MobileInputWithoutIcon from '../../common/ui/MobileInputWithoutIcon';
 import { validateEmail, validateNumber, numberShouldStartWith } from 'utils/validators';
-import { ToastContainer } from 'react-toastify';
 import toast from '../../common/ui/Toast';
 import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
@@ -251,7 +250,6 @@ class Thankyou extends Component {
           </div>
         </div>
         {this.renderDialog()}
-        <ToastContainer autoClose={3000} />
       </Container>
     );
   }

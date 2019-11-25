@@ -3,6 +3,7 @@ import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import contact from 'assets/address_details_icon.svg';
+import contact_myway from 'assets/address_details_icn.svg';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 
@@ -206,46 +207,53 @@ class AddEditAddress extends Component {
     this.sendEvents('next');
 
     if (can_submit) {
-      this.setState({ show_loader: true });
-      let addressline = {
-        "pincode": this.state.pincode,
-        "country": "india",
-        'addressline1': this.state.addressline1,
-        'addressline2': this.state.addressline2,
+      try {
+        this.setState({ show_loader: true });
+        let addressline = {
+          "pincode": this.state.pincode,
+          "country": "india",
+          'addressline1': this.state.addressline1,
+          'addressline2': this.state.addressline2,
 
-      };
+        };
 
-      if (this.state.address_present) {
-        addressline.address_id = this.state.address_id;
-      }
-
-      let res;
-      if (this.state.address_present) {
-        res = await Api.put('/api/mandate/campaign/address/' + this.state.params.key, addressline);
-      } else {
-        res = await Api.post('/api/mandate/campaign/address/' + this.state.params.key, addressline);
-      }
-
-      if (res.pfwresponse.status_code === 200) {
-        let address_id_send = res.pfwresponse.result.address_id;
-        // if (this.state.address_present) {
-        //   address_id_send = this.state.address_id;
-        // }
-
-        let res2 = await Api.get('/api/mandate/campaign/address/confirm/' + this.state.params.key +
-          '?address_id=' + address_id_send);
-        this.setState({ show_loader: false });
-        if (res2.pfwresponse.status_code === 200) {
-
-          this.navigate('success');
-        } else {
-          toast(res2.pfwresponse.result.error || "Something went wrong");
+        if (this.state.address_present) {
+          addressline.address_id = this.state.address_id;
         }
-      } else {
+
+        let res;
+        if (this.state.address_present) {
+          res = await Api.put('/api/mandate/campaign/address/' + this.state.params.key, addressline);
+        } else {
+          res = await Api.post('/api/mandate/campaign/address/' + this.state.params.key, addressline);
+        }
+
+        if (res.pfwresponse.status_code === 200) {
+          let address_id_send = res.pfwresponse.result.address_id;
+          // if (this.state.address_present) {
+          //   address_id_send = this.state.address_id;
+          // }
+
+          let res2 = await Api.get('/api/mandate/campaign/address/confirm/' + this.state.params.key +
+            '?address_id=' + address_id_send);
+          this.setState({ show_loader: false });
+          if (res2.pfwresponse.status_code === 200) {
+
+            this.navigate('success');
+          } else {
+            toast(res2.pfwresponse.result.error || "Something went wrong");
+          }
+        } else {
+          this.setState({
+            show_loader: false
+          });
+          toast(res.pfwresponse.result.error || "Something went wrong");
+        }
+      } catch (err) {
         this.setState({
           show_loader: false
         });
-        toast(res.pfwresponse.result.error || "Something went wrong");
+        toast("Something went wrong");
       }
     }
   }
@@ -272,7 +280,8 @@ class AddEditAddress extends Component {
       >
         {/* Permanent Address Block */}
         <FormControl fullWidth>
-          <TitleWithIcon width="16" icon={contact} title="Address Details" />
+          <TitleWithIcon width="16" icon={getConfig().productName !== 'fisdom' ? contact_myway : contact}
+           title="Address Details" />
           <div className="InputField">
             <Input
               error={(this.state.addressline1_error) ? true : false}

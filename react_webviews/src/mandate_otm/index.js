@@ -19,6 +19,7 @@ import Upload from './components/form_upload/upload';
 import UploadSuccess from './components/form_upload/upload_success';
 import SendEmail from './components/form_upload/send_email';
 import EmailSuccess from './components/form_upload/email_success';
+import { ToastContainer } from 'react-toastify';
 
 import { create } from 'jss';
 import JssProvider from 'react-jss/lib/JssProvider';
@@ -55,6 +56,7 @@ const Mandate_OTM = (props) => {
     <JssProvider jss={jss} generateClassName={generateClassName}>
       <MuiThemeProvider theme={theme}>
         <ScrollToTop />
+        <ToastContainer autoClose={3000} />
         <Switch>
           <Route exact path={`${url}`} component={RequestAbout} />
           <Route path={`${url}/form-request/about`} component={RequestAbout} />

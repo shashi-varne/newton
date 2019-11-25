@@ -6,7 +6,6 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { copyToClipboard } from 'utils/validators';
 import Api from 'utils/api';
-import { ToastContainer } from 'react-toastify';
 import toast from '../../../common/ui/Toast';
 
 import { banks_details } from '../../constants';
@@ -176,7 +175,6 @@ class BillerSteps extends Component {
 
           </div>}
         </div>}
-        <ToastContainer autoClose={3000} />
       </Container >
 
     );
