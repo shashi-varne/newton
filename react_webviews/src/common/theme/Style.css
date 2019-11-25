@@ -221,7 +221,7 @@ button.MuiButtonBase-root.MuiButton-root.MuiButton-raised.MuiButton-raisedSecond
   flex: 1;
 }
 
-.FooterTwoButtonLayout button.borderButton img {
+.FooterTwoButtonLayout button.borderButton svg {
   margin-right: 10px;
 }
 
