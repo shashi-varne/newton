@@ -198,7 +198,7 @@ class AdditionalInfo extends Component {
     this.props.history.push({
       pathname: pathname,
       search: '?insurance_id=' + this.state.params.insurance_id + '&base_url=' + this.state.params.base_url +
-        '&insurance_v2=' + this.state.params.insurance_v2 + '&resume=' + this.state.params.resume
+        '&insurance_v2=' + this.state.params.insurance_v2 
         + '&generic_callback=' + this.state.params.generic_callback,
       params: {
         disableBack: true

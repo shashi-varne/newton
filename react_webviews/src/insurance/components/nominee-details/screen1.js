@@ -247,7 +247,7 @@ class NomineeDetails extends Component {
   navigate = (pathname, disableBack) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams + '&resume=' + this.state.params.resume,
+      search: getConfig().searchParams ,
       params: {
         disableBack: disableBack
       }
@@ -396,11 +396,7 @@ class NomineeDetails extends Component {
             if (this.state.age < 18) {
               this.navigate('/insurance/edit-appointee');
             } else {
-              if (this.state.params.resume === "yes") {
-                this.navigate('/insurance/resume', true);
-              } else {
                 this.navigate('/insurance/summary', true);
-              }
             }
           } else {
             if (this.state.age < 18) {

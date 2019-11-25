@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
-
+import { getConfig } from 'utils/functions';
 import Container from '../../common/Container';
 import RadioOptions from '../../../common/ui/RadioOptions';
 import { nativeCallback } from 'utils/native_callback';
@@ -62,7 +62,7 @@ class QuestionScreen3 extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?base_url=' + this.state.params.base_url
+      search: getConfig().searchParams
     });
   }
 

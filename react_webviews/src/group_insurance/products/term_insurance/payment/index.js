@@ -10,6 +10,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import qs from 'qs';
 import { nativeCallback } from '../../../../utils/native_callback';
+import {getConfig} from 'utils/functions';
 
 class Payment extends Component {
   constructor(props) {
@@ -68,14 +69,12 @@ class Payment extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id=' + this.state.insurance_id + '&base_url=' + this.state.params.base_url +
-        '&generic_callback=' + this.state.params.generic_callback
+      search: getConfig().searchParamsMustAppend + '&insurance_id=' + this.state.insurance_id
     });
   }
 
   navigateResume = (pathname) => {
-    let search = '?insurance_id=' + this.state.insurance_id + '&resume=yes&base_url=' + this.state.params.base_url +
-      '&generic_callback=' + this.state.params.generic_callback;
+    let search = getConfig().searchParamsMustAppend + '&insurance_id=' + this.state.insurance_id;
     this.props.history.push({
       pathname: pathname,
       search: search,

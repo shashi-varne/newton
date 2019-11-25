@@ -158,7 +158,7 @@ class ProfessionalDetails1 extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams + '&resume=' + this.state.params.resume
+      search: getConfig().searchParams 
     });
   }
 
@@ -261,11 +261,7 @@ class ProfessionalDetails1 extends Component {
 
           this.setState({ show_loader: false });
           if (this.props.edit) {
-            if (this.state.params.resume === "yes") {
-              this.navigate('/insurance/resume');
-            } else {
               this.navigate('/insurance/summary');
-            }
           } else {
             this.navigate('/insurance/nominee');
           }

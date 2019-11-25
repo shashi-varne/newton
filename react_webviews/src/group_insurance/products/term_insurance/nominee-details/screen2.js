@@ -255,7 +255,7 @@ class AppointeeDetails extends Component {
   navigate = (pathname, disableBack) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams + '&resume=' + this.state.params.resume,
+      search: getConfig().searchParams ,
       params: {
         disableBack: disableBack
       }
@@ -331,11 +331,7 @@ class AppointeeDetails extends Component {
 
           this.setState({ show_loader: false });
           if (this.props.edit) {
-            if (this.state.params.resume === "yes") {
-              this.navigate('resume', true);
-            } else {
               this.navigate('summary', true);
-            }
           } else {
             if (this.state.provider === 'IPRU') {
               this.navigate('pincode');

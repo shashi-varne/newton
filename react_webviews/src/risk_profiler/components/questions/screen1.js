@@ -4,6 +4,7 @@ import qs from 'qs';
 
 import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
+import { getConfig } from 'utils/functions';
 import RadioOptions from '../../../common/ui/RadioOptions';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
@@ -100,7 +101,7 @@ class QuestionScreen1 extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?base_url=' + this.state.params.base_url
+      search: getConfig().searchParams
     });
   }
 

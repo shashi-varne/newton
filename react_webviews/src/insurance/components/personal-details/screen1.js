@@ -132,7 +132,7 @@ class PersonalDetails1 extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams + '&resume=' + this.state.params.resume
+      search: getConfig().searchParams 
     });
   }
 
@@ -265,11 +265,7 @@ class PersonalDetails1 extends Component {
             }
           } else {
             if (this.props.edit) {
-              if (this.state.params.resume === "yes") {
-                this.navigate('/insurance/resume');
-              } else {
                 this.navigate('/insurance/pincode');
-              }
             } else {
               if (this.state.params.isKyc) {
                 this.navigate('/insurance/professional');

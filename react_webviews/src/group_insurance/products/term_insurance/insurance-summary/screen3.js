@@ -532,13 +532,9 @@ class Journey extends Component {
   navigate = (pathname) => {
     let insurance_id = this.state.insurance_id || this.state.params.insurance_id;
 
-    let search = 'insurance_id=' + insurance_id + '&base_url=' + this.state.params.base_url +
-    '&insurance_v2=' + this.state.insurance_v2 + '&resume=yes&isKyc=' + this.state.isKyc + '&generic_callback=' +
-    this.state.params.generic_callback 
+    let search = getConfig().searchParamsMustAppend + '&insurance_id=' + insurance_id +
+     '&isKyc=' + this.state.isKyc
 
-    if (getConfig().isJourney) {
-      search+= '&isJourney=' + this.state.params.isJourney;
-    }
     this.props.history.push({
       pathname: pathname,
       search: search

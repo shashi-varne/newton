@@ -164,7 +164,7 @@ class Pincode extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams + '&resume=' + this.state.params.resume,
+      search: getConfig().searchParams ,
       params: {
         disableBack: true
       }
@@ -174,9 +174,7 @@ class Pincode extends Component {
   navigateNew = (pathname, insurance_id) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?insurance_id=' + insurance_id + '&base_url=' + this.state.params.base_url +
-        '&insurance_v2=' + this.state.params.insurance_v2 + '&resume=' + this.state.params.resume + '&generic_callback=' +
-        this.state.params.generic_callback,
+      search: getConfig().searchParamsMustAppend + '&insurance_id=' + insurance_id,
       params: {
         disableBack: true
       }

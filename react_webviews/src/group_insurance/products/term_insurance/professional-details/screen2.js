@@ -115,7 +115,7 @@ class ProfessionalDetails2 extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams + '&resume=' + this.state.params.resume
+      search: getConfig().searchParams 
     });
   }
 
@@ -220,11 +220,7 @@ class ProfessionalDetails2 extends Component {
 
           this.setState({ show_loader: false });
           if (this.props.edit) {
-            if (this.state.params.resume === "yes") {
-              this.navigate('resume');
-            } else {
-              this.navigate('summary');
-            }
+            this.navigate('summary');
           } else {
             this.navigate('nominee');
           }

@@ -277,7 +277,8 @@ function getPartnerConfig(partner_code) {
   };
 
 
-  if(partner_code) {
+  if(checkValidString(partner_code) && partner_code !== 'fisdom' && 
+  partner_code !== 'myway' && partner_code !== 'test') {
     let partnerData = partnersConfigBase[partner_code];
     config_to_return.partner_code = partner_code;
     for (var key in partnerKeysMapper) {
@@ -308,11 +309,7 @@ export const getConfig = () => {
   let { generic_callback } = main_query_params;
   generic_callback= "true"
   let { redirect_url } = main_query_params;
-  let searchParams = `?base_url=${base_url}&generic_callback=${generic_callback}`;
-  if(redirect_url) {
-    
-    searchParams += `&redirect_url=${redirect_url}`;
-  }
+  let { partner_code } = main_query_params;
 
   let project = 'insurance';
   let project_child = '';
@@ -340,19 +337,7 @@ export const getConfig = () => {
   } else if (myHistory.location.pathname.indexOf('referral') >= 0) {
     project = 'referral';
   }
-  let isInsurance = myHistory.location.pathname.indexOf('insurance') >= 0 ? true : false;
-  if (isInsurance) {
-
-    let insurance_v2 = generic_callback === "true" ? true : main_query_params.insurance_v2;;
-    let { insurance_id } = main_query_params;
-    let { isJourney } = main_query_params;
-    searchParams += '&insurance_id=' + insurance_id +
-      '&insurance_v2=' + insurance_v2;
-    if(checkValidString(isJourney)) {
-      searchParams += '&isJourney=' + isJourney;
-    }
-
-  }
+  
 
  
   let search = window.location.search;
@@ -362,10 +347,49 @@ export const getConfig = () => {
   let returnConfig = getPartnerConfig('bfdlmobile');
   
 
+  let searchParams = `?base_url=${base_url}`;
+  let searchParamsMustAppend = `?base_url=${base_url}`;
+
+  if(checkValidString(generic_callback)) {
+    returnConfig.generic_callback = generic_callback;
+    searchParams += `&generic_callback=${generic_callback}`;
+    searchParamsMustAppend += `&generic_callback=${generic_callback}`;
+  }
+
+  if(checkValidString(redirect_url)) {
+    returnConfig.redirect_url = redirect_url;
+    searchParams += `&redirect_url=${redirect_url}`;
+    searchParamsMustAppend += `&redirect_url=${redirect_url}`;
+  }
+
+  if(checkValidString(partner_code)) {
+    returnConfig.partner_code = partner_code;
+    searchParams += `&partner_code=${partner_code}`;
+    searchParamsMustAppend += `&partner_code=${partner_code}`;
+  }
+
+  if (project === 'insurance') {
+
+    let insurance_v2 = generic_callback === "true" ? true : main_query_params.insurance_v2;;
+    let { insurance_id } = main_query_params;
+    let { isJourney } = main_query_params;
+
+    searchParams += '&insurance_id=' + insurance_id +
+      '&insurance_v2=' + insurance_v2;
+    searchParamsMustAppend += '&insurance_v2=' + insurance_v2;
+
+    if(checkValidString(isJourney)) {
+      searchParams += '&isJourney=' + isJourney;
+      searchParamsMustAppend += '&isJourney=' + isJourney;
+    }
+
+    
+
+  }
+
   returnConfig.project = project;
-  returnConfig.redirect_url = redirect_url || '';
   returnConfig.project_child = project_child;
-  returnConfig.generic_callback = generic_callback;
+
   let { insurance_allweb } = main_query_params;
   if (insurance_allweb) {
     returnConfig.insurance_allweb = insurance_allweb;
@@ -395,6 +419,7 @@ export const getConfig = () => {
     let { html_camera } = main_query_params;
     searchParams += '&key=' + key + '&name=' + name
       + '&email=' + email + '&campaign_version=' + campaign_version;
+      
     // eslint-disable-next-line
     returnConfig.campaign_version = parseInt(campaign_version);
     returnConfig.html_camera = ((returnConfig.iOS || returnConfig.Web) && returnConfig.campaign_version) ? true : html_camera;
@@ -418,6 +443,7 @@ export const getConfig = () => {
 
 
   returnConfig.searchParams = searchParams;
+  returnConfig.searchParamsMustAppend = searchParamsMustAppend;
   return returnConfig;
 }
 
