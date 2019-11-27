@@ -281,7 +281,7 @@ class BasicDetailsForm extends Component {
     try {
 
       if (this.state.lead_id) {
-        let res = await Api.get('ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+        let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
 
         this.setState({
           show_loader: false
@@ -301,7 +301,7 @@ class BasicDetailsForm extends Component {
             || 'Something went wrong');
         }
       } else {
-        let res = await Api.get('ins_service/api/insurance/account/summary')
+        let res = await Api.get('api/ins_service/api/insurance/account/summary')
 
         this.setState({
           show_loader: false
@@ -474,9 +474,9 @@ class BasicDetailsForm extends Component {
         let res2 = {};
         if (this.state.lead_id) {
           final_data.lead_id = this.state.lead_id;
-          res2 = await Api.post('ins_service/api/insurance/bhartiaxa/lead/update', final_data)
+          res2 = await Api.post('api/ins_service/api/insurance/bhartiaxa/lead/update', final_data)
         } else {
-          res2 = await Api.post('ins_service/api/insurance/bhartiaxa/lead/create', final_data)
+          res2 = await Api.post('api/ins_service/api/insurance/bhartiaxa/lead/create', final_data)
         }
 
         this.setState({

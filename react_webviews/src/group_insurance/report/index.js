@@ -115,7 +115,7 @@ class Report extends Component {
 
     try {
 
-      let res = await Api.get('ins_service/api/insurance/get/report')
+      let res = await Api.get('api/ins_service/api/insurance/get/report')
 
       this.setState({
         show_loader: false

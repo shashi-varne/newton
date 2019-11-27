@@ -36,7 +36,7 @@ class PlanSummaryClass extends Component {
 
   async componentDidMount() {
     try {
-      let res = await Api.get('ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+      let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
       this.setState({
         show_loader: false
       });
@@ -98,7 +98,7 @@ class PlanSummaryClass extends Component {
         show_loader: true
       })
       let res2;
-      res2 = await Api.get('ins_service/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
+      res2 = await Api.get('api/ins_service/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
 
       
       if (res2.pfwresponse.status_code === 200) {

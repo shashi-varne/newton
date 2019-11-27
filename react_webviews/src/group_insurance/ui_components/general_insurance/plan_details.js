@@ -103,7 +103,7 @@ class PlanDetailsClass extends Component {
 
     try {
 
-      const resQuote = await Api.get('ins_service/api/insurance/bhartiaxa/get/quote?product_name=' +
+      const resQuote = await Api.get('api/ins_service/api/insurance/bhartiaxa/get/quote?product_name=' +
         this.props.parent.state.product_key)
 
       if (resQuote && resQuote.pfwresponse.status_code === 200) {
@@ -119,7 +119,7 @@ class PlanDetailsClass extends Component {
       }
 
       if (this.state.lead_id) {
-        let res = await Api.get('ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+        let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
 
        
         if (res.pfwresponse.status_code === 200) {
@@ -265,7 +265,7 @@ class PlanDetailsClass extends Component {
       let res2 = {};
       if (this.state.lead_id) {
         final_data.lead_id = this.state.lead_id;
-        res2 = await Api.post('ins_service/api/insurance/bhartiaxa/lead/update', final_data)
+        res2 = await Api.post('api/ins_service/api/insurance/bhartiaxa/lead/update', final_data)
        
 
         if (res2.pfwresponse.status_code === 200) {

@@ -87,7 +87,7 @@ class Landing extends Component {
   async componentDidMount() {
 
     try {
-      const res = await Api.get('/ins_service/api/insurance/application/summary')
+      const res = await Api.get('/api/ins_service/api/insurance/application/summary')
 
       this.setState({
         show_loader: false

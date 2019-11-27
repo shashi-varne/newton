@@ -54,7 +54,7 @@ class ReportDetails extends Component {
 
     try {
 
-      let res = await Api.get('ins_service/api/insurance/bhartiaxa/policy/get/' + this.state.policy_id)
+      let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/policy/get/' + this.state.policy_id)
 
       this.setState({
         show_loader: false
