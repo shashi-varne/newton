@@ -206,7 +206,8 @@ class GoldSummary extends Component {
         goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
         this.setState({
           goldSellInfo: result.sell_info,
-          goldInfo: goldInfo
+          goldInfo: goldInfo,
+          enableInputs: true
         });
       } else {
         this.setState({
@@ -654,7 +655,8 @@ class GoldSummary extends Component {
                   <div className="InputField">
                     <div className="input-above-text">In Rupees (₹)</div>
                     <div className="input-box">
-                      <input type="number" autoComplete="off" name="amount" placeholder="Amount" disabled={this.state.isWeight}
+                      <input type="number" autoComplete="off" name="amount" placeholder="Amount" disabled={!this.state.enableInputs || 
+                       this.state.isWeight}
                         onChange={this.setAmountGms()} value={this.state.amount} />
                     </div>
                     <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>Min {inrFormatDecimal(this.state.minAmount)}</div>
@@ -665,7 +667,8 @@ class GoldSummary extends Component {
                   <div className="InputField">
                     <div className="input-above-text">In Grams (gm)</div>
                     <div className="input-box">
-                      <input type="number" autoComplete="off" name="weight" placeholder="Weight" disabled={this.state.isAmount}
+                      <input type="number" autoComplete="off" name="weight" placeholder="Weight" disabled={!this.state.enableInputs || 
+                       this.state.isAmount}
                         onChange={this.setAmountGms()} value={this.state.weight} />
                     </div>
                     <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>Max {this.state.maxWeight} gm</div>
