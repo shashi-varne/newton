@@ -7,7 +7,7 @@ import { numDifferentiation } from '../../../utils/validators';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
-import { insuranceStateMapper } from '../../constants';
+import { insuranceStateMapper, insuranceProductTitleMapper } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 import instant_fisdom from 'assets/instant_fisdom.svg';
 import instant_myway from 'assets/instant_myway.svg';
@@ -29,11 +29,13 @@ class PlanSummaryClass extends Component {
   componentWillMount() {
 
     let instant_icon = this.state.type !== 'fisdom' ? instant_myway : instant_fisdom;
+    let product_title = insuranceProductTitleMapper[this.props.parent ? this.props.parent.state.product_key : ''];
     nativeCallback({ action: 'take_control_reset' });
     let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
     this.setState({
       lead_id: lead_id || '',
-      instant_icon: instant_icon
+      instant_icon: instant_icon,
+      product_title: product_title
     })
 
   }
@@ -193,7 +195,7 @@ class PlanSummaryClass extends Component {
         classOverRideContainer="plan-summary"
       >
         <div className="plan-summary-heading">
-          <div className="plan-summary-heading-text">{this.state.summaryData.product_title}</div>
+          <div className="plan-summary-heading-text">{this.state.product_title}</div>
           <img src={provider} alt="" />
         </div>
         <div className="plan-summary-mid">
