@@ -4,7 +4,8 @@ import { getConfig, setHeights } from 'utils/functions';
 import Header from './Header';
 import Footer from './footer';
 import Banner from '../../common/ui/Banner';
-import loader from 'assets/loader_gif.gif';
+import loader_fisdom from 'assets/loader_gif_fisdom.gif';
+import loader_myway from 'assets/loader_gif_myway.gif';
 import { nativeCallback } from 'utils/native_callback';
 import Button from 'material-ui/Button';
 import Dialog, {
@@ -24,7 +25,8 @@ class Container extends Component {
       openDialog: false,
       openPopup: false,
       popupText: '',
-      callbackType: ''
+      callbackType: '',
+      loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
     }
     this.historyGoBack = this.historyGoBack.bind(this);
   }
@@ -160,7 +162,7 @@ class Container extends Component {
       return (
         <div className="Loader">
           <div className="LoaderOverlay">
-            <img src={loader} alt="" />
+            <img src={this.state.loaderMain} alt="" />
           </div>
         </div>
       );

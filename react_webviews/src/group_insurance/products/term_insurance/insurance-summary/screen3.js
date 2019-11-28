@@ -9,7 +9,8 @@ import wait_icn from 'assets/not_done_yet_step.svg';
 import in_process_icn from 'assets/current_step.svg';
 import premium from 'assets/premium_icon.svg';
 import nominee from 'assets/personal_details_icon.svg';
-import loader from 'assets/loader_gif.gif';
+import loader_fisdom from 'assets/loader_gif_fisdom.gif';
+import loader_myway from 'assets/loader_gif_myway.gif';
 import Api from 'utils/api';
 import Modal from 'material-ui/Modal';
 import Typography from 'material-ui/Typography';
@@ -98,7 +99,8 @@ class Journey extends Component {
       apiError: '',
       params: qs.parse(props.history.location.search.slice(1)),
       type: getConfig().productName,
-      askEmail: getConfig().askEmail
+      askEmail: getConfig().askEmail,
+      loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
     }
     this.renderJourney = this.renderJourney.bind(this);
     this.handleClosePayment = this.handleClosePayment.bind(this);
@@ -751,7 +753,7 @@ class Journey extends Component {
       >
         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: '#fff', borderRadius: 4, minWidth: 320, padding: 25, textAlign: 'center' }}>
           <div style={{ padding: '20px 0 30px' }}>
-            <img src={loader} alt="" />
+            <img src={this.state.loaderMain} alt="" />
           </div>
           <Typography variant="subheading" id="simple-modal-description" style={{ color: '#444' }}>
             {this.state.openModalMessage}

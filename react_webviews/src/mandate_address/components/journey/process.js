@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import loader from 'assets/loader_gif.gif';
+import loader_fisdom from 'assets/loader_gif_fisdom.gif';
+import loader_myway from 'assets/loader_gif_myway.gif';
 import qs from 'qs';
 import Button from 'material-ui/Button';
 import Dialog, {
@@ -9,6 +10,7 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
+import { getConfig } from 'utils/functions';
 
 class MandateProcess extends Component {
   constructor(props) {
@@ -19,6 +21,7 @@ class MandateProcess extends Component {
       showLoader: true,
       address_present: false,
       params: qs.parse(props.history.location.search.slice(1)),
+      loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
     }
     this.handleClose = this.handleClose.bind(this);
   }
@@ -128,7 +131,7 @@ class MandateProcess extends Component {
       return (
         <div className="Loader">
           <div className="LoaderOverlay">
-            <img src={loader} alt="" />
+            <img src={this.state.loaderMain} alt="" />
           </div>
         </div>
       );

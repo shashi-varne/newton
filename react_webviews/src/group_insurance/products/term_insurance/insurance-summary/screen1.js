@@ -8,7 +8,8 @@ import income from 'assets/income_icon.png';
 import smoking from 'assets/smoking_icon.png';
 import expand from 'assets/expand_icn.png';
 import shrink from 'assets/shrink_icn.png';
-import loader from 'assets/loader_gif.gif';
+import loader_fisdom from 'assets/loader_gif_fisdom.gif';
+import loader_myway from 'assets/loader_gif_myway.gif';
 import Api from 'utils/api';
 import Modal from 'material-ui/Modal';
 import Typography from 'material-ui/Typography';
@@ -57,7 +58,8 @@ class Summary extends Component {
       openDialog: false,
       accordianTab: 'benefits',
       params: qs.parse(props.history.location.search.slice(1)),
-      time_spent: 0
+      time_spent: 0,
+      loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
     }
     this.handleClosePayment = this.handleClosePayment.bind(this);
   }
@@ -451,7 +453,7 @@ class Summary extends Component {
       >
         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: '#fff', borderRadius: 4, minWidth: 320, padding: 25, textAlign: 'center' }}>
           <div style={{ padding: '20px 0 30px' }}>
-            <img src={loader} alt="" />
+            <img src={this.state.loaderMain} alt="" />
           </div>
           <Typography variant="subheading" id="simple-modal-description" style={{ color: '#444' }}>
             Wait a moment, you will be redirected to <b>{this.state.quote_provider}</b>.

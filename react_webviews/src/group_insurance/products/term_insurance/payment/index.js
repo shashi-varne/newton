@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import loader from 'assets/loader_gif.gif';
+import loader_fisdom from 'assets/loader_gif_fisdom.gif';
+import loader_myway from 'assets/loader_gif_myway.gif';
 import Modal from 'material-ui/Modal';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
@@ -18,6 +19,7 @@ class Payment extends Component {
     this.state = {
       openDialog: true,
       params: qs.parse(props.history.location.search.slice(1)),
+      loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
     };
   }
 
@@ -38,7 +40,7 @@ class Payment extends Component {
       return (
         <div className="Loader">
           <div className="LoaderOverlay">
-            <img src={loader} alt="" />
+            <img src={this.state.loaderMain} alt="" />
           </div>
         </div>
       );
@@ -56,7 +58,7 @@ class Payment extends Component {
       >
         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: '#fff', borderRadius: 4, minWidth: 320, padding: 25, textAlign: 'center' }}>
           <div style={{ padding: '20px 0 30px' }}>
-            <img src={loader} alt="" />
+            <img src={this.state.loaderMain} alt="" />
           </div>
           <Typography variant="subheading" id="simple-modal-description" style={{ color: '#444' }}>
             Wait a moment, you will be redirected to <b>{this.state.quote_provider}</b> for the payment.

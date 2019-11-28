@@ -9,7 +9,8 @@ import meter3 from 'assets/meter3.svg';
 import meter4 from 'assets/meter4.svg';
 import meter5 from 'assets/meter5.svg';
 import { nativeCallback } from 'utils/native_callback';
-import loader from 'assets/loader_gif.gif';
+import loader_fisdom from 'assets/loader_gif_fisdom.gif';
+import loader_myway from 'assets/loader_gif_myway.gif';
 import Api from 'utils/api';
 import Button from 'material-ui/Button';
 import Dialog, {
@@ -26,6 +27,7 @@ class Result extends Component {
       show_loader: true,
       openDialogReset: false,
       params: qs.parse(props.history.location.search.slice(1)),
+      loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
     }
   }
 
@@ -202,7 +204,7 @@ class Result extends Component {
       return (
         <div className="Loader">
           <div className="LoaderOverlay">
-            <img src={loader} alt="" />
+            <img src={this.state.loaderMain} alt="" />
           </div>
         </div>
       );
