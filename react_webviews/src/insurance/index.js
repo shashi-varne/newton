@@ -11,7 +11,7 @@ import { ToastContainer } from 'react-toastify';
 
 import './common/Style.css';
 import './components/Style.css';
-import NotFound from '../common/components/NotFound';
+// import NotFound from '../common/components/NotFound';
 
 import AppUpdateInfo from './components/app_update.js';
 
@@ -110,7 +110,7 @@ const Insurance = (props) => {
         <ToastContainer autoClose={3000} />
         <Switch>
           <Route exact path={`${url}`} component={AppUpdateInfo} />
-          <Route component={NotFound} />
+          <Route component={AppUpdateInfo} />
         </Switch>
       </MuiThemeProvider>
     </JssProvider>
