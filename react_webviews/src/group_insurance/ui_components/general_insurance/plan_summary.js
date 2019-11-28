@@ -19,7 +19,8 @@ class PlanSummaryClass extends Component {
       checked: false,
       show_loader: true,
       parent: this.props.parent,
-      summaryData: {}
+      summaryData: {},
+      type: getConfig().productName
     };
 
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
