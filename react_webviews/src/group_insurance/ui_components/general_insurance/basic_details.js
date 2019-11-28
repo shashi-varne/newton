@@ -36,7 +36,8 @@ class BasicDetailsForm extends Component {
     };
 
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
-    this.nomineeRef = React.createRef()
+    this.nomineeRef = React.createRef();
+    this.handleNomineeScroll = this.handleNomineeScroll.bind(this);
 
   }
 
@@ -87,7 +88,6 @@ class BasicDetailsForm extends Component {
             onChange={this.handleChange('nominee_name')} />
         </div>
         <div id="nomineeScroll" ref={this.nomineeRef} className="InputField">
-          {this.handleNomineeScroll(this.state.checked)}
           <DropdownWithoutIcon
             width="40"
             options={this.state.relationshipOptions}
@@ -166,6 +166,7 @@ class BasicDetailsForm extends Component {
       this.setState({
         [name]: event.target.checked
       })
+      this.handleNomineeScroll(event.target.checked);
     } else if (name === 'mobile_no') {
       if (value.length <= 10) {
         basic_details_data[name] = value;
