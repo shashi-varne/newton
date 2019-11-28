@@ -50,8 +50,8 @@ class Landing extends Component {
 
     let insuranceProducts = [
       // {
-      //   key: 'PERSONAL_ACCIDENT',
-      //   title: 'Personal accident',
+      //   key: 'HEALTH',
+      //   title: 'Health insurance',
       //   subtitle: 'Starts from ₹ 200 annually',
       //   icon: health_icon
       // },
@@ -67,12 +67,12 @@ class Landing extends Component {
         subtitle: 'Starts from ₹ 133/year',
         icon: hospicash
       },
-      {
-        key: 'SMART_WALLET',
-        title: 'Smart wallet',
-        subtitle: 'Starts from ₹ 250/year',
-        icon: wallet_icon
-      },
+      // {
+      //   key: 'SMART_WALLET',
+      //   title: 'Smart wallet',
+      //   subtitle: 'Starts from ₹ 250/year',
+      //   icon: wallet_icon
+      // },
       {
         key: 'TERM_INSURANCE',
         title: 'Term insurance',
