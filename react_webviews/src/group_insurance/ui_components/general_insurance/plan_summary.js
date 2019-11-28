@@ -9,6 +9,8 @@ import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { insuranceStateMapper } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
+import instant_fisdom from 'assets/instant_fisdom.svg';
+import instant_myway from 'assets/instant_myway.svg';
 
 class PlanSummaryClass extends Component {
   constructor(props) {
@@ -26,10 +28,12 @@ class PlanSummaryClass extends Component {
 
   componentWillMount() {
 
+    let instant_icon = this.state.type !== 'fisdom' ? instant_myway : instant_fisdom;
     nativeCallback({ action: 'take_control_reset' });
     let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
     this.setState({
-      lead_id: lead_id || ''
+      lead_id: lead_id || '',
+      instant_icon: instant_icon
     })
 
   }
@@ -195,7 +199,9 @@ class PlanSummaryClass extends Component {
         <div className="plan-summary-mid">
           <div className="plan-summary-mid1">
             <div className="plan-summary-mid11">Cover amount</div>
-            <div className="plan-summary-mid12">{numDifferentiation(String(this.state.summaryData.cover_amount || 0))}</div>
+            <div className="plan-summary-mid12">{numDifferentiation(String(this.state.summaryData.cover_amount || 0))}
+            {this.props.parent.state.product_key === 'HOSPICASH' && <span>/day</span>}
+            </div>
           </div>
           <div className="plan-summary-mid1">
             <div className="plan-summary-mid11">Cover period</div>
@@ -217,7 +223,7 @@ class PlanSummaryClass extends Component {
             <div className="plan-summary-premium-list2">₹{this.state.summaryData.base_premium}</div>
           </div>
           <div className="plan-summary-premium-list">
-            <div className="plan-summary-premium-list1">GST & taxes</div>
+            <div className="plan-summary-premium-list1">GST</div>
             <div className="plan-summary-premium-list2">₹{this.state.summaryData.tax_amount}</div>
           </div>
           <div className="divider"></div>
@@ -225,6 +231,13 @@ class PlanSummaryClass extends Component {
             <div className="plan-summary-premium-list1 plan-summary-premium-font">Total payable</div>
             <div className="plan-summary-premium-list2 plan-summary-premium-amount">₹ {this.state.summaryData.premium}</div>
           </div>
+        </div>
+        <div style={{display: 'flex',justifyContent: 'center',margin: '10px 0 0 0'}}>
+        <div style={{ marginTop: '10px', fontSize: '14px', lineHeight: '24px', color: '#4a4a4a',
+        display: 'flex' }}>
+            <img style={{margin: '0px 5px 0 0'}} src={this.state.instant_icon} alt="" />
+            Instant policy issuance
+            </div>
         </div>
       </Container>
     );

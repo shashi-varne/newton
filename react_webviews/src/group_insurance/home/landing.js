@@ -15,6 +15,9 @@ import term_fisdom from 'assets/ic_term_insurance_fisdom.svg';
 import term_myway from 'assets/ic_term_insurance_myway.svg';
 // import resume_tag from 'assets/resume_tag.png';
 
+import instant_fisdom from 'assets/instant_fisdom.svg';
+import instant_myway from 'assets/instant_myway.svg';
+
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
@@ -47,6 +50,7 @@ class Landing extends Component {
     let accident_icon = this.state.type !== 'fisdom' ? accident_myway : accident_fisdom;
     // let wallet_icon = this.state.type !== 'fisdom' ? wallet_myway : wallet_fisdom;
     let term_icon = this.state.type !== 'fisdom' ? term_myway : term_fisdom;
+    let instant_icon = this.state.type !== 'fisdom' ? instant_myway : instant_fisdom;
 
     let insuranceProducts = [
       // {
@@ -83,7 +87,8 @@ class Landing extends Component {
 
     this.setState({
       insuranceProducts: insuranceProducts,
-      insurance: insurance
+      insurance: insurance,
+      instant_icon: instant_icon
     })
   }
 
@@ -323,8 +328,12 @@ class Landing extends Component {
             <h1 style={{ fontSize: '16px', lineHeight: '24px', color: '#160d2e', margin: 0, fontWeight: '500' }}>Insurance is a priority, <br></br> not an option.</h1>
             <img src={this.state.insurance} alt="" />
           </div>
-          <div style={{ marginTop: '10px', fontSize: '14px', lineHeight: '24px', color: '#4a4a4a' }}>Get insured with ease</div>
-          <div style={{ marginTop: '20px', color: '#4a4a4a', fontSize: '10px', lineHeight: '24px', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '2px' }}>Instant | No medical | Zero paperwork</div>
+          <div style={{ marginTop: '10px', fontSize: '14px', lineHeight: '24px', color: '#4a4a4a',
+        display: 'flex' }}>
+            <img style={{margin: '0px 5px 0 0'}} src={this.state.instant_icon} alt="" />
+            Instant policy issuance
+            </div>
+          <div style={{ marginTop: '20px', color: '#4a4a4a', fontSize: '10px', lineHeight: '24px', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '2px' }}>Claim assitance | No medical | Zero paperwork</div>
           <div className='products' style={{ marginTop: '50px' }}>
             <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '20px' }}>Get started</h1>
             <div>

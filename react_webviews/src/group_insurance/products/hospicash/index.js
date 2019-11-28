@@ -53,7 +53,7 @@ class HospicashPlanDetails extends Component {
 
     var plan_data = {
       'product_name': 'Hospicash',
-      'product_tag_line': 'Reimburse your hospital expenses for any type of hospitalization.',
+      'product_tag_line': 'Cover your expenses for any type of hospitalization.',
       'key': 'HOSPICASH',
       'logo': '',
       'premium_details': [

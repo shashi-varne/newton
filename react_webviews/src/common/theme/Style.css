@@ -408,3 +408,6 @@ input#pan {
   overflow-y: hidden;
   position: fixed;
 }
+.highlight_color_info {
+  background: var(--highlight_color_info);
+}

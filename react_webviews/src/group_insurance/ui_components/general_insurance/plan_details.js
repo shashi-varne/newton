@@ -8,6 +8,9 @@ import ic_claim_assist_myway from 'assets/ic_claim_assist_myway.svg';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 
+import instant_fisdom from 'assets/instant_fisdom.svg';
+import instant_myway from 'assets/instant_myway.svg';
+
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
@@ -62,10 +65,11 @@ class PlanDetailsClass extends Component {
   }
 
   componentWillMount() {
-
+    let instant_icon = this.state.type !== 'fisdom' ? instant_myway : instant_fisdom;
     let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
     this.setState({
-      lead_id: lead_id || ''
+      lead_id: lead_id || '',
+      instant_icon: instant_icon
     })
 
   }
@@ -189,7 +193,9 @@ class PlanDetailsClass extends Component {
         <img className="plan-details-icon" src={props.icon} alt="" />
         <div>
           <div className="plan-details-text">{props.disc}</div>
-          {props.disc2 &&<div style={{color: '#6F6F6F', margin:'7px 0 0 0', fontSize:10}}>
+          {((props.isDisabled && props.disc2) || 
+          (this.props.parent.state.product_key === 'HOSPICASH' && props.disc2)) 
+          &&<div style={{color: '#6F6F6F', margin:'7px 0 0 0', fontSize:10}}>
              {props.disc2}</div>}
         </div>
       </div>
@@ -213,7 +219,9 @@ class PlanDetailsClass extends Component {
         className={`accident-plan-item`}
         onClick={() => this.selectPlan(index)}>
         <div className="accident-plan-item1">Cover amount</div>
-        <div className="accident-plan-item2">{inrFormatDecimal(props.sum_assured)}</div>
+        <div className="accident-plan-item2">{inrFormatDecimal(props.sum_assured)}
+        {this.props.parent.state.product_key === 'HOSPICASH' && <span>/day</span>}
+        </div>
         <div className="accident-plan-item3">
           <span className="accident-plan-item4">in</span>
           <span className="accident-plan-item-color" style={{color: getConfig().primary,fontWeight:'bold'}}>₹ {props.premium}/year</span></div>
@@ -330,7 +338,14 @@ class PlanDetailsClass extends Component {
           </div>
         </div>
         <div className="accident-plans">
-          <div className="accident-plan-heading-title">Select a plan</div>
+          <div style={{display: 'flex',justifyContent: 'flex-end', margin:' 0 0px 0 0'}}>
+            <div style={{fontSize: '14px', lineHeight: '24px', color: '#4a4a4a',
+                display: 'flex',width: 'fit-content', background: '#ede9f5',padding: '0px 10px 0 10px' }}>
+              <img style={{margin: '0px 5px 0 0'}} src={this.state.instant_icon} alt="" />
+              instant policy issuance
+              </div>
+          </div>
+          <div style={{paddingTop: 20}} className="accident-plan-heading-title">Select a plan</div>
           <div className="accident-plan-list-container">
             <div className="accident-plan-list">
               {this.props.parent && this.props.parent.state.plan_data &&
@@ -379,7 +394,7 @@ class PlanDetailsClass extends Component {
                 className="Checkbox" />
             </Grid>
             <Grid item xs={11}>
-              <div className="accident-plan-terms-text" style={{}}>I accept the <span onClick={() => this.openInBrowser(this.state.quoteData.terms_and_conditions, 'terms_and_conditions')} className="accident-plan-terms-bold" style={styles.color}>Terms and condition</span></div>
+              <div className="accident-plan-terms-text" style={{}}>I accept <span onClick={() => this.openInBrowser(this.state.quoteData.terms_and_conditions, 'terms_and_conditions')} className="accident-plan-terms-bold" style={styles.color}>Terms and conditions</span></div>
             </Grid>
           </Grid>
         </div>

@@ -66,6 +66,7 @@ class AccidentPlanDetails extends Component {
       },
       {
         'disc': 'Dependent child education benefit',
+        'disc2': '(Select higher plans to get this benefit)',
         'key': 'child_education',
         'icon': this.state.ic_pa_b6
       },
@@ -76,16 +77,19 @@ class AccidentPlanDetails extends Component {
       // },
       {
         'disc': 'Allowances for ambulance & legal expenses',
+        'disc2': '(Select higher plans to get this benefit)',
         'key': 'last_rites',
         'icon': this.state.ic_pa_b4
       },
       {
         'disc': 'Allowances for purchase of blood',
+        'disc2': '(Select higher plans to get this benefit)',
         'key': 'blood_allowence',
         'icon': this.state.ic_pa_b5
       },
       {
         'disc': 'Transportation of imported medicine',
+        'disc2': '(Select higher plans to get this benefit)',
         'key': 'imported_medicine',
         'icon': this.state.ic_pa_b7
       }

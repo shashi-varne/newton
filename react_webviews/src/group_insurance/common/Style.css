@@ -262,7 +262,7 @@
 }
 .accident-plans {
   background: #f4f3f6;
-  padding-top: 20px;
+  /* padding-top: 20px; */
 }
 .accident-plan-list-container {
   overflow-x: auto;

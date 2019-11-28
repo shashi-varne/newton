@@ -3,14 +3,15 @@ import Container from '../../common/Container';
 import Input from '../../../common/ui/Input';
 import MobileInputWithoutIcon from '../../../common/ui/MobileInputWithoutIcon';
 import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
-import { genderOptions, insuranceMaritalStatus, relationshipOptionsGroupInsuranceAll } from '../../constants';
+import { genderOptions, insuranceMaritalStatus, relationshipOptionsGroupInsuranceAll,
+  insuranceProductTitleMapper } from '../../constants';
 import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
-import scrollIntoView from 'scroll-into-view-if-needed'
+import scrollIntoView from 'scroll-into-view-if-needed';
 
 import {
   isValidDate, validateAlphabets,
@@ -558,12 +559,12 @@ class BasicDetailsForm extends Component {
         onlyButton={true}
         showLoader={this.state.show_loader}
         handleClick={() => this.handleClickCurrent()}
-        title="Basic Details"
+        title={insuranceProductTitleMapper[this.props.parent ? this.props.parent.state.product_key : '']}
         classOverRideContainer="basic-details">
         <div>
           <div>
-            <div className="basic-details-heading">Basics Details</div>
-            <div className="basic-details-subtitle">We only need your basic detail for verification</div>
+            <div className="basic-details-heading">Your details</div>
+            <div className="basic-details-subtitle">It's necessary for policy issuance</div>
           </div>
           <div style={{ marginTop: '40px' }}>
             <div className="InputField">
