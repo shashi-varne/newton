@@ -90,8 +90,9 @@ export const themeConfig = {
                 color: '#fff'
             },
             disabled: {
-                opacity: 0.4,
-                color: '#fff !important'
+                // opacity: 0.4,
+                color: '#fff !important',
+                backgroundColor: '#b4ebc3 !important'
             },
             label: {
                 textTransform: 'capitalize'

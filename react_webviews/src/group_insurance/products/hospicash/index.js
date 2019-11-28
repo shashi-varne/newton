@@ -16,11 +16,11 @@ class HospicashPlanDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedIndex: 1,
+      selectedIndex: 0,
       checked: false,
       show_loader:true,
       plan_data: {},
-      recommendedInedx: 1,
+      recommendedInedx: 0,
       product_key: 'HOSPICASH',
       type: getConfig().productName,
       ic_hospicash_b1: getConfig().productName !== 'fisdom' ? ic_hospicash_b1_myway : ic_hospicash_b1_fisdom,
@@ -45,7 +45,7 @@ class HospicashPlanDetails extends Component {
         'icon': this.state.ic_hospicash_b1
       },
       {
-        'disc': 'No medical examination required.',
+        'disc': 'Claim against discharge summary, no questions asked.',
         'key' : 'no_medical_examination',
         'icon': this.state.ic_hospicash_b2
       }
@@ -53,15 +53,15 @@ class HospicashPlanDetails extends Component {
 
     var plan_data = {
       'product_name': 'Hospicash',
-      'product_tag_line': 'Cover your daily hospital cash expenses.',
+      'product_tag_line': 'Reimburse your hospital expenses for any type of hospitalization.',
       'key': 'HOSPICASH',
       'logo': '',
       'premium_details': [
         {
-          "sum_assured": 500,
+          "sum_assured": 5000,
           "product_benefits_included": ['daily_cash','no_medical_examination'],
-          "premium": "133",
-          "tax_amount": "23.94",
+          "premium": "2500",
+          "tax_amount": "450",
           "plus_benefit": ''
         },
         {
@@ -72,10 +72,10 @@ class HospicashPlanDetails extends Component {
           "plus_benefit": ''
         },
         {
-          "sum_assured": 5000,
+          "sum_assured": 500,
           "product_benefits_included": ['daily_cash','no_medical_examination'],
-          "premium": "2500",
-          "tax_amount": "450",
+          "premium": "133",
+          "tax_amount": "23.94",
           "plus_benefit": ''
         }
       ]

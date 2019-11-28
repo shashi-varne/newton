@@ -16,11 +16,11 @@ class SmartwalletPlanDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedIndex: 1,
+      selectedIndex: 0,
       checked: false,
       show_loader:true,
       plan_data: {},
-      recommendedInedx: 1,
+      recommendedInedx: 0,
       product_key: 'SMART_WALLET',
       type: getConfig().productName,
       ic_wallet_b1: getConfig().productName !== 'fisdom' ? ic_wallet_b1_myway : ic_wallet_b1_fisdom,
@@ -45,12 +45,12 @@ class SmartwalletPlanDetails extends Component {
         'icon': this.state.ic_wallet_b1
       },
       {
-        'disc': 'Lost Card liability & assistance for blocking of cards',
+        'disc': '24x7 one call assistance to block your cards',
         'key' : 'lost_card',
         'icon': this.state.ic_wallet_b2
       },
       {
-        'disc': 'Insures mobile wallet apps from unauthorized transactions',
+        'disc': 'Insure mobile wallets from unauthorized transactions, skimming or phishing',
         'key' : 'mobile_wallet',
         'icon': this.state.ic_wallet_b3
       }
@@ -58,16 +58,16 @@ class SmartwalletPlanDetails extends Component {
 
     var plan_data = {
       'product_name': 'Smart wallet',
-      'product_tag_line': 'Protect all your bank cards and mobile wallets against frauds and misuse',
+      'product_tag_line': 'Protect all your bank cards and mobile wallets against fraud and misuse',
       'key': 'SMART_WALLET',
       'logo': '',
       'premium_details': [
         {
-          "sum_assured": 40000,
+          "sum_assured": 150000,
           "product_benefits_included": ['unauthorized_protection', 'lost_card', 
           'mobile_wallet'],
-          "premium": "250",
-          "tax_amount": "45",
+          "premium": "999",
+          "tax_amount": "179.82",
           "plus_benefit": ''
         },
         {
@@ -79,11 +79,11 @@ class SmartwalletPlanDetails extends Component {
           "plus_benefit": ''
         },
         {
-          "sum_assured": 150000,
+          "sum_assured": 40000,
           "product_benefits_included": ['unauthorized_protection', 'lost_card', 
           'mobile_wallet'],
-          "premium": "999",
-          "tax_amount": "179.82",
+          "premium": "250",
+          "tax_amount": "45",
           "plus_benefit": ''
         }
       ]

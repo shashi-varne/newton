@@ -455,9 +455,9 @@ export const insuranceStateMapper = {
 
 export const insuranceProductTitleMapper = {
   'HEALTH': 'Health',
-  'SMART_WALLET': 'Smart Wallet',
-  'PERSONAL_ACCIDENT': 'Personal Accident',
-  'HOSPICASH': 'Hospicash',
+  'SMART_WALLET': 'Smart wallet',
+  'PERSONAL_ACCIDENT': 'Personal accident insurance',
+  'HOSPICASH': 'Hospital daily cash',
   'term_insurance': 'Term Insurance'
 }
 

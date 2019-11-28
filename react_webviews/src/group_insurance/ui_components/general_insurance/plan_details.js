@@ -19,19 +19,19 @@ import {
 
 const coverAmountMapper = {
   'PERSONAL_ACCIDENT': {
-    200000: 0,
+    1000000: 0,
     500000: 1,
-    1000000: 2
+    200000: 2,
   },
   'HOSPICASH': {
-    500: 0,
+    500: 2,
     1500: 1,
-    5000: 2
+    5000: 0
   },
   'SMART_WALLET': {
-    40000: 0,
+    40000: 2,
     100000: 1,
-    150000: 2
+    150000: 0
   }
 }
 
@@ -42,7 +42,7 @@ class PlanDetailsClass extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedIndex: 1,
+      selectedIndex: 0,
       checked: true,
       show_loader: true,
       parent: this.props.parent || {
@@ -218,7 +218,7 @@ class PlanDetailsClass extends Component {
           <span className="accident-plan-item4">in</span>
           <span className="accident-plan-item-color" style={{color: getConfig().primary,fontWeight:'bold'}}>₹ {props.premium}/year</span></div>
         {props.plus_benefit &&
-          <div className="accident-plan-benefit" style={styles.color}>+2 Benefits</div>
+          <div className="accident-plan-benefit" style={styles.color}>+{props.plus_benefit} Benefits</div>
         }
         {this.state.parent.state.recommendedInedx === index &&
           <div className="recommended">RECOMMENDED</div>

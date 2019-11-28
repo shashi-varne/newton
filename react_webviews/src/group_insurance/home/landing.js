@@ -57,20 +57,20 @@ class Landing extends Component {
       // },
       {
         key: 'PERSONAL_ACCIDENT',
-        title: 'Personal accident',
-        subtitle: 'Starts from ₹ 200 annually',
+        title: 'Personal accident insurance',
+        subtitle: 'Starts from ₹ 200/year',
         icon: accident_icon
       },
       {
         key: 'HOSPICASH',
-        title: 'Hospicash',
-        subtitle: 'Starts from ₹ 133 annually',
+        title: 'Hospital daily cash',
+        subtitle: 'Starts from ₹ 133/year',
         icon: hospicash
       },
       {
         key: 'SMART_WALLET',
         title: 'Smart wallet',
-        subtitle: 'Starts from ₹ 250 annually',
+        subtitle: 'Starts from ₹ 250/year',
         icon: wallet_icon
       },
       {

@@ -8,21 +8,26 @@ import ic_pa_b2_fisdom from 'assets/ic_pa_b2_fisdom.svg';
 import ic_pa_b3_fisdom from 'assets/ic_pa_b3_fisdom.svg';
 import ic_pa_b4_fisdom from 'assets/ic_pa_b4_fisdom.svg';
 import ic_pa_b5_fisdom from 'assets/ic_pa_b5_fisdom.svg';
+import ic_pa_b6_fisdom from 'assets/ic_pa_b6_fisdom.svg';
+import ic_pa_b7_fisdom from 'assets/ic_pa_b7_fisdom.svg';
+
 import ic_pa_b1_myway from 'assets/ic_pa_b1_myway.svg';
 import ic_pa_b2_myway from 'assets/ic_pa_b2_myway.svg';
 import ic_pa_b3_myway from 'assets/ic_pa_b3_myway.svg';
 import ic_pa_b4_myway from 'assets/ic_pa_b4_myway.svg';
 import ic_pa_b5_myway from 'assets/ic_pa_b5_myway.svg';
+import ic_pa_b6_myway from 'assets/ic_pa_b6_myway.svg';
+import ic_pa_b7_myway from 'assets/ic_pa_b7_myway.svg';
 
 class AccidentPlanDetails extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      selectedIndex: 1,
+      selectedIndex: 0,
       checked: false,
       plan_data: {},
-      recommendedInedx: 1,
+      recommendedInedx: 0,
       product_key: 'PERSONAL_ACCIDENT',
       type: getConfig().productName,
       ic_pa_b1: getConfig().productName !== 'fisdom' ? ic_pa_b1_myway : ic_pa_b1_fisdom,
@@ -30,6 +35,8 @@ class AccidentPlanDetails extends Component {
       ic_pa_b3: getConfig().productName !== 'fisdom' ? ic_pa_b3_myway : ic_pa_b3_fisdom,
       ic_pa_b4: getConfig().productName !== 'fisdom' ? ic_pa_b4_myway : ic_pa_b4_fisdom,
       ic_pa_b5: getConfig().productName !== 'fisdom' ? ic_pa_b5_myway : ic_pa_b5_fisdom,
+      ic_pa_b6: getConfig().productName !== 'fisdom' ? ic_pa_b6_myway : ic_pa_b6_fisdom,
+      ic_pa_b7: getConfig().productName !== 'fisdom' ? ic_pa_b7_myway : ic_pa_b7_fisdom,
     }
   }
 
@@ -48,22 +55,27 @@ class AccidentPlanDetails extends Component {
 
     var product_benefits = [
       {
-        'disc': 'Lumpsum payout to your family in case of Accidental Death',
+        'disc': 'Lumpsum payout to your family in case of accidental death',
         'key': 'lumpsum_payout',
         'icon': this.state.ic_pa_b1
       },
       {
-        'disc': 'Coverage against Permanent Total or Partial Disablement',
+        'disc': 'Lumpsum payout for partial & total disability',
         'key': 'disablement_coverage',
         'icon': this.state.ic_pa_b2
       },
       {
-        'disc': 'Protection against accidental burns',
-        'key': 'accidental_burns_protection',
-        'icon': this.state.ic_pa_b3
+        'disc': 'Dependent Child Education Benefit',
+        'key': 'child_education',
+        'icon': this.state.ic_pa_b6
       },
+      // {
+      //   'disc': 'Protection against accidental burns',
+      //   'key': 'accidental_burns_protection',
+      //   'icon': this.state.ic_pa_b3
+      // },
       {
-        'disc': 'Allowances for ambulance and last rites',
+        'disc': 'Allowances for ambulance & legal expenses',
         'key': 'last_rites',
         'icon': this.state.ic_pa_b4
       },
@@ -71,6 +83,11 @@ class AccidentPlanDetails extends Component {
         'disc': 'Allowances for purchase of blood',
         'key': 'blood_allowence',
         'icon': this.state.ic_pa_b5
+      },
+      {
+        'disc': 'Transportation of imported medicine',
+        'key': 'imported_medicine',
+        'icon': this.state.ic_pa_b7
       }
     ]
 
@@ -81,28 +98,27 @@ class AccidentPlanDetails extends Component {
       'logo': '',
       'premium_details': [
         {
-          "sum_assured": 200000,
-          "product_benefits_included": ['lumpsum_payout', 'disablement_coverage',
-            'accidental_burns_protection'],
-          "premium": "200",
-          "tax_amount": "36",
-          "plus_benefit": ''
+          "sum_assured": 1000000,
+          "product_benefits_included": ['lumpsum_payout', 'disablement_coverage', 
+          'last_rites', 'blood_allowence', 'child_education', 'imported_medicine'],
+          "premium": "1200",
+          "tax_amount": "216",
+          "plus_benefit": '4'
         },
         {
           "sum_assured": 500000,
           "product_benefits_included": ['lumpsum_payout', 'disablement_coverage', 
-          'accidental_burns_protection', 'last_rites', 'blood_allowence'],
+          'last_rites', 'blood_allowence', 'child_education', 'imported_medicine'],
           "premium": "700",
           "tax_amount": "126",
-          "plus_benefit": '2'
+          "plus_benefit": '4'
         },
         {
-          "sum_assured": 1000000,
-          "product_benefits_included": ['lumpsum_payout', 'disablement_coverage', 
-          'accidental_burns_protection', 'last_rites', 'blood_allowence'],
-          "premium": "1200",
-          "tax_amount": "216",
-          "plus_benefit": '2'
+          "sum_assured": 200000,
+          "product_benefits_included": ['lumpsum_payout', 'disablement_coverage'],
+          "premium": "200",
+          "tax_amount": "36",
+          "plus_benefit": ''
         }
       ]
     }
