@@ -11,7 +11,7 @@ import Dialog, {
   DialogTitle
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
-import { ToastContainer } from 'react-toastify';
+
 import toast from '../../../common/ui/Toast';
 import { inrFormatDecimal } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
@@ -293,7 +293,6 @@ class About extends Component {
         </div>
         {this.renderResponseDialog()}
         {this.renderPopup()}
-        <ToastContainer autoClose={3000} />
       </Container>
     );
   }

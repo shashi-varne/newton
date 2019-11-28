@@ -15,10 +15,22 @@ import Dialog, {
   DialogTitle
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
-import { ToastContainer } from 'react-toastify';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
+
+import goldOfferImageFisdom from 'assets/gold_offer_fisdom.jpg';
+import goldOfferImageMyway from 'assets/gold_offer_myway.jpg';
+
+import goldOfferImageFisdom2 from 'assets/gold_offer2.png';
+import goldOfferImageMyway2 from 'assets/gold_offer2.png';
+
+import goldOfferImageFisdom3 from 'assets/gold_offer_fisdom3.jpg';
+import goldOfferImageMyway3 from 'assets/gold_offer_myway3.jpg';
+
+import { Carousel } from 'react-responsive-carousel';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+
 
 class GoldSummary extends Component {
   constructor(props) {
@@ -48,55 +60,63 @@ class GoldSummary extends Component {
       weight: '',
       amount: '',
       params: qs.parse(props.history.location.search.slice(1)),
-      countdownInterval: null
+      countdownInterval: null,
+      openDialogOffer: false,
+      showOffers: false,
+      offerImageData: []
     }
+
+    this.renderOfferImages = this.renderOfferImages.bind(this);
+  }
+
+  componentWillMount() {
+
+    let type = getConfig().productName;
+    
+    var gold_offer_terms1 = [
+      'For a transaction to be valid, there must be a minimum purchase of Rs 1,000 for each offer.',
+      'Gold-back will be in the form of SafeGold balance and will be 5% of the value of gold purchased and upto a maximum of Rs 1000.',
+      "Gold-back will be credited to the customer's account within 14 days of the end date of the offer.",
+      "If an existing customer has transacted for purchase of Digital Gold through his/her " + (type === 'fisdom' ? 'Fisdom' : 'Myway') + " account prior to the launch of this gold-back offer, s/he will not be eligible for this offer",
+      "Any conditions which are not explicitly covered would be at the sole discretion of SafeGold. The decision of SafeGold in this regard will be final and the company has the right to change the terms and conditions at any time.",
+      "In case of any customer query or dispute, SafeGold reserves the right to resolve the same on the basis of the terms and conditions of the offer at its sole discretion."
+    ];
+
+    var gold_offer_terms2 = [
+      'This offer is valid for only the first 100 deliveries per day.',
+      'Delivery of coins may take between 5-7 working days from the date of order, and may be affected by weekends and holidays.'
+    ]
+
+    let offerImageData = [
+      {
+        src: type === 'fisdom' ? goldOfferImageFisdom : goldOfferImageMyway,
+        link: '',
+        terms: gold_offer_terms1,
+        key: '5buy'
+      },
+      {
+        src: type === 'fisdom' ? goldOfferImageFisdom3 : goldOfferImageMyway3,
+        link: '',
+        terms: gold_offer_terms2,
+        key: '50delivery'
+      },
+      {
+        src: type === 'fisdom' ? goldOfferImageFisdom2 : goldOfferImageMyway2,
+        link: type === 'fisdom' ? 'https://www.fisdom.com/candere-gold-2019/' : 'https://mywaywealth.com/candere-gold-2019/',
+        terms: '',
+        key: 'candere'
+      }
+    ];
+
+    this.setState({
+      offerImageData: offerImageData
+    })
   }
 
   async componentDidMount() {
     try {
-      const res = await Api.get('/api/gold/user/account');
-      if (res.pfwresponse.status_code === 200) {
-        let result = res.pfwresponse.result;
-        let isRegistered = true;
-        if (result.gold_user_info.user_info.registration_status === "pending" ||
-          !result.gold_user_info.user_info.registration_status ||
-          result.gold_user_info.is_new_gold_user) {
-          isRegistered = false;
-        }
-        this.setState({
-          // show_loader: false,
-          goldInfo: result.gold_user_info.safegold_info,
-          userInfo: result.gold_user_info.user_info,
-          maxWeight: parseFloat(((30 - result.gold_user_info.safegold_info.gold_balance) || 30).toFixed(4)),
-          isRegistered: isRegistered
-        });
-      } else {
-        this.setState({
-          show_loader: false
-        });
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
-      }
-
-      const res2 = await Api.get('/api/gold/sell/currentprice');
-      if (res2.pfwresponse.status_code === 200) {
-        let goldInfo = this.state.goldInfo;
-        let result = res2.pfwresponse.result;
-        goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
-        this.setState({
-          // show_loader: false,
-          goldSellInfo: result.sell_info,
-          goldInfo: goldInfo
-        });
-      } else {
-        this.setState({
-          show_loader: false
-        });
-        toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message || 'Something went wrong', 'error');
-      }
-
 
       const res3 = await Api.get('/api/gold/buy/currentprice');
-
       if (res3.pfwresponse.status_code === 200) {
         let result = res3.pfwresponse.result;
         let goldBuyInfo = result.buy_info;
@@ -136,6 +156,47 @@ class GoldSummary extends Component {
         });
         toast(res3.pfwresponse.result.error || res3.pfwresponse.result.message || 'Something went wrong', 'error');
       }
+
+      const res = await Api.get('/api/gold/user/account');
+      if (res && res.pfwresponse.status_code === 200) {
+        let result = res.pfwresponse.result;
+        let isRegistered = true;
+        if (result.gold_user_info.user_info.registration_status === "pending" ||
+          !result.gold_user_info.user_info.registration_status ||
+          result.gold_user_info.is_new_gold_user) {
+          isRegistered = false;
+        }
+        this.setState({
+          goldInfo: result.gold_user_info.safegold_info,
+          userInfo: result.gold_user_info.user_info,
+          maxWeight: parseFloat(((30 - result.gold_user_info.safegold_info.gold_balance) || 30).toFixed(4)),
+          isRegistered: isRegistered
+        });
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
+      }
+  
+  
+      const res2 = await Api.get('/api/gold/sell/currentprice');
+      if (res2 && res2.pfwresponse.status_code === 200) {
+        let goldInfo = this.state.goldInfo;
+        let result = res2.pfwresponse.result;
+        goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
+        this.setState({
+          goldSellInfo: result.sell_info,
+          goldInfo: goldInfo
+        });
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message || 'Something went wrong', 'error');
+      }
+  
+  
     } catch (err) {
       this.setState({
         show_loader: false
@@ -297,7 +358,8 @@ class GoldSummary extends Component {
   handleClose = () => {
     this.setState({
       openResponseDialog: false,
-      openPopup: false
+      openPopup: false,
+      openDialogOffer: false
     });
   }
 
@@ -321,6 +383,78 @@ class GoldSummary extends Component {
         </DialogActions>
       </Dialog>
     );
+  }
+
+  openInBrowser(url) {
+    nativeCallback({
+      action: 'open_in_browser',
+      message: {
+        url: url
+      }
+    });
+  }
+
+  handleClickOffer(offer, index) {
+    if (offer.key === '5buy' || offer.key === '50delivery') {
+      this.setState({
+        openDialogOffer: true,
+        selectedIndexOffer: index
+      })
+    } else if (offer.link) {
+      this.openInBrowser(offer.link)
+    }
+
+  }
+
+  renderOfferTerms(props, index) {
+    return (
+      <span className="gold-offer-terms" key={index}>
+        {index + 1}. {props}
+      </span>
+    )
+  }
+
+  renderOfferImages(props, index) {
+    return (
+      <div key={index} onClick={() => this.handleClickOffer(props, index)} className="gold-offer-slider">
+        <img className="gold-offer-slide-img"
+          src={props.src} alt="Gold Offer" />
+      </div>
+    )
+  }
+
+  renderGoldOfferDialog = () => {
+
+    if (this.state.openDialogOffer) {
+      return (
+        <Dialog
+          id="payment"
+          open={this.state.openDialogOffer}
+          onClose={this.handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              <span style={{ fontWeight: 500, color: 'black' }}>Terms and Conditions:  </span>
+              {this.state.offerImageData[this.state.selectedIndexOffer].terms.map(this.renderOfferTerms)}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button style={{ textTransform: 'capitalize' }}
+              fullWidth={true}
+              variant="raised"
+              size="large"
+              color="secondary"
+              onClick={() => this.handleClose()}
+              autoFocus>Got It!
+            </Button>
+          </DialogActions>
+        </Dialog>
+      );
+    }
+    return null;
+
   }
 
   handlePopup = () => {
@@ -363,7 +497,7 @@ class GoldSummary extends Component {
               <DialogContentText>
                 Your checkout value has been updated to
               {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-                                                                                                                                                                                                                                                                                                                                                                                                                                    previous gold price has expired.
+              previous gold price has expired.
               </DialogContentText>
             </DialogContent>
           </div>
@@ -445,7 +579,7 @@ class GoldSummary extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="Gold Summary"
+        title="24K Digital Gold"
         handleClick={this.buyGold}
         edit={this.props.edit}
         buttonTitle="Proceed"
@@ -473,7 +607,7 @@ class GoldSummary extends Component {
                 </div>
                 <div className="my-gold-details-header3">
                   <div className="my-gold-details-header2a">Selling Value</div>
-                  <div className="my-gold-details-header2b">{inrFormatDecimal(this.state.goldInfo.sell_value) || 0}</div>
+                  <div className="my-gold-details-header2b">{inrFormatDecimal(this.state.goldInfo.sell_value ) || 0}</div>
                 </div>
               </div>
             </div>
@@ -535,11 +669,29 @@ class GoldSummary extends Component {
                 Purchase amount is inclusive of 3% GST
               </div>
             </div>
+            {this.state.showOffers && this.state.offerImageData && <div style={{ margin: '20px 0 0 0', cursor: 'pointer' }}>
+              <Carousel
+
+                showStatus={false} showThumbs={false}
+                showArrows={true}
+                infiniteLoop={false}
+                selectedItem={this.state.selectedIndex}
+                onChange={(index) => {
+                  this.setState({
+                    selectedIndex: index,
+                    card_swipe: 'yes',
+                    card_swipe_count: this.state.card_swipe_count + 1
+                  });
+                }}
+              >
+                {this.state.offerImageData.map(this.renderOfferImages)}
+              </Carousel>
+            </div>}
           </div>
         </div>
         {this.renderResponseDialog()}
+        {this.renderGoldOfferDialog()}
         {this.renderPopup()}
-        <ToastContainer autoClose={3000} />
       </Container>
     );
   }

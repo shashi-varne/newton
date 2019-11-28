@@ -13,7 +13,6 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import { validateNumber, validateEmail } from 'utils/validators';
-import { ToastContainer } from 'react-toastify';
 import toast from '../../../common/ui/Toast';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
@@ -401,9 +400,9 @@ class GoldRegister extends Component {
             <Grid container spacing={16} alignItems="center">
               <Grid item xs={2} className="TextCenter">
                 <Checkbox
-                  style={{
-                    color: getConfig().primary
-                  }}
+                  // style={{
+                  //   color: getConfig().primary
+                  // }}
                   defaultChecked
                   checked={this.state.checked}
                   color="default"
@@ -423,7 +422,6 @@ class GoldRegister extends Component {
           </div>
         </div>
         {this.renderResponseDialog()}
-        <ToastContainer autoClose={3000} />
       </Container>
     );
   }

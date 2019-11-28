@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import qs from 'qs';
-
+import { getConfig } from 'utils/functions';
 import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import meter1 from 'assets/meter1.svg';
@@ -56,7 +56,7 @@ class Result extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?base_url=' + this.state.params.base_url,
+      search: getConfig().searchParams,
       params: {
         indicator: (this.state.score) ? this.state.score.indicator : false
       }
@@ -248,7 +248,7 @@ class Result extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{height:'inherit'}}>
         {this.renderUi()}
         {this.renderDialog()}
         {this.renderPageLoader()}

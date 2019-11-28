@@ -64,7 +64,6 @@ class PlanDetailsClass extends Component {
   componentWillMount() {
 
     let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
-    console.log("lead_id :" + lead_id)
     this.setState({
       lead_id: lead_id || ''
     })

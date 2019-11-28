@@ -1,4 +1,4 @@
-@value secondary: #35cb5d;
+@value secondary: var(--secondary);
 .Banner-gold {
   position: relative;
   text-align: center;
@@ -522,4 +522,12 @@
   min-height: 30px;
   margin: 0 20px;
   text-align: center;
+}
+.gold-offer-terms {
+  display: block;
+  margin: 10px 0 10px 0;
+}
+img.gold-offer-slide-img {
+  width: 100%;
+  border-radius: 8px;
 }

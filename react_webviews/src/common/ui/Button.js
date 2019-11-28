@@ -3,6 +3,8 @@ import Button from 'material-ui/Button';
 import { withStyles } from 'material-ui/styles';
 import arrow from 'assets/next_arrow.png';
 import download from 'assets/download.svg';
+import SVG from 'react-inlinesvg';
+
 import './style.css';
 import { getConfig } from 'utils/functions';
 
@@ -19,8 +21,12 @@ class CustomButton extends Component {
             variant="raised"
             size="large"
             className={`${props.classes.button} borderButton`}
+            style={{color: getConfig().secondary, borderColor: getConfig().secondary}}
             disabled={props.disable} >
-            <img alt="" src={download} />
+            <SVG
+              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().secondary)}
+              src={download}
+            />
             {props.buttonOneTitle}
           </Button>
           <Button
@@ -28,6 +34,7 @@ class CustomButton extends Component {
             fullWidth={false}
             variant="raised"
             size="large"
+            color="secondary"
             className={`${props.classes.button} filledButton`}
             disabled={props.disable} >
             {props.buttonTwoTitle}
@@ -42,6 +49,7 @@ class CustomButton extends Component {
             variant="raised"
             size="large"
             color="secondary"
+            style={{backgroundColor: getConfig().secondary}}
             className={props.classes.button}
             disabled={props.disable} >
             {props.buttonTitle}
@@ -60,7 +68,7 @@ class CustomButton extends Component {
 const styles = {
   button: {
     padding: '16px 0px !important',
-    borderRadius: getConfig().project !== 'insurance' ? 6 : 0,
+    borderRadius: 6,
     textTransform: 'capitalize',
     fontSize: '16px !important',
     boxShadow: 'none',

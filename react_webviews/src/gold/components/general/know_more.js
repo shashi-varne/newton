@@ -5,7 +5,6 @@ import Container from '../../common/Container';
 import safegold_logo from 'assets/safegold_logo@2x.png';
 import idbi from 'assets/idbi_trustee2.png';
 import brinks from 'assets/brinks-logo.png';
-import { ToastContainer } from 'react-toastify';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 
@@ -86,7 +85,6 @@ class KnowMore extends Component {
             </div>
           </div>
         </div>
-        <ToastContainer autoClose={3000} />
       </Container>
     );
   }

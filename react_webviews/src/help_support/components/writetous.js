@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import qs from 'qs';
 import Container from '../common/Container';
 import Api from 'utils/api';
-import { ToastContainer } from 'react-toastify';
 import toast from '../../common/ui/Toast';
 import Dialog, {
   DialogActions,
@@ -322,7 +321,6 @@ class Writetous extends Component {
           <div className="error">{this.state.emptyForm}</div>
         </div>
         {this.renderDialog()}
-        <ToastContainer autoClose={3000} />
       </Container>
     );
   }

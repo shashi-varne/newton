@@ -114,7 +114,7 @@ class Recommendation extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?base_url=' + this.state.params.base_url
+      search: getConfig().searchParams
     });
   }
 
@@ -199,7 +199,7 @@ class Recommendation extends Component {
 
     // eslint-disable-next-line
     let nativeRedirectUrl = window.location.origin +
-      '/risk/recommendation?base_url=' + this.state.params.base_url;
+      '/risk/recommendation' + getConfig().searchParams;
 
     let backData = {
       mfTab: this.state.mfTab,
@@ -259,7 +259,7 @@ class Recommendation extends Component {
 
   getTabClassName(type, value) {
     if (value === this.state[type]) {
-      return getConfig().colorClass;
+      return getConfig().configPrimaryColorClass;
     }
     return '';
   }

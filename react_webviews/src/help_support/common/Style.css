@@ -75,8 +75,6 @@
 }
 
 .cta button {
-	border: 1px solid #47cc48;
-	color: #35cb5d;
 	font-size: 16px;
 	border-radius: 5px;
 	padding: 10px 15px;
@@ -151,7 +149,7 @@
 }
 
 .callback .title {
-	color: #35cb5d;
+	color: var(--secondary);
 	font-size: 14px;
 	font-weight: 500;
 }
@@ -187,7 +185,6 @@
 }
 
 .related-question {
-	color: #3792fc;
 	font-size: 14px;
 	line-height: 23px;
 }
@@ -242,8 +239,8 @@
 
 .outlinebutton button {
 	background: #fff !important;
-	color: #35cb5d !important;
-	border: 1px solid #35cb5d;
+	color: var(--secondary) !important;
+	border: 1px solid var(--secondary);
 }
 
 .FooterDefaultLayout .FlexItem2 button {

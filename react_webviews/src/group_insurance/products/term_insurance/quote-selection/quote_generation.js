@@ -277,7 +277,8 @@ class QuoteGeneration extends Component {
         window.localStorage.setItem('cameFromHome', '');
         let url = res.pfwresponse.result.profile_start;
         let search = url.split('?')[1];
-        search += '&generic_callback=true';
+        let searchParamsMustAppend = getConfig().searchParamsMustAppend.split('?')[1];
+        search +=  '&' + searchParamsMustAppend;
         this.navigate("journey", search);
       } else {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message

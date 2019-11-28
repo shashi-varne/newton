@@ -11,7 +11,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Grid from 'material-ui/Grid';
-import { ToastContainer } from 'react-toastify';
+
 import toast from '../../../common/ui/Toast';
 // import { inrFormatDecimal } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
@@ -338,7 +338,7 @@ class Transactions extends Component {
           onChange={this.handleChange}
           indicatorColor="primary"
           textColor="primary"
-          variant="fullWidth"
+          fullWidth
         >
           <Tab label="Buy" />
           <Tab label="Sell" />
@@ -359,7 +359,6 @@ class Transactions extends Component {
             {this.renderRows('delivery')}
           </Grid>
         </div>}
-        <ToastContainer autoClose={3000} />
       </Container>
     );
   }

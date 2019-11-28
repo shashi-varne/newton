@@ -5,7 +5,6 @@ import Container from '../../common/Container';
 import Api from 'utils/api';
 import Input from '../../../common/ui/Input';
 import { validateNumber, validateLengthDynamic, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';
-import { ToastContainer } from 'react-toastify';
 import toast from '../../../common/ui/Toast';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
@@ -305,7 +304,6 @@ class DeliveryAddress extends Component {
               onChange={this.handleChange('landmark')} />
           </div>
         </div>
-        <ToastContainer autoClose={3000} />
       </Container>
     );
   }

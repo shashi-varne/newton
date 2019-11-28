@@ -42,14 +42,14 @@ class About extends Component {
 
   handleClick = async () => {
     this.sendEvents('next');
-    this.navigate('details');
+    this.navigate('steps');
   }
 
   render() {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="About iSIP Biller"
+        title="Automate Monthly SIPs"
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="Continue"
@@ -61,15 +61,13 @@ class About extends Component {
         <div style={{ marginTop: 26, marginBottom: 5 }}>
           <div className="biller-about-points">
             <div className="biller-dot"></div>
-            <div style={{ width: '90%' }}>Biller is a completely paperless, secure and the easiest method for paying monthly
-              SIP installments.
+            <div style={{ width: '90%' }}> Biller is completerly paperless, secure and the easiest method for paying monthly SIP installments.
             </div>
           </div>
 
           <div className="biller-about-points">
             <div className="biller-dot"></div>
-            <div style={{ width: '90%' }}>  On successful addition of biller, your bank will notify you before the SIP
-              dates and debit SIP installments from your account.
+            <div style={{ width: '90%' }}>  On successful addition of biller, your bank will notify you before the SIP dates and debit SIP installment from your account.
             </div>
           </div>
 

@@ -6,6 +6,7 @@ import { FormControl } from 'material-ui/Form';
 import Input from '../../../common/ui/Input';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import contact from 'assets/address_details_icon.svg';
+import contact_myway from 'assets/address_details_icn.svg';
 
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
@@ -76,8 +77,6 @@ class PaymentSuccessClass extends Component {
           leadData.permanent_address = {};
         }
 
-        console.log(leadData)
-
         Object.keys(address_details_data).forEach((key) => {
           if (leadData.permanent_address[key]) {
             address_details_data[key] = leadData.permanent_address[key];
@@ -86,9 +85,6 @@ class PaymentSuccessClass extends Component {
         })
 
         address_details_data.addressline = leadData.permanent_address.address_line;
-
-        console.log(address_details_data)
-
         this.setState({
           leadData: leadData,
           address_details_data: address_details_data
@@ -324,7 +320,7 @@ class PaymentSuccessClass extends Component {
           <div className="payment-success-divider"></div>
           <div style={{ marginTop: '30px' }}>
             <FormControl fullWidth>
-              <TitleWithIcon width="15" icon={contact}
+              <TitleWithIcon width="15" icon={getConfig().productName !== 'fisdom' ? contact_myway : contact}
                 title={'Address Details'} />
               <div className="InputField">
                 <Input

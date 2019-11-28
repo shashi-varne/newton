@@ -1,9 +1,3 @@
-@value fisdom: #4f2da7;
-@value myway: #3792fc;
-@value secondary: #35cb5d;
-@value default: #4a4a4a;
-@value label: #a2a2a2;
-
 .Select {
   font-size: 14px !important;
 }
@@ -39,7 +33,8 @@
   width: auto;
   min-width: 50px;
   text-align: center;
-  font-size: 12px;    color: #4a4a4a;
+  font-size: 12px;
+  color: #4a4a4a;
   border-color: #e6e6e6;
 }
 .RadioButton label {
@@ -96,14 +91,14 @@
 }
 
 .RadioLabel {
-  color: label;
+  color: var(--label);
   font-size: 14px;
   font-family: 'Roboto';
   font-weight: 500;
 }
 
 .RadioWithIcon {
-  color: label;
+  color: var(--label);
   font-size: 0.8rem;
   margin-bottom: 15px;
   position: relative;
@@ -125,7 +120,7 @@
 }
 .DialogButtonFullWidth {
   width: 100%;
-  background-color: secondary !important;
+  background-color: var(--secondary) !important;
   color: #fff !important;
 }
 
@@ -143,19 +138,6 @@
   height: auto;
 }
 
-.MuiCheckbox-root {
-  position: relative;
-  left: -15px;
-}
-.MuiFormLabel-root.MuiFormLabel-error {
-  color: label !important;
-}
-.MuiFormLabel-root.MuiFormLabel-focused.MuiFormLabel-error {
-  color: rgb(55, 31, 116) !important;
-}
-.MuiInput-underline.MuiInput-error:after {
-  background-color: inherit !important;
-}
 .error-radiogrp {
   margin: 0;
   font-size: 0.75rem;
@@ -168,32 +150,12 @@
   position: relative;
   top: 5px;
 }
-.MuiInput-input {
-  color: default !important;
-}
 
 .MuiDialog-paper {
   margin: 0 20px 0px 20px !important;
 }
 .MuiDialogContent-root {
   padding: 0 14px 24px 14px !important;
-}
-.MuiButton-label {
-  text-transform: capitalize !important;
-}
-
-.MuiInput-fullWidth {
-  /* margin-bottom: 12px; */
-}
-
-.MuiInput-input {
-  padding: 3px 0 5px;
-}
-.MuiInput-underline:after {
-  transform: inherit;
-  transition: transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
-  pointer-events: none;
-  background-color: #cecece !important;
 }
 
 /* dot dot loader */
@@ -236,4 +198,51 @@
     -webkit-transform: scale(1.0);
     transform: scale(1.0);
   }
+}
+
+/* carousel */
+.carousel .control-dots .dot.selected, .carousel .control-dots .dot:hover {
+  opacity: 1;
+  background: black;
+  width: 10px;
+  height: 10px;
+}
+.carousel .control-dots .dot {
+  -webkit-transition: opacity .25s ease-in;
+  -o-transition: opacity .25s ease-in;
+  transition: opacity .25s ease-in;
+  opacity: .3;
+  /* -webkit-box-shadow: 1px 1px 2px rgba(0,0,0,.9); */
+  box-shadow: none !important;
+  background: #fff;
+  border-radius: 50%;
+  width: 8px;
+  height: 8px;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0 8px;
+  border: 1px solid black;
+  vertical-align: middle;
+}
+.carousel .control-dots {
+  position: inherit !important;
+  bottom: 0;
+  margin: 10px 0;
+  text-align: center;
+  width: 100%;
+}
+.carousel .slide img {
+  height: 205px;
+}
+.carousel .slide {
+  background: #fff;
+}
+.carousel .control-next.control-arrow:before {
+  border-left: 8px solid #514b4b !important;
+}
+.carousel .control-prev.control-arrow:before {
+  border-right: 8px solid #514b4b !important;
+}
+.carousel .control-arrow:before, .carousel.carousel-slider .control-arrow:before {
+  margin: 0 0px !important;
 }

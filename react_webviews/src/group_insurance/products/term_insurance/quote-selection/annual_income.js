@@ -155,7 +155,7 @@ class AnnualIncome extends Component {
           <div> {props.value}</div>}
         {this.state.selectedIndex === index &&
           <div style={{ display: '-webkit-box' }}>
-            <div style={{ width: '88%', color: '#4f2da7', fontWeight: 500 }}>{props.value}</div>
+            <div style={{ width: '88%', color: getConfig().primary, fontWeight: 500 }}>{props.value}</div>
             <img width="20" src={selected_option} alt="Insurance" />
           </div>}
       </div>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
 import toast from '../../../common/ui/Toast';
-
+import { getConfig } from 'utils/functions';
 import Container from '../../common/Container';
 import RadioOptions from '../../../common/ui/RadioOptions';
 import Api from 'utils/api';
@@ -64,7 +64,7 @@ class QuestionScreen5 extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: '?base_url=' + this.state.params.base_url + '&goBack=true'
+      search: getConfig().searchParams + '&goBack=true'
     });
   }
 

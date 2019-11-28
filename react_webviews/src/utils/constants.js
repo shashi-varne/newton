@@ -28,10 +28,47 @@ export const themeConfig = {
                 width: '100%'
             }
         },
+        MuiFormLabel: {
+            root: {
+                "&$focused": {
+                  color: getConfig().primary,
+                },
+                "&$focused&$error": {
+                    color: getConfig().primary,
+                },
+                "&$error": {
+                    color: '#f44336',
+                }
+            }, 
+        },
         MuiInput: {
             input: {
                 padding: '11px 0 7px',
-                fontSize: '14px'
+                fontSize: '14px',
+                color: getConfig().default
+            },
+            fullWidth: {
+                // marginBottom: '12px'
+            },
+            focused: {
+                borderColor: getConfig().inputFocusedColor || getConfig().primary,
+            },
+            underline: {
+                "&$error": {
+                    color: getConfig().primary,
+                },
+                '&:after': {
+                    backgroundColor: getConfig().inputFocusedColor || getConfig().primary
+                },
+                transform: 'inherit',
+                transition: 'transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms',
+            },
+            error: {
+                '&:after': {
+                    backgroundColor: 'green'
+                }
+            },
+            root: {
             }
         },
         MuiInputLabel: {
@@ -48,7 +85,16 @@ export const themeConfig = {
             raisedSecondary: {
                 '&:hover': {
                     backgroundColor: getConfig().secondary
-                }
+                },
+                backgroundColor: getConfig().secondary,
+                color: '#fff'
+            },
+            disabled: {
+                opacity: 0.4,
+                color: '#fff !important'
+            },
+            label: {
+                textTransform: 'capitalize'
             }
         },
         MuiIconButton: {
@@ -58,7 +104,9 @@ export const themeConfig = {
         },
         MuiCheckbox: {
             root: {
-                color: getConfig().primary
+                color: getConfig().primary,
+                position: 'relative',
+                left: '-15px'
             }
         }
     }

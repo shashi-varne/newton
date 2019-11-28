@@ -410,10 +410,10 @@
   background: #d26774;
 }
 .green {
-  color: #35cb5d;
+  color: var(--secondary);
 }
 .green .circle {
-  background: #35cb5d;
+  background: var(--secondary);
 }
 .yellow {
   color: #f7b500;
@@ -482,7 +482,7 @@
   margin-right:10px;
 }
 .report-detail-download-text {
-  color: #35cb5d;
+  color: var(--secondary);
   font-size: 14px;
   font-weight: 700;
 }

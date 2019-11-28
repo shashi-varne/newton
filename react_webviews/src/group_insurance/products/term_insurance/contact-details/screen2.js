@@ -251,7 +251,7 @@ class ContactDetails2 extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams + '&resume=' + this.state.params.resume
+      search: getConfig().searchParams 
     });
   }
 
@@ -446,10 +446,10 @@ class ContactDetails2 extends Component {
           });
           if (result.pfwresponse.status_code === 200) {
 
+            let current_url = window.location.origin + '/group-insurance/term/journey' + getConfig().searchParams;
             nativeCallback({
               action: 'take_control', message: {
-                back_url: result.pfwresponse.result.insurance_app.profile_link + '&insurance_v2=' + this.state.params.insurance_v2 + '&generic_callback=' +
-                  this.state.params.generic_callback,
+                back_url: current_url,
                 show_top_bar: false,
                 top_bar_title: result.pfwresponse.result.insurance_app.provider,
                 back_text: "We suggest you to complete the application process for fast issuance of your insurance.Do you still want to exit the application process"
@@ -462,11 +462,7 @@ class ContactDetails2 extends Component {
             });
             this.setState({ show_loader: false });
             // if (this.props.edit) {
-            //   if (this.state.params.resume === "yes") {
-            //     this.navigate('resume');
-            //   } else {
             //     this.navigate('summary');
-            //   }
             // } else {
             //   if (this.state.provider === 'HDFC') {
             //     this.navigate('journey');

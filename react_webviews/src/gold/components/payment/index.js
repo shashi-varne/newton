@@ -7,7 +7,7 @@ import safegold_logo from 'assets/safegold_logo_60x60.png';
 import error from 'assets/error.png';
 import thumpsup from 'assets/thumpsup.png';
 import arrow from 'assets/arrow.png';
-import { ToastContainer } from 'react-toastify';
+
 import toast from '../../../common/ui/Toast';
 import { inrFormatDecimal } from 'utils/validators';
 // eslint-disable-next-line
@@ -353,7 +353,6 @@ class Payment extends Component {
               </div>}
           </div>
         </div>
-        <ToastContainer autoClose={3000} />
       </Container>
     );
   }

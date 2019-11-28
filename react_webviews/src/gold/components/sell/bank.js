@@ -4,7 +4,7 @@ import qs from 'qs';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import Input from '../../../common/ui/Input';
-import { ToastContainer } from 'react-toastify';
+
 import toast from '../../../common/ui/Toast';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
@@ -393,7 +393,6 @@ class SellOrder extends Component {
           </div>
           <div className="bank-timer">Price expires in <b>{this.state.minutes}:{this.state.seconds}</b></div>
         </div>
-        <ToastContainer autoClose={3000} />
       </Container>
     );
   }
