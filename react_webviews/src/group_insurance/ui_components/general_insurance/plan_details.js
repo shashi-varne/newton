@@ -379,7 +379,7 @@ class PlanDetailsClass extends Component {
                 className="Checkbox" />
             </Grid>
             <Grid item xs={11}>
-              <div className="accident-plan-terms-text" style={{}}>I accept with the <span onClick={() => this.openInBrowser(this.state.quoteData.terms_and_conditions, 'terms_and_conditions')} className="accident-plan-terms-bold" style={styles.color}>Terms and condition</span></div>
+              <div className="accident-plan-terms-text" style={{}}>I accept the <span onClick={() => this.openInBrowser(this.state.quoteData.terms_and_conditions, 'terms_and_conditions')} className="accident-plan-terms-bold" style={styles.color}>Terms and condition</span></div>
             </Grid>
           </Grid>
         </div>

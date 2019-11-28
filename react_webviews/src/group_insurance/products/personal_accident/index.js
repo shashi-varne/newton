@@ -65,7 +65,7 @@ class AccidentPlanDetails extends Component {
         'icon': this.state.ic_pa_b2
       },
       {
-        'disc': 'Dependent Child Education Benefit',
+        'disc': 'Dependent child education benefit',
         'key': 'child_education',
         'icon': this.state.ic_pa_b6
       },

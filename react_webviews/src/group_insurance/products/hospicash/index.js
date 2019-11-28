@@ -40,7 +40,7 @@ class HospicashPlanDetails extends Component {
 
     var product_benefits = [
       {
-        'disc': 'Daily Cash benefits on hospitalization for 30 days.',
+        'disc': 'Daily cash benefits on hospitalization for 30 days.',
         'key' : 'daily_cash',
         'icon': this.state.ic_hospicash_b1
       },
@@ -88,7 +88,7 @@ class HospicashPlanDetails extends Component {
        
         let benefit_data = Object.create(benefit);
         if(index === 0 && benefit_data.key === 'daily_cash') {
-          benefit_data.disc = 'Daily Cash benefits on hospitalization for 5 days*.';
+          benefit_data.disc = 'Daily cash benefits on hospitalization for 5 days*.';
           benefit_data.disc2 = '* to get cover for 30 days select a higher plan';
         }
 
