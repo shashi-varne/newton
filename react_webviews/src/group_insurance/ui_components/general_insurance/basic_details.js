@@ -226,7 +226,10 @@ class BasicDetailsForm extends Component {
 
       basic_details_data[name] = event.target.value;
       basic_details_data[name + '_error'] = errorDate;
-
+      let age = this.calculateAge(event.target.value.replace(/\\-/g, '/').split('/').reverse().join('/'));
+      this.setState({
+        age: age
+      })
     } else {
       basic_details_data[name] = value;
       basic_details_data[name + '_error'] = '';
@@ -297,7 +300,11 @@ class BasicDetailsForm extends Component {
           })
 
           this.setRelationshipOptions(basic_details_data.gender);
-          basic_details_data['dob'] = basic_details_data['dob'] ? basic_details_data['dob'].replace(/\\-/g, '/').split('-').join('/') : ''
+          basic_details_data['dob'] = basic_details_data['dob'] ? basic_details_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
+          let age = this.calculateAge(basic_details_data.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
+          this.setState({
+            age: age
+          })
         } else {
           toast(res.pfwresponse.result.error || res.pfwresponse.result.message
             || 'Something went wrong');
@@ -324,7 +331,11 @@ class BasicDetailsForm extends Component {
           basic_details_data.email = result.email || '';
           basic_details_data.nominee = result.nominee ? result.nominee : {};
           this.setRelationshipOptions(basic_details_data.gender);
-          basic_details_data['dob'] = result.dob ? result.dob.replace(/\\-/g, '/').split('-').join('/') : ''
+          basic_details_data['dob'] = result.dob ? result.dob.replace(/\\-/g, '/').split('-').join('/') : '';
+          let age = this.calculateAge(basic_details_data.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
+          this.setState({
+            age: age
+          })
         } else {
           toast(res.pfwresponse.result.error || res.pfwresponse.result.message
             || 'Something went wrong');
@@ -342,6 +353,17 @@ class BasicDetailsForm extends Component {
       basic_details_data: basic_details_data
     })
 
+  }
+
+  calculateAge = (birthday) => {
+    var today = new Date();
+    var birthDate = new Date(birthday);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
   }
 
 
@@ -390,10 +412,9 @@ class BasicDetailsForm extends Component {
       basic_details_data['dob_error'] = 'Please enter valid date';
     } else if (IsFutureDate(basic_details_data.dob)) {
       basic_details_data['dob_error'] = 'Future date is not allowed';
+    } else if (this.state.age > 65 || this.state.age < 18) {
+      basic_details_data['dob_error'] = 'Valid age is between 18 and 65';
     } 
-    // else if (basic_details_data.age > 65 || basic_details_data.age < 18) {
-    //   basic_details_data['dob_error'] = 'Valid age is between 18 and 65';
-    // } 
 
     
     if (!basic_details_data.email || (basic_details_data.email.length < 10 || !validateEmail(basic_details_data.email))) {
