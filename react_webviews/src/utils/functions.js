@@ -389,7 +389,7 @@ export const getConfig = () => {
   if (isMobile.Android() && typeof window.Android !== 'undefined') {
     returnConfig.app = 'android';
     returnConfig.Android = true;
-  } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
+  } else if (typeof window.webkit !== 'undefined') {
     returnConfig.app = 'ios';
     returnConfig.iOS = true;
   } else {
