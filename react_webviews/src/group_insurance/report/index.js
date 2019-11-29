@@ -52,6 +52,7 @@ class Report extends Component {
         application = insurance_apps.failed[0];
         pathname = 'report';
       } else if (insurance_apps.init.length > 0) {
+        canShowReport = true;
         application = insurance_apps.init[0];
         pathname = 'journey';
       } else if (insurance_apps.submitted.length > 0) {
@@ -93,6 +94,7 @@ class Report extends Component {
       let obj = {
         status: policy.status,
         product_name: policy.product_title,
+        product_key: policy.product_name,
         cover_amount: policy.sum_assured,
         premium: policy.premium,
         key: 'BHARTIAXA',
@@ -216,7 +218,9 @@ class Report extends Component {
         </div>
         <div className="report-ins-name">{props.product_name}</div>
         <div className="report-cover">
-          <div className="report-cover-amount"><span>Cover amount:</span> {props.cover_amount}</div>
+          <div className="report-cover-amount"><span>Cover amount:</span> {props.cover_amount}
+          {props.product_key === 'HOSPICASH' && <span style={{fontWeight: 400}}>/day</span>}
+          </div>
           <div className="report-cover-amount"><span>Premium:</span> {inrFormatDecimal(props.premium)}/yr</div>
         </div>
       </div>
@@ -255,6 +259,7 @@ class Report extends Component {
           let obj = {
             status: policy.status,
             product_name: policy.product_title,
+            product_key: policy.product_name,
             cover_amount: policy.sum_assured,
             premium: policy.premium,
             key: 'BHARTIAXA',
