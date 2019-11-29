@@ -33,7 +33,8 @@ class BasicDetailsForm extends Component {
       show_loader: true,
       premium_details: {},
       inputDisabled: {},
-      relationshipOptions: []
+      relationshipOptions: [],
+      age: 0
     };
 
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
@@ -303,7 +304,8 @@ class BasicDetailsForm extends Component {
           basic_details_data['dob'] = basic_details_data['dob'] ? basic_details_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
           let age = this.calculateAge(basic_details_data.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
           this.setState({
-            age: age
+            age: age,
+            checked: leadData.nominee_details || false
           })
         } else {
           toast(res.pfwresponse.result.error || res.pfwresponse.result.message
@@ -336,6 +338,8 @@ class BasicDetailsForm extends Component {
           this.setState({
             age: age
           })
+        } else if(res.pfwresponse.status_code === 401) {
+
         } else {
           toast(res.pfwresponse.result.error || res.pfwresponse.result.message
             || 'Something went wrong');
@@ -494,6 +498,7 @@ class BasicDetailsForm extends Component {
       }
 
       final_data.product_name = this.props.parent.state.product_key;
+      final_data.nominee_details = this.state.checked;
 
       try {
         this.setState({
