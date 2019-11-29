@@ -401,12 +401,17 @@ class BasicDetailsForm extends Component {
 
     if (!validateAlphabets(basic_details_data.name)) {
       basic_details_data['name_error'] = 'Name can contain only alphabets';
-    } else if (validateLengthNames(basic_details_data.name, 'name', this.state.provider).isError) {
-
-      basic_details_data['name_error'] = validateLengthNames(basic_details_data.name, 'name', basic_details_data.provider).error_msg;
-    } else if (!validateConsecutiveChar(basic_details_data.name)) {
-      basic_details_data['name_error'] = 'Name can not contain more than 3 same consecutive characters';
-    }
+    } 
+    // else if (validateLengthNames(basic_details_data.name, 'name', this.state.provider).isError) {
+    //   basic_details_data['name_error'] = validateLengthNames(basic_details_data.name, 'name', basic_details_data.provider).error_msg;
+    // } else if (basic_details_data.name.split(" ").filter(e => e).length < 2) {
+    //   basic_details_data['name_error'] = 'Enter valid full name';
+    // } else if (basic_details_data.name.split(" ")[0].length < 2 || 
+    // basic_details_data.name.split(" ")[basic_details_data.name.split(" ").length -1].length < 2) {
+    //   basic_details_data['name_error'] = 'Minimum 2 words required , containing minimum 2 letters';
+    // } else if (!validateConsecutiveChar(basic_details_data.name)) {
+    //   basic_details_data['name_error'] = 'Name can not contain more than 3 same consecutive characters';
+    // }
 
     if (new Date(basic_details_data.dob) > new Date() || !isValidDate(basic_details_data.dob)) {
       basic_details_data['dob_error'] = 'Please enter valid date';
