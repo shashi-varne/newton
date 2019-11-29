@@ -55,7 +55,9 @@ class PlanDetailsClass extends Component {
       },
       type: getConfig().productName,
       color: getConfig().primary,
-      quoteData: {}
+      quoteData: {},
+      premiudmDtailsStored: window.localStorage.getItem('group_insurance_plan_final_data') ? 
+      JSON.parse(window.localStorage.getItem('group_insurance_plan_final_data')) : ''
     };
 
     this.renderPlans = this.renderPlans.bind(this);
@@ -85,6 +87,20 @@ class PlanDetailsClass extends Component {
         url: url
       }
     });
+  }
+
+  setPremiumData(premium_details, leadData) {
+    if(!leadData) {
+      return;
+    }
+    Object.keys(premium_details).forEach((key) => {
+      premium_details[key] = leadData[key]
+    })
+
+    let selectedIndex = coverAmountMapper[this.props.parent.state.product_key][premium_details.cover_amount];
+    this.setState({
+      selectedIndex: selectedIndex
+    })
   }
 
   async componentDidMount() {
@@ -128,15 +144,9 @@ class PlanDetailsClass extends Component {
         if (res.pfwresponse.status_code === 200) {
 
           var leadData = res.pfwresponse.result.lead;
-
-          Object.keys(premium_details).forEach((key) => {
-            premium_details[key] = leadData[key]
-          })
-
-          let selectedIndex = coverAmountMapper[this.props.parent.state.product_key][premium_details.cover_amount];
-
+          this.setPremiumData(premium_details, leadData);
           this.setState({
-            selectedIndex: selectedIndex,
+            leadData: leadData,
             show_loader: false
           })
 
@@ -148,6 +158,9 @@ class PlanDetailsClass extends Component {
             || 'Something went wrong');
         }
       } else {
+        
+        this.setPremiumData(premium_details, this.state.premiudmDtailsStored);
+
         this.setState({
           show_loader: false
         })
@@ -245,20 +258,13 @@ class PlanDetailsClass extends Component {
     });
   }
 
-  handleClick = async (final_data) => {
-
-    this.navigate('form', '', final_data);
-
-  }
-
-
   async handleClickCurrent() {
     var final_data = {
       "premium": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].premium,
       "cover_amount": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].sum_assured,
       "tax_amount": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].tax_amount
     }
-
+    window.localStorage.setItem('group_insurance_plan_final_data', JSON.stringify(final_data));
 
 
     final_data.product_name = this.props.parent.state.product_key;
