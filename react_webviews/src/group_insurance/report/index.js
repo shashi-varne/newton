@@ -55,6 +55,7 @@ class Report extends Component {
         application = insurance_apps.init[0];
         pathname = 'journey';
       } else if (insurance_apps.submitted.length > 0) {
+        canShowReport = true;
         application = insurance_apps.submitted[0];
         pathname = 'journey';
       } else {

@@ -12,11 +12,9 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import {
-  validateNumber,
-  validateConsecutiveChar, validateLengthDynamic,
-  validateMinChar, 
+  validateNumber,validateLengthDynamic, 
 } from 'utils/validators';
-// validateStreetName, validateEmpty
+// validateStreetName, validateEmpty, validateConsecutiveChar, validateMinChar
 import { nativeCallback } from 'utils/native_callback';
 
 class PaymentSuccessClass extends Component {
@@ -188,15 +186,20 @@ class PaymentSuccessClass extends Component {
       if (address_details_data.pincode.length !== 6 || !validateNumber(address_details_data.pincode) || address_details_data.pincode_error) {
         address_details_data['pincode_error'] = 'Please enter valid pincode';
       } 
+     
       
-      if (!validateConsecutiveChar(address_details_data.addressline)) {
-        
-        address_details_data['addressline_error'] = 'Address can not contain more than 3 same consecutive characters';
-      } else if (!validateLengthDynamic(address_details_data.addressline, 90)) {
+      if (!validateLengthDynamic(address_details_data.addressline, 90)) {
         address_details_data['addressline_error'] = 'Maximum length of address is 90';
-      } else if (!validateMinChar(address_details_data.addressline)) {
-        address_details_data['addressline_error'] = 'Address should contain minimum two characters';
       }
+
+      // if (!validateConsecutiveChar(address_details_data.addressline)) {
+        
+      //   address_details_data['addressline_error'] = 'Address can not contain more than 3 same consecutive characters';
+      // } else if (!validateLengthDynamic(address_details_data.addressline, 90)) {
+      //   address_details_data['addressline_error'] = 'Maximum length of address is 90';
+      // } else if (!validateMinChar(address_details_data.addressline)) {
+      //   address_details_data['addressline_error'] = 'Address should contain minimum two characters';
+      // }
 
       // if (!validateEmpty(address_details_data.landmark)) {
       //   address_details_data['landmark_error'] = 'Enter nearest landmark';
