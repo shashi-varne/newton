@@ -13,9 +13,10 @@ import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import {
   validateNumber,
-  validateConsecutiveChar, validateStreetName, validateLengthDynamic,
-  validateMinChar, validateEmpty, validateAddressWords
+  validateConsecutiveChar, validateLengthDynamic,
+  validateMinChar, 
 } from 'utils/validators';
+// validateStreetName, validateEmpty
 import { nativeCallback } from 'utils/native_callback';
 
 class PaymentSuccessClass extends Component {
@@ -174,7 +175,7 @@ class PaymentSuccessClass extends Component {
         'pincode': 'pincode',
         'landmark': 'landmark'
       }
-      let keys_to_check = ['pincode', 'addressline', 'landmark'];
+      let keys_to_check = ['pincode', 'addressline'];
       let address_details_data = this.state.address_details_data;
 
       for (var i = 0; i < keys_to_check.length; i++) {
@@ -191,23 +192,19 @@ class PaymentSuccessClass extends Component {
       if (!validateConsecutiveChar(address_details_data.addressline)) {
         
         address_details_data['addressline_error'] = 'Address can not contain more than 3 same consecutive characters';
-      } else if (!validateAddressWords(address_details_data.addressline, 2)) {
-        address_details_data['addressline_error'] = 'Please enter at least 2 words containing minimum 2 letters';
-      } else if (!validateLengthDynamic(address_details_data.addressline, 30)) {
-        address_details_data['addressline_error'] = 'Maximum length of address is 30';
+      } else if (!validateLengthDynamic(address_details_data.addressline, 90)) {
+        address_details_data['addressline_error'] = 'Maximum length of address is 90';
       } else if (!validateMinChar(address_details_data.addressline)) {
         address_details_data['addressline_error'] = 'Address should contain minimum two characters';
       }
 
-      if (!validateEmpty(address_details_data.landmark)) {
-        address_details_data['landmark_error'] = 'Enter nearest landmark';
-      } else if (!validateAddressWords(address_details_data.landmark, 2)) {
-        address_details_data['landmark_error'] = 'Please enter at least 2 words containing minimum 2 letters';
-      } else if (!validateLengthDynamic(address_details_data.landmark, 30)) {
-        address_details_data['landmark_error'] = 'Maximum length of landmark is 30';
-      } else if (!validateStreetName(address_details_data.landmark)) {
-        address_details_data['landmark_error'] = 'Please enter valid landmark';
-      }
+      // if (!validateEmpty(address_details_data.landmark)) {
+      //   address_details_data['landmark_error'] = 'Enter nearest landmark';
+      // } else if (!validateLengthDynamic(address_details_data.landmark, 30)) {
+      //   address_details_data['landmark_error'] = 'Maximum length of landmark is 30';
+      // } else if (!validateStreetName(address_details_data.landmark)) {
+      //   address_details_data['landmark_error'] = 'Please enter valid landmark';
+      // }
 
 
       this.setState({
@@ -346,7 +343,7 @@ class PaymentSuccessClass extends Component {
                   value={this.state.address_details_data.addressline || ''}
                   onChange={this.handleChange()} />
               </div>
-              <div className="InputField">
+              {/* <div className="InputField">
                 <Input
                   type="text"
                   id="landmark"
@@ -356,7 +353,7 @@ class PaymentSuccessClass extends Component {
                   helperText={this.state.address_details_data.landmark_error}
                   value={this.state.address_details_data.landmark || ''}
                   onChange={this.handleChange()} />
-              </div>
+              </div> */}
               <div className="InputField">
                 <Input
                   disabled={true}
