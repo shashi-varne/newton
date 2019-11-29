@@ -33,7 +33,8 @@ class BasicDetailsForm extends Component {
       show_loader: true,
       premium_details: {},
       inputDisabled: {},
-      relationshipOptions: []
+      relationshipOptions: [],
+      age: 0
     };
 
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
@@ -303,7 +304,8 @@ class BasicDetailsForm extends Component {
           basic_details_data['dob'] = basic_details_data['dob'] ? basic_details_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
           let age = this.calculateAge(basic_details_data.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
           this.setState({
-            age: age
+            age: age,
+            checked: leadData.nominee_details || false
           })
         } else {
           toast(res.pfwresponse.result.error || res.pfwresponse.result.message
@@ -336,6 +338,8 @@ class BasicDetailsForm extends Component {
           this.setState({
             age: age
           })
+        } else if(res.pfwresponse.status_code === 401) {
+
         } else {
           toast(res.pfwresponse.result.error || res.pfwresponse.result.message
             || 'Something went wrong');
@@ -401,12 +405,17 @@ class BasicDetailsForm extends Component {
 
     if (!validateAlphabets(basic_details_data.name)) {
       basic_details_data['name_error'] = 'Name can contain only alphabets';
-    } else if (validateLengthNames(basic_details_data.name, 'name', this.state.provider).isError) {
-
-      basic_details_data['name_error'] = validateLengthNames(basic_details_data.name, 'name', basic_details_data.provider).error_msg;
-    } else if (!validateConsecutiveChar(basic_details_data.name)) {
-      basic_details_data['name_error'] = 'Name can not contain more than 3 same consecutive characters';
-    }
+    } 
+    // else if (validateLengthNames(basic_details_data.name, 'name', this.state.provider).isError) {
+    //   basic_details_data['name_error'] = validateLengthNames(basic_details_data.name, 'name', basic_details_data.provider).error_msg;
+    // } else if (basic_details_data.name.split(" ").filter(e => e).length < 2) {
+    //   basic_details_data['name_error'] = 'Enter valid full name';
+    // } else if (basic_details_data.name.split(" ")[0].length < 2 || 
+    // basic_details_data.name.split(" ")[basic_details_data.name.split(" ").length -1].length < 2) {
+    //   basic_details_data['name_error'] = 'Minimum 2 words required , containing minimum 2 letters';
+    // } else if (!validateConsecutiveChar(basic_details_data.name)) {
+    //   basic_details_data['name_error'] = 'Name can not contain more than 3 same consecutive characters';
+    // }
 
     if (new Date(basic_details_data.dob) > new Date() || !isValidDate(basic_details_data.dob)) {
       basic_details_data['dob_error'] = 'Please enter valid date';
@@ -489,6 +498,7 @@ class BasicDetailsForm extends Component {
       }
 
       final_data.product_name = this.props.parent.state.product_key;
+      final_data.nominee_details = this.state.checked;
 
       try {
         this.setState({

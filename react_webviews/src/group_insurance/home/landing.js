@@ -283,7 +283,7 @@ class Landing extends Component {
         <div style={{ display: 'flex' }}>
           <img src={props.icon} alt="" style={{ marginRight: '15px' }} />
           <div>
-            <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px' }}>{props.title}</div>
+            <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px',fontWeight:500 }}>{props.title}</div>
             <div style={{ color: '#7e7e7e', fontSize: '13px' }}>{props.subtitle}</div>
           </div>
         </div>
