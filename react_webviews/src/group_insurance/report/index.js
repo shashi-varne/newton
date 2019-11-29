@@ -76,9 +76,13 @@ class Report extends Component {
         status: application.status,
         product_name: application.quote.insurance_title,
         cover_amount: application.quote.cover_amount,
-        premium: application.quote.quote_json.base_premium_total,
+        premium: application.quote.quote_json.premium,
         key: 'TERM_INSURANCE',
         id: application.id
+      }
+
+      if (!termReport.product_name) {
+        termReport.product_name = application.quote.quote_provider + ' ' + application.quote.quote_json.cover_plan;
       }
 
       let data = this.statusMapper(termReport);
