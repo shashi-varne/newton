@@ -64,7 +64,7 @@ class PaymentFailedClass extends Component {
         onlyButton={true}
         showLoader={this.state.show_loader}
         handleClick={() => this.handleClick()}
-        title="Paymnet Failed"
+        title="Payment Failed"
         classOverRideContainer="payment-failed"
       >
         <div>

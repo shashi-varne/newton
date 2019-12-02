@@ -131,7 +131,8 @@ class AccidentPlanDetails extends Component {
 
       plan_data.premium_details[index].product_benefits = []
       product_benefits.forEach(function (benefit, index2) {
-        let benefit_data = Object.create(benefit);
+        let benefit_data = {};
+        benefit_data = Object.assign(benefit_data, benefit);
         if (premium.product_benefits_included.indexOf(benefit_data.key) === -1) {
           benefit_data.isDisabled = true;
         }

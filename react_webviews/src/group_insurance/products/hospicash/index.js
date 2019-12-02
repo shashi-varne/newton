@@ -86,7 +86,8 @@ class HospicashPlanDetails extends Component {
       plan_data.premium_details[index].product_benefits = []
       product_benefits.forEach(function (benefit, index2) {
        
-        let benefit_data = Object.create(benefit);
+        let benefit_data = {};
+        benefit_data = Object.assign(benefit_data, benefit);
         if(index === 2 && benefit_data.key === 'daily_cash') {
           benefit_data.disc = 'Daily cash benefits on hospitalization for 5 days*.';
           benefit_data.disc2 = '* to get cover for 30 days select a higher plan';
@@ -99,7 +100,6 @@ class HospicashPlanDetails extends Component {
         plan_data.premium_details[index].product_benefits.push(benefit_data)
       });
     });
-
 
     this.setState({
       plan_data: plan_data
