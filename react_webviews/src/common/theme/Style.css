@@ -8,6 +8,47 @@
   background-color: #fff;
 }
 
+/* web-app changes */
+body[data-device="web"] .MuiAppBar-positionFixed {
+  left: 0 !important;
+}
+body[data-device="web"] .Header {
+  max-width: 640px;
+  margin: 0 auto;
+}
+body[data-device="web"] {
+ height: 100% !important;
+}
+body[data-device="web"] .Footer {
+  max-width: 640px;
+  position: relative !important;
+}
+
+body[data-device="web"] .ContainerWrapper {
+  max-width: 640px;
+  margin: 0 auto;
+  padding-bottom: 3px;
+}
+body[data-device="web"], #root {
+  height: 100%;
+  background: #a99c9c;
+}
+body[data-device="web"] .Loader {
+  max-width: 640px;
+  margin: 0 auto;
+}
+body[data-device="web"] .Container {
+ height: auto !important;
+ 
+}
+
+body[data-device="web"] #root .ContainerWrapper {
+  height: 100% !important;
+ }
+
+
+
+
 .Container {
    padding: 20px 15px;
   /* margin-bottom: 60px;
