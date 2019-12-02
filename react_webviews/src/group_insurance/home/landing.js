@@ -160,7 +160,8 @@ class Landing extends Component {
           let navigateMapper = {
             hospicash: 'HOSPICASH',
             personal_accident: 'PERSONAL_ACCIDENT',
-            smart_wallet: 'SMART_WALLET'
+            smart_wallet: 'SMART_WALLET',
+            term_insurance: 'TERM_INSURANCE'
           };
 
           let pathname = navigateMapper[this.state.openModuleData.sub_module] || '';
