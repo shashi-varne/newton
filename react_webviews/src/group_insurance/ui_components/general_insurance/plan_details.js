@@ -266,6 +266,7 @@ class PlanDetailsClass extends Component {
   }
 
   async handleClickCurrent() {
+    this.sendEvents('next');
     var final_data = {
       "premium": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].premium,
       "cover_amount": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].sum_assured,
