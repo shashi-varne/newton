@@ -68,7 +68,7 @@ class PlanDetailsClass extends Component {
 
   componentWillMount() {
     let instant_icon = this.state.type !== 'fisdom' ? instant_myway : instant_fisdom;
-    let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
+    let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected') || '';
     this.setState({
       lead_id: lead_id || '',
       instant_icon: instant_icon
@@ -90,7 +90,10 @@ class PlanDetailsClass extends Component {
   }
 
   setPremiumData(premium_details, leadData) {
-    if(!leadData) {
+    if(!leadData || Object.keys(leadData).length === 0) {
+      this.setState({
+        selectedIndex: 0
+      })
       return;
     }
     Object.keys(premium_details).forEach((key) => {
@@ -159,7 +162,11 @@ class PlanDetailsClass extends Component {
         }
       } else {
         
-        this.setPremiumData(premium_details, this.state.premiudmDtailsStored);
+        let data = {};
+        if(this.state.premiudmDtailsStored) {
+          data = this.state.premiudmDtailsStored[this.props.parent.state.product_key] || {};
+        }
+        this.setPremiumData(premium_details, data || {});
 
         this.setState({
           show_loader: false
@@ -264,10 +271,12 @@ class PlanDetailsClass extends Component {
       "cover_amount": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].sum_assured,
       "tax_amount": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].tax_amount
     }
-    window.localStorage.setItem('group_insurance_plan_final_data', JSON.stringify(final_data));
-
-
     final_data.product_name = this.props.parent.state.product_key;
+
+    let group_insurance_plan_final_data = this.state.group_insurance_plan_final_data || {};
+    group_insurance_plan_final_data[final_data.product_name] = final_data;
+    window.localStorage.setItem('group_insurance_plan_final_data', 
+    JSON.stringify(group_insurance_plan_final_data));
 
     this.setState({
       show_loader: true
@@ -303,13 +312,16 @@ class PlanDetailsClass extends Component {
   }
 
   sendEvents(user_action) {
+    let selectedIndex =  this.state.selectedIndex || 0;
     let eventObj = {
       "event_name": 'Group Insurance',
       "properties": {
         "user_action": user_action,
         "screen_name": this.props.parent.state.product_key,
-        "cover_amount": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].sum_assured,
-        "premium": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].premium,
+        "cover_amount": this.props.parent.state.plan_data.premium_details[selectedIndex] ?
+         this.props.parent.state.plan_data.premium_details[selectedIndex].sum_assured: '',
+        "premium": this.props.parent.state.plan_data.premium_details[selectedIndex] ?
+        this.props.parent.state.plan_data.premium_details[selectedIndex].premium: '',
         "cover_period": 1,
         "tnc_checked": "yes"
       }
@@ -371,7 +383,7 @@ class PlanDetailsClass extends Component {
 
           {this.props.parent && this.props.parent.state.plan_data &&
             this.props.parent.state.plan_data.premium_details &&
-            this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].product_benefits.map(this.renderBenefits)}
+            this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_benefits.map(this.renderBenefits)}
         </div>
 
         <div className="accident-plan-claim">

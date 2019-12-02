@@ -41,7 +41,7 @@ class Landing extends Component {
 
     // let search = getConfig().searchParams + '&partner_code=bfdlmobile';
     // this.navigate('/mandate-otm/form-request/about',   search);
-
+    window.localStorage.setItem('group_insurance_plan_final_data', '');
     nativeCallback({ action: 'take_control_reset' });
     window.localStorage.setItem('group_insurance_payment_url', '');
     let insurance = this.state.type !== 'fisdom' ? insurance_myway : insurance_fisdom;
