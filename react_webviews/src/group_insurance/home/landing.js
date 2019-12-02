@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Container from '../common/Container';
+import qs from 'qs';
 import { insuranceStateMapper } from '../constants';
 import insurance_fisdom from 'assets/ic_fisdom_insurance_fisdom.svg';
 import insurance_myway from 'assets/ic_fisdom_insurance_myway.svg';
@@ -31,7 +32,8 @@ class Landing extends Component {
     this.state = {
       show_loader: true,
       type: getConfig().productName,
-      insuranceProducts: []
+      insuranceProducts: [],
+      params: qs.parse(props.history.location.search.slice(1))
     }
 
     this.renderPorducts = this.renderPorducts.bind(this);
@@ -83,9 +85,13 @@ class Landing extends Component {
         subtitle: 'Get comprehensive life coverage',
         icon: term_icon
       }
-    ]
+    ];
+
+    let { params } = this.props.location || {};
+    let openModuleData =  params ? params.openModuleData : {}
 
     this.setState({
+      openModuleData: openModuleData,
       insuranceProducts: insuranceProducts,
       insurance: insurance,
       instant_icon: instant_icon
@@ -97,9 +103,12 @@ class Landing extends Component {
     try {
       const res = await Api.get('/api/ins_service/api/insurance/application/summary')
 
-      this.setState({
-        show_loader: false
-      })
+      if(!this.state.openModuleData.sub_module) {
+        this.setState({
+          show_loader: false
+        })
+      }
+      
       if (res.pfwresponse.status_code === 200) {
 
         var resultData = res.pfwresponse.result.response;
@@ -146,6 +155,17 @@ class Landing extends Component {
           BHARTIAXA_APPS: BHARTIAXA_APPS,
           insuranceProducts: insuranceProducts
         })
+
+        if(this.state.openModuleData.sub_module) {
+          let navigateMapper = {
+            hospicash: 'HOSPICASH',
+            personal_accident: 'PERSONAL_ACCIDENT',
+            smart_wallet: 'SMART_WALLET'
+          };
+
+          let pathname = navigateMapper[this.state.openModuleData.sub_module] || '';
+          this.handleClick(pathname);
+        }
 
       } else {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message
