@@ -6,11 +6,13 @@ import { getConfig } from 'utils/functions';
 import ic_wallet_b1_fisdom from 'assets/ic_wallet_b1_fisdom.svg';
 import ic_wallet_b2_fisdom from 'assets/ic_wallet_b2_fisdom.svg';
 import ic_wallet_b3_fisdom from 'assets/ic_wallet_b3_fisdom.svg';
+import ic_wallet_b4_fisdom from 'assets/ic_wallet_b4_fisdom.svg';
 
 import ic_wallet_b1_myway from 'assets/ic_wallet_b1_myway.svg';
 import ic_wallet_b2_myway from 'assets/ic_wallet_b2_myway.svg';
 import ic_wallet_b3_myway from 'assets/ic_wallet_b3_myway.svg';
 
+import ic_wallet_b4_myway from 'assets/ic_wallet_b4_myway.svg';
 class SmartwalletPlanDetails extends Component {
 
   constructor(props) {
@@ -25,7 +27,8 @@ class SmartwalletPlanDetails extends Component {
       type: getConfig().productName,
       ic_wallet_b1: getConfig().productName !== 'fisdom' ? ic_wallet_b1_myway : ic_wallet_b1_fisdom,
       ic_wallet_b2: getConfig().productName !== 'fisdom' ? ic_wallet_b2_myway : ic_wallet_b2_fisdom,
-      ic_wallet_b3: getConfig().productName !== 'fisdom' ? ic_wallet_b3_myway : ic_wallet_b3_fisdom
+      ic_wallet_b3: getConfig().productName !== 'fisdom' ? ic_wallet_b3_myway : ic_wallet_b3_fisdom,
+      ic_wallet_b4: getConfig().productName !== 'fisdom' ? ic_wallet_b4_myway : ic_wallet_b4_fisdom
     }
   }
 
@@ -53,6 +56,11 @@ class SmartwalletPlanDetails extends Component {
         'disc': 'Insure mobile wallets from unauthorized transactions, skimming or phishing',
         'key' : 'mobile_wallet',
         'icon': this.state.ic_wallet_b3
+      },
+      {
+        'disc': 'Assistant services for PAN Card replacement. ',
+        'key' : 'pan_replacement',
+        'icon': this.state.ic_wallet_b4
       }
     ]
 
@@ -65,7 +73,7 @@ class SmartwalletPlanDetails extends Component {
         {
           "sum_assured": 150000,
           "product_benefits_included": ['unauthorized_protection', 'lost_card', 
-          'mobile_wallet'],
+          'mobile_wallet', 'pan_replacement'],
           "premium": "999",
           "tax_amount": "179.82",
           "plus_benefit": ''
@@ -73,15 +81,15 @@ class SmartwalletPlanDetails extends Component {
         {
           "sum_assured": 100000,
           "product_benefits_included": ['unauthorized_protection', 'lost_card', 
-          'mobile_wallet'],
+          'mobile_wallet', 'pan_replacement'],
           "premium": "500",
           "tax_amount": "90",
           "plus_benefit": ''
         },
         {
-          "sum_assured": 40000,
+          "sum_assured": 50000,
           "product_benefits_included": ['unauthorized_protection', 'lost_card', 
-          'mobile_wallet'],
+          'mobile_wallet', 'pan_replacement'],
           "premium": "250",
           "tax_amount": "45",
           "plus_benefit": ''

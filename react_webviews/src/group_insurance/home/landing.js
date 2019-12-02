@@ -9,8 +9,8 @@ import hospicash_fisdom from 'assets/ic_hospicash_fisdom.svg';
 import hospicash_myway from 'assets/ic_hospicash_myway.svg';
 import accident_fisdom from 'assets/ic_personal_accident_fisdom.svg';
 import accident_myway from 'assets/ic_personal_accident_myway.svg';
-// import wallet_fisdom from 'assets/ic_wallet_fisdom.svg';
-// import wallet_myway from 'assets/ic_wallet_myway.svg';
+import wallet_fisdom from 'assets/ic_wallet_fisdom.svg';
+import wallet_myway from 'assets/ic_wallet_myway.svg';
 import term_fisdom from 'assets/ic_term_insurance_fisdom.svg';
 import term_myway from 'assets/ic_term_insurance_myway.svg';
 // import resume_tag from 'assets/resume_tag.png';
@@ -48,7 +48,7 @@ class Landing extends Component {
     //  let  health_icon  = this.state.type !== 'fisdom' ? health_myway : health_fisdom;
     let hospicash = this.state.type !== 'fisdom' ? hospicash_myway : hospicash_fisdom;
     let accident_icon = this.state.type !== 'fisdom' ? accident_myway : accident_fisdom;
-    // let wallet_icon = this.state.type !== 'fisdom' ? wallet_myway : wallet_fisdom;
+    let wallet_icon = this.state.type !== 'fisdom' ? wallet_myway : wallet_fisdom;
     let term_icon = this.state.type !== 'fisdom' ? term_myway : term_fisdom;
     let instant_icon = this.state.type !== 'fisdom' ? instant_myway : instant_fisdom;
 
@@ -71,12 +71,12 @@ class Landing extends Component {
         subtitle: 'Starts from ₹ 133/year',
         icon: hospicash
       },
-      // {
-      //   key: 'SMART_WALLET',
-      //   title: 'Smart wallet',
-      //   subtitle: 'Starts from ₹ 250/year',
-      //   icon: wallet_icon
-      // },
+      {
+        key: 'SMART_WALLET',
+        title: 'Smart wallet (fraud protection)',
+        subtitle: 'Starts from ₹ 250/year',
+        icon: wallet_icon
+      },
       {
         key: 'TERM_INSURANCE',
         title: 'Term insurance',
