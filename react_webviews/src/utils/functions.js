@@ -2,6 +2,7 @@
 import qs from 'qs';
 import createBrowserHistory from 'history/createBrowserHistory';
 import {checkValidString} from './validators';
+import $ from 'jquery';
 
 const partnersConfigBase = {
   obc: {
@@ -299,6 +300,17 @@ function getPartnerConfig(partner_code) {
   return config_to_return;
 }
 
+export const isMobileDevice = () => {
+  var mobileDevice = isMobile.any() || window.innerWidth < 767;
+    if (mobileDevice) {
+      $("body").attr('data-device', 'mobile');
+    } else {
+      $("body").attr('data-device', 'web');
+    }
+  
+  return mobileDevice;
+}
+
 export const getConfig = () => {
 
   let main_pathname = window.location.pathname;
@@ -379,6 +391,7 @@ export const getConfig = () => {
 
   returnConfig.project = project;
   returnConfig.project_child = project_child;
+  returnConfig.isMobileDevice = isMobileDevice();
 
   let { insurance_allweb } = main_query_params;
   if (insurance_allweb) {
