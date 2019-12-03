@@ -20,7 +20,6 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   let callbackData = {};
   let project = getConfig().project;
   let redirect_url = new URLSearchParams(getConfig().searchParams).get('redirect_url');
-
   if (action) {
     callbackData.action = action;
   }
@@ -202,7 +201,8 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       }
     }
   } else {
-    if (action === 'native_back' || action === 'exit_web' || action === 'exit') {
+    if (action === 'native_back' || action === 'exit_web' || action === 'exit' || 
+    action === 'open_module') {
       if (!redirect_url) {
         redirect_url = "https://app.fisdom.com/"
       }
