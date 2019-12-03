@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
 import '../../common/Style.css';
-import failed from 'assets/error_illustration.svg';
+import failed_fisdom from 'assets/error_illustration_fisdom.svg';
+import failed_myway from 'assets/error_illustration_myway.svg';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 
@@ -10,7 +11,8 @@ class PaymentFailedClass extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false
+      show_loader: false,
+      failed_icon: getConfig().productName !== 'fisdom' ? failed_myway : failed_fisdom,
     };
   }
 
@@ -68,7 +70,7 @@ class PaymentFailedClass extends Component {
         classOverRideContainer="payment-failed"
       >
         <div>
-          <div className="payment-failed-icon"><img src={failed} alt="" /></div>
+          <div className="payment-failed-icon"><img src={this.state.failed_icon} alt="" /></div>
           <div className="payment-failed-title">Payment Failed!</div>
           <div className="payment-failed-subtitle">Seems like an internal issue. Don’t worry we are on to it, please retry after sometime.</div>
         </div>
