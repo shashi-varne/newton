@@ -33,10 +33,10 @@ body[data-device="web"] .ContainerWrapper {
   padding-bottom: 3px;
   overflow: auto;
 }
-body[data-device="web"] #root{
+html, body[data-device="web"] #root{
   /* autoprefixer: off */
   height: 100%;
-  background: #a99c9c;
+  background: #f3f4f6;
 }
 
 body[data-device="web"] #root > div:nth-child(2) {

@@ -310,6 +310,7 @@
    margin-right: 20px;
    position: relative;
    border: 2px solid #fff;
+   cursor: pointer;
 }
 .accident-plan-item1 {
   color: #6f6f6f;
@@ -360,6 +361,7 @@
    display: flex;
    align-items: center;
    padding: 0 15px;
+   cursor: pointer;
 }
 .accident-plan-read-icon {
   margin-right: 10px;
@@ -377,6 +379,7 @@
 }
 .accident-plan-terms-bold {
    font-weight: 500;
+   cursor: pointer;
 }
 .card {
   box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
