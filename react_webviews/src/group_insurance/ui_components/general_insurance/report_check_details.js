@@ -8,7 +8,7 @@ import download from 'assets/download.svg';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
-import { numDifferentiation } from '../../../utils/validators';
+import { numDifferentiation, inrFormatDecimal } from '../../../utils/validators';
 import { insuranceStateMapper } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 
@@ -181,7 +181,7 @@ class ReportDetails extends Component {
             <div className="report-detail-summary-item"><span>Issuer:</span> {this.state.policyData.issuer}</div>
             {this.state.policyData.status === 'policy_issued' &&
               <div className="report-detail-summary-item"><span>Policy number:</span> {this.state.policyData.master_policy_number}</div>}
-            <div className="report-detail-summary-item"><span>Premium:</span> {this.state.policyData.premium}/yr</div>
+            <div className="report-detail-summary-item"><span>Premium:</span> {inrFormatDecimal(this.state.policyData.premium)}/yr</div>
             <div className="report-detail-summary-item"><span>Sum assured:</span> {numDifferentiation(this.state.policyData.sum_assured)}</div>
             <div className="report-detail-summary-item"><span>Cover period:</span> {this.state.policyData.insured_details.product_coverage} yr
             ({this.state.policyData.policy_start_date} - {this.state.policyData.policy_end_date})</div>
