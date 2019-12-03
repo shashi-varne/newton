@@ -296,6 +296,7 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--primary`, `${config_to_return.primary}`);
   html.style.setProperty(`--default`, `${config_to_return.default}`);
   html.style.setProperty(`--label`, `${config_to_return.label}`);
+  html.style.setProperty(`--desktop-width`, '640px');
 
   return config_to_return;
 }

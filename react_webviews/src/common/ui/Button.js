@@ -67,7 +67,7 @@ class CustomButton extends Component {
 
 const styles = {
   button: {
-    padding: '16px 0px !important',
+    padding: getConfig().Web ? '12px 15px 12px 15px !important' : '16px 0px !important',
     borderRadius: 6,
     textTransform: 'capitalize',
     fontSize: '16px !important',

@@ -481,6 +481,7 @@
   margin-top: 30px;
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 .report-detail-download img {
   margin-right:10px;
