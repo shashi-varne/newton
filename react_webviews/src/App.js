@@ -15,6 +15,7 @@ import Mandate_OTM from './mandate_otm';
 import RiskProfiler from './risk_profiler';
 import IsipBIller from './isip';
 import HelpSupport from './help_support';
+import CommonLanding from './common/components/landing';
 
 class App extends Component {
   render() {
@@ -30,6 +31,8 @@ class App extends Component {
           <Route path="/risk" component={RiskProfiler} />
           <Route path="/isip" component={IsipBIller} />
           <Route path="/help" component={HelpSupport} />
+          <Route path="/webview/:main_module/:sub_module" component={CommonLanding} />
+          <Route path="/webview/:main_module" component={CommonLanding} />
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>

@@ -5,7 +5,9 @@ import expand from 'assets/expand_icn.png';
 import shrink from 'assets/shrink_icn.png';
 import congratulations_fisdom from 'assets/congratulations_illustration.svg';
 import congratulations_myway from 'assets/congratulations_illustration_myway.svg';
-
+import {
+  inrFormatDecimal
+} from '../../../utils/validators';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
@@ -173,7 +175,6 @@ class PlanSuccessClass extends Component {
   }
 
   renderAccordionBody = (name) => {
-
     if (name === 'policy') {
       return (
         <div className="AccordionBody">
@@ -181,7 +182,7 @@ class PlanSuccessClass extends Component {
             <li>Policy: <span>{this.state.lead_data.policy.product_title}</span></li>
             <li>Issuer: <span>{this.state.lead_data.policy.issuer}</span></li>
             <li>COI: <span>{this.state.lead_data.policy.master_policy_number}</span></li>
-            <li>Sum Assured: <span>{this.state.lead_data.cover_amount}</span></li>
+            <li>Sum Assured: <span>{inrFormatDecimal(this.state.lead_data.cover_amount || 0)}</span></li>
             <li>Cover period: <span>{this.state.lead_data.product_coverage} yr 
             ({this.state.lead_data.policy.policy_start_date} - {this.state.lead_data.policy.policy_end_date})</span></li>
             
@@ -201,7 +202,10 @@ class PlanSuccessClass extends Component {
             <li>DOB: <span>{this.state.lead_data.dob}</span></li>
             <li>Mobile: <span>{this.state.lead_data.mobile_no}</span></li>
             <li>Email: <span>{this.state.lead_data.email}</span></li>
-            <li>Marital status: <span>{this.capitalize(this.state.lead_data.marital_status)}</span></li>
+            {this.state.lead_data.product_name !== "SMART_WALLET" && 
+            <li>Marital status: <span>
+              {this.capitalize(this.state.lead_data.marital_status)}</span></li>
+            }
             <li>Gender: <span>{this.capitalize(this.state.lead_data.gender)}</span></li>
           </ul>
         </div>

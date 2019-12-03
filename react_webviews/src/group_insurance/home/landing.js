@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Container from '../common/Container';
+import qs from 'qs';
 import { insuranceStateMapper } from '../constants';
 import insurance_fisdom from 'assets/ic_fisdom_insurance_fisdom.svg';
 import insurance_myway from 'assets/ic_fisdom_insurance_myway.svg';
@@ -9,8 +10,8 @@ import hospicash_fisdom from 'assets/ic_hospicash_fisdom.svg';
 import hospicash_myway from 'assets/ic_hospicash_myway.svg';
 import accident_fisdom from 'assets/ic_personal_accident_fisdom.svg';
 import accident_myway from 'assets/ic_personal_accident_myway.svg';
-// import wallet_fisdom from 'assets/ic_wallet_fisdom.svg';
-// import wallet_myway from 'assets/ic_wallet_myway.svg';
+import wallet_fisdom from 'assets/ic_wallet_fisdom.svg';
+import wallet_myway from 'assets/ic_wallet_myway.svg';
 import term_fisdom from 'assets/ic_term_insurance_fisdom.svg';
 import term_myway from 'assets/ic_term_insurance_myway.svg';
 // import resume_tag from 'assets/resume_tag.png';
@@ -31,7 +32,8 @@ class Landing extends Component {
     this.state = {
       show_loader: true,
       type: getConfig().productName,
-      insuranceProducts: []
+      insuranceProducts: [],
+      params: qs.parse(props.history.location.search.slice(1))
     }
 
     this.renderPorducts = this.renderPorducts.bind(this);
@@ -48,7 +50,7 @@ class Landing extends Component {
     //  let  health_icon  = this.state.type !== 'fisdom' ? health_myway : health_fisdom;
     let hospicash = this.state.type !== 'fisdom' ? hospicash_myway : hospicash_fisdom;
     let accident_icon = this.state.type !== 'fisdom' ? accident_myway : accident_fisdom;
-    // let wallet_icon = this.state.type !== 'fisdom' ? wallet_myway : wallet_fisdom;
+    let wallet_icon = this.state.type !== 'fisdom' ? wallet_myway : wallet_fisdom;
     let term_icon = this.state.type !== 'fisdom' ? term_myway : term_fisdom;
     let instant_icon = this.state.type !== 'fisdom' ? instant_myway : instant_fisdom;
 
@@ -71,21 +73,25 @@ class Landing extends Component {
         subtitle: 'Starts from ₹ 133/year',
         icon: hospicash
       },
-      // {
-      //   key: 'SMART_WALLET',
-      //   title: 'Smart wallet',
-      //   subtitle: 'Starts from ₹ 250/year',
-      //   icon: wallet_icon
-      // },
+      {
+        key: 'SMART_WALLET',
+        title: 'Smart wallet (fraud protection)',
+        subtitle: 'Starts from ₹ 250/year',
+        icon: wallet_icon
+      },
       {
         key: 'TERM_INSURANCE',
         title: 'Term insurance',
         subtitle: 'Get comprehensive life coverage',
         icon: term_icon
       }
-    ]
+    ];
+
+    let { params } = this.props.location || {};
+    let openModuleData =  params ? params.openModuleData : {}
 
     this.setState({
+      openModuleData: openModuleData,
       insuranceProducts: insuranceProducts,
       insurance: insurance,
       instant_icon: instant_icon
@@ -97,9 +103,12 @@ class Landing extends Component {
     try {
       const res = await Api.get('/api/ins_service/api/insurance/application/summary')
 
-      this.setState({
-        show_loader: false
-      })
+      if(!this.state.openModuleData.sub_module) {
+        this.setState({
+          show_loader: false
+        })
+      }
+      
       if (res.pfwresponse.status_code === 200) {
 
         var resultData = res.pfwresponse.result.response;
@@ -146,6 +155,18 @@ class Landing extends Component {
           BHARTIAXA_APPS: BHARTIAXA_APPS,
           insuranceProducts: insuranceProducts
         })
+
+        if(this.state.openModuleData.sub_module) {
+          let navigateMapper = {
+            hospicash: 'HOSPICASH',
+            personal_accident: 'PERSONAL_ACCIDENT',
+            smart_wallet: 'SMART_WALLET',
+            term_insurance: 'TERM_INSURANCE'
+          };
+
+          let pathname = navigateMapper[this.state.openModuleData.sub_module] || '';
+          this.handleClick(pathname);
+        }
 
       } else {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message

@@ -32,7 +32,7 @@ const coverAmountMapper = {
     5000: 0
   },
   'SMART_WALLET': {
-    40000: 2,
+    50000: 2,
     100000: 1,
     150000: 0
   }
@@ -67,11 +67,17 @@ class PlanDetailsClass extends Component {
   }
 
   componentWillMount() {
+    let productTitle = insuranceProductTitleMapper[this.props.parent ? this.props.parent.state.product_key : ''];
+    if(this.props.parent.state.product_key === 'SMART_WALLET') {
+      productTitle += ' (fraud protection)';
+    }
+
     let instant_icon = this.state.type !== 'fisdom' ? instant_myway : instant_fisdom;
     let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected') || '';
     this.setState({
       lead_id: lead_id || '',
-      instant_icon: instant_icon
+      instant_icon: instant_icon,
+      productTitle: productTitle
     })
 
   }
@@ -345,11 +351,11 @@ class PlanDetailsClass extends Component {
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         handleClick={() => this.handleClickCurrent()}
-        title={insuranceProductTitleMapper[this.props.parent ? this.props.parent.state.product_key : '']}
+        title={this.state.productTitle || ''}
         classOverRideContainer="accident-plan">
         <div className="accident-plan-heading-container">
           <div className="accident-plan-heading">
-            <h1 className="accident-plan-title">{this.props.parent.state.plan_data.product_name}</h1>
+            <h1 className="accident-plan-title">{this.state.productTitle}</h1>
             <img src={provider} alt="" />
           </div>
           <div className="accident-plan-subtitle">
