@@ -354,7 +354,7 @@ class Landing extends Component {
             <img style={{margin: '0px 5px 0 0'}} src={this.state.instant_icon} alt="" />
             Instant policy issuance
             </div>
-          <div style={{ marginTop: '20px', color: '#4a4a4a', fontSize: '10px', lineHeight: '24px', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '2px' }}>Claim assitance | No medical | Zero paperwork</div>
+          <div style={{ marginTop: '20px', color: '#4a4a4a', fontSize: '10px', lineHeight: '24px', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '2px' }}>Claim assistance | No medical | Zero paperwork</div>
           <div className='products' style={{ marginTop: '50px' }}>
             <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '20px' }}>Get started</h1>
             <div>
