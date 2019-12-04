@@ -41,7 +41,7 @@ const Header = ({ classes, title, count, total, current, goBack, edit, type, res
         }
       </Typography>
       {resetpage &&
-        <img onClick={handleReset}
+        <img className="pointer" onClick={handleReset}
           alt=""
           width={20}
           src={restart}
@@ -49,7 +49,7 @@ const Header = ({ classes, title, count, total, current, goBack, edit, type, res
       }
 
       {filterPgae &&
-        <img onClick={handleFilter}
+        <img className="pointer" onClick={handleFilter}
           alt=""
           width={20}
           src={filterIcon}

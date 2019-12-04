@@ -8,6 +8,100 @@
   background-color: #fff;
 }
 
+/* web-app changes */
+body[data-device="web"] .MuiAppBar-positionFixed {
+  left: 0 !important;
+}
+body[data-device="web"] .Header {
+  max-width: var(--desktop-width);
+  margin: 0 auto;
+}
+body[data-device="web"] {
+  height: 100%;
+  overflow: hidden;
+}
+body[data-device="web"] .Footer {
+  max-width: fit-content;
+  position: relative !important;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+
+body[data-device="web"] .ContainerWrapper {
+  max-width: var(--desktop-width);
+  margin: 0 auto;
+  padding-bottom: 3px;
+  overflow: auto;
+}
+body[data-device="web"] .Step {
+  max-width: var(--desktop-width);
+  margin: 0 auto;
+  top: 66px;
+}
+body[data-device="web"] .Banner {
+  max-width: var(--desktop-width);
+}
+
+body[data-device="web"] .header-annual-inc-info {
+  max-width: var(--desktop-width);
+  margin: 0 auto;
+  top: 66px;
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+body[data-device="web"] .quote-top-tiles {
+  max-width: var(--desktop-width);
+  margin: 0 auto;
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+body[data-device="web"] .quote-filter-dialog-head {
+  margin: 0 auto;
+  margin-top: -25px;
+  max-width: var(--desktop-width);
+}
+
+body[data-device="web"] .MuiDialogActions-root{
+  margin: 0 auto;
+  width: fit-content;
+  margin-bottom: 20px;
+}
+
+.MuiDialogContent-root {
+  overflow-x: hidden;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+html, body[data-device="web"] #root{
+  /* autoprefixer: off */
+  height: 100%;
+  background: #f3f4f6;
+}
+
+body[data-device="web"] #root > div:nth-child(2) {
+  height: 100%;
+}
+body[data-device="web"] .Loader {
+  max-width: var(--desktop-width);
+  margin: 0 auto;
+}
+body[data-device="web"] .Container {
+ height: auto !important;
+ overflow: hidden;
+}
+
+body[data-device="web"] #root .ContainerWrapper {
+  height: 100% !important;
+ }
+
+
+
+
 .Container {
    padding: 20px 15px;
   /* margin-bottom: 60px;

@@ -2,6 +2,7 @@
 import qs from 'qs';
 import createBrowserHistory from 'history/createBrowserHistory';
 import {checkValidString} from './validators';
+import $ from 'jquery';
 
 const partnersConfigBase = {
   obc: {
@@ -295,8 +296,20 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--primary`, `${config_to_return.primary}`);
   html.style.setProperty(`--default`, `${config_to_return.default}`);
   html.style.setProperty(`--label`, `${config_to_return.label}`);
+  html.style.setProperty(`--desktop-width`, '640px');
 
   return config_to_return;
+}
+
+export const isMobileDevice = () => {
+  var mobileDevice = isMobile.any() || window.innerWidth < 767;
+    if (mobileDevice) {
+      $("body").attr('data-device', 'mobile');
+    } else {
+      $("body").attr('data-device', 'web');
+    }
+  
+  return mobileDevice;
 }
 
 export const getConfig = () => {
@@ -379,6 +392,7 @@ export const getConfig = () => {
 
   returnConfig.project = project;
   returnConfig.project_child = project_child;
+  returnConfig.isMobileDevice = isMobileDevice();
 
   let { insurance_allweb } = main_query_params;
   if (insurance_allweb) {

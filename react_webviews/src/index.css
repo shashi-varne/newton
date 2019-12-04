@@ -1,4 +1,4 @@
-html, body, #root, .ReferralContainerWrapper {
+html, body, #root .ReferralContainerWrapper {
   height: 100%;
   
 }

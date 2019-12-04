@@ -215,7 +215,7 @@ class Report extends Component {
 
   renderReportCards(props, index) {
     return (
-      <div onClick={() => this.redirectCards(props)} key={index} className="card">
+      <div onClick={() => this.redirectCards(props)} key={index} style={{cursor:'pointer'}} className="card">
         <div className={`report-color-state ${(props.cssMapper.color)}`}>
           <div className="circle"></div>
           <div className="report-color-state-title">{(props.cssMapper.disc)}</div>

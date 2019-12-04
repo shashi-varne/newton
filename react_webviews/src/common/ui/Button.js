@@ -21,7 +21,8 @@ class CustomButton extends Component {
             variant="raised"
             size="large"
             className={`${props.classes.button} borderButton`}
-            style={{color: getConfig().secondary, borderColor: getConfig().secondary}}
+            style={{color: getConfig().secondary, borderColor: getConfig().secondary,
+            flex: !getConfig().isMobileDevice ? 'inherit': 2}}
             disabled={props.disable} >
             <SVG
               preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().secondary)}
@@ -67,13 +68,13 @@ class CustomButton extends Component {
 
 const styles = {
   button: {
-    padding: '16px 0px !important',
+    padding: !getConfig().isMobileDevice ? '12px 15px 12px 15px !important' : '16px 0px !important',
     borderRadius: 6,
     textTransform: 'capitalize',
     fontSize: '16px !important',
     boxShadow: 'none',
     // boxShadow: '0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149)',
-    width: '100% !important'
+    width: !getConfig().isMobileDevice ? 'auto' : '100% !important'
   }
 }
 
