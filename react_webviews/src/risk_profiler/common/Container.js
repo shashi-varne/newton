@@ -109,6 +109,9 @@ class Container extends Component {
       case "/risk/intro":
         nativeCallback({ action: 'exit', events: this.getEvents('back') });
         break;
+      case "/risk/recommendation":
+        this.navigate('result');
+        break;
       default:
         if (navigator.onLine) {
           nativeCallback({ events: this.getEvents('back') });

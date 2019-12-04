@@ -64,14 +64,18 @@ class Recommendation extends Component {
         order_type: type_choices[type],
         period: timeChoices[duration]
       });
-      let url = '/api/risk/profile/user/recommendation?duration=' + timeChoices[duration] +
-        '&amount=' + amount + '&type=' + type_choices[type];
-      const res = await Api.post(url);
+      let url = '/api/risk/profile/user/recommendation?';
+      let riskRecommendationParams = 'duration=' + timeChoices[duration] +
+      '&amount=' + amount + '&type=' + type_choices[type];
+
+      let final_url = url + riskRecommendationParams;
+      const res = await Api.post(final_url);
 
       if (res.pfwresponse.result.funds) {
         this.setState({
           funds: res.pfwresponse.result.funds,
-          amount_error: ''
+          amount_error: '',
+          riskRecommendationParams: riskRecommendationParams
         })
       } else {
         toast(res.pfwresponse.result.message || res.pfwresponse.result.error)
@@ -111,10 +115,11 @@ class Recommendation extends Component {
     })
   }
 
-  navigate = (pathname) => {
+  navigate = (pathname, params) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams
+      search: getConfig().searchParams,
+      params: params || {}
     });
   }
 
@@ -234,22 +239,28 @@ class Recommendation extends Component {
     }
     investment.allocations = allocations;
 
-    if (isin) {
-      nativeCallback({
-        action: 'show_fund', message: {
-          investment: investment,
-          isins: isins,
-          selected_isin: isin || ''
-        }
-      });
-      return;
-    }
-    nativeCallback({
-      action: 'invest', message: {
-        investment: investment,
-        isins: isins
-      }
-    });
+    // if (isin) {
+    //   nativeCallback({
+    //     action: 'show_fund', message: {
+    //       investment: investment,
+    //       isins: isins,
+    //       selected_isin: isin || ''
+    //     }
+    //   });
+    //   return;
+    // }
+    // nativeCallback({
+    //   action: 'invest', message: {
+    //     investment: investment,
+    //     isins: isins
+    //   }
+    // });
+    
+    // params = JSON.stringify(params);
+    // riskRecommendationParams
+    let webview_redirect_url = window.location.origin + '/risk/recommendation' + getConfig().searchParams;
+    window.location.href = 'http://localhost:3001/#!/risk/recommendations?' + 
+    this.state.riskRecommendationParams + '&webview_redirect_url=' + webview_redirect_url;
   }
 
   showFundDetails(isin) {
