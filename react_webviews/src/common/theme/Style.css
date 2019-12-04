@@ -7,6 +7,9 @@
 .ContainerWrapper {
   background-color: #fff;
 }
+html, body, #root {
+  height: 100%;
+}
 
 /* web-app changes */
 body[data-device="web"] .MuiAppBar-positionFixed {
