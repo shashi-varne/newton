@@ -60,6 +60,7 @@ body[data-device="web"] .quote-top-tiles {
 body[data-device="web"] .quote-filter-dialog-head {
   margin: 0 auto;
   margin-top: -25px;
+  max-width: var(--desktop-width);
 }
 
 body[data-device="web"] .MuiDialogActions-root{
