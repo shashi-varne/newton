@@ -239,28 +239,42 @@ class Recommendation extends Component {
     }
     investment.allocations = allocations;
 
-    // if (isin) {
-    //   nativeCallback({
-    //     action: 'show_fund', message: {
-    //       investment: investment,
-    //       isins: isins,
-    //       selected_isin: isin || ''
-    //     }
-    //   });
-    //   return;
-    // }
-    // nativeCallback({
-    //   action: 'invest', message: {
-    //     investment: investment,
-    //     isins: isins
-    //   }
-    // });
-    
-    // params = JSON.stringify(params);
-    // riskRecommendationParams
-    let webview_redirect_url = window.location.origin + '/risk/recommendation' + getConfig().searchParams;
-    window.location.href = 'http://localhost:3001/#!/risk/recommendations?' + 
-    this.state.riskRecommendationParams + '&webview_redirect_url=' + webview_redirect_url;
+    let webview_redirect_url = window.location.origin + '/risk/recommendation' + 
+                                getConfig().searchParams;
+
+    if (isin) {
+
+      if(getConfig().Web) {
+        
+      window.location.href =  getConfig().webAppUrl +  '/risk/fund-info?isin=' + 
+      isin + '&webview_redirect_url=' + webview_redirect_url;
+      
+    } else {
+        nativeCallback({
+          action: 'show_fund', message: {
+            investment: investment,
+            isins: isins,
+            selected_isin: isin || ''
+          }
+        });
+      }
+      
+      return;
+    }
+
+    if(getConfig().Web) {
+
+      window.location.href =  getConfig().webAppUrl +  '/risk/recommendations?' + 
+      this.state.riskRecommendationParams + '&webview_redirect_url=' + webview_redirect_url;
+
+    } else {
+      nativeCallback({
+        action: 'invest', message: {
+          investment: investment,
+          isins: isins
+        }
+      });
+    }
   }
 
   showFundDetails(isin) {

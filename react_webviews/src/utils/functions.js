@@ -411,6 +411,8 @@ export const getConfig = () => {
     returnConfig.Web = true;
   }
 
+  returnConfig.webAppUrl = 'http://localhost:3001/#!';
+
   if (insurance_v2) {
     returnConfig.insurance_v2 = true;
   }
