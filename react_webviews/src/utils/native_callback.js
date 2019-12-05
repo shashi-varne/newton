@@ -204,7 +204,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     if (action === 'native_back' || action === 'exit_web' || action === 'exit' || 
     action === 'open_module') {
       if (!redirect_url) {
-        redirect_url = "https://app.fisdom.com/"
+        redirect_url = getConfig().webAppUrl;
       }
       window.location.href = redirect_url;
     } else if (action === 'open_in_browser') {

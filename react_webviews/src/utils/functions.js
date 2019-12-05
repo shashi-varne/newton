@@ -234,7 +234,8 @@ function getPartnerConfig(partner_code) {
       askEmail: 'ask@fisdom.com',
       mobile: '+91-8048093070',
       configPrimaryColorClass: 'configPrimaryColorClass',
-      configPrimaryBackgroundColorClass: 'fisdomBackColor'
+      configPrimaryBackgroundColorClass: 'fisdomBackColor',
+      webAppUrl: 'https://app.fisdom.com/#!'
     },
     'myway': {
       primary: '#3792fc',
@@ -250,18 +251,24 @@ function getPartnerConfig(partner_code) {
       schemeLink: 'https://mywaywealth.com/scheme/',
       askEmail: 'ask@mywaywealth.com',
       configPrimaryColorClass: 'configPrimaryColorClass',
-      configPrimaryBackgroundColorClass: 'mywayBackColor'
+      configPrimaryBackgroundColorClass: 'mywayBackColor',
+      webAppUrl: 'https://app.mywaywealth.com/#!'
     }
   }
 
   const ismyway = search.indexOf("api.mywaywealth.com") >= 0;
+  const isStaging = search.indexOf("staging") >= 0;
   let productType = 'fisdom';
   if (ismyway || partner_code === 'bfdlmobile') {
     productType = 'myway';
   }
 
   let config_to_return = baseConfig[productType];
-  
+
+  if(isStaging) {
+    config_to_return.webAppUrl = 'https://vinod-dot-plutus-web.appspot.com/#!';
+  }
+
   let partnerKeysMapper = {
     'askEmail': 'email',
     'mobile': 'mobile',
