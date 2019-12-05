@@ -411,7 +411,9 @@ export const getConfig = () => {
     returnConfig.Web = true;
   }
 
-  returnConfig.webAppUrl = 'http://localhost:3001/#!';
+  // returnConfig.webAppUrl = 'http://localhost:3001/#!';
+  // returnConfig.webAppUrl = 'https://app.fisdom.com/#!';
+  returnConfig.webAppUrl = 'https://vinod-dot-plutus-web.appspot.com/#!';
 
   if (insurance_v2) {
     returnConfig.insurance_v2 = true;
