@@ -195,9 +195,11 @@
       padding: 20px 0px 10px 10px;
       width: 105%;
       margin: 5px -13px 0 -15px;
+      cursor: pointer;
   }
   .ins-row-scroll-selected {
     background: #f4f4f4;
+    cursor: unset;
   }
   .intro-empty-dot {
     height: 5px;
@@ -234,6 +236,7 @@
       height: fit-content;
       padding: 3px 5px 3px 5px;
       border-radius: 4px;
+      cursor: pointer;
   }
   img.per-det-img {
     width: 44%;
@@ -345,6 +348,7 @@
       width: 42%;
       margin: 0 0px 0px 9px;
       text-align: center;
+      cursor: pointer;
   }
   .quote-tiles3b {
     /* border: 1px solid; */
@@ -359,6 +363,7 @@
       text-align: center;
       position: relative;
       right: 6px;
+      cursor: pointer;
   }
   .quote-tiles4 {
     display: flex;
@@ -380,6 +385,7 @@
       height: fit-content;
       padding: 3px 5px 3px 5px;
       border-radius: 4px;
+      cursor: pointer;
   }
   span.bold-premium {
     font-weight: 500;
@@ -401,6 +407,7 @@
       right: 4px;
       top: 45px;
       padding: 28px 10px 0px 10px;
+      cursor: pointer;
   }
   .quote-top-tiles-container {
     display: flex;
@@ -633,6 +640,7 @@
     border-bottom: 1px solid #efefef;
     padding: 10px 0 10px 0;
     margin: 20px 0 20px 0;
+    cursor: pointer;
   }
   .quote-addon-tiles1{
     display: flex;
