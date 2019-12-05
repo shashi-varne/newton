@@ -266,7 +266,8 @@ function getPartnerConfig(partner_code) {
   let config_to_return = baseConfig[productType];
 
   if(isStaging) {
-    config_to_return.webAppUrl = 'https://vinod-dot-plutus-web.appspot.com/#!';
+    // config_to_return.webAppUrl = 'https://vinod-dot-plutus-web.appspot.com/#!';
+    config_to_return.webAppUrl = 'http://localhost:3001/#!';
   }
 
   let partnerKeysMapper = {
@@ -417,10 +418,6 @@ export const getConfig = () => {
     returnConfig.app = 'web';
     returnConfig.Web = true;
   }
-
-  // returnConfig.webAppUrl = 'http://localhost:3001/#!';
-  // returnConfig.webAppUrl = 'https://app.fisdom.com/#!';
-  returnConfig.webAppUrl = 'https://vinod-dot-plutus-web.appspot.com/#!';
 
   if (insurance_v2) {
     returnConfig.insurance_v2 = true;

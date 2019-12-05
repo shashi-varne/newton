@@ -239,8 +239,10 @@ class Recommendation extends Component {
     }
     investment.allocations = allocations;
 
-    let webview_redirect_url = window.location.origin + '/risk/recommendation' + 
-                                getConfig().searchParams;
+    let webview_redirect_url = encodeURIComponent(
+      window.location.origin + '/risk/recommendation' + 
+                                getConfig().searchParams
+    );
 
     if (isin) {
 
