@@ -466,9 +466,9 @@ class Recommendation extends Component {
           <div style={{ display: '-webkit-box', marginBottom: 10, fontSize: 10 }}>
             <img style={{ verticalAlign: '-webkit-baseline-middle' }} width={15} src={check} alt="Invest" />
             <div style={{ width: '94%', marginLeft: 8, color: '#4a4a4a' }}>I agree that I have read and accepted the
-              <span onClick={() => this.openTermsAndCondition('terms')} style={{ textDecoration: 'underline', margin: '0 2px 0px 2px' }}> terms & conditions
+              <span onClick={() => this.openTermsAndCondition('terms')} style={{ textDecoration: 'underline', margin: '0 2px 0px 2px', cursor: 'pointer' }}> terms & conditions
               </span> and understood the
-              <span onClick={() => this.openTermsAndCondition('offer')} style={{ textDecoration: 'underline', margin: '0 2px 0px 2px' }}> scheme offer documents </span>
+              <span onClick={() => this.openTermsAndCondition('offer')} style={{ textDecoration: 'underline', margin: '0 2px 0px 2px', cursor: 'pointer' }}> scheme offer documents </span>
             </div>
           </div>
         </div>
