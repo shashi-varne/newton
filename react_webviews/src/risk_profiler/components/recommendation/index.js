@@ -248,7 +248,7 @@ class Recommendation extends Component {
 
       if(getConfig().Web) {
         
-      window.location.href =  getConfig().webAppUrl +  '/risk/fund-info?isin=' + 
+      window.location.href =  getConfig().webAppUrl +  'risk/fund-info?isin=' + 
       isin + '&webview_redirect_url=' + webview_redirect_url;
       
     } else {
@@ -266,7 +266,7 @@ class Recommendation extends Component {
 
     if(getConfig().Web) {
 
-      window.location.href =  getConfig().webAppUrl +  '/risk/recommendations?' + 
+      window.location.href =  getConfig().webAppUrl +  'risk/recommendations?' + 
       this.state.riskRecommendationParams + '&webview_redirect_url=' + webview_redirect_url;
 
     } else {
