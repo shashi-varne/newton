@@ -6,7 +6,7 @@ import toast from '../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 
 import {
-  inrFormatDecimal
+  inrFormatDecimalWithoutIcon
 } from '../../utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 
@@ -222,10 +222,10 @@ class Report extends Component {
         </div>
         <div className="report-ins-name">{props.product_name}</div>
         <div className="report-cover">
-          <div className="report-cover-amount"><span>Cover amount:</span> {inrFormatDecimal(props.cover_amount)}
+          <div className="report-cover-amount"><span>Cover amount:</span> ₹{inrFormatDecimalWithoutIcon(props.cover_amount)}
           {props.product_key === 'HOSPICASH' && <span style={{fontWeight: 400}}>/day</span>}
           </div>
-          <div className="report-cover-amount"><span>Premium:</span> {inrFormatDecimal(props.premium)}/yr</div>
+          <div className="report-cover-amount"><span>Premium:</span> ₹{inrFormatDecimalWithoutIcon(props.premium)}/yr</div>
         </div>
       </div>
     )
