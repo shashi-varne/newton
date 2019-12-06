@@ -267,6 +267,7 @@ function getPartnerConfig(partner_code) {
 
   if(isStaging) {
     config_to_return.webAppUrl = 'https://vinod-dot-plutus-web.appspot.com/#!/';
+    // config_to_return.webAppUrl = 'http://localhost:3001/#!/';
   }
 
   let partnerKeysMapper = {

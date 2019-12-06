@@ -64,14 +64,18 @@ class Recommendation extends Component {
         order_type: type_choices[type],
         period: timeChoices[duration]
       });
-      let url = '/api/risk/profile/user/recommendation?duration=' + timeChoices[duration] +
-        '&amount=' + amount + '&type=' + type_choices[type];
-      const res = await Api.post(url);
+      let url = '/api/risk/profile/user/recommendation?';
+      let riskRecommendationParams = 'duration=' + timeChoices[duration] +
+      '&amount=' + amount + '&type=' + type_choices[type];
+
+      let final_url = url + riskRecommendationParams;
+      const res = await Api.post(final_url);
 
       if (res.pfwresponse.result.funds) {
         this.setState({
           funds: res.pfwresponse.result.funds,
-          amount_error: ''
+          amount_error: '',
+          riskRecommendationParams: riskRecommendationParams
         })
       } else {
         toast(res.pfwresponse.result.message || res.pfwresponse.result.error)
@@ -111,10 +115,11 @@ class Recommendation extends Component {
     })
   }
 
-  navigate = (pathname) => {
+  navigate = (pathname, params) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams
+      search: getConfig().searchParams,
+      params: params || {}
     });
   }
 
@@ -234,22 +239,44 @@ class Recommendation extends Component {
     }
     investment.allocations = allocations;
 
+    let webview_redirect_url = encodeURIComponent(
+      window.location.origin + '/risk/recommendation' + 
+                                getConfig().searchParams
+    );
+
     if (isin) {
-      nativeCallback({
-        action: 'show_fund', message: {
-          investment: investment,
-          isins: isins,
-          selected_isin: isin || ''
-        }
-      });
+
+      if(getConfig().Web) {
+        
+      window.location.href =  getConfig().webAppUrl +  'risk/fund-info?isin=' + 
+      isin + '&webview_redirect_url=' + webview_redirect_url;
+      
+    } else {
+        nativeCallback({
+          action: 'show_fund', message: {
+            investment: investment,
+            isins: isins,
+            selected_isin: isin || ''
+          }
+        });
+      }
+      
       return;
     }
-    nativeCallback({
-      action: 'invest', message: {
-        investment: investment,
-        isins: isins
-      }
-    });
+
+    if(getConfig().Web) {
+
+      window.location.href =  getConfig().webAppUrl +  'risk/recommendations?' + 
+      this.state.riskRecommendationParams + '&webview_redirect_url=' + webview_redirect_url;
+
+    } else {
+      nativeCallback({
+        action: 'invest', message: {
+          investment: investment,
+          isins: isins
+        }
+      });
+    }
   }
 
   showFundDetails(isin) {
@@ -425,7 +452,7 @@ class Recommendation extends Component {
               // onKeyChange={this.onBlurAmount()}
               />
             </div> */}
-            <div onClick={() => this.handleClickOpen()} >
+            <div style={{cursor: 'pointer'}} onClick={() => this.handleClickOpen()} >
               <p style={{ color: '#4a4a4a', fontSize: 14 }}>Amount</p>
               <div style={{ color: getConfig().primary }}>{inrFormatDecimal(this.state.amount)}</div>
               <div style={{ border: '1px solid #f2f2f2', marginTop: 3 }}></div>
@@ -439,9 +466,9 @@ class Recommendation extends Component {
           <div style={{ display: '-webkit-box', marginBottom: 10, fontSize: 10 }}>
             <img style={{ verticalAlign: '-webkit-baseline-middle' }} width={15} src={check} alt="Invest" />
             <div style={{ width: '94%', marginLeft: 8, color: '#4a4a4a' }}>I agree that I have read and accepted the
-              <span onClick={() => this.openTermsAndCondition('terms')} style={{ textDecoration: 'underline', margin: '0 2px 0px 2px' }}> terms & conditions
+              <span onClick={() => this.openTermsAndCondition('terms')} style={{ textDecoration: 'underline', margin: '0 2px 0px 2px', cursor: 'pointer' }}> terms & conditions
               </span> and understood the
-              <span onClick={() => this.openTermsAndCondition('offer')} style={{ textDecoration: 'underline', margin: '0 2px 0px 2px' }}> scheme offer documents </span>
+              <span onClick={() => this.openTermsAndCondition('offer')} style={{ textDecoration: 'underline', margin: '0 2px 0px 2px', cursor: 'pointer' }}> scheme offer documents </span>
             </div>
           </div>
         </div>

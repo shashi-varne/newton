@@ -64,7 +64,7 @@ class Container extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: this.props.location.search
+      search: getConfig().searchParams
     });
   }
 
@@ -108,6 +108,9 @@ class Container extends Component {
       case "/risk":
       case "/risk/intro":
         nativeCallback({ action: 'exit', events: this.getEvents('back') });
+        break;
+      case "/risk/recommendation":
+        this.navigate('result');
         break;
       default:
         if (navigator.onLine) {
