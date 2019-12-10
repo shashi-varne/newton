@@ -236,6 +236,15 @@
    font-size: 14px;
    line-height: 22px;
 }
+.plan-diseases-text {
+  background: #f4f3f6;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: #160d2e;
+  font-size: 14px;
+  line-height: 22px;
+  margin-right: 15px;
+}
 .plan-details-item.disabled {
   opacity: 0.4;
 }

@@ -450,7 +450,8 @@ export const insuranceStateMapper = {
   'SMART_WALLET': 'wallet',
   'PERSONAL_ACCIDENT': 'accident',
   'HOSPICASH': 'hospicash',
-  'term_insurance': 'term'
+  'term_insurance': 'term',
+  'DENGUE': 'dengue'
 }
 
 export const insuranceProductTitleMapper = {
@@ -458,7 +459,8 @@ export const insuranceProductTitleMapper = {
   'SMART_WALLET': 'Smart wallet',
   'PERSONAL_ACCIDENT': 'Personal accident insurance',
   'HOSPICASH': 'Hospital daily cash',
-  'term_insurance': 'Term Insurance'
+  'term_insurance': 'Term Insurance',
+  'DENGUE': 'Dengue insurance'
 }
 
 export function getBhartiaxaStatusToState(policy) {
