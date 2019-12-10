@@ -12,7 +12,7 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import {
-  validateNumber,validateLengthDynamic, 
+  validateNumber, validateLengthDynamic,
 } from 'utils/validators';
 // validateStreetName, validateEmpty, validateConsecutiveChar, validateMinChar
 import { nativeCallback } from 'utils/native_callback';
@@ -72,7 +72,7 @@ class PaymentSuccessClass extends Component {
       if (res.pfwresponse.status_code === 200) {
 
         var leadData = res.pfwresponse.result.lead;
-        if(!leadData.permanent_address) {
+        if (!leadData.permanent_address) {
           leadData.permanent_address = {};
         }
 
@@ -80,7 +80,7 @@ class PaymentSuccessClass extends Component {
           if (leadData.permanent_address[key]) {
             address_details_data[key] = leadData.permanent_address[key];
           }
-          
+
         })
 
         address_details_data.addressline = leadData.permanent_address.address_line;
@@ -101,7 +101,7 @@ class PaymentSuccessClass extends Component {
       toast('Something went wrong');
     }
 
-    
+
 
   }
 
@@ -121,17 +121,10 @@ class PaymentSuccessClass extends Component {
         if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
           address_details_data.city = res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name;
           address_details_data.state = res.pfwresponse.result[0].state_name
-
         } else {
-          this.setState({
-            city: '',
-            state: '',
-            [name + '_error']: 'Please enter valid pincode'
-          });
-
           address_details_data.city = '';
           address_details_data.state = '';
-          address_details_data[name + '_error'] = '';
+          address_details_data[name + '_error'] = 'Please enter valid pincode';
         }
 
       } catch (err) {
@@ -141,7 +134,9 @@ class PaymentSuccessClass extends Component {
         toast('Something went wrong');
       }
 
-
+    } else {
+      address_details_data.city = '';
+      address_details_data.state = '';
     }
 
     this.setState({
@@ -185,15 +180,15 @@ class PaymentSuccessClass extends Component {
 
       if (address_details_data.pincode.length !== 6 || !validateNumber(address_details_data.pincode) || address_details_data.pincode_error) {
         address_details_data['pincode_error'] = 'Please enter valid pincode';
-      } 
-     
-      
+      }
+
+
       if (!validateLengthDynamic(address_details_data.addressline, 90)) {
         address_details_data['addressline_error'] = 'Maximum length of address is 90';
       }
 
       // if (!validateConsecutiveChar(address_details_data.addressline)) {
-        
+
       //   address_details_data['addressline_error'] = 'Address can not contain more than 3 same consecutive characters';
       // } else if (!validateLengthDynamic(address_details_data.addressline, 90)) {
       //   address_details_data['addressline_error'] = 'Maximum length of address is 90';
@@ -251,7 +246,7 @@ class PaymentSuccessClass extends Component {
 
           this.navigate('summary-success')
         } else {
-        
+
           toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
             || 'Something went wrong');
         }
