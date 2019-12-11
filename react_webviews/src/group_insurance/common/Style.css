@@ -503,7 +503,3 @@
 .report-detail .Accordion:last-child {
   border-bottom: 0;
 }
-.MuiInput-input.MuiInput-disabled {
-  color: #a2a2a2;
-  background: #ffffff;
-}
