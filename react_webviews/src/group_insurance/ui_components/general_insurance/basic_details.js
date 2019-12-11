@@ -3,8 +3,10 @@ import Container from '../../common/Container';
 import Input from '../../../common/ui/Input';
 import MobileInputWithoutIcon from '../../../common/ui/MobileInputWithoutIcon';
 import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
-import { genderOptions, insuranceMaritalStatus, relationshipOptionsGroupInsuranceAll,
-  insuranceProductTitleMapper } from '../../constants';
+import {
+  genderOptions, insuranceMaritalStatus, relationshipOptionsGroupInsuranceAll,
+  insuranceProductTitleMapper
+} from '../../constants';
 import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
@@ -239,7 +241,7 @@ class BasicDetailsForm extends Component {
     this.setState({
       basic_details_data: basic_details_data
     })
-  
+
   };
 
   handleChangeRadio = name => event => {
@@ -338,7 +340,7 @@ class BasicDetailsForm extends Component {
           this.setState({
             age: age
           })
-        } else if(res.pfwresponse.status_code === 401) {
+        } else if (res.pfwresponse.status_code === 401) {
 
         } else {
           toast(res.pfwresponse.result.error || res.pfwresponse.result.message
@@ -396,7 +398,7 @@ class BasicDetailsForm extends Component {
     for (var i = 0; i < keys_to_check.length; i++) {
       let key_check = keys_to_check[i];
       let first_error = key_check === 'gender' || key_check === 'marital_status' ? 'Please select ' :
-                                             'Please enter ';
+        'Please enter ';
       if (!basic_details_data[key_check]) {
         basic_details_data[key_check + '_error'] = first_error + keysMapper[key_check];
       }
@@ -405,7 +407,7 @@ class BasicDetailsForm extends Component {
 
     if (!validateAlphabets(basic_details_data.name)) {
       basic_details_data['name_error'] = 'Name can contain only alphabets';
-    } 
+    }
     // else if (validateLengthNames(basic_details_data.name, 'name', this.state.provider).isError) {
     //   basic_details_data['name_error'] = validateLengthNames(basic_details_data.name, 'name', basic_details_data.provider).error_msg;
     // } else if (basic_details_data.name.split(" ").filter(e => e).length < 2) {
@@ -421,17 +423,21 @@ class BasicDetailsForm extends Component {
       basic_details_data['dob_error'] = 'Please enter valid date';
     } else if (IsFutureDate(basic_details_data.dob)) {
       basic_details_data['dob_error'] = 'Future date is not allowed';
-    } else if (this.state.age > 65 || this.state.age < 18) {
-      basic_details_data['dob_error'] = 'Valid age is between 18 and 65';
-    } 
+    } else if (this.props.parent.state.product_key === 'PERSONAL_ACCIDENT' && (basic_details_data.cover_amount === 500000 || basic_details_data.cover_amount === 1000000) && (this.state.age > 50 || this.state.age < 18)) {
+      basic_details_data['dob_error'] = 'Valid age is between 18 and 50';
+    } else if (this.props.parent.state.product_key !== 'DENGUE' && (this.state.age > 65 || this.state.age < 18)) {
+        basic_details_data['dob_error'] = 'Valid age is between 18 and 65';
+    } else if (this.props.parent.state.product_key === 'DENGUE' && (this.state.age > 50 || this.state.age < 18)) {
+      basic_details_data['dob_error'] = 'Valid age is between 18 and 50';
+    }
 
-    
+
     if (!basic_details_data.email || (basic_details_data.email.length < 10 || !validateEmail(basic_details_data.email))) {
 
       basic_details_data['email_error'] = 'Please enter valid email';
     }
 
-    if (!basic_details_data.mobile_no || 
+    if (!basic_details_data.mobile_no ||
       (basic_details_data.mobile_no.length !== 10 || !validateNumber(basic_details_data.mobile_no))
       || !numberShouldStartWith(basic_details_data.mobile_no)) {
       basic_details_data['mobile_no_error'] = 'Please enter valid mobile number';
