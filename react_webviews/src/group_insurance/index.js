@@ -76,6 +76,14 @@ import SmartwalletFailed from './products/smart_wallet/payment-failed';
 import SmartwalletPlanPayment from './products/smart_wallet/payment';
 import SmartwalletPlanDetails from './products/smart_wallet';
 
+/* Dengue */
+import DengueForm from './products/dengue/form';
+import DengueSummary from './products/dengue/summary';
+import DengueFailed from './products/dengue/payment-failed';
+import DenguePaymentSuccess from './products/dengue/payment-success';
+import DenguePlanSuccess from './products/dengue/plan-success';
+import DenguePlanDetails from './products/dengue';
+import DenguePlanPayment from './products/dengue/payment';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -157,6 +165,15 @@ const Insurance = (props) => {
           <Route path={`${url}/accident/payment-success`} component={AccidentPaymentSuccess} />
           <Route path={`${url}/accident/payment-failed`} component={AccidentFailed} />
           <Route path={`${url}/accident/payment/:status`} component={AccidentPlanPayment} />
+
+          {/********** Dengue **********/}
+          <Route path={`${url}/dengue/plan`} component={DenguePlanDetails} />
+          <Route path={`${url}/dengue/form`} component={DengueForm} />
+          <Route path={`${url}/dengue/summary`} component={DengueSummary} />
+          <Route path={`${url}/dengue/summary-success`} component={DenguePlanSuccess} />
+          <Route path={`${url}/dengue/payment-success`} component={DenguePaymentSuccess} />
+          <Route path={`${url}/dengue/payment-failed`} component={DengueFailed} />
+          <Route path={`${url}/dengue/payment/:status`} component={DenguePlanPayment} />
 
           {/********** Hospicash **********/}
           <Route path={`${url}/hospicash/plan`} component={HospicashPlanDetails} />

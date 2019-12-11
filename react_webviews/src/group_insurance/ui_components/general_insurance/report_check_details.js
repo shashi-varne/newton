@@ -177,7 +177,7 @@ class ReportDetails extends Component {
             </div>
           </div>
           <div className="report-detail-summary">
-            <div className="report-detail-summary-item"><span>Policy:</span> {this.state.policyData.product_title} insurance</div>
+            <div className="report-detail-summary-item"><span>Policy:</span> {this.state.policyData.product_title}</div>
             <div className="report-detail-summary-item"><span>Issuer:</span> {this.state.policyData.issuer}</div>
             {this.state.policyData.status === 'policy_issued' &&
               <div className="report-detail-summary-item"><span>Policy number:</span> {this.state.policyData.master_policy_number}</div>}

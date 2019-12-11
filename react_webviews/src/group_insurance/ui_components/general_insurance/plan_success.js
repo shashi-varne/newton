@@ -25,6 +25,10 @@ const product_config = {
   'SMART_WALLET': {
     'top_title1': 'Your Bank cards & Mobile wallets are insured with',
     'top_title2': 'Bharti AXA General Insurance.'
+  },
+  'DENGUE': {
+    'top_title1': 'You have successfully insured yourself against vector borne diseases with',
+    'top_title2': 'Bharti AXA General Insurance.'
   }
 }
 

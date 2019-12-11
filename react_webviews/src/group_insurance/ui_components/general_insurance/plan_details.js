@@ -35,6 +35,11 @@ const coverAmountMapper = {
     50000: 2,
     100000: 1,
     150000: 0
+  },
+  'DENGUE': {
+    35000: 0,
+    25000: 1,
+    15000: 2,
   }
 }
 
@@ -56,8 +61,8 @@ class PlanDetailsClass extends Component {
       type: getConfig().productName,
       color: getConfig().primary,
       quoteData: {},
-      premiudmDtailsStored: window.localStorage.getItem('group_insurance_plan_final_data') ? 
-      JSON.parse(window.localStorage.getItem('group_insurance_plan_final_data')) : ''
+      premiudmDtailsStored: window.localStorage.getItem('group_insurance_plan_final_data') ?
+        JSON.parse(window.localStorage.getItem('group_insurance_plan_final_data')) : ''
     };
 
     this.renderPlans = this.renderPlans.bind(this);
@@ -68,7 +73,7 @@ class PlanDetailsClass extends Component {
 
   componentWillMount() {
     let productTitle = insuranceProductTitleMapper[this.props.parent ? this.props.parent.state.product_key : ''];
-    if(this.props.parent.state.product_key === 'SMART_WALLET') {
+    if (this.props.parent.state.product_key === 'SMART_WALLET') {
       productTitle += ' (fraud protection)';
     }
 
@@ -96,7 +101,7 @@ class PlanDetailsClass extends Component {
   }
 
   setPremiumData(premium_details, leadData) {
-    if(!leadData || Object.keys(leadData).length === 0) {
+    if (!leadData || Object.keys(leadData).length === 0) {
       this.setState({
         selectedIndex: 0
       })
@@ -149,7 +154,7 @@ class PlanDetailsClass extends Component {
       if (this.state.lead_id) {
         let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
 
-       
+
         if (res.pfwresponse.status_code === 200) {
 
           var leadData = res.pfwresponse.result.lead;
@@ -167,9 +172,9 @@ class PlanDetailsClass extends Component {
             || 'Something went wrong');
         }
       } else {
-        
+
         let data = {};
-        if(this.state.premiudmDtailsStored) {
+        if (this.state.premiudmDtailsStored) {
           data = this.state.premiudmDtailsStored[this.props.parent.state.product_key] || {};
         }
         this.setPremiumData(premium_details, data || {});
@@ -215,15 +220,22 @@ class PlanDetailsClass extends Component {
   renderBenefits = (props, index) => {
     return (
       <div key={index} className={`plan-details-item ${(props.isDisabled) ? 'disabled' : ''}`}
-       >
+      >
         <img className="plan-details-icon" src={props.icon} alt="" />
         <div>
           <div className="plan-details-text">{props.disc}</div>
-          {((props.isDisabled && props.disc2) || 
-          (this.props.parent.state.product_key === 'HOSPICASH' && props.disc2)) 
-          &&<div style={{color: '#6F6F6F', margin:'7px 0 0 0', fontSize:10}}>
-             {props.disc2}</div>}
+          {((props.isDisabled && props.disc2) ||
+            (this.props.parent.state.product_key === 'HOSPICASH' && props.disc2))
+            && <div style={{ color: '#6F6F6F', margin: '7px 0 0 0', fontSize: 10 }}>
+              {props.disc2}</div>}
         </div>
+      </div>
+    )
+  }
+  renderDiseases = (props, index) => {
+    return (
+      <div key={index} className={`plan-details-item ${(props.isDisabled) ? 'disabled' : ''}`}>
+        <div className="plan-diseases-text">{index + 1}. {props}</div>
       </div>
     )
   }
@@ -246,11 +258,11 @@ class PlanDetailsClass extends Component {
         onClick={() => this.selectPlan(index)}>
         <div className="accident-plan-item1">Cover amount</div>
         <div className="accident-plan-item2">{inrFormatDecimal(props.sum_assured)}
-        {this.props.parent.state.product_key === 'HOSPICASH' && <span>/day</span>}
+          {this.props.parent.state.product_key === 'HOSPICASH' && <span>/day</span>}
         </div>
         <div className="accident-plan-item3">
           <span className="accident-plan-item4">in</span>
-          <span className="accident-plan-item-color" style={{color: getConfig().primary,fontWeight:'bold'}}>₹ {props.premium}/year</span></div>
+          <span className="accident-plan-item-color" style={{ color: getConfig().primary, fontWeight: 'bold' }}>₹ {props.premium}/year</span></div>
         {props.plus_benefit &&
           <div className="accident-plan-benefit" style={styles.color}>+{props.plus_benefit} Benefits</div>
         }
@@ -282,8 +294,8 @@ class PlanDetailsClass extends Component {
 
     let group_insurance_plan_final_data = this.state.group_insurance_plan_final_data || {};
     group_insurance_plan_final_data[final_data.product_name] = final_data;
-    window.localStorage.setItem('group_insurance_plan_final_data', 
-    JSON.stringify(group_insurance_plan_final_data));
+    window.localStorage.setItem('group_insurance_plan_final_data',
+      JSON.stringify(group_insurance_plan_final_data));
 
     this.setState({
       show_loader: true
@@ -295,7 +307,7 @@ class PlanDetailsClass extends Component {
       if (this.state.lead_id) {
         final_data.lead_id = this.state.lead_id;
         res2 = await Api.post('api/ins_service/api/insurance/bhartiaxa/lead/update', final_data)
-       
+
 
         if (res2.pfwresponse.status_code === 200) {
           this.navigate('form', '', final_data);
@@ -319,16 +331,16 @@ class PlanDetailsClass extends Component {
   }
 
   sendEvents(user_action) {
-    let selectedIndex =  this.state.selectedIndex || 0;
+    let selectedIndex = this.state.selectedIndex || 0;
     let eventObj = {
       "event_name": 'Group Insurance',
       "properties": {
         "user_action": user_action,
         "screen_name": this.props.parent.state.product_key,
         "cover_amount": this.props.parent.state.plan_data.premium_details[selectedIndex] ?
-         this.props.parent.state.plan_data.premium_details[selectedIndex].sum_assured: '',
+          this.props.parent.state.plan_data.premium_details[selectedIndex].sum_assured : '',
         "premium": this.props.parent.state.plan_data.premium_details[selectedIndex] ?
-        this.props.parent.state.plan_data.premium_details[selectedIndex].premium: '',
+          this.props.parent.state.plan_data.premium_details[selectedIndex].premium : '',
         "cover_period": 1,
         "tnc_checked": "yes"
       }
@@ -363,14 +375,16 @@ class PlanDetailsClass extends Component {
           </div>
         </div>
         <div className="accident-plans">
-          <div style={{display: 'flex',justifyContent: 'flex-end', margin:' 0 0px 0 0'}}>
-            <div style={{fontSize: '14px', lineHeight: '24px', color: '#4a4a4a',
-                display: 'flex',width: 'fit-content', background: '#ede9f5',padding: '0px 10px 0 10px' }}>
-              <img style={{margin: '0px 5px 0 0'}} src={this.state.instant_icon} alt="" />
+          <div style={{ display: 'flex', justifyContent: 'flex-end', margin: ' 0 0px 0 0' }}>
+            <div style={{
+              fontSize: '14px', lineHeight: '24px', color: '#4a4a4a',
+              display: 'flex', width: 'fit-content', background: '#ede9f5', padding: '0px 10px 0 10px'
+            }}>
+              <img style={{ margin: '0px 5px 0 0' }} src={this.state.instant_icon} alt="" />
               instant policy issuance
               </div>
           </div>
-          <div style={{paddingTop: 20}} className="accident-plan-heading-title">Select a plan</div>
+          <div style={{ paddingTop: 20 }} className="accident-plan-heading-title">Select a plan</div>
           <div className="accident-plan-list-container">
             <div className="accident-plan-list">
               {this.props.parent && this.props.parent.state.plan_data &&
@@ -379,6 +393,21 @@ class PlanDetailsClass extends Component {
             </div>
           </div>
         </div>
+        {this.props.parent.state.product_key === 'DENGUE' &&
+          <div style={{ marginTop: '40px', padding: '0 15px' }}>
+            <div style={{ color: '#160d2e', fontSize: '16px', fontWeight: '500', marginBottom: '10px' }}>Diseases covered</div>
+
+
+            <div className="plan-details">
+
+            </div>
+            <div style={{display:'flex', flexWrap: 'wrap'}}>    
+            {this.props.parent && this.props.parent.state.plan_data &&
+              this.props.parent.state.plan_data.premium_details &&
+              this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_diseases_covered.map(this.renderDiseases)}
+            </div>
+          </div>
+        }
 
         <div style={{ marginTop: '40px', padding: '0 15px' }}>
           <div style={{ color: '#160d2e', fontSize: '16px', fontWeight: '500', marginBottom: '10px' }}>Benefits that are covered</div>
@@ -420,9 +449,9 @@ class PlanDetailsClass extends Component {
             </Grid>
             <Grid item xs={11}>
               <div className="accident-plan-terms-text" style={{}}>
-                I accept <span onClick={() => this.openInBrowser(this.state.quoteData.terms_and_conditions, 
-                'terms_and_conditions')} className="accident-plan-terms-bold" style={styles.color}>
-                   Terms and conditions</span></div>
+                I accept <span onClick={() => this.openInBrowser(this.state.quoteData.terms_and_conditions,
+                  'terms_and_conditions')} className="accident-plan-terms-bold" style={styles.color}>
+                  Terms and conditions</span></div>
             </Grid>
           </Grid>
         </div>

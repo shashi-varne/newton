@@ -14,6 +14,8 @@ import wallet_fisdom from 'assets/ic_wallet_fisdom.svg';
 import wallet_myway from 'assets/ic_wallet_myway.svg';
 import term_fisdom from 'assets/ic_term_insurance_fisdom.svg';
 import term_myway from 'assets/ic_term_insurance_myway.svg';
+import dengue_fisdom from 'assets/ic_dengue_insurance_fisdom.svg';
+import dengue_myway from 'assets/ic_dengue_insurance_myway.svg';
 // import resume_tag from 'assets/resume_tag.png';
 
 import instant_fisdom from 'assets/instant_fisdom.svg';
@@ -53,6 +55,7 @@ class Landing extends Component {
     let wallet_icon = this.state.type !== 'fisdom' ? wallet_myway : wallet_fisdom;
     let term_icon = this.state.type !== 'fisdom' ? term_myway : term_fisdom;
     let instant_icon = this.state.type !== 'fisdom' ? instant_myway : instant_fisdom;
+    let dengue_icon = this.state.type !== 'fisdom' ? dengue_myway : dengue_fisdom;
 
     let insuranceProducts = [
       // {
@@ -66,6 +69,12 @@ class Landing extends Component {
         title: 'Personal accident insurance',
         subtitle: 'Starts from ₹ 200/year',
         icon: accident_icon
+      },
+      {
+        key: 'DENGUE',
+        title: 'Dengue insurance',
+        subtitle: 'Starts from ₹ 50/year',
+        icon: dengue_icon
       },
       {
         key: 'HOSPICASH',
@@ -94,7 +103,8 @@ class Landing extends Component {
       openModuleData: openModuleData,
       insuranceProducts: insuranceProducts,
       insurance: insurance,
-      instant_icon: instant_icon
+      instant_icon: instant_icon,
+      dengue_icon: dengue_icon
     })
   }
 
@@ -128,7 +138,8 @@ class Landing extends Component {
         let BHARTIAXA_APPS = {
           'PERSONAL_ACCIDENT': BHARTIAXA['PERSONAL_ACCIDENT'],
           'HOSPICASH': BHARTIAXA['HOSPICASH'],
-          'SMART_WALLET': BHARTIAXA['SMART_WALLET']
+          'SMART_WALLET': BHARTIAXA['SMART_WALLET'],
+          'DENGUE': BHARTIAXA['DENGUE']
         }
 
         for (var key in BHARTIAXA_APPS) {
@@ -161,7 +172,8 @@ class Landing extends Component {
             hospicash: 'HOSPICASH',
             personal_accident: 'PERSONAL_ACCIDENT',
             smart_wallet: 'SMART_WALLET',
-            term_insurance: 'TERM_INSURANCE'
+            term_insurance: 'TERM_INSURANCE',
+            dengue:'DENGUE'
           };
 
           let pathname = navigateMapper[this.state.openModuleData.sub_module] || '';
@@ -262,7 +274,7 @@ class Landing extends Component {
   handleClick = (product_key) => {
 
     this.sendEvents('next', product_key)
-    var BHARTIAXA_PRODUCTS = ['PERSONAL_ACCIDENT', 'HOSPICASH', 'SMART_WALLET', 'HEALTH'];
+    var BHARTIAXA_PRODUCTS = ['PERSONAL_ACCIDENT', 'HOSPICASH', 'SMART_WALLET', 'HEALTH', 'DENGUE'];
 
     var lead_id = '';
     var path = '';
