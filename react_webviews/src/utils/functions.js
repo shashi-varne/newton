@@ -443,8 +443,7 @@ export const getConfig = () => {
   }
 
   if (project === 'e-mandate') {
-    let { key } = main_query_params;
-    searchParams += '&key=' + key + '&generic_callback=true'
+    searchParams += '&generic_callback=true'
   }
 
   if (project === 'isip') {

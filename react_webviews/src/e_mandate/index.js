@@ -15,6 +15,7 @@ import RequestAbout from './components/about';
 import RequestBank from './components/bank';
 import RequestFailure from './components/failure';
 import RequestSuccess from './components/success';
+import RequestRedirection from './components/redirection';
 import { ToastContainer } from 'react-toastify';
 
 import { create } from 'jss';
@@ -56,6 +57,7 @@ const Mandate_OTM = (props) => {
         <Switch>
           <Route exact path={`${url}`} component={RequestAbout} />
           <Route path={`${url}/select-bank`} component={RequestBank} />
+          <Route path={`${url}/redirection`} component={RequestRedirection} />
           <Route path={`${url}/failure`} component={RequestFailure} />
           <Route path={`${url}/success`} component={RequestSuccess} />
           

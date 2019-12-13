@@ -103,12 +103,11 @@ class SelectBank extends Component {
       const res = await Api.post('/api/mandate/enach/user/banks', bank_data);
       if (res.pfwresponse.result) {
         let paymentRedirectUrl = encodeURIComponent(
-          window.location.origin + '/e-mandate'
+          window.location.origin + '/e-mandate/redirection'
         );
         let current_url = window.location.origin + '/e-mandate'
-        var pgLink = res.pfwresponse.result.enach_start_url + '/' + this.state.params.key + '?digio_id=' + res.pfwresponse.result.digio_id;
+        var pgLink = res.pfwresponse.result.enach_start_url;
         let app = getConfig().app;
-        var back_url = encodeURIComponent(current_url);
         // eslint-disable-next-line
         pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
           '&app=' + app;
@@ -158,7 +157,7 @@ class SelectBank extends Component {
 
           <div style={{ marginTop: '15px' }} className="highlight-text highlight-color-info">
             <div className="highlight-text1">
-              <img className="highlight-text11" src={this.state.info_icon} />
+              <img className="highlight-text11" src={this.state.info_icon} alt="info" />
               <div className="highlight-text12">
                 NOTE
         </div>
