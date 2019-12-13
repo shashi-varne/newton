@@ -22,7 +22,7 @@ class PaymentFailedClass extends Component {
   }
 
   navigate = (pathname) => {
-    this.props.parent.props.history.push({
+    this.props.history.push({
       pathname: pathname,
       search: getConfig().searchParams
     });
