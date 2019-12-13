@@ -106,7 +106,7 @@ class SelectBank extends Component {
           window.location.origin + '/e-mandate'
         );
         let current_url = window.location.origin + '/e-mandate'
-        var pgLink = res.pfwresponse.result.enach_start_url + '/' + this.state.params.key;
+        var pgLink = res.pfwresponse.result.enach_start_url + '/' + this.state.params.key + '?digio_id=' + res.pfwresponse.result.digio_id;
         let app = getConfig().app;
         var back_url = encodeURIComponent(current_url);
         // eslint-disable-next-line
