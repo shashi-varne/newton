@@ -18,7 +18,7 @@ class PaymentFailedClass extends Component {
 
   handleClick = () => {
     this.sendEvents('retry');
-    this.navigate('e-mandate')
+    this.navigate('e-mandate');
   }
 
   navigate = (pathname) => {

@@ -4,6 +4,7 @@ import qs from 'qs';
 import sip_resumed_fisdom from 'assets/sip_resumed_illustration_fisdom.svg';
 import sip_resumed_myway from 'assets/sip_resumed_illustration_myway.svg';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 class MandateSuccess extends Component {
   constructor(props) {
@@ -17,15 +18,13 @@ class MandateSuccess extends Component {
 
   handleClick = () => {
     this.sendEvents('ok');
-    // nativeCallback({ action: 'native_back' });
-    let url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate&message=success&code=200&destination=';
-    window.location.replace(url);
+    nativeCallback({ action: 'exit' });
   }
 
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: 'base_url=' + this.state.params.base_url + '&key=' + this.state.params.key + '&pc_key=' + this.state.params.pc_key
+      search: getConfig().searchParams
     });
   }
 
