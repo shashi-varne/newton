@@ -17,21 +17,37 @@ class PaymentFailedClass extends Component {
   }
 
   handleClick = () => {
+    this.sendEvents('retry');
+    this.navigate('e-mandate')
   }
 
   navigate = (pathname) => {
     this.props.parent.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams,
-      params: {
-        disableBack: true
-      }
+      search: getConfig().searchParams
     });
+  }
+
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'e-mandate',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'auth_failed'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   }
 
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         fullWidthButton={true}
         buttonTitle='RETRY'
         onlyButton={true}

@@ -90,7 +90,24 @@ class About extends Component {
     )
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'e-mandate',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'set_up_easy_sip'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   handleClick = async () => {
+    this.sendEvents('next');
     this.setState({
       show_loader: true
     })
@@ -158,6 +175,7 @@ class About extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="Select Bank for e-mandate"
+        events={this.sendEvents('just_set_events')}
       >
         <div style={{ textAlign: 'center' }}>
           <img width={'100%'} src={this.state.top_icon} alt="Mandate" />

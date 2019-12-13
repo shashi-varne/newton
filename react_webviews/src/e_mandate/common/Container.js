@@ -88,7 +88,6 @@ class Container extends Component {
     }
     let pathname = this.props.history.location.pathname;
     let { params } = this.props.location;
-    console.log(this.props);
     if ((params && params.disableBack) || this.props.disableBack) {
       nativeCallback({ action: 'exit', events: this.getEvents('exit') });
       return;
@@ -100,13 +99,6 @@ class Container extends Component {
         nativeCallback({ action: 'exit', events: this.getEvents('exit') });
         break;
       default:
-        // if (navigator.onLine) {
-        //   this.props.history.goBack();
-        // } else {
-        //   this.setState({
-        //     openDialog: true
-        //   });
-        // }
         if (this.getEvents('back')) {
           nativeCallback({ events: this.getEvents('back') });
         }

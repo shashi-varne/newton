@@ -47,6 +47,24 @@ class SelectBank extends Component {
     });
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'e-mandate',
+      "properties": {
+        "user_action": user_action,
+        "bank_name": this.state.selected_bank.primary ? "yes" : "no",
+        "primary_bank": this.state.selected_bank.bank_name,
+        "screen_name": 'select_bank'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   selectBank = (props) => {
     this.setState({
       selected_bank: props
@@ -76,6 +94,7 @@ class SelectBank extends Component {
   }
 
   handleClick = async () => {
+    this.sendEvents('next');
     this.setState({
       show_loader: true
     })
@@ -83,7 +102,28 @@ class SelectBank extends Component {
       let bank_data = { selected_bank: this.state.selected_bank };
       const res = await Api.post('/api/mandate/enach/user/banks', bank_data);
       if (res.pfwresponse.result) {
-        window.location.href = res.pfwresponse.result.enach_start_url + '/' + this.state.params.key
+        let paymentRedirectUrl = encodeURIComponent(
+          window.location.origin + '/e-mandate'
+        );
+        let current_url = window.location.origin + '/e-mandate'
+        var pgLink = res.pfwresponse.result.enach_start_url + '/' + this.state.params.key;
+        let app = getConfig().app;
+        var back_url = encodeURIComponent(current_url);
+        // eslint-disable-next-line
+        pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
+          '&app=' + app;
+        if (getConfig().generic_callback) {
+          pgLink += '&generic_callback=' + getConfig().generic_callback;
+        }
+
+        nativeCallback({
+          action: 'take_control', message: {
+            back_url: current_url,
+            back_text: 'You are almost there, do you really want to go back?'
+          }
+        });
+
+        window.location.href = pgLink;
       }
       else {
         this.setState({
@@ -104,6 +144,7 @@ class SelectBank extends Component {
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Select bank"
         handleClick={this.handleClick}

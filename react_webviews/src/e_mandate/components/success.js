@@ -15,16 +15,8 @@ class MandateSuccess extends Component {
     }
   }
 
-  componentWillMount() {
-    let { params } = this.props.location;
-  }
-
-
-  componentDidMount() {
-
-  }
-
   handleClick = () => {
+    this.sendEvents('ok');
     // nativeCallback({ action: 'native_back' });
     let url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate&message=success&code=200&destination=';
     window.location.replace(url);
@@ -37,9 +29,26 @@ class MandateSuccess extends Component {
     });
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'e-mandate',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'auth_success'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Authorisation successful"
         handleClick={this.handleClick}
