@@ -39,7 +39,7 @@ class RedirectionClass extends Component {
     render() {
         return (
             <Container
-                title="Success"
+                title="Redirection"
                 showLoader={true}
                 hide_header={true}
             >

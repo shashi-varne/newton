@@ -77,7 +77,7 @@ class SelectBank extends Component {
         <div className="display-flex">
           <img src={props.image} width={40} alt="" />
           <div style={{ marginLeft: '20px', lineHeight: '20px' }}>
-            <div>{props.short_name}</div>
+            <div>{props.bank_short_name}</div>
             <div>{props.obscured_account_number}</div>
           </div>
         </div>
@@ -105,7 +105,6 @@ class SelectBank extends Component {
         let paymentRedirectUrl = encodeURIComponent(
           window.location.origin + '/e-mandate/redirection'
         );
-        let current_url = window.location.origin + '/e-mandate'
         var pgLink = res.pfwresponse.result.enach_start_url;
         let app = getConfig().app;
         // eslint-disable-next-line
@@ -117,7 +116,6 @@ class SelectBank extends Component {
 
         nativeCallback({
           action: 'take_control', message: {
-            back_url: current_url,
             back_text: 'You are almost there, do you really want to go back?'
           }
         });
