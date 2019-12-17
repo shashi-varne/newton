@@ -40,7 +40,7 @@ class DenguePlanDetails extends Component {
 
     var product_benefits = [
       {
-        'disc': 'Reimburse you hospital expenses up to cover amount',
+        'disc': 'Reimburse your hospital expenses up to cover amount',
         'key': 'reimburse',
         'icon': this.state.ic_d_b1
       },
