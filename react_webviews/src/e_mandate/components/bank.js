@@ -107,11 +107,20 @@ class SelectBank extends Component {
         );
         var pgLink = res.pfwresponse.result.enach_start_url;
         let app = getConfig().app;
+        let redirect_url = getConfig().redirect_url;
         // eslint-disable-next-line
         pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
-          '&app=' + app;
+          '&app=' + app + '&redirect_url=' + redirect_url;
         if (getConfig().generic_callback) {
           pgLink += '&generic_callback=' + getConfig().generic_callback;
+        }
+
+        if (getConfig().app === 'ios') {
+          nativeCallback({
+            action: 'show_top_bar', message: {
+              title: 'Authorisation'
+            }
+          });
         }
 
         nativeCallback({

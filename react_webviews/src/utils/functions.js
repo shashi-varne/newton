@@ -374,6 +374,7 @@ export const getConfig = () => {
   }
 
   if(checkValidString(redirect_url)) {
+    redirect_url = encodeURIComponent(redirect_url)
     returnConfig.redirect_url = redirect_url;
     searchParams += `&redirect_url=${redirect_url}`;
     searchParamsMustAppend += `&redirect_url=${redirect_url}`;
