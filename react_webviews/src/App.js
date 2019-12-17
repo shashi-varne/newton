@@ -12,6 +12,7 @@ import Referral from './referral';
 import Gold from './gold';
 import Mandate from './mandate_address';
 import Mandate_OTM from './mandate_otm';
+import EMandate from './e_mandate';
 import RiskProfiler from './risk_profiler';
 import IsipBIller from './isip';
 import HelpSupport from './help_support';
@@ -28,6 +29,7 @@ class App extends Component {
           <Route path="/gold" component={Gold} />
           <Route path="/mandate" component={Mandate} />
           <Route path="/mandate-otm" component={Mandate_OTM} />
+          <Route path="/e-mandate" component={EMandate} />
           <Route path="/risk" component={RiskProfiler} />
           <Route path="/isip" component={IsipBIller} />
           <Route path="/help" component={HelpSupport} />

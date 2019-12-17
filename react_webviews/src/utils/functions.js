@@ -347,6 +347,8 @@ export const getConfig = () => {
     project = 'risk';
   } else if (main_pathname.indexOf('mandate-otm') >= 0) {
     project = 'mandate-otm';
+  } else if (main_pathname.indexOf('e-mandate') >= 0) {
+    project = 'e-mandate';
   } else if (main_pathname.indexOf('mandate') >= 0) {
     project = 'mandate';
   } else if (main_pathname.indexOf('gold') >= 0) {
@@ -372,6 +374,7 @@ export const getConfig = () => {
   }
 
   if(checkValidString(redirect_url)) {
+    redirect_url = encodeURIComponent(redirect_url)
     returnConfig.redirect_url = redirect_url;
     searchParams += `&redirect_url=${redirect_url}`;
     searchParamsMustAppend += `&redirect_url=${redirect_url}`;
@@ -438,6 +441,10 @@ export const getConfig = () => {
     if (returnConfig.iOS && !returnConfig.campaign_version) {
       returnConfig.hide_header = true;
     }
+  }
+
+  if (project === 'e-mandate') {
+    searchParams += '&generic_callback=true'
   }
 
   if (project === 'isip') {
