@@ -122,13 +122,38 @@ class SelectBank extends Component {
             }
           });
         }
-
-        nativeCallback({
-          action: 'take_control', message: {
-            back_text: 'You are almost there, do you really want to go back?'
-          }
-        });
-
+        if (!redirect_url) {
+          nativeCallback({
+            action: 'take_control', message: {
+              back_text: 'You are almost there, do you really want to go back?'
+            }
+          });
+        } else {
+          let redirectData = {
+            show_toolbar: false,
+            icon: 'back',
+            dialog: {
+              message: 'Are you sure you want to exit?',
+              action: [{
+                action_name: 'positive',
+                action_text: 'Yes',
+                action_type: 'redirect',
+                redirect_url: redirect_url
+              }, {
+                action_name: 'negative',
+                action_text: 'No',
+                action_type: 'cancel',
+                redirect_url: ''
+              }]
+            },
+            data: {
+              type: 'webview'
+            }
+          };
+          nativeCallback({
+            action: 'third_party_redirect', message: redirectData
+          });
+        }
         window.location.href = pgLink;
       }
       else {
