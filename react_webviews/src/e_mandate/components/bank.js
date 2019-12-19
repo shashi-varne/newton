@@ -52,8 +52,8 @@ class SelectBank extends Component {
       "event_name": 'e-mandate',
       "properties": {
         "user_action": user_action,
-        "bank_name": this.state.selected_bank.primary ? "yes" : "no",
-        "primary_bank": this.state.selected_bank.bank_name,
+        "primary_bank": this.state.selected_bank.primary ? "yes" : "no",
+        "bank_name": this.state.selected_bank.bank_name,
         "screen_name": 'select_bank'
       }
     };
