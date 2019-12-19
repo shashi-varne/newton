@@ -114,15 +114,14 @@ class SelectBank extends Component {
         if (getConfig().generic_callback) {
           pgLink += '&generic_callback=' + getConfig().generic_callback;
         }
-
-        if (getConfig().app === 'ios') {
-          nativeCallback({
-            action: 'show_top_bar', message: {
-              title: 'Authorisation'
-            }
-          });
-        }
         if (!redirect_url) {
+          if (getConfig().app === 'ios') {
+            nativeCallback({
+              action: 'show_top_bar', message: {
+                title: 'Authorisation'
+              }
+            });
+          }
           nativeCallback({
             action: 'take_control', message: {
               back_text: 'You are almost there, do you really want to go back?'
@@ -150,6 +149,9 @@ class SelectBank extends Component {
               type: 'webview'
             }
           };
+          if (getConfig().app === 'ios') {
+            redirectData.show_toolbar = true;
+          }
           nativeCallback({
             action: 'third_party_redirect', message: redirectData
           });
