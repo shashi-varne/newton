@@ -79,7 +79,7 @@ class Landing extends Component {
       {
         key: 'HOSPICASH',
         title: 'Hospital daily cash',
-        subtitle: 'Starts from ₹ 133/year',
+        subtitle: 'Starts from ₹ 750/year',
         icon: hospicash
       },
       {
