@@ -326,7 +326,6 @@ export const getConfig = () => {
   let main_query_params = qs.parse(window.location.search.slice(1));
   let { base_url } = main_query_params;
   let { generic_callback } = main_query_params;
-  generic_callback= "true"
   let { redirect_url } = main_query_params;
   let { partner_code } = main_query_params;
 
