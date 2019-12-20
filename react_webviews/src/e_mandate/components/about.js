@@ -43,7 +43,8 @@ class About extends Component {
     this.state = {
       show_loader: false,
       params: qs.parse(props.history.location.search.slice(1)),
-      questionIndex: -1,
+      questionIndex: 0,
+      faq_read: "no",
       top_icon: getConfig().productName !== 'fisdom' ? top_icon_myway : top_icon_fisdom,
       b_icon: getConfig().productName !== 'fisdom' ? ic_b_myway : ic_b_fisdom,
       e_icon: getConfig().productName !== 'fisdom' ? ic_e_myway : ic_e_fisdom,
@@ -95,6 +96,7 @@ class About extends Component {
       "event_name": 'e-mandate',
       "properties": {
         "user_action": user_action,
+        "faq_read": this.state.faq_read,
         "screen_name": 'set_up_easy_sip'
       }
     };
@@ -138,11 +140,13 @@ class About extends Component {
   showAnswers(index) {
     if (this.state.questionIndex === index) {
       this.setState({
-        questionIndex: -1
+        questionIndex: -1,
+        faq_read: "yes"
       })
     } else {
       this.setState({
-        questionIndex: index
+        questionIndex: index,
+        faq_read: "yes"
       })
     }
   }
