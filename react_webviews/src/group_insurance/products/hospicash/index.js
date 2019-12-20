@@ -58,6 +58,20 @@ class HospicashPlanDetails extends Component {
       'logo': '',
       'premium_details': [
         {
+          "sum_assured": 10000,
+          "product_benefits_included": ['daily_cash','no_medical_examination'],
+          "premium": "7500",
+          "tax_amount": "1350",
+          "plus_benefit": ''
+        },
+        {
+          "sum_assured": 7500,
+          "product_benefits_included": ['daily_cash','no_medical_examination'],
+          "premium": "5000",
+          "tax_amount": "900",
+          "plus_benefit": ''
+        },
+        {
           "sum_assured": 5000,
           "product_benefits_included": ['daily_cash','no_medical_examination'],
           "premium": "2500",
@@ -71,13 +85,13 @@ class HospicashPlanDetails extends Component {
           "tax_amount": "135",
           "plus_benefit": ''
         },
-        {
-          "sum_assured": 500,
-          "product_benefits_included": ['daily_cash','no_medical_examination'],
-          "premium": "133",
-          "tax_amount": "23.94",
-          "plus_benefit": ''
-        }
+        // {
+        //   "sum_assured": 500,
+        //   "product_benefits_included": ['daily_cash','no_medical_examination'],
+        //   "premium": "133",
+        //   "tax_amount": "23.94",
+        //   "plus_benefit": ''
+        // }
       ]
     }
 
@@ -88,9 +102,8 @@ class HospicashPlanDetails extends Component {
        
         let benefit_data = {};
         benefit_data = Object.assign(benefit_data, benefit);
-        if(index === 2 && benefit_data.key === 'daily_cash') {
-          benefit_data.disc = 'Daily cash benefits on hospitalization for 5 days*.';
-          benefit_data.disc2 = '* to get cover for 30 days select a higher plan';
+        if(index === 0 && benefit_data.key === 'daily_cash') {
+          benefit_data.disc = 'Daily cash benefits on hospitalization for 90 days.';
         }
 
         if (premium.product_benefits_included.indexOf(benefit_data.key) === -1) {

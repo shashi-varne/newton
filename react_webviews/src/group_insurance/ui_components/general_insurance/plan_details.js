@@ -27,9 +27,10 @@ const coverAmountMapper = {
     200000: 2,
   },
   'HOSPICASH': {
-    500: 2,
-    1500: 1,
-    5000: 0
+    10000: 0,
+    7500: 1,
+    5000: 2,
+    1500: 3,
   },
   'SMART_WALLET': {
     50000: 2,
@@ -111,7 +112,7 @@ class PlanDetailsClass extends Component {
       premium_details[key] = leadData[key]
     })
 
-    let selectedIndex = coverAmountMapper[this.props.parent.state.product_key][premium_details.cover_amount];
+    let selectedIndex = coverAmountMapper[this.props.parent.state.product_key][premium_details.cover_amount] || 0;
     this.setState({
       selectedIndex: selectedIndex
     })
