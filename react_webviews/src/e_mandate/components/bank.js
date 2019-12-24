@@ -26,9 +26,11 @@ class SelectBank extends Component {
   componentWillMount() {
     let selected_bank = {}
     let index = 0;
+    // eslint-disable-next-line
     this.state.banks.map((bank, i) => {
       if (bank.primary) {
         index = i;
+        // eslint-disable-next-line
         return;
       }
     })
