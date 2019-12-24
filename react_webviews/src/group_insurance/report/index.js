@@ -175,7 +175,6 @@ class Report extends Component {
   }
 
   statusMapper(policy) {
-
     let cssMapper = {
       'init' : {
         color: 'yellow',
@@ -192,6 +191,10 @@ class Report extends Component {
       'rejected' : {
         color: 'red',
         disc: 'Policy Rejected'
+      },
+      'cancelled' : {
+        color: 'red',
+        disc: 'Policy Cancelled'
       }
     }
 
@@ -208,7 +211,7 @@ class Report extends Component {
       obj.status = policy.status;
     }
 
-    obj.cssMapper = cssMapper[obj.status];
+    obj.cssMapper = cssMapper[obj.status] || cssMapper['init'];
 
     return obj;
   }
