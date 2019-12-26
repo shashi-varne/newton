@@ -583,8 +583,8 @@ class QuoteGeneration extends Component {
     return (
       <div key={index}>
         <div className="quote-tiles2">
-         {type=== 'basic_benefits' && index === 0 && <span className="quote-tiles2a">{index + 1}. Lump sum payment of  {numDifferentiation(this.state.quoteData.cover_amount)} to your nominee</span>}
-         {(type !=='basic_benefits' || index !== 0) && <span className="quote-tiles2a">{index + 1}. {props}</span>}
+         {index === 0 && <span className="quote-tiles2a">{index + 1}. Lump sum payment of  {numDifferentiation(this.state.quoteData.cover_amount)} to your nominee</span>}
+         {(index !== 0) && <span className="quote-tiles2a">{index + 1}. {props}</span>}
         </div>
         {props.points && props.points.map((row, i) => (
           <div key={i} className="quote-tiles2">
@@ -599,7 +599,7 @@ class QuoteGeneration extends Component {
     return (
       <div key={index}>
         <div className="quote-tiles2">
-          <span className="quote-tiles2a">{index + 1}. {props}</span>
+         <span className="quote-tiles2a">{index + 1}. {props}</span>
         </div>
         {props.points && props.points.map((row, i) => (
           <div key={i} className="quote-tiles2">
@@ -666,7 +666,7 @@ class QuoteGeneration extends Component {
           </div>
           {props.expendAddOnOpen &&
             <div style={{ marginTop: 10 }}>
-              {props.quote_provider && quotePoints[props.quote_provider].add_on_benefits.map(this.renderQuotePoints)
+              {props.quote_provider && quotePoints[props.quote_provider].add_on_benefits.map(this.renderAddOnPoints)
               }
             </div>
           }
