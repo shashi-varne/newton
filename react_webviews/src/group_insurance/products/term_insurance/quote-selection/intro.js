@@ -1,115 +1,361 @@
 import React, { Component } from 'react';
 import qs from 'qs';
 
+import toast from '../../../../common/ui/Toast';
 import Container from '../../../common/Container';
+import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
+import dropdown_arrow_fisdom from 'assets/down_arrow_fisdom.svg';
+import dropdown_arrow_myway from 'assets/down_arrow_myway.svg';
+import kotak_logo from 'assets/kotak_life_logo.png';
+import {
+  inrFormatDecimal
+} from '../../../../utils/validators';
+import '../../../../utils/native_listner_otm';
 
-import help_myway from 'assets/help_myway.svg';
-import help_fisdom from 'assets/help_fisdom.svg';
-import secure_family_myway from 'assets/secure_family_myway.svg';
-import secure_family_fisdom from 'assets/secure_family_fisdom.svg';
-import unfortunate_events_fisdom from 'assets/unfortunate_events_fisdom.svg';
-import unfortunate_events_myway from 'assets/unfortunate_events_myway.svg';
-
-import { Carousel } from 'react-responsive-carousel';
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-
+import { quotePointsPorivders } from '../../../constants';
 
 class Intro extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      show_loader: true,
       params: qs.parse(props.history.location.search.slice(1)),
       type: getConfig().productName,
-      selectedItem: 0,
-      selectedIndex: 0,
-      card_swipe: 'no',
-      card_swipe_count: 0,
-      time_spent: 0
+      termRedirectData: {},
+      canRenderList: false,
+      openPopUp: false,
+      renderList: [],
+      paymentFreqRadio: 'Monthly',
+      expendAddOnOpen: false,
+      provider: 'KOTAK'
     }
-    this.renderTitle = this.renderTitle.bind(this);
+
+    this.renderQuotes = this.renderQuotes.bind(this);
+    this.renderQuotePoints = this.renderQuotePoints.bind(this);
   }
 
   componentWillMount() {
-    let intervalId = setInterval(this.countdown, 1000);
-    this.setState({
-      countdownInterval: intervalId,
-      show_loader: false
-    });
+    nativeCallback({ action: 'take_control_reset' });
   }
+  
+  async getTermInsurance() {
+    try {
+      const res2 = await Api.get('/api/insurance/all/summary');
 
-  componentWillUnmount() {
-    clearInterval(this.state.countdownInterval);
-  }
+      this.setState({
+        show_loader: false
+      })
+      if (res2.pfwresponse.status_code === 200) {
 
-  countdown = () => {
-    this.setState({
-      time_spent: this.state.time_spent + 1
-    })
-  };
+        window.localStorage.setItem('excluded_providers', '');
+        window.localStorage.setItem('required_providers', '');
+        window.localStorage.setItem('quoteSelected', '');
+        window.localStorage.setItem('quoteData', '');
+        let pathname = '';
+        let resumeFlagTerm = false;
+        let termData = res2.pfwresponse.result;
+        let application;
+        if (!termData.error) {
+          let insurance_apps = termData.insurance_apps;
+          let required_fields;
+          required_fields = termData.required;
+          if (insurance_apps.complete.length > 0) {
+            application = insurance_apps.complete[0];
+            pathname = 'report';
+          } else if (insurance_apps.failed.length > 0) {
+            application = insurance_apps.failed[0];
+            pathname = 'report';
+          } else if (insurance_apps.init.length > 0) {
+            application = insurance_apps.init[0];
+            resumeFlagTerm = true;
+            pathname = 'journey';
+          } else if (insurance_apps.submitted.length > 0) {
+            resumeFlagTerm = true;
+            application = insurance_apps.submitted[0];
+            pathname = 'journey';
+          } else {
+            // intro
+            pathname = 'intro';
+            return;
+          }
 
-  renderTitle(index) {
-    index = index * 1;
-    if (this.state.imageData) {
-      return (
-        <div style={{
-          color: '#4a4a4a', fontSize: 16, fontWeight: 500, textAlign: 'center',
-          marginTop: 20
-        }}>
-          {this.state.imageData[this.state.selectedIndex].text}
-        </div>
-      )
+          if (application) {
+            let data = {
+              application: application,
+              required_fields: required_fields
+            }
+            window.localStorage.setItem('cameFromHome', true);
+            window.localStorage.setItem('homeApplication', JSON.stringify(data));
+            pathname = 'journey';
+            this.setState({
+              termApplication: application
+            })
+          }
+        } else {
+          pathname = 'intro';
+        }
+
+        let fullPath = '/group-insurance/term/' + pathname;
+
+        this.setState({
+          redirectTermPath: fullPath
+        })
+
+        let termRedirectData = {
+          resumeFlag: resumeFlagTerm,
+          resumeRedirectPath: fullPath,
+          provider: resumeFlagTerm && application ? application.provider: ''
+        };
+
+        this.setState({
+          termRedirectData: termRedirectData
+        })
+
+      } else {
+
+      }
+
+
+    } catch (err) {
+      console.log(err);
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
     }
   }
 
-  async componentDidMount() {
+  async getQuotes() {
 
+    this.getTermInsurance();
+    try {
+      // const res = await Api.post('/api/insurance/quote');
 
-    let imageData = [
-      {
-        text: 'Insurance is securing family',
-        src: this.state.type === 'fisdom' ? secure_family_fisdom : secure_family_myway
-      },
-      {
-        text: 'from unfortunate events',
-        src: this.state.type === 'fisdom' ? unfortunate_events_fisdom : unfortunate_events_myway
-      },
-      {
-        text: '& we help you to choose right policy',
-        src: this.state.type === 'fisdom' ? help_fisdom : help_myway
+      const res = {
+        "pfwuser_id": 6495756614631425, "pfwresponse": {
+          "status_code": 200, "requestapi": "",
+          "result": {
+            "quotes":
+              [{
+                "quotation_dump": "", "quote_describer":
+                {
+                  "image": "https://kotak-dot-plutus-staging.appspot.com/static/img/insurance/hdfc_logo.png",
+                  "explainer": "<style media='screen'> body {margin: 0;padding-bottom:12px;}div.no-span{margin-bottom: 10px; font-weight: bold; border-top: 1px solid #efefef; width: 100%;}</style><div style='font-size: 14px;font-family: Roboto;'><div style='display:-webkit-box;padding: 12px;padding-bottom: 0px;'> <img style='width: 120px;margin-bottom: 15px;' src='https://kotak-dot-plutus-staging.appspot.com/static/img/insurance/hdfc_logo.png' alt='' /><div style='width: 50%; margin: 11px 0 0 10px;color: #4a4a4a;font-weight: 600;'>HDFC Life Click 2 Protect 3D Plus</div></div><div class='no-span' style='color: #444;margin-bottom: 10px;font-weight: bold;'></div><div style='color: #878787;margin-bottom: 5px;padding-left:12px;'><b>Payout: </b>Lump sum in case of death</div><div style='color:#878787;padding-left:12px;'><b>Full waiver of future premiums:</b><div style='margin-top: 5px;'><div style='margin-bottom: 5px;'> <b>A.</b> On Accidental Total Permanent Disability </div><div> <b>B.</b> In case of diagnosis of Terminal Illness </div></div></div></div>", "provider": "HDFC"
+                }, "payment_frequency": "MONTHLY", "id": 6581433712771073, "tobacco_choice": "Y", "insurance_title": "HDFC Life Click 2 Protect 3D Plus", "annual_quote_id": 6508615293730817, "status": "init", "annual_quote_json": { "total_tax": "3264", "premium": "21396", "quote_date": "26-12-2019", "adb_premium": "0.0", "base_premium": "18132.0", "riders_base_premium": "0.0", "adb_service_tax": "0.0", "base_premium_tax": "3263.76", "cover_amount": "13000000", "ci_base_premium": "0.0", "payment_frequency": "YEARLY", "app_num": "", "base_premium_total": "21395.76", "adb_base_premium": "0.0", "ci_premium": "0.0", "ci_service_tax": "0.0", "quote_id": "", "product_name": "HDFC Life Click 2 Protect 3D Plus", "total_savings": "684", "cover_plan": "Life" }, "dt_created": "26/12/2019", "payout_option": "Lump sum", "quote_provider_logo": "https://kotak-dot-plutus-staging.appspot.com/static/img/insurance/hdfc_logo.png", "term": 50, "annual_income": "7-10", "quote_provider": "HDFC", "dob": "21/08/1993", "gender": "MALE", "cover_amount": 13000000, "accident_benefit": 0, "quote_json": { "total_tax": "281", "premium": "1840", "quote_date": "26-12-2019", "adb_premium": "0.0", "base_premium": "1559.0", "riders_base_premium": "0.0", "adb_service_tax": "0.0", "base_premium_tax": "280.62", "cover_amount": "13000000", "ci_base_premium": "0.0", "payment_frequency": "MONTHLY", "app_num": "", "base_premium_total": "1839.62", "adb_base_premium": "0.0", "ci_premium": "0.0", "ci_service_tax": "0.0", "quote_id": "", "product_name": "HDFC Life Click 2 Protect 3D Plus", "cover_plan": "Life" }, "ci_benefit": "N", "cover_plan": "Life"
+              }], "errors": []
+          }
+        }, "pfwmessage": "Success", "pfwutime": "",
       }
-    ];
+      // this.setState({
+      //   show_loader: false
+      // });
+
+      let quotesData = [
+
+        {
+          'quote_provider': 'KOTAK',
+          'premium': '199',
+          'quote_provider_logo': kotak_logo,
+          'claim_settled_ratio': '97.4'
+        },
+        {
+          'quote_provider': 'HDFC',
+          'premium': '417',
+          'quote_provider_logo': 'https://kotak-dot-plutus-staging.appspot.com/static/img/insurance/hdfc_logo.png',
+          'claim_settled_ratio': '98'
+        }
+      ]
+      if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.quotes) {
+        // let result = res.pfwresponse.result.quotes;
+        // let quotes = [
+        //   result[0], result[0]
+        // ]
+
+        this.setState({
+          // quotes: quotes,
+          quotes: quotesData
+        });
+      } else {
+        this.setState({
+          quotes: []
+        });
+        toast(res.pfwresponse.result.error);
+      }
+
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
+    }
+  }
+
+  componentDidMount() {
 
     this.setState({
-      imageData: imageData
+      dropdown_arrow: this.state.type !== 'fisdom' ? dropdown_arrow_myway : dropdown_arrow_fisdom,
     })
-    this.renderTitle(0);
+    this.getQuotes();
   }
 
 
-  navigate = (pathname) => {
+  navigate = (pathname, search, params) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams
+      search: search ? search : getConfig().searchParams
     });
   }
 
-  handleClick = async () => {
-    this.sendEvents('next');
-    this.navigate('journey-intro')
+  selectQuote(quote, index) {
+
+    this.setState({
+      quoteSelected: quote,
+      selectedIndexQuote: index,
+    })
+
+    this.sendEvents('next', quote);
+    if (this.state.termRedirectData.resumeFlag &&
+      this.state.termRedirectData.provider === quote.quote_provider) {
+      this.navigate(this.state.termRedirectData.resumeRedirectPath)
+      return;
+    }
+
+    if (quote.quote_provider === 'HDFC') {
+      this.navigate('personal-details-intro')
+    } else {
+      let search = getConfig().searchParams + '&provider=' + quote.quote_provider
+      this.navigate('personal-details-redirect', search)
+    }
+
   }
 
-  sendEvents(user_action) {
+  renderQuotePoints(props, index) {
+    return (
+      <div key={index}>
+        <div className="quote-tiles2" style={{ marginLeft: '5%' }}>
+          <span className="quote-tiles2a">{index + 1}. {props}</span>
+        </div>
+        {props.points && props.points.map((row, i) => (
+          <div key={i} className="quote-tiles2">
+            <span className="quote-tiles2b">- {row}</span>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  renderAddOnPoints(props, index) {
+    return (
+      <div key={index}>
+        <div className="quote-tiles2">
+          <span className="quote-tiles2a">{index + 1}. {props}</span>
+        </div>
+        {props.points && props.points.map((row, i) => (
+          <div key={i} className="quote-tiles2">
+            <span className="quote-tiles2b">- {row}</span>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  expendAddOn(index) {
+
+    let quotes = this.state.quotes;
+    quotes[index].expendAddOnOpen = !quotes[index].expendAddOnOpen;
+    this.setState({
+      quotes: quotes
+    })
+  }
+
+  renderQuotes(props, index) {
+    return (
+      <div key={index} className="quote-tiles" style={{ margin: index !== 0 ? '20px 0 0 0' : '' }}>
+        <div className="quote-tiles1">
+          <div className="quote-tiles1a">
+            <img style={{ width: 90 }} src={props.quote_provider_logo} alt="Insurance" />
+          </div>
+          <div className="quote-tiles1b">{props.insurance_title}</div>
+        </div>
+
+        <div className="quote-tiles4" style={{
+          padding: '0 11px 10px 17px',
+          margin: '0 0 10px 0px', borderBottom: '1px solid #efefef'
+        }}>
+          <div className="quote-tiles4a">
+            Claim Settled
+          </div>
+          <div className="quote-tiles4a" style={{ color: getConfig().primary, fontWeight: 500 }}>
+            {props.claim_settled_ratio}%
+          </div>
+        </div>
+        <div className="quote-tiles4">
+          <div className="quote-tiles4a">
+            Basic Benifits
+            </div>
+        </div>
+
+        {/* basic benefits */}
+        {props.quote_provider &&
+          quotePointsPorivders[props.quote_provider].basic_benefits.map(this.renderQuotePoints)}
+
+        {/* add on benefits */}
+        <div className="quote-addon-tiles11">
+          <div className="quote-addon-tiles1" onClick={() => this.expendAddOn(index, props.quote_provider)}>
+            <div className="quote-addon-tiles1a">
+              Add on Benifits
+          </div>
+            <div className="quote-addon-tiles1b">
+              <img className="quote-addon-tiles1c" src={this.state.dropdown_arrow} alt="Insurance" />
+            </div>
+          </div>
+          {props.expendAddOnOpen &&
+            <div style={{ marginTop: 10 }}>
+              {props.quote_provider && quotePointsPorivders[props.quote_provider].add_on_benefits.map(this.renderQuotePoints)
+              }
+            </div>
+          }
+        </div>
+
+        {(props.quote_provider !== this.state.termRedirectData.provider ||
+          (props.quote_provider === 'HDFC' && !this.state.termRedirectData.resumeFlag)) && <div className="quote-tiles3">
+            <div className="quote-tiles3a-providers">
+              <div className="quote-tiles3aa" style={{ display: 'grid', textAlign: 'left' }}>
+                <span> Starts from</span>
+                <span> {inrFormatDecimal(props.premium)}/month*</span>
+              </div>
+            </div>
+            <div className="quote-tiles3b" style={{ padding: '14px', width: '48%' }} onClick={() => this.selectQuote(props, index)}>
+              <div className="quote-tiles3ba">
+                <span style={{ textTransform: 'uppercase', fontWeight: 500 }}>Get Free Quote</span>
+              </div>
+            </div>
+          </div>}
+
+        {this.state.termRedirectData.resumeFlag && (props.quote_provider === this.state.termRedirectData.provider) && <div className="quote-tiles3">
+          <div className="quote-tiles3b" style={{ padding: '14px', width: '90%', margin: '0 0 0 13px' }} onClick={() => this.selectQuote(props, index)}>
+            <div className="quote-tiles3ba">
+              <span style={{ textTransform: 'uppercase', fontWeight: 500 }}>Resume</span>
+            </div>
+          </div>
+        </div>}
+      </div>
+    )
+  }
+
+  sendEvents(user_action, quote) {
+
     let eventObj = {
       "event_name": 'term_insurance ',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'term_insurance_intro',
-        "card_swipe": this.state.card_swipe,
-        'card_swipe_count': this.state.card_swipe_count / 2,
-        'current_card_pos': this.state.selectedIndex + 1,
-        'time_spent': this.state.time_spent
+        "screen_name": 'select_provider',
+        'provider_name': quote ? quote.quote_provider : this.state.quoteSelected &&
+          this.state.quoteSelected.quote_provider ? this.state.quoteSelected.quote_provider : '',
+        'resume': this.state.termRedirectData.resumeFlag && quote &&
+          this.state.termRedirectData.provider === quote.quote_provider ? 'yes' : 'no'
       }
     };
 
@@ -123,39 +369,14 @@ class Intro extends Component {
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
+        noFooter={true}
         showLoader={this.state.show_loader}
         title="Term Insurance"
-        handleClick={this.handleClick}
-        buttonTitle="Protect Your Family"
-        fullWidthButton={true}
         onlyButton={true}
-        events={this.sendEvents('just_set_events')}
       >
 
-        {this.state.imageData && <Carousel
-          showStatus={false} showThumbs={false}
-          showArrows={true}
-          infiniteLoop={false}
-          selectedItem={this.state.selectedIndex}
-          onChange={(index) => {
-            this.setState({
-              selectedIndex: index,
-              card_swipe: 'yes',
-              card_swipe_count: this.state.card_swipe_count + 1
-            });
-          }}
-        >
-          <div>
-            <img src={this.state.imageData[0].src} alt="Insurance" />
-          </div>
-          <div>
-            <img src={this.state.imageData[1].src} alt="Insurance" />
-          </div>
-          <div>
-            <img src={this.state.imageData[2].src} alt="Insurance" />
-          </div>
-        </Carousel>}
-        {this.renderTitle(this.state.selectedIndex)}
+        {this.state.quotes && this.state.quotes.map(this.renderQuotes)}
       </Container>
     );
   }
