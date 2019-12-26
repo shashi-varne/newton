@@ -131,6 +131,10 @@ class PersonalDetails1 extends Component {
       this.setState({
         name_error: 'Enter valid full name'
       });
+    } else if (this.state.name.split(" ").length < 2) {
+      this.setState({
+        name_error: 'Enter valid full name'
+      });
     } else if (this.state.email.length < 10 || !validateEmail(this.state.email)) {
       this.setState({
         email_error: 'Please enter valid email'
