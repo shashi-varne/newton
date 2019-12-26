@@ -352,10 +352,10 @@ export const quotePoints = {
   'HDFC': {
     basic_benefits: [
       'Lump sum payment of  ₹ 1 crore to your nominee',
+      '100% of sum assured payable in case of death',
       'Early claim on terminal illness',
-      'Full premium waiver incase of  Total Permanent Disability',
-      'Get tax benefit on premium under sec 80(C)',
-      'No tax to be paid on claim amount under section 10 (10D)'
+      'Full waiver of premium in case of total permanent disability',
+      'Tax benefit on premium under 80C'
     ],
     add_on_benefits: [
       'Extra payout on Accidental  death or disability',
@@ -423,10 +423,10 @@ export const quotePoints = {
 export const quotePointsPorivders = {
   'HDFC': {
     basic_benefits: [
+      '100% of sum assured payable in case of death',
       'Early claim on terminal illness',
-      'Full premium waiver incase of  Total Permanent Disability',
-      'Get tax benefit on premium under sec 80(C)',
-      'No tax to be paid on claim amount under section 10 (10D)'
+      'Full waiver of premium in case of total permanent disability',
+      'Tax benefit on premium under 80C'
     ],
     add_on_benefits: [
       'Extra payout on Accidental  death or disability',
