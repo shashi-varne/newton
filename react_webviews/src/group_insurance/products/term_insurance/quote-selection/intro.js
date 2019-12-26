@@ -8,7 +8,7 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import dropdown_arrow_fisdom from 'assets/down_arrow_fisdom.svg';
 import dropdown_arrow_myway from 'assets/down_arrow_myway.svg';
-import kotak_logo from 'assets/kotak_life_logo.png';
+// import kotak_logo from 'assets/kotak_life_logo.png';
 import {
   inrFormatDecimal
 } from '../../../../utils/validators';
@@ -131,53 +131,33 @@ class Intro extends Component {
 
     this.getTermInsurance();
     try {
-      // const res = await Api.post('/api/insurance/quote');
-
-      const res = {
-        "pfwuser_id": 6495756614631425, "pfwresponse": {
-          "status_code": 200, "requestapi": "",
-          "result": {
-            "quotes":
-              [{
-                "quotation_dump": "", "quote_describer":
-                {
-                  "image": "https://kotak-dot-plutus-staging.appspot.com/static/img/insurance/hdfc_logo.png",
-                  "explainer": "<style media='screen'> body {margin: 0;padding-bottom:12px;}div.no-span{margin-bottom: 10px; font-weight: bold; border-top: 1px solid #efefef; width: 100%;}</style><div style='font-size: 14px;font-family: Roboto;'><div style='display:-webkit-box;padding: 12px;padding-bottom: 0px;'> <img style='width: 120px;margin-bottom: 15px;' src='https://kotak-dot-plutus-staging.appspot.com/static/img/insurance/hdfc_logo.png' alt='' /><div style='width: 50%; margin: 11px 0 0 10px;color: #4a4a4a;font-weight: 600;'>HDFC Life Click 2 Protect 3D Plus</div></div><div class='no-span' style='color: #444;margin-bottom: 10px;font-weight: bold;'></div><div style='color: #878787;margin-bottom: 5px;padding-left:12px;'><b>Payout: </b>Lump sum in case of death</div><div style='color:#878787;padding-left:12px;'><b>Full waiver of future premiums:</b><div style='margin-top: 5px;'><div style='margin-bottom: 5px;'> <b>A.</b> On Accidental Total Permanent Disability </div><div> <b>B.</b> In case of diagnosis of Terminal Illness </div></div></div></div>", "provider": "HDFC"
-                }, "payment_frequency": "MONTHLY", "id": 6581433712771073, "tobacco_choice": "Y", "insurance_title": "HDFC Life Click 2 Protect 3D Plus", "annual_quote_id": 6508615293730817, "status": "init", "annual_quote_json": { "total_tax": "3264", "premium": "21396", "quote_date": "26-12-2019", "adb_premium": "0.0", "base_premium": "18132.0", "riders_base_premium": "0.0", "adb_service_tax": "0.0", "base_premium_tax": "3263.76", "cover_amount": "13000000", "ci_base_premium": "0.0", "payment_frequency": "YEARLY", "app_num": "", "base_premium_total": "21395.76", "adb_base_premium": "0.0", "ci_premium": "0.0", "ci_service_tax": "0.0", "quote_id": "", "product_name": "HDFC Life Click 2 Protect 3D Plus", "total_savings": "684", "cover_plan": "Life" }, "dt_created": "26/12/2019", "payout_option": "Lump sum", "quote_provider_logo": "https://kotak-dot-plutus-staging.appspot.com/static/img/insurance/hdfc_logo.png", "term": 50, "annual_income": "7-10", "quote_provider": "HDFC", "dob": "21/08/1993", "gender": "MALE", "cover_amount": 13000000, "accident_benefit": 0, "quote_json": { "total_tax": "281", "premium": "1840", "quote_date": "26-12-2019", "adb_premium": "0.0", "base_premium": "1559.0", "riders_base_premium": "0.0", "adb_service_tax": "0.0", "base_premium_tax": "280.62", "cover_amount": "13000000", "ci_base_premium": "0.0", "payment_frequency": "MONTHLY", "app_num": "", "base_premium_total": "1839.62", "adb_base_premium": "0.0", "ci_premium": "0.0", "ci_service_tax": "0.0", "quote_id": "", "product_name": "HDFC Life Click 2 Protect 3D Plus", "cover_plan": "Life" }, "ci_benefit": "N", "cover_plan": "Life"
-              }], "errors": []
-          }
-        }, "pfwmessage": "Success", "pfwutime": "",
-      }
+      const res = await Api.get('/api/ins_service/api/providers/all');
       // this.setState({
       //   show_loader: false
       // });
 
-      let quotesData = [
+      // let quotesData = [
 
-        {
-          'quote_provider': 'KOTAK',
-          'premium': '231',
-          'quote_provider_logo': kotak_logo,
-          'claim_settled_ratio': '97.4',
-          'insurance_title': 'Kotak Life Insurance'
-        },
-        {
-          'quote_provider': 'HDFC',
-          'premium': '417',
-          'quote_provider_logo': 'https://kotak-dot-plutus-staging.appspot.com/static/img/insurance/hdfc_logo.png',
-          'claim_settled_ratio': '98',
-          'insurance_title': 'HDFC Life Click 2 Protect 3D Plus'
-        }
-      ]
-      if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.quotes) {
-        // let result = res.pfwresponse.result.quotes;
-        // let quotes = [
-        //   result[0], result[0]
-        // ]
+      //   {
+      //     'quote_provider': 'KOTAK',
+      //     'premium': '231',
+      //     'quote_provider_logo': kotak_logo,
+      //     'claim_settled_ratio': '97.4',
+      //     'insurance_title': 'Kotak Life Insurance'
+      //   },
+      //   {
+      //     'quote_provider': 'HDFC',
+      //     'premium': '417',
+      //     'quote_provider_logo': 'https://kotak-dot-plutus-staging.appspot.com/static/img/insurance/hdfc_logo.png',
+      //     'claim_settled_ratio': '98',
+      //     'insurance_title': 'HDFC Life Click 2 Protect 3D Plus'
+      //   }
+      // ]
 
+      if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.providers) {
+        let result = res.pfwresponse.result;
         this.setState({
-          // quotes: quotes,
-          quotes: quotesData
+          quotes: result.providers
         });
       } else {
         this.setState({
@@ -326,7 +306,7 @@ class Intro extends Component {
             <div className="quote-tiles3a-providers">
               <div className="quote-tiles3aa" style={{ display: 'grid', textAlign: 'left' }}>
                 <span> Starts from</span>
-                <span> {inrFormatDecimal(props.premium)}/month*</span>
+                <span> {inrFormatDecimal(props.starting_premium_monthly)}/month*</span>
               </div>
             </div>
             <div className="quote-tiles3b" style={{ padding: '14px', width: '48%' }} onClick={() => this.selectQuote(props, index)}>
