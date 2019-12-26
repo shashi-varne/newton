@@ -56,11 +56,13 @@ class PersonalDetails1 extends Component {
   async componentDidMount() {
     try {
       const res = await Api.get('/api/ins_service/api/insurance/account/summary')
+      this.setState({
+        show_loader: false
+      });
 
       if (res.pfwresponse.status_code === 200) {
         const { name,  email, mobile_number} = res.pfwresponse.result.insurance_account;
         this.setState({
-          show_loader: false,
           name: name || '',
           email: email || '',
           mobile_number: mobile_number || '',
