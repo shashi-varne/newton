@@ -180,7 +180,7 @@ class PersonalDetails1 extends Component {
 
         if (res.pfwresponse.status_code === 200) {
           // this.setState({ show_loader: false });
-
+          this.setState({ openModal: false, openModalMessage: '' });
           var kotakUrl = res.pfwresponse.result.lead;
           if(getConfig().app === 'web') {
             this.setState({ show_loader: false });
