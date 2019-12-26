@@ -138,7 +138,7 @@ class Container extends Component {
         }
 
         {/* Below Header Block */}
-        {!this.props.hideheader && <div id="HeaderHeight" style={{ top: 56 }}>
+        {<div id="HeaderHeight" style={{ top: 56 }}>
         </div>}
 
         {/* Loader Block */}
