@@ -156,7 +156,7 @@ class Intro extends Component {
 
         {
           'quote_provider': 'KOTAK',
-          'premium': '199',
+          'premium': '231',
           'quote_provider_logo': kotak_logo,
           'claim_settled_ratio': '97.4',
           'insurance_title': 'Kotak Life Insurance'
