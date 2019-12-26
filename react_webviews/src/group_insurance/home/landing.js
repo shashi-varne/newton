@@ -164,7 +164,8 @@ class Landing extends Component {
           group_insurance: group_insurance,
           term_insurance: term_insurance,
           BHARTIAXA_APPS: BHARTIAXA_APPS,
-          insuranceProducts: insuranceProducts
+          insuranceProducts: insuranceProducts,
+          resumeFlagAll: resumeFlagAll
         })
 
         if(this.state.openModuleData.sub_module) {
@@ -256,6 +257,9 @@ class Landing extends Component {
         window.localStorage.setItem('cameFromHome', true);
         window.localStorage.setItem('homeApplication', JSON.stringify(data));
         pathname = 'journey';
+        this.setState({
+          termApplication: application
+        })
       }
     } else {
       pathname = 'intro';
@@ -296,8 +300,9 @@ class Landing extends Component {
 
       fullPath = insuranceStateMapper[product_key] + '/' + path;
     } else {
-      this.navigate(this.state.redirectTermPath);
 
+      // this.navigate(this.state.redirectTermPath);
+      this.navigate('/group-insurance/term/intro');
       return;
     }
 
