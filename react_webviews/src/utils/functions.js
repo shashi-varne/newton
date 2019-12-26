@@ -510,8 +510,7 @@ export function setHeights(data) {
   let foot = document.getElementsByClassName('Footer') && document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight : 0;
 
   let HeaderHeight = bannerHeight + stepHeight + head + 'px';
-  if (data.header) {
-
+  if (data.header && document.getElementById('HeaderHeight')) {
     document.getElementById('HeaderHeight').style.height = HeaderHeight;
   }
 
