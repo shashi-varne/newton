@@ -41,7 +41,10 @@ class PersonalDetails1 extends Component {
     nativeCallback({ action: 'take_control_reset' });
 
     let providerLogoMapper = {
-      'KOTAK': kotak_logo
+      'KOTAK': {
+        'logo' : kotak_logo,
+        'insurance_title': 'Kotak Life Insurance'
+      }
     }
 
     let provider = this.state.params.provider;
@@ -49,7 +52,8 @@ class PersonalDetails1 extends Component {
     this.setState({
       current_url: current_url,
       provider: provider,
-      image: providerLogoMapper[provider]
+      image: providerLogoMapper[provider].logo,
+      insurance_title: providerLogoMapper[provider].insurance_title
     });
   }
 
@@ -175,7 +179,7 @@ class PersonalDetails1 extends Component {
               },
       
             });
-            nativeCallback({ action: 'show_top_bar', message: { title: this.state.provider } });
+            nativeCallback({ action: 'show_top_bar', message: { title: this.state.provinsurance_titleder } });
             
             window.location.href = kotakUrl;
           }

@@ -73,6 +73,11 @@ body[data-device="web"] .MuiDialogActions-root{
   margin-bottom: 20px;
 }
 
+body[data-device="web"] .FooterImage{
+  width: auto;
+  height: 47px;
+}
+
 .MuiDialogContent-root {
   overflow-x: hidden;
 }

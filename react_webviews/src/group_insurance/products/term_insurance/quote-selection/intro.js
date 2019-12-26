@@ -39,7 +39,7 @@ class Intro extends Component {
   componentWillMount() {
     nativeCallback({ action: 'take_control_reset' });
   }
-  
+
   async getTermInsurance() {
     try {
       const res2 = await Api.get('/api/insurance/all/summary');
@@ -158,13 +158,15 @@ class Intro extends Component {
           'quote_provider': 'KOTAK',
           'premium': '199',
           'quote_provider_logo': kotak_logo,
-          'claim_settled_ratio': '97.4'
+          'claim_settled_ratio': '97.4',
+          'insurance_title': 'Kotak Life Insurance'
         },
         {
           'quote_provider': 'HDFC',
           'premium': '417',
           'quote_provider_logo': 'https://kotak-dot-plutus-staging.appspot.com/static/img/insurance/hdfc_logo.png',
-          'claim_settled_ratio': '98'
+          'claim_settled_ratio': '98',
+          'insurance_title': 'HDFC Life Click 2 Protect 3D Plus'
         }
       ]
       if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.quotes) {
