@@ -45,6 +45,8 @@ import AddOnBenefits from './products/term_insurance/add-on-benefits/index'
 import FinalReport from './products/term_insurance/report/index'
 import InsuranceHome from './products/term_insurance/home/index'
 
+import PersonalDetailsRedirect from './products/term_insurance/quote-selection/personal_details_redirect'
+
 /***********************TERM INSURANCE END   **************/
 
 /* Accident */
@@ -147,6 +149,7 @@ const Insurance = (props) => {
           <Route path={`${url}/term/riders`} component={AddOnBenefits} />
           <Route path={`${url}/term/report`} component={FinalReport} />
           <Route path={`${url}/term/home`} component={InsuranceHome} />
+          <Route path={`${url}/term/personal-details-redirect`} component={PersonalDetailsRedirect} />
           {/* Edit paths */}
           <Route path={`${url}/term/edit-personal`} render={(props) => <PersonalDetails1 {...props} edit={true} />} />
           <Route path={`${url}/term/edit-personal1`} render={(props) => <PersonalDetails2 {...props} edit={true} />} />
