@@ -18,6 +18,10 @@ import {
 } from 'utils/validators';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
+import loader_fisdom from 'assets/loader_gif_fisdom.gif';
+import loader_myway from 'assets/loader_gif_myway.gif';
+import Modal from 'material-ui/Modal';
+import Typography from 'material-ui/Typography';
 
 class PersonalDetails1 extends Component {
   constructor(props) {
@@ -25,6 +29,7 @@ class PersonalDetails1 extends Component {
     this.state = {
       show_loader: true,
       name: '',
+      openModal: false,
       name_error: '',
       email: '',
       mobile_number: '',
@@ -32,7 +37,8 @@ class PersonalDetails1 extends Component {
       mobile_number_error: '',
       provider: '',
       params: qs.parse(props.history.location.search.slice(1)),
-      type: getConfig().productName
+      type: getConfig().productName,
+      loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
     }
   }
 
@@ -149,7 +155,8 @@ class PersonalDetails1 extends Component {
       });
     } else {
       try {
-        this.setState({ show_loader: true });
+        let openModalMessage = 'Redirecting to ' + this.state.insurance_title +' portal';
+        this.setState({ openModal: true, openModalMessage: openModalMessage });
 
         var kotakBody = {
           name: this.state.name,
@@ -170,7 +177,7 @@ class PersonalDetails1 extends Component {
             if (getConfig().app === 'ios') {
               nativeCallback({
                 action: 'show_top_bar', message: {
-                  title: this.state.provider
+                  title: this.state.insurance_title
                 }
               });
             }
@@ -183,7 +190,7 @@ class PersonalDetails1 extends Component {
               },
       
             });
-            nativeCallback({ action: 'show_top_bar', message: { title: this.state.provinsurance_titleder } });
+            nativeCallback({ action: 'show_top_bar', message: { title: this.state.insurance_title } });
             
             window.location.href = kotakUrl;
           }
@@ -231,6 +238,25 @@ class PersonalDetails1 extends Component {
       <span>
         Enter your personal details to get a free quote.
       </span>
+    );
+  }
+
+  renderModal = () => {
+    return (
+      <Modal
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        open={this.state.openModal}
+      >
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: '#fff', borderRadius: 4, minWidth: 320, padding: 25, textAlign: 'center' }}>
+          <div style={{ padding: '20px 0 30px' }}>
+            <img src={this.state.loaderMain} alt="" />
+          </div>
+          <Typography variant="subheading" id="simple-modal-description" style={{ color: '#444' }}>
+            {this.state.openModalMessage}
+          </Typography>
+        </div>
+      </Modal>
     );
   }
 
@@ -291,6 +317,7 @@ class PersonalDetails1 extends Component {
               onChange={this.handleChange()} />
           </div>
         </FormControl>
+        {this.renderModal()}
       </Container>
     );
   }
