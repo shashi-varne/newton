@@ -35,10 +35,9 @@ class PersonalDetailsIntro extends Component {
       const res = await Api.get('/api/kyc/v2/mine')
       let dob = res.pfwresponse.result.kyc.pan.meta_data.dob;
       let gender = res.pfwresponse.result.kyc.identification.meta_data.gender;
-
       this.setState({
         show_loader: false,
-        dob: this.state.quoteData ? this.state.quoteData.dob : dob || '',
+        dob: this.state.quoteData && this.state.quoteData.dob ? this.state.quoteData.dob : dob || '',
         gender: this.state.quoteData.gender ? this.state.quoteData.gender : gender ? gender.toLowerCase() : ''
       });
     } catch (err) {
