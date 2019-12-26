@@ -129,9 +129,10 @@ class Intro extends Component {
 
   async getQuotes() {
 
-    this.getTermInsurance();
+    
     try {
       const res = await Api.get('/api/ins_service/api/providers/all');
+      this.getTermInsurance();
       // this.setState({
       //   show_loader: false
       // });
