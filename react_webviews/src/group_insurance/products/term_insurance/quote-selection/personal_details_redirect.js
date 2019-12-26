@@ -133,27 +133,40 @@ class PersonalDetails1 extends Component {
 
     this.sendEvents('next');
 
+    var canSubmitForm = true;
+
     if (!validateEmpty(this.state.name)) {
+      canSubmitForm = false;
       this.setState({
         name_error: 'Enter valid full name'
       });
     } else if (this.state.name.split(" ").length < 2) {
+      canSubmitForm = false;
       this.setState({
         name_error: 'Enter valid full name'
       });
-    } else if (this.state.email.length < 10 || !validateEmail(this.state.email)) {
+    } 
+    
+    if (this.state.email.length < 10 || !validateEmail(this.state.email)) {
+      canSubmitForm = false;
       this.setState({
         email_error: 'Please enter valid email'
       });
-    } else if (this.state.mobile_number.length !== 10 || !validateNumber(this.state.mobile_number)) {
+    } 
+    
+    if (this.state.mobile_number.length !== 10 || !validateNumber(this.state.mobile_number)) {
+      canSubmitForm = false;
       this.setState({
         mobile_number_error: 'Please enter valid mobile no'
       });
     } else if (!numberShouldStartWith(this.state.mobile_number)) {
+      canSubmitForm = false;
       this.setState({
         mobile_number_error: 'Please enter valid mobile no'
       });
-    } else {
+    } 
+    
+    if (canSubmitForm) {
       try {
         let openModalMessage = 'Redirecting to ' + this.state.insurance_title +' portal';
         this.setState({ openModal: true, openModalMessage: openModalMessage });
