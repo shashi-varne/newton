@@ -796,7 +796,7 @@ class Journey extends Component {
     });
     if (res.pfwresponse.status_code === 200) {
       window.localStorage.setItem('excludedd_providers', '');
-      this.navigate('journey-intro');
+      this.navigate('intro');
     } else {
       this.setState({ openModal: false, openModalMessage: '', openResponseDialog: true, apiError: res.pfwresponse.result.error });
     }
