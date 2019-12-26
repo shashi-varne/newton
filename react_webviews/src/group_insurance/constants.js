@@ -367,6 +367,23 @@ export const quotePoints = {
       content: 'This plan will cover your death (till x years of age) in all cases except suicide for the first year. Plan benefit includes a payout of Rs 1 Crore to your nominee. Additionally, full payout will happen in case of terminal illness and your entire premium will be waived of incase of  Total Permanent Disability.'
     }
   },
+  'KOTAK': {
+    basic_benefits: [
+      '100% of sum assured payable in case of death',
+      'Multiple rider options available',
+      'Easy claim settlement process',
+      'Tax benefit on premium under 80C'
+    ],
+    add_on_benefits: [
+      'Accidental death benefit rider',
+      'Permanent disability benefit rider',
+      'Critical illness benefit rider'
+    ],
+    popup_info: {
+      title: '',
+      content: ''
+    }
+  },
   'IPRU': {
     basic_benefits: [
       'Lump sum payment of  ₹ 1 crore to your nominee',
@@ -403,6 +420,43 @@ export const quotePoints = {
   }
 };
 
+export const quotePointsPorivders = {
+  'HDFC': {
+    basic_benefits: [
+      'Early claim on terminal illness',
+      'Full premium waiver incase of  Total Permanent Disability',
+      'Get tax benefit on premium under sec 80(C)',
+      'No tax to be paid on claim amount under section 10 (10D)'
+    ],
+    add_on_benefits: [
+      'Extra payout on Accidental  death or disability',
+      'Full premium waiver incase of critical illness',
+      'Cover against 19 critical illness'
+    ],
+    popup_info: {
+      title: 'Plan benefits',
+      content: 'This plan will cover your death (till x years of age) in all cases except suicide for the first year. Plan benefit includes a payout of Rs 1 Crore to your nominee. Additionally, full payout will happen in case of terminal illness and your entire premium will be waived of incase of  Total Permanent Disability.'
+    }
+  },
+  'KOTAK': {
+    basic_benefits: [
+      '100% of sum assured payable in case of death',
+      'Multiple rider options available',
+      'Easy claim settlement process',
+      'Tax benefit on premium under 80C'
+    ],
+    add_on_benefits: [
+      'Accidental death benefit rider',
+      'Permanent disability benefit rider',
+      'Critical illness benefit rider'
+    ],
+    popup_info: {
+      title: '',
+      content: ''
+    }
+  }
+};
+
 export const add_on_benefits_points = {
   'ci_benefit': {
     'title': 'Waiver of premium',
@@ -429,7 +483,7 @@ export const back_button_mapper = {
   '/group-insurance/term/cover-period': '/group-insurance/term/cover-amount',
   '/group-insurance/term/cover-amount': '/group-insurance/term/annual-income',
   '/group-insurance/term/annual-income': '/group-insurance/term/personal-details-intro',
-  '/group-insurance/term/personal-details-intro': '/group-insurance/term/journey-intro',
+  '/group-insurance/term/personal-details-intro': '/group-insurance/term/intro',
   '/group-insurance/term/journey-intro': '/group-insurance/term/intro',
   '/group-insurance/term/summary': '/group-insurance/term/journey'
 };
