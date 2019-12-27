@@ -276,7 +276,7 @@ class Intro extends Component {
         </div>
         <div className="quote-tiles4">
           <div className="quote-tiles4a">
-            Basic Benifits
+            Basic Benefits
             </div>
         </div>
 
@@ -288,7 +288,7 @@ class Intro extends Component {
         <div className="quote-addon-tiles11">
           <div className="quote-addon-tiles1" onClick={() => this.expendAddOn(index, props.quote_provider)}>
             <div className="quote-addon-tiles1a">
-              Add on Benifits
+              Add on Benefits
           </div>
             <div className="quote-addon-tiles1b">
               <img className="quote-addon-tiles1c" src={this.state.dropdown_arrow} alt="Insurance" />
