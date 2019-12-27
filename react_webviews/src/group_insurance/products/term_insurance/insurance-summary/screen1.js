@@ -640,7 +640,7 @@ class Summary extends Component {
         return (
           <div className="AccordionBody">
             <ul>
-              {this.state.benefits.accident_benefit && <li>Accidental death benifits:<span>₹ {numDifferentiation(this.state.benefits.accident_benefit)}</span></li>}
+              {this.state.benefits.accident_benefit && <li>Accidental death benefits:<span>₹ {numDifferentiation(this.state.benefits.accident_benefit)}</span></li>}
               <li>Payout option: <span>{this.state.benefits.payout_option}</span></li>
             </ul>
           </div>
@@ -796,7 +796,7 @@ class Summary extends Component {
         return (
           <div className="AccordionBody">
             <ul>
-              {this.state.benefits.accident_benefit && <li>Accidental death benifits:<span>₹ {numDifferentiation(this.state.benefits.accident_benefit)}</span></li>}
+              {this.state.benefits.accident_benefit && <li>Accidental death benefits:<span>₹ {numDifferentiation(this.state.benefits.accident_benefit)}</span></li>}
               <li>Payout option: <span>{this.state.benefits.payout_option}</span></li>
             </ul>
           </div>
