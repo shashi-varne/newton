@@ -143,8 +143,25 @@ class Container extends Component {
       return;
     }
 
+    if (project_child === 'bhartiaxa' && pathname.indexOf('/home_insurance') >= 0 && 
+    pathname.indexOf('/plan') >= 0) {
+      this.navigate('/group-insurance');
+      return;
+    }
+
+    if (project_child === 'bhartiaxa' && pathname.indexOf('/plan') >= 0 &&
+    pathname.indexOf('/health') >= 0) {
+      this.navigate('/group-insurance/health/landing');
+      return;
+    }
+
     if (project_child === 'bhartiaxa' && pathname.indexOf('/plan') >= 0) {
       this.backMapperBharti('/plan');
+      return;
+    }
+
+    if (project_child === 'bhartiaxa' && pathname.indexOf('/health/landing') >= 0) {
+      this.navigate('/group-insurance');
       return;
     }
 
