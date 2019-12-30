@@ -312,7 +312,14 @@ class PlanDetailsClass extends Component {
           <span style={{color: '#160d2e', fontSize: 14}}>{props.product_plan_title}</span>
         </div>}
 
-        {!props.product_plan_title && props.sum_assured && <div className="accident-plan-item2">{props.plan_title || inrFormatDecimal(props.sum_assured)}
+        {props.plan_title && 
+        <div className="accident-plan-item2">
+          {props.plan_title}
+        </div>}
+
+        {!props.plan_title && props.sum_assured && 
+        <div className="accident-plan-item2">
+          {props.plan_title || inrFormatDecimal(props.sum_assured)}
           {this.props.parent.state.product_key === 'HOSPICASH' && <span>/day</span>}
         </div>}
 
