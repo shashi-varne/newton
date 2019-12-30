@@ -203,7 +203,7 @@ class BasicDetailsRedirectionForm extends Component {
                             action: 'take_control', message: {
                                 back_url: this.state.current_url,
                                 show_top_bar: false,
-                                back_text: "We suggest you to complete the application process for fast issuance of your insurance.Do you still want to exit the application process"
+                                back_text: "We suggest you to complete the application process for fast issuance of your insurance.Do you still want to exit the application process?"
                             },
 
                         });
