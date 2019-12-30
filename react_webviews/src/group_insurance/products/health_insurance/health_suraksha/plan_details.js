@@ -68,7 +68,7 @@ class HealthSuraksha extends Component {
         'icon': this.state.ic_hs_b3
       },
       {
-        'disc': '25% sum insured bonus every claim-free year',
+        'disc': '10% sum insured bonus every claim-free year',
         'key' : 'sum_insured',
         'icon': this.state.ic_hs_b4
       },
@@ -93,29 +93,32 @@ class HealthSuraksha extends Component {
         {
           "sum_assured": 7500000,
           "product_benefits_included": ['room_rent', 'hospitalization_cover', 'ambulance_allowances', 'sum_insured', 'daycare', 'enitre_family'],
-          "premium": "1499",
+          "premium": "1061",
           "tax_amount": "",
           "plus_benefit": 'Cover amount upto ₹75,00,000',
           'product_plan': 'platinum',
-          'plan_frequency': 'month'
+          'plan_frequency': 'month',
+          "product_plan_title": "Platinum"
         },
         {
           "sum_assured": 1500000,
           "product_benefits_included": ['room_rent', 'hospitalization_cover', 'ambulance_allowances', 'sum_insured', 'daycare', 'enitre_family'],
-          "premium": "899",
+          "premium": "669",
           "tax_amount": "",
           "plus_benefit": 'Cover amount upto ₹15,00,000',
           'product_plan': 'gold',
-          'plan_frequency': 'month'
+          'plan_frequency': 'month',
+          "product_plan_title": "Gold"
         },
         {
           "sum_assured": 500000,
           "product_benefits_included": ['room_rent', 'hospitalization_cover', 'ambulance_allowances', 'sum_insured', 'daycare', 'enitre_family'],
-          "premium": "599",
+          "premium": "446",
           "tax_amount": "",
           "plus_benefit": 'Cover amount upto ₹5,00,000',
           'product_plan': 'silver',
-          'plan_frequency': 'month'
+          'plan_frequency': 'month',
+          "product_plan_title": "Silver",
         }
       ]
     }
@@ -127,6 +130,14 @@ class HealthSuraksha extends Component {
        
         let benefit_data = {};
         benefit_data = Object.assign(benefit_data, benefit);
+
+        if(index === 2 && benefit_data.key === 'ambulance_allowances') {
+          benefit_data.disc = 'Road ambulance allowances';
+        }
+
+        if(index === 0 && benefit_data.key === 'sum_insured') {
+          benefit_data.disc = '25% sum insured bonus every claim-free year';
+        }
 
         if (premium.product_benefits_included.indexOf(benefit_data.key) === -1) {
           benefit_data.isDisabled = true;

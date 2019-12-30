@@ -95,7 +95,7 @@ class HealthCriticalIllness extends Component {
 
     var plan_data = {
       'product_name': 'Health suraksha',
-      'product_tag_line': 'Covers medical expenses and ensures quality medical treatment at the time of need',
+      'product_tag_line': 'Cover against life-threatening diseases like cancer, heart attack, paralysis and more',
       'key': 'CRITICAL_HEALTH_INSURANCE',
       'logo': '',
       'premium_details': [

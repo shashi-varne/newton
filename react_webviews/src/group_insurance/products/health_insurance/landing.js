@@ -47,7 +47,7 @@ class HealthInsuranceLanding extends Component {
       {
         key: 'CRITICAL_HEALTH_INSURANCE',
         title: 'Critical illness insurance',
-        subtitle: 'Secure from life threatening diseases',
+        subtitle: 'Cover against life threatening diseases',
         icon: critical_illness_icon
       },
       {

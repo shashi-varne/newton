@@ -64,8 +64,8 @@ const premiumAmountMapper = {
     1000: 1
   },
   'HOME_INSURANCE' : {
-    674: 0,
-    252: 1
+    328: 0,
+    182: 1
   }
 }
 
@@ -302,17 +302,17 @@ class PlanDetailsClass extends Component {
         style={styles.activeplan}
         className={`accident-plan-item`}
         onClick={() => this.selectPlan(index)}>
-       {this.props.parent.state.product_key !== 'CRITICAL_HEALTH_INSURANCE' && 
+       {!props.product_plan_title && 
         <div className="accident-plan-item1">
           {!props.cover_text && <span>Cover amount</span>}
           {props.cover_text && <span>{props.cover_text}</span>}
         </div>}
 
-       {this.props.parent.state.product_key === 'CRITICAL_HEALTH_INSURANCE' && <div className="accident-plan-item1">
+       {props.product_plan_title && <div className="accident-plan-item1">
           <span style={{color: '#160d2e', fontSize: 14}}>{props.product_plan_title}</span>
         </div>}
 
-        {props.sum_assured && <div className="accident-plan-item2">{props.plan_title || inrFormatDecimal(props.sum_assured)}
+        {!props.product_plan_title && props.sum_assured && <div className="accident-plan-item2">{props.plan_title || inrFormatDecimal(props.sum_assured)}
           {this.props.parent.state.product_key === 'HOSPICASH' && <span>/day</span>}
         </div>}
 
@@ -356,7 +356,8 @@ class PlanDetailsClass extends Component {
       "product_plan": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].product_plan,
       "premium": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].premium,
       "cover_amount": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].sum_assured,
-      "tax_amount": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].tax_amount
+      "tax_amount": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].tax_amount,
+      "productTitle": this.state.productTitle
     }
     final_data.product_name = this.props.parent.state.product_key;
 

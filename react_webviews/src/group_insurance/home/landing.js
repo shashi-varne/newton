@@ -87,7 +87,7 @@ class Landing extends Component {
       {
         key: 'HEALTH_INSURANCE',
         title: 'Health insurance',
-        subtitle: 'Insure yourself and your family',
+        subtitle: 'Cover your health expenses',
         icon: health_insurance_icon
       },
       {

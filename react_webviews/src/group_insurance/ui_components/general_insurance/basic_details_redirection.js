@@ -62,6 +62,7 @@ class BasicDetailsRedirectionForm extends Component {
             current_url: current_url,
             provider: provider,
             insurance_title: providerLogoMapper[provider] ? providerLogoMapper[provider].insurance_title: '',
+            productTitle: params && params.premium_details ? params.premium_details.productTitle : '',
             buttonTitle: buttonTitle
         });
     }
@@ -188,7 +189,7 @@ class BasicDetailsRedirectionForm extends Component {
                         if (getConfig().app === 'ios') {
                             nativeCallback({
                                 action: 'show_top_bar', message: {
-                                    title: this.state.insurance_title
+                                    title: this.state.productTitle
                                 }
                             });
                         }
@@ -201,7 +202,7 @@ class BasicDetailsRedirectionForm extends Component {
                             },
 
                         });
-                        nativeCallback({ action: 'show_top_bar', message: { title: this.state.insurance_title } });
+                        nativeCallback({ action: 'show_top_bar', message: { title: this.state.productTitle } });
 
                         window.location.href = kotakUrl;
                     }
