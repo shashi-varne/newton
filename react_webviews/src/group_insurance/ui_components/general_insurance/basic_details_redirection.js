@@ -179,11 +179,16 @@ class BasicDetailsRedirectionForm extends Component {
 
                 if (res.pfwresponse.status_code === 200) {
                     // this.setState({ show_loader: false });
-                    this.setState({ openModal: false, openModalMessage: '' });
+                    
                     var leadRedirectUrl = res.pfwresponse.result.lead;
                     if (getConfig().app === 'web') {
-                        this.setState({ show_loader: false });
-                        window.open(leadRedirectUrl, '_blank');
+                        this.setState({ 
+                            show_loader: false,
+                            openModal: false, 
+                            openModalMessage: ''
+                         });
+
+                         window.open(leadRedirectUrl, '_blank');
                     } else {
 
                         if (getConfig().app === 'ios') {
