@@ -3,23 +3,15 @@ import PlanDetails from '../../../ui_components/general_insurance/plan_details';
 
 import { getConfig } from 'utils/functions';
 
-import ic_hs_b1_fisdom from 'assets/ic_hs_b1_fisdom.svg';
-import ic_hs_b1_myway from 'assets/ic_hs_b1_myway.svg';
+import ic_health_b1_fisdom from 'assets/ic_health_b1_fisdom.svg';
+import ic_health_b1_myway from 'assets/ic_health_b1_myway.svg';
 
-import ic_hs_b2_fisdom from 'assets/ic_health_b1_fisdom.svg';
-import ic_hs_b2_myway from 'assets/ic_health_b1_myway.svg';
+import ic_hospicash_b2_fisdom from 'assets/ic_hospicash_b2_fisdom.svg';
+import ic_hospicash_b2_myway from 'assets/ic_hospicash_b2_myway.svg';
 
-import ic_hs_b3_fisdom from 'assets/ic_hs_b3_fisdom.svg';
-import ic_hs_b3_myway from 'assets/ic_hs_b3_myway.svg';
+import ic_ci_b3_fisdom from 'assets/ic_ci_b3_fisdom.svg';
+import ic_ci_b3_myway from 'assets/ic_ci_b3_myway.svg';
 
-import ic_hs_b4_fisdom from 'assets/ic_hs_b4_fisdom.svg';
-import ic_hs_b4_myway from 'assets/ic_hs_b4_myway.svg';
-
-import ic_hs_b5_fisdom from 'assets/ic_hs_b5_fisdom.svg';
-import ic_hs_b5_myway from 'assets/ic_hs_b5_myway.svg';
-
-import ic_pa_b1_fisdom from 'assets/ic_pa_b1_fisdom.svg';
-import ic_pa_b1_myway from 'assets/ic_pa_b1_myway.svg';
 
 class HealthCriticalIllness extends Component {
 
@@ -35,12 +27,9 @@ class HealthCriticalIllness extends Component {
       provider: 'hdfcergo',
       integeration_type: 'redirection',
       type: getConfig().productName,
-      ic_hs_b1: getConfig().productName !== 'fisdom' ? ic_hs_b1_myway : ic_hs_b1_fisdom,
-      ic_hs_b2: getConfig().productName !== 'fisdom' ? ic_hs_b2_myway : ic_hs_b2_fisdom,
-      ic_hs_b3: getConfig().productName !== 'fisdom' ? ic_hs_b3_myway : ic_hs_b3_fisdom,
-      ic_hs_b4: getConfig().productName !== 'fisdom' ? ic_hs_b4_myway : ic_hs_b4_fisdom,
-      ic_hs_b5: getConfig().productName !== 'fisdom' ? ic_hs_b5_myway : ic_hs_b5_fisdom,
-      ic_pa_b1: getConfig().productName !== 'fisdom' ? ic_pa_b1_myway : ic_pa_b1_fisdom
+      ic_health_b1: getConfig().productName !== 'fisdom' ? ic_health_b1_myway : ic_health_b1_fisdom,
+      ic_hospicash_b2: getConfig().productName !== 'fisdom' ? ic_hospicash_b2_myway : ic_hospicash_b2_fisdom,
+      ic_ci_b3: getConfig().productName !== 'fisdom' ? ic_ci_b3_myway : ic_ci_b3_fisdom
     }
   }
 
@@ -62,34 +51,19 @@ class HealthCriticalIllness extends Component {
 
     var product_benefits = [
       {
-        'disc': 'No limit on hospital room rent, physician charges',
-        'key' : 'room_rent',
-        'icon': this.state.ic_hs_b1
+        'disc': 'Lumpsum payout up to 10 lacs on the first diagnosis of illness',
+        'key' : 'first_diagnosis',
+        'icon': this.state.ic_health_b1
       },
       {
-        'disc': '60 days pre  & 180 days post hospitalization cover',
-        'key' : 'hospitalization_cover',
-        'icon': this.state.ic_hs_b2
+        'disc': 'No hospitalisation required to get the claim',
+        'key' : 'hospitalisation_cliam',
+        'icon': this.state.ic_hospicash_b2
       },
       {
-        'disc': 'Road as well as air ambulance allowances',
-        'key' : 'ambulance_allowances',
-        'icon': this.state.ic_hs_b3
-      },
-      {
-        'disc': '25% sum insured bonus every claim-free year',
-        'key' : 'sum_insured',
-        'icon': this.state.ic_hs_b4
-      },
-      {
-        'disc': '586 day care procedures and treatments covered',
-        'key' : 'daycare',
-        'icon': this.state.ic_hs_b5
-      },
-      {
-        'disc': 'Option to cover individual and entire family',
-        'key' : 'enitre_family',
-        'icon': this.state.ic_pa_b1
+        'disc': 'Save tax up to ₹50,000 under section 80 (D)',
+        'key' : 'save_tax',
+        'icon': this.state.ic_ci_b3
       }
     ]
 
@@ -102,7 +76,7 @@ class HealthCriticalIllness extends Component {
         {
           "sum_assured": '',
           "product_plan_title": "Platinum",
-          "product_benefits_included": ['room_rent', 'hospitalization_cover', 'ambulance_allowances', 'sum_insured', 'daycare', 'enitre_family'],
+          "product_benefits_included": ['first_diagnosis', 'hospitalisation_cliam', 'save_tax'],
           "premium": "1150",
           "tax_amount": "",
           "plus_benefit": '15 diseases',
@@ -112,7 +86,7 @@ class HealthCriticalIllness extends Component {
         {
           "sum_assured": '',
           "product_plan_title": "Gold",
-          "product_benefits_included": ['room_rent', 'hospitalization_cover', 'ambulance_allowances', 'sum_insured', 'daycare', 'enitre_family'],
+          "product_benefits_included": ['first_diagnosis', 'hospitalisation_cliam', 'save_tax'],
           "premium": "1000",
           "tax_amount": "",
           "plus_benefit": '8 diseases',
