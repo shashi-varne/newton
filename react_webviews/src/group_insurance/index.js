@@ -239,7 +239,7 @@ const Insurance = (props) => {
           <Route path={`${url}/health/super_topup/form-redirection`} component={HealthSuperTopupForm} />
 
 
-          {/* super topup */}
+          {/* home insurance */}
           <Route path={`${url}/home_insurance/general/plan`} component={HomeInsurance} />
           <Route path={`${url}/home_insurance/general/form-redirection`} component={HomeInsuranceForm} />
           
