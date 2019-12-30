@@ -348,6 +348,7 @@ export const getConfig = () => {
     project = 'mandate-otm';
   } else if (main_pathname.indexOf('e-mandate') >= 0) {
     project = 'e-mandate';
+    generic_callback = "true";
   } else if (main_pathname.indexOf('mandate') >= 0) {
     project = 'mandate';
   } else if (main_pathname.indexOf('gold') >= 0) {
@@ -440,10 +441,6 @@ export const getConfig = () => {
     if (returnConfig.iOS && !returnConfig.campaign_version) {
       returnConfig.hide_header = true;
     }
-  }
-
-  if (project === 'e-mandate') {
-    searchParams += '&generic_callback=true'
   }
 
   if (project === 'isip') {
