@@ -213,12 +213,10 @@ class BasicDetailsRedirectionForm extends Component {
                     }
 
                 } else {
-                    this.setState({ show_loader: false });
-                    for (let error of res.pfwresponse.result.errors) {
-                        this.setState({
-                            [error.field + '_error']: error.message
-                        });
-                    }
+                    this.setState({ show_loader: false,openModal: false, 
+                        openModalMessage: '' });
+                    
+                    toast(res.pfwresponse.result.error ||  'Something went wrong');
                 }
             } catch (err) {
                 this.setState({
