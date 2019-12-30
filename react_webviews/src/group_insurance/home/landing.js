@@ -349,7 +349,7 @@ class Landing extends Component {
             <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px',fontWeight:500 }}>{props.title}
             {props.key === 'HEALTH_INSURANCE' && 
             <span style={{    padding: '3px 7px',
-              borderRadius: 10,fontSize: 10,background: '#7f66bf',margin: '0 0 0 10px',color: 'white'
+              borderRadius: 10,fontSize: 10,background: getConfig().primary, margin: '0 0 0 10px',color: 'white'
           }}>3 Plans</span>}
             </div>
             <div style={{ color: '#7e7e7e', fontSize: '13px' }}>{props.subtitle}</div>
