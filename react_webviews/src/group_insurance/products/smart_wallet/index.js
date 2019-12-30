@@ -22,7 +22,7 @@ class SmartwalletPlanDetails extends Component {
       checked: false,
       show_loader:true,
       plan_data: {},
-      recommendedInedx: 0,
+      recommendedIndex: 0,
       product_key: 'SMART_WALLET',
       type: getConfig().productName,
       ic_wallet_b1: getConfig().productName !== 'fisdom' ? ic_wallet_b1_myway : ic_wallet_b1_fisdom,
