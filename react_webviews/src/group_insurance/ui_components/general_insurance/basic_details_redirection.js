@@ -56,7 +56,7 @@ class BasicDetailsRedirectionForm extends Component {
 
         let  buttonTitle = 'Continue';
         let provider = this.props.parent.state.provider;
-        let current_url = window.location.origin + '/group-insurance/term/intro' + getConfig().searchParams;
+        let current_url = window.location.href;
         this.setState({
             premium_details: params ? params.premium_details : {},
             current_url: current_url,
@@ -180,10 +180,10 @@ class BasicDetailsRedirectionForm extends Component {
                 if (res.pfwresponse.status_code === 200) {
                     // this.setState({ show_loader: false });
                     this.setState({ openModal: false, openModalMessage: '' });
-                    var kotakUrl = res.pfwresponse.result.lead;
+                    var leadRedirectUrl = res.pfwresponse.result.lead;
                     if (getConfig().app === 'web') {
                         this.setState({ show_loader: false });
-                        window.open(kotakUrl, '_blank');
+                        window.open(leadRedirectUrl, '_blank');
                     } else {
 
                         if (getConfig().app === 'ios') {
@@ -204,7 +204,7 @@ class BasicDetailsRedirectionForm extends Component {
                         });
                         nativeCallback({ action: 'show_top_bar', message: { title: this.state.productTitle } });
 
-                        window.location.href = kotakUrl;
+                        window.location.href = leadRedirectUrl;
                     }
 
                 } else {
