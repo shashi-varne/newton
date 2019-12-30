@@ -1,0 +1,173 @@
+import React, { Component } from 'react';
+import PlanDetails from '../../../ui_components/general_insurance/plan_details';
+
+import { getConfig } from 'utils/functions';
+
+import ic_hs_b1_fisdom from 'assets/ic_hs_b1_fisdom.svg';
+import ic_hs_b1_myway from 'assets/ic_hs_b1_myway.svg';
+
+import ic_hs_b2_fisdom from 'assets/ic_health_b1_fisdom.svg';
+import ic_hs_b2_myway from 'assets/ic_health_b1_myway.svg';
+
+import ic_hs_b3_fisdom from 'assets/ic_hs_b3_fisdom.svg';
+import ic_hs_b3_myway from 'assets/ic_hs_b3_myway.svg';
+
+import ic_hs_b4_fisdom from 'assets/ic_hs_b4_fisdom.svg';
+import ic_hs_b4_myway from 'assets/ic_hs_b4_myway.svg';
+
+import ic_hs_b5_fisdom from 'assets/ic_hs_b5_fisdom.svg';
+import ic_hs_b5_myway from 'assets/ic_hs_b5_myway.svg';
+
+import ic_pa_b1_fisdom from 'assets/ic_pa_b1_fisdom.svg';
+import ic_pa_b1_myway from 'assets/ic_pa_b1_myway.svg';
+
+class HealthCriticalIllness extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedIndex: 0,
+      checked: false,
+      show_loader:true,
+      plan_data: {},
+      recommendedIndex: 0,
+      product_key: 'CRITICAL_HEALTH_INSURANCE',
+      provider: 'hdfcergo',
+      integeration_type: 'redirection',
+      type: getConfig().productName,
+      ic_hs_b1: getConfig().productName !== 'fisdom' ? ic_hs_b1_myway : ic_hs_b1_fisdom,
+      ic_hs_b2: getConfig().productName !== 'fisdom' ? ic_hs_b2_myway : ic_hs_b2_fisdom,
+      ic_hs_b3: getConfig().productName !== 'fisdom' ? ic_hs_b3_myway : ic_hs_b3_fisdom,
+      ic_hs_b4: getConfig().productName !== 'fisdom' ? ic_hs_b4_myway : ic_hs_b4_fisdom,
+      ic_hs_b5: getConfig().productName !== 'fisdom' ? ic_hs_b5_myway : ic_hs_b5_fisdom,
+      ic_pa_b1: getConfig().productName !== 'fisdom' ? ic_pa_b1_myway : ic_pa_b1_fisdom
+    }
+  }
+
+  componentWillMount() {
+
+    let { params } = this.props.location;
+    this.setState({
+      premium_details: params ? params.premium_details : {}
+    })
+
+    var product_diseases = ['Heart attack', 'Multiple sclerosi', 'Major organ transplantation', 
+   'Cancer', 'Kidney failure', 'Stroke', 'Coronary artery bypass surgery', 'Paralysis',
+    'Heart valve replacement', 'Primary pulmonary arterial hypertension',
+     'Benign brain tumour', 'End stage liver disease', 
+     "Parkinson's disease", 'Aorta graft surgery', "Alzheimer's disease"];
+
+     var product_diseases2 = ['Heart attack', 'Multiple sclerosi', ' Major organ transplantation',
+      'Cancer', 'Kidney failure', 'Stroke', 'Coronary artery bypass surgery', 'Paralysis'];
+
+    var product_benefits = [
+      {
+        'disc': 'No limit on hospital room rent, physician charges',
+        'key' : 'room_rent',
+        'icon': this.state.ic_hs_b1
+      },
+      {
+        'disc': '60 days pre  & 180 days post hospitalization cover',
+        'key' : 'hospitalization_cover',
+        'icon': this.state.ic_hs_b2
+      },
+      {
+        'disc': 'Road as well as air ambulance allowances',
+        'key' : 'ambulance_allowances',
+        'icon': this.state.ic_hs_b3
+      },
+      {
+        'disc': '25% sum insured bonus every claim-free year',
+        'key' : 'sum_insured',
+        'icon': this.state.ic_hs_b4
+      },
+      {
+        'disc': '586 day care procedures and treatments covered',
+        'key' : 'daycare',
+        'icon': this.state.ic_hs_b5
+      },
+      {
+        'disc': 'Option to cover individual and entire family',
+        'key' : 'enitre_family',
+        'icon': this.state.ic_pa_b1
+      }
+    ]
+
+    var plan_data = {
+      'product_name': 'Health suraksha',
+      'product_tag_line': 'Covers medical expenses and ensures quality medical treatment at the time of need',
+      'key': 'CRITICAL_HEALTH_INSURANCE',
+      'logo': '',
+      'premium_details': [
+        {
+          "sum_assured": '',
+          "product_plan_title": "Platinum",
+          "product_benefits_included": ['room_rent', 'hospitalization_cover', 'ambulance_allowances', 'sum_insured', 'daycare', 'enitre_family'],
+          "premium": "1150",
+          "tax_amount": "",
+          "plus_benefit": '15 diseases',
+          "product_diseases_covered": product_diseases,
+          'product_plan': 'platinum'
+        },
+        {
+          "sum_assured": '',
+          "product_plan_title": "Gold",
+          "product_benefits_included": ['room_rent', 'hospitalization_cover', 'ambulance_allowances', 'sum_insured', 'daycare', 'enitre_family'],
+          "premium": "1000",
+          "tax_amount": "",
+          "plus_benefit": '8 diseases',
+          "product_diseases_covered": product_diseases2,
+          'product_plan': 'gold'
+        }
+      ]
+    }
+
+    plan_data.premium_details.forEach(function (premium, index) {
+
+      plan_data.premium_details[index].product_benefits = []
+      product_benefits.forEach(function (benefit, index2) {
+       
+        let benefit_data = {};
+        benefit_data = Object.assign(benefit_data, benefit);
+
+        if (premium.product_benefits_included.indexOf(benefit_data.key) === -1) {
+          benefit_data.isDisabled = true;
+        }
+
+        plan_data.premium_details[index].product_benefits.push(benefit_data)
+      });
+    });
+
+    this.setState({
+      plan_data: plan_data
+    })
+
+  }
+
+  navigate = (pathname, search,premium_details) => {
+    this.props.history.push({
+      pathname: pathname,
+      search: search ? search : getConfig().searchParams,
+      params: {
+        premium_details: premium_details || {}
+      }
+    });
+  }
+
+  handleClick = async (final_data) => {
+    this.navigate('form','', final_data);
+  }
+
+  render() {
+    return (
+      <div>
+        <PlanDetails
+          parent={this}
+        />
+      </div>
+    );
+  }
+
+}
+
+export default HealthCriticalIllness;
