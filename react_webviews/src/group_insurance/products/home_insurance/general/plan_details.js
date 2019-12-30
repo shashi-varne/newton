@@ -99,6 +99,7 @@ class HomeInsurance extends Component {
           "product_benefits_included": ['structural_damage', 'long_tenure', 'shifting_expenses'],
           "product_benefits_title2": 'Benefits under content',
           "product_benefits2": product_benefits2,
+          "product_benefits": product_benefits,
           "premium": "328",
           "tax_amount": "",
           "plus_benefit": 'Structure & content',
@@ -109,9 +110,10 @@ class HomeInsurance extends Component {
         },
         {
           "sum_assured": '',
-          "product_benefits_title": 'Benefits under structure',
+          "product_benefits_title": 'Benefits under content',
           "product_benefits_included": ['structural_damage', 'long_tenure', 'shifting_expenses'],
           "premium": "182",
+          "product_benefits": product_benefits2,
           "tax_amount": "",
           "plus_benefit": 'Content',
           'card_top_info' : 'up to 45% discount',
@@ -121,22 +123,6 @@ class HomeInsurance extends Component {
         }
       ]
     }
-
-    plan_data.premium_details.forEach(function (premium, index) {
-
-      plan_data.premium_details[index].product_benefits = []
-      product_benefits.forEach(function (benefit, index2) {
-       
-        let benefit_data = {};
-        benefit_data = Object.assign(benefit_data, benefit);
-
-        if (premium.product_benefits_included.indexOf(benefit_data.key) === -1) {
-          benefit_data.isDisabled = true;
-        }
-
-        plan_data.premium_details[index].product_benefits.push(benefit_data)
-      });
-    });
 
     this.setState({
       plan_data: plan_data
