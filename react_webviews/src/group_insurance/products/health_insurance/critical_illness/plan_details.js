@@ -85,13 +85,13 @@ class HealthCriticalIllness extends Component {
         },
         {
           "sum_assured": '',
-          "product_plan_title": "Gold",
+          "product_plan_title": "Silver",
           "product_benefits_included": ['first_diagnosis', 'hospitalisation_cliam', 'save_tax'],
           "premium": "1000",
           "tax_amount": "",
           "plus_benefit": '8 diseases',
           "product_diseases_covered": product_diseases2,
-          'product_plan': 'gold'
+          'product_plan': 'silver'
         }
       ]
     }
