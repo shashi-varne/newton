@@ -198,7 +198,8 @@ class Landing extends Component {
             dengue:'DENGUE'
           };
 
-          let pathname = navigateMapper[this.state.openModuleData.sub_module] || '';
+          let pathname = navigateMapper[this.state.openModuleData.sub_module] || 
+          this.state.openModuleData.sub_module;
           this.handleClick(pathname);
         }
 

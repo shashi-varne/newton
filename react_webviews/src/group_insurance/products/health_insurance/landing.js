@@ -21,7 +21,7 @@ class HealthInsuranceLanding extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false,
+      show_loader: true,
       type: getConfig().productName,
       insuranceProducts: [],
       params: qs.parse(props.history.location.search.slice(1))
@@ -58,6 +58,18 @@ class HealthInsuranceLanding extends Component {
       }
     ];
 
+
+    let { params } = this.props.location || {};
+    let openModuleData =  params ? params.openModuleData : {}
+
+    if(openModuleData && openModuleData.sub_module) {
+      let pathname = openModuleData.sub_module;
+      this.handleClick(pathname);
+    } else {
+      this.setState({
+        show_loader: false
+      })
+    }
 
     this.setState({
       insuranceProducts: insuranceProducts
