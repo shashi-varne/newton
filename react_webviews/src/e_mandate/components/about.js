@@ -115,7 +115,7 @@ class About extends Component {
       show_loader: true
     })
     try {
-      const res = await Api.get('/api/mandate/enach/user/banks' + this.state.pc_urlsafe);
+      const res = await Api.get('/api/mandate/enach/user/banks/' + this.state.pc_urlsafe);
       if (res.pfwresponse.result) {
         let params = {
           banks: res.pfwresponse.result.banks
