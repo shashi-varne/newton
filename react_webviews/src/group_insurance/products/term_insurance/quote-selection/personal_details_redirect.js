@@ -179,11 +179,16 @@ class PersonalDetails1 extends Component {
         const res = await Api.post('/api/ins_service/api/insurance/kotak/lead/create', kotakBody);
 
         if (res.pfwresponse.status_code === 200) {
-          // this.setState({ show_loader: false });
-          this.setState({ openModal: false, openModalMessage: '' });
+
           var kotakUrl = res.pfwresponse.result.lead;
           if(getConfig().app === 'web') {
-            this.setState({ show_loader: false });
+            
+            this.setState({ 
+              show_loader: false,
+              openModal: false, 
+              openModalMessage: ''
+            });
+
             window.open(kotakUrl, '_blank');
           } else {
 
@@ -209,12 +214,10 @@ class PersonalDetails1 extends Component {
           }
          
         } else {
-          this.setState({ show_loader: false });
-          for (let error of res.pfwresponse.result.errors) {
-            this.setState({
-              [error.field + '_error']: error.message
-            });
-          }
+          this.setState({ show_loader: false,openModal: false, 
+            openModalMessage: '' });
+        
+          toast(res.pfwresponse.result.error ||  'Something went wrong');
         }
       } catch (err) {
         this.setState({

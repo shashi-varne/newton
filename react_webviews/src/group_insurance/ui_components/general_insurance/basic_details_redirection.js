@@ -178,7 +178,6 @@ class BasicDetailsRedirectionForm extends Component {
                 this.props.parent.state.provider + '/lead/create', leadCreateBody);
 
                 if (res.pfwresponse.status_code === 200) {
-                    // this.setState({ show_loader: false });
                     
                     var leadRedirectUrl = res.pfwresponse.result.lead;
                     if (getConfig().app === 'web') {
