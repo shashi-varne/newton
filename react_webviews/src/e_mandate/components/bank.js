@@ -19,7 +19,8 @@ class SelectBank extends Component {
       banks: props.location.state.banks,
       params: qs.parse(props.history.location.search.slice(1)),
       info_icon: getConfig().productName !== 'fisdom' ? info_icon_myway : info_icon_fisdom,
-      selected_bank: {}
+      selected_bank: {},
+      pc_urlsafe: getConfig().pc_urlsafe
     }
   }
 
@@ -102,7 +103,7 @@ class SelectBank extends Component {
     })
     try {
       let bank_data = { selected_bank: this.state.selected_bank };
-      const res = await Api.post('/api/mandate/enach/user/banks', bank_data);
+      const res = await Api.post('/api/mandate/enach/user/banks/' + this.state.pc_urlsafe, bank_data);
       if (res.pfwresponse.result) {
         let paymentRedirectUrl = encodeURIComponent(
           window.location.origin + '/e-mandate/redirection'

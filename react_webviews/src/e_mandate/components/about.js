@@ -49,7 +49,8 @@ class About extends Component {
       b_icon: getConfig().productName !== 'fisdom' ? ic_b_myway : ic_b_fisdom,
       e_icon: getConfig().productName !== 'fisdom' ? ic_e_myway : ic_e_fisdom,
       sb_icon: getConfig().productName !== 'fisdom' ? ic_sb_myway : ic_sb_fisdom,
-      emandate: {}
+      emandate: {},
+      pc_urlsafe: getConfig().pc_urlsafe
     }
 
     this.renderQuestions = this.renderQuestions.bind(this);
@@ -114,7 +115,7 @@ class About extends Component {
       show_loader: true
     })
     try {
-      const res = await Api.get('/api/mandate/enach/user/banks');
+      const res = await Api.get('/api/mandate/enach/user/banks' + this.state.pc_urlsafe);
       if (res.pfwresponse.result) {
         let params = {
           banks: res.pfwresponse.result.banks
