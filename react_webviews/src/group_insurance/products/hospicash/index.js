@@ -20,7 +20,7 @@ class HospicashPlanDetails extends Component {
       checked: false,
       show_loader:true,
       plan_data: {},
-      recommendedInedx: 0,
+      recommendedIndex: 0,
       product_key: 'HOSPICASH',
       type: getConfig().productName,
       ic_hospicash_b1: getConfig().productName !== 'fisdom' ? ic_hospicash_b1_myway : ic_hospicash_b1_fisdom,

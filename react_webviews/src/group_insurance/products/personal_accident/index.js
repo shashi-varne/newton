@@ -27,7 +27,7 @@ class AccidentPlanDetails extends Component {
       selectedIndex: 0,
       checked: false,
       plan_data: {},
-      recommendedInedx: 0,
+      recommendedIndex: 0,
       product_key: 'PERSONAL_ACCIDENT',
       type: getConfig().productName,
       ic_pa_b1: getConfig().productName !== 'fisdom' ? ic_pa_b1_myway : ic_pa_b1_fisdom,
@@ -107,7 +107,7 @@ class AccidentPlanDetails extends Component {
           'last_rites', 'blood_allowence', 'child_education', 'imported_medicine'],
           "premium": "1200",
           "tax_amount": "216",
-          "plus_benefit": '4'
+          "plus_benefit": '+4 Benefits'
         },
         {
           "sum_assured": 500000,
@@ -115,7 +115,7 @@ class AccidentPlanDetails extends Component {
           'last_rites', 'blood_allowence', 'child_education', 'imported_medicine'],
           "premium": "700",
           "tax_amount": "126",
-          "plus_benefit": '4'
+          "plus_benefit": '+4 Benefits'
         },
         {
           "sum_assured": 200000,

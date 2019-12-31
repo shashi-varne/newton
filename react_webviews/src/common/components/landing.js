@@ -32,7 +32,9 @@ class CommonLanding extends Component {
         }
 
         let navigateMapper = {
-            'group-insurance': '/group-insurance' 
+            'group-insurance': '/group-insurance',
+            'health-insurance': '/group-insurance/health/landing',
+            'term-insurance': '/group-insurance/term/intro'
         };
 
         let pathname = navigateMapper[main_module] || '';

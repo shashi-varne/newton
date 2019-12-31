@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
-import provider from 'assets/provider.svg';
 import ic_read_fisdom from 'assets/ic_read_fisdom.svg';
 import ic_read_myway from 'assets/ic_read_myway.svg';
 import ic_claim_assist_fisdom from 'assets/ic_claim_assist_fisdom.svg';
 import ic_claim_assist_myway from 'assets/ic_claim_assist_myway.svg';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
+import bhartiaxa_logo from 'assets/provider.svg'
 
 import instant_fisdom from 'assets/instant_fisdom.svg';
 import instant_myway from 'assets/instant_myway.svg';
+
+
+import ic_ci_d1_fisdom from 'assets/ic_ci_d1_fisdom.svg';
+import ic_ci_d1_myway from 'assets/ic_ci_d1_myway.svg';
 
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
@@ -41,6 +45,27 @@ const coverAmountMapper = {
     35000: 0,
     25000: 1,
     15000: 2,
+  },
+  'HEALTH_SURAKSHA': {
+    7500000: 0,
+    1500000: 1,
+    500000: 2
+  },
+  'HEALTH_SUPER_TOPUP' : {
+    1600000: 0,
+    1100000: 1,
+    600000: 2
+  }
+}
+
+const premiumAmountMapper = {
+  'CRITICAL_HEALTH_INSURANCE': {
+    1150: 0,
+    1000: 1
+  },
+  'HOME_INSURANCE' : {
+    328: 0,
+    182: 1
   }
 }
 
@@ -78,12 +103,18 @@ class PlanDetailsClass extends Component {
       productTitle += ' (fraud protection)';
     }
 
+    let instant_issuance = this.props.parent.state.integeration_type === 'redirection' ? false : true;
+    let isRedirectionModal = this.props.parent.state.integeration_type === 'redirection' ? true : false;
     let instant_icon = this.state.type !== 'fisdom' ? instant_myway : instant_fisdom;
     let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected') || '';
+    let ic_ci_d1_icon = this.state.type !== 'fisdom' ? ic_ci_d1_myway : ic_ci_d1_fisdom;
     this.setState({
       lead_id: lead_id || '',
       instant_icon: instant_icon,
-      productTitle: productTitle
+      productTitle: productTitle,
+      instant_issuance: instant_issuance,
+      ic_ci_d1_icon: ic_ci_d1_icon,
+      isRedirectionModal: isRedirectionModal
     })
 
   }
@@ -104,7 +135,7 @@ class PlanDetailsClass extends Component {
   setPremiumData(premium_details, leadData) {
     if (!leadData || Object.keys(leadData).length === 0) {
       this.setState({
-        selectedIndex: 0
+        selectedIndex: this.props.parent.state.recommendedIndex || 0
       })
       return;
     }
@@ -112,9 +143,20 @@ class PlanDetailsClass extends Component {
       premium_details[key] = leadData[key]
     })
 
-    let selectedIndex = coverAmountMapper[this.props.parent.state.product_key][premium_details.cover_amount] || 0;
+    let premiumMapper = ["CRITICAL_HEALTH_INSURANCE", "HOME_INSURANCE"];
+    let product_key = this.props.parent.state.product_key;
+
+    let mapper = coverAmountMapper;
+    let mapperValue  = premium_details.cover_amount;
+
+    if(premiumMapper.indexOf(product_key) !== -1) {
+      mapper = premiumAmountMapper;
+      mapperValue = premium_details.premium;
+    }
+
+    let selectedIndex = mapper[product_key][mapperValue] || this.props.parent.state.recommendedIndex;
     this.setState({
-      selectedIndex: selectedIndex
+      selectedIndex: selectedIndex || 0
     })
   }
 
@@ -136,15 +178,18 @@ class PlanDetailsClass extends Component {
     }
 
     try {
-
-      const resQuote = await Api.get('api/ins_service/api/insurance/bhartiaxa/get/quote?product_name=' +
+      
+      let provider = this.props.parent.state.provider || 'bhartiaxa';
+      const resQuote = await Api.get('/api/ins_service/api/insurance/' + 
+      provider + '/get/quote?product_name=' +
         this.props.parent.state.product_key)
 
       if (resQuote && resQuote.pfwresponse.status_code === 200) {
 
         let quoteData = resQuote.pfwresponse.result;
         this.setState({
-          quoteData: quoteData
+          quoteData: quoteData,
+          productTitle: quoteData.product_title || this.state.productTitle
         })
 
       } else {
@@ -257,29 +302,57 @@ class PlanDetailsClass extends Component {
         style={styles.activeplan}
         className={`accident-plan-item`}
         onClick={() => this.selectPlan(index)}>
-        <div className="accident-plan-item1">Cover amount</div>
-        <div className="accident-plan-item2">{inrFormatDecimal(props.sum_assured)}
+       {!props.product_plan_title && 
+        <div className="accident-plan-item1">
+          {!props.cover_text && <span>Cover amount</span>}
+          {props.cover_text && <span>{props.cover_text}</span>}
+        </div>}
+
+       {props.product_plan_title && <div className="accident-plan-item1">
+          <span style={{color: '#160d2e', fontSize: 14}}>{props.product_plan_title}</span>
+        </div>}
+
+        {props.plan_title && 
+        <div className="accident-plan-item2">
+          {props.plan_title}
+        </div>}
+
+        {!props.plan_title && !props.product_plan_title && props.sum_assured && 
+        <div className="accident-plan-item2">
+          {props.plan_title || inrFormatDecimal(props.sum_assured)}
           {this.props.parent.state.product_key === 'HOSPICASH' && <span>/day</span>}
+        </div>}
+
+        <div className="accident-plan-item3" style={{ display: this.state.isRedirectionModal ? 'grid' : 'flex' }}>
+          {!this.state.isRedirectionModal && <span className="accident-plan-item4">in</span>}
+          {this.state.isRedirectionModal && <span className="accident-plan-item4" style={{ marginBottom: 3 }}>starts from</span>}
+          <span className="accident-plan-item-color" style={{ color: getConfig().primary, fontWeight: 'bold' }}>₹ 
+          {props.premium}/{props.plan_frequency || 'year'}</span>
         </div>
-        <div className="accident-plan-item3">
-          <span className="accident-plan-item4">in</span>
-          <span className="accident-plan-item-color" style={{ color: getConfig().primary, fontWeight: 'bold' }}>₹ {props.premium}/year</span></div>
         {props.plus_benefit &&
-          <div className="accident-plan-benefit" style={styles.color}>+{props.plus_benefit} Benefits</div>
+          <div className="accident-plan-benefit" style={styles.color}>
+            {props.plus_benefit}
+          </div>
         }
-        {this.state.parent.state.recommendedInedx === index &&
+        {!props.card_top_info && this.state.parent.state.recommendedIndex === index &&
           <div className="recommended">RECOMMENDED</div>
         }
+
+        {props.card_top_info &&
+          <div className="card-top-info">
+            {props.card_top_info}
+          </div>}
       </div>
     )
   }
 
-  navigate = (pathname, search, premium_details) => {
+  navigate = (pathname, search, premium_details, diseasesData) => {
     this.props.parent.props.history.push({
       pathname: pathname,
       search: search ? search : getConfig().searchParams,
       params: {
-        premium_details: premium_details || {}
+        premium_details: premium_details || {},
+        diseasesData: diseasesData || {}
       }
     });
   }
@@ -287,9 +360,11 @@ class PlanDetailsClass extends Component {
   async handleClickCurrent() {
     this.sendEvents('next');
     var final_data = {
+      "product_plan": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].product_plan,
       "premium": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].premium,
       "cover_amount": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].sum_assured,
-      "tax_amount": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].tax_amount
+      "tax_amount": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].tax_amount,
+      "productTitle": this.state.productTitle
     }
     final_data.product_name = this.props.parent.state.product_key;
 
@@ -301,6 +376,11 @@ class PlanDetailsClass extends Component {
     this.setState({
       show_loader: true
     })
+
+    if (this.state.isRedirectionModal) {
+      this.navigate('form-redirection', '', final_data);
+      return;
+    }
 
     try {
 
@@ -326,8 +406,24 @@ class PlanDetailsClass extends Component {
       toast('Something went wrong');
     }
 
+  }
 
+  openDiseases() {
 
+    if(!this.props.parent.state.plan_data.premium_details) {
+      return;
+    }
+
+    let plan_selected = this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0];
+    let product_diseases_covered = plan_selected.product_diseases_covered;
+    
+    let dieseasesTitle = 'HDFC ERGO ' + plan_selected.product_plan_title + ' plan';
+    let diseasesData = {
+      product_diseases_covered : product_diseases_covered,
+      dieseasesTitle: dieseasesTitle
+    }
+
+    this.navigate('/group-insurance/common/diseases', '', '', diseasesData);
 
   }
 
@@ -359,7 +455,7 @@ class PlanDetailsClass extends Component {
       <Container
         fullWidthButton={true}
         product_key={this.props.parent ? this.props.parent.state.product_key : ''}
-        buttonTitle='Get this Plan'
+        buttonTitle={this.props.parent.state.provider === 'hdfcergo' ? 'Get Free Quote':  'Get this Plan'}
         onlyButton={true}
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
@@ -369,14 +465,14 @@ class PlanDetailsClass extends Component {
         <div className="accident-plan-heading-container">
           <div className="accident-plan-heading">
             <h1 className="accident-plan-title">{this.state.productTitle}</h1>
-            <img src={provider} alt="" />
+            <img src={this.state.quoteData.logo || bhartiaxa_logo} alt="" />
           </div>
           <div className="accident-plan-subtitle">
             {this.props.parent.state.plan_data.product_tag_line}
           </div>
         </div>
         <div className="accident-plans">
-          <div style={{ display: 'flex', justifyContent: 'flex-end', margin: ' 0 0px 0 0' }}>
+          {this.state.instant_issuance && <div style={{ display: 'flex', justifyContent: 'flex-end', margin: ' 0 0px 0 0' }}>
             <div style={{
               fontSize: '14px', lineHeight: '24px', color: '#4a4a4a',
               display: 'flex', width: 'fit-content', background: '#ede9f5', padding: '0px 10px 0 10px'
@@ -384,7 +480,7 @@ class PlanDetailsClass extends Component {
               <img style={{ margin: '0px 5px 0 0' }} src={this.state.instant_icon} alt="" />
               instant policy issuance
               </div>
-          </div>
+          </div>}
           <div style={{ paddingTop: 20 }} className="accident-plan-heading-title">Select a plan</div>
           <div className="accident-plan-list-container">
             <div className="accident-plan-list">
@@ -402,20 +498,40 @@ class PlanDetailsClass extends Component {
             <div className="plan-details">
 
             </div>
-            <div style={{display:'flex', flexWrap: 'wrap'}}>    
-            {this.props.parent && this.props.parent.state.plan_data &&
-              this.props.parent.state.plan_data.premium_details &&
-              this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_diseases_covered.map(this.renderDiseases)}
+            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+              {this.props.parent && this.props.parent.state.plan_data &&
+                this.props.parent.state.plan_data.premium_details &&
+                this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_diseases_covered.map(this.renderDiseases)}
+            </div>
+          </div>
+        }
+
+        {this.props.parent.state.product_key === 'CRITICAL_HEALTH_INSURANCE' &&
+          <div style={{ marginTop: '40px', padding: '0 15px' }}>
+            <div style={{ color: '#160d2e', fontSize: '16px', fontWeight: '500', marginBottom: '10px' }}>Diseases covered</div>
+            <div className="plan-details-item" >
+              <img className="plan-details-icon" src={this.state.ic_ci_d1_icon} alt="" />
+              <div>
+                <div className="plan-details-text">{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_diseases_covered.length} life-threatening diseases covered</div>
+                <div onClick={() => this.openDiseases()} className="round-visible-button">
+                Diseases covered &nbsp;&nbsp;&nbsp;>
+                </div>
+              </div>
             </div>
           </div>
         }
 
         <div style={{ marginTop: '40px', padding: '0 15px' }}>
-          <div style={{ color: '#160d2e', fontSize: '16px', fontWeight: '500', marginBottom: '10px' }}>Benefits that are covered</div>
+          <div style={{ color: '#160d2e', fontSize: '16px', fontWeight: '500', marginBottom: '10px' }}>
+
+            {!this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_benefits_title &&
+              <span>Benefits that are covered</span>}
+            {this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_benefits_title &&
+              <span>{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_benefits_title}</span>}
+          </div>
 
 
           <div className="plan-details">
-
           </div>
 
           {this.props.parent && this.props.parent.state.plan_data &&
@@ -423,18 +539,41 @@ class PlanDetailsClass extends Component {
             this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_benefits.map(this.renderBenefits)}
         </div>
 
+        {this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_benefits2 &&
+
+          <div style={{ marginTop: '40px', padding: '0 15px' }}>
+            <div style={{ color: '#160d2e', fontSize: '16px', fontWeight: '500', marginBottom: '10px' }}>
+
+              {!this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_benefits_title2 &&
+                <span>Benefits that are covered</span>}
+              {this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_benefits_title2 &&
+                <span>{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_benefits_title2}</span>}
+            </div>
+
+
+            <div className="plan-details">
+            </div>
+
+            {this.props.parent && this.props.parent.state.plan_data &&
+              this.props.parent.state.plan_data.premium_details &&
+              this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_benefits2.map(this.renderBenefits)}
+          </div>
+        }
+
         <div className="accident-plan-claim">
           <img className="accident-plan-claim-icon" src={this.state.ic_claim_assist} alt="" />
           <div>
             <div className="accident-plan-claim-title">Claim assistance</div>
-            <div className="accident-plan-claim-subtitle">Call Bharti AXA on toll free 1800-103-2292</div>
+            <div className="accident-plan-claim-subtitle">{this.state.quoteData.claim_assistance_line  || 
+            'Call Bharti AXA on toll free 1800-103-2292'}</div>
           </div>
         </div>
+       {this.props.parent.state.provider !== 'hdfcergo' &&
         <div className="accident-plan-read"
           onClick={() => this.openInBrowser(this.state.quoteData.read_document, 'read_document')}>
           <img className="accident-plan-read-icon" src={this.state.ic_read} alt="" />
           <div className="accident-plan-read-text" style={styles.color}>Read Detailed Document</div>
-        </div>
+        </div>}
 
         <div className="CheckBlock2 accident-plan-terms" style={{}}>
           <Grid container spacing={16} alignItems="center">
@@ -450,7 +589,7 @@ class PlanDetailsClass extends Component {
             </Grid>
             <Grid item xs={11}>
               <div className="accident-plan-terms-text" style={{}}>
-                I accept <span onClick={() => this.openInBrowser(this.state.quoteData.terms_and_conditions,
+                I accept <span onClick={() => this.openInBrowser(this.state.quoteData.terms_and_conditions || this.state.quoteData.tnc,
                   'terms_and_conditions')} className="accident-plan-terms-bold" style={styles.color}>
                   Terms and conditions</span></div>
             </Grid>

@@ -131,30 +131,10 @@ class Intro extends Component {
 
     
     try {
-      const res = await Api.get('/api/ins_service/api/providers/all');
+      
+      const res = await Api.get('/api/ins_service/api/insurance/providers/all');
       this.getTermInsurance();
-      // this.setState({
-      //   show_loader: false
-      // });
-
-      // let quotesData = [
-
-      //   {
-      //     'quote_provider': 'KOTAK',
-      //     'premium': '231',
-      //     'quote_provider_logo': kotak_logo,
-      //     'claim_settled_ratio': '97.4',
-      //     'insurance_title': 'Kotak Life Insurance'
-      //   },
-      //   {
-      //     'quote_provider': 'HDFC',
-      //     'premium': '417',
-      //     'quote_provider_logo': 'https://kotak-dot-plutus-staging.appspot.com/static/img/insurance/hdfc_logo.png',
-      //     'claim_settled_ratio': '98',
-      //     'insurance_title': 'HDFC Life Click 2 Protect 3D Plus'
-      //   }
-      // ]
-
+     
       if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.providers) {
         let result = res.pfwresponse.result;
         this.setState({

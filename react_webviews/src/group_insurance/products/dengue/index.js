@@ -17,7 +17,7 @@ class DenguePlanDetails extends Component {
       selectedIndex: 0,
       checked: false,
       plan_data: {},
-      recommendedInedx: 0,
+      recommendedIndex: 0,
       product_key: 'DENGUE',
       type: getConfig().productName,
       ic_d_b1: getConfig().productName !== 'fisdom' ? ic_d_b1_myway : ic_d_b1_fisdom,

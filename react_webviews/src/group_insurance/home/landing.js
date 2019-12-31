@@ -4,8 +4,7 @@ import qs from 'qs';
 import { insuranceStateMapper } from '../constants';
 import insurance_fisdom from 'assets/ic_fisdom_insurance_fisdom.svg';
 import insurance_myway from 'assets/ic_fisdom_insurance_myway.svg';
-// import health_fisdom from 'assets/ic_health_fisdom.svg';
-// import health_myway from 'assets/ic_health_myway.svg';
+
 import hospicash_fisdom from 'assets/ic_hospicash_fisdom.svg';
 import hospicash_myway from 'assets/ic_hospicash_myway.svg';
 import accident_fisdom from 'assets/ic_personal_accident_fisdom.svg';
@@ -20,6 +19,11 @@ import dengue_myway from 'assets/ic_dengue_insurance_myway.svg';
 
 import instant_fisdom from 'assets/instant_fisdom.svg';
 import instant_myway from 'assets/instant_myway.svg';
+
+import health_fisdom from 'assets/ic_health_fisdom.svg';
+import health_myway from 'assets/ic_health_myway.svg';
+import home_fisdom from 'assets/home_insurance_fisdom.svg';
+import home_myway from 'assets/home_insurance_myway.svg';
 
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
@@ -57,6 +61,9 @@ class Landing extends Component {
     let instant_icon = this.state.type !== 'fisdom' ? instant_myway : instant_fisdom;
     let dengue_icon = this.state.type !== 'fisdom' ? dengue_myway : dengue_fisdom;
 
+    let health_insurance_icon = this.state.type !== 'fisdom' ? health_myway : health_fisdom;
+    let home_insurance_icon = this.state.type !== 'fisdom' ? home_myway : home_fisdom;
+
     let insuranceProducts = [
       // {
       //   key: 'HEALTH',
@@ -71,22 +78,36 @@ class Landing extends Component {
         icon: accident_icon
       },
       {
-        key: 'DENGUE',
-        title: 'Dengue insurance',
-        subtitle: 'Starts from ₹ 50/year',
-        icon: dengue_icon
-      },
-      {
         key: 'HOSPICASH',
         title: 'Hospital daily cash',
         subtitle: 'Starts from ₹ 750/year',
         icon: hospicash
       },
+
+      {
+        key: 'HEALTH_INSURANCE',
+        title: 'Health insurance',
+        subtitle: 'Cover your health expenses',
+        icon: health_insurance_icon
+      },
+      {
+        key: 'HOME_INSURANCE',
+        title: 'Home insurance',
+        subtitle: 'Secure your home and interiors',
+        icon: home_insurance_icon
+      },
+
       {
         key: 'SMART_WALLET',
         title: 'Smart wallet (fraud protection)',
         subtitle: 'Starts from ₹ 250/year',
         icon: wallet_icon
+      },
+      {
+        key: 'DENGUE',
+        title: 'Dengue insurance',
+        subtitle: 'Starts from ₹ 50/year',
+        icon: dengue_icon
       },
       {
         key: 'TERM_INSURANCE',
@@ -177,7 +198,8 @@ class Landing extends Component {
             dengue:'DENGUE'
           };
 
-          let pathname = navigateMapper[this.state.openModuleData.sub_module] || '';
+          let pathname = navigateMapper[this.state.openModuleData.sub_module] || 
+          this.state.openModuleData.sub_module;
           this.handleClick(pathname);
         }
 
@@ -299,6 +321,10 @@ class Landing extends Component {
       }
 
       fullPath = insuranceStateMapper[product_key] + '/' + path;
+    } else if(product_key === 'HEALTH_INSURANCE') {
+      fullPath = 'health/landing';
+    } else if(product_key === 'HOME_INSURANCE') {
+      fullPath = 'home_insurance/general/plan';
     } else {
 
       // this.navigate(this.state.redirectTermPath);
@@ -321,7 +347,12 @@ class Landing extends Component {
         <div style={{ display: 'flex' }}>
           <img src={props.icon} alt="" style={{ marginRight: '15px' }} />
           <div>
-            <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px',fontWeight:500 }}>{props.title}</div>
+            <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px',fontWeight:500 }}>{props.title}
+            {props.key === 'HEALTH_INSURANCE' && 
+            <span style={{    padding: '3px 7px',
+              borderRadius: 10,fontSize: 10,background: getConfig().primary, margin: '0 0 0 10px',color: 'white'
+          }}>3 Plans</span>}
+            </div>
             <div style={{ color: '#7e7e7e', fontSize: '13px' }}>{props.subtitle}</div>
           </div>
         </div>

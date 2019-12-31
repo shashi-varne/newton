@@ -87,6 +87,32 @@ import DenguePlanSuccess from './products/dengue/plan-success';
 import DenguePlanDetails from './products/dengue';
 import DenguePlanPayment from './products/dengue/payment';
 
+/*******************  Health ******************/
+import HealthInsuranceLanding from './products/health_insurance/landing';
+
+
+// health suraksha
+import HealthSuraksha from './products/health_insurance/health_suraksha/plan_details'
+import HealthSurakshaForm from './products/health_insurance/health_suraksha/form'
+
+
+// critical illness
+import HealthCriticalIllness from './products/health_insurance/critical_illness/plan_details'
+import HealthCriticalIllnessForm from './products/health_insurance/critical_illness/form'
+
+
+// super topup 
+import HealthSuperTopup from './products/health_insurance/super_topup/plan_details'
+import HealthSuperTopupForm from './products/health_insurance/super_topup/form'
+
+
+/*******************  Home Insurance ******************/
+import HomeInsurance from './products/home_insurance/general/plan_details';
+import HomeInsuranceForm from './products/home_insurance/general/form';
+
+// common
+import RenderDiseasesClass from './ui_components/general_insurance/diseases';
+
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
   productionPrefix: 'f',
@@ -196,10 +222,33 @@ const Insurance = (props) => {
           <Route path={`${url}/wallet/payment-failed`} component={SmartwalletFailed} />
           <Route path={`${url}/wallet/payment/:status`} component={SmartwalletPlanPayment} />
 
+          {/********** Health Insurance **********/}
+          <Route path={`${url}/health/landing`} component={HealthInsuranceLanding} />
+
+          {/* health suraksha */}
+          <Route path={`${url}/health/health_suraksha/plan`} component={HealthSuraksha} />
+          <Route path={`${url}/health/health_suraksha/form-redirection`} component={HealthSurakshaForm} />
+
+          {/* critical illness */}
+          <Route path={`${url}/health/critical_illness/plan`} component={HealthCriticalIllness} />
+          <Route path={`${url}/health/critical_illness/form-redirection`} component={HealthCriticalIllnessForm} />
+          
+
+          {/* super topup */}
+          <Route path={`${url}/health/super_topup/plan`} component={HealthSuperTopup} />
+          <Route path={`${url}/health/super_topup/form-redirection`} component={HealthSuperTopupForm} />
+
+
+          {/* home insurance */}
+          <Route path={`${url}/home_insurance/general/plan`} component={HomeInsurance} />
+          <Route path={`${url}/home_insurance/general/form-redirection`} component={HomeInsuranceForm} />
+          
+
 
           {/* common */}
           <Route path={`${url}/common/report`} component={Report} />
           <Route path={`${url}/common/reportdetails/:policy_id`} component={ReportDetails} />
+          <Route path={`${url}/common/diseases`} component={RenderDiseasesClass} />
 
           <Route component={NotFound} />
         </Switch>
