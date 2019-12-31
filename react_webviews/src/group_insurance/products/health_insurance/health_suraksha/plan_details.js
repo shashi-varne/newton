@@ -6,8 +6,8 @@ import { getConfig } from 'utils/functions';
 import ic_hs_b1_fisdom from 'assets/ic_hs_b1_fisdom.svg';
 import ic_hs_b1_myway from 'assets/ic_hs_b1_myway.svg';
 
-import ic_hs_b2_fisdom from 'assets/ic_health_b1_fisdom.svg';
-import ic_hs_b2_myway from 'assets/ic_health_b1_myway.svg';
+import ic_hs_b2_fisdom from 'assets/ic_hs_b2_fisdom.svg';
+import ic_hs_b2_myway from 'assets/ic_hs_b2_myway.svg';
 
 import ic_hs_b3_fisdom from 'assets/ic_hs_b3_fisdom.svg';
 import ic_hs_b3_myway from 'assets/ic_hs_b3_myway.svg';

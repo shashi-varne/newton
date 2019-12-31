@@ -26,7 +26,8 @@ class BasicDetailsRedirectionForm extends Component {
             checked: false,
             parent: this.props.parent,
             show_loader: true,
-            premium_details: {},
+            premium_details_all: window.localStorage.getItem('group_insurance_plan_final_data') ?
+            JSON.parse(window.localStorage.getItem('group_insurance_plan_final_data')) : '',
             name: '',
             openModal: false,
             name_error: '',
@@ -46,8 +47,7 @@ class BasicDetailsRedirectionForm extends Component {
     componentWillMount() {
 
         nativeCallback({ action: 'take_control_reset' });
-        let { params } = this.props.parent.props.location || {};
-
+        let premium_details = this.state.premium_details_all[this.props.parent.state.product_key];
         let providerLogoMapper = {
             'hdfcergo': {
                 'insurance_title': 'HDFC ERGO'
@@ -58,11 +58,11 @@ class BasicDetailsRedirectionForm extends Component {
         let provider = this.props.parent.state.provider;
         let current_url = window.location.href;
         this.setState({
-            premium_details: params ? params.premium_details : {},
             current_url: current_url,
             provider: provider,
+            premium_details: premium_details,
             insurance_title: providerLogoMapper[provider] ? providerLogoMapper[provider].insurance_title: '',
-            productTitle: params && params.premium_details ? params.premium_details.productTitle : '',
+            productTitle: premium_details.productTitle || '',
             buttonTitle: buttonTitle
         });
     }
@@ -178,7 +178,6 @@ class BasicDetailsRedirectionForm extends Component {
                 this.props.parent.state.provider + '/lead/create', leadCreateBody);
 
                 if (res.pfwresponse.status_code === 200) {
-                    // this.setState({ show_loader: false });
                     
                     var leadRedirectUrl = res.pfwresponse.result.lead;
                     if (getConfig().app === 'web') {
