@@ -119,7 +119,7 @@ class HomeInsurance extends Component {
           'card_top_info' : 'up to 45% discount',
           'cover_text': 'Cover for',
           'plan_title': 'Tenant',
-          'product_plan': 'plan2  '
+          'product_plan': 'plan2'
         }
       ]
     }
