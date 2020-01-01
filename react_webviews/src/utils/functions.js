@@ -163,9 +163,9 @@ const partnersConfigBase = {
   },
   fpg: {
     logo: "fpg.png",
-    primary_color: "#4f2da7",
-    secondary_color: "#5788B7",
-    cta_disabled_background: "#BFC1C1",
+    primary_color: "#EB6024",
+    secondary_color: "#EB6024",
+    cta_disabled_background: "#F1D5C9",
     cta_disabled_color: "#ffffff",
     code: "fpg",
     mobile: "+80-48-093070",
