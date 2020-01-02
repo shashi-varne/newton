@@ -1,6 +1,5 @@
 // import colors from '../common/theme/Style.css';
 import qs from 'qs';
-import createBrowserHistory from 'history/createBrowserHistory';
 import {checkValidString} from './validators';
 import $ from 'jquery';
 
@@ -181,8 +180,6 @@ const partnersConfigBase = {
     }
   }
 };
-
-const myHistory = createBrowserHistory();
 
 export const getHost = (pathname) => {
   return window.location.origin + pathname;
