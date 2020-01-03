@@ -1,7 +1,7 @@
 // import colors from '../common/theme/Style.css';
 import qs from 'qs';
 import createBrowserHistory from 'history/createBrowserHistory';
-import {checkValidString} from './validators';
+import {checkValidString, getUrlParams} from './validators';
 import $ from 'jquery';
 
 const partnersConfigBase = {
@@ -283,7 +283,6 @@ function getPartnerConfig(partner_code) {
     'inputFocusedColor' : 'inputFocusedColor'
   };
 
-
   if(checkValidString(partner_code) && partner_code !== 'fisdom' && 
   partner_code !== 'myway' && partner_code !== 'test') {
     let partnerData = partnersConfigBase[partner_code];
@@ -323,7 +322,8 @@ export const isMobileDevice = () => {
 export const getConfig = () => {
 
   let main_pathname = window.location.pathname;
-  let main_query_params = qs.parse(window.location.search.slice(1));
+  let main_query_params = getUrlParams();
+  
   let { base_url } = main_query_params;
   let { generic_callback } = main_query_params;
   let { redirect_url } = main_query_params;
