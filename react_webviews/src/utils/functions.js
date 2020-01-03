@@ -279,10 +279,13 @@ function getPartnerConfig(partner_code) {
     'inputFocusedColor' : 'inputFocusedColor'
   };
 
+  config_to_return.isFinwiz = true;
+
   if(checkValidString(partner_code) && partner_code !== 'fisdom' && 
   partner_code !== 'myway' && partner_code !== 'test') {
     let partnerData = partnersConfigBase[partner_code];
     config_to_return.partner_code = partner_code;
+    config_to_return.isFinwiz = false;
     for (var key in partnerKeysMapper) {
 
       let key_to_copy = partnerKeysMapper[key];
