@@ -1,6 +1,4 @@
 // import colors from '../common/theme/Style.css';
-import qs from 'qs';
-import createBrowserHistory from 'history/createBrowserHistory';
 import {checkValidString, getUrlParams} from './validators';
 import $ from 'jquery';
 
@@ -182,8 +180,6 @@ const partnersConfigBase = {
   }
 };
 
-const myHistory = createBrowserHistory();
-
 export const getHost = (pathname) => {
   return window.location.origin + pathname;
 };
@@ -328,6 +324,7 @@ export const getConfig = () => {
   let { generic_callback } = main_query_params;
   let { redirect_url } = main_query_params;
   let { partner_code } = main_query_params;
+  let { pc_urlsafe } = main_query_params;
 
   let project = 'insurance';
   let project_child = '';
@@ -384,6 +381,12 @@ export const getConfig = () => {
     returnConfig.partner_code = partner_code;
     searchParams += `&partner_code=${partner_code}`;
     searchParamsMustAppend += `&partner_code=${partner_code}`;
+  }
+
+  if(checkValidString(pc_urlsafe)) {
+    returnConfig.pc_urlsafe = pc_urlsafe;
+    searchParams += `&pc_urlsafe=${pc_urlsafe}`;
+    searchParamsMustAppend += `&pc_urlsafe=${pc_urlsafe}`;
   }
 
   if (project === 'insurance' || project_child === 'term') {
@@ -444,10 +447,8 @@ export const getConfig = () => {
   }
 
   if (project === 'isip') {
-    let { pc_urlsafe } = qs.parse(myHistory.location.search.slice(1));
     let campaign_version = generic_callback === "true" ? 1 : main_query_params.campaign_version;
-    searchParams += '&pc_urlsafe=' + pc_urlsafe +
-      '&campaign_version=' + campaign_version;
+    searchParams += '&campaign_version=' + campaign_version;
 
     // eslint-disable-next-line
     returnConfig.campaign_version = parseInt(campaign_version);
