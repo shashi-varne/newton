@@ -87,7 +87,7 @@ class BuyOrder extends Component {
     // });
 
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.origin + '/gold/buy/payment'
+      window.location.origin + '/gold/buy/payment' + getConfig().searchParams
     );
 
     var pgLink = this.state.buyData.payment_link;
