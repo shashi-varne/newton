@@ -4,10 +4,11 @@ import qs from 'qs';
 import createBrowserHistory from 'history/createBrowserHistory';
 
 import { encrypt, decrypt } from './encryption';
+import { getConfig } from  'utils/functions'
 
 const myHistory = createBrowserHistory();
 let { base_url } = qs.parse(myHistory.location.search.slice(1));
-let { redirect_url } = qs.parse(myHistory.location.search.slice(1));
+let redirect_url  = getConfig().redirect_url;
 let is_secure = false;
 
 axios.defaults.baseURL = decodeURIComponent(base_url).replace(/\/$/, "");
