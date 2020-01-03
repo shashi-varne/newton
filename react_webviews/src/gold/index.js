@@ -85,7 +85,7 @@ const Gold = props => {
             component={DeliverySelectedProduct}
           />
           <Route
-            path={`${url}/:orderType/payment/:status`}
+            path={`${url}/:orderType/payment`}
             component={Payment}
           />
           <Route path={`${url}/verify`} component={Otp} />
