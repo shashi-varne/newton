@@ -460,7 +460,7 @@ export const getConfig = () => {
     }
   }
 
-
+  returnConfig.base_url = base_url;
   returnConfig.searchParams = searchParams;
   returnConfig.searchParamsMustAppend = searchParamsMustAppend;
   return returnConfig;
