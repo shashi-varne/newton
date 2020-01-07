@@ -244,14 +244,15 @@ class Recommendation extends Component {
                                 getConfig().searchParams
     );
 
+    let openWebModule = getConfig().Web || getConfig().isFinwiz;
     if (isin) {
 
-      if(getConfig().Web) {
+      if(openWebModule) {
         
-      window.location.href =  getConfig().webAppUrl +  'risk/fund-info?isin=' + 
-      isin + '&webview_redirect_url=' + webview_redirect_url;
+        window.location.href =  getConfig().webAppUrl +  'risk/fund-info?isin=' + 
+        isin + '&webview_redirect_url=' + webview_redirect_url;
       
-    } else {
+      } else {
         nativeCallback({
           action: 'show_fund', message: {
             investment: investment,
@@ -261,22 +262,22 @@ class Recommendation extends Component {
         });
       }
       
-      return;
-    }
-
-    if(getConfig().Web) {
-
-      window.location.href =  getConfig().webAppUrl +  'risk/recommendations?' + 
-      this.state.riskRecommendationParams + '&webview_redirect_url=' + webview_redirect_url;
-
     } else {
-      nativeCallback({
-        action: 'invest', message: {
-          investment: investment,
-          isins: isins
-        }
-      });
+      if(openWebModule) {
+
+        window.location.href =  getConfig().webAppUrl +  'risk/recommendations?' + 
+        this.state.riskRecommendationParams + '&webview_redirect_url=' + webview_redirect_url;
+  
+      } else {
+        nativeCallback({
+          action: 'invest', message: {
+            investment: investment,
+            isins: isins
+          }
+        });
+      }
     }
+    
   }
 
   showFundDetails(isin) {

@@ -1,6 +1,5 @@
 // import colors from '../common/theme/Style.css';
-import qs from 'qs';
-import {checkValidString} from './validators';
+import {checkValidString, getUrlParams} from './validators';
 import $ from 'jquery';
 
 const partnersConfigBase = {
@@ -162,9 +161,9 @@ const partnersConfigBase = {
   },
   fpg: {
     logo: "fpg.png",
-    primary_color: "#4f2da7",
-    secondary_color: "#5788B7",
-    cta_disabled_background: "#BFC1C1",
+    primary_color: "#EB6024",
+    secondary_color: "#EB6024",
+    cta_disabled_background: "#F1D5C9",
     cta_disabled_color: "#ffffff",
     code: "fpg",
     mobile: "+80-48-093070",
@@ -280,11 +279,13 @@ function getPartnerConfig(partner_code) {
     'inputFocusedColor' : 'inputFocusedColor'
   };
 
+  config_to_return.isFinwiz = true;
 
   if(checkValidString(partner_code) && partner_code !== 'fisdom' && 
   partner_code !== 'myway' && partner_code !== 'test') {
     let partnerData = partnersConfigBase[partner_code];
     config_to_return.partner_code = partner_code;
+    config_to_return.isFinwiz = false;
     for (var key in partnerKeysMapper) {
 
       let key_to_copy = partnerKeysMapper[key];
@@ -320,7 +321,8 @@ export const isMobileDevice = () => {
 export const getConfig = () => {
 
   let main_pathname = window.location.pathname;
-  let main_query_params = qs.parse(window.location.search.slice(1));
+  let main_query_params = getUrlParams();
+  
   let { base_url } = main_query_params;
   let { generic_callback } = main_query_params;
   let { redirect_url } = main_query_params;

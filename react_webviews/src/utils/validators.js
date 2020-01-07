@@ -1,4 +1,5 @@
 // import { func } from "prop-types";
+import qs from 'qs';
 
 export function validateEmpty(string) {
   let nameSplit = string.split(" ").filter(e => e);
@@ -423,4 +424,23 @@ export function checkValidString(value) {
   } else {
     return true;
   }
+}
+
+export function split2(str, delim) {
+  var parts=str.split(delim);
+  return [parts[0], parts.splice(1,parts.length).join(delim)];
+}
+
+
+export function getUrlParams(url) {
+  if(!url) {
+    url = window.location.href;
+  }
+
+  let data = split2(url, '?');
+
+  let main_query_params = qs.parse(data[1]);
+
+  return main_query_params;
+  
 }

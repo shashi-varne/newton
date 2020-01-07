@@ -147,7 +147,7 @@ class DeliveryOrder extends Component {
     // });
 
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.origin + '/gold/delivery/payment'
+      window.location.origin + '/gold/delivery/payment' + getConfig().searchParams
     );
 
     var pgLink = this.state.redeemProduct.payment_link;

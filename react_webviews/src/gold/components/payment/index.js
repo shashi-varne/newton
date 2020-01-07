@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import qs from 'qs';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
@@ -9,7 +8,7 @@ import thumpsup from 'assets/thumpsup.png';
 import arrow from 'assets/arrow.png';
 
 import toast from '../../../common/ui/Toast';
-import { inrFormatDecimal } from 'utils/validators';
+import { inrFormatDecimal, getUrlParams } from 'utils/validators';
 // eslint-disable-next-line
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
@@ -23,7 +22,7 @@ class Payment extends Component {
       goldInfo: {},
       sellDetails: {},
       weight: "",
-      params: qs.parse(props.history.location.search.slice(1))
+      params: getUrlParams()
     }
     this.sendInvoiceEmail = this.sendInvoiceEmail.bind(this);
     this.trackDelivery = this.trackDelivery.bind(this);
@@ -32,7 +31,8 @@ class Payment extends Component {
   componentWillMount() {
     // let { params } = this.props.location;
     nativeCallback({ action: 'take_control_reset' });
-    let { status, orderType } = this.props.match.params;
+    let { status } = this.state.params;
+    let { orderType } = this.props.match.params;
     let weight, sellDetails, buyDetails, redeemProduct,
       productDisc, paymentError, paymentMessage, paymentPending, invoiceLink;
     if (orderType === 'sell') {

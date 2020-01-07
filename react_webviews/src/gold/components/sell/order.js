@@ -61,10 +61,15 @@ class About extends Component {
     clearInterval(this.state.countdownInterval);
   }
 
-  navigate = (pathname) => {
+  navigate = (pathname, status) => {
+    let search = getConfig().searchParams;
+    if(status) {
+      search+= '&status=' + status;
+    }
+
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams
+      search: search
     });
   }
 
@@ -113,7 +118,7 @@ class About extends Component {
         this.setState({
           show_loader: false,
         });
-        this.navigate('/gold/sell/payment/' + sellDetails.provider_sell_order_status)
+        this.navigate('/gold/sell/payment', sellDetails.provider_sell_order_status)
       } else if (res.pfwresponse.result.is_gold_rate_changed) {
         let new_rate = res.pfwresponse.result.new_rate;
         let amountUpdated, weightUpdated;
