@@ -280,3 +280,17 @@
 .carousel .control-arrow:before, .carousel.carousel-slider .control-arrow:before {
   margin: 0 0px !important;
 } */
+
+.CircularProgressbar .CircularProgressbar-text {
+  fill: var(--primary) !important;
+  font-size: 35px !important;
+}
+.CircularProgressbar-background {
+  fill: green;
+}
+.CircularProgressbar .CircularProgressbar-path {
+  stroke: var(--primary) !important;
+}
+.CircularProgressbar {
+  width: 30px !important;
+}
