@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import qs from 'qs';
 
 import Container from '../common/Container';
 import { getConfig } from 'utils/functions';
@@ -18,6 +17,7 @@ import trust_icon from 'assets/trust_icons_emandate.svg';
 import toast from '../../common/ui/Toast';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
+import { getUrlParams } from 'utils/validators';
 
 const aboutQuestions = [
   {
@@ -42,7 +42,6 @@ class About extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      params: qs.parse(props.history.location.search.slice(1)),
       questionIndex: 0,
       faq_read: "no",
       top_icon: getConfig().productName !== 'fisdom' ? top_icon_myway : top_icon_fisdom,
@@ -50,7 +49,8 @@ class About extends Component {
       e_icon: getConfig().productName !== 'fisdom' ? ic_e_myway : ic_e_fisdom,
       sb_icon: getConfig().productName !== 'fisdom' ? ic_sb_myway : ic_sb_fisdom,
       emandate: {},
-      pc_urlsafe: getConfig().pc_urlsafe
+      pc_urlsafe: getConfig().pc_urlsafe,
+      params: getUrlParams()
     }
 
     this.renderQuestions = this.renderQuestions.bind(this);
@@ -70,8 +70,10 @@ class About extends Component {
         'icon': this.state.sb_icon
       }
     ]
+
     this.setState({
-      emandate: emandate_easysip
+      emandate: emandate_easysip,
+      referral_code: this.state.params.referral_code
     })
   }
 
@@ -110,7 +112,18 @@ class About extends Component {
   }
 
   handleClick = async () => {
+
     this.sendEvents('next');
+    if(this.state.referral_code) {
+
+      let data = {
+        referral_code: this.state.referral_code
+      }
+      this.navigate('e-mandate/otp', data);
+      return;
+
+    }
+    
     this.setState({
       show_loader: true
     })
@@ -123,10 +136,8 @@ class About extends Component {
         this.navigate('e-mandate/select-bank', params);
       }
       else {
-        this.setState({
-          show_loader: false,
-          openDialog: true, apiError: res.pfwresponse.result.error
-        });
+        toast(res.pfwresponse.result.error || 
+          res.pfwresponse.result.message || 'Something went wrong', 'error');
       }
 
 
