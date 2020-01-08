@@ -68,6 +68,11 @@ class eMandateOtpClass extends Component {
           })
           return;
         }
+
+        if(!this.state.otpBaseData || !this.state.otpBaseData.verify_url) {
+            toast('Something went wrong');
+            return;
+        }
         let url = getConfig().base_url + '/' + this.state.otpBaseData.verify_url + 
         '?otp=' + this.state.otp;
     
