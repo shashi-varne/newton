@@ -7,7 +7,7 @@ import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import {
     validateEmail, validateNumber, numberShouldStartWith,
-    validateEmpty
+    validateEmpty, open_browser_web
 } from 'utils/validators';
 import { FormControl } from 'material-ui/Form';
 
@@ -187,7 +187,7 @@ class BasicDetailsRedirectionForm extends Component {
                             openModalMessage: ''
                          });
 
-                         window.open(leadRedirectUrl, '_blank');
+                         open_browser_web(leadRedirectUrl, '_blank');
                     } else {
 
                         if (getConfig().app === 'ios') {

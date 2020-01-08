@@ -14,7 +14,7 @@ import Api from 'utils/api';
 import { maritalOptions, genderOptions } from '../../../constants';
 import {
   validateEmail, validateNumber, numberShouldStartWith,
-  validateEmpty
+  validateEmpty, open_browser_web
 } from 'utils/validators';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
@@ -189,7 +189,7 @@ class PersonalDetails1 extends Component {
               openModalMessage: ''
             });
 
-            window.open(kotakUrl, '_blank');
+            open_browser_web(kotakUrl, '_blank');
           } else {
 
             if (getConfig().app === 'ios') {
