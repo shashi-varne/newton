@@ -232,6 +232,7 @@ class Container extends Component {
           current={this.props.current}
           goBack={this.historyGoBack}
           edit={this.props.edit}
+          noBack={this.props.noBack}
           type={getConfig().productName}
           resetpage={this.props.resetpage}
           handleReset={this.props.handleReset}

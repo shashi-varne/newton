@@ -47,8 +47,12 @@ class SelectBank extends Component {
           this.setBankData();
         }
         else {
-          toast(res.pfwresponse.result.error || 
-            res.pfwresponse.result.message || 'Something went wrong', 'error');
+          let fetchError = res.pfwresponse.result.error || 
+          res.pfwresponse.result.message || 'Something went wrong';
+          this.setState({
+            fetchError: fetchError
+          })
+          toast(fetchError, 'error');
         }
 
 
@@ -138,7 +142,7 @@ class SelectBank extends Component {
   handleClick = async () => {
 
     if(!this.state.selected_bank.account_number) {
-      toast('Please select bank');
+      toast(this.state.fetchError || 'Please select bank', 'error');
       return;
     }
     this.sendEvents('next');

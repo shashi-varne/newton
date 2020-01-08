@@ -17,7 +17,6 @@ import trust_icon from 'assets/trust_icons_emandate.svg';
 import toast from '../../common/ui/Toast';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
-import { getUrlParams } from 'utils/validators';
 
 const aboutQuestions = [
   {
@@ -50,7 +49,7 @@ class About extends Component {
       sb_icon: getConfig().productName !== 'fisdom' ? ic_sb_myway : ic_sb_fisdom,
       emandate: {},
       pc_urlsafe: getConfig().pc_urlsafe,
-      params: getUrlParams()
+      params: getConfig().current_params
     }
 
     this.renderQuestions = this.renderQuestions.bind(this);
@@ -186,6 +185,7 @@ class About extends Component {
   render() {
     return (
       <Container
+        noBack={this.state.params.referral_code ? true: false}
         showLoader={this.state.show_loader}
         title="Set up easySIP"
         handleClick={this.handleClick}
