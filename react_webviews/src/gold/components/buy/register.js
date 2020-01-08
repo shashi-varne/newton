@@ -240,12 +240,38 @@ class GoldRegister extends Component {
     this.setState({
       terms_opened: true
     })
-    nativeCallback({
-      action: 'open_in_browser',
-      message: {
-        url: 'https://www.safegold.com/assets/terms-and-conditions.pdf'
-      }
-    });
+
+    let url = 'https://www.safegold.com/assets/terms-and-conditions.pdf';
+    let current_url = window.location.href;
+
+    if (getConfig().Web) {
+      nativeCallback({
+        action: 'open_in_browser',
+        message: {
+          url: url
+        }
+      });
+    } else {
+      this.setState({
+        show_loader: true
+      })
+
+      nativeCallback({
+        action: 'take_control', message: {
+          back_url: current_url,
+          show_top_bar: false
+        },
+
+      });
+
+      nativeCallback({
+        action: 'show_top_bar', message: {
+          title: 'Safegold Terms & Conditions', icon: 'close'
+        }
+      });
+
+      nativeCallback({ action: 'open_pdf', message: { url: url } });
+    }
   }
 
   sendEvents(user_action) {
