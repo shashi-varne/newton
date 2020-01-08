@@ -3,6 +3,7 @@ import qs from 'qs';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
+import point_five_gm from 'assets/05gmImage.png';
 import one_gm_front from 'assets/1gm_front.png';
 import two_gm_front from 'assets/2gm_front.png';
 import five_gm_front from 'assets/5gm_front.png';
@@ -134,6 +135,7 @@ class DeliverySelectedProduct extends Component {
       8: ten_gm_front,
       12: ten_gmbar_front,
       15: twenty_gmbar_front,
+      16: point_five_gm
     };
 
     return (
