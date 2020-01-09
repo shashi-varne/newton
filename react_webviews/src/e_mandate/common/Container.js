@@ -80,14 +80,25 @@ class Container extends Component {
   }
 
   historyGoBack = () => {
+
+    let current_params = getConfig().current_params;
+
     this.setState({
       back_pressed: true
     })
+
+
     if (this.props.popupOpen) {
       return;
     }
     let pathname = this.props.history.location.pathname;
     let { params } = this.props.location;
+
+    if(pathname === '/e-mandate' && current_params && 
+      current_params.referral_code) {
+        return;
+    }
+
     if ((params && params.disableBack) || this.props.disableBack) {
       nativeCallback({ action: 'exit', events: this.getEvents('exit') });
       return;
@@ -221,6 +232,7 @@ class Container extends Component {
           current={this.props.current}
           goBack={this.historyGoBack}
           edit={this.props.edit}
+          noBack={this.props.noBack}
           type={getConfig().productName}
           resetpage={this.props.resetpage}
           handleReset={this.props.handleReset}

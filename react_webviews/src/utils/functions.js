@@ -322,7 +322,6 @@ export const getConfig = () => {
 
   let main_pathname = window.location.pathname;
   let main_query_params = getUrlParams();
-  
   let { base_url } = main_query_params;
   let { generic_callback } = main_query_params;
   let { redirect_url } = main_query_params;
@@ -460,7 +459,8 @@ export const getConfig = () => {
     }
   }
 
-
+  returnConfig.current_params = main_query_params;
+  returnConfig.base_url = base_url;
   returnConfig.searchParams = searchParams;
   returnConfig.searchParamsMustAppend = searchParamsMustAppend;
   return returnConfig;
