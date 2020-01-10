@@ -514,3 +514,10 @@ input#pan {
 .highlight_color_info {
   background: var(--highlight_color_info);
 }
+
+.main-top-title-new {
+  font-size: 20px;
+  color: #160d2e;
+  font-weight: 600;
+  padding: 10px 0px 0 0px;
+}

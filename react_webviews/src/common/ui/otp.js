@@ -83,7 +83,8 @@ class OtpDefaultClass extends Component {
                 </div>
 
                 { this.state.timeAvailable > 0 && 
-                        <div style={{ display: 'flex', alignItems: 'center',margin: '30px 0 0 0px'  }}>
+                        <div style={{ display: 'flex', alignItems: 'center',justifyContent: 'center',
+                         margin: '30px 0 0 0px'  }}>
                         
                         <CircularProgressbar value={this.state.timeAvailablePercantage}
                             // text={`${this.state.timeAvailable}`} 
@@ -99,8 +100,9 @@ class OtpDefaultClass extends Component {
                {(this.state.timeAvailable <= 0 || !this.state.timeAvailable) && 
                <div style={{ margin: '30px 0 0 -10px' }}>
                         <div onClick={this.resendOtp} 
-                        style={{ color: getConfig().primary, margin: '0 0 0 10px', fontWeight: 500 }}>
-                        Resend
+                        style={{ color: '#4A494A', margin: '0 0 0 10px',
+                        fontSize: 14 }}>
+                        Didn’t receive? <span style={{ color: getConfig().primary, fontWeight: 500}}>Resend OTP</span>
                     </div>
                 </div>}
             </div>
