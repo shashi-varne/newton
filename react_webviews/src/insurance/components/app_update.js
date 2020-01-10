@@ -51,7 +51,6 @@ class AppUpdateInfo extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="UPDATE NOW"
-        noFooter={getConfig().iOS}
       >
       <div style={{textAlign: 'center'}}>
        <div>
