@@ -60,13 +60,13 @@ class AppUpdateInfo extends Component {
 
        <div style={{fontSize: 24,color: 'black' , fontWeight: 500,
       margin: '20px 0 10px 0'}}>
-       {!getConfig().iOS && <span>Update your application</span>}
-       {getConfig().iOS && <span>Coming soon!</span>}
+       <span>Update your application</span>
+       
        </div>
 
-       {!getConfig().iOS && <div style={{color: '#6d7278', fontSize: 13}}>
+       <div style={{color: '#6d7278', fontSize: 13}}>
        We have addded new insurance products and fixed bugs to make your experience as smooth as possible.
-       </div>}
+       </div>
       </div>
       </Container>
 
