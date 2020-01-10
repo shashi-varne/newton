@@ -94,6 +94,16 @@ class Container extends Component {
     let pathname = this.props.history.location.pathname;
     let { params } = this.props.location;
 
+    if (pathname.indexOf('consent/about') >= 0
+      && this.props.disableBack) {
+      this.setState({
+        callbackType: 'exit',
+        openPopup: true,
+        popupText: 'You are almost there, do you really want to go back?'
+      })
+      return;
+    }
+
     if(pathname === '/e-mandate' && current_params && 
       current_params.referral_code) {
         return;
