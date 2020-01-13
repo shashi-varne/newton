@@ -12,7 +12,8 @@ class MandateSuccess extends Component {
     this.state = {
       show_loader: false,
       params: qs.parse(props.history.location.search.slice(1)),
-      sip_resumed: getConfig().productName !== 'fisdom' ? sip_resumed_myway : sip_resumed_fisdom
+      sip_resumed: getConfig().productName !== 'fisdom' ? sip_resumed_myway : sip_resumed_fisdom,
+      session_less_enach: window.localStorage.getItem('session_less_enach') || ''
     }
   }
 
@@ -55,6 +56,8 @@ class MandateSuccess extends Component {
         onlyButton={true}
         disableBack={true}
         buttonTitle="Ok"
+        noFooter={this.state.session_less_enach}
+        noBack={this.state.session_less_enach}
       >
         <div>
           <div className="success-img">

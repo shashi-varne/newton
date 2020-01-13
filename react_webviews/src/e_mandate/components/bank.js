@@ -16,7 +16,7 @@ class SelectBank extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      banks: props.location.state.banks,
+      banks: props.location.state ? props.location.state.banks : [],
       params: qs.parse(props.history.location.search.slice(1)),
       info_icon: getConfig().productName !== 'fisdom' ? info_icon_myway : info_icon_fisdom,
       selected_bank: {},
@@ -24,7 +24,50 @@ class SelectBank extends Component {
     }
   }
 
-  componentWillMount() {
+  async componentDidMount() {
+    if(this.state.banks.length > 0) {
+      this.setState({
+        show_loader: false
+      })
+      this.setBankData();
+    } else {
+       
+     
+      try {
+        const res = await Api.get('/api/mandate/enach/user/banks/' + this.state.pc_urlsafe);
+        this.setState({
+          show_loader: false
+        })
+        if (res.pfwresponse.result && !res.pfwresponse.result.error) {
+          let  banks = res.pfwresponse.result.banks;
+          this.setState({
+            banks: banks
+          });
+
+          this.setBankData();
+        }
+        else {
+          let fetchError = res.pfwresponse.result.error || 
+          res.pfwresponse.result.message || 'Something went wrong';
+          this.setState({
+            fetchError: fetchError
+          })
+          toast(fetchError, 'error');
+        }
+
+
+      } catch (err) {
+        this.setState({
+          show_loader: false
+        })
+        toast("Something went wrong");
+      }
+    }
+
+  }
+
+  setBankData() {
+  
     let selected_bank = {}
     let index = 0;
     // eslint-disable-next-line
@@ -37,9 +80,9 @@ class SelectBank extends Component {
     })
     selected_bank = this.state.banks[index]
     this.setState({
-      selected_bank: selected_bank
+      selected_bank: selected_bank,
+      show_loader: false
     })
-
   }
 
 
@@ -97,6 +140,11 @@ class SelectBank extends Component {
   }
 
   handleClick = async () => {
+
+    if(!this.state.selected_bank.account_number) {
+      toast(this.state.fetchError || 'Please select bank', 'error');
+      return;
+    }
     this.sendEvents('next');
     this.setState({
       show_loader: true
@@ -104,7 +152,11 @@ class SelectBank extends Component {
     try {
       let bank_data = { selected_bank: this.state.selected_bank };
       const res = await Api.post('/api/mandate/enach/user/banks/' + this.state.pc_urlsafe, bank_data);
-      if (res.pfwresponse.result) {
+      
+      this.setState({
+        show_loader: false
+      });
+      if (res.pfwresponse.result && !res.pfwresponse.result.error) {
         let paymentRedirectUrl = encodeURIComponent(
           window.location.origin + '/e-mandate/redirection'
         );
@@ -160,16 +212,14 @@ class SelectBank extends Component {
           });
         }
         window.location.href = pgLink;
-      }
-      else {
-        this.setState({
-          show_loader: false,
-          openDialog: true, apiError: res.pfwresponse.result.error
-        });
+      } else {
+        toast(res.pfwresponse.result.error || 
+          res.pfwresponse.result.message || 'Something went wrong', 'error');
       }
 
 
     } catch (err) {
+      console.log(err)
       this.setState({
         show_loader: false
       })
