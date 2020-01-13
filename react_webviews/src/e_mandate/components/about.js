@@ -55,6 +55,10 @@ class About extends Component {
     this.renderQuestions = this.renderQuestions.bind(this);
   }
   componentWillMount() {
+    if(!this.state.params.referral_code) {
+      window.localStorage.setItem('session_less_enach', '');
+    }
+    
     const emandate_easysip = [
       {
         'disc': 'Select bank account from which you want funds to be debited',
