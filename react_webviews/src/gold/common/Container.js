@@ -116,13 +116,7 @@ class Container extends Component {
         nativeCallback({ action: "native_back", events: this.getEvents("back") });
         break;
       default:
-        if (navigator.onLine) {
-          this.props.history.goBack();
-        } else {
-          this.setState({
-            openDialog: true
-          });
-        }
+        this.props.history.goBack();
     }
   };
 
