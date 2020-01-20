@@ -11,11 +11,12 @@ import restart from 'assets/restart_nav_icn.svg';
 const Header = ({ classes, title, count, total, current, goBack, edit, type, resetpage, handleReset, smallTitle, disableBack, provider, topIcon, handleTopIcon, noBack }) => (
   <AppBar position="fixed" color="primary" className={`Header ${classes.root}`}>
     <Toolbar>
+      {!noBack && 
       <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={goBack}>
-        {!disableBack && !noBack && <Arrow />}
-        {(disableBack === true || disableBack === 'summary') && !noBack && <Close />}
-        {/* <Arrow /> */}
+        {!disableBack && <Arrow />}
+        {(disableBack === true || disableBack === 'summary') && <Close />}
       </IconButton>
+      }
       <Typography variant="subheading" color="inherit" className={classes.flex}>
         {smallTitle && smallTitle !== undefined &&
           <div>

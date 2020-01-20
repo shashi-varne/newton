@@ -108,20 +108,15 @@ class Container extends Component {
       case "/gold":
       case "/gold/my-gold":
       case "/gold/about":
-        this.setState({
-          callbackType: "exit",
-          openPopup: true,
-          popupText: "Are you sure you want to exit?"
-        });
+        // this.setState({
+        //   callbackType: "exit",
+        //   openPopup: true,
+        //   popupText: "Are you sure you want to exit?"
+        // });
+        nativeCallback({ action: "native_back", events: this.getEvents("back") });
         break;
       default:
-        if (navigator.onLine) {
-          this.props.history.goBack();
-        } else {
-          this.setState({
-            openDialog: true
-          });
-        }
+        this.props.history.goBack();
     }
   };
 
