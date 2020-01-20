@@ -69,11 +69,11 @@ class eMandateOtpClass extends Component {
             return;
         }
 
-        if (!this.state.otpBaseData || !this.state.otpBaseData.verify_url) {
+        if (!this.state.otpBaseData || !this.state.otpBaseData.verify_otp_url) {
             toast('Something went wrong');
             return;
         }
-        let url = getConfig().base_url + '/' + this.state.otpBaseData.verify_url +
+        let url = this.state.otpBaseData.verify_otp_url +
             '?otp=' + this.state.otp;
 
         try {
@@ -88,13 +88,14 @@ class eMandateOtpClass extends Component {
 
 
                 let result = res.pfwresponse.result;
-                if (result.message === 'success') {
-                    this.navigate('/e-mandate/select-bank', result.urlsafe);
+
+                toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+                     'Something went wrong');
+                if (result.message) {
+                    this.navigate('/e-mandate/consent/success', result.urlsafe);
                 } else {
                     this.setState({
-                        otpVerified: false,
-                        openResponseDialog: true,
-                        apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
+                        otpVerified: false
                     });
                 }
 
@@ -147,12 +148,8 @@ class eMandateOtpClass extends Component {
                 show_loader: false
             })
 
-            if (res.pfwresponse.result) {
-
-            } else {
-                toast(res.pfwresponse.result.error ||
-                    res.pfwresponse.result.message || 'Something went wrong', 'error');
-            }
+            toast(res.pfwresponse.result.error ||
+                res.pfwresponse.result.message || 'Something went wrong');
 
 
         } catch (err) {
@@ -176,13 +173,24 @@ class eMandateOtpClass extends Component {
                 <div className="default-otp">
 
                     <div className="title">
-                        Enter OTP to verify
+                        Enter OTP to verify 
                     </div>
                     <div className="content">
-                    We have send the OTP on <span className="content-auth"> +91-7400190682, </span>
-                        please enter to activate easySIP
-                         {/* {this.state.otpBaseData.mobile_number} */}
+
+                    We have send the OTP on
+                    {this.state.otpBaseData.mobile_number && 
+                    <span> mobile number
+                        <span className="content-auth"> {this.state.otpBaseData.mobile_number}, </span> 
+                    </span>}
+                    {this.state.otpBaseData.email && this.state.otpBaseData.mobile_number && <span>
+                    and </span>}
+                    {this.state.otpBaseData.email &&
+                        <span> e-mail address <span className="content-auth"> {this.state.otpBaseData.email} </span>
+                        </span>
+                    }
+                    please enter to activate easySIP
                     </div>
+
 
                     <OtpDefault parent={this} />
                     {this.state.otp_error &&

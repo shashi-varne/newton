@@ -82,7 +82,7 @@ class About extends Component {
           show_loader: false
         })
         if (res.pfwresponse.result && !res.pfwresponse.result.error) {
-          let  biller_bank = res.pfwresponse.result.biller_bank;
+          let  biller_bank = res.pfwresponse.result.biller_bank || {};
           this.setState({
             biller_bank: biller_bank
           });
