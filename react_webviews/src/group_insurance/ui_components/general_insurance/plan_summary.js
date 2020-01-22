@@ -201,6 +201,7 @@ class PlanSummaryClass extends Component {
         onlyButton={true}
         product_key={this.props.parent ? this.props.parent.state.product_key : ''}
         events={this.sendEvents('just_set_events')}
+        hide_header={this.state.show_loader}
         showLoader={this.state.show_loader}
         handleClick={() => this.handleClickCurrent()}
         title="Summary"

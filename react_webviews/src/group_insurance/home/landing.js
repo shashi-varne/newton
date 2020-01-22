@@ -121,7 +121,7 @@ class Landing extends Component {
     let openModuleData =  params ? params.openModuleData : {}
 
     this.setState({
-      openModuleData: openModuleData,
+      openModuleData: openModuleData || {},
       insuranceProducts: insuranceProducts,
       insurance: insurance,
       instant_icon: instant_icon,

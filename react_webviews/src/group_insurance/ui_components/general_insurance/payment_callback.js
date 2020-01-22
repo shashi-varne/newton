@@ -23,6 +23,7 @@ class PaymentCallbackClass extends Component {
 
     let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
     let group_insurance_payment_urlsafe = window.localStorage.getItem('group_insurance_payment_urlsafe');
+    
     this.setState({
       lead_id: lead_id || '',
       group_insurance_payment_urlsafe: group_insurance_payment_urlsafe || ''
@@ -31,6 +32,11 @@ class PaymentCallbackClass extends Component {
   }
 
   async componentDidMount(){
+
+    if (!this.state.group_insurance_payment_urlsafe) {
+        this.navigate('/group-insurance');
+        return;
+    }
     try {
         this.setState({
           show_loader: true
@@ -38,6 +44,9 @@ class PaymentCallbackClass extends Component {
         let res;
         res = await Api.get('api/ins_service/api/insurance/bhartiaxa/confirm/payment/' + this.state.group_insurance_payment_urlsafe)
         
+        this.setState({
+            show_loader: false
+        })
         if (res.pfwresponse.status_code === 200) {
             
             if(res.pfwresponse.result.payment_status === 'success') {
@@ -90,6 +99,7 @@ class PaymentCallbackClass extends Component {
         this.sendEvents('next');
 
         window.localStorage.setItem('group_insurance_payment_url', pgLink);
+        window.localStorage.setItem('group_insurance_payment_urlsafe', res2.pfwresponse.result.insurance_payment_urlsafe || '');
         window.localStorage.setItem('group_insurance_payment_started', true);
 
         if (getConfig().app === 'ios') {
@@ -156,6 +166,7 @@ class PaymentCallbackClass extends Component {
         fullWidthButton={true}
         buttonTitle='Make new payment'
         onlyButton={true}
+        hide_header={this.state.show_loader}
         showLoader={this.state.show_loader}
         handleClick={() => this.handleClick()}
         title="Payment Failed"
