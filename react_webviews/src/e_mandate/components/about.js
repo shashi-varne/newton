@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import qs from 'qs';
 
 import Container from '../common/Container';
 import { getConfig } from 'utils/functions';
@@ -42,7 +41,6 @@ class About extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      params: qs.parse(props.history.location.search.slice(1)),
       questionIndex: 0,
       faq_read: "no",
       top_icon: getConfig().productName !== 'fisdom' ? top_icon_myway : top_icon_fisdom,
@@ -50,12 +48,17 @@ class About extends Component {
       e_icon: getConfig().productName !== 'fisdom' ? ic_e_myway : ic_e_fisdom,
       sb_icon: getConfig().productName !== 'fisdom' ? ic_sb_myway : ic_sb_fisdom,
       emandate: {},
-      pc_urlsafe: getConfig().pc_urlsafe
+      pc_urlsafe: getConfig().pc_urlsafe,
+      params: getConfig().current_params
     }
 
     this.renderQuestions = this.renderQuestions.bind(this);
   }
   componentWillMount() {
+    if(!this.state.params.referral_code) {
+      window.localStorage.setItem('session_less_enach', '');
+    }
+    
     const emandate_easysip = [
       {
         'disc': 'Select bank account from which you want funds to be debited',
@@ -70,8 +73,10 @@ class About extends Component {
         'icon': this.state.sb_icon
       }
     ]
+
     this.setState({
-      emandate: emandate_easysip
+      emandate: emandate_easysip,
+      referral_code: this.state.params.referral_code
     })
   }
 
@@ -110,7 +115,18 @@ class About extends Component {
   }
 
   handleClick = async () => {
+
     this.sendEvents('next');
+    if(this.state.referral_code) {
+
+      let data = {
+        referral_code: this.state.referral_code
+      }
+      this.navigate('e-mandate/otp', data);
+      return;
+
+    }
+    
     this.setState({
       show_loader: true
     })
@@ -123,10 +139,8 @@ class About extends Component {
         this.navigate('e-mandate/select-bank', params);
       }
       else {
-        this.setState({
-          show_loader: false,
-          openDialog: true, apiError: res.pfwresponse.result.error
-        });
+        toast(res.pfwresponse.result.error || 
+          res.pfwresponse.result.message || 'Something went wrong', 'error');
       }
 
 
@@ -175,6 +189,7 @@ class About extends Component {
   render() {
     return (
       <Container
+        noBack={this.state.params.referral_code ? true: false}
         showLoader={this.state.show_loader}
         title="Set up easySIP"
         handleClick={this.handleClick}

@@ -70,13 +70,11 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       callbackData.action = 'event';
     }
 
-    if (project === 'insurance') {
-      if (action === 'resume_provider') {
-        nativeCallback({ action: 'show_top_bar', message: { title: message.provider } });
-        callbackData.action = 'open_url';
-        message = {
-          url: message.resume_link
-        }
+    if (action === 'resume_provider') {
+      nativeCallback({ action: 'show_top_bar', message: { title: message.provider } });
+      callbackData.action = 'open_url';
+      message = {
+        url: message.resume_link
       }
     }
 
@@ -219,8 +217,10 @@ export const nativeCallback = async ({ action = null, message = null, events = n
         redirect_url = getConfig().webAppUrl;
       }
       window.location.href = redirect_url;
-    } else if (action === 'open_in_browser') {
+    } else if (action === 'open_in_browser' || action === 'open_url') {
       open_browser_web(message.url, '_blank')
+    } else if (action === 'resume_provider') {
+      open_browser_web(message.resume_link, '_self')
     } else {
       return;
     }
