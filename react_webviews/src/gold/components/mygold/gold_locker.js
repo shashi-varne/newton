@@ -525,8 +525,8 @@ class GoldSummary extends Component {
                     *Why is my Max Amount/Weight less than Locker quantity?
                   </div>
                   <div style={{ color: '#838383', fontSize: 10, fontWeight: 400 }}>
-                    You can sell your purchases after 24 hours i.e. If you buy gold today you can sell anytime
-                    after 24 hours have elapsed
+                    You can sell your purchases after 7 days i.e. If you buy gold today you can sell anytime
+                    after 7 days have elapsed
                   </div>
                 </div>}
               </div>
