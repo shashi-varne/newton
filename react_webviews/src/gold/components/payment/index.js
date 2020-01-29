@@ -22,7 +22,8 @@ class Payment extends Component {
       goldInfo: {},
       sellDetails: {},
       weight: "",
-      params: getUrlParams()
+      params: getUrlParams(),
+      provider: this.props.match.params.provider
     }
     this.sendInvoiceEmail = this.sendInvoiceEmail.bind(this);
     this.trackDelivery = this.trackDelivery.bind(this);

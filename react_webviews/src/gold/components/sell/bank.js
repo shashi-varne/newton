@@ -28,7 +28,8 @@ class SellOrder extends Component {
       account_no_error: '',
       confirm_account_no: '',
       confirm_account_no_error: '',
-      countdownInterval: null
+      countdownInterval: null,
+      provider: this.props.match.params.provider
     }
     this.countdown = this.countdown.bind(this);
     this.checkIFSCFormat = this.checkIFSCFormat.bind(this);

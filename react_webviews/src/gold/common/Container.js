@@ -15,6 +15,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import '../../utils/native_listner';
 import { getConfig, setHeights } from 'utils/functions';
+import {checkStringInString} from 'utils/validators';
 
 class Container extends Component {
   constructor(props) {
@@ -79,12 +80,12 @@ class Container extends Component {
     }
 
     let pathname = this.props.history.location.pathname;
-    if (pathname.indexOf("payment") >= 0) {
+    if (checkStringInString(pathname, "payment")) {
       this.navigate("/gold/my-gold");
       return;
     }
     switch (pathname) {
-      case "/gold/select-gold-product":
+      case checkStringInString(pathname, "select-gold-product"):
         this.props.history.push({
           pathname: "/gold/my-gold-locker",
           search: this.props.location.search + "&isDelivery=" + true
@@ -96,13 +97,13 @@ class Container extends Component {
       case "/gold/my-gold-locker":
         this.navigate("/gold/my-gold");
         break;
-      case "/gold/buy-gold-order":
+      case checkStringInString(pathname, "buy-gold-order"):
         this.navigate("/gold/my-gold");
         break;
-      case "/gold/gold-delivery-order":
+      case checkStringInString(pathname, "gold-delivery-order"):
         this.navigate("/gold/gold-delivery-address");
         break;
-      case "/gold/gold-delivery-address":
+      case checkStringInString(pathname, "gold-delivery-address"):
         this.navigate("/gold/select-gold-product");
         break;
       case "/gold":

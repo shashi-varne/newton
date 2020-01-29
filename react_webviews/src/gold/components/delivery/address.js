@@ -24,6 +24,7 @@ class DeliveryAddress extends Component {
       pincode_error: '',
       city: '',
       state: '',
+      provider: this.props.match.params.provider
     }
   }
 

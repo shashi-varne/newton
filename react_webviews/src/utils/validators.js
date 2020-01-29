@@ -444,3 +444,11 @@ export function getUrlParams(url) {
   return main_query_params;
   
 }
+
+export function checkStringInString(string_base, string_to_check) {
+  if(string_base.indexOf(string_to_check) >= 0) {
+    return true;
+  }
+
+  return false;
+}

@@ -30,7 +30,8 @@ class DeliveryOrder extends Component {
         product_details: [],
         delivery_address: []
       },
-      params: qs.parse(props.history.location.search.slice(1))
+      params: qs.parse(props.history.location.search.slice(1)),
+      provider: this.props.match.params.provider
     }
     this.onload = this.onload.bind(this);
   }
@@ -52,7 +53,7 @@ class DeliveryOrder extends Component {
         this.onload(product, address);
       } else {
         toast('Please verify your mobile number to proceed', 'error')
-        this.navigate('gold-delivery-address');
+        this.navigate(this.state.provider + '/gold-delivery-address');
       }
     } else {
       this.navigate('my-gold-locker');
@@ -138,7 +139,7 @@ class DeliveryOrder extends Component {
     })
 
     let nativeRedirectUrl = window.location.origin +
-      '/gold/gold-delivery-order' + getConfig().searchParams;
+      '/gold/' + this.state.provider + '/gold-delivery-order' + getConfig().searchParams;
 
     // nativeCallback({
     //   action: 'take_control', message: {
@@ -148,7 +149,7 @@ class DeliveryOrder extends Component {
     // });
 
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.origin + '/gold/delivery/payment' + getConfig().searchParams
+      window.location.origin + '/gold/' + this.state.provider  + '/delivery/payment' + getConfig().searchParams
     );
 
     var pgLink = this.state.redeemProduct.payment_link;

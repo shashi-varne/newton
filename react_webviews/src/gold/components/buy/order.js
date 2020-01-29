@@ -18,7 +18,8 @@ class BuyOrder extends Component {
       buyData: {},
       params: qs.parse(props.history.location.search.slice(1)),
       type: getConfig().productName,
-      countdownInterval: null
+      countdownInterval: null,
+      provider: this.props.match.params.provider
     }
   }
 
@@ -77,7 +78,7 @@ class BuyOrder extends Component {
     });
 
     let nativeRedirectUrl = window.location.origin +
-      '/gold/buy-gold-order' + getConfig().searchParams;
+      '/gold/'  + this.state.provider +  '/buy-gold-order' + getConfig().searchParams;
 
     // nativeCallback({
     //   action: 'take_control', message: {
@@ -87,7 +88,7 @@ class BuyOrder extends Component {
     // });
 
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.origin + '/gold/buy/payment' + getConfig().searchParams
+      window.location.origin + '/gold/' + this.state.provider  + '/buy/payment' + getConfig().searchParams
     );
 
     var pgLink = this.state.buyData.payment_link;

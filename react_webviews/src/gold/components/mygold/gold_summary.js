@@ -291,7 +291,7 @@ class GoldSummary extends Component {
     if (this.state.userInfo.mobile_verified === false ||
       this.state.isRegistered === false) {
       window.localStorage.setItem('buyAmountRegister', this.state.amount);
-      this.navigate('gold-register')
+      this.navigate(this.state.provider + '/gold-register');
       return;
     }
 
@@ -318,7 +318,7 @@ class GoldSummary extends Component {
         this.setState({
           show_loader: false,
         });
-        this.navigate('buy-gold-order');
+        this.navigate(this.state.provider + '/buy-gold-order');
         return;
       } else if (res.pfwresponse.result.is_gold_rate_changed) {
         let new_rate = res.pfwresponse.result.new_rate;

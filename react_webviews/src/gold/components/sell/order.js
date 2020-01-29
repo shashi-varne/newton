@@ -29,7 +29,8 @@ class About extends Component {
       timeAvailable: "",
       sellData: {},
       params: qs.parse(props.history.location.search.slice(1)),
-      countdownInterval: null
+      countdownInterval: null,
+      provider: this.props.match.params.provider
     }
   }
 
@@ -118,7 +119,7 @@ class About extends Component {
         this.setState({
           show_loader: false,
         });
-        this.navigate('/gold/sell/payment', sellDetails.provider_sell_order_status)
+        this.navigate('/gold/' + this.state.provider  + '/sell/payment', sellDetails.provider_sell_order_status)
       } else if (res.pfwresponse.result.is_gold_rate_changed) {
         let new_rate = res.pfwresponse.result.new_rate;
         let amountUpdated, weightUpdated;

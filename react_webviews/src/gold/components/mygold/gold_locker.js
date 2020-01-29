@@ -294,14 +294,14 @@ class GoldSummary extends Component {
     this.setState({
       show_loader: false
     });
-    this.navigate('bank-details');
+    this.navigate(this.state.provider + '/bank-details');
   }
 
   selectGoldProduct(index) {
     this.sendEvents('next', this.state.gold_products[index].disc);
     let selectedProduct = this.state.gold_products[index];
     window.localStorage.setItem('goldProduct', JSON.stringify(selectedProduct));
-    this.navigate('select-gold-product');
+    this.navigate(this.state.provider + '/select-gold-product');
   };
 
 
@@ -335,7 +335,7 @@ class GoldSummary extends Component {
   }
 
   navigate = (pathname) => {
-    if (pathname === 'gold-register') {
+    if (pathname.indexOf('gold-register') >= 0) {
       this.sendEvents('registeration')
     }
     if (pathname === 'gold-transactions') {
@@ -533,7 +533,7 @@ class GoldSummary extends Component {
             </div>
           </div>
           {this.state.error && this.state.isRegistered && <p className="error">{this.state.errorMessage}</p>}
-          {!this.state.isRegistered && <p className="error">Click <b><span onClick={() => this.navigate('gold-register')}>here</span></b> to register yourself for gold account</p>}
+          {!this.state.isRegistered && <p className="error">Click <b><span onClick={() => this.navigate(this.state.provider + '/gold-register')}>here</span></b> to register yourself for gold account</p>}
         </div>}
         {this.state.value === 1 && <div>
           <div className="FlexRow" style={{ justifyContent: 'center', flexWrap: 'wrap' }}>

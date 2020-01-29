@@ -39,7 +39,8 @@ class GoldRegister extends Component {
       mobile_no_error: '',
       city: '',
       state: '',
-      terms_opened: 'no'
+      terms_opened: 'no',
+      provider: this.props.match.params.provider
     }
   }
 

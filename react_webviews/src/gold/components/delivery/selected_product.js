@@ -27,7 +27,8 @@ class DeliverySelectedProduct extends Component {
       openResponseDialog: false,
       disabledText: 'Continue',
       disabled: false,
-      params: qs.parse(props.history.location.search.slice(1))
+      params: qs.parse(props.history.location.search.slice(1)),
+      provider: this.props.match.params.provider
     }
   }
 
@@ -120,7 +121,7 @@ class DeliverySelectedProduct extends Component {
       return;
     }
     if (parseFloat(this.state.product.metal_weight) <= this.state.maxWeight) {
-      this.navigate('gold-delivery-address');
+      this.navigate(this.state.provider + '/gold-delivery-address');
     } else {
       toast("Insufficient Gold Balance", 'error');
     }

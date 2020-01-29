@@ -25,7 +25,8 @@ class Otp extends Component {
       messageOtp: '',
       openResponseDialog: false,
       otpVerified: false,
-      params: qs.parse(props.history.location.search.slice(1))
+      params: qs.parse(props.history.location.search.slice(1)),
+      provider: this.props.match.params.provider
     }
   }
 
@@ -186,13 +187,13 @@ class Otp extends Component {
       this.navigate('my-gold');
 
     } else if (this.state.fromTypeDeliveryOtp === 'sell') {
-      this.navigate('sell-gold-order');
+      this.navigate(this.state.provider + '/sell-gold-order');
     } else if (this.state.fromTypeDeliveryOtp === 'delivery') {
       if (window.localStorage.getItem('goldProduct')) {
         let product = JSON.parse(window.localStorage.getItem('goldProduct'));
         product.isFisdomVerified = true;
         window.localStorage.setItem('goldProduct', JSON.stringify(product));
-        this.navigate('gold-delivery-order');
+        this.navigate(this.state.provider + '/gold-delivery-order');
       } else {
         this.navigate('my-gold');
       }
