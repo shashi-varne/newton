@@ -533,3 +533,23 @@ img.gold-offer-slide-img {
   width: 100%;
   border-radius: 8px;
 }
+
+.check-how-gold .title {
+  color: #0A1C32;
+  margin: 0 0 20px 0;
+  font-size: 16px;
+}
+
+.check-how-gold .content {
+  color: #767E86;
+  font-size: 14px;
+  font-weight: 400;
+}
+.check-how-gold .content-tiles {
+  margin: 0 0 10px 0;
+  line-height: 1.5;
+  text-align: left;
+}
+.check-how-gold .chart {
+  margin: 10px 0 30px 0;
+}
