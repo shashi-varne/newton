@@ -47,6 +47,8 @@ class Container extends Component {
         }
       });
     }
+
+    window.addEventListener("scroll", this.onScroll, false);
   }
 
   componentWillUnmount() {
@@ -55,6 +57,8 @@ class Container extends Component {
     } else {
       window.PlutusSdk.remove_listener({});
     }
+
+    window.removeEventListener("scroll", this.onScroll, false);
   }
 
   navigate = pathname => {
@@ -206,6 +210,29 @@ class Container extends Component {
     setHeights({ 'header': true, 'container': false });
   }
 
+  getHeightFromTop() {
+    var el = document.getElementsByClassName('Container')[0];
+    var height = el.getBoundingClientRect().top;
+    return height;
+  }
+
+  onScroll = () => {
+
+    let inPageTitle = this.state.inPageTitle;
+    if (this.getHeightFromTop() >= 56) {
+      //show up
+      inPageTitle = true;
+
+    } else {
+      //show down
+      inPageTitle = false;
+    }
+
+    this.setState({
+      inPageTitle: inPageTitle
+    })
+  };
+
   render() {
     let steps = [];
     for (var i = 0; i < this.props.total; i++) {
@@ -232,6 +259,7 @@ class Container extends Component {
           type={getConfig().productName}
           resetpage={this.props.resetpage}
           handleReset={this.props.handleReset}
+          inPageTitle={this.state.inPageTitle}
         />
 
         {/* Below Header Block */}

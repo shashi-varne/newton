@@ -521,3 +521,36 @@ input#pan {
   font-weight: 600;
   padding: 10px 0px 0 0px;
 }
+.header-title-page {
+  background: white;
+    color: #0A1C32;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 0 0 0 20px;
+    font-size: 20px;
+    font-weight: 400;
+    transition:.3s transform ease-in-out;
+}
+.header-topbar-white {
+  background: white !important;
+  color: black !important;
+  transition: .3s transform ease-in-out;
+  box-shadow: none !important;
+}
+
+.main-top-title-new2 {
+  font-size: 20px !important;
+  color: #160d2e !important;
+  font-weight: 400 !important;
+}
+
+
+.slide-fade{
+  transition: all 0.4s ease-out;
+  opacity: 0;
+  height: 0px;
+}
+.slide-fade-show {
+  opacity: 1;
+}
