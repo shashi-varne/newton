@@ -25,6 +25,8 @@ import DeliverySelectedProduct from "./components/delivery/selected_product";
 import Payment from "./components/payment/index";
 import Otp from "./components/otp/index";
 
+import CheckHow1 from "./components/general/check_how1";
+
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
 import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
@@ -91,6 +93,9 @@ const Gold = props => {
             component={Payment}
           />
           <Route path={`${url}/verify`} component={Otp} />
+
+
+          <Route path={`${url}/check-how1`} component={CheckHow1} />
 
           {/* Edit paths */}
           {/* <Route path={`${url}/edit-personal`} render={(props) => <PersonalDetails1 {...props} edit={true} />} /> */}

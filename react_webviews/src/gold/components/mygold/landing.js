@@ -10,7 +10,6 @@ class GoldLanding extends Component {
     super(props);
     this.state = {
       show_loader: true,
-      gs: 'fisdom',
       productName: getConfig().productName
     }
   }
