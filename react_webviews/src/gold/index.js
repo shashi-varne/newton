@@ -12,6 +12,7 @@ import NotFound from "../common/components/NotFound";
 // import About from "./components/general/about";
 import KnowMore from "./components/general/know_more";
 import GoldSummary from "./components/mygold/gold_summary";
+import GoldLanding from "./components/mygold/landing";
 import GoldLocker from "./components/mygold/gold_locker";
 import Transactions from "./components/transactions/index";
 import GoldRegister from "./components/buy/register";
@@ -61,7 +62,8 @@ const Gold = props => {
         <ScrollToTop />
         <ToastContainer autoClose={3000} />
         <Switch>
-          <Route exact path={`${url}`} component={GoldSummary} />
+          <Route exact path={`${url}`} component={GoldLanding} />
+          <Route path={`${url}/landing`} component={GoldLanding} />
           <Route path={`${url}/about`} component={GoldSummary} />
           <Route path={`${url}/details`} component={KnowMore} />
           <Route path={`${url}/my-gold`} component={GoldSummary} />
