@@ -562,3 +562,10 @@ input#pan {
 .slide-fade-show {
   opacity: 1;
 }
+
+.common-top-page-subtitle {
+  color: #767E86;
+  font-size: 14px;
+  font-weight: 400;
+  margin: -20px 0 20px 0;
+}

@@ -17,6 +17,9 @@ import toast from '../../../common/ui/Toast';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 
+import ic_live_green from 'assets/ic_live_green.svg';
+import SVG from 'react-inlinesvg';
+
 class GoldRegister extends Component {
   constructor(props) {
     super(props);
@@ -335,13 +338,31 @@ class GoldRegister extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="Registration"
+        title="Buy gold"
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="Proceed"
         disable={!this.state.checked}
         events={this.sendEvents('just_set_events')}
       >
+        <div className="common-top-page-subtitle">
+          We need following details to open your MMTC account
+        </div>
+
+        <div className="live-price-gold">
+          <div className="left-img">
+            <SVG
+                // preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+                src={ic_live_green}
+              />
+          </div>
+          <div className="mid-text">
+            Live price: ₹4,173.00/gm
+          </div>
+          <div className="right-text">
+            VALID FOR 1:59
+          </div>
+        </div>
         <div className="register-form">
           <div className="InputField">
             <Input
@@ -349,7 +370,7 @@ class GoldRegister extends Component {
               helperText={this.state.name_error}
               type="text"
               width="40"
-              label="Name *"
+              label="Name"
               class="name"
               id="name"
               name="name"
@@ -362,7 +383,7 @@ class GoldRegister extends Component {
               helperText={this.state.mobile_no_error}
               type="number"
               width="40"
-              label="Mobile number *"
+              label="Mobile"
               class="Mobile"
               id="number"
               name="mobile_no"
@@ -375,14 +396,14 @@ class GoldRegister extends Component {
               helperText={this.state.email_error}
               type="email"
               width="40"
-              label="Email address *"
+              label="Email"
               class="Email"
               id="email"
               name="email"
               value={this.state.email}
               onChange={this.handleChange('email')} />
           </div>
-          <div className="InputField">
+          {/* <div className="InputField">
             <Input
               error={(this.state.pin_code_error) ? true : false}
               helperText={this.state.pin_code_error}
@@ -396,14 +417,11 @@ class GoldRegister extends Component {
             <div className="filler">
               {(this.state.city && this.state.state && !this.state.pin_code_error) && <span>{this.state.city} , {this.state.state}</span>}
             </div>
-          </div>
+          </div> */}
           <div className="CheckBlock">
             <Grid container spacing={16} alignItems="center">
               <Grid item xs={2} className="TextCenter">
                 <Checkbox
-                  // style={{
-                  //   color: getConfig().primary
-                  // }}
                   defaultChecked
                   checked={this.state.checked}
                   color="default"

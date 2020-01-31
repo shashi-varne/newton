@@ -557,3 +557,21 @@ img.gold-offer-slide-img {
 .check-how-gold .mid-img {
   margin: 0 0 20px 0;
 }
+.live-price-gold {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 20px 0;
+  background: #F0F7FF;
+  padding: 10px 10px 10px 10px;
+  align-items: center;
+  border-radius: 4px;
+}
+.live-price-gold .mid-text {
+  color: #767E86;
+  font-size: 13px;
+}
+.live-price-gold .right-text {
+  font-size: 10px;
+  color: var(--secondary);
+  font-weight: 800;
+}
