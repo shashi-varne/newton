@@ -7,11 +7,8 @@ import Input from '../../../common/ui/Input';
 import Grid from 'material-ui/Grid';
 import Checkbox from 'material-ui/Checkbox';
 import Dialog, {
-  DialogActions,
-  DialogContent,
-  DialogContentText
+  DialogContent
 } from 'material-ui/Dialog';
-import Button from 'material-ui/Button';
 import { validateNumber, validateEmail } from 'utils/validators';
 import toast from '../../../common/ui/Toast';
 import { nativeCallback } from 'utils/native_callback';
@@ -19,6 +16,7 @@ import { getConfig } from 'utils/functions';
 
 import ic_live_green from 'assets/ic_live_green.svg';
 import SVG from 'react-inlinesvg';
+import { WithProviderLayout } from '../../common/footer/layout';
 
 class GoldRegister extends Component {
   constructor(props) {
@@ -33,8 +31,7 @@ class GoldRegister extends Component {
       mobile_no: "",
       goldInfo: {},
       isRegistered: false,
-      openResponseDialog: false,
-      openPopup: false,
+      openConfirmDialog: true,
       params: qs.parse(props.history.location.search.slice(1)),
       checked: false,
       name_error: '',
@@ -213,31 +210,8 @@ class GoldRegister extends Component {
 
   handleClose = () => {
     this.setState({
-      openResponseDialog: false,
-      openPopup: false
+      openConfirmDialog: false
     });
-  }
-
-  renderResponseDialog = () => {
-    return (
-      <Dialog
-        open={this.state.openResponseDialog}
-        onClose={this.handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {this.state.apiError}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleClose} color="default" autoFocus>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
   }
 
   openTermsAndCondition() {
@@ -329,7 +303,92 @@ class GoldRegister extends Component {
     }
   }
 
+  renderConfirmDialog = () => {
+      return (
+        <Dialog
+          id="bottom-popup"
+          open={this.state.openConfirmDialog}
+          onClose={this.handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogContent>
+            <div className="gold-dialog" id="alert-dialog-description">
+              <div className="live-price-gold">
+                <div className="left-img">
+                  <SVG
+                      // preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+                      src={ic_live_green}
+                    />
+                </div>
+                <div className="mid-text">
+                  Live price: ₹4,173.00/gm
+                </div>
+                <div className="right-text">
+                  VALID FOR 1:59
+                </div>
+              </div>
+              <div className="mid-buttons">
+                <WithProviderLayout type="default"
+                   handleClick2={this.handleClose}
+                   handleClick={this.handleClick}
+                   buttonTitle="Ok"
+                   buttonData= {{
+                     leftTitle: 'Buy gold worth',
+                     leftSubtitle: '₹1,000',
+                     leftArrow: 'down',
+                     provider: 'safegold'
+                   }}
+                />
+              </div>
+
+              <div className="hr"></div>
+
+              <div className="content">
+                   <div className="content-points">
+                      <div className="content-points-inside-text">
+                        Buy price for <b>0.014</b> gms
+                      </div>
+                      <div className="content-points-inside-text">
+                        ₹194.17
+                      </div>
+                   </div>
+
+                   <div className="content-points">
+                      <div className="content-points-inside-text">
+                      GST
+                      </div>
+                      <div className="content-points-inside-text">
+                      ₹5.83
+                      </div>
+                   </div>
+              </div>
+
+              <div className="hr"></div>
+
+              <div className="content2">
+                   <div className="content2-points">
+                      <div className="content2-points-inside-text">
+                        Total
+                      </div>
+                      <div className="content2-points-inside-text">
+                        ₹200.00
+                      </div>
+                   </div>
+              </div>
+
+              <div className="hr"></div>
+            </div>
+          </DialogContent>
+        </Dialog >
+      );
+
+  }
+
   handleClick2 = () => {
+    this.setState({
+      openConfirmDialog: true
+    })
   }
 
   render() {
@@ -445,7 +504,7 @@ class GoldRegister extends Component {
             </Grid>
           </div>
         </div>
-        {this.renderResponseDialog()}
+        {this.renderConfirmDialog()}
       </Container>
     );
   }

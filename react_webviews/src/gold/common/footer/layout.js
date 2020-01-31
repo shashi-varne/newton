@@ -11,6 +11,7 @@ import Dialog, {
 
 import logo_safegold from 'assets/logo_safegold.svg';
 import down_arrow from 'assets/down_arrow.svg';
+import up_arrow from 'assets/up_arrow.svg';
 import SVG from 'react-inlinesvg';
 import {getConfig} from 'utils/functions';
 
@@ -132,6 +133,11 @@ export class WithProviderLayout extends Component {
   render() {
     const props = this.props;
 
+    const leftArrowMapper = {
+      'up': up_arrow,
+      'down': down_arrow
+    }
+
     return (
       <div className="FooterDefaultLayout">
         <div className="FlexItem1 FlexItem1-withProivder-footer" onClick={props.handleClick2}>
@@ -147,7 +153,7 @@ export class WithProviderLayout extends Component {
               <SVG
                 className="text-block-2-img"
                 preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
-                src={down_arrow}
+                src={leftArrowMapper[props.leftArrow] || down_arrow}
               />
               {props.buttonData.leftSubtitle}
               </div>

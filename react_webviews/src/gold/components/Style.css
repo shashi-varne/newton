@@ -575,3 +575,26 @@ img.gold-offer-slide-img {
   color: var(--secondary);
   font-weight: 800;
 }
+.gold-dialog .hr {
+  border: 1px solid #EDEDED;
+}
+
+.gold-dialog .content-points {
+  color: #0A1D32;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0 15px 0;
+}
+
+.gold-dialog .content2-points {
+  color: #0A1D32;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0 15px 0;
+  font-weight: 600;
+}
+.gold-dialog .mid-buttons {
+  margin: 0 0 20px 0;
+}

@@ -589,16 +589,32 @@ input#pan {
 .FlexItem1-withProivder-footer .text-block-2 {
   color: #0A1D32;
   font-size: 16px;
-  padding: 5px 0 0 0;
+  /* padding: 5px 0 0 0; */
 }
 .FlexItem1-withProivder-footer .text-block-2-img {
   margin: 0px 5px 0 0;
   vertical-align: middle;
 }
 .FlexItem1-withProivder-footer .image-block {
-  margin: 5px 5px 10px 3px;
-  height: 48px;
+  /* margin: 5px 5px 10px 3px;
+  height: 48px; */
+  margin: 0px 9px 0px 3px;
 }
 .FlexItem2-withProivder-footer button {
   box-shadow: none !important;
+  padding: 0px !important;
+}
+
+.FlexItem1-withProivder-footer .FooterImage {
+  width: 40px;
+}
+
+
+#bottom-popup .MuiDialog-paper {
+  position: fixed;
+  width: 100%;
+  bottom: 0px;
+  left: -20px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
