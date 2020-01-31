@@ -28,6 +28,7 @@ import Otp from "./components/otp/index";
 import CheckHow1 from "./components/general/check_how1";
 import CheckHow2 from "./components/general/check_how2";
 import CheckHow3 from "./components/general/check_how3";
+import GoldPanBuy from "./components/buy/pan";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -66,44 +67,45 @@ const Gold = props => {
         <ScrollToTop />
         <ToastContainer autoClose={3000} />
         <Switch>
+
           <Route exact path={`${url}`} component={GoldLanding} />
+
+          {/* general */}
           <Route path={`${url}/landing`} component={GoldLanding} />
           <Route path={`${url}/about`} component={GoldSummary} />
           <Route path={`${url}/details`} component={KnowMore} />
-          <Route path={`${url}/my-gold`} component={GoldSummary} />
-          <Route path={`${url}/my-gold-locker`} component={GoldLocker} />
-          <Route path={`${url}/gold-transactions`} component={Transactions} />
-
-          <Route path={`${url}/:provider/gold-register`} component={GoldRegister} />
-          <Route path={`${url}/:provider/buy-gold-order`} component={BuyOrder} />
-          <Route path={`${url}/:provider/bank-details`} component={GoldBank} />
-          <Route path={`${url}/:provider/sell-gold-order`} component={SellOrder} />
-          <Route
-            path={`${url}/:provider/gold-delivery-address`}
-            component={DeliveryAddress}
-          />
-          <Route
-            path={`${url}/:provider/gold-delivery-order`}
-            component={DeliveryOrder}
-          />
-          <Route
-            path={`${url}/:provider/select-gold-product`}
-            component={DeliverySelectedProduct}
-          />
-          <Route
-            path={`${url}/:provider/:orderType/payment`}
-            component={Payment}
-          />
-          <Route path={`${url}/verify`} component={Otp} />
-
-
           <Route path={`${url}/check-how1`} component={CheckHow1} />
           <Route path={`${url}/check-how2`} component={CheckHow2} />
           <Route path={`${url}/check-how3`} component={CheckHow3} />
+          
+          
 
-          {/* Edit paths */}
-          {/* <Route path={`${url}/edit-personal`} render={(props) => <PersonalDetails1 {...props} edit={true} />} /> */}
+           {/* common */}
+           <Route path={`${url}/my-gold`} component={GoldSummary} />
+          <Route path={`${url}/my-gold-locker`} component={GoldLocker} />
+          <Route path={`${url}/gold-transactions`} component={Transactions} />
+          <Route path={`${url}/:provider/:orderType/payment`} component={Payment} />
+          <Route path={`${url}/verify`} component={Otp} />
+          
+
+          {/* buy */}
+          <Route path={`${url}/:provider/gold-register`} component={GoldRegister} />
+          <Route path={`${url}/:provider/buy-gold-order`} component={BuyOrder} />
+          <Route path={`${url}/:provider/buy-pan`} component={GoldPanBuy} />
+
+          {/* sell */}
+          <Route path={`${url}/:provider/bank-details`} component={GoldBank} />
+          <Route path={`${url}/:provider/sell-gold-order`} component={SellOrder} />
+
+
+          {/* delivery */}
+          <Route path={`${url}/:provider/gold-delivery-address`}  component={DeliveryAddress} />
+          <Route path={`${url}/:provider/gold-delivery-order`} component={DeliveryOrder} />
+          <Route path={`${url}/:provider/select-gold-product`}  component={DeliverySelectedProduct} />
+          
+         
           <Route component={NotFound} />
+
         </Switch>
       </MuiThemeProvider>
     </JssProvider>
