@@ -286,11 +286,6 @@ class GoldRegister extends Component {
       this.setState({
         email_error: 'Please enter valid email'
       });
-    } else if (this.state.pin_code.length !== 6 || !validateNumber(this.state.pin_code) ||
-      this.state.pin_code_error) {
-      this.setState({
-        pin_code_error: 'Please enter valid pincode'
-      });
     } else if (!this.state.checked) {
       return;
     } else {
@@ -334,12 +329,16 @@ class GoldRegister extends Component {
     }
   }
 
+  handleClick2 = () => {
+  }
+
   render() {
     return (
       <Container
         showLoader={this.state.show_loader}
         title="Buy gold"
         handleClick={this.handleClick}
+        handleClick2={this.handleClick2}
         edit={this.props.edit}
         withProvider={true}
         buttonTitle="Continue"

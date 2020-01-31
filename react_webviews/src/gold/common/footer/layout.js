@@ -133,8 +133,8 @@ export class WithProviderLayout extends Component {
     const props = this.props;
 
     return (
-      <div className="FooterDefaultLayout" onClick={props.handleClick}>
-        <div className="FlexItem1 FlexItem1-withProivder-footer">
+      <div className="FooterDefaultLayout">
+        <div className="FlexItem1 FlexItem1-withProivder-footer" onClick={props.handleClick2}>
           <div className='image-block'>
             <img
               alt=""
@@ -146,14 +146,14 @@ export class WithProviderLayout extends Component {
             <div className="text-block-2">
               <SVG
                 className="text-block-2-img"
-                // preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
                 src={down_arrow}
               />
               {props.buttonData.leftSubtitle}
               </div>
           </div>
         </div>
-        <div className="FlexItem2 FlexItem2-withProivder-footer">
+        <div className="FlexItem2 FlexItem2-withProivder-footer" onClick={props.handleClick}>
           <Button
             type={props.type}
             {...props} />

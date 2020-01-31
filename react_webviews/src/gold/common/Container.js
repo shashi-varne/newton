@@ -288,6 +288,7 @@ class Container extends Component {
             edit={this.props.edit}
             resetpage={this.props.resetpage}
             handleClick={this.props.handleClick}
+            handleClick2={this.props.handleClick2}
             handleReset={this.props.handleReset}
             onlyButton={this.props.onlyButton}
             noFooter={this.props.noFooter}
