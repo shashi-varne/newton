@@ -20,7 +20,8 @@ class PlanSummaryClass extends Component {
       show_loader: true,
       parent: this.props.parent,
       summaryData: {},
-      type: getConfig().productName
+      type: getConfig().productName,
+      group_insurance_payment_started: window.localStorage.getItem('group_insurance_payment_started') || ''
     };
 
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
@@ -29,6 +30,10 @@ class PlanSummaryClass extends Component {
 
   componentWillMount() {
 
+    if(this.state.group_insurance_payment_started) {
+      window.localStorage.setItem('group_insurance_payment_started', '');
+    }
+    
     let instant_icon = this.state.type !== 'fisdom' ? instant_myway : instant_fisdom;
     let product_title = insuranceProductTitleMapper[this.props.parent ? this.props.parent.state.product_key : ''];
     nativeCallback({ action: 'take_control_reset' });
@@ -42,6 +47,12 @@ class PlanSummaryClass extends Component {
   }
 
   async componentDidMount() {
+
+    if(this.state.group_insurance_payment_started) {
+      this.navigate('payment-callback');
+      return; 
+    }
+
     try {
       let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
       this.setState({
@@ -107,7 +118,6 @@ class PlanSummaryClass extends Component {
       let res2;
       res2 = await Api.get('api/ins_service/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
 
-      
       if (res2.pfwresponse.status_code === 200) {
 
         let current_url =  window.location.origin + '/group-insurance/' + 
@@ -132,6 +142,8 @@ class PlanSummaryClass extends Component {
         this.sendEvents('next');
 
         window.localStorage.setItem('group_insurance_payment_url', pgLink);
+        window.localStorage.setItem('group_insurance_payment_urlsafe', res2.pfwresponse.result.insurance_payment_urlsafe || '');
+        window.localStorage.setItem('group_insurance_payment_started', true);
 
         if (getConfig().app === 'ios') {
           nativeCallback({
@@ -189,6 +201,7 @@ class PlanSummaryClass extends Component {
         onlyButton={true}
         product_key={this.props.parent ? this.props.parent.state.product_key : ''}
         events={this.sendEvents('just_set_events')}
+        hide_header={this.state.show_loader}
         showLoader={this.state.show_loader}
         handleClick={() => this.handleClickCurrent()}
         title="Summary"
