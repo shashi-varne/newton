@@ -26,6 +26,8 @@ import Payment from "./components/payment/index";
 import Otp from "./components/otp/index";
 
 import CheckHow1 from "./components/general/check_how1";
+import CheckHow2 from "./components/general/check_how2";
+import CheckHow3 from "./components/general/check_how3";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -96,6 +98,8 @@ const Gold = props => {
 
 
           <Route path={`${url}/check-how1`} component={CheckHow1} />
+          <Route path={`${url}/check-how2`} component={CheckHow2} />
+          <Route path={`${url}/check-how3`} component={CheckHow3} />
 
           {/* Edit paths */}
           {/* <Route path={`${url}/edit-personal`} render={(props) => <PersonalDetails1 {...props} edit={true} />} /> */}

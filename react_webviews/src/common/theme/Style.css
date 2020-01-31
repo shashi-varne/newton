@@ -476,8 +476,8 @@ input#pan {
   font-size: 14px;
 }
 .MuiToolbar-gutters {
-  padding-left: 16px;
-  padding-right: 30px;
+  padding-left: 12px !important;
+  padding-right: 13px !important;
 }
 .Toastify__toast-container.Toastify__toast-container--bottom-center {
   z-index: 9999 !important;
@@ -527,10 +527,12 @@ input#pan {
     height: 50px;
     display: flex;
     align-items: center;
-    padding: 0 0 0 20px;
+    padding: 0 15px 0 15px;
     font-size: 20px;
-    font-weight: 400;
     transition:.3s transform ease-in-out;
+}
+.header-title-page-text {
+  font-weight: 600;
 }
 .header-topbar-white {
   background: white !important;
@@ -541,6 +543,12 @@ input#pan {
 
 .main-top-title-new2 {
   font-size: 20px !important;
+  color: #160d2e !important;
+  font-weight: 400 !important;
+}
+
+.main-top-title-header {
+  font-size: 16px !important;
   color: #160d2e !important;
   font-weight: 400 !important;
 }

@@ -538,6 +538,7 @@ img.gold-offer-slide-img {
   color: #0A1C32;
   margin: 0 0 20px 0;
   font-size: 16px;
+  font-weight: 500;
 }
 
 .check-how-gold .content {
@@ -552,4 +553,7 @@ img.gold-offer-slide-img {
 }
 .check-how-gold .chart {
   margin: 10px 0 30px 0;
+}
+.check-how-gold .mid-img {
+  margin: 0 0 20px 0;
 }

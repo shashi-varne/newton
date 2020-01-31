@@ -1,0 +1,93 @@
+import React, { Component } from 'react';
+
+import Container from '../../common/Container';
+import { nativeCallback } from 'utils/native_callback';
+import { getConfig } from 'utils/functions';
+
+
+class CheckHow2 extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            show_loader: false,
+            productName: getConfig().productName
+        }
+    }
+
+
+    navigate = (pathname) => {
+        this.props.history.push({
+            pathname: pathname,
+            search: getConfig().searchParams
+        });
+    }
+
+    sendEvents(user_action) {
+        let eventObj = {
+            "event_name": 'GOLD',
+            "properties": {
+                "user_action": user_action,
+                "screen_name": 'Know More'
+            }
+        };
+
+        if (user_action === 'just_set_events') {
+            return eventObj;
+        } else {
+            nativeCallback({ events: eventObj });
+        }
+    }
+
+    handleClick = () => {
+        this.sendEvents('next');
+    }
+
+    render() {
+        return (
+            <Container
+                showLoader={this.state.show_loader}
+                title="Buy 24K gold to create long term wealth"
+                edit={this.props.edit}
+                buttonTitle="Proceed"
+                handleClick={this.handleClick}
+                events={this.sendEvents('just_set_events')}
+                count={true}
+                current={3}
+                total={3}
+            >
+                <div className="check-how-gold">
+
+                    <div className="mid-img">
+                        <img src={require(`assets/${this.state.productName}/ils_hassle_free.svg`)} alt="Gold" />
+                    </div>
+
+                    <div className="title">
+                        Hassle free buy/sell/delivery
+                    </div>
+                    <div className="content">
+                        <div className="content-tiles">
+                            Digital Gold solves the issues of owning and storing physical gold.
+                It also provides <b>flexibility to buy</b> at prices comfortable to you and <b>sell anytime</b> which is
+                                        just icing on the cake.
+                                        You can start accumulating gold now and sell/get gold coins delivered as per your convenience.
+                    </div>
+
+                    </div>
+
+                    <div style={{color: '#767E86', fontSize:13, fontWeight:400,textAlign:'center'}}>
+                        100% Secure  |  Transparent  |  Convenient
+                    </div>
+
+                    <div style={{display:'flex', justifyContent: 'space-around', margin: '8px 0 0 0'}}>
+                        <img src={require(`assets/brinks_logo.svg`)} alt="Gold" />
+                        <img src={require(`assets/logo_idbi.svg`)} alt="Gold" />
+                        <img src={require(`assets/logo_lbma.svg`)} alt="Gold" />
+                        
+                    </div>
+                </div>
+            </Container>
+        );
+    }
+}
+
+export default CheckHow2;
