@@ -292,6 +292,8 @@ class Container extends Component {
             onlyButton={this.props.onlyButton}
             noFooter={this.props.noFooter}
             disable={this.props.disable}
+            withProvider={this.props.withProvider}
+            buttonData={this.props.buttonData}
           />
         )}
         {/* No Internet */}

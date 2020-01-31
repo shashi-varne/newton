@@ -341,9 +341,15 @@ class GoldRegister extends Component {
         title="Buy gold"
         handleClick={this.handleClick}
         edit={this.props.edit}
-        buttonTitle="Proceed"
-        disable={!this.state.checked}
+        withProvider={true}
+        buttonTitle="Continue"
         events={this.sendEvents('just_set_events')}
+        buttonData= {{
+          leftTitle: 'Buy gold worth',
+          leftSubtitle: '₹1,000',
+          leftArrow: 'up',
+          provider: 'safegold'
+        }}
       >
         <div className="common-top-page-subtitle">
           We need following details to open your MMTC account
