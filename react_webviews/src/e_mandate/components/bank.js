@@ -72,13 +72,13 @@ class SelectBank extends Component {
     let index = 0;
     // eslint-disable-next-line
     this.state.banks.map((bank, i) => {
-      if (bank.primary) {
+      if (bank && bank.primary) {
         index = i;
         // eslint-disable-next-line
         return;
       }
     })
-    selected_bank = this.state.banks[index]
+    selected_bank = this.state.banks[index] || {};
     this.setState({
       selected_bank: selected_bank,
       show_loader: false
@@ -98,8 +98,8 @@ class SelectBank extends Component {
       "event_name": 'e-mandate',
       "properties": {
         "user_action": user_action,
-        "primary_bank": this.state.selected_bank.primary ? "yes" : "no",
-        "bank_name": this.state.selected_bank.bank_name,
+        "primary_bank": this.state.selected_bank && this.state.selected_bank.primary ? "yes" : "no",
+        "bank_name": this.state.selected_bank && this.state.selected_bank.bank_name,
         "screen_name": 'select_bank'
       }
     };

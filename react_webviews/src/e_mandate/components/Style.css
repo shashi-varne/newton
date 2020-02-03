@@ -30,26 +30,26 @@
   font-weight: 600;
   padding: 0px 0px 0 0px;
 }
-.infocard .highlight-text {
+.highlight-text {
   background: #f6f2ff;
   padding: 15px 15px 20px 15px;
   border: 1px solid #f6f2ff;
   border-radius: 4px;
 }
-.infocard .highlight-text1 {
+.highlight-text1 {
   display: -webkit-box;
   line-height: 20px;
 }
-.infocard .highlight-text11 {
+.highlight-text11 {
   width: 14px;
 }
-.infocard .highlight-text12 {
+.highlight-text12 {
   font-size: 14px;
   color: #160d2e;
   font-weight: 700;
   margin: -2px 0 0 7px;
 }
-.infocard .highlight-text2 {
+.highlight-text2 {
   color: #160d2e;
   font-size: 14px;
   margin: 0 0 0 20px;
