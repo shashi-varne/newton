@@ -45,24 +45,27 @@ import AddOnBenefits from './products/term_insurance/add-on-benefits/index'
 import FinalReport from './products/term_insurance/report/index'
 import InsuranceHome from './products/term_insurance/home/index'
 
-import PersonalDetailsRedirect from './products/term_insurance/quote-selection/personal_details_redirect'
-
-/***********************TERM INSURANCE END   **************/
-
-/* Accident */
-import AccidentForm from './products/personal_accident/form';
-import AccidentSummary from './products/personal_accident/summary';
 
 import { create } from 'jss';
 import JssProvider from 'react-jss/lib/JssProvider';
 import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
+
+import PersonalDetailsRedirect from './products/term_insurance/quote-selection/personal_details_redirect'
+
+/***********************TERM INSURANCE END   **************/
+
+/* personal Accident */
+import AccidentForm from './products/personal_accident/form';
+import AccidentSummary from './products/personal_accident/summary';
 import AccidentFailed from './products/personal_accident/payment-failed';
 import AccidentPaymentSuccess from './products/personal_accident/payment-success';
 import AccidentPlanSuccess from './products/personal_accident/plan-success';
 import AccidentPlanDetails from './products/personal_accident';
-import Report from './report';
-import ReportDetails from './ui_components/general_insurance/report_check_details';
 import AccidentPlanPayment from './products/personal_accident/payment';
+import AccidentPaymentCallback from './products/personal_accident/payment-callback';
+
+
+// hospicash
 import HospicashPlanDetails from './products/hospicash';
 import HospicashForm from './products/hospicash/form';
 import HospicashSummary from './products/hospicash/summary';
@@ -70,6 +73,9 @@ import HospicashPlanSuccess from './products/hospicash/plan-success';
 import HospicashPaymentSuccess from './products/hospicash/payment-success';
 import HospicashFailed from './products/hospicash/payment-failed';
 import HospicashPlanPayment from './products/hospicash/payment';
+import HospicashPaymentCallback from './products/hospicash/payment-callback';
+
+// smart wallet
 import SmartwalletForm from './products/smart_wallet/form';
 import SmartwalletSummary from './products/smart_wallet/summary';
 import SmartwalletPlanSuccess from './products/smart_wallet/plan-success';
@@ -77,6 +83,7 @@ import SmartwalletPaymentSuccess from './products/smart_wallet/payment-success';
 import SmartwalletFailed from './products/smart_wallet/payment-failed';
 import SmartwalletPlanPayment from './products/smart_wallet/payment';
 import SmartwalletPlanDetails from './products/smart_wallet';
+import SmartwalletPaymentCallback from './products/smart_wallet/payment-callback';
 
 /* Dengue */
 import DengueForm from './products/dengue/form';
@@ -86,6 +93,8 @@ import DenguePaymentSuccess from './products/dengue/payment-success';
 import DenguePlanSuccess from './products/dengue/plan-success';
 import DenguePlanDetails from './products/dengue';
 import DenguePlanPayment from './products/dengue/payment';
+import DenguePaymentCallback from './products/dengue/payment-callback';
+
 
 /*******************  Health ******************/
 import HealthInsuranceLanding from './products/health_insurance/landing';
@@ -111,6 +120,9 @@ import HomeInsurance from './products/home_insurance/general/plan_details';
 import HomeInsuranceForm from './products/home_insurance/general/form';
 
 // common
+
+import Report from './report';
+import ReportDetails from './ui_components/general_insurance/report_check_details';
 import RenderDiseasesClass from './ui_components/general_insurance/diseases';
 
 const generateClassName = createGenerateClassName({
@@ -194,6 +206,7 @@ const Insurance = (props) => {
           <Route path={`${url}/accident/payment-success`} component={AccidentPaymentSuccess} />
           <Route path={`${url}/accident/payment-failed`} component={AccidentFailed} />
           <Route path={`${url}/accident/payment/:status`} component={AccidentPlanPayment} />
+          <Route path={`${url}/accident/payment-callback`} component={AccidentPaymentCallback} />
 
           {/********** Dengue **********/}
           <Route path={`${url}/dengue/plan`} component={DenguePlanDetails} />
@@ -203,6 +216,7 @@ const Insurance = (props) => {
           <Route path={`${url}/dengue/payment-success`} component={DenguePaymentSuccess} />
           <Route path={`${url}/dengue/payment-failed`} component={DengueFailed} />
           <Route path={`${url}/dengue/payment/:status`} component={DenguePlanPayment} />
+          <Route path={`${url}/dengue/payment-callback`} component={DenguePaymentCallback} />
 
           {/********** Hospicash **********/}
           <Route path={`${url}/hospicash/plan`} component={HospicashPlanDetails} />
@@ -212,6 +226,7 @@ const Insurance = (props) => {
           <Route path={`${url}/hospicash/payment-success`} component={HospicashPaymentSuccess} />
           <Route path={`${url}/hospicash/payment-failed`} component={HospicashFailed} />
           <Route path={`${url}/hospicash/payment/:status`} component={HospicashPlanPayment} />
+          <Route path={`${url}/hospicash/payment-callback`} component={HospicashPaymentCallback} />
 
           {/********** Smart wallet **********/}
           <Route path={`${url}/wallet/plan`} component={SmartwalletPlanDetails} />
@@ -221,6 +236,7 @@ const Insurance = (props) => {
           <Route path={`${url}/wallet/payment-success`} component={SmartwalletPaymentSuccess} />
           <Route path={`${url}/wallet/payment-failed`} component={SmartwalletFailed} />
           <Route path={`${url}/wallet/payment/:status`} component={SmartwalletPlanPayment} />
+          <Route path={`${url}/wallet/payment-callback`} component={SmartwalletPaymentCallback} />
 
           {/********** Health Insurance **********/}
           <Route path={`${url}/health/landing`} component={HealthInsuranceLanding} />
