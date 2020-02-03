@@ -598,3 +598,39 @@ img.gold-offer-slide-img {
 .gold-dialog .mid-buttons {
   margin: 0 0 20px 0;
 }
+
+.gold-payment-container .hr {
+  border: 1px solid #EDEDED;
+}
+
+.gold-payment-container .content-points {
+  color: #0A1D32;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0 15px 0;
+}
+
+.gold-payment-container .content2-points {
+  color: #0A1D32;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0 15px 0;
+  font-weight: 600;
+}
+.gold-payment-container .mid-title {
+  color: #0A1C32;
+  font-size: 16px;
+  font-weight: 500;
+}
+.gold-payment-container .send-invoice {
+  display: flex;
+  align-items: center;
+  margin: 20px 0 0 0;
+}
+.gold-payment-container .top-content {
+  color: #0A1D32;
+  font-size: 16px;
+  font-weight: 300;
+}
