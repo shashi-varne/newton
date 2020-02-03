@@ -9,26 +9,41 @@ import { ToastContainer } from 'react-toastify';
 
 import "./components/Style.css";
 import NotFound from "../common/components/NotFound";
+import CheckHow1 from "./components/general/check_how1";
+import CheckHow2 from "./components/general/check_how2";
+import CheckHow3 from "./components/general/check_how3";
 // import About from "./components/general/about";
 import KnowMore from "./components/general/know_more";
+
+
 import GoldSummary from "./components/mygold/gold_summary";
 import GoldLanding from "./components/mygold/landing";
 import GoldLocker from "./components/mygold/gold_locker";
 import Transactions from "./components/transactions/index";
-import GoldRegister from "./components/buy/register";
-import BuyOrder from "./components/buy/order";
-import GoldBank from "./components/sell/bank";
-import SellOrder from "./components/sell/order";
-import DeliveryAddress from "./components/delivery/address";
-import DeliveryOrder from "./components/delivery/order";
-import DeliverySelectedProduct from "./components/delivery/selected_product";
 import Payment from "./components/payment/index";
 import Otp from "./components/otp/index";
 
-import CheckHow1 from "./components/general/check_how1";
-import CheckHow2 from "./components/general/check_how2";
-import CheckHow3 from "./components/general/check_how3";
+
+
+//buy
 import GoldPanBuy from "./components/buy/pan";
+import GoldRegister from "./components/buy/register";
+import BuyOrder from "./components/buy/order";
+
+//sell
+import GoldBank from "./components/sell/bank";
+import SellOrder from "./components/sell/order";
+
+
+// delivery
+import DeliveryAddress from "./components/delivery/address";
+import DeliveryOrder from "./components/delivery/order";
+import DeliverySelectedProduct from "./components/delivery/selected_product";
+import SelectAddressDelivery from "./components/delivery/address_select";
+import AddEditAddressDelivery from "./components/delivery/address_add_edit";
+
+
+
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -102,6 +117,9 @@ const Gold = props => {
           <Route path={`${url}/:provider/gold-delivery-address`}  component={DeliveryAddress} />
           <Route path={`${url}/:provider/gold-delivery-order`} component={DeliveryOrder} />
           <Route path={`${url}/:provider/select-gold-product`}  component={DeliverySelectedProduct} />
+
+          <Route path={`${url}/:provider/select-address-delivery`} component={SelectAddressDelivery} />
+          <Route path={`${url}/:provider/add-address-delivery`} component={AddEditAddressDelivery} />
           
          
           <Route component={NotFound} />
