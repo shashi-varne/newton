@@ -31,6 +31,7 @@ import GoldRegister from "./components/buy/register";
 import BuyOrder from "./components/buy/order";
 
 //sell
+import GoldPanSell from "./components/sell/pan";
 import GoldBank from "./components/sell/bank";
 import SellOrder from "./components/sell/order";
 
@@ -111,6 +112,7 @@ const Gold = props => {
           {/* sell */}
           <Route path={`${url}/:provider/bank-details`} component={GoldBank} />
           <Route path={`${url}/:provider/sell-gold-order`} component={SellOrder} />
+          <Route path={`${url}/:provider/sell-pan`} component={GoldPanSell} />
 
 
           {/* delivery */}
