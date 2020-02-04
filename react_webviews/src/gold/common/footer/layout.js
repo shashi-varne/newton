@@ -153,7 +153,7 @@ export class WithProviderLayout extends Component {
               <SVG
                 className="text-block-2-img"
                 preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
-                src={leftArrowMapper[props.leftArrow] || down_arrow}
+                src={leftArrowMapper[props.buttonData.leftArrow] || down_arrow}
               />
               {props.buttonData.leftSubtitle}
               </div>

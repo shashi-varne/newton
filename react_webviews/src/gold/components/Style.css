@@ -665,18 +665,22 @@ img.gold-offer-slide-img {
     margin: 5px 8px 0 0px;
 }
 .gold-delivery-select-address .add-new-button {
-  margin: 20px 0 0 0px;
+  margin: 20px 0 0 25px;
   font-size: 12px;
   color: var(--secondary);
   text-transform: uppercase;
-    font-weight: 800;
+  font-weight: 800;
 }
 .gold-delivery-select-address .address-tile {
   display: flex;
     justify-content: start;
     margin: 10px 15px 20px 15px;
-    background: linear-gradient(to right, #c6bbbb , white);
     padding: 20px 10px 10px 10px;
+}
+.gold-delivery-select-address .address-tile-selected {
+    margin: 10px 0px 20px 0px;
+    background: linear-gradient(to right, #ebe4e4 , white);
+    padding: 20px 25px 10px 25px;
 }
 .gold-delivery-select-address {
   margin: 0 -15px 0 -20px;

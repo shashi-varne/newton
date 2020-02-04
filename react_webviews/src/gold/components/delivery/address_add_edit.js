@@ -1,47 +1,39 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
-import qs from 'qs';
-import TitleWithIcon from '../../../common/ui/TitleWithIcon';
-import contact from 'assets/address_details_icon.svg';
 
 import Container from '../../common/Container';
 import Input from '../../../common/ui/Input';
 import location from 'assets/location_dark_icn.png';
 import Api from 'utils/api';
 import { validateNumber, validateLength, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  DialogContentText
-} from 'material-ui/Dialog';
-import Button from 'material-ui/Button';
+import {getConfig} from "utils/functions";
+import toast from '../../../common/ui/Toast';
 
 class AddEditAddressDelivery extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
-      openDialogReset: false,
       pincode: '',
       pincode_error: '',
       addressline1: '',
       addressline1_error: '',
       addressline2: '',
       addressline2_error: '',
+      name: "",
+      name_error: '',
+      mobile_no: "",
+      mobile_no_error: '',
       city: '',
       state: '',
-      checked: true,
-      error: '',
-      apiError: '',
-      openDialog: false,
-      params: qs.parse(props.history.location.search.slice(1)),
+      provider: this.props.match.params.provider
     }
   }
 
   componentDidMount() {
 
     if (this.props.edit) {
-      if (this.state.params.address_id) {
+      if (this.state.params && this.state.params.address_id) {
         Api.get('/api/mandate/campaign/address/' + this.state.params.key + '?address_id=' + this.state.params.address_id).then(res => {
           if (res.pfwresponse.result) {
             let address = res.pfwresponse.result[0];
@@ -78,6 +70,14 @@ class AddEditAddressDelivery extends Component {
     if (event.target.name === 'checked') {
       this.setState({
         [event.target.name]: event.target.checked
+      });
+    } else if (event.target.name === 'mobile_no') {
+      if (event.target.value.length > 10) {
+        return;
+      }
+      this.setState({
+        [event.target.name]: event.target.value,
+        [event.target.name + '_error']: ''
       });
     } else {
       this.setState({
@@ -124,46 +124,80 @@ class AddEditAddressDelivery extends Component {
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: 'base_url=' + this.state.params.base_url + '&key=' + this.state.params.key + '&pc_key=' + this.state.params.pc_key
+      search: getConfig().searchParams
     });
   }
 
   handleClick = async () => {
+
+    let canSubmitForm = true;
+    // #TODO need to change cansubmitform flag logic
+
+    if (this.state.name.split(" ").filter(e => e).length < 2) {
+      this.setState({
+        name_error: 'Enter valid full name'
+      });
+      canSubmitForm = false;
+    } 
+    
+    if (this.state.mobile_no.length !== 10 || !validateNumber(this.state.mobile_no)) {
+      this.setState({
+        mobile_no_error: 'Please enter valid mobile no'
+      });
+      canSubmitForm = false;
+    }
+
     if (this.state.pincode.length !== 6 || !validateNumber(this.state.pincode)) {
       this.setState({
         pincode_error: 'Please enter valid pincode'
       });
-    } else if (!validateEmpty(this.state.addressline1)) {
+      canSubmitForm = false;
+    } 
+    
+    if (!validateEmpty(this.state.addressline1)) {
       this.setState({
         addressline1_error: 'Enter your address'
       });
+      canSubmitForm = false;
     } else if (!validateConsecutiveChar(this.state.addressline1)) {
       this.setState({
         addressline1_error: 'Address can not contain more than 3 same consecutive characters'
       });
+      canSubmitForm = false;
     } else if (!validateLength(this.state.addressline1)) {
       this.setState({
         addressline1_error: 'Maximum length of address is 30'
       });
+      canSubmitForm = false;
     } else if (!validateMinChar(this.state.addressline1)) {
       this.setState({
         addressline1_error: 'Address should contain minimum two characters'
       });
-    } else if (!validateEmpty(this.state.addressline2)) {
+      canSubmitForm = false;
+    }
+    
+    if (!validateEmpty(this.state.addressline2)) {
       this.setState({
         addressline2_error: 'Enter your street and locality'
       });
+      canSubmitForm = false;
     } else if (!validateConsecutiveChar(this.state.addressline2)) {
       this.setState({
         addressline2_error: 'Address can not contain more than 3 same consecutive characters'
       });
+      canSubmitForm = false;
     } else if (!validateLength(this.state.addressline2)) {
       this.setState({
         addressline2_error: 'Maximum length of address is 30'
       });
-    } else {
+      canSubmitForm = false;
+    } 
+
+    if(canSubmitForm) {
       this.setState({ show_loader: true });
       let addressline = {
+        "name": this.state.name,
+        "mobile_no": this.state.mobile_no,
         "pincode": this.state.pincode,
         "country": "india",
         'addressline1': this.state.addressline1,
@@ -174,136 +208,81 @@ class AddEditAddressDelivery extends Component {
       let res;
       if (this.props.edit) {
         addressline.address_id = this.state.params.address_id;
-        res = await Api.put('/api/mandate/campaign/address/' + this.state.params.key, addressline);
+        res = await Api.put('/api/gold/user/address/' + this.state.params.key, addressline);
       } else {
-        res = await Api.post('/api/mandate/campaign/address/' + this.state.params.key, addressline);
+        res = await Api.post('/api/gold/user/address/' + this.state.params.key, addressline);
       }
 
+      this.setState({ show_loader: false });
       if (res.pfwresponse.status_code === 200) {
-
-
-        this.setState({ show_loader: false });
-        this.navigate('/mandate/select-address');
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+          'Something went wrong');
+        this.navigate('delivery-select-address');
       } else {
-        this.setState({
-          show_loader: false,
-          openDialog: true, apiError: res.pfwresponse.result.error
-        });
+        toast('Something went wrong', 'error');
       }
     }
-  }
-
-  bannerText = () => {
-    return (
-      <span>
-        Delivery address for <b>Mandate Form</b>
-      </span>
-    );
-  }
-
-  handleClose = () => {
-    this.setState({
-      openDialog: false,
-      openDialogReset: false
-    });
-  }
-
-  handleReset = async () => {
-    this.setState({
-      openResponseDialog: false,
-      show_loader: true,
-      apiError: '', openDialog: false, openDialogReset: false,
-      openModalMessage: 'Wait a moment while we reset your application'
-    });
-    const res = await Api.delete('/api/mandate/campaign/address/' + this.state.params.key + '?address_id=' + this.state.params.address_id);
-    if (res.pfwresponse.status_code === 200) {
-      // this.setState({ openModal: false });
-      this.navigate('/mandate/select-address');
-    } else {
-      this.setState({ openModal: false, openModalMessage: '', openResponseDialog: true, apiError: res.pfwresponse.result.error });
-    }
-  }
-
-  showDialog = () => {
-    this.setState({ openDialogReset: true });
-  }
-
-  showDialog = () => {
-    this.setState({ openDialogReset: true });
-  }
-
-  renderDialog = () => {
-    return (
-      <Dialog
-        fullScreen={false}
-        open={this.state.openDialogReset}
-        onClose={this.handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogContent>
-          <DialogContentText>
-            Are you sure, you want to delete this address?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleClose} color="primary">
-            No
-          </Button>
-          <Button onClick={this.handleReset} color="primary" autoFocus>
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  }
-
-  renderResponseDialog = () => {
-    return (
-      <Dialog
-        open={this.state.openDialog}
-        onClose={this.handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {this.state.apiError}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleClose} color="primary" autoFocus>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
   }
 
   render() {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title={(this.props.edit) ? 'Edit Address' : 'Add New Address'}
+        title={(this.props.edit) ? 'Edit Address' : 'Add Address'}
         rightIcon={this.props.edit ? 'delete' : ''}
         resetpage={this.props.edit ? true : false}
-        handleReset={this.showDialog}
-        banner={true}
-        bannerText={this.bannerText()}
         handleClick={this.handleClick}
         edit={this.props.edit}
-        buttonTitle="Save Address"
+        buttonTitle="Save and continue"
         logo={this.state.image}
       >
-        {/* Permanent Address Block */}
         <FormControl fullWidth>
-          <TitleWithIcon width="16" icon={contact} title="Address Details" />
+          <div className="InputField">
+            <Input
+              error={(this.state.name_error) ? true : false}
+              helperText={this.state.name_error}
+              type="text"
+              width="40"
+              label="Person’s name"
+              class="name"
+              id="name"
+              name="name"
+              value={this.state.name}
+              onChange={this.handleChange('name')} />
+          </div>
+          <div className="InputField">
+            <Input
+              error={(this.state.mobile_no_error) ? true : false}
+              helperText={this.state.mobile_no_error}
+              type="number"
+              width="40"
+              label="Mobile number"
+              class="Mobile"
+              id="number"
+              name="mobile_no"
+              value={this.state.mobile_no}
+              onChange={this.handleChange('mobile_no')} />
+          </div>
+          <div className="InputField">
+            <Input
+              error={(this.state.pincode_error) ? true : false}
+              helperText={this.state.pincode_error}
+              type="number"
+              icon={location}
+              width="40"
+              label="Pin code"
+              id="pincode"
+              name="pincode"
+              value={this.state.pincode}
+              onChange={this.handlePincode('pincode')} />
+          </div>
           <div className="InputField">
             <Input
               error={(this.state.addressline1_error) ? true : false}
               helperText={this.state.addressline1_error}
               type="text"
               id="addressline1"
-              label="Address line 1 *"
+              label="Address 1"
               name="addressline1"
               placeholder="ex: 16/1 Queens paradise"
               value={this.state.addressline1}
@@ -315,7 +294,7 @@ class AddEditAddressDelivery extends Component {
               helperText={this.state.addressline2_error}
               type="text"
               id="addressline2"
-              label="Address line 2 *"
+              label="Address 2"
               name="addressline2"
               placeholder="ex: Curve Road, Shivaji Nagar"
               value={this.state.addressline2}
@@ -323,22 +302,9 @@ class AddEditAddressDelivery extends Component {
           </div>
           <div className="InputField">
             <Input
-              error={(this.state.pincode_error) ? true : false}
-              helperText={this.state.pincode_error}
-              type="number"
-              icon={location}
-              width="40"
-              label="Pincode *"
-              id="pincode"
-              name="pincode"
-              value={this.state.pincode}
-              onChange={this.handlePincode('pincode')} />
-          </div>
-          <div className="InputField">
-            <Input
               disabled={true}
               id="city"
-              label="City *"
+              label="City/Town"
               value={this.state.city}
               name="city"
               onChange={this.handleChange()} />
@@ -354,8 +320,6 @@ class AddEditAddressDelivery extends Component {
           </div>
         </FormControl>
 
-        {this.renderDialog()}
-        {this.renderResponseDialog()}
       </Container >
     );
   }

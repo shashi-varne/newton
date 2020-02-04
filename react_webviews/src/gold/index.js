@@ -120,7 +120,9 @@ const Gold = props => {
 
           <Route path={`${url}/:provider/select-address-delivery`} component={SelectAddressDelivery} />
           <Route path={`${url}/:provider/add-address-delivery`} component={AddEditAddressDelivery} />
-          
+          {/* Edit paths */}
+          <Route path={`${url}/:provider/edit-address-delivery`} render={(props) => 
+              <AddEditAddressDelivery {...props} edit={true} />} />
          
           <Route component={NotFound} />
 
