@@ -679,9 +679,123 @@ img.gold-offer-slide-img {
 }
 .gold-delivery-select-address .address-tile-selected {
     margin: 10px 0px 20px 0px;
-    background: linear-gradient(to right, #ebe4e4 , white);
+    background: linear-gradient(to right, #F4F4F4 , white);
     padding: 20px 25px 10px 25px;
 }
 .gold-delivery-select-address {
   margin: 0 -15px 0 -20px;
+}
+
+.gold-sell-select-bank .select-bank {
+  color: rgb(122, 118, 118);
+  line-height: 1.4;
+  font-size: 18px;
+  margin-top: -2px;
+  width: auto;
+}
+.gold-sell-select-bank .add-new-button {
+  margin: 20px 0 0 25px;
+  font-size: 12px;
+  color: var(--secondary);
+  text-transform: uppercase;
+  font-weight: 800;
+}
+.gold-sell-select-bank .bank-tile {
+    margin: 10px 15px 20px 15px;
+    padding: 20px 10px 10px 10px;
+}
+.gold-sell-select-bank .bank-tile-selected {
+    margin: 10px 0px 20px 0px;
+    background: linear-gradient(to right, #F4F4F4 , white);
+    padding: 20px 25px 10px 25px;
+}
+.gold-sell-select-bank {
+  margin: 0 -15px 0 -20px;
+}
+.gold-sell-select-bank .bank-name {
+  color: #0A1C32;
+  font-size: 14px;
+  font-weight: 600;
+}
+.gold-sell-select-bank .account-number {
+  color: #767E86;
+  font-size: 14px;
+}
+.gold-sell-select-bank .primary-bank {
+  color: #D3DBE4;
+  font-size: 8px;
+  font-weight: 'bold';
+}
+.gold-sell-select-bank .left-icon {
+  width: 10%;
+  float: left;
+  margin: 0 10px 0 0;
+}
+
+
+.gold-delivery-order .top-info-tile {
+  display: flex;
+  justify-content: space-between;
+    margin: 5px -15px 5px -15px;
+    padding: 10px 15px 10px 15px;
+}
+.gold-delivery-order .top-info-tile1 {
+  color: #091C32;
+  font-size: 13px;
+}
+.gold-delivery-order .top-info {
+  margin: 0 0 20px 0;
+}
+.gold-delivery-order .dash-hr {
+  border: 1px dashed #767E86;
+  margin: 0 0 30px 0;
+}
+
+
+.gold-delivery-order .hr {
+  border: 1px solid #EDEDED;
+}
+
+.gold-delivery-order .content-points {
+  color: #767E86;
+  font-size: 13px;
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0 15px 0;
+}
+
+.gold-delivery-order .content2-points {
+  color: #0A1D32;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0 15px 0;
+  font-weight: 600;
+}
+.gold-delivery-order .mid-title {
+  color: #0A1C32;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.gold-delivery-order .shipping-address .top-tile {
+  display: flex;
+  justify-content: space-between;
+}
+.gold-delivery-order .shipping-address .top-title {
+  color: #0A1C32;
+  font-size: 14px;
+  font-weight: 600;
+}
+.gold-delivery-order .shipping-address .top-icon {
+  color: #0A1D32;
+  width: 14px;
+}
+.gold-delivery-order .address .content {
+  font-size: 13px;
+  color: #767E86;
+  margin: 2px 0 3px 0;
+}
+.gold-delivery-order .address {
+  margin: 15px 0 20px 0;
 }

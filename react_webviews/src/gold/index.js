@@ -34,7 +34,9 @@ import BuyOrder from "./components/buy/order";
 import GoldPanSell from "./components/sell/pan";
 import GoldBank from "./components/sell/bank";
 import SellOrder from "./components/sell/order";
+import SellVerifyBank from "./components/sell/verify_bank";
 import SellAddEditBank from "./components/sell/add_edit_bank";
+import SellSelectBank from "./components/sell/select_bank";
 
 
 // delivery
@@ -114,9 +116,11 @@ const Gold = props => {
           <Route path={`${url}/:provider/bank-details`} component={GoldBank} />
           <Route path={`${url}/:provider/sell-gold-order`} component={SellOrder} />
           <Route path={`${url}/:provider/sell-pan`} component={GoldPanSell} />
+          <Route path={`${url}/:provider/sell-verify-bank`} component={SellVerifyBank} />
           <Route path={`${url}/:provider/sell-add-bank`} component={SellAddEditBank} />
           <Route path={`${url}/:provider/sell-edit-bank`} render={(props) => 
               <SellAddEditBank {...props} edit={true} />} />
+          <Route path={`${url}/:provider/sell-select-bank`} component={SellSelectBank} />
 
 
           {/* delivery */}
