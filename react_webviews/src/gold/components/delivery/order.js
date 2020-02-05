@@ -285,8 +285,7 @@ class DeliveryOrder extends Component {
                 Shipping address
               </div>
               <div className="top-icon">
-                {!this.state.showAddress && <span>+</span>}
-                {this.state.showAddress && <span>-</span>}
+                <img src={ require(`assets/${this.state.showAddress ? 'minus_icon' : 'plus_icon'}.svg`)} alt="Gold" />
               </div>
             </div>
 
