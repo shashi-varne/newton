@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import completed_step from "assets/completed_step.svg";
-import {getConfig} from 'utils/functions';
+import { getConfig } from 'utils/functions';
 import toast from '../../../common/ui/Toast';
 import Dialog, {
   DialogActions,
@@ -11,8 +11,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 
-import { WithProviderLayout } from '../../common/footer/layout';
-
+import ConfirmDialog from '../ui_components/confirm_dialog';
 
 class SelectAddressDelivery extends Component {
   constructor(props) {
@@ -31,6 +30,29 @@ class SelectAddressDelivery extends Component {
   }
 
   componentWillMount() {
+
+    let confirmDialogData = {
+      buttonData: {
+        leftTitle: '0.5g Lotus…',
+        leftSubtitle: '₹1,000',
+        leftArrow: 'down',
+        provider: 'safegold'
+      },
+      buttonTitle: "Ok",
+      content1: [
+        { 'name': 'Making charges', 'value': '₹194.17' },
+        { 'name': 'Shipping charges', 'value': 'Free' }
+      ],
+      content2: [
+        { 'name': 'Total', 'value': '₹200.00' }
+      ]
+    }
+
+    this.setState({
+      confirmDialogData: confirmDialogData
+    })
+
+
     let product = {};
     if (window.localStorage.getItem('goldProduct')) {
       product = JSON.parse(window.localStorage.getItem('goldProduct'));
@@ -69,8 +91,8 @@ class SelectAddressDelivery extends Component {
       "mobile_number": "8271961955"
     };
     this.setState({
-        addressData: [addressline, addressline],
-        show_loader: false
+      addressData: [addressline, addressline],
+      show_loader: false
     })
   }
 
@@ -81,7 +103,7 @@ class SelectAddressDelivery extends Component {
 
   navigate = (pathname, address_id) => {
     let searchParams = getConfig().searchParams;
-    if(address_id) {
+    if (address_id) {
       searchParams += '&address_id=' + address_id;
     }
 
@@ -145,6 +167,10 @@ class SelectAddressDelivery extends Component {
 
   handleClick = async () => {
 
+    this.setState({
+      openConfirmDialog: false
+    })
+
     if (this.state.selectedIndex === -1) {
       return;
     }
@@ -160,7 +186,7 @@ class SelectAddressDelivery extends Component {
     this.navigate('gold-delivery-order');
   }
 
-  handleClose () {
+  handleClose() {
     this.setState({
       openDialogDelete: false,
       openConfirmDialog: false
@@ -192,7 +218,7 @@ class SelectAddressDelivery extends Component {
     );
   }
 
-  removeAddressDialog (address_id){
+  removeAddressDialog(address_id) {
     // if (!address_id) {
     //   return;
     // }
@@ -210,12 +236,12 @@ class SelectAddressDelivery extends Component {
       openDialogDelete: false
     });
 
-    let res = await Api.get('/api/mandate/campaign/address/confirm'+
+    let res = await Api.get('/api/mandate/campaign/address/confirm' +
       '?address_id=' + this.state.address_id_delete);
 
     this.setState({ show_loader: false });
     if (res.pfwresponse.status_code === 200) {
-     
+
       this.getAddressData();
     } else {
       toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
@@ -250,107 +276,39 @@ class SelectAddressDelivery extends Component {
 
   renderAddress(props, index) {
     return (
-      <div className={`address-tile ${index === this.state.selectedIndex ? 'address-tile-selected': ''}`} key={index}
+      <div className={`address-tile ${index === this.state.selectedIndex ? 'address-tile-selected' : ''}`} key={index}
       >
         <div className="user-name">
-            {(props.name || '')[0]}
+          {(props.name || '')[0]}
         </div>
         <div className="select-addressline">
-            <div onClick={() => this.chooseAddress(index)}>
-              <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                  <div className="right-name">{props.name}</div>
-                  {index === this.state.selectedIndex && 
-                  <img style={{width: 14}} src={completed_step} alt="Gold Delivery" />}
-              </div>
-              <div>
-                {this.getFullAddress(props)}
-              </div>
+          <div onClick={() => this.chooseAddress(index)}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <div className="right-name">{props.name}</div>
+              {index === this.state.selectedIndex &&
+                <img style={{ width: 14 }} src={completed_step} alt="Gold Delivery" />}
             </div>
-            <div className="action-buttons">
-                <div className="er-button" onClick={() => this.navigate('edit-address-delivery', props.id)}>Edit</div>
-                <div className="er-button" onClick={() => this.removeAddressDialog(props.id)}>Remove</div>
+            <div>
+              {this.getFullAddress(props)}
             </div>
+          </div>
+          <div className="action-buttons">
+            <div className="er-button" onClick={() => this.navigate('edit-address-delivery', props.id)}>Edit</div>
+            <div className="er-button" onClick={() => this.removeAddressDialog(props.id)}>Remove</div>
+          </div>
         </div>
       </div >
     )
   }
 
-  renderConfirmDialog = () => {
-    return (
-      <Dialog
-        id="bottom-popup"
-        open={this.state.openConfirmDialog}
-        onClose={this.handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent>
-          <div className="gold-dialog" id="alert-dialog-description">
-            <div className="mid-buttons">
-              <WithProviderLayout type="default"
-                 handleClick2={this.handleClose}
-                 handleClick={this.handleClick}
-                 buttonTitle="Continue"
-                 buttonData= {{
-                   leftTitle: 'Buy gold worth',
-                   leftSubtitle: '₹1,000',
-                   leftArrow: 'down',
-                   provider: 'safegold'
-                 }}
-              />
-            </div>
-
-            <div className="hr"></div>
-
-            <div className="content">
-                 <div className="content-points">
-                    <div className="content-points-inside-text">
-                    Making charges
-                    </div>
-                    <div className="content-points-inside-text">
-                      ₹194.17
-                    </div>
-                 </div>
-
-                 <div className="content-points">
-                    <div className="content-points-inside-text">
-                    Shipping charges
-                    </div>
-                    <div className="content-points-inside-text">
-                   Free
-                    </div>
-                 </div>
-            </div>
-
-            <div className="hr"></div>
-
-            <div className="content2">
-                 <div className="content2-points">
-                    <div className="content2-points-inside-text">
-                      Total
-                    </div>
-                    <div className="content2-points-inside-text">
-                      ₹200.00
-                    </div>
-                 </div>
-            </div>
-
-            <div className="hr"></div>
-          </div>
-        </DialogContent>
-      </Dialog >
-    );
-
-}
-
-handleClick2 = () => {
-  if(this.state.selectedIndex === -1) {
-    return;
+  handleClick2 = () => {
+    if (this.state.selectedIndex === -1) {
+      return;
+    }
+    this.setState({
+      openConfirmDialog: true
+    })
   }
-  this.setState({
-    openConfirmDialog: true
-  })
-}
 
 
   render() {
@@ -366,25 +324,27 @@ handleClick2 = () => {
         buttonTitle="Continue"
         disable={this.state.selectedIndex === -1 ? true : false}
         withProvider={true}
-        buttonData= {{
+        buttonData={{
           leftTitle: '0.5g Lotus…',
           leftSubtitle: '₹1,000',
           leftArrow: 'up',
           provider: 'safegold'
         }}
       >
-          <div className="gold-delivery-select-address">
-              {this.state.addressData && this.state.addressData.map(this.renderAddress)}
-              {this.state.addressData && this.state.addressData.length < 3 &&
-                  <div
-                  onClick={() => this.navigate('add-address-delivery')}
-                  className="add-new-button">
-                  <span style={{background: '#F0F7FF', padding: '4px 9px 4px 9px',
-              color: getConfig().secondary, margin: '0 9px 0 0'}}>+</span> Add New Address
+        <div className="gold-delivery-select-address">
+          {this.state.addressData && this.state.addressData.map(this.renderAddress)}
+          {this.state.addressData && this.state.addressData.length < 3 &&
+            <div
+              onClick={() => this.navigate('add-address-delivery')}
+              className="add-new-button">
+              <span style={{
+                background: '#F0F7FF', padding: '4px 9px 4px 9px',
+                color: getConfig().secondary, margin: '0 9px 0 0'
+              }}>+</span> Add New Address
               </div>}
-          </div>
-          {this.renderDialogDelete()}
-          {this.renderConfirmDialog()}
+        </div>
+        {this.renderDialogDelete()}
+        <ConfirmDialog parent={this} />
       </Container >
     );
   }

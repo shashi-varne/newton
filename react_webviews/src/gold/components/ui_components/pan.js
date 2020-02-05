@@ -3,17 +3,12 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import Input from '../../../common/ui/Input';
-import Dialog, {
-    DialogContent
-} from 'material-ui/Dialog';
 import { validatePan, validateEmpty } from 'utils/validators';
 import toast from '../../../common/ui/Toast';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
-
-import ic_live_green from 'assets/ic_live_green.svg';
-import SVG from 'react-inlinesvg';
-import { WithProviderLayout } from '../../common/footer/layout';
+import GoldLivePrice from '../ui_components/live_price';
+import ConfirmDialog from '../ui_components/confirm_dialog';
 
 const commonMapper = {
     'buy': {
@@ -72,6 +67,28 @@ class GoldPanDataClass extends Component {
     }
 
     async componentDidMount() {
+
+        let confirmDialogData = {
+            buttonData: {
+                leftTitle: this.state.commonMapper.name + ' gold worth',
+                leftSubtitle: '₹1,000',
+                leftArrow: 'down',
+                provider: 'safegold'
+            },
+            buttonTitle: "Ok",
+            content1: [
+                {'name': this.state.commonMapper.name + ' price for <b>0.014</b> gms', 'value': '₹194.17'},
+                {'name': 'GST', 'value': '₹5.83'}
+            ],
+            content2: [
+                {'name': 'Total', 'value': '₹200.00'}
+            ]
+        }
+      
+        this.setState({
+            confirmDialogData: confirmDialogData
+        })
+        
         try {
 
             const res = await Api.get('/api/gold/user/account');
@@ -138,6 +155,11 @@ class GoldPanDataClass extends Component {
     }
 
     handleClick = async () => {
+
+        this.setState({
+            openConfirmDialog: false
+        })
+
         if (!validateEmpty(this.state.pan_number)) {
             this.setState({
                 pan_number_error: 'PAN number cannot be empty'
@@ -184,88 +206,6 @@ class GoldPanDataClass extends Component {
         }
     }
 
-    renderConfirmDialog = () => {
-        return (
-            <Dialog
-                id="bottom-popup"
-                open={this.state.openConfirmDialog}
-                onClose={this.handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogContent>
-                    <div className="gold-dialog" id="alert-dialog-description">
-                        <div className="live-price-gold">
-                            <div className="left-img">
-                                <SVG
-                                    // preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
-                                    src={ic_live_green}
-                                />
-                            </div>
-                            <div className="mid-text">
-                                Live price: ₹4,173.00/gm
-                            </div>
-                            <div className="right-text">
-                                VALID FOR 1:59
-                            </div>
-                        </div>
-                        <div className="mid-buttons">
-                            <WithProviderLayout type="default"
-                                handleClick2={this.handleClose}
-                                handleClick={this.handleClick}
-                                buttonTitle="Ok"
-                                buttonData={{
-                                    leftTitle: this.state.commonMapper.name + ' gold worth',
-                                    leftSubtitle: '₹1,000',
-                                    leftArrow: 'down',
-                                    provider: 'safegold'
-                                }}
-                            />
-                        </div>
-
-                        <div className="hr"></div>
-
-                        <div className="content">
-                            <div className="content-points">
-                                <div className="content-points-inside-text">
-                                    {this.state.commonMapper.name} price for <b>0.014</b> gms
-                            </div>
-                                <div className="content-points-inside-text">
-                                    ₹194.17
-                            </div>
-                            </div>
-
-                            <div className="content-points">
-                                <div className="content-points-inside-text">
-                                    GST
-                            </div>
-                                <div className="content-points-inside-text">
-                                    ₹5.83
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="hr"></div>
-
-                        <div className="content2">
-                            <div className="content2-points">
-                                <div className="content2-points-inside-text">
-                                    Total
-                                </div>
-                                <div className="content2-points-inside-text">
-                                    ₹200.00
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="hr"></div>
-                    </div>
-                </DialogContent>
-            </Dialog >
-        );
-
-    }
-
     handleClick2 = () => {
         this.setState({
             openConfirmDialog: true
@@ -294,20 +234,9 @@ class GoldPanDataClass extends Component {
                     {this.state.commonMapper.top_subtitle}
                 </div>
 
-                <div className="live-price-gold">
-                    <div className="left-img">
-                        <SVG
-                            // preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
-                            src={ic_live_green}
-                        />
-                    </div>
-                    <div className="mid-text">
-                        Live price: ₹4,173.00/gm
-                    </div>
-                    <div className="right-text">
-                        VALID FOR 1:59
-                </div>
-                </div>
+                <GoldLivePrice parent={this} />
+                <ConfirmDialog parent={this} />
+
                 <div className="register-form">
                     <div className="InputField">
                         <Input
@@ -323,7 +252,6 @@ class GoldPanDataClass extends Component {
                             onChange={this.handleChange('pan_number')} />
                     </div>
                 </div>
-                {this.renderConfirmDialog()}
             </Container>
         );
     }
