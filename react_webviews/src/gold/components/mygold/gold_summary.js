@@ -29,7 +29,11 @@ import goldOfferImageMyway3 from 'assets/gold_offer_myway3.jpg';
 
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { stateMapper} from  '../../constants';
 import PlaceBuyOrder from '../ui_components/place_buy_order';
+import PriceChangeDialog from '../ui_components/price_change_dialog';
+import RefreshBuyPrice from '../ui_components/buy_price';
+import { inrFormatDecimal2 } from 'utils/validators';
 
 import {calculate_gold_amount_buy, calculate_gold_wt_buy, setBuyDataAfterUpdate} from '../../constants';
 
@@ -63,10 +67,145 @@ class GoldSummary extends Component {
       countdownInterval: null,
       openDialogOffer: false,
       showOffers: false,
-      offerImageData: []
+      offerImageData: [],
+      openPriceChangedDialog: false,
+      fetchLivePrice: true
     }
 
     this.renderOfferImages = this.renderOfferImages.bind(this);
+    this.refreshData = this.refreshData.bind(this);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.countdownInterval);
+  }
+
+  countdown = () => {
+    let timeAvailable = this.state.buyData.timeAvailable;
+    let buyData = this.state.buyData;
+    if (timeAvailable <= 0) {
+      this.setState({
+        minutes: 0,
+        seconds: 0,
+        openPriceChangedDialog: true,
+        live_price: '',
+        timeAvailable: timeAvailable || 0
+      })
+
+      storageService().set('forceBackState', stateMapper['buy-home']);
+
+      return;
+    }
+
+    let minutes = Math.floor(timeAvailable / 60);
+    let seconds = Math.floor(timeAvailable - minutes * 60);
+    timeAvailable--;
+    buyData.timeAvailable = timeAvailable;
+
+    this.setState({
+      timeAvailable: timeAvailable,
+      minutes: minutes,
+      seconds: seconds,
+      buyData: buyData
+    })
+    
+    storageService().setObject('buyData', buyData);
+   
+  };
+
+
+  startTimer(buyData) {
+    if (buyData) {
+      let intervalId = setInterval(this.countdown, 1000);
+      this.setState({
+        countdownInterval: intervalId,
+        show_loader: false
+      });
+    }
+  }
+
+  onload() {
+
+    storageService().remove('forceBackState');
+
+    let buyData = storageService().getObject('buyData');
+    this.setState({
+      buyData: buyData,
+      live_price: buyData.goldBuyInfo.plutus_rate,
+      openRefreshModule: false,
+      timeAvailable: buyData.timeAvailable || 0
+    })
+    this.startTimer(buyData);
+
+
+    let priceChangeDialogData = {
+      buttonData: {
+        leftTitle: 'To buy gold worth',
+        leftSubtitle: inrFormatDecimal2(buyData.amount_selected),
+        leftArrow: 'down',
+        provider: 'safegold'
+      },
+      buttonTitle: "REFRESH",
+      content1: [
+        { 'name': 'Buy price for <b>0.014</b> gms', 'value': inrFormatDecimal2(buyData.base_amount) },
+        { 'name': 'GST', 'value': inrFormatDecimal2(buyData.gst_amount) }
+      ],
+      content2: [
+        { 'name': 'Total', 'value': inrFormatDecimal2(buyData.total_amount) }
+      ]
+    }
+
+
+
+    this.setState({
+      show_loader: false,
+      goldBuyInfo: buyData.goldBuyInfo,
+      timeAvailable: buyData.timeAvailable,
+      minAmount: buyData.goldBuyInfo.minimum_buy_price,
+      buyData: buyData,
+      priceChangeDialogData: priceChangeDialogData
+    });
+
+    if (this.state.buyData) {
+      let intervalId = setInterval(this.countdown, 1000);
+      this.setState({
+        countdownInterval: intervalId
+      });
+    }
+
+  }
+
+  updateParent(key, value) {
+    this.setState({
+      [key]: value
+    })
+  }
+
+  refreshData () {
+
+    if(this.state.timeAvailable > 0) {
+      this.handleClick();
+    } else {
+      this.setState({
+        show_loader: true,
+        openRefreshModule: true
+      })
+    }
+    
+  }
+
+  handleClose = () => {
+    this.setState({
+      openConfirmDialog: false,
+      openPopup: false,
+      openDialogOffer: false
+    });
+
+    if(this.state.openPriceChangedDialog && this.state.timeAvailable >0) {
+      this.setState({
+        openPriceChangedDialog: false
+      })
+    }
   }
 
   componentWillMount() {
@@ -113,50 +252,15 @@ class GoldSummary extends Component {
     })
   }
 
-  updateParent(key, value) {
-    this.setState({
-      [key]: value
-    })
-  }
-
   async componentDidMount() {
     try {
 
-      const res3 = await Api.get('/api/gold/buy/currentprice');
-      if (res3.pfwresponse.status_code === 200) {
-        let result = res3.pfwresponse.result;
-        let goldBuyInfo = result.buy_info;
-        var currentDate = new Date();
-        let timeAvailable = ((goldBuyInfo.rate_validity - currentDate.getTime()) / 1000 - 330 * 60);
+      const res = await Api.get('/api/gold/user/account');
+      if (res && res.pfwresponse.status_code === 200) {
 
-        let buyData = storageService().getObject('buyData');
-        buyData.goldBuyInfo = result.buy_info;
-        buyData.timeAvailable = timeAvailable;
-        storageService().setObject('buyData', buyData);
-
-        this.setState({
-          show_loader: false,
-          goldBuyInfo: result.buy_info,
-          timeAvailable: timeAvailable,
-          minAmount: goldBuyInfo.minimum_buy_price,
-          buyData: buyData
-        });
-
-        if (timeAvailable >= 0 && goldBuyInfo.plutus_rate) {
-          let intervalId = setInterval(this.countdown, 1000);
-          this.setState({
-            countdownInterval: intervalId
-          });
-        }
-      } else {
         this.setState({
           show_loader: false
         });
-        toast(res3.pfwresponse.result.error || res3.pfwresponse.result.message || 'Something went wrong', 'error');
-      }
-
-      const res = await Api.get('/api/gold/user/account');
-      if (res && res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
         let isRegistered = true;
         if (result.gold_user_info.user_info.registration_status === "pending" ||
@@ -205,31 +309,6 @@ class GoldSummary extends Component {
 
   }
 
-  componentWillUnmount() {
-    clearInterval(this.state.countdownInterval);
-  }
-
-  countdown = () => {
-    let timeAvailable = this.state.timeAvailable;
-    if (timeAvailable <= 0) {
-      this.setState({
-        minutes: '',
-        seconds: ''
-      })
-      window.location.reload();
-      return;
-    }
-
-    let minutes = Math.floor(timeAvailable / 60);
-    let seconds = Math.floor(timeAvailable - minutes * 60);
-    timeAvailable--;
-    this.setState({
-      timeAvailable: timeAvailable,
-      minutes: minutes,
-      seconds: seconds
-    })
-    window.localStorage.setItem('timeAvailable', timeAvailable);
-  }
 
   sendEvents(user_action) {
     let eventObj = {
@@ -249,8 +328,9 @@ class GoldSummary extends Component {
     }
   }
 
-  buyGold = async () => {
+  handleClick = async () => {
 
+    this.handleClose();
     this.sendEvents('next');
     if (parseFloat(this.state.weight) > this.state.maxWeight) {
       toast('You can not buy more than ' + this.state.maxWeight + ' gm', 'error');
@@ -285,15 +365,6 @@ class GoldSummary extends Component {
     })
 
   }
-
-
-  handleClose = () => {
-    this.setState({
-      openPopup: false,
-      openDialogOffer: false
-    });
-  }
-
 
   openInBrowser(url) {
     nativeCallback({
@@ -447,7 +518,7 @@ class GoldSummary extends Component {
       <Container
         showLoader={this.state.show_loader}
         title="24K Digital Gold"
-        handleClick={this.buyGold}
+        handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="Proceed"
         noPadding={true}
@@ -562,6 +633,13 @@ class GoldSummary extends Component {
         {this.state.proceedForOrder && 
           <PlaceBuyOrder parent={this} />
         }
+
+        <PriceChangeDialog parent={this} />
+        {this.state.openRefreshModule &&
+         <RefreshBuyPrice parent={this} />}
+
+        {this.state.fetchLivePrice && 
+        <RefreshBuyPrice parent={this} />}
       </Container>
     );
   }

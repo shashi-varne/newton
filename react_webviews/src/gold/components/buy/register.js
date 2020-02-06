@@ -47,6 +47,9 @@ class GoldRegister extends Component {
     this.refreshData = this.refreshData.bind(this);
   }
 
+
+  // common code for buy live price start
+
   componentWillUnmount() {
     clearInterval(this.state.countdownInterval);
   }
@@ -59,7 +62,8 @@ class GoldRegister extends Component {
         minutes: 0,
         seconds: 0,
         openPriceChangedDialog: true,
-        live_price: ''
+        live_price: '',
+        timeAvailable: timeAvailable || 0
       })
 
       storageService().set('forceBackState', stateMapper['buy-home']);
@@ -92,6 +96,25 @@ class GoldRegister extends Component {
         show_loader: false
       });
     }
+  }
+
+  updateParent(key, value) {
+    this.setState({
+      [key]: value
+    })
+  }
+
+  refreshData () {
+
+    if(this.state.timeAvailable > 0) {
+      this.handleClick();
+    } else {
+      this.setState({
+        show_loader: true,
+        openRefreshModule: true
+      })
+    }
+    
   }
 
   onload() {
@@ -156,6 +179,20 @@ class GoldRegister extends Component {
 
     
   }
+
+  handleClose = () => {
+    this.setState({
+      openConfirmDialog: false
+    });
+
+    if(this.state.openPriceChangedDialog && this.state.timeAvailable >0) {
+      this.setState({
+        openPriceChangedDialog: false
+      })
+    }
+  }
+
+  // common code for buy live price end
 
   async componentDidMount() {
 
@@ -324,18 +361,6 @@ class GoldRegister extends Component {
     }
   }
 
-  handleClose = () => {
-    this.setState({
-      openConfirmDialog: false
-    });
-
-    if(this.state.openPriceChangedDialog && this.state.timeAvailable >0) {
-      this.setState({
-        openPriceChangedDialog: false
-      })
-    }
-  }
-
   openTermsAndCondition() {
     this.setState({
       terms_opened: true
@@ -431,29 +456,6 @@ class GoldRegister extends Component {
     this.setState({
       openConfirmDialog: true
     })
-  }
-
-  updateParent(key, value) {
-    this.setState({
-      [key]: value
-    })
-  }
-
-  refreshData () {
-
-    if(this.state.timeAvailable > 0) {
-      this.handleClick();
-    } else {
-      this.setState({
-        show_loader: true,
-        openRefreshModule: true
-      })
-    }
-    
-  }
-
-  dataRefreshed() {
-
   }
 
   render() {

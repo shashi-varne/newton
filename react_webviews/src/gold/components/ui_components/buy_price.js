@@ -20,9 +20,11 @@ class BuyPriceClass extends Component {
 
         try {
 
-            this.setState({
-                show_loader: true
-            })
+            if(!this.props.parent.state.fetchLivePrice) {
+                this.setState({
+                    show_loader: true
+                })
+            }
 
             const res = await Api.get('/api/gold/buy/currentprice');
             if (res.pfwresponse.status_code === 200) {
@@ -39,6 +41,7 @@ class BuyPriceClass extends Component {
                 storageService().setObject('buyData', buyData);
 
                 this.props.parent.onload();
+                this.props.parent.updateParent('fetchLivePrice', false);
                 this.setState({
                     show_loader: false
                 })
