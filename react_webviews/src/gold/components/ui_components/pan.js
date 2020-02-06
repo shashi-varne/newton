@@ -9,6 +9,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import GoldLivePrice from '../ui_components/live_price';
 import ConfirmDialog from '../ui_components/confirm_dialog';
+import PriceChangeDialog from '../ui_components/price_change_dialog';
 
 const commonMapper = {
     'buy': {
@@ -54,6 +55,7 @@ class GoldPanDataClass extends Component {
             pan_number: "",
             pan_number_error: '',
             openConfirmDialog: false,
+            openPriceChangedDialog: true,
             provider: this.props.parent.props.match.params.provider,
             orderType: this.props.parent.state.orderType,
             pan_editable_status: 'editable'
@@ -61,13 +63,13 @@ class GoldPanDataClass extends Component {
     }
 
     componentWillMount() {
+
         this.setState({
             commonMapper: commonMapper[this.state.orderType][this.state.pan_editable_status]
         })
     }
 
-    async componentDidMount() {
-
+    getSellData() {
         let confirmDialogData = {
             buttonData: {
                 leftTitle: this.state.commonMapper.name + ' gold worth',
@@ -84,11 +86,37 @@ class GoldPanDataClass extends Component {
                 {'name': 'Total', 'value': '₹200.00'}
             ]
         }
+
+        let priceChangeDialogData = {
+            buttonData: {
+              leftTitle: 'To buy gold worth',
+              leftSubtitle: '₹1,000',
+              leftArrow: 'down',
+              provider: 'safegold'
+            },
+            buttonTitle: "REFRESH",
+            content1: [
+              { 'name': 'Buy price for <b>0.014</b> gms', 'value': '₹194.17' },
+              { 'name': 'GST', 'value': '₹5.83' }
+            ],
+            content2: [
+              { 'name': 'Total', 'value': '₹200.00' }
+            ]
+          }
+      
       
         this.setState({
-            confirmDialogData: confirmDialogData
+            confirmDialogData: confirmDialogData,
+            priceChangeDialogData: priceChangeDialogData
         })
+    }
+
+    async componentDidMount() {
+
         
+        if (this.state.orderType === 'sell') {
+            this.getSellData();
+        }
         try {
 
             const res = await Api.get('/api/gold/user/account');
@@ -133,7 +161,8 @@ class GoldPanDataClass extends Component {
 
     handleClose = () => {
         this.setState({
-            openConfirmDialog: false
+            openConfirmDialog: false,
+            openPriceChangedDialog: false
         });
     }
 
@@ -156,9 +185,7 @@ class GoldPanDataClass extends Component {
 
     handleClick = async () => {
 
-        this.setState({
-            openConfirmDialog: false
-        })
+        this.handleClose();
 
         if (!validateEmpty(this.state.pan_number)) {
             this.setState({
@@ -252,6 +279,8 @@ class GoldPanDataClass extends Component {
                             onChange={this.handleChange('pan_number')} />
                     </div>
                 </div>
+
+                <PriceChangeDialog parent={this} />
             </Container>
         );
     }

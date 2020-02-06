@@ -80,13 +80,6 @@ class BuyOrder extends Component {
     let nativeRedirectUrl = window.location.origin +
       '/gold/'  + this.state.provider +  '/buy-gold-order' + getConfig().searchParams;
 
-    // nativeCallback({
-    //   action: 'take_control', message: {
-    //     back_url: nativeRedirectUrl,
-    //     back_text: 'Are you sure you want to exit the payment process?'
-    //   }
-    // });
-
     let paymentRedirectUrl = encodeURIComponent(
       window.location.origin + '/gold/' + this.state.provider  + '/buy/payment' + getConfig().searchParams
     );

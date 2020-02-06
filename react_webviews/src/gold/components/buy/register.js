@@ -6,13 +6,17 @@ import Api from 'utils/api';
 import Input from '../../../common/ui/Input';
 import Grid from 'material-ui/Grid';
 import Checkbox from 'material-ui/Checkbox';
-import { validateNumber, validateEmail } from 'utils/validators';
+import { validateNumber, validateEmail, inrFormatDecimal2 } from 'utils/validators';
 import toast from '../../../common/ui/Toast';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 
 import GoldLivePrice from '../ui_components/live_price';
 import ConfirmDialog from '../ui_components/confirm_dialog';
+import PriceChangeDialog from '../ui_components/price_change_dialog';
+import RefreshBuyPrice from '../ui_components/buy_price';
+import {providerMapper, stateMapper} from  '../../constants';
+import { storageService } from 'utils/validators';
 
 class GoldRegister extends Component {
   constructor(props) {
@@ -36,32 +40,126 @@ class GoldRegister extends Component {
       city: '',
       state: '',
       terms_opened: 'no',
-      provider: this.props.match.params.provider
+      provider: this.props.match.params.provider,
+      openPriceChangedDialog: false
+    }
+
+    this.refreshData = this.refreshData.bind(this);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.countdownInterval);
+  }
+
+  countdown = () => {
+    let timeAvailable = this.state.buyData.timeAvailable;
+    let buyData = this.state.buyData;
+    if (timeAvailable <= 0) {
+      this.setState({
+        minutes: 0,
+        seconds: 0,
+        openPriceChangedDialog: true,
+        live_price: ''
+      })
+
+      storageService().set('forceBackState', stateMapper['buy-home']);
+
+      return;
+    }
+
+    let minutes = Math.floor(timeAvailable / 60);
+    let seconds = Math.floor(timeAvailable - minutes * 60);
+    timeAvailable--;
+    buyData.timeAvailable = timeAvailable;
+
+    this.setState({
+      timeAvailable: timeAvailable,
+      minutes: minutes,
+      seconds: seconds,
+      buyData: buyData
+    })
+    
+    storageService().setObject('buyData', buyData);
+   
+  };
+
+
+  startTimer(buyData) {
+    if (buyData) {
+      let intervalId = setInterval(this.countdown, 1000);
+      this.setState({
+        countdownInterval: intervalId,
+        show_loader: false
+      });
     }
   }
 
-  async componentDidMount() {
+  onload() {
+
+    storageService().remove('forceBackState');
+
+    let buyData = storageService().getObject('buyData');
+    this.setState({
+      buyData: buyData,
+      live_price: buyData.goldBuyInfo.plutus_rate,
+      openRefreshModule: false,
+      timeAvailable: buyData.timeAvailable
+    })
+    this.startTimer(buyData);
 
     let confirmDialogData = {
       buttonData: {
         leftTitle: 'Buy gold worth',
-        leftSubtitle: '₹1,000',
+        leftSubtitle: inrFormatDecimal2(buyData.amount_selected),
         leftArrow: 'down',
         provider: 'safegold'
       },
-      buttonTitle: "Ok",
+      buttonTitle: "OK",
       content1: [
-        { 'name': 'Buy price for <b>0.014</b> gms', 'value': '₹194.17' },
-        { 'name': 'GST', 'value': '₹5.83' }
+        { 'name': 'Buy price for <b>' + buyData.weight_selected + '</b> gms', 'value': inrFormatDecimal2(buyData.base_amount) },
+        { 'name': 'GST', 'value': inrFormatDecimal2(buyData.gst_amount) }
       ],
       content2: [
-        { 'name': 'Total', 'value': '₹200.00' }
+        { 'name': 'Total', 'value': inrFormatDecimal2(buyData.total_amount) }
       ]
     }
 
+    let priceChangeDialogData = {
+      buttonData: {
+        leftTitle: 'To buy gold worth',
+        leftSubtitle: inrFormatDecimal2(buyData.amount_selected),
+        leftArrow: 'down',
+        provider: 'safegold'
+      },
+      buttonTitle: "REFRESH",
+      content1: [
+        { 'name': 'Buy price for <b>0.014</b> gms', 'value': inrFormatDecimal2(buyData.base_amount) },
+        { 'name': 'GST', 'value': inrFormatDecimal2(buyData.gst_amount) }
+      ],
+      content2: [
+        { 'name': 'Total', 'value': inrFormatDecimal2(buyData.total_amount) }
+      ]
+    }
+
+    let bottomButtonData = {
+      leftTitle: 'Buy gold worth',
+      leftSubtitle: inrFormatDecimal2(buyData.amount_selected),
+      leftArrow: 'up',
+      provider: 'safegold'
+    }
+
     this.setState({
-      confirmDialogData: confirmDialogData
+      confirmDialogData: confirmDialogData,
+      priceChangeDialogData: priceChangeDialogData,
+      bottomButtonData: bottomButtonData
     })
+
+    
+  }
+
+  async componentDidMount() {
+
+    this.onload();
 
     try {
 
@@ -230,6 +328,12 @@ class GoldRegister extends Component {
     this.setState({
       openConfirmDialog: false
     });
+
+    if(this.state.openPriceChangedDialog && this.state.timeAvailable >0) {
+      this.setState({
+        openPriceChangedDialog: false
+      })
+    }
   }
 
   openTermsAndCondition() {
@@ -266,9 +370,7 @@ class GoldRegister extends Component {
   }
 
   handleClick = async () => {
-    this.setState({
-      openConfirmDialog: false
-    })
+    this.handleClose();
 
     if (this.state.name.split(" ").filter(e => e).length < 2) {
       this.setState({
@@ -331,6 +433,29 @@ class GoldRegister extends Component {
     })
   }
 
+  updateParent(key, value) {
+    this.setState({
+      [key]: value
+    })
+  }
+
+  refreshData () {
+
+    if(this.state.timeAvailable > 0) {
+      this.handleClick();
+    } else {
+      this.setState({
+        show_loader: true,
+        openRefreshModule: true
+      })
+    }
+    
+  }
+
+  dataRefreshed() {
+
+  }
+
   render() {
     return (
       <Container
@@ -342,19 +467,15 @@ class GoldRegister extends Component {
         withProvider={true}
         buttonTitle="Continue"
         events={this.sendEvents('just_set_events')}
-        buttonData={{
-          leftTitle: 'Buy gold worth',
-          leftSubtitle: '₹1,000',
-          leftArrow: 'up',
-          provider: 'safegold'
-        }}
+        buttonData={this.state.bottomButtonData}
       >
         <div className="common-top-page-subtitle">
-          We need following details to open your MMTC account
+          We need following details to open your {providerMapper[this.state.provider].title} account
         </div>
 
         <GoldLivePrice parent={this} />
         <ConfirmDialog parent={this} />
+        <PriceChangeDialog parent={this} />
 
         <div className="register-form">
           <div className="InputField">
@@ -433,6 +554,9 @@ class GoldRegister extends Component {
             </Grid>
           </div>
         </div>
+
+        {this.state.openRefreshModule &&
+         <RefreshBuyPrice parent={this} />}
       </Container>
     );
   }

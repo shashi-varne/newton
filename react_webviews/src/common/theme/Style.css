@@ -381,6 +381,17 @@ input#pan {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  text-align: center;
+}
+.Loader-Dialog {
+  opacity: 0.9;
+  z-index: 200000;
+}
+.LoaderOverlayText {
+  color: #0A1D32;
+  font-size: 14px;
+  margin: 10px 0 0 0;
+  font-weight: 400;
 }
 
 .Step {

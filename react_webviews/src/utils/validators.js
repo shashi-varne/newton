@@ -201,10 +201,10 @@ export function formatAmount(amount) {
   return res;
 }
 
-export function inrFormatDecimal(number) {
+export function inrFormatDecimal(number, toFixed) {
   if (number) {
     number = parseFloat(number);
-    number = number.toFixed(0);
+    number = number.toFixed(toFixed || 0);
     number = number.toString();
     var afterPoint = '';
     if (number.indexOf('.') > 0)
@@ -220,6 +220,10 @@ export function inrFormatDecimal(number) {
   } else {
     return '₹';
   }
+}
+
+export function inrFormatDecimal2(number) {
+  return inrFormatDecimal(number, 2);
 }
 
 export function inrFormatDecimalWithoutIcon(number) {
@@ -451,4 +455,49 @@ export function checkStringInString(string_base, string_to_check) {
   }
 
   return false;
+}
+
+export function storageService() {
+  var service = {
+      set: set,
+      get: get,
+      setObject: setObject,
+      getObject: getObject,
+      remove: remove,
+      clear: clear
+  };
+  return service;
+
+  function set(key, value) {
+    window.localStorage.setItem(key, value);
+  }
+
+  function get(key) {
+    if (checkValidString(window.localStorage.getItem(key))) {
+      return window.localStorage.getItem(key) || false;
+    }
+
+    return false;
+  }
+
+  function setObject(key, value) {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  function getObject(key) {
+    if (checkValidString(window.localStorage.getItem(key))) {
+      return JSON.parse(window.localStorage.getItem(key)) || {};
+    }
+
+    return false;
+  }
+
+  function remove(key) {
+    return window.localStorage.removeItem(key);
+  }
+
+  function clear() {
+    return window.localStorage.clear();
+  }
+
 }

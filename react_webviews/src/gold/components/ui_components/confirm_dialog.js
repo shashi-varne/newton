@@ -51,7 +51,7 @@ class ConfirmDialogClass extends Component {
           >
             <DialogContent>
               <div className="gold-dialog" id="alert-dialog-description">
-                <GoldLivePrice parent={this} />
+                <GoldLivePrice parent={this.props.parent} />
                 <div className="mid-buttons">
                   <WithProviderLayout type="default"
                      handleClick2={this.props.parent.handleClose}

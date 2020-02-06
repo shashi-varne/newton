@@ -16,6 +16,7 @@ import Dialog, {
 import '../../utils/native_listner';
 import { getConfig, setHeights } from 'utils/functions';
 import {checkStringInString} from 'utils/validators';
+import {forceBackState} from '../constants';
 
 class Container extends Component {
   constructor(props) {
@@ -80,6 +81,11 @@ class Container extends Component {
 
   historyGoBack = () => {
     // let { params } = this.props.location;
+
+    if(forceBackState()) {
+      this.navigate(forceBackState());
+      return;
+    }
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
     }
@@ -196,9 +202,12 @@ class Container extends Component {
   renderPageLoader = () => {
     if (this.props.showLoader) {
       return (
-        <div className="Loader">
+        <div className={`Loader ${this.props.loaderData ? this.props.loaderData.loaderClass : ''}`}>
           <div className="LoaderOverlay">
             <img src={this.state.loaderMain} alt="" />
+              {this.props.loaderData && this.props.loaderData.loadingText && 
+                <div className="LoaderOverlayText">{this.props.loaderData.loadingText}</div>
+              }
           </div>
         </div>
       );

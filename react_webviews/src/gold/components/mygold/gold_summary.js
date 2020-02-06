@@ -5,14 +5,13 @@ import qs from 'qs';
 // import Input from '../../../common/ui/Input';
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import { inrFormatDecimal } from 'utils/validators';
+import { inrFormatDecimal, storageService } from 'utils/validators';
 import safegold_logo from 'assets/safegold_logo_60x60.png';
 import arrow from 'assets/arrow.png';
 import Dialog, {
   DialogActions,
   DialogContent,
-  DialogContentText,
-  DialogTitle
+  DialogContentText
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import toast from '../../../common/ui/Toast';
@@ -30,14 +29,15 @@ import goldOfferImageMyway3 from 'assets/gold_offer_myway3.jpg';
 
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import PlaceBuyOrder from '../ui_components/place_buy_order';
 
+import {calculate_gold_amount_buy, calculate_gold_wt_buy, setBuyDataAfterUpdate} from '../../constants';
 
 class GoldSummary extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
-      openResponseDialog: false,
       openPopup: false,
       popupText: '',
       apiError: '',
@@ -113,6 +113,12 @@ class GoldSummary extends Component {
     })
   }
 
+  updateParent(key, value) {
+    this.setState({
+      [key]: value
+    })
+  }
+
   async componentDidMount() {
     try {
 
@@ -121,29 +127,21 @@ class GoldSummary extends Component {
         let result = res3.pfwresponse.result;
         let goldBuyInfo = result.buy_info;
         var currentDate = new Date();
-        // var validityDate = new Date(goldBuyInfo.rate_validity);
-        // var validityDate = new Date(result.buy_info.rate_validity.replace(/-/g, '/'));
         let timeAvailable = ((goldBuyInfo.rate_validity - currentDate.getTime()) / 1000 - 330 * 60);
 
-        let amount = '', weight = '';
-        if (window.localStorage.getItem('buyAmountRegister')) {
-          amount = window.localStorage.getItem('buyAmountRegister');
-          window.localStorage.setItem('buyAmountRegister', '');
-          weight = this.calculate_gold_wt(goldBuyInfo.plutus_rate,
-            goldBuyInfo.applicable_tax, amount);
-          this.setState({
-            amount: amount || '',
-            weight: weight || ''
-          })
-        }
+        let buyData = storageService().getObject('buyData');
+        buyData.goldBuyInfo = result.buy_info;
+        buyData.timeAvailable = timeAvailable;
+        storageService().setObject('buyData', buyData);
 
         this.setState({
           show_loader: false,
           goldBuyInfo: result.buy_info,
-          plutusRateID: result.buy_info.plutus_rate_id,
           timeAvailable: timeAvailable,
-          minAmount: goldBuyInfo.minimum_buy_price
+          minAmount: goldBuyInfo.minimum_buy_price,
+          buyData: buyData
         });
+
         if (timeAvailable >= 0 && goldBuyInfo.plutus_rate) {
           let intervalId = setInterval(this.countdown, 1000);
           this.setState({
@@ -233,20 +231,6 @@ class GoldSummary extends Component {
     window.localStorage.setItem('timeAvailable', timeAvailable);
   }
 
-  calculate_gold_wt(current_gold_price, tax, buy_price) {
-    tax = 1.0 + parseFloat(tax) / 100.0
-    var current_gold_price_with_tax = (current_gold_price * tax).toFixed(2);
-    var gold_wt = (buy_price / current_gold_price_with_tax).toFixed(4);
-    return gold_wt
-  }
-
-  calculate_gold_amount(current_gold_price, tax, weight) {
-    tax = 1.0 + parseFloat(tax) / 100.0
-    var current_gold_price_with_tax = (current_gold_price * tax).toFixed(2)
-    var gold_amount = (weight * current_gold_price_with_tax).toFixed(2);
-    return gold_amount
-  }
-
   sendEvents(user_action) {
     let eventObj = {
       "event_name": 'GOLD',
@@ -290,101 +274,26 @@ class GoldSummary extends Component {
 
     if (this.state.userInfo.mobile_verified === false ||
       this.state.isRegistered === false) {
-      window.localStorage.setItem('buyAmountRegister', this.state.amount);
       this.navigate(this.state.provider + '/gold-register');
       return;
     }
 
-    var options = {
-      plutus_rate_id: this.state.goldBuyInfo.plutus_rate_id,
-      buy_price: parseFloat(this.state.amount)
-    }
 
+    // place buy order
     this.setState({
-      show_loader: true
-    });
-
-    try {
-
-      const res = await Api.post('/api/gold/user/buy/verify', options);
-
-      if (res.pfwresponse.status_code === 200 &&
-        res.pfwresponse.result.payment_details.plutus_rate === this.state.goldBuyInfo.plutus_rate) {
-        let result = res.pfwresponse.result;
-        var buyData = result.payment_details;
-        window.localStorage.setItem('buyData', JSON.stringify(buyData));
-        window.localStorage.setItem('timeAvailable', this.state.timeAvailable);
-        window.localStorage.setItem('base_url', this.state.params.base_url);
-        this.setState({
-          show_loader: false,
-        });
-        this.navigate(this.state.provider + '/buy-gold-order');
-        return;
-      } else if (res.pfwresponse.result.is_gold_rate_changed) {
-        let new_rate = res.pfwresponse.result.new_rate;
-        let amountUpdated, weightUpdated;
-        if (this.state.isAmount) {
-          amountUpdated = this.state.amount;
-          weightUpdated = this.calculate_gold_wt(new_rate.plutus_rate,
-            new_rate.applicable_tax, this.state.amount);
-        } else {
-          weightUpdated = this.state.weight;
-          amountUpdated = this.calculate_gold_amount(new_rate.plutus_rate,
-            new_rate.applicable_tax, this.state.weight);
-        }
-        this.setState({
-          show_loader: false,
-          amountUpdated: amountUpdated,
-          weightUpdated: weightUpdated,
-          new_rate: new_rate,
-          openPopup: true
-        });
-      } else {
-        this.setState({
-          show_loader: false
-        });
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-          'Something went wrong', 'error');
-      }
-    } catch (err) {
-      this.setState({
-        show_loader: false
-      });
-      toast('Something went wrong', 'error');
-    }
+      proceedForOrder: true
+    })
 
   }
 
 
   handleClose = () => {
     this.setState({
-      openResponseDialog: false,
       openPopup: false,
       openDialogOffer: false
     });
   }
 
-  renderResponseDialog = () => {
-    return (
-      <Dialog
-        open={this.state.openResponseDialog}
-        onClose={this.handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {this.state.apiError}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleClose} color="default" autoFocus>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  }
 
   openInBrowser(url) {
     nativeCallback({
@@ -458,63 +367,6 @@ class GoldSummary extends Component {
 
   }
 
-  handlePopup = () => {
-    this.setState({
-      openPopup: false
-    });
-
-    if (this.state.isAmount) {
-      this.buyGold(this.state.new_rate.plutus_rate_id, this.state.amount);
-    } else {
-      this.buyGold(this.state.new_rate.plutus_rate_id, this.state.amountUpdated);
-    }
-  }
-
-  renderPopup = () => {
-    return (
-      <Dialog
-        fullScreen={false}
-        open={this.state.openPopup}
-        onClose={this.handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-
-        {this.state.isAmount &&
-          <div>
-            <DialogTitle id="form-dialog-title">Confirm Updated Price</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                Your checkout value has been updated to
-                Rs.{this.state.amountUpdated} ({this.state.weightUpdated}gm) as the
-                previous gold price has expired.
-              </DialogContentText>
-            </DialogContent>
-          </div>
-        }
-        {this.state.isWeight &&
-          <div>
-            <DialogTitle id="form-dialog-title">Confirm Updated Weight</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                Your checkout value has been updated to
-              {this.state.weightUpdated}gm (Rs.{this.state.amountUpdated}) as the
-              previous gold price has expired.
-              </DialogContentText>
-            </DialogContent>
-          </div>
-        }
-        <DialogActions>
-          <Button onClick={this.handleClose} color="default">
-            CANCEL
-          </Button>
-          <Button onClick={this.handlePopup} color="default" autoFocus>
-            CONTINUE
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  }
-
   navigate = (pathname) => {
     if (pathname === '/gold/my-gold-locker') {
       this.sendEvents('gold-locker');
@@ -531,16 +383,18 @@ class GoldSummary extends Component {
     let isWeight = this.state.isWeight;
     let isAmount = this.state.isAmount;
     let amount = '', weight = '';
+    let inputData = {};
+
     if (event.target.name === 'amount' && event.target.value) {
       amount = Math.floor(event.target.value);
-      weight = this.calculate_gold_wt(this.state.goldBuyInfo.plutus_rate,
-        this.state.goldBuyInfo.applicable_tax, amount);
+      inputData = calculate_gold_wt_buy(this.state.buyData, amount);
+      weight = inputData.weight;
       isWeight = false;
       isAmount = true;
     } else if (event.target.name === 'weight' && event.target.value) {
       weight = event.target.value;
-      amount = this.calculate_gold_amount(this.state.goldBuyInfo.plutus_rate,
-        this.state.goldBuyInfo.applicable_tax, weight);
+      inputData = calculate_gold_amount_buy(this.state.buyData, weight);
+      amount = inputData.amount;
       isWeight = true;
       isAmount = false;
     } else {
@@ -566,13 +420,25 @@ class GoldSummary extends Component {
       amountError = true;
     }
 
+
+    // will consume for buy price and buy order;
+    let buyData = storageService().getObject('buyData');
+    buyData.amount_selected = amount;
+    buyData.weight_selected = weight;
+    buyData.inputMode = isAmount ? 'amount' : 'weight';
+    storageService().setObject('buyData', buyData);
+
+    setBuyDataAfterUpdate(inputData);
+
+    console.log(buyData);
     this.setState({
       isWeight: isWeight,
       isAmount: isAmount,
       amountError: amountError,
       weightError: weightError,
       amount: amount,
-      weight: weight
+      weight: weight,
+      buyData: buyData
     })
   };
 
@@ -692,9 +558,10 @@ class GoldSummary extends Component {
             </div>}
           </div>
         </div>
-        {this.renderResponseDialog()}
         {this.renderGoldOfferDialog()}
-        {this.renderPopup()}
+        {this.state.proceedForOrder && 
+          <PlaceBuyOrder parent={this} />
+        }
       </Container>
     );
   }

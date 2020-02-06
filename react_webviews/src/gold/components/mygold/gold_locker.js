@@ -52,7 +52,8 @@ class GoldSummary extends Component {
       value: 0,
       error: false,
       errorMessage: '',
-      countdownInterval: null
+      countdownInterval: null,
+      provider: 'safegold'
     }
     this.renderDeliveryProducts = this.renderDeliveryProducts.bind(this);
   }
