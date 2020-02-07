@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import ic_live_green from 'assets/ic_live_green.svg';
 import SVG from 'react-inlinesvg';
-import { inrFormatDecimal } from 'utils/validators';
+import { inrFormatDecimal2 } from 'utils/validators';
 import {getConfig} from 'utils/functions';
 
 class GoldLivePriceClass extends Component {
@@ -28,7 +28,7 @@ class GoldLivePriceClass extends Component {
                     />}
                 </div>
                 <div className="mid-text">
-        Live price: {inrFormatDecimal(this.props.parent.state.live_price)} 
+        Live price: {inrFormatDecimal2(this.props.parent.state.live_price)} 
         {(!this.props.parent.state.live_price ? '-' : '')}/gm
                 </div>
                 <div className="right-text" 

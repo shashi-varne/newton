@@ -8,6 +8,17 @@ import { WithProviderLayout } from '../../common/footer/layout';
 import ReactHtmlParser from 'react-html-parser'; 
 import {getConfig} from 'utils/functions';
 
+const mapper = {
+    'buy': {
+        'expired_title' : 'buying',
+        'update_title': 'Buying'
+    },
+    'sell': {
+        'expired_title' : 'selling',
+        'update_title': 'Selling'
+    }
+}
+
 class PriceChangeClass extends Component {
     constructor(props) {
         super(props);
@@ -55,20 +66,20 @@ class PriceChangeClass extends Component {
               <div className="gold-dialog" id="alert-dialog-description">
                 {this.props.parent.state.timeAvailable <=0 && <div>
                     <div style={{color: '#0A1C32', fontSize:16, fontWeight:800}}>
-                    Oops! buying price has changed
+                    Oops! {mapper[this.props.parent.state.orderType].expired_title} price has changed
                     </div>
                     <div>
                         <img style={{width: '100%', margin: '10px 0 20px 0'}} 
                         src={ require(`assets/${this.state.productName}/ils_timeout.svg`)} alt="Gold" />
                     </div>
                     <div style={{color: '#767E86', fontSize:14, fontWeight:400,margin: '0 0 20px 0'}}>
-                        Looks like you took too long… Please refresh to get the <b>latest buy price</b>
+                        Looks like you took too long… Please refresh to get the <b>latest {this.props.parent.state.orderType} price</b>
                     </div>
                 </div>}
 
                 {this.props.parent.state.timeAvailable >0 && <div>
                     <div style={{color: '#0A1C32', fontSize:16, fontWeight:800}}>
-                    Buying price has been updated!
+                    {mapper[this.props.parent.state.orderType].update_title} price has been updated!
                     </div>
                 </div>}
 

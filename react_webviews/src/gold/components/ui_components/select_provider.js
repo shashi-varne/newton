@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 
 import completed_step from "assets/completed_step.svg";
 import Container from '../../common/Container';
-import safegold_logo from 'assets/safegold_logo_60x60.png';
 import { getConfig } from 'utils/functions';
 import { getUrlParams } from 'utils/validators';
-import {stateMapper, default_provider} from  '../../constants';
+import {stateMapper, default_provider, gold_providers_array} from  '../../constants';
 import {storageService, getIndexArray} from "utils/validators";
 
 class GoldSelectProviderClass extends Component {
@@ -20,20 +19,7 @@ class GoldSelectProviderClass extends Component {
     }
 
     componentWillMount() {
-        let providers = [
-            {
-                key: 'mmtc',
-                title: 'MMTC',
-                subtitle: '24 Karat | 99.9% pure',
-                icon: safegold_logo
-            },
-            {
-                key: 'safegold',
-                title: 'Safegold',
-                subtitle: '24 Karat | 99.5% pure',
-                icon: safegold_logo
-            }
-        ];
+        let providers = gold_providers_array;
 
         let selectedIndex = getIndexArray(providers, this.state.provider, 'key');
         this.setState({
@@ -59,8 +45,9 @@ class GoldSelectProviderClass extends Component {
             >
                 <div className="left-icon">
                     <img style={{ width: '40px', margin: '0 7px 0 0' }}
-                        src={props.icon} alt="info"
+                        src={require(`assets/${props.logo}`)} alt="Gold"
                     />
+
                 </div>
                 <div className="select-bank" style={{ padding: '3px 0 0 50px', margin: 0 }}>
                     <div >

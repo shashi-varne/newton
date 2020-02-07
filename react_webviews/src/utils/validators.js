@@ -202,7 +202,8 @@ export function formatAmount(amount) {
 }
 
 export function inrFormatDecimal(number, toFixed) {
-  if (number) {
+
+  if (number || number === 0) {
     number = parseFloat(number);
     number = number.toFixed(toFixed || 0);
     number = number.toString();

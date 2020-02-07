@@ -53,7 +53,9 @@ class GoldBuyHome extends Component {
       openPriceChangedDialog: false,
       fetchLivePrice: true,
       provider: storageService().get('gold_provider') || default_provider,
-      gold_providers: gold_providers
+      gold_providers: gold_providers,
+      redirect_state: 'buy-home',
+      orderType: 'buy'
     }
 
     this.refreshData = this.refreshData.bind(this);
@@ -65,8 +67,10 @@ class GoldBuyHome extends Component {
   }
 
   countdown = () => {
-    let timeAvailable = this.state.buyData.timeAvailable;
-    let buyData = this.state.buyData;
+
+    let buyData = storageService().getObject('buyData');
+    
+    let timeAvailable = buyData.timeAvailable;
     if (timeAvailable <= 0) {
       this.setState({
         minutes: 0,
@@ -332,14 +336,9 @@ class GoldBuyHome extends Component {
       this.sendEvents('gold-locker');
     }
 
-    let searchParams  = getConfig().searchParams;
-    
-    if(pathname === 'providers') {
-      searchParams+= '&redirect_state=buy-home';
-    }
     this.props.history.push({
       pathname: pathname,
-      search: searchParams
+      search: getConfig().searchParams
     });
   }
 
@@ -424,32 +423,7 @@ class GoldBuyHome extends Component {
         buttonTitle="Proceed"
         events={this.sendEvents('just_set_events')}
       >
-        {/* <div className="gold-provider-filter">
-            <div className="tile1">
-              <div className="tile1-left">
-                  Buy gold:
-                  <span onClick={() => this.navigate('providers', {redirect_state: 'buy-home'})} 
-                    style={{color: getConfig().primary}}> {this.state.gold_providers[this.state.provider].title}
-                    <SVG
-                      className="arrow-img"
-                      preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
-                      src={down_arrow}
-                    />
-                  </span>
-              </div>
-              <div className="tile1-right">
-                <img src={ require(`assets/${this.state.gold_providers[this.state.provider].logo}`)} alt="Gold" />
-              </div>
-            </div>
-            <div className="tile2">
-              <div className="tile2-left">
-                  24K | 99.99% pure
-              </div>
-              <div className="tile2-right">
-                {this.state.goldInfo.gold_balance || 0} gms in {this.state.gold_providers[this.state.provider].title}
-              </div>
-            </div>
-        </div> */}
+        
         <GoldProviderFilter parent={this} />
         
         <div className="gold-buy-home" id="goldSection">

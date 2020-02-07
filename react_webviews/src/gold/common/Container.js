@@ -27,11 +27,13 @@ class Container extends Component {
       popupText: "",
       callbackType: "",
       loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom,
-      inPageTitle: true
+      inPageTitle: false,
+      hide_header_title: true
     };
   }
 
   componentDidMount() {
+    this.check_hide_header_title(true);
     setHeights({ 'header': true, 'container': false });
     let that = this;
     if (getConfig().generic_callback) {
@@ -226,8 +228,29 @@ class Container extends Component {
     return height;
   }
 
-  onScroll = () => {
+  check_hide_header_title(inPageTitle) {
+    let hide_header_title;
     let restrict_in_page_titles = ['provider-filter'];
+    if((inPageTitle || this.state.inPageTitle) && restrict_in_page_titles.indexOf(this.props.headerType) !== -1) {
+      hide_header_title = true;
+    }
+
+    this.setState({
+      hide_header_title: hide_header_title || false
+    })
+
+    if(this.props.updateChild) {
+      this.props.updateChild('hide_header_title', hide_header_title);
+    }
+
+    if(inPageTitle) {
+      this.setState({
+        inPageTitle: inPageTitle
+      })
+    }
+  }
+
+  onScroll = () => {
     let inPageTitle = this.state.inPageTitle;
     if (this.getHeightFromTop() >= 56) {
       //show up
@@ -238,20 +261,12 @@ class Container extends Component {
       inPageTitle = false;
     }
 
-    let hide_header_title;
-    if(inPageTitle && restrict_in_page_titles.indexOf(this.props.headerType) !== -1) {
-      hide_header_title = true;
-    }
+    this.check_hide_header_title();
 
     this.setState({
-      inPageTitle: inPageTitle,
-      hide_header_title: hide_header_title || false
+      inPageTitle: inPageTitle
     })
 
-    if(this.props.updateChild) {
-      this.props.updateChild('hide_header_title', hide_header_title);
-    }
-    
   };
 
   render() {

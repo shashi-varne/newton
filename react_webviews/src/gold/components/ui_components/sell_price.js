@@ -34,8 +34,8 @@ class SellPriceClass extends Component {
                 let timeAvailable = ((goldSellInfo.rate_validity - currentDate.getTime()) / 1000 - 330 * 60);
 
                 let sellData = storageService().getObject('sellData');
-                sellData.goldBuyInfo = result.buy_info;
-                sellData.plutusRateID = result.buy_info.plutus_rate_id;
+                sellData.goldSellInfo = result.sell_info;
+                sellData.plutusRateID = result.sell_info.plutus_rate_id;
                 sellData.timeAvailable = timeAvailable;
                 storageService().setObject('sellData', sellData);
 
@@ -45,8 +45,6 @@ class SellPriceClass extends Component {
                     show_loader: false
                 })
 
-                let goldInfo = this.state.goldInfo;
-                goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
                 
             } else {
                 this.setState({
@@ -56,6 +54,7 @@ class SellPriceClass extends Component {
             }
 
         } catch (err) {
+            console.log(err);
             this.setState({
                 show_loader: false
             });

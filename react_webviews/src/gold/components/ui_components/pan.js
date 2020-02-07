@@ -32,7 +32,8 @@ const commonMapper = {
             'cta2': 'Buy gold worth',
             'name': 'Buy'
         },
-        'name': 'Buy'
+        'name': 'Buy',
+        'next_state': ''
     },
     'sell': {
         'editable': {
@@ -49,7 +50,8 @@ const commonMapper = {
             'cta2': 'Sell gold worth',
             'name': 'Sell'
         },
-        'name': 'Sell'
+        'name': 'Sell',
+        'next_state': 'sell-select-bank'
     }
 
 }
@@ -62,7 +64,7 @@ class GoldPanDataClass extends Component {
             pan_number: "",
             pan_number_error: '',
             openConfirmDialog: false,
-            openPriceChangedDialog: true,
+            openPriceChangedDialog: false,
             provider: this.props.parent.props.match.params.provider,
             orderType: this.props.parent.state.orderType,
             pan_editable_status: 'editable'
@@ -76,6 +78,7 @@ class GoldPanDataClass extends Component {
         this.setState({
             commonMapper: commonMapper[this.state.orderType][this.state.pan_editable_status],
             orderName: commonMapper[this.state.orderType].name,
+            next_state: commonMapper[this.state.orderType].next_state,
             storageKey: this.state.orderType === 'buy' ? 'buyData' : 'sellData'
         })
     }
@@ -88,7 +91,6 @@ class GoldPanDataClass extends Component {
 
   countdown = () => {
     let timeAvailable = this.state.orderData.timeAvailable;
-    console.log('timeAvailable :' + timeAvailable);
     let orderData = this.state.orderData;
     if (timeAvailable <= 0) {
       this.setState({
@@ -156,7 +158,6 @@ class GoldPanDataClass extends Component {
         storageService().remove('forceBackState');
 
         let orderData = storageService().getObject(this.state.storageKey);
-        console.log(orderData);
         this.setState({
           orderData: orderData,
           live_price: this.state.orderType === 'buy' ?  orderData.goldBuyInfo.plutus_rate : orderData.goldSellInfo.plutus_rate,
@@ -301,6 +302,9 @@ class GoldPanDataClass extends Component {
 
         this.handleClose();
 
+        // this.navigate(this.state.next_state);
+        // return;
+
         if (!validateEmpty(this.state.pan_number)) {
             this.setState({
                 pan_number_error: 'PAN number cannot be empty'
@@ -329,9 +333,8 @@ class GoldPanDataClass extends Component {
                     show_loader: false
                 });
 
-
                 if (res.pfwresponse.status_code === 200) {
-                    //   next step
+                    this.navigate(this.state.next_state);
                 } else {
 
                     toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||

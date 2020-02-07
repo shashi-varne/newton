@@ -11,14 +11,12 @@ class GoldProviderFilterClass extends Component {
         this.state = {
             providerInfo: gold_providers[this.props.parent.state.provider]
         }
-
     }
 
-
     navigate = (pathname) => {
-        this.props.history.push({
+        this.props.parent.props.history.push({
             pathname: pathname,
-            search: getConfig().searchParams
+            search: getConfig().searchParams + '&redirect_state=' + this.props.parent.state.redirect_state
         });
     }
     renderUi() {
@@ -27,7 +25,7 @@ class GoldProviderFilterClass extends Component {
             className={`gold-provider-filter ${this.props.parent.state.hide_header_title ? 'slide-fade-show' : 'slide-fade'}`}>
                 <div className="tile1">
                     <div className="tile1-left">
-                        Buy gold:
+                        <span style={{textTransform: 'capitalize'}}>{this.props.parent.state.orderType}</span> gold:
                         <span onClick={() => this.navigate('providers', { redirect_state: 'buy-home' })}
                             style={{ color: getConfig().primary }}> {this.state.providerInfo.title}
                             <SVG
@@ -45,9 +43,10 @@ class GoldProviderFilterClass extends Component {
                     <div className="tile2-left">
                         24K | 99.99% pure
                     </div>
-                    <div className="tile2-right">
+                    {this.props.parent.state.orderType === 'sell' && 
+                     <div className="tile2-right">
                         {this.props.parent.state.goldInfo.gold_balance || 0} gms in {this.state.providerInfo.title}
-                    </div>
+                    </div>}
                 </div>
             </div>
         )

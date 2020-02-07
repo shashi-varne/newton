@@ -66,6 +66,34 @@ export function calculate_gold_amount_buy(buyData, weight) {
     return data;
 }
 
+export function calculate_gold_wt_sell(sellData, amount) {
+    
+
+    let weight = ((amount) / (sellData.goldSellInfo.plutus_rate)).toFixed(4);
+    let data = {
+        'weight': weight,
+        'amount': amount,
+        'gst_amount': 0,
+        'total_amount': amount,
+        'tax': 0,
+        'base_amount': amount
+    }
+    return data;
+}
+
+export function calculate_gold_amount_sell(sellData, weight) {
+    let amount = ((sellData.goldSellInfo.plutus_rate) * (weight)).toFixed(2);
+    let data = {
+        'weight': sellData.weight,
+        'amount': amount,
+        'gst_amount': 0,
+        'total_amount': amount,
+        'tax': 0,
+        'base_amount': amount
+    }
+    return data;
+}
+
 export function getUpdatedBuyData(new_rate) {
 
     let buyData = storageService().getObject('buyData');
@@ -100,6 +128,15 @@ export function setBuyDataAfterUpdate(inputData) {
     buyData.base_amount = inputData.base_amount
     buyData.tax = inputData.tax;
     storageService().setObject('buyData', buyData);
+}
+
+export function setSellDataAfterUpdate(inputData) {
+    let sellData = storageService().getObject('sellData');
+    sellData.gst_amount = inputData.gst_amount;
+    sellData.total_amount = inputData.total_amount;
+    sellData.base_amount = inputData.base_amount
+    sellData.tax = inputData.tax;
+    storageService().setObject('sellData', sellData);
 }
 
 export const default_provider = 'mmtc';

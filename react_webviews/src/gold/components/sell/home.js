@@ -4,18 +4,22 @@ import qs from 'qs';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
-import { inrFormatDecimal } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
-import { default_provider} from  '../../constants';
+import { default_provider, gold_providers, stateMapper, setSellDataAfterUpdate,
+  calculate_gold_wt_sell, calculate_gold_amount_sell} from  '../../constants';
 import {storageService} from "utils/validators";
+import GoldProviderFilter from '../ui_components/provider_filter';
+import GoldLivePrice from '../ui_components/live_price';
+import { inrFormatDecimal2 } from 'utils/validators';
+import RefreshSellPrice from '../ui_components/sell_price';
+import PriceChangeDialog from '../ui_components/price_change_dialog';
 
 class GoldSellHome extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
-      openPopup: false,
       popupText: '',
       apiError: '',
       goldInfo: {},
@@ -36,12 +40,155 @@ class GoldSellHome extends Component {
       error: false,
       errorMessage: '',
       countdownInterval: null,
-      provider: storageService().get('gold_provider') || default_provider
+      provider: storageService().get('gold_provider') || default_provider,
+      gold_providers: gold_providers,
+      orderType: "sell",
+      fetchLivePrice: true,
+      openPriceChangedDialog: false
+    }
+
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.countdownInterval);
+  }
+
+  countdown = () => {
+
+    let sellData = storageService().getObject('sellData');
+    if(!this.state.sellData) {
+      return;
+    }
+    let timeAvailable = sellData.timeAvailable;
+    
+    if (timeAvailable <= 0 || !timeAvailable) {
+      this.setState({
+        minutes: 0,
+        seconds: 0,
+        openPriceChangedDialog: true,
+        live_price: '',
+        timeAvailable: timeAvailable || 0
+      })
+
+      storageService().set('forceBackState', stateMapper['sell-home']);
+
+      return;
+    }
+
+    let minutes = Math.floor(timeAvailable / 60);
+    let seconds = Math.floor(timeAvailable - minutes * 60);
+    timeAvailable--;
+    // timeAvailable = timeAvailable -100;
+    sellData.timeAvailable = timeAvailable;
+
+    this.setState({
+      timeAvailable: timeAvailable,
+      minutes: minutes,
+      seconds: seconds,
+      sellData: sellData
+    })
+    
+    storageService().setObject('sellData', sellData);
+   
+  };
+
+
+  startTimer(sellData) {
+    if (sellData) {
+      let intervalId = setInterval(this.countdown, 1000);
+      this.setState({
+        countdownInterval: intervalId,
+        show_loader: false
+      });
+    }
+  }
+
+  onload() {
+
+    storageService().remove('forceBackState');
+
+    let sellData = storageService().getObject('sellData');
+    this.setState({
+      sellData: sellData,
+      live_price: sellData.goldSellInfo.plutus_rate,
+      openRefreshModule: false,
+      timeAvailable: sellData.timeAvailable || 0
+    })
+    this.startTimer(sellData);
+
+
+    let priceChangeDialogData = {
+      buttonData: {
+        leftTitle: 'To sell gold worth',
+        leftSubtitle: inrFormatDecimal2(sellData.amount_selected),
+        leftArrow: 'down',
+        provider: 'safegold'
+      },
+      buttonTitle: "REFRESH",
+      content1: [
+        { 'name': 'Sell price for <b>' + sellData.weight_selected + '</b> gms', 'value': inrFormatDecimal2(sellData.base_amount) },
+        { 'name': 'GST', 'value': inrFormatDecimal2(sellData.gst_amount) }
+      ],
+      content2: [
+        { 'name': 'Total', 'value': inrFormatDecimal2(sellData.total_amount) }
+      ]
+    }
+
+
+
+    this.setState({
+      show_loader: false,
+      goldSellInfo: sellData.goldSellInfo,
+      timeAvailable: sellData.timeAvailable,
+      sellData: sellData,
+      priceChangeDialogData: priceChangeDialogData
+    });
+
+    if (this.state.sellData) {
+      let intervalId = setInterval(this.countdown, 1000);
+      this.setState({
+        countdownInterval: intervalId
+      });
+    }
+
+  }
+
+  updateParent(key, value) {
+    this.setState({
+      [key]: value
+    })
+  }
+
+  refreshData = () => {
+
+    if(this.state.timeAvailable > 0) {
+      this.handleClick();
+    } else {
+      this.setState({
+        show_loader: true,
+        openRefreshModule: true
+      })
+    }
+    
+  }
+
+  handleClose = () => {
+    this.setState({
+      openConfirmDialog: false,
+      openDialogOffer: false
+    });
+
+    if(this.state.openPriceChangedDialog && this.state.timeAvailable >0) {
+      this.setState({
+        openPriceChangedDialog: false
+      })
     }
   }
 
 
+
   async componentDidMount() {
+
     this.setState({
       error: false,
       errorMessage: ''
@@ -140,48 +287,7 @@ class GoldSellHome extends Component {
     });
   }
 
-  componentWillUnmount() {
-    clearInterval(this.state.countdownInterval);
-  }
-
-  countdown = () => {
-    let timeAvailable = this.state.timeAvailable;
-    if (timeAvailable <= 0) {
-      this.setState({
-        minutes: '',
-        seconds: ''
-      })
-      window.location.reload();
-      return;
-    }
-
-    let minutes = Math.floor(timeAvailable / 60);
-    let seconds = Math.floor(timeAvailable - minutes * 60);
-    timeAvailable--;
-
-    this.setState({
-      timeAvailable: timeAvailable,
-      minutes: minutes,
-      seconds: seconds
-    });
-    window.localStorage.setItem('timeAvailableSell', timeAvailable);
-  };
-
-  calculate_gold_wt(current_gold_price, tax, buy_price) {
-    tax = 1.0 + parseFloat(tax) / 100.0
-    var current_gold_price_with_tax = (current_gold_price * tax).toFixed(2);
-    var gold_wt = (buy_price / current_gold_price_with_tax).toFixed(4);
-    return gold_wt
-
-  }
-
-  calculate_gold_amount(current_gold_price, tax, weight) {
-    tax = 1.0 + parseFloat(tax) / 100.0
-    var current_gold_price_with_tax = (current_gold_price * tax).toFixed(2)
-    var gold_amount = (weight * current_gold_price_with_tax).toFixed(2);
-    return gold_amount
-  }
-
+ 
   sendEvents(user_action, product_name) {
     let eventObj = {
       "event_name": 'GOLD',
@@ -202,8 +308,9 @@ class GoldSellHome extends Component {
     }
   }
 
-  sellGold = async () => {
+  handleClick = async () => {
 
+    this.handleClose();
     this.sendEvents('next');
 
     let amount = this.state.amount;
@@ -229,23 +336,12 @@ class GoldSellHome extends Component {
       return;
     }
 
-    let goldSellInfo = this.state.goldSellInfo;
-    goldSellInfo.amount = amount;
-    goldSellInfo.weight = weight;
-    goldSellInfo.isAmount = this.state.isAmount;
+    if(!this.state.userInfo.pan_verified) {
+      this.navigate(this.state.provider + '/sell-pan');
+    } else {
+      this.navigate(this.state.provider + '/sell-select-bank');
+    }
 
-    this.setState({
-      show_loader: true,
-      goldSellInfo: goldSellInfo
-    });
-
-    window.localStorage.setItem('timeAvailableSell', this.state.timeAvailable);
-    window.localStorage.setItem('sellData', JSON.stringify(goldSellInfo));
-
-    this.setState({
-      show_loader: false
-    });
-    this.navigate(this.state.provider + '/bank-details');
   }
 
   selectGoldProduct(index) {
@@ -254,13 +350,6 @@ class GoldSellHome extends Component {
     window.localStorage.setItem('goldProduct', JSON.stringify(selectedProduct));
     this.navigate(this.state.provider + '/select-gold-product');
   };
-
-
-  handleClose = () => {
-    this.setState({
-      openPopup: false
-    });
-  }
 
   navigate = (pathname) => {
     this.props.history.push({
@@ -277,15 +366,21 @@ class GoldSellHome extends Component {
     let isWeight = this.state.isWeight;
     let isAmount = this.state.isAmount;
     let amount = '', weight = '';
+    let inputData = {};
+
     if (event.target.name === 'amount' && event.target.value) {
       amount = Math.floor(event.target.value);
       isWeight = false;
       isAmount = true;
-      weight = ((amount) / (this.state.goldSellInfo.plutus_rate)).toFixed(4);
+      inputData = calculate_gold_wt_sell(this.state.sellData, amount);
+      weight = inputData.weight;
 
     } else if (event.target.name === 'weight' && event.target.value) {
       weight = event.target.value;
-      amount = ((this.state.goldSellInfo.plutus_rate) * (weight)).toFixed(2);
+
+      inputData = calculate_gold_amount_sell(this.state.sellData, weight);
+      amount = inputData.amount;
+      
       isWeight = true;
       isAmount = false;
     } else {
@@ -313,58 +408,49 @@ class GoldSellHome extends Component {
       amountError = true;
     }
 
+    // will consume for buy price and buy order;
+    let sellData = storageService().getObject('sellData');
+    sellData.amount_selected = amount;
+    sellData.weight_selected = weight;
+    sellData.inputMode = isAmount ? 'amount' : 'weight';
+    storageService().setObject('sellData', sellData);
+
+    setSellDataAfterUpdate(inputData);
+
+
     this.setState({
       isWeight: isWeight,
       isAmount: isAmount,
       amountError: amountError,
       weightError: weightError,
       amount: amount,
-      weight: weight
+      weight: weight,
+      sellData: sellData
     })
   };
 
+  updateChild = (key, value) => {
+    this.setState({
+      [key] : value
+    })
+  }
 
   render() {
 
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="My 24K Safegold Locker"
-        edit={this.props.edit}
         buttonTitle="Proceed"
-        handleClick={this.sellGold}
-        noPadding={true}
-        disable={!this.state.isRegistered}
-        noFooter={this.state.value === 1}
+        headerType="provider-filter"
+        handleClick={this.handleClick}
+        title={'Sell gold: ' + this.state.gold_providers[this.state.provider].title}
         events={this.sendEvents('just_set_events')}
+        updateChild={this.updateChild}
       >
-        {/* <div className="FlexRow locker-head">
-          <div className="FlexRow block1">
-            <img alt="Gold" className="img-mygold" src={safegold_logo} width="35" style={{ marginRight: 10 }} />
-            <div>
-              <div className="grey-color" style={{ marginBottom: 5 }}>Gold Quantity</div>
-              <div>{this.state.goldInfo.gold_balance || 0} gm</div>
-            </div>
-          </div>
-          <div className="block2">
-            <div className="grey-color" style={{ marginBottom: 5 }}>Gold Value</div>
-            <div>{inrFormatDecimal(this.state.goldInfo.sell_value || 0)}</div>
-          </div>
-        </div> */}
-       
-        <div className="page home container-padding" id="goldSection">
+        <GoldProviderFilter parent={this} />
+        <GoldLivePrice parent={this} />
+        <div className="sell-home" id="goldSection">
           <div className="page-body-gold" id="goldInput">
-            <div className="buy-info1">
-              <div className="FlexRow">
-                <span className="buy-info2a">Current Sell Price</span>
-                <span className="buy-info2b">Price valid for
-                  &nbsp;<span className="timer-green">{this.state.minutes}:{this.state.seconds}</span>
-                </span>
-              </div>
-              <div className="buy-info3">
-                {inrFormatDecimal(this.state.goldSellInfo.plutus_rate)}/gm
-              </div>
-            </div>
             <div className="buy-input">
               <div className="buy-input1">
                 Enter amount of gold you want to sell
@@ -411,6 +497,13 @@ class GoldSellHome extends Component {
             </div>
           </div>
           </div>
+
+          <PriceChangeDialog parent={this} />
+        {this.state.openRefreshModule &&
+         <RefreshSellPrice parent={this} />}
+
+        {this.state.fetchLivePrice && 
+        <RefreshSellPrice parent={this} />}
       </Container>
     );
   }
