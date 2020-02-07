@@ -7,7 +7,8 @@ import IconButton from 'material-ui/IconButton';
 import Arrow from '@material-ui/icons/ArrowBack';
 import Close from '@material-ui/icons/Close';
 
-const Header = ({ classes, title, count, total, current, goBack, edit, type, resetpage, handleReset, smallTitle, disableBack, provider, inPageTitle }) => (
+const Header = ({ classes, title, count, total, current, goBack, 
+  edit, type, resetpage, handleReset, smallTitle, disableBack, provider, inPageTitle, hide_header_title }) => (
   <AppBar position="fixed" color="primary" className={`Header transition ${classes.root} ${inPageTitle ? 'header-topbar-white' : 'header-topbar-white'}`}>
     <Toolbar>
       <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={goBack}>
@@ -16,6 +17,8 @@ const Header = ({ classes, title, count, total, current, goBack, edit, type, res
       </IconButton>
 
 
+      {!hide_header_title && 
+      <div>
       <div
         className={`${classes.flex},PageTitle main-top-title-header ${inPageTitle ? 'slide-fade' : 'slide-fade-show'}`}
       >
@@ -26,8 +29,13 @@ const Header = ({ classes, title, count, total, current, goBack, edit, type, res
         <span color="inherit">
           <span style={{ fontWeight: 600 }}>{current}</span>/<span>{total}</span>
         </span>}
+      </div>
+      }
     </Toolbar>
-    <div id="header-title-page" className={`header-title-page ${inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}>
+
+    
+   {!hide_header_title &&
+     <div id="header-title-page" className={`header-title-page ${inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}>
       <div className="header-title-page-text">
         {title}
       </div>
@@ -35,7 +43,8 @@ const Header = ({ classes, title, count, total, current, goBack, edit, type, res
         <span color="inherit" style={{ fontSize: 10 }}>
           <span style={{ fontWeight: 600 }}>{current}</span>/<span>{total}</span>
         </span>}
-    </div>
+      </div>
+    }
 
 
   </AppBar >

@@ -227,7 +227,7 @@ class Container extends Component {
   }
 
   onScroll = () => {
-
+    let restrict_in_page_titles = ['provider-filter'];
     let inPageTitle = this.state.inPageTitle;
     if (this.getHeightFromTop() >= 56) {
       //show up
@@ -238,9 +238,20 @@ class Container extends Component {
       inPageTitle = false;
     }
 
+    let hide_header_title;
+    if(inPageTitle && restrict_in_page_titles.indexOf(this.props.headerType) !== -1) {
+      hide_header_title = true;
+    }
+
     this.setState({
-      inPageTitle: inPageTitle
+      inPageTitle: inPageTitle,
+      hide_header_title: hide_header_title || false
     })
+
+    if(this.props.updateChild) {
+      this.props.updateChild('hide_header_title', hide_header_title);
+    }
+    
   };
 
   render() {
@@ -270,6 +281,7 @@ class Container extends Component {
           resetpage={this.props.resetpage}
           handleReset={this.props.handleReset}
           inPageTitle={this.state.inPageTitle}
+          hide_header_title={this.state.hide_header_title}
         />}
 
         {/* Below Header Block */}

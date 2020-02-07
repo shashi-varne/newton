@@ -22,15 +22,18 @@ import GoldLocker from "./components/mygold/gold_locker";
 import Transactions from "./components/transactions/index";
 import Payment from "./components/payment/index";
 import Otp from "./components/otp/index";
-
+import GoldSelectProvider from "./components/ui_components/select_provider";
 
 
 //buy
+
+import GoldBuyHome from "./components/buy/home";
 import GoldPanBuy from "./components/buy/pan";
 import GoldRegister from "./components/buy/register";
 import BuyOrder from "./components/buy/order";
 
 //sell
+import GoldSellHome from "./components/sell/home";
 import GoldPanSell from "./components/sell/pan";
 import GoldBank from "./components/sell/bank";
 import SellOrder from "./components/sell/order";
@@ -105,14 +108,16 @@ const Gold = props => {
           <Route path={`${url}/gold-transactions`} component={Transactions} />
           <Route path={`${url}/:provider/:orderType/payment`} component={Payment} />
           <Route path={`${url}/verify`} component={Otp} />
-          
+          <Route path={`${url}/providers`} component={GoldSelectProvider} />
 
           {/* buy */}
+          <Route path={`${url}/buy`} component={GoldBuyHome} />
           <Route path={`${url}/:provider/gold-register`} component={GoldRegister} />
           <Route path={`${url}/:provider/buy-gold-order`} component={BuyOrder} />
           <Route path={`${url}/:provider/buy-pan`} component={GoldPanBuy} />
 
           {/* sell */}
+          <Route path={`${url}/sell`} component={GoldSellHome} />
           <Route path={`${url}/:provider/bank-details`} component={GoldBank} />
           <Route path={`${url}/:provider/sell-gold-order`} component={SellOrder} />
           <Route path={`${url}/:provider/sell-pan`} component={GoldPanSell} />

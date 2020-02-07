@@ -1,0 +1,72 @@
+import React, { Component } from 'react';
+
+import { getConfig } from 'utils/functions';
+import down_arrow from 'assets/down_arrow.svg';
+import SVG from 'react-inlinesvg';
+import { gold_providers } from '../../constants';
+
+class GoldProviderFilterClass extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            providerInfo: gold_providers[this.props.parent.state.provider]
+        }
+
+    }
+
+
+    navigate = (pathname) => {
+        this.props.history.push({
+            pathname: pathname,
+            search: getConfig().searchParams
+        });
+    }
+    renderUi() {
+        return (
+            <div 
+            className={`gold-provider-filter ${this.props.parent.state.hide_header_title ? 'slide-fade-show' : 'slide-fade'}`}>
+                <div className="tile1">
+                    <div className="tile1-left">
+                        Buy gold:
+                        <span onClick={() => this.navigate('providers', { redirect_state: 'buy-home' })}
+                            style={{ color: getConfig().primary }}> {this.state.providerInfo.title}
+                            <SVG
+                                className="arrow-img"
+                                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+                                src={down_arrow}
+                            />
+                        </span>
+                    </div>
+                    <div className="tile1-right">
+                        <img src={require(`assets/${this.state.providerInfo.logo}`)} alt="Gold" />
+                    </div>
+                </div>
+                <div className="tile2">
+                    <div className="tile2-left">
+                        24K | 99.99% pure
+                    </div>
+                    <div className="tile2-right">
+                        {this.props.parent.state.goldInfo.gold_balance || 0} gms in {this.state.providerInfo.title}
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    render() {
+        return (
+            <div>
+                {this.renderUi()}
+            </div>
+        )
+    }
+
+
+}
+
+const GoldProviderFilter = (props) => (
+    <GoldProviderFilterClass
+        {...props} />
+);
+
+export default GoldProviderFilter;

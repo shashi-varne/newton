@@ -501,3 +501,17 @@ export function storageService() {
   }
 
 }
+
+export function getIndexArray(array, value, objKey) {
+  for (var i=0; i < array.length; i++) {
+    if(objKey) {
+      if(array[i][objKey] === value) {
+        return i;
+      }
+    } else {
+      if(array[i] === value) {
+        return i;
+      }
+    }
+  }
+}

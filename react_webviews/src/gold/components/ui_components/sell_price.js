@@ -5,7 +5,7 @@ import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import {storageService} from 'utils/validators';
 
-class BuyPriceClass extends Component {
+class SellPriceClass extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -26,19 +26,18 @@ class BuyPriceClass extends Component {
                 })
             }
 
-            const res = await Api.get('/api/gold/buy/currentprice');
+            const res = await Api.get('/api/gold/sell/currentprice');
             if (res.pfwresponse.status_code === 200) {
                 let result = res.pfwresponse.result;
-                let goldBuyInfo = result.buy_info;
+                let goldSellInfo = result.sell_info;
                 var currentDate = new Date();
-                let timeAvailable = ((goldBuyInfo.rate_validity - currentDate.getTime()) / 1000 - 330 * 60);
+                let timeAvailable = ((goldSellInfo.rate_validity - currentDate.getTime()) / 1000 - 330 * 60);
 
-
-                let buyData = storageService().getObject('buyData');
-                buyData.goldBuyInfo = result.buy_info;
-                buyData.plutusRateID = result.buy_info.plutus_rate_id;
-                buyData.timeAvailable = timeAvailable;
-                storageService().setObject('buyData', buyData);
+                let sellData = storageService().getObject('sellData');
+                sellData.goldBuyInfo = result.buy_info;
+                sellData.plutusRateID = result.buy_info.plutus_rate_id;
+                sellData.timeAvailable = timeAvailable;
+                storageService().setObject('sellData', sellData);
 
                 this.props.parent.onload();
                 this.props.parent.updateParent('fetchLivePrice', false);
@@ -46,6 +45,9 @@ class BuyPriceClass extends Component {
                     show_loader: false
                 })
 
+                let goldInfo = this.state.goldInfo;
+                goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
+                
             } else {
                 this.setState({
                     show_loader: false
@@ -78,9 +80,9 @@ class BuyPriceClass extends Component {
 
 }
 
-const RefreshBuyPrice = (props) => (
-    <BuyPriceClass
+const RefreshSellPrice = (props) => (
+    <SellPriceClass
         {...props} />
 );
 
-export default RefreshBuyPrice;
+export default RefreshSellPrice;

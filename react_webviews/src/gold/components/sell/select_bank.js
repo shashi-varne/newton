@@ -161,8 +161,16 @@ class SellSelectBank extends Component {
         <div className="select-bank">
           <div >
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <div className="bank-name">{props.bank_name}</div>
-
+              <div>
+                <div className="bank-name">
+                  {props.bank_name}
+                </div>
+                <div className="account-number">
+                  {props.account_number}
+                  {props.status === 'pending' && 
+                  <span> (Verification pending)</span>}
+                </div>
+              </div>
               <div style={{}}>
                 {index === 0 &&
                     <span className="primary-bank">PRIMARY</span>}
@@ -171,11 +179,7 @@ class SellSelectBank extends Component {
               </div>
               
             </div>
-            <div className="account-number">
-              {props.account_number}
-              {props.status === 'pending' && 
-              <span> (Verification pending)</span>}
-            </div>
+            
           </div>
         </div>
       </div >
@@ -219,7 +223,6 @@ class SellSelectBank extends Component {
         <GoldLivePrice parent={this} />
         <div className="gold-sell-select-bank">
           {this.state.bankData && this.state.bankData.map(this.renderBanks)}
-          {this.state.bankData && this.state.bankData.length < 3 &&
             <div
               onClick={() => this.navigate('add-address-delivery')}
               className="add-new-button">
@@ -227,7 +230,7 @@ class SellSelectBank extends Component {
                 background: '#F0F7FF', padding: '4px 9px 4px 9px',
                 color: getConfig().secondary, margin: '0 9px 0 0'
               }}>+</span> Add Bank
-              </div>}
+            </div>
         </div>
         <ConfirmDialog parent={this} />
       </Container >
