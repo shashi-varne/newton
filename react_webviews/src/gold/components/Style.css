@@ -831,3 +831,49 @@ img.gold-offer-slide-img {
   color: #767E86;
   font-size: 13px;
 }
+
+
+.gold-aw-inputs input::placeholder {  
+                  
+  text-align: right; 
+  color: #767E86;
+} 
+
+.gold-aw-inputs .gold-placeholder-right {
+  color: #767E86;
+  line-height: 40px;
+  position: absolute;
+  right: 5px;
+  top: 0px;
+  bottom: 0;
+  -moz-transition: 0.3s right ease;
+  -ms-transition: 0.3s right ease;
+  -o-transition: 0.3s right ease;
+  -webkit-transition: 0.3s right ease;
+  transition: 0.3s right ease;
+  z-index: 0;
+}
+
+.gold-aw-inputs .gold-aw-tabs {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  width: auto;
+  margin: 0 0 30px 0;
+}
+
+.gold-aw-inputs .gold-aw-tab {
+  color: #767E86;
+  border: 1px solid beige;
+  /* border-top-right-radius: 6px; */
+  padding: 10px 20px 10px 20px;
+  background: #F8F8F8;
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0 0 0 -1px;
+}
+
+.gold-aw-inputs .gold-aw-tab.selected {
+  background: white;
+  color: #3792FC;
+}

@@ -1,23 +1,23 @@
 import React, { Component } from 'react';
 import qs from 'qs';
 
-// import { FormControl } from 'material-ui/Form';
-// import Input from '../../../common/ui/Input';
+import { FormControl } from 'material-ui/Form';
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import { inrFormatDecimal, storageService } from 'utils/validators';
+import { inrFormatDecimal, storageService, formatAmountInr, formatGms } from 'utils/validators';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { default_provider, gold_providers} from  '../../constants';
+import { default_provider, gold_providers } from '../../constants';
 import PlaceBuyOrder from '../ui_components/place_buy_order';
 import PriceChangeDialog from '../ui_components/price_change_dialog';
 import RefreshBuyPrice from '../ui_components/buy_price';
 import GoldLivePrice from '../ui_components/live_price';
-import {calculate_gold_amount_buy, calculate_gold_wt_buy, setBuyDataAfterUpdate} from '../../constants';
+import { calculate_gold_amount_buy, calculate_gold_wt_buy, setBuyDataAfterUpdate } from '../../constants';
 
 import GoldProviderFilter from '../ui_components/provider_filter';
 import GoldOnloadAndTimer from '../ui_components/onload_and_timer';
+import TextField from 'material-ui/TextField';
 
 class GoldBuyHome extends Component {
   constructor(props) {
@@ -37,7 +37,7 @@ class GoldBuyHome extends Component {
       minAmount: '',
       isRegistered: false,
       isWeight: false,
-      isAmount: false,
+      isAmount: true,
       amountError: false,
       weightError: false,
       minutes: "",
@@ -77,7 +77,7 @@ class GoldBuyHome extends Component {
 
   refreshData = () => {
 
-    if(this.state.timeAvailable > 0) {
+    if (this.state.timeAvailable > 0) {
       this.handleClick();
     } else {
       this.setState({
@@ -85,7 +85,7 @@ class GoldBuyHome extends Component {
         openRefreshModule: true
       })
     }
-    
+
   }
 
   handleClose = () => {
@@ -95,7 +95,7 @@ class GoldBuyHome extends Component {
       openDialogOffer: false
     });
 
-    if(this.state.openPriceChangedDialog && this.state.timeAvailable >0) {
+    if (this.state.openPriceChangedDialog && this.state.timeAvailable > 0) {
       this.setState({
         openPriceChangedDialog: false
       })
@@ -133,7 +133,7 @@ class GoldBuyHome extends Component {
         });
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
       }
-  
+
     } catch (err) {
       console.log(err);
       this.setState({
@@ -233,6 +233,15 @@ class GoldBuyHome extends Component {
     });
   }
 
+  handleKeyChange = name => event => {
+    if (event.charCode >= 48 && event.charCode <= 57) {
+      // valid
+    } else {
+      // invalid
+      event.preventDefault();
+    }
+  }
+
   setAmountGms = () => event => {
     let amountError = false;
     let weightError = false;
@@ -242,13 +251,15 @@ class GoldBuyHome extends Component {
     let inputData = {};
 
     if (event.target.name === 'amount' && event.target.value) {
-      amount = Math.floor(event.target.value);
+      amount = (event.target.value).replace(/,/g, "");
+      amount = amount.replace(/₹/g, "");
+      // amount = Math.floor(amount);
       inputData = calculate_gold_wt_buy(this.state.buyData, amount);
       weight = inputData.weight;
       isWeight = false;
       isAmount = true;
     } else if (event.target.name === 'weight' && event.target.value) {
-      weight = event.target.value;
+      weight = (event.target.value).replace(/gms/g, "");
       inputData = calculate_gold_amount_buy(this.state.buyData, weight);
       amount = inputData.amount;
       isWeight = true;
@@ -286,6 +297,7 @@ class GoldBuyHome extends Component {
 
     setBuyDataAfterUpdate(inputData);
 
+    console.log("amount" + amount)
     this.setState({
       isWeight: isWeight,
       isAmount: isAmount,
@@ -299,7 +311,13 @@ class GoldBuyHome extends Component {
 
   updateChild = (key, value) => {
     this.setState({
-      [key] : value
+      [key]: value
+    })
+  }
+
+  chooseTabs() {
+    this.setState({
+      isAmount: !this.state.isAmount
     })
   }
 
@@ -314,73 +332,88 @@ class GoldBuyHome extends Component {
         buttonTitle="Proceed"
         events={this.sendEvents('just_set_events')}
       >
-        
+
         <GoldProviderFilter parent={this} />
-        
+
         <div className="gold-buy-home" id="goldSection">
           <GoldLivePrice parent={this} />
           <div className="page-body-gold container-padding" id="goldInput">
-            <div className="buy-input">
-              <div className="buy-input1">
-                Enter amount of gold you want to buy
-              </div>
-              {/* <FormControl fullWidth> */}
-              <div className="label">
-                <div className="FlexRow">
-                  <div className="InputField">
-                    <div className="input-above-text">In Rupees (₹)</div>
-                    <div className="input-box">
-                      <input type="number" autoComplete="off" name="amount" placeholder="Amount" disabled={!this.state.enableInputs || 
-                       this.state.isWeight}
-                        onChange={this.setAmountGms()} value={this.state.amount} />
-                    </div>
-                    <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>Min {inrFormatDecimal(this.state.minAmount)}</div>
-                  </div>
-                  <div className="symbol">
-                    =
-                  </div>
-                  <div className="InputField">
-                    <div className="input-above-text">In Grams (gm)</div>
-                    <div className="input-box">
-                      <input type="number" autoComplete="off" name="weight" placeholder="Weight" disabled={!this.state.enableInputs || 
-                       this.state.isAmount}
-                        onChange={this.setAmountGms()} value={this.state.weight} />
-                    </div>
-                    <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>Max {this.state.maxWeight} gm</div>
-                  </div>
+            <div className="gold-aw-inputs">
+              <div className="gold-aw-tabs">
+                <div onClick={() => this.chooseTabs()} className={`gold-aw-tab ${this.state.isAmount ? 'selected': ''}`}>
+                  Enter in INR
+                </div>
+                <div onClick={() => this.chooseTabs()} className={`gold-aw-tab ${!this.state.isAmount ? 'selected': ''}`}>
+                  Enter in gms
                 </div>
               </div>
-              {/* </FormControl> */}
-              {/* <FormControl fullWidth>
+              
+              <FormControl fullWidth>
+               
                 <div className="InputField">
-                  <Input
-                    type="number" autoComplete="off" label="Amount" name="amount" placeholder="Amount" disabled={this.state.isWeight}
-                    onChange={this.setAmountGms()} value={this.state.amount} />
+                {this.state.isAmount &&
+                  <div >
+                    <div>
+                      <TextField
+                          type="text"
+                          autoComplete="off"
+                          name="amount"
+                          disabled={!this.state.openOnloadModal}
+                          onChange={this.setAmountGms()}
+                          onKeyPress={this.handleKeyChange('amount')}
+                          value={formatAmountInr(this.state.amount || '')}
+                        />
+
+                        <label className="gold-placeholder-right">= 0.249 gms</label>
+                      </div>
+                      <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>
+                        Min {inrFormatDecimal(this.state.minAmount)}</div>
+                  </div>
+                }
+
+                {!this.state.isAmount &&
+                  <div >
+                    <div>
+                        <TextField
+                          type="text"
+                          autoComplete="off"
+                          label=""
+                          name="weight"
+                          disabled={!this.state.openOnloadModal}
+                          onChange={this.setAmountGms()}
+                          onKeyPress={this.handleKeyChange('weight')}
+                          value={formatGms(this.state.weight || '')}
+                        />
+
+                        <label className="gold-placeholder-right">= {inrFormatDecimal(this.state.amount || '')}</label>
+                      </div>
+                      <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>
+                        Max {this.state.maxWeight} gm</div>
+                  </div>
+                }
+                  
                 </div>
-                <div className="InputField">
-                  <Input
-                    type="number" autoComplete="off" label="Weight" name="weight" placeholder="Weight" disabled={this.state.isAmount}
-                    onChange={this.setAmountGms()} value={this.state.weight} />
-                </div>
-              </FormControl> */}
+              </FormControl>
             </div>
           </div>
         </div>
-        {this.state.proceedForOrder && 
+
+
+        {this.state.proceedForOrder &&
           <PlaceBuyOrder parent={this} />
         }
 
         <PriceChangeDialog parent={this} />
 
-        
+
         {this.state.openRefreshModule &&
-         <RefreshBuyPrice parent={this} />}
+          <RefreshBuyPrice parent={this} />}
 
-        {this.state.fetchLivePrice && 
-        <RefreshBuyPrice parent={this} />}
+        {this.state.fetchLivePrice &&
+          <RefreshBuyPrice parent={this} />}
 
-        {this.state.openOnloadModal && 
-        <GoldOnloadAndTimer parent={this} />}
+        {this.state.openOnloadModal &&
+          <GoldOnloadAndTimer parent={this} />}
       </Container>
     );
   }

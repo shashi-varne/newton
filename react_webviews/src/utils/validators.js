@@ -201,6 +201,33 @@ export function formatAmount(amount) {
   return res;
 }
 
+export function formatAmountInr(amount) {
+  if (!amount) {
+    return '₹';
+  }
+
+  amount = Number(amount);
+  amount = amount.toFixed(0);
+  amount = amount.toString();
+  let lastThree = amount.substring(amount.length - 3);
+  let otherNumbers = amount.substring(0, amount.length - 3);
+  if (otherNumbers !== '')
+    lastThree = ',' + lastThree;
+  let res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+
+  return '₹' + res;
+}
+
+export function formatGms(weight) {
+  // if (!weight) {
+  //   return 'gms';
+  // } else {
+  //   return 'gms' + weight 
+  // }
+
+  return weight;
+}
+
 export function inrFormatDecimal(number, toFixed) {
 
   if (number || number === 0) {

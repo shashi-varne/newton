@@ -28,6 +28,10 @@ class BuyPriceClass extends Component {
 
             const res = await Api.get('/api/gold/buy/currentprice');
             if (res.pfwresponse.status_code === 200) {
+                this.setState({
+                    show_loader: false
+                })
+                
                 let result = res.pfwresponse.result;
                 let goldBuyInfo = result.buy_info;
                 var currentDate = new Date();
@@ -40,12 +44,9 @@ class BuyPriceClass extends Component {
                 buyData.timeAvailable = timeAvailable;
                 storageService().setObject('buyData', buyData);
 
-                console.log("yo")
                 this.props.parent.onload();
                 this.props.parent.updateParent('fetchLivePrice', false);
-                this.setState({
-                    show_loader: false
-                })
+                
 
             } else {
                 this.setState({

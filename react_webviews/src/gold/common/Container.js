@@ -33,7 +33,7 @@ class Container extends Component {
   }
 
   componentDidMount() {
-    this.check_hide_header_title(true);
+    this.check_hide_header_title(true, true);
     setHeights({ 'header': true, 'container': false });
     let that = this;
     if (getConfig().generic_callback) {
@@ -228,7 +228,7 @@ class Container extends Component {
     return height;
   }
 
-  check_hide_header_title(inPageTitle) {
+  check_hide_header_title(inPageTitle, forceTrue) {
     let hide_header_title;
     let restrict_in_page_titles = ['provider-filter'];
     if((inPageTitle || this.state.inPageTitle) && restrict_in_page_titles.indexOf(this.props.headerType) !== -1) {
@@ -236,7 +236,7 @@ class Container extends Component {
     }
 
     this.setState({
-      hide_header_title: hide_header_title || false
+      hide_header_title: (forceTrue || hide_header_title) || false
     })
 
     if(this.props.updateChild) {
