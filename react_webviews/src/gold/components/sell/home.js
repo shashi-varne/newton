@@ -6,14 +6,14 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
-import { default_provider, gold_providers, stateMapper, setSellDataAfterUpdate,
+import { default_provider, gold_providers, setSellDataAfterUpdate,
   calculate_gold_wt_sell, calculate_gold_amount_sell} from  '../../constants';
 import {storageService} from "utils/validators";
 import GoldProviderFilter from '../ui_components/provider_filter';
 import GoldLivePrice from '../ui_components/live_price';
-import { inrFormatDecimal2 } from 'utils/validators';
 import RefreshSellPrice from '../ui_components/sell_price';
 import PriceChangeDialog from '../ui_components/price_change_dialog';
+import GoldOnloadAndTimer from '../ui_components/onload_and_timer';
 
 class GoldSellHome extends Component {
   constructor(props) {
@@ -49,108 +49,14 @@ class GoldSellHome extends Component {
 
   }
 
-  componentWillUnmount() {
-    clearInterval(this.state.countdownInterval);
-  }
-
-  countdown = () => {
-
-    let sellData = storageService().getObject('sellData');
-    if(!this.state.sellData) {
-      return;
-    }
-    let timeAvailable = sellData.timeAvailable;
-    
-    if (timeAvailable <= 0 || !timeAvailable) {
-      this.setState({
-        minutes: 0,
-        seconds: 0,
-        openPriceChangedDialog: true,
-        live_price: '',
-        timeAvailable: timeAvailable || 0
-      })
-
-      storageService().set('forceBackState', stateMapper['sell-home']);
-
-      return;
-    }
-
-    let minutes = Math.floor(timeAvailable / 60);
-    let seconds = Math.floor(timeAvailable - minutes * 60);
-    timeAvailable--;
-    // timeAvailable = timeAvailable -100;
-    sellData.timeAvailable = timeAvailable;
-
+   // common code start
+   onload = () => {
     this.setState({
-      timeAvailable: timeAvailable,
-      minutes: minutes,
-      seconds: seconds,
-      sellData: sellData
+      openOnloadModal: false
     })
-    
-    storageService().setObject('sellData', sellData);
-   
-  };
-
-
-  startTimer(sellData) {
-    if (sellData) {
-      let intervalId = setInterval(this.countdown, 1000);
-      this.setState({
-        countdownInterval: intervalId,
-        show_loader: false
-      });
-    }
-  }
-
-  onload() {
-
-    storageService().remove('forceBackState');
-
-    let sellData = storageService().getObject('sellData');
     this.setState({
-      sellData: sellData,
-      live_price: sellData.goldSellInfo.plutus_rate,
-      openRefreshModule: false,
-      timeAvailable: sellData.timeAvailable || 0
+      openOnloadModal: true
     })
-    this.startTimer(sellData);
-
-
-    let priceChangeDialogData = {
-      buttonData: {
-        leftTitle: 'To sell gold worth',
-        leftSubtitle: inrFormatDecimal2(sellData.amount_selected),
-        leftArrow: 'down',
-        provider: 'safegold'
-      },
-      buttonTitle: "REFRESH",
-      content1: [
-        { 'name': 'Sell price for <b>' + sellData.weight_selected + '</b> gms', 'value': inrFormatDecimal2(sellData.base_amount) },
-        { 'name': 'GST', 'value': inrFormatDecimal2(sellData.gst_amount) }
-      ],
-      content2: [
-        { 'name': 'Total', 'value': inrFormatDecimal2(sellData.total_amount) }
-      ]
-    }
-
-
-
-    this.setState({
-      show_loader: false,
-      goldSellInfo: sellData.goldSellInfo,
-      timeAvailable: sellData.timeAvailable,
-      sellData: sellData,
-      priceChangeDialogData: priceChangeDialogData
-    });
-
-    if (this.state.sellData) {
-      let intervalId = setInterval(this.countdown, 1000);
-      this.setState({
-        countdownInterval: intervalId
-      });
-    }
-
   }
 
   updateParent(key, value) {
@@ -184,8 +90,6 @@ class GoldSellHome extends Component {
       })
     }
   }
-
-
 
   async componentDidMount() {
 
@@ -504,6 +408,9 @@ class GoldSellHome extends Component {
 
         {this.state.fetchLivePrice && 
         <RefreshSellPrice parent={this} />}
+
+        {this.state.openOnloadModal && 
+        <GoldOnloadAndTimer parent={this} />}
       </Container>
     );
   }

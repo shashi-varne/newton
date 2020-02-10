@@ -40,6 +40,7 @@ class BuyPriceClass extends Component {
                 buyData.timeAvailable = timeAvailable;
                 storageService().setObject('buyData', buyData);
 
+                console.log("yo")
                 this.props.parent.onload();
                 this.props.parent.updateParent('fetchLivePrice', false);
                 this.setState({
@@ -54,6 +55,7 @@ class BuyPriceClass extends Component {
             }
 
         } catch (err) {
+            console.log(err);
             this.setState({
                 show_loader: false
             });

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import Input from '../../../common/ui/Input';
-import { validatePan, validateEmpty, inrFormatDecimal2 } from 'utils/validators';
+import { validatePan, validateEmpty } from 'utils/validators';
 import toast from '../../../common/ui/Toast';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
@@ -13,8 +13,9 @@ import PriceChangeDialog from '../ui_components/price_change_dialog';
 
 import RefreshBuyPrice from '../ui_components/buy_price';
 import RefreshSellPrice from '../ui_components/sell_price';
-import {stateMapper} from  '../../constants';
-import { storageService } from 'utils/validators';
+
+
+import GoldOnloadAndTimer from '../ui_components/onload_and_timer';
 
 const commonMapper = {
     'buy': {
@@ -85,52 +86,16 @@ class GoldPanDataClass extends Component {
 
      // common code for buy live price start
 
-  componentWillUnmount() {
-    clearInterval(this.state.countdownInterval);
-  }
+       // common code start
+  onload = () => {
 
-  countdown = () => {
-    let timeAvailable = this.state.orderData.timeAvailable;
-    let orderData = this.state.orderData;
-    if (timeAvailable <= 0) {
-      this.setState({
-        minutes: 0,
-        seconds: 0,
-        openPriceChangedDialog: true,
-        live_price: '',
-        timeAvailable: timeAvailable || 0
-      })
-
-      storageService().set('forceBackState', stateMapper['buy-home']);
-
-      return;
-    }
-
-    let minutes = Math.floor(timeAvailable / 60);
-    let seconds = Math.floor(timeAvailable - minutes * 60);
-    timeAvailable--;
-    orderData.timeAvailable = timeAvailable;
-
+    console.log("on load");
     this.setState({
-      timeAvailable: timeAvailable,
-      minutes: minutes,
-      seconds: seconds,
-      orderData: orderData
+      openOnloadModal: false
     })
-    
-    storageService().setObject(this.state.storageKey, orderData);
-   
-  };
-
-
-  startTimer(orderData) {
-    if (orderData) {
-      let intervalId = setInterval(this.countdown, 1000);
-      this.setState({
-        countdownInterval: intervalId,
-        show_loader: false
-      });
-    }
+    this.setState({
+      openOnloadModal: true
+    })
   }
 
   updateParent(key, value) {
@@ -138,6 +103,18 @@ class GoldPanDataClass extends Component {
       [key]: value
     })
   }
+
+  handleClose = () => {
+    this.setState({
+        openConfirmDialog: false
+    });
+
+    if(this.state.openPriceChangedDialog && this.state.timeAvailable >0) {
+        this.setState({
+          openPriceChangedDialog: false
+        })
+      }
+}
 
   refreshData () {
 
@@ -152,81 +129,9 @@ class GoldPanDataClass extends Component {
     
   }
 
-  onload() {
-
-    try {
-        storageService().remove('forceBackState');
-
-        let orderData = storageService().getObject(this.state.storageKey);
-        this.setState({
-          orderData: orderData,
-          live_price: this.state.orderType === 'buy' ?  orderData.goldBuyInfo.plutus_rate : orderData.goldSellInfo.plutus_rate,
-          openRefreshModule: false,
-          timeAvailable: orderData.timeAvailable
-        })
-        this.startTimer(orderData);
-    
-        let confirmDialogData = {
-          buttonData: {
-            leftTitle: 'Buy gold worth',
-            leftSubtitle: inrFormatDecimal2(orderData.amount_selected),
-            leftArrow: 'down',
-            provider: 'safegold'
-          },
-          buttonTitle: "OK",
-          content1: [
-            { 'name':  this.state.orderName + ' price for <b>' + orderData.weight_selected + '</b> gms', 'value': inrFormatDecimal2(orderData.base_amount) },
-            { 'name': 'GST', 'value': inrFormatDecimal2(orderData.gst_amount) }
-          ],
-          content2: [
-            { 'name': 'Total', 'value': inrFormatDecimal2(orderData.total_amount) }
-          ]
-        }
-    
-        let priceChangeDialogData = {
-          buttonData: {
-            leftTitle: 'To ' +  this.state.orderType + 'gold worth',
-            leftSubtitle: inrFormatDecimal2(orderData.amount_selected),
-            leftArrow: 'down',
-            provider: 'safegold'
-          },
-          buttonTitle: "REFRESH",
-          content1: [
-            { 'name': this.state.orderName +  ' price for <b>' +  orderData.weight_selected  + '</b> gms', 'value': inrFormatDecimal2(orderData.base_amount) },
-            { 'name': 'GST', 'value': inrFormatDecimal2(orderData.gst_amount) }
-          ],
-          content2: [
-            { 'name': 'Total', 'value': inrFormatDecimal2(orderData.total_amount) }
-          ]
-        }
-    
-        let bottomButtonData = {
-          leftTitle: this.state.orderName + ' gold worth',
-          leftSubtitle: inrFormatDecimal2(orderData.amount_selected),
-          leftArrow: 'up',
-          provider: 'safegold'
-        }
-    
-        this.setState({
-          confirmDialogData: confirmDialogData,
-          priceChangeDialogData: priceChangeDialogData,
-          bottomButtonData: bottomButtonData
-        })
-    }catch(err) {
-        this.setState({
-            show_loader: false
-        });
-        toast('Something went wrong', 'error');
-        this.navigate('/gold/my-gold');
-    }
-  
-    
-  }
-
     async componentDidMount() {
 
         this.onload();
-       
         try {
 
             const res = await Api.get('/api/gold/user/account');
@@ -269,17 +174,7 @@ class GoldPanDataClass extends Component {
     }
 
 
-    handleClose = () => {
-        this.setState({
-            openConfirmDialog: false
-        });
-
-        if(this.state.openPriceChangedDialog && this.state.timeAvailable >0) {
-            this.setState({
-              openPriceChangedDialog: false
-            })
-          }
-    }
+    
 
     sendEvents(user_action) {
         let eventObj = {
@@ -379,8 +274,7 @@ class GoldPanDataClass extends Component {
                 </div>
 
                 <GoldLivePrice parent={this} />
-                <ConfirmDialog parent={this} />
-                <PriceChangeDialog parent={this} />
+                
 
                 <div className="register-form">
                     <div className="InputField">
@@ -398,12 +292,16 @@ class GoldPanDataClass extends Component {
                     </div>
                 </div>
 
+                <ConfirmDialog parent={this} />
                 <PriceChangeDialog parent={this} />
 
                 {this.state.orderType === 'buy' && this.state.openRefreshModule &&
                     <RefreshBuyPrice parent={this} />}
                 {this.state.orderType === 'sell' && this.state.openRefreshModule &&
                     <RefreshSellPrice parent={this} />}
+
+                {this.state.openOnloadModal && 
+                    <GoldOnloadAndTimer parent={this} />}
             </Container>
         );
     }

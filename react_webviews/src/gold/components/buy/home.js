@@ -9,15 +9,15 @@ import { inrFormatDecimal, storageService } from 'utils/validators';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { stateMapper, default_provider, gold_providers} from  '../../constants';
+import { default_provider, gold_providers} from  '../../constants';
 import PlaceBuyOrder from '../ui_components/place_buy_order';
 import PriceChangeDialog from '../ui_components/price_change_dialog';
 import RefreshBuyPrice from '../ui_components/buy_price';
-import { inrFormatDecimal2 } from 'utils/validators';
 import GoldLivePrice from '../ui_components/live_price';
 import {calculate_gold_amount_buy, calculate_gold_wt_buy, setBuyDataAfterUpdate} from '../../constants';
 
 import GoldProviderFilter from '../ui_components/provider_filter';
+import GoldOnloadAndTimer from '../ui_components/onload_and_timer';
 
 class GoldBuyHome extends Component {
   constructor(props) {
@@ -30,7 +30,6 @@ class GoldBuyHome extends Component {
       goldInfo: {},
       userInfo: {},
       goldBuyInfo: {},
-      goldSellInfo: {},
       new_rate: {},
       amountUpdated: '',
       weightUpdated: '',
@@ -50,126 +49,33 @@ class GoldBuyHome extends Component {
       openDialogOffer: false,
       showOffers: false,
       offerImageData: [],
-      openPriceChangedDialog: false,
-      fetchLivePrice: true,
       provider: storageService().get('gold_provider') || default_provider,
       gold_providers: gold_providers,
       redirect_state: 'buy-home',
-      orderType: 'buy'
+      orderType: 'buy',
+      openPriceChangedDialog: false,
+      fetchLivePrice: true,
     }
-
-    this.refreshData = this.refreshData.bind(this);
-    this.updateChild = this.updateChild.bind(this);
   }
 
-  componentWillUnmount() {
-    clearInterval(this.state.countdownInterval);
-  }
 
-  countdown = () => {
-
-    let buyData = storageService().getObject('buyData');
-    
-    let timeAvailable = buyData.timeAvailable;
-    if (timeAvailable <= 0) {
-      this.setState({
-        minutes: 0,
-        seconds: 0,
-        openPriceChangedDialog: true,
-        live_price: '',
-        timeAvailable: timeAvailable || 0
-      })
-
-      storageService().set('forceBackState', stateMapper['buy-home']);
-
-      return;
-    }
-
-    let minutes = Math.floor(timeAvailable / 60);
-    let seconds = Math.floor(timeAvailable - minutes * 60);
-    timeAvailable--;
-    buyData.timeAvailable = timeAvailable;
-
+  // common code start
+  onload = () => {
     this.setState({
-      timeAvailable: timeAvailable,
-      minutes: minutes,
-      seconds: seconds,
-      buyData: buyData
+      openOnloadModal: false
     })
-    
-    storageService().setObject('buyData', buyData);
-   
-  };
-
-
-  startTimer(buyData) {
-    if (buyData) {
-      let intervalId = setInterval(this.countdown, 1000);
-      this.setState({
-        countdownInterval: intervalId,
-        show_loader: false
-      });
-    }
-  }
-
-  onload() {
-
-    storageService().remove('forceBackState');
-
-    let buyData = storageService().getObject('buyData');
     this.setState({
-      buyData: buyData,
-      live_price: buyData.goldBuyInfo.plutus_rate,
-      openRefreshModule: false,
-      timeAvailable: buyData.timeAvailable || 0
+      openOnloadModal: true
     })
-    this.startTimer(buyData);
-
-
-    let priceChangeDialogData = {
-      buttonData: {
-        leftTitle: 'To buy gold worth',
-        leftSubtitle: inrFormatDecimal2(buyData.amount_selected),
-        leftArrow: 'down',
-        provider: 'safegold'
-      },
-      buttonTitle: "REFRESH",
-      content1: [
-        { 'name': 'Buy price for <b>0.014</b> gms', 'value': inrFormatDecimal2(buyData.base_amount) },
-        { 'name': 'GST', 'value': inrFormatDecimal2(buyData.gst_amount) }
-      ],
-      content2: [
-        { 'name': 'Total', 'value': inrFormatDecimal2(buyData.total_amount) }
-      ]
-    }
-
-
-
-    this.setState({
-      show_loader: false,
-      goldBuyInfo: buyData.goldBuyInfo,
-      timeAvailable: buyData.timeAvailable,
-      minAmount: buyData.goldBuyInfo.minimum_buy_price,
-      buyData: buyData,
-      priceChangeDialogData: priceChangeDialogData
-    });
-
-    if (this.state.buyData) {
-      let intervalId = setInterval(this.countdown, 1000);
-      this.setState({
-        countdownInterval: intervalId
-      });
-    }
-
   }
 
-  updateParent(key, value) {
+  updateParent = (key, value) => {
     this.setState({
       [key]: value
     })
   }
 
-  refreshData () {
+  refreshData = () => {
 
     if(this.state.timeAvailable > 0) {
       this.handleClick();
@@ -196,6 +102,8 @@ class GoldBuyHome extends Component {
     }
   }
 
+  // common code start
+
   async componentDidMount() {
     try {
 
@@ -216,7 +124,8 @@ class GoldBuyHome extends Component {
           goldInfo: result.gold_user_info.safegold_info,
           userInfo: result.gold_user_info.user_info,
           maxWeight: parseFloat(((30 - result.gold_user_info.safegold_info.gold_balance) || 30).toFixed(4)),
-          isRegistered: isRegistered
+          isRegistered: isRegistered,
+          enableInputs: true
         });
       } else {
         this.setState({
@@ -225,26 +134,8 @@ class GoldBuyHome extends Component {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
       }
   
-  
-      const res2 = await Api.get('/api/gold/sell/currentprice');
-      if (res2 && res2.pfwresponse.status_code === 200) {
-        let goldInfo = this.state.goldInfo;
-        let result = res2.pfwresponse.result;
-        goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
-        this.setState({
-          goldSellInfo: result.sell_info,
-          goldInfo: goldInfo,
-          enableInputs: true
-        });
-      } else {
-        this.setState({
-          show_loader: false
-        });
-        toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message || 'Something went wrong', 'error');
-      }
-  
-  
     } catch (err) {
+      console.log(err);
       this.setState({
         show_loader: false
       });
@@ -406,7 +297,7 @@ class GoldBuyHome extends Component {
     })
   };
 
-  updateChild(key, value) {
+  updateChild = (key, value) => {
     this.setState({
       [key] : value
     })
@@ -480,11 +371,16 @@ class GoldBuyHome extends Component {
         }
 
         <PriceChangeDialog parent={this} />
+
+        
         {this.state.openRefreshModule &&
          <RefreshBuyPrice parent={this} />}
 
         {this.state.fetchLivePrice && 
         <RefreshBuyPrice parent={this} />}
+
+        {this.state.openOnloadModal && 
+        <GoldOnloadAndTimer parent={this} />}
       </Container>
     );
   }
