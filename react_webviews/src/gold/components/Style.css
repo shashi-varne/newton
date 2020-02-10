@@ -923,19 +923,19 @@ img.gold-offer-slide-img {
   font-weight: 500;
 }
 
-.gold-buy-home .buy-steps .top-tile {
+.gold-how-steps .top-tile {
   display: flex;
   justify-content: space-between;
 }
-.gold-buy-home .buy-steps .top-title {
+.gold-how-steps .top-title {
   color: #0A1C32;
   font-size: 14px;
   font-weight: 600;
 }
-.gold-buy-home .buy-steps .top-icon {
+.gold-how-steps .top-icon {
   width: 14px;
 }
-.gold-buy-home .buy-steps {
+.gold-how-steps {
   margin: 20px 0 20px 0;
   border-top: 1px solid #EDEDED;
   border-bottom: 1px solid #EDEDED;

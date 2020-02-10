@@ -4,7 +4,7 @@ import qs from 'qs';
 import { FormControl } from 'material-ui/Form';
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import { inrFormatDecimal, storageService, formatAmountInr, formatGms } from 'utils/validators';
+import { inrFormatDecimal2, storageService, formatAmountInr, formatGms } from 'utils/validators';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
@@ -127,9 +127,9 @@ class GoldBuyHome extends Component {
       const res = await Api.get('/api/gold/user/account');
       if (res && res.pfwresponse.status_code === 200) {
 
-        this.setState({
-          show_loader: false
-        });
+        // this.setState({
+        //   show_loader: false
+        // });
         let result = res.pfwresponse.result;
         let isRegistered = true;
         if (result.gold_user_info.user_info.registration_status === "pending" ||
@@ -285,10 +285,13 @@ class GoldBuyHome extends Component {
       weight = (weight).replace(/in gm/g, "");
     }
 
+    if(eventName === 'amount') {
+      eventValue = (eventValue).replace(/,/g, "");
+      eventValue = eventValue.replace(/₹/g, "");
+      amount = eventValue
+    }
+
     if (eventName === 'amount' && eventValue) {
-      amount = (eventValue).replace(/,/g, "");
-      amount = amount.replace(/₹/g, "");
-      // amount = Math.floor(amount);
       inputData = calculate_gold_wt_buy(this.state.buyData, amount);
       weight = inputData.weight;
       isWeight = false;
@@ -438,10 +441,10 @@ class GoldBuyHome extends Component {
                           value={formatAmountInr(this.state.amount || '')}
                         />
 
-                        <label className="gold-placeholder-right">= 0.249 gms</label>
+                        <label className="gold-placeholder-right">= {this.state.weight} gms</label>
                       </div>
                       <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>
-                        Min {inrFormatDecimal(this.state.minAmount)}</div>
+                        Min {inrFormatDecimal2(this.state.minAmount)}</div>
                   </div>
                 }
 
@@ -460,7 +463,7 @@ class GoldBuyHome extends Component {
                           value={formatGms(this.state.weight || '')}
                         />
 
-                        <label className="gold-placeholder-right">= {inrFormatDecimal(this.state.amount || '')}</label>
+                        <label className="gold-placeholder-right">= {inrFormatDecimal2(this.state.amount || '')}</label>
                       </div>
                       <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>
                         Max {this.state.maxWeight} gm</div>
@@ -481,8 +484,8 @@ class GoldBuyHome extends Component {
                     {plusOptionsWeight.map(this.renderPlusOptions)}
                   </div>}
                   <Button fullWidth={true} variant="raised"
-                      size="large" onClick={this.handleClose} color="secondary" autoFocus>
-                    Pay {inrFormatDecimal(this.state.amount || 0)}
+                      size="large" onClick={this.handleClick} color="secondary" autoFocus>
+                    Pay {inrFormatDecimal2(this.state.amount || 0)}
                   </Button>
 
                   <div style={{color: '#767E86', fontSize:8,margin: '7px 0 0 0'}}>
@@ -519,7 +522,7 @@ class GoldBuyHome extends Component {
               </div>
             </div>
 
-            <div className="buy-steps" onClick={() => this.showHideSteps()}>
+            <div className="gold-how-steps" onClick={() => this.showHideSteps()}>
                 <div className="top-tile">
                   <div className="top-title">
                   How to buy digital gold?

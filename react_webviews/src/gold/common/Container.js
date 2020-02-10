@@ -28,12 +28,12 @@ class Container extends Component {
       callbackType: "",
       loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom,
       inPageTitle: false,
-      hide_header_title: true
+      force_hide_inpage_title: false
     };
   }
 
   componentDidMount() {
-    this.check_hide_header_title(true, true);
+    this.check_hide_header_title();
     setHeights({ 'header': true, 'container': false });
     let that = this;
     if (getConfig().generic_callback) {
@@ -228,26 +228,21 @@ class Container extends Component {
     return height;
   }
 
-  check_hide_header_title(inPageTitle, forceTrue) {
-    let hide_header_title;
+  check_hide_header_title() {
+    let force_hide_inpage_title;
     let restrict_in_page_titles = ['provider-filter'];
-    if((inPageTitle || this.state.inPageTitle) && restrict_in_page_titles.indexOf(this.props.headerType) !== -1) {
-      hide_header_title = true;
+    if(restrict_in_page_titles.indexOf(this.props.headerType) !== -1) {
+      force_hide_inpage_title = true;
     }
 
     this.setState({
-      hide_header_title: (forceTrue || hide_header_title) || false
+      force_hide_inpage_title: force_hide_inpage_title || false
     })
 
     if(this.props.updateChild) {
-      this.props.updateChild('hide_header_title', hide_header_title);
+      this.props.updateChild('force_hide_inpage_title', force_hide_inpage_title);
     }
 
-    if(inPageTitle) {
-      this.setState({
-        inPageTitle: inPageTitle
-      })
-    }
   }
 
   onScroll = () => {
@@ -261,11 +256,13 @@ class Container extends Component {
       inPageTitle = false;
     }
 
-    this.check_hide_header_title();
-
     this.setState({
       inPageTitle: inPageTitle
     })
+
+    if(this.props.updateChild) {
+      this.props.updateChild('inPageTitle', inPageTitle);
+    }
 
   };
 
@@ -296,7 +293,7 @@ class Container extends Component {
           resetpage={this.props.resetpage}
           handleReset={this.props.handleReset}
           inPageTitle={this.state.inPageTitle}
-          hide_header_title={this.state.hide_header_title}
+          force_hide_inpage_title={this.state.force_hide_inpage_title}
         />}
 
         {/* Below Header Block */}

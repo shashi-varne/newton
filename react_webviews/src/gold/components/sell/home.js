@@ -8,12 +8,21 @@ import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import { default_provider, gold_providers, setSellDataAfterUpdate,
   calculate_gold_wt_sell, calculate_gold_amount_sell} from  '../../constants';
-import {storageService} from "utils/validators";
+import { inrFormatDecimal2, storageService, formatAmountInr, formatGms} from "utils/validators";
 import GoldProviderFilter from '../ui_components/provider_filter';
 import GoldLivePrice from '../ui_components/live_price';
 import RefreshSellPrice from '../ui_components/sell_price';
 import PriceChangeDialog from '../ui_components/price_change_dialog';
 import GoldOnloadAndTimer from '../ui_components/onload_and_timer';
+import { FormControl } from 'material-ui/Form';
+import TextField from 'material-ui/TextField';
+import Button from 'material-ui/Button';
+const stepsContentMapper = [
+  {'icon': 'ic_gold_provider', 'content': '1. Select your preferred gold provider'},
+  {'icon': 'ic_input', 'content': '2. Enter amount in rupees or grams'},
+  {'icon': 'ic_make_payment', 'content': '3. Confirm bank account details'},
+  {'icon': 'ic_gold_added', 'content': '4. Get money in selected bank account within 48 hrs'}
+];
 
 class GoldSellHome extends Component {
   constructor(props) {
@@ -30,7 +39,7 @@ class GoldSellHome extends Component {
       maxAmount: '',
       isRegistered: false,
       isWeight: false,
-      isAmount: false,
+      isAmount: true,
       amountError: false,
       weightError: false,
       weight: '',
@@ -44,7 +53,8 @@ class GoldSellHome extends Component {
       gold_providers: gold_providers,
       orderType: "sell",
       fetchLivePrice: true,
-      openPriceChangedDialog: false
+      openPriceChangedDialog: false,
+      productName: getConfig().productName
     }
 
   }
@@ -262,9 +272,22 @@ class GoldSellHome extends Component {
     });
   }
 
+  handleKeyChange = name => event => {
+    if (event.charCode >= 48 && event.charCode <= 57) {
+      // valid
+    } else {
+      // invalid
+      event.preventDefault();
+    }
+  }
 
+  chooseTabs() {
+    this.setState({
+      isAmount: !this.state.isAmount
+    })
+  }
 
-  setAmountGms = () => event => {
+  setAmountGms = (event) => {
     let amountError = false;
     let weightError = false;
     let isWeight = this.state.isWeight;
@@ -272,16 +295,28 @@ class GoldSellHome extends Component {
     let amount = '', weight = '';
     let inputData = {};
 
-    if (event.target.name === 'amount' && event.target.value) {
-      amount = Math.floor(event.target.value);
+    let eventName = event.target.name;
+    let eventValue = event.target.value;
+
+    if(eventName === 'weight') {
+      eventValue = (eventValue).replace(/in gm /g, "");
+      eventValue = (eventValue).replace(/in gm/g, "");
+      weight = eventValue;
+    }
+
+    if(eventName === 'amount') {
+      eventValue = (eventValue).replace(/,/g, "");
+      eventValue = eventValue.replace(/₹/g, "");
+      amount = eventValue
+    }
+
+    if (eventName === 'amount' && eventValue) {
       isWeight = false;
       isAmount = true;
       inputData = calculate_gold_wt_sell(this.state.sellData, amount);
       weight = inputData.weight;
 
-    } else if (event.target.name === 'weight' && event.target.value) {
-      weight = event.target.value;
-
+    } else if (eventName === 'weight' && eventValue) {
       inputData = calculate_gold_amount_sell(this.state.sellData, weight);
       amount = inputData.amount;
       
@@ -339,10 +374,29 @@ class GoldSellHome extends Component {
     })
   }
 
+  showHideSteps() {
+    this.setState({
+      showSteps: !this.state.showSteps
+    })
+  }
+
+  renderInfoSteps =(props, index) => {
+    return(
+      <div key={index} className="tile">
+        <img className="icon" 
+        src={require(`assets/${this.state.productName}/${props.icon}.svg`)} alt="Gold" />
+        <div className="content">
+          {props.content}
+        </div>
+      </div>
+    );
+  }
+
   render() {
 
     return (
       <Container
+        noFooter={true}
         showLoader={this.state.show_loader}
         buttonTitle="Proceed"
         headerType="provider-filter"
@@ -354,52 +408,107 @@ class GoldSellHome extends Component {
         <GoldProviderFilter parent={this} />
         <GoldLivePrice parent={this} />
         <div className="sell-home" id="goldSection">
-          <div className="page-body-gold" id="goldInput">
-            <div className="buy-input">
-              <div className="buy-input1">
-                Enter amount of gold you want to sell
+        <div className="gold-aw-inputs">
+              <div className="gold-aw-tabs">
+                <div onClick={() => this.chooseTabs()} className={`gold-aw-tab ${this.state.isAmount ? 'selected': ''}`}>
+                  Enter in INR
+                </div>
+                <div onClick={() => this.chooseTabs()} className={`gold-aw-tab ${!this.state.isAmount ? 'selected': ''}`}>
+                  Enter in gms
+                </div>
               </div>
-              <div className="label">
-                <div className="FlexRow">
-                  <div>
+              
+              <FormControl fullWidth>
+               
+                <div className="InputField">
+                {this.state.isAmount &&
+                  <div >
                     <div>
-                      <div className="input-above-text">In Rupees (₹)</div>
-                      <div className="input-box InputField">
-                        <input type="number" autoComplete="off" placeholder="Amount" name="amount"
-                          onChange={this.setAmountGms()} value={this.state.amount} disabled={!this.state.isRegistered || this.state.isWeight} />
+                      <TextField
+                          type="text"
+                          autoComplete="off"
+                          name="amount"
+                          id="amount"
+                          disabled={!this.state.openOnloadModal}
+                          onChange={(event) => this.setAmountGms(event)}
+                          onKeyPress={this.handleKeyChange('amount')}
+                          value={formatAmountInr(this.state.amount || '')}
+                        />
+
+                        <label className="gold-placeholder-right">= {this.state.weight} gms</label>
                       </div>
-                    </div>
-                  {this.state.isRegistered &&  <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}
-                    >Min ₹1.00 {this.state.sellWeightDiffrence && <span>*</span>}
-                    {this.state.maxAmount > 1 &&<span>- Max ₹ {this.state.maxAmount}</span>}
-                    </div>}
+                      {this.state.isRegistered &&  <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}
+                      >Min ₹1.00 {this.state.sellWeightDiffrence && <span>*</span>}
+                      {this.state.maxAmount > 1 &&<span>- Max ₹ {this.state.maxAmount}</span>}
+                      </div>}
                   </div>
-                  <div className="symbol">
-                    =
-                  </div>
-                  <div>
-                    <div className="input-above-text">In Grams (gm)</div>
-                    <div className="input-box InputField">
-                      <input type="number" autoComplete="off" placeholder="Weight" name="weight"
-                        onChange={this.setAmountGms()} value={this.state.weight} disabled={!this.state.isRegistered || this.state.isAmount} />
-                    </div>
-                   {this.state.isRegistered && <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>
+                }
+
+                {!this.state.isAmount &&
+                  <div >
+                    <div>
+                        <TextField
+                          type="text"
+                          autoComplete="off"
+                          label=""
+                          name="weight"
+                          id="weight"
+                          disabled={!this.state.openOnloadModal}
+                          onChange={(event) => this.setAmountGms(event)}
+                          onKeyPress={this.handleKeyChange('weight')}
+                          value={formatGms(this.state.weight || '')}
+                        />
+
+                        <label className="gold-placeholder-right">= {inrFormatDecimal2(this.state.amount || '')}</label>
+                      </div>
+
+                      {this.state.isRegistered && <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>
                       {this.state.sellWeightDiffrence && <span>*</span>}Max {this.state.maxWeight} gm
                       </div>}
                   </div>
+                }
+                  
                 </div>
-                {this.state.sellWeightDiffrence && <div style={{ margin: '30px 0 0 0' }}>
-                  <div style={{ margin: '0 0 4px 0', color: '#6F6F6F', fontSize: 11, fontWeight: 600 }}>
-                    *Why is my Max Amount/Weight less than Locker quantity?
-                  </div>
-                  <div style={{ color: '#838383', fontSize: 10, fontWeight: 400 }}>
-                    You can sell your purchases after 7 days i.e. If you buy gold today you can sell anytime
-                    after 7 days have elapsed
-                  </div>
-                </div>}
+              </FormControl>
+
+              <div>
+                  <Button fullWidth={true} variant="raised"
+                      size="large" onClick={this.handleClick} color="secondary" autoFocus>
+                    Proceed
+                  </Button>
               </div>
             </div>
-          </div>
+
+            <div className="gold-how-steps" onClick={() => this.showHideSteps()}>
+                <div className="top-tile">
+                  <div className="top-title">
+                  How to sell digital gold?
+                  </div>
+                  <div className="top-icon">
+                    <img src={ require(`assets/${this.state.showSteps ? 'minus_icon' : 'plus_icon'}.svg`)} alt="Gold" />
+                  </div>
+                </div>
+
+
+              {this.state.showSteps &&
+                <div className='gold-steps-images'>
+                 {stepsContentMapper.map(this.renderInfoSteps)}
+                </div>
+              }
+            </div>
+
+
+            <div className="gold-bottom-secure-info">
+              <div className="content">
+                  100% Secure  |  Transparent  |  Convenient
+              </div>
+
+              <div className="images">
+                  <img className="icon" src={require(`assets/brinks_logo.svg`)} alt="Gold" />
+                  <img className="icon" src={require(`assets/logo_idbi.svg`)} alt="Gold" />
+                  <img className="icon" src={require(`assets/logo_lbma.svg`)} alt="Gold" />
+              </div>
+            </div>
           </div>
 
           <PriceChangeDialog parent={this} />

@@ -118,7 +118,7 @@ class GoldOnloadAndTimerClass extends Component {
             ]
         }
 
-        this.updateParent('show_loader', false);
+        
 
         if(this.state.orderType === 'buy') {
             this.updateParent('goldBuyInfo', orderData.goldBuyInfo);
@@ -139,6 +139,8 @@ class GoldOnloadAndTimerClass extends Component {
                 countdownInterval: intervalId
             });
         }
+
+        this.updateParent('show_loader', false);
 
     }
 

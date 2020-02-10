@@ -67,6 +67,7 @@ class BuyPriceClass extends Component {
     render() {
         return(
             <Container
+            noFooter={true}
             showLoader={this.state.show_loader}
             loaderData= {
                 {

@@ -28,6 +28,10 @@ class SellPriceClass extends Component {
 
             const res = await Api.get('/api/gold/sell/currentprice');
             if (res.pfwresponse.status_code === 200) {
+
+                this.setState({
+                    show_loader: false
+                })
                 let result = res.pfwresponse.result;
                 let goldSellInfo = result.sell_info;
                 var currentDate = new Date();
@@ -41,9 +45,7 @@ class SellPriceClass extends Component {
 
                 this.props.parent.onload();
                 this.props.parent.updateParent('fetchLivePrice', false);
-                this.setState({
-                    show_loader: false
-                })
+               
 
                 
             } else {
@@ -66,6 +68,7 @@ class SellPriceClass extends Component {
         return(
             <Container
             showLoader={this.state.show_loader}
+            noFooter={true}
             loaderData= {
                 {
                     'loaderClass': 'Loader-Dialog',
