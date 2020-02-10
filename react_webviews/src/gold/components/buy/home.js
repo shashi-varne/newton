@@ -18,6 +18,22 @@ import { calculate_gold_amount_buy, calculate_gold_wt_buy, setBuyDataAfterUpdate
 import GoldProviderFilter from '../ui_components/provider_filter';
 import GoldOnloadAndTimer from '../ui_components/onload_and_timer';
 import TextField from 'material-ui/TextField';
+import Button from 'material-ui/Button';
+
+const plusOptionsAmount = [
+  500, 1000, 2000, 5000
+];
+
+const plusOptionsWeight = [
+  0.25, 0.50, 1.00, 2.00
+];
+
+const stepsContentMapper = [
+  {'icon': 'ic_gold_provider', 'content': '1. Select your preferred gold provider'},
+  {'icon': 'ic_input', 'content': '2. Enter amount in rupees or grams'},
+  {'icon': 'ic_make_payment', 'content': '3. Select payment method and make payment'},
+  {'icon': 'ic_gold_added', 'content': '4. Gold added to your digital locker'}
+];
 
 class GoldBuyHome extends Component {
   constructor(props) {
@@ -55,6 +71,7 @@ class GoldBuyHome extends Component {
       orderType: 'buy',
       openPriceChangedDialog: false,
       fetchLivePrice: true,
+      productName: getConfig().productName
     }
   }
 
@@ -242,7 +259,7 @@ class GoldBuyHome extends Component {
     }
   }
 
-  setAmountGms = () => event => {
+  setAmountGms = (event)  => {
     let amountError = false;
     let weightError = false;
     let isWeight = this.state.isWeight;
@@ -250,16 +267,33 @@ class GoldBuyHome extends Component {
     let amount = '', weight = '';
     let inputData = {};
 
-    if (event.target.name === 'amount' && event.target.value) {
-      amount = (event.target.value).replace(/,/g, "");
+    let eventName,eventValue;
+    if(event.target) {
+      eventName  = event.target.name;
+      eventValue =  event.target.value;
+    } else if(event.event) {
+      eventName  = event.event.name;
+      eventValue =  event.event.value;
+    } else {
+      return;
+    }
+
+    eventValue = eventValue.toString();
+
+    if(eventName === 'weight') {
+      weight = (eventValue).replace(/in gm /g, "");
+      weight = (weight).replace(/in gm/g, "");
+    }
+
+    if (eventName === 'amount' && eventValue) {
+      amount = (eventValue).replace(/,/g, "");
       amount = amount.replace(/₹/g, "");
       // amount = Math.floor(amount);
       inputData = calculate_gold_wt_buy(this.state.buyData, amount);
       weight = inputData.weight;
       isWeight = false;
       isAmount = true;
-    } else if (event.target.name === 'weight' && event.target.value) {
-      weight = (event.target.value).replace(/gms/g, "");
+    } else if (eventName === 'weight' && eventValue) {
       inputData = calculate_gold_amount_buy(this.state.buyData, weight);
       amount = inputData.amount;
       isWeight = true;
@@ -297,7 +331,6 @@ class GoldBuyHome extends Component {
 
     setBuyDataAfterUpdate(inputData);
 
-    console.log("amount" + amount)
     this.setState({
       isWeight: isWeight,
       isAmount: isAmount,
@@ -321,9 +354,50 @@ class GoldBuyHome extends Component {
     })
   }
 
+  addPlusItems =(value) => {
+    let event = {};
+    if(this.state.isAmount) {
+      event.name  = 'amount';
+      event.value = parseFloat(this.state.amount || 0) + value;
+    } else {
+      event.name  = 'weight';
+      event.value = parseFloat(this.state.weight || 0) + value;
+    }
+
+    this.setAmountGms({event : event});
+
+  }
+
+  renderPlusOptions = (props, index) =>{
+    return(
+      <div onClick={() => this.addPlusItems(props)} key={index} className="plus-tile">
+        +{props}
+      </div>
+    );
+  }
+
+  showHideSteps() {
+    this.setState({
+      showSteps: !this.state.showSteps
+    })
+  }
+
+  renderInfoSteps =(props, index) => {
+    return(
+      <div key={index} className="tile">
+        <img className="icon" 
+        src={require(`assets/${this.state.productName}/${props.icon}.svg`)} alt="Gold" />
+        <div className="content">
+          {props.content}
+        </div>
+      </div>
+    );
+  }
+
   render() {
     return (
       <Container
+        noFooter={true}
         headerType="provider-filter"
         showLoader={this.state.show_loader}
         title={'Buy gold: ' + this.state.gold_providers[this.state.provider].title}
@@ -337,7 +411,6 @@ class GoldBuyHome extends Component {
 
         <div className="gold-buy-home" id="goldSection">
           <GoldLivePrice parent={this} />
-          <div className="page-body-gold container-padding" id="goldInput">
             <div className="gold-aw-inputs">
               <div className="gold-aw-tabs">
                 <div onClick={() => this.chooseTabs()} className={`gold-aw-tab ${this.state.isAmount ? 'selected': ''}`}>
@@ -358,8 +431,9 @@ class GoldBuyHome extends Component {
                           type="text"
                           autoComplete="off"
                           name="amount"
+                          id="amount"
                           disabled={!this.state.openOnloadModal}
-                          onChange={this.setAmountGms()}
+                          onChange={(event) => this.setAmountGms(event)}
                           onKeyPress={this.handleKeyChange('amount')}
                           value={formatAmountInr(this.state.amount || '')}
                         />
@@ -379,8 +453,9 @@ class GoldBuyHome extends Component {
                           autoComplete="off"
                           label=""
                           name="weight"
+                          id="weight"
                           disabled={!this.state.openOnloadModal}
-                          onChange={this.setAmountGms()}
+                          onChange={(event) => this.setAmountGms(event)}
                           onKeyPress={this.handleKeyChange('weight')}
                           value={formatGms(this.state.weight || '')}
                         />
@@ -394,8 +469,87 @@ class GoldBuyHome extends Component {
                   
                 </div>
               </FormControl>
+
+              <div>
+
+                  {this.state.isAmount && 
+                  <div className="plus-options">
+                    {plusOptionsAmount.map(this.renderPlusOptions)}
+                  </div>}
+                  {!this.state.isAmount && 
+                  <div className="plus-options">
+                    {plusOptionsWeight.map(this.renderPlusOptions)}
+                  </div>}
+                  <Button fullWidth={true} variant="raised"
+                      size="large" onClick={this.handleClose} color="secondary" autoFocus>
+                    Pay {inrFormatDecimal(this.state.amount || 0)}
+                  </Button>
+
+                  <div style={{color: '#767E86', fontSize:8,margin: '7px 0 0 0'}}>
+                  *Inclusive of 3% GST | can only be sold after 24 hours
+                  </div>
+              </div>
             </div>
-          </div>
+
+            <div className="page-title">
+            Benefits of digital gold at fisdom
+            </div>
+
+            <div className="gold-buy-info-images">
+              <div className="tile">
+                <img className="img"
+                 src={ require(`assets/${this.state.productName}/ic_purity.svg`)} alt="Gold" />
+                <div className="title">
+                  Affordability
+                </div>
+              </div>
+              <div className="tile">
+                <img className="img"
+                 src={ require(`assets/${this.state.productName}/ic_benefit_gold.svg`)} alt="Gold" />
+                <div className="title">
+                Easy sell or conversion
+                </div>
+              </div>
+              <div className="tile">
+                <img className="img"
+                 src={ require(`assets/${this.state.productName}/ic_purity.svg`)} alt="Gold" />
+                <div className="title">
+                100% insured & secured
+                </div>
+              </div>
+            </div>
+
+            <div className="buy-steps" onClick={() => this.showHideSteps()}>
+                <div className="top-tile">
+                  <div className="top-title">
+                  How to buy digital gold?
+                  </div>
+                  <div className="top-icon">
+                    <img src={ require(`assets/${this.state.showSteps ? 'minus_icon' : 'plus_icon'}.svg`)} alt="Gold" />
+                  </div>
+                </div>
+
+
+              {this.state.showSteps &&
+                <div className='gold-steps-images'>
+                 {stepsContentMapper.map(this.renderInfoSteps)}
+                </div>
+              }
+            </div>
+
+
+            <div className="gold-bottom-secure-info">
+              <div className="content">
+                  100% Secure  |  Transparent  |  Convenient
+              </div>
+
+              <div className="images">
+                  <img className="icon" src={require(`assets/brinks_logo.svg`)} alt="Gold" />
+                  <img className="icon" src={require(`assets/logo_idbi.svg`)} alt="Gold" />
+                  <img className="icon" src={require(`assets/logo_lbma.svg`)} alt="Gold" />
+              </div>
+            </div>
+          
         </div>
 
 

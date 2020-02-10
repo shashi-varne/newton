@@ -219,13 +219,11 @@ export function formatAmountInr(amount) {
 }
 
 export function formatGms(weight) {
-  // if (!weight) {
-  //   return 'gms';
-  // } else {
-  //   return 'gms' + weight 
-  // }
-
-  return weight;
+  if (!weight) {
+    return 'in gm ';
+  } else {
+    return 'in gm ' + weight 
+  }
 }
 
 export function inrFormatDecimal(number, toFixed) {

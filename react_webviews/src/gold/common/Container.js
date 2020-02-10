@@ -315,6 +315,7 @@ class Container extends Component {
         {/* Footer Block */}
         {!this.props.noFooter && (
           <Footer
+            noFooter={this.props.noFooter}
             fullWidthButton={this.props.fullWidthButton}
             logo={this.props.logo}
             buttonTitle={this.props.buttonTitle}
@@ -327,7 +328,6 @@ class Container extends Component {
             handleClick2={this.props.handleClick2}
             handleReset={this.props.handleReset}
             onlyButton={this.props.onlyButton}
-            noFooter={this.props.noFooter}
             disable={this.props.disable}
             withProvider={this.props.withProvider}
             buttonData={this.props.buttonData}

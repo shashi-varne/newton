@@ -74,15 +74,16 @@ class CheckHow2 extends Component {
 
                     </div>
 
-                    <div style={{color: '#767E86', fontSize:13, fontWeight:400,textAlign:'center'}}>
-                        100% Secure  |  Transparent  |  Convenient
-                    </div>
+                    <div className="gold-bottom-secure-info">
+                        <div className="content">
+                            100% Secure  |  Transparent  |  Convenient
+                        </div>
 
-                    <div style={{display:'flex', justifyContent: 'space-around', margin: '8px 0 0 0'}}>
-                        <img src={require(`assets/brinks_logo.svg`)} alt="Gold" />
-                        <img src={require(`assets/logo_idbi.svg`)} alt="Gold" />
-                        <img src={require(`assets/logo_lbma.svg`)} alt="Gold" />
-                        
+                        <div className="images">
+                            <img className="icon" src={require(`assets/brinks_logo.svg`)} alt="Gold" />
+                            <img className="icon" src={require(`assets/logo_idbi.svg`)} alt="Gold" />
+                            <img className="icon" src={require(`assets/logo_lbma.svg`)} alt="Gold" />
+                        </div>
                     </div>
                 </div>
             </Container>
