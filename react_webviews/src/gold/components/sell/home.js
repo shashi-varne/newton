@@ -17,6 +17,8 @@ import GoldOnloadAndTimer from '../ui_components/onload_and_timer';
 import { FormControl } from 'material-ui/Form';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
+import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
+
 const stepsContentMapper = [
   {'icon': 'ic_gold_provider', 'content': '1. Select your preferred gold provider'},
   {'icon': 'ic_input', 'content': '2. Enter amount in rupees or grams'},
@@ -498,17 +500,7 @@ class GoldSellHome extends Component {
             </div>
 
 
-            <div className="gold-bottom-secure-info">
-              <div className="content">
-                  100% Secure  |  Transparent  |  Convenient
-              </div>
-
-              <div className="images">
-                  <img className="icon" src={require(`assets/brinks_logo.svg`)} alt="Gold" />
-                  <img className="icon" src={require(`assets/logo_idbi.svg`)} alt="Gold" />
-                  <img className="icon" src={require(`assets/logo_lbma.svg`)} alt="Gold" />
-              </div>
-            </div>
+            <GoldBottomSecureInfo />
           </div>
 
           <PriceChangeDialog parent={this} />

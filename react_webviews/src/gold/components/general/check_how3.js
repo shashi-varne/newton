@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
-
+import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
 
 class CheckHow2 extends Component {
     constructor(props) {
@@ -74,17 +74,7 @@ class CheckHow2 extends Component {
 
                     </div>
 
-                    <div className="gold-bottom-secure-info">
-                        <div className="content">
-                            100% Secure  |  Transparent  |  Convenient
-                        </div>
-
-                        <div className="images">
-                            <img className="icon" src={require(`assets/brinks_logo.svg`)} alt="Gold" />
-                            <img className="icon" src={require(`assets/logo_idbi.svg`)} alt="Gold" />
-                            <img className="icon" src={require(`assets/logo_lbma.svg`)} alt="Gold" />
-                        </div>
-                    </div>
+                    <GoldBottomSecureInfo />
                 </div>
             </Container>
         );

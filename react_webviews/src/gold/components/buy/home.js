@@ -19,6 +19,7 @@ import GoldProviderFilter from '../ui_components/provider_filter';
 import GoldOnloadAndTimer from '../ui_components/onload_and_timer';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
+import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
 
 const plusOptionsAmount = [
   500, 1000, 2000, 5000
@@ -541,17 +542,7 @@ class GoldBuyHome extends Component {
             </div>
 
 
-            <div className="gold-bottom-secure-info">
-              <div className="content">
-                  100% Secure  |  Transparent  |  Convenient
-              </div>
-
-              <div className="images">
-                  <img className="icon" src={require(`assets/brinks_logo.svg`)} alt="Gold" />
-                  <img className="icon" src={require(`assets/logo_idbi.svg`)} alt="Gold" />
-                  <img className="icon" src={require(`assets/logo_lbma.svg`)} alt="Gold" />
-              </div>
-            </div>
+            <GoldBottomSecureInfo />
           
         </div>
 
