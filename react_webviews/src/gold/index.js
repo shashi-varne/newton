@@ -48,7 +48,7 @@ import DeliveryOrder from "./components/delivery/order";
 import DeliverySelectedProduct from "./components/delivery/selected_product";
 import SelectAddressDelivery from "./components/delivery/address_select";
 import AddEditAddressDelivery from "./components/delivery/address_add_edit";
-
+import DeliveryIntro from  "./components/delivery/intro"
 
 
 
@@ -129,6 +129,7 @@ const Gold = props => {
 
 
           {/* delivery */}
+          <Route path={`${url}/delivery`} component={DeliveryIntro} />
           <Route path={`${url}/:provider/gold-delivery-address`}  component={DeliveryAddress} />
           <Route path={`${url}/:provider/gold-delivery-order`} component={DeliveryOrder} />
           <Route path={`${url}/:provider/select-gold-product`}  component={DeliverySelectedProduct} />

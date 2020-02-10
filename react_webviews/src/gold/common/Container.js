@@ -27,7 +27,7 @@ class Container extends Component {
       popupText: "",
       callbackType: "",
       loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom,
-      inPageTitle: false,
+      inPageTitle: true,
       force_hide_inpage_title: false
     };
   }
