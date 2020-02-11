@@ -121,6 +121,6 @@
   "homepage": "https://wv.fisdom.com",
   "devDependencies": {
     "node-sass": "^4.9.0",
-    "sass-loader": "^7.0.1"
+    "sass-loader": "^7.3.1"
   }
 }
