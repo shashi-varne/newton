@@ -1098,7 +1098,7 @@ img.gold-offer-slide-img {
 
 .gold-landing-container {
     /* autoprefixer: off */
-  height: -webkit-fill-available;
+  // height: -webkit-fill-available;
   margin-bottom: 0px;
   padding-bottom: 0;
   overflow-y: hidden;
@@ -1123,10 +1123,69 @@ img.gold-offer-slide-img {
   border-top-left-radius: 10px;
 }
 
-#block3 {
+.gold-landing .block3 {
   margin: 30px 0 0 0;
 
   .title {
-    color: red;
+    font-size: 16px;
+    color: #FEFFFE;
+    font-weight: 500;
   }
+  .tile {
+    display: flex;
+    align-items: center;
+    margin: 0 0 20px 0;
+  }
+
+  .benefites {
+      margin: 20px 0 0 0;
+  }
+
+  .benefit-tile-title {
+      color: #3792FC;
+      font-size: 14px;
+      font-weight: 800;
+  }
+
+  .benefit-tile-subtitle {
+      color: #D3DBE4;
+      font-size: 13px;
+      margin: 7px 0 0 0;
+  }
+
+  img {
+    width: 70px;
+    margin: 0 20px 0 0;
+  }
+}
+.gold-landing .block2 {
+    margin: 30px -15px 0 -15px;
+    background: white;
+    padding: 10px 15px 50px 15px;
+    border-radius: 10px;
+    .want-to {
+      color: #0A1C32;
+      font-size: 16px;
+      font-weight: 600;
+      border-bottom: 1px solid #EDEDED;
+      padding: 13px 0 13px 0;
+    }
+
+    .tile2 {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #EDEDED;
+      padding: 13px 0 13px 0;
+      .title {
+        color: #0A1D32;
+        margin: 0 0 0 20px;
+      }
+    }
+
+    .highlight-text {
+      display: flex;
+      background: #fff;
+      box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+      margin: -24px 0 20px 0;
+    }
 }

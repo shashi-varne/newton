@@ -32,7 +32,7 @@ const Header = ({ classes, title, count, total, current, goBack,
       <div>
         <div
         style={style}
-          className={`${classes.flex},PageTitle main-top-title-header ${inPageTitle ? 'slide-fade' : 'slide-fade-show'}`}
+          className={`${classes.flex},PageTitle main-top-title-header ${inPageTitle ? 'slide-fade' : 'slide-fade-show'} ${className}`}
         >
 
           {title}

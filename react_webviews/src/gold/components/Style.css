@@ -940,7 +940,6 @@ img.gold-offer-slide-img {
   border: 1px solid #ededed;
 }
 .gold-landing-container {
-  height: -webkit-fill-available;
   margin-bottom: 0px;
   padding-bottom: 0;
   overflow-y: hidden;
@@ -962,9 +961,62 @@ img.gold-offer-slide-img {
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
 }
-#block3 {
+.gold-landing .block3 {
   margin: 30px 0 0 0;
 }
-#block3 .title {
-  color: red;
+.gold-landing .block3 .title {
+  font-size: 16px;
+  color: #fefffe;
+  font-weight: 500;
+}
+.gold-landing .block3 .tile {
+  display: flex;
+  align-items: center;
+  margin: 0 0 20px 0;
+}
+.gold-landing .block3 .benefites {
+  margin: 20px 0 0 0;
+}
+.gold-landing .block3 .benefit-tile-title {
+  color: #3792fc;
+  font-size: 14px;
+  font-weight: 800;
+}
+.gold-landing .block3 .benefit-tile-subtitle {
+  color: #d3dbe4;
+  font-size: 13px;
+  margin: 7px 0 0 0;
+}
+.gold-landing .block3 img {
+  width: 70px;
+  margin: 0 20px 0 0;
+}
+.gold-landing .block2 {
+  margin: 30px -15px 0 -15px;
+  background: white;
+  padding: 10px 15px 50px 15px;
+  border-radius: 10px;
+}
+.gold-landing .block2 .want-to {
+  color: #0a1c32;
+  font-size: 16px;
+  font-weight: 600;
+  border-bottom: 1px solid #ededed;
+  padding: 13px 0 13px 0;
+}
+.gold-landing .block2 .tile2 {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ededed;
+  padding: 13px 0 13px 0;
+}
+.gold-landing .block2 .tile2 .title {
+  color: #0a1d32;
+  margin: 0 0 0 20px;
+}
+.gold-landing .block2 .highlight-text {
+  display: flex;
+  background: #fff;
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  margin: -24px 0 20px 0;
 }

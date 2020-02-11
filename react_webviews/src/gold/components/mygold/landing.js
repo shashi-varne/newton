@@ -285,7 +285,7 @@ class GoldSummary extends Component {
         classHeader="gold-landing-header gold-landing-container-background"
       >
         <div className="gold-landing" id="goldSection">
-          <div className="text-center goldheader"
+          {/* <div className="text-center goldheader"
             onClick={() => this.navigate('/gold/my-gold-locker')}
             style={{
               background: getConfig().primary
@@ -309,8 +309,58 @@ class GoldSummary extends Component {
                 </div>
               </div>
             </div>
-          </div>
-            
+          </div> */}
+            <div className="block1">
+
+                <img 
+                src={ require(`assets/crd_gold_info.svg`)} alt="Gold" />
+            </div>
+
+            <div className="block2">
+                <div className="highlight-text highlight-color-info">
+
+                  <img 
+                    src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
+                  <div style={{display: 'grid'}}>
+                    <div className="highlight-text12">
+                    Total value
+                    </div>
+                    <div className="highlight-text2" style={{margin: '4px 0 0 8px'}}>
+                    0.0249 gms = ₹93.83
+                    </div>
+                  </div>
+
+                </div>
+
+                <div className="want-to">
+                I want to
+                </div>
+                <div className="common-hr"></div>
+
+                <div className="tile2">
+                    <img className="icon"
+                      src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
+                    <div className="title">
+                      Buy gold
+                    </div>
+                </div>
+
+                <div className="tile2">
+                    <img className="icon"
+                      src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
+                    <div className="title">
+                    Sell gold
+                    </div>
+                </div>
+
+                <div className="tile2">
+                    <img className="icon"
+                      src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
+                    <div className="title">
+                    Get delivery
+                    </div>
+                </div>
+            </div>
 
             <div className="block3">
               <div className="title">
@@ -324,13 +374,39 @@ class GoldSummary extends Component {
 
                 <div className="tile">
                     <img 
-                    src={ require(`assets/${this.state.productName}/sip_date_icon.svg`)} alt="Gold" />
+                    src={ require(`assets/${this.state.productName}/ic_benefit_gold.svg`)} alt="Gold" />
                   <div className="benefit-tile">
                     <div className="benefit-tile-title">
                       Affordability
                     </div>
                     <div className="benefit-tile-subtitle">
                       Buy gold at live international market prices as per your budget
+                    </div>
+                  </div>
+                </div>
+
+                <div className="tile">
+                    <img 
+                    src={ require(`assets/${this.state.productName}/ic_secure_vault.svg`)} alt="Gold" />
+                  <div className="benefit-tile">
+                    <div className="benefit-tile-title">
+                    Easy sell or conversion
+                    </div>
+                    <div className="benefit-tile-subtitle">
+                    Sell to get the amount credited or convert to gold coins
+                    </div>
+                  </div>
+                </div>
+
+                <div className="tile">
+                    <img 
+                    src={ require(`assets/${this.state.productName}/ic_purity.svg`)} alt="Gold" />
+                  <div className="benefit-tile">
+                    <div className="benefit-tile-title">
+                    100% insured & secured
+                    </div>
+                    <div className="benefit-tile-subtitle">
+                    Assurance of 24 karat gold with no making or storage charges
                     </div>
                   </div>
                 </div>
