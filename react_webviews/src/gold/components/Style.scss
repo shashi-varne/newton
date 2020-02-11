@@ -1,0 +1,1132 @@
+@value secondary: var(--secondary);
+
+
+
+.BannerContent {
+  top: 50%;
+  position: absolute;
+  color: white;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.BannerText {
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: small;
+}
+
+.SafeGoldImage {
+  margin: 5px 0;
+}
+
+.SafeGoldImage img {
+  width: 150px;
+}
+
+.FlexRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.FlexRow2 {
+  display: inline-flex;
+  /* align-items: center; */
+  justify-content: space-between;
+}
+
+.helper {
+  color: #8ab9e3;
+  margin-top: 10px;
+  text-decoration: underline;
+}
+
+.gold-about-text-know-more {
+    margin: 20px 0 20px 0;
+    text-align: center;
+}
+
+.gold-about-text {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  line-height: 1.3rem;
+}
+
+.gold-about-text:last-child {
+  margin-bottom: 0;
+}
+
+.gold-about-text img {
+  margin-right: 15px;
+}
+
+.gold-dot {
+  min-height: 7px;
+  min-width: 7px;
+  margin-right: 20px;
+  border-radius: 50%;
+  border: 2px solid #f0c82f;
+}
+
+.about-img-span2 {
+  font-size: 14px;
+  color: #888181;
+}
+
+.about-img-tile-know-more {
+  text-align: justify;
+}
+
+.gold-about-card {
+  position: relative;
+  background: #fff;
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  padding: 0px 0px 10px 0px;
+  margin: 0px;
+  margin-bottom: 20px;
+  border: 1px solid #ececec;
+}
+
+.gold-about-card h3 {
+  font-size: 16px;
+  color: black;
+  font-weight: normal;
+  margin-top: 0;
+}
+
+.BannerBody {
+  padding: 15px;
+}
+
+.card-padding {
+  padding: 15px;
+}
+
+.know-more-buy {
+  color: #3c3c3c;
+}
+
+.about-img-span-know-more {
+  font-size: 14px;
+  color: #888181;
+  line-height: 1.3rem;
+}
+
+.gold-about-text-know-more {
+  border-bottom: 1px solid #e8e8e8;
+  padding-bottom: 15px;
+  text-align: left;
+}
+
+.gold-about-text-know-more img {
+  width: 35%;
+  margin-bottom: 10px;
+}
+
+.goldheader {
+  position: relative;
+  margin: 0px;
+  padding: 20px 15px;
+}
+
+.goldheader .my-gold-header {
+  background: #fff;
+  border-radius: 7px;
+  padding-bottom: 20px;
+  cursor: pointer;
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  padding: 15px;
+}
+
+.my-gold-details-header1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.my-gold-details-header2a {
+  color: #6e6e6e;
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
+.my-gold-header .img-mygold {
+  width: 30px;
+}
+
+.row1 {
+  border-bottom: 1px solid #e8e8e8;
+  justify-content: space-between;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+}
+
+.my-gold-header .img-mygold2 {
+  width: 7px;
+}
+
+.buy-info1 {
+  border-bottom: 1px solid #e8e8e8;
+  padding-bottom: 15px;
+  margin-bottom: 25px;
+}
+
+.buy-info2b {
+  color: #6e6e6e;
+}
+
+.buy-info3 {
+  font-size: 22px;
+  margin: 10px 0;
+}
+
+.buy-info4 {
+  color: #6e6e6e;
+}
+
+.timer-green {
+  color: green;
+}
+
+.buy-input1 {
+  margin-bottom: 10px;
+}
+
+.input-above-text {
+  color: #6e6e6e;
+  flex: 1;
+}
+
+.input-below-text {
+  color: #6e6e6e;
+  flex: 1;
+  font-size: 11px;
+}
+
+.input-box {
+  padding: 15px 0;
+}
+
+.symbol {
+  /*flex: 1;*/
+  text-align: center;
+  margin: 0 15px;
+
+  /* margin-top: 1%;
+  display: flex;
+  align-items: center; */
+}
+
+.input-box input {
+  border-radius: 5px;
+  height: 30px;
+  padding: 5px 10px;
+  border: 1px solid #cfcfcf;
+  width: 85%;
+}
+
+.or {
+  margin-top: 34px;
+  width: 10%;
+  font-size: 18px;
+}
+
+.Input {
+  margin: 15px 0; 
+}
+
+.Input input {
+  border: 1px solid #cfcfcf;
+  border-radius: 5px;
+  padding: 5px;
+  height: 30px;
+}
+
+.disclaimer {
+  color: grey;
+  margin-top: 30px;
+}
+
+.grey-color {
+  color: #6e6e6e;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
+.delivery-tile {
+  background-color: #f6f6f6;
+  flex: 1;
+  text-align: center;
+  margin: 15px;
+  text-align: center;
+  margin: 5px;
+  padding: 15px;
+  min-height: 150px;
+  flex-basis: calc(50% - 50px);
+  cursor: pointer;
+}
+
+.order-tile {
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  top: 100px;
+  padding: 10px;
+  border: 1px solid #ececec;
+}
+
+.order-heading {
+  background: #f5f5f5;
+  padding: 10px;
+  border-radius: 3px;
+}
+
+.order-tile-head {
+  text-align: left;
+  font-size: 20px;
+  display: -webkit-inline-box;
+}
+
+.order-tile-total1 {
+  font-size: 17px;
+  color: black;
+  /* flex: 1; */
+}
+
+.order-tile-other-text {
+  color: #6e6e6e;
+  font-size: 14px;
+  /* flex: 1; */
+}
+
+.order-tile-total1-delivery {
+  font-size: 17px;
+  color: black;
+  flex: 1;
+}
+
+.order-tile-other-text-delivery {
+  color: #6e6e6e;
+  font-size: 14px;
+  flex: 1;
+}
+
+.order-tile2 {
+  margin: 14px 0px 16px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stopwatch {
+  margin-top: 10px;
+  justify-content: flex-end;
+}
+
+.stopwatch-order {
+  width: 15px;
+  position: relative;
+  top: -3px;
+  right: 3px;
+}
+
+.stopwatch-title {
+  font-size: 12px;
+  color: #6e6e6e;
+}
+
+.timer {
+  font-size: 16px;
+  color: green;
+  padding-left: 5px;
+}
+
+.bank-timer {
+  
+}
+
+.invest-success {
+  text-align: center;
+}
+
+.invest-success h3 {
+  color: secondary;
+  font-size: 20px;
+  margin: 0;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+.invest-error h3 {
+  color: red;
+  font-size: 20px;
+  margin: 0;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.invest-success p {
+  color: #878787;
+  font-size: 16px;
+}
+
+.invoice {
+  margin: 0 auto;
+  border: 1px solid #c4c4c4;
+  padding: 4px 10px 4px 10px;
+  margin-top: 12px;
+  color: #3d3d3d;
+  border-radius: 11px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.success-card {
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.seller-name {
+  border-top: 1px solid #e6e6e6;
+  border-bottom: 1px solid #e6e6e6;
+  padding: 7px 5px;
+  margin: 10px 0;
+}
+
+.delivery-select-logo, .delivery-order-logo {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.product-details-content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  color: #6e6e6e;
+  margin-bottom: 7px;
+}
+
+.product-details-heading {
+  font-size: 15px;
+  color: black;
+  margin: 0 0 20px 0;
+}
+
+.delivery.block {
+  margin-bottom: 40px;
+}
+
+.product-name {
+  margin-right: 10px;
+  flex: 1;
+}
+
+.product-value {
+  flex: 1;
+}
+
+.delivery ul {
+  padding-left: 15px;
+}
+
+.delivery ul li {
+  line-height: 1.3rem;
+}
+
+.error {
+  color: red;
+}
+
+.MuiTabs-flexContainer {
+  display: flex;
+  justify-content: space-around;
+}
+
+.filler {
+  margin-top: 5px;
+  color: #6e6e6e;
+}
+
+.download-invoice {
+  color: #5346a7;
+  border: 1px solid #5346a7;
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 5px;
+}
+
+.locker-head {
+  padding: 10px 15px;
+  border-bottom: 8px solid #ecebeb;
+}
+
+.locker-head .link {
+  /*color: #5346a7;*/
+  /*border-bottom: 1px solid #5346a7;*/
+  cursor: pointer;
+}
+
+.locker-head .block1 {
+  justify-content: flex-start;
+  flex: 1;
+  margin-right: 2px;
+  background: #fff;
+  border-right: 2px solid #ecebeb;
+}
+
+.locker-head .block2 {
+  flex: 1;
+  background: #fff;
+  padding: 10px;
+}
+
+.transaction-history {
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.transaction-history .arrow {
+  font-size: 16px;
+}
+.input-box.InputField {
+  margin-bottom: 0px;
+}
+.load-more {
+  text-align: center;
+    margin-top: 13px;
+    font-weight: 500;
+    /* color: #5346a7; */
+    border: 1px;
+}
+.buy-order-tile22 {
+  margin-left: 20px;
+  margin-right: 6px;
+}
+.custom-toast {
+  bottom: 60px;
+  padding: 15px 5px;
+  border-radius: 15px;
+  min-height: 30px;
+  margin: 0 20px;
+  text-align: center;
+}
+.gold-offer-terms {
+  display: block;
+  margin: 10px 0 10px 0;
+}
+img.gold-offer-slide-img {
+  width: 100%;
+  border-radius: 8px;
+  height: 100px;
+}
+
+.check-how-gold .title {
+  color: #0A1C32;
+  margin: 0 0 20px 0;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.check-how-gold .content {
+  color: #767E86;
+  font-size: 14px;
+  font-weight: 400;
+}
+.check-how-gold .content-tiles {
+  margin: 0 0 10px 0;
+  line-height: 1.5;
+  text-align: left;
+}
+.check-how-gold .chart {
+  margin: 10px 0 30px 0;
+}
+.check-how-gold .mid-img {
+  margin: 0 0 20px 0;
+}
+.live-price-gold {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 20px 0;
+  background: #F0F7FF;
+  padding: 10px 10px 10px 10px;
+  align-items: center;
+  border-radius: 4px;
+}
+.live-price-gold .mid-text {
+  color: #767E86;
+  font-size: 13px;
+}
+.live-price-gold .right-text {
+  font-size: 10px;
+  color: var(--secondary);
+  font-weight: 800;
+}
+.gold-dialog .hr {
+  border: 1px solid #EDEDED;
+}
+
+.gold-dialog .content-points {
+  color: #0A1D32;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0 15px 0;
+}
+
+.gold-dialog .content2-points {
+  color: #0A1D32;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0 15px 0;
+  font-weight: 600;
+}
+.gold-dialog .mid-buttons {
+  margin: 0 0 20px 0;
+}
+
+.gold-payment-container .hr {
+  border: 1px solid #EDEDED;
+}
+
+.gold-payment-container .content-points {
+  color: #0A1D32;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0 15px 0;
+}
+
+.gold-payment-container .content2-points {
+  color: #0A1D32;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0 15px 0;
+  font-weight: 600;
+}
+.gold-payment-container .mid-title {
+  color: #0A1C32;
+  font-size: 16px;
+  font-weight: 500;
+}
+.gold-payment-container .send-invoice {
+  display: flex;
+  align-items: center;
+  margin: 20px 0 0 0;
+}
+.gold-payment-container .top-content {
+  color: #0A1D32;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.gold-delivery-select-address .user-name {
+  font-size: 14px;
+  width: 33px;
+  height: 22px;
+    background: var(--primary);
+    color: white;
+    padding: 6px 0 0 0px;
+    text-align: center;
+    margin: 0 10px 0 0;
+    border-radius: 6px;
+}
+.gold-delivery-select-address .select-addressline {
+  color: rgb(122, 118, 118);
+  line-height: 1.4;
+  font-size: 18px;
+  margin-top: -2px;
+  width: auto;
+}
+.gold-delivery-select-address .action-buttons {
+  display: flex;
+  align-items: center;
+}
+.gold-delivery-select-address .er-button {
+    color: var(--secondary);
+    text-transform: uppercase;
+    font-weight: 800;
+    font-size: 12px;
+    margin: 5px 8px 0 0px;
+}
+.gold-delivery-select-address .add-new-button {
+  margin: 20px 0 0 25px;
+  font-size: 12px;
+  color: var(--secondary);
+  text-transform: uppercase;
+  font-weight: 800;
+}
+.gold-delivery-select-address .address-tile {
+  display: flex;
+    justify-content: start;
+    margin: 10px 15px 20px 15px;
+    padding: 20px 10px 10px 10px;
+}
+.gold-delivery-select-address .address-tile-selected {
+    margin: 10px 0px 20px 0px;
+    background: linear-gradient(to right, #F4F4F4 , white);
+    padding: 20px 25px 10px 25px;
+}
+.gold-delivery-select-address {
+  margin: 0 -15px 0 -20px;
+}
+
+.gold-sell-select-bank .select-bank {
+  color: rgb(122, 118, 118);
+  line-height: 1.4;
+  font-size: 18px;
+  /* margin-top: -2px; */
+  /* width: auto; */
+}
+.gold-sell-select-bank .add-new-button {
+  margin: 20px 0 0 25px;
+  font-size: 12px;
+  color: var(--secondary);
+  text-transform: uppercase;
+  font-weight: 800;
+}
+.gold-sell-select-bank .bank-tile {
+    margin: 10px 15px 20px 15px;
+    padding: 20px 10px 10px 10px;
+}
+.gold-sell-select-bank .bank-tile-selected {
+    margin: 10px 0px 20px 0px;
+    background: linear-gradient(to right, #F4F4F4 , white);
+    padding: 20px 25px 10px 25px;
+}
+.gold-sell-select-bank {
+  margin: 0 -15px 0 -20px;
+}
+.gold-sell-select-bank .bank-name {
+  color: #0A1C32;
+  font-size: 14px;
+  font-weight: 600;
+}
+.gold-sell-select-bank .account-number {
+  color: #767E86;
+  font-size: 14px;
+}
+.gold-sell-select-bank .primary-bank {
+  color: #D3DBE4;
+  font-size: 8px;
+  font-weight: 'bold';
+}
+.gold-sell-select-bank .left-icon {
+  /* width: 10%; */
+  float: left;
+  margin: 0 10px 0 0;
+}
+
+
+.gold-delivery-order .top-info-tile {
+  display: flex;
+  justify-content: space-between;
+    margin: 5px -15px 5px -15px;
+    padding: 10px 15px 10px 15px;
+}
+.gold-delivery-order .top-info-tile1 {
+  color: #091C32;
+  font-size: 13px;
+}
+.gold-delivery-order .top-info {
+  margin: 0 0 20px 0;
+}
+.gold-delivery-order .dash-hr {
+  border: 1px dashed #767E86;
+  margin: 0 0 30px 0;
+}
+
+
+.gold-delivery-order .hr {
+  border: 1px solid #EDEDED;
+}
+
+.gold-delivery-order .content-points {
+  color: #767E86;
+  font-size: 13px;
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0 15px 0;
+}
+
+.gold-delivery-order .content2-points {
+  color: #0A1D32;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0 15px 0;
+  font-weight: 600;
+}
+.gold-delivery-order .mid-title {
+  color: #0A1C32;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.gold-delivery-order .shipping-address .top-tile {
+  display: flex;
+  justify-content: space-between;
+}
+.gold-delivery-order .shipping-address .top-title {
+  color: #0A1C32;
+  font-size: 14px;
+  font-weight: 600;
+}
+.gold-delivery-order .shipping-address .top-icon {
+  width: 14px;
+}
+.gold-delivery-order .address .content {
+  font-size: 13px;
+  color: #767E86;
+  margin: 2px 0 3px 0;
+}
+.gold-delivery-order .address {
+  margin: 15px 0 20px 0;
+}
+
+.gold-provider-filter {
+  margin: 0 0 20px 0;
+}
+.gold-provider-filter .tile1 {
+  margin: 0 0 0px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.gold-provider-filter .tile1-left {
+  color: #0A1C32;
+  font-size: 20px;
+  font-weight: 600;
+}
+.gold-provider-filter .tile1-right img{
+  width: 60px;
+}
+.gold-provider-filter .arrow-img {
+  margin: 0 0 0 6px;
+}
+.gold-provider-filter .tile2 {
+  display: flex;
+  justify-content: space-between;
+}
+.gold-provider-filter .tile2-left {
+  color: #767E86;
+  font-size: 13px;
+}
+.gold-provider-filter .tile2-right {
+  color: #767E86;
+  font-size: 13px;
+}
+
+
+.gold-aw-inputs input::placeholder {  
+                  
+  text-align: right; 
+  color: #767E86;
+} 
+
+.gold-aw-inputs .gold-placeholder-right {
+  color: #767E86;
+  line-height: 40px;
+  position: absolute;
+  right: 5px;
+  top: 0px;
+  bottom: 0;
+  -moz-transition: 0.3s right ease;
+  -ms-transition: 0.3s right ease;
+  -o-transition: 0.3s right ease;
+  -webkit-transition: 0.3s right ease;
+  transition: 0.3s right ease;
+  z-index: 0;
+}
+
+.gold-aw-tabs {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  width: auto;
+  margin: 0 0 30px 0;
+}
+
+.gold-aw-tab {
+  color: #767E86;
+  border: 1px solid beige;
+  /* border-top-right-radius: 6px; */
+  padding: 10px 20px 10px 20px;
+  background: #F8F8F8;
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0 0 0 -1px;
+}
+
+.gold-aw-tab.selected {
+  background: white;
+  color: #3792FC;
+}
+
+.gold-aw-inputs .plus-options {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 20px 0;
+}
+
+.gold-aw-inputs {
+  margin: 0 0 30px 0;
+}
+
+.gold-aw-inputs .plus-tile {
+  color: #35CB5D;
+  font-size: 12px;
+  font-weight: 800;
+  border: 1px solid;
+  padding: 5px 10px 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.gold-buy-info-images {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0 0 0;
+}
+
+.gold-buy-info-images .tile {
+  max-width: 78px;
+}
+
+.gold-buy-info-images .title {
+  color: #767E86;
+  font-size: 13px;
+}
+
+.gold-buy-info-images .img {
+  margin: 0 0 10px 0;
+}
+
+.gold-buy-home .page-title {
+  color: #0A1C32;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.gold-how-steps .top-tile {
+  display: flex;
+  justify-content: space-between;
+}
+.gold-how-steps .top-title {
+  color: #0A1C32;
+  font-size: 14px;
+  font-weight: 600;
+}
+.gold-how-steps .top-icon {
+  width: 14px;
+}
+.gold-how-steps {
+  margin: 20px 0 20px 0;
+  border-top: 1px solid #EDEDED;
+  border-bottom: 1px solid #EDEDED;
+  padding: 10px 0 10px 0;
+  cursor: pointer;
+}
+.gold-bottom-secure-info .content {
+  color: #767E86;
+  font-size: 13px;
+  font-weight: 400;
+  text-align: center;
+}
+.gold-bottom-secure-info .images {
+  margin: 8px 0 0 0;
+  display: flex;
+  justify-content: space-around;
+}
+.gold-steps-images .content {
+  color: #767E86;
+  font-size: 13px;
+  margin: 0 0 0 20px;
+}
+.gold-steps-images .tile {
+  display: flex;
+  align-items: center;
+  margin: 20px 0 20px 0;
+}
+
+.gold-locker-tabs {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: center;
+  justify-content: space-between;
+  margin: 0 auto;
+  width: auto;
+  margin: 20px 0 30px 0;
+}
+
+.gold-locker-tab {
+  color: #767E86;
+  border: 1px solid beige;
+  /* border-top-right-radius: 6px; */
+  padding: 10px 20px 10px 20px;
+  background: #F8F8F8;
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0 0 0 -1px;
+  /* autoprefixer: off */
+  width: -webkit-fill-available;
+}
+.gold-locker-tab.selected {
+  background: white;
+  color: #3792FC;
+}
+
+
+.gold-locker-tab .block2 {
+  color: #767E86;
+  font-size: 13px;
+}
+.gold-locker-tab.selected .block2 {
+  color: #0A1C32;
+  font-size: 13px;
+  margin: 3px 0 0 0;
+}
+.gold-locker-tab .block1 {
+  display: flex;
+  justify-content: space-between;
+}
+.gold-locker-tab .block1 img {
+  width: 30px;
+}
+
+.generic-page-title {
+  color: #0A1C32;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.gold-trans-card .top-title {
+  color: #0A1D32;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 0 6px 0;
+}
+.gold-trans-card {
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
+}
+.gold-trans-card .report-cover-amount {
+  display: flex;
+  color: #0A1D32;
+}
+.gold-trans-card .report-cover-amount  img {
+  width: 16px;
+  margin: 0 5px 0 0;
+}
+
+.gold-trans-detail-card {
+  display: flex;
+  margin: 20px 0 30px 0;
+}
+
+.gold-trans-detail-card .title {
+  color: #0A1C32;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.gold-trans-detail-card .gold-trans-card {
+  display: flex;
+}
+
+.gold-trans-detail-card .block2 {
+  margin: 0 0 0 8px;
+}
+
+.gold-trans-detail-card .subtitle {
+  color: #767E86;
+  font-size: 13px;
+  margin: 2px 0 0 0;
+  font-weight: 400;
+}
+
+.gold-trans-detail-card .icon {
+  width: 18px;
+}
+.gold-send-invoice {
+  display: flex;
+  align-items: center;
+  margin: 20px 0 0 0;
+}
+
+
+.generic-progress-vertical {
+  margin: 20px 0 0 0;
+}
+.generic-progress-vertical .tile {
+  display: flex;
+  border-left: 1px solid #ECECEC;
+  padding: 0 0 20px 0;
+}
+
+.generic-progress-vertical .tile .title {
+    color: #0A1D32;
+    font-size: 14px;
+    margin: 0 0 0 15px;
+    font-weight: 400;
+}
+
+.generic-progress-vertical img {
+  width: 18px;
+  position: relative;
+    left: -9px;
+  padding: 0 0 20px 0;
+}
+.generic-progress-vertical .text-on-img {
+  position: relative;
+  top: -10px;
+  left: -22px;
+}
+
+.common-hr {
+  border: 1px solid #EDEDED;
+}
+
+.gold-landing-container {
+    /* autoprefixer: off */
+  height: -webkit-fill-available;
+  margin-bottom: 0px;
+  padding-bottom: 0;
+  overflow-y: hidden;
+}
+.gold-landing-container-background {
+  background-position: inherit;
+  background-repeat: repeat;
+  background-size: contain;
+  background-color: #0A1D32;
+}
+.gold-landing-header {
+  background-color: #0A1D32 !important;
+  color: #fff !important;
+}
+
+
+.gold-landing .block4 {
+  background: #fff;
+  padding: 10px 15px 20px 15px;
+  margin: 20px -15px 0 -15px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+#block3 {
+  margin: 30px 0 0 0;
+
+  .title {
+    color: red;
+  }
+}

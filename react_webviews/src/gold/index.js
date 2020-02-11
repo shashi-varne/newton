@@ -7,7 +7,7 @@ import "./common/Style.css";
 import { themeConfig } from 'utils/constants';
 import { ToastContainer } from 'react-toastify';
 
-import "./components/Style.sass";
+import "./components/Style.scss";
 import NotFound from "../common/components/NotFound";
 import CheckHow1 from "./components/general/check_how1";
 import CheckHow2 from "./components/general/check_how2";
