@@ -58,7 +58,7 @@ class GoldLanding extends Component {
         events={this.sendEvents('just_set_events')}
       >
           <div>
-          <img src={ require(`assets/${this.state.productName}/gold_pattern.png`)} alt="Gold" />
+            <img src={ require(`assets/${this.state.productName}/gold_pattern.png`)} alt="Gold" />
           </div>
       </Container>
     );

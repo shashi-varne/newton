@@ -6,6 +6,10 @@ import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
+import toast from '../../../common/ui/Toast';
+import {
+  inrFormatDecimalWithoutIcon
+} from 'utils/validators';
 
 class GoldLocker extends Component {
   constructor(props) {
@@ -21,23 +25,43 @@ class GoldLocker extends Component {
       error: false,
       errorMessage: '',
       countdownInterval: null,
-      provider: 'safegold'
+      provider: 'mmtc',
+      productName: getConfig().productName,
+      reportData: [],
     }
   }
 
-  componentWillMount() {
-    if (this.state.params.isDelivery) {
-      this.setState({
-        value: 1
-      });
-    }
+ 
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.onScroll, false);
   }
+
 
   async componentDidMount() {
+    
+    let obj = {
+      'name': 'test test',
+      'status': 'success'
+    };
+    obj.cssMapper = this.statusMapper(obj);
+
+    let obj2 = {
+      'name': 'test test',
+      'status': 'failed'
+    };
+    obj2.cssMapper = this.statusMapper(obj2);
+
+    let obj3 = {
+      'name': 'test test',
+      'status': 'pending'
+    };
+    obj3.cssMapper = this.statusMapper(obj3);
+
+    let reportData = [obj, obj2, obj3, obj];
+
     this.setState({
-      error: false,
-      errorMessage: ''
-    });
+      reportData: reportData
+    })
 
     try {
 
@@ -117,13 +141,128 @@ class GoldLocker extends Component {
     }
   }
 
-  
+  statusMapper(data) {
+    let cssMapper = {
+      'init' : {
+        color: 'yellow',
+        disc: 'Pending'
+      },
+      'success' : {
+        color: 'green',
+        disc: 'Success'
+      },
+      'failed' : {
+        color: 'red',
+        disc: 'Failed'
+      },
+      'rejected' : {
+        color: 'red',
+        disc: 'Rejected'
+      },
+      'cancelled' : {
+        color: 'red',
+        disc: 'Cancelled'
+      }
+    }
+    
+    return cssMapper[data.status] || cssMapper['init'];
+  }
 
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
       search: getConfig().searchParams
     });
+  }
+
+  chooseTabs(provider) {
+    this.setState({
+      provider: provider
+    })
+  }
+  
+  loadMore = async () => {
+    try {
+
+      if(this.state.loading_more) {
+        return;
+      }
+      this.setState({
+        loading_more: true
+      });
+
+      let res = await Api.get(this.state.nextPage)
+
+      this.setState({
+        loading_more: false
+      });
+
+      if (res.pfwresponse.status_code === 200) {
+        var policyData = res.pfwresponse.result.response;
+        var next_page = policyData.group_insurance.next_page;
+        var has_more = policyData.group_insurance.more;
+
+        this.setState({
+          nextPage: (has_more) ? next_page : null
+        });
+
+        var newReportData = [];
+
+        this.setState((prevState) => ({
+          reportData: prevState.reportData.concat(newReportData)
+        }));
+      } else {
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
+      }
+    } catch (err) {
+      this.setState({
+        loading_more: false
+      });
+      toast('Something went wrong');
+    }
+  }
+
+  hasReachedBottom() {
+    var el = document.getElementsByClassName('Container')[0];
+    var height = el.getBoundingClientRect().bottom <= window.innerHeight;
+    return height;
+  }
+
+  onScroll = () => {
+    if (this.hasReachedBottom()) {
+      if(this.state.nextPage) {
+        this.loadMore();
+      }
+      
+    }
+  };
+
+  renderReportCards = (props, index) => {
+    return (
+      <div onClick={() => this.redirectCards(props)} 
+      key={index} style={{cursor:'pointer'}} className="card gold-trans-card">
+        <div className="top-title">
+          Bought 0.014 gms
+        </div>
+        <div className={`report-color-state ${(props.cssMapper.color)}`}>
+          <div className="circle"></div>
+          <div className="report-color-state-title">{(props.cssMapper.disc)}</div>
+        </div>
+        <div className="report-ins-name">{props.product_name}</div>
+        <div className="report-cover">
+          <div className="report-cover-amount">
+              <img 
+              src={ require(`assets/${this.state.productName}/sip_date_icon.svg`)} alt="Gold" />
+              <span style={{color: '#767E86'}}>2nd Jan, 06:30 PM</span>
+          </div>
+          <div className="report-cover-amount">
+            <img 
+              src={ require(`assets/${this.state.productName}/amount_icon.svg`)} alt="Gold" />
+            ₹{inrFormatDecimalWithoutIcon(2000)}
+          </div>
+        </div>
+      </div>
+    )
   }
 
   
@@ -136,7 +275,78 @@ class GoldLocker extends Component {
         noFooter={true}
         events={this.sendEvents('just_set_events')}
       >
-        
+        <div style={{ marginTop: '15px',display:'flex' }} className="highlight-text highlight-color-info">
+
+            <img 
+              src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
+            <div style={{display: 'grid'}}>
+              <div className="highlight-text12">
+              Total value
+              </div>
+              <div className="highlight-text2" style={{margin: '4px 0 0 8px'}}>
+              0.0249 gms = ₹93.83
+              </div>
+            </div>
+            
+        </div>
+
+        <div className="gold-locker-tabs">
+          <div onClick={() => this.chooseTabs('mmtc')} 
+          className={`gold-locker-tab ${this.state.provider === 'mmtc' ? 'selected': ''}`}>
+            <div className="block1">
+              <div className="title">
+                MMTC
+              </div>
+              <img className="img"
+              src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
+            </div>
+            <div className="block2">
+              0.024 gms
+            </div>
+            <div className="block2">
+              ₹93.83
+            </div>
+          </div>
+          <div onClick={() => this.chooseTabs('safegold')} 
+          className={`gold-locker-tab ${this.state.provider === 'safegold' ? 'selected': ''}`}>
+              <div className="block1">
+                <div className="title">
+                  Safegold
+                </div>
+                <img className="img"
+                src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
+              </div>
+              <div className="block2">
+                0.024 gms
+              </div>
+              <div className="block2">
+                ₹93.83
+              </div>
+          </div>
+        </div>
+
+        <div>
+          <div className="generic-page-title">
+            Transactions
+          </div>
+
+          <div style={{margin: '20px 0 0 0'}}>
+            {this.state.reportData.map(this.renderReportCards)}
+            {this.state.loading_more && <div className="loader">
+              Loading...
+            </div>}
+          </div>
+        </div>
+
+        {/* <div>
+          <div>
+              <img className="img"
+                src={ require(`assets/${this.state.productName}/ils_alternate_assets.svg`)} alt="Gold" />
+          </div>
+          <div style={{color: '#0A1D32', fontSize:14, fontWeight: 400, margin: '20px 0 30px 0'}}>
+          Seems like you have not invested in Safegold yet, <b>buy 24K gold</b> to create long term wealth.
+          </div>
+        </div> */}
         <GoldBottomSecureInfo />
       </Container>
     );

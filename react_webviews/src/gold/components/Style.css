@@ -854,7 +854,7 @@ img.gold-offer-slide-img {
   z-index: 0;
 }
 
-.gold-aw-inputs .gold-aw-tabs {
+.gold-aw-tabs {
   display: flex;
   justify-content: center;
   margin: 0 auto;
@@ -862,7 +862,7 @@ img.gold-offer-slide-img {
   margin: 0 0 30px 0;
 }
 
-.gold-aw-inputs .gold-aw-tab {
+.gold-aw-tab {
   color: #767E86;
   border: 1px solid beige;
   /* border-top-right-radius: 6px; */
@@ -873,7 +873,7 @@ img.gold-offer-slide-img {
   margin: 0 0 0 -1px;
 }
 
-.gold-aw-inputs .gold-aw-tab.selected {
+.gold-aw-tab.selected {
   background: white;
   color: #3792FC;
 }
@@ -962,4 +962,73 @@ img.gold-offer-slide-img {
   display: flex;
   align-items: center;
   margin: 20px 0 20px 0;
+}
+
+.gold-locker-tabs {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: center;
+  justify-content: space-between;
+  margin: 0 auto;
+  width: auto;
+  margin: 20px 0 30px 0;
+}
+
+.gold-locker-tab {
+  color: #767E86;
+  border: 1px solid beige;
+  /* border-top-right-radius: 6px; */
+  padding: 10px 20px 10px 20px;
+  background: #F8F8F8;
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0 0 0 -1px;
+  /* autoprefixer: off */
+  width: -webkit-fill-available;
+}
+.gold-locker-tab.selected {
+  background: white;
+  color: #3792FC;
+}
+
+
+.gold-locker-tab .block2 {
+  color: #767E86;
+  font-size: 13px;
+}
+.gold-locker-tab.selected .block2 {
+  color: #0A1C32;
+  font-size: 13px;
+  margin: 3px 0 0 0;
+}
+.gold-locker-tab .block1 {
+  display: flex;
+  justify-content: space-between;
+}
+.gold-locker-tab .block1 img {
+  width: 30px;
+}
+
+.generic-page-title {
+  color: #0A1C32;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.gold-trans-card .top-title {
+  color: #0A1D32;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 0 6px 0;
+}
+.gold-trans-card {
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
+}
+.gold-trans-card .report-cover-amount {
+  display: flex;
+  color: #0A1D32;
+}
+.gold-trans-card .report-cover-amount  img {
+  width: 16px;
+  margin: 0 5px 0 0;
 }
