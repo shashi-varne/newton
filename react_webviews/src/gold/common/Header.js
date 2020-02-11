@@ -4,15 +4,26 @@ import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 // import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
-import Arrow from '@material-ui/icons/ArrowBack';
+// import Arrow from '@material-ui/icons/ArrowBack';
 import Close from '@material-ui/icons/Close';
+import SVG from 'react-inlinesvg';
+import {getConfig} from 'utils/functions';
+import back_arrow from 'assets/back_arrow.svg';
 
 const Header = ({ classes, title, count, total, current, goBack, 
-  edit, type, resetpage, handleReset, smallTitle, disableBack, provider, inPageTitle, force_hide_inpage_title }) => (
-  <AppBar position="fixed" color="primary" className={`Header transition ${classes.root} ${inPageTitle ? 'header-topbar-white' : 'header-topbar-white'}`}>
+  edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
+  inPageTitle, force_hide_inpage_title, className ,style}) => (
+  <AppBar position="fixed" color="primary" 
+  className={`Header transition ${classes.root} ${inPageTitle ? 'header-topbar-white' : 'header-topbar-white'} ${className}`}>
     <Toolbar>
       <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={goBack}>
-        {!disableBack && <Arrow color={inPageTitle ? "secondary" : "secondary"} />}
+        {!disableBack && 
+        // <Arrow color={inPageTitle ? "secondary" : "secondary"} />
+        <SVG
+          preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+          src={back_arrow}
+        />
+        }
         {(disableBack === true) && <Close />}
       </IconButton>
 
@@ -20,6 +31,7 @@ const Header = ({ classes, title, count, total, current, goBack,
       {/* {!force_hide_inpage_title &&  */}
       <div>
         <div
+        style={style}
           className={`${classes.flex},PageTitle main-top-title-header ${inPageTitle ? 'slide-fade' : 'slide-fade-show'}`}
         >
 
@@ -35,7 +47,9 @@ const Header = ({ classes, title, count, total, current, goBack,
 
     
    {!force_hide_inpage_title &&
-     <div id="header-title-page" className={`header-title-page ${inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}>
+     <div id="header-title-page"
+     style={style} 
+     className={`header-title-page ${inPageTitle ? 'slide-fade-show' : 'slide-fade'} ${className}`}>
       <div className="header-title-page-text">
         {title}
       </div>

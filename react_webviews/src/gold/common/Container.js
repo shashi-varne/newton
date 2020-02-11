@@ -277,7 +277,7 @@ class Container extends Component {
     }
 
     return (
-      <div className={`ContainerWrapper ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`} >
+      <div className={`ContainerWrapper ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`}  >
         {/* Header Block */}
         {(!this.props.noHeader && !getConfig().hide_header) &&<Header
           disableBack={this.props.disableBack}
@@ -294,6 +294,8 @@ class Container extends Component {
           handleReset={this.props.handleReset}
           inPageTitle={this.state.inPageTitle}
           force_hide_inpage_title={this.state.force_hide_inpage_title}
+          style={this.props.styleHeader}
+          className={this.props.classHeader}
         />}
 
         {/* Below Header Block */}
@@ -304,7 +306,8 @@ class Container extends Component {
 
         {/* Children Block */}
         <div
-          className={`Container ${this.props.noPadding ? "no-padding" : ""}`}
+          style={this.props.styleContainer}
+          className={`Container ${this.props.classOverRideContainer} ${this.props.noPadding ? "no-padding" : ""}`}
         >
           {this.props.children}
         </div>
