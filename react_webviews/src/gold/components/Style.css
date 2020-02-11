@@ -1032,3 +1032,71 @@ img.gold-offer-slide-img {
   width: 16px;
   margin: 0 5px 0 0;
 }
+
+.gold-trans-detail-card {
+  display: flex;
+  margin: 20px 0 30px 0;
+}
+
+.gold-trans-detail-card .title {
+  color: #0A1C32;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.gold-trans-detail-card .gold-trans-card {
+  display: flex;
+}
+
+.gold-trans-detail-card .block2 {
+  margin: 0 0 0 8px;
+}
+
+.gold-trans-detail-card .subtitle {
+  color: #767E86;
+  font-size: 13px;
+  margin: 2px 0 0 0;
+  font-weight: 400;
+}
+
+.gold-trans-detail-card .icon {
+  width: 18px;
+}
+.gold-send-invoice {
+  display: flex;
+  align-items: center;
+  margin: 20px 0 0 0;
+}
+
+
+..generic-progress-vertical {
+  margin: 20px 0 0 0;
+}
+.generic-progress-vertical .tile {
+  display: flex;
+  border-left: 1px solid #ECECEC;
+  padding: 0 0 20px 0;
+}
+
+.generic-progress-vertical .tile .title {
+    color: #0A1D32;
+    font-size: 14px;
+    margin: 0 0 0 15px;
+    font-weight: 400;
+}
+
+.generic-progress-vertical img {
+  width: 18px;
+  position: relative;
+    left: -9px;
+  padding: 0 0 20px 0;
+}
+.generic-progress-vertical .text-on-img {
+  position: relative;
+  top: -10px;
+  left: -22px;
+}
+
+.common-hr {
+  border: 1px solid #EDEDED;
+}

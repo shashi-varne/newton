@@ -23,6 +23,7 @@ import Transactions from "./components/transactions/index";
 import Payment from "./components/payment/index";
 import Otp from "./components/otp/index";
 import GoldSelectProvider from "./components/ui_components/select_provider";
+import GoldTransactionDetail from "./components/transactions/details";
 
 
 //buy
@@ -109,6 +110,7 @@ const Gold = props => {
           <Route path={`${url}/:provider/:orderType/payment`} component={Payment} />
           <Route path={`${url}/verify`} component={Otp} />
           <Route path={`${url}/providers`} component={GoldSelectProvider} />
+          <Route path={`${url}/transaction`} component={GoldTransactionDetail} />
 
           {/* buy */}
           <Route path={`${url}/buy`} component={GoldBuyHome} />
