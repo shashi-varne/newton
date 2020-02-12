@@ -15,6 +15,11 @@ import toast from '../../../common/ui/Toast';
 import { inrFormatDecimal } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
+import { Carousel } from 'react-responsive-carousel';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import goldOfferImageFisdom from 'assets/gold_offer_fisdom.jpg';
+import TextField from 'material-ui/TextField';
+import DotDotLoader from '../../../common/ui/DotDotLoader';
 
 class DeliverySelectedProduct extends Component {
   constructor(props) {
@@ -25,14 +30,37 @@ class DeliverySelectedProduct extends Component {
         product_highlights: []
       },
       openResponseDialog: false,
-      disabledText: 'Continue',
+      disabledText: 'Proceed to address selection',
       disabled: false,
       params: qs.parse(props.history.location.search.slice(1)),
-      provider: this.props.match.params.provider
+      provider: this.props.match.params.provider,
+      offerImageData: [],
+      pincode: '',
+      pincodeRightText: 'CHECK',
+      pincodeLoading :false
     }
   }
 
   async componentDidMount() {
+
+    let offerImageData = [
+      {
+        src: goldOfferImageFisdom,
+        key: '5buy'
+      },
+      {
+        src: goldOfferImageFisdom,
+        key: '5buy'
+      },
+      {
+        src: goldOfferImageFisdom,
+        key: '5buy'
+      }
+    ];
+
+    this.setState({
+      offerImageData: offerImageData
+    })
 
     if (window.localStorage.getItem('goldProduct')) {
       let product = JSON.parse(window.localStorage.getItem('goldProduct'));
@@ -146,78 +174,197 @@ class DeliverySelectedProduct extends Component {
 
   renderProductHIghlights(props, index) {
     return (
-      <li key={index}>{props}</li>
+      <div className="product-de-points" key={index}>
+        {index + 1}. {props}
+      </div>
     )
+  }
+
+  renderOfferImages(props, index) {
+    return (
+      <div key={index}
+        className="gold-offer-slider">
+        <img className="gold-offer-slide-img"
+          src={props.src} alt="Gold Offer" />
+      </div>
+    )
+  }
+
+  changePincode() {
+    this.setState({
+      pincode: '',
+      pincode_error: '',
+      pincodeRightText: 'CHECK',
+      pincodeDisabled: false,
+      pincode_helper: ''
+    })
+  }
+
+  checkPincode = async () => {
+
+    if(this.state.pincodeRightText === 'CHANGE') {
+      this.changePincode();
+      return;
+    }
+
+    let pincode = this.state.pincode;
+    if (pincode && pincode.length === 6) {
+      try {
+
+        this.setState({
+          pincodeLoading: true,
+          pincode_helper: ''
+        })
+        const res = await Api.get('/api/pincode/' + pincode);
+        this.setState({
+          pincodeLoading: false
+        })
+        if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
+          this.setState({
+            city: res.pfwresponse.result[0].district_name || res.pfwresponse.result[0].taluk,
+            state: res.pfwresponse.result[0].state_name,
+            pincodeRightText: 'CHANGE',
+            pincodeDisabled: true,
+            pincode_helper: 'We deliver to this location'
+          });
+        } else {
+          this.setState({
+            city: '',
+            state: '',
+            pincode_error: 'Invalid Pincode',
+            pincodeRightText: 'CHECK'
+          });
+        }
+      } catch (err) {
+        this.setState({
+          show_loader: false
+        });
+        toast('Something went wrong', 'error');
+      }
+    } else {
+      this.setState({
+        pincode_error: 'Please enter valid 6 digit pincode'
+      })
+    }
+  }
+
+  handlePincode = async (event) => {
+    const pincode = event.target.value;
+    if (pincode.length > 6) {
+      return;
+    }
+    this.setState({
+      pincode: pincode,
+      pincode_error: '',
+      pincode_helper: ''
+    });
   }
 
   render() {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="Select Gold Product"
+        title={this.state.product.description}
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle={this.state.disabledText}
         disable={this.state.disabled}
         events={this.sendEvents('just_set_events')}
       >
-        <div className="delivery block">
-          <div className="delivery-select-logo">
-            {this.productImgMap()}
-          </div>
-          <div className="">
-            <div>{this.state.product.description}</div>
-            <div style={{ fontSize: '16px', color: 'black', marginTop: '5px' }}>Charges : {inrFormatDecimal(this.state.product.delivery_minting_cost)}</div>
-          </div>
-          <div className="seller-name">
-            Seller : {this.state.product.brand}
-          </div>
-          <div className="instock">
-            {this.state.product.in_stock === 'Y' && <span className="green">*(In Stock)</span>}
-            {this.state.product.in_stock === 'N' && <span className="red">(Out of Stock)</span>}
-          </div>
-        </div>
+        <div className="delivery-select-product">
+          <div className="block1">
+            <Carousel
 
-        <div className="delivery block">
-          <div className="product-details-heading">
-            Product Details
+              showStatus={false} showThumbs={false}
+              showArrows={true}
+              infiniteLoop={false}
+              selectedItem={this.state.selectedIndex}
+              onChange={(index) => {
+                this.setState({
+                  selectedIndex: index,
+                  card_swipe: 'yes',
+                  card_swipe_count: this.state.card_swipe_count + 1
+                });
+              }}
+            >
+              {this.state.offerImageData.map(this.renderOfferImages)}
+            </Carousel>
           </div>
-          <div className="product-details-content">
-            <div className="product-name">Model</div>
-            <div className="product-value">: {this.state.product.sku_number}</div>
-          </div>
-          <div className="product-details-content">
-            <div className="product-name">Metal Purity</div>
-            <div className="product-value">: {this.state.product.metal_stamp}</div>
-          </div>
-          <div className="product-details-content">
-            <div className="product-name">Packaging</div>
-            <div className="product-value">: {this.state.product.packaging}</div>
-          </div>
-          <div className="product-details-content">
-            <div className="product-name">Weight</div>
-            <div className="product-value">: {this.state.product.metal_weight} gm</div>
-          </div>
-          <div className="product-details-content">
-            <div className="product-name">Est. Arrival</div>
-            <div className="product-value">: {this.state.product.estimated_days_for_dispatch}</div>
-          </div>
-          <div className="product-details-content">
-            <div className="product-name">Refund Policy</div>
-            <div className="product-value">: {this.state.product.refund_policy}</div>
-          </div>
-        </div>
 
-        <div className="delivery block">
-          <div className="product-details-heading">
-            Product Hightlight
+
+          <div className="block2">
+            {/* <div className="delivery-select-logo">
+              {this.productImgMap()}
+            </div> */}
+            <div className="mc">
+              Making charges
+            </div>
+            <div className="">
+              <div className="generic-page-title flex-center">
+                {inrFormatDecimal(this.state.product.delivery_minting_cost)}
+                <span className="all-tax"> Inclusive of all taxes</span>
+              </div>
+            </div>
+
+            <div className="seller-name">
+              Seller : {this.state.product.brand}
+            </div>
+
+            <div className="seller-name">
+              Free shipping
+            </div>
+
+            <div className="seller-name">
+              Return/replacement not allowed
+            </div>
+
+            <div className="seller-name">
+              Cancellation not allowed
+            </div>
           </div>
-          <ul>
+
+          <div className="block3">
+            <div className="page-title">
+              Delivering to
+            </div>
+
+              <div className="pincode-block InputField">
+                <TextField
+                  label="Enter Pin code"
+                  type="text"
+                  autoComplete="off"
+                  name="pincode"
+                  id="pincode"
+                  error={this.state.pincode_error ? true: false}
+                  helperText={this.state.pincode_helper || this.state.pincode_error}
+                  onChange={(event) => this.handlePincode(event)}
+                  value={this.state.pincode}
+                  disabled={this.state.pincodeDisabled || this.state.pincodeLoading}
+                />
+
+                <label className="input-placeholder-right gold-placeholder-right"
+                  onClick={() => this.checkPincode()}>
+                    {!this.state.pincodeLoading && 
+                      <span>
+                        {this.state.pincodeRightText}
+                      </span>
+                    }
+
+                    {this.state.pincodeLoading &&
+                     <DotDotLoader style={{
+                      textAlign: 'right'
+                      }} />
+                    }
+                </label>
+              </div>
+          </div>
+
+          <div className="block4">
+            <div className="page-title">
+              Product details
+            </div>
             {this.state.product.product_highlights.map(this.renderProductHIghlights)}
-          </ul>
-          {/* <div className="grey-color">
-            *You can place your order for sell/delivery after 2 working day from your buying transaction date
-          </div> */}
+          </div>
         </div>
       </Container>
     );

@@ -191,7 +191,8 @@ body[data-device="web"] #root .ContainerWrapper {
 }
 .Footer {
   position: fixed;
-  background: unset !important;
+  /* background: unset !important; */
+  background-color: #fff;
   bottom: 0;
   left: 0;
   right: 0;

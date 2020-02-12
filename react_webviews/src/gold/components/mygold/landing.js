@@ -310,6 +310,7 @@ class GoldSummary extends Component {
             <div className="block1">
 
                 <img 
+                style={{width:'100%'}}
                 src={ require(`assets/crd_gold_info.svg`)} alt="Gold" />
             </div>
 

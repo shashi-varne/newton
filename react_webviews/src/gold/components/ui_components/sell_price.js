@@ -37,7 +37,7 @@ class SellPriceClass extends Component {
                 var currentDate = new Date();
                 let timeAvailable = ((goldSellInfo.rate_validity - currentDate.getTime()) / 1000 - 330 * 60);
 
-                let sellData = storageService().getObject('sellData');
+                let sellData = storageService().getObject('sellData') || {};
                 sellData.goldSellInfo = result.sell_info;
                 sellData.plutusRateID = result.sell_info.plutus_rate_id;
                 sellData.timeAvailable = timeAvailable;

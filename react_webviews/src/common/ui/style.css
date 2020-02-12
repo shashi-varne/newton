@@ -333,3 +333,22 @@ input.default-otp-input {
 .default-otp .content-auth {
   font-weight: 600;
 }
+
+.flex-center {
+  display: flex;
+  align-items: center;
+}
+
+.input-placeholder-right {
+  line-height: 40px;
+  position: absolute;
+  right: 5px;
+  top: 17px;
+  bottom: 0;
+  -moz-transition: 0.3s right ease;
+  -ms-transition: 0.3s right ease;
+  -o-transition: 0.3s right ease;
+  -webkit-transition: 0.3s right ease;
+  transition: 0.3s right ease;
+  z-index: 0;
+}

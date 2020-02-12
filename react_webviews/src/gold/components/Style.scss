@@ -382,13 +382,6 @@
   margin-bottom: 20px;
 }
 
-.seller-name {
-  border-top: 1px solid #e6e6e6;
-  border-bottom: 1px solid #e6e6e6;
-  padding: 7px 5px;
-  margin: 10px 0;
-}
-
 .delivery-select-logo, .delivery-order-logo {
   text-align: center;
   padding: 10px 0;
@@ -1224,6 +1217,59 @@ img.gold-offer-slide-img {
         color: #0A1D32;
         text-align: left;
         margin: 3px 0 0 0;
+    }
+  }
+}
+
+.delivery-select-product {
+  .block2 {
+    .all-tax {
+      color: #767E86;
+      font-size: 10px;
+      font-weight: 700;
+      margin: 0 0 0 5px;
+    }
+    .mc {
+      color: #767E86;
+      font-size: 10px;
+      margin: 0 0 7px 0;
+    }
+    .seller-name {
+      color: #767E86;
+      font-size: 13px;
+      font-weight: 400;
+      margin: 6px 0 6px 0;
+    }
+  }
+
+  .block3 {
+    margin: 20px 0 40px 0;
+    .pincode-block {
+      position: relative;
+      margin: 10px 0 0 0;
+      .gold-placeholder-right {
+        color: var(--secondary);
+        font-weight: 700;
+        font-size: 10px;
+        cursor: pointer;
+      }
+    }
+    
+  }
+
+  .page-title {
+    color: #0A1C32;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .block4 {
+    margin: 0 0 30px 0;
+    .product-de-points {
+      color: #767E86;
+      font-size: 13px;
+      font-weight: 400;
+      margin: 10px 0 10px 0;
     }
   }
 }

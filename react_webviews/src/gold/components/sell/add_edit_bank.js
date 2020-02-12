@@ -11,7 +11,8 @@ import { getConfig } from 'utils/functions';
 import GoldLivePrice from '../ui_components/live_price';
 import ConfirmDialog from '../ui_components/confirm_dialog';
 import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
-import {bankAccountTypeOptions} from 'utils/constants';
+import { bankAccountTypeOptions } from 'utils/constants';
+import TextField from 'material-ui/TextField';
 
 class SellAddEditBank extends Component {
   constructor(props) {
@@ -36,33 +37,39 @@ class SellAddEditBank extends Component {
       countdownInterval: null,
       account_type: '',
       provider: this.props.match.params.provider,
-      accountTypeOptions: bankAccountTypeOptions(false)
+      accountTypeOptions: bankAccountTypeOptions(false),
+      formData: {
+        account_type: '',
+        ifsc_code: '',
+        account_no: '',
+        confirm_account_no: '',
+        bank_image: ''
+      }
     }
     this.countdown = this.countdown.bind(this);
     this.checkIFSCFormat = this.checkIFSCFormat.bind(this);
   }
 
   async componentDidMount() {
-
     let confirmDialogData = {
-        buttonData: {
-            leftTitle: 'Sell gold worth',
-            leftSubtitle: '₹1,000',
-            leftArrow: 'down',
-            provider: 'safegold'
-        },
-        buttonTitle: "Ok",
-        content1: [
-            {'name': 'Sell price for <b>0.014</b> gms', 'value': '₹194.17'},
-            {'name': 'GST', 'value': '₹5.83'}
-        ],
-        content2: [
-            {'name': 'Total', 'value': '₹200.00'}
-        ]
+      buttonData: {
+        leftTitle: 'Sell gold worth',
+        leftSubtitle: '₹1,000',
+        leftArrow: 'down',
+        provider: 'safegold'
+      },
+      buttonTitle: "Ok",
+      content1: [
+        { 'name': 'Sell price for <b>0.014</b> gms', 'value': '₹194.17' },
+        { 'name': 'GST', 'value': '₹5.83' }
+      ],
+      content2: [
+        { 'name': 'Total', 'value': '₹200.00' }
+      ]
     }
 
     this.setState({
-        confirmDialogData: confirmDialogData
+      confirmDialogData: confirmDialogData
     })
 
     let timeAvailable = window.localStorage.getItem('timeAvailableSell');
@@ -79,28 +86,26 @@ class SellAddEditBank extends Component {
     }
 
     try {
+
+      let formData = this.state.formData;
       const res = await Api.get('/api/gold/user/bank/details');
       if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
-        let bankDetails, account_no, confirm_account_no, ifsc_code;
         if (result.banks.length !== 0) {
-          account_no = result.banks[0].account_number;
-          confirm_account_no = result.banks[0].account_number;
-          ifsc_code = result.banks[0].ifsc_code;
-          this.checkIFSCFormat(result.banks[0].ifsc_code);
+          let bank = result.banks[0];
+          formData.account_no = bank.account_number;
+          formData.confirm_account_no = bank.account_number;
+          formData.ifsc_code = bank.ifsc_code;
+          formData.bank_image = bank.image;
+          this.checkIFSCFormat(bank.ifsc_code);
         } else {
-          bankDetails = {
-            account_no: '',
-            confirm_account_no: '',
-            ifsc_code: ''
-          };
+          formData.account_no = '';
+          formData.confirm_account_no = '';
+          formData.ifsc_code = '';
+          formData.bank_image = ''
         }
         this.setState({
-          // show_loader: false,
-          bankDetails: bankDetails,
-          account_no: account_no,
-          confirm_account_no: confirm_account_no,
-          ifsc_code: ifsc_code
+          formData: formData,
         });
       } else {
         this.setState({
@@ -167,33 +172,32 @@ class SellAddEditBank extends Component {
   };
 
   async checkIFSCFormat(ifsc_code) {
+
+    let formData = this.state.formData;
     if (ifsc_code && ('' + ifsc_code).length === 11) {
 
       try {
         const res = await Api.get('/api/ifsc/' + (ifsc_code).toUpperCase());
         if (res.pfwresponse.status_code === 200) {
           let result = res.pfwresponse.result;
-          let bankDetails, ifsc_error, bank_name, branch_name, ifsc_helper;
           if (result.length === 0) {
-            ifsc_error = 'Please enter a valid IFSC code';
-            bank_name = '';
-            branch_name = '';
-            ifsc_helper = '';
+            formData.ifsc_error = 'Please enter a valid IFSC code';
+            formData.bank_name = '';
+            formData.branch_name = '';
+            formData.ifsc_helper = '';
+            formData.image = ''
+          }else if (result[0]) {
+            let bank = result[0];
+            formData.ifsc_error = '';
+            formData.bank_name = bank.bank;
+            formData.branch_name = bank.branch;
+            formData.ifsc_helper = formData.bank_name + ', ' + formData.branch_name;
+            formData.bank_image = bank.image;
           }
 
-          if (result[0]) {
-            ifsc_error = '';
-            bank_name = result[0].bank;
-            branch_name = result[0].branch;
-            ifsc_helper = bank_name + ', ' + branch_name;
-          }
           this.setState({
             show_loader: false,
-            bank_name: bank_name,
-            branch_name: branch_name,
-            ifsc_error: ifsc_error,
-            ifsc_helper: ifsc_helper,
-            bankDetails: bankDetails
+            formData:formData
           });
         } else {
           this.setState({
@@ -220,19 +224,29 @@ class SellAddEditBank extends Component {
   }
 
   handleChange = (field) => (event) => {
+    let formData = this.state.formData;
+
     if (event.target.name === 'ifsc_code') {
       if (event.target.value.length > 11) {
         return;
       }
       this.checkIFSCFormat(event.target.value);
+
+      formData[event.target.name] = event.target.value;
       this.setState({
-        [event.target.name]: event.target.value
+        formData: formData
       });
 
     } else {
       this.setState({
         [event.target.name]: event.target.value,
         [event.target.name + '_error']: ''
+      });
+
+      formData[event.target.name] = event.target.value;
+      formData[event.target.name + '_error'] = '';
+      this.setState({
+        formData: formData
       });
     }
   }
@@ -306,7 +320,7 @@ class SellAddEditBank extends Component {
   handleClick = async () => {
 
     this.setState({
-        openConfirmDialog: false
+      openConfirmDialog: false
     })
     this.sendEvents('next');
 
@@ -314,27 +328,42 @@ class SellAddEditBank extends Component {
       return;
     }
 
+    let canSubmitForm = true;
+    let formData = this.state.formData;
+
     if (!this.state.account_no) {
-      this.setState({
-        account_no_error: 'Please enter account number'
-      });
-    } else if (!this.state.confirm_account_no) {
-      this.setState({
-        confirm_account_no_error: 'This field is required'
-      });
+      formData.account_no_error = 'Please enter account number';
+    }
+
+    if (!this.state.account_type) {
+      formData.account_type_error = 'Please select account type';
+    }
+
+    if (!this.state.confirm_account_no) {
+      formData.confirm_account_no_error = 'This field is required';
     } else if (this.state.account_no !== this.state.confirm_account_no) {
-      this.setState({
-        confirm_account_no_error: 'Account number mismatch'
-      });
-    } else if (!this.state.ifsc_code) {
-      this.setState({
-        ifsc_error: 'Please enter IFSC Code'
-      });
+      formData.confirm_account_no_error = 'Account number mismatch';
+    }
+
+    if (!this.state.ifsc_code) {
+      formData.ifsc_error = 'Please enter IFSC Code';
     } else if (this.state.ifsc_code && (this.state.ifsc_code.length < 11 || this.state.ifsc_code.length > 11)) {
-      this.setState({
-        ifsc_error: 'Invalid IFSC Code'
-      });
-    } else {
+      formData.ifsc_error = 'Invalid IFSC Code';
+    }
+
+    this.setState({
+      formData: formData
+    })
+
+    let keysToCheck = ['account_no_error', 'confirm_account_no_error', 'ifsc_error', 'account_type'];
+    for (var i = 0; i < keysToCheck.length; i++) {
+      if (formData[keysToCheck[i]]) {
+        canSubmitForm = false;
+        break;
+      }
+    }
+
+    if (canSubmitForm) {
       var options = {
         'account_number': this.state.account_no,
         'ifsc_code': this.state.ifsc_code
@@ -401,91 +430,98 @@ class SellAddEditBank extends Component {
         buttonTitle="Continue"
         events={this.sendEvents('just_set_events')}
         withProvider={true}
-        buttonData= {{
-            leftTitle: 'Sell gold worth',
-            leftSubtitle: '₹1,000',
-            leftArrow: 'up',
-            provider: 'safegold'
+        buttonData={{
+          leftTitle: 'Sell gold worth',
+          leftSubtitle: '₹1,000',
+          leftArrow: 'up',
+          provider: 'safegold'
         }}
       >
         <div className="common-top-page-subtitle">
-         Amount will be credited to your account
+          Amount will be credited to your account
         </div>
 
         <GoldLivePrice parent={this} />
         <ConfirmDialog parent={this} />
-        
+
         <div className="bank-details">
-            <div className="InputField">
-                <Input
-                error={(this.state.name_error) ? true : false}
-                helperText={this.state.name_error}
-                type="text"
-                disabled={true}
-                width="40"
-                label="Account holder name"
-                class="name"
-                id="name"
-                name="name"
-                value={this.state.name}
-                onChange={this.handleChange('name')} />
+          <div className="InputField">
+            <Input
+              error={(this.state.formData.name_error) ? true : false}
+              helperText={this.state.formData.name_error}
+              type="text"
+              disabled={true}
+              width="40"
+              label="Account holder name"
+              class="name"
+              id="name"
+              name="name"
+              value={this.state.formData.name}
+              onChange={this.handleChange('name')} />
+          </div>
+          <div className="InputField">
+            <Input
+              error={(this.state.formData.account_no_error) ? true : false}
+              helperText={this.state.formData.account_no_error}
+              type="password"
+              width="40"
+              label="Your Account Number *"
+              class="account_no"
+              id="account_no"
+              name="account_no"
+              value={this.state.formData.account_no}
+              onChange={this.handleChange('account_no')} />
+          </div>
+          <div className="InputField">
+            <Input
+              error={(this.state.formData.confirm_account_no_error) ? true : false}
+              helperText={this.state.formData.confirm_account_no_error}
+              type="text"
+              width="40"
+              label="Confirm Account Number *"
+              class="confirm_account_no"
+              id="confirm_account_no"
+              name="confirm_account_no"
+              value={this.state.formData.confirm_account_no}
+              onChange={this.handleChange('confirm_account_no')} />
+          </div>
+          <div className="InputField">
+            <TextField
+              error={(this.state.formData.ifsc_error) ? true : false}
+              helperText={this.state.formData.ifsc_error}
+              type="text"
+              width="40"
+              label="IFSC Code *"
+              id="ifsc_code"
+              name="ifsc_code"
+              value={this.state.formData.ifsc_code}
+              onChange={this.handleChange('ifsc_code')}
+            />
+
+           {this.state.formData.bank_image && 
+            <label className="input-placeholder-right gold-placeholder-right">
+              <img style={{ width: 20 }}
+                src={this.state.formData.bank_image} alt="info" />
+            </label>}
+
+            <div className="filler">
+              {(this.state.formData.ifsc_helper && !this.state.formData.ifsc_error) && <span>{this.state.formData.ifsc_helper}</span>}
             </div>
-            <div className="InputField">
-                <Input
-                error={(this.state.account_no_error) ? true : false}
-                helperText={this.state.account_no_error}
-                type="password"
-                width="40"
-                label="Your Account Number *"
-                class="account_no"
-                id="account_no"
-                name="account_no"
-                value={this.state.account_no}
-                onChange={this.handleChange('account_no')} />
-            </div>
-            <div className="InputField">
-                <Input
-                error={(this.state.confirm_account_no_error) ? true : false}
-                helperText={this.state.confirm_account_no_error}
-                type="text"
-                width="40"
-                label="Confirm Account Number *"
-                class="confirm_account_no"
-                id="confirm_account_no"
-                name="confirm_account_no"
-                value={this.state.confirm_account_no}
-                onChange={this.handleChange('confirm_account_no')} />
-            </div>
-            <div className="InputField">
-                <Input
-                error={(this.state.ifsc_error) ? true : false}
-                helperText={this.state.ifsc_error}
-                type="text"
-                width="40"
-                label="IFSC Code *"
-                class="ifsc"
-                id="ifsc_code"
-                name="ifsc_code"
-                value={this.state.ifsc_code}
-                onChange={this.handleChange('ifsc_code')} />
-                <div className="filler">
-                {(this.state.ifsc_helper && !this.state.ifsc_error) && <span>{this.state.ifsc_helper}</span>}
-                </div>
-            </div>
-            <div className="InputField">
-                    <DropdownWithoutIcon
-                    error={(this.state.account_type_error) ? true : false}
-                    helperText={this.state.account_type_error}
-                    width="40"
-                    type="professional"
-                    label="Select account type"
-                    class="MaritalStatus"
-                    options={this.state.accountTypeOptions}
-                    id="education"
-                    name="account_type"
-                    value={this.state.account_type}
-                    onChange={this.handleAccountTypeRadioValue('account_type')} />
-                </div>
+          </div>
+          <div className="InputField">
+            <DropdownWithoutIcon
+              error={(this.state.formData.account_type_error) ? true : false}
+              helperText={this.state.formData.account_type_error}
+              width="40"
+              type="professional"
+              label="Select account type"
+              class="MaritalStatus"
+              options={this.state.accountTypeOptions}
+              id="education"
+              name="account_type"
+              value={this.state.formData.account_type}
+              onChange={this.handleAccountTypeRadioValue('account_type')} />
+          </div>
           {/* <div className="bank-timer">Price expires in <b>{this.state.minutes}:{this.state.seconds}</b></div> */}
         </div>
       </Container>

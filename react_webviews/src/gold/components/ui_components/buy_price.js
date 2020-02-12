@@ -38,7 +38,7 @@ class BuyPriceClass extends Component {
                 let timeAvailable = ((goldBuyInfo.rate_validity - currentDate.getTime()) / 1000 - 330 * 60);
 
 
-                let buyData = storageService().getObject('buyData');
+                let buyData = storageService().getObject('buyData') || {};
                 buyData.goldBuyInfo = result.buy_info;
                 buyData.plutusRateID = result.buy_info.plutus_rate_id;
                 buyData.timeAvailable = timeAvailable;

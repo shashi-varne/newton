@@ -16,7 +16,6 @@ import CheckHow3 from "./components/general/check_how3";
 import KnowMore from "./components/general/know_more";
 
 
-import GoldSummary from "./components/mygold/gold_summary";
 import GoldLanding from "./components/mygold/landing";
 import GoldLocker from "./components/mygold/gold_locker";
 import Transactions from "./components/transactions/index";
@@ -95,7 +94,7 @@ const Gold = props => {
 
           {/* general */}
           <Route path={`${url}/landing`} component={GoldLanding} />
-          <Route path={`${url}/about`} component={GoldSummary} />
+          <Route path={`${url}/about`} component={GoldLanding} />
           <Route path={`${url}/details`} component={KnowMore} />
           <Route path={`${url}/check-how1`} component={CheckHow1} />
           <Route path={`${url}/check-how2`} component={CheckHow2} />
@@ -104,7 +103,7 @@ const Gold = props => {
           
 
            {/* common */}
-           <Route path={`${url}/my-gold`} component={GoldSummary} />
+           <Route path={`${url}/my-gold`} component={GoldLanding} />
           <Route path={`${url}/my-gold-locker`} component={GoldLocker} />
           <Route path={`${url}/gold-transactions`} component={Transactions} />
           <Route path={`${url}/:provider/:orderType/payment`} component={Payment} />
@@ -132,10 +131,11 @@ const Gold = props => {
 
           {/* delivery */}
           <Route path={`${url}/delivery`} component={DeliveryIntro} />
+          <Route path={`${url}/delivery-products`}  component={GoldDeliveryProducts} />
           <Route path={`${url}/:provider/gold-delivery-address`}  component={DeliveryAddress} />
           <Route path={`${url}/:provider/gold-delivery-order`} component={DeliveryOrder} />
           <Route path={`${url}/:provider/select-gold-product`}  component={DeliverySelectedProduct} />
-          <Route path={`${url}/:provider/delivery-products`}  component={GoldDeliveryProducts} />
+          
 
           <Route path={`${url}/:provider/select-address-delivery`} component={SelectAddressDelivery} />
           <Route path={`${url}/:provider/add-address-delivery`} component={AddEditAddressDelivery} />
