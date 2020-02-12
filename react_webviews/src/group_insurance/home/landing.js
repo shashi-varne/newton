@@ -47,6 +47,8 @@ class Landing extends Component {
 
   componentWillMount() {
 
+    window.localStorage.setItem('group_insurance_payment_started', '');
+    window.localStorage.setItem('group_insurance_payment_urlsafe', '');
     window.localStorage.setItem('group_insurance_plan_final_data', '');
     nativeCallback({ action: 'take_control_reset' });
     window.localStorage.setItem('group_insurance_payment_url', '');
@@ -119,7 +121,7 @@ class Landing extends Component {
     let openModuleData =  params ? params.openModuleData : {}
 
     this.setState({
-      openModuleData: openModuleData,
+      openModuleData: openModuleData || {},
       insuranceProducts: insuranceProducts,
       insurance: insurance,
       instant_icon: instant_icon,

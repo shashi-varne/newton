@@ -17,6 +17,15 @@ import RequestFailure from './components/failure';
 import RequestSuccess from './components/success';
 import RequestRedirection from './components/redirection';
 import eMandateOtp from './components/otp';
+
+
+
+// consent
+import ConsentAbout from './components/consent/about';
+import ConsentOtp from './components/consent/otp';
+import ConsentSuccess from './components/consent/success';
+
+
 import { ToastContainer } from 'react-toastify';
 
 import { create } from 'jss';
@@ -62,7 +71,13 @@ const Mandate_OTM = (props) => {
           <Route path={`${url}/failure`} component={RequestFailure} />
           <Route path={`${url}/success`} component={RequestSuccess} />
           <Route path={`${url}/otp`} component={eMandateOtp} />
-          
+
+           {/*consent  */}
+          <Route path={`${url}/consent/about`} component={ConsentAbout} />
+          <Route path={`${url}/consent/otp`} component={ConsentOtp} />
+          <Route path={`${url}/consent/success`} component={ConsentSuccess} />
+
+
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>
