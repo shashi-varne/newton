@@ -546,7 +546,7 @@ input#pan {
   font-weight: 600;
 }
 .header-topbar-white {
-  background: white !important;
+  background-color: white !important;
   color: black !important;
   transition: .3s transform ease-in-out;
   box-shadow: none !important;

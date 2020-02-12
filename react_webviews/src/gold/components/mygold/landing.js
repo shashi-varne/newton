@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import { inrFormatDecimal } from 'utils/validators';
-import safegold_logo from 'assets/safegold_logo_60x60.png';
-import arrow from 'assets/arrow.png';
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -279,9 +276,9 @@ class GoldSummary extends Component {
         styleContainer={{
           backgroundImage: `url(${gold_pattern})`,
         }}
-        // styleHeader={{
-        //   backgroundImage: `url(${gold_pattern})`,
-        // }}
+        styleHeader={{
+          backgroundImage: `url(${gold_pattern})`,
+        }}
         classHeader="gold-landing-header gold-landing-container-background"
       >
         <div className="gold-landing" id="goldSection">

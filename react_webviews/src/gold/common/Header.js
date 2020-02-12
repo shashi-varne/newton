@@ -14,7 +14,9 @@ const Header = ({ classes, title, count, total, current, goBack,
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
   inPageTitle, force_hide_inpage_title, className ,style}) => (
   <AppBar position="fixed" color="primary" 
-  className={`Header transition ${classes.root} ${inPageTitle ? 'header-topbar-white' : 'header-topbar-white'} ${className}`}>
+  className={`Header transition ${classes.root} ${inPageTitle ? 'header-topbar-white' : 'header-topbar-white'} ${className}`}
+  style={style}
+  >
     <Toolbar>
       <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={goBack}>
         {!disableBack && 

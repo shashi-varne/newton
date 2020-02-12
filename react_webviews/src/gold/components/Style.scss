@@ -526,7 +526,7 @@
 img.gold-offer-slide-img {
   width: 100%;
   border-radius: 8px;
-  height: 100px;
+  height: 165px;
 }
 
 .check-how-gold .title {
@@ -1102,11 +1102,12 @@ img.gold-offer-slide-img {
   margin-bottom: 0px;
   padding-bottom: 0;
   overflow-y: hidden;
+  padding-bottom: 0px !important;
 }
 .gold-landing-container-background {
   background-position: inherit;
-  background-repeat: repeat;
-  background-size: contain;
+  // background-repeat: repeat;
+  // background-size: contain;
   background-color: #0A1D32;
 }
 .gold-landing-header {
