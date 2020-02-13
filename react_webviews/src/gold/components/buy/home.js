@@ -346,6 +346,7 @@ class GoldBuyHome extends Component {
   };
 
   updateChild = (key, value) => {
+    console.log(key, value);
     this.setState({
       [key]: value
     })

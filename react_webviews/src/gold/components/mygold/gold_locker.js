@@ -8,26 +8,29 @@ import { getConfig } from 'utils/functions';
 import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
 import toast from '../../../common/ui/Toast';
 import {
-  inrFormatDecimalWithoutIcon
+  inrFormatDecimal2
 } from 'utils/validators';
+
+import {isUserRegistered, gold_providers} from '../../constants';
 
 class GoldLocker extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
-      goldInfo: {},
-      userInfo: {},
-      goldSellInfo: {},
-      isRegistered: false,
+      user_info: {},
       params: qs.parse(props.history.location.search.slice(1)),
       value: 0,
       error: false,
       errorMessage: '',
-      countdownInterval: null,
       provider: 'mmtc',
       productName: getConfig().productName,
       reportData: [],
+      mmtc_info: {},
+      mmtc_info_local: gold_providers['mmtc'],
+      safegold_info: {},
+      safegold_info_local: gold_providers['safegold'],
+      selected_provider_info : {}
     }
   }
 
@@ -36,6 +39,65 @@ class GoldLocker extends Component {
     window.removeEventListener("scroll", this.onScroll, false);
   }
 
+  setProviderData(provider, result1, result2) {
+    let isRegistered = isUserRegistered(result1);
+    let data = result1.gold_user_info.provider_info;
+    data.isRegistered = isRegistered;
+    data.user_info = result1.gold_user_info.user_info
+    data.sell_value = ((result2.sell_info.plutus_rate) * (data.gold_balance || 0)).toFixed(2) || 0;
+    data.provider = provider;
+    data.local = gold_providers[provider];
+    this.setState({
+      [provider + '_info']: data,
+      user_info: data.user_info
+    });
+
+    if(provider === 'safegold') {
+      this.setState({
+        show_loader: false
+      })
+    }
+
+  }
+
+  async onloadProvider(provider) {
+    try {
+
+      let result1 = {};
+      let result2 = {};
+      const res = await Api.get('/api/gold/user/account/' + provider);
+      if (res.pfwresponse.status_code === 200) {
+        result1 = res.pfwresponse.result;
+      } else {
+        this.setState({
+          error: true,
+          errorMessage: res.pfwresponse.result.error || res.pfwresponse.result.message ||
+            'Something went wrong'
+        });
+      }
+
+      const res2 = await Api.get('/api/gold/sell/currentprice/' + provider);
+      if (res2.pfwresponse.status_code === 200) {
+        
+        result2 = res2.pfwresponse.result;
+      } else {
+        this.setState({
+          error: true,
+          errorMessage: res2.pfwresponse.result.error || res2.pfwresponse.result.message ||
+            'Something went wrong'
+        });
+      }
+
+
+      this.setProviderData(provider, result1, result2);
+   
+    } catch (err) {
+      this.setState({
+        show_loader: false,
+      });
+      toast('Something went wrong', 'error');
+    }
+  }
 
   async componentDidMount() {
     
@@ -63,60 +125,8 @@ class GoldLocker extends Component {
       reportData: reportData
     })
 
-    try {
-
-      const res = await Api.get('/api/gold/user/account');
-      if (res.pfwresponse.status_code === 200) {
-        let result = res.pfwresponse.result;
-        let isRegistered = true;
-        if (result.gold_user_info.user_info.registration_status === "pending" ||
-          !result.gold_user_info.user_info.registration_status ||
-          result.gold_user_info.is_new_gold_user) {
-          isRegistered = false;
-        }
-        this.setState({
-          goldInfo: result.gold_user_info.safegold_info,
-          userInfo: result.gold_user_info.user_info,
-          isRegistered: isRegistered
-        });
-      } else {
-        this.setState({
-          error: true,
-          errorMessage: res.pfwresponse.result.error || res.pfwresponse.result.message ||
-            'Something went wrong'
-        });
-      }
-
-      const res2 = await Api.get('/api/gold/sell/currentprice');
-      if (res2.pfwresponse.status_code === 200) {
-        let goldInfo = this.state.goldInfo;
-        let result = res2.pfwresponse.result;
-        goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
-        this.setState({
-          goldSellInfo: result.sell_info,
-          goldInfo: goldInfo,
-        });
-
-      } else {
-        this.setState({
-          error: true,
-          errorMessage: res2.pfwresponse.result.error || res2.pfwresponse.result.message ||
-            'Something went wrong'
-        });
-      }
-
-
-   
-    } catch (err) {
-      this.setState({
-        show_loader: false,
-      });
-      // toast('Something went wrong', 'error');
-    }
-
-    this.setState({
-      show_loader: false
-    });
+    this.onloadProvider('mmtc');
+    this.onloadProvider('safegold');
   }
 
  
@@ -177,7 +187,8 @@ class GoldLocker extends Component {
 
   chooseTabs(provider) {
     this.setState({
-      provider: provider
+      provider: provider,
+      selected_provider_info: this.state[provider + '_info']
     })
   }
   
@@ -258,14 +269,13 @@ class GoldLocker extends Component {
           <div className="report-cover-amount">
             <img 
               src={ require(`assets/${this.state.productName}/amount_icon.svg`)} alt="Gold" />
-            ₹{inrFormatDecimalWithoutIcon(2000)}
+            {inrFormatDecimal2(2000)}
           </div>
         </div>
       </div>
     )
   }
 
-  
   render() {
 
     return (
@@ -275,7 +285,8 @@ class GoldLocker extends Component {
         noFooter={true}
         events={this.sendEvents('just_set_events')}
       >
-        <div style={{ marginTop: '15px',display:'flex' }} className="highlight-text highlight-color-info">
+        <div
+        style={{ marginTop: '15px',display:'flex' }} className="highlight-text highlight-color-info">
 
             <img 
               src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
@@ -284,7 +295,7 @@ class GoldLocker extends Component {
               Total value
               </div>
               <div className="highlight-text2" style={{margin: '4px 0 0 8px'}}>
-              0.0249 gms = ₹93.83
+              {this.state.user_info.total_balance} gms = { inrFormatDecimal2(parseFloat(this.state.mmtc_info.sell_value) + parseFloat(this.state.safegold_info.sell_value))}
               </div>
             </div>
             
@@ -297,15 +308,18 @@ class GoldLocker extends Component {
               <div className="title">
                 MMTC
               </div>
+              <div className="block2">
+                {this.state.mmtc_info.gold_balance} gms
+              </div>
+              <div className="block2">
+                {inrFormatDecimal2(this.state.mmtc_info.sell_value)}
+              </div>
+            </div>
+
+            {this.state.provider === 'mmtc' && 
               <img className="img"
-              src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
-            </div>
-            <div className="block2">
-              0.024 gms
-            </div>
-            <div className="block2">
-              ₹93.83
-            </div>
+              src={ require(`assets/${this.state.mmtc_info_local.logo}`) } alt="Gold" />}
+            
           </div>
           <div onClick={() => this.chooseTabs('safegold')} 
           className={`gold-locker-tab ${this.state.provider === 'safegold' ? 'selected': ''}`}>
@@ -313,40 +327,48 @@ class GoldLocker extends Component {
                 <div className="title">
                   Safegold
                 </div>
+
+                <div className="block2">
+                {this.state.safegold_info.gold_balance} gms
+                </div>
+                <div className="block2">
+                {inrFormatDecimal2(this.state.safegold_info.sell_value)}
+                </div>
+              </div>
+
+              {this.state.provider === 'safegold' && 
                 <img className="img"
-                src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
-              </div>
-              <div className="block2">
-                0.024 gms
-              </div>
-              <div className="block2">
-                ₹93.83
-              </div>
+                src={ require(`assets/${this.state.safegold_info_local.logo}`) } alt="Gold" />}
+              
           </div>
         </div>
 
-        <div>
-          <div className="generic-page-title">
-            Transactions
-          </div>
-
-          <div style={{margin: '20px 0 0 0'}}>
-            {this.state.reportData.map(this.renderReportCards)}
-            {this.state.loading_more && <div className="loader">
-              Loading...
-            </div>}
-          </div>
-        </div>
-
-        {/* <div>
+        {this.state.selected_provider_info.isRegistered && 
           <div>
-              <img className="img"
-                src={ require(`assets/${this.state.productName}/ils_alternate_assets.svg`)} alt="Gold" />
+            <div className="generic-page-title">
+              Transactions
+            </div>
+
+            <div style={{margin: '20px 0 0 0'}}>
+              {this.state.reportData.map(this.renderReportCards)}
+              {this.state.loading_more && <div className="loader">
+                Loading...
+              </div>}
+            </div>
           </div>
-          <div style={{color: '#0A1D32', fontSize:14, fontWeight: 400, margin: '20px 0 30px 0'}}>
-          Seems like you have not invested in Safegold yet, <b>buy 24K gold</b> to create long term wealth.
+        }
+        {!this.state.selected_provider_info.isRegistered && 
+          <div>
+            <div>
+                <img className="img"
+                  src={ require(`assets/${this.state.productName}/ils_alternate_assets.svg`)} alt="Gold" />
+            </div>
+            <div style={{color: '#0A1D32', fontSize:14, fontWeight: 400, margin: '20px 0 30px 0'}}>
+            Seems like you have not invested in Safegold yet, <b>buy 24K gold</b> to create long term wealth.
+            </div>
           </div>
-        </div> */}
+        }
+
         <GoldBottomSecureInfo />
       </Container>
     );

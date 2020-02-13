@@ -1,14 +1,5 @@
 import { storageService } from 'utils/validators';
 
-export const providerMapper = {
-    'safegold': {
-        'title': 'Safegold'
-    },
-    'mmtc': {
-        'title': 'MMTC'
-    }
-}
-
 export function forceBackState() {
     let forceBackState = storageService().get('forceBackState');
 
@@ -172,3 +163,16 @@ export const gold_providers_array = [
         logo: 'safegold_logo_60x60.png'
     }
 ]
+
+export function isUserRegistered(result) {
+    let provider_info = result.gold_user_info.provider_info;
+
+    if (!provider_info || 
+        provider_info.registration_status === "pending" || !provider_info.registration_status ||
+      result.gold_user_info.is_new_gold_user) {
+      return false;
+    }
+
+    return true;
+
+}

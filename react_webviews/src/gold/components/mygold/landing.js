@@ -26,24 +26,28 @@ import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
 
 import gold_pattern from 'assets/gold_pattern.png';
 import crd_gold_info from 'assets/crd_gold_info.svg';
+import {isUserRegistered, gold_providers} from '../../constants';
+import { inrFormatDecimal2} from 'utils/validators';
 
 class GoldSummary extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false,
+      show_loader: true,
       openPopup: false,
       popupText: '',
       apiError: '',
-      goldInfo: {},
       user_info: {},
-      goldBuyInfo: {},
-      goldSellInfo: {},
-      isRegistered: false,
       openDialogOffer: false,
       showOffers: true,
       offerImageData: [],
-      productName: getConfig().productName
+      productName: getConfig().productName,
+      mmtc_info: {},
+      mmtc_info_local: gold_providers['mmtc'],
+      safegold_info: {},
+      safegold_info_local: gold_providers['safegold'],
+      selected_provider_info : {},
+      bottom_carousel: true
     }
 
     this.renderOfferImages = this.renderOfferImages.bind(this);
@@ -108,52 +112,70 @@ class GoldSummary extends Component {
     })
   }
 
-  async componentDidMount() {
-    try {
+  setProviderData(provider, result1, result2) {
+    let isRegistered = isUserRegistered(result1);
+    let data = result1.gold_user_info.provider_info;
+    data.isRegistered = isRegistered;
+    data.user_info = result1.gold_user_info.user_info
+    data.sell_value = ((result2.sell_info.plutus_rate) * (data.gold_balance || 0)).toFixed(2) || 0;
+    data.provider = provider;
+    data.local = gold_providers[provider];
+    this.setState({
+      [provider + '_info']: data,
+      user_info: data.user_info
+    });
 
-      const res = await Api.get('/api/gold/user/account/mmtc');
-      if (res && res.pfwresponse.status_code === 200) {
-
-        this.setState({
-          show_loader: false
-        });
-        let result = res.pfwresponse.result;
-        
-        this.setState({
-          provider_info: result.gold_user_info.provider_info,
-          user_info: result.gold_user_info.user_info,
-        });
-      } else {
-        this.setState({
-          show_loader: false
-        });
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
-      }
-
-      const res2 = await Api.get('/api/gold/sell/currentprice');
-      if (res2 && res2.pfwresponse.status_code === 200) {
-        let goldInfo = this.state.goldInfo;
-        let result = res2.pfwresponse.result;
-        goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
-        this.setState({
-          goldSellInfo: result.sell_info,
-          goldInfo: goldInfo,
-          enableInputs: true
-        });
-      } else {
-        this.setState({
-          show_loader: false
-        });
-        toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message || 'Something went wrong', 'error');
-      }
-  
-    } catch (err) {
+    if(provider === 'safegold') {
       this.setState({
         show_loader: false
+      })
+    }
+
+  }
+
+  async onloadProvider(provider) {
+    try {
+
+      let result1 = {};
+      let result2 = {};
+      const res = await Api.get('/api/gold/user/account/' + provider);
+      if (res.pfwresponse.status_code === 200) {
+        result1 = res.pfwresponse.result;
+      } else {
+        this.setState({
+          error: true,
+          errorMessage: res.pfwresponse.result.error || res.pfwresponse.result.message ||
+            'Something went wrong'
+        });
+      }
+
+      const res2 = await Api.get('/api/gold/sell/currentprice/' + provider);
+      if (res2.pfwresponse.status_code === 200) {
+        
+        result2 = res2.pfwresponse.result;
+      } else {
+        this.setState({
+          error: true,
+          errorMessage: res2.pfwresponse.result.error || res2.pfwresponse.result.message ||
+            'Something went wrong'
+        });
+      }
+
+
+      this.setProviderData(provider, result1, result2);
+   
+    } catch (err) {
+      this.setState({
+        show_loader: false,
       });
       toast('Something went wrong', 'error');
     }
+  }
 
+
+  async componentDidMount() {
+    this.onloadProvider('mmtc');
+    this.onloadProvider('safegold');
   }
 
 
@@ -255,7 +277,182 @@ class GoldSummary extends Component {
     });
   }
 
- 
+  
+  renderBlock1() {
+    return(
+      <div className="block1">
+        {this.state.bottom_carousel && this.rendertopInfoImage()}
+        {!this.state.bottom_carousel && this.renderCarousel()}
+      </div>
+    )
+  }
+
+  renderBlock2() {
+    return(
+      <div className="block2">
+      <div onClick={() => this.navigate('my-gold-locker')}
+       className="highlight-text highlight-color-info">
+        <img 
+          src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
+        <div style={{display: 'grid'}}>
+          <div className="highlight-text12">
+          Total value
+          </div>
+          <div className="highlight-text2" style={{margin: '4px 0 0 8px'}}>
+          {this.state.user_info.total_balance} gms = { inrFormatDecimal2(parseFloat(this.state.mmtc_info.sell_value) + parseFloat(this.state.safegold_info.sell_value))}
+          </div>
+        </div>
+
+      </div>
+
+      <div className="want-to">
+      I want to
+      </div>
+      <div className="common-hr"></div>
+
+      <div className="tile2" onClick={() => this.navigate('/gold/buy')}>
+          <img className="icon"
+            src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
+          <div className="title">
+            Buy gold
+          </div>
+      </div>
+
+      <div className="tile2" onClick={() => this.navigate('/gold/sell')}>
+          <img className="icon"
+            src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
+          <div className="title">
+          Sell gold
+          </div>
+      </div>
+
+      <div className="tile2" onClick={() => this.navigate('/gold/delivery')}>
+          <img className="icon"
+            src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
+          <div className="title">
+          Get delivery
+          </div>
+      </div>
+  </div>
+    )
+  }
+
+  renderBlock3() {
+    return(
+     
+      <div className="block3">
+      <div className="title">
+        Benefits of digital gold
+      </div>
+      <div className="subtitle">
+        Bringing convenience and safety to digital gold
+      </div>
+
+      {!this.state.bottom_carousel && this.rendertopInfoImage()}
+
+      <div className="benefites">
+
+        <div className="tile">
+            <img 
+            src={ require(`assets/${this.state.productName}/ic_benefit_gold.svg`)} alt="Gold" />
+          <div className="benefit-tile">
+            <div className="benefit-tile-title">
+              Affordability
+            </div>
+            <div className="benefit-tile-subtitle">
+              Buy gold at live international market prices as per your budget
+            </div>
+          </div>
+        </div>
+
+        <div className="tile">
+            <img 
+            src={ require(`assets/${this.state.productName}/ic_secure_vault.svg`)} alt="Gold" />
+          <div className="benefit-tile">
+            <div className="benefit-tile-title">
+            Easy sell or conversion
+            </div>
+            <div className="benefit-tile-subtitle">
+            Sell to get the amount credited or convert to gold coins
+            </div>
+          </div>
+        </div>
+
+        <div className="tile">
+            <img 
+            src={ require(`assets/${this.state.productName}/ic_purity.svg`)} alt="Gold" />
+          <div className="benefit-tile">
+            <div className="benefit-tile-title">
+            100% insured & secured
+            </div>
+            <div className="benefit-tile-subtitle">
+            Assurance of 24 karat gold with no making or storage charges
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    )
+  }
+
+  rendertopInfoImage() {
+    return(
+      <div className="infoimage-block" style={{backgroundImage: `url(${crd_gold_info})`}}>
+            <div className="title generic-page-title">
+              Buy 24K gold to create long term wealth
+            </div>
+            <div className="button">
+                <Button variant="raised"
+                    size="large" onClick={() => this.navigate('check-how1')} color="secondary" autoFocus>
+                  CHECK HOW?
+                </Button>
+            </div>
+            <div className="bottom-content">
+              Buy-sell anytime | 24K 99.9% pure | 100% secure
+            </div>
+        </div>
+    )
+  }
+
+  renderCarousel() {
+    return(
+      <div>
+        {this.state.showOffers && this.state.offerImageData && 
+        <div style={{ margin: '20px 0 0 0', cursor: 'pointer' }}>
+          <Carousel
+
+            showStatus={false} showThumbs={false}
+            showArrows={true}
+            infiniteLoop={false}
+            selectedItem={this.state.selectedIndex}
+            onChange={(index) => {
+              this.setState({
+                selectedIndex: index,
+                card_swipe: 'yes',
+                card_swipe_count: this.state.card_swipe_count + 1
+              });
+            }}
+          >
+            {this.state.offerImageData.map(this.renderOfferImages)}
+          </Carousel>
+        </div>}
+      </div>
+    )
+  }
+
+  renderBlock4() {
+    return(
+      <div className="block4">
+
+      {this.state.bottom_carousel && this.renderCarousel()}
+      <div style={{margin: '30px 0 20px 0'}}>
+        <GoldBottomSecureInfo />
+      </div>
+
+      </div>
+    )
+  }
 
   render() {
     return (
@@ -276,167 +473,11 @@ class GoldSummary extends Component {
         classHeader="gold-landing-header gold-landing-container-background"
       >
         <div className="gold-landing" id="goldSection">
-          {/* <div className="text-center goldheader"
-            onClick={() => this.navigate('/gold/my-gold-locker')}
-            style={{
-              background: getConfig().primary
-            }}
-          >
-            <div className="my-gold-header">
-              <div className="FlexRow row1">
-                <img alt="Gold" className="img-mygold" src={safegold_logo} />
-                <span className="my-gold-title-header">My 24K Safegold Gold Locker</span>
-                <img alt="Gold" className="img-mygold2" src={arrow} />
-              </div>
-              <div className="spacer-header"></div>
-              <div className="my-gold-details-header1">
-                <div className="my-gold-details-header2">
-                  <div className="my-gold-details-header2a">Weight</div>
-                  <div className="my-gold-details-header2b">{this.state.goldInfo.gold_balance || 0} gm</div>
-                </div>
-                <div className="my-gold-details-header3">
-                  <div className="my-gold-details-header2a">Selling Value</div>
-                  <div className="my-gold-details-header2b">{inrFormatDecimal(this.state.goldInfo.sell_value ) || 0}</div>
-                </div>
-              </div>
-            </div>
-          </div> */}
-            <div className="block1" style={{backgroundImage: `url(${crd_gold_info})`}}>
-                <div className="title generic-page-title">
-                  Buy 24K gold to create long term wealth
-                </div>
-                <div className="button">
-                    <Button variant="raised"
-                        size="large" onClick={this.handleClick} color="secondary" autoFocus>
-                      CHECK HOW?
-                    </Button>
-                </div>
-                <div className="bottom-content">
-                  Buy-sell anytime | 24K 99.9% pure | 100% secure
-                </div>
-            </div>
-
-            <div className="block2">
-                <div className="highlight-text highlight-color-info">
-
-                  <img 
-                    src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
-                  <div style={{display: 'grid'}}>
-                    <div className="highlight-text12">
-                    Total value
-                    </div>
-                    <div className="highlight-text2" style={{margin: '4px 0 0 8px'}}>
-                    0.0249 gms = ₹93.83
-                    </div>
-                  </div>
-
-                </div>
-
-                <div className="want-to">
-                I want to
-                </div>
-                <div className="common-hr"></div>
-
-                <div className="tile2" onClick={() => this.navigate('/gold/buy')}>
-                    <img className="icon"
-                      src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
-                    <div className="title">
-                      Buy gold
-                    </div>
-                </div>
-
-                <div className="tile2" onClick={() => this.navigate('/gold/sell')}>
-                    <img className="icon"
-                      src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
-                    <div className="title">
-                    Sell gold
-                    </div>
-                </div>
-
-                <div className="tile2" onClick={() => this.navigate('/gold/delivery')}>
-                    <img className="icon"
-                      src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
-                    <div className="title">
-                    Get delivery
-                    </div>
-                </div>
-            </div>
-
-            <div className="block3">
-              <div className="title">
-                Benefits of digital gold
-              </div>
-              <div className="subtitle">
-                Bringing convenience and safety to digital gold
-              </div>
-
-              <div className="benefites">
-
-                <div className="tile">
-                    <img 
-                    src={ require(`assets/${this.state.productName}/ic_benefit_gold.svg`)} alt="Gold" />
-                  <div className="benefit-tile">
-                    <div className="benefit-tile-title">
-                      Affordability
-                    </div>
-                    <div className="benefit-tile-subtitle">
-                      Buy gold at live international market prices as per your budget
-                    </div>
-                  </div>
-                </div>
-
-                <div className="tile">
-                    <img 
-                    src={ require(`assets/${this.state.productName}/ic_secure_vault.svg`)} alt="Gold" />
-                  <div className="benefit-tile">
-                    <div className="benefit-tile-title">
-                    Easy sell or conversion
-                    </div>
-                    <div className="benefit-tile-subtitle">
-                    Sell to get the amount credited or convert to gold coins
-                    </div>
-                  </div>
-                </div>
-
-                <div className="tile">
-                    <img 
-                    src={ require(`assets/${this.state.productName}/ic_purity.svg`)} alt="Gold" />
-                  <div className="benefit-tile">
-                    <div className="benefit-tile-title">
-                    100% insured & secured
-                    </div>
-                    <div className="benefit-tile-subtitle">
-                    Assurance of 24 karat gold with no making or storage charges
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
-            <div className="block4">
-              {this.state.showOffers && this.state.offerImageData && <div style={{ margin: '20px 0 0 0', cursor: 'pointer' }}>
-                <Carousel
-
-                  showStatus={false} showThumbs={false}
-                  showArrows={true}
-                  infiniteLoop={false}
-                  selectedItem={this.state.selectedIndex}
-                  onChange={(index) => {
-                    this.setState({
-                      selectedIndex: index,
-                      card_swipe: 'yes',
-                      card_swipe_count: this.state.card_swipe_count + 1
-                    });
-                  }}
-                >
-                  {this.state.offerImageData.map(this.renderOfferImages)}
-                </Carousel>
-              </div>}
-
-              <GoldBottomSecureInfo />
-
-            </div>
+            
+            {this.renderBlock1()}
+            {this.renderBlock2()}
+            {this.renderBlock3()}
+            {this.renderBlock4()}
         </div>
         
       </Container>

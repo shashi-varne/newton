@@ -240,7 +240,7 @@ class Container extends Component {
     })
 
     if(this.props.updateChild) {
-      this.props.updateChild('force_hide_inpage_title', force_hide_inpage_title);
+      this.props.updateChild('inPageTitle', force_hide_inpage_title);
     }
 
   }

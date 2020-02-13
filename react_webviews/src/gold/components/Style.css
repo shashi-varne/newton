@@ -812,35 +812,33 @@ img.gold-offer-slide-img {
   width: auto;
   margin: 20px 0 30px 0;
 }
-.gold-locker-tab {
+.gold-locker-tabs .gold-locker-tab {
   color: #767e86;
   border: 1px solid beige;
-  padding: 10px 20px 10px 20px;
+  padding: 20px 20px 20px 20px;
   background: #f8f8f8;
   font-size: 13px;
   font-weight: 500;
   margin: 0 0 0 -1px;
   width: -webkit-fill-available;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
 }
-.gold-locker-tab.selected {
-  background: white;
-  color: #3792fc;
-}
-.gold-locker-tab .block2 {
+.gold-locker-tabs .gold-locker-tab .block2 {
   color: #767e86;
-  font-size: 13px;
-}
-.gold-locker-tab.selected .block2 {
-  color: #0a1c32;
   font-size: 13px;
   margin: 3px 0 0 0;
 }
-.gold-locker-tab .block1 {
-  display: flex;
-  justify-content: space-between;
-}
-.gold-locker-tab .block1 img {
+.gold-locker-tabs .gold-locker-tab img {
   width: 30px;
+}
+.gold-locker-tabs .gold-locker-tab.selected {
+  background: white;
+  color: #3792fc;
+}
+.gold-locker-tabs .gold-locker-tab.selected .block2 {
+  color: #0a1c32;
 }
 .generic-page-title {
   color: #0a1c32;
@@ -935,7 +933,7 @@ img.gold-offer-slide-img {
   background-color: #0a1d32 !important;
   color: #fff !important;
 }
-.gold-landing .block1 {
+.gold-landing .infoimage-block {
   height: 190px;
   background-repeat: no-repeat;
   display: flex;
@@ -945,10 +943,10 @@ img.gold-offer-slide-img {
   background-size: auto;
   background-position: center;
 }
-.gold-landing .block1 .title {
+.gold-landing .infoimage-block .title {
   max-width: 60%;
 }
-.gold-landing .block1 .bottom-content {
+.gold-landing .infoimage-block .bottom-content {
   color: #9e6e1d;
   font-size: 8px;
   font-weight: 800;
@@ -960,6 +958,11 @@ img.gold-offer-slide-img {
   font-size: 16px;
   color: #fefffe;
   font-weight: 500;
+}
+.gold-landing .block3 .subtitle {
+  color: #d2dae4;
+  font-size: 13px;
+  margin: 4px 0 0 0;
 }
 .gold-landing .block3 .tile {
   display: flex;

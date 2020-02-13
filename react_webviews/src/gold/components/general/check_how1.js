@@ -40,6 +40,7 @@ class CheckHow1 extends Component {
 
   handleClick = () => {
     this.sendEvents('next');
+    this.navigate('check-how2');
   }
 
   render() {
@@ -51,6 +52,7 @@ class CheckHow1 extends Component {
         buttonTitle="Proceed"
         handleClick={this.handleClick}
         events={this.sendEvents('just_set_events')}
+        noFooter={true}
       >
         <div className="check-how-gold">
 
