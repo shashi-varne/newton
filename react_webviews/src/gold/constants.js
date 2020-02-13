@@ -8,7 +8,8 @@ export function forceBackState() {
 
 export const stateMapper = {
     'buy-home': '/gold/buy',
-    'sell-home': '/gold/sell'
+    'sell-home': '/gold/sell',
+    'delivery-products': '/gold/delivery-products'
 }
 
 export function calculate_gold_wt_buy(buyData, buy_price) {
@@ -175,4 +176,16 @@ export function isUserRegistered(result) {
 
     return true;
 
+}
+
+
+export function goBackMap(path) {
+    let mapper = {
+        '/gold/sell' : '/gold/landing',
+        '/gold/buy' : '/gold/landing',
+        '/gold/delivery' : '/gold/landing',
+        '/gold/my-gold-locker' : '/gold/landing'
+    }
+
+    return mapper[path] || false;
 }

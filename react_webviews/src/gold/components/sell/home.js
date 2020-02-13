@@ -7,7 +7,7 @@ import toast from '../../../common/ui/Toast';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import { default_provider, gold_providers, setSellDataAfterUpdate,
-  calculate_gold_wt_sell, calculate_gold_amount_sell} from  '../../constants';
+  calculate_gold_wt_sell, calculate_gold_amount_sell, isUserRegistered} from  '../../constants';
 import { inrFormatDecimal2, storageService, formatAmountInr, formatGms} from "utils/validators";
 import GoldProviderFilter from '../ui_components/provider_filter';
 import GoldLivePrice from '../ui_components/live_price';
@@ -33,8 +33,8 @@ class GoldSellHome extends Component {
       show_loader: true,
       popupText: '',
       apiError: '',
-      goldInfo: {},
-      userInfo: {},
+      provider_info: {},
+      user_info: {},
       goldSellInfo: {},
       gold_products: [],
       maxWeight: '',
@@ -54,6 +54,7 @@ class GoldSellHome extends Component {
       provider: storageService().get('gold_provider') || default_provider,
       gold_providers: gold_providers,
       orderType: "sell",
+      redirect_state: 'sell-home',
       fetchLivePrice: true,
       openPriceChangedDialog: false,
       productName: getConfig().productName
@@ -62,7 +63,7 @@ class GoldSellHome extends Component {
   }
 
    // common code start
-   onload = () => {
+  onload = () => {
     this.setState({
       openOnloadModal: false
     })
@@ -72,6 +73,11 @@ class GoldSellHome extends Component {
   }
 
   updateParent(key, value) {
+
+    if(key === 'fetchLivePrice' && !value) {
+      this.setMaxWeightAmount();
+    }
+
     this.setState({
       [key]: value
     })
@@ -103,6 +109,21 @@ class GoldSellHome extends Component {
     }
   }
 
+  setMaxWeightAmount() {
+    let maxWeight = this.state.maxWeight;
+    let maxAmount = ((this.state.goldSellInfo.plutus_rate) * (maxWeight || 0)).toFixed(2);
+    let weightDiffrence = this.state.provider_info.gold_balance - maxWeight;
+    let sellWeightDiffrence = false;
+    if(weightDiffrence > 0) {
+      sellWeightDiffrence = true
+    }
+    this.setState({
+      maxWeight: maxWeight,
+      maxAmount: maxAmount,
+      sellWeightDiffrence: sellWeightDiffrence
+    });
+  }
+
   async componentDidMount() {
 
     this.setState({
@@ -112,20 +133,24 @@ class GoldSellHome extends Component {
 
     try {
 
-      const res = await Api.get('/api/gold/user/account');
+      const res = await Api.get('/api/gold/user/account/' + this.state.provider);
       if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
-        let isRegistered = true;
-        if (result.gold_user_info.user_info.registration_status === "pending" ||
-          !result.gold_user_info.user_info.registration_status ||
-          result.gold_user_info.is_new_gold_user) {
-          isRegistered = false;
-        }
+        let isRegistered = isUserRegistered(result);
         this.setState({
-          goldInfo: result.gold_user_info.safegold_info,
-          userInfo: result.gold_user_info.user_info,
+          provider_info: result.gold_user_info.provider_info,
+          user_info: result.gold_user_info.user_info,
           isRegistered: isRegistered
         });
+
+        if(!isRegistered) {
+          let err = 'You haven’t invested in gold yet, buy now!';
+          this.setState({
+            base_error: err,
+            amountError: err,
+            weightError: err
+          })
+        }
       } else {
         this.setState({
           error: true,
@@ -135,52 +160,19 @@ class GoldSellHome extends Component {
         
       }
 
-      const res2 = await Api.get('/api/gold/sell/currentprice');
-      if (res2.pfwresponse.status_code === 200) {
-        let goldInfo = this.state.goldInfo;
-        let result = res2.pfwresponse.result;
-        var currentDate = new Date();
-        let timeAvailable = ((result.sell_info.rate_validity - currentDate.getTime()) / 1000 - 330 * 60);
-        goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
-        this.setState({
-          goldSellInfo: result.sell_info,
-          goldInfo: goldInfo,
-          timeAvailable: timeAvailable
-        });
-
-        if (timeAvailable >= 0 && result.sell_info.plutus_rate) {
-          let intervalId = setInterval(this.countdown, 1000);
-          this.setState({
-            countdownInterval: intervalId
-          });
-        }
-      } else {
-        this.setState({
-          error: true,
-          errorMessage: res2.pfwresponse.result.error || res2.pfwresponse.result.message ||
-            'Something went wrong'
-        });
-        
-      }
-
-      const res3 = await Api.get('/api/gold/user/sell/balance');
+      const res3 = await Api.get('/api/gold/user/sell/balance/' + this.state.provider);
 
       if (res3.pfwresponse.status_code === 200) {
 
         let result = res3.pfwresponse.result;
         
         let maxWeight = parseFloat(result.sellable_gold_balance || 0).toFixed(4);
-        let maxAmount = ((this.state.goldSellInfo.plutus_rate) * (maxWeight || 0)).toFixed(2);
-        let weightDiffrence = this.state.goldInfo.gold_balance - maxWeight;
-        let sellWeightDiffrence = false;
-        if(weightDiffrence > 0) {
-          sellWeightDiffrence = true
-        }
         this.setState({
-          maxWeight: maxWeight,
-          maxAmount: maxAmount,
-          sellWeightDiffrence: sellWeightDiffrence
-        });
+          sellable_gold_balance: result.sellable_gold_balance,
+          maxWeight: maxWeight
+        })
+        this.setMaxWeightAmount();
+       
       } else {
         this.setState({
           error: true,
@@ -252,7 +244,7 @@ class GoldSellHome extends Component {
       return;
     }
 
-    if(!this.state.userInfo.pan_verified) {
+    if(!this.state.user_info.pan_verified) {
       this.navigate(this.state.provider + '/sell-pan');
     } else {
       this.navigate(this.state.provider + '/sell-select-bank');
@@ -290,6 +282,10 @@ class GoldSellHome extends Component {
   }
 
   setAmountGms = (event) => {
+
+    if(this.state.base_error) {
+      return;
+    }
     let amountError = false;
     let weightError = false;
     let isWeight = this.state.isWeight;
@@ -332,7 +328,7 @@ class GoldSellHome extends Component {
     }
 
     if (!weight || parseFloat(weight) < 0 ||
-      parseFloat(weight) > this.state.maxWeight) {
+      parseFloat(weight) > parseFloat(this.state.maxWeight)) {
       weightError = true;
     }
 
@@ -429,9 +425,10 @@ class GoldSellHome extends Component {
                       <TextField
                           type="text"
                           autoComplete="off"
+                          error={this.state.amountError ? true: false}
                           name="amount"
                           id="amount"
-                          disabled={!this.state.openOnloadModal}
+                          disabled={!this.state.openOnloadModal || !this.state.isRegistered}
                           onChange={(event) => this.setAmountGms(event)}
                           onKeyPress={this.handleKeyChange('amount')}
                           value={formatAmountInr(this.state.amount || '')}
@@ -439,9 +436,11 @@ class GoldSellHome extends Component {
 
                         <label className="gold-placeholder-right">= {this.state.weight} gms</label>
                       </div>
-                      {this.state.isRegistered &&  <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}
-                      >Min ₹1.00 {this.state.sellWeightDiffrence && <span>*</span>}
-                      {this.state.maxAmount > 1 &&<span>- Max ₹ {this.state.maxAmount}</span>}
+                      {this.state.isRegistered &&  
+                      <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>
+                      {this.state.maxAmount >= 1 && <span> Min ₹1.00 - </span>}
+                      {/* {this.state.sellWeightDiffrence && <span>*</span>} */}
+                      <span> Max ₹ {this.state.maxAmount}</span>
                       </div>}
                   </div>
                 }
@@ -455,7 +454,8 @@ class GoldSellHome extends Component {
                           label=""
                           name="weight"
                           id="weight"
-                          disabled={!this.state.openOnloadModal}
+                          error={this.state.weightError ? true: false}
+                          disabled={!this.state.openOnloadModal || !this.state.isRegistered}
                           onChange={(event) => this.setAmountGms(event)}
                           onKeyPress={this.handleKeyChange('weight')}
                           value={formatGms(this.state.weight || '')}
@@ -465,7 +465,8 @@ class GoldSellHome extends Component {
                       </div>
 
                       {this.state.isRegistered && <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>
-                      {this.state.sellWeightDiffrence && <span>*</span>}Max {this.state.maxWeight} gm
+                      {/* {this.state.sellWeightDiffrence && <span>*</span>} */}
+                      Max {this.state.maxWeight} gm
                       </div>}
                   </div>
                 }
@@ -474,7 +475,7 @@ class GoldSellHome extends Component {
               </FormControl>
 
               <div>
-                  <Button fullWidth={true} variant="raised"
+                  <Button fullWidth={true} variant="raised" disabled={!this.state.isRegistered}
                       size="large" onClick={this.handleClick} color="secondary" autoFocus>
                     Proceed
                   </Button>

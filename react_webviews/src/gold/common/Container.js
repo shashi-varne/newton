@@ -16,7 +16,7 @@ import Dialog, {
 import '../../utils/native_listner';
 import { getConfig, setHeights } from 'utils/functions';
 import {checkStringInString} from 'utils/validators';
-import {forceBackState} from '../constants';
+import {forceBackState, goBackMap} from '../constants';
 
 class Container extends Component {
   constructor(props) {
@@ -82,7 +82,6 @@ class Container extends Component {
   }
 
   historyGoBack = () => {
-    // let { params } = this.props.location;
 
     if(forceBackState()) {
       this.navigate(forceBackState());
@@ -94,21 +93,17 @@ class Container extends Component {
 
     let pathname = this.props.history.location.pathname;
     if (checkStringInString(pathname, "payment")) {
-      this.navigate("/gold/my-gold");
+      this.navigate("/gold/my-gold-locker");
+      return;
+    }
+
+    if(goBackMap(pathname)) {
+      this.navigate(goBackMap(pathname));
       return;
     }
     switch (pathname) {
-      case checkStringInString(pathname, "select-gold-product"):
-        this.props.history.push({
-          pathname: "/gold/my-gold-locker",
-          search: this.props.location.search + "&isDelivery=" + true
-        });
-        break;
-      // case '/gold/my-gold':
-      //   this.navigate('/gold/about');
-      //   break;
       case "/gold/my-gold-locker":
-        this.navigate("/gold/my-gold");
+        this.navigate("/gold/landing");
         break;
       case checkStringInString(pathname, "buy-gold-order"):
         this.navigate("/gold/my-gold");
@@ -122,6 +117,7 @@ class Container extends Component {
       case "/gold":
       case "/gold/my-gold":
       case "/gold/about":
+        case "/gold/landing":
         // this.setState({
         //   callbackType: "exit",
         //   openPopup: true,

@@ -57,6 +57,10 @@ class DeliveryIntro extends Component {
     );
   }
 
+  handleClick =() => {
+    this.navigate('delivery-products');
+  }
+
   render() {
     return (
       <Container

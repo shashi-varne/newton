@@ -15,7 +15,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
 import GoldProviderFilter from '../ui_components/provider_filter';
-import { default_provider, gold_providers } from '../../constants';
+import { default_provider, gold_providers, isUserRegistered } from '../../constants';
 import { storageService} from 'utils/validators';
 
 const stepsContentMapper = [
@@ -35,24 +35,22 @@ class GoldDeliveryProducts extends Component {
       provider: storageService().get('gold_provider') || default_provider,
       goldInfo: {},
       userInfo: {},
-      productName: getConfig().productName
+      provider_info: {},
+      productName: getConfig().productName,
+      redirect_state: 'delivery-products'
     }
   }
 
 
   async componentDidMount() {
 
+    let isRegistered;
     try {
 
-      const res = await Api.get('/api/gold/user/account');
+      const res = await Api.get('/api/gold/user/account/' + this.state.provider);
       if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
-        let isRegistered = true;
-        if (result.gold_user_info.user_info.registration_status === "pending" ||
-          !result.gold_user_info.user_info.registration_status ||
-          result.gold_user_info.is_new_gold_user) {
-          isRegistered = false;
-        }
+        isRegistered = isUserRegistered(result);
         this.setState({
           goldInfo: result.gold_user_info.safegold_info,
           userInfo: result.gold_user_info.user_info,
@@ -70,36 +68,29 @@ class GoldDeliveryProducts extends Component {
         //   'Something went wrong', 'error');
       }
 
-      const res3 = await Api.get('/api/gold/user/sell/balance');
+      if(isRegistered) {
+        const res3 = await Api.get('/api/gold/user/sell/balance/' + this.state.provider);
 
-      if (res3.pfwresponse.status_code === 200) {
-
-        let result = res3.pfwresponse.result;
-        
-        let maxWeight = parseFloat(result.sellable_gold_balance || 0).toFixed(4);
-        let maxAmount = ((this.state.goldSellInfo.plutus_rate) * (maxWeight || 0)).toFixed(2);
-        let weightDiffrence = this.state.goldInfo.gold_balance - maxWeight;
-        let sellWeightDiffrence = false;
-        if(weightDiffrence > 0) {
-          sellWeightDiffrence = true
+        if (res3.pfwresponse.status_code === 200) {
+  
+          let result = res3.pfwresponse.result;
+          let maxWeight = parseFloat(result.sellable_gold_balance || 0).toFixed(4);
+          this.setState({
+            maxWeight: maxWeight
+          });
+        } else {
+          this.setState({
+            // show_loader: false,
+            error: true,
+            errorMessage: res3.pfwresponse.result.error || res3.pfwresponse.result.message ||
+              'Something went wrong'
+          });
+          // toast(res3.pfwresponse.result.error || res3.pfwresponse.result.message ||
+          //   'Something went wrong', 'error');
         }
-        this.setState({
-          maxWeight: maxWeight,
-          maxAmount: maxAmount,
-          sellWeightDiffrence: sellWeightDiffrence
-        });
-      } else {
-        this.setState({
-          // show_loader: false,
-          error: true,
-          errorMessage: res3.pfwresponse.result.error || res3.pfwresponse.result.message ||
-            'Something went wrong'
-        });
-        // toast(res3.pfwresponse.result.error || res3.pfwresponse.result.message ||
-        //   'Something went wrong', 'error');
-      }
+      } 
 
-      const res4 = await Api.get('/api/gold/delivery/products');
+      const res4 = await Api.get('/api/gold/delivery/products/' + this.state.provider);
       if (res4.pfwresponse.status_code === 200) {
         this.setState({
           show_loader: false,
@@ -116,6 +107,7 @@ class GoldDeliveryProducts extends Component {
         //   'Something went wrong', 'error');
       }
     } catch (err) {
+      console.log(err);
       this.setState({
         show_loader: false,
         error: true,

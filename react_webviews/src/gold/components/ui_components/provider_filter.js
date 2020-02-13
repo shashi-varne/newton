@@ -45,7 +45,7 @@ class GoldProviderFilterClass extends Component {
                     </div>
                     {this.props.parent.state.orderType !== 'buy' && 
                      <div className="tile2-right">
-                        {this.props.parent.state.goldInfo.gold_balance || 0} gms in {this.state.providerInfo.title}
+                        {this.props.parent.state.provider_info.gold_balance || 0} gms in {this.state.providerInfo.title}
                     </div>}
                 </div>
             </div>
