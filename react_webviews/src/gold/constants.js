@@ -146,13 +146,15 @@ export const gold_providers = {
         key: 'mmtc',
         title: 'MMTC',
         subtitle: '24 Karat | 99.9% pure',
-        logo: 'safegold_logo_60x60.png'
+        logo: 'safegold_logo_60x60.png',
+        karat: '24K 99.99%'
     },
     'safegold': { 
         key: 'safegold',
         title: 'Safegold',
         subtitle: '24 Karat | 99.5% pure',
-        logo: 'safegold_logo_60x60.png'
+        logo: 'safegold_logo_60x60.png',
+        karat: '24K 99.5%'
     }
 }
 

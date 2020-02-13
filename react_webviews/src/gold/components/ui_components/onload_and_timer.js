@@ -52,7 +52,6 @@ class GoldOnloadAndTimerClass extends Component {
         let minutes = Math.floor(timeAvailable / 60);
         let seconds = Math.floor(timeAvailable - minutes * 60);
         timeAvailable--;
-        // timeAvailable = timeAvailable -100;
         orderData.timeAvailable = timeAvailable;
 
         this.updateParent('timeAvailable', timeAvailable);
@@ -72,6 +71,7 @@ class GoldOnloadAndTimerClass extends Component {
                 countdownInterval: intervalId,
                 show_loader: false
             });
+            // this.updateParent('show_loader', false);
         }
     }
 
@@ -139,8 +139,6 @@ class GoldOnloadAndTimerClass extends Component {
                 countdownInterval: intervalId
             });
         }
-
-        this.updateParent('show_loader', false);
 
     }
 

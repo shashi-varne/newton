@@ -11,6 +11,9 @@ import { getUrlParams } from 'utils/validators';
 // eslint-disable-next-line
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
+import { inrFormatDecimal } from 'utils/validators';
+import DotDotLoader from '../../../common/ui/DotDotLoader';
+import { gold_providers } from '../../constants';
 
 const commonMapper = {
   'buy': {
@@ -18,19 +21,22 @@ const commonMapper = {
       'top_icon': 'ils_gold_purchase_success',
       'top_title': 'Gold purchase successful!',
       'mid_title': 'Payment details',
-      'button_title': 'Go to locker'
+      'button_title': 'Go to locker',
+      'cta_state': '/gold/my-gold-locker'
     },
     'pending': {
       'top_icon': 'ils_gold_purchase_pending',
       'top_title': 'Gold purchase pending!',
       'mid_title': 'Payment details',
-      'button_title': 'Go to locker'
+      'button_title': 'Go to locker',
+      'cta_state': ''
     },
     'failed': {
       'top_icon': 'ils_gold_purchase_failed',
       'top_title': 'Oops! gold purchase failed',
       'mid_title': '',
-      'button_title': 'Retry buy gold'
+      'button_title': 'Retry buy gold',
+      'cta_state': '/gold/buy'
     }
   },
   'sell': {
@@ -38,19 +44,22 @@ const commonMapper = {
       'top_icon': 'ils_gold_sell_success',
       'top_title': 'Gold sell successful!',
       'mid_title': 'Sold gold details',
-      'button_title': 'Continue to locker'
+      'button_title': 'Continue to locker',
+      'cta_state': '/gold/my-gold-locker'
     },
     'pending': {
       'top_icon': '',
       'top_title': '',
       'mid_title': '',
-      'button_title': ''
+      'button_title': '',
+      'cta_state': ''
     },
     'failed': {
       'top_icon': 'ils_gold_sell_failed',
       'top_title': 'Gold sell failed!',
       'mid_title': '',
-      'button_title': 'Continue to locker'
+      'button_title': 'Continue to locker',
+      'cta_state': ''
     }
   },
   'delivery': {
@@ -58,19 +67,22 @@ const commonMapper = {
       'top_icon': 'sucess_order_delivery',
       'top_title': 'Order placed',
       'mid_title': 'Payment details',
-      'button_title': 'Go to locker'
+      'button_title': 'Go to locker',
+      'cta_state': '/gold/my-gold-locker'
     },
     'pending': {
       'top_icon': 'pending_order_delivery',
       'top_title': 'Delivery order pending!',
       'mid_title': 'Payment details',
-      'button_title': 'Go to locker'
+      'button_title': 'Go to locker',
+      'cta_state': ''
     },
     'failed': {
       'top_icon': 'failed_order_delivery',
       'top_title': 'Oops! delivery order failed',
       'mid_title': '',
-      'button_title': 'Retry purchase'
+      'button_title': 'Retry purchase',
+      'cta_state': ''
     }
   }
 }
@@ -81,7 +93,7 @@ class Payment extends Component {
     this.state = {
       show_loader: true,
       openResponseDialog: false,
-      goldInfo: {},
+      provider_info: {},
       sellDetails: {},
       weight: "",
       params: getUrlParams(),
@@ -96,17 +108,35 @@ class Payment extends Component {
     // let { params } = this.props.location;
     nativeCallback({ action: 'take_control_reset' });
     let { status } = this.state.params;
+    if(!status) {
+      status = 'failed';
+    }
     let { orderType } = this.props.match.params;
-    let weight, sellDetails, buyDetails, redeemProduct,
+    let weight,amount, sellDetails, buyDetails, redeemProduct,
       productDisc, paymentError, paymentMessage, paymentPending, invoiceLink;
+
+    let base_amount, gst_amount, total_amount;
     if (orderType === 'sell') {
       let sellDetails = JSON.parse(window.localStorage.getItem('sellDetails'));
-      weight = sellDetails ? sellDetails.gold_weight : '';
+      weight = sellDetails ? sellDetails.weight_selected : '';
+      amount = sellDetails ? sellDetails.amount_selected : '';
+      base_amount = sellDetails ? sellDetails.base_amount : '';
+      gst_amount = sellDetails ? sellDetails.gst_amount : '';
+      total_amount = sellDetails ? sellDetails.total_amount : '';
       invoiceLink = sellDetails ? sellDetails.invoice_link : '';
-    } else if (orderType === 'buy') {
+    }
+    
+    
+    if (orderType === 'buy') {
       buyDetails = JSON.parse(window.localStorage.getItem('buyData')) || {};
-      weight = buyDetails ? buyDetails.gold_weight : '';
-    } else if (orderType === 'delivery') {
+      weight = buyDetails ? buyDetails.weight_selected : '';
+      amount = buyDetails ? buyDetails.amount_selected : '';
+      base_amount = buyDetails ? buyDetails.base_amount : '';
+      gst_amount = buyDetails ? buyDetails.gst_amount : '';
+      total_amount = buyDetails ? buyDetails.total_amount : '';
+    }
+    
+    if (orderType === 'delivery') {
       redeemProduct = JSON.parse(window.localStorage.getItem('redeemProduct'));
       productDisc = redeemProduct ? redeemProduct.product_details.description : '';
     }
@@ -117,7 +147,7 @@ class Payment extends Component {
     } else if (status === 'success') {
       paymentSuccess = true;
       if (orderType === 'buy') {
-        this.getInvoice(buyDetails.transact_id);
+        // this.getInvoice(buyDetails.transact_id);
       }
     } else if (status === 'pending') {
       paymentPending = true;
@@ -126,6 +156,7 @@ class Payment extends Component {
       status: status,
       orderType: orderType,
       weight: weight,
+      amount: amount,
       sellDetails: sellDetails,
       buyDetails: buyDetails,
       redeemProduct: redeemProduct,
@@ -136,27 +167,23 @@ class Payment extends Component {
       paymentMessage: paymentMessage,
       paymentPending: paymentPending,
       invoiceLink: invoiceLink,
-      commonMapper: commonMapper[orderType][status]
+      commonMapper: commonMapper[orderType][status],
+      base_amount: base_amount,
+      gst_amount: gst_amount,
+      total_amount: total_amount,
+      providerData: gold_providers[this.state.provider]
     })
 
   }
 
   async componentDidMount() {
     try {
-      const res = await Api.get('/api/gold/user/account');
+      const res = await Api.get('/api/gold/user/account/' + this.state.provider);
       if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
-        let isRegistered = true;
-        if (result.gold_user_info.user_info.registration_status === "pending" ||
-          !result.gold_user_info.user_info.registration_status ||
-          result.gold_user_info.is_new_gold_user) {
-          isRegistered = false;
-        }
         this.setState({
-          goldInfo: result.gold_user_info.safegold_info,
+          provider_info: result.gold_user_info.provider_info,
           userInfo: result.gold_user_info.user_info,
-          maxWeight: parseFloat(((30 - result.gold_user_info.safegold_info.gold_balance) || 30).toFixed(4)),
-          isRegistered: isRegistered
         });
       } else {
         this.setState({
@@ -165,14 +192,14 @@ class Payment extends Component {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
       }
 
-      const res2 = await Api.get('/api/gold/sell/currentprice');
+      const res2 = await Api.get('/api/gold/sell/currentprice/' + this.state.provider);
       if (res2.pfwresponse.status_code === 200) {
-        let goldInfo = this.state.goldInfo;
+        let provider_info = this.state.provider_info;
         let result = res2.pfwresponse.result;
-        goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
+        provider_info.sell_value = ((result.sell_info.plutus_rate) * (provider_info.gold_balance || 0)).toFixed(2) || 0;
         this.setState({
           goldSellInfo: result.sell_info,
-          goldInfo: goldInfo,
+          provider_info: provider_info,
           show_loader: false,
         });
 
@@ -183,6 +210,7 @@ class Payment extends Component {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
       }
     } catch (err) {
+      console.log(err);
       this.setState({
         show_loader: false
       });
@@ -192,9 +220,6 @@ class Payment extends Component {
   }
 
   navigate = (pathname) => {
-    if (pathname === '/gold/my-gold') {
-      this.sendEvents('gold_summary')
-    }
     this.props.history.push({
       pathname: pathname,
       search: getConfig().searchParams
@@ -216,7 +241,7 @@ class Payment extends Component {
   async sendInvoiceEmail(path) {
 
     this.setState({
-      show_loader: true,
+      invoiceLoading: true,
     });
 
     try {
@@ -229,17 +254,17 @@ class Payment extends Component {
           toast(result.message || result.error);
         }
         this.setState({
-          show_loader: false,
+          invoiceLoading: false,
         });
       } else {
         this.setState({
-          show_loader: false
+          invoiceLoading: false
         });
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
       }
     } catch (err) {
       this.setState({
-        show_loader: false
+        invoiceLoading: false
       });
       toast('Something went wrong', 'error');
     }
@@ -292,13 +317,14 @@ class Payment extends Component {
 
   handleClick = () => {
     this.sendEvents('next');
-    this.props.history.push({
-      pathname: '/gold/my-gold',
-      search: getConfig().searchParams
-    });
+    this.navigate(this.state.commonMapper['cta_state']);
   }
 
   emailInvoice = () => {
+
+    this.setState({
+      invoiceLoading: true
+    })
     if(this.state.orderType === 'delivery') {
       this.trackDelivery(this.state.invoiceLink)
     } else {
@@ -319,7 +345,8 @@ class Payment extends Component {
       >
         <div className="gold-payment-container" id="goldSection">
           <div>
-          <img src={ require(`assets/${this.state.productName}/${this.state.commonMapper['top_icon']}.svg`)} 
+          <img style={{width: '100%'}} 
+          src={ require(`assets/${this.state.productName}/${this.state.commonMapper['top_icon']}.svg`)} 
           alt="Gold" />
           </div>
                 <div className="main-tile">
@@ -328,14 +355,14 @@ class Payment extends Component {
                     <div>
                         {this.state.paymentSuccess && 
                           <p className="top-content"> 
-                            <b>{this.state.weight} gms </b> gold worth <b>₹200</b> added to your MMTC gold locker.  
+                            <b>{this.state.weight} gms </b> gold worth <b>{inrFormatDecimal(this.state.amount)}</b> added to your MMTC gold locker.  
                           </p>
                         }
 
                         {this.state.paymentPending && 
                           <div>
                             <p className="top-content"> 
-                            Your purchase of <b>{this.state.weight} gms </b> gold worth <b>₹200</b> is awaiting confirmation.  
+                            Your purchase of <b>{this.state.weight} gms </b> gold worth <b>{inrFormatDecimal(this.state.amount)}</b> is awaiting confirmation.  
                             </p>
                             <p className="top-content"> 
                             If confirmed within 30 minutes we will place gold 
@@ -347,31 +374,12 @@ class Payment extends Component {
                         {this.state.paymentFailed && 
                           <div>
                             <p className="top-content"> 
-                              Your purchase of <b>{this.state.weight} gms</b> gold worth <b>₹200</b> is failed.
+                              Your purchase of <b>{this.state.weight} gms</b> gold worth <b>{inrFormatDecimal(this.state.amount)}</b> is failed.
                             </p>
                             <p className="top-content"> 
                               If any amount has been debited, it will be refunded within 3-5 business days.  
                             </p>
                           </div> 
-                        }
-
-                        {!this.state.paymentFailed &&
-                          <div style={{ margin: '30px 0 30px 0' }} className="highlight-text highlight-color-info">
-                            <div className="highlight-text1">
-                              <img className="highlight-text11" src={safegold_logo} alt="info" />
-                              <div className="highlight-text12" style={{display:'flex'}}>
-                                <div>Safegold</div>
-                                <div style={{position: 'absolute', right: 30, fontWeight:300}}>24K 99.99%</div>
-                              </div>
-                            </div>
-                            <div className="highlight-text2" style={{color: '#767E86'}}>
-                              <div>Updated value {this.state.goldInfo.gold_balance} gms</div>
-                              <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                                <div>Order id: F1232E</div>
-                                <div>2nd Jan, 06:30 PM</div>
-                              </div>
-                            </div>
-                          </div>
                         }
                       
                     </div>
@@ -383,14 +391,14 @@ class Payment extends Component {
 
                         {this.state.paymentSuccess && 
                           <p className="top-content"> 
-                            <b>{this.state.weight} gms</b> gold worth <b>₹200.00</b> sold successfully, ₹200.00 will be 
+                            <b>{this.state.weight} gms</b> gold worth <b>{inrFormatDecimal(this.state.amount)}</b> sold successfully, {inrFormatDecimal(this.state.amount)} will be 
                           credited to HDFC(xxxx-4456) within 48 hrs.  
                           </p>
                         }
 
                         {this.state.paymentPending && 
                           <p className="top-content"> 
-                            <b>{this.state.weight} gms</b> gold worth <b>₹200.00</b> sold successfully, ₹200.00 will be 
+                            <b>{this.state.weight} gms</b> gold worth <b>{inrFormatDecimal(this.state.amount)}</b> sold successfully, {inrFormatDecimal(this.state.amount)} will be 
                           credited to HDFC(xxxx-4456) within 48 hrs.  
                           </p>
                         }
@@ -398,36 +406,40 @@ class Payment extends Component {
                         {this.state.paymentFailed && 
                           <div>
                             <p className="top-content"> 
-                            Your sale of <b>{this.state.weight} gms</b> gold worth <b>₹200.00</b> is failed.
+                            Your sale of <b>{this.state.weight} gms</b> gold worth <b>{inrFormatDecimal(this.state.amount)}</b> is failed.
                             </p>
                             <p className="top-content"> 
                             If gold value has been debited, it will be restored back to your gold locker within 24hrs. 
                             </p>
                           </div>
                         }
-                       
+                    </div>
+                  
+                  }
 
-                        {!this.state.paymentFailed &&
+                  {this.state.orderType !== 'delivery' && this.state.paymentSuccess &&
                           <div style={{ margin: '30px 0 30px 0' }} className="highlight-text highlight-color-info">
                             <div className="highlight-text1">
-                              <img className="highlight-text11" src={safegold_logo} alt="info" />
+                              <img className="highlight-text11" 
+                              src={ require(`assets/${this.state.providerData.logo}`)}
+                              alt="info" />
                               <div className="highlight-text12" style={{display:'flex'}}>
-                                <div>Safegold</div>
-                                <div style={{position: 'absolute', right: 30, fontWeight:300}}>24K 99.99%</div>
+                                <div>
+                                  {this.state.providerData.title}
+                                </div>
+                                <div style={{position: 'absolute', right: 30, fontWeight:300}}>
+                                  {this.state.providerData.karat}
+                                </div>
                               </div>
                             </div>
                             <div className="highlight-text2" style={{color: '#767E86'}}>
-                              <div>Updated value {this.state.goldInfo.gold_balance} gms</div>
+                              <div>Updated value {this.state.provider_info.gold_balance} gms</div>
                               <div style={{display: 'flex', justifyContent: 'space-between'}}>
                                 <div>Order id: F1232E</div>
                                 <div>2nd Jan, 06:30 PM</div>
                               </div>
                             </div>
                           </div>
-                        }
-                      
-                    </div>
-                  
                   }
 
                   {this.state.orderType === 'delivery' && 
@@ -485,7 +497,7 @@ class Payment extends Component {
                                   Buy price for <b>{this.state.weight}</b> gms
                                 </div>
                                 <div className="content-points-inside-text">
-                                  ₹194.17
+                                  {inrFormatDecimal(this.state.base_amount)}
                                 </div>
                             </div>
 
@@ -494,7 +506,7 @@ class Payment extends Component {
                                 GST
                                 </div>
                                 <div className="content-points-inside-text">
-                                ₹5.83
+                                {inrFormatDecimal(this.state.gst_amount)}
                                 </div>
                             </div>
                         </div>
@@ -530,7 +542,7 @@ class Payment extends Component {
                                 Total
                               </div>
                               <div className="content2-points-inside-text">
-                                ₹200.00
+                                {inrFormatDecimal(this.state.amount)}
                               </div>
                           </div>
                       </div>
@@ -543,10 +555,22 @@ class Payment extends Component {
                   {this.state.paymentSuccess &&
                     <div className="send-invoice">
                       <SVG
-                        // preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().secondary)}
+                        preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().secondary)}
                         src={ic_send_email}
                       />
-                      <div style={{color: getConfig().secondary, marginLeft: 10}}>Email invoice</div>
+                      {!this.state.invoiceLoading &&
+                        <div onClick={() => this.emailInvoice()}
+                        style={{color: getConfig().secondary, marginLeft: 10}}>
+                          Email invoice
+                        </div>
+                      }
+                      {this.state.invoiceLoading &&
+                        <DotDotLoader style={{
+                          textAlign: 'left',
+                          marginLeft: 10
+                          }} 
+                        />
+                      }
                     </div>
                   }
                 </div>

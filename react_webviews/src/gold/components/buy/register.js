@@ -4,8 +4,8 @@ import qs from 'qs';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import Input from '../../../common/ui/Input';
-import Grid from 'material-ui/Grid';
-import Checkbox from 'material-ui/Checkbox';
+// import Grid from 'material-ui/Grid';
+// import Checkbox from 'material-ui/Checkbox';
 import { validateNumber, validateEmail } from 'utils/validators';
 import toast from '../../../common/ui/Toast';
 import { nativeCallback } from 'utils/native_callback';
@@ -15,15 +15,15 @@ import GoldLivePrice from '../ui_components/live_price';
 import ConfirmDialog from '../ui_components/confirm_dialog';
 import PriceChangeDialog from '../ui_components/price_change_dialog';
 import RefreshBuyPrice from '../ui_components/buy_price';
-import {providerMapper} from  '../../constants';
+import {gold_providers} from  '../../constants';
 import GoldOnloadAndTimer from '../ui_components/onload_and_timer';
 
 class GoldRegister extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false,
-      userInfo: {},
+      show_loader: true,
+      user_info: {},
       name: "",
       name_error: '',
       email: "",
@@ -32,7 +32,7 @@ class GoldRegister extends Component {
       pin_code_error: "",
       mobile_no: "",
       mobile_no_error: '',
-      goldInfo: {},
+      provider_info: {},
       isRegistered: false,
       openConfirmDialog: false,
       params: qs.parse(props.history.location.search.slice(1)),
@@ -99,24 +99,30 @@ class GoldRegister extends Component {
     this.onload();
     try {
 
-      const res = await Api.get('/api/gold/user/account');
+      const res = await Api.get('/api/gold/user/account/' + this.state.provider);
+
+      this.setState({
+        show_loader: false
+      });
       if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
         let isRegistered = true;
-        let userInfo = result.gold_user_info.user_info;
-        if (userInfo.registration_status === "pending" ||
-          !userInfo.registration_status ||
-          result.gold_user_info.is_new_gold_user) {
+        let user_info = result.gold_user_info.user_info;
+        let provider_info = result.gold_user_info.provider_info;
+        if (provider_info.registration_status === "pending" ||
+          !provider_info.registration_status ||
+          user_info.is_new_gold_user) {
           isRegistered = false;
         }
 
-        const { name, email, pin_code, mobile_no } = userInfo;
-        this.checkPincode(pin_code);
+        const { name, email, pin_code, mobile_no } = user_info;
+        
+        // this.checkPincode(pin_code);
 
         this.setState({
           show_loader: false,
-          goldInfo: result.gold_user_info.safegold_info,
-          userInfo: userInfo,
+          provider_info: provider_info,
+          user_info: user_info,
           isRegistered: isRegistered,
           name: name || "",
           email: email || "",
@@ -124,12 +130,6 @@ class GoldRegister extends Component {
           mobile_no: mobile_no || "",
         });
 
-        if (userInfo.mobile_verified === false &&
-          isRegistered === false) {
-          // $state.go('my-gold');
-          return;
-        }
-        // this.checkPincode();
 
       } else {
         this.setState({
@@ -234,12 +234,13 @@ class GoldRegister extends Component {
           window.localStorage.setItem('fromType', 'buy')
           var message = 'An OTP is sent to your mobile number ' + this.state.mobile_no + ', please verify to complete registration.'
           this.props.history.push({
-            pathname: 'verify',
+            pathname: 'buy/verify',
             search: getConfig().searchParams,
             params: {
               resend_link: result.resend_verification_otp_link,
               verify_link: result.verification_link,
-              message: message, fromType: 'buy'
+              message: message, fromType: 'buy',
+              mobile_no: this.state.mobile_no
             }
           });
           toast(message);
@@ -296,27 +297,36 @@ class GoldRegister extends Component {
   handleClick = async () => {
     this.handleClose();
 
+    let canSubmitForm = true;
+
     if (this.state.name.split(" ").filter(e => e).length < 2) {
       this.setState({
         name_error: 'Enter valid full name'
       });
-    } else if (this.state.mobile_no.length !== 10 || !validateNumber(this.state.mobile_no)) {
+      canSubmitForm = false;
+    }
+    
+    if (this.state.mobile_no.length !== 10 || !validateNumber(this.state.mobile_no)) {
       this.setState({
         mobile_no_error: 'Please enter valid mobile no'
       });
-    } else if (this.state.email.length < 10 || !validateEmail(this.state.email)) {
+      canSubmitForm = false;
+    } 
+    
+    else if (this.state.email.length < 10 || !validateEmail(this.state.email)) {
       this.setState({
         email_error: 'Please enter valid email'
       });
-    } else if (!this.state.checked) {
-      return;
-    } else {
+      canSubmitForm = false;
+    }
+    
+    if(canSubmitForm) {
 
       this.setState({
         show_loader: true
       });
 
-      let options = this.state.userInfo;
+      let options = this.state.user_info;
 
       options.name = this.state.name;
       options.mobile_no = this.state.mobile_no;
@@ -324,14 +334,14 @@ class GoldRegister extends Component {
       options.pin_code = this.state.pin_code;
 
       try {
-        const res = await Api.post('/api/gold/user/account', options);
+        const res = await Api.post('/api/gold/user/account/' + this.state.provider, options);
 
         if (res.pfwresponse.status_code === 200) {
           this.verifyMobile();
         } else {
 
           if (res.pfwresponse.result.error !== 'User with the same mobile number exists!' &&
-            (this.state.userInfo.mobile_verified === false || res.pfwresponse.result.mobile_verified === false)) {
+            (this.state.user_info.mobile_verified === false || res.pfwresponse.result.mobile_verified === false)) {
             this.verifyMobile();
           } else {
             this.setState({
@@ -371,7 +381,7 @@ class GoldRegister extends Component {
         buttonData={this.state.bottomButtonData}
       >
         <div className="common-top-page-subtitle">
-          We need following details to open your {providerMapper[this.state.provider].title} account
+          We need following details to open your {gold_providers[this.state.provider].title} account
         </div>
 
         <GoldLivePrice parent={this} />
@@ -432,7 +442,7 @@ class GoldRegister extends Component {
               {(this.state.city && this.state.state && !this.state.pin_code_error) && <span>{this.state.city} , {this.state.state}</span>}
             </div>
           </div> */}
-          <div className="CheckBlock">
+          {/* <div className="CheckBlock">
             <Grid container spacing={16} alignItems="center">
               <Grid item xs={2} className="TextCenter">
                 <Checkbox
@@ -452,7 +462,7 @@ class GoldRegister extends Component {
                   }} onClick={() => this.openTermsAndCondition()}>Terms and Conditions</a></span>
               </Grid>
             </Grid>
-          </div>
+          </div> */}
         </div>
 
         {this.state.openRefreshModule &&

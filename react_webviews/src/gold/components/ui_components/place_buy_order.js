@@ -12,7 +12,8 @@ class PlaceBuyOrderClass extends Component {
             show_loader: false,
             openConfirmDialog: false,
             openPriceChangedDialog: true,
-            provider: this.props.parent.props.match.params.provider,
+            provider: this.props.parent.state.provider || 
+                    this.props.parent.props.match.params.provider,
             buyData: storageService().getObject('buyData')
         }
     }
@@ -44,7 +45,7 @@ class PlaceBuyOrderClass extends Component {
 
         try {
 
-            const res = await Api.post('/api/gold/user/buy/verify', options);
+            const res = await Api.post('/api/gold/user/buy/verify/' + this.state.provider, options);
 
             if (res.pfwresponse.status_code === 200 &&
                 res.pfwresponse.result.payment_details.plutus_rate === this.state.buyData.goldBuyInfo.plutus_rate) {

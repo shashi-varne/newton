@@ -44,8 +44,8 @@ class GoldBuyHome extends Component {
       openPopup: false,
       popupText: '',
       apiError: '',
-      goldInfo: {},
-      userInfo: {},
+      provider_info: {},
+      user_info: {},
       goldBuyInfo: {},
       new_rate: {},
       amountUpdated: '',
@@ -125,23 +125,22 @@ class GoldBuyHome extends Component {
   async componentDidMount() {
     try {
 
-      const res = await Api.get('/api/gold/user/account');
+      const res = await Api.get('/api/gold/user/account/' + this.state.provider);
       if (res && res.pfwresponse.status_code === 200) {
 
-        // this.setState({
-        //   show_loader: false
-        // });
         let result = res.pfwresponse.result;
+        let user_info = result.gold_user_info.user_info;
+        let provider_info = result.gold_user_info.provider_info;
         let isRegistered = true;
-        if (result.gold_user_info.user_info.registration_status === "pending" ||
-          !result.gold_user_info.user_info.registration_status ||
+        if (provider_info.registration_status === "pending" ||
+          !provider_info.registration_status ||
           result.gold_user_info.is_new_gold_user) {
           isRegistered = false;
         }
         this.setState({
-          goldInfo: result.gold_user_info.safegold_info,
-          userInfo: result.gold_user_info.user_info,
-          maxWeight: parseFloat(((30 - result.gold_user_info.safegold_info.gold_balance) || 30).toFixed(4)),
+          provider_info: provider_info,
+          user_info: user_info,
+          maxWeight: parseFloat(((30 - result.gold_user_info.provider_info.gold_balance) || 30).toFixed(4)),
           isRegistered: isRegistered,
           enableInputs: true
         });
@@ -205,7 +204,7 @@ class GoldBuyHome extends Component {
       return;
     }
 
-    if (this.state.userInfo.mobile_verified === false ||
+    if (this.state.provider_info.mobile_verified === false ||
       this.state.isRegistered === false) {
       this.navigate(this.state.provider + '/gold-register');
       return;

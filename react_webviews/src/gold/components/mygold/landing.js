@@ -25,6 +25,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
 
 import gold_pattern from 'assets/gold_pattern.png';
+import crd_gold_info from 'assets/crd_gold_info.svg';
 
 class GoldSummary extends Component {
   constructor(props) {
@@ -35,7 +36,7 @@ class GoldSummary extends Component {
       popupText: '',
       apiError: '',
       goldInfo: {},
-      userInfo: {},
+      user_info: {},
       goldBuyInfo: {},
       goldSellInfo: {},
       isRegistered: false,
@@ -110,24 +111,17 @@ class GoldSummary extends Component {
   async componentDidMount() {
     try {
 
-      const res = await Api.get('/api/gold/user/account');
+      const res = await Api.get('/api/gold/user/account/mmtc');
       if (res && res.pfwresponse.status_code === 200) {
 
         this.setState({
           show_loader: false
         });
         let result = res.pfwresponse.result;
-        let isRegistered = true;
-        if (result.gold_user_info.user_info.registration_status === "pending" ||
-          !result.gold_user_info.user_info.registration_status ||
-          result.gold_user_info.is_new_gold_user) {
-          isRegistered = false;
-        }
+        
         this.setState({
-          goldInfo: result.gold_user_info.safegold_info,
-          userInfo: result.gold_user_info.user_info,
-          maxWeight: parseFloat(((30 - result.gold_user_info.safegold_info.gold_balance) || 30).toFixed(4)),
-          isRegistered: isRegistered
+          provider_info: result.gold_user_info.provider_info,
+          user_info: result.gold_user_info.user_info,
         });
       } else {
         this.setState({
@@ -307,11 +301,19 @@ class GoldSummary extends Component {
               </div>
             </div>
           </div> */}
-            <div className="block1">
-
-                <img 
-                style={{width:'100%'}}
-                src={ require(`assets/crd_gold_info.svg`)} alt="Gold" />
+            <div className="block1" style={{backgroundImage: `url(${crd_gold_info})`}}>
+                <div className="title generic-page-title">
+                  Buy 24K gold to create long term wealth
+                </div>
+                <div className="button">
+                    <Button variant="raised"
+                        size="large" onClick={this.handleClick} color="secondary" autoFocus>
+                      CHECK HOW?
+                    </Button>
+                </div>
+                <div className="bottom-content">
+                  Buy-sell anytime | 24K 99.9% pure | 100% secure
+                </div>
             </div>
 
             <div className="block2">
@@ -335,7 +337,7 @@ class GoldSummary extends Component {
                 </div>
                 <div className="common-hr"></div>
 
-                <div className="tile2">
+                <div className="tile2" onClick={() => this.navigate('/gold/buy')}>
                     <img className="icon"
                       src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
                     <div className="title">
@@ -343,7 +345,7 @@ class GoldSummary extends Component {
                     </div>
                 </div>
 
-                <div className="tile2">
+                <div className="tile2" onClick={() => this.navigate('/gold/sell')}>
                     <img className="icon"
                       src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
                     <div className="title">
@@ -351,7 +353,7 @@ class GoldSummary extends Component {
                     </div>
                 </div>
 
-                <div className="tile2">
+                <div className="tile2" onClick={() => this.navigate('/gold/delivery')}>
                     <img className="icon"
                       src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
                     <div className="title">

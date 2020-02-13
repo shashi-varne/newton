@@ -26,7 +26,7 @@ class BuyPriceClass extends Component {
                 })
             }
 
-            const res = await Api.get('/api/gold/buy/currentprice');
+            const res = await Api.get('/api/gold/buy/currentprice/' + this.state.provider);
             if (res.pfwresponse.status_code === 200) {
                 this.setState({
                     show_loader: false
@@ -37,7 +37,6 @@ class BuyPriceClass extends Component {
                 var currentDate = new Date();
                 let timeAvailable = ((goldBuyInfo.rate_validity - currentDate.getTime()) / 1000 - 330 * 60);
 
-
                 let buyData = storageService().getObject('buyData') || {};
                 buyData.goldBuyInfo = result.buy_info;
                 buyData.plutusRateID = result.buy_info.plutus_rate_id;
@@ -46,6 +45,7 @@ class BuyPriceClass extends Component {
 
                 this.props.parent.onload();
                 this.props.parent.updateParent('fetchLivePrice', false);
+                this.props.parent.updateParent('show_loader', false);
                 
 
             } else {

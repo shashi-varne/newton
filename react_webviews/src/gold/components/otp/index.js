@@ -3,7 +3,6 @@ import qs from 'qs';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import Input from '../../../common/ui/Input';
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -14,57 +13,60 @@ import Button from 'material-ui/Button';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
+import OtpDefault from '../../../common/ui/otp';
+import PlaceBuyOrder from '../ui_components/place_buy_order';
 
 class Otp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      show_loader: false,
       otpnumber: '',
       otpnumber_error: '',
       messageOtp: '',
       openResponseDialog: false,
       otpVerified: false,
       params: qs.parse(props.history.location.search.slice(1)),
-      provider: this.props.match.params.provider
+      provider: this.props.match.params.provider,
+      orderType: this.props.match.params.orderType,
+      otp: '',
+      timeAvailable: 30,
+      totalTime: 30,
+      otpBaseData: {},
+      proceedForOrder: false
     }
+  }
+
+  updateParent = (key, value) => {
+    this.setState({
+      [key]: value
+    })
   }
 
   componentWillMount() {
     let { params } = this.props.location;
 
-    if (!params || params.resend_link === null || params.verify_link === null) {
-      // let fromType = window.localStorage.getItem('fromType');
-      // if (fromType === 'buy') {
-      //   this.navigate('gold-register');
+    // if (!params || params.resend_link === null || params.verify_link === null) {
 
-      // } else if (fromType === 'sell') {
-      //   this.navigate('bank-details');
+    //   if(this.state.orderType === 'buy') {
+    //     this.navigate('/gold/' + this.state.provider + '/gold-register');
+        
+    //   } else {
+    //     this.navigate('/gold/landing');
+    //   }
 
-      // } else if (fromType === 'delivery') {
-      //   this.navigate('gold-delivery-address');
+    //   return;
+    // }
 
-      // } else {
-      //   this.navigate('my-gold');
-      // }
-
-      this.navigate('my-gold');
-      return;
+    let otpBaseData = {
+      mobile_no: params ? params.mobile_no : ''
     }
-
     this.setState({
+      otpBaseData: otpBaseData,
       resend_link: params ? params.resend_link : '',
       verify_link: params ? params.verify_link : '',
-      fromTypeDeliveryOtp: params ? params.fromType : '',
       messageOtp: params ? params.message : 'An OTP is sent to your registered mobile number, please verify to complete the process.',
     })
-    window.localStorage.setItem('fromType', params.fromType);
-  }
-
-  componentDidMount() {
-    this.setState({
-      show_loader: false,
-    });
   }
 
   navigate = (pathname) => {
@@ -76,20 +78,21 @@ class Otp extends Component {
 
   handleClick = async () => {
 
-    if (!this.state.otpnumber) {
+    if (!this.state.otp) {
       this.setState({
-        otpnumber_error: 'Please enter OTP'
+        otp_error: 'Please enter OTP'
       })
       return;
     }
 
-    if (this.state.otpnumber.length !== 4) {
+    if (this.state.otp.length !== 4) {
       this.setState({
-        otpnumber_error: 'OTP is a 4 digit number'
+        otp_error: 'OTP is a 4 digit number'
       })
       return;
     }
-    let url = this.state.params.base_url + this.state.verify_link + '?otp=' + this.state.otpnumber;
+    let url = this.state.params.base_url + this.state.verify_link + '/' + this.state.provider + 
+              '?otp=' + this.state.otp;
 
     try {
       this.setState({
@@ -137,6 +140,14 @@ class Otp extends Component {
   }
 
   resendOtp = async () => {
+
+    this.setState({
+      show_loader: true,
+      otp_error: '',
+      otp: '',
+      timeAvailable: this.state.totalTime
+    })
+
     let url = this.state.params.base_url + this.state.resend_link;
     try {
       this.setState({
@@ -183,23 +194,26 @@ class Otp extends Component {
 
   handleOtpVerified = () => {
     this.sendEvents('next');
-    if (this.state.fromTypeDeliveryOtp === 'buy') {
-      this.navigate('my-gold');
+    if (this.state.orderType === 'buy') {
+      // place buy order
+      this.setState({
+        proceedForOrder: true
+      })
 
-    } else if (this.state.fromTypeDeliveryOtp === 'sell') {
+    } else if (this.state.orderType === 'sell') {
       this.navigate(this.state.provider + '/sell-gold-order');
-    } else if (this.state.fromTypeDeliveryOtp === 'delivery') {
+    } else if (this.state.orderType === 'delivery') {
       if (window.localStorage.getItem('goldProduct')) {
         let product = JSON.parse(window.localStorage.getItem('goldProduct'));
         product.isFisdomVerified = true;
         window.localStorage.setItem('goldProduct', JSON.stringify(product));
         this.navigate(this.state.provider + '/gold-delivery-order');
       } else {
-        this.navigate('my-gold');
+        this.navigate('/gold');
       }
 
     } else {
-      this.navigate('my-gold');
+      this.navigate('/gold');
     }
   }
 
@@ -209,7 +223,7 @@ class Otp extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'OTP',
-        'verification_type': this.state.fromTypeDeliveryOtp
+        'verification_type': this.state.orderType
       }
     };
 
@@ -245,42 +259,50 @@ class Otp extends Component {
     );
   }
 
+  handleOtp = (otp) => {
+    this.setState({
+      otp: otp,
+      otp_error: ''
+    })
+  }
+
   render() {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="Verify OTP"
+        title=""
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="Proceed"
         events={this.sendEvents('just_set_events')}
       >
-        <div className="otp-body">
-          <div className="otp-input">
-            <div className="InputField">
-              <Input
-                error={(this.state.otpnumber_error) ? true : false}
-                helperText={this.state.otpnumber_error}
-                type="text"
-                width="40"
-                label="Enter OTP"
-                class="otp"
-                id="otp"
-                name="otpnumber"
-                autoComplete="off"
-                value={this.state.otpnumber}
-                onChange={this.handleChange('otpnumber')} />
-            </div>
-            <p
-              className="resend-otp text-center"
-              style={{
-                fontWeight: 500,
-                color: getConfig().primary
-              }} color="primary" onClick={this.resendOtp}>Resend OTP</p>
+        {/* <div className="otp-body">
             <div className="text-center">{this.state.messageOtp}</div>
+        </div> */}
+
+        <div className="default-otp">
+
+            <div className="title">
+                Enter OTP to verify
+            </div>
+            <div className="content">
+              We have send the OTP on 
+              <span> mobile number
+                <span className="content-auth"> {this.state.otpBaseData.mobile_no} </span> 
+              </span>
+              please enter to buy gold 
+            </div>
+
+            <OtpDefault parent={this} />
+            {this.state.otp_error &&
+              <div style={{ color: 'red', margin: '14px 0 0 0' }}>{this.state.otp_error}</div>}
           </div>
-        </div>
+
         {this.renderResponseDialog()}
+
+        {this.state.proceedForOrder &&
+          <PlaceBuyOrder parent={this} />
+        }
       </Container>
     );
   }

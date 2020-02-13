@@ -1095,51 +1095,64 @@ img.gold-offer-slide-img {
   color: #fff !important;
 }
 
+.gold-landing {
 
-.gold-landing .block4 {
-  background: #fff;
-  padding: 10px 15px 20px 15px;
-  margin: 20px -15px 0 -15px;
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
-}
-
-.gold-landing .block3 {
-  margin: 30px 0 0 0;
-
-  .title {
-    font-size: 16px;
-    color: #FEFFFE;
-    font-weight: 500;
-  }
-  .tile {
+  .block1 {
+    height: 190px;
+    background-repeat: no-repeat;
     display: flex;
-    align-items: center;
-    margin: 0 0 20px 0;
-  }
-
-  .benefites {
-      margin: 20px 0 0 0;
-  }
-
-  .benefit-tile-title {
-      color: #3792FC;
-      font-size: 14px;
+    flex-direction: column;
+    padding: 30px 0 10px 10%;
+    justify-content: space-evenly;
+    background-size: auto;
+    background-position: center;
+    .title {
+      max-width: 60%;
+    }
+    .bottom-content {
+      color: #9E6E1D;
+      font-size: 8px;
       font-weight: 800;
+    }
   }
 
-  .benefit-tile-subtitle {
-      color: #D3DBE4;
-      font-size: 13px;
-      margin: 7px 0 0 0;
+  .block3 {
+    margin: 30px 0 0 0;
+  
+    .title {
+      font-size: 16px;
+      color: #FEFFFE;
+      font-weight: 500;
+    }
+    .tile {
+      display: flex;
+      align-items: center;
+      margin: 0 0 20px 0;
+    }
+  
+    .benefites {
+        margin: 20px 0 0 0;
+    }
+  
+    .benefit-tile-title {
+        color: #3792FC;
+        font-size: 14px;
+        font-weight: 800;
+    }
+  
+    .benefit-tile-subtitle {
+        color: #D3DBE4;
+        font-size: 13px;
+        margin: 7px 0 0 0;
+    }
+  
+    img {
+      width: 70px;
+      margin: 0 20px 0 0;
+    }
   }
 
-  img {
-    width: 70px;
-    margin: 0 20px 0 0;
-  }
-}
-.gold-landing .block2 {
+  .block2 {
     margin: 30px -15px 0 -15px;
     background: white;
     padding: 10px 15px 50px 15px;
@@ -1169,6 +1182,15 @@ img.gold-offer-slide-img {
       box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
       margin: -24px 0 20px 0;
     }
+  }
+
+  .block4 {
+    background: #fff;
+    padding: 10px 15px 20px 15px;
+    margin: 20px -15px 0 -15px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+  }
 }
 
 .gold-delivery-products {
