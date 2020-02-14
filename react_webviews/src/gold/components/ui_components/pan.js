@@ -9,13 +9,11 @@ import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import GoldLivePrice from '../ui_components/live_price';
 import ConfirmDialog from '../ui_components/confirm_dialog';
-import PriceChangeDialog from '../ui_components/price_change_dialog';
 
 import RefreshBuyPrice from '../ui_components/buy_price';
 import RefreshSellPrice from '../ui_components/sell_price';
-
-
 import GoldOnloadAndTimer from '../ui_components/onload_and_timer';
+import PriceChangeDialog from '../ui_components/price_change_dialog';
 
 const commonMapper = {
     'buy': {
@@ -84,57 +82,56 @@ class GoldPanDataClass extends Component {
         })
     }
 
-     // common code for buy live price start
+    // common code for buy live price start
 
-       // common code start
-  onload = () => {
+    // common code start
+    onload = () => {
 
-    console.log("on load");
-    this.setState({
-      openOnloadModal: false
-    })
-    this.setState({
-      openOnloadModal: true
-    })
-  }
-
-  updateParent(key, value) {
-    this.setState({
-      [key]: value
-    })
-  }
-
-  handleClose = () => {
-    this.setState({
-        openConfirmDialog: false
-    });
-
-    if(this.state.openPriceChangedDialog && this.state.timeAvailable >0) {
         this.setState({
-          openPriceChangedDialog: false
+            openOnloadModal: false
         })
-      }
-}
-
-  refreshData () {
-
-    if(this.state.timeAvailable > 0) {
-      this.handleClick();
-    } else {
-      this.setState({
-        show_loader: true,
-        openRefreshModule: true
-      })
+        this.setState({
+            openOnloadModal: true
+        })
     }
-    
-  }
+
+    updateParent(key, value) {
+        this.setState({
+            [key]: value
+        })
+    }
+
+    handleClose = () => {
+        this.setState({
+            openConfirmDialog: false
+        });
+
+        if (this.state.openPriceChangedDialog && this.state.timeAvailable > 0) {
+            this.setState({
+                openPriceChangedDialog: false
+            })
+        }
+    }
+
+    refreshData() {
+
+        if (this.state.timeAvailable > 0) {
+            this.handleClick();
+        } else {
+            this.setState({
+                show_loader: true,
+                openRefreshModule: true
+            })
+        }
+
+    }
 
     async componentDidMount() {
 
         this.onload();
         try {
 
-            const res = await Api.get('/api/gold/user/account');
+            const res = await Api.get('/api/gold/user/account/' + this.state.provider);
             if (res.pfwresponse.status_code === 200) {
                 let result = res.pfwresponse.result;
 
@@ -174,7 +171,7 @@ class GoldPanDataClass extends Component {
     }
 
 
-    
+
 
     sendEvents(user_action) {
         let eventObj = {
@@ -217,12 +214,16 @@ class GoldPanDataClass extends Component {
             });
 
             let options = {
-                pan_number: this.state.pan_number
+                kyc: {
+                    pan: {
+                        pan_number: this.state.pan_number
+                    }
+                }
             }
 
 
             try {
-                const res = await Api.post('/api/gold/user/account', options);
+                const res = await Api.post('/api/kyc/v2/mine', options);
 
                 this.setState({
                     show_loader: false
@@ -274,7 +275,7 @@ class GoldPanDataClass extends Component {
                 </div>
 
                 <GoldLivePrice parent={this} />
-                
+
 
                 <div className="register-form">
                     <div className="InputField">
@@ -300,7 +301,7 @@ class GoldPanDataClass extends Component {
                 {this.state.orderType === 'sell' && this.state.openRefreshModule &&
                     <RefreshSellPrice parent={this} />}
 
-                {this.state.openOnloadModal && 
+                {this.state.openOnloadModal &&
                     <GoldOnloadAndTimer parent={this} />}
             </Container>
         );
@@ -309,7 +310,7 @@ class GoldPanDataClass extends Component {
 
 const GoldPanData = (props) => (
     <GoldPanDataClass
-    {...props} />
+        {...props} />
 );
 
 export default GoldPanData;

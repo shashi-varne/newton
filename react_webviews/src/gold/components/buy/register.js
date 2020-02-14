@@ -378,7 +378,6 @@ class GoldRegister extends Component {
         withProvider={true}
         buttonTitle="Continue"
         events={this.sendEvents('just_set_events')}
-        buttonData={this.state.bottomButtonData}
       >
         <div className="common-top-page-subtitle">
           We need following details to open your {gold_providers[this.state.provider].title} account

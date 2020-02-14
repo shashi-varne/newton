@@ -21,16 +21,15 @@ export function calculate_gold_wt_buy(buyData, buy_price) {
     var current_gold_price_with_tax = (current_gold_price * tax).toFixed(2);
     var gold_wt = (buy_price / current_gold_price_with_tax).toFixed(4);
 
-    var current_gold_price_without_tax = (current_gold_price).toFixed(2)
-    var gold_amount_without_tax = current_gold_price_without_tax - buy_price;
+    var base_amount = (buy_price/tax).toFixed(2);
 
     let data = {
         'weight': gold_wt,
         'amount': buy_price,
-        'gst_amount': gold_amount_without_tax - buy_price,
+        'gst_amount': buy_price - base_amount,
         'total_amount': buy_price,
         'tax': buyData.goldBuyInfo.applicable_tax,
-        'base_amount': gold_amount_without_tax
+        'base_amount': base_amount
     }
     return data;
 }
@@ -138,14 +137,14 @@ export const gold_providers = {
         key: 'mmtc',
         title: 'MMTC',
         subtitle: '24 Karat | 99.9% pure',
-        logo: 'safegold_logo_60x60.png',
+        logo: 'logo_mmtc.svg',
         karat: '24K 99.99%'
     },
     'safegold': { 
         key: 'safegold',
         title: 'Safegold',
         subtitle: '24 Karat | 99.5% pure',
-        logo: 'safegold_logo_60x60.png',
+        logo: 'logo_safegold.svg',
         karat: '24K 99.5%'
     }
 }
@@ -155,13 +154,13 @@ export const gold_providers_array = [
         key: 'mmtc',
         title: 'MMTC',
         subtitle: '24 Karat | 99.9% pure',
-        logo: 'safegold_logo_60x60.png'
+        logo: 'logo_mmtc.svg'
     },
     {
         key: 'safegold',
         title: 'Safegold',
         subtitle: '24 Karat | 99.5% pure',
-        logo: 'safegold_logo_60x60.png'
+        logo: 'logo_safegold.svg'
     }
 ]
 

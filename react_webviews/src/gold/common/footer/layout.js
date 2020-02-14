@@ -10,6 +10,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 
 import logo_safegold from 'assets/logo_safegold.svg';
+import logo_mmtc from 'assets/logo_mmtc.svg';
 import down_arrow from 'assets/down_arrow.svg';
 import up_arrow from 'assets/up_arrow.svg';
 import SVG from 'react-inlinesvg';
@@ -144,7 +145,7 @@ export class WithProviderLayout extends Component {
           <div className='image-block'>
             <img
               alt=""
-              src={props.buttonData.provider === 'safegold' ? logo_safegold: ''}
+              src={props.buttonData.provider === 'safegold' ? logo_safegold: logo_mmtc}
               className="FooterImage" />
           </div>
           <div className="text-block">

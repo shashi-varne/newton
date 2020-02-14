@@ -11,12 +11,32 @@ import Dialog, {
     DialogContent, DialogActions
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
+import { storageService } from "utils/validators";
+import RefreshSellPrice from '../ui_components/sell_price';
+import GoldOnloadAndTimer from '../ui_components/onload_and_timer';
+import PriceChangeDialog from '../ui_components/price_change_dialog';
+import {bankAccountTypeMapper} from 'utils/constants';
 
 const verificationDataMapper = {
     'success': {
         'title': "Bank added",
         'subtitle': 'Great! bank account has been added successfully. You are good to sell your gold now.',
         'icon': 'ic_bank_added'
+    },
+    'delayed_response': {
+        'title': "Bank verification pending",
+        'subtitle': "We have added your bank account details. Bank account verification is in progress, we will email you once it's done. ",
+        'icon': 'ic_bank_partial_added'
+    },
+    'request_triggered': {
+        'title': "Bank verification pending",
+        'subtitle': "We have added your bank account details. Bank account verification is in progress, we will email you once it's done. ",
+        'icon': 'ic_bank_partial_added'
+    },
+    'failed': {
+        'title': "Bank verification failed",
+        'subtitle': 'Great! bank account has been added successfully. You are good to sell your gold now.',
+        'icon': 'ic_bank_not_added'
     }
 };
 
@@ -28,15 +48,58 @@ class SellVerifyBank extends Component {
             provider: this.props.match.params.provider,
             productName: getConfig().productName,
             openVerifyDialog: false,
-            openStatusDialog: true,
-            verification_status: 'success'
+            openStatusDialog: false,
+            verification_status: '',
+            verifyBankData: storageService().getObject('goldVerifyBankData') || {},
+            orderType: 'sell',
+            statusMapper: {}
+        }
+    }
+
+    onload = () => {
+        this.setState({
+            openOnloadModal: false
+        })
+        this.setState({
+            openOnloadModal: true
+        })
+    }
+
+    updateParent(key, value) {
+        this.setState({
+            [key]: value
+        })
+    }
+
+    handleClose = () => {
+        this.setState({
+            openConfirmDialog: false,
+            // openVerifyDialog: false,
+            openStatusDialog: false
+        });
+
+        if (this.state.openPriceChangedDialog && this.state.timeAvailable > 0) {
+            this.setState({
+                openPriceChangedDialog: false
+            })
+        }
+    }
+
+    refreshData = () => {
+
+        if (this.state.timeAvailable > 0) {
+            this.handleClick();
+        } else {
+            this.setState({
+                show_loader: true,
+                openRefreshModule: true
+            })
         }
 
-        this.handleClose = this.handleClose.bind(this);
     }
 
     async componentDidMount() {
-
+        this.onload();
     }
 
     navigate = (pathname) => {
@@ -66,44 +129,100 @@ class SellVerifyBank extends Component {
         }
     }
 
+    componentWillUnmount() {
+        clearInterval(this.state.countdownInterval);
+    }
+
+    countdown = () => {
+        let timeAvailableVerify = this.state.timeAvailableVerify;
+
+        timeAvailableVerify--;
+        if (timeAvailableVerify <= 0) {
+            timeAvailableVerify = 0;
+            this.setState({
+                openVerifyDialog: false
+            })
+            clearInterval(this.state.countdownInterval);
+        }
+
+        this.setState({
+            timeAvailableVerify: timeAvailableVerify
+        })
+    };
+
+    getPennyStatus = async () => {
+        try {
+            const res = await Api.get('/api/gold/user/bank/details');
+
+            if (res.pfwresponse.status_code === 200) {
+                let result = res.pfwresponse.result || {};
+                let plutus_bank_info_record = result.plutus_bank_info_record || {};
+                let penny_verification_reference = plutus_bank_info_record.penny_verification_reference || {};
+                let verification_status = penny_verification_reference.penny_verification_state || 'failed';
+                this.getStatusMapper(verification_status);
+                this.setState({
+                    verification_status: verification_status,
+                    openStatusDialog: true,
+                    openVerifyDialog: false
+                })
+            } else {
+                toast(res.pfwresponse.result.error || res.pfwresponse.result.message);
+            }
+        } catch (err) {
+            this.setState({
+                openVerifyDialog: false
+            });
+            toast('Something went wrong', 'error');
+        }
+    }
+
+
     handleClick = async () => {
 
-
+        this.handleClose();
         var options = {
-            'account_number': this.state.account_no,
-            'ifsc_code': this.state.ifsc_code
+            'account_number': this.state.verifyBankData.account_no,
+            'ifsc_code': this.state.verifyBankData.ifsc_code,
+            'account_type': this.state.verifyBankData.account_type
         };
+
+
         this.setState({
-            show_loader: true
+            openVerifyDialog: true
+        });
+        let intervalId = setInterval(this.countdown, 1000);
+        this.setState({
+            countdownInterval: intervalId,
+            timeAvailableVerify: 5
         });
 
         try {
             const res = await Api.post('/api/gold/user/bank/details', options);
+
+            this.setState({
+                show_loader: false
+            });
+
             if (res.pfwresponse.status_code === 200) {
-                let sellData = this.state.sellData;
-                sellData.account_number = this.state.account_no;
-                sellData.ifsc_code = this.state.ifsc_code;
-                window.localStorage.setItem('sellData', JSON.stringify(sellData));
-            } else {
+                let result = res.pfwresponse.result || {};
+                let plutus_bank_info_record = result.plutus_bank_info_record || {};
+                let penny_verification_reference = plutus_bank_info_record.penny_verification_reference || {};
+                let verification_status = penny_verification_reference.penny_verification_state || 'failed';
+                this.getStatusMapper(verification_status);
                 this.setState({
-                    show_loader: false, openResponseDialog: true,
-                    apiError: res.pfwresponse.result.error || res.pfwresponse.result.message
-                });
+                    verification_status: verification_status,
+                    openStatusDialog: true
+                })
+            } else {
+                toast(res.pfwresponse.result.error || res.pfwresponse.result.message);
             }
         } catch (err) {
             this.setState({
-                show_loader: false
+                openVerifyDialog: false
             });
             toast('Something went wrong', 'error');
         }
 
-    }
-
-    handleClose() {
-        this.setState({
-            openVerifyDialog: false,
-            openStatusDialog: false
-        })
     }
 
     renderVerifyDialog = () => {
@@ -123,7 +242,7 @@ class SellVerifyBank extends Component {
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <div style={{ color: '#0A1C32', fontSize: 16, fontWeight: 600 }}>Verifying your account details</div>
-                            <div style={{ color: getConfig().primary, fontSize: 13 }}>00:12</div>
+                            <div style={{ color: getConfig().primary, fontSize: 13 }}>00:{this.state.timeAvailableVerify}</div>
                         </div>
                         <div style={{ color: '#767E86', fontSize: 14, margin: '15px 0 0 0' }}>
                             Please wait, while we verify your bank account. Do not close the app.
@@ -135,12 +254,24 @@ class SellVerifyBank extends Component {
 
     }
 
+    getStatusMapper =(verification_status) => {
+        let data = verificationDataMapper[verification_status] || verificationDataMapper['failed'];
+
+        this.setState({
+            statusMapper: data
+        });
+    }
+
+    handleCloseStatus = () => {
+        this.navigate('sell-select-bank');
+    }
+
     renderStatusDialog = () => {
         return (
             <Dialog
                 id="bottom-popup"
                 open={this.state.openStatusDialog}
-                onClose={this.handleClose}
+                onClose={this.handleCloseStatus}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
@@ -148,19 +279,19 @@ class SellVerifyBank extends Component {
                     <div className="gold-dialog" id="alert-dialog-description">
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '-20px 0 0 0' }}>
                             <div style={{ color: '#0A1C32', fontSize: 16, fontWeight: 600 }}>
-                                {verificationDataMapper[this.state.verification_status].title}
+                                {this.state.statusMapper.title}
                             </div>
                             <img style={{ margin: '0 0 15px 0', borderRadius: 6 }}
-                                src={require(`assets/${this.state.productName}/${verificationDataMapper[this.state.verification_status].icon}.svg`)} alt="info"
+                                src={require(`assets/${this.state.productName}/${this.state.statusMapper.icon}.svg`)} alt="info"
                             />
                         </div>
                         <div style={{ color: '#767E86', fontSize: 14, margin: '15px 0 0 0' }}>
-                            {verificationDataMapper[this.state.verification_status].subtitle}
+                            {this.state.statusMapper.subtitle}
                         </div>
                     </div>
                 </DialogContent>
                 <DialogActions>
-                    <Button className="DialogButtonFullWidth" onClick={this.handleClose} color="default" autoFocus>
+                    <Button className="DialogButtonFullWidth" onClick={this.handleCloseStatus} color="default" autoFocus>
                         OK
                     </Button>
                 </DialogActions>
@@ -200,13 +331,16 @@ class SellVerifyBank extends Component {
                 <GoldLivePrice parent={this} />
 
                 <div style={{ display: 'flex', margin: '20px 0 20px 0px' }}>
-                    <img src={require(`assets/home_insurance_fisdom.svg`)} alt="Gold" />
+                    <img src={this.state.verifyBankData.bank_image}
+                        style={{ width: '50px', margin: '0 8px 0 0' }} alt="Gold" />
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div>
-                            <div style={{ color: '#0A1C32', fontSize: 16, fontWeight: 500 }}>HDFC BANK</div>
-                            <div style={{ color: '#767E86', fontSize: 14 }}>Mahipalpur, New Delhi</div>
+                            <div style={{ color: '#0A1C32', fontSize: 16, fontWeight: 500 }}>{this.state.verifyBankData.bank_name}</div>
+                            <div style={{ color: '#767E86', fontSize: 14 }}>{this.state.verifyBankData.branch_name}</div>
                         </div>
-                        <div style={{
+                        <div 
+                        onClick={() => this.navigate('sell-edit-bank')}
+                        style={{
                             position: 'absolute', right: 16,
                             color: getConfig().secondary, fontWeight: 'bold'
                         }}>EDIT</div>
@@ -222,7 +356,7 @@ class SellVerifyBank extends Component {
                                 Account number
                             </div>
                             <div className="content-points-inside-text">
-                                5343150838600
+                                {this.state.verifyBankData.account_no}
                             </div>
                         </div>
 
@@ -232,8 +366,8 @@ class SellVerifyBank extends Component {
                             <div className="content-points-inside-text">
                                 IFSC code
                             </div>
-                            <div className="content-points-inside-text">
-                                HDFC0004404
+                            <div className="content-points-inside-text" style={{textTransform: 'uppercase'}}>
+                                {this.state.verifyBankData.ifsc_code}
                             </div>
                         </div>
 
@@ -244,7 +378,7 @@ class SellVerifyBank extends Component {
                                 Account type
                             </div>
                             <div className="content-points-inside-text">
-                                Savings
+                                {bankAccountTypeMapper[this.state.verifyBankData.account_type]}
                             </div>
                         </div>
                     </div>
@@ -254,7 +388,15 @@ class SellVerifyBank extends Component {
                 </div>
 
                 {this.renderVerifyDialog()}
-                {this.renderStatusDialog()}
+                {this.state.openStatusDialog && this.renderStatusDialog()}
+
+                <PriceChangeDialog parent={this} />
+
+                {this.state.openRefreshModule &&
+                    <RefreshSellPrice parent={this} />}
+
+                {this.state.openOnloadModal &&
+                    <GoldOnloadAndTimer parent={this} />}
             </Container>
         );
     }

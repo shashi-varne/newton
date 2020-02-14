@@ -57,7 +57,7 @@ class PriceChangeClass extends Component {
         return (
           <Dialog
             id="bottom-popup"
-            open={this.props.parent.state.openPriceChangedDialog}
+            open={this.props.parent.state.openPriceChangedDialog || false}
             onClose={this.props.parent.handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
@@ -78,7 +78,7 @@ class PriceChangeClass extends Component {
                 </div>}
 
                 {this.props.parent.state.timeAvailable >0 && <div>
-                    <div style={{color: '#0A1C32', fontSize:16, fontWeight:800}}>
+                    <div style={{color: '#0A1C32', fontSize:16, fontWeight:800, margin: '0 0 20px 0'}}>
                     {mapper[this.props.parent.state.orderType].update_title} price has been updated!
                     </div>
                 </div>}

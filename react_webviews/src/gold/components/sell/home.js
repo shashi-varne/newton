@@ -179,7 +179,6 @@ class GoldSellHome extends Component {
           errorMessage: res3.pfwresponse.result.error || res3.pfwresponse.result.message ||
             'Something went wrong'
         });
-        
       }
     
     } catch (err) {
@@ -288,8 +287,6 @@ class GoldSellHome extends Component {
     }
     let amountError = false;
     let weightError = false;
-    let isWeight = this.state.isWeight;
-    let isAmount = this.state.isAmount;
     let amount = '', weight = '';
     let inputData = {};
 
@@ -309,20 +306,13 @@ class GoldSellHome extends Component {
     }
 
     if (eventName === 'amount' && eventValue) {
-      isWeight = false;
-      isAmount = true;
       inputData = calculate_gold_wt_sell(this.state.sellData, amount);
       weight = inputData.weight;
 
     } else if (eventName === 'weight' && eventValue) {
       inputData = calculate_gold_amount_sell(this.state.sellData, weight);
       amount = inputData.amount;
-      
-      isWeight = true;
-      isAmount = false;
     } else {
-      isWeight = false;
-      isAmount = false;
       amount = '';
       weight = '';
     }
@@ -349,15 +339,13 @@ class GoldSellHome extends Component {
     let sellData = storageService().getObject('sellData');
     sellData.amount_selected = amount;
     sellData.weight_selected = weight;
-    sellData.inputMode = isAmount ? 'amount' : 'weight';
+    sellData.inputMode = this.state.isAmount ? 'amount' : 'weight';
     storageService().setObject('sellData', sellData);
 
     setSellDataAfterUpdate(inputData);
 
 
     this.setState({
-      isWeight: isWeight,
-      isAmount: isAmount,
       amountError: amountError,
       weightError: weightError,
       amount: amount,

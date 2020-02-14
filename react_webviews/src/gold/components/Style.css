@@ -554,6 +554,9 @@ img.gold-offer-slide-img {
 .gold-delivery-select-address {
   margin: 0 -15px 0 -20px;
 }
+.gold-sell-select-bank {
+  margin: 0 -15px 30px -20px;
+}
 .gold-sell-select-bank .select-bank {
   color: #7a7676;
   line-height: 1.4;
@@ -574,9 +577,6 @@ img.gold-offer-slide-img {
   margin: 10px 0px 20px 0px;
   background: linear-gradient(to right, #f4f4f4, white);
   padding: 20px 25px 10px 25px;
-}
-.gold-sell-select-bank {
-  margin: 0 -15px 0 -20px;
 }
 .gold-sell-select-bank .bank-name {
   color: #0a1c32;

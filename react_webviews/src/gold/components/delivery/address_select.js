@@ -30,29 +30,6 @@ class SelectAddressDelivery extends Component {
   }
 
   componentWillMount() {
-
-    let confirmDialogData = {
-      buttonData: {
-        leftTitle: '0.5g Lotus…',
-        leftSubtitle: '₹1,000',
-        leftArrow: 'down',
-        provider: 'safegold'
-      },
-      buttonTitle: "Ok",
-      content1: [
-        { 'name': 'Making charges', 'value': '₹194.17' },
-        { 'name': 'Shipping charges', 'value': 'Free' }
-      ],
-      content2: [
-        { 'name': 'Total', 'value': '₹200.00' }
-      ]
-    }
-
-    this.setState({
-      confirmDialogData: confirmDialogData
-    })
-
-
     let product = {};
     if (window.localStorage.getItem('goldProduct')) {
       product = JSON.parse(window.localStorage.getItem('goldProduct'));

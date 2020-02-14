@@ -661,51 +661,58 @@ img.gold-offer-slide-img {
   margin: 0 -15px 0 -20px;
 }
 
-.gold-sell-select-bank .select-bank {
-  color: rgb(122, 118, 118);
-  line-height: 1.4;
-  font-size: 18px;
-  /* margin-top: -2px; */
-  /* width: auto; */
-}
-.gold-sell-select-bank .add-new-button {
-  margin: 20px 0 0 25px;
-  font-size: 12px;
-  color: var(--secondary);
-  text-transform: uppercase;
-  font-weight: 800;
-}
-.gold-sell-select-bank .bank-tile {
+.gold-sell-select-bank {
+
+  margin: 0 -15px 30px -20px;
+
+  .select-bank {
+    color: rgb(122, 118, 118);
+    line-height: 1.4;
+    font-size: 18px;
+    /* margin-top: -2px; */
+    /* width: auto; */
+  }
+
+  .add-new-button {
+    margin: 20px 0 0 25px;
+    font-size: 12px;
+    color: var(--secondary);
+    text-transform: uppercase;
+    font-weight: 800;
+  }
+
+ .bank-tile {
     margin: 10px 15px 20px 15px;
     padding: 20px 10px 10px 10px;
+  }
+  .bank-tile-selected {
+      margin: 10px 0px 20px 0px;
+      background: linear-gradient(to right, #F4F4F4 , white);
+      padding: 20px 25px 10px 25px;
+  }
+
+  .bank-name {
+    color: #0A1C32;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .account-number {
+    color: #767E86;
+    font-size: 14px;
+  }
+  .primary-bank {
+    color: #D3DBE4;
+    font-size: 8px;
+    font-weight: 'bold';
+  }
+  .left-icon {
+    /* width: 10%; */
+    float: left;
+    margin: 0 10px 0 0;
+  }
+
 }
-.gold-sell-select-bank .bank-tile-selected {
-    margin: 10px 0px 20px 0px;
-    background: linear-gradient(to right, #F4F4F4 , white);
-    padding: 20px 25px 10px 25px;
-}
-.gold-sell-select-bank {
-  margin: 0 -15px 0 -20px;
-}
-.gold-sell-select-bank .bank-name {
-  color: #0A1C32;
-  font-size: 14px;
-  font-weight: 600;
-}
-.gold-sell-select-bank .account-number {
-  color: #767E86;
-  font-size: 14px;
-}
-.gold-sell-select-bank .primary-bank {
-  color: #D3DBE4;
-  font-size: 8px;
-  font-weight: 'bold';
-}
-.gold-sell-select-bank .left-icon {
-  /* width: 10%; */
-  float: left;
-  margin: 0 10px 0 0;
-}
+
 
 
 .gold-delivery-order .top-info-tile {

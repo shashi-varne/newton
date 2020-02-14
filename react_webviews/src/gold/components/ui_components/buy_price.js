@@ -39,7 +39,7 @@ class BuyPriceClass extends Component {
 
                 let buyData = storageService().getObject('buyData') || {};
                 buyData.goldBuyInfo = result.buy_info;
-                buyData.plutusRateID = result.buy_info.plutus_rate_id;
+                buyData.plutus_rate_id = result.buy_info.plutus_rate_id;
                 buyData.timeAvailable = timeAvailable;
                 storageService().setObject('buyData', buyData);
 

@@ -262,8 +262,6 @@ class GoldBuyHome extends Component {
   setAmountGms = (event)  => {
     let amountError = false;
     let weightError = false;
-    let isWeight = this.state.isWeight;
-    let isAmount = this.state.isAmount;
     let amount = '', weight = '';
     let inputData = {};
 
@@ -294,16 +292,10 @@ class GoldBuyHome extends Component {
     if (eventName === 'amount' && eventValue) {
       inputData = calculate_gold_wt_buy(this.state.buyData, amount);
       weight = inputData.weight;
-      isWeight = false;
-      isAmount = true;
     } else if (eventName === 'weight' && eventValue) {
       inputData = calculate_gold_amount_buy(this.state.buyData, weight);
       amount = inputData.amount;
-      isWeight = true;
-      isAmount = false;
     } else {
-      isWeight = false;
-      isAmount = false;
       amount = '';
       weight = '';
     }
@@ -329,14 +321,12 @@ class GoldBuyHome extends Component {
     let buyData = storageService().getObject('buyData');
     buyData.amount_selected = amount;
     buyData.weight_selected = weight;
-    buyData.inputMode = isAmount ? 'amount' : 'weight';
+    buyData.inputMode = this.state.isAmount ? 'amount' : 'weight';
     storageService().setObject('buyData', buyData);
 
     setBuyDataAfterUpdate(inputData);
 
     this.setState({
-      isWeight: isWeight,
-      isAmount: isAmount,
       amountError: amountError,
       weightError: weightError,
       amount: amount,
