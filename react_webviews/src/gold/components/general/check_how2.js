@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
-
+import LeftRightFooter from '../../../common/ui/leftRightFooter';
 
 class CheckHow2 extends Component {
     constructor(props) {
@@ -38,8 +38,14 @@ class CheckHow2 extends Component {
         }
     }
 
-    handleClick = () => {
+    leftClick = () => {
+        this.sendEvents('back');
+        this.navigate('check-how1');
+    }
+
+    rightClick = () => {
         this.sendEvents('next');
+        this.navigate('check-how3');
     }
 
     render() {
@@ -48,12 +54,11 @@ class CheckHow2 extends Component {
                 showLoader={this.state.show_loader}
                 title="Buy 24K gold to create long term wealth"
                 edit={this.props.edit}
-                buttonTitle="Proceed"
-                handleClick={this.handleClick}
                 events={this.sendEvents('just_set_events')}
                 count={true}
                 current={2}
                 total={3}
+                noFooter={true}
             >
                 <div className="check-how-gold">
 
@@ -62,18 +67,19 @@ class CheckHow2 extends Component {
                     </div>
                     <div className="title">
                         Gold is an alternate asset
-            </div>
+                    </div>
                     <div className="content">
                         <div className="content-tiles">
                             Gold is globally considered by all wealth managers as an asset class which
-                    provides <b>stability to your portfolio</b> against stock market risks.
-                </div>
+                            provides <b>stability to your portfolio</b> against stock market risks.
+                        </div>
                         <div className="content-tiles">
                             In India, gold is much more than an investment and you can convert your
-                    <b> digital gold to gold coins</b> anytime.
-                </div>
+                            <b> digital gold to gold coins</b> anytime.
+                        </div>
                     </div>
                 </div>
+                <LeftRightFooter parent={this} />
             </Container>
         );
     }

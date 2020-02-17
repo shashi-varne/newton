@@ -30,13 +30,10 @@ import GoldTransactionDetail from "./components/transactions/details";
 import GoldBuyHome from "./components/buy/home";
 import GoldPanBuy from "./components/buy/pan";
 import GoldRegister from "./components/buy/register";
-import BuyOrder from "./components/buy/order";
 
 //sell
 import GoldSellHome from "./components/sell/home";
 import GoldPanSell from "./components/sell/pan";
-import GoldBank from "./components/sell/bank";
-import SellOrder from "./components/sell/order";
 import SellVerifyBank from "./components/sell/verify_bank";
 import SellAddEditBank from "./components/sell/add_edit_bank";
 import SellSelectBank from "./components/sell/select_bank";
@@ -49,7 +46,6 @@ import SelectAddressDelivery from "./components/delivery/address_select";
 import AddEditAddressDelivery from "./components/delivery/address_add_edit";
 import DeliveryIntro from  "./components/delivery/intro";
 import GoldDeliveryProducts from "./components/delivery/products";
-
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -113,13 +109,10 @@ const Gold = props => {
           {/* buy */}
           <Route path={`${url}/buy`} component={GoldBuyHome} />
           <Route path={`${url}/:provider/gold-register`} component={GoldRegister} />
-          <Route path={`${url}/:provider/buy-gold-order`} component={BuyOrder} />
           <Route path={`${url}/:provider/buy-pan`} component={GoldPanBuy} />
 
           {/* sell */}
           <Route path={`${url}/sell`} component={GoldSellHome} />
-          <Route path={`${url}/:provider/bank-details`} component={GoldBank} />
-          <Route path={`${url}/:provider/sell-gold-order`} component={SellOrder} />
           <Route path={`${url}/:provider/sell-pan`} component={GoldPanSell} />
           <Route path={`${url}/:provider/sell-verify-bank`} component={SellVerifyBank} />
           <Route path={`${url}/:provider/sell-add-bank`} component={SellAddEditBank} />

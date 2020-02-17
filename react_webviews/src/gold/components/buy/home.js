@@ -8,7 +8,7 @@ import { inrFormatDecimal2, storageService, formatAmountInr, formatGms } from 'u
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { default_provider, gold_providers } from '../../constants';
+import { default_provider, gold_providers, isUserRegistered } from '../../constants';
 import PlaceBuyOrder from '../ui_components/place_buy_order';
 import PriceChangeDialog from '../ui_components/price_change_dialog';
 import RefreshBuyPrice from '../ui_components/buy_price';
@@ -129,21 +129,15 @@ class GoldBuyHome extends Component {
       if (res && res.pfwresponse.status_code === 200) {
 
         let result = res.pfwresponse.result;
-        let user_info = result.gold_user_info.user_info;
-        let provider_info = result.gold_user_info.provider_info;
-        let isRegistered = true;
-        if (provider_info.registration_status === "pending" ||
-          !provider_info.registration_status ||
-          result.gold_user_info.is_new_gold_user) {
-          isRegistered = false;
-        }
+        let isRegistered = isUserRegistered(result);
         this.setState({
-          provider_info: provider_info,
-          user_info: user_info,
+          provider_info: result.gold_user_info.provider_info,
+          user_info: result.gold_user_info.user_info,
           maxWeight: parseFloat(((30 - result.gold_user_info.provider_info.gold_balance) || 30).toFixed(4)),
           isRegistered: isRegistered,
           enableInputs: true
         });
+      
       } else {
         this.setState({
           show_loader: false
@@ -184,10 +178,10 @@ class GoldBuyHome extends Component {
 
     this.handleClose();
     this.sendEvents('next');
-    if (parseFloat(this.state.weight) > this.state.maxWeight) {
-      toast('You can not buy more than ' + this.state.maxWeight + ' gm', 'error');
-      return;
-    }
+    // if (parseFloat(this.state.weight) > this.state.maxWeight) {
+    //   toast('You can not buy more than ' + this.state.maxWeight + ' gm', 'error');
+    //   return;
+    // }
 
     if (!parseFloat(this.state.weight) || parseFloat(this.state.weight) < 0) {
       toast('Please enter a correct value for the weight', 'error');
@@ -211,10 +205,16 @@ class GoldBuyHome extends Component {
     }
 
 
-    // place buy order
-    this.setState({
-      proceedForOrder: true
-    })
+    let totalAmount = parseFloat(this.state.amount) + parseFloat(this.state.provider_info.gold_balance || 0);
+
+    if(!this.state.user_info.pan_verified && totalAmount > 100000) {
+      this.navigate(this.state.provider + '/buy-pan');
+    } else {
+      // place buy order
+      this.setState({
+        proceedForOrder: true
+      })
+    }
 
   }
 
@@ -300,9 +300,9 @@ class GoldBuyHome extends Component {
       weight = '';
     }
 
-    if (parseFloat(weight) > this.state.maxWeight) {
-      weightError = true;
-    }
+    // if (parseFloat(weight) > this.state.maxWeight) {
+    //   weightError = true;
+    // }
 
     if (!weight || parseFloat(weight) < 0) {
       weightError = true;
@@ -456,7 +456,8 @@ class GoldBuyHome extends Component {
                         <label className="gold-placeholder-right">= {inrFormatDecimal2(this.state.amount || '')}</label>
                       </div>
                       <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>
-                        Max {this.state.maxWeight} gm</div>
+                        {/* Max {this.state.maxWeight} gm */}
+                      </div>
                   </div>
                 }
                   

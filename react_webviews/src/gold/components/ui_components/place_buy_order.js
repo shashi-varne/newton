@@ -20,7 +20,7 @@ class PlaceBuyOrderClass extends Component {
 
     redirect(pgLink) {
         let nativeRedirectUrl = window.location.origin +
-            '/gold/' + this.state.provider + '/buy-gold-order' + getConfig().searchParams;
+            '/gold/buy' + getConfig().searchParams;
 
         let paymentRedirectUrl = encodeURIComponent(
             window.location.origin + '/gold/' + this.state.provider + '/buy/payment' + getConfig().searchParams
@@ -50,6 +50,10 @@ class PlaceBuyOrderClass extends Component {
             if (res.pfwresponse.status_code === 200 &&
                 res.pfwresponse.result.payment_details.plutus_rate === this.state.buyData.goldBuyInfo.plutus_rate) {
                 let result = res.pfwresponse.result;
+                let buyData = this.state.buyData;
+                buyData.payment_details = result.payment_details;
+                storageService().setObject('buyData', buyData);
+
                 var payment_link = result.payment_details.payment_link;
                 this.redirect(payment_link);
                 return;

@@ -116,6 +116,7 @@ class Payment extends Component {
       productDisc, paymentError, paymentMessage, paymentPending, invoiceLink;
 
     let base_amount, gst_amount, total_amount;
+    let transaction_id;
     if (orderType === 'sell') {
       let sellDetails = JSON.parse(window.localStorage.getItem('sellDetails'));
       weight = sellDetails ? sellDetails.weight_selected : '';
@@ -124,6 +125,7 @@ class Payment extends Component {
       gst_amount = sellDetails ? sellDetails.gst_amount : '';
       total_amount = sellDetails ? sellDetails.total_amount : '';
       invoiceLink = sellDetails ? sellDetails.invoice_link : '';
+      transaction_id = sellDetails.transaction_id || '';
     }
     
     
@@ -134,11 +136,15 @@ class Payment extends Component {
       base_amount = buyDetails ? buyDetails.base_amount : '';
       gst_amount = buyDetails ? buyDetails.gst_amount : '';
       total_amount = buyDetails ? buyDetails.total_amount : '';
+      transaction_id = buyDetails.payment_details.transact_id || '';
     }
+
+    console.log(buyDetails);
     
     if (orderType === 'delivery') {
       redeemProduct = JSON.parse(window.localStorage.getItem('redeemProduct'));
       productDisc = redeemProduct ? redeemProduct.product_details.description : '';
+      transaction_id = redeemProduct.transaction_id || '';
     }
 
     let paymentFailed, paymentSuccess;
@@ -146,9 +152,6 @@ class Payment extends Component {
       paymentFailed = true;
     } else if (status === 'success') {
       paymentSuccess = true;
-      if (orderType === 'buy') {
-        // this.getInvoice(buyDetails.transact_id);
-      }
     } else if (status === 'pending') {
       paymentPending = true;
     }
@@ -173,6 +176,8 @@ class Payment extends Component {
       total_amount: total_amount,
       providerData: gold_providers[this.state.provider]
     })
+
+    this.getTransDetails(transaction_id, orderType);
 
   }
 
@@ -270,14 +275,16 @@ class Payment extends Component {
     }
   }
 
-  async getInvoice(txn_id) {
+   getTransDetails = async (transaction_id, orderType) => {
 
+    console.log(this.state);
     this.setState({
       show_loader: true,
     });
 
     try {
-      const res = await Api.get('/api/gold/user/getinvoice', { txn_id: txn_id });
+      const res = await Api.get('/api/gold/report/orders/safegold?transaction_id=' + transaction_id +
+      '&order_type=' + orderType);
       if (res.pfwresponse.status_code === 200) {
         this.setState({
           show_loader: false,

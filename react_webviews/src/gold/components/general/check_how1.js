@@ -5,6 +5,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 
 import { Bar } from 'react-chartjs-2';
+import LeftRightFooter from '../../../common/ui/leftRightFooter';
 
 class CheckHow1 extends Component {
   constructor(props) {
@@ -43,15 +44,26 @@ class CheckHow1 extends Component {
     this.navigate('check-how2');
   }
 
+  leftClick = () => {
+    this.sendEvents('back');
+    this.navigate('/gold/landing');
+  }
+
+  rightClick = () => {
+    this.sendEvents('next');
+    this.navigate('check-how2');
+  }
+
   render() {
     return (
       <Container
         showLoader={this.state.show_loader}
         title="Buy 24K gold to create long term wealth"
         edit={this.props.edit}
-        buttonTitle="Proceed"
-        handleClick={this.handleClick}
         events={this.sendEvents('just_set_events')}
+        count={true}
+        current={1}
+        total={3}
         noFooter={true}
       >
         <div className="check-how-gold">
@@ -88,6 +100,8 @@ class CheckHow1 extends Component {
                 </div>
             </div>
        </div>
+
+       <LeftRightFooter parent={this} />
       </Container>
     );
   }

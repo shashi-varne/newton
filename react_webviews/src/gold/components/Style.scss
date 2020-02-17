@@ -1317,3 +1317,21 @@ img.gold-offer-slide-img {
     }
   }
 }
+
+.my-gold-locker-home {
+  .share-pan-bank {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #F0F7FF;
+    padding: 0px 0 10px 20px;
+    border-radius: 4px;
+    margin: 0 0 20px 0;
+    .title {
+      color: #0A1D32;
+      font-weight: 400;
+  }
+}
+
+
+}

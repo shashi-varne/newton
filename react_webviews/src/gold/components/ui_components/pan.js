@@ -14,6 +14,7 @@ import RefreshBuyPrice from '../ui_components/buy_price';
 import RefreshSellPrice from '../ui_components/sell_price';
 import GoldOnloadAndTimer from '../ui_components/onload_and_timer';
 import PriceChangeDialog from '../ui_components/price_change_dialog';
+import {isUserRegistered} from '../../constants';
 
 const commonMapper = {
     'buy': {
@@ -132,19 +133,23 @@ class GoldPanDataClass extends Component {
         try {
 
             const res = await Api.get('/api/gold/user/account/' + this.state.provider);
+
+            this.setState({
+                show_loader: false
+            });
             if (res.pfwresponse.status_code === 200) {
                 let result = res.pfwresponse.result;
+                let isRegistered = isUserRegistered(result);
 
-                const { pan_number } = result;
+                let user_info = result.gold_user_info.user_info;
                 this.setState({
-                    show_loader: false,
-                    pan_number: pan_number || '',
+                    provider_info: result.gold_user_info.provider_info,
+                    user_info: user_info,
+                    isRegistered: isRegistered,
+                    pan_number: user_info.pan_number || ''
                 });
 
             } else {
-                this.setState({
-                    show_loader: false
-                });
                 toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
                     'Something went wrong', 'error');
             }
@@ -194,9 +199,6 @@ class GoldPanDataClass extends Component {
 
         this.handleClose();
 
-        // this.navigate(this.state.next_state);
-        // return;
-
         if (!validateEmpty(this.state.pan_number)) {
             this.setState({
                 pan_number_error: 'PAN number cannot be empty'
@@ -225,14 +227,20 @@ class GoldPanDataClass extends Component {
             try {
                 const res = await Api.post('/api/kyc/v2/mine', options);
 
-                this.setState({
-                    show_loader: false
-                });
-
+                
                 if (res.pfwresponse.status_code === 200) {
-                    this.navigate(this.state.next_state);
-                } else {
 
+                    if(this.state.orderType === 'buy' && this.state.isRegistered) {
+                        this.props.parent.updateParent('proceedForOrder', true);
+                    } else {
+                        this.navigate(this.state.next_state);
+                    }
+                    
+                } else {
+                    this.setState({
+                        show_loader: false
+                    });
+    
                     toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
                         'Something went wrong', 'error');
 
@@ -255,7 +263,7 @@ class GoldPanDataClass extends Component {
     render() {
         return (
             <Container
-                showLoader={this.state.show_loader}
+                showLoader={this.state.show_loader || this.props.parent.state.show_loader}
                 title={this.state.commonMapper.top_title}
                 handleClick={this.handleClick}
                 handleClick2={this.handleClick2}
@@ -283,6 +291,7 @@ class GoldPanDataClass extends Component {
                             class="name"
                             id="name"
                             name="pan_number"
+                            maxLength="10"
                             value={this.state.pan_number}
                             onChange={this.handleChange('pan_number')} />
                     </div>

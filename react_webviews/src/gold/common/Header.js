@@ -39,10 +39,10 @@ const Header = ({ classes, title, count, total, current, goBack,
 
           {title}
         </div>
-        {!inPageTitle && count &&
+        {/* {!inPageTitle && count &&
           <span color="inherit">
             <span style={{ fontWeight: 600 }}>{current}</span>/<span>{total}</span>
-          </span>}
+          </span>} */}
       </div>
       {/* } */}
     </Toolbar>

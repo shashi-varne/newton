@@ -25,8 +25,7 @@ class GoldDeliveryProducts extends Component {
       gold_providers: gold_providers,
       orderType: 'delivery',
       provider: storageService().get('gold_provider') || default_provider,
-      goldInfo: {},
-      userInfo: {},
+      user_info: {},
       provider_info: {},
       productName: getConfig().productName,
       redirect_state: 'delivery-products'
@@ -44,8 +43,8 @@ class GoldDeliveryProducts extends Component {
         let result = res.pfwresponse.result;
         isRegistered = isUserRegistered(result);
         this.setState({
-          goldInfo: result.gold_user_info.safegold_info,
-          userInfo: result.gold_user_info.user_info,
+          provider_info: result.gold_user_info.provider_info,
+          user_info: result.gold_user_info.user_info,
           // maxWeight: parseFloat(result.gold_user_info.safegold_info.gold_balance).toFixed(4),
           isRegistered: isRegistered
         });

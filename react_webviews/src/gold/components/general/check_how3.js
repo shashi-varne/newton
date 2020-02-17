@@ -4,13 +4,17 @@ import Container from '../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
+import LeftRightFooter from '../../../common/ui/leftRightFooter';
 
 class CheckHow2 extends Component {
     constructor(props) {
         super(props);
         this.state = {
             show_loader: false,
-            productName: getConfig().productName
+            productName: getConfig().productName,
+            rightButtonData :{
+                title: 'Buy digital gold'
+            }
         }
     }
 
@@ -38,8 +42,14 @@ class CheckHow2 extends Component {
         }
     }
 
-    handleClick = () => {
+    leftClick = () => {
+        this.sendEvents('back');
+        this.navigate('check-how2');
+    }
+
+    rightClick = () => {
         this.sendEvents('next');
+        this.navigate('/gold/buy');
     }
 
     render() {
@@ -48,12 +58,11 @@ class CheckHow2 extends Component {
                 showLoader={this.state.show_loader}
                 title="Buy 24K gold to create long term wealth"
                 edit={this.props.edit}
-                buttonTitle="Proceed"
-                handleClick={this.handleClick}
                 events={this.sendEvents('just_set_events')}
                 count={true}
                 current={3}
                 total={3}
+                noFooter={true}
             >
                 <div className="check-how-gold">
 
@@ -76,6 +85,8 @@ class CheckHow2 extends Component {
 
                     <GoldBottomSecureInfo />
                 </div>
+
+                <LeftRightFooter parent={this} />
             </Container>
         );
     }
