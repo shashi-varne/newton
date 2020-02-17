@@ -12,13 +12,20 @@ class EnpsSuccess extends Component {
     this.state = {
       show_loader: false,
       params: qs.parse(props.history.location.search.slice(1)),
-      sip_resumed: getConfig().productName !== 'fisdom' ? sip_resumed_myway : sip_resumed_fisdom
+      sip_resumed: getConfig().productName !== 'fisdom' ? sip_resumed_myway : sip_resumed_fisdom,
+      session_less_enps: window.localStorage.getItem('session_less_enps') || ''
     }
   }
 
   handleClick = () => {
     this.sendEvents('ok');
-    nativeCallback({ action: 'exit' });
+    let url = 'https://fis.do/m/module?action_type=native';
+    url += '&native_module=' + encodeURIComponent('app/' + 'portfolio');
+    nativeCallback({
+      action: 'open_module', message: {
+        action_url: url
+      }
+    });
   }
 
   navigate = (pathname) => {
@@ -54,14 +61,16 @@ class EnpsSuccess extends Component {
         onlyButton={true}
         disableBack={true}
         buttonTitle="Go to Portfolio"
+        noFooter={this.state.session_less_enps}
+        noBack={this.state.session_less_enps}
       >
         <div>
-            <div className="main-top-title-new">NPS with e-Sign successful</div>
+          <div className="main-top-title-new">NPS with e-Sign successful</div>
           <div className="success-img">
             <img alt="Mandate" src={this.state.sip_resumed} width="100%" />
           </div>
           <div className="success-text-info success-enps">
-          e-Sign by Aadhaar is successful. You will receive a confirmation mail from PFRDA and your PRAN card will be delivered within a week at registered address.
+            e-Sign by Aadhaar is successful. You will receive a confirmation mail from PFRDA and your PRAN card will be delivered within a week at registered address.
           </div>
 
           <div className="success-bottom">
