@@ -933,23 +933,28 @@ img.gold-offer-slide-img {
   background-color: #0a1d32 !important;
   color: #fff !important;
 }
-.gold-landing .infoimage-block {
-  height: 190px;
-  background-repeat: no-repeat;
-  display: flex;
-  flex-direction: column;
-  padding: 30px 0 10px 10%;
-  justify-content: space-evenly;
-  background-size: auto;
-  background-position: center;
+.gold-landing .infoimage-block1 {
+  position: relative;
 }
-.gold-landing .infoimage-block .title {
+.gold-landing .infoimage-block1 .inner {
+  padding: 0 0 0 20px;
+}
+.gold-landing .infoimage-block1 .title {
   max-width: 60%;
+  margin: 0 0 40px 0;
+  position: absolute;
+  top: 18%;
 }
-.gold-landing .infoimage-block .bottom-content {
+.gold-landing .infoimage-block1 .button {
+  position: absolute;
+  top: 50%;
+}
+.gold-landing .infoimage-block1 .bottom-content {
   color: #9e6e1d;
   font-size: 8px;
   font-weight: 800;
+  bottom: 20px;
+  position: absolute;
 }
 .gold-landing .block3 {
   margin: 30px 0 0 0;

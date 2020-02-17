@@ -413,7 +413,8 @@ class GoldSellHome extends Component {
                       <TextField
                           type="text"
                           autoComplete="off"
-                          error={this.state.amountError ? true: false}
+                          error={this.state.base_error ? true: false}
+                          helperText={this.state.base_error}
                           name="amount"
                           id="amount"
                           disabled={!this.state.openOnloadModal || !this.state.isRegistered}
@@ -442,7 +443,8 @@ class GoldSellHome extends Component {
                           label=""
                           name="weight"
                           id="weight"
-                          error={this.state.weightError ? true: false}
+                          error={this.state.base_error ? true: false}
+                          helperText={this.state.base_error}
                           disabled={!this.state.openOnloadModal || !this.state.isRegistered}
                           onChange={(event) => this.setAmountGms(event)}
                           onKeyPress={this.handleKeyChange('weight')}

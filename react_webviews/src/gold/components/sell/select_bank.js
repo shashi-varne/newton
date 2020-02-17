@@ -292,12 +292,7 @@ class SellSelectBank extends Component {
         buttonTitle="Continue"
         disable={this.state.selectedIndex === -1 ? true : false}
         withProvider={true}
-        buttonData={{
-          leftTitle: 'Sell gold worth',
-          leftSubtitle: '₹1,000',
-          leftArrow: 'up',
-          provider: 'safegold'
-        }}
+        buttonData={this.state.bottomButtonData}
         events={this.sendEvents('just_set_events')}
       >
         <div className="common-top-page-subtitle">

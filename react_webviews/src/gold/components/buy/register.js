@@ -377,6 +377,7 @@ class GoldRegister extends Component {
         edit={this.props.edit}
         withProvider={true}
         buttonTitle="Continue"
+        buttonData={this.state.bottomButtonData}
         events={this.sendEvents('just_set_events')}
       >
         <div className="common-top-page-subtitle">

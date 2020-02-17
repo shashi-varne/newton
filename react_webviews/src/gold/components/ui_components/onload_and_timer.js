@@ -22,7 +22,8 @@ class GoldOnloadAndTimerClass extends Component {
             openOnloadModal: this.props.parent.state.openOnloadModal,
             title: mapper[this.props.parent.state.orderType].title,
             orderType: this.props.parent.state.orderType,
-            orderKey: this.props.parent.state.orderType + 'Data'
+            orderKey: this.props.parent.state.orderType + 'Data',
+            provider: this.props.parent.state.provider
         }
 
     }
@@ -117,7 +118,7 @@ class GoldOnloadAndTimerClass extends Component {
                 leftTitle: 'To ' + this.state.orderType + ' gold worth',
                 leftSubtitle: inrFormatDecimal2(orderData.amount_selected),
                 leftArrow: 'down',
-                provider: 'safegold'
+                provider: this.state.provider
             },
             buttonTitle: "REFRESH",
             content1: [
@@ -153,13 +154,14 @@ class GoldOnloadAndTimerClass extends Component {
         }
 
         let confirmDialogData = {};
+        let bottomButtonData = {};
         if (this.state.orderType !== 'delivery') {
             confirmDialogData = {
                 buttonData: {
                     leftTitle: this.state.orderType + ' gold worth',
                     leftSubtitle: inrFormatDecimal2(orderData.amount_selected),
                     leftArrow: 'down',
-                    provider: 'safegold'
+                    provider: this.state.provider
                 },
                 buttonTitle: "Ok",
                 content1: [
@@ -173,13 +175,20 @@ class GoldOnloadAndTimerClass extends Component {
                     { 'name': 'Total', 'value': inrFormatDecimal2(orderData.total_amount) }
                 ]
             }
+
+            bottomButtonData = {
+                leftTitle: this.state.orderType + ' gold worth',
+                leftSubtitle: inrFormatDecimal2(orderData.amount_selected),
+                leftArrow: 'up',
+                provider: this.state.provider
+            }
         } else {
             let confirmDialogData = {
                 buttonData: {
                   leftTitle: '0.5g Lotus…',
                   leftSubtitle: '₹1,000',
                   leftArrow: 'down',
-                  provider: 'safegold'
+                  provider: this.state.provider
                 },
                 buttonTitle: "Ok",
                 content1: [
@@ -197,6 +206,7 @@ class GoldOnloadAndTimerClass extends Component {
         }
 
         this.updateParent('confirmDialogData', confirmDialogData);
+        this.updateParent('bottomButtonData', bottomButtonData)
 
     }
 

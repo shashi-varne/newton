@@ -313,12 +313,7 @@ class SellAddEditBank extends Component {
         buttonTitle="Continue"
         events={this.sendEvents('just_set_events')}
         withProvider={true}
-        buttonData={{
-          leftTitle: 'Sell gold worth',
-          leftSubtitle: '₹1,000',
-          leftArrow: 'up',
-          provider: 'safegold'
-        }}
+        buttonData={this.state.bottomButtonData}
       >
         <div className="common-top-page-subtitle">
           Amount will be credited to your account

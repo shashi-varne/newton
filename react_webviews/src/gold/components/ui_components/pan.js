@@ -263,12 +263,7 @@ class GoldPanDataClass extends Component {
                 withProvider={true}
                 buttonTitle={this.state.commonMapper.cta}
                 events={this.sendEvents('just_set_events')}
-                buttonData={{
-                    leftTitle: this.state.commonMapper.cta2,
-                    leftSubtitle: '₹1,000',
-                    leftArrow: 'up',
-                    provider: 'safegold'
-                }}
+                buttonData={this.state.bottomButtonData}
             >
                 <div className="common-top-page-subtitle">
                     {this.state.commonMapper.top_subtitle}

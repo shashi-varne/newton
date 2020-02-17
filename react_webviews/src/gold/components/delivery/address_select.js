@@ -301,12 +301,7 @@ class SelectAddressDelivery extends Component {
         buttonTitle="Continue"
         disable={this.state.selectedIndex === -1 ? true : false}
         withProvider={true}
-        buttonData={{
-          leftTitle: '0.5g Lotus…',
-          leftSubtitle: '₹1,000',
-          leftArrow: 'up',
-          provider: 'safegold'
-        }}
+        buttonData={this.state.bottomButtonData}
       >
         <div className="gold-delivery-select-address">
           {this.state.addressData && this.state.addressData.map(this.renderAddress)}

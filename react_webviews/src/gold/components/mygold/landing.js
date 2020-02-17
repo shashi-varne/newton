@@ -398,18 +398,21 @@ class GoldSummary extends Component {
 
   rendertopInfoImage() {
     return(
-      <div className="infoimage-block" style={{backgroundImage: `url(${crd_gold_info})`}}>
-            <div className="title generic-page-title">
-              Buy 24K gold to create long term wealth
-            </div>
-            <div className="button">
-                <Button variant="raised"
-                    size="large" onClick={() => this.navigate('check-how1')} color="secondary" autoFocus>
-                  CHECK HOW?
-                </Button>
-            </div>
-            <div className="bottom-content">
-              Buy-sell anytime | 24K 99.9% pure | 100% secure
+      <div className="infoimage-block1">
+            <img style={{width:'100%'}} src={crd_gold_info} alt="" />
+            <div className="inner">
+              <div className="title generic-page-title">
+                Buy 24K gold to create long term wealth
+              </div>
+              <div className="button">
+                  <Button variant="raised"
+                      size="large" onClick={() => this.navigate('check-how1')} color="secondary" autoFocus>
+                    CHECK HOW?
+                  </Button>
+              </div>
+              <div className="bottom-content">
+                Buy-sell anytime | 24K 99.9% pure | 100% secure
+              </div>
             </div>
         </div>
     )
