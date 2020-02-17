@@ -43,7 +43,6 @@ import SellSelectBank from "./components/sell/select_bank";
 
 
 // delivery
-import DeliveryAddress from "./components/delivery/address";
 import DeliveryOrder from "./components/delivery/order";
 import DeliverySelectedProduct from "./components/delivery/selected_product";
 import SelectAddressDelivery from "./components/delivery/address_select";
@@ -132,15 +131,14 @@ const Gold = props => {
           {/* delivery */}
           <Route path={`${url}/delivery`} component={DeliveryIntro} />
           <Route path={`${url}/delivery-products`}  component={GoldDeliveryProducts} />
-          <Route path={`${url}/:provider/gold-delivery-address`}  component={DeliveryAddress} />
           <Route path={`${url}/:provider/gold-delivery-order`} component={DeliveryOrder} />
           <Route path={`${url}/:provider/select-gold-product`}  component={DeliverySelectedProduct} />
           
 
-          <Route path={`${url}/:provider/select-address-delivery`} component={SelectAddressDelivery} />
-          <Route path={`${url}/:provider/add-address-delivery`} component={AddEditAddressDelivery} />
+          <Route path={`${url}/:provider/delivery-select-address`} component={SelectAddressDelivery} />
+          <Route path={`${url}/:provider/delivery-add-address`} component={AddEditAddressDelivery} />
           {/* Edit paths */}
-          <Route path={`${url}/:provider/edit-address-delivery`} render={(props) => 
+          <Route path={`${url}/:provider/delivery-edit-address`} render={(props) => 
               <AddEditAddressDelivery {...props} edit={true} />} />
          
           <Route component={NotFound} />

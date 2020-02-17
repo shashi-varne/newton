@@ -10,7 +10,7 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
-
+import { storageService } from 'utils/validators';
 import ConfirmDialog from '../ui_components/confirm_dialog';
 
 class SelectAddressDelivery extends Component {
@@ -21,7 +21,8 @@ class SelectAddressDelivery extends Component {
       selectedIndex: -1,
       provider: this.props.match.params.provider,
       openDialogDelete: false,
-      openConfirmDialog: false
+      openConfirmDialog: false,
+      product:storageService().getObject('deliveryData') || {}
     }
 
     this.renderAddress = this.renderAddress.bind(this);
@@ -30,47 +31,28 @@ class SelectAddressDelivery extends Component {
   }
 
   componentWillMount() {
-    let product = {};
-    if (window.localStorage.getItem('goldProduct')) {
-      product = JSON.parse(window.localStorage.getItem('goldProduct'));
-    } else {
-      this.navigate('my-gold-locker');
+    if (!this.state.product) {
+      this.navigate('/gold/delivery-products');
     }
-    this.setState({
-      product: product
-    })
   }
 
   getAddressData = async () => {
-    //  Api.get('/api/mandate/campaign/address/' + this.state.params.key).then(res => {
+     Api.get('/api/gold/address').then(res => {
 
-    //   this.setState({ show_loader: false });
+      this.setState({ show_loader: false });
 
-    //   if (res.pfwresponse.status_code === 200) {
+      if (res.pfwresponse.status_code === 200) {
 
-    //     this.setState({
-    //       addressData: res.pfwresponse.result
-    //     })
-    //   } else {
-    //     toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-    //       'Something went wrong');
-    //   }
-    // }).catch(error => {
-    //   this.setState({ show_loader: false });
-    // });
-
-    let addressline = {
-      "pincode": '560046',
-      "country": "india",
-      'addressline1': "Aajdbvhjdbjvd",
-      'addressline2': "vbvhd hdhdv hdhdh",
-      "name": "vinod jat",
-      "mobile_number": "8271961955"
-    };
-    this.setState({
-      addressData: [addressline, addressline],
-      show_loader: false
-    })
+        this.setState({
+          addressData: res.pfwresponse.result
+        })
+      } else {
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+          'Something went wrong');
+      }
+    }).catch(error => {
+      this.setState({ show_loader: false });
+    });
   }
 
 
@@ -96,52 +78,6 @@ class SelectAddressDelivery extends Component {
     })
   }
 
-  verifyMobile = async () => {
-    this.setState({
-      show_loader: true
-    });
-
-    let options = {
-      mobile_number: this.state.userInfo.mobile_no,
-    }
-    try {
-      const res = await Api.post('/api/gold/user/verify/delivery/mobilenumber', options);
-      if (res.pfwresponse.status_code === 200) {
-        this.setState({
-          show_loader: false,
-        });
-
-        let result = res.pfwresponse.result;
-        if (result.resend_verification_otp_link !== '' && result.verification_link !== '') {
-          window.localStorage.setItem('fromType', 'delivery')
-          var message = 'An OTP is sent to your mobile number ' + this.state.userInfo.mobile_no + ', please verify to place delivery order.'
-          this.props.history.push({
-            pathname: 'verify',
-            search: getConfig().searchParams,
-            params: {
-              resend_link: result.resend_verification_otp_link,
-              verify_link: result.verification_link,
-              message: message, fromType: 'delivery'
-            }
-          });
-          toast(message);
-        }
-      } else {
-        this.setState({
-          show_loader: false
-        });
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-          'Something went wrong', 'error');
-      }
-    } catch (err) {
-      this.setState({
-        show_loader: false
-      });
-      toast('Something went wrong', 'error');
-    }
-  }
-
-
   handleClick = async () => {
 
     this.setState({
@@ -153,13 +89,10 @@ class SelectAddressDelivery extends Component {
     }
 
     let selectedAddress = this.state.addressData[this.state.selectedIndex];
-
     let product = this.state.product;
     product.address = selectedAddress;
 
-    product.isFisdomVerified = true; //Assumption: Hardcoding as we are not doing otp verification
-
-    window.localStorage.setItem('goldProduct', JSON.stringify(product));
+    storageService().setObject('deliveryData', product);
     this.navigate('gold-delivery-order');
   }
 
@@ -213,16 +146,18 @@ class SelectAddressDelivery extends Component {
       openDialogDelete: false
     });
 
-    let res = await Api.get('/api/mandate/campaign/address/confirm' +
-      '?address_id=' + this.state.address_id_delete);
-
-    this.setState({ show_loader: false });
+    let body = {
+      address_id: this.state.address_id_delete,
+      changeType: 'delete'
+    }
+    let res = await Api.post('/api/gold/address', body);
+   
+    toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+      'Something went wrong');
     if (res.pfwresponse.status_code === 200) {
-
       this.getAddressData();
     } else {
-      toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-        'Something went wrong');
+      this.setState({ show_loader: false });
     }
   }
 
@@ -270,7 +205,7 @@ class SelectAddressDelivery extends Component {
             </div>
           </div>
           <div className="action-buttons">
-            <div className="er-button" onClick={() => this.navigate('edit-address-delivery', props.id)}>Edit</div>
+            <div className="er-button" onClick={() => this.navigate('delivery-edit-address', props.id)}>Edit</div>
             <div className="er-button" onClick={() => this.removeAddressDialog(props.id)}>Remove</div>
           </div>
         </div>
@@ -307,7 +242,7 @@ class SelectAddressDelivery extends Component {
           {this.state.addressData && this.state.addressData.map(this.renderAddress)}
           {this.state.addressData && this.state.addressData.length < 3 &&
             <div
-              onClick={() => this.navigate('add-address-delivery')}
+              onClick={() => this.navigate('delivery-add-address')}
               className="add-new-button">
               <span style={{
                 background: '#F0F7FF', padding: '4px 9px 4px 9px',

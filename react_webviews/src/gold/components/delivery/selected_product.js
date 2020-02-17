@@ -3,16 +3,8 @@ import qs from 'qs';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import point_five_gm from 'assets/05gmImage.png';
-import one_gm_front from 'assets/1gm_front.png';
-import two_gm_front from 'assets/2gm_front.png';
-import five_gm_front from 'assets/5gm_front.png';
-import five_gmbar_front from 'assets/5gmbar_front.png';
-import ten_gm_front from 'assets/10gm_front.png';
-import ten_gmbar_front from 'assets/10gmbar_front.png';
-import twenty_gmbar_front from 'assets/20gmbar_front.png';
 import toast from '../../../common/ui/Toast';
-import { inrFormatDecimal } from 'utils/validators';
+import { inrFormatDecimal, storageService } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import { Carousel } from 'react-responsive-carousel';
@@ -26,12 +18,10 @@ class DeliverySelectedProduct extends Component {
     super(props);
     this.state = {
       show_loader: true,
-      product: {
-        product_highlights: []
-      },
+      product:storageService().getObject('deliveryData'),
       openResponseDialog: false,
       disabledText: 'Proceed to address selection',
-      disabled: false,
+      disabled: true,
       params: qs.parse(props.history.location.search.slice(1)),
       provider: this.props.match.params.provider,
       offerImageData: [],
@@ -62,24 +52,22 @@ class DeliverySelectedProduct extends Component {
       offerImageData: offerImageData
     })
 
-    if (window.localStorage.getItem('goldProduct')) {
-      let product = JSON.parse(window.localStorage.getItem('goldProduct'));
-      if (product.in_stock === 'N') {
+    console.log(this.state.product);
+
+    if (this.state.product) {
+      if (this.state.product.in_stock === 'N') {
         this.setState({
           disabled: true,
           disabledText: 'Out of Stock'
         })
       }
-      this.setState({
-        product: product
-      })
     } else {
-      this.navigate('my-gold-locker');
+      this.navigate('/gold/delivery-products');
       return;
     }
 
     try {
-      const res = await Api.get('/api/gold/user/sell/balance');
+      const res = await Api.get('/api/gold/user/sell/balance/'  + this.state.provider);
 
       if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
@@ -149,27 +137,10 @@ class DeliverySelectedProduct extends Component {
       return;
     }
     if (parseFloat(this.state.product.metal_weight) <= this.state.maxWeight) {
-      this.navigate(this.state.provider + '/gold-delivery-address');
+      this.navigate('delivery-select-address');
     } else {
       toast("Insufficient Gold Balance", 'error');
     }
-  }
-
-  productImgMap = () => {
-    const prod_image_map = {
-      2: one_gm_front,
-      3: two_gm_front,
-      1: five_gm_front,
-      14: five_gmbar_front,
-      8: ten_gm_front,
-      12: ten_gmbar_front,
-      15: twenty_gmbar_front,
-      16: point_five_gm
-    };
-
-    return (
-      <img alt="Gold" className="delivery-icon" src={prod_image_map[this.state.product.id]} width="150" />
-    );
   }
 
   renderProductHIghlights(props, index) {
@@ -185,7 +156,7 @@ class DeliverySelectedProduct extends Component {
       <div key={index}
         className="gold-offer-slider">
         <img className="gold-offer-slide-img"
-          src={props.src} alt="Gold Offer" />
+          src={props} alt="Gold Offer" />
       </div>
     )
   }
@@ -287,15 +258,12 @@ class DeliverySelectedProduct extends Component {
                 });
               }}
             >
-              {this.state.offerImageData.map(this.renderOfferImages)}
+              {this.state.product.media.images.map(this.renderOfferImages)}
             </Carousel>
           </div>
 
 
           <div className="block2">
-            {/* <div className="delivery-select-logo">
-              {this.productImgMap()}
-            </div> */}
             <div className="mc">
               Making charges
             </div>

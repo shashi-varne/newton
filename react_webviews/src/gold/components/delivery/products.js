@@ -2,14 +2,6 @@ import React, { Component } from 'react';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import point_five_gm from 'assets/05gmImage.png';
-import one_gm_front from 'assets/1gm_front.png';
-import two_gm_front from 'assets/2gm_front.png';
-import five_gm_front from 'assets/5gm_front.png';
-import five_gmbar_front from 'assets/5gmbar_front.png';
-import ten_gm_front from 'assets/10gm_front.png';
-import ten_gmbar_front from 'assets/10gmbar_front.png';
-import twenty_gmbar_front from 'assets/20gmbar_front.png';
 // import toast from '../../../common/ui/Toast';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
@@ -31,7 +23,7 @@ class GoldDeliveryProducts extends Component {
       show_loader: true,
       gold_products: [],
       gold_providers: gold_providers,
-      orderType: 'deliver',
+      orderType: 'delivery',
       provider: storageService().get('gold_provider') || default_provider,
       goldInfo: {},
       userInfo: {},
@@ -68,6 +60,23 @@ class GoldDeliveryProducts extends Component {
         //   'Something went wrong', 'error');
       }
 
+      const res4 = await Api.get('/api/gold/delivery/products/' + this.state.provider);
+      if (res4.pfwresponse.status_code === 200) {
+        this.setState({
+          show_loader: false,
+          gold_products: res4.pfwresponse.result.delivery_products
+        });
+      } else {
+        this.setState({
+          // show_loader: false,
+          error: true,
+          errorMessage: res4.pfwresponse.result.error || res4.pfwresponse.result.message ||
+            'Something went wrong'
+        });
+        // toast(res4.pfwresponse.result.error || res4.pfwresponse.result.message ||
+        //   'Something went wrong', 'error');
+      }
+
       if(isRegistered) {
         const res3 = await Api.get('/api/gold/user/sell/balance/' + this.state.provider);
 
@@ -89,23 +98,6 @@ class GoldDeliveryProducts extends Component {
           //   'Something went wrong', 'error');
         }
       } 
-
-      const res4 = await Api.get('/api/gold/delivery/products/' + this.state.provider);
-      if (res4.pfwresponse.status_code === 200) {
-        this.setState({
-          show_loader: false,
-          gold_products: res4.pfwresponse.result.safegold_products
-        });
-      } else {
-        this.setState({
-          // show_loader: false,
-          error: true,
-          errorMessage: res4.pfwresponse.result.error || res4.pfwresponse.result.message ||
-            'Something went wrong'
-        });
-        // toast(res4.pfwresponse.result.error || res4.pfwresponse.result.message ||
-        //   'Something went wrong', 'error');
-      }
     } catch (err) {
       console.log(err);
       this.setState({
@@ -140,8 +132,10 @@ class GoldDeliveryProducts extends Component {
 
   selectGoldProduct(index) {
     this.sendEvents('next', this.state.gold_products[index].disc);
+
     let selectedProduct = this.state.gold_products[index];
-    window.localStorage.setItem('goldProduct', JSON.stringify(selectedProduct));
+    storageService().setObject('deliveryData', selectedProduct);
+
     this.navigate(this.state.provider + '/select-gold-product');
   };
 
@@ -154,29 +148,10 @@ class GoldDeliveryProducts extends Component {
     });
   }
 
-
-  productImgMap = (product) => {
-    const prod_image_map = {
-      2: one_gm_front,
-      3: two_gm_front,
-      1: five_gm_front,
-      14: five_gmbar_front,
-      8: ten_gm_front,
-      12: ten_gmbar_front,
-      13: ten_gmbar_front,
-      15: twenty_gmbar_front,
-      16: point_five_gm
-    };
-
-    return (
-      <img alt="Gold" className="delivery-icon" src={prod_image_map[product.id]} width="80" />
-    );
-  }
-
   renderDeliveryProducts =(props, index)  =>{
     return (
       <div key={index} onClick={() => this.selectGoldProduct(index)} className="delivery-tile">
-        {this.productImgMap(props)}
+        <img alt="Gold" className="delivery-icon" src={props.media.images[0]} width="80" />
 
         <div className="disc">{props.description}</div>
         <div className="making-charges">Making charges</div>

@@ -5,7 +5,8 @@ import Container from '../../common/Container';
 import Input from '../../../common/ui/Input';
 import location from 'assets/location_dark_icn.png';
 import Api from 'utils/api';
-import { validateNumber, validateLength, validateMinChar, validateConsecutiveChar, validateEmpty } from 'utils/validators';
+import { validateNumber, validateLength, validateMinChar, 
+  validateConsecutiveChar, validateEmpty, getUrlParams } from 'utils/validators';
 import {getConfig} from "utils/functions";
 import toast from '../../../common/ui/Toast';
 
@@ -22,19 +23,22 @@ class AddEditAddressDelivery extends Component {
       addressline2_error: '',
       name: "",
       name_error: '',
-      mobile_no: "",
-      mobile_no_error: '',
+      mobile_number: "",
+      mobile_number_error: '',
       city: '',
       state: '',
-      provider: this.props.match.params.provider
+      provider: this.props.match.params.provider,
+      address_id: getUrlParams().address_id || ''
     }
   }
 
   componentDidMount() {
 
+    console.log(getUrlParams());
+    console.log(this.props.edit)
     if (this.props.edit) {
-      if (this.state.params && this.state.params.address_id) {
-        Api.get('/api/mandate/campaign/address/' + this.state.params.key + '?address_id=' + this.state.params.address_id).then(res => {
+      if (this.state.address_id) {
+        Api.get('/api/gold/address?address_id=' + this.state.address_id).then(res => {
           if (res.pfwresponse.result) {
             let address = res.pfwresponse.result[0];
             this.setState({
@@ -44,6 +48,8 @@ class AddEditAddressDelivery extends Component {
               addressline2: address.addressline2 || '',
               city: address.city || '',
               state: address.state || '',
+              name: address.name || '',
+              mobile_number: address.mobile_number || ''
             });
           }
           else {
@@ -71,7 +77,7 @@ class AddEditAddressDelivery extends Component {
       this.setState({
         [event.target.name]: event.target.checked
       });
-    } else if (event.target.name === 'mobile_no') {
+    } else if (event.target.name === 'mobile_number') {
       if (event.target.value.length > 10) {
         return;
       }
@@ -140,9 +146,9 @@ class AddEditAddressDelivery extends Component {
       canSubmitForm = false;
     } 
     
-    if (this.state.mobile_no.length !== 10 || !validateNumber(this.state.mobile_no)) {
+    if (this.state.mobile_number.length !== 10 || !validateNumber(this.state.mobile_number)) {
       this.setState({
-        mobile_no_error: 'Please enter valid mobile no'
+        mobile_number_error: 'Please enter valid mobile no'
       });
       canSubmitForm = false;
     }
@@ -197,7 +203,7 @@ class AddEditAddressDelivery extends Component {
       this.setState({ show_loader: true });
       let addressline = {
         "name": this.state.name,
-        "mobile_no": this.state.mobile_no,
+        "mobile_number": this.state.mobile_number,
         "pincode": this.state.pincode,
         "country": "india",
         'addressline1': this.state.addressline1,
@@ -207,19 +213,20 @@ class AddEditAddressDelivery extends Component {
 
       let res;
       if (this.props.edit) {
-        addressline.address_id = this.state.params.address_id;
-        res = await Api.put('/api/gold/user/address/' + this.state.params.key, addressline);
+        addressline.changeType = 'update';
+        addressline.address_id = this.state.address_id;
+        res = await Api.post('/api/gold/address', addressline);
       } else {
-        res = await Api.post('/api/gold/user/address/' + this.state.params.key, addressline);
+        addressline.changeType = 'add';
+        res = await Api.post('/api/gold/address', addressline);
       }
 
       this.setState({ show_loader: false });
+      toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+        'Something went wrong');
       if (res.pfwresponse.status_code === 200) {
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-          'Something went wrong');
+       
         this.navigate('delivery-select-address');
-      } else {
-        toast('Something went wrong', 'error');
       }
     }
   }
@@ -252,16 +259,16 @@ class AddEditAddressDelivery extends Component {
           </div>
           <div className="InputField">
             <Input
-              error={(this.state.mobile_no_error) ? true : false}
-              helperText={this.state.mobile_no_error}
+              error={(this.state.mobile_number_error) ? true : false}
+              helperText={this.state.mobile_number_error}
               type="number"
               width="40"
               label="Mobile number"
               class="Mobile"
               id="number"
-              name="mobile_no"
-              value={this.state.mobile_no}
-              onChange={this.handleChange('mobile_no')} />
+              name="mobile_number"
+              value={this.state.mobile_number}
+              onChange={this.handleChange('mobile_number')} />
           </div>
           <div className="InputField">
             <Input

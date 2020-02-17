@@ -90,20 +90,6 @@ class SellSelectBank extends Component {
       this.setState({ show_loader: false });
     });
 
-    // let bank_data = {
-    //   "bank_name": 'ICICI Bank',
-    //   "account_number": "xxxx-8600"
-    // };
-
-    // let bank_data2 = {
-    //   "bank_name": 'ICICI Bank',
-    //   "account_number": "xxxx-8600",
-    //   "status": 'pending'
-    // };
-    // this.setState({
-    //   bankData: [bank_data, bank_data, bank_data2],
-    //   show_loader: false
-    // })
   }
 
 
@@ -125,9 +111,9 @@ class SellSelectBank extends Component {
   }
 
   chooseBank = (index, bank) => {
-    if (this.isVerificationPending(bank)) {
-      return;
-    }
+    // if (this.isVerificationPending(bank)) {
+    //   return;
+    // }
     this.setState({
       selectedIndex: index
     })
