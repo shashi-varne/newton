@@ -50,11 +50,9 @@ class DeliveryOrder extends Component {
         this.setState({
           show_loader: false
         })
-        let redeem_body = res.pfwresponse.result || {};
-        let redeemProduct = redeem_body.product_details;
-        redeemProduct.address = redeem_body.delivery_address;
+        let redeem_body = res.pfwresponse.result.redeem_body || {};
         this.setState({
-          redeemProduct: redeemProduct,
+          redeem_body: redeem_body,
           disabled: false
         })
 
@@ -70,6 +68,7 @@ class DeliveryOrder extends Component {
           'Something went wrong', 'error');
       }
     } catch (err) {
+      console.log(err);
       this.setState({
         show_loader: false
       });
@@ -105,7 +104,7 @@ class DeliveryOrder extends Component {
   handleClick = async () => {
     this.sendEvents('next');
 
-    if(!this.state.redeemProduct.payment_link) {
+    if(!this.state.redeem_body.payment_link) {
       return;
     }
     this.setState({
@@ -126,7 +125,7 @@ class DeliveryOrder extends Component {
       window.location.origin + '/gold/' + this.state.provider  + '/delivery/payment' + getConfig().searchParams
     );
 
-    var pgLink = this.state.redeemProduct.payment_link;
+    var pgLink = this.state.redeem_body.payment_link;
     // eslint-disable-next-line
     pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl + '&back_url=' + encodeURIComponent(nativeRedirectUrl) + '&order_type=delivery';
     if (getConfig().generic_callback) {

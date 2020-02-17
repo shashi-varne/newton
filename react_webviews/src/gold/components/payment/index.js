@@ -142,7 +142,7 @@ class Payment extends Component {
     console.log(buyDetails);
     
     if (orderType === 'delivery') {
-      redeemProduct = JSON.parse(window.localStorage.getItem('redeemProduct'));
+      redeemProduct = JSON.parse(window.localStorage.getItem('deliveryData'));
       productDisc = redeemProduct ? redeemProduct.product_details.description : '';
       transaction_id = redeemProduct.transaction_id || '';
     }

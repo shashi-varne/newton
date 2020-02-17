@@ -54,14 +54,7 @@ class DeliverySelectedProduct extends Component {
 
     console.log(this.state.product);
 
-    if (this.state.product) {
-      if (this.state.product.in_stock === 'N') {
-        this.setState({
-          disabled: true,
-          disabledText: 'Out of Stock'
-        })
-      }
-    } else {
+    if (!this.state.product) {
       this.navigate('/gold/delivery-products');
       return;
     }
@@ -73,17 +66,19 @@ class DeliverySelectedProduct extends Component {
         let result = res.pfwresponse.result;
         let maxWeight = result.sellable_gold_balance || 0;
         let product = this.state.product;
-        let disabledText;
+        let disabledText = this.state.disabledText;
+        let disabled = this.state.disabled;
         if (parseFloat(product.metal_weight) > maxWeight) {
           disabledText = 'Minimum ' + (parseFloat(product.metal_weight)).toFixed(2) + ' GM gold required';
-          this.setState({
-            disabled: true,
-            disabledText: disabledText
-          });
+          disabled = true;
+        } else {
+          disabled = false;
         }
         this.setState({
           show_loader: false,
-          maxWeight: maxWeight
+          maxWeight: maxWeight,
+          disabled:disabled,
+          disabledText: disabledText
         });
       } else {
         this.setState({

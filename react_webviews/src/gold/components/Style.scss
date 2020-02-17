@@ -713,72 +713,76 @@ img.gold-offer-slide-img {
 
 }
 
+.gold-delivery-order {
 
-
-.gold-delivery-order .top-info-tile {
-  display: flex;
-  justify-content: space-between;
-    margin: 5px -15px 5px -15px;
-    padding: 10px 15px 10px 15px;
-}
-.gold-delivery-order .top-info-tile1 {
-  color: #091C32;
-  font-size: 13px;
-}
-.gold-delivery-order .top-info {
-  margin: 0 0 20px 0;
-}
-.gold-delivery-order .dash-hr {
-  border: 1px dashed #767E86;
   margin: 0 0 30px 0;
-}
-
-
-.gold-delivery-order .hr {
-  border: 1px solid #EDEDED;
-}
-
-.gold-delivery-order .content-points {
-  color: #767E86;
-  font-size: 13px;
-  display: flex;
-  justify-content: space-between;
-  margin: 15px 0 15px 0;
-}
-
-.gold-delivery-order .content2-points {
-  color: #0A1D32;
-  font-size: 14px;
-  display: flex;
-  justify-content: space-between;
-  margin: 15px 0 15px 0;
-  font-weight: 600;
-}
-.gold-delivery-order .mid-title {
-  color: #0A1C32;
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.gold-delivery-order .shipping-address .top-tile {
-  display: flex;
-  justify-content: space-between;
-}
-.gold-delivery-order .shipping-address .top-title {
-  color: #0A1C32;
-  font-size: 14px;
-  font-weight: 600;
-}
-.gold-delivery-order .shipping-address .top-icon {
-  width: 14px;
-}
-.gold-delivery-order .address .content {
-  font-size: 13px;
-  color: #767E86;
-  margin: 2px 0 3px 0;
-}
-.gold-delivery-order .address {
-  margin: 15px 0 20px 0;
+  .top-info-tile {
+    display: flex;
+    justify-content: space-between;
+      margin: 5px -15px 5px -15px;
+      padding: 10px 15px 10px 15px;
+  }
+  
+  .top-info-tile1 {
+    color: #091C32;
+    font-size: 13px;
+  }
+  .top-info {
+    margin: 0 0 20px 0;
+  }
+  .dash-hr {
+    border: 1px dashed #767E86;
+    margin: 0 0 30px 0;
+  }
+  
+  
+  .hr {
+    border: 1px solid #EDEDED;
+  }
+  
+  .content-points {
+    color: #767E86;
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0 15px 0;
+  }
+  
+  .content2-points {
+    color: #0A1D32;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0 15px 0;
+    font-weight: 600;
+  }
+  .mid-title {
+    color: #0A1C32;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  
+  .shipping-address .top-tile {
+    display: flex;
+    justify-content: space-between;
+  }
+  .shipping-address .top-title {
+    color: #0A1C32;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .shipping-address .top-icon {
+    width: 14px;
+  }
+  .address .content {
+    font-size: 13px;
+    color: #767E86;
+    margin: 2px 0 3px 0;
+  }
+  .address {
+    margin: 15px 0 20px 0;
+  }
+  
 }
 
 .gold-provider-filter {
