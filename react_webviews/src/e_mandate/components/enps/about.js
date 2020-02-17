@@ -109,11 +109,11 @@ class About extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'consent',
+      "event_name": 'enps',
       "properties": {
         "user_action": user_action,
         "faq_read": this.state.faq_read,
-        "screen_name": 'set_up_easy_sip'
+        "screen_name": 'set_up_enps'
       }
     };
 

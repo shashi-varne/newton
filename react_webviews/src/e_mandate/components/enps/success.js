@@ -30,7 +30,7 @@ class EnpsSuccess extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'consent',
+      "event_name": 'enps',
       "properties": {
         "user_action": user_action,
         "screen_name": 'auth_success'
