@@ -25,6 +25,13 @@ import ConsentAbout from './components/consent/about';
 import ConsentOtp from './components/consent/otp';
 import ConsentSuccess from './components/consent/success';
 
+// enps
+import EnpsConsentAbout from './components/enps/about';
+import EnpsConsentSuccess from './components/enps/success';
+import EnpsConsentFailure from './components/enps/failure';
+import EnpsRedirection from './components/enps/redirection';
+import EnpsConsentOtp from './components/enps/otp';
+
 
 import { ToastContainer } from 'react-toastify';
 
@@ -76,6 +83,13 @@ const Mandate_OTM = (props) => {
           <Route path={`${url}/consent/about`} component={ConsentAbout} />
           <Route path={`${url}/consent/otp`} component={ConsentOtp} />
           <Route path={`${url}/consent/success`} component={ConsentSuccess} />
+
+          {/*enps  */}
+          <Route path={`${url}/enps/about`} component={EnpsConsentAbout} />
+          <Route path={`${url}/enps/redirection`} component={EnpsRedirection} />
+          <Route path={`${url}/enps/failure`} component={EnpsConsentFailure} />
+          <Route path={`${url}/enps/success`} component={EnpsConsentSuccess} />
+          <Route path={`${url}/enps/otp`} component={EnpsConsentOtp} />
 
 
           <Route component={NotFound} />
