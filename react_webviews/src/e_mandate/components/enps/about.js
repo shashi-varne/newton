@@ -139,7 +139,7 @@ class About extends Component {
     let paymentRedirectUrl = encodeURIComponent(
       window.location.origin + '/e-mandate/enps/redirection'
     );
-    var pgLink = getConfig().base_url + '/page/nps/user/esign/'+ this.state.pc_urlsafe;
+    var pgLink = getConfig().base_url + 'page/nps/user/esign/'+ this.state.pc_urlsafe;
     let app = getConfig().app;
     let redirect_url = getConfig().redirect_url;
     // eslint-disable-next-line

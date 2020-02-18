@@ -3,8 +3,11 @@ import Container from '../../common/Container';
 import qs from 'qs';
 import sip_resumed_fisdom from 'assets/ils_esign_failed_fisdom.svg';
 import sip_resumed_myway from 'assets/ils_esign_failed_myway.svg';
+import Api from 'utils/api';
+import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
+import { inrFormatDecimal } from '../../../utils/validators';
 
 class EnpsSuccess extends Component {
   constructor(props) {
@@ -13,7 +16,39 @@ class EnpsSuccess extends Component {
       show_loader: false,
       params: qs.parse(props.history.location.search.slice(1)),
       sip_resumed: getConfig().productName !== 'fisdom' ? sip_resumed_myway : sip_resumed_fisdom,
+      highlight_text: getConfig().productName !== 'fisdom' ? 'highlight-text-myway' : 'highlight-text',
       pc_urlsafe: getConfig().pc_urlsafe,
+      orderdata: {},
+    }
+  }
+
+  async componentDidMount() {
+
+    this.setState({
+      show_loader: true
+    })
+    try {
+      const res = await Api.get('/api/nps/invest/last/order/' + this.state.pc_urlsafe);
+      this.setState({
+        show_loader: false
+      })
+
+      if (res.pfwresponse.result && !res.pfwresponse.result.error) {
+        let result = res.pfwresponse.result;
+        this.setState({
+          orderdata: result.orders[0]
+        })
+      } else {
+        toast(res.pfwresponse.result.error ||
+          res.pfwresponse.result.message || 'Something went wrong', 'error');
+      }
+
+
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      })
+      toast("Something went wrong");
     }
   }
 
@@ -118,6 +153,19 @@ class EnpsSuccess extends Component {
           <div className="success-text-info success-enps">
             e-Sign by Aadhaar has been failed, retry e-Sign to complete your NPS contribution.
           </div>
+          {this.state.orderdata && this.state.orderdata.total_amount &&
+            <div style={{ display: 'flex', alignItems: 'center' }} className={`${this.state.highlight_text}`}>
+              <div><img width="50" src={this.state.orderdata.fund_transactions[0].pf.pf_house.image} alt="NPS Fund House" /></div>
+              <div style={{ marginLeft: '20px', lineHeight: '20px' }}>
+                <div>
+                  {this.state.orderdata.fund_transactions[0].pf.pension_house_name}
+                </div>
+                <div style={{ marginTop: '5px' }}>
+                {inrFormatDecimal(this.state.orderdata.total_amount)}
+                </div>
+              </div>
+            </div>
+          }
 
           <div className="success-bottom">
             <div className="success-bottom1">
