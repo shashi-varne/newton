@@ -131,7 +131,7 @@ class About extends Component {
       let data = {
         referral_code: this.state.referral_code
       }
-      this.navigate('e-mandate/enps/otp', data);
+      this.navigate('otp', data);
       return;
 
     }

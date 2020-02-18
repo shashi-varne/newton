@@ -143,7 +143,7 @@ class EnpsSuccess extends Component {
         fullWidthButton={true}
         onlyButton={true}
         disableBack={true}
-        buttonTitle="Retry e-sign"
+        buttonTitle="RETRY E-SIGN"
       >
         <div>
           <div className="main-top-title-new">NPS with e-Sign failed</div>

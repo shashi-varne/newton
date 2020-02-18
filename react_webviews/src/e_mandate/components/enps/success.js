@@ -96,7 +96,7 @@ class EnpsSuccess extends Component {
         fullWidthButton={true}
         onlyButton={true}
         disableBack={true}
-        buttonTitle="Go to Portfolio"
+        buttonTitle="GO TO PORTFOLIO"
         noFooter={this.state.session_less_enps}
         noBack={this.state.session_less_enps}
       >
