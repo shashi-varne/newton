@@ -542,6 +542,7 @@ input#pan {
     padding: 0 15px 0 15px;
     font-size: 20px;
     transition:.3s transform ease-in-out;
+    justify-content: space-between;
 }
 .header-title-page-text {
   font-weight: 600;

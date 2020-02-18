@@ -11,7 +11,7 @@ import Dialog, {
     DialogContent, DialogActions
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
-import { storageService } from "utils/validators";
+import { storageService, getUrlParams} from "utils/validators";
 import RefreshSellPrice from '../ui_components/sell_price';
 import GoldOnloadAndTimer from '../ui_components/onload_and_timer';
 import PriceChangeDialog from '../ui_components/price_change_dialog';
@@ -52,7 +52,8 @@ class SellVerifyBank extends Component {
             verification_status: '',
             verifyBankData: storageService().getObject('goldVerifyBankData') || {},
             orderType: 'sell',
-            statusMapper: {}
+            statusMapper: {},
+            pan_bank_flow: getUrlParams().pan_bank_flow || false
         }
     }
 
@@ -103,9 +104,14 @@ class SellVerifyBank extends Component {
     }
 
     navigate = (pathname) => {
+        let searchParams = getConfig().searchParams;
+
+        if(this.state.pan_bank_flow) {
+            searchParams += '&pan_bank_flow=' + this.state.pan_bank_flow
+        }
         this.props.history.push({
-            pathname: pathname,
-            search: getConfig().searchParams
+          pathname: pathname,
+          search: searchParams
         });
     }
 
@@ -263,7 +269,11 @@ class SellVerifyBank extends Component {
     }
 
     handleCloseStatus = () => {
-        this.navigate('sell-select-bank');
+        if(this.state.pan_bank_flow) {
+            this.navigate('/gold/my-gold-locker');
+        } else {
+            this.navigate('sell-select-bank');
+        }
     }
 
     renderStatusDialog = () => {

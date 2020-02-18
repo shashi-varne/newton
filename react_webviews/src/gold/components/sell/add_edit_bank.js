@@ -13,7 +13,7 @@ import ConfirmDialog from '../ui_components/confirm_dialog';
 import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
 import { bankAccountTypeOptions } from 'utils/constants';
 import TextField from 'material-ui/TextField';
-import { storageService } from "utils/validators";
+import { storageService, getUrlParams } from "utils/validators";
 import RefreshSellPrice from '../ui_components/sell_price';
 import GoldOnloadAndTimer from '../ui_components/onload_and_timer';
 import PriceChangeDialog from '../ui_components/price_change_dialog';
@@ -47,7 +47,8 @@ class SellAddEditBank extends Component {
         bank_image: '',
         name: ''
       },
-      orderType: 'sell'
+      orderType: 'sell',
+      pan_bank_flow: getUrlParams().pan_bank_flow || false
     }
     this.checkIFSCFormat = this.checkIFSCFormat.bind(this);
   }
@@ -178,9 +179,14 @@ class SellAddEditBank extends Component {
   };
 
   navigate = (pathname) => {
+    let searchParams = getConfig().searchParams;
+
+    if(this.state.pan_bank_flow) {
+        searchParams += '&pan_bank_flow=' + this.state.pan_bank_flow
+    }
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams
+      search: searchParams
     });
   }
 
@@ -312,7 +318,10 @@ class SellAddEditBank extends Component {
         handleClick2={this.handleClick2}
         buttonTitle="Continue"
         events={this.sendEvents('just_set_events')}
-        withProvider={true}
+        withProvider={!this.state.pan_bank_flow ? true : false}
+        count={this.state.pan_bank_flow ? true : false}
+        current={2}
+        total={2}
         buttonData={this.state.bottomButtonData}
       >
         <div className="common-top-page-subtitle">

@@ -312,7 +312,7 @@ class GoldSummary extends Component {
 
       <div className="tile2" onClick={() => this.navigate('/gold/buy')}>
           <img className="icon"
-            src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
+            src={ require(`assets/${this.state.productName}/ic_buy_gold.svg`)} alt="Gold" />
           <div className="title">
             Buy gold
           </div>
@@ -320,7 +320,7 @@ class GoldSummary extends Component {
 
       <div className="tile2" onClick={() => this.navigate('/gold/sell')}>
           <img className="icon"
-            src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
+            src={ require(`assets/${this.state.productName}/ic_sell_gold.svg`)} alt="Gold" />
           <div className="title">
           Sell gold
           </div>
@@ -328,7 +328,7 @@ class GoldSummary extends Component {
 
       <div className="tile2" onClick={() => this.navigate('/gold/delivery')}>
           <img className="icon"
-            src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
+            src={ require(`assets/${this.state.productName}/ic_delivery.svg`)} alt="Gold" />
           <div className="title">
           Get delivery
           </div>

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import Input from '../../../common/ui/Input';
-import { validatePan, validateEmpty } from 'utils/validators';
+import { validatePan, validateEmpty, getUrlParams } from 'utils/validators';
 import toast from '../../../common/ui/Toast';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
@@ -14,7 +14,7 @@ import RefreshBuyPrice from '../ui_components/buy_price';
 import RefreshSellPrice from '../ui_components/sell_price';
 import GoldOnloadAndTimer from '../ui_components/onload_and_timer';
 import PriceChangeDialog from '../ui_components/price_change_dialog';
-import {isUserRegistered} from '../../constants';
+import { isUserRegistered } from '../../constants';
 
 const commonMapper = {
     'buy': {
@@ -67,7 +67,8 @@ class GoldPanDataClass extends Component {
             openPriceChangedDialog: false,
             provider: this.props.parent.props.match.params.provider,
             orderType: this.props.parent.state.orderType,
-            pan_editable_status: 'editable'
+            pan_editable_status: 'editable',
+            pan_bank_flow: getUrlParams().pan_bank_flow || false
         }
 
         this.refreshData = this.refreshData.bind(this);
@@ -129,7 +130,6 @@ class GoldPanDataClass extends Component {
 
     async componentDidMount() {
 
-        this.onload();
         try {
 
             const res = await Api.get('/api/gold/user/account/' + this.state.provider);
@@ -162,10 +162,17 @@ class GoldPanDataClass extends Component {
     }
 
     navigate = (pathname) => {
+
+        let searchParams = getConfig().searchParams;
+
+        if (this.state.pan_bank_flow) {
+            searchParams += '&pan_bank_flow=' + this.state.pan_bank_flow
+        }
         this.props.parent.props.history.push({
             pathname: pathname,
-            search: getConfig().searchParams
+            search: searchParams
         });
+
     }
 
     handleChange = (field) => (event) => {
@@ -227,20 +234,23 @@ class GoldPanDataClass extends Component {
             try {
                 const res = await Api.post('/api/kyc/v2/mine', options);
 
-                
+
                 if (res.pfwresponse.status_code === 200) {
 
-                    if(this.state.orderType === 'buy' && this.state.isRegistered) {
+                    if (this.state.orderType === 'buy' && this.state.isRegistered) {
                         this.props.parent.updateParent('proceedForOrder', true);
+                    } else if (this.state.orderType === 'sell' && this.state.pan_bank_flow) {
+                        this.navigate('sell-add-bank');
+                        return;
                     } else {
                         this.navigate(this.state.next_state);
                     }
-                    
+
                 } else {
                     this.setState({
                         show_loader: false
                     });
-    
+
                     toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
                         'Something went wrong', 'error');
 
@@ -268,7 +278,10 @@ class GoldPanDataClass extends Component {
                 handleClick={this.handleClick}
                 handleClick2={this.handleClick2}
                 edit={this.props.edit}
-                withProvider={true}
+                withProvider={!this.state.pan_bank_flow ? true : false}
+                count={this.state.pan_bank_flow ? true : false}
+                current={1}
+                total={2}
                 buttonTitle={this.state.commonMapper.cta}
                 events={this.sendEvents('just_set_events')}
                 buttonData={this.state.bottomButtonData}
@@ -278,7 +291,6 @@ class GoldPanDataClass extends Component {
                 </div>
 
                 <GoldLivePrice parent={this} />
-
 
                 <div className="register-form">
                     <div className="InputField">

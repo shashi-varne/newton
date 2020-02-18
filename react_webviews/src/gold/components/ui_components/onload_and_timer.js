@@ -93,6 +93,10 @@ class GoldOnloadAndTimerClass extends Component {
 
     onload() {
 
+        if(this.props.parent.state.pan_bank_flow) {
+            return;
+        }
+        
         storageService().remove('forceBackState');
 
         let orderData = storageService().getObject(this.state.orderKey);

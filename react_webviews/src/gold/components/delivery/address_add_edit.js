@@ -34,8 +34,6 @@ class AddEditAddressDelivery extends Component {
 
   componentDidMount() {
 
-    console.log(getUrlParams());
-    console.log(this.props.edit)
     if (this.props.edit) {
       if (this.state.address_id) {
         Api.get('/api/gold/address?address_id=' + this.state.address_id).then(res => {

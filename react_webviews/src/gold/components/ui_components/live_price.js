@@ -13,6 +13,10 @@ class GoldLivePriceClass extends Component {
     }
 
     render() {
+        if(this.props.parent.state.pan_bank_flow) {
+            return null;
+        }
+        
         return (
             <div className="live-price-gold">
                 <div className="left-img">

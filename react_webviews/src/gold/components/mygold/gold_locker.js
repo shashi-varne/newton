@@ -203,10 +203,15 @@ class GoldLocker extends Component {
     return obj;
   }
 
-  navigate = (pathname) => {
+  navigate = (pathname, data = {}) => {
+    let searchParams = getConfig().searchParams;
+
+    if(data.pan_bank_flow) {
+      searchParams += '&pan_bank_flow=' + data.pan_bank_flow
+    }
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams
+      search: searchParams
     });
   }
 
@@ -403,7 +408,7 @@ class GoldLocker extends Component {
 
               {!this.state.selected_provider_info.user_info.bank_info_added &&
                <div className="share-pan-bank" onClick={() => this.navigate(
-                  this.state.provider + '/sell-pan'
+                  this.state.provider + '/sell-pan', {pan_bank_flow: true}
                 )}>
                   <div className="title">
                     Share PAN and Bank details to sell gold effortlessly
