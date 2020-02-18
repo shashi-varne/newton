@@ -205,9 +205,9 @@ class GoldDeliveryProducts extends Component {
             {this.state.gold_products && this.state.gold_products.map(this.renderDeliveryProducts)}
         </div>
 
-        <div className="show-more">
+        {/* <div className="show-more">
           SHOW MORE
-        </div>
+        </div> */}
 
         <div className="gold-how-steps" onClick={() => this.showHideSteps()}>
             <div className="top-tile">

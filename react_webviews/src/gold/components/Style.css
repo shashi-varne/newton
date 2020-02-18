@@ -494,7 +494,7 @@ img.gold-offer-slide-img {
   font-size: 16px;
   font-weight: 500;
 }
-.gold-payment-container .send-invoice {
+.send-invoice {
   display: flex;
   align-items: center;
   margin: 20px 0 0 0;
@@ -1030,7 +1030,7 @@ img.gold-offer-slide-img {
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
 }
-.gold-delivery-products .show-more {
+.show-more {
   font-size: 12px;
   color: var(--secondary);
   border: 1px solid;
@@ -1038,7 +1038,7 @@ img.gold-offer-slide-img {
   font-weight: 700;
   padding: 10px;
   border-radius: 4px;
-  margin: 20px 0 0 0;
+  margin: 20px 0 20px 0;
   cursor: pointer;
 }
 .gold-delivery-products .delivery-products-tiles {

@@ -73,6 +73,9 @@ class GoldLocker extends Component {
       })
     }
 
+    if(provider === 'mmtc') {
+      this.chooseTabs('mmtc');
+    }
   }
 
   async onloadProvider(provider) {
@@ -284,7 +287,7 @@ class GoldLocker extends Component {
   onScroll = () => {
     if (this.hasReachedBottom()) {
       if (this.state.next_page) {
-        this.loadMore();
+        // this.loadMore();
       }
 
     }
@@ -293,7 +296,7 @@ class GoldLocker extends Component {
   redirectCards = (data) => {
 
     let pathname = this.state.selected_provider_info.provider + '/' + data.transaction_type + 
-                    '/' + data.order_details.provider_txn_id;
+                    '/transaction/' + data.order_details.provider_txn_id;
     this.navigate(pathname);
   }
 
@@ -401,6 +404,11 @@ class GoldLocker extends Component {
 
               <div style={{ margin: '20px 0 0 0' }}>
                 {this.state.selected_provider_info.report.orders.map(this.renderReportCards)}
+                {this.state.next_page && !this.state.loading_more && 
+                  <div className="show-more" onClick={() => this.loadMore()}>
+                    SHOW MORE
+                  </div>
+                }
                 {this.state.loading_more && <div className="loader">
                   Loading...
               </div>}

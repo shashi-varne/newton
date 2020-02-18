@@ -12,6 +12,7 @@ import {
 
 import SVG from 'react-inlinesvg';
 import ic_send_email from 'assets/ic_send_email.svg';
+import DotDotLoader from '../../../common/ui/DotDotLoader';
 
 class GoldTransactionDetail extends Component {
   constructor(props) {
@@ -30,67 +31,112 @@ class GoldTransactionDetail extends Component {
       provider: 'mmtc',
       productName: getConfig().productName,
       journeyData: [],
-      topStatusData: {}
+      topStatusData: {},
+      order: {
+        cssMapper: {}
+      }
     }
+  }
+
+  statusMapper = (data)  => {
+    let cssMapper = {
+      'init': {
+        color: 'yellow',
+        disc: 'Pending'
+      },
+      'success': {
+        color: 'green',
+        disc: 'Success'
+      },
+      'failed': {
+        color: 'red',
+        disc: 'Failed'
+      },
+      'rejected': {
+        color: 'red',
+        disc: 'Rejected'
+      },
+      'cancelled': {
+        color: 'red',
+        disc: 'Cancelled'
+      }
+    }
+
+
+    let obj = cssMapper[data.provider_buy_order_status] || cssMapper['init'];
+
+    let type = this.state.orderType;
+    let title = '';
+    if(type === 'buy') {
+      title = 'Bought ' + data.gold_weight + ' gms'; 
+    }
+
+    if(type === 'sell') {
+      title = 'Sold ' + data.gold_weight + ' gms'; 
+    }
+
+    if(type === 'delivery') {
+      title = 'Delivery of ' + data.description; 
+    }
+
+    obj.title = title;
+
+    return obj;
   }
 
   async componentDidMount() {
 
     let journeyData = [
-        {'title': 'Purchase initiated', 'icon': 'check_green_pg', 'status': 'success'},
-        {'title': 'Purchase initiated', 'icon': 'text_error_icon', 'status': 'error'},
-        {'title': 'Purchase initiated', 'icon': 'not_done_yet_step', 'status': 'pending'}
+      { 'title': 'Purchase initiated', 'icon': 'check_green_pg', 'status': 'success' },
+      { 'title': 'Purchase initiated', 'icon': 'text_error_icon', 'status': 'error' },
+      { 'title': 'Purchase initiated', 'icon': 'not_done_yet_step', 'status': 'pending' }
     ];
 
-    let topStatusData = {
-        status: 'pending',
-        disc: 'PENDING',
-        color: 'yellow'
-    }
+    this.setState({
+      journeyData: journeyData
+    })
 
     this.setState({
-        journeyData: journeyData,
-        topStatusData: topStatusData
+      show_loader: true,
+    });
+
+    let { provider } = this.props.match.params;
+    let { orderType } = this.props.match.params;
+    let { trans_id } = this.props.match.params;
+
+    this.setState({
+      provider: provider,
+      trans_id: trans_id,
+      orderType: orderType
     })
 
     try {
-
-      const res = await Api.get('/api/gold/user/account');
+      const res = await Api.get('/api/gold/report/orders/safegold?transaction_id=' + trans_id +
+        '&order_type=' + orderType);
       if (res.pfwresponse.status_code === 200) {
-        let result = res.pfwresponse.result;
-        let isRegistered = true;
-        if (result.gold_user_info.user_info.registration_status === "pending" ||
-          !result.gold_user_info.user_info.registration_status ||
-          result.gold_user_info.is_new_gold_user) {
-          isRegistered = false;
-        }
+        let order = res.pfwresponse.result || {};
+        order.cssMapper = this.statusMapper(order);
+        console.log(order);
         this.setState({
-          goldInfo: result.gold_user_info.safegold_info,
-          userInfo: result.gold_user_info.user_info,
-          isRegistered: isRegistered
+          show_loader: false,
+          order: order
         });
       } else {
         this.setState({
-          error: true,
-          errorMessage: res.pfwresponse.result.error || res.pfwresponse.result.message ||
-            'Something went wrong'
+          show_loader: false
         });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
       }
-
-
     } catch (err) {
+      console.log(err);
       this.setState({
-        show_loader: false,
+        show_loader: false
       });
       toast('Something went wrong', 'error');
     }
-
-    this.setState({
-      show_loader: false
-    });
   }
 
- 
+
 
   sendEvents(user_action, product_name) {
     let eventObj = {
@@ -119,131 +165,176 @@ class GoldTransactionDetail extends Component {
     });
   }
 
-  getJourneyBorder =(props, index) => {
-    if(index === this.state.journeyData.length -1) {
-        return 'none';
+  getJourneyBorder = (props, index) => {
+    if (index === this.state.journeyData.length - 1) {
+      return 'none';
     } else if (props.status === 'success') {
-        return '1px solid '  + getConfig().primary;
+      return '1px solid ' + getConfig().primary;
     }
 
     return '';
   }
 
   renderJourney = (props, index) => {
-      return(
-        <div key={index} className="tile" style={{borderLeft: this.getJourneyBorder(props, index)}}>
-            <img 
-            className="icon"
-            src={ require(`assets/${props.icon}.svg`)} alt="Gold" />
-            {props.status === 'pending' && 
-                <p className="text-on-img">{index + 1}</p>
-            }
-            <div className="title">
-            {props.title}
-            </div>
+    return (
+      <div key={index} className="tile" style={{ borderLeft: this.getJourneyBorder(props, index) }}>
+        <img
+          className="icon"
+          src={require(`assets/${props.icon}.svg`)} alt="Gold" />
+        {props.status === 'pending' &&
+          <p className="text-on-img">{index + 1}</p>
+        }
+        <div className="title">
+          {props.title}
         </div>
+      </div>
 
-      );
+    );
   }
-  
+
+  async emailInvoice(path) {
+
+    this.setState({
+      invoiceLoading: true,
+    });
+
+    try {
+      const res = await Api.get('/api/gold/invoice/download/mail', { url: path });
+      if (res.pfwresponse.status_code === 200) {
+        let result = res.pfwresponse.result;
+        if (result.message === 'success') {
+          toast('Invoice has been sent succesfully to your registered email');
+        } else {
+          toast(result.message || result.error);
+        }
+        this.setState({
+          invoiceLoading: false,
+        });
+      } else {
+        this.setState({
+          invoiceLoading: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
+      }
+    } catch (err) {
+      this.setState({
+        invoiceLoading: false
+      });
+      toast('Something went wrong', 'error');
+    }
+  }
+
+
   render() {
 
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="Bought 0.024 gms gold"
+        title={this.state.order.cssMapper.title}
         noFooter={true}
         events={this.sendEvents('just_set_events')}
       >
 
-        <div style={{margin: '0px 0 40px 0'}} className={`report-color-state ${this.state.topStatusData.color}`}>
+        <div style={{ margin: '0px 0 40px 0' }} className={`report-color-state ${this.state.order.cssMapper.color}`}>
           <div className="circle"></div>
-          <div className="report-color-state-title">{this.state.topStatusData.disc}</div>
+          <div className="report-color-state-title">{this.state.order.cssMapper.disc}</div>
         </div>
         <div className="gold-trans-detail-card">
-            <img 
-                className="icon"
-              src={ require(`assets/${this.state.productName}/order_id.svg`)} alt="Gold" />
-            <div className="block2">
-              <div className="title">
+          <img
+            className="icon"
+            src={require(`assets/${this.state.productName}/order_id.svg`)} alt="Gold" />
+          <div className="block2">
+            <div className="title">
               Order ID
               </div>
-              <div className="subtitle">
-              D4290M
+            <div className="subtitle">
+              {this.state.order.provider_txn_id}
               </div>
-            </div>
+          </div>
         </div>
 
         <div className="gold-trans-detail-card">
-            <img 
-                className="icon"
-              src={ require(`assets/${this.state.productName}/sip_date_icon.svg`)} alt="Gold" />
-            <div className="block2">
-              <div className="title">
+          <img
+            className="icon"
+            src={require(`assets/${this.state.productName}/sip_date_icon.svg`)} alt="Gold" />
+          <div className="block2">
+            <div className="title">
               Order date
               </div>
-              <div className="subtitle">
-              2nd Jan 2019
+            <div className="subtitle">
+            {this.state.order.dt_created}
               </div>
-            </div>
+          </div>
         </div>
 
         <div className="gold-trans-detail-card">
-            <img 
-                className="icon"
-              src={ require(`assets/${this.state.productName}/amount_icon.svg`)} alt="Gold" />
-            <div className="block2">
-              <div className="title">
+          <img
+            className="icon"
+            src={require(`assets/${this.state.productName}/amount_icon.svg`)} alt="Gold" />
+          <div className="block2">
+            <div className="title">
               Gold purchase amount
               </div>
-              <div className="subtitle">
-              {inrFormatDecimal(300)}
-              </div>
+            <div className="subtitle">
+              {inrFormatDecimal(this.state.order.total_amount)}
             </div>
+          </div>
         </div>
 
-        <div className="gold-trans-detail-card" style={{alignItems: 'baseline', marginBottom: 0}}>
-            <img 
-                className="icon"
-              src={ require(`assets/${this.state.productName}/status_sip_icon.svg`)} alt="Gold" />
-            <div className="block2" style={{margin: '0px 0 0 8px', position: 'relative', top: '-18px'}}>
-              <div className="title">
+        <div className="gold-trans-detail-card" style={{ alignItems: 'baseline', marginBottom: 0 }}>
+          <img
+            className="icon"
+            src={require(`assets/${this.state.productName}/status_sip_icon.svg`)} alt="Gold" />
+          <div className="block2" style={{ margin: '0px 0 0 8px', position: 'relative', top: '-18px' }}>
+            <div className="title">
               Status
               </div>
 
-              <div className="subtitle" style={{margin: '10px 0 0 7px'}}>
-                <div className="generic-progress-vertical">
-                   {this.state.journeyData.map(this.renderJourney)}
-                </div>
+            <div className="subtitle" style={{ margin: '10px 0 0 7px' }}>
+              <div className="generic-progress-vertical">
+                {this.state.journeyData.map(this.renderJourney)}
               </div>
             </div>
+          </div>
         </div>
 
         <div className="common-hr"></div>
 
-        <div className="gold-send-invoice">
-            <SVG
+        <div className="send-invoice">
+          <SVG
             preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().secondary)}
             src={ic_send_email}
+          />
+          {!this.state.invoiceLoading &&
+            <div onClick={() => this.emailInvoice()}
+            style={{color: getConfig().secondary, marginLeft: 10}}>
+              Email invoice
+            </div>
+          }
+          {this.state.invoiceLoading &&
+            <DotDotLoader style={{
+              textAlign: 'left',
+              marginLeft: 10
+              }} 
             />
-            <div style={{color: getConfig().secondary, marginLeft: 10}}>Email invoice</div>
+          }
         </div>
         <div className="success-bottom">
-            <div className="success-bottom1">
-              For any query, reach us at
+          <div className="success-bottom1">
+            For any query, reach us at
             </div>
-            <div className="success-bottom2">
-              <div className="success-bottom2a">
-                {getConfig().mobile}
+          <div className="success-bottom2">
+            <div className="success-bottom2a">
+              {getConfig().mobile}
+            </div>
+            <div className="success-bottom2b">
+              |
               </div>
-              <div className="success-bottom2b">
-                |
-              </div>
-              <div className="success-bottom2a">
-                {getConfig().askEmail}
-              </div>
+            <div className="success-bottom2a">
+              {getConfig().askEmail}
             </div>
           </div>
+        </div>
       </Container>
     );
   }

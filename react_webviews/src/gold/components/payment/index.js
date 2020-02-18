@@ -139,7 +139,6 @@ class Payment extends Component {
       paymentPending = true;
     }
 
-    console.log(orderData);
     this.setState({
       status: status,
       orderType: orderType,
@@ -255,7 +254,6 @@ class Payment extends Component {
 
    getTransDetails = async (transaction_id, orderType) => {
 
-    console.log(this.state);
     this.setState({
       show_loader: true,
     });
@@ -440,7 +438,7 @@ class Payment extends Component {
                             <div className="highlight-text2" style={{color: '#767E86'}}>
                               <div>Updated value {this.state.provider_info.gold_balance} gms</div>
                               <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                                <div>Order id: F1232E</div>
+                                <div>Order id: {this.state.transaction_id}</div>
                                 <div>2nd Jan, 06:30 PM</div>
                               </div>
                             </div>
@@ -475,7 +473,7 @@ class Payment extends Component {
                             <div className="highlight-text12" style={{display:'grid'}}>
                               <div>0.5 gm lotus round coin</div>
                               {!this.state.paymentFailed &&
-                               <div style={{color: '#767E86', fontWeight: 400}}>Order id: F1232E</div>
+                               <div style={{color: '#767E86', fontWeight: 400}}>Order id: {this.state.transaction_id}</div>
                                }
                             </div>
                           </div>
