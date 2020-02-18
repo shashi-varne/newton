@@ -154,8 +154,8 @@ class EnpsSuccess extends Component {
             e-Sign by Aadhaar has been failed, retry e-Sign to complete your NPS contribution.
           </div>
           {this.state.orderdata && this.state.orderdata.total_amount &&
-            <div style={{ display: 'flex', alignItems: 'center' }} className={`${this.state.highlight_text}`}>
-              <div><img width="50" src={this.state.orderdata.fund_transactions[0].pf.pf_house.image} alt="NPS Fund House" /></div>
+            <div style={{ display: 'flex' }} className={`${this.state.highlight_text}`}>
+              <div><img width="30" src={this.state.orderdata.fund_transactions[0].pf.pf_house.image} alt="NPS Fund House" /></div>
               <div style={{ marginLeft: '20px', lineHeight: '20px' }}>
                 <div>
                   {this.state.orderdata.fund_transactions[0].pf.pension_house_name}
