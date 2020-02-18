@@ -185,7 +185,11 @@ class GoldLocker extends Component {
 
 
     let type = data.transaction_type;
-    let statusKey = 'plutus_' + type + '_order_status'
+    let statusKey = 'plutus_' + type + '_order_status';
+
+    if(type === 'delivery') {
+      statusKey = 'order_status';
+    }
     let obj = cssMapper[data.order_details[statusKey]] || cssMapper['init'];
     
     let title = '';

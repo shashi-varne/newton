@@ -64,6 +64,10 @@ class GoldTransactionDetail extends Component {
 
     let type = this.state.orderType;
     let statusKey = 'plutus_' + type + '_order_status';
+    if(type === 'delivery') {
+      statusKey = 'order_status';
+    }
+    
     let obj = cssMapper[data[statusKey]] || cssMapper['init'];
 
     

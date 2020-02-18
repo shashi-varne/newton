@@ -371,7 +371,7 @@ class SellAddEditBank extends Component {
             <Input
               error={(this.state.formData.confirm_account_no_error) ? true : false}
               helperText={this.state.formData.confirm_account_no_error}
-              type="text"
+              type="number"
               width="40"
               label="Confirm Account Number *"
               class="confirm_account_no"
