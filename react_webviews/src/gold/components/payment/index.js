@@ -217,10 +217,7 @@ class Payment extends Component {
     this.navigate('/gold/gold-transactions')
     this.props.history.push({
       pathname: '/gold/gold-transactions',
-      search: getConfig().searchParams,
-      params: {
-        isDelivery: true
-      }
+      search: getConfig().searchParams
     });
   }
 

@@ -34,15 +34,6 @@ class Transactions extends Component {
     }
   }
 
-  componentWillMount() {
-    let { params } = this.props.location;
-    if (params && params.isDelivery) {
-      this.setState({
-        value: 2
-      })
-    }
-  }
-
   setNextPage(type, next_page) {
     if (type === 'buy') {
       this.setState({

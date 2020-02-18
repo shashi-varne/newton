@@ -68,7 +68,7 @@ class Container extends Component {
   navigate = pathname => {
     this.props.history.push({
       pathname: pathname,
-      search: this.props.location.search + "&isDelivery=" + false
+      search: this.props.location.search
     });
   };
 

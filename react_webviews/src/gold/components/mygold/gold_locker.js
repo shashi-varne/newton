@@ -25,7 +25,6 @@ class GoldLocker extends Component {
       errorMessage: '',
       provider: 'mmtc',
       productName: getConfig().productName,
-      reportData: [],
       mmtc_info: {},
       mmtc_info_local: gold_providers['mmtc'],
       safegold_info: {},
@@ -39,6 +38,14 @@ class GoldLocker extends Component {
     window.removeEventListener("scroll", this.onScroll, false);
   }
 
+  setCssMapper = (data) => {
+    for (var i=0; i< data.length; i++) {
+      data[i].cssMapper = this.statusMapper(data[i]);
+    }
+
+    return data;
+  }
+
   setProviderData(provider, result1, result2, result3) {
     let isRegistered = isUserRegistered(result1);
     let data = result1.gold_user_info.provider_info;
@@ -48,11 +55,12 @@ class GoldLocker extends Component {
     data.provider = provider;
     data.local = gold_providers[provider];
 
-    data.reportData = result3.orders ? result3.orders.all : [];
-
-    for (var i=0; i< data.reportData.length; i++) {
-      data.reportData[i].cssMapper = this.statusMapper(data.reportData[i]);
-    }
+    let report = {
+      orders: result3.orders ? result3.orders.all : [],
+      next_page: result3.orders.next_page || ''
+    };
+    data.report = report;
+    data.report.orders = this.setCssMapper(data.report.orders);
 
     this.setState({
       [provider + '_info']: data,
@@ -123,6 +131,7 @@ class GoldLocker extends Component {
 
     this.onloadProvider('mmtc');
     this.onloadProvider('safegold');
+    window.addEventListener("scroll", this.onScroll, false);
   }
 
 
@@ -148,7 +157,6 @@ class GoldLocker extends Component {
   }
 
   statusMapper(data) {
-    console.log(data);
     let cssMapper = {
       'init': {
         color: 'yellow',
@@ -203,10 +211,12 @@ class GoldLocker extends Component {
   }
 
   chooseTabs(provider) {
+
+    let selected_provider_info = this.state[provider + '_info'];
     this.setState({
       provider: provider,
-      selected_provider_info: this.state[provider + '_info'],
-      nextPage: '',
+      selected_provider_info: selected_provider_info,
+      next_page: selected_provider_info.report.next_page,
       loading_more: false
     })
   }
@@ -221,30 +231,38 @@ class GoldLocker extends Component {
         loading_more: true
       });
 
-      let res = await Api.get(this.state.nextPage)
+      let res = await Api.get(this.state.next_page)
 
       this.setState({
         loading_more: false
       });
 
       if (res.pfwresponse.status_code === 200) {
-        var policyData = res.pfwresponse.result.response;
-        var next_page = policyData.group_insurance.next_page;
-        var has_more = policyData.group_insurance.more;
+
+        let result = res.pfwresponse.result;
+        var next_page = result.orders.next_page;
 
         this.setState({
-          nextPage: (has_more) ? next_page : null
+          next_page: next_page || ''
         });
 
-        var newReportData = [];
+        var newReportData = result.orders.all || [];
+        let selected_provider_info  = this.state.selected_provider_info;
+        let orders  = selected_provider_info.report.orders;
+        newReportData = this.setCssMapper(newReportData);
 
-        this.setState((prevState) => ({
-          reportData: prevState.reportData.concat(newReportData)
-        }));
+        orders = orders.concat(newReportData);
+        selected_provider_info.report.orders = orders;
+
+        this.setState({
+          selected_provider_info: selected_provider_info
+        });
+
       } else {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
       }
     } catch (err) {
+      console.log(err);
       this.setState({
         loading_more: false
       });
@@ -260,12 +278,19 @@ class GoldLocker extends Component {
 
   onScroll = () => {
     if (this.hasReachedBottom()) {
-      if (this.state.nextPage) {
+      if (this.state.next_page) {
         this.loadMore();
       }
 
     }
   };
+
+  redirectCards = (data) => {
+
+    let pathname = this.state.selected_provider_info.provider + '/' + data.transaction_type + 
+                    '/' + data.order_details.provider_txn_id;
+    this.navigate(pathname);
+  }
 
   renderReportCards = (props, index) => {
     return (
@@ -370,19 +395,23 @@ class GoldLocker extends Component {
             </div>
 
               <div style={{ margin: '20px 0 0 0' }}>
-                {this.state.selected_provider_info.reportData.map(this.renderReportCards)}
+                {this.state.selected_provider_info.report.orders.map(this.renderReportCards)}
                 {this.state.loading_more && <div className="loader">
                   Loading...
               </div>}
               </div>
 
-              <div className="share-pan-bank">
-                <div className="title">
-                  Share PAN and Bank details to sell gold effortlessly
-              </div>
-                <img className="icon"
-                  src={require(`assets/${this.state.productName}/ic_to_sell_gold.svg`)} alt="" />
-              </div>
+              {!this.state.selected_provider_info.user_info.bank_info_added &&
+               <div className="share-pan-bank" onClick={() => this.navigate(
+                  this.state.provider + '/sell-pan'
+                )}>
+                  <div className="title">
+                    Share PAN and Bank details to sell gold effortlessly
+                </div>
+                  <img className="icon"
+                    src={require(`assets/${this.state.productName}/ic_to_sell_gold.svg`)} alt="" />
+                </div>
+              }
             </div>
           }
           {!this.state.selected_provider_info.isRegistered &&
