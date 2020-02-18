@@ -11,7 +11,7 @@ import { getUrlParams } from 'utils/validators';
 // eslint-disable-next-line
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
-import { inrFormatDecimal } from 'utils/validators';
+import { inrFormatDecimal, storageService } from 'utils/validators';
 import DotDotLoader from '../../../common/ui/DotDotLoader';
 import { gold_providers } from '../../constants';
 
@@ -29,7 +29,7 @@ const commonMapper = {
       'top_title': 'Gold purchase pending!',
       'mid_title': 'Payment details',
       'button_title': 'Go to locker',
-      'cta_state': ''
+      'cta_state':  '/gold/my-gold-locker'
     },
     'failed': {
       'top_icon': 'ils_gold_purchase_failed',
@@ -48,18 +48,18 @@ const commonMapper = {
       'cta_state': '/gold/my-gold-locker'
     },
     'pending': {
-      'top_icon': '',
-      'top_title': '',
+      'top_icon': 'ils_gold_sell_failed',
+      'top_title': 'Gold sell failed!',
       'mid_title': '',
-      'button_title': '',
-      'cta_state': ''
+      'button_title': 'Continue to locker',
+      'cta_state':  '/gold/my-gold-locker'
     },
     'failed': {
       'top_icon': 'ils_gold_sell_failed',
       'top_title': 'Gold sell failed!',
       'mid_title': '',
       'button_title': 'Continue to locker',
-      'cta_state': ''
+      'cta_state':  '/gold/my-gold-locker'
     }
   },
   'delivery': {
@@ -75,14 +75,14 @@ const commonMapper = {
       'top_title': 'Delivery order pending!',
       'mid_title': 'Payment details',
       'button_title': 'Go to locker',
-      'cta_state': ''
+      'cta_state':  '/gold/my-gold-locker'
     },
     'failed': {
       'top_icon': 'failed_order_delivery',
       'top_title': 'Oops! delivery order failed',
       'mid_title': '',
       'button_title': 'Retry purchase',
-      'cta_state': ''
+      'cta_state':  '/gold/delivery-products'
     }
   }
 }
@@ -94,53 +94,36 @@ class Payment extends Component {
       show_loader: true,
       openResponseDialog: false,
       provider_info: {},
-      sellDetails: {},
       weight: "",
       params: getUrlParams(),
       provider: this.props.match.params.provider,
-      productName: getConfig().productName
+      productName: getConfig().productName,
+      orderData: {}
     }
     this.sendInvoiceEmail = this.sendInvoiceEmail.bind(this);
     this.trackDelivery = this.trackDelivery.bind(this);
   }
 
   componentWillMount() {
-    // let { params } = this.props.location;
     nativeCallback({ action: 'take_control_reset' });
     let { status } = this.state.params;
     if(!status) {
       status = 'failed';
     }
     let { orderType } = this.props.match.params;
-    let weight,amount, sellDetails, buyDetails, redeemProduct,
+    let weight,amount, redeemProduct,
       productDisc, paymentError, paymentMessage, paymentPending, invoiceLink;
 
-    let base_amount, gst_amount, total_amount;
     let transaction_id;
-    if (orderType === 'sell') {
-      let sellDetails = JSON.parse(window.localStorage.getItem('sellDetails'));
-      weight = sellDetails ? sellDetails.weight_selected : '';
-      amount = sellDetails ? sellDetails.amount_selected : '';
-      base_amount = sellDetails ? sellDetails.base_amount : '';
-      gst_amount = sellDetails ? sellDetails.gst_amount : '';
-      total_amount = sellDetails ? sellDetails.total_amount : '';
-      invoiceLink = sellDetails ? sellDetails.invoice_link : '';
-      transaction_id = sellDetails.transaction_id || '';
-    }
-    
-    
-    if (orderType === 'buy') {
-      buyDetails = JSON.parse(window.localStorage.getItem('buyData')) || {};
-      weight = buyDetails ? buyDetails.weight_selected : '';
-      amount = buyDetails ? buyDetails.amount_selected : '';
-      base_amount = buyDetails ? buyDetails.base_amount : '';
-      gst_amount = buyDetails ? buyDetails.gst_amount : '';
-      total_amount = buyDetails ? buyDetails.total_amount : '';
-      transaction_id = buyDetails.payment_details.transact_id || '';
-    }
 
-    console.log(buyDetails);
-    
+    let orderKey = orderType + 'Data';
+    let orderData = storageService().getObject(orderKey) || {};
+
+    weight = orderData.weight_selected || '';
+    amount = orderData.amount_selected || '';
+    invoiceLink = orderData.invoice_link || '';
+    transaction_id = orderData.transaction_id || '';
+
     if (orderType === 'delivery') {
       redeemProduct = JSON.parse(window.localStorage.getItem('deliveryData'));
       productDisc = redeemProduct ? redeemProduct.product_details.description : '';
@@ -155,13 +138,14 @@ class Payment extends Component {
     } else if (status === 'pending') {
       paymentPending = true;
     }
+
+    console.log(orderData);
     this.setState({
       status: status,
       orderType: orderType,
       weight: weight,
       amount: amount,
-      sellDetails: sellDetails,
-      buyDetails: buyDetails,
+      orderData: orderData,
       redeemProduct: redeemProduct,
       productDisc: productDisc,
       paymentError: paymentError,
@@ -171,9 +155,6 @@ class Payment extends Component {
       paymentPending: paymentPending,
       invoiceLink: invoiceLink,
       commonMapper: commonMapper[orderType][status],
-      base_amount: base_amount,
-      gst_amount: gst_amount,
-      total_amount: total_amount,
       providerData: gold_providers[this.state.provider]
     })
 
@@ -339,6 +320,24 @@ class Payment extends Component {
     }
   }
 
+  getHiddenBank(account_number) {
+    account_number = account_number.toString();
+    let str = '';
+    let len = ((account_number.length)/2).toFixed(0);
+
+    for(var i = 0; i < len - 1; i++) {
+      str += 'X';
+    }
+
+    str += '-';
+    for(var j = account_number.length - len; j < account_number.length; j++) {
+      str += account_number[j];
+    }
+
+    return str;
+
+  }
+
   render() {
     return (
       <Container
@@ -399,14 +398,16 @@ class Payment extends Component {
                         {this.state.paymentSuccess && 
                           <p className="top-content"> 
                             <b>{this.state.weight} gms</b> gold worth <b>{inrFormatDecimal(this.state.amount)}</b> sold successfully, {inrFormatDecimal(this.state.amount)} will be 
-                          credited to HDFC(xxxx-4456) within 48 hrs.  
+                        credited to {this.state.orderData.bank.bank_name}
+                        ({this.getHiddenBank(this.state.orderData.bank.account_number)}) within 48 hrs.  
                           </p>
                         }
 
                         {this.state.paymentPending && 
                           <p className="top-content"> 
                             <b>{this.state.weight} gms</b> gold worth <b>{inrFormatDecimal(this.state.amount)}</b> sold successfully, {inrFormatDecimal(this.state.amount)} will be 
-                          credited to HDFC(xxxx-4456) within 48 hrs.  
+                            credited to {this.state.orderData.bank.bank_name}
+                            ({this.getHiddenBank(this.state.orderData.bank.account_number)}) within 48 hrs. 
                           </p>
                         }
 
@@ -504,7 +505,7 @@ class Payment extends Component {
                                   Buy price for <b>{this.state.weight}</b> gms
                                 </div>
                                 <div className="content-points-inside-text">
-                                  {inrFormatDecimal(this.state.base_amount)}
+                                  {inrFormatDecimal(this.state.orderData.base_amount)}
                                 </div>
                             </div>
 
@@ -513,7 +514,7 @@ class Payment extends Component {
                                 GST
                                 </div>
                                 <div className="content-points-inside-text">
-                                {inrFormatDecimal(this.state.gst_amount)}
+                                {inrFormatDecimal(this.state.orderData.gst_amount)}
                                 </div>
                             </div>
                         </div>

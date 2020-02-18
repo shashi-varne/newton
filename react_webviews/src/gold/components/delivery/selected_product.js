@@ -150,7 +150,7 @@ class DeliverySelectedProduct extends Component {
     return (
       <div key={index}
         className="gold-offer-slider">
-        <img className="gold-offer-slide-img"
+        <img className="gold-offer-slide-img" style={{height:380}}
           src={props} alt="Gold Offer" />
       </div>
     )
@@ -181,22 +181,18 @@ class DeliverySelectedProduct extends Component {
           pincodeLoading: true,
           pincode_helper: ''
         })
-        const res = await Api.get('/api/pincode/' + pincode);
+        const res = await Api.get('/api/gold/' + this.state.provider + '/pincode/support?pincode=' + pincode);
         this.setState({
           pincodeLoading: false
         })
-        if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
+        if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.message  === 'success') {
           this.setState({
-            city: res.pfwresponse.result[0].district_name || res.pfwresponse.result[0].taluk,
-            state: res.pfwresponse.result[0].state_name,
             pincodeRightText: 'CHANGE',
             pincodeDisabled: true,
             pincode_helper: 'We deliver to this location'
           });
         } else {
           this.setState({
-            city: '',
-            state: '',
             pincode_error: 'Invalid Pincode',
             pincodeRightText: 'CHECK'
           });

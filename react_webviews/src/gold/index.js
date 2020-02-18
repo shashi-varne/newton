@@ -104,7 +104,7 @@ const Gold = props => {
           <Route path={`${url}/:provider/:orderType/payment`} component={Payment} />
           <Route path={`${url}/:provider/:orderType/verify`} component={Otp} />
           <Route path={`${url}/providers`} component={GoldSelectProvider} />
-          <Route path={`${url}/transaction`} component={GoldTransactionDetail} />
+          <Route path={`${url}/:provider/:orderType/transaction/:trans_id/`} component={GoldTransactionDetail} />
 
           {/* buy */}
           <Route path={`${url}/buy`} component={GoldBuyHome} />

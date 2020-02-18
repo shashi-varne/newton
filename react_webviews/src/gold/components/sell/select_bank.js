@@ -98,10 +98,14 @@ class SellSelectBank extends Component {
     this.getBankData();
   }
 
-  navigate = (pathname, address_id) => {
+  navigate = (pathname, address_id, status) => {
     let searchParams = getConfig().searchParams;
     if (address_id) {
       searchParams += '&address_id=' + address_id;
+    }
+
+    if (status) {
+      searchParams += '&status=' + status;
     }
 
     this.props.history.push({
@@ -129,14 +133,15 @@ class SellSelectBank extends Component {
 
     let selectedBank = this.state.bankData[this.state.selectedIndex];
     let sellData = storageService().getObject('sellData');
+    sellData.bank = selectedBank;
+    
     this.sendEvents('next');
 
 
     var options = {
       "plutus_rate_id": sellData.goldSellInfo.plutus_rate_id,
       "sell_price": sellData.amount_selected,
-      'account_number': selectedBank.account_number,
-      'ifsc_code': selectedBank.ifsc_code
+      'bank_id': selectedBank.bank_id
     }
 
     this.setState({
@@ -148,12 +153,13 @@ class SellSelectBank extends Component {
       if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
         var sellDetails = result.sell_confirmation_info;
-
-        window.localStorage.setItem('sellDetails', JSON.stringify(sellDetails));
+        sellData.sell_confirmation_info = sellDetails;
+        storageService().setObject('sellData', sellData);
+        
         this.setState({
           show_loader: false,
         });
-        this.navigate('/gold/' + this.state.provider  + '/sell/payment', sellDetails.provider_sell_order_status)
+        this.navigate('/gold/' + this.state.provider  + '/sell/payment', '', sellDetails.provider_sell_order_status)
       } else if (res.pfwresponse.result.is_gold_rate_changed) {
         let new_rate = res.pfwresponse.result.new_rate;
         let amountUpdated, weightUpdated;

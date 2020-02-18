@@ -39,7 +39,7 @@ class GoldLocker extends Component {
     window.removeEventListener("scroll", this.onScroll, false);
   }
 
-  setProviderData(provider, result1, result2) {
+  setProviderData(provider, result1, result2, result3) {
     let isRegistered = isUserRegistered(result1);
     let data = result1.gold_user_info.provider_info;
     data.isRegistered = isRegistered;
@@ -47,6 +47,13 @@ class GoldLocker extends Component {
     data.sell_value = ((result2.sell_info.plutus_rate) * (data.gold_balance || 0)).toFixed(2) || 0;
     data.provider = provider;
     data.local = gold_providers[provider];
+
+    data.reportData = result3.orders ? result3.orders.all : [];
+
+    for (var i=0; i< data.reportData.length; i++) {
+      data.reportData[i].cssMapper = this.statusMapper(data.reportData[i]);
+    }
+
     this.setState({
       [provider + '_info']: data,
       user_info: data.user_info
@@ -89,17 +96,17 @@ class GoldLocker extends Component {
         });
       }
 
-      // const res3 = await Api.get('/api/gold/report/orders/' + provider + '?order_type=all');
-      // if (res3.pfwresponse.status_code === 200) {
+      const res3 = await Api.get('/api/gold/report/orders/' + provider + '?order_type=all');
+      if (res3.pfwresponse.status_code === 200) {
 
-      //   result3 = res3.pfwresponse.result;
-      // } else {
-      //   this.setState({
-      //     error: true,
-      //     errorMessage: res3.pfwresponse.result.error || res3.pfwresponse.result.message ||
-      //       'Something went wrong'
-      //   });
-      // }
+        result3 = res3.pfwresponse.result;
+      } else {
+        this.setState({
+          error: true,
+          errorMessage: res3.pfwresponse.result.error || res3.pfwresponse.result.message ||
+            'Something went wrong'
+        });
+      }
 
 
       this.setProviderData(provider, result1, result2, result3);
@@ -113,30 +120,6 @@ class GoldLocker extends Component {
   }
 
   async componentDidMount() {
-
-    let obj = {
-      'name': 'test test',
-      'status': 'success'
-    };
-    obj.cssMapper = this.statusMapper(obj);
-
-    let obj2 = {
-      'name': 'test test',
-      'status': 'failed'
-    };
-    obj2.cssMapper = this.statusMapper(obj2);
-
-    let obj3 = {
-      'name': 'test test',
-      'status': 'pending'
-    };
-    obj3.cssMapper = this.statusMapper(obj3);
-
-    let reportData = [obj, obj2, obj3, obj];
-
-    this.setState({
-      reportData: reportData
-    })
 
     this.onloadProvider('mmtc');
     this.onloadProvider('safegold');
@@ -165,6 +148,7 @@ class GoldLocker extends Component {
   }
 
   statusMapper(data) {
+    console.log(data);
     let cssMapper = {
       'init': {
         color: 'yellow',
@@ -188,7 +172,27 @@ class GoldLocker extends Component {
       }
     }
 
-    return cssMapper[data.status] || cssMapper['init'];
+
+    let obj = cssMapper[data.status] || cssMapper['init'];
+
+
+    let type = data.transaction_type;
+    let title = '';
+    if(type === 'buy') {
+      title = 'Bought ' + data.order_details.gold_weight + ' gms'; 
+    }
+
+    if(type === 'sell') {
+      title = 'Sold ' + data.order_details.gold_weight + ' gms'; 
+    }
+
+    if(type === 'delivery') {
+      title = 'Delivery of ' + data.order_details.description; 
+    }
+
+    obj.title = title;
+
+    return obj;
   }
 
   navigate = (pathname) => {
@@ -201,7 +205,9 @@ class GoldLocker extends Component {
   chooseTabs(provider) {
     this.setState({
       provider: provider,
-      selected_provider_info: this.state[provider + '_info']
+      selected_provider_info: this.state[provider + '_info'],
+      nextPage: '',
+      loading_more: false
     })
   }
 
@@ -266,7 +272,7 @@ class GoldLocker extends Component {
       <div onClick={() => this.redirectCards(props)}
         key={index} style={{ cursor: 'pointer' }} className="card gold-trans-card">
         <div className="top-title">
-          Bought 0.014 gms
+          {props.cssMapper.title}
         </div>
         <div className={`report-color-state ${(props.cssMapper.color)}`}>
           <div className="circle"></div>
@@ -277,12 +283,12 @@ class GoldLocker extends Component {
           <div className="report-cover-amount">
             <img
               src={require(`assets/${this.state.productName}/sip_date_icon.svg`)} alt="Gold" />
-            <span style={{ color: '#767E86' }}>2nd Jan, 06:30 PM</span>
+            <span style={{ color: '#767E86' }}>{props.dt_created}</span>
           </div>
           <div className="report-cover-amount">
             <img
               src={require(`assets/${this.state.productName}/amount_icon.svg`)} alt="Gold" />
-            {inrFormatDecimal2(2000)}
+            {inrFormatDecimal2(props.order_details.total_amount)}
           </div>
         </div>
       </div>
@@ -364,7 +370,7 @@ class GoldLocker extends Component {
             </div>
 
               <div style={{ margin: '20px 0 0 0' }}>
-                {this.state.reportData.map(this.renderReportCards)}
+                {this.state.selected_provider_info.reportData.map(this.renderReportCards)}
                 {this.state.loading_more && <div className="loader">
                   Loading...
               </div>}
