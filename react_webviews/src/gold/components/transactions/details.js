@@ -62,10 +62,11 @@ class GoldTransactionDetail extends Component {
       }
     }
 
-
-    let obj = cssMapper[data.provider_buy_order_status] || cssMapper['init'];
-
     let type = this.state.orderType;
+    let statusKey = 'plutus_' + type + '_order_status';
+    let obj = cssMapper[data[statusKey]] || cssMapper['init'];
+
+    
     let title = '';
     if(type === 'buy') {
       title = 'Bought ' + data.gold_weight + ' gms'; 

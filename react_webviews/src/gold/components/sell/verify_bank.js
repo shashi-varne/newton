@@ -143,11 +143,12 @@ class SellVerifyBank extends Component {
         let timeAvailableVerify = this.state.timeAvailableVerify;
 
         timeAvailableVerify--;
+
+        if(timeAvailableVerify === 20) {
+            this.getPennyStatus();
+        }
         if (timeAvailableVerify <= 0) {
             timeAvailableVerify = 0;
-            this.setState({
-                openVerifyDialog: false
-            })
             clearInterval(this.state.countdownInterval);
         }
 
@@ -157,28 +158,39 @@ class SellVerifyBank extends Component {
     };
 
     getPennyStatus = async () => {
-        try {
-            const res = await Api.get('/api/gold/user/bank/details');
+        if(this.state.bank_id) {
+            try {
 
-            if (res.pfwresponse.status_code === 200) {
-                let result = res.pfwresponse.result || {};
-                let plutus_bank_info_record = result.plutus_bank_info_record || {};
-                let penny_verification_reference = plutus_bank_info_record.penny_verification_reference || {};
-                let verification_status = penny_verification_reference.penny_verification_state || 'failed';
-                this.getStatusMapper(verification_status);
+                let body = {
+                    bank_id: this.state.bank_id
+                }
+                const res = await Api.post('/api/account/penny-verification-status-check', body);
+    
+                if (res.pfwresponse.status_code === 200) {
+                    let result = res.pfwresponse.result || {};
+                    let plutus_bank_info_record = result.records.PBI_record || {};
+                    let penny_verification_reference = plutus_bank_info_record.penny_verification_reference || {};
+                    let verification_status = penny_verification_reference.penny_verification_state || 'failed';
+                    this.getStatusMapper(verification_status);
+                    this.setState({
+                        verification_status: verification_status,
+                        openStatusDialog: true,
+                        openVerifyDialog: false
+                    })
+                } else {
+                    this.setState({
+                        verification_status: 'delayed_response',
+                        openStatusDialog: true,
+                        openVerifyDialog: false
+                    })
+                    toast(res.pfwresponse.result.error || res.pfwresponse.result.message);
+                }
+            } catch (err) {
                 this.setState({
-                    verification_status: verification_status,
-                    openStatusDialog: true,
                     openVerifyDialog: false
-                })
-            } else {
-                toast(res.pfwresponse.result.error || res.pfwresponse.result.message);
+                });
+                toast('Something went wrong', 'error');
             }
-        } catch (err) {
-            this.setState({
-                openVerifyDialog: false
-            });
-            toast('Something went wrong', 'error');
         }
     }
 
@@ -199,7 +211,7 @@ class SellVerifyBank extends Component {
         let intervalId = setInterval(this.countdown, 1000);
         this.setState({
             countdownInterval: intervalId,
-            timeAvailableVerify: 5
+            timeAvailableVerify: 30
         });
 
         try {
@@ -217,9 +229,13 @@ class SellVerifyBank extends Component {
                 this.getStatusMapper(verification_status);
                 this.setState({
                     verification_status: verification_status,
-                    openStatusDialog: true
+                    // openStatusDialog: true,
+                    bank_id: plutus_bank_info_record.bank_id
                 })
             } else {
+                this.setState({
+                    openVerifyDialog: false
+                });
                 toast(res.pfwresponse.result.error || res.pfwresponse.result.message);
             }
         } catch (err) {

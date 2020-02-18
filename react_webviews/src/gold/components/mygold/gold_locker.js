@@ -184,10 +184,10 @@ class GoldLocker extends Component {
     }
 
 
-    let obj = cssMapper[data.status] || cssMapper['init'];
-
-
     let type = data.transaction_type;
+    let statusKey = 'plutus_' + type + '_order_status'
+    let obj = cssMapper[data.order_details[statusKey]] || cssMapper['init'];
+    
     let title = '';
     if(type === 'buy') {
       title = 'Bought ' + data.order_details.gold_weight + ' gms'; 

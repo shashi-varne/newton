@@ -250,6 +250,8 @@ class SellAddEditBank extends Component {
 
     if (!formData.account_no) {
       formData.account_no_error = 'Please enter account number';
+    } else if (formData.account_no.length < 5) {
+      formData.account_no_error = 'Minimum length for account number is 5';
     }
 
     if (!formData.account_type) {
@@ -264,6 +266,8 @@ class SellAddEditBank extends Component {
       formData.confirm_account_no_error = 'This field is required';
     } else if (formData.account_no !== formData.confirm_account_no) {
       formData.confirm_account_no_error = 'Account number mismatch';
+    } else if (formData.confirm_account_no.length < 5) {
+      formData.confirm_account_no_error = 'Minimum length for account number is 5';
     } else {
       formData.confirm_account_no_error = '';
     }
@@ -358,6 +362,7 @@ class SellAddEditBank extends Component {
               class="account_no"
               autoComplete="new-password"
               id="account_no"
+              maxLength="21"
               name="account_no"
               value={this.state.formData.account_no}
               onChange={this.handleChange('account_no')} />
@@ -372,6 +377,7 @@ class SellAddEditBank extends Component {
               class="confirm_account_no"
               id="confirm_account_no"
               name="confirm_account_no"
+              maxLength="21"
               value={this.state.formData.confirm_account_no}
               onChange={this.handleChange('confirm_account_no')} />
           </div>

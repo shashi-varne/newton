@@ -130,6 +130,7 @@ class GoldPanDataClass extends Component {
 
     async componentDidMount() {
 
+        this.onload();
         try {
 
             const res = await Api.get('/api/gold/user/account/' + this.state.provider);

@@ -181,7 +181,7 @@ class DeliverySelectedProduct extends Component {
           pincodeLoading: true,
           pincode_helper: ''
         })
-        const res = await Api.get('/api/gold/' + this.state.provider + '/pincode/support?pincode=' + pincode);
+        const res = await Api.get('/api/gold/check/pincode_support/' + this.state.provider + '?pincode=' + pincode);
         this.setState({
           pincodeLoading: false
         })

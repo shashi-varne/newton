@@ -111,6 +111,12 @@ class Container extends Component {
       case checkStringInString(pathname, "gold-delivery-address"):
         this.navigate("/gold/select-gold-product");
         break;
+      case checkStringInString(pathname, "sell-select-bank"):
+        this.navigate("/gold/sell");
+        break;
+      case checkStringInString(pathname, "delivery-select-address"):
+        this.navigate("/gold/sell");
+        break;
       case "/gold":
       case "/gold/my-gold":
       case "/gold/about":

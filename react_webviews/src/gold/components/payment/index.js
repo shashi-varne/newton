@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import safegold_logo from 'assets/safegold_logo_60x60.png';
 import SVG from 'react-inlinesvg';
 import ic_send_email from 'assets/ic_send_email.svg';
 
@@ -11,7 +10,7 @@ import { getUrlParams } from 'utils/validators';
 // eslint-disable-next-line
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
-import { inrFormatDecimal, storageService } from 'utils/validators';
+import { inrFormatDecimal2, storageService } from 'utils/validators';
 import DotDotLoader from '../../../common/ui/DotDotLoader';
 import { gold_providers } from '../../constants';
 
@@ -98,9 +97,9 @@ class Payment extends Component {
       params: getUrlParams(),
       provider: this.props.match.params.provider,
       productName: getConfig().productName,
-      orderData: {}
+      orderData: {},
+      report: {}
     }
-    this.sendInvoiceEmail = this.sendInvoiceEmail.bind(this);
     this.trackDelivery = this.trackDelivery.bind(this);
   }
 
@@ -111,24 +110,20 @@ class Payment extends Component {
       status = 'failed';
     }
     let { orderType } = this.props.match.params;
-    let weight,amount, redeemProduct,
-      productDisc, paymentError, paymentMessage, paymentPending, invoiceLink;
+    let weight,amount,
+       paymentError, paymentMessage, paymentPending, invoiceLink;
 
     let transaction_id;
 
     let orderKey = orderType + 'Data';
     let orderData = storageService().getObject(orderKey) || {};
-
+    console.log(orderData);
     weight = orderData.weight_selected || '';
     amount = orderData.amount_selected || '';
     invoiceLink = orderData.invoice_link || '';
     transaction_id = orderData.transaction_id || '';
 
-    if (orderType === 'delivery') {
-      redeemProduct = JSON.parse(window.localStorage.getItem('deliveryData'));
-      productDisc = redeemProduct ? redeemProduct.product_details.description : '';
-      transaction_id = redeemProduct.transaction_id || '';
-    }
+    
 
     let paymentFailed, paymentSuccess;
     if (status === 'failed' || status === 'error') {
@@ -145,8 +140,6 @@ class Payment extends Component {
       weight: weight,
       amount: amount,
       orderData: orderData,
-      redeemProduct: redeemProduct,
-      productDisc: productDisc,
       paymentError: paymentError,
       paymentSuccess: paymentSuccess,
       paymentFailed: paymentFailed,
@@ -220,7 +213,7 @@ class Payment extends Component {
     });
   }
 
-  async sendInvoiceEmail(path) {
+  emailInvoice = async (path) => {
 
     this.setState({
       invoiceLoading: true,
@@ -254,30 +247,37 @@ class Payment extends Component {
 
    getTransDetails = async (transaction_id, orderType) => {
 
-    this.setState({
-      show_loader: true,
-    });
-
-    try {
-      const res = await Api.get('/api/gold/report/orders/safegold?transaction_id=' + transaction_id +
-      '&order_type=' + orderType);
-      if (res.pfwresponse.status_code === 200) {
-        this.setState({
-          show_loader: false,
-          invoiceLink: res.pfwresponse.result.invoice_link
-        });
-      } else {
+    if(transaction_id) {
+      this.setState({
+        show_loader: true,
+      });
+  
+      try {
+        const res = await Api.get('/api/gold/report/orders/' + this.state.provider + '?transaction_id=' + transaction_id +
+        '&order_type=' + orderType);
+        if (res.pfwresponse.status_code === 200) {
+          this.setState({
+            show_loader: false,
+            report: res.pfwresponse.result
+          });
+        } else {
+          this.setState({
+            show_loader: false
+          });
+          toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
+        }
+      } catch (err) {
         this.setState({
           show_loader: false
         });
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
+        toast('Something went wrong', 'error');
       }
-    } catch (err) {
+    } else {
       this.setState({
-        show_loader: false
-      });
-      toast('Something went wrong', 'error');
+        report: {}
+      })
     }
+    
   }
 
   sendEvents(user_action) {
@@ -301,18 +301,6 @@ class Payment extends Component {
   handleClick = () => {
     this.sendEvents('next');
     this.navigate(this.state.commonMapper['cta_state']);
-  }
-
-  emailInvoice = () => {
-
-    this.setState({
-      invoiceLoading: true
-    })
-    if(this.state.orderType === 'delivery') {
-      this.trackDelivery(this.state.invoiceLink)
-    } else {
-      this.sendInvoiceEmail(this.state.invoiceLink) 
-    }
   }
 
   getHiddenBank(account_number) {
@@ -356,14 +344,14 @@ class Payment extends Component {
                     <div>
                         {this.state.paymentSuccess && 
                           <p className="top-content"> 
-                            <b>{this.state.weight} gms </b> gold worth <b>{inrFormatDecimal(this.state.amount)}</b> added to your MMTC gold locker.  
+                            <b>{this.state.weight} gms </b> gold worth <b>{inrFormatDecimal2(this.state.amount)}</b> added to your MMTC gold locker.  
                           </p>
                         }
 
                         {this.state.paymentPending && 
                           <div>
                             <p className="top-content"> 
-                            Your purchase of <b>{this.state.weight} gms </b> gold worth <b>{inrFormatDecimal(this.state.amount)}</b> is awaiting confirmation.  
+                            Your purchase of <b>{this.state.weight} gms </b> gold worth <b>{inrFormatDecimal2(this.state.amount)}</b> is awaiting confirmation.  
                             </p>
                             <p className="top-content"> 
                             If confirmed within 30 minutes we will place gold 
@@ -375,7 +363,7 @@ class Payment extends Component {
                         {this.state.paymentFailed && 
                           <div>
                             <p className="top-content"> 
-                              Your purchase of <b>{this.state.weight} gms</b> gold worth <b>{inrFormatDecimal(this.state.amount)}</b> is failed.
+                              Your purchase of <b>{this.state.weight} gms</b> gold worth <b>{inrFormatDecimal2(this.state.amount)}</b> is failed.
                             </p>
                             <p className="top-content"> 
                               If any amount has been debited, it will be refunded within 3-5 business days.  
@@ -392,7 +380,7 @@ class Payment extends Component {
 
                         {this.state.paymentSuccess && 
                           <p className="top-content"> 
-                            <b>{this.state.weight} gms</b> gold worth <b>{inrFormatDecimal(this.state.amount)}</b> sold successfully, {inrFormatDecimal(this.state.amount)} will be 
+                            <b>{this.state.weight} gms</b> gold worth <b>{inrFormatDecimal2(this.state.amount)}</b> sold successfully, {inrFormatDecimal2(this.state.amount)} will be 
                         credited to {this.state.orderData.bank.bank_name}
                         ({this.getHiddenBank(this.state.orderData.bank.account_number)}) within 48 hrs.  
                           </p>
@@ -400,7 +388,7 @@ class Payment extends Component {
 
                         {this.state.paymentPending && 
                           <p className="top-content"> 
-                            <b>{this.state.weight} gms</b> gold worth <b>{inrFormatDecimal(this.state.amount)}</b> sold successfully, {inrFormatDecimal(this.state.amount)} will be 
+                            <b>{this.state.weight} gms</b> gold worth <b>{inrFormatDecimal2(this.state.amount)}</b> sold successfully, {inrFormatDecimal2(this.state.amount)} will be 
                             credited to {this.state.orderData.bank.bank_name}
                             ({this.getHiddenBank(this.state.orderData.bank.account_number)}) within 48 hrs. 
                           </p>
@@ -409,7 +397,7 @@ class Payment extends Component {
                         {this.state.paymentFailed && 
                           <div>
                             <p className="top-content"> 
-                            Your sale of <b>{this.state.weight} gms</b> gold worth <b>{inrFormatDecimal(this.state.amount)}</b> is failed.
+                            Your sale of <b>{this.state.weight} gms</b> gold worth <b>{inrFormatDecimal2(this.state.amount)}</b> is failed.
                             </p>
                             <p className="top-content"> 
                             If gold value has been debited, it will be restored back to your gold locker within 24hrs. 
@@ -469,9 +457,10 @@ class Payment extends Component {
                         <div style={{ margin: '30px 0 30px 0' }} className="highlight-text highlight-color-info">
                           <div  style={{textAlign: 'right', fontSize:10, color: getConfig().primary}}>24K 99.99%</div>
                           <div className="highlight-text1">
-                            <img className="highlight-text11" style={{width: 34}} src={safegold_logo} alt="info" />
+                            <img className="highlight-text11" style={{width: 34}} 
+                            src={this.state.orderData.media.images[0]} alt="info" />
                             <div className="highlight-text12" style={{display:'grid'}}>
-                              <div>0.5 gm lotus round coin</div>
+                                <div>{this.state.orderData.description}</div>
                               {!this.state.paymentFailed &&
                                <div style={{color: '#767E86', fontWeight: 400}}>Order id: {this.state.transaction_id}</div>
                                }
@@ -500,7 +489,7 @@ class Payment extends Component {
                                   Buy price for <b>{this.state.weight}</b> gms
                                 </div>
                                 <div className="content-points-inside-text">
-                                  {inrFormatDecimal(this.state.orderData.base_amount)}
+                                  {inrFormatDecimal2(this.state.orderData.base_amount)}
                                 </div>
                             </div>
 
@@ -509,7 +498,7 @@ class Payment extends Component {
                                 GST
                                 </div>
                                 <div className="content-points-inside-text">
-                                {inrFormatDecimal(this.state.orderData.gst_amount)}
+                                {inrFormatDecimal2(this.state.orderData.gst_amount)}
                                 </div>
                             </div>
                         </div>
@@ -522,7 +511,7 @@ class Payment extends Component {
                                   Making charges
                                 </div>
                                 <div className="content-points-inside-text">
-                                  ₹194.17
+                                  {inrFormatDecimal2(this.state.orderData.delivery_minting_cost)}
                                 </div>
                             </div>
 
@@ -545,7 +534,7 @@ class Payment extends Component {
                                 Total
                               </div>
                               <div className="content2-points-inside-text">
-                                {inrFormatDecimal(this.state.amount)}
+                                {inrFormatDecimal2(this.state.orderData.delivery_minting_cost)}
                               </div>
                           </div>
                       </div>
@@ -578,7 +567,6 @@ class Payment extends Component {
                   }
                 </div>
 
-                {/* this.state.weight, this.state.productDisc */}
           <div className="success-bottom">
             <div className="success-bottom1">
               For any query, reach us at

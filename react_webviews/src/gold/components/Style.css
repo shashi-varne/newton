@@ -901,6 +901,7 @@ img.gold-offer-slide-img {
   display: flex;
   border-left: 1px solid #ececec;
   padding: 0 0 20px 0;
+  justify-content: space-between;
 }
 .generic-progress-vertical .tile .title {
   color: #0a1d32;

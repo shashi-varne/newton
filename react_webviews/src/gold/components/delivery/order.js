@@ -19,19 +19,18 @@ class DeliveryOrder extends Component {
       params: qs.parse(props.history.location.search.slice(1)),
       provider: this.props.match.params.provider,
       showAddress: false,
-      redeemProduct:storageService().getObject('deliveryData') || {}
+      orderData:storageService().getObject('deliveryData') || {}
     }
   }
 
   componentWillMount() {
-    console.log(this.state.redeemProduct);
     nativeCallback({ action: 'take_control_reset' });
 
     this.setState({
       providerData: gold_providers[this.state.provider]
     })
 
-    if (!this.state.redeemProduct) {
+    if (!this.state.orderData) {
       this.navigate('/gold/delivery-products');
     }
   }
@@ -39,10 +38,12 @@ class DeliveryOrder extends Component {
   async componentDidMount() {
 
     var options = {
-      "product_code": this.state.redeemProduct.id,
-      "addressId": this.state.redeemProduct.address.id
+      "product_code": this.state.orderData.id,
+      "addressId": this.state.orderData.address.id
 
     }
+
+    let orderData = this.state.orderData;
 
     try {
       const res = await Api.post('/api/gold/user/redeem/verify/' + this.state.provider, options);
@@ -51,6 +52,9 @@ class DeliveryOrder extends Component {
           show_loader: false
         })
         let redeem_body = res.pfwresponse.result.redeem_body || {};
+        orderData.transaction_id = redeem_body.transact_id;
+
+        storageService().setObject('deliveryData', orderData)
         this.setState({
           redeem_body: redeem_body,
           disabled: false
@@ -157,9 +161,9 @@ class DeliveryOrder extends Component {
         <div  style={{textAlign: 'right', fontSize:10, color: getConfig().primary}}>{this.state.providerData.karat}</div>
           <div className="highlight-text1">
             <img className="highlight-text11" style={{width: 34}} 
-            src={this.state.redeemProduct.media.images[0]} alt="info" />
+            src={this.state.orderData.media.images[0]} alt="info" />
             <div className="highlight-text12" style={{display:'grid'}}>
-              <div>{this.state.redeemProduct.description}</div>
+              <div>{this.state.orderData.description}</div>
             </div>
           </div>
         </div>
@@ -167,12 +171,12 @@ class DeliveryOrder extends Component {
         <div className="top-info">
           <div className="top-info-tile">
             <div className="top-info-tile1">Gold coin weight</div>
-            <div className="top-info-tile1">{this.state.redeemProduct.metal_weight} gms</div>
+            <div className="top-info-tile1">{this.state.orderData.metal_weight} gms</div>
           </div>
 
           <div className="top-info-tile" style={{background: '#F8F8F8',paddingLeft: 8}}>
             <div className="top-info-tile1">- Gold in locker ({this.state.providerData.title})</div>
-            <div className="top-info-tile1">- {this.state.redeemProduct.metal_weight} gms</div>
+            <div className="top-info-tile1">- {this.state.orderData.metal_weight} gms</div>
           </div>
         </div>
 
@@ -188,7 +192,7 @@ class DeliveryOrder extends Component {
                 Making charges
                 </div>
                 <div className="content-points-inside-text">
-                {inrFormatDecimal2(this.state.redeemProduct.delivery_minting_cost)}
+                {inrFormatDecimal2(this.state.orderData.delivery_minting_cost)}
                 </div>
             </div>
 
@@ -202,14 +206,14 @@ class DeliveryOrder extends Component {
                 </div>
             </div> */}
 
-            <div className="content-points">
+            {/* <div className="content-points">
                 <div className="content-points-inside-text">
                 GST
                 </div>
                 <div className="content-points-inside-text">
                 ₹50
                 </div>
-            </div>
+            </div> */}
 
             <div className="content-points">
                 <div className="content-points-inside-text">
@@ -248,17 +252,17 @@ class DeliveryOrder extends Component {
            {this.state.showAddress &&
             <div className='address'>
               <div className="content">
-                {this.state.redeemProduct.address.name}
+                {this.state.orderData.address.name}
               </div>
               <div className="content">
-              {this.state.redeemProduct.address.addressline1}, {this.state.redeemProduct.address.addressline2}, 
-              , {this.state.redeemProduct.address.city}
+              {this.state.orderData.address.addressline1}, {this.state.orderData.address.addressline2}, 
+              , {this.state.orderData.address.city}
               </div>
               <div className="content">
-                {this.state.redeemProduct.address.state} - {this.state.redeemProduct.address.pincode}
+                {this.state.orderData.address.state} - {this.state.orderData.address.pincode}
               </div>
               <div className="content">
-                Mobile: {this.state.redeemProduct.address.mobile_number}
+                Mobile: {this.state.orderData.address.mobile_number}
               </div>
             </div>
           }

@@ -195,7 +195,8 @@ class SellSelectBank extends Component {
   isVerificationPending(bank) {
     let status = bank.penny_verification_reference.penny_verification_state;
 
-    if(status === 'request_triggered' || status === 'delayed_response') {
+    if(!status || status === 'request_triggered' || 
+      status === 'delayed_response') {
       return true;
     }
 
