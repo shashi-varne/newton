@@ -52,6 +52,7 @@ class GoldBuyHome extends Component {
       weightUpdated: '',
       maxWeight: '',
       minAmount: '',
+      minWeight: '',
       isRegistered: false,
       isWeight: false,
       isAmount: true,
@@ -193,8 +194,15 @@ class GoldBuyHome extends Component {
       return;
     }
 
-    if (parseFloat(this.state.amount) >= 0 && parseFloat(this.state.amount) < this.state.minAmount) {
+    if (this.state.isAmount && parseFloat(this.state.amount) >= 0 && 
+        parseFloat(this.state.amount) < this.state.minAmount) {
       toast('Minimum amount should be Rs. ' + this.state.minAmount, 'error');
+      return;
+    }
+
+    if (!this.state.isAmount && this.state.weight >= 0 && 
+    this.state.weight < this.state.minWeight) {
+      toast('Minimum weight should be Rs. ' + this.state.minWeight + ' gms', 'error');
       return;
     }
 
@@ -289,6 +297,10 @@ class GoldBuyHome extends Component {
 
     if (parseFloat(amount) >= 0 && parseFloat(amount) < this.state.minAmount) {
       amountError = true;
+    }
+
+    if (weight >= 0 && weight < this.state.minWeight) {
+      weightError = true;
     }
 
 
@@ -431,7 +443,7 @@ class GoldBuyHome extends Component {
                         <label className="gold-placeholder-right">= {inrFormatDecimal2(this.state.amount || '')}</label>
                       </div>
                       <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>
-                        {/* Max {this.state.maxWeight} gm */}
+                        Min {this.state.minWeight} gm
                       </div>
                   </div>
                 }

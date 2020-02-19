@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 
-
-
 import { storageService } from 'utils/validators';
-import { stateMapper } from '../../constants';
+import { stateMapper, calculate_gold_wt_buy } from '../../constants';
 import { inrFormatDecimal2 } from 'utils/validators';
-
 
 const mapper = {
     'buy': {
@@ -142,7 +139,13 @@ class GoldOnloadAndTimerClass extends Component {
 
         if (this.state.orderType === 'buy') {
             this.updateParent('goldBuyInfo', orderData.goldBuyInfo);
-            this.updateParent('minAmount', orderData.goldBuyInfo.minimum_buy_price);
+
+            let minimum_buy_price  = orderData.goldBuyInfo.minimum_buy_price || 1000;
+            this.updateParent('minAmount', minimum_buy_price);
+
+
+            let minWeight = calculate_gold_wt_buy(orderData, minimum_buy_price).weight;
+            this.updateParent('minWeight', minWeight);
         }
 
         if (this.state.orderType === 'sell') {
