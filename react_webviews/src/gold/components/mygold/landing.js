@@ -138,6 +138,7 @@ class GoldSummary extends Component {
 
       let result1 = {};
       let result2 = {};
+
       const res = await Api.get('/api/gold/user/account/' + provider);
       if (res.pfwresponse.status_code === 200) {
         result1 = res.pfwresponse.result;
@@ -165,6 +166,7 @@ class GoldSummary extends Component {
       this.setProviderData(provider, result1, result2);
    
     } catch (err) {
+      console.log(err);
       this.setState({
         show_loader: false,
       });

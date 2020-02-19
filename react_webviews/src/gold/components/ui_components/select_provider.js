@@ -49,7 +49,7 @@ class GoldSelectProviderClass extends Component {
                     />
 
                 </div>
-                <div className="select-bank" style={{ padding: '3px 0 0 50px', margin: 0 }}>
+                <div className="select-bank" style={{ padding: '3px 0 0 0px', margin: 0 }}>
                     <div >
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <div>

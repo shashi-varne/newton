@@ -243,7 +243,7 @@ class GoldSellHome extends Component {
       return;
     }
 
-    if(!this.state.user_info.pan_verified) {
+    if(!this.state.user_info.pan_number) {
       this.navigate(this.state.provider + '/sell-pan');
     } else {
       this.navigate(this.state.provider + '/sell-select-bank');

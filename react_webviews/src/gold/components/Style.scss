@@ -536,7 +536,7 @@ img.gold-offer-slide-img {
   display: flex;
   justify-content: space-between;
   margin: 0 0 20px 0;
-  background: #F0F7FF;
+  background: var(--highlight);
   padding: 10px 10px 10px 10px;
   align-items: center;
   border-radius: 4px;
@@ -684,6 +684,9 @@ img.gold-offer-slide-img {
  .bank-tile {
     margin: 10px 15px 20px 15px;
     padding: 20px 10px 10px 10px;
+    // display: flex;
+    // align-items: center;
+    // justify-content: start;
   }
   .bank-tile-selected {
       margin: 10px 0px 20px 0px;
@@ -1328,7 +1331,7 @@ img.gold-offer-slide-img {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #F0F7FF;
+    background: var(--highlight);
     padding: 0px 0 10px 20px;
     border-radius: 4px;
     margin: 0 0 20px 0;

@@ -318,12 +318,12 @@ class DeliverySelectedProduct extends Component {
               </div>
           </div>
 
-          <div className="block4">
+         {this.state.product.product_highlights && <div className="block4">
             <div className="page-title">
               Product details
             </div>
             {this.state.product.product_highlights.map(this.renderProductHIghlights)}
-          </div>
+          </div>}
         </div>
       </Container>
     );

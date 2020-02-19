@@ -31,9 +31,9 @@
   padding: 0px 0px 0 0px;
 }
 .highlight-text {
-  background: #f6f2ff;
+  background: var(--highlight);
   padding: 15px 15px 20px 15px;
-  border: 1px solid #f6f2ff;
+  border: 1px solid var(--highlight);
   border-radius: 4px;
 }
 .highlight-text1 {

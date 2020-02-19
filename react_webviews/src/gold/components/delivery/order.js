@@ -52,7 +52,7 @@ class DeliveryOrder extends Component {
           show_loader: false
         })
         let redeem_body = res.pfwresponse.result.redeem_body || {};
-        orderData.transaction_id = redeem_body.transact_id;
+        orderData.transact_id = redeem_body.transact_id;
 
         storageService().setObject('deliveryData', orderData)
         this.setState({

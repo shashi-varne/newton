@@ -207,7 +207,7 @@ class GoldBuyHome extends Component {
 
     let totalAmount = parseFloat(this.state.amount) + parseFloat(this.state.provider_info.gold_balance || 0);
 
-    if(!this.state.user_info.pan_verified && totalAmount > 100000) {
+    if(!this.state.user_info.pan_number && totalAmount > 100000) {
       this.navigate(this.state.provider + '/buy-pan');
     } else {
       // place buy order

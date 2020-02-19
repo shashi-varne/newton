@@ -193,22 +193,22 @@ class SellAddEditBank extends Component {
   handleChange = (field) => (event) => {
     let formData = this.state.formData;
 
-    if (event.target.name === 'ifsc_code') {
-      if (event.target.value.length > 11) {
-        return;
-      }
-      this.checkIFSCFormat(event.target.value);
+    let value = event.target.value;
+    let name = event.target.name;
 
-      formData[event.target.name] = event.target.value;
+    if (name === 'ifsc_code') {
+      this.checkIFSCFormat(value);
+      value = value.toUpperCase();
+      formData[name] = value;
 
     } else {
       this.setState({
-        [event.target.name]: event.target.value,
-        [event.target.name + '_error']: ''
+        [name]: value,
+        [name + '_error']: ''
       });
 
-      formData[event.target.name] = event.target.value;
-      formData[event.target.name + '_error'] = '';
+      formData[name] = value;
+      formData[name + '_error'] = '';
 
     }
 
@@ -390,6 +390,7 @@ class SellAddEditBank extends Component {
               label="IFSC Code *"
               id="ifsc_code"
               name="ifsc_code"
+              maxLength="11"
               value={this.state.formData.ifsc_code}
               onChange={this.handleChange('ifsc_code')}
             />

@@ -52,6 +52,7 @@ class PlaceBuyOrderClass extends Component {
                 let result = res.pfwresponse.result;
                 let buyData = this.state.buyData;
                 buyData.payment_details = result.payment_details;
+                buyData.transact_id = result.payment_details.provider_txn_id;
                 storageService().setObject('buyData', buyData);
 
                 var payment_link = result.payment_details.payment_link;

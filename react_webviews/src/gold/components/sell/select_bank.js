@@ -115,9 +115,9 @@ class SellSelectBank extends Component {
   }
 
   chooseBank = (index, bank) => {
-    // if (this.isVerificationPending(bank)) {
-    //   return;
-    // }
+    if (this.isVerificationPending(bank)) {
+      return;
+    }
     this.setState({
       selectedIndex: index
     })
@@ -153,7 +153,8 @@ class SellSelectBank extends Component {
       if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
         var sellDetails = result.sell_confirmation_info;
-        sellData.sell_confirmation_info = sellDetails;
+        sellData.payment_details = sellDetails;
+        sellData.transact_id  = sellDetails.provider_txn_id;
         storageService().setObject('sellData', sellData);
         
         this.setState({
@@ -161,23 +162,23 @@ class SellSelectBank extends Component {
         });
         this.navigate('/gold/' + this.state.provider  + '/sell/payment', '', sellDetails.provider_sell_order_status)
       } else if (res.pfwresponse.result.is_gold_rate_changed) {
-        let new_rate = res.pfwresponse.result.new_rate;
-        let amountUpdated, weightUpdated;
-        let sellData = this.state.sellData;
-        if (sellData.isAmount) {
-          amountUpdated = sellData.amount;
-          weightUpdated = (sellData.amount) * (new_rate.plutus_rate);
-        } else {
-          weightUpdated = sellData.weight;
-          amountUpdated = (sellData.weight) / (new_rate.plutus_rate);
-        }
-        this.setState({
-          show_loader: false,
-          amountUpdated: amountUpdated,
-          weightUpdated: weightUpdated,
-          new_rate: new_rate,
-          openPopup: true
-        });
+        // let new_rate = res.pfwresponse.result.new_rate;
+        // let amountUpdated, weightUpdated;
+        // let sellData = this.state.sellData;
+        // if (sellData.isAmount) {
+        //   amountUpdated = sellData.amount;
+        //   weightUpdated = (sellData.amount) * (new_rate.plutus_rate);
+        // } else {
+        //   weightUpdated = sellData.weight;
+        //   amountUpdated = (sellData.weight) / (new_rate.plutus_rate);
+        // }
+        // this.setState({
+        //   show_loader: false,
+        //   amountUpdated: amountUpdated,
+        //   weightUpdated: weightUpdated,
+        //   new_rate: new_rate,
+        //   openPopup: true
+        // });
       } else {
         this.setState({
           show_loader: false
@@ -195,12 +196,16 @@ class SellSelectBank extends Component {
   isVerificationPending(bank) {
     let status = bank.penny_verification_reference.penny_verification_state;
 
-    if(!status || status === 'request_triggered' || 
-      status === 'delayed_response') {
-      return true;
+    if (status === 'success') {
+      return false;
     }
 
-    return false;
+    return true;
+
+    // if(!status || status === 'request_triggered' || 
+    //   status === 'delayed_response') {
+    //   return true;
+    // }
   }
 
   renderBanks(props, index) {
@@ -212,7 +217,7 @@ class SellSelectBank extends Component {
       >
         <div className="left-icon">
           <img style={{ width: '40px', margin: '0 7px 0 0' }}
-            src={require(`assets/ic_health_myway.svg`)} alt="info"
+            src={props.ifsc_image} alt="info"
           />
         </div>
         <div className="select-bank">
@@ -299,7 +304,7 @@ class SellSelectBank extends Component {
             onClick={() => this.navigate('sell-add-bank')}
             className="add-new-button">
             <span style={{
-              background: '#F0F7FF', padding: '4px 9px 4px 9px',
+              background: getConfig().highlight_color, padding: '4px 9px 4px 9px',
               color: getConfig().secondary, margin: '0 9px 0 0'
             }}>+</span> Add Bank
             </div>

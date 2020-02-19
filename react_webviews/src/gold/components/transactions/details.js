@@ -107,16 +107,16 @@ class GoldTransactionDetail extends Component {
 
     let { provider } = this.props.match.params;
     let { orderType } = this.props.match.params;
-    let { trans_id } = this.props.match.params;
+    let { transact_id } = this.props.match.params;
 
     this.setState({
       provider: provider,
-      trans_id: trans_id,
+      transact_id: transact_id,
       orderType: orderType
     })
 
     try {
-      const res = await Api.get('/api/gold/report/orders/safegold?transaction_id=' + trans_id +
+      const res = await Api.get('/api/gold/report/orders/safegold?transaction_id=' + transact_id +
         '&order_type=' + orderType);
       if (res.pfwresponse.status_code === 200) {
         let order = res.pfwresponse.result || {};
@@ -197,8 +197,9 @@ class GoldTransactionDetail extends Component {
     );
   }
 
-  async emailInvoice(path) {
+  async emailInvoice() {
 
+    let path = this.state.order.invoice_link;
     this.setState({
       invoiceLoading: true,
     });
@@ -230,6 +231,18 @@ class GoldTransactionDetail extends Component {
   }
 
 
+  getPurchaseTitle =() => {
+    let title = 'Gold purchase amount';
+
+    if (this.state.orderType === 'sell') {
+      title = 'Gold selling amount';
+    } else if (this.state.orderType === 'delivery') {
+      title = 'Making charges';
+    } 
+
+    return title;
+  }
+  
   render() {
 
     return (
@@ -278,10 +291,11 @@ class GoldTransactionDetail extends Component {
             src={require(`assets/${this.state.productName}/amount_icon.svg`)} alt="Gold" />
           <div className="block2">
             <div className="title">
-              Gold purchase amount
+              {this.getPurchaseTitle()}
               </div>
             <div className="subtitle">
-              {inrFormatDecimal(this.state.order.total_amount)}
+              {inrFormatDecimal(this.state.order.total_amount || 
+                this.state.order.delivery_minting_cost)}
             </div>
           </div>
         </div>

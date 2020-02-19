@@ -245,7 +245,7 @@ class SelectAddressDelivery extends Component {
               onClick={() => this.navigate('delivery-add-address')}
               className="add-new-button">
               <span style={{
-                background: '#F0F7FF', padding: '4px 9px 4px 9px',
+                background: getConfig().highlight_color, padding: '4px 9px 4px 9px',
                 color: getConfig().secondary, margin: '0 9px 0 0'
               }}>+</span> Add New Address
               </div>}

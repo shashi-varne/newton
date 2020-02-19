@@ -113,7 +113,7 @@ class Payment extends Component {
     let weight,amount,
        paymentError, paymentMessage, paymentPending, invoiceLink;
 
-    let transaction_id;
+    let transact_id;
 
     let orderKey = orderType + 'Data';
     let orderData = storageService().getObject(orderKey) || {};
@@ -121,9 +121,7 @@ class Payment extends Component {
     weight = orderData.weight_selected || '';
     amount = orderData.amount_selected || '';
     invoiceLink = orderData.invoice_link || '';
-    transaction_id = orderData.transaction_id || '';
-
-    
+    transact_id = orderData.transact_id || '';
 
     let paymentFailed, paymentSuccess;
     if (status === 'failed' || status === 'error') {
@@ -147,10 +145,11 @@ class Payment extends Component {
       paymentPending: paymentPending,
       invoiceLink: invoiceLink,
       commonMapper: commonMapper[orderType][status],
-      providerData: gold_providers[this.state.provider]
+      providerData: gold_providers[this.state.provider],
+      transact_id: transact_id
     })
 
-    this.getTransDetails(transaction_id, orderType);
+    this.getTransDetails(transact_id, orderType);
 
   }
 
@@ -213,7 +212,13 @@ class Payment extends Component {
     });
   }
 
-  emailInvoice = async (path) => {
+  emailInvoice = async () => {
+
+    let path = this.state.report.invoice_link;
+
+    if(!path) {
+      return;
+    }
 
     this.setState({
       invoiceLoading: true,
@@ -245,19 +250,18 @@ class Payment extends Component {
     }
   }
 
-   getTransDetails = async (transaction_id, orderType) => {
+   getTransDetails = async (transact_id, orderType) => {
 
-    if(transaction_id) {
+    if(transact_id) {
       this.setState({
         show_loader: true,
       });
   
       try {
-        const res = await Api.get('/api/gold/report/orders/' + this.state.provider + '?transaction_id=' + transaction_id +
+        const res = await Api.get('/api/gold/report/orders/' + this.state.provider + '?transaction_id=' + transact_id +
         '&order_type=' + orderType);
         if (res.pfwresponse.status_code === 200) {
           this.setState({
-            show_loader: false,
             report: res.pfwresponse.result
           });
         } else {
@@ -424,10 +428,10 @@ class Payment extends Component {
                               </div>
                             </div>
                             <div className="highlight-text2" style={{color: '#767E86'}}>
-                              <div>Updated value {this.state.provider_info.gold_balance} gms</div>
+                              <div style={{margin: '5px 0 6px 0'}}>Updated value {this.state.provider_info.gold_balance} gms</div>
                               <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                                <div>Order id: {this.state.transaction_id}</div>
-                                <div>2nd Jan, 06:30 PM</div>
+                                <div>Order id: {this.state.transact_id}</div>
+                                  <div>{this.state.report.dt_created}</div>
                               </div>
                             </div>
                           </div>
@@ -462,7 +466,7 @@ class Payment extends Component {
                             <div className="highlight-text12" style={{display:'grid'}}>
                                 <div>{this.state.orderData.description}</div>
                               {!this.state.paymentFailed &&
-                               <div style={{color: '#767E86', fontWeight: 400}}>Order id: {this.state.transaction_id}</div>
+                               <div style={{color: '#767E86', fontWeight: 400}}>Order id: {this.state.transact_id}</div>
                                }
                             </div>
                           </div>
@@ -534,7 +538,8 @@ class Payment extends Component {
                                 Total
                               </div>
                               <div className="content2-points-inside-text">
-                                {inrFormatDecimal2(this.state.orderData.delivery_minting_cost)}
+                                {inrFormatDecimal2(this.state.orderData.total_amount || 
+                                  this.state.orderData.delivery_minting_cost)}
                               </div>
                           </div>
                       </div>

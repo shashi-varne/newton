@@ -123,6 +123,7 @@ class GoldLocker extends Component {
       this.setProviderData(provider, result1, result2, result3);
 
     } catch (err) {
+      console.log(err);
       this.setState({
         show_loader: false,
       });
@@ -228,7 +229,7 @@ class GoldLocker extends Component {
     this.setState({
       provider: provider,
       selected_provider_info: selected_provider_info,
-      next_page: selected_provider_info.report.next_page,
+      next_page: selected_provider_info.report ? selected_provider_info.report.next_page : '',
       loading_more: false
     })
   }
@@ -325,7 +326,8 @@ class GoldLocker extends Component {
           <div className="report-cover-amount">
             <img
               src={require(`assets/${this.state.productName}/amount_icon.svg`)} alt="Gold" />
-            {inrFormatDecimal2(props.order_details.total_amount)}
+            {inrFormatDecimal2(props.order_details.total_amount || 
+              props.order_details.delivery_minting_cost)}
           </div>
         </div>
       </div>
