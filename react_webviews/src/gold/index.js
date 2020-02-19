@@ -100,6 +100,7 @@ const Gold = props => {
            {/* common */}
            <Route path={`${url}/my-gold`} component={GoldLanding} />
           <Route path={`${url}/my-gold-locker`} component={GoldLocker} />
+          <Route path={`${url}/report`} component={GoldLocker} />
           <Route path={`${url}/gold-transactions`} component={Transactions} />
           <Route path={`${url}/:provider/:orderType/payment`} component={Payment} />
           <Route path={`${url}/:provider/:orderType/verify`} component={Otp} />

@@ -240,10 +240,6 @@ class GoldBuyHome extends Component {
   }
 
   navigate = (pathname) => {
-    if (pathname === '/gold/my-gold-locker') {
-      this.sendEvents('gold-locker');
-    }
-
     this.props.history.push({
       pathname: pathname,
       search: getConfig().searchParams
