@@ -64,6 +64,10 @@ class SellPriceClass extends Component {
     }
 
     render() {
+        if(!this.state.show_loader) {
+            return null;
+        }
+        
         return(
             <Container
             showLoader={this.state.show_loader}

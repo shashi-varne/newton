@@ -45,7 +45,6 @@ class GoldRegister extends Component {
       orderType: 'buy'
     }
 
-    this.refreshData = this.refreshData.bind(this);
   }
 
 

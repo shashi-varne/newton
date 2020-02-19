@@ -65,6 +65,10 @@ class BuyPriceClass extends Component {
     }
 
     render() {
+        if(!this.state.show_loader) {
+            return null;
+        }
+        
         return(
             <Container
             noFooter={true}
