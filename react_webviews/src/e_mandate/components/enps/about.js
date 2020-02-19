@@ -135,29 +135,20 @@ class About extends Component {
       return;
 
     }
-
-    let paymentRedirectUrl = encodeURIComponent(
-      window.location.origin + '/e-mandate/enps/redirection'
-    );
-    var pgLink = getConfig().base_url + 'page/nps/user/esign/'+ this.state.pc_urlsafe;
-    let app = getConfig().app;
     let redirect_url = getConfig().redirect_url;
-    // eslint-disable-next-line
-    pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
-      '&app=' + app + '&redirect_url=' + redirect_url;
-    if (getConfig().generic_callback) {
-      pgLink += '&generic_callback=' + getConfig().generic_callback;
-    }
+    let current_url = window.location.origin + '/e-mandate/enps/redirection' + getConfig().searchParams;
+    var pgLink = getConfig().base_url + 'page/nps/user/esign/' + this.state.pc_urlsafe;
     if (!redirect_url) {
       if (getConfig().app === 'ios') {
         nativeCallback({
           action: 'show_top_bar', message: {
-            title: 'Authorisation'
+            title: 'Activate NPS'
           }
         });
       }
       nativeCallback({
         action: 'take_control', message: {
+          back_url: current_url,
           back_text: 'You are almost there, do you really want to go back?'
         }
       });
@@ -171,7 +162,7 @@ class About extends Component {
             action_name: 'positive',
             action_text: 'Yes',
             action_type: 'redirect',
-            redirect_url: redirect_url
+            redirect_url: current_url
           }, {
             action_name: 'negative',
             action_text: 'No',

@@ -3,26 +3,52 @@ import Container from '../../common/Container';
 import '../../common/Style.css';
 import qs from 'qs';
 import { getConfig } from 'utils/functions';
+import Api from 'utils/api';
+import toast from '../../../common/ui/Toast';
 class RedirectionClass extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             show_loader: true,
-            params: qs.parse(props.history.location.search.slice(1))
+            params: qs.parse(props.history.location.search.slice(1)),
+            pc_urlsafe: getConfig().pc_urlsafe
         };
     }
 
-    componentWillMount() {
-        const { status } = this.state.params
+    async componentDidMount() {
 
-        let path = '/e-mandate/enps/'
-        if (status === 'success') {
-            path += 'success';
-        } else {
-            path += 'failure';
+        this.setState({
+            show_loader: true
+        })
+        try {
+            const res = await Api.get('/api/nps/esign/status/' + this.state.pc_urlsafe);
+            this.setState({
+                show_loader: false
+            })
+
+            if (res.pfwresponse.result && !res.pfwresponse.result.error) {
+                let result = res.pfwresponse.result;
+                if (result.esign === true) {
+                    this.navigate('success')
+                } else {
+                    this.navigate('failure')
+                }
+            } else {
+                this.navigate('about')
+                toast(res.pfwresponse.result.error ||
+                    res.pfwresponse.result.message || 'Something went wrong', 'error');
+            }
+
+
+        } catch (err) {
+            this.setState({
+                show_loader: false
+            })
+            this.navigate('about')
+            toast("Something went wrong");
+            this.navigate('about')
         }
-        this.navigate(path)
     }
 
     navigate = (pathname) => {
