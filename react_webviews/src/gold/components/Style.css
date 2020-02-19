@@ -504,13 +504,16 @@ img.gold-offer-slide-img {
   font-size: 16px;
   font-weight: 300;
 }
+.gold-delivery-select-address {
+  margin: 0 -15px 0 -20px;
+}
 .gold-delivery-select-address .user-name {
   font-size: 14px;
-  width: 33px;
-  height: 22px;
+  width: 30px;
+  height: fit-content;
   background: var(--primary);
   color: white;
-  padding: 6px 0 0 0px;
+  padding: 5px 0px 7px 0px;
   text-align: center;
   margin: 0 10px 0 0;
   border-radius: 6px;
@@ -520,7 +523,7 @@ img.gold-offer-slide-img {
   line-height: 1.4;
   font-size: 18px;
   margin-top: -2px;
-  width: auto;
+  width: 100%;
 }
 .gold-delivery-select-address .action-buttons {
   display: flex;
@@ -534,7 +537,7 @@ img.gold-offer-slide-img {
   margin: 5px 8px 0 0px;
 }
 .gold-delivery-select-address .add-new-button {
-  margin: 20px 0 0 21px;
+  margin: 20px 0 0 26px;
   font-size: 12px;
   color: var(--secondary);
   text-transform: uppercase;
@@ -546,13 +549,21 @@ img.gold-offer-slide-img {
   margin: 10px 15px 20px 15px;
   padding: 20px 10px 10px 10px;
 }
+.gold-delivery-select-address .address-tile .right-name {
+  color: #0a1c32;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+.gold-delivery-select-address .address-tile .address-content {
+  color: #767e86;
+  font-size: 13px;
+  font-weight: 400;
+}
 .gold-delivery-select-address .address-tile-selected {
   margin: 10px 0px 20px 0px;
   background: linear-gradient(to right, #f4f4f4, white);
   padding: 20px 25px 10px 25px;
-}
-.gold-delivery-select-address {
-  margin: 0 -15px 0 -20px;
 }
 .gold-sell-select-bank {
   margin: 0 -15px 30px -20px;
@@ -779,7 +790,7 @@ img.gold-offer-slide-img {
   width: 14px;
 }
 .gold-how-steps {
-  margin: 20px 0 20px 0;
+  margin: 50px 0 40px 0;
   border-top: 1px solid #ededed;
   border-bottom: 1px solid #ededed;
   padding: 10px 0 10px 0;

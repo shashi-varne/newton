@@ -117,7 +117,6 @@ class Payment extends Component {
 
     let orderKey = orderType + 'Data';
     let orderData = storageService().getObject(orderKey) || {};
-    console.log(orderData);
     weight = orderData.weight_selected || '';
     amount = orderData.amount_selected || '';
     invoiceLink = orderData.invoice_link || '';

@@ -52,8 +52,6 @@ class DeliverySelectedProduct extends Component {
       offerImageData: offerImageData
     })
 
-    console.log(this.state.product);
-
     if (!this.state.product) {
       this.navigate('/gold/delivery-products');
       return;

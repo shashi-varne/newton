@@ -392,7 +392,11 @@ class GoldSellHome extends Component {
         updateChild={this.updateChild}
       >
         <GoldProviderFilter parent={this} />
-        <GoldLivePrice parent={this} />
+        <GoldLivePrice parent={this} 
+        style={{
+          margin: '40px 0 20px 0'
+        }}
+        />
         <div className="sell-home" id="goldSection">
         <div className="gold-aw-inputs">
               <div className="gold-aw-tabs">

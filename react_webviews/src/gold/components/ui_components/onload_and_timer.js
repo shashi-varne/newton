@@ -13,6 +13,9 @@ const mapper = {
     },
     'sell': {
         'title': 'sell'
+    },
+    'delivery': {
+        'title': 'delivery'
     }
 }
 class GoldOnloadAndTimerClass extends Component {
@@ -187,26 +190,29 @@ class GoldOnloadAndTimerClass extends Component {
                 provider: this.state.provider
             }
         } else {
-            let confirmDialogData = {
+            confirmDialogData = {
                 buttonData: {
-                  leftTitle: '0.5g Lotus…',
-                  leftSubtitle: '₹1,000',
+                  leftTitle: orderData.description,
+                  leftSubtitle: inrFormatDecimal2(orderData.delivery_minting_cost),
                   leftArrow: 'down',
                   provider: this.state.provider
                 },
                 buttonTitle: "Ok",
                 content1: [
-                  { 'name': 'Making charges', 'value': inrFormatDecimal2(orderData.total_amount) },
+                  { 'name': 'Making charges', 'value': inrFormatDecimal2(orderData.delivery_minting_cost) },
                   { 'name': 'Shipping charges', 'value': 'Free' }
                 ],
                 content2: [
-                  { 'name': 'Total', 'value': inrFormatDecimal2(orderData.total_amount) }
+                  { 'name': 'Total', 'value': inrFormatDecimal2(orderData.delivery_minting_cost) }
                 ]
-              }
-          
-              this.setState({
-                confirmDialogData: confirmDialogData
-              })
+            }
+
+            bottomButtonData = {
+                leftTitle: orderData.description,
+                leftSubtitle: inrFormatDecimal2(orderData.delivery_minting_cost),
+                leftArrow: 'up',
+                provider: this.state.provider
+            }
         }
 
         this.updateParent('confirmDialogData', confirmDialogData);

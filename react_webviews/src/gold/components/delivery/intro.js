@@ -5,9 +5,9 @@ import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 
 const stepsContentMapper = [
-  { 'icon': 'ic_gold_provider', 'content': '1. How to get gold coin delivered?' },
-  { 'icon': 'ic_make_payment', 'content': '2. Pay making charges' },
-  { 'icon': 'deliver', 'content': '3. Get home delivery' }
+  { 'icon': 'ic_gold_provider', 'content': 'How to get gold coin delivered?' },
+  { 'icon': 'ic_make_payment', 'content': 'Pay making charges' },
+  { 'icon': 'deliver', 'content': 'Get home delivery' }
 ];
 
 class DeliveryIntro extends Component {
@@ -51,7 +51,7 @@ class DeliveryIntro extends Component {
         <img className="icon"
           src={require(`assets/${this.state.productName}/${props.icon}.svg`)} alt="Gold" />
         <div className="content">
-          {props.content}
+          {index + 1}. {props.content}
         </div>
       </div>
     );

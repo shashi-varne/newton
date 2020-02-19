@@ -10,8 +10,9 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
-import { storageService } from 'utils/validators';
+import { storageService, inrFormatDecimal2 } from 'utils/validators';
 import ConfirmDialog from '../ui_components/confirm_dialog';
+import GoldOnloadAndTimer from '../ui_components/onload_and_timer';
 
 class SelectAddressDelivery extends Component {
   constructor(props) {
@@ -22,12 +23,43 @@ class SelectAddressDelivery extends Component {
       provider: this.props.match.params.provider,
       openDialogDelete: false,
       openConfirmDialog: false,
-      product:storageService().getObject('deliveryData') || {}
+      product:storageService().getObject('deliveryData') || {},
+      orderType: 'delivery'
+    }
+  }
+
+   // common code start
+   onload = () => {
+    this.setState({
+      openOnloadModal: false
+    })
+    this.setState({
+      openOnloadModal: true
+    })
+  }
+
+  updateParent(key, value) {
+
+    if(key === 'fetchLivePrice' && !value) {
+      this.setMaxWeightAmount();
     }
 
-    this.renderAddress = this.renderAddress.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-    this.removeAddress = this.removeAddress.bind(this);
+    this.setState({
+      [key]: value
+    })
+  }
+
+  refreshData = () => {
+
+    if(this.state.timeAvailable > 0) {
+      this.handleClick();
+    } else {
+      this.setState({
+        show_loader: true,
+        openRefreshModule: true
+      })
+    }
+    
   }
 
   componentWillMount() {
@@ -58,6 +90,17 @@ class SelectAddressDelivery extends Component {
 
   componentDidMount() {
     this.getAddressData();
+    this.onload();
+    let bottomButtonData = {
+      leftTitle: this.state.product.description,
+      leftSubtitle: inrFormatDecimal2(this.state.product.delivery_minting_cost),
+      leftArrow: 'up',
+      provider: this.state.provider
+    }
+
+    this.setState({
+      bottomButtonData: bottomButtonData
+    })
   }
 
   navigate = (pathname, address_id) => {
@@ -80,9 +123,7 @@ class SelectAddressDelivery extends Component {
 
   handleClick = async () => {
 
-    this.setState({
-      openConfirmDialog: false
-    })
+    this.handleClose();
 
     if (this.state.selectedIndex === -1) {
       return;
@@ -96,11 +137,17 @@ class SelectAddressDelivery extends Component {
     this.navigate('gold-delivery-order');
   }
 
-  handleClose() {
+  handleClose = () => {
     this.setState({
-      openDialogDelete: false,
-      openConfirmDialog: false
-    })
+      openConfirmDialog: false,
+      openDialogDelete: false
+    });
+
+    if(this.state.openPriceChangedDialog && this.state.timeAvailable >0) {
+      this.setState({
+        openPriceChangedDialog: false
+      })
+    }
   }
 
   renderDialogDelete = () => {
@@ -128,10 +175,10 @@ class SelectAddressDelivery extends Component {
     );
   }
 
-  removeAddressDialog(address_id) {
-    // if (!address_id) {
-    //   return;
-    // }
+  removeAddressDialog = (address_id) => {
+    if (!address_id) {
+      return;
+    }
 
     this.setState({
       address_id_delete: address_id,
@@ -151,12 +198,12 @@ class SelectAddressDelivery extends Component {
       changeType: 'delete'
     }
     let res = await Api.post('/api/gold/address', body);
-   
-    toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-      'Something went wrong');
+
     if (res.pfwresponse.status_code === 200) {
       this.getAddressData();
     } else {
+      toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+        'Something went wrong');
       this.setState({ show_loader: false });
     }
   }
@@ -186,7 +233,7 @@ class SelectAddressDelivery extends Component {
     return addressline;
   }
 
-  renderAddress(props, index) {
+  renderAddress = (props, index) => {
     return (
       <div className={`address-tile ${index === this.state.selectedIndex ? 'address-tile-selected' : ''}`} key={index}
       >
@@ -195,13 +242,25 @@ class SelectAddressDelivery extends Component {
         </div>
         <div className="select-addressline">
           <div onClick={() => this.chooseAddress(index)}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <div className="right-name">{props.name}</div>
+            <div style={{ display: 'flex', justifyContent: 'space-between',alignItems: 'baseline' }}>
+              <div>
+                  <div>
+                    <div className="right-name">{props.name}</div>
+                    
+                  </div>
+                  <div className="address-content">
+                  {props.addressline1}, {props.addressline2}, 
+                  , {props.city}
+                  </div>
+                  <div className="address-content">
+                    {props.state} - {props.pincode}
+                  </div>
+                  <div className="address-content">
+                    Mobile: {props.mobile_number}
+                  </div>
+                </div>
               {index === this.state.selectedIndex &&
-                <img style={{ width: 14 }} src={completed_step} alt="Gold Delivery" />}
-            </div>
-            <div>
-              {this.getFullAddress(props)}
+                  <img style={{ width: 14 }} src={completed_step} alt="Gold Delivery" />}
             </div>
           </div>
           <div className="action-buttons">
@@ -246,12 +305,15 @@ class SelectAddressDelivery extends Component {
               className="add-new-button">
               <span style={{
                 background: getConfig().highlight_color, padding: '4px 9px 4px 9px',
-                color: getConfig().secondary, margin: '0 9px 0 0'
+                color: getConfig().secondary, margin: '0 10px 0 0'
               }}>+</span> Add New Address
               </div>}
         </div>
         {this.renderDialogDelete()}
         <ConfirmDialog parent={this} />
+
+        {this.state.openOnloadModal && 
+        <GoldOnloadAndTimer parent={this} />}
       </Container >
     );
   }

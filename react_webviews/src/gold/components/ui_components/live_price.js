@@ -18,7 +18,7 @@ class GoldLivePriceClass extends Component {
         }
         
         return (
-            <div className="live-price-gold">
+            <div className="live-price-gold" style={this.props.style}>
                 <div className="left-img">
                     {this.props.parent.state.minutes < 1 && 
                     <SVG

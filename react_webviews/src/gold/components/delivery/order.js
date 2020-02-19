@@ -175,7 +175,7 @@ class DeliveryOrder extends Component {
           </div>
 
           <div className="top-info-tile" style={{background: '#F8F8F8',paddingLeft: 8}}>
-            <div className="top-info-tile1">- Gold in locker ({this.state.providerData.title})</div>
+            <div className="top-info-tile1">- Gold locker ({this.state.providerData.title})</div>
             <div className="top-info-tile1">- {this.state.orderData.metal_weight} gms</div>
           </div>
         </div>
@@ -233,7 +233,7 @@ class DeliveryOrder extends Component {
                   Total charges
                 </div>
                 <div className="content2-points-inside-text">
-                  ₹200.00
+                  {inrFormatDecimal2(this.state.orderData.delivery_minting_cost)}
                 </div>
             </div>
         </div>

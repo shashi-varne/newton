@@ -94,6 +94,9 @@ class AddEditAddressDelivery extends Component {
   handlePincode = name => async (event) => {
     const pincode = event.target.value;
 
+    if(pincode.length > 6) {
+      return;
+    }
     this.setState({
       [name]: pincode,
       [name + '_error']: ''
@@ -119,7 +122,8 @@ class AddEditAddressDelivery extends Component {
           city: '',
           state: '',
           ccity: '',
-          cstate: ''
+          cstate: '',
+          pincode_error: 'Invalid pincode'
         });
       }
     }
@@ -220,11 +224,12 @@ class AddEditAddressDelivery extends Component {
       }
 
       this.setState({ show_loader: false });
-      toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-        'Something went wrong');
+      
       if (res.pfwresponse.status_code === 200) {
-       
         this.navigate('delivery-select-address');
+      } else {
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+          'Something went wrong');
       }
     }
   }
@@ -278,6 +283,7 @@ class AddEditAddressDelivery extends Component {
               label="Pin code"
               id="pincode"
               name="pincode"
+              maxLength="6"
               value={this.state.pincode}
               onChange={this.handlePincode('pincode')} />
           </div>

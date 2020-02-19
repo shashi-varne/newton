@@ -83,15 +83,31 @@ class Container extends Component {
 
   historyGoBack = () => {
 
+    let pathname = this.props.history.location.pathname;
+
+    let provider = '';
+    if(checkStringInString(pathname, "safegold")) {
+      provider = 'safegold';
+    }
+
+    if(checkStringInString(pathname, "mmtc")) {
+      provider = 'mmtc';
+    }
+
     if(forceBackState()) {
       this.navigate(forceBackState());
       return;
     }
+
+    if(goBackMap(pathname)) {
+      this.navigate(goBackMap(pathname));
+      return;
+    }
+
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
     }
-
-    let pathname = this.props.history.location.pathname;
+    
     if (checkStringInString(pathname, "payment")) {
       this.navigate("/gold/my-gold-locker");
       return;
@@ -101,31 +117,35 @@ class Container extends Component {
       this.navigate(goBackMap(pathname));
       return;
     }
+
+    if(checkStringInString(pathname, "gold-delivery-order")) {
+      this.navigate("/gold/" + provider +  "/delivery-select-address");
+      return;
+    }
+
+    if(checkStringInString(pathname, "delivery-select-address")) {
+      this.navigate("/gold/" + provider +  "/select-gold-product");
+      return;
+    }
+
+    if(checkStringInString(pathname, "select-gold-product")) {
+      this.navigate("/gold/delivery-products");
+      return;
+    }
+
+    if(checkStringInString(pathname, "sell-select-bank")) {
+      this.navigate("/gold/sell");
+      return;
+    }
+
     switch (pathname) {
       case "/gold/my-gold-locker":
         this.navigate("/gold/landing");
         break;
-      case checkStringInString(pathname, "gold-delivery-order"):
-        this.navigate("/gold/gold-delivery-address");
-        break;
-      case checkStringInString(pathname, "gold-delivery-address"):
-        this.navigate("/gold/select-gold-product");
-        break;
-      case checkStringInString(pathname, "sell-select-bank"):
-        this.navigate("/gold/sell");
-        break;
-      case checkStringInString(pathname, "delivery-select-address"):
-        this.navigate("/gold/sell");
-        break;
       case "/gold":
       case "/gold/my-gold":
       case "/gold/about":
-        case "/gold/landing":
-        // this.setState({
-        //   callbackType: "exit",
-        //   openPopup: true,
-        //   popupText: "Are you sure you want to exit?"
-        // });
+      case "/gold/landing":
         nativeCallback({ action: "native_back", events: this.getEvents("back") });
         break;
       default:

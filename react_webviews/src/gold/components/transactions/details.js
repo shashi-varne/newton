@@ -121,7 +121,6 @@ class GoldTransactionDetail extends Component {
       if (res.pfwresponse.status_code === 200) {
         let order = res.pfwresponse.result || {};
         order.cssMapper = this.statusMapper(order);
-        console.log(order);
         this.setState({
           show_loader: false,
           order: order
@@ -300,13 +299,29 @@ class GoldTransactionDetail extends Component {
           </div>
         </div>
 
+        {this.state.orderType === 'delivery' && 
+           <div className="gold-trans-detail-card">
+            <img
+              className="icon"
+              src={require(`assets/${this.state.productName}/track_order.svg`)} alt="Gold" />
+            <div className="block2">
+              <div className="title">
+                Tracking URL
+                </div>
+              <div className="subtitle">
+                {this.state.order.courier_tracking_id}
+              </div>
+            </div>
+          </div>
+        }
+
         <div className="gold-trans-detail-card" style={{ alignItems: 'baseline', marginBottom: 0 }}>
           <img
             className="icon"
             src={require(`assets/${this.state.productName}/status_sip_icon.svg`)} alt="Gold" />
           <div className="block2" style={{ margin: '0px 0 0 8px', position: 'relative', top: '-18px' }}>
             <div className="title">
-              Status
+              {this.state.orderType === 'delivery' && <span>Delivery</span>}  Status
               </div>
 
             <div className="subtitle" style={{ margin: '10px 0 0 7px' }}>
