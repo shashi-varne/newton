@@ -81,8 +81,10 @@ class Container extends Component {
     return events;
   }
 
-  historyGoBack = () => {
+  historyGoBack = (backData) => {
 
+    
+    let fromHeader = backData.fromHeader || false;
     let pathname = this.props.history.location.pathname;
 
     let provider = '';
@@ -92,6 +94,11 @@ class Container extends Component {
 
     if(checkStringInString(pathname, "mmtc")) {
       provider = 'mmtc';
+    }
+
+    if (fromHeader && checkStringInString(pathname, "check-how")) {
+      this.navigate("/gold/landing");
+      return;
     }
 
     if(forceBackState()) {
@@ -112,6 +119,7 @@ class Container extends Component {
       this.navigate("/gold/my-gold-locker");
       return;
     }
+
 
     if(checkStringInString(pathname, "gold-delivery-order")) {
       this.navigate("/gold/" + provider +  "/delivery-select-address");
@@ -280,6 +288,10 @@ class Container extends Component {
 
   };
 
+  headerGoBack = () => {
+    this.historyGoBack({fromHeader: true});
+  }
+
   render() {
     let steps = [];
     for (var i = 0; i < this.props.total; i++) {
@@ -301,7 +313,7 @@ class Container extends Component {
           count={this.props.count}
           total={this.props.total}
           current={this.props.current}
-          goBack={this.historyGoBack}
+          goBack={this.headerGoBack}
           edit={this.props.edit}
           type={getConfig().productName}
           resetpage={this.props.resetpage}
@@ -310,6 +322,7 @@ class Container extends Component {
           force_hide_inpage_title={this.state.force_hide_inpage_title}
           style={this.props.styleHeader}
           className={this.props.classHeader}
+          headerData={this.props.headerData}
         />}
 
         {/* Below Header Block */}

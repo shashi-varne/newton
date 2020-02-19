@@ -9,10 +9,17 @@ import Close from '@material-ui/icons/Close';
 import SVG from 'react-inlinesvg';
 import {getConfig} from 'utils/functions';
 import back_arrow from 'assets/back_arrow.svg';
+import close_icn from 'assets/close_icn.svg';
+
+
+const headerIconMapper = {
+  back: back_arrow,
+  close: close_icn
+}
 
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
-  inPageTitle, force_hide_inpage_title, className ,style}) => (
+  inPageTitle, force_hide_inpage_title, className ,style, headerData}) => (
   <AppBar position="fixed" color="primary" 
   className={`Header transition ${classes.root} ${inPageTitle ? 'header-topbar-white' : 'header-topbar-white'} ${className}`}
   style={style}
@@ -23,7 +30,7 @@ const Header = ({ classes, title, count, total, current, goBack,
         // <Arrow color={inPageTitle ? "secondary" : "secondary"} />
         <SVG
           preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
-          src={back_arrow}
+          src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
         />
         }
         {(disableBack === true) && <Close />}

@@ -702,6 +702,13 @@ img.gold-offer-slide-img {
   color: #767e86;
   font-size: 13px;
 }
+.gold-aw-inputs {
+  margin: 0 0 30px 0;
+}
+.gold-aw-inputs input {
+  background-color: #f8f8f8;
+  padding: 15px 0px 15px 5px;
+}
 .gold-aw-inputs input::placeholder {
   text-align: right;
   color: #767e86;
@@ -719,6 +726,20 @@ img.gold-offer-slide-img {
   -webkit-transition: 0.3s right ease;
   transition: 0.3s right ease;
   z-index: 0;
+}
+.gold-aw-inputs .plus-options {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 20px 0;
+}
+.gold-aw-inputs .plus-tile {
+  color: #35cb5d;
+  font-size: 12px;
+  font-weight: 800;
+  border: 1px solid;
+  padding: 10px 15px 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
 }
 .gold-aw-tabs {
   display: flex;
@@ -739,23 +760,6 @@ img.gold-offer-slide-img {
 .gold-aw-tab.selected {
   background: white;
   color: #3792fc;
-}
-.gold-aw-inputs .plus-options {
-  display: flex;
-  justify-content: space-between;
-  margin: 0 0 20px 0;
-}
-.gold-aw-inputs {
-  margin: 0 0 30px 0;
-}
-.gold-aw-inputs .plus-tile {
-  color: #35cb5d;
-  font-size: 12px;
-  font-weight: 800;
-  border: 1px solid;
-  padding: 5px 10px 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
 }
 .gold-buy-info-images {
   display: flex;

@@ -12,7 +12,7 @@ class CheckHow2 extends Component {
         this.state = {
             show_loader: false,
             productName: getConfig().productName,
-            rightButtonData :{
+            rightButtonData: {
                 title: 'Buy digital gold'
             }
         }
@@ -63,6 +63,9 @@ class CheckHow2 extends Component {
                 current={3}
                 total={3}
                 noFooter={true}
+                headerData={{
+                    icon: 'close'
+                }}
             >
                 <div className="check-how-gold">
 
@@ -77,8 +80,8 @@ class CheckHow2 extends Component {
                         <div className="content-tiles">
                             Digital Gold solves the issues of owning and storing physical gold.
                 It also provides <b>flexibility to buy</b> at prices comfortable to you and <b>sell anytime</b> which is
-                                        just icing on the cake.
-                                        You can start accumulating gold now and sell/get gold coins delivered as per your convenience.
+                                                    just icing on the cake.
+                                                    You can start accumulating gold now and sell/get gold coins delivered as per your convenience.
                     </div>
 
                     </div>

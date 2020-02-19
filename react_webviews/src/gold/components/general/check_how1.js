@@ -7,6 +7,24 @@ import { getConfig } from 'utils/functions';
 import { Bar } from 'react-chartjs-2';
 import LeftRightFooter from '../../../common/ui/leftRightFooter';
 
+const options={
+  legend: {
+      display: false,
+  },
+  scales: {
+    xAxes: [{
+        gridLines: {
+            color: "rgba(0, 0, 0, 0)",
+        }
+    }],
+    yAxes: [{
+        gridLines: {
+            color: "rgba(0, 0, 0, 0)",
+        }   
+    }]
+}
+};
+
 class CheckHow1 extends Component {
   constructor(props) {
     super(props);
@@ -65,6 +83,9 @@ class CheckHow1 extends Component {
         current={1}
         total={3}
         noFooter={true}
+        headerData={ {
+          icon: 'close'
+        }}
       >
         <div className="check-how-gold">
 
@@ -72,15 +93,16 @@ class CheckHow1 extends Component {
             <div style={{color: '#D3DBE4', fontSize: 10,fontWeight: 700, textAlign: 'center'}}>Gold prices since 1975</div>
             <Bar
             data={
-                {labels: [0, 1900, 2000, 2010, 2020],
+                {labels: [0, 1985, 1995, 2005, 2015, 2019],
                 datasets: [
                   {
                     label: 'Price',
-                    data: [0, 200, 300, 500, 1000],
+                    data: [0, 1781.24, 5454.37, 9590.61, 28510.10, 42158.60],
                      backgroundColor: getConfig().primary,
                   }
                 ]}
             }
+            options = {options}
             width={100}
             height={50}
             />

@@ -835,27 +835,53 @@ img.gold-offer-slide-img {
   font-size: 13px;
 }
 
+.gold-aw-inputs {
 
-.gold-aw-inputs input::placeholder {  
+  margin: 0 0 30px 0;
+  input {
+    background-color: #F8F8F8;
+    padding: 15px 0px 15px 5px;
+  }
+
+  input::placeholder {  
                   
-  text-align: right; 
-  color: #767E86;
-} 
+    text-align: right; 
+    color: #767E86;
+  } 
+  
+  .gold-placeholder-right {
+    color: #767E86;
+    line-height: 40px;
+    position: absolute;
+    right: 5px;
+    top: 0px;
+    bottom: 0;
+    -moz-transition: 0.3s right ease;
+    -ms-transition: 0.3s right ease;
+    -o-transition: 0.3s right ease;
+    -webkit-transition: 0.3s right ease;
+    transition: 0.3s right ease;
+    z-index: 0;
+  }
 
-.gold-aw-inputs .gold-placeholder-right {
-  color: #767E86;
-  line-height: 40px;
-  position: absolute;
-  right: 5px;
-  top: 0px;
-  bottom: 0;
-  -moz-transition: 0.3s right ease;
-  -ms-transition: 0.3s right ease;
-  -o-transition: 0.3s right ease;
-  -webkit-transition: 0.3s right ease;
-  transition: 0.3s right ease;
-  z-index: 0;
+  .plus-options {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0 20px 0;
+  }
+  
+  .plus-tile {
+    color: #35CB5D;
+    font-size: 12px;
+    font-weight: 800;
+    border: 1px solid;
+    padding: 10px 15px 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
 }
+
+
 
 .gold-aw-tabs {
   display: flex;
@@ -881,25 +907,7 @@ img.gold-offer-slide-img {
   color: #3792FC;
 }
 
-.gold-aw-inputs .plus-options {
-  display: flex;
-  justify-content: space-between;
-  margin: 0 0 20px 0;
-}
 
-.gold-aw-inputs {
-  margin: 0 0 30px 0;
-}
-
-.gold-aw-inputs .plus-tile {
-  color: #35CB5D;
-  font-size: 12px;
-  font-weight: 800;
-  border: 1px solid;
-  padding: 5px 10px 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-}
 
 .gold-buy-info-images {
   display: flex;

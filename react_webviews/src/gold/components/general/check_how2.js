@@ -59,6 +59,9 @@ class CheckHow2 extends Component {
                 current={2}
                 total={3}
                 noFooter={true}
+                headerData={{
+                    icon: 'close'
+                }}
             >
                 <div className="check-how-gold">
 
