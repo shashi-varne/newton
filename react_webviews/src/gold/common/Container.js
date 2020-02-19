@@ -113,11 +113,6 @@ class Container extends Component {
       return;
     }
 
-    if(goBackMap(pathname)) {
-      this.navigate(goBackMap(pathname));
-      return;
-    }
-
     if(checkStringInString(pathname, "gold-delivery-order")) {
       this.navigate("/gold/" + provider +  "/delivery-select-address");
       return;
@@ -270,7 +265,7 @@ class Container extends Component {
       //show up
       inPageTitle = true;
 
-    } else {
+    } else if(this.getHeightFromTop() < 36) {
       //show down
       inPageTitle = false;
     }

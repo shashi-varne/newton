@@ -218,27 +218,6 @@ class GoldBuyHome extends Component {
 
   }
 
-  openInBrowser(url) {
-    nativeCallback({
-      action: 'open_in_browser',
-      message: {
-        url: url
-      }
-    });
-  }
-
-  handleClickOffer(offer, index) {
-    if (offer.key === '5buy' || offer.key === '50delivery') {
-      this.setState({
-        openDialogOffer: true,
-        selectedIndexOffer: index
-      })
-    } else if (offer.link) {
-      this.openInBrowser(offer.link)
-    }
-
-  }
-
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
