@@ -73,11 +73,6 @@ class GoldLocker extends Component {
       [provider + '_info']: data
     });
 
-    if (provider === 'safegold') {
-      this.setState({
-        show_loader: false
-      })
-    }
 
     if(provider === 'mmtc') {
       this.chooseTabs('mmtc');
@@ -225,7 +220,8 @@ class GoldLocker extends Component {
       provider: provider,
       selected_provider_info: selected_provider_info,
       next_page: selected_provider_info.report ? selected_provider_info.report.next_page : '',
-      loading_more: false
+      loading_more: false,
+      show_loader: false
     })
   }
 
