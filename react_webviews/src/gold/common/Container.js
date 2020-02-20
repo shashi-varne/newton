@@ -84,7 +84,7 @@ class Container extends Component {
   historyGoBack = (backData) => {
 
     
-    let fromHeader = backData.fromHeader || false;
+    let fromHeader = backData ? backData.fromHeader : false;
     let pathname = this.props.history.location.pathname;
 
     let provider = '';
