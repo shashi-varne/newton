@@ -209,7 +209,7 @@ class GoldDeliveryProducts extends Component {
           SHOW MORE
         </div> */}
 
-        <div className="gold-how-steps" onClick={() => this.showHideSteps()}>
+        <div className="gold-how-steps pointer" onClick={() => this.showHideSteps()}>
             <div className="top-tile">
               <div className="top-title">
               How to get gold coin delivered?

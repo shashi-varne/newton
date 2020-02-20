@@ -356,7 +356,7 @@ class SellVerifyBank extends Component {
 
                 <GoldLivePrice parent={this} />
 
-                <div style={{ display: 'flex', margin: '20px 0 20px 0px' }}>
+                <div style={{ display: 'flex', margin: '20px 0 20px 0px' , position: 'relative'}}>
                     <img src={this.state.verifyBankData.bank_image}
                         style={{ width: '50px', margin: '0 8px 0 0' }} alt="Gold" />
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -368,7 +368,8 @@ class SellVerifyBank extends Component {
                         onClick={() => this.navigate('sell-edit-bank')}
                         style={{
                             position: 'absolute', right: 16,
-                            color: getConfig().secondary, fontWeight: 'bold'
+                            color: getConfig().secondary, fontWeight: 'bold',
+                            cursor: 'pointer'
                         }}>EDIT</div>
                     </div>
                 </div>

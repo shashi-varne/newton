@@ -215,7 +215,8 @@ class SellSelectBank extends Component {
       <div onClick={() => this.chooseBank(index, props)}
         className={`bank-tile ${index === this.state.selectedIndex ? 'bank-tile-selected' : ''}`}
         key={index}
-        style={{ opacity: this.isVerificationPending(props) ? 0.4 : 1 }}
+        style={{ opacity: this.isVerificationPending(props) ? 0.4 : 1,
+        cursor: this.isVerificationPending(props) ? 'unset': 'pointer' }}
       >
         <div className="left-icon">
           <img style={{ width: '40px', margin: '0 7px 0 0' }}

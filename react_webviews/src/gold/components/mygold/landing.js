@@ -406,15 +406,15 @@ class GoldSummary extends Component {
 
   rendertopInfoImage() {
     return(
-      <div className="infoimage-block1">
-            <img style={{width:'100%'}} src={crd_gold_info} alt="" />
+      <div className="infoimage-block1" onClick={() => this.navigate('check-how1')} >
+            <img style={{width:'100%',cursor:'pointer'}} src={crd_gold_info} alt="" />
             <div className="inner">
               <div className="title generic-page-title">
                 Buy 24K gold to create long term wealth
               </div>
               <div className="button">
                   <Button variant="raised"
-                      size="large" onClick={() => this.navigate('check-how1')} color="secondary" autoFocus>
+                      size="large" color="secondary" autoFocus>
                     CHECK HOW?
                   </Button>
               </div>

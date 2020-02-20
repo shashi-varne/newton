@@ -603,6 +603,8 @@ img.gold-offer-slide-img {
   display: flex;
   align-items: center;
   margin: 20px 0 0 0;
+  cursor: pointer;
+  width: fit-content;
 }
 .gold-payment-container .top-content {
   color: #0A1D32;
@@ -649,12 +651,14 @@ img.gold-offer-slide-img {
     color: var(--secondary);
     text-transform: uppercase;
     font-weight: 800;
+    cursor: pointer;
   }
   .address-tile {
     display: flex;
       justify-content: start;
       margin: 10px 15px 20px 15px;
       padding: 20px 10px 10px 10px;
+      cursor: pointer;
       .right-name {
         color: #0A1C32;
         font-size: 14px;
@@ -693,11 +697,13 @@ img.gold-offer-slide-img {
     color: var(--secondary);
     text-transform: uppercase;
     font-weight: 800;
+    cursor: pointer;
   }
 
  .bank-tile {
     margin: 10px 15px 20px 15px;
     padding: 20px 10px 10px 10px;
+    cursor: pointer;
     // display: flex;
     // align-items: center;
     // justify-content: start;
@@ -799,6 +805,10 @@ img.gold-offer-slide-img {
   .address {
     margin: 15px 0 20px 0;
   }
+
+  .shipping-address {
+    cursor: pointer;
+  }
   
 }
 
@@ -889,6 +899,7 @@ img.gold-offer-slide-img {
   margin: 0 auto;
   width: auto;
   margin: 0 0 30px 0;
+  cursor: pointer;
 }
 
 .gold-aw-tab {
@@ -934,24 +945,25 @@ img.gold-offer-slide-img {
   font-weight: 500;
 }
 
-.gold-how-steps .top-tile {
-  display: flex;
-  justify-content: space-between;
-}
-.gold-how-steps .top-title {
-  color: #0A1C32;
-  font-size: 14px;
-  font-weight: 600;
-}
-.gold-how-steps .top-icon {
-  width: 14px;
-}
+
 .gold-how-steps {
   margin: 50px 0 40px 0;
   border-top: 1px solid #EDEDED;
   border-bottom: 1px solid #EDEDED;
   padding: 10px 0 10px 0;
-  cursor: pointer;
+
+  .top-tile {
+    display: flex;
+    justify-content: space-between;
+  }
+  .top-title {
+    color: #0A1C32;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .top-icon {
+    width: 14px;
+  }
 }
 .gold-bottom-secure-info .content {
   color: #767E86;
@@ -997,6 +1009,7 @@ img.gold-offer-slide-img {
     display: flex;
     justify-content: space-between;
     align-items: end;
+    cursor: pointer;
 
     .block2 {
       color: #767E86;
@@ -1012,6 +1025,7 @@ img.gold-offer-slide-img {
   .gold-locker-tab.selected {
     background: white;
     color: #3792FC;
+    cursor: unset;
 
     .block2 {
       color: #0A1C32;
@@ -1151,6 +1165,7 @@ img.gold-offer-slide-img {
   }
   .infoimage-block1 {
     position: relative;
+    cursor: pointer;
     .inner {
       // position: absolute;
       // top: 50px;
@@ -1230,11 +1245,15 @@ img.gold-offer-slide-img {
       padding: 13px 0 13px 0;
     }
 
+    .highlight-text {
+      cursor: pointer;
+    }
     .tile2 {
       display: flex;
       align-items: center;
       border-bottom: 1px solid #EDEDED;
       padding: 13px 0 13px 0;
+      cursor: pointer;
       .title {
         color: #0A1D32;
         margin: 0 0 0 20px;
@@ -1370,6 +1389,7 @@ img.gold-offer-slide-img {
     padding: 0px 0 10px 20px;
     border-radius: 4px;
     margin: 0 0 20px 0;
+    cursor: pointer;
     .title {
       color: #0A1D32;
       font-weight: 400;

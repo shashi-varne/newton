@@ -106,10 +106,29 @@ body[data-device="web"] .Container {
 
 body[data-device="web"] #root .ContainerWrapper {
   height: 100% !important;
- }
+}
 
+body[data-device="web"] .FlexItem1-withProvider-footer {
+  flex: inherit;
+  cursor: pointer;
+}
 
+body[data-device="web"] .FlexItem2-withProvider-footer {
+  margin: 0 10px 0 10px;
+}
 
+body[data-device="web"] .FlexItem1-withProvider-footer .text-block-1 {
+  max-width: unset;
+}
+
+body[data-device="web"] #bottom-popup .MuiDialog-paper {
+  position: unset;
+  width: 100%;
+  bottom: unset;
+  left: unset;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
 
 .Container {
    padding: 20px 15px;

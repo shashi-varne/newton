@@ -476,7 +476,7 @@ class GoldSellHome extends Component {
               </div>
             </div>
 
-            <div className="gold-how-steps" onClick={() => this.showHideSteps()}>
+            <div className="gold-how-steps pointer" onClick={() => this.showHideSteps()}>
                 <div className="top-tile">
                   <div className="top-title">
                   How to sell digital gold?
