@@ -11,7 +11,7 @@ import {
   inrFormatDecimal2
 } from 'utils/validators';
 
-import { isUserRegistered, gold_providers } from '../../constants';
+import { isUserRegistered, gold_providers, getTransactionStatus, getUniversalTransStatus } from '../../constants';
 
 class GoldLocker extends Component {
   constructor(props) {
@@ -40,6 +40,8 @@ class GoldLocker extends Component {
 
   setCssMapper = (data) => {
     for (var i=0; i< data.length; i++) {
+      data[i].order_details.orderType = data[i].transaction_type;
+      data[i].order_details.final_status = getTransactionStatus(data[i].order_details);
       data[i].cssMapper = this.statusMapper(data[i]);
     }
 
@@ -48,9 +50,11 @@ class GoldLocker extends Component {
 
   setProviderData(provider, result1, result2, result3) {
     let isRegistered = isUserRegistered(result1);
-    let data = result1.gold_user_info.provider_info;
+    isRegistered = true;
+    
+    let data = result1.gold_user_info.provider_info || {};
     data.isRegistered = isRegistered;
-    data.user_info = result1.gold_user_info.user_info
+    data.user_info = result1.gold_user_info.user_info || {};
     data.sell_value = ((result2.sell_info.plutus_rate) * (data.gold_balance || 0)).toFixed(2) || 0;
     data.provider = provider;
     data.local = gold_providers[provider];
@@ -62,9 +66,13 @@ class GoldLocker extends Component {
     data.report = report;
     data.report.orders = this.setCssMapper(data.report.orders);
 
+    if(data.user_info.total_balance) {
+      this.setState({
+        user_info: data.user_info
+      });
+    }
     this.setState({
-      [provider + '_info']: data,
-      user_info: data.user_info
+      [provider + '_info']: data
     });
 
     if (provider === 'safegold') {
@@ -161,8 +169,9 @@ class GoldLocker extends Component {
   }
 
   statusMapper(data) {
+
     let cssMapper = {
-      'init': {
+      'pending': {
         color: 'yellow',
         disc: 'Pending'
       },
@@ -173,25 +182,14 @@ class GoldLocker extends Component {
       'failed': {
         color: 'red',
         disc: 'Failed'
-      },
-      'rejected': {
-        color: 'red',
-        disc: 'Rejected'
-      },
-      'cancelled': {
-        color: 'red',
-        disc: 'Cancelled'
       }
     }
 
-
     let type = data.transaction_type;
-    let statusKey = 'plutus_' + type + '_order_status';
+    
+    let uniStatus = getUniversalTransStatus(data.order_details);
+    let obj = cssMapper[uniStatus];
 
-    if(type === 'delivery') {
-      statusKey = 'order_status';
-    }
-    let obj = cssMapper[data.order_details[statusKey]] || cssMapper['init'];
     
     let title = '';
     if(type === 'buy') {

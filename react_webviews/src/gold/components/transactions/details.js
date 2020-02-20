@@ -13,6 +13,14 @@ import {
 import SVG from 'react-inlinesvg';
 import ic_send_email from 'assets/ic_send_email.svg';
 import DotDotLoader from '../../../common/ui/DotDotLoader';
+import {getTransactionStatus, setTransationsSteps, getUniversalTransStatus} from '../../constants';
+
+let icon_mapper = {
+  'pending': 'not_done_yet_step',
+  'init': 'not_done_yet_step',
+  'failed': 'text_error_icon',
+  'success': 'check_green_pg'
+};
 
 class GoldTransactionDetail extends Component {
   constructor(props) {
@@ -34,13 +42,14 @@ class GoldTransactionDetail extends Component {
       topStatusData: {},
       order: {
         cssMapper: {}
-      }
+      },
+      icon_mapper: icon_mapper
     }
   }
 
   statusMapper = (data)  => {
     let cssMapper = {
-      'init': {
+      'pending': {
         color: 'yellow',
         disc: 'Pending'
       },
@@ -51,25 +60,12 @@ class GoldTransactionDetail extends Component {
       'failed': {
         color: 'red',
         disc: 'Failed'
-      },
-      'rejected': {
-        color: 'red',
-        disc: 'Rejected'
-      },
-      'cancelled': {
-        color: 'red',
-        disc: 'Cancelled'
       }
     }
 
     let type = this.state.orderType;
-    let statusKey = 'plutus_' + type + '_order_status';
-    if(type === 'delivery') {
-      statusKey = 'order_status';
-    }
-    
-    let obj = cssMapper[data[statusKey]] || cssMapper['init'];
-
+    let uniStatus = getUniversalTransStatus(data);
+    let obj = cssMapper[uniStatus];
     
     let title = '';
     if(type === 'buy') {
@@ -91,16 +87,6 @@ class GoldTransactionDetail extends Component {
 
   async componentDidMount() {
 
-    let journeyData = [
-      { 'title': 'Purchase initiated', 'icon': 'check_green_pg', 'status': 'success' },
-      { 'title': 'Purchase initiated', 'icon': 'text_error_icon', 'status': 'error' },
-      { 'title': 'Purchase initiated', 'icon': 'not_done_yet_step', 'status': 'pending' }
-    ];
-
-    this.setState({
-      journeyData: journeyData
-    })
-
     this.setState({
       show_loader: true,
     });
@@ -120,10 +106,17 @@ class GoldTransactionDetail extends Component {
         '&order_type=' + orderType);
       if (res.pfwresponse.status_code === 200) {
         let order = res.pfwresponse.result || {};
+
+        order.orderType = this.state.orderType;
+        order.provider = this.state.provider;
+
         order.cssMapper = this.statusMapper(order);
+        order.final_status = getTransactionStatus(order);
+        let journeyData = setTransationsSteps(order);
         this.setState({
           show_loader: false,
-          order: order
+          order: order,
+          journeyData: journeyData
         });
       } else {
         this.setState({
@@ -182,12 +175,15 @@ class GoldTransactionDetail extends Component {
   renderJourney = (props, index) => {
     return (
       <div key={index} className="tile" style={{ borderLeft: this.getJourneyBorder(props, index) }}>
-        <img
-          className="icon"
-          src={require(`assets/${props.icon}.svg`)} alt="Gold" />
-        {props.status === 'pending' &&
-          <p className="text-on-img">{index + 1}</p>
-        }
+        <div style={{position: 'relative'}}>
+          <img
+            className="icon"
+            src={require(`assets/${this.state.icon_mapper[props.status]}.svg`)} alt="Gold" 
+          />
+            {props.status === 'pending' &&
+              <p className="text-on-img">{index + 1}</p>
+            }
+        </div>
         <div className="title">
           {props.title}
         </div>
@@ -309,7 +305,7 @@ class GoldTransactionDetail extends Component {
                 Tracking URL
                 </div>
               <div className="subtitle">
-                {this.state.order.courier_tracking_id}
+                {(this.state.order.courier_tracking_id || '-')}
               </div>
             </div>
           </div>

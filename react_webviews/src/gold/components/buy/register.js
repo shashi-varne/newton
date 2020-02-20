@@ -325,12 +325,12 @@ class GoldRegister extends Component {
         show_loader: true
       });
 
-      let options = this.state.user_info;
+      let options = {};
 
       options.name = this.state.name;
       options.mobile_no = this.state.mobile_no;
       options.email = this.state.email;
-      options.pin_code = this.state.pin_code;
+      options.pin_code = this.state.user_info.pin_code;
 
       try {
         const res = await Api.post('/api/gold/user/account/' + this.state.provider, options);

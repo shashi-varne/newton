@@ -142,9 +142,9 @@ class GoldPanDataClass extends Component {
                 let result = res.pfwresponse.result;
                 let isRegistered = isUserRegistered(result);
 
-                let user_info = result.gold_user_info.user_info;
+                let user_info = result.gold_user_info.user_info || {};
                 this.setState({
-                    provider_info: result.gold_user_info.provider_info,
+                    provider_info: result.gold_user_info.provider_info || {},
                     user_info: user_info,
                     isRegistered: isRegistered,
                     pan_number: user_info.pan_number || ''

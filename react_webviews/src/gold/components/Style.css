@@ -915,25 +915,25 @@ img.gold-offer-slide-img {
 .generic-progress-vertical .tile {
   display: flex;
   border-left: 1px solid #ececec;
-  padding: 0 0 20px 0;
-  justify-content: space-between;
+  padding: 0px 0 30px 0px;
+  justify-content: start;
 }
 .generic-progress-vertical .tile .title {
   color: #0a1d32;
   font-size: 14px;
-  margin: 0 0 0 15px;
+  margin: 0 0 0 30px;
   font-weight: 400;
 }
 .generic-progress-vertical img {
   width: 18px;
-  position: relative;
+  position: absolute;
   left: -9px;
   padding: 0 0 20px 0;
 }
 .generic-progress-vertical .text-on-img {
-  position: relative;
-  top: -10px;
-  left: -22px;
+  position: absolute;
+  top: -12px;
+  left: -3px;
 }
 .common-hr {
   border: 1px solid #ededed;

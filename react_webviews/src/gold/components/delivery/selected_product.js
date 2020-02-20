@@ -148,7 +148,7 @@ class DeliverySelectedProduct extends Component {
     return (
       <div key={index}
         className="gold-offer-slider">
-        <img className="gold-offer-slide-img" style={{height:380}}
+        <img className="gold-offer-slide-img" style={{height:300}}
           src={props} alt="Gold Offer" />
       </div>
     )

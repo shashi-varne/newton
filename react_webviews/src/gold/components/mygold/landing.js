@@ -114,16 +114,22 @@ class GoldSummary extends Component {
 
   setProviderData(provider, result1, result2) {
     let isRegistered = isUserRegistered(result1);
-    let data = result1.gold_user_info.provider_info;
+    let data = result1.gold_user_info.provider_info || {};
     data.isRegistered = isRegistered;
-    data.user_info = result1.gold_user_info.user_info
+    data.user_info = result1.gold_user_info.user_info || {}
     data.sell_value = ((result2.sell_info.plutus_rate) * (data.gold_balance || 0)).toFixed(2) || 0;
     data.provider = provider;
     data.local = gold_providers[provider];
+
+    if(data.user_info.total_balance) {
+      this.setState({
+        user_info: data.user_info
+      });
+    }
     this.setState({
-      [provider + '_info']: data,
-      user_info: data.user_info
+      [provider + '_info']: data
     });
+
 
     if(provider === 'safegold') {
       this.setState({

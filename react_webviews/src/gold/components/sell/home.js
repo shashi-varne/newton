@@ -135,11 +135,11 @@ class GoldSellHome extends Component {
 
       const res = await Api.get('/api/gold/user/account/' + this.state.provider);
       if (res.pfwresponse.status_code === 200) {
-        let result = res.pfwresponse.result;
+        let result = res.pfwresponse.result || {};
         let isRegistered = isUserRegistered(result);
         this.setState({
-          provider_info: result.gold_user_info.provider_info,
-          user_info: result.gold_user_info.user_info,
+          provider_info: result.gold_user_info.provider_info || {},
+          user_info: result.gold_user_info.user_info || {},
           isRegistered: isRegistered
         });
 

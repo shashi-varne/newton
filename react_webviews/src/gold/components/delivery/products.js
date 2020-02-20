@@ -43,8 +43,8 @@ class GoldDeliveryProducts extends Component {
         let result = res.pfwresponse.result;
         isRegistered = isUserRegistered(result);
         this.setState({
-          provider_info: result.gold_user_info.provider_info,
-          user_info: result.gold_user_info.user_info,
+          provider_info: result.gold_user_info.provider_info || {},
+          user_info: result.gold_user_info.user_info || {},
           // maxWeight: parseFloat(result.gold_user_info.safegold_info.gold_balance).toFixed(4),
           isRegistered: isRegistered
         });

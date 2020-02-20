@@ -131,10 +131,12 @@ class GoldBuyHome extends Component {
 
         let result = res.pfwresponse.result;
         let isRegistered = isUserRegistered(result);
+        let user_info = result.gold_user_info.user_info || {};
+        let provider_info = result.gold_user_info.provider_info || {};
         this.setState({
-          provider_info: result.gold_user_info.provider_info,
-          user_info: result.gold_user_info.user_info,
-          maxWeight: parseFloat(((30 - result.gold_user_info.provider_info.gold_balance) || 30).toFixed(4)),
+          provider_info: provider_info,
+          user_info: user_info,
+          maxWeight: parseFloat(((30 - provider_info.gold_balance) || 30).toFixed(4)),
           isRegistered: isRegistered,
           enableInputs: true
         });
