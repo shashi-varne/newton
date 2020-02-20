@@ -137,7 +137,7 @@ class About extends Component {
     }
     let redirect_url = getConfig().redirect_url;
     let current_url = window.location.origin + '/e-mandate/enps/redirection' + getConfig().searchParams;
-    var pgLink = getConfig().base_url + 'page/nps/user/esign/' + this.state.pc_urlsafe;
+    var pgLink = getConfig().base_url + '/page/nps/user/esign/' + this.state.pc_urlsafe;
     if (!redirect_url) {
       if (getConfig().app === 'ios') {
         nativeCallback({
