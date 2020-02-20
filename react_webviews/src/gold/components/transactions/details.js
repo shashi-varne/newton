@@ -19,7 +19,7 @@ let icon_mapper = {
   'pending': 'not_done_yet_step',
   'init': 'not_done_yet_step',
   'failed': 'text_error_icon',
-  'success': 'check_green_pg'
+  'success': 'ic_completed'
 };
 
 class GoldTransactionDetail extends Component {
@@ -48,6 +48,7 @@ class GoldTransactionDetail extends Component {
   }
 
   statusMapper = (data)  => {
+
     let cssMapper = {
       'pending': {
         color: 'yellow',
@@ -77,7 +78,7 @@ class GoldTransactionDetail extends Component {
     }
 
     if(type === 'delivery') {
-      title = 'Delivery of ' + data.description; 
+      title = 'Delivery of ' + (data.description || ''); 
     }
 
     obj.title = title;
@@ -102,16 +103,16 @@ class GoldTransactionDetail extends Component {
     })
 
     try {
-      const res = await Api.get('/api/gold/report/orders/safegold?transaction_id=' + transact_id +
-        '&order_type=' + orderType);
+      const res = await Api.get('/api/gold/report/orders/' + this.state.provider +
+       '?transaction_id=' + transact_id + '&order_type=' + orderType);
       if (res.pfwresponse.status_code === 200) {
         let order = res.pfwresponse.result || {};
 
         order.orderType = this.state.orderType;
         order.provider = this.state.provider;
 
-        order.cssMapper = this.statusMapper(order);
         order.final_status = getTransactionStatus(order);
+        order.cssMapper = this.statusMapper(order);
         let journeyData = setTransationsSteps(order);
         this.setState({
           show_loader: false,
@@ -164,9 +165,9 @@ class GoldTransactionDetail extends Component {
 
   getJourneyBorder = (props, index) => {
     if (index === this.state.journeyData.length - 1) {
-      return 'none';
+      return '2px solid white';
     } else if (props.status === 'success') {
-      return '1px solid ' + getConfig().primary;
+      return '2px solid ' + getConfig().primary;
     }
 
     return '';
@@ -176,10 +177,19 @@ class GoldTransactionDetail extends Component {
     return (
       <div key={index} className="tile" style={{ borderLeft: this.getJourneyBorder(props, index) }}>
         <div style={{position: 'relative'}}>
-          <img
-            className="icon"
-            src={require(`assets/${this.state.icon_mapper[props.status]}.svg`)} alt="Gold" 
-          />
+          {props.status === 'success' &&
+           <SVG
+            style={{backgroundColor: '#fff',zIndex:111}}
+            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+            src={require(`assets/${this.state.icon_mapper[props.status]}.svg`)}
+            className="icon normal-step-icon"
+          />}
+          {props.status !== 'success' &&
+           <SVG
+            // preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+            src={require(`assets/${this.state.icon_mapper[props.status]}.svg`)}
+            className="icon normal-step-icon"
+          />}
             {props.status === 'pending' &&
               <p className="text-on-img">{index + 1}</p>
             }
@@ -195,6 +205,12 @@ class GoldTransactionDetail extends Component {
   async emailInvoice() {
 
     let path = this.state.order.invoice_link;
+
+    if(!path) {
+      toast('Invoice not generated, please try after sometime', 'error');
+      return;
+    }
+
     this.setState({
       invoiceLoading: true,
     });
@@ -315,7 +331,7 @@ class GoldTransactionDetail extends Component {
           <img
             className="icon"
             src={require(`assets/${this.state.productName}/status_sip_icon.svg`)} alt="Gold" />
-          <div className="block2" style={{ margin: '0px 0 0 8px', position: 'relative', top: '-18px' }}>
+          <div className="block2" style={{ margin: '0px 0 0 15px', position: 'relative', top: '-18px' }}>
             <div className="title">
               {this.state.orderType === 'delivery' && <span>Delivery</span>}  Status
               </div>

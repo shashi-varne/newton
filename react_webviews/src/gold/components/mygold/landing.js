@@ -307,7 +307,7 @@ class GoldSummary extends Component {
           Total value
           </div>
           <div className="highlight-text2" style={{margin: '4px 0 0 8px'}}>
-          {this.state.user_info.total_balance} gms = { inrFormatDecimal2(parseFloat(this.state.mmtc_info.sell_value) + parseFloat(this.state.safegold_info.sell_value))}
+          {this.state.user_info.total_balance || 0} gms = { inrFormatDecimal2(parseFloat(this.state.mmtc_info.sell_value) + parseFloat(this.state.safegold_info.sell_value))}
           </div>
         </div>
 

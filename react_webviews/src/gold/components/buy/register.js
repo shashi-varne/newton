@@ -336,19 +336,16 @@ class GoldRegister extends Component {
         const res = await Api.post('/api/gold/user/account/' + this.state.provider, options);
 
         if (res.pfwresponse.status_code === 200) {
+          
+        } else if(res.pfwresponse.result.mobile_verified === false) {
           this.verifyMobile();
         } else {
 
-          if (res.pfwresponse.result.error !== 'User with the same mobile number exists!' &&
-            (this.state.user_info.mobile_verified === false || res.pfwresponse.result.mobile_verified === false)) {
-            this.verifyMobile();
-          } else {
-            this.setState({
-              show_loader: false
-            });
-            toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-              'Something went wrong', 'error');
-          }
+          this.setState({
+            show_loader: false
+          });
+          toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+            'Something went wrong', 'error');
 
         }
       } catch (err) {

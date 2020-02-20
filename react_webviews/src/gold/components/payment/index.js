@@ -216,6 +216,7 @@ class Payment extends Component {
     let path = this.state.report.invoice_link;
 
     if(!path) {
+      toast('Invoice not generated, please try after sometime', 'error');
       return;
     }
 

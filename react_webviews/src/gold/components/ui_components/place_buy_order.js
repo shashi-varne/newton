@@ -38,7 +38,9 @@ class PlaceBuyOrderClass extends Component {
 
         var options = {
             plutus_rate_id: this.state.buyData.goldBuyInfo.plutus_rate_id,
-            buy_price: parseFloat(this.state.buyData.amount_selected)
+            buy_price: parseFloat(this.state.buyData.amount_selected),
+            buy_weight: this.state.buyData.weight_selected,
+            inputMode: this.state.buyData.inputMode
         }
 
         this.props.parent.updateParent('show_loader', true);
@@ -59,25 +61,6 @@ class PlaceBuyOrderClass extends Component {
                 this.redirect(payment_link);
                 return;
 
-            } else if (res.pfwresponse.result.is_gold_rate_changed) {
-                let new_rate = res.pfwresponse.result.new_rate;
-                let amountUpdated, weightUpdated;
-                if (this.state.isAmount) {
-                    amountUpdated = this.state.amount;
-                    weightUpdated = this.calculate_gold_wt(new_rate.plutus_rate,
-                        new_rate.applicable_tax, this.state.amount);
-                } else {
-                    weightUpdated = this.state.weight;
-                    amountUpdated = this.calculate_gold_amount(new_rate.plutus_rate,
-                        new_rate.applicable_tax, this.state.weight);
-                }
-                this.setState({
-                    show_loader: false,
-                    amountUpdated: amountUpdated,
-                    weightUpdated: weightUpdated,
-                    new_rate: new_rate,
-                    openPopup: true
-                });
             } else {
                 this.setState({
                     show_loader: false

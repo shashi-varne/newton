@@ -232,8 +232,8 @@ export function getTransactionStatus(order) {
                 }
 
                 if (order.realization_status === 'realized' &&
-                    order.provider_buy_order_status === 'success') {
-                    return 'processed';
+                    order.provider_buy_order_status === 'confirmed') {
+                    return 'success';
                 }
             }
 
@@ -284,13 +284,6 @@ export function getTransactionStatus(order) {
             if (order.order_status === 'failed') {
                 return 'payment_failed';
             }
-
-            // if (!order.delivery_status || order.delivery_status === 'package_pending' ||
-            //     order.delivery_status === 'failed' || order.delivery_status === '-') {
-            //     if (order.order_status === 'success') {
-            //         return 'payment_success';
-            //     }
-            // }
 
             if (order.order_status === 'success') {
                 if (order.delivery_status === 'packed') {
@@ -415,6 +408,7 @@ export function changeArrayKeyValue(data, key, value) {
 }
 
 export function setTransationsSteps(order) {
+    
     let type = order.orderType;
 
     let final_status = order.final_status;

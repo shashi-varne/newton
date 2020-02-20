@@ -141,6 +141,8 @@ class SellSelectBank extends Component {
     var options = {
       "plutus_rate_id": sellData.goldSellInfo.plutus_rate_id,
       "sell_price": sellData.amount_selected,
+      "sell_weight": sellData.weight_selected,
+      "inputMode": sellData.inputMode,
       'bank_id': selectedBank.bank_id
     }
 

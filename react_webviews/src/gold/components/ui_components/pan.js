@@ -68,7 +68,8 @@ class GoldPanDataClass extends Component {
             provider: this.props.parent.props.match.params.provider,
             orderType: this.props.parent.state.orderType,
             pan_editable_status: 'editable',
-            pan_bank_flow: getUrlParams().pan_bank_flow || false
+            pan_bank_flow: getUrlParams().pan_bank_flow || false,
+            user_info: {}
         }
 
         this.refreshData = this.refreshData.bind(this);
@@ -298,6 +299,8 @@ class GoldPanDataClass extends Component {
                         <Input
                             error={(this.state.pan_number_error) ? true : false}
                             helperText={this.state.pan_number_error}
+                            disabled={(this.state.user_info.pan_status === 'APPROVED' || 
+                            this.state.user_info.pan_status === 'approved' ? true : false)}
                             type="text"
                             width="40"
                             label="Enter PAN"

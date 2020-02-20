@@ -893,7 +893,7 @@ img.gold-offer-slide-img {
   display: flex;
 }
 .gold-trans-detail-card .block2 {
-  margin: 0 0 0 8px;
+  margin: 0 0 0 15px;
 }
 .gold-trans-detail-card .subtitle {
   color: #767e86;
@@ -914,7 +914,7 @@ img.gold-offer-slide-img {
 }
 .generic-progress-vertical .tile {
   display: flex;
-  border-left: 1px solid #ececec;
+  border-left: 2px solid #ececec;
   padding: 0px 0 30px 0px;
   justify-content: start;
 }
@@ -932,8 +932,13 @@ img.gold-offer-slide-img {
 }
 .generic-progress-vertical .text-on-img {
   position: absolute;
-  top: -12px;
-  left: -3px;
+  top: -14px;
+  left: -4px;
+}
+.generic-progress-vertical .normal-step-icon {
+  position: absolute;
+  top: -2px;
+  left: -9px;
 }
 .common-hr {
   border: 1px solid #ededed;

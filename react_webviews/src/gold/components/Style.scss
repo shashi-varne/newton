@@ -1046,32 +1046,34 @@ img.gold-offer-slide-img {
 .gold-trans-detail-card {
   display: flex;
   margin: 20px 0 30px 0;
+
+  .title {
+    color: #0A1C32;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  
+  .gold-trans-card {
+    display: flex;
+  }
+  
+  .block2 {
+    margin: 0 0 0 15px;
+  }
+  
+  .subtitle {
+    color: #767E86;
+    font-size: 13px;
+    margin: 2px 0 0 0;
+    font-weight: 400;
+  }
+  
+  .icon {
+    width: 18px;
+  }
 }
 
-.gold-trans-detail-card .title {
-  color: #0A1C32;
-  font-size: 12px;
-  font-weight: 500;
-}
 
-.gold-trans-detail-card .gold-trans-card {
-  display: flex;
-}
-
-.gold-trans-detail-card .block2 {
-  margin: 0 0 0 8px;
-}
-
-.gold-trans-detail-card .subtitle {
-  color: #767E86;
-  font-size: 13px;
-  margin: 2px 0 0 0;
-  font-weight: 400;
-}
-
-.gold-trans-detail-card .icon {
-  width: 18px;
-}
 .gold-send-invoice {
   display: flex;
   align-items: center;
@@ -1081,32 +1083,43 @@ img.gold-offer-slide-img {
 
 .generic-progress-vertical {
   margin: 20px 0 0 0;
-}
-.generic-progress-vertical .tile {
-  display: flex;
-  border-left: 1px solid #ECECEC;
-  padding:0px 0 30px 0px;
-  justify-content: start;
-}
 
-.generic-progress-vertical .tile .title {
-    color: #0A1D32;
-    font-size: 14px;
-    margin: 0 0 0 30px;
-    font-weight: 400;
-}
+  .tile {
+    display: flex;
+    border-left: 2px solid #ECECEC;
+    padding:0px 0 30px 0px;
+    justify-content: start;
+  }
+  
+  .tile .title {
+      color: #0A1D32;
+      font-size: 14px;
+      margin: 0 0 0 30px;
+      font-weight: 400;
+  }
+  
+  img {
+    width: 18px;
+    position: absolute;
+      left: -9px;
+    padding: 0 0 20px 0;
+  }
+  .text-on-img {
+    position: absolute;
+    top: -14px;
+    left: -4px;
+  }
 
-.generic-progress-vertical img {
-  width: 18px;
-  position: absolute;
+  .success-step {
+
+  }
+  .normal-step-icon {
+    position: absolute;
+    top: -2px;
     left: -9px;
-  padding: 0 0 20px 0;
+  }
 }
-.generic-progress-vertical .text-on-img {
-  position: absolute;
-  top: -12px;
-    left: -3px;
-}
+
 
 .common-hr {
   border: 1px solid #EDEDED;

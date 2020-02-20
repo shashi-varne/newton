@@ -50,8 +50,6 @@ class GoldLocker extends Component {
 
   setProviderData(provider, result1, result2, result3) {
     let isRegistered = isUserRegistered(result1);
-    isRegistered = true;
-    
     let data = result1.gold_user_info.provider_info || {};
     data.isRegistered = isRegistered;
     data.user_info = result1.gold_user_info.user_info || {};
@@ -169,7 +167,6 @@ class GoldLocker extends Component {
   }
 
   statusMapper(data) {
-
     let cssMapper = {
       'pending': {
         color: 'yellow',
@@ -201,7 +198,7 @@ class GoldLocker extends Component {
     }
 
     if(type === 'delivery') {
-      title = 'Delivery of ' + data.order_details.description; 
+      title = 'Delivery of ' + (data.order_details.description || ''); 
     }
 
     obj.title = title;
@@ -352,7 +349,7 @@ class GoldLocker extends Component {
                 Total value
               </div>
               <div className="highlight-text2" style={{ margin: '4px 0 0 8px' }}>
-                {this.state.user_info.total_balance} gms = {inrFormatDecimal2(parseFloat(this.state.mmtc_info.sell_value) + parseFloat(this.state.safegold_info.sell_value))}
+                {this.state.user_info.total_balance || 0} gms = {inrFormatDecimal2(parseFloat(this.state.mmtc_info.sell_value) + parseFloat(this.state.safegold_info.sell_value))}
               </div>
             </div>
 
