@@ -127,6 +127,10 @@ class GoldRegister extends Component {
           email: email || "",
           pin_code: pin_code || "",
           mobile_no: mobile_no || "",
+          name_disabled: name || false,
+          email_disabled: email || false,
+          pin_code_disabled: pin_code || false,
+          mobile_no_disabled: mobile_no || false,
         });
 
 
@@ -388,6 +392,7 @@ class GoldRegister extends Component {
             <Input
               error={(this.state.name_error) ? true : false}
               helperText={this.state.name_error}
+              disabled={this.state.name_disabled}
               type="text"
               width="40"
               label="Name"
@@ -401,6 +406,7 @@ class GoldRegister extends Component {
             <Input
               error={(this.state.mobile_no_error) ? true : false}
               helperText={this.state.mobile_no_error}
+              disabled={this.state.mobile_no_disabled}
               type="number"
               width="40"
               label="Mobile"
@@ -414,6 +420,7 @@ class GoldRegister extends Component {
             <Input
               error={(this.state.email_error) ? true : false}
               helperText={this.state.email_error}
+              disabled={this.state.email_disabled}
               type="email"
               width="40"
               label="Email"
