@@ -30,10 +30,10 @@ class DeliveryIntro extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'GOLD',
+      "event_name": 'gold_investment_flow',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'Delivery Order Summary'
+        "screen_name": 'delivery_journey'
       }
     };
 
@@ -58,6 +58,7 @@ class DeliveryIntro extends Component {
   }
 
   handleClick =() => {
+    this.sendEvents('next');
     this.navigate('delivery-products');
   }
 

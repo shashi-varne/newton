@@ -72,7 +72,6 @@ class GoldPanDataClass extends Component {
             user_info: {}
         }
 
-        this.refreshData = this.refreshData.bind(this);
     }
 
     componentWillMount() {
@@ -114,19 +113,6 @@ class GoldPanDataClass extends Component {
                 openPriceChangedDialog: false
             })
         }
-    }
-
-    refreshData() {
-
-        if (this.state.timeAvailable > 0) {
-            this.handleClick();
-        } else {
-            this.setState({
-                show_loader: true,
-                openRefreshModule: true
-            })
-        }
-
     }
 
     async componentDidMount() {
@@ -187,13 +173,15 @@ class GoldPanDataClass extends Component {
 
 
 
-    sendEvents(user_action) {
+    sendEvents(user_action, data={}) {
         let eventObj = {
-            "event_name": 'GOLD',
+            "event_name": 'gold_investment_flow',
             "properties": {
                 "user_action": user_action,
-                "screen_name": 'Registeration',
-                'pan_number': this.state.pan_number_error ? 'invalid' : this.state.pan_number ? 'valid' : 'empty',
+                "screen_name": 'pan_entry',
+                'flow': this.state.orderType,
+                'pan_entered': this.state.pan_number ? 'yes' : 'no',
+                'price_summary_clicked': data.price_summary_clicked ? 'yes' : 'no'
             }
         };
 
@@ -207,6 +195,7 @@ class GoldPanDataClass extends Component {
     handleClick = async () => {
 
         this.handleClose();
+        this.sendEvents('next');
 
         if (!validateEmpty(this.state.pan_number)) {
             this.setState({
@@ -267,6 +256,7 @@ class GoldPanDataClass extends Component {
     }
 
     handleClick2 = () => {
+        this.sendEvents('next', {price_summary_clicked: true})
         this.setState({
             openConfirmDialog: true
         })

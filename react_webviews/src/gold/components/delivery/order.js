@@ -91,10 +91,11 @@ class DeliveryOrder extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'GOLD',
+      "event_name": 'gold_investment_flow',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'Delivery Order Summary'
+        "screen_name": 'delivery_summary',
+        'address_check': this.state.address_check ? 'yes' : 'no'
       }
     };
 
@@ -140,7 +141,8 @@ class DeliveryOrder extends Component {
 
   showHideAddress() {
     this.setState({
-      showAddress: !this.state.showAddress
+      showAddress: !this.state.showAddress,
+      address_check: true
     })
   }
 

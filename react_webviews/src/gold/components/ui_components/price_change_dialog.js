@@ -53,6 +53,16 @@ class PriceChangeClass extends Component {
         )
     }
 
+    refreshData = () => {
+        if (this.props.parent.state.timeAvailable > 0) {
+            this.props.parent.handleClose();
+        } else {
+
+            this.props.parent.updateParent('show_loader', true);
+            this.props.parent.updateParent('openRefreshModule', true);
+        }
+    }
+
     renderConfirmDialog = () => {
         return (
           <Dialog
@@ -88,7 +98,7 @@ class PriceChangeClass extends Component {
                 <div className="mid-buttons">
                   <WithProviderLayout type="default"
                      handleClick2={this.props.parent.handleClose}
-                     handleClick={this.props.parent.refreshData}
+                     handleClick={this.refreshData}
                      buttonTitle={this.props.parent.state.timeAvailable > 0 ? 'OK' : this.props.parent.state.priceChangeDialogData.buttonTitle}
                      buttonData= {this.props.parent.state.priceChangeDialogData.buttonData}
                   />

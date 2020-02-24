@@ -56,7 +56,8 @@ class ConfirmDialogClass extends Component {
                 <div className="mid-buttons">
                   <WithProviderLayout type="default"
                      handleClick2={this.props.parent.handleClose}
-                     handleClick={this.props.parent.handleClick}
+                    //  handleClick={this.props.parent.handleClick}
+                    handleClick={this.props.parent.handleClose}
                      buttonTitle={this.props.parent.state.confirmDialogData.buttonTitle}
                      buttonData= {this.props.parent.state.confirmDialogData.buttonData}
                   />

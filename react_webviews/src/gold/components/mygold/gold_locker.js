@@ -142,16 +142,14 @@ class GoldLocker extends Component {
 
 
 
-  sendEvents(user_action, product_name) {
+  sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'GOLD',
+      "event_name": 'gold_investment_flow',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'Gold Locker',
-        "trade": this.state.value === 0 ? 'sell' : 'delivery',
-        "amount": this.state.amountError ? 'invalid' : this.state.amount ? 'valid' : 'empty',
-        "weight": this.state.weightError ? 'invalid' : this.state.weight ? 'valid' : 'empty',
-        "product_name": product_name
+        "screen_name": 'gold_locker',
+        "provider_selected": this.state.provider,
+        "total_balance": this.state.selected_provider_info.gold_balance
       }
     };
 
@@ -206,6 +204,7 @@ class GoldLocker extends Component {
     let searchParams = getConfig().searchParams;
 
     if(data.pan_bank_flow) {
+      this.navigate('pan_bank_card');
       searchParams += '&pan_bank_flow=' + data.pan_bank_flow
     }
     this.props.history.push({
@@ -292,6 +291,7 @@ class GoldLocker extends Component {
 
   redirectCards = (data) => {
 
+    this.sendEvents('trans_card');
     let pathname = this.state.selected_provider_info.provider + '/' + data.transaction_type + 
                     '/transaction/' + data.order_details.provider_txn_id;
     this.navigate(pathname);

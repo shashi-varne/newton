@@ -80,19 +80,6 @@ class SellAddEditBank extends Component {
     }
   }
 
-  refreshData = () => {
-
-    if (this.state.timeAvailable > 0) {
-      this.handleClick();
-    } else {
-      this.setState({
-        show_loader: true,
-        openRefreshModule: true
-      })
-    }
-
-  }
-
   async componentDidMount() {
     this.onload();
     try {
@@ -219,13 +206,15 @@ class SellAddEditBank extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'GOLD',
+      "event_name": 'gold_investment_flow',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'Sell Bank Details',
-        'account_no': this.state.account_no_error ? 'invalid' : this.state.account_no ? 'valid' : 'empty',
-        'confirm_account_no': this.state.confirm_account_no_error ? 'invalid' : this.state.confirm_account_no ? 'valid' : 'empty',
-        'ifsc_code': this.state.ifsc_code_error ? 'invalid' : this.state.ifsc_code ? 'valid' : 'empty'
+        "screen_name": 'add_bank_account',
+        'account_no': this.state.formData.account_no ? 'yes' : 'no',
+        'confirm_account_no': this.state.formData.confirm_account_no ? 'yes' : 'no',
+        'ifsc_code': this.state.formData.ifsc_code ? 'yes' : 'no',
+        'account_type': this.state.formData.account_type ? 'yes' : 'no',
+        'update_type': this.props.edit ? 'edit' : 'add'
       }
     };
 

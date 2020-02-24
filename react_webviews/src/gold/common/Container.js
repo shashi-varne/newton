@@ -102,10 +102,10 @@ class Container extends Component {
     }
 
     if(forceBackState()) {
-      let state = forceBackState();
+      // let state = forceBackState();
       storageService().remove('forceBackState');
-      this.navigate(state);
-      return;
+      // this.navigate(state);
+      // return;
     }
 
     if(goBackMap(pathname)) {
@@ -151,7 +151,7 @@ class Container extends Component {
       case "/gold/my-gold":
       case "/gold/about":
       case "/gold/landing":
-        nativeCallback({ action: "native_back", events: this.getEvents("back") });
+        nativeCallback({ action: "native_back"});
         break;
       default:
         this.props.history.goBack();

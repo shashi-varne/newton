@@ -112,14 +112,18 @@ class GoldDeliveryProducts extends Component {
     });
   }
 
-  sendEvents(user_action, product_name) {
+  sendEvents(user_action, current_data={}) {
     let eventObj = {
-      "event_name": 'GOLD',
+      "event_name": 'gold_investment_flow',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'Gold Locker',
-        "product_name": product_name
+        "screen_name": 'select_gold_coin',
+        "provider": this.state.provider || '',
+        "faq_clicked": this.state.faq_clicked ? 'yes' : 'no',
+        "change_provider": current_data.change_provider ? 'yes' : 'no',
+        "selected_coin": current_data.select_coin ? current_data.select_coin + ' gms' : ''
       }
+      
     };
 
     if (user_action === 'just_set_events') {
@@ -130,7 +134,7 @@ class GoldDeliveryProducts extends Component {
   }
 
   selectGoldProduct(index) {
-    this.sendEvents('next', this.state.gold_products[index].disc);
+    this.sendEvents('next', {select_coin : this.state.gold_products[index].metal_weight});
 
     let selectedProduct = this.state.gold_products[index];
     storageService().setObject('deliveryData', selectedProduct);
@@ -167,7 +171,8 @@ class GoldDeliveryProducts extends Component {
 
   showHideSteps() {
     this.setState({
-      showSteps: !this.state.showSteps
+      showSteps: !this.state.showSteps,
+      faq_clicked: true
     })
   }
 

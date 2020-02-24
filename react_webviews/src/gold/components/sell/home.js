@@ -83,19 +83,6 @@ class GoldSellHome extends Component {
     })
   }
 
-  refreshData = () => {
-
-    if(this.state.timeAvailable > 0) {
-      this.handleClick();
-    } else {
-      this.setState({
-        show_loader: true,
-        openRefreshModule: true
-      })
-    }
-    
-  }
-
   handleClose = () => {
     this.setState({
       openConfirmDialog: false,
@@ -195,17 +182,18 @@ class GoldSellHome extends Component {
   }
 
  
-  sendEvents(user_action, product_name) {
+  sendEvents(user_action, current_data={}) {
     let eventObj = {
-      "event_name": 'GOLD',
+      "event_name": 'gold_investment_flow',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'Gold Locker',
-        "trade": this.state.value === 0 ? 'sell' : 'delivery',
-        "amount": this.state.amountError ? 'invalid' : this.state.amount ? 'valid' : 'empty',
-        "weight": this.state.weightError ? 'invalid' : this.state.weight ? 'valid' : 'empty',
-        "product_name": product_name
+        "screen_name": 'sell_gold',
+        "provider": this.state.provider || '',
+        "sell_option": this.state.isAmount ? 'inr': 'gms',
+        "faq_clicked": this.state.faq_clicked ? 'yes' : 'no',
+        "change_provider": current_data.change_provider ? 'yes' : 'no'
       }
+      
     };
 
     if (user_action === 'just_set_events') {
@@ -361,9 +349,12 @@ class GoldSellHome extends Component {
   }
 
   showHideSteps() {
+
     this.setState({
-      showSteps: !this.state.showSteps
+      showSteps: !this.state.showSteps,
+      faq_clicked: true
     })
+    
   }
 
   renderInfoSteps =(props, index) => {

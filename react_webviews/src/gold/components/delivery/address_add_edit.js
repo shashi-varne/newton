@@ -8,6 +8,7 @@ import Api from 'utils/api';
 import { validateNumber, validateLength, validateMinChar, 
   validateConsecutiveChar, validateEmpty, getUrlParams } from 'utils/validators';
 import {getConfig} from "utils/functions";
+import { nativeCallback } from 'utils/native_callback';
 import toast from '../../../common/ui/Toast';
 
 class AddEditAddressDelivery extends Component {
@@ -138,6 +139,7 @@ class AddEditAddressDelivery extends Component {
 
   handleClick = async () => {
 
+    this.sendEvents('next');
     let canSubmitForm = true;
     // #TODO need to change cansubmitform flag logic
 
@@ -234,6 +236,30 @@ class AddEditAddressDelivery extends Component {
     }
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'gold_investment_flow',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'add_address',
+        'name': this.state.name ? 'yes' : 'no',
+        'mobile_number': this.state.mobile_number ? 'yes' : 'no',
+        'pincode': this.state.pincode ? 'yes' : 'no',
+        'addressline1': this.state.addressline1 ? 'yes' : 'no',
+        'addressline2': this.state.addressline2 ? 'yes' : 'no',
+        'city': this.state.city ? 'yes' : 'no',
+        'state': this.state.state ? 'yes' : 'no',
+        'update_type': this.props.edit ? 'edit' : 'add'
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
     return (
       <Container
@@ -245,6 +271,7 @@ class AddEditAddressDelivery extends Component {
         edit={this.props.edit}
         buttonTitle="Save and continue"
         logo={this.state.image}
+        events={this.sendEvents('just_set_events')}
       >
         <FormControl fullWidth>
           <div className="InputField">

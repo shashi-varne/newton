@@ -58,19 +58,6 @@ class SellSelectBank extends Component {
     }
   }
 
-  refreshData = () => {
-
-    if (this.state.timeAvailable > 0) {
-      this.handleClick();
-    } else {
-      this.setState({
-        show_loader: true,
-        openRefreshModule: true
-      })
-    }
-
-  }
-
   getBankData = async () => {
     Api.get('/api/gold/user/bank/details').then(res => {
 
@@ -99,6 +86,10 @@ class SellSelectBank extends Component {
   }
 
   navigate = (pathname, address_id, status) => {
+
+    if(pathname === 'sell-add-bank') {
+      this.sendEvents('next', {add_bank_clicked: true});
+    }
     let searchParams = getConfig().searchParams;
     if (address_id) {
       searchParams += '&address_id=' + address_id;
@@ -260,15 +251,13 @@ class SellSelectBank extends Component {
     })
   }
 
-  sendEvents(user_action) {
+  sendEvents(user_action, data={}) {
     let eventObj = {
-      "event_name": 'GOLD',
+      "event_name": 'gold_investment_flow',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'Sell Bank Details',
-        'account_no': this.state.account_no_error ? 'invalid' : this.state.account_no ? 'valid' : 'empty',
-        'confirm_account_no': this.state.confirm_account_no_error ? 'invalid' : this.state.confirm_account_no ? 'valid' : 'empty',
-        'ifsc_code': this.state.ifsc_code_error ? 'invalid' : this.state.ifsc_code ? 'valid' : 'empty'
+        "screen_name": 'account_selection',
+        'add_bank_clicked': data.add_bank_clicked ? 'yes' : 'no'
       }
     };
 

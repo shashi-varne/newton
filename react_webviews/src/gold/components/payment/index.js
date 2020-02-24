@@ -214,7 +214,9 @@ class Payment extends Component {
   emailInvoice = async () => {
 
     let path = this.state.report.invoice_link;
-
+    this.setState({
+      download_invoice_clicked: true
+    })
     if(!path) {
       toast('Invoice not generated, please try after sometime', 'error');
       return;
@@ -284,14 +286,15 @@ class Payment extends Component {
     
   }
 
-  sendEvents(user_action) {
+  sendEvents(user_action, data={}) {
     let eventObj = {
-      "event_name": 'GOLD',
+      "event_name": 'gold_investment_flow',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'Payment Summary',
-        'type': this.state.orderType,
-        'status': this.state.status
+        "screen_name": 'payment',
+        'flow': this.state.orderType,
+        'status': this.state.status,
+        'download_invoice_clicked': this.state.download_invoice_clicked ? 'yes': 'no'
       }
     };
 

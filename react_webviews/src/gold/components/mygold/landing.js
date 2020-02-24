@@ -29,6 +29,16 @@ import crd_gold_info from 'assets/crd_gold_info.svg';
 import {isUserRegistered, gold_providers} from '../../constants';
 import { inrFormatDecimal2, storageService} from 'utils/validators';
 
+let eventToStateMapper = {
+  'check-how1': 'check-how',
+  '/gold/buy': 'buy_gold',
+  '/gold/sell': 'sell_gold',
+  '/gold/delivery': 'get_delivery',
+  'my-gold-locker': 'gold_locker',
+  'marketing_banner': 'marketing_banner'
+};
+
+
 class GoldSummary extends Component {
   constructor(props) {
     super(props);
@@ -188,14 +198,14 @@ class GoldSummary extends Component {
   }
 
 
-  sendEvents(user_action) {
+  sendEvents(user_action, card_clicked, marketing_banner) {
     let eventObj = {
-      "event_name": 'GOLD',
+      "event_name": 'gold_investment_flow',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'Gold Summary',
-        "amount": this.state.amountError ? 'invalid' : this.state.amount ? 'valid' : 'empty',
-        "weight": this.state.weightError ? 'invalid' : this.state.weight ? 'valid' : 'empty',
+        "screen_name": 'gold_landing',
+        'card_clicked': card_clicked || '',
+        'marketing_banner': marketing_banner >= 0 ? marketing_banner : ''
       }
     };
 
@@ -216,6 +226,9 @@ class GoldSummary extends Component {
   }
 
   handleClickOffer(offer, index) {
+
+    this.sendEvents('next', 'marketing_banner', index);
+
     if (offer.key === '5buy' || offer.key === '50delivery') {
       this.setState({
         openDialogOffer: true,
@@ -279,7 +292,8 @@ class GoldSummary extends Component {
   }
 
   navigate = (pathname) => {
-   
+    
+    this.sendEvents('next', eventToStateMapper[pathname]);
     this.props.history.push({
       pathname: pathname,
       search: getConfig().searchParams

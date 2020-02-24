@@ -13,6 +13,7 @@ import Button from 'material-ui/Button';
 import { storageService, inrFormatDecimal2 } from 'utils/validators';
 import ConfirmDialog from '../ui_components/confirm_dialog';
 import GoldOnloadAndTimer from '../ui_components/onload_and_timer';
+import { nativeCallback } from 'utils/native_callback';
 
 class SelectAddressDelivery extends Component {
   constructor(props) {
@@ -40,26 +41,9 @@ class SelectAddressDelivery extends Component {
 
   updateParent(key, value) {
 
-    if(key === 'fetchLivePrice' && !value) {
-      this.setMaxWeightAmount();
-    }
-
     this.setState({
       [key]: value
     })
-  }
-
-  refreshData = () => {
-
-    if(this.state.timeAvailable > 0) {
-      this.handleClick();
-    } else {
-      this.setState({
-        show_loader: true,
-        openRefreshModule: true
-      })
-    }
-    
   }
 
   componentWillMount() {
@@ -106,7 +90,12 @@ class SelectAddressDelivery extends Component {
   navigate = (pathname, address_id) => {
     let searchParams = getConfig().searchParams;
     if (address_id) {
+      this.sendEvents('next', {address_change : 'edit'})
       searchParams += '&address_id=' + address_id;
+    }
+
+    if(pathname === 'delivery-add-address') {
+      this.sendEvents('next', {address_change : 'add'});
     }
 
     this.props.history.push({
@@ -124,7 +113,7 @@ class SelectAddressDelivery extends Component {
   handleClick = async () => {
 
     this.handleClose();
-
+    this.sendEvents('next');
     if (this.state.selectedIndex === -1) {
       return;
     }
@@ -176,6 +165,8 @@ class SelectAddressDelivery extends Component {
   }
 
   removeAddressDialog = (address_id) => {
+
+    this.sendEvents('next', {address_change : 'remove'});
     if (!address_id) {
       return;
     }
@@ -281,6 +272,23 @@ class SelectAddressDelivery extends Component {
     })
   }
 
+  sendEvents(user_action, data={}) {
+    let eventObj = {
+      "event_name": 'gold_investment_flow',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'select_adress',
+        'address_change': data.address_change ? data.address_change : ''
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
 
   render() {
     return (
@@ -296,6 +304,7 @@ class SelectAddressDelivery extends Component {
         disable={this.state.selectedIndex === -1 ? true : false}
         withProvider={true}
         buttonData={this.state.bottomButtonData}
+        events={this.sendEvents('just_set_events')}
       >
         <div className="gold-delivery-select-address">
           {this.state.addressData && this.state.addressData.map(this.renderAddress)}

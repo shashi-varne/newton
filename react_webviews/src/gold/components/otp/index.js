@@ -78,6 +78,7 @@ class Otp extends Component {
 
   handleClick = async () => {
 
+    this.sendEvents('next', {otp_vaildation: true});
     if (!this.state.otp) {
       this.setState({
         otp_error: 'Please enter OTP'
@@ -145,7 +146,8 @@ class Otp extends Component {
       show_loader: true,
       otp_error: '',
       otp: '',
-      timeAvailable: this.state.totalTime
+      timeAvailable: this.state.totalTime,
+      resend_otp_clicked: true
     })
 
     let url = this.state.params.base_url + this.state.resend_link;
@@ -217,13 +219,14 @@ class Otp extends Component {
     }
   }
 
-  sendEvents(user_action) {
+  sendEvents(user_action, data={}) {
     let eventObj = {
-      "event_name": 'GOLD',
+      "event_name": 'gold_investment_flow',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'OTP',
-        'verification_type': this.state.orderType
+        "screen_name": 'otp_validation_buy_gold',
+        'resend_otp_clicked': this.state.resend_otp_clicked ? 'yes' : 'no',
+        'otp_vaildation ': data.otp_vaildation ? 'yes' : 'no'
       }
     };
 

@@ -6,6 +6,7 @@ import { getConfig } from 'utils/functions';
 import { getUrlParams } from 'utils/validators';
 import {stateMapper, default_provider, gold_providers_array} from  '../../constants';
 import {storageService, getIndexArray} from "utils/validators";
+import { nativeCallback } from 'utils/native_callback';
 
 class GoldSelectProviderClass extends Component {
     constructor(props) {
@@ -29,9 +30,12 @@ class GoldSelectProviderClass extends Component {
     }
 
     chooseProvider = (index) => {
+        this.sendEvents('next', {change_provider: true});
         this.setState({
-            selectedIndex: index
+            selectedIndex: index,
+            provider: this.state.providers[index].key
         })
+
     }
 
 
@@ -81,11 +85,31 @@ class GoldSelectProviderClass extends Component {
       }
 
     handleClick = () => {
+        
         let state = stateMapper[this.state.params.redirect_state];
         let provider = this.state.providers[this.state.selectedIndex].key;
         storageService().set('gold_provider', provider)
         this.navigate(state);
     }
+
+    sendEvents(user_action, current_data={}) {
+        let eventObj = {
+          "event_name": 'gold_investment_flow',
+          "properties": {
+            "user_action": user_action,
+            "screen_name": 'select_provider',
+            "provider": this.state.provider || '',
+            "change_provider": current_data.change_provider ? 'yes' : 'no'
+          }
+          
+        };
+    
+        if (user_action === 'just_set_events') {
+          return eventObj;
+        } else {
+          nativeCallback({ events: eventObj });
+        }
+      }
 
     render() {
         return (
@@ -97,6 +121,7 @@ class GoldSelectProviderClass extends Component {
                 fullWidthButton={true}
                 onlyButton={true}
                 buttonTitle="Continue"
+                events={this.sendEvents('just_set_events')}
             >
                 <div className="gold-sell-select-bank">
                     {this.state.providers && this.state.providers.map(this.renderProviders)}

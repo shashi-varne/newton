@@ -66,7 +66,9 @@ class GoldTransactionDetail extends Component {
 
     let type = this.state.orderType;
     let uniStatus = getUniversalTransStatus(data);
+
     let obj = cssMapper[uniStatus];
+    obj.uniStatus = uniStatus;
     
     let title = '';
     if(type === 'buy') {
@@ -138,14 +140,13 @@ class GoldTransactionDetail extends Component {
 
   sendEvents(user_action, product_name) {
     let eventObj = {
-      "event_name": 'GOLD',
+      "event_name": 'gold_investment_flow',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'Gold Locker',
-        "trade": this.state.value === 0 ? 'sell' : 'delivery',
-        "amount": this.state.amountError ? 'invalid' : this.state.amount ? 'valid' : 'empty',
-        "weight": this.state.weightError ? 'invalid' : this.state.weight ? 'valid' : 'empty',
-        "product_name": product_name
+        "screen_name": 'transaction_detail',
+        "flow": this.state.orderType,
+        "download_invoice_clicked": this.state.download_invoice_clicked ? 'yes' : 'no',
+        "status": this.state.order.cssMapper.uniStatus || ''
       }
     };
 
@@ -206,6 +207,9 @@ class GoldTransactionDetail extends Component {
 
     let path = this.state.order.invoice_link;
 
+    this.setState({
+      download_invoice_clicked: true
+    })
     if(!path) {
       toast('Invoice not generated, please try after sometime', 'error');
       return;

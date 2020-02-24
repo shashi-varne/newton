@@ -18,7 +18,7 @@ class DeliverySelectedProduct extends Component {
     super(props);
     this.state = {
       show_loader: true,
-      product:storageService().getObject('deliveryData'),
+      product:storageService().getObject('deliveryData') || {},
       openResponseDialog: false,
       disabledText: 'Proceed to address selection',
       disabled: true,
@@ -52,6 +52,7 @@ class DeliverySelectedProduct extends Component {
       offerImageData: offerImageData
     })
 
+    console.log(this.state.product);
     if (!this.state.product) {
       this.navigate('/gold/delivery-products');
       return;
@@ -105,14 +106,13 @@ class DeliverySelectedProduct extends Component {
     });
   }
 
-  sendEvents(user_action) {
+  sendEvents(user_action, data={}) {
     let eventObj = {
-      "event_name": 'GOLD',
+      "event_name": 'gold_investment_flow',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'Select Gold Product',
-        'product_name': this.state.product.description,
-        'in_stock': this.state.product.in_stock
+        "screen_name": 'gold_coin',
+        'check_pincode': data.check_pincode  ? data.check_pincode : ''
       }
     };
 
@@ -148,7 +148,7 @@ class DeliverySelectedProduct extends Component {
     return (
       <div key={index}
         className="gold-offer-slider">
-        <img className="gold-offer-slide-img" style={{height:300}}
+        <img className="gold-offer-slide-img" style={{height:381}}
           src={props} alt="Gold Offer" />
       </div>
     )
@@ -165,13 +165,14 @@ class DeliverySelectedProduct extends Component {
   }
 
   checkPincode = async () => {
-
+    
     if(this.state.pincodeRightText === 'CHANGE') {
       this.changePincode();
       return;
     }
 
     let pincode = this.state.pincode;
+    this.sendEvents('next', {check_pincode: pincode});
     if (pincode && pincode.length === 6) {
       try {
 

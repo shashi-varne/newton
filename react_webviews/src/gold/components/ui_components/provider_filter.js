@@ -14,6 +14,7 @@ class GoldProviderFilterClass extends Component {
     }
 
     navigate = (pathname) => {
+        this.props.parent.sendEvents('next', {change_provider : true})
         this.props.parent.props.history.push({
             pathname: pathname,
             search: getConfig().searchParams + '&redirect_state=' + this.props.parent.state.redirect_state

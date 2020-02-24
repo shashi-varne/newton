@@ -42,7 +42,10 @@ class GoldRegister extends Component {
       terms_opened: 'no',
       provider: this.props.match.params.provider,
       openPriceChangedDialog: false,
-      orderType: 'buy'
+      orderType: 'buy',
+      name_disabled: false,
+      mobile_no_disabled: false,
+      email_disabled: false
     }
 
   }
@@ -64,20 +67,6 @@ class GoldRegister extends Component {
       [key]: value
     })
   }
-
-  refreshData  = () => {
-
-    if(this.state.timeAvailable > 0) {
-      this.handleClick();
-    } else {
-      this.setState({
-        show_loader: true,
-        openRefreshModule: true
-      })
-    }
-    
-  }
-
 
   handleClose = () => {
     this.setState({
@@ -127,10 +116,10 @@ class GoldRegister extends Component {
           email: email || "",
           pin_code: pin_code || "",
           mobile_no: mobile_no || "",
-          name_disabled: name || false,
-          email_disabled: email || false,
-          pin_code_disabled: pin_code || false,
-          mobile_no_disabled: mobile_no || false,
+          name_disabled: name ? true : false,
+          email_disabled: email? true : false,
+          pin_code_disabled: pin_code ? true : false,
+          mobile_no_disabled: mobile_no ? true : false,
         });
 
 
@@ -276,17 +265,17 @@ class GoldRegister extends Component {
     });
   }
 
-  sendEvents(user_action) {
+  sendEvents(user_action, data = {}) {
     let eventObj = {
-      "event_name": 'GOLD',
+      "event_name": 'gold_investment_flow',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'Registeration',
-        'name': this.state.name_error ? 'invalid' : this.state.name ? 'valid' : 'empty',
-        'email': this.state.email_error ? 'invalid' : this.state.email ? 'valid' : 'empty',
-        'pin_code': this.state.pin_code_error ? 'invalid' : this.state.pin_code ? 'valid' : 'empty',
-        'agree': this.state.checked ? 'yes' : 'no',
-        'terms_opened': this.state.terms_opened
+        "screen_name": 'user_details_buy_gold',
+        'name': this.state.name ? 'yes' : 'no',
+        'email': this.state.email ? 'yes' : 'no',
+        'mobile_no': this.state.mobile_no ? 'yes' : 'no',
+        "existing_mobile_number": this.state.mobile_no_disabled ? 'yes' : 'no',
+        'price_summary_clicked': data.price_summary_clicked ? 'yes' : ''
       }
     };
 
@@ -300,6 +289,7 @@ class GoldRegister extends Component {
   handleClick = async () => {
     this.handleClose();
 
+    this.sendEvents('next');
     let canSubmitForm = true;
 
     if (this.state.name.split(" ").filter(e => e).length < 2) {
@@ -362,6 +352,7 @@ class GoldRegister extends Component {
   }
 
   handleClick2 = () => {
+    this.sendEvents("next", {price_summary_clicked : true})
     this.setState({
       openConfirmDialog: true
     })

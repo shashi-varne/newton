@@ -33,7 +33,7 @@ class KnowMore extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'GOLD',
+      "event_name": 'gold_investment_flow',
       "properties": {
         "user_action": user_action,
         "screen_name": 'Know More'

@@ -86,24 +86,15 @@ class SellVerifyBank extends Component {
         }
     }
 
-    refreshData = () => {
-
-        if (this.state.timeAvailable > 0) {
-            this.handleClick();
-        } else {
-            this.setState({
-                show_loader: true,
-                openRefreshModule: true
-            })
-        }
-
-    }
-
     async componentDidMount() {
         this.onload();
     }
 
     navigate = (pathname) => {
+
+        if(pathname === 'sell-edit-bank') {
+            this.sendEvents('next', {bank_edit_clicked: true});
+        }
         let searchParams = getConfig().searchParams;
 
         if(this.state.pan_bank_flow) {
@@ -116,15 +107,13 @@ class SellVerifyBank extends Component {
     }
 
 
-    sendEvents(user_action) {
+    sendEvents(user_action, data={}) {
         let eventObj = {
-            "event_name": 'GOLD',
+            "event_name": 'gold_investment_flow',
             "properties": {
                 "user_action": user_action,
-                "screen_name": 'Sell Bank Details',
-                'account_no': this.state.account_no_error ? 'invalid' : this.state.account_no ? 'valid' : 'empty',
-                'confirm_account_no': this.state.confirm_account_no_error ? 'invalid' : this.state.confirm_account_no ? 'valid' : 'empty',
-                'ifsc_code': this.state.ifsc_code_error ? 'invalid' : this.state.ifsc_code ? 'valid' : 'empty'
+                "screen_name": 'verify_bank',
+                'bank_edit_clicked': data.bank_edit_clicked ? 'yes' : 'no'
             }
         };
 
@@ -204,6 +193,7 @@ class SellVerifyBank extends Component {
             'account_type': this.state.verifyBankData.account_type
         };
 
+        this.sendEvents('next');
 
         this.setState({
             openVerifyDialog: true
@@ -288,6 +278,18 @@ class SellVerifyBank extends Component {
         if(this.state.pan_bank_flow) {
             this.navigate('/gold/my-gold-locker');
         } else {
+
+            let eventObj = {
+                "event_name": 'gold_investment_flow',
+                "properties": {
+                    "user_action": 'next',
+                    "screen_name": 'penny_verification_respose',
+                    'result': this.state.verification_status || ''
+                }
+            };
+    
+            nativeCallback({ events: eventObj });
+            
             this.navigate('sell-select-bank');
         }
     }

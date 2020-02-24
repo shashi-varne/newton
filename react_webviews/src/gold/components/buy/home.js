@@ -94,19 +94,6 @@ class GoldBuyHome extends Component {
     })
   }
 
-  refreshData = () => {
-
-    if (this.state.timeAvailable > 0) {
-      this.handleClick();
-    } else {
-      this.setState({
-        show_loader: true,
-        openRefreshModule: true
-      })
-    }
-
-  }
-
   handleClose = () => {
     this.setState({
       openConfirmDialog: false,
@@ -159,15 +146,20 @@ class GoldBuyHome extends Component {
   }
 
 
-  sendEvents(user_action) {
+  sendEvents(user_action, current_data={}) {
     let eventObj = {
-      "event_name": 'GOLD',
+      "event_name": 'gold_investment_flow',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'Gold Summary',
-        "amount": this.state.amountError ? 'invalid' : this.state.amount ? 'valid' : 'empty',
-        "weight": this.state.weightError ? 'invalid' : this.state.weight ? 'valid' : 'empty',
+        "screen_name": 'buy_gold',
+        "provider": this.state.provider || '',
+        "buy_option": this.state.isAmount ? 'inr': 'gms',
+        "faq_clicked": this.state.faq_clicked ? 'yes' : 'no',
+        "plus_card_clicked_value": current_data.plus_card_clicked_value || '',
+        "change_provider": current_data.change_provider ? 'yes' : 'no',
+        "buy_above_1_lac": current_data.buy_above_1_lac ? 'yes' : 'no',
       }
+      
     };
 
     if (user_action === 'just_set_events') {
@@ -218,6 +210,7 @@ class GoldBuyHome extends Component {
     let totalAmount = parseFloat(this.state.amount) + parseFloat(this.state.provider_info.gold_balance || 0);
 
     if(!this.state.user_info.pan_number && totalAmount > 100000) {
+      this.sendEvents('next', {buy_above_1_lac: true});
       this.navigate(this.state.provider + '/buy-pan');
     } else {
       // place buy order
@@ -337,6 +330,8 @@ class GoldBuyHome extends Component {
   }
 
   addPlusItems =(value) => {
+
+    this.sendEvents('next', {plus_card_clicked_value: value});
     let event = {};
     if(this.state.isAmount) {
       event.name  = 'amount';
@@ -359,9 +354,11 @@ class GoldBuyHome extends Component {
   }
 
   showHideSteps() {
+
     this.setState({
-      showSteps: !this.state.showSteps
-    })
+      showSteps: !this.state.showSteps,
+      faq_clicked: true
+    });
   }
 
   renderInfoSteps =(props, index) => {
