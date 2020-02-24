@@ -8,7 +8,7 @@ import { getConfig } from 'utils/functions';
 import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
 import toast from '../../../common/ui/Toast';
 import {
-  inrFormatDecimal2
+  inrFormatDecimal2, storageService
 } from 'utils/validators';
 
 import { isUserRegistered, gold_providers, getTransactionStatus, getUniversalTransStatus } from '../../constants';
@@ -134,6 +134,7 @@ class GoldLocker extends Component {
 
   async componentDidMount() {
 
+    storageService().remove('forceBackState');
     this.onloadProvider('mmtc');
     this.onloadProvider('safegold');
     window.addEventListener("scroll", this.onScroll, false);

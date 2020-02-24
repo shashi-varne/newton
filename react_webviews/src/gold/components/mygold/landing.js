@@ -27,7 +27,7 @@ import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
 import gold_pattern from 'assets/gold_pattern.png';
 import crd_gold_info from 'assets/crd_gold_info.svg';
 import {isUserRegistered, gold_providers} from '../../constants';
-import { inrFormatDecimal2} from 'utils/validators';
+import { inrFormatDecimal2, storageService} from 'utils/validators';
 
 class GoldSummary extends Component {
   constructor(props) {
@@ -182,6 +182,7 @@ class GoldSummary extends Component {
 
 
   async componentDidMount() {
+    storageService().remove('forceBackState');
     this.onloadProvider('mmtc');
     this.onloadProvider('safegold');
   }

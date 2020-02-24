@@ -8,8 +8,11 @@ export function forceBackState() {
 
 export const stateMapper = {
     'buy-home': '/gold/buy',
+    'buy': '/gold/buy',
     'sell-home': '/gold/sell',
-    'delivery-products': '/gold/delivery-products'
+    'sell': '/gold/sell',
+    'delivery-products': '/gold/delivery-products',
+    'delivery': '/gold/delivery-products'
 }
 
 export function calculate_gold_wt_buy(buyData, buy_price) {

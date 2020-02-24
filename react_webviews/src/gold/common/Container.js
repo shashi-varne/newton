@@ -15,7 +15,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import '../../utils/native_listner';
 import { getConfig, setHeights } from 'utils/functions';
-import {checkStringInString} from 'utils/validators';
+import {checkStringInString, storageService} from 'utils/validators';
 import {forceBackState, goBackMap} from '../constants';
 
 class Container extends Component {
@@ -102,7 +102,9 @@ class Container extends Component {
     }
 
     if(forceBackState()) {
-      this.navigate(forceBackState());
+      let state = forceBackState();
+      storageService().remove('forceBackState');
+      this.navigate(state);
       return;
     }
 

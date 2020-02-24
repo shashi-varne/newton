@@ -57,7 +57,7 @@ class GoldOnloadAndTimerClass extends Component {
             this.updateParent('live_price', '');
             this.updateParent('timeAvailable', timeAvailable || 0);
 
-            storageService().set('forceBackState', stateMapper['buy-home']);
+            storageService().set('forceBackState', stateMapper[this.state.orderType]);
             clearInterval(this.state.countdownInterval);
             return;
         }
@@ -93,12 +93,11 @@ class GoldOnloadAndTimerClass extends Component {
 
     onload() {
 
+        storageService().remove('forceBackState');
         if(this.props.parent.state.pan_bank_flow) {
             return;
         }
         
-        storageService().remove('forceBackState');
-
         let orderData = storageService().getObject(this.state.orderKey);
 
         this.updateParent(this.state.orderKey, orderData);
