@@ -247,7 +247,8 @@ class SellSelectBank extends Component {
       return;
     }
     this.setState({
-      openConfirmDialog: true
+      openConfirmDialog: true,
+      price_summary_clicked: true
     })
   }
 
@@ -257,7 +258,10 @@ class SellSelectBank extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'account_selection',
-        'add_bank_clicked': data.add_bank_clicked ? 'yes' : 'no'
+        'add_bank_clicked': data.add_bank_clicked ? 'yes' : 'no',
+        'price_summary_clicked' : this.state.price_summary_clicked ? 'yes' : 'no',
+        "timeout_alert": this.state.timeout_alert_event ? 'yes' : 'no',
+        "refresh_price": this.state.refresh_price_event ? 'yes' : 'no'
       }
     };
 

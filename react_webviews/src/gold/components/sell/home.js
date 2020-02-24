@@ -85,7 +85,6 @@ class GoldSellHome extends Component {
 
   handleClose = () => {
     this.setState({
-      openConfirmDialog: false,
       openDialogOffer: false
     });
 
@@ -191,7 +190,9 @@ class GoldSellHome extends Component {
         "provider": this.state.provider || '',
         "sell_option": this.state.isAmount ? 'inr': 'gms',
         "faq_clicked": this.state.faq_clicked ? 'yes' : 'no',
-        "change_provider": current_data.change_provider ? 'yes' : 'no'
+        "change_provider": current_data.change_provider ? 'yes' : 'no',
+        "timeout_alert": this.state.timeout_alert_event ? 'yes' : 'no',
+        "refresh_price": this.state.refresh_price_event ? 'yes' : 'no'
       }
       
     };

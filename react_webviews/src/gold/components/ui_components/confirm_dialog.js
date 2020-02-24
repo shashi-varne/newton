@@ -14,6 +14,10 @@ class ConfirmDialogClass extends Component {
         }
     }
 
+    componentDidMount() {
+        console.log("yo yo");
+    }
+
     rednerContent1(props, index) {
         return (
             <div key={index} className="content-points">
@@ -44,7 +48,7 @@ class ConfirmDialogClass extends Component {
         return (
           <Dialog
             id="bottom-popup"
-            open={this.props.parent.state.openConfirmDialog}
+            open={this.props.parent.state.openConfirmDialog || false}
             onClose={this.props.parent.handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"

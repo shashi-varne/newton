@@ -57,7 +57,7 @@ class PriceChangeClass extends Component {
         if (this.props.parent.state.timeAvailable > 0) {
             this.props.parent.handleClose();
         } else {
-
+            this.props.parent.updateParent('refresh_price_event', true);
             this.props.parent.updateParent('show_loader', true);
             this.props.parent.updateParent('openRefreshModule', true);
         }

@@ -10,8 +10,6 @@ class BuyPriceClass extends Component {
         super(props);
         this.state = {
             show_loader: false,
-            openConfirmDialog: false,
-            openPriceChangedDialog: true,
             provider: this.props.parent.state.provider,
         }
     }

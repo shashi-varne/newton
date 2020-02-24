@@ -170,10 +170,7 @@ class GoldPanDataClass extends Component {
         });
     }
 
-
-
-
-    sendEvents(user_action, data={}) {
+    sendEvents(user_action) {
         let eventObj = {
             "event_name": 'gold_investment_flow',
             "properties": {
@@ -181,7 +178,9 @@ class GoldPanDataClass extends Component {
                 "screen_name": 'pan_entry',
                 'flow': this.state.orderType,
                 'pan_entered': this.state.pan_number ? 'yes' : 'no',
-                'price_summary_clicked': data.price_summary_clicked ? 'yes' : 'no'
+                'price_summary_clicked': this.state.price_summary_clicked ? 'yes' : 'no',
+                "timeout_alert": this.state.timeout_alert_event ? 'yes' : 'no',
+                "refresh_price": this.state.refresh_price_event ? 'yes' : 'no'
             }
         };
 
@@ -256,9 +255,9 @@ class GoldPanDataClass extends Component {
     }
 
     handleClick2 = () => {
-        this.sendEvents('next', {price_summary_clicked: true})
         this.setState({
-            openConfirmDialog: true
+            openConfirmDialog: true,
+            price_summary_clicked: true
         })
     }
 

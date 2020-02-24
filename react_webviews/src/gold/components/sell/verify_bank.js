@@ -113,7 +113,9 @@ class SellVerifyBank extends Component {
             "properties": {
                 "user_action": user_action,
                 "screen_name": 'verify_bank',
-                'bank_edit_clicked': data.bank_edit_clicked ? 'yes' : 'no'
+                'bank_edit_clicked': data.bank_edit_clicked ? 'yes' : 'no',
+                "timeout_alert": this.state.timeout_alert_event ? 'yes' : 'no',
+        "refresh_price": this.state.refresh_price_event ? 'yes' : 'no'
             }
         };
 

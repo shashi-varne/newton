@@ -52,6 +52,10 @@ class GoldOnloadAndTimerClass extends Component {
         if (timeAvailable <= 0) {
 
             this.updateParent('openPriceChangedDialog', true);
+
+            this.updateParent('timeout_alert_event', true);
+            this.updateParent('refresh_price_event', false);
+
             this.updateParent('minutes', 0);
             this.updateParent('seconds', 0);
             this.updateParent('live_price', '');

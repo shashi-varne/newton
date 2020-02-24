@@ -265,7 +265,7 @@ class GoldRegister extends Component {
     });
   }
 
-  sendEvents(user_action, data = {}) {
+  sendEvents(user_action) {
     let eventObj = {
       "event_name": 'gold_investment_flow',
       "properties": {
@@ -275,7 +275,9 @@ class GoldRegister extends Component {
         'email': this.state.email ? 'yes' : 'no',
         'mobile_no': this.state.mobile_no ? 'yes' : 'no',
         "existing_mobile_number": this.state.mobile_no_disabled ? 'yes' : 'no',
-        'price_summary_clicked': data.price_summary_clicked ? 'yes' : ''
+        'price_summary_clicked': this.state.price_summary_clicked ? 'yes' : 'no',
+        "timeout_alert": this.state.timeout_alert_event ? 'yes' : 'no',
+        "refresh_price": this.state.refresh_price_event ? 'yes' : 'no'
       }
     };
 
@@ -352,9 +354,9 @@ class GoldRegister extends Component {
   }
 
   handleClick2 = () => {
-    this.sendEvents("next", {price_summary_clicked : true})
     this.setState({
-      openConfirmDialog: true
+      openConfirmDialog: true,
+      price_summary_clicked: true
     })
   }
 

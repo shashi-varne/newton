@@ -268,7 +268,8 @@ class SelectAddressDelivery extends Component {
       return;
     }
     this.setState({
-      openConfirmDialog: true
+      openConfirmDialog: true,
+      price_summary_clicked: true
     })
   }
 
@@ -278,7 +279,10 @@ class SelectAddressDelivery extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'select_adress',
-        'address_change': data.address_change ? data.address_change : ''
+        'address_change': data.address_change ? data.address_change : '',
+        "price_summary_clicked": this.state.price_summary_clicked ? 'yes' : 'no',
+        "timeout_alert": this.state.timeout_alert_event ? 'yes' : 'no',
+        "refresh_price": this.state.refresh_price_event ? 'yes' : 'no'
       }
     };
 

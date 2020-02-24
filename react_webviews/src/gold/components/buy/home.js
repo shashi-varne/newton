@@ -96,7 +96,6 @@ class GoldBuyHome extends Component {
 
   handleClose = () => {
     this.setState({
-      openConfirmDialog: false,
       openPopup: false,
       openDialogOffer: false
     });
@@ -158,6 +157,8 @@ class GoldBuyHome extends Component {
         "plus_card_clicked_value": current_data.plus_card_clicked_value || '',
         "change_provider": current_data.change_provider ? 'yes' : 'no',
         "buy_above_1_lac": current_data.buy_above_1_lac ? 'yes' : 'no',
+        "timeout_alert": this.state.timeout_alert_event ? 'yes' : 'no',
+        "refresh_price": this.state.refresh_price_event ? 'yes' : 'no'
       }
       
     };

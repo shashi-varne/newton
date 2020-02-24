@@ -66,16 +66,10 @@ class GoldSummary extends Component {
 
   handleClose = () => {
     this.setState({
-      openConfirmDialog: false,
       openPopup: false,
       openDialogOffer: false
     });
-
-    if(this.state.openPriceChangedDialog && this.state.timeAvailable >0) {
-      this.setState({
-        openPriceChangedDialog: false
-      })
-    }
+   
   }
 
   componentWillMount() {

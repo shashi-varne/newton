@@ -214,7 +214,10 @@ class SellAddEditBank extends Component {
         'confirm_account_no': this.state.formData.confirm_account_no ? 'yes' : 'no',
         'ifsc_code': this.state.formData.ifsc_code ? 'yes' : 'no',
         'account_type': this.state.formData.account_type ? 'yes' : 'no',
-        'update_type': this.props.edit ? 'edit' : 'add'
+        'update_type': this.props.edit ? 'edit' : 'add',
+        'price_summary_clicked': this.state.price_summary_clicked ? 'yes' : 'no',
+        "timeout_alert": this.state.timeout_alert_event ? 'yes' : 'no',
+        "refresh_price": this.state.refresh_price_event ? 'yes' : 'no'
       }
     };
 
@@ -297,7 +300,8 @@ class SellAddEditBank extends Component {
 
   handleClick2 = () => {
     this.setState({
-      openConfirmDialog: true
+      openConfirmDialog: true,
+      price_summary_clicked: true
     })
   }
 
