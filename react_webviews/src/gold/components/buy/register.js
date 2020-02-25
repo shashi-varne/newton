@@ -371,7 +371,15 @@ class GoldRegister extends Component {
         try {
           const res = await Api.post('/api/gold/user/account/' + this.state.provider, options);
   
-          if(res.pfwresponse.result.mobile_verified === false) {
+          if(res.pfwresponse.result.registered_with_another_account === true) {
+            this.setState({
+              mobile_no_disabled: false,
+              show_loader: false
+            })
+            toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+              'Something went wrong', 'error');
+          } else if(res.pfwresponse.result.message === 'success'  || 
+            res.pfwresponse.result.mobile_verified === false) {
             this.verifyMobile();
           } else if(res.pfwresponse.result.mobile_verified === true) {
             this.createUser();

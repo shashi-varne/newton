@@ -14,10 +14,6 @@ class ConfirmDialogClass extends Component {
         }
     }
 
-    componentDidMount() {
-        console.log("yo yo");
-    }
-
     rednerContent1(props, index) {
         return (
             <div key={index} className="content-points">
