@@ -12,6 +12,7 @@ import GoldOnloadAndTimer from '../ui_components/onload_and_timer';
 import PriceChangeDialog from '../ui_components/price_change_dialog';
 import { storageService } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
+import {getTransactionStatus, getUniversalTransStatus} from '../../constants';
 
 class SellSelectBank extends Component {
   constructor(props) {
@@ -153,7 +154,13 @@ class SellSelectBank extends Component {
         this.setState({
           show_loader: false,
         });
-        this.navigate('/gold/' + this.state.provider  + '/sell/payment', '', sellDetails.provider_sell_order_status)
+
+        
+        sellDetails.orderType = this.state.orderType;
+        sellDetails.final_status = getTransactionStatus(sellDetails);
+        let uniStatus = getUniversalTransStatus(sellDetails);
+
+        this.navigate('/gold/' + this.state.provider  + '/sell/payment', '', uniStatus);
       } else if (res.pfwresponse.result.is_gold_rate_changed) {
         // let new_rate = res.pfwresponse.result.new_rate;
         // let amountUpdated, weightUpdated;
