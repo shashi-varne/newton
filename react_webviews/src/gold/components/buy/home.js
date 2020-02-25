@@ -259,8 +259,9 @@ class GoldBuyHome extends Component {
     eventValue = eventValue.toString();
 
     if(eventName === 'weight') {
-      weight = (eventValue).replace(/in gm /g, "");
-      weight = (weight).replace(/in gm/g, "");
+      eventValue = (eventValue).replace(/in gm /g, "");
+      eventValue = (eventValue).replace(/in gm/g, "");
+      weight = eventValue;
     }
 
     if(eventName === 'amount') {
@@ -351,10 +352,10 @@ class GoldBuyHome extends Component {
     let event = {};
     if(this.state.isAmount) {
       event.name  = 'amount';
-      event.value = parseFloat(this.state.amount || 0) + value;
+      event.value = parseFloat(this.state.amount || 0) + parseFloat(parseFloat);
     } else {
       event.name  = 'weight';
-      event.value = parseFloat(this.state.weight || 0) + value;
+      event.value = parseFloat(this.state.weight || 0) + parseFloat(value);
     }
 
     this.setAmountGms({event : event});
