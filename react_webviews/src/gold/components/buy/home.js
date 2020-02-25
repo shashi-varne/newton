@@ -352,7 +352,7 @@ class GoldBuyHome extends Component {
     let event = {};
     if(this.state.isAmount) {
       event.name  = 'amount';
-      event.value = parseFloat(this.state.amount || 0) + parseFloat(parseFloat);
+      event.value = parseFloat(this.state.amount || 0) + parseFloat(value);
     } else {
       event.name  = 'weight';
       event.value = parseFloat(this.state.weight || 0) + parseFloat(value);

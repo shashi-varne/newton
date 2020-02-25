@@ -105,6 +105,8 @@ class GoldRegister extends Component {
           isRegistered = false;
         }
 
+        let mobile_verified_current = provider_info.mobile_verified || false;
+
         const { name, email, pin_code, mobile_no } = user_info;
         
         // this.checkPincode(pin_code);
@@ -122,6 +124,7 @@ class GoldRegister extends Component {
           email_disabled: email? true : false,
           pin_code_disabled: pin_code ? true : false,
           mobile_no_disabled: mobile_no ? true : false,
+          mobile_verified_current: mobile_verified_current
         });
 
 
@@ -346,6 +349,8 @@ class GoldRegister extends Component {
       });
       canSubmitForm = false;
     }
+
+    
     
     if(canSubmitForm) {
 
@@ -353,35 +358,41 @@ class GoldRegister extends Component {
         show_loader: true
       });
 
-      let options = {};
+      if(this.state.mobile_verified_current) {
+        this.createUser()
+      } else {
+        let options = {};
 
-      options.name = this.state.name;
-      options.mobile_no = this.state.mobile_no;
-      options.email = this.state.email;
-      options.pin_code = this.state.user_info.pin_code;
-
-      try {
-        const res = await Api.post('/api/gold/user/account/' + this.state.provider, options);
-
-        if(res.pfwresponse.result.mobile_verified === false) {
-          this.verifyMobile();
-        } else if(res.pfwresponse.result.mobile_verified === true) {
-          this.createUser();
-        } else {
-
+        options.name = this.state.name;
+        options.mobile_no = this.state.mobile_no;
+        options.email = this.state.email;
+        options.pin_code = this.state.user_info.pin_code;
+  
+        try {
+          const res = await Api.post('/api/gold/user/account/' + this.state.provider, options);
+  
+          if(res.pfwresponse.result.mobile_verified === false) {
+            this.verifyMobile();
+          } else if(res.pfwresponse.result.mobile_verified === true) {
+            this.createUser();
+          } else {
+  
+            this.setState({
+              show_loader: false
+            });
+            toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+              'Something went wrong', 'error');
+  
+          }
+        } catch (err) {
           this.setState({
             show_loader: false
           });
-          toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-            'Something went wrong', 'error');
-
+          toast('Something went wrong', 'error');
         }
-      } catch (err) {
-        this.setState({
-          show_loader: false
-        });
-        toast('Something went wrong', 'error');
       }
+
+     
     }
   }
 
