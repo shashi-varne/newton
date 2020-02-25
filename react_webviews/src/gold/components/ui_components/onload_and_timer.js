@@ -54,7 +54,7 @@ class GoldOnloadAndTimerClass extends Component {
         
         // for testing
         // let timeAvailable = orderData.timeAvailable;
-        // timeAvailable = timeAvailable -5;
+        // timeAvailable = timeAvailable -50;
 
 
         if (timeAvailable <= 0) {

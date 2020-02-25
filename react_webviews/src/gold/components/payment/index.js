@@ -227,7 +227,7 @@ class Payment extends Component {
     });
 
     try {
-      const res = await Api.get('/api/gold/invoice/download/mail', { url: path });
+      const res = await Api.get('/api/gold/invoice/download/mail/' + this.state.provider, { url: path });
       if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
         if (result.message === 'success') {

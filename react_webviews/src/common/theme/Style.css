@@ -511,7 +511,10 @@ input#pan {
   padding-right: 13px !important;
 }
 .Toastify__toast-container.Toastify__toast-container--bottom-center {
-  z-index: 9999 !important;
+  z-index: 99999999 !important;
+}
+.Toastify__toast {
+  z-index: 99999999 !important;
 }
 .file-upload {
   cursor: inherit;
@@ -557,7 +560,7 @@ input#pan {
     color: #0A1C32;
     height: 50px;
     display: flex;
-    align-items: baseline;
+    align-items: flex-start;
     padding: 0 15px 0 15px;
     font-size: 20px;
     transition:.3s transform ease-in-out;

@@ -46,17 +46,17 @@ class Otp extends Component {
   componentWillMount() {
     let { params } = this.props.location;
 
-    // if (!params || params.resend_link === null || params.verify_link === null) {
+    if (!params || params.resend_link === null || params.verify_link === null) {
 
-    //   if(this.state.orderType === 'buy') {
-    //     this.navigate('/gold/' + this.state.provider + '/gold-register');
+      if(this.state.orderType === 'buy') {
+        this.navigate('/gold/' + this.state.provider + '/gold-register');
         
-    //   } else {
-    //     this.navigate('/gold/landing');
-    //   }
+      } else {
+        this.navigate('/gold/landing');
+      }
 
-    //   return;
-    // }
+      return;
+    }
 
     let otpBaseData = {
       mobile_no: params ? params.mobile_no : ''
