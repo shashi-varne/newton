@@ -24,7 +24,8 @@ import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
 
-import gold_pattern from 'assets/gold_pattern.png';
+import gold_pattern_fisdom from 'assets/fisdom/gold_pattern.png';
+import gold_pattern_myway from 'assets/myway/gold_pattern.png';
 import crd_gold_info from 'assets/crd_gold_info.svg';
 import {isUserRegistered, gold_providers} from '../../constants';
 import { inrFormatDecimal2, storageService} from 'utils/validators';
@@ -74,6 +75,7 @@ class GoldSummary extends Component {
 
   componentWillMount() {
 
+    storageService().set('gold_provider', 'mmtc');
     let type = getConfig().productName;
     
     var gold_offer_terms1 = [
@@ -112,7 +114,8 @@ class GoldSummary extends Component {
     ];
 
     this.setState({
-      offerImageData: offerImageData
+      offerImageData: offerImageData,
+      gold_pattern: this.state.productName !== 'fisdom'  ? gold_pattern_myway : gold_pattern_fisdom
     })
   }
 
@@ -311,9 +314,11 @@ class GoldSummary extends Component {
        className="highlight-text highlight-color-info">
         <img 
           src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
-        <div style={{display: 'grid'}}>
+        <div style={{display: 'grid', margin: '0 0 0 10px'}}>
           <div className="highlight-text12">
-          Total value
+            Your gold locker
+            <img  style={{margin: '0 0 0 8px', width: 11}}
+          src={ require(`assets/easy_secure_icon.svg`)} alt="Gold" />
           </div>
           <div className="highlight-text2" style={{margin: '4px 0 0 8px'}}>
           {this.state.user_info.total_balance || 0} gms = { inrFormatDecimal2(parseFloat(this.state.mmtc_info.sell_value) + parseFloat(this.state.safegold_info.sell_value))}
@@ -485,10 +490,10 @@ class GoldSummary extends Component {
         classOverRide="gold-landing-container gold-landing-container-background"
         classOverRideContainer="gold-landing-container gold-landing-container-background"
         styleContainer={{
-          backgroundImage: `url(${gold_pattern})`,
+          backgroundImage: `url(${this.state.gold_pattern})`,
         }}
         styleHeader={{
-          backgroundImage: `url(${gold_pattern})`,
+          backgroundImage: `url(${this.state.gold_pattern})`,
         }}
         classHeader="gold-landing-header gold-landing-container-background"
       >

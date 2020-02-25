@@ -12,7 +12,7 @@ class GoldBottomSecureInfoClass extends Component {
 
     render() {
         return (
-            <div className="gold-bottom-secure-info">
+            <div style={this.props.style} className="gold-bottom-secure-info">
                 <div className="content">
                     100% Secure  |  Transparent  |  Convenient
               </div>

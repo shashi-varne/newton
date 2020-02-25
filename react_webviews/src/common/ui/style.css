@@ -302,11 +302,12 @@ input.default-otp-input {
   width: 20px;
 }
 .right-arrow {
-  width: fit-content;
+  width: 200px;
   background: var(--secondary);
   padding: 12px 20px 12px 20px;
   height: fit-content;
   border-radius: 4px;
+  text-align: center;
 }
 .right-arrow img {
   width: 20px;

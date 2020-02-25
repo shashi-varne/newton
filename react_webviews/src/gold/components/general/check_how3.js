@@ -14,6 +14,9 @@ class CheckHow2 extends Component {
             productName: getConfig().productName,
             rightButtonData: {
                 title: 'Buy digital gold'
+            },
+            leftButtonData: {
+                title: 'BACK'
             }
         }
     }
@@ -86,7 +89,7 @@ class CheckHow2 extends Component {
 
                     </div>
 
-                    <GoldBottomSecureInfo />
+                    <GoldBottomSecureInfo style={{margin: '60px 0 -20px 0'}} />
                 </div>
 
                 <LeftRightFooter parent={this} />

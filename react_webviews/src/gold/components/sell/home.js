@@ -263,10 +263,20 @@ class GoldSellHome extends Component {
     }
   }
 
-  chooseTabs() {
-    this.setState({
-      isAmount: !this.state.isAmount
-    })
+  chooseTabs(type) {
+
+    if(type === 'amount') {
+      this.setState({
+        isAmount: true
+      })
+    }
+
+    if(type === 'weight') {
+      this.setState({
+        isAmount: false
+      })
+    }
+    
   }
 
   setAmountGms = (event) => {
@@ -292,6 +302,10 @@ class GoldSellHome extends Component {
       eventValue = (eventValue).replace(/,/g, "");
       eventValue = eventValue.replace(/₹/g, "");
       amount = eventValue
+    }
+
+    if(isNaN(eventValue)) {
+      return;
     }
 
     if (eventName === 'amount' && eventValue) {
@@ -392,10 +406,10 @@ class GoldSellHome extends Component {
         <div className="sell-home" id="goldSection">
         <div className="gold-aw-inputs">
               <div className="gold-aw-tabs">
-                <div onClick={() => this.chooseTabs()} className={`gold-aw-tab ${this.state.isAmount ? 'selected': ''}`}>
+                <div onClick={() => this.chooseTabs('amount')} className={`gold-aw-tab left-radius ${this.state.isAmount ? 'selected': ''}`}>
                   Enter in INR
                 </div>
-                <div onClick={() => this.chooseTabs()} className={`gold-aw-tab ${!this.state.isAmount ? 'selected': ''}`}>
+                <div onClick={() => this.chooseTabs('weight')} className={`gold-aw-tab right-radius ${!this.state.isAmount ? 'selected': ''}`}>
                   Enter in gms
                 </div>
               </div>
@@ -461,7 +475,7 @@ class GoldSellHome extends Component {
               </FormControl>
 
               <div>
-                  <Button fullWidth={true} variant="raised" disabled={!this.state.isRegistered}
+                  <Button style={{height: 50}} fullWidth={true} variant="raised" disabled={!this.state.isRegistered}
                       size="large" onClick={this.handleClick} color="secondary" autoFocus>
                     Proceed
                   </Button>

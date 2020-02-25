@@ -6,13 +6,16 @@ import { inrFormatDecimal2 } from 'utils/validators';
 
 const mapper = {
     'buy': {
-        'title': 'buy'
+        'title': 'buy',
+        'titleCaps': 'Buy'
     },
     'sell': {
-        'title': 'sell'
+        'title': 'sell',
+        'titleCaps': 'Sell'
     },
     'delivery': {
-        'title': 'delivery'
+        'title': 'delivery',
+        'titleCaps': 'Delivery'
     }
 }
 class GoldOnloadAndTimerClass extends Component {
@@ -48,6 +51,11 @@ class GoldOnloadAndTimerClass extends Component {
         }
 
         let timeAvailable = ((rate_validity - currentDate.getTime()) / 1000 - 330 * 60);
+        
+        // for testing
+        // let timeAvailable = orderData.timeAvailable;
+        // timeAvailable = timeAvailable -5;
+
 
         if (timeAvailable <= 0) {
 
@@ -68,6 +76,9 @@ class GoldOnloadAndTimerClass extends Component {
 
         let minutes = Math.floor(timeAvailable / 60);
         let seconds = Math.floor(timeAvailable - minutes * 60);
+        if(seconds < 10) {
+            seconds = '0' + seconds;
+        }
         orderData.timeAvailable = timeAvailable;
 
         this.updateParent('timeAvailable', timeAvailable);
@@ -129,11 +140,11 @@ class GoldOnloadAndTimerClass extends Component {
             },
             buttonTitle: "REFRESH",
             content1: [
-                { 'name': this.state.title + ' price for <b>' + orderData.weight_selected + '</b> gms', 'value': inrFormatDecimal2(orderData.base_amount) },
-                { 'name': 'GST', 'value': inrFormatDecimal2(orderData.gst_amount) }
+                { 'name': this.state.title + ' price for <b>' + (orderData.weight_selected || 0) + '</b> gms', 'value': inrFormatDecimal2(orderData.base_amount || 0) },
+                { 'name': 'GST', 'value': inrFormatDecimal2(orderData.gst_amount || 0) }
             ],
             content2: [
-                { 'name': 'Total', 'value': inrFormatDecimal2(orderData.total_amount) }
+                { 'name': 'Total', 'value': inrFormatDecimal2(orderData.total_amount || 0) }
             ],
             provider: this.state.provider
         }
@@ -171,7 +182,7 @@ class GoldOnloadAndTimerClass extends Component {
         if (this.state.orderType !== 'delivery') {
             confirmDialogData = {
                 buttonData: {
-                    leftTitle: this.state.orderType + ' gold worth',
+                    leftTitle: mapper[this.state.orderType].titleCaps + ' gold worth',
                     leftSubtitle: inrFormatDecimal2(orderData.amount_selected),
                     leftArrow: 'down',
                     provider: this.state.provider
@@ -190,7 +201,7 @@ class GoldOnloadAndTimerClass extends Component {
             }
 
             bottomButtonData = {
-                leftTitle: this.state.orderType + ' gold worth',
+                leftTitle: mapper[this.state.orderType].titleCaps + ' gold worth',
                 leftSubtitle: inrFormatDecimal2(orderData.amount_selected),
                 leftArrow: 'up',
                 provider: this.state.provider

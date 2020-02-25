@@ -19,21 +19,23 @@ class GoldLivePriceClass extends Component {
         
         return (
             <div className="live-price-gold" style={this.props.style}>
-                <div className="left-img">
-                    {this.props.parent.state.minutes < 1 && 
-                    <SVG
-                        preProcessor={code => code.replace(/fill=".*?"/g, 'fill=#D0021B' )}
-                        src={ic_live_green}
-                    />}
-                    {this.props.parent.state.minutes >= 1 && 
-                    <SVG
-                        preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().secondary )}
-                        src={ic_live_green}
-                    />}
-                </div>
-                <div className="mid-text">
-        Live price: {inrFormatDecimal2(this.props.parent.state.live_price)} 
-        {(!this.props.parent.state.live_price ? '-' : '')}/gm
+                <div style={{display: 'flex'}}>
+                    <div className="left-img">
+                        {this.props.parent.state.minutes < 1 && 
+                        <SVG
+                            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=#D0021B' )}
+                            src={ic_live_green}
+                        />}
+                        {this.props.parent.state.minutes >= 1 && 
+                        <SVG
+                            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().secondary )}
+                            src={ic_live_green}
+                        />}
+                    </div>
+                    <div className="mid-text">
+            Live price: {inrFormatDecimal2(this.props.parent.state.live_price)} 
+            {(!this.props.parent.state.live_price ? '-' : '')}/gm
+                    </div>
                 </div>
                 <div className="right-text" 
                 style={{color: this.props.parent.state.minutes <1 ? '#D0021B' : getConfig().secondary}}>

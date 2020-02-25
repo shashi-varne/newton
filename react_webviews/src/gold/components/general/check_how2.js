@@ -10,7 +10,13 @@ class CheckHow2 extends Component {
         super(props);
         this.state = {
             show_loader: false,
-            productName: getConfig().productName
+            productName: getConfig().productName,
+            rightButtonData: {
+                title: 'NEXT'
+              },
+              leftButtonData: {
+                title: 'BACK'
+              }
         }
     }
 

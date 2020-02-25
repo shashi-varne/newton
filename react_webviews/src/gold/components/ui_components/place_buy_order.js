@@ -29,6 +29,7 @@ class PlaceBuyOrderClass extends Component {
         if (getConfig().generic_callback) {
             pgLink += '&generic_callback=' + getConfig().generic_callback;
         }
+
         window.location = pgLink;
     }
 

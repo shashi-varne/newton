@@ -59,7 +59,7 @@ const Header = ({ classes, title, count, total, current, goBack,
      <div id="header-title-page"
      style={style} 
      className={`header-title-page ${inPageTitle ? 'slide-fade-show' : 'slide-fade'} ${className}`}>
-      <div className="header-title-page-text">
+      <div className="header-title-page-text" style={{width: count ? '75%': ''}}>
         {title}
       </div>
       {inPageTitle && count &&

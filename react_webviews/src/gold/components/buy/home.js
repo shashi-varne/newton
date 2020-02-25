@@ -26,7 +26,7 @@ const plusOptionsAmount = [
 ];
 
 const plusOptionsWeight = [
-  0.25, 0.50, 1.00, 2.00
+  '0.25', '0.50', '1.00', '2.00'
 ];
 
 const stepsContentMapper = [
@@ -180,24 +180,24 @@ class GoldBuyHome extends Component {
     // }
 
     if (!parseFloat(this.state.weight) || parseFloat(this.state.weight) < 0) {
-      toast('Please enter a correct value for the weight', 'error');
+      toast('Please enter a correct value for the weight');
       return;
     }
 
     if (!parseFloat(this.state.amount)) {
-      toast('Please enter a correct value for the amount', 'error');
+      toast('Please enter a correct value for the amount');
       return;
     }
 
     if (this.state.isAmount && parseFloat(this.state.amount) >= 0 && 
         parseFloat(this.state.amount) < this.state.minAmount) {
-      toast('Minimum amount should be Rs. ' + this.state.minAmount, 'error');
+      toast('Minimum amount should be Rs. ' + this.state.minAmount);
       return;
     }
 
     if (!this.state.isAmount && this.state.weight >= 0 && 
     this.state.weight < this.state.minWeight) {
-      toast('Minimum weight should be Rs. ' + this.state.minWeight + ' gms', 'error');
+      toast('Minimum weight should be Rs. ' + this.state.minWeight + ' gms');
       return;
     }
 
@@ -255,6 +255,7 @@ class GoldBuyHome extends Component {
       return;
     }
 
+
     eventValue = eventValue.toString();
 
     if(eventName === 'weight') {
@@ -266,6 +267,10 @@ class GoldBuyHome extends Component {
       eventValue = (eventValue).replace(/,/g, "");
       eventValue = eventValue.replace(/₹/g, "");
       amount = eventValue
+    }
+
+    if(isNaN(eventValue)) {
+      return;
     }
 
     if (eventName === 'amount' && eventValue) {
@@ -324,10 +329,20 @@ class GoldBuyHome extends Component {
     })
   }
 
-  chooseTabs() {
-    this.setState({
-      isAmount: !this.state.isAmount
-    })
+  chooseTabs(type) {
+
+    if(type === 'amount') {
+      this.setState({
+        isAmount: true
+      })
+    }
+
+    if(type === 'weight') {
+      this.setState({
+        isAmount: false
+      })
+    }
+    
   }
 
   addPlusItems =(value) => {
@@ -393,10 +408,10 @@ class GoldBuyHome extends Component {
           <GoldLivePrice parent={this} />
             <div className="gold-aw-inputs">
               <div className="gold-aw-tabs">
-                <div onClick={() => this.chooseTabs()} className={`gold-aw-tab ${this.state.isAmount ? 'selected': ''}`}>
+                <div onClick={() => this.chooseTabs('amount')} className={`gold-aw-tab left-radius ${this.state.isAmount ? 'selected': ''}`}>
                   Enter in INR
                 </div>
-                <div onClick={() => this.chooseTabs()} className={`gold-aw-tab ${!this.state.isAmount ? 'selected': ''}`}>
+                <div onClick={() => this.chooseTabs('weight')} className={`gold-aw-tab right-radius ${!this.state.isAmount ? 'selected': ''}`}>
                   Enter in gms
                 </div>
               </div>
@@ -461,12 +476,13 @@ class GoldBuyHome extends Component {
                   <div className="plus-options">
                     {plusOptionsWeight.map(this.renderPlusOptions)}
                   </div>}
-                  <Button fullWidth={true} variant="raised"
+                  <Button style={{height: 50}} fullWidth={true} variant="raised"
                       size="large" onClick={this.handleClick} color="secondary" autoFocus>
                     Pay {inrFormatDecimal2(this.state.amount || 0)}
                   </Button>
 
-                  <div style={{color: '#767E86', fontSize:8,margin: '7px 0 0 0'}}>
+                  <div style={{color: '#767E86', fontSize:8,margin: '7px 0 0 0', 
+                textTransform: 'capitalize', textAlign: 'center', letterSpacing:1.1}}>
                   *Inclusive of 3% GST | can only be sold after 24 hours
                   </div>
               </div>

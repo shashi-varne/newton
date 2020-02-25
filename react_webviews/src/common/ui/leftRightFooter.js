@@ -9,19 +9,34 @@ class LeftRightFooterClass extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rightButtonData: this.props.parent.state.rightButtonData || {}
+            rightButtonData: this.props.parent.state.rightButtonData || {},
+            leftButtonData: this.props.parent.state.leftButtonData || {}
         }
     }
 
     render() {
         return (
-            <div className="bottom-short-footer">
-                <div className="left-arrow" onClick={() => this.props.parent.leftClick()}>
-                    <SVG
+            <div className="bottom-short-footer" style={{justifyContent: this.state.leftButtonData.hide ? 'flex-end' : ''}}>
+                {!this.state.leftButtonData.hide &&
+                    <div className="left-arrow" 
+                    style={{backgroundColor: this.state.leftButtonData.title  ? 'white': ''}}
+                    onClick={() => this.props.parent.leftClick()}>
+                        
+
+                    {!this.state.leftButtonData.title &&  
+                        <SVG
                         preProcessor={code => code.replace(/fill=".*?"/g, 'fill=#767E86' )}
                         src={back_arrow}
-                    />
-                </div>
+                        />
+                    }           
+
+                    {this.state.leftButtonData.title &&  
+                        <span style={{color: '#767E86', fontSize:12, fontWeight:700}}>
+                            {this.state.leftButtonData.title}
+                        </span>
+                    }
+                    </div>
+                }
                 <div className="right-arrow" onClick={() => this.props.parent.rightClick()}>
                     {!this.state.rightButtonData.title &&  
                         <SVG

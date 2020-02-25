@@ -17,6 +17,7 @@ import PriceChangeDialog from '../ui_components/price_change_dialog';
 import RefreshBuyPrice from '../ui_components/buy_price';
 import {gold_providers} from  '../../constants';
 import GoldOnloadAndTimer from '../ui_components/onload_and_timer';
+import PlaceBuyOrder from '../ui_components/place_buy_order';
 
 class GoldRegister extends Component {
   constructor(props) {
@@ -45,7 +46,8 @@ class GoldRegister extends Component {
       orderType: 'buy',
       name_disabled: false,
       mobile_no_disabled: false,
-      email_disabled: false
+      email_disabled: false,
+      proceedForOrder: false
     }
 
   }
@@ -253,6 +255,36 @@ class GoldRegister extends Component {
     }
   }
 
+  createUser = async () => {
+
+    this.setState({
+      show_loader: true
+    });
+
+   
+    try {
+      const res = await Api.post('/api/gold/user/account/create/'  + this.state.provider);
+
+      if (res.pfwresponse.status_code === 200) {
+        // place order
+        this.setState({
+          proceedForOrder: true
+        })
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+          'Something went wrong', 'error');
+      }
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong', 'error');
+    }
+  }
+
   openTermsAndCondition() {
     this.setState({
       terms_opened: true
@@ -335,6 +367,8 @@ class GoldRegister extends Component {
           
         } else if(res.pfwresponse.result.mobile_verified === false) {
           this.verifyMobile();
+        } else if(res.pfwresponse.result.mobile_verified === true) {
+          this.createUser();
         } else {
 
           this.setState({
@@ -469,6 +503,10 @@ class GoldRegister extends Component {
 
         {this.state.openOnloadModal && 
           <GoldOnloadAndTimer parent={this} />}
+
+        {this.state.proceedForOrder &&
+          <PlaceBuyOrder parent={this} />
+        }
       </Container>
     );
   }

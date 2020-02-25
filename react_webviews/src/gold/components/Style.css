@@ -164,6 +164,7 @@
   color: #6e6e6e;
   flex: 1;
   font-size: 11px;
+  margin: 5px 0 0 0;
 }
 .input-box {
   padding: 15px 0;
@@ -423,7 +424,7 @@ img.gold-offer-slide-img {
 }
 .check-how-gold .content-tiles {
   margin: 0 0 10px 0;
-  line-height: 1.5;
+  line-height: 1.7;
   text-align: left;
 }
 .check-how-gold .chart {
@@ -431,6 +432,9 @@ img.gold-offer-slide-img {
 }
 .check-how-gold .mid-img {
   margin: 0 0 20px 0;
+}
+.check-how-gold .mid-img img {
+  width: 100%;
 }
 .live-price-gold {
   display: flex;
@@ -444,6 +448,7 @@ img.gold-offer-slide-img {
 .live-price-gold .mid-text {
   color: #767e86;
   font-size: 13px;
+  margin: 0 0 0 10px;
 }
 .live-price-gold .right-text {
   font-size: 10px;
@@ -749,14 +754,23 @@ img.gold-offer-slide-img {
   padding: 10px 15px 10px 15px;
   border-radius: 4px;
   cursor: pointer;
+  min-width: 40px;
+  text-align: center;
 }
 .gold-aw-tabs {
   display: flex;
   justify-content: center;
   margin: 0 auto;
   width: auto;
-  margin: 0 0 30px 0;
-  cursor: pointer;
+  margin: 30px 0 30px 0;
+}
+.gold-aw-tabs .left-radius {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+.gold-aw-tabs .right-radius {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
 .gold-aw-tab {
   color: #767e86;
@@ -766,10 +780,12 @@ img.gold-offer-slide-img {
   font-size: 13px;
   font-weight: 500;
   margin: 0 0 0 -1px;
+  cursor: pointer;
 }
 .gold-aw-tab.selected {
   background: white;
-  color: #3792fc;
+  color: var(--primary);
+  cursor: unset;
 }
 .gold-buy-info-images {
   display: flex;
@@ -795,7 +811,7 @@ img.gold-offer-slide-img {
   margin: 50px 0 40px 0;
   border-top: 1px solid #ededed;
   border-bottom: 1px solid #ededed;
-  padding: 10px 0 10px 0;
+  padding: 20px 0 20px 0;
 }
 .gold-how-steps .top-tile {
   display: flex;
@@ -818,7 +834,10 @@ img.gold-offer-slide-img {
 .gold-bottom-secure-info .images {
   margin: 8px 0 0 0;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+}
+.gold-bottom-secure-info .images img {
+  margin: 0 10px 0 0;
 }
 .gold-steps-images .content {
   color: #767e86;
@@ -863,7 +882,7 @@ img.gold-offer-slide-img {
 }
 .gold-locker-tabs .gold-locker-tab.selected {
   background: white;
-  color: #3792fc;
+  color: var(--primary);
   cursor: unset;
 }
 .gold-locker-tabs .gold-locker-tab.selected .block2 {
@@ -970,6 +989,7 @@ img.gold-offer-slide-img {
 }
 .gold-landing .infoimage-block1 {
   position: relative;
+  line-height: 1.6;
   cursor: pointer;
 }
 .gold-landing .infoimage-block1 .inner {
@@ -977,13 +997,16 @@ img.gold-offer-slide-img {
 }
 .gold-landing .infoimage-block1 .title {
   max-width: 60%;
-  margin: 0 0 40px 0;
+  margin: 10px 0 0px 0;
   position: absolute;
   top: 18%;
 }
 .gold-landing .infoimage-block1 .button {
   position: absolute;
   top: 50%;
+}
+.gold-landing .infoimage-block1 .button button {
+  box-shadow: none;
 }
 .gold-landing .infoimage-block1 .bottom-content {
   color: #9e6e1d;
@@ -1008,13 +1031,13 @@ img.gold-offer-slide-img {
 .gold-landing .block3 .tile {
   display: flex;
   align-items: center;
-  margin: 0 0 20px 0;
+  margin: 40px 0 40px 0;
 }
 .gold-landing .block3 .benefites {
   margin: 20px 0 0 0;
 }
 .gold-landing .block3 .benefit-tile-title {
-  color: #3792fc;
+  color: var(--primary);
   font-size: 14px;
   font-weight: 800;
 }
@@ -1030,18 +1053,18 @@ img.gold-offer-slide-img {
 .gold-landing .block2 {
   margin: 30px -15px 0 -15px;
   background: white;
-  padding: 10px 15px 50px 15px;
+  padding: 10px 15px 20px 15px;
   border-radius: 10px;
 }
 .gold-landing .block2 .want-to {
   color: #0a1c32;
   font-size: 16px;
   font-weight: 600;
-  border-bottom: 1px solid #ededed;
   padding: 13px 0 13px 0;
 }
 .gold-landing .block2 .highlight-text {
   cursor: pointer;
+  padding: 20px 0px 20px 20px;
 }
 .gold-landing .block2 .tile2 {
   display: flex;

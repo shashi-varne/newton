@@ -204,6 +204,7 @@
   color: #6e6e6e;
   flex: 1;
   font-size: 11px;
+  margin: 5px 0 0 0;
 }
 
 .input-box {
@@ -523,7 +524,7 @@ img.gold-offer-slide-img {
 }
 .check-how-gold .content-tiles {
   margin: 0 0 10px 0;
-  line-height: 1.5;
+  line-height: 1.7;
   text-align: left;
 }
 .check-how-gold .chart {
@@ -531,6 +532,9 @@ img.gold-offer-slide-img {
 }
 .check-how-gold .mid-img {
   margin: 0 0 20px 0;
+  img {
+    width: 100%;
+  }
 }
 .live-price-gold {
   display: flex;
@@ -544,6 +548,7 @@ img.gold-offer-slide-img {
 .live-price-gold .mid-text {
   color: #767E86;
   font-size: 13px;
+  margin: 0 0 0 10px;
 }
 .live-price-gold .right-text {
   font-size: 10px;
@@ -888,6 +893,8 @@ img.gold-offer-slide-img {
     padding: 10px 15px 10px 15px;
     border-radius: 4px;
     cursor: pointer;
+    min-width: 40px;
+    text-align: center;
   }
 }
 
@@ -898,8 +905,17 @@ img.gold-offer-slide-img {
   justify-content: center;
   margin: 0 auto;
   width: auto;
-  margin: 0 0 30px 0;
-  cursor: pointer;
+  margin: 30px 0 30px 0;
+
+  .left-radius {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+  }
+  .right-radius {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+  
 }
 
 .gold-aw-tab {
@@ -911,11 +927,13 @@ img.gold-offer-slide-img {
   font-size: 13px;
   font-weight: 500;
   margin: 0 0 0 -1px;
+  cursor: pointer;
 }
 
 .gold-aw-tab.selected {
   background: white;
-  color: #3792FC;
+  color: var(--primary);
+  cursor: unset;
 }
 
 
@@ -950,7 +968,7 @@ img.gold-offer-slide-img {
   margin: 50px 0 40px 0;
   border-top: 1px solid #EDEDED;
   border-bottom: 1px solid #EDEDED;
-  padding: 10px 0 10px 0;
+  padding: 20px 0 20px 0;
 
   .top-tile {
     display: flex;
@@ -974,7 +992,10 @@ img.gold-offer-slide-img {
 .gold-bottom-secure-info .images {
   margin: 8px 0 0 0;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  img {
+    margin: 0 10px 0 0;
+  }
 }
 .gold-steps-images .content {
   color: #767E86;
@@ -1024,7 +1045,7 @@ img.gold-offer-slide-img {
 
   .gold-locker-tab.selected {
     background: white;
-    color: #3792FC;
+    color: var(--primary);
     cursor: unset;
 
     .block2 {
@@ -1165,6 +1186,7 @@ img.gold-offer-slide-img {
   }
   .infoimage-block1 {
     position: relative;
+    line-height: 1.6;
     cursor: pointer;
     .inner {
       // position: absolute;
@@ -1173,13 +1195,16 @@ img.gold-offer-slide-img {
     }
     .title {
       max-width: 60%;
-      margin: 0 0 40px 0;
+      margin: 10px 0 0px 0;
       position: absolute;
       top: 18%;
     }
     .button {
       position: absolute;
       top: 50%;
+      button {
+        box-shadow: none;
+      }
     }
     .bottom-content {
       color: #9E6E1D;
@@ -1207,7 +1232,7 @@ img.gold-offer-slide-img {
     .tile {
       display: flex;
       align-items: center;
-      margin: 0 0 20px 0;
+      margin: 40px 0 40px 0;
     }
   
     .benefites {
@@ -1215,7 +1240,7 @@ img.gold-offer-slide-img {
     }
   
     .benefit-tile-title {
-        color: #3792FC;
+        color: var(--primary);
         font-size: 14px;
         font-weight: 800;
     }
@@ -1235,18 +1260,18 @@ img.gold-offer-slide-img {
   .block2 {
     margin: 30px -15px 0 -15px;
     background: white;
-    padding: 10px 15px 50px 15px;
+    padding: 10px 15px 20px 15px;
     border-radius: 10px;
     .want-to {
       color: #0A1C32;
       font-size: 16px;
       font-weight: 600;
-      border-bottom: 1px solid #EDEDED;
       padding: 13px 0 13px 0;
     }
 
     .highlight-text {
       cursor: pointer;
+      padding: 20px 0px 20px 20px;
     }
     .tile2 {
       display: flex;

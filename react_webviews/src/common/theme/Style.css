@@ -557,7 +557,7 @@ input#pan {
     color: #0A1C32;
     height: 50px;
     display: flex;
-    align-items: center;
+    align-items: baseline;
     padding: 0 15px 0 15px;
     font-size: 20px;
     transition:.3s transform ease-in-out;

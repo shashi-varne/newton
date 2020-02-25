@@ -341,9 +341,11 @@ class GoldLocker extends Component {
 
             <img
               src={require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
-            <div style={{ display: 'grid' }}>
+            <div style={{ display: 'grid', margin: '0 0 0 10px' }}>
               <div className="highlight-text12">
-                Total value
+                Your gold locker
+                <img  style={{margin: '0 0 0 8px', width: 11}}
+                src={ require(`assets/easy_secure_icon.svg`)} alt="Gold" />
               </div>
               <div className="highlight-text2" style={{ margin: '4px 0 0 8px' }}>
                 {this.state.user_info.total_balance || 0} gms = {inrFormatDecimal2(parseFloat(this.state.mmtc_info.sell_value) + parseFloat(this.state.safegold_info.sell_value))}
@@ -412,7 +414,8 @@ class GoldLocker extends Component {
               </div>}
               </div>
 
-              {!this.state.selected_provider_info.user_info.bank_info_added &&
+              {(!this.state.selected_provider_info.user_info.bank_info_added || 
+              !this.state.selected_provider_info.user_info.pan_number) &&
                <div className="share-pan-bank" onClick={() => this.navigate(
                   this.state.provider + '/sell-pan', {pan_bank_flow: true}
                 )}>
@@ -429,6 +432,7 @@ class GoldLocker extends Component {
             <div>
               <div>
                 <img className="img"
+                 style={{width: '100%'}}
                   src={require(`assets/${this.state.productName}/ils_alternate_assets.svg`)} alt="Gold" />
               </div>
               <div style={{ color: '#0A1D32', fontSize: 14, fontWeight: 400, margin: '20px 0 30px 0' }}>

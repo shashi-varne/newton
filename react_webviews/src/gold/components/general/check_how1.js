@@ -29,7 +29,13 @@ class CheckHow1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false
+      show_loader: false,
+      rightButtonData: {
+        title: 'NEXT'
+      },
+      leftButtonData: {
+        hide: true
+      }
     }
   }
 
@@ -93,11 +99,11 @@ class CheckHow1 extends Component {
             <div style={{color: '#D3DBE4', fontSize: 10,fontWeight: 700, textAlign: 'center'}}>Gold prices since 1975</div>
             <Bar
             data={
-                {labels: [0, 1985, 1995, 2005, 2015, 2019],
+                {labels: [1985, 1995, 2005, 2015, 2019],
                 datasets: [
                   {
                     label: 'Price',
-                    data: [0, 1781.24, 5454.37, 9590.61, 28510.10, 42158.60],
+                    data: [1781.24, 5454.37, 9590.61, 28510.10, 42158.60],
                      backgroundColor: getConfig().primary,
                   }
                 ]}
@@ -117,7 +123,7 @@ class CheckHow1 extends Component {
                     Over the last 30 years gold price has increased by <b>~423%.</b> It acts as a cushion to stock market risks.
                 </div>
                 <div className="content-tiles">
-                    For example, gold has generated a return of <b>24.58%</b> during the financial year <b>2008-09,</b> 
+                    For example, gold has generated a return of <b>24.58%</b> during the financial year <b>2008-09, </b> 
                     when the Sensex has crashed almost 38%.
                 </div>
             </div>

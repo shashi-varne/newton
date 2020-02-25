@@ -66,7 +66,7 @@ class GoldSelectProviderClass extends Component {
                             </div>
                             <div style={{}}>
                                 {index === this.state.selectedIndex &&
-                                    <img style={{ width: 9, margin: '4px 0 0 8px', verticalAlign: 'middle' }} src={completed_step} alt="Gold Delivery" />}
+                                    <img style={{ width: 14, margin: '4px 0 0 8px', verticalAlign: 'middle' }} src={completed_step} alt="Gold Delivery" />}
                             </div>
 
                         </div>
@@ -88,7 +88,7 @@ class GoldSelectProviderClass extends Component {
         
         let state = stateMapper[this.state.params.redirect_state];
         let provider = this.state.providers[this.state.selectedIndex].key;
-        storageService().set('gold_provider', provider)
+        storageService().set('gold_provider', provider);
         this.navigate(state);
     }
 
