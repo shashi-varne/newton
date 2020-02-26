@@ -8,7 +8,7 @@ import { getConfig } from 'utils/functions';
 import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
 import GoldProviderFilter from '../ui_components/provider_filter';
 import { default_provider, gold_providers, isUserRegistered } from '../../constants';
-import { storageService} from 'utils/validators';
+import { storageService, inrFormatDecimal2} from 'utils/validators';
 
 const stepsContentMapper = [
   { 'icon': 'ic_gold_provider', 'content': 'How to get gold coin delivered?' },
@@ -158,7 +158,7 @@ class GoldDeliveryProducts extends Component {
 
         <div className="disc">{props.description}</div>
         <div className="making-charges">Making charges</div>
-        <div className="making-cost">Rs. {props.delivery_minting_cost}</div>
+        <div className="making-cost">{inrFormatDecimal2(props.delivery_minting_cost)}</div>
       </div>
     )
   }

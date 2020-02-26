@@ -5,7 +5,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 
 const stepsContentMapper = [
-  { 'icon': 'ic_gold_provider', 'content': 'How to get gold coin delivered?' },
+  { 'icon': 'ic_gold_provider', 'content': 'Select gold coin' },
   { 'icon': 'ic_make_payment', 'content': 'Pay making charges' },
   { 'icon': 'deliver', 'content': 'Get home delivery' }
 ];
@@ -80,8 +80,8 @@ class DeliveryIntro extends Component {
         <div className="gold-how-steps" style={{ border: 'none' }}>
           <div className="top-tile">
             <div className="top-title">
-              How to buy digital gold?
-                        </div>
+              How to get gold coin delivered?
+            </div>
           </div>
 
           <div className='gold-steps-images'>

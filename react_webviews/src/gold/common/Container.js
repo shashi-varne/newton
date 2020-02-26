@@ -270,7 +270,6 @@ class Container extends Component {
   }
 
   onScroll = () => {
-    console.log(this.getHeightFromTop());
     let inPageTitle = this.state.inPageTitle;
     if (this.getHeightFromTop() >= 56) {
       //show up
