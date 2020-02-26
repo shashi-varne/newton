@@ -270,12 +270,13 @@ class Container extends Component {
   }
 
   onScroll = () => {
+    console.log(this.getHeightFromTop());
     let inPageTitle = this.state.inPageTitle;
     if (this.getHeightFromTop() >= 56) {
       //show up
       inPageTitle = true;
 
-    } else if(this.getHeightFromTop() < 36) {
+    } else {
       //show down
       inPageTitle = false;
     }
@@ -332,6 +333,27 @@ class Container extends Component {
           {/* Loader Block */}
           {this.renderPageLoader()}
         </div>
+
+        {/*  */}
+
+        {!this.state.force_hide_inpage_title &&
+          <div id="header-title-page"
+            style={this.props.styleHeader} 
+            className={`header-title-page  ${this.props.classHeader}`}>
+              {/* {this.state.inPageTitle &&  */}
+                <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{width: this.props.count ? '75%': ''}}>
+                  {this.props.title}
+                </div>
+              {/* } */}
+              
+              {this.state.inPageTitle && this.props.count &&
+                <span color="inherit" 
+                className={`${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}
+                style={{ fontSize: 10 }}>
+                  <span style={{ fontWeight: 600 }}>{this.props.current}</span>/<span>{this.props.total}</span>
+                </span>}
+          </div>
+         }
 
         {/* Children Block */}
         <div

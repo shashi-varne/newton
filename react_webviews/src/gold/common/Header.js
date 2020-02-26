@@ -55,7 +55,7 @@ const Header = ({ classes, title, count, total, current, goBack,
     </Toolbar>
 
     
-   {!force_hide_inpage_title &&
+   {/* {!force_hide_inpage_title &&
      <div id="header-title-page"
      style={style} 
      className={`header-title-page ${inPageTitle ? 'slide-fade-show' : 'slide-fade'} ${className}`}>
@@ -67,7 +67,7 @@ const Header = ({ classes, title, count, total, current, goBack,
           <span style={{ fontWeight: 600 }}>{current}</span>/<span>{total}</span>
         </span>}
       </div>
-    }
+    } */}
 
 
   </AppBar >

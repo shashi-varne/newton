@@ -23,7 +23,8 @@ class GoldProviderFilterClass extends Component {
     renderUi() {
         return (
             <div 
-            className={`gold-provider-filter ${this.props.parent.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}>
+            className={`gold-provider-filter ${this.props.parent.state.inPageTitle ? 'slide-fade-show' : 'slide-fade2'}`}
+            >
                 <div className="tile1">
                     <div className="tile1-left">
                         <span style={{textTransform: 'capitalize'}}>{this.props.parent.state.orderType}</span> gold:

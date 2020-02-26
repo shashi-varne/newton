@@ -560,7 +560,7 @@ input#pan {
     color: #0A1C32;
     height: 50px;
     display: flex;
-    align-items: flex-start;
+    align-items: flex-end;
     padding: 0 15px 0 15px;
     font-size: 20px;
     transition:.3s transform ease-in-out;
@@ -592,7 +592,12 @@ input#pan {
 .slide-fade{
   transition: all 0.4s ease-out;
   opacity: 0;
-  height: 0px;
+  /* height: 0px; */
+}
+.slide-fade2{
+  transition: all 0.4s ease-out;
+  /* opacity: 0; */
+  /* height: 0px; */
 }
 .slide-fade-show {
   opacity: 1;
