@@ -14,6 +14,7 @@ import SVG from 'react-inlinesvg';
 import ic_send_email from 'assets/ic_send_email.svg';
 import DotDotLoader from '../../../common/ui/DotDotLoader';
 import {getTransactionStatus, setTransationsSteps, getUniversalTransStatus} from '../../constants';
+import { copyToClipboard } from 'utils/validators';
 
 let icon_mapper = {
   'pending': 'not_done_yet_step',
@@ -43,7 +44,8 @@ class GoldTransactionDetail extends Component {
       order: {
         cssMapper: {}
       },
-      icon_mapper: icon_mapper
+      icon_mapper: icon_mapper,
+      copyText: 'COPY'
     }
   }
 
@@ -245,6 +247,16 @@ class GoldTransactionDetail extends Component {
     }
   }
 
+  copyItem = (string) => {
+    if (copyToClipboard(string)) {
+      toast('Tracking number copied');
+      this.setState({
+        copyText: 'Copied'
+      })
+      this.sendEvents('copy');
+    }
+  }
+
 
   getPurchaseTitle =() => {
     let title = 'Gold purchase amount';
@@ -325,7 +337,17 @@ class GoldTransactionDetail extends Component {
                 Tracking URL
                 </div>
               <div className="subtitle">
-                {(this.state.order.courier_tracking_id || '-')}
+                <span>Couriour service : {this.state.order.courier_company || ' -'}</span>
+                <div style={{display:'flex', justifyContent: 'space-between', 
+                margin: '3px 0 0 0', alignItems: 'center'}}>
+                  <span>Tracking number : {this.state.order.courier_tracking_id || ' -'}</span>
+                  {this.state.order.courier_tracking_id && 
+                    <span 
+                      onClick={() => this.copyItem(this.state.order.courier_tracking_id)}
+                      style={{fontSize: 10, fontWeight: 700,color: getConfig().secondary}}>{this.state.copyText}
+                    </span>
+                  }
+                </div>
               </div>
             </div>
           </div>
