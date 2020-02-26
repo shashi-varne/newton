@@ -6,10 +6,18 @@ import { getConfig } from 'utils/functions';
 
 import { Bar } from 'react-chartjs-2';
 import LeftRightFooter from '../../../common/ui/leftRightFooter';
+import {inrFormatDecimal2} from 'utils/validators';
 
 const options={
   legend: {
       display: false,
+  },
+  tooltips: {
+    callbacks: {
+        label: function(tooltipItem, data) {
+          return 'PRICE ' + inrFormatDecimal2(tooltipItem.yLabel);
+        }
+    }
   },
   scales: {
     xAxes: [{
@@ -19,8 +27,19 @@ const options={
     }],
     yAxes: [{
         gridLines: {
-            color: "rgba(0, 0, 0, 0)",
-        }   
+            // color: "rgba(0, 0, 0, 0)",
+            color: "#EEEEEE"
+        },
+        ticks: {
+          // Include a dollar sign in the ticks
+          callback: function(value) {
+              return (value/1000).toFixed(0) + 'K';
+          },
+          stepSize: 10000,
+          beginAtZero: false,
+          // display: false
+        }
+           
     }]
 }
 };
@@ -89,6 +108,8 @@ class CheckHow1 extends Component {
         current={1}
         total={3}
         noFooter={true}
+        // classOverRide="gold-check-how-container"
+        // classOverRideContainer="gold-check-how-container"
         headerData={ {
           icon: 'close'
         }}

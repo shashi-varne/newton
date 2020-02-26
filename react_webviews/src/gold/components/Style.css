@@ -1193,3 +1193,6 @@ img.gold-offer-slide-img {
   color: #0a1d32;
   font-weight: 400;
 }
+.gold-check-how-container {
+  height: -webkit-fill-available;
+}
