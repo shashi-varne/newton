@@ -229,6 +229,9 @@ class GoldPanDataClass extends Component {
 
                     if (this.state.orderType === 'buy' && this.state.isRegistered) {
                         this.props.parent.updateParent('proceedForOrder', true);
+                    } if (this.state.orderType === 'buy' && !this.state.isRegistered) {
+                        this.navigate('gold-register');
+                        return;
                     } else if (this.state.orderType === 'sell' && this.state.pan_bank_flow) {
                         this.navigate('sell-add-bank');
                         return;

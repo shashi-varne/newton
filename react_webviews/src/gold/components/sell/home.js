@@ -501,7 +501,7 @@ class GoldSellHome extends Component {
             </div>
 
 
-            <GoldBottomSecureInfo />
+            <GoldBottomSecureInfo parent={this} />
           </div>
 
           <PriceChangeDialog parent={this} />

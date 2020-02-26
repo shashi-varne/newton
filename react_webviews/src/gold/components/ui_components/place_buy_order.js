@@ -9,7 +9,6 @@ class PlaceBuyOrderClass extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            show_loader: false,
             provider: this.props.parent.state.provider || 
                     this.props.parent.props.match.params.provider,
             buyData: storageService().getObject('buyData')
@@ -61,17 +60,13 @@ class PlaceBuyOrderClass extends Component {
                 return;
 
             } else {
-                this.setState({
-                    show_loader: false
-                });
+                this.props.parent.updateParent('show_loader', true);
                 toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
                     'Something went wrong', 'error');
             }
         } catch (err) {
             console.log(err);
-            this.setState({
-                show_loader: false
-            });
+            this.props.parent.updateParent('show_loader', true);
             toast('Something went wrong', 'error');
         }
     }

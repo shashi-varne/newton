@@ -6,7 +6,8 @@ class GoldBottomSecureInfoClass extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            productName: getConfig().productName
+            productName: getConfig().productName,
+            provider: this.props.parent.state.provider || ''
         }
     }
 
@@ -18,9 +19,12 @@ class GoldBottomSecureInfoClass extends Component {
               </div>
 
                 <div className="images">
-                    <img className="icon" src={require(`assets/brinks_logo.svg`)} alt="Gold" />
-                    <img className="icon" src={require(`assets/logo_idbi.svg`)} alt="Gold" />
-                    <img className="icon" src={require(`assets/logo_lbma.svg`)} alt="Gold" />
+                    {(this.state.provider === 'safegold' || !this.state.provider) && 
+                    <img className="icon" src={require(`assets/brinks_logo.svg`)} alt="Gold" />}
+                    {(this.state.provider === 'mmtc' || !this.state.provider) && 
+                    <img className="icon" src={require(`assets/logo_idbi.svg`)} alt="Gold" />}
+                    {(this.state.provider === 'mmtc' || !this.state.provider) && 
+                    <img className="icon" src={require(`assets/logo_lbma.svg`)} alt="Gold" />}
                 </div>
             </div>
         );

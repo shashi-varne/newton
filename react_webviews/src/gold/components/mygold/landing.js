@@ -472,7 +472,7 @@ class GoldSummary extends Component {
 
       {this.state.bottom_carousel && this.renderCarousel()}
       <div style={{margin: '30px 0 20px 0'}}>
-        <GoldBottomSecureInfo />
+        <GoldBottomSecureInfo parent={this} />
       </div>
 
       </div>

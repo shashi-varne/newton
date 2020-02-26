@@ -441,7 +441,7 @@ class GoldLocker extends Component {
             </div>
           }
 
-          <GoldBottomSecureInfo />
+          <GoldBottomSecureInfo parent={this} />
 
         </div>
       </Container>
