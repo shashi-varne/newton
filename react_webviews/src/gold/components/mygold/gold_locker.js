@@ -344,7 +344,7 @@ class GoldLocker extends Component {
               <div className="highlight-text12">
                 Your gold locker
                 <img  style={{margin: '0 0 0 8px', width: 11}}
-                src={ require(`assets/easy_secure_icon.svg`)} alt="Gold" />
+                src={ require(`assets/lock_icn.svg`)} alt="Gold" />
               </div>
               <div className="highlight-text2" style={{ margin: '4px 0 0 8px' }}>
                 {this.state.user_info.total_balance || 0} gms = {inrFormatDecimal2(parseFloat(this.state.mmtc_info.sell_value) + parseFloat(this.state.safegold_info.sell_value))}
