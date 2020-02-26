@@ -38,7 +38,7 @@ class GoldTransactionDetail extends Component {
       error: false,
       errorMessage: '',
       countdownInterval: null,
-      provider: 'mmtc',
+      provider: this.props.match.params.provider,
       productName: getConfig().productName,
       journeyData: [],
       topStatusData: {},

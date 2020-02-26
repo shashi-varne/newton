@@ -351,7 +351,7 @@ class Payment extends Component {
                     <div>
                         {this.state.paymentSuccess && 
                           <p className="top-content"> 
-                            <b>{this.state.weight} gms </b> gold worth <b>{inrFormatDecimal2(this.state.amount)}</b> added to your MMTC gold locker.  
+                            <b>{this.state.weight} gms </b> gold worth <b>{inrFormatDecimal2(this.state.amount)}</b> added to your {this.state.providerData.title} gold locker.  
                           </p>
                         }
 
