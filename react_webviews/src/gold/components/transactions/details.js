@@ -18,6 +18,7 @@ import { copyToClipboard } from 'utils/validators';
 
 let icon_mapper = {
   'pending': 'not_done_yet_step',
+  'pending_triangle': 'warning_icon',
   'init': 'not_done_yet_step',
   'failed': 'text_error_icon',
   'success': 'ic_completed'

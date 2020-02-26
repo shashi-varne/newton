@@ -323,7 +323,7 @@ export function getTransactionStatus(order) {
                 return 'payment_pending';
             }
 
-            if (order.order_status === 'Confirmed') {
+            if (order.order_status === 'confirmed') {
                 if (order.delivery_status === 'In Process') {
                     return 'delivery_initiated';
                 }
@@ -439,7 +439,7 @@ export function setTransationsSteps(order) {
 
         } else {
             data[1].title = 'Payment pending';
-            data[1].status = 'pending';
+            data[1].status = 'pending_triangle';
             // pending
         }
     }
@@ -479,7 +479,7 @@ export function setTransationsSteps(order) {
             data[3].status = 'success';
 
         } else if (final_status === 'payment_pending') {
-            data[1].status = 'pending';
+            data[1].status = 'pending_triangle';
             data[1].title = 'Payment pending';
         } else if (final_status === 'payment_success') {
             data[1].status = 'success';
