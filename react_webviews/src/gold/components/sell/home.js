@@ -22,8 +22,8 @@ import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
 const stepsContentMapper = [
   {'icon': 'ic_gold_provider', 'content': '1. Select your preferred gold provider'},
   {'icon': 'ic_input', 'content': '2. Enter amount in rupees or grams'},
-  {'icon': 'ic_make_payment', 'content': '3. Confirm bank account details'},
-  {'icon': 'ic_gold_added', 'content': '4. Get money in selected bank account within 48 hrs'}
+  {'icon': 'ic_auth_bank', 'content': '3. Confirm bank account details'},
+  {'icon': 'ic_get_money', 'content': '4. Get money in selected bank account within 48 hrs'}
 ];
 
 class GoldSellHome extends Component {
@@ -212,23 +212,23 @@ class GoldSellHome extends Component {
     let amount = this.state.amount;
     let weight = this.state.weight;
     if (!weight || weight < 0) {
-      toast('Please enter a correct value for the weight', 'error');
+      toast('Please enter a correct value for the weight');
       return;
     }
 
     if (!amount || amount < 0) {
-      toast('Please enter a correct value for the amount', 'error');
+      toast('Please enter a correct value for the amount');
       return;
     }
 
     if (amount >= 0 && amount < 1) {
-      toast('Minimum amount should be Rs. 1', 'error');
+      toast('Minimum amount should be Rs. 1');
       return;
     }
 
     if (amount > parseFloat(this.state.maxAmount) ||
       weight > parseFloat(this.state.maxWeight)) {
-      toast("You don't have enough gold", 'error');
+      toast("You don't have enough gold");
       return;
     }
 

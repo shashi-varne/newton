@@ -56,7 +56,7 @@ class GoldDeliveryProducts extends Component {
             'Something went wrong'
         });
         // toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-        //   'Something went wrong', 'error');
+        //   'Something went wrong');
       }
 
       const res4 = await Api.get('/api/gold/delivery/products/' + this.state.provider);
@@ -73,7 +73,7 @@ class GoldDeliveryProducts extends Component {
             'Something went wrong'
         });
         // toast(res4.pfwresponse.result.error || res4.pfwresponse.result.message ||
-        //   'Something went wrong', 'error');
+        //   'Something went wrong');
       }
 
       if(isRegistered) {
@@ -94,7 +94,7 @@ class GoldDeliveryProducts extends Component {
               'Something went wrong'
           });
           // toast(res3.pfwresponse.result.error || res3.pfwresponse.result.message ||
-          //   'Something went wrong', 'error');
+          //   'Something went wrong');
         }
       } 
     } catch (err) {
@@ -104,7 +104,7 @@ class GoldDeliveryProducts extends Component {
         error: true,
         errorMessage: 'Something went wrong'
       });
-      // toast('Something went wrong', 'error');
+      // toast('Something went wrong');
     }
 
     this.setState({

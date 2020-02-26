@@ -180,7 +180,7 @@ class SellVerifyBank extends Component {
                 this.setState({
                     openVerifyDialog: false
                 });
-                toast('Something went wrong', 'error');
+                toast('Something went wrong');
             }
         }
     }
@@ -234,7 +234,7 @@ class SellVerifyBank extends Component {
             this.setState({
                 openVerifyDialog: false
             });
-            toast('Something went wrong', 'error');
+            toast('Something went wrong');
         }
 
     }
@@ -278,7 +278,7 @@ class SellVerifyBank extends Component {
 
     handleCloseStatus = () => {
         if(this.state.pan_bank_flow) {
-            this.navigate('/gold/my-gold-locker');
+            this.navigate('/gold/gold-locker');
         } else {
 
             let eventObj = {

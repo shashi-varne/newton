@@ -104,7 +104,7 @@ class SellAddEditBank extends Component {
         });
       } else {
 
-        toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message || 'Something went wrong', 'error');
+        toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message || 'Something went wrong');
       }
 
       this.setState({
@@ -116,7 +116,7 @@ class SellAddEditBank extends Component {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong', 'error');
+      toast('Something went wrong');
     }
   }
 
@@ -153,13 +153,13 @@ class SellAddEditBank extends Component {
             show_loader: false
           });
           toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-            'Something went wrong', 'error');
+            'Something went wrong');
         }
       } catch (err) {
         this.setState({
           show_loader: false
         });
-        toast('Something went wrong', 'error');
+        toast('Something went wrong');
       }
     }
 

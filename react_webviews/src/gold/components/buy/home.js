@@ -86,6 +86,8 @@ class GoldBuyHome extends Component {
     this.setState({
       openOnloadModal: true
     })
+
+    this.addPlusItems(this.state.minAmount);
   }
 
   updateParent = (key, value) => {
@@ -131,7 +133,7 @@ class GoldBuyHome extends Component {
         this.setState({
           show_loader: false
         });
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
       }
 
     } catch (err) {
@@ -139,7 +141,7 @@ class GoldBuyHome extends Component {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong', 'error');
+      toast('Something went wrong');
     }
 
   }
@@ -175,7 +177,7 @@ class GoldBuyHome extends Component {
     this.handleClose();
     this.sendEvents('next');
     // if (parseFloat(this.state.weight) > this.state.maxWeight) {
-    //   toast('You can not buy more than ' + this.state.maxWeight + ' gm', 'error');
+    //   toast('You can not buy more than ' + this.state.maxWeight + ' gm');
     //   return;
     // }
 

@@ -50,7 +50,7 @@ class BuyPriceClass extends Component {
                 this.setState({
                     show_loader: false
                 });
-                toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
+                toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
             }
 
         } catch (err) {
@@ -58,7 +58,7 @@ class BuyPriceClass extends Component {
             this.setState({
                 show_loader: false
             });
-            toast('Something went wrong', 'error');
+            toast('Something went wrong');
         }
     }
 

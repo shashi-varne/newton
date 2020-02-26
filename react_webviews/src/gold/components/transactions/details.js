@@ -125,14 +125,14 @@ class GoldTransactionDetail extends Component {
         this.setState({
           show_loader: false
         });
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
       }
     } catch (err) {
       console.log(err);
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong', 'error');
+      toast('Something went wrong');
     }
   }
 
@@ -211,7 +211,7 @@ class GoldTransactionDetail extends Component {
       download_invoice_clicked: true
     })
     if(!path) {
-      toast('Invoice not generated, please try after sometime', 'error');
+      toast('Invoice not generated, please try after sometime');
       return;
     }
 
@@ -235,13 +235,13 @@ class GoldTransactionDetail extends Component {
         this.setState({
           invoiceLoading: false
         });
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
       }
     } catch (err) {
       this.setState({
         invoiceLoading: false
       });
-      toast('Something went wrong', 'error');
+      toast('Something went wrong');
     }
   }
 

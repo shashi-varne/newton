@@ -62,12 +62,12 @@ class PlaceBuyOrderClass extends Component {
             } else {
                 this.props.parent.updateParent('show_loader', true);
                 toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-                    'Something went wrong', 'error');
+                    'Something went wrong');
             }
         } catch (err) {
             console.log(err);
             this.props.parent.updateParent('show_loader', true);
-            toast('Something went wrong', 'error');
+            toast('Something went wrong');
         }
     }
 

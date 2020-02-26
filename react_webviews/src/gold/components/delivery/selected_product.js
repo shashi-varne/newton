@@ -85,13 +85,13 @@ class DeliverySelectedProduct extends Component {
           disabledText: 'Insufficient Gold Balance'
         });
         // toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-        //   'Something went wrong', 'error');
+        //   'Something went wrong');
       }
     } catch (err) {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong', 'error');
+      toast('Something went wrong');
     }
 
     this.setState({
@@ -132,7 +132,7 @@ class DeliverySelectedProduct extends Component {
     if (parseFloat(this.state.product.metal_weight) <= this.state.maxWeight) {
       this.navigate('delivery-select-address');
     } else {
-      toast("Insufficient Gold Balance", 'error');
+      toast("Insufficient Gold Balance");
     }
   }
 
@@ -200,7 +200,7 @@ class DeliverySelectedProduct extends Component {
         this.setState({
           show_loader: false
         });
-        toast('Something went wrong', 'error');
+        toast('Something went wrong');
       }
     } else {
       this.setState({

@@ -37,7 +37,7 @@ class CommonLanding extends Component {
             'term-insurance': '/group-insurance/term/intro',
             'gold': '/gold/landing',
             'gold-buy': '/gold/buy',
-            'gold-locker': '/gold/my-gold-locker',
+            'gold-locker': '/gold/gold-locker',
             'gold-sell': '/gold/sell',
             'gold-delivery': '/gold/delivery'
         };

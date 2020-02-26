@@ -1177,7 +1177,7 @@ img.gold-offer-slide-img {
   font-weight: 400;
   margin: 10px 0 10px 0;
 }
-.my-gold-locker-home .share-pan-bank {
+.gold-locker-home .share-pan-bank {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1187,7 +1187,7 @@ img.gold-offer-slide-img {
   margin: 0 0 20px 0;
   cursor: pointer;
 }
-.my-gold-locker-home .share-pan-bank .title {
+.gold-locker-home .share-pan-bank .title {
   color: #0a1d32;
   font-weight: 400;
 }

@@ -128,7 +128,7 @@ class GoldLocker extends Component {
       this.setState({
         show_loader: false,
       });
-      toast('Something went wrong', 'error');
+      toast('Something went wrong');
     }
   }
 
@@ -204,7 +204,6 @@ class GoldLocker extends Component {
     let searchParams = getConfig().searchParams;
 
     if(data.pan_bank_flow) {
-      this.navigate('pan_bank_card');
       searchParams += '&pan_bank_flow=' + data.pan_bank_flow
     }
     this.props.history.push({
@@ -335,7 +334,7 @@ class GoldLocker extends Component {
         noFooter={true}
         events={this.sendEvents('just_set_events')}
       >
-        <div className="my-gold-locker-home">
+        <div className="gold-locker-home">
           <div
             style={{ marginTop: '15px', display: 'flex' }} className="highlight-text highlight-color-info">
 

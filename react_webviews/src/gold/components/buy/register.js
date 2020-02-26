@@ -133,13 +133,13 @@ class GoldRegister extends Component {
           show_loader: false
         });
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-          'Something went wrong', 'error');
+          'Something went wrong');
       }
     } catch (err) {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong', 'error');
+      toast('Something went wrong');
     }
   }
 
@@ -194,7 +194,7 @@ class GoldRegister extends Component {
         this.setState({
           show_loader: false
         });
-        toast('Something went wrong', 'error');
+        toast('Something went wrong');
       }
     }
   }
@@ -248,13 +248,13 @@ class GoldRegister extends Component {
           show_loader: false
         });
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-          'Something went wrong', 'error');
+          'Something went wrong');
       }
     } catch (err) {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong', 'error');
+      toast('Something went wrong');
     }
   }
 
@@ -278,13 +278,13 @@ class GoldRegister extends Component {
           show_loader: false
         });
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-          'Something went wrong', 'error');
+          'Something went wrong');
       }
     } catch (err) {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong', 'error');
+      toast('Something went wrong');
     }
   }
 
@@ -372,12 +372,14 @@ class GoldRegister extends Component {
           const res = await Api.post('/api/gold/user/account/' + this.state.provider, options);
   
           if(res.pfwresponse.result.registered_with_another_account === true) {
+            let error = 'Mobile number already registered with ' + this.state.provider + ', enter another mobile number';
             this.setState({
               mobile_no_disabled: false,
-              show_loader: false
+              show_loader: false,
+              mobile_no_error: error
             })
-            toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-              'Something went wrong', 'error');
+            // toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+            //   'Something went wrong');
           } else if(res.pfwresponse.result.message === 'success'  || 
             res.pfwresponse.result.mobile_verified === false) {
             this.verifyMobile();
@@ -389,14 +391,14 @@ class GoldRegister extends Component {
               show_loader: false
             });
             toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-              'Something went wrong', 'error');
+              'Something went wrong');
   
           }
         } catch (err) {
           this.setState({
             show_loader: false
           });
-          toast('Something went wrong', 'error');
+          toast('Something went wrong');
         }
       }
 

@@ -21,14 +21,14 @@ const commonMapper = {
       'top_title': 'Gold purchase successful!',
       'mid_title': 'Payment details',
       'button_title': 'Go to locker',
-      'cta_state': '/gold/my-gold-locker'
+      'cta_state': '/gold/gold-locker'
     },
     'pending': {
       'top_icon': 'ils_gold_purchase_pending',
       'top_title': 'Gold purchase pending!',
       'mid_title': 'Payment details',
       'button_title': 'Go to locker',
-      'cta_state':  '/gold/my-gold-locker'
+      'cta_state':  '/gold/gold-locker'
     },
     'failed': {
       'top_icon': 'ils_gold_purchase_failed',
@@ -44,21 +44,21 @@ const commonMapper = {
       'top_title': 'Gold sell successful!',
       'mid_title': 'Sold gold details',
       'button_title': 'Continue to locker',
-      'cta_state': '/gold/my-gold-locker'
+      'cta_state': '/gold/gold-locker'
     },
     'pending': {
       'top_icon': 'ils_gold_sell_failed',
       'top_title': 'Gold sell failed!',
       'mid_title': '',
       'button_title': 'Continue to locker',
-      'cta_state':  '/gold/my-gold-locker'
+      'cta_state':  '/gold/gold-locker'
     },
     'failed': {
       'top_icon': 'ils_gold_sell_failed',
       'top_title': 'Gold sell failed!',
       'mid_title': '',
       'button_title': 'Continue to locker',
-      'cta_state':  '/gold/my-gold-locker'
+      'cta_state':  '/gold/gold-locker'
     }
   },
   'delivery': {
@@ -67,14 +67,14 @@ const commonMapper = {
       'top_title': 'Order placed',
       'mid_title': 'Payment details',
       'button_title': 'Go to locker',
-      'cta_state': '/gold/my-gold-locker'
+      'cta_state': '/gold/gold-locker'
     },
     'pending': {
       'top_icon': 'pending_order_delivery',
       'top_title': 'Delivery order pending!',
       'mid_title': 'Payment details',
       'button_title': 'Go to locker',
-      'cta_state':  '/gold/my-gold-locker'
+      'cta_state':  '/gold/gold-locker'
     },
     'failed': {
       'top_icon': 'failed_order_delivery',
@@ -165,7 +165,7 @@ class Payment extends Component {
         this.setState({
           show_loader: false
         });
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
       }
 
       const res2 = await Api.get('/api/gold/sell/currentprice/' + this.state.provider);
@@ -183,14 +183,14 @@ class Payment extends Component {
         this.setState({
           show_loader: false
         });
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
       }
     } catch (err) {
       console.log(err);
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong', 'error');
+      toast('Something went wrong');
     }
 
   }
@@ -218,7 +218,7 @@ class Payment extends Component {
       download_invoice_clicked: true
     })
     if(!path) {
-      toast('Invoice not generated, please try after sometime', 'error');
+      toast('Invoice not generated, please try after sometime');
       return;
     }
 
@@ -242,13 +242,13 @@ class Payment extends Component {
         this.setState({
           invoiceLoading: false
         });
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
       }
     } catch (err) {
       this.setState({
         invoiceLoading: false
       });
-      toast('Something went wrong', 'error');
+      toast('Something went wrong');
     }
   }
 
@@ -270,13 +270,13 @@ class Payment extends Component {
           this.setState({
             show_loader: false
           });
-          toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
+          toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
         }
       } catch (err) {
         this.setState({
           show_loader: false
         });
-        toast('Something went wrong', 'error');
+        toast('Something went wrong');
       }
     } else {
       this.setState({

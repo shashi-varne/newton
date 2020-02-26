@@ -187,7 +187,7 @@ export function goBackMap(path) {
         '/gold/buy': '/gold/landing',
         '/gold/delivery': '/gold/landing',
         '/gold/delivery-products': '/gold/delivery',
-        '/gold/my-gold-locker': '/gold/landing',
+        '/gold/gold-locker': '/gold/landing',
         '/gold/report': '/gold/landing',
         '/gold/check-how3': '/gold/check-how2',
         '/gold/check-how2': '/gold/check-how1',

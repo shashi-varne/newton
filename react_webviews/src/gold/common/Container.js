@@ -118,7 +118,7 @@ class Container extends Component {
     }
     
     if (checkStringInString(pathname, "payment")) {
-      this.navigate("/gold/my-gold-locker");
+      this.navigate("/gold/gold-locker");
       return;
     }
 
@@ -144,7 +144,7 @@ class Container extends Component {
     }
 
     switch (pathname) {
-      case "/gold/my-gold-locker":
+      case "/gold/gold-locker":
         this.navigate("/gold/landing");
         break;
       case "/gold":

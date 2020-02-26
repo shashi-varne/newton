@@ -69,14 +69,14 @@ class DeliveryOrder extends Component {
           disabledText: disabledText
         });
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-          'Something went wrong', 'error');
+          'Something went wrong');
       }
     } catch (err) {
       console.log(err);
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong', 'error');
+      toast('Something went wrong');
     }
 
   }

@@ -35,7 +35,7 @@ let eventToStateMapper = {
   '/gold/buy': 'buy_gold',
   '/gold/sell': 'sell_gold',
   '/gold/delivery': 'get_delivery',
-  'my-gold-locker': 'gold_locker',
+  'gold-locker': 'gold_locker',
   'marketing_banner': 'marketing_banner'
 };
 
@@ -183,7 +183,7 @@ class GoldSummary extends Component {
       this.setState({
         show_loader: false,
       });
-      toast('Something went wrong', 'error');
+      toast('Something went wrong');
     }
   }
 
@@ -310,7 +310,7 @@ class GoldSummary extends Component {
   renderBlock2() {
     return(
       <div className="block2">
-      <div onClick={() => this.navigate('my-gold-locker')}
+      <div onClick={() => this.navigate('gold-locker')}
        className="highlight-text highlight-color-info">
         <img 
           src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
