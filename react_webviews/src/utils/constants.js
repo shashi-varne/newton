@@ -69,6 +69,9 @@ export const themeConfig = {
                 }
             },
             root: {
+            },
+            disabled: {
+                opacity: 0.4
             }
         },
         MuiInputLabel: {

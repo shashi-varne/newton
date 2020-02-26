@@ -312,3 +312,7 @@ input.default-otp-input {
 .right-arrow img {
   width: 20px;
 }
+.MuiInput-underline.MuiInput-disabled:before {
+  background-image: none !important;
+  border-bottom: 1px solid #d3dbe4;
+}

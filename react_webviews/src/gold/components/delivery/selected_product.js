@@ -289,7 +289,7 @@ class DeliverySelectedProduct extends Component {
               <div className="pincode-block InputField">
                 <TextField
                   label="Enter Pin code"
-                  type="text"
+                  type="number"
                   autoComplete="off"
                   name="pincode"
                   id="pincode"
