@@ -47,10 +47,19 @@ class PlaceBuyOrderClass extends Component {
 
             const res = await Api.post('/api/gold/user/buy/verify/' + this.state.provider, options);
 
-            if (res.pfwresponse.status_code === 200 &&
+            let buyData = this.state.buyData;
+
+            if(res.pfwresponse.status_code === 200 && 
+                res.pfwresponse.result.payment_details.plutus_rate !== this.state.buyData.goldBuyInfo.plutus_rate) {
+
+                buyData.goldBuyInfo.rate_validity  = 0;
+                storageService().setObject('buyData', buyData);
+                this.props.parent.updateParent('show_loader', false);
+                this.props.parent.updateParent('proceedForOrder', false);
+            } else if (res.pfwresponse.status_code === 200 && 
                 res.pfwresponse.result.payment_details.plutus_rate === this.state.buyData.goldBuyInfo.plutus_rate) {
                 let result = res.pfwresponse.result;
-                let buyData = this.state.buyData;
+                
                 buyData.payment_details = result.payment_details;
                 buyData.transact_id = result.payment_details.transact_id;
                 storageService().setObject('buyData', buyData);
@@ -60,13 +69,15 @@ class PlaceBuyOrderClass extends Component {
                 return;
 
             } else {
-                this.props.parent.updateParent('show_loader', true);
+                this.props.parent.updateParent('show_loader', false);
+                this.props.parent.updateParent('proceedForOrder', false);
                 toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
                     'Something went wrong');
             }
         } catch (err) {
             console.log(err);
-            this.props.parent.updateParent('show_loader', true);
+            this.props.parent.updateParent('show_loader', false);
+            this.props.parent.updateParent('proceedForOrder', false);
             toast('Something went wrong');
         }
     }
