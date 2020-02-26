@@ -11,9 +11,9 @@ import { default_provider, gold_providers, isUserRegistered } from '../../consta
 import { storageService, inrFormatDecimal2} from 'utils/validators';
 
 const stepsContentMapper = [
-  { 'icon': 'ic_gold_provider', 'content': 'How to get gold coin delivered?' },
-  { 'icon': 'ic_make_payment', 'content': '2. Pay making charges' },
-  { 'icon': 'deliver', 'content': '3. Get home delivery' }
+  { 'icon': 'ic_gold_provider', 'content': 'Select gold coin' },
+  { 'icon': 'ic_make_payment', 'content': 'Pay making charges' },
+  { 'icon': 'deliver', 'content': 'Get home delivery' }
 ];
 
 class GoldDeliveryProducts extends Component {
@@ -182,7 +182,7 @@ class GoldDeliveryProducts extends Component {
         <img className="icon" 
         src={require(`assets/${this.state.productName}/${props.icon}.svg`)} alt="Gold" />
         <div className="content">
-          {props.content}
+          {index + 1}.  {props.content}
         </div>
       </div>
     );
