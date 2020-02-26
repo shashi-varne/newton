@@ -257,7 +257,8 @@ function getPartnerConfig(partner_code) {
   const ismyway = search.indexOf("api.mywaywealth.com") >= 0;
   const isStaging = search.indexOf("staging") >= 0;
   let productType = 'fisdom';
-  if (ismyway || partner_code === 'bfdlmobile') {
+  if (ismyway || partner_code === 'bfdlmobile' || 
+  partner_code === 'myway') {
     productType = 'myway';
   }
 
