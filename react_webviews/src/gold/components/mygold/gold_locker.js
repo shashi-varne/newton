@@ -395,7 +395,7 @@ class GoldLocker extends Component {
             </div>
           </div>
 
-          {this.state.selected_provider_info.isRegistered &&
+          {this.state.selected_provider_info.isRegistered && this.state.selected_provider_info.gold_balance > 0 &&
             <div>
               <div className="generic-page-title">
                 Transactions
@@ -427,14 +427,16 @@ class GoldLocker extends Component {
               }
             </div>
           }
-          {!this.state.selected_provider_info.isRegistered &&
+          {!this.state.selected_provider_info.isRegistered && (this.state.selected_provider_info.gold_balance <= 0 || 
+          !this.state.selected_provider_info.gold_balance) &&
             <div>
               <div>
                 <img className="img"
                  style={{width: '100%'}}
                   src={require(`assets/${this.state.productName}/ils_alternate_assets.svg`)} alt="Gold" />
               </div>
-              <div style={{ color: '#0A1D32', fontSize: 14, fontWeight: 400, margin: '20px 0 30px 0' }}>
+              <div style={{ color: '#0A1D32', fontSize: 14, fontWeight: 400, margin: '20px 0 30px 0',
+            lineHeight: 1.6 }}>
                 Seems like you have not invested in Safegold yet, <b>buy 24K gold</b> to create long term wealth.
             </div>
             </div>
