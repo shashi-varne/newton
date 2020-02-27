@@ -541,3 +541,46 @@ export function getIndexArray(array, value, objKey) {
     }
   }
 }
+
+function dateOrdinal(dom) {
+  if (dom === 31 || dom === 21 || dom === 1) return dom + "st";
+  else if (dom === 22 || dom === 2) return dom + "nd";
+  else if (dom === 23 || dom === 3) return dom + "rd";
+  else return dom + "th";
+};
+
+function formatAMPM(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? '0'+minutes : minutes;
+  var strTime = hours + ':' + minutes + ' ' + ampm;
+  return strTime;
+}
+
+export function formatDateAmPm(date) {
+
+  let monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  ];
+
+  if(!date) {
+    return '';
+  }
+
+  let date2 = new Date(date);
+
+  let dom = date2.getDate();
+  dom = dateOrdinal(dom);
+
+  let month = monthNames[date2.getMonth()];
+  // let year = date2.getFullYear();
+  let time = formatAMPM(date2);
+
+  let final_date = dom + ' ' + month + ', ' + time;
+
+  return final_date;
+
+}

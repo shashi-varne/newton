@@ -8,7 +8,7 @@ import { getConfig } from 'utils/functions';
 import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
 import toast from '../../../common/ui/Toast';
 import {
-  inrFormatDecimal2, storageService
+  inrFormatDecimal2, storageService, formatDateAmPm
 } from 'utils/validators';
 
 import { isUserRegistered, gold_providers, getTransactionStatus, getUniversalTransStatus } from '../../constants';
@@ -307,12 +307,12 @@ class GoldLocker extends Component {
           <div className="circle"></div>
           <div className="report-color-state-title">{(props.cssMapper.disc)}</div>
         </div>
-        <div className="report-ins-name">{props.product_name}</div>
+        {/* <div className="report-ins-name">{props.product_name}</div> */}
         <div className="report-cover">
           <div className="report-cover-amount">
             <img
               src={require(`assets/${this.state.productName}/sip_date_icon.svg`)} alt="Gold" />
-            <span style={{ color: '#767E86' }}>{props.dt_created}</span>
+            <span style={{ color: '#767E86',fontWeight: 'unset' }}>{formatDateAmPm(props.order_details.dt_created)}</span>
           </div>
           <div className="report-cover-amount">
             <img

@@ -707,7 +707,7 @@ img.gold-offer-slide-img {
 
  .bank-tile {
     margin: 10px 15px 20px 15px;
-    padding: 20px 10px 10px 10px;
+    padding: 20px 10px 20px 10px;
     cursor: pointer;
     // display: flex;
     // align-items: center;
@@ -716,7 +716,7 @@ img.gold-offer-slide-img {
   .bank-tile-selected {
       margin: 10px 0px 20px 0px;
       background: linear-gradient(to right, #F4F4F4 , white);
-      padding: 20px 25px 10px 25px;
+      padding: 20px 25px 20px 25px;
   }
 
   .bank-name {
@@ -983,20 +983,25 @@ img.gold-offer-slide-img {
     width: 14px;
   }
 }
-.gold-bottom-secure-info .content {
-  color: #767E86;
-  font-size: 13px;
-  font-weight: 400;
-  text-align: center;
-}
-.gold-bottom-secure-info .images {
-  margin: 8px 0 0 0;
-  display: flex;
-  justify-content: center;
-  img {
-    margin: 0 10px 0 0;
+
+.gold-bottom-secure-info {
+  margin: 50px 0 0 0;
+  .content {
+    color: #767E86;
+    font-size: 13px;
+    font-weight: 400;
+    text-align: center;
+  }
+  .images {
+    margin: 8px 0 0 0;
+    display: flex;
+    justify-content: center;
+    img {
+      margin: 0 10px 0 0;
+    }
   }
 }
+
 .gold-steps-images .content {
   color: #767E86;
   font-size: 13px;
@@ -1018,7 +1023,7 @@ img.gold-offer-slide-img {
   margin: 20px 0 30px 0;
   .gold-locker-tab {
     color: #767E86;
-    border: 1px solid beige;
+    // border: 1px solid beige;
     /* border-top-right-radius: 6px; */
     padding: 20px 20px 20px 20px;
     background: #F8F8F8;
@@ -1047,6 +1052,7 @@ img.gold-offer-slide-img {
     background: white;
     color: var(--primary);
     cursor: unset;
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
 
     .block2 {
       color: #0A1C32;
@@ -1060,22 +1066,32 @@ img.gold-offer-slide-img {
   font-weight: 500;
 }
 
-.gold-trans-card .top-title {
-  color: #0A1D32;
-  font-size: 14px;
-  font-weight: 500;
-  margin: 0 0 6px 0;
-}
 .gold-trans-card {
+
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
-}
-.gold-trans-card .report-cover-amount {
-  display: flex;
-  color: #0A1D32;
-}
-.gold-trans-card .report-cover-amount  img {
-  width: 16px;
-  margin: 0 5px 0 0;
+  .top-title {
+    color: #0A1D32;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0 0 6px 0;
+  }
+  .report-cover-amount {
+    display: flex;
+    color: #0A1D32;
+  }
+  .report-cover-amount  img {
+    width: 16px;
+    margin: 0 5px 0 0;
+  }
+  .card {
+    padding: 20px 20px 20px 20px;
+  }
+  .report-color-state {
+    margin: 10px 0 0 0;
+  }
+  .report-cover {
+    margin: 20px  0 0 0;
+  }
 }
 
 .gold-trans-detail-card {
@@ -1313,7 +1329,7 @@ img.gold-offer-slide-img {
   border: 1px solid;
   text-align: center;
   font-weight: 700;
-  padding: 10px;
+  padding: 15px;
   border-radius: 4px;
   margin: 20px 0 20px 0;
   cursor: pointer;
@@ -1330,6 +1346,7 @@ img.gold-offer-slide-img {
       padding: 20px 19px 0 0;
       cursor: pointer;
       width: 43%;
+      margin: 0 0 20px 0;
     }
     img {
       box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);

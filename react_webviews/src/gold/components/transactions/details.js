@@ -7,7 +7,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import toast from '../../../common/ui/Toast';
 import {
-  inrFormatDecimal
+  inrFormatDecimal, formatDateAmPm
 } from 'utils/validators';
 
 import SVG from 'react-inlinesvg';
@@ -308,7 +308,7 @@ class GoldTransactionDetail extends Component {
               Order date
               </div>
             <div className="subtitle">
-            {this.state.order.dt_created}
+            {formatDateAmPm(this.state.order.dt_created)}
               </div>
           </div>
         </div>

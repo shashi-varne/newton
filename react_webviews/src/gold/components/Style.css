@@ -592,13 +592,13 @@ img.gold-offer-slide-img {
 }
 .gold-sell-select-bank .bank-tile {
   margin: 10px 15px 20px 15px;
-  padding: 20px 10px 10px 10px;
+  padding: 20px 10px 20px 10px;
   cursor: pointer;
 }
 .gold-sell-select-bank .bank-tile-selected {
   margin: 10px 0px 20px 0px;
   background: linear-gradient(to right, #f4f4f4, white);
-  padding: 20px 25px 10px 25px;
+  padding: 20px 25px 20px 25px;
 }
 .gold-sell-select-bank .bank-name {
   color: #0a1c32;
@@ -825,6 +825,9 @@ img.gold-offer-slide-img {
 .gold-how-steps .top-icon {
   width: 14px;
 }
+.gold-bottom-secure-info {
+  margin: 50px 0 0 0;
+}
 .gold-bottom-secure-info .content {
   color: #767e86;
   font-size: 13px;
@@ -860,7 +863,6 @@ img.gold-offer-slide-img {
 }
 .gold-locker-tabs .gold-locker-tab {
   color: #767e86;
-  border: 1px solid beige;
   padding: 20px 20px 20px 20px;
   background: #f8f8f8;
   font-size: 13px;
@@ -884,6 +886,7 @@ img.gold-offer-slide-img {
   background: white;
   color: var(--primary);
   cursor: unset;
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
 }
 .gold-locker-tabs .gold-locker-tab.selected .block2 {
   color: #0a1c32;
@@ -893,14 +896,14 @@ img.gold-offer-slide-img {
   font-size: 16px;
   font-weight: 500;
 }
+.gold-trans-card {
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
+}
 .gold-trans-card .top-title {
   color: #0a1d32;
   font-size: 14px;
   font-weight: 500;
   margin: 0 0 6px 0;
-}
-.gold-trans-card {
-  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
 }
 .gold-trans-card .report-cover-amount {
   display: flex;
@@ -909,6 +912,15 @@ img.gold-offer-slide-img {
 .gold-trans-card .report-cover-amount img {
   width: 16px;
   margin: 0 5px 0 0;
+}
+.gold-trans-card .card {
+  padding: 20px 20px 20px 20px;
+}
+.gold-trans-card .report-color-state {
+  margin: 10px 0 0 0;
+}
+.gold-trans-card .report-cover {
+  margin: 20px 0 0 0;
 }
 .gold-trans-detail-card {
   display: flex;
@@ -1101,7 +1113,7 @@ img.gold-offer-slide-img {
   border: 1px solid;
   text-align: center;
   font-weight: 700;
-  padding: 10px;
+  padding: 15px;
   border-radius: 4px;
   margin: 20px 0 20px 0;
   cursor: pointer;
@@ -1116,6 +1128,7 @@ img.gold-offer-slide-img {
   padding: 20px 19px 0 0;
   cursor: pointer;
   width: 43%;
+  margin: 0 0 20px 0;
 }
 .gold-delivery-products .delivery-products-tiles img {
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);

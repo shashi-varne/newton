@@ -10,7 +10,7 @@ import { getUrlParams } from 'utils/validators';
 // eslint-disable-next-line
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
-import { inrFormatDecimal2, storageService } from 'utils/validators';
+import { inrFormatDecimal2, storageService, formatDateAmPm } from 'utils/validators';
 import DotDotLoader from '../../../common/ui/DotDotLoader';
 import { gold_providers } from '../../constants';
 
@@ -434,7 +434,7 @@ class Payment extends Component {
                               <div style={{margin: '5px 0 6px 0'}}>Updated value {this.state.provider_info.gold_balance} gms</div>
                               <div style={{display: 'flex', justifyContent: 'space-between'}}>
                                 <div>Order id: {this.state.transact_id}</div>
-                                  <div>{this.state.report.dt_created}</div>
+                                  <div>{formatDateAmPm(this.state.report.dt_created)}</div>
                               </div>
                             </div>
                           </div>
