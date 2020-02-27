@@ -12,7 +12,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import { inrFormatDecimal2, storageService, formatDateAmPm } from 'utils/validators';
 import DotDotLoader from '../../../common/ui/DotDotLoader';
-import { gold_providers } from '../../constants';
+import { gold_providers, getOrderStatusPayment, getUniversalTransStatus } from '../../constants';
 
 const commonMapper = {
   'buy': {
@@ -103,6 +103,39 @@ class Payment extends Component {
     this.trackDelivery = this.trackDelivery.bind(this);
   }
 
+  setPaymentStatus(orderType, payStatus, uniStatus) {
+    if(!payStatus) {
+      payStatus = this.state.status;
+    }
+
+    if(!uniStatus) {
+      uniStatus = payStatus;  //if not getting data from transaction api
+    }
+
+    let statusFinal = '';
+
+    let paymentFailed,paymentPending, paymentSuccess;
+    if ((payStatus === 'failed' || payStatus === 'error') || 
+    (uniStatus === 'failed' || uniStatus === 'error')) {
+      paymentFailed = true;
+      statusFinal = 'failed';
+    } else if (payStatus === 'success' && uniStatus === 'success') {
+      paymentSuccess = true;
+      statusFinal = 'success';
+    } else {
+      paymentPending = true;
+      statusFinal = 'pending';
+    } 
+
+    this.setState({
+      paymentSuccess: paymentSuccess,
+      paymentFailed: paymentFailed,
+      paymentPending: paymentPending,
+      statusFinal: statusFinal,
+      commonMapper: commonMapper[orderType][statusFinal]
+    })
+  }
+
   componentWillMount() {
     nativeCallback({ action: 'take_control_reset' });
     let { status } = this.state.params;
@@ -110,8 +143,10 @@ class Payment extends Component {
       status = 'failed';
     }
     let { orderType } = this.props.match.params;
-    let weight,amount,
-       paymentError, paymentMessage, paymentPending, invoiceLink;
+    this.setState({
+      orderType: orderType
+    })
+    let weight,amount, invoiceLink;
 
     let transact_id;
 
@@ -122,32 +157,17 @@ class Payment extends Component {
     invoiceLink = orderData.invoice_link || '';
     transact_id = orderData.transact_id || '';
 
-    let paymentFailed, paymentSuccess;
-    if (status === 'failed' || status === 'error') {
-      paymentFailed = true;
-    } else if (status === 'success') {
-      paymentSuccess = true;
-    } else if (status === 'pending') {
-      paymentPending = true;
-    }
-
     this.setState({
       status: status,
-      orderType: orderType,
       weight: weight,
       amount: amount,
       orderData: orderData,
-      paymentError: paymentError,
-      paymentSuccess: paymentSuccess,
-      paymentFailed: paymentFailed,
-      paymentMessage: paymentMessage,
-      paymentPending: paymentPending,
       invoiceLink: invoiceLink,
-      commonMapper: commonMapper[orderType][status],
       providerData: gold_providers[this.state.provider],
       transact_id: transact_id
     })
 
+    this.setPaymentStatus(orderType, status);
     this.getTransDetails(transact_id, orderType);
 
   }
@@ -160,6 +180,7 @@ class Payment extends Component {
         this.setState({
           provider_info: result.gold_user_info.provider_info,
           userInfo: result.gold_user_info.user_info,
+          show_loader: false
         });
       } else {
         this.setState({
@@ -168,23 +189,23 @@ class Payment extends Component {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
       }
 
-      const res2 = await Api.get('/api/gold/sell/currentprice/' + this.state.provider);
-      if (res2.pfwresponse.status_code === 200) {
-        let provider_info = this.state.provider_info;
-        let result = res2.pfwresponse.result;
-        provider_info.sell_value = ((result.sell_info.plutus_rate) * (provider_info.gold_balance || 0)).toFixed(2) || 0;
-        this.setState({
-          goldSellInfo: result.sell_info,
-          provider_info: provider_info,
-          show_loader: false,
-        });
+      // const res2 = await Api.get('/api/gold/sell/currentprice/' + this.state.provider);
+      // if (res2.pfwresponse.status_code === 200) {
+      //   let provider_info = this.state.provider_info;
+      //   let result = res2.pfwresponse.result;
+      //   provider_info.sell_value = ((result.sell_info.plutus_rate) * (provider_info.gold_balance || 0)).toFixed(2) || 0;
+      //   this.setState({
+      //     goldSellInfo: result.sell_info,
+      //     provider_info: provider_info,
+      //     show_loader: false,
+      //   });
 
-      } else {
-        this.setState({
-          show_loader: false
-        });
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
-      }
+      // } else {
+      //   this.setState({
+      //     show_loader: false
+      //   });
+      //   toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
+      // }
     } catch (err) {
       console.log(err);
       this.setState({
@@ -263,8 +284,15 @@ class Payment extends Component {
         const res = await Api.get('/api/gold/report/orders/' + this.state.provider + '?transaction_id=' + transact_id +
         '&order_type=' + orderType);
         if (res.pfwresponse.status_code === 200) {
+
+          let report = res.pfwresponse.result;
+          report.orderType = orderType;
+          report.final_status = getOrderStatusPayment(report);
+          let uniStatus = getUniversalTransStatus(report);
+          this.setPaymentStatus(this.state.orderType, this.state.status, uniStatus);
           this.setState({
-            report: res.pfwresponse.result
+            report: res.pfwresponse.result,
+            uniStatus: uniStatus
           });
         } else {
           this.setState({
@@ -293,7 +321,7 @@ class Payment extends Component {
         "user_action": user_action,
         "screen_name": 'payment',
         'flow': this.state.orderType,
-        'status': this.state.status,
+        'status': this.state.statusFinal,
         'download_invoice_clicked': this.state.download_invoice_clicked ? 'yes': 'no'
       }
     };

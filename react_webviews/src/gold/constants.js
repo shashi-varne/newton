@@ -538,3 +538,58 @@ export function getUniversalTransStatus(order) {
 
     return uniStatus;
 }
+
+export function getOrderStatusPayment(order) {
+    let type = order.orderType;
+    let provider = order.provider || 'safegold';
+    if (type === 'buy') {
+
+        if (order.plutus_buy_order_status === 'failed') {
+            return 'failed';
+        }
+
+        if (order.plutus_buy_order_status === 'success') {
+            return 'success';
+        }
+    }
+
+    if (type === 'sell') {
+
+        if (order.plutus_sell_order_status === 'failed') {
+            return 'failed';
+        }
+
+        if (order.plutus_sell_order_status === 'success') {
+            return 'success';
+        }
+
+    }
+
+    if (type === 'delivery') {
+
+        if (provider === 'safegold') {
+
+            if (order.order_status === 'failed') {
+                return 'failed';
+            }
+
+            if (order.order_status === 'success') {
+                return 'success';
+            }
+
+        }
+
+        if (provider === 'mmtc') {
+
+            if (order.order_status === 'confirmed') {
+                return 'success';
+            } else {
+                return 'pending';
+            } 
+
+        }
+
+    }
+
+    return 'pending';
+}
