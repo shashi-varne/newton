@@ -190,6 +190,8 @@ class GoldSummary extends Component {
 
   async componentDidMount() {
     storageService().remove('forceBackState');
+    storageService().remove('buyData');
+    storageService().remove('sellData');
     this.onloadProvider('mmtc');
     this.onloadProvider('safegold');
   }

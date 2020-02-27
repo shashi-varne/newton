@@ -428,7 +428,7 @@ class Payment extends Component {
                             </div>
                             
                             <div>
-                              <div className="highlight-text1" style={{position: 'relative'}}>
+                              <div className="highlight-text1">
                               
                                 <div className="highlight-text12" style={{display:'flex'}}>
                                   <div>

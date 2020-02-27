@@ -18,7 +18,6 @@ import { FormControl } from 'material-ui/Form';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
-storageService().remove('sellData');
 
 const stepsContentMapper = [
   {'icon': 'ic_gold_provider', 'content': '1. Select your preferred gold provider'},
