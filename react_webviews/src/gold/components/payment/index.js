@@ -338,6 +338,9 @@ class Payment extends Component {
         edit={this.props.edit}
         buttonTitle={this.state.commonMapper.button_title}
         events={this.sendEvents('just_set_events')}
+        headerData={ {
+          icon: 'close'
+        }}
       >
         <div className="gold-payment-container" id="goldSection">
           <div>
@@ -416,25 +419,32 @@ class Payment extends Component {
                   }
 
                   {this.state.orderType !== 'delivery' && this.state.paymentSuccess &&
-                          <div style={{ margin: '30px 0 30px 0' }} className="highlight-text highlight-color-info">
-                            <div className="highlight-text1">
-                              <img className="highlight-text11" 
+                          <div style={{ margin: '30px 0 30px 0', display:'flex' }} className="highlight-text highlight-color-info">
+                            <div>
+                            <img className="highlight-text11" 
                               src={ require(`assets/${this.state.providerData.logo}`)}
+                              style={{width:30}}
                               alt="info" />
-                              <div className="highlight-text12" style={{display:'flex'}}>
-                                <div>
-                                  {this.state.providerData.title}
-                                </div>
-                                <div style={{position: 'absolute', right: 30, fontWeight:300}}>
-                                  {this.state.providerData.karat}
+                            </div>
+                            
+                            <div>
+                              <div className="highlight-text1" style={{position: 'relative'}}>
+                              
+                                <div className="highlight-text12" style={{display:'flex'}}>
+                                  <div>
+                                    {this.state.providerData.title}
+                                  </div>
+                                  <div className="karat">
+                                    {this.state.providerData.karat}
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                            <div className="highlight-text2" style={{color: '#767E86'}}>
-                              <div style={{margin: '5px 0 6px 0'}}>Updated value {this.state.provider_info.gold_balance} gms</div>
-                              <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                                <div>Order id: {this.state.transact_id}</div>
-                                  <div>{formatDateAmPm(this.state.report.dt_created)}</div>
+                              <div className="highlight-text2" style={{color: '#767E86',marginLeft:7}}>
+                                <div style={{margin: '5px 0 6px 0'}}>Updated value {this.state.provider_info.gold_balance} gms</div>
+                                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                                  <div>Order id: {this.state.transact_id}</div>
+                                    <div>{formatDateAmPm(this.state.report.dt_created)}</div>
+                                </div>
                               </div>
                             </div>
                           </div>

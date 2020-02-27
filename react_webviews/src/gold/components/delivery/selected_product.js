@@ -257,7 +257,7 @@ class DeliverySelectedProduct extends Component {
             <div className="mc">
               Making charges
             </div>
-            <div className="">
+            <div className="" style={{margin: '0 0 20px 0'}}>
               <div className="generic-page-title flex-center">
                 {inrFormatDecimal(this.state.product.delivery_minting_cost)}
                 <span className="all-tax"> Inclusive of all taxes</span>

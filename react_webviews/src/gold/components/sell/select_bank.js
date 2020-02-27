@@ -217,7 +217,7 @@ class SellSelectBank extends Component {
         cursor: this.isVerificationPending(props) ? 'unset': 'pointer' }}
       >
         <div className="left-icon">
-          <img style={{ width: '40px', margin: '0 7px 0 0' }}
+          <img style={{ width: '30px', margin: '0 7px 0 0' }}
             src={props.ifsc_image} alt="info"
           />
         </div>

@@ -579,31 +579,49 @@ img.gold-offer-slide-img {
   margin: 0 0 20px 0;
 }
 
-.gold-payment-container .hr {
-  border: 1px solid #EDEDED;
+.gold-payment-container {
+  .content-points {
+    color: #0A1D32;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0 15px 0;
+  }
+  
+  .content2-points {
+    color: #0A1D32;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0 15px 0;
+    font-weight: 600;
+  }
+  .mid-title {
+    color: #0A1C32;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0 0 30px 0;
+  }
+  .hr {
+    border: 1px solid #EDEDED;
+  }
+
+  .top-content {
+    color: #0A1D32;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  .karat {
+    position: absolute;
+    right: 0px;
+    color: #767E86;
+    font-size: 10px;
+    font-weight: 600;
+  }
 }
 
-.gold-payment-container .content-points {
-  color: #0A1D32;
-  font-size: 14px;
-  display: flex;
-  justify-content: space-between;
-  margin: 15px 0 15px 0;
-}
-
-.gold-payment-container .content2-points {
-  color: #0A1D32;
-  font-size: 14px;
-  display: flex;
-  justify-content: space-between;
-  margin: 15px 0 15px 0;
-  font-weight: 600;
-}
-.gold-payment-container .mid-title {
-  color: #0A1C32;
-  font-size: 16px;
-  font-weight: 500;
-}
 .send-invoice {
   display: flex;
   align-items: center;
@@ -611,11 +629,7 @@ img.gold-offer-slide-img {
   cursor: pointer;
   width: fit-content;
 }
-.gold-payment-container .top-content {
-  color: #0A1D32;
-  font-size: 16px;
-  font-weight: 300;
-}
+
 
 
 .gold-delivery-select-address {
@@ -651,7 +665,7 @@ img.gold-offer-slide-img {
       margin: 5px 8px 0 0px;
   }
   .add-new-button {
-    margin: 20px 0 0 26px;
+    margin: 30px 0 0 26px;
     font-size: 12px;
     color: var(--secondary);
     text-transform: uppercase;
@@ -669,6 +683,7 @@ img.gold-offer-slide-img {
         font-size: 14px;
         font-weight: 700;
         text-transform: capitalize;
+        margin: 0 0 10px 0;
       }
 
       .address-content {
@@ -697,7 +712,7 @@ img.gold-offer-slide-img {
   }
 
   .add-new-button {
-    margin: 20px 0 0 25px;
+    margin: 30px 0 0 25px;
     font-size: 12px;
     color: var(--secondary);
     text-transform: uppercase;
@@ -723,6 +738,7 @@ img.gold-offer-slide-img {
     color: #0A1C32;
     font-size: 14px;
     font-weight: 600;
+    line-height: 1.6;
   }
   .account-number {
     color: #767E86;
@@ -736,7 +752,7 @@ img.gold-offer-slide-img {
   .left-icon {
     /* width: 10%; */
     float: left;
-    margin: 0 10px 0 0;
+    margin: 5px 10px 0 0;
   }
 
 }
@@ -790,18 +806,7 @@ img.gold-offer-slide-img {
     font-weight: 600;
   }
   
-  .shipping-address .top-tile {
-    display: flex;
-    justify-content: space-between;
-  }
-  .shipping-address .top-title {
-    color: #0A1C32;
-    font-size: 14px;
-    font-weight: 600;
-  }
-  .shipping-address .top-icon {
-    width: 14px;
-  }
+  
   .address .content {
     font-size: 13px;
     color: #767E86;
@@ -813,6 +818,20 @@ img.gold-offer-slide-img {
 
   .shipping-address {
     cursor: pointer;
+    margin: 30px 0 0 0;
+
+    .top-tile {
+      display: flex;
+      justify-content: space-between;
+    }
+    .top-title {
+      color: #0A1C32;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .top-icon {
+      width: 14px;
+    }
   }
   
 }
@@ -934,8 +953,14 @@ img.gold-offer-slide-img {
   background: white;
   color: var(--primary);
   cursor: unset;
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
 }
 
+.sell-home {
+  button {
+    box-shadow: unset;
+  }
+}
 
 
 .gold-buy-info-images {
@@ -957,10 +982,21 @@ img.gold-offer-slide-img {
   margin: 0 0 10px 0;
 }
 
-.gold-buy-home .page-title {
-  color: #0A1C32;
-  font-size: 16px;
-  font-weight: 500;
+.gold-buy-home  {
+  .page-title {
+    color: #0A1C32;
+    font-size: 16px;
+    font-weight: 500;
+  }
+ 
+  .gst-info {
+    color: rgb(118, 126, 134);
+    font-size: 8px;
+    margin: 7px 0px 0px;
+    text-align: center;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+  }
 }
 
 
@@ -1158,7 +1194,7 @@ img.gold-offer-slide-img {
   .text-on-img {
     position: absolute;
     top: -14px;
-    left: -4px;
+    left: -3px;
   }
 
   .success-step {
@@ -1352,18 +1388,22 @@ img.gold-offer-slide-img {
       box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
       width: 100%;
       margin: 0 0 10px 0;
+      border-radius: 4px;
     }
     .disc {
       color: #0A1D32;
       font-size: 14px;
-      margin: 0 0 7px 0;
+      margin: 0 0 10px 0;
       text-align: left;
+      line-height: 1.6;
+      font-weight: 500;
     }
     
     .making-charges {
         color: #767E86;
         font-size: 10px;
         text-align: left;
+        font-weight: 500;
     }
     
     .making-cost {
@@ -1423,6 +1463,7 @@ img.gold-offer-slide-img {
       font-size: 13px;
       font-weight: 400;
       margin: 10px 0 10px 0;
+      line-height: 1.6;
     }
   }
 }

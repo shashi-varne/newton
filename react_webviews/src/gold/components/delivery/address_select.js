@@ -299,7 +299,7 @@ class SelectAddressDelivery extends Component {
       <Container
         summarypage={true}
         showLoader={this.state.show_loader}
-        title="Select Address"
+        title="Select address"
         handleClick={this.handleClick}
         handleClick2={this.handleClick2}
         fullWidthButton={true}

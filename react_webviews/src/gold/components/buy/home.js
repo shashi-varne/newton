@@ -478,11 +478,10 @@ class GoldBuyHome extends Component {
                   </div>}
                   <Button style={{height: 50}} fullWidth={true} variant="raised"
                       size="large" onClick={this.handleClick} color="secondary" autoFocus>
-                    Pay {inrFormatDecimal2(this.state.amount || 0)}
+                    PAY {inrFormatDecimal2(this.state.amount || 0)}
                   </Button>
 
-                  <div style={{color: '#767E86', fontSize:8,margin: '7px 0 0 0', 
-                textTransform: 'capitalize', textAlign: 'center', letterSpacing:1.1}}>
+                  <div className="gst-info">
                   *Inclusive of 3% GST | can only be sold after 24 hours
                   </div>
               </div>
