@@ -20,6 +20,7 @@ import GoldOnloadAndTimer from '../ui_components/onload_and_timer';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
+storageService().remove('buyData');
 
 const plusOptionsAmount = [
   500, 1000, 2000, 5000
@@ -99,14 +100,15 @@ class GoldBuyHome extends Component {
   handleClose = () => {
     this.setState({
       openPopup: false,
-      openDialogOffer: false
+      openDialogOffer: false,
+      openPriceChangedDialog: false
     });
 
-    if (this.state.openPriceChangedDialog && this.state.timeAvailable > 0) {
-      this.setState({
-        openPriceChangedDialog: false
-      })
-    }
+    // if (this.state.openPriceChangedDialog && this.state.timeAvailable > 0) {
+    //   this.setState({
+    //     openPriceChangedDialog: false
+    //   })
+    // }
   }
 
   // common code start
@@ -238,6 +240,11 @@ class GoldBuyHome extends Component {
   }
 
   setAmountGms = (event)  => {
+
+    if(!this.state.buyData || !this.state.buyData.plutus_rate_id) {
+      return;
+    }
+    
     let amountError = false;
     let weightError = false;
     let amount = '', weight = '';

@@ -18,6 +18,7 @@ import { FormControl } from 'material-ui/Form';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
+storageService().remove('sellData');
 
 const stepsContentMapper = [
   {'icon': 'ic_gold_provider', 'content': '1. Select your preferred gold provider'},
@@ -85,19 +86,25 @@ class GoldSellHome extends Component {
 
   handleClose = () => {
     this.setState({
-      openDialogOffer: false
+      openDialogOffer: false,
+      openPriceChangedDialog: false
     });
 
-    if(this.state.openPriceChangedDialog && this.state.timeAvailable >0) {
-      this.setState({
-        openPriceChangedDialog: false
-      })
-    }
+    // if(this.state.openPriceChangedDialog && this.state.timeAvailable >0) {
+    //   this.setState({
+    //     openPriceChangedDialog: false
+    //   })
+    // }
   }
 
   setMaxWeightAmount() {
     let maxWeight = this.state.maxWeight;
-    let maxAmount = ((this.state.goldSellInfo.plutus_rate) * (maxWeight || 0)).toFixed(2);
+
+    let maxAmount = '';
+    if(this.state.goldSellInfo) {
+      maxAmount = ((this.state.goldSellInfo.plutus_rate) * (maxWeight || 0)).toFixed(2);
+    }
+    
     let weightDiffrence = this.state.provider_info.gold_balance - maxWeight;
     let sellWeightDiffrence = false;
     if(weightDiffrence > 0) {
@@ -281,7 +288,8 @@ class GoldSellHome extends Component {
 
   setAmountGms = (event) => {
 
-    if(this.state.base_error) {
+    if(this.state.base_error || !this.state.sellData || 
+      !this.state.sellData.plutus_rate_id) {
       return;
     }
     let amountError = false;

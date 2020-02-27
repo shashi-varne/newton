@@ -37,6 +37,7 @@ class SellPriceClass extends Component {
 
                 let sellData = storageService().getObject('sellData') || {};
                 sellData.goldSellInfo = result.sell_info;
+                sellData.provider = this.state.provider;
                 sellData.plutus_rate_id = result.sell_info.plutus_rate_id;
                 sellData.timeAvailable = timeAvailable;
                 storageService().setObject('sellData', sellData);
@@ -46,6 +47,9 @@ class SellPriceClass extends Component {
                 this.props.parent.updateParent('show_loader', false);
                 
             } else {
+                this.props.parent.onload();
+                this.props.parent.updateParent('fetchLivePrice', false);
+                this.props.parent.updateParent('show_loader', false);
                 this.setState({
                     show_loader: false
                 });

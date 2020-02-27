@@ -16,7 +16,6 @@ export const stateMapper = {
 }
 
 export function calculate_gold_wt_buy(buyData, buy_price) {
-
     let current_gold_price = buyData.goldBuyInfo.plutus_rate;
     let tax = buyData.goldBuyInfo.applicable_tax;
 
@@ -77,7 +76,14 @@ export function calculate_gold_amount_buy(buyData, weight) {
 export function calculate_gold_wt_sell(sellData, amount) {
 
 
-    let weight = ((amount) / (sellData.goldSellInfo.plutus_rate)).toFixed(4);
+    let weight = ((amount) / (sellData.goldSellInfo.plutus_rate));
+    if(sellData.provider === 'mmtc') {
+        weight = Math.ceil(weight*10000);
+        weight = (weight/10000).toFixed(4);
+    } else {
+        weight = weight.toFixed(4);
+    }
+
     let data = {
         'weight': weight,
         'amount': amount,
@@ -90,7 +96,14 @@ export function calculate_gold_wt_sell(sellData, amount) {
 }
 
 export function calculate_gold_amount_sell(sellData, weight) {
-    let amount = ((sellData.goldSellInfo.plutus_rate) * (weight)).toFixed(2);
+    let amount = ((sellData.goldSellInfo.plutus_rate) * (weight));
+    
+    if(sellData.provider === 'mmtc') {
+        amount = Math.round(amount*100)/100;
+    } else {
+        amount = amount.toFixed(2);
+    }
+
     let data = {
         'weight': sellData.weight,
         'amount': amount,

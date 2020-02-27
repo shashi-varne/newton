@@ -37,17 +37,17 @@ class GoldOnloadAndTimerClass extends Component {
 
     countdown = () => {
 
-        let orderData = storageService().getObject(this.state.orderKey);
+        let orderData = storageService().getObject(this.state.orderKey) || {};
 
         // fresh time available
         var currentDate = new Date();
         let rate_validity = '';
         if(this.state.orderType === 'buy') {
-            rate_validity = orderData.goldBuyInfo.rate_validity;
+            rate_validity = orderData.goldBuyInfo ? orderData.goldBuyInfo.rate_validity : '';
         }
 
         if(this.state.orderType === 'sell') {
-            rate_validity = orderData.goldSellInfo.rate_validity;
+            rate_validity = orderData.goldSellInfo ? orderData.goldSellInfo.rate_validity : '';
         }
 
         let timeAvailable = ((rate_validity - currentDate.getTime()) / 1000 - 330 * 60);
@@ -113,16 +113,16 @@ class GoldOnloadAndTimerClass extends Component {
             return;
         }
         
-        let orderData = storageService().getObject(this.state.orderKey);
+        let orderData = storageService().getObject(this.state.orderKey) || {};
 
         this.updateParent(this.state.orderKey, orderData);
 
         if (this.state.orderType === 'buy') {
-            this.updateParent('live_price', orderData.goldBuyInfo.plutus_rate);
+            this.updateParent('live_price', orderData.goldBuyInfo ? orderData.goldBuyInfo.plutus_rate : '');
         }
 
         if (this.state.orderType === 'sell') {
-            this.updateParent('live_price', orderData.goldSellInfo.plutus_rate);
+            this.updateParent('live_price', orderData.goldSellInfo ? orderData.goldSellInfo.plutus_rate: '');
         }
 
         this.updateParent('openRefreshModule', false);
@@ -152,6 +152,9 @@ class GoldOnloadAndTimerClass extends Component {
 
 
         if (this.state.orderType === 'buy') {
+            if(!orderData.goldBuyInfo) {
+                orderData.goldBuyInfo = {};
+            }
             this.updateParent('goldBuyInfo', orderData.goldBuyInfo);
 
             let minimum_buy_price  = orderData.goldBuyInfo.minimum_buy_price || 1000;
