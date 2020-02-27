@@ -22,7 +22,14 @@ export function calculate_gold_wt_buy(buyData, buy_price) {
 
     tax = 1.0 + parseFloat(tax) / 100.0
     var current_gold_price_with_tax = (current_gold_price * tax).toFixed(2);
-    var gold_wt = (buy_price / current_gold_price_with_tax).toFixed(4);
+    var gold_wt = (buy_price / current_gold_price_with_tax);
+
+    if(buyData.provider === 'mmtc') {
+        gold_wt = Math.floor(gold_wt*10000);
+        gold_wt = (gold_wt/10000).toFixed(4);
+    } else {
+        gold_wt = gold_wt.toFixed(4);
+    }
 
     var base_amount = (buy_price / tax).toFixed(2);
 
@@ -43,8 +50,15 @@ export function calculate_gold_amount_buy(buyData, weight) {
 
 
     tax = 1.0 + parseFloat(tax) / 100.0
-    var current_gold_price_with_tax = (current_gold_price * tax).toFixed(2)
-    var gold_amount = (weight * current_gold_price_with_tax).toFixed(2);
+    var current_gold_price_with_tax = (current_gold_price * tax).toFixed(2);
+    var gold_amount = (weight * current_gold_price_with_tax);
+
+    if(buyData.provider === 'mmtc') {
+        gold_amount = Math.ceil(gold_amount*100);
+        gold_amount = (gold_amount/100).toFixed(2);
+    } else {
+        gold_amount = gold_amount.toFixed(2);
+    }
 
     var current_gold_price_without_tax = (current_gold_price).toFixed(2)
     var gold_amount_without_tax = (weight * current_gold_price_without_tax).toFixed(2);
