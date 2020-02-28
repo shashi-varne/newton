@@ -15,7 +15,7 @@ class DeliveryOrder extends Component {
       show_loader: true,
       openResponseDialog: false,
       disabled: false,
-      disabledText: 'Make payment',
+      disabledText: 'MAKE PAYMENT',
       params: qs.parse(props.history.location.search.slice(1)),
       provider: this.props.match.params.provider,
       showAddress: false,

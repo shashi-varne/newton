@@ -404,7 +404,7 @@ class GoldBuyHome extends Component {
         title={'Buy gold: ' + this.state.gold_providers[this.state.provider].title}
         handleClick={this.handleClick}
         updateChild={this.updateChild}
-        buttonTitle="Proceed"
+        buttonTitle="PROCEED"
         events={this.sendEvents('just_set_events')}
       >
 

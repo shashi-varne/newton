@@ -20,7 +20,7 @@ class DeliverySelectedProduct extends Component {
       show_loader: true,
       product:storageService().getObject('deliveryData') || {},
       openResponseDialog: false,
-      disabledText: 'Proceed to address selection',
+      disabledText: 'PROCEED TO ADDRESS SELECTION',
       disabled: true,
       params: qs.parse(props.history.location.search.slice(1)),
       provider: this.props.match.params.provider,

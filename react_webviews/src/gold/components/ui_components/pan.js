@@ -21,14 +21,14 @@ const commonMapper = {
         'editable': {
             'top_title': 'Share PAN details',
             'top_subtitle': 'As per government guidelines, PAN is mandatory to buy more than ₹1 lac worth gold',
-            'cta': 'Continue',
+            'cta': 'CONTINUE',
             'cta2': 'Buy gold worth',
             'name': 'Buy'
         },
         'non-editable': {
             'top_title': 'Share PAN details',
             'top_subtitle': 'As per government guidelines, PAN is mandatory to buy more than ₹1 lac worth gold',
-            'cta': 'Continue',
+            'cta': 'CONTINUE',
             'cta2': 'Buy gold worth',
             'name': 'Buy'
         },
@@ -39,14 +39,14 @@ const commonMapper = {
         'editable': {
             'top_title': 'Share PAN details',
             'top_subtitle': 'As per Indian government, PAN is mandatory to sell gold',
-            'cta': 'Continue',
+            'cta': 'CONTINUE',
             'cta2': 'Sell gold worth',
             'name': 'Sell'
         },
         'non-editable': {
             'top_title': 'Share PAN details',
             'top_subtitle': 'As per Indian government, PAN is mandatory to sell gold',
-            'cta': 'Continue',
+            'cta': 'CONTINUE',
             'cta2': 'Sell gold worth',
             'name': 'Sell'
         },

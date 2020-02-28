@@ -58,7 +58,7 @@ class KnowMore extends Component {
         showLoader={this.state.show_loader}
         title="About Safegold"
         edit={this.props.edit}
-        buttonTitle="Proceed"
+        buttonTitle="PROCEED"
         handleClick={this.handleClick}
         events={this.sendEvents('just_set_events')}
       >

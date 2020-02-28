@@ -120,7 +120,7 @@ class GoldSelectProviderClass extends Component {
                 handleClick={this.handleClick}
                 fullWidthButton={true}
                 onlyButton={true}
-                buttonTitle="Continue"
+                buttonTitle="CONTINUE"
                 events={this.sendEvents('just_set_events')}
             >
                 <div className="gold-sell-select-bank">

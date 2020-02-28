@@ -276,7 +276,7 @@ class Otp extends Component {
         title=""
         handleClick={this.handleClick}
         edit={this.props.edit}
-        buttonTitle="Proceed"
+        buttonTitle="PROCEED"
         events={this.sendEvents('just_set_events')}
       >
         {/* <div className="otp-body">

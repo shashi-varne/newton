@@ -338,7 +338,7 @@ class SellVerifyBank extends Component {
                 title="Verify bank details"
                 edit={this.props.edit}
                 handleClick={this.handleClick}
-                buttonTitle="Verify Bank Account"
+                buttonTitle="VERIFY BANK ACCOUNT"
                 events={this.sendEvents('just_set_events')}
             >
                 <div className="common-top-page-subtitle">

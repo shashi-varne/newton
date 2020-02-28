@@ -68,7 +68,7 @@ class DeliveryIntro extends Component {
         showLoader={this.state.show_loader}
         title="Deliver gold"
         handleClick={this.handleClick}
-        buttonTitle="Select gold coin"
+        buttonTitle="SELECT GOLD COIN"
         events={this.sendEvents('just_set_events')}
       >
 

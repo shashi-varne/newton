@@ -258,7 +258,7 @@ class AddEditAddressDelivery extends Component {
         resetpage={this.props.edit ? true : false}
         handleClick={this.handleClick}
         edit={this.props.edit}
-        buttonTitle="Save and continue"
+        buttonTitle="SAVE AND CONTINUE"
         logo={this.state.image}
         events={this.sendEvents('just_set_events')}
       >

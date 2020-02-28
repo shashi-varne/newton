@@ -20,21 +20,21 @@ const commonMapper = {
       'top_icon': 'ils_gold_purchase_success',
       'top_title': 'Gold purchase successful!',
       'mid_title': 'Payment details',
-      'button_title': 'Go to locker',
+      'button_title': 'GO TO LOCKER',
       'cta_state': '/gold/gold-locker'
     },
     'pending': {
       'top_icon': 'ils_gold_purchase_pending',
       'top_title': 'Gold purchase pending!',
       'mid_title': 'Payment details',
-      'button_title': 'Go to locker',
+      'button_title': 'GO TO LOCKER',
       'cta_state':  '/gold/gold-locker'
     },
     'failed': {
       'top_icon': 'ils_gold_purchase_failed',
       'top_title': 'Oops! gold purchase failed',
       'mid_title': '',
-      'button_title': 'Retry buy gold',
+      'button_title': 'RETRY BUY GOLD',
       'cta_state': '/gold/buy'
     }
   },
@@ -43,21 +43,21 @@ const commonMapper = {
       'top_icon': 'ils_gold_sell_success',
       'top_title': 'Gold sell successful!',
       'mid_title': 'Sold gold details',
-      'button_title': 'Continue to locker',
+      'button_title': 'CONTINUE TO LOCKER',
       'cta_state': '/gold/gold-locker'
     },
     'pending': {
       'top_icon': 'ils_gold_sell_failed',
       'top_title': 'Gold sell failed!',
       'mid_title': '',
-      'button_title': 'Continue to locker',
+      'button_title': 'CONTINUE TO LOCKER',
       'cta_state':  '/gold/gold-locker'
     },
     'failed': {
       'top_icon': 'ils_gold_sell_failed',
       'top_title': 'Gold sell failed!',
       'mid_title': '',
-      'button_title': 'Continue to locker',
+      'button_title': 'CONTINUE TO LOCKER',
       'cta_state':  '/gold/gold-locker'
     }
   },
@@ -66,21 +66,21 @@ const commonMapper = {
       'top_icon': 'sucess_order_delivery',
       'top_title': 'Order placed',
       'mid_title': 'Payment details',
-      'button_title': 'Go to locker',
+      'button_title': 'GO TO LOCKER',
       'cta_state': '/gold/gold-locker'
     },
     'pending': {
       'top_icon': 'pending_order_delivery',
       'top_title': 'Delivery order pending!',
       'mid_title': 'Payment details',
-      'button_title': 'Go to locker',
+      'button_title': 'GO TO LOCKER',
       'cta_state':  '/gold/gold-locker'
     },
     'failed': {
       'top_icon': 'failed_order_delivery',
       'top_title': 'Oops! delivery order failed',
       'mid_title': '',
-      'button_title': 'Retry purchase',
+      'button_title': 'RETRY PURCHASE',
       'cta_state':  '/gold/delivery-products'
     }
   }

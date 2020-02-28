@@ -313,7 +313,7 @@ class SellAddEditBank extends Component {
         edit={this.props.edit}
         handleClick={this.handleClick}
         handleClick2={this.handleClick2}
-        buttonTitle="Continue"
+        buttonTitle="CONTINUE"
         events={this.sendEvents('just_set_events')}
         withProvider={!this.state.pan_bank_flow ? true : false}
         count={this.state.pan_bank_flow ? true : false}

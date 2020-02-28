@@ -319,7 +319,7 @@ class Transactions extends Component {
         showLoader={this.state.show_loader}
         title="Gold Transactions"
         edit={this.props.edit}
-        buttonTitle="Proceed"
+        buttonTitle="PROCEED"
         noFooter={true}
         noPadding={true}
         events={this.sendEvents('just_set_events')}

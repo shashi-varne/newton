@@ -335,9 +335,6 @@
   padding-left: 5px;
 }
 
-.bank-timer {
-}
-
 .invest-success {
   text-align: center;
 }
@@ -471,11 +468,13 @@
 .transaction-history {
   justify-content: space-between;
   cursor: pointer;
+
+  .arrow {
+    font-size: 16px;
+  }
 }
 
-.transaction-history .arrow {
-  font-size: 16px;
-}
+
 .input-box.InputField {
   margin-bottom: 0px;
 }
@@ -508,32 +507,35 @@ img.gold-offer-slide-img {
   height: 165px;
 }
 
-.check-how-gold .title {
-  color: #0a1c32;
-  margin: 0 0 20px 0;
-  font-size: 16px;
-  font-weight: 500;
-}
-
-.check-how-gold .content {
-  color: #767e86;
-  font-size: 14px;
-  font-weight: 400;
-}
-.check-how-gold .content-tiles {
-  margin: 0 0 10px 0;
-  line-height: 1.7;
-  text-align: left;
-}
-.check-how-gold .chart {
-  margin: 10px 0 30px 0;
-}
-.check-how-gold .mid-img {
-  margin: 0 0 20px 0;
-  img {
-    width: 100%;
+.check-how-gold {
+  .title {
+    color: #0a1c32;
+    margin: 0 0 20px 0;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  
+  .content {
+    color: #767e86;
+    font-size: 14px;
+    font-weight: 400;
+  }
+  .content-tiles {
+    margin: 0 0 10px 0;
+    line-height: 1.7;
+    text-align: left;
+  }
+  .chart {
+    margin: 10px 0 30px 0;
+  }
+  .mid-img {
+    margin: 0 0 20px 0;
+    img {
+      width: 100%;
+    }
   }
 }
+
 .live-price-gold {
   display: flex;
   justify-content: space-between;
@@ -542,40 +544,46 @@ img.gold-offer-slide-img {
   padding: 10px 10px 10px 10px;
   align-items: center;
   border-radius: 4px;
-}
-.live-price-gold .mid-text {
-  color: #767e86;
-  font-size: 13px;
-  margin: 0 0 0 10px;
-}
-.live-price-gold .right-text {
-  font-size: 10px;
-  color: var(--secondary);
-  font-weight: 800;
-}
-.gold-dialog .hr {
-  border: 1px solid #ededed;
+
+  .mid-text {
+    color: #767e86;
+    font-size: 13px;
+    margin: 0 0 0 10px;
+  }
+  .right-text {
+    font-size: 10px;
+    color: var(--secondary);
+    font-weight: 800;
+  }
 }
 
-.gold-dialog .content-points {
-  color: #0a1d32;
-  font-size: 14px;
-  display: flex;
-  justify-content: space-between;
-  margin: 15px 0 15px 0;
+
+.gold-dialog {
+  .hr {
+    border: 1px solid #ededed;
+  }
+  
+  .content-points {
+    color: #0a1d32;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0 15px 0;
+  }
+  
+  .content2-points {
+    color: #0a1d32;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0 15px 0;
+    font-weight: 600;
+  }
+  .mid-buttons {
+    margin: 0 0 20px 0;
+  }
 }
 
-.gold-dialog .content2-points {
-  color: #0a1d32;
-  font-size: 14px;
-  display: flex;
-  justify-content: space-between;
-  margin: 15px 0 15px 0;
-  font-weight: 600;
-}
-.gold-dialog .mid-buttons {
-  margin: 0 0 20px 0;
-}
 
 .gold-payment-container {
   .content-points {
@@ -828,36 +836,37 @@ img.gold-offer-slide-img {
 
 .gold-provider-filter {
   margin: 0 0 20px 0;
+  .tile1 {
+    margin: 0 0 0px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .tile1-left {
+    color: #0a1c32;
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .tile1-right img {
+    width: 60px;
+  }
+  .arrow-img {
+    margin: 0 0 0 6px;
+  }
+  .tile2 {
+    display: flex;
+    justify-content: space-between;
+  }
+  .tile2-left {
+    color: #767e86;
+    font-size: 13px;
+  }
+  .tile2-right {
+    color: #767e86;
+    font-size: 13px;
+  }
 }
-.gold-provider-filter .tile1 {
-  margin: 0 0 0px 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.gold-provider-filter .tile1-left {
-  color: #0a1c32;
-  font-size: 20px;
-  font-weight: 600;
-}
-.gold-provider-filter .tile1-right img {
-  width: 60px;
-}
-.gold-provider-filter .arrow-img {
-  margin: 0 0 0 6px;
-}
-.gold-provider-filter .tile2 {
-  display: flex;
-  justify-content: space-between;
-}
-.gold-provider-filter .tile2-left {
-  color: #767e86;
-  font-size: 13px;
-}
-.gold-provider-filter .tile2-right {
-  color: #767e86;
-  font-size: 13px;
-}
+
 
 .gold-aw-inputs {
   margin: 0 0 30px 0;

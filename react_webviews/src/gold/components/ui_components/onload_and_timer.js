@@ -190,7 +190,7 @@ class GoldOnloadAndTimerClass extends Component {
                     leftArrow: 'down',
                     provider: this.state.provider
                 },
-                buttonTitle: "Ok",
+                buttonTitle: "OK",
                 content1: [
                     {
                         'name': this.state.orderType + ' price for <b>' + orderData.weight_selected + '</b> gms', 'value':
@@ -217,7 +217,7 @@ class GoldOnloadAndTimerClass extends Component {
                   leftArrow: 'down',
                   provider: this.state.provider
                 },
-                buttonTitle: "Ok",
+                buttonTitle: "OK",
                 content1: [
                   { 'name': 'Making charges', 'value': inrFormatDecimal2(orderData.delivery_minting_cost) },
                   { 'name': 'Shipping charges', 'value': 'Free' }

@@ -290,7 +290,7 @@ class SellSelectBank extends Component {
         handleClick2={this.handleClick2}
         fullWidthButton={true}
         onlyButton={true}
-        buttonTitle="Continue"
+        buttonTitle="CONTINUE"
         disable={this.state.selectedIndex === -1 ? true : false}
         withProvider={true}
         buttonData={this.state.bottomButtonData}

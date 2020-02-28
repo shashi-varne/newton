@@ -422,7 +422,7 @@ class GoldRegister extends Component {
         handleClick2={this.handleClick2}
         edit={this.props.edit}
         withProvider={true}
-        buttonTitle="Continue"
+        buttonTitle="CONTINUE"
         buttonData={this.state.bottomButtonData}
         events={this.sendEvents('just_set_events')}
       >

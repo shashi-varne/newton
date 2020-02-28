@@ -397,7 +397,7 @@ class GoldSellHome extends Component {
       <Container
         noFooter={true}
         showLoader={this.state.show_loader}
-        buttonTitle="Proceed"
+        buttonTitle="PROCEED"
         headerType="provider-filter"
         handleClick={this.handleClick}
         title={'Sell gold: ' + this.state.gold_providers[this.state.provider].title}
@@ -484,7 +484,7 @@ class GoldSellHome extends Component {
               <div>
                   <Button style={{height: 50}} fullWidth={true} variant="raised" disabled={!this.state.isRegistered}
                       size="large" onClick={this.handleClick} color="secondary">
-                    Proceed
+                    PROCEED
                   </Button>
               </div>
             </div>
