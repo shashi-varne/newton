@@ -593,3 +593,14 @@ export function getOrderStatusPayment(order) {
 
     return 'pending';
 }
+
+export function validateAmountWeight(value, isAmount) {
+    let rule;
+    if(isAmount) {
+        rule = /^[ A-Za-z0-9,.]/;
+    } else {
+        rule = /^[a-zA-Z0-9._]*$/;
+    }
+    
+    return rule.test(value);
+}

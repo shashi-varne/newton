@@ -8,7 +8,7 @@ import { inrFormatDecimal2, storageService, formatAmountInr, formatGms } from 'u
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { default_provider, gold_providers, isUserRegistered } from '../../constants';
+import { default_provider, gold_providers, isUserRegistered, validateAmountWeight } from '../../constants';
 import PlaceBuyOrder from '../ui_components/place_buy_order';
 import PriceChangeDialog from '../ui_components/price_change_dialog';
 import RefreshBuyPrice from '../ui_components/buy_price';
@@ -230,16 +230,16 @@ class GoldBuyHome extends Component {
   }
 
   handleKeyChange = name => event => {
-    if (event.charCode >= 48 && event.charCode <= 57) {
-      // valid
-    } else {
-      // invalid
-      event.preventDefault();
-    }
+    // if (event.charCode >= 48 && event.charCode <= 57) {
+    //   // valid
+    // } else {
+    //   // invalid
+    //   event.preventDefault();
+    // }
   }
 
   setAmountGms = (event)  => {
-
+    
     if(!this.state.buyData || !this.state.buyData.plutus_rate_id) {
       return;
     }
@@ -275,7 +275,7 @@ class GoldBuyHome extends Component {
       amount = eventValue
     }
 
-    if(isNaN(eventValue)) {
+    if(eventValue && !validateAmountWeight(eventValue, this.state.isAmount)) {
       return;
     }
 

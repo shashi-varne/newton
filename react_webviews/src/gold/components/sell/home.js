@@ -7,7 +7,7 @@ import toast from '../../../common/ui/Toast';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import { default_provider, gold_providers, setSellDataAfterUpdate,
-  calculate_gold_wt_sell, calculate_gold_amount_sell, isUserRegistered} from  '../../constants';
+  calculate_gold_wt_sell, calculate_gold_amount_sell, isUserRegistered, validateAmountWeight} from  '../../constants';
 import { inrFormatDecimal2, storageService, formatAmountInr, formatGms} from "utils/validators";
 import GoldProviderFilter from '../ui_components/provider_filter';
 import GoldLivePrice from '../ui_components/live_price';
@@ -261,12 +261,12 @@ class GoldSellHome extends Component {
   }
 
   handleKeyChange = name => event => {
-    if (event.charCode >= 48 && event.charCode <= 57) {
-      // valid
-    } else {
-      // invalid
-      event.preventDefault();
-    }
+    // if (event.charCode >= 48 && event.charCode <= 57) {
+    //   // valid
+    // } else {
+    //   // invalid
+    //   event.preventDefault();
+    // }
   }
 
   chooseTabs(type) {
@@ -311,7 +311,7 @@ class GoldSellHome extends Component {
       amount = eventValue
     }
 
-    if(isNaN(eventValue)) {
+    if(eventValue && !validateAmountWeight(eventValue, this.state.isAmount)) {
       return;
     }
 
