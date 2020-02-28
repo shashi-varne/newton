@@ -1,29 +1,36 @@
 .configPrimaryColorClass {
   color: var(--primary) !important;
 }
+
 .configPrimaryBackgroundColorClass {
   background-color: var(--primary) !important;
 }
+
 .ContainerWrapper {
   background-color: #fff;
 }
+
 html, body, #root {
   height: 100%;
   background-color: #fff;
 }
 
 /* web-app changes */
+
 body[data-device="web"] .MuiAppBar-positionFixed {
   left: 0 !important;
 }
+
 body[data-device="web"] .Header {
   max-width: var(--desktop-width);
   margin: 0 auto;
 }
+
 body[data-device="web"] {
   height: 100%;
   overflow: hidden;
 }
+
 body[data-device="web"] .Footer {
   max-width: fit-content;
   position: relative !important;
@@ -37,11 +44,13 @@ body[data-device="web"] .ContainerWrapper {
   padding-bottom: 3px;
   overflow: auto;
 }
+
 body[data-device="web"] .Step {
   max-width: var(--desktop-width);
   margin: 0 auto;
   top: 66px;
 }
+
 body[data-device="web"] .Banner {
   max-width: var(--desktop-width);
 }
@@ -67,13 +76,13 @@ body[data-device="web"] .quote-filter-dialog-head {
   max-width: var(--desktop-width);
 }
 
-body[data-device="web"] .MuiDialogActions-root{
+body[data-device="web"] .MuiDialogActions-root {
   margin: 0 auto;
   width: fit-content;
   margin-bottom: 20px;
 }
 
-body[data-device="web"] .FooterImage{
+body[data-device="web"] .FooterImage {
   width: auto;
   height: 47px;
 }
@@ -86,22 +95,24 @@ body[data-device="web"] .FooterImage{
   cursor: pointer;
 }
 
-html, body[data-device="web"] #root{
+html, body[data-device="web"] #root {
   /* autoprefixer: off */
   height: 100%;
   background: #f3f4f6;
 }
 
-body[data-device="web"] #root > div:nth-child(2) {
+body[data-device="web"] #root>div:nth-child(2) {
   height: 100%;
 }
+
 body[data-device="web"] .Loader {
   max-width: var(--desktop-width);
   margin: 0 auto;
 }
+
 body[data-device="web"] .Container {
- height: auto !important;
- overflow: hidden;
+  height: auto !important;
+  overflow: hidden;
 }
 
 body[data-device="web"] #root .ContainerWrapper {
@@ -131,15 +142,14 @@ body[data-device="web"] #bottom-popup .MuiDialog-paper {
 }
 
 .Container {
-   padding: 20px 15px;
+  padding: 20px 15px;
   /* margin-bottom: 60px;
   padding-bottom: 20px !important;  */
-
-    background-color: #fff;
-    overflow-y: scroll;
-    /* margin-bottom: 56px !important; */
-    height: 100%;
-    padding-bottom: 56px !important; 
+  background-color: #fff;
+  overflow-y: scroll;
+  /* margin-bottom: 56px !important; */
+  height: 100%;
+  padding-bottom: 56px !important;
 }
 
 .Container .container-padding {
@@ -164,12 +174,12 @@ body[data-device="web"] #bottom-popup .MuiDialog-paper {
 }
 
 .fixheader .Header {
-    position: absolute !important;
+  position: absolute !important;
 }
 
 .SectionHead {
   margin-bottom: 15px;
-  color: rgb(68,68,68);
+  color: rgb(68, 68, 68);
   font-size: 14px;
   font-family: 'Roboto';
   font-weight: 500;
@@ -179,6 +189,7 @@ body[data-device="web"] #bottom-popup .MuiDialog-paper {
   margin-top: 20px;
   margin-bottom: 30px;
 }
+
 .CheckBlock2 {
   margin-top: 0px;
   margin-bottom: 0px;
@@ -205,9 +216,11 @@ body[data-device="web"] #bottom-popup .MuiDialog-paper {
 .FlexItem5 {
   flex: 5;
 }
+
 .FlexItem10 {
   flex: 10
 }
+
 .Footer {
   position: fixed;
   /* background: unset !important; */
@@ -217,15 +230,16 @@ body[data-device="web"] #bottom-popup .MuiDialog-paper {
   right: 0;
   /* border: 0; */
   /* border: 1px solid; */
-  box-shadow: 0px 2px 6px 0px rgba(102,120,121,0.25);
+  box-shadow: 0px 2px 6px 0px rgba(102, 120, 121, 0.25);
   /* box-shadow: 0 -3px 5px -2px rgba(0,0,0,.1); */
   /* box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149); */
   margin: 0px 7px 7px 7px;
   border-radius: 7px;
 }
+
 button.MuiButtonBase-root.MuiButton-root.MuiButton-raised.MuiButton-raisedSecondary.MuiButton-sizeLarge.CustomButton-button-100 {
   border-radius: 6px;
-  box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149);
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149);
 }
 
 .FooterButtonArrow {
@@ -285,7 +299,9 @@ button.MuiButtonBase-root.MuiButton-root.MuiButton-raised.MuiButton-raisedSecond
   color: #b1b1b1;
   font-size: 12px;
 }
+
 /* old */
+
 /* .FooterImage {
   width: 80%;
   position: relative;
@@ -296,7 +312,6 @@ button.MuiButtonBase-root.MuiButton-root.MuiButton-raised.MuiButton-raisedSecond
   /* width: 80%;
   position: relative;
   top: 2px; */
-
   width: 100%;
   position: relative;
   /* top: 1px; */
@@ -361,12 +376,15 @@ input#pan {
   font-family: 'Roboto';
   font-weight: 500;
 }
+
 .Accordion:last-child {
   border-bottom: solid 1px #c2c2c2;
 }
+
 .AccordionTitle {
   cursor: pointer;
 }
+
 .AccordionBody ul {
   padding: 0;
   margin: 0;
@@ -374,17 +392,21 @@ input#pan {
   padding-top: 15px;
   padding-left: 30px;
 }
+
 .AccordionBody ul li span {
   font-weight: normal;
 }
+
 .AccordionBody ul li {
   padding: 10px 0;
   font-size: 14px;
 }
+
 .Footer {
   background: #fff;
   z-index: 100;
 }
+
 .Loader {
   background: #fff;
   width: 100%;
@@ -396,6 +418,7 @@ input#pan {
   bottom: 0;
   z-index: 200;
 }
+
 .LoaderOverlay {
   position: absolute;
   top: 50%;
@@ -403,10 +426,12 @@ input#pan {
   transform: translate(-50%, -50%);
   text-align: center;
 }
+
 .Loader-Dialog {
   opacity: 0.9;
   z-index: 200000;
 }
+
 .LoaderOverlayText {
   color: #0A1D32;
   font-size: 14px;
@@ -418,12 +443,13 @@ input#pan {
   flex-direction: row;
   display: flex;
   position: fixed;
-    top: 56px;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    background: white;
+  top: 56px;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: white;
 }
+
 .Step span {
   background: #cacaca;
   height: 3px;
@@ -432,6 +458,7 @@ input#pan {
   box-sizing: border-box;
   margin-right: 3px;
 }
+
 .Step span.active {
   /* background: #250087; */
   height: 3px;
@@ -440,20 +467,23 @@ input#pan {
   box-sizing: border-box;
   margin-right: 3px;
 }
+
 .Step span:last-child {
   margin-right: 0;
 }
+
 .Progress {
-	height: 10px;
-	position: relative;
-	background: #ebebeb;
-	-moz-border-radius: 25px;
-	-webkit-border-radius: 25px;
-	border-radius: 25px;
-	/*box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);*/
+  height: 10px;
+  position: relative;
+  background: #ebebeb;
+  -moz-border-radius: 25px;
+  -webkit-border-radius: 25px;
+  border-radius: 25px;
+  /*box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);*/
   flex: 2;
 }
-.Progress > span {
+
+.Progress>span {
   display: block;
   height: 100%;
   border-top-right-radius: 20px;
@@ -461,17 +491,14 @@ input#pan {
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
   background-color: #3023ae;
-  background-image: linear-gradient(
-    to right,
-    #3023ae,
-    #c86dd7
-  );
+  background-image: linear-gradient( to right, #3023ae, #c86dd7);
   /*box-shadow:
     inset 0 2px 9px  rgba(255,255,255,0.3),
     inset 0 -2px 6px rgba(0,0,0,0.4);*/
   position: relative;
   overflow: hidden;
 }
+
 .NoInternet {
   background: #fff;
   text-align: center;
@@ -480,25 +507,29 @@ input#pan {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
 .NoInternet img {
   margin-bottom: 40px;
 }
+
 .NoInternet h1 {
-  color: rgb(74,74,74);
+  color: rgb(74, 74, 74);
   margin-top: 0;
   font-size: 20px;
   font-family: 'Roboto';
   font-weight: 500;
   text-align: center;
 }
+
 .NoInternet p {
-  color: rgb(74,74,74);
+  color: rgb(74, 74, 74);
   margin-top: 10px;
   margin-bottom: 0;
   font-size: 16px;
   font-family: 'Roboto';
   text-align: center;
 }
+
 .NoInternet button {
   box-shadow: none;
   margin-top: 40px;
@@ -506,45 +537,53 @@ input#pan {
   padding: 12px 22px;
   font-size: 14px;
 }
+
 .MuiToolbar-gutters {
   padding-left: 12px !important;
   padding-right: 13px !important;
 }
+
 .Toastify__toast-container.Toastify__toast-container--bottom-center {
   z-index: 99999999 !important;
 }
+
 .Toastify__toast {
   z-index: 99999999 !important;
 }
+
 .file-upload {
   cursor: inherit;
-    display: block;
-    font-size: 0;
-    filter: alpha(opacity=0);
-    min-height: 7%;
-    min-width: 100%;
-    opacity: 0;
-    position: absolute;
-    text-align: right;
-    left: 0;
-    right: 0;
+  display: block;
+  font-size: 0;
+  filter: alpha(opacity=0);
+  min-height: 7%;
+  min-width: 100%;
+  opacity: 0;
+  position: absolute;
+  text-align: right;
+  left: 0;
+  right: 0;
 }
+
 .Toastify__toast--default {
   background: #494747 !important;
   color: white !important;
   bottom: 80px !important;
   /* position: relative; */
 }
+
 .MuiModal-root {
   z-index: 99999 !important;
-    -webkit-transform: none;
-    -ms-transform: none; 
-    transform: none;
+  -webkit-transform: none;
+  -ms-transform: none;
+  transform: none;
 }
+
 .ReactModal__Body--open {
   overflow-y: hidden;
   position: fixed;
 }
+
 .highlight_color_info {
   background: var(--highlight_color_info);
 }
@@ -555,20 +594,23 @@ input#pan {
   font-weight: 600;
   padding: 10px 0px 0 0px;
 }
+
 .header-title-page {
   background: white;
-    color: #0A1C32;
-    height: 50px;
-    display: flex;
-    align-items: flex-end;
-    padding: 0 15px 0 15px;
-    font-size: 20px;
-    transition:.3s transform ease-in-out;
-    justify-content: space-between;
+  color: #0A1C32;
+  height: 50px;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 15px 0 15px;
+  font-size: 20px;
+  transition: .3s transform ease-in-out;
+  justify-content: space-between;
 }
+
 .header-title-page-text {
   font-weight: 600;
 }
+
 .header-topbar-white {
   background-color: white !important;
   color: black !important;
@@ -588,17 +630,18 @@ input#pan {
   font-weight: 400 !important;
 }
 
-
-.slide-fade{
+.slide-fade {
   transition: all 0.4s ease-out;
   opacity: 0;
   /* height: 0px; */
 }
-.slide-fade2{
+
+.slide-fade2 {
   transition: all 0.4s ease-out;
   /* opacity: 0; */
   /* height: 0px; */
 }
+
 .slide-fade-show {
   opacity: 1;
 }
@@ -611,16 +654,18 @@ input#pan {
   line-height: 1.6;
 }
 
-
 /* used in gold  */
+
 .FlexItem1-withProvider-footer {
   display: flex;
   align-items: center;
 }
+
 .FlexItem2-withProvider-footer {
   flex: 1;
   margin: 0 10px 0 0;
 }
+
 .FlexItem1-withProvider-footer .text-block-1 {
   color: #0A1C32;
   font-size: 10px;
@@ -631,20 +676,24 @@ input#pan {
   overflow: hidden;
   max-width: 100px;
 }
+
 .FlexItem1-withProvider-footer .text-block-2 {
   color: #0A1D32;
   font-size: 16px;
   /* padding: 5px 0 0 0; */
 }
+
 .FlexItem1-withProvider-footer .text-block-2-img {
   margin: 0px 5px 0 0;
   vertical-align: middle;
 }
+
 .FlexItem1-withProvider-footer .image-block {
   /* margin: 5px 5px 10px 3px;
   height: 48px; */
   margin: 0px 9px 0px 3px;
 }
+
 .FlexItem2-withProvider-footer button {
   box-shadow: none !important;
   padding: 0px !important;
@@ -653,7 +702,6 @@ input#pan {
 .FlexItem1-withProvider-footer .FooterImage {
   width: 40px;
 }
-
 
 #bottom-popup .MuiDialog-paper {
   position: fixed;

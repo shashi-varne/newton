@@ -1,7 +1,5 @@
 @value secondary: var(--secondary);
 
-
-
 .BannerContent {
   top: 50%;
   position: absolute;
@@ -43,8 +41,8 @@
 }
 
 .gold-about-text-know-more {
-    margin: 20px 0 20px 0;
-    text-align: center;
+  margin: 20px 0 20px 0;
+  text-align: center;
 }
 
 .gold-about-text {
@@ -236,7 +234,7 @@
 }
 
 .Input {
-  margin: 15px 0; 
+  margin: 15px 0;
 }
 
 .Input input {
@@ -338,7 +336,6 @@
 }
 
 .bank-timer {
-  
 }
 
 .invest-success {
@@ -383,7 +380,8 @@
   margin-bottom: 20px;
 }
 
-.delivery-select-logo, .delivery-order-logo {
+.delivery-select-logo,
+.delivery-order-logo {
   text-align: center;
   padding: 10px 0;
 }
@@ -483,10 +481,10 @@
 }
 .load-more {
   text-align: center;
-    margin-top: 13px;
-    font-weight: 500;
-    /* color: #5346a7; */
-    border: 1px;
+  margin-top: 13px;
+  font-weight: 500;
+  /* color: #5346a7; */
+  border: 1px;
 }
 .buy-order-tile22 {
   margin-left: 20px;
@@ -511,14 +509,14 @@ img.gold-offer-slide-img {
 }
 
 .check-how-gold .title {
-  color: #0A1C32;
+  color: #0a1c32;
   margin: 0 0 20px 0;
   font-size: 16px;
   font-weight: 500;
 }
 
 .check-how-gold .content {
-  color: #767E86;
+  color: #767e86;
   font-size: 14px;
   font-weight: 400;
 }
@@ -546,7 +544,7 @@ img.gold-offer-slide-img {
   border-radius: 4px;
 }
 .live-price-gold .mid-text {
-  color: #767E86;
+  color: #767e86;
   font-size: 13px;
   margin: 0 0 0 10px;
 }
@@ -556,11 +554,11 @@ img.gold-offer-slide-img {
   font-weight: 800;
 }
 .gold-dialog .hr {
-  border: 1px solid #EDEDED;
+  border: 1px solid #ededed;
 }
 
 .gold-dialog .content-points {
-  color: #0A1D32;
+  color: #0a1d32;
   font-size: 14px;
   display: flex;
   justify-content: space-between;
@@ -568,7 +566,7 @@ img.gold-offer-slide-img {
 }
 
 .gold-dialog .content2-points {
-  color: #0A1D32;
+  color: #0a1d32;
   font-size: 14px;
   display: flex;
   justify-content: space-between;
@@ -581,15 +579,15 @@ img.gold-offer-slide-img {
 
 .gold-payment-container {
   .content-points {
-    color: #0A1D32;
+    color: #0a1d32;
     font-size: 14px;
     display: flex;
     justify-content: space-between;
     margin: 15px 0 15px 0;
   }
-  
+
   .content2-points {
-    color: #0A1D32;
+    color: #0a1d32;
     font-size: 14px;
     display: flex;
     justify-content: space-between;
@@ -597,17 +595,17 @@ img.gold-offer-slide-img {
     font-weight: 600;
   }
   .mid-title {
-    color: #0A1C32;
+    color: #0a1c32;
     font-size: 16px;
     font-weight: 500;
     margin: 0 0 30px 0;
   }
   .hr {
-    border: 1px solid #EDEDED;
+    border: 1px solid #ededed;
   }
 
   .top-content {
-    color: #0A1D32;
+    color: #0a1d32;
     font-size: 16px;
     font-weight: 300;
     line-height: 1.6;
@@ -616,7 +614,7 @@ img.gold-offer-slide-img {
   .karat {
     position: absolute;
     right: 30px;
-    color: #767E86;
+    color: #767e86;
     font-size: 10px;
     font-weight: 600;
   }
@@ -629,8 +627,6 @@ img.gold-offer-slide-img {
   cursor: pointer;
   width: fit-content;
 }
-
-
 
 .gold-delivery-select-address {
   margin: 0 -15px 0 -20px;
@@ -658,11 +654,11 @@ img.gold-offer-slide-img {
     align-items: center;
   }
   .er-button {
-      color: var(--secondary);
-      text-transform: uppercase;
-      font-weight: 800;
-      font-size: 12px;
-      margin: 5px 8px 0 0px;
+    color: var(--secondary);
+    text-transform: uppercase;
+    font-weight: 800;
+    font-size: 12px;
+    margin: 5px 8px 0 0px;
   }
   .add-new-button {
     margin: 30px 0 0 26px;
@@ -674,33 +670,32 @@ img.gold-offer-slide-img {
   }
   .address-tile {
     display: flex;
-      justify-content: start;
-      margin: 10px 15px 20px 15px;
-      padding: 20px 10px 20px 10px;
-      cursor: pointer;
-      .right-name {
-        color: #0A1C32;
-        font-size: 14px;
-        font-weight: 700;
-        text-transform: capitalize;
-        margin: 0 0 10px 0;
-      }
+    justify-content: start;
+    margin: 10px 15px 20px 15px;
+    padding: 20px 10px 20px 10px;
+    cursor: pointer;
+    .right-name {
+      color: #0a1c32;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: capitalize;
+      margin: 0 0 10px 0;
+    }
 
-      .address-content {
-        color: #767E86;
-        font-size: 13px;
-        font-weight: 400;
-      }
+    .address-content {
+      color: #767e86;
+      font-size: 13px;
+      font-weight: 400;
+    }
   }
   .address-tile-selected {
-      margin: 10px 0px 20px 0px;
-      background: linear-gradient(to right, #F4F4F4 , white);
-      padding: 20px 25px 20px 25px;
+    margin: 10px 0px 20px 0px;
+    background: linear-gradient(to right, #f4f4f4, white);
+    padding: 20px 25px 20px 25px;
   }
 }
 
 .gold-sell-select-bank {
-
   margin: 0 -15px 30px -20px;
 
   .select-bank {
@@ -720,7 +715,7 @@ img.gold-offer-slide-img {
     cursor: pointer;
   }
 
- .bank-tile {
+  .bank-tile {
     margin: 10px 15px 20px 15px;
     padding: 20px 10px 20px 10px;
     cursor: pointer;
@@ -729,71 +724,68 @@ img.gold-offer-slide-img {
     // justify-content: start;
   }
   .bank-tile-selected {
-      margin: 10px 0px 20px 0px;
-      background: linear-gradient(to right, #F4F4F4 , white);
-      padding: 20px 25px 20px 25px;
+    margin: 10px 0px 20px 0px;
+    background: linear-gradient(to right, #f4f4f4, white);
+    padding: 20px 25px 20px 25px;
   }
 
   .bank-name {
-    color: #0A1C32;
+    color: #0a1c32;
     font-size: 14px;
     font-weight: 600;
     line-height: 1.6;
   }
   .account-number {
-    color: #767E86;
+    color: #767e86;
     font-size: 14px;
   }
   .primary-bank {
-    color: #D3DBE4;
+    color: #d3dbe4;
     font-size: 8px;
-    font-weight: 'bold';
+    font-weight: "bold";
   }
   .left-icon {
     /* width: 10%; */
     float: left;
     margin: 5px 10px 0 0;
   }
-
 }
 
 .gold-delivery-order {
-
   margin: 0 0 30px 0;
   .top-info-tile {
     display: flex;
     justify-content: space-between;
-      margin: 5px -15px 5px -15px;
-      padding: 10px 15px 10px 15px;
+    margin: 5px -15px 5px -15px;
+    padding: 10px 15px 10px 15px;
   }
-  
+
   .top-info-tile1 {
-    color: #091C32;
+    color: #091c32;
     font-size: 13px;
   }
   .top-info {
     margin: 0 0 20px 0;
   }
   .dash-hr {
-    border: 1px dashed #767E86;
+    border: 1px dashed #767e86;
     margin: 0 0 30px 0;
   }
-  
-  
+
   .hr {
-    border: 1px solid #EDEDED;
+    border: 1px solid #ededed;
   }
-  
+
   .content-points {
-    color: #767E86;
+    color: #767e86;
     font-size: 13px;
     display: flex;
     justify-content: space-between;
     margin: 15px 0 15px 0;
   }
-  
+
   .content2-points {
-    color: #0A1D32;
+    color: #0a1d32;
     font-size: 14px;
     display: flex;
     justify-content: space-between;
@@ -801,15 +793,14 @@ img.gold-offer-slide-img {
     font-weight: 600;
   }
   .mid-title {
-    color: #0A1C32;
+    color: #0a1c32;
     font-size: 16px;
     font-weight: 600;
   }
-  
-  
+
   .address .content {
     font-size: 13px;
-    color: #767E86;
+    color: #767e86;
     margin: 2px 0 3px 0;
   }
   .address {
@@ -825,7 +816,7 @@ img.gold-offer-slide-img {
       justify-content: space-between;
     }
     .top-title {
-      color: #0A1C32;
+      color: #0a1c32;
       font-size: 14px;
       font-weight: 600;
     }
@@ -833,7 +824,6 @@ img.gold-offer-slide-img {
       width: 14px;
     }
   }
-  
 }
 
 .gold-provider-filter {
@@ -846,11 +836,11 @@ img.gold-offer-slide-img {
   align-items: center;
 }
 .gold-provider-filter .tile1-left {
-  color: #0A1C32;
+  color: #0a1c32;
   font-size: 20px;
   font-weight: 600;
 }
-.gold-provider-filter .tile1-right img{
+.gold-provider-filter .tile1-right img {
   width: 60px;
 }
 .gold-provider-filter .arrow-img {
@@ -861,30 +851,28 @@ img.gold-offer-slide-img {
   justify-content: space-between;
 }
 .gold-provider-filter .tile2-left {
-  color: #767E86;
+  color: #767e86;
   font-size: 13px;
 }
 .gold-provider-filter .tile2-right {
-  color: #767E86;
+  color: #767e86;
   font-size: 13px;
 }
 
 .gold-aw-inputs {
-
   margin: 0 0 30px 0;
   input {
-    background-color: #F8F8F8;
+    background-color: #f8f8f8;
     padding: 15px 0px 15px 5px;
   }
 
-  input::placeholder {  
-                  
-    text-align: right; 
-    color: #767E86;
-  } 
-  
+  input::placeholder {
+    text-align: right;
+    color: #767e86;
+  }
+
   .gold-placeholder-right {
-    color: #767E86;
+    color: #767e86;
     line-height: 40px;
     position: absolute;
     right: 5px;
@@ -903,9 +891,9 @@ img.gold-offer-slide-img {
     justify-content: space-between;
     margin: 0 0 20px 0;
   }
-  
+
   .plus-tile {
-    color: #35CB5D;
+    color: #35cb5d;
     font-size: 12px;
     font-weight: 800;
     border: 1px solid;
@@ -916,8 +904,6 @@ img.gold-offer-slide-img {
     text-align: center;
   }
 }
-
-
 
 .gold-aw-tabs {
   display: flex;
@@ -934,14 +920,13 @@ img.gold-offer-slide-img {
     border-top-right-radius: 6px;
     border-bottom-right-radius: 6px;
   }
-  
 }
 
 .gold-aw-tab {
-  color: #767E86;
+  color: #767e86;
   /* border-top-right-radius: 6px; */
   padding: 10px 20px 10px 20px;
-  background: #F8F8F8;
+  background: #f8f8f8;
   font-size: 13px;
   font-weight: 500;
   margin: 0 0 0 -1px;
@@ -961,7 +946,6 @@ img.gold-offer-slide-img {
   }
 }
 
-
 .gold-buy-info-images {
   display: flex;
   justify-content: space-between;
@@ -973,7 +957,7 @@ img.gold-offer-slide-img {
 }
 
 .gold-buy-info-images .title {
-  color: #767E86;
+  color: #767e86;
   font-size: 13px;
 }
 
@@ -981,13 +965,13 @@ img.gold-offer-slide-img {
   margin: 0 0 10px 0;
 }
 
-.gold-buy-home  {
+.gold-buy-home {
   .page-title {
-    color: #0A1C32;
+    color: #0a1c32;
     font-size: 16px;
     font-weight: 500;
   }
- 
+
   .gst-info {
     color: rgb(118, 126, 134);
     font-size: 8px;
@@ -998,11 +982,10 @@ img.gold-offer-slide-img {
   }
 }
 
-
 .gold-how-steps {
   margin: 50px 0 40px 0;
-  border-top: 1px solid #EDEDED;
-  border-bottom: 1px solid #EDEDED;
+  border-top: 1px solid #ededed;
+  border-bottom: 1px solid #ededed;
   padding: 20px 0 20px 0;
 
   .top-tile {
@@ -1010,7 +993,7 @@ img.gold-offer-slide-img {
     justify-content: space-between;
   }
   .top-title {
-    color: #0A1C32;
+    color: #0a1c32;
     font-size: 14px;
     font-weight: 600;
   }
@@ -1025,7 +1008,7 @@ img.gold-offer-slide-img {
 .gold-bottom-secure-info {
   margin: 50px 0 0 0;
   .content {
-    color: #767E86;
+    color: #767e86;
     font-size: 13px;
     font-weight: 400;
     text-align: center;
@@ -1041,7 +1024,7 @@ img.gold-offer-slide-img {
 }
 
 .gold-steps-images .content {
-  color: #767E86;
+  color: #767e86;
   font-size: 13px;
   margin: 0 0 0 20px;
 }
@@ -1060,11 +1043,11 @@ img.gold-offer-slide-img {
   width: auto;
   margin: 20px 0 30px 0;
   .gold-locker-tab {
-    color: #767E86;
+    color: #767e86;
     // border: 1px solid beige;
     /* border-top-right-radius: 6px; */
     padding: 20px 20px 20px 20px;
-    background: #F8F8F8;
+    background: #f8f8f8;
     font-size: 13px;
     font-weight: 500;
     margin: 0 0 0 -1px;
@@ -1076,7 +1059,7 @@ img.gold-offer-slide-img {
     cursor: pointer;
 
     .block2 {
-      color: #767E86;
+      color: #767e86;
       font-size: 13px;
       margin: 3px 0 0 0;
     }
@@ -1093,31 +1076,30 @@ img.gold-offer-slide-img {
     box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
 
     .block2 {
-      color: #0A1C32;
+      color: #0a1c32;
     }
   }
 }
 
 .generic-page-title {
-  color: #0A1C32;
+  color: #0a1c32;
   font-size: 16px;
   font-weight: 500;
 }
 
 .gold-trans-card {
-
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
   .top-title {
-    color: #0A1D32;
+    color: #0a1d32;
     font-size: 14px;
     font-weight: 500;
     margin: 0 0 6px 0;
   }
   .report-cover-amount {
     display: flex;
-    color: #0A1D32;
+    color: #0a1d32;
   }
-  .report-cover-amount  img {
+  .report-cover-amount img {
     width: 16px;
     margin: 0 5px 0 0;
   }
@@ -1128,7 +1110,7 @@ img.gold-offer-slide-img {
     margin: 10px 0 0 0;
   }
   .report-cover {
-    margin: 20px  0 0 0;
+    margin: 20px 0 0 0;
   }
 }
 
@@ -1137,31 +1119,30 @@ img.gold-offer-slide-img {
   margin: 20px 0 30px 0;
 
   .title {
-    color: #0A1C32;
+    color: #0a1c32;
     font-size: 12px;
     font-weight: 500;
   }
-  
+
   .gold-trans-card {
     display: flex;
   }
-  
+
   .block2 {
     margin: 0 0 0 15px;
   }
-  
+
   .subtitle {
-    color: #767E86;
+    color: #767e86;
     font-size: 13px;
     margin: 2px 0 0 0;
     font-weight: 400;
   }
-  
+
   .icon {
     width: 18px;
   }
 }
-
 
 .gold-send-invoice {
   display: flex;
@@ -1169,28 +1150,27 @@ img.gold-offer-slide-img {
   margin: 20px 0 0 0;
 }
 
-
 .generic-progress-vertical {
   margin: 20px 0 0 0;
 
   .tile {
     display: flex;
-    border-left: 2px solid #ECECEC;
-    padding:0px 0 30px 0px;
+    border-left: 2px solid #ececec;
+    padding: 0px 0 30px 0px;
     justify-content: start;
   }
-  
+
   .tile .title {
-      color: #0A1D32;
-      font-size: 14px;
-      margin: 0 0 0 30px;
-      font-weight: 400;
+    color: #0a1d32;
+    font-size: 14px;
+    margin: 0 0 0 30px;
+    font-weight: 400;
   }
-  
+
   img {
     width: 18px;
     position: absolute;
-      left: -9px;
+    left: -9px;
     padding: 0 0 20px 0;
   }
   .text-on-img {
@@ -1200,7 +1180,6 @@ img.gold-offer-slide-img {
   }
 
   .success-step {
-
   }
   .normal-step-icon {
     position: absolute;
@@ -1211,13 +1190,12 @@ img.gold-offer-slide-img {
   }
 }
 
-
 .common-hr {
-  border: 1px solid #EDEDED;
+  border: 1px solid #ededed;
 }
 
 .gold-landing-container {
-    /* autoprefixer: off */
+  /* autoprefixer: off */
   // height: -webkit-fill-available;
   margin-bottom: 0px;
   padding-bottom: 0;
@@ -1228,17 +1206,15 @@ img.gold-offer-slide-img {
   background-position: inherit;
   // background-repeat: repeat;
   // background-size: contain;
-  background-color: #0A1D32;
+  background-color: #0a1d32;
 }
 .gold-landing-header {
-  background-color: #0A1D32 !important;
+  background-color: #0a1d32 !important;
   color: #fff !important;
 }
 
 .gold-landing {
-
   .block1 {
-   
   }
   .infoimage-block1 {
     position: relative;
@@ -1264,7 +1240,7 @@ img.gold-offer-slide-img {
       }
     }
     .bottom-content {
-      color: #9E6E1D;
+      color: #9e6e1d;
       font-size: 8px;
       font-weight: 800;
       // margin: 50px 0 0 0;
@@ -1277,14 +1253,14 @@ img.gold-offer-slide-img {
 
   .block3 {
     margin: 30px 0 0 0;
-  
+
     .title {
       font-size: 16px;
-      color: #FEFFFE;
+      color: #fefffe;
       font-weight: 500;
     }
     .subtitle {
-      color: #D2DAE4;
+      color: #d2dae4;
       font-size: 13px;
       margin: 4px 0 0 0;
     }
@@ -1293,23 +1269,23 @@ img.gold-offer-slide-img {
       align-items: center;
       margin: 40px 0 40px 0;
     }
-  
+
     .benefites {
-        margin: 20px 0 0 0;
+      margin: 20px 0 0 0;
     }
-  
+
     .benefit-tile-title {
-        color: var(--primary);
-        font-size: 14px;
-        font-weight: 800;
+      color: var(--primary);
+      font-size: 14px;
+      font-weight: 800;
     }
-  
+
     .benefit-tile-subtitle {
-        color: #D3DBE4;
-        font-size: 13px;
-        margin: 7px 0 0 0;
+      color: #d3dbe4;
+      font-size: 13px;
+      margin: 7px 0 0 0;
     }
-  
+
     img {
       width: 70px;
       margin: 0 20px 0 0;
@@ -1322,7 +1298,7 @@ img.gold-offer-slide-img {
     padding: 10px 15px 20px 15px;
     border-radius: 10px;
     .want-to {
-      color: #0A1C32;
+      color: #0a1c32;
       font-size: 16px;
       font-weight: 600;
       padding: 13px 0 13px 0;
@@ -1335,11 +1311,11 @@ img.gold-offer-slide-img {
     .tile2 {
       display: flex;
       align-items: center;
-      border-bottom: 1px solid #EDEDED;
+      border-bottom: 1px solid #ededed;
       padding: 13px 0 13px 0;
       cursor: pointer;
       .title {
-        color: #0A1D32;
+        color: #0a1d32;
         margin: 0 0 0 20px;
       }
     }
@@ -1374,7 +1350,6 @@ img.gold-offer-slide-img {
 }
 
 .gold-delivery-products {
-  
   .delivery-products-tiles {
     display: flex;
     flex-wrap: wrap;
@@ -1393,25 +1368,25 @@ img.gold-offer-slide-img {
       border-radius: 4px;
     }
     .disc {
-      color: #0A1D32;
+      color: #0a1d32;
       font-size: 14px;
       margin: 0 0 10px 0;
       text-align: left;
       line-height: 1.6;
       font-weight: 500;
     }
-    
+
     .making-charges {
-        color: #767E86;
-        font-size: 10px;
-        text-align: left;
-        font-weight: 500;
+      color: #767e86;
+      font-size: 10px;
+      text-align: left;
+      font-weight: 500;
     }
-    
+
     .making-cost {
-        color: #0A1D32;
-        text-align: left;
-        margin: 3px 0 0 0;
+      color: #0a1d32;
+      text-align: left;
+      margin: 3px 0 0 0;
     }
   }
 }
@@ -1419,18 +1394,18 @@ img.gold-offer-slide-img {
 .delivery-select-product {
   .block2 {
     .all-tax {
-      color: #767E86;
+      color: #767e86;
       font-size: 10px;
       font-weight: 700;
       margin: 0 0 0 5px;
     }
     .mc {
-      color: #767E86;
+      color: #767e86;
       font-size: 10px;
       margin: 0 0 7px 0;
     }
     .seller-name {
-      color: #767E86;
+      color: #767e86;
       font-size: 13px;
       font-weight: 400;
       margin: 6px 0 6px 0;
@@ -1449,11 +1424,10 @@ img.gold-offer-slide-img {
         cursor: pointer;
       }
     }
-    
   }
 
   .page-title {
-    color: #0A1C32;
+    color: #0a1c32;
     font-size: 14px;
     font-weight: 700;
   }
@@ -1461,7 +1435,7 @@ img.gold-offer-slide-img {
   .block4 {
     margin: 0 0 30px 0;
     .product-de-points {
-      color: #767E86;
+      color: #767e86;
       font-size: 13px;
       font-weight: 400;
       margin: 10px 0 10px 0;
@@ -1481,12 +1455,10 @@ img.gold-offer-slide-img {
     margin: 0 0 20px 0;
     cursor: pointer;
     .title {
-      color: #0A1D32;
+      color: #0a1d32;
       font-weight: 400;
+    }
   }
-}
-
-
 }
 .gold-check-how-container {
   height: -webkit-fill-available;
