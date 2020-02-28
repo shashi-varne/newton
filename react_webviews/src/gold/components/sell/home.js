@@ -483,7 +483,7 @@ class GoldSellHome extends Component {
 
               <div>
                   <Button style={{height: 50}} fullWidth={true} variant="raised" disabled={!this.state.isRegistered}
-                      size="large" onClick={this.handleClick} color="secondary" autoFocus>
+                      size="large" onClick={this.handleClick} color="secondary">
                     Proceed
                   </Button>
               </div>

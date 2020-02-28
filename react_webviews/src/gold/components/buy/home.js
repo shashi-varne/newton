@@ -483,7 +483,7 @@ class GoldBuyHome extends Component {
                     {plusOptionsWeight.map(this.renderPlusOptions)}
                   </div>}
                   <Button style={{height: 50}} fullWidth={true} variant="raised"
-                      size="large" onClick={this.handleClick} color="secondary" autoFocus>
+                      size="large" onClick={this.handleClick} color="secondary">
                     PAY {inrFormatDecimal2(this.state.amount || 0)}
                   </Button>
 
