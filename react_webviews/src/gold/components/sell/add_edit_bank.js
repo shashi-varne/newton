@@ -383,7 +383,9 @@ class SellAddEditBank extends Component {
               label="IFSC Code *"
               id="ifsc_code"
               name="ifsc_code"
-              maxLength="11"
+              inputProps={{
+                maxLength: 11,
+              }}
               value={this.state.formData.ifsc_code}
               onChange={this.handleChange('ifsc_code')}
             />

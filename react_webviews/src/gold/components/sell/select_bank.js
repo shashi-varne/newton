@@ -308,7 +308,7 @@ class SellSelectBank extends Component {
             className="add-new-button">
             <span style={{
               background: getConfig().highlight_color, padding: '4px 9px 4px 9px',
-              color: getConfig().secondary, margin: '0 9px 0 0'
+              color: getConfig().secondary, margin: '0 20px 0 0'
             }}>+</span> Add Bank
             </div>
         </div>

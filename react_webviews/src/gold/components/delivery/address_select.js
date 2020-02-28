@@ -318,7 +318,7 @@ class SelectAddressDelivery extends Component {
               className="add-new-button">
               <span style={{
                 background: getConfig().highlight_color, padding: '4px 9px 4px 9px',
-                color: getConfig().secondary, margin: '0 10px 0 0'
+                color: getConfig().secondary, margin: '0 7px 0 0'
               }}>+</span> Add New Address
               </div>}
         </div>
