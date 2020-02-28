@@ -429,7 +429,7 @@ input#pan {
 
 .Loader-Dialog {
   opacity: 0.9;
-  z-index: 200000;
+  z-index: 999999;
 }
 
 .LoaderOverlayText {
