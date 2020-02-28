@@ -24,6 +24,8 @@ class SellPriceClass extends Component {
                 })
             }
 
+            this.props.parent.updateParent('price_crashed', false);
+
             const res = await Api.get('/api/gold/sell/currentprice/' + this.state.provider);
             if (res.pfwresponse.status_code === 200) {
 
@@ -50,6 +52,7 @@ class SellPriceClass extends Component {
                 this.props.parent.onload();
                 this.props.parent.updateParent('fetchLivePrice', false);
                 this.props.parent.updateParent('show_loader', false);
+                this.props.parent.updateParent('price_crashed', true);
                 this.setState({
                     show_loader: false
                 });

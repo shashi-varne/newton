@@ -141,7 +141,9 @@ export class WithProviderLayout extends Component {
 
     return (
       <div className="FooterDefaultLayout">
-        {props.buttonData && <div className="FlexItem1 FlexItem1-withProvider-footer" onClick={props.handleClick2}>
+        {props.buttonData && <div className="FlexItem1 FlexItem1-withProvider-footer" 
+        onClick={props.handleClick2}
+        style={props.buttonData.leftStyle}>
           <div className='image-block'>
             <img
               alt=""

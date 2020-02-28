@@ -54,6 +54,12 @@ class PriceChangeClass extends Component {
     }
 
     refreshData = () => {
+        if(this.props.parent.state.price_crashed) {
+            this.props.parent.navigate('/gold/landing');
+            return;
+        }
+
+
         if (this.props.parent.state.timeAvailable > 0) {
             this.props.parent.handleClose();
         } else {
@@ -61,6 +67,15 @@ class PriceChangeClass extends Component {
             this.props.parent.updateParent('show_loader', true);
             this.props.parent.updateParent('openRefreshModule', true);
         }
+    }
+
+    getBottomButtonData =() => {
+        let data = this.props.parent.state.priceChangeDialogData.buttonData;
+        data.leftStyle = {
+            opacity: this.props.parent.state.price_crashed ? 0.3 : 1
+        }
+
+        return data;
     }
 
     renderConfirmDialog = () => {
@@ -74,7 +89,7 @@ class PriceChangeClass extends Component {
           >
             <DialogContent>
               <div className="gold-dialog" id="alert-dialog-description">
-                {this.props.parent.state.timeAvailable <=0 && <div>
+                {!this.props.parent.state.price_crashed && this.props.parent.state.timeAvailable <=0 && <div>
                     <div style={{color: '#0A1C32', fontSize:16, fontWeight:800}}>
                     Oops! {mapper[this.props.parent.state.orderType].expired_title} price has changed
                     </div>
@@ -82,25 +97,36 @@ class PriceChangeClass extends Component {
                         <img style={{width: '100%', margin: '10px 0 20px 0'}} 
                         src={ require(`assets/${this.state.productName}/ils_timeout.svg`)} alt="Gold" />
                     </div>
-                    <div style={{color: '#767E86', fontSize:14, fontWeight:400,margin: '0 0 20px 0'}}>
+                    <div style={{color: '#767E86', fontSize:14, fontWeight:400,margin: '0 0 20px 0', lineHeight: 1.6}}>
                         Looks like you took too long… Please refresh to get the <b>latest {this.props.parent.state.orderType} price</b>
                     </div>
                 </div>}
 
+                {this.props.parent.state.price_crashed && 
+                    <div>
+                        <div style={{color: '#0A1C32', fontSize:16, fontWeight:800}}>
+                        Oops! something went wrong
+                        </div>
+                        <div style={{color: '#767E86', fontSize:14, fontWeight:400,margin: '20px 0 20px 0', lineHeight: 1.6}}>
+                        Something is not working, we are not sure yet but we will look into it, please try after sometime.
+                        </div>
+                    </div>
+                }
+
                 {this.props.parent.state.timeAvailable >0 && <div>
-                    <div style={{color: '#0A1C32', fontSize:16, fontWeight:800, margin: '0 0 20px 0'}}>
+                    <div style={{color: '#0A1C32', fontSize:16, fontWeight:800, margin: '0 0 20px 0', lineHeight: 1.6}}>
                     {mapper[this.props.parent.state.orderType].update_title} price has been updated!
                     </div>
                 </div>}
 
 
-                <GoldLivePrice parent={this.props.parent} />
+                <GoldLivePrice style={{opacity: this.props.parent.state.price_crashed ? 0.3 : 1}} parent={this.props.parent} />
                 <div className="mid-buttons">
                   <WithProviderLayout type="default"
                      handleClick2={this.props.parent.handleClose}
                      handleClick={this.refreshData}
-                     buttonTitle={this.props.parent.state.timeAvailable > 0 ? 'OK' : this.props.parent.state.priceChangeDialogData.buttonTitle}
-                     buttonData= {this.props.parent.state.priceChangeDialogData.buttonData}
+                     buttonTitle={this.props.parent.state.timeAvailable > 0 || this.props.parent.state.price_crashed ? 'OK' : this.props.parent.state.priceChangeDialogData.buttonTitle}
+                     buttonData= {this.getBottomButtonData()}
                   />
                 </div>
     
