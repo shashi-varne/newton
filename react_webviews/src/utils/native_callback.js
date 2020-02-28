@@ -17,9 +17,6 @@ export const nativeCallbackOld = (status_code, message, action) => {
 
 
 export const nativeCallback = async ({ action = null, message = null, events = null } = {}) => {
-  if(events) {
-    console.log(events.properties);
-  }
   
   let callbackData = {};
   let project = getConfig().project;
