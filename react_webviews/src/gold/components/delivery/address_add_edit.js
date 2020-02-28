@@ -5,8 +5,8 @@ import Container from '../../common/Container';
 import Input from '../../../common/ui/Input';
 import location from 'assets/location_dark_icn.png';
 import Api from 'utils/api';
-import { validateNumber, validateLength, validateMinChar, 
-  validateConsecutiveChar, validateEmpty, getUrlParams } from 'utils/validators';
+import { validateNumber, validateLengthDynamic, validateMinChar, 
+ validateEmpty, getUrlParams } from 'utils/validators';
 import {getConfig} from "utils/functions";
 import { nativeCallback } from 'utils/native_callback';
 import toast from '../../../common/ui/Toast';
@@ -141,7 +141,6 @@ class AddEditAddressDelivery extends Component {
 
     this.sendEvents('next');
     let canSubmitForm = true;
-    // #TODO need to change cansubmitform flag logic
 
     if (this.state.name.split(" ").filter(e => e).length < 2) {
       this.setState({
@@ -169,19 +168,14 @@ class AddEditAddressDelivery extends Component {
         addressline1_error: 'Enter your address'
       });
       canSubmitForm = false;
-    } else if (!validateConsecutiveChar(this.state.addressline1)) {
+    } else if (!validateLengthDynamic(this.state.addressline1, 90)) {
       this.setState({
-        addressline1_error: 'Address can not contain more than 3 same consecutive characters'
+        addressline1_error: 'Maximum length of address is 90'
       });
       canSubmitForm = false;
-    } else if (!validateLength(this.state.addressline1)) {
+    } else if (!validateMinChar(this.state.addressline1, 4)) {
       this.setState({
-        addressline1_error: 'Maximum length of address is 30'
-      });
-      canSubmitForm = false;
-    } else if (!validateMinChar(this.state.addressline1)) {
-      this.setState({
-        addressline1_error: 'Address should contain minimum two characters'
+        addressline1_error: 'Address should contain minimum four characters'
       });
       canSubmitForm = false;
     }
@@ -191,14 +185,9 @@ class AddEditAddressDelivery extends Component {
         addressline2_error: 'Enter your street and locality'
       });
       canSubmitForm = false;
-    } else if (!validateConsecutiveChar(this.state.addressline2)) {
+    } else if (!validateLengthDynamic(this.state.addressline2, 90)) {
       this.setState({
-        addressline2_error: 'Address can not contain more than 3 same consecutive characters'
-      });
-      canSubmitForm = false;
-    } else if (!validateLength(this.state.addressline2)) {
-      this.setState({
-        addressline2_error: 'Maximum length of address is 30'
+        addressline2_error: 'Maximum length of address is 90'
       });
       canSubmitForm = false;
     } 

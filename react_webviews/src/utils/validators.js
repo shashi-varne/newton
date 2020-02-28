@@ -113,9 +113,12 @@ export function validateLengthNames(string, type, provider) {
   return data;
 }
 
-export function validateMinChar(string) {
-  let nameSplit = string.trim(" ");
-  if (nameSplit.length < 2) {
+export function validateMinChar(string, length) {
+  let nameSplit = string.replace(/ /g, "");
+  if(!length) {
+    length = 2;
+  }
+  if (nameSplit.length < length) {
     return false;
   }
 
