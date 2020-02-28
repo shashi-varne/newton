@@ -676,7 +676,7 @@ img.gold-offer-slide-img {
     display: flex;
       justify-content: start;
       margin: 10px 15px 20px 15px;
-      padding: 20px 10px 10px 10px;
+      padding: 20px 10px 20px 10px;
       cursor: pointer;
       .right-name {
         color: #0A1C32;
@@ -695,7 +695,7 @@ img.gold-offer-slide-img {
   .address-tile-selected {
       margin: 10px 0px 20px 0px;
       background: linear-gradient(to right, #F4F4F4 , white);
-      padding: 20px 25px 10px 25px;
+      padding: 20px 25px 20px 25px;
   }
 }
 
@@ -939,7 +939,6 @@ img.gold-offer-slide-img {
 
 .gold-aw-tab {
   color: #767E86;
-  border: 1px solid beige;
   /* border-top-right-radius: 6px; */
   padding: 10px 20px 10px 20px;
   background: #F8F8F8;
@@ -1017,6 +1016,9 @@ img.gold-offer-slide-img {
   }
   .top-icon {
     width: 14px;
+  }
+  .gold-steps-images {
+    margin: 40px 0 0 0;
   }
 }
 

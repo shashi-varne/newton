@@ -242,7 +242,7 @@ export function inrFormatDecimal(number, toFixed) {
     if (otherNumbers !== '')
       lastThree = ',' + lastThree;
     var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
-    return '₹ ' + res;
+    return '₹' + res;
   } else {
     return '₹';
   }

@@ -20,7 +20,7 @@ class SelectAddressDelivery extends Component {
     super(props);
     this.state = {
       show_loader: true,
-      selectedIndex: -1,
+      selectedIndex: 0,
       provider: this.props.match.params.provider,
       openDialogDelete: false,
       openConfirmDialog: false,

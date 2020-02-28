@@ -564,7 +564,7 @@ img.gold-offer-slide-img {
   display: flex;
   justify-content: start;
   margin: 10px 15px 20px 15px;
-  padding: 20px 10px 10px 10px;
+  padding: 20px 10px 20px 10px;
   cursor: pointer;
 }
 .gold-delivery-select-address .address-tile .right-name {
@@ -582,7 +582,7 @@ img.gold-offer-slide-img {
 .gold-delivery-select-address .address-tile-selected {
   margin: 10px 0px 20px 0px;
   background: linear-gradient(to right, #f4f4f4, white);
-  padding: 20px 25px 10px 25px;
+  padding: 20px 25px 20px 25px;
 }
 .gold-sell-select-bank {
   margin: 0 -15px 30px -20px;
@@ -786,7 +786,6 @@ img.gold-offer-slide-img {
 }
 .gold-aw-tab {
   color: #767e86;
-  border: 1px solid beige;
   padding: 10px 20px 10px 20px;
   background: #f8f8f8;
   font-size: 13px;
@@ -848,6 +847,9 @@ img.gold-offer-slide-img {
 }
 .gold-how-steps .top-icon {
   width: 14px;
+}
+.gold-how-steps .gold-steps-images {
+  margin: 40px 0 0 0;
 }
 .gold-bottom-secure-info {
   margin: 50px 0 0 0;

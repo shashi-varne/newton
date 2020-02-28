@@ -354,7 +354,7 @@ class SellVerifyBank extends Component {
                         </div>
                     </div>
                     <div className="highlight-text2">
-                        We will credit Rs 1 to your bank account to verify the account number and name.
+                        We will credit ₹1 to your bank account to verify the account number and name.
                     </div>
                 </div>
 

@@ -447,7 +447,7 @@ class Payment extends Component {
                   }
 
                   {this.state.orderType !== 'delivery' && this.state.paymentSuccess &&
-                          <div style={{ margin: '30px 0 30px 0', display:'flex' }} className="highlight-text highlight-color-info">
+                          <div style={{ margin: '30px 0 30px 0', display:'flex',position: 'relative' }} className="highlight-text highlight-color-info">
                             <div>
                             <img className="highlight-text11" 
                               src={ require(`assets/${this.state.providerData.logo}`)}

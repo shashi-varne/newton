@@ -176,8 +176,8 @@ class DeliveryOrder extends Component {
             <div className="top-info-tile1">{this.state.orderData.metal_weight} gms</div>
           </div>
 
-          <div className="top-info-tile" style={{background: '#F8F8F8',paddingLeft: 8}}>
-            <div className="top-info-tile1">- Gold locker ({this.state.providerData.title})</div>
+          <div className="top-info-tile" style={{background: '#F8F8F8'}}>
+            <div className="top-info-tile1"> Gold locker ({this.state.providerData.title})</div>
             <div className="top-info-tile1">- {this.state.orderData.metal_weight} gms</div>
           </div>
         </div>
