@@ -215,6 +215,11 @@ class GoldSellHome extends Component {
     this.handleClose();
     this.sendEvents('next');
 
+    if (!this.state.timeAvailable || this.state.timeAvailable <= 0) {
+      toast('Please try after sometime');
+      return;
+    }
+    
     let amount = this.state.amount;
     let weight = this.state.weight;
     if (!weight || weight < 0) {

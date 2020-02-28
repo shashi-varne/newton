@@ -182,6 +182,11 @@ class GoldBuyHome extends Component {
     //   return;
     // }
 
+    if (!this.state.timeAvailable || this.state.timeAvailable <= 0) {
+      toast('Please try after sometime');
+      return;
+    }
+
     if (!parseFloat(this.state.weight) || parseFloat(this.state.weight) < 0) {
       toast('Please enter a correct value for the weight');
       return;
