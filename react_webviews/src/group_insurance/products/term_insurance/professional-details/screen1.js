@@ -22,7 +22,7 @@ import {
   occupationCategoryOptions, educationQualificationsOptionsIpru,
   qualification, educationQualificationsOptionsMaxlife, occupationDetailOptionsMaxlife
 } from '../../../constants';
-import { validatePan, validateNumber, formatAmount, validateEmpty, providerAsIpru } from 'utils/validators';
+import { validatePan, validateNumber, formatAmount, validateEmpty, providerAsIpru, inrFormatTest } from 'utils/validators';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 
@@ -95,6 +95,10 @@ class ProfessionalDetails1 extends Component {
         [name]: declareOptions[event]['value'],
       });
     } else {
+
+      if(name === 'annual_income' && !inrFormatTest(event.target.value)) {
+          return;
+      }
       this.setState({
         [name]: event.target.value.replace(/,/g, ""),
         [name + '_error']: ''
