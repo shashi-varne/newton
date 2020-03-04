@@ -243,10 +243,13 @@ class GoldLocker extends Component {
       if (res.pfwresponse.status_code === 200) {
 
         let result = res.pfwresponse.result;
-        var next_page = result.orders.next_page;
+        var next_page = result.orders.next_page || '';
 
+        let provider_info = this.state[this.state.provider + '_info'];
+        provider_info.report.next_page = next_page;
         this.setState({
-          next_page: next_page || ''
+          next_page: next_page,
+          [this.state.provider + '_info'] : provider_info
         });
 
         var newReportData = result.orders.all || [];
@@ -305,9 +308,8 @@ class GoldLocker extends Component {
         </div>
         <div className={`report-color-state ${(props.cssMapper.color)}`}>
           <div className="circle"></div>
-          <div className="report-color-state-title">{(props.cssMapper.disc)}</div>
+    <div className="report-color-state-title">{(props.cssMapper.disc)}</div>
         </div>
-        {/* <div className="report-ins-name">{props.product_name}</div> */}
         <div className="report-cover">
           <div className="report-cover-amount">
             <img
