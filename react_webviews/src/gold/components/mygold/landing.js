@@ -423,7 +423,7 @@ class GoldSummary extends Component {
   rendertopInfoImage() {
     return(
       <div className="infoimage-block1" onClick={() => this.navigate('check-how1')} >
-            <img style={{width:'103%',cursor:'pointer'}} src={crd_gold_info} alt="" />
+            <img style={{width:'100%',cursor:'pointer'}} src={crd_gold_info} alt="" />
             <div className="inner">
               <div className="title generic-page-title">
                 Buy 24K gold to create long term wealth
