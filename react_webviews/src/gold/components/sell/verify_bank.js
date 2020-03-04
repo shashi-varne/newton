@@ -163,7 +163,6 @@ class SellVerifyBank extends Component {
                     let plutus_bank_info_record = result.records.PBI_record || {};
                     let penny_verification_reference = plutus_bank_info_record.penny_verification_reference || {};
                     let verification_status = penny_verification_reference.penny_verification_state || 'failed';
-                    verification_status = 'failed';
                     this.getStatusMapper(verification_status);
                     this.setState({
                         verification_status: verification_status,
