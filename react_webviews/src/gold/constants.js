@@ -58,6 +58,10 @@ export function calculate_gold_amount_buy(buyData, weight) {
         gold_amount = gold_amount.toFixed(2);
     }
 
+    if(isNaN(gold_amount)) {
+        gold_amount = '';
+    }
+
     var current_gold_price_without_tax = (current_gold_price).toFixed(2)
     var gold_amount_without_tax = (weight * current_gold_price_without_tax).toFixed(2);
 
@@ -96,11 +100,15 @@ export function calculate_gold_wt_sell(sellData, amount) {
 
 export function calculate_gold_amount_sell(sellData, weight) {
     let amount = ((sellData.goldSellInfo.plutus_rate) * (weight));
-    
+
     if(sellData.provider === 'mmtc') {
         amount = Math.round(amount*100)/100;
     } else {
         amount = amount.toFixed(2);
+    }
+
+    if(isNaN(amount)) {
+        amount = '';
     }
 
     let data = {
