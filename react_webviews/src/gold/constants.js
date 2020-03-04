@@ -598,7 +598,7 @@ export function validateAmountWeight(value, isAmount) {
     if(isAmount) {
         rule = /^[ A-Za-z0-9,]/;
     } else {
-        rule = /^[a-zA-Z0-9._]*$/;
+        rule = /^[a-zA-Z0-9.]*$/;
     }
     
     return rule.test(value);
