@@ -34,9 +34,10 @@ const verificationDataMapper = {
         'icon': 'ic_bank_partial_added'
     },
     'failed': {
-        'title': "Bank verification failed",
-        'subtitle': 'Great! bank account has been added successfully. You are good to sell your gold now.',
-        'icon': 'ic_bank_not_added'
+        'title': "Unable to add bank",
+        'subtitle': 'Bank account verification failed. Are you sure you have entered correct account details?',
+        'icon': 'ic_bank_not_added',
+        'cta_title': 'Check Bank Details'
     }
 };
 
@@ -162,6 +163,7 @@ class SellVerifyBank extends Component {
                     let plutus_bank_info_record = result.records.PBI_record || {};
                     let penny_verification_reference = plutus_bank_info_record.penny_verification_reference || {};
                     let verification_status = penny_verification_reference.penny_verification_state || 'failed';
+                    verification_status = 'failed';
                     this.getStatusMapper(verification_status);
                     this.setState({
                         verification_status: verification_status,
@@ -292,7 +294,12 @@ class SellVerifyBank extends Component {
     
             nativeCallback({ events: eventObj });
             
-            this.navigate('sell-select-bank');
+            if(this.state.verification_status === 'failed') {
+                this.navigate('sell-edit-bank');
+            } else {
+                this.navigate('sell-select-bank');
+            }
+            
         }
     }
 
@@ -322,7 +329,7 @@ class SellVerifyBank extends Component {
                 </DialogContent>
                 <DialogActions>
                     <Button className="DialogButtonFullWidth" onClick={this.handleCloseStatus} color="default" autoFocus>
-                        OK
+                        {this.state.statusMapper.cta_title || 'OK'}
                     </Button>
                 </DialogActions>
             </Dialog >
