@@ -87,7 +87,10 @@ class GoldBuyHome extends Component {
       openOnloadModal: true
     })
 
-    this.addPlusItems(this.state.minAmount);
+    if(!this.state.amount) {
+      this.addPlusItems(this.state.minAmount);
+    }
+    
   }
 
   updateParent = (key, value) => {
