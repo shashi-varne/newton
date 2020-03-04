@@ -429,7 +429,7 @@ class GoldLocker extends Component {
               }
             </div>
           }
-          {!this.state.selected_provider_info.isRegistered && (this.state.selected_provider_info.gold_balance <= 0 || 
+          {(!this.state.selected_provider_info.isRegistered || this.state.selected_provider_info.gold_balance <= 0 || 
           !this.state.selected_provider_info.gold_balance) &&
             <div>
               <div>
