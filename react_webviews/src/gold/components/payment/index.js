@@ -471,7 +471,7 @@ class Payment extends Component {
                                 <div style={{margin: '5px 0 6px 0'}}>Updated value {this.state.provider_info.gold_balance} gms</div>
                                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                                   <div>Order id: {this.state.transact_id}</div>
-                                    <div>{formatDateAmPm(this.state.report.dt_created)}</div>
+                                  <div style={{marginLeft: 10}}>{formatDateAmPm(this.state.report.dt_created)}</div>
                                 </div>
                               </div>
                             </div>
