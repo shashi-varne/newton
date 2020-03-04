@@ -585,5 +585,11 @@ export function formatDateAmPm(date) {
   let final_date = dom + ' ' + month + ', ' + time;
 
   return final_date;
+  
+}
 
+export function inrFormatTest(value) {
+  let rule = /^[0-9,]/;
+
+  return rule.test(value);
 }

@@ -36,6 +36,12 @@
   border: 1px solid var(--highlight);
   border-radius: 4px;
 }
+.highlight-text-myway {
+  background: #f0f7ff;
+  padding: 15px 15px 20px 15px;
+  border: 1px solid #f6f2ff;
+  border-radius: 4px;
+}
 .highlight-text1 {
   display: flex;
   line-height: 20px;
@@ -90,6 +96,9 @@
   text-align: center;
   font-size: 16px;
   color: #767e86;
+}
+.success-enps {
+  margin: 20px 0;
 }
 .success-bottom {
   margin: 50px 0 20px 0;

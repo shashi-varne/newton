@@ -286,6 +286,9 @@ function getPartnerConfig(partner_code) {
 
   if(checkValidString(partner_code) && partner_code !== 'fisdom' && 
   partner_code !== 'myway' && partner_code !== 'test') {
+    if(partner_code === 'bfdl') {
+      partner_code = 'bfdlmobile';
+    }
     let partnerData = partnersConfigBase[partner_code];
     config_to_return.partner_code = partner_code;
     config_to_return.isFinwiz = false;
