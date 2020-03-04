@@ -47,7 +47,6 @@ export function calculate_gold_amount_buy(buyData, weight) {
     let current_gold_price = buyData.goldBuyInfo.plutus_rate;
     let tax = buyData.goldBuyInfo.applicable_tax;
 
-
     tax = 1.0 + parseFloat(tax) / 100.0
     var current_gold_price_with_tax = (current_gold_price * tax).toFixed(2);
     var gold_amount = (weight * current_gold_price_with_tax);
@@ -597,7 +596,7 @@ export function getOrderStatusPayment(order) {
 export function validateAmountWeight(value, isAmount) {
     let rule;
     if(isAmount) {
-        rule = /^[ A-Za-z0-9,.]/;
+        rule = /^[ A-Za-z0-9,]/;
     } else {
         rule = /^[a-zA-Z0-9._]*$/;
     }
