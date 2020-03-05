@@ -457,6 +457,7 @@ class PlanDetailsClass extends Component {
         product_key={this.props.parent ? this.props.parent.state.product_key : ''}
         buttonTitle={this.props.parent.state.provider === 'hdfcergo' ? 'Get Free Quote':  'Get this Plan'}
         onlyButton={true}
+        hide_header={this.state.show_loader}
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         handleClick={() => this.handleClickCurrent()}
