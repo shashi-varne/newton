@@ -58,7 +58,7 @@ class GoldSummary extends Component {
       safegold_info: {},
       safegold_info_local: gold_providers['safegold'],
       selected_provider_info : {},
-      bottom_carousel: true
+      bottom_carousel: true //to intechange check how and carousel
     }
 
     this.renderOfferImages = this.renderOfferImages.bind(this);
