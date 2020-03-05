@@ -6,6 +6,7 @@ import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import toast from '../../../common/ui/Toast';
+import ContactUs from '../../../common/components/contact_us';
 import {
   inrFormatDecimal, formatDateAmPm
 } from 'utils/validators';
@@ -415,22 +416,8 @@ class GoldTransactionDetail extends Component {
             </div>
           }
         </div>
-        <div className="success-bottom">
-          <div className="success-bottom1">
-            For any query, reach us at
-            </div>
-          <div className="success-bottom2">
-            <div className="success-bottom2a">
-              {getConfig().mobile}
-            </div>
-            <div className="success-bottom2b">
-              |
-              </div>
-            <div className="success-bottom2a">
-              {getConfig().askEmail}
-            </div>
-          </div>
-        </div>
+        
+        <ContactUs />
       </Container>
     );
   }

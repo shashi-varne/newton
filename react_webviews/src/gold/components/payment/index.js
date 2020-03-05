@@ -13,6 +13,7 @@ import { getConfig } from 'utils/functions';
 import { inrFormatDecimal2, storageService, formatDateAmPm } from 'utils/validators';
 import DotDotLoader from '../../../common/ui/DotDotLoader';
 import { gold_providers, getOrderStatusPayment, getUniversalTransStatus } from '../../constants';
+import ContactUs from '../../../common/components/contact_us';
 
 const commonMapper = {
   'buy': {
@@ -628,22 +629,7 @@ class Payment extends Component {
                   }
                 </div>
 
-          <div className="success-bottom">
-            <div className="success-bottom1">
-              For any query, reach us at
-            </div>
-            <div className="success-bottom2">
-              <div className="success-bottom2a">
-                {getConfig().mobile}
-              </div>
-              <div className="success-bottom2b">
-                |
-              </div>
-              <div className="success-bottom2a">
-                {getConfig().askEmail}
-              </div>
-            </div>
-          </div>
+                <ContactUs />
         </div>
       </Container>
     );
