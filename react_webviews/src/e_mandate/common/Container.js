@@ -117,6 +117,9 @@ class Container extends Component {
     switch (pathname) {
       case "/e-mandate":
       case "/e-mandate/success":
+      case "/e-mandate/enps/about":
+      case "/e-mandate/enps/success":
+      case "/e-mandate/enps/failure":
         nativeCallback({ action: 'exit', events: this.getEvents('exit') });
         break;
       default:

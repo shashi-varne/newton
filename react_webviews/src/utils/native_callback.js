@@ -27,6 +27,17 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     return;
   }
 
+
+  if(callbackData.action === 'open_pdf') {
+    callbackData.action = 'open_url';
+
+    if(getConfig().Android) {
+      message.url = "https://docs.google.com/gview?embedded=true&url=" + message.url;
+    }
+
+  }
+
+
   if (getConfig().generic_callback) {
     if (action === 'take_control_reset_hard' || action === 'take_control_reset') {
       callbackData.action = 'reset_back_button_control';
@@ -183,6 +194,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   }
 
   if (getConfig().app !== 'web') {
+
     if (redirect_url && redirect_url !== 'undefined' && (callbackData.action === 'exit_web' || callbackData.action === 'exit_module')) {
       window.location.href = redirect_url
     } else {

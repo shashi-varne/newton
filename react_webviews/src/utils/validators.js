@@ -444,3 +444,9 @@ export function getUrlParams(url) {
   return main_query_params;
   
 }
+
+export function inrFormatTest(value) {
+  let rule = /^[0-9,]/;
+
+  return rule.test(value);
+}

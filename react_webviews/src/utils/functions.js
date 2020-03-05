@@ -262,7 +262,7 @@ function getPartnerConfig(partner_code) {
   let config_to_return = baseConfig[productType];
 
   if(isStaging) {
-    config_to_return.webAppUrl = 'https://vinod-dot-plutus-web.appspot.com/#!/';
+    config_to_return.webAppUrl = 'https://sdk-dot-plutus-web.appspot.com/#!/';
     // config_to_return.webAppUrl = 'http://localhost:3001/#!/';
   }
 
@@ -283,6 +283,9 @@ function getPartnerConfig(partner_code) {
 
   if(checkValidString(partner_code) && partner_code !== 'fisdom' && 
   partner_code !== 'myway' && partner_code !== 'test') {
+    if(partner_code === 'bfdl') {
+      partner_code = 'bfdlmobile';
+    }
     let partnerData = partnersConfigBase[partner_code];
     config_to_return.partner_code = partner_code;
     config_to_return.isFinwiz = false;
