@@ -50,7 +50,7 @@ class GoldSummary extends Component {
       apiError: '',
       user_info: {},
       openDialogOffer: false,
-      showOffers: true,
+      showOffers: true, // to manage offer carousel
       offerImageData: [],
       productName: getConfig().productName,
       mmtc_info: {},
