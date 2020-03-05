@@ -634,6 +634,14 @@ img.gold-offer-slide-img {
   margin: 20px 0 0 0;
   cursor: pointer;
   width: fit-content;
+  .sent {
+    color: #0a1d32;
+    font-size: 14px;
+    margin: 0 0 0 10px;
+  }
+  .sent-icon {
+    width: 14px;
+  }
 }
 
 .gold-delivery-select-address {

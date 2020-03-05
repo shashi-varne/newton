@@ -252,6 +252,9 @@ class Payment extends Component {
       if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
         if (result.message === 'success') {
+          this.setState({
+            invoiceSent: true
+          })
           toast('Invoice has been sent succesfully to your registered email');
         } else {
           toast(result.message || result.error);
@@ -591,23 +594,35 @@ class Payment extends Component {
 
 
                   {this.state.paymentSuccess &&
-                    <div className="send-invoice">
-                      <SVG
-                        preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().secondary)}
-                        src={ic_send_email}
-                      />
-                      {!this.state.invoiceLoading &&
-                        <div onClick={() => this.emailInvoice()}
-                        style={{color: getConfig().secondary, marginLeft: 10}}>
-                          Email invoice
+                    <div>
+                      {!this.state.invoiceSent && 
+                        <div className="send-invoice">
+                          <SVG
+                            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().secondary)}
+                            src={ic_send_email}
+                          />
+                          {!this.state.invoiceLoading &&
+                            <div onClick={() => this.emailInvoice()}
+                            style={{color: getConfig().secondary, marginLeft: 10}}>
+                              Email invoice
+                            </div>
+                          }
+                          {this.state.invoiceLoading &&
+                            <DotDotLoader style={{
+                              textAlign: 'left',
+                              marginLeft: 10
+                              }} 
+                            />
+                          }
                         </div>
                       }
-                      {this.state.invoiceLoading &&
-                        <DotDotLoader style={{
-                          textAlign: 'left',
-                          marginLeft: 10
-                          }} 
-                        />
+                      {this.state.invoiceSent && 
+                        <div className="send-invoice">
+                            <img className="sent-icon" 
+                              src={ require(`assets/completed_step.svg`)} 
+                              alt="Gold" />
+                              <span className="sent">Sent</span>
+                        </div>
                       }
                     </div>
                   }

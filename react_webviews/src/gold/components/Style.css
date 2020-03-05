@@ -520,6 +520,14 @@ img.gold-offer-slide-img {
   cursor: pointer;
   width: fit-content;
 }
+.send-invoice .sent {
+  color: #0a1d32;
+  font-size: 14px;
+  margin: 0 0 0 10px;
+}
+.send-invoice .sent-icon {
+  width: 14px;
+}
 .gold-delivery-select-address {
   margin: 0 -15px 0 -20px;
 }
