@@ -14,7 +14,7 @@ import {
 import SVG from 'react-inlinesvg';
 import ic_send_email from 'assets/ic_send_email.svg';
 import DotDotLoader from '../../../common/ui/DotDotLoader';
-import {getTransactionStatus, setTransationsSteps, getUniversalTransStatus} from '../../constants';
+import { getTransactionStatus, setTransationsSteps, getUniversalTransStatus } from '../../constants';
 import { copyToClipboard } from 'utils/validators';
 
 let icon_mapper = {
@@ -51,7 +51,7 @@ class GoldTransactionDetail extends Component {
     }
   }
 
-  statusMapper = (data)  => {
+  statusMapper = (data) => {
 
     let cssMapper = {
       'pending': {
@@ -73,23 +73,48 @@ class GoldTransactionDetail extends Component {
 
     let obj = cssMapper[uniStatus];
     obj.uniStatus = uniStatus;
-    
+
     let title = '';
-    if(type === 'buy') {
-      title = 'Bought ' + data.gold_weight + ' gms'; 
+    if (type === 'buy') {
+      title = 'Bought ' + data.gold_weight + ' gms';
     }
 
-    if(type === 'sell') {
-      title = 'Sold ' + data.gold_weight + ' gms'; 
+    if (type === 'sell') {
+      title = 'Sold ' + data.gold_weight + ' gms';
     }
 
-    if(type === 'delivery') {
-      title = 'Delivery of ' + (data.description || ''); 
+    if (type === 'delivery') {
+      title = 'Delivery of ' + (data.description || '');
     }
 
     obj.title = title;
 
     return obj;
+  }
+
+  async getOrderData(baseData) {
+    const res = await Api.get('/api/gold/report/orders/' + this.state.provider +
+      '?transaction_id=' + baseData.transact_id + '&order_type=' + baseData.orderType);
+    if (res.pfwresponse.status_code === 200) {
+      let order = res.pfwresponse.result || {};
+
+      order.orderType = this.state.orderType;
+      order.provider = this.state.provider;
+
+      order.final_status = getTransactionStatus(order);
+      order.cssMapper = this.statusMapper(order);
+      let journeyData = setTransationsSteps(order);
+      this.setState({
+        show_loader: false,
+        order: order,
+        journeyData: journeyData
+      });
+    } else {
+      this.setState({
+        show_loader: false
+      });
+      toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
+    }
   }
 
   async componentDidMount() {
@@ -102,6 +127,12 @@ class GoldTransactionDetail extends Component {
     let { orderType } = this.props.match.params;
     let { transact_id } = this.props.match.params;
 
+    let baseData = {
+      provider: provider,
+      orderType: orderType,
+      transact_id: transact_id
+    };
+
     this.setState({
       provider: provider,
       transact_id: transact_id,
@@ -109,28 +140,29 @@ class GoldTransactionDetail extends Component {
     })
 
     try {
-      const res = await Api.get('/api/gold/report/orders/' + this.state.provider +
-       '?transaction_id=' + transact_id + '&order_type=' + orderType);
-      if (res.pfwresponse.status_code === 200) {
-        let order = res.pfwresponse.result || {};
 
-        order.orderType = this.state.orderType;
-        order.provider = this.state.provider;
+      if (orderType === 'delivery') {
+        var url_mapper = {
+          'check_status': '/api/gold/check/transactions/mine/' + provider,
+          'update_status': '/api/gold/update/' + orderType + '/transactions/mine/' + provider,
+          'refund': '/api/gold/update/' + orderType + '/transactions/mine/' + provider
+        }
 
-        order.final_status = getTransactionStatus(order);
-        order.cssMapper = this.statusMapper(order);
-        let journeyData = setTransationsSteps(order);
-        this.setState({
-          show_loader: false,
-          order: order,
-          journeyData: journeyData
-        });
+        var deliveryUpdateUrl = url_mapper['update_status'] + '?txn_id=' + transact_id;
+
+        const res = await Api.get(deliveryUpdateUrl);
+        if (res.pfwresponse.status_code === 200) {
+          this.getOrderData(baseData);
+        } else {
+          this.setState({
+            show_loader: false
+          });
+          toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
+        }
       } else {
-        this.setState({
-          show_loader: false
-        });
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
+        this.getOrderData(baseData);
       }
+
     } catch (err) {
       console.log(err);
       this.setState({
@@ -142,7 +174,7 @@ class GoldTransactionDetail extends Component {
 
 
 
-  sendEvents(user_action, product_name) {
+  sendEvents(user_action) {
     let eventObj = {
       "event_name": 'gold_investment_flow',
       "properties": {
@@ -181,23 +213,23 @@ class GoldTransactionDetail extends Component {
   renderJourney = (props, index) => {
     return (
       <div key={index} className="tile" style={{ borderLeft: this.getJourneyBorder(props, index) }}>
-        <div style={{position: 'relative'}}>
+        <div style={{ position: 'relative' }}>
           {props.status === 'success' &&
-           <SVG
-            style={{backgroundColor: '#fff',zIndex:111}}
-            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
-            src={require(`assets/${this.state.icon_mapper[props.status]}.svg`)}
-            className="icon normal-step-icon"
-          />}
+            <SVG
+              style={{ backgroundColor: '#fff', zIndex: 111 }}
+              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+              src={require(`assets/${this.state.icon_mapper[props.status]}.svg`)}
+              className="icon normal-step-icon"
+            />}
           {props.status !== 'success' &&
-           <SVG
-            // preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
-            src={require(`assets/${this.state.icon_mapper[props.status]}.svg`)}
-            className="icon normal-step-icon"
-          />}
-            {props.status === 'pending' &&
-              <p className="text-on-img">{index + 1}</p>
-            }
+            <SVG
+              // preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+              src={require(`assets/${this.state.icon_mapper[props.status]}.svg`)}
+              className="icon normal-step-icon"
+            />}
+          {props.status === 'pending' &&
+            <p className="text-on-img">{index + 1}</p>
+          }
         </div>
         <div className="title">
           {props.title}
@@ -214,7 +246,7 @@ class GoldTransactionDetail extends Component {
     this.setState({
       download_invoice_clicked: true
     })
-    if(!path) {
+    if (!path) {
       toast('Invoice not generated, please try after sometime');
       return;
     }
@@ -263,18 +295,18 @@ class GoldTransactionDetail extends Component {
   }
 
 
-  getPurchaseTitle =() => {
+  getPurchaseTitle = () => {
     let title = 'Gold purchase amount';
 
     if (this.state.orderType === 'sell') {
       title = 'Gold selling amount';
     } else if (this.state.orderType === 'delivery') {
       title = 'Making charges';
-    } 
+    }
 
     return title;
   }
-  
+
   render() {
 
     return (
@@ -299,7 +331,7 @@ class GoldTransactionDetail extends Component {
               </div>
             <div className="subtitle">
               {this.state.order.provider_txn_id}
-              </div>
+            </div>
           </div>
         </div>
 
@@ -312,8 +344,8 @@ class GoldTransactionDetail extends Component {
               Order date
               </div>
             <div className="subtitle">
-            {formatDateAmPm(this.state.order.dt_created)}
-              </div>
+              {formatDateAmPm(this.state.order.dt_created)}
+            </div>
           </div>
         </div>
 
@@ -324,16 +356,16 @@ class GoldTransactionDetail extends Component {
           <div className="block2">
             <div className="title">
               {this.getPurchaseTitle()}
-              </div>
+            </div>
             <div className="subtitle">
-              {inrFormatDecimal(this.state.order.total_amount || 
+              {inrFormatDecimal(this.state.order.total_amount ||
                 this.state.order.delivery_minting_cost)}
             </div>
           </div>
         </div>
 
-        {this.state.orderType === 'delivery' && 
-           <div className="gold-trans-detail-card">
+        {this.state.orderType === 'delivery' &&
+          <div className="gold-trans-detail-card">
             <img
               className="icon"
               src={require(`assets/${this.state.productName}/track_order.svg`)} alt="Gold" />
@@ -341,25 +373,27 @@ class GoldTransactionDetail extends Component {
               <div className="title">
                 Tracking URL
                 </div>
-              {this.state.order.courier_tracking_id && 
-               <div className="subtitle">
-                <span>Couriour service : {this.state.order.courier_company || ' -'}</span>
-                <div style={{display:'flex', justifyContent: 'space-between', 
-                margin: '3px 0 0 0', alignItems: 'center'}}>
-                  <span>Tracking number : {this.state.order.courier_tracking_id || ' -'}</span>
-                  {this.state.order.courier_tracking_id && 
-                    <span 
-                      onClick={() => this.copyItem(this.state.order.courier_tracking_id)}
-                      style={{fontSize: 10, fontWeight: 700,color: getConfig().secondary}}>{this.state.copyText}
-                    </span>
-                  }
-                </div>
+              {this.state.order.courier_tracking_id &&
+                <div className="subtitle">
+                  <span>Couriour service : {this.state.order.courier_company || ' -'}</span>
+                  <div style={{
+                    display: 'flex', justifyContent: 'space-between',
+                    margin: '3px 0 0 0', alignItems: 'center'
+                  }}>
+                    <span>Tracking number : {this.state.order.courier_tracking_id || ' -'}</span>
+                    {this.state.order.courier_tracking_id &&
+                      <span
+                        onClick={() => this.copyItem(this.state.order.courier_tracking_id)}
+                        style={{ fontSize: 10, fontWeight: 700, color: getConfig().secondary }}>{this.state.copyText}
+                      </span>
+                    }
+                  </div>
                 </div>
               }
 
-              {!this.state.order.courier_tracking_id && 
-               <div className="subtitle">
-                   -
+              {!this.state.order.courier_tracking_id &&
+                <div className="subtitle">
+                  -
                 </div>
               }
             </div>
@@ -386,7 +420,7 @@ class GoldTransactionDetail extends Component {
         <div className="common-hr"></div>
 
         <div>
-          {!this.state.invoiceSent && 
+          {!this.state.invoiceSent &&
             <div className="send-invoice">
               <SVG
                 preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().secondary)}
@@ -394,7 +428,7 @@ class GoldTransactionDetail extends Component {
               />
               {!this.state.invoiceLoading &&
                 <div onClick={() => this.emailInvoice()}
-                style={{color: getConfig().secondary, marginLeft: 10}}>
+                  style={{ color: getConfig().secondary, marginLeft: 10 }}>
                   Email invoice
                 </div>
               }
@@ -402,21 +436,21 @@ class GoldTransactionDetail extends Component {
                 <DotDotLoader style={{
                   textAlign: 'left',
                   marginLeft: 10
-                  }} 
+                }}
                 />
               }
             </div>
           }
-          {this.state.invoiceSent && 
+          {this.state.invoiceSent &&
             <div className="send-invoice">
-                <img className="sent-icon" 
-                  src={ require(`assets/completed_step.svg`)} 
-                  alt="Gold" />
-                  <span className="sent">Sent</span>
+              <img className="sent-icon"
+                src={require(`assets/completed_step.svg`)}
+                alt="Gold" />
+              <span className="sent">Sent</span>
             </div>
           }
         </div>
-        
+
         <ContactUs />
       </Container>
     );
