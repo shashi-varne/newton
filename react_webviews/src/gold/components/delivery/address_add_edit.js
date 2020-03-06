@@ -201,7 +201,7 @@ class AddEditAddressDelivery extends Component {
         "country": "india",
         'addressline1': this.state.addressline1,
         'addressline2': this.state.addressline2,
-
+        'provider': this.state.provider
       };
 
       let res;

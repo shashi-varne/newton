@@ -177,7 +177,7 @@ class SelectAddressDelivery extends Component {
     })
   }
 
-  async removeAddress() {
+  removeAddress = async() =>{
 
     this.setState({
       show_loader: true,
