@@ -50,6 +50,9 @@ class RadioGrp extends Component {
         </div>
         <Grid container style={{
           position: 'relative',
+          display: 'flex',
+          justifyContent: 'space-between',
+          width: 'auto'
           // left: 40
         }} spacing={16}>
           {allOptions}

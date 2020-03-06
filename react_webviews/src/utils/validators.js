@@ -589,6 +589,10 @@ export function formatDateAmPm(date) {
 }
 
 export function inrFormatTest(value) {
+  if(value === '') {
+    return true;
+  }
+  
   let rule = /^[0-9,]/;
 
   return rule.test(value);
