@@ -250,9 +250,6 @@ class SellSelectBank extends Component {
   }
 
   handleClick2 = () => {
-    if (this.state.selectedIndex === -1) {
-      return;
-    }
     this.setState({
       openConfirmDialog: true,
       price_summary_clicked: true
