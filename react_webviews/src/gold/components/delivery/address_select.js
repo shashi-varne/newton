@@ -246,7 +246,7 @@ class SelectAddressDelivery extends Component {
                     
                   </div>
                   <div className="address-content">
-                  {props.addressline1}, {props.addressline2}, 
+                  {props.addressline1}, {props.addressline2} 
                   , {props.city}
                   </div>
                   <div className="address-content">
