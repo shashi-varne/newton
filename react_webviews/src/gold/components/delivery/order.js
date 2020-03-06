@@ -256,7 +256,7 @@ class DeliveryOrder extends Component {
                 {this.state.orderData.address.name}
               </div>
               <div className="content">
-              {this.state.orderData.address.addressline1}, {this.state.orderData.address.addressline2}, 
+              {this.state.orderData.address.addressline1}, {this.state.orderData.address.addressline2} 
               , {this.state.orderData.address.city}
               </div>
               <div className="content">
