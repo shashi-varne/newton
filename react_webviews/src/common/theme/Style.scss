@@ -30,6 +30,10 @@ body[data-device="web"] {
   .MuiAppBar-positionFixed {
     left: 0 !important;
   }
+
+  .FlexItem1-withProvider-footer .text-block-1 {
+    width: auto;
+  }
   
   .Header {
     max-width: var(--desktop-width);
@@ -675,12 +679,16 @@ input#pan {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  max-width: 100px;
+  width: 95%;
+}
+.FlexItem1-withProvider-footer .text-block {
+  width: 100%;
 }
 
 .FlexItem1-withProvider-footer .text-block-2 {
   color: #0A1D32;
   font-size: 16px;
+  text-align: left;
   /* padding: 5px 0 0 0; */
 }
 

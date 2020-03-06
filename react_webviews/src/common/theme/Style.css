@@ -25,6 +25,9 @@ body[data-device="web"] {
 body[data-device="web"] .MuiAppBar-positionFixed {
   left: 0 !important;
 }
+body[data-device="web"] .FlexItem1-withProvider-footer .text-block-1 {
+  width: auto;
+}
 body[data-device="web"] .Header {
   max-width: var(--desktop-width);
   margin: 0 auto;
@@ -537,11 +540,15 @@ input#pan {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  max-width: 100px;
+  width: 95%;
+}
+.FlexItem1-withProvider-footer .text-block {
+  width: 100%;
 }
 .FlexItem1-withProvider-footer .text-block-2 {
   color: #0a1d32;
   font-size: 16px;
+  text-align: left;
 }
 .FlexItem1-withProvider-footer .text-block-2-img {
   margin: 0px 5px 0 0;
