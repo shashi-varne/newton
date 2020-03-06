@@ -40,7 +40,6 @@ class DeliveryOrder extends Component {
     var options = {
       "product_code": this.state.orderData.id,
       "addressId": this.state.orderData.address.id
-
     }
 
     let orderData = this.state.orderData;

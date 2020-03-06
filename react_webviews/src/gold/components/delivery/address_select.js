@@ -20,7 +20,6 @@ class SelectAddressDelivery extends Component {
     super(props);
     this.state = {
       show_loader: true,
-      selectedIndex: 0,
       provider: this.props.match.params.provider,
       openDialogDelete: false,
       openConfirmDialog: false,
@@ -53,6 +52,9 @@ class SelectAddressDelivery extends Component {
   }
 
   getAddressData = async () => {
+    this.setState({
+      selectedIndex: 0
+    })
      Api.get('/api/gold/address').then(res => {
 
       this.setState({ show_loader: false });
@@ -114,7 +116,11 @@ class SelectAddressDelivery extends Component {
 
     this.handleClose();
     this.sendEvents('next');
-    if (this.state.selectedIndex === -1) {
+    if (this.state.selectedIndex === -1 || !this.state.addressData) {
+      return;
+    }
+
+    if(this.state.selectedIndex >=0 && !this.state.addressData[this.state.selectedIndex]) {
       return;
     }
 
@@ -305,7 +311,8 @@ class SelectAddressDelivery extends Component {
         fullWidthButton={true}
         onlyButton={true}
         buttonTitle="CONTINUE"
-        disable={this.state.selectedIndex === -1 ? true : false}
+        disable={(this.state.selectedIndex === -1 || (!this.state.addressData ||
+          !this.state.addressData.length)) ? true : false}
         withProvider={true}
         buttonData={this.state.bottomButtonData}
         events={this.sendEvents('just_set_events')}
