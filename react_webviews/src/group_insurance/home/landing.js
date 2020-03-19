@@ -128,7 +128,7 @@ class Landing extends Component {
     ];
 
     let { params } = this.props.location || {};
-    let openModuleData =  params ? params.openModuleData : {}
+    let openModuleData = params ? params.openModuleData : {}
 
     this.setState({
       openModuleData: openModuleData || {},
@@ -144,12 +144,12 @@ class Landing extends Component {
     try {
       const res = await Api.get('/api/ins_service/api/insurance/application/summary')
 
-      if(!this.state.openModuleData.sub_module) {
+      if (!this.state.openModuleData.sub_module) {
         this.setState({
           show_loader: false
         })
       }
-      
+
       if (res.pfwresponse.status_code === 200) {
 
         var resultData = res.pfwresponse.result.response;
@@ -162,7 +162,7 @@ class Landing extends Component {
         let resumeFlagAll = {
           'TERM_INSURANCE': resumeFlagTerm
         }
-        
+
         if (!BHARTIAXA) {
           BHARTIAXA = {};
         }
@@ -199,17 +199,18 @@ class Landing extends Component {
           resumeFlagAll: resumeFlagAll
         })
 
-        if(this.state.openModuleData.sub_module) {
+        if (this.state.openModuleData.sub_module) {
           let navigateMapper = {
             hospicash: 'HOSPICASH',
             personal_accident: 'PERSONAL_ACCIDENT',
             smart_wallet: 'SMART_WALLET',
             term_insurance: 'TERM_INSURANCE',
-            dengue:'DENGUE'
+            dengue: 'DENGUE',
+            corona: 'CORONA'
           };
 
-          let pathname = navigateMapper[this.state.openModuleData.sub_module] || 
-          this.state.openModuleData.sub_module;
+          let pathname = navigateMapper[this.state.openModuleData.sub_module] ||
+            this.state.openModuleData.sub_module;
           this.handleClick(pathname);
         }
 
@@ -331,9 +332,9 @@ class Landing extends Component {
       }
 
       fullPath = insuranceStateMapper[product_key] + '/' + path;
-    } else if(product_key === 'HEALTH_INSURANCE') {
+    } else if (product_key === 'HEALTH_INSURANCE') {
       fullPath = 'health/landing';
-    } else if(product_key === 'HOME_INSURANCE') {
+    } else if (product_key === 'HOME_INSURANCE') {
       fullPath = 'home_insurance/general/plan';
     } else {
 
@@ -357,15 +358,17 @@ class Landing extends Component {
         <div style={{ display: 'flex' }}>
           <img src={props.icon} alt="" style={{ marginRight: '15px' }} />
           <div>
-            <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px',fontWeight:500 }}>{props.title}
-            {props.key === 'HEALTH_INSURANCE' && 
-            <span style={{    padding: '3px 7px',
-              borderRadius: 10,fontSize: 10,background: getConfig().primary, margin: '0 0 0 10px',color: 'white'
-          }}>3 Plans</span>}
-          {props.key === 'CORONA' && 
-            <span style={{    padding: '3px 7px',
-              borderRadius: 10,fontSize: 10,background: getConfig().primary, margin: '0 0 0 10px',color: 'white'
-          }}>New</span>}
+            <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px', fontWeight: 500 }}>{props.title}
+              {props.key === 'HEALTH_INSURANCE' &&
+                <span style={{
+                  padding: '3px 7px',
+                  borderRadius: 10, fontSize: 10, background: getConfig().primary, margin: '0 0 0 10px', color: 'white'
+                }}>3 Plans</span>}
+              {props.key === 'CORONA' &&
+                <span style={{
+                  padding: '3px 7px',
+                  borderRadius: 10, fontSize: 10, background: getConfig().primary, margin: '0 0 0 10px', color: 'white'
+                }}>New</span>}
             </div>
             <div style={{ color: '#7e7e7e', fontSize: '13px' }}>{props.subtitle}</div>
           </div>
@@ -411,9 +414,11 @@ class Landing extends Component {
             <h1 style={{ fontSize: '16px', lineHeight: '24px', color: '#160d2e', margin: 0, fontWeight: '500' }}>Insurance is a priority, <br></br> not an option.</h1>
             <img src={this.state.insurance} alt="" />
           </div>
-          <div style={{ marginTop: '10px', fontSize: '14px', lineHeight: '24px', color: '#4a4a4a',
-        display: 'flex' }}>
-            <img style={{margin: '0px 5px 0 0'}} src={this.state.instant_icon} alt="" />
+          <div style={{
+            marginTop: '10px', fontSize: '14px', lineHeight: '24px', color: '#4a4a4a',
+            display: 'flex'
+          }}>
+            <img style={{ margin: '0px 5px 0 0' }} src={this.state.instant_icon} alt="" />
             Instant policy issuance
             </div>
           <div style={{ marginTop: '20px', color: '#4a4a4a', fontSize: '10px', lineHeight: '24px', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '2px' }}>Claim assistance | No medical | Zero paperwork</div>
