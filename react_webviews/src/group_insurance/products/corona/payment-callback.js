@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PaymentCallback from '../../ui_components/general_insurance/payment_callback';
 
-class AccidentPaymentCallback extends Component {
+class CoronaPaymentCallback extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      product_key: 'DENGUE'
+      product_key: 'CORONA'
     }
   }
 
@@ -20,4 +20,4 @@ class AccidentPaymentCallback extends Component {
   }
 }
 
-export default AccidentPaymentCallback;
+export default CoronaPaymentCallback;

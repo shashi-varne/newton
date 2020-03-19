@@ -46,6 +46,11 @@ const coverAmountMapper = {
     25000: 1,
     15000: 2,
   },
+  'CORONA': {
+    100000: 0,
+    50000: 1,
+    25000: 2,
+  },
   'HEALTH_SURAKSHA': {
     7500000: 0,
     1500000: 1,
@@ -310,6 +315,21 @@ class PlanDetailsClass extends Component {
       </div>
     )
   }
+
+  renderThings = (props, index) => {
+    return (
+      <div key={index} onClick={() => this.openThings(props)} style={{
+        display: 'flex', alignItems: 'center', borderTop: index === 0 ? '1px solid #EFEDF2' : '', borderBottom: '1px solid #EFEDF2', paddingTop: '15px',
+        paddingBottom: '15px', cursor: 'pointer'
+      }}>
+        <img className="plan-details-icon" src={props.icon} alt="" />
+        <div>
+          <div className="plan-details-text">{props.disc} ?</div>
+        </div>
+      </div>
+    )
+  }
+
   renderDiseases = (props, index) => {
     return (
       <div key={index} className={`plan-details-item ${(props.isDisabled) ? 'disabled' : ''}`}>
@@ -459,6 +479,35 @@ class PlanDetailsClass extends Component {
 
   }
 
+  openThings = (props) => {
+    if (props.key === 'claim') {
+      this.openClaim();
+    } else {
+      this.openCovered(props);
+    }
+  }
+
+  openCovered = (props) => {
+    if (!props.data) {
+      return;
+    }
+
+    let dieseasesTitle = props.disc;
+    let diseasesData = {
+      product_diseases_covered: props.data,
+      dieseasesTitle: dieseasesTitle
+    }
+
+    this.navigate('/group-insurance/common/cover', '', '', diseasesData);
+
+  }
+
+  openClaim() {
+
+    this.navigate('/group-insurance/common/claim', '', '');
+
+  }
+
   sendEvents(user_action) {
     let selectedIndex = this.state.selectedIndex || 0;
     let eventObj = {
@@ -592,15 +641,33 @@ class PlanDetailsClass extends Component {
               this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_benefits2.map(this.renderBenefits)}
           </div>
         }
-
-        <div className="accident-plan-claim">
-          <img className="accident-plan-claim-icon" src={this.state.ic_claim_assist} alt="" />
+        {this.props.parent.state.product_key === 'CORONA' &&
           <div>
-            <div className="accident-plan-claim-title">Claim assistance</div>
-            <div className="accident-plan-claim-subtitle">{this.state.quoteData.claim_assistance_line ||
-              'Call Bharti AXA on toll free 1800-103-2292'}</div>
+            <div style={{ marginTop: '40px', padding: '0 15px' }}>
+              <div style={{ color: '#160d2e', fontSize: '16px', fontWeight: '500', marginBottom: '20px' }}>Things to know</div>
+              <div>
+                <div className="plan-details-text">{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].things_to_know.map(this.renderThings)}</div>
+              </div>
+
+            </div>
+            <div style={{ marginTop: '40px', padding: '0 15px' }}>
+              <div style={{ color: '#160d2e', fontSize: '16px', fontWeight: '500', marginBottom: '20px' }}>Waiting period</div>
+              <div>
+                <div className="plan-details-text">{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].waiting_period.map(this.renderBenefits)}</div>
+              </div>
+            </div>
           </div>
-        </div>
+        }
+        {this.props.parent.state.product_key !== 'CORONA' &&
+          <div className="accident-plan-claim">
+            <img className="accident-plan-claim-icon" src={this.state.ic_claim_assist} alt="" />
+            <div>
+              <div className="accident-plan-claim-title">Claim assistance</div>
+              <div className="accident-plan-claim-subtitle">{this.state.quoteData.claim_assistance_line ||
+                'Call Bharti AXA on toll free 1800-103-2292'}</div>
+            </div>
+          </div>
+        }
         {this.props.parent.state.provider !== 'hdfcergo' &&
           <div className="accident-plan-read"
             onClick={() => this.openInBrowser(this.state.quoteData.read_document, 'read_document')}>

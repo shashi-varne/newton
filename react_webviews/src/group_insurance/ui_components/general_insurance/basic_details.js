@@ -707,6 +707,9 @@ class BasicDetailsForm extends Component {
             </div>
             {this.renderNominee()}
           </div>
+          {this.props.parent.state.product_key === 'CORONA' && 
+            <div className="bottom-info">World Health Organisation has declared coronavirus infection as pandemic. Stay safe!</div>
+          }
         </div>
       </Container>
     );

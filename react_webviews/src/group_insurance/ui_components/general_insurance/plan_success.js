@@ -3,8 +3,8 @@ import Container from '../../common/Container';
 import '../../common/Style.css';
 import expand from 'assets/expand_icn.png';
 import shrink from 'assets/shrink_icn.png';
-import congratulations_fisdom from 'assets/congratulations_illustration.svg';
-import congratulations_myway from 'assets/congratulations_illustration_myway.svg';
+import congratulations_fisdom from 'assets/ils_covid_success_fisdom.svg';
+import congratulations_myway from 'assets/ils_covid_success_myway.svg';
 import {
   inrFormatDecimal
 } from '../../../utils/validators';
@@ -28,6 +28,10 @@ const product_config = {
   },
   'DENGUE': {
     'top_title1': 'You have successfully insured yourself against vector borne diseases with',
+    'top_title2': 'Bharti AXA General Insurance.'
+  },
+  'CORONA': {
+    'top_title1': 'You’re insured against coronavirus with',
     'top_title2': 'Bharti AXA General Insurance.'
   }
 }

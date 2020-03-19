@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import PaymentCallback from '../../ui_components/general_insurance/payment_callback';
+import PaymentFailed from '../../ui_components/general_insurance/payment_failed';
 
-class AccidentPaymentCallback extends Component {
+class CoronaFailed extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -12,7 +13,7 @@ class AccidentPaymentCallback extends Component {
   render() {
     return (
       <div>
-        <PaymentCallback
+        <PaymentFailed
           parent={this}
         />
       </div>
@@ -20,4 +21,4 @@ class AccidentPaymentCallback extends Component {
   }
 }
 
-export default AccidentPaymentCallback;
+export default CoronaFailed;

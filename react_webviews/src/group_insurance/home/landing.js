@@ -15,6 +15,8 @@ import term_fisdom from 'assets/ic_term_insurance_fisdom.svg';
 import term_myway from 'assets/ic_term_insurance_myway.svg';
 import dengue_fisdom from 'assets/ic_dengue_insurance_fisdom.svg';
 import dengue_myway from 'assets/ic_dengue_insurance_myway.svg';
+import corona_fisdom from 'assets/ic_coronavirus_insurance_fisdom.svg';
+import corona_myway from 'assets/ic_coronavirus_insurance_myway.svg';
 // import resume_tag from 'assets/resume_tag.png';
 
 import instant_fisdom from 'assets/instant_fisdom.svg';
@@ -60,6 +62,8 @@ class Landing extends Component {
     let term_icon = this.state.type !== 'fisdom' ? term_myway : term_fisdom;
     let instant_icon = this.state.type !== 'fisdom' ? instant_myway : instant_fisdom;
     let dengue_icon = this.state.type !== 'fisdom' ? dengue_myway : dengue_fisdom;
+    let corona_icon = this.state.type !== 'fisdom' ? corona_myway : corona_fisdom;
+
 
     let health_insurance_icon = this.state.type !== 'fisdom' ? health_myway : health_fisdom;
     let home_insurance_icon = this.state.type !== 'fisdom' ? home_myway : home_fisdom;
@@ -71,6 +75,12 @@ class Landing extends Component {
       //   subtitle: 'Starts from ₹ 200 annually',
       //   icon: health_icon
       // },
+      {
+        key: 'CORONA',
+        title: 'Coronavirus insurance',
+        subtitle: 'Cover against COVID-19 infection',
+        icon: corona_icon
+      },
       {
         key: 'PERSONAL_ACCIDENT',
         title: 'Personal accident insurance',
@@ -300,7 +310,7 @@ class Landing extends Component {
   handleClick = (product_key) => {
 
     this.sendEvents('next', product_key)
-    var BHARTIAXA_PRODUCTS = ['PERSONAL_ACCIDENT', 'HOSPICASH', 'SMART_WALLET', 'HEALTH', 'DENGUE'];
+    var BHARTIAXA_PRODUCTS = ['PERSONAL_ACCIDENT', 'HOSPICASH', 'SMART_WALLET', 'HEALTH', 'DENGUE', 'CORONA'];
 
     var lead_id = '';
     var path = '';
@@ -352,6 +362,10 @@ class Landing extends Component {
             <span style={{    padding: '3px 7px',
               borderRadius: 10,fontSize: 10,background: getConfig().primary, margin: '0 0 0 10px',color: 'white'
           }}>3 Plans</span>}
+          {props.key === 'CORONA' && 
+            <span style={{    padding: '3px 7px',
+              borderRadius: 10,fontSize: 10,background: getConfig().primary, margin: '0 0 0 10px',color: 'white'
+          }}>New</span>}
             </div>
             <div style={{ color: '#7e7e7e', fontSize: '13px' }}>{props.subtitle}</div>
           </div>
