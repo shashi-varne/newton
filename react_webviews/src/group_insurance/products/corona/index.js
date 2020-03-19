@@ -168,7 +168,7 @@ class CoronaPlanDetails extends Component {
 
     var plan_data = {
       'product_name': 'Corona insurance',
-      'product_tag_line': 'Cover your hospital expenses for 6 vector borne disease under one plan.',
+      'product_tag_line': 'Guaranteed 1 lac sum assured in just ₹1799 to fight with coronavirus',
       'key': 'CORONA',
       'logo': '',
       'premium_details': [

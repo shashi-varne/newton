@@ -694,6 +694,9 @@ class PlanDetailsClass extends Component {
                   Terms and conditions</span></div>
             </Grid>
           </Grid>
+          {this.props.parent.state.product_key === 'CORONA' &&
+            <div className="bottom-info">Instant policy issuance and no paper work</div>
+          }
         </div>
       </Container>
     );
