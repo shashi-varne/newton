@@ -559,7 +559,12 @@ class PlanDetailsClass extends Component {
         classOverRideContainer="accident-plan">
         <div className="accident-plan-heading-container">
           <div className="accident-plan-heading">
-            <h1 className="accident-plan-title">{this.state.productTitle}</h1>
+            {this.props.parent.state.product_key !== 'CORONA' &&
+              <h1 className="accident-plan-title">{this.state.productTitle}</h1>
+            }
+            {this.props.parent.state.product_key === 'CORONA' &&
+              <h1 className="accident-plan-title">{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_tag_line}</h1>
+            }
             <img src={this.state.quoteData.logo || bhartiaxa_logo} alt="" />
           </div>
           <div className="accident-plan-subtitle">

@@ -79,48 +79,18 @@ class CoronaPlanDetails extends Component {
 
     var product_benefits = [
       {
-        'disc': "Assured lump sum payment of Rs. 100,000 if tested positive for COVID-19",
-        'key': 'positive1',
+        'disc': "Assured lump sum payment of Rs sum_assured_amount if tested positive for COVID-19",
+        'key': 'positive',
         'icon': this.state.ic_c_b1
       },
       {
-        'disc': "Get Rs 50,000 if quarantined in a government /military facility for at least 14 days",
-        'key': 'quarantined1',
+        'disc': "Get Rs quarantined_amount if quarantined in a government /military facility for at least 14 days",
+        'key': 'quarantined',
         'icon': this.state.ic_c_b2
       },
       {
         'disc': "No exclusions for existing diseases. Insured will get sum assured for COVID-19 infection",
-        'key': 'exclusions1',
-        'icon': this.state.ic_c_b3
-      },
-      {
-        'disc': "Assured lump sum payment of Rs. 50,000 if tested positive for COVID-19",
-        'key': 'positive2',
-        'icon': this.state.ic_c_b1
-      },
-      {
-        'disc': "Get Rs 25,000 if quarantined in a government /military facility for at least 14 days",
-        'key': 'quarantined2',
-        'icon': this.state.ic_c_b2
-      },
-      {
-        'disc': "No exclusions for existing diseases. Insured will get sum assured for COVID-19 infection",
-        'key': 'exclusions2',
-        'icon': this.state.ic_c_b3
-      },
-      {
-        'disc': "Assured lump sum payment of Rs. 25,000 if tested positive for COVID-19",
-        'key': 'positive3',
-        'icon': this.state.ic_c_b1
-      },
-      {
-        'disc': "Get Rs 12,500 if quarantined in a government /military facility for at least 14 days",
-        'key': 'quarantined3',
-        'icon': this.state.ic_c_b2
-      },
-      {
-        'disc': "No exclusions for existing diseases. Insured will get sum assured for COVID-19 infection",
-        'key': 'exclusions3',
+        'key': 'exclusions',
         'icon': this.state.ic_c_b3
       }
     ]
@@ -137,7 +107,7 @@ class CoronaPlanDetails extends Component {
       {
         'icon': this.state.ic_c_d2,
         'header': 'All expenses',
-        'text': 'This plan covers all the kinds of expenses incurred due to COVID-19 infection Insured will get 100% of the sum assured, if tested positive for COVID-19 specified in the virology report issued by authorised centres of ICMR - National Institute of Virology, Pune'
+        'text': 'This plan covers all the kinds of expenses incurred due to COVID-19 infection. Insured will get 100% of the sum assured, if tested positive for COVID-19 specified in the virology report issued by authorised centres of ICMR - National Institute of Virology, Pune'
       },
       {
         'icon': this.state.ic_c_d1,
@@ -198,13 +168,14 @@ class CoronaPlanDetails extends Component {
 
     var plan_data = {
       'product_name': 'Corona insurance',
-      'product_tag_line': 'Guaranteed 1 lac sum assured in just ₹1799 to fight with coronavirus',
+      'product_tag_line': '',
       'key': 'CORONA',
       'logo': '',
       'premium_details': [
         {
           "sum_assured": 100000,
-          "product_benefits_included": ['positive1', 'quarantined1', 'exclusions1'],
+          'product_tag_line': 'Guaranteed 1 lac sum assured in just ₹1799 to fight with coronavirus',
+          "product_benefits_included": ['positive', 'quarantined', 'exclusions'],
           "things_to_know": things_to_know,
           "waiting_period": waiting_period,
           "premium": "1799",
@@ -212,7 +183,8 @@ class CoronaPlanDetails extends Component {
         },
         {
           "sum_assured": 50000,
-          "product_benefits_included": ['positive2', 'quarantined2', 'exclusions2'],
+          'product_tag_line': 'Guaranteed 50,000 sum assured in just ₹899 to fight with coronavirus',
+          "product_benefits_included": ['positive', 'quarantined', 'exclusions'],
           "things_to_know": things_to_know,
           "waiting_period": waiting_period,
           "premium": "899",
@@ -220,7 +192,8 @@ class CoronaPlanDetails extends Component {
         },
         {
           "sum_assured": 25000,
-          "product_benefits_included": ['positive3', 'quarantined3', 'exclusions3'],
+          'product_tag_line': 'Guaranteed 25,000 sum assured in just ₹459 to fight with coronavirus',
+          "product_benefits_included": ['positive', 'quarantined', 'exclusions'],
           "things_to_know": things_to_know,
           "waiting_period": waiting_period,
           "premium": "459",
@@ -238,6 +211,8 @@ class CoronaPlanDetails extends Component {
         if (premium.product_benefits_included.indexOf(benefit_data.key) === -1) {
           benefit_data.isDisabled = true;
         }
+        benefit_data.disc = benefit_data.disc.replace('sum_assured_amount', plan_data.premium_details[index].sum_assured);
+        benefit_data.disc = benefit_data.disc.replace('quarantined_amount', (plan_data.premium_details[index].sum_assured) / 2);
 
         plan_data.premium_details[index].product_benefits.push(benefit_data)
       });

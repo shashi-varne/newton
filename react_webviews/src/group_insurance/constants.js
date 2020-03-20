@@ -516,7 +516,7 @@ export const insuranceProductTitleMapper = {
   'HOSPICASH': 'Hospital daily cash',
   'term_insurance': 'Term Insurance',
   'DENGUE': 'Dengue insurance',
-  'CORONA': 'Corona insurance',
+  'CORONA': 'Coronavirus insurance',
 }
 
 export function getBhartiaxaStatusToState(policy) {
