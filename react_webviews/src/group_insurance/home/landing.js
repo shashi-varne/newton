@@ -15,6 +15,8 @@ import term_fisdom from 'assets/ic_term_insurance_fisdom.svg';
 import term_myway from 'assets/ic_term_insurance_myway.svg';
 import dengue_fisdom from 'assets/ic_dengue_insurance_fisdom.svg';
 import dengue_myway from 'assets/ic_dengue_insurance_myway.svg';
+import corona_fisdom from 'assets/ic_coronavirus_insurance_fisdom.svg';
+import corona_myway from 'assets/ic_coronavirus_insurance_myway.svg';
 // import resume_tag from 'assets/resume_tag.png';
 
 import instant_fisdom from 'assets/instant_fisdom.svg';
@@ -60,6 +62,8 @@ class Landing extends Component {
     let term_icon = this.state.type !== 'fisdom' ? term_myway : term_fisdom;
     let instant_icon = this.state.type !== 'fisdom' ? instant_myway : instant_fisdom;
     let dengue_icon = this.state.type !== 'fisdom' ? dengue_myway : dengue_fisdom;
+    let corona_icon = this.state.type !== 'fisdom' ? corona_myway : corona_fisdom;
+
 
     let health_insurance_icon = this.state.type !== 'fisdom' ? health_myway : health_fisdom;
     let home_insurance_icon = this.state.type !== 'fisdom' ? home_myway : home_fisdom;
@@ -71,6 +75,12 @@ class Landing extends Component {
       //   subtitle: 'Starts from ₹ 200 annually',
       //   icon: health_icon
       // },
+      {
+        key: 'CORONA',
+        title: 'Coronavirus insurance',
+        subtitle: 'Cover against COVID-19 infection',
+        icon: corona_icon
+      },
       {
         key: 'PERSONAL_ACCIDENT',
         title: 'Personal accident insurance',
@@ -118,7 +128,7 @@ class Landing extends Component {
     ];
 
     let { params } = this.props.location || {};
-    let openModuleData =  params ? params.openModuleData : {}
+    let openModuleData = params ? params.openModuleData : {}
 
     this.setState({
       openModuleData: openModuleData || {},
@@ -134,12 +144,12 @@ class Landing extends Component {
     try {
       const res = await Api.get('/api/ins_service/api/insurance/application/summary')
 
-      if(!this.state.openModuleData.sub_module) {
+      if (!this.state.openModuleData.sub_module) {
         this.setState({
           show_loader: false
         })
       }
-      
+
       if (res.pfwresponse.status_code === 200) {
 
         var resultData = res.pfwresponse.result.response;
@@ -152,7 +162,7 @@ class Landing extends Component {
         let resumeFlagAll = {
           'TERM_INSURANCE': resumeFlagTerm
         }
-        
+
         if (!BHARTIAXA) {
           BHARTIAXA = {};
         }
@@ -160,7 +170,8 @@ class Landing extends Component {
           'PERSONAL_ACCIDENT': BHARTIAXA['PERSONAL_ACCIDENT'],
           'HOSPICASH': BHARTIAXA['HOSPICASH'],
           'SMART_WALLET': BHARTIAXA['SMART_WALLET'],
-          'DENGUE': BHARTIAXA['DENGUE']
+          'DENGUE': BHARTIAXA['DENGUE'],
+          'CORONA': BHARTIAXA['CORONA']
         }
 
         for (var key in BHARTIAXA_APPS) {
@@ -189,17 +200,18 @@ class Landing extends Component {
           resumeFlagAll: resumeFlagAll
         })
 
-        if(this.state.openModuleData.sub_module) {
+        if (this.state.openModuleData.sub_module) {
           let navigateMapper = {
             hospicash: 'HOSPICASH',
             personal_accident: 'PERSONAL_ACCIDENT',
             smart_wallet: 'SMART_WALLET',
             term_insurance: 'TERM_INSURANCE',
-            dengue:'DENGUE'
+            dengue: 'DENGUE',
+            corona: 'CORONA'
           };
 
-          let pathname = navigateMapper[this.state.openModuleData.sub_module] || 
-          this.state.openModuleData.sub_module;
+          let pathname = navigateMapper[this.state.openModuleData.sub_module] ||
+            this.state.openModuleData.sub_module;
           this.handleClick(pathname);
         }
 
@@ -300,7 +312,7 @@ class Landing extends Component {
   handleClick = (product_key) => {
 
     this.sendEvents('next', product_key)
-    var BHARTIAXA_PRODUCTS = ['PERSONAL_ACCIDENT', 'HOSPICASH', 'SMART_WALLET', 'HEALTH', 'DENGUE'];
+    var BHARTIAXA_PRODUCTS = ['PERSONAL_ACCIDENT', 'HOSPICASH', 'SMART_WALLET', 'HEALTH', 'DENGUE', 'CORONA'];
 
     var lead_id = '';
     var path = '';
@@ -321,9 +333,9 @@ class Landing extends Component {
       }
 
       fullPath = insuranceStateMapper[product_key] + '/' + path;
-    } else if(product_key === 'HEALTH_INSURANCE') {
+    } else if (product_key === 'HEALTH_INSURANCE') {
       fullPath = 'health/landing';
-    } else if(product_key === 'HOME_INSURANCE') {
+    } else if (product_key === 'HOME_INSURANCE') {
       fullPath = 'home_insurance/general/plan';
     } else {
 
@@ -347,11 +359,17 @@ class Landing extends Component {
         <div style={{ display: 'flex' }}>
           <img src={props.icon} alt="" style={{ marginRight: '15px' }} />
           <div>
-            <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px',fontWeight:500 }}>{props.title}
-            {props.key === 'HEALTH_INSURANCE' && 
-            <span style={{    padding: '3px 7px',
-              borderRadius: 10,fontSize: 10,background: getConfig().primary, margin: '0 0 0 10px',color: 'white'
-          }}>3 Plans</span>}
+            <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px', fontWeight: 500 }}>{props.title}
+              {props.key === 'HEALTH_INSURANCE' &&
+                <span style={{
+                  padding: '3px 7px',
+                  borderRadius: 10, fontSize: 10, background: getConfig().primary, margin: '0 0 0 10px', color: 'white'
+                }}>3 Plans</span>}
+              {props.key === 'CORONA' && !props.resume_flag &&
+                <span style={{
+                  padding: '3px 7px',
+                  borderRadius: 10, fontSize: 10, background: getConfig().primary, margin: '0 0 0 10px', color: 'white'
+                }}>New</span>}
             </div>
             <div style={{ color: '#7e7e7e', fontSize: '13px' }}>{props.subtitle}</div>
           </div>
@@ -397,9 +415,11 @@ class Landing extends Component {
             <h1 style={{ fontSize: '16px', lineHeight: '24px', color: '#160d2e', margin: 0, fontWeight: '500' }}>Insurance is a priority, <br></br> not an option.</h1>
             <img src={this.state.insurance} alt="" />
           </div>
-          <div style={{ marginTop: '10px', fontSize: '14px', lineHeight: '24px', color: '#4a4a4a',
-        display: 'flex' }}>
-            <img style={{margin: '0px 5px 0 0'}} src={this.state.instant_icon} alt="" />
+          <div style={{
+            marginTop: '10px', fontSize: '14px', lineHeight: '24px', color: '#4a4a4a',
+            display: 'flex'
+          }}>
+            <img style={{ margin: '0px 5px 0 0' }} src={this.state.instant_icon} alt="" />
             Instant policy issuance
             </div>
           <div style={{ marginTop: '20px', color: '#4a4a4a', fontSize: '10px', lineHeight: '24px', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '2px' }}>Claim assistance | No medical | Zero paperwork</div>
