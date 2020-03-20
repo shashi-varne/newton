@@ -174,6 +174,8 @@ class CoronaPlanDetails extends Component {
       'premium_details': [
         {
           "sum_assured": 100000,
+          "sum_assured_text": '1 lac',
+          "quarantined_text": '50,000',
           'product_tag_line': 'Guaranteed 1 lac sum assured in just ₹1799 to fight with coronavirus',
           "product_benefits_included": ['positive', 'quarantined', 'exclusions'],
           "things_to_know": things_to_know,
@@ -183,6 +185,8 @@ class CoronaPlanDetails extends Component {
         },
         {
           "sum_assured": 50000,
+          "sum_assured_text": '50,000',
+          "quarantined_text": '25,000',
           'product_tag_line': 'Guaranteed 50,000 sum assured in just ₹899 to fight with coronavirus',
           "product_benefits_included": ['positive', 'quarantined', 'exclusions'],
           "things_to_know": things_to_know,
@@ -192,6 +196,8 @@ class CoronaPlanDetails extends Component {
         },
         {
           "sum_assured": 25000,
+          "sum_assured_text": '25,000',
+          "quarantined_text": '12,500',
           'product_tag_line': 'Guaranteed 25,000 sum assured in just ₹459 to fight with coronavirus',
           "product_benefits_included": ['positive', 'quarantined', 'exclusions'],
           "things_to_know": things_to_know,
@@ -211,8 +217,8 @@ class CoronaPlanDetails extends Component {
         if (premium.product_benefits_included.indexOf(benefit_data.key) === -1) {
           benefit_data.isDisabled = true;
         }
-        benefit_data.disc = benefit_data.disc.replace('sum_assured_amount', plan_data.premium_details[index].sum_assured);
-        benefit_data.disc = benefit_data.disc.replace('quarantined_amount', (plan_data.premium_details[index].sum_assured) / 2);
+        benefit_data.disc = benefit_data.disc.replace('sum_assured_amount', plan_data.premium_details[index].sum_assured_text);
+        benefit_data.disc = benefit_data.disc.replace('quarantined_amount', plan_data.premium_details[index].quarantined_text);
 
         plan_data.premium_details[index].product_benefits.push(benefit_data)
       });

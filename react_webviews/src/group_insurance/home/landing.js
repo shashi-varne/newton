@@ -170,7 +170,8 @@ class Landing extends Component {
           'PERSONAL_ACCIDENT': BHARTIAXA['PERSONAL_ACCIDENT'],
           'HOSPICASH': BHARTIAXA['HOSPICASH'],
           'SMART_WALLET': BHARTIAXA['SMART_WALLET'],
-          'DENGUE': BHARTIAXA['DENGUE']
+          'DENGUE': BHARTIAXA['DENGUE'],
+          'CORONA': BHARTIAXA['CORONA']
         }
 
         for (var key in BHARTIAXA_APPS) {
