@@ -57,7 +57,7 @@ class RenderDiseasesClass extends Component {
 
           <div className="plan-details">
           </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', lineHeight: '20px', color: '#6f6f6f'}}>
+          <div style={{lineHeight: '20px', color: '#6f6f6f'}}>
             <div style={{marginTop: '22px', marginBottom: '22px',  color: '#000000'}}>Follow these simple steps to ensure a faster, speedier and easier process:</div>
             <div style={{marginBottom: '22px',  color: '#000000', fontWeight: 'bold'}}>Claim notification</div>
             <div>1. Notify us through any of our 24x7  convenient intimation modes:</div>

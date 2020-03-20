@@ -79,12 +79,12 @@ class CoronaPlanDetails extends Component {
 
     var product_benefits = [
       {
-        'disc': "Assured lump sum payment of Rs sum_assured_amount if tested positive for COVID-19",
+        'disc': "Assured lump sum payment of ₹ sum_assured_amount if tested positive for COVID-19",
         'key': 'positive',
         'icon': this.state.ic_c_b1
       },
       {
-        'disc': "Get Rs quarantined_amount if quarantined in a government /military facility for at least 14 days",
+        'disc': "Get ₹ quarantined_amount if quarantined in a government /military facility for at least 14 days",
         'key': 'quarantined',
         'icon': this.state.ic_c_b2
       },

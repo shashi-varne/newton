@@ -229,7 +229,7 @@ class PlanSummaryClass extends Component {
             <div className="plan-summary-mid12">{this.state.summaryData.product_coverage} year</div>
           </div>
           <div className="plan-summary-mid1 plan-summary-mid1-bg">
-            <div className="plan-summary-mid11">start date</div>
+            <div className="plan-summary-mid11">Start date</div>
             <div className="plan-summary-mid12">{this.state.summaryData.dt_policy_start}</div>
           </div>
           <div className="plan-summary-mid1">
