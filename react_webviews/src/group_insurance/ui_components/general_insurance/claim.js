@@ -57,37 +57,25 @@ class RenderDiseasesClass extends Component {
 
           <div className="plan-details">
           </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', lineHeight: '20px' }}>
-            <p>Follow these simple steps to ensure a faster, speedier and easier process:</p>
-            <h4>Claim notification</h4>
-            <ol style={{ color: '#6f6f6f', padding: '15px', margin: '0' }}>
-              <li>Notify us through any of our 24x7  convenient intimation modes:</li>
-              <ol type="a" style={{ color: '#6f6f6f', padding: '15px', margin: '0' }}>
-                <li>Call us on a toll-free number <a href="tel:1800-103-2292">(1800-103-2292)</a></li>
-                <li>Drop us an email <a href="mailto: claims@bhartiaxa.com">(claims@bhartiaxa.com)</a> to register your claim</li>
-              </ol>
-              <li>Once your claim is registered, you will receive a confirmation SMS on your registered number within an hour. This will have your Bharti-AXA General Insurance (BAGI) claim number along with the next steps towards your claim settlement process</li>
-              <li>In less than 24 hours of your claim registration, a BAGI representative will call you explaining the complete process and intimating you about the various documents that you will need to furnish for claim processing</li>
-            </ol>
-            <h4>Claim form</h4>
-            <ol style={{ color: '#6f6f6f', padding: '15px', margin: '0' }}>
-              <li>Upon the notification of the claim, the company will dispatch the claim Form A and Form B to the Insured/covered person</li>
-              <li>Claim forms will also be available with the company offices and on its website. You can download and email along with the following documents:</li>
-              <ol type="a" style={{ color: '#6f6f6f', padding: '15px', margin: '0' }}>
-                <li>Duly signed claim Form A and Form B</li>
-                <li>Discharge summary for quarantine cases</li>
-                <li>NEFT details in the name of policy holder</li>
-                <li>Reports from authorised centres of ICMR - National Institute of Virology, Pune</li>
-              </ol>
-            </ol>
-            <h4>Settlement Process</h4>
-            <ol style={{ color: '#6f6f6f', padding: '15px', margin: '0' }}>
-              <li>On receipt of the complete set of claim documents to the company’s satisfaction, the company will send offer of settlement, along with a settlement statement within 30 days to the insured.</li>
-              <li>Payment will be made within 7 days of receipt of acceptance of such settlement offer.</li>
-            </ol>
-
-
-
+          <div style={{ display: 'flex', flexWrap: 'wrap', lineHeight: '20px', color: '#6f6f6f'}}>
+            <div style={{marginTop: '22px', marginBottom: '22px',  color: '#000000'}}>Follow these simple steps to ensure a faster, speedier and easier process:</div>
+            <div style={{marginBottom: '22px',  color: '#000000', fontWeight: 'bold'}}>Claim notification</div>
+            <div>1. Notify us through any of our 24x7  convenient intimation modes:</div>
+            <div>a) Call us on a toll-free number <a href="tel:1800-103-2292">(1800-103-2292)</a></div>
+            <div>b) Drop us an email <a href="mailto: claims@bhartiaxa.com">(claims@bhartiaxa.com)</a> to register your claim</div>
+            <div style={{marginTop: '15px'}}>2. Once your claim is registered, you will receive a <b>confirmation SMS</b> on your registered number within an hour. This will have your <b>Bharti-AXA General Insurance (BAGI) claim number</b> along with the next steps towards your claim settlement process</div>
+            <div style={{marginTop: '15px'}}>3. In less than 24 hours of your claim registration, a BAGI representative will call you explaining the complete process and intimating you about the various documents that you will need to furnish for claim processing</div>
+            <div style={{marginTop: '22px', marginBottom: '22px', color: '#000000', fontWeight: 'bold'}}>Claim form</div>
+            <div>1. Upon the notification of the claim, the company will dispatch the <b>claim Form A and Form B</b> to the Insured/covered person</div>
+            <div style={{marginTop: '15px'}}>2. Claim forms will also be available with the company offices and on its website. You can download and email along with the following documents:</div>
+            <div style={{marginTop: '15px', fontWeight: 'bold'}}>Document check list</div>
+            <div>a) Duly signed claim Form A and Form B</div>
+            <div>b) Discharge summary for quarantine cases</div>
+            <div>c) NEFT details in the name of policy holder</div>
+            <div>d) Reports from authorised centres of ICMR - National Institute of Virology, Pune</div>
+            <div style={{marginTop: '22px', marginBottom: '22px',  color: '#000000', fontWeight: 'bold'}}>Settlement Process</div>
+            <div>1. On receipt of the complete set of claim documents to the company’s satisfaction, the company will send offer of settlement, along with a settlement statement within 30 days to the insured.</div>
+            <div style={{marginTop: '15px', marginBottom: '20px'}}>2. Payment will be made within 7 days of receipt of acceptance of such settlement offer.</div>
           </div>
         </div>
 
