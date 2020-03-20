@@ -107,7 +107,8 @@ class CoronaPlanDetails extends Component {
       {
         'icon': this.state.ic_c_d2,
         'header': 'All expenses',
-        'text': 'This plan covers all the kinds of expenses incurred due to COVID-19 infection. Insured will get 100% of the sum assured, if tested positive for COVID-19 specified in the virology report issued by authorised centres of ICMR - National Institute of Virology, Pune'
+        'text': 'This plan covers all the kinds of expenses incurred due to COVID-19 infection',
+        'text2': 'Insured will get 100% of the sum assured, if tested positive for COVID-19 specified in the virology report issued by authorised centres of ICMR - National Institute of Virology, Pune'
       },
       {
         'icon': this.state.ic_c_d1,
@@ -162,7 +163,7 @@ class CoronaPlanDetails extends Component {
         'disc': "How to claim",
         'key': 'claim',
         'icon': this.state.ic_c_c3,
-        'data': product_diseases_covered
+        'data': ''
       }
     ];
 

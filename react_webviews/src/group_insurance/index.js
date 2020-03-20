@@ -135,6 +135,7 @@ import Report from './report';
 import ReportDetails from './ui_components/general_insurance/report_check_details';
 import RenderDiseasesClass from './ui_components/general_insurance/diseases';
 import RenderCoverClass from './ui_components/general_insurance/cover';
+import RenderNotCoverClass from './ui_components/general_insurance/notcover';
 import RenderClaimClass from './ui_components/general_insurance/claim';
 
 
@@ -289,6 +290,7 @@ const Insurance = (props) => {
           <Route path={`${url}/common/reportdetails/:policy_id`} component={ReportDetails} />
           <Route path={`${url}/common/diseases`} component={RenderDiseasesClass} />
           <Route path={`${url}/common/cover`} component={RenderCoverClass} />
+          <Route path={`${url}/common/notcover`} component={RenderNotCoverClass} />
           <Route path={`${url}/common/claim`} component={RenderClaimClass} />
 
           <Route component={NotFound} />

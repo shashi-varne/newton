@@ -385,7 +385,7 @@ class PlanDetailsClass extends Component {
           }
           {this.props.parent.state.product_key === 'CORONA' &&
             <span className="accident-plan-item-color" style={{ color: getConfig().primary, fontWeight: 'bold' }}>₹
-          {props.premium} <span style={{fontSize: '9px', color: '#6f6f6f'}}>{props.plan_frequency || 'for a year'}</span></span>
+          {props.premium} <span style={{ fontSize: '9px', color: '#6f6f6f' }}>{props.plan_frequency || 'for a year'}</span></span>
           }
         </div>
         {props.plus_benefit &&
@@ -507,7 +507,11 @@ class PlanDetailsClass extends Component {
       key: props.key
     }
 
-    this.navigate('/group-insurance/common/cover', '', '', diseasesData);
+    if (props.key === 'is_covered') {
+      this.navigate('/group-insurance/common/cover', '', '', diseasesData);
+    } else if (props.key === 'not_covered') {
+      this.navigate('/group-insurance/common/notcover', '', '', diseasesData);
+    }
 
   }
 
@@ -633,7 +637,7 @@ class PlanDetailsClass extends Component {
             {!this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_benefits_title && this.props.parent.state.product_key !== 'CORONA' &&
               <span>Benefits that are covered</span>}
             {!this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_benefits_title && this.props.parent.state.product_key === 'CORONA' &&
-              <span>Plan benefits</span>}  
+              <span>Plan benefits</span>}
             {this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_benefits_title &&
               <span>{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_benefits_title}</span>}
           </div>

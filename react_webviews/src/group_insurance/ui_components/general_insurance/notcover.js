@@ -35,8 +35,12 @@ class RenderDiseasesClass extends Component {
           {props.header &&
             <div className="cover-details-header">{props.header}</div>
           }
-          <div className="cover-details-text" style={{marginBottom: '20px'}}>{props.text}</div>
-          <div className="cover-details-text">{props.text2}</div>
+          <div className="cover-details-text">{props.text}</div>
+          {props.list &&
+            <ul style={{ color: '#767e86', padding: '15px', margin: '0' }}>
+              {props.list.map((list, index) => <li key={index}>{list}</li>)}
+            </ul>
+          }
         </div>
       </div>
     )
