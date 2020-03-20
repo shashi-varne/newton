@@ -130,11 +130,11 @@ class CoronaPlanDetails extends Component {
         'text': 'Any signs or symptoms of the infection present at the time of purchasing the policy'
       },
       {
-        'icon': this.state.ic_c_e4,
+        'icon': this.state.ic_c_d1,
         'text': 'While buying policy, person should not be suffering from COVID-19 infection or recommended for quarantine'
       },
       {
-        'icon': this.state.ic_c_d1,
+        'icon': this.state.ic_c_e4,
         'text': 'Manifestation of the coronavirus infection  taken place while the Insured is outside India'
       },
       {

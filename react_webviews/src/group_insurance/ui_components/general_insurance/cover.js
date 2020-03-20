@@ -37,8 +37,8 @@ class RenderDiseasesClass extends Component {
           }
           <div className="cover-details-text">{props.text}</div>
           {props.list &&
-            <ul style={{color: '#767e86', padding: '15px', margin: '0'}}>
-              {props.list.map(list => <li>{list}</li>)}
+            <ul style={{ color: '#767e86', padding: '15px', margin: '0' }}>
+              {props.list.map((list, index) => <li key={index}>{list}</li>)}
             </ul>
           }
         </div>
@@ -90,7 +90,7 @@ class RenderDiseasesClass extends Component {
 
           <div className="plan-details">
           </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', lineHeight: '20px' }}>
             {this.state.diseasesData && this.state.diseasesData.product_diseases_covered &&
               this.state.diseasesData.product_diseases_covered.map(this.renderDiseases)}
           </div>

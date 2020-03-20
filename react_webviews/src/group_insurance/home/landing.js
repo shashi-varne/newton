@@ -365,7 +365,7 @@ class Landing extends Component {
                   padding: '3px 7px',
                   borderRadius: 10, fontSize: 10, background: getConfig().primary, margin: '0 0 0 10px', color: 'white'
                 }}>3 Plans</span>}
-              {props.key === 'CORONA' &&
+              {props.key === 'CORONA' && !props.resume_flag &&
                 <span style={{
                   padding: '3px 7px',
                   borderRadius: 10, fontSize: 10, background: getConfig().primary, margin: '0 0 0 10px', color: 'white'

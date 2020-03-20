@@ -669,7 +669,7 @@ class PlanDetailsClass extends Component {
 
             </div>
             <div style={{ marginTop: '40px', padding: '0 15px' }}>
-              <div style={{ color: '#160d2e', fontSize: '16px', fontWeight: '500', marginBottom: '20px' }}>Waiting period</div>
+              <div style={{ color: '#160d2e', fontSize: '16px', fontWeight: '500'}}>Waiting period</div>
               <div>
                 <div className="plan-details-text">{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].waiting_period.map(this.renderBenefits)}</div>
               </div>
