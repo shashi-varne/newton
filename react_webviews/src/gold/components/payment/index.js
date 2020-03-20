@@ -249,7 +249,8 @@ class Payment extends Component {
     });
 
     try {
-      const res = await Api.get('/api/gold/invoice/download/mail/' + this.state.provider, { url: path });
+      const res = await Api.get('/api/gold/invoice/download/mail/' + this.state.provider, 
+      { txn_id: this.state.transact_id, order_type: this.state.orderType });
       if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
         if (result.message === 'success') {
