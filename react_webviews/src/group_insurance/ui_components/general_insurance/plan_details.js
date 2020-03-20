@@ -379,8 +379,14 @@ class PlanDetailsClass extends Component {
         <div className="accident-plan-item3" style={{ display: this.state.isRedirectionModal ? 'grid' : 'flex' }}>
           {!this.state.isRedirectionModal && <span className="accident-plan-item4">in</span>}
           {this.state.isRedirectionModal && <span className="accident-plan-item4" style={{ marginBottom: 3 }}>starts from</span>}
-          <span className="accident-plan-item-color" style={{ color: getConfig().primary, fontWeight: 'bold' }}>₹
+          {this.props.parent.state.product_key !== 'CORONA' &&
+            <span className="accident-plan-item-color" style={{ color: getConfig().primary, fontWeight: 'bold' }}>₹
           {props.premium}/{props.plan_frequency || 'year'}</span>
+          }
+          {this.props.parent.state.product_key === 'CORONA' &&
+            <span className="accident-plan-item-color" style={{ color: getConfig().primary, fontWeight: 'bold' }}>₹
+          {props.premium} <span style={{fontSize: '9px', color: '#6f6f6f'}}>{props.plan_frequency || 'for a year'}</span></span>
+          }
         </div>
         {props.plus_benefit &&
           <div className="accident-plan-benefit" style={styles.color}>
@@ -624,8 +630,10 @@ class PlanDetailsClass extends Component {
         <div style={{ marginTop: '40px', padding: '0 15px' }}>
           <div style={{ color: '#160d2e', fontSize: '16px', fontWeight: '500', marginBottom: '10px' }}>
 
-            {!this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_benefits_title &&
+            {!this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_benefits_title && this.props.parent.state.product_key !== 'CORONA' &&
               <span>Benefits that are covered</span>}
+            {!this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_benefits_title && this.props.parent.state.product_key === 'CORONA' &&
+              <span>Plan benefits</span>}  
             {this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_benefits_title &&
               <span>{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_benefits_title}</span>}
           </div>
@@ -669,7 +677,7 @@ class PlanDetailsClass extends Component {
 
             </div>
             <div style={{ marginTop: '40px', padding: '0 15px' }}>
-              <div style={{ color: '#160d2e', fontSize: '16px', fontWeight: '500'}}>Waiting period</div>
+              <div style={{ color: '#160d2e', fontSize: '16px', fontWeight: '500' }}>Waiting period</div>
               <div>
                 <div className="plan-details-text">{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].waiting_period.map(this.renderBenefits)}</div>
               </div>

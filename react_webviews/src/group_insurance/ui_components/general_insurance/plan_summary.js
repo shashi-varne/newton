@@ -220,7 +220,7 @@ class PlanSummaryClass extends Component {
             {this.props.parent.state.product_key === 'CORONA' &&
               <div className="plan-summary-mid11">Sum assured</div>
             }
-            <div className="plan-summary-mid12">₹{numDifferentiation(String(this.state.summaryData.cover_amount || 0))}
+            <div className="plan-summary-mid12">{numDifferentiation(String(this.state.summaryData.cover_amount || 0))}
               {this.props.parent.state.product_key === 'HOSPICASH' && <span>/day</span>}
             </div>
           </div>

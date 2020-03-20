@@ -190,7 +190,7 @@ class PlanSuccessClass extends Component {
             <li>Policy: <span>{this.state.lead_data.policy.product_title}</span></li>
             <li>Issuer: <span>{this.state.lead_data.policy.issuer}</span></li>
             <li>COI: <span>{this.state.lead_data.policy.master_policy_number}</span></li>
-            <li>Sum Assured: <span>{inrFormatDecimal(this.state.lead_data.cover_amount || 0)}</span></li>
+            <li>Sum assured: <span>{inrFormatDecimal(this.state.lead_data.cover_amount || 0)}</span></li>
             <li>Cover period: <span>{this.state.lead_data.product_coverage} yr 
             ({this.state.lead_data.policy.policy_start_date} - {this.state.lead_data.policy.policy_end_date})</span></li>
             
