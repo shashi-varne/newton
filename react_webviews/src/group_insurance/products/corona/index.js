@@ -74,23 +74,53 @@ class CoronaPlanDetails extends Component {
     })
 
     this.setState({
-      
+
     })
 
     var product_benefits = [
       {
-        'disc': "Assured lump sum payment of ₹1 lac if tested positive for COVID-19",
-        'key': 'positive',
+        'disc': "Assured lump sum payment of Rs. 100,000 if tested positive for COVID-19",
+        'key': 'positive1',
         'icon': this.state.ic_c_b1
       },
       {
-        'disc': "Get ₹50,000 if quarantined in a government /military facility for at least 14 days",
-        'key': 'quarantined',
+        'disc': "Get Rs 50,000 if quarantined in a government /military facility for at least 14 days",
+        'key': 'quarantined1',
         'icon': this.state.ic_c_b2
       },
       {
         'disc': "No exclusions for existing diseases. Insured will get sum assured for COVID-19 infection",
-        'key': 'exclusions',
+        'key': 'exclusions1',
+        'icon': this.state.ic_c_b3
+      },
+      {
+        'disc': "Assured lump sum payment of Rs. 50,000 if tested positive for COVID-19",
+        'key': 'positive2',
+        'icon': this.state.ic_c_b1
+      },
+      {
+        'disc': "Get Rs 25,000 if quarantined in a government /military facility for at least 14 days",
+        'key': 'quarantined2',
+        'icon': this.state.ic_c_b2
+      },
+      {
+        'disc': "No exclusions for existing diseases. Insured will get sum assured for COVID-19 infection",
+        'key': 'exclusions2',
+        'icon': this.state.ic_c_b3
+      },
+      {
+        'disc': "Assured lump sum payment of Rs. 25,000 if tested positive for COVID-19",
+        'key': 'positive3',
+        'icon': this.state.ic_c_b1
+      },
+      {
+        'disc': "Get Rs 12,500 if quarantined in a government /military facility for at least 14 days",
+        'key': 'quarantined3',
+        'icon': this.state.ic_c_b2
+      },
+      {
+        'disc': "No exclusions for existing diseases. Insured will get sum assured for COVID-19 infection",
+        'key': 'exclusions3',
         'icon': this.state.ic_c_b3
       }
     ]
@@ -174,7 +204,7 @@ class CoronaPlanDetails extends Component {
       'premium_details': [
         {
           "sum_assured": 100000,
-          "product_benefits_included": ['positive', 'quarantined', 'exclusions'],
+          "product_benefits_included": ['positive1', 'quarantined1', 'exclusions1'],
           "things_to_know": things_to_know,
           "waiting_period": waiting_period,
           "premium": "1799",
@@ -182,7 +212,7 @@ class CoronaPlanDetails extends Component {
         },
         {
           "sum_assured": 50000,
-          "product_benefits_included": ['positive', 'quarantined', 'exclusions'],
+          "product_benefits_included": ['positive2', 'quarantined2', 'exclusions2'],
           "things_to_know": things_to_know,
           "waiting_period": waiting_period,
           "premium": "899",
@@ -190,7 +220,7 @@ class CoronaPlanDetails extends Component {
         },
         {
           "sum_assured": 25000,
-          "product_benefits_included": ['positive', 'quarantined', 'exclusions'],
+          "product_benefits_included": ['positive3', 'quarantined3', 'exclusions3'],
           "things_to_know": things_to_know,
           "waiting_period": waiting_period,
           "premium": "459",

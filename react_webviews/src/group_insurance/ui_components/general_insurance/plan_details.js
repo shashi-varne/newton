@@ -131,7 +131,7 @@ class PlanDetailsClass extends Component {
 
     let header_title_mapper = {
       'terms_and_conditions': 'Terms & Conditions',
-      'read_document': this.state.productTitle ? this.state.productTitle + ' - FAQ' : 'Read Detailed Document'
+      'read_document': this.state.productTitle ? this.state.productTitle + ' - details' : 'Read Detailed Document'
     }
 
     let current_url = window.location.href;
@@ -356,7 +356,8 @@ class PlanDetailsClass extends Component {
         onClick={() => this.selectPlan(index)}>
         {!props.product_plan_title &&
           <div className="accident-plan-item1">
-            {!props.cover_text && <span>Cover amount</span>}
+            {!props.cover_text && this.props.parent.state.product_key !== 'CORONA' && <span>Cover amount</span>}
+            {!props.cover_text && this.props.parent.state.product_key === 'CORONA' && <span>Sum assured</span>}
             {props.cover_text && <span>{props.cover_text}</span>}
           </div>}
 
