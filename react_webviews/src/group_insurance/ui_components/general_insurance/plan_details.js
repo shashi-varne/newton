@@ -480,6 +480,7 @@ class PlanDetailsClass extends Component {
   }
 
   openThings = (props) => {
+    this.sendEvents('next', props.key);
     if (props.key === 'claim') {
       this.openClaim();
     } else {
@@ -508,13 +509,14 @@ class PlanDetailsClass extends Component {
 
   }
 
-  sendEvents(user_action) {
+  sendEvents(user_action, type) {
     let selectedIndex = this.state.selectedIndex || 0;
     let eventObj = {
       "event_name": 'Group Insurance',
       "properties": {
         "user_action": user_action,
-        "screen_name": this.props.parent.state.product_key,
+        "screen_name": 'plan_details',
+        "type": this.props.parent.state.product_key,
         "cover_amount": this.props.parent.state.plan_data.premium_details[selectedIndex] ?
           this.props.parent.state.plan_data.premium_details[selectedIndex].sum_assured : '',
         "premium": this.props.parent.state.plan_data.premium_details[selectedIndex] ?
@@ -524,6 +526,15 @@ class PlanDetailsClass extends Component {
       }
     };
 
+    if (this.props.parent.state.product_key === 'CORONA' && type) {
+      if (type === 'covered') {
+        eventObj.properties.is_covered = "yes";
+      } else if (type === "notcovered") {
+        eventObj.properties.not_covered = "yes";
+      } else if (type === "claim") {
+        eventObj.properties.claim = "yes";
+      }
+    }
     if (user_action === 'just_set_events') {
       return eventObj;
     } else {
