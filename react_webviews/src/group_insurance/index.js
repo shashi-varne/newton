@@ -119,6 +119,12 @@ import HealthSuperTopupForm from './products/health_insurance/super_topup/form'
 import HomeInsurance from './products/home_insurance/general/plan_details';
 import HomeInsuranceForm from './products/home_insurance/general/form';
 
+
+// etli
+import EtliPersonalDetails1 from './products/term_insurance/etli/personal_details1';
+import EtliPersonalDetails2 from './products/term_insurance/etli/personal_details2';
+import EtliPersonalDetails3 from './products/term_insurance/etli/personal_details3';
+
 // common
 
 import Report from './report';
@@ -198,6 +204,12 @@ const Insurance = (props) => {
           <Route path={`${url}/term/edit-professional`} render={(props) => <ProfessionalDetails1 {...props} edit={true} />} />
           <Route path={`${url}/term/edit-professional1`} render={(props) => <ProfessionalDetails2 {...props} edit={true} />} />
           
+
+          {/* etli */}
+          <Route path={`${url}/term/etli/personal-details1`} component={EtliPersonalDetails1} />
+          <Route path={`${url}/term/etli/personal-details2`} component={EtliPersonalDetails2} />
+          <Route path={`${url}/term/etli/personal-details3`} component={EtliPersonalDetails3} />
+       
           {/********** Accident **********/}
           <Route path={`${url}/accident/plan`} component={AccidentPlanDetails} />
           <Route path={`${url}/accident/form`} component={AccidentForm} />
@@ -265,6 +277,7 @@ const Insurance = (props) => {
           <Route path={`${url}/common/report`} component={Report} />
           <Route path={`${url}/common/reportdetails/:policy_id`} component={ReportDetails} />
           <Route path={`${url}/common/diseases`} component={RenderDiseasesClass} />
+
 
           <Route component={NotFound} />
         </Switch>

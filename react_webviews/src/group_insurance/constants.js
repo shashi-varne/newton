@@ -28,6 +28,17 @@ export const genderOptions = [
   }
 ];
 
+export const smokingOptions = [
+  {
+    'name': 'Yes',
+    'value': 'YES'
+  },
+  {
+    'name': 'No',
+    'value': 'NO'
+  }
+]
+
 export const relationshipOptions = [
   'BROTHER',
   'DAUGHTER',
@@ -454,6 +465,21 @@ export const quotePointsPorivders = {
       title: '',
       content: ''
     }
+  },
+  'etli': {
+    basic_benefits: [
+      'Complete sum assured payable in case of death',
+      'Option to increase your sum assured regularly or at key life stages',
+      'Tax benefits on premium under 80C'
+    ],
+    add_on_benefits: [
+      'Better half benefit option',
+      'Option of waiver of premium benefit is available in case of one of the covered critical illnesses'
+    ],
+    popup_info: {
+      title: '',
+      content: ''
+    }
   }
 };
 
@@ -492,6 +518,17 @@ export const insuranceMaritalStatus = [
   {
     'name': 'Single',
     'value': 'UNMARRIED'
+  },
+  {
+    'name': 'Married',
+    'value': 'MARRIED'
+  }
+]
+
+export const insuranceMaritalStatusEtli = [
+  {
+    'name': 'Single',
+    'value': 'SINGLE'
   },
   {
     'name': 'Married',

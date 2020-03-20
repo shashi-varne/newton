@@ -93,8 +93,31 @@ class Report extends Component {
     }
 
 
-    for (var i = 0; i < group_insurance_policies.length; i++) {
-      let policy = group_insurance_policies[i];
+    let ins_policies = group_insurance_policies.ins_policies || [];
+    for (var i = 0; i < ins_policies.length; i++) {
+      let policy = ins_policies[i];
+      let obj = {
+        status: policy.status,
+        product_name: policy.product_title,
+        product_key: policy.product_name,
+        cover_amount: policy.sum_assured,
+        premium: policy.premium,
+        key: 'BHARTIAXA',
+        id: policy.id
+      }
+
+      let data = this.statusMapper(obj);
+      obj.status  = data.status;
+      obj.cssMapper = data.cssMapper;
+
+      reportData.push(obj);
+    }
+
+    // edelwisss
+
+    let edelweiss_ins = group_insurance_policies.edelweiss_ins || [];
+    for (var j = 0; j < edelweiss_ins.length; j++) {
+      let policy = edelweiss_ins[j];
       let obj = {
         status: policy.status,
         product_name: policy.product_title,
@@ -137,8 +160,7 @@ class Report extends Component {
           nextPage: (has_more) ? next_page : ''
         })
 
-        let ins_policies = policyData.group_insurance && 
-        policyData.group_insurance.ins_policies ? policyData.group_insurance.ins_policies : {};
+        let ins_policies = policyData.group_insurance || {};
 
         this.setReportData(policyData.term_insurance, ins_policies);
       } else {

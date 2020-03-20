@@ -129,7 +129,7 @@ class Intro extends Component {
 
   async getQuotes() {
 
-    
+    window.localStorage.setItem('quote_redirect_data', ''); 
     try {
       
       const res = await Api.get('/api/ins_service/api/insurance/providers/all');
@@ -137,8 +137,13 @@ class Intro extends Component {
      
       if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.providers) {
         let result = res.pfwresponse.result;
+
+        let quotes = result.providers;
+        quotes.push({
+          quote_provider: 'etli'
+        })
         this.setState({
-          quotes: result.providers
+          quotes: quotes
         });
       } else {
         this.setState({
@@ -187,6 +192,8 @@ class Intro extends Component {
 
     if (quote.quote_provider === 'HDFC') {
       this.navigate('personal-details-intro')
+    } else if (quote.quote_provider === 'etli') {
+      this.navigate('etli/personal-details1');
     } else {
       let search = getConfig().searchParams + '&provider=' + quote.quote_provider
       this.navigate('personal-details-redirect', search)
