@@ -30,7 +30,7 @@ class RenderDiseasesClass extends Component {
       "event_name": 'Group Insurance',
       "properties": {
         "user_action": user_action,
-        "screen_name": '',
+        "screen_name": 'how_to_claim',
       }
     };
 

@@ -148,13 +148,13 @@ class CoronaPlanDetails extends Component {
     var things_to_know = [
       {
         'disc': "What's covered",
-        'key': 'covered',
+        'key': 'is_covered',
         'icon': this.state.ic_c_c1,
         'data': product_diseases_covered
       },
       {
         'disc': "What's not covered",
-        'key': 'notcovered',
+        'key': 'not_covered',
         'icon': this.state.ic_c_c2,
         'data': product_diseases_not_covered
       },

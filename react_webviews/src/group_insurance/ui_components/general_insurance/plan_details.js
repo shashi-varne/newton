@@ -496,7 +496,8 @@ class PlanDetailsClass extends Component {
     let dieseasesTitle = props.disc;
     let diseasesData = {
       product_diseases_covered: props.data,
-      dieseasesTitle: dieseasesTitle
+      dieseasesTitle: dieseasesTitle,
+      key: props.key
     }
 
     this.navigate('/group-insurance/common/cover', '', '', diseasesData);
@@ -527,9 +528,9 @@ class PlanDetailsClass extends Component {
     };
 
     if (this.props.parent.state.product_key === 'CORONA' && type) {
-      if (type === 'covered') {
+      if (type === 'is_covered') {
         eventObj.properties.is_covered = "yes";
-      } else if (type === "notcovered") {
+      } else if (type === "not_covered") {
         eventObj.properties.not_covered = "yes";
       } else if (type === "claim") {
         eventObj.properties.claim = "yes";

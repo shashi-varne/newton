@@ -63,7 +63,7 @@ class RenderDiseasesClass extends Component {
       "event_name": 'Group Insurance',
       "properties": {
         "user_action": user_action,
-        "screen_name": '',
+        "screen_name": this.state.diseasesData.key,
       }
     };
 
