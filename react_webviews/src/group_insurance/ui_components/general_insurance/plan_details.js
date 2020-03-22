@@ -393,7 +393,7 @@ class PlanDetailsClass extends Component {
             {props.plus_benefit}
           </div>
         }
-        {!props.card_top_info && this.state.parent.state.recommendedIndex === index &&
+        {!props.card_top_info && this.props.parent.state.product_key !== 'CORONA' && this.state.parent.state.recommendedIndex === index &&
           <div className="recommended">RECOMMENDED</div>
         }
 
