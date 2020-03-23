@@ -23,10 +23,10 @@ class Report extends Component {
   }
 
 
-  navigate = (pathname) => {
+  navigate = (pathname, provider) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams,
+      search: getConfig().searchParams + '&provider=' + provider,
       params: {
         backToState: 'report'
       }
@@ -103,6 +103,7 @@ class Report extends Component {
         cover_amount: policy.sum_assured,
         premium: policy.premium,
         key: 'BHARTIAXA',
+        provider: 'BHARTIAXA',
         id: policy.id
       }
 
@@ -125,7 +126,9 @@ class Report extends Component {
         cover_amount: policy.sum_assured,
         premium: policy.premium,
         key: policy.provider,
-        id: policy.id
+        provider: policy.provider,
+        id: policy.id,
+        transaction_id: policy.transaction_id
       }
 
       let data = this.statusMapper(obj);
@@ -193,7 +196,7 @@ class Report extends Component {
       path = '/group-insurance/common/reportdetails/' + policy.id;
     }
 
-    this.navigate(path);
+    this.navigate(path, policy.provider);
   }
 
   statusMapper(policy) {
@@ -206,7 +209,7 @@ class Report extends Component {
         color: 'green',
         disc: 'Policy Issued'
       },
-      'edelweiss_payment_done' : {
+      'complete' : {
         color: 'green',
         disc: 'PAYMENT DONE'
       },
@@ -261,7 +264,7 @@ class Report extends Component {
         }
         { props.product_key === 'EDELWEISS' &&
           <div className="report-cover">
-            <div className="report-cover-amount"><span>Transaction ID:</span> {props.edelweiss_id}
+            <div className="report-cover-amount"><span>Transaction ID:</span> {props.transaction_id}
             </div>
           </div>
         }
