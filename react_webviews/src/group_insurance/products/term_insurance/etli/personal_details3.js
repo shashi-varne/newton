@@ -8,8 +8,10 @@ import { FormControl } from 'material-ui/Form';
 
 import MobileInputWithoutIcon from '../../../../common/ui/MobileInputWithoutIcon';
 
-import { validateEmail, validateNumber, numberShouldStartWith, 
-     open_browser_web } from 'utils/validators';
+import {
+    validateEmail, validateNumber, numberShouldStartWith,
+    open_browser_web
+} from 'utils/validators';
 
 import etli_logo from 'assets/etli_logo2.svg';
 import { nativeCallback } from 'utils/native_callback';
@@ -50,7 +52,7 @@ class EtliPersonalDetails3 extends Component {
             });
 
             if (res.pfwresponse.status_code === 200) {
-                const { email, mobile_number} = res.pfwresponse.result.insurance_account;
+                const { email, mobile_number } = res.pfwresponse.result.insurance_account;
                 basic_details_data = {
                     email: (this.state.quote_redirect_data.email || email) || '',
                     mobile_no: (this.state.quote_redirect_data.mobile_no || mobile_number) || ''
@@ -83,8 +85,16 @@ class EtliPersonalDetails3 extends Component {
         var value = event.target ? event.target.value : '';
         var basic_details_data = this.state.basic_details_data || {};
 
-        basic_details_data[name] = value;
+        if (name === 'mobile_no') {
+            if (value.length <= 10) {
+                basic_details_data[name] = value;
+                basic_details_data[name + '_error'] = '';
+            }
+        } else {
+            basic_details_data[name] = value;
             basic_details_data[name + '_error'] = '';
+        }
+
 
         this.setState({
             basic_details_data: basic_details_data
@@ -114,15 +124,15 @@ class EtliPersonalDetails3 extends Component {
         }
 
 
-        if (this.state.basic_details_data.email.length < 10 || 
+        if (this.state.basic_details_data.email.length < 10 ||
             !validateEmail(this.state.basic_details_data.email)) {
             basic_details_data['email_error'] = 'Please enter valid email';
-        } 
-        
-        if (this.state.basic_details_data.mobile_no.length !== 10 || !validateNumber(this.state.basic_details_data.mobile_no) || 
-        !numberShouldStartWith(this.state.basic_details_data.mobile_no)) {
+        }
+
+        if (this.state.basic_details_data.mobile_no.length !== 10 || !validateNumber(this.state.basic_details_data.mobile_no) ||
+            !numberShouldStartWith(this.state.basic_details_data.mobile_no)) {
             basic_details_data['mobile_no_error'] = 'Please enter valid mobile no';
-       
+
         }
 
         let canSubmitForm = true;
@@ -169,20 +179,20 @@ class EtliPersonalDetails3 extends Component {
                 };
 
 
-                const res = await Api.post('/api/ins_service/api/insurance/edelweiss' + 
-                '/lead/create', leadCreateBody);
+                const res = await Api.post('/api/ins_service/api/insurance/edelweiss' +
+                    '/lead/create', leadCreateBody);
 
                 if (res.pfwresponse.status_code === 200) {
-                    
+
                     var leadRedirectUrl = res.pfwresponse.result.lead;
                     if (getConfig().app === 'web') {
-                        this.setState({ 
+                        this.setState({
                             show_loader: false,
-                            openModal: false, 
+                            openModal: false,
                             openModalMessage: ''
-                         });
+                        });
 
-                         open_browser_web(leadRedirectUrl, '_blank');
+                        open_browser_web(leadRedirectUrl, '_blank');
                     } else {
 
                         if (getConfig().app === 'ios') {
@@ -207,10 +217,12 @@ class EtliPersonalDetails3 extends Component {
                     }
 
                 } else {
-                    this.setState({ show_loader: false,openModal: false, 
-                        openModalMessage: '' });
-                    
-                    toast(res.pfwresponse.result.error ||  'Something went wrong');
+                    this.setState({
+                        show_loader: false, openModal: false,
+                        openModalMessage: ''
+                    });
+
+                    toast(res.pfwresponse.result.error || 'Something went wrong');
                 }
             } catch (err) {
                 this.setState({
@@ -284,7 +296,7 @@ class EtliPersonalDetails3 extends Component {
                             width="40"
                             label="Mobile number"
                             class="Mobile"
-                            maxLength={10}
+                            maxLength="10"
                             id="number"
                             name="mobile_no"
                             value={this.state.basic_details_data.mobile_no}

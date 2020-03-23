@@ -19,7 +19,13 @@ import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
 import etli_logo from 'assets/etli_logo2.svg';
 import { nativeCallback } from 'utils/native_callback';
 
-const annual_income_options = ['3-5', '5-10', '10-15', '15-20', '20-above'];
+const annual_income_options = [
+    {name:'3-5 lakhs', value: '3-5'},
+    {name: '5-10 lakhs', value: '5-10'},
+    {name: '10-15 lakhs', value: '10-15'},
+    {name: '15-20 lakhs', value: '15-20'},
+    {name: '20-above lakhs', value: '20-above'}
+]
 
 class EtliPersonalDetails2 extends Component {
     constructor(props) {
@@ -214,6 +220,7 @@ class EtliPersonalDetails2 extends Component {
                             helperText={this.state.basic_details_data.annual_income_error}
                             width="40"
                             options={annual_income_options}
+                            dataType="AOB"
                             label="Yearly salary"
                             class="Education"
                             id="annual_income"
