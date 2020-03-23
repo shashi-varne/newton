@@ -7,6 +7,8 @@ import { getConfig } from 'utils/functions';
 import { FormControl } from 'material-ui/Form';
 
 import MobileInputWithoutIcon from '../../../../common/ui/MobileInputWithoutIcon';
+import Modal from 'material-ui/Modal';
+import Typography from 'material-ui/Typography';
 
 import {
     validateEmail, validateNumber, numberShouldStartWith,
@@ -15,6 +17,8 @@ import {
 
 import etli_logo from 'assets/etli_logo2.svg';
 import { nativeCallback } from 'utils/native_callback';
+import loader_fisdom from 'assets/loader_gif_fisdom.gif';
+import loader_myway from 'assets/loader_gif_myway.gif';
 
 class EtliPersonalDetails3 extends Component {
     constructor(props) {
@@ -30,7 +34,8 @@ class EtliPersonalDetails3 extends Component {
                 mobile_no: ''
             },
             provider: 'EDELWEISS',
-            productTitle: 'Edelweiss Tokio Life Zindagi Plus'
+            productTitle: 'Edelweiss Tokio Life Zindagi Plus',
+            loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
         };
     }
 
@@ -163,7 +168,7 @@ class EtliPersonalDetails3 extends Component {
 
 
             try {
-                let openModalMessage = 'Redirecting to ' + this.state.insurance_title + ' portal';
+                let openModalMessage = 'Redirecting to Edelweiss tokio life';
                 this.setState({ openModal: true, openModalMessage: openModalMessage });
 
 
@@ -177,7 +182,6 @@ class EtliPersonalDetails3 extends Component {
                     annual_income: prevData.annual_income,
                     tobacco_choice: prevData.smoking,
                 };
-
 
                 const res = await Api.post('/api/ins_service/api/insurance/edelweiss' +
                     '/lead/create', leadCreateBody);
@@ -260,6 +264,25 @@ class EtliPersonalDetails3 extends Component {
         }
     }
 
+    renderModal = () => {
+        return (
+          <Modal
+            aria-labelledby="simple-modal-title"
+            aria-describedby="simple-modal-description"
+            open={this.state.openModal}
+          >
+            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: '#fff', borderRadius: 4, minWidth: 320, padding: 25, textAlign: 'center' }}>
+              <div style={{ padding: '20px 0 30px' }}>
+                <img src={this.state.loaderMain} alt="" />
+              </div>
+              <Typography variant="subheading" id="simple-modal-description" style={{ color: '#444' }}>
+                {this.state.openModalMessage}
+              </Typography>
+            </div>
+          </Modal>
+        );
+      }
+
     render() {
         return (
             <Container
@@ -302,6 +325,7 @@ class EtliPersonalDetails3 extends Component {
                             onChange={this.handleChange()} />
                     </div>
                 </FormControl>
+                {this.renderModal()}
             </Container>
         );
     }
