@@ -124,6 +124,7 @@ import HomeInsuranceForm from './products/home_insurance/general/form';
 import EtliPersonalDetails1 from './products/term_insurance/etli/personal_details1';
 import EtliPersonalDetails2 from './products/term_insurance/etli/personal_details2';
 import EtliPersonalDetails3 from './products/term_insurance/etli/personal_details3';
+import EtliAuthFailed from './products/term_insurance/etli/auth_failed';
 
 // common
 
@@ -209,6 +210,7 @@ const Insurance = (props) => {
           <Route path={`${url}/term/etli/personal-details1`} component={EtliPersonalDetails1} />
           <Route path={`${url}/term/etli/personal-details2`} component={EtliPersonalDetails2} />
           <Route path={`${url}/term/etli/personal-details3`} component={EtliPersonalDetails3} />
+          <Route path={`${url}/term/etli/auth-failed`} component={EtliAuthFailed} />
        
           {/********** Accident **********/}
           <Route path={`${url}/accident/plan`} component={AccidentPlanDetails} />
