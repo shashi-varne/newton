@@ -27,7 +27,7 @@ class EtliPersonalDetails3 extends Component {
                 email: '',
                 mobile_no: ''
             },
-            provider: 'etli',
+            provider: 'EDELWEISS',
             productTitle: 'Edelweiss Tokio Life Zindagi Plus'
         };
     }

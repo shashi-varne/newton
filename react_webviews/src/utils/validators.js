@@ -1,5 +1,7 @@
 // import { func } from "prop-types";
 import qs from 'qs';
+import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 export function validateEmpty(string) {
   let nameSplit = string.split(" ").filter(e => e);
@@ -453,4 +455,46 @@ export function inrFormatTest(value) {
   let rule = /^[0-9,]/;
 
   return rule.test(value);
+}
+
+export function openPdfCall(data={}) {
+
+  let url = data.url || '';
+  if (!url) {
+      return;
+  }
+
+
+  let current_url = window.location.href;
+
+  if(!data.back_url) {
+    data.back_url = current_url;
+  }
+
+  if (getConfig().Web) {
+      nativeCallback({
+          action: 'open_in_browser',
+          message: {
+              url: url
+          }
+      });
+  } else {
+
+      nativeCallback({
+          action: 'take_control', message: {
+              back_url: data.back_url,
+              show_top_bar: false
+          },
+
+      });
+
+      nativeCallback({
+          action: 'show_top_bar', message: {
+              title: data.header_title, icon: data.icon || 'close'
+          }
+      });
+
+      nativeCallback({ action: 'open_pdf', message: { url: url } });
+  }
+
 }

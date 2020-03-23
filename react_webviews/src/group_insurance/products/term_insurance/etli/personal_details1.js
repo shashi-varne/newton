@@ -12,17 +12,19 @@ import {
 } from './../../../constants';
 
 import {
-    isValidDate, validateAlphabets, IsFutureDate
+    isValidDate, validateAlphabets, IsFutureDate, openPdfCall
 } from 'utils/validators';
 
 import etli_logo from 'assets/etli_logo2.svg';
 import { nativeCallback } from 'utils/native_callback';
 
+import TermsAndConditions from '../../../../common/ui/tnc';
+
 class EtliPersonalDetails1 extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            checked: false,
+            checked: true,
             show_loader: true,
             quote_redirect_data: window.localStorage.getItem('quote_redirect_data') ?
                 JSON.parse(window.localStorage.getItem('quote_redirect_data')) : {},
@@ -33,7 +35,8 @@ class EtliPersonalDetails1 extends Component {
                 dob: '',
                 gender: '',
                 marital_status: ''
-            }
+            },
+            tnc: window.localStorage.getItem('term_ins_tnc')
         };
     }
 
@@ -49,13 +52,12 @@ class EtliPersonalDetails1 extends Component {
             if (res.pfwresponse.status_code === 200) {
                 const { name, dob, gender, marital_status } = res.pfwresponse.result.insurance_account;
                 basic_details_data = {
-                    name: (this.state.quote_redirect_data.name || name )|| '',
+                    name: (this.state.quote_redirect_data.name || name) || '',
                     dob: (this.state.quote_redirect_data.dob || dob) || '',
                     gender: (this.state.quote_redirect_data.gender || gender) || '',
                     marital_status: (this.state.quote_redirect_data.marital_status || marital_status) || ''
                 };
 
-                console.log(basic_details_data);
                 this.setState({
                     basic_details_data: basic_details_data
                 })
@@ -289,6 +291,24 @@ class EtliPersonalDetails1 extends Component {
     };
 
 
+    openInBrowser() {
+
+        this.sendEvents('Terms & Conditions');
+        if (!getConfig().Web) {
+            this.setState({
+                show_loader: true
+            })
+        } 
+
+        let data = {
+            url: this.state.tnc,
+            header_title: 'Terms & Conditions',
+            icon : 'close'
+        };
+
+        openPdfCall(data);
+    }
+
     render() {
         let currentDate = new Date().toISOString().slice(0, 10);
         return (
@@ -364,6 +384,8 @@ class EtliPersonalDetails1 extends Component {
                             onChange={this.handleChangeRadio('marital_status')} />
                     </div>
                 </FormControl>
+
+                <TermsAndConditions parent={this} />
             </Container>
         );
     }

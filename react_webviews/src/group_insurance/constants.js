@@ -466,7 +466,7 @@ export const quotePointsPorivders = {
       content: ''
     }
   },
-  'etli': {
+  'EDELWEISS': {
     basic_benefits: [
       'Complete sum assured payable in case of death',
       'Option to increase your sum assured regularly or at key life stages',

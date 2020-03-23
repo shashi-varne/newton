@@ -139,9 +139,6 @@ class Intro extends Component {
         let result = res.pfwresponse.result;
 
         let quotes = result.providers;
-        quotes.push({
-          quote_provider: 'etli'
-        })
         this.setState({
           quotes: quotes
         });
@@ -178,6 +175,9 @@ class Intro extends Component {
 
   selectQuote(quote, index) {
 
+    let tnc = quote.terms_and_conditions;
+    window.localStorage.setItem('term_ins_tnc', tnc);
+
     this.setState({
       quoteSelected: quote,
       selectedIndexQuote: index,
@@ -192,7 +192,7 @@ class Intro extends Component {
 
     if (quote.quote_provider === 'HDFC') {
       this.navigate('personal-details-intro')
-    } else if (quote.quote_provider === 'etli') {
+    } else if (quote.quote_provider === 'EDELWEISS') {
       this.navigate('etli/personal-details1');
     } else {
       let search = getConfig().searchParams + '&provider=' + quote.quote_provider
