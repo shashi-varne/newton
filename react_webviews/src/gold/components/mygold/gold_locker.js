@@ -535,10 +535,17 @@ class GoldSummary extends Component {
           {this.state.error && this.state.isRegistered && <p className="error">{this.state.errorMessage}</p>}
           {!this.state.isRegistered && <p className="error">Click <b><span onClick={() => this.navigate('gold-register')}>here</span></b> to register yourself for gold account</p>}
         </div>}
-        {this.state.value === 1 && <div>
-          <div className="FlexRow" style={{ justifyContent: 'center', flexWrap: 'wrap' }}>
-            {this.state.gold_products && this.state.gold_products.map(this.renderDeliveryProducts)}
+        {this.state.value === 1 && 
+        
+        <div>
+          {/* corona */}
+          <div style={{margin: '40px 20px 0 20px', color: 'red', fontWeight:500, lineHeight:1.3}}>
+          Due to temporary restrictions in movement and staffing because of the novel coronavirus, 
+          we are unable to process any deliveries until these restrictions are lifted.
           </div>
+          {/* <div className="FlexRow" style={{ justifyContent: 'center', flexWrap: 'wrap' }}>
+            {this.state.gold_products && this.state.gold_products.map(this.renderDeliveryProducts)}
+          </div> */}
         </div>}
         {this.renderResponseDialog()}
       </Container>
