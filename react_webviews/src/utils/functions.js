@@ -177,6 +177,44 @@ const partnersConfigBase = {
       nps: true,
       gold: true
     }
+  },
+  hbl: {
+    logo: "hbl.png",
+    primary_color: "#0066B3",
+    code: "hbl",
+    mobile: "+80-48-093070",
+    email: "hbl@fisdom.com",
+    message: "",
+    banner: "bfdl_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png"
+  },
+  subh: {
+    logo: "subh.svg",
+    primary_color: "#F5821F",
+    secondary_color: "#F5821F",
+    cta_disabled_color: "#ffffff",
+    code: "subh",
+    email: "ask@fisdom.com",
+    mobile: "+91-76191-71846",
+    message: "",
+    banner: "bfdl_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png"
+  },
+  sbm: {
+    logo: "sbm.svg",
+    primary_color: "#1e3769",
+    code: "sbm",
+    mobile: "+80-48-093070",
+    email: "sbm@fisdom.com",
+    message: "",
+    banner: "bfdl_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png"
   }
 };
 

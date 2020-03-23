@@ -41,6 +41,7 @@ class Landing extends Component {
       show_loader: true,
       type: getConfig().productName,
       insuranceProducts: [],
+      partner_code: getConfig().partner_code,
       params: qs.parse(props.history.location.search.slice(1))
     }
 
@@ -126,6 +127,11 @@ class Landing extends Component {
         icon: term_icon
       }
     ];
+
+    if (this.state.partner_code === 'hbl') {
+      let index = insuranceProducts.findIndex(obj => obj.key === "CORONA");
+      insuranceProducts.splice(index, 1);
+    }
 
     let { params } = this.props.location || {};
     let openModuleData = params ? params.openModuleData : {}
