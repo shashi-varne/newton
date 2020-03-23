@@ -246,11 +246,10 @@ class EtliPersonalDetails3 extends Component {
             "event_name": 'term_insurance',
             "properties": {
                 "user_action": user_action,
-                "screen_name": 'basic_detail_v2',
+                "screen_name": 'personal details 3/3',
                 "provider": this.state.provider,
-                'name': this.state.name ? 'yes' : 'no',
-                'email': this.state.email ? 'yes' : 'no',
-                'mobile_number': this.state.mobile_number ? 'yes' : 'no'
+                'email': this.state.basic_details_data.email ? 'yes' : 'no',
+                'mobile_number': this.state.basic_details_data.mobile_no ? 'yes' : 'no'
             }
         };
 

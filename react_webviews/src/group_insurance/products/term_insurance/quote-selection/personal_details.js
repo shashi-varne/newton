@@ -211,7 +211,7 @@ class PersonalDetailsIntro extends Component {
 
   openInBrowser() {
 
-    this.sendEvents('Terms & Conditions');
+    this.sendEvents('tnc_clicked');
     if (!getConfig().Web) {
         this.setState({
             show_loader: true

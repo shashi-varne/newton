@@ -35,7 +35,7 @@ class EtliPersonalDetails2 extends Component {
             show_loader: true,
             quote_redirect_data: window.localStorage.getItem('quote_redirect_data') ?
                 JSON.parse(window.localStorage.getItem('quote_redirect_data')) : {},
-            provider: '',
+            provider: 'EDELWEISS',
             params: qs.parse(this.props.history.location.search.slice(1)),
             type: getConfig().productName,
             loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom,
@@ -167,11 +167,10 @@ class EtliPersonalDetails2 extends Component {
             "event_name": 'term_insurance',
             "properties": {
                 "user_action": user_action,
-                "screen_name": 'basic_detail_v2',
+                "screen_name": 'personal details 2/3',
                 "provider": this.state.provider,
-                'name': this.state.name ? 'yes' : 'no',
-                'email': this.state.email ? 'yes' : 'no',
-                'mobile_number': this.state.mobile_number ? 'yes' : 'no'
+                'yearly_salary': this.state.basic_details_data.annual_income || '',
+                'smoke': this.state.basic_details_data.smoking || ''
             }
         };
 

@@ -28,7 +28,7 @@ class EtliPersonalDetails1 extends Component {
             show_loader: true,
             quote_redirect_data: window.localStorage.getItem('quote_redirect_data') ?
                 JSON.parse(window.localStorage.getItem('quote_redirect_data')) : {},
-            provider: '',
+            provider: 'EDELWEISS',
             type: getConfig().productName,
             basic_details_data: {
                 name: '',
@@ -248,11 +248,12 @@ class EtliPersonalDetails1 extends Component {
             "event_name": 'term_insurance',
             "properties": {
                 "user_action": user_action,
-                "screen_name": 'basic_detail_v2',
+                "screen_name": 'personal details 1/3',
                 "provider": this.state.provider,
-                'name': this.state.name ? 'yes' : 'no',
-                'email': this.state.email ? 'yes' : 'no',
-                'mobile_number': this.state.mobile_number ? 'yes' : 'no'
+                'name': this.state.basic_details_data.name ? 'yes' : 'no',
+                'dob': this.state.basic_details_data.dob ? 'yes' : 'no',
+                'gender': this.state.basic_details_data.gender  || '',
+                'marital_status': this.state.basic_details_data.marital_status || ''
             }
         };
 
@@ -293,7 +294,7 @@ class EtliPersonalDetails1 extends Component {
 
     openInBrowser() {
 
-        this.sendEvents('Terms & Conditions');
+        this.sendEvents('tnc_clicked');
         if (!getConfig().Web) {
             this.setState({
                 show_loader: true
