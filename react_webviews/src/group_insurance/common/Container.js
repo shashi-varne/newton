@@ -96,6 +96,11 @@ class Container extends Component {
 
   historyGoBack = () => {
 
+    if(this.props.forceBackState) {
+      this.navigate(this.props.forceBackState);
+      return;
+    }
+
     let project_child = getConfig().project_child;
     if (manageDialog('general-dialog', 'none', 'enableScroll')) {
       if (this.props.closePopup) {

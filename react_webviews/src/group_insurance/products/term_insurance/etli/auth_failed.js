@@ -58,6 +58,7 @@ class EtliAuthFailedClass extends Component {
         showLoader={this.state.show_loader}
         handleClick={() => this.handleClick()}
         disableBack={true}
+        forceBackState="/group-insurance"
         title="Authorisation Failed"
         classOverRideContainer="payment-failed"
       >
