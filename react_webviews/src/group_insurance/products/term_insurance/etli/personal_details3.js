@@ -243,7 +243,7 @@ class EtliPersonalDetails3 extends Component {
 
     sendEvents(user_action) {
         let eventObj = {
-            "event_name": 'Group Insurance',
+            "event_name": 'term_insurance',
             "properties": {
                 "user_action": user_action,
                 "screen_name": 'basic_detail_v2',
