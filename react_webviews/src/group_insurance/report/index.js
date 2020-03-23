@@ -120,11 +120,11 @@ class Report extends Component {
       let policy = edelweiss_ins[j];
       let obj = {
         status: policy.status,
-        product_name: policy.product_title,
-        product_key: policy.product_name,
+        product_name: 'Term insurance (Edelweiss tokio life zindagi plus)',
+        product_key: policy.provider,
         cover_amount: policy.sum_assured,
         premium: policy.premium,
-        key: 'BHARTIAXA',
+        key: policy.provider,
         id: policy.id
       }
 
@@ -206,6 +206,10 @@ class Report extends Component {
         color: 'green',
         disc: 'Policy Issued'
       },
+      'edelweiss_payment_done' : {
+        color: 'green',
+        disc: 'PAYMENT DONE'
+      },
       'policy_expired' : {
         color: 'red',
         disc: 'Policy Expired'
@@ -219,6 +223,7 @@ class Report extends Component {
         disc: 'Policy Cancelled'
       }
     }
+    
 
     let obj = {}
     if(policy.key === 'TERM_INSURANCE') {
@@ -246,12 +251,20 @@ class Report extends Component {
           <div className="report-color-state-title">{(props.cssMapper.disc)}</div>
         </div>
         <div className="report-ins-name">{props.product_name}</div>
-        <div className="report-cover">
-          <div className="report-cover-amount"><span>Cover amount:</span> ₹{inrFormatDecimalWithoutIcon(props.cover_amount)}
-          {props.product_key === 'HOSPICASH' && <span style={{fontWeight: 400}}>/day</span>}
+        { props.product_key !== 'EDELWEISS' &&
+          <div className="report-cover">
+            <div className="report-cover-amount"><span>Cover amount:</span> ₹{inrFormatDecimalWithoutIcon(props.cover_amount)}
+            {props.product_key === 'HOSPICASH' && <span style={{fontWeight: 400}}>/day</span>}
+            </div>
+            <div className="report-cover-amount"><span>Premium:</span> ₹{inrFormatDecimalWithoutIcon(props.premium)}/yr</div>
           </div>
-          <div className="report-cover-amount"><span>Premium:</span> ₹{inrFormatDecimalWithoutIcon(props.premium)}/yr</div>
-        </div>
+        }
+        { props.product_key === 'EDELWEISS' &&
+          <div className="report-cover">
+            <div className="report-cover-amount"><span>Transaction ID:</span> {props.edelweiss_id}
+            </div>
+          </div>
+        }
       </div>
     )
   }
