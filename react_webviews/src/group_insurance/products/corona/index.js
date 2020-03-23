@@ -199,7 +199,7 @@ class CoronaPlanDetails extends Component {
           "sum_assured": 25000,
           "sum_assured_text": '25,000',
           "quarantined_text": '12,500',
-          'product_tag_line': 'Guaranteed 25,000 sum assured in just ₹459 to fight with coronavirus',
+          'product_tag_line': 'Guaranteed ₹25,000 sum assured in just ₹459 to fight with coronavirus',
           "product_benefits_included": ['positive', 'quarantined', 'exclusions'],
           "things_to_know": things_to_know,
           "waiting_period": waiting_period,
