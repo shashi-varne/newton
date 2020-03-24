@@ -4,6 +4,7 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import {storageService} from 'utils/validators';
+import {getUpdatedBuyData} from '../../constants';
 
 class BuyPriceClass extends Component {
     constructor(props) {
@@ -42,7 +43,9 @@ class BuyPriceClass extends Component {
                 buyData.provider = this.state.provider;
                 buyData.plutus_rate_id = result.buy_info.plutus_rate_id;
                 buyData.timeAvailable = timeAvailable;
+
                 storageService().setObject('buyData', buyData);
+                getUpdatedBuyData(buyData);
 
                 this.props.parent.onload();
                 this.props.parent.updateParent('fetchLivePrice', false);

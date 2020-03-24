@@ -54,7 +54,7 @@ class GoldOnloadAndTimerClass extends Component {
         
         // for testing
         // let timeAvailable = orderData.timeAvailable;
-        // timeAvailable = timeAvailable -50;
+        // timeAvailable = timeAvailable -200;
 
 
         if (timeAvailable <= 0) {
@@ -88,48 +88,8 @@ class GoldOnloadAndTimerClass extends Component {
 
         storageService().setObject(this.state.orderKey, orderData);
 
-    };
 
-
-    startTimer(orderData) {
-        if (orderData) {
-            let intervalId = setInterval(this.countdown, 1000);
-            this.setState({
-                countdownInterval: intervalId,
-                show_loader: false
-            });
-            // this.updateParent('show_loader', false);
-        }
-    }
-
-    updateParent = (key, value) => {
-        this.props.parent.updateParent(key, value);
-    }
-
-    onload() {
-
-        storageService().remove('forceBackState');
-        if(this.props.parent.state.pan_bank_flow) {
-            return;
-        }
-        
-        let orderData = storageService().getObject(this.state.orderKey) || {};
-
-        this.updateParent(this.state.orderKey, orderData);
-
-        if (this.state.orderType === 'buy') {
-            this.updateParent('live_price', orderData.goldBuyInfo ? orderData.goldBuyInfo.plutus_rate : '');
-        }
-
-        if (this.state.orderType === 'sell') {
-            this.updateParent('live_price', orderData.goldSellInfo ? orderData.goldSellInfo.plutus_rate: '');
-        }
-
-        this.updateParent('openRefreshModule', false);
-        this.updateParent('timeAvailable', orderData.timeAvailable || 0);
-
-        this.startTimer(orderData);
-
+        // misc
 
         let priceChangeDialogData = {
             buttonData: {
@@ -148,37 +108,7 @@ class GoldOnloadAndTimerClass extends Component {
             ],
             provider: this.state.provider
         }
-
-
-
-        if (this.state.orderType === 'buy') {
-            if(!orderData.goldBuyInfo) {
-                orderData.goldBuyInfo = {};
-            }
-            this.updateParent('goldBuyInfo', orderData.goldBuyInfo);
-
-            let minimum_buy_price  = orderData.goldBuyInfo.minimum_buy_price || 1000;
-            this.updateParent('minAmount', minimum_buy_price);
-
-
-            let minWeight = calculate_gold_wt_buy(orderData, minimum_buy_price).weight;
-            this.updateParent('minWeight', minWeight);
-        }
-
-        if (this.state.orderType === 'sell') {
-            this.updateParent('goldSellInfo', orderData.goldSellInfo);
-        }
-
-        this.updateParent('timeAvailable', orderData.timeAvailable);
-        this.updateParent(orderData, orderData);
         this.updateParent('priceChangeDialogData', priceChangeDialogData);
-
-        if (this.state.orderData) {
-            let intervalId = setInterval(this.countdown, 1000);
-            this.setState({
-                countdownInterval: intervalId
-            });
-        }
 
         let confirmDialogData = {};
         let bottomButtonData = {};
@@ -236,7 +166,82 @@ class GoldOnloadAndTimerClass extends Component {
         }
 
         this.updateParent('confirmDialogData', confirmDialogData);
-        this.updateParent('bottomButtonData', bottomButtonData)
+        this.updateParent('bottomButtonData', bottomButtonData);
+
+    };
+
+
+    startTimer(orderData) {
+        if (orderData) {
+            let intervalId = setInterval(this.countdown, 1000);
+            this.setState({
+                countdownInterval: intervalId,
+                show_loader: false
+            });
+            // this.updateParent('show_loader', false);
+        }
+    }
+
+    updateParent = (key, value) => {
+        this.props.parent.updateParent(key, value);
+    }
+
+    onload() {
+
+        storageService().remove('forceBackState');
+        if(this.props.parent.state.pan_bank_flow) {
+            return;
+        }
+        
+        let orderData = storageService().getObject(this.state.orderKey) || {};
+
+        this.updateParent(this.state.orderKey, orderData);
+
+        if (this.state.orderType === 'buy') {
+            this.updateParent('live_price', orderData.goldBuyInfo ? orderData.goldBuyInfo.plutus_rate : '');
+        }
+
+        if (this.state.orderType === 'sell') {
+            this.updateParent('live_price', orderData.goldSellInfo ? orderData.goldSellInfo.plutus_rate: '');
+        }
+
+        this.updateParent('openRefreshModule', false);
+        this.updateParent('timeAvailable', orderData.timeAvailable || 0);
+
+        this.startTimer(orderData);
+
+
+
+        if (this.state.orderType === 'buy') {
+            if(!orderData.goldBuyInfo) {
+                orderData.goldBuyInfo = {};
+            }
+            this.updateParent('goldBuyInfo', orderData.goldBuyInfo);
+
+            let minimum_buy_price  = orderData.goldBuyInfo.minimum_buy_price || 1000;
+            this.updateParent('minAmount', minimum_buy_price);
+
+
+            let minWeight = calculate_gold_wt_buy(orderData, minimum_buy_price).weight;
+            this.updateParent('minWeight', minWeight);
+        }
+
+        if (this.state.orderType === 'sell') {
+            this.updateParent('goldSellInfo', orderData.goldSellInfo);
+        }
+
+        this.updateParent('timeAvailable', orderData.timeAvailable);
+        this.updateParent(orderData, orderData);
+        
+
+        if (this.state.orderData) {
+            let intervalId = setInterval(this.countdown, 1000);
+            this.setState({
+                countdownInterval: intervalId
+            });
+        }
+
+       
 
     }
 

@@ -248,7 +248,8 @@ class GoldBuyHome extends Component {
 
   setAmountGms = (event)  => {
     
-    if(!this.state.buyData || !this.state.buyData.plutus_rate_id) {
+    if(!this.state.buyData || !this.state.buyData.plutus_rate_id ||
+      this.state.timeAvailable <= 0) {
       return;
     }
     
@@ -324,9 +325,9 @@ class GoldBuyHome extends Component {
     buyData.amount_selected = amount;
     buyData.weight_selected = weight;
     buyData.inputMode = this.state.isAmount ? 'amount' : 'weight';
+    buyData.isAmount = this.state.isAmount;
     storageService().setObject('buyData', buyData);
-
-    setBuyDataAfterUpdate(inputData);
+    setBuyDataAfterUpdate(inputData, buyData);
 
     this.setState({
       amountError: amountError,

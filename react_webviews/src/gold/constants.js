@@ -122,35 +122,33 @@ export function calculate_gold_amount_sell(sellData, weight) {
     return data;
 }
 
-export function getUpdatedBuyData(new_rate) {
+export function getUpdatedBuyData(buyData) {
 
-    let buyData = storageService().getObject('buyData');
     let amountUpdated, weightUpdated;
     let inputData;
 
-    if (buyData.isAmount) {
-        amountUpdated = buyData.amount;
-        inputData = calculate_gold_wt_buy(buyData, buyData.amount);
+    if (buyData.inputMode === 'amount') {
+        amountUpdated = buyData.amount_selected;
+        inputData = calculate_gold_wt_buy(buyData, buyData.amount_selected);
         weightUpdated = inputData.weight;
 
     } else {
-        weightUpdated = buyData.weight;
-        amountUpdated = this.calculate_gold_amount(new_rate.plutus_rate,
-            new_rate.applicable_tax, buyData.weight);
+        weightUpdated = buyData.weight_selected;
+        inputData = calculate_gold_amount_buy(buyData, buyData.weight_selected);
+        amountUpdated = inputData.amount;
     }
-
 
     buyData.amount_selected = amountUpdated;
     buyData.weight_selected = weightUpdated;
-    setBuyDataAfterUpdate(inputData);
-    storageService().setObject('buyData', buyData)
 
-    return buyData;
-
+    setBuyDataAfterUpdate(inputData, buyData);
 }
 
-export function setBuyDataAfterUpdate(inputData) {
-    let buyData = storageService().getObject('buyData');
+export function setBuyDataAfterUpdate(inputData, buyData) {
+    if(!buyData) {
+        buyData = storageService().getObject('buyData') || {};
+    }
+    
     buyData.gst_amount = inputData.gst_amount;
     buyData.total_amount = inputData.total_amount;
     buyData.base_amount = inputData.base_amount
