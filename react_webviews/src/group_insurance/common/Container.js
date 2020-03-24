@@ -396,12 +396,12 @@ class Container extends Component {
           {/* Loader Block */}
           {this.renderPageLoader()}
 
-          {steps && <div className={`Step ${(this.props.type !== 'fisdom') ? 'blue' : ''}`}>
+          {!this.props.showLoader && steps && <div className={`Step ${(this.props.type !== 'fisdom') ? 'blue' : ''}`}>
             {steps}
           </div>}
 
           {/* Banner Block */}
-          {this.props.banner && <Banner text={this.props.bannerText} />}
+          {!this.props.showLoader && this.props.banner && <Banner text={this.props.bannerText} />}
 
         </div>
 

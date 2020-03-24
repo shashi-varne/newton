@@ -42,6 +42,7 @@ class EtliPersonalDetails1 extends Component {
 
     async componentDidMount() {
 
+        nativeCallback({ action: 'take_control_reset' });
         let basic_details_data = this.state.basic_details_data || {};
         try {
             const res = await Api.get('/api/ins_service/api/insurance/account/summary')
@@ -51,12 +52,14 @@ class EtliPersonalDetails1 extends Component {
 
             if (res.pfwresponse.status_code === 200) {
                 const { name, dob, gender, marital_status } = res.pfwresponse.result.insurance_account;
+              
                 basic_details_data = {
                     name: (this.state.quote_redirect_data.name || name) || '',
                     dob: (this.state.quote_redirect_data.dob || dob) || '',
                     gender: (this.state.quote_redirect_data.gender || gender) || '',
                     marital_status: (this.state.quote_redirect_data.marital_status || marital_status) || ''
                 };
+                basic_details_data['dob'] = basic_details_data['dob'] ? basic_details_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
 
                 this.setState({
                     basic_details_data: basic_details_data
@@ -320,6 +323,7 @@ class EtliPersonalDetails1 extends Component {
                 total={3}
                 current={1}
                 bannerText={this.bannerText()}
+                hide_header={this.state.show_loader}
                 showLoader={this.state.show_loader}
                 handleClick={() => this.handleClickCurrent()}
                 title='Personal details'

@@ -26,6 +26,7 @@ class EtliPersonalDetails3 extends Component {
         this.state = {
             checked: false,
             show_loader: true,
+            openModal:false,
             quote_redirect_data: window.localStorage.getItem('quote_redirect_data') ?
                 JSON.parse(window.localStorage.getItem('quote_redirect_data')) : {},
             type: getConfig().productName,
@@ -40,6 +41,7 @@ class EtliPersonalDetails3 extends Component {
     }
 
     componentWillMount() {
+        nativeCallback({ action: 'take_control_reset' });
         let current_url = window.location.href;
 
         this.setState({
@@ -226,6 +228,11 @@ class EtliPersonalDetails3 extends Component {
                         openModalMessage: ''
                     });
 
+                    let errors = res.pfwresponse.result.error || [];
+                    for(var j =0; j < errors.length; j++) {
+                        toast(errors[j].error || 'Something went wrong');
+                    }
+
                     toast(res.pfwresponse.result.error || 'Something went wrong');
                 }
             } catch (err) {
@@ -290,6 +297,7 @@ class EtliPersonalDetails3 extends Component {
                 count={true}
                 total={3}
                 current={3}
+                hide_header={this.state.show_loader}
                 showLoader={this.state.show_loader}
                 handleClick={() => this.handleClickCurrent()}
                 title='Personal details'
