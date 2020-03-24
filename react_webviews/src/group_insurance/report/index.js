@@ -127,8 +127,8 @@ class Report extends Component {
         premium: policy.premium,
         key: policy.provider,
         provider: policy.provider,
-        id: policy.id,
-        transaction_id: policy.transaction_id
+        id: policy.policy_id,
+        transaction_id: policy.transaction_id,
       }
 
       let data = this.statusMapper(obj);
