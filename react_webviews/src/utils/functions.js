@@ -414,6 +414,7 @@ export const getConfig = () => {
   }
 
   if(checkValidString(redirect_url)) {
+    returnConfig.webAppUrl = decodeURIComponent(redirect_url).split('#')[0]+'#!/';
     redirect_url = encodeURIComponent(redirect_url)
     returnConfig.redirect_url = redirect_url;
     searchParams += `&redirect_url=${redirect_url}`;
