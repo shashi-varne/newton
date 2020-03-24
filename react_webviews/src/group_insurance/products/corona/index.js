@@ -184,17 +184,17 @@ class CoronaPlanDetails extends Component {
         //   "premium": "1799",
         //   "tax_amount": "274"
         // },
-        // {
-        //   "sum_assured": 50000,
-        //   "sum_assured_text": '50,000',
-        //   "quarantined_text": '25,000',
-        //   'product_tag_line': 'Guaranteed 50,000 sum assured in just ₹899 to fight with coronavirus',
-        //   "product_benefits_included": ['positive', 'quarantined', 'exclusions'],
-        //   "things_to_know": things_to_know,
-        //   "waiting_period": waiting_period,
-        //   "premium": "899",
-        //   "tax_amount": "137"
-        // },
+        {
+          "sum_assured": 50000,
+          "sum_assured_text": '50,000',
+          "quarantined_text": '25,000',
+          'product_tag_line': 'Guaranteed ₹50,000 sum assured in just ₹899 to fight with coronavirus',
+          "product_benefits_included": ['positive', 'quarantined', 'exclusions'],
+          "things_to_know": things_to_know,
+          "waiting_period": waiting_period,
+          "premium": "899",
+          "tax_amount": "137"
+        },
         {
           "sum_assured": 25000,
           "sum_assured_text": '25,000',
