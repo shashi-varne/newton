@@ -212,7 +212,7 @@ class ReportDetails extends Component {
             </div>
           }
           {this.state.policyData.provider === 'EDELWEISS' && 
-            <div style={{display: 'flex', alignItems: 'end'}}>
+            <div style={{display: 'flex', alignItems: 'end', margin: '30px 0 0 0'}}>
               <img src={this.state.icn_call} alt="" />
               <div style={{color: '#4A4A4A', fontSize:13, fontWeight: 400, margin: '0 0 0 10px'}}>
                 Edelweiss team will call you to assist in policy issuance.
