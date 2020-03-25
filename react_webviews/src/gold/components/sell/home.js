@@ -356,9 +356,10 @@ class GoldSellHome extends Component {
     sellData.amount_selected = amount;
     sellData.weight_selected = weight;
     sellData.inputMode = this.state.isAmount ? 'amount' : 'weight';
+    sellData.isAmount = this.state.isAmount;
     storageService().setObject('sellData', sellData);
 
-    setSellDataAfterUpdate(inputData);
+    setSellDataAfterUpdate(inputData, sellData);
 
 
     this.setState({

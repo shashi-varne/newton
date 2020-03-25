@@ -122,6 +122,28 @@ export function calculate_gold_amount_sell(sellData, weight) {
     return data;
 }
 
+export function getUpdatedSellData(sellData) {
+
+    let amountUpdated, weightUpdated;
+    let inputData;
+
+    if (sellData.inputMode === 'amount') {
+        amountUpdated = sellData.amount_selected;
+        inputData = calculate_gold_wt_sell(sellData, sellData.amount_selected);
+        weightUpdated = inputData.weight;
+
+    } else {
+        weightUpdated = sellData.weight_selected;
+        inputData = calculate_gold_amount_sell(sellData, sellData.weight_selected);
+        amountUpdated = inputData.amount;
+    }
+
+    sellData.amount_selected = amountUpdated;
+    sellData.weight_selected = weightUpdated;
+
+    setSellDataAfterUpdate(inputData, sellData);
+}
+
 export function getUpdatedBuyData(buyData) {
 
     let amountUpdated, weightUpdated;
@@ -156,8 +178,11 @@ export function setBuyDataAfterUpdate(inputData, buyData) {
     storageService().setObject('buyData', buyData);
 }
 
-export function setSellDataAfterUpdate(inputData) {
-    let sellData = storageService().getObject('sellData');
+export function setSellDataAfterUpdate(inputData, sellData) {
+    if(!sellData) {
+        sellData = storageService().getObject('sellData') || {};
+    }
+
     sellData.gst_amount = inputData.gst_amount;
     sellData.total_amount = inputData.total_amount;
     sellData.base_amount = inputData.base_amount

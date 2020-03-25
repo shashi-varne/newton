@@ -29,9 +29,7 @@ class BuyPriceClass extends Component {
 
             const res = await Api.get('/api/gold/buy/currentprice/' + this.state.provider);
             if (res.pfwresponse.status_code === 200) {
-                this.setState({
-                    show_loader: false
-                })
+                
                 
                 let result = res.pfwresponse.result;
                 let goldBuyInfo = result.buy_info;
@@ -50,18 +48,17 @@ class BuyPriceClass extends Component {
                 this.props.parent.onload();
                 this.props.parent.updateParent('fetchLivePrice', false);
                 this.props.parent.updateParent('show_loader', false);
-                
 
             } else {
                 this.props.parent.onload();
                 this.props.parent.updateParent('fetchLivePrice', false);
                 this.props.parent.updateParent('show_loader', false);
                 this.props.parent.updateParent('price_crashed', true);
-                this.setState({
-                    show_loader: false
-                });
                 toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
             }
+            this.setState({
+                show_loader: false
+            })
 
         } catch (err) {
             console.log(err);

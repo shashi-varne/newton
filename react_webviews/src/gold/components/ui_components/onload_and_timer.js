@@ -35,9 +35,91 @@ class GoldOnloadAndTimerClass extends Component {
         clearInterval(this.state.countdownInterval);
     }
 
+    setMiscData = (orderData) => {
+            // misc
+
+            let priceChangeDialogData = {
+                buttonData: {
+                    leftTitle: 'To ' + this.state.orderType + ' gold worth',
+                    leftSubtitle: inrFormatDecimal2(orderData.amount_selected),
+                    leftArrow: 'down',
+                    provider: this.state.provider
+                },
+                buttonTitle: "REFRESH",
+                content1: [
+                    { 'name': this.state.title + ' price for <b>' + (orderData.weight_selected || 0) + '</b> gms', 'value': inrFormatDecimal2(orderData.base_amount || 0) },
+                    { 'name': 'GST', 'value': inrFormatDecimal2(orderData.gst_amount || 0) }
+                ],
+                content2: [
+                    { 'name': 'Total', 'value': inrFormatDecimal2(orderData.total_amount || 0) }
+                ],
+                provider: this.state.provider
+            }
+            this.updateParent('priceChangeDialogData', priceChangeDialogData);
+    
+            let confirmDialogData = {};
+            let bottomButtonData = {};
+            if (this.state.orderType !== 'delivery') {
+                confirmDialogData = {
+                    buttonData: {
+                        leftTitle: mapper[this.state.orderType].titleCaps + ' gold worth',
+                        leftSubtitle: inrFormatDecimal2(orderData.amount_selected),
+                        leftArrow: 'down',
+                        provider: this.state.provider
+                    },
+                    buttonTitle: "OK",
+                    content1: [
+                        {
+                            'name': this.state.orderType + ' price for <b>' + orderData.weight_selected + '</b> gms', 'value':
+                                inrFormatDecimal2(orderData.base_amount)
+                        },
+                        { 'name': 'GST', 'value': inrFormatDecimal2(orderData.gst_amount) }
+                    ],
+                    content2: [
+                        { 'name': 'Total', 'value': inrFormatDecimal2(orderData.total_amount) }
+                    ]
+                }
+    
+                bottomButtonData = {
+                    leftTitle: mapper[this.state.orderType].titleCaps + ' gold worth',
+                    leftSubtitle: inrFormatDecimal2(orderData.amount_selected),
+                    leftArrow: 'up',
+                    provider: this.state.provider
+                }
+            } else {
+                confirmDialogData = {
+                    buttonData: {
+                      leftTitle: orderData.description,
+                      leftSubtitle: inrFormatDecimal2(orderData.delivery_minting_cost),
+                      leftArrow: 'down',
+                      provider: this.state.provider
+                    },
+                    buttonTitle: "OK",
+                    content1: [
+                      { 'name': 'Making charges', 'value': inrFormatDecimal2(orderData.delivery_minting_cost) },
+                      { 'name': 'Shipping charges', 'value': 'Free' }
+                    ],
+                    content2: [
+                      { 'name': 'Total', 'value': inrFormatDecimal2(orderData.delivery_minting_cost) }
+                    ]
+                }
+    
+                bottomButtonData = {
+                    leftTitle: orderData.description,
+                    leftSubtitle: inrFormatDecimal2(orderData.delivery_minting_cost),
+                    leftArrow: 'up',
+                    provider: this.state.provider
+                }
+            }
+    
+            this.updateParent('confirmDialogData', confirmDialogData);
+            this.updateParent('bottomButtonData', bottomButtonData);
+    }
+
     countdown = () => {
 
         let orderData = storageService().getObject(this.state.orderKey) || {};
+        this.setMiscData(orderData);
 
         // fresh time available
         var currentDate = new Date();
@@ -88,86 +170,6 @@ class GoldOnloadAndTimerClass extends Component {
 
         storageService().setObject(this.state.orderKey, orderData);
 
-
-        // misc
-
-        let priceChangeDialogData = {
-            buttonData: {
-                leftTitle: 'To ' + this.state.orderType + ' gold worth',
-                leftSubtitle: inrFormatDecimal2(orderData.amount_selected),
-                leftArrow: 'down',
-                provider: this.state.provider
-            },
-            buttonTitle: "REFRESH",
-            content1: [
-                { 'name': this.state.title + ' price for <b>' + (orderData.weight_selected || 0) + '</b> gms', 'value': inrFormatDecimal2(orderData.base_amount || 0) },
-                { 'name': 'GST', 'value': inrFormatDecimal2(orderData.gst_amount || 0) }
-            ],
-            content2: [
-                { 'name': 'Total', 'value': inrFormatDecimal2(orderData.total_amount || 0) }
-            ],
-            provider: this.state.provider
-        }
-        this.updateParent('priceChangeDialogData', priceChangeDialogData);
-
-        let confirmDialogData = {};
-        let bottomButtonData = {};
-        if (this.state.orderType !== 'delivery') {
-            confirmDialogData = {
-                buttonData: {
-                    leftTitle: mapper[this.state.orderType].titleCaps + ' gold worth',
-                    leftSubtitle: inrFormatDecimal2(orderData.amount_selected),
-                    leftArrow: 'down',
-                    provider: this.state.provider
-                },
-                buttonTitle: "OK",
-                content1: [
-                    {
-                        'name': this.state.orderType + ' price for <b>' + orderData.weight_selected + '</b> gms', 'value':
-                            inrFormatDecimal2(orderData.base_amount)
-                    },
-                    { 'name': 'GST', 'value': inrFormatDecimal2(orderData.gst_amount) }
-                ],
-                content2: [
-                    { 'name': 'Total', 'value': inrFormatDecimal2(orderData.total_amount) }
-                ]
-            }
-
-            bottomButtonData = {
-                leftTitle: mapper[this.state.orderType].titleCaps + ' gold worth',
-                leftSubtitle: inrFormatDecimal2(orderData.amount_selected),
-                leftArrow: 'up',
-                provider: this.state.provider
-            }
-        } else {
-            confirmDialogData = {
-                buttonData: {
-                  leftTitle: orderData.description,
-                  leftSubtitle: inrFormatDecimal2(orderData.delivery_minting_cost),
-                  leftArrow: 'down',
-                  provider: this.state.provider
-                },
-                buttonTitle: "OK",
-                content1: [
-                  { 'name': 'Making charges', 'value': inrFormatDecimal2(orderData.delivery_minting_cost) },
-                  { 'name': 'Shipping charges', 'value': 'Free' }
-                ],
-                content2: [
-                  { 'name': 'Total', 'value': inrFormatDecimal2(orderData.delivery_minting_cost) }
-                ]
-            }
-
-            bottomButtonData = {
-                leftTitle: orderData.description,
-                leftSubtitle: inrFormatDecimal2(orderData.delivery_minting_cost),
-                leftArrow: 'up',
-                provider: this.state.provider
-            }
-        }
-
-        this.updateParent('confirmDialogData', confirmDialogData);
-        this.updateParent('bottomButtonData', bottomButtonData);
-
     };
 
 
@@ -205,11 +207,8 @@ class GoldOnloadAndTimerClass extends Component {
             this.updateParent('live_price', orderData.goldSellInfo ? orderData.goldSellInfo.plutus_rate: '');
         }
 
-        this.updateParent('openRefreshModule', false);
-        this.updateParent('timeAvailable', orderData.timeAvailable || 0);
-
         this.startTimer(orderData);
-
+        
 
 
         if (this.state.orderType === 'buy') {
@@ -230,9 +229,9 @@ class GoldOnloadAndTimerClass extends Component {
             this.updateParent('goldSellInfo', orderData.goldSellInfo);
         }
 
-        this.updateParent('timeAvailable', orderData.timeAvailable);
         this.updateParent(orderData, orderData);
-        
+        this.updateParent('openRefreshModule', false);
+        this.updateParent('timeAvailable', orderData.timeAvailable || 0);
 
         if (this.state.orderData) {
             let intervalId = setInterval(this.countdown, 1000);
