@@ -35,7 +35,6 @@ class SellPriceClass extends Component {
                 })
                 let result = res.pfwresponse.result;
                 let goldSellInfo = result.sell_info;
-                goldSellInfo.plutus_rate = (goldSellInfo.plutus_rate)*(Math.floor((Math.random() * 10) + 1));
                 var currentDate = new Date();
                 let timeAvailable = ((goldSellInfo.rate_validity - currentDate.getTime()) / 1000 - 330 * 60);
 
