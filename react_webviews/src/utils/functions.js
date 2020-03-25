@@ -434,7 +434,7 @@ export const getConfig = () => {
   }
 
   if (project === 'insurance' || project_child === 'term') {
-    let insurance_v2 = generic_callback === "true" ? true : main_query_params.insurance_v2;;
+    let insurance_v2 = generic_callback === "true" ? true : main_query_params.insurance_v2;
     let { insurance_id } = main_query_params;
     let { isJourney } = main_query_params;
 

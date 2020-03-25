@@ -141,7 +141,7 @@ class PlanSummaryClass extends Component {
         }
 
         if (getConfig().redirect_url) {
-          pgLink += '&redirect_url=' + getConfig().redirect_url;;
+          pgLink += '&redirect_url=' + getConfig().redirect_url;
         }
         this.sendEvents('next');
 
