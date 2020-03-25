@@ -140,6 +140,10 @@ class PlanSummaryClass extends Component {
           pgLink += '&generic_callback=' + getConfig().generic_callback;
         }
 
+        if (getConfig().partner_code) {
+          pgLink += '&partner_code=' + getConfig().partner_code;
+        }
+
         if (getConfig().redirect_url) {
           pgLink += '&redirect_url=' + getConfig().redirect_url;
         }
@@ -149,7 +153,7 @@ class PlanSummaryClass extends Component {
         window.localStorage.setItem('group_insurance_payment_urlsafe', res2.pfwresponse.result.insurance_payment_urlsafe || '');
         window.localStorage.setItem('group_insurance_payment_started', true);
 
-        if (!redirect_url) {
+        if (!getConfig().redirect_url) {
           if (getConfig().app === 'ios') {
             nativeCallback({
               action: 'show_top_bar', message: {
