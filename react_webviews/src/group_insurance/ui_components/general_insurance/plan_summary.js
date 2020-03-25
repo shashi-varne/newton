@@ -139,26 +139,58 @@ class PlanSummaryClass extends Component {
         if (getConfig().generic_callback) {
           pgLink += '&generic_callback=' + getConfig().generic_callback;
         }
+
+        if (getConfig().redirect_url) {
+          pgLink += '&redirect_url=' + getConfig().redirect_url;;
+        }
         this.sendEvents('next');
 
         window.localStorage.setItem('group_insurance_payment_url', pgLink);
         window.localStorage.setItem('group_insurance_payment_urlsafe', res2.pfwresponse.result.insurance_payment_urlsafe || '');
         window.localStorage.setItem('group_insurance_payment_started', true);
 
-        if (getConfig().app === 'ios') {
+        if (!redirect_url) {
+          if (getConfig().app === 'ios') {
+            nativeCallback({
+              action: 'show_top_bar', message: {
+                title: 'Payment'
+              }
+            });
+          }
           nativeCallback({
-            action: 'show_top_bar', message: {
-              title: 'Payment'
+            action: 'take_control', message: {
+              back_text: 'Are you sure you want to exit the payment process?'
             }
           });
-        }
-
-        nativeCallback({
-          action: 'take_control', message: {
-            back_url: nativeRedirectUrl,
-            back_text: 'Are you sure you want to exit the payment process?'
+        } else {
+          let redirectData = {
+            show_toolbar: false,
+            icon: 'back',
+            dialog: {
+              message: 'Are you sure you want to exit the payment process?',
+              action: [{
+                action_name: 'positive',
+                action_text: 'Yes',
+                action_type: 'redirect',
+                redirect_url: nativeRedirectUrl
+              }, {
+                action_name: 'negative',
+                action_text: 'No',
+                action_type: 'cancel',
+                redirect_url: ''
+              }]
+            },
+            data: {
+              type: 'webview'
+            }
+          };
+          if (getConfig().app === 'ios') {
+            redirectData.show_toolbar = true;
           }
-        });
+          nativeCallback({
+            action: 'third_party_redirect', message: redirectData
+          });
+        }
 
         window.location.href = pgLink;
 
