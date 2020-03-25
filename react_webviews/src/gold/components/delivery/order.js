@@ -157,6 +157,8 @@ class DeliveryOrder extends Component {
     if (getConfig().generic_callback) {
       pgLink += '&generic_callback=' + getConfig().generic_callback;
     }
+
+    pgLink = '';
     window.location = pgLink;
   }
 

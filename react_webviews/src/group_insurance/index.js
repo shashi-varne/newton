@@ -95,6 +95,16 @@ import DenguePlanDetails from './products/dengue';
 import DenguePlanPayment from './products/dengue/payment';
 import DenguePaymentCallback from './products/dengue/payment-callback';
 
+/* Corona */
+import CoronaForm from './products/corona/form';
+import CoronaSummary from './products/corona/summary';
+import CoronaFailed from './products/corona/payment-failed';
+import CoronaPaymentSuccess from './products/corona/payment-success';
+import CoronaPlanSuccess from './products/corona/plan-success';
+import CoronaPlanDetails from './products/corona';
+import CoronaPlanPayment from './products/corona/payment';
+import CoronaPaymentCallback from './products/corona/payment-callback';
+
 
 /*******************  Health ******************/
 import HealthInsuranceLanding from './products/health_insurance/landing';
@@ -131,6 +141,10 @@ import EtliAuthFailed from './products/term_insurance/etli/auth_failed';
 import Report from './report';
 import ReportDetails from './ui_components/general_insurance/report_check_details';
 import RenderDiseasesClass from './ui_components/general_insurance/diseases';
+import RenderCoverClass from './ui_components/general_insurance/cover';
+import RenderNotCoverClass from './ui_components/general_insurance/notcover';
+import RenderClaimClass from './ui_components/general_insurance/claim';
+
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -232,6 +246,16 @@ const Insurance = (props) => {
           <Route path={`${url}/dengue/payment/:status`} component={DenguePlanPayment} />
           <Route path={`${url}/dengue/payment-callback`} component={DenguePaymentCallback} />
 
+          {/********** Corona **********/}
+          <Route path={`${url}/corona/plan`} component={CoronaPlanDetails} />
+          <Route path={`${url}/corona/form`} component={CoronaForm} />
+          <Route path={`${url}/corona/summary`} component={CoronaSummary} />
+          <Route path={`${url}/corona/summary-success`} component={CoronaPlanSuccess} />
+          <Route path={`${url}/corona/payment-success`} component={CoronaPaymentSuccess} />
+          <Route path={`${url}/corona/payment-failed`} component={CoronaFailed} />
+          <Route path={`${url}/corona/payment/:status`} component={CoronaPlanPayment} />
+          <Route path={`${url}/corona/payment-callback`} component={CoronaPaymentCallback} />
+
           {/********** Hospicash **********/}
           <Route path={`${url}/hospicash/plan`} component={HospicashPlanDetails} />
           <Route path={`${url}/hospicash/form`} component={HospicashForm} />
@@ -279,6 +303,9 @@ const Insurance = (props) => {
           <Route path={`${url}/common/report`} component={Report} />
           <Route path={`${url}/common/reportdetails/:policy_id`} component={ReportDetails} />
           <Route path={`${url}/common/diseases`} component={RenderDiseasesClass} />
+          <Route path={`${url}/common/cover`} component={RenderCoverClass} />
+          <Route path={`${url}/common/notcover`} component={RenderNotCoverClass} />
+          <Route path={`${url}/common/claim`} component={RenderClaimClass} />
 
 
           <Route component={NotFound} />

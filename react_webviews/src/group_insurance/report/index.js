@@ -86,7 +86,7 @@ class Report extends Component {
       }
 
       let data = this.statusMapper(termReport);
-      termReport.status  = data.status;
+      termReport.status = data.status;
       termReport.cssMapper = data.cssMapper;
 
       reportData.push(termReport)
@@ -101,6 +101,7 @@ class Report extends Component {
         product_name: policy.product_title,
         product_key: policy.product_name,
         cover_amount: policy.sum_assured,
+        product_coverage: policy.insured_details.product_coverage,
         premium: policy.premium,
         key: 'BHARTIAXA',
         provider: 'BHARTIAXA',
@@ -108,7 +109,7 @@ class Report extends Component {
       }
 
       let data = this.statusMapper(obj);
-      obj.status  = data.status;
+      obj.status = data.status;
       obj.cssMapper = data.cssMapper;
 
       reportData.push(obj);
@@ -132,7 +133,7 @@ class Report extends Component {
       }
 
       let data = this.statusMapper(obj);
-      obj.status  = data.status;
+      obj.status = data.status;
       obj.cssMapper = data.cssMapper;
 
       reportData.push(obj);
@@ -201,38 +202,38 @@ class Report extends Component {
 
   statusMapper(policy) {
     let cssMapper = {
-      'init' : {
+      'init': {
         color: 'yellow',
         disc: 'Policy Pending'
       },
-      'policy_issued' : {
+      'policy_issued': {
         color: 'green',
         disc: 'Policy Issued'
       },
-      'complete' : {
+      'complete': {
         color: 'green',
         disc: 'PAYMENT DONE'
       },
-      'policy_expired' : {
+      'policy_expired': {
         color: 'red',
         disc: 'Policy Expired'
       },
-      'rejected' : {
+      'rejected': {
         color: 'red',
         disc: 'Policy Rejected'
       },
-      'cancelled' : {
+      'cancelled': {
         color: 'red',
         disc: 'Policy Cancelled'
       }
     }
-    
+
 
     let obj = {}
-    if(policy.key === 'TERM_INSURANCE') {
-      if(policy.status === 'failed') {
+    if (policy.key === 'TERM_INSURANCE') {
+      if (policy.status === 'failed') {
         obj.status = 'rejected';
-      } else if(policy.status === 'success') {
+      } else if (policy.status === 'success') {
         obj.status = 'policy_issued';
       } else {
         obj.status = 'init';
@@ -248,21 +249,26 @@ class Report extends Component {
 
   renderReportCards(props, index) {
     return (
-      <div onClick={() => this.redirectCards(props)} key={index} style={{cursor:'pointer'}} className="card">
+      <div onClick={() => this.redirectCards(props)} key={index} style={{ cursor: 'pointer' }} className="card">
         <div className={`report-color-state ${(props.cssMapper.color)}`}>
           <div className="circle"></div>
           <div className="report-color-state-title">{(props.cssMapper.disc)}</div>
         </div>
         <div className="report-ins-name">{props.product_name}</div>
-        { props.product_key !== 'EDELWEISS' &&
+        {props.product_key !== 'EDELWEISS' &&
           <div className="report-cover">
             <div className="report-cover-amount"><span>Cover amount:</span> ₹{inrFormatDecimalWithoutIcon(props.cover_amount)}
-            {props.product_key === 'HOSPICASH' && <span style={{fontWeight: 400}}>/day</span>}
+              {props.product_key === 'HOSPICASH' && <span style={{ fontWeight: 400 }}>/day</span>}
             </div>
-            <div className="report-cover-amount"><span>Premium:</span> ₹{inrFormatDecimalWithoutIcon(props.premium)}/yr</div>
+            {props.product_key !== 'CORONA' &&
+              <div className="report-cover-amount"><span>Premium:</span> ₹{inrFormatDecimalWithoutIcon(props.premium)}/yr</div>
+            }
+            {props.product_key === 'CORONA' &&
+              <div className="report-cover-amount"><span>Cover Peroid:</span> {props.product_coverage} year</div>
+            }
           </div>
         }
-        { props.product_key === 'EDELWEISS' &&
+        {props.product_key === 'EDELWEISS' &&
           <div className="report-cover">
             <div className="report-cover-amount"><span>Transaction ID:</span> {props.transaction_id}
             </div>
@@ -275,7 +281,7 @@ class Report extends Component {
   loadMore = async () => {
     try {
 
-      if(this.state.loading_more) {
+      if (this.state.loading_more) {
         return;
       }
       this.setState({
@@ -312,7 +318,7 @@ class Report extends Component {
           }
 
           let data = this.statusMapper(obj);
-          obj.status  = data.status;
+          obj.status = data.status;
           obj.cssMapper = data.cssMapper;
           newReportData.push(obj);
         }
@@ -363,10 +369,10 @@ class Report extends Component {
 
   onScroll = () => {
     if (this.hasReachedBottom()) {
-      if(this.state.nextPage) {
+      if (this.state.nextPage) {
         this.loadMore();
       }
-      
+
     }
   };
 
