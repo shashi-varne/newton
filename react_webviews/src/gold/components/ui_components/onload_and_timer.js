@@ -139,7 +139,7 @@ class GoldOnloadAndTimerClass extends Component {
         // timeAvailable = timeAvailable -200;
 
 
-        if (timeAvailable <= 0) {
+        if (timeAvailable <= 0 || !timeAvailable) {
 
             this.updateParent('openPriceChangedDialog', true);
 

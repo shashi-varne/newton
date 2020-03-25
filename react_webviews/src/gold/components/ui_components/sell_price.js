@@ -17,7 +17,17 @@ class SellPriceClass extends Component {
         }
     }
 
+    resetTimer(sellData) {
+        sellData.goldSellInfo = {};
+        sellData.plutus_rate_id = '';
+        sellData.timeAvailable = 0;
+
+        return sellData;
+    }
+
     async componentDidMount() {
+
+        let sellData = storageService().getObject('sellData') || {};
 
         try {
 
@@ -28,7 +38,6 @@ class SellPriceClass extends Component {
             }
 
             this.props.parent.updateParent('price_crashed', false);
-
             const res = await Api.get('/api/gold/sell/currentprice/' + this.state.provider);
             if (res.pfwresponse.status_code === 200) {
 
@@ -39,14 +48,12 @@ class SellPriceClass extends Component {
                 let goldSellInfo = result.sell_info;
                 var currentDate = new Date();
                 let timeAvailable = ((goldSellInfo.rate_validity - currentDate.getTime()) / 1000 - 330 * 60);
-
-                let sellData = storageService().getObject('sellData') || {};
+                
                 sellData.goldSellInfo = result.sell_info;
                 sellData.provider = this.state.provider;
                 sellData.plutus_rate_id = result.sell_info.plutus_rate_id;
                 sellData.timeAvailable = timeAvailable;
-                storageService().setObject('sellData', sellData);
-
+                
                 // getUpdatedSellData(sellData);
 
                 this.props.parent.onload();
@@ -54,6 +61,8 @@ class SellPriceClass extends Component {
                 this.props.parent.updateParent('show_loader', false);
                 
             } else {
+                sellData = this.resetTimer(sellData);
+
                 this.props.parent.onload();
                 this.props.parent.updateParent('fetchLivePrice', false);
                 this.props.parent.updateParent('show_loader', false);
@@ -64,13 +73,18 @@ class SellPriceClass extends Component {
                 toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
             }
 
+            
+
         } catch (err) {
+            sellData = this.resetTimer(sellData);
             console.log(err);
             this.setState({
                 show_loader: false
             });
             toast('Something went wrong');
         }
+
+        storageService().setObject('sellData', sellData);
     }
 
     render() {

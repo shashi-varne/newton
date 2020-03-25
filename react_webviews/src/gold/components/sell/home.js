@@ -294,7 +294,8 @@ class GoldSellHome extends Component {
   setAmountGms = (event) => {
 
     if(this.state.base_error || !this.state.sellData || 
-      !this.state.sellData.plutus_rate_id) {
+      !this.state.sellData.plutus_rate_id || 
+      this.state.timeAvailable <= 0) {
       return;
     }
     let amountError = false;

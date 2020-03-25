@@ -17,8 +17,16 @@ class BuyPriceClass extends Component {
         }
     }
 
+    resetTimer(buyData) {
+        buyData.goldBuyInfo = {};
+        buyData.plutus_rate_id = '';
+        buyData.timeAvailable = 0;
+
+        return buyData;
+    }
     async componentDidMount() {
 
+        let buyData = storageService().getObject('buyData') || {};
         try {
 
             if(!this.props.parent.state.fetchLivePrice) {
@@ -38,13 +46,12 @@ class BuyPriceClass extends Component {
                 var currentDate = new Date();
                 let timeAvailable = ((goldBuyInfo.rate_validity - currentDate.getTime()) / 1000 - 330 * 60);
 
-                let buyData = storageService().getObject('buyData') || {};
+                
                 buyData.goldBuyInfo = result.buy_info;
                 buyData.provider = this.state.provider;
                 buyData.plutus_rate_id = result.buy_info.plutus_rate_id;
                 buyData.timeAvailable = timeAvailable;
 
-                storageService().setObject('buyData', buyData);
                 // getUpdatedBuyData(buyData);
 
                 this.props.parent.onload();
@@ -52,6 +59,8 @@ class BuyPriceClass extends Component {
                 this.props.parent.updateParent('show_loader', false);
 
             } else {
+
+                buyData = this.resetTimer(buyData);
                 this.props.parent.onload();
                 this.props.parent.updateParent('fetchLivePrice', false);
                 this.props.parent.updateParent('show_loader', false);
@@ -63,12 +72,15 @@ class BuyPriceClass extends Component {
             })
 
         } catch (err) {
+            buyData = this.resetTimer(buyData);
             console.log(err);
             this.setState({
                 show_loader: false
             });
             toast('Something went wrong');
         }
+
+        storageService().setObject('buyData', buyData);
     }
 
     render() {
