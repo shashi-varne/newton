@@ -198,6 +198,14 @@
   color: #a2a2a2;
    font-size: 14px;
 }
+.bottom-info {
+  background: #f4effe;
+  padding: 10px;
+  text-align: center;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  color: #6f6f6f;
+}
 .payment-success-heading {
   display: flex;
    align-items: center;
@@ -222,19 +230,37 @@
    background: #eaeaea;
    width: 100%;
 }
+.cover-details-item {
+  display: flex;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+.cover-details-icon {
+  min-width: 70px;
+  margin-right: 15px;
+}
+.cover-details-header {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+.cover-details-text {
+  color: #6f6f6f;
+  font-size: 14px;
+  line-height: 22px;
+}
 .plan-details-item {
   display: flex;
-   align-items: center;
-   padding-top: 15px;
-   padding-bottom: 15px;
+  align-items: center;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 .plan-details-icon {
   margin-right: 15px;
 }
 .plan-details-text {
   color: #160d2e;
-   font-size: 14px;
-   line-height: 22px;
+  font-size: 14px;
+  line-height: 22px;
 }
 .plan-diseases-text {
   background: #f4f3f6;

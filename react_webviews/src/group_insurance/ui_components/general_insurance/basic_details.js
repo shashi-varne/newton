@@ -425,7 +425,7 @@ class BasicDetailsForm extends Component {
       basic_details_data['dob_error'] = 'Future date is not allowed';
     } else if (this.props.parent.state.product_key === 'PERSONAL_ACCIDENT' && (basic_details_data.cover_amount === 500000 || basic_details_data.cover_amount === 1000000) && (this.state.age > 50 || this.state.age < 18)) {
       basic_details_data['dob_error'] = 'Valid age is between 18 and 50';
-    } else if (this.props.parent.state.product_key !== 'DENGUE' && (this.state.age > 65 || this.state.age < 18)) {
+    } else if (this.props.parent.state.product_key !== 'DENGUE' && (this.state.age >= 65 || this.state.age < 18)) {
         basic_details_data['dob_error'] = 'Valid age is between 18 and 65';
     } else if (this.props.parent.state.product_key === 'DENGUE' && (this.state.age > 50 || this.state.age < 18)) {
       basic_details_data['dob_error'] = 'Valid age is between 18 and 50';
@@ -707,6 +707,9 @@ class BasicDetailsForm extends Component {
             </div>
             {this.renderNominee()}
           </div>
+          {this.props.parent.state.product_key === 'CORONA' && 
+            <div className="bottom-info">World Health Organisation has declared coronavirus infection as pandemic. Stay safe!</div>
+          }
         </div>
       </Container>
     );

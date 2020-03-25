@@ -30,10 +30,10 @@ class PlanSummaryClass extends Component {
 
   componentWillMount() {
 
-    if(this.state.group_insurance_payment_started) {
+    if (this.state.group_insurance_payment_started) {
       window.localStorage.setItem('group_insurance_payment_started', '');
     }
-    
+
     let instant_icon = this.state.type !== 'fisdom' ? instant_myway : instant_fisdom;
     let product_title = insuranceProductTitleMapper[this.props.parent ? this.props.parent.state.product_key : ''];
     nativeCallback({ action: 'take_control_reset' });
@@ -48,9 +48,9 @@ class PlanSummaryClass extends Component {
 
   async componentDidMount() {
 
-    if(this.state.group_insurance_payment_started) {
+    if (this.state.group_insurance_payment_started) {
       this.navigate('payment-callback');
-      return; 
+      return;
     }
 
     try {
@@ -120,8 +120,8 @@ class PlanSummaryClass extends Component {
 
       if (res2.pfwresponse.status_code === 200) {
 
-        let current_url =  window.location.origin + '/group-insurance/' + 
-        insuranceStateMapper[this.props.parent.state.product_key] + '/summary' + getConfig().searchParams
+        let current_url = window.location.origin + '/group-insurance/' +
+          insuranceStateMapper[this.props.parent.state.product_key] + '/summary' + getConfig().searchParams
 
         let nativeRedirectUrl = current_url;
 
@@ -152,7 +152,7 @@ class PlanSummaryClass extends Component {
             }
           });
         }
-        
+
         nativeCallback({
           action: 'take_control', message: {
             back_url: nativeRedirectUrl,
@@ -214,9 +214,14 @@ class PlanSummaryClass extends Component {
         </div>
         <div className="plan-summary-mid">
           <div className="plan-summary-mid1">
-            <div className="plan-summary-mid11">Cover amount</div>
+            {this.props.parent.state.product_key !== 'CORONA' &&
+              <div className="plan-summary-mid11">Cover amount</div>
+            }
+            {this.props.parent.state.product_key === 'CORONA' &&
+              <div className="plan-summary-mid11">Sum assured</div>
+            }
             <div className="plan-summary-mid12">{numDifferentiation(String(this.state.summaryData.cover_amount || 0))}
-            {this.props.parent.state.product_key === 'HOSPICASH' && <span>/day</span>}
+              {this.props.parent.state.product_key === 'HOSPICASH' && <span>/day</span>}
             </div>
           </div>
           <div className="plan-summary-mid1">
@@ -224,7 +229,7 @@ class PlanSummaryClass extends Component {
             <div className="plan-summary-mid12">{this.state.summaryData.product_coverage} year</div>
           </div>
           <div className="plan-summary-mid1 plan-summary-mid1-bg">
-            <div className="plan-summary-mid11">Policy start date</div>
+            <div className="plan-summary-mid11">Start date</div>
             <div className="plan-summary-mid12">{this.state.summaryData.dt_policy_start}</div>
           </div>
           <div className="plan-summary-mid1">
@@ -239,7 +244,7 @@ class PlanSummaryClass extends Component {
             <div className="plan-summary-premium-list2">₹{this.state.summaryData.base_premium}</div>
           </div>
           <div className="plan-summary-premium-list">
-            <div className="plan-summary-premium-list1">GST</div>
+            <div className="plan-summary-premium-list1">GST & taxes</div>
             <div className="plan-summary-premium-list2">₹{this.state.summaryData.tax_amount}</div>
           </div>
           <div className="divider"></div>
@@ -248,10 +253,12 @@ class PlanSummaryClass extends Component {
             <div className="plan-summary-premium-list2 plan-summary-premium-amount">₹ {this.state.summaryData.premium}</div>
           </div>
         </div>
-        <div style={{display: 'flex',justifyContent: 'center',margin: '10px 0 0 0'}}>
-        <div style={{ marginTop: '10px', fontSize: '14px', lineHeight: '24px', color: '#4a4a4a',
-        display: 'flex' }}>
-            <img style={{margin: '0px 5px 0 0'}} src={this.state.instant_icon} alt="" />
+        <div style={{ display: 'flex', justifyContent: 'center', margin: '10px 0 0 0' }}>
+          <div style={{
+            marginTop: '10px', fontSize: '14px', lineHeight: '24px', color: '#4a4a4a',
+            display: 'flex'
+          }}>
+            <img style={{ margin: '0px 5px 0 0' }} src={this.state.instant_icon} alt="" />
             Instant policy issuance
             </div>
         </div>

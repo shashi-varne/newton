@@ -505,7 +505,8 @@ export const insuranceStateMapper = {
   'PERSONAL_ACCIDENT': 'accident',
   'HOSPICASH': 'hospicash',
   'term_insurance': 'term',
-  'DENGUE': 'dengue'
+  'DENGUE': 'dengue',
+  'CORONA': 'corona'
 }
 
 export const insuranceProductTitleMapper = {
@@ -514,7 +515,8 @@ export const insuranceProductTitleMapper = {
   'PERSONAL_ACCIDENT': 'Personal accident insurance',
   'HOSPICASH': 'Hospital daily cash',
   'term_insurance': 'Term Insurance',
-  'DENGUE': 'Dengue insurance'
+  'DENGUE': 'Dengue insurance',
+  'CORONA': 'Coronavirus insurance',
 }
 
 export function getBhartiaxaStatusToState(policy) {
