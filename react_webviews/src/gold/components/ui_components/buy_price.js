@@ -4,6 +4,8 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import {storageService} from 'utils/validators';
+
+// eslint-disable-next-line
 import {getUpdatedBuyData} from '../../constants';
 
 class BuyPriceClass extends Component {
@@ -43,7 +45,7 @@ class BuyPriceClass extends Component {
                 buyData.timeAvailable = timeAvailable;
 
                 storageService().setObject('buyData', buyData);
-                getUpdatedBuyData(buyData);
+                // getUpdatedBuyData(buyData);
 
                 this.props.parent.onload();
                 this.props.parent.updateParent('fetchLivePrice', false);
