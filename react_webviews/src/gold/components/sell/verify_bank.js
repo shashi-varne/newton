@@ -226,9 +226,14 @@ class SellVerifyBank extends Component {
                     bank_id: plutus_bank_info_record.bank_id
                 })
             } else {
+                let verification_status = 'failed';
+                this.getStatusMapper(verification_status);
                 this.setState({
-                    openVerifyDialog: false
-                });
+                    verification_status: verification_status,
+                    openVerifyDialog: false,
+                    openStatusDialog: true
+                })
+
                 toast(res.pfwresponse.result.error || res.pfwresponse.result.message);
             }
         } catch (err) {
