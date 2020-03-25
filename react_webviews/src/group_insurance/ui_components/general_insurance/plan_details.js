@@ -48,8 +48,8 @@ const coverAmountMapper = {
   },
   'CORONA': {
     // 100000: 0,
-    // 50000: 1,
-    25000: 0,
+    50000: 0,
+    25000: 1,
   },
   'HEALTH_SURAKSHA': {
     7500000: 0,
@@ -393,7 +393,7 @@ class PlanDetailsClass extends Component {
             {props.plus_benefit}
           </div>
         }
-        {!props.card_top_info && this.props.parent.state.product_key !== 'CORONA' && this.state.parent.state.recommendedIndex === index &&
+        {!props.card_top_info && this.state.parent.state.recommendedIndex === index &&
           <div className="recommended">RECOMMENDED</div>
         }
 
