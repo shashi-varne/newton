@@ -189,7 +189,9 @@ class EtliPersonalDetails1 extends Component {
 
         if (!validateAlphabets(basic_details_data.name)) {
             basic_details_data['name_error'] = 'Name can contain only alphabets';
-        }
+        } else if (basic_details_data.name.split(" ").filter(e => e).length < 2) {
+            basic_details_data['name_error'] = 'Enter valid full name'
+        } 
 
         if (new Date(basic_details_data.dob) > new Date() || !isValidDate(basic_details_data.dob)) {
             basic_details_data['dob_error'] = 'Please enter valid date';
