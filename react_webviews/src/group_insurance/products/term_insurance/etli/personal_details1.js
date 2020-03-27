@@ -12,7 +12,8 @@ import {
 } from './../../../constants';
 
 import {
-    isValidDate, validateAlphabets, IsFutureDate, openPdfCall
+    isValidDate, validateAlphabets, IsFutureDate, openPdfCall, 
+    calculateAge, validateLengthDynamic
 } from 'utils/validators';
 
 import etli_logo from 'assets/etli_logo2.svg';
@@ -61,6 +62,11 @@ class EtliPersonalDetails1 extends Component {
                 };
                 basic_details_data['dob'] = basic_details_data['dob'] ? basic_details_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
 
+                // from some other place we will get unmarried/divorce which are not accepted here
+                if(insuranceMaritalStatusEtli.indexOf((basic_details_data.marital_status).toUpperCase()) == -1) {
+                    basic_details_data.marital_status = '';   
+                }
+
                 this.setState({
                     basic_details_data: basic_details_data
                 })
@@ -92,13 +98,7 @@ class EtliPersonalDetails1 extends Component {
             this.setState({
                 [name]: event.target.checked
             })
-            this.handleNomineeScroll(event.target.checked);
-        } else if (name === 'mobile_no') {
-            if (value.length <= 10) {
-                basic_details_data[name] = value;
-                basic_details_data[name + '_error'] = '';
-            }
-        } else if (name === 'dob') {
+        }else if (name === 'dob') {
             let errorDate = '';
             if (value.length > 10) {
                 return;
@@ -186,18 +186,19 @@ class EtliPersonalDetails1 extends Component {
             }
         }
 
-
         if (!validateAlphabets(basic_details_data.name)) {
             basic_details_data['name_error'] = 'Name can contain only alphabets';
         } else if (basic_details_data.name.split(" ").filter(e => e).length < 2) {
             basic_details_data['name_error'] = 'Enter valid full name'
+        } else if (!validateLengthDynamic(basic_details_data.name, 50)) {
+            basic_details_data['name_error'] = 'Maximum length of name is 50'
         } 
 
         if (new Date(basic_details_data.dob) > new Date() || !isValidDate(basic_details_data.dob)) {
             basic_details_data['dob_error'] = 'Please enter valid date';
         } else if (IsFutureDate(basic_details_data.dob)) {
             basic_details_data['dob_error'] = 'Future date is not allowed';
-        } else if (this.state.age > 65 || this.state.age < 18) {
+        } else if (calculateAge(basic_details_data.dob) > 65 || calculateAge(basic_details_data.dob) < 18) {
             basic_details_data['dob_error'] = 'Valid age is between 18 and 65';
         }
 
