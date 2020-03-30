@@ -4,8 +4,6 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import {storageService} from 'utils/validators';
-
-// eslint-disable-next-line
 import {getUpdatedSellData} from '../../constants';
 
 class SellPriceClass extends Component {
@@ -54,7 +52,8 @@ class SellPriceClass extends Component {
                 sellData.plutus_rate_id = result.sell_info.plutus_rate_id;
                 sellData.timeAvailable = timeAvailable;
                 
-                // getUpdatedSellData(sellData);
+                storageService().setObject('sellData', sellData);
+                getUpdatedSellData(sellData);
 
                 this.props.parent.onload();
                 this.props.parent.updateParent('fetchLivePrice', false);
