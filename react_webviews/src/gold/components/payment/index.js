@@ -505,7 +505,7 @@ class Payment extends Component {
                         }
 
                         <div style={{ margin: '30px 0 30px 0' }} className="highlight-text highlight-color-info">
-                          <div  style={{textAlign: 'right', fontSize:10, color: getConfig().primary}}>24K 99.99%</div>
+                          <div  style={{textAlign: 'right', fontSize:10, color: getConfig().primary}}>{this.state.providerData.karat}</div>
                           <div className="highlight-text1">
                             <img className="highlight-text11" style={{width: 34}} 
                             src={this.state.orderData.media.images[0]} alt="info" />

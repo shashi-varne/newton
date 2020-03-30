@@ -43,7 +43,7 @@ class GoldProviderFilterClass extends Component {
                 </div>
                 <div className="tile2">
                     <div className="tile2-left">
-                        24K | 99.99% pure
+                        {this.state.providerInfo.subtitle}
                     </div>
                     {this.props.parent.state.orderType !== 'buy' && 
                      <div className="tile2-right">
