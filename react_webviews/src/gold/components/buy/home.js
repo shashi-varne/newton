@@ -509,14 +509,14 @@ class GoldBuyHome extends Component {
             <div className="gold-buy-info-images">
               <div className="tile">
                 <img className="img"
-                 src={ require(`assets/${this.state.productName}/ic_purity.svg`)} alt="Gold" />
+                 src={ require(`assets/${this.state.productName}/ic_benefit_gold.svg`)} alt="Gold" />
                 <div className="title">
                   Affordability
                 </div>
               </div>
               <div className="tile">
                 <img className="img"
-                 src={ require(`assets/${this.state.productName}/ic_benefit_gold.svg`)} alt="Gold" />
+                 src={ require(`assets/${this.state.productName}/ic_secure_vault.svg`)} alt="Gold" />
                 <div className="title">
                 Easy sell or conversion
                 </div>

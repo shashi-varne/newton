@@ -214,9 +214,12 @@ class GoldLocker extends Component {
 
   chooseTabs(provider) {
 
-    let selected_provider_info = this.state[provider + '_info'];
     this.setState({
       provider: provider,
+    })
+
+    let selected_provider_info = this.state[provider + '_info'];
+    this.setState({
       selected_provider_info: selected_provider_info,
       next_page: selected_provider_info.report ? selected_provider_info.report.next_page : '',
       loading_more: false,
