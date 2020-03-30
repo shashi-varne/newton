@@ -19,7 +19,7 @@ class BuyPriceClass extends Component {
         buyData.goldBuyInfo = {};
         buyData.plutus_rate_id = '';
         buyData.timeAvailable = 0;
-
+        storageService().setObject('buyData', buyData);
         return buyData;
     }
     async componentDidMount() {
@@ -59,7 +59,7 @@ class BuyPriceClass extends Component {
 
             } else {
 
-                buyData = this.resetTimer(buyData);
+               this.resetTimer(buyData);
                 this.props.parent.onload();
                 this.props.parent.updateParent('fetchLivePrice', false);
                 this.props.parent.updateParent('show_loader', false);
@@ -71,7 +71,7 @@ class BuyPriceClass extends Component {
             })
 
         } catch (err) {
-            buyData = this.resetTimer(buyData);
+           this.resetTimer(buyData);
             console.log(err);
             this.setState({
                 show_loader: false
@@ -79,7 +79,6 @@ class BuyPriceClass extends Component {
             toast('Something went wrong');
         }
 
-        storageService().setObject('buyData', buyData);
     }
 
     render() {

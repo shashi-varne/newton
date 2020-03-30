@@ -20,6 +20,7 @@ class SellPriceClass extends Component {
         sellData.plutus_rate_id = '';
         sellData.timeAvailable = 0;
 
+        storageService().setObject('sellData', sellData);
         return sellData;
     }
 
@@ -51,7 +52,7 @@ class SellPriceClass extends Component {
                 sellData.provider = this.state.provider;
                 sellData.plutus_rate_id = result.sell_info.plutus_rate_id;
                 sellData.timeAvailable = timeAvailable;
-                
+
                 storageService().setObject('sellData', sellData);
                 getUpdatedSellData(sellData);
 
@@ -60,7 +61,7 @@ class SellPriceClass extends Component {
                 this.props.parent.updateParent('show_loader', false);
                 
             } else {
-                sellData = this.resetTimer(sellData);
+                this.resetTimer(sellData);
 
                 this.props.parent.onload();
                 this.props.parent.updateParent('fetchLivePrice', false);
@@ -75,15 +76,13 @@ class SellPriceClass extends Component {
             
 
         } catch (err) {
-            sellData = this.resetTimer(sellData);
+            this.resetTimer(sellData);
             console.log(err);
             this.setState({
                 show_loader: false
             });
             toast('Something went wrong');
         }
-
-        storageService().setObject('sellData', sellData);
     }
 
     render() {
