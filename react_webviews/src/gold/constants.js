@@ -627,9 +627,10 @@ export function getOrderStatusPayment(order) {
 export function validateAmountWeight(value, isAmount) {
     let rule;
     if(isAmount) {
-        rule = /^[ A-Za-z0-9,]/;
+        // rule = /^[0-9,]/;
+        rule = /^\d*(\.\d+)?$/;
     } else {
-        rule = /^[a-zA-Z0-9.]*$/;
+        rule = /^[0-9.]*$/;
     }
     
     return rule.test(value);

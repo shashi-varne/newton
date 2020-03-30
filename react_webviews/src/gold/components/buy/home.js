@@ -269,7 +269,6 @@ class GoldBuyHome extends Component {
       return;
     }
 
-
     eventValue = eventValue.toString();
 
     if(eventName === 'weight') {
