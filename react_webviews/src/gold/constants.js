@@ -195,8 +195,8 @@ export const default_provider = 'mmtc';
 export const gold_providers = {
     'mmtc': {
         key: 'mmtc',
-        title: 'MMTC',
-        subtitle: '24 Karat | 99.9% pure',
+        title: 'MMTC-PAMP',
+        subtitle: '24 Karat | 99.99% pure',
         logo: 'logo_mmtc.svg',
         karat: '24K 99.99%'
     },
@@ -212,8 +212,8 @@ export const gold_providers = {
 export const gold_providers_array = [
     {
         key: 'mmtc',
-        title: 'MMTC',
-        subtitle: '24 Karat | 99.9% pure',
+        title: 'MMTC-PAMP',
+        subtitle: '24 Karat | 99.99% pure',
         logo: 'logo_mmtc.svg'
     },
     {

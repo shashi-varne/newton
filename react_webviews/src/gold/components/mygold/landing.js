@@ -431,7 +431,7 @@ class GoldSummary extends Component {
                   </Button>
               </div>
               <div className="bottom-content">
-                Buy-sell anytime | 24K 99.9% pure | 100% secure
+                Buy-sell anytime | 24K 99.99% pure | 100% secure
               </div>
             </div>
         </div>
