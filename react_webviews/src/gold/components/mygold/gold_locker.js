@@ -363,7 +363,7 @@ class GoldLocker extends Component {
               className={`gold-locker-tab ${this.state.provider === 'mmtc' ? 'selected' : ''}`}>
               <div className="block1">
                 <div className="title">
-                  MMTC
+                  {this.state.mmtc_info_local.title}
               </div>
                 <div className="block2">
                   {this.state.mmtc_info.gold_balance} gms
@@ -382,7 +382,7 @@ class GoldLocker extends Component {
               className={`gold-locker-tab ${this.state.provider === 'safegold' ? 'selected' : ''}`}>
               <div className="block1">
                 <div className="title">
-                  Safegold
+                {this.state.safegold_info_local.title}
                 </div>
 
                 <div className="block2">
