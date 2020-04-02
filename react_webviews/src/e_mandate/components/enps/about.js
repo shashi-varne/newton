@@ -20,6 +20,7 @@ import ic_e_fisdom from 'assets/ic_esign_done_fisdom.svg';
 
 
 import { nativeCallback } from 'utils/native_callback';
+import {open_browser_web} from  'utils/validators';
 
 const aboutQuestions = [
   {
@@ -181,7 +182,13 @@ class About extends Component {
         action: 'third_party_redirect', message: redirectData
       });
     }
-    window.location.href = pgLink;
+
+    // for web, we will open in new tab
+    if(getConfig().Web) {
+      open_browser_web(pgLink, '_blank');
+    } else {
+      window.location.href = pgLink;
+    }
 
   }
 
