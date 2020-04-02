@@ -175,7 +175,7 @@ class SellVerifyBank extends Component {
                         openStatusDialog: true,
                         openVerifyDialog: false
                     })
-                    toast(res.pfwresponse.result.error || res.pfwresponse.result.message);
+                    // toast(res.pfwresponse.result.error || res.pfwresponse.result.message);
                 }
             } catch (err) {
                 this.setState({
@@ -234,7 +234,7 @@ class SellVerifyBank extends Component {
                     openStatusDialog: true
                 })
 
-                toast(res.pfwresponse.result.error || res.pfwresponse.result.message);
+                // toast(res.pfwresponse.result.error || res.pfwresponse.result.message);
             }
         } catch (err) {
             this.setState({

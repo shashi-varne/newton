@@ -164,8 +164,11 @@ class GoldPanDataClass extends Component {
     }
 
     handleChange = (field) => (event) => {
+
+        let value = event.target.value;
+        value = value.toUpperCase();
         this.setState({
-            [event.target.name]: event.target.value,
+            [event.target.name]: value,
             [event.target.name + '_error']: ''
         });
     }
