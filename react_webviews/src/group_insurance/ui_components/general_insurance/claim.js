@@ -61,8 +61,8 @@ class RenderDiseasesClass extends Component {
             <div style={{marginTop: '22px', marginBottom: '22px',  color: '#000000'}}>Follow these simple steps to ensure a faster, speedier and easier process:</div>
             <div style={{marginBottom: '22px',  color: '#000000', fontWeight: 'bold'}}>Claim notification</div>
             <div>1. Notify us through any of our 24x7  convenient intimation modes:</div>
-            <div>a) Call us on a toll-free number <a href="tel:1800-103-2292">(1800-103-2292)</a></div>
-            <div>b) Drop us an email <a href="mailto: claims@bhartiaxa.com">(claims@bhartiaxa.com)</a> to register your claim</div>
+            <div>a) Call us on a toll-free number <b>(1800-103-2292)</b></div>
+            <div>b) Drop us an email <b>(claims@bhartiaxa.com)</b> to register your claim</div>
             <div style={{marginTop: '15px'}}>2. Once your claim is registered, you will receive a <b>confirmation SMS</b> on your registered number within an hour. This will have your <b>Bharti-AXA General Insurance (BAGI) claim number</b> along with the next steps towards your claim settlement process</div>
             <div style={{marginTop: '15px'}}>3. In less than 24 hours of your claim registration, a BAGI representative will call you explaining the complete process and intimating you about the various documents that you will need to furnish for claim processing</div>
             <div style={{marginTop: '22px', marginBottom: '22px', color: '#000000', fontWeight: 'bold'}}>Claim form</div>
