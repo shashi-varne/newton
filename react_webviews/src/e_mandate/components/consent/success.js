@@ -30,9 +30,10 @@ class MandateSuccess extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'consent',
+      "event_name": 'session_less_campaigns',
       "properties": {
         "user_action": user_action,
+        "mandate_type": 'biller',
         "screen_name": 'auth_success'
       }
     };
