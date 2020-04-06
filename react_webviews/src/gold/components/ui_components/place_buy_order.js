@@ -4,6 +4,7 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import {getConfig} from 'utils/functions';
 import { storageService } from 'utils/validators';
+import { nativeCallback } from 'utils/native_callback';
 
 class PlaceBuyOrderClass extends Component {
     constructor(props) {
@@ -29,7 +30,22 @@ class PlaceBuyOrderClass extends Component {
             pgLink += '&generic_callback=' + getConfig().generic_callback;
         }
 
-        window.location = pgLink;
+        if (getConfig().app === 'ios') {
+            nativeCallback({
+                action: 'show_top_bar', message: {
+                title: 'Payment'
+                }
+            });
+        }
+  
+        nativeCallback({
+            action: 'take_control', message: {
+                back_url: nativeRedirectUrl,
+                back_text: 'Are you sure you want to exit the payment process?'
+            }
+        });
+  
+        window.location.href = pgLink;
     }
 
     async componentDidMount() {
