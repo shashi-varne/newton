@@ -471,8 +471,9 @@ class GoldBuyHome extends Component {
 
                         <label className="gold-placeholder-right">= {inrFormatDecimal2(this.state.amount || '')}</label>
                       </div>
-                      <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>
-                        Min {this.state.minWeight} gm
+                      <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>
+                        {/* Min {this.state.minWeight} gm */}
+                        Min {inrFormatDecimal2(this.state.minAmount)}
                       </div>
                   </div>
                 }
