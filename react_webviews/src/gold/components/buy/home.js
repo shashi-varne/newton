@@ -200,17 +200,17 @@ class GoldBuyHome extends Component {
       return;
     }
 
-    if (this.state.isAmount && parseFloat(this.state.amount) >= 0 && 
+    if (parseFloat(this.state.amount) <= 0 ||
         parseFloat(this.state.amount) < this.state.minAmount) {
       toast('Minimum amount should be Rs. ' + this.state.minAmount);
       return;
     }
 
-    if (!this.state.isAmount && this.state.weight >= 0 && 
-    this.state.weight < this.state.minWeight) {
-      toast('Minimum weight should be Rs. ' + this.state.minWeight + ' gms');
-      return;
-    }
+    // if (!this.state.isAmount && this.state.weight >= 0 && 
+    // this.state.weight < this.state.minWeight) {
+    //   toast('Minimum weight should be Rs. ' + this.state.minWeight + ' gms');
+    //   return;
+    // }
 
 
     let totalAmount = parseFloat(this.state.amount) + parseFloat(this.state.provider_info.gold_balance || 0);
