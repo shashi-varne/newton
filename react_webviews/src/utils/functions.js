@@ -414,6 +414,7 @@ export const getConfig = () => {
   }
 
   if(checkValidString(redirect_url)) {
+    returnConfig.webAppUrl = decodeURIComponent(redirect_url).split('#')[0]+'#!/';
     redirect_url = encodeURIComponent(redirect_url)
     returnConfig.redirect_url = redirect_url;
     searchParams += `&redirect_url=${redirect_url}`;
@@ -433,7 +434,7 @@ export const getConfig = () => {
   }
 
   if (project === 'insurance' || project_child === 'term') {
-    let insurance_v2 = generic_callback === "true" ? true : main_query_params.insurance_v2;;
+    let insurance_v2 = generic_callback === "true" ? true : main_query_params.insurance_v2;
     let { insurance_id } = main_query_params;
     let { isJourney } = main_query_params;
 

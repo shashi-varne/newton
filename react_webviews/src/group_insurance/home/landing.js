@@ -49,7 +49,6 @@ class Landing extends Component {
   }
 
   componentWillMount() {
-
     window.localStorage.setItem('group_insurance_payment_started', '');
     window.localStorage.setItem('group_insurance_payment_urlsafe', '');
     window.localStorage.setItem('group_insurance_plan_final_data', '');
@@ -135,6 +134,11 @@ class Landing extends Component {
 
     let { params } = this.props.location || {};
     let openModuleData = params ? params.openModuleData : {}
+
+    let redirect_url =  decodeURIComponent(getConfig().redirect_url);
+    if(!openModuleData.sub_module && redirect_url && redirect_url.includes("exit_web")) {
+      window.location.href = redirect_url;
+    }
 
     this.setState({
       openModuleData: openModuleData || {},

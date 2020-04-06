@@ -139,6 +139,14 @@ class PlanSummaryClass extends Component {
         if (getConfig().generic_callback) {
           pgLink += '&generic_callback=' + getConfig().generic_callback;
         }
+
+        if (getConfig().partner_code) {
+          pgLink += '&partner_code=' + getConfig().partner_code;
+        }
+
+        if (getConfig().redirect_url) {
+          pgLink += '&redirect_url=' + getConfig().redirect_url;
+        }
         this.sendEvents('next');
 
         window.localStorage.setItem('group_insurance_payment_url', pgLink);
@@ -152,7 +160,6 @@ class PlanSummaryClass extends Component {
             }
           });
         }
-
         nativeCallback({
           action: 'take_control', message: {
             back_url: nativeRedirectUrl,
