@@ -16,10 +16,10 @@ class DeliveryIntro extends Component {
     this.state = {
       show_loader: false,
       provider: this.props.match.params.provider,
-      productName: getConfig().productName
+      productName: getConfig().productName,
+      deliveryDisabled: true
     }
   }
-
 
   navigate = (pathname) => {
     this.props.history.push({
@@ -57,7 +57,11 @@ class DeliveryIntro extends Component {
     );
   }
 
-  handleClick =() => {
+  handleClick = () => {
+    if(this.state.deliveryDisabled) {
+      return;
+    }
+
     this.sendEvents('next');
     this.navigate('delivery-products');
   }
@@ -70,6 +74,7 @@ class DeliveryIntro extends Component {
         handleClick={this.handleClick}
         buttonTitle="SELECT GOLD COIN"
         events={this.sendEvents('just_set_events')}
+        disable={this.state.deliveryDisabled}
       >
 
         <div className="common-top-page-subtitle">
@@ -88,6 +93,11 @@ class DeliveryIntro extends Component {
             {stepsContentMapper.map(this.renderInfoSteps)}
           </div>
         </div>
+       {this.state.deliveryDisabled && 
+        <div style={{margin: '40px 0px 0px 0px', color: 'red', fontWeight:500, lineHeight:1.3}}>
+          Due to temporary restrictions in movement and staffing because of the novel coronavirus, 
+          we are unable to process any deliveries until these restrictions are lifted.
+          </div>}
       </Container>
     );
   }
