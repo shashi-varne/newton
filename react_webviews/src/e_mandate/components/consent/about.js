@@ -55,7 +55,8 @@ class About extends Component {
       pc_urlsafe: getConfig().pc_urlsafe,
       biller_bank: {},
       sip_total_amount: '',
-      sip_dates: ''
+      sip_dates: '',
+      fetchError: ''
     }
 
     this.renderQuestions = this.renderQuestions.bind(this);
@@ -79,9 +80,6 @@ class About extends Component {
   async componentDidMount() {
     try {
       const res = await Api.get('/api/mandate/auto/debit/biller/data/' + this.state.pc_urlsafe);
-      this.setState({
-        show_loader: false
-      })
       if (res.pfwresponse.result && !res.pfwresponse.result.error) {
         let biller_bank = res.pfwresponse.result.biller_bank || {};
         let sip_total_amount = res.pfwresponse.result.total_sip_amount || '';
@@ -89,14 +87,17 @@ class About extends Component {
         this.setState({
           biller_bank: biller_bank,
           sip_total_amount: sip_total_amount,
-          sip_dates: sip_dates
+          sip_dates: sip_dates,
+          show_loader: false
         });
 
       }
       else {
-        let fetchError = res.pfwresponse.result.error || res.pfwresponse.result.message ||
-          'Something went wrong';
-        toast(fetchError, 'error');
+        let fetchError = res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong';
+        this.setState({
+          fetchError: fetchError,
+          show_loader: false
+        })
       }
 
 
@@ -189,67 +190,90 @@ class About extends Component {
   }
 
   render() {
-    return (
-      <Container
-        showLoader={this.state.show_loader}
-        handleClick={this.handleClick}
-        edit={this.props.edit}
-        disableBack={true}
-        buttonTitle="Request OTP"
-        events={this.sendEvents('just_set_events')}
-      >
-        <div style={{ color: '#0A1C32', fontWeight: 500, fontSize: 20, margin: '0 0 10px 0' }}>
-          Activate easySIP
+    if (this.state.fetchError) {
+      return (
+        <Container
+          showLoader={this.state.show_loader}
+          disableBack={true}
+          noFooter={true}
+          events={this.sendEvents('just_set_events')}
+        >
+          <div style={{ color: '#0A1C32', fontWeight: 500, fontSize: 20, margin: '0 0 10px 0' }}>
+            Activate easySIP
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <img width={'100%'} src={this.state.top_icon} alt="Mandate" />
+          </div>
+          <div style={{
+            color: '#767e86', margin: '10px 0px 10px 0px',
+            fontSize: 16
+          }}>
+            {this.state.fetchError}
+          </div>
+        </Container>
+      )
+    } else {
+      return (
+        <Container
+          showLoader={this.state.show_loader}
+          handleClick={this.handleClick}
+          edit={this.props.edit}
+          disableBack={true}
+          buttonTitle="Request OTP"
+          events={this.sendEvents('just_set_events')}
+        >
+          <div style={{ color: '#0A1C32', fontWeight: 500, fontSize: 20, margin: '0 0 10px 0' }}>
+            Activate easySIP
         </div>
-        <div style={{ textAlign: 'center' }}>
-          <img width={'100%'} src={this.state.top_icon} alt="Mandate" />
+          <div style={{ textAlign: 'center' }}>
+            <img width={'100%'} src={this.state.top_icon} alt="Mandate" />
+          </div>
+          <div style={{
+            color: '#767e86', margin: '10px 0px 10px 0px',
+            fontSize: 16
+          }}>
+            easySIP with <b>OTP consent</b> makes your monthly SIP payments simpler. It's a one time authorization process to fund your monthly SIP.
         </div>
-        <div style={{
-          color: '#767e86', margin: '10px 0px 10px 0px',
-          fontSize: 16
-        }}>
-          easySIP with <b>OTP consent</b> makes your monthly SIP payments simpler. It's a one time authorization process to fund your monthly SIP.
-        </div>
-        {!this.state.sip_total_amount && !this.state.sip_dates &&
-          <div style={{ marginTop: '15px' }} className="highlight-text highlight-color-info">
-            <div className="highlight-text1">
-              <img className="highlight-text11" src={this.state.info_icon} alt="info" />
-              <div className="highlight-text12">
-                Activate easySIP for
+          {!this.state.sip_total_amount && !this.state.sip_dates &&
+            <div style={{ marginTop: '15px' }} className="highlight-text highlight-color-info">
+              <div className="highlight-text1">
+                <img className="highlight-text11" src={this.state.info_icon} alt="info" />
+                <div className="highlight-text12">
+                  Activate easySIP for
                 </div>
+              </div>
+              <div className="highlight-text2">
+                Bank A/C: {this.state.biller_bank.bank_short_name} - {this.state.biller_bank.obscured_account_number}
+              </div>
             </div>
-            <div className="highlight-text2">
-              Bank A/C: {this.state.biller_bank.bank_short_name} - {this.state.biller_bank.obscured_account_number}
-            </div>
+          }
+          <div style={{ marginTop: '40px' }}>
+            <div style={{ color: '#160d2e', fontSize: '16px', fontWeight: '500', marginBottom: '10px' }}>Steps to activate easySIP</div>
+
+            {this.state.emandate.map(this.renderSteps)}
           </div>
-        }
-        <div style={{ marginTop: '40px' }}>
-          <div style={{ color: '#160d2e', fontSize: '16px', fontWeight: '500', marginBottom: '10px' }}>Steps to activate easySIP</div>
-
-          {this.state.emandate.map(this.renderSteps)}
-        </div>
-        {this.state.sip_total_amount && this.state.sip_dates &&
-          <div style={{ margin: '15px -15px' }}>
-            <div className="sip-details-header">
-              SIP details
+          {this.state.sip_total_amount && this.state.sip_dates &&
+            <div style={{ margin: '15px -15px' }}>
+              <div className="sip-details-header">
+                SIP details
             </div>
-            <div>
-              <div className="sip-details"><div className="left"><b>Total SIP amount</b> </div><div className="right"><b>₹{this.state.sip_total_amount}</b></div></div>
-              <div className="sip-details"><div className="left">SIP date </div><div className="right">{this.state.sip_dates} of every month</div></div>
-              <div className="sip-details"><div className="left">Mutual fund distributor </div><div className="right">Finwizard Technology pvt limited</div></div>
-              <div className="sip-details"><div className="left">Bank </div><div className="right">{this.state.biller_bank.bank_short_name} bank</div></div>
-              <div className="sip-details"><div className="left">A/C number </div><div className="right">{this.state.biller_bank.obscured_account_number}</div></div>
+              <div>
+                <div className="sip-details"><div className="left"><b>Total SIP amount</b> </div><div className="right"><b>₹{this.state.sip_total_amount}</b></div></div>
+                <div className="sip-details"><div className="left">SIP date </div><div className="right">{this.state.sip_dates} of every month</div></div>
+                <div className="sip-details"><div className="left">Mutual fund distributor </div><div className="right">Finwizard Technology pvt limited</div></div>
+                <div className="sip-details"><div className="left">Bank </div><div className="right">{this.state.biller_bank.bank_short_name} bank</div></div>
+                <div className="sip-details"><div className="left">A/C number </div><div className="right">{this.state.biller_bank.obscured_account_number}</div></div>
+              </div>
             </div>
-          </div>
-        }
-        <div style={{ color: '#0A1C32', fontWeight: 500, fontSize: 20, margin: '0 0 10px 0' }}>
-          Frequently asked questions
+          }
+          <div style={{ color: '#0A1C32', fontWeight: 500, fontSize: 20, margin: '0 0 10px 0' }}>
+            Frequently asked questions
         </div>
-        {aboutQuestions.map(this.renderQuestions)}
+          {aboutQuestions.map(this.renderQuestions)}
 
-      </Container>
+        </Container>
 
-    );
+      )}
   }
 }
 
