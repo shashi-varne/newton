@@ -142,9 +142,9 @@ class AddEditAddressDelivery extends Component {
     this.sendEvents('next');
     let canSubmitForm = true;
 
-    if (this.state.name.split(" ").filter(e => e).length < 2) {
+    if (!this.state.name) {
       this.setState({
-        name_error: 'Enter valid full name'
+        name_error: 'Enter valid name'
       });
       canSubmitForm = false;
     } 
