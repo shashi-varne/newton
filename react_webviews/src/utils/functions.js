@@ -258,6 +258,7 @@ function getPartnerConfig(partner_code) {
       primary: '#4f2da7',
       secondary: '#35cb5d',
       default: '#4a4a4a',
+      highlight_color: '#f6f2ff',
       label: '#a2a2a2',
       type: 'fisdom',
       // inputFocusedColor: '#4f2da7', 
@@ -275,6 +276,7 @@ function getPartnerConfig(partner_code) {
       primary: '#3792fc',
       secondary: '#35cb5d',
       default: '#4a4a4a',
+      highlight_color: '#F0F7FF',
       label: '#a2a2a2',
       type: 'myway',
       // inputFocusedColor: '#3792fc',
@@ -293,7 +295,8 @@ function getPartnerConfig(partner_code) {
   const ismyway = search.indexOf("api.mywaywealth.com") >= 0;
   const isStaging = search.indexOf("staging") >= 0;
   let productType = 'fisdom';
-  if (ismyway || partner_code === 'bfdlmobile') {
+  if (ismyway || partner_code === 'bfdlmobile' || 
+  partner_code === 'myway') {
     productType = 'myway';
   }
 
@@ -340,6 +343,7 @@ function getPartnerConfig(partner_code) {
 
   let html = document.querySelector(`html`);
   html.style.setProperty(`--secondary`, `${config_to_return.secondary}`);
+  html.style.setProperty(`--highlight`, `${config_to_return.highlight_color}`);
   html.style.setProperty(`--primary`, `${config_to_return.primary}`);
   html.style.setProperty(`--default`, `${config_to_return.default}`);
   html.style.setProperty(`--label`, `${config_to_return.label}`);
