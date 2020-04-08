@@ -166,7 +166,7 @@ const partnersConfigBase = {
     cta_disabled_background: "#F1D5C9",
     cta_disabled_color: "#ffffff",
     code: "fpg",
-    mobile: "+80-48-093070",
+    mobile: "1800-212-5997",
     email: "care.futuremoney@fisdom.com",
     message: "",
     banner: "bfdl_banner.png",
