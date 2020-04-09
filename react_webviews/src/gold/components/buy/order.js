@@ -96,7 +96,23 @@ class BuyOrder extends Component {
     if (getConfig().generic_callback) {
       pgLink += '&generic_callback=' + getConfig().generic_callback;
     }
-    window.location = pgLink;
+
+    if (getConfig().app === 'ios') {
+      nativeCallback({
+        action: 'show_top_bar', message: {
+          title: 'Payment'
+        }
+      });
+    }
+
+    nativeCallback({
+      action: 'take_control', message: {
+        back_url: nativeRedirectUrl,
+        back_text: 'Are you sure you want to exit the payment process?'
+      }
+    });
+
+    window.location.href = pgLink;
   }
 
   countdown = () => {
