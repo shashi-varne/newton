@@ -85,7 +85,7 @@ class GoldLocker extends Component {
       let result1 = {};
       let result2 = {};
       let result3 = {};
-      const res = await Api.get('/api/gold/user/account/' + provider);
+      const res = await Api.get('/api/gold/user/account/' + provider + '?bank_info_required=true');
       if (res.pfwresponse.status_code === 200) {
         result1 = res.pfwresponse.result;
       } else {
