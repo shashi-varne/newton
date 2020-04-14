@@ -127,7 +127,7 @@ class Landing extends Component {
       }
     ];
 
-    if (this.state.partner_code === 'hbl') {
+    if (this.state.partner_code === 'hbl' || (this.state.type === 'fisdom' && getConfig().app !== 'web')) {
       let index = insuranceProducts.findIndex(obj => obj.key === "CORONA");
       insuranceProducts.splice(index, 1);
     }

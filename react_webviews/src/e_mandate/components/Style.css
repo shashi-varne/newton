@@ -62,6 +62,30 @@
   font-size: 14px;
   margin: 4px 0 0 20px;
 }
+.sip-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+}
+.sip-details:nth-child(odd) {
+  background-color: #faf7ff;
+}
+.sip-details-header {
+  padding: 15px;
+  color:#0A1C32;
+  font-weight: 500;
+  font-size: 20px;
+}
+.sip-details .left {
+  width: 33%;
+  text-align: left;
+  color: #767e86;
+}
+.sip-details .right {
+  width: 33%;
+  text-align: right;
+}
 .display-flex {
   display: flex;
   align-items: center;
