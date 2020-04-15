@@ -129,18 +129,20 @@ class GoldSellHome extends Component {
       if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result || {};
         let isRegistered = isUserRegistered(result);
+        let provider_info = result.gold_user_info.provider_info || {};
         this.setState({
-          provider_info: result.gold_user_info.provider_info || {},
+          provider_info: provider_info,
           user_info: result.gold_user_info.user_info || {},
           isRegistered: isRegistered
         });
 
-        if(!isRegistered) {
+        if(!isRegistered || !provider_info.gold_balance) {
           let err = 'You haven’t invested in gold yet, buy now!';
           this.setState({
             base_error: err,
             amountError: err,
-            weightError: err
+            weightError: err,
+            zeroInvestment: true
           })
         }
       } else {
@@ -442,7 +444,8 @@ class GoldSellHome extends Component {
                           helperText={this.state.base_error}
                           name="amount"
                           id="amount"
-                          disabled={!this.state.openOnloadModal || !this.state.isRegistered}
+                          disabled={!this.state.openOnloadModal || !this.state.isRegistered || 
+                          this.state.zeroInvestment}
                           onChange={(event) => this.setAmountGms(event)}
                           onKeyPress={this.handleKeyChange('amount')}
                           value={formatAmountInr(this.state.amount || '')}
@@ -450,7 +453,7 @@ class GoldSellHome extends Component {
 
                         <label className="gold-placeholder-right">= {this.state.weight} gms</label>
                       </div>
-                      {this.state.isRegistered &&  
+                      {this.state.isRegistered && !this.state.zeroInvestment && 
                       <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>
                       {this.state.maxAmount >= 1 && <span> Min ₹1.00 - </span>}
                       {/* {this.state.sellWeightDiffrence && <span>*</span>} */}
@@ -470,7 +473,8 @@ class GoldSellHome extends Component {
                           id="weight"
                           error={this.state.base_error ? true: false}
                           helperText={this.state.base_error}
-                          disabled={!this.state.openOnloadModal || !this.state.isRegistered}
+                          disabled={!this.state.openOnloadModal || !this.state.isRegistered ||
+                            this.state.zeroInvestment}
                           onChange={(event) => this.setAmountGms(event)}
                           onKeyPress={this.handleKeyChange('weight')}
                           value={formatGms(this.state.weight || '')}
@@ -479,7 +483,7 @@ class GoldSellHome extends Component {
                         <label className="gold-placeholder-right">= {inrFormatDecimal2(this.state.amount || '')}</label>
                       </div>
 
-                      {this.state.isRegistered && <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>
+                      {this.state.isRegistered && !this.state.zeroInvestment && <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>
                       {/* {this.state.sellWeightDiffrence && <span>*</span>} */}
                       Max {this.state.maxWeight} gm
                       </div>}
@@ -490,7 +494,8 @@ class GoldSellHome extends Component {
               </FormControl>
 
               <div>
-                  <Button style={{height: 50}} fullWidth={true} variant="raised" disabled={!this.state.isRegistered}
+                  <Button style={{height: 50}} fullWidth={true} variant="raised" disabled={!this.state.isRegistered || this.state.zeroInvestment || 
+                  !this.state.maxWeight}
                       size="large" onClick={this.handleClick} color="secondary">
                     PROCEED
                   </Button>
