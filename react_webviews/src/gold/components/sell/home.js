@@ -125,7 +125,7 @@ class GoldSellHome extends Component {
 
     try {
 
-      const res = await Api.get('/api/gold/user/account/' + this.state.provider);
+      const res = await Api.get('/api/gold/user/account/' + this.state.provider  + '?bank_info_required=true');
       if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result || {};
         let isRegistered = isUserRegistered(result);
