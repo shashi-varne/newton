@@ -125,24 +125,19 @@ class GoldSellHome extends Component {
 
     try {
 
-      const res = await Api.get('/api/gold/user/account/' + this.state.provider);
+      let provider_info, isRegistered;
+      const res = await Api.get('/api/gold/user/account/' + this.state.provider  + '?bank_info_required=true');
       if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result || {};
-        let isRegistered = isUserRegistered(result);
+        isRegistered = isUserRegistered(result);
+        provider_info = result.gold_user_info.provider_info || {};
         this.setState({
-          provider_info: result.gold_user_info.provider_info || {},
+          provider_info: provider_info,
           user_info: result.gold_user_info.user_info || {},
           isRegistered: isRegistered
         });
 
-        if(!isRegistered) {
-          let err = 'You haven’t invested in gold yet, buy now!';
-          this.setState({
-            base_error: err,
-            amountError: err,
-            weightError: err
-          })
-        }
+        
       } else {
         this.setState({
           error: true,
@@ -152,13 +147,14 @@ class GoldSellHome extends Component {
         
       }
 
+      let maxWeight;
       const res3 = await Api.get('/api/gold/user/sell/balance/' + this.state.provider);
 
       if (res3.pfwresponse.status_code === 200) {
 
         let result = res3.pfwresponse.result;
         
-        let maxWeight = parseFloat(result.sellable_gold_balance || 0).toFixed(4);
+        maxWeight = parseFloat(result.sellable_gold_balance || 0).toFixed(4);
         this.setState({
           sellable_gold_balance: result.sellable_gold_balance,
           maxWeight: maxWeight
@@ -171,6 +167,20 @@ class GoldSellHome extends Component {
           errorMessage: res3.pfwresponse.result.error || res3.pfwresponse.result.message ||
             'Something went wrong'
         });
+      }
+
+      if(!isRegistered || !provider_info.gold_balance || !maxWeight) {
+        let err = 'You haven’t invested in gold yet, buy now!';
+        if (provider_info.gold_balance && !maxWeight) {
+          err = 'You can sell gold 24 hours after purchase';
+        }
+
+        this.setState({
+          base_error: err,
+          amountError: err,
+          weightError: err,
+          zeroInvestment: true
+        })
       }
     
     } catch (err) {
@@ -442,7 +452,8 @@ class GoldSellHome extends Component {
                           helperText={this.state.base_error}
                           name="amount"
                           id="amount"
-                          disabled={!this.state.openOnloadModal || !this.state.isRegistered}
+                          disabled={!this.state.openOnloadModal || !this.state.isRegistered || 
+                          this.state.zeroInvestment}
                           onChange={(event) => this.setAmountGms(event)}
                           onKeyPress={this.handleKeyChange('amount')}
                           value={formatAmountInr(this.state.amount || '')}
@@ -450,11 +461,11 @@ class GoldSellHome extends Component {
 
                         <label className="gold-placeholder-right">= {this.state.weight} gms</label>
                       </div>
-                      {this.state.isRegistered &&  
+                      {this.state.isRegistered && !this.state.zeroInvestment && 
                       <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}>
                       {this.state.maxAmount >= 1 && <span> Min ₹1.00 - </span>}
                       {/* {this.state.sellWeightDiffrence && <span>*</span>} */}
-                      <span> Max ₹ {this.state.maxAmount}</span>
+                      <span> Max limit: ₹ {this.state.maxAmount}</span>
                       </div>}
                   </div>
                 }
@@ -470,7 +481,8 @@ class GoldSellHome extends Component {
                           id="weight"
                           error={this.state.base_error ? true: false}
                           helperText={this.state.base_error}
-                          disabled={!this.state.openOnloadModal || !this.state.isRegistered}
+                          disabled={!this.state.openOnloadModal || !this.state.isRegistered ||
+                            this.state.zeroInvestment}
                           onChange={(event) => this.setAmountGms(event)}
                           onKeyPress={this.handleKeyChange('weight')}
                           value={formatGms(this.state.weight || '')}
@@ -479,9 +491,9 @@ class GoldSellHome extends Component {
                         <label className="gold-placeholder-right">= {inrFormatDecimal2(this.state.amount || '')}</label>
                       </div>
 
-                      {this.state.isRegistered && <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>
+                      {this.state.isRegistered && !this.state.zeroInvestment && <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>
                       {/* {this.state.sellWeightDiffrence && <span>*</span>} */}
-                      Max {this.state.maxWeight} gm
+                      Max limit: {this.state.maxWeight} gm
                       </div>}
                   </div>
                 }
@@ -490,7 +502,8 @@ class GoldSellHome extends Component {
               </FormControl>
 
               <div>
-                  <Button style={{height: 50}} fullWidth={true} variant="raised" disabled={!this.state.isRegistered}
+                  <Button style={{height: 50}} fullWidth={true} variant="raised" disabled={!this.state.isRegistered || this.state.zeroInvestment || 
+                  !this.state.maxWeight}
                       size="large" onClick={this.handleClick} color="secondary">
                     PROCEED
                   </Button>
