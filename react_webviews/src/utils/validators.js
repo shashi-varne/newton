@@ -573,6 +573,9 @@ export function formatDateAmPm(date) {
     return '';
   }
 
+  // fix for safari
+  date = date.replace(/ /g,"T");
+
   let date2 = new Date(date);
 
   let dom = date2.getDate();
