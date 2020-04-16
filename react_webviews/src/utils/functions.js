@@ -401,6 +401,9 @@ export const getConfig = () => {
     project = 'isip';
   } else if (main_pathname.indexOf('referral') >= 0) {
     project = 'referral';
+  } else if (main_pathname.indexOf('help') >= 0) {
+    project = 'help';
+    generic_callback = "true";
   }
   
   let search = window.location.search;
