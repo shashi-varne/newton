@@ -77,6 +77,10 @@ class GoldBuyHome extends Component {
     }
   }
 
+  componentWillMount() {
+    nativeCallback({ action: 'take_control_reset' });
+  }
+
 
   // common code start
   onload = () => {

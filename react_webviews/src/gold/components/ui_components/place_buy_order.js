@@ -16,6 +16,10 @@ class PlaceBuyOrderClass extends Component {
         }
     }
 
+    componentWillMount() {
+        nativeCallback({ action: 'take_control_reset' });
+    }
+
     redirect(pgLink) {
         let nativeRedirectUrl = window.location.origin +
             '/gold/buy' + getConfig().searchParams;
