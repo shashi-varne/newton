@@ -507,7 +507,7 @@ class GoldBuyHome extends Component {
             </div>
 
             <div className="page-title">
-            Benefits of digital gold at fisdom
+            Benefits of digital gold at {getConfig().productName}
             </div>
 
             <div className="gold-buy-info-images">

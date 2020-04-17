@@ -225,7 +225,6 @@ class GoldLocker extends Component {
     })
 
     let selected_provider_info = this.state[provider + '_info'];
-    console.log(selected_provider_info);
     this.setState({
       selected_provider_info: selected_provider_info,
       next_page: selected_provider_info.report ? selected_provider_info.report.next_page : '',
