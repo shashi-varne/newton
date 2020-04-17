@@ -155,6 +155,7 @@ class GoldSellHome extends Component {
         let result = res3.pfwresponse.result;
         
         maxWeight = parseFloat(result.sellable_gold_balance || 0).toFixed(4);
+        maxWeight = parseFloat(maxWeight);
         this.setState({
           sellable_gold_balance: result.sellable_gold_balance,
           maxWeight: maxWeight
