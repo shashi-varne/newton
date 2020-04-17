@@ -75,6 +75,7 @@ class GoldSummary extends Component {
 
   componentWillMount() {
 
+    nativeCallback({ action: 'take_control_reset' });
     storageService().set('gold_provider', 'mmtc');
     let type = getConfig().productName;
     

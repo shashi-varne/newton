@@ -38,6 +38,10 @@ class GoldLocker extends Component {
     window.removeEventListener("scroll", this.onScroll, false);
   }
 
+  componentWillMount() {
+    nativeCallback({ action: 'take_control_reset' });
+  }
+
   setCssMapper = (data) => {
     for (var i=0; i< data.length; i++) {
       data[i].order_details.orderType = data[i].transaction_type;
