@@ -234,6 +234,10 @@ class Intro extends Component {
   }
 
   renderQuotes(props, index) {
+    // && !this.state.termRedirectData.resumeFlag
+    if(props.quote_provider === 'HDFC') {
+      return;
+    }
     return (
       <div key={index} className="quote-tiles" style={{ margin: index !== 0 ? '20px 0 0 0' : '' }}>
         <div className="quote-tiles1">
