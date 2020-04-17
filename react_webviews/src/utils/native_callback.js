@@ -17,6 +17,7 @@ export const nativeCallbackOld = (status_code, message, action) => {
 
 
 export const nativeCallback = async ({ action = null, message = null, events = null } = {}) => {
+  
   let callbackData = {};
   let project = getConfig().project;
   let redirect_url = new URLSearchParams(getConfig().searchParams).get('redirect_url');

@@ -33,7 +33,7 @@ class KnowMore extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'GOLD',
+      "event_name": 'gold_investment_flow',
       "properties": {
         "user_action": user_action,
         "screen_name": 'Know More'
@@ -58,7 +58,7 @@ class KnowMore extends Component {
         showLoader={this.state.show_loader}
         title="About Safegold"
         edit={this.props.edit}
-        buttonTitle="Proceed"
+        buttonTitle="PROCEED"
         handleClick={this.handleClick}
         events={this.sendEvents('just_set_events')}
       >

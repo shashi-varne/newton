@@ -4,92 +4,142 @@ import qs from 'qs';
 import Container from '../../common/Container';
 import Api from 'utils/api';
 import Input from '../../../common/ui/Input';
-import Grid from 'material-ui/Grid';
-import Checkbox from 'material-ui/Checkbox';
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  DialogContentText
-} from 'material-ui/Dialog';
-import Button from 'material-ui/Button';
+// import Grid from 'material-ui/Grid';
+// import Checkbox from 'material-ui/Checkbox';
 import { validateNumber, validateEmail } from 'utils/validators';
 import toast from '../../../common/ui/Toast';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 
+import GoldLivePrice from '../ui_components/live_price';
+import ConfirmDialog from '../ui_components/confirm_dialog';
+import PriceChangeDialog from '../ui_components/price_change_dialog';
+import RefreshBuyPrice from '../ui_components/buy_price';
+import {gold_providers} from  '../../constants';
+import GoldOnloadAndTimer from '../ui_components/onload_and_timer';
+import PlaceBuyOrder from '../ui_components/place_buy_order';
+
 class GoldRegister extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false,
-      userInfo: {},
+      show_loader: true,
+      user_info: {},
       name: "",
+      name_error: '',
       email: "",
+      email_error: '',
       pin_code: "",
       pin_code_error: "",
       mobile_no: "",
-      goldInfo: {},
+      mobile_no_error: '',
+      provider_info: {},
       isRegistered: false,
-      openResponseDialog: false,
-      openPopup: false,
+      openConfirmDialog: false,
       params: qs.parse(props.history.location.search.slice(1)),
       checked: false,
-      name_error: '',
-      email_error: '',
-      mobile_no_error: '',
       city: '',
       state: '',
-      terms_opened: 'no'
+      terms_opened: 'no',
+      provider: this.props.match.params.provider,
+      openPriceChangedDialog: false,
+      orderType: 'buy',
+      name_disabled: false,
+      mobile_no_disabled: false,
+      email_disabled: false,
+      proceedForOrder: false
+    }
+
+  }
+
+
+  // common code for buy live price start
+
+  onload = () => {
+    this.setState({
+      openOnloadModal: false
+    })
+    this.setState({
+      openOnloadModal: true
+    })
+  }
+
+  updateParent(key, value) {
+    this.setState({
+      [key]: value
+    })
+  }
+
+  handleClose = () => {
+    this.setState({
+      openConfirmDialog: false
+    });
+
+    if(this.state.openPriceChangedDialog && this.state.timeAvailable >0) {
+      this.setState({
+        openPriceChangedDialog: false
+      })
     }
   }
 
+  // common code for buy live price end
+
   async componentDidMount() {
+
+    this.onload();
     try {
 
-      const res = await Api.get('/api/gold/user/account');
+      const res = await Api.get('/api/gold/user/account/' + this.state.provider);
+
+      this.setState({
+        show_loader: false
+      });
       if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
         let isRegistered = true;
-        let userInfo = result.gold_user_info.user_info;
-        if (userInfo.registration_status === "pending" ||
-          !userInfo.registration_status ||
-          result.gold_user_info.is_new_gold_user) {
+        let user_info = result.gold_user_info.user_info;
+        let provider_info = result.gold_user_info.provider_info;
+        if (provider_info.registration_status === "pending" ||
+          !provider_info.registration_status ||
+          user_info.is_new_gold_user) {
           isRegistered = false;
         }
 
-        const { name, email, pin_code, mobile_no } = userInfo;
-        this.checkPincode(pin_code);
+        let mobile_verified_current = provider_info.mobile_verified || false;
+
+        const { name, email, pin_code, mobile_no } = user_info;
+        
+        // this.checkPincode(pin_code);
 
         this.setState({
           show_loader: false,
-          goldInfo: result.gold_user_info.safegold_info,
-          userInfo: userInfo,
+          provider_info: provider_info,
+          user_info: user_info,
           isRegistered: isRegistered,
           name: name || "",
           email: email || "",
           pin_code: pin_code || "",
           mobile_no: mobile_no || "",
+          name_disabled: name ? true : false,
+          email_disabled: email? true : false,
+          pin_code_disabled: pin_code ? true : false,
+          mobile_no_disabled: mobile_no ? true : false,
+          mobile_verified_current: mobile_verified_current
         });
 
-        if (userInfo.mobile_verified === false &&
-          isRegistered === false) {
-          // $state.go('my-gold');
-          return;
-        }
-        // this.checkPincode();
 
       } else {
         this.setState({
           show_loader: false
         });
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-          'Something went wrong', 'error');
+          'Something went wrong');
       }
     } catch (err) {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong', 'error');
+      toast('Something went wrong');
     }
   }
 
@@ -144,7 +194,7 @@ class GoldRegister extends Component {
         this.setState({
           show_loader: false
         });
-        toast('Something went wrong', 'error');
+        toast('Something went wrong');
       }
     }
   }
@@ -181,12 +231,13 @@ class GoldRegister extends Component {
           window.localStorage.setItem('fromType', 'buy')
           var message = 'An OTP is sent to your mobile number ' + this.state.mobile_no + ', please verify to complete registration.'
           this.props.history.push({
-            pathname: 'verify',
+            pathname: 'buy/verify',
             search: getConfig().searchParams,
             params: {
               resend_link: result.resend_verification_otp_link,
               verify_link: result.verification_link,
-              message: message, fromType: 'buy'
+              message: message, fromType: 'buy',
+              mobile_no: this.state.mobile_no
             }
           });
           toast(message);
@@ -197,43 +248,44 @@ class GoldRegister extends Component {
           show_loader: false
         });
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-          'Something went wrong', 'error');
+          'Something went wrong');
       }
     } catch (err) {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong', 'error');
+      toast('Something went wrong');
     }
   }
 
-  handleClose = () => {
-    this.setState({
-      openResponseDialog: false,
-      openPopup: false
-    });
-  }
+  createUser = async () => {
 
-  renderResponseDialog = () => {
-    return (
-      <Dialog
-        open={this.state.openResponseDialog}
-        onClose={this.handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {this.state.apiError}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleClose} color="default" autoFocus>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
+    this.setState({
+      show_loader: true
+    });
+
+   
+    try {
+      const res = await Api.post('/api/gold/user/account/create/'  + this.state.provider);
+
+      if (res.pfwresponse.status_code === 200) {
+        // place order
+        this.setState({
+          proceedForOrder: true
+        })
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+          'Something went wrong');
+      }
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
+    }
   }
 
   openTermsAndCondition() {
@@ -250,15 +302,17 @@ class GoldRegister extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'GOLD',
+      "event_name": 'gold_investment_flow',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'Registeration',
-        'name': this.state.name_error ? 'invalid' : this.state.name ? 'valid' : 'empty',
-        'email': this.state.email_error ? 'invalid' : this.state.email ? 'valid' : 'empty',
-        'pin_code': this.state.pin_code_error ? 'invalid' : this.state.pin_code ? 'valid' : 'empty',
-        'agree': this.state.checked ? 'yes' : 'no',
-        'terms_opened': this.state.terms_opened
+        "screen_name": 'user_details_buy_gold',
+        'name': this.state.name ? 'yes' : 'no',
+        'email': this.state.email ? 'yes' : 'no',
+        'mobile_no': this.state.mobile_no ? 'yes' : 'no',
+        "existing_mobile_number": this.state.mobile_no_disabled ? 'yes' : 'no',
+        'price_summary_clicked': this.state.price_summary_clicked ? 'yes' : 'no',
+        "timeout_alert": this.state.timeout_alert_event ? 'yes' : 'no',
+        "refresh_price": this.state.refresh_price_event ? 'yes' : 'no'
       }
     };
 
@@ -270,85 +324,124 @@ class GoldRegister extends Component {
   }
 
   handleClick = async () => {
-    if (this.state.name.split(" ").filter(e => e).length < 2) {
+    this.handleClose();
+
+    this.sendEvents('next');
+    let canSubmitForm = true;
+
+    if (!this.state.name) {
       this.setState({
-        name_error: 'Enter valid full name'
+        name_error: 'Enter valid name'
       });
-    } else if (this.state.mobile_no.length !== 10 || !validateNumber(this.state.mobile_no)) {
+      canSubmitForm = false;
+    }
+    
+    if (this.state.mobile_no.length !== 10 || !validateNumber(this.state.mobile_no)) {
       this.setState({
         mobile_no_error: 'Please enter valid mobile no'
       });
-    } else if (this.state.email.length < 10 || !validateEmail(this.state.email)) {
+      canSubmitForm = false;
+    } 
+    
+    else if (this.state.email.length < 10 || !validateEmail(this.state.email)) {
       this.setState({
         email_error: 'Please enter valid email'
       });
-    } else if (this.state.pin_code.length !== 6 || !validateNumber(this.state.pin_code) ||
-      this.state.pin_code_error) {
-      this.setState({
-        pin_code_error: 'Please enter valid pincode'
-      });
-    } else if (!this.state.checked) {
-      return;
-    } else {
+      canSubmitForm = false;
+    }
+
+    
+    
+    if(canSubmitForm) {
 
       this.setState({
         show_loader: true
       });
 
-      let options = this.state.userInfo;
+      if(this.state.mobile_verified_current) {
+        this.createUser()
+      } else {
+        let options = {};
 
-      options.name = this.state.name;
-      options.mobile_no = this.state.mobile_no;
-      options.email = this.state.email;
-      options.pin_code = this.state.pin_code;
-
-      try {
-        const res = await Api.post('/api/gold/user/account', options);
-
-        if (res.pfwresponse.status_code === 200) {
-          this.verifyMobile();
-        } else {
-
-          if (res.pfwresponse.result.error !== 'User with the same mobile number exists!' &&
-            (this.state.userInfo.mobile_verified === false || res.pfwresponse.result.mobile_verified === false)) {
+        options.name = this.state.name;
+        options.mobile_no = this.state.mobile_no;
+        options.email = this.state.email;
+        options.pin_code = this.state.user_info.pin_code;
+  
+        try {
+          const res = await Api.post('/api/gold/user/account/' + this.state.provider, options);
+  
+          if(res.pfwresponse.result.registered_with_another_account === true) {
+            let error = 'Mobile number already registered with ' + this.state.provider + ', enter another mobile number';
+            this.setState({
+              mobile_no_disabled: false,
+              show_loader: false,
+              mobile_no_error: error
+            })
+            // toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+            //   'Something went wrong');
+          } else if(res.pfwresponse.result.message === 'success'  || 
+            res.pfwresponse.result.mobile_verified === false) {
             this.verifyMobile();
+          } else if(res.pfwresponse.result.mobile_verified === true) {
+            this.createUser();
           } else {
+  
             this.setState({
               show_loader: false
             });
             toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-              'Something went wrong', 'error');
+              'Something went wrong');
+  
           }
-
+        } catch (err) {
+          this.setState({
+            show_loader: false
+          });
+          toast('Something went wrong');
         }
-      } catch (err) {
-        this.setState({
-          show_loader: false
-        });
-        toast('Something went wrong', 'error');
       }
+
+     
     }
+  }
+
+  handleClick2 = () => {
+    this.setState({
+      openConfirmDialog: true,
+      price_summary_clicked: true
+    })
   }
 
   render() {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="Registration"
+        title="Buy gold"
         handleClick={this.handleClick}
+        handleClick2={this.handleClick2}
         edit={this.props.edit}
-        buttonTitle="Proceed"
-        disable={!this.state.checked}
+        withProvider={true}
+        buttonTitle="CONTINUE"
+        buttonData={this.state.bottomButtonData}
         events={this.sendEvents('just_set_events')}
       >
+        <div className="common-top-page-subtitle">
+          We need following details to open your {gold_providers[this.state.provider].title} account
+        </div>
+
+        <GoldLivePrice parent={this} />
+        
+
         <div className="register-form">
           <div className="InputField">
             <Input
               error={(this.state.name_error) ? true : false}
               helperText={this.state.name_error}
+              disabled={this.state.name_disabled}
               type="text"
               width="40"
-              label="Name *"
+              label="Name"
               class="name"
               id="name"
               name="name"
@@ -359,9 +452,10 @@ class GoldRegister extends Component {
             <Input
               error={(this.state.mobile_no_error) ? true : false}
               helperText={this.state.mobile_no_error}
+              disabled={this.state.mobile_no_disabled}
               type="number"
               width="40"
-              label="Mobile number *"
+              label="Mobile"
               class="Mobile"
               id="number"
               name="mobile_no"
@@ -372,16 +466,17 @@ class GoldRegister extends Component {
             <Input
               error={(this.state.email_error) ? true : false}
               helperText={this.state.email_error}
+              disabled={this.state.email_disabled}
               type="email"
               width="40"
-              label="Email address *"
+              label="Email"
               class="Email"
               id="email"
               name="email"
               value={this.state.email}
               onChange={this.handleChange('email')} />
           </div>
-          <div className="InputField">
+          {/* <div className="InputField">
             <Input
               error={(this.state.pin_code_error) ? true : false}
               helperText={this.state.pin_code_error}
@@ -395,14 +490,11 @@ class GoldRegister extends Component {
             <div className="filler">
               {(this.state.city && this.state.state && !this.state.pin_code_error) && <span>{this.state.city} , {this.state.state}</span>}
             </div>
-          </div>
-          <div className="CheckBlock">
+          </div> */}
+          {/* <div className="CheckBlock">
             <Grid container spacing={16} alignItems="center">
               <Grid item xs={2} className="TextCenter">
                 <Checkbox
-                  // style={{
-                  //   color: getConfig().primary
-                  // }}
                   defaultChecked
                   checked={this.state.checked}
                   color="default"
@@ -419,9 +511,21 @@ class GoldRegister extends Component {
                   }} onClick={() => this.openTermsAndCondition()}>Terms and Conditions</a></span>
               </Grid>
             </Grid>
-          </div>
+          </div> */}
         </div>
-        {this.renderResponseDialog()}
+
+        {this.state.openRefreshModule &&
+         <RefreshBuyPrice parent={this} />}
+
+        <ConfirmDialog parent={this} />
+        <PriceChangeDialog parent={this} />
+
+        {this.state.openOnloadModal && 
+          <GoldOnloadAndTimer parent={this} />}
+
+        {this.state.proceedForOrder &&
+          <PlaceBuyOrder parent={this} />
+        }
       </Container>
     );
   }

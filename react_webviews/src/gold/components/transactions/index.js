@@ -34,15 +34,6 @@ class Transactions extends Component {
     }
   }
 
-  componentWillMount() {
-    let { params } = this.props.location;
-    if (params && params.isDelivery) {
-      this.setState({
-        value: 2
-      })
-    }
-  }
-
   setNextPage(type, next_page) {
     if (type === 'buy') {
       this.setState({
@@ -82,13 +73,13 @@ class Transactions extends Component {
         this.setState({
           show_loader: false
         });
-        toast(trans.pfwresponse.result.error || trans.pfwresponse.result.message || 'Something went wrong', 'error');
+        toast(trans.pfwresponse.result.error || trans.pfwresponse.result.message || 'Something went wrong');
       }
     } catch (err) {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong', 'error');
+      toast('Something went wrong');
     }
   }
 
@@ -128,19 +119,19 @@ class Transactions extends Component {
         this.setState({
           show_loader: false
         });
-        toast(trans.pfwresponse.result.error || trans.pfwresponse.result.message || 'Something went wrong', 'error');
+        toast(trans.pfwresponse.result.error || trans.pfwresponse.result.message || 'Something went wrong');
       }
     } catch (err) {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong', 'error');
+      toast('Something went wrong');
     }
   }
 
   sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'GOLD',
+      "event_name": 'gold_investment_flow',
       "properties": {
         "user_action": user_action,
         "screen_name": 'Transactions'
@@ -185,13 +176,13 @@ class Transactions extends Component {
         this.setState({
           show_loader: false
         });
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
       }
     } catch (err) {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong', 'error');
+      toast('Something went wrong');
     }
   }
 
@@ -328,7 +319,7 @@ class Transactions extends Component {
         showLoader={this.state.show_loader}
         title="Gold Transactions"
         edit={this.props.edit}
-        buttonTitle="Proceed"
+        buttonTitle="PROCEED"
         noFooter={true}
         noPadding={true}
         events={this.sendEvents('just_set_events')}

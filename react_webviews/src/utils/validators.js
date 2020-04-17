@@ -113,9 +113,12 @@ export function validateLengthNames(string, type, provider) {
   return data;
 }
 
-export function validateMinChar(string) {
-  let nameSplit = string.trim(" ");
-  if (nameSplit.length < 2) {
+export function validateMinChar(string, length) {
+  let nameSplit = string.replace(/ /g, "");
+  if(!length) {
+    length = 2;
+  }
+  if (nameSplit.length < length) {
     return false;
   }
 
@@ -201,10 +204,36 @@ export function formatAmount(amount) {
   return res;
 }
 
-export function inrFormatDecimal(number) {
-  if (number) {
+export function formatAmountInr(amount) {
+  if (!amount) {
+    return '₹';
+  }
+
+  amount = Number(amount);
+  amount = amount.toFixed(0);
+  amount = amount.toString();
+  let lastThree = amount.substring(amount.length - 3);
+  let otherNumbers = amount.substring(0, amount.length - 3);
+  if (otherNumbers !== '')
+    lastThree = ',' + lastThree;
+  let res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+
+  return '₹' + res;
+}
+
+export function formatGms(weight) {
+  if (!weight) {
+    return 'in gm ';
+  } else {
+    return 'in gm ' + weight 
+  }
+}
+
+export function inrFormatDecimal(number, toFixed) {
+
+  if (number || number === 0) {
     number = parseFloat(number);
-    number = number.toFixed(0);
+    number = number.toFixed(toFixed || 0);
     number = number.toString();
     var afterPoint = '';
     if (number.indexOf('.') > 0)
@@ -216,10 +245,14 @@ export function inrFormatDecimal(number) {
     if (otherNumbers !== '')
       lastThree = ',' + lastThree;
     var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
-    return '₹ ' + res;
+    return '₹' + res;
   } else {
     return '₹';
   }
+}
+
+export function inrFormatDecimal2(number) {
+  return inrFormatDecimal(number, 2);
 }
 
 export function inrFormatDecimalWithoutIcon(number) {
@@ -442,6 +475,119 @@ export function getUrlParams(url) {
   let main_query_params = qs.parse(data[1]);
 
   return main_query_params;
+  
+}
+
+export function checkStringInString(string_base, string_to_check) {
+  if(string_base.indexOf(string_to_check) >= 0) {
+    return true;
+  }
+
+  return false;
+}
+
+export function storageService() {
+  var service = {
+      set: set,
+      get: get,
+      setObject: setObject,
+      getObject: getObject,
+      remove: remove,
+      clear: clear
+  };
+  return service;
+
+  function set(key, value) {
+    window.localStorage.setItem(key, value);
+  }
+
+  function get(key) {
+    if (checkValidString(window.localStorage.getItem(key))) {
+      return window.localStorage.getItem(key) || false;
+    }
+
+    return false;
+  }
+
+  function setObject(key, value) {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  function getObject(key) {
+    if (checkValidString(window.localStorage.getItem(key))) {
+      return JSON.parse(window.localStorage.getItem(key)) || {};
+    }
+
+    return false;
+  }
+
+  function remove(key) {
+    return window.localStorage.removeItem(key);
+  }
+
+  function clear() {
+    return window.localStorage.clear();
+  }
+
+}
+
+export function getIndexArray(array, value, objKey) {
+  for (var i=0; i < array.length; i++) {
+    if(objKey) {
+      if(array[i][objKey] === value) {
+        return i;
+      }
+    } else {
+      if(array[i] === value) {
+        return i;
+      }
+    }
+  }
+}
+
+function dateOrdinal(dom) {
+  if (dom === 31 || dom === 21 || dom === 1) return dom + "st";
+  else if (dom === 22 || dom === 2) return dom + "nd";
+  else if (dom === 23 || dom === 3) return dom + "rd";
+  else return dom + "th";
+};
+
+function formatAMPM(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? '0'+minutes : minutes;
+  var strTime = hours + ':' + minutes + ' ' + ampm;
+  return strTime;
+}
+
+export function formatDateAmPm(date) {
+
+  let monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  ];
+
+  if(!date) {
+    return '';
+  }
+
+  // fix for safari
+  date = date.replace(/ /g,"T");
+
+  let date2 = new Date(date);
+
+  let dom = date2.getDate();
+  dom = dateOrdinal(dom);
+
+  let month = monthNames[date2.getMonth()];
+  // let year = date2.getFullYear();
+  let time = formatAMPM(date2);
+
+  let final_date = dom + ' ' + month + ', ' + time;
+
+  return final_date;
   
 }
 

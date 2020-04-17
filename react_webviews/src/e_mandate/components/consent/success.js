@@ -5,6 +5,7 @@ import sip_resumed_fisdom from 'assets/sip_resumed_illustration_fisdom.svg';
 import sip_resumed_myway from 'assets/sip_resumed_illustration_myway.svg';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
+import ContactUs from '../../../common/components/contact_us';
 
 class MandateSuccess extends Component {
   constructor(props) {
@@ -68,22 +69,7 @@ class MandateSuccess extends Component {
           Your next SIP payment will get auto debited from your account.
           </div>
 
-          <div className="success-bottom">
-            <div className="success-bottom1">
-              For any query, reach us at
-            </div>
-            <div className="success-bottom2">
-              <div className="success-bottom2a">
-                {getConfig().mobile}
-              </div>
-              <div className="success-bottom2b">
-                |
-              </div>
-              <div className="success-bottom2a">
-                {getConfig().askEmail}
-              </div>
-            </div>
-          </div>
+          <ContactUs />
         </div>
       </Container >
     );
