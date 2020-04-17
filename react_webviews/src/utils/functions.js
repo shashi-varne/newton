@@ -215,7 +215,23 @@ const partnersConfigBase = {
     back_button: "back_icon_white.png",
     close_button: "close_nav_icon.svg",
     search_button: "search.png"
-  }
+  },
+  flexi: {
+    logo: "logo_white.png",
+    primary_color: "#4f2da7",
+    code: "flexi",
+    email: "ask@fisdom.com",
+    mobile: "+80-48-093070",
+    message: "",
+    banner: "obc_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png",
+    invest_screen_cards: {
+      nps: true,
+      gold: true
+    }
+  },
 };
 
 export const getHost = (pathname) => {
