@@ -29,7 +29,9 @@ class GoldLocker extends Component {
       mmtc_info_local: gold_providers['mmtc'],
       safegold_info: {},
       safegold_info_local: gold_providers['safegold'],
-      selected_provider_info: {}
+      selected_provider_info: {
+        local: {}
+      }
     }
   }
 
@@ -223,6 +225,7 @@ class GoldLocker extends Component {
     })
 
     let selected_provider_info = this.state[provider + '_info'];
+    console.log(selected_provider_info);
     this.setState({
       selected_provider_info: selected_provider_info,
       next_page: selected_provider_info.report ? selected_provider_info.report.next_page : '',
@@ -446,7 +449,7 @@ class GoldLocker extends Component {
               </div>
               <div style={{ color: '#0A1D32', fontSize: 14, fontWeight: 400, margin: '20px 0 30px 0',
             lineHeight: 1.6 }}>
-                Seems like you have not invested in Safegold yet, <b>buy 24K gold</b> to create long term wealth.
+                Seems like you have not invested in {this.state.selected_provider_info.local.title} yet, <b>buy 24K gold</b> to create long term wealth.
             </div>
             </div>
           }
