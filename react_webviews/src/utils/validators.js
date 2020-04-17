@@ -574,7 +574,8 @@ export function formatDateAmPm(date) {
   }
 
   // fix for safari
-  date = date.replace(/ /g,"T");
+  // date = date.replace(/ /g,"T");
+  date = date.replace(/-/g, '/');
 
   let date2 = new Date(date);
 
