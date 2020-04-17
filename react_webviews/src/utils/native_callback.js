@@ -21,7 +21,8 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   let project = getConfig().project;
   let redirect_url = getConfig().redirect_url;
   let is_secure = false;
-  let redirect_url_data = decodeURIComponent(redirect_url).split("?is_secure=")
+  redirect_url = decodeURIComponent(redirect_url)
+  let redirect_url_data = redirect_url.split("?is_secure=")
   if (redirect_url_data.length === 2) {
     is_secure = redirect_url_data[1]
   }
