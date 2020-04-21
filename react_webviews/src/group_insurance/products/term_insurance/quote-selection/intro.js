@@ -78,7 +78,6 @@ class Intro extends Component {
           } else {
             // intro
             pathname = 'intro';
-            return;
           }
 
           if (application) {

@@ -62,7 +62,6 @@ class Report extends Component {
       } else {
         // intro
         pathname = 'intro';
-        return;
       }
 
     }
