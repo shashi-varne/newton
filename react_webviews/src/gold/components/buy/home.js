@@ -73,7 +73,8 @@ class GoldBuyHome extends Component {
       orderType: 'buy',
       openPriceChangedDialog: false,
       fetchLivePrice: true,
-      productName: getConfig().productName
+      productName: getConfig().productName,
+      maxAmount: 499999
     }
   }
 
@@ -206,7 +207,12 @@ class GoldBuyHome extends Component {
 
     if (parseFloat(this.state.amount) <= 0 ||
         parseFloat(this.state.amount) < this.state.minAmount) {
-      toast('Minimum amount should be Rs. ' + this.state.minAmount);
+      toast('Minimum amount should be ' + inrFormatDecimal2(this.state.minAmount));
+      return;
+    }
+
+    if (parseFloat(this.state.amount) > this.state.maxAmount) {
+      toast('Maximum allowed amount is ' + inrFormatDecimal2(this.state.maxAmount));
       return;
     }
 
