@@ -22,6 +22,9 @@ import ic_e_fisdom from 'assets/ic_esign_done_fisdom.svg';
 import { nativeCallback } from 'utils/native_callback';
 import {open_browser_web} from  'utils/validators';
 
+import Api from 'utils/api';
+import toast from '../../../common/ui/Toast';
+
 const aboutQuestions = [
   {
     id: 1,
@@ -185,7 +188,37 @@ class About extends Component {
 
     // for web, we will open in new tab
     if(getConfig().Web) {
-      open_browser_web(pgLink, '_blank');
+
+      this.setState({
+        show_loader: true
+      })
+      try {
+          const res = await Api.get('/api/nps/esign/status/' + this.state.pc_urlsafe);
+          this.setState({
+              show_loader: false
+          })
+
+          if (res.pfwresponse.result && !res.pfwresponse.result.error) {
+              let result = res.pfwresponse.result;
+
+              if (result.esign === true) {
+                  this.navigate('success');
+              } else {
+                open_browser_web(pgLink, '_blank');
+              }
+          } else {
+              toast(res.pfwresponse.result.error ||
+                  res.pfwresponse.result.message || 'Something went wrong', 'error');
+          }
+
+
+      } catch (err) {
+          this.setState({
+              show_loader: false
+          })
+          toast("Something went wrong");
+      }
+      
     } else {
       window.location.href = pgLink;
     }
