@@ -545,7 +545,7 @@ export const getConfig = () => {
   returnConfig.searchParams = searchParams;
   returnConfig.searchParamsMustAppend = searchParamsMustAppend;
 
-  returnConfig.isWebCode = returnConfig.Web || !returnConfig.isFinwiz;
+  returnConfig.isWebCode = returnConfig.Web || returnConfig.redirect_url;
   return returnConfig;
 }
 
