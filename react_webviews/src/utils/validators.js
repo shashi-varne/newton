@@ -617,8 +617,9 @@ export function getWebUrlByPath(path) {
 }
 
 export function openNativeModule (moduleName) {
+
   let url = 'https://fis.do/m/module?action_type=native';
-  url +=  '&native_module=' + encodeURIComponent('app/' + moduleName);
+  url +=  '&native_module=' + encodeURIComponent(moduleName);
   nativeCallback({
     action: 'open_module', message: {
       action_url: url
@@ -627,11 +628,12 @@ export function openNativeModule (moduleName) {
 }
 
 export function openModule (moduleName) {
+  
   if(getConfig().Web) {
 
     let module_mapper = {
-      'portfolio': 'reports',
-      'profile': 'my-account'
+      'app/portfolio': 'reports',
+      'app/profile': 'my-account'
     }
 
     let moduleNameWeb = module_mapper[moduleName] || '';

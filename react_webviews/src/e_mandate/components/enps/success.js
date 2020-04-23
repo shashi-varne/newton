@@ -58,7 +58,7 @@ class EnpsSuccess extends Component {
   handleClick = () => {
     this.sendEvents('ok');
 
-    openModule('portfolio');
+    openModule('app/portfolio');
   }
 
   navigate = (pathname) => {
