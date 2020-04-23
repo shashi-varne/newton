@@ -247,11 +247,11 @@ class SelectBank extends Component {
               <img className="highlight-text11" src={this.state.info_icon} alt="info" />
               <div className="highlight-text12">
                 NOTE
-        </div>
+              </div>
             </div>
             <div className="highlight-text2">
               This is only for future SIP payments. No amount will be deducted now
-      </div>
+            </div>
           </div>
         </div>
         {this.state.banks.map(this.renderBanks)}

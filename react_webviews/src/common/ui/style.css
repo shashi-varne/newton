@@ -39,7 +39,7 @@
 }
 .RadioButton label {
   padding: 8px;
-  display: inline-block;  
+  display: inline-block;
   border-radius: 4px;
   width: 100px;
   text-align: center;
@@ -50,7 +50,7 @@
 }
 .RadioLabelChecked {
   font-weight: 500;
-    border: 1px solid !important;
+  border: 1px solid !important;
 }
 .Flex {
   display: flex;
@@ -66,12 +66,12 @@
 .CountryCode {
   margin-right: 20px;
   font-size: 16px;
-  color: rgb(68,68,68);
+  color: #444;
 }
 .Banner {
   position: fixed;
-    top: inherit;
-  background: rgb(250, 247, 255);
+  top: inherit;
+  background: #faf7ff;
   font-size: 14px;
   color: #444;
   z-index: 1000;
@@ -81,7 +81,7 @@
   align-items: center;
 }
 .FlexItem {
-  color: rgb(68, 68, 68);
+  color: #444;
 }
 .Dropdown {
   width: 100%;
@@ -90,28 +90,24 @@
   flex-basis: unset;
   max-width: 100%;
 }
-
 .RadioLabel {
   color: var(--label);
   font-size: 14px;
-  font-family: 'Roboto';
+  font-family: "Roboto";
   font-weight: 500;
 }
-
 .RadioWithIcon {
   color: var(--label);
   font-size: 0.8rem;
   margin-bottom: 15px;
   position: relative;
 }
-
 .RadioWithIcon.professional2 {
   color: #4a4a4a !important;
   font-size: 0.8rem;
   margin-bottom: 15px;
   position: relative;
 }
-
 .RadioWithIcon .error {
   position: absolute;
   right: 0;
@@ -124,21 +120,14 @@
   background-color: var(--secondary) !important;
   color: #fff !important;
 }
-
-
-
-/* verify */
-
 .CheckBlock {
   margin-top: 20px;
   margin-bottom: 30px;
 }
-
 .Checkbox {
   width: auto;
   height: auto;
 }
-
 .error-radiogrp {
   margin: 0;
   font-size: 0.75rem;
@@ -151,70 +140,67 @@
   position: relative;
   top: 5px;
 }
-
 .MuiDialog-paper {
   margin: 0 20px 0px 20px !important;
 }
 .MuiDialogContent-root {
   padding: 0 14px 24px 14px !important;
 }
-
-/* dot dot loader */
 .spinner {
   width: 70px;
   text-align: center;
 }
-
 .spinner > div {
   width: 10px;
- height: 10px;
- background-color: #878787;
-
+  height: 10px;
+  background-color: #878787;
   border-radius: 100%;
   display: inline-block;
   -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
   animation: sk-bouncedelay 1.4s infinite ease-in-out both;
 }
-
 .spinner .bounce1 {
   -webkit-animation-delay: -0.32s;
   animation-delay: -0.32s;
 }
-
 .spinner .bounce2 {
   -webkit-animation-delay: -0.16s;
   animation-delay: -0.16s;
 }
-
 @-webkit-keyframes sk-bouncedelay {
-  0%, 80%, 100% { -webkit-transform: scale(0) }
-  40% { -webkit-transform: scale(1.0) }
-}
-
-@keyframes sk-bouncedelay {
-  0%, 80%, 100% { 
+  0%,
+  80%,
+  100% {
     -webkit-transform: scale(0);
-    transform: scale(0);
-  } 40% { 
-    -webkit-transform: scale(1.0);
-    transform: scale(1.0);
+  }
+  40% {
+    -webkit-transform: scale(1);
   }
 }
-
-
-/* carousel */
-.carousel .control-dots .dot.selected, .carousel .control-dots .dot:hover {
+@keyframes sk-bouncedelay {
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+  40% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+.carousel .control-dots .dot.selected,
+.carousel .control-dots .dot:hover {
   opacity: 1;
   background: black;
   width: 10px;
   height: 10px;
 }
 .carousel .control-dots .dot {
-  -webkit-transition: opacity .25s ease-in;
-  -o-transition: opacity .25s ease-in;
-  transition: opacity .25s ease-in;
-  opacity: .3;
-  /* -webkit-box-shadow: 1px 1px 2px rgba(0,0,0,.9); */
+  -webkit-transition: opacity 0.25s ease-in;
+  -o-transition: opacity 0.25s ease-in;
+  transition: opacity 0.25s ease-in;
+  opacity: 0.3;
   box-shadow: none !important;
   background: #fff;
   border-radius: 50%;
@@ -232,55 +218,8 @@
   margin: 10px 0;
   text-align: center;
   width: 100%;
+  padding: 0px;
 }
-
-
-/* carousel */
-/* .carousel .control-dots .dot.selected, .carousel .control-dots .dot:hover {
-  opacity: 1;
-  background: black;
-  width: 10px;
-  height: 10px;
-}
-.carousel .control-dots .dot {
-  -webkit-transition: opacity .25s ease-in;
-  -o-transition: opacity .25s ease-in;
-  transition: opacity .25s ease-in;
-  opacity: .3;
-  box-shadow: none !important;
-  background: #fff;
-  border-radius: 50%;
-  width: 8px;
-  height: 8px;
-  cursor: pointer;
-  display: inline-block;
-  margin: 0 8px;
-  border: 1px solid black;
-  vertical-align: middle;
-}
-.carousel .control-dots {
-  position: inherit !important;
-  bottom: 0;
-  margin: 10px 0;
-  text-align: center;
-  width: 100%;
-}
-.carousel .slide img {
-  height: 205px;
-}
-.carousel .slide {
-  background: #fff;
-}
-.carousel .control-next.control-arrow:before {
-  border-left: 8px solid #514b4b !important;
-}
-.carousel .control-prev.control-arrow:before {
-  border-right: 8px solid #514b4b !important;
-}
-.carousel .control-arrow:before, .carousel.carousel-slider .control-arrow:before {
-  margin: 0 0px !important;
-} */
-
 .CircularProgressbar .CircularProgressbar-text {
   fill: var(--primary) !important;
   font-size: 35px !important;
@@ -302,7 +241,7 @@
 input.default-otp-input {
   width: 33px !important;
   height: 20px;
-  border-bottom:2px solid #5446a6 !important;
+  border-bottom: 2px solid #5446a6 !important;
   border: none;
   margin: 0 10px 0 0;
   width: 20%;
@@ -311,25 +250,69 @@ input.default-otp-input {
   outline: none;
   background: transparent;
   color: black;
-  font-size: 20px
+  font-size: 20px;
 }
-
 .default-otp {
   text-align: center;
 }
 .default-otp .title {
   font-size: 20px;
-  color: #0A1C32;
+  color: #0a1c32;
   font-weight: 500;
 }
 .default-otp .content {
   margin: 20px 0px 0px;
   font-size: 14px;
-  color: #767E86;
+  color: #767e86;
   font-weight: 400;
   line-height: 1.5;
 }
-
 .default-otp .content-auth {
   font-weight: 600;
+}
+.flex-center {
+  display: flex;
+  align-items: center;
+}
+.input-placeholder-right {
+  line-height: 40px;
+  position: absolute;
+  right: 5px;
+  top: 17px;
+  bottom: 0;
+  -moz-transition: 0.3s right ease;
+  -ms-transition: 0.3s right ease;
+  -o-transition: 0.3s right ease;
+  -webkit-transition: 0.3s right ease;
+  transition: 0.3s right ease;
+  z-index: 0;
+}
+.bottom-short-footer {
+  display: flex;
+  justify-content: space-between;
+  margin: 80px 0 0 0;
+}
+.left-arrow {
+  width: fit-content;
+  background: #ececec;
+  padding: 12px 20px 12px 20px;
+  height: fit-content;
+  border-radius: 4px;
+}
+.left-arrow img {
+  width: 20px;
+}
+.right-arrow {
+  background: var(--secondary);
+  padding: 12px 20px 12px 20px;
+  height: fit-content;
+  border-radius: 4px;
+  text-align: center;
+}
+.right-arrow img {
+  width: 20px;
+}
+.MuiInput-underline.MuiInput-disabled:before {
+  background-image: none !important;
+  border-bottom: 1px solid #d3dbe4;
 }

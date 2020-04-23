@@ -6,6 +6,7 @@ import './index.css';
 import App from './App';
 import $ from 'jquery';
 import { isMobile } from 'utils/functions';
+import scrollIntoView from 'scroll-into-view-if-needed';
 
 $(document).ready(function () {
   if (isMobile.Android()) {
@@ -20,9 +21,15 @@ $(document).ready(function () {
     });
 
     function scrollToActiveElement() {
-      if (document.activeElement && document.activeElement.scrollIntoViewIfNeeded) {
-        document.activeElement.scrollIntoViewIfNeeded()
-      }
+      // if (document.activeElement && document.activeElement.scrollIntoViewIfNeeded) {
+        // document.activeElement.scrollIntoViewIfNeeded()
+      // }
+      scrollIntoView(document.activeElement, {
+        block: 'center',
+        inline: 'nearest',
+        behavior: 'smooth',
+        // scrollMode: 'if-needed'
+      })
     }
     window.addEventListener("resize", () => {
       setTimeout(scrollToActiveElement, 100)

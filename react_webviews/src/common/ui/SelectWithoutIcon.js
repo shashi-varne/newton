@@ -34,7 +34,9 @@ class SelectGrp extends Component {
   render() {
     const allOptions = this.state.options.map((option, i) => {
       return (
-        <MenuItem key={i} value={option}>{option}</MenuItem>
+        <MenuItem key={i} value={this.props.isAOB ? option.value: option}>
+          {this.props.isAOB ? option.name: option}
+        </MenuItem>
       );
     });
 
@@ -53,7 +55,8 @@ class SelectGrp extends Component {
           autoWidth={true} >
           {allOptions}
         </Select>
-        <span className='error-radiogrp'>{(this.props.error) ? 'Please select an option' : ''}</span>
+        <span className='error-radiogrp'>{(this.props.error) ? 
+        this.props.helperText || 'Please select an option' : ''}</span>
       </FormControl>
     );
   }
