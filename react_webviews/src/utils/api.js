@@ -8,7 +8,7 @@ import { getConfig } from  'utils/functions'
 
 const myHistory = createBrowserHistory();
 let { base_url } = qs.parse(myHistory.location.search.slice(1));
-let redirect_url  = getConfig().redirect_url;
+let redirect_url  = getConfig ? getConfig().redirect_url : '';
 let is_secure = false;
 
 axios.defaults.baseURL = decodeURIComponent(base_url).replace(/\/$/, "");
