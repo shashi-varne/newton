@@ -3,244 +3,159 @@ import qs from 'qs';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import safegold_logo from 'assets/safegold_logo_60x60.png';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import point_five_gm from 'assets/05gmImage.png';
-import one_gm_front from 'assets/1gm_front.png';
-import two_gm_front from 'assets/2gm_front.png';
-import five_gm_front from 'assets/5gm_front.png';
-import five_gmbar_front from 'assets/5gmbar_front.png';
-import ten_gm_front from 'assets/10gm_front.png';
-import ten_gmbar_front from 'assets/10gmbar_front.png';
-import twenty_gmbar_front from 'assets/20gmbar_front.png';
-import ArrowRight from '@material-ui/icons/ChevronRight';
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  DialogContentText
-} from 'material-ui/Dialog';
-import Button from 'material-ui/Button';
-import toast from '../../../common/ui/Toast';
-import { inrFormatDecimal } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
+import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
+import toast from '../../../common/ui/Toast';
+import {
+  inrFormatDecimal2, storageService, formatDateAmPm
+} from 'utils/validators';
 
-class GoldSummary extends Component {
+import { isUserRegistered, gold_providers, getTransactionStatus, getUniversalTransStatus } from '../../constants';
+
+class GoldLocker extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
-      openResponseDialog: false,
-      openPopup: false,
-      popupText: '',
-      apiError: '',
-      goldInfo: {},
-      userInfo: {},
-      goldSellInfo: {},
-      gold_products: [],
-      maxWeight: '',
-      maxAmount: '',
-      isRegistered: false,
-      isWeight: false,
-      isAmount: false,
-      amountError: false,
-      weightError: false,
-      weight: '',
-      amount: '',
+      user_info: {},
       params: qs.parse(props.history.location.search.slice(1)),
       value: 0,
       error: false,
       errorMessage: '',
-      countdownInterval: null
+      provider: 'mmtc',
+      productName: getConfig().productName,
+      mmtc_info: {},
+      mmtc_info_local: gold_providers['mmtc'],
+      safegold_info: {},
+      safegold_info_local: gold_providers['safegold'],
+      selected_provider_info: {
+        local: {}
+      }
     }
-    this.renderDeliveryProducts = this.renderDeliveryProducts.bind(this);
+  }
+
+
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.onScroll, false);
   }
 
   componentWillMount() {
-    if (this.state.params.isDelivery) {
+    nativeCallback({ action: 'take_control_reset' });
+  }
+
+  setCssMapper = (data) => {
+    for (var i=0; i< data.length; i++) {
+      data[i].order_details.orderType = data[i].transaction_type;
+      data[i].order_details.final_status = getTransactionStatus(data[i].order_details);
+      data[i].cssMapper = this.statusMapper(data[i]);
+    }
+
+    return data;
+  }
+
+  setProviderData(provider, result1, result2, result3) {
+    let isRegistered = isUserRegistered(result1);
+    let data = result1.gold_user_info.provider_info || {};
+    data.isRegistered = isRegistered;
+    data.user_info = result1.gold_user_info.user_info || {};
+    data.sell_value = ((result2.sell_info.plutus_rate) * (data.gold_balance || 0)).toFixed(2) || 0;
+    data.provider = provider;
+    data.local = gold_providers[provider];
+
+    let report = {
+      orders: result3.orders ? result3.orders.all : [],
+      next_page: result3.orders.next_page || ''
+    };
+    data.report = report;
+    data.report.orders = this.setCssMapper(data.report.orders);
+
+    if(data.user_info.total_balance) {
       this.setState({
-        value: 1
+        user_info: data.user_info
       });
+    }
+    this.setState({
+      [provider + '_info']: data
+    });
+
+
+    if(provider === 'mmtc') {
+      this.chooseTabs('mmtc');
     }
   }
 
-  async componentDidMount() {
-    this.setState({
-      error: false,
-      errorMessage: ''
-    });
-
+  async onloadProvider(provider) {
     try {
 
-      const res = await Api.get('/api/gold/user/account');
+      let result1 = {};
+      let result2 = {};
+      let result3 = {};
+      const res = await Api.get('/api/gold/user/account/' + provider + '?bank_info_required=true');
       if (res.pfwresponse.status_code === 200) {
-        let result = res.pfwresponse.result;
-        let isRegistered = true;
-        if (result.gold_user_info.user_info.registration_status === "pending" ||
-          !result.gold_user_info.user_info.registration_status ||
-          result.gold_user_info.is_new_gold_user) {
-          isRegistered = false;
-        }
-        this.setState({
-          goldInfo: result.gold_user_info.safegold_info,
-          userInfo: result.gold_user_info.user_info,
-          // maxWeight: parseFloat(result.gold_user_info.safegold_info.gold_balance).toFixed(4),
-          isRegistered: isRegistered
-        });
+        result1 = res.pfwresponse.result;
       } else {
         this.setState({
-          // show_loader: false,
           error: true,
           errorMessage: res.pfwresponse.result.error || res.pfwresponse.result.message ||
             'Something went wrong'
         });
-        // toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-        //   'Something went wrong', 'error');
       }
 
-      const res2 = await Api.get('/api/gold/sell/currentprice');
+      const res2 = await Api.get('/api/gold/sell/currentprice/' + provider);
       if (res2.pfwresponse.status_code === 200) {
-        let goldInfo = this.state.goldInfo;
-        let result = res2.pfwresponse.result;
-        var currentDate = new Date();
-        // var validityDate = new Date('2019-01-24 14:41:14');
-        let timeAvailable = ((result.sell_info.rate_validity - currentDate.getTime()) / 1000 - 330 * 60);
-        goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
-        this.setState({
-          goldSellInfo: result.sell_info,
-          goldInfo: goldInfo,
-          timeAvailable: timeAvailable
-        });
 
-        if (timeAvailable >= 0 && result.sell_info.plutus_rate) {
-          let intervalId = setInterval(this.countdown, 1000);
-          this.setState({
-            countdownInterval: intervalId
-          });
-        }
+        result2 = res2.pfwresponse.result;
       } else {
         this.setState({
-          // show_loader: false,
           error: true,
           errorMessage: res2.pfwresponse.result.error || res2.pfwresponse.result.message ||
             'Something went wrong'
         });
-        // toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message ||
-        //   'Something went wrong', 'error');
       }
 
-      const res3 = await Api.get('/api/gold/user/sell/balance');
-
+      const res3 = await Api.get('/api/gold/report/orders/' + provider + '?order_type=all');
       if (res3.pfwresponse.status_code === 200) {
 
-        let result = res3.pfwresponse.result;
-        
-        let maxWeight = parseFloat(result.sellable_gold_balance || 0).toFixed(4);
-        let maxAmount = ((this.state.goldSellInfo.plutus_rate) * (maxWeight || 0)).toFixed(2);
-        let weightDiffrence = this.state.goldInfo.gold_balance - maxWeight;
-        let sellWeightDiffrence = false;
-        if(weightDiffrence > 0) {
-          sellWeightDiffrence = true
-        }
-        this.setState({
-          maxWeight: maxWeight,
-          maxAmount: maxAmount,
-          sellWeightDiffrence: sellWeightDiffrence
-        });
+        result3 = res3.pfwresponse.result;
       } else {
         this.setState({
-          // show_loader: false,
           error: true,
           errorMessage: res3.pfwresponse.result.error || res3.pfwresponse.result.message ||
             'Something went wrong'
         });
-        // toast(res3.pfwresponse.result.error || res3.pfwresponse.result.message ||
-        //   'Something went wrong', 'error');
       }
 
-      const res4 = await Api.get('/api/gold/delivery/products');
-      if (res4.pfwresponse.status_code === 200) {
-        this.setState({
-          show_loader: false,
-          gold_products: res4.pfwresponse.result.safegold_products
-        });
-      } else {
-        this.setState({
-          // show_loader: false,
-          error: true,
-          errorMessage: res4.pfwresponse.result.error || res4.pfwresponse.result.message ||
-            'Something went wrong'
-        });
-        // toast(res4.pfwresponse.result.error || res4.pfwresponse.result.message ||
-        //   'Something went wrong', 'error');
-      }
+
+      this.setProviderData(provider, result1, result2, result3);
+
     } catch (err) {
+      console.log(err);
       this.setState({
         show_loader: false,
-        error: true,
-        errorMessage: 'Something went wrong'
       });
-      // toast('Something went wrong', 'error');
+      toast('Something went wrong');
     }
-
-    this.setState({
-      show_loader: false
-    });
   }
 
-  componentWillUnmount() {
-    clearInterval(this.state.countdownInterval);
+  async componentDidMount() {
+
+    storageService().remove('forceBackState');
+    this.onloadProvider('mmtc');
+    this.onloadProvider('safegold');
+    window.addEventListener("scroll", this.onScroll, false);
   }
 
-  countdown = () => {
-    let timeAvailable = this.state.timeAvailable;
-    if (timeAvailable <= 0) {
-      this.setState({
-        minutes: '',
-        seconds: ''
-      })
-      window.location.reload();
-      return;
-    }
 
-    let minutes = Math.floor(timeAvailable / 60);
-    let seconds = Math.floor(timeAvailable - minutes * 60);
-    timeAvailable--;
 
-    this.setState({
-      timeAvailable: timeAvailable,
-      minutes: minutes,
-      seconds: seconds
-    });
-    window.localStorage.setItem('timeAvailableSell', timeAvailable);
-  };
-
-  calculate_gold_wt(current_gold_price, tax, buy_price) {
-    tax = 1.0 + parseFloat(tax) / 100.0
-    var current_gold_price_with_tax = (current_gold_price * tax).toFixed(2);
-    var gold_wt = (buy_price / current_gold_price_with_tax).toFixed(4);
-    return gold_wt
-
-  }
-
-  calculate_gold_amount(current_gold_price, tax, weight) {
-    tax = 1.0 + parseFloat(tax) / 100.0
-    var current_gold_price_with_tax = (current_gold_price * tax).toFixed(2)
-    var gold_amount = (weight * current_gold_price_with_tax).toFixed(2);
-    return gold_amount
-  }
-
-  sendEvents(user_action, product_name) {
+  sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'GOLD',
+      "event_name": 'gold_investment_flow',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'Gold Locker',
-        "trade": this.state.value === 0 ? 'sell' : 'delivery',
-        "amount": this.state.amountError ? 'invalid' : this.state.amount ? 'valid' : 'empty',
-        "weight": this.state.weightError ? 'invalid' : this.state.weight ? 'valid' : 'empty',
-        "product_name": product_name
+        "screen_name": 'gold_locker',
+        "provider_selected": this.state.provider,
+        "total_balance": this.state.selected_provider_info.gold_balance
       }
     };
 
@@ -251,184 +166,172 @@ class GoldSummary extends Component {
     }
   }
 
-  sellGold = async () => {
-
-    this.sendEvents('next');
-
-    let amount = this.state.amount;
-    let weight = this.state.weight;
-    if (!weight || weight < 0) {
-      toast('Please enter a correct value for the weight', 'error');
-      return;
+  statusMapper(data) {
+    let cssMapper = {
+      'pending': {
+        color: 'yellow',
+        disc: 'Pending'
+      },
+      'success': {
+        color: 'green',
+        disc: 'Success'
+      },
+      'failed': {
+        color: 'red',
+        disc: 'Failed'
+      }
     }
 
-    if (!amount || amount < 0) {
-      toast('Please enter a correct value for the amount', 'error');
-      return;
+    let type = data.transaction_type;
+    
+    let uniStatus = getUniversalTransStatus(data.order_details);
+    let obj = cssMapper[uniStatus];
+
+    
+    let title = '';
+    if(type === 'buy') {
+      title = 'Bought ' + data.order_details.gold_weight + ' gms'; 
     }
 
-    if (amount >= 0 && amount < 1) {
-      toast('Minimum amount should be Rs. 1', 'error');
-      return;
+    if(type === 'sell') {
+      title = 'Sold ' + data.order_details.gold_weight + ' gms'; 
     }
 
-    if (amount > parseFloat(this.state.maxAmount) ||
-      weight > parseFloat(this.state.maxWeight)) {
-      toast("You don't have enough gold", 'error');
-      return;
+    if(type === 'delivery') {
+      title = 'Delivery of ' + (data.order_details.description || ''); 
     }
 
-    let goldSellInfo = this.state.goldSellInfo;
-    goldSellInfo.amount = amount;
-    goldSellInfo.weight = weight;
-    goldSellInfo.isAmount = this.state.isAmount;
+    obj.title = title;
 
-    this.setState({
-      show_loader: true,
-      goldSellInfo: goldSellInfo
-    });
-
-    window.localStorage.setItem('timeAvailableSell', this.state.timeAvailable);
-    window.localStorage.setItem('sellData', JSON.stringify(goldSellInfo));
-
-    this.setState({
-      show_loader: false
-    });
-    this.navigate('bank-details');
+    return obj;
   }
 
-  selectGoldProduct(index) {
-    this.sendEvents('next', this.state.gold_products[index].disc);
-    let selectedProduct = this.state.gold_products[index];
-    window.localStorage.setItem('goldProduct', JSON.stringify(selectedProduct));
-    this.navigate('select-gold-product');
-  };
+  navigate = (pathname, data = {}) => {
+    let searchParams = getConfig().searchParams;
 
-
-  handleClose = () => {
-    this.setState({
-      openResponseDialog: false,
-      openPopup: false
-    });
-  }
-
-  renderResponseDialog = () => {
-    return (
-      <Dialog
-        open={this.state.openResponseDialog}
-        onClose={this.handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {this.state.apiError}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleClose} color="default" autoFocus>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  }
-
-  navigate = (pathname) => {
-    if (pathname === 'gold-register') {
-      this.sendEvents('registeration')
+    if(data.pan_bank_flow) {
+      searchParams += '&pan_bank_flow=' + data.pan_bank_flow
     }
-    if (pathname === 'gold-transactions') {
-      this.sendEvents('transaction history')
-    }
-
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams
+      search: searchParams
     });
   }
 
-  handleChange = (event, value) => {
-    this.setState({ value });
-  }
-
-  setAmountGms = () => event => {
-    let amountError = false;
-    let weightError = false;
-    let isWeight = this.state.isWeight;
-    let isAmount = this.state.isAmount;
-    let amount = '', weight = '';
-    if (event.target.name === 'amount' && event.target.value) {
-      amount = Math.floor(event.target.value);
-      isWeight = false;
-      isAmount = true;
-      weight = ((amount) / (this.state.goldSellInfo.plutus_rate)).toFixed(4);
-
-    } else if (event.target.name === 'weight' && event.target.value) {
-      weight = event.target.value;
-      amount = ((this.state.goldSellInfo.plutus_rate) * (weight)).toFixed(2);
-      isWeight = true;
-      isAmount = false;
-    } else {
-      isWeight = false;
-      isAmount = false;
-      amount = '';
-      weight = '';
-    }
-
-    if (!weight || parseFloat(weight) < 0 ||
-      parseFloat(weight) > this.state.maxWeight) {
-      weightError = true;
-    }
-
-    if (!amount || parseFloat(amount) < 0) {
-      amountError = true;
-    }
-
-    if (amount >= 0 && parseFloat(amount) < 1) {
-      amountError = true;
-    }
-
-    if (parseFloat(amount) > parseFloat(this.state.maxAmount) ||
-      parseFloat(weight) > parseFloat(this.state.maxWeight)) {
-      amountError = true;
-    }
+  chooseTabs(provider) {
 
     this.setState({
-      isWeight: isWeight,
-      isAmount: isAmount,
-      amountError: amountError,
-      weightError: weightError,
-      amount: amount,
-      weight: weight
+      provider: provider,
     })
-  };
 
-  productImgMap = (product) => {
-    const prod_image_map = {
-      2: one_gm_front,
-      3: two_gm_front,
-      1: five_gm_front,
-      14: five_gmbar_front,
-      8: ten_gm_front,
-      12: ten_gmbar_front,
-      13: ten_gmbar_front,
-      15: twenty_gmbar_front,
-      16: point_five_gm
-    };
-
-    return (
-      <img alt="Gold" className="delivery-icon" src={prod_image_map[product.id]} width="80" />
-    );
+    let selected_provider_info = this.state[provider + '_info'];
+    this.setState({
+      selected_provider_info: selected_provider_info,
+      next_page: selected_provider_info.report ? selected_provider_info.report.next_page : '',
+      loading_more: false,
+      show_loader: false
+    })
   }
 
-  renderDeliveryProducts(props, index) {
-    return (
-      <div key={index} onClick={() => this.selectGoldProduct(index)} className="delivery-tile">
-        {this.productImgMap(props)}
+  loadMore = async () => {
+    try {
 
-        <div className="">{props.description}</div>
-        <div className="">Charges Rs. {props.delivery_minting_cost}</div>
+      if (this.state.loading_more) {
+        return;
+      }
+      this.setState({
+        loading_more: true
+      });
+
+      let res = await Api.get(this.state.next_page)
+
+      this.setState({
+        loading_more: false
+      });
+
+      if (res.pfwresponse.status_code === 200) {
+
+        let result = res.pfwresponse.result;
+        var next_page = result.orders.next_page || '';
+
+        let provider_info = this.state[this.state.provider + '_info'];
+        provider_info.report.next_page = next_page;
+        this.setState({
+          next_page: next_page,
+          [this.state.provider + '_info'] : provider_info
+        });
+
+        var newReportData = result.orders.all || [];
+        let selected_provider_info  = this.state.selected_provider_info;
+        let orders  = selected_provider_info.report.orders;
+        newReportData = this.setCssMapper(newReportData);
+
+        orders = orders.concat(newReportData);
+        selected_provider_info.report.orders = orders;
+
+        this.setState({
+          selected_provider_info: selected_provider_info
+        });
+
+      } else {
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
+      }
+    } catch (err) {
+      console.log(err);
+      this.setState({
+        loading_more: false
+      });
+      toast('Something went wrong');
+    }
+  }
+
+  hasReachedBottom() {
+    var el = document.getElementsByClassName('Container')[0];
+    var height = el.getBoundingClientRect().bottom <= window.innerHeight;
+    return height;
+  }
+
+  onScroll = () => {
+    if (this.hasReachedBottom()) {
+      if (this.state.next_page) {
+        // this.loadMore();
+      }
+
+    }
+  };
+
+  redirectCards = (data) => {
+
+    this.sendEvents('trans_card');
+    let pathname = this.state.selected_provider_info.provider + '/' + data.transaction_type + 
+                    '/transaction/' + data.order_details.provider_txn_id;
+    this.navigate(pathname);
+  }
+
+  renderReportCards = (props, index) => {
+    return (
+      <div onClick={() => this.redirectCards(props)}
+        key={index} style={{ cursor: 'pointer' }} className="card gold-trans-card">
+        <div className="top-title">
+          {props.cssMapper.title}
+        </div>
+        <div className={`report-color-state ${(props.cssMapper.color)}`}>
+          <div className="circle"></div>
+    <div className="report-color-state-title">{(props.cssMapper.disc)}</div>
+        </div>
+        <div className="report-cover">
+          <div className="report-cover-amount">
+            <img
+              src={require(`assets/${this.state.productName}/sip_date_icon.svg`)} alt="Gold" />
+            <span style={{ color: '#767E86',fontWeight: 'unset' }}>{formatDateAmPm(props.order_details.dt_created)}</span>
+          </div>
+          <div className="report-cover-amount">
+            <img
+              src={require(`assets/${this.state.productName}/amount_icon.svg`)} alt="Gold" />
+            {inrFormatDecimal2(props.order_details.total_amount || 
+              props.order_details.delivery_minting_cost)}
+          </div>
+        </div>
       </div>
     )
   }
@@ -438,119 +341,124 @@ class GoldSummary extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="My 24K Safegold Locker"
-        edit={this.props.edit}
-        buttonTitle="Proceed"
-        handleClick={this.sellGold}
-        noPadding={true}
-        disable={!this.state.isRegistered}
-        noFooter={this.state.value === 1}
+        title="Gold locker"
+        noFooter={true}
         events={this.sendEvents('just_set_events')}
       >
-        <div className="FlexRow locker-head">
-          <div className="FlexRow block1">
-            <img alt="Gold" className="img-mygold" src={safegold_logo} width="35" style={{ marginRight: 10 }} />
-            <div>
-              <div className="grey-color" style={{ marginBottom: 5 }}>Gold Quantity</div>
-              <div>{this.state.goldInfo.gold_balance || 0} gm</div>
-            </div>
-          </div>
-          <div className="block2">
-            <div className="grey-color" style={{ marginBottom: 5 }}>Gold Value</div>
-            <div>{inrFormatDecimal(this.state.goldInfo.sell_value || 0)}</div>
-          </div>
-        </div>
-        <div className="FlexRow locker-head transaction-history" onClick={() => this.navigate('gold-transactions')}>
-          <div className="link">Transactions History</div>
-          <div className="arrow"><ArrowRight /></div>
-        </div>
-        <Tabs
-          value={this.state.value}
-          onChange={this.handleChange}
-          indicatorColor="primary"
-          textColor="primary"
-          fullWidth
-        >
-          <Tab label="Sell" />
-          <Tab label="Deliver" />
-        </Tabs>
-        {this.state.value === 0 && <div className="page home container-padding" id="goldSection">
-          <div className="page-body-gold" id="goldInput">
-            <div className="buy-info1">
-              <div className="FlexRow">
-                <span className="buy-info2a">Current Sell Price</span>
-                <span className="buy-info2b">Price valid for
-                  &nbsp;<span className="timer-green">{this.state.minutes}:{this.state.seconds}</span>
-                </span>
+        <div className="gold-locker-home">
+          <div
+            style={{ marginTop: '15px', display: 'flex' }} className="highlight-text highlight-color-info">
+
+            <img
+              src={require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
+            <div style={{ display: 'grid', margin: '0 0 0 10px' }}>
+              <div className="highlight-text12">
+                Your gold locker
+                <img  style={{margin: '0 0 0 8px', width: 11}}
+                src={ require(`assets/lock_icn.svg`)} alt="Gold" />
               </div>
-              <div className="buy-info3">
-                {inrFormatDecimal(this.state.goldSellInfo.plutus_rate)}/gm
+              <div className="highlight-text2" style={{ margin: '4px 0 0 8px' }}>
+                {this.state.user_info.total_balance || 0} gms = {inrFormatDecimal2(parseFloat(this.state.mmtc_info.sell_value) + parseFloat(this.state.safegold_info.sell_value))}
               </div>
             </div>
-            <div className="buy-input">
-              <div className="buy-input1">
-                Enter amount of gold you want to sell
+
+          </div>
+
+          <div className="gold-locker-tabs">
+            <div onClick={() => this.chooseTabs('mmtc')}
+              className={`gold-locker-tab ${this.state.provider === 'mmtc' ? 'selected' : ''}`}>
+              <div className="block1">
+                <div className="title">
+                  {this.state.mmtc_info_local.title}
               </div>
-              <div className="label">
-                <div className="FlexRow">
-                  <div>
-                    <div>
-                      <div className="input-above-text">In Rupees (₹)</div>
-                      <div className="input-box InputField">
-                        <input type="number" autoComplete="off" placeholder="Amount" name="amount"
-                          onChange={this.setAmountGms()} value={this.state.amount} disabled={!this.state.isRegistered || this.state.isWeight} />
-                      </div>
-                    </div>
-                  {this.state.isRegistered &&  <div className={'input-below-text ' + (this.state.amountError ? 'error' : '')}
-                    >Min ₹1.00 {this.state.sellWeightDiffrence && <span>*</span>}
-                    {this.state.maxAmount > 1 &&<span>- Max ₹ {this.state.maxAmount}</span>}
-                    </div>}
-                  </div>
-                  <div className="symbol">
-                    =
-                  </div>
-                  <div>
-                    <div className="input-above-text">In Grams (gm)</div>
-                    <div className="input-box InputField">
-                      <input type="number" autoComplete="off" placeholder="Weight" name="weight"
-                        onChange={this.setAmountGms()} value={this.state.weight} disabled={!this.state.isRegistered || this.state.isAmount} />
-                    </div>
-                   {this.state.isRegistered && <div className={'input-below-text ' + (this.state.weightError ? 'error' : '')}>
-                      {this.state.sellWeightDiffrence && <span>*</span>}Max {this.state.maxWeight} gm
-                      </div>}
-                  </div>
+                <div className="block2">
+                  {this.state.mmtc_info.gold_balance} gms
+              </div>
+                <div className="block2">
+                  {inrFormatDecimal2(this.state.mmtc_info.sell_value)}
                 </div>
-                {this.state.sellWeightDiffrence && <div style={{ margin: '30px 0 0 0' }}>
-                  <div style={{ margin: '0 0 4px 0', color: '#6F6F6F', fontSize: 11, fontWeight: 600 }}>
-                    *Why is my Max Amount/Weight less than Locker quantity?
-                  </div>
-                  <div style={{ color: '#838383', fontSize: 10, fontWeight: 400 }}>
-                    You can sell your purchases after 7 days i.e. If you buy gold today you can sell anytime
-                    after 7 days have elapsed
-                  </div>
-                </div>}
               </div>
+
+              {this.state.provider === 'mmtc' &&
+                <img className="img"
+                  src={require(`assets/${this.state.mmtc_info_local.logo}`)} alt="Gold" />}
+
+            </div>
+            <div onClick={() => this.chooseTabs('safegold')}
+              className={`gold-locker-tab ${this.state.provider === 'safegold' ? 'selected' : ''}`}>
+              <div className="block1">
+                <div className="title">
+                {this.state.safegold_info_local.title}
+                </div>
+
+                <div className="block2">
+                  {this.state.safegold_info.gold_balance} gms
+                </div>
+                <div className="block2">
+                  {inrFormatDecimal2(this.state.safegold_info.sell_value)}
+                </div>
+              </div>
+
+              {this.state.provider === 'safegold' &&
+                <img className="img"
+                  src={require(`assets/${this.state.safegold_info_local.logo}`)} alt="Gold" />}
+
             </div>
           </div>
-          {this.state.error && this.state.isRegistered && <p className="error">{this.state.errorMessage}</p>}
-          {!this.state.isRegistered && <p className="error">Click <b><span onClick={() => this.navigate('gold-register')}>here</span></b> to register yourself for gold account</p>}
-        </div>}
-        {this.state.value === 1 && 
-        
-        <div>
-          {/* corona */}
-          <div style={{margin: '40px 20px 0 20px', color: 'red', fontWeight:500, lineHeight:1.3}}>
-          Due to temporary restrictions in movement and staffing because of the novel coronavirus, 
-          we are unable to process any deliveries until these restrictions are lifted.
-          </div>
-          {/* <div className="FlexRow" style={{ justifyContent: 'center', flexWrap: 'wrap' }}>
-            {this.state.gold_products && this.state.gold_products.map(this.renderDeliveryProducts)}
-          </div> */}
-        </div>}
-        {this.renderResponseDialog()}
+
+          {this.state.selected_provider_info.isRegistered && this.state.selected_provider_info.gold_balance > 0 &&
+            <div>
+              <div className="generic-page-title">
+                Transactions
+            </div>
+
+              <div style={{ margin: '20px 0 0 0' }}>
+                {this.state.selected_provider_info.report.orders.map(this.renderReportCards)}
+                {this.state.next_page && !this.state.loading_more && 
+                  <div className="show-more" onClick={() => this.loadMore()}>
+                    SHOW MORE
+                  </div>
+                }
+                {this.state.loading_more && <div className="loader">
+                  Loading...
+              </div>}
+              </div>
+
+              {(!this.state.selected_provider_info.user_info.bank_info_added || 
+              !this.state.selected_provider_info.user_info.pan_number) &&
+               <div className="share-pan-bank" onClick={() => this.navigate(
+                  this.state.provider + '/sell-pan', {pan_bank_flow: true}
+                )}>
+                  <div className="title">
+                    Share PAN and Bank details to sell gold effortlessly
+                </div>
+                  <img className="icon"
+                    src={require(`assets/${this.state.productName}/ic_to_sell_gold.svg`)} alt="" />
+                </div>
+              }
+            </div>
+          }
+          {(!this.state.selected_provider_info.isRegistered || this.state.selected_provider_info.gold_balance <= 0 || 
+          !this.state.selected_provider_info.gold_balance) &&
+            <div>
+              <div>
+                <img className="img"
+                 style={{width: '100%'}}
+                  src={require(`assets/${this.state.productName}/ils_alternate_assets.svg`)} alt="Gold" />
+              </div>
+              <div style={{ color: '#0A1D32', fontSize: 14, fontWeight: 400, margin: '20px 0 30px 0',
+            lineHeight: 1.6 }}>
+                Seems like you have not invested in {this.state.selected_provider_info.local.title} yet, <b>buy 24K gold</b> to create long term wealth.
+            </div>
+            </div>
+          }
+
+          <GoldBottomSecureInfo parent={this} />
+
+        </div>
       </Container>
     );
   }
 }
 
-export default GoldSummary;
+export default GoldLocker;

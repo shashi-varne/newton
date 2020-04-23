@@ -7,6 +7,7 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 
 import OtpDefault from '../../../common/ui/otp';
+import { nativeCallback } from 'utils/native_callback';
 
 
 class eMandateOtpClass extends Component {
@@ -52,6 +53,23 @@ class eMandateOtpClass extends Component {
         }
     }
 
+    sendEvents(user_action) {
+        let eventObj = {
+            "event_name": 'session_less_campaigns',
+            "properties": {
+                "user_action": user_action,
+                "mandate_type": 'biller',
+                "screen_name": 'otp',
+                "otp_entered": 'yes'
+            }
+        };
+
+        if (user_action === 'just_set_events') {
+            return eventObj;
+        } else {
+            nativeCallback({ events: eventObj });
+        }
+    }
 
     handleClick = async () => {
 
@@ -77,6 +95,7 @@ class eMandateOtpClass extends Component {
             '?otp=' + this.state.otp;
 
         try {
+            this.sendEvents('next');
             this.setState({
                 show_loader: true
             })
@@ -90,7 +109,7 @@ class eMandateOtpClass extends Component {
                 let result = res.pfwresponse.result;
 
                 toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-                     'Something went wrong');
+                    'Something went wrong');
                 if (result.message) {
                     this.navigate('/e-mandate/consent/success', result.urlsafe);
                 } else {
@@ -168,28 +187,28 @@ class eMandateOtpClass extends Component {
                 onlyButton={true}
                 showLoader={this.state.show_loader}
                 handleClick={() => this.handleClick()}
-                classOverRideContainer="payment-failed"
-            >
+                classOverRideContainer="payment-failed">
                 <div className="default-otp">
 
                     <div className="title">
-                        Enter OTP to verify 
+                        Enter OTP to verify
                     </div>
                     <div className="content">
 
-                    We have send the OTP on
-                    {this.state.otpBaseData.mobile_number && 
-                    <span> mobile number
-                        <span className="content-auth"> {this.state.otpBaseData.mobile_number}, </span> 
-                    </span>}
-                    {this.state.otpBaseData.email && this.state.otpBaseData.mobile_number && <span>
-                    and </span>}
-                    {this.state.otpBaseData.email &&
-                        <span> e-mail address <span className="content-auth"> {this.state.otpBaseData.email} </span>
-                        </span>
-                    }
-                    please enter to activate easySIP
-                    </div>
+                        We have send the OTP on
+                    {this.state.otpBaseData.mobile_number &&
+                            <span> mobile number
+                                <span className="content-auth"> {this.state.otpBaseData.mobile_number}, </span>
+                            </span>
+                        }
+                        {this.state.otpBaseData.email && this.state.otpBaseData.mobile_number && <span>
+                            and </span>}
+                        {this.state.otpBaseData.email &&
+                            <span> e-mail address <span className="content-auth"> {this.state.otpBaseData.email} </span>
+                            </span>
+                        }
+                        please enter to activate easySIP
+                </div>
 
 
                     <OtpDefault parent={this} />

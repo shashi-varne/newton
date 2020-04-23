@@ -17,6 +17,7 @@ export const nativeCallbackOld = (status_code, message, action) => {
 
 
 export const nativeCallback = async ({ action = null, message = null, events = null } = {}) => {
+  
   let callbackData = {};
   let project = getConfig().project;
   let redirect_url = new URLSearchParams(getConfig().searchParams).get('redirect_url');
@@ -195,7 +196,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
 
   if (getConfig().app !== 'web') {
 
-    if (redirect_url && redirect_url !== 'undefined' && (callbackData.action === 'exit_web' || callbackData.action === 'exit_module')) {
+    if (redirect_url && redirect_url !== 'undefined' && (callbackData.action === 'exit_web' || callbackData.action === 'exit_module' || callbackData.action === 'open_module')) {
       window.location.href = redirect_url
     } else {
       if (action === 'exit_web_sdk') {

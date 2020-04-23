@@ -45,9 +45,11 @@ const Input = (props) => {
         name={props.name}
         onChange={props.onChange}
         onKeyPress={props.onKeyChange}
-        maxLength={props.maxLength}
         onClick={props.onClick}
         autoComplete={props.autoComplete}
+        inputProps={{
+          maxLength: props.maxLength,
+        }}
       />
     );
   }
