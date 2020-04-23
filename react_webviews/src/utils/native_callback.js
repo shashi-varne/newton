@@ -16,11 +16,10 @@ export const nativeCallbackOld = (status_code, message, action) => {
 };
 
 
-export const nativeCallback = async ({ action = null, message = null, events = null } = {}) => {
-  
+export const nativeCallback = async ({ action = null, message = null, events = null, action_path = null } = {}) => {
   let callbackData = {};
   let project = getConfig().project;
-  let redirect_url = new URLSearchParams(getConfig().searchParams).get('redirect_url');
+  let redirect_url = getConfig().redirect_url;
   if (action) {
     callbackData.action = action;
   }
@@ -29,10 +28,10 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   }
 
 
-  if(callbackData.action === 'open_pdf') {
+  if (callbackData.action === 'open_pdf') {
     callbackData.action = 'open_url';
 
-    if(getConfig().Android) {
+    if (getConfig().Android) {
       message.url = "https://docs.google.com/gview?embedded=true&url=" + message.url;
     }
 
@@ -212,8 +211,8 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       }
     }
   } else {
-    if (action === 'native_back' || action === 'exit_web' || action === 'exit' || 
-    action === 'open_module') {
+    if (action === 'native_back' || action === 'exit_web' || action === 'exit' ||
+      action === 'open_module') {
       if (!redirect_url) {
         redirect_url = getConfig().webAppUrl;
       }
