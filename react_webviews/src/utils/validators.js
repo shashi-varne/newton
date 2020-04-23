@@ -629,7 +629,7 @@ export function openNativeModule(moduleName) {
 
 export function openModule(moduleName) {
 
-  if (getConfig().Web) {
+  if (getConfig().isWebCode) {
 
     let module_mapper = {
       'app/portfolio': 'reports',
