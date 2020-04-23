@@ -17,6 +17,7 @@ import thumb_up_fill from 'assets/thumb_up_fill.svg';
 import launch from 'assets/launch.svg';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
+import { openModule } from 'utils/validators';
 
 let start_time = '';
 
@@ -291,12 +292,7 @@ class Answer extends Component {
       }
     };
 
-    nativeCallback({
-      action: 'open_module', message: {
-        // eslint-disable-next-line
-        action_url: (this.state.type === 'myway') ? ('https://w-ay.in/m/module?action_type=native&native_module=' + this.props.location.state.answer.action_path) : ('https://fis.do/m/module?action_type=native&native_module=' + this.props.location.state.answer.action_path)
-      }, events: eventObj, action_path: this.props.location.state.answer.action_path
-    });
+    openModule(this.props.location.state.answer.action_path);
 
   }
 
