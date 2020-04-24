@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
-import {getConfig} from 'utils/functions';
+import { getConfig } from 'utils/functions';
 import { storageService } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 
@@ -10,8 +10,8 @@ class PlaceBuyOrderClass extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            provider: this.props.parent.state.provider || 
-                    this.props.parent.props.match.params.provider,
+            provider: this.props.parent.state.provider ||
+                this.props.parent.props.match.params.provider,
             buyData: storageService().getObject('buyData')
         }
     }
@@ -37,18 +37,27 @@ class PlaceBuyOrderClass extends Component {
         if (getConfig().app === 'ios') {
             nativeCallback({
                 action: 'show_top_bar', message: {
-                title: 'Payment'
+                    title: 'Payment'
                 }
             });
         }
-  
-        nativeCallback({
-            action: 'take_control', message: {
-                back_url: nativeRedirectUrl,
-                back_text: 'Are you sure you want to exit the payment process?'
-            }
-        });
-  
+
+        if (!getConfig().redirect_url) {
+            nativeCallback({
+                action: 'take_control', message: {
+                    back_url: nativeRedirectUrl,
+                    back_text: 'Are you sure you want to exit the payment process?'
+                }
+            });
+        } else {
+            nativeCallback({
+                action: 'take_control', message: {
+                    back_url: nativeRedirectUrl,
+                    back_text: ''
+                }
+            });
+        }
+
         window.location.href = pgLink;
     }
 
@@ -69,17 +78,17 @@ class PlaceBuyOrderClass extends Component {
 
             let buyData = this.state.buyData;
 
-            if(res.pfwresponse.status_code === 200 && 
+            if (res.pfwresponse.status_code === 200 &&
                 res.pfwresponse.result.payment_details.plutus_rate !== this.state.buyData.goldBuyInfo.plutus_rate) {
 
-                buyData.goldBuyInfo.rate_validity  = 0;
+                buyData.goldBuyInfo.rate_validity = 0;
                 storageService().setObject('buyData', buyData);
                 this.props.parent.updateParent('show_loader', false);
                 this.props.parent.updateParent('proceedForOrder', false);
-            } else if (res.pfwresponse.status_code === 200 && 
+            } else if (res.pfwresponse.status_code === 200 &&
                 res.pfwresponse.result.payment_details.plutus_rate === this.state.buyData.goldBuyInfo.plutus_rate) {
                 let result = res.pfwresponse.result;
-                
+
                 buyData.payment_details = result.payment_details;
                 buyData.transact_id = result.payment_details.transact_id;
                 storageService().setObject('buyData', buyData);
