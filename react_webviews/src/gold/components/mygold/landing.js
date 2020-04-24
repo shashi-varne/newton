@@ -504,6 +504,7 @@ class GoldSummary extends Component {
             {this.renderBlock4()}
         </div>
         
+        {this.renderGoldOfferDialog()}
       </Container>
     );
   }
