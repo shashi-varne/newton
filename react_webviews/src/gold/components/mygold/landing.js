@@ -58,7 +58,7 @@ class GoldSummary extends Component {
       apiError: '',
       user_info: {},
       openDialogOffer: false,
-      showOffers: true, // to manage offer carousel
+      showOffers: false, // to manage offer carousel
       offerImageData: [],
       productName: getConfig().productName,
       mmtc_info: {},
@@ -139,7 +139,7 @@ class GoldSummary extends Component {
         link: '',
         terms: gold_offer_terms_mmtc,
         key: 'mmtc_offer',
-        canShow: true,
+        canShow: false,
         tableData: [
           {'c1': '1000-1999', 'c2': '10'},
           {'c1': '2000-4999', 'c2': '25'},
