@@ -4,7 +4,7 @@ import qs from 'qs';
 import { FormControl } from 'material-ui/Form';
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import { inrFormatDecimal2, storageService, formatAmountInr, formatGms } from 'utils/validators';
+import { inrFormatDecimal2,inrFormatDecimal, storageService, formatAmountInr, formatGms } from 'utils/validators';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
@@ -74,7 +74,7 @@ class GoldBuyHome extends Component {
       openPriceChangedDialog: false,
       fetchLivePrice: true,
       productName: getConfig().productName,
-      maxAmount: 499999
+      maxAmount: 100000
     }
   }
 
@@ -212,7 +212,7 @@ class GoldBuyHome extends Component {
     }
 
     if (parseFloat(this.state.amount) > this.state.maxAmount) {
-      toast('Maximum allowed amount is ' + inrFormatDecimal2(this.state.maxAmount));
+      toast('Maximum allowed amount is ' + inrFormatDecimal(this.state.maxAmount));
       return;
     }
 
