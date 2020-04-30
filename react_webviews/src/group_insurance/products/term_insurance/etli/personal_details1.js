@@ -63,7 +63,7 @@ class EtliPersonalDetails1 extends Component {
                 basic_details_data['dob'] = basic_details_data['dob'] ? basic_details_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
 
                 // from some other place we will get unmarried/divorce which are not accepted here
-                if(insuranceMaritalStatusEtli.indexOf((basic_details_data.marital_status).toUpperCase()) == -1) {
+                if(insuranceMaritalStatusEtli.indexOf((basic_details_data.marital_status).toUpperCase()) === -1) {
                     basic_details_data.marital_status = '';   
                 }
 

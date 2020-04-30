@@ -69,6 +69,9 @@ export const themeConfig = {
                 }
             },
             root: {
+            },
+            disabled: {
+                opacity: 0.4
             }
         },
         MuiInputLabel: {
@@ -112,3 +115,43 @@ export const themeConfig = {
         }
     }
 }
+
+export function bankAccountTypeOptions(isNri) {
+    var account_types = [];
+    if (!isNri) {
+      account_types = [
+        {
+          value: "CA",
+          name: "Current Account"
+        },
+        {
+          value: "CC",
+          name: "Cash Credit"
+        },
+        {
+          value: "SB",
+          name: "Savings Account"
+        }
+      ];
+    } else {
+      account_types = [
+        {
+          value: "SB-NRE",
+          name: "Non Resident External Account (NRE)"
+        },
+        {
+          value: "SB-NRO",
+          name: "Non Resident Ordinary Account (NRO)"
+        }
+      ];
+    }
+    return account_types;
+  }
+
+  export const bankAccountTypeMapper = {
+      'CA': 'Current Account',
+      'CC': 'Cash Credit',
+      'SB': 'Savings Account',
+      'SB-NRE': 'Non Resident External Account (NRE)',
+      'SB-NRO': 'Non Resident Ordinary Account (NRO)'
+  }

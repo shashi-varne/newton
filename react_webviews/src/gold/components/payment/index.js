@@ -2,16 +2,90 @@ import React, { Component } from 'react';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import safegold_logo from 'assets/safegold_logo_60x60.png';
-import error from 'assets/error.png';
-import thumpsup from 'assets/thumpsup.png';
-import arrow from 'assets/arrow.png';
+import SVG from 'react-inlinesvg';
+import ic_send_email from 'assets/ic_send_email.svg';
 
 import toast from '../../../common/ui/Toast';
-import { inrFormatDecimal, getUrlParams } from 'utils/validators';
+import { getUrlParams } from 'utils/validators';
 // eslint-disable-next-line
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
+import { inrFormatDecimal2, storageService, formatDateAmPm } from 'utils/validators';
+import DotDotLoader from '../../../common/ui/DotDotLoader';
+import { gold_providers, getOrderStatusPayment, getUniversalTransStatus } from '../../constants';
+import ContactUs from '../../../common/components/contact_us';
+
+const commonMapper = {
+  'buy': {
+    'success': {
+      'top_icon': 'ils_gold_purchase_success',
+      'top_title': 'Gold purchase successful!',
+      'mid_title': 'Payment details',
+      'button_title': 'GO TO LOCKER',
+      'cta_state': '/gold/gold-locker'
+    },
+    'pending': {
+      'top_icon': 'ils_gold_purchase_pending',
+      'top_title': 'Gold purchase pending!',
+      'mid_title': 'Payment details',
+      'button_title': 'GO TO LOCKER',
+      'cta_state':  '/gold/gold-locker'
+    },
+    'failed': {
+      'top_icon': 'ils_gold_purchase_failed',
+      'top_title': 'Oops! gold purchase failed',
+      'mid_title': '',
+      'button_title': 'RETRY BUY GOLD',
+      'cta_state': '/gold/buy'
+    }
+  },
+  'sell': {
+    'success': {
+      'top_icon': 'ils_gold_sell_success',
+      'top_title': 'Gold sell successful!',
+      'mid_title': 'Sold gold details',
+      'button_title': 'CONTINUE TO LOCKER',
+      'cta_state': '/gold/gold-locker'
+    },
+    'pending': {
+      'top_icon': 'ils_gold_sell_failed',
+      'top_title': 'Gold sell failed!',
+      'mid_title': '',
+      'button_title': 'CONTINUE TO LOCKER',
+      'cta_state':  '/gold/gold-locker'
+    },
+    'failed': {
+      'top_icon': 'ils_gold_sell_failed',
+      'top_title': 'Gold sell failed!',
+      'mid_title': '',
+      'button_title': 'CONTINUE TO LOCKER',
+      'cta_state':  '/gold/gold-locker'
+    }
+  },
+  'delivery': {
+    'success': {
+      'top_icon': 'sucess_order_delivery',
+      'top_title': 'Order placed',
+      'mid_title': 'Payment details',
+      'button_title': 'GO TO LOCKER',
+      'cta_state': '/gold/gold-locker'
+    },
+    'pending': {
+      'top_icon': 'pending_order_delivery',
+      'top_title': 'Delivery order pending!',
+      'mid_title': 'Payment details',
+      'button_title': 'GO TO LOCKER',
+      'cta_state':  '/gold/gold-locker'
+    },
+    'failed': {
+      'top_icon': 'failed_order_delivery',
+      'top_title': 'Oops! delivery order failed',
+      'mid_title': '',
+      'button_title': 'RETRY PURCHASE',
+      'cta_state':  '/gold/delivery-products'
+    }
+  }
+}
 
 class Payment extends Component {
   constructor(props) {
@@ -19,114 +93,131 @@ class Payment extends Component {
     this.state = {
       show_loader: true,
       openResponseDialog: false,
-      goldInfo: {},
-      sellDetails: {},
+      provider_info: {},
       weight: "",
-      params: getUrlParams()
+      params: getUrlParams(),
+      provider: this.props.match.params.provider,
+      productName: getConfig().productName,
+      orderData: {},
+      report: {}
     }
-    this.sendInvoiceEmail = this.sendInvoiceEmail.bind(this);
     this.trackDelivery = this.trackDelivery.bind(this);
   }
 
-  componentWillMount() {
-    // let { params } = this.props.location;
-    nativeCallback({ action: 'take_control_reset' });
-    let { status } = this.state.params;
-    let { orderType } = this.props.match.params;
-    let weight, sellDetails, buyDetails, redeemProduct,
-      productDisc, paymentError, paymentMessage, paymentPending, invoiceLink;
-    if (orderType === 'sell') {
-      let sellDetails = JSON.parse(window.localStorage.getItem('sellDetails'));
-      weight = sellDetails ? sellDetails.gold_weight : '';
-      invoiceLink = sellDetails ? sellDetails.invoice_link : '';
-    } else if (orderType === 'buy') {
-      buyDetails = JSON.parse(window.localStorage.getItem('buyData')) || {};
-      weight = buyDetails ? buyDetails.gold_weight : '';
-    } else if (orderType === 'delivery') {
-      redeemProduct = JSON.parse(window.localStorage.getItem('redeemProduct'));
-      productDisc = redeemProduct ? redeemProduct.product_details.description : '';
+  setPaymentStatus(orderType, payStatus, uniStatus) {
+    if(!payStatus) {
+      payStatus = this.state.status;
     }
 
-    if (status === 'failed' || status === 'error') {
-      paymentError = true;
-    } else if (status === 'success') {
-      paymentError = false;
-      if (orderType === 'buy') {
-        this.getInvoice(buyDetails.transact_id);
-      }
-    } else if (status === 'pending') {
-      paymentPending = true;
+    if(!uniStatus) {
+      uniStatus = payStatus;  //if not getting data from transaction api
     }
+
+    let statusFinal = '';
+
+    let paymentFailed,paymentPending, paymentSuccess;
+    if ((payStatus === 'failed' || payStatus === 'error') || 
+    (uniStatus === 'failed' || uniStatus === 'error')) {
+      paymentFailed = true;
+      statusFinal = 'failed';
+    } else if (payStatus === 'success' && uniStatus === 'success') {
+      paymentSuccess = true;
+      statusFinal = 'success';
+    } else {
+      paymentPending = true;
+      statusFinal = 'pending';
+    } 
+
+    this.setState({
+      paymentSuccess: paymentSuccess,
+      paymentFailed: paymentFailed,
+      paymentPending: paymentPending,
+      statusFinal: statusFinal,
+      commonMapper: commonMapper[orderType][statusFinal]
+    })
+  }
+
+  componentWillMount() {
+    nativeCallback({ action: 'take_control_reset' });
+    let { status } = this.state.params;
+    if(!status) {
+      status = 'failed';
+    }
+    let { orderType } = this.props.match.params;
+    this.setState({
+      orderType: orderType
+    })
+    let weight,amount, invoiceLink;
+
+    let transact_id;
+
+    let orderKey = orderType + 'Data';
+    let orderData = storageService().getObject(orderKey) || {};
+    weight = orderData.weight_selected || '';
+    amount = orderData.amount_selected || '';
+    invoiceLink = orderData.invoice_link || '';
+    transact_id = orderData.transact_id || '';
+
     this.setState({
       status: status,
-      orderType: orderType,
       weight: weight,
-      sellDetails: sellDetails,
-      buyDetails: buyDetails,
-      redeemProduct: redeemProduct,
-      productDisc: productDisc,
-      paymentError: paymentError,
-      paymentMessage: paymentMessage,
-      paymentPending: paymentPending,
-      invoiceLink: invoiceLink
+      amount: amount,
+      orderData: orderData,
+      invoiceLink: invoiceLink,
+      providerData: gold_providers[this.state.provider],
+      transact_id: transact_id
     })
+
+    this.setPaymentStatus(orderType, status);
+    this.getTransDetails(transact_id, orderType);
 
   }
 
   async componentDidMount() {
     try {
-      const res = await Api.get('/api/gold/user/account');
+      const res = await Api.get('/api/gold/user/account/' + this.state.provider);
       if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
-        let isRegistered = true;
-        if (result.gold_user_info.user_info.registration_status === "pending" ||
-          !result.gold_user_info.user_info.registration_status ||
-          result.gold_user_info.is_new_gold_user) {
-          isRegistered = false;
-        }
         this.setState({
-          goldInfo: result.gold_user_info.safegold_info,
+          provider_info: result.gold_user_info.provider_info,
           userInfo: result.gold_user_info.user_info,
-          maxWeight: parseFloat(((30 - result.gold_user_info.safegold_info.gold_balance) || 30).toFixed(4)),
-          isRegistered: isRegistered
+          show_loader: false
         });
       } else {
         this.setState({
           show_loader: false
         });
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
       }
 
-      const res2 = await Api.get('/api/gold/sell/currentprice');
-      if (res2.pfwresponse.status_code === 200) {
-        let goldInfo = this.state.goldInfo;
-        let result = res2.pfwresponse.result;
-        goldInfo.sell_value = ((result.sell_info.plutus_rate) * (goldInfo.gold_balance || 0)).toFixed(2) || 0;
-        this.setState({
-          goldSellInfo: result.sell_info,
-          goldInfo: goldInfo,
-          show_loader: false,
-        });
+      // const res2 = await Api.get('/api/gold/sell/currentprice/' + this.state.provider);
+      // if (res2.pfwresponse.status_code === 200) {
+      //   let provider_info = this.state.provider_info;
+      //   let result = res2.pfwresponse.result;
+      //   provider_info.sell_value = ((result.sell_info.plutus_rate) * (provider_info.gold_balance || 0)).toFixed(2) || 0;
+      //   this.setState({
+      //     goldSellInfo: result.sell_info,
+      //     provider_info: provider_info,
+      //     show_loader: false,
+      //   });
 
-      } else {
-        this.setState({
-          show_loader: false
-        });
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
-      }
+      // } else {
+      //   this.setState({
+      //     show_loader: false
+      //   });
+      //   toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
+      // }
     } catch (err) {
+      console.log(err);
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong', 'error');
+      toast('Something went wrong');
     }
 
   }
 
   navigate = (pathname) => {
-    if (pathname === '/gold/my-gold') {
-      this.sendEvents('gold_summary')
-    }
     this.props.history.push({
       pathname: pathname,
       search: getConfig().searchParams
@@ -138,80 +229,105 @@ class Payment extends Component {
     this.navigate('/gold/gold-transactions')
     this.props.history.push({
       pathname: '/gold/gold-transactions',
-      search: getConfig().searchParams,
-      params: {
-        isDelivery: true
-      }
+      search: getConfig().searchParams
     });
   }
 
-  async sendInvoiceEmail(path) {
+  emailInvoice = async () => {
+
+    let path = this.state.report.invoice_link;
+    this.setState({
+      download_invoice_clicked: true
+    })
+    if(!path) {
+      toast('Invoice not generated, please try after sometime');
+      return;
+    }
 
     this.setState({
-      show_loader: true,
+      invoiceLoading: true,
     });
 
     try {
-      const res = await Api.get('/api/gold/invoice/download/mail', { url: path });
+      const res = await Api.get('/api/gold/invoice/download/mail/' + this.state.provider, 
+      { txn_id: this.state.transact_id, order_type: this.state.orderType });
       if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
         if (result.message === 'success') {
+          this.setState({
+            invoiceSent: true
+          })
           toast('Invoice has been sent succesfully to your registered email');
         } else {
           toast(result.message || result.error);
         }
         this.setState({
-          show_loader: false,
+          invoiceLoading: false,
         });
       } else {
         this.setState({
-          show_loader: false
+          invoiceLoading: false
         });
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
       }
     } catch (err) {
       this.setState({
-        show_loader: false
+        invoiceLoading: false
       });
-      toast('Something went wrong', 'error');
+      toast('Something went wrong');
     }
   }
 
-  async getInvoice(txn_id) {
+   getTransDetails = async (transact_id, orderType) => {
 
-    this.setState({
-      show_loader: true,
-    });
+    if(transact_id) {
+      this.setState({
+        show_loader: true,
+      });
+  
+      try {
+        const res = await Api.get('/api/gold/report/orders/' + this.state.provider + '?transaction_id=' + transact_id +
+        '&order_type=' + orderType);
+        if (res.pfwresponse.status_code === 200) {
 
-    try {
-      const res = await Api.get('/api/gold/user/getinvoice', { txn_id: txn_id });
-      if (res.pfwresponse.status_code === 200) {
-        this.setState({
-          show_loader: false,
-          invoiceLink: res.pfwresponse.result.invoice_link
-        });
-      } else {
+          let report = res.pfwresponse.result;
+          report.orderType = orderType;
+          report.final_status = getOrderStatusPayment(report);
+          let uniStatus = getUniversalTransStatus(report);
+          this.setPaymentStatus(this.state.orderType, this.state.status, uniStatus);
+          this.setState({
+            report: res.pfwresponse.result,
+            uniStatus: uniStatus
+          });
+        } else {
+          this.setState({
+            show_loader: false
+          });
+          toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
+        }
+      } catch (err) {
         this.setState({
           show_loader: false
         });
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong', 'error');
+        toast('Something went wrong');
       }
-    } catch (err) {
+    } else {
       this.setState({
-        show_loader: false
-      });
-      toast('Something went wrong', 'error');
+        report: {}
+      })
     }
+    
   }
 
-  sendEvents(user_action) {
+  sendEvents(user_action, data={}) {
     let eventObj = {
-      "event_name": 'GOLD',
+      "event_name": 'gold_investment_flow',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'Payment Summary',
-        'type': this.state.orderType,
-        'status': this.state.status
+        "screen_name": 'payment',
+        'flow': this.state.orderType,
+        'status': this.state.statusFinal,
+        'download_invoice_clicked': this.state.download_invoice_clicked ? 'yes': 'no'
       }
     };
 
@@ -224,134 +340,297 @@ class Payment extends Component {
 
   handleClick = () => {
     this.sendEvents('next');
-    this.props.history.push({
-      pathname: '/gold/my-gold',
-      search: getConfig().searchParams
-    });
+    this.navigate(this.state.commonMapper['cta_state']);
+  }
+
+  getHiddenBank(account_number) {
+    account_number = account_number.toString();
+    let str = '';
+    let len = ((account_number.length)/2).toFixed(0);
+
+    for(var i = 0; i < len - 1; i++) {
+      str += 'X';
+    }
+
+    str += '-';
+    for(var j = account_number.length - len; j < account_number.length; j++) {
+      str += account_number[j];
+    }
+
+    return str;
+
   }
 
   render() {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="Payment Summary"
+        noHeader={this.state.show_loader}
+        title={this.state.commonMapper['top_title']}
         handleClick={this.handleClick}
         edit={this.props.edit}
-        buttonTitle="Proceed"
-        noPadding={true}
+        buttonTitle={this.state.commonMapper.button_title}
         events={this.sendEvents('just_set_events')}
+        headerData={ {
+          icon: 'close'
+        }}
       >
-        <div className="page home" id="goldSection">
-          <div className="text-center goldheader"
-            onClick={() => this.navigate('/gold/my-gold')}
-            style={{
-              background: getConfig().primary
-            }}
-          >
-            <div className="my-gold-header" onClick={() => this.navigate('/gold/my-gold')}>
-              <div className="FlexRow row1" >
-                <img alt="Gold" className="img-mygold" src={safegold_logo} />
-                <span className="my-gold-title-header">Updated Gold Locker</span>
-                <img alt="Gold" className="img-mygold2" src={arrow} />
-              </div>
-              <div className="spacer-header"></div>
-              <div className="my-gold-details-header1">
-                <div className="my-gold-details-header2">
-                  <div className="my-gold-details-header2a">Weight</div>
-                  <div className="my-gold-details-header2b">{this.state.goldInfo.gold_balance} gm</div>
-                </div>
-                <div className="my-gold-details-header3">
-                  <div className="my-gold-details-header2a">Selling Value</div>
-                  <div className="my-gold-details-header2b">{inrFormatDecimal(this.state.goldInfo.sell_value)}</div>
-                </div>
-              </div>
-            </div>
+        <div className="gold-payment-container" id="goldSection">
+          <div>
+          <img style={{width: '100%'}} 
+          src={ require(`assets/${this.state.productName}/${this.state.commonMapper['top_icon']}.svg`)} 
+          alt="Gold" />
           </div>
-          <div className="invest-success container-padding" id="goldPayment">
-            {this.state.paymentError === false &&
-              <div>
-                <div className="success-card">
-                  <div className="icon">
-                    <img alt="Gold" src={thumpsup} width="80" />
-                  </div>
-                  {this.state.orderType === 'buy' && <h3>Payment Successful</h3>}
-                  {this.state.orderType === 'sell' && <h3>Successful</h3>}
-                  {this.state.orderType === 'delivery' && <h3>Order Successful</h3>}
+                <div className="main-tile">
+                  
+                  {this.state.orderType === 'buy' && 
+                    <div>
+                        {this.state.paymentSuccess && 
+                          <p className="top-content"> 
+                            <b>{this.state.weight} gms </b> gold worth <b>{inrFormatDecimal2(this.state.amount)}</b> added to your {this.state.providerData.title} gold locker.  
+                          </p>
+                        }
 
-                  {this.state.orderType === 'buy' && <p> {this.state.weight} grams gold has been purchased and the invoice has been sent to your registered email id.</p>}
-                  {this.state.orderType === 'sell' && <p> {this.state.weight} grams gold has been sold and the invoice has been sent to your registered email id.</p>}
-                  {this.state.orderType === 'delivery' && <p>Your delivery order for {this.state.productDisc} has been placed successfully</p>}
-                  {this.state.orderType !== 'delivery' && <div className="invoice">
-                    <a onClick={() => this.sendInvoiceEmail(this.state.invoiceLink)}>Download Invoice</a>
-                  </div>}
-                  {this.state.orderType === 'delivery' && <div className="invoice">
-                    <a onClick={() => this.trackDelivery(this.state.invoiceLink)}>Track all Delivery Orders</a>
-                  </div>}
+                        {this.state.paymentPending && 
+                          <div>
+                            <p className="top-content"> 
+                            Your purchase of <b>{this.state.weight} gms </b> gold worth <b>{inrFormatDecimal2(this.state.amount)}</b> is awaiting confirmation.  
+                            </p>
+                            <p className="top-content"> 
+                            If confirmed within 30 minutes we will place gold 
+                            purchase order (at live price) else it will be refunded in 3-5 business days.  
+                            </p>
+                          </div>
+                        }
+
+                        {this.state.paymentFailed && 
+                          <div>
+                            <p className="top-content"> 
+                              Your purchase of <b>{this.state.weight} gms</b> gold worth <b>{inrFormatDecimal2(this.state.amount)}</b> is failed.
+                            </p>
+                            <p className="top-content"> 
+                              If any amount has been debited, it will be refunded within 3-5 business days.  
+                            </p>
+                          </div> 
+                        }
+                      
+                    </div>
+                  
+                  }
+
+                  {this.state.orderType === 'sell' && 
+                    <div>
+
+                        {this.state.paymentSuccess && 
+                          <p className="top-content"> 
+                            <b>{this.state.weight} gms</b> gold worth <b>{inrFormatDecimal2(this.state.amount)}</b> sold successfully, {inrFormatDecimal2(this.state.amount)} will be 
+                        credited to {this.state.orderData.bank.bank_name}
+                        ({this.getHiddenBank(this.state.orderData.bank.account_number)}) within 48 hrs.  
+                          </p>
+                        }
+
+                        {this.state.paymentPending && 
+                          <p className="top-content"> 
+                            <b>{this.state.weight} gms</b> gold worth <b>{inrFormatDecimal2(this.state.amount)}</b> sold successfully, {inrFormatDecimal2(this.state.amount)} will be 
+                            credited to {this.state.orderData.bank.bank_name}
+                            ({this.getHiddenBank(this.state.orderData.bank.account_number)}) within 48 hrs. 
+                          </p>
+                        }
+
+                        {this.state.paymentFailed && 
+                          <div>
+                            <p className="top-content"> 
+                            Your sale of <b>{this.state.weight} gms</b> gold worth <b>{inrFormatDecimal2(this.state.amount)}</b> is failed.
+                            </p>
+                            <p className="top-content"> 
+                            If gold value has been debited, it will be restored back to your gold locker within 24hrs. 
+                            </p>
+                          </div>
+                        }
+                    </div>
+                  
+                  }
+
+                  {this.state.orderType !== 'delivery' && this.state.paymentSuccess &&
+                          <div style={{ margin: '30px 0 30px 0', display:'flex',position: 'relative' }} className="highlight-text highlight-color-info">
+                            <div>
+                            <img className="highlight-text11" 
+                              src={ require(`assets/${this.state.providerData.logo}`)}
+                              style={{width:30}}
+                              alt="info" />
+                            </div>
+                            
+                            <div>
+                              <div className="highlight-text1">
+                              
+                                <div className="highlight-text12" style={{display:'flex'}}>
+                                  <div>
+                                    {this.state.providerData.title}
+                                  </div>
+                                  <div className="karat">
+                                    {this.state.providerData.karat}
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="highlight-text2" style={{color: '#767E86',marginLeft:7}}>
+                                <div style={{margin: '5px 0 6px 0'}}>Updated value {this.state.provider_info.gold_balance} gms</div>
+                                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                                  <div>Order id: {this.state.transact_id}</div>
+                                  <div style={{marginLeft: 10}}>{formatDateAmPm(this.state.report.dt_created)}</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                  }
+
+                  {this.state.orderType === 'delivery' && 
+                    <div>
+
+                        {this.state.paymentSuccess && 
+                          <p className="top-content"> 
+                           Your delivery order of gold coin is successfully placed.
+                          </p>
+                        }
+                       
+                        {this.state.paymentPending && 
+                          <p className="top-content"> 
+                           Your delivery order of gold coin is awaiting confirmation.
+                          </p>
+                        }
+
+                        {this.state.paymentFailed && 
+                          <p className="top-content"> 
+                           Your delivery order of gold coin is failed.
+                          </p>
+                        }
+
+                        <div style={{ margin: '30px 0 30px 0' }} className="highlight-text highlight-color-info">
+                          <div  style={{textAlign: 'right', fontSize:10, color: getConfig().primary}}>{this.state.providerData.karat}</div>
+                          <div className="highlight-text1">
+                            <img className="highlight-text11" style={{width: 34}} 
+                            src={this.state.orderData.media.images[0]} alt="info" />
+                            <div className="highlight-text12" style={{display:'grid'}}>
+                                <div>{this.state.orderData.description}</div>
+                              {!this.state.paymentFailed &&
+                               <div style={{color: '#767E86', fontWeight: 400}}>Order id: {this.state.transact_id}</div>
+                               }
+                            </div>
+                          </div>
+                        </div>
+
+                        {this.state.paymentPending && 
+                            <p className="top-content"> 
+                            If confirmed within 30 minutes we will place gold 
+                            purchase order (at live price) else it will be refunded in 3-5 business days.  
+                            </p>
+                        }
+                      
+                    </div>
+                  
+                  }
+
+           {!this.state.paymentFailed &&
+                  <div>
+                      <div className="mid-title">{this.state.commonMapper.mid_title}</div>
+                      {this.state.orderType !== 'delivery' && 
+                        <div className="content">
+                            <div className="content-points">
+                                <div className="content-points-inside-text">
+                                  Buy price for <b>{this.state.weight}</b> gms
+                                </div>
+                                <div className="content-points-inside-text">
+                                  {inrFormatDecimal2(this.state.orderData.base_amount)}
+                                </div>
+                            </div>
+
+                            <div className="content-points">
+                                <div className="content-points-inside-text">
+                                GST
+                                </div>
+                                <div className="content-points-inside-text">
+                                {inrFormatDecimal2(this.state.orderData.gst_amount)}
+                                </div>
+                            </div>
+                        </div>
+                      }
+
+                      {this.state.orderType === 'delivery' && 
+                        <div className="content">
+                            <div className="content-points">
+                                <div className="content-points-inside-text">
+                                  Making charges
+                                </div>
+                                <div className="content-points-inside-text">
+                                  {inrFormatDecimal2(this.state.orderData.delivery_minting_cost)}
+                                </div>
+                            </div>
+
+                            <div className="content-points">
+                                <div className="content-points-inside-text">
+                                Shipping charges
+                                </div>
+                                <div className="content-points-inside-text">
+                                Free
+                                </div>
+                            </div>
+                        </div>
+                      }
+
+                      <div className="hr"></div>
+
+                      <div className="content2">
+                          <div className="content2-points">
+                              <div className="content2-points-inside-text">
+                                Total
+                              </div>
+                              <div className="content2-points-inside-text">
+                                {inrFormatDecimal2(this.state.orderData.total_amount || 
+                                  this.state.orderData.delivery_minting_cost)}
+                              </div>
+                          </div>
+                      </div>
+
+                      <div className="hr"></div>
+                  </div>
+                  }
+
+
+                  {this.state.paymentSuccess &&
+                    <div>
+                      {!this.state.invoiceSent && 
+                        <div className="send-invoice">
+                          <SVG
+                            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().secondary)}
+                            src={ic_send_email}
+                          />
+                          {!this.state.invoiceLoading &&
+                            <div onClick={() => this.emailInvoice()}
+                            style={{color: getConfig().secondary, marginLeft: 10}}>
+                              Email invoice
+                            </div>
+                          }
+                          {this.state.invoiceLoading &&
+                            <DotDotLoader style={{
+                              textAlign: 'left',
+                              marginLeft: 10
+                              }} 
+                            />
+                          }
+                        </div>
+                      }
+                      {this.state.invoiceSent && 
+                        <div className="send-invoice">
+                            <img className="sent-icon" 
+                              src={ require(`assets/completed_step.svg`)} 
+                              alt="Gold" />
+                              <span className="sent">Sent</span>
+                        </div>
+                      }
+                    </div>
+                  }
                 </div>
-              </div>
-            }
-            {this.state.paymentError === true &&
-              <div className="invest-error success-card">
-                <div className="icon">
-                  <img alt="Gold" src={error} width="80" />
-                </div>
-                <h3>Payment Failed</h3>
-                {this.state.orderType === 'buy' && <p>
-                  Oops! Your buy order for {this.state.weight} grams could not be placed.
-                <br />
-                  <br />
-                  Sorry for the inconvenience.
-                </p>}
-                {this.state.orderType === 'sell' &&
-                  <p>
-                    Oops! Your sell order for {this.state.weight} grams could not be placed.
-                <br />
-                    <br />
-                    Sorry for the inconvenience.
-                  </p>}
-                {this.state.orderType === 'delivery' &&
-                  <p>
-                    Oops! Your delivery order for {this.state.productDisc} could not be placed.
-                <br />
-                    <br />
-                    Sorry for the inconvenience.
-                </p>}
-              </div>}
-            {this.state.paymentPending === true &&
-              <div className="invest-error success-card">
-                <div className="icon">
-                  <img alt="Gold" src={error} width="80" height="80" />
-                </div>
-                <h3>Order Pending</h3>
-                {this.state.orderType === 'buy' &&
-                  <p>
-                    Oops! Your buy order for {this.state.weight} grams is in pending state. We will try placing
-                    the order again in the next 24 hrs. The amount will be refunded if the order
-                    doesn't go through
-                <br />
-                    <br />
-                    Sorry for the inconvenience.
-                </p>}
-                {this.state.orderType === 'sell' &&
-                  <p>
-                    Oops! Your sell order for {this.state.weight} grams could not be placed. We will try placing
-                    the order again in the next 24 hrs. The amount will be refunded if the order
-                    doesn't go through
-                <br />
-                    <br />
-                    Sorry for the inconvenience.
-                </p>}
-                {this.state.orderType === 'delivery' &&
-                  <p>
-                    Oops! Your delivery order for {this.state.productDisc} could not be placed. We will try placing
-                    the order again in the next 24 hrs. The amount will be refunded if the order
-                    doesn't go through
-                <br />
-                    <br />
-                    Sorry for the inconvenience.
-                </p>}
-              </div>}
-          </div>
+
+                <ContactUs />
         </div>
       </Container>
     );

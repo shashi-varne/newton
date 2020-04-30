@@ -62,7 +62,6 @@ class Report extends Component {
       } else {
         // intro
         pathname = 'intro';
-        return;
       }
 
     }
@@ -260,9 +259,11 @@ class Report extends Component {
             <div className="report-cover-amount"><span>Cover amount:</span> ₹{inrFormatDecimalWithoutIcon(props.cover_amount)}
               {props.product_key === 'HOSPICASH' && <span style={{ fontWeight: 400 }}>/day</span>}
             </div>
-            {props.product_key !== 'CORONA' &&
-              <div className="report-cover-amount"><span>Premium:</span> ₹{inrFormatDecimalWithoutIcon(props.premium)}/yr</div>
-            }
+           {props.product_key !== 'CORONA' && <div className="report-cover-amount"><span>Premium:</span> ₹{inrFormatDecimalWithoutIcon(props.premium)}
+              {props.key !== 'TERM_INSURANCE' &&
+              <span>/yr</span>
+              }
+            </div>}
             {props.product_key === 'CORONA' &&
               <div className="report-cover-amount"><span>Cover Peroid:</span> {props.product_coverage} year</div>
             }

@@ -34,6 +34,10 @@ class Listing extends Component {
     return new_date.getUTCMinutes() + '.' + new_date.getUTCSeconds();
   }
 
+  componentWillMount() {
+    nativeCallback({ action: 'take_control_reset' });
+  }
+
   async componentDidMount() {
     start_time = new Date();
 

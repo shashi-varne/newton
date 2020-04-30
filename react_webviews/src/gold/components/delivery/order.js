@@ -3,19 +3,11 @@ import qs from 'qs';
 
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import point_five_gm from 'assets/05gmImage.png';
-import one_gm_front from 'assets/1gm_front.png';
-import two_gm_front from 'assets/2gm_front.png';
-import five_gm_front from 'assets/5gm_front.png';
-import five_gmbar_front from 'assets/5gmbar_front.png';
-import ten_gm_front from 'assets/10gm_front.png';
-import ten_gmbar_front from 'assets/10gmbar_front.png';
-import twenty_gmbar_front from 'assets/20gmbar_front.png';
 import toast from '../../../common/ui/Toast';
-import { inrFormatDecimal } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
-
+import { storageService, inrFormatDecimal2 } from 'utils/validators';
+import { gold_providers } from '../../constants';
 class DeliveryOrder extends Component {
   constructor(props) {
     super(props);
@@ -23,90 +15,71 @@ class DeliveryOrder extends Component {
       show_loader: true,
       openResponseDialog: false,
       disabled: false,
-      disabledText: 'Proceed to payment',
-      product: {},
-      address: {},
-      redeemProduct: {
-        product_details: [],
-        delivery_address: []
-      },
-      params: qs.parse(props.history.location.search.slice(1))
+      disabledText: 'MAKE PAYMENT',
+      params: qs.parse(props.history.location.search.slice(1)),
+      provider: this.props.match.params.provider,
+      showAddress: false,
+      orderData: storageService().getObject('deliveryData') || {}
     }
-    this.onload = this.onload.bind(this);
   }
 
   componentWillMount() {
     nativeCallback({ action: 'take_control_reset' });
-  }
 
-  componentDidMount() {
+    this.setState({
+      providerData: gold_providers[this.state.provider]
+    })
 
-    if (window.localStorage.getItem('goldProduct')) {
-      let product = JSON.parse(window.localStorage.getItem('goldProduct'));
-      let address = product.address;
-      this.setState({
-        product: product,
-        address: address
-      })
-      if (product.isFisdomVerified) {
-        this.onload(product, address);
-      } else {
-        toast('Please verify your mobile number to proceed', 'error')
-        this.navigate('gold-delivery-address');
-      }
-    } else {
-      this.navigate('my-gold-locker');
+    if (!this.state.orderData) {
+      this.navigate('/gold/delivery-products');
     }
   }
 
-  async onload(product, address) {
+  async componentDidMount() {
 
     var options = {
-      "pincode": address.pincode,
-      "addressline": address.addressline,
-      "landmark": address.landmark,
-      "city": address.city,
-      "product_code": product.id,
-      "state": address.state
-
+      "product_code": this.state.orderData.id,
+      "addressId": this.state.orderData.address.id
     }
 
+    let orderData = this.state.orderData;
+
     try {
-      const res = await Api.post('/api/gold/user/redeem/verify', options);
+      const res = await Api.post('/api/gold/user/redeem/verify/' + this.state.provider, options);
       if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.message === 'success') {
         this.setState({
           show_loader: false
         })
-        let result = res.pfwresponse.result;
-        let redeemProduct = result.redeem_body;
-        window.localStorage.setItem('redeemProduct', JSON.stringify(redeemProduct));
+        let redeem_body = res.pfwresponse.result.redeem_body || {};
+        orderData.transact_id = redeem_body.transact_id;
+
+        storageService().setObject('deliveryData', orderData)
         this.setState({
-          redeemProduct: redeemProduct,
+          redeem_body: redeem_body,
           disabled: false
         })
 
       } else {
-        let product = this.state.product;
-        let redeemProduct = this.state.redeemProduct;
+
         let disabledText = res.pfwresponse.result.message || res.pfwresponse.result.error || 'Insufficient Balance';
-        redeemProduct.delivery_address = product.address;
-        redeemProduct.product_details = product
         this.setState({
           show_loader: false,
           disabled: true,
-          redeemProduct: redeemProduct,
           disabledText: disabledText
         });
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
-          'Something went wrong', 'error');
+          'Something went wrong');
       }
     } catch (err) {
+      console.log(err);
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong', 'error');
+      toast('Something went wrong');
     }
+
   }
+
 
   navigate = (pathname) => {
     this.props.history.push({
@@ -117,10 +90,11 @@ class DeliveryOrder extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'GOLD',
+      "event_name": 'gold_investment_flow',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'Delivery Order Summary'
+        "screen_name": 'delivery_summary',
+        'address_check': this.state.address_check ? 'yes' : 'no'
       }
     };
 
@@ -133,109 +107,186 @@ class DeliveryOrder extends Component {
 
   handleClick = async () => {
     this.sendEvents('next');
+
+    if (!this.state.redeem_body.payment_link) {
+      return;
+    }
     this.setState({
       show_loader: true
     })
 
     let nativeRedirectUrl = window.location.origin +
-      '/gold/gold-delivery-order' + getConfig().searchParams;
-
-    // nativeCallback({
-    //   action: 'take_control', message: {
-    //     back_url: nativeRedirectUrl,
-    //     back_text: 'Are you sure you want to exit the payment process?'
-    //   }
-    // });
+      '/gold/' + this.state.provider + '/gold-delivery-order' + getConfig().searchParams;
 
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.origin + '/gold/delivery/payment' + getConfig().searchParams
+      window.location.origin + '/gold/' + this.state.provider + '/delivery/payment' + getConfig().searchParams
     );
 
-    var pgLink = this.state.redeemProduct.payment_link;
+    var pgLink = this.state.redeem_body.payment_link;
     // eslint-disable-next-line
     pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl + '&back_url=' + encodeURIComponent(nativeRedirectUrl) + '&order_type=delivery';
     if (getConfig().generic_callback) {
       pgLink += '&generic_callback=' + getConfig().generic_callback;
     }
 
-    pgLink = '';
-    window.location = pgLink;
+    if (getConfig().app === 'ios') {
+      nativeCallback({
+        action: 'show_top_bar', message: {
+          title: 'Payment'
+        }
+      });
+    }
+
+    if (!getConfig().redirect_url) {
+      nativeCallback({
+        action: 'take_control', message: {
+          back_url: nativeRedirectUrl,
+          back_text: 'Are you sure you want to exit the payment process?'
+        }
+      });
+    } else {
+      nativeCallback({
+        action: 'take_control', message: {
+          back_url: nativeRedirectUrl,
+          back_text: ''
+        }
+      });
+    }
+
+    window.location.href = pgLink;
   }
 
-  productImgMap = () => {
-    const prod_image_map = {
-      2: one_gm_front,
-      3: two_gm_front,
-      1: five_gm_front,
-      14: five_gmbar_front,
-      8: ten_gm_front,
-      12: ten_gmbar_front,
-      15: twenty_gmbar_front,
-      16: point_five_gm
-    };
-
-    return (
-      <img alt="Gold" className="delivery-icon" src={prod_image_map[this.state.product.id]} width="150" />
-    );
+  showHideAddress() {
+    this.setState({
+      showAddress: !this.state.showAddress,
+      address_check: true
+    })
   }
 
   render() {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="Gold Delivery Order"
+        title="Summary"
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle={this.state.disabledText}
         disable={this.state.disabled}
         events={this.sendEvents('just_set_events')}
       >
-        <div className="order-tile">
-          <div className="order-heading">
-            <div className="order-tile-head">
-              Delivery Order Summary
+
+        <div className="gold-delivery-order">
+          <div style={{ margin: '30px 0 30px 0' }} className="highlight-text highlight-color-info">
+            <div style={{ textAlign: 'right', fontSize: 10, color: getConfig().primary }}>{this.state.providerData.karat}</div>
+            <div className="highlight-text1">
+              <img className="highlight-text11" style={{ width: 34 }}
+                src={this.state.orderData.media.images[0]} alt="info" />
+              <div className="highlight-text12" style={{ display: 'grid' }}>
+                <div>{this.state.orderData.description}</div>
+              </div>
             </div>
           </div>
-          <div className="delivery-order-logo">
-            {this.productImgMap()}
+
+          <div className="top-info">
+            <div className="top-info-tile">
+              <div className="top-info-tile1">Gold coin weight</div>
+              <div className="top-info-tile1">{this.state.orderData.metal_weight} gms</div>
+            </div>
+
+            <div className="top-info-tile" style={{ background: '#F8F8F8' }}>
+              <div className="top-info-tile1"> Gold locker ({this.state.providerData.title})</div>
+              <div className="top-info-tile1">- {this.state.orderData.metal_weight} gms</div>
+            </div>
           </div>
-          <div className="order-tile2">
-            <span className="order-tile-total1-delivery">Total payble amount</span>
-            <span className="float-right order-tile-total1-delivery"> &nbsp;&nbsp;{inrFormatDecimal(this.state.redeemProduct.mint_delivery_price)}</span>
+
+          <div className='dash-hr'></div>
+
+          <div className="mid-title">
+            Order summary
+        </div>
+
+          <div className="content">
+            <div className="content-points">
+              <div className="content-points-inside-text">
+                Making charges
+                </div>
+              <div className="content-points-inside-text">
+                {inrFormatDecimal2(this.state.orderData.delivery_minting_cost)}
+              </div>
+            </div>
+
+            {/* <div className="content-points">
+                <div className="content-points-inside-text">
+                Gold buying charges
+                  (0.125 gms) 
+                </div>
+                <div className="content-points-inside-text">
+                + ₹500
+                </div>
+            </div> */}
+
+            {/* <div className="content-points">
+                <div className="content-points-inside-text">
+                GST
+                </div>
+                <div className="content-points-inside-text">
+                ₹50
+                </div>
+            </div> */}
+
+            <div className="content-points">
+              <div className="content-points-inside-text">
+                Shipping charges
+                </div>
+              <div className="content-points-inside-text">
+                Free
+                </div>
+            </div>
           </div>
-          <div className="order-tile2">
-            <span className="order-tile-other-text-delivery">Estimated Dispatch Period</span>
-            <span className="float-right order-tile-other-text-delivery">{this.state.redeemProduct.estimated_dispatch_period}</span>
+
+          <div className="hr"></div>
+
+          <div className="content2">
+            <div className="content2-points">
+              <div className="content2-points-inside-text">
+                Total charges
+                </div>
+              <div className="content2-points-inside-text">
+                {inrFormatDecimal2(this.state.orderData.delivery_minting_cost)}
+              </div>
+            </div>
           </div>
-          <div className="order-tile2">
-            <span className="order-tile-other-text-delivery">Estimated Delivery Period</span>
-            <span className="float-right order-tile-other-text-delivery">{this.state.redeemProduct.product_details.estimated_days_for_dispatch}</span>
+
+          <div className="shipping-address" onClick={() => this.showHideAddress()}>
+            <div className="top-tile">
+              <div className="top-title">
+                Shipping address
+              </div>
+              <div className="top-icon">
+                <img src={require(`assets/${this.state.showAddress ? 'minus_icon' : 'plus_icon'}.svg`)} alt="Gold" />
+              </div>
+            </div>
+
+
+            {this.state.showAddress &&
+              <div className='address'>
+                <div className="content">
+                  {this.state.orderData.address.name}
+                </div>
+                <div className="content">
+                  {this.state.orderData.address.addressline1}, {this.state.orderData.address.addressline2}
+                  , {this.state.orderData.address.city}
+                </div>
+                <div className="content">
+                  {this.state.orderData.address.state} - {this.state.orderData.address.pincode}
+                </div>
+                <div className="content">
+                  Mobile: {this.state.orderData.address.mobile_number}
+                </div>
+              </div>
+            }
           </div>
-          <div className="order-tile2">
-            <span className="order-tile-other-text-delivery">Product </span>
-            <span className="float-right order-tile-other-text-delivery">{this.state.redeemProduct.product_details.description}</span>
-          </div>
-          <div className="order-tile2">
-            <span className="order-tile-other-text-delivery">Address</span>
-            <span className="float-right order-tile-other-text-delivery">{this.state.redeemProduct.delivery_address.addressline}</span>
-          </div>
-          <div className="order-tile2">
-            <span className="order-tile-other-text-delivery">Pincode</span>
-            <span className="float-right order-tile-other-text-delivery">{this.state.redeemProduct.delivery_address.pincode}</span>
-          </div>
-          {this.state.redeemProduct.delivery_address.landmark &&
-            <div className="order-tile2">
-              <span className="order-tile-other-text-delivery">Landmark</span>
-              <span className="float-right order-tile-other-text-delivery">{this.state.redeemProduct.delivery_address.landmark}</span>
-            </div>}
-          <div className="order-tile2">
-            <span className="order-tile-other-text-delivery">City</span>
-            <span className="float-right order-tile-other-text-delivery">{this.state.redeemProduct.delivery_address.city}</span>
-          </div>
-          <div className="order-tile2">
-            <span className="order-tile-other-text-delivery">{this.state.redeemProduct.delivery_address.state}</span>
-            <span className="float-right order-tile-other-text-delivery">Karnataka</span>
-          </div>
+
         </div>
       </Container>
     );
