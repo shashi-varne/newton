@@ -199,7 +199,7 @@
    font-size: 14px;
 }
 .bottom-info {
-  background: #f4effe;
+  background: var(--highlight);
   padding: 10px;
   text-align: center;
   border-radius: 6px;

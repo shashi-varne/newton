@@ -8,6 +8,7 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { nativeCallback } from 'utils/native_callback';
 import { inrFormatDecimal } from '../../../utils/validators';
+import ContactUs from '../../../common/components/contact_us';
 
 class EnpsSuccess extends Component {
   constructor(props) {
@@ -122,22 +123,7 @@ class EnpsSuccess extends Component {
             </div>
           }
 
-          <div className="success-bottom">
-            <div className="success-bottom1">
-              For any query, reach us at
-            </div>
-            <div className="success-bottom2">
-              <div className="success-bottom2a">
-                {getConfig().mobile}
-              </div>
-              <div className="success-bottom2b">
-                |
-              </div>
-              <div className="success-bottom2a">
-                {getConfig().askEmail}
-              </div>
-            </div>
-          </div>
+          <ContactUs />
         </div>
       </Container >
     );

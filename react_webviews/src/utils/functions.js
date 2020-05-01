@@ -166,7 +166,7 @@ const partnersConfigBase = {
     cta_disabled_background: "#F1D5C9",
     cta_disabled_color: "#ffffff",
     code: "fpg",
-    mobile: "+80-48-093070",
+    mobile: "1800-212-5997",
     email: "care.futuremoney@fisdom.com",
     message: "",
     banner: "bfdl_banner.png",
@@ -215,6 +215,38 @@ const partnersConfigBase = {
     back_button: "back_icon_white.png",
     close_button: "close_nav_icon.svg",
     search_button: "search.png"
+  },
+  flexi: {
+    logo: "logo_white.png",
+    primary_color: "#4f2da7",
+    code: "flexi",
+    email: "ask@fisdom.com",
+    mobile: "+80-48-093070",
+    message: "",
+    banner: "obc_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png",
+    invest_screen_cards: {
+      nps: true,
+      gold: true
+    }
+  },
+  medlife: {
+    logo: "logo_white.png",
+    primary_color: "#4f2da7",
+    code: "medlife",
+    email: "ask@fisdom.com",
+    mobile: "+80-48-093070",
+    message: "",
+    banner: "obc_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png",
+    invest_screen_cards: {
+      nps: true,
+      gold: true
+    }
   }
 };
 
@@ -258,6 +290,7 @@ function getPartnerConfig(partner_code) {
       primary: '#4f2da7',
       secondary: '#35cb5d',
       default: '#4a4a4a',
+      highlight_color: '#f6f2ff',
       label: '#a2a2a2',
       type: 'fisdom',
       // inputFocusedColor: '#4f2da7', 
@@ -275,6 +308,7 @@ function getPartnerConfig(partner_code) {
       primary: '#3792fc',
       secondary: '#35cb5d',
       default: '#4a4a4a',
+      highlight_color: '#F0F7FF',
       label: '#a2a2a2',
       type: 'myway',
       // inputFocusedColor: '#3792fc',
@@ -293,7 +327,8 @@ function getPartnerConfig(partner_code) {
   const ismyway = search.indexOf("api.mywaywealth.com") >= 0;
   const isStaging = search.indexOf("staging") >= 0;
   let productType = 'fisdom';
-  if (ismyway || partner_code === 'bfdlmobile') {
+  if (ismyway || partner_code === 'bfdlmobile' || 
+  partner_code === 'myway') {
     productType = 'myway';
   }
 
@@ -324,7 +359,7 @@ function getPartnerConfig(partner_code) {
     if(partner_code === 'bfdl') {
       partner_code = 'bfdlmobile';
     }
-    let partnerData = partnersConfigBase[partner_code];
+    let partnerData = partnersConfigBase[partner_code] || partnersConfigBase['fisdom'];
     config_to_return.partner_code = partner_code;
     config_to_return.isFinwiz = false;
     for (var key in partnerKeysMapper) {
@@ -340,6 +375,7 @@ function getPartnerConfig(partner_code) {
 
   let html = document.querySelector(`html`);
   html.style.setProperty(`--secondary`, `${config_to_return.secondary}`);
+  html.style.setProperty(`--highlight`, `${config_to_return.highlight_color}`);
   html.style.setProperty(`--primary`, `${config_to_return.primary}`);
   html.style.setProperty(`--default`, `${config_to_return.default}`);
   html.style.setProperty(`--label`, `${config_to_return.label}`);
@@ -397,6 +433,9 @@ export const getConfig = () => {
     project = 'isip';
   } else if (main_pathname.indexOf('referral') >= 0) {
     project = 'referral';
+  } else if (main_pathname.indexOf('help') >= 0) {
+    project = 'help';
+    generic_callback = "true";
   }
   
   let search = window.location.search;
@@ -414,6 +453,7 @@ export const getConfig = () => {
   }
 
   if(checkValidString(redirect_url)) {
+    returnConfig.webAppUrl = decodeURIComponent(redirect_url).split('#')[0]+'#!/';
     redirect_url = encodeURIComponent(redirect_url)
     returnConfig.redirect_url = redirect_url;
     searchParams += `&redirect_url=${redirect_url}`;
@@ -433,7 +473,7 @@ export const getConfig = () => {
   }
 
   if (project === 'insurance' || project_child === 'term') {
-    let insurance_v2 = generic_callback === "true" ? true : main_query_params.insurance_v2;;
+    let insurance_v2 = generic_callback === "true" ? true : main_query_params.insurance_v2;
     let { insurance_id } = main_query_params;
     let { isJourney } = main_query_params;
 

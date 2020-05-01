@@ -1019,9 +1019,10 @@ class Journey extends Component {
           events={this.sendEvents('just_set_events')}
           disableBack={this.state.disableBack ? true : false}
           isJourney={this.state.params.isJourney ? true : false}
-          resetpage={((this.state.status === 'init' || this.state.status === 'plutus_submitted') &&
-            (this.state.plutus_payment_status !== 'payment_done' && !this.state.params.isJourney)) ? true : false
-          }
+          // resetpage={((this.state.status === 'init' || this.state.status === 'plutus_submitted') &&
+          //   (this.state.plutus_payment_status !== 'payment_done' && !this.state.params.isJourney)) ? true : false
+          // }
+          resetpage={false}
           handleReset={this.showDialog}
           summarypage={true}
           showLoader={this.state.show_loader}

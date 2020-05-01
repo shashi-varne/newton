@@ -49,7 +49,6 @@ class Landing extends Component {
   }
 
   componentWillMount() {
-
     window.localStorage.setItem('group_insurance_payment_started', '');
     window.localStorage.setItem('group_insurance_payment_urlsafe', '');
     window.localStorage.setItem('group_insurance_plan_final_data', '');
@@ -128,13 +127,18 @@ class Landing extends Component {
       }
     ];
 
-    if (this.state.partner_code === 'hbl') {
+    if (this.state.partner_code === 'hbl' || (this.state.type === 'fisdom' && getConfig().app !== 'web')) {
       let index = insuranceProducts.findIndex(obj => obj.key === "CORONA");
       insuranceProducts.splice(index, 1);
     }
 
     let { params } = this.props.location || {};
     let openModuleData = params ? params.openModuleData : {}
+
+    let redirect_url =  decodeURIComponent(getConfig().redirect_url);
+    if(!openModuleData.sub_module && redirect_url && redirect_url.includes("exit_web")) {
+      window.location.href = redirect_url;
+    }
 
     this.setState({
       openModuleData: openModuleData || {},
@@ -286,7 +290,6 @@ class Landing extends Component {
       } else {
         // intro
         pathname = 'intro';
-        return;
       }
 
       if (application) {

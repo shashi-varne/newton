@@ -92,7 +92,7 @@ class About extends Component {
         title="Gold"
         edit={this.props.edit}
         handleClick={this.handleClick}
-        buttonTitle="Proceed"
+        buttonTitle="PROCEED"
         events={this.sendEvents('just_set_events')}
       >
         <div className="gold-about-card">

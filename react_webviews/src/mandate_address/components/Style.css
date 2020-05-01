@@ -71,27 +71,6 @@
   font-size: 16px;
   color: #4a4a4a;
 }
-.success-bottom {
-  margin: 40px 0 0 0;
-  text-align: center;
-}
-.success-bottom1 {
-  font-size: 14px;
-  color: #b4b4b4;
-  margin-bottom: 11px;
-}
-.success-bottom2 {
-  display: -webkit-inline-box;
-}
-.success-bottom2a {
-  font-size: 14px;
-  color: #b4b4b4;
-  font-weight: 600;
-}
-.success-bottom2b {
-  margin: 0 20px 0 20px;
-  color: #d6d6d6;
-}
 .success-bottom-timer {
   text-align: center;
   margin: 20px 0 0 0;
