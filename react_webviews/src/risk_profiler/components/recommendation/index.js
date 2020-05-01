@@ -244,7 +244,7 @@ class Recommendation extends Component {
                                 getConfig().searchParams
     );
 
-    let openWebModule = getConfig().Web || !getConfig().isFinwiz;
+    let openWebModule = getConfig().Web || getConfig().redirect_url;
     if (isin) {
 
       if(openWebModule) {
