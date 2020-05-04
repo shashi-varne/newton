@@ -16,6 +16,10 @@ class EtliAuthFailedClass extends Component {
     };
   }
 
+  componentWillMount() {
+    nativeCallback({ action: 'take_control_reset' });
+  }
+
   handleClick = () => {
     this.setState({
       show_loader: true

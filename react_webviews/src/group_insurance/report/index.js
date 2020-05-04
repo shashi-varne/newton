@@ -185,6 +185,10 @@ class Report extends Component {
     window.removeEventListener("scroll", this.onScroll, false);
   }
 
+  componentWillMount() {
+    nativeCallback({ action: 'take_control_reset' });
+  }
+
   redirectCards(policy) {
     this.sendEvents('next', policy.key);
     let path = '';
