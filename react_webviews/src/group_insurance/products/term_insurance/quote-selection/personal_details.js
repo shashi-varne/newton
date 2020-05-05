@@ -33,6 +33,10 @@ class PersonalDetailsIntro extends Component {
     }
   }
 
+  componentWillMount() {
+    nativeCallback({ action: 'take_control_reset' });
+  }
+
   async componentDidMount() {
     try {
       const res = await Api.get('/api/kyc/v2/mine')

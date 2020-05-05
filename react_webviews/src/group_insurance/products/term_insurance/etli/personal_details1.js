@@ -41,9 +41,12 @@ class EtliPersonalDetails1 extends Component {
         };
     }
 
+    componentWillMount() {
+        nativeCallback({ action: 'take_control_reset' });
+    }
+
     async componentDidMount() {
 
-        nativeCallback({ action: 'take_control_reset' });
         let basic_details_data = this.state.basic_details_data || {};
         try {
             const res = await Api.get('/api/ins_service/api/insurance/account/summary')
