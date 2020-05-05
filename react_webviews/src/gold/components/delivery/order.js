@@ -7,7 +7,7 @@ import toast from '../../../common/ui/Toast';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import { storageService, inrFormatDecimal2 } from 'utils/validators';
-import { gold_providers} from '../../constants';
+import { gold_providers } from '../../constants';
 class DeliveryOrder extends Component {
   constructor(props) {
     super(props);
@@ -19,7 +19,7 @@ class DeliveryOrder extends Component {
       params: qs.parse(props.history.location.search.slice(1)),
       provider: this.props.match.params.provider,
       showAddress: false,
-      orderData:storageService().getObject('deliveryData') || {}
+      orderData: storageService().getObject('deliveryData') || {}
     }
   }
 
@@ -60,7 +60,7 @@ class DeliveryOrder extends Component {
         })
 
       } else {
-        
+
         let disabledText = res.pfwresponse.result.message || res.pfwresponse.result.error || 'Insufficient Balance';
         this.setState({
           show_loader: false,
@@ -108,7 +108,7 @@ class DeliveryOrder extends Component {
   handleClick = async () => {
     this.sendEvents('next');
 
-    if(!this.state.redeem_body.payment_link) {
+    if (!this.state.redeem_body.payment_link) {
       return;
     }
     this.setState({
@@ -118,15 +118,8 @@ class DeliveryOrder extends Component {
     let nativeRedirectUrl = window.location.origin +
       '/gold/' + this.state.provider + '/gold-delivery-order' + getConfig().searchParams;
 
-    // nativeCallback({
-    //   action: 'take_control', message: {
-    //     back_url: nativeRedirectUrl,
-    //     back_text: 'Are you sure you want to exit the payment process?'
-    //   }
-    // });
-
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.origin + '/gold/' + this.state.provider  + '/delivery/payment' + getConfig().searchParams
+      window.location.origin + '/gold/' + this.state.provider + '/delivery/payment' + getConfig().searchParams
     );
 
     var pgLink = this.state.redeem_body.payment_link;
@@ -138,18 +131,27 @@ class DeliveryOrder extends Component {
 
     if (getConfig().app === 'ios') {
       nativeCallback({
-          action: 'show_top_bar', message: {
+        action: 'show_top_bar', message: {
           title: 'Payment'
-          }
+        }
       });
     }
 
-    nativeCallback({
+    if (!getConfig().redirect_url) {
+      nativeCallback({
         action: 'take_control', message: {
-            back_url: nativeRedirectUrl,
-            back_text: 'Are you sure you want to exit the payment process?'
+          back_url: nativeRedirectUrl,
+          back_text: 'Are you sure you want to exit the payment process?'
         }
-    });
+      });
+    } else {
+      nativeCallback({
+        action: 'take_control', message: {
+          back_url: nativeRedirectUrl,
+          back_text: ''
+        }
+      });
+    }
 
     window.location.href = pgLink;
   }
@@ -173,44 +175,44 @@ class DeliveryOrder extends Component {
         events={this.sendEvents('just_set_events')}
       >
 
-      <div className="gold-delivery-order">
-        <div style={{ margin: '30px 0 30px 0' }} className="highlight-text highlight-color-info">
-        <div  style={{textAlign: 'right', fontSize:10, color: getConfig().primary}}>{this.state.providerData.karat}</div>
-          <div className="highlight-text1">
-            <img className="highlight-text11" style={{width: 34}} 
-            src={this.state.orderData.media.images[0]} alt="info" />
-            <div className="highlight-text12" style={{display:'grid'}}>
-              <div>{this.state.orderData.description}</div>
+        <div className="gold-delivery-order">
+          <div style={{ margin: '30px 0 30px 0' }} className="highlight-text highlight-color-info">
+            <div style={{ textAlign: 'right', fontSize: 10, color: getConfig().primary }}>{this.state.providerData.karat}</div>
+            <div className="highlight-text1">
+              <img className="highlight-text11" style={{ width: 34 }}
+                src={this.state.orderData.media.images[0]} alt="info" />
+              <div className="highlight-text12" style={{ display: 'grid' }}>
+                <div>{this.state.orderData.description}</div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="top-info">
-          <div className="top-info-tile">
-            <div className="top-info-tile1">Gold coin weight</div>
-            <div className="top-info-tile1">{this.state.orderData.metal_weight} gms</div>
+          <div className="top-info">
+            <div className="top-info-tile">
+              <div className="top-info-tile1">Gold coin weight</div>
+              <div className="top-info-tile1">{this.state.orderData.metal_weight} gms</div>
+            </div>
+
+            <div className="top-info-tile" style={{ background: '#F8F8F8' }}>
+              <div className="top-info-tile1"> Gold locker ({this.state.providerData.title})</div>
+              <div className="top-info-tile1">- {this.state.orderData.metal_weight} gms</div>
+            </div>
           </div>
 
-          <div className="top-info-tile" style={{background: '#F8F8F8'}}>
-            <div className="top-info-tile1"> Gold locker ({this.state.providerData.title})</div>
-            <div className="top-info-tile1">- {this.state.orderData.metal_weight} gms</div>
-          </div>
+          <div className='dash-hr'></div>
+
+          <div className="mid-title">
+            Order summary
         </div>
 
-        <div className='dash-hr'></div>
-
-        <div className="mid-title">
-          Order summary
-        </div>
-
-        <div className="content">
+          <div className="content">
             <div className="content-points">
-                <div className="content-points-inside-text">
+              <div className="content-points-inside-text">
                 Making charges
                 </div>
-                <div className="content-points-inside-text">
+              <div className="content-points-inside-text">
                 {inrFormatDecimal2(this.state.orderData.delivery_minting_cost)}
-                </div>
+              </div>
             </div>
 
             {/* <div className="content-points">
@@ -233,57 +235,57 @@ class DeliveryOrder extends Component {
             </div> */}
 
             <div className="content-points">
-                <div className="content-points-inside-text">
+              <div className="content-points-inside-text">
                 Shipping charges
                 </div>
-                <div className="content-points-inside-text">
+              <div className="content-points-inside-text">
                 Free
                 </div>
             </div>
-        </div>
+          </div>
 
-        <div className="hr"></div>
+          <div className="hr"></div>
 
-        <div className="content2">
+          <div className="content2">
             <div className="content2-points">
-                <div className="content2-points-inside-text">
-                  Total charges
+              <div className="content2-points-inside-text">
+                Total charges
                 </div>
-                <div className="content2-points-inside-text">
-                  {inrFormatDecimal2(this.state.orderData.delivery_minting_cost)}
-                </div>
+              <div className="content2-points-inside-text">
+                {inrFormatDecimal2(this.state.orderData.delivery_minting_cost)}
+              </div>
             </div>
-        </div>
+          </div>
 
-        <div className="shipping-address" onClick={() => this.showHideAddress()}>
+          <div className="shipping-address" onClick={() => this.showHideAddress()}>
             <div className="top-tile">
               <div className="top-title">
                 Shipping address
               </div>
               <div className="top-icon">
-                <img src={ require(`assets/${this.state.showAddress ? 'minus_icon' : 'plus_icon'}.svg`)} alt="Gold" />
+                <img src={require(`assets/${this.state.showAddress ? 'minus_icon' : 'plus_icon'}.svg`)} alt="Gold" />
               </div>
             </div>
 
 
-           {this.state.showAddress &&
-            <div className='address'>
-              <div className="content">
-                {this.state.orderData.address.name}
+            {this.state.showAddress &&
+              <div className='address'>
+                <div className="content">
+                  {this.state.orderData.address.name}
+                </div>
+                <div className="content">
+                  {this.state.orderData.address.addressline1}, {this.state.orderData.address.addressline2}
+                  , {this.state.orderData.address.city}
+                </div>
+                <div className="content">
+                  {this.state.orderData.address.state} - {this.state.orderData.address.pincode}
+                </div>
+                <div className="content">
+                  Mobile: {this.state.orderData.address.mobile_number}
+                </div>
               </div>
-              <div className="content">
-              {this.state.orderData.address.addressline1}, {this.state.orderData.address.addressline2} 
-              , {this.state.orderData.address.city}
-              </div>
-              <div className="content">
-                {this.state.orderData.address.state} - {this.state.orderData.address.pincode}
-              </div>
-              <div className="content">
-                Mobile: {this.state.orderData.address.mobile_number}
-              </div>
-            </div>
-          }
-        </div>
+            }
+          </div>
 
         </div>
       </Container>

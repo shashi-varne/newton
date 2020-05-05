@@ -125,6 +125,7 @@
 
 .thumbs img {
 	margin: 0 10px;
+	cursor: pointer;
 }
 
 .related {
@@ -152,6 +153,7 @@
 	color: var(--secondary);
 	font-size: 14px;
 	font-weight: 500;
+	cursor: pointer;
 }
 
 .InputField .label {

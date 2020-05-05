@@ -20,6 +20,8 @@ import goldOfferImageMyway2 from 'assets/gold_offer2.png';
 import goldOfferImageFisdom3 from 'assets/gold_offer_fisdom3.jpg';
 import goldOfferImageMyway3 from 'assets/gold_offer_myway3.jpg';
 
+import mmtcOfferImage from 'assets/MMTC-PAMP-offer.png';
+
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
@@ -29,6 +31,12 @@ import gold_pattern_myway from 'assets/myway/gold_pattern.png';
 import crd_gold_info from 'assets/crd_gold_info.svg';
 import {isUserRegistered, gold_providers} from '../../constants';
 import { inrFormatDecimal2, storageService} from 'utils/validators';
+
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 let eventToStateMapper = {
   'check-how1': 'check-how',
@@ -78,12 +86,13 @@ class GoldSummary extends Component {
     nativeCallback({ action: 'take_control_reset' });
     storageService().set('gold_provider', 'mmtc');
     let type = getConfig().productName;
+    let typeCaps = type === 'fisdom' ? 'Fisdom' : 'Myway';
     
     var gold_offer_terms1 = [
       'For a transaction to be valid, there must be a minimum purchase of Rs 1,000 for each offer.',
       'Gold-back will be in the form of SafeGold balance and will be 5% of the value of gold purchased and upto a maximum of Rs 1000.',
       "Gold-back will be credited to the customer's account within 14 days of the end date of the offer.",
-      "If an existing customer has transacted for purchase of Digital Gold through his/her " + (type === 'fisdom' ? 'Fisdom' : 'Myway') + " account prior to the launch of this gold-back offer, s/he will not be eligible for this offer",
+      "If an existing customer has transacted for purchase of Digital Gold through his/her " + typeCaps + " account prior to the launch of this gold-back offer, s/he will not be eligible for this offer",
       "Any conditions which are not explicitly covered would be at the sole discretion of SafeGold. The decision of SafeGold in this regard will be final and the company has the right to change the terms and conditions at any time.",
       "In case of any customer query or dispute, SafeGold reserves the right to resolve the same on the basis of the terms and conditions of the offer at its sole discretion."
     ];
@@ -93,26 +102,59 @@ class GoldSummary extends Component {
       'Delivery of coins may take between 5-7 working days from the date of order, and may be affected by weekends and holidays.'
     ]
 
-    let offerImageData = [
+    var gold_offer_terms_mmtc = [
+      'For a transaction to be valid, there must be a minimum purchase of Rs 1,000.',
+      'Offer is only valid till  23:59 hrs 26th April 2020 .',
+      'Gold-back will be credited to the customer’s account by 5th of May. ',
+      'This offer can be availed only once ( per device, per user, per account) during the offer period.',
+      'Any conditions which are not explicitly covered would be at the sole discretion of ' + typeCaps + '. The decision of ' + typeCaps + ' in this regard will be final and the company has the right to change terms and conditions at any time.',
+      'In case of any customer query or dispute, ' + typeCaps+  ' reserves the right to resolve the same on the basis of the terms and conditions of the offer at its sole discretion.',
+      'Gold-back will be in the form of MMTC-PAMP balance and will be 1% of the value of gold purchased and upto a maximum of Rs 100. Below table shows how the gold-back will be done. '
+    ]
+
+    let offerImageDataBase = [
       {
         src: type === 'fisdom' ? goldOfferImageFisdom : goldOfferImageMyway,
         link: '',
         terms: gold_offer_terms1,
-        key: '5buy'
+        key: '5buy',
+        canShow: false
       },
       {
         src: type === 'fisdom' ? goldOfferImageFisdom3 : goldOfferImageMyway3,
         link: '',
         terms: gold_offer_terms2,
-        key: '50delivery'
+        key: '50delivery',
+        canShow: false
       },
       {
         src: type === 'fisdom' ? goldOfferImageFisdom2 : goldOfferImageMyway2,
         link: type === 'fisdom' ? 'https://www.fisdom.com/candere-gold-2019/' : 'https://mywaywealth.com/candere-gold-2019/',
         terms: '',
-        key: 'candere'
+        key: 'candere',
+        canShow: false
+      },
+      {
+        src: mmtcOfferImage,
+        link: '',
+        terms: gold_offer_terms_mmtc,
+        key: 'mmtc_offer',
+        canShow: false,
+        tableData: [
+          {'c1': '1000-1999', 'c2': '10'},
+          {'c1': '2000-4999', 'c2': '25'},
+          {'c1': '5000 and above', 'c2': '100'}
+        ]
       }
     ];
+
+    let offerImageData = [];
+
+    for(var i=0; i< offerImageDataBase.length; i++) {
+      if(offerImageDataBase[i].canShow) {
+        offerImageData.push(offerImageDataBase[i]);
+      }
+    }
 
     this.setState({
       offerImageData: offerImageData,
@@ -225,7 +267,8 @@ class GoldSummary extends Component {
 
     this.sendEvents('next', 'marketing_banner', index);
 
-    if (offer.key === '5buy' || offer.key === '50delivery') {
+    if (offer.key === '5buy' || offer.key === '50delivery' || 
+    offer.key === 'mmtc_offer') {
       this.setState({
         openDialogOffer: true,
         selectedIndexOffer: index
@@ -268,7 +311,27 @@ class GoldSummary extends Component {
             <DialogContentText id="alert-dialog-description">
               <span style={{ fontWeight: 500, color: 'black' }}>Terms and Conditions:  </span>
               {this.state.offerImageData[this.state.selectedIndexOffer].terms.map(this.renderOfferTerms)}
+
+              
             </DialogContentText>
+           {this.state.offerImageData[this.state.selectedIndexOffer].key === 'mmtc_offer' &&
+              <div>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="justify" padding='dense'>Investment Bucket</TableCell>
+                      <TableCell align="justify" padding='dense'>Incentive ( Rs.)</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>{this.state.offerImageData[this.state.selectedIndexOffer].tableData.map((row, i) => (
+                    <TableRow key={i}>
+                      <TableCell align="justify" padding='dense'>{row.c1}</TableCell>
+                      <TableCell align="justify" padding='dense'>{row.c2}</TableCell>
+                    </TableRow>
+                  ))}</TableBody>
+                </Table>
+              </div>
+            }
           </DialogContent>
           <DialogActions>
             <Button style={{ textTransform: 'capitalize' }}
@@ -504,6 +567,7 @@ class GoldSummary extends Component {
             {this.renderBlock4()}
         </div>
         
+        {this.renderGoldOfferDialog()}
       </Container>
     );
   }

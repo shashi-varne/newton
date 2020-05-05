@@ -244,7 +244,7 @@ class Recommendation extends Component {
                                 getConfig().searchParams
     );
 
-    let openWebModule = getConfig().Web || !getConfig().isFinwiz;
+    let openWebModule = getConfig().Web || getConfig().redirect_url;
     if (isin) {
 
       if(openWebModule) {
@@ -257,7 +257,8 @@ class Recommendation extends Component {
           action: 'show_fund', message: {
             investment: investment,
             isins: isins,
-            selected_isin: isin || ''
+            selected_isin: isin || '',
+            funds: fundsData
           }
         });
       }
@@ -272,7 +273,8 @@ class Recommendation extends Component {
         nativeCallback({
           action: 'invest', message: {
             investment: investment,
-            isins: isins
+            isins: isins,
+            funds: fundsData
           }
         });
       }

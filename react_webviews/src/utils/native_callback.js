@@ -16,11 +16,16 @@ export const nativeCallbackOld = (status_code, message, action) => {
 };
 
 
-export const nativeCallback = async ({ action = null, message = null, events = null } = {}) => {
-  
+export const nativeCallback = async ({ action = null, message = null, events = null, action_path = null } = {}) => {
   let callbackData = {};
   let project = getConfig().project;
-  let redirect_url = new URLSearchParams(getConfig().searchParams).get('redirect_url');
+  let redirect_url = getConfig().redirect_url;
+  let is_secure = false;
+  redirect_url = decodeURIComponent(redirect_url)
+  let redirect_url_data = redirect_url.split("?is_secure=")
+  if (redirect_url_data.length === 2) {
+    is_secure = redirect_url_data[1]
+  }
   if (action) {
     callbackData.action = action;
   }
@@ -29,10 +34,10 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   }
 
 
-  if(callbackData.action === 'open_pdf') {
+  if (callbackData.action === 'open_pdf') {
     callbackData.action = 'open_url';
 
-    if(getConfig().Android) {
+    if (getConfig().Android) {
       message.url = "https://docs.google.com/gview?embedded=true&url=" + message.url;
     }
 
@@ -197,7 +202,18 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   if (getConfig().app !== 'web') {
 
     if (redirect_url && redirect_url !== 'undefined' && (callbackData.action === 'exit_web' || callbackData.action === 'exit_module' || callbackData.action === 'open_module')) {
-      window.location.href = redirect_url
+      if (action_path) {
+        if (action_path === 'app/profile') {
+          window.location.href = getConfig().webAppUrl + 'my-account?is_secure=' + is_secure
+        }
+        else if (action_path === 'app/portfolio') {
+          window.location.href = getConfig().webAppUrl + 'reports?is_secure=' + is_secure
+        } else {
+          window.location.href = redirect_url
+        }
+      } else {
+        window.location.href = redirect_url
+      }
     } else {
       if (action === 'exit_web_sdk') {
         callbackData.action = 'exit_web';
@@ -212,12 +228,23 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       }
     }
   } else {
-    if (action === 'native_back' || action === 'exit_web' || action === 'exit' || 
-    action === 'open_module') {
+    if (action === 'native_back' || action === 'exit_web' || action === 'exit' ||
+      action === 'open_module') {
       if (!redirect_url) {
         redirect_url = getConfig().webAppUrl;
       }
-      window.location.href = redirect_url;
+      if (action_path) {
+        if (action_path === 'app/profile') {
+          window.location.href = getConfig().webAppUrl + 'my-account'
+        }
+        else if (action_path === 'app/portfolio') {
+          window.location.href = getConfig().webAppUrl + 'reports'
+        } else {
+          window.location.href = redirect_url
+        }
+      } else {
+        window.location.href = redirect_url
+      }
     } else if (action === 'open_in_browser' || action === 'open_url') {
       open_browser_web(message.url, '_blank')
     } else if (action === 'resume_provider') {

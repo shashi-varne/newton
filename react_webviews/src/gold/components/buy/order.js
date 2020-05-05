@@ -79,13 +79,6 @@ class BuyOrder extends Component {
     let nativeRedirectUrl = window.location.origin +
       '/gold/buy-gold-order' + getConfig().searchParams;
 
-    // nativeCallback({
-    //   action: 'take_control', message: {
-    //     back_url: nativeRedirectUrl,
-    //     back_text: 'Are you sure you want to exit the payment process?'
-    //   }
-    // });
-
     let paymentRedirectUrl = encodeURIComponent(
       window.location.origin + '/gold/buy/payment' + getConfig().searchParams
     );
@@ -104,13 +97,21 @@ class BuyOrder extends Component {
         }
       });
     }
-
-    nativeCallback({
-      action: 'take_control', message: {
-        back_url: nativeRedirectUrl,
-        back_text: 'Are you sure you want to exit the payment process?'
-      }
-    });
+    if (!getConfig().redirect_url) {
+      nativeCallback({
+        action: 'take_control', message: {
+          back_url: nativeRedirectUrl,
+          back_text: 'Are you sure you want to exit the payment process?'
+        }
+      });
+    } else {
+      nativeCallback({
+        action: 'take_control', message: {
+          back_url: nativeRedirectUrl,
+          back_text: ''
+        }
+      });
+    }
 
     window.location.href = pgLink;
   }

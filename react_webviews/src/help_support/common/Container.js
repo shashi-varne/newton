@@ -128,7 +128,7 @@ class Container extends Component {
 
   render() {
     return (
-      <div className="HelpContainerWrapper">
+      <div className="ContainerWrapper">
         {/* Header Block */}
         {!this.props.hideheader &&
           <Header
