@@ -331,3 +331,10 @@ input.default-otp-input {
   background-image: none !important;
   border-bottom: 1px solid #d3dbe4;
 }
+.hash-right {
+  color: #878787;
+  font-size: 12px;
+  font-weight: 400;
+  margin: -5px 0 0 0px;
+  position: absolute;
+}

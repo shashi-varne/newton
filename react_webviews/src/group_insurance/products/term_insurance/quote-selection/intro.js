@@ -249,75 +249,95 @@ class Intro extends Component {
       return;
     }
     return (
-      <div key={index} className="quote-tiles" style={{ margin: index !== 0 ? '20px 0 0 0' : '' }}>
-        <div className="quote-tiles1">
-          <div className="quote-tiles1a">
-            <img style={{ width: 90 }} src={props.quote_provider_logo} alt="Insurance" />
-          </div>
-          <div className="quote-tiles1b">{props.insurance_title}</div>
-        </div>
-
-        <div className="quote-tiles4" style={{
-          padding: '0 11px 10px 17px',
-          margin: '0 0 10px 0px', borderBottom: '1px solid #efefef'
-        }}>
-          <div className="quote-tiles4a">
-            Claim Settled
-          </div>
-          <div className="quote-tiles4a" style={{ color: getConfig().primary, fontWeight: 500 }}>
-            {props.claim_settled_ratio}%
-          </div>
-        </div>
-        <div className="quote-tiles4">
-          <div className="quote-tiles4a">
-            Basic benefits
+      <div className="quote-tiles-term" key={index} >
+        <div className="quote-tiles" style={{ margin: index !== 0 ? '20px 0 0 0' : '' }}>
+          <div className="quote-tiles1">
+            <div className="quote-tiles1a">
+              <img style={{ width: 90 }} src={props.quote_provider_logo} alt="Insurance" />
             </div>
-        </div>
-
-        {/* basic benefits */}
-        {props.quote_provider &&
-          quotePointsPorivders[props.quote_provider].basic_benefits.map(this.renderQuotePoints)}
-
-        {/* add on benefits */}
-        <div className="quote-addon-tiles11">
-          <div className="quote-addon-tiles1" onClick={() => this.expendAddOn(index, props.quote_provider)}>
-            <div className="quote-addon-tiles1a">
-              Add on benefits
+            <div className="quote-tiles1b">{props.insurance_title}</div>
           </div>
-            <div className="quote-addon-tiles1b">
-              <img className="quote-addon-tiles1c" src={this.state.dropdown_arrow} alt="Insurance" />
+
+          <div className="quote-tiles4" style={{
+            padding: '0 11px 10px 17px',
+            margin: '0 0 10px 0px', borderBottom: '1px solid #efefef'
+          }}>
+            <div className="quote-tiles4a">
+              Claim Settled
+            </div>
+            <div className="quote-tiles4a" style={{ color: getConfig().primary, fontWeight: 500 }}>
+              {props.claim_settled_ratio}% {props.quote_provider === 'EDELWEISS' && <span className="hash-right">#</span>}
             </div>
           </div>
-          {props.expendAddOnOpen &&
-            <div style={{ marginTop: 10 }}>
-              {props.quote_provider && quotePointsPorivders[props.quote_provider].add_on_benefits.map(this.renderQuotePoints)
-              }
-            </div>
-          }
-        </div>
+          <div className="quote-tiles4">
+            <div className="quote-tiles4a">
+              Basic benefits
+              </div>
+          </div>
 
-        {(props.quote_provider !== this.state.termRedirectData.provider ||
-          (props.quote_provider === 'HDFC' && !this.state.termRedirectData.resumeFlag)) && <div className="quote-tiles3">
-            <div className="quote-tiles3a-providers">
-              <div className="quote-tiles3aa" style={{ display: 'grid', textAlign: 'left' }}>
-                <span> Starts from</span>
-                <span> {inrFormatDecimal(props.starting_premium_monthly)}/month*</span>
+          {/* basic benefits */}
+          {props.quote_provider &&
+            quotePointsPorivders[props.quote_provider].basic_benefits.map(this.renderQuotePoints)}
+
+          {/* add on benefits */}
+          <div className="quote-addon-tiles11">
+            <div className="quote-addon-tiles1" onClick={() => this.expendAddOn(index, props.quote_provider)}>
+              <div className="quote-addon-tiles1a">
+                Add on benefits
+            </div>
+              <div className="quote-addon-tiles1b">
+                <img className="quote-addon-tiles1c" src={this.state.dropdown_arrow} alt="Insurance" />
               </div>
             </div>
-            <div className="quote-tiles3b" style={{ padding: '14px', width: '48%' }} onClick={() => this.selectQuote(props, index)}>
+            {props.expendAddOnOpen &&
+              <div style={{ marginTop: 10 }}>
+                {props.quote_provider && quotePointsPorivders[props.quote_provider].add_on_benefits.map(this.renderQuotePoints)
+                }
+              </div>
+            }
+          </div>
+
+          {(props.quote_provider !== this.state.termRedirectData.provider ||
+            (props.quote_provider === 'HDFC' && !this.state.termRedirectData.resumeFlag)) && <div className="quote-tiles3">
+              <div className="quote-tiles3a-providers">
+                <div className="quote-tiles3aa" style={{ display: 'grid', textAlign: 'left' }}>
+                  <span> Starts from</span>
+                  <span> {inrFormatDecimal(props.starting_premium_monthly)}/month*</span>
+                </div>
+              </div>
+              <div className="quote-tiles3b" style={{ padding: '14px', width: '48%' }} onClick={() => this.selectQuote(props, index)}>
+                <div className="quote-tiles3ba">
+                  <span style={{ textTransform: 'uppercase', fontWeight: 500 }}>Get Free Quote</span>
+                </div>
+              </div>
+            </div>}
+
+          {this.state.termRedirectData.resumeFlag && (props.quote_provider === this.state.termRedirectData.provider) && <div className="quote-tiles3">
+            <div className="quote-tiles3b" style={{ padding: '14px', width: '90%', margin: '0 0 0 13px' }} onClick={() => this.selectQuote(props, index)}>
               <div className="quote-tiles3ba">
-                <span style={{ textTransform: 'uppercase', fontWeight: 500 }}>Get Free Quote</span>
+                <span style={{ textTransform: 'uppercase', fontWeight: 500 }}>Resume</span>
               </div>
             </div>
           </div>}
+        </div>
 
-        {this.state.termRedirectData.resumeFlag && (props.quote_provider === this.state.termRedirectData.provider) && <div className="quote-tiles3">
-          <div className="quote-tiles3b" style={{ padding: '14px', width: '90%', margin: '0 0 0 13px' }} onClick={() => this.selectQuote(props, index)}>
-            <div className="quote-tiles3ba">
-              <span style={{ textTransform: 'uppercase', fontWeight: 500 }}>Resume</span>
+       {props.quote_provider === 'EDELWEISS' && 
+          <div className="bottom-extra-info">
+            <div className="hash-info-tile">
+              <div className="left">#</div>
+              <div className="right">
+                  Individual-Death Claim settled and as per published in 
+                  IRDAI Annual Report for FY’18-19.
+              </div>
+            </div>
+            <div className="hash-info-tile">
+              <div className="left">^</div>
+              <div className="right">
+                  Tax benefits are subject to changes in the tax laws.
+              </div>
             </div>
           </div>
-        </div>}
+        }
       </div>
     )
   }

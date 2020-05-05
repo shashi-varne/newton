@@ -341,7 +341,7 @@ class EtliPersonalDetails1 extends Component {
                             error={(this.state.basic_details_data.name_error) ? true : false}
                             helperText={this.state.basic_details_data.name_error}
                             width="40"
-                            label="Full Name"
+                            label="Full name"
                             class="FullName"
                             id="name"
                             name="name"

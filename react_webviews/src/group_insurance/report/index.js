@@ -386,7 +386,7 @@ class Report extends Component {
       <Container
         noFooter={true}
         events={this.sendEvents('just_set_events')}
-        title="Insurance report"
+        title="Insurance Report"
         showLoader={this.state.show_loader}
         classOverRideContainer="report"
       >

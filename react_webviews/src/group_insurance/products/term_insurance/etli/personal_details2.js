@@ -24,7 +24,7 @@ const annual_income_options = [
     {name: '5-10 lakhs', value: '5-10'},
     {name: '10-15 lakhs', value: '10-15'},
     {name: '15-20 lakhs', value: '15-20'},
-    {name: '20-above lakhs', value: '20-above'}
+    {name: 'Above 20 lakhs', value: '20-above'}
 ]
 
 class EtliPersonalDetails2 extends Component {

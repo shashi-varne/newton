@@ -470,7 +470,7 @@ export const quotePointsPorivders = {
     basic_benefits: [
       'Complete sum assured payable in case of death',
       'Option to increase your sum assured regularly or at key life stages',
-      'Tax benefits on premium under 80C'
+      'Tax benefits on premium under 80C^'
     ],
     add_on_benefits: [
       'Better half benefit option',
