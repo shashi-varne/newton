@@ -531,7 +531,7 @@ export const insuranceMaritalStatus = [
 export const insuranceMaritalStatusEtli = [
   {
     'name': 'Single',
-    'value': 'SINGLE'
+    'value': 'UNMARRIED'
   },
   {
     'name': 'Married',
