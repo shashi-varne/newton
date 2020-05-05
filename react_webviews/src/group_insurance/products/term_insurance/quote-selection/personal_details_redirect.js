@@ -304,6 +304,7 @@ class PersonalDetails1 extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
+        hide_header={this.state.show_loader}
         title="Personal Details"
         banner={true}
         bannerText={this.bannerText()}

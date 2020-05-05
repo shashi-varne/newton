@@ -248,6 +248,7 @@ class PersonalDetailsIntro extends Component {
         buttonTitle="Next"
         fullWidthButton={true}
         onlyButton={true}
+        hide_header={this.state.show_loader}
       >
         <FormControl fullWidth>
           <div className="InputField">
