@@ -514,7 +514,9 @@ export const back_button_mapper = {
   '/group-insurance/term/summary': '/group-insurance/term/journey',
   '/group-insurance/term/etli/personal-details3': '/group-insurance/term/etli/personal-details2',
   '/group-insurance/term/etli/personal-details2': '/group-insurance/term/etli/personal-details1',
-  '/group-insurance/term/etli/personal-details1': '/group-insurance/term/intro'
+  '/group-insurance/term/etli/personal-details1': '/group-insurance/term/intro',
+  '/group-insurance/term/personal-details-redirect' : '/group-insurance/term/intro',
+  '/group-insurance/term/intro' : '/group-insurance'
 };
 
 export const insuranceMaritalStatus = [
