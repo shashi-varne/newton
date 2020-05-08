@@ -21,6 +21,7 @@ class EnpsSuccess extends Component {
       session_less_enps: window.localStorage.getItem('session_less_enps') || '',
       pc_urlsafe: getConfig().pc_urlsafe,
       orderdata: {},
+      type: getConfig().productName
     }
   }
 
@@ -56,11 +57,16 @@ class EnpsSuccess extends Component {
 
   handleClick = () => {
     this.sendEvents('ok');
+
     let url = 'https://fis.do/m/module?action_type=native';
+    if(this.state.type === 'myway') {
+      url = 'https://w-ay.in/m/module?action_type=native';
+    }
+
     url += '&native_module=' + encodeURIComponent('app/portfolio');
     nativeCallback({
       action: 'open_module', message: {
-        action_url: url
+        action_url: url, action_path: 'app/portfolio'
       }
     });
   }
