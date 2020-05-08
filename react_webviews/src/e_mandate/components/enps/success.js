@@ -9,7 +9,6 @@ import toast from '../../../common/ui/Toast';
 import { nativeCallback } from 'utils/native_callback';
 import { inrFormatDecimal } from '../../../utils/validators';
 import ContactUs from '../../../common/components/contact_us';
-import {openModule} from 'utils/validators';
 
 class EnpsSuccess extends Component {
   constructor(props) {
@@ -57,8 +56,13 @@ class EnpsSuccess extends Component {
 
   handleClick = () => {
     this.sendEvents('ok');
-
-    openModule('portfolio');
+    let url = 'https://fis.do/m/module?action_type=native';
+    url += '&native_module=' + encodeURIComponent('app/portfolio');
+    nativeCallback({
+      action: 'open_module', message: {
+        action_url: url
+      }
+    });
   }
 
   navigate = (pathname) => {
