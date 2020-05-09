@@ -17,8 +17,7 @@ import goldOfferImageMyway from 'assets/gold_offer_myway.jpg';
 import goldOfferImageFisdom2 from 'assets/gold_offer2.png';
 import goldOfferImageMyway2 from 'assets/gold_offer2.png';
 
-import goldOfferImageFisdom3 from 'assets/gold_offer_fisdom3.jpg';
-import goldOfferImageMyway3 from 'assets/gold_offer_myway3.jpg';
+import goldOfferImage from 'assets/gold_offer.jpg';
 
 import mmtcOfferImage from 'assets/MMTC-PAMP-offer.png';
 
@@ -58,7 +57,7 @@ class GoldSummary extends Component {
       apiError: '',
       user_info: {},
       openDialogOffer: false,
-      showOffers: false, // to manage offer carousel
+      showOffers: true, // to manage offer carousel
       offerImageData: [],
       productName: getConfig().productName,
       mmtc_info: {},
@@ -98,8 +97,13 @@ class GoldSummary extends Component {
     ];
 
     var gold_offer_terms2 = [
-      'This offer is valid for only the first 100 deliveries per day.',
-      'Delivery of coins may take between 5-7 working days from the date of order, and may be affected by weekends and holidays.'
+      'For a transaction to be valid, there must be a minimum purchase of Rs 1,000.',
+      'Offer is only valid till  23:59 hrs 10th May 2020.',
+      'This offer can be availed only once ( per device, per user, per account) during the offer period.',
+      '5 Lucky customers will be selected as a winner of flat Rs 1000 Gold-back.',
+      'Gold-back amounts for lucky winners will be credited to the customers MMTC-PAMP account by 20th May 2020.',
+      'Any conditions which are not explicitly covered would be at the sole discretion of Fisdom. The decision of Fisdom in this regard will be final and the company has the right to change terms and conditions at any time.',
+      'In case of any customer query or dispute, Fisdom reserves the right to resolve the same on the basis of the terms and conditions of the offer at its sole discretion.'
     ]
 
     var gold_offer_terms_mmtc = [
@@ -121,11 +125,11 @@ class GoldSummary extends Component {
         canShow: false
       },
       {
-        src: type === 'fisdom' ? goldOfferImageFisdom3 : goldOfferImageMyway3,
+        src: goldOfferImage,
         link: '',
         terms: gold_offer_terms2,
         key: '50delivery',
-        canShow: false
+        canShow: true
       },
       {
         src: type === 'fisdom' ? goldOfferImageFisdom2 : goldOfferImageMyway2,
