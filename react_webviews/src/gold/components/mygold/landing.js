@@ -57,7 +57,7 @@ class GoldSummary extends Component {
       apiError: '',
       user_info: {},
       openDialogOffer: false,
-      showOffers: true, // to manage offer carousel
+      showOffers: false, // to manage offer carousel
       offerImageData: [],
       productName: getConfig().productName,
       mmtc_info: {},
@@ -102,8 +102,8 @@ class GoldSummary extends Component {
       'This offer can be availed only once ( per device, per user, per account) during the offer period.',
       '5 Lucky customers will be selected as a winner of flat Rs 1000 Gold-back.',
       'Gold-back amounts for lucky winners will be credited to the customers MMTC-PAMP account by 20th May 2020.',
-      'Any conditions which are not explicitly covered would be at the sole discretion of Fisdom. The decision of Fisdom in this regard will be final and the company has the right to change terms and conditions at any time.',
-      'In case of any customer query or dispute, Fisdom reserves the right to resolve the same on the basis of the terms and conditions of the offer at its sole discretion.'
+      'Any conditions which are not explicitly covered would be at the sole discretion of ' + typeCaps + '. The decision of ' + typeCaps + ' in this regard will be final and the company has the right to change terms and conditions at any time.',
+      'In case of any customer query or dispute, ' + typeCaps + ' reserves the right to resolve the same on the basis of the terms and conditions of the offer at its sole discretion.'
     ]
 
     var gold_offer_terms_mmtc = [
@@ -129,7 +129,7 @@ class GoldSummary extends Component {
         link: '',
         terms: gold_offer_terms2,
         key: '50delivery',
-        canShow: true
+        canShow: false
       },
       {
         src: type === 'fisdom' ? goldOfferImageFisdom2 : goldOfferImageMyway2,
