@@ -141,7 +141,7 @@ class Payment extends Component {
     nativeCallback({ action: 'take_control_reset' });
     let { status } = this.state.params;
     if(!status) {
-      status = 'failed';
+      status = 'pending';
     }
     let { orderType } = this.props.match.params;
     this.setState({
@@ -278,6 +278,23 @@ class Payment extends Component {
     }
   }
 
+  setFinalTransReport(report) {
+    if(!report) {
+      report = {};
+    }
+
+    report.orderType = this.state.orderType;
+    report.provider = this.state.provider;
+
+    report.final_status = getOrderStatusPayment(report);
+    let uniStatus = getUniversalTransStatus(report);
+    this.setPaymentStatus(this.state.orderType, this.state.status, uniStatus);
+    this.setState({
+      report: report,
+      uniStatus: uniStatus
+    });
+  }
+
    getTransDetails = async (transact_id, orderType) => {
 
     if(transact_id) {
@@ -288,23 +305,20 @@ class Payment extends Component {
       try {
         const res = await Api.get('/api/gold/report/orders/' + this.state.provider + '?transaction_id=' + transact_id +
         '&order_type=' + orderType);
-        if (res.pfwresponse.status_code === 200) {
 
-          let report = res.pfwresponse.result;
-          report.orderType = orderType;
-          report.final_status = getOrderStatusPayment(report);
-          let uniStatus = getUniversalTransStatus(report);
-          this.setPaymentStatus(this.state.orderType, this.state.status, uniStatus);
-          this.setState({
-            report: res.pfwresponse.result,
-            uniStatus: uniStatus
-          });
+        let report = {};
+
+        if (res.pfwresponse.status_code === 200) {
+          report = res.pfwresponse.result || {};
+          
         } else {
           this.setState({
             show_loader: false
           });
           toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
         }
+
+        this.setFinalTransReport(report);
       } catch (err) {
         this.setState({
           show_loader: false
