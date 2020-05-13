@@ -336,6 +336,18 @@ class GoldLocker extends Component {
     )
   }
 
+  handlePanBank() {
+    if(!this.state.selected_provider_info.user_info.pan_number) {
+      this.navigate(
+        this.state.provider + '/sell-pan', {pan_bank_flow: true}
+      )
+    } else {
+      this.navigate(
+        this.state.provider + '/sell-add-bank', {pan_bank_flow: true}
+      )
+    }
+  }
+
   render() {
 
     return (
@@ -426,9 +438,7 @@ class GoldLocker extends Component {
 
               {(!this.state.selected_provider_info.user_info.bank_info_added || 
               !this.state.selected_provider_info.user_info.pan_number) &&
-               <div className="share-pan-bank" onClick={() => this.navigate(
-                  this.state.provider + '/sell-pan', {pan_bank_flow: true}
-                )}>
+               <div className="share-pan-bank" onClick={() => this.handlePanBank()}>
                   <div className="title">
                     Share PAN and Bank details to sell gold effortlessly
                 </div>
