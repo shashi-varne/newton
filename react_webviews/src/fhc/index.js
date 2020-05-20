@@ -1,0 +1,87 @@
+import React, { Component } from 'react';
+import {
+  Route,
+  Switch
+} from 'react-router-dom';
+import { withRouter } from "react-router";
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import '../common/theme/Style.css';
+// import { getConfig } from 'utils/functions';
+import { themeConfig } from 'utils/constants';
+import { ToastContainer } from 'react-toastify';
+
+import './common/Style.css';
+import "./components/Style.css";
+// import './products/term_insurance/Style.css';
+import NotFound from '../common/components/NotFound';
+import Landing from './home/landing';
+import { create } from 'jss';
+import JssProvider from 'react-jss/lib/JssProvider';
+import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
+
+
+/***********************TERM INSURANCE START   **************/
+// import PersonalDetails1 from '../products/term_insurance/personal-details/screen1';
+// import PersonalDetails2 from './products/term_insurance/personal-details/screen2';
+import ContactDetails1 from './components/contact-details/screen1';
+import ContactDetails2 from './components/contact-details/screen2';
+// import AdditionalInfo from './products/term_insurance/additional-info/hdfc';
+// import Summary from './products/term_insurance/insurance-summary/screen1';
+// import Journey from './products/term_insurance/insurance-summary/screen3';
+// import Resume from './products/term_insurance/insurance-summary/screen2';
+
+/***********************TERM INSURANCE END   **************/
+
+const generateClassName = createGenerateClassName({
+  dangerouslyUseGlobalCSS: true,
+  productionPrefix: 'f',
+});
+const jss = create(jssPreset());
+// We define a custom insertion point that JSS will look for injecting the styles in the DOM.
+// jss.options.insertionPoint = 'jss-insertion-point';
+
+const theme = createMuiTheme(themeConfig);
+
+const ScrollToTop = withRouter(
+  class ScrollToTopWithoutRouter extends Component {
+    componentDidUpdate(prevProps) {
+      if (this.props.location !== prevProps.location) {
+        window.scrollTo(0, 0)
+      }
+    }
+
+    render() {
+      return null;
+    }
+  }
+);
+
+const Insurance = (props) => {
+  const { url } = props.match;
+
+  return (
+    <JssProvider jss={jss} generateClassName={generateClassName}>
+      <MuiThemeProvider theme={theme}>
+        <ScrollToTop />
+        <ToastContainer autoClose={3000} />
+        <Switch>
+          <Route exact path={`${url}`} component={Landing} />
+
+          {/********** TERM INSURANCE **********/}
+          {/* <Route path={`${url}/fhc/resume`} component={Resume} /> */}
+          {/* <Route path={`${url}/fhc/personal`} component={PersonalDetails1} /> */}
+          {/* <Route path={`${url}/fhc/personal1`} component={PersonalDetails2} /> */}
+          <Route path={`${url}/contact`} component={ContactDetails1} />
+          <Route path={`${url}/contact1`} component={ContactDetails2} />
+          {/* <Route path={`${url}/fhc/additional-info`} component={AdditionalInfo} /> */}
+          {/* <Route path={`${url}/fhc/summary`} component={Summary} /> */}
+          {/* <Route path={`${url}/fhc/journey`} component={Journey} /> */}
+
+          <Route component={NotFound} />
+        </Switch>
+      </MuiThemeProvider>
+    </JssProvider>
+  );
+};
+
+export default Insurance;

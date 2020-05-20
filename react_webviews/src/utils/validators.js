@@ -92,7 +92,7 @@ export function validateLengthNames(string, type, provider) {
   let nomenclatureMapper = {
     'name': 'name',
     'first_name': 'first name',
-    'middle_name': 'middle_name',
+    'middle_name': 'middle name',
     'last_name': 'last name',
     'father_name': 'father name',
     'spouse_name': 'spouse name',
