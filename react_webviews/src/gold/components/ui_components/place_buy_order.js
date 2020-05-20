@@ -80,7 +80,7 @@ class PlaceBuyOrderClass extends Component {
             let buyData = this.state.buyData;
 
             if(result.pan_needed) {
-                this.props.parent.navigate(this.state.provider + '/buy-pan');
+                this.props.parent.navigate('/gold/' + this.state.provider + '/buy-pan');
             } else if (res.pfwresponse.status_code === 200 &&
                 result.payment_details.plutus_rate !== this.state.buyData.goldBuyInfo.plutus_rate) {
 
