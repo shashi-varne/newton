@@ -71,6 +71,7 @@ class PlaceBuyOrderClass extends Component {
         }
 
         this.props.parent.updateParent('show_loader', true);
+        let pathname = this.props.parent.props.history.location.pathname;
 
         try {
 
@@ -104,6 +105,10 @@ class PlaceBuyOrderClass extends Component {
                 this.props.parent.updateParent('proceedForOrder', false);
                 toast(result.error || result.message ||
                     'Something went wrong');
+
+                if(pathname !== '/gold/buy') {
+                    this.props.parent.navigate('/gold/buy');
+                }
             }
         } catch (err) {
             console.log(err);
