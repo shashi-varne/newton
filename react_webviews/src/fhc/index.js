@@ -27,6 +27,7 @@ import PersonalDetails1 from './components/personal-details/screen1';
 import PersonalDetails2 from './components/personal-details/screen2';
 import PersonalDetails3 from './components/personal-details/screen3';
 import EarningDetails1 from './components/earning-details/screen1';
+import PersonalComplete from './components/earning-details/success';
 // import AdditionalInfo from './products/term_insurance/additional-info/hdfc';
 // import Summary from './products/term_insurance/insurance-summary/screen1';
 // import Journey from './products/term_insurance/insurance-summary/screen3';
@@ -75,6 +76,7 @@ const Insurance = (props) => {
           <Route path={`${url}/personal2`} component={PersonalDetails2} />
           <Route path={`${url}/personal3`} component={PersonalDetails3} />
           <Route path={`${url}/earnings1`} component={EarningDetails1} />
+          <Route path={`${url}/personal-complete`} component={PersonalComplete} />
           {/* <Route path={`${url}/fhc/additional-info`} component={AdditionalInfo} /> */}
           {/* <Route path={`${url}/fhc/summary`} component={Summary} /> */}
           {/* <Route path={`${url}/fhc/journey`} component={Journey} /> */}

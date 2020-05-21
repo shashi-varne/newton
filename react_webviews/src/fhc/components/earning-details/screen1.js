@@ -123,9 +123,9 @@ class PersonalDetails1 extends Component {
       this.setState({
         monthly_sal_error: 'Enter a valid Monthly Salary amount'
       });
-    } else if (this.state.annualCTC < this.state.monthly_sal) {
+    } else if (this.state.monthly_sal > this.state.annualCTC / 12) {
       this.setState({
-        monthly_sal_error: 'Monthly Salary cannot be more than Annual CTC'
+        monthly_sal_error: 'Monthly Salary cannot be greater than CTC/12'
       });
     } else if (!this.state.monthly_exp || !validateNumber(this.state.monthly_exp)) {
       this.setState({
@@ -133,6 +133,7 @@ class PersonalDetails1 extends Component {
       });
     } else {
       console.log('ALL VALID - EXPENSE SCREEN')
+      this.navigate('personal-complete')
     }
   }
 
