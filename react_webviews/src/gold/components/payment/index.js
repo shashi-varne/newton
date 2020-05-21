@@ -139,7 +139,8 @@ class Payment extends Component {
 
   componentWillMount() {
     nativeCallback({ action: 'take_control_reset' });
-    let { status } = this.state.params;
+    let { status, txn_id } = this.state.params;
+    let txn_id_backend = txn_id || '';
     if(!status) {
       status = 'pending';
     }
@@ -157,6 +158,9 @@ class Payment extends Component {
     amount = orderData.amount_selected || '';
     invoiceLink = orderData.invoice_link || '';
     transact_id = orderData.transact_id || '';
+    if(txn_id_backend) {
+      transact_id = txn_id_backend;
+    }
 
     this.setState({
       status: status,
