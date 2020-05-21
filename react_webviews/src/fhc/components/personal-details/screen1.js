@@ -4,10 +4,8 @@ import qs from 'qs';
 import toast from '../../../common/ui/Toast';
 
 import Container from '../../common/Container';
-import MobileInputWithoutIcon from '../../../common/ui/MobileInputWithoutIcon';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import personal from 'assets/personal_details_icon.svg';
-import contact_myway from 'assets/contact_details_icn.svg';
 import Input from '../../../common/ui/Input';
 import email from 'assets/email_dark_icn.png';
 import dob from 'assets/dob_dark_icn.png';
@@ -20,7 +18,7 @@ import {
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 
-class ContactDetails1 extends Component {
+class PersonalDetails1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -173,6 +171,9 @@ class ContactDetails1 extends Component {
       this.setState({
         email_error: 'Please enter valid email'
       });
+    } else {
+      console.log('ALL VALID - SCREEN 1');
+      this.navigate('/fhc/personal2');
     }
   };
 
@@ -266,13 +267,14 @@ class ContactDetails1 extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'term_insurance ',
+      "event_name": 'fin_health_check',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'contact_details_one',
+        "screen_name": 'personal_details_one',
         "provider": this.state.provider,
         "email": this.state.email ? 'yes' : 'no',
-        "mobile": this.state.mobile_no ? 'yes' : 'no',
+        "name": this.state.name ? 'yes' : 'no',
+        "dob": this.state.dob ? 'yes' : 'no',
         "from_edit": (this.state.edit) ? 'yes' : 'no'
       }
     };
@@ -304,7 +306,7 @@ class ContactDetails1 extends Component {
         logo={this.state.image}
       >
         <FormControl fullWidth>
-          <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? contact_myway : personal}
+          <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
             title={(this.props.edit) ? 'Verify Personal Details' : 'Personal Details'} />
           <div className="InputField">
             <Input
@@ -358,4 +360,4 @@ class ContactDetails1 extends Component {
   }
 }
 
-export default ContactDetails1;
+export default PersonalDetails1;

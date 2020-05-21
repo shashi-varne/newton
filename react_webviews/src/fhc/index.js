@@ -23,8 +23,10 @@ import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
 /***********************TERM INSURANCE START   **************/
 // import PersonalDetails1 from '../products/term_insurance/personal-details/screen1';
 // import PersonalDetails2 from './products/term_insurance/personal-details/screen2';
-import ContactDetails1 from './components/contact-details/screen1';
-import ContactDetails2 from './components/contact-details/screen2';
+import PersonalDetails1 from './components/personal-details/screen1';
+import PersonalDetails2 from './components/personal-details/screen2';
+import PersonalDetails3 from './components/personal-details/screen3';
+import EarningDetails1 from './components/earning-details/screen1';
 // import AdditionalInfo from './products/term_insurance/additional-info/hdfc';
 // import Summary from './products/term_insurance/insurance-summary/screen1';
 // import Journey from './products/term_insurance/insurance-summary/screen3';
@@ -69,10 +71,10 @@ const Insurance = (props) => {
 
           {/********** TERM INSURANCE **********/}
           {/* <Route path={`${url}/fhc/resume`} component={Resume} /> */}
-          {/* <Route path={`${url}/fhc/personal`} component={PersonalDetails1} /> */}
-          {/* <Route path={`${url}/fhc/personal1`} component={PersonalDetails2} /> */}
-          <Route path={`${url}/contact`} component={ContactDetails1} />
-          <Route path={`${url}/contact1`} component={ContactDetails2} />
+          <Route path={`${url}/personal1`} component={PersonalDetails1} />
+          <Route path={`${url}/personal2`} component={PersonalDetails2} />
+          <Route path={`${url}/personal3`} component={PersonalDetails3} />
+          <Route path={`${url}/earnings1`} component={EarningDetails1} />
           {/* <Route path={`${url}/fhc/additional-info`} component={AdditionalInfo} /> */}
           {/* <Route path={`${url}/fhc/summary`} component={Summary} /> */}
           {/* <Route path={`${url}/fhc/journey`} component={Journey} /> */}

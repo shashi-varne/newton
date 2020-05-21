@@ -13,7 +13,7 @@ class Landing extends Component {
     }
     startFHC() {
         console.log('BUTTON CLICKED!!!!', this);
-        this.navigate('/fhc/contact');
+        this.navigate('/fhc/personal1');
     }
 
     navigate(pathname, search) {
