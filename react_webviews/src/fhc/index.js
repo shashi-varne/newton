@@ -27,6 +27,11 @@ import PersonalDetails1 from './components/personal-details/screen1';
 import PersonalDetails2 from './components/personal-details/screen2';
 import PersonalDetails3 from './components/personal-details/screen3';
 import EarningDetails1 from './components/earning-details/screen1';
+import LoanDetails1 from './components/loan-details/screen1';
+import LoanDetails2 from './components/loan-details/screen2';
+import LoanDetails3 from './components/loan-details/screen3';
+import LoanDetails4 from './components/loan-details/screen4';
+import LoanDetailsSummary from './components/loan-details/summary';
 import PersonalComplete from './components/earning-details/success';
 // import AdditionalInfo from './products/term_insurance/additional-info/hdfc';
 // import Summary from './products/term_insurance/insurance-summary/screen1';
@@ -77,6 +82,11 @@ const Insurance = (props) => {
           <Route path={`${url}/personal3`} component={PersonalDetails3} />
           <Route path={`${url}/earnings1`} component={EarningDetails1} />
           <Route path={`${url}/personal-complete`} component={PersonalComplete} />
+          <Route path={`${url}/loan1`} component={LoanDetails1} />
+          <Route path={`${url}/loan2`} component={LoanDetails2} />
+          <Route path={`${url}/loan3`} component={LoanDetails3} />
+          <Route path={`${url}/loan4`} component={LoanDetails4} />
+          <Route path={`${url}/loan-summary`} component={LoanDetailsSummary} />
           {/* <Route path={`${url}/fhc/additional-info`} component={AdditionalInfo} /> */}
           {/* <Route path={`${url}/fhc/summary`} component={Summary} /> */}
           {/* <Route path={`${url}/fhc/journey`} component={Journey} /> */}

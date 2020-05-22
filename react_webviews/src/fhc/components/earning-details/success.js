@@ -13,8 +13,8 @@ class Success extends Component {
 
     componentDidMount() {
         setTimeout(() => {
-            this.navigate('personal1');
-        }, 4000);
+            this.navigate('loan1');
+        }, 2500);
     }
 
     navigate(pathname, search) {

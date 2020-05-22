@@ -142,7 +142,7 @@ class PersonalDetails1 extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
-        title="Application Form"
+        title="Fin Health Check (FHC)"
         smallTitle={this.state.provider}
         count={false}
         total={5}

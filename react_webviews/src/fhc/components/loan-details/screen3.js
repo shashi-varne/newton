@@ -5,6 +5,8 @@ import toast from '../../../common/ui/Toast';
 
 import Container from '../../common/Container';
 import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
+import Input from '../../../common/ui/Input';
+import { validateNumber, formatAmount, inrFormatTest } from 'utils/validators';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import personal from 'assets/personal_details_icon.svg';
 import Api from 'utils/api';
@@ -12,15 +14,15 @@ import { yesOrNoOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 
-class PersonalDetails3 extends Component {
+class LoanDetails3 extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
-      parental_dependence: '',
-      parental_dependence_error: '',
-      other_dependence: '',
-      other_dependence_error: '',
+      car_loan: '',
+      car_loan_error: '',
+      monthly_emi: '',
+      monthly_emi_error: '',
       image: '',
       provider: '',
       params: qs.parse(this.props.location.search.slice(1)),
@@ -60,11 +62,23 @@ class PersonalDetails3 extends Component {
   }
 
   handleChange = name => event => {
-    if (name === 'num_other_dependence') {
+    if (name === 'monthly_emi') {
+      if (!inrFormatTest(event.target.value)) {
+        return;
+      }
       this.setState({
-        [name]: event,
+        [name]: event.target.value.replace(/,/g, ""),
         [name + '_error']: ''
       });
+    }
+  }
+
+  handleKeyChange = name => event => {
+    if (event.charCode >= 48 && event.charCode <= 57) {
+      // valid
+    } else {
+      // invalid
+      event.preventDefault();
     }
   }
 
@@ -83,10 +97,10 @@ class PersonalDetails3 extends Component {
       "event_name": 'fin_health_check',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'personal_details_three',
+        "screen_name": 'loan_details_three',
         "provider": this.state.provider,
-        "parental_dependence": this.state.parental_dependence,
-        "other_dependence": this.state.other_dependence,
+        "car_loan": this.state.car_loan,
+        "monthly_emi": this.state.monthly_emi,
         "from_edit": (this.state.edit) ? 'yes' : 'no'
       }
     };
@@ -100,21 +114,41 @@ class PersonalDetails3 extends Component {
 
   handleClick = () => {
     // this.sendEvents('next');
-    if (!this.state.parental_dependence) {
+    if (!this.state.car_loan) {
       this.setState({
-        parental_dependence_error: 'Please select an option',
+        car_loan_error: 'Please select an option',
       });
-    } else if (!this.state.other_dependence) {
+    } else if (
+      this.state.car_loan === 'yes' &&
+      (!this.state.monthly_emi || !validateNumber(this.state.monthly_emi))
+      ) {
       this.setState({
-        other_dependence_error: 'Please select an option',
+        monthly_emi_error: 'Monthly EMI cannot be negative or 0',
       });
     } else {
-      console.log('ALL VALID - SCREEN 3');
+      console.log('ALL VALID - SCREEN 3 - LOAN');
       this.navigate('/fhc/earnings1');
     }
   }
 
   render() {
+    let monthlyEMIInput = null;
+    if (this.state.car_loan === 'yes') {
+      monthlyEMIInput = <div className="InputField">
+        <Input
+          error={(this.state.monthly_emi_error) ? true : false}
+          helperText={this.state.monthly_emi_error}
+          type="text"
+          width="40"
+          label="Monthly EMI"
+          class="Income"
+          id="monthly-emi"
+          name="monthly_emi"
+          value={formatAmount(this.state.monthly_emi || '')}
+          onChange={this.handleChange('monthly_emi')}
+          onKeyChange={this.handleKeyChange('monthly_emi')} />
+      </div>
+    }
     return (
       <Container
         events={this.sendEvents('just_set_events')}
@@ -123,7 +157,7 @@ class PersonalDetails3 extends Component {
         smallTitle={this.state.provider}
         count={false}
         total={5}
-        current={1}
+        current={3}
         banner={false}
         bannerText={''}
         handleClick={this.handleClick}
@@ -134,35 +168,26 @@ class PersonalDetails3 extends Component {
       >
         <FormControl fullWidth>
           <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
-            title={(this.props.edit) ? 'Edit Family Details' : 'Family Details'} />
+            title={(this.props.edit) ? 'Edit Loan Liability Details' : 'Loan Liability'} />
           <div className="InputField">
             <RadioWithoutIcon
-              error={(this.state.parental_dependence_error) ? true : false}
-              helperText={this.state.parental_dependence_error}
+              error={(this.state.car_loan_error) ? true : false}
+              helperText={this.state.car_loan_error}
               width="40"
-              label="Are your parents dependent on you?"
+              label="Do you have car loan?"
               class="MaritalStatus"
               options={yesOrNoOptions}
-              id="parental-dependence"
-              value={this.state.parental_dependence}
-              onChange={this.handleRadioValue('parental_dependence')} />
+              id="car-loan"
+              value={this.state.car_loan}
+              onChange={this.handleRadioValue('car_loan')} />
           </div>
-          <div className="InputField">
-            <RadioWithoutIcon
-              error={(this.state.other_dependence_error) ? true : false}
-              helperText={this.state.other_dependence_error}
-              width="40"
-              label="Do you have other dependence?"
-              class="MaritalStatus"
-              options={yesOrNoOptions}
-              id="other-dependence"
-              value={this.state.other_dependence}
-              onChange={this.handleRadioValue('other_dependence')} />
-          </div>
+          {
+            monthlyEMIInput
+          }
         </FormControl>
       </Container>
     );
   }
 }
 
-export default PersonalDetails3;
+export default LoanDetails3;
