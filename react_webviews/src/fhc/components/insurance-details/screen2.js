@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
 import toast from '../../../common/ui/Toast';
@@ -14,15 +14,17 @@ import { yesOrNoOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 
-class LoanDetails4 extends Component {
+class InsuranceDetails2 extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
-      education_loan: '',
-      education_loan_error: '',
-      monthly_emi: '',
-      monthly_emi_error: '',
+      medical_insurance: '',
+      medical_insurance_error: '',
+      annual_premium: '',
+      annual_premium_error: '',
+      cover_amt: '',
+      cover_amt_error: '',
       image: '',
       provider: '',
       params: qs.parse(this.props.location.search.slice(1)),
@@ -57,12 +59,12 @@ class LoanDetails4 extends Component {
   handleRadioValue = name => index => {
     this.setState({
       [name]: yesOrNoOptions[index]['value'],
-      [name + '_error']: ''
+      [name + '_error']: '',
     });
   }
 
   handleChange = name => event => {
-    if (name === 'monthly_emi') {
+    if (name === 'annual_premium' || name === 'cover_amt') {
       if (!inrFormatTest(event.target.value)) {
         return;
       }
@@ -97,10 +99,11 @@ class LoanDetails4 extends Component {
       "event_name": 'fin_health_check',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'loan_details_three',
+        "screen_name": 'insurance_details_one',
         "provider": this.state.provider,
-        "education_loan": this.state.education_loan,
-        "monthly_emi": this.state.monthly_emi,
+        "medical_insurance": this.state.medical_insurance,
+        "annual_premium": this.state.annual_premium,
+        "cover_amt": this.state.cover_amt,
         "from_edit": (this.state.edit) ? 'yes' : 'no'
       }
     };
@@ -114,40 +117,64 @@ class LoanDetails4 extends Component {
 
   handleClick = () => {
     // this.sendEvents('next');
-    if (!this.state.education_loan) {
+    if (!this.state.medical_insurance) {
       this.setState({
-        education_loan_error: 'Please select an option',
+        medical_insurance_error: 'Please select an option',
       });
     } else if (
-      this.state.education_loan === 'yes' &&
-      (!this.state.monthly_emi || !validateNumber(this.state.monthly_emi))
-      ) {
+      this.state.life_insurance === 'yes' &&
+      (!this.state.annual_premium || !validateNumber(this.state.annual_premium))
+    ) {
       this.setState({
-        monthly_emi_error: 'Monthly EMI cannot be negative or 0',
+        annual_premium_error: 'Annual premium cannot be negative or 0',
+      });
+    } else if (
+      this.state.life_insurance === 'yes' &&
+      (!this.state.cover_amt || !validateNumber(this.state.cover_amt))
+    ) {
+      this.setState({
+        cover_amt_error: 'Coverage cannot be negative or 0',
       });
     } else {
-      console.log('ALL VALID - SCREEN 4 - LOAN');
-      this.navigate('/fhc/loan-summary');
+      console.log('ALL VALID - SCREEN 2 - insurance');
+      this.navigate('/fhc/insurance-summary');
     }
   }
 
   render() {
-    let monthlyEMIInput = null;
-    if (this.state.education_loan === 'yes') {
-      monthlyEMIInput = <div className="InputField">
-        <Input
-          error={(this.state.monthly_emi_error) ? true : false}
-          helperText={this.state.monthly_emi_error}
-          type="text"
-          width="40"
-          label="Monthly EMI"
-          class="Income"
-          id="monthly-emi"
-          name="monthly_emi"
-          value={formatAmount(this.state.monthly_emi || '')}
-          onChange={this.handleChange('monthly_emi')}
-          onKeyChange={this.handleKeyChange('monthly_emi')} />
-      </div>
+    let amountInputs = null;
+    if (this.state.medical_insurance === 'yes') {
+      amountInputs =
+      <Fragment>
+        <div className="InputField">
+          <Input
+            error={(this.state.annual_premium_error) ? true : false}
+            helperText={this.state.annual_premium_error}
+            type="text"
+            width="40"
+            label="Annual premium"
+            class="Income"
+            id="annual-premium"
+            name="annual_premium"
+            value={formatAmount(this.state.annual_premium || '')}
+            onChange={this.handleChange('annual_premium')}
+            onKeyChange={this.handleKeyChange('annual_premium')} />
+        </div>
+        <div className="InputField">
+          <Input
+            error={(this.state.cover_amt_error) ? true : false}
+            helperText={this.state.cover_amt_error}
+            type="text"
+            width="40"
+            label="Cover amount"
+            class="Income"
+            id="cover-amt"
+            name="cover_amt"
+            value={formatAmount(this.state.cover_amt || '')}
+            onChange={this.handleChange('cover_amt')}
+            onKeyChange={this.handleKeyChange('cover_amt')} />
+        </div>
+      </Fragment>
     }
     return (
       <Container
@@ -157,7 +184,7 @@ class LoanDetails4 extends Component {
         smallTitle={this.state.provider}
         count={false}
         total={5}
-        current={3}
+        current={4}
         banner={false}
         bannerText={''}
         handleClick={this.handleClick}
@@ -168,21 +195,21 @@ class LoanDetails4 extends Component {
       >
         <FormControl fullWidth>
           <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
-            title={(this.props.edit) ? 'Edit Loan Liability Details' : 'Loan Liability'} />
+            title={(this.props.edit) ? 'Edit Insurance Details' : 'Insurance Details'} />
           <div className="InputField">
             <RadioWithoutIcon
-              error={(this.state.education_loan_error) ? true : false}
-              helperText={this.state.education_loan_error}
+              error={(this.state.medical_insurance_error) ? true : false}
+              helperText={this.state.medical_insurance_error}
               width="40"
-              label="Do you have education loan?"
+              label="Do you have medical insurance?"
               class="MaritalStatus"
               options={yesOrNoOptions}
-              id="education-loan"
-              value={this.state.education_loan}
-              onChange={this.handleRadioValue('education_loan')} />
+              id="medical-insurance"
+              value={this.state.medical_insurance}
+              onChange={this.handleRadioValue('medical_insurance')} />
           </div>
           {
-            monthlyEMIInput
+            amountInputs
           }
         </FormControl>
       </Container>
@@ -190,4 +217,4 @@ class LoanDetails4 extends Component {
   }
 }
 
-export default LoanDetails4;
+export default InsuranceDetails2;

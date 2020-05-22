@@ -27,12 +27,16 @@ import PersonalDetails1 from './components/personal-details/screen1';
 import PersonalDetails2 from './components/personal-details/screen2';
 import PersonalDetails3 from './components/personal-details/screen3';
 import EarningDetails1 from './components/earning-details/screen1';
+import PersonalComplete from './components/earning-details/success';
 import LoanDetails1 from './components/loan-details/screen1';
 import LoanDetails2 from './components/loan-details/screen2';
 import LoanDetails3 from './components/loan-details/screen3';
 import LoanDetails4 from './components/loan-details/screen4';
 import LoanDetailsSummary from './components/loan-details/summary';
-import PersonalComplete from './components/earning-details/success';
+import InsuranceDetails1 from './components/insurance-details/screen1';
+import InsuranceDetails2 from './components/insurance-details/screen2';
+import InsuranceSummary from './components/insurance-details/summary';
+
 // import AdditionalInfo from './products/term_insurance/additional-info/hdfc';
 // import Summary from './products/term_insurance/insurance-summary/screen1';
 // import Journey from './products/term_insurance/insurance-summary/screen3';
@@ -74,23 +78,38 @@ const Insurance = (props) => {
         <ToastContainer autoClose={3000} />
         <Switch>
           <Route exact path={`${url}`} component={Landing} />
-
-          {/********** TERM INSURANCE **********/}
-          {/* <Route path={`${url}/fhc/resume`} component={Resume} /> */}
+          {/* Personal Details */}
           <Route path={`${url}/personal1`} component={PersonalDetails1} />
           <Route path={`${url}/personal2`} component={PersonalDetails2} />
           <Route path={`${url}/personal3`} component={PersonalDetails3} />
           <Route path={`${url}/earnings1`} component={EarningDetails1} />
           <Route path={`${url}/personal-complete`} component={PersonalComplete} />
+          {/* Loan Details */}
           <Route path={`${url}/loan1`} component={LoanDetails1} />
           <Route path={`${url}/loan2`} component={LoanDetails2} />
           <Route path={`${url}/loan3`} component={LoanDetails3} />
           <Route path={`${url}/loan4`} component={LoanDetails4} />
           <Route path={`${url}/loan-summary`} component={LoanDetailsSummary} />
-          {/* <Route path={`${url}/fhc/additional-info`} component={AdditionalInfo} /> */}
-          {/* <Route path={`${url}/fhc/summary`} component={Summary} /> */}
-          {/* <Route path={`${url}/fhc/journey`} component={Journey} /> */}
-
+          <Route path={`${url}/edit-loan1`}
+            render={(props) => <LoanDetails1 {...props} edit={true} />}
+          />
+          <Route path={`${url}/edit-loan3`}
+            render={(props) => <LoanDetails3 {...props} edit={true} />}
+          />
+          <Route path={`${url}/edit-loan4`}
+            render={(props) => <LoanDetails4 {...props} edit={true} />}
+          />
+          {/* Insurance Details */}
+          <Route path={`${url}/insurance1`} component={InsuranceDetails1} />
+          <Route path={`${url}/insurance2`} component={InsuranceDetails2} />
+          <Route path={`${url}/insurance-summary`} component={InsuranceSummary} />
+          <Route path={`${url}/edit-insurance1`}
+            render={(props) => <InsuranceDetails1 {...props} edit={true} />}
+          />
+          <Route path={`${url}/edit-insurance2`}
+            render={(props) => <InsuranceDetails2 {...props} edit={true} />}
+          />
+          {/* Catch-all */}
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>

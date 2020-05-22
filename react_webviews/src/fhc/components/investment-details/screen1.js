@@ -14,15 +14,13 @@ import { yesOrNoOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 
-class LoanDetails4 extends Component {
+class InvestmentDetails1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
-      education_loan: '',
-      education_loan_error: '',
-      monthly_emi: '',
-      monthly_emi_error: '',
+      investment: '',
+      investment_error: '',
       image: '',
       provider: '',
       params: qs.parse(this.props.location.search.slice(1)),
@@ -57,29 +55,8 @@ class LoanDetails4 extends Component {
   handleRadioValue = name => index => {
     this.setState({
       [name]: yesOrNoOptions[index]['value'],
-      [name + '_error']: ''
+      [name + '_error']: '',
     });
-  }
-
-  handleChange = name => event => {
-    if (name === 'monthly_emi') {
-      if (!inrFormatTest(event.target.value)) {
-        return;
-      }
-      this.setState({
-        [name]: event.target.value.replace(/,/g, ""),
-        [name + '_error']: ''
-      });
-    }
-  }
-
-  handleKeyChange = name => event => {
-    if (event.charCode >= 48 && event.charCode <= 57) {
-      // valid
-    } else {
-      // invalid
-      event.preventDefault();
-    }
   }
 
   navigate = (pathname) => {
@@ -97,10 +74,9 @@ class LoanDetails4 extends Component {
       "event_name": 'fin_health_check',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'loan_details_three',
+        "screen_name": 'loan_details_one',
         "provider": this.state.provider,
-        "education_loan": this.state.education_loan,
-        "monthly_emi": this.state.monthly_emi,
+        "investment": this.state.investment,
         "from_edit": (this.state.edit) ? 'yes' : 'no'
       }
     };
@@ -114,41 +90,30 @@ class LoanDetails4 extends Component {
 
   handleClick = () => {
     // this.sendEvents('next');
-    if (!this.state.education_loan) {
+    if (!this.state.investment) {
       this.setState({
-        education_loan_error: 'Please select an option',
-      });
-    } else if (
-      this.state.education_loan === 'yes' &&
-      (!this.state.monthly_emi || !validateNumber(this.state.monthly_emi))
-      ) {
-      this.setState({
-        monthly_emi_error: 'Monthly EMI cannot be negative or 0',
+        investment_error: 'Please select an option',
       });
     } else {
-      console.log('ALL VALID - SCREEN 4 - LOAN');
-      this.navigate('/fhc/loan-summary');
+      console.log('ALL VALID - SCREEN 1 - Investment');
+      if (this.state.investment === 'yes') {
+        this.navigate('/fhc/investment2');
+      } else {
+        //skip to screen 3 if user selects 'No' for investments
+        this.navigate('/fhc/investment4');
+      }
     }
   }
 
+  bannerText = () => {
+    return (
+      <span>
+        Let's have a look at your investments
+      </span>
+    );
+  }
+
   render() {
-    let monthlyEMIInput = null;
-    if (this.state.education_loan === 'yes') {
-      monthlyEMIInput = <div className="InputField">
-        <Input
-          error={(this.state.monthly_emi_error) ? true : false}
-          helperText={this.state.monthly_emi_error}
-          type="text"
-          width="40"
-          label="Monthly EMI"
-          class="Income"
-          id="monthly-emi"
-          name="monthly_emi"
-          value={formatAmount(this.state.monthly_emi || '')}
-          onChange={this.handleChange('monthly_emi')}
-          onKeyChange={this.handleKeyChange('monthly_emi')} />
-      </div>
-    }
     return (
       <Container
         events={this.sendEvents('just_set_events')}
@@ -158,8 +123,8 @@ class LoanDetails4 extends Component {
         count={false}
         total={5}
         current={3}
-        banner={false}
-        bannerText={''}
+        banner={true}
+        bannerText={this.bannerText()}
         handleClick={this.handleClick}
         edit={this.props.edit}
         topIcon="close"
@@ -168,26 +133,23 @@ class LoanDetails4 extends Component {
       >
         <FormControl fullWidth>
           <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
-            title={(this.props.edit) ? 'Edit Loan Liability Details' : 'Loan Liability'} />
+            title={'Investment Details'} />
           <div className="InputField">
             <RadioWithoutIcon
-              error={(this.state.education_loan_error) ? true : false}
-              helperText={this.state.education_loan_error}
+              error={(this.state.investment_error) ? true : false}
+              helperText={this.state.investment_error}
               width="40"
-              label="Do you have education loan?"
+              label="Have you ever invested your money?"
               class="MaritalStatus"
               options={yesOrNoOptions}
-              id="education-loan"
-              value={this.state.education_loan}
-              onChange={this.handleRadioValue('education_loan')} />
+              id="investment"
+              value={this.state.investment}
+              onChange={this.handleRadioValue('investment')} />
           </div>
-          {
-            monthlyEMIInput
-          }
         </FormControl>
       </Container>
     );
   }
 }
 
-export default LoanDetails4;
+export default InvestmentDetails1;

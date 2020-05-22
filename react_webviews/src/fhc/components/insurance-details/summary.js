@@ -13,18 +13,18 @@ import { numDifferentiation, formatAmount } from 'utils/validators';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 
-class LoanSummary extends Component {
+class InsuranceSummary extends Component {
   constructor(props) {
     super(props);
     this.state = {
       image: '',
-      house_loan: {},
-      education_loan: {},
-      car_loan: {},
+      life_insurance: {},
+      education_Insurance: {},
+      medical_insurance: {},
       provider: '',
       apiError: '',
       edit_allowed: true,
-      accordianTab: 'house_loan',
+      accordianTab: 'life_insurance',
       params: qs.parse(props.history.location.search.slice(1)),
       loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
     }
@@ -42,39 +42,45 @@ class LoanSummary extends Component {
     });
   }
 
-  handleClick = async () => {
-    this.navigate('insurance1');
-  }
+  handleClick = async () => {}
 
   renderAccordionBody = (name) => {
-    if (this.state.accordianTab === 'house_loan' && name === 'house_loan') {
+    if (this.state.accordianTab === 'life_insurance' && name === 'life_insurance') {
       return (
         <div className="AccordionBody">
           <ul>
             <li className="summary-li">
-              Monthly EMI: 
+              Annual Premium
+              <span><b>₹ {formatAmount(750000)}</b></span>
+            </li>
+            <li className="summary-li">
+              Coverage
               <span><b>₹ {formatAmount(750000)}</b></span>
             </li>
           </ul>
         </div>
       );
-    } else if (this.state.accordianTab === 'car_loan' && name === 'car_loan') {
+    } else if (this.state.accordianTab === 'medical_insurance' && name === 'medical_insurance') {
       return (
         <div className="AccordionBody">
           <ul>
             <li class="summary-li">
-              Monthly EMI: 
+              Annual Premium
+              <span><b>₹ {formatAmount(750000)}</b></span>
+            </li>
+            <li class="summary-li">
+              Coverage
               <span><b>₹ {formatAmount(750000)}</b></span>
             </li>
           </ul>
         </div>
       );
-    } else if (this.state.accordianTab === 'education_loan' && name === 'education_loan') {
+    } else if (this.state.accordianTab === 'education_insurance' && name === 'education_insurance') {
       return (
         <div className="AccordionBody">
           <ul>
-            <li className="summary-li">
-              Monthly EMI:
+            <li class="summary-li">Monthly EMI: </li>
+            <li class="summary-li">
               <span><b>₹ {formatAmount(750000)}</b></span>
             </li>
           </ul>
@@ -92,12 +98,10 @@ class LoanSummary extends Component {
 
   navigate = (pathname) => {
 
-    if (pathname === 'edit-loan1') {
-      this.sendEvents('next', '', 'house-loan');
-    } else if (pathname === 'edit-loan3') {
-      this.sendEvents('next', '', 'car-loan');
-    } else if (pathname === 'edit-loan4') {
-      this.sendEvents('next', '', 'education-loan');
+    if (pathname === 'edit-insurance1') {
+      this.sendEvents('next', '', 'life-insurance');
+    } else if (pathname === 'edit-insurance2') {
+      this.sendEvents('next', '', 'medical-insurance');
     }
 
     this.props.history.push({
@@ -110,13 +114,12 @@ class LoanSummary extends Component {
 
     which_one_edit = which_one_edit || '';
     let eventObj = {
-      "event_name": 'loan_details ',
+      "event_name": 'insurance_details ',
       "properties": {
         "user_action": user_action,
         "screen_name": 'insurance_summary',
-        'car_loan_details_edit': which_one_edit === 'car_loan' ? 'yes' : 'no',
-        'house_loan_details_edit': which_one_edit === 'house_loan' ? 'yes' : 'no',
-        'education_loan_details_edit': which_one_edit === 'education_loan' ? 'yes' : 'no',
+        'medical_insurance_details_edit': which_one_edit === 'medical_insurance' ? 'yes' : 'no',
+        'life_insurance_details_edit': which_one_edit === 'life_insurance' ? 'yes' : 'no',
         'time_spent': this.state.time_spent
       }
     };
@@ -137,7 +140,7 @@ class LoanSummary extends Component {
         smallTitle={this.state.provider}
         count={false}
         total={5}
-        current={3}
+        current={4}
         banner={false}
         bannerText={''}
         handleClick={this.handleClick}
@@ -148,44 +151,32 @@ class LoanSummary extends Component {
       >
         <FormControl fullWidth>
           <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
-            title={'Loan liability Summary'} />
+            title={'Insurance liability Summary'} />
           <div style={{ marginBottom: 30 }}>
             <div className="accordion-container">
               <div className="Accordion">
-                <div className="AccordionTitle" onClick={() => this.toggleAccordian('house_loan')}>
+                <div className="AccordionTitle" onClick={() => this.toggleAccordian('life_insurance')}>
                   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative' }}>
                     <span style={{ marginRight: 10 }}>
-                      <img style={{ position: 'relative', top: 2 }} src={(this.state.accordianTab === 'house_loan') ? shrink : expand} alt="" width="20" />
+                      <img style={{ position: 'relative', top: 2 }} src={(this.state.accordianTab === 'life_insurance') ? shrink : expand} alt="" width="20" />
                     </span>
-                    <span>House Loan detail</span>
-                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().secondary, fontSize: 13 }} onClick={() => this.navigate('edit-loan1')}>Edit</span>}
+                    <span>Life Insurance detail</span>
+                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().secondary, fontSize: 13 }} onClick={() => this.navigate('edit-insurance1')}>Edit</span>}
                   </div>
                 </div>
-                {this.renderAccordionBody('house_loan')}
+                {this.renderAccordionBody('life_insurance')}
               </div>
               <div className="Accordion">
-                <div className="AccordionTitle" onClick={() => this.toggleAccordian('car_loan')}>
+                <div className="AccordionTitle" onClick={() => this.toggleAccordian('medical_insurance')}>
                   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative' }}>
                     <span style={{ marginRight: 10 }}>
-                      <img style={{ position: 'relative', top: 2 }} src={(this.state.accordianTab === 'car_loan') ? shrink : expand} alt="" width="20" />
+                      <img style={{ position: 'relative', top: 2 }} src={(this.state.accordianTab === 'medical_insurance') ? shrink : expand} alt="" width="20" />
                     </span>
-                    <span>Car Loan detail</span>
-                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().secondary, fontSize: 13 }} onClick={() => this.navigate('edit-loan3')}>Edit</span>}
+                    <span>Medical Insurance detail</span>
+                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().secondary, fontSize: 13 }} onClick={() => this.navigate('edit-insurance2')}>Edit</span>}
                   </div>
                 </div>
-                {this.renderAccordionBody('car_loan')}
-              </div>
-              <div className="Accordion">
-                <div className="AccordionTitle" onClick={() => this.toggleAccordian('education_loan')}>
-                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative' }}>
-                    <span style={{ marginRight: 10 }}>
-                      <img style={{ position: 'relative', top: 2 }} src={(this.state.accordianTab === 'education_loan') ? shrink : expand} alt="" width="20" />
-                    </span>
-                    <span>Education Loan detail</span>
-                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().secondary, fontSize: 13 }} onClick={() => this.navigate('edit-loan4')}>Edit</span>}
-                  </div>
-                </div>
-                {this.renderAccordionBody('education_loan')}
+                {this.renderAccordionBody('medical_insurance')}
               </div>
             </div>
           </div>
@@ -196,4 +187,4 @@ class LoanSummary extends Component {
 }
 
 
-export default LoanSummary;
+export default InsuranceSummary;

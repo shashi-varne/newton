@@ -30,3 +30,13 @@
   font-size: 14px;
   display: block;
 }
+.summary-li {
+  font-weight: normal;
+  font-size: 14px;
+  color: #878787;
+  line-height: 20px;
+}
+.summary-li span {
+  display: block;
+  margin-top: 5px;
+}

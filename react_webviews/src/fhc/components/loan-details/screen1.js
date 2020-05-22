@@ -127,7 +127,12 @@ class LoanDetails1 extends Component {
       });
     } else {
       console.log('ALL VALID - SCREEN 1 - LOAN');
-      this.navigate('/fhc/loan2');
+      if (this.props.edit) {
+        //skip to screen 3 for edit flow (house rent details not required)
+        this.navigate('/fhc/edit-loan3');
+      } else {
+        this.navigate('/fhc/loan2');
+      }
     }
   }
 

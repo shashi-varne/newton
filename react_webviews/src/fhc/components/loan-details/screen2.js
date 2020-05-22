@@ -127,7 +127,11 @@ class LoanDetails2 extends Component {
       });
     } else {
       console.log('ALL VALID - SCREEN 2 - LOAN');
-      this.navigate('/fhc/earnings1');
+      if (this.props.edit) {
+        this.navigate('/fhc/edit-loan3');
+      } else {
+        this.navigate('/fhc/loan3');
+      }
     }
   }
 
