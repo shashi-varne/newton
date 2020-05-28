@@ -54,7 +54,6 @@ class PersonalDetails2 extends Component {
   handleRadioValue = name => index => {
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
     const selectedVal = yesOrNoOptions[index]['value'];
-    console.log(name, index, selectedVal);
 
     if (name === 'num_kids') {
       fhc_data.num_kids = selectedVal ? 1 : 0;
@@ -69,7 +68,6 @@ class PersonalDetails2 extends Component {
 
   handleChange = name => event => {
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
-    console.log(name, event);
     if (name === 'num_kids') {
       fhc_data.num_kids = event;
     }
@@ -123,15 +121,14 @@ class PersonalDetails2 extends Component {
       this.setState({ fhc_data });
     } else {
       window.localStorage.setItem('fhc_data', JSON.stringify(fhc_data));
-      console.log('ALL VALID - SCREEN 2');
-      this.navigate('/fhc/personal3');
+      this.navigate('personal3');
     }
   }
 
   render() {
     let kidsSelect = null;
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
-    let has_kids = fhc_data.num_kids > 0;
+    const has_kids = fhc_data.num_kids > 0;
     if (has_kids) {
       kidsSelect = <div className="InputField">
         <DropdownWithoutIcon
@@ -179,8 +176,8 @@ class PersonalDetails2 extends Component {
           </div>
           <div className="InputField">
             <RadioWithoutIcon
-              error={(fhc_data.num_kids_error) ? true : false}
-              helperText={fhc_data.num_kids_error}
+              error={false}
+              helperText={''}
               icon={marital}
               width="40"
               label="Do you have kids?"

@@ -8,24 +8,18 @@ import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import personal from 'assets/personal_details_icon.svg';
 import income from 'assets/annual_income_dark_icn.png';
 import Input from '../../../common/ui/Input';
-import { validateNumber, formatAmount, inrFormatTest } from 'utils/validators';
+import { formatAmount, inrFormatTest } from 'utils/validators';
+import FHC from '../../FHCClass';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 
-class PersonalDetails1 extends Component {
+class PersonalDetails4 extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
-      annualCTC: '',
-      annualCTC_error: '',
-      monthly_sal: '',
-      monthly_sal_error: '',
-      monthly_exp: '',
-      monthly_exp_error: '',
-      image: '',
-      provider: '',
+      fhc_data: new FHC(),
       params: qs.parse(this.props.location.search.slice(1)),
       type: getConfig().productName
     }
@@ -33,20 +27,20 @@ class PersonalDetails1 extends Component {
 
   async componentDidMount() {
     try {
-      const res = await Api.get('/api/insurance/profile/' + this.state.params.insurance_id, {
-        groups: 'contact'
-      });
-      const { email, mobile_no } = res.pfwresponse.result.profile;
-      const { image, provider, cover_plan } = res.pfwresponse.result.quote_desc;
-
+      let fhc_data = JSON.parse(window.localStorage.getItem('fhc_data'));
+      if (!fhc_data) {
+        const res = await Api.get('page/financialhealthcheck/edit/mine', {
+          format: 'json',
+        });
+        console.log('res', res);
+        fhc_data = res.pfwresponse.result;
+      }
+      fhc_data = new FHC(fhc_data);
       this.setState({
         show_loader: false,
-        email: email || '',
-        mobile_no: mobile_no || '',
-        image: image,
-        provider: provider,
-        cover_plan: cover_plan
+        fhc_data,
       });
+
     } catch (err) {
       this.setState({
         show_loader: false
@@ -79,7 +73,6 @@ class PersonalDetails1 extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'personal_details_one',
-        "provider": this.state.provider,
         "email": this.state.email ? 'yes' : 'no',
         "name": this.state.name ? 'yes' : 'no',
         "dob": this.state.dob ? 'yes' : 'no',
@@ -95,13 +88,13 @@ class PersonalDetails1 extends Component {
   }
 
   handleChange = name => event => {
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+
     if (!inrFormatTest(event.target.value)) {
       return;
     }
-    this.setState({
-      [name]: event.target.value.replace(/,/g, ""),
-      [name + '_error']: ''
-    });
+    fhc_data[name] = event.target.value.replace(/,/g, "");
+    this.setState({ fhc_data });
   }
 
   handleKeyChange = name => event => {
@@ -114,36 +107,25 @@ class PersonalDetails1 extends Component {
   }
 
   handleClick = () => {
-    if (!this.state.annualCTC || !validateNumber(this.state.annualCTC)) {
-      this.setState({
-        annualCTC_error: 'Enter a valid Annual CTC',
-        monthly_sal_error: 'Enter a valid Annual CTC first'
-      });
-    } else if (!this.state.monthly_sal || !validateNumber(this.state.monthly_sal)) {
-      this.setState({
-        monthly_sal_error: 'Enter a valid Monthly Salary amount'
-      });
-    } else if (this.state.monthly_sal > this.state.annualCTC / 12) {
-      this.setState({
-        monthly_sal_error: 'Monthly Salary cannot be greater than CTC/12'
-      });
-    } else if (!this.state.monthly_exp || !validateNumber(this.state.monthly_exp)) {
-      this.setState({
-        monthly_exp_error: 'Enter a valid Monthly Expense amount',
-      });
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+
+    if (!fhc_data.isValidSalaryInfo()) {
+      this.setState({ fhc_data });
     } else {
+      window.localStorage.setItem('fhc_data', JSON.stringify(fhc_data));
       console.log('ALL VALID - EXPENSE SCREEN')
       this.navigate('personal-complete')
     }
   }
 
   render() {
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+    console.log(fhc_data);
     return (
       <Container
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Fin Health Check (FHC)"
-        smallTitle={this.state.provider}
         count={false}
         total={5}
         current={2}
@@ -153,15 +135,14 @@ class PersonalDetails1 extends Component {
         edit={this.props.edit}
         topIcon="close"
         buttonTitle="Save & Continue"
-        logo={this.state.image}
       >
         <FormControl fullWidth>
           <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
             title={(this.props.edit) ? 'Edit Earning and Expense Details' : 'Earning and Expense Details'} />
           <div className="InputField">
             <Input
-              error={(this.state.annualCTC_error) ? true : false}
-              helperText={this.state.annualCTC_error}
+              error={(fhc_data.annual_sal_error) ? true : false}
+              helperText={fhc_data.annual_sal_error}
               type="text"
               icon={income}
               width="40"
@@ -169,14 +150,14 @@ class PersonalDetails1 extends Component {
               class="Income"
               id="income"
               name="annualCTC"
-              value={formatAmount(this.state.annualCTC || '')}
-              onChange={this.handleChange('annualCTC')}
-              onKeyChange={this.handleKeyChange('annualCTC')} />
+              value={formatAmount(fhc_data.annual_sal || '')}
+              onChange={this.handleChange('annual_sal')}
+              onKeyChange={this.handleKeyChange('annual_sal')} />
           </div>
           <div className="InputField">
             <Input
-              error={(this.state.monthly_sal_error) ? true : false}
-              helperText={this.state.monthly_sal_error}
+              error={(fhc_data.monthly_sal_error) ? true : false}
+              helperText={fhc_data.monthly_sal_error}
               type="text"
               icon={income}
               width="40"
@@ -184,14 +165,14 @@ class PersonalDetails1 extends Component {
               class="Income"
               id="income"
               name="monthly-sal"
-              value={formatAmount(this.state.monthly_sal || '')}
+              value={formatAmount(fhc_data.monthly_sal || '')}
               onChange={this.handleChange('monthly_sal')}
               onKeyChange={this.handleKeyChange('monthly_sal')} />
           </div>
           <div className="InputField">
             <Input
-              error={(this.state.monthly_exp_error) ? true : false}
-              helperText={this.state.monthly_exp_error}
+              error={(fhc_data.monthly_exp_error) ? true : false}
+              helperText={fhc_data.monthly_exp_error}
               type="text"
               icon={income}
               width="40"
@@ -199,7 +180,7 @@ class PersonalDetails1 extends Component {
               class="Income"
               id="monthly-exp"
               name="monthly_exp"
-              value={formatAmount(this.state.monthly_exp || '')}
+              value={formatAmount(fhc_data.monthly_exp || '')}
               onChange={this.handleChange('monthly_exp')}
               onKeyChange={this.handleKeyChange('monthly_exp')} />
           </div>
@@ -209,4 +190,4 @@ class PersonalDetails1 extends Component {
   }
 }
 
-export default PersonalDetails1;
+export default PersonalDetails4;

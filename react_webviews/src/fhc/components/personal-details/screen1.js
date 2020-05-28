@@ -89,7 +89,7 @@ class PersonalDetails1 extends Component {
       this.setState({ fhc_data });
     } else {
       window.localStorage.setItem('fhc_data', JSON.stringify(fhc_data));
-      this.navigate('/fhc/personal2');
+      this.navigate('personal2');
     }
   };
 

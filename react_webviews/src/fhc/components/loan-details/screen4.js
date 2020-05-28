@@ -10,6 +10,7 @@ import { validateNumber, formatAmount, inrFormatTest } from 'utils/validators';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import personal from 'assets/personal_details_icon.svg';
 import Api from 'utils/api';
+import FHC from '../../FHCClass';
 import { yesOrNoOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
@@ -19,12 +20,7 @@ class LoanDetails4 extends Component {
     super(props);
     this.state = {
       show_loader: true,
-      education_loan: '',
-      education_loan_error: '',
-      monthly_emi: '',
-      monthly_emi_error: '',
-      image: '',
-      provider: '',
+      fhc_data: new FHC(),
       params: qs.parse(this.props.location.search.slice(1)),
       type: getConfig().productName
     }
@@ -32,20 +28,20 @@ class LoanDetails4 extends Component {
 
   async componentDidMount() {
     try {
-      const res = await Api.get('/api/insurance/profile/' + this.state.params.insurance_id, {
-        groups: 'contact'
-      });
-      const { email, mobile_no } = res.pfwresponse.result.profile;
-      const { image, provider, cover_plan } = res.pfwresponse.result.quote_desc;
-
+      let fhc_data = JSON.parse(window.localStorage.getItem('fhc_data'));
+      if (!fhc_data) {
+        const res = await Api.get('page/financialhealthcheck/edit/mine', {
+          format: 'json',
+        });
+        console.log('res', res);
+        fhc_data = res.pfwresponse.result;
+      }
+      fhc_data = new FHC(fhc_data);
       this.setState({
         show_loader: false,
-        email: email || '',
-        mobile_no: mobile_no || '',
-        image: image,
-        provider: provider,
-        cover_plan: cover_plan
+        fhc_data,
       });
+
     } catch (err) {
       this.setState({
         show_loader: false
@@ -54,24 +50,27 @@ class LoanDetails4 extends Component {
     }
   }
 
+
   handleRadioValue = name => index => {
-    this.setState({
-      [name]: yesOrNoOptions[index]['value'],
-      [name + '_error']: ''
-    });
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+    const selectedVal = yesOrNoOptions[index]['value'];
+
+    fhc_data[name] = selectedVal;
+    fhc_data[`${name}_error`] = '';
+    this.setState({ fhc_data });
   }
 
   handleChange = name => event => {
-    if (name === 'monthly_emi') {
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+
+    if (name === 'education_loan') {
       if (!inrFormatTest(event.target.value)) {
         return;
       }
-      this.setState({
-        [name]: event.target.value.replace(/,/g, ""),
-        [name + '_error']: ''
-      });
+      fhc_data.education_loan = event.target.value;
     }
-  }
+    this.setState({ fhc_data });
+  };
 
   handleKeyChange = name => event => {
     if (event.charCode >= 48 && event.charCode <= 57) {
@@ -100,7 +99,7 @@ class LoanDetails4 extends Component {
         "screen_name": 'loan_details_three',
         "provider": this.state.provider,
         "education_loan": this.state.education_loan,
-        "monthly_emi": this.state.monthly_emi,
+        "education_loan": this.state.education_loan,
         "from_edit": (this.state.edit) ? 'yes' : 'no'
       }
     };
@@ -114,39 +113,43 @@ class LoanDetails4 extends Component {
 
   handleClick = () => {
     // this.sendEvents('next');
-    if (!this.state.education_loan) {
-      this.setState({
-        education_loan_error: 'Please select an option',
-      });
-    } else if (
-      this.state.education_loan === 'yes' &&
-      (!this.state.monthly_emi || !validateNumber(this.state.monthly_emi))
-      ) {
-      this.setState({
-        monthly_emi_error: 'Monthly EMI cannot be negative or 0',
-      });
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+
+    if (!fhc_data.isValidLoanInfo('education')) {
+      this.setState({ fhc_data });
     } else {
-      console.log('ALL VALID - SCREEN 4 - LOAN');
-      this.navigate('/fhc/loan-summary');
+      window.localStorage.setItem('fhc_data', JSON.stringify(fhc_data));
+      if (
+        fhc_data.has_house_loan ||
+        fhc_data.has_car_loan ||
+        fhc_data.has_education_loan
+      ) {
+        // Only show summary if any loan is taken
+        this.navigate('loan-summary');
+      } else {        
+        this.navigate('insurance1');
+      }
     }
   }
 
   render() {
     let monthlyEMIInput = null;
-    if (this.state.education_loan === 'yes') {
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+
+    if (fhc_data.has_education_loan) {
       monthlyEMIInput = <div className="InputField">
         <Input
-          error={(this.state.monthly_emi_error) ? true : false}
-          helperText={this.state.monthly_emi_error}
+          error={(fhc_data.education_loan_error) ? true : false}
+          helperText={fhc_data.education_loan_error}
           type="text"
           width="40"
           label="Monthly EMI"
           class="Income"
           id="monthly-emi"
-          name="monthly_emi"
-          value={formatAmount(this.state.monthly_emi || '')}
-          onChange={this.handleChange('monthly_emi')}
-          onKeyChange={this.handleKeyChange('monthly_emi')} />
+          name="education_loan"
+          value={formatAmount(fhc_data.education_loan || '')}
+          onChange={this.handleChange('education_loan')}
+          onKeyChange={this.handleKeyChange('education_loan')} />
       </div>
     }
     return (
@@ -154,7 +157,6 @@ class LoanDetails4 extends Component {
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Fin Health Check (FHC)"
-        smallTitle={this.state.provider}
         count={false}
         total={5}
         current={3}
@@ -164,22 +166,21 @@ class LoanDetails4 extends Component {
         edit={this.props.edit}
         topIcon="close"
         buttonTitle="Save & Continue"
-        logo={this.state.image}
       >
         <FormControl fullWidth>
           <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
             title={(this.props.edit) ? 'Edit Loan Liability Details' : 'Loan Liability'} />
           <div className="InputField">
             <RadioWithoutIcon
-              error={(this.state.education_loan_error) ? true : false}
-              helperText={this.state.education_loan_error}
+              error={!!fhc_data.has_education_loan_error}
+              helperText={fhc_data.has_education_loan_error}
               width="40"
               label="Do you have education loan?"
               class="MaritalStatus"
               options={yesOrNoOptions}
               id="education-loan"
-              value={this.state.education_loan}
-              onChange={this.handleRadioValue('education_loan')} />
+              value={fhc_data.has_education_loan}
+              onChange={this.handleRadioValue('has_education_loan')} />
           </div>
           {
             monthlyEMIInput

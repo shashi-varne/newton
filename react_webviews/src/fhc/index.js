@@ -26,8 +26,8 @@ import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
 import PersonalDetails1 from './components/personal-details/screen1';
 import PersonalDetails2 from './components/personal-details/screen2';
 import PersonalDetails3 from './components/personal-details/screen3';
-import EarningDetails1 from './components/earning-details/screen1';
-import PersonalComplete from './components/earning-details/success';
+import PersonalDetails4 from './components/personal-details/screen4';
+import PersonalComplete from './components/personal-details/success';
 import LoanDetails1 from './components/loan-details/screen1';
 import LoanDetails2 from './components/loan-details/screen2';
 import LoanDetails3 from './components/loan-details/screen3';
@@ -84,7 +84,7 @@ const Insurance = (props) => {
           <Route path={`${url}/personal1`} component={PersonalDetails1} />
           <Route path={`${url}/personal2`} component={PersonalDetails2} />
           <Route path={`${url}/personal3`} component={PersonalDetails3} />
-          <Route path={`${url}/earnings1`} component={EarningDetails1} />
+          <Route path={`${url}/personal4`} component={PersonalDetails4} />
           <Route path={`${url}/personal-complete`} component={PersonalComplete} />
           {/* Loan Details */}
           <Route path={`${url}/loan1`} component={LoanDetails1} />

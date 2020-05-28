@@ -33,26 +33,23 @@ class Success extends Component {
                 noFooter={true}
                 handleClick={() => this.startFHC()}
                 title="Fin Health Check (FHC)"
-                >
-                    <div className="landing-container">
-                        <img
-                            src={require(`assets/done_icon.png`)}
-                            className="success-img"
-                            alt="Personal Details Success" />    
-                        <div className="success-text-container">
-                            <span id="span1">
-                                <b>Hey {name}!</b> Great work indeed.
+            >
+                <div className="landing-container">
+                    <img
+                        src={require(`assets/done_icon.png`)}
+                        className="success-img"
+                        alt="Personal Details Success" />
+                    <div className="success-text-container">
+                        <span id="span1">
+                            <b>Hey {name}!</b> Great work indeed.
                             </span>
-                            <span id="span2">
-                                Now, let's take a look at your<br />
+                        <span id="span2">
+                            Now, let's take a look at your<br />
                                 liabilities, coverage, and investments.
                             </span>
-                            
-                        </div>    
+
                     </div>
-
-
-
+                </div>
             </Container>
         );
     }

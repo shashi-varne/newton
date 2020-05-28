@@ -101,8 +101,7 @@ class PersonalDetails3 extends Component {
       this.setState({ fhc_data });
     } else {
       window.localStorage.setItem('fhc_data', JSON.stringify(fhc_data));
-      console.log('ALL VALID - SCREEN 3');
-      this.navigate('/fhc/earnings1');
+      this.navigate('earnings1');
     }
   }
 

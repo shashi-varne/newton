@@ -9,7 +9,7 @@ export const yesOrNoOptions = [
     },
 ];
 
-export const kidsOptions = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+export const kidsOptions = ['1', '2', '3', '4', '5+'];
 
 export const investmentOptions = [
     { name: 'Bank FD', value: 'bank_fd' },
