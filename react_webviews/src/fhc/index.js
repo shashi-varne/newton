@@ -36,6 +36,8 @@ import LoanDetailsSummary from './components/loan-details/summary';
 import InsuranceDetails1 from './components/insurance-details/screen1';
 import InsuranceDetails2 from './components/insurance-details/screen2';
 import InsuranceSummary from './components/insurance-details/summary';
+import InvestmentDetails2 from './components/investment-details/screen2';
+import InvestmentDetails1 from './components/investment-details/screen4';
 
 // import AdditionalInfo from './products/term_insurance/additional-info/hdfc';
 // import Summary from './products/term_insurance/insurance-summary/screen1';
@@ -90,25 +92,18 @@ const Insurance = (props) => {
           <Route path={`${url}/loan3`} component={LoanDetails3} />
           <Route path={`${url}/loan4`} component={LoanDetails4} />
           <Route path={`${url}/loan-summary`} component={LoanDetailsSummary} />
-          <Route path={`${url}/edit-loan1`}
-            render={(props) => <LoanDetails1 {...props} edit={true} />}
-          />
-          <Route path={`${url}/edit-loan3`}
-            render={(props) => <LoanDetails3 {...props} edit={true} />}
-          />
-          <Route path={`${url}/edit-loan4`}
-            render={(props) => <LoanDetails4 {...props} edit={true} />}
-          />
+          <Route path={`${url}/edit-loan1`} render={(props) => <LoanDetails1 {...props} edit={true} />}/>
+          <Route path={`${url}/edit-loan3`} render={(props) => <LoanDetails3 {...props} edit={true} />}/>
+          <Route path={`${url}/edit-loan4`} render={(props) => <LoanDetails4 {...props} edit={true} />}/>
           {/* Insurance Details */}
           <Route path={`${url}/insurance1`} component={InsuranceDetails1} />
           <Route path={`${url}/insurance2`} component={InsuranceDetails2} />
           <Route path={`${url}/insurance-summary`} component={InsuranceSummary} />
-          <Route path={`${url}/edit-insurance1`}
-            render={(props) => <InsuranceDetails1 {...props} edit={true} />}
-          />
-          <Route path={`${url}/edit-insurance2`}
-            render={(props) => <InsuranceDetails2 {...props} edit={true} />}
-          />
+          <Route path={`${url}/edit-insurance1`} render={(props) => <InsuranceDetails1 {...props} edit={true} />}/>
+          <Route path={`${url}/edit-insurance2`} render={(props) => <InsuranceDetails2 {...props} edit={true} />}/>
+          {/* Investment Details */}
+          <Route path={`${url}/investment1`} component={InvestmentDetails1} />
+          <Route path={`${url}/investment2`} component={InvestmentDetails2} />
           {/* Catch-all */}
           <Route component={NotFound} />
         </Switch>

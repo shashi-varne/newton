@@ -4,19 +4,21 @@ import qs from 'qs';
 import toast from '../../../common/ui/Toast';
 
 import Container from '../../common/Container';
-import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
+import Checkbox from 'material-ui/Checkbox';
+import Grid from 'material-ui/Grid';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import personal from 'assets/personal_details_icon.svg';
 import Api from 'utils/api';
-import { yesOrNoOptions } from '../../constants';
+import { yesOrNoOptions, investmentOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 
-class InvestmentDetails1 extends Component {
+class InvestmentDetails2 extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
+      investmentOpts: this.createInvestOpts(),
       investment: '',
       investment_error: '',
       image: '',
@@ -26,11 +28,15 @@ class InvestmentDetails1 extends Component {
     }
   }
 
+  createInvestOpts = () => {
+    let opts = [...investmentOptions];
+    opts.forEach(opt => opt.checked = false);
+    return opts;
+  }
+
   async componentDidMount() {
     try {
-      const res = await Api.get('/api/insurance/profile/' + this.state.params.insurance_id, {
-        groups: 'contact'
-      });
+      const res = await Api.get('page/financialhealthcheck/edit/mine?format=json');
       const { email, mobile_no } = res.pfwresponse.result.profile;
       const { image, provider, cover_plan } = res.pfwresponse.result.quote_desc;
 
@@ -48,13 +54,6 @@ class InvestmentDetails1 extends Component {
       });
       toast('Something went wrong');
     }
-  }
-
-  handleRadioValue = name => index => {
-    this.setState({
-      [name]: yesOrNoOptions[index]['value'],
-      [name + '_error']: '',
-    });
   }
 
   navigate = (pathname) => {
@@ -103,6 +102,13 @@ class InvestmentDetails1 extends Component {
     }
   }
 
+  handleChange = (val, idx) => event => {
+    console.log(val, event.target.checked);
+    let opts = [...this.state.investmentOpts];
+    opts[idx].checked = event.target.checked;
+    this.setState({ investmentOpts: opts });
+  }
+
   bannerText = () => {
     return (
       <span>
@@ -110,6 +116,28 @@ class InvestmentDetails1 extends Component {
       </span>
     );
   }
+
+  renderSelectOption = (option, idx) => {
+    return (
+      <div className="CheckBlock2" style={{ marginLeft: '5px' }} key={idx}>
+        <Grid container spacing={16} alignItems="center" style={{ maxHeight: '60px' }}>
+          <Grid item xs={1} className="TextCenter">
+            <Checkbox
+              defaultChecked
+              checked={option.checked}
+              color="default"
+              value="checked"
+              name="checked"
+              onChange={this.handleChange(option.value, idx)}
+              className="Checkbox" />
+          </Grid>
+          <Grid item xs={11}>
+            <div className="checkbox-text">{option.name}</div>
+          </Grid>
+        </Grid>
+      </div>
+    )
+  };
 
   render() {
     return (
@@ -132,17 +160,10 @@ class InvestmentDetails1 extends Component {
         <FormControl fullWidth>
           <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
             title={'Investment Details'} />
-          <div className="InputField">
-            <RadioWithoutIcon
-              error={(this.state.investment_error) ? true : false}
-              helperText={this.state.investment_error}
-              width="40"
-              label="Have you ever invested your money?"
-              class="MaritalStatus"
-              options={yesOrNoOptions}
-              id="investment"
-              value={this.state.investment}
-              onChange={this.handleRadioValue('investment')} />
+          <div className="InputField" style={{ marginBottom: '0px !important' }}>
+            { 
+              this.state.investmentOpts.map((option, idx) => this.renderSelectOption(option, idx))
+            }
           </div>
         </FormControl>
       </Container>
@@ -150,4 +171,4 @@ class InvestmentDetails1 extends Component {
   }
 }
 
-export default InvestmentDetails1;
+export default InvestmentDetails2;
