@@ -10,6 +10,7 @@ import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import personal from 'assets/personal_details_icon.svg';
 import marital from 'assets/marital_status_dark_icn.png';
 import Api from 'utils/api';
+import FHC from '../../FHCClass';
 import { yesOrNoOptions, kidsOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
@@ -19,15 +20,8 @@ class PersonalDetails2 extends Component {
     super(props);
     this.state = {
       show_loader: true,
-      marital_status: '',
-      marital_status_error: '',
-      kids: '',
-      kids_error: '',
-      num_kids: '',
-      num_kids_error: '',
+      fhc_data: new FHC(),
       kidsOptions: kidsOptions,
-      image: '',
-      provider: '',
       params: qs.parse(this.props.location.search.slice(1)),
       type: getConfig().productName
     }
@@ -35,20 +29,20 @@ class PersonalDetails2 extends Component {
 
   async componentDidMount() {
     try {
-      const res = await Api.get('/api/insurance/profile/' + this.state.params.insurance_id, {
-        groups: 'contact'
-      });
-      const { email, mobile_no } = res.pfwresponse.result.profile;
-      const { image, provider, cover_plan } = res.pfwresponse.result.quote_desc;
-
+      let fhc_data = JSON.parse(window.localStorage.getItem('fhc_data'));
+      if (!fhc_data) {
+        const res = await Api.get('page/financialhealthcheck/edit/mine', {
+          format: 'json',
+        });
+        console.log('res', res);
+        fhc_data = res.pfwresponse.result;
+      }
+      fhc_data = new FHC(fhc_data);
       this.setState({
         show_loader: false,
-        email: email || '',
-        mobile_no: mobile_no || '',
-        image: image,
-        provider: provider,
-        cover_plan: cover_plan
+        fhc_data,
       });
+
     } catch (err) {
       this.setState({
         show_loader: false
@@ -58,19 +52,28 @@ class PersonalDetails2 extends Component {
   }
 
   handleRadioValue = name => index => {
-    this.setState({
-      [name]: yesOrNoOptions[index]['value'],
-      [name + '_error']: ''
-    });
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+    const selectedVal = yesOrNoOptions[index]['value'];
+    console.log(name, index, selectedVal);
+
+    if (name === 'num_kids') {
+      fhc_data.num_kids = selectedVal ? 1 : 0;
+      fhc_data.num_kids_error = '';
+    } else {
+      fhc_data[name] = selectedVal;
+      fhc_data[`${name}_error`] = '';
+    }
+  
+    this.setState({ fhc_data });
   }
 
   handleChange = name => event => {
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+    console.log(name, event);
     if (name === 'num_kids') {
-      this.setState({
-        [name]: event,
-        [name + '_error']: ''
-      });
+      fhc_data.num_kids = event;
     }
+    this.setState({ fhc_data });
   }
 
   navigate = (pathname) => {
@@ -90,8 +93,8 @@ class PersonalDetails2 extends Component {
         "user_action": user_action,
         "screen_name": 'personal_details_two',
         "provider": this.state.provider,
-        "marital_status": this.state.marital_status,
-        "kids": this.state.kids,
+        "is_married": this.state.fhc_data.is_married,
+        "has_kids": this.state.has_kids,
         "num_kids": this.state.num_kids,
         "from_edit": (this.state.edit) ? 'yes' : 'no'
       }
@@ -106,19 +109,20 @@ class PersonalDetails2 extends Component {
 
   handleClick = () => {
     // this.sendEvents('next');
-    if (!this.state.marital_status) {
-      this.setState({
-        marital_status_error: 'Please select an option',
-      });
-    } else if (!this.state.kids) {
-      this.setState({
-        kids_error: 'Please select an option',
-      });
-    } else if (this.state.kids == 'yes' && !this.state.num_kids) {
-      this.setState({
-        num_kids_error: 'Please select an option'
-      });
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+    let error = false;
+    
+    ['is_married', 'num_kids'].forEach(key => {
+      if(fhc_data[key] === null || fhc_data[key] === undefined) {
+        fhc_data[`${key}_error`] = 'Please select an option';
+        error = true;
+      }
+    });
+
+    if (error) {
+      this.setState({ fhc_data });
     } else {
+      window.localStorage.setItem('fhc_data', JSON.stringify(fhc_data));
       console.log('ALL VALID - SCREEN 2');
       this.navigate('/fhc/personal3');
     }
@@ -126,26 +130,27 @@ class PersonalDetails2 extends Component {
 
   render() {
     let kidsSelect = null;
-    if (this.state.kids === 'yes') {
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+    let has_kids = fhc_data.num_kids > 0;
+    if (has_kids) {
       kidsSelect = <div className="InputField">
         <DropdownWithoutIcon
-          error={(this.state.num_kids_error) ? true : false}
-          helperText={this.state.num_kids_error}
+          error={(fhc_data.num_kids_error) ? true : false}
+          helperText={fhc_data.num_kids_error}
           width="40"
           options={this.state.kidsOptions}
           id="num-kids"
           label="How many kids do you have?"
-          value={this.state.num_kids}
+          value={fhc_data.num_kids}
           name="num_kids"
           onChange={this.handleChange('num_kids')} />
-      </div>
+      </div>;
     }
     return (
       <Container
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Fin Health Check (FHC)"
-        smallTitle={this.state.provider}
         count={false}
         total={5}
         current={1}
@@ -155,36 +160,35 @@ class PersonalDetails2 extends Component {
         edit={this.props.edit}
         topIcon="close"
         buttonTitle="Save & Continue"
-        logo={this.state.image}
       >
         <FormControl fullWidth>
           <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
             title={(this.props.edit) ? 'Edit Family Details' : 'Family Details'} />
           <div className="InputField">
             <RadioWithoutIcon
-              error={(this.state.marital_status_error) ? true : false}
-              helperText={this.state.marital_status_error}
+              error={(fhc_data.is_married_error) ? true : false}
+              helperText={fhc_data.is_married_error}
               icon={marital}
               width="40"
               label="Are you married?"
               class="MaritalStatus"
               options={yesOrNoOptions}
               id="marital-status"
-              value={this.state.marital_status}
-              onChange={this.handleRadioValue('marital_status')} />
+              value={fhc_data.is_married}
+              onChange={this.handleRadioValue('is_married')} />
           </div>
           <div className="InputField">
             <RadioWithoutIcon
-              error={(this.state.kids_error) ? true : false}
-              helperText={this.state.kids_error}
+              error={(fhc_data.num_kids_error) ? true : false}
+              helperText={fhc_data.num_kids_error}
               icon={marital}
               width="40"
               label="Do you have kids?"
               class="MaritalStatus"
               options={yesOrNoOptions}
-              id="kids"
-              value={this.state.kids}
-              onChange={this.handleRadioValue('kids')} />
+              id="has-kids"
+              value={has_kids}
+              onChange={this.handleRadioValue('num_kids')} />
           </div>
           {
             kidsSelect

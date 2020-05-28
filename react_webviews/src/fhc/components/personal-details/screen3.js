@@ -8,6 +8,7 @@ import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import personal from 'assets/personal_details_icon.svg';
 import Api from 'utils/api';
+import FHC from '../../FHCClass';
 import { yesOrNoOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
@@ -17,12 +18,7 @@ class PersonalDetails3 extends Component {
     super(props);
     this.state = {
       show_loader: true,
-      parental_dependence: '',
-      parental_dependence_error: '',
-      other_dependence: '',
-      other_dependence_error: '',
-      image: '',
-      provider: '',
+      fhc_data: new FHC(),
       params: qs.parse(this.props.location.search.slice(1)),
       type: getConfig().productName
     }
@@ -30,20 +26,20 @@ class PersonalDetails3 extends Component {
 
   async componentDidMount() {
     try {
-      const res = await Api.get('/api/insurance/profile/' + this.state.params.insurance_id, {
-        groups: 'contact'
-      });
-      const { email, mobile_no } = res.pfwresponse.result.profile;
-      const { image, provider, cover_plan } = res.pfwresponse.result.quote_desc;
-
+      let fhc_data = JSON.parse(window.localStorage.getItem('fhc_data'));
+      if (!fhc_data) {
+        const res = await Api.get('page/financialhealthcheck/edit/mine', {
+          format: 'json',
+        });
+        console.log('res', res);
+        fhc_data = res.pfwresponse.result;
+      }
+      fhc_data = new FHC(fhc_data);
       this.setState({
         show_loader: false,
-        email: email || '',
-        mobile_no: mobile_no || '',
-        image: image,
-        provider: provider,
-        cover_plan: cover_plan
+        fhc_data,
       });
+
     } catch (err) {
       this.setState({
         show_loader: false
@@ -53,19 +49,10 @@ class PersonalDetails3 extends Component {
   }
 
   handleRadioValue = name => index => {
-    this.setState({
-      [name]: yesOrNoOptions[index]['value'],
-      [name + '_error']: ''
-    });
-  }
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
 
-  handleChange = name => event => {
-    if (name === 'num_other_dependence') {
-      this.setState({
-        [name]: event,
-        [name + '_error']: ''
-      });
-    }
+    fhc_data.family_status[name] = yesOrNoOptions[index]['value'];
+    this.setState({ fhc_data });
   }
 
   navigate = (pathname) => {
@@ -79,14 +66,15 @@ class PersonalDetails3 extends Component {
   }
 
   sendEvents(user_action) {
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+
     let eventObj = {
       "event_name": 'fin_health_check',
       "properties": {
         "user_action": user_action,
         "screen_name": 'personal_details_three',
-        "provider": this.state.provider,
-        "parental_dependence": this.state.parental_dependence,
-        "other_dependence": this.state.other_dependence,
+        "dependent-parents": fhc_data.family_status['dependent-parents'],
+        "other-dependents": fhc_data.family_status['other-dependents'],
         "from_edit": (this.state.edit) ? 'yes' : 'no'
       }
     };
@@ -100,27 +88,32 @@ class PersonalDetails3 extends Component {
 
   handleClick = () => {
     // this.sendEvents('next');
-    if (!this.state.parental_dependence) {
-      this.setState({
-        parental_dependence_error: 'Please select an option',
-      });
-    } else if (!this.state.other_dependence) {
-      this.setState({
-        other_dependence_error: 'Please select an option',
-      });
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+
+    let error = false;
+    ['dependent-parents', 'other-dependents'].forEach(key => {
+      if (fhc_data.family_status[key] === null || fhc_data.family_status[key] === undefined) {
+        fhc_data[`${key}_error`] = 'Please select an option';
+        error = true;
+      }
+    });
+    if (error) {
+      this.setState({ fhc_data });
     } else {
+      window.localStorage.setItem('fhc_data', JSON.stringify(fhc_data));
       console.log('ALL VALID - SCREEN 3');
       this.navigate('/fhc/earnings1');
     }
   }
 
   render() {
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+
     return (
       <Container
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Fin Health Check (FHC)"
-        smallTitle={this.state.provider}
         count={false}
         total={5}
         current={1}
@@ -130,34 +123,33 @@ class PersonalDetails3 extends Component {
         edit={this.props.edit}
         topIcon="close"
         buttonTitle="Save & Continue"
-        logo={this.state.image}
       >
         <FormControl fullWidth>
           <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
             title={(this.props.edit) ? 'Edit Family Details' : 'Family Details'} />
           <div className="InputField">
             <RadioWithoutIcon
-              error={(this.state.parental_dependence_error) ? true : false}
-              helperText={this.state.parental_dependence_error}
+              error={(fhc_data['dependent-parents_error']) ? true : false}
+              helperText={fhc_data['dependent-parents_error']}
               width="40"
               label="Are your parents dependent on you?"
               class="MaritalStatus"
               options={yesOrNoOptions}
               id="parental-dependence"
-              value={this.state.parental_dependence}
-              onChange={this.handleRadioValue('parental_dependence')} />
+              value={fhc_data.family_status['dependent-parents']}
+              onChange={this.handleRadioValue('dependent-parents')} />
           </div>
           <div className="InputField">
             <RadioWithoutIcon
-              error={(this.state.other_dependence_error) ? true : false}
-              helperText={this.state.other_dependence_error}
+              error={(fhc_data['other-dependents_error']) ? true : false}
+              helperText={fhc_data['other-dependents_error']}
               width="40"
               label="Do you have other dependence?"
               class="MaritalStatus"
               options={yesOrNoOptions}
               id="other-dependence"
-              value={this.state.other_dependence}
-              onChange={this.handleRadioValue('other_dependence')} />
+              value={fhc_data.family_status['other-dependents']}
+              onChange={this.handleRadioValue('other-dependents')} />
           </div>
         </FormControl>
       </Container>
