@@ -9,25 +9,65 @@ import loader_myway from 'assets/loader_gif_myway.gif';
 import Api from 'utils/api';
 import personal from 'assets/personal_details_icon.svg';
 import qs from 'qs';
-import { numDifferentiation, formatAmount } from 'utils/validators';
+import { formatAmount } from 'utils/validators';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
+import FHC from '../../FHCClass';
+import toast from '../../../common/ui/Toast';
 
+const insurance_types = [{
+  key: 'life_insurance',
+  label: 'Life Insurance',
+  editPath: 'edit-insurance1',
+}, {
+  key: 'medical_insurance',
+  label: 'Medical Insurance',
+  editPath: 'edit-insurance2',
+}];
 class InsuranceSummary extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      image: '',
-      life_insurance: {},
-      education_Insurance: {},
-      medical_insurance: {},
-      provider: '',
-      apiError: '',
+      fhc_data: new FHC(),
       edit_allowed: true,
       accordianTab: 'life_insurance',
       params: qs.parse(props.history.location.search.slice(1)),
       loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
     }
+  }
+
+  async componentDidMount() {
+    try {
+      let fhc_data = JSON.parse(window.localStorage.getItem('fhc_data'));
+      if (!fhc_data) {
+        const res = await Api.get('page/financialhealthcheck/edit/mine', {
+          format: 'json',
+        });
+        fhc_data = res.pfwresponse.result;
+      }
+      fhc_data = new FHC(fhc_data);
+      let accordianTab = '';
+      if (fhc_data.life_insurance.is_present) {
+        accordianTab = 'life_insurance';
+      } else if (fhc_data.medical_insurance.is_present) {
+        accordianTab = 'medical_insurance';
+      }
+      this.setState({
+        show_loader: false,
+        accordianTab,
+        fhc_data,
+      });
+
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
+    }
+  }
+
+  handleClick = async () => {
+    this.navigate('investment1');
   }
 
   toggleAccordian = (accordianTab) => {
@@ -42,20 +82,20 @@ class InsuranceSummary extends Component {
     });
   }
 
-  handleClick = async () => {}
-
   renderAccordionBody = (name) => {
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+
     if (this.state.accordianTab === 'life_insurance' && name === 'life_insurance') {
       return (
         <div className="AccordionBody">
           <ul>
             <li className="summary-li">
               Annual Premium
-              <span><b>₹ {formatAmount(750000)}</b></span>
+              <span><b>₹ {formatAmount(fhc_data.life_insurance.annual_premuim)}</b></span>
             </li>
             <li className="summary-li">
               Coverage
-              <span><b>₹ {formatAmount(750000)}</b></span>
+              <span><b>₹ {formatAmount(fhc_data.life_insurance.cover_value)}</b></span>
             </li>
           </ul>
         </div>
@@ -64,24 +104,13 @@ class InsuranceSummary extends Component {
       return (
         <div className="AccordionBody">
           <ul>
-            <li class="summary-li">
+            <li className="summary-li">
               Annual Premium
-              <span><b>₹ {formatAmount(750000)}</b></span>
+              <span><b>₹ {formatAmount(fhc_data.medical_insurance.annual_premuim)}</b></span>
             </li>
-            <li class="summary-li">
+            <li className="summary-li">
               Coverage
-              <span><b>₹ {formatAmount(750000)}</b></span>
-            </li>
-          </ul>
-        </div>
-      );
-    } else if (this.state.accordianTab === 'education_insurance' && name === 'education_insurance') {
-      return (
-        <div className="AccordionBody">
-          <ul>
-            <li class="summary-li">Monthly EMI: </li>
-            <li class="summary-li">
-              <span><b>₹ {formatAmount(750000)}</b></span>
+              <span><b>₹ {formatAmount(fhc_data.medical_insurance.cover_value)}</b></span>
             </li>
           </ul>
         </div>
@@ -132,6 +161,26 @@ class InsuranceSummary extends Component {
   }
 
   render() {
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+    let accordions = insurance_types.map(type => {
+      if (fhc_data[type.key].is_present) {
+        return (
+          <div className="Accordion">
+            <div className="AccordionTitle" onClick={() => this.toggleAccordian(type.key)}>
+              <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative' }}>
+                <span style={{ marginRight: 10 }}>
+                  <img style={{ position: 'relative', top: 2 }} src={(this.state.accordianTab === type.key) ? shrink : expand} alt="" width="20" />
+                </span>
+                <span>{type.label} detail</span>
+                {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().secondary, fontSize: 13 }} onClick={() => this.navigate(type.editPath)}>Edit</span>}
+              </div>
+            </div>
+            {this.renderAccordionBody(type.key)}
+          </div>
+        )
+      }
+      return '';
+    });
     return (
       <Container
         events={this.sendEvents('just_set_events')}
@@ -154,30 +203,9 @@ class InsuranceSummary extends Component {
             title={'Insurance liability Summary'} />
           <div style={{ marginBottom: 30 }}>
             <div className="accordion-container">
-              <div className="Accordion">
-                <div className="AccordionTitle" onClick={() => this.toggleAccordian('life_insurance')}>
-                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative' }}>
-                    <span style={{ marginRight: 10 }}>
-                      <img style={{ position: 'relative', top: 2 }} src={(this.state.accordianTab === 'life_insurance') ? shrink : expand} alt="" width="20" />
-                    </span>
-                    <span>Life Insurance detail</span>
-                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().secondary, fontSize: 13 }} onClick={() => this.navigate('edit-insurance1')}>Edit</span>}
-                  </div>
-                </div>
-                {this.renderAccordionBody('life_insurance')}
-              </div>
-              <div className="Accordion">
-                <div className="AccordionTitle" onClick={() => this.toggleAccordian('medical_insurance')}>
-                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative' }}>
-                    <span style={{ marginRight: 10 }}>
-                      <img style={{ position: 'relative', top: 2 }} src={(this.state.accordianTab === 'medical_insurance') ? shrink : expand} alt="" width="20" />
-                    </span>
-                    <span>Medical Insurance detail</span>
-                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().secondary, fontSize: 13 }} onClick={() => this.navigate('edit-insurance2')}>Edit</span>}
-                  </div>
-                </div>
-                {this.renderAccordionBody('medical_insurance')}
-              </div>
+            {
+              accordions
+            }
             </div>
           </div>
         </FormControl>

@@ -11,6 +11,7 @@ class FHC {
       loan: {car: {}, education: {}},
       house: {},
       life_insurance: {},
+      medical_insurance: {},
     }, props);
   }
 
@@ -230,7 +231,6 @@ class FHC {
 
   isValidLoanInfo(type) {
     let valid = true;
-    console.log(this.loan[type]['is_present']);
     if ([null, undefined, ''].includes(this.loan[type]['is_present'])) {
       this[`has_${type}_loan_error`] = 'Please select an option';
       valid = false;
@@ -239,6 +239,24 @@ class FHC {
       (!Number(this[`${type}_loan`]) || !validateNumber(this[`${type}_loan`]))
     ) {
       this[`${type}_loan_error`] = 'Monthly EMI cannot be negative or 0';
+      valid = false;
+    }
+    return valid;
+  }
+
+  isValidInsuranceInfo(type) {
+    if (!type) return false;
+    let valid = true;
+    const { is_present, annual_premuim, cover_value } = this[`${type}_insurance`];
+    
+    if ([null, undefined, ''].includes(is_present)) {
+      this[`is_present_error`] = 'Please select an option';
+      valid = false;
+    } else if (is_present && (!Number(annual_premuim) || !validateNumber(annual_premuim))) {
+      this[`annual_premuim_error`] = 'Annual premium cannot be negative or 0';
+      valid = false;
+    } else if (is_present && (!Number(cover_value) || !validateNumber(cover_value))) {
+      this[`cover_value_error`] = 'Coverage cannot be negative or 0';
       valid = false;
     }
     return valid;

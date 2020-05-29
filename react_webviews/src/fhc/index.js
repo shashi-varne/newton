@@ -37,7 +37,7 @@ import InsuranceDetails1 from './components/insurance-details/screen1';
 import InsuranceDetails2 from './components/insurance-details/screen2';
 import InsuranceSummary from './components/insurance-details/summary';
 import InvestmentDetails2 from './components/investment-details/screen2';
-import InvestmentDetails1 from './components/investment-details/screen4';
+import InvestmentDetails1 from './components/investment-details/screen1';
 
 // import AdditionalInfo from './products/term_insurance/additional-info/hdfc';
 // import Summary from './products/term_insurance/insurance-summary/screen1';

@@ -98,7 +98,7 @@ class LoanSummary extends Component {
       return (
         <div className="AccordionBody">
           <ul>
-            <li class="summary-li">
+            <li className="summary-li">
               Monthly EMI: 
               <span><b>₹ {formatAmount(fhc_data.car_loan)}</b></span>
             </li>

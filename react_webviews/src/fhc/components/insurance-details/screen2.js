@@ -6,27 +6,21 @@ import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
 import Input from '../../../common/ui/Input';
-import { validateNumber, formatAmount, inrFormatTest } from 'utils/validators';
+import { formatAmount, inrFormatTest } from 'utils/validators';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import personal from 'assets/personal_details_icon.svg';
 import Api from 'utils/api';
 import { yesOrNoOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
+import FHC from '../../FHCClass';
 
 class InsuranceDetails2 extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
-      medical_insurance: '',
-      medical_insurance_error: '',
-      annual_premium: '',
-      annual_premium_error: '',
-      cover_amt: '',
-      cover_amt_error: '',
-      image: '',
-      provider: '',
+      fhc_data: new FHC(),
       params: qs.parse(this.props.location.search.slice(1)),
       type: getConfig().productName
     }
@@ -34,20 +28,20 @@ class InsuranceDetails2 extends Component {
 
   async componentDidMount() {
     try {
-      const res = await Api.get('/api/insurance/profile/' + this.state.params.insurance_id, {
-        groups: 'contact'
-      });
-      const { email, mobile_no } = res.pfwresponse.result.profile;
-      const { image, provider, cover_plan } = res.pfwresponse.result.quote_desc;
-
+      let fhc_data = JSON.parse(window.localStorage.getItem('fhc_data'));
+      if (!fhc_data) {
+        const res = await Api.get('page/financialhealthcheck/edit/mine', {
+          format: 'json',
+        });
+        console.log('res', res);
+        fhc_data = res.pfwresponse.result;
+      }
+      fhc_data = new FHC(fhc_data);
       this.setState({
         show_loader: false,
-        email: email || '',
-        mobile_no: mobile_no || '',
-        image: image,
-        provider: provider,
-        cover_plan: cover_plan
+        fhc_data,
       });
+
     } catch (err) {
       this.setState({
         show_loader: false
@@ -57,22 +51,24 @@ class InsuranceDetails2 extends Component {
   }
 
   handleRadioValue = name => index => {
-    this.setState({
-      [name]: yesOrNoOptions[index]['value'],
-      [name + '_error']: '',
-    });
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+    const selectedVal = yesOrNoOptions[index]['value'];
+
+    fhc_data.medical_insurance[name] = selectedVal;
+    fhc_data[`${name}_error`] = '';
+    this.setState({ fhc_data });
   }
 
   handleChange = name => event => {
-    if (name === 'annual_premium' || name === 'cover_amt') {
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+    if (name === 'annual_premuim' || name === 'cover_value') {
       if (!inrFormatTest(event.target.value)) {
         return;
       }
-      this.setState({
-        [name]: event.target.value.replace(/,/g, ""),
-        [name + '_error']: ''
-      });
+      fhc_data.medical_insurance[name] = event.target.value.replace(/,/g, '');
+      fhc_data[`${name}_error`] = '';
     }
+    this.setState({ fhc_data });
   }
 
   handleKeyChange = name => event => {
@@ -102,7 +98,7 @@ class InsuranceDetails2 extends Component {
         "screen_name": 'insurance_details_one',
         "provider": this.state.provider,
         "medical_insurance": this.state.medical_insurance,
-        "annual_premium": this.state.annual_premium,
+        "annual_premuim": this.state.annual_premuim,
         "cover_amt": this.state.cover_amt,
         "from_edit": (this.state.edit) ? 'yes' : 'no'
       }
@@ -117,71 +113,66 @@ class InsuranceDetails2 extends Component {
 
   handleClick = () => {
     // this.sendEvents('next');
-    if (!this.state.medical_insurance) {
-      this.setState({
-        medical_insurance_error: 'Please select an option',
-      });
-    } else if (
-      this.state.life_insurance === 'yes' &&
-      (!this.state.annual_premium || !validateNumber(this.state.annual_premium))
-    ) {
-      this.setState({
-        annual_premium_error: 'Annual premium cannot be negative or 0',
-      });
-    } else if (
-      this.state.life_insurance === 'yes' &&
-      (!this.state.cover_amt || !validateNumber(this.state.cover_amt))
-    ) {
-      this.setState({
-        cover_amt_error: 'Coverage cannot be negative or 0',
-      });
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+
+    if (!fhc_data.isValidInsuranceInfo('medical')) {
+      this.setState({ fhc_data });
     } else {
-      console.log('ALL VALID - SCREEN 2 - insurance');
-      this.navigate('/fhc/insurance-summary');
+      window.localStorage.setItem('fhc_data', JSON.stringify(fhc_data));
+      if (
+        fhc_data.life_insurance.is_present ||
+        fhc_data.medical_insurance.is_present
+      ) {
+        // Only show summary if any insurance is taken
+        this.navigate('insurance-summary');
+      } else {
+        this.navigate('investment1');
+      }
     }
   }
 
   render() {
     let amountInputs = null;
-    if (this.state.medical_insurance === 'yes') {
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+    let { is_present, annual_premuim, cover_value } = fhc_data.medical_insurance;
+    if (is_present) {
       amountInputs =
-      <Fragment>
-        <div className="InputField">
-          <Input
-            error={(this.state.annual_premium_error) ? true : false}
-            helperText={this.state.annual_premium_error}
-            type="text"
-            width="40"
-            label="Annual premium"
-            class="Income"
-            id="annual-premium"
-            name="annual_premium"
-            value={formatAmount(this.state.annual_premium || '')}
-            onChange={this.handleChange('annual_premium')}
-            onKeyChange={this.handleKeyChange('annual_premium')} />
-        </div>
-        <div className="InputField">
-          <Input
-            error={(this.state.cover_amt_error) ? true : false}
-            helperText={this.state.cover_amt_error}
-            type="text"
-            width="40"
-            label="Cover amount"
-            class="Income"
-            id="cover-amt"
-            name="cover_amt"
-            value={formatAmount(this.state.cover_amt || '')}
-            onChange={this.handleChange('cover_amt')}
-            onKeyChange={this.handleKeyChange('cover_amt')} />
-        </div>
-      </Fragment>
+        <Fragment>
+          <div className="InputField">
+            <Input
+              error={!!fhc_data.annual_premuim_error}
+              helperText={fhc_data.annual_premuim_error}
+              type="text"
+              width="40"
+              label="Annual premium"
+              class="Income"
+              id="annual-premium"
+              name="annual_premuim"
+              value={formatAmount(annual_premuim || '')}
+              onChange={this.handleChange('annual_premuim')}
+              onKeyChange={this.handleKeyChange('annual_premuim')} />
+          </div>
+          <div className="InputField">
+            <Input
+              error={!!fhc_data.cover_value_error}
+              helperText={fhc_data.cover_value_error}
+              type="text"
+              width="40"
+              label="Cover amount"
+              class="Income"
+              id="cover-value"
+              name="cover_value"
+              value={formatAmount(cover_value || '')}
+              onChange={this.handleChange('cover_value')}
+              onKeyChange={this.handleKeyChange('cover_value')} />
+          </div>
+        </Fragment>
     }
     return (
       <Container
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Fin Health Check (FHC)"
-        smallTitle={this.state.provider}
         count={false}
         total={5}
         current={4}
@@ -191,22 +182,21 @@ class InsuranceDetails2 extends Component {
         edit={this.props.edit}
         topIcon="close"
         buttonTitle="Save & Continue"
-        logo={this.state.image}
       >
         <FormControl fullWidth>
           <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
             title={(this.props.edit) ? 'Edit Insurance Details' : 'Insurance Details'} />
           <div className="InputField">
             <RadioWithoutIcon
-              error={(this.state.medical_insurance_error) ? true : false}
-              helperText={this.state.medical_insurance_error}
+              error={(fhc_data.is_present_error) ? true : false}
+              helperText={fhc_data.is_present_error}
               width="40"
               label="Do you have medical insurance?"
               class="MaritalStatus"
               options={yesOrNoOptions}
               id="medical-insurance"
-              value={this.state.medical_insurance}
-              onChange={this.handleRadioValue('medical_insurance')} />
+              value={is_present}
+              onChange={this.handleRadioValue('is_present')} />
           </div>
           {
             amountInputs

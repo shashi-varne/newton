@@ -11,16 +11,14 @@ import Api from 'utils/api';
 import { yesOrNoOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
+import FHC from '../../FHCClass';
 
 class InvestmentDetails1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
-      investment: '',
-      investment_error: '',
-      image: '',
-      provider: '',
+      fhc_data: new FHC(),
       params: qs.parse(this.props.location.search.slice(1)),
       type: getConfig().productName
     }
@@ -28,20 +26,20 @@ class InvestmentDetails1 extends Component {
 
   async componentDidMount() {
     try {
-      const res = await Api.get('/api/insurance/profile/' + this.state.params.insurance_id, {
-        groups: 'contact'
-      });
-      const { email, mobile_no } = res.pfwresponse.result.profile;
-      const { image, provider, cover_plan } = res.pfwresponse.result.quote_desc;
-
+      let fhc_data = JSON.parse(window.localStorage.getItem('fhc_data'));
+      if (!fhc_data) {
+        const res = await Api.get('page/financialhealthcheck/edit/mine', {
+          format: 'json',
+        });
+        console.log('res', res);
+        fhc_data = res.pfwresponse.result;
+      }
+      fhc_data = new FHC(fhc_data);
       this.setState({
         show_loader: false,
-        email: email || '',
-        mobile_no: mobile_no || '',
-        image: image,
-        provider: provider,
-        cover_plan: cover_plan
+        fhc_data,
       });
+
     } catch (err) {
       this.setState({
         show_loader: false
