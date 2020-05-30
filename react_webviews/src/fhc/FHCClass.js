@@ -56,10 +56,10 @@ class FHC {
   }
 
   get monthly_exp() {
-    return this.salary.expense;
+    return this.family_expence;
   }
   set monthly_exp(val) {
-    this.salary.expense = val.toString().replace(/\D/g, '');
+    this.family_expence = val.toString().replace(/\D/g, '');
     this['monthly_exp_error'] = '';
   }
 
@@ -192,9 +192,9 @@ class FHC {
       this['monthly_sal_error'] = 'Enter a valid Monthly Salary amount';
       valid = false;
     } else if (this.salary.monthly > this.salary.annual / 12) {
-      this['monthly_sal_error'] = 'Monthly Salary cannot be greater than CTC/12';
-      valid = false;// TODO: family_expence
-    } else if (!this.salary.expense || !validateNumber(this.salary.expense)) {
+      this['monthly_sal_error'] = 'Monthly take home cannot be greater than CTC/12';
+      valid = false;
+    } else if (!this.family_expence || !validateNumber(this.family_expence)) {
       this['monthly_exp_error'] = 'Enter a valid Monthly Expense amount';
       valid = false;
     }

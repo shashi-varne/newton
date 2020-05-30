@@ -49,10 +49,12 @@ class InvestmentDetails1 extends Component {
   }
 
   handleRadioValue = name => index => {
-    this.setState({
-      [name]: yesOrNoOptions[index]['value'],
-      [name + '_error']: '',
-    });
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+    const selectedVal = yesOrNoOptions[index]['value'];
+
+    fhc_data[name] = selectedVal;
+    fhc_data[`${name}_error`] = '';
+    this.setState({ fhc_data });
   }
 
   navigate = (pathname) => {

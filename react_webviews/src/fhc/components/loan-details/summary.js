@@ -119,13 +119,6 @@ class LoanSummary extends Component {
     }
   }
 
-  capitalize = (string) => {
-    if (!string) {
-      return;
-    }
-    return string.toLowerCase().replace(/(^|\s)[a-z]/g, function (f) { return f.toUpperCase(); })
-  }
-
   navigate = (pathname) => {
 
     if (pathname === 'edit-loan1') {

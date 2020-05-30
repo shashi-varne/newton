@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router';
 
 import Header from './Header';
@@ -7,6 +7,11 @@ import Banner from '../../common/ui/Banner';
 import loader_fisdom from 'assets/loader_gif_fisdom.gif';
 import loader_myway from 'assets/loader_gif_myway.gif';
 import { nativeCallback } from 'utils/native_callback';
+import '../../utils/native_listner';
+import { getConfig, setHeights } from 'utils/functions';
+import PopUp from './PopUp';
+import Api from 'utils/api';
+import { toast } from 'react-toastify';
 import Button from 'material-ui/Button';
 import Dialog, {
   DialogActions,
@@ -14,9 +19,6 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
-import '../../utils/native_listner';
-import { getConfig, setHeights } from 'utils/functions';
-
 
 class Container extends Component {
 
@@ -30,7 +32,7 @@ class Container extends Component {
       loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
     }
     this.handleTopIcon = this.handleTopIcon.bind(this);
-    this.handlePopup = this.handlePopup.bind(this);
+    this.handleYes = this.handleYes.bind(this);
   }
 
   componentDidMount() {
@@ -158,46 +160,27 @@ class Container extends Component {
     );
   }
 
-  handlePopup = () => {
+  handleYes = async () => {
     this.setState({
       openPopup: false
     });
-
-    nativeCallback({ action: this.state.callbackType, events: this.getEvents('exit_yes') });
-
-  }
-
-  renderPopup = () => {
-    return (
-      <Dialog
-        fullScreen={false}
-        open={this.state.openPopup}
-        onClose={this.handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        {/* <DialogTitle id="form-dialog-title">No Internet Found</DialogTitle> */}
-        <DialogContent>
-          <DialogContentText>
-            {this.state.popupText}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleClose} color="default">
-            No
-          </Button>
-          <Button onClick={this.handlePopup} color="default" autoFocus>
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
+    try {
+      const fhc_data = JSON.parse(window.localStorage.fhc_data);
+      await Api.post('api/financialhealthcheck/mine', fhc_data);
+    } catch (e) {
+      console.log(e);
+      toast('Could not save data. Please try again');
+    }
+    // nativeCallback({ action: this.state.callbackType, events: this.getEvents('exit_yes') });
   }
 
   handleTopIcon() {
     this.setState({
       callbackType: 'exit',
       openPopup: true,
-      popupText: 'Are you sure you want to exit ?'
+      popupText: <Fragment>Are you sure you want to <b>exit</b>? 
+        <br />We will save your information securely.
+      </Fragment>
     })
   }
 
@@ -291,7 +274,14 @@ class Container extends Component {
         }
         {/* No Internet */}
         {this.renderDialog()}
-        {this.renderPopup()}
+        <PopUp
+          openPopup={this.state.openPopup}
+          popupText={this.state.popupText}
+          handleClose={this.handleClose}
+          handleNo={this.handleClose}
+          handleYes={this.handleYes}
+        >
+        </PopUp>
       </div>
     );
   }
