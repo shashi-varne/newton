@@ -39,6 +39,8 @@ import InsuranceSummary from './components/insurance-details/summary';
 import InvestmentDetails2 from './components/investment-details/screen2';
 import InvestmentDetails1 from './components/investment-details/screen1';
 import InvestmentDetails3 from './components/investment-details/screen3';
+import InvestmentDetails4 from './components/investment-details/screen4';
+import InvestSuccess from './components/investment-details/success';
 import Report from './components/result/report';
 
 // import AdditionalInfo from './products/term_insurance/additional-info/hdfc';
@@ -107,8 +109,10 @@ const Insurance = (props) => {
           <Route path={`${url}/investment1`} component={InvestmentDetails1} />
           <Route path={`${url}/investment2`} component={InvestmentDetails2} />
           <Route path={`${url}/investment3`} component={InvestmentDetails3} />
+          <Route path={`${url}/investment4`} component={InvestmentDetails4} />
+          <Route path={`${url}/invest-complete`} component={InvestSuccess} />
           {/* Final Report */}
-          <Route path={`${url}/report`} component={Report} />
+          <Route path={`${url}/final-report`} component={Report} />
           {/* Catch-all */}
           <Route component={NotFound} />
         </Switch>

@@ -12,6 +12,7 @@ class FHC {
       house: {},
       life_insurance: {},
       medical_insurance: {},
+      tax_savings: {},
       investments: [],
     }, props);
   }
@@ -255,6 +256,19 @@ class FHC {
       valid = false;
     } else if (is_present && (!Number(cover_value) || !validateNumber(cover_value))) {
       this[`cover_value_error`] = 'Coverage cannot be negative or 0';
+      valid = false;
+    }
+    return valid;
+  }
+
+  isValidTaxes() {
+    const { tax_saving_80C, tax_saving_80CCD } = this.tax_savings;
+    let valid = true;
+    if (!Number(tax_saving_80C) || !validateNumber(tax_saving_80C)) {
+      this.tax_saving_80C_error = 'Total tax saving cannot be negative or 0';
+      valid = false;
+    } else if (!Number(tax_saving_80CCD) || !validateNumber(tax_saving_80CCD)) {
+      this.tax_saving_80CCD_error = 'Total tax saving cannot be negative or 0';
       valid = false;
     }
     return valid;
