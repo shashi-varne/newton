@@ -137,7 +137,7 @@ class PlanDetailsClass extends Component {
     let current_url = window.location.href;
     this.sendEvents(type);
 
-    if (getConfig().Web) {
+    if (getConfig().Web || getConfig().redirect_url) {
       nativeCallback({
         action: 'open_in_browser',
         message: {

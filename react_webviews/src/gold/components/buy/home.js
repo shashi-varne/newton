@@ -4,7 +4,7 @@ import qs from 'qs';
 import { FormControl } from 'material-ui/Form';
 import Container from '../../common/Container';
 import Api from 'utils/api';
-import { inrFormatDecimal2, storageService, formatAmountInr, formatGms } from 'utils/validators';
+import { inrFormatDecimal2,inrFormatDecimal, storageService, formatAmountInr, formatGms } from 'utils/validators';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
@@ -212,7 +212,7 @@ class GoldBuyHome extends Component {
     }
 
     if (parseFloat(this.state.amount) > this.state.maxAmount) {
-      toast('Maximum allowed amount is ' + inrFormatDecimal2(this.state.maxAmount));
+      toast('Maximum allowed amount is ' + inrFormatDecimal(this.state.maxAmount));
       return;
     }
 
@@ -224,11 +224,14 @@ class GoldBuyHome extends Component {
 
 
     let totalAmount = parseFloat(this.state.amount) + parseFloat(this.state.provider_info.gold_balance || 0);
-
     if(!this.state.user_info.pan_number && totalAmount > 100000) {
       this.sendEvents('next', {buy_above_1_lac: true});
-      this.navigate(this.state.provider + '/buy-pan');
-    } else if (!this.state.isRegistered) {
+     
+      // handlling through backend in place order component
+      // this.navigate(this.state.provider + '/buy-pan');
+    } 
+    
+    if (!this.state.isRegistered) {
       this.navigate(this.state.provider + '/gold-register');
       return;
     } else {

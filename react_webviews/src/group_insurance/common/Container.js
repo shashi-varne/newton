@@ -235,6 +235,10 @@ class Container extends Component {
 
   openNativeModule(moduleName) {
     let url = 'https://fis.do/m/module?action_type=native';
+    if(getConfig().productName === 'myway') {
+      url = 'https://w-ay.in/m/module?action_type=native';
+    }
+
     url +=  '&native_module=' + encodeURIComponent('app/' + moduleName);
     nativeCallback({
       action: 'open_module', message: {

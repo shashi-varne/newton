@@ -232,6 +232,22 @@ const partnersConfigBase = {
       gold: true
     }
   },
+  medlife: {
+    logo: "logo_white.png",
+    primary_color: "#4f2da7",
+    code: "medlife",
+    email: "ask@fisdom.com",
+    mobile: "+80-48-093070",
+    message: "",
+    banner: "obc_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png",
+    invest_screen_cards: {
+      nps: true,
+      gold: true
+    }
+  }
 };
 
 export const getHost = (pathname) => {
@@ -343,7 +359,7 @@ function getPartnerConfig(partner_code) {
     if (partner_code === 'bfdl') {
       partner_code = 'bfdlmobile';
     }
-    let partnerData = partnersConfigBase[partner_code];
+    let partnerData = partnersConfigBase[partner_code] || partnersConfigBase['fisdom'];
     config_to_return.partner_code = partner_code;
     config_to_return.isFinwiz = false;
     for (var key in partnerKeysMapper) {
