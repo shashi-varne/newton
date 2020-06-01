@@ -19,6 +19,8 @@ class InvestmentDetails1 extends Component {
     this.state = {
       show_loader: true,
       fhc_data: new FHC(),
+      has_investment: false,
+      has_investment_error: '',
       params: qs.parse(this.props.location.search.slice(1)),
       type: getConfig().productName
     }
@@ -37,6 +39,7 @@ class InvestmentDetails1 extends Component {
       fhc_data = new FHC(fhc_data);
       this.setState({
         show_loader: false,
+        has_investment: !!fhc_data.investments.length,
         fhc_data,
       });
 
@@ -49,12 +52,12 @@ class InvestmentDetails1 extends Component {
   }
 
   handleRadioValue = name => index => {
-    let fhc_data = new FHC(this.state.fhc_data.getCopy());
     const selectedVal = yesOrNoOptions[index]['value'];
 
-    fhc_data[name] = selectedVal;
-    fhc_data[`${name}_error`] = '';
-    this.setState({ fhc_data });
+    this.setState({
+      [name]: selectedVal,
+      [`${name}_error`]: '',
+    });
   }
 
   navigate = (pathname) => {
@@ -68,13 +71,14 @@ class InvestmentDetails1 extends Component {
   }
 
   sendEvents(user_action) {
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+
     let eventObj = {
       "event_name": 'fin_health_check',
       "properties": {
         "user_action": user_action,
         "screen_name": 'loan_details_one',
-        "provider": this.state.provider,
-        "investment": this.state.investment,
+        "investment": fhc_data.investment,
         "from_edit": (this.state.edit) ? 'yes' : 'no'
       }
     };
@@ -88,13 +92,16 @@ class InvestmentDetails1 extends Component {
 
   handleClick = () => {
     // this.sendEvents('next');
-    if (!this.state.investment) {
-      this.setState({
-        investment_error: 'Please select an option',
-      });
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+
+    if ([null, undefined, ''].includes(this.state.has_investment)) {
+      this.setState({ has_investment_error: 'Please select an option' });
     } else {
-      console.log('ALL VALID - SCREEN 1 - Investment');
-      if (this.state.investment === 'yes') {
+      if (this.state.has_investment === false) {
+        fhc_data.investments = [];
+      }
+      window.localStorage.setItem('fhc_data', JSON.stringify(fhc_data));
+      if (this.state.has_investment) {
         this.navigate('/fhc/investment2');
       } else {
         //skip to screen 3 if user selects 'No' for investments
@@ -117,7 +124,6 @@ class InvestmentDetails1 extends Component {
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Fin Health Check (FHC)"
-        smallTitle={this.state.provider}
         count={false}
         total={5}
         current={3}
@@ -127,22 +133,21 @@ class InvestmentDetails1 extends Component {
         edit={this.props.edit}
         topIcon="close"
         buttonTitle="Save & Continue"
-        logo={this.state.image}
       >
         <FormControl fullWidth>
           <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
             title={'Investment Details'} />
           <div className="InputField">
             <RadioWithoutIcon
-              error={(this.state.investment_error) ? true : false}
-              helperText={this.state.investment_error}
+              error={(this.state.has_investment_error) ? true : false}
+              helperText={this.state.has_investment_error}
               width="40"
               label="Have you ever invested your money?"
               class="MaritalStatus"
               options={yesOrNoOptions}
               id="investment"
-              value={this.state.investment}
-              onChange={this.handleRadioValue('investment')} />
+              value={this.state.has_investment}
+              onChange={this.handleRadioValue('has_investment')} />
           </div>
         </FormControl>
       </Container>

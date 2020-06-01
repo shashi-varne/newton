@@ -118,7 +118,6 @@ class LoanDetails2 extends Component {
       this.setState({ fhc_data });
     } else {
       window.localStorage.setItem('fhc_data', JSON.stringify(fhc_data));
-      console.log('ALL VALID - SCREEN 2 - LOAN');
       this.navigate('/fhc/loan3');
     }
   }

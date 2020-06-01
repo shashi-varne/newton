@@ -12,6 +12,7 @@ class FHC {
       house: {},
       life_insurance: {},
       medical_insurance: {},
+      investments: [],
     }, props);
   }
 
@@ -126,9 +127,6 @@ class FHC {
     this.house.value = val.toString().replace(/\D/g, '');
     this.house_rent_error = '';
   }
-  
-
-  
 
   getCopy() {
     return JSON.parse(JSON.stringify(this));
