@@ -1,7 +1,5 @@
 // import { func } from "prop-types";
 import qs from 'qs';
-import { nativeCallback } from 'utils/native_callback';
-import { getConfig } from 'utils/functions';
 
 export function validateEmpty(string) {
   let nameSplit = string.split(" ").filter(e => e);
@@ -602,45 +600,4 @@ export function inrFormatTest(value) {
   let rule = /^[0-9,]/;
 
   return rule.test(value);
-}
-
-export function getWebUrlByPath(path) {
-  if (!path) {
-    path = '';
-  }
-
-  let web_url = getConfig().webAppUrl + path //can accept params with path also, below it handlled
-  // eslint-disable-next-line
-  web_url += (web_url.match(/[\?]/g) ? "&" : "?") + getConfig().webAppParams;
-
-  return web_url;
-}
-
-export function openNativeModule(moduleName) {
-
-  let url = 'https://fis.do/m/module?action_type=native';
-  url += '&native_module=' + encodeURIComponent(moduleName);
-  nativeCallback({
-    action: 'open_module', message: {
-      action_url: url
-    }
-  });
-}
-
-export function openModule(moduleName) {
-
-  if (getConfig().isWebCode) {
-
-    let module_mapper = {
-      'app/portfolio': 'reports',
-      'app/profile': 'my-account'
-    }
-
-    let moduleNameWeb = module_mapper[moduleName] || '';
-    let module_url = getWebUrlByPath(moduleNameWeb);
-
-    window.location.href = module_url;
-  } else {
-    openNativeModule(moduleName);
-  }
 }
