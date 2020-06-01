@@ -15,9 +15,8 @@ import thumb_up from 'assets/thumb_up.svg';
 import thumb_down_fill from 'assets/thumb_down_fill.svg';
 import thumb_up_fill from 'assets/thumb_up_fill.svg';
 import launch from 'assets/launch.svg';
-import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback, openModule } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
-import { openModule } from 'utils/validators';
 
 let start_time = '';
 
@@ -291,6 +290,7 @@ class Answer extends Component {
         'time_spent': this.calcReadtime(new Date())
       }
     };
+    nativeCallback({ events: eventObj });
 
     openModule(this.props.location.state.answer.action_path);
 
