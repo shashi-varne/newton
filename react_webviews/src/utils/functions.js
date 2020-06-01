@@ -466,6 +466,7 @@ export const getConfig = () => {
     searchParamsMustAppend += `&generic_callback=${generic_callback}`;
   }
 
+  returnConfig.redirect_url = '';
   if (checkValidString(redirect_url)) {
     returnConfig.webAppParams = setWebAppParams(redirect_url);
 
