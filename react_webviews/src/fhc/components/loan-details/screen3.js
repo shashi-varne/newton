@@ -6,7 +6,7 @@ import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
 import Input from '../../../common/ui/Input';
-import { validateNumber, formatAmount, inrFormatTest } from 'utils/validators';
+import { formatAmount, inrFormatTest } from 'utils/validators';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import personal from 'assets/personal_details_icon.svg';
 import Api from 'utils/api';
@@ -92,13 +92,11 @@ class LoanDetails3 extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'fin_health_check',
+      "event_name": 'fhc',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'loan_details_three',
-        "provider": this.state.provider,
-        "car_loan": this.state.car_loan,
-        "car_loan": this.state.car_loan,
+        "screen_name": 'loan liability details',
+        "car_loan": this.state.car_loan ? 'yes' : 'no',
         "from_edit": (this.state.edit) ? 'yes' : 'no'
       }
     };

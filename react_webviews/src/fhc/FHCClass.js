@@ -30,7 +30,7 @@ class FHC {
     return (`${children || 0}`);
   }
   set num_kids(val) {
-    const [kids] = val.split('+'); // Remove 
+    const [kids] = val.toString().split('+'); // Remove 
     Object.assign(this.family_status, { children: kids });
   }
 

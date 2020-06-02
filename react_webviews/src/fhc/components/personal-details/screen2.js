@@ -56,13 +56,12 @@ class PersonalDetails2 extends Component {
     const selectedVal = yesOrNoOptions[index]['value'];
 
     if (name === 'num_kids') {
-      fhc_data.num_kids = selectedVal ? 1 : 0;
+      fhc_data.num_kids = selectedVal ? '1' : '0';
       fhc_data.num_kids_error = '';
     } else {
       fhc_data[name] = selectedVal;
       fhc_data[`${name}_error`] = '';
     }
-  
     this.setState({ fhc_data });
   }
 
@@ -85,16 +84,15 @@ class PersonalDetails2 extends Component {
   }
 
   sendEvents(user_action) {
+    let { fhc_data } = this.state;
+
     let eventObj = {
-      "event_name": 'fin_health_check',
+      "event_name": 'fhc',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'personal_details_two',
-        "provider": this.state.provider,
-        "is_married": this.state.fhc_data.is_married,
-        "has_kids": this.state.has_kids,
-        "num_kids": this.state.num_kids,
-        "from_edit": (this.state.edit) ? 'yes' : 'no'
+        "screen_name": 'family details 1',
+        "marital_status": fhc_data.is_married ? 'yes' : 'no',
+        "kids": fhc_data.has_kids ? 'yes' : 'no',
       }
     };
 
@@ -138,7 +136,7 @@ class PersonalDetails2 extends Component {
           options={this.state.kidsOptions}
           id="num-kids"
           label="How many kids do you have?"
-          value={fhc_data.num_kids}
+          value={fhc_data.num_kids === '5' ? '5+' : fhc_data.num_kids}
           name="num_kids"
           onChange={this.handleChange('num_kids')} />
       </div>;
@@ -154,13 +152,13 @@ class PersonalDetails2 extends Component {
         banner={false}
         bannerText={''}
         handleClick={this.handleClick}
-        edit={this.props.edit}
+        edit={false}
         topIcon="close"
         buttonTitle="Save & Continue"
       >
         <FormControl fullWidth>
           <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
-            title={(this.props.edit) ? 'Edit Family Details' : 'Family Details'} />
+            title='Family Details' />
           <div className="InputField">
             <RadioWithoutIcon
               error={(fhc_data.is_married_error) ? true : false}

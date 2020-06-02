@@ -30,7 +30,7 @@ class InvestmentDetails2 extends Component {
   initializeInvestOpts = (existingData = {}) => {
     let keyedData = existingData.reduce((keyMap, currOpt) => {
       keyMap[currOpt.type] = currOpt;
-      return keyMap; 
+      return keyMap;
     }, {});
     let invOpts = [];
     for (const inv of investmentOptions) {
@@ -77,14 +77,17 @@ class InvestmentDetails2 extends Component {
   }
 
   sendEvents(user_action) {
+    const snakeCase = val => val.replace(/[-\s]/g, '_');
+    const eventOpts = this.state.investmentOpts.reduce((obj, currInv) => {
+      obj[snakeCase(currInv.type)] = currInv.checked ? 'yes' : 'no';
+      return obj;
+    }, {});
     let eventObj = {
-      "event_name": 'fin_health_check',
+      "event_name": 'fhc',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'loan_details_one',
-        "provider": this.state.provider,
-        "investment": this.state.investment,
-        "from_edit": (this.state.edit) ? 'yes' : 'no'
+        "screen_name": 'investment details',
+        ...(eventOpts || []),
       }
     };
 
@@ -165,7 +168,7 @@ class InvestmentDetails2 extends Component {
         banner={true}
         bannerText={this.bannerText()}
         handleClick={this.handleClick}
-        edit={this.props.edit}
+        edit={false}
         topIcon="close"
         buttonTitle="Save & Continue"
       >

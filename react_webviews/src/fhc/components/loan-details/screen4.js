@@ -93,17 +93,14 @@ class LoanDetails4 extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'fin_health_check',
+      "event_name": 'fhc',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'loan_details_three',
-        "provider": this.state.provider,
-        "education_loan": this.state.education_loan,
-        "education_loan": this.state.education_loan,
-        "from_edit": (this.state.edit) ? 'yes' : 'no'
+        "screen_name": 'loan liability details',
+        "education_loan": this.state.fhc_data.education_loan,
+        "from_edit": (this.props.edit) ? 'yes' : 'no'
       }
     };
-
     if (user_action === 'just_set_events') {
       return eventObj;
     } else {

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import fhc_img from 'assets/fisdom/fhc_landing.svg';
 import Container from '../common/Container';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 class Landing extends Component {
     constructor(props) {
@@ -12,8 +13,25 @@ class Landing extends Component {
         };
     }
     startFHC() {
-        console.log('BUTTON CLICKED!!!!', this);
+        this.sendEvents('next');
         this.navigate('/fhc/personal1');
+    }
+
+    sendEvents(user_action) {
+        let eventObj = {
+            "event_name": 'fhc',
+            "properties": {
+                "user_action": user_action,
+                "screen_name": 'fhc',
+                "source": '',
+            }
+        };
+
+        if (user_action === 'just_set_events') {
+            return eventObj;
+        } else {
+            nativeCallback({ events: eventObj });
+        }
     }
 
     navigate(pathname, search) {
@@ -41,9 +59,6 @@ class Landing extends Component {
                             Managing your finances is<br />as important as your health.
                         </div>    
                     </div>
-
-
-
             </Container>
         );
     }

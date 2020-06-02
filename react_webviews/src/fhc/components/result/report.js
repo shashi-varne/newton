@@ -49,6 +49,22 @@ class Report extends Component {
     });
   }
 
+  sendEvents = (user_action) => {
+    let eventObj = {
+      "event_name": 'fhc',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'check results',
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   handleClose = () => {
     this.setState({
       openPopup: false,

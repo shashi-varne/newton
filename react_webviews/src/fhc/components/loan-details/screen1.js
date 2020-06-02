@@ -92,14 +92,12 @@ class LoanDetails1 extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'fin_health_check',
+      "event_name": 'fhc',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'loan_details_one',
-        "provider": this.state.provider,
-        "house_loan": this.state.house_loan,
-        "monthly_emi": this.state.monthly_emi,
-        "from_edit": (this.state.edit) ? 'yes' : 'no'
+        "screen_name": 'liabilties',
+        "house_loan": this.state.fhc_data.house_loan ? 'yes' : 'no',
+        "from_edit": (this.props.edit) ? 'yes' : 'no'
       }
     };
 
@@ -123,12 +121,12 @@ class LoanDetails1 extends Component {
           fhc_data.has_house_loan ||
           fhc_data.has_car_loan ||
           fhc_data.has_education_loan
-          ) {
-            // skip to summary for edit flow (house rent details not required)
-            this.navigate('loan-summary');
-          } else {
-            this.navigate('insurance1');
-          }
+        ) {
+          // skip to summary for edit flow (house rent details not required)
+          this.navigate('loan-summary');
+        } else {
+          this.navigate('insurance1');
+        }
       } else if (fhc_data.has_house_loan) {
         this.navigate('loan3'); // skip house_rent entry if user has house_loan
       } else {

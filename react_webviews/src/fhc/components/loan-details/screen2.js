@@ -92,14 +92,13 @@ class LoanDetails2 extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'fin_health_check',
+      "event_name": 'fhc',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'loan_details_three',
-        "provider": this.state.provider,
-        "house_rent": this.state.house_rent,
-        "house_rent": this.state.house_rent,
-        "from_edit": (this.state.edit) ? 'yes' : 'no'
+        "screen_name": 'loan liability details',
+        "house_rent": this.state.fhc_data.house_rent ? 'yes' : 'no',
+        "rent_per_month": this.state.fhc_data.house_rent ? 'yes' : 'no',
+        "from_edit": (this.props.edit) ? 'yes' : 'no'
       }
     };
 

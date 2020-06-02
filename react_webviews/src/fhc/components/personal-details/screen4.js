@@ -68,15 +68,16 @@ class PersonalDetails4 extends Component {
   }
 
   sendEvents(user_action) {
+    const { fhc_data } = this.state;
+  
     let eventObj = {
-      "event_name": 'fin_health_check',
+      "event_name": 'fhc',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'personal_details_one',
-        "email": this.state.email ? 'yes' : 'no',
-        "name": this.state.name ? 'yes' : 'no',
-        "dob": this.state.dob ? 'yes' : 'no',
-        "from_edit": (this.state.edit) ? 'yes' : 'no'
+        "screen_name": 'earning expense details',
+        "annual_ctc": fhc_data.annual_sal ? 'yes' : 'no',
+        "monthly_salary": fhc_data.monthly_sal ? 'yes' : 'no',
+        "monthy_expense": fhc_data.monthy_exp ? 'yes' : 'no',
       }
     };
 
@@ -132,13 +133,13 @@ class PersonalDetails4 extends Component {
         banner={true}
         bannerText={this.bannerText()}
         handleClick={this.handleClick}
-        edit={this.props.edit}
+        edit={false}
         topIcon="close"
         buttonTitle="Save & Continue"
       >
         <FormControl fullWidth>
           <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
-            title={(this.props.edit) ? 'Edit Earning and Expense Details' : 'Earning and Expense Details'} />
+            title='Earning and Expense Details' />
           <div className="InputField">
             <Input
               error={(fhc_data.annual_sal_error) ? true : false}

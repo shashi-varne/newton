@@ -66,16 +66,15 @@ class PersonalDetails3 extends Component {
   }
 
   sendEvents(user_action) {
-    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+    let { fhc_data } = this.state;
 
     let eventObj = {
-      "event_name": 'fin_health_check',
+      "event_name": 'fhc',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'personal_details_three',
-        "dependent-parents": fhc_data.family_status['dependent-parents'],
-        "other-dependents": fhc_data.family_status['other-dependents'],
-        "from_edit": (this.state.edit) ? 'yes' : 'no'
+        "screen_name": 'family details 2',
+        "parents_dependency": fhc_data.family_status['dependent-parents'] ? 'yes' : 'no',
+        "other_dependents": fhc_data.family_status['other-dependents'] ? 'yes' : 'no',
       }
     };
 
@@ -119,13 +118,13 @@ class PersonalDetails3 extends Component {
         banner={false}
         bannerText={''}
         handleClick={this.handleClick}
-        edit={this.props.edit}
+        edit={false}
         topIcon="close"
         buttonTitle="Save & Continue"
       >
         <FormControl fullWidth>
           <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
-            title={(this.props.edit) ? 'Edit Family Details' : 'Family Details'} />
+            title='Family Details' />
           <div className="InputField">
             <RadioWithoutIcon
               error={(fhc_data['dependent-parents_error']) ? true : false}

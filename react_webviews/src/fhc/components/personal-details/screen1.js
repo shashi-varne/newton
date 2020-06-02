@@ -110,15 +110,13 @@ class PersonalDetails1 extends Component {
   sendEvents(user_action) {
     let { fhc_data } = this.state;
     let eventObj = {
-      "event_name": 'fin_health_check',
+      "event_name": 'fhc',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'personal_details_one',
-        "provider": fhc_data.provider,
+        "screen_name": 'personal details',
         "email": fhc_data.email ? 'yes' : 'no',
-        "name": fhc_data.name ? 'yes' : 'no',
-        "dob": fhc_data.dob ? 'yes' : 'no',
-        "from_edit": (fhc_data.edit) ? 'yes' : 'no'
+        "full_name": fhc_data.name ? 'yes' : 'no',
+        "date_of_birth": fhc_data.dob ? 'yes' : 'no',
       }
     };
 
@@ -143,13 +141,13 @@ class PersonalDetails1 extends Component {
         banner={true}
         bannerText={this.bannerText()}
         handleClick={this.handleClick}
-        edit={this.props.edit}
+        edit={false}
         topIcon="close"
         buttonTitle="Save & Continue"
       >
         <FormControl fullWidth>
           <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
-            title={(this.props.edit) ? 'Verify Personal Details' : 'Personal Details'} />
+            title='Personal Details' />
           <div className="InputField">
             <Input
               type="text"

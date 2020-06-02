@@ -72,14 +72,17 @@ class InvestmentDetails3 extends Component {
   }
 
   sendEvents(user_action) {
+    const snakeCase = val => val.replace(/[-\s]/g, '_');
+    const eventOpts = this.state.fhc_data.investments.reduce((obj, currInv) => {
+      obj[snakeCase(currInv.type)] = 'yes';
+      return obj;
+    }, {});
     let eventObj = {
-      "event_name": 'fin_health_check',
+      "event_name": 'fhc',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'loan_details_one',
-        "provider": this.state.provider,
-        "investment": this.state.investment,
-        "from_edit": (this.state.edit) ? 'yes' : 'no'
+        "screen_name": 'investment details',
+        ...(eventOpts || []),
       }
     };
 

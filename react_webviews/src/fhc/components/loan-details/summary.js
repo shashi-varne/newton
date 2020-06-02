@@ -11,7 +11,6 @@ import personal from 'assets/personal_details_icon.svg';
 import qs from 'qs';
 import { formatAmount } from 'utils/validators';
 import { getConfig } from 'utils/functions';
-import { nativeCallback } from 'utils/native_callback';
 import FHC from '../../FHCClass';
 import toast from '../../../common/ui/Toast';
 
@@ -82,41 +81,19 @@ class LoanSummary extends Component {
 
   renderAccordionBody = (name) => {
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
-
-    if (this.state.accordianTab === 'house_loan' && name === 'house_loan') {
-      return (
-        <div className="AccordionBody">
-          <ul>
-            <li className="summary-li">
-              Monthly EMI: 
-              <span><b>₹ {formatAmount(fhc_data.house_loan)}</b></span>
-            </li>
-          </ul>
-        </div>
-      );
-    } else if (this.state.accordianTab === 'car_loan' && name === 'car_loan') {
-      return (
-        <div className="AccordionBody">
-          <ul>
-            <li className="summary-li">
-              Monthly EMI: 
-              <span><b>₹ {formatAmount(fhc_data.car_loan)}</b></span>
-            </li>
-          </ul>
-        </div>
-      );
-    } else if (this.state.accordianTab === 'education_loan' && name === 'education_loan') {
+    if (this.state.accordianTab === name) {
       return (
         <div className="AccordionBody">
           <ul>
             <li className="summary-li">
               Monthly EMI:
-              <span><b>₹ {formatAmount(fhc_data.education_loan)}</b></span>
+                <span><b>₹ {formatAmount(fhc_data[name])}</b></span>
             </li>
           </ul>
         </div>
       );
     }
+    return '';
   }
 
   navigate = (pathname) => {
@@ -133,28 +110,6 @@ class LoanSummary extends Component {
       pathname: pathname,
       search: getConfig().searchParams
     });
-  }
-
-  sendEvents(user_action, screen_name, which_one_edit) {
-
-    which_one_edit = which_one_edit || '';
-    let eventObj = {
-      "event_name": 'loan_details ',
-      "properties": {
-        "user_action": user_action,
-        "screen_name": 'insurance_summary',
-        'car_loan_details_edit': which_one_edit === 'car_loan' ? 'yes' : 'no',
-        'house_loan_details_edit': which_one_edit === 'house_loan' ? 'yes' : 'no',
-        'education_loan_details_edit': which_one_edit === 'education_loan' ? 'yes' : 'no',
-        'time_spent': this.state.time_spent
-      }
-    };
-
-    if (user_action === 'just_set_events') {
-      return eventObj;
-    } else {
-      nativeCallback({ events: eventObj });
-    }
   }
 
   render() {
@@ -180,7 +135,7 @@ class LoanSummary extends Component {
     });
     return (
       <Container
-        events={this.sendEvents('just_set_events')}
+        events={''}
         showLoader={this.state.show_loader}
         title="Fin Health Check (FHC)"
         count={false}

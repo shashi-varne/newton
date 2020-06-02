@@ -71,15 +71,13 @@ class InvestmentDetails1 extends Component {
   }
 
   sendEvents(user_action) {
-    let fhc_data = new FHC(this.state.fhc_data.getCopy());
 
     let eventObj = {
-      "event_name": 'fin_health_check',
+      "event_name": 'fhc',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'loan_details_one',
-        "investment": fhc_data.investment,
-        "from_edit": (this.state.edit) ? 'yes' : 'no'
+        "screen_name": 'investment details',
+        "investment": this.state.has_investment,
       }
     };
 
@@ -130,7 +128,7 @@ class InvestmentDetails1 extends Component {
         banner={true}
         bannerText={this.bannerText()}
         handleClick={this.handleClick}
-        edit={this.props.edit}
+        edit={false}
         topIcon="close"
         buttonTitle="Save & Continue"
       >

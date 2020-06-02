@@ -93,15 +93,13 @@ class InvestmentDetails4 extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'fin_health_check',
+      "event_name": 'fhc',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'insurance_details_one',
-        "provider": this.state.provider,
-        "tax_investment": this.state.tax_investment,
-        "tax_saving_80C": this.state.tax_saving_80C,
-        "tax_saving_80CCD": this.state.tax_saving_80CCD,
-        "from_edit": (this.state.edit) ? 'yes' : 'no'
+        "screen_name": 'tax saving details',
+        "invested_under_80c": this.state.tax_investment ? 'yes' : 'no',
+        "amount_under_80c": this.state.fhc_data.tax_saving_80C ? 'yes' : 'no',
+        "tax_saving_80CCD": this.state.fhc_data.tax_saving_80CCD ? 'yes' : 'no',
       }
     };
 
@@ -178,7 +176,7 @@ class InvestmentDetails4 extends Component {
         banner={false}
         bannerText={''}
         handleClick={this.handleClick}
-        edit={this.props.edit}
+        edit={false}
         topIcon="close"
         buttonTitle="Save & Continue"
       >

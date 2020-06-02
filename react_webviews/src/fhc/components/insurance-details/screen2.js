@@ -92,14 +92,11 @@ class InsuranceDetails2 extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'fin_health_check',
+      "event_name": 'fhc',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'insurance_details_one',
-        "provider": this.state.provider,
-        "medical_insurance": this.state.medical_insurance,
-        "annual_premuim": this.state.annual_premuim,
-        "cover_amt": this.state.cover_amt,
+        "screen_name": 'insurance details',
+        "medical_insurance": (this.state.fhc_data.medical_insurance || {}).annual_premuim ? 'yes' : 'no',
         "from_edit": (this.state.edit) ? 'yes' : 'no'
       }
     };

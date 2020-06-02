@@ -132,27 +132,6 @@ class InsuranceSummary extends Component {
     });
   }
 
-  sendEvents(user_action, screen_name, which_one_edit) {
-
-    which_one_edit = which_one_edit || '';
-    let eventObj = {
-      "event_name": 'insurance_details ',
-      "properties": {
-        "user_action": user_action,
-        "screen_name": 'insurance_summary',
-        'medical_insurance_details_edit': which_one_edit === 'medical_insurance' ? 'yes' : 'no',
-        'life_insurance_details_edit': which_one_edit === 'life_insurance' ? 'yes' : 'no',
-        'time_spent': this.state.time_spent
-      }
-    };
-
-    if (user_action === 'just_set_events') {
-      return eventObj;
-    } else {
-      nativeCallback({ events: eventObj });
-    }
-  }
-
   render() {
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
     let accordions = insurance_types.map(type => {
