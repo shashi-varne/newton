@@ -28,12 +28,26 @@ class Container extends Component {
       openPopup: false,
       popupText: '',
       callbackType: '',
-      loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
+      loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom,
+      inPageTitle: false,
+      force_hide_inpage_title: false
     }
     this.historyGoBack = this.historyGoBack.bind(this);
   }
 
   componentDidMount() {
+
+    let pathname = this.props.history.location.pathname;
+    if (pathname.indexOf('group-health') >= 0) {
+      this.setState({
+        new_header: true,
+        inPageTitle: true
+      })
+    } else {
+      this.setState({
+        new_header: false
+      })
+    }
     setHeights({ 'header': true, 'container': false });
     let that = this;
     if (getConfig().generic_callback) {
@@ -52,6 +66,8 @@ class Container extends Component {
       });
     }
 
+    window.addEventListener("scroll", this.onScroll, false);
+
   }
 
   componentWillUnmount() {
@@ -61,7 +77,59 @@ class Container extends Component {
     } else {
       window.PlutusSdk.remove_listener({});
     }
+
+    window.removeEventListener("scroll", this.onScroll, false);
   }
+
+  getHeightFromTop() {
+    var el = document.getElementsByClassName('Container')[0];
+    var height = el.getBoundingClientRect().top;
+    return height;
+  }
+
+  check_hide_header_title() {
+    let force_hide_inpage_title;
+    let restrict_in_page_titles = ['provider-filter'];
+    if(restrict_in_page_titles.indexOf(this.props.headerType) !== -1) {
+      force_hide_inpage_title = true;
+    }
+
+    this.setState({
+      force_hide_inpage_title: force_hide_inpage_title || false
+    })
+
+    if(this.props.updateChild) {
+      this.props.updateChild('inPageTitle', force_hide_inpage_title);
+    }
+
+  }
+
+  onScroll = () => {
+    if(!this.state.new_header) {
+      this.setState({
+        inPageTitle: false
+      })
+      return;
+    }
+    let inPageTitle = this.state.inPageTitle;
+    if (this.getHeightFromTop() >= 56) {
+      //show up
+      inPageTitle = true;
+
+    } else {
+      //show down
+      inPageTitle = false;
+    }
+
+    this.setState({
+      inPageTitle: inPageTitle
+    })
+
+    if(this.props.updateChild) {
+      this.props.updateChild('inPageTitle', inPageTitle);
+    }
+
+  };
 
   navigate = (pathname, user_action) => {
 
@@ -385,9 +453,13 @@ class Container extends Component {
           edit={this.props.edit}
           type={getConfig().productName}
           resetpage={this.props.resetpage}
+          inPageTitle={this.state.inPageTitle}
+          force_hide_inpage_title={this.state.force_hide_inpage_title}
           handleReset={this.props.handleReset}
           filterPgae={this.props.filterPgae}
-          handleFilter={this.props.handleFilter} />}
+          handleFilter={this.props.handleFilter} 
+          new_header={this.state.new_header}  
+        />}
 
         {/* Below Header Block */}
         <div id="HeaderHeight" style={{ top: 56 }}>
@@ -403,6 +475,23 @@ class Container extends Component {
           {this.props.banner && <Banner text={this.props.bannerText} />}
 
         </div>
+
+        {!this.state.force_hide_inpage_title && this.state.new_header &&
+          <div id="header-title-page"
+            style={this.props.styleHeader} 
+            className={`header-title-page  ${this.props.classHeader}`}>
+                <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{width: this.props.count ? '75%': ''}}>
+                  {this.props.title}
+                </div>
+              
+              {this.state.inPageTitle && this.props.count &&
+                <span color="inherit" 
+                className={`${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}
+                style={{ fontSize: 10 }}>
+                  <span style={{ fontWeight: 600 }}>{this.props.current}</span>/<span>{this.props.total}</span>
+                </span>}
+          </div>
+         }
 
         {/* Children Block */}
         <div className={`Container ${this.props.classOverRideContainer}`}>
