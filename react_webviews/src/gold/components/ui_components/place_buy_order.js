@@ -71,23 +71,26 @@ class PlaceBuyOrderClass extends Component {
         }
 
         this.props.parent.updateParent('show_loader', true);
+        let pathname = this.props.parent.props.history.location.pathname;
 
         try {
 
             const res = await Api.post('/api/gold/user/buy/verify/' + this.state.provider, options);
 
+            let result = res.pfwresponse.result;
             let buyData = this.state.buyData;
 
-            if (res.pfwresponse.status_code === 200 &&
-                res.pfwresponse.result.payment_details.plutus_rate !== this.state.buyData.goldBuyInfo.plutus_rate) {
+            if(result.pan_needed) {
+                this.props.parent.navigate('/gold/' + this.state.provider + '/buy-pan');
+            } else if (res.pfwresponse.status_code === 200 &&
+                result.payment_details.plutus_rate !== this.state.buyData.goldBuyInfo.plutus_rate) {
 
                 buyData.goldBuyInfo.rate_validity = 0;
                 storageService().setObject('buyData', buyData);
                 this.props.parent.updateParent('show_loader', false);
                 this.props.parent.updateParent('proceedForOrder', false);
             } else if (res.pfwresponse.status_code === 200 &&
-                res.pfwresponse.result.payment_details.plutus_rate === this.state.buyData.goldBuyInfo.plutus_rate) {
-                let result = res.pfwresponse.result;
+                result.payment_details.plutus_rate === this.state.buyData.goldBuyInfo.plutus_rate) {
 
                 buyData.payment_details = result.payment_details;
                 buyData.transact_id = result.payment_details.transact_id;
@@ -100,8 +103,12 @@ class PlaceBuyOrderClass extends Component {
             } else {
                 this.props.parent.updateParent('show_loader', false);
                 this.props.parent.updateParent('proceedForOrder', false);
-                toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+                toast(result.error || result.message ||
                     'Something went wrong');
+
+                if(pathname !== '/gold/buy') {
+                    this.props.parent.navigate('/gold/buy');
+                }
             }
         } catch (err) {
             console.log(err);

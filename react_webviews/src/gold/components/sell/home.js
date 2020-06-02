@@ -254,9 +254,10 @@ class GoldSellHome extends Component {
       return;
     }
 
-    if(!this.state.user_info.pan_number || 
-      !this.state.user_info.bank_info_added) {
+    if(!this.state.user_info.pan_number) {
       this.navigate(this.state.provider + '/sell-pan');
+    } else if(!this.state.user_info.bank_info_added) {
+      this.navigate(this.state.provider + '/sell-add-bank');
     } else {
       this.navigate(this.state.provider + '/sell-select-bank');
     }

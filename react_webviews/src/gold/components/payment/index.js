@@ -139,9 +139,10 @@ class Payment extends Component {
 
   componentWillMount() {
     nativeCallback({ action: 'take_control_reset' });
-    let { status } = this.state.params;
+    let { status, txn_id } = this.state.params;
+    let txn_id_backend = txn_id || '';
     if(!status) {
-      status = 'failed';
+      status = 'pending';
     }
     let { orderType } = this.props.match.params;
     this.setState({
@@ -157,6 +158,9 @@ class Payment extends Component {
     amount = orderData.amount_selected || '';
     invoiceLink = orderData.invoice_link || '';
     transact_id = orderData.transact_id || '';
+    if(txn_id_backend) {
+      transact_id = txn_id_backend;
+    }
 
     this.setState({
       status: status,
@@ -278,6 +282,23 @@ class Payment extends Component {
     }
   }
 
+  setFinalTransReport(report) {
+    if(!report) {
+      report = {};
+    }
+
+    report.orderType = this.state.orderType;
+    report.provider = this.state.provider;
+
+    report.final_status = getOrderStatusPayment(report);
+    let uniStatus = getUniversalTransStatus(report);
+    this.setPaymentStatus(this.state.orderType, this.state.status, uniStatus);
+    this.setState({
+      report: report,
+      uniStatus: uniStatus
+    });
+  }
+
    getTransDetails = async (transact_id, orderType) => {
 
     if(transact_id) {
@@ -288,23 +309,20 @@ class Payment extends Component {
       try {
         const res = await Api.get('/api/gold/report/orders/' + this.state.provider + '?transaction_id=' + transact_id +
         '&order_type=' + orderType);
-        if (res.pfwresponse.status_code === 200) {
 
-          let report = res.pfwresponse.result;
-          report.orderType = orderType;
-          report.final_status = getOrderStatusPayment(report);
-          let uniStatus = getUniversalTransStatus(report);
-          this.setPaymentStatus(this.state.orderType, this.state.status, uniStatus);
-          this.setState({
-            report: res.pfwresponse.result,
-            uniStatus: uniStatus
-          });
+        let report = {};
+
+        if (res.pfwresponse.status_code === 200) {
+          report = res.pfwresponse.result || {};
+          
         } else {
           this.setState({
             show_loader: false
           });
           toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
         }
+
+        this.setFinalTransReport(report);
       } catch (err) {
         this.setState({
           show_loader: false
