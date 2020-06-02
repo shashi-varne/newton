@@ -14,6 +14,7 @@ class Report extends Component {
     this.state = {
       report: {},
       openPopup: false,
+      show_loader: true,
       popupText: '',
     };
   }

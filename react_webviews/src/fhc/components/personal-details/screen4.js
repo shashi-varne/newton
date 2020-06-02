@@ -5,7 +5,6 @@ import toast from '../../../common/ui/Toast';
 
 import Container from '../../common/Container';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
-import personal from 'assets/personal_details_icon.svg';
 import income from 'assets/annual_income_dark_icn.png';
 import Input from '../../../common/ui/Input';
 import { formatAmount, inrFormatTest } from 'utils/validators';
@@ -45,7 +44,7 @@ class PersonalDetails4 extends Component {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong');
+      toast('Something went wrong. Please try again');
     }
   }
 
@@ -114,7 +113,6 @@ class PersonalDetails4 extends Component {
       this.setState({ fhc_data });
     } else {
       window.localStorage.setItem('fhc_data', JSON.stringify(fhc_data));
-      console.log('ALL VALID - EXPENSE SCREEN')
       this.navigate('personal-complete')
     }
   }
@@ -138,7 +136,7 @@ class PersonalDetails4 extends Component {
         buttonTitle="Save & Continue"
       >
         <FormControl fullWidth>
-          <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
+          <TitleWithIcon width="23" icon={require(`assets/${this.state.type}/expense.svg`)}
             title='Earning and Expense Details' />
           <div className="InputField">
             <Input

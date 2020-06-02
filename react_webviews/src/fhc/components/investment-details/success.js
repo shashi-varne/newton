@@ -1,20 +1,35 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
 import { getConfig } from 'utils/functions';
+import Api from 'utils/api';
+import { toast } from 'react-toastify';
 
 class InvestSuccess extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            show_loader: true,
             name: '',
+            fhc_data: '',
         };
     }
 
     async componentDidMount() {
         let fhc_data = JSON.parse(window.localStorage.getItem('fhc_data'));
-        this.setState({
-            name: fhc_data.name,
-        });
+        // Upload Data 
+        try {
+            if (fhc_data) {
+                await Api.post('api/financialhealthcheck/mine', fhc_data);
+            }
+            this.setState({
+                show_loader: false,
+                name: fhc_data.name,
+                fhc_data,
+            });
+        } catch (e) {
+            console.log(e);
+            toast('Something went wrong. Please try again');
+        }
     }
 
     navigate(pathname, search) {
@@ -28,9 +43,10 @@ class InvestSuccess extends Component {
     }
 
     render() {
-        let name = this.state.name;
+        let { name } = this.state;
         return (
             <Container
+                showLoader={this.state.show_loader}
                 buttonTitle="Check Results"
                 handleClick={() => this.navigate('final-report')}
                 title="Fin Health Check (FHC)"

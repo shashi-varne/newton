@@ -5,7 +5,6 @@ import toast from '../../../common/ui/Toast';
 
 import Container from '../../common/Container';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
-import personal from 'assets/personal_details_icon.svg';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
@@ -57,7 +56,7 @@ class InvestmentDetails3 extends Component {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong');
+      toast('Something went wrong. Please try again');
     }
   }
 
@@ -139,7 +138,7 @@ class InvestmentDetails3 extends Component {
         buttonTitle="Save & Continue"
       >
         <FormControl fullWidth>
-          <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
+          <TitleWithIcon width="23" icon={require(`assets/${this.state.type}/invest.svg`)}
             title={'Investment Details'} />
           <div>
             Rearrange the following in terms of how you 

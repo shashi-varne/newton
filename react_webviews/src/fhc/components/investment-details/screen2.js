@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
 import toast from '../../../common/ui/Toast';
-
 import Container from '../../common/Container';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
-import personal from 'assets/personal_details_icon.svg';
 import Api from 'utils/api';
 import { investmentOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
@@ -62,7 +60,7 @@ class InvestmentDetails2 extends Component {
         show_loader: false
       });
       console.log(err);
-      toast('Something went wrong');
+      toast('Something went wrong. Please try again');
     }
   }
 
@@ -173,7 +171,7 @@ class InvestmentDetails2 extends Component {
         buttonTitle="Save & Continue"
       >
         <FormControl fullWidth>
-          <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
+          <TitleWithIcon width="23" icon={require(`assets/${this.state.type}/invest.svg`)}
             title={'Investment Details'} />
           <div style={{ fontSize: '16px', color: '#4a4a4a', marginBottom: '10px' }}>
             <span style={{ fontSize: '13px', display: 'block', marginBottom: '20px'}}>Great! It's good to have investments for future.</span>

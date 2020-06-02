@@ -46,7 +46,7 @@ class LoanDetails2 extends Component {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong');
+      toast('Something went wrong. Please try again');
     }
   }
 
@@ -156,7 +156,7 @@ class LoanDetails2 extends Component {
         buttonTitle="Save & Continue"
       >
         <FormControl fullWidth>
-          <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
+          <TitleWithIcon width="23" icon={require(`assets/${this.state.type}/loan.svg`)}
             title={(this.props.edit) ? 'Edit Loan Liability Details' : 'Loan Liability'} />
           <div className="InputField">
             <RadioWithoutIcon

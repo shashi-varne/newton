@@ -7,7 +7,6 @@ import shrink from 'assets/shrink_icn.png';
 import loader_fisdom from 'assets/loader_gif_fisdom.gif';
 import loader_myway from 'assets/loader_gif_myway.gif';
 import Api from 'utils/api';
-import personal from 'assets/personal_details_icon.svg';
 import qs from 'qs';
 import { formatAmount } from 'utils/validators';
 import { getConfig } from 'utils/functions';
@@ -35,6 +34,7 @@ class LoanSummary extends Component {
       edit_allowed: true,
       fhc_data: new FHC(),
       accordianTab: 'house_loan',
+      type: getConfig().productName,
       params: qs.parse(props.history.location.search.slice(1)),
       loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
     }
@@ -59,7 +59,7 @@ class LoanSummary extends Component {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong');
+      toast('Something went wrong. Please try again');
     }
   }
 
@@ -114,10 +114,10 @@ class LoanSummary extends Component {
 
   render() {
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
-    let accordions = loan_types.map(type => {
+    let accordions = loan_types.map((type, idx) => {
       if (fhc_data[`has_${type.key}`]) {
         return (
-          <div className="Accordion">
+          <div className="Accordion" key={idx}>
             <div className="AccordionTitle" onClick={() => this.toggleAccordian(type.key)}>
               <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative' }}>
                 <span style={{ marginRight: 10 }}>
@@ -149,7 +149,7 @@ class LoanSummary extends Component {
         buttonTitle="Save & Continue"
       >
         <FormControl fullWidth>
-          <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
+          <TitleWithIcon width="23" icon={require(`assets/${this.state.type}/loan.svg`)}
             title={'Loan liability Summary'} />
           <div style={{ marginBottom: 30 }}>
             <div className="accordion-container">

@@ -6,7 +6,6 @@ import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
-import personal from 'assets/personal_details_icon.svg';
 import Api from 'utils/api';
 import { yesOrNoOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
@@ -47,7 +46,7 @@ class InvestmentDetails1 extends Component {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong');
+      toast('Something went wrong. Please try again');
     }
   }
 
@@ -133,7 +132,7 @@ class InvestmentDetails1 extends Component {
         buttonTitle="Save & Continue"
       >
         <FormControl fullWidth>
-          <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
+          <TitleWithIcon width="23" icon={require(`assets/${this.state.type}/invest.svg`)}
             title={'Investment Details'} />
           <div className="InputField">
             <RadioWithoutIcon

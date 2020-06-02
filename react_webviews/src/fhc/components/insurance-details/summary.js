@@ -7,11 +7,9 @@ import shrink from 'assets/shrink_icn.png';
 import loader_fisdom from 'assets/loader_gif_fisdom.gif';
 import loader_myway from 'assets/loader_gif_myway.gif';
 import Api from 'utils/api';
-import personal from 'assets/personal_details_icon.svg';
 import qs from 'qs';
 import { formatAmount } from 'utils/validators';
 import { getConfig } from 'utils/functions';
-import { nativeCallback } from 'utils/native_callback';
 import FHC from '../../FHCClass';
 import toast from '../../../common/ui/Toast';
 
@@ -30,6 +28,7 @@ class InsuranceSummary extends Component {
     this.state = {
       fhc_data: new FHC(),
       edit_allowed: true,
+      type: getConfig().productName,
       accordianTab: 'life_insurance',
       params: qs.parse(props.history.location.search.slice(1)),
       loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
@@ -62,7 +61,7 @@ class InsuranceSummary extends Component {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong');
+      toast('Something went wrong. Please try again');
     }
   }
 
@@ -134,10 +133,10 @@ class InsuranceSummary extends Component {
 
   render() {
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
-    let accordions = insurance_types.map(type => {
+    let accordions = insurance_types.map((type, idx) => {
       if (fhc_data[type.key].is_present) {
         return (
-          <div className="Accordion">
+          <div className="Accordion" key={idx}>
             <div className="AccordionTitle" onClick={() => this.toggleAccordian(type.key)}>
               <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'relative' }}>
                 <span style={{ marginRight: 10 }}>
@@ -155,7 +154,7 @@ class InsuranceSummary extends Component {
     });
     return (
       <Container
-        events={this.sendEvents('just_set_events')}
+        events={''}
         showLoader={this.state.show_loader}
         title="Fin Health Check (FHC)"
         smallTitle={this.state.provider}
@@ -171,7 +170,7 @@ class InsuranceSummary extends Component {
         logo={this.state.image}
       >
         <FormControl fullWidth>
-          <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
+          <TitleWithIcon width="23" icon={require(`assets/${this.state.type}/secure.svg`)}
             title={'Insurance liability Summary'} />
           <div style={{ marginBottom: 30 }}>
             <div className="accordion-container">

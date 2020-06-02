@@ -2,13 +2,11 @@ import React, { Component, Fragment } from 'react';
 import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
 import toast from '../../../common/ui/Toast';
-
 import Container from '../../common/Container';
 import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
 import Input from '../../../common/ui/Input';
 import { formatAmount, inrFormatTest } from 'utils/validators';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
-import personal from 'assets/personal_details_icon.svg';
 import Api from 'utils/api';
 import { yesOrNoOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
@@ -48,7 +46,7 @@ class InvestmentDetails4 extends Component {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong');
+      toast('Something went wrong. Please try again');
     }
   }
 
@@ -122,7 +120,6 @@ class InvestmentDetails4 extends Component {
       this.setState({ fhc_data });
     } else {
       window.localStorage.setItem('fhc_data', JSON.stringify(fhc_data));
-      await Api.post('api/financialhealthcheck/mine', fhc_data);
       this.navigate('invest-complete');
     }
   }
@@ -138,7 +135,7 @@ class InvestmentDetails4 extends Component {
         <div className="InputField">
           <Input
             error={(fhc_data.tax_saving_80C_error) ? true : false}
-            helperText={fhc_data.tax_saving_80C_error}
+            helperText={fhc_data.tax_saving_80C_error || 'Max Rs 1,50,000'}
             type="text"
             width="40"
             label="Investment under Sec 80C ?"
@@ -152,7 +149,7 @@ class InvestmentDetails4 extends Component {
         <div className="InputField">
           <Input
             error={(fhc_data.tax_saving_80CCD_error) ? true : false}
-            helperText={fhc_data.tax_saving_80CCD_error}
+            helperText={fhc_data.tax_saving_80CCD_error || 'Max Rs 50,000'}
             type="text"
             width="40"
             label="Invested in NPS under Sec 80CCD ?"
@@ -181,7 +178,7 @@ class InvestmentDetails4 extends Component {
         buttonTitle="Save & Continue"
       >
         <FormControl fullWidth>
-          <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
+          <TitleWithIcon width="23" icon={require(`assets/${this.state.type}/invest.svg`)}
             title={'Tax saving Details'} />
           <div className="InputField">
             <RadioWithoutIcon

@@ -81,38 +81,25 @@ class Container extends Component {
 
   historyGoBack = () => {
     this.setState({
-      back_pressed: true
-    })
+      back_pressed: true,
+    });
     let pathname = this.props.history.location.pathname;
     let { params } = this.props.location;
-    let { search } = this.props.location;
-
-    if (search.indexOf('goBack') < 0) {
-      if (pathname.indexOf('result') >= 0) {
-
-        nativeCallback({ action: 'exit', events: this.getEvents('back') });
-        return;
-      }
-    }
-
+    
     if (params && params.disableBack) {
       nativeCallback({ action: 'exit' });
       return;
     }
-
-    if (pathname.indexOf('question1') >= 0) {
-      nativeCallback({ events: this.getEvents('back') });
-      this.navigate('intro');
-      return;
-    }
-
     switch (pathname) {
-      case "/risk":
-      case "/risk/intro":
+      case "/fhc":
+      case "/fhc/final-report":
         nativeCallback({ action: 'exit', events: this.getEvents('back') });
         break;
-      case "/risk/recommendation":
-        this.navigate('result');
+      case "/fhc/loan1":
+        this.navigate('personal4'); // to skip success screen
+        break;
+      case "/fhc/insurance1":
+        this.navigate('loan4'); // to skip success screen
         break;
       default:
         if (navigator.onLine) {
