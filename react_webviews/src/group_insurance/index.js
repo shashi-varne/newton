@@ -129,6 +129,9 @@ import HealthSuperTopupForm from './products/health_insurance/super_topup/form'
 import HomeInsurance from './products/home_insurance/general/plan_details';
 import HomeInsuranceForm from './products/home_insurance/general/form';
 
+/*******************Group  Health ******************/
+import GroupHealthLanding from './products/group_health/landing';
+
 // common
 
 import Report from './report';
@@ -284,6 +287,9 @@ const Insurance = (props) => {
           <Route path={`${url}/home_insurance/general/form-redirection`} component={HomeInsuranceForm} />
           
 
+
+          {/********** Group Health Insurance **********/}
+          <Route path={`${url}/group-health/landing`} component={GroupHealthLanding} />
 
           {/* common */}
           <Route path={`${url}/common/report`} component={Report} />
