@@ -1,9 +1,27 @@
 import {
   validateEmail, isValidDate, validateEmpty, validateNumber,
-  validateLengthNames, validateConsecutiveChar, validateAlphabets,
+  validateConsecutiveChar, validateAlphabets,
 } from 'utils/validators';
 
+import { calculateAge } from 'utils/functions';
+
 class FHC {
+  name = '';
+  age = '';
+  dob = '';
+  gender = '';
+  mobile_number = '';
+  company = '';
+  house = {};
+  loan = {};
+  salary = {};
+  family_expence = '';
+  family_status = {};
+  life_insurance = {};
+  medical_insurance = {};
+  tax_savings = {};
+  investments = [];
+
   constructor(props = {}) {
     Object.assign(this, {
       family_status: {},
@@ -22,7 +40,7 @@ class FHC {
   }
   set dob(val) {
     this._dob = val;
-    this.age = this.calculateAge();
+    this.age = calculateAge(this._dob);
   }
 
   get num_kids() {
@@ -131,18 +149,6 @@ class FHC {
 
   getCopy() {
     return JSON.parse(JSON.stringify(this));
-  }
-
-  calculateAge() {
-    const birthday = this.dob.replace(/\\-/g, '/').split('/').reverse().join('/');
-    const today = new Date();
-    const birthDate = new Date(birthday);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-    return age;
   }
 
   isValidName() {

@@ -615,3 +615,14 @@ export function capitalize (string) {
   }
   return string.toLowerCase().replace(/(^|\s)[a-z]/g, function (f) { return f.toUpperCase(); })
 }
+export function calculateAge(val) {
+  const birthday = val.toString().replace(/\\-/g, '/').split('/').reverse().join('/');
+  const today = new Date();
+  const birthDate = new Date(birthday);
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age;
+}
