@@ -1,5 +1,5 @@
 // import colors from '../common/theme/Style.css';
-import {checkValidString, getUrlParams} from './validators';
+import { checkValidString, getUrlParams } from './validators';
 import $ from 'jquery';
 
 const partnersConfigBase = {
@@ -103,7 +103,7 @@ const partnersConfigBase = {
     back_button: "back_icon_white.png",
     close_button: "close_nav_icon.svg",
     search_button: "bfdlmobile_search.png",
-    inputFocusedColor : '#00ffbc'
+    inputFocusedColor: '#00ffbc'
   },
   alb: {
     logo: "alb.png",
@@ -283,7 +283,7 @@ export const isMobile = {
 };
 
 function getPartnerConfig(partner_code) {
- 
+
   let search = window.location.search;
   let baseConfig = {
     'fisdom': {
@@ -327,14 +327,14 @@ function getPartnerConfig(partner_code) {
   const ismyway = search.indexOf("api.mywaywealth.com") >= 0;
   const isStaging = search.indexOf("staging") >= 0;
   let productType = 'fisdom';
-  if (ismyway || partner_code === 'bfdlmobile' || 
-  partner_code === 'myway') {
+  if (ismyway || partner_code === 'bfdlmobile' ||
+    partner_code === 'myway') {
     productType = 'myway';
   }
 
   let config_to_return = baseConfig[productType];
 
-  if(isStaging) {
+  if (isStaging) {
     config_to_return.webAppUrl = 'https://sdk-dot-plutus-web.appspot.com/#!/';
     // config_to_return.webAppUrl = 'http://localhost:3001/#!/';
   }
@@ -349,14 +349,14 @@ function getPartnerConfig(partner_code) {
     'back_button_color': 'back_button_color',
     'notifications_color': 'notifications_color',
     'header_title_color': 'header_title_color',
-    'inputFocusedColor' : 'inputFocusedColor'
+    'inputFocusedColor': 'inputFocusedColor'
   };
 
   config_to_return.isFinwiz = true;
 
-  if(checkValidString(partner_code) && partner_code !== 'fisdom' && 
-  partner_code !== 'myway') {
-    if(partner_code === 'bfdl') {
+  if (checkValidString(partner_code) && partner_code !== 'fisdom' &&
+    partner_code !== 'myway' && partner_code !== 'test') {
+    if (partner_code === 'bfdl') {
       partner_code = 'bfdlmobile';
     }
     let partnerData = partnersConfigBase[partner_code] || partnersConfigBase['fisdom'];
@@ -365,12 +365,12 @@ function getPartnerConfig(partner_code) {
     for (var key in partnerKeysMapper) {
 
       let key_to_copy = partnerKeysMapper[key];
-      if(partnerData[key_to_copy]) {
+      if (partnerData[key_to_copy]) {
         config_to_return[key] = partnerData[key_to_copy];
       }
     }
 
-    
+
   }
 
   let html = document.querySelector(`html`);
@@ -384,14 +384,28 @@ function getPartnerConfig(partner_code) {
   return config_to_return;
 }
 
+export function setWebAppParams(redirect_url) {
+  redirect_url = decodeURIComponent(redirect_url);
+  let redirect_url_data = redirect_url.split("?is_secure=");
+
+  let is_secure = false;
+  if (redirect_url_data.length === 2) {
+    is_secure = redirect_url_data[1]
+  }
+
+  let web_params = 'is_secure=' + is_secure;
+  return web_params;
+
+}
+
 export const isMobileDevice = () => {
   var mobileDevice = isMobile.any() || window.innerWidth < 767;
-    if (mobileDevice) {
-      $("body").attr('data-device', 'mobile');
-    } else {
-      $("body").attr('data-device', 'web');
-    }
-  
+  if (mobileDevice) {
+    $("body").attr('data-device', 'mobile');
+  } else {
+    $("body").attr('data-device', 'web');
+  }
+
   return mobileDevice;
 }
 
@@ -413,7 +427,7 @@ export const getConfig = () => {
     project_child = 'bhartiaxa';
     if (main_pathname.indexOf('term') >= 0) {
       project_child = 'term';
-    } 
+    }
 
   } else if (main_pathname.indexOf('insurance') >= 0) {
     project = 'insurance';
@@ -437,36 +451,39 @@ export const getConfig = () => {
     project = 'help';
     generic_callback = "true";
   }
-  
+
   let search = window.location.search;
   const insurance_v2 = generic_callback === "true" ? true : search.indexOf("insurance_v2") >= 0;
-  
+
   let returnConfig = getPartnerConfig(partner_code);
 
   let searchParams = `?base_url=${base_url}`;
   let searchParamsMustAppend = `?base_url=${base_url}`;
 
-  if(checkValidString(generic_callback)) {
+  if (checkValidString(generic_callback)) {
     returnConfig.generic_callback = generic_callback;
     searchParams += `&generic_callback=${generic_callback}`;
     searchParamsMustAppend += `&generic_callback=${generic_callback}`;
   }
 
-  if(checkValidString(redirect_url)) {
-    returnConfig.webAppUrl = decodeURIComponent(redirect_url).split('#')[0]+'#!/';
+  returnConfig.redirect_url = '';
+  if (checkValidString(redirect_url)) {
+    returnConfig.webAppParams = setWebAppParams(redirect_url);
+
+    returnConfig.webAppUrl = decodeURIComponent(redirect_url).split('#')[0] + '#!/';
     redirect_url = encodeURIComponent(redirect_url)
     returnConfig.redirect_url = redirect_url;
     searchParams += `&redirect_url=${redirect_url}`;
     searchParamsMustAppend += `&redirect_url=${redirect_url}`;
   }
 
-  if(checkValidString(partner_code)) {
+  if (checkValidString(partner_code)) {
     returnConfig.partner_code = partner_code;
     searchParams += `&partner_code=${partner_code}`;
     searchParamsMustAppend += `&partner_code=${partner_code}`;
   }
 
-  if(checkValidString(pc_urlsafe)) {
+  if (checkValidString(pc_urlsafe)) {
     returnConfig.pc_urlsafe = pc_urlsafe;
     searchParams += `&pc_urlsafe=${pc_urlsafe}`;
     searchParamsMustAppend += `&pc_urlsafe=${pc_urlsafe}`;
@@ -481,7 +498,7 @@ export const getConfig = () => {
       '&insurance_v2=' + insurance_v2;
     searchParamsMustAppend += '&insurance_v2=' + insurance_v2;
 
-    if(checkValidString(isJourney)) {
+    if (checkValidString(isJourney)) {
       searchParams += '&isJourney=' + isJourney;
       searchParamsMustAppend += '&isJourney=' + isJourney;
     }
@@ -544,6 +561,8 @@ export const getConfig = () => {
   returnConfig.base_url = base_url;
   returnConfig.searchParams = searchParams;
   returnConfig.searchParamsMustAppend = searchParamsMustAppend;
+
+  returnConfig.isWebCode = returnConfig.Web || returnConfig.redirect_url;
   return returnConfig;
 }
 
@@ -586,9 +605,9 @@ export function setHeights(data) {
   let stepHeight = (step) ? step.offsetHeight : 0;
 
   let body = document.getElementsByTagName('body') && document.getElementsByTagName('body')[0]
-   ? document.getElementsByTagName('body')[0].offsetHeight : 0;
+    ? document.getElementsByTagName('body')[0].offsetHeight : 0;
   let client = document.getElementsByClassName('ContainerWrapper') && document.getElementsByClassName('ContainerWrapper')[0]
-   ? document.getElementsByClassName('ContainerWrapper')[0].offsetHeight: 0;
+    ? document.getElementsByClassName('ContainerWrapper')[0].offsetHeight : 0;
   let foot = document.getElementsByClassName('Footer') && document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight : 0;
 
   let HeaderHeight = bannerHeight + stepHeight + head + 'px';

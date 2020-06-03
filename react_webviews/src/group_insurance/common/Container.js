@@ -6,7 +6,7 @@ import Footer from './footer';
 import Banner from '../../common/ui/Banner';
 import loader_fisdom from 'assets/loader_gif_fisdom.gif';
 import loader_myway from 'assets/loader_gif_myway.gif';
-import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback, openModule } from 'utils/native_callback';
 import Button from 'material-ui/Button';
 import Dialog, {
   DialogActions,
@@ -206,7 +206,7 @@ class Container extends Component {
         nativeCallback({ action: 'exit', events: this.getEvents('back') });
         break;
       case "/group-insurance/common/report":
-        this.openNativeModule('portfolio');
+        openModule('app/portfolio')
         // nativeCallback({ action: 'exit', events: this.getEvents('back') });
         break;
       case "/group-insurance/term/resume":
@@ -231,20 +231,6 @@ class Container extends Component {
           this.props.history.goBack();
         }
     }
-  }
-
-  openNativeModule(moduleName) {
-    let url = 'https://fis.do/m/module?action_type=native';
-    if(getConfig().productName === 'myway') {
-      url = 'https://w-ay.in/m/module?action_type=native';
-    }
-
-    url +=  '&native_module=' + encodeURIComponent('app/' + moduleName);
-    nativeCallback({
-      action: 'open_module', message: {
-        action_url: url
-      }
-    });
   }
 
   handleClose = () => {
