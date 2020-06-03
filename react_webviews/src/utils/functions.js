@@ -417,6 +417,7 @@ export const getConfig = () => {
   let { generic_callback } = main_query_params;
   let { redirect_url } = main_query_params;
   let { partner_code } = main_query_params;
+  let { app_version } = main_query_params;
   let { pc_urlsafe } = main_query_params;
 
   let project = 'insurance';
@@ -563,7 +564,45 @@ export const getConfig = () => {
   returnConfig.searchParamsMustAppend = searchParamsMustAppend;
 
   returnConfig.isWebCode = returnConfig.Web || returnConfig.redirect_url;
+
+  returnConfig.app_version = '';
+  if (checkValidString(app_version)) {
+    returnConfig.app_version = app_version;
+    searchParams += `&app_version=${app_version}`;
+    searchParamsMustAppend += `&app_version=${app_version}`;
+  }
+
   return returnConfig;
+}
+
+export function isFeatureEnabled(config, feature) {
+  let partner_code = config.code;
+  let app = config.app;
+  let app_version = config.app_version;
+
+  if(app === 'web') {
+    return true;
+  }
+
+  let mapper = {
+    'etli_download': {
+      'fisdom': {
+        'android': '201',
+        'ios': ''
+      },
+      'myway': {
+        'android': '201',
+        'ios': ''
+      }
+    }
+  }
+
+  if(mapper[feature] && mapper[feature][partner_code] && mapper[feature][partner_code][app] &&
+    mapper[feature][partner_code][app] === app_version) {
+    return true;
+  }
+
+  return false;
 }
 
 
