@@ -14,10 +14,10 @@ import Api from 'utils/api';
 import { maritalOptions, genderOptions } from '../../../constants';
 import {
   validateEmail, validateNumber, numberShouldStartWith,
-  validateEmpty, open_browser_web, openPdfCall
+  validateEmpty, open_browser_web
 } from 'utils/validators';
 import { getConfig } from 'utils/functions';
-import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback, openPdfCall } from 'utils/native_callback';
 import loader_fisdom from 'assets/loader_gif_fisdom.gif';
 import loader_myway from 'assets/loader_gif_myway.gif';
 import Modal from 'material-ui/Modal';

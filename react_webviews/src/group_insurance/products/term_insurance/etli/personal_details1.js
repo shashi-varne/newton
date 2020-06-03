@@ -12,12 +12,12 @@ import {
 } from './../../../constants';
 
 import {
-    isValidDate, validateAlphabets, IsFutureDate, openPdfCall, 
+    isValidDate, validateAlphabets, IsFutureDate, 
     calculateAge, validateLengthDynamic
 } from 'utils/validators';
 
 import etli_logo from 'assets/etli_logo2.svg';
-import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback, openPdfCall } from 'utils/native_callback';
 
 import TermsAndConditions from '../../../../common/ui/tnc';
 

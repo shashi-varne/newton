@@ -6,14 +6,14 @@ import toast from '../../../../common/ui/Toast';
 import Container from '../../../common/Container';
 import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
-import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback, openPdfCall } from 'utils/native_callback';
 import Input from '../../../../common/ui/Input';
 
 import male_icon from 'assets/male_icon.svg';
 import female_icon from 'assets/female_icon.svg';
 import text_error_icon from 'assets/text_error_icon.svg';
 import completed_step from 'assets/completed_step.svg';
-import { isValidDate, openPdfCall } from 'utils/validators';
+import { isValidDate } from 'utils/validators';
 import TermsAndConditions from '../../../../common/ui/tnc';
 
 class PersonalDetailsIntro extends Component {
