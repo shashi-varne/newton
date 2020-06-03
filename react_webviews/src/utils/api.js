@@ -5,7 +5,6 @@ import createBrowserHistory from 'history/createBrowserHistory';
 
 import { encrypt, decrypt } from './encryption';
 import { getConfig } from  'utils/functions'
-
 const myHistory = createBrowserHistory();
 let { base_url } = qs.parse(myHistory.location.search.slice(1));
 let redirect_url  = getConfig().redirect_url;
