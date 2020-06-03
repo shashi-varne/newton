@@ -659,6 +659,51 @@ input#pan {
   line-height: 1.6;
 }
 
+.common-top-page-subtitle-dark {
+  color: #102F50;
+  font-size: 16px;
+  font-weight: 500;
+  margin: -20px 0 20px 0;
+  line-height: 1.6;
+
+}
+
+.common-how-steps {
+  margin: 50px 0 40px 0;
+  border-top: 1px solid #ededed;
+  border-bottom: 1px solid #ededed;
+  padding: 20px 0 20px 0;
+
+  .top-tile {
+    display: flex;
+    justify-content: space-between;
+  }
+  .top-title {
+    color: #0a1c32;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .top-icon {
+    width: 14px;
+  }
+  .common-steps-images {
+    margin: 40px 0 0 0;
+  }
+}
+
+.common-steps-images  {
+  .content {
+    color: #767e86;
+    font-size: 13px;
+    margin: 0 0 0 20px;
+  }
+  .tile {
+    display: flex;
+    align-items: center;
+    margin: 20px 0 20px 0;
+  }
+}
+
 /* used in gold  */
 
 .FlexItem1-withProvider-footer {

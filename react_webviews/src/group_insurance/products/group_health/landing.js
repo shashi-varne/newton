@@ -5,6 +5,7 @@ import Container from '../../common/Container';
 // import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
+import {health_providers} from '../../constants';
 
 class GroupHealthLanding extends Component {
 
@@ -12,8 +13,15 @@ class GroupHealthLanding extends Component {
     super(props);
     this.state = {
     //   show_loader: true,
-      type: getConfig().productName
+      type: getConfig().productName,
+      provider: 'HDFC_ERGO'
     }
+  }
+
+  componentWillMount() {
+    this.setState({
+      providerData: health_providers[this.state.provider]
+    })
   }
 
 
@@ -48,13 +56,13 @@ class GroupHealthLanding extends Component {
 
   navigate = (pathname) => {
     this.props.history.push({
-      pathname: pathname,
+      pathname: this.state.provider + '/' + pathname,
       search: getConfig().searchParams
     });
   }
 
   handleClick = () => {
-
+    this.navigate('insure-type')
   }
 
 
@@ -81,12 +89,20 @@ class GroupHealthLanding extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
-        title="Insurance"
+        title={this.state.providerData.title}
         fullWidthButton={true}
         buttonTitle="Get insured"
         onlyButton={true}
         handleClick={() => this.handleClick()}
     >
+                <div className="common-top-page-subtitle-dark">
+                    {this.state.providerData.subtitle}
+                </div>
+
+                <div className="group-health-landing">
+                
+                  
+                </div>
       </Container>
     );
   }

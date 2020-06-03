@@ -524,6 +524,44 @@ input#pan {
   margin: -20px 0 20px 0;
   line-height: 1.6;
 }
+.common-top-page-subtitle-dark {
+  color: #102f50;
+  font-size: 16px;
+  font-weight: 500;
+  margin: -20px 0 20px 0;
+  line-height: 1.6;
+}
+.common-how-steps {
+  margin: 50px 0 40px 0;
+  border-top: 1px solid #ededed;
+  border-bottom: 1px solid #ededed;
+  padding: 20px 0 20px 0;
+}
+.common-how-steps .top-tile {
+  display: flex;
+  justify-content: space-between;
+}
+.common-how-steps .top-title {
+  color: #0a1c32;
+  font-size: 14px;
+  font-weight: 600;
+}
+.common-how-steps .top-icon {
+  width: 14px;
+}
+.common-how-steps .common-steps-images {
+  margin: 40px 0 0 0;
+}
+.common-steps-images .content {
+  color: #767e86;
+  font-size: 13px;
+  margin: 0 0 0 20px;
+}
+.common-steps-images .tile {
+  display: flex;
+  align-items: center;
+  margin: 20px 0 20px 0;
+}
 .FlexItem1-withProvider-footer {
   display: flex;
   align-items: center;

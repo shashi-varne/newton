@@ -82,14 +82,14 @@ class DeliveryIntro extends Component {
           directly in the form of gold coin.
                 </div>
 
-        <div className="gold-how-steps" style={{ border: 'none' }}>
+        <div className="common-how-steps" style={{ border: 'none' }}>
           <div className="top-tile">
             <div className="top-title">
               How to get gold coin delivered?
             </div>
           </div>
 
-          <div className='gold-steps-images'>
+          <div className='common-steps-images'>
             {stepsContentMapper.map(this.renderInfoSteps)}
           </div>
         </div>

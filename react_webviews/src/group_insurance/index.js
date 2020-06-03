@@ -131,7 +131,7 @@ import HomeInsuranceForm from './products/home_insurance/general/form';
 
 /*******************Group  Health ******************/
 import GroupHealthLanding from './products/group_health/landing';
-
+import GroupHealthSelectInsureType from './products/group_health/insure_type';
 // common
 
 import Report from './report';
@@ -290,6 +290,7 @@ const Insurance = (props) => {
 
           {/********** Group Health Insurance **********/}
           <Route path={`${url}/group-health/landing`} component={GroupHealthLanding} />
+          <Route path={`${url}/group-health/:provider/insure-type`} component={GroupHealthSelectInsureType} />
 
           {/* common */}
           <Route path={`${url}/common/report`} component={Report} />

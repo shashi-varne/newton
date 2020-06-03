@@ -533,3 +533,15 @@ export function getBhartiaxaStatusToState(policy) {
 
   return path;
 }
+
+export const health_providers = {
+  'HDFC_ERGO': {
+      key: 'HDFC_ERGO',
+      title: 'HDFC ERGO',
+      subtitle: 'my: health Suraksha',
+      logo: 'logo_mmtc.svg',
+      logo_card: 'hdfc_ergo_ic_logo_card',
+      logo_cta: 'hdfc_ergo_ic_logo_cta.svg',
+      logo_summary: 'hdfc_ergo_ic_logo_summary'
+  }
+}
