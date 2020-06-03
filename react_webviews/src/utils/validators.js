@@ -115,7 +115,7 @@ export function validateLengthNames(string, type, provider) {
 
 export function validateMinChar(string, length) {
   let nameSplit = string.replace(/ /g, "");
-  if(!length) {
+  if (!length) {
     length = 2;
   }
   if (nameSplit.length < length) {
@@ -225,7 +225,7 @@ export function formatGms(weight) {
   if (!weight) {
     return 'in gm ';
   } else {
-    return 'in gm ' + weight 
+    return 'in gm ' + weight
   }
 }
 
@@ -460,13 +460,13 @@ export function checkValidString(value) {
 }
 
 export function split2(str, delim) {
-  var parts=str.split(delim);
-  return [parts[0], parts.splice(1,parts.length).join(delim)];
+  var parts = str.split(delim);
+  return [parts[0], parts.splice(1, parts.length).join(delim)];
 }
 
 
 export function getUrlParams(url) {
-  if(!url) {
+  if (!url) {
     url = window.location.href;
   }
 
@@ -475,11 +475,11 @@ export function getUrlParams(url) {
   let main_query_params = qs.parse(data[1]);
 
   return main_query_params;
-  
+
 }
 
 export function checkStringInString(string_base, string_to_check) {
-  if(string_base.indexOf(string_to_check) >= 0) {
+  if (string_base.indexOf(string_to_check) >= 0) {
     return true;
   }
 
@@ -488,12 +488,12 @@ export function checkStringInString(string_base, string_to_check) {
 
 export function storageService() {
   var service = {
-      set: set,
-      get: get,
-      setObject: setObject,
-      getObject: getObject,
-      remove: remove,
-      clear: clear
+    set: set,
+    get: get,
+    setObject: setObject,
+    getObject: getObject,
+    remove: remove,
+    clear: clear
   };
   return service;
 
@@ -532,13 +532,13 @@ export function storageService() {
 }
 
 export function getIndexArray(array, value, objKey) {
-  for (var i=0; i < array.length; i++) {
-    if(objKey) {
-      if(array[i][objKey] === value) {
+  for (var i = 0; i < array.length; i++) {
+    if (objKey) {
+      if (array[i][objKey] === value) {
         return i;
       }
     } else {
-      if(array[i] === value) {
+      if (array[i] === value) {
         return i;
       }
     }
@@ -558,7 +558,7 @@ function formatAMPM(date) {
   var ampm = hours >= 12 ? 'PM' : 'AM';
   hours = hours % 12;
   hours = hours ? hours : 12; // the hour '0' should be '12'
-  minutes = minutes < 10 ? '0'+minutes : minutes;
+  minutes = minutes < 10 ? '0' + minutes : minutes;
   var strTime = hours + ':' + minutes + ' ' + ampm;
   return strTime;
 }
@@ -566,10 +566,10 @@ function formatAMPM(date) {
 export function formatDateAmPm(date) {
 
   let monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
   ];
 
-  if(!date) {
+  if (!date) {
     return '';
   }
 
@@ -589,15 +589,31 @@ export function formatDateAmPm(date) {
   let final_date = dom + ' ' + month + ', ' + time;
 
   return final_date;
-  
+
 }
 
 export function inrFormatTest(value) {
-  if(value === '') {
+  if (value === '') {
     return true;
   }
-  
+
   let rule = /^[0-9,]/;
 
   return rule.test(value);
+}
+
+export function calculateAge (birthday) {
+
+  if(!birthday) {
+    return 0;
+  }
+  birthday = birthday.replace(/\\-/g, '/').split('/').reverse().join('/');
+  var today = new Date();
+  var birthDate = new Date(birthday);
+  var age = today.getFullYear() - birthDate.getFullYear();
+  var m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age;
 }

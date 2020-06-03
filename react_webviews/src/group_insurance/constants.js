@@ -28,6 +28,17 @@ export const genderOptions = [
   }
 ];
 
+export const smokingOptions = [
+  {
+    'name': 'Yes',
+    'value': 'YES'
+  },
+  {
+    'name': 'No',
+    'value': 'NO'
+  }
+]
+
 export const relationshipOptions = [
   'BROTHER',
   'DAUGHTER',
@@ -454,6 +465,21 @@ export const quotePointsPorivders = {
       title: '',
       content: ''
     }
+  },
+  'EDELWEISS': {
+    basic_benefits: [
+      'Complete sum assured payable in case of death',
+      'Option to increase your sum assured regularly or at key life stages',
+      'Tax benefits on premium under 80C^'
+    ],
+    add_on_benefits: [
+      'Better half benefit option',
+      'Option of waiver of premium benefit is available in case of one of the covered critical illnesses'
+    ],
+    popup_info: {
+      title: '',
+      content: ''
+    }
   }
 };
 
@@ -485,10 +511,26 @@ export const back_button_mapper = {
   '/group-insurance/term/annual-income': '/group-insurance/term/personal-details-intro',
   '/group-insurance/term/personal-details-intro': '/group-insurance/term/intro',
   '/group-insurance/term/journey-intro': '/group-insurance/term/intro',
-  '/group-insurance/term/summary': '/group-insurance/term/journey'
+  '/group-insurance/term/summary': '/group-insurance/term/journey',
+  '/group-insurance/term/etli/personal-details3': '/group-insurance/term/etli/personal-details2',
+  '/group-insurance/term/etli/personal-details2': '/group-insurance/term/etli/personal-details1',
+  '/group-insurance/term/etli/personal-details1': '/group-insurance/term/intro',
+  '/group-insurance/term/personal-details-redirect' : '/group-insurance/term/intro',
+  '/group-insurance/term/intro' : '/group-insurance'
 };
 
 export const insuranceMaritalStatus = [
+  {
+    'name': 'Single',
+    'value': 'UNMARRIED'
+  },
+  {
+    'name': 'Married',
+    'value': 'MARRIED'
+  }
+]
+
+export const insuranceMaritalStatusEtli = [
   {
     'name': 'Single',
     'value': 'UNMARRIED'
