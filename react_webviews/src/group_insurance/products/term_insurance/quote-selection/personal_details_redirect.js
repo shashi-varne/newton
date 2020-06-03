@@ -17,12 +17,11 @@ import {
   validateEmpty, open_browser_web
 } from 'utils/validators';
 import { getConfig } from 'utils/functions';
-import { nativeCallback, openPdfCall } from 'utils/native_callback';
+import { nativeCallback } from 'utils/native_callback';
 import loader_fisdom from 'assets/loader_gif_fisdom.gif';
 import loader_myway from 'assets/loader_gif_myway.gif';
 import Modal from 'material-ui/Modal';
 import Typography from 'material-ui/Typography';
-import TermsAndConditions from '../../../../common/ui/tnc';
 
 class PersonalDetails1 extends Component {
   constructor(props) {
@@ -39,9 +38,7 @@ class PersonalDetails1 extends Component {
       provider: '',
       params: qs.parse(props.history.location.search.slice(1)),
       type: getConfig().productName,
-      loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom,
-      tnc: window.localStorage.getItem('term_ins_tnc'),
-      checked: true
+      loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
     }
   }
 
@@ -51,7 +48,7 @@ class PersonalDetails1 extends Component {
 
     let providerLogoMapper = {
       'KOTAK': {
-        'logo': kotak_logo,
+        'logo' : kotak_logo,
         'insurance_title': 'Kotak Life Insurance'
       }
     }
@@ -74,7 +71,7 @@ class PersonalDetails1 extends Component {
       });
 
       if (res.pfwresponse.status_code === 200) {
-        const { name, email, mobile_number } = res.pfwresponse.result.insurance_account;
+        const { name,  email, mobile_number} = res.pfwresponse.result.insurance_account;
         this.setState({
           name: name || '',
           email: email || '',
@@ -87,7 +84,7 @@ class PersonalDetails1 extends Component {
           || 'Something went wrong');
       }
 
-
+    
     } catch (err) {
       this.setState({
         show_loader: false
@@ -148,15 +145,15 @@ class PersonalDetails1 extends Component {
       this.setState({
         name_error: 'Enter valid full name'
       });
-    }
-
+    } 
+    
     if (this.state.email.length < 10 || !validateEmail(this.state.email)) {
       canSubmitForm = false;
       this.setState({
         email_error: 'Please enter valid email'
       });
-    }
-
+    } 
+    
     if (this.state.mobile_number.length !== 10 || !validateNumber(this.state.mobile_number)) {
       canSubmitForm = false;
       this.setState({
@@ -167,11 +164,11 @@ class PersonalDetails1 extends Component {
       this.setState({
         mobile_number_error: 'Please enter valid mobile no'
       });
-    }
-
+    } 
+    
     if (canSubmitForm) {
       try {
-        let openModalMessage = 'Redirecting to ' + this.state.insurance_title + ' portal';
+        let openModalMessage = 'Redirecting to ' + this.state.insurance_title +' portal';
         this.setState({ openModal: true, openModalMessage: openModalMessage });
 
         var kotakBody = {
@@ -184,11 +181,11 @@ class PersonalDetails1 extends Component {
         if (res.pfwresponse.status_code === 200) {
 
           var kotakUrl = res.pfwresponse.result.lead;
-          if (getConfig().app === 'web') {
-
-            this.setState({
+          if(getConfig().app === 'web') {
+            
+            this.setState({ 
               show_loader: false,
-              openModal: false,
+              openModal: false, 
               openModalMessage: ''
             });
 
@@ -209,20 +206,18 @@ class PersonalDetails1 extends Component {
                 show_top_bar: false,
                 back_text: "We suggest you to complete the application process for fast issuance of your insurance.Do you still want to exit the application process"
               },
-
+      
             });
             nativeCallback({ action: 'show_top_bar', message: { title: this.state.insurance_title } });
-
+            
             window.location.href = kotakUrl;
           }
-
+         
         } else {
-          this.setState({
-            show_loader: false, openModal: false,
-            openModalMessage: ''
-          });
-
-          toast(res.pfwresponse.result.error || 'Something went wrong');
+          this.setState({ show_loader: false,openModal: false, 
+            openModalMessage: '' });
+        
+          toast(res.pfwresponse.result.error ||  'Something went wrong');
         }
       } catch (err) {
         this.setState({
@@ -281,30 +276,11 @@ class PersonalDetails1 extends Component {
     );
   }
 
-  openInBrowser() {
-
-    this.sendEvents('tnc_clicked');
-    if (!getConfig().Web) {
-      this.setState({
-        show_loader: true
-      })
-    }
-
-    let data = {
-      url: this.state.tnc,
-      header_title: 'Terms & Conditions',
-      icon: 'close'
-    };
-
-    openPdfCall(data);
-  }
-
   render() {
     return (
       <Container
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
-        hide_header={this.state.show_loader}
         title="Personal Details"
         banner={true}
         bannerText={this.bannerText()}
@@ -357,7 +333,6 @@ class PersonalDetails1 extends Component {
               onChange={this.handleChange()} />
           </div>
         </FormControl>
-        <TermsAndConditions parent={this} />
         {this.renderModal()}
       </Container>
     );

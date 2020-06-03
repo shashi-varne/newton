@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
-// import provider from 'assets/provider.svg';
+import provider from 'assets/provider.svg';
 import expand from 'assets/expand_icn.png';
 import shrink from 'assets/shrink_icn.png';
 import download from 'assets/download.svg';
-import icn_call_fisdom from 'assets/icn_call_fisdom.svg';
-import icn_call_myway from 'assets/icn_call_myway.svg';
 
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
-import { numDifferentiation, inrFormatDecimal, getUrlParams } from '../../../utils/validators';
+import { numDifferentiation, inrFormatDecimal } from '../../../utils/validators';
 import { insuranceStateMapper } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 
@@ -26,9 +24,7 @@ class ReportDetails extends Component {
         }
       },
       show_loader: true,
-      noFooter: true,
-      icn_call: getConfig().productName !== 'fisdom' ? icn_call_myway : icn_call_fisdom,
-      params: getUrlParams()
+      noFooter: true
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -42,8 +38,7 @@ class ReportDetails extends Component {
 
     this.setState({
       lead_id: lead_id || '',
-      policy_id: policy_id || '',
-      provider: this.state.params.provider || 'BHARTIAXA'
+      policy_id: policy_id || ''
     })
 
   }
@@ -59,16 +54,14 @@ class ReportDetails extends Component {
 
     try {
 
-      let res = await Api.get('api/ins_service/api/insurance/' + (this.state.provider).toLowerCase() + 
-      '/policy/get/' + this.state.policy_id);
-      
+      let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/policy/get/' + this.state.policy_id)
+
       this.setState({
         show_loader: false
       })
       if (res.pfwresponse.status_code === 200) {
 
         var policyData = res.pfwresponse.result.lead;
-        policyData.provider = this.state.provider;
         let buttonTitle = 'Resume';
 
         let path = '';
@@ -169,56 +162,30 @@ class ReportDetails extends Component {
         fullWidthButton={true}
         buttonTitle={this.state.buttonTitle}
         onlyButton={true}
-        title={this.state.policyData.provider === 'EDELWEISS' ?  'Term insurance' : this.state.policyData.product_title}
+        title={this.state.policyData.product_title}
         showLoader={this.state.show_loader}
         classOverRideContainer="report-detail"
       >
         <div className="card">
           <div className="report-detail-header">
             <div className="report-detail-icon">
-              <img src={this.state.policyData.logo} alt="" />
+              <img src={provider} alt="" />
             </div>
             <div>
               <div className="report-detail-ins-name">{this.state.policyData.product_title}</div>
-              <div className="report-detail-status">Status: <span 
-              className={`${(this.state.policyData.status === 'init') ? 'yellow' : 
-                  ((this.state.policyData.status === 'policy_issued' || 
-                  (this.state.policyData.provider === 'EDELWEISS' && this.state.policyData.status === 'payment_done') )) ? 'green' : 'red'}`}>
-                    {
-                      (this.state.policyData.provider === 'EDELWEISS' && this.state.policyData.status === 'payment_done' ? 'Payment Done':
-                      this.state.policyData.status === 'init' ? 'Policy Pending' : 
-                      this.state.policyData.status === 'policy_issued' ? 'Policy Issued' : 'Policy Expired')
-                    }
-                </span>
-              </div>
+              <div className="report-detail-status">Status: <span className={`${(this.state.policyData.status === 'init') ? 'yellow' : (this.state.policyData.status === 'policy_issued') ? 'green' : 'red'}`}>{(this.state.policyData.status === 'init') ? 'Policy Pending' : (this.state.policyData.status === 'policy_issued' ? 'Policy Issued' : 'Policy Expired')}</span></div>
             </div>
           </div>
-          {this.state.policyData.provider !== 'EDELWEISS' && 
-            <div className="report-detail-summary">
-              <div className="report-detail-summary-item"><span>Policy:</span> {this.state.policyData.product_title}</div>
-              <div className="report-detail-summary-item"><span>Issuer:</span> {this.state.policyData.issuer}</div>
-              {this.state.policyData.status === 'policy_issued' &&
-                <div className="report-detail-summary-item"><span>Policy number:</span> {this.state.policyData.master_policy_number}</div>}
-              <div className="report-detail-summary-item"><span>Premium:</span> {inrFormatDecimal(this.state.policyData.premium)}/yr</div>
-              <div className="report-detail-summary-item"><span>Sum assured:</span> {numDifferentiation(this.state.policyData.sum_assured)}</div>
-              <div className="report-detail-summary-item"><span>Cover period:</span> {this.state.policyData.insured_details ? this.state.policyData.insured_details.product_coverage : ''} yr
-              ({this.state.policyData.policy_start_date} - {this.state.policyData.policy_end_date})</div>
-            </div>
-          }
-          {this.state.policyData.provider === 'EDELWEISS' && 
-            <div className="report-detail-summary">
-              <div className="report-detail-summary-item"><span>Transaction ID:</span> {this.state.policyData.transaction_id}</div>
-              <div className="report-detail-summary-item"><span>Transaction date:</span> {this.state.policyData.transaction_date}</div>
-            </div>
-          }
-          {this.state.policyData.provider === 'EDELWEISS' && 
-            <div style={{display: 'flex', alignItems: 'end', margin: '30px 0 0 0'}}>
-              <img src={this.state.icn_call} alt="" />
-              <div style={{color: '#4A4A4A', fontSize:13, fontWeight: 400, margin: '0 0 0 10px'}}>
-                Edelweiss team will call you to assist in policy issuance.
-              </div>
-            </div>
-          }
+          <div className="report-detail-summary">
+            <div className="report-detail-summary-item"><span>Policy:</span> {this.state.policyData.product_title}</div>
+            <div className="report-detail-summary-item"><span>Issuer:</span> {this.state.policyData.issuer}</div>
+            {this.state.policyData.status === 'policy_issued' &&
+              <div className="report-detail-summary-item"><span>Policy number:</span> {this.state.policyData.master_policy_number}</div>}
+            <div className="report-detail-summary-item"><span>Premium:</span> {inrFormatDecimal(this.state.policyData.premium)}/yr</div>
+            <div className="report-detail-summary-item"><span>Sum assured:</span> {numDifferentiation(this.state.policyData.sum_assured)}</div>
+            <div className="report-detail-summary-item"><span>Cover period:</span> {this.state.policyData.insured_details.product_coverage} yr
+            ({this.state.policyData.policy_start_date} - {this.state.policyData.policy_end_date})</div>
+          </div>
         </div>
         {this.state.policyData.status === 'policy_issued' &&
           <div onClick={() => this.openInBrowser(this.state.policyData.coi_blob_key)} className="report-detail-download">
