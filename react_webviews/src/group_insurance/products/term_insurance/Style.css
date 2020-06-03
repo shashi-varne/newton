@@ -287,20 +287,6 @@
   .annual-inc-dialog-button {
     /* margin: 0px -10px 0px -10px !important; */
   }
-
-  .quote-tiles-term .bottom-extra-info{
-    margin: 20px 10px 30px 10px;
-  }
-  .quote-tiles-term .bottom-extra-info .hash-info-tile {
-    display: flex;
-    color: #878787;
-    font-size: 12px;
-    font-weight: 400;
-    margin: 0 0 10px 0;
-  }
-  .quote-tiles-term .bottom-extra-info .left {
-      margin: 0 6px 0px 0;
-  }
   .annual-inc-dialog {
     font-size: 1rem;
       font-weight: 400;

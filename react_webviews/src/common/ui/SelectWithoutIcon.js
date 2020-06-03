@@ -32,12 +32,10 @@ class SelectGrp extends Component {
   };
 
   render() {
-    let dataType = this.props.dataType || '';
-
     const allOptions = this.state.options.map((option, i) => {
       return (
-        <MenuItem key={i} value={dataType === 'AOB' || this.props.isAOB ? option.value : option}>
-          {dataType === 'AOB' || this.props.isAOB ? option.name : option}
+        <MenuItem key={i} value={this.props.isAOB ? option.value: option}>
+          {this.props.isAOB ? option.name: option}
         </MenuItem>
       );
     });

@@ -31,7 +31,6 @@ class FinalReport extends Component {
 
   async componentDidMount() {
 
-    nativeCallback({ action: 'take_control_reset' });
     this.setState({
       dropdown_arrow: this.state.type !== 'fisdom' ? dropdown_arrow_myway : dropdown_arrow_fisdom,
       dropup_arrow: this.state.type !== 'fisdom' ? dropup_arrow_myway : dropup_arrow_fisdom

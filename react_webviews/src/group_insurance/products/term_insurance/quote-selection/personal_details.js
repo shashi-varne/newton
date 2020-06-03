@@ -6,7 +6,7 @@ import toast from '../../../../common/ui/Toast';
 import Container from '../../../common/Container';
 import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
-import { nativeCallback, openPdfCall } from 'utils/native_callback';
+import { nativeCallback } from 'utils/native_callback';
 import Input from '../../../../common/ui/Input';
 
 import male_icon from 'assets/male_icon.svg';
@@ -14,7 +14,6 @@ import female_icon from 'assets/female_icon.svg';
 import text_error_icon from 'assets/text_error_icon.svg';
 import completed_step from 'assets/completed_step.svg';
 import { isValidDate } from 'utils/validators';
-import TermsAndConditions from '../../../../common/ui/tnc';
 
 class PersonalDetailsIntro extends Component {
   constructor(props) {
@@ -27,14 +26,8 @@ class PersonalDetailsIntro extends Component {
       gender_error: '',
       dob: '',
       gender: '',
-      quoteData: quoteData,
-      tnc: window.localStorage.getItem('term_ins_tnc'),
-      checked: true
+      quoteData: quoteData
     }
-  }
-
-  componentWillMount() {
-    nativeCallback({ action: 'take_control_reset' });
   }
 
   async componentDidMount() {
@@ -213,24 +206,6 @@ class PersonalDetailsIntro extends Component {
     }
   }
 
-  openInBrowser() {
-
-    this.sendEvents('tnc_clicked');
-    if (!getConfig().Web) {
-        this.setState({
-            show_loader: true
-        })
-    } 
-
-    let data = {
-        url: this.state.tnc,
-        header_title: 'Terms & Conditions',
-        icon : 'close'
-    };
-
-    openPdfCall(data);
-}
-
   render() {
     let currentDate = new Date().toISOString().slice(0, 10);
     return (
@@ -248,7 +223,6 @@ class PersonalDetailsIntro extends Component {
         buttonTitle="Next"
         fullWidthButton={true}
         onlyButton={true}
-        hide_header={this.state.show_loader}
       >
         <FormControl fullWidth>
           <div className="InputField">
@@ -289,7 +263,6 @@ class PersonalDetailsIntro extends Component {
             </div>}
           </div>
         </FormControl>
-        {this.state.tnc && <TermsAndConditions parent={this} />}
       </Container>
     );
   }

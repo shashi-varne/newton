@@ -270,21 +270,6 @@ input.default-otp-input {
 .default-otp .content-auth {
   font-weight: 600;
 }
-
-
-.generic-terms {
-  /* padding: 0 15px; */
-  margin: 10px 0;
-}
-.generic-terms-text {
-  color: #24154c;
-   font-size: 14px;
-}
-.generic-terms-bold {
-   font-weight: 500;
-   cursor: pointer;
-   color: var(--primary);
-}
 .flex-center {
   display: flex;
   align-items: center;
@@ -330,11 +315,4 @@ input.default-otp-input {
 .MuiInput-underline.MuiInput-disabled:before {
   background-image: none !important;
   border-bottom: 1px solid #d3dbe4;
-}
-.hash-right {
-  color: #878787;
-  font-size: 12px;
-  font-weight: 400;
-  margin: -5px 0 0 0px;
-  position: absolute;
 }

@@ -496,7 +496,6 @@ class PersonalDetails1 extends Component {
         total={providerAsIpru(this.state.provider) ? 5 : 4}
         current={this.state.params.isKyc ? 2 : 1}
         handleClick={this.handleClick}
-        summarypage={true}
         edit={this.props.edit}
         buttonTitle="Save & Continue"
         logo={this.state.image}
