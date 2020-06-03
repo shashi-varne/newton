@@ -96,6 +96,11 @@ class Container extends Component {
 
   historyGoBack = () => {
 
+    if(this.props.forceBackState) {
+      this.navigate(this.props.forceBackState);
+      return;
+    }
+
     let project_child = getConfig().project_child;
     if (manageDialog('general-dialog', 'none', 'enableScroll')) {
       if (this.props.closePopup) {
@@ -381,12 +386,12 @@ class Container extends Component {
           {/* Loader Block */}
           {this.renderPageLoader()}
 
-          {steps && <div className={`Step ${(this.props.type !== 'fisdom') ? 'blue' : ''}`}>
+          {!this.props.showLoader && steps && <div className={`Step ${(this.props.type !== 'fisdom') ? 'blue' : ''}`}>
             {steps}
           </div>}
 
           {/* Banner Block */}
-          {this.props.banner && <Banner text={this.props.bannerText} />}
+          {!this.props.showLoader && this.props.banner && <Banner text={this.props.bannerText} />}
 
         </div>
 
