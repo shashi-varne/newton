@@ -23,10 +23,10 @@ class Report extends Component {
   }
 
 
-  navigate = (pathname) => {
+  navigate = (pathname, provider) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams,
+      search: getConfig().searchParams + '&provider=' + provider,
       params: {
         backToState: 'report'
       }
@@ -92,8 +92,9 @@ class Report extends Component {
     }
 
 
-    for (var i = 0; i < group_insurance_policies.length; i++) {
-      let policy = group_insurance_policies[i];
+    let ins_policies = group_insurance_policies.ins_policies || [];
+    for (var i = 0; i < ins_policies.length; i++) {
+      let policy = ins_policies[i];
       let obj = {
         status: policy.status,
         product_name: policy.product_title,
@@ -102,7 +103,32 @@ class Report extends Component {
         product_coverage: policy.insured_details.product_coverage,
         premium: policy.premium,
         key: 'BHARTIAXA',
+        provider: 'BHARTIAXA',
         id: policy.id
+      }
+
+      let data = this.statusMapper(obj);
+      obj.status = data.status;
+      obj.cssMapper = data.cssMapper;
+
+      reportData.push(obj);
+    }
+
+    // edelwisss
+
+    let edelweiss_ins = group_insurance_policies.edelweiss_ins || [];
+    for (var j = 0; j < edelweiss_ins.length; j++) {
+      let policy = edelweiss_ins[j];
+      let obj = {
+        status: policy.status,
+        product_name: 'Term insurance (Edelweiss tokio life zindagi plus)',
+        product_key: policy.provider,
+        cover_amount: policy.sum_assured,
+        premium: policy.premium,
+        key: policy.provider,
+        provider: policy.provider,
+        id: policy.policy_id,
+        transaction_id: policy.transaction_id,
       }
 
       let data = this.statusMapper(obj);
@@ -137,8 +163,7 @@ class Report extends Component {
           nextPage: (has_more) ? next_page : ''
         })
 
-        let ins_policies = policyData.group_insurance &&
-          policyData.group_insurance.ins_policies ? policyData.group_insurance.ins_policies : {};
+        let ins_policies = policyData.group_insurance || {};
 
         this.setReportData(policyData.term_insurance, ins_policies);
       } else {
@@ -160,6 +185,10 @@ class Report extends Component {
     window.removeEventListener("scroll", this.onScroll, false);
   }
 
+  componentWillMount() {
+    nativeCallback({ action: 'take_control_reset' });
+  }
+
   redirectCards(policy) {
     this.sendEvents('next', policy.key);
     let path = '';
@@ -171,7 +200,7 @@ class Report extends Component {
       path = '/group-insurance/common/reportdetails/' + policy.id;
     }
 
-    this.navigate(path);
+    this.navigate(path, policy.provider);
   }
 
   statusMapper(policy) {
@@ -183,6 +212,10 @@ class Report extends Component {
       'policy_issued': {
         color: 'green',
         disc: 'Policy Issued'
+      },
+      'complete': {
+        color: 'green',
+        disc: 'PAYMENT DONE'
       },
       'policy_expired': {
         color: 'red',
@@ -197,6 +230,7 @@ class Report extends Component {
         disc: 'Policy Cancelled'
       }
     }
+
 
     let obj = {}
     if (policy.key === 'TERM_INSURANCE') {
@@ -224,21 +258,27 @@ class Report extends Component {
           <div className="report-color-state-title">{(props.cssMapper.disc)}</div>
         </div>
         <div className="report-ins-name">{props.product_name}</div>
-        <div className="report-cover">
-          <div className="report-cover-amount"><span>Cover amount:</span> ₹{inrFormatDecimalWithoutIcon(props.cover_amount)}
-            {props.product_key === 'HOSPICASH' && <span style={{ fontWeight: 400 }}>/day</span>}
-          </div>
-          {props.product_key !== 'CORONA' &&
-            <div className="report-cover-amount"><span>Premium:</span> ₹{inrFormatDecimalWithoutIcon(props.premium)}
+        {props.product_key !== 'EDELWEISS' &&
+          <div className="report-cover">
+            <div className="report-cover-amount"><span>Cover amount:</span> ₹{inrFormatDecimalWithoutIcon(props.cover_amount)}
+              {props.product_key === 'HOSPICASH' && <span style={{ fontWeight: 400 }}>/day</span>}
+            </div>
+           {props.product_key !== 'CORONA' && <div className="report-cover-amount"><span>Premium:</span> ₹{inrFormatDecimalWithoutIcon(props.premium)}
               {props.key !== 'TERM_INSURANCE' &&
               <span>/yr</span>
               }
+            </div>}
+            {props.product_key === 'CORONA' &&
+              <div className="report-cover-amount"><span>Cover Peroid:</span> {props.product_coverage} year</div>
+            }
+          </div>
+        }
+        {props.product_key === 'EDELWEISS' &&
+          <div className="report-cover">
+            <div className="report-cover-amount"><span>Transaction ID:</span> {props.transaction_id}
             </div>
-          }
-          {props.product_key === 'CORONA' &&
-            <div className="report-cover-amount"><span>Cover Peroid:</span> {props.product_coverage} year</div>
-          }
-        </div>
+          </div>
+        }
       </div>
     )
   }
@@ -346,7 +386,7 @@ class Report extends Component {
       <Container
         noFooter={true}
         events={this.sendEvents('just_set_events')}
-        title="Insurance report"
+        title="Insurance Report"
         showLoader={this.state.show_loader}
         classOverRideContainer="report"
       >
