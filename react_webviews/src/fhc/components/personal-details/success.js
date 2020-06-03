@@ -1,17 +1,24 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
 import { getConfig } from 'utils/functions';
+import FHC from '../../FHCClass';
+import { storageService } from '../../../utils/validators';
 
 class Success extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: 'Karan',
+            name: '',
             productName: getConfig().productName,
         };
     }
 
     componentDidMount() {
+        let fhc_data = new FHC(storageService().getObject('fhc_data'));
+        this.setState({
+            show_loader: false,
+            name: fhc_data.name,
+        });
         setTimeout(() => {
             this.navigate('loan1');
         }, 2500);

@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
-import qs from 'qs';
 import toast from '../../../common/ui/Toast';
-
 import Container from '../../common/Container';
 import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
 import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import marital from 'assets/marital_status_dark_icn.png';
-import Api from 'utils/api';
+import { fetchFHCData } from '../../common/ApiCalls';
+import { storageService } from '../../../utils/validators';
 import FHC from '../../FHCClass';
 import { yesOrNoOptions, kidsOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
@@ -21,32 +20,26 @@ class PersonalDetails2 extends Component {
       show_loader: true,
       fhc_data: new FHC(),
       kidsOptions: kidsOptions,
-      params: qs.parse(this.props.location.search.slice(1)),
       type: getConfig().productName
     }
   }
 
   async componentDidMount() {
     try {
-      let fhc_data = JSON.parse(window.localStorage.getItem('fhc_data'));
+      let fhc_data = new FHC(storageService().getObject('fhc_data'));
       if (!fhc_data) {
-        const res = await Api.get('page/financialhealthcheck/edit/mine', {
-          format: 'json',
-        });
-        console.log('res', res);
-        fhc_data = res.pfwresponse.result;
+        fhc_data = await fetchFHCData();
+        storageService().setObject('fhc_data', fhc_data);
       }
-      fhc_data = new FHC(fhc_data);
       this.setState({
         show_loader: false,
         fhc_data,
       });
-
     } catch (err) {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong. Please try again');
+      toast(err);
     }
   }
 
@@ -117,7 +110,7 @@ class PersonalDetails2 extends Component {
     if (error) {
       this.setState({ fhc_data });
     } else {
-      window.localStorage.setItem('fhc_data', JSON.stringify(fhc_data));
+      storageService().setObject('fhc_data', fhc_data)
       this.navigate('personal3');
     }
   }

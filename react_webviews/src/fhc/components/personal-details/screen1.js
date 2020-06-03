@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
-import qs from 'qs';
 import toast from '../../../common/ui/Toast';
-import { formatDate } from '../../../utils/formatters';
+import { formatDate } from '../../../utils/validators';
 import Container from '../../common/Container';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import Input from '../../../common/ui/Input';
 import email from 'assets/email_dark_icn.png';
 import dob from 'assets/dob_dark_icn.png';
 import name from 'assets/full_name_dark_icn.png';
-import Api from 'utils/api';
 import FHC from '../../FHCClass';
+import { storageService } from '../../../utils/validators';
+import { fetchFHCData } from '../../common/ApiCalls';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 
@@ -20,22 +20,17 @@ class PersonalDetails1 extends Component {
     this.state = {
       show_loader: true,
       fhc_data: new FHC(),
-      params: qs.parse(this.props.location.search.slice(1)),
       type: getConfig().productName
     }
   }
 
   async componentDidMount() {
     try {
-      let fhc_data = JSON.parse(window.localStorage.getItem('fhc_data'));
+      let fhc_data = new FHC(storageService().getObject('fhc_data'));
       if (!fhc_data) {
-        const res = await Api.get('page/financialhealthcheck/edit/mine', {
-          format: 'json',
-        });
-        console.log('res', res);
-        fhc_data = res.pfwresponse.result;
+        fhc_data = await fetchFHCData();
+        storageService().setObject('fhc_data', fhc_data);
       }
-      fhc_data = new FHC(fhc_data);
       this.setState({
         show_loader: false,
         fhc_data,
@@ -48,7 +43,7 @@ class PersonalDetails1 extends Component {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong. Please try again');
+      toast(err);
     }
   }
 
@@ -87,7 +82,7 @@ class PersonalDetails1 extends Component {
     ) {
       this.setState({ fhc_data });
     } else {
-      window.localStorage.setItem('fhc_data', JSON.stringify(fhc_data));
+      storageService().setObject('fhc_data', fhc_data)
       this.navigate('personal2');
     }
   };

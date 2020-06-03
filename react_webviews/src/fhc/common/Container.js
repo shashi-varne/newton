@@ -10,7 +10,8 @@ import { nativeCallback } from 'utils/native_callback';
 import '../../utils/native_listner';
 import { getConfig, setHeights } from 'utils/functions';
 import PopUp from './PopUp';
-import Api from 'utils/api';
+import { storageService } from '../../utils/validators';
+import { uploadFHCData } from '../common/ApiCalls';
 import { toast } from 'react-toastify';
 import Button from 'material-ui/Button';
 import Dialog, {
@@ -102,14 +103,9 @@ class Container extends Component {
         this.navigate('loan4'); // to skip success screen
         break;
       default:
-        if (navigator.onLine) {
-          nativeCallback({ events: this.getEvents('back') });
-          this.props.history.goBack();
-        } else {
-          this.setState({
-            openDialog: true
-          });
-        }
+        this.setState({
+          openDialog: true
+        });
     }
   }
 
@@ -152,8 +148,8 @@ class Container extends Component {
       openPopup: false
     });
     try {
-      const fhc_data = JSON.parse(window.localStorage.fhc_data);
-      await Api.post('api/financialhealthcheck/mine', fhc_data);
+      const fhc_data = storageService().getObject('fhc_data');
+      await uploadFHCData(fhc_data);
     } catch (e) {
       console.log(e);
       toast('Could not save data. Please try again');
@@ -201,7 +197,7 @@ class Container extends Component {
     }
 
     return (
-      <div className={`ContainerWrapper ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`} >
+      <div className={`ContainerWrapper fhc-container ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`} >
         {/* Header Block */}
         <Header
           disableBack={this.props.disableBack}

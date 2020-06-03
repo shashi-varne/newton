@@ -6,8 +6,8 @@ import expand from 'assets/expand_icn.png';
 import shrink from 'assets/shrink_icn.png';
 import loader_fisdom from 'assets/loader_gif_fisdom.gif';
 import loader_myway from 'assets/loader_gif_myway.gif';
-import Api from 'utils/api';
-import qs from 'qs';
+import { fetchFHCData } from '../../common/ApiCalls';
+import { storageService } from '../../../utils/validators';
 import { formatAmount } from 'utils/validators';
 import { getConfig } from 'utils/functions';
 import FHC from '../../FHCClass';
@@ -35,31 +35,26 @@ class LoanSummary extends Component {
       fhc_data: new FHC(),
       accordianTab: 'house_loan',
       type: getConfig().productName,
-      params: qs.parse(props.history.location.search.slice(1)),
       loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
     }
   }
 
   async componentDidMount() {
     try {
-      let fhc_data = JSON.parse(window.localStorage.getItem('fhc_data'));
+      let fhc_data = new FHC(storageService().getObject('fhc_data'));
       if (!fhc_data) {
-        const res = await Api.get('page/financialhealthcheck/edit/mine', {
-          format: 'json',
-        });
-        fhc_data = res.pfwresponse.result;
+        fhc_data = await fetchFHCData();
+        storageService().setObject('fhc_data', fhc_data);
       }
-      fhc_data = new FHC(fhc_data);
       this.setState({
         show_loader: false,
         fhc_data,
       });
-
     } catch (err) {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong. Please try again');
+      toast(err);
     }
   }
 

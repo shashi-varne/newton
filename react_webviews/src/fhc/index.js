@@ -11,8 +11,7 @@ import { themeConfig } from 'utils/constants';
 import { ToastContainer } from 'react-toastify';
 
 import './common/Style.css';
-import "./components/Style.css";
-// import './products/term_insurance/Style.css';
+import "./components/Style.scss";
 import NotFound from '../common/components/NotFound';
 import Landing from './home/landing';
 import { create } from 'jss';
@@ -42,13 +41,6 @@ import InvestmentDetails3 from './components/investment-details/screen3';
 import InvestmentDetails4 from './components/investment-details/screen4';
 import InvestSuccess from './components/investment-details/success';
 import Report from './components/result/report';
-
-// import AdditionalInfo from './products/term_insurance/additional-info/hdfc';
-// import Summary from './products/term_insurance/insurance-summary/screen1';
-// import Journey from './products/term_insurance/insurance-summary/screen3';
-// import Resume from './products/term_insurance/insurance-summary/screen2';
-
-/***********************TERM INSURANCE END   **************/
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,

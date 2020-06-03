@@ -1,13 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import { FormControl } from 'material-ui/Form';
-import qs from 'qs';
 import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
 import Input from '../../../common/ui/Input';
 import { formatAmount, inrFormatTest } from 'utils/validators';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
-import Api from 'utils/api';
+import { fetchFHCData, uploadFHCData } from '../../common/ApiCalls';
+import { storageService } from '../../../utils/validators';
 import { yesOrNoOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
@@ -21,32 +21,27 @@ class InvestmentDetails4 extends Component {
       tax_investment: '',
       tax_investment_error: '',
       fhc_data: new FHC(),
-      params: qs.parse(this.props.location.search.slice(1)),
       type: getConfig().productName
     }
   }
 
   async componentDidMount() {
     try {
-      let fhc_data = JSON.parse(window.localStorage.getItem('fhc_data'));
+      let fhc_data = new FHC(storageService().getObject('fhc_data'));
       if (!fhc_data) {
-        const res = await Api.get('page/financialhealthcheck/edit/mine', {
-          format: 'json',
-        });
-        fhc_data = res.pfwresponse.result;
+        fhc_data = await fetchFHCData();
+        storageService().setObject('fhc_data', fhc_data);
       }
-      fhc_data = new FHC(fhc_data);
       this.setState({
         show_loader: false,
         fhc_data,
         tax_investment: !!Object.keys(fhc_data.tax_savings).length,
       });
-
     } catch (err) {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong. Please try again');
+      toast(err);
     }
   }
 
@@ -119,8 +114,15 @@ class InvestmentDetails4 extends Component {
     } else if (this.state.tax_investment && !fhc_data.isValidTaxes()) {
       this.setState({ fhc_data });
     } else {
-      window.localStorage.setItem('fhc_data', JSON.stringify(fhc_data));
-      this.navigate('invest-complete');
+      storageService().setObject('fhc_data', fhc_data);
+      this.setState({ show_loader: true });
+      try {
+        await uploadFHCData(fhc_data);
+        this.navigate('invest-complete');
+      } catch (err) {
+        toast(err);
+      }
+      this.setState({ show_loader: false });
     }
   }
 

@@ -3,7 +3,7 @@ import {
   validateConsecutiveChar, validateAlphabets,
 } from 'utils/validators';
 
-import { calculateAge } from 'utils/functions';
+import { calculateAge } from 'utils/validators';
 
 class FHC {
   name = '';

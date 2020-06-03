@@ -1,9 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
-import Api from 'utils/api';
+import { fetchFHCReport } from '../../common/ApiCalls';
 import { nativeCallback } from 'utils/native_callback';
-
 import { capitalize } from '../../../utils/validators';
 import { getConfig } from '../../../utils/functions';
 import PopUp from '../../common/PopUp';
@@ -21,22 +20,17 @@ class Report extends Component {
 
   async componentDidMount() {
     try {
-      const res = await Api.get('page/financialhealthcheck/view/mine', {
-        format: 'json',
-      });
-      let report = res.pfwresponse.result;
+      const report = await fetchFHCReport(); 
       this.setState({
         report,
         show_loader: false,
       });
-  
-      console.log(report);
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      console.log(err);
       this.setState({
         show_loader: false
       });
-      toast('Failed to fetch data. Please try again');
+      toast(err);
     }
   }
 

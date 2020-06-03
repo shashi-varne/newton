@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
-import qs from 'qs';
 import toast from '../../../common/ui/Toast';
-
 import Container from '../../common/Container';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
-import Api from 'utils/api';
+import { fetchFHCData } from '../../common/ApiCalls';
+import { storageService } from '../../../utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import FHC from '../../FHCClass';
@@ -32,31 +31,26 @@ class InvestmentDetails3 extends Component {
     this.state = {
       show_loader: true,
       fhc_data: new FHC(),
-      params: qs.parse(this.props.location.search.slice(1)),
       type: getConfig().productName
     }
   }
 
   async componentDidMount() {
     try {
-      let fhc_data = JSON.parse(window.localStorage.getItem('fhc_data'));
+      let fhc_data = new FHC(storageService().getObject('fhc_data'));
       if (!fhc_data) {
-        const res = await Api.get('page/financialhealthcheck/edit/mine', {
-          format: 'json',
-        });
-        fhc_data = res.pfwresponse.result;
+        fhc_data = await fetchFHCData();
+        storageService().setObject('fhc_data', fhc_data);
       }
-      fhc_data = new FHC(fhc_data);
       this.setState({
         show_loader: false,
         fhc_data,
       });
-
     } catch (err) {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong. Please try again');
+      toast(err);
     }
   }
 
@@ -103,7 +97,7 @@ class InvestmentDetails3 extends Component {
     // this.sendEvents('next');
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
     fhc_data.investments.map((inv, idx) => inv.rank = `${idx+1}`);
-    window.localStorage.setItem('fhc_data', JSON.stringify(fhc_data));
+    storageService().setObject('fhc_data', fhc_data)
     if (this.state.investment === 'yes') {
       this.navigate('/fhc/investment2');
     } else {

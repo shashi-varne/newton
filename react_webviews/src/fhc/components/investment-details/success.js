@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
 import { getConfig } from 'utils/functions';
-import Api from 'utils/api';
-import { toast } from 'react-toastify';
+import { storageService } from '../../../utils/validators';
+import FHC from '../../FHCClass';
 
 class InvestSuccess extends Component {
     constructor(props) {
@@ -10,26 +10,15 @@ class InvestSuccess extends Component {
         this.state = {
             show_loader: true,
             name: '',
-            fhc_data: '',
         };
     }
 
     async componentDidMount() {
-        let fhc_data = JSON.parse(window.localStorage.getItem('fhc_data'));
-        // Upload Data 
-        try {
-            if (fhc_data) {
-                await Api.post('api/financialhealthcheck/mine', fhc_data);
-            }
-            this.setState({
-                show_loader: false,
-                name: fhc_data.name,
-                fhc_data,
-            });
-        } catch (e) {
-            console.log(e);
-            toast('Something went wrong. Please try again');
-        }
+        let fhc_data = new FHC(storageService().getObject('fhc_data'));
+        this.setState({
+            show_loader: false,
+            name: fhc_data.name,
+        });
     }
 
     navigate(pathname, search) {

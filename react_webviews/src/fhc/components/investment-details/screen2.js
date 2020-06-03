@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
-import qs from 'qs';
 import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
-import Api from 'utils/api';
+import { fetchFHCData } from '../../common/ApiCalls';
+import { storageService } from '../../../utils/validators';
+
 import { investmentOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
@@ -20,7 +21,6 @@ class InvestmentDetails2 extends Component {
       investmentOpts: [],
       investment_error: '',
       fhc_data: new FHC(),
-      params: qs.parse(this.props.location.search.slice(1)),
       type: getConfig().productName
     }
   }
@@ -40,27 +40,22 @@ class InvestmentDetails2 extends Component {
 
   async componentDidMount() {
     try {
-      let fhc_data = JSON.parse(window.localStorage.getItem('fhc_data'));
+      let fhc_data = new FHC(storageService().getObject('fhc_data'));
       if (!fhc_data) {
-        const res = await Api.get('page/financialhealthcheck/edit/mine', {
-          format: 'json',
-        });
-        console.log('res', res);
-        fhc_data = res.pfwresponse.result;
+        fhc_data = await fetchFHCData();
+        storageService().setObject('fhc_data', fhc_data);
       }
-      fhc_data = new FHC(fhc_data);
       this.setState({
         show_loader: false,
         investmentOpts: this.initializeInvestOpts(fhc_data.investments),
         fhc_data,
       });
-
     } catch (err) {
       this.setState({
         show_loader: false
       });
       console.log(err);
-      toast('Something went wrong. Please try again');
+      toast(err);
     }
   }
 
@@ -107,13 +102,12 @@ class InvestmentDetails2 extends Component {
       });
     } else {
       fhc_data.investments = this.state.investmentOpts.filter(inv => inv.checked);
-      window.localStorage.setItem('fhc_data', JSON.stringify(fhc_data));
+      storageService().setObject('fhc_data', fhc_data)
       this.navigate('investment3');
     }
   }
 
   handleChange = (val, idx) => event => {
-    console.log(val, event.target.checked);
     let opts = [...this.state.investmentOpts];
     opts[idx].checked = event.target.checked;
     this.setState({ investmentOpts: opts });

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import fhc_img from 'assets/fisdom/fhc_landing.svg';
 import Container from '../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
@@ -8,7 +7,6 @@ class Landing extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            landingImg: fhc_img,
             productName: getConfig().productName,
         };
     }
@@ -52,7 +50,7 @@ class Landing extends Component {
                 >
                     <div className="landing-container">
                         <img
-                            src={require(`assets/${this.state.productName}/fhc_landing.svg`)}
+                            src={require(`assets/fisdom/fhc_landing.svg`)}
                             className="landing-img"
                             alt="Health Check Banner" />
                         <div className="landing-text">
