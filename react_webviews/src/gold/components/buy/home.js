@@ -74,7 +74,7 @@ class GoldBuyHome extends Component {
       openPriceChangedDialog: false,
       fetchLivePrice: true,
       productName: getConfig().productName,
-      maxAmount: 100000
+      maxAmount: 499999
     }
   }
 
@@ -224,11 +224,14 @@ class GoldBuyHome extends Component {
 
 
     let totalAmount = parseFloat(this.state.amount) + parseFloat(this.state.provider_info.gold_balance || 0);
-
     if(!this.state.user_info.pan_number && totalAmount > 100000) {
       this.sendEvents('next', {buy_above_1_lac: true});
-      this.navigate(this.state.provider + '/buy-pan');
-    } else if (!this.state.isRegistered) {
+     
+      // handlling through backend in place order component
+      // this.navigate(this.state.provider + '/buy-pan');
+    } 
+    
+    if (!this.state.isRegistered) {
       this.navigate(this.state.provider + '/gold-register');
       return;
     } else {

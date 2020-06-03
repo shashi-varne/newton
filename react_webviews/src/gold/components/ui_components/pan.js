@@ -225,10 +225,24 @@ class GoldPanDataClass extends Component {
 
 
             try {
-                const res = await Api.post('/api/kyc/v2/mine', options);
+                let res = {};
+                if(this.state.orderType === 'buy') {
+                    res = await Api.post('/api/gold/kyc/update/mine/' + this.state.provider, options);
+                } else {
+                    res = await Api.post('/api/kyc/v2/mine', options);
+                }
+                
 
+                let result = res.pfwresponse.result || {};
 
-                if (res.pfwresponse.status_code === 200) {
+                if(this.state.orderType === 'buy' && result.pan_needed) {
+                    this.setState({
+                        show_loader: false
+                    });
+
+                    toast(result.error || result.message ||
+                        'Something went wrong');
+                }   else if (res.pfwresponse.status_code === 200) {
 
                     if (this.state.orderType === 'buy' && this.state.isRegistered) {
                         this.props.parent.updateParent('proceedForOrder', true);
@@ -247,7 +261,7 @@ class GoldPanDataClass extends Component {
                         show_loader: false
                     });
 
-                    toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+                    toast(result.error || result.message ||
                         'Something went wrong');
 
                 }
