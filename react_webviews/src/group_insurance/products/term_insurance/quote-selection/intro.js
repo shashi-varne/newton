@@ -248,6 +248,9 @@ class Intro extends Component {
     if(props.quote_provider === 'HDFC') {
       return;
     }
+    if(!quotePointsPorivders[props.quote_provider]) {
+      return null;
+    }
     return (
       <div className="quote-tiles-term" key={index} >
         <div className="quote-tiles" style={{ margin: index !== 0 ? '20px 0 0 0' : '' }}>
