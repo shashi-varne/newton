@@ -576,7 +576,7 @@ export const getConfig = () => {
 }
 
 export function isFeatureEnabled(config, feature) {
-  let partner_code = config.code;
+  // let partner_code = config.code;
   let app = config.app;
   let app_version = config.app_version;
 
@@ -584,23 +584,27 @@ export function isFeatureEnabled(config, feature) {
     return true;
   }
 
-  let mapper = {
-    'etli_download': {
-      'fisdom': {
-        'android': '201',
-        'ios': ''
-      },
-      'myway': {
-        'android': '201',
-        'ios': ''
-      }
-    }
-  }
-
-  if(mapper[feature] && mapper[feature][partner_code] && mapper[feature][partner_code][app] &&
-    mapper[feature][partner_code][app] === app_version) {
+  if(feature === 'etli_download' && app === 'android' && app_version) {
     return true;
   }
+
+  // let mapper = {
+  //   'etli_download': {
+  //     'fisdom': {
+  //       'android': '201',
+  //       'ios': ''
+  //     },
+  //     'myway': {
+  //       'android': '98',
+  //       'ios': ''
+  //     }
+  //   }
+  // }
+
+  // if(mapper[feature] && mapper[feature][partner_code] && mapper[feature][partner_code][app] &&
+  //   mapper[feature][partner_code][app] === app_version) {
+  //   return true;
+  // }
 
   return false;
 }
