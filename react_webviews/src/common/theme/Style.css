@@ -552,15 +552,36 @@ input#pan {
 .common-how-steps .common-steps-images {
   margin: 40px 0 0 0;
 }
-.common-steps-images .content {
+.generic-page-title {
+  color: #0a1d32;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0 0 5px 0;
+}
+.generic-page-subtitle {
   color: #767e86;
   font-size: 13px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+.common-steps-images .content {
   margin: 0 0 0 20px;
 }
 .common-steps-images .tile {
   display: flex;
   align-items: center;
   margin: 20px 0 20px 0;
+}
+.common-steps-images .content-title {
+  color: #041d34;
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0 0 4px 0;
+}
+.common-steps-images .content-subtitle {
+  color: #747e87;
+  font-size: 13px;
+  font-weight: 400;
 }
 .FlexItem1-withProvider-footer {
   display: flex;

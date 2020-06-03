@@ -15,61 +15,61 @@
 }
 .plan-summary-heading {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+   align-items: center;
+   justify-content: space-between;
 }
 .plan-summary-heading-text {
   color: #160d2e;
-  font-size: 20px;
-  line-height: 28px;
-  font-weight: 500;
-  padding: 10px;
+   font-size: 20px;
+   line-height: 28px;
+   font-weight: 500;
+   padding: 10px;
 }
 .plan-summary-mid {
-  margin-top: 30px;
+  margin-top: 30px
 }
 .plan-summary-mid1:nth-child(even) {
   background: #fff;
 }
 .plan-summary-mid1 {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 15px;
-  background: #f8f8f8;
+   align-items: center;
+   justify-content: space-between;
+   padding: 15px;
+   background: #f8f8f8;
 }
 .plan-summary-mid1-bg {
   background: #f8f8f8;
 }
 .plan-summary-mid11 {
   color: #878787;
-  font-size: 14px;
+   font-size: 14px;
 }
 .plan-summary-mid12 {
   color: #4a4a4a;
-  font-size: 14px;
-  font-weight: 500;
+   font-size: 14px;
+   font-weight: 500;
 }
 .plan-summary-premium {
   background: #fff;
-  margin-top: 20px;
-  padding: 15px 15px;
+   margin-top: 20px;
+   padding: 15px 15px;
 }
 .plan-summary-premium-heading {
   color: #4a4a4a;
-  font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 10px;
+   font-size: 14px;
+   font-weight: 500;
+   margin-bottom: 10px;
 }
 .plan-summary-premium-list {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 0;
+   align-items: center;
+   justify-content: space-between;
+   padding: 10px 0;
 }
 .plan-summary-premium-list1 {
   color: #878787;
-  font-size: 13px;
+   font-size: 13px;
 }
 .plan-summary-premium-font {
   font-size: 14px;
@@ -97,33 +97,33 @@
 }
 .plan-success-heading-icon {
   text-align: center;
-  margin-bottom: 30px;
+   margin-bottom: 30px;
 }
 .plan-success-heading-title {
   color: #4a4a4a;
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 10px;
-  text-align: center;
+   font-size: 16px;
+   font-weight: 700;
+   margin-bottom: 10px;
+   text-align: center;
 }
 .plan-success-heading-subtitle {
   color: #878787;
-  font-size: 14px;
-  line-height: 22px;
+   font-size: 14px;
+   line-height: 22px;
 }
 .AccordionListIcon {
   position: relative;
-  top: 2px;
-  margin-right: 10px;
+   top: 2px;
+   margin-right: 10px;
 }
 .AccordionList1 {
   margin-right: 10;
 }
 .AccordionList {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  position: relative;
+   flex-direction: row;
+   align-items: center;
+   position: relative;
 }
 .AccordionDescription {
   font-weight: 400;
@@ -145,12 +145,12 @@
 }
 .plan-summary-accordion {
   margin-top: 10;
-  margin-bottom: 30;
+   margin-bottom: 30;
 }
 .AccordionBodyItem {
   color: #878787;
-  font-size: 14px;
-  font-weight: 400;
+   font-size: 14px;
+   font-weight: 400;
 }
 .AccordionBodyItemBold {
   font-weight: 500;
@@ -168,36 +168,35 @@
   color: #878787;
 }
 .payment-failed-icon {
-  text-align: center;
-  margin-bottom: 30px;
+  text-align: center; margin-bottom: 30px;
 }
 .payment-failed-title {
   color: #160d2e;
-  font-size: 14px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  text-align: center;
+   font-size: 14px;
+   font-weight: 700;
+   margin-bottom: 20px;
+   text-align: center;
 }
 .payment-failed-subtitle {
   color: #878787;
-  font-size: 14px;
-  line-height: 22px;
-  text-align: center;
+   font-size: 14px;
+   line-height: 22px;
+   text-align: center;
 }
 .basic-details-heading {
   color: #160d2e;
-  font-size: 16px;
-  line-height: 20px;
-  font-weight: 500;
-  margin-bottom: 10px;
+   font-size: 16px;
+   line-height: 20px;
+   font-weight: 500;
+   margin-bottom: 10px;
 }
 .basic-details-subtitle {
   color: #878787;
-  font-size: 13px;
+   font-size: 13px;
 }
 .checkbox-text {
   color: #a2a2a2;
-  font-size: 14px;
+   font-size: 14px;
 }
 .bottom-info {
   background: var(--highlight);
@@ -209,27 +208,27 @@
 }
 .payment-success-heading {
   display: flex;
-  align-items: center;
-  padding: 20px 10px;
+   align-items: center;
+   padding: 20px 10px;
 }
 .payment-success-icon {
   margin-right: 15px;
 }
 .payment-success-title {
   color: #160d2e;
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 10px;
+   font-size: 16px;
+   font-weight: 700;
+   margin-bottom: 10px;
 }
 .payment-success-subtitle {
   color: #a2a2a2;
-  font-size: 14px;
-  line-height: 20px;
+   font-size: 14px;
+   line-height: 20px;
 }
 .payment-success-divider {
   height: 2px;
-  background: #eaeaea;
-  width: 100%;
+   background: #eaeaea;
+   width: 100%;
 }
 .cover-details-item {
   display: flex;
@@ -277,28 +276,29 @@
 }
 .accident-plan-heading-container {
   margin-top: 10px;
-  margin-bottom: 30px;
-  padding: 0 15px;
+   margin-bottom: 30px;
+   padding: 0 15px;
 }
 .accident-plan-heading {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
+   align-items: center;
+   justify-content: space-between;
+   margin-bottom: 10px;
 }
 .accident-plan-title {
   color: #160d2e;
-  font-size: 20px;
-  line-height: 28px;
-  font-weight: 500;
+   font-size: 20px;
+   line-height: 28px;
+   font-weight: 500;
 }
 .accident-plan-subtitle {
   color: #24154c;
-  font-size: 14px;
-  line-height: 22px;
+   font-size: 14px;
+   line-height: 22px;
 }
 .accident-plans {
   background: #f4f3f6;
+  /* padding-top: 20px; */
 }
 .accident-plan-list-container {
   overflow-x: auto;
@@ -311,8 +311,8 @@
 }
 .accident-plan-heading {
   color: #160d2e;
-  font-size: 16px;
-  font-weight: 500;
+   font-size: 16px;
+   font-weight: 500;
 }
 .accident-plan-list {
   display: flex;
@@ -337,8 +337,9 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
+
 .accident-plan-list .card-top-info {
-  background: #ede9f5;
+  background: rgb(237, 233, 245);
   color: #4a4a4a;
   font-size: 8px;
   padding: 5px;
@@ -349,41 +350,42 @@
   text-transform: lowercase;
   letter-spacing: 0.1px;
 }
+
 .accident-plan-item {
   background: #fff;
-  border-radius: 5px;
-  padding: 15px;
-  min-width: 100px;
-  box-shadow: 0px 2px 6px 0px rgba(102, 120, 121, 0.25);
-  margin-right: 20px;
-  position: relative;
-  border: 2px solid #fff;
-  cursor: pointer;
+   border-radius: 5px;
+   padding: 15px;
+   min-width: 100px;
+   box-shadow: 0px 2px 6px 0px rgba(102, 120, 121,0.25);
+   margin-right: 20px;
+   position: relative;
+   border: 2px solid #fff;
+   cursor: pointer;
 }
 .accident-plan-item1 {
   color: #6f6f6f;
-  font-size: 10px;
-  line-height: 16px;
-  margin-bottom: 5px;
-  margin-top: 15px;
+   font-size: 10px;
+   line-height: 16px;
+   margin-bottom: 5px;
+   margin-top: 15px;
 }
 .accident-plan-item2 {
   color: #160d2e;
-  font-size: 14px;
+   font-size: 14px;
 }
 .accident-plan-item3 {
   margin-top: 30px;
-  display: flex;
-  align-items: center;
+   display: flex;
+   align-items: center;
 }
 .accident-plan-item4 {
   color: #6f6f6f;
-  font-size: 10px;
-  margin-right: 6px;
+   font-size: 10px;
+   margin-right: 6px;
 }
 .accident-plan-benefit {
-  font-size: 10px;
-  margin-top: 10px;
+   font-size: 10px;
+   margin-top: 10px;
 }
 .round-visible-button {
   color: var(--secondary);
@@ -397,35 +399,35 @@
 }
 .accident-plan-claim {
   margin: 15px 0;
-  display: flex;
-  align-items: flex-start;
-  padding: 0 15px;
+   display: flex;
+   align-items: flex-start;
+   padding: 0 15px;
 }
 .accident-plan-claim-icon {
   margin-right: 10px;
 }
 .accident-plan-claim-title {
   color: #160d2e;
-  font-size: 14px;
-  margin-bottom: 10px;
-  font-weight: 500;
+   font-size: 14px;
+   margin-bottom: 10px;
+   font-weight: 500;
 }
 .accident-plan-claim-subtitle {
   color: #6d7278;
-  font-size: 14px;
+   font-size: 14px;
 }
 .accident-plan-read {
   margin-top: 30px;
-  display: flex;
-  align-items: center;
-  padding: 0 15px;
-  cursor: pointer;
+   display: flex;
+   align-items: center;
+   padding: 0 15px;
+   cursor: pointer;
 }
 .accident-plan-read-icon {
   margin-right: 10px;
 }
 .accident-plan-read-text {
-  font-size: 14px;
+   font-size: 14px;
 }
 .accident-plan-terms {
   padding: 0 15px;
@@ -433,11 +435,11 @@
 }
 .accident-plan-terms-text {
   color: #24154c;
-  font-size: 14px;
+   font-size: 14px;
 }
 .accident-plan-terms-bold {
-  font-weight: 500;
-  cursor: pointer;
+   font-weight: 500;
+   cursor: pointer;
 }
 .card {
   box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
@@ -448,7 +450,7 @@
 .report-color-state {
   margin-bottom: 15px;
   display: flex;
-  align-items: center;
+  align-items: center;  
 }
 .report-color-state-title {
   font-size: 10px;
@@ -480,7 +482,7 @@
   color: #f7b500;
 }
 .yellow .circle {
-  background: #f7b500;
+  background: #f7b500; 
 }
 .report-ins-name {
   color: #160d2e;
@@ -541,7 +543,7 @@
   cursor: pointer;
 }
 .report-detail-download img {
-  margin-right: 10px;
+  margin-right:10px;
 }
 .report-detail-download-text {
   color: var(--secondary);
@@ -551,8 +553,12 @@
 .report-detail .Accordion:last-child {
   border-bottom: 0;
 }
-.group-health-landing .family-images {
-  display: flex;
-  justify-content: space-between;
-  margin: 30px 0 0 0;
+
+.group-health-landing {
+  .family-images {
+    display: flex;
+      justify-content: space-between;
+      margin: 30px 0 0 0;
+  }
+  
 }

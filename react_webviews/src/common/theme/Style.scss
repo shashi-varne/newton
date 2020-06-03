@@ -691,16 +691,42 @@ input#pan {
   }
 }
 
+.generic-page-title {
+  color: #0A1D32;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0 0 5px 0;
+}
+
+.generic-page-subtitle {
+    color: #767E86;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.6;
+}
+
 .common-steps-images  {
   .content {
-    color: #767e86;
-    font-size: 13px;
+    // color: #767e86;
+    // font-size: 13px;
     margin: 0 0 0 20px;
   }
   .tile {
     display: flex;
     align-items: center;
     margin: 20px 0 20px 0;
+  }
+  .content-title {
+    color: #041D34;
+    font-size: 14px;
+    font-weight: 400;
+    margin: 0 0 4px 0;
+  }
+
+  .content-subtitle {
+      color: #747E87;
+      font-size: 13px;
+      font-weight: 400;
   }
 }
 

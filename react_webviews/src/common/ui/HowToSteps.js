@@ -1,0 +1,56 @@
+import React, { Component } from 'react';
+import './style.css';
+import { getConfig } from 'utils/functions';
+
+class HowToStepsClass extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      baseData: this.props.baseData,
+      productName: getConfig().type
+    };
+  }
+
+  renderList = (option, index) => {
+    return (
+      <div key={index} className="tile">
+        <img className="icon"
+          src={require(`assets/${this.state.productName}/${option.icon}.svg`)} alt="Gold" />
+        <div className="content">
+          {this.state.baseData.show_index && <span> {index + 1}. </span>}
+          <div className="content">
+            {option.title && <div className="content-title">{option.title}</div>}
+            {option.subtitle && <div className="content-subtitle">{option.subtitle}</div>}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  render() {
+
+    return (
+
+      <div className="common-how-steps" style={{ border: 'none' }}>
+        <div className="top-tile">
+          <div className="top-title">
+            {this.state.baseData.title}
+        </div>
+        </div>
+
+        <div className='common-steps-images'>
+          {this.state.baseData.options.map(this.renderList)}
+        </div>
+      </div>
+
+    );
+
+  }
+}
+
+const HowToSteps = (props) => (
+  <HowToStepsClass
+    {...props} />
+);
+
+export default HowToSteps;
