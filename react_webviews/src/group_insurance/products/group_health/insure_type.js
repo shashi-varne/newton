@@ -3,7 +3,29 @@ import Container from '../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import {health_providers} from '../../constants';
+import { health_providers } from '../../constants';
+import BottomInfo from '../../../common/ui/BottomInfo';
+import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
+import { storageService } from 'utils/validators';
+
+const account_type_options = [
+  {
+    'name': 'Self',
+    'value': 'self'
+  },
+  {
+    'name': 'Family members',
+    'value': 'family'
+  },
+  {
+    'name': 'Self & family members',
+    'value': 'selfandfamily'
+  },
+  {
+    'name': 'Parents',
+    'value': 'parents'
+  }
+];
 
 class GroupHealthSelectInsureType extends Component {
 
@@ -11,7 +33,8 @@ class GroupHealthSelectInsureType extends Component {
     super(props);
     this.state = {
       type: getConfig().productName,
-      provider: 'HDFC_ERGO'
+      provider: this.props.match.params.provider,
+      groupHealthPlanData: storageService().getObject('groupHealthPlanData')|| {},
     }
   }
 
@@ -24,7 +47,7 @@ class GroupHealthSelectInsureType extends Component {
 
   async componentDidMount() {
 
-   
+
   }
 
   navigate = (pathname) => {
@@ -36,6 +59,11 @@ class GroupHealthSelectInsureType extends Component {
 
   handleClick = () => {
 
+    let groupHealthPlanData = this.state.groupHealthPlanData;
+    console.log(groupHealthPlanData);
+    groupHealthPlanData.account_type = this.state.account_type;
+    storageService().setObject('groupHealthPlanData',groupHealthPlanData );
+    this.navigate('plan-dob');
   }
 
 
@@ -55,6 +83,14 @@ class GroupHealthSelectInsureType extends Component {
     }
   }
 
+  handleChangeRadio = name => event => {
+    this.setState({
+      [name]: account_type_options[event].value,
+      [name + '_error']: ''
+    })
+
+  };
+
   render() {
 
 
@@ -62,12 +98,27 @@ class GroupHealthSelectInsureType extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
-        title="Insurance"
+        title="Whom do you want to insure? "
         fullWidthButton={true}
-        buttonTitle="Get insured"
+        buttonTitle="CONTINUE"
         onlyButton={true}
         handleClick={() => this.handleClick()}
-    >
+      >
+
+        <div className="InputField">
+          <RadioWithoutIcon
+            width="40"
+            label=""
+            class="Gender:"
+            options={account_type_options}
+            id="account_type"
+            name="account_type"
+            error={(this.state.account_type_error) ? true : false}
+            helperText={this.state.account_type_error}
+            value={this.state.account_type || ''}
+            onChange={this.handleChangeRadio('account_type')} />
+        </div>
+        <BottomInfo baseData={{ 'content': 'Trusted by 1 crore+ families' }} />
       </Container>
     );
   }
