@@ -588,7 +588,7 @@ export function isFeatureEnabled(config, feature) {
     return true;
   }
 
-  if(feature === 'etli_download' && app === 'android' && app_version) {
+  if(feature === 'etli_download' && app === 'android' && parseInt(app_version) >= 999) {
     return true;
   }
 
