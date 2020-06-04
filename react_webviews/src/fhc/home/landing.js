@@ -12,18 +12,20 @@ class Landing extends Component {
         };
         this.navigate = navigate.bind(this);
     }
+
     startFHC() {
         this.sendEvents('next');
         this.navigate('/fhc/personal1');
     }
 
     sendEvents(user_action) {
+        let { params } = this.props.location;
         let eventObj = {
             "event_name": 'fhc',
             "properties": {
                 "user_action": user_action,
                 "screen_name": 'fhc',
-                "source": '',
+                "source": (params || {}).refresh ? 'refresh' : 'invest_home',
             }
         };
 
@@ -43,7 +45,7 @@ class Landing extends Component {
                 >
                     <div className="landing-container">
                         <img
-                            src={require(`assets/fisdom/fhc_landing.svg`)}
+                            src={require(`assets/fhc_landing.svg`)}
                             className="landing-img"
                             alt="Health Check Banner" />
                         <div className="landing-text">

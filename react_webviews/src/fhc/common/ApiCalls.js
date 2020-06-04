@@ -26,6 +26,7 @@ export const uploadFHCData = async (fhc_data) => {
     if (status !== 200) {
       throw (result.error || result.message || 'Something went wrong. Please try again');
     }
+    return result;
   } catch (e) {
     throw e;
   }

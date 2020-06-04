@@ -2,8 +2,8 @@ import React, { Component, Fragment } from 'react';
 import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import { fetchFHCReport } from '../../common/ApiCalls';
-import { nativeCallback } from 'utils/native_callback';
-import { capitalize } from '../../../utils/validators';
+import { nativeCallback, openModule } from 'utils/native_callback';
+import { capitalize, storageService } from '../../../utils/validators';
 import PopUp from '../../common/PopUp';
 import { navigate } from '../../common/commonFunctions';
 
@@ -35,14 +35,13 @@ class Report extends Component {
     }
   }
 
-  
-
-  sendEvents = (user_action) => {
+  sendEvents = (user_action, flow, screen_name = 'fhc result') => {
     let eventObj = {
       "event_name": 'fhc',
       "properties": {
-        "user_action": user_action,
-        "screen_name": 'check results',
+        screen_name,
+        user_action,
+        flow,
       }
     };
 
@@ -54,13 +53,16 @@ class Report extends Component {
   }
 
   handleClose = () => {
+    this.sendEvents('no', null, 'refresh');
     this.setState({
       openPopup: false,
     });
   }
 
   handleOpen = () => {
-    this.navigate('/fhc');
+    this.sendEvents('yes', null, 'refresh');
+    this.sendEvents('next', 'refresh');
+    this.navigate('/fhc', { refresh: true });
   }
 
   restartFHC = () => {
@@ -68,14 +70,25 @@ class Report extends Component {
       openPopup: true,
       popupText: <Fragment>
         Are you sure you want to <b>restart the FHC</b>?
-        <br />We will save your information securely.`
+        <br />We will save your information securely.
       </Fragment>,
     });
+  }
+
+  redirectToCTA = (cta_path) => {
+    storageService().remove('fhc_data'); // remove cached fhc data
+    this.sendEvents('next', 'invest');
+    if (cta_path === 'invest/term_insurance') {
+      this.navigate('/group-insurance/term/intro');
+    } else {
+      openModule(cta_path);
+    }
   }
 
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Fin Health Check (FHC)"
         count={false}
@@ -95,7 +108,13 @@ class Report extends Component {
             'mediclaim',
             'dependents',
             'savings'
-          ].map((type, i) => <Card key={i} report={this.state.report[type] || {}}></Card>)
+          ].map((type, i) => (
+            <Card
+              key={i}
+              report={this.state.report[type] || {}}
+              ctaRedirect={this.redirectToCTA}
+            ></Card>
+          ))
         }
       <PopUp
         openPopup={this.state.openPopup}
@@ -109,7 +128,7 @@ class Report extends Component {
   }
 }
 
-function Card({ report }) {
+function Card({ report, ctaRedirect }) {
   if (!Object.keys(report).length) return '';
   let steps = [];
   
@@ -129,7 +148,11 @@ function Card({ report }) {
 
   let cta_button = '';
   if (report.cta_title) { // show cta button only if title exists
-    cta_button = <button className="card-report-cta_btn">{report.cta_title}</button>
+    cta_button = 
+      <button
+        className="card-report-cta_btn"
+        onClick={() => ctaRedirect(report.CTA)}
+      >{report.cta_title}</button>
   }
   
   const summary = report.summary.split(' ').map(capitalize).join(' '); // Capitalize summary words

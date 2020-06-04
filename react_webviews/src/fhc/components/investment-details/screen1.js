@@ -88,8 +88,13 @@ class InvestmentDetails1 extends Component {
       if (this.state.has_investment) {
         this.navigate('/fhc/investment2');
       } else {
-        //skip to screen 3 if user selects 'No' for investments
-        this.navigate('/fhc/investment4');
+        const showTaxSaving = storageService().get('enable_tax_saving');
+        // skip to screen 4 if user selects 'No' for investments and enable_tax_saving = true
+        if (showTaxSaving === 'true') {
+          this.navigate('investment4');
+        } else {
+          this.navigate('invest-complete');
+        }
       }
     }
   }

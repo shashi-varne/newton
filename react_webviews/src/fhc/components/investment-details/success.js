@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
 import { navigate } from '../../common/commonFunctions';
-import { getConfig } from 'utils/functions';
 import { storageService } from '../../../utils/validators';
 import FHC from '../../FHCClass';
+import { nativeCallback } from 'utils/native_callback';
 
 class InvestSuccess extends Component {
     constructor(props) {
@@ -23,13 +23,35 @@ class InvestSuccess extends Component {
         });
     }
 
+    sendEvents = (user_action) => {
+        let eventObj = {
+            "event_name": 'fhc',
+            "properties": {
+                "user_action": user_action,
+                "screen_name": 'fhc result',
+            }
+        };
+
+        if (user_action === 'just_set_events') {
+            return eventObj;
+        } else {
+            nativeCallback({ events: eventObj });
+        }
+    }
+
+    handleClick = () => {
+        this.sendEvents('next');
+        this.navigate('final-report');
+    }
+
     render() {
         let { name } = this.state;
         return (
             <Container
+                events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
                 buttonTitle="Check Results"
-                handleClick={() => this.navigate('final-report')}
+                handleClick={this.handleClick}
                 title="Fin Health Check (FHC)"
             >
                 <div className="landing-container">

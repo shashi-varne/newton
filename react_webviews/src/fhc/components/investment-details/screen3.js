@@ -92,11 +92,12 @@ class InvestmentDetails3 extends Component {
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
     fhc_data.investments.map((inv, idx) => inv.rank = `${idx+1}`);
     storageService().setObject('fhc_data', fhc_data)
-    if (this.state.investment === 'yes') {
-      this.navigate('/fhc/investment2');
+    const showTaxSaving = storageService().get('enable_tax_saving');
+    // skip to screen 4 if user selects 'No' for investments and enable_tax_saving = true
+    if (showTaxSaving === 'true') {
+      this.navigate('investment4');
     } else {
-      //skip to screen 3 if user selects 'No' for investments
-      this.navigate('/fhc/investment4');
+      this.navigate('invest-complete');
     }
   }
 

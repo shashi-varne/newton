@@ -96,8 +96,18 @@ class InvestmentDetails2 extends Component {
       });
     } else {
       fhc_data.investments = this.state.investmentOpts.filter(inv => inv.checked);
-      storageService().setObject('fhc_data', fhc_data)
-      this.navigate('investment3');
+      storageService().setObject('fhc_data', fhc_data);
+      if (fhc_data.investments.length <= 1) {
+        const showTaxSaving = storageService().get('enable_tax_saving');
+        
+        if (showTaxSaving === 'true') {
+          this.navigate('investment4');
+        } else {
+          this.navigate('invest-complete');
+        }
+      } else {
+        this.navigate('investment3');
+      }
     }
   }
 

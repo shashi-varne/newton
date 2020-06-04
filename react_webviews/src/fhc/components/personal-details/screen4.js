@@ -7,7 +7,7 @@ import income from 'assets/annual_income_dark_icn.png';
 import Input from '../../../common/ui/Input';
 import { formatAmount, inrFormatTest } from 'utils/validators';
 import FHC from '../../FHCClass';
-import { fetchFHCData } from '../../common/ApiCalls';
+import { fetchFHCData, uploadFHCData } from '../../common/ApiCalls';
 import { storageService } from '../../../utils/validators';
 
 import { nativeCallback } from 'utils/native_callback';
@@ -94,14 +94,20 @@ class PersonalDetails4 extends Component {
     }
   }
 
-  handleClick = () => {
+  handleClick = async () => {
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
 
     if (!fhc_data.isValidSalaryInfo()) {
       this.setState({ fhc_data });
     } else {
       storageService().setObject('fhc_data', fhc_data)
-      this.navigate('personal-complete')
+      try {
+        const result = await uploadFHCData(fhc_data);
+        storageService().setObject('enable_tax_saving', result.enable_tax_saving);
+        this.navigate('personal-complete')
+      } catch (err) {
+        toast(err);
+      }
     }
   }
 
