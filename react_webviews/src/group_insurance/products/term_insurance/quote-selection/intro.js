@@ -4,7 +4,7 @@ import qs from 'qs';
 import toast from '../../../../common/ui/Toast';
 import Container from '../../../common/Container';
 import Api from 'utils/api';
-import { getConfig } from 'utils/functions';
+import { getConfig, isFeatureEnabled } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import dropdown_arrow_fisdom from 'assets/down_arrow_fisdom.svg';
 import dropdown_arrow_myway from 'assets/down_arrow_myway.svg';
@@ -240,13 +240,17 @@ class Intro extends Component {
   }
 
   renderQuotes(props, index) {
-    if(getConfig().iOS && props.quote_provider === 'EDELWEISS') {
+
+    if(props.quote_provider === 'EDELWEISS' && !isFeatureEnabled(getConfig(), 'etli_download')) {
       return null;
     }
 
     // && !this.state.termRedirectData.resumeFlag
     if(props.quote_provider === 'HDFC') {
       return;
+    }
+    if(!quotePointsPorivders[props.quote_provider]) {
+      return null;
     }
     return (
       <div className="quote-tiles-term" key={index} >
