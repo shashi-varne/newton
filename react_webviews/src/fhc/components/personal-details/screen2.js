@@ -11,6 +11,7 @@ import { storageService } from '../../../utils/validators';
 import FHC from '../../FHCClass';
 import { yesOrNoOptions, kidsOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
+import { navigate } from '../../common/commonFunctions';
 import { getConfig } from 'utils/functions';
 
 class PersonalDetails2 extends Component {
@@ -21,7 +22,8 @@ class PersonalDetails2 extends Component {
       fhc_data: new FHC(),
       kidsOptions: kidsOptions,
       type: getConfig().productName
-    }
+    };
+    this.navigate = navigate.bind(this);
   }
 
   async componentDidMount() {
@@ -65,15 +67,7 @@ class PersonalDetails2 extends Component {
     this.setState({ fhc_data });
   }
 
-  navigate = (pathname) => {
-    this.props.history.push({
-      pathname: pathname,
-      search: getConfig().searchParams,
-      params: {
-        disableBack: true
-      }
-    });
-  }
+  
 
   sendEvents(user_action) {
     let { fhc_data } = this.state;

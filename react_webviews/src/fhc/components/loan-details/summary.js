@@ -9,6 +9,7 @@ import loader_myway from 'assets/loader_gif_myway.gif';
 import { fetchFHCData } from '../../common/ApiCalls';
 import { storageService } from '../../../utils/validators';
 import { formatAmount } from 'utils/validators';
+import { navigate } from '../../common/commonFunctions';
 import { getConfig } from 'utils/functions';
 import FHC from '../../FHCClass';
 import toast from '../../../common/ui/Toast';
@@ -36,7 +37,8 @@ class LoanSummary extends Component {
       accordianTab: 'house_loan',
       type: getConfig().productName,
       loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
-    }
+    };
+    this.navigate = navigate.bind(this);
   }
 
   async componentDidMount() {
@@ -46,8 +48,16 @@ class LoanSummary extends Component {
         fhc_data = await fetchFHCData();
         storageService().setObject('fhc_data', fhc_data);
       }
+      let accordianTab = '';
+      for (const type of loan_types) {
+        if (fhc_data[`has_${type.key}`]) {
+          accordianTab = type.key;
+          break;
+        }
+      }
       this.setState({
         show_loader: false,
+        accordianTab,
         fhc_data,
       });
     } catch (err) {
@@ -89,22 +99,6 @@ class LoanSummary extends Component {
       );
     }
     return '';
-  }
-
-  navigate = (pathname) => {
-
-    if (pathname === 'edit-loan1') {
-      this.sendEvents('next', '', 'house-loan');
-    } else if (pathname === 'edit-loan3') {
-      this.sendEvents('next', '', 'car-loan');
-    } else if (pathname === 'edit-loan4') {
-      this.sendEvents('next', '', 'education-loan');
-    }
-
-    this.props.history.push({
-      pathname: pathname,
-      search: getConfig().searchParams
-    });
   }
 
   render() {

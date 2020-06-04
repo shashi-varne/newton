@@ -10,6 +10,7 @@ import { fetchFHCData, uploadFHCData } from '../../common/ApiCalls';
 import { storageService } from '../../../utils/validators';
 import { yesOrNoOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
+import { navigate } from '../../common/commonFunctions';
 import { getConfig } from 'utils/functions';
 import FHC from '../../FHCClass';
 
@@ -22,7 +23,8 @@ class InvestmentDetails4 extends Component {
       tax_investment_error: '',
       fhc_data: new FHC(),
       type: getConfig().productName
-    }
+    };
+    this.navigate = navigate.bind(this);
   }
 
   async componentDidMount() {
@@ -46,9 +48,14 @@ class InvestmentDetails4 extends Component {
   }
 
   handleRadioValue = name => index => {
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+    if (name === 'tax_investment') {
+      fhc_data.tax_savings = {};
+    }
     this.setState({
       [name]: yesOrNoOptions[index]['value'],
       [name + '_error']: '',
+      fhc_data,
     });
   }
 
@@ -74,15 +81,7 @@ class InvestmentDetails4 extends Component {
     }
   }
 
-  navigate = (pathname) => {
-    this.props.history.push({
-      pathname: pathname,
-      search: getConfig().searchParams,
-      params: {
-        disableBack: true
-      }
-    });
-  }
+  
 
   sendEvents(user_action) {
     let eventObj = {
@@ -114,8 +113,8 @@ class InvestmentDetails4 extends Component {
     } else if (this.state.tax_investment && !fhc_data.isValidTaxes()) {
       this.setState({ fhc_data });
     } else {
-      storageService().setObject('fhc_data', fhc_data);
       this.setState({ show_loader: true });
+      storageService().setObject('fhc_data', fhc_data);
       try {
         await uploadFHCData(fhc_data);
         this.navigate('invest-complete');

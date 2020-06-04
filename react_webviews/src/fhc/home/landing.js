@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Container from '../common/Container';
+import { navigate } from '../common/commonFunctions';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 
@@ -9,6 +10,7 @@ class Landing extends Component {
         this.state = {
             productName: getConfig().productName,
         };
+        this.navigate = navigate.bind(this);
     }
     startFHC() {
         this.sendEvents('next');
@@ -32,15 +34,6 @@ class Landing extends Component {
         }
     }
 
-    navigate(pathname, search) {
-        this.props.history.push({
-            pathname: pathname,
-            search: search ? search : getConfig().searchParams,
-            params: {
-                fromHome: true
-            }
-        });
-    }
     render() {
         return (
             <Container

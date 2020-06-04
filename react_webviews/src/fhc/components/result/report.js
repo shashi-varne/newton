@@ -4,8 +4,8 @@ import Container from '../../common/Container';
 import { fetchFHCReport } from '../../common/ApiCalls';
 import { nativeCallback } from 'utils/native_callback';
 import { capitalize } from '../../../utils/validators';
-import { getConfig } from '../../../utils/functions';
 import PopUp from '../../common/PopUp';
+import { navigate } from '../../common/commonFunctions';
 
 class Report extends Component {
   constructor(props) {
@@ -16,6 +16,7 @@ class Report extends Component {
       show_loader: true,
       popupText: '',
     };
+    this.navigate = navigate.bind(this);
   }
 
   async componentDidMount() {
@@ -34,15 +35,7 @@ class Report extends Component {
     }
   }
 
-  navigate = (pathname) => {
-    this.props.history.push({
-      pathname: pathname,
-      search: getConfig().searchParams,
-      params: {
-        disableBack: true
-      }
-    });
-  }
+  
 
   sendEvents = (user_action) => {
     let eventObj = {
@@ -102,7 +95,7 @@ class Report extends Component {
             'mediclaim',
             'dependents',
             'savings'
-          ].map(type => <Card report={this.state.report[type] || {}}></Card>)
+          ].map((type, i) => <Card key={i} report={this.state.report[type] || {}}></Card>)
         }
       <PopUp
         openPopup={this.state.openPopup}

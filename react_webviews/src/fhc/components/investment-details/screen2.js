@@ -10,6 +10,7 @@ import { storageService } from '../../../utils/validators';
 
 import { investmentOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
+import { navigate } from '../../common/commonFunctions';
 import { getConfig } from 'utils/functions';
 import FHC from '../../FHCClass';
 
@@ -22,7 +23,8 @@ class InvestmentDetails2 extends Component {
       investment_error: '',
       fhc_data: new FHC(),
       type: getConfig().productName
-    }
+    };
+    this.navigate = navigate.bind(this);
   }
 
   initializeInvestOpts = (existingData = {}) => {
@@ -59,15 +61,7 @@ class InvestmentDetails2 extends Component {
     }
   }
 
-  navigate = (pathname) => {
-    this.props.history.push({
-      pathname: pathname,
-      search: getConfig().searchParams,
-      params: {
-        disableBack: true
-      }
-    });
-  }
+  
 
   sendEvents(user_action) {
     const snakeCase = val => val.replace(/[-\s]/g, '_');

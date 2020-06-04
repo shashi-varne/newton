@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
+import { navigate } from '../../common/commonFunctions';
 import { getConfig } from 'utils/functions';
 import FHC from '../../FHCClass';
 import { storageService } from '../../../utils/validators';
@@ -11,6 +12,7 @@ class Success extends Component {
             name: '',
             productName: getConfig().productName,
         };
+        this.navigate = navigate.bind(this);
     }
 
     componentDidMount() {
@@ -24,15 +26,6 @@ class Success extends Component {
         }, 2500);
     }
 
-    navigate(pathname, search) {
-        this.props.history.push({
-            pathname: pathname,
-            search: search ? search : getConfig().searchParams,
-            params: {
-                fromHome: true
-            }
-        });
-    }
     render() {
         let name = this.state.name;
         return (

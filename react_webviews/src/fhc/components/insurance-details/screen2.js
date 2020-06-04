@@ -12,6 +12,7 @@ import { storageService } from '../../../utils/validators';
 
 import { yesOrNoOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
+import { navigate } from '../../common/commonFunctions';
 import { getConfig } from 'utils/functions';
 import FHC from '../../FHCClass';
 
@@ -23,6 +24,7 @@ class InsuranceDetails2 extends Component {
       fhc_data: new FHC(),
       type: getConfig().productName
     }
+    this.navigate = navigate.bind(this);
   }
 
   async componentDidMount() {
@@ -49,6 +51,8 @@ class InsuranceDetails2 extends Component {
     const selectedVal = yesOrNoOptions[index]['value'];
 
     fhc_data.medical_insurance[name] = selectedVal;
+    fhc_data.medical_insurance.annual_premuim = 0;
+    fhc_data.medical_insurance.cover_value = 0;
     fhc_data[`${name}_error`] = '';
     this.setState({ fhc_data });
   }
@@ -59,7 +63,7 @@ class InsuranceDetails2 extends Component {
       if (!inrFormatTest(event.target.value)) {
         return;
       }
-      fhc_data.medical_insurance[name] = event.target.value.replace(/,/g, '');
+      fhc_data.medical_insurance[name] = event.target.value.toString().replace(/,/g, '');
       fhc_data[`${name}_error`] = '';
     }
     this.setState({ fhc_data });
@@ -72,16 +76,6 @@ class InsuranceDetails2 extends Component {
       // invalid
       event.preventDefault();
     }
-  }
-
-  navigate = (pathname) => {
-    this.props.history.push({
-      pathname: pathname,
-      search: getConfig().searchParams,
-      params: {
-        disableBack: true
-      }
-    });
   }
 
   sendEvents(user_action) {

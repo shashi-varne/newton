@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
+import { navigate } from '../../common/commonFunctions';
 import { getConfig } from 'utils/functions';
 import { storageService } from '../../../utils/validators';
 import FHC from '../../FHCClass';
@@ -11,6 +12,7 @@ class InvestSuccess extends Component {
             show_loader: true,
             name: '',
         };
+        this.navigate = navigate.bind(this);
     }
 
     async componentDidMount() {
@@ -18,16 +20,6 @@ class InvestSuccess extends Component {
         this.setState({
             show_loader: false,
             name: fhc_data.name,
-        });
-    }
-
-    navigate(pathname, search) {
-        this.props.history.push({
-            pathname: pathname,
-            search: search ? search : getConfig().searchParams,
-            params: {
-                fromHome: true
-            }
         });
     }
 

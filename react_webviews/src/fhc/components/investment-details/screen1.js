@@ -8,6 +8,7 @@ import { fetchFHCData } from '../../common/ApiCalls';
 import { storageService } from '../../../utils/validators';
 import { yesOrNoOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
+import { navigate } from '../../common/commonFunctions';
 import { getConfig } from 'utils/functions';
 import FHC from '../../FHCClass';
 
@@ -20,7 +21,8 @@ class InvestmentDetails1 extends Component {
       has_investment: false,
       has_investment_error: '',
       type: getConfig().productName
-    }
+    };
+    this.navigate = navigate.bind(this);
   }
 
   async componentDidMount() {
@@ -52,15 +54,7 @@ class InvestmentDetails1 extends Component {
     });
   }
 
-  navigate = (pathname) => {
-    this.props.history.push({
-      pathname: pathname,
-      search: getConfig().searchParams,
-      params: {
-        disableBack: true
-      }
-    });
-  }
+  
 
   sendEvents(user_action) {
 

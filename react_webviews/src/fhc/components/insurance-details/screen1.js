@@ -10,8 +10,9 @@ import { fetchFHCData } from '../../common/ApiCalls';
 import { storageService } from '../../../utils/validators';
 import { yesOrNoOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
-import { getConfig } from 'utils/functions';
 import FHC from '../../FHCClass';
+import { navigate } from '../../common/commonFunctions';
+import { getConfig } from 'utils/functions';
 
 class InsuranceDetails1 extends Component {
   constructor(props) {
@@ -20,7 +21,8 @@ class InsuranceDetails1 extends Component {
       show_loader: true,
       fhc_data: new FHC(),
       type: getConfig().productName
-    }
+    };
+    this.navigate = navigate.bind(this);
   }
 
   async componentDidMount() {
@@ -47,6 +49,8 @@ class InsuranceDetails1 extends Component {
     const selectedVal = yesOrNoOptions[index]['value'];
 
     fhc_data.life_insurance[name] = selectedVal;
+    fhc_data.life_insurance.annual_premuim = 0;
+    fhc_data.life_insurance.cover_value = 0;
     fhc_data[`${name}_error`] = '';
     this.setState({ fhc_data });
   }
@@ -70,16 +74,6 @@ class InsuranceDetails1 extends Component {
       // invalid
       event.preventDefault();
     }
-  }
-
-  navigate = (pathname) => {
-    this.props.history.push({
-      pathname: pathname,
-      search: getConfig().searchParams,
-      params: {
-        disableBack: true
-      }
-    });
   }
 
   sendEvents(user_action) {

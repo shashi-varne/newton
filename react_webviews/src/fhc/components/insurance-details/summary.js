@@ -9,6 +9,7 @@ import loader_myway from 'assets/loader_gif_myway.gif';
 import { fetchFHCData } from '../../common/ApiCalls';
 import { storageService } from '../../../utils/validators';
 import { formatAmount } from 'utils/validators';
+import { navigate } from '../../common/commonFunctions';
 import { getConfig } from 'utils/functions';
 import FHC from '../../FHCClass';
 import toast from '../../../common/ui/Toast';
@@ -31,7 +32,8 @@ class InsuranceSummary extends Component {
       type: getConfig().productName,
       accordianTab: 'life_insurance',
       loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
-    }
+    };
+    this.navigate = navigate.bind(this);
   }
 
   async componentDidMount() {
@@ -111,20 +113,6 @@ class InsuranceSummary extends Component {
         </div>
       );
     }
-  }
-
-  navigate = (pathname) => {
-
-    if (pathname === 'edit-insurance1') {
-      this.sendEvents('next', '', 'life-insurance');
-    } else if (pathname === 'edit-insurance2') {
-      this.sendEvents('next', '', 'medical-insurance');
-    }
-
-    this.props.history.push({
-      pathname: pathname,
-      search: getConfig().searchParams
-    });
   }
 
   render() {

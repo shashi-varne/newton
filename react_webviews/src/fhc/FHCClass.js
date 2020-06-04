@@ -89,6 +89,7 @@ class FHC {
   set has_education_loan(val) {
     this.loan.education.is_present = val;
     this.has_education_loan_error = '';
+    this.education_loan = 0;
   }
 
   get education_loan() {
@@ -105,6 +106,7 @@ class FHC {
   set has_car_loan(val) {
     this.loan.car.is_present = val;
     this.has_car_loan_error = '';
+    this.car_loan = 0;
   }
 
   get car_loan() {

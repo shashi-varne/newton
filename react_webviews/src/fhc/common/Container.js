@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router';
-
 import Header from './Header';
 import Footer from './footer';
 import Banner from '../../common/ui/Banner';
@@ -20,6 +19,7 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
+import { navigate } from './commonFunctions';
 
 class Container extends Component {
 
@@ -34,6 +34,7 @@ class Container extends Component {
     }
     this.handleTopIcon = this.handleTopIcon.bind(this);
     this.handleYes = this.handleYes.bind(this);
+    this.navigate = navigate.bind(this);
   }
 
   componentDidMount() {
@@ -64,13 +65,6 @@ class Container extends Component {
     }
   }
 
-  navigate = (pathname) => {
-    this.props.history.push({
-      pathname: pathname,
-      search: getConfig().searchParams
-    });
-  }
-
   getEvents(user_action) {
     if (!this || !this.props || !this.props.events) {
       return;
@@ -86,7 +80,7 @@ class Container extends Component {
     });
     let pathname = this.props.history.location.pathname;
     let { params } = this.props.location;
-    
+    console.trace(pathname, params);
     if (params && params.disableBack) {
       nativeCallback({ action: 'exit' });
       return;
@@ -103,9 +97,7 @@ class Container extends Component {
         this.navigate('loan4'); // to skip success screen
         break;
       default:
-        this.setState({
-          openDialog: true
-        });
+        this.props.history.goBack();
     }
   }
 
@@ -200,7 +192,6 @@ class Container extends Component {
       <div className={`ContainerWrapper fhc-container ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`} >
         {/* Header Block */}
         <Header
-          disableBack={this.props.disableBack}
           title={this.props.title}
           smallTitle={this.props.smallTitle}
           provider={this.props.provider}
