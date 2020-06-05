@@ -133,6 +133,7 @@ import HomeInsuranceForm from './products/home_insurance/general/form';
 import GroupHealthLanding from './products/group_health/landing';
 import GroupHealthSelectInsureType from './products/group_health/insure_type';
 import GroupHealthPlanDob from './products/group_health/plans/dob';
+import GroupHealthPlanAddMembers from './products/group_health/plans/add_members';
 // etli
 import EtliPersonalDetails1 from './products/term_insurance/etli/personal_details1';
 import EtliPersonalDetails2 from './products/term_insurance/etli/personal_details2';
@@ -306,6 +307,7 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/landing`} component={GroupHealthLanding} />
           <Route path={`${url}/group-health/:provider/insure-type`} component={GroupHealthSelectInsureType} />
           <Route path={`${url}/group-health/:provider/plan-dob`} component={GroupHealthPlanDob} />
+          <Route path={`${url}/group-health/:provider/plan-add-members`} component={GroupHealthPlanAddMembers} />
           
           {/* common */}
           <Route path={`${url}/common/report`} component={Report} />

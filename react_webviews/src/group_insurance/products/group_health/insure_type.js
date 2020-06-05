@@ -63,7 +63,13 @@ class GroupHealthSelectInsureType extends Component {
     console.log(groupHealthPlanData);
     groupHealthPlanData.account_type = this.state.account_type;
     storageService().setObject('groupHealthPlanData',groupHealthPlanData );
-    this.navigate('plan-dob');
+
+    if(this.state.account_type === 'self') {
+      this.navigate('plan-dob');
+    } else {
+      this.navigate('plan-add-members');
+    }
+    
   }
 
 

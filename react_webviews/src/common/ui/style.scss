@@ -37,20 +37,33 @@
   color: #4a4a4a;
   border-color: #e6e6e6;
 }
-.RadioButton label {
-  padding: 8px;
-  display: inline-block;
-  border-radius: 4px;
-  width: 100px;
-  text-align: center;
-  font-size: 12px;
-  color: #4a4a4a;
-  border-color: #e6e6e6;
-  cursor: pointer;
+.RadioButton {
+  label {
+    padding: 8px;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 4px;
+    width: 100px;
+    text-align: center;
+    font-size: 12px;
+    color: #4a4a4a;
+    border-color: #e6e6e6;
+    cursor: pointer;
+  }
+
+  .tickmark-img {
+    width: 10px;
+  }
+
+  
 }
+
 .RadioLabelChecked {
   font-weight: 500;
   border: 1px solid !important;
+}
+.radioDisabledWithValue {
+  border-color: #e6e6e6 !important;
 }
 .Flex {
   display: flex;
@@ -325,4 +338,67 @@ input.default-otp-input {
     font-weight: 400;
     margin: -5px 0 0 0px;
     position: absolute;
+}
+
+
+.plus-minus-input {
+  .right-data {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .images {
+    display: flex;
+    align-items: center;
+  }
+  
+  .plus-minus-icons {
+    border: 1px solid var(--primary);
+    padding: 2px;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+  
+  .content {
+    color: #0A1D32;
+    font-size: 14px;
+    font-weight: 400;
+  }
+  .number {
+    color: #0A1D32;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0 10px 0 10px;
+  }
+}
+
+
+// .checkmark {
+//   display: inline-block;
+//   margin: 3px 0px 0 10px;
+//   float: right;
+//   position: relative;
+
+//   &:after {
+//     content: '';
+//     display: block;
+//     width: 6px;
+//     height: 10px;
+//     border-width: 0px 2px 2px 0;
+//     transform: rotate(45deg);
+//   }
+// }
+
+.checkmark {
+  display: inline-block;
+      transform: rotate(45deg);
+      height: 25px;
+      width: 12px;
+      margin-left: 60%; 
+      border-bottom: 7px solid #78b13f;
+      border-right: 7px solid #78b13f;
+}
+.checkmark:after {
+  border: solid var(--primary);
 }
