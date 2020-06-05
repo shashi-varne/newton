@@ -6,7 +6,7 @@ import sip_resumed_myway from 'assets/ils_esign_success_myway.svg';
 import { getConfig } from 'utils/functions';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
-import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback, openModule } from 'utils/native_callback';
 import { inrFormatDecimal } from '../../../utils/validators';
 import ContactUs from '../../../common/components/contact_us';
 
@@ -57,18 +57,7 @@ class EnpsSuccess extends Component {
 
   handleClick = () => {
     this.sendEvents('ok');
-
-    let url = 'https://fis.do/m/module?action_type=native';
-    if(this.state.type === 'myway') {
-      url = 'https://w-ay.in/m/module?action_type=native';
-    }
-
-    url += '&native_module=' + encodeURIComponent('app/portfolio');
-    nativeCallback({
-      action: 'open_module', message: {
-        action_url: url, action_path: 'app/portfolio'
-      }
-    });
+    openModule('app/portfolio');
   }
 
   navigate = (pathname) => {

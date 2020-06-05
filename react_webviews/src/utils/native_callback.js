@@ -20,12 +20,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   let callbackData = {};
   let project = getConfig().project;
   let redirect_url = getConfig().redirect_url;
-  let is_secure = false;
-  redirect_url = decodeURIComponent(redirect_url)
-  let redirect_url_data = redirect_url.split("?is_secure=")
-  if (redirect_url_data.length === 2) {
-    is_secure = redirect_url_data[1]
-  }
+  redirect_url = decodeURIComponent(redirect_url);
   if (action) {
     callbackData.action = action;
   }
@@ -202,18 +197,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   if (getConfig().app !== 'web') {
 
     if (redirect_url && redirect_url !== 'undefined' && (callbackData.action === 'exit_web' || callbackData.action === 'exit_module' || callbackData.action === 'open_module')) {
-      if (action_path) {
-        if (action_path === 'app/profile') {
-          window.location.href = getConfig().webAppUrl + 'my-account?is_secure=' + is_secure
-        }
-        else if (action_path === 'app/portfolio') {
-          window.location.href = getConfig().webAppUrl + 'reports?is_secure=' + is_secure
-        } else {
-          window.location.href = redirect_url
-        }
-      } else {
-        window.location.href = redirect_url
-      }
+      window.location.href = redirect_url
     } else {
       if (action === 'exit_web_sdk') {
         callbackData.action = 'exit_web';
@@ -233,18 +217,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       if (!redirect_url) {
         redirect_url = getConfig().webAppUrl;
       }
-      if (action_path) {
-        if (action_path === 'app/profile') {
-          window.location.href = getConfig().webAppUrl + 'my-account'
-        }
-        else if (action_path === 'app/portfolio') {
-          window.location.href = getConfig().webAppUrl + 'reports'
-        } else {
-          window.location.href = redirect_url
-        }
-      } else {
-        window.location.href = redirect_url
-      }
+      window.location.href = redirect_url;
     } else if (action === 'open_in_browser' || action === 'open_url') {
       open_browser_web(message.url, '_blank')
     } else if (action === 'resume_provider') {
@@ -255,3 +228,95 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   }
 
 };
+
+
+export function getWebUrlByPath(path) {
+  if (!path) {
+    path = '';
+  }
+
+  let web_url = getConfig().webAppUrl + path //can accept params with path also, below it handlled
+  
+  if(getConfig().webAppParams) {
+    // eslint-disable-next-line
+    web_url += (web_url.match(/[\?]/g) ? "&" : "?") + getConfig().webAppParams;
+  }
+
+  return web_url;
+}
+
+export function openNativeModule(moduleName) {
+
+
+  let url = 'https://fis.do/m/module?action_type=native';
+  if(getConfig().productName === 'myway') {
+    url = 'https://w-ay.in/m/module?action_type=native';
+  }
+
+  url += '&native_module=' + encodeURIComponent(moduleName);
+  nativeCallback({
+    action: 'open_module', message: {
+      action_url: url
+    }
+  });
+}
+
+export function openModule(moduleName) {
+
+  if (getConfig().isWebCode) {
+
+    let module_mapper = {
+      'app/portfolio': 'reports',
+      'app/profile': 'my-account'
+    }
+
+    let moduleNameWeb = module_mapper[moduleName] || '';
+    let module_url = getWebUrlByPath(moduleNameWeb);
+
+    window.location.href = module_url;
+  } else {
+    openNativeModule(moduleName);
+  }
+}
+
+export function openPdfCall(data={}) {
+
+  let url = data.url || '';
+  if (!url) {
+      return;
+  }
+
+
+  let current_url = window.location.href;
+
+  if(!data.back_url) {
+    data.back_url = current_url;
+  }
+
+  if (getConfig().Web) {
+      nativeCallback({
+          action: 'open_in_browser',
+          message: {
+              url: url
+          }
+      });
+  } else {
+
+      nativeCallback({
+          action: 'take_control', message: {
+              back_url: data.back_url,
+              show_top_bar: false
+          },
+
+      });
+
+      nativeCallback({
+          action: 'show_top_bar', message: {
+              title: data.header_title, icon: data.icon || 'close'
+          }
+      });
+
+      nativeCallback({ action: 'open_pdf', message: { url: url } });
+  }
+
+}
