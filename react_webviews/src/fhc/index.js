@@ -75,6 +75,7 @@ const Insurance = (props) => {
         <ToastContainer autoClose={3000} />
         <Switch>
           <Route exact path={`${url}`} component={Landing} />
+          <Route path={`${url}/landing`} component={Landing} />
           {/* Personal Details */}
           <Route path={`${url}/personal1`} component={PersonalDetails1} />
           <Route path={`${url}/personal2`} component={PersonalDetails2} />

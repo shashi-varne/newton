@@ -1,16 +1,35 @@
 import React, { Component } from 'react';
 import Container from '../common/Container';
 import { navigate } from '../common/commonFunctions';
+import { fetchFHCData } from '../common/ApiCalls';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
+import { toast } from 'react-toastify';
 
 class Landing extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            show_loader: true,
             productName: getConfig().productName,
         };
         this.navigate = navigate.bind(this);
+    }
+
+    async componentDidMount() {
+        try {
+            let { params } = this.props.location;
+            if (!(params || {}).refresh) {
+                const fhc_data = await fetchFHCData();
+                if (fhc_data.completed) {
+                    this.navigate('/fhc/final-report');
+                }
+            }
+            this.setState({ show_loader: false });
+        } catch (err) {
+            console.log(err);
+            toast(err);
+        }
     }
 
     startFHC() {
@@ -39,19 +58,20 @@ class Landing extends Component {
     render() {
         return (
             <Container
+                showLoader={this.state.show_loader}
                 buttonTitle="Start"
                 handleClick={() => this.startFHC()}
                 title="Fin Health Check (FHC)"
-                >
-                    <div className="landing-container">
-                        <img
-                            src={require(`assets/fhc_landing.svg`)}
-                            className="landing-img"
-                            alt="Health Check Banner" />
-                        <div className="landing-text">
-                            Managing your finances is<br />as important as your health.
-                        </div>    
-                    </div>
+            >
+                <div className="landing-container">
+                    <img
+                        src={require(`assets/fhc_landing.svg`)}
+                        className="landing-img"
+                        alt="Health Check Banner" />
+                    <div className="landing-text">
+                        Managing your finances is<br />as important as your health.
+                        </div>
+                </div>
             </Container>
         );
     }

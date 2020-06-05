@@ -139,7 +139,7 @@ class Container extends Component {
       console.log(e);
       toast('Could not save data. Please try again');
     }
-    // nativeCallback({ action: this.state.callbackType, events: this.getEvents('exit_yes') });
+    nativeCallback({ action: this.state.callbackType, events: this.getEvents('exit_yes') });
   }
 
   handleTopIcon() {

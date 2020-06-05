@@ -50,7 +50,7 @@ class PersonalDetails2 extends Component {
     const selectedVal = yesOrNoOptions[index]['value'];
 
     if (name === 'num_kids') {
-      fhc_data.num_kids = selectedVal ? '1' : '0';
+      fhc_data.num_kids = selectedVal ? '1' : null;
       fhc_data.num_kids_error = '';
     } else {
       fhc_data[name] = selectedVal;
@@ -66,8 +66,6 @@ class PersonalDetails2 extends Component {
     }
     this.setState({ fhc_data });
   }
-
-  
 
   sendEvents(user_action) {
     let { fhc_data } = this.state;
@@ -112,7 +110,8 @@ class PersonalDetails2 extends Component {
   render() {
     let kidsSelect = null;
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
-    const has_kids = fhc_data.num_kids > 0;
+    const has_kids = fhc_data.num_kids || null;
+    console.log(has_kids);
     if (has_kids) {
       kidsSelect = <div className="InputField">
         <DropdownWithoutIcon
