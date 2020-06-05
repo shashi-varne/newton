@@ -556,6 +556,23 @@
   justify-content: space-between;
   margin: 30px 0 0 0;
 }
+.group-health-top-content-plan-logo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0 30px 0;
+}
+.group-health-top-content-plan-logo .tc-title {
+  color: #0a1d32;
+  font-size: 10px;
+  font-weight: 600;
+  margin: 0 0 7px 0;
+}
+.group-health-top-content-plan-logo .tc-subtitle {
+  color: #0a1d32;
+  font-size: 20px;
+  font-weight: 500;
+}
 .group-health-plan-list {
   padding: 30px 0 0 0;
 }
@@ -569,23 +586,6 @@
 .group-health-plan-list .info-img {
   position: absolute;
   right: 0px;
-}
-.group-health-plan-list .tc-title {
-  color: #0a1d32;
-  font-size: 10px;
-  font-weight: 600;
-  margin: 0 0 7px 0;
-}
-.group-health-plan-list .top-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 10px 0 30px 0;
-}
-.group-health-plan-list .tc-subtitle {
-  color: #0a1d32;
-  font-size: 20px;
-  font-weight: 500;
 }
 .group-health-plan-list .pi-tile {
   display: flex;
@@ -617,4 +617,12 @@
   border-radius: 4px;
   margin: 20px 0 0 0;
   text-transform: uppercase;
+}
+.group-health-plan-details .sum-assured-info {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0 0 0;
+  color: #0b1e33;
+  font-size: 16px;
+  font-weight: 400;
 }

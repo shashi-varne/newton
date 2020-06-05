@@ -136,6 +136,7 @@ import GroupHealthPlanDob from './products/group_health/plans/dob';
 import GroupHealthPlanAddMembers from './products/group_health/plans/add_members';
 import GroupHealthPlanSelectCity from './products/group_health/plans/select_city';
 import GroupHealthPlanList from './products/group_health/plans/plan_list';
+import GroupHealthPlanDetails from './products/group_health/plans/plan_details';
 // etli
 import EtliPersonalDetails1 from './products/term_insurance/etli/personal_details1';
 import EtliPersonalDetails2 from './products/term_insurance/etli/personal_details2';
@@ -312,6 +313,7 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/:provider/plan-add-members`} component={GroupHealthPlanAddMembers} />
           <Route path={`${url}/group-health/:provider/plan-select-city`} component={GroupHealthPlanSelectCity} />
           <Route path={`${url}/group-health/:provider/plan-list`} component={GroupHealthPlanList} />
+          <Route path={`${url}/group-health/:provider/plan-details`} component={GroupHealthPlanDetails} />
           
           {/* common */}
           <Route path={`${url}/common/report`} component={Report} />

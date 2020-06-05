@@ -588,6 +588,7 @@ export function isFeatureEnabled(config, feature) {
     return true;
   }
 
+  // eslint-disable-next-line
   if(feature === 'etli_download' && app === 'android' && parseInt(app_version) >= 999) {
     return true;
   }

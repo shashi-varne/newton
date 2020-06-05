@@ -18,7 +18,7 @@ class GroupHealthPlanList extends Component {
             show_loader: true,
             plan_data: {
                 coverplan: []
-            } 
+            }
         }
     }
 
@@ -81,13 +81,6 @@ class GroupHealthPlanList extends Component {
         });
     }
 
-    handleClick = () => {
-        let groupHealthPlanData = this.state.groupHealthPlanData;
-        storageService().setObject('groupHealthPlanData', groupHealthPlanData);
-
-        this.navigate('plan-list');
-    }
-
 
     sendEvents(user_action) {
         let eventObj = {
@@ -105,12 +98,19 @@ class GroupHealthPlanList extends Component {
         }
     }
 
+    selectPlan = (plan, index) => {
+        let groupHealthPlanData = this.state.groupHealthPlanData;
+        groupHealthPlanData.plan_selected = plan 
+        storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+
+        this.navigate('plan-details');
+    }
 
     renderPlans = (props, index) => {
         return (
             <div className="tile" key={index}>
                 <div className="recommendation">{props.recommendation_tag}</div>
-                <div className="top-content">
+                <div className="group-health-top-content-plan-logo">
                     <div className="left">
                         <div className="tc-title">{this.state.plan_data.common.base_plan_title}</div>
                         <div className="tc-subtitle">{props.plan_title}</div>
@@ -138,9 +138,9 @@ class GroupHealthPlanList extends Component {
                     </div>
                 </div>
 
-                <div className="bottom-cta">
+                <div className="bottom-cta" onClick={() => this.selectPlan(props, index)}>
                     starts at {inrFormatDecimal(props.premium)}/year
-                            </div>
+                </div>
             </div>
         );
     }
@@ -156,7 +156,6 @@ class GroupHealthPlanList extends Component {
                 title="3 smart plans to choose from!"
                 noFooter={true}
                 onlyButton={true}
-                handleClick={() => this.handleClick()}
             >
                 <div className="group-health-plan-list">
                     <div className="tiles">
