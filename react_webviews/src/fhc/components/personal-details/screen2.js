@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
-import qs from 'qs';
 import toast from '../../../common/ui/Toast';
-
 import Container from '../../common/Container';
 import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
 import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
-import personal from 'assets/personal_details_icon.svg';
 import marital from 'assets/marital_status_dark_icn.png';
-import Api from 'utils/api';
+import { fetchFHCData } from '../../common/ApiCalls';
+import { storageService } from '../../../utils/validators';
 import FHC from '../../FHCClass';
 import { yesOrNoOptions, kidsOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
+import { navigate } from '../../common/commonFunctions';
 import { getConfig } from 'utils/functions';
 
 class PersonalDetails2 extends Component {
@@ -22,81 +21,64 @@ class PersonalDetails2 extends Component {
       show_loader: true,
       fhc_data: new FHC(),
       kidsOptions: kidsOptions,
-      params: qs.parse(this.props.location.search.slice(1)),
       type: getConfig().productName
-    }
+    };
+    this.navigate = navigate.bind(this);
   }
 
   async componentDidMount() {
     try {
-      let fhc_data = JSON.parse(window.localStorage.getItem('fhc_data'));
+      let fhc_data = new FHC(storageService().getObject('fhc_data'));
       if (!fhc_data) {
-        const res = await Api.get('page/financialhealthcheck/edit/mine', {
-          format: 'json',
-        });
-        console.log('res', res);
-        fhc_data = res.pfwresponse.result;
+        fhc_data = await fetchFHCData();
+        storageService().setObject('fhc_data', fhc_data);
       }
-      fhc_data = new FHC(fhc_data);
       this.setState({
         show_loader: false,
         fhc_data,
       });
-
     } catch (err) {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong');
+      toast(err);
     }
   }
 
   handleRadioValue = name => index => {
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
     const selectedVal = yesOrNoOptions[index]['value'];
-    console.log(name, index, selectedVal);
 
     if (name === 'num_kids') {
-      fhc_data.num_kids = selectedVal ? 1 : 0;
+      fhc_data.num_kids = selectedVal ? '1' : '0';
       fhc_data.num_kids_error = '';
     } else {
       fhc_data[name] = selectedVal;
       fhc_data[`${name}_error`] = '';
     }
-  
     this.setState({ fhc_data });
   }
 
   handleChange = name => event => {
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
-    console.log(name, event);
     if (name === 'num_kids') {
       fhc_data.num_kids = event;
     }
     this.setState({ fhc_data });
   }
 
-  navigate = (pathname) => {
-    this.props.history.push({
-      pathname: pathname,
-      search: getConfig().searchParams,
-      params: {
-        disableBack: true
-      }
-    });
-  }
+  
 
   sendEvents(user_action) {
+    let { fhc_data } = this.state;
+
     let eventObj = {
-      "event_name": 'fin_health_check',
+      "event_name": 'fhc',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'personal_details_two',
-        "provider": this.state.provider,
-        "is_married": this.state.fhc_data.is_married,
-        "has_kids": this.state.has_kids,
-        "num_kids": this.state.num_kids,
-        "from_edit": (this.state.edit) ? 'yes' : 'no'
+        "screen_name": 'family details 1',
+        "marital_status": fhc_data.is_married ? 'yes' : 'no',
+        "kids": fhc_data.has_kids ? 'yes' : 'no',
       }
     };
 
@@ -122,16 +104,15 @@ class PersonalDetails2 extends Component {
     if (error) {
       this.setState({ fhc_data });
     } else {
-      window.localStorage.setItem('fhc_data', JSON.stringify(fhc_data));
-      console.log('ALL VALID - SCREEN 2');
-      this.navigate('/fhc/personal3');
+      storageService().setObject('fhc_data', fhc_data)
+      this.navigate('personal3');
     }
   }
 
   render() {
     let kidsSelect = null;
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
-    let has_kids = fhc_data.num_kids > 0;
+    const has_kids = fhc_data.num_kids > 0;
     if (has_kids) {
       kidsSelect = <div className="InputField">
         <DropdownWithoutIcon
@@ -141,7 +122,7 @@ class PersonalDetails2 extends Component {
           options={this.state.kidsOptions}
           id="num-kids"
           label="How many kids do you have?"
-          value={fhc_data.num_kids}
+          value={fhc_data.num_kids === '5' ? '5+' : fhc_data.num_kids}
           name="num_kids"
           onChange={this.handleChange('num_kids')} />
       </div>;
@@ -157,13 +138,13 @@ class PersonalDetails2 extends Component {
         banner={false}
         bannerText={''}
         handleClick={this.handleClick}
-        edit={this.props.edit}
+        edit={false}
         topIcon="close"
         buttonTitle="Save & Continue"
       >
         <FormControl fullWidth>
-          <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
-            title={(this.props.edit) ? 'Edit Family Details' : 'Family Details'} />
+          <TitleWithIcon width="23" icon={require(`assets/${this.state.type}/group.svg`)}
+            title='Family Details' />
           <div className="InputField">
             <RadioWithoutIcon
               error={(fhc_data.is_married_error) ? true : false}
@@ -179,8 +160,8 @@ class PersonalDetails2 extends Component {
           </div>
           <div className="InputField">
             <RadioWithoutIcon
-              error={(fhc_data.num_kids_error) ? true : false}
-              helperText={fhc_data.num_kids_error}
+              error={false}
+              helperText={''}
               icon={marital}
               width="40"
               label="Do you have kids?"

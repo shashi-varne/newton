@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
-import qs from 'qs';
 import toast from '../../../common/ui/Toast';
-
+import { formatDate } from '../../../utils/validators';
 import Container from '../../common/Container';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
-import personal from 'assets/personal_details_icon.svg';
 import Input from '../../../common/ui/Input';
 import email from 'assets/email_dark_icn.png';
 import dob from 'assets/dob_dark_icn.png';
 import name from 'assets/full_name_dark_icn.png';
-import Api from 'utils/api';
 import FHC from '../../FHCClass';
+import { storageService } from '../../../utils/validators';
+import { fetchFHCData } from '../../common/ApiCalls';
 import { nativeCallback } from 'utils/native_callback';
+import { navigate } from '../../common/commonFunctions';
 import { getConfig } from 'utils/functions';
 
 class PersonalDetails1 extends Component {
@@ -21,22 +21,18 @@ class PersonalDetails1 extends Component {
     this.state = {
       show_loader: true,
       fhc_data: new FHC(),
-      params: qs.parse(this.props.location.search.slice(1)),
       type: getConfig().productName
-    }
+    };
+    this.navigate = navigate.bind(this);
   }
 
   async componentDidMount() {
     try {
-      let fhc_data = JSON.parse(window.localStorage.getItem('fhc_data'));
+      let fhc_data = new FHC(storageService().getObject('fhc_data'));
       if (!fhc_data) {
-        const res = await Api.get('page/financialhealthcheck/edit/mine', {
-          format: 'json',
-        });
-        console.log('res', res);
-        fhc_data = res.pfwresponse.result;
+        fhc_data = await fetchFHCData();
+        storageService().setObject('fhc_data', fhc_data);
       }
-      fhc_data = new FHC(fhc_data);
       this.setState({
         show_loader: false,
         fhc_data,
@@ -49,7 +45,7 @@ class PersonalDetails1 extends Component {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong');
+      toast(err);
     }
   }
 
@@ -67,15 +63,7 @@ class PersonalDetails1 extends Component {
     this.setState({ fhc_data });
   };
 
-  navigate = (pathname) => {
-    this.props.history.push({
-      pathname: pathname,
-      search: getConfig().searchParams,
-      params: {
-        disableBack: true
-      }
-    });
-  }
+  
 
   handleClick = () => {
     // this.sendEvents('next');
@@ -88,8 +76,8 @@ class PersonalDetails1 extends Component {
     ) {
       this.setState({ fhc_data });
     } else {
-      window.localStorage.setItem('fhc_data', JSON.stringify(fhc_data));
-      this.navigate('/fhc/personal2');
+      storageService().setObject('fhc_data', fhc_data)
+      this.navigate('personal2');
     }
   };
 
@@ -110,15 +98,13 @@ class PersonalDetails1 extends Component {
   sendEvents(user_action) {
     let { fhc_data } = this.state;
     let eventObj = {
-      "event_name": 'fin_health_check',
+      "event_name": 'fhc',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'personal_details_one',
-        "provider": fhc_data.provider,
+        "screen_name": 'personal details',
         "email": fhc_data.email ? 'yes' : 'no',
-        "name": fhc_data.name ? 'yes' : 'no',
-        "dob": fhc_data.dob ? 'yes' : 'no',
-        "from_edit": (fhc_data.edit) ? 'yes' : 'no'
+        "full_name": fhc_data.name ? 'yes' : 'no',
+        "date_of_birth": fhc_data.dob ? 'yes' : 'no',
       }
     };
 
@@ -143,13 +129,13 @@ class PersonalDetails1 extends Component {
         banner={true}
         bannerText={this.bannerText()}
         handleClick={this.handleClick}
-        edit={this.props.edit}
+        edit={false}
         topIcon="close"
         buttonTitle="Save & Continue"
       >
         <FormControl fullWidth>
-          <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
-            title={(this.props.edit) ? 'Verify Personal Details' : 'Personal Details'} />
+          <TitleWithIcon width="23" icon={require(`assets/${this.state.type}/personal.svg`)}
+            title='Personal Details' />
           <div className="InputField">
             <Input
               type="text"
@@ -199,46 +185,6 @@ class PersonalDetails1 extends Component {
         </FormControl>
       </Container>
     );
-  }
-}
-
-function formatDate(event) {
-  var key = event.keyCode || event.charCode;
-
-  var thisVal;
-
-  let slash = 0;
-  for (var i = 0; i < event.target.value.length; i++) {
-    if (event.target.value[i] === '/') {
-      slash += 1;
-    }
-  }
-
-  if (slash <= 1 && key !== 8 && key !== 46) {
-    var strokes = event.target.value.length;
-
-    if (strokes === 2 || strokes === 5) {
-      thisVal = event.target.value;
-      thisVal += '/';
-      event.target.value = thisVal;
-    }
-    // if someone deletes the first slash and then types a number this handles it
-    if (strokes >= 3 && strokes < 5) {
-      thisVal = event.target.value;
-      if (thisVal.charAt(2) !== '/') {
-        var txt1 = thisVal.slice(0, 2) + "/" + thisVal.slice(2);
-        event.target.value = txt1;
-      }
-    }
-    // if someone deletes the second slash and then types a number this handles it
-    if (strokes >= 6) {
-      thisVal = event.target.value;
-
-      if (thisVal.charAt(5) !== '/') {
-        var txt2 = thisVal.slice(0, 5) + "/" + thisVal.slice(5);
-        event.target.value = txt2;
-      }
-    }
   }
 }
 

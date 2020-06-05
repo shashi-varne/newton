@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
-import qs from 'qs';
 import toast from '../../../common/ui/Toast';
-
 import Container from '../../common/Container';
 import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
-import personal from 'assets/personal_details_icon.svg';
-import Api from 'utils/api';
+import { fetchFHCData } from '../../common/ApiCalls';
+import { storageService } from '../../../utils/validators';
 import FHC from '../../FHCClass';
 import { yesOrNoOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
+import { navigate } from '../../common/commonFunctions';
 import { getConfig } from 'utils/functions';
 
 class PersonalDetails3 extends Component {
@@ -19,32 +18,27 @@ class PersonalDetails3 extends Component {
     this.state = {
       show_loader: true,
       fhc_data: new FHC(),
-      params: qs.parse(this.props.location.search.slice(1)),
       type: getConfig().productName
-    }
+    };
+    this.navigate = navigate.bind(this);
   }
 
   async componentDidMount() {
     try {
-      let fhc_data = JSON.parse(window.localStorage.getItem('fhc_data'));
+      let fhc_data = new FHC(storageService().getObject('fhc_data'));
       if (!fhc_data) {
-        const res = await Api.get('page/financialhealthcheck/edit/mine', {
-          format: 'json',
-        });
-        console.log('res', res);
-        fhc_data = res.pfwresponse.result;
+        fhc_data = await fetchFHCData();
+        storageService().setObject('fhc_data', fhc_data);
       }
-      fhc_data = new FHC(fhc_data);
       this.setState({
         show_loader: false,
         fhc_data,
       });
-
     } catch (err) {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong');
+      toast(err);
     }
   }
 
@@ -55,27 +49,18 @@ class PersonalDetails3 extends Component {
     this.setState({ fhc_data });
   }
 
-  navigate = (pathname) => {
-    this.props.history.push({
-      pathname: pathname,
-      search: getConfig().searchParams,
-      params: {
-        disableBack: true
-      }
-    });
-  }
+  
 
   sendEvents(user_action) {
-    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+    let { fhc_data } = this.state;
 
     let eventObj = {
-      "event_name": 'fin_health_check',
+      "event_name": 'fhc',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'personal_details_three',
-        "dependent-parents": fhc_data.family_status['dependent-parents'],
-        "other-dependents": fhc_data.family_status['other-dependents'],
-        "from_edit": (this.state.edit) ? 'yes' : 'no'
+        "screen_name": 'family details 2',
+        "parents_dependency": fhc_data.family_status['dependent-parents'] ? 'yes' : 'no',
+        "other_dependents": fhc_data.family_status['other-dependents'] ? 'yes' : 'no',
       }
     };
 
@@ -100,9 +85,8 @@ class PersonalDetails3 extends Component {
     if (error) {
       this.setState({ fhc_data });
     } else {
-      window.localStorage.setItem('fhc_data', JSON.stringify(fhc_data));
-      console.log('ALL VALID - SCREEN 3');
-      this.navigate('/fhc/earnings1');
+      storageService().setObject('fhc_data', fhc_data)
+      this.navigate('personal4');
     }
   }
 
@@ -120,13 +104,13 @@ class PersonalDetails3 extends Component {
         banner={false}
         bannerText={''}
         handleClick={this.handleClick}
-        edit={this.props.edit}
+        edit={false}
         topIcon="close"
         buttonTitle="Save & Continue"
       >
         <FormControl fullWidth>
-          <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
-            title={(this.props.edit) ? 'Edit Family Details' : 'Family Details'} />
+          <TitleWithIcon width="23" icon={require(`assets/${this.state.type}/group.svg`)}
+            title='Family Details' />
           <div className="InputField">
             <RadioWithoutIcon
               error={(fhc_data['dependent-parents_error']) ? true : false}

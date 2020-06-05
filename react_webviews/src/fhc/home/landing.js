@@ -1,30 +1,41 @@
 import React, { Component } from 'react';
-import fhc_img from 'assets/fisdom/fhc_landing.svg';
 import Container from '../common/Container';
+import { navigate } from '../common/commonFunctions';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 class Landing extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            landingImg: fhc_img,
             productName: getConfig().productName,
         };
+        this.navigate = navigate.bind(this);
     }
+
     startFHC() {
-        console.log('BUTTON CLICKED!!!!', this);
+        this.sendEvents('next');
         this.navigate('/fhc/personal1');
     }
 
-    navigate(pathname, search) {
-        this.props.history.push({
-            pathname: pathname,
-            search: search ? search : getConfig().searchParams,
-            params: {
-                fromHome: true
+    sendEvents(user_action) {
+        let { params } = this.props.location;
+        let eventObj = {
+            "event_name": 'fhc',
+            "properties": {
+                "user_action": user_action,
+                "screen_name": 'fhc',
+                "source": (params || {}).refresh ? 'refresh' : 'invest_home',
             }
-        });
+        };
+
+        if (user_action === 'just_set_events') {
+            return eventObj;
+        } else {
+            nativeCallback({ events: eventObj });
+        }
     }
+
     render() {
         return (
             <Container
@@ -34,16 +45,13 @@ class Landing extends Component {
                 >
                     <div className="landing-container">
                         <img
-                            src={require(`assets/${this.state.productName}/fhc_landing.svg`)}
+                            src={require(`assets/fhc_landing.svg`)}
                             className="landing-img"
                             alt="Health Check Banner" />
                         <div className="landing-text">
                             Managing your finances is<br />as important as your health.
                         </div>    
                     </div>
-
-
-
             </Container>
         );
     }

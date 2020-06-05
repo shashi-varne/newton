@@ -6,13 +6,11 @@ import {
 import { withRouter } from "react-router";
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import '../common/theme/Style.css';
-// import { getConfig } from 'utils/functions';
 import { themeConfig } from 'utils/constants';
 import { ToastContainer } from 'react-toastify';
 
 import './common/Style.css';
-import "./components/Style.css";
-// import './products/term_insurance/Style.css';
+import "./components/Style.scss";
 import NotFound from '../common/components/NotFound';
 import Landing from './home/landing';
 import { create } from 'jss';
@@ -26,8 +24,8 @@ import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
 import PersonalDetails1 from './components/personal-details/screen1';
 import PersonalDetails2 from './components/personal-details/screen2';
 import PersonalDetails3 from './components/personal-details/screen3';
-import EarningDetails1 from './components/earning-details/screen1';
-import PersonalComplete from './components/earning-details/success';
+import PersonalDetails4 from './components/personal-details/screen4';
+import PersonalComplete from './components/personal-details/success';
 import LoanDetails1 from './components/loan-details/screen1';
 import LoanDetails2 from './components/loan-details/screen2';
 import LoanDetails3 from './components/loan-details/screen3';
@@ -37,14 +35,11 @@ import InsuranceDetails1 from './components/insurance-details/screen1';
 import InsuranceDetails2 from './components/insurance-details/screen2';
 import InsuranceSummary from './components/insurance-details/summary';
 import InvestmentDetails2 from './components/investment-details/screen2';
-import InvestmentDetails1 from './components/investment-details/screen4';
-
-// import AdditionalInfo from './products/term_insurance/additional-info/hdfc';
-// import Summary from './products/term_insurance/insurance-summary/screen1';
-// import Journey from './products/term_insurance/insurance-summary/screen3';
-// import Resume from './products/term_insurance/insurance-summary/screen2';
-
-/***********************TERM INSURANCE END   **************/
+import InvestmentDetails1 from './components/investment-details/screen1';
+import InvestmentDetails3 from './components/investment-details/screen3';
+import InvestmentDetails4 from './components/investment-details/screen4';
+import InvestSuccess from './components/investment-details/success';
+import Report from './components/result/report';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -84,7 +79,7 @@ const Insurance = (props) => {
           <Route path={`${url}/personal1`} component={PersonalDetails1} />
           <Route path={`${url}/personal2`} component={PersonalDetails2} />
           <Route path={`${url}/personal3`} component={PersonalDetails3} />
-          <Route path={`${url}/earnings1`} component={EarningDetails1} />
+          <Route path={`${url}/personal4`} component={PersonalDetails4} />
           <Route path={`${url}/personal-complete`} component={PersonalComplete} />
           {/* Loan Details */}
           <Route path={`${url}/loan1`} component={LoanDetails1} />
@@ -104,6 +99,11 @@ const Insurance = (props) => {
           {/* Investment Details */}
           <Route path={`${url}/investment1`} component={InvestmentDetails1} />
           <Route path={`${url}/investment2`} component={InvestmentDetails2} />
+          <Route path={`${url}/investment3`} component={InvestmentDetails3} />
+          <Route path={`${url}/investment4`} component={InvestmentDetails4} />
+          <Route path={`${url}/invest-complete`} component={InvestSuccess} />
+          {/* Final Report */}
+          <Route path={`${url}/final-report`} component={Report} />
           {/* Catch-all */}
           <Route component={NotFound} />
         </Switch>

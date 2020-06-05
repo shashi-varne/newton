@@ -1,80 +1,80 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
-import qs from 'qs';
 import toast from '../../../common/ui/Toast';
-
 import Container from '../../common/Container';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
-import personal from 'assets/personal_details_icon.svg';
-import Api from 'utils/api';
-import { yesOrNoOptions, investmentOptions } from '../../constants';
+import { fetchFHCData } from '../../common/ApiCalls';
+import { storageService } from '../../../utils/validators';
+
+import { investmentOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
+import { navigate } from '../../common/commonFunctions';
 import { getConfig } from 'utils/functions';
+import FHC from '../../FHCClass';
 
 class InvestmentDetails2 extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
-      investmentOpts: this.createInvestOpts(),
-      investment: '',
+      investmentOpts: [],
       investment_error: '',
-      image: '',
-      provider: '',
-      params: qs.parse(this.props.location.search.slice(1)),
+      fhc_data: new FHC(),
       type: getConfig().productName
-    }
+    };
+    this.navigate = navigate.bind(this);
   }
 
-  createInvestOpts = () => {
-    let opts = [...investmentOptions];
-    opts.forEach(opt => opt.checked = false);
-    return opts;
+  initializeInvestOpts = (existingData = {}) => {
+    let keyedData = existingData.reduce((keyMap, currOpt) => {
+      keyMap[currOpt.type] = currOpt;
+      return keyMap;
+    }, {});
+    let invOpts = [];
+    for (const inv of investmentOptions) {
+      let checked = !!keyedData[inv.type];
+      invOpts.push(Object.assign({}, inv, { checked }));
+    }
+    return invOpts;
   }
 
   async componentDidMount() {
     try {
-      const res = await Api.get('page/financialhealthcheck/edit/mine?format=json');
-      const { email, mobile_no } = res.pfwresponse.result.profile;
-      const { image, provider, cover_plan } = res.pfwresponse.result.quote_desc;
-
+      let fhc_data = new FHC(storageService().getObject('fhc_data'));
+      if (!fhc_data) {
+        fhc_data = await fetchFHCData();
+        storageService().setObject('fhc_data', fhc_data);
+      }
       this.setState({
         show_loader: false,
-        email: email || '',
-        mobile_no: mobile_no || '',
-        image: image,
-        provider: provider,
-        cover_plan: cover_plan
+        investmentOpts: this.initializeInvestOpts(fhc_data.investments),
+        fhc_data,
       });
     } catch (err) {
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong');
+      console.log(err);
+      toast(err);
     }
   }
 
-  navigate = (pathname) => {
-    this.props.history.push({
-      pathname: pathname,
-      search: getConfig().searchParams,
-      params: {
-        disableBack: true
-      }
-    });
-  }
+  
 
   sendEvents(user_action) {
+    const snakeCase = val => val.replace(/[-\s]/g, '_');
+    const eventOpts = this.state.investmentOpts.reduce((obj, currInv) => {
+      obj[snakeCase(currInv.type)] = currInv.checked ? 'yes' : 'no';
+      return obj;
+    }, {});
     let eventObj = {
-      "event_name": 'fin_health_check',
+      "event_name": 'fhc',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'loan_details_one',
-        "provider": this.state.provider,
-        "investment": this.state.investment,
-        "from_edit": (this.state.edit) ? 'yes' : 'no'
+        "screen_name": 'investment details',
+        ...(eventOpts || []),
       }
     };
 
@@ -87,23 +87,31 @@ class InvestmentDetails2 extends Component {
 
   handleClick = () => {
     // this.sendEvents('next');
-    if (!this.state.investment) {
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+    const investmentSelected = this.state.investmentOpts.some(inv => inv.checked);
+    
+    if (!investmentSelected) {
       this.setState({
-        investment_error: 'Please select an option',
+        investment_error: 'Please select investments from below',
       });
     } else {
-      console.log('ALL VALID - SCREEN 1 - Investment');
-      if (this.state.investment === 'yes') {
-        this.navigate('/fhc/investment2');
+      fhc_data.investments = this.state.investmentOpts.filter(inv => inv.checked);
+      storageService().setObject('fhc_data', fhc_data);
+      if (fhc_data.investments.length <= 1) {
+        const showTaxSaving = storageService().get('enable_tax_saving');
+        
+        if (showTaxSaving === 'true') {
+          this.navigate('investment4');
+        } else {
+          this.navigate('invest-complete');
+        }
       } else {
-        //skip to screen 3 if user selects 'No' for investments
-        this.navigate('/fhc/investment4');
+        this.navigate('investment3');
       }
     }
   }
 
   handleChange = (val, idx) => event => {
-    console.log(val, event.target.checked);
     let opts = [...this.state.investmentOpts];
     opts[idx].checked = event.target.checked;
     this.setState({ investmentOpts: opts });
@@ -128,7 +136,7 @@ class InvestmentDetails2 extends Component {
               color="default"
               value="checked"
               name="checked"
-              onChange={this.handleChange(option.value, idx)}
+              onChange={this.handleChange(option.type, idx)}
               className="Checkbox" />
           </Grid>
           <Grid item xs={11}>
@@ -140,26 +148,34 @@ class InvestmentDetails2 extends Component {
   };
 
   render() {
+    let errorMsg = this.state.investment_error ? 
+      <span style={{ color: 'red', paddingLeft: '4px' }}>
+        {this.state.investment_error}
+      </span> : '';
+
     return (
       <Container
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Fin Health Check (FHC)"
-        smallTitle={this.state.provider}
         count={false}
         total={5}
         current={3}
         banner={true}
         bannerText={this.bannerText()}
         handleClick={this.handleClick}
-        edit={this.props.edit}
+        edit={false}
         topIcon="close"
         buttonTitle="Save & Continue"
-        logo={this.state.image}
       >
         <FormControl fullWidth>
-          <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
+          <TitleWithIcon width="23" icon={require(`assets/${this.state.type}/invest.svg`)}
             title={'Investment Details'} />
+          <div style={{ fontSize: '16px', color: '#4a4a4a', marginBottom: '10px' }}>
+            <span style={{ fontSize: '13px', display: 'block', marginBottom: '20px'}}>Great! It's good to have investments for future.</span>
+            Where you have put your money? Select from the assets below
+          </div>
+          { errorMsg }
           <div className="InputField" style={{ marginBottom: '0px !important' }}>
             { 
               this.state.investmentOpts.map((option, idx) => this.renderSelectOption(option, idx))

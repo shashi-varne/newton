@@ -2,24 +2,36 @@ import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
 import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
-import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import { fetchFHCData } from '../../common/ApiCalls';
 import { storageService } from '../../../utils/validators';
-import { yesOrNoOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 import { navigate } from '../../common/commonFunctions';
 import { getConfig } from 'utils/functions';
 import FHC from '../../FHCClass';
+import arrayMove from 'array-move';
+import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 
-class InvestmentDetails1 extends Component {
+const SortableItem = SortableElement(({ value }) => {
+  return (<li className="draggable-item item-li">{value.name}</li>);
+})
+
+const SortableList = SortableContainer(({ items }) => {
+  return (
+    <ul style={{padding: '0'}}>
+      {items.map((item, index) => (
+        <SortableItem value={item} index={index} key={index}></SortableItem>
+      ))}
+    </ul>
+  );
+})
+
+class InvestmentDetails3 extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
       fhc_data: new FHC(),
-      has_investment: false,
-      has_investment_error: '',
       type: getConfig().productName
     };
     this.navigate = navigate.bind(this);
@@ -34,7 +46,6 @@ class InvestmentDetails1 extends Component {
       }
       this.setState({
         show_loader: false,
-        has_investment: !!fhc_data.investments.length,
         fhc_data,
       });
     } catch (err) {
@@ -45,25 +56,20 @@ class InvestmentDetails1 extends Component {
     }
   }
 
-  handleRadioValue = name => index => {
-    const selectedVal = yesOrNoOptions[index]['value'];
-
-    this.setState({
-      [name]: selectedVal,
-      [`${name}_error`]: '',
-    });
-  }
-
   
 
   sendEvents(user_action) {
-
+    const snakeCase = val => val.replace(/[-\s]/g, '_');
+    const eventOpts = this.state.fhc_data.investments.reduce((obj, currInv) => {
+      obj[snakeCase(currInv.type)] = 'yes';
+      return obj;
+    }, {});
     let eventObj = {
       "event_name": 'fhc',
       "properties": {
         "user_action": user_action,
         "screen_name": 'investment details',
-        "investment": this.state.has_investment,
+        ...(eventOpts || []),
       }
     };
 
@@ -74,28 +80,24 @@ class InvestmentDetails1 extends Component {
     }
   }
 
+  onSortEnd = ({ oldIndex, newIndex }) => {
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+    fhc_data.investments = arrayMove(fhc_data.investments, oldIndex, newIndex);
+    this.setState({ fhc_data });
+  };
+
+
   handleClick = () => {
     // this.sendEvents('next');
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
-
-    if ([null, undefined, ''].includes(this.state.has_investment)) {
-      this.setState({ has_investment_error: 'Please select an option' });
+    fhc_data.investments.map((inv, idx) => inv.rank = `${idx+1}`);
+    storageService().setObject('fhc_data', fhc_data)
+    const showTaxSaving = storageService().get('enable_tax_saving');
+    // skip to screen 4 if user selects 'No' for investments and enable_tax_saving = true
+    if (showTaxSaving === 'true') {
+      this.navigate('investment4');
     } else {
-      if (this.state.has_investment === false) {
-        fhc_data.investments = [];
-      }
-      storageService().setObject('fhc_data', fhc_data)
-      if (this.state.has_investment) {
-        this.navigate('/fhc/investment2');
-      } else {
-        const showTaxSaving = storageService().get('enable_tax_saving');
-        // skip to screen 4 if user selects 'No' for investments and enable_tax_saving = true
-        if (showTaxSaving === 'true') {
-          this.navigate('investment4');
-        } else {
-          this.navigate('invest-complete');
-        }
-      }
+      this.navigate('invest-complete');
     }
   }
 
@@ -108,6 +110,7 @@ class InvestmentDetails1 extends Component {
   }
 
   render() {
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
     return (
       <Container
         events={this.sendEvents('just_set_events')}
@@ -119,24 +122,31 @@ class InvestmentDetails1 extends Component {
         banner={true}
         bannerText={this.bannerText()}
         handleClick={this.handleClick}
-        edit={false}
+        edit={this.props.edit}
         topIcon="close"
         buttonTitle="Save & Continue"
       >
         <FormControl fullWidth>
           <TitleWithIcon width="23" icon={require(`assets/${this.state.type}/invest.svg`)}
             title={'Investment Details'} />
-          <div className="InputField">
-            <RadioWithoutIcon
-              error={(this.state.has_investment_error) ? true : false}
-              helperText={this.state.has_investment_error}
-              width="40"
-              label="Have you ever invested your money?"
-              class="MaritalStatus"
-              options={yesOrNoOptions}
-              id="investment"
-              value={this.state.has_investment}
-              onChange={this.handleRadioValue('has_investment')} />
+          <div>
+            Rearrange the following in terms of how you 
+            have invested money from high to low
+          </div>
+          <div className="sortable-investment-container">
+            <div id="sortable-col-left">
+              <ul style={{padding: '0'}}>
+                {fhc_data.investments.map((v, i) => (
+                  <li className="item-li" key={i}>{i+1}</li>
+                ))}
+              </ul>
+            </div>
+            <div style={{ width: '100%' }}>
+              <SortableList
+                items={fhc_data.investments}
+                onSortEnd={this.onSortEnd}>
+              </SortableList>
+            </div>
           </div>
         </FormControl>
       </Container>
@@ -144,4 +154,4 @@ class InvestmentDetails1 extends Component {
   }
 }
 
-export default InvestmentDetails1;
+export default InvestmentDetails3;

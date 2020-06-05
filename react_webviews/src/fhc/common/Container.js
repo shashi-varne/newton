@@ -1,12 +1,17 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router';
-
 import Header from './Header';
 import Footer from './footer';
 import Banner from '../../common/ui/Banner';
 import loader_fisdom from 'assets/loader_gif_fisdom.gif';
 import loader_myway from 'assets/loader_gif_myway.gif';
 import { nativeCallback } from 'utils/native_callback';
+import '../../utils/native_listner';
+import { getConfig, setHeights } from 'utils/functions';
+import PopUp from './PopUp';
+import { storageService } from '../../utils/validators';
+import { uploadFHCData } from '../common/ApiCalls';
+import { toast } from 'react-toastify';
 import Button from 'material-ui/Button';
 import Dialog, {
   DialogActions,
@@ -14,9 +19,7 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
-import '../../utils/native_listner';
-import { getConfig, setHeights } from 'utils/functions';
-
+import { navigate } from './commonFunctions';
 
 class Container extends Component {
 
@@ -30,7 +33,8 @@ class Container extends Component {
       loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
     }
     this.handleTopIcon = this.handleTopIcon.bind(this);
-    this.handlePopup = this.handlePopup.bind(this);
+    this.handleYes = this.handleYes.bind(this);
+    this.navigate = navigate.bind(this);
   }
 
   componentDidMount() {
@@ -61,13 +65,6 @@ class Container extends Component {
     }
   }
 
-  navigate = (pathname) => {
-    this.props.history.push({
-      pathname: pathname,
-      search: getConfig().searchParams
-    });
-  }
-
   getEvents(user_action) {
     if (!this || !this.props || !this.props.events) {
       return;
@@ -79,48 +76,28 @@ class Container extends Component {
 
   historyGoBack = () => {
     this.setState({
-      back_pressed: true
-    })
+      back_pressed: true,
+    });
     let pathname = this.props.history.location.pathname;
     let { params } = this.props.location;
-    let { search } = this.props.location;
-
-    if (search.indexOf('goBack') < 0) {
-      if (pathname.indexOf('result') >= 0) {
-
-        nativeCallback({ action: 'exit', events: this.getEvents('back') });
-        return;
-      }
-    }
-
+    console.trace(pathname, params);
     if (params && params.disableBack) {
       nativeCallback({ action: 'exit' });
       return;
     }
-
-    if (pathname.indexOf('question1') >= 0) {
-      nativeCallback({ events: this.getEvents('back') });
-      this.navigate('intro');
-      return;
-    }
-
     switch (pathname) {
-      case "/risk":
-      case "/risk/intro":
+      case "/fhc":
+      case "/fhc/final-report":
         nativeCallback({ action: 'exit', events: this.getEvents('back') });
         break;
-      case "/risk/recommendation":
-        this.navigate('result');
+      case "/fhc/loan1":
+        this.navigate('personal4'); // to skip success screen
+        break;
+      case "/fhc/insurance1":
+        this.navigate('loan4'); // to skip success screen
         break;
       default:
-        if (navigator.onLine) {
-          nativeCallback({ events: this.getEvents('back') });
-          this.props.history.goBack();
-        } else {
-          this.setState({
-            openDialog: true
-          });
-        }
+        this.props.history.goBack();
     }
   }
 
@@ -158,46 +135,27 @@ class Container extends Component {
     );
   }
 
-  handlePopup = () => {
+  handleYes = async () => {
     this.setState({
       openPopup: false
     });
-
-    nativeCallback({ action: this.state.callbackType, events: this.getEvents('exit_yes') });
-
-  }
-
-  renderPopup = () => {
-    return (
-      <Dialog
-        fullScreen={false}
-        open={this.state.openPopup}
-        onClose={this.handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        {/* <DialogTitle id="form-dialog-title">No Internet Found</DialogTitle> */}
-        <DialogContent>
-          <DialogContentText>
-            {this.state.popupText}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleClose} color="default">
-            No
-          </Button>
-          <Button onClick={this.handlePopup} color="default" autoFocus>
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
+    try {
+      const fhc_data = storageService().getObject('fhc_data');
+      await uploadFHCData(fhc_data);
+    } catch (e) {
+      console.log(e);
+      toast('Could not save data. Please try again');
+    }
+    // nativeCallback({ action: this.state.callbackType, events: this.getEvents('exit_yes') });
   }
 
   handleTopIcon() {
     this.setState({
       callbackType: 'exit',
       openPopup: true,
-      popupText: 'Are you sure you want to exit ?'
+      popupText: <Fragment>Are you sure you want to <b>exit</b>? 
+        <br />We will save your information securely.
+      </Fragment>
     })
   }
 
@@ -231,10 +189,9 @@ class Container extends Component {
     }
 
     return (
-      <div className={`ContainerWrapper ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`} >
+      <div className={`ContainerWrapper fhc-container ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`} >
         {/* Header Block */}
         <Header
-          disableBack={this.props.disableBack}
           title={this.props.title}
           smallTitle={this.props.smallTitle}
           provider={this.props.provider}
@@ -291,7 +248,14 @@ class Container extends Component {
         }
         {/* No Internet */}
         {this.renderDialog()}
-        {this.renderPopup()}
+        <PopUp
+          openPopup={this.state.openPopup}
+          popupText={this.state.popupText}
+          handleClose={this.handleClose}
+          handleNo={this.handleClose}
+          handleYes={this.handleYes}
+        >
+        </PopUp>
       </div>
     );
   }

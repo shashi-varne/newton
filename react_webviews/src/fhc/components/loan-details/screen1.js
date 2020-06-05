@@ -1,76 +1,69 @@
 import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
-import qs from 'qs';
 import toast from '../../../common/ui/Toast';
-
 import Container from '../../common/Container';
 import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
 import Input from '../../../common/ui/Input';
-import { validateNumber, formatAmount, inrFormatTest } from 'utils/validators';
+import { formatAmount, inrFormatTest } from 'utils/validators';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
-import personal from 'assets/personal_details_icon.svg';
-import Api from 'utils/api';
+import { fetchFHCData } from '../../common/ApiCalls';
+import { storageService } from '../../../utils/validators';
 import { yesOrNoOptions } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
+import { navigate } from '../../common/commonFunctions';
 import { getConfig } from 'utils/functions';
+import FHC from '../../FHCClass';
 
 class LoanDetails1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: true,
-      house_loan: '',
-      house_loan_error: '',
-      monthly_emi: '',
-      monthly_emi_error: '',
-      image: '',
-      provider: '',
-      params: qs.parse(this.props.location.search.slice(1)),
+      fhc_data: new FHC(),
       type: getConfig().productName
-    }
+    };
+    this.navigate = navigate.bind(this);
   }
 
   async componentDidMount() {
     try {
-      const res = await Api.get('/api/insurance/profile/' + this.state.params.insurance_id, {
-        groups: 'contact'
-      });
-      const { email, mobile_no } = res.pfwresponse.result.profile;
-      const { image, provider, cover_plan } = res.pfwresponse.result.quote_desc;
-
+      let fhc_data = new FHC(storageService().getObject('fhc_data'));
+      if (!fhc_data) {
+        fhc_data = await fetchFHCData();
+        storageService().setObject('fhc_data', fhc_data);
+      }
       this.setState({
         show_loader: false,
-        email: email || '',
-        mobile_no: mobile_no || '',
-        image: image,
-        provider: provider,
-        cover_plan: cover_plan
+        fhc_data,
       });
     } catch (err) {
+      console.log(err);
       this.setState({
         show_loader: false
       });
-      toast('Something went wrong');
+      toast(err);
     }
   }
 
   handleRadioValue = name => index => {
-    this.setState({
-      [name]: yesOrNoOptions[index]['value'],
-      [name + '_error']: '',
-    });
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+    const selectedVal = yesOrNoOptions[index]['value'];
+
+    fhc_data[name] = selectedVal;
+    fhc_data[`${name}_error`] = '';
+    this.setState({ fhc_data });
   }
 
   handleChange = name => event => {
-    if (name === 'monthly_emi') {
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+
+    if (name === 'house_loan') {
       if (!inrFormatTest(event.target.value)) {
         return;
       }
-      this.setState({
-        [name]: event.target.value.replace(/,/g, ""),
-        [name + '_error']: ''
-      });
+      fhc_data.house_loan = event.target.value;
     }
+    this.setState({ fhc_data });
   }
 
   handleKeyChange = name => event => {
@@ -82,26 +75,16 @@ class LoanDetails1 extends Component {
     }
   }
 
-  navigate = (pathname) => {
-    this.props.history.push({
-      pathname: pathname,
-      search: getConfig().searchParams,
-      params: {
-        disableBack: true
-      }
-    });
-  }
+  
 
   sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'fin_health_check',
+      "event_name": 'fhc',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'loan_details_one',
-        "provider": this.state.provider,
-        "house_loan": this.state.house_loan,
-        "monthly_emi": this.state.monthly_emi,
-        "from_edit": (this.state.edit) ? 'yes' : 'no'
+        "screen_name": 'liabilties',
+        "house_loan": this.state.fhc_data.house_loan ? 'yes' : 'no',
+        "from_edit": (this.props.edit) ? 'yes' : 'no'
       }
     };
 
@@ -114,24 +97,27 @@ class LoanDetails1 extends Component {
 
   handleClick = () => {
     // this.sendEvents('next');
-    if (!this.state.house_loan) {
-      this.setState({
-        house_loan_error: 'Please select an option',
-      });
-    } else if (
-      this.state.house_loan === 'yes' &&
-      (!this.state.monthly_emi || !validateNumber(this.state.monthly_emi))
-      ) {
-      this.setState({
-        monthly_emi_error: 'Monthly EMI cannot be negative or 0',
-      });
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+
+    if (!fhc_data.isValidHouseInfo('loan')) {
+      this.setState({ fhc_data });
     } else {
-      console.log('ALL VALID - SCREEN 1 - LOAN');
+      storageService().setObject('fhc_data', fhc_data)
       if (this.props.edit) {
-        //skip to screen 3 for edit flow (house rent details not required)
-        this.navigate('/fhc/edit-loan3');
+        if (
+          fhc_data.has_house_loan ||
+          fhc_data.has_car_loan ||
+          fhc_data.has_education_loan
+        ) {
+          // skip to summary for edit flow (house rent details not required)
+          this.navigate('loan-summary');
+        } else {
+          this.navigate('insurance1');
+        }
+      } else if (fhc_data.has_house_loan) {
+        this.navigate('loan3'); // skip house_rent entry if user has house_loan
       } else {
-        this.navigate('/fhc/loan2');
+        this.navigate('loan2');
       }
     }
   }
@@ -146,20 +132,22 @@ class LoanDetails1 extends Component {
 
   render() {
     let monthlyEMIInput = null;
-    if (this.state.house_loan === 'yes') {
+    let fhc_data = new FHC(this.state.fhc_data.getCopy());
+
+    if (fhc_data.has_house_loan) {
       monthlyEMIInput = <div className="InputField">
         <Input
-          error={(this.state.monthly_emi_error) ? true : false}
-          helperText={this.state.monthly_emi_error}
+          error={!!fhc_data.house_loan_error}
+          helperText={fhc_data.house_loan_error}
           type="text"
           width="40"
           label="Monthly EMI"
           class="Income"
-          id="monthly_emi"
-          name="monthly_emi"
-          value={formatAmount(this.state.monthly_emi || '')}
-          onChange={this.handleChange('monthly_emi')}
-          onKeyChange={this.handleKeyChange('monthly_emi')} />
+          id="house_loan"
+          name="house_loan"
+          value={formatAmount(fhc_data.house_loan || '')}
+          onChange={this.handleChange('house_loan')}
+          onKeyChange={this.handleKeyChange('house_loan')} />
       </div>
     }
     return (
@@ -167,32 +155,30 @@ class LoanDetails1 extends Component {
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Fin Health Check (FHC)"
-        smallTitle={this.state.provider}
         count={false}
         total={5}
-        current={3}
+        current={2}
         banner={true}
         bannerText={this.bannerText()}
         handleClick={this.handleClick}
         edit={this.props.edit}
         topIcon="close"
         buttonTitle="Save & Continue"
-        logo={this.state.image}
       >
         <FormControl fullWidth>
-          <TitleWithIcon width="23" icon={this.state.type !== 'fisdom' ? personal : personal}
+          <TitleWithIcon width="23" icon={require(`assets/${this.state.type}/loan.svg`)}
             title={(this.props.edit) ? 'Edit Loan Liability Details' : 'Loan Liability'} />
           <div className="InputField">
             <RadioWithoutIcon
-              error={(this.state.house_loan_error) ? true : false}
-              helperText={this.state.house_loan_error}
+              error={!!fhc_data.has_house_loan_error}
+              helperText={fhc_data.has_house_loan_error}
               width="40"
               label="Do you have house loan?"
               class="MaritalStatus"
               options={yesOrNoOptions}
               id="house-loan"
-              value={this.state.house_loan}
-              onChange={this.handleRadioValue('house_loan')} />
+              value={fhc_data.has_house_loan}
+              onChange={this.handleRadioValue('has_house_loan')} />
           </div>
           {
             monthlyEMIInput
