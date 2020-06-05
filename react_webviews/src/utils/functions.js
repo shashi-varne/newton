@@ -558,19 +558,23 @@ export const getConfig = () => {
     }
   }
 
-  returnConfig.current_params = main_query_params;
-  returnConfig.base_url = base_url;
-  returnConfig.searchParams = searchParams;
-  returnConfig.searchParamsMustAppend = searchParamsMustAppend;
-
-  returnConfig.isWebCode = returnConfig.Web || returnConfig.redirect_url;
-
   returnConfig.app_version = '';
   if (checkValidString(app_version)) {
     returnConfig.app_version = app_version;
     searchParams += `&app_version=${app_version}`;
     searchParamsMustAppend += `&app_version=${app_version}`;
   }
+
+
+
+
+  // should be last
+  returnConfig.current_params = main_query_params;
+  returnConfig.base_url = base_url;
+  returnConfig.searchParams = searchParams;
+  returnConfig.searchParamsMustAppend = searchParamsMustAppend;
+
+  returnConfig.isWebCode = returnConfig.Web || returnConfig.redirect_url;
 
   return returnConfig;
 }
@@ -584,7 +588,7 @@ export function isFeatureEnabled(config, feature) {
     return true;
   }
 
-  if(feature === 'etli_download' && app === 'android' && app_version) {
+  if(feature === 'etli_download' && app === 'android' && parseInt(app_version) >= 999) {
     return true;
   }
 
