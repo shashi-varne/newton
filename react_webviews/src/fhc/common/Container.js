@@ -80,7 +80,6 @@ class Container extends Component {
     });
     let pathname = this.props.history.location.pathname;
     let { params } = this.props.location;
-    console.trace(pathname, params);
     if (params && params.disableBack) {
       nativeCallback({ action: 'exit' });
       return;
@@ -89,12 +88,6 @@ class Container extends Component {
       case "/fhc":
       case "/fhc/final-report":
         nativeCallback({ action: 'exit', events: this.getEvents('back') });
-        break;
-      case "/fhc/loan1":
-        this.navigate('personal4'); // to skip success screen
-        break;
-      case "/fhc/insurance1":
-        this.navigate('loan4'); // to skip success screen
         break;
       default:
         this.props.history.goBack();
@@ -204,7 +197,8 @@ class Container extends Component {
           resetpage={this.props.resetpage}
           handleReset={this.props.handleReset}
           topIcon={this.props.topIcon}
-          handleTopIcon={this.handleTopIcon} />
+          handleTopIcon={this.handleTopIcon}
+          hideBack={this.props.hideBack} />
 
         {/* Below Header Block */}
         <div id="HeaderHeight" style={{ top: 60 }}>

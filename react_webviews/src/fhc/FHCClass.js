@@ -84,6 +84,10 @@ class FHC {
   }
 
   get has_education_loan() {
+    if (
+      !this.loan.education ||
+      [null, undefined, ''].includes(this.loan.education.is_present)
+    ) return null;
     return this.loan.education.is_present;
   }
   set has_education_loan(val) {
@@ -101,6 +105,10 @@ class FHC {
   }
 
   get has_car_loan() {
+    if (
+      !this.loan.car ||
+      [null, undefined, ''].includes(this.loan.car.is_present)
+    ) return null;
     return this.loan.car.is_present;
   }
   set has_car_loan(val) {
@@ -118,6 +126,7 @@ class FHC {
   }
 
   get has_house_loan() {
+    if (!this.house.type) return null;
     return this.house.type === 'own-house';
   }
   set has_house_loan(val) {
@@ -191,17 +200,19 @@ class FHC {
 
   isValidSalaryInfo() {
     let valid = true;
-    if (!this.salary.annual || !validateNumber(this.salary.annual)) {
+    const annual = Number(this.salary.annual);
+    const monthly = Number(this.salary.monthly);
+    if (!annual || !validateNumber(annual)) {
       this['annual_sal_error'] = 'Enter a valid Annual CTC';
       this['monthly_sal_error'] = 'Enter a valid Annual CTC first';
       valid = false;
-    } else if (!this.salary.monthly || !validateNumber(this.salary.monthly)) {
+    } else if (!monthly || !validateNumber(monthly)) {
       this['monthly_sal_error'] = 'Enter a valid Monthly Salary amount';
       valid = false;
-    } else if (this.salary.monthly > this.salary.annual / 12) {
+    } else if (monthly > annual / 12) {
       this['monthly_sal_error'] = 'Monthly take home cannot be greater than CTC/12';
       valid = false;
-    } else if (!this.family_expence || !validateNumber(this.family_expence)) {
+    } else if (!Number(this.family_expence) || !validateNumber(this.family_expence)) {
       this['monthly_exp_error'] = 'Enter a valid Monthly Expense amount';
       valid = false;
     }

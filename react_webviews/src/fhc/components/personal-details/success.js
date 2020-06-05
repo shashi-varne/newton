@@ -22,7 +22,12 @@ class Success extends Component {
             name: fhc_data.name,
         });
         setTimeout(() => {
-            this.navigate('loan1');
+            /* sending 3rd param (replace) as true is required to prevent this screen
+             from showing up in the back sequence of 'loan1'. Also, the history stack
+             is left in a way that allows a natural flow when moving back through
+             subsequent or former screens
+            */
+            this.navigate('loan1', null, true);
         }, 2500);
     }
 
@@ -33,6 +38,7 @@ class Success extends Component {
                 noFooter={true}
                 handleClick={() => this.startFHC()}
                 title="Fin Health Check (FHC)"
+                hideBack={true}
             >
                 <div className="landing-container">
                     <img

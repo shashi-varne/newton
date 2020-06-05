@@ -46,6 +46,7 @@ class PersonalDetails3 extends Component {
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
 
     fhc_data.family_status[name] = yesOrNoOptions[index]['value'];
+    fhc_data[`${name}_error`] = '';
     this.setState({ fhc_data });
   }
 
@@ -72,7 +73,7 @@ class PersonalDetails3 extends Component {
   }
 
   handleClick = () => {
-    // this.sendEvents('next');
+    this.sendEvents('next');
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
 
     let error = false;

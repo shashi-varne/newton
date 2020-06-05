@@ -85,8 +85,20 @@ class InvestmentDetails2 extends Component {
     }
   }
 
+  setInvestments = (fhc_data) => {
+    let rank = 1;
+    fhc_data.investments = this.state.investmentOpts.filter(inv => {
+      if (inv.checked) {
+        inv.rank = `${rank}`;
+        rank += 1;
+        return true;
+      }
+      return false;
+    });
+  }
+
   handleClick = () => {
-    // this.sendEvents('next');
+    this.sendEvents('next');
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
     const investmentSelected = this.state.investmentOpts.some(inv => inv.checked);
     
@@ -95,8 +107,9 @@ class InvestmentDetails2 extends Component {
         investment_error: 'Please select investments from below',
       });
     } else {
-      fhc_data.investments = this.state.investmentOpts.filter(inv => inv.checked);
+      this.setInvestments(fhc_data);
       storageService().setObject('fhc_data', fhc_data);
+      
       if (fhc_data.investments.length <= 1) {
         const showTaxSaving = storageService().get('enable_tax_saving');
         

@@ -139,8 +139,8 @@ class PersonalDetails1 extends Component {
           <div className="InputField">
             <Input
               type="text"
-              productType={this.state.type}
-              error={(fhc_data.name_error) ? true : false}
+              shrink={fhc_data.name}
+              error={!!fhc_data.name_error}
               helperText={fhc_data.name_error}
               width="40"
               icon={name}
@@ -153,7 +153,8 @@ class PersonalDetails1 extends Component {
           </div>
           <div className="InputField">
             <Input
-              error={(fhc_data.dob_error) ? true : false}
+              shrink={fhc_data.dob}
+              error={!!fhc_data.dob_error}
               helperText={fhc_data.dob_error}
               type="text"
               width="40"
@@ -170,7 +171,8 @@ class PersonalDetails1 extends Component {
           </div>
           <div className="InputField">
             <Input
-              error={(fhc_data.email_error) ? true : false}
+              shrink={fhc_data.email}
+              error={!!fhc_data.email_error}
               helperText={fhc_data.email_error}
               type="email"
               icon={email}

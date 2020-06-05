@@ -102,9 +102,10 @@ class PersonalDetails4 extends Component {
     } else {
       storageService().setObject('fhc_data', fhc_data)
       try {
+        this.setState({ show_loader : true});
         const result = await uploadFHCData(fhc_data);
         storageService().setObject('enable_tax_saving', result.enable_tax_saving);
-        this.navigate('personal-complete')
+        this.navigate('personal-complete');
       } catch (err) {
         toast(err);
       }
@@ -119,9 +120,9 @@ class PersonalDetails4 extends Component {
         showLoader={this.state.show_loader}
         title="Fin Health Check (FHC)"
         count={false}
-        total={5}
+        total={this.state.show_loader ? 0 : 5}
         current={2}
-        banner={true}
+        banner={!this.state.show_loader}
         bannerText={this.bannerText()}
         handleClick={this.handleClick}
         edit={false}

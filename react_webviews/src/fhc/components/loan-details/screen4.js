@@ -76,8 +76,6 @@ class LoanDetails4 extends Component {
     }
   }
 
-  
-
   sendEvents(user_action) {
     let eventObj = {
       "event_name": 'fhc',
@@ -96,7 +94,7 @@ class LoanDetails4 extends Component {
   }
 
   handleClick = () => {
-    // this.sendEvents('next');
+    this.sendEvents('next');
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
 
     if (!fhc_data.isValidLoanInfo('education')) {

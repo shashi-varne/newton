@@ -90,7 +90,7 @@ class PersonalDetails2 extends Component {
   }
 
   handleClick = () => {
-    // this.sendEvents('next');
+    this.sendEvents('next');
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
     let error = false;
     

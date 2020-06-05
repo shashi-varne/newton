@@ -8,12 +8,15 @@ import Arrow from '@material-ui/icons/ArrowBack';
 import Close from '@material-ui/icons/Close';
 import restart from 'assets/restart_nav_icn.svg';
 
-const Header = ({ classes, title, count, total, current, goBack, edit, type, resetpage, handleReset, smallTitle, disableBack, provider, topIcon, handleTopIcon }) => (
+const Header = ({ classes, title, count, total, current, goBack, edit, type, resetpage, handleReset, smallTitle,  hideBack, topIcon, handleTopIcon }) => (
   <AppBar position="fixed" color="primary" className={`Header ${classes.root}`}>
     <Toolbar>
-      <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={goBack}>
-        <Arrow />
-      </IconButton>
+      {
+        !hideBack &&
+        <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={goBack}>
+          <Arrow />
+        </IconButton>
+      }
       <Typography variant="subheading" color="inherit" className={classes.flex}>
         {smallTitle && smallTitle !== undefined &&
           <div>

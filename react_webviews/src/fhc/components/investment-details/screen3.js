@@ -9,7 +9,6 @@ import { nativeCallback } from 'utils/native_callback';
 import { navigate } from '../../common/commonFunctions';
 import { getConfig } from 'utils/functions';
 import FHC from '../../FHCClass';
-import arrayMove from 'array-move';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 
 const SortableItem = SortableElement(({ value }) => {
@@ -56,9 +55,7 @@ class InvestmentDetails3 extends Component {
     }
   }
 
-  
-
-  sendEvents(user_action) {
+  sendEvents = (user_action) => {
     const snakeCase = val => val.replace(/[-\s]/g, '_');
     const eventOpts = this.state.fhc_data.investments.reduce((obj, currInv) => {
       obj[snakeCase(currInv.type)] = 'yes';
@@ -88,7 +85,7 @@ class InvestmentDetails3 extends Component {
 
 
   handleClick = () => {
-    // this.sendEvents('next');
+    this.sendEvents('next');
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
     fhc_data.investments.map((inv, idx) => inv.rank = `${idx+1}`);
     storageService().setObject('fhc_data', fhc_data)
@@ -144,6 +141,8 @@ class InvestmentDetails3 extends Component {
             <div style={{ width: '100%' }}>
               <SortableList
                 items={fhc_data.investments}
+                lockAxis={'y'}
+                pressDelay={200}
                 onSortEnd={this.onSortEnd}>
               </SortableList>
             </div>
@@ -155,3 +154,11 @@ class InvestmentDetails3 extends Component {
 }
 
 export default InvestmentDetails3;
+
+function arrayMove(arr, oldIdx, newIdx) {
+  if (oldIdx === newIdx) return arr;
+  let arrToReturn = [...arr];
+  const [moveElem] = arrToReturn.splice(oldIdx, 1);
+  arrToReturn.splice(newIdx, 0, moveElem);
+  return arrToReturn;
+}

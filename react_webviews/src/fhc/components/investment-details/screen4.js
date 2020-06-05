@@ -103,7 +103,7 @@ class InvestmentDetails4 extends Component {
   }
 
   handleClick = async () => {
-    // this.sendEvents('next');
+    this.sendEvents('next');
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
 
     if ([undefined, null, ''].includes(this.state.tax_investment)) {

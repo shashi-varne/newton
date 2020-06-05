@@ -75,7 +75,7 @@ class InvestmentDetails1 extends Component {
   }
 
   handleClick = () => {
-    // this.sendEvents('next');
+    this.sendEvents('next');
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
 
     if ([null, undefined, ''].includes(this.state.has_investment)) {

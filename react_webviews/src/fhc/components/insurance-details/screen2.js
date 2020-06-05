@@ -97,7 +97,7 @@ class InsuranceDetails2 extends Component {
   }
 
   handleClick = () => {
-    // this.sendEvents('next');
+    this.sendEvents('next');
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
 
     if (!fhc_data.isValidInsuranceInfo('medical')) {
