@@ -60,7 +60,6 @@ class GroupHealthSelectInsureType extends Component {
   handleClick = () => {
 
     let groupHealthPlanData = this.state.groupHealthPlanData;
-    console.log(groupHealthPlanData);
     groupHealthPlanData.account_type = this.state.account_type;
     storageService().setObject('groupHealthPlanData',groupHealthPlanData );
 

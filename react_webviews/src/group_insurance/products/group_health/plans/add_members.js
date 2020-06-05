@@ -4,7 +4,8 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { health_providers } from '../../../constants';
-import { storageService, calculateAge, isValidDate, IsFutureDate } from 'utils/validators';
+import { storageService } from 'utils/validators';
+// calculateAge, isValidDate, IsFutureDate
 import PlusMinusInput from '../../../../common/ui/PlusMinusInput';
 
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
