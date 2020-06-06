@@ -20,6 +20,8 @@ class PersonalDetails2 extends Component {
     this.state = {
       show_loader: true,
       fhc_data: new FHC(),
+      has_kids: '',
+      has_kids_error: '',
       kidsOptions: kidsOptions,
       type: getConfig().productName
     };
@@ -35,6 +37,7 @@ class PersonalDetails2 extends Component {
       }
       this.setState({
         show_loader: false,
+        has_kids: !!Number(fhc_data.num_kids),
         fhc_data,
       });
     } catch (err) {
@@ -49,20 +52,25 @@ class PersonalDetails2 extends Component {
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
     const selectedVal = yesOrNoOptions[index]['value'];
 
-    if (name === 'num_kids') {
-      fhc_data.num_kids = selectedVal ? '1' : null;
-      fhc_data.num_kids_error = '';
+    if (name === 'has_kids') {
+      fhc_data.num_kids = selectedVal ? '1' : '0';
+      this.setState({
+        fhc_data,
+        has_kids: selectedVal,
+        has_kids_error: '',
+      });
     } else {
       fhc_data[name] = selectedVal;
       fhc_data[`${name}_error`] = '';
+      this.setState({ fhc_data });
     }
-    this.setState({ fhc_data });
   }
 
   handleChange = name => event => {
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
     if (name === 'num_kids') {
       fhc_data.num_kids = event;
+      fhc_data.num_kids_error = '';
     }
     this.setState({ fhc_data });
   }
@@ -90,16 +98,14 @@ class PersonalDetails2 extends Component {
   handleClick = () => {
     this.sendEvents('next');
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
-    let error = false;
     
-    ['is_married', 'num_kids'].forEach(key => {
-      if(fhc_data[key] === null || fhc_data[key] === undefined) {
-        fhc_data[`${key}_error`] = 'Please select an option';
-        error = true;
-      }
-    });
-
-    if (error) {
+    if ([null, undefined, ''].includes(fhc_data.is_married)) {
+      fhc_data.is_married_error = 'Please select an option';
+      this.setState({ fhc_data });
+    } else if ([null, undefined, ''].includes(this.state.has_kids)){
+      this.setState({ has_kids_error: 'Please select an option' });
+    } else if (this.state.has_kids && !Number(fhc_data.num_kids)) {
+      fhc_data.num_kids_error = 'Please select an option';
       this.setState({ fhc_data });
     } else {
       storageService().setObject('fhc_data', fhc_data)
@@ -110,8 +116,7 @@ class PersonalDetails2 extends Component {
   render() {
     let kidsSelect = null;
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
-    const has_kids = fhc_data.num_kids || null;
-    console.log(has_kids);
+    const has_kids = this.state.has_kids;
     if (has_kids) {
       kidsSelect = <div className="InputField">
         <DropdownWithoutIcon
@@ -159,8 +164,8 @@ class PersonalDetails2 extends Component {
           </div>
           <div className="InputField">
             <RadioWithoutIcon
-              error={false}
-              helperText={''}
+              error={!!this.state.has_kids_error}
+              helperText={this.state.has_kids_error}
               icon={marital}
               width="40"
               label="Do you have kids?"
@@ -168,7 +173,7 @@ class PersonalDetails2 extends Component {
               options={yesOrNoOptions}
               id="has-kids"
               value={has_kids}
-              onChange={this.handleRadioValue('num_kids')} />
+              onChange={this.handleRadioValue('has_kids')} />
           </div>
           {
             kidsSelect

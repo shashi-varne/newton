@@ -16,7 +16,7 @@ class FHC {
   loan = {};
   salary = {};
   family_expence = '';
-  family_status = { spouse: false, children: null };
+  family_status = { spouse: false, children: '0' };
   life_insurance = {};
   medical_insurance = {};
   tax_savings = {};
@@ -24,7 +24,7 @@ class FHC {
 
   constructor(props = {}) {
     Object.assign(this, {
-      family_status: { spouse: false, children: null },
+      family_status: { spouse: false, children: '0' },
       salary: {},
       loan: { car: {}, education: {} },
       house: {},
@@ -45,7 +45,7 @@ class FHC {
 
   get num_kids() {
     const children = this.family_status.children;
-    return children ? `${children}` : null;
+    return `${children}`;
   }
   set num_kids(val) {
     const [kids] = val.toString().split('+'); // Remove 
@@ -53,7 +53,7 @@ class FHC {
   }
 
   get is_married() {
-    return this.family_status.spouse;
+    return !!this.family_status.spouse;
   }
   set is_married(val) {
     this.family_status.spouse = val;

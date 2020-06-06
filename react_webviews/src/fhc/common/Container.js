@@ -87,6 +87,7 @@ class Container extends Component {
     switch (pathname) {
       case "/fhc":
       case "/fhc/final-report":
+        storageService().remove('fhc_data'); // remove cached fhc data
         nativeCallback({ action: 'exit', events: this.getEvents('back') });
         break;
       default:
