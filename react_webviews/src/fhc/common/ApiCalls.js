@@ -7,7 +7,6 @@ export const fetchFHCData = async () => {
       format: 'json',
     });
     const { result: fhc_data, status_code: status } = res.pfwresponse;
-    console.log(res.pfwresponse);
     if (status === 200) {
       return new FHC(fhc_data);
     } else {

@@ -18,9 +18,6 @@ import JssProvider from 'react-jss/lib/JssProvider';
 import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
 
 
-/***********************TERM INSURANCE START   **************/
-// import PersonalDetails1 from '../products/term_insurance/personal-details/screen1';
-// import PersonalDetails2 from './products/term_insurance/personal-details/screen2';
 import PersonalDetails1 from './components/personal-details/screen1';
 import PersonalDetails2 from './components/personal-details/screen2';
 import PersonalDetails3 from './components/personal-details/screen3';

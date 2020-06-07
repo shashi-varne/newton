@@ -27,10 +27,12 @@ class PersonalDetails4 extends Component {
 
   async componentDidMount() {
     try {
-      let fhc_data = new FHC(storageService().getObject('fhc_data'));
+      let fhc_data = storageService().getObject('fhc_data');
       if (!fhc_data) {
         fhc_data = await fetchFHCData();
         storageService().setObject('fhc_data', fhc_data);
+      } else {
+        fhc_data = new FHC(fhc_data);
       }
       this.setState({
         show_loader: false,
@@ -120,9 +122,9 @@ class PersonalDetails4 extends Component {
         showLoader={this.state.show_loader}
         title="Fin Health Check (FHC)"
         count={false}
-        total={this.state.show_loader ? 0 : 5}
+        total={5}
         current={2}
-        banner={!this.state.show_loader}
+        banner={true}
         bannerText={this.bannerText()}
         handleClick={this.handleClick}
         edit={false}

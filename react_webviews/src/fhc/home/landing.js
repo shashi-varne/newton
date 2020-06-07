@@ -18,8 +18,10 @@ class Landing extends Component {
 
     async componentDidMount() {
         try {
-            let { params } = this.props.location;
-            if (!(params || {}).refresh) {
+            let params = this.props.location.params || {};
+            if (params.refresh || params.fromScreen1) {
+                // Do nothing
+            } else {
                 const fhc_data = await fetchFHCData();
                 if (fhc_data.completed) {
                     this.navigate('/fhc/final-report');

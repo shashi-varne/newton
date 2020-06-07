@@ -28,6 +28,7 @@ class Container extends Component {
     this.state = {
       openDialog: false,
       openPopup: false,
+      show_loader: false,
       popupText: '',
       callbackType: '',
       loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
@@ -90,6 +91,9 @@ class Container extends Component {
         storageService().remove('fhc_data'); // remove cached fhc data
         nativeCallback({ action: 'exit', events: this.getEvents('back') });
         break;
+      case "/fhc/personal1":
+        this.navigate('/fhc', { fromScreen1: true });
+        break;
       default:
         this.props.history.goBack();
     }
@@ -133,14 +137,16 @@ class Container extends Component {
     this.setState({
       openPopup: false
     });
+    this.setState({ show_loader: true });
     try {
       const fhc_data = storageService().getObject('fhc_data');
       await uploadFHCData(fhc_data);
+      nativeCallback({ action: this.state.callbackType, events: this.getEvents('exit_yes') });
     } catch (e) {
+      this.setState({ show_loader: false });
       console.log(e);
       toast('Could not save data. Please try again');
     }
-    nativeCallback({ action: this.state.callbackType, events: this.getEvents('exit_yes') });
   }
 
   handleTopIcon() {
@@ -154,7 +160,7 @@ class Container extends Component {
   }
 
   renderPageLoader = () => {
-    if (this.props.showLoader) {
+    if (this.props.showLoader || this.state.show_loader) {
       return (
         <div className="Loader">
           <div className="LoaderOverlay">
@@ -172,6 +178,7 @@ class Container extends Component {
   }
 
   render() {
+    let show_loader = this.props.showLoader || this.state.show_loader;
     let steps = [];
     for (var i = 0; i < this.props.total; i++) {
       if (this.props.current > i) {
@@ -208,13 +215,13 @@ class Container extends Component {
           {this.renderPageLoader()}
 
           {
-            steps && <div className="Step">
+            (!show_loader && steps) && <div className="Step">
               {steps}
             </div>
           }
 
           {/* Banner Block */}
-          {this.props.banner && <Banner text={this.props.bannerText} />}
+          {(!show_loader && this.props.banner) && <Banner text={this.props.bannerText} />}
 
         </div>
 

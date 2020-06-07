@@ -27,10 +27,12 @@ class InsuranceDetails1 extends Component {
 
   async componentDidMount() {
     try {
-      let fhc_data = new FHC(storageService().getObject('fhc_data'));
+      let fhc_data = storageService().getObject('fhc_data');
       if (!fhc_data) {
         fhc_data = await fetchFHCData();
         storageService().setObject('fhc_data', fhc_data);
+      } else {
+        fhc_data = new FHC(fhc_data);
       }
       this.setState({
         show_loader: false,

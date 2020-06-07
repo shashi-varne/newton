@@ -163,10 +163,7 @@ class FHC {
   }
 
   isValidName() {
-    if (
-      (this.name.split(" ").filter(e => e).length < 2) ||
-      !validateEmpty(this.name)
-    ) {
+    if (!validateEmpty(this.name)) {
       this.name_error = 'Enter valid full name';
     } else if (!validateConsecutiveChar(this.name)) {
       this.name_error = 'Name can not contain more than 3 same consecutive characters';
