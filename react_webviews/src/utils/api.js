@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import qs from 'qs';
 import createBrowserHistory from 'history/createBrowserHistory';
-
+import { checkValidString } from './validators';
 import { encrypt, decrypt } from './encryption';
 import { getConfig } from  'utils/functions'
 const myHistory = createBrowserHistory();
@@ -40,8 +40,9 @@ class Api {
         redirect_url = decodeURIComponent(redirect_url);
         let redirect_url_data = redirect_url.split("?is_secure=")
         if(redirect_url_data.length === 2) {
-          is_secure = redirect_url_data[1]
+          is_secure = checkValidString(redirect_url_data[1]);
         }
+
       }
     }
     let options = Object.assign({
