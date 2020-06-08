@@ -3,10 +3,13 @@ import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { health_providers } from '../../../constants';
 import { storageService, inrFormatDecimal, numDifferentiation } from 'utils/validators';
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
+import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
+import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
+import {initialize} from '../common_data';
+
 class GroupHealthPlanDetails extends Component {
 
     constructor(props) {
@@ -20,17 +23,25 @@ class GroupHealthPlanDetails extends Component {
                 WF: []
             },
             common_data: {},
-            plan_selected: {}
+            plan_selected: {},
+            extra_data: {
+                benefits: {
+                    main: []
+                },
+                special_benfits: [],
+                waiting_period: []
+            },
+            show_loader: true,
+            ic_hs_special_benefits: ic_hs_special_benefits,
+            ic_hs_main_benefits: ic_hs_main_benefits
         }
+
+        this.initialize = initialize.bind(this);
     }
 
     componentWillMount() {
-        this.setState({
-            providerData: health_providers[this.state.provider],
-            plan_selected: this.state.groupHealthPlanData.plan_selected
-        })
 
-        console.log(this.state.groupHealthPlanData);
+        this.initialize();
     }
 
     async componentDidMount() {
@@ -105,15 +116,18 @@ class GroupHealthPlanDetails extends Component {
     }
 
     handleClick = () => {
-        let groupHealthPlanData = this.state.groupHealthPlanData;
-        storageService().setObject('groupHealthPlanData', groupHealthPlanData);
 
-        this.navigate('plan-list');
+        let groupHealthPlanData = this.state.groupHealthPlanData;
+        groupHealthPlanData.plan_selected.common_data = this.state.common_data;
+        groupHealthPlanData.plan_selected.extra_data = this.state.extra_data;
+        groupHealthPlanData.plan_selected.premium_data = this.state.premium_data;
+        storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+        this.navigate('plan-select-sum-assured');
     }
 
 
     renderPremiums = (props, index) => {
-      
+
         return (
             <div className="sum-assured-info" key={index}>
                 <div className="sai-left">
@@ -122,6 +136,20 @@ class GroupHealthPlanDetails extends Component {
                 <div className="sai-left">
                     {inrFormatDecimal(props.net_premium)}/year
                         </div>
+            </div>
+        );
+    }
+
+    renderSteps = (option, index) => {
+        return (
+            <div key={index} className="tile">
+                <img className="icon"
+                    src={option.img} alt="Gold" />
+                <div className="content">
+                    <div className="content">
+                        <div className="content-title">{option.content}</div>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -153,6 +181,8 @@ class GroupHealthPlanDetails extends Component {
 
                     <div className="settlement-info">Claim settlement: 98.88%</div>
 
+                    <div className="recomm-info">Affordable</div>
+
                     <div className="copay-info">
                         <div className="ci-left">
                             0% copay, assured 100% cashless treatment
@@ -162,7 +192,7 @@ class GroupHealthPlanDetails extends Component {
                         </div>
                     </div>
 
-                    <div className="sum-assured-info">
+                    <div className="sum-assured-info" style={{ fontWeight: 600 }}>
                         <div className="sai-left">
                             Sum assured
                         </div>
@@ -172,6 +202,73 @@ class GroupHealthPlanDetails extends Component {
                     </div>
 
                     {this.state.premium_data.WF.map(this.renderPremiums)}
+
+                    <div className="common-how-steps" style={{ border: 'none' }}>
+                        <div className="top-tile">
+                            <div className="top-title">
+                                Benefits under this plan
+                            </div>
+                        </div>
+
+
+                        <div className="special-benefit"
+                            style={{ backgroundImage: `url(${this.state.ic_hs_special_benefits})` }}>
+                            <img className="special-benefit-img" src={require(`assets/ic_hs_special.svg`)}
+                                alt="" />
+                            <span className="special-benefit-text">Special benefits</span>
+                        </div>
+                        <div className='common-steps-images'>
+                            {this.state.extra_data.benefits.main.map(this.renderSteps)}
+                        </div>
+
+                        <div className="special-benefit"
+                            style={{ backgroundImage: `url(${this.state.ic_hs_main_benefits})` }}>
+                            <img className="special-benefit-img" src={require(`assets/ic_hs_main.svg`)}
+                                alt="" />
+                            <span className="special-benefit-text">Main benefits</span>
+                        </div>
+                        <div className='common-steps-images'>
+                            {this.state.extra_data.special_benfits.map(this.renderSteps)}
+                        </div>
+                    </div>
+
+                    <div className="common-how-steps" style={{ border: 'none' }}>
+                        <div className="top-tile">
+                            <div className="top-title">
+                                Waiting period
+                            </div>
+                        </div>
+                        <div className='common-steps-images'>
+                            {this.state.extra_data.waiting_period.map(this.renderSteps)}
+                        </div>
+
+                    </div>
+
+                    <div className="bototm-design">
+                        <div className="bd-tile">
+                            <img className="bf-img" src={require(`assets/${this.state.productName}/ic_whats_covered.svg`)}
+                                alt="" />
+                            <div className="bd-content">What's included?</div>
+                        </div>
+                        <div className="bd-tile">
+                            <img className="bf-img" src={require(`assets/${this.state.productName}/ic_whats_not_covered.svg`)}
+                                alt="" />
+                            <div className="bd-content">What's not included?</div>
+                        </div>
+                        <div className="bd-tile">
+                            <img className="bf-img" src={require(`assets/${this.state.productName}/ic_how_to_claim.svg`)}
+                                alt="" />
+                            <div className="bd-content">How to claim?</div>
+                        </div>
+                        <div className="generic-hr"></div>
+                    </div>
+
+                    <div className="accident-plan-read" style={{ padding: 0 }}
+                        onClick={() => this.openInBrowser(this.state.quoteData.read_document, 'read_document')}>
+                        <img className="accident-plan-read-icon"
+                            src={require(`assets/${this.state.productName}/ic_read.svg`)} alt="" />
+                        <div className="accident-plan-read-text" style={{ color: getConfig().primary }}>Read Detailed Document</div>
+                    </div>
                 </div>
             </Container>
         );

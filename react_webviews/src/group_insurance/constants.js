@@ -581,7 +581,7 @@ export const health_providers = {
       key: 'HDFC_ERGO',
       title: 'HDFC ERGO',
       subtitle: 'my: health Suraksha',
-      logo: 'logo_mmtc.svg',
+      logo: 'hdfc_ergo_ic_logo_cta.svg',
       logo_card: 'hdfc_ergo_ic_logo_card.svg',
       logo_cta: 'hdfc_ergo_ic_logo_cta.svg',
       logo_summary: 'hdfc_ergo_ic_logo_summary.svg'

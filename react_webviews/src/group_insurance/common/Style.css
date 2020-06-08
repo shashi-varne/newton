@@ -618,6 +618,9 @@
   margin: 20px 0 0 0;
   text-transform: uppercase;
 }
+.group-health-plan-details {
+  margin: 0 0 30px 0;
+}
 .group-health-plan-details .sum-assured-info {
   display: flex;
   justify-content: space-between;
@@ -625,4 +628,38 @@
   color: #0b1e33;
   font-size: 16px;
   font-weight: 400;
+}
+.group-health-plan-details .copay-info {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0 10px 0;
+}
+.group-health-plan-details span.special-benefit-text {
+  color: #0a1d32;
+  font-size: 10px;
+  font-weight: 400;
+  margin: 0 0 0 5px;
+}
+.group-health-plan-details .special-benefit {
+  width: fit-content;
+  margin: 30px 0 -30px 0;
+  padding: 2px;
+}
+.group-health-plan-details .bd-tile {
+  display: flex;
+  align-items: center;
+  padding: 15px 0px 15px 0px;
+  border-top: 1px solid #ededed;
+}
+.group-health-plan-details .bd-content {
+  color: #0a1d32;
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0 0 0 20px;
+}
+.group-health-plan-details .bototm-design {
+  margin: 0 0 20px 0;
+}
+.group-health-plan-select-sum-assured {
+  margin: 60px 0 0 0;
 }

@@ -517,6 +517,22 @@ input#pan {
 .slide-fade-show {
   opacity: 1;
 }
+.flex-between-center {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+}
+.flex-center {
+  display: flex;
+  align-items: center;
+}
+.flex {
+  display: flex;
+}
 .common-top-page-subtitle {
   color: #767e86;
   font-size: 14px;

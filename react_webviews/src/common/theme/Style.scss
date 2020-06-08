@@ -651,12 +651,30 @@ input#pan {
   opacity: 1;
 }
 
+.flex-between-center {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+}
+.flex-center {
+  display: flex;
+  align-items: center;
+}
+.flex {
+  display: flex;
+}
+
 .common-top-page-subtitle {
   color: #767E86;
   font-size: 14px;
   font-weight: 400;
   margin: -20px 0 20px 0;
   line-height: 1.6;
+  
 }
 
 .common-top-page-subtitle-dark {
@@ -665,7 +683,6 @@ input#pan {
   font-weight: 500;
   margin: -20px 0 20px 0;
   line-height: 1.6;
-
 }
 
 .common-how-steps {

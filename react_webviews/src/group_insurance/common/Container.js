@@ -510,7 +510,9 @@ class Container extends Component {
             handleReset={this.props.handleReset}
             onlyButton={this.props.onlyButton}
             showDotDot={this.props.showDotDot}
-            noFooter={this.props.noFooter} />
+            noFooter={this.props.noFooter}
+            withProvider={this.props.withProvider}
+            buttonData={this.props.buttonData} />
         }
         {/* No Internet */}
         {this.renderDialog()}

@@ -356,6 +356,9 @@ input.default-otp-input {
   font-weight: 500;
   margin: 0 10px 0 10px;
 }
+.generic-hr {
+  border-top: 1px solid #ededed;
+}
 .checkmark {
   display: inline-block;
   transform: rotate(45deg);
@@ -367,4 +370,45 @@ input.default-otp-input {
 }
 .checkmark:after {
   border: solid var(--primary);
+}
+.generic-choose-input {
+  margin: 0 -15px 30px -20px;
+}
+.generic-choose-input .tile {
+  margin: 10px 15px 20px 15px;
+  padding: 20px 10px 20px 10px;
+  cursor: pointer;
+}
+.generic-choose-input .tile-selected {
+  margin: 10px 0px 20px 0px;
+  background: linear-gradient(to right, #f4f4f4, white);
+  padding: 20px 25px 20px 25px;
+}
+.generic-choose-input .select-tile {
+  color: #7a7676;
+  line-height: 1.4;
+  font-size: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.generic-choose-input .name {
+  color: #0a1c32;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+.generic-choose-input .content {
+  color: #767e86;
+  font-size: 14px;
+}
+.generic-choose-input .completed-icon img {
+  width: 14px;
+  margin: 4px 0 0 8px;
+}
+.__react_component_tooltip {
+  left: auto !important;
+  margin: 70px 0 0 0px !important;
+  width: 62%;
+  right: 15px;
 }
