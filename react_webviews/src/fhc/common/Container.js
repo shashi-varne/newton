@@ -192,21 +192,23 @@ class Container extends Component {
     return (
       <div className={`ContainerWrapper fhc-container ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`} >
         {/* Header Block */}
-        <Header
-          title={this.props.title}
-          smallTitle={this.props.smallTitle}
-          provider={this.props.provider}
-          count={this.props.count}
-          total={this.props.total}
-          current={this.props.current}
-          goBack={this.historyGoBack}
-          edit={this.props.edit}
-          type={getConfig().productName}
-          resetpage={this.props.resetpage}
-          handleReset={this.props.handleReset}
-          topIcon={this.props.topIcon}
-          handleTopIcon={this.handleTopIcon}
-          hideBack={this.props.hideBack} />
+        {!this.props.noHeader &&
+          <Header
+            title={this.props.title}
+            smallTitle={this.props.smallTitle}
+            provider={this.props.provider}
+            count={this.props.count}
+            total={this.props.total}
+            current={this.props.current}
+            goBack={this.historyGoBack}
+            edit={this.props.edit}
+            type={getConfig().productName}
+            resetpage={this.props.resetpage}
+            handleReset={this.props.handleReset}
+            topIcon={this.props.topIcon}
+            handleTopIcon={this.handleTopIcon}
+            hideBack={this.props.hideBack} />
+        }
 
         {/* Below Header Block */}
         <div id="HeaderHeight" style={{ top: 60 }}>

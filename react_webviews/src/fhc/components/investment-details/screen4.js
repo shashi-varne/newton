@@ -51,14 +51,15 @@ class InvestmentDetails4 extends Component {
 
   handleRadioValue = name => index => {
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
-    if (name === 'tax_investment') {
-      fhc_data.tax_savings = {};
+    if (name === 'is_present') {
+      fhc_data.tax_savings = {
+        is_present: yesOrNoOptions[index]['value'],
+        tax_saving_80C: '0',
+        tax_saving_80CCD: '0',
+      };
     }
-    this.setState({
-      [name]: yesOrNoOptions[index]['value'],
-      [name + '_error']: '',
-      fhc_data,
-    });
+    fhc_data.clearErrors(['tax_saving_80C', 'tax_saving_80CCD', 'tax_is_present']);
+    this.setState({ fhc_data });
   }
 
   handleChange = name => event => {
@@ -69,7 +70,7 @@ class InvestmentDetails4 extends Component {
         return;
       }
       fhc_data.tax_savings[name] = event.target.value.replace(/\D/g, '');
-      fhc_data[name + '_error'] = ''
+      fhc_data.clearErrors(['tax_saving_80C', 'tax_saving_80CCD', 'tax_is_present']);
     }
     this.setState({ fhc_data });
   }
@@ -82,8 +83,6 @@ class InvestmentDetails4 extends Component {
       event.preventDefault();
     }
   }
-
-  
 
   sendEvents(user_action) {
     let eventObj = {
@@ -108,14 +107,15 @@ class InvestmentDetails4 extends Component {
     this.sendEvents('next');
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
 
-    if ([undefined, null, ''].includes(this.state.tax_investment)) {
-      this.setState({
-        tax_investment_error: 'Please select an option',
-      });
-    } else if (this.state.tax_investment && !fhc_data.isValidTaxes()) {
+    if (!fhc_data.isValidTaxes()) {
       this.setState({ fhc_data });
     } else {
       this.setState({ show_loader: true });
+      if (!Number(fhc_data.tax_savings.tax_saving_80C)) {
+        fhc_data.tax_savings.tax_saving_80C = '0';
+      } else if (!Number(fhc_data.tax_savings.tax_saving_80CCD)) {
+        fhc_data.tax_savings.tax_saving_80CCD = '0';
+      }
       storageService().setObject('fhc_data', fhc_data);
       try {
         await uploadFHCData(fhc_data);
@@ -130,14 +130,14 @@ class InvestmentDetails4 extends Component {
   render() {
     let amountInputs = null;
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
-    const { tax_saving_80C, tax_saving_80CCD } = fhc_data.tax_savings;
+    const { tax_saving_80C, tax_saving_80CCD, is_present } = fhc_data.tax_savings;
 
-    if (this.state.tax_investment) {
+    if (is_present) {
       amountInputs =
       <Fragment>
         <div className="InputField">
           <Input
-            error={(fhc_data.tax_saving_80C_error) ? true : false}
+            error={!!fhc_data.tax_saving_80C_error}
             helperText={fhc_data.tax_saving_80C_error || 'Max Rs 1,50,000'}
             type="text"
             width="40"
@@ -151,7 +151,7 @@ class InvestmentDetails4 extends Component {
         </div>
         <div className="InputField">
           <Input
-            error={(fhc_data.tax_saving_80CCD_error) ? true : false}
+            error={!!fhc_data.tax_saving_80CCD_error}
             helperText={fhc_data.tax_saving_80CCD_error || 'Max Rs 50,000'}
             type="text"
             width="40"
@@ -185,15 +185,15 @@ class InvestmentDetails4 extends Component {
             title={'Tax saving Details'} />
           <div className="InputField">
             <RadioWithoutIcon
-              error={(this.state.tax_investment_error) ? true : false}
-              helperText={this.state.tax_investment_error}
+              error={!!fhc_data.tax_is_present_error}
+              helperText={fhc_data.tax_is_present_error}
               width="40"
               label="Have you invested under 80C or others?"
               class="MaritalStatus"
               options={yesOrNoOptions}
               id="tax-saving"
-              value={this.state.tax_investment}
-              onChange={this.handleRadioValue('tax_investment')} />
+              value={is_present}
+              onChange={this.handleRadioValue('is_present')} />
           </div>
           {
             amountInputs

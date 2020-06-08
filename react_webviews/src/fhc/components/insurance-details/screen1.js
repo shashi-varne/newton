@@ -53,7 +53,7 @@ class InsuranceDetails1 extends Component {
     fhc_data.life_insurance[name] = selectedVal;
     fhc_data.life_insurance.annual_premuim = 0;
     fhc_data.life_insurance.cover_value = 0;
-    fhc_data[`${name}_error`] = '';
+    fhc_data.clearErrors(['life_is_present', 'life_annual_premuim', 'life_cover_value']);
     this.setState({ fhc_data });
   }
 
@@ -64,7 +64,7 @@ class InsuranceDetails1 extends Component {
         return;
       }
       fhc_data.life_insurance[name] = event.target.value.replace(/,/g, '');
-      fhc_data[`${name}_error`] = '';
+      fhc_data[`life_${name}_error`] = '';
     }
     this.setState({ fhc_data });
   }
@@ -137,8 +137,8 @@ class InsuranceDetails1 extends Component {
       <Fragment>
         <div className="InputField">
           <Input
-            error={!!fhc_data.annual_premuim_error}
-            helperText={fhc_data.annual_premuim_error}
+            error={!!fhc_data.life_annual_premuim_error}
+            helperText={fhc_data.life_annual_premuim_error}
             type="text"
             width="40"
             label="Annual premium"
@@ -151,8 +151,8 @@ class InsuranceDetails1 extends Component {
         </div>
         <div className="InputField">
           <Input
-            error={!!fhc_data.cover_value_error}
-            helperText={fhc_data.cover_value_error}
+            error={!!fhc_data.life_cover_value_error}
+            helperText={fhc_data.life_cover_value_error}
             type="text"
             width="40"
             label="Cover amount"
@@ -185,8 +185,8 @@ class InsuranceDetails1 extends Component {
             title={(this.props.edit) ? 'Edit Insurance Details' : 'Insurance Details'} />
           <div className="InputField">
             <RadioWithoutIcon
-              error={(fhc_data.is_present_error) ? true : false}
-              helperText={fhc_data.is_present_error}
+              error={(fhc_data.life_is_present_error) ? true : false}
+              helperText={fhc_data.life_is_present_error}
               width="40"
               label="Do you have life insurance?"
               class="MaritalStatus"

@@ -170,7 +170,7 @@ class FHC {
     } else if (!validateAlphabets(this.name)) {
       this.name_error = 'Name can contain only alphabets';
     } else {
-      this.name_error = '';
+      this.clearErrors('name');
     }
     return (this.name_error ? false : true);
   }
@@ -181,7 +181,7 @@ class FHC {
     } else if (this.age < 0) {
       this.dob_error = 'Future date is not allowed';
     } else {
-      this.dob_error = '';
+      this.clearErrors('dob');
     }
     return (this.dob_error ? false : true);
   }
@@ -190,7 +190,7 @@ class FHC {
     if (this.email.length < 10 || !validateEmail(this.email)) {
       this.email_error = 'Please enter valid email';
     } else {
-      this.email_error = '';
+      this.clearErrors('email');
     }
     return (this.email_error ? false : true);
   }
@@ -212,6 +212,8 @@ class FHC {
     } else if (!Number(this.family_expence) || !validateNumber(this.family_expence)) {
       this['monthly_exp_error'] = 'Enter a valid Monthly Expense amount';
       valid = false;
+    } else {
+      this.clearErrors(['annual_sal', 'monthly_sal', 'monthly_exp']);
     }
     return valid;
   }
@@ -228,6 +230,8 @@ class FHC {
       ) {
         this.house_loan_error = 'Monthly EMI cannot be negative or 0';
         valid = false;
+      } else {
+        this.clearErrors(['has_house_loan', 'house_loan']);
       }
     } else if (prop === 'rent') {
       if (!this.house.type) {
@@ -239,6 +243,8 @@ class FHC {
       ) {
         this.house_rent_error = 'Rent per month cannot be negative or 0';
         valid = false;
+      } else {
+        this.clearErrors(['pays_rent', 'house_rent']);
       }
     }
     return valid;
@@ -255,6 +261,8 @@ class FHC {
     ) {
       this[`${type}_loan_error`] = 'Monthly EMI cannot be negative or 0';
       valid = false;
+    } else {
+      this.clearErrors([`has_${type}_loan`, `${type}_loan`]);
     }
     return valid;
   }
@@ -265,29 +273,57 @@ class FHC {
     const { is_present, annual_premuim, cover_value } = this[`${type}_insurance`];
     
     if ([null, undefined, ''].includes(is_present)) {
-      this[`is_present_error`] = 'Please select an option';
+      this[`${type}_is_present_error`] = 'Please select an option';
       valid = false;
     } else if (is_present && (!Number(annual_premuim) || !validateNumber(annual_premuim))) {
-      this[`annual_premuim_error`] = 'Annual premium cannot be negative or 0';
+      this[`${type}_annual_premuim_error`] = 'Annual premium cannot be negative or 0';
       valid = false;
     } else if (is_present && (!Number(cover_value) || !validateNumber(cover_value))) {
-      this[`cover_value_error`] = 'Coverage cannot be negative or 0';
+      this[`${type}_cover_value_error`] = 'Coverage cannot be negative or 0';
       valid = false;
+    } else {
+      this.clearErrors([`${type}_is_present`, `${type}_annual_premuim`, `${type}_cover_value`]);
     }
     return valid;
   }
 
   isValidTaxes() {
-    const { tax_saving_80C, tax_saving_80CCD } = this.tax_savings;
+    let { tax_saving_80C, tax_saving_80CCD, is_present } = this.tax_savings;
+    tax_saving_80C = Number(tax_saving_80C);
+    tax_saving_80CCD = Number(tax_saving_80CCD);
     let valid = true;
-    if (!Number(tax_saving_80C) || !validateNumber(tax_saving_80C)) {
-      this.tax_saving_80C_error = 'Total tax saving cannot be negative or 0';
+    
+    if ([null, undefined, ''].includes(is_present)) {
+      this.tax_is_present_error = 'Please select an option';
       valid = false;
-    } else if (!Number(tax_saving_80CCD) || !validateNumber(tax_saving_80CCD)) {
-      this.tax_saving_80CCD_error = 'Total tax saving cannot be negative or 0';
-      valid = false;
+    } else if (is_present) {
+      if (!tax_saving_80C && !tax_saving_80CCD) {
+        this.tax_saving_80C_error = 'Total tax saving cannot be negative or 0';
+        this.tax_saving_80CCD_error = 'Total tax saving cannot be negative or 0';
+        valid = false;
+      } else if (tax_saving_80C > 150000) {
+        this.tax_saving_80C_error = 'Please enter a valid value';
+        valid = false;
+      } else if (tax_saving_80CCD > 50000) {
+        this.tax_saving_80CCD_error = 'Please enter a valid value';
+        valid = false;
+      } else if (tax_saving_80C && !validateNumber(tax_saving_80C)) {
+        this.tax_saving_80C_error = 'Total tax saving cannot be negative or 0';
+        valid = false;
+      } else if (tax_saving_80CCD && !validateNumber(tax_saving_80CCD)) {
+        this.tax_saving_80CCD_error = 'Total tax saving cannot be negative or 0';
+        valid = false;
+      }
+    }
+    if (valid) {
+      this.clearErrors(['tax_saving_80C', 'tax_saving_80CCD', 'tax_is_present']);
     }
     return valid;
+  }
+
+  clearErrors(keys) {
+    if (!Array.isArray(keys)) keys = [keys];
+    keys.forEach(key => delete this[`${key}_error`]);
   }
 }
 

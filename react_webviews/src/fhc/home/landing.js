@@ -4,7 +4,7 @@ import { navigate } from '../common/commonFunctions';
 import { fetchFHCData } from '../common/ApiCalls';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { toast } from 'react-toastify';
+import toast from '../../common/ui/Toast';
 
 class Landing extends Component {
     constructor(props) {
@@ -23,7 +23,7 @@ class Landing extends Component {
                 // Do nothing
             } else {
                 const fhc_data = await fetchFHCData();
-                if (fhc_data.completed) {
+                if (fhc_data.completed_v2) {
                     this.navigate('/fhc/final-report');
                 }
             }

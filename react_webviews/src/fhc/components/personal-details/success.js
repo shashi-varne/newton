@@ -36,6 +36,7 @@ class Success extends Component {
         return (
             <Container
                 noFooter={true}
+                noHeader={true}
                 handleClick={() => this.startFHC()}
                 title="Fin Health Check (FHC)"
                 hideBack={true}

@@ -66,7 +66,7 @@ class InsuranceDetails2 extends Component {
         return;
       }
       fhc_data.medical_insurance[name] = event.target.value.toString().replace(/,/g, '');
-      fhc_data[`${name}_error`] = '';
+      fhc_data[`medical_${name}_error`] = '';
     }
     this.setState({ fhc_data });
   }
@@ -127,8 +127,8 @@ class InsuranceDetails2 extends Component {
         <Fragment>
           <div className="InputField">
             <Input
-              error={!!fhc_data.annual_premuim_error}
-              helperText={fhc_data.annual_premuim_error}
+              error={!!fhc_data.medical_annual_premuim_error}
+              helperText={fhc_data.medical_annual_premuim_error}
               type="text"
               width="40"
               label="Annual premium"
@@ -141,8 +141,8 @@ class InsuranceDetails2 extends Component {
           </div>
           <div className="InputField">
             <Input
-              error={!!fhc_data.cover_value_error}
-              helperText={fhc_data.cover_value_error}
+              error={!!fhc_data.medical_cover_value_error}
+              helperText={fhc_data.medical_cover_value_error}
               type="text"
               width="40"
               label="Cover amount"
@@ -175,8 +175,8 @@ class InsuranceDetails2 extends Component {
             title={(this.props.edit) ? 'Edit Insurance Details' : 'Insurance Details'} />
           <div className="InputField">
             <RadioWithoutIcon
-              error={(fhc_data.is_present_error) ? true : false}
-              helperText={fhc_data.is_present_error}
+              error={(fhc_data.medical_is_present_error) ? true : false}
+              helperText={fhc_data.medical_is_present_error}
               width="40"
               label="Do you have medical insurance?"
               class="MaritalStatus"

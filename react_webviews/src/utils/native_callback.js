@@ -267,7 +267,9 @@ export function openModule(moduleName) {
 
     let module_mapper = {
       'app/portfolio': 'reports',
-      'app/profile': 'my-account'
+      'app/profile': 'my-account',
+      'invest/save_tax': 'invest',
+      'invest/nps': 'nps/info', 
     }
 
     let moduleNameWeb = module_mapper[moduleName] || '';
