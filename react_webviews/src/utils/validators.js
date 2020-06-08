@@ -452,7 +452,8 @@ export function checkValidNumber(value, otherwise) {
 }
 
 export function checkValidString(value) {
-  if (value === null || value === undefined || value === 'undefined' || value === '') {
+  if (value === null || value === undefined || value === 'undefined' || 
+  value === '' || value === 'false') {
     return false;
   } else {
     return true;
