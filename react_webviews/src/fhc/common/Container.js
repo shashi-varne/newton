@@ -11,7 +11,7 @@ import { getConfig, setHeights } from 'utils/functions';
 import PopUp from './PopUp';
 import { storageService } from '../../utils/validators';
 import { uploadFHCData } from '../common/ApiCalls';
-import { toast } from 'react-toastify';
+import toast from '../../common/ui/Toast';
 import Button from 'material-ui/Button';
 import Dialog, {
   DialogActions,
@@ -145,7 +145,7 @@ class Container extends Component {
     } catch (e) {
       this.setState({ show_loader: false });
       console.log(e);
-      toast('Could not save data. Please try again');
+      toast(e);
     }
   }
 
