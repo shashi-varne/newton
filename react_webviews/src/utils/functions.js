@@ -393,7 +393,12 @@ export function setWebAppParams(redirect_url) {
     is_secure = redirect_url_data[1]
   }
 
-  let web_params = 'is_secure=' + is_secure;
+
+  let web_params = '';
+  if(checkValidString(is_secure)) {
+    web_params += 'is_secure=' + is_secure;
+  }
+
   return web_params;
 
 }
