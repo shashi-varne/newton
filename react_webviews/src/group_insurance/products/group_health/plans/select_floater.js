@@ -211,7 +211,13 @@ class GroupHealthPlanSelectFloater extends Component {
                 handleClick={() => this.handleClick()}
             >
 
-                
+                <div className="common-top-page-subtitle flex-between-center">
+                    The period for which health expenses will be covered
+                 <img
+                        data-tip="As premium increases by insurer age, policy with longer cover period reduces the overall premium. 70% of our user has taken cover for 3 year period."
+                        src={require(`assets/${this.state.productName}/info_icon.svg`)}
+                        alt="" />
+                </div>
                 <div className="group-health-plan-select-floater">
 
                     <div className="generic-choose-input">
