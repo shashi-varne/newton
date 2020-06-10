@@ -32,6 +32,11 @@ class PlusMinusInputClass extends Component {
             return;
         }
 
+            
+        if(type === 'plus' && state[name + '_ismax']) {
+            return;
+        }
+
         if (type === 'checked') {
             let checked = !state[name + '_checked']
 
@@ -98,7 +103,7 @@ class PlusMinusInputClass extends Component {
                         
                             <Grid item xs={11}>
                                 <div className="right-data">
-                                    <div className="content">Son</div>
+                                    <div className="content" style={{textTransform: 'capitalize'}}>{name}</div>
                                     {parentState[name + '_checked'] && !parentState[name + '_onlycheckbox'] &&
                                         <div className="images">
                                             <SVG className="plus-minus-icons"
@@ -108,7 +113,7 @@ class PlusMinusInputClass extends Component {
                                             />
                                             <div className="number">{parentState[name + '_total']}</div>
                                             <SVG className="plus-minus-icons"
-                                                style={{ opacity: parentState[name + '_total'] === parentState[name + '_max'] ? 0.3 : 1 }}
+                                                style={{ opacity: parentState[name + '_ismax'] ? 0.3 : 1 }}
                                                 preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
                                                 src={plus_icon}
                                                 onClick={() => this.handleClick(name, 'plus')}

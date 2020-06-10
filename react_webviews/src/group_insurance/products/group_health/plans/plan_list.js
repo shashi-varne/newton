@@ -14,7 +14,7 @@ class GroupHealthPlanList extends Component {
         this.state = {
             productName: getConfig().productName,
             provider: this.props.match.params.provider,
-            groupHealthPlanData: storageService().getObject('groupHealthPlanData'),
+            groupHealthPlanData: storageService().getObject('groupHealthPlanData') || {},
             show_loader: true,
             plan_data: {
                 coverplan: []

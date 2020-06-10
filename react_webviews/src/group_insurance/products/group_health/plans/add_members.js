@@ -9,15 +9,16 @@ import { storageService } from 'utils/validators';
 import PlusMinusInput from '../../../../common/ui/PlusMinusInput';
 
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
+import toast from '../../../../common/ui/Toast';
 
 const other_adult_member_options = [
     {
         'name': 'Husband',
-        'value': 'Husband'
+        'value': 'husband'
     },
     {
         'name': 'Wife',
-        'value': 'Wife'
+        'value': 'wife'
     }
 ];
 
@@ -40,7 +41,11 @@ class GroupHealthPlanAddMembers extends Component {
             final_dob_data: [],
             son_max: 2,
             self_member: 'Self',
-            // son_onlycheckbox: true
+            daughter_max: 2,
+            total_plus_minus_max: 2,
+            plus_minus_keys: ['son', 'daughter'],
+            father_onlycheckbox: true,
+            mother_onlycheckbox: true
         }
     }
 
@@ -56,6 +61,19 @@ class GroupHealthPlanAddMembers extends Component {
 
     async componentDidMount() {
 
+        let ui_members = this.state.groupHealthPlanData.ui_members || {};
+        this.setState({
+            son_total: ui_members.son_total || 0,
+            son_checked: ui_members.son_total ? true : false,
+            daughter_total: ui_members.daughter_total || 0,
+            daughter_checked: ui_members.daughter_total ? true : false,
+            father_checked: ui_members.father ? true : false,
+            mother_checked: ui_members.mother ? true : false,
+            other_adult_member: ui_members.other_adult_member || '',
+            ui_members: ui_members
+        }, () => {
+            this.setMinMax();
+        })
 
     }
 
@@ -69,6 +87,115 @@ class GroupHealthPlanAddMembers extends Component {
 
     handleClick = () => {
 
+        let ui_members = this.state.ui_members;
+
+        if(this.state.account_type === 'family') {
+            if(!this.state.other_adult_member && !this.state.son_total && 
+                !this.state.daughter_total) {
+                    toast('Atleast select one member');
+                    return;
+                }
+                
+        }
+
+        if(this.state.account_type === 'parents') {
+            if(!this.state.father_checked && !this.state.mother_checked ) {
+                    toast('Atleast select one member');
+                    return;
+                }
+                
+        }
+
+        if(this.state.account_type === 'family' && !this.state.other_adult_member) {
+            this.setState({
+                other_adult_member_error: 'Please select this option'
+            });
+            return;
+        }
+
+        let keys_to_reset = ['self', 'wife', 'father', 'mother', 'son', 'son1', 'son2',
+                            'daughter', 'daughter1', 'daughter2'];
+
+      
+        for(var kr in keys_to_reset) {
+            ui_members[keys_to_reset[kr]] = false;
+        }
+        
+
+        if(this.state.account_type === 'parents') {
+            if(this.state.father_checked) {
+                ui_members.father = true;
+            }
+
+            if(this.state.mother_checked) {
+                ui_members.mother = true;
+            }
+        }
+
+        if(['selfandfamily', 'family'].indexOf(this.state.account_type) !== -1) {
+            ui_members.other_adult_member = this.state.other_adult_member;
+
+            if(this.state.other_adult_member === 'wife') {
+                ui_members.wife = true;
+            }
+
+            if(this.state.account_type === 'selfandfamily') {
+                ui_members.self = true;
+            }
+
+            if(this.state.son_total === this.state.son_max) {
+                ui_members.son1 = true;
+                ui_members.son2 = true;
+            }
+
+            if(this.state.son_total === 1) {
+                ui_members.son = true;
+            }
+
+            if(this.state.daughter_total === this.state.daughter_max) {
+                ui_members.daughter1 = true;
+                ui_members.daughter2 = true;
+            }
+
+            if(this.state.daughter_total === 1) {
+                ui_members.daughter = true;
+            }
+
+                ui_members.son_total = this.state.son_total || 0;
+                ui_members.daughter_total = this.state.daughter_total || 0;
+            
+        }
+
+        
+
+        let adult_keys = ['wife', 'father', 'mother'];
+        let adult_total = 0;
+        if(this.state.account_type === 'selfandfamily') {
+            adult_total++;
+        }
+
+        let child_total = (ui_members.son_total || 0) + (ui_members.daughter_total || 0);
+
+        for (var key in adult_keys) {
+            if(ui_members[adult_keys[key]]) {
+                adult_total++;
+            }
+        }
+
+        let post_body = this.state.groupHealthPlanData.post_body || {};
+        post_body.mem_info = {
+            adult: adult_total,
+            child: child_total
+        }
+
+
+        let groupHealthPlanData = this.state.groupHealthPlanData;
+        groupHealthPlanData.ui_members = ui_members;
+        groupHealthPlanData.post_body = post_body;
+        storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+
+
+        this.navigate('plan-dob');
     }
 
 
@@ -88,9 +215,41 @@ class GroupHealthPlanAddMembers extends Component {
         }
     }
 
+    setMinMax = () => {
+        let son_disabled = false;
+            let daughter_disabled = false
+            if (this.state.son_total === 1 && this.state.daughter_total === 1) {
+                this.setState({
+                    son_ismax: true,
+                    daughter_ismax: true
+                });
+
+            } else {
+                this.setState({
+                    son_ismax: false,
+                    daughter_ismax: false
+                });
+            }
+
+            if (this.state.son_total === 2) {
+                daughter_disabled = true
+            }
+
+            if (this.state.daughter_total === 2) {
+                son_disabled = true
+            }
+
+            this.setState({
+                son_disabled: son_disabled,
+                daughter_disabled: daughter_disabled
+            });
+    }
+
     updateParent = (key, value) => {
         this.setState({
             [key]: value
+        }, () => {
+            this.setMinMax();
         })
     }
 
@@ -105,7 +264,6 @@ class GroupHealthPlanAddMembers extends Component {
 
     render() {
 
-
         return (
             <Container
                 events={this.sendEvents('just_set_events')}
@@ -117,6 +275,7 @@ class GroupHealthPlanAddMembers extends Component {
                 handleClick={() => this.handleClick()}
             >
 
+               {['selfandfamily'].indexOf(this.state.account_type) !== -1 && 
                 <div className="InputField">
                     <RadioWithoutIcon
                         width="40"
@@ -129,31 +288,68 @@ class GroupHealthPlanAddMembers extends Component {
                         error={(this.state.self_member_error) ? true : false}
                         helperText={this.state.self_member_error}
                         value={this.state.self_member || ''}
-                        onChange={() => {}} 
+                        onChange={() => { }}
                     />
                 </div>
+}
+
+            {['selfandfamily', 'family'].indexOf(this.state.account_type) !== -1 && 
+                <div>
+                    <div className="InputField">
+                        <RadioWithoutIcon
+                            width="40"
+                            label={this.state.account_type === 'selfandfamily' ? 'Other adult member' : 'Adult member'}
+                            class="Gender:"
+                            options={other_adult_member_options}
+                            id="other_adult_member"
+                            name="other_adult_member"
+                            error={(this.state.other_adult_member_error) ? true : false}
+                            helperText={this.state.other_adult_member_error}
+                            value={this.state.other_adult_member || ''}
+                            onChange={this.handleChangeRadio('other_adult_member')} />
+                    </div>
 
 
-                <div className="InputField">
-                    <RadioWithoutIcon
-                        width="40"
-                        label="Other adult member"
-                        class="Gender:"
-                        options={other_adult_member_options}
-                        id="other_adult_member"
-                        name="other_adult_member"
-                        error={(this.state.other_adult_member_error) ? true : false}
-                        helperText={this.state.other_adult_member_error}
-                        value={this.state.other_adult_member || ''}
-                        onChange={this.handleChangeRadio('other_adult_member')} />
+
+                    <div style={{
+                        color: '#8D879B', fontSize: 13, fontWeight: 400,
+                        margin: '0 0 10px 0'
+                    }}>
+                        Children (max 2)
                 </div>
+                    <div className="generic-hr"></div>
+                    <PlusMinusInput
+                        name="son"
+                        parent={this}
+                    />
+                    <div className="generic-hr"></div>
+                    <PlusMinusInput
+                        name="daughter"
+                        parent={this}
+                    />
+                    <div className="generic-hr"></div>
+                </div>}
 
-
-
-                <PlusMinusInput
-                    name="son"
-                    parent={this}
-                />
+                {['parents'].indexOf(this.state.account_type) !== -1 && 
+                <div>
+                    <div style={{
+                        color: '#8D879B', fontSize: 13, fontWeight: 400,
+                        margin: '0 0 10px 0'
+                    }}>
+                        Parents
+                </div>
+                    <div className="generic-hr"></div>
+                    <PlusMinusInput
+                        name="father"
+                        parent={this}
+                    />
+                    <div className="generic-hr"></div>
+                    <PlusMinusInput
+                        name="mother"
+                        parent={this}
+                    />
+                    <div className="generic-hr"></div>
+                </div>}
             </Container>
         );
     }

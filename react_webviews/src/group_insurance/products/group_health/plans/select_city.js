@@ -8,6 +8,9 @@ import BottomInfo from '../../../../common/ui/BottomInfo';
 import { storageService } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 
+import Api from 'utils/api';
+import toast from '../../../../common/ui/Toast';
+
 class GroupHealthPlanSelectCity extends Component {
 
     constructor(props) {
@@ -24,6 +27,38 @@ class GroupHealthPlanSelectCity extends Component {
         this.setState({
             providerData: health_providers[this.state.provider],
         })
+    }
+
+    async componentDidMount() {
+        try {
+
+            
+            const res = await Api.get('/api/ins_service/api/insurance/hdfcergo/get/citylist');
+
+            this.setState({
+                show_loader: false
+            });
+            var resultData = res.pfwresponse.result;
+            console.log(resultData);
+            
+            if (res.pfwresponse.status_code === 200) {
+
+                this.setState({
+                    resultData: resultData
+                })
+
+
+            } else {
+                toast(resultData.error || resultData.message
+                    || 'Something went wrong');
+            }
+        } catch (err) {
+            console.log(err)
+            this.setState({
+                show_loader: false
+            });
+            toast('Something went wrong');
+        }
     }
 
 

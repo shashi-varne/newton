@@ -46,7 +46,9 @@ class GroupHealthSelectInsureType extends Component {
 
 
   async componentDidMount() {
-
+    this.setState({
+      account_type: this.state.groupHealthPlanData.account_type || ''
+    })
 
   }
 
@@ -61,6 +63,13 @@ class GroupHealthSelectInsureType extends Component {
 
     let groupHealthPlanData = this.state.groupHealthPlanData;
     groupHealthPlanData.account_type = this.state.account_type;
+
+    let post_body = {
+      account_type: this.state.account_type
+    }
+
+    groupHealthPlanData.post_body = post_body;
+
     storageService().setObject('groupHealthPlanData',groupHealthPlanData );
 
     if(this.state.account_type === 'self') {

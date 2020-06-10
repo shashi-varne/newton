@@ -667,6 +667,10 @@ input#pan {
 .flex {
   display: flex;
 }
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
 
 .common-top-page-subtitle {
   color: #767E86;

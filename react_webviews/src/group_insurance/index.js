@@ -5,12 +5,12 @@ import {
 } from 'react-router-dom';
 import { withRouter } from "react-router";
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
-import '../common/theme/Style.css';
+import '../common/theme/Style.scss';
 // import { getConfig } from 'utils/functions';
 import { themeConfig } from 'utils/constants';
 import { ToastContainer } from 'react-toastify';
 
-import './common/Style.css';
+import './common/Style.scss';
 import './products/term_insurance/Style.css';
 import NotFound from '../common/components/NotFound';
 import Landing from './home/landing';
@@ -139,6 +139,7 @@ import GroupHealthPlanList from './products/group_health/plans/plan_list';
 import GroupHealthPlanDetails from './products/group_health/plans/plan_details';
 import GroupHealthPlanSelectSumAssured from './products/group_health/plans/select_sum_assured';
 import GroupHealthPlanSelectCoverPeriod from './products/group_health/plans/select_cover_period';
+import GroupHealthPlanSelectFloater from './products/group_health/plans/select_floater';
 // etli
 import EtliPersonalDetails1 from './products/term_insurance/etli/personal_details1';
 import EtliPersonalDetails2 from './products/term_insurance/etli/personal_details2';
@@ -318,7 +319,7 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/:provider/plan-details`} component={GroupHealthPlanDetails} />
           <Route path={`${url}/group-health/:provider/plan-select-sum-assured`} component={GroupHealthPlanSelectSumAssured} />
           <Route path={`${url}/group-health/:provider/plan-select-cover-period`} component={GroupHealthPlanSelectCoverPeriod} />
-          
+          <Route path={`${url}/group-health/:provider/plan-select-floater`} component={GroupHealthPlanSelectFloater} />
           
           {/* common */}
           <Route path={`${url}/common/report`} component={Report} />

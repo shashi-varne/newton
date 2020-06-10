@@ -17,10 +17,19 @@ export function initialize() {
     })
 
 
-    if (this.state.ctaWithProvider) {
+    if (this.state.ctaWithProvider && groupHealthPlanData) {
+
+        let premium_data = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.premium_data.WF : [];
+        let selectedIndexSumAssured = groupHealthPlanData.selectedIndexSumAssured || 0;
+
+        this.setState({
+            premium_data: premium_data
+        })
+
+        console.log(premium_data[0]);
         let bottomButtonData = {
             leftTitle: groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.plan_title : '',
-            // leftSubtitle: '',
+            leftSubtitle: premium_data[selectedIndexSumAssured] ? inrFormatDecimal(premium_data[selectedIndexSumAssured].net_premium): '',
             leftArrow: 'up',
             provider: providerData.key,
             logo: providerData.logo_cta

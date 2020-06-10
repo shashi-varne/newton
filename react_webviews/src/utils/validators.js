@@ -274,7 +274,7 @@ export function inrFormatDecimalWithoutIcon(number) {
   }
 }
 
-export function numDifferentiation(val) {
+export function numDifferentiation(val, withSymbol) {
   if (!val) {
     val = '';
   }
@@ -285,7 +285,15 @@ export function numDifferentiation(val) {
   val = val.toString();
   // remove .00
   val = val.replace(/\.00([^\d])/g, '$1');
+
+  if(withSymbol) {
+    val = '₹' + val;
+  }
   return val;
+}
+
+export function numDifferentiationInr(val) {
+  numDifferentiation(val, true);
 }
 
 export function IsFutureDate(idate) {
