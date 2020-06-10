@@ -26,19 +26,14 @@ class GroupHealthPlanSelectSumAssured extends Component {
     }
 
     async componentDidMount() {
-        let premium_data = this.state.groupHealthPlanData.plan_selected.premium_data.WF;
-
         let selectedIndex = this.state.groupHealthPlanData.selectedIndexSumAssured || 0;
 
-        console.log("selectedIndex :" + selectedIndex);
         this.setState({
-            premium_data: premium_data,
             selectedIndex: selectedIndex
         }, () => {
             this.updateBottomPremium();
         })
 
-        console.log(premium_data[0]);
 
     }
 

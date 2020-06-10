@@ -4,20 +4,19 @@ import Container from '../../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 // import { getConfig } from 'utils/functions';
 
-import { storageService, inrFormatDecimal } from 'utils/validators';
+import { storageService, inrFormatDecimal, numDifferentiationInr } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
-import Tooltip from '../../../../common/ui/Tooltip';
 
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
-class GroupHealthPlanSelectCoverPeriod extends Component {
+class GroupHealthPlanSelectFloater extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             ctaWithProvider: true,
             premium_data: [],
-            // show_loader: true
+            show_loader: true
         }
 
         this.initialize = initialize.bind(this);
@@ -55,9 +54,25 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
             console.log(resultData.premium);
             if (res.pfwresponse.status_code === 200) {
 
+                let premium_data_nf = resultData.premium[0].NF[0];
+                let premium_data_wf = resultData.premium[0].WF[0];
+
+
+                let premium_data = [
+                    {
+                        'title': 'All the members',
+                        'subtitle': 'in ' + inrFormatDecimal(premium_data_wf.net_premium),
+                        'key': 'wf'
+                    },
+                    {
+                        'title': 'Each member individualy',
+                        'subtitle': 'in ' + inrFormatDecimal(premium_data_nf.net_premium),
+                        'key': 'nf'
+                    }
+                ];
+
                 this.setState({
-                    premium_data_nf: resultData.premium[0].NF,
-                    premium_data_wf: resultData.premium[0].WF
+                    premium_data: premium_data
                 })
 
 
@@ -118,9 +133,12 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                 <div className="select-tile">
                     <div className="flex-column">
                         <div className="name">
-                            {props.tenure} year{props.tenure !== "1" && <span>s</span>} for {inrFormatDecimal(props.sum_assured)}
+                            {props.title}
                         </div>
-                        <div className="flex" style={{margin: '4px 0 0 0'}}>
+                        <div style={{ margin: '5px 0 5px 0', color: '#0A1D32', fontSize: 14, fontWeight: 400 }}>
+                            {props.subtitle}
+                        </div>
+                        <div className="flex" style={{ margin: '4px 0 0 0' }}>
                             <img style={{ width: 10 }} src={require(`assets/completed_step.svg`)} alt="" />
                             <span style={{
                                 color: '#4D890D', fontSize: 10,
@@ -135,6 +153,43 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
 
 
                 </div>
+
+                {props.key === 'nf' && index === this.state.selectedIndex &&
+                    <div className="detail-info">
+                        <div className="di-title">Sum assured</div>
+                        <div className="flex-between di-tile">
+                            <div className="di-tile-left">3 lacs x 3</div>
+                            <div className="di-tile-right">{numDifferentiationInr(900000)}</div>
+                        </div>
+
+                        <div className="generic-hr"></div>
+
+                        <div className="di-title">Details</div>
+
+                        <div className="di-sum-assured-data">
+
+                        </div>
+
+                        <div className="generic-hr"></div>
+
+                        <div className="flex-between di-tile">
+                            <div className="di-tile-left">Base premium</div>
+                            <div className="di-tile-right">{inrFormatDecimal(18180)}</div>
+                        </div>
+                        <div className="flex-between di-tile">
+                            <div className="di-tile-left">10% discount</div>
+                            <div className="di-tile-right">{inrFormatDecimal(1080)}</div>
+                        </div>
+
+                        <div className="generic-hr"></div>
+
+                        <div className="flex-between di-tile">
+                            <div className="di-tile-left">Total premium</div>
+                            <div className="di-tile-right">{inrFormatDecimal(17100)}</div>
+                        </div>
+                        <div className="generic-hr"></div>
+                    </div>
+                }
             </div >
         )
     }
@@ -148,14 +203,13 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
-                title="Select cover period"
+                title={'3 lacs sum assured For'}
                 buttonTitle="CONTINUE"
                 withProvider={true}
                 buttonData={this.state.bottomButtonData}
                 handleClick={() => this.handleClick()}
             >
 
-                <Tooltip />
                 <div className="common-top-page-subtitle flex-between-center">
                     The period for which health expenses will be covered
                  <img
@@ -163,7 +217,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                         src={require(`assets/${this.state.productName}/info_icon.svg`)}
                         alt="" />
                 </div>
-                <div className="group-health-plan-select-sum-assured">
+                <div className="group-health-plan-select-floater">
 
                     <div className="generic-choose-input">
                         {this.state.premium_data.map(this.renderPlans)}
@@ -174,4 +228,4 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
     }
 }
 
-export default GroupHealthPlanSelectCoverPeriod;
+export default GroupHealthPlanSelectFloater;
