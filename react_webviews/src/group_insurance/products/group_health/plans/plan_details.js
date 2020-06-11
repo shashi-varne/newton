@@ -47,18 +47,7 @@ class GroupHealthPlanDetails extends Component {
     async componentDidMount() {
         try {
 
-            let body = {
-                "city": "MUMBAI",
-                "account_type": "selfandfamily",
-                "mem_info": {
-                    "adult": "2",
-                    "child": "1"
-                },
-                "self_account_key": { "dob": "05/09/1995" },
-                "spouse_account_key": { "dob": "05/09/1996" },
-                "child_account1_key": { "dob": "05/09/2014" },
-                'plan': this.state.groupHealthPlanData.plan_selected.plan_type
-            }
+            let body = this.state.groupHealthPlanData.post_body;
             const res = await Api.post('/api/ins_service/api/insurance/hdfcergo/premium', body);
 
             this.setState({

@@ -26,7 +26,6 @@ export function initialize() {
             premium_data: premium_data
         })
 
-        console.log(premium_data[0]);
         let bottomButtonData = {
             leftTitle: groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.plan_title : '',
             leftSubtitle: premium_data[selectedIndexSumAssured] ? inrFormatDecimal(premium_data[selectedIndexSumAssured].net_premium): '',

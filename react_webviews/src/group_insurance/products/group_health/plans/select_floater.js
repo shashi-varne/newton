@@ -15,7 +15,7 @@ class GroupHealthPlanSelectFloater extends Component {
         super(props);
         this.state = {
             ctaWithProvider: true,
-            premium_data: [],
+            premium_data_floater: [],
             show_loader: true
         }
 
@@ -30,22 +30,14 @@ class GroupHealthPlanSelectFloater extends Component {
     }
 
     async componentDidMount() {
+
+        this.setState({
+            selectedIndex: this.state.groupHealthPlanData.selectedIndexFloater || 0
+        });
+
         try {
 
-            console.log(this.state.groupHealthPlanData);
-            let body = {
-                "city": "MUMBAI",
-                "account_type": "selfandfamily",
-                "mem_info": {
-                    "adult": "2",
-                    "child": "1"
-                },
-                "self_account_key": { "dob": "05/09/1995" },
-                "spouse_account_key": { "dob": "05/09/1996" },
-                "child_account1_key": { "dob": "05/09/2014" },
-                'plan': this.state.groupHealthPlanData.plan_selected.plan_type,
-                "sum_assured": "400000"
-            }
+            let body = this.state.groupHealthPlanData.post_body;
             const res = await Api.post('/api/ins_service/api/insurance/hdfcergo/premium', body);
 
             this.setState({
@@ -59,21 +51,26 @@ class GroupHealthPlanSelectFloater extends Component {
                 let premium_data_wf = resultData.premium[0].WF[0];
 
 
-                let premium_data = [
+                let premium_data_floater = [
                     {
                         'title': 'All the members',
-                        'subtitle': 'in ' + inrFormatDecimal(premium_data_wf.net_premium),
+                        'subtitle': 'in ' + inrFormatDecimal(premium_data_wf.premium_after_account_discount),
+                        'discount': premium_data_wf.total_discount ? inrFormatDecimal(premium_data_wf.total_discount): '',
                         'key': 'wf'
                     },
                     {
                         'title': 'Each member individualy',
-                        'subtitle': 'in ' + inrFormatDecimal(premium_data_nf.net_premium),
+                        'subtitle': 'in ' + inrFormatDecimal(premium_data_nf.premium_after_account_discount),
+                        'discount': premium_data_nf.total_discount ? inrFormatDecimal(premium_data_nf.total_discount) : '',
                         'key': 'nf'
                     }
                 ];
 
+                console.log(premium_data_nf);
+                console.log(premium_data_wf);
+
                 this.setState({
-                    premium_data: premium_data
+                    premium_data_floater: premium_data_floater
                 })
 
 
@@ -117,7 +114,6 @@ class GroupHealthPlanSelectFloater extends Component {
     }
 
     choosePlan = (index) => {
-        console.log(this.state.premium_data[index]);
         this.setState({
             selectedIndex: index
         }, () => {
@@ -139,13 +135,13 @@ class GroupHealthPlanSelectFloater extends Component {
                         <div style={{ margin: '5px 0 5px 0', color: '#0A1D32', fontSize: 14, fontWeight: 400 }}>
                             {props.subtitle}
                         </div>
-                        <div className="flex" style={{ margin: '4px 0 0 0' }}>
+                        {props.discount && <div className="flex" style={{ margin: '4px 0 0 0' }}>
                             <img style={{ width: 10 }} src={require(`assets/completed_step.svg`)} alt="" />
                             <span style={{
                                 color: '#4D890D', fontSize: 10,
                                 fontWeight: 400, margin: '0 0 0 4px'
-                            }}>save ₹200 </span>
-                        </div>
+                            }}>save {props.discount} </span>
+                        </div>}
                     </div>
                     <div className="completed-icon">
                         {index === this.state.selectedIndex &&
@@ -221,7 +217,7 @@ class GroupHealthPlanSelectFloater extends Component {
                 <div className="group-health-plan-select-floater">
 
                     <div className="generic-choose-input">
-                        {this.state.premium_data.map(this.renderPlans)}
+                        {this.state.premium_data_floater.map(this.renderPlans)}
                     </div>
                 </div>
             </Container>

@@ -240,7 +240,9 @@ class GroupHealthPlanDob extends Component {
                 if((final_dob_data[j].key === 'daughter' || final_dob_data[j].key === 'daughter1') && ui_members.son_total === 1) {
                     key = 'child_account2_key';
                 }
-                post_body[key] = final_dob_data[j].value;
+                post_body[key] = {
+                    dob: final_dob_data[j].value
+                };
             }
 
 

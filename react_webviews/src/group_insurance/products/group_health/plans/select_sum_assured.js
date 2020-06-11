@@ -26,10 +26,9 @@ class GroupHealthPlanSelectSumAssured extends Component {
     }
 
     async componentDidMount() {
-        let selectedIndex = this.state.groupHealthPlanData.selectedIndexSumAssured || 0;
 
         this.setState({
-            selectedIndex: selectedIndex
+            selectedIndex: this.state.groupHealthPlanData.selectedIndexSumAssured || 0
         }, () => {
             this.updateBottomPremium();
         })
@@ -64,9 +63,15 @@ class GroupHealthPlanSelectSumAssured extends Component {
     handleClick = () => {
         let groupHealthPlanData = this.state.groupHealthPlanData;
         groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
+        groupHealthPlanData.post_body.sum_assured = this.state.premium_data[this.state.selectedIndex].sum_assured;
         storageService().setObject('groupHealthPlanData', groupHealthPlanData);
 
-        this.navigate('plan-select-cover-period');
+        if(groupHealthPlanData.account_type === 'self') {
+            this.navigate('plan-select-cover-period');
+        } else {
+            this.navigate('plan-select-floater');
+        }
+        
     }
 
     choosePlan = (index) => {
@@ -80,7 +85,6 @@ class GroupHealthPlanSelectSumAssured extends Component {
 
     renderPlans = (props, index) => {
         return (
-
             <div onClick={() => this.choosePlan(index, props)}
                 className={`tile ${index === this.state.selectedIndex ? 'tile-selected' : ''}`} key={index}>
                 <div className="select-tile">
@@ -91,8 +95,6 @@ class GroupHealthPlanSelectSumAssured extends Component {
                         {index === this.state.selectedIndex &&
                             <img src={require(`assets/completed_step.svg`)} alt="" />}
                     </div>
-
-
                 </div>
             </div >
         )
@@ -118,7 +120,6 @@ class GroupHealthPlanSelectSumAssured extends Component {
                  <img src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
                 </div>
                 <div className="group-health-plan-select-sum-assured">
-
                     <div className="generic-choose-input">
                         {this.state.premium_data.map(this.renderPlans)}
                     </div>

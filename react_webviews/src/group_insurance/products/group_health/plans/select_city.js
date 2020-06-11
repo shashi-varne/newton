@@ -33,6 +33,7 @@ class GroupHealthPlanSelectCity extends Component {
     componentWillMount() {
         this.setState({
             providerData: health_providers[this.state.provider],
+            city: this.state.groupHealthPlanData.city || ''
         })
     }
 
@@ -80,6 +81,7 @@ class GroupHealthPlanSelectCity extends Component {
     handleClick = () => {
         let groupHealthPlanData = this.state.groupHealthPlanData;
         groupHealthPlanData.city = this.state.city;
+        groupHealthPlanData.post_body.city = this.state.city;
         storageService().setObject('groupHealthPlanData', groupHealthPlanData);
 
         this.navigate('plan-list');
