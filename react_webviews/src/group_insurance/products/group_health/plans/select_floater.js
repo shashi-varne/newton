@@ -4,7 +4,7 @@ import Container from '../../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 // import { getConfig } from 'utils/functions';
 
-import { storageService, inrFormatDecimal, numDifferentiationInr, numDifferentiation } from 'utils/validators';
+import { storageService, inrFormatDecimal, numDifferentiationInr } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
 
 import Api from 'utils/api';

@@ -6,11 +6,13 @@ import { nativeCallback } from 'utils/native_callback';
 import { health_providers } from '../../../constants';
 import BottomInfo from '../../../../common/ui/BottomInfo';
 import { storageService } from 'utils/validators';
-import Input from '../../../../common/ui/Input';
 
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
 
+import Autosuggests from '../../../../common/ui/Autosuggest';
+
+import { FormControl } from 'material-ui/Form';
 class GroupHealthPlanSelectCity extends Component {
 
     constructor(props) {
@@ -19,7 +21,12 @@ class GroupHealthPlanSelectCity extends Component {
             type: getConfig().productName,
             provider: this.props.match.params.provider,
             groupHealthPlanData: storageService().getObject('groupHealthPlanData'),
-            city: ''
+            city: '',
+            suggestions: [],
+            suggestions_list: [],
+            errors: [],
+            fields: [],
+            show_loader: true
         }
     }
 
@@ -32,19 +39,18 @@ class GroupHealthPlanSelectCity extends Component {
     async componentDidMount() {
         try {
 
-            
+
             const res = await Api.get('/api/ins_service/api/insurance/hdfcergo/get/citylist');
 
             this.setState({
                 show_loader: false
             });
             var resultData = res.pfwresponse.result;
-            console.log(resultData);
-            
+
             if (res.pfwresponse.status_code === 200) {
 
                 this.setState({
-                    resultData: resultData
+                    suggestions_list: resultData.city_list
                 })
 
 
@@ -74,8 +80,8 @@ class GroupHealthPlanSelectCity extends Component {
     handleClick = () => {
         let groupHealthPlanData = this.state.groupHealthPlanData;
         groupHealthPlanData.city = this.state.city;
-        storageService().setObject('groupHealthPlanData',groupHealthPlanData );
-    
+        storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+
         this.navigate('plan-list');
     }
 
@@ -96,22 +102,18 @@ class GroupHealthPlanSelectCity extends Component {
         }
     }
 
-    handleChange = name => event => {
-        if (!name) {
-          name = event.target.name;
-        }
-        var value = event.target ? event.target.value : '';
+    handleChange = name => value => {
+        
         this.setState({
             [name]: value,
             [name + '_error']: ''
-        })
+        });
 
-      };
+    };
 
 
     render() {
-
-
+       
         return (
             <Container
                 events={this.sendEvents('just_set_events')}
@@ -123,7 +125,25 @@ class GroupHealthPlanSelectCity extends Component {
                 handleClick={() => this.handleClick()}
             >
 
-                <div className="InputField">
+                <FormControl fullWidth>
+                    <div className="InputField">
+                    <Autosuggests
+                        parent={this}
+                        width="40"
+                        employers={this.state.suggestions_list}
+                        label="City"
+                        id="city"
+                        name="city"
+                        error={(this.state.city_error) ? true : false}
+                        helperText={this.state.city_error || 'Premium depends on city of residence'}
+                        value={this.state.city}
+                        onChange={this.handleChange('city')} />
+                    </div>
+
+
+
+                </FormControl>
+                {/* <div className="InputField">
                     <Input
                         type="text"
                         width="40"
@@ -134,7 +154,7 @@ class GroupHealthPlanSelectCity extends Component {
                         helperText={this.state.city_error || 'Premium depends on city of residence'}
                         value={this.state.city}
                         onChange={this.handleChange()} />
-                </div>
+                </div> */}
                 <BottomInfo baseData={{ 'content': 'Get cashless treatments at 10000+ cities' }} />
             </Container>
         );
