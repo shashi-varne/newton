@@ -116,8 +116,10 @@ class InvestmentDetails4 extends Component {
       } else if (!Number(fhc_data.tax_savings.tax_saving_80CCD)) {
         fhc_data.tax_savings.tax_saving_80CCD = '0';
       }
+      
       storageService().setObject('fhc_data', fhc_data);
       try {
+        fhc_data.generate_report = true;
         await uploadFHCData(fhc_data);
         this.navigate('invest-complete');
       } catch (err) {

@@ -166,7 +166,7 @@ export function validateAlphabets(string) {
 
 export function validateEmail(string) {
   // eslint-disable-next-line
-  let rule = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  let rule = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return rule.test(string);
 }
 

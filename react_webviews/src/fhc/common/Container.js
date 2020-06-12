@@ -101,6 +101,7 @@ class Container extends Component {
 
   handleClose = () => {
     if (this.state.openPopup) {
+      storageService().remove('fhc_data'); // remove cached fhc data
       nativeCallback({ events: this.getEvents('exit_no') });
     }
     this.setState({
