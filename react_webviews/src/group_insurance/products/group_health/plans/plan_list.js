@@ -102,6 +102,7 @@ class GroupHealthPlanList extends Component {
     selectPlan = (plan, index) => {
         let groupHealthPlanData = this.state.groupHealthPlanData;
         groupHealthPlanData.plan_selected = plan;
+        groupHealthPlanData.base_plan_title = this.state.plan_data.common.base_plan_title
         groupHealthPlanData.post_body.plan = plan.plan_type;
         storageService().setObject('groupHealthPlanData', groupHealthPlanData);
 

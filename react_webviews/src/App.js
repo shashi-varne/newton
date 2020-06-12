@@ -17,6 +17,7 @@ import RiskProfiler from './risk_profiler';
 import IsipBIller from './isip';
 import HelpSupport from './help_support';
 import CommonLanding from './common/components/landing';
+import CommonRenderBenefits from './common/components/RenderBenefits';
 
 class App extends Component {
   render() {
@@ -35,6 +36,7 @@ class App extends Component {
           <Route path="/help" component={HelpSupport} />
           <Route path="/webview/:main_module/:sub_module" component={CommonLanding} />
           <Route path="/webview/:main_module" component={CommonLanding} />
+          <Route path="/common/render-benefits" component={CommonRenderBenefits} />
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>

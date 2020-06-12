@@ -61,6 +61,13 @@ class GroupHealthSelectInsureType extends Component {
 
   handleClick = () => {
 
+    if(!this.state.account_type) {
+      this.setState({
+        account_type_error: 'Please select one'
+      })
+      return;
+    }
+
     let groupHealthPlanData = this.state.groupHealthPlanData;
     groupHealthPlanData.account_type = this.state.account_type;
 

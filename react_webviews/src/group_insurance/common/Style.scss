@@ -650,7 +650,12 @@
   .copay-info {
     display: flex;
     justify-content: space-between;
-    margin: 10px 0 10px 0;
+    margin: 10px 0 20px 0;
+    .ci-left {
+      color: #051E35;
+      font-size: 14px;
+      font-weight: 400;
+    }
   }
   span.special-benefit-text {
     color: #0A1D32;
@@ -681,6 +686,12 @@
 
   .bototm-design {
       margin: 0 0 20px 0;
+  }
+  .settlement-info {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--primary);
+    margin: 0 0 20px 0;
   }
 }
 
@@ -715,3 +726,52 @@
   }
 }
 
+.group-health-plan-premium-summary {
+  .group-health-top-content-plan-logo {
+    justify-content: flex-start;
+    .tc-right {
+      margin: 0 20px 0 0px;
+    }
+  }
+
+  .pi-tile {
+    color: #0A1D32;
+    font-size: 14px;
+    font-weight: 400;
+    margin: 15px 0 15px 0;
+  }
+
+  .page-title {
+      color: #0A1D32;
+      font-size: 14px;
+      font-weight: 600;
+      margin: 20px 0 0 0;
+  }
+}
+
+.group-health-how-to-claim {
+  padding: 20px 0 0 0;
+  .page-title {
+    color: #0A1D32;
+    font-size: 14px;
+    font-weight: 400;
+    margin: 0 0 30px 0;
+  }
+  
+  .ri-tile {
+    color: #767E86;
+    font-size: 13px;
+    margin: 0 0 10px 0;
+    line-height: 1.6;
+  }
+  
+  .ri-tile-left {
+    font-weight: 500;
+  }
+  .contact-email {
+    color: #767E86;
+    font-size: 14px;
+    margin: 40px 0 0 0;
+    font-weight: 400;
+  }
+}

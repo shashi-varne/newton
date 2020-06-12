@@ -4,7 +4,7 @@ import Container from '../../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 // import { getConfig } from 'utils/functions';
 
-import { storageService, inrFormatDecimal, numDifferentiationInr } from 'utils/validators';
+import { storageService, inrFormatDecimal, numDifferentiationInr, numDifferentiation } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
 
 import Api from 'utils/api';
@@ -31,46 +31,64 @@ class GroupHealthPlanSelectFloater extends Component {
 
     async componentDidMount() {
 
+        let post_body = this.state.groupHealthPlanData.post_body;
         this.setState({
-            selectedIndex: this.state.groupHealthPlanData.selectedIndexFloater || 0
+            selectedIndex: this.state.groupHealthPlanData.selectedIndexFloater || 0,
+            sum_assured: post_body.sum_assured,
+            total_member: post_body.mem_info.adult + post_body.mem_info.child
         });
 
         try {
 
-            let body = this.state.groupHealthPlanData.post_body;
-            const res = await Api.post('/api/ins_service/api/insurance/hdfcergo/premium', body);
+            const res = await Api.post('/api/ins_service/api/insurance/hdfcergo/premium', post_body);
 
             this.setState({
                 show_loader: false
             });
             var resultData = res.pfwresponse.result;
-            console.log(resultData.premium);
             if (res.pfwresponse.status_code === 200) {
 
                 let premium_data_nf = resultData.premium[0].NF[0];
                 let premium_data_wf = resultData.premium[0].WF[0];
 
-
                 let premium_data_floater = [
                     {
                         'title': 'All the members',
-                        'subtitle': 'in ' + inrFormatDecimal(premium_data_wf.premium_after_account_discount),
-                        'discount': premium_data_wf.total_discount ? inrFormatDecimal(premium_data_wf.total_discount): '',
-                        'key': 'wf'
+                        'premium': premium_data_wf.net_premium,
+                        'subtitle': 'in ' + inrFormatDecimal(premium_data_wf.net_premium),
+                        'discount': premium_data_wf.total_discount ? inrFormatDecimal(premium_data_wf.total_discount) : '',
+                        'key': 'WF'
                     },
                     {
                         'title': 'Each member individualy',
-                        'subtitle': 'in ' + inrFormatDecimal(premium_data_nf.premium_after_account_discount),
+                        'subtitle': 'in ' + inrFormatDecimal(premium_data_nf.net_premium),
+                        'premium': premium_data_nf.net_premium,
                         'discount': premium_data_nf.total_discount ? inrFormatDecimal(premium_data_nf.total_discount) : '',
-                        'key': 'nf'
+                        'key': 'NF'
                     }
                 ];
 
-                console.log(premium_data_nf);
-                console.log(premium_data_wf);
+                let ind_pre_data = [];
+
+                let final_dob_data = this.state.groupHealthPlanData.final_dob_data;
+                for (var i in final_dob_data) {
+                    let mem = final_dob_data[i];
+                    let backend_key = final_dob_data[i].backend_key;
+
+                    if (premium_data_nf[backend_key]) {
+                        let obj = {
+                            name: numDifferentiation(this.state.sum_assured) + ' for ' + mem.key,
+                            value: inrFormatDecimal(premium_data_nf[backend_key])
+                        };
+                        ind_pre_data.push(obj);
+                    }
+                }
 
                 this.setState({
-                    premium_data_floater: premium_data_floater
+                    premium_data_floater: premium_data_floater,
+                    ind_pre_data: ind_pre_data,
+                    premium_data_nf: premium_data_nf,
+                    premium_data_wf: premium_data_wf
                 })
 
 
@@ -107,19 +125,30 @@ class GroupHealthPlanSelectFloater extends Component {
 
     handleClick = () => {
         let groupHealthPlanData = this.state.groupHealthPlanData;
-        groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
+        let type_of_plan = this.state.premium_data_floater[this.state.selectedIndex].key;
+        groupHealthPlanData.selectedIndexFloater = this.state.selectedIndex;
+        groupHealthPlanData.type_of_plan = type_of_plan;
+        groupHealthPlanData.post_body.type_of_plan = type_of_plan;
         storageService().setObject('groupHealthPlanData', groupHealthPlanData);
 
-        this.navigate('plan-list');
+        this.navigate('plan-select-cover-period');
     }
 
     choosePlan = (index) => {
         this.setState({
             selectedIndex: index
         }, () => {
-            this.updateBottomPremium();
+            this.updateBottomPremium(this.state.premium_data_floater[index].premium);
         });
 
+    }
+    renderIndPlans = (props, index) => {
+        return (
+            <div key={index} className="flex-between di-tile">
+                <div className="di-tile-left">{props.name}</div>
+                <div className="di-tile-right">{props.value}</div>
+            </div>
+        );
     }
 
     renderPlans = (props, index) => {
@@ -151,12 +180,12 @@ class GroupHealthPlanSelectFloater extends Component {
 
                 </div>
 
-                {props.key === 'nf' && index === this.state.selectedIndex &&
+                {props.key === 'NF' && index === this.state.selectedIndex &&
                     <div className="detail-info">
                         <div className="di-title">Sum assured</div>
                         <div className="flex-between di-tile">
-                            <div className="di-tile-left">3 lacs x 3</div>
-                            <div className="di-tile-right">{numDifferentiationInr(900000)}</div>
+                            <div className="di-tile-left">{numDifferentiation(this.state.sum_assured)} x {this.state.total_member}</div>
+                            <div className="di-tile-right">{numDifferentiationInr(this.state.sum_assured * this.state.total_member)}</div>
                         </div>
 
                         <div className="generic-hr"></div>
@@ -164,25 +193,25 @@ class GroupHealthPlanSelectFloater extends Component {
                         <div className="di-title">Details</div>
 
                         <div className="di-sum-assured-data">
-
+                            {this.state.ind_pre_data.map(this.renderIndPlans)}
                         </div>
 
                         <div className="generic-hr"></div>
 
                         <div className="flex-between di-tile">
                             <div className="di-tile-left">Base premium</div>
-                            <div className="di-tile-right">{inrFormatDecimal(18180)}</div>
+                            <div className="di-tile-right">{inrFormatDecimal(this.state.premium_data_nf.base_premium)}</div>
                         </div>
                         <div className="flex-between di-tile">
-                            <div className="di-tile-left">10% discount</div>
-                            <div className="di-tile-right">{inrFormatDecimal(1080)}</div>
+                            <div className="di-tile-left">{this.state.premium_data_nf.tenure_discount_percentage}% discount</div>
+                            <div className="di-tile-right">{inrFormatDecimal(this.state.premium_data_nf.total_discount)}</div>
                         </div>
 
                         <div className="generic-hr"></div>
 
                         <div className="flex-between di-tile">
                             <div className="di-tile-left">Total premium</div>
-                            <div className="di-tile-right">{inrFormatDecimal(17100)}</div>
+                            <div className="di-tile-right">{inrFormatDecimal(this.state.premium_data_nf.net_premium)}</div>
                         </div>
                         <div className="generic-hr"></div>
                     </div>
@@ -200,20 +229,13 @@ class GroupHealthPlanSelectFloater extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
-                title={'3 lacs sum assured For'}
+                title={numDifferentiation(this.state.sum_assured) + ' sum assured For'}
                 buttonTitle="CONTINUE"
                 withProvider={true}
                 buttonData={this.state.bottomButtonData}
                 handleClick={() => this.handleClick()}
             >
 
-                <div className="common-top-page-subtitle flex-between-center">
-                    The period for which health expenses will be covered
-                 <img
-                        data-tip="As premium increases by insurer age, policy with longer cover period reduces the overall premium. 70% of our user has taken cover for 3 year period."
-                        src={require(`assets/${this.state.productName}/info_icon.svg`)}
-                        alt="" />
-                </div>
                 <div className="group-health-plan-select-floater">
 
                     <div className="generic-choose-input">

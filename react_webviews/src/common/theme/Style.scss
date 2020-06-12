@@ -733,6 +733,7 @@ input#pan {
   background-color: var(--highlight);
   padding: 15px;
   text-align: center;
+  border-radius: 4px;
   .content {
     color: #767E86;
     font-size: 12px;
@@ -749,19 +750,20 @@ input#pan {
   .tile {
     display: flex;
     align-items: center;
-    margin: 20px 0 20px 0;
+    margin: 30px 0 30px 0px;
   }
   .content-title {
     color: #041D34;
     font-size: 14px;
     font-weight: 400;
-    margin: 0 0 4px 0;
+    margin: 0 0 8px 0;
   }
 
   .content-subtitle {
       color: #747E87;
       font-size: 13px;
       font-weight: 400;
+      line-height: 1.6;
   }
 }
 

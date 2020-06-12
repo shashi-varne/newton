@@ -14,8 +14,10 @@ class HowToStepsClass extends Component {
   renderList = (option, index) => {
     return (
       <div key={index} className="tile">
-        <img className="icon"
-          src={require(`assets/${this.state.productName}/${option.icon}.svg`)} alt="Gold" />
+        {option.icon && <img className="icon"
+          src={require(`assets/${this.state.productName}/${option.icon}.svg`)} alt="Gold" />}
+        {option.img && <img className="icon"
+          src={option.img} alt="Gold" />}
         <div className="content">
           {this.state.baseData.show_index && <span> {index + 1}. </span>}
           <div className="content">
@@ -32,11 +34,11 @@ class HowToStepsClass extends Component {
     return (
 
       <div className="common-how-steps" style={{ border: 'none' }}>
-        <div className="top-tile">
+        {this.state.baseData.title && <div className="top-tile">
           <div className="top-title">
             {this.state.baseData.title}
-        </div>
-        </div>
+          </div>
+        </div>}
 
         <div className='common-steps-images'>
           {this.state.baseData.options.map(this.renderList)}

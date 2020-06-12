@@ -40,12 +40,12 @@ export function initialize() {
     }
 }
 
-export function updateBottomPremium() {
+export function updateBottomPremium(premium) {
     
     this.setState({
         bottomButtonData: {
             ...this.state.bottomButtonData,
-            leftSubtitle: inrFormatDecimal(this.state.premium_data[this.state.selectedIndex].net_premium)
+            leftSubtitle: inrFormatDecimal(premium || this.state.premium_data[this.state.selectedIndex].net_premium)
         }
     })
 }

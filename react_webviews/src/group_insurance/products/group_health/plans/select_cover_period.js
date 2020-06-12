@@ -31,6 +31,12 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
     }
 
     async componentDidMount() {
+
+        this.setState({
+            selectedIndex: this.state.groupHealthPlanData.selectedIndexCover || 0
+        })
+
+        let type_of_plan = this.state.groupHealthPlanData.post_body.type_of_plan;
         try {
 
             let body = this.state.groupHealthPlanData.post_body;
@@ -40,12 +46,14 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                 show_loader: false
             });
             var resultData = res.pfwresponse.result;
-            console.log(resultData.premium);
             if (res.pfwresponse.status_code === 200) {
 
+                console.log(resultData.premium[0][type_of_plan]);
                 this.setState({
-                    premium_data_nf: resultData.premium[0].NF,
-                    premium_data_wf: resultData.premium[0].WF
+                    premium_data: resultData.premium[0][type_of_plan],
+                    type_of_plan: type_of_plan
+                }, () => {
+                    this.updateBottomPremium();
                 })
 
 
@@ -82,14 +90,26 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
 
     handleClick = () => {
         let groupHealthPlanData = this.state.groupHealthPlanData;
-        groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
+        let tenure = this.state.premium_data[this.state.selectedIndex].tenure;
+        groupHealthPlanData.tenure = tenure;
+        let post_body = groupHealthPlanData.post_body;
+
+        let premium_selected = this.state.premium_data[this.state.selectedIndex]
+        post_body.tenure = premium_selected.tenure;
+        post_body.tax_amount = premium_selected.gst_tax;
+        post_body.base_premium = premium_selected.base_premium;
+        post_body.total_amount = premium_selected.total_amount;
+        post_body.discount_amount = premium_selected.total_discount;
+        post_body.insured_pattern = premium_selected.insured_pattern;
+        groupHealthPlanData.post_body.tenure  = tenure;
+
+        groupHealthPlanData.selectedIndexCover = this.state.selectedIndex;
         storageService().setObject('groupHealthPlanData', groupHealthPlanData);
 
-        this.navigate('plan-list');
+        this.navigate('plan-premium-summary');
     }
 
     choosePlan = (index) => {
-        console.log(this.state.premium_data[index]);
         this.setState({
             selectedIndex: index
         }, () => {
@@ -106,15 +126,17 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                 <div className="select-tile">
                     <div className="flex-column">
                         <div className="name">
-                            {props.tenure} year{props.tenure !== "1" && <span>s</span>} for {inrFormatDecimal(props.sum_assured)}
+                            {props.tenure} year{props.tenure !== "1" && <span>s</span>} for {inrFormatDecimal(props.net_premium)}
                         </div>
-                        <div className="flex" style={{margin: '4px 0 0 0'}}>
+                       {props.total_discount > 0 && 
+                            <div className="flex" style={{margin: '4px 0 0 0'}}>
                             <img style={{ width: 10 }} src={require(`assets/completed_step.svg`)} alt="" />
                             <span style={{
                                 color: '#4D890D', fontSize: 10,
                                 fontWeight: 400, margin: '0 0 0 4px'
-                            }}>save ₹200 </span>
+                            }}>save {inrFormatDecimal(props.total_discount)} </span>
                         </div>
+                        }
                     </div>
                     <div className="completed-icon">
                         {index === this.state.selectedIndex &&
