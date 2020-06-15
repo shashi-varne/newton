@@ -335,7 +335,7 @@ function getPartnerConfig(partner_code) {
   let config_to_return = baseConfig[productType];
 
   if (isStaging) {
-    config_to_return.webAppUrl = 'https://fhc-dot-plutus-web.appspot.com/#!/';
+    config_to_return.webAppUrl = 'https://sdk-dot-plutus-web.appspot.com/#!/';
     // config_to_return.webAppUrl = 'http://localhost:3001/#!/';
   }
 
