@@ -38,7 +38,7 @@ class Landing extends Component {
 
     startFHC() {
         this.sendEvents('next');
-        this.navigate('/fhc/personal1');
+        this.navigate('/fhc/personal1', { fromLanding: true });
     }
 
     sendEvents(user_action) {

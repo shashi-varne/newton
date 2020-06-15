@@ -92,7 +92,11 @@ class Container extends Component {
         nativeCallback({ action: 'exit', events: this.getEvents('back') });
         break;
       case "/fhc/personal1":
-        this.navigate('/fhc', { fromScreen1: true });
+        if (params && params.fromLanding) {
+          this.navigate('/fhc', { fromScreen1: true });
+        } else {
+          nativeCallback({ action: 'exit', events: this.getEvents('back') });
+        }
         break;
       default:
         this.props.history.goBack();
