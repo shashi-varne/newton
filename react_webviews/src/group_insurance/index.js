@@ -142,6 +142,10 @@ import GroupHealthPlanSelectCoverPeriod from './products/group_health/plans/sele
 import GroupHealthPlanSelectFloater from './products/group_health/plans/select_floater';
 import GroupHealthPlanPremiumSummary from './products/group_health/plans/premium_summary';
 import GroupHealthPlanHowToClaim from './products/group_health/plans/how_to_claim';
+import GroupHealthPlanPersonalDetails from './products/group_health/form/personal_details';
+import GroupHealthPlanContactDetails from './products/group_health/form/contact';
+import GroupHealthPlanAddressDetails from './products/group_health/form/address';
+
 // etli
 import EtliPersonalDetails1 from './products/term_insurance/etli/personal_details1';
 import EtliPersonalDetails2 from './products/term_insurance/etli/personal_details2';
@@ -324,6 +328,10 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/:provider/plan-select-floater`} component={GroupHealthPlanSelectFloater} />
           <Route path={`${url}/group-health/:provider/plan-premium-summary`} component={GroupHealthPlanPremiumSummary} />
           <Route path={`${url}/group-health/:provider/how-to-claim`} component={GroupHealthPlanHowToClaim} />
+          <Route path={`${url}/group-health/:provider/personal-details/:member_key`} component={GroupHealthPlanPersonalDetails} />
+          <Route path={`${url}/group-health/:provider/contact-details`} component={GroupHealthPlanContactDetails} />
+          <Route path={`${url}/group-health/:provider/address-details`} component={GroupHealthPlanAddressDetails} />
+          
           
           {/* common */}
           <Route path={`${url}/common/report`} component={Report} />

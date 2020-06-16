@@ -52,7 +52,7 @@ class GroupHealthPlanPremiumSummary extends Component {
 
      handleClick = async() => {
         let groupHealthPlanData = this.state.groupHealthPlanData;
-        storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+        
 
         try {
 
@@ -66,8 +66,9 @@ class GroupHealthPlanPremiumSummary extends Component {
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
                 console.log(resultData);
-
-                // this.navigate('plan-premium-summary');
+                groupHealthPlanData.lead = resultData.lead;
+                storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+                this.navigate('personal-details/self');
             } else {
                 this.setState({
                     show_loader: false

@@ -444,3 +444,61 @@ input.default-otp-input {
     margin-top: 0px;
   }
 }
+
+.dropdown-in-modal {
+  .input-box {
+    display: flex;
+    justify-content: space-between;
+    margin: 43px 0 0 0;
+    border-bottom: 1px solid #949494;
+    padding: 0 0 3px 0;
+    cursor: pointer;
+    .input-value {
+      color: #0A1D32;
+      font-size: 15px;
+      font-weight: 400;
+    }
+  }
+}
+
+#dropdown-in-modal-dialog {
+  .MuiDialog-paper {
+    margin: 0px !important;
+  }
+
+  .row-scroll {
+    font-size: 14px;
+    color: #4a4a4a;
+    padding: 20px 0px 10px 20px;
+    width: 105%;
+    margin: 5px -13px 0 -15px;
+    cursor: pointer;
+    position: relative;
+  }
+  .row-scroll-selected {
+    background: #f4f4f4;
+    cursor: unset;
+  }
+  .content-selected {
+    color: var(--primary);
+    font-weight: 500;
+  }
+}
+
+
+#dropdown-in-modal-dialog-title {
+  padding: 20px 0 0 20px;
+  height: 100px;
+  .dialog-head {
+    margin: 0px 0px 0px -20px;
+    text-align: cent;
+    padding: 13px 10px 13px 20px;
+    position: fixed;
+    color: #160D2E;
+    font-size: 20px;
+    font-weight: 600;
+    width: -webkit-fill-available;
+    text-align: left;
+    background: white;
+}
+}

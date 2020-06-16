@@ -32,6 +32,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
 
     async componentDidMount() {
 
+        console.log(this.state.groupHealthPlanData);
         this.setState({
             selectedIndex: this.state.groupHealthPlanData.selectedIndexCover || 0
         })
@@ -98,9 +99,11 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         post_body.tenure = premium_selected.tenure;
         post_body.tax_amount = premium_selected.gst_tax;
         post_body.base_premium = premium_selected.base_premium;
+        post_body.premium = premium_selected.base_premium;
         post_body.total_amount = premium_selected.total_amount;
         post_body.discount_amount = premium_selected.total_discount;
         post_body.insured_pattern = premium_selected.insured_pattern;
+        post_body.plan_code = groupHealthPlanData.plan_selected.plan_code;
         groupHealthPlanData.post_body.tenure  = tenure;
 
         groupHealthPlanData.selectedIndexCover = this.state.selectedIndex;

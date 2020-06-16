@@ -4,7 +4,8 @@ import { health_providers } from '../../constants';
 export function initialize() {
 
     this.navigate = navigate.bind(this);
-    let provider = this.props.match.params.provider;
+    console.log(this);
+    let provider = this.props.parent && this.props.parent.props ? this.props.parent.props.match.params.provider : this.props.match.params.provider;
     let providerData = health_providers[provider];
 
     let groupHealthPlanData = storageService().getObject('groupHealthPlanData') || {};
@@ -26,8 +27,10 @@ export function initialize() {
             premium_data: premium_data
         })
 
+        let leftTitle = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.plan_title : '';
+
         let bottomButtonData = {
-            leftTitle: groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.plan_title : '',
+            leftTitle: leftTitle,
             leftSubtitle: premium_data[selectedIndexSumAssured] ? inrFormatDecimal(premium_data[selectedIndexSumAssured].net_premium): '',
             leftArrow: 'up',
             provider: providerData.key,
@@ -36,6 +39,32 @@ export function initialize() {
         this.setState({
             bottomButtonData: bottomButtonData
         })
+
+         let  confirmDialogData = {
+                buttonData: {
+                    leftTitle: leftTitle,
+                    leftSubtitle: premium_data[selectedIndexSumAssured] ? inrFormatDecimal(premium_data[selectedIndexSumAssured].net_premium): '',
+                    leftArrow: 'down',
+                    provider: providerData.key,
+                    logo: providerData.logo_cta
+                },
+                buttonTitle: "OK",
+                content1: [
+                    {
+                        'name': 'Basic premium ', 'value':
+                            inrFormatDecimal(10000)
+                    },
+                    { 'name': 'GST & other taxes', 'value': inrFormatDecimal(10000) }
+                ],
+                content2: [
+                    { 'name': 'Total', 'value': inrFormatDecimal(10000) }
+                ]
+            }
+
+        this.setState({
+            confirmDialogData: confirmDialogData
+        })
+
 
     }
 }
