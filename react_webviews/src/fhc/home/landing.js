@@ -25,8 +25,6 @@ class Landing extends Component {
                 const fhc_data = await fetchFHCData();
                 if (fhc_data.completed_v2) {
                     this.navigate('/fhc/final-report');
-                } else if (fhc_data.template_to_render === 'fisdom_health_check_edit.html') {
-                    this.navigate('/fhc/personal1');
                 }
             }
             this.setState({ show_loader: false });
@@ -38,7 +36,7 @@ class Landing extends Component {
 
     startFHC() {
         this.sendEvents('next');
-        this.navigate('/fhc/personal1', { fromLanding: true });
+        this.navigate('/fhc/personal1');
     }
 
     sendEvents(user_action) {

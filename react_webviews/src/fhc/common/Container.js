@@ -92,11 +92,7 @@ class Container extends Component {
         nativeCallback({ action: 'exit', events: this.getEvents('back') });
         break;
       case "/fhc/personal1":
-        if (params && params.fromLanding) {
-          this.navigate('/fhc', { fromScreen1: true });
-        } else {
-          nativeCallback({ action: 'exit', events: this.getEvents('back') });
-        }
+        this.navigate('/fhc', { fromScreen1: true });
         break;
       default:
         this.props.history.goBack();
@@ -105,7 +101,6 @@ class Container extends Component {
 
   handleClose = () => {
     if (this.state.openPopup) {
-      storageService().remove('fhc_data'); // remove cached fhc data
       nativeCallback({ events: this.getEvents('exit_no') });
     }
     this.setState({
@@ -145,7 +140,8 @@ class Container extends Component {
     this.setState({ show_loader: true });
     try {
       const fhc_data = storageService().getObject('fhc_data');
-      await uploadFHCData(fhc_data);
+      await uploadFHCData(fhc_data, true);
+      storageService().remove('fhc_data'); // remove cached fhc data when exiting
       nativeCallback({ action: this.state.callbackType, events: this.getEvents('exit_yes') });
     } catch (e) {
       this.setState({ show_loader: false });

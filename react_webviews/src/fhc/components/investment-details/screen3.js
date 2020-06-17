@@ -45,6 +45,7 @@ class InvestmentDetails3 extends Component {
       } else {
         fhc_data = new FHC(fhc_data);
       }
+      fhc_data.investments = fhc_data.investments.sort((inv1, inv2) => inv1.rank - inv2.rank);
       this.setState({
         show_loader: false,
         fhc_data,
@@ -110,6 +111,7 @@ class InvestmentDetails3 extends Component {
 
   render() {
     let fhc_data = new FHC(this.state.fhc_data.getCopy());
+
     return (
       <Container
         events={this.sendEvents('just_set_events')}

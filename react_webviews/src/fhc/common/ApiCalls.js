@@ -17,12 +17,12 @@ export const fetchFHCData = async () => {
   }
 }
 
-export const uploadFHCData = async (fhc_data) => {
+export const uploadFHCData = async (fhc_data, ignoreErr) => {
   try {
     const res = await Api.post('api/financialhealthcheck/mine', fhc_data);
     const { result, status_code: status } = res.pfwresponse;
 
-    if (status !== 200) {
+    if (status !== 200 && !ignoreErr) {
       throw (result.error || result.message || 'Something went wrong. Please try again');
     }
     return result;
