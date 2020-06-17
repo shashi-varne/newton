@@ -1,0 +1,49 @@
+.ext-pf-banner {
+  background: url(../../assets/myway/banner_ext_pf.svg) no-repeat right/contain;
+  height: 165px;
+  width: 100%;
+
+  .header-title-text {
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 28px;
+    color: #0a1d32;
+  }
+
+  .header-subtitle-text {
+    display: block;
+    margin-top: 40px;
+    color: #767e86;
+    font-size: 13px;
+    line-height: 20px;
+  }
+}
+
+.ext-pf-email-subheader {
+  margin: 30px 0 20px 0;
+  font-size: 15px;
+  font-weight: 500;
+  color: #0a1d32;
+}
+
+.uppercase-text {
+  text-transform: uppercase;   
+}
+
+.info-box {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  background: #f0f7ff;
+
+  .info-box-img {
+    height: 20px;
+    width: 25px;
+  }
+
+  .info-box-body {
+    flex-basis: 60%;
+  }
+}

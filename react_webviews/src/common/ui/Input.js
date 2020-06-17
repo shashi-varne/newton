@@ -44,6 +44,7 @@ const Input = (props) => {
         onFocus={props.onFocus}
         name={props.name}
         onChange={props.onChange}
+        variant={props.variant}
         onKeyPress={props.onKeyChange}
         inputProps={{
           maxLength: props.maxLength
