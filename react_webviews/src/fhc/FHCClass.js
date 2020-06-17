@@ -7,6 +7,7 @@ import { calculateAge } from 'utils/validators';
 
 class FHC {
   name = '';
+  email = '';
   age = '';
   dob = '';
   gender = '';
