@@ -6,7 +6,6 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import Input from '../../common/ui/Input';
 import { validateEmail } from '../../utils/validators.js';
-import image from '../../assets/contact_details_icn.svg';
 const product_type = getConfig().type;
 class email_entry extends Component {
   constructor(props) {
@@ -54,7 +53,7 @@ class email_entry extends Component {
             Get a consolidated view of all <br /> your external investments
           </span>
         </div>
-        <div className="ext-pf-email-subheader">
+        <div className="ext-pf-email-label">
           Enter your primary investment email
         </div>
         <div className="InputField">
@@ -70,19 +69,6 @@ class email_entry extends Component {
             name="email"
             value={this.state.email}
             onChange={this.handleChange('email')} />
-        </div>
-        <div class="info-box">
-          <div class="info-box-img">
-            <img
-              src={image}
-              className=""
-              alt=""
-            />
-          </div>
-          <div class="info-box-body">
-
-          </div>
-          <div class="info-box-ctrl"></div>
         </div>
       </Container>
     );
