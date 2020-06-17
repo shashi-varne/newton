@@ -12,6 +12,8 @@ import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
 import Landing from './components/landing.js';
 import Email_entry from './components/email_entry';
 import StatementRequest from './components/statement_request_update';
+import EmailNotReceived from './components/email_not_received';
+import EmailExampleView from './components/email_example_view';
 // 
 
 const generateClassName = createGenerateClassName({
@@ -44,6 +46,8 @@ function external_portfolio(props) {
           <Route exact path={`${url}`} component={Landing} />
           <Route path={`${url}/email_entry`} component={Email_entry} />
           <Route path={`${url}/statement_request`} component={StatementRequest} />
+          <Route path={`${url}/email_not_received`} component={EmailNotReceived} />
+          <Route path={`${url}/email_example_view`} component={EmailExampleView} />
         </Switch>
       </MuiThemeProvider>
     </JssProvider>

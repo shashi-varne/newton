@@ -338,7 +338,7 @@ class Container extends Component {
             style={this.props.styleHeader} 
             className={`header-title-page  ${this.props.classHeader}`}>
               {/* {this.state.inPageTitle &&  */}
-                <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{width: this.props.count ? '75%': ''}}>
+                <div className={`header-title-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{width: this.props.count ? '75%': ''}}>
                   {this.props.title}
                 </div>
               {/* } */}
@@ -350,7 +350,13 @@ class Container extends Component {
                   <span style={{ fontWeight: 600 }}>{this.props.current}</span>/<span>{this.props.total}</span>
                 </span>}
           </div>
-         }
+        }
+
+        {this.props.subtitle &&
+          <div className="header-subtitle-text">
+            {this.props.subtitle}
+          </div>
+        }
 
         {/* Children Block */}
         <div

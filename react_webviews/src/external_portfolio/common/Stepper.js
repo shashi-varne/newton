@@ -23,7 +23,8 @@ const step2 = (<Fragment>
   <Button
     variant="outlined"  color="secondary" fullWidth={true}
     classes={{
-      root: 'gen-statement-btn'
+      root: 'gen-statement-btn',
+      label: 'gen-statement-btn-label'
     }}
   >
     Generate Statement
