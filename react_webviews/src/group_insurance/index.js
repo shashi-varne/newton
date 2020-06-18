@@ -145,6 +145,10 @@ import GroupHealthPlanHowToClaim from './products/group_health/plans/how_to_clai
 import GroupHealthPlanPersonalDetails from './products/group_health/form/personal_details';
 import GroupHealthPlanContactDetails from './products/group_health/form/contact';
 import GroupHealthPlanAddressDetails from './products/group_health/form/address';
+import GroupHealthPlanNomineeDetails from './products/group_health/form/nominee';
+import GroupHealthPlanIsPed from './products/group_health/form/is_ped';
+import GroupHealthPlanSelectPed from './products/group_health/form/select_ped';
+
 
 // etli
 import EtliPersonalDetails1 from './products/term_insurance/etli/personal_details1';
@@ -331,6 +335,9 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/:provider/personal-details/:member_key`} component={GroupHealthPlanPersonalDetails} />
           <Route path={`${url}/group-health/:provider/contact-details`} component={GroupHealthPlanContactDetails} />
           <Route path={`${url}/group-health/:provider/address-details`} component={GroupHealthPlanAddressDetails} />
+          <Route path={`${url}/group-health/:provider/nominee-details`} component={GroupHealthPlanNomineeDetails} />
+          <Route path={`${url}/group-health/:provider/is-ped`} component={GroupHealthPlanIsPed} />
+          <Route path={`${url}/group-health/:provider/select-ped/:member_key`} component={GroupHealthPlanSelectPed} />
           
           
           {/* common */}

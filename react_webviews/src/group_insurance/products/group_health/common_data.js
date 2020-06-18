@@ -4,7 +4,6 @@ import { health_providers } from '../../constants';
 export function initialize() {
 
     this.navigate = navigate.bind(this);
-    console.log(this);
     let provider = this.props.parent && this.props.parent.props ? this.props.parent.props.match.params.provider : this.props.match.params.provider;
     let providerData = health_providers[provider];
 

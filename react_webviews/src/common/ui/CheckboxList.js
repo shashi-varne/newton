@@ -9,7 +9,7 @@ import SVG from 'react-inlinesvg';
 import plus_icon from 'assets/plus_icon.svg';
 import minus_icon from 'assets/minus_icon.svg';
 
-class PlusMinusInputClass extends Component {
+class CheckboxListClass extends Component {
 
     constructor(props) {
         super(props);
@@ -51,33 +51,7 @@ class PlusMinusInputClass extends Component {
         }
 
 
-        if (type === 'plus') {
-
-
-            let total = state[name + '_total'] || 0;
-            total++;
-
-            if (total > state[name + '_max']) {
-                return;
-            }
-            this.updateParent([name + '_total'], total);
-        }
-
-        if (type === 'minus') {
-
-
-            let total = state[name + '_total'];
-
-            if (total > 0) {
-                total--;
-                this.updateParent([name + '_total'], total);
-            }
-
-            if (total === 0) {
-                this.updateParent([name + '_checked'], false);
-            }
-
-        }
+        
 
     }
 
@@ -104,23 +78,6 @@ class PlusMinusInputClass extends Component {
                             <Grid item xs={11}>
                                 <div className="right-data">
                                     <div className="content" style={{textTransform: 'capitalize'}}>{name}</div>
-                                    {parentState[name + '_checked'] &&
-                                     (!parentState[name + '_onlycheckbox'] && !parentState.onlycheckbox) &&
-                                        <div className="images">
-                                            <SVG className="plus-minus-icons"
-                                                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
-                                                src={minus_icon}
-                                                onClick={() => this.handleClick(name, 'minus')}
-                                            />
-                                            <div className="number">{parentState[name + '_total']}</div>
-                                            <SVG className="plus-minus-icons"
-                                                style={{ opacity: parentState[name + '_ismax'] ? 0.3 : 1 }}
-                                                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
-                                                src={plus_icon}
-                                                onClick={() => this.handleClick(name, 'plus')}
-                                            />
-                                        </div>
-                                    }
                                 </div>
                             </Grid>
                         
@@ -131,9 +88,9 @@ class PlusMinusInputClass extends Component {
     }
 };
 
-const PlusMinusInput = (props) => (
-    <PlusMinusInputClass
+const CheckboxList = (props) => (
+    <CheckboxListClass
         {...props} />
 );
 
-export default PlusMinusInput;
+export default CheckboxList;

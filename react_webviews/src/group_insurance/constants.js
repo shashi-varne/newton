@@ -39,6 +39,17 @@ export const smokingOptions = [
   }
 ]
 
+export const yesNoOptions = [
+  {
+    'name': 'Yes',
+    'value': 'YES'
+  },
+  {
+    'name': 'No',
+    'value': 'NO'
+  }
+]
+
 export const relationshipOptions = [
   'BROTHER',
   'DAUGHTER',

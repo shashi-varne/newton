@@ -311,12 +311,9 @@ class GroupHealthPlanAddMembers extends Component {
 
 
 
-                    <div style={{
-                        color: '#8D879B', fontSize: 13, fontWeight: 400,
-                        margin: '0 0 10px 0'
-                    }}>
+                    <div className="plus-minus-input-label">
                         Children (max 2)
-                </div>
+                    </div>
                     <div className="generic-hr"></div>
                     <PlusMinusInput
                         name="son"
@@ -332,12 +329,9 @@ class GroupHealthPlanAddMembers extends Component {
 
                 {['parents'].indexOf(this.state.account_type) !== -1 && 
                 <div>
-                    <div style={{
-                        color: '#8D879B', fontSize: 13, fontWeight: 400,
-                        margin: '0 0 10px 0'
-                    }}>
-                        Parents
-                </div>
+                    <div className="plus-minus-input-label">
+                        Parents 
+                    </div>
                     <div className="generic-hr"></div>
                     <PlusMinusInput
                         name="father"

@@ -5,8 +5,7 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
 
-import MobileInputWithoutIcon from '../../../../common/ui/MobileInputWithoutIcon';
-import { storageService, validateEmail, numberShouldStartWith, validateNumber } from 'utils/validators';
+import { storageService } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
@@ -32,12 +31,10 @@ class GroupHealthPlanAddressDetails extends Component {
 
     async componentDidMount() {
 
+        console.log(this.state.groupHealthPlanData);
         let lead = this.state.groupHealthPlanData.lead || {};
-        let form_data = {
-            email: lead.email || '',
-            mobile_number: lead.mobile_number || ''
-        };
-
+        let form_data = lead.permanent_addr_key || {};
+        form_data.city = lead.city;
 
         this.setState({
             form_data: form_data,
@@ -101,11 +98,11 @@ class GroupHealthPlanAddressDetails extends Component {
     handleClick = async () => {
 
         let keysMapper = {
-            'email': 'email',
-            'mobile_number': 'mobile number',
+            'addressline1': 'Address line 1',
+            'addressline2': 'Address line 2'
         }
 
-        let keys_to_check = ['email', 'mobile_number']
+        let keys_to_check = ['addressline1', 'addressline2']
 
         let form_data = this.state.form_data;
         for (var i = 0; i < keys_to_check.length; i++) {
@@ -116,17 +113,6 @@ class GroupHealthPlanAddressDetails extends Component {
             }
         }
 
-
-        if (this.state.form_data.email.length < 10 ||
-            !validateEmail(this.state.form_data.email)) {
-            form_data['email_error'] = 'Please enter valid email';
-        }
-
-        if (this.state.form_data.mobile_number.length !== 10 || !validateNumber(this.state.form_data.mobile_number) ||
-            !numberShouldStartWith(this.state.form_data.mobile_number)) {
-            form_data['mobile_number_error'] = 'Please enter valid mobile no';
-
-        }
 
         let canSubmitForm = true;
         for (var key in form_data) {
@@ -152,8 +138,10 @@ class GroupHealthPlanAddressDetails extends Component {
                 });
 
                 let body = {
-                    "email": this.state.form_data.email,
-                    "mobile_number": this.state.form_data.mobile_number
+                    permanent_addr_key: {
+                        addressline1: this.state.form_data.addressline1,
+                        addressline2: this.state.form_data.addressline2
+                    }
                 }
 
                 const res = await Api.post('/api/ins_service/api/insurance/hdfcergo/lead/update?quote_id=' + this.state.lead.id, body);
@@ -162,7 +150,7 @@ class GroupHealthPlanAddressDetails extends Component {
                 if (res.pfwresponse.status_code === 200) {
                     groupHealthPlanData.lead = resultData.quote_lead;
                     storageService().setObject('groupHealthPlanData', groupHealthPlanData);
-                    this.navigate('address-details');
+                    this.navigate('nominee-details');
                 } else {
                     this.setState({
                         show_loader: false
@@ -199,6 +187,49 @@ class GroupHealthPlanAddressDetails extends Component {
         }
     }
 
+    handlePincode = name => async (event) => {
+        const pincode = event.target.value;
+    
+        if(pincode.length > 6){
+            return;
+        }
+    
+        let form_data = this.state.form_data;
+        form_data[name] = pincode;
+        form_data[name + '_error'] = '';
+    
+        
+    
+        if (pincode.length === 6) {
+            this.setState({
+                form_data: form_data
+              })
+          try {
+            const res = await Api.get((`/api/ins_service/api/insurance/hdfcergo/pincode/validate?pincode=${pincode}&city=${this.state.lead.city}`));
+    
+            if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.pincode_match) {
+              form_data.state = res.pfwresponse.result.state_name;
+            } else {
+              form_data.state = '';
+              form_data[name + '_error'] = res.pfwresponse.result.error || 'Please enter valid pincode';
+            }
+    
+          } catch (err) {
+            this.setState({
+              show_loader: false
+            });
+            toast('Something went wrong');
+          }
+    
+        } else {
+          form_data.state = '';
+        }
+    
+        this.setState({
+          form_data: form_data
+        })
+    }
+
     render() {
 
         return (
@@ -213,37 +244,51 @@ class GroupHealthPlanAddressDetails extends Component {
                 handleClick={() => this.handleClick()}
             >
 
-                <div className="common-top-page-subtitle-dark">
+                <div className="common-top-page-subtitle">
                     Policy document will be delivered to this address
         </div>
 
 
                 <FormControl fullWidth>
                    
+                <div className="InputField">
+                        <Input
+                            type="text"
+                            id="addressline1"
+                            label="Address line 1"
+                            name="addressline1"
+                            placeholder="ex: 16/1 Queens paradise"
+                            error={(this.state.form_data.addressline1_error) ? true : false}
+                            helperText={this.state.form_data.addressline1_error}
+                            value={this.state.form_data.addressline1 || ''}
+                            onChange={this.handleChange()} />
+                    </div>
                     <div className="InputField">
                         <Input
-                        disabled={true}
+                            type="text"
+                            id="addressline2"
+                            label="Address line 2"
+                            name="addressline2"
+                            placeholder="ex: 16/1 Queens paradise"
+                            error={(this.state.form_data.addressline2_error) ? true : false}
+                            helperText={this.state.form_data.addressline2_error}
+                            value={this.state.form_data.addressline2 || ''}
+                            onChange={this.handleChange()} />
+                    </div>
+                    <div className="InputField">
+                        <Input
                             type="number"
                             width="40"
                             label="Pincode *"
                             id="pincode"
                             name="pincode"
+                            maxLength="6"
                             error={(this.state.form_data.pincode_error) ? true : false}
                             helperText={this.state.form_data.pincode_error}
-                            value={this.state.form_data.pincode || ''} />
+                            value={this.state.form_data.pincode || ''}
+                            onChange={this.handlePincode('pincode')} />
                     </div>
-                    <div className="InputField">
-                        <Input
-                            type="text"
-                            id="addressline"
-                            label="Address*"
-                            name="addressline"
-                            placeholder="ex: 16/1 Queens paradise"
-                            error={(this.state.form_data.addressline_error) ? true : false}
-                            helperText={this.state.form_data.addressline_error}
-                            value={this.state.form_data.addressline || ''}
-                            onChange={this.handleChange()} />
-                    </div>
+                    
                     <div className="InputField">
                         <Input
                             disabled={true}
