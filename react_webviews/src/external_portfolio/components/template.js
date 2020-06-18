@@ -15,6 +15,7 @@ class StatementRequest extends Component {
         noFooter={true}
       >
         <div className="ext-pf-subheader">
+          <h4></h4>
         </div>
       </Container>
     );

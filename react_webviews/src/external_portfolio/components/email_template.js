@@ -16,7 +16,7 @@ class EmailTemplate extends Component {
       >
         <div>
           <div className="ext-pf-subheader">
-            Search your email under
+            <h4>Search your email under</h4>
             <div class="info-box info-box-extra">
               <div class="info-box-body">
                 <span id="info-box-body-text" className="info-box-body-text-extra">
@@ -29,7 +29,7 @@ class EmailTemplate extends Component {
             </div>
           </div>
           <div className="ext-pf-subheader">
-            Email looks like this
+            <h4>Email looks like this</h4>
             <img
               src={require('../../assets/cas_email.jpg')}
               alt="Email"

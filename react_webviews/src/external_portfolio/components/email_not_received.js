@@ -16,7 +16,7 @@ class EmailNotReceived extends Component {
         subtitle="Please ensure that the correct email is forwarded to cas@fisdom.com"
         noFooter={true}
       >
-        <div class="info-box">
+        <div class="info-box info-box-email-not-received">
           <div class="info-box-img">
             <InfoIcon color="primary"/>
           </div>

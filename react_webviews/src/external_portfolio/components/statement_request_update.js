@@ -32,7 +32,7 @@ class StatementRequest extends Component {
           </div>
         </div>
         <div className="ext-pf-subheader">
-          What's next?
+          <h4>What's next?</h4>
         </div>
         <EmailRegenerationStepper/>
         {/* </EmailRegenerationStepper> */}
