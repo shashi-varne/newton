@@ -64,18 +64,12 @@
   text-transform: uppercase;   
 }
 
-.info-box-extra {
-  margin-top: 20px;
-  padding: 20px !important;
-  border: 1px dashed #e3e3e3;
-}
-
-.info-box-email-not-received {
+.m-t-40 {
   margin-top: 40px;
 }
 
-.info-box {
-  padding: 16px;
+#info-box {
+  padding: 16px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -83,13 +77,13 @@
   border-radius: 6px;
   background: var(--highlight);
 
-  .info-box-img {
+  #info-box-img {
     height: 20px;
     width: 25px;
     margin-right: 16px;
   }
 
-  .info-box-body {
+  #info-box-body {
     flex-basis: 60%;
     flex: 1;
 
@@ -100,31 +94,13 @@
     }
     
     #info-box-body-subheader {
-      font-size: 13px;
+      font-size: 14px;
+      font-weight: 500;
     }
 
-    #info-box-body-text {
-      font-size: 15px;
-      font-weight: bold;
-      color: #3792fc;
-    }
-
-    #info-box-body-text-1 {
-      font-size: 13px;
-      line-height: 20px;
-      font-weight: 300;
-      // justify-text
-    }
-
-    .info-box-body-text-extra {
-      font-size: 13px;
-      line-height: 20px;
-      letter-spacing: 0;
-      color: #3792fc;
-    }
   }
 
-  .info-box-ctrl {
+  #info-box-ctrl {
     font-size: 12px;
     letter-spacing: 1px;;
     font-weight: bold;
@@ -132,6 +108,37 @@
     color: var(--secondary);
     margin-left: 16px;
   }
+}
+
+
+.flex-info-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  #info-container-icon {
+    margin-right: 16px;
+  }
+
+  #info-container-text {
+    font-size: 13px;
+    line-height: 20px;
+    font-weight: 300;
+    // justify-text
+  }
+}
+
+.info-box-cut-out {
+  padding: 20px;
+  margin-top: 20px;
+  border: 1px dashed #e3e3e3;
+}
+
+.info-box-body-text {
+  font-size: 15px;
+  font-weight: bold;
+  line-height: 20px;
+  color: #3792fc;
 }
 
 .hni-stepper-root {
@@ -175,4 +182,109 @@
   display: block;
   width: 100%;
   height: auto;
+}
+
+#btm_mail_check_img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 140px;
+}
+
+.statement-req-popup {
+  height: 300px;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+
+  .header-title-text {
+    font-weight: 500;
+    display: block;
+    margin: 10px 0;
+  }
+}
+
+.fund-details-container:first-child {
+  margin-top: 10px;
+}
+
+.fund-details-container {
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
+  margin: 20px 0;
+
+  .fund-header, .fund-info, .fund-numbers {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .current-val, .annual-ret, .invested-amt {
+    flex-direction: column;
+  }
+
+  .fund-header {
+    img {
+      margin-right: 17px;
+    }
+
+    span#heading {
+      display: block;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 22px;
+      color: #0a1d32;
+      margin: 0;
+    }
+  }
+
+  .fund-info {
+    margin-top: 10px;
+    align-items: center;
+    justify-content: space-between;
+
+    .fund-chip {
+      height: 16px;
+      background: #ffe0ec;
+      padding: 3px 0;
+    }
+    .fund-chip-label {
+      font-size: 8px;
+      letter-spacing: 1px;
+      color: #f16fa0;
+      font-weight: bold;
+    }
+    .fund-investment-date {
+      font-size: 11px;
+      text-align: right;
+      letter-spacing: 0;
+      color: #767e86;
+    }
+  }
+
+  .fund-numbers {
+    margin-top: 20px;
+    justify-content: space-between;
+
+    .fund-numbers-title {
+      font-size: 11px;
+      letter-spacing: 0;
+      color: #767e86;
+      margin-bottom: 5px;
+    }
+
+    .fund-numbers-value {
+      font-size: 13px;
+      letter-spacing: 0;
+      color: #0a1d32;
+    }
+
+    .annual-ret {
+      text-align: center;
+    }
+
+    .invested-amt {
+      text-align: right;
+    }
+  }
 }

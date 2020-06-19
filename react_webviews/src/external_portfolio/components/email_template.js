@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Container from '../common/Container';
+import InfoBox from '../mini-components/InfoBox';
 
 class EmailTemplate extends Component {
   constructor(props) {
@@ -17,16 +18,15 @@ class EmailTemplate extends Component {
         <div>
           <div className="ext-pf-subheader">
             <h4>Search your email under</h4>
-            <div class="info-box info-box-extra">
-              <div class="info-box-body">
-                <span id="info-box-body-text" className="info-box-body-text-extra">
-                  Consolidated Account Statement - CAMS Mailback Request
-                </span>
-              </div>
-              <div class="info-box-ctrl">
-                <span>COPY</span>
-              </div>
-            </div>
+            <InfoBox
+              classes={{ root: 'info-box-cut-out'}}
+              isCopiable={true}
+              textToCopy="Consolidated Account Statement - CAMS Mailback Request"
+            >
+              <span className="info-box-body-text">
+                Consolidated Account Statement - CAMS Mailback Request
+              </span>
+            </InfoBox>
           </div>
           <div className="ext-pf-subheader">
             <h4>Email looks like this</h4>

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import Container from '../common/Container.js';
 import Api from 'utils/api';
-import toast from '../../common/ui/Toast';
-import { getConfig } from 'utils/functions';
-import { nativeCallback } from 'utils/native_callback';
+// import toast from '../../common/ui/Toast';
+// import { getConfig } from 'utils/functions';
+// import { nativeCallback } from 'utils/native_callback';
 import Input from '../../common/ui/Input';
 import { validateEmail } from '../../utils/validators.js';
-const product_type = getConfig().type;
+// const product_type = getConfig().type;
 class email_entry extends Component {
   constructor(props) {
     super(props);

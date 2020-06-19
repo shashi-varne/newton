@@ -1,12 +1,26 @@
 import React, { Component } from 'react';
 import Container from '../common/Container';
 import image from '../../assets/contact_details_icn.svg';
-import EmailRegenerationStepper from '../common/Stepper';
+import EmailRegenerationStepper from '../mini-components/Stepper';
+import { getConfig } from '../../utils/functions';
+import RegenerateOptsPopup from '../mini-components/RegenerateOptsPopup';
+import InfoBox from '../mini-components/InfoBox';
 
+const productType = getConfig().productName;
 class StatementRequest extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      popupOpen: false,
+    };
+  }
+
+  generateStatement = () => {
+    this.setState({ popupOpen: true });
+  }
+
+  onPopupClose = () => {
+    this.setState({ popupOpen: false });
   }
 
   render() {
@@ -15,27 +29,24 @@ class StatementRequest extends Component {
         title="Statement request sent"
         noFooter={true}
       >
-        <div class="info-box">
-          <div class="info-box-img">
-            <img
-              src={image}
-              className=""
-              alt=""
-            />
-          </div>
-          <div class="info-box-body">
-            <div id="info-box-body-header">Email ID</div>
-            <span id="info-box-body-subheader">anant@fisdom.com</span>
-          </div>
-          <div class="info-box-ctrl">
-            <span>CHANGE</span>
-          </div>
-        </div>
+        <InfoBox
+          image={image}
+          imageAltText="mail-icon"
+          ctrlText="Change"
+        >
+          <div id="info-box-body-header">Email ID</div>
+          <span id="info-box-body-subheader">anant@fisdom.com</span>
+        </InfoBox>
         <div className="ext-pf-subheader">
           <h4>What's next?</h4>
         </div>
-        <EmailRegenerationStepper/>
-        {/* </EmailRegenerationStepper> */}
+        <EmailRegenerationStepper
+          generateBtnClick={this.generateStatement}
+        />
+        <RegenerateOptsPopup
+          onPopupClose={this.onPopupClose}
+          open={this.state.popupOpen}
+        />
       </Container>
     );
   }

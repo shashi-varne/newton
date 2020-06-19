@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import EmailTemplate from './email_template';
 import { Button } from 'material-ui';
 import InfoIcon from '@material-ui/icons/Info';
+import InfoBox from '../mini-components/InfoBox';
 
 class EmailNotReceived extends Component {
   constructor(props) {
@@ -16,18 +17,16 @@ class EmailNotReceived extends Component {
         subtitle="Please ensure that the correct email is forwarded to cas@fisdom.com"
         noFooter={true}
       >
-        <div class="info-box info-box-email-not-received">
-          <div class="info-box-img">
-            <InfoIcon color="primary"/>
-          </div>
-          <div class="info-box-body">
-            <span id="info-box-body-text-1">
+        <InfoBox classes={{root: 'm-t-40'}}>
+          <div className="flex-info-container">
+            <InfoIcon color="primary" id="info-container-icon"/>
+            <span id="info-container-text">
               If you have not recieved an email from CAMS within 24hrs,
-              try creating a fresh request again for the statement 
+              try creating a fresh request again for the statement
               by clicking below
             </span>
           </div>
-        </div>
+        </InfoBox>
         <Button
           variant="outlined" color="secondary" fullWidth={true}
           classes={{

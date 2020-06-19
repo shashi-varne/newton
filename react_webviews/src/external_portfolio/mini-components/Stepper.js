@@ -4,51 +4,10 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
-
-const step1 = (<Fragment>
-  In a few minutes, you’ll receive a CAS email on your email ID
-</Fragment>);
-const step2 = (<Fragment>
-  Please forward the email (and not the statement) to
-  <div class="info-box info-box-extra">
-    <div class="info-box-body">
-      <span id="info-box-body-text">
-        cas@fisdom.com
-      </span>
-    </div>
-    <div class="info-box-ctrl">
-      <span>COPY</span>
-    </div>
-  </div>
-  <Button
-    variant="outlined"  color="secondary" fullWidth={true}
-    classes={{
-      root: 'gen-statement-btn',
-      label: 'gen-statement-btn-label'
-    }}
-  >
-    Generate Statement
-  </Button>
-</Fragment>);
-const step3 = (<Fragment>
-  As soon as we receive the email, your portfolio view will get generated
-</Fragment>);
+import InfoBox from './InfoBox';
 
 function getSteps() {
   return ['Wait for CAS email', 'Forward the email', 'View portfolio instantly'];
-}
-
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return step1;
-    case 1:
-      return step2;
-    case 2:
-      return step3;
-    default:
-      return 'Unknown step';
-  }
 }
 
 export default class EmailRegenerationStepper extends Component {
@@ -61,6 +20,56 @@ export default class EmailRegenerationStepper extends Component {
 
   setActiveStep = (step) => {
     this.setState({ activeStep: step });
+  }
+
+  renderStep1 = () => {
+    return (<Fragment>
+      In a few minutes, you’ll receive a CAS email on your email ID
+    </Fragment>);
+  }
+
+  renderStep2 = () => {
+    return (<Fragment>
+      Please forward the email (and not the statement) to
+      <InfoBox
+        classes={{ root: 'info-box-cut-out' }}
+        isCopiable={true}
+        textToCopy="cas@fisdom.com"
+      >
+        <span className="info-box-body-text">
+          cas@fisdom.com
+        </span>
+      </InfoBox>
+      <Button
+        variant="outlined" color="secondary" fullWidth={true}
+        classes={{
+          root: 'gen-statement-btn',
+          label: 'gen-statement-btn-label'
+        }}
+        onClick={this.props.generateBtnClick}
+      >
+        Generate Statement
+      </Button>
+    </Fragment>);
+  }
+
+  renderStep3 = () => {
+    return (<Fragment>
+      As soon as we receive the email, your portfolio view will get generated
+    </Fragment>);
+  }
+
+  getStepContent = (step) => {
+    switch (step) {
+      case 0:
+        return this.renderStep1();
+      case 1:
+        return this.renderStep2();
+      case 2:
+        return this.renderStep3();
+      default:
+        return 'Unknown step';
+    }
   }
 
   render() {
@@ -91,7 +100,7 @@ export default class EmailRegenerationStepper extends Component {
               <StepContent
                 classes={{ root: 'hni-step-content-root' }}
               >
-                {getStepContent(index)}
+                {this.getStepContent(index)}
               </StepContent>
             </Step>
           ))}
