@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import { withRouter } from "react-router";
 import { MuiThemeProvider, createMuiTheme } from "material-ui/styles";
 import "./components/Style.scss";
+import "./mini-components/Style.scss";
 import { themeConfig } from 'utils/constants';
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";

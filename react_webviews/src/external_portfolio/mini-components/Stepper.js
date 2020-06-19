@@ -5,6 +5,50 @@ import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
 import InfoBox from './InfoBox';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+
+const theme = createMuiTheme({
+  overrides: {
+    MuiStepper: {
+      root: {
+        padding: 0,
+      },
+    },
+    MuiStepLabel: {
+      label: {
+        fontSize: '15px',
+        fontWeight: 500,
+      },
+      completed: {
+        color: '#767e86',
+      },
+      disabled: {
+        color: '#767e86',
+      },
+      active: {
+        color: 'inherit !important',
+      },
+      iconContainer: {
+        
+      }
+    },
+    MuiStepIcon: {
+      active: {
+        color: 'var(--primary) !important',
+      },
+      completed: {
+        color: 'var(--primary) !important',
+      }
+    },
+    MuiStepContent: {
+      root: {
+        color: '#767e86',
+        fontSize: '13px',
+        lineHeight: '19px',
+      },
+    },
+  },
+});
 
 function getSteps() {
   return ['Wait for CAS email', 'Forward the email', 'View portfolio instantly'];
@@ -76,11 +120,10 @@ export default class EmailRegenerationStepper extends Component {
     const steps = getSteps();
     const { activeStep } = this.state;
     return (
-      <div>
+      <MuiThemeProvider theme={theme}>
         <Stepper
           activeStep={activeStep}
-          orientation="vertical"
-          class={{ root: 'hni-stepper-root' }}>
+          orientation="vertical">
           {steps.map((label, index) => (
             <Step
               key={label}
@@ -88,24 +131,14 @@ export default class EmailRegenerationStepper extends Component {
               completed={index === 0}
               disabled={index === 2}
             >
-              <StepLabel
-                classes={{
-                  label: 'hni-stepper-label',
-                  completed: 'hni-stepper-complete',
-                  disabled: 'hni-stepper-disable',
-                  active: 'hni-stepper-active',
-                  iconContainer: 'hni-stepper-icon'
-                }}
-              >{label}</StepLabel>
-              <StepContent
-                classes={{ root: 'hni-step-content-root' }}
-              >
+              <StepLabel>{label}</StepLabel>
+              <StepContent>
                 {this.getStepContent(index)}
               </StepContent>
             </Step>
           ))}
         </Stepper>
-      </div>
+      </MuiThemeProvider>
     );
   }
 }
