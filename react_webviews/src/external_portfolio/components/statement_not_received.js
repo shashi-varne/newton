@@ -7,16 +7,22 @@ import cas_not_received_m from '../../assets/myway/cas_not_received.svg';
 import { getConfig } from '../../utils/functions';
 import { Button } from 'material-ui';
 import InfoBox from '../mini-components/InfoBox';
+import { navigate } from '../common/commonFunctions';
 
 const productType = getConfig().productName;
 class StatementNotReceived extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.navigate = navigate.bind(this);
   }
 
-  infoBoxCtrlClick = () => {
-    console.log('Change clicked');
+  goNext = (path) => {
+    this.navigate(path, { comingFrom: 'statement_not_received' });
+  }
+
+  goBack = () => {
+    this.props.history.goBack();
   }
 
   render() {
@@ -24,6 +30,7 @@ class StatementNotReceived extends Component {
       <Container
         title="We haven't received any CAS email"
         noFooter={true}
+        goBack={this.goBack}
       >
         <img
           src={productType === 'fisdom' ? cas_not_received_f : cas_not_received_m}
@@ -36,7 +43,7 @@ class StatementNotReceived extends Component {
             image={image}
             imageAltText="mail-icon"
             ctrlText="Change"
-            onCtrlClick={this.infoBoxCtrlClick}
+            onCtrlClick={() => this.goNext('email_entry')}
           >
             <div id="info-box-body-header">Email ID</div>
             <span id="info-box-body-subheader">anant@fisdom.com</span>
@@ -72,6 +79,7 @@ class StatementNotReceived extends Component {
               root: 'gen-statement-btn',
               label: 'gen-statement-btn-label'
             }}
+            onClick={() => this.goNext('statement_request')}
           >
             Regenerate Statement
           </Button>

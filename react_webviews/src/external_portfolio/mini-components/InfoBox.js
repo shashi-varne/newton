@@ -27,7 +27,6 @@ export default class InfoBox extends Component {
       children,
       ctrlText,
       isCopiable,
-      onCtrlClick
     } = this.props;
 
     const classes = this.props.classes || {};
@@ -60,7 +59,7 @@ export default class InfoBox extends Component {
           <div
             id="info-box-ctrl"
             className={classes.ctrl}
-            onCtrlClick={onCtrlClick}
+            onClick={this.props.onCtrlClick}
           >
             <span>{ctrlText}</span>
           </div>

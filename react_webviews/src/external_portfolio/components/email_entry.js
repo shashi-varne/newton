@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import Container from '../common/Container.js';
-import Api from 'utils/api';
+// import Api from 'utils/api';
 // import toast from '../../common/ui/Toast';
 // import { getConfig } from 'utils/functions';
-// import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback } from 'utils/native_callback';
 import Input from '../../common/ui/Input';
 import { validateEmail } from '../../utils/validators.js';
+import { navigate } from '../common/commonFunctions.js';
+
 // const product_type = getConfig().type;
 class email_entry extends Component {
   constructor(props) {
@@ -14,6 +16,7 @@ class email_entry extends Component {
       email: '',
       email_error: '',
     };
+    this.navigate = navigate.bind(this);
   }
 
   handleChange = key => event => {
@@ -27,8 +30,16 @@ class email_entry extends Component {
     if (!validateEmail(this.state.email)) {
       this.setState({ email_error: 'Please enter a valid email' });
     } else {
-      // this.navigate();
-      console.log('else');
+      this.navigate('statement_request', { comingFrom: 'email_entry'});
+    }
+  }
+
+  goBack = (params) => {
+    console.log('here');
+    if (params.comingFrom === 'statement_not_received') {
+      this.props.history.goBack();
+    } else {
+      nativeCallback({ action: 'exit', events: this.getEvents('back') });
     }
   }
 
@@ -40,6 +51,7 @@ class email_entry extends Component {
         fullWidthButton={true}
         handleClick={this.goNext}
         buttonTitle="Generate Statement"
+        goBack={this.goBack}
       >
         <div
           className="ext-pf-banner"

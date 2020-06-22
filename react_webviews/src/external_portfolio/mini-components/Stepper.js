@@ -69,6 +69,11 @@ export default class EmailRegenerationStepper extends Component {
   renderStep1 = () => {
     return (<Fragment>
       In a few minutes, you’ll receive a CAS email on your email ID
+
+      <div
+        className="email_example_link" onClick={this.props.emailLinkTrigger}>
+        What does the CAS email look like?
+      </div>
     </Fragment>);
   }
 
@@ -92,7 +97,7 @@ export default class EmailRegenerationStepper extends Component {
         }}
         onClick={this.props.generateBtnClick}
       >
-        Generate Statement
+        Regenerate Statement
       </Button>
     </Fragment>);
   }

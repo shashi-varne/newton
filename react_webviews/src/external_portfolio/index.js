@@ -12,7 +12,7 @@ import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
 // Component Paths
 import Landing from './components/landing.js';
 import Email_entry from './components/email_entry';
-import StatementRequest from './components/statement_request_update';
+import StatementRequest from './components/statement_request';
 import EmailNotReceived from './components/email_not_received';
 import EmailExampleView from './components/email_example_view';
 import StatementNotReceived from './components/statement_not_received';

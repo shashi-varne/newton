@@ -3,6 +3,7 @@ import btm_mail_check_f from '../../assets/fisdom/btm_mail_check.svg';
 import btm_mail_check_m from '../../assets/myway/btm_mail_check.svg';
 import { Drawer, Button } from 'material-ui';
 import { getConfig } from '../../utils/functions';
+import { navigate } from '../common/commonFunctions';
 
 const productType = getConfig().productName;
 
@@ -10,6 +11,7 @@ export default class RegenerateOptsPopup extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.navigate = navigate.bind(this);
   }
 
   render() {
@@ -34,6 +36,7 @@ export default class RegenerateOptsPopup extends Component {
               root: 'gen-statement-btn',
               label: 'gen-statement-btn-label'
             }}
+            onClick={this.props.forwardedClick}
           >
             CAS EMAIL FORWARDED
           </Button>
@@ -43,6 +46,7 @@ export default class RegenerateOptsPopup extends Component {
               root: 'gen-statement-btn',
               label: 'gen-statement-btn-label'
             }}
+            onClick={this.props.notReceivedClick}
           >
             CAS EMAIL NOT RECIEVED
           </Button>

@@ -657,3 +657,7 @@ export function calculateAge(val) {
   }
   return age;
 }
+
+export function isFunction(value) {
+  return (typeof value === 'function') && (value instanceof Function);
+}
