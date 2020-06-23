@@ -344,6 +344,7 @@ input#pan {
 .LoaderOverlayText {
   color: #0a1d32;
   font-size: 14px;
+  line-height: 19px;
   margin: 10px 0 0 0;
   font-weight: 400;
 }

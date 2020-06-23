@@ -12,6 +12,11 @@
   padding: 20px 20px;
 }
 
+.bg-highlight {
+  background-color: var(--highlight) !important;
+  color: black !important;
+}
+
 .header-title-text {
   font-size: 20px;
   font-weight: bold;
@@ -28,13 +33,16 @@
   padding: 0 20px;
 }
 
-.ext-pf-banner {
-  background: url(../../assets/myway/banner_ext_pf.svg) no-repeat right/contain;
-  height: 165px;
-  width: 100%;
+.email-entry-banner {
+  background: url(/static/media/banner_ext_pf.fdd14661.svg) no-repeat bottom right/245px 164px;
+  background-color: var(--highlight);
+  height: 140px;
+  margin: -20px -20px 0 -20px;
+  padding: 20px;
 
   .header-subtitle-text {
     margin-top: 40px;
+    padding: 0;
   }
 }
 

@@ -145,7 +145,7 @@ export class WithProviderLayout extends Component {
         >
           <Button
             type={props.type}
-            classes={{ root: 'uppercase-text' }}
+            classes={{ label: 'uppercase-text' }}
             {...props}
             />
         </div>
