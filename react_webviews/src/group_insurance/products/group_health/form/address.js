@@ -9,7 +9,7 @@ import { storageService } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
-import { initialize } from '../common_data';
+import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
 class GroupHealthPlanAddressDetails extends Component {
 
@@ -18,23 +18,26 @@ class GroupHealthPlanAddressDetails extends Component {
         this.state = {
             type: getConfig().productName,
             form_data: {},
-            ctaWithProvider: true
+            ctaWithProvider: true,
+            get_lead: true
         }
         this.initialize = initialize.bind(this);
+        this.updateLead = updateLead.bind(this);
     }
-
 
     componentWillMount() {
         this.initialize();
     }
 
-
-    async componentDidMount() {
-
-        console.log(this.state.groupHealthPlanData);
-        let lead = this.state.groupHealthPlanData.lead || {};
-        let form_data = lead.permanent_addr_key || {};
+    onload = () => {
+        let lead = this.state.lead || {};
+        console.log(lead);
+        let form_data = lead.permanent_address || {};
         form_data.city = lead.city;
+
+        if(form_data.pincode) {
+            form_data.pincode_match = true;
+        }
 
         this.setState({
             form_data: form_data,
@@ -98,11 +101,12 @@ class GroupHealthPlanAddressDetails extends Component {
     handleClick = async () => {
 
         let keysMapper = {
-            'addressline1': 'Address line 1',
-            'addressline2': 'Address line 2'
+            'addressline': 'Address line 1',
+            'addressline2': 'Address line 2',
+            'pincode': 'pincode' 
         }
 
-        let keys_to_check = ['addressline1', 'addressline2']
+        let keys_to_check = ['addressline', 'addressline2', 'pincode']
 
         let form_data = this.state.form_data;
         for (var i = 0; i < keys_to_check.length; i++) {
@@ -115,6 +119,12 @@ class GroupHealthPlanAddressDetails extends Component {
 
 
         let canSubmitForm = true;
+        
+        if(!form_data.pincode_match) {
+            form_data.pincode_error = 'verifying pincode';
+            canSubmitForm = false;
+        }
+
         for (var key in form_data) {
             if (key.indexOf('error') >= 0) {
                 if (form_data[key]) {
@@ -123,6 +133,7 @@ class GroupHealthPlanAddressDetails extends Component {
                 }
             }
         }
+
 
         this.setState({
             form_data: form_data
@@ -138,9 +149,10 @@ class GroupHealthPlanAddressDetails extends Component {
                 });
 
                 let body = {
-                    permanent_addr_key: {
-                        addressline1: this.state.form_data.addressline1,
-                        addressline2: this.state.form_data.addressline2
+                    permanent_address: {
+                        addressline: this.state.form_data.addressline,
+                        addressline2: this.state.form_data.addressline2,
+                        pincode: this.state.form_data.pincode 
                     }
                 }
 
@@ -150,7 +162,7 @@ class GroupHealthPlanAddressDetails extends Component {
                 if (res.pfwresponse.status_code === 200) {
                     groupHealthPlanData.lead = resultData.quote_lead;
                     storageService().setObject('groupHealthPlanData', groupHealthPlanData);
-                    this.navigate('nominee-details');
+                    this.navigate('nominee');
                 } else {
                     this.setState({
                         show_loader: false
@@ -197,6 +209,7 @@ class GroupHealthPlanAddressDetails extends Component {
         let form_data = this.state.form_data;
         form_data[name] = pincode;
         form_data[name + '_error'] = '';
+        form_data.pincode_match = false;
     
         
     
@@ -208,9 +221,12 @@ class GroupHealthPlanAddressDetails extends Component {
             const res = await Api.get((`/api/ins_service/api/insurance/hdfcergo/pincode/validate?pincode=${pincode}&city=${this.state.lead.city}`));
     
             if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.pincode_match) {
-              form_data.state = res.pfwresponse.result.state_name;
+              form_data.state = res.pfwresponse.result.state;
+              form_data.pincode_match = true;
+              form_data[name + '_error'] = '';
             } else {
               form_data.state = '';
+              form_data.pincode_match = false;
               form_data[name + '_error'] = res.pfwresponse.result.error || 'Please enter valid pincode';
             }
     
@@ -254,13 +270,13 @@ class GroupHealthPlanAddressDetails extends Component {
                 <div className="InputField">
                         <Input
                             type="text"
-                            id="addressline1"
+                            id="addressline"
                             label="Address line 1"
-                            name="addressline1"
+                            name="addressline"
                             placeholder="ex: 16/1 Queens paradise"
-                            error={(this.state.form_data.addressline1_error) ? true : false}
-                            helperText={this.state.form_data.addressline1_error}
-                            value={this.state.form_data.addressline1 || ''}
+                            error={(this.state.form_data.addressline_error) ? true : false}
+                            helperText={this.state.form_data.addressline_error}
+                            value={this.state.form_data.addressline || ''}
                             onChange={this.handleChange()} />
                     </div>
                     <div className="InputField">

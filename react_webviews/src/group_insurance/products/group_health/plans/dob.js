@@ -198,7 +198,7 @@ class GroupHealthPlanDob extends Component {
         for (var i = 0; i < final_dob_data.length; i++) {
 
             let dob = final_dob_data[i].value;
-            let age = final_dob_data[i].age;
+            // let age = final_dob_data[i].age;
             let key = final_dob_data[i].key;
 
             
@@ -208,9 +208,10 @@ class GroupHealthPlanDob extends Component {
                 error = 'Please enter valid date';
             } else if (IsFutureDate(dob)) {
                 error = 'Future date is not allowed';
-            } else if (age > 50 || age < 18) {
-                error = 'Valid age is between 18 and 50';
             }
+            //  else if (age > 50 || age < 18) {
+            //     error = 'Valid age is between 18 and 50';
+            // }
             final_dob_data[i].error = error;
 
             if(!error) {
@@ -235,22 +236,33 @@ class GroupHealthPlanDob extends Component {
             let post_body = groupHealthPlanData.post_body;
 
             for (var j in final_dob_data) {
-                let key = final_dob_data[j].backend_key;
 
-                if((final_dob_data[j].key === 'daughter' || final_dob_data[j].key === 'daughter1') && ui_members.son_total === 1) {
-                    key = 'child_account2_key';
+                let key = final_dob_data[j].key;
+                if((key === 'daughter' || key === 'daughter1') && ui_members.son_total === 1) {
+                    final_dob_data[j].backend_key = 'child_account2_key';
                 }
-                post_body[key] = {
-                    dob: final_dob_data[j].value
+
+                let backend_key = final_dob_data[j].backend_key;
+
+                let relation = key;
+                if(relation.indexOf('son') >= 0) {
+                    relation = 'son';
+                }
+
+                if(relation.indexOf('daughter') >= 0) {
+                    relation = 'daughter';
+                }
+
+                post_body[backend_key] = {
+                    dob: final_dob_data[j].value,
+                    relation: relation
                 };
             }
-
 
 
             groupHealthPlanData.post_body = post_body;
 
             storageService().setObject('groupHealthPlanData', groupHealthPlanData);
-
             this.navigate('plan-select-city');
         }
     }

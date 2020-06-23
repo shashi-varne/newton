@@ -40,9 +40,9 @@ class DropdownInModalClass extends Component {
           this.handleShow(this.props.value);
         }
     
-        if (prevState.value !== this.props.value) {
+        if (prevState.selectedIndex !== this.props.selectedIndex) {
           this.setState({
-            selectedValue: this.props.value
+            selectedIndex: this.props.selectedIndex
           })
         }
     
@@ -94,7 +94,7 @@ class DropdownInModalClass extends Component {
                 <div>
                     <div className="flex-between">
                         <div className={isSelected ? 'content-selected' : ''}>
-                            <span>{props}</span>
+                            <span>{props.name}</span>
                         </div>
 
                         {isSelected && <img style={{
@@ -169,7 +169,7 @@ class DropdownInModalClass extends Component {
                             openPopUp: true
                         })
                     }}>
-                    <InputLabel htmlFor={this.props.id}>{this.props.label} *</InputLabel>
+                    <InputLabel htmlFor={this.props.id}>{this.props.label}</InputLabel>
 
                     <div className="input-box">
                     <div className="input-value">{this.props.value}</div>

@@ -5,11 +5,8 @@ import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
-import { storageService } from 'utils/validators';
-import Input from '../../../../common/ui/Input';
-import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
-import { initialize } from '../common_data';
+import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
 import { yesNoOptions } from '../../../constants';
 import PlusMinusInput from '../../../../common/ui/PlusMinusInput';
@@ -22,10 +19,12 @@ class GroupHealthPlanIsPed extends Component {
             form_data: {},
             ctaWithProvider: true,
             relationshipOptions: [],
-            ui_ped_data: {},
-            onlycheckbox: true
+            onlycheckbox: true,
+            get_lead: true,
+            next_state: ''
         }
         this.initialize = initialize.bind(this);
+        this.updateLead = updateLead.bind(this);
     }
 
 
@@ -34,26 +33,44 @@ class GroupHealthPlanIsPed extends Component {
     }
 
 
-    async componentDidMount() {
+    onload = () => {
+        let lead = this.state.lead;
 
-        console.log(this.state.groupHealthPlanData);
+        console.log(lead);
 
-        let account_type = this.state.groupHealthPlanData.account_type;
+        let account_type = lead.account_type;
         let radio_title = 'Do you have any pre-existing diseases?';
         if (account_type !== 'self') {
             radio_title = 'Does any of the members have any pre-existing disease?';
         }
 
-        let lead = this.state.groupHealthPlanData.lead || {};
+        let is_ped = 'NO';
 
+        let member_base = lead.member_base;
         let form_data = {};
-        form_data.city = lead.city;
+
+        for (var mem in member_base) {
+            let mem_info = member_base[mem];
+            if(mem_info.ped_exists) {
+                is_ped = 'YES';
+                form_data[mem_info.key + '_checked'] = true;
+            }
+        }
+
+        form_data.is_ped = is_ped;
+
+        for(var key in form_data) {
+            this.setState({
+                [key]: form_data[key]
+            });
+        }
 
         this.setState({
             form_data: form_data,
             lead: lead,
             radio_title: radio_title,
-            account_type: account_type
+            account_type: account_type,
+            member_base: member_base
         })
 
 
@@ -106,38 +123,48 @@ class GroupHealthPlanIsPed extends Component {
             canSubmitForm = false;
         }
 
-        if (form_data.is_ped === 'YES') {
-            if (!this.state.ui_ped_data === 0) {
-                canSubmitForm = false;
-                toast('Please select atleast one');
-                return;
-            }
-        }
-
-        let final_dob_data = this.state.groupHealthPlanData.final_dob_data;
-        let ui_ped_data = this.state.ui_ped_data;
-        for (var i in final_dob_data) {
-            let key = final_dob_data[i].key;
-            delete ui_ped_data[key];
-            if (form_data[key + '_checked']) {
-                ui_ped_data[key] = true;
-            }
-        }
         this.setState({
             form_data: form_data
         })
 
+        if (form_data.is_ped === 'YES') {
+            
 
-        if (canSubmitForm) {
+            let member_base = this.state.lead.member_base;
 
-            let groupHealthPlanData = this.state.groupHealthPlanData;
-            groupHealthPlanData.ui_ped_data = ui_ped_data;
+            let next_state = '';
+            let body = {};
+            for (var i in member_base) {
+                let key = member_base[i].key;
+                let backend_key = member_base[i].backend_key;
+                body[backend_key] = {};
+                if (form_data[key + '_checked']) {
+                    body[backend_key].ped_exists = 'true';
 
-            storageService().setObject('groupHealthPlanData', groupHealthPlanData);
-            this.navigate('select-ped');
+                    if(!next_state) {
+                        next_state = key;
+                    }
+                } else {
+                    body[backend_key].ped_exists = 'false';
+                }
+            }
+
+            if (!next_state) {
+                canSubmitForm = false;
+                toast('Please select atleast one');
+            }
+
+
+            if (canSubmitForm) {
+
+                this.setState({
+                    next_state: 'select-ped/' + next_state
+                })
+                this.updateLead(body);
+            }
+        } else {
+            this.navigate('final-summary');
         }
-
-
     }
 
 
@@ -225,7 +252,7 @@ class GroupHealthPlanIsPed extends Component {
                                 Who has pre-existing disease?
                             </div>
                             <div className="generic-hr"></div>
-                            {this.state.groupHealthPlanData.final_dob_data.map(this.renderMembers)}
+                            {this.state.member_base.map(this.renderMembers)}
                         </div>
                     }
 

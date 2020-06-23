@@ -37,26 +37,71 @@ class GroupHealthPlanSelectCity extends Component {
         })
     }
 
+    checkCity = (city, proceed) => {
+        if(!city) {
+            return;
+        }
+        let data  = this.state.suggestions_list.filter(data => (data.name).toUpperCase() === (city).toUpperCase());
+
+        if(data.length === 0) {
+            this.setState({
+                city_error: 'Please select city from provided list'
+            });
+        } else if(proceed) {
+            let groupHealthPlanData = this.state.groupHealthPlanData;
+            groupHealthPlanData.city = this.state.city;
+            groupHealthPlanData.post_body.city = this.state.city;
+            storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+    
+            this.navigate('plan-list');
+        }
+    }
+
     async componentDidMount() {
         try {
 
 
-            const res = await Api.get('/api/ins_service/api/insurance/hdfcergo/get/citylist');
+            if(!this.state.city) {
+                try {
+
+                    const res = await Api.get('/api/ins_service/api/insurance/account/summary');
+                    if (res.pfwresponse.status_code === 200) {
+                        var resultData = res.pfwresponse.result;
+                        let city = resultData.insurance_account.permanent_address.city;
+                        console.log(city);
+                        this.setState({
+                            city: city
+                        })
+        
+                    } else {
+                        toast(resultData.error || resultData.message
+                            || 'Something went wrong');
+                    }
+                } catch (err) {
+                    console.log(err)
+                    this.setState({
+                        show_loader: false
+                    });
+                    toast('Something went wrong');
+                }
+            }
+
+            const res2 = await Api.get('/api/ins_service/api/insurance/hdfcergo/get/citylist');
 
             this.setState({
                 show_loader: false
             });
-            var resultData = res.pfwresponse.result;
+            var resultData2 = res2.pfwresponse.result;
 
-            if (res.pfwresponse.status_code === 200) {
+            if (res2.pfwresponse.status_code === 200) {
 
                 this.setState({
-                    suggestions_list: resultData.city_list
+                    suggestions_list: resultData2.city_list
+                }, () => {
+                    this.checkCity(this.state.city);
                 })
-
-
             } else {
-                toast(resultData.error || resultData.message
+                toast(resultData2.error || resultData2.message
                     || 'Something went wrong');
             }
         } catch (err) {
@@ -79,12 +124,8 @@ class GroupHealthPlanSelectCity extends Component {
     }
 
     handleClick = () => {
-        let groupHealthPlanData = this.state.groupHealthPlanData;
-        groupHealthPlanData.city = this.state.city;
-        groupHealthPlanData.post_body.city = this.state.city;
-        storageService().setObject('groupHealthPlanData', groupHealthPlanData);
-
-        this.navigate('plan-list');
+        this.checkCity(this.state.city, true);
+        
     }
 
 

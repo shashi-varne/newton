@@ -148,7 +148,7 @@ import GroupHealthPlanAddressDetails from './products/group_health/form/address'
 import GroupHealthPlanNomineeDetails from './products/group_health/form/nominee';
 import GroupHealthPlanIsPed from './products/group_health/form/is_ped';
 import GroupHealthPlanSelectPed from './products/group_health/form/select_ped';
-
+import GroupHealthPlanFinalSummary from './products/group_health/form/final_summary';
 
 // etli
 import EtliPersonalDetails1 from './products/term_insurance/etli/personal_details1';
@@ -333,11 +333,12 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/:provider/plan-premium-summary`} component={GroupHealthPlanPremiumSummary} />
           <Route path={`${url}/group-health/:provider/how-to-claim`} component={GroupHealthPlanHowToClaim} />
           <Route path={`${url}/group-health/:provider/personal-details/:member_key`} component={GroupHealthPlanPersonalDetails} />
-          <Route path={`${url}/group-health/:provider/contact-details`} component={GroupHealthPlanContactDetails} />
-          <Route path={`${url}/group-health/:provider/address-details`} component={GroupHealthPlanAddressDetails} />
-          <Route path={`${url}/group-health/:provider/nominee-details`} component={GroupHealthPlanNomineeDetails} />
+          <Route path={`${url}/group-health/:provider/contact`} component={GroupHealthPlanContactDetails} />
+          <Route path={`${url}/group-health/:provider/address`} component={GroupHealthPlanAddressDetails} />
+          <Route path={`${url}/group-health/:provider/nominee`} component={GroupHealthPlanNomineeDetails} />
           <Route path={`${url}/group-health/:provider/is-ped`} component={GroupHealthPlanIsPed} />
           <Route path={`${url}/group-health/:provider/select-ped/:member_key`} component={GroupHealthPlanSelectPed} />
+          <Route path={`${url}/group-health/:provider/final-summary`} component={GroupHealthPlanFinalSummary} />
           
           
           {/* common */}

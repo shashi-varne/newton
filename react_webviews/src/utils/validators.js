@@ -627,3 +627,14 @@ export function calculateAge (birthday) {
   }
   return age;
 }
+
+export function toFeet(n) {
+  var realFeet = ((n*0.393700) / 12);
+  var feet = Math.floor(realFeet);
+  var inches = Math.round((realFeet - feet) * 12);
+  return feet + 'ft ' + inches + 'in';
+}
+
+export function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}

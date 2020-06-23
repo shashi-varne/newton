@@ -598,3 +598,70 @@ export const health_providers = {
       logo_summary: 'hdfc_ergo_ic_logo_summary.svg'
   }
 }
+
+
+export function ghGetMember(lead) {
+  
+
+  let backend_keys = ['self_account_key', 'spouse_account_key', 'child_account1_key',
+                      'child_account2_key', 'parent_account1_key', 'parent_account2_key'];
+
+  let member_base = [];
+
+
+  let total_son = 0;
+  let total_daughter = 0;
+
+  if(lead.child_account1_key.dob) {
+    if((lead.child_account1_key.relation).toUpperCase() === 'SON') {
+      total_son++;
+    } else if((lead.child_account2_key.relation).toUpperCase() === 'DAUGHTER') {
+      total_daughter++;
+    }
+  }
+
+  if(lead.child_account2_key.dob) {
+    if((lead.child_account2_key.relation).toUpperCase() === 'SON') {
+      total_son++;
+    } else if((lead.child_account2_key.relation).toUpperCase() === 'DAUGHTER') {
+      total_daughter++;
+    }
+  }
+
+  for (var i in backend_keys) {
+    let key = backend_keys[i];
+
+    if(lead[key] && lead[key].dob) {
+      let obj = lead[key];
+      obj.backend_key = key;
+
+      obj.key = (lead[key].relation).toLowerCase();
+
+      if(total_son === 2) {
+
+        if(key === 'child_account1_key') {
+          obj.key = 'son1'
+        }
+
+        if(key === 'child_account2_key') {
+          obj.key = 'son2'
+        }
+        
+      } else if(total_daughter === 2) {
+
+        if(key === 'child_account1_key') {
+          obj.key = 'daughter1'
+        }
+
+        if(key === 'child_account2_key') {
+          obj.key = 'daughter2'
+        }
+      }
+
+      member_base.push(obj);
+    }
+  }
+
+  return member_base;
+
+}

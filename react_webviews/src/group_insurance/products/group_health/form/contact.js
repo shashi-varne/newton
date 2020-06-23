@@ -6,11 +6,9 @@ import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
 
 import MobileInputWithoutIcon from '../../../../common/ui/MobileInputWithoutIcon';
-import { storageService, validateEmail, numberShouldStartWith, validateNumber } from 'utils/validators';
+import {validateEmail, numberShouldStartWith, validateNumber } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
-import Api from 'utils/api';
-import toast from '../../../../common/ui/Toast';
-import { initialize } from '../common_data';
+import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
 class GroupHealthPlanContactDetails extends Component {
 
@@ -19,9 +17,12 @@ class GroupHealthPlanContactDetails extends Component {
         this.state = {
             type: getConfig().productName,
             form_data: {},
-            ctaWithProvider: true
+            ctaWithProvider: true,
+            get_lead: true,
+            next_state: 'address'
         }
         this.initialize = initialize.bind(this);
+        this.updateLead = updateLead.bind(this);
     }
 
 
@@ -29,10 +30,9 @@ class GroupHealthPlanContactDetails extends Component {
         this.initialize();
     }
 
-
-    async componentDidMount() {
-
-        let lead = this.state.groupHealthPlanData.lead || {};
+    onload = () => {
+        let lead = this.state.lead;
+        console.log(lead);
         let form_data = {
             email: lead.email || '',
             mobile_number: lead.mobile_number || ''
@@ -43,7 +43,6 @@ class GroupHealthPlanContactDetails extends Component {
             form_data: form_data,
             lead: lead,
         })
-
 
         this.setState({
             bottomButtonData: {
@@ -144,42 +143,13 @@ class GroupHealthPlanContactDetails extends Component {
 
 
         if (canSubmitForm) {
-            let groupHealthPlanData = this.state.groupHealthPlanData;
-            try {
 
-                this.setState({
-                    show_loader: true
-                });
-
-                let body = {
-                    "email": this.state.form_data.email,
-                    "mobile_number": this.state.form_data.mobile_number
-                }
-
-                const res = await Api.post('/api/ins_service/api/insurance/hdfcergo/lead/update?quote_id=' + this.state.lead.id, body);
-
-                var resultData = res.pfwresponse.result;
-                if (res.pfwresponse.status_code === 200) {
-                    groupHealthPlanData.lead = resultData.quote_lead;
-                    storageService().setObject('groupHealthPlanData', groupHealthPlanData);
-                    this.navigate('address-details');
-                } else {
-                    this.setState({
-                        show_loader: false
-                    });
-                    toast(resultData.error || resultData.message
-                        || 'Something went wrong');
-                }
-            } catch (err) {
-                console.log(err)
-                this.setState({
-                    show_loader: false
-                });
-                toast('Something went wrong');
+            let body = {
+                "email": this.state.form_data.email,
+                "mobile_number": this.state.form_data.mobile_number
             }
+           this.updateLead(body);
         }
-
-
     }
 
 
