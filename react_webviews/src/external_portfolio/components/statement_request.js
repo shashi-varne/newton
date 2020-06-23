@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../common/Container';
-import image from '../../assets/contact_details_icn.svg';
+import mail_icn_f from '../../assets/fisdom/ic_mail.svg';
+import mail_icn_m from '../../assets/myway/ic_mail.svg';
 import EmailRegenerationStepper from '../mini-components/Stepper';
 import { getConfig } from '../../utils/functions';
 import RegenerateOptsPopup from '../mini-components/RegenerateOptsPopup';
@@ -67,7 +68,7 @@ class StatementRequest extends Component {
         goBack={this.goBack}
       >
         <InfoBox
-          image={image}
+          image={productType === 'fisdom' ? mail_icn_f : mail_icn_m}
           imageAltText="mail-icon"
           onCtrlClick={this.onInfoCtrlClick}
           ctrlText="Change"

@@ -16,7 +16,7 @@ const headerIconMapper = {
 }
 
 const Header = ({ classes, title, count, total, current, goBack, 
-  edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
+  edit, type, rightIcon, handleRightIconClick, smallTitle, disableBack, provider, 
   inPageTitle, force_hide_inpage_title, className ,style, headerData}) => (
   <AppBar
     position="fixed"
@@ -53,6 +53,18 @@ const Header = ({ classes, title, count, total, current, goBack,
           {title}
         </div>
       </div>
+      {rightIcon &&
+        <IconButton
+          classes={{
+            root: 'header-right-btn'
+          }}
+          color="inherit"
+          aria-label="Menu"
+          onClick={handleRightIconClick}
+        >
+          {rightIcon}
+        </IconButton>
+      }
     </Toolbar>
   </AppBar>
 );

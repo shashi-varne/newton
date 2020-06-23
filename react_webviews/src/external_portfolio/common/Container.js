@@ -268,8 +268,8 @@ class Container extends Component {
           goBack={this.headerGoBack}
           edit={this.props.edit}
           type={getConfig().productName}
-          resetpage={this.props.resetpage}
-          handleReset={this.props.handleReset}
+          rightIcon={this.props.rightIcon}
+          handleRightIconClick={this.props.handleRightIconClick}
           inPageTitle={this.state.inPageTitle}
           force_hide_inpage_title={this.props.hideInPageTitle}
           style={this.props.styleHeader}

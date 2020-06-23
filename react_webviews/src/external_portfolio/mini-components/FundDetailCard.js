@@ -71,7 +71,11 @@ export default class FundDetailCard extends Component {
             </div>
           </div>
         </div>
-        <hr />
+        <hr style={{
+          background: '#eaeaea',
+          border: 'none',
+          height: '0.5px',
+        }}/>
       </Fragment>
     );
   }

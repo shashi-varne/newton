@@ -17,6 +17,7 @@ import EmailNotReceived from './components/email_not_received';
 import EmailExampleView from './components/email_example_view';
 import StatementNotReceived from './components/statement_not_received';
 import FundHoldings from './components/fund_holdings';
+import ExternalPortfolio from './components/external_portfolio';
 // 
 
 const generateClassName = createGenerateClassName({
@@ -52,6 +53,7 @@ function external_portfolio(props) {
           <Route path={`${url}/email_not_received`} component={EmailNotReceived} />
           <Route path={`${url}/email_example_view`} component={EmailExampleView} />
           <Route path={`${url}/statement_not_received`} component={StatementNotReceived} />
+          <Route path={`${url}/external_portfolio`} component={ExternalPortfolio} />
           <Route path={`${url}/fund_holdings`} component={FundHoldings} />
         </Switch>
       </MuiThemeProvider>
