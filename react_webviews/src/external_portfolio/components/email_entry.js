@@ -49,9 +49,6 @@ class email_entry extends Component {
       <Container
         hideInPageTitle={true}
         fullWidthButton={true}
-        styleHeader={{
-          background: 'var(--highlight)',
-        }}
         classHeader="bg-highlight"
         handleClick={this.goNext}
         buttonTitle="Generate Statement"

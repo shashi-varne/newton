@@ -42,7 +42,6 @@ class StatementRequest extends Component {
   }
 
   goBack = (params = {}) => {
-    console.log(params);
     if (!params.comingFrom ||
       [ 'email_entry',
         'email_not_received',

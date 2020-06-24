@@ -38,6 +38,9 @@ const theme = createMuiTheme({
       },
       completed: {
         color: 'var(--primary) !important',
+      },
+      disabled: {
+        color: 'var(--secondary) !important',
       }
     },
     MuiStepContent: {
@@ -45,6 +48,7 @@ const theme = createMuiTheme({
         color: '#767e86',
         fontSize: '13px',
         lineHeight: '19px',
+        borderLeft: 'none',
       },
     },
   },
@@ -126,23 +130,25 @@ export default class EmailRegenerationStepper extends Component {
     const { activeStep } = this.state;
     return (
       <MuiThemeProvider theme={theme}>
-        <Stepper
-          activeStep={activeStep}
-          orientation="vertical">
-          {steps.map((label, index) => (
-            <Step
-              key={label}
-              active={true}
-              completed={index === 0}
-              disabled={index === 2}
-            >
-              <StepLabel>{label}</StepLabel>
-              <StepContent>
-                {this.getStepContent(index)}
-              </StepContent>
-            </Step>
-          ))}
-        </Stepper>
+        <div id="hni-stepper">
+          <Stepper
+            activeStep={activeStep}
+            orientation="vertical">
+            {steps.map((label, index) => (
+              <Step
+                key={label}
+                active={true}
+                completed={index === 0}
+                disabled={[0, 2].includes(index)}
+              >
+                <StepLabel>{label}</StepLabel>
+                <StepContent>
+                  {this.getStepContent(index)}
+                </StepContent>
+              </Step>
+            ))}
+          </Stepper>
+        </div>
       </MuiThemeProvider>
     );
   }

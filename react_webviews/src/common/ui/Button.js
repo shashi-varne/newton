@@ -11,7 +11,6 @@ import { getConfig } from 'utils/functions';
 class CustomButton extends Component {
   render() {
     const props = this.props;
-
     if (props.twoButton) {
       return (
         <div className="FlexButton">
@@ -52,6 +51,7 @@ class CustomButton extends Component {
             color="secondary"
             style={{backgroundColor: getConfig().secondary}}
             className={props.classes.button}
+            classes={props.classes}
             disabled={props.disable} >
             {props.buttonTitle}
             {
