@@ -76,6 +76,13 @@
   color: var(--primary);
 }
 
+.resync-btn {
+  padding: 13px 35px !important;
+  border: 1.5px solid var(--secondary) !important;
+  border-radius: 4px !important;
+  background-color: white !important;
+}
+
 .statement-req-popup {
   height: 300px;
   width: 100%;
@@ -230,5 +237,30 @@
       font-weight: 300;
       color: #767e86;
     }
+  }
+}
+
+.email-expand-container {
+  margin-top: 30px;
+  
+  #email-expand-title {
+    font-size: 13px;
+    color: #767e86;
+    margin-bottom: 3px;
+  }
+
+  #resync-update-text {
+    font-size: 8px;
+    color: #767e86;
+    font-weight: 600;
+    margin-top: 5px;
+  }
+
+  #remove-email {
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #767e86;
+    margin-top: 30px;
   }
 }

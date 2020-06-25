@@ -76,6 +76,10 @@
   .ext-pf-subheader:first-child {
     margin: 10px 0 0 0;
   }
+
+  .email-expand-container:first-child {
+    margin-top: 10px;
+  }
 }
 
 .uppercase-text {
@@ -87,9 +91,10 @@
 }
 
 .gen-statement-btn {
-  border: 1px solid var(--secondary) !important;
+  border: 1.5px solid var(--secondary) !important;
   margin-top: 30px !important;
   padding: 18px 50px !important;
+  background-color: white !important;
 }
 
 .gen-statement-btn-label {
