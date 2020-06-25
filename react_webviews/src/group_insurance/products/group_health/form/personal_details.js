@@ -54,6 +54,10 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     }
 
+    if(this.props.edit) {
+      next_state = `/group-insurance/group-health/${this.state.provider}/final-summary`;
+    }
+
     let form_data = lead[backend_key] || {};
 
     form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
@@ -137,13 +141,6 @@ class GroupHealthPlanPersonalDetails extends Component {
     })
 
   };
-
-  navigate = (pathname) => {
-    this.props.history.push({
-      pathname: pathname,
-      search: getConfig().searchParams
-    });
-  }
 
   handleClick = async () => {
 

@@ -31,6 +31,13 @@ class GroupHealthPlanContactDetails extends Component {
     }
 
     onload = () => {
+
+        if(this.props.edit) {
+            this.setState({
+                next_state : `/group-insurance/group-health/${this.state.provider}/final-summary`
+            })
+        }
+
         let lead = this.state.lead;
         console.log(lead);
         let form_data = {
@@ -76,14 +83,6 @@ class GroupHealthPlanContactDetails extends Component {
         })
 
     };
-
-    navigate = (pathname) => {
-        this.props.parent.props.history.push({
-            pathname: pathname,
-            search: getConfig().searchParams
-        });
-    }
-
 
     handleClose = () => {
         this.setState({

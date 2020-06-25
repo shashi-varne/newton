@@ -560,6 +560,111 @@
       justify-content: space-between;
       margin: 30px 0 0 0;
   }
+
+  .offer-slide-img {
+    width: 100%;
+    // border-radius: 8px;
+    // height: 165px;
+  }
+  .faq {
+    align-items: center;
+    padding: 10px 0 10px 0;
+    cursor: pointer;
+  }
+
+  .resume-card {
+    padding: 20px;
+    margin: 20px 0 20px 0;
+    box-shadow: 0px 2px 6px 0px rgba(102, 120, 121, 0.25);
+    border-radius: 4px;
+    .rc-title {
+      color: #0A1D32;
+      font-size: 14px;
+      font-weight: 500;
+      margin: 0 0 20px 0;
+    }
+
+    .rc-tile {
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .rc-tile-left {
+        display: flex;
+        /* align-items: center; */
+    }
+    
+    .rct-title {
+        color: #0A1D32;
+        font-size: 10px;
+        font-weight: 600;
+        margin: 4px 0 5px 0;
+    }
+    
+    .rct-subtitle {
+        color: #0A1D32;
+        font-size: 16px;
+        font-weight: 400;
+    }
+    
+    .rc-tile-premium-data {
+        margin: 0 0 0 10px;
+    }
+
+    .rc-bottom {
+      margin: 20px 0 0 0;
+    }
+    
+    .rcb-content {
+        color: #767E86;
+        font-size: 12px;
+        font-weight: 400;
+    }
+  }
+
+
+  .what-is-covered {
+    background: #19487F;
+    
+    padding: 10px;
+    border-radius: 4px;
+    margin: 10px 0 10px 0;
+    cursor: pointer;
+    .top {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .wic-title {
+      color: white;
+      font-size: 14px;
+      font-weight: 400;
+    }
+    .content {
+      margin: 20px 0 0 0;
+    }
+  
+    .circle {
+      width: 8px;
+      height: 8px;
+      border-radius: 100px;
+      margin-right: 5px;
+      background-color: white;
+    }
+
+    .wic-tile {
+      display: flex;
+      align-items: baseline;
+      margin: 15px 0 10px 0;
+      color: white;
+      font-size: 12px;
+        font-weight: 400;
+    }
+    
+    .wic-tile-right {
+        margin: 0 0 0 4px;
+    }
+  }
   
 }
 
@@ -806,5 +911,43 @@
     }
   }
 
-
+  .bottom-content {
+    .bct-top {
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .bc-tile {
+        margin: 10px 0 10px 0;
+        padding: 6px 0 15px 0;
+        border-bottom: 1px solid #ededed;
+    }
+    
+    .bct-top-title {
+        color: #0A1D32;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    
+    .bct-content {
+        padding: 30px 0 20px 10px;
+    }
+    .bctc-tile {
+      margin: 0 0 20px 0;
+    }
+    
+    .title {
+        color: #767E86;
+        font-size: 10px;
+        font-weight: 700;
+    }
+    
+    .subtitle {
+        color: #767E86;
+        font-size: 14px;
+        font-weight: 400;
+        margin: 7px 0 0 0;
+        line-height: 1.3;
+    }
+  }
 }

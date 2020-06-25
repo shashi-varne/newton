@@ -135,13 +135,6 @@ export function updateBottomPremium(premium) {
     })
 }
 
-export function navigate(pathname) {
-    this.props.history.push({
-        pathname: pathname,
-        search: getConfig().searchParams
-    });
-}
-
 export async function updateLead(body, quote_id) {
     try {
 
@@ -172,4 +165,20 @@ export async function updateLead(body, quote_id) {
         });
         toast('Something went wrong');
       }
+}
+
+export function navigate (pathname, data ={}) {
+
+    if(this.props.edit || data.edit) {
+        this.props.history.push({
+            pathname: pathname,
+            search: getConfig().searchParams
+        });
+    } else {
+        this.props.history.push({
+            pathname: pathname,
+            search: getConfig().searchParams
+        });
+    }
+   
 }

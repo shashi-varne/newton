@@ -5,7 +5,6 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
 
-import { storageService } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
@@ -19,7 +18,8 @@ class GroupHealthPlanAddressDetails extends Component {
             type: getConfig().productName,
             form_data: {},
             ctaWithProvider: true,
-            get_lead: true
+            get_lead: true,
+            next_state: 'nominee'
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -30,6 +30,13 @@ class GroupHealthPlanAddressDetails extends Component {
     }
 
     onload = () => {
+
+        if(this.props.edit) {
+            this.setState({
+                next_state : `/group-insurance/group-health/${this.state.provider}/final-summary`
+            })
+        }
+
         let lead = this.state.lead || {};
         console.log(lead);
         let form_data = lead.permanent_address || {};
@@ -79,7 +86,7 @@ class GroupHealthPlanAddressDetails extends Component {
     };
 
     navigate = (pathname) => {
-        this.props.parent.props.history.push({
+        this.props.history.push({
             pathname: pathname,
             search: getConfig().searchParams
         });
@@ -141,45 +148,17 @@ class GroupHealthPlanAddressDetails extends Component {
 
 
         if (canSubmitForm) {
-            let groupHealthPlanData = this.state.groupHealthPlanData;
-            try {
-
-                this.setState({
-                    show_loader: true
-                });
-
-                let body = {
-                    permanent_address: {
-                        addressline: this.state.form_data.addressline,
-                        addressline2: this.state.form_data.addressline2,
-                        pincode: this.state.form_data.pincode 
-                    }
+            let body = {
+                permanent_address: {
+                    addressline: this.state.form_data.addressline,
+                    addressline2: this.state.form_data.addressline2,
+                    pincode: this.state.form_data.pincode,
+                    state: this.state.form_data.state
                 }
-
-                const res = await Api.post('/api/ins_service/api/insurance/hdfcergo/lead/update?quote_id=' + this.state.lead.id, body);
-
-                var resultData = res.pfwresponse.result;
-                if (res.pfwresponse.status_code === 200) {
-                    groupHealthPlanData.lead = resultData.quote_lead;
-                    storageService().setObject('groupHealthPlanData', groupHealthPlanData);
-                    this.navigate('nominee');
-                } else {
-                    this.setState({
-                        show_loader: false
-                    });
-                    toast(resultData.error || resultData.message
-                        || 'Something went wrong');
-                }
-            } catch (err) {
-                console.log(err)
-                this.setState({
-                    show_loader: false
-                });
-                toast('Something went wrong');
             }
+
+            this.updateLead(body);
         }
-
-
     }
 
 

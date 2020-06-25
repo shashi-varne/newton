@@ -31,6 +31,13 @@ class GroupHealthPlanNomineeDetails extends Component {
     }
 
     onload = () => {
+
+        if(this.props.edit) {
+            this.setState({
+                next_state : `/group-insurance/group-health/${this.state.provider}/final-summary`
+            })
+        }
+
         let lead = this.state.lead || {};
         let form_data = lead.nominee_account_key || {};
 
@@ -57,7 +64,6 @@ class GroupHealthPlanNomineeDetails extends Component {
         var value = event.target ? event.target.value : event;
         var form_data = this.state.form_data || {};
 
-      
         form_data[name] = value;
         form_data[name + '_error'] = '';
 
@@ -66,14 +72,6 @@ class GroupHealthPlanNomineeDetails extends Component {
         })
 
     };
-
-    navigate = (pathname) => {
-        this.props.parent.props.history.push({
-            pathname: pathname,
-            search: getConfig().searchParams
-        });
-    }
-
 
     handleClose = () => {
         this.setState({

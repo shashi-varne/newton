@@ -340,6 +340,27 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/:provider/select-ped/:member_key`} component={GroupHealthPlanSelectPed} />
           <Route path={`${url}/group-health/:provider/final-summary`} component={GroupHealthPlanFinalSummary} />
           
+
+
+           {/* Edit paths */}
+
+          <Route path={`${url}/group-health/:provider/edit-personal-details/:member_key`} 
+          render={(props) => <GroupHealthPlanPersonalDetails {...props} edit={true} />} />
+
+          <Route path={`${url}/group-health/:provider/edit-contact`} 
+          render={(props) => <GroupHealthPlanContactDetails  {...props} edit={true}  />} />
+
+          <Route path={`${url}/group-health/:provider/edit-address`} 
+          render={(props) => <GroupHealthPlanAddressDetails  {...props} edit={true} />} />
+
+          <Route path={`${url}/group-health/:provider/edit-nominee`} 
+          render={(props) => <GroupHealthPlanNomineeDetails  {...props} edit={true} />} />
+
+          <Route path={`${url}/group-health/:provider/edit-is-ped`} 
+          render={(props) => <GroupHealthPlanIsPed  {...props} edit={true} />} />
+
+          <Route path={`${url}/group-health/:provider/edit-select-ped/:member_key`}
+          render={(props) => <GroupHealthPlanSelectPed  {...props} edit={true} />} />
           
           {/* common */}
           <Route path={`${url}/common/report`} component={Report} />

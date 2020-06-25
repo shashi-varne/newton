@@ -29,8 +29,7 @@ class GroupHealthPlanSelectPed extends Component {
                 cta_title: 'OK'
             },
             get_lead: true,
-            show_loader: true,
-            next_state: 'final-summary'
+            show_loader: true
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -38,6 +37,8 @@ class GroupHealthPlanSelectPed extends Component {
 
 
     onload = () => {
+        let next_state = `/group-insurance/group-health/${this.state.provider}/final-summary`;
+
         let lead = this.state.lead;
         let member_base = lead.member_base;
         let member_key = this.props.match.params.member_key;
@@ -102,7 +103,8 @@ class GroupHealthPlanSelectPed extends Component {
             lead: lead,
             backend_key: backend_key,
             options: options,
-            show_loader: false
+            show_loader: false,
+            next_state: next_state
         })
     }
 
@@ -121,15 +123,6 @@ class GroupHealthPlanSelectPed extends Component {
             [key]: value
         });
     }
-
-
-    navigate = (pathname) => {
-        this.props.history.push({
-            pathname: pathname,
-            search: getConfig().searchParams
-        });
-    }
-
 
     handleClose = () => {
         this.setState({

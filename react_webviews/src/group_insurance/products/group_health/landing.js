@@ -1,29 +1,36 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
 
-// import Api from 'utils/api';
-// import toast from '../../../common/ui/Toast';
+import Api from 'utils/api';
+import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { health_providers } from '../../constants';
 import HowToSteps from '../../../common/ui/HowToSteps';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
-
+import SVG from 'react-inlinesvg';
+import down_arrow from 'assets/down_arrow.svg';
+import up_arrow from 'assets/up_arrow.svg';
+import { Carousel } from 'react-responsive-carousel';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 class GroupHealthLanding extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      //   show_loader: true,
+        show_loader: true,
       productName: getConfig().productName,
       provider: 'HDFC_ERGO',
-      checked: true
+      checked: true,
+      offerImageData: [],
+      whats_not_covered: [],
+      whats_covered: []
     }
   }
 
   componentWillMount() {
-   
+
 
     let stepsContentMapper = {
       title: 'Why buy on ' + this.state.productName + '??',
@@ -34,40 +41,74 @@ class GroupHealthLanding extends Component {
       ]
     }
 
+    let offerImageData = [
+      {
+        src: 'icn_landing_card_1.svg',
+      },
+      {
+        src: 'icn_landing_card_2.svg',
+      },
+      {
+        src: 'icn_landing_card_3.svg',
+      }
+    ];
+
+    let whats_covered = [
+      'Diseases occured before policy issuance will be covered after 3 year',
+      'Ayurveda, unani, sidha and homeopathy  treatments',
+      '60 days pre and 180 days post hospitalization expenses',
+      'Organ donor expenses',
+      'Mental health and home health care'
+    ];
+    let whats_not_covered = [
+      'Diseases occured before policy issuance will be covered after 3 year',
+      'Ayurveda, unani, sidha and homeopathy  treatments',
+      '60 days pre and 180 days post hospitalization expenses',
+      'Organ donor expenses',
+      'Mental health and home health care'
+    ]
+
     this.setState({
       providerData: health_providers[this.state.provider],
-      stepsContentMapper: stepsContentMapper
+      stepsContentMapper: stepsContentMapper,
+      offerImageData: offerImageData,
+      whats_covered: whats_covered,
+      whats_not_covered: whats_not_covered
     })
   }
 
 
   async componentDidMount() {
 
-    // try {
-    //   const res = await Api.get('/api/ins_service/api/insurance/application/summary')
+    this.setState({
+         show_loader: false
+    });
+    try {
+      const res = await Api.get('/api/ins_service/api/insurance/hdfcergo/policy/list')
 
-    //   this.setState ({
-    //       show_loader: false
-    //   });
-    //   var resultData = res.pfwresponse.result;
-    //   if (res.pfwresponse.status_code === 200) {
+      this.setState ({
+          show_loader: false
+      });
+      var resultData = res.pfwresponse.result;
+      console.log(resultData);
+      if (res.pfwresponse.status_code === 200) {
 
-    //     this.setState({
-    //       resultData: resultData
-    //     })
+        this.setState({
+          resultData: resultData
+        })
 
 
-    //   } else {
-    //     toast(resultData.error || resultData.message
-    //       || 'Something went wrong');
-    //   }
-    // } catch (err) {
-    //   console.log(err)
-    //   this.setState({
-    //     show_loader: false
-    //   });
-    //   toast('Something went wrong');
-    // }
+      } else {
+        toast(resultData.error || resultData.message
+          || 'Something went wrong');
+      }
+    } catch (err) {
+      console.log(err)
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
+    }
   }
 
   navigate = (pathname) => {
@@ -98,6 +139,37 @@ class GroupHealthLanding extends Component {
     }
   }
 
+  renderOfferImages = (props, index) => {
+    return (
+      <div key={index} className="gold-offer-slider">
+        <img className="offer-slide-img"
+          src={require(`assets/${this.state.productName}/${props.src}`)} alt="Gold Offer" />
+      </div>
+    )
+  }
+
+  renderCoveredPoints = (props, index) => {
+    return(
+      <div key={index} className="wic-tile">
+        <div className="circle"></div>
+        <div className="wic-tile-right">
+          {props}
+        </div>
+      </div>
+    );
+  }
+
+  handleClickPoints = (key) => {
+    this.setState({
+      [key + '_open'] : !this.state[key + '_open']
+    })
+  }
+
+  handleResume = () => {
+    let state = `/group-insurance/group-health/${this.state.provider}/final-summary`;
+    this.navigate(state);
+  }
+
   render() {
 
 
@@ -107,7 +179,7 @@ class GroupHealthLanding extends Component {
         showLoader={this.state.show_loader}
         title={this.state.providerData.title}
         fullWidthButton={true}
-        buttonTitle="Get insured"
+        buttonTitle="GET INSURED"
         onlyButton={true}
         handleClick={() => this.handleClick()}
       >
@@ -117,39 +189,145 @@ class GroupHealthLanding extends Component {
 
         <div className="group-health-landing">
 
+          <div style={{ margin: '20px 0 0 0', cursor: 'pointer' }}>
+            <Carousel
+              showStatus={false} showThumbs={false}
+              showArrows={true}
+              infiniteLoop={false}
+              selectedItem={this.state.selectedIndex}
+              onChange={(index) => {
+                this.setState({
+                  selectedIndex: index,
+                  card_swipe: 'yes',
+                  card_swipe_count: this.state.card_swipe_count + 1
+                });
+              }}
+            >
+              {this.state.offerImageData.map(this.renderOfferImages)}
+            </Carousel>
+          </div>
+
+          <div className="resume-card">
+            <div className="rc-title">
+            Complete your health protection 
+            </div>
+
+            <div className="rc-tile" style={{ marginBottom: 0 }}>
+                <div className="rc-tile-left">
+                  <div className="">
+                      <img src={require(`assets/${this.state.providerData.logo_cta}`)} alt="" />
+                  </div>
+                  <div className="rc-tile-premium-data">
+                      <div className="rct-title">Silver smart plan</div>
+                      <div className="rct-subtitle">₹7,640</div>
+                  </div>
+
+                </div>
+
+                <div className="generic-page-button-small">
+                  RESUME
+                </div>
+
+               
+            </div>
+
+            <div className="rc-bottom flex-between">
+              <div className="rcb-content">Sum assured: ₹3 lacs</div>
+              <div className="rcb-content">Cover period: 1 year</div>
+            </div>
+          </div>
+
           <div className="generic-page-title">
-          Coverage for all
+            Coverage for all
           </div>
           <div className="generic-page-subtitle">
-          Option to cover your entire family (spouse, kids and parents)
+            Option to cover your entire family (spouse, kids and parents)
           </div>
 
           <div className='family-images'>
-          <img className="accident-plan-read-icon" 
-            src={require(`assets/${this.state.productName}/icn_couple.svg`)}  alt="" />
-            <img className="accident-plan-read-icon" 
-            src={require(`assets/${this.state.productName}/icn_kids.svg`)}  alt="" />
-            <img className="accident-plan-read-icon" 
-            src={require(`assets/${this.state.productName}/icn_parents.svg`)}  alt="" />
+            <img className="accident-plan-read-icon"
+              src={require(`assets/${this.state.productName}/icn_couple.svg`)} alt="" />
+            <img className="accident-plan-read-icon"
+              src={require(`assets/${this.state.productName}/icn_kids.svg`)} alt="" />
+            <img className="accident-plan-read-icon"
+              src={require(`assets/${this.state.productName}/icn_parents.svg`)} alt="" />
+          </div>
+
+          <div className="generic-page-title" style={{margin: '40px 0 20px 0'}}>
+            Overview
+          </div>
+
+          <div className="what-is-covered" onClick={() => this.handleClickPoints('whats_covered')}>
+            <div className="top">
+              <div className="wic-title">
+                What is covered?
+              </div>
+              <div className="">
+              <SVG
+                            className="text-block-2-img"
+                            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=#fff')}
+                            src={this.state.whats_covered_open ? up_arrow : down_arrow}
+                        />
+              </div>
+              </div>
+
+             {this.state.whats_covered_open && 
+              <div  className="content">
+                  {this.state.whats_covered.map(this.renderCoveredPoints)}
+              </div>
+             }
+          </div>
+
+          <div className="what-is-covered" onClick={() => this.handleClickPoints('whats_not_covered')}>
+            <div className="top">
+              <div className="wic-title">
+                What is not covered?
+              </div>
+              <div className="">
+              <SVG
+                            className="text-block-2-img"
+                            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=#fff')}
+                            src={this.state.whats_not_covered_open ? up_arrow : down_arrow}
+                        />
+              </div>
+              </div>
+
+             {this.state.whats_not_covered_open && this.state.whats_not_covered.map(this.renderCoveredPoints)}
           </div>
 
           <div className="generic-page-title">
-          Overview
+            Why to have health insurance?
           </div>
 
-          <div className="generic-page-title">
-          Why to have health insurance?
+          <div className="horizontal-images-scroll">
+
           </div>
 
           <HowToSteps baseData={this.state.stepsContentMapper} />
 
-          <div className="accident-plan-read" style={{padding:0}}
+
+          <div className="generic-page-title">
+            Things to know
+          </div>
+          <div className="generic-hr"></div>
+          <div className="flex faq">
+            <div>
+            <img className="accident-plan-read-icon"
+              src={require(`assets/${this.state.productName}/ic_document_copy.svg`)} alt="" />
+            </div>
+            <div>
+              Frequently asked questions
+            </div>
+          </div>
+          <div className="generic-hr"></div>
+
+          <div className="accident-plan-read" style={{ padding: 0 }}
             onClick={() => this.openInBrowser(this.state.quoteData.read_document, 'read_document')}>
-            <img className="accident-plan-read-icon" 
-            src={require(`assets/${this.state.productName}/ic_read.svg`)}  alt="" />
+            <img className="accident-plan-read-icon"
+              src={require(`assets/${this.state.productName}/ic_read.svg`)} alt="" />
             <div className="accident-plan-read-text" style={{ color: getConfig().primary }}>Read Detailed Document</div>
           </div>
-          <div className="CheckBlock2 accident-plan-terms" style={{padding:0}}>
+          <div className="CheckBlock2 accident-plan-terms" style={{ padding: 0 }}>
             <Grid container spacing={16} alignItems="center">
               <Grid item xs={1} className="TextCenter">
                 <Checkbox
