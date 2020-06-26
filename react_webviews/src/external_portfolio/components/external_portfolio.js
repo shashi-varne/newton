@@ -21,6 +21,7 @@ export default class ExternalPortfolio extends Component {
         title="External Portfolio"
         noFooter={true}
         rightIcon={<SettingsIcon />}
+        handleRightIconClick={() => this.navigate('settings')}
         hideInPageTitle={true}
         styleHeader={{
           background: 'black',
@@ -31,8 +32,8 @@ export default class ExternalPortfolio extends Component {
           <span className="header-title-text" style={{ color: 'white' }}>
             External Portfolio
           </span>
-          <div id="selected-pan">
-            <div id="selected-pan-initial">A</div>
+          <div id="selected-pan" onClick={() => this.navigate('select_pan')}>
+            <div className="selected-pan-initial">A</div>
             <div id="selected-pan-detail">
               <span id="selected-pan-num">DWGPK7557E</span>
               <span id="selected-pan-name">Anant Singh</span>

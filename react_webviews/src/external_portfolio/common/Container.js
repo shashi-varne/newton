@@ -95,17 +95,6 @@ class Container extends Component {
       return this.props.goBack(params);
     }
 
-    // switch (pathname) {
-    //   case "/hni":
-    //     storageService().remove('fhc_data'); // remove cached fhc data
-    //     nativeCallback({ action: 'exit', events: this.getEvents('back') });
-    //     break;
-    //   case "/hni/email_entry":
-    //     if (params.comingFrom === 'statement_not_received')
-    //   case "/fhc/personal1":
-    //     this.navigate('/fhc', { fromScreen1: true });
-    //     break;
-    //   default:
     this.props.history.goBack();
   };
 

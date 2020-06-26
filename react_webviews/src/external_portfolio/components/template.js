@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../common/Container';
 
 
-class StatementRequest extends Component {
+class StatementRequestPage extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -22,4 +22,4 @@ class StatementRequest extends Component {
   }
 }
 
-export default StatementRequest;
+export default StatementRequestPage;

@@ -12,6 +12,7 @@ const theme = createMuiTheme({
     MuiStepper: {
       root: {
         padding: 0,
+        background: 'transparent',
       },
     },
     MuiStepLabel: {
@@ -82,10 +83,11 @@ export default class EmailRegenerationStepper extends Component {
   }
 
   renderStep2 = () => {
+    const { classes } = this.props;
     return (<Fragment>
-      Please forward the email (and not the statement) to
+      Please forward the email (and <b>not the statement</b> ) to
       <InfoBox
-        classes={{ root: 'info-box-cut-out' }}
+        classes={{ root: `info-box-cut-out ${classes.emailBox}` }}
         isCopiable={true}
         textToCopy="cas@fisdom.com"
       >

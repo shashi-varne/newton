@@ -1,67 +1,81 @@
 import React, { Component } from 'react';
 
 import completed_step from "assets/completed_step.svg";
-import Container from '../../common/Container';
-import { getConfig } from 'utils/functions';
+import Container from '../common/Container';
 import { getUrlParams } from 'utils/validators';
-import { stateMapper, default_PAN, user_PANs_array} from  '../../constants';
+// import { stateMapper, default_PAN, user_PANs_array } from  '../constants';
 import {storageService, getIndexArray} from "utils/validators";
 import { nativeCallback } from 'utils/native_callback';
-
-class SelectPANClass extends Component {
+import { navigate } from '../common/commonFunctions';
+let [stateMapper, user_PANs_array] = [{}, [
+    {
+        name: 'Karan Uday',
+        pan: 'DWGPK7557E',
+    },
+    {
+        name: 'Gautam Shanbhag',
+        pan: 'XIRRP7662D',
+    }
+]];
+class PANSelector extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            PAN: storageService().get('user_PAN') || default_PAN,
+            PAN: storageService().get('user_pan'),
             params: getUrlParams()
         }
-
         this.renderPANs = this.renderPANs.bind(this);
+        this.navigate = navigate.bind(this);
     }
 
     componentWillMount() {
+        // Hit API for PANs list
         let PANs = user_PANs_array;
 
-        let selectedIndex = getIndexArray(PANs, this.state.PAN, 'key');
-        this.setState({
-            PANs: PANs,
-            selectedIndex: selectedIndex
-        })
+        let selectedIndex = getIndexArray(PANs, this.state.PAN, 'pan');
+        this.setState({ PANs, selectedIndex })
     }
 
     choosePAN = (index) => {
         this.sendEvents('next', {change_PAN: true});
         this.setState({
             selectedIndex: index,
-            PAN: this.state.PANs[index].key
+            PAN: this.state.PANs[index].pan,
         })
-
     }
 
 
     renderPANs(props, index) {
         return (
-
             <div onClick={() => this.choosePAN(index, props)}
                 className={`bank-tile ${index === this.state.selectedIndex ? 'bank-tile-selected' : ''}`}
                 key={index}
-                style={{ opacity: props.status === 'pending' ? 0.4 : 1 }}
+                style={{
+                    opacity: props.status === 'pending' ? 0.4 : 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                }}
             >
-                <div className="left-icon">
-                    <img style={{ width: '40px', margin: '0 7px 0 0' }}
-                        src={require(`assets/${props.logo}`)} alt="Gold"
-                    />
-
+                <div
+                    className="selected-pan-initial"
+                    style={{
+                        minWidth: '40px',
+                        minHeight: '40px',
+                        lineHeight: '40px',
+                        fontSize: '19px',
+                    }}
+                >
+                    A
                 </div>
-                <div className="select-bank" style={{ padding: '3px 0 0 0px', margin: 0 }}>
+                <div className="select-bank" style={{ padding: '3px 0 0 0px', margin: 0, flex: 1 }}>
                     <div >
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <div>
-                                <div className="bank-name">
-                                    {props.title}
+                                <div className="bank-name" style={{ fontSize: '15px' }}>
+                                    {props.name}
                                 </div>
-                                <div className="account-number">
-                                    {props.subtitle}
+                                <div className="account-number" style={{ textTransform: 'uppercase', lineHeight: '25px' }}>
+                                    {props.pan}
                                 </div>
                             </div>
                             <div style={{}}>
@@ -69,7 +83,7 @@ class SelectPANClass extends Component {
                                     <img
                                         style={{ width: 14, margin: '4px 0 0 8px', verticalAlign: 'middle' }}
                                         src={completed_step}
-                                        alt="Gold Delivery"/>
+                                        alt="Check"/>
                                 }
                             </div>
                         </div>
@@ -79,19 +93,12 @@ class SelectPANClass extends Component {
         )
     }
 
-    navigate = (pathname) => {
-        this.props.history.push({
-          pathname: pathname,
-          search: getConfig().searchParams
-        });
-      }
 
     handleClick = () => {
-        
-        let state = stateMapper[this.state.params.redirect_state];
-        let PAN = this.state.PANs[this.state.selectedIndex].key;
-        storageService().set('gold_PAN', PAN);
-        this.navigate(state);
+        // let state = stateMapper[this.state.params.redirect_state];
+        let PAN = this.state.PANs[this.state.selectedIndex].pan;
+        storageService().set('user_pan', PAN);
+        this.navigate('external_portfolio');
     }
 
     sendEvents(user_action, current_data={}) {
@@ -115,7 +122,6 @@ class SelectPANClass extends Component {
 
     render() {
         return (
-
             <Container
                 showLoader={this.state.show_loader}
                 title="Portfolio accounts"
@@ -133,9 +139,8 @@ class SelectPANClass extends Component {
     }
 }
 
-const GoldSelectPAN = (props) => (
-    <GoldSelectPANClass
-        {...props} />
-);
+// const GoldSelectPAN = (props) => (
+//     <PANSelector {...props} />
+// );
 
-export default GoldSelectPAN;
+export default PANSelector;
