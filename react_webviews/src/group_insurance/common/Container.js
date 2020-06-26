@@ -450,7 +450,8 @@ class Container extends Component {
           handleReset={this.props.handleReset}
           filterPgae={this.props.filterPgae}
           handleFilter={this.props.handleFilter} 
-          new_header={this.state.new_header}  
+          new_header={this.state.new_header} 
+          headerData={this.props.headerData}
         />}
 
         {/* Below Header Block */}

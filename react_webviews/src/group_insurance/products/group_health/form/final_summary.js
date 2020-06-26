@@ -3,10 +3,18 @@ import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-// import toast from '../../../../common/ui/Toast';
-import { initialize, updateLead } from '../common_data'
+import toast from '../../../../common/ui/Toast';
+import { initialize, updateLead } from '../common_data';
 import BottomInfo from '../../../../common/ui/BottomInfo';
-import { numDifferentiationInr } from 'utils/validators';
+import { numDifferentiationInr, inrFormatDecimal, 
+    capitalizeFirstLetter, storageService } from 'utils/validators';
+import Api from 'utils/api';
+import Button from 'material-ui/Button';
+import Dialog, {
+    DialogActions,
+    DialogContent,
+    DialogContentText
+} from 'material-ui/Dialog';
 
 class GroupHealthPlanFinalSummary extends Component {
 
@@ -19,7 +27,9 @@ class GroupHealthPlanFinalSummary extends Component {
             lead: {
                 member_base: []
             },
-            accordianData: []
+            accordianData: [],
+            openDialogReset: false,
+            quote_id: storageService().get('ghs_ergo_quote_id')
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -65,7 +75,7 @@ class GroupHealthPlanFinalSummary extends Component {
             let member = Object.assign({}, member_base[i]);
 
             let obj = {
-                title: `Personal details (insured ${i + 1})`,
+                title: `${capitalizeFirstLetter(member.key)}'s details (insured ${i + 1})`,
                 edit_state: `/group-insurance/group-health/${this.state.provider}/edit-personal-details/${member.key}`
             }
 
@@ -81,15 +91,15 @@ class GroupHealthPlanFinalSummary extends Component {
             obj.data = data;
             accordianData.push(obj);
 
-            if(member.ped_diseases_name) {
+            if (member.ped_diseases_name) {
                 let dis_data = {
-                    'title' : `${member.relation}'s diseses`,
+                    'title': `${member.relation}'s diseses`,
                     'subtitle': member.ped_diseases_name
                 }
 
                 diseases_data_backend.push(dis_data);
             }
-            
+
         }
 
         let contact_data = {
@@ -157,7 +167,7 @@ class GroupHealthPlanFinalSummary extends Component {
         accordianData.push(nominee_data);
 
 
-        if(diseases_data_backend.length !== 0) {
+        if (diseases_data_backend.length !== 0) {
             let diseases_data = {
                 'title': 'Pre-existing diseases',
                 edit_state: `/group-insurance/group-health/${this.state.provider}/edit-is-ped`,
@@ -166,16 +176,114 @@ class GroupHealthPlanFinalSummary extends Component {
 
             accordianData.push(diseases_data);
         }
-        
+
         this.setState({
             accordianData: accordianData
         })
     }
 
 
+    startPayment = async () => {
+        try {
+            let res = await Api.get(`/api/ins_service/api/insurance/hdfcergo/start/payment?lead_id=${this.state.quote_id}`);
+
+            console.log(res);
+           
+            var resultData = res.pfwresponse.result;
+            console.log(resultData);
+            if (res.pfwresponse.status_code === 200) {
+
+               
+            let current_url =  window.location.href;
+            let nativeRedirectUrl = current_url;
+
+            let paymentRedirectUrl = encodeURIComponent(
+            window.location.origin + `/group-insurance/group-health/${this.state.provider}/payment`
+            );
+
+            console.log(paymentRedirectUrl);
+
+            var payment_link = resultData.payment_link;
+            var pgLink = payment_link;
+            let app = getConfig().app;
+            var back_url = encodeURIComponent(current_url);
+            // eslint-disable-next-line
+            pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
+            '&app=' + app + '&back_url=' + back_url;
+            if (getConfig().generic_callback) {
+            pgLink += '&generic_callback=' + getConfig().generic_callback;
+            }
+
+
+            if (getConfig().app === 'ios') {
+            nativeCallback({
+                action: 'show_top_bar', message: {
+                title: 'Payment'
+                }
+            });
+            }
+            
+            nativeCallback({
+                action: 'take_control', message: {
+                    back_url: nativeRedirectUrl,
+                    back_text: 'Are you sure you want to exit the payment process?'
+                }
+            });
+
+            window.location.href = pgLink;
+
+
+            } else {
+                this.setState({
+                    show_loader: false
+                });
+                toast(resultData.error || resultData.message
+                    || 'Something went wrong');
+            }
+        } catch (err) {
+            console.log(err)
+            this.setState({
+                show_loader: false
+            });
+            toast('Something went wrong');
+        }
+    }
+
+    checkPPC = async () => {
+
+        this.setState({
+            show_loader: true
+        });
+        try {
+            let res = await Api.post(`/api/ins_service/api/insurance/hdfcergo/ppc/check?quote_id=${this.state.quote_id}`);
+
+           
+            var resultData = res.pfwresponse.result;
+            if (res.pfwresponse.status_code === 200) {
+
+                let lead = resultData.quote_lead || {};
+                if (lead.status === 'ready_to_pay') {
+                    this.startPayment();
+                }
+            } else {
+                this.setState({
+                    show_loader: false
+                });
+                toast(resultData.error || resultData.message
+                    || 'Something went wrong');
+            }
+        } catch (err) {
+            console.log(err)
+            this.setState({
+                show_loader: false
+            });
+            toast('Something went wrong');
+        }
+    }
+
     handleClick = async () => {
-
-
+        console.log("handle")
+        this.checkPPC();
     }
 
 
@@ -281,16 +389,92 @@ class GroupHealthPlanFinalSummary extends Component {
         this.navigate(state);
     }
 
+    handleClose = () => {
+        this.setState({
+            openDialogReset: false
+        })
+    }
+
+    renderDialog = () => {
+        return (
+            <Dialog
+                fullScreen={false}
+                open={this.state.openDialogReset}
+                onClose={this.handleClose}
+                aria-labelledby="responsive-dialog-title"
+            >
+                <DialogContent>
+                    <DialogContentText>
+                        All the data will be saved. Are you sure you want to restart?
+              </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={this.handleReset} color="default">
+                        YES
+              </Button>
+                    <Button onClick={this.handleClose} color="default" autoFocus>
+                        CANCEL
+              </Button>
+                </DialogActions>
+            </Dialog>
+        );
+    }
+
+    handleReset = async () => {
+        this.sendEvents('yes', 'reset');
+
+        this.setState({
+            openDialogReset: false,
+            show_loader: true
+        });
+
+
+        try {
+            const res = await Api.get('/api/ins_service/api/insurance/hdfcergo/lead/cancel/6216331653283840')
+
+            this.setState({
+                show_loader: false
+            });
+
+            var resultData = res.pfwresponse.result;
+            console.log(resultData);
+            if (res.pfwresponse.status_code === 200) {
+
+                this.setState({
+                    resultData: resultData
+                })
+
+            } else {
+                toast(resultData.error || resultData.message
+                    || 'Something went wrong');
+            }
+        } catch (err) {
+            console.log(err)
+            this.setState({
+                show_loader: false
+            });
+            toast('Something went wrong');
+        }
+    }
+
+    showDialog = () => {
+        this.sendEvents('reset');
+        this.setState({ openDialogReset: true });
+    }
+
     render() {
 
         return (
             <Container
+
+                resetpage={true}
+                handleReset={this.showDialog}
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
                 title="Summary"
                 fullWidthButton={true}
                 onlyButton={true}
-                buttonTitle="MAKE PAYMENT OF ₹7,640"
+                buttonTitle={`MAKE PAYMENT OF ${inrFormatDecimal(this.state.lead.total_amount)}`}
                 handleClick={() => this.handleClick()}
             >
 
@@ -346,8 +530,22 @@ class GroupHealthPlanFinalSummary extends Component {
                                 <div className="mtr-top">
                                     TOTAL PREMIUM
                                 </div>
-                                <div className="mtr-bottom">
-                                    {this.state.lead.total_amount}
+                                <div className="mtr-bottom flex">
+                                        <div>
+                                        {inrFormatDecimal(this.state.lead.premium)} (Basic premium)
+                                        </div>
+                                        <div>
+                                        &nbsp;+&nbsp;
+                                        </div>
+                                        <div>
+                                        {inrFormatDecimal(this.state.lead.tax_amount)} (18% GST & other taxes)
+                                        </div>
+                                        <div>
+                                        &nbsp;=&nbsp;
+                                        </div>
+                                        <div>
+                                        {inrFormatDecimal(this.state.lead.total_amount)}
+                                        </div>
                                 </div>
                             </div>
                         </div>
@@ -360,9 +558,11 @@ class GroupHealthPlanFinalSummary extends Component {
 
 
                     </div>
-                </div>
-                <BottomInfo baseData={{ 'content': 'Get best health insurance benefits at this amount and have a secured future.' }} />
 
+                    <BottomInfo baseData={{ 'content': 'Get best health insurance benefits at this amount and have a secured future.' }} />
+                </div>
+                
+                {this.renderDialog()}
             </Container>
         );
     }

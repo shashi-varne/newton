@@ -159,7 +159,7 @@ class GroupHealthPlanIsPed extends Component {
         if (canSubmitForm) {
 
             this.setState({
-                next_state: 'select-ped/' + (next_state || this.state.next_state)
+                next_state: next_state ?  'select-ped/' + next_state : this.state.next_state
             })
             this.updateLead(body);
         }

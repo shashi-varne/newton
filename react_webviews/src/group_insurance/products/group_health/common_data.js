@@ -29,7 +29,9 @@ export async function initialize() {
                 show_loader: true
             });
 
-            const res = await Api.get('/api/ins_service/api/insurance/hdfcergo/lead/quote?quote_id=5740551081033728');
+            let quote_id = storageService().get('ghs_ergo_quote_id');
+
+            const res = await Api.get('/api/ins_service/api/insurance/hdfcergo/lead/quote?quote_id=' + quote_id);
 
             var resultData = res.pfwresponse.result;
 
@@ -138,7 +140,10 @@ export function updateBottomPremium(premium) {
 export async function updateLead(body, quote_id) {
     try {
 
-        quote_id = '5740551081033728';
+
+        if(!quote_id) {
+            quote_id = storageService().get('ghs_ergo_quote_id');
+        }
 
         this.setState({
           show_loader: true

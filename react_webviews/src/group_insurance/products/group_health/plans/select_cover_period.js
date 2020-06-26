@@ -95,7 +95,8 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         groupHealthPlanData.tenure = tenure;
         let post_body = groupHealthPlanData.post_body;
 
-        let premium_selected = this.state.premium_data[this.state.selectedIndex]
+        let premium_selected = this.state.premium_data[this.state.selectedIndex];
+        groupHealthPlanData.plan_selected_final = premium_selected;
         post_body.tenure = premium_selected.tenure;
         post_body.tax_amount = premium_selected.gst_tax;
         post_body.base_premium = premium_selected.base_premium;
@@ -133,7 +134,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                         </div>
                        {props.total_discount > 0 && 
                             <div className="flex" style={{margin: '4px 0 0 0'}}>
-                            <img style={{ width: 10 }} src={require(`assets/completed_step.svg`)} alt="" />
+                            <img style={{ width: 10 }} src={require(`assets/ic_discount.svg`)} alt="" />
                             <span style={{
                                 color: '#4D890D', fontSize: 10,
                                 fontWeight: 400, margin: '0 0 0 4px'

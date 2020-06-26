@@ -153,7 +153,8 @@ class GroupHealthPlanAddressDetails extends Component {
                     addressline: this.state.form_data.addressline,
                     addressline2: this.state.form_data.addressline2,
                     pincode: this.state.form_data.pincode,
-                    state: this.state.form_data.state
+                    state: this.state.form_data.state,
+                    city: this.state.form_data.city
                 }
             }
 

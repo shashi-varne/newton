@@ -63,7 +63,6 @@ class GroupHealthPlanSelectCity extends Component {
 
             if(!this.state.city) {
                 try {
-
                     const res = await Api.get('/api/ins_service/api/insurance/account/summary');
                     if (res.pfwresponse.status_code === 200) {
                         var resultData = res.pfwresponse.result;
@@ -170,7 +169,8 @@ class GroupHealthPlanSelectCity extends Component {
 
                 <FormControl fullWidth>
                     <div className="InputField">
-                    <Autosuggests
+                    {this.state.suggestions_list.length > 0 &&
+                     <Autosuggests
                         parent={this}
                         width="40"
                         employers={this.state.suggestions_list}
@@ -181,6 +181,7 @@ class GroupHealthPlanSelectCity extends Component {
                         helperText={this.state.city_error || 'Premium depends on city of residence'}
                         value={this.state.city}
                         onChange={this.handleChange('city')} />
+                    }
                     </div>
 
 

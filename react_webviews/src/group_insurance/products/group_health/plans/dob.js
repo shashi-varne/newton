@@ -50,13 +50,13 @@ class GroupHealthPlanDob extends Component {
                 'key': 'father',
                 'label': "Father's date of birth (DD/MM/YYYY)",
                 'value': '',
-                'backend_key': 'self_account_key'
+                'backend_key': 'parent_account1_key'
             },
             {
                 'key': 'mother',
                 'label': "Mother's date of birth (DD/MM/YYYY)",
                 'value': '',
-                'backend_key': 'self_account_key'
+                'backend_key': 'parent_account2_key'
             },
             {
                 'key': 'son',
@@ -257,6 +257,10 @@ class GroupHealthPlanDob extends Component {
                     dob: final_dob_data[j].value,
                     relation: relation
                 };
+            }
+
+            if(final_dob_data.length === 1 && this.state.account_type === 'parent') {
+                final_dob_data[0].backend_key = 'parent_account1_key';
             }
 
 

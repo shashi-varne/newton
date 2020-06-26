@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import Container from '../../../common/Container';
 
 import { nativeCallback } from 'utils/native_callback';
-
-import { storageService, inrFormatDecimal , numDifferentiationInr} from 'utils/validators';
+import {  ghGetMember } from '../../../constants';
+import { storageService, inrFormatDecimal, numDifferentiationInr } from 'utils/validators';
 import { initialize } from '../common_data';
 import BottomInfo from '../../../../common/ui/BottomInfo';
 
@@ -15,7 +15,8 @@ class GroupHealthPlanPremiumSummary extends Component {
         super(props);
         this.state = {
             premium_data: [],
-            post_body: {}
+            plan_selected_final: {},
+            final_dob_data: []
         }
 
         this.initialize = initialize.bind(this);
@@ -28,9 +29,16 @@ class GroupHealthPlanPremiumSummary extends Component {
     }
 
     async componentDidMount() {
+        let groupHealthPlanData = this.state.groupHealthPlanData;
+        let post_body = groupHealthPlanData.post_body;
+
         this.setState({
-            post_body : this.state.groupHealthPlanData.post_body
+            plan_selected_final: groupHealthPlanData.plan_selected_final,
+            total_member: post_body.mem_info.adult + post_body.mem_info.child,
+            type_of_plan: groupHealthPlanData.type_of_plan,
+            final_dob_data: groupHealthPlanData.final_dob_data
         })
+
     }
 
 
@@ -50,10 +58,7 @@ class GroupHealthPlanPremiumSummary extends Component {
         }
     }
 
-     handleClick = async() => {
-        let groupHealthPlanData = this.state.groupHealthPlanData;
-        
-
+    handleClick = async () => {
         try {
 
             this.setState({
@@ -62,13 +67,13 @@ class GroupHealthPlanPremiumSummary extends Component {
 
             let body = this.state.groupHealthPlanData.post_body;
             const res = await Api.post('/api/ins_service/api/insurance/hdfcergo/lead/quote', body);
-            
+
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
-                console.log(resultData);
-                groupHealthPlanData.lead = resultData.lead;
-                storageService().setObject('groupHealthPlanData', groupHealthPlanData);
-                this.navigate('personal-details/self');
+                let lead = resultData.lead;
+                lead.member_base = ghGetMember(lead);
+                storageService().set('ghs_ergo_quote_id', lead.id);
+                this.navigate('personal-details/' + lead.member_base[0].key);
             } else {
                 this.setState({
                     show_loader: false
@@ -83,13 +88,16 @@ class GroupHealthPlanPremiumSummary extends Component {
             });
             toast('Something went wrong');
         }
-
-        
     }
 
-
-
-
+    renderIndPremium = (props, index) => {
+        return (
+            <div key={index} className="nf-info flex-between" style={{ margin: '0 0 6px 0' }}>
+                <div>{props.key}</div>
+                <div>{inrFormatDecimal(this.state.plan_selected_final[props.backend_key])}</div>
+            </div>
+        )
+    }
 
     render() {
 
@@ -119,41 +127,62 @@ class GroupHealthPlanPremiumSummary extends Component {
                     <div className="premium-info">
                         <div className="flex-between pi-tile">
                             <div className="pi-tile-left">Sum assured</div>
-                            <div className="pi-tile-right">{numDifferentiationInr(this.state.post_body.sum_assured)}</div>
+                            <div className="pi-tile-right">{numDifferentiationInr(this.state.plan_selected_final.sum_assured)}</div>
                         </div>
+                        {this.state.type_of_plan === 'NF' &&
+                            <div className="nf-info">
+                                {(`${inrFormatDecimal(this.state.plan_selected_final.sum_assured)} x ${this.state.total_member}`)}
+                            </div>}
 
                         <div className="flex-between pi-tile">
                             <div className="pi-tile-left">Cover period</div>
-                            <div className="pi-tile-right">{this.state.post_body.tenure} year</div>
+                            <div className="pi-tile-right">{this.state.plan_selected_final.tenure} year</div>
                         </div>
 
                         <div className="generic-hr"></div>
 
                         <div className="page-title">
-                        Premium details
+                            Premium details
                         </div>
 
                         <div className="flex-between pi-tile">
-                            <div className="pi-tile-left">Base premium</div>
-                            <div className="pi-tile-right">{inrFormatDecimal(this.state.post_body.base_premium)}</div>
+                            <div className="pi-tile-left">Individual premium</div>
                         </div>
+
+                        {this.state.type_of_plan === 'NF' &&
+                            <div>
+                                {this.state.final_dob_data.map(this.renderIndPremium)}
+                                <div className="generic-hr"></div>
+                            </div>
+                        }
+                        <div className="flex-between pi-tile">
+                            <div className="pi-tile-left">Base premium</div>
+                            <div className="pi-tile-right">{inrFormatDecimal(this.state.plan_selected_final.base_premium)}</div>
+                        </div>
+                        
+
+                        {this.state.plan_selected_final.total_discount &&
+                            <div className="flex-between pi-tile">
+                                <div className="pi-tile-left">{this.state.plan_selected_final.tenure_discount_percentage}% discount</div>
+                                <div className="pi-tile-right">-{inrFormatDecimal(this.state.plan_selected_final.total_discount)}</div>
+                            </div>}
 
                         <div className="flex-between pi-tile">
                             <div className="pi-tile-left">GST & other taxes</div>
-                            <div className="pi-tile-right">{inrFormatDecimal(this.state.post_body.tax_amount)}</div>
+                            <div className="pi-tile-right">{inrFormatDecimal(this.state.plan_selected_final.gst_tax)}</div>
                         </div>
 
                         <div className="generic-hr"></div>
 
-                        <div className="flex-between pi-tile" style={{fontWeight:600}}>
+                        <div className="flex-between pi-tile" style={{ fontWeight: 600 }}>
                             <div className="pi-tile-left">Total payable</div>
-                            <div className="pi-tile-right">{inrFormatDecimal(this.state.post_body.total_amount)}</div>
+                            <div className="pi-tile-right">{inrFormatDecimal(this.state.plan_selected_final.total_amount)}</div>
                         </div>
 
                         <div className="generic-hr"></div>
                     </div>
 
-                    <BottomInfo baseData={{'content': 'Complete your details and get quality medical treatments at affordable cost'}} />
+                    <BottomInfo baseData={{ 'content': 'Complete your details and get quality medical treatments at affordable cost' }} />
 
                 </div>
             </Container>

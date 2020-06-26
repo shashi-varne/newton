@@ -149,6 +149,7 @@ import GroupHealthPlanNomineeDetails from './products/group_health/form/nominee'
 import GroupHealthPlanIsPed from './products/group_health/form/is_ped';
 import GroupHealthPlanSelectPed from './products/group_health/form/select_ped';
 import GroupHealthPlanFinalSummary from './products/group_health/form/final_summary';
+import GroupHealthPayment from './products/group_health/payment/index';
 
 // etli
 import EtliPersonalDetails1 from './products/term_insurance/etli/personal_details1';
@@ -339,9 +340,8 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/:provider/is-ped`} component={GroupHealthPlanIsPed} />
           <Route path={`${url}/group-health/:provider/select-ped/:member_key`} component={GroupHealthPlanSelectPed} />
           <Route path={`${url}/group-health/:provider/final-summary`} component={GroupHealthPlanFinalSummary} />
+          <Route path={`${url}/group-health/:provider/payment`} component={GroupHealthPayment} />
           
-
-
            {/* Edit paths */}
 
           <Route path={`${url}/group-health/:provider/edit-personal-details/:member_key`} 

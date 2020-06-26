@@ -602,7 +602,6 @@ export const health_providers = {
 
 export function ghGetMember(lead) {
   
-
   let backend_keys = ['self_account_key', 'spouse_account_key', 'child_account1_key',
                       'child_account2_key', 'parent_account1_key', 'parent_account2_key'];
 
@@ -660,6 +659,13 @@ export function ghGetMember(lead) {
 
       member_base.push(obj);
     }
+  }
+
+  if(lead.account_type === 'parents') {
+    let obj = lead['self_account_key'];
+    obj.backend_key = 'self_account_key';
+    obj.key = 'applicant';
+    member_base.push(obj);
   }
 
   return member_base;

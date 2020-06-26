@@ -27,9 +27,12 @@ class GroupHealthPlanPersonalDetails extends Component {
   }
 
   onload = () => {
+    
     let lead = this.state.lead || {};
+    console.log(lead);
     let member_base = lead.member_base;
     let member_key = this.props.match.params.member_key;
+    console.log(member_key);
 
     let header_title = `${capitalizeFirstLetter(member_key)}'s details`;
     let header_subtitle = '';
@@ -144,11 +147,16 @@ class GroupHealthPlanPersonalDetails extends Component {
 
   handleClick = async () => {
 
-    let keys_to_check = ['name', 'dob', 'height', 'weight']
+    let keys_to_check = ['name', 'dob', 'height', 'weight'];
 
     if(this.state.member_key === 'self') {
       keys_to_check.push('gender');
     }
+
+    if(this.state.member_key === 'applicant') {
+      keys_to_check = ['name', 'dob', 'gender']
+    }
+
     let form_data = this.state.form_data;
     for (var i = 0; i < keys_to_check.length; i++) {
       let key_check = keys_to_check[i];
@@ -159,7 +167,7 @@ class GroupHealthPlanPersonalDetails extends Component {
       }
     }
 
-    if (this.state.form_data.name.split(" ").filter(e => e).length < 2) {
+    if (this.state.form_data && this.state.form_data.name.split(" ").filter(e => e).length < 2) {
         form_data.name_error = 'Enter valid full name';
     } 
 
@@ -179,17 +187,27 @@ class GroupHealthPlanPersonalDetails extends Component {
 
 
     if (canSubmitForm) {
+
+      let gender = '';
+      if(this.state.member_key !== 'self') {
+        gender = 'FEMALE';
+        if(['son', 'son1', 'son2', 'father', 'husband'].indexOf(this.state.member_key) !== -1) {
+          gender = 'MALE';
+        }
+      }
+
       let body = {
         [this.state.backend_key]: {
           "name": this.state.form_data.name,
           "dob": this.state.form_data.dob,
-          "gender": this.state.form_data.gender,
+          "gender": this.state.form_data.gender || gender,
           "height": this.state.form_data.height,
           "weight": this.state.form_data.weight,
           // "relation": this.state.member_key
         }
       }
 
+      
       this.updateLead(body);
     }
   }
@@ -276,7 +294,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         </div>
         <div className="InputField">
           <Input
-            disabled={true}
+            disabled={this.state.member_key === 'applicant' ? false : true}
             type="text"
             width="40"
             label="Date of birth (DD/MM/YYYY)"
@@ -292,7 +310,7 @@ class GroupHealthPlanPersonalDetails extends Component {
             onChange={this.handleChange()} />
         </div>
 
-        {this.state.member_key === 'self' &&
+        {(this.state.member_key === 'self' || this.state.member_key === 'applicant') &&
           <div className="InputField">
             <RadioWithoutIcon
               width="40"
@@ -306,7 +324,7 @@ class GroupHealthPlanPersonalDetails extends Component {
               value={this.state.form_data.gender || ''}
               onChange={this.handleChangeRadio('gender')} />
           </div>}
-        <div>
+       {this.state.member_key !== 'applicant' && <div>
           <DropdownInModal
             options={this.state.height_options}
             header_title="Select Height (cm)"
@@ -322,8 +340,8 @@ class GroupHealthPlanPersonalDetails extends Component {
             name="height"
             onChange={this.handleChange('height')}
           />
-        </div>
-        <div className="InputField">
+        </div>}
+       {this.state.member_key !== 'applicant' && <div className="InputField">
           <Input
             type="number"
             width="40"
@@ -335,7 +353,7 @@ class GroupHealthPlanPersonalDetails extends Component {
             helperText={this.state.form_data.weight_error}
             value={this.state.form_data.weight || ''}
             onChange={this.handleChange()} />
-        </div>
+        </div>}
         <ConfirmDialog parent={this} />
       </Container>
     );

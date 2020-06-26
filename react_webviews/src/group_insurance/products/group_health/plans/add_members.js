@@ -120,6 +120,9 @@ class GroupHealthPlanAddMembers extends Component {
         for(var kr in keys_to_reset) {
             ui_members[keys_to_reset[kr]] = false;
         }
+
+        ui_members.son_total = 0;
+        ui_members.daughter_total = 0;
         
 
         if(this.state.account_type === 'parents') {

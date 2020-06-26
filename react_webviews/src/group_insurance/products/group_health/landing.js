@@ -5,15 +5,17 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { health_providers } from '../../constants';
+import { health_providers, ghGetMember } from '../../constants';
 import HowToSteps from '../../../common/ui/HowToSteps';
 import Checkbox from 'material-ui/Checkbox';
+import { inrFormatDecimal, numDifferentiationInr, storageService } from 'utils/validators';
 import Grid from 'material-ui/Grid';
 import SVG from 'react-inlinesvg';
 import down_arrow from 'assets/down_arrow.svg';
 import up_arrow from 'assets/up_arrow.svg';
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+
 class GroupHealthLanding extends Component {
 
   constructor(props) {
@@ -25,12 +27,15 @@ class GroupHealthLanding extends Component {
       checked: true,
       offerImageData: [],
       whats_not_covered: [],
-      whats_covered: []
+      whats_covered: [],
+      quoteResume: {}
     }
   }
 
   componentWillMount() {
 
+
+    storageService().remove('groupHealthPlanData');
 
     let stepsContentMapper = {
       title: 'Why buy on ' + this.state.productName + '??',
@@ -77,24 +82,22 @@ class GroupHealthLanding extends Component {
     })
   }
 
-
   async componentDidMount() {
 
-    this.setState({
-         show_loader: false
-    });
     try {
-      const res = await Api.get('/api/ins_service/api/insurance/hdfcergo/policy/list')
+      const res = await Api.get('api/ins_service/api/insurance/hdfcergo/lead/get/quoteid')
 
       this.setState ({
           show_loader: false
       });
       var resultData = res.pfwresponse.result;
-      console.log(resultData);
-      if (res.pfwresponse.status_code === 200) {
 
+     
+      if (res.pfwresponse.status_code === 200) {
+        let lead = resultData.quote;
+        lead.member_base = ghGetMember(lead);
         this.setState({
-          resultData: resultData
+          quoteResume: lead
         })
 
 
@@ -166,8 +169,14 @@ class GroupHealthLanding extends Component {
   }
 
   handleResume = () => {
-    let state = `/group-insurance/group-health/${this.state.provider}/final-summary`;
-    this.navigate(state);
+
+    storageService().set('ghs_ergo_quote_id', this.state.quoteResume.id);
+    if(this.state.quoteResume.status === 'ready_to_pay') {
+      this.navigate('final-summary');
+    } else {
+      this.navigate(`personal-details/${this.state.quoteResume.member_base[0].key}`);
+    }
+    
   }
 
   render() {
@@ -207,7 +216,8 @@ class GroupHealthLanding extends Component {
             </Carousel>
           </div>
 
-          <div className="resume-card">
+          {this.state.quoteResume && this.state.quoteResume.id && 
+          <div className="resume-card" onClick={() => this.handleResume()}>
             <div className="rc-title">
             Complete your health protection 
             </div>
@@ -218,8 +228,8 @@ class GroupHealthLanding extends Component {
                       <img src={require(`assets/${this.state.providerData.logo_cta}`)} alt="" />
                   </div>
                   <div className="rc-tile-premium-data">
-                      <div className="rct-title">Silver smart plan</div>
-                      <div className="rct-subtitle">₹7,640</div>
+            <div className="rct-title">{this.state.quoteResume.plan_title}</div>
+            <div className="rct-subtitle">{inrFormatDecimal(this.state.quoteResume.total_amount)}</div>
                   </div>
 
                 </div>
@@ -232,10 +242,10 @@ class GroupHealthLanding extends Component {
             </div>
 
             <div className="rc-bottom flex-between">
-              <div className="rcb-content">Sum assured: ₹3 lacs</div>
-              <div className="rcb-content">Cover period: 1 year</div>
+              <div className="rcb-content">Sum assured: {numDifferentiationInr(this.state.quoteResume.sum_assured)}</div>
+              <div className="rcb-content">Cover period: {this.state.quoteResume.tenure} year</div>
             </div>
-          </div>
+          </div>}
 
           <div className="generic-page-title">
             Coverage for all
@@ -295,15 +305,20 @@ class GroupHealthLanding extends Component {
              {this.state.whats_not_covered_open && this.state.whats_not_covered.map(this.renderCoveredPoints)}
           </div>
 
-          <div className="generic-page-title">
+          <div className="generic-page-title" style={{margin: '20px 0 15px 0'}}>
             Why to have health insurance?
           </div>
 
-          <div className="horizontal-images-scroll">
-
+          <div className="his">
+            <div className="horizontal-images-scroll">
+              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs.svg`)} alt="" />
+              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs2.svg`)} alt="" />
+              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs3.svg`)} alt="" />
+              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs4.svg`)} alt="" />
+            </div>
           </div>
 
-          <HowToSteps baseData={this.state.stepsContentMapper} />
+          <HowToSteps style={{marginTop: 20}} baseData={this.state.stepsContentMapper} />
 
 
           <div className="generic-page-title">

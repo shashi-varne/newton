@@ -8,7 +8,6 @@ import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
 import Input from '../../../../common/ui/Input';
 import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
-import { relationshipOptionsGroupInsuranceAll } from '../../../constants';
 class GroupHealthPlanNomineeDetails extends Component {
 
     constructor(props) {
@@ -28,6 +27,57 @@ class GroupHealthPlanNomineeDetails extends Component {
 
     componentWillMount() {
         this.initialize();
+
+        let relationshipOptions = [
+            {
+                'name': 'SIBLING',
+                'value': 'SIBLING'
+            },
+            {
+                'name': 'CHILD',
+                'value': 'CHILD'
+            },
+            {
+                'name': 'NIECE',
+                'value': 'NIECE'
+            },
+            {
+                'name': 'GRANDPARENT',
+                'value': 'GRANDPARENT'
+            },
+            {
+                'name': 'GRANDCHILD',
+                'value': 'GRANDCHILD'
+            },
+            {
+                'name': 'BROTHER IN LAW',
+                'value': 'BROTHER_IN_LAW'
+            },
+            {
+                'name': 'SISTER IN LAW',
+                'value': 'SISTER_IN_LAW'
+            },
+            {
+                'name': 'NEPHEW',
+                'value': 'NEPHEW'
+            },
+            {
+                'name': 'PARENT',
+                'value': 'PARENT'
+            },
+            {
+                'name': 'SPOUSE',
+                'value': 'SPOUSE'
+            },
+            {
+                'name': 'OTHER',
+                'value': 'OTHER'
+            }
+        ]
+
+        this.setState({
+            relationshipOptions: relationshipOptions
+        })
     }
 
     onload = () => {
@@ -41,7 +91,6 @@ class GroupHealthPlanNomineeDetails extends Component {
         let lead = this.state.lead || {};
         let form_data = lead.nominee_account_key || {};
 
-        this.setRelationshipOptions('male');
         this.setState({
             form_data: form_data,
             lead: lead,
@@ -146,22 +195,6 @@ class GroupHealthPlanNomineeDetails extends Component {
         }
     }
 
-    setRelationshipOptions(proposer_gender) {
-        let options = [];
-        if (proposer_gender && proposer_gender.toLowerCase() === 'male') {
-            options = relationshipOptionsGroupInsuranceAll['male'];
-        } else if (proposer_gender && proposer_gender.toLowerCase() === 'female') {
-            options = relationshipOptionsGroupInsuranceAll['female'];
-        } else {
-            options = relationshipOptionsGroupInsuranceAll['male'];
-        }
-
-        this.setState({
-            relationshipOptions: options
-        })
-
-    }
-
     render() {
 
         return (
@@ -193,6 +226,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                     <div className="InputField">
                         <DropdownWithoutIcon
                             width="40"
+                            dataType="AOB"
                             options={this.state.relationshipOptions}
                             id="relation"
                             label="Relationship"

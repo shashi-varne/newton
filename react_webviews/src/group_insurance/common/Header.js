@@ -102,11 +102,11 @@ const Header = ({ classes, title, count, total, current, goBack, edit, type,
         </div>
       }
       {resetpage &&
-        <img className="pointer" onClick={handleReset}
-          alt=""
-          width={20}
-          src={restart}
-        />
+        <SVG
+        className="action-img-right-header" onClick={handleReset} width={20}
+        preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+        src={restart}
+      />
       }
 
       {filterPgae &&
