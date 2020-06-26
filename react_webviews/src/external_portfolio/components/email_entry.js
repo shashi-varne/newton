@@ -36,7 +36,7 @@ class email_entry extends Component {
 
   goBack = (params) => {
     console.log('here');
-    if (params.comingFrom === 'statement_not_received') {
+    if (params.comingFrom) {
       this.props.history.goBack();
     } else {
       nativeCallback({ action: 'exit', events: this.getEvents('back') });
