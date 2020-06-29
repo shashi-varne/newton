@@ -593,8 +593,7 @@ export function isFeatureEnabled(config, feature) {
     return true;
   }
 
-  // eslint-disable-next-line
-  if(feature === 'etli_download' && app === 'android' && parseInt(app_version) >= 999) {
+  if(feature === 'etli_download' && app === 'android' && parseInt(app_version, 10) >= 999) {
     return true;
   }
 
@@ -680,4 +679,10 @@ export function setHeights(data) {
     document.getElementsByClassName('Container')[0].style.height = body - HeaderHeight - foot - 40 + 'px';
   }
 
+}
+export function capitalize (string) {
+  if (!string) {
+    return;
+  }
+  return string.toLowerCase().replace(/(^|\s)[a-z]/g, function (f) { return f.toUpperCase(); })
 }

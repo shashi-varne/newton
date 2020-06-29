@@ -18,6 +18,7 @@ import IsipBIller from './isip';
 import HelpSupport from './help_support';
 import CommonLanding from './common/components/landing';
 import CommonRenderBenefits from './common/components/RenderBenefits';
+import Fhc from './fhc';
 
 class App extends Component {
   render() {
@@ -28,6 +29,7 @@ class App extends Component {
           <Route path="/group-insurance" component={GroupInsurance} />
           <Route path="/referral" component={Referral} />
           <Route path="/gold" component={Gold} />
+          <Route path="/fhc" component={Fhc} />
           <Route path="/mandate" component={Mandate} />
           <Route path="/mandate-otm" component={Mandate_OTM} />
           <Route path="/e-mandate" component={EMandate} />
