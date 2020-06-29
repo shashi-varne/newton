@@ -18,7 +18,11 @@ class StatementNotReceived extends Component {
   }
 
   goNext = (path) => {
-    this.navigate(path, { comingFrom: 'statement_not_received' });
+    if (path === 'statement_request') {
+      this.navigate(path, { exitToApp: true });      
+    } else {
+      this.navigate(path, { comingFrom: 'statement_not_received' });
+    }
   }
 
   goBack = () => {

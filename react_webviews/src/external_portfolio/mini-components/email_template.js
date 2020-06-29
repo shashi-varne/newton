@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Container from '../common/Container';
-import InfoBox from '../mini-components/InfoBox';
+import InfoBox from './InfoBox';
 
 class EmailTemplate extends Component {
   constructor(props) {

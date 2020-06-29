@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import Container from '../common/Container';
-import EmailTemplate from './email_template';
-import { Button } from 'material-ui';
+import EmailTemplate from '../mini-components/email_template';
 
 
 class EmailExampleView extends Component {

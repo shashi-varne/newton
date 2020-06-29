@@ -13,7 +13,7 @@ class EmailNotReceived extends Component {
   }
 
   goNext = () => {
-    this.navigate('statement_request', { comingFrom: 'email_not_received' });
+    this.navigate('statement_request', { exitToApp: true });
   }
 
   goBack = () => {

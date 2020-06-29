@@ -35,3 +35,24 @@ export const dummyHoldings = [{
   name: 'HDFC BANK LTD.',
   value: '3',
 }];
+
+export const dummyAllocations = [
+  {
+    "id": "equity",
+    "label": "Equity",
+    "value": 33,
+    "color": "#94c5ff"
+  },
+  {
+    "id": "debt",
+    "label": "Debt",
+    "value": 33,
+    "color": "#68aeff"
+  },
+  {
+    "id": "hybrid",
+    "label": "Hybrid",
+    "value": 33,
+    "color": "#dbebff"
+  },
+];

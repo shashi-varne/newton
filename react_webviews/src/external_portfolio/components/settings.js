@@ -15,14 +15,14 @@ export default class Settings extends Component {
         subtitle="Resync to track the recent transactions in your portfolio"
         buttonTitle="Add new email"
       >
+        <EmailExpand parent={this} comingFrom="settings"></EmailExpand>
+        <EmailExpand parent={this} comingFrom="settings"></EmailExpand>
+        {/* <EmailExpand></EmailExpand>
         <EmailExpand></EmailExpand>
         <EmailExpand></EmailExpand>
         <EmailExpand></EmailExpand>
         <EmailExpand></EmailExpand>
-        <EmailExpand></EmailExpand>
-        <EmailExpand></EmailExpand>
-        <EmailExpand></EmailExpand>
-        <EmailExpand></EmailExpand>
+        <EmailExpand></EmailExpand> */}
       </Container>
     );
   }

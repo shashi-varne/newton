@@ -30,12 +30,16 @@ class email_entry extends Component {
     if (!validateEmail(this.state.email)) {
       this.setState({ email_error: 'Please enter a valid email' });
     } else {
-      this.navigate('statement_request', { comingFrom: 'email_entry'});
+      const { params } = this.props.location;
+      this.navigate(
+        'statement_request',
+        { exitToApp: !!(params || {}).comingFrom },
+        true
+      );
     }
   }
 
   goBack = (params) => {
-    console.log('here');
     if (params.comingFrom) {
       this.props.history.goBack();
     } else {

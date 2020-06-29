@@ -6,7 +6,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { Button } from 'material-ui';
 import { navigate } from '../common/commonFunctions';
-import EmailRegenerationStepper from './Stepper';
+import EmailRequestSteps from './EmailRequestSteps';
 
 const theme = createMuiTheme({
   overrides: {
@@ -49,6 +49,7 @@ export default class EmailExpand extends Component {
   }
 
   render() {
+    const { parent, comingFrom } = this.props;
     return (
       <MuiThemeProvider theme={theme}>
         <div className="email-expand-container">
@@ -70,15 +71,15 @@ export default class EmailExpand extends Component {
                   label: 'gen-statement-btn-label'
                 }}
                 size="small"
-                onClick={() => this.goNext('statement_request')}
+                onClick={() => parent.navigate('statement_request', { comingFrom })}
               >
                 Resync
               </Button>
               <div id="resync-update-text">Last updated: Jan 30, 2019</div>
               <div className="ext-pf-subheader">
                 <h4>Statement request sent</h4>
-                <EmailRegenerationStepper
-                  emailLinkTrigger={() => this.navigate('email_entry', { comingFrom: 'settings'})}
+                <EmailRequestSteps
+                  parent={parent}
                   classes={{ emailBox: 'info-box-email-expand' }}
                 />
               </div>

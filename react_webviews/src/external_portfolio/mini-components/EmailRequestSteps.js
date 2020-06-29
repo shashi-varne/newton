@@ -59,7 +59,7 @@ function getSteps() {
   return ['Wait for CAS email', 'Forward the email', 'View portfolio instantly'];
 }
 
-export default class EmailRegenerationStepper extends Component {
+export default class EmailRequestSteps extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -72,18 +72,34 @@ export default class EmailRegenerationStepper extends Component {
   }
 
   renderStep1 = () => {
+    const { parent, emailLinkClick } = this.props;
+    if (!parent || !emailLinkClick) {
+      return (
+        <span style={{color: 'red'}}>
+          Error: Please provide parent or emailLinkClick function props
+        </span>
+      );
+    }
+    const handleEmailLinkClick = () => {
+      if (parent && parent.navigate) {
+        return parent.navigate('email_example_view');
+      }
+      return emailLinkClick();
+    }
     return (<Fragment>
       In a few minutes, you’ll receive a CAS email on your email ID
 
       <div
-        className="email_example_link" onClick={this.props.emailLinkTrigger}>
+        className="email_example_link"
+        onClick={handleEmailLinkClick}
+      >
         What does the CAS email look like?
       </div>
     </Fragment>);
   }
 
   renderStep2 = () => {
-    const { classes } = this.props;
+    let classes = this.props.classes || {};
     return (<Fragment>
       Please forward the email (and <b>not the statement</b> ) to
       <InfoBox

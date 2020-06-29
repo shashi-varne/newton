@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../common/Container';
 import mail_icn_f from '../../assets/fisdom/ic_mail.svg';
 import mail_icn_m from '../../assets/myway/ic_mail.svg';
-import EmailRegenerationStepper from '../mini-components/Stepper';
+import EmailRequestSteps from '../mini-components/EmailRequestSteps';
 import { getConfig } from '../../utils/functions';
 import RegenerateOptsPopup from '../mini-components/RegenerateOptsPopup';
 import InfoBox from '../mini-components/InfoBox';
@@ -42,12 +42,7 @@ class StatementRequest extends Component {
   }
 
   goBack = (params = {}) => {
-    if (!params.comingFrom ||
-      [ 'email_entry',
-        'email_not_received',
-        'statement_not_received',
-      ].includes(params.comingFrom)
-    ) {
+    if (params.exitToApp) {
       nativeCallback({ action: 'exit', events: this.getEvents('back') });
     } else {
       this.props.history.goBack();
@@ -78,7 +73,7 @@ class StatementRequest extends Component {
         <div className="ext-pf-subheader">
           <h4>What's next?</h4>
         </div>
-        <EmailRegenerationStepper
+        <EmailRequestSteps
           generateBtnClick={this.generateStatement}
           emailLinkTrigger={() => this.navigate('email_example_view')}
         />
