@@ -135,6 +135,10 @@ class GroupHealthPlanIsPed extends Component {
         
         let body = {};
         let next_state = '';
+        body['self_account_key'] = {
+            ped_exists: 'false'
+        };
+        
         for (var i in member_base) {
             let key = member_base[i].key;
             let backend_key = member_base[i].backend_key;
@@ -150,11 +154,15 @@ class GroupHealthPlanIsPed extends Component {
             }
         }
 
-        if (form_data.is_ped === 'YES' && !next_state) {
+        if (this.state.lead.account_type !== 'self' && form_data.is_ped === 'YES' && !next_state) {
             canSubmitForm = false;
             toast('Please select atleast one');
         }
 
+        if (this.state.lead.account_type === 'self' && form_data.is_ped === 'YES') {
+            next_state = 'self';
+            body['self_account_key'].ped_exists = 'true';
+        }
 
         if (canSubmitForm) {
 
@@ -213,6 +221,9 @@ class GroupHealthPlanIsPed extends Component {
     };
 
     renderMembers = (props, index) => {
+        if(props.key === 'applicant') {
+            return;
+        }
         return (
             <div key={index}>
                 <PlusMinusInput

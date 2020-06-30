@@ -16,11 +16,13 @@ export async function initialize() {
         provider: provider,
         groupHealthPlanData: groupHealthPlanData,
         providerData: providerData,
-        plan_selected: groupHealthPlanData ? groupHealthPlanData.plan_selected : {}
+        plan_selected: groupHealthPlanData && groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected : {}
     })
 
 
-    let lead = {};
+    let lead = {
+        member_base: []
+    };
 
     if (this.state.get_lead) {
         try {
@@ -49,7 +51,7 @@ export async function initialize() {
                     if (this.onload && !this.state.ctaWithProvider) {
                         this.onload();
                     }
-        
+
                 })
             } else {
                 toast(resultData.error || resultData.message
@@ -58,7 +60,9 @@ export async function initialize() {
         } catch (err) {
             console.log(err)
             this.setState({
-                show_loader: false
+                show_loader: false,
+                lead: lead,
+                common_data: {}
             });
             toast('Something went wrong');
         }
@@ -67,10 +71,15 @@ export async function initialize() {
     if (this.state.ctaWithProvider) {
 
 
-        let leftTitle, leftSubtitle = '';
+        let leftTitle, leftSubtitle, sum_assured, tenure, base_premium, tax_amount, total_amount = '';
         if (this.state.get_lead) {
             leftTitle = lead.plan_title || '';
-            leftSubtitle = inrFormatDecimal(lead.premium);
+            leftSubtitle = inrFormatDecimal(lead.total_amount);
+            sum_assured = lead.sum_assured;
+            tenure = lead.tenure;
+            base_premium = lead.premium;
+            tax_amount = lead.tax_amount;
+            total_amount = lead.total_amount;
 
         } else {
             let premium_data = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.premium_data.WF : [];
@@ -95,23 +104,22 @@ export async function initialize() {
 
         let confirmDialogData = {
             buttonData: {
-                leftTitle: leftTitle,
-                leftSubtitle: leftSubtitle,
-                leftArrow: 'down',
-                provider: providerData.key,
-                logo: providerData.logo_cta
+                ...bottomButtonData,
+                leftArrow: 'down'
             },
             buttonTitle: "OK",
             content1: [
                 {
                     'name': 'Basic premium ', 'value':
-                        inrFormatDecimal(10000)
+                        inrFormatDecimal(base_premium)
                 },
-                { 'name': 'GST & other taxes', 'value': inrFormatDecimal(10000) }
+                { 'name': 'GST & other taxes', 'value': inrFormatDecimal(tax_amount) }
             ],
             content2: [
-                { 'name': 'Total', 'value': inrFormatDecimal(10000) }
-            ]
+                { 'name': 'Total', 'value': inrFormatDecimal(total_amount) }
+            ],
+            sum_assured: sum_assured,
+            tenure: tenure
         }
 
 
@@ -141,40 +149,45 @@ export async function updateLead(body, quote_id) {
     try {
 
 
-        if(!quote_id) {
+        if (!quote_id) {
             quote_id = storageService().get('ghs_ergo_quote_id');
         }
 
         this.setState({
-          show_loader: true
+            show_loader: true
         });
 
-       
         const res = await Api.post('/api/ins_service/api/insurance/hdfcergo/lead/update?quote_id=' + quote_id,
-         body);
+            body);
 
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
-          this.navigate(this.state.next_state);
+            this.navigate(this.state.next_state);
         } else {
-          this.setState({
-            show_loader: false
-          });
-          toast(resultData.error || resultData.message
-            || 'Something went wrong');
+            this.setState({
+                show_loader: false
+            });
+            if (resultData.bmi_check) {
+                this.setState({
+                    openBmiDialog: true
+                })
+            } else {
+                toast(resultData.error || resultData.message
+                    || 'Something went wrong');
+            }
         }
-      } catch (err) {
+    } catch (err) {
         console.log(err)
         this.setState({
-          show_loader: false
+            show_loader: false
         });
         toast('Something went wrong');
-      }
+    }
 }
 
-export function navigate (pathname, data ={}) {
+export function navigate(pathname, data = {}) {
 
-    if(this.props.edit || data.edit) {
+    if (this.props.edit || data.edit) {
         this.props.history.push({
             pathname: pathname,
             search: getConfig().searchParams
@@ -185,5 +198,5 @@ export function navigate (pathname, data ={}) {
             search: getConfig().searchParams
         });
     }
-   
+
 }

@@ -152,6 +152,16 @@ class GroupHealthPlanNomineeDetails extends Component {
             }
         }
 
+       
+
+        if (this.state.form_data && (this.state.form_data.name || '').split(" ").filter(e => e).length < 2) {
+            form_data.name_error = 'Enter valid full name';
+        } 
+
+        this.setState({
+            form_data: form_data
+        })
+
         let canSubmitForm = true;
         for (var key in form_data) {
             if (key.indexOf('error') >= 0) {
@@ -161,10 +171,6 @@ class GroupHealthPlanNomineeDetails extends Component {
                 }
             }
         }
-
-        this.setState({
-            form_data: form_data
-        })
 
         if (canSubmitForm) {
             let body = {

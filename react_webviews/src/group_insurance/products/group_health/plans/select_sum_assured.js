@@ -26,14 +26,11 @@ class GroupHealthPlanSelectSumAssured extends Component {
     }
 
     async componentDidMount() {
-
         this.setState({
             selectedIndex: this.state.groupHealthPlanData.selectedIndexSumAssured || 0
         }, () => {
             this.updateBottomPremium();
         })
-
-
     }
 
     navigate = (pathname) => {
@@ -64,9 +61,18 @@ class GroupHealthPlanSelectSumAssured extends Component {
         let groupHealthPlanData = this.state.groupHealthPlanData;
         groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
         groupHealthPlanData.post_body.sum_assured = this.state.premium_data[this.state.selectedIndex].sum_assured;
+        
+
+        let total_member = groupHealthPlanData.post_body.mem_info.adult + groupHealthPlanData.post_body.mem_info.child;
+
+        if(total_member === 1) {
+            groupHealthPlanData.type_of_plan = 'WF';
+            groupHealthPlanData.post_body.type_of_plan = 'WF';
+        }
+
         storageService().setObject('groupHealthPlanData', groupHealthPlanData);
 
-        if(groupHealthPlanData.account_type === 'self') {
+        if(groupHealthPlanData.account_type === 'self' || total_member === 1) {
             this.navigate('plan-select-cover-period');
         } else {
             this.navigate('plan-select-floater');
@@ -117,7 +123,10 @@ class GroupHealthPlanSelectSumAssured extends Component {
             >
                 <div className="common-top-page-subtitle flex-between-center">
                     This is the amount you will receive for your claim
-                 <img src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
+                 <img 
+                 className="tooltip-icon"
+                 data-tip="In the last 10 years, the average cost per hospitalisation for urban patients (in India) has increased by about 176%. Hence, we recommend to have adequate coverage to manage health expenses."
+                 src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
                 </div>
                 <div className="group-health-plan-select-sum-assured">
                     <div className="generic-choose-input">

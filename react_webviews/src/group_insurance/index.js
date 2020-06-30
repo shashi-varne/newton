@@ -131,7 +131,7 @@ import HomeInsuranceForm from './products/home_insurance/general/form';
 
 /*******************Group  Health ******************/
 import GroupHealthLanding from './products/group_health/landing';
-import GroupHealthSelectInsureType from './products/group_health/insure_type';
+import GroupHealthSelectInsureType from './products/group_health/plans/insure_type';
 import GroupHealthPlanDob from './products/group_health/plans/dob';
 import GroupHealthPlanAddMembers from './products/group_health/plans/add_members';
 import GroupHealthPlanSelectCity from './products/group_health/plans/select_city';
@@ -166,6 +166,8 @@ import RenderCoverClass from './ui_components/general_insurance/cover';
 import RenderNotCoverClass from './ui_components/general_insurance/notcover';
 import RenderClaimClass from './ui_components/general_insurance/claim';
 
+import Tooltip from '../common/ui/Tooltip';
+
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -199,6 +201,7 @@ const Insurance = (props) => {
       <MuiThemeProvider theme={theme}>
         <ScrollToTop />
         <ToastContainer autoClose={3000} />
+        <Tooltip />
         <Switch>
           <Route exact path={`${url}`} component={Landing} />
 

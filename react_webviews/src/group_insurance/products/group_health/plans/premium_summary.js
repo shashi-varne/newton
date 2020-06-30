@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../../../common/Container';
 
 import { nativeCallback } from 'utils/native_callback';
-import {  ghGetMember } from '../../../constants';
+import { ghGetMember } from '../../../constants';
 import { storageService, inrFormatDecimal, numDifferentiationInr } from 'utils/validators';
 import { initialize } from '../common_data';
 import BottomInfo from '../../../../common/ui/BottomInfo';
@@ -16,11 +16,12 @@ class GroupHealthPlanPremiumSummary extends Component {
         this.state = {
             premium_data: [],
             plan_selected_final: {},
-            final_dob_data: []
+            final_dob_data: [],
+            show_loader: true,
+            plan_selected: {}
         }
 
         this.initialize = initialize.bind(this);
-
     }
 
 
@@ -29,7 +30,20 @@ class GroupHealthPlanPremiumSummary extends Component {
     }
 
     async componentDidMount() {
-        let groupHealthPlanData = this.state.groupHealthPlanData;
+
+        let groupHealthPlanData = this.state.groupHealthPlanData || {};
+        let group_health_landing = '/group-insurance/group-health/landing';
+
+        if (!groupHealthPlanData.post_body) {
+            this.navigate(group_health_landing);
+            return;
+        } else {
+            this.setState({
+                show_loader: false
+            })
+        }
+
+
         let post_body = groupHealthPlanData.post_body;
 
         this.setState({
@@ -72,6 +86,7 @@ class GroupHealthPlanPremiumSummary extends Component {
             if (res.pfwresponse.status_code === 200) {
                 let lead = resultData.lead;
                 lead.member_base = ghGetMember(lead);
+                storageService().remove('groupHealthPlanData');
                 storageService().set('ghs_ergo_quote_id', lead.id);
                 this.navigate('personal-details/' + lead.member_base[0].key);
             } else {
@@ -145,12 +160,11 @@ class GroupHealthPlanPremiumSummary extends Component {
                             Premium details
                         </div>
 
-                        <div className="flex-between pi-tile">
-                            <div className="pi-tile-left">Individual premium</div>
-                        </div>
-
                         {this.state.type_of_plan === 'NF' &&
                             <div>
+                                <div className="flex-between pi-tile">
+                                    <div className="pi-tile-left">Individual premium</div>
+                                </div>
                                 {this.state.final_dob_data.map(this.renderIndPremium)}
                                 <div className="generic-hr"></div>
                             </div>
@@ -159,7 +173,7 @@ class GroupHealthPlanPremiumSummary extends Component {
                             <div className="pi-tile-left">Base premium</div>
                             <div className="pi-tile-right">{inrFormatDecimal(this.state.plan_selected_final.base_premium)}</div>
                         </div>
-                        
+
 
                         {this.state.plan_selected_final.total_discount &&
                             <div className="flex-between pi-tile">

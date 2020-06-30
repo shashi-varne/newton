@@ -75,8 +75,16 @@ class GroupHealthPlanFinalSummary extends Component {
             let member = Object.assign({}, member_base[i]);
 
             let obj = {
-                title: `${capitalizeFirstLetter(member.key)}'s details (insured ${i + 1})`,
+                title: `${capitalizeFirstLetter(member.key)}'s details ${member_base.length > 1 ?  ('(insured ' + (i+1) + ')') : ''}`,
                 edit_state: `/group-insurance/group-health/${this.state.provider}/edit-personal-details/${member.key}`
+            }
+
+            if(member.key === 'applicant') {
+                obj.title = 'Applicant details';
+            }
+
+            if(lead.account_type === 'self') {
+                obj.title = 'Personal details';
             }
 
             let info = {};
@@ -85,6 +93,10 @@ class GroupHealthPlanFinalSummary extends Component {
             for (var pc in personal_details_to_copy) {
                 info = Object.assign({}, personal_details_to_copy[pc]);
                 info.subtitle = member[info.key];
+
+                if(member.key === 'applicant' && info.key === 'name') {
+                    info.title = 'Applicant name';
+                }
                 data.push(info);
             }
 
@@ -305,21 +317,40 @@ class GroupHealthPlanFinalSummary extends Component {
 
 
     renderMembertop = (props, index) => {
-        return (
-            <div className="member-tile" key={index}>
-                <div className="mt-left">
-                    <img src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" />
-                </div>
-                <div className="mt-right">
-                    <div className="mtr-top">
-                        Insured {index + 1} name
+        if(props.key === 'applicant') {
+            return (
+                <div className="member-tile" key={index}>
+                    <div className="mt-left">
+                        <img src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" />
                     </div>
-                    <div className="mtr-bottom">
-                        {props.name} ({props.relation.toLowerCase()})
+                    <div className="mt-right">
+                        <div className="mtr-top">
+                            Applicant name
+                        </div>
+                        <div className="mtr-bottom">
+                            {props.name}
+                        </div>
                     </div>
                 </div>
-            </div>
-        );
+            );
+        } else {
+            return (
+                <div className="member-tile" key={index}>
+                    <div className="mt-left">
+                        <img src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" />
+                    </div>
+                    <div className="mt-right">
+                        <div className="mtr-top">
+                            Insured {index + 1} name
+                        </div>
+                        <div className="mtr-bottom">
+                            {props.name} ({props.relation.toLowerCase()})
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+       
     }
 
     renderAccordiansubData = (props, index) => {
@@ -430,7 +461,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
 
         try {
-            const res = await Api.get('/api/ins_service/api/insurance/hdfcergo/lead/cancel/6216331653283840')
+            const res = await Api.get(`/api/ins_service/api/insurance/hdfcergo/lead/cancel/${this.state.quote_id}`)
 
             this.setState({
                 show_loader: false
@@ -440,6 +471,9 @@ class GroupHealthPlanFinalSummary extends Component {
             console.log(resultData);
             if (res.pfwresponse.status_code === 200) {
 
+                storageService().remove('groupHealthPlanData');
+                let next_state = `/group-insurance/group-health/${this.state.provider}/insure-type`;
+                this.navigate(next_state);
                 this.setState({
                     resultData: resultData
                 })

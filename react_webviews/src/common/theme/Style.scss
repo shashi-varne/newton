@@ -918,6 +918,20 @@ input#pan {
     align-items: center;
   }
 
+  .generic-page-button-small-with-back {
+    background: var(--secondary);
+    font-size: 12px;
+    font-weight: 700;
+    border: 1px solid;
+    width: fit-content;
+    padding: 7px 20px 7px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: white;
+  }
+
   .action-img-right-header {
     width: 17px;
     position: absolute;

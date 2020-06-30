@@ -4,12 +4,16 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { health_providers, genderOptions } from '../../../constants';
-import { calculateAge, toFeet, capitalizeFirstLetter } from 'utils/validators';
+import { calculateAge, toFeet, capitalizeFirstLetter, formatDate } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import DropdownInModal from '../../../../common/ui/DropdownInModal';
 import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
+import Dialog, {
+  DialogContent
+} from 'material-ui/Dialog';
+
 class GroupHealthPlanPersonalDetails extends Component {
 
   constructor(props) {
@@ -20,19 +24,19 @@ class GroupHealthPlanPersonalDetails extends Component {
       form_data: {},
       ctaWithProvider: true,
       show_loader:true,
-      get_lead: true
+      get_lead: true,
+      openBmiDialog: false
     }
     this.initialize = initialize.bind(this);
     this.updateLead = updateLead.bind(this);
   }
 
   onload = () => {
-    
+
     let lead = this.state.lead || {};
     console.log(lead);
     let member_base = lead.member_base;
     let member_key = this.props.match.params.member_key;
-    console.log(member_key);
 
     let header_title = `${capitalizeFirstLetter(member_key)}'s details`;
     let header_subtitle = '';
@@ -101,7 +105,8 @@ class GroupHealthPlanPersonalDetails extends Component {
       show_loader: false,
       header_title: header_title,
       header_subtitle: header_subtitle,
-      selectedIndex: selectedIndex
+      selectedIndex: selectedIndex,
+      height: ''
     })
   }
 
@@ -118,11 +123,16 @@ class GroupHealthPlanPersonalDetails extends Component {
 
   handleChange = name => event => {
 
+
+    var input = document.getElementById('dob');
+    input.onkeyup = formatDate;
+
     let form_data = this.state.form_data;
 
     if (!name) {
       name = event.target.name;
     }
+
 
     if (name === 'height') {
       this.setState({
@@ -130,8 +140,11 @@ class GroupHealthPlanPersonalDetails extends Component {
       }, () => {
         form_data[name] = this.state.height_options[this.state.selectedIndex].value;
         form_data[name + '_error'] = '';
-      });
 
+        this.setState({
+          height : this.state.height_options[this.state.selectedIndex].value
+        })
+      });
 
 
     } else {
@@ -167,7 +180,7 @@ class GroupHealthPlanPersonalDetails extends Component {
       }
     }
 
-    if (this.state.form_data && this.state.form_data.name.split(" ").filter(e => e).length < 2) {
+    if (this.state.form_data && (this.state.form_data.name || '').split(" ").filter(e => e).length < 2) {
         form_data.name_error = 'Enter valid full name';
     } 
 
@@ -198,11 +211,11 @@ class GroupHealthPlanPersonalDetails extends Component {
 
       let body = {
         [this.state.backend_key]: {
-          "name": this.state.form_data.name,
-          "dob": this.state.form_data.dob,
+          "name": this.state.form_data.name || '',
+          "dob": this.state.form_data.dob || '',
           "gender": this.state.form_data.gender || gender,
-          "height": this.state.form_data.height,
-          "weight": this.state.form_data.weight,
+          "height": this.state.form_data.height || '',
+          "weight": this.state.form_data.weight || '',
           // "relation": this.state.member_key
         }
       }
@@ -232,7 +245,8 @@ class GroupHealthPlanPersonalDetails extends Component {
 
   handleClose = () => {
     this.setState({
-      openConfirmDialog: false
+      openConfirmDialog: false,
+      openBmiDialog: false
     });
 
   }
@@ -259,6 +273,47 @@ class GroupHealthPlanPersonalDetails extends Component {
     })
 
   };
+
+  renderBmiDialog = () => {
+    return (
+      <Dialog
+        id="bottom-popup"
+        open={this.state.openBmiDialog || false}
+        onClose={this.handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <div className="group-health-bmi-dialog" id="alert-dialog-description">
+
+            <div className="top-content flex-between">
+              <div className="generic-page-title">
+                Sorry, policy can't be issued!
+              </div>
+              <img className=""
+                src={require(`assets/${this.state.productName}/ic_medical_checkup.svg`)} alt="" />
+            </div>
+            <div className="content-mid">
+              We are not able to proceed with this application as the insured BMI* is greater than 40.
+            </div>
+
+            <div className="content-bottom">
+              *Body mass index (BMI) is a measure of body fat based on height and weight
+            </div>
+
+            <div className="actions flex-between">
+              <div className="generic-page-button-small" onClick={this.handleClose}>
+                CHANGE DETAILS
+              </div>
+              <div className="generic-page-button-small-with-back">
+                CHANGE INSURED
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog >
+    );
+  }
 
   render() {
     let currentDate = new Date().toISOString().slice(0, 10);
@@ -326,6 +381,7 @@ class GroupHealthPlanPersonalDetails extends Component {
           </div>}
        {this.state.member_key !== 'applicant' && <div>
           <DropdownInModal
+            parent={this}
             options={this.state.height_options}
             header_title="Select Height (cm)"
             cta_title="SAVE"
@@ -355,6 +411,7 @@ class GroupHealthPlanPersonalDetails extends Component {
             onChange={this.handleChange()} />
         </div>}
         <ConfirmDialog parent={this} />
+        {this.renderBmiDialog()}
       </Container>
     );
   }

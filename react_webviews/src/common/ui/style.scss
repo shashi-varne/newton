@@ -11,6 +11,7 @@
 .RadioButton.checked label {
   color: #fff;
   border: 1px solid;
+  width: auto !important;
 }
 .MuiDialogContent-root:first-child {
   padding-top: 24px !important;

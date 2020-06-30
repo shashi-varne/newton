@@ -270,7 +270,10 @@ class GroupHealthPlanDetails extends Component {
                             0% copay, assured 100% cashless treatment
                         </div>
                         <div className="ci-right">
-                            <img src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
+                            <img 
+                            className="tooltip-icon"
+                            data-tip={this.state.plan_selected.recovery_benefit_content}
+                            src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
                         </div>
                     </div>
 

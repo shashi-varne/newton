@@ -5,8 +5,10 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { health_providers } from '../../../constants';
 import BottomInfo from '../../../../common/ui/BottomInfo';
-import { storageService, calculateAge, isValidDate, IsFutureDate } from 'utils/validators';
+import { storageService, calculateAge, isValidDate, IsFutureDate, formatDate } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
+import { initialize } from '../common_data';
+
 
 class GroupHealthPlanDob extends Component {
 
@@ -19,23 +21,28 @@ class GroupHealthPlanDob extends Component {
             header_title: 'Your date of birth',
             final_dob_data: []
         }
+
+        this.initialize = initialize.bind(this);
     }
 
     componentWillMount() {
-        this.setState({
-            providerData: health_providers[this.state.provider],
-            header_title: this.state.groupHealthPlanData.account_type === 'self' ? 'Your date of birth' : 'Date of birth details'
-        })
+        this.initialize();
     }
 
 
     async componentDidMount() {
         let groupHealthPlanData = this.state.groupHealthPlanData;
+        console.log(groupHealthPlanData);
+
+        this.setState({
+            providerData: health_providers[this.state.provider],
+            header_title: groupHealthPlanData.account_type === 'self' ? 'Your date of birth' : 'Date of birth details'
+        })
 
         let dob_data = [
             {
                 'key': 'self',
-                'label': this.state.groupHealthPlanData.account_type === 'self' ? 'Date of birth (DD/MM/YYYY)' : "Your date of birth (DD/MM/YYYY)",
+                'label': groupHealthPlanData.account_type === 'self' ? 'Date of birth (DD/MM/YYYY)' : "Your date of birth (DD/MM/YYYY)",
                 'value': '',
                 'backend_key': 'self_account_key'
             },
@@ -99,21 +106,24 @@ class GroupHealthPlanDob extends Component {
         let final_dob_data = [];
 
 
+        let ui_members = groupHealthPlanData.ui_members || {};
         for (var i = 0; i < dob_data.length; i++) {
             let key = dob_data[i].key;
-            if (groupHealthPlanData.ui_members[key]) {
-                dob_data[i].value = groupHealthPlanData.ui_members[key + '_dob'] || '';
+            if (ui_members[key]) {
+                dob_data[i].value = ui_members[key + '_dob'] || '';
                 final_dob_data.push(dob_data[i]);
             }
         }
        
         this.setState({
-            final_dob_data: final_dob_data
+            final_dob_data: final_dob_data,
+            dob_data: dob_data
         })
 
     }
 
     handleChange = index => event => {
+
 
         var final_dob_data = this.state.final_dob_data;
         let name = final_dob_data[index].key;
@@ -128,46 +138,7 @@ class GroupHealthPlanDob extends Component {
         }
 
         var input = document.getElementById(name);
-
-        input.onkeyup = function (event) {
-            var key = event.keyCode || event.charCode;
-
-            var thisVal;
-
-            let slash = 0;
-            for (var i = 0; i < event.target.value.length; i++) {
-                if (event.target.value[i] === '/') {
-                    slash += 1;
-                }
-            }
-
-            if (slash <= 1 && key !== 8 && key !== 46) {
-                var strokes = event.target.value.length;
-
-                if (strokes === 2 || strokes === 5) {
-                    thisVal = event.target.value;
-                    thisVal += '/';
-                    event.target.value = thisVal;
-                }
-                // if someone deletes the first slash and then types a number this handles it
-                if (strokes >= 3 && strokes < 5) {
-                    thisVal = event.target.value;
-                    if (thisVal.charAt(2) !== '/') {
-                        var txt1 = thisVal.slice(0, 2) + "/" + thisVal.slice(2);
-                        event.target.value = txt1;
-                    }
-                }
-                // if someone deletes the second slash and then types a number this handles it
-                if (strokes >= 6) {
-                    thisVal = event.target.value;
-
-                    if (thisVal.charAt(5) !== '/') {
-                        var txt2 = thisVal.slice(0, 5) + "/" + thisVal.slice(5);
-                        event.target.value = txt2;
-                    }
-                }
-            };
-        }
+        input.onkeyup = formatDate;
 
         final_dob_data[index].value = event.target.value;
         final_dob_data[index].error = errorDate;
@@ -193,7 +164,7 @@ class GroupHealthPlanDob extends Component {
         let canProceed = true;
         let final_dob_data = this.state.final_dob_data;
         let groupHealthPlanData = this.state.groupHealthPlanData;
-        let ui_members = groupHealthPlanData.ui_members;
+        let ui_members = groupHealthPlanData.ui_members || {};
 
         for (var i = 0; i < final_dob_data.length; i++) {
 
@@ -227,14 +198,22 @@ class GroupHealthPlanDob extends Component {
             final_dob_data: final_dob_data
         })
 
+        let post_body = groupHealthPlanData.post_body;
 
+        // reset data
+
+        let dob_data_base = this.state.dob_data;
+        for (var mem in dob_data_base) {
+            let backend_key = dob_data_base[mem].backend_key;
+            post_body[backend_key] = {};
+        }
+       
 
         if(canProceed) {
             
             groupHealthPlanData.ui_members = ui_members;
             groupHealthPlanData.final_dob_data = final_dob_data;
-            let post_body = groupHealthPlanData.post_body;
-
+            
             for (var j in final_dob_data) {
 
                 let key = final_dob_data[j].key;

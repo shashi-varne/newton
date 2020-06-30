@@ -607,6 +607,15 @@ export function ghGetMember(lead) {
 
   let member_base = [];
 
+  let allowed_as_per_account = {
+    'self': ['self_account_key'],
+    'family': ['spouse_account_key', 'child_account1_key',
+    'child_account2_key'],
+    'selfandfamily': ['self_account_key', 'spouse_account_key', 'child_account1_key',
+    'child_account2_key'],
+    'parents': ['parent_account1_key', 'parent_account2_key']
+  }
+
 
   let total_son = 0;
   let total_daughter = 0;
@@ -630,7 +639,10 @@ export function ghGetMember(lead) {
   for (var i in backend_keys) {
     let key = backend_keys[i];
 
-    if(lead[key] && lead[key].dob) {
+    let allowed_mapper = allowed_as_per_account[lead.account_type];
+
+    if(allowed_mapper.indexOf(key) !== -1 &&
+     lead[key] && lead[key].dob) {
       let obj = lead[key];
       obj.backend_key = key;
 
@@ -661,7 +673,7 @@ export function ghGetMember(lead) {
     }
   }
 
-  if(lead.account_type === 'parents') {
+  if(lead.account_type === 'parents' || lead.account_type === 'family') {
     let obj = lead['self_account_key'];
     obj.backend_key = 'self_account_key';
     obj.key = 'applicant';

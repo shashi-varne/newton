@@ -2,11 +2,9 @@ import React, { Component } from 'react';
 import Container from '../../../common/Container';
 
 import { nativeCallback } from 'utils/native_callback';
-// import { getConfig } from 'utils/functions';
 
 import { storageService, inrFormatDecimal } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
-import Tooltip from '../../../../common/ui/Tooltip';
 
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
@@ -91,21 +89,20 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
 
     handleClick = () => {
         let groupHealthPlanData = this.state.groupHealthPlanData;
-        let tenure = this.state.premium_data[this.state.selectedIndex].tenure;
-        groupHealthPlanData.tenure = tenure;
         let post_body = groupHealthPlanData.post_body;
 
-        let premium_selected = this.state.premium_data[this.state.selectedIndex];
-        groupHealthPlanData.plan_selected_final = premium_selected;
-        post_body.tenure = premium_selected.tenure;
-        post_body.tax_amount = premium_selected.gst_tax;
-        post_body.base_premium = premium_selected.base_premium;
-        post_body.premium = premium_selected.base_premium;
-        post_body.total_amount = premium_selected.total_amount;
-        post_body.discount_amount = premium_selected.total_discount;
-        post_body.insured_pattern = premium_selected.insured_pattern;
-        post_body.plan_code = groupHealthPlanData.plan_selected.plan_code;
-        groupHealthPlanData.post_body.tenure  = tenure;
+        let plan_selected_final = this.state.premium_data[this.state.selectedIndex];
+        groupHealthPlanData.plan_selected_final = plan_selected_final;
+        post_body.tenure = plan_selected_final.tenure;
+        post_body.tax_amount = plan_selected_final.gst_tax;
+        post_body.base_premium = plan_selected_final.base_premium;
+        post_body.premium = plan_selected_final.net_premium;
+        post_body.total_amount = plan_selected_final.total_amount;
+        post_body.discount_amount = plan_selected_final.total_discount;
+        post_body.insured_pattern = plan_selected_final.insured_pattern;
+        post_body.plan_code = groupHealthPlanData.plan_selected_final.plan_code;
+        groupHealthPlanData.post_body.tenure  = plan_selected_final.tenure;
+        groupHealthPlanData.tenure = plan_selected_final.tenure;
 
         groupHealthPlanData.selectedIndexCover = this.state.selectedIndex;
         storageService().setObject('groupHealthPlanData', groupHealthPlanData);
@@ -130,7 +127,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                 <div className="select-tile">
                     <div className="flex-column">
                         <div className="name">
-                            {props.tenure} year{props.tenure !== "1" && <span>s</span>} for {inrFormatDecimal(props.net_premium)}
+                            {props.tenure} year{props.tenure !== "1" && <span>s</span>} for {inrFormatDecimal(props.base_premium)}
                         </div>
                        {props.total_discount > 0 && 
                             <div className="flex" style={{margin: '4px 0 0 0'}}>
@@ -169,10 +166,10 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                 handleClick={() => this.handleClick()}
             >
 
-                <Tooltip />
                 <div className="common-top-page-subtitle flex-between-center">
                     The period for which health expenses will be covered
-                 <img
+                 <img 
+                        className="tooltip-icon"
                         data-tip="As premium increases by insurer age, policy with longer cover period reduces the overall premium. 70% of our user has taken cover for 3 year period."
                         src={require(`assets/${this.state.productName}/info_icon.svg`)}
                         alt="" />

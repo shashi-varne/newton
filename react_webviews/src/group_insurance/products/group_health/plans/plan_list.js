@@ -110,6 +110,7 @@ class GroupHealthPlanList extends Component {
     }
 
     renderPlans = (props, index) => {
+        console.log(props)
         return (
             <div className="tile" key={index}>
                 <div className="recommendation">{props.recommendation_tag}</div>
@@ -132,7 +133,11 @@ class GroupHealthPlanList extends Component {
                         <div className="pi-left">Recovery benefit:</div>
                         <div className="pi-right">{props.recovery_benefit_extra}</div>
                         <div className="info-img">
-                            <img src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
+                            <img 
+                            id={index}
+                             className="tooltip-icon"
+                             data-tip={props.recovery_benefit_content}
+                            src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
                         </div>
                     </div>
                     <div className="pi-tile">

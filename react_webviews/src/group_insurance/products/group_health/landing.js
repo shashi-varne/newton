@@ -33,10 +33,6 @@ class GroupHealthLanding extends Component {
   }
 
   componentWillMount() {
-
-
-    storageService().remove('groupHealthPlanData');
-
     let stepsContentMapper = {
       title: 'Why buy on ' + this.state.productName + '??',
       options: [
@@ -91,11 +87,16 @@ class GroupHealthLanding extends Component {
           show_loader: false
       });
       var resultData = res.pfwresponse.result;
-
      
       if (res.pfwresponse.status_code === 200) {
-        let lead = resultData.quote;
-        lead.member_base = ghGetMember(lead);
+        let lead = resultData.quote || {};
+        lead.member_base = [];
+
+        if(resultData.resume_quote) {
+          lead.member_base = ghGetMember(lead);
+        }
+        
+        console.log(lead);
         this.setState({
           quoteResume: lead
         })

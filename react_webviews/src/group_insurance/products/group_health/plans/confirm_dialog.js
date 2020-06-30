@@ -5,6 +5,7 @@ import Dialog, {
   } from 'material-ui/Dialog';
 import { WithProviderLayout } from '../../../common/footer/layout';
 import ReactHtmlParser from 'react-html-parser'; 
+import { numDifferentiationInr } from 'utils/validators';
 
 class ConfirmDialogClass extends Component {
     constructor(props) {
@@ -40,11 +41,15 @@ class ConfirmDialogClass extends Component {
     }
 
     renderConfirmDialog = () => {
+       
+        let parent = this.props.parent || {};
+        let confirmDialogData = parent.state.confirmDialogData || {};
+
         return (
           <Dialog
             id="bottom-popup"
-            open={this.props.parent.state.openConfirmDialog || false}
-            onClose={this.props.parent.handleClose}
+            open={parent.state.openConfirmDialog || false}
+            onClose={parent.handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
@@ -52,23 +57,32 @@ class ConfirmDialogClass extends Component {
               <div className="gold-dialog" id="alert-dialog-description">
                 <div className="mid-buttons">
                   <WithProviderLayout type="default"
-                     handleClick2={this.props.parent.handleClose}
-                    handleClick={this.props.parent.handleClose}
-                     buttonTitle={this.props.parent.state.confirmDialogData.buttonTitle}
-                     buttonData= {this.props.parent.state.confirmDialogData.buttonData}
+                     handleClick2={parent.handleClose}
+                    handleClick={parent.handleClose}
+                     buttonTitle={confirmDialogData.buttonTitle}
+                     buttonData= {confirmDialogData.buttonData}
                   />
+                </div>
+
+                <div className="content-top flex-between" style={{margin: '0 0 20px 0'}}>
+                    <div className='ct-left'>
+                        <span style={{fontWeight: 600}}>Cover amount:</span> {numDifferentiationInr(confirmDialogData.sum_assured)}
+                    </div>
+                    <div className='ct-right'>
+                        <span style={{fontWeight: 600}}>Cover period:</span> {confirmDialogData.tenure} year
+                    </div>
                 </div>
     
                 <div className="hr"></div>
     
                 <div className="content">
-                    {this.props.parent.state.confirmDialogData.content1.map(this.rednerContent1)}
+                    {confirmDialogData.content1.map(this.rednerContent1)}
                 </div>
     
                 <div className="hr"></div>
     
                 <div className="content2">
-                    {this.props.parent.state.confirmDialogData.content2.map(this.rednerContent2)}
+                    {confirmDialogData.content2.map(this.rednerContent2)}
                 </div>
     
                 <div className="hr"></div>

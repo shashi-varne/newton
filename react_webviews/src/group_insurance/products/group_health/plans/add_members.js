@@ -3,13 +3,13 @@ import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { health_providers } from '../../../constants';
 import { storageService } from 'utils/validators';
 // calculateAge, isValidDate, IsFutureDate
 import PlusMinusInput from '../../../../common/ui/PlusMinusInput';
 
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import toast from '../../../../common/ui/Toast';
+import { initialize } from '../common_data';
 
 const other_adult_member_options = [
     {
@@ -34,9 +34,6 @@ class GroupHealthPlanAddMembers extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            type: getConfig().productName,
-            provider: this.props.match.params.provider,
-            groupHealthPlanData: storageService().getObject('groupHealthPlanData'),
             header_title: 'Your date of birth',
             final_dob_data: [],
             son_max: 2,
@@ -47,19 +44,22 @@ class GroupHealthPlanAddMembers extends Component {
             father_onlycheckbox: true,
             mother_onlycheckbox: true
         }
+
+        this.initialize = initialize.bind(this);
     }
 
     componentWillMount() {
-        this.setState({
-            providerData: health_providers[this.state.provider],
-            account_type: this.state.groupHealthPlanData.account_type,
-            header_title: this.state.groupHealthPlanData.account_type === 'parents' ? 'Add parents to be insured' :
-                'Add members to be insured'
-        })
+        this.initialize();
     }
 
 
     async componentDidMount() {
+
+        this.setState({
+            account_type: this.state.groupHealthPlanData.account_type,
+            header_title: this.state.groupHealthPlanData.account_type === 'parents' ? 'Add parents to be insured' :
+                'Add members to be insured'
+        })
 
         let ui_members = this.state.groupHealthPlanData.ui_members || {};
         this.setState({

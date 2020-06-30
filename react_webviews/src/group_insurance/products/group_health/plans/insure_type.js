@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import Container from '../../common/Container';
+import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { health_providers } from '../../constants';
-import BottomInfo from '../../../common/ui/BottomInfo';
-import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
+import BottomInfo from '../../../../common/ui/BottomInfo';
+import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import { storageService } from 'utils/validators';
+import { initialize } from '../common_data';
 
 const account_type_options = [
   {
@@ -32,16 +32,12 @@ class GroupHealthSelectInsureType extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      type: getConfig().productName,
-      provider: this.props.match.params.provider,
-      groupHealthPlanData: storageService().getObject('groupHealthPlanData')|| {},
     }
+    this.initialize = initialize.bind(this);
   }
 
   componentWillMount() {
-    this.setState({
-      providerData: health_providers[this.state.provider]
-    })
+    this.initialize();
   }
 
 
@@ -50,13 +46,6 @@ class GroupHealthSelectInsureType extends Component {
       account_type: this.state.groupHealthPlanData.account_type || ''
     })
 
-  }
-
-  navigate = (pathname) => {
-    this.props.history.push({
-      pathname: pathname,
-      search: getConfig().searchParams
-    });
   }
 
   handleClick = () => {
@@ -71,15 +60,23 @@ class GroupHealthSelectInsureType extends Component {
     let groupHealthPlanData = this.state.groupHealthPlanData;
     groupHealthPlanData.account_type = this.state.account_type;
 
-    let post_body = {
-      account_type: this.state.account_type
-    }
+    let post_body = groupHealthPlanData.post_body || {};
 
+    post_body.account_type = this.state.account_type;
     groupHealthPlanData.post_body = post_body;
-
     storageService().setObject('groupHealthPlanData',groupHealthPlanData );
 
     if(this.state.account_type === 'self') {
+
+      groupHealthPlanData.post_body.mem_info = {
+          adult: 1,
+          child: 0
+      }
+      groupHealthPlanData.ui_members = groupHealthPlanData.ui_members || {};
+      groupHealthPlanData.ui_members.self = true;
+      
+      storageService().setObject('groupHealthPlanData',groupHealthPlanData );
+
       this.navigate('plan-dob');
     } else {
       this.navigate('plan-add-members');

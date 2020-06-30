@@ -958,3 +958,25 @@
     }
   }
 }
+
+.group-health-bmi-dialog {
+  .top-content {
+    align-items: center;
+    margin: 0 0 30px 0;
+  }
+  .content-mid {
+    color: #767E86;
+    font-size: 14px;
+    font-weight: 400;
+    margin: 10px 0 10px 0;
+    line-height: 1.6;
+  }
+
+  .content-bottom {
+      color: #767E86;
+      font-size: 12px;
+      font-weight: 400;
+      margin: 20px 0 20px 0;
+      line-height: 1.2;
+  }
+}

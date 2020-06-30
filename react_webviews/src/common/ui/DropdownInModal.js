@@ -24,7 +24,8 @@ class DropdownInModalClass extends Component {
             onChange: this.props.onChange,
             tick_icon: getConfig().type !== 'fisdom' ? tick_icon_myway : tick_icon_fisdom,
             inputToRender: this.props.inputToRender,
-            view_scrolled: false
+            view_scrolled: false,
+            value: this.props.value
         };
 
         this.handleShow.bind(this, this.props.selectedIndex)
@@ -32,12 +33,12 @@ class DropdownInModalClass extends Component {
 
 
     componentDidMount() {
-        this.handleShow(this.state.selectedIndex)
+        this.handleShow(this.state.selectedIndex);
     }
 
     componentDidUpdate(prevState) {
         if (!this.state.view_scrolled) {
-          this.handleShow(this.props.value);
+          this.handleShow(this.state.selectedIndex);
         }
     
         if (prevState.selectedIndex !== this.props.selectedIndex) {
@@ -51,14 +52,15 @@ class DropdownInModalClass extends Component {
             options: this.props.options
           })
         }
+
       }
 
     handleChange(index) {
         this.setState({ selectedIndex: index });
-        this.props.onChange(index);
     };
 
     handleShow(i) {
+        i = 'scroll_' + i;
         let element = document.getElementById(i);
         if (!element || element === null) {
             return;
@@ -89,7 +91,7 @@ class DropdownInModalClass extends Component {
 
         let isSelected = this.state.selectedIndex === index;
         return (
-            <div key={index} id={index} ref={index} onClick={() => this.handleChange(index)}
+            <div key={index} id={'scroll_' + index} ref={index} onClick={() => this.handleChange(index)}
                 className={'row-scroll' + (isSelected ? ' row-scroll-selected' : '')}>
                 <div>
                     <div className="flex-between">
@@ -158,21 +160,28 @@ class DropdownInModalClass extends Component {
     }
 
     render() {
-
         return (
             <div className="dropdown-in-modal">
-                {this.renderPopUp()}
+                {this.state.openPopUp && this.renderPopUp()}
 
                 <FormControl className="Dropdown" disabled={this.props.disabled}
                     onClick={() => {
                         this.setState({
-                            openPopUp: true
+                            openPopUp: true,
+                            selectedIndex: this.props.selectedIndex
+                        }, () => {
+                            let that = this;
+                            setTimeout(function(){ 
+                                that.handleShow(that.state.selectedIndex);
+                             }, 200);
+                            
                         })
+                        
                     }}>
                     <InputLabel htmlFor={this.props.id}>{this.props.label}</InputLabel>
 
                     <div className="input-box">
-                    <div className="input-value">{this.props.value}</div>
+                    <div className="input-value">{this.props.parent.state[this.props.name] || this.props.value}</div>
                         <SVG
                             className="text-block-2-img"
                             preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}

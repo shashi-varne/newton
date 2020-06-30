@@ -15,7 +15,7 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import '../../utils/native_listner';
-
+import {checkStringInString} from 'utils/validators';
 import { back_button_mapper } from '../constants';
 
 
@@ -68,6 +68,12 @@ class Container extends Component {
 
     window.addEventListener("scroll", this.onScroll, false);
 
+  }
+
+  checkStringInString = (string) => {
+    let pathname = this.props.history.location.pathname;
+
+    return checkStringInString(pathname, string);
   }
 
   componentWillUnmount() {
@@ -178,6 +184,19 @@ class Container extends Component {
     }
     let { params } = this.props.location;
     let pathname = this.props.history.location.pathname;
+
+
+    if(this.checkStringInString('group-health')) {
+      let group_health_landing = '/group-insurance/group-health/landing';
+
+      if(this.checkStringInString('final-summary') || 
+      this.checkStringInString('insure-type')) {
+        this.navigate(group_health_landing);
+        return;
+      }
+      
+    }
+
     if (project_child === 'bhartiaxa' && pathname.indexOf('payment-success') >= 0
       && this.props.disableBack) {
       this.setState({

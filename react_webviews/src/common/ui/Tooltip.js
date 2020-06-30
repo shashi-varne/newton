@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './style.css';
-// import { getConfig } from 'utils/functions';
-// import ReactTooltip from "react-tooltip";
+import { getConfig } from 'utils/functions';
+import ReactTooltip from "react-tooltip";
 
 
 class TooltipClass extends Component {
@@ -13,20 +13,16 @@ class TooltipClass extends Component {
 
     }
 
-  
-
-
 
     render() {
         return (
-            // <ReactTooltip
-            //     backgroundColor={getConfig().highlight_color}
-            //     textColor={'#767E86'}
-            //     place={'bottom'}
-            //     arrowColor={getConfig().highlight_color}
-            //     effect="float"
-            //     />
-            null
+            <ReactTooltip
+                backgroundColor={getConfig().highlight_color}
+                textColor={'#767E86'}
+                place={'bottom'}
+                arrowColor={getConfig().highlight_color}
+                effect="float"
+                />
         );
     }
 };
