@@ -143,7 +143,7 @@ class GroupHealthPlanDob extends Component {
         final_dob_data[index].value = event.target.value;
         final_dob_data[index].error = errorDate;
 
-        let age = calculateAge(event.target.value);
+        let age = calculateAge(event.target.value, 'byMonth');
         final_dob_data[index].age = age;
 
         this.setState({
@@ -166,10 +166,12 @@ class GroupHealthPlanDob extends Component {
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let ui_members = groupHealthPlanData.ui_members || {};
 
+        console.log(final_dob_data);
+
         for (var i = 0; i < final_dob_data.length; i++) {
 
             let dob = final_dob_data[i].value;
-            // let age = final_dob_data[i].age;
+            let age = final_dob_data[i].age;
             let key = final_dob_data[i].key;
 
             
@@ -180,9 +182,24 @@ class GroupHealthPlanDob extends Component {
             } else if (IsFutureDate(dob)) {
                 error = 'Future date is not allowed';
             }
-            //  else if (age > 50 || age < 18) {
-            //     error = 'Valid age is between 18 and 50';
-            // }
+
+            if(age) {
+                if(key.indexOf('son') >=0 || key.indexOf('daughter') >=0) {
+                    // child
+                    if (age.age > 25 || (age.age === 0 && age.month < 3)) {
+                        error = 'Valid age is between 3 months- 25 years';
+                    }
+    
+                } else {
+                    // adult
+                    if (age.age > 90 || age.age < 18) {
+                        error = 'Valid age is between 18 - 90 years';
+                    }
+                }
+            }
+
+           
+           
             final_dob_data[i].error = error;
 
             if(!error) {

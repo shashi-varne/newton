@@ -4,15 +4,18 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { health_providers, genderOptions } from '../../../constants';
-import { calculateAge, toFeet, capitalizeFirstLetter, formatDate } from 'utils/validators';
+import { calculateAge, toFeet, capitalizeFirstLetter, formatDate, validatePan } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import DropdownInModal from '../../../../common/ui/DropdownInModal';
-import { initialize, updateLead } from '../common_data';
+import { initialize, updateLead, resetQuote } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
 import Dialog, {
-  DialogContent
+  DialogContent,
+  DialogContentText, DialogActions
 } from 'material-ui/Dialog';
+import ReactTooltip from "react-tooltip";
+import Button from 'material-ui/Button';
 
 class GroupHealthPlanPersonalDetails extends Component {
 
@@ -23,20 +26,28 @@ class GroupHealthPlanPersonalDetails extends Component {
       header_title: 'Personal details',
       form_data: {},
       ctaWithProvider: true,
-      show_loader:true,
+      show_loader: true,
       get_lead: true,
-      openBmiDialog: false
+      openBmiDialog: false,
+      pan_needed: false
     }
     this.initialize = initialize.bind(this);
     this.updateLead = updateLead.bind(this);
+    this.resetQuote = resetQuote.bind(this);
   }
 
   onload = () => {
 
     let lead = this.state.lead || {};
-    console.log(lead);
+
     let member_base = lead.member_base;
     let member_key = this.props.match.params.member_key;
+
+    let pan_needed = false;
+    if (lead.premium > 100000 && (member_key === 'self' || member_key === 'applicant')) {
+      pan_needed = true;
+    }
+
 
     let header_title = `${capitalizeFirstLetter(member_key)}'s details`;
     let header_subtitle = '';
@@ -61,7 +72,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     }
 
-    if(this.props.edit) {
+    if (this.props.edit) {
       next_state = `/group-insurance/group-health/${this.state.provider}/final-summary`;
     }
 
@@ -82,12 +93,12 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     let selectedIndex = '';
-    if(form_data.height) {
-      height_options.forEach(function(x, index) {
+    if (form_data.height) {
+      height_options.forEach(function (x, index) {
         // eslint-disable-next-line
-          if (x.value === parseInt(form_data.height)) {
-            selectedIndex = index;
-          }
+        if (x.value === parseInt(form_data.height)) {
+          selectedIndex = index;
+        }
       });
     }
 
@@ -106,7 +117,10 @@ class GroupHealthPlanPersonalDetails extends Component {
       header_title: header_title,
       header_subtitle: header_subtitle,
       selectedIndex: selectedIndex,
-      height: ''
+      height: '',
+      pan_needed: pan_needed
+    }, () => {
+      ReactTooltip.rebuild()
     })
   }
 
@@ -142,7 +156,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         form_data[name + '_error'] = '';
 
         this.setState({
-          height : this.state.height_options[this.state.selectedIndex].value
+          height: this.state.height_options[this.state.selectedIndex].value
         })
       });
 
@@ -162,12 +176,16 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let keys_to_check = ['name', 'dob', 'height', 'weight'];
 
-    if(this.state.member_key === 'self') {
+    if (this.state.member_key === 'self') {
       keys_to_check.push('gender');
     }
 
-    if(this.state.member_key === 'applicant') {
+    if (this.state.member_key === 'applicant') {
       keys_to_check = ['name', 'dob', 'gender']
+    }
+
+    if (this.state.pan_needed) {
+      keys_to_check.push('pan_number');
     }
 
     let form_data = this.state.form_data;
@@ -176,13 +194,19 @@ class GroupHealthPlanPersonalDetails extends Component {
       let first_error = key_check === 'gender' || key_check === 'height' ? 'Please select ' :
         'Please enter ';
       if (!form_data[key_check]) {
-        form_data[key_check + '_error'] = first_error + key_check;
+        form_data[key_check + '_error'] = first_error + (key_check === 'pan_number' ? 'pan number' : key_check);
       }
     }
 
     if (this.state.form_data && (this.state.form_data.name || '').split(" ").filter(e => e).length < 2) {
-        form_data.name_error = 'Enter valid full name';
-    } 
+      form_data.name_error = 'Enter valid full name';
+    }
+
+    if (this.state.pan_needed && this.state.form_data.pan_number &&
+      !validatePan(this.state.form_data.pan_number)) {
+      form_data.pan_number_error = 'Invalid PAN number';
+    }
+
 
     let canSubmitForm = true;
     for (var key in form_data) {
@@ -202,9 +226,9 @@ class GroupHealthPlanPersonalDetails extends Component {
     if (canSubmitForm) {
 
       let gender = '';
-      if(this.state.member_key !== 'self') {
+      if (this.state.member_key !== 'self') {
         gender = 'FEMALE';
-        if(['son', 'son1', 'son2', 'father', 'husband'].indexOf(this.state.member_key) !== -1) {
+        if (['son', 'son1', 'son2', 'father', 'husband'].indexOf(this.state.member_key) !== -1) {
           gender = 'MALE';
         }
       }
@@ -215,12 +239,15 @@ class GroupHealthPlanPersonalDetails extends Component {
           "dob": this.state.form_data.dob || '',
           "gender": this.state.form_data.gender || gender,
           "height": this.state.form_data.height || '',
-          "weight": this.state.form_data.weight || '',
-          // "relation": this.state.member_key
+          "weight": this.state.form_data.weight || ''
         }
       }
 
-      
+      if (this.state.pan_needed) {
+        body[this.state.backend_key].pan_number = this.state.form_data.pan_number;
+      }
+
+
       this.updateLead(body);
     }
   }
@@ -246,7 +273,8 @@ class GroupHealthPlanPersonalDetails extends Component {
   handleClose = () => {
     this.setState({
       openConfirmDialog: false,
-      openBmiDialog: false
+      openBmiDialog: false,
+      openDialogReset: false
     });
 
   }
@@ -305,13 +333,43 @@ class GroupHealthPlanPersonalDetails extends Component {
               <div className="generic-page-button-small" onClick={this.handleClose}>
                 CHANGE DETAILS
               </div>
-              <div className="generic-page-button-small-with-back">
+              <div className="generic-page-button-small-with-back" onClick={() => {
+                this.handleClose();
+                this.setState({
+                  openDialogReset: true
+                })
+              }}>
                 CHANGE INSURED
               </div>
             </div>
           </div>
         </DialogContent>
       </Dialog >
+    );
+  }
+
+  renderResetDialog = () => {
+    return (
+      <Dialog
+        fullScreen={false}
+        open={this.state.openDialogReset || false}
+        onClose={this.handleClose}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogContent>
+          <DialogContentText>
+            By continuing, you will reset your application.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.resetQuote} color="default">
+            CONTINUE
+          </Button>
+          <Button onClick={this.handleClose} color="default" autoFocus>
+            CANCEL
+          </Button>
+        </DialogActions>
+      </Dialog>
     );
   }
 
@@ -324,8 +382,8 @@ class GroupHealthPlanPersonalDetails extends Component {
         showLoader={this.state.show_loader}
         title={this.state.header_title}
         withProvider={true}
-                handleClick2={this.handleClick2}
-                buttonData={this.state.bottomButtonData}
+        handleClick2={this.handleClick2}
+        buttonData={this.state.bottomButtonData}
         buttonTitle="CONTINUE"
         handleClick={() => this.handleClick()}
       >
@@ -379,7 +437,31 @@ class GroupHealthPlanPersonalDetails extends Component {
               value={this.state.form_data.gender || ''}
               onChange={this.handleChangeRadio('gender')} />
           </div>}
-       {this.state.member_key !== 'applicant' && <div>
+
+        {(this.state.member_key === 'self' || this.state.member_key === 'applicant') &&
+          this.state.pan_needed &&
+          <div className="InputField flex-between" style={{ alignItems: 'baseline' }}>
+            <Input
+              error={(this.state.form_data.pan_number_error) ? true : false}
+              helperText={this.state.form_data.pan_number_error}
+              type="text"
+              width="40"
+              label="Enter PAN"
+              class="name"
+              id="name"
+              name="pan_number"
+              maxLength="10"
+              value={this.state.form_data.pan_number || ''}
+              onChange={this.handleChange('pan_number')} />
+            <img
+              className="tooltip-icon"
+              style={{ margin: '0 0 0 10px' }}
+              // ref={ref => this.fooRef = ref} onClick={() => { ReactTooltip.rebuild(); }}
+              data-tip="As per the IRDA guidelines, PAN is required if premium amount is greater than Rs 1 lac"
+              src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
+          </div>
+        }
+        {this.state.member_key !== 'applicant' && <div>
           <DropdownInModal
             parent={this}
             options={this.state.height_options}
@@ -397,7 +479,7 @@ class GroupHealthPlanPersonalDetails extends Component {
             onChange={this.handleChange('height')}
           />
         </div>}
-       {this.state.member_key !== 'applicant' && <div className="InputField">
+        {this.state.member_key !== 'applicant' && <div className="InputField">
           <Input
             type="number"
             width="40"
@@ -412,6 +494,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         </div>}
         <ConfirmDialog parent={this} />
         {this.renderBmiDialog()}
+        {this.renderResetDialog()}
       </Container>
     );
   }

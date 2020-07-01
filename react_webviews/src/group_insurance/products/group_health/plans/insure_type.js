@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 
-import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import BottomInfo from '../../../../common/ui/BottomInfo';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
@@ -50,7 +49,7 @@ class GroupHealthSelectInsureType extends Component {
 
   handleClick = () => {
 
-    if(!this.state.account_type) {
+    if (!this.state.account_type) {
       this.setState({
         account_type_error: 'Please select one'
       })
@@ -64,24 +63,37 @@ class GroupHealthSelectInsureType extends Component {
 
     post_body.account_type = this.state.account_type;
     groupHealthPlanData.post_body = post_body;
-    storageService().setObject('groupHealthPlanData',groupHealthPlanData );
+    storageService().setObject('groupHealthPlanData', groupHealthPlanData);
 
-    if(this.state.account_type === 'self') {
+    if (this.state.account_type === 'self') {
 
       groupHealthPlanData.post_body.mem_info = {
-          adult: 1,
-          child: 0
+        adult: 1,
+        child: 0
       }
-      groupHealthPlanData.ui_members = groupHealthPlanData.ui_members || {};
-      groupHealthPlanData.ui_members.self = true;
-      
-      storageService().setObject('groupHealthPlanData',groupHealthPlanData );
+      let ui_members = groupHealthPlanData.ui_members || {};
+
+      let keys_to_reset = ['self', 'wife', 'father', 'mother', 'son', 'son1', 'son2',
+        'daughter', 'daughter1', 'daughter2'];
+
+      for (var kr in keys_to_reset) {
+        ui_members[keys_to_reset[kr]] = false;
+      }
+
+      ui_members.son_total = 0;
+      ui_members.daughter_total = 0;
+
+      ui_members.self = true;
+
+      groupHealthPlanData.ui_members = ui_members;
+
+      storageService().setObject('groupHealthPlanData', groupHealthPlanData);
 
       this.navigate('plan-dob');
     } else {
       this.navigate('plan-add-members');
     }
-    
+
   }
 
 

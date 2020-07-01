@@ -38,7 +38,6 @@ class GroupHealthPlanAddressDetails extends Component {
         }
 
         let lead = this.state.lead || {};
-        console.log(lead);
         let form_data = lead.permanent_address || {};
         form_data.city = lead.city;
 

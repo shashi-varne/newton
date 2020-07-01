@@ -7,6 +7,8 @@ import { health_providers } from '../../../constants';
 import { storageService, inrFormatDecimal } from 'utils/validators';
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
+import ReactTooltip from "react-tooltip";
+
 class GroupHealthPlanList extends Component {
 
     constructor(props) {
@@ -31,19 +33,6 @@ class GroupHealthPlanList extends Component {
     async componentDidMount() {
         try {
 
-            // let body = {
-            //     "city": "MUMBAI",
-            //     "account_type": "selfandfamily",
-            //     "mem_info": {
-            //         "adult": "2",
-            //         "child": "1"
-            //     },
-            //     "self_account_key": { "dob": "05/09/1995" },
-            //     "spouse_account_key": { "dob": "05/09/1996" },
-            //     "child_account1_key": { "dob": "05/09/2014" }
-
-
-            // }
             let body = this.state.groupHealthPlanData.post_body;
             const res = await Api.post('/api/ins_service/api/insurance/hdfcergo/coverplan', body);
 
@@ -51,11 +40,12 @@ class GroupHealthPlanList extends Component {
                 show_loader: false
             });
             var resultData = res.pfwresponse.result;
-            console.log(resultData);
             if (res.pfwresponse.status_code === 200) {
 
                 this.setState({
                     plan_data: resultData
+                }, () => {
+                    ReactTooltip.rebuild()
                 })
 
 
@@ -110,10 +100,9 @@ class GroupHealthPlanList extends Component {
     }
 
     renderPlans = (props, index) => {
-        console.log(props)
         return (
             <div className="tile" key={index}>
-                <div className="recommendation">{props.recommendation_tag}</div>
+                <div className="group-health-recommendation" style={{backgroundColor: props.recommendation_tag === 'Recommended' ? '#E86364' : ''}}>{props.recommendation_tag}</div>
                 <div className="group-health-top-content-plan-logo">
                     <div className="left">
                         <div className="tc-title">{this.state.plan_data.common.base_plan_title}</div>

@@ -11,7 +11,6 @@
 .RadioButton.checked label {
   color: #fff;
   border: 1px solid;
-  width: auto !important;
 }
 .MuiDialogContent-root:first-child {
   padding-top: 24px !important;
@@ -21,7 +20,7 @@
   display: inline-block;
   border-radius: 4px;
   width: auto;
-  min-width: 100px;
+  min-width: 140px;
   text-align: center;
   font-size: 12px;
   color: #4a4a4a;
@@ -432,12 +431,19 @@ input.default-otp-input {
 }
 
 
-.__react_component_tooltip {
-  left: auto !important;
-  margin: 70px 0 0 0px !important;
-  width: 62%;
-  right: 15px;
+body[data-device="web"] { 
+
 }
+
+body[data-device="mobile"] { 
+  .__react_component_tooltip {
+    left: auto !important;
+    margin: 50px 10px 0 0px !important;
+    width: 62%;
+    right: 15px;
+  }
+}
+
 
 .generic-render-benefits {
   margin-top: -40px;

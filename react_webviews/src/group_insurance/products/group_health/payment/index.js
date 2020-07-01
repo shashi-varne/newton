@@ -6,32 +6,32 @@ import { getUrlParams } from 'utils/validators';
 // eslint-disable-next-line
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
-import { inrFormatDecimal2, storageService, formatDateAmPm } from 'utils/validators';
+import { inrFormatDecimal2, storageService, formatDateAmPm, numDifferentiationInr } from 'utils/validators';
 import ContactUs from '../../../../common/components/contact_us';
-import { initialize } from '../common_data'
+import { initialize } from '../common_data';
+import Api from 'utils/api';
+import toast from '../../../../common/ui/Toast';
+
 
 const commonMapper = {
-    'success': {
-      'top_icon': 'ils_covid_success',
-      'top_title': 'Insurance payment successful',
-      'mid_title': 'Insurance payment details',
-      'button_title': 'CHECK REPORTS',
-      'cta_state': '/gold/gold-locker'
-    },
-    'pending': {
-      'top_icon': 'ils_covid_pending',
-      'top_title': 'Insurance payment pending!',
-      'mid_title': 'Insurance payment details',
-      'button_title': 'GO TO LOCKER',
-      'cta_state':  '/gold/gold-locker'
-    },
-    'failed': {
-      'top_icon': 'ils_covid_failed',
-      'top_title': 'Insurance payment failed',
-      'mid_title': '',
-      'button_title': 'RETRY',
-      'cta_state': '/gold/buy'
-    }
+  'success': {
+    'top_icon': 'ils_covid_success',
+    'top_title': 'Insurance payment successful',
+    'mid_title': 'Insurance payment details',
+    'button_title': 'CHECK REPORTS'
+  },
+  'pending': {
+    'top_icon': 'ils_covid_pending',
+    'top_title': 'Insurance payment pending!',
+    'mid_title': 'Insurance payment details',
+    'button_title': 'CHECK REPORTS'
+  },
+  'failed': {
+    'top_icon': 'ils_covid_failed',
+    'top_title': 'Insurance payment failed',
+    'mid_title': '',
+    'button_title': 'RETRY'
+  }
 }
 
 class GroupHealthPayment extends Component {
@@ -41,30 +41,31 @@ class GroupHealthPayment extends Component {
       show_loader: false,
       params: getUrlParams(),
       commonMapper: {},
-      get_lead: true
+      lead: {},
+      policy_data: {}
     }
 
     this.initialize = initialize.bind(this);
   }
 
- 
-  componentWillMount() {
+
+  async componentWillMount() {
 
     this.initialize();
 
     nativeCallback({ action: 'take_control_reset' });
     let { status } = this.state.params;
-    let paymentFailed,paymentPending, paymentSuccess = false;
+    let paymentFailed, paymentPending, paymentSuccess = false;
 
-    if(status === 'success') {
+    if (status === 'success') {
       paymentSuccess = true;
     } else if (status === 'failed') {
-        paymentFailed = true;
+      paymentFailed = true;
     } else {
-        paymentPending = true;
-        if(!status) {
-            status = 'pending';
-        }
+      paymentPending = true;
+      if (!status) {
+        status = 'pending';
+      }
     }
 
     this.setState({
@@ -74,12 +75,46 @@ class GroupHealthPayment extends Component {
       paymentPending: paymentPending,
       paymentFailed: paymentFailed
     })
-  }
 
-  onload = () => {
-      console.log(this.state.lead);
-  }
 
+    try {
+
+      this.setState({
+        show_loader: true
+      });
+
+      let quote_id = storageService().get('ghs_ergo_quote_id');
+
+      const res = await Api.get('/api/ins_service/api/insurance/hdfcergo/get/policy/' + quote_id);
+
+      var resultData = res.pfwresponse.result;
+
+      this.setState({
+        show_loader: false
+      });
+      if (res.pfwresponse.status_code === 200) {
+
+        console.log(resultData);
+
+        let lead = resultData.policy_data.insured_lead_details || {};
+        let policy_data = resultData.policy_data || {};
+
+        this.setState({
+          policy_data: policy_data,
+          lead: lead
+        })
+      } else {
+        toast(resultData.error || resultData.message
+          || 'Something went wrong');
+      }
+    } catch (err) {
+      console.log(err)
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
+    }
+  }
 
   navigate = (pathname) => {
     this.props.history.push({
@@ -88,8 +123,7 @@ class GroupHealthPayment extends Component {
     });
   }
 
-
-  sendEvents(user_action, data={}) {
+  sendEvents(user_action, data = {}) {
     let eventObj = {
       "event_name": 'gold_investment_flow',
       "properties": {
@@ -97,7 +131,7 @@ class GroupHealthPayment extends Component {
         "screen_name": 'payment',
         'flow': this.state.orderType,
         'status': this.state.statusFinal,
-        'download_invoice_clicked': this.state.download_invoice_clicked ? 'yes': 'no'
+        'download_invoice_clicked': this.state.download_invoice_clicked ? 'yes' : 'no'
       }
     };
 
@@ -110,9 +144,16 @@ class GroupHealthPayment extends Component {
 
   handleClick = () => {
     this.sendEvents('next');
-    this.navigate(this.state.commonMapper['cta_state']);
-  }
 
+    let state = '';
+    if(this.state.paymentFailed) {
+      state =  `/group-insurance/group-health/${this.state.provider}/final-summary`
+    } else {
+      state = '/group-insurance/common/report';
+    }
+
+    this.navigate(state);
+  }
 
   render() {
     return (
@@ -126,122 +167,119 @@ class GroupHealthPayment extends Component {
         onlyButton={true}
         buttonTitle={this.state.commonMapper.button_title}
         events={this.sendEvents('just_set_events')}
-        headerData={ {
+        headerData={{
           icon: 'close'
         }}
       >
         <div className="gold-payment-container" id="goldSection">
           <div>
-          <img style={{width: '100%'}} 
-          src={ require(`assets/${this.state.productName}/${this.state.commonMapper['top_icon']}.svg`)} 
-          alt="Gold" />
+            <img style={{ width: '100%' }}
+              src={require(`assets/${this.state.productName}/${this.state.commonMapper['top_icon']}.svg`)}
+              alt="" />
           </div>
-                <div className="main-tile">
-                  
-                    <div>
-                        {this.state.paymentSuccess && 
-                          <p className="top-content"> 
-                           Payment of ₹7,640 for HDFC ERGO my health Suraksha
-                        silver smart is successful. Now you have access to 10000+ cashless hospitals.
+          <div className="main-tile">
+
+            <div>
+              {this.state.paymentSuccess &&
+                <p className="top-content">
+                  Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for HDFC ERGO my health
+                           Suraksha {this.state.lead.plan_title} is successful. Now you have access to 10000+ cashless hospitals.
                           </p>
-                        }
+              }
 
-                        {this.state.paymentPending && 
-                          <div>
-                            <p className="top-content"> 
-                            Your purchase of <b>{this.state.weight} gms </b> gold worth <b>{inrFormatDecimal2(this.state.amount)}</b> is awaiting confirmation.  
+              {this.state.paymentPending &&
+                <div>
+                  <p className="top-content">
+                    Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for HDFC ERGO my health Suraksha {this.state.lead.plan_title} is pending.
+                          </p>
+                </div>
+              }
+
+              {this.state.paymentFailed &&
+                <div>
+                  <p className="top-content">
+                    Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for HDFC ERGO my health Suraksha {this.state.lead.plan_title} has failed.
                             </p>
-                            <p className="top-content"> 
-                            If confirmed within 30 minutes we will place gold 
-                            purchase order (at live price) else it will be refunded in 3-5 business days.  
+                  <p className="top-content">
+                    If amount has been debited it will be refunded back to you in 3-5 business days.
                             </p>
-                          </div>
-                        }
+                </div>
+              }
 
-                        {this.state.paymentFailed && 
-                          <div>
-                            <p className="top-content"> 
-                            Payment of ₹7,640 for HDFC ERGO my health Suraksha silver smart has failed.
-                            </p>
-                            <p className="top-content"> 
-                            If amount has been debited it will be refunded back to you in 3-5 business days. 
-                            </p>
-                          </div> 
-                        }
-                      
-                    </div>
-                  
+            </div>
 
 
-                  {this.state.paymentSuccess &&
-                          <div style={{ margin: '30px 0 30px 0', display:'flex',position: 'relative' }} className="highlight-text highlight-color-info">
-                            <div>
-                            <img className="highlight-text11" 
-                              src={ require(`assets/${this.state.providerData.logo}`)}
-                              style={{width:30}}
-                              alt="info" />
-                            </div>
-                            
-                            <div>
-                              <div className="highlight-text1">
-                              
-                                <div className="highlight-text12" style={{display:'flex'}}>
-                                  <div>
-                                    {this.state.providerData.subtitle}
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="highlight-text2" style={{color: '#767E86',marginLeft:7}}>
-                                <div style={{margin: '5px 0 6px 0'}}>Sum assured ₹3 lacs for 1 year</div>
-                                <div style={{margin: '5px 0 6px 0'}}>Policy id: F6453QXXXX</div>
-                                <div style={{margin: '5px 0 6px 0'}}>6nd Jan, 01:31 PM</div>
-                              </div>
-                            </div>
-                          </div>
-                  }
 
-
-           {!this.state.paymentFailed &&
-                  <div>
-                      <div className="mid-title">{this.state.commonMapper.mid_title}</div>
-                        <div className="content">
-                            <div className="content-points">
-                                <div className="content-points-inside-text">
-                                Basic premium
-                                </div>
-                                <div className="content-points-inside-text">
-                                  {inrFormatDecimal2(1000)}
-                                </div>
-                            </div>
-
-                            <div className="content-points">
-                                <div className="content-points-inside-text">
-                                GST
-                                </div>
-                                <div className="content-points-inside-text">
-                                {inrFormatDecimal2(10000)}
-                                </div>
-                            </div>
-                        </div>
-
-                      <div className="hr"></div>
-
-                      <div className="content2">
-                          <div className="content2-points">
-                              <div className="content2-points-inside-text">
-                              Total amount paid
-                              </div>
-                              <div className="content2-points-inside-text">
-                                {inrFormatDecimal2(10000)}
-                              </div>
-                          </div>
-                      </div>
-                      <div className="hr"></div>
-                  </div>
-                  }
+            {this.state.paymentSuccess &&
+              <div style={{ margin: '30px 0 30px 0', display: 'flex', position: 'relative' }} className="highlight-text highlight-color-info">
+                <div>
+                  <img className="highlight-text11"
+                    src={require(`assets/${this.state.providerData.logo}`)}
+                    style={{ width: 30 }}
+                    alt="info" />
                 </div>
 
-                <ContactUs />
+                <div>
+                  <div className="highlight-text1">
+
+                    <div className="highlight-text12" style={{ display: 'flex' }}>
+                      <div>
+                        {this.state.providerData.subtitle}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="highlight-text2" style={{ color: '#767E86', marginLeft: 7 }}>
+                    <div style={{ margin: '5px 0 6px 0' }}>Sum assured
+                                {numDifferentiationInr(this.state.lead.sum_assured)} for {this.state.lead.tenure} year</div>
+                    <div style={{ margin: '5px 0 6px 0' }}>Policy id: {this.state.policy_data.policy_number}</div>
+                    <div style={{ margin: '5px 0 6px 0' }}>{formatDateAmPm(this.state.policy_data.dt_created)}</div>
+                  </div>
+                </div>
+              </div>
+            }
+
+
+            {!this.state.paymentFailed &&
+              <div>
+                <div className="mid-title">{this.state.commonMapper.mid_title}</div>
+                <div className="content">
+                  <div className="content-points">
+                    <div className="content-points-inside-text">
+                      Basic premium
+                                </div>
+                    <div className="content-points-inside-text">
+                      {inrFormatDecimal2(this.state.lead.premium)}
+                    </div>
+                  </div>
+
+                  <div className="content-points">
+                    <div className="content-points-inside-text">
+                      GST
+                                </div>
+                    <div className="content-points-inside-text">
+                      {inrFormatDecimal2(this.state.lead.tax_amount)}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="hr"></div>
+
+                <div className="content2">
+                  <div className="content2-points">
+                    <div className="content2-points-inside-text">
+                      Total amount paid
+                              </div>
+                    <div className="content2-points-inside-text">
+                      {inrFormatDecimal2(this.state.lead.total_amount)}
+                    </div>
+                  </div>
+                </div>
+                <div className="hr"></div>
+              </div>
+            }
+          </div>
+
+          <ContactUs />
         </div>
       </Container>
     );

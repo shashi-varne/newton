@@ -30,7 +30,6 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
 
     async componentDidMount() {
 
-        console.log(this.state.groupHealthPlanData);
         this.setState({
             selectedIndex: this.state.groupHealthPlanData.selectedIndexCover || 0
         })
@@ -47,7 +46,6 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
 
-                console.log(resultData.premium[0][type_of_plan]);
                 this.setState({
                     premium_data: resultData.premium[0][type_of_plan],
                     type_of_plan: type_of_plan

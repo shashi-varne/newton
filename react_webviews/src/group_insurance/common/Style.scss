@@ -740,6 +740,17 @@
     margin: 20px 0 0 0;
     text-transform: uppercase;
   }
+
+}
+
+.group-health-recommendation {
+  color: white;
+  background: var(--primary);
+  width: fit-content;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 4px;
+  padding: 2px 5px 2px 5px;
 }
 
 .group-health-plan-details {

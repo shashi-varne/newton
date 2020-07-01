@@ -67,7 +67,6 @@ class GroupHealthPlanSelectCity extends Component {
                     if (res.pfwresponse.status_code === 200) {
                         var resultData = res.pfwresponse.result;
                         let city = resultData.insurance_account.permanent_address.city;
-                        console.log(city);
                         this.setState({
                             city: city
                         })

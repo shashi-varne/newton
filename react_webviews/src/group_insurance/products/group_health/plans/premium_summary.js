@@ -175,11 +175,12 @@ class GroupHealthPlanPremiumSummary extends Component {
                         </div>
 
 
-                        {this.state.plan_selected_final.total_discount &&
+                        {this.state.plan_selected_final.total_discount > 0 &&
                             <div className="flex-between pi-tile">
                                 <div className="pi-tile-left">{this.state.plan_selected_final.tenure_discount_percentage}% discount</div>
                                 <div className="pi-tile-right">-{inrFormatDecimal(this.state.plan_selected_final.total_discount)}</div>
-                            </div>}
+                            </div>
+                        }
 
                         <div className="flex-between pi-tile">
                             <div className="pi-tile-left">GST & other taxes</div>

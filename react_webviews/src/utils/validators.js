@@ -652,7 +652,13 @@ export function formatDate(event) {
   }
 }
 
-export function calculateAge(val) {
+
+function monthDiff(dateFrom, dateTo) {
+  return dateTo.getMonth() - dateFrom.getMonth() + 
+  (12 * (dateTo.getFullYear() - dateFrom.getFullYear()))
+}
+
+export function calculateAge(val, byMonth) {
   if (!val) {
     return 0;
   }
@@ -664,6 +670,14 @@ export function calculateAge(val) {
   if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
     age--;
   }
+
+  if(byMonth) {
+    return {
+      age: age,
+      month: monthDiff(birthDate, today)
+    }
+  }
+
   return age;
 }
 

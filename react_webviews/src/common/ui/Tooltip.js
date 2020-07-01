@@ -13,15 +13,20 @@ class TooltipClass extends Component {
 
     }
 
+    componentDidUpdate() {
+        ReactTooltip.rebuild();
+    }
 
     render() {
         return (
             <ReactTooltip
                 backgroundColor={getConfig().highlight_color}
                 textColor={'#767E86'}
-                place={'bottom'}
+                // place={'bottom'}
                 arrowColor={getConfig().highlight_color}
-                effect="float"
+                // effect="float"
+                // data-html={true}
+            //   clickable={true}
                 />
         );
     }

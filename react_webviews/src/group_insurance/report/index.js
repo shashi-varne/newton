@@ -95,17 +95,37 @@ class Report extends Component {
     let ins_policies = group_insurance_policies.ins_policies || [];
     for (var i = 0; i < ins_policies.length; i++) {
       let policy = ins_policies[i];
-      let obj = {
-        status: policy.status,
-        product_name: policy.product_title,
-        product_key: policy.product_name,
-        cover_amount: policy.sum_assured,
-        product_coverage: policy.insured_details.product_coverage,
-        premium: policy.premium,
-        key: 'BHARTIAXA',
-        provider: 'BHARTIAXA',
-        id: policy.id
+      let provider = policy.provider;
+      let obj = {};
+
+      if(provider === 'HDFCERGO') {
+        obj = policy;
+      } else if(provider === 'BHARTIAXA') {
+        obj = {
+          status: policy.status,
+          product_name: policy.product_title,
+          product_key: policy.product_name,
+          cover_amount: policy.sum_assured,
+          product_coverage: policy.insured_details.product_coverage,
+          premium: policy.premium,
+          key: 'BHARTIAXA',
+          provider: 'BHARTIAXA',
+          id: policy.id
+        }
+      } else if(provider === 'HDFCERGO') {
+        obj = {
+          status: policy.status,
+          product_name: 'Term insurance (Edelweiss tokio life zindagi plus)',
+          product_key: policy.provider,
+          cover_amount: policy.sum_assured,
+          premium: policy.premium,
+          key: policy.provider,
+          provider: policy.provider,
+          id: policy.policy_id,
+          transaction_id: policy.transaction_id,
+        }
       }
+      
 
       let data = this.statusMapper(obj);
       obj.status = data.status;
@@ -114,29 +134,6 @@ class Report extends Component {
       reportData.push(obj);
     }
 
-    // edelwisss
-
-    let edelweiss_ins = group_insurance_policies.edelweiss_ins || [];
-    for (var j = 0; j < edelweiss_ins.length; j++) {
-      let policy = edelweiss_ins[j];
-      let obj = {
-        status: policy.status,
-        product_name: 'Term insurance (Edelweiss tokio life zindagi plus)',
-        product_key: policy.provider,
-        cover_amount: policy.sum_assured,
-        premium: policy.premium,
-        key: policy.provider,
-        provider: policy.provider,
-        id: policy.policy_id,
-        transaction_id: policy.transaction_id,
-      }
-
-      let data = this.statusMapper(obj);
-      obj.status = data.status;
-      obj.cssMapper = data.cssMapper;
-
-      reportData.push(obj);
-    }
 
     this.setState({
       reportData: reportData,

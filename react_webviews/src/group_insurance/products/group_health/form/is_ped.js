@@ -91,8 +91,6 @@ class GroupHealthPlanIsPed extends Component {
         this.setState({
             form_data: form_data,
             [key]: value
-        }, () => {
-            console.log(this.state.form_data);
         });
     }
 

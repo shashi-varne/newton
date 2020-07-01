@@ -96,7 +96,6 @@ class GroupHealthLanding extends Component {
           lead.member_base = ghGetMember(lead);
         }
         
-        console.log(lead);
         this.setState({
           quoteResume: lead
         })

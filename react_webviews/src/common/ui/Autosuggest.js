@@ -51,7 +51,6 @@ class AutosuggestInput extends Component {
   renderSuggestion(suggestion, { query }) {
     const matches = match(suggestion.name, query);
     const parts = parse(suggestion.name, matches);
-
     return (
       <span>
         {parts.map((part, index) => {

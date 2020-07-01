@@ -42,7 +42,6 @@ class GroupHealthPlanFinalSummary extends Component {
 
     onload = () => {
         let lead = this.state.lead;
-        console.log(lead);
         let member_base = lead.member_base;
 
         let personal_details_to_copy = [
@@ -98,6 +97,15 @@ class GroupHealthPlanFinalSummary extends Component {
                     info.title = 'Applicant name';
                 }
                 data.push(info);
+            }
+
+
+            if((member.key === 'applicant' || member.key === 'self') && lead.self_account_key.pan_number) {
+                data.push({
+                    'title': 'PAN number',
+                    'key': 'pan',
+                    'subtitle' : lead.self_account_key.pan_number
+                })
             }
 
             obj.data = data;
@@ -199,10 +207,8 @@ class GroupHealthPlanFinalSummary extends Component {
         try {
             let res = await Api.get(`/api/ins_service/api/insurance/hdfcergo/start/payment?lead_id=${this.state.quote_id}`);
 
-            console.log(res);
            
             var resultData = res.pfwresponse.result;
-            console.log(resultData);
             if (res.pfwresponse.status_code === 200) {
 
                
@@ -213,7 +219,6 @@ class GroupHealthPlanFinalSummary extends Component {
             window.location.origin + `/group-insurance/group-health/${this.state.provider}/payment`
             );
 
-            console.log(paymentRedirectUrl);
 
             var payment_link = resultData.payment_link;
             var pgLink = payment_link;
@@ -294,7 +299,6 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     handleClick = async () => {
-        console.log("handle")
         this.checkPPC();
     }
 
@@ -468,7 +472,6 @@ class GroupHealthPlanFinalSummary extends Component {
             });
 
             var resultData = res.pfwresponse.result;
-            console.log(resultData);
             if (res.pfwresponse.status_code === 200) {
 
                 storageService().remove('groupHealthPlanData');

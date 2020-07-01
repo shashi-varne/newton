@@ -44,6 +44,7 @@ export async function initialize() {
 
                 lead = resultData.quote;
                 lead.member_base = ghGetMember(lead);
+                console.log(lead);
                 this.setState({
                     lead: resultData.quote || {},
                     common_data: resultData.common
@@ -199,4 +200,42 @@ export function navigate(pathname, data = {}) {
         });
     }
 
+}
+
+export async function resetQuote() {
+
+    this.handleClose();
+    let quote_id = storageService().get('ghs_ergo_quote_id');
+    this.setState({
+        show_loader: true
+    });
+
+    try {
+        const res = await Api.get(`/api/ins_service/api/insurance/hdfcergo/lead/cancel/` + quote_id);
+
+        var resultData = res.pfwresponse.result;
+        if (res.pfwresponse.status_code === 200) {
+
+            storageService().remove('groupHealthPlanData');
+            let next_state = `/group-insurance/group-health/${this.state.provider}/insure-type`;
+            this.navigate(next_state);
+            this.setState({
+                resultData: resultData
+            })
+
+        } else {
+            this.setState({
+                show_loader: false
+            });
+
+            toast(resultData.error || resultData.message
+                || 'Something went wrong');
+        }
+    } catch (err) {
+        console.log(err)
+        this.setState({
+            show_loader: false
+        });
+        toast('Something went wrong');
+    }
 }
