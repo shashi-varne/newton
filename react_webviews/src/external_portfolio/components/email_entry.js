@@ -5,8 +5,10 @@ import Container from '../common/Container.js';
 // import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import Input from '../../common/ui/Input';
-import { validateEmail } from '../../utils/validators.js';
-import { navigate } from '../common/commonFunctions.js';
+import { validateEmail, storageService } from '../../utils/validators.js';
+import { navigate, setLoader } from '../common/commonFunctions.js';
+import { requestStatement, fetchEmails } from '../common/ApiCalls.js';
+import PopUp from '../common/PopUp.js';
 
 // const product_type = getConfig().type;
 class email_entry extends Component {
@@ -15,8 +17,10 @@ class email_entry extends Component {
     this.state = {
       email: '',
       email_error: '',
+      openPopup: false,
     };
     this.navigate = navigate.bind(this);
+    this.setLoader = setLoader.bind(this);
   }
 
   handleChange = key => event => {
@@ -26,16 +30,33 @@ class email_entry extends Component {
     });
   }
 
-  goNext = () => {
-    if (!validateEmail(this.state.email)) {
+  handleClose = () => {
+    this.setState({ openPopup: false });
+  }
+
+  goNext = async () => {
+    const { email } = this.state;
+    if (!validateEmail(email)) {
       this.setState({ email_error: 'Please enter a valid email' });
     } else {
-      const { params } = this.props.location;
-      this.navigate(
-        'statement_request',
-        { exitToApp: !!(params || {}).comingFrom },
-        true
-      );
+      storageService().setObject('new_user_email', email);
+      try {
+        this.setLoader(true);
+        const { emails } = await fetchEmails({ email_id: email });
+        if (emails.length) {
+          this.setState({ openPopup: true });
+        } else {
+          await requestStatement({ email });
+          const { params } = this.props.location;
+          this.navigate(
+            'statement_request',
+            { exitToApp: !!(params || {}).comingFrom },
+            true
+          );
+        }
+      } catch(e) {
+        this.setLoader(false);
+      }
     }
   }
 
@@ -48,7 +69,7 @@ class email_entry extends Component {
   }
 
   render() {
-    const { email_error } = this.state;
+    const { email_error, show_loader } = this.state;
     return (
       <Container
         hideInPageTitle={true}
@@ -56,10 +77,10 @@ class email_entry extends Component {
         classHeader="bg-highlight"
         handleClick={this.goNext}
         buttonTitle="Generate Statement"
+        showLoader={show_loader}
         goBack={this.goBack}
       >
-        <div
-          className="email-entry-banner">
+        <div className="email-entry-banner">
           <span className="header-title-text">
             Portfolio Tracker
           </span>
@@ -84,6 +105,14 @@ class email_entry extends Component {
             value={this.state.email}
             onChange={this.handleChange('email')} />
         </div>
+        <PopUp
+          openPopup={this.state.openPopup}
+          handleNo={this.handleClose}
+          onlyExit={true}
+          handleClose={this.handleClose}
+        >
+          This email has already been added. Please resync from the settings page to update portfolio
+        </PopUp>
       </Container>
     );
   }

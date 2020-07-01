@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import EmailTemplate from './email_template';
+import EmailTemplate from '../mini-components/email_template';
 import { Button } from 'material-ui';
 import InfoIcon from '@material-ui/icons/Info';
 import InfoBox from '../mini-components/InfoBox';

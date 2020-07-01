@@ -18,3 +18,7 @@ export function navigate(pathname, params, replace) {
     });
   }
 }
+
+export function setLoader(val) {
+  this.setState({ show_loader: val });
+}

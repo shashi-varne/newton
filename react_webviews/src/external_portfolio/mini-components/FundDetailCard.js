@@ -11,12 +11,12 @@ export default class FundDetailCard extends Component {
   render() {
     const {
       fundAMCIcon,
-      fundName,
-      fundType,
-      investmentDate,
-      currentValue,
-      annualReturn,
-      investedAmt,
+      fund_name,
+      scheme_type,
+      investment_since,
+      current_value,
+      xirr: annual_return,
+      total_amount_invested: invested_amt,
     } = this.props.fundDetails;
     return (
       <Fragment>
@@ -28,20 +28,20 @@ export default class FundDetailCard extends Component {
               alt="amc-logo"
             />
             <span id="heading">
-              {fundName}
+              {fund_name}
             </span>
           </div>
           <div className="fund-info">
             <Chip
               size="small"
-              label={fundType}
+              label={scheme_type}
               classes={{
                 root: 'fund-chip',
                 label: 'fund-chip-label'
               }}
             />
             <div className="fund-investment-date">
-              Investment since <span>{investmentDate}</span>
+              Investment since <span>{investment_since}</span>
             </div>
           </div>
           <div className="fund-numbers">
@@ -50,7 +50,7 @@ export default class FundDetailCard extends Component {
                 Current value
               </div>
               <div className="fund-numbers-value">
-                ₹ {currentValue}
+                ₹ {current_value}
               </div>
             </div>
             <div className="annual-ret">
@@ -58,7 +58,7 @@ export default class FundDetailCard extends Component {
                 Annual return
               </div>
               <div className="fund-numbers-value">
-                {annualReturn} %
+                {annual_return.toFixed(2)} %
               </div>
             </div>
             <div className="invested-amt">
@@ -66,7 +66,7 @@ export default class FundDetailCard extends Component {
                 Invested amount
               </div>
               <div className="fund-numbers-value">
-                ₹ {investedAmt}
+                ₹ {invested_amt}
               </div>
             </div>
           </div>
