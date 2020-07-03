@@ -139,6 +139,7 @@ class GroupHealthSelectInsureType extends Component {
           <RadioWithoutIcon
             width="40"
             label=""
+            isVertical={true}
             class="Gender:"
             options={account_type_options}
             id="account_type"
