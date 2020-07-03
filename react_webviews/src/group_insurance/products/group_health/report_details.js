@@ -149,12 +149,12 @@ class GroupHealthReportDetails extends Component {
             'whats_included': {
                 'header_title': 'What is included',
                 'steps': this.state.extra_data.whats_included,
-                'pathname': '/common/render-benefits'
+                'pathname': '/gold/common/render-benefits'
             },
             'whats_not_included': {
                 'header_title': "What's not included",
                 'steps': this.state.extra_data.whats_not_included,
-                'pathname': '/common/render-benefits'
+                'pathname': '/gold/common/render-benefits'
             },
             'how_to_claim': {
                 'header_title': "How to claim",
