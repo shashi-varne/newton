@@ -115,7 +115,7 @@ class DropdownInModalClass extends Component {
             return (
                 <Dialog
                     fullWidth={true}
-                    fullScreen={true}
+                    fullScreen={!!getConfig().isMobileDevice}
                     style={{ margin: 0 }}
                     id="dropdown-in-modal-dialog"
                     paper={{

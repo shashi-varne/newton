@@ -23,8 +23,6 @@ class CommonRenderBenefits extends Component {
 
     componentWillMount() {
 
-        console.log("render benefits");
-
         let { params } = this.props.location || {};
         if(!params || !params.renderData) {
             this.props.history.goBack();

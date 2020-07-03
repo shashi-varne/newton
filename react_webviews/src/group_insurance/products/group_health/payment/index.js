@@ -76,41 +76,42 @@ class GroupHealthPayment extends Component {
       paymentFailed: paymentFailed
     })
 
-
-    try {
-
-      this.setState({
-        show_loader: true
-      });
-
-      let quote_id = storageService().get('ghs_ergo_quote_id');
-
-      const res = await Api.get('/api/ins_service/api/insurance/hdfcergo/get/policy/' + quote_id);
-
-      var resultData = res.pfwresponse.result;
-
-      this.setState({
-        show_loader: false
-      });
-      if (res.pfwresponse.status_code === 200) {
-
-        let lead = resultData.policy_data.insured_lead_details || {};
-        let policy_data = resultData.policy_data || {};
+    if(!paymentFailed) {
+      try {
 
         this.setState({
-          policy_data: policy_data,
-          lead: lead
-        })
-      } else {
-        toast(resultData.error || resultData.message
-          || 'Something went wrong');
+          show_loader: true
+        });
+  
+        let quote_id = storageService().get('ghs_ergo_quote_id');
+  
+        const res = await Api.get('/api/ins_service/api/insurance/hdfcergo/get/policy/' + quote_id);
+  
+        var resultData = res.pfwresponse.result;
+  
+        this.setState({
+          show_loader: false
+        });
+        if (res.pfwresponse.status_code === 200) {
+  
+          let lead = resultData.policy_data.insured_lead_details || {};
+          let policy_data = resultData.policy_data || {};
+  
+          this.setState({
+            policy_data: policy_data,
+            lead: lead
+          })
+        } else {
+          toast(resultData.error || resultData.message
+            || 'Something went wrong');
+        }
+      } catch (err) {
+        console.log(err)
+        this.setState({
+          show_loader: false
+        });
+        toast('Something went wrong');
       }
-    } catch (err) {
-      console.log(err)
-      this.setState({
-        show_loader: false
-      });
-      toast('Something went wrong');
     }
   }
 

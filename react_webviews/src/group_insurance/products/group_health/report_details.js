@@ -12,7 +12,7 @@ import toast from '../../../common/ui/Toast';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
 import { initialize } from './common_data';
-import { ghGetMember } from '../../constants';
+import { ghGetMember, getCssMapperReport } from '../../constants';
 import download from 'assets/download.svg';
 class GroupHealthReportDetails extends Component {
 
@@ -48,56 +48,6 @@ class GroupHealthReportDetails extends Component {
         this.initialize();
     }
 
-    statusMapper(policy) {
-        let cssMapper = {
-            'init': {
-                color: 'yellow',
-                disc: 'Policy Pending'
-            },
-            'policy_issued': {
-                color: 'green',
-                disc: 'Policy Issued'
-            },
-            'complete': {
-                color: 'green',
-                disc: 'PAYMENT DONE'
-            },
-            'policy_expired': {
-                color: 'red',
-                disc: 'Policy Expired'
-            },
-            'rejected': {
-                color: 'red',
-                disc: 'Policy Rejected'
-            },
-            'cancelled': {
-                color: 'red',
-                disc: 'Policy Cancelled'
-            }
-        }
-
-
-        let obj = {
-            status: policy.status
-        }
-        // if (policy.key === 'TERM_INSURANCE') {
-        //   if (policy.status === 'failed') {
-        //     obj.status = 'rejected';
-        //   } else if (policy.status === 'success') {
-        //     obj.status = 'policy_issued';
-        //   } else {
-        //     obj.status = 'init';
-        //   }
-        // } else {
-        //   obj.status = policy.status;
-        // }
-
-        obj.cssMapper = cssMapper[obj.status] || cssMapper['init'];
-
-        return obj;
-    }
-
-
     async componentDidMount() {
 
         try {
@@ -115,7 +65,7 @@ class GroupHealthReportDetails extends Component {
                 lead.member_base = ghGetMember(lead);
 
 
-                let data = this.statusMapper(policy_data);
+                let data = getCssMapperReport(policy_data);
                 policy_data.status = data.status;
                 policy_data.cssMapper = data.cssMapper;
 
@@ -446,7 +396,7 @@ class GroupHealthReportDetails extends Component {
                                 DATE OF PAYMENT
                                 </div>
                             <div className="mtr-bottom">
-                                {this.state.policy_data.transaction_date}
+                                {this.state.policy_data.transaction_date || '-'}
                             </div>
                         </div>
                     </div>
@@ -466,9 +416,9 @@ class GroupHealthReportDetails extends Component {
                     </div>
 
                     {!this.state.showPlanDetails &&
-                        <div className="report-detail-download" style={{ fontWeight: 400 }}>
+                        <div className="report-detail-download">
 
-                            <div className="report-detail-download-text" onClick={() => {
+                            <div className="report-detail-download-text" style={{ fontWeight: 400 }} onClick={() => {
                                 this.setState({
                                     showPlanDetails: !this.state.showPlanDetails
                                 })
@@ -484,7 +434,7 @@ class GroupHealthReportDetails extends Component {
                                     <div className="flex"
                                         onClick={() => this.downloadPolicy()}>
                                         <img src={download} alt="" />
-                                        <div className="report-detail-download-text">Download Policy</div>
+                                        <div className="report-detail-download-text" style={{ fontWeight: 400 }}>Download Policy</div>
                                     </div>
 
                                 </div>

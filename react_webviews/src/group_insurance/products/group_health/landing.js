@@ -23,7 +23,7 @@ class GroupHealthLanding extends Component {
     this.state = {
       show_loader: true,
       productName: getConfig().productName,
-      provider: 'HDFC_ERGO',
+      provider: 'HDFCERGO',
       checked: true,
       offerImageData: [],
       whats_not_covered: [],
@@ -177,7 +177,7 @@ class GroupHealthLanding extends Component {
   handleResume = () => {
 
     storageService().set('ghs_ergo_quote_id', this.state.quoteResume.id);
-    if (this.state.quoteResume.status === 'ready_to_pay') {
+    if (this.state.quoteResume.status !== 'init') {
       this.navigate('final-summary');
     } else {
       this.navigate(`personal-details/${this.state.quoteResume.member_base[0].key}`);

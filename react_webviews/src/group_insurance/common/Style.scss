@@ -484,22 +484,37 @@
 .yellow .circle {
   background: #f7b500; 
 }
-.report-ins-name {
-  color: #160d2e;
-  font-size: 16px;
-  margin-bottom: 15px;
-}
-.report-cover {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.report-cover-amount {
-  color: #878787;
-  font-size: 14px;
-}
-.report-cover-amount span {
-  font-weight: 700;
+
+
+.group-insurance-report {
+  .top-title {
+    color: #0A1D32;
+    font-size: 16px;
+    margin: 0 0 10px 0;
+    font-weight: 400;
+  }
+
+  .report-ins-name {
+    color: #767E86;
+    font-size: 16px;
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
+
+  .report-cover {
+    display: flex;
+    align-items: baseline;
+    flex-direction: column;
+  }
+  .report-cover-amount {
+    color: #767E86;
+    font-size: 14px;
+    margin: 0 0 8px 0;
+  }
+  .report-cover-amount span {
+    font-weight: 500;
+    margin: 0 5px 0 0;
+  }
 }
 .report-detail-header {
   display: flex;

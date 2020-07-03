@@ -590,8 +590,8 @@ export function getBhartiaxaStatusToState(policy) {
 }
 
 export const health_providers = {
-  'HDFC_ERGO': {
-      key: 'HDFC_ERGO',
+  'HDFCERGO': {
+      key: 'HDFCERGO',
       title: 'HDFC ERGO',
       subtitle: 'my: health Suraksha',
       logo: 'hdfc_ergo_ic_logo_cta.svg',
@@ -684,4 +684,71 @@ export function ghGetMember(lead) {
 
   return member_base;
 
+}
+
+export function getCssMapperReport(policy) {
+
+  let provider = policy.provider;
+
+  let cssMapper = {
+    'init': {
+      color: 'yellow',
+      disc: 'Policy Pending'
+    },
+    'policy_issued': {
+      color: 'green',
+      disc: 'Policy Issued'
+    },
+    'success': {
+      color: 'green',
+      disc: 'Policy Issued'
+    },
+    'complete': {
+      color: 'green',
+      disc: 'PAYMENT DONE'
+    },
+    'policy_expired': {
+      color: 'red',
+      disc: 'Policy Expired'
+    },
+    'rejected': {
+      color: 'red',
+      disc: 'Policy Rejected'
+    },
+    'failed': {
+      color: 'red',
+      disc: 'Policy Failed'
+    },
+    'cancelled': {
+      color: 'red',
+      disc: 'Policy Cancelled'
+    }
+  }
+
+  if(provider === 'HDFCERGO') {
+    cssMapper.complete = {
+      color: 'yellow',
+      disc: 'Policy Pending'
+    }
+
+    cssMapper.success.disc = 'Issued on ' + (policy.dt_policy_start || '');
+  }
+
+
+  let obj = {}
+  if (policy.key === 'TERM_INSURANCE') {
+    if (policy.status === 'failed') {
+      obj.status = 'rejected';
+    } else if (policy.status === 'success') {
+      obj.status = 'policy_issued';
+    } else {
+      obj.status = 'init';
+    }
+  } else {
+    obj.status = policy.status;
+  }
+
+  obj.cssMapper = cssMapper[obj.status] || cssMapper['init'];
+
+  return obj;
 }
