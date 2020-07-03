@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import Container from '../../gold/common/Container';
 
 import { getConfig } from 'utils/functions';
-import HowToSteps from '../ui/HowToSteps';
+import Faqs from '../ui/Faqs';
 
-class CommonRenderBenefits extends Component {
+class CommonRenderFaqs extends Component {
 
     constructor(props) {
         super(props);
@@ -23,9 +23,9 @@ class CommonRenderBenefits extends Component {
 
     componentWillMount() {
 
-        console.log("render benefits");
 
         let { params } = this.props.location || {};
+        console.log(params);
         if(!params || !params.renderData) {
             this.props.history.goBack();
             return;
@@ -61,12 +61,12 @@ class CommonRenderBenefits extends Component {
                 <div className="common-top-page-subtitle-dark">
                     {this.state.renderData.header_subtitle}
                 </div>}
-                <div className="generic-render-benefits">
-                    <HowToSteps baseData={this.state.renderData.steps} />
+                <div className="generic-render-faqs">
+                    <Faqs options={this.state.renderData.steps.options} />
                 </div>
             </Container>
         );
     }
 }
 
-export default CommonRenderBenefits;
+export default CommonRenderFaqs;

@@ -4,7 +4,8 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { health_providers, genderOptions } from '../../../constants';
-import { calculateAge, toFeet, capitalizeFirstLetter, formatDate, validatePan } from 'utils/validators';
+import { calculateAge, toFeet, capitalizeFirstLetter, 
+  formatDate, validatePan } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import DropdownInModal from '../../../../common/ui/DropdownInModal';
@@ -44,7 +45,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     let member_key = this.props.match.params.member_key;
 
     let pan_needed = false;
-    if (lead.premium > 100000 && (member_key === 'self' || member_key === 'applicant')) {
+    if (lead.total_amount > 100000 && (member_key === 'self' || member_key === 'applicant')) {
       pan_needed = true;
     }
 
@@ -380,7 +381,7 @@ class GroupHealthPlanPersonalDetails extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
-        title={this.state.header_title}
+        title={this.setEditTitle(this.state.header_title)}
         withProvider={true}
         handleClick2={this.handleClick2}
         buttonData={this.state.bottomButtonData}

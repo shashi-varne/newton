@@ -165,7 +165,7 @@ class GroupHealthPlanIsPed extends Component {
         if (canSubmitForm) {
 
             this.setState({
-                next_state: next_state ?  'select-ped/' + next_state : this.state.next_state
+                next_state: next_state ?  `${this.props.edit  ? 'edit-' : ''}select-ped/` + next_state : this.state.next_state
             })
             this.updateLead(body);
         }
@@ -239,7 +239,7 @@ class GroupHealthPlanIsPed extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
-                title="One last step"
+                title={this.props.edit ? 'Edit diseases' : "One last step"}
                 buttonTitle="CONTINUE"
                 withProvider={true}
                 handleClick2={this.handleClick2}

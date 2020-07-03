@@ -73,7 +73,6 @@ class GroupHealthPlanDetails extends Component {
                 show_loader: false
             });
             var resultData = res.pfwresponse.result;
-            console.log(resultData);
             if (res.pfwresponse.status_code === 200) {
 
                 this.setState({
@@ -102,12 +101,12 @@ class GroupHealthPlanDetails extends Component {
             'whats_included': {
                 'header_title': 'What is included',
                 'steps': this.state.extra_data.whats_included,
-                'pathname': '/common/render-benefits'
+                'pathname': '/gold/common/render-benefits'
             },
             'whats_not_included': {
                 'header_title': "What's not included",
                 'steps': this.state.extra_data.whats_not_included,
-                'pathname': '/common/render-benefits'
+                'pathname': '/gold/common/render-benefits'
             },
             'how_to_claim': {
                 'header_title': "How to claim",
@@ -290,7 +289,7 @@ class GroupHealthPlanDetails extends Component {
 
                     {this.state.premium_data.WF.map(this.renderPremiums)}
 
-                    <div className="common-how-steps" style={{ border: 'none' }}>
+                    <div className="common-how-steps" style={{ border: 'none',marginTop:0 ,marginBottom:0 }}>
                         <div className="top-tile">
                             <div className="top-title">
                                 Benefits under this plan
@@ -319,7 +318,7 @@ class GroupHealthPlanDetails extends Component {
                         </div>
                     </div>
 
-                    <div className="common-how-steps" style={{ border: 'none' }}>
+                    <div className="common-how-steps" style={{ border: 'none',marginTop:0 ,marginBottom:0 }}>
                         <div className="top-tile">
                             <div className="top-title">
                                 Waiting period

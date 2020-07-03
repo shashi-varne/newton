@@ -96,23 +96,31 @@ class Report extends Component {
     for (var i = 0; i < ins_policies.length; i++) {
       let policy = ins_policies[i];
       let provider = policy.provider;
-      let obj = {};
+      let obj = policy;
 
       if(provider === 'HDFCERGO') {
-        obj = policy;
+        obj = {
+          ...policy,
+          product_name: policy.base_plan_title,
+          product_key: policy.product_title,
+          cover_amount: policy.sum_assured,
+          premium: policy.premium,
+          key: 'HDFCERGO',
+          id: policy.id
+        };
       } else if(provider === 'BHARTIAXA') {
         obj = {
           status: policy.status,
           product_name: policy.product_title,
           product_key: policy.product_name,
           cover_amount: policy.sum_assured,
-          product_coverage: policy.insured_details.product_coverage,
+          product_coverage: policy.insured_details ? policy.insured_details.product_coverage : '',
           premium: policy.premium,
           key: 'BHARTIAXA',
           provider: 'BHARTIAXA',
           id: policy.id
         }
-      } else if(provider === 'HDFCERGO') {
+      } else if(provider === 'EDELWEISS') {
         obj = {
           status: policy.status,
           product_name: 'Term insurance (Edelweiss tokio life zindagi plus)',
@@ -169,6 +177,7 @@ class Report extends Component {
       }
 
     } catch (err) {
+      console.log(err)
       this.setState({
         show_loader: false
       });
@@ -189,10 +198,13 @@ class Report extends Component {
   redirectCards(policy) {
     this.sendEvents('next', policy.key);
     let path = '';
-    if (policy.key === 'TERM_INSURANCE') {
+    let key = policy.key;
+    if (key === 'TERM_INSURANCE') {
       if (this.state.termRedirectionPath) {
         path = this.state.termRedirectionPath;
       }
+    } else if(key === 'HDFC_ERGO') {
+      path = `/group-insurance/group-health/${key}/reportdetails/${policy.id}`;
     } else {
       path = '/group-insurance/common/reportdetails/' + policy.id;
     }
@@ -315,7 +327,7 @@ class Report extends Component {
             product_key: policy.product_name,
             cover_amount: policy.sum_assured,
             premium: policy.premium,
-            key: 'BHARTIAXA',
+            key: policy.provider,
             id: policy.id
           }
 

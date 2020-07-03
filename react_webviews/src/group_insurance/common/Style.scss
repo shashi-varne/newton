@@ -548,7 +548,7 @@
 .report-detail-download-text {
   color: var(--secondary);
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 400;
 }
 .report-detail .Accordion:last-child {
   border-bottom: 0;
@@ -791,6 +791,7 @@
     align-items: center;
     padding: 15px 0px 15px 0px;
     border-top: 1px solid #ededed;
+    cursor: pointer;
   }
 
   .bd-content {
@@ -939,6 +940,7 @@
         margin: 10px 0 10px 0;
         padding: 6px 0 15px 0;
         border-bottom: 1px solid #ededed;
+        cursor: pointer;
     }
     
     .bct-top-title {

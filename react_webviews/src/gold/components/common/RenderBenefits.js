@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Container from '../../gold/common/Container';
+import Container from '../../common/Container';
 
 import { getConfig } from 'utils/functions';
-import HowToSteps from '../ui/HowToSteps';
+import HowToSteps from '../../../common/ui/HowToSteps';
 
 class CommonRenderBenefits extends Component {
 
@@ -22,8 +22,6 @@ class CommonRenderBenefits extends Component {
     }
 
     componentWillMount() {
-
-        console.log("render benefits");
 
         let { params } = this.props.location || {};
         if(!params || !params.renderData) {

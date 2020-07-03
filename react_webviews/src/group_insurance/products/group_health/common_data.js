@@ -1,12 +1,16 @@
-import { storageService, inrFormatDecimal } from 'utils/validators';
+import { storageService, inrFormatDecimal, getEditTitle } from 'utils/validators';
 import { getConfig } from 'utils/functions';
 import { health_providers, ghGetMember } from '../../constants';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
+import {  openPdfCall } from 'utils/native_callback';
 
 export async function initialize() {
 
     this.navigate = navigate.bind(this);
+    this.openInBrowser = openInBrowser.bind(this);
+    this.setEditTitle = setEditTitle.bind(this);
+
     let provider = this.props.parent && this.props.parent.props ? this.props.parent.props.match.params.provider : this.props.match.params.provider;
     let providerData = health_providers[provider];
 
@@ -238,4 +242,42 @@ export async function resetQuote() {
         });
         toast('Something went wrong');
     }
+}
+
+export function openInBrowser(url, type) {
+
+    this.sendEvents('tnc_clicked');
+    if (!getConfig().Web) {
+        this.setState({
+            show_loader: true
+        })
+    }
+
+    let mapper = {
+        'tnc' : {
+            header_title: 'Terms & Conditions',
+        },
+        'read_document' : {
+            header_title: 'Terms & Conditions',
+        }
+    }
+
+    let mapper_data = mapper[type];
+
+    let data = {
+        url: url,
+        header_title: mapper_data.header_title,
+        icon: 'close'
+    };
+
+    openPdfCall(data);
+}
+
+export function setEditTitle(string) {
+
+    if(this.props.edit) {
+        return getEditTitle(string);
+    }
+
+    return string;
 }

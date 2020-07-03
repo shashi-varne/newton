@@ -56,14 +56,14 @@ class GroupHealthPlanSelectFloater extends Component {
                         'title': 'All the members',
                         'premium': premium_data_wf.net_premium,
                         'subtitle': 'in ' + inrFormatDecimal(premium_data_wf.net_premium),
-                        'discount': premium_data_wf.total_discount ? inrFormatDecimal(premium_data_wf.total_discount) : '',
+                        'discount': premium_data_wf.account_type_discount ? inrFormatDecimal(premium_data_wf.account_type_discount) : '',
                         'key': 'WF'
                     },
                     {
                         'title': 'Each member individualy',
                         'subtitle': 'in ' + inrFormatDecimal(premium_data_nf.net_premium),
                         'premium': premium_data_nf.net_premium,
-                        'discount': premium_data_nf.total_discount ? inrFormatDecimal(premium_data_nf.total_discount) : '',
+                        'discount': premium_data_nf.account_type_discount ? inrFormatDecimal(premium_data_nf.account_type_discount) : '',
                         'key': 'NF'
                     }
                 ];
@@ -203,8 +203,8 @@ class GroupHealthPlanSelectFloater extends Component {
                             <div className="di-tile-right">{inrFormatDecimal(this.state.premium_data_nf.base_premium)}</div>
                         </div>
                         <div className="flex-between di-tile">
-                            <div className="di-tile-left">{this.state.premium_data_nf.tenure_discount_percentage}% discount</div>
-                            <div className="di-tile-right">{inrFormatDecimal(this.state.premium_data_nf.total_discount)}</div>
+                            <div className="di-tile-left">{this.state.premium_data_nf.account_type_discount_percentage}% discount</div>
+                            <div className="di-tile-right">{inrFormatDecimal(this.state.premium_data_nf.account_type_discount)}</div>
                         </div>
 
                         <div className="generic-hr"></div>

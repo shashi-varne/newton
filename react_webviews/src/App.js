@@ -18,6 +18,7 @@ import IsipBIller from './isip';
 import HelpSupport from './help_support';
 import CommonLanding from './common/components/landing';
 import CommonRenderBenefits from './common/components/RenderBenefits';
+import CommonRenderFaqs from './common/components/RenderFaqs';
 import Fhc from './fhc';
 
 class App extends Component {
@@ -38,7 +39,8 @@ class App extends Component {
           <Route path="/help" component={HelpSupport} />
           <Route path="/webview/:main_module/:sub_module" component={CommonLanding} />
           <Route path="/webview/:main_module" component={CommonLanding} />
-          <Route path="/common/render-benefits" component={CommonRenderBenefits} />
+          <Route path="/gold/common/render-benefits" component={CommonRenderBenefits} />
+          <Route path="/common/render-faqs" component={CommonRenderFaqs} />
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>

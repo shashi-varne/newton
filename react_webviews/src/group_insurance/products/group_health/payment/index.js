@@ -94,8 +94,6 @@ class GroupHealthPayment extends Component {
       });
       if (res.pfwresponse.status_code === 200) {
 
-        console.log(resultData);
-
         let lead = resultData.policy_data.insured_lead_details || {};
         let policy_data = resultData.policy_data || {};
 
@@ -149,7 +147,7 @@ class GroupHealthPayment extends Component {
     if(this.state.paymentFailed) {
       state =  `/group-insurance/group-health/${this.state.provider}/final-summary`
     } else {
-      state = '/group-insurance/common/report';
+      state  = `/group-insurance/group-health/${this.state.provider}/reportdetails/${this.state.policy_data.id}`
     }
 
     this.navigate(state);
@@ -229,10 +227,12 @@ class GroupHealthPayment extends Component {
                     </div>
                   </div>
                   <div className="highlight-text2" style={{ color: '#767E86', marginLeft: 7 }}>
-                    <div style={{ margin: '5px 0 6px 0' }}>Sum assured
-                                {numDifferentiationInr(this.state.lead.sum_assured)} for {this.state.lead.tenure} year</div>
+                    <div style={{ margin: '5px 0 6px 0' }}>Sum 
+                    assured {numDifferentiationInr(this.state.lead.sum_assured)} for {this.state.lead.tenure} year</div>
                     <div style={{ margin: '5px 0 6px 0' }}>Policy id: {this.state.policy_data.policy_number}</div>
-                    <div style={{ margin: '5px 0 6px 0' }}>{formatDateAmPm(this.state.policy_data.dt_created)}</div>
+                    <div style={{ margin: '5px 0 6px 0' }}>
+                      {formatDateAmPm(this.state.policy_data.dt_created)}
+                      </div>
                   </div>
                 </div>
               </div>

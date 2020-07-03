@@ -194,6 +194,11 @@ class Container extends Component {
         this.navigate(group_health_landing);
         return;
       }
+
+      if(this.checkStringInString('reportdetails')) {
+        this.navigate('/group-insurance/common/report');
+        return;
+      }
       
     }
 
@@ -235,28 +240,31 @@ class Container extends Component {
       return;
     }
 
-    // #TODO
-    // if (project_child === 'bhartiaxa' && pathname.indexOf('/home_insurance') >= 0 && 
-    // pathname.indexOf('/plan') >= 0) {
-    //   this.navigate('/group-insurance');
-    //   return;
-    // }
-
-    // if (project_child === 'bhartiaxa' && pathname.indexOf('/plan') >= 0 &&
-    // pathname.indexOf('/health') >= 0 && pathname.indexOf('/group-health') < 0) {
-    //   this.navigate('/group-insurance/health/landing');
-    //   return;
-    // }
-
-    // if (project_child === 'bhartiaxa' && pathname.indexOf('/plan') >= 0) {
-    //   this.backMapperBharti('/plan');
-    //   return;
-    // }
-
-    // if (project_child === 'bhartiaxa' && pathname.indexOf('/health/landing') >= 0 && pathname.indexOf('/group-health') < 0) {
-    //   this.navigate('/group-insurance');
-    //   return;
-    // }
+    if(pathname.indexOf('/group-health') < 0) {
+      if (project_child === 'bhartiaxa' && pathname.indexOf('/home_insurance') >= 0 && 
+      pathname.indexOf('/plan') >= 0) {
+        this.navigate('/group-insurance');
+        return;
+      }
+  
+     
+      if (project_child === 'bhartiaxa' && pathname.indexOf('/plan') >= 0 &&
+      pathname.indexOf('/health') >= 0) {
+        this.navigate('/group-insurance/health/landing');
+        return;
+      }
+  
+      if (project_child === 'bhartiaxa' && pathname.indexOf('/plan') >= 0) {
+        this.backMapperBharti('/plan');
+        return;
+      }
+  
+      if (project_child === 'bhartiaxa' && pathname.indexOf('/health/landing') >= 0) {
+        this.navigate('/group-insurance');
+        return;
+      }
+    }
+   
 
     if (project_child === 'term') {
       if(params && params.backToState === 'report') {
@@ -300,7 +308,6 @@ class Container extends Component {
         break;
       case "/group-insurance/common/report":
         openModule('app/portfolio')
-        // nativeCallback({ action: 'exit', events: this.getEvents('back') });
         break;
       case "/group-insurance/term/resume":
       case "/group-insurance/term/journey":
@@ -452,7 +459,7 @@ class Container extends Component {
     return (
       <div className={`ContainerWrapper ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`}  >
         {/* Header Block */}
-        {!this.props.hide_header && <Header
+        {!this.props.hide_header && !this.props.showLoader && <Header
           disableBack={this.props.disableBack}
           title={this.props.title}
           smallTitle={this.props.smallTitle}

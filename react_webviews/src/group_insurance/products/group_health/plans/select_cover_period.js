@@ -127,13 +127,13 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                         <div className="name">
                             {props.tenure} year{props.tenure !== "1" && <span>s</span>} for {inrFormatDecimal(props.base_premium)}
                         </div>
-                       {props.total_discount > 0 && 
+                       {props.tenure_discount > 0 && 
                             <div className="flex" style={{margin: '4px 0 0 0'}}>
                             <img style={{ width: 10 }} src={require(`assets/ic_discount.svg`)} alt="" />
                             <span style={{
                                 color: '#4D890D', fontSize: 10,
                                 fontWeight: 400, margin: '0 0 0 4px'
-                            }}>save {inrFormatDecimal(props.total_discount)} </span>
+                            }}>save {inrFormatDecimal(props.tenure_discount)} </span>
                         </div>
                         }
                     </div>

@@ -32,7 +32,6 @@ class GroupHealthPlanDob extends Component {
 
     async componentDidMount() {
         let groupHealthPlanData = this.state.groupHealthPlanData;
-        console.log(groupHealthPlanData);
 
         this.setState({
             providerData: health_providers[this.state.provider],
@@ -165,8 +164,6 @@ class GroupHealthPlanDob extends Component {
         let final_dob_data = this.state.final_dob_data;
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let ui_members = groupHealthPlanData.ui_members || {};
-
-        console.log(final_dob_data);
 
         for (var i = 0; i < final_dob_data.length; i++) {
 

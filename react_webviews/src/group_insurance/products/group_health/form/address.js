@@ -231,7 +231,7 @@ class GroupHealthPlanAddressDetails extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
-                title="Address details"
+                title={this.setEditTitle("Address details")}
                 buttonTitle="CONTINUE"
                 withProvider={true}
                 handleClick2={this.handleClick2}
