@@ -302,7 +302,12 @@ class Container extends Component {
         {/* Children Block */}
         <div
           style={this.props.styleContainer}
-          className={`Container hni-container ${this.props.classOverRideContainer} ${this.props.noPadding ? "no-padding" : ""}`}
+          className={`
+            Container hni-container
+            ${this.props.classOverRideContainer}
+            ${this.props.noPadding ? "no-padding" : ""}
+            ${this.props.noFooter ? '' : 'm-b-60'}
+          `}
         >
           {this.props.children}
         </div>

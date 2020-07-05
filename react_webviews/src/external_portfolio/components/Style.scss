@@ -12,6 +12,10 @@
   padding: 20px 20px;
 }
 
+.m-b-60 {
+  margin-bottom: 60px;
+}
+
 .bg-highlight {
   background-color: var(--highlight) !important;
   color: black !important;
@@ -31,6 +35,11 @@
   margin-top: 10px;
   line-height: 20px;
   padding: 0 20px;
+}
+
+#cas-email-highlight {
+  color: var(--primary);
+  font-weight: bold;
 }
 
 .email-entry-banner {
@@ -63,7 +72,7 @@
   
   h4 {
     font-size: 17px;
-    font-weight: bold;
+    font-weight: 500;
     margin-top: 0;
   }
 
@@ -95,6 +104,7 @@
   margin-top: 30px !important;
   padding: 18px 50px !important;
   background-color: white !important;
+  border-radius: 4px !important;
 }
 
 .gen-statement-btn-label {
@@ -252,4 +262,37 @@
 .bg-black {
   background: black !important;
   color: white !important;
+}
+
+#ext-portfolio-custom-legend {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+
+  .custom-legend-item:nth-child(1) {
+    flex-basis: 50%;
+  }
+  
+  .custom-legend-item {
+    font-size: 16px;
+    letter-spacing: 0;
+    margin-bottom: 20px;
+
+    .color-square {
+      height: 14px;
+      width: 14px;
+      margin-right: 10px;
+      display: inline-block;
+      background: transparent;
+    }
+
+    .label {
+      font-weight: 500;
+      color: #0a1d32;
+    }
+
+    .label-val {
+      color: #767e86;
+    }
+  }
 }

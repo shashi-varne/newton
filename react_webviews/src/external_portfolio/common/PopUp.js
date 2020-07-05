@@ -29,10 +29,10 @@ function PopUp(props) {
         ) : (
         <DialogActions>
           <Button onClick={props.handleNo} color="default">
-            No
+            {props.cancelText || 'No'}
           </Button>
           <Button onClick={props.handleYes} color="default" autoFocus>
-            Yes
+            {props.okText || 'Yes'}
           </Button>
         </DialogActions>
       )}

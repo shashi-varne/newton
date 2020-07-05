@@ -28,7 +28,7 @@ export default class RegenerateOptsPopup extends Component {
             id="btm_mail_check_img"
           />
           <span className="header-title-text">
-            Reconfirming the <br />status of CAS email
+            What is the status of the<br /> CAS email?
           </span>
           <Button
             variant="outlined" color="secondary" fullWidth={true}
@@ -36,7 +36,7 @@ export default class RegenerateOptsPopup extends Component {
               root: 'gen-statement-btn',
               label: 'gen-statement-btn-label'
             }}
-            onClick={this.props.forwardedClick}
+            onClick={this.props.emailForwardedHandler}
           >
             CAS EMAIL FORWARDED
           </Button>

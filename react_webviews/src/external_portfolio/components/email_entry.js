@@ -42,8 +42,9 @@ class email_entry extends Component {
       storageService().setObject('new_user_email', email);
       try {
         this.setLoader(true);
-        const { emails } = await fetchEmails({ email_id: email });
-        if (emails.length) {
+        const emails = await fetchEmails({ email_id: email });
+        if (false) {
+          this.setLoader(false);
           this.setState({ openPopup: true });
         } else {
           await requestStatement({ email });
@@ -74,7 +75,7 @@ class email_entry extends Component {
       <Container
         hideInPageTitle={true}
         fullWidthButton={true}
-        classHeader="bg-highlight"
+        classHeader={show_loader ? '' : 'bg-highlight'}
         handleClick={this.goNext}
         buttonTitle="Generate Statement"
         showLoader={show_loader}

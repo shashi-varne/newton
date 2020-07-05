@@ -4,17 +4,29 @@ import image from '../../assets/contact_details_icn.svg';
 import InfoIcon from '@material-ui/icons/Info';
 import cas_not_received_f from '../../assets/fisdom/cas_not_received.svg';
 import cas_not_received_m from '../../assets/myway/cas_not_received.svg';
+import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from '../../utils/functions';
 import { Button } from 'material-ui';
 import InfoBox from '../mini-components/InfoBox';
 import { navigate } from '../common/commonFunctions';
+import { requestStatement } from '../common/ApiCalls';
 
 const productType = getConfig().productName;
 class StatementNotReceived extends Component {
   constructor(props) {
+    // TODO: Receive email as a route prop or from storageService?
     super(props);
-    this.state = {};
+    const { params } = props.location;
+    this.state = {
+      status: params ? params.status : null,
+    };
     this.navigate = navigate.bind(this);
+  }
+
+  regenerateStatement = async () => {
+    const email = '', statement_id = ''; //TODO: fetch proper email and statement_id
+    // await requestStatement({ email, statement_id, retrigger: true });
+    this.goNext('statement_request');
   }
 
   goNext = (path) => {
@@ -25,14 +37,23 @@ class StatementNotReceived extends Component {
     }
   }
 
-  goBack = () => {
-    this.props.history.goBack();
+  goBack = (params) => {
+    if (params.exitToApp) {
+      nativeCallback({ action: 'exit', events: this.getEvents('back') });
+    } else {
+      this.props.history.goBack();
+    }
   }
 
   render() {
+    const { status } = this.state;
     return (
       <Container
-        title="We haven't received any CAS email"
+        title={
+          status === 'requested' ?
+          "We haven't received any CAS email" : "Error while processing CAS email"
+        }
+        headerData={{ icon: 'close' }}
         noFooter={true}
         goBack={this.goBack}
       >
@@ -41,18 +62,20 @@ class StatementNotReceived extends Component {
           alt="cas-not-received"
           style={{ width: '100%'}}
           />
-        <div className="ext-pf-subheader">
-          <h4>Make sure your email id is correct</h4>
-          <InfoBox
-            image={image}
-            imageAltText="mail-icon"
-            ctrlText="Change"
-            onCtrlClick={() => this.goNext('email_entry')}
-          >
-            <div id="info-box-body-header">Email ID</div>
-            <span id="info-box-body-subheader">anant@fisdom.com</span>
-          </InfoBox>
-        </div>
+        {status === 'requested' &&
+          <div className="ext-pf-subheader">
+            <h4>Make sure your email id is correct</h4>
+            <InfoBox
+              image={image}
+              imageAltText="mail-icon"
+              ctrlText="Change"
+              onCtrlClick={() => this.goNext('email_entry')}
+            >
+              <div id="info-box-body-header">Email ID</div>
+              <span id="info-box-body-subheader">anant@fisdom.com</span>
+            </InfoBox>
+          </div>
+        }
         <div className="ext-pf-subheader">
           <h4>Please ensure that the correct email is forwarded to</h4>
           <InfoBox
@@ -83,7 +106,7 @@ class StatementNotReceived extends Component {
               root: 'gen-statement-btn',
               label: 'gen-statement-btn-label'
             }}
-            onClick={() => this.goNext('statement_request')}
+            onClick={this.regenerateStatement}
           >
             Regenerate Statement
           </Button>

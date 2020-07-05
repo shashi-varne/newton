@@ -13,10 +13,11 @@ class EmailExampleView extends Component {
   }
 
   render() {
+    const subtitleText = (<span>Please ensure that the correct email is forwarded to <span id="cas-email-highlight">cas@fisdom.com</span></span>);
     return (
       <EmailTemplate
-        title="What does the CAS email look like?"
-        subtitle="Please ensure that the correct email is forwarded to cas@fisdom.com"
+        title="How to find the CAS email?"
+        subtitle={subtitleText}
         handleClick={this.goBack}
         buttonTitle="Okay"
         goBack={this.goBack}

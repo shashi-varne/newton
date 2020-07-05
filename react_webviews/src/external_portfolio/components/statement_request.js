@@ -8,6 +8,7 @@ import RegenerateOptsPopup from '../mini-components/RegenerateOptsPopup';
 import InfoBox from '../mini-components/InfoBox';
 import { navigate } from '../common/commonFunctions';
 import { nativeCallback } from 'utils/native_callback';
+import { storageService } from '../../utils/validators';
 
 const productType = getConfig().productName;
 class StatementRequest extends Component {
@@ -17,8 +18,14 @@ class StatementRequest extends Component {
       popupOpen: false,
       showLoader: false,
       loadingText: '',
+      email: '',
     };
     this.navigate = navigate.bind(this);
+  }
+
+  componentDidMount() {
+    const new_user_email = storageService().getObject('new_user_email');
+    this.setState({ email: new_user_email});
   }
 
   generateStatement = () => {
@@ -39,6 +46,13 @@ class StatementRequest extends Component {
       popupOpen: false,
       loadingText: 'Checking if we have received any CAS email from you',
     });
+    // TODO: check statement_status for email (call email listing API with specific email ID)
+    const status = '';
+    if (status === 'success') {
+      this.navigate('external_portfolio');
+    } else {
+      this.navigate('statement_not_received', { exitToApp: true, status });
+    }
   }
 
   goBack = (params = {}) => {
@@ -50,6 +64,11 @@ class StatementRequest extends Component {
   }
 
   render() {
+    const { pathname } = this.props.history.location;
+    /* TODO: fetch email statement dt_updated and do
+    (new Date() - new Date(dt_updated))/60000 to check if or not
+    to show the regenrate btn */
+    const showRegenerateBtn = false;
     return (
       <Container
         title="Statement request sent"
@@ -57,6 +76,7 @@ class StatementRequest extends Component {
         loaderData={{
           loadingText: this.state.loadingText,
         }}
+        headerData={{ icon: 'close' }}
         noFooter={true}
         noHeader={this.state.showLoader}
         goBack={this.goBack}
@@ -68,20 +88,15 @@ class StatementRequest extends Component {
           ctrlText="Change"
         >
           <div id="info-box-body-header">Email ID</div>
-          <span id="info-box-body-subheader">anant@fisdom.com</span>
+          <span id="info-box-body-subheader">{this.state.email}</span>
         </InfoBox>
         <div className="ext-pf-subheader">
           <h4>What's next?</h4>
         </div>
         <EmailRequestSteps
-          generateBtnClick={this.generateStatement}
-          emailLinkTrigger={() => this.navigate('email_example_view')}
-        />
-        <RegenerateOptsPopup
-          forwardedClick={this.emailForwarded}
-          notReceivedClick={() => this.navigate('email_not_received')}
-          onPopupClose={this.onPopupClose}
-          open={this.state.popupOpen}
+          emailForwardedHandler={this.emailForwarded}
+          showRegenerateBtn={showRegenerateBtn}
+          parent={this}
         />
       </Container>
     );

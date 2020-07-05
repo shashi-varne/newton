@@ -30,17 +30,15 @@ const doughnutConfigOpts = {
     maintainAspectRatio: false,
   },
   legend: {
-    onClick: () => {},
-    display: true,
-    position: 'bottom',
-    align: 'start',
-    labels: {
-      fontColor: '#0a1d32',
-        fontSize: 15,
-          padding: 20
-    }
+    display: false,
   }
 };
+
+const colorsMap = {
+  fisdom: ['#DFD8EF', '#7F66BF', '#5F40AF'],
+  myway: ['#dbebff', '#94c5ff', '#68aeff'],
+};
+
 export default class ExternalPortfolio extends Component {
   constructor(props) {
     super(props);
@@ -76,10 +74,6 @@ export default class ExternalPortfolio extends Component {
 
   generateAllocationData = (data) => {
     if (!data) return {};
-    const colorsMap = {
-      fisdom: ['#DFD8EF', '#7F66BF', '#5F40AF'],
-      myway: ['#dbebff', '#94c5ff', '#68aeff'],
-    };
     const dataKeys = Object.keys(data).sort();
     return {
       labels: dataKeys.map(key => `${capitalize(key)} (${data[key]}%)`),
@@ -89,6 +83,26 @@ export default class ExternalPortfolio extends Component {
         borderColor: colorsMap[productType],
       }],
     }
+  }
+
+  renderCustomLegend = (data) => {
+    data = {
+      "equity": 59.21,
+      "hybrid": 25.0,
+      "debt": 15.79
+    };
+    const colorScheme = colorsMap[productType];
+    return (
+      <div id="ext-portfolio-custom-legend">
+        {Object.keys(data).sort().map((key, idx) => (
+          <div className="custom-legend-item">
+            <div className="color-square" style={{ 'background': colorScheme[idx] }}></div>
+            <span className="label">{capitalize(key)} </span>
+            <span className="label-val">({data[key]}%)</span>
+          </div>
+        ))}
+      </div>
+    );
   }
 
   render() {
@@ -169,6 +183,7 @@ export default class ExternalPortfolio extends Component {
         <div className="ext-pf-subheader">
           <h4>Asset Allocation</h4>
           <Doughnut data={assetAllocData} {...doughnutConfigOpts}/>
+          {this.renderCustomLegend(asset_allocation)}
         </div>
         <div className="ext-pf-subheader">
           <h4>Top holdings</h4>

@@ -37,6 +37,7 @@ const theme = createMuiTheme({
         background: 'var(--highlight)',
         border: 'none',
         display: 'block',
+        borderRadius: '4px',
       }
     }
   }
@@ -82,7 +83,7 @@ export default class EmailExpand extends Component {
   }
 
   render() {
-    const { email } = this.props;
+    const { email, clickRemoveEmail } = this.props;
     return (
       <MuiThemeProvider theme={theme}>
         <div className="email-expand-container">
@@ -99,7 +100,7 @@ export default class EmailExpand extends Component {
               {email.statement_status === 'success' ?
                 this.renderResync() : this.renderStatementPending()
               }
-              <div id="remove-email">Remove email</div>
+              <div id="remove-email" onClick={clickRemoveEmail}>Remove email</div>
             </ExpansionPanelDetails>
           </ExpansionPanel>
         </div>

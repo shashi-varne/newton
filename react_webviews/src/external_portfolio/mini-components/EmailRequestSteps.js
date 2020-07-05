@@ -6,6 +6,7 @@ import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
 import InfoBox from './InfoBox';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import RegenerateOptsPopup from './RegenerateOptsPopup';
 
 const theme = createMuiTheme({
   overrides: {
@@ -64,6 +65,7 @@ export default class EmailRequestSteps extends Component {
     super(props);
     this.state = {
       activeStep: 1,
+      popupOpen: false,
     };
   }
 
@@ -73,7 +75,7 @@ export default class EmailRequestSteps extends Component {
 
   renderStep1 = () => {
     const { parent, emailLinkClick } = this.props;
-    if (!parent || !emailLinkClick) {
+    if (!parent && !emailLinkClick) {
       return (
         <span style={{color: 'red'}}>
           Error: Please provide parent or emailLinkClick function props
@@ -93,13 +95,14 @@ export default class EmailRequestSteps extends Component {
         className="email_example_link"
         onClick={handleEmailLinkClick}
       >
-        What does the CAS email look like?
+        The email looks like this
       </div>
     </Fragment>);
   }
 
   renderStep2 = () => {
     let classes = this.props.classes || {};
+    const { showRegenerateBtn } = this.props;
     return (<Fragment>
       Please forward the email (and <b>not the statement</b> ) to
       <InfoBox
@@ -111,16 +114,18 @@ export default class EmailRequestSteps extends Component {
           cas@fisdom.com
         </span>
       </InfoBox>
-      <Button
-        variant="outlined" color="secondary" fullWidth={true}
-        classes={{
-          root: 'gen-statement-btn',
-          label: 'gen-statement-btn-label'
-        }}
-        onClick={this.props.generateBtnClick}
-      >
-        Regenerate Statement
-      </Button>
+      {showRegenerateBtn &&
+        <Button
+          variant="outlined" color="secondary" fullWidth={true}
+          classes={{
+            root: 'gen-statement-btn',
+            label: 'gen-statement-btn-label'
+          }}
+          onClick={this.generateStatement}
+        >
+          Regenerate Statement
+        </Button>
+      }
     </Fragment>);
   }
 
@@ -143,9 +148,18 @@ export default class EmailRequestSteps extends Component {
     }
   }
 
+  generateStatement = () => {
+    this.setState({ popupOpen: true });
+  }
+
+  onPopupClose = () => {
+    this.setState({ popupOpen: false });
+  }
+
   render() {
     const steps = getSteps();
     const { activeStep } = this.state;
+    const { parent, notReceivedClick, emailForwardedHandler } = this.props;
     return (
       <MuiThemeProvider theme={theme}>
         <div id="hni-stepper">
@@ -166,6 +180,14 @@ export default class EmailRequestSteps extends Component {
               </Step>
             ))}
           </Stepper>
+          <RegenerateOptsPopup
+            emailForwardedHandler={this.props.emailForwardedHandler}
+            notReceivedClick={() => notReceivedClick ?
+              notReceivedClick() : parent.navigate('email_not_received')
+            }
+            onPopupClose={this.onPopupClose}
+            open={this.state.popupOpen}
+          />
         </div>
       </MuiThemeProvider>
     );
