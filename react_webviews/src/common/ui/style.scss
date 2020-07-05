@@ -446,8 +446,12 @@ body[data-device="web"] {
     margin: 0 auto !important;
     z-index: 999999;
     height: auto !important;
-    left: 0% !important;
-    top: 14% !important;
+    left: 8% !important;
+    margin-top: 50px !important;
+  }
+  .__react_component_tooltip::before, .__react_component_tooltip::after {
+    content: "";
+      right: 46px !important;
   }
 }
 
@@ -457,6 +461,7 @@ body[data-device="mobile"] {
     margin-right: 10px !important;
     width: 62%;
     right: 0px;
+    margin-top: 40px !important;
   }
 }
 

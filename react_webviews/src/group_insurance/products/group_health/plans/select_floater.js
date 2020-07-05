@@ -164,7 +164,7 @@ class GroupHealthPlanSelectFloater extends Component {
                         <div style={{ margin: '5px 0 5px 0', color: '#0A1D32', fontSize: 14, fontWeight: 400 }}>
                             {props.subtitle}
                         </div>
-                        {props.discount && <div className="flex" style={{ margin: '4px 0 0 0' }}>
+                        {props.discount > 0 && <div className="flex" style={{ margin: '4px 0 0 0' }}>
                             <img style={{ width: 10 }} src={require(`assets/completed_step.svg`)} alt="" />
                             <span style={{
                                 color: '#4D890D', fontSize: 10,
@@ -202,10 +202,11 @@ class GroupHealthPlanSelectFloater extends Component {
                             <div className="di-tile-left">Base premium</div>
                             <div className="di-tile-right">{inrFormatDecimal(this.state.premium_data_nf.base_premium)}</div>
                         </div>
+                       {this.state.premium_data_nf.account_type_discount > 0  &&
                         <div className="flex-between di-tile">
                             <div className="di-tile-left">{this.state.premium_data_nf.account_type_discount_percentage}% discount</div>
                             <div className="di-tile-right">{inrFormatDecimal(this.state.premium_data_nf.account_type_discount)}</div>
-                        </div>
+                        </div>}
 
                         <div className="generic-hr"></div>
 

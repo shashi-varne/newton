@@ -408,7 +408,7 @@ input.default-otp-input {
 }
 .__react_component_tooltip {
   left: auto !important;
-  margin: 70px 0 0 0px !important;
+  margin-right: 10px !important;
   width: 62%;
   right: 15px;
 }

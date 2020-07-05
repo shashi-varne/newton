@@ -25,10 +25,6 @@ class TooltipClass extends Component {
                 place={'bottom'}
                 arrowColor={getConfig().highlight_color}
                 // effect="float"
-                // data-html={true}
-            //   clickable={true}
-
-             type='dark' effect='solid'
                 />
         );
     }
