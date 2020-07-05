@@ -726,11 +726,8 @@ export function getCssMapperReport(policy) {
   }
 
   if(provider === 'HDFCERGO') {
-    cssMapper.complete = {
-      color: 'yellow',
-      disc: 'Policy Pending'
-    }
-
+   
+    cssMapper.complete.disc = 'Issued on ' + (policy.dt_policy_start || '');
     cssMapper.success.disc = 'Issued on ' + (policy.dt_policy_start || '');
   }
 

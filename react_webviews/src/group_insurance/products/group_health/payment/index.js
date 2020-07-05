@@ -149,7 +149,7 @@ class GroupHealthPayment extends Component {
     if(this.state.paymentFailed) {
       state =  `/group-insurance/group-health/${this.state.provider}/final-summary`
     } else {
-      state  = `/group-insurance/group-health/${this.state.provider}/reportdetails/${this.state.policy_data.id}`
+      state  = `/group-insurance/group-health/${this.state.provider}/reportdetails/${this.state.policy_data.lead_id}`
     }
 
     this.navigate(state);
