@@ -22,11 +22,13 @@ class TooltipClass extends Component {
             <ReactTooltip
                 backgroundColor={getConfig().highlight_color}
                 textColor={'#767E86'}
-                // place={'bottom'}
+                place={'bottom'}
                 arrowColor={getConfig().highlight_color}
                 // effect="float"
                 // data-html={true}
             //   clickable={true}
+
+             type='dark' effect='solid'
                 />
         );
     }

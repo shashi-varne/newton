@@ -40,7 +40,7 @@ class GroupHealthPlanDetails extends Component {
     }
 
     componentWillMount() {
-
+        nativeCallback({ action: 'take_control_reset' });
         this.initialize();
     }
 

@@ -380,6 +380,7 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--default`, `${config_to_return.default}`);
   html.style.setProperty(`--label`, `${config_to_return.label}`);
   html.style.setProperty(`--desktop-width`, '640px');
+  html.style.setProperty(`--tooltip-width`, '540px');
 
   return config_to_return;
 }

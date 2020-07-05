@@ -22,6 +22,7 @@ class CommonRenderBenefits extends Component {
     }
 
     componentWillMount() {
+        window.scrollTo(0, 0);
 
         let { params } = this.props.location || {};
         if(!params || !params.renderData) {

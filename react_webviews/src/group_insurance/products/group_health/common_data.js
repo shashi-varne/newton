@@ -258,7 +258,7 @@ export function openInBrowser(url, type) {
             header_title: 'Terms & Conditions',
         },
         'read_document' : {
-            header_title: 'Terms & Conditions',
+            header_title: 'Read Document',
         }
     }
 

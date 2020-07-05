@@ -37,11 +37,15 @@ class Container extends Component {
 
   componentDidMount() {
 
+    window.addEventListener("scroll", this.onScroll, false);
     let pathname = this.props.history.location.pathname;
     if (pathname.indexOf('group-health') >= 0) {
       this.setState({
         new_header: true,
-        inPageTitle: true
+        inPageTitle: true,
+        force_show_inpage_title : true
+      }, () => {
+        this.onScroll();
       })
     } else {
       this.setState({
@@ -65,9 +69,6 @@ class Container extends Component {
         }
       });
     }
-
-    window.addEventListener("scroll", this.onScroll, false);
-
   }
 
   checkStringInString = (string) => {
@@ -95,7 +96,7 @@ class Container extends Component {
 
   check_hide_header_title() {
     let force_hide_inpage_title;
-    let restrict_in_page_titles = ['provider-filter'];
+    let restrict_in_page_titles = [];
     if(restrict_in_page_titles.indexOf(this.props.headerType) !== -1) {
       force_hide_inpage_title = true;
     }
@@ -111,6 +112,7 @@ class Container extends Component {
   }
 
   onScroll = () => {
+   
     if(!this.state.new_header) {
       this.setState({
         inPageTitle: false
@@ -119,12 +121,23 @@ class Container extends Component {
     }
     let inPageTitle = this.state.inPageTitle;
     if (this.getHeightFromTop() >= 56) {
-      //show up
+      //show down
       inPageTitle = true;
 
     } else {
-      //show down
+      //show up
       inPageTitle = false;
+    }
+
+    if(this.state.force_show_inpage_title) {
+      inPageTitle = true;
+      let that = this;
+      setTimeout(function(){ 
+        that.setState({
+          force_show_inpage_title: false
+        })
+     }, 100);
+      
     }
 
     this.setState({

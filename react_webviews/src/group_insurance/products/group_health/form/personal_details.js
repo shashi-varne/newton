@@ -96,8 +96,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     let selectedIndex = '';
     if (form_data.height) {
       height_options.forEach(function (x, index) {
-        // eslint-disable-next-line
-        if (x.value === parseInt(form_data.height)) {
+        if (x.value === parseInt(form_data.height,10)) {
           selectedIndex = index;
         }
       });

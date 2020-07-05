@@ -51,6 +51,12 @@ class GroupHealthPlanDob extends Component {
                 'value': '',
                 'backend_key': 'spouse_account_key'
             },
+            {
+                'key': 'husband',
+                'label': "Husband's date of birth (DD/MM/YYYY)",
+                'value': '',
+                'backend_key': 'spouse_account_key'
+            },
 
             {
                 'key': 'father',

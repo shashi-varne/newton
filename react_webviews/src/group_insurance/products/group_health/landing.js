@@ -4,7 +4,7 @@ import Container from '../../common/Container';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
-import { nativeCallback, openPdfCall } from 'utils/native_callback';
+import { nativeCallback } from 'utils/native_callback';
 import { health_providers, ghGetMember } from '../../constants';
 import HowToSteps from '../../../common/ui/HowToSteps';
 import Checkbox from 'material-ui/Checkbox';
@@ -15,6 +15,8 @@ import down_arrow from 'assets/down_arrow.svg';
 import up_arrow from 'assets/up_arrow.svg';
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import {openInBrowser} from './common_data';
+
 
 class GroupHealthLanding extends Component {
 
@@ -31,15 +33,19 @@ class GroupHealthLanding extends Component {
       quoteResume: {},
       common: {}
     }
+
+    this.openInBrowser = openInBrowser.bind(this);
   }
 
   componentWillMount() {
+    nativeCallback({ action: 'take_control_reset' });
+    
     let stepsContentMapper = {
       title: 'Why buy on ' + this.state.productName + '??',
       options: [
-        { 'icon': 'ic_gold_provider', 'title': 'No document required', 'subtitle': 'Easy and paperless process' },
-        { 'icon': 'ic_make_payment', 'title': 'Complete assistance', 'subtitle': 'Our experts will help in purchase and claim of policy' },
-        { 'icon': 'deliver', 'title': 'Secure payment', 'subtitle': 'Smooth and secure online payment process via razorpay' }
+        { 'icon': 'icn_hs_no_document', 'title': 'No document required', 'subtitle': 'Easy and paperless process' },
+        { 'icon': 'icn_hs_assistance', 'title': 'Complete assistance', 'subtitle': 'Our experts will help in purchase and claim of policy' },
+        { 'icon': 'icn_hs_payment', 'title': 'Secure payment', 'subtitle': 'Smooth and secure online payment process via razorpay' }
       ]
     }
 
@@ -183,24 +189,6 @@ class GroupHealthLanding extends Component {
       this.navigate(`personal-details/${this.state.quoteResume.member_base[0].key}`);
     }
 
-  }
-
-  openInBrowser(url) {
-
-    this.sendEvents('tnc_clicked');
-    if (!getConfig().Web) {
-      this.setState({
-        show_loader: true
-      })
-    }
-
-    let data = {
-      url: url,
-      header_title: 'Terms & Conditions',
-      icon: 'close'
-    };
-
-    openPdfCall(data);
   }
 
   openFaqs = () => {
@@ -387,7 +375,7 @@ class GroupHealthLanding extends Component {
             </div>
           </div>
 
-          <HowToSteps style={{ marginTop: 20 }} baseData={this.state.stepsContentMapper} />
+          <HowToSteps style={{ marginTop: 20,marginBottom:0 }} baseData={this.state.stepsContentMapper} />
 
 
           <div className="generic-page-title">
@@ -426,7 +414,7 @@ class GroupHealthLanding extends Component {
               <Grid item xs={11}>
                 <div className="accident-plan-terms-text" style={{}}>
                   I accept <span onClick={() => this.openInBrowser(this.state.common.tnc,
-                  'terms_and_conditions')} className="accident-plan-terms-bold" style={{ color: getConfig().primary }}>
+                  'tnc')} className="accident-plan-terms-bold" style={{ color: getConfig().primary }}>
                     Terms and conditions</span></div>
               </Grid>
             </Grid>

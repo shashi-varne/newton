@@ -51,6 +51,7 @@ class GroupHealthPayment extends Component {
 
   async componentWillMount() {
 
+    nativeCallback({ action: 'take_control_reset' });
     this.initialize();
 
     nativeCallback({ action: 'take_control_reset' });
