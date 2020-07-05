@@ -695,6 +695,10 @@ export function getCssMapperReport(policy) {
       color: 'yellow',
       disc: 'Policy Pending'
     },
+    'incomplete': {
+      color: 'yellow',
+      disc: 'Policy Pending'
+    },
     'policy_issued': {
       color: 'green',
       disc: 'Policy Issued'
@@ -705,7 +709,7 @@ export function getCssMapperReport(policy) {
     },
     'complete': {
       color: 'green',
-      disc: 'PAYMENT DONE'
+      disc: 'Policy Issued'
     },
     'policy_expired': {
       color: 'red',
