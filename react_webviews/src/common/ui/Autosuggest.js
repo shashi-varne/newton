@@ -33,7 +33,7 @@ class AutosuggestInput extends Component {
   }
 
   getSuggestions(value) {
-    const escapedValue = this.escapeRegexCharacters(value.trim());
+    const escapedValue = this.escapeRegexCharacters((value || '').trim());
 
     if (escapedValue === '') {
       return [];
