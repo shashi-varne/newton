@@ -46,13 +46,18 @@ class GroupHealthReportDetails extends Component {
 
     componentWillMount() {
         this.initialize();
+
+        const { policy_id } = this.props.match.params;
+        this.setState({
+            policy_id: policy_id
+        })
     }
 
     async componentDidMount() {
 
         try {
 
-            const res = await Api.get('api/ins_service/api/insurance/hdfcergo/get/policy/6594827726618624');
+            const res = await Api.get('api/ins_service/api/insurance/hdfcergo/get/policy/' + this.state.policy_id);
 
             this.setState({
                 show_loader: false

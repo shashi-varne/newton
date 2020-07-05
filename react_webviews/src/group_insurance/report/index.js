@@ -44,7 +44,8 @@ class Report extends Component {
         ...obj,
         product_name: policy.base_plan_title,
         top_title: 'Health insurance',
-        key: 'HDFCERGO'
+        key: 'HDFCERGO',
+        id: policy.lead_id
       };
     } else if (provider === 'BHARTIAXA') {
       obj = {
