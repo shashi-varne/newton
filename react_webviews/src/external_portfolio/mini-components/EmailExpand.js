@@ -53,16 +53,21 @@ export default class EmailExpand extends Component {
 
   resync = async () => {
     const { email, parent } = this.props;
-    await requestStatement({ email_id: email.email_id });
-    parent.navigate('statement_request', {
-      navigateBackTo: 'settings',
-      email: email.email_id,
-      allowEmailChange: false,
-    })
+    try {
+      await requestStatement({ email_id: email.email });
+      parent.navigate('statement_request', {
+        navigateBackTo: 'settings',
+        email: email.email,
+        allowEmailChange: false,
+      });
+    } catch (err) {
+      console.log(err);
+      toast(err);
+    }
   }
 
   renderResync = () => {
-    const { parent, comingFrom, email } = this.props;
+    const { email } = this.props;
     return (
       <Fragment>
         <Button
@@ -76,18 +81,21 @@ export default class EmailExpand extends Component {
         >
           Resync
         </Button>
-        <div id="resync-update-text">Last updated: {email.statement_end_date}</div>
+        <div id="resync-update-text">Last updated: {email.latest_success_statement.statement_end_date}</div>
       </Fragment>
     );
   }
 
   renderStatementPending = () => {
-    const showRegenerateBtn = (new Date() - new Date(this.props.email.dt_updated)) / 60000 >= 30;
+    const { email, parent } = this.props;
+    const showRegenerateBtn = (new Date() - new Date(email.latest_statement.dt_updated)) / 60000 >= 30;
     return (
       <div className="ext-pf-subheader">
         <h4>Statement request sent</h4>
         <EmailRequestSteps
-          parent={this.props.parent}
+          parent={parent}
+          emailDetail={email}
+          emailForwardedHandler={this.props.emailForwardedHandler}
           showRegenerateBtn={showRegenerateBtn}
           classes={{ emailBox: 'info-box-email-expand' }}
         />
@@ -96,7 +104,7 @@ export default class EmailExpand extends Component {
   }
 
   render() {
-    const { email, clickRemoveEmail } = this.props;
+    const { email, clickRemoveEmail, allowRemove } = this.props;
     return (
       <MuiThemeProvider theme={theme}>
         <div className="email-expand-container">
@@ -106,14 +114,16 @@ export default class EmailExpand extends Component {
                 email ID
               </div>
               <div className="info-box-body-text">
-                {email.email_id}
+                {email.email}
               </div>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
-              {email.statement_status === 'success' ?
+              {email.latest_statement.statement_status === 'success' ?
                 this.renderResync() : this.renderStatementPending()
               }
-              <div id="remove-email" onClick={clickRemoveEmail}>Remove email</div>
+              {allowRemove && 
+                <div id="remove-email" onClick={clickRemoveEmail}>Remove email</div>
+              }
             </ExpansionPanelDetails>
           </ExpansionPanel>
         </div>

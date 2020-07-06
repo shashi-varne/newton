@@ -159,7 +159,7 @@ export default class EmailRequestSteps extends Component {
   render() {
     const steps = getSteps();
     const { activeStep } = this.state;
-    const { parent, notReceivedClick, emailDetail } = this.props;
+    const { parent, notReceivedClick, emailDetail, emailForwardedHandler } = this.props;
     return (
       <MuiThemeProvider theme={theme}>
         <div id="hni-stepper">
@@ -181,7 +181,7 @@ export default class EmailRequestSteps extends Component {
             ))}
           </Stepper>
           <RegenerateOptsPopup
-            emailForwardedHandler={this.props.emailForwardedHandler}
+            emailForwardedHandler={() => { this.onPopupClose(); emailForwardedHandler(); }}
             notReceivedClick={() => notReceivedClick ?
               notReceivedClick() :
               parent.navigate('email_not_received', { email_detail: emailDetail })

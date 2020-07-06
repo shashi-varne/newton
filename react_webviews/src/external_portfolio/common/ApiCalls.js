@@ -38,7 +38,7 @@ export const fetchStatements = async (params) => {
   try {
     const res = await Api.get('api/external_portfolio/hni/fetch/statements', params);
     const { result, status_code: status } = res.pfwresponse;
-    return result.statements;
+    return result.statements || [];
   } catch (e) {
     throw e;
   }

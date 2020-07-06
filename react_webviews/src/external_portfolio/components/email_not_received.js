@@ -18,13 +18,16 @@ class EmailNotReceived extends Component {
   goNext = async () => {
     try {
       this.setLoader(true);
-      const { email_detail } = this.props;
+      const { email_detail } = this.props.location.params;
       await requestStatement({ 
-        email_id: email_detail.email_id,
-        statement_id: email_detail.statement_id,
+        email_id: email_detail.email,
+        statement_id: email_detail.latest_statement.statement_id,
         retrigger: true,
       });
-      this.navigate('statement_request', { exitToApp: true });
+      this.navigate('statement_request', {
+        exitToApp: true,
+        email: email_detail.email,
+      });
     } catch (err) {
       console.log(err);
       toast(err);
@@ -41,7 +44,9 @@ class EmailNotReceived extends Component {
       <EmailTemplate
         title="CAS email not received"
         subtitle="Please ensure that the correct email is forwarded to cas@fisdom.com"
+        showLoader={this.state.show_loader}
         noFooter={true}
+        noHeader={this.state.show_loader}
         goBack={this.goBack}
       >
         <InfoBox classes={{root: 'm-t-40'}}>

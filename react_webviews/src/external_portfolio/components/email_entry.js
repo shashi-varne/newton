@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import Container from '../common/Container.js';
-// import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
-// import { getConfig } from 'utils/functions';
+import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import Input from '../../common/ui/Input';
-import { validateEmail, storageService } from '../../utils/validators.js';
+import { validateEmail } from '../../utils/validators.js';
 import { navigate, setLoader } from '../common/commonFunctions.js';
 import { requestStatement, fetchEmails } from '../common/ApiCalls.js';
 import PopUp from '../common/PopUp.js';
-// const product_type = getConfig().type;
-// TODO: change bg image based on prod type
+
+const productType = getConfig().productName;
+
 class email_entry extends Component {
   constructor(props) {
     super(props);
@@ -43,7 +43,7 @@ class email_entry extends Component {
       try {
         this.setLoader(true);
         const emails = await fetchEmails({ email_id: email });
-        if (false) {
+        if (emails.length) {
           this.setLoader(false);
           this.setState({ openPopup: true });
         } else {
@@ -101,7 +101,12 @@ class email_entry extends Component {
         showLoader={show_loader}
         goBack={this.goBack}
       >
-        <div className="email-entry-banner">
+        <div
+          className={`
+            email-entry-banner
+            ${productType === 'fisdom' ? 'fisdom-bg' : 'myway-bg' }
+          `}
+        >
           <span className="header-title-text">
             Portfolio Tracker
           </span>

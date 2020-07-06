@@ -42,8 +42,14 @@
   font-weight: bold;
 }
 
+.fisdom-bg {
+  background: url(../../assets/fisdom/banner_ext_pf.svg) no-repeat bottom right/245px 164px;
+}
+.myway-bg {
+  background: url(../../assets/myway/banner_ext_pf.svg) no-repeat bottom right/245px 164px;
+}
+
 .email-entry-banner {
-  background: url(/static/media/banner_ext_pf.fdd14661.svg) no-repeat bottom right/245px 164px;
   background-color: var(--highlight);
   height: 140px;
   margin: -20px -20px 0 -20px;

@@ -31,7 +31,7 @@ class EmailTemplate extends Component {
           <div className="ext-pf-subheader">
             <h4>Email looks like this</h4>
             <img
-              src={require('../../assets/cas_email.jpg')}
+              src={require('assets/cas_email.jpg')}
               alt="Email"
               className="email_img"
               width="100" height="200"

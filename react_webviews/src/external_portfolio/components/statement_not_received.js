@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Container from '../common/Container';
-import image from '../../assets/contact_details_icn.svg';
+import image from 'assets/contact_details_icn.svg';
 import InfoIcon from '@material-ui/icons/Info';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from '../../utils/functions';
@@ -15,9 +15,10 @@ class StatementNotReceived extends Component {
   constructor(props) {
     // TODO: Receive email as a route prop or from storageService?
     super(props);
-    const { params } = props.location;
+    const params = props.location.params || {};
     this.state = {
-      status: params ? params.status : null,
+      status: params.status || null,
+      email_detail: params.email_detail || {},
     };
     this.navigate = navigate.bind(this);
     this.setLoader = setLoader.bind(this);
@@ -26,13 +27,16 @@ class StatementNotReceived extends Component {
   regenerateStatement = async () => {
     try {
       this.setLoader(true);
-      const { email_detail } = this.props;
+      const { email_detail } = this.state;
       await requestStatement({
-        email_id: email_detail.email_id,
-        statement_id: email_detail.statement_id,
+        email_id: email_detail.email,
+        statement_id: email_detail.latest_statement.statement_id,
         retrigger: true,
       });
-      this.navigate('statement_request', { exitToApp: true });
+      this.navigate('statement_request', {
+        exitToApp: true,
+        email: email_detail.email,
+      });
     } catch (err) {
       console.log(err);
       toast(err);
@@ -48,7 +52,7 @@ class StatementNotReceived extends Component {
     }
   }
 
-  goBack = (params) => {
+  goBack = (params = {}) => {
     if (params.exitToApp) {
       nativeCallback({ action: 'exit', events: this.getEvents('back') });
     } else {
@@ -57,15 +61,17 @@ class StatementNotReceived extends Component {
   }
 
   render() {
-    const { status } = this.state;
+    const { show_loader, status, email_detail } = this.state;
     return (
       <Container
         title={
           status === 'requested' ?
           "We haven't received any CAS email" : "Error while processing CAS email"
         }
+        showLoader={show_loader}
         headerData={{ icon: 'close' }}
         noFooter={true}
+        noHeader={show_loader}
         goBack={this.goBack}
       >
         <img
@@ -79,11 +85,11 @@ class StatementNotReceived extends Component {
             <InfoBox
               image={image}
               imageAltText="mail-icon"
-              ctrlText="Change"
-              onCtrlClick={() => this.goNext('email_entry')}
+              ctrlText=""
+              // onCtrlClick={() => this.goNext('email_entry')}
             >
               <div id="info-box-body-header">Email ID</div>
-              <span id="info-box-body-subheader">anant@fisdom.com</span>
+              <span id="info-box-body-subheader">{email_detail.email}</span>
             </InfoBox>
           </div>
         }

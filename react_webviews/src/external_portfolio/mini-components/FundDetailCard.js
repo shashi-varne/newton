@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { Chip } from 'material-ui';
-import icon from '../../assets/value_for_money_icon.png';
+import icon from 'assets/value_for_money_icon.png';
 import { formatAmountInr } from "../../utils/validators";
 
 export default class FundDetailCard extends Component {

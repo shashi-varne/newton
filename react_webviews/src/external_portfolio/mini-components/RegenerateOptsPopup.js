@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import btm_mail_check_f from '../../assets/fisdom/btm_mail_check.svg';
-import btm_mail_check_m from '../../assets/myway/btm_mail_check.svg';
 import { Drawer, Button } from 'material-ui';
 import { getConfig } from '../../utils/functions';
 import { navigate } from '../common/commonFunctions';
@@ -24,7 +22,7 @@ export default class RegenerateOptsPopup extends Component {
         <div className="statement-req-popup">
           <img
             alt="mail-check"
-            src={productType === 'fisdom' ? btm_mail_check_f : btm_mail_check_m}
+            src={require(`assets/${productType}/btm_mail_check.svg`)}
             id="btm_mail_check_img"
           />
           <span className="header-title-text">

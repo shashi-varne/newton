@@ -3,7 +3,7 @@ import Container from '../common/Container';
 import EmailRequestSteps from '../mini-components/EmailRequestSteps';
 import { getConfig } from '../../utils/functions';
 import InfoBox from '../mini-components/InfoBox';
-import { navigate } from '../common/commonFunctions';
+import { navigate, emailForwardedHandler } from '../common/commonFunctions';
 import { nativeCallback } from 'utils/native_callback';
 import { storageService } from '../../utils/validators';
 import toast from '../../common/ui/Toast';
@@ -15,28 +15,35 @@ class StatementRequest extends Component {
     super(props);
     this.state = {
       popupOpen: false,
-      showLoader: false,
+      show_loader: false,
       loadingText: '',
       email_detail: '',
       selectedEmail: '',
     };
     this.navigate = navigate.bind(this);
+    this.emailForwardedHandler = emailForwardedHandler.bind(this);
   }
 
   async componentDidMount() {
     try {
       const params = this.props.location.params || {};
       if (params.email) {
-        const resObj = await fetchEmails({ email_id: params.email });
-        const email_detail = resObj[params.email];
-        this.setState({
-          email_detail: email_detail || {},
-          selectedEmail: params.email,
-        });
+        this.setState({ selectedEmail: params.email });
+        const [email] = await fetchEmails({ email_id: params.email });
+        if (email) {
+          this.setState({email_detail: email || {}});
+          let keyedEmails = storageService().getObject('keyedEmails');
+          if (keyedEmails) keyedEmails[params.email] = email;
+          else keyedEmails = { [params.email]: email };
+          storageService().setObject('keyedEmails', keyedEmails);
+        } else {
+          throw 'Error fetching email details';
+        }
       } else {
         // Todo: wait for Vikas to confirm
       }
     } catch (err) {
+      console.log(err);
       toast(err);
     }
   }
@@ -54,26 +61,8 @@ class StatementRequest extends Component {
     this.navigate('email_entry', {
       comingFrom: 'statement_request',
       navigateBackTo: params.navigateBackTo,
-      email: this.state.selectedEmail
+      email: this.state.selectedEmail,
     });
-  }
-
-  emailForwarded = async () => {
-    this.setState({
-      showLoader: true,
-      popupOpen: false,
-      loadingText: 'Checking if we have received any CAS email from you',
-    });
-    const status = this.state.email_detail.statement_status;
-    if (status === 'success') {
-      this.navigate('external_portfolio');
-    } else {
-      this.navigate('statement_not_received', {
-        exitToApp: true,
-        email_detail: this.state.email_detail,
-        status
-      });
-    }
   }
 
   goBack = (params) => {
@@ -87,20 +76,23 @@ class StatementRequest extends Component {
   }
 
   render() {
-    const { email_detail, showLoader, loadingText, selectedEmail } = this.state;
+    const { email_detail, show_loader, loadingText, selectedEmail } = this.state;
     const params = this.props.location.params || {};
-    const emailToShow = email_detail.email_id || selectedEmail;
-    const showRegenerateBtn = (new Date() - new Date(email_detail.dt_updated))/60000 >= 30;
+    let emailToShow = selectedEmail, showRegenerateBtn = false;
+    if (email_detail && email_detail.latest_statement) {
+      emailToShow = email_detail.email || selectedEmail;
+      showRegenerateBtn = (new Date() - new Date(email_detail.latest_statement.dt_updated))/60000 >= 30;
+    }
     return (
       <Container
         title="Statement request sent"
-        showLoader={showLoader}
+        showLoader={show_loader}
         loaderData={{
           loadingText,
         }}
         headerData={{ icon: 'close' }}
         noFooter={true}
-        noHeader={showLoader}
+        noHeader={show_loader}
         goBack={this.goBack}
       >
         {emailToShow &&
@@ -118,7 +110,7 @@ class StatementRequest extends Component {
           <h4>What's next?</h4>
         </div>
         <EmailRequestSteps
-          emailForwardedHandler={this.emailForwarded}
+          emailForwardedHandler={() => this.emailForwardedHandler(email_detail.email)}
           showRegenerateBtn={showRegenerateBtn}
           emailDetail={email_detail}
           parent={this}
