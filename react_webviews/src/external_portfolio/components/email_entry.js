@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../common/Container.js';
 // import Api from 'utils/api';
-// import toast from '../../common/ui/Toast';
+import toast from '../../common/ui/Toast';
 // import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import Input from '../../common/ui/Input';
@@ -9,13 +9,14 @@ import { validateEmail, storageService } from '../../utils/validators.js';
 import { navigate, setLoader } from '../common/commonFunctions.js';
 import { requestStatement, fetchEmails } from '../common/ApiCalls.js';
 import PopUp from '../common/PopUp.js';
-
 // const product_type = getConfig().type;
+// TODO: change bg image based on prod type
 class email_entry extends Component {
   constructor(props) {
     super(props);
+    const params = props.location.params || {};
     this.state = {
-      email: '',
+      email: params.email || '',
       email_error: '',
       openPopup: false,
     };
@@ -39,7 +40,6 @@ class email_entry extends Component {
     if (!validateEmail(email)) {
       this.setState({ email_error: 'Please enter a valid email' });
     } else {
-      storageService().setObject('new_user_email', email);
       try {
         this.setLoader(true);
         const emails = await fetchEmails({ email_id: email });
@@ -48,14 +48,22 @@ class email_entry extends Component {
           this.setState({ openPopup: true });
         } else {
           await requestStatement({ email });
-          const { params } = this.props.location;
+          const params = this.props.location.params || {};
+          const moveToParam = params.comingFrom === 'statement_request' ?
+            params.navigateBackTo : params.comingFrom;
           this.navigate(
             'statement_request',
-            { exitToApp: !!(params || {}).comingFrom },
+            {
+              exitToApp: !moveToParam,
+              navigateBackTo: moveToParam,
+              email
+            },
             true
           );
         }
-      } catch(e) {
+      } catch(err) {
+        console.log(err);
+        toast(err);
         this.setLoader(false);
       }
     }
@@ -63,7 +71,19 @@ class email_entry extends Component {
 
   goBack = (params) => {
     if (params.comingFrom) {
-      this.props.history.goBack();
+      if (params.comingFrom === 'statement_request') {
+        this.navigate(
+          'statement_request',
+          {
+            exitToApp: !(params || {}).exitToApp,
+            navigateBackTo: params.navigateBackTo,
+            email: this.state.email,
+          },
+          true
+        );
+      } else {
+        this.props.history.goBack();
+      }
     } else {
       nativeCallback({ action: 'exit', events: this.getEvents('back') });
     }
@@ -104,6 +124,7 @@ class email_entry extends Component {
             id="email"
             name="email"
             value={this.state.email}
+            variant="filled"
             onChange={this.handleChange('email')} />
         </div>
         <PopUp

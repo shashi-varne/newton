@@ -2,17 +2,18 @@ import React, { Component } from 'react';
 import Container from '../common/Container';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import { Button } from 'material-ui';
-import TopHoldings from '../mini-components/TopHoldingElement';
-import { dummyHoldings } from '../constants';
+import TopHoldings from '../mini-components/TopHoldings';
 import { navigate, setLoader } from '../common/commonFunctions';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { Doughnut } from 'react-chartjs-2';
 import toast from '../../common/ui/Toast';
 import { fetchExternalPortfolio, fetchAllPANs } from '../common/ApiCalls';
 import { capitalize } from 'utils/validators';
+import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from '../../utils/functions';
-import { storageService } from '../../utils/validators';
+import { storageService, formatAmountInr } from '../../utils/validators';
 
 const productType = getConfig().productName;
 
@@ -23,6 +24,8 @@ const doughnutConfigOpts = {
     layout: {
       padding: {
         left: 0,
+        bottom: 5,
+        top: 5,
       }
     },
     events: [],
@@ -45,6 +48,7 @@ export default class ExternalPortfolio extends Component {
     this.state = {
       portfolio: {},
       show_loader: false,
+      selectedPan: {},
     };
     this.navigate = navigate.bind(this);
     this.setLoader = setLoader.bind(this);
@@ -53,23 +57,22 @@ export default class ExternalPortfolio extends Component {
   async componentDidMount() {
     try {
       this.setLoader(true);
-      let selectedPan = storageService().getObject('user_pan');
-      const userId = storageService().getObject('user_id');
-      if (!selectedPan) {
-        let pans = await fetchAllPANs();
-        [selectedPan] = pans;
+      let selectedPan = storageService().getObject('user_pan') || null;
+      if (!selectedPan || !selectedPan.pan) {
+        let { pans } = await fetchAllPANs();
+        selectedPan = { pan: pans[0]};
+        storageService().setObject('user_pan', selectedPan);
       }
-      const result = await fetchExternalPortfolio({
-        pan: selectedPan,
-        userId,
-      });
+      const result = await fetchExternalPortfolio({ pan: selectedPan.pan });
       this.setState({
-        portfolio: result.portfolio,
+        portfolio: result.response,
+        selectedPan,
       });
     } catch(err) {
-      this.setLoader(false);
+      console.log(err);
       toast(err);
     }
+    this.setLoader(false);
   }
 
   generateAllocationData = (data) => {
@@ -86,16 +89,12 @@ export default class ExternalPortfolio extends Component {
   }
 
   renderCustomLegend = (data) => {
-    data = {
-      "equity": 59.21,
-      "hybrid": 25.0,
-      "debt": 15.79
-    };
+    if (!data) return '';
     const colorScheme = colorsMap[productType];
     return (
       <div id="ext-portfolio-custom-legend">
         {Object.keys(data).sort().map((key, idx) => (
-          <div className="custom-legend-item">
+          <div className="custom-legend-item" key={idx}>
             <div className="color-square" style={{ 'background': colorScheme[idx] }}></div>
             <span className="label">{capitalize(key)} </span>
             <span className="label-val">({data[key]}%)</span>
@@ -105,26 +104,35 @@ export default class ExternalPortfolio extends Component {
     );
   }
 
+  goBack = () => {
+    nativeCallback({ action: 'exit', events: this.getEvents('back') });
+  }
+
   render() {
-    const {
+    let {
       total_investment,
       total_current_value,
       one_day_change,
-      xirr: annual_return,
-      asset_allocation
+      one_day_change_perc,
+      portfolio_xirr: annual_return,
+      asset_allocation,
+      top_holdings
     } = this.state.portfolio;
+    annual_return = Number(annual_return);
     const assetAllocData = this.generateAllocationData(asset_allocation);
 
     return (
       <Container
         title="External Portfolio"
         noFooter={true}
+        noHeader={this.state.show_loader}
         rightIcon={<SettingsIcon />}
         handleRightIconClick={() => this.navigate('settings')}
         hideInPageTitle={true}
         styleHeader={{
           background: 'black',
         }}
+        goBack={this.goBack}
         showLoader={this.state.show_loader}
         classHeader="ext-pf-inPageHeader bg-black"
       >
@@ -135,8 +143,8 @@ export default class ExternalPortfolio extends Component {
           <div id="selected-pan" onClick={() => this.navigate('select_pan')}>
             <div className="selected-pan-initial">A</div>
             <div id="selected-pan-detail">
-              <span id="selected-pan-num">DWGPK7557E</span>
-              <span id="selected-pan-name">Anant Singh</span>
+              <span id="selected-pan-num">{this.state.selectedPan.pan}</span>
+              <span id="selected-pan-name">{this.state.selectedPan.name || 'James Bond'}</span>
             </div>
             <ChevronRightIcon style={{ color: 'white' }}/>
           </div>
@@ -147,15 +155,17 @@ export default class ExternalPortfolio extends Component {
                   Current value
                 </div>
                 <div className="pf-detail-value">
-                  ₹ {total_current_value}
+                  {formatAmountInr(total_current_value)}
                 </div>
               </div>
               <div id="portfolio-irr">
                 <div className="pf-detail-title">
                   IRR
                 </div>
-                <div className="pf-detail-value">
-                  10.8%
+                <div
+                  className="pf-detail-value"
+                  style={{ color: annual_return < 0 ? '#ba3366' : 'var(--secondary)' }}>
+                  {annual_return.toFixed(1)}%
                 </div>
               </div>
             </div>
@@ -165,7 +175,7 @@ export default class ExternalPortfolio extends Component {
                   Invested amount
                 </div>
                 <div className="pf-detail-value">
-                  ₹ {total_investment}
+                  {formatAmountInr(total_investment)}
                 </div>
               </div>
               <div id="portfolio-odc">
@@ -173,8 +183,15 @@ export default class ExternalPortfolio extends Component {
                   One day change
                 </div>
                 <div className="pf-detail-value">
-                  <ArrowDropDownIcon style={{ color: '#ba3366', verticalAlign: 'middle', height: '19px'}}/>
-                  ₹ {one_day_change} <span>(3.1%)</span>
+                  {Number(one_day_change) ? (one_day_change < 0 ? 
+                    <ArrowDropDownIcon style={{ color: '#ba3366', verticalAlign: 'middle', height: '19px' }} /> :
+                    <ArrowDropUpIcon style={{ color: 'var(--secondary)', verticalAlign: 'middle', height: '19px' }} />
+                    ) : ''
+                  }
+                  {formatAmountInr(one_day_change)}
+                  <span style={{ color: one_day_change < 0 ? '#ba3366' : 'var(--secondary)'}}>
+                    &nbsp;({one_day_change_perc}%)
+                  </span>
                 </div>
               </div>
             </div>
@@ -186,8 +203,8 @@ export default class ExternalPortfolio extends Component {
           {this.renderCustomLegend(asset_allocation)}
         </div>
         <div className="ext-pf-subheader">
-          <h4>Top holdings</h4>
-          <TopHoldings holdings={dummyHoldings}/>
+          <h4>Top 10 holdings</h4>
+          <TopHoldings holdings={top_holdings || []}/>
         </div>
         <Button
           fullWidth={true}

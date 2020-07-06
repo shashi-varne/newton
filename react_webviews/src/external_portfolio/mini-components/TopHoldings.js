@@ -16,7 +16,7 @@ export default class TopHoldings extends Component {
   }
 
   renderHoldings = () => {
-    let holdings = (JSON.parse(JSON.stringify(this.props.holdings))).sort((a,b) => b.value - a.value);
+    let holdings = (JSON.parse(JSON.stringify(this.props.holdings)));
 
     if (!this.state.open) holdings.splice(5);
 
@@ -33,12 +33,12 @@ export default class TopHoldings extends Component {
         {holdings.map((holding, idx) => (
           <div id="top-holding" key={idx}>
             <div id="top-holding-detail">
-              <span id="top-holding-name">{holding.name}</span>
-              <span id="top-holding-value">{holding.value}%</span>
+              <span id="top-holding-name">{holding.amc_name}</span>
+              <span id="top-holding-value">{Number(holding.invested_perc || '0000.888292').toFixed(2)}%</span>
             </div>
             <LinearProgress
               variant="determinate"
-              value={Number(holding.value)}
+              value={Number(holding.invested_perc)}
               classes={{
                 root: 'top-holding-bar'
               }}

@@ -153,6 +153,16 @@
       background: #ffe0ec;
       padding: 3px 0;
     }
+    .fund-chip-equity {
+      background: #ffe0ec;
+    }
+    .fund-chip-debt {
+      background: #fff6ce;
+    }
+    .fund-chip-hybrid {
+      background: #e8e0ff;
+    }
+
     .fund-chip-label {
       font-size: 8px;
       letter-spacing: 1px;
@@ -160,6 +170,16 @@
       color: #f16fa0;
       font-weight: bold;
     }
+    .fund-chip-label-equity {
+      color: #f16fa0;
+    }
+    .fund-chip-label-debt {
+      color: #dfbe22;
+    }
+    .fund-chip-label-hybrid {
+      color: #a38ceb;
+    }
+
     .fund-investment-date {
       font-size: 11px;
       text-align: right;
@@ -235,6 +255,7 @@
     
     #top-holding-name, {
       font-weight: 500;
+      text-transform: uppercase;
       color: #0a1d32; //dark-indigo
     }
 

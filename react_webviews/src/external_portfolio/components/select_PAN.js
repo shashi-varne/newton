@@ -3,44 +3,34 @@ import React, { Component } from 'react';
 import completed_step from "assets/completed_step.svg";
 import Container from '../common/Container';
 import { getUrlParams } from 'utils/validators';
-// import { stateMapper, default_PAN, user_PANs_array } from  '../constants';
 import {storageService, getIndexArray} from "utils/validators";
 import { nativeCallback } from 'utils/native_callback';
 import { navigate } from '../common/commonFunctions';
-let [stateMapper, user_PANs_array] = [{}, [
-    {
-        name: 'Karan Uday',
-        pan: 'DWGPK7557E',
-    },
-    {
-        name: 'Gautam Shanbhag',
-        pan: 'XIRRP7662D',
-    }
-]];
+import { fetchAllPANs } from '../common/ApiCalls';
+
 class PANSelector extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            PAN: storageService().get('user_pan'),
+            selectedPan: storageService().getObject('user_pan'),
             params: getUrlParams()
         }
         this.renderPANs = this.renderPANs.bind(this);
         this.navigate = navigate.bind(this);
     }
 
-    componentWillMount() {
-        // Hit API for PANs list
-        let PANs = user_PANs_array;
-
-        let selectedIndex = getIndexArray(PANs, this.state.PAN, 'pan');
-        this.setState({ PANs, selectedIndex })
+    async componentWillMount() {
+        let { pans } = await fetchAllPANs();
+        pans = pans.map(pan => ({ pan }));
+        let selectedIndex = getIndexArray(pans, this.state.selectedPan.pan, 'pan');
+        this.setState({ pans, selectedIndex })
     }
 
     choosePAN = (index) => {
         this.sendEvents('next', {change_PAN: true});
         this.setState({
             selectedIndex: index,
-            PAN: this.state.PANs[index].pan,
+            selectedPan: this.state.pans[index],
         })
     }
 
@@ -65,14 +55,14 @@ class PANSelector extends Component {
                         fontSize: '19px',
                     }}
                 >
-                    A
+                    J
                 </div>
                 <div className="select-bank" style={{ padding: '3px 0 0 0px', margin: 0, flex: 1 }}>
                     <div >
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <div>
                                 <div className="bank-name" style={{ fontSize: '15px' }}>
-                                    {props.name}
+                                    {props.name || 'James Bond'}
                                 </div>
                                 <div className="account-number" style={{ textTransform: 'uppercase', lineHeight: '25px' }}>
                                     {props.pan}
@@ -96,8 +86,7 @@ class PANSelector extends Component {
 
     handleClick = () => {
         // let state = stateMapper[this.state.params.redirect_state];
-        let PAN = this.state.PANs[this.state.selectedIndex].pan;
-        storageService().set('user_pan', PAN);
+        storageService().set('user_pan', this.state.selectedPan);
         this.navigate('external_portfolio');
     }
 
@@ -107,7 +96,7 @@ class PANSelector extends Component {
           "properties": {
             "user_action": user_action,
             "screen_name": 'select_PAN',
-            "PAN": this.state.PAN || '',
+            "selectedPan": this.state.selectedPan || '',
             "change_PAN": current_data.change_PAN ? 'yes' : 'no'
           }
           
@@ -132,7 +121,7 @@ class PANSelector extends Component {
                 events={this.sendEvents('just_set_events')}
             >
                 <div className="gold-sell-select-bank">
-                    {this.state.PANs && this.state.PANs.map(this.renderPANs)}
+                    {this.state.pans && this.state.pans.map(this.renderPANs)}
                 </div>
             </Container>
         );

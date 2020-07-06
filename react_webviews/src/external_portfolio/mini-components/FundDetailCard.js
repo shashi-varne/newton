@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { Chip } from 'material-ui';
 import icon from '../../assets/value_for_money_icon.png';
+import { formatAmountInr } from "../../utils/validators";
 
 export default class FundDetailCard extends Component {
   constructor(props) {
@@ -10,7 +11,7 @@ export default class FundDetailCard extends Component {
 
   render() {
     const {
-      fundAMCIcon,
+      amc_logo,
       fund_name,
       scheme_type,
       investment_since,
@@ -23,7 +24,7 @@ export default class FundDetailCard extends Component {
         <div className="fund-details-container">
           <div className="fund-header">
             <img
-              src={icon}
+              src={amc_logo || icon}
               width="40" height="40"
               alt="amc-logo"
             />
@@ -36,8 +37,8 @@ export default class FundDetailCard extends Component {
               size="small"
               label={scheme_type}
               classes={{
-                root: 'fund-chip',
-                label: 'fund-chip-label'
+                root: `fund-chip fund-chip-${scheme_type}`,
+                label: `fund-chip-label fund-chip-label-${scheme_type}`
               }}
             />
             <div className="fund-investment-date">
@@ -50,15 +51,16 @@ export default class FundDetailCard extends Component {
                 Current value
               </div>
               <div className="fund-numbers-value">
-                ₹ {current_value}
+                {formatAmountInr(current_value)}
               </div>
             </div>
             <div className="annual-ret">
               <div className="fund-numbers-title">
                 Annual return
               </div>
-              <div className="fund-numbers-value">
-                {annual_return.toFixed(2)} %
+              <div className="fund-numbers-value"
+                style={{ color: annual_return < 0 ? '#ba3366' : 'var(--secondary)'}}>
+                {Number(annual_return || '0000.888292').toFixed(2)} %
               </div>
             </div>
             <div className="invested-amt">
@@ -66,7 +68,7 @@ export default class FundDetailCard extends Component {
                 Invested amount
               </div>
               <div className="fund-numbers-value">
-                ₹ {invested_amt}
+                {formatAmountInr(invested_amt)}
               </div>
             </div>
           </div>

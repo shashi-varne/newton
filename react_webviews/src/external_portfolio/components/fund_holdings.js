@@ -1,9 +1,10 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import Container from '../common/Container';
 import FundDetailCard from '../mini-components/FundDetailCard';
 import { fetchAllHoldings } from '../common/ApiCalls';
 import { storageService } from '../../utils/validators';
-import { toast } from 'react-toastify';
+import toast from '../../common/ui/Toast';
+import { setLoader } from '../common/commonFunctions';
 class FundHoldings extends Component {
   constructor(props) {
     super(props);
@@ -11,26 +12,22 @@ class FundHoldings extends Component {
       holdings: [],
       show_loader: false,
     };
+    this.setLoader = setLoader.bind(this);
   }
 
   async componentWillMount() {
     try {
-      this.setState({
-        show_loader: true,
-      })
-      const pan = storageService().getObject('user_PAN');
-      if (!pan) {
+      this.setLoader(true);
+      const selectedPan = storageService().getObject('user_pan');
+      if (!selectedPan || !selectedPan.pan) {
         throw 'Please select a PAN';
       }
-      const holdings = await fetchAllHoldings({
-        pan,
-      });
+      const holdings = await fetchAllHoldings({ pan: selectedPan.pan });
+      this.setState({ holdings });
     } catch (err) {
-      this.setState({
-        show_loader: false,
-      });
       toast(err);
     }
+    this.setLoader(false);
   }
 
   render() {

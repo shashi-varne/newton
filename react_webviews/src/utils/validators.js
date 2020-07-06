@@ -218,7 +218,7 @@ export function formatAmountInr(amount) {
     lastThree = ',' + lastThree;
   let res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
 
-  return '₹' + res;
+  return '₹ ' + res;
 }
 
 export function formatGms(weight) {

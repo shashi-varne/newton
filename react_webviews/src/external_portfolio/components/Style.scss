@@ -92,7 +92,7 @@
 }
 
 .uppercase-text {
-  text-transform: uppercase;   
+  text-transform: uppercase !important;   
 }
 
 .m-t-40 {
@@ -249,7 +249,6 @@
     #portfolio-odc {
       .pf-detail-value {
         span {
-          color: #ba3366;
           line-height: 18px;
           font-weight: 600;
           letter-spacing: 1.1px;
@@ -268,6 +267,7 @@
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
+  margin-top: 30px;
 
   .custom-legend-item:nth-child(1) {
     flex-basis: 50%;

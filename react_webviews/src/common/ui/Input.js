@@ -23,6 +23,7 @@ const Input = (props) => {
         label={props.label}
         onFocus={props.onFocus}
         name={props.name}
+        variant={props.variant}
         onChange={props.onChange}
       />
     );

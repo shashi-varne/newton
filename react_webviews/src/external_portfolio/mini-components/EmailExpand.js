@@ -8,6 +8,7 @@ import { Button } from 'material-ui';
 import toast from '../../common/ui/Toast';
 import { navigate } from '../common/commonFunctions';
 import EmailRequestSteps from './EmailRequestSteps';
+import { requestStatement } from '../common/ApiCalls';
 
 const theme = createMuiTheme({
   overrides: {
@@ -50,6 +51,16 @@ export default class EmailExpand extends Component {
     this.navigate = navigate.bind(this);
   }
 
+  resync = async () => {
+    const { email, parent } = this.props;
+    await requestStatement({ email_id: email.email_id });
+    parent.navigate('statement_request', {
+      navigateBackTo: 'settings',
+      email: email.email_id,
+      allowEmailChange: false,
+    })
+  }
+
   renderResync = () => {
     const { parent, comingFrom, email } = this.props;
     return (
@@ -58,10 +69,10 @@ export default class EmailExpand extends Component {
           variant="outlined" color="secondary"
           classes={{
             root: 'resync-btn',
-            label: 'gen-statement-btn-label'
+            label: 'gen-statement-btn-label',
           }}
           size="small"
-          onClick={() => parent.navigate('statement_request', { comingFrom })}
+          onClick={this.resync}
         >
           Resync
         </Button>
@@ -71,11 +82,13 @@ export default class EmailExpand extends Component {
   }
 
   renderStatementPending = () => {
+    const showRegenerateBtn = (new Date() - new Date(this.props.email.dt_updated)) / 60000 >= 30;
     return (
       <div className="ext-pf-subheader">
         <h4>Statement request sent</h4>
         <EmailRequestSteps
           parent={this.props.parent}
+          showRegenerateBtn={showRegenerateBtn}
           classes={{ emailBox: 'info-box-email-expand' }}
         />
       </div>

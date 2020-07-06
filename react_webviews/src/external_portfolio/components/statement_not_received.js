@@ -2,14 +2,13 @@ import React, { Component } from 'react';
 import Container from '../common/Container';
 import image from '../../assets/contact_details_icn.svg';
 import InfoIcon from '@material-ui/icons/Info';
-import cas_not_received_f from '../../assets/fisdom/cas_not_received.svg';
-import cas_not_received_m from '../../assets/myway/cas_not_received.svg';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from '../../utils/functions';
 import { Button } from 'material-ui';
 import InfoBox from '../mini-components/InfoBox';
-import { navigate } from '../common/commonFunctions';
+import { navigate, setLoader } from '../common/commonFunctions';
 import { requestStatement } from '../common/ApiCalls';
+import toast from '../../common/ui/Toast';
 
 const productType = getConfig().productName;
 class StatementNotReceived extends Component {
@@ -21,12 +20,24 @@ class StatementNotReceived extends Component {
       status: params ? params.status : null,
     };
     this.navigate = navigate.bind(this);
+    this.setLoader = setLoader.bind(this);
   }
 
   regenerateStatement = async () => {
-    const email = '', statement_id = ''; //TODO: fetch proper email and statement_id
-    // await requestStatement({ email, statement_id, retrigger: true });
-    this.goNext('statement_request');
+    try {
+      this.setLoader(true);
+      const { email_detail } = this.props;
+      await requestStatement({
+        email_id: email_detail.email_id,
+        statement_id: email_detail.statement_id,
+        retrigger: true,
+      });
+      this.navigate('statement_request', { exitToApp: true });
+    } catch (err) {
+      console.log(err);
+      toast(err);
+    }
+    this.setLoader(false);
   }
 
   goNext = (path) => {
@@ -58,7 +69,7 @@ class StatementNotReceived extends Component {
         goBack={this.goBack}
       >
         <img
-          src={productType === 'fisdom' ? cas_not_received_f : cas_not_received_m}
+          src={require(`assets/${productType}/cas_not_received.svg`)}
           alt="cas-not-received"
           style={{ width: '100%'}}
           />

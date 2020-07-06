@@ -3,17 +3,33 @@ import EmailTemplate from '../mini-components/email_template';
 import { Button } from 'material-ui';
 import InfoIcon from '@material-ui/icons/Info';
 import InfoBox from '../mini-components/InfoBox';
-import { navigate } from '../common/commonFunctions';
+import { navigate, setLoader } from '../common/commonFunctions';
+import { requestStatement } from '../common/ApiCalls';
+import toast from '../../common/ui/Toast';
 
 class EmailNotReceived extends Component {
   constructor(props) {
     super(props);
     this.state = {};
     this.navigate = navigate.bind(this);
+    this.setLoader = setLoader.bind(this);
   }
 
-  goNext = () => {
-    this.navigate('statement_request', { exitToApp: true });
+  goNext = async () => {
+    try {
+      this.setLoader(true);
+      const { email_detail } = this.props;
+      await requestStatement({ 
+        email_id: email_detail.email_id,
+        statement_id: email_detail.statement_id,
+        retrigger: true,
+      });
+      this.navigate('statement_request', { exitToApp: true });
+    } catch (err) {
+      console.log(err);
+      toast(err);
+    }
+    this.setLoader(false);
   }
 
   goBack = () => {

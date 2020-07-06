@@ -75,6 +75,7 @@ export class DefaultLayout extends Component {
         <div className="FlexItem2">
           <Button
             type={props.type}
+            classes={{ label: 'uppercase-text' }}
             // arrow={(props.edit) ? false : true}
             {...props} />
         </div>
@@ -110,7 +111,6 @@ export class WithProviderLayout extends Component {
 
   render() {
     const props = this.props;
-
     const leftArrowMapper = {
       'up': up_arrow,
       'down': down_arrow
@@ -145,7 +145,6 @@ export class WithProviderLayout extends Component {
         >
           <Button
             type={props.type}
-            classes={{ label: 'uppercase-text' }}
             {...props}
             />
         </div>
