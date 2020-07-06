@@ -165,16 +165,11 @@ class Listing extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title={'Help & Support'}
+        title="Category you need help with"
         noFooter={true}
         events={this.backButtonEvent()}
       >
-        <div className="Help pad20">
-          <div className="section-head">
-            <div className="main-title">
-              Category you need help with
-						</div>
-          </div>
+        <div className="Help">
           <div className="section-card">
             {this.state.categories && this.renderCategories()}
           </div>

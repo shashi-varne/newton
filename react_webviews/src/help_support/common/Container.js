@@ -69,12 +69,12 @@ class Container extends Component {
           {<div id="HeaderHeight" style={{ top: 56 }}>
           </div>}
 
-          {!this.state.force_hide_inpage_title && 
+          {!this.state.force_hide_inpage_title && !this.props.hideheader && 
             this.new_header_scroll() 
           }
 
           {/* Children Block */}
-          <div className={`Container HelpContainer ${this.props.background}`}>
+          <div className={`Container ${this.props.background}`}>
             {this.props.children}
           </div>
 
