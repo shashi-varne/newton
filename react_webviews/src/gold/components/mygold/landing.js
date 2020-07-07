@@ -83,7 +83,7 @@ class GoldSummary extends Component {
   componentWillMount() {
 
     nativeCallback({ action: 'take_control_reset' });
-    storageService().set('gold_provider', 'mmtc');
+    storageService().remove('gold_provider');
     let type = getConfig().productName;
     let typeCaps = type === 'fisdom' ? 'Fisdom' : 'Myway';
     
