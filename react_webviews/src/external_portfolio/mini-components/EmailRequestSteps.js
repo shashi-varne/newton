@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import InfoBox from './InfoBox';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import RegenerateOptsPopup from './RegenerateOptsPopup';
+import { isFunction, storageService } from '../../utils/validators';
 
 const theme = createMuiTheme({
   overrides: {
@@ -41,9 +42,6 @@ const theme = createMuiTheme({
       completed: {
         color: 'var(--primary) !important',
       },
-      disabled: {
-        color: 'var(--secondary) !important',
-      }
     },
     MuiStepContent: {
       root: {
@@ -156,10 +154,21 @@ export default class EmailRequestSteps extends Component {
     this.setState({ popupOpen: false });
   }
 
+  notReceivedHandler = () => {
+    const { notReceivedClick, parent, emailDetail } = this.props;
+
+    if (isFunction(notReceivedClick)) {
+      notReceivedClick();
+    } else {
+      storageService().setObject('email_detail_hni', emailDetail);
+      parent.navigate('email_not_received');
+    }
+  }
+
   render() {
     const steps = getSteps();
     const { activeStep } = this.state;
-    const { parent, notReceivedClick, emailDetail, emailForwardedHandler } = this.props;
+    const { emailForwardedHandler } = this.props;
     return (
       <MuiThemeProvider theme={theme}>
         <div id="hni-stepper">
@@ -182,10 +191,7 @@ export default class EmailRequestSteps extends Component {
           </Stepper>
           <RegenerateOptsPopup
             emailForwardedHandler={() => { this.onPopupClose(); emailForwardedHandler(); }}
-            notReceivedClick={() => notReceivedClick ?
-              notReceivedClick() :
-              parent.navigate('email_not_received', { email_detail: emailDetail })
-            }
+            notReceivedClick={this.notReceivedHandler}
             onPopupClose={this.onPopupClose}
             open={this.state.popupOpen}
           />

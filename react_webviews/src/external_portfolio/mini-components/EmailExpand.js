@@ -9,6 +9,7 @@ import toast from '../../common/ui/Toast';
 import { navigate } from '../common/commonFunctions';
 import EmailRequestSteps from './EmailRequestSteps';
 import { requestStatement } from '../common/ApiCalls';
+import { formattedDate } from '../../utils/validators';
 
 const theme = createMuiTheme({
   overrides: {
@@ -58,7 +59,7 @@ export default class EmailExpand extends Component {
       parent.navigate('statement_request', {
         navigateBackTo: 'settings',
         email: email.email,
-        allowEmailChange: false,
+        noEmailChange: true,
       });
     } catch (err) {
       console.log(err);
@@ -81,7 +82,11 @@ export default class EmailExpand extends Component {
         >
           Resync
         </Button>
-        <div id="resync-update-text">Last updated: {email.latest_success_statement.statement_end_date}</div>
+        <div id="resync-update-text">
+          Last updated: {
+            formattedDate(email.latest_success_statement.statement_end_date, 'd m y')
+          }
+        </div>
       </Fragment>
     );
   }

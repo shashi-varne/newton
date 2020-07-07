@@ -4,13 +4,13 @@ import { withStyles } from 'material-ui/styles';
 import arrow from 'assets/next_arrow.png';
 import download from 'assets/download.svg';
 import SVG from 'react-inlinesvg';
-
 import './style.css';
 import { getConfig } from 'utils/functions';
 
 class CustomButton extends Component {
   render() {
     const props = this.props;
+    const { button: buttonClass, ...classes } = props.classes || {};
     if (props.twoButton) {
       return (
         <div className="FlexButton">
@@ -19,10 +19,11 @@ class CustomButton extends Component {
             fullWidth={false}
             variant="raised"
             size="large"
-            className={`${props.classes.button} borderButton`}
+            className={`${buttonClass} borderButton`}
             style={{color: getConfig().secondary, borderColor: getConfig().secondary,
             flex: !getConfig().isMobileDevice ? 'inherit': 2}}
-            disabled={props.disable} >
+            disabled={props.disable}
+          >
             <SVG
               preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().secondary)}
               src={download}
@@ -30,13 +31,14 @@ class CustomButton extends Component {
             {props.buttonOneTitle}
           </Button>
           <Button
-          onClick={props.handleClickTwo}
+            onClick={props.handleClickTwo}
             fullWidth={false}
             variant="raised"
             size="large"
             color="secondary"
-            className={`${props.classes.button} filledButton`}
-            disabled={props.disable} >
+            className={`${buttonClass} filledButton`}
+            disabled={props.disable}
+          >
             {props.buttonTwoTitle}
           </Button>
         </div>
@@ -50,9 +52,10 @@ class CustomButton extends Component {
             size="large"
             color="secondary"
             style={{backgroundColor: getConfig().secondary}}
-            className={props.classes.button}
-            classes={props.classes}
-            disabled={props.disable} >
+            className={buttonClass}
+            classes={classes}
+            disabled={props.disable}
+          >
             {props.buttonTitle}
             {
               props.arrow &&
@@ -75,7 +78,8 @@ const styles = {
     boxShadow: 'none',
     // boxShadow: '0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149)',
     width: !getConfig().isMobileDevice ? 'auto' : '100% !important'
-  }
+  },
+  label: {},
 }
 
 export default withStyles(styles)(CustomButton);

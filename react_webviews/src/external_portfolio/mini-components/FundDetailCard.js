@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { Chip } from 'material-ui';
 import icon from 'assets/value_for_money_icon.png';
-import { formatAmountInr } from "../../utils/validators";
+import { formatAmountInr, formattedDate } from "../../utils/validators";
 
 export default class FundDetailCard extends Component {
   constructor(props) {
@@ -42,7 +42,7 @@ export default class FundDetailCard extends Component {
               }}
             />
             <div className="fund-investment-date">
-              Investment since <span>{investment_since}</span>
+              Investment since <span>{formattedDate(investment_since, 'd m y')}</span>
             </div>
           </div>
           <div className="fund-numbers">

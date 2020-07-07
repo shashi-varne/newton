@@ -32,15 +32,10 @@ class StatementRequest extends Component {
         const [email] = await fetchEmails({ email_id: params.email });
         if (email) {
           this.setState({email_detail: email || {}});
-          let keyedEmails = storageService().getObject('keyedEmails');
-          if (keyedEmails) keyedEmails[params.email] = email;
-          else keyedEmails = { [params.email]: email };
-          storageService().setObject('keyedEmails', keyedEmails);
+          storageService().setObject('email_detail_hni', email);
         } else {
           throw 'Error fetching email details';
         }
-      } else {
-        // Todo: wait for Vikas to confirm
       }
     } catch (err) {
       console.log(err);
@@ -61,11 +56,13 @@ class StatementRequest extends Component {
     this.navigate('email_entry', {
       comingFrom: 'statement_request',
       navigateBackTo: params.navigateBackTo,
+      exitToApp: params.exitToApp,
       email: this.state.selectedEmail,
     });
   }
 
   goBack = (params) => {
+    storageService().remove('email_detail_hni');
     if (!params || params.exitToApp) {
       nativeCallback({ action: 'exit', events: this.getEvents('back') });
     } else if (params.navigateBackTo) { // available when coming from email_entry
@@ -100,7 +97,7 @@ class StatementRequest extends Component {
             image={require(`assets/${productType}/ic_mail.svg`)}
             imageAltText="mail-icon"
             onCtrlClick={this.onInfoCtrlClick}
-            ctrlText={params.allowEmailChange ? 'Change' : ''}
+            ctrlText={params.noEmailChange ? '' : 'Change'}
           >
             <div id="info-box-body-header">Email ID</div>
             <span id="info-box-body-subheader">{emailToShow}</span>
@@ -112,7 +109,6 @@ class StatementRequest extends Component {
         <EmailRequestSteps
           emailForwardedHandler={() => this.emailForwardedHandler(email_detail.email)}
           showRegenerateBtn={showRegenerateBtn}
-          emailDetail={email_detail}
           parent={this}
         />
       </Container>

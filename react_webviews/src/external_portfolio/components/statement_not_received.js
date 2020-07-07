@@ -9,16 +9,15 @@ import InfoBox from '../mini-components/InfoBox';
 import { navigate, setLoader } from '../common/commonFunctions';
 import { requestStatement } from '../common/ApiCalls';
 import toast from '../../common/ui/Toast';
+import { storageService } from '../../utils/validators';
 
 const productType = getConfig().productName;
 class StatementNotReceived extends Component {
   constructor(props) {
-    // TODO: Receive email as a route prop or from storageService?
     super(props);
-    const params = props.location.params || {};
+    const email_detail = storageService().getObject('email_detail_hni');
     this.state = {
-      status: params.status || null,
-      email_detail: params.email_detail || {},
+      email_detail: email_detail,
     };
     this.navigate = navigate.bind(this);
     this.setLoader = setLoader.bind(this);
@@ -36,6 +35,7 @@ class StatementNotReceived extends Component {
       this.navigate('statement_request', {
         exitToApp: true,
         email: email_detail.email,
+        noEmailChange: true,
       });
     } catch (err) {
       console.log(err);
@@ -44,24 +44,14 @@ class StatementNotReceived extends Component {
     this.setLoader(false);
   }
 
-  goNext = (path) => {
-    if (path === 'statement_request') {
-      this.navigate(path, { exitToApp: true });      
-    } else {
-      this.navigate(path, { comingFrom: 'statement_not_received' });
-    }
-  }
-
   goBack = (params = {}) => {
-    if (params.exitToApp) {
-      nativeCallback({ action: 'exit', events: this.getEvents('back') });
-    } else {
-      this.props.history.goBack();
-    }
+    storageService().remove('email_detail_hni');
+    nativeCallback({ action: 'exit', events: this.getEvents('back') });
   }
 
   render() {
-    const { show_loader, status, email_detail } = this.state;
+    const { show_loader, email_detail } = this.state;
+    const status = email_detail.latest_statement.statement_status;
     return (
       <Container
         title={
@@ -85,8 +75,12 @@ class StatementNotReceived extends Component {
             <InfoBox
               image={image}
               imageAltText="mail-icon"
-              ctrlText=""
-              // onCtrlClick={() => this.goNext('email_entry')}
+              ctrlText="Change"
+              onCtrlClick={() => this.navigate('email_entry', {
+                comingFrom: 'statement_not_received',
+                exitToApp: true,
+                email: email_detail.email,
+              })}
             >
               <div id="info-box-body-header">Email ID</div>
               <span id="info-box-body-subheader">{email_detail.email}</span>

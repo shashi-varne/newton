@@ -89,7 +89,10 @@ export default class Settings extends Component {
     return (
       <Container
         title="Investment email ids"
-        handleClick={() => this.navigate('email_entry', {comingFrom: 'settings'})}
+        handleClick={() => this.navigate('email_entry', {
+          comingFrom: 'settings',
+          exitToApp: false,
+        })}
         subtitle="Resync to track the recent transactions in your portfolio"
         buttonTitle="Add new email"
         showLoader={show_loader}

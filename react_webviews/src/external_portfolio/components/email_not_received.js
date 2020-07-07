@@ -6,6 +6,7 @@ import InfoBox from '../mini-components/InfoBox';
 import { navigate, setLoader } from '../common/commonFunctions';
 import { requestStatement } from '../common/ApiCalls';
 import toast from '../../common/ui/Toast';
+import { storageService } from '../../utils/validators';
 
 class EmailNotReceived extends Component {
   constructor(props) {
@@ -18,7 +19,7 @@ class EmailNotReceived extends Component {
   goNext = async () => {
     try {
       this.setLoader(true);
-      const { email_detail } = this.props.location.params;
+      const email_detail = storageService().getObject('email_detail_hni');
       await requestStatement({ 
         email_id: email_detail.email,
         statement_id: email_detail.latest_statement.statement_id,

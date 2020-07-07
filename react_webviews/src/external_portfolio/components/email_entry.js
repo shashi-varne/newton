@@ -48,13 +48,13 @@ class email_entry extends Component {
           this.setState({ openPopup: true });
         } else {
           await requestStatement({ email });
-          const params = this.props.location.params || {};
+          const params = this.props.location.params || { exitToApp: true };
           const moveToParam = params.comingFrom === 'statement_request' ?
             params.navigateBackTo : params.comingFrom;
           this.navigate(
             'statement_request',
             {
-              exitToApp: !moveToParam,
+              exitToApp: params.exitToApp,
               navigateBackTo: moveToParam,
               email
             },
@@ -70,12 +70,12 @@ class email_entry extends Component {
   }
 
   goBack = (params) => {
-    if (params.comingFrom) {
+    if (params && params.comingFrom) {
       if (params.comingFrom === 'statement_request') {
         this.navigate(
           'statement_request',
           {
-            exitToApp: !(params || {}).exitToApp,
+            exitToApp: params.exitToApp,
             navigateBackTo: params.navigateBackTo,
             email: this.state.email,
           },

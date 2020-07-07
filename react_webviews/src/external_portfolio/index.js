@@ -10,7 +10,6 @@ import JssProvider from "react-jss/lib/JssProvider";
 import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
 
 // Component Paths
-import Landing from './components/landing.js';
 import Email_entry from './components/email_entry';
 import StatementRequestPage from './components/statement_request';
 import EmailNotReceived from './components/email_not_received';
@@ -49,7 +48,6 @@ function external_portfolio(props) {
       <MuiThemeProvider theme={theme}>
         <ScrollToTop />
         <Switch>
-          <Route exact path={`${url}`} component={Landing} />
           <Route path={`${url}/email_entry`} component={Email_entry} />
           <Route path={`${url}/statement_request`} component={StatementRequestPage} />
           <Route path={`${url}/email_not_received`} component={EmailNotReceived} />

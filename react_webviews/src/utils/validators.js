@@ -564,7 +564,7 @@ function formatAMPM(date) {
   return strTime;
 }
 
-export function formatDateAmPm(date) {
+export function getDateBreakup(date) {
 
   let monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
@@ -579,18 +579,35 @@ export function formatDateAmPm(date) {
   date = date.replace(/-/g, '/');
 
   let date2 = new Date(date);
-
+  console.log(date, date2, date2.getDate(), date2.getMonth(), date2.getFullYear());
   let dom = date2.getDate();
   dom = dateOrdinal(dom);
 
   let month = monthNames[date2.getMonth()];
-  // let year = date2.getFullYear();
+  let year = date2.getFullYear();
   let time = formatAMPM(date2);
 
-  let final_date = dom + ' ' + month + ', ' + time;
+  return { dom, month, time, year };
+}
 
-  return final_date;
+export function formatDateAmPm(date) {
+  return formattedDate(date, 'd m, t');
+}
 
+export function formattedDate(date, pattern = '') {
+  pattern = pattern.toLowerCase();
+  const validPatterns = ['d m, t', 'd m y'];
+
+  if (!date) return '';
+  else if (!validPatterns.includes(pattern)) return date;
+  console.log(getDateBreakup(date));
+  let { dom, month, time, year } = getDateBreakup(date);
+  const patternMap = {
+    'd m, t': `${dom} ${month}, ${time}`,
+    'd m y': `${dom} ${month} ${year}`,
+    // Enter custom patterns here
+  };
+  return patternMap[pattern];
 }
 
 export function inrFormatTest(value) {

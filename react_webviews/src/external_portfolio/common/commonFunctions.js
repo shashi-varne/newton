@@ -1,6 +1,7 @@
 import { getConfig } from 'utils/functions';
 import { fetchEmails } from './ApiCalls';
 import toast from '../../common/ui/Toast';
+import { storageService } from '../../utils/validators';
 
 export function navigate(pathname, params, replace) {
   if (!replace) {
@@ -34,6 +35,7 @@ export async function emailForwardedHandler(email_id) {
     });
     const [email_detail] = await fetchEmails({ email_id });
     const status = email_detail.latest_statement.statement_status;
+    storageService().setObject('email_detail_hni', email_detail);
     this.setState({
       show_loader: false,
       loadingText: '',
@@ -41,11 +43,7 @@ export async function emailForwardedHandler(email_id) {
     if (status === 'success') {
       this.navigate('external_portfolio');
     } else {
-      this.navigate('statement_not_received', {
-        exitToApp: true,
-        email_detail,
-        status
-      });
+      this.navigate('statement_not_received', { exitToApp: true });
     }
   } catch (err) {
     console.log(err);
