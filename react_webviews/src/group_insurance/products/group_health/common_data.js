@@ -20,7 +20,8 @@ export async function initialize() {
         provider: provider,
         groupHealthPlanData: groupHealthPlanData,
         providerData: providerData,
-        plan_selected: groupHealthPlanData && groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected : {}
+        plan_selected: groupHealthPlanData && groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected : {},
+        insured_account_type: groupHealthPlanData.account_type || ''
     })
 
 
@@ -51,7 +52,8 @@ export async function initialize() {
                 console.log(lead);
                 this.setState({
                     lead: resultData.quote || {},
-                    common_data: resultData.common
+                    common_data: resultData.common,
+                    insured_account_type: lead.account_type || ''
                 }, () => {
                     if (this.onload && !this.state.ctaWithProvider) {
                         this.onload();
@@ -258,7 +260,7 @@ export function openInBrowser(url, type) {
             header_title: 'Terms & Conditions',
         },
         'read_document' : {
-            header_title: 'Read Document',
+            header_title: 'Read Detailed Document',
         }
     }
 

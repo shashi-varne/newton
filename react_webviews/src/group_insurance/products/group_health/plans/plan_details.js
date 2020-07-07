@@ -97,6 +97,7 @@ class GroupHealthPlanDetails extends Component {
 
     navigateBenefits = (type) => {
        
+        this.sendEvents('next', {more_info: type});
         let data_mapper = {
             'whats_included': {
                 'header_title': 'What is included',
@@ -162,12 +163,15 @@ class GroupHealthPlanDetails extends Component {
     }
 
 
-    sendEvents(user_action) {
+    sendEvents(user_action, data={}) {
         let eventObj = {
-            "event_name": 'health_suraksha',
+            "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "screen_name": 'insurance'
+                "product": 'health suraksha',
+                "flow": this.state.insured_account_type || '',
+                "screen_name": 'plan details',
+                'more_info' : data.more_info || ''
             }
         };
 
@@ -198,6 +202,7 @@ class GroupHealthPlanDetails extends Component {
 
     handleClick = () => {
 
+        this.sendEvents('next');
         let groupHealthPlanData = this.state.groupHealthPlanData;
         groupHealthPlanData.plan_selected.common_data = this.state.common_data;
         groupHealthPlanData.plan_selected.extra_data = this.state.extra_data;

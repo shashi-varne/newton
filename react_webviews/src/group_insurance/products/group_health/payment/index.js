@@ -126,11 +126,11 @@ class GroupHealthPayment extends Component {
   sendEvents(user_action, data = {}) {
     let eventObj = {
       "event_name": 'gold_investment_flow',
-      "properties": {
+       "properties": {
         "user_action": user_action,
+        "product": 'health suraksha',
+        "flow": this.state.insured_account_type || '',
         "screen_name": 'payment',
-        'flow': this.state.orderType,
-        'status': this.state.statusFinal,
         'download_invoice_clicked': this.state.download_invoice_clicked ? 'yes' : 'no'
       }
     };

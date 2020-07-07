@@ -153,9 +153,11 @@ class GroupHealthPlanContactDetails extends Component {
 
     sendEvents(user_action) {
         let eventObj = {
-            "event_name": 'health_suraksha',
+            "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
+                "product": 'health suraksha',
+                "flow": this.state.insured_account_type || '',
                 "screen_name": 'insurance'
             }
         };

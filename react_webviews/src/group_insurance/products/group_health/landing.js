@@ -31,7 +31,8 @@ class GroupHealthLanding extends Component {
       whats_not_covered: [],
       whats_covered: [],
       quoteResume: {},
-      common: {}
+      common: {},
+      selectedIndex: 0
     }
 
     this.openInBrowser = openInBrowser.bind(this);
@@ -134,16 +135,22 @@ class GroupHealthLanding extends Component {
   }
 
   handleClick = () => {
+    this.sendEvents('next');
     this.navigate('insure-type')
   }
 
 
-  sendEvents(user_action) {
+  sendEvents(user_action, data={}) {
     let eventObj = {
-      "event_name": 'health_suraksha',
-      "properties": {
+      "event_name": 'health_insurance',
+       "properties": {
         "user_action": user_action,
-        "screen_name": 'insurance'
+        "product": 'health suraksha',
+                "flow": this.state.insured_account_type || '',
+        "screen_name": 'introduction',
+        "coverage_overview_click" : (this.state.whats_covered ? 'what is covered,' : '' ) + (this.state.whats_not_covered ? 'what is not covered'  : '') ,
+        "things_to_know": data.things_to_know || '',
+        "benifits_carousel": this.state.selectedIndex  + 1
       }
     };
 
@@ -176,12 +183,14 @@ class GroupHealthLanding extends Component {
 
   handleClickPoints = (key) => {
     this.setState({
-      [key + '_open']: !this.state[key + '_open']
+      [key + '_open']: !this.state[key + '_open'],
+      [key + '_clicked'] : true
     })
   }
 
   handleResume = () => {
 
+    this.sendEvents('next');
     storageService().set('ghs_ergo_quote_id', this.state.quoteResume.id);
     if (this.state.quoteResume.status !== 'init') {
       this.navigate('final-summary');
@@ -193,7 +202,7 @@ class GroupHealthLanding extends Component {
 
   openFaqs = () => {
 
-
+    this.sendEvents('next', {things_to_know: 'faq'})
     let options = [
       {
         'title': 'Why do I need health insurance?',

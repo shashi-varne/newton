@@ -19,7 +19,8 @@ class GroupHealthPlanDob extends Component {
             provider: this.props.match.params.provider,
             groupHealthPlanData: storageService().getObject('groupHealthPlanData'),
             header_title: 'Your date of birth',
-            final_dob_data: []
+            final_dob_data: [],
+            ui_members: {}
         }
 
         this.initialize = initialize.bind(this);
@@ -166,6 +167,8 @@ class GroupHealthPlanDob extends Component {
 
     handleClick = () => {
 
+        this.sendEvents('next');
+
         let canProceed = true;
         let final_dob_data = this.state.final_dob_data;
         let groupHealthPlanData = this.state.groupHealthPlanData;
@@ -258,7 +261,7 @@ class GroupHealthPlanDob extends Component {
                 };
             }
 
-            if(final_dob_data.length === 1 && this.state.account_type === 'parent') {
+            if(final_dob_data.length === 1 && groupHealthPlanData.account_type === 'parent') {
                 final_dob_data[0].backend_key = 'parent_account1_key';
             }
 
@@ -273,10 +276,13 @@ class GroupHealthPlanDob extends Component {
 
     sendEvents(user_action) {
         let eventObj = {
-            "event_name": 'health_suraksha',
+            "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "screen_name": 'insurance'
+                "product": 'health suraksha',
+                "flow": this.state.insured_account_type || '',
+                "screen_name": 'enter birthday',
+                'eldest_member': this.state.groupHealthPlanData.ui_members.other_adult_member || '',
             }
         };
 

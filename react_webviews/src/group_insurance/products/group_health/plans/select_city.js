@@ -3,7 +3,6 @@ import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { health_providers } from '../../../constants';
 import BottomInfo from '../../../../common/ui/BottomInfo';
 import { storageService } from 'utils/validators';
 
@@ -13,14 +12,14 @@ import toast from '../../../../common/ui/Toast';
 import Autosuggests from '../../../../common/ui/Autosuggest';
 
 import { FormControl } from 'material-ui/Form';
+import { initialize } from '../common_data';
+
 class GroupHealthPlanSelectCity extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             type: getConfig().productName,
-            provider: this.props.match.params.provider,
-            groupHealthPlanData: storageService().getObject('groupHealthPlanData'),
             city: '',
             suggestions: [],
             suggestions_list: [],
@@ -28,13 +27,12 @@ class GroupHealthPlanSelectCity extends Component {
             fields: [],
             show_loader: true
         }
+
+        this.initialize = initialize.bind(this);
     }
 
     componentWillMount() {
-        this.setState({
-            providerData: health_providers[this.state.provider],
-            city: this.state.groupHealthPlanData.city || ''
-        })
+        this.initialize();
     }
 
     checkCity = (city, proceed) => {
@@ -58,6 +56,10 @@ class GroupHealthPlanSelectCity extends Component {
     }
 
     async componentDidMount() {
+
+        this.setState({
+            city: this.state.groupHealthPlanData.city || ''
+        })
         try {
 
 
@@ -122,17 +124,19 @@ class GroupHealthPlanSelectCity extends Component {
     }
 
     handleClick = () => {
+        this.sendEvents('next');
         this.checkCity(this.state.city, true);
-        
     }
-
 
     sendEvents(user_action) {
         let eventObj = {
-            "event_name": 'health_suraksha',
+            "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "screen_name": 'insurance'
+                "product": 'health suraksha',
+                "flow": this.state.insured_account_type || '',
+                "screen_name": 'city of residence',
+                'is_city_entered': this.state.city ? 'valid' : 'empty'
             }
         };
 

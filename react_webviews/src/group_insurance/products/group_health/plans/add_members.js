@@ -42,7 +42,8 @@ class GroupHealthPlanAddMembers extends Component {
             total_plus_minus_max: 2,
             plus_minus_keys: ['son', 'daughter'],
             father_onlycheckbox: true,
-            mother_onlycheckbox: true
+            mother_onlycheckbox: true,
+            ui_members: {}
         }
 
         this.initialize = initialize.bind(this);
@@ -87,6 +88,7 @@ class GroupHealthPlanAddMembers extends Component {
 
     handleClick = () => {
 
+        this.sendEvents('next');
         let ui_members = this.state.ui_members;
 
         if (this.state.account_type === 'family') {
@@ -192,17 +194,23 @@ class GroupHealthPlanAddMembers extends Component {
         groupHealthPlanData.post_body = post_body;
         storageService().setObject('groupHealthPlanData', groupHealthPlanData);
 
-
         this.navigate('plan-dob');
     }
 
 
     sendEvents(user_action) {
         let eventObj = {
-            "event_name": 'health_suraksha',
+            "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "screen_name": 'insurance'
+                "product": 'health suraksha',
+                "flow": this.state.insured_account_type || '',
+                "screen_name": 'add members',
+                'adult_member': this.state.other_adult_member || '',
+                'son': this.state.ui_members.son_total || '',
+                'daughter': this.state.ui_members.daughter_total || '',
+                'self' : this.state.ui_members.account_type === 'selfandfamily' ? 'yes' : 'no',
+                'parent' : (this.state.ui_members.father_checked ? 'father, ' : '' + this.state.ui_members.mother_checked ? 'mother, ' : ''),
             }
         };
 

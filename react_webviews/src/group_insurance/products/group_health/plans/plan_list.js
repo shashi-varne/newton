@@ -3,31 +3,28 @@ import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { health_providers } from '../../../constants';
 import { storageService, inrFormatDecimal } from 'utils/validators';
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
 import ReactTooltip from "react-tooltip";
+import { initialize } from '../common_data';
 
 class GroupHealthPlanList extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            productName: getConfig().productName,
-            provider: this.props.match.params.provider,
-            groupHealthPlanData: storageService().getObject('groupHealthPlanData') || {},
             show_loader: true,
             plan_data: {
                 coverplan: []
             }
         }
+
+        this.initialize = initialize.bind(this);
     }
 
     componentWillMount() {
-        this.setState({
-            providerData: health_providers[this.state.provider],
-        })
+        this.initialize();
     }
 
     async componentDidMount() {
@@ -73,12 +70,16 @@ class GroupHealthPlanList extends Component {
     }
 
 
-    sendEvents(user_action) {
+    sendEvents(user_action, plan ={}) {
         let eventObj = {
-            "event_name": 'health_suraksha',
+            "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "screen_name": 'insurance'
+                "product": 'health suraksha',
+                "flow": this.state.insured_account_type || '',
+                "screen_name": 'select plan',
+                'plan_health_suraksha' : plan.plan_type || '',
+                'plan_religare': plan.recommendation_tag || ''
             }
         };
 
@@ -90,6 +91,7 @@ class GroupHealthPlanList extends Component {
     }
 
     selectPlan = (plan, index) => {
+        this.sendEvents('next', plan);
         let groupHealthPlanData = this.state.groupHealthPlanData;
         groupHealthPlanData.plan_selected = plan;
         groupHealthPlanData.base_plan_title = this.state.plan_data.common.base_plan_title

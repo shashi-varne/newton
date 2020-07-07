@@ -21,6 +21,11 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   let project = getConfig().project;
   let redirect_url = getConfig().redirect_url;
   redirect_url = decodeURIComponent(redirect_url);
+
+  if(events && events.properties) {
+    console.log(events.properties);
+  }
+ 
   if (action) {
     callbackData.action = action;
   }
@@ -295,7 +300,7 @@ export function openPdfCall(data={}) {
     data.back_url = current_url;
   }
 
-  if (getConfig().Web) {
+  if (getConfig().isWebCode) {
       nativeCallback({
           action: 'open_in_browser',
           message: {
