@@ -11,7 +11,8 @@ import {
   inrFormatDecimal2, storageService, formatDateAmPm
 } from 'utils/validators';
 
-import { isUserRegistered, gold_providers, getTransactionStatus, getUniversalTransStatus } from '../../constants';
+import { isUserRegistered, gold_providers, getTransactionStatus, 
+  getUniversalTransStatus, gold_providers_array, default_provider } from '../../constants';
 
 class GoldLocker extends Component {
   constructor(props) {
@@ -23,7 +24,7 @@ class GoldLocker extends Component {
       value: 0,
       error: false,
       errorMessage: '',
-      provider: 'mmtc',
+      provider: storageService().get('gold_provider') || default_provider,
       productName: getConfig().productName,
       mmtc_info: {},
       mmtc_info_local: gold_providers['mmtc'],
@@ -80,8 +81,8 @@ class GoldLocker extends Component {
     });
 
 
-    if(provider === 'mmtc') {
-      this.chooseTabs('mmtc');
+    if(provider === this.state.provider) {
+      this.chooseTabs(this.state.provider);
     }
   }
 
@@ -348,6 +349,32 @@ class GoldLocker extends Component {
     }
   }
 
+  renderProviders = (props, index) => {
+    let isSelected = this.state.provider === props.key;
+    let key = props.key;
+    return(
+      <div key={index} onClick={() => this.chooseTabs(props.key)}
+              className={`gold-locker-tab ${isSelected ? 'selected' : ''}`}>
+              <div className="block1">
+                <div className="title">
+                  {this.state[key + '_info_local'].title}
+              </div>
+                <div className="block2">
+                  {this.state[key + '_info'].gold_balance} gms
+              </div>
+                <div className="block2">
+                  {inrFormatDecimal2(this.state[key + '_info'].sell_value)}
+                </div>
+              </div>
+
+              {isSelected &&
+                <img className="img"
+                  src={require(`assets/${this.state[key + '_info_local'].logo}`)} alt="Gold" />}
+
+            </div>
+    )
+  }
+
   render() {
 
     return (
@@ -377,45 +404,7 @@ class GoldLocker extends Component {
           </div>
 
           <div className="gold-locker-tabs">
-            <div onClick={() => this.chooseTabs('mmtc')}
-              className={`gold-locker-tab ${this.state.provider === 'mmtc' ? 'selected' : ''}`}>
-              <div className="block1">
-                <div className="title">
-                  {this.state.mmtc_info_local.title}
-              </div>
-                <div className="block2">
-                  {this.state.mmtc_info.gold_balance} gms
-              </div>
-                <div className="block2">
-                  {inrFormatDecimal2(this.state.mmtc_info.sell_value)}
-                </div>
-              </div>
-
-              {this.state.provider === 'mmtc' &&
-                <img className="img"
-                  src={require(`assets/${this.state.mmtc_info_local.logo}`)} alt="Gold" />}
-
-            </div>
-            <div onClick={() => this.chooseTabs('safegold')}
-              className={`gold-locker-tab ${this.state.provider === 'safegold' ? 'selected' : ''}`}>
-              <div className="block1">
-                <div className="title">
-                {this.state.safegold_info_local.title}
-                </div>
-
-                <div className="block2">
-                  {this.state.safegold_info.gold_balance} gms
-                </div>
-                <div className="block2">
-                  {inrFormatDecimal2(this.state.safegold_info.sell_value)}
-                </div>
-              </div>
-
-              {this.state.provider === 'safegold' &&
-                <img className="img"
-                  src={require(`assets/${this.state.safegold_info_local.logo}`)} alt="Gold" />}
-
-            </div>
+            {gold_providers_array.map(this.renderProviders)}
           </div>
 
           {this.state.selected_provider_info.isRegistered && this.state.selected_provider_info.gold_balance > 0 &&
