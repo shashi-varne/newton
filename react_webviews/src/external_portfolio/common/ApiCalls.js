@@ -4,10 +4,17 @@ const platform = getConfig().productName;
 
 export const requestStatement = async (params) => {
   try {
-    const res = await Api.post('api/external_portfolio/cams/cas/send_mail', {
+    const { res } = await Api.post('api/external_portfolio/cams/cas/send_mail', {
       ...params,
       platform,
     });
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result;
+    } else {
+      throw (result.error || result.message || 'Something went wrong. Please try again');
+    }
   } catch (e) {
     throw e;
   }
@@ -18,7 +25,12 @@ export const fetchExternalPortfolio = async (params) => {
   try {
     const res = await Api.get('api/external_portfolio/list/holdings', params);
     const { result, status_code: status } = res.pfwresponse;
-    return result;
+
+    if (status === 200) {
+      return result;
+    } else {
+      throw (result.error || result.message || 'Something went wrong. Please try again');
+    }
   } catch (e) {
     throw e;
   }
@@ -28,7 +40,12 @@ export const fetchAllHoldings = async (params) => {
   try {
     const res = await Api.get('api/external_portfolio/list/holdings', params);
     const { result, status_code: status } = res.pfwresponse;
-    return result.response.holdings;
+
+    if (status === 200) {
+      return result.response.holdings;
+    } else {
+      throw (result.error || result.message || 'Something went wrong. Please try again');
+    }
   } catch (e) {
     throw e;
   }
@@ -38,7 +55,12 @@ export const fetchStatements = async (params) => {
   try {
     const res = await Api.get('api/external_portfolio/hni/fetch/statements', params);
     const { result, status_code: status } = res.pfwresponse;
-    return result.statements || [];
+
+    if (status === 200) {
+      return result.statements || [];
+    } else {
+      throw (result.error || result.message || 'Something went wrong. Please try again');
+    }
   } catch (e) {
     throw e;
   }
@@ -48,7 +70,12 @@ export const fetchEmails = async (params) => {
   try {
     const res = await Api.get('api/external_portfolio/list/emails/requests', params);
     const { result, status_code: status } = res.pfwresponse;
-    return result.emails || [];
+
+    if (status === 200) {
+      return result.emails || [];
+    } else {
+      throw (result.error || result.message || 'Something went wrong. Please try again');
+    }
   } catch (e) {
     throw e;
   }
@@ -58,7 +85,12 @@ export const deleteEmail = async (params) => {
   try {
     const res = await Api.get('api/external_portfolio/hni/remove/statements', params);
     const { result, status_code: status } = res.pfwresponse;
-    return result;
+
+    if (status === 200) {
+      return result;
+    } else {
+      throw (result.error || result.message || 'Something went wrong. Please try again');
+    }
   } catch (e) {
     throw e;
   }
@@ -69,7 +101,12 @@ export const fetchAllPANs = async (params) => {
     // send userID
     const res = await Api.get('api/external_portfolio/hni/fetch/pans', params);
     const { result, status_code: status } = res.pfwresponse;
-    return result.pans;
+
+    if (status === 200) {
+      return result.pans;
+    } else {
+      throw (result.error || result.message || 'Something went wrong. Please try again');
+    }
   } catch (e) {
     throw e;
   }
