@@ -23,7 +23,24 @@ class StatementNotReceived extends Component {
     this.setLoader = setLoader.bind(this);
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'portfolio_tracker',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'sent mail not found',
+      }
+    };
+
+    if (['just_set_events', 'back'].includes(user_action)) {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   regenerateStatement = async () => {
+    this.sendEvents('regenerate_stat');
     try {
       this.setLoader(true);
       const { email_detail } = this.state;
@@ -46,7 +63,7 @@ class StatementNotReceived extends Component {
 
   goBack = (params = {}) => {
     storageService().remove('email_detail_hni');
-    nativeCallback({ action: 'exit', events: this.getEvents('back') });
+    nativeCallback({ action: 'exit', events: this.sendEvents('back') });
   }
 
   render() {

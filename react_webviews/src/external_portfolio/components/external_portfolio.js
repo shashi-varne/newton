@@ -54,16 +54,33 @@ export default class ExternalPortfolio extends Component {
     this.setLoader = setLoader.bind(this);
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'portfolio_tracker',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'external portfolio',
+        see_all_clicked: this.state.seeMoreClicked,
+      }
+    };
+
+    if (['just_set_events', 'back'].includes(user_action)) {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   async componentDidMount() {
     try {
       this.setLoader(true);
       let selectedPan = storageService().getObject('user_pan') || null;
-      if (!selectedPan || !selectedPan.pan) {
+      if (!selectedPan) {
         let { pans } = await fetchAllPANs();
-        selectedPan = { pan: pans[0]};
+        selectedPan = pans[0];
         storageService().setObject('user_pan', selectedPan);
       }
-      const result = await fetchExternalPortfolio({ pan: selectedPan.pan });
+      const result = await fetchExternalPortfolio({ pan: selectedPan });
       this.setState({
         portfolio: result.response,
         selectedPan,
@@ -105,7 +122,22 @@ export default class ExternalPortfolio extends Component {
   }
 
   goBack = () => {
-    nativeCallback({ action: 'exit', events: this.getEvents('back') });
+    nativeCallback({ action: 'exit', events: this.sendEvents('back') });
+  }
+
+  settingsClicked = () => {
+    this.sendEvents('settings');
+    this.navigate('settings');
+  }
+
+  panSelectClicked = () => {
+    this.sendEvents('accounts');
+    this.navigate('select_pan');
+  }
+
+  fundHoldingsClicked = () => {
+    this.sendEvents('fund holdings');
+    this.navigate('fund_holdings');
   }
 
   render() {
@@ -127,7 +159,7 @@ export default class ExternalPortfolio extends Component {
         noFooter={true}
         noHeader={this.state.show_loader}
         rightIcon={<SettingsIcon />}
-        handleRightIconClick={() => this.navigate('settings')}
+        handleRightIconClick={this.settingsClicked}
         hideInPageTitle={true}
         styleHeader={{
           background: 'black',
@@ -140,11 +172,9 @@ export default class ExternalPortfolio extends Component {
           <span className="header-title-text" style={{ color: 'white' }}>
             External Portfolio
           </span>
-          <div id="selected-pan" onClick={() => this.navigate('select_pan')}>
-            <div className="selected-pan-initial">A</div>
+          <div id="selected-pan" onClick={this.panSelectClicked}>
             <div id="selected-pan-detail">
-              <span id="selected-pan-num">{this.state.selectedPan.pan}</span>
-              <span id="selected-pan-name">{this.state.selectedPan.name || 'James Bond'}</span>
+              <span id="selected-pan-num">{this.state.selectedPan}</span>
             </div>
             <ChevronRightIcon style={{ color: 'white' }}/>
           </div>
@@ -204,14 +234,17 @@ export default class ExternalPortfolio extends Component {
         </div>
         <div className="ext-pf-subheader">
           <h4>Top 10 holdings</h4>
-          <TopHoldings holdings={top_holdings || []}/>
+          <TopHoldings
+            holdings={top_holdings || []}
+            onSeeMoreClicked={() => this.setState({ seeMoreClicked: true })}
+          />
         </div>
         <Button
           fullWidth={true}
           classes={{
             root: 'fund-holding-btn',
           }}
-          onClick={() => this.navigate('fund_holdings')}
+          onClick={this.fundHoldingsClicked}
         >
           <div id="fund-holding-btn-text">
             Fund Holdings

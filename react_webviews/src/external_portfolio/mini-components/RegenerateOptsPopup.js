@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Drawer, Button } from 'material-ui';
 import { getConfig } from '../../utils/functions';
 import { navigate } from '../common/commonFunctions';
+import { nativeCallback } from 'utils/native_callback';
 
 const productType = getConfig().productName;
 
@@ -10,6 +11,22 @@ export default class RegenerateOptsPopup extends Component {
     super(props);
     this.state = {};
     this.navigate = navigate.bind(this);
+  }
+  
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'portfolio_tracker',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'reconfirm popup',
+      }
+    };
+
+    if (['just_set_events', 'back'].includes(user_action)) {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   }
 
   render() {
@@ -34,7 +51,7 @@ export default class RegenerateOptsPopup extends Component {
               root: 'gen-statement-btn',
               label: 'gen-statement-btn-label'
             }}
-            onClick={this.props.emailForwardedHandler}
+            onClick={() => { this.sendEvents('email forwarded'); this.props.emailForwardedHandler() }}
           >
             CAS EMAIL FORWARDED
           </Button>
@@ -44,7 +61,7 @@ export default class RegenerateOptsPopup extends Component {
               root: 'gen-statement-btn',
               label: 'gen-statement-btn-label'
             }}
-            onClick={this.props.notReceivedClick}
+            onClick={() => { this.sendEvents('email not received'); this.props.notReceivedClick() }}
           >
             CAS EMAIL NOT RECIEVED
           </Button>

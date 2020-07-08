@@ -24,6 +24,25 @@ class StatementRequest extends Component {
     this.emailForwardedHandler = emailForwardedHandler.bind(this);
   }
 
+  sendEvents(user_action) {
+    const params = this.props.location.params || {};
+    let eventObj = {
+      "event_name": 'portfolio_tracker',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'statement request sent',
+        entry_point: params.comingFrom === 'email_entry' ? 'email entry' : 'regenerate_stat',
+        status: this.state.showRegenerateBtn ? 'mail not recieved in 30 min' : 'before tracker setup',
+      }
+    };
+
+    if (['just_set_events', 'back'].includes(user_action)) {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   async componentDidMount() {
     try {
       const params = this.props.location.params || {};
@@ -31,7 +50,11 @@ class StatementRequest extends Component {
         this.setState({ selectedEmail: params.email });
         const [email] = await fetchEmails({ email_id: params.email });
         if (email) {
-          this.setState({email_detail: email || {}});
+          let showRegenerateBtn = false;
+          if (email.latest_statement) {
+            showRegenerateBtn = (new Date() - new Date(email.latest_statement.dt_updated)) / 60000 >= 30;
+          }
+          this.setState({email_detail: email || {}, showRegenerateBtn});
           storageService().setObject('email_detail_hni', email);
         } else {
           throw 'Error fetching email details';
@@ -44,6 +67,7 @@ class StatementRequest extends Component {
   }
 
   generateStatement = () => {
+    this.sendEvents('regenerate_stat');
     this.setState({ popupOpen: true });
   }
 
@@ -52,6 +76,7 @@ class StatementRequest extends Component {
   }
 
   onInfoCtrlClick = () => {
+    this.sendEvents('email_change');
     const params = this.props.location.params || {};
     this.navigate('email_entry', {
       comingFrom: 'statement_request',
@@ -64,7 +89,7 @@ class StatementRequest extends Component {
   goBack = (params) => {
     storageService().remove('email_detail_hni');
     if (!params || params.exitToApp) {
-      nativeCallback({ action: 'exit', events: this.getEvents('back') });
+      nativeCallback({ action: 'exit', events: this.sendEvents('back') });
     } else if (params.navigateBackTo) { // available when coming from email_entry
       this.navigate(params.navigateBackTo);
     } else {
@@ -73,13 +98,8 @@ class StatementRequest extends Component {
   }
 
   render() {
-    const { email_detail, show_loader, loadingText, selectedEmail } = this.state;
+    const { email_detail, show_loader, loadingText, selectedEmail, showRegenerateBtn } = this.state;
     const params = this.props.location.params || {};
-    let emailToShow = selectedEmail, showRegenerateBtn = false;
-    if (email_detail && email_detail.latest_statement) {
-      emailToShow = email_detail.email || selectedEmail;
-      showRegenerateBtn = (new Date() - new Date(email_detail.latest_statement.dt_updated))/60000 >= 30;
-    }
     return (
       <Container
         title="Statement request sent"
@@ -100,7 +120,7 @@ class StatementRequest extends Component {
             ctrlText={params.noEmailChange ? '' : 'Change'}
           >
             <div id="info-box-body-header">Email ID</div>
-            <span id="info-box-body-subheader">{emailToShow}</span>
+            <span id="info-box-body-subheader">{selectedEmail}</span>
           </InfoBox>
         }
         <div className="ext-pf-subheader">

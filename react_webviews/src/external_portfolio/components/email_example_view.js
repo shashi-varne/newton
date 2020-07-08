@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import EmailTemplate from '../mini-components/email_template';
-
+import { nativeCallback } from 'utils/native_callback';
 
 class EmailExampleView extends Component {
   constructor(props) {
@@ -8,7 +8,24 @@ class EmailExampleView extends Component {
     this.state = {};
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'portfolio_tracker',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'cas email ',
+      }
+    };
+
+    if (['just_set_events'].includes(user_action)) {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   goBack = () => {
+    this.sendEvents('back');
     this.props.history.goBack();
   }
 
@@ -20,6 +37,7 @@ class EmailExampleView extends Component {
         subtitle={subtitleText}
         handleClick={this.goBack}
         buttonTitle="Okay"
+        events={this.sendEvents('just_set_events')}
         goBack={this.goBack}
       >
       </EmailTemplate>

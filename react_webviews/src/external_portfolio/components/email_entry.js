@@ -24,6 +24,22 @@ class email_entry extends Component {
     this.setLoader = setLoader.bind(this);
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'portfolio_tracker',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'email entry',
+      }
+    };
+
+    if (['just_set_events', 'back'].includes(user_action)) {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   handleChange = key => event => {
     this.setState({
       [key]: event.target.value,
@@ -36,6 +52,7 @@ class email_entry extends Component {
   }
 
   goNext = async () => {
+    this.sendEvents('next');
     const { email } = this.state;
     if (!validateEmail(email)) {
       this.setState({ email_error: 'Please enter a valid email' });
@@ -85,7 +102,7 @@ class email_entry extends Component {
         this.props.history.goBack();
       }
     } else {
-      nativeCallback({ action: 'exit', events: this.getEvents('back') });
+      nativeCallback({ action: 'exit', events: this.sendEvents('back') });
     }
   }
 
@@ -94,6 +111,7 @@ class email_entry extends Component {
     return (
       <Container
         hideInPageTitle={true}
+        events={this.sendEvents('just_set_events')}
         fullWidthButton={true}
         classHeader={show_loader ? '' : 'bg-highlight'}
         handleClick={this.goNext}

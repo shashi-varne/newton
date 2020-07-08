@@ -94,7 +94,7 @@ class Container extends Component {
       console.log('CALLING GOBACK FUNCTION');
       return this.props.goBack(params);
     }
-
+    nativeCallback({ events: this.getEvents('back') });
     this.props.history.goBack();
   };
 

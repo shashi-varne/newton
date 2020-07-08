@@ -6,6 +6,7 @@ import { fetchEmails, deleteEmail } from '../common/ApiCalls';
 import { storageService } from '../../utils/validators';
 import { setLoader, navigate, emailForwardedHandler } from '../common/commonFunctions';
 import PopUp from '../common/PopUp';
+import { nativeCallback } from 'utils/native_callback';
 
 export default class Settings extends Component {
   constructor(props) {
@@ -18,6 +19,23 @@ export default class Settings extends Component {
     this.setLoader = setLoader.bind(this);
     this.navigate = navigate.bind(this);
     this.emailForwardedHandler = emailForwardedHandler.bind(this);
+  }
+
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'portfolio_tracker',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'settings',
+        remove_email_clicked: this.state.removeClicked,
+      }
+    };
+
+    if (['just_set_events'].includes(user_action)) {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   }
 
   getData = async () => {
@@ -56,7 +74,7 @@ export default class Settings extends Component {
   }
 
   removeEmail = async () => {
-    this.setState({ openPopup: false });
+    this.setState({ openPopup: false, removeClicked: true });
     try {
       this.setLoader(true);
       await deleteEmail({ email_id: this.state.email_to_remove });
@@ -83,23 +101,28 @@ export default class Settings extends Component {
     return activeEmails.length > 2;
   }
 
+  addNewEmail = () => {
+    this.sendEvents('next');
+    this.navigate('email_entry', {
+      comingFrom: 'settings',
+      exitToApp: false,
+    });
+  }
+
   render() {
     const { emails, show_loader, loadingText } = this.state;
     const allowRemove = this.checkForRemoveCtrl(emails);
     return (
       <Container
         title="Investment email ids"
-        handleClick={() => this.navigate('email_entry', {
-          comingFrom: 'settings',
-          exitToApp: false,
-        })}
+        handleClick={this.addNewEmail}
         subtitle="Resync to track the recent transactions in your portfolio"
         buttonTitle="Add new email"
         showLoader={show_loader}
         loaderData={{
           loadingText,
         }}
-        goBack={() => this.navigate('external_portfolio')}
+        goBack={() => { this.sendEvents('back'); this.navigate('external_portfolio');}}
         noHeader={show_loader}
       >
         {emails.map(email => (

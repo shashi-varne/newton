@@ -7,6 +7,7 @@ import { navigate, setLoader } from '../common/commonFunctions';
 import { requestStatement } from '../common/ApiCalls';
 import toast from '../../common/ui/Toast';
 import { storageService } from '../../utils/validators';
+import { nativeCallback } from 'utils/native_callback';
 
 class EmailNotReceived extends Component {
   constructor(props) {
@@ -16,9 +17,26 @@ class EmailNotReceived extends Component {
     this.setLoader = setLoader.bind(this);
   }
 
+  sendEvents(user_action) {
+    let eventObj = {
+      "event_name": 'portfolio_tracker',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'cas email not received',
+      }
+    };
+
+    if (['just_set_events'].includes(user_action)) {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   goNext = async () => {
     try {
       this.setLoader(true);
+      this.sendEvents('regenerate_stat');
       const email_detail = storageService().getObject('email_detail_hni');
       await requestStatement({ 
         email_id: email_detail.email,
@@ -37,6 +55,7 @@ class EmailNotReceived extends Component {
   }
 
   goBack = () => {
+    this.sendEvents('back');
     this.props.history.goBack();
   }
 

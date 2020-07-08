@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { LinearProgress } from 'material-ui';
+import { isFunction } from '../../utils/validators';
 
 export default class TopHoldings extends Component {
   constructor(props) {
@@ -10,6 +11,9 @@ export default class TopHoldings extends Component {
   }
 
   toggleView = () => {
+    if (isFunction(this.props.onSeeMoreClicked)) {
+      this.props.onSeeMoreClicked();
+    }
     this.setState((state) => ({
       open: !state.open,
     }));

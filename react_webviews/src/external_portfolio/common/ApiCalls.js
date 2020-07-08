@@ -69,7 +69,7 @@ export const fetchAllPANs = async (params) => {
     // send userID
     const res = await Api.get('api/external_portfolio/hni/fetch/pans', params);
     const { result, status_code: status } = res.pfwresponse;
-    return result;
+    return result.pans;
   } catch (e) {
     throw e;
   }
