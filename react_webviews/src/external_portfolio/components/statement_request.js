@@ -112,7 +112,7 @@ class StatementRequest extends Component {
         noHeader={show_loader}
         goBack={this.goBack}
       >
-        {emailToShow &&
+        {selectedEmail &&
           <InfoBox
             image={require(`assets/${productType}/ic_mail.svg`)}
             imageAltText="mail-icon"

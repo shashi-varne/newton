@@ -48,7 +48,7 @@ export default class ExternalPortfolio extends Component {
     this.state = {
       portfolio: {},
       show_loader: false,
-      selectedPan: {},
+      selectedPan: '',
     };
     this.navigate = navigate.bind(this);
     this.setLoader = setLoader.bind(this);
@@ -74,11 +74,11 @@ export default class ExternalPortfolio extends Component {
   async componentDidMount() {
     try {
       this.setLoader(true);
-      let selectedPan = storageService().getObject('user_pan') || null;
+      let selectedPan = storageService().get('user_pan') || null;
       if (!selectedPan) {
-        let { pans } = await fetchAllPANs();
+        let pans = await fetchAllPANs();
         selectedPan = pans[0];
-        storageService().setObject('user_pan', selectedPan);
+        storageService().set('user_pan', selectedPan);
       }
       const result = await fetchExternalPortfolio({ pan: selectedPan });
       this.setState({

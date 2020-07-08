@@ -579,7 +579,6 @@ export function getDateBreakup(date) {
   date = date.replace(/-/g, '/');
 
   let date2 = new Date(date);
-  console.log(date, date2, date2.getDate(), date2.getMonth(), date2.getFullYear());
   let dom = date2.getDate();
   dom = dateOrdinal(dom);
 
@@ -600,7 +599,6 @@ export function formattedDate(date, pattern = '') {
 
   if (!date) return '';
   else if (!validPatterns.includes(pattern)) return date;
-  console.log(getDateBreakup(date));
   let { dom, month, time, year } = getDateBreakup(date);
   const patternMap = {
     'd m, t': `${dom} ${month}, ${time}`,

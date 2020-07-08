@@ -35,13 +35,14 @@ class FundHoldings extends Component {
   async componentWillMount() {
     try {
       this.setLoader(true);
-      const selectedPan = storageService().getObject('user_pan');
-      if (!selectedPan || !selectedPan.pan) {
+      const selectedPan = storageService().get('user_pan');
+      if (!selectedPan) {
         throw 'Please select a PAN';
       }
-      const holdings = await fetchAllHoldings({ pan: selectedPan.pan });
+      const holdings = await fetchAllHoldings({ pan: selectedPan });
       this.setState({ holdings });
     } catch (err) {
+      console.log(err);
       toast(err);
     }
     this.setLoader(false);

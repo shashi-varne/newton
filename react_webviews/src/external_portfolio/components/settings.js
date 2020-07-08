@@ -68,7 +68,7 @@ export default class Settings extends Component {
 
   cancelRemoveOp = () => {
     this.setState({
-      openPopup: true,
+      openPopup: false,
       email_to_remove: '',
     });
   }
@@ -92,13 +92,19 @@ export default class Settings extends Component {
 
     emails = emails.filter(email => email.email !== email_to_remove);
     this.setState({ emails });
+    if (email_to_remove.latest_success_statement.statement_id) {
+      /* This is required for when an email with a succesfully synced
+      statement is removed and the PAN selected by the user was the PAN
+      associated with the email being removed */
+      storageService().remove('user_pan');
+    }
   }
 
   checkForRemoveCtrl = (emails) => {
     /* Function to check if there are atleast 2 emails 
     with successfully updated portfolio statements */
     const activeEmails = emails.filter(email => !!email.latest_success_statement.statement_id);
-    return activeEmails.length > 2;
+    return activeEmails.length >= 2;
   }
 
   addNewEmail = () => {
