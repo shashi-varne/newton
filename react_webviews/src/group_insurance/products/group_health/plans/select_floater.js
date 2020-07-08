@@ -114,7 +114,8 @@ class GroupHealthPlanSelectFloater extends Component {
                 "user_action": user_action,
                 "product": 'health suraksha',
                 "flow": this.state.insured_account_type || '',
-                "screen_name": 'insurance'
+                "screen_name": 'select sum Insured for',
+                'sum_assured_for' : this.state.premium_data_floater[this.state.selectedIndex].key === 'WF' ? 'complete family' : 'individual'
             }
         };
 
@@ -126,6 +127,7 @@ class GroupHealthPlanSelectFloater extends Component {
     }
 
     handleClick = () => {
+        this.sendEvents('next');
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let type_of_plan = this.state.premium_data_floater[this.state.selectedIndex].key;
         groupHealthPlanData.selectedIndexFloater = this.state.selectedIndex;

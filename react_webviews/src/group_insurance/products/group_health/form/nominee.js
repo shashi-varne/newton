@@ -136,6 +136,7 @@ class GroupHealthPlanNomineeDetails extends Component {
 
     handleClick = async () => {
 
+        this.sendEvents('next');
         let keysMapper = {
             'name': 'name',
             'relation': 'relation'
@@ -192,7 +193,10 @@ class GroupHealthPlanNomineeDetails extends Component {
                 "user_action": user_action,
                 "product": 'health suraksha',
                 "flow": this.state.insured_account_type || '',
-                "screen_name": 'insurance'
+                "screen_name": 'nominee details',
+                'from_edit': this.props.edit ? 'yes' : 'no',
+                'name': this.state.form_data.name ? 'yes' : 'no',
+                'relation': this.state.form_data.relation ? 'yes' : 'no',
             }
         };
 

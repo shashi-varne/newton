@@ -137,6 +137,7 @@ class GroupHealthPlanSelectPed extends Component {
     }
 
     handleClick = async () => {
+        this.sendEvents('next');
 
         let options = this.state.options;
         let member_base = this.state.lead.member_base;
@@ -197,6 +198,19 @@ class GroupHealthPlanSelectPed extends Component {
         }
     }
 
+    getTotalDisease = () => {
+
+        let total = 0;
+        let options = this.state.options || [];
+
+        for(var j in options) {
+            if(options[j].checked) {
+                total++;
+            } 
+        }
+
+        return total;
+    }
 
     sendEvents(user_action) {
         let eventObj = {
@@ -205,7 +219,9 @@ class GroupHealthPlanSelectPed extends Component {
                 "user_action": user_action,
                 "product": 'health suraksha',
                 "flow": this.state.insured_account_type || '',
-                "screen_name": 'insurance'
+                "screen_name": 'pre-existing disease_list',
+                'from_edit': this.props.edit ? 'yes' : 'no',
+                'disease' : this.getTotalDisease()
             }
         };
 

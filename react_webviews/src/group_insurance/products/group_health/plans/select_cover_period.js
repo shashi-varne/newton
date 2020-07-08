@@ -76,7 +76,8 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                 "user_action": user_action,
                 "product": 'health suraksha',
                 "flow": this.state.insured_account_type || '',
-                "screen_name": 'insurance'
+                "screen_name": 'select cover period',
+                'cover_period' : (this.state.premium_data || [])[(this.state.selectedIndex || 0)].tenure || ''
             }
         };
 
@@ -88,6 +89,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
     }
 
     handleClick = () => {
+        this.sendEvents('next');
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let post_body = groupHealthPlanData.post_body;
 

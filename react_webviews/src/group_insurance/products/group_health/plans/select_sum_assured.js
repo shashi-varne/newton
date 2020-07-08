@@ -48,7 +48,8 @@ class GroupHealthPlanSelectSumAssured extends Component {
                 "user_action": user_action,
                 "product": 'health suraksha',
                 "flow": this.state.insured_account_type || '',
-                "screen_name": 'insurance'
+                "screen_name": 'select sum Insured',
+                'sum_assured' : (this.state.premium_data || [])[this.state.selectedIndex || 0].sum_assured || ''
             }
         };
 
@@ -60,6 +61,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
     }
 
     handleClick = () => {
+        this.sendEvents('next');
         let groupHealthPlanData = this.state.groupHealthPlanData;
         groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
         groupHealthPlanData.post_body.sum_assured = this.state.premium_data[this.state.selectedIndex].sum_assured;

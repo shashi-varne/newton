@@ -97,6 +97,7 @@ class GroupHealthPlanContactDetails extends Component {
 
     handleClick = async () => {
 
+        this.sendEvents('next');
         let keysMapper = {
             'email': 'email',
             'mobile_number': 'mobile number',
@@ -158,7 +159,10 @@ class GroupHealthPlanContactDetails extends Component {
                 "user_action": user_action,
                 "product": 'health suraksha',
                 "flow": this.state.insured_account_type || '',
-                "screen_name": 'insurance'
+                "screen_name": 'contact details',
+                'email': this.state.form_data.email ? 'yes' : 'no',
+                'mobile_number': this.state.form_data.mobile_number ? 'yes' : 'no',
+                'from_edit': this.props.edit ? 'yes' : 'no'
             }
         };
 

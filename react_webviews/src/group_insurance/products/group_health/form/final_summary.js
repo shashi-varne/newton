@@ -300,18 +300,22 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     handleClick = async () => {
+        this.sendEvents('next');
         this.checkPPC();
     }
 
 
-    sendEvents(user_action) {
+    sendEvents(user_action, data={}) {
         let eventObj = {
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
                 "product": 'health suraksha',
                 "flow": this.state.insured_account_type || '',
-                "screen_name": 'insurance'
+                "screen_name": 'summary',
+                'restart_clicked' : this.state.restart_clicked ? 'yes' : 'no',
+                'restart_conformation' : this.state.restart_conformation ? 'yes' : 'no',
+                'edit_clicked' : data.edit_clicked || ''
             }
         };
 
@@ -423,7 +427,7 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     openEdit = (state) => {
-        // this.navigate(state, {edit: true});
+        this.sendEvents('next', {edit_clicked: state});
         this.navigate(state);
     }
 
@@ -459,11 +463,14 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     handleReset = async () => {
-        this.sendEvents('yes', 'reset');
+        
 
         this.setState({
             openDialogReset: false,
-            show_loader: true
+            show_loader: true,
+            restart_conformation: true
+        }, () => {
+            this.sendEvents('next');
         });
 
 
@@ -498,8 +505,10 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     showDialog = () => {
-        this.sendEvents('reset');
-        this.setState({ openDialogReset: true });
+        this.setState({ 
+            openDialogReset: true,
+            restart_clicked: true
+        });
     }
 
     render() {

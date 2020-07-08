@@ -174,6 +174,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
   handleClick = async () => {
 
+    this.sendEvents('next');
     let keys_to_check = ['name', 'dob', 'height', 'weight'];
 
     if (this.state.member_key === 'self') {
@@ -259,8 +260,14 @@ class GroupHealthPlanPersonalDetails extends Component {
        "properties": {
         "user_action": user_action,
         "product": 'health suraksha',
-                "flow": this.state.insured_account_type || '',
-        "screen_name": 'insurance'
+        "flow": this.state.insured_account_type || '',
+        "screen_name": 'personal details',
+        'full_name': this.state.form_data.name ? 'yes' : 'no',
+        'dob': this.state.form_data.dob ? 'yes' : 'no',
+        'height': this.state.form_data.height ? 'yes' : 'no',
+        'weight': this.state.form_data.weight ? 'yes' : 'no',
+        'gender': this.state.form_data.gender ? 'yes' : 'no',
+        'from_edit': this.props.edit ? 'yes' : 'no'
       }
     };
 

@@ -117,6 +117,7 @@ class GroupHealthPlanIsPed extends Component {
 
     handleClick = async () => {
 
+        this.sendEvents('next');
         let form_data = this.state.form_data;
         let canSubmitForm = true;
         if (!form_data.is_ped) {
@@ -180,7 +181,9 @@ class GroupHealthPlanIsPed extends Component {
                 "user_action": user_action,
                 "product": 'health suraksha',
                 "flow": this.state.insured_account_type || '',
-                "screen_name": 'insurance'
+                "screen_name": 'pre-existing_disease',
+                'from_edit': this.props.edit ? 'yes' : 'no',
+                'with_disease_list' : this.state.form_data.is_ped === 'YES' ? 'yes' : 'no'
             }
         };
 

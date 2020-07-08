@@ -63,7 +63,7 @@ class GroupHealthPlanPremiumSummary extends Component {
                 "user_action": user_action,
                 "product": 'health suraksha',
                 "flow": this.state.insured_account_type || '',
-                "screen_name": 'insurance'
+                "screen_name": 'premium summary'
             }
         };
 
@@ -75,6 +75,7 @@ class GroupHealthPlanPremiumSummary extends Component {
     }
 
     handleClick = async () => {
+        this.sendEvents('next');
         try {
 
             this.setState({

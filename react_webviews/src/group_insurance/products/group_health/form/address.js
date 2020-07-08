@@ -106,6 +106,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
     handleClick = async () => {
 
+        this.sendEvents('next');
         let keysMapper = {
             'addressline': 'Address line 1',
             'addressline2': 'Address line 2',
@@ -169,7 +170,9 @@ class GroupHealthPlanAddressDetails extends Component {
                 "user_action": user_action,
                 "product": 'health suraksha',
                 "flow": this.state.insured_account_type || '',
-                "screen_name": 'insurance'
+                "screen_name": 'address details',
+                'from_edit': this.props.edit ? 'yes' : 'no',
+                'address_entered' : this.state.form_data.addressline ? 'yes' : 'no'
             }
         };
 

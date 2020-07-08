@@ -220,7 +220,7 @@ class GroupHealthReportDetails extends Component {
                 "user_action": user_action,
                 "product": 'health suraksha',
                 "flow": this.state.insured_account_type || '',
-                "screen_name": 'insurance'
+                "screen_name": 'report details'
             }
         };
 
