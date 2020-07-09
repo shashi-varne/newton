@@ -8,6 +8,7 @@ import { themeConfig } from 'utils/constants';
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
 import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
+import { ToastContainer } from 'react-toastify';
 
 // Component Paths
 import Email_entry from './components/email_entry';
@@ -47,6 +48,7 @@ function external_portfolio(props) {
     <JssProvider jss={jss} generateClassName={generateClassName}>
       <MuiThemeProvider theme={theme}>
         <ScrollToTop />
+        <ToastContainer autoClose={3000} />
         <Switch>
           <Route path={`${url}/email_entry`} component={Email_entry} />
           <Route path={`${url}/statement_request/:email`} component={StatementRequestPage} />
