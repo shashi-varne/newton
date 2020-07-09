@@ -145,12 +145,16 @@ class GroupHealthPlanPremiumSummary extends Component {
                     <div className="premium-info">
                         <div className="flex-between pi-tile">
                             <div className="pi-tile-left">Sum assured</div>
-                            <div className="pi-tile-right">{numDifferentiationInr(this.state.plan_selected_final.sum_assured)}</div>
+                            <div className="pi-tile-right">
+                                {numDifferentiationInr(this.state.type_of_plan === 'NF' ? this.state.plan_selected_final.sum_assured * this.state.total_member : 
+                                this.state.plan_selected_final.sum_assured)}
+                            </div>
                         </div>
                         {this.state.type_of_plan === 'NF' &&
                             <div className="nf-info">
                                 {(`${inrFormatDecimal(this.state.plan_selected_final.sum_assured)} x ${this.state.total_member}`)}
-                            </div>}
+                            </div>
+                        }
 
                         <div className="flex-between pi-tile">
                             <div className="pi-tile-left">Cover period</div>

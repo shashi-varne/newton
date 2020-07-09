@@ -180,8 +180,6 @@ class GroupHealthPlanDob extends Component {
             let age = final_dob_data[i].age;
             let key = final_dob_data[i].key;
 
-            
-
             let error = '';
             if (new Date(dob) > new Date() || !isValidDate(dob)) {
                 error = 'Please enter valid date';
@@ -203,8 +201,6 @@ class GroupHealthPlanDob extends Component {
                     }
                 }
             }
-
-           
            
             final_dob_data[i].error = error;
 

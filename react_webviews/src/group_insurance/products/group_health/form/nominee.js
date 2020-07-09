@@ -4,6 +4,7 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
+import { validateAlphabets } from 'utils/validators';
 import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
 import Input from '../../../../common/ui/Input';
 import { initialize, updateLead } from '../common_data';
@@ -157,7 +158,10 @@ class GroupHealthPlanNomineeDetails extends Component {
 
         if (this.state.form_data && (this.state.form_data.name || '').split(" ").filter(e => e).length < 2) {
             form_data.name_error = 'Enter valid full name';
-        } 
+        } else if (this.state.form_data.name &&
+            !validateAlphabets(this.state.form_data.name)) {
+            form_data.name_error = 'Invalid name';
+          }
 
         this.setState({
             form_data: form_data

@@ -16,7 +16,7 @@ class GroupHealthPlanSelectFloater extends Component {
         this.state = {
             ctaWithProvider: true,
             premium_data_floater: [],
-            show_loader: true
+            show_loader: true,
         }
 
         this.initialize = initialize.bind(this);
@@ -115,7 +115,7 @@ class GroupHealthPlanSelectFloater extends Component {
                 "product": 'health suraksha',
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'select sum Insured for',
-                'sum_assured_for' : this.state.premium_data_floater[this.state.selectedIndex].key === 'WF' ? 'complete family' : 'individual'
+                'sum_assured_for' : (this.state.premium_data_floater[this.state.selectedIndex || 0]  || {}).key === 'WF' ? 'complete family' : 'individual'
             }
         };
 

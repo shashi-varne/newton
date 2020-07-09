@@ -74,7 +74,7 @@ class GroupHealthSelectInsureType extends Component {
       }
       let ui_members = groupHealthPlanData.ui_members || {};
 
-      let keys_to_reset = ['self', 'wife', 'father', 'mother', 'son', 'son1', 'son2',
+      let keys_to_reset = ['self', 'wife', 'husband', 'father', 'mother', 'son', 'son1', 'son2',
         'daughter', 'daughter1', 'daughter2'];
 
       for (var kr in keys_to_reset) {

@@ -15,6 +15,10 @@ class RadioGrp extends Component {
   }
 
   toggleRadioBtn = (index) => {
+
+    if(this.props.canUnSelect && this.state.selectedIndex === index) {
+      index = '';
+    }
     this.props.onChange(index);
     this.setState({
       selectedIndex: index,

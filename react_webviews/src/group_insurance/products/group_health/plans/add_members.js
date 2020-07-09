@@ -51,7 +51,8 @@ class GroupHealthPlanAddMembers extends Component {
 
     componentWillMount() {
         this.initialize();
-    }
+    }Open
+
 
 
     async componentDidMount() {
@@ -115,7 +116,7 @@ class GroupHealthPlanAddMembers extends Component {
             return;
         }
 
-        let keys_to_reset = ['self', 'wife', 'father', 'mother', 'son', 'son1', 'son2',
+        let keys_to_reset = ['self', 'wife', 'husband', 'father', 'mother', 'son', 'son1', 'son2',
             'daughter', 'daughter1', 'daughter2'];
 
 
@@ -181,7 +182,6 @@ class GroupHealthPlanAddMembers extends Component {
                 adult_total++;
             }
         }
-
 
         let post_body = this.state.groupHealthPlanData.post_body || {};
         post_body.mem_info = {
@@ -261,7 +261,7 @@ class GroupHealthPlanAddMembers extends Component {
 
     handleChangeRadio = name => event => {
         this.setState({
-            [name]: other_adult_member_options[event].value,
+            [name]: other_adult_member_options[event] ? other_adult_member_options[event].value : '',
             [name + '_error']: ''
         })
 
@@ -312,7 +312,8 @@ class GroupHealthPlanAddMembers extends Component {
                                 error={(this.state.other_adult_member_error) ? true : false}
                                 helperText={this.state.other_adult_member_error}
                                 value={this.state.other_adult_member || ''}
-                                onChange={this.handleChangeRadio('other_adult_member')} />
+                                onChange={this.handleChangeRadio('other_adult_member')} 
+                                canUnSelect={true}/>
                         </div>
 
 

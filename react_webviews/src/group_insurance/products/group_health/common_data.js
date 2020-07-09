@@ -248,6 +248,9 @@ export async function resetQuote() {
 
 export function openInBrowser(url, type) {
 
+    if(!url) {
+        return;
+    }
     this.sendEvents('tnc_clicked');
     if (!getConfig().Web) {
         this.setState({

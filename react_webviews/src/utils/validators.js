@@ -673,7 +673,7 @@ export function calculateAge(val, byMonth) {
 
   if(byMonth) {
     return {
-      age: age,
+      age: monthDiff(birthDate, today)/12,
       month: monthDiff(birthDate, today)
     }
   }

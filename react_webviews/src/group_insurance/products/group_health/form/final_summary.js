@@ -581,19 +581,21 @@ class GroupHealthPlanFinalSummary extends Component {
                                 </div>
                                 <div className="mtr-bottom flex">
                                         <div>
-                                        {inrFormatDecimal(this.state.lead.premium)} (Basic premium)
+                                            <div> {inrFormatDecimal(this.state.lead.premium)} </div>
+                                            <div style={{fontSize:10}}> (Basic premium)</div>
                                         </div>
                                         <div>
-                                        &nbsp;+&nbsp;
+                                            &nbsp;+&nbsp;
                                         </div>
                                         <div>
-                                        {inrFormatDecimal(this.state.lead.tax_amount)} (18% GST & other taxes)
+                                            <div>{inrFormatDecimal(this.state.lead.tax_amount)} </div>
+                                            <div style={{fontSize:10}}>(18% GST & other taxes) </div>
                                         </div>
                                         <div>
                                         &nbsp;=&nbsp;
                                         </div>
                                         <div>
-                                        {inrFormatDecimal(this.state.lead.total_amount)}
+                                         {inrFormatDecimal(this.state.lead.total_amount)}
                                         </div>
                                 </div>
                             </div>

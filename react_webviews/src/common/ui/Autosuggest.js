@@ -51,27 +51,31 @@ class AutosuggestInput extends Component {
   renderSuggestion(suggestion, { query }) {
     const matches = match(suggestion.name, query);
     const parts = parse(suggestion.name, matches);
-    return (
-      <span>
-        {parts.map((part, index) => {
-          const className = part.highlight ? 'react-autosuggest__suggestion-match' : null;
-
-          return (
-            <span className={className} key={index}>
-              {part.text}
-            </span>
-          );
-        })}
-      </span>
-    );
+    if(parts) {
+      return (
+        <span>
+          {parts.map((part, index) => {
+            const className = part.highlight ? 'react-autosuggest__suggestion-match' : null;
+  
+            return (
+              <span className={className} key={index}>
+                {part.text}
+              </span>
+            );
+          })}
+        </span>
+      );
+    }
+    
   }
 
-  handleChange = (event) => {
+  handleChange = (event, { newValue }) => {
+    newValue = newValue || '';
     this.setState({ selectedValue: event.target.value });
-    if(typeof event.target.value === 'number') {
-      this.props.onChange(this.state.suggestions[event.target.value].value);
+    if(typeof newValue === 'number') {
+      this.props.onChange(this.state.suggestions[newValue].value);
     } else {
-      this.props.onChange(event.target.value);
+      this.props.onChange(newValue);
     }
     
   };

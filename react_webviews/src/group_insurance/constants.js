@@ -623,17 +623,17 @@ export function ghGetMember(lead) {
   let total_daughter = 0;
 
   if(lead.child_account1_key.dob) {
-    if((lead.child_account1_key.relation).toUpperCase() === 'SON') {
+    if((lead.child_account1_key.relation || '').toUpperCase() === 'SON') {
       total_son++;
-    } else if((lead.child_account2_key.relation).toUpperCase() === 'DAUGHTER') {
+    } else if((lead.child_account2_key.relation || '').toUpperCase() === 'DAUGHTER') {
       total_daughter++;
     }
   }
 
   if(lead.child_account2_key.dob) {
-    if((lead.child_account2_key.relation).toUpperCase() === 'SON') {
+    if((lead.child_account2_key.relation || '').toUpperCase() === 'SON') {
       total_son++;
-    } else if((lead.child_account2_key.relation).toUpperCase() === 'DAUGHTER') {
+    } else if((lead.child_account2_key.relation || '').toUpperCase() === 'DAUGHTER') {
       total_daughter++;
     }
   }
@@ -648,7 +648,7 @@ export function ghGetMember(lead) {
       let obj = lead[key];
       obj.backend_key = key;
 
-      obj.key = (lead[key].relation).toLowerCase();
+      obj.key = (lead[key].relation || '').toLowerCase();
 
       if(total_son === 2) {
 

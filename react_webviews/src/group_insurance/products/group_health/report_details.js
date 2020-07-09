@@ -467,7 +467,7 @@ class GroupHealthReportDetails extends Component {
                                     <span className="special-benefit-text">Special benefits</span>
                                 </div>
                                 <div className='common-steps-images'>
-                                    {this.state.extra_data.benefits.main.map(this.renderSteps)}
+                                    {this.state.extra_data.special_benfits.map(this.renderSteps)}
                                 </div>
 
                                 <div className="special-benefit"
@@ -477,7 +477,7 @@ class GroupHealthReportDetails extends Component {
                                     <span className="special-benefit-text">Main benefits</span>
                                 </div>
                                 <div className='common-steps-images'>
-                                    {this.state.extra_data.special_benfits.map(this.renderSteps)}
+                                    {this.state.extra_data.benefits.main.map(this.renderSteps)}
                                 </div>
                             </div>
 

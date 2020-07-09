@@ -70,11 +70,11 @@ class GroupHealthLanding extends Component {
       'Mental health and home health care'
     ];
     let whats_not_covered = [
-      'Diseases occured before policy issuance will be covered after 3 year',
-      'Ayurveda, unani, sidha and homeopathy  treatments',
-      '60 days pre and 180 days post hospitalization expenses',
-      'Organ donor expenses',
-      'Mental health and home health care'
+      'Maternity',
+      'Self-inflicted injuries',
+      'Adventure sport injuries',
+      'Injuries caused due to participation in defense operations/war',
+      'Venereal or Sexually transmitted diseases'
     ]
 
     this.setState({

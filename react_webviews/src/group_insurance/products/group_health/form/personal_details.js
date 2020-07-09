@@ -5,7 +5,7 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { health_providers, genderOptions } from '../../../constants';
 import { calculateAge, toFeet, capitalizeFirstLetter, 
-  formatDate, validatePan } from 'utils/validators';
+  formatDate, validatePan, validateAlphabets } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import DropdownInModal from '../../../../common/ui/DropdownInModal';
@@ -190,11 +190,12 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     let form_data = this.state.form_data;
+    console.log(form_data);
     for (var i = 0; i < keys_to_check.length; i++) {
       let key_check = keys_to_check[i];
       let first_error = key_check === 'gender' || key_check === 'height' ? 'Please select ' :
         'Please enter ';
-      if (!form_data[key_check]) {
+      if (!form_data[key_check] || form_data[key_check] === "0") {
         form_data[key_check + '_error'] = first_error + (key_check === 'pan_number' ? 'pan number' : key_check);
       }
     }
@@ -206,6 +207,11 @@ class GroupHealthPlanPersonalDetails extends Component {
     if (this.state.pan_needed && this.state.form_data.pan_number &&
       !validatePan(this.state.form_data.pan_number)) {
       form_data.pan_number_error = 'Invalid PAN number';
+    }
+
+    if (this.state.form_data.name &&
+      !validateAlphabets(this.state.form_data.name)) {
+      form_data.name_error = 'Invalid name';
     }
 
 
