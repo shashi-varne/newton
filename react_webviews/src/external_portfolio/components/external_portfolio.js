@@ -49,6 +49,7 @@ export default class ExternalPortfolio extends Component {
       portfolio: {},
       show_loader: false,
       selectedPan: '',
+      selectedPanRank: '',
     };
     this.navigate = navigate.bind(this);
     this.setLoader = setLoader.bind(this);
@@ -75,15 +76,19 @@ export default class ExternalPortfolio extends Component {
     try {
       this.setLoader(true);
       let selectedPan = storageService().get('user_pan') || null;
+      let selectedPanRank = storageService().get('user_pan_rank') || null;
       if (!selectedPan) {
         let pans = await fetchAllPANs();
         selectedPan = pans[0];
+        selectedPanRank = 1;
         storageService().set('user_pan', selectedPan);
+        storageService().set('user_pan_rank', selectedPanRank);
       }
       const result = await fetchExternalPortfolio({ pan: selectedPan });
       this.setState({
         portfolio: result.response,
         selectedPan,
+        selectedPanRank,
       });
     } catch(err) {
       console.log(err);
@@ -141,6 +146,7 @@ export default class ExternalPortfolio extends Component {
   }
 
   render() {
+    const { selectedPan, selectedPanRank, portfolio, show_loader } = this.state;
     let {
       total_investment,
       total_current_value,
@@ -149,7 +155,7 @@ export default class ExternalPortfolio extends Component {
       portfolio_xirr: annual_return,
       asset_allocation,
       top_holdings
-    } = this.state.portfolio;
+    } = portfolio;
     annual_return = Number(annual_return);
     const assetAllocData = this.generateAllocationData(asset_allocation);
 
@@ -157,7 +163,7 @@ export default class ExternalPortfolio extends Component {
       <Container
         title="External Portfolio"
         noFooter={true}
-        noHeader={this.state.show_loader}
+        noHeader={show_loader}
         rightIcon={<SettingsIcon />}
         handleRightIconClick={this.settingsClicked}
         hideInPageTitle={true}
@@ -165,7 +171,7 @@ export default class ExternalPortfolio extends Component {
           background: 'black',
         }}
         goBack={this.goBack}
-        showLoader={this.state.show_loader}
+        showLoader={show_loader}
         classHeader="ext-pf-inPageHeader bg-black"
       >
         <div className="fullscreen-banner bg-black">
@@ -173,8 +179,12 @@ export default class ExternalPortfolio extends Component {
             External Portfolio
           </span>
           <div id="selected-pan" onClick={this.panSelectClicked}>
+            <div className="selected-pan-initial">
+              {selectedPan[0]}
+            </div>
             <div id="selected-pan-detail">
-              <span id="selected-pan-num">{this.state.selectedPan}</span>
+              <span id="selected-pan-header">PAN {selectedPanRank || ''}</span>
+              <span id="selected-pan-num">{selectedPan}</span>
             </div>
             <ChevronRightIcon style={{ color: 'white' }}/>
           </div>

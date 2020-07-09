@@ -37,7 +37,7 @@ export default class TopHoldings extends Component {
         {holdings.map((holding, idx) => (
           <div id="top-holding" key={idx}>
             <div id="top-holding-detail">
-              <span id="top-holding-name">{holding.amc_name}</span>
+              <span id="top-holding-name">{holding.org_name}</span>
               <span id="top-holding-value">{Number(holding.invested_perc || '0000.888292').toFixed(2)}%</span>
             </div>
             <LinearProgress

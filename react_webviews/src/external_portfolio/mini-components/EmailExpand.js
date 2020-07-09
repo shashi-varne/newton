@@ -56,9 +56,8 @@ export default class EmailExpand extends Component {
     const { email, parent } = this.props;
     try {
       await requestStatement({ email_id: email.email, resync: true });
-      parent.navigate('statement_request', {
+      parent.navigate(`statement_request/${email.email}`, {
         navigateBackTo: 'settings',
-        email: email.email,
         noEmailChange: true,
       });
     } catch (err) {

@@ -21,7 +21,7 @@ export default class FundDetailCard extends Component {
     } = this.props.fundDetails;
     return (
       <Fragment>
-        <div className="fund-details-container">
+        <div className="fund-details-container" onClick={this.props.onFundClicked}>
           <div className="fund-header">
             <img
               src={amc_logo || icon}

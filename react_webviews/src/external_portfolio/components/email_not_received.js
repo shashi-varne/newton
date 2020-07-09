@@ -43,9 +43,8 @@ class EmailNotReceived extends Component {
         statement_id: email_detail.latest_statement.statement_id,
         retrigger: true,
       });
-      this.navigate('statement_request', {
+      this.navigate(`statement_request/${email_detail.email}`, {
         exitToApp: true,
-        email: email_detail.email,
       });
     } catch (err) {
       console.log(err);

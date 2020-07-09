@@ -44,26 +44,34 @@ class StatementRequest extends Component {
   }
 
   async componentDidMount() {
-    try {
-      const params = this.props.location.params || {};
-      if (params.email) {
-        this.setState({ selectedEmail: params.email });
-        const [email] = await fetchEmails({ email_id: params.email });
+    const params = this.props.location.params || {};
+    const matchParams = this.props.match.params || {};
+    const emailParam = params.email || matchParams.email;
+
+    if (emailParam) {
+      this.setState({ selectedEmail: emailParam });
+      try {
+        const [email] = await fetchEmails({ email_id: emailParam });
         if (email) {
           let showRegenerateBtn = false;
           if (email.latest_statement) {
-            showRegenerateBtn = (new Date() - new Date(email.latest_statement.dt_updated)) / 60000 >= 30;
+            showRegenerateBtn =
+              (new Date() - new Date(email.latest_statement.dt_updated)) / 60000 >= 30;
           }
-          this.setState({email_detail: email || {}, showRegenerateBtn});
+          this.setState({
+            email_detail: email || {},
+            showRegenerateBtn,
+          });
           storageService().setObject('email_detail_hni', email);
         } else {
           throw 'Error fetching email details';
         }
+      } catch (err) {
+        console.log(err);
+        toast(err);
       }
-    } catch (err) {
-      console.log(err);
-      toast(err);
     }
+    
   }
 
   generateStatement = () => {
@@ -98,8 +106,15 @@ class StatementRequest extends Component {
   }
 
   render() {
-    const { email_detail, show_loader, loadingText, selectedEmail, showRegenerateBtn } = this.state;
+    const {
+      email_detail,
+      show_loader,
+      loadingText,
+      selectedEmail,
+      showRegenerateBtn,
+    } = this.state;
     const params = this.props.location.params || {};
+    
     return (
       <Container
         title="Statement request sent"

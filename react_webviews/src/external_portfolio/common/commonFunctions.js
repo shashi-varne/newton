@@ -6,7 +6,7 @@ import { storageService } from '../../utils/validators';
 export function navigate(pathname, params, replace) {
   if (!replace) {
     this.props.history.push({
-      pathname: pathname,
+      pathname: `/hni/${pathname}`,
       search: getConfig().searchParams,
       params,
     });
@@ -15,7 +15,7 @@ export function navigate(pathname, params, replace) {
       the history sequence when moving back through history using
       history.goBack() */
     this.props.history.replace({
-      pathname: pathname,
+      pathname: `/hni/${pathname}`,
       search: getConfig().searchParams,
       params,
     });

@@ -175,11 +175,12 @@
     
     #selected-pan-num {
       font-size: 13px;
-      color: white;
-    }
-    #selected-pan-name {
-      font-size: 11px;
       color: #d3dbe4;
+    }
+    #selected-pan-header {
+      font-size: 13px;
+      font-weight: bold;
+      color: white;
       text-transform: capitalize;
     }
   }

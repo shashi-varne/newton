@@ -22,6 +22,7 @@ class FundHoldings extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'fund holdings',
+        fund_card_clicked: this.state.fundClicked,
       }
     };
 
@@ -32,7 +33,11 @@ class FundHoldings extends Component {
     }
   }
 
-  async componentWillMount() {
+  onFundClicked = () => {
+    this.setState({ fundClicked: true });
+  }
+
+  async componentDidMount() {
     try {
       this.setLoader(true);
       const selectedPan = storageService().get('user_pan');
@@ -56,10 +61,11 @@ class FundHoldings extends Component {
         showLoader={this.state.show_loader}
         noFooter={true}
       >
-        {this.state.holdings.length ? this.state.holdings.map(holding => (
+        {this.state.holdings.length ? this.state.holdings.map((holding, idx) => (
           <FundDetailCard
+            onFundClicked={this.onFundClicked}
             fundDetails={holding}
-            key={holding.isin}
+            key={idx}
           />
         )) : 'No fund holdings found'}
       </Container>

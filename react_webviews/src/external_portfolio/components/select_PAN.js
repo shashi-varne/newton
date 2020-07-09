@@ -32,11 +32,11 @@ class PANSelector extends Component {
         nativeCallback({ events: eventObj });
     }
 
-    async componentWillMount() {
+    async componentDidMount() {
         try {
             this.setLoader(true);
             let pans = await fetchAllPANs();
-            const selectedPan = storageService().getObject('user_pan');
+            const selectedPan = storageService().get('user_pan');
             let selectedIndex = pans.indexOf(selectedPan);
             this.setState({ pans, selectedIndex, selectedPan });
         } catch(err) {
@@ -50,8 +50,9 @@ class PANSelector extends Component {
         const old_pan = this.state.selectedPan;
         const new_pan = this.state.pans[index];
         if (old_pan === new_pan) return;
-        this.sendEvents('account_changed', { account_changed: old_pan !== new_pan });
-        storageService().set('user_pan', this.state.selectedPan);
+        this.sendEvents('back', { account_changed: true });
+        storageService().set('user_pan', new_pan);
+        storageService().set('user_pan_rank', index + 1);
         this.setState({
             selectedIndex: index,
             selectedPan: new_pan,
@@ -59,26 +60,39 @@ class PANSelector extends Component {
         this.navigate('external_portfolio');
     }
 
-    renderPANs(props, index) {
+    renderPANs(pan, index) {
         return (
-            <div onClick={() => this.choosePAN(index, props)}
+            <div onClick={() => this.choosePAN(index, pan)}
                 className={`bank-tile ${index === this.state.selectedIndex ? 'bank-tile-selected' : ''}`}
                 key={index}
                 style={{
-                    opacity: props.status === 'pending' ? 0.4 : 1,
                     display: 'flex',
                     alignItems: 'center',
                 }}
             >
+                <div
+                    className="selected-pan-initial"
+                    style={{
+                        minWidth: '40px',
+                        minHeight: '40px',
+                        lineHeight: '40px',
+                        fontSize: '19px',
+                    }}
+                >
+                    {pan[0]}
+                </div>
                 <div className="select-bank" style={{ padding: '3px 0 0 0px', margin: 0, flex: 1 }}>
                     <div >
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <div>
+                                <div className="bank-name" style={{ fontSize: '15px' }}>
+                                    PAN {index + 1}
+                                </div>
                                 <div className="account-number" style={{ textTransform: 'uppercase', lineHeight: '25px' }}>
-                                    {props}
+                                    {pan}
                                 </div>
                             </div>
-                            <div style={{}}>
+                            <div>
                                 {index === this.state.selectedIndex &&
                                     <img
                                         style={{ width: 14, margin: '4px 0 0 8px', verticalAlign: 'middle' }}

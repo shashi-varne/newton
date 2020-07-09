@@ -69,11 +69,10 @@ class email_entry extends Component {
           const moveToParam = params.comingFrom === 'statement_request' ?
             params.navigateBackTo : params.comingFrom;
           this.navigate(
-            'statement_request',
+            `statement_request/${email}`,
             {
               exitToApp: params.exitToApp,
               navigateBackTo: moveToParam,
-              email
             },
             true
           );
@@ -90,11 +89,10 @@ class email_entry extends Component {
     if (params && params.comingFrom) {
       if (params.comingFrom === 'statement_request') {
         this.navigate(
-          'statement_request',
+          `statement_request/${this.state.email}`,
           {
             exitToApp: params.exitToApp,
             navigateBackTo: params.navigateBackTo,
-            email: this.state.email,
           },
           true
         );

@@ -4,7 +4,7 @@ const platform = getConfig().productName;
 
 export const requestStatement = async (params) => {
   try {
-    const { res } = await Api.post('api/external_portfolio/cams/cas/send_mail', {
+    const res = await Api.post('api/external_portfolio/cams/cas/send_mail', {
       ...params,
       platform,
     });
@@ -103,7 +103,7 @@ export const fetchAllPANs = async (params) => {
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
-      return result.pans;
+      return result.pans.sort();
     } else {
       throw (result.error || result.message || 'Something went wrong. Please try again');
     }
