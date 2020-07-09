@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 import loader_fisdom from 'assets/loader_gif_fisdom.gif';
 import loader_myway from 'assets/loader_gif_myway.gif';
 import qs from 'qs';
-
+import { storageService} from 'utils/validators';
 import { getConfig } from 'utils/functions';
 
 class CommonLanding extends Component {
@@ -20,6 +20,7 @@ class CommonLanding extends Component {
     }
 
     componentWillMount() {
+        storageService().remove('gold_provider');
         const { main_module } = this.props.match.params;
         const { sub_module } = this.props.match.params;
         let openModuleData = {
