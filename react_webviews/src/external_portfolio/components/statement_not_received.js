@@ -45,9 +45,9 @@ class StatementNotReceived extends Component {
       this.setLoader(true);
       const { email_detail } = this.state;
       await requestStatement({
-        email_id: email_detail.email,
+        email: email_detail.email,
         statement_id: email_detail.latest_statement.statement_id,
-        retrigger: true,
+        retrigger: 'true',
       });
       this.navigate(`statement_request/${email_detail.email}`, {
         exitToApp: true,
@@ -94,7 +94,6 @@ class StatementNotReceived extends Component {
               ctrlText="Change"
               onCtrlClick={() => this.navigate('email_entry', {
                 comingFrom: 'statement_not_received',
-                exitToApp: true,
                 email: email_detail.email,
               })}
             >

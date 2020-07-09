@@ -72,7 +72,7 @@ class email_entry extends Component {
             `statement_request/${email}`,
             {
               exitToApp: params.exitToApp,
-              navigateBackTo: moveToParam,
+              navigateBackTo: params.exitToApp ? null : moveToParam,
             },
             true
           );
@@ -86,13 +86,13 @@ class email_entry extends Component {
   }
 
   goBack = (params) => {
-    if (params && params.comingFrom) {
+    if (params) {
       if (params.comingFrom === 'statement_request') {
         this.navigate(
           `statement_request/${this.state.email}`,
           {
             exitToApp: params.exitToApp,
-            navigateBackTo: params.navigateBackTo,
+            navigateBackTo: params.exitToApp ? null : params.navigateBackTo,
           },
           true
         );

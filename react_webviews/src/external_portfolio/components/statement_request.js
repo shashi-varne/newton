@@ -44,9 +44,8 @@ class StatementRequest extends Component {
   }
 
   async componentDidMount() {
-    const params = this.props.location.params || {};
     const matchParams = this.props.match.params || {};
-    const emailParam = params.email || matchParams.email;
+    const emailParam = matchParams.email;
 
     if (emailParam) {
       this.setState({ selectedEmail: emailParam });
@@ -100,8 +99,6 @@ class StatementRequest extends Component {
       nativeCallback({ action: 'exit', events: this.sendEvents('back') });
     } else if (params.navigateBackTo) { // available when coming from email_entry
       this.navigate(params.navigateBackTo);
-    } else {
-      this.props.history.goBack();
     }
   }
 
@@ -144,6 +141,14 @@ class StatementRequest extends Component {
         <EmailRequestSteps
           emailForwardedHandler={() => this.emailForwardedHandler(email_detail.email)}
           showRegenerateBtn={showRegenerateBtn}
+          emailLinkClick={() => this.navigate('email_example_view', {
+            /* Require these params to be sent back here, otherwise props
+            will be lost when coming back from next page*/
+            navigateBackTo: params.exitToApp ? null : params.navigateBackTo,
+            exitToApp: params.exitToApp,
+            noEmailChange: params.noEmailChange,
+            email: selectedEmail,
+          })}
           parent={this}
         />
       </Container>

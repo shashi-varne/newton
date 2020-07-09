@@ -77,7 +77,7 @@ export default class Settings extends Component {
     this.setState({ openPopup: false, removeClicked: true });
     try {
       this.setLoader(true);
-      await deleteEmail({ email_id: this.state.email_to_remove });
+      await deleteEmail({ email_id: this.state.email_to_remove.email });
       this.removeAndUpdateEmailList();
       this.setLoader(false);
     } catch (err) {
@@ -90,7 +90,7 @@ export default class Settings extends Component {
     let { email_to_remove, emails } = this.state;
     emails = JSON.parse(JSON.stringify(emails));
 
-    emails = emails.filter(email => email.email !== email_to_remove);
+    emails = emails.filter(email => email.email !== email_to_remove.email);
     this.setState({ emails });
     if (email_to_remove.latest_success_statement.statement_id) {
       /* This is required for when an email with a succesfully synced
@@ -111,7 +111,6 @@ export default class Settings extends Component {
     this.sendEvents('next');
     this.navigate('email_entry', {
       comingFrom: 'settings',
-      exitToApp: false,
     });
   }
 
@@ -138,7 +137,7 @@ export default class Settings extends Component {
             parent={this}
             comingFrom="settings"
             emailForwardedHandler={() => this.emailForwardedHandler(email.email)}
-            clickRemoveEmail={() => this.openRemoveConfirm(email.email)}
+            clickRemoveEmail={() => this.openRemoveConfirm(email)}
             email={email}
           />
         ))}

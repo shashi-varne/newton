@@ -55,7 +55,10 @@ export default class EmailExpand extends Component {
   resync = async () => {
     const { email, parent } = this.props;
     try {
-      await requestStatement({ email_id: email.email, resync: true });
+      await requestStatement({
+        email: email.email,
+        resync: 'true',
+      });
       parent.navigate(`statement_request/${email.email}`, {
         navigateBackTo: 'settings',
         noEmailChange: true,
@@ -100,7 +103,7 @@ export default class EmailExpand extends Component {
           parent={parent}
           emailDetail={email}
           emailForwardedHandler={this.props.emailForwardedHandler}
-          showRegenerateBtn={showRegenerateBtn}
+          showRegenerateBtn={true}
           classes={{ emailBox: 'info-box-email-expand' }}
         />
       </div>

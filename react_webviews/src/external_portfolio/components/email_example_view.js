@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import EmailTemplate from '../mini-components/email_template';
 import { nativeCallback } from 'utils/native_callback';
+import { navigate } from '../common/commonFunctions';
 
 class EmailExampleView extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.navigate = navigate.bind(this);
   }
 
   sendEvents(user_action) {
@@ -25,8 +27,10 @@ class EmailExampleView extends Component {
   }
 
   goBack = () => {
+    const params = this.props.location.params || {};
+
     this.sendEvents('back');
-    this.props.history.goBack();
+    this.navigate(`statement_request/${params.email}`, params);
   }
 
   render() {

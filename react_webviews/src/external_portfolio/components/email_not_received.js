@@ -39,9 +39,9 @@ class EmailNotReceived extends Component {
       this.sendEvents('regenerate_stat');
       const email_detail = storageService().getObject('email_detail_hni');
       await requestStatement({ 
-        email_id: email_detail.email,
+        email: email_detail.email,
         statement_id: email_detail.latest_statement.statement_id,
-        retrigger: true,
+        retrigger: 'true',
       });
       this.navigate(`statement_request/${email_detail.email}`, {
         exitToApp: true,

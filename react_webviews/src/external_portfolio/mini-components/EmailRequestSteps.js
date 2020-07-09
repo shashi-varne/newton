@@ -95,9 +95,6 @@ export default class EmailRequestSteps extends Component {
     }
     const handleEmailLinkClick = () => {
       this.sendEvents('email_look_clicked');
-      if (parent && parent.navigate) {
-        return parent.navigate('email_example_view');
-      }
       return emailLinkClick();
     }
     return (<Fragment>
