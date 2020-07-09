@@ -175,7 +175,7 @@ export default class ExternalPortfolio extends Component {
         classHeader="ext-pf-inPageHeader bg-black"
       >
         <div className="fullscreen-banner bg-black">
-          <span className="header-title-text" style={{ color: 'white' }}>
+          <span className="header-title-text-hni" style={{ color: 'white' }}>
             External Portfolio
           </span>
           <div id="selected-pan" onClick={this.panSelectClicked}>

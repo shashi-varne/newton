@@ -42,7 +42,7 @@ export default class RegenerateOptsPopup extends Component {
             src={require(`assets/${productType}/btm_mail_check.svg`)}
             id="btm_mail_check_img"
           />
-          <span className="header-title-text">
+          <span className="header-title-text-hni">
             What is the status of the<br /> CAS email?
           </span>
           <Button

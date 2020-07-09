@@ -21,14 +21,14 @@
   color: black !important;
 }
 
-.header-title-text {
+.header-title-text-hni {
   font-size: 20px;
   font-weight: bold;
   line-height: 28px;
   color: #0a1d32;
 }
 
-.header-subtitle-text {
+.header-subtitle-text-hni {
   display: block;
   color: #767e86;
   font-size: 13px;
@@ -55,7 +55,7 @@
   margin: -20px -20px 0 -20px;
   padding: 20px;
 
-  .header-subtitle-text {
+  .header-subtitle-text-hni {
     margin-top: 40px;
     padding: 0;
   }
@@ -136,7 +136,7 @@
 }
 
 .ext-pf-inPageHeader {
-  .header-title-text {
+  .header-title-text-hni {
     color: white;
   }
 }

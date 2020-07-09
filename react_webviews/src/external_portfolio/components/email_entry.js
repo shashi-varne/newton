@@ -111,7 +111,8 @@ class email_entry extends Component {
         hideInPageTitle={true}
         events={this.sendEvents('just_set_events')}
         fullWidthButton={true}
-        classHeader={show_loader ? '' : 'bg-highlight'}
+        noHeader={show_loader}
+        classHeader={'bg-highlight'}
         handleClick={this.goNext}
         buttonTitle="Generate Statement"
         showLoader={show_loader}
@@ -123,10 +124,10 @@ class email_entry extends Component {
             ${productType === 'fisdom' ? 'fisdom-bg' : 'myway-bg' }
           `}
         >
-          <span className="header-title-text">
+          <span className="header-title-text-hni">
             Portfolio Tracker
           </span>
-          <span className="header-subtitle-text">
+          <span className="header-subtitle-text-hni">
             Get a consolidated view of all <br /> your external investments
           </span>
         </div>
