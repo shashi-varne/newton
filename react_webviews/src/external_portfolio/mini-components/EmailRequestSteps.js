@@ -8,7 +8,6 @@ import InfoBox from './InfoBox';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import RegenerateOptsPopup from './RegenerateOptsPopup';
 import { isFunction, storageService } from '../../utils/validators';
-import { nativeCallback } from 'utils/native_callback';
 
 const theme = createMuiTheme({
   overrides: {
@@ -68,41 +67,25 @@ export default class EmailRequestSteps extends Component {
     };
   }
 
-  sendEvents(user_action) {
-    let eventObj = {
-      "event_name": 'portfolio_tracker',
-      "properties": {
-        "user_action": user_action,
-        "screen_name": 'statement request sent',
-      }
-    };
-
-    nativeCallback({ events: eventObj });
-  }
-
   setActiveStep = (step) => {
     this.setState({ activeStep: step });
   }
 
   renderStep1 = () => {
-    const { parent, emailLinkClick } = this.props;
-    if (!parent && !emailLinkClick) {
+    const { emailLinkClick } = this.props;
+    if (!emailLinkClick) {
       return (
         <span style={{color: 'red'}}>
           Error: Please provide parent or emailLinkClick function props
         </span>
       );
     }
-    const handleEmailLinkClick = () => {
-      this.sendEvents('email_look_clicked');
-      return emailLinkClick();
-    }
     return (<Fragment>
       In a few minutes, you’ll receive a CAS email on your email ID
 
       <div
         className="email_example_link"
-        onClick={handleEmailLinkClick}
+        onClick={emailLinkClick}
       >
         The email looks like this
       </div>
@@ -158,6 +141,10 @@ export default class EmailRequestSteps extends Component {
   }
 
   generateStatement = () => {
+    const { parent } = this.props;
+    if (parent) {
+      parent.sendEvents('regenerate_stat');
+    }
     this.setState({ popupOpen: true });
   }
 

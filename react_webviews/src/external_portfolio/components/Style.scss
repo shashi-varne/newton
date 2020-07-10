@@ -1,3 +1,7 @@
+$steel_grey: #767e86;
+$dark_indigo: #0a1d32;
+$light_periwinkle: #d3dbe4;
+
 .Footer {
   margin: 0 !important;
   padding: 20px;
@@ -25,12 +29,12 @@
   font-size: 20px;
   font-weight: bold;
   line-height: 28px;
-  color: #0a1d32;
+  color: $dark_indigo;
 }
 
 .header-subtitle-text-hni {
   display: block;
-  color: #767e86;
+  color: $steel_grey;
   font-size: 13px;
   margin-top: 10px;
   line-height: 20px;
@@ -70,7 +74,7 @@
   margin: 30px 0 20px 0;
   font-size: 15px;
   font-weight: 500;
-  color: #0a1d32;
+  color: $dark_indigo;
 }
 
 .ext-pf-subheader {
@@ -175,7 +179,7 @@
     
     #selected-pan-num {
       font-size: 13px;
-      color: #d3dbe4;
+      color: $light_periwinkle;
     }
     #selected-pan-header {
       font-size: 13px;
@@ -230,12 +234,12 @@
       font-size: 11px;
       font-weight: bold;
       letter-spacing: 0;
-      color: #d3dbe4;
+      color: $light_periwinkle;
     }
 
     .pf-detail-value {
       font-size: 13px;
-      color: #d3dbe4;
+      color: $light_periwinkle;
     }
 
     #current-value {
@@ -295,11 +299,11 @@
 
     .label {
       font-weight: 500;
-      color: #0a1d32;
+      color: $dark_indigo;
     }
 
     .label-val {
-      color: #767e86;
+      color: $steel_grey;
     }
   }
 }

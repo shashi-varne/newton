@@ -5,7 +5,7 @@ import { getConfig } from '../../utils/functions';
 import InfoBox from '../mini-components/InfoBox';
 import { navigate, emailForwardedHandler } from '../common/commonFunctions';
 import { nativeCallback } from 'utils/native_callback';
-import { storageService } from '../../utils/validators';
+import { storageService, getUrlParams } from '../../utils/validators';
 import toast from '../../common/ui/Toast';
 import { fetchEmails } from '../common/ApiCalls';
 
@@ -31,6 +31,7 @@ class StatementRequest extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'statement request sent',
+        email_look_clicked: this.state.emailLinkClicked,
         entry_point: params.comingFrom === 'email_entry' ? 'email entry' : 'regenerate_stat',
         status: this.state.showRegenerateBtn ? 'mail not recieved in 30 min' : 'before tracker setup',
       }
@@ -45,7 +46,8 @@ class StatementRequest extends Component {
 
   async componentDidMount() {
     const matchParams = this.props.match.params || {};
-    const emailParam = matchParams.email;
+    const queryParams = getUrlParams();
+    const emailParam = matchParams.email || queryParams.email;
 
     if (emailParam) {
       this.setState({ selectedEmail: emailParam });
@@ -70,7 +72,6 @@ class StatementRequest extends Component {
         toast(err);
       }
     }
-    
   }
 
   generateStatement = () => {
@@ -100,6 +101,19 @@ class StatementRequest extends Component {
     } else if (params.navigateBackTo) { // available when coming from email_entry
       this.navigate(params.navigateBackTo);
     }
+  }
+
+  emailLinkClick = (params) => {
+    this.setState({ emailLinkClicked: true });
+    this.navigate('email_example_view', {
+      /* Require these params to be sent back here, otherwise props
+      will be lost when coming back from next page*/
+      comingFrom: 'statement_request',
+      navigateBackTo: params.exitToApp ? null : params.navigateBackTo,
+      exitToApp: params.exitToApp,
+      noEmailChange: params.noEmailChange,
+      email: this.state.selectedEmail,
+    });
   }
 
   render() {
@@ -141,14 +155,7 @@ class StatementRequest extends Component {
         <EmailRequestSteps
           emailForwardedHandler={() => this.emailForwardedHandler(email_detail.email)}
           showRegenerateBtn={showRegenerateBtn}
-          emailLinkClick={() => this.navigate('email_example_view', {
-            /* Require these params to be sent back here, otherwise props
-            will be lost when coming back from next page*/
-            navigateBackTo: params.exitToApp ? null : params.navigateBackTo,
-            exitToApp: params.exitToApp,
-            noEmailChange: params.noEmailChange,
-            email: selectedEmail,
-          })}
+          emailLinkClick={() => this.emailLinkClick(params)}
           parent={this}
         />
       </Container>

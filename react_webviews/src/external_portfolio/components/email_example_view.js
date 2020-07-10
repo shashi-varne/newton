@@ -30,7 +30,11 @@ class EmailExampleView extends Component {
     const params = this.props.location.params || {};
 
     this.sendEvents('back');
-    this.navigate(`statement_request/${params.email}`, params);
+    if (params.comingFrom === 'statement_request') {
+      this.navigate(`statement_request/${params.email}`, params);
+    } else {
+      this.props.history.goBack();
+    }
   }
 
   render() {

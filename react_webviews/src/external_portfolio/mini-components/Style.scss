@@ -1,3 +1,6 @@
+$steel_grey: #767e86;
+$dark_indigo: #0a1d32;
+
 #hni-stepper{
   background-color: transparent;
   span {
@@ -22,12 +25,14 @@
 
   #info-box-body {
     flex-basis: 60%;
+    max-width: 70%;
+    word-break: break-word;
     flex: 1;
 
     #info-box-body-header {
       font-size: 11px;
       line-height: 20px;
-      color: #767e86;
+      color: $steel_grey;
     }
     
     #info-box-body-subheader {
@@ -138,7 +143,7 @@
       font-size: 15px;
       font-weight: 500;
       line-height: 22px;
-      color: #0a1d32;
+      color: $dark_indigo;
       margin: 0;
     }
   }
@@ -184,7 +189,7 @@
       font-size: 11px;
       text-align: right;
       letter-spacing: 0;
-      color: #767e86;
+      color: $steel_grey;
     }
   }
 
@@ -195,14 +200,14 @@
     .fund-numbers-title {
       font-size: 11px;
       letter-spacing: 0;
-      color: #767e86;
+      color: $steel_grey;
       margin-bottom: 5px;
     }
 
     .fund-numbers-value {
       font-size: 13px;
       letter-spacing: 0;
-      color: #0a1d32;
+      color: $dark_indigo;
     }
 
     .annual-ret {
@@ -231,7 +236,7 @@
 
 #no-top-holdings{
   font-size: 12px;
-  color: #767e86;
+  color: $steel_grey;
 }
 
 #top-holdings-expand {
@@ -256,12 +261,12 @@
     #top-holding-name, {
       font-weight: 500;
       text-transform: uppercase;
-      color: #0a1d32; //dark-indigo
+      color: $dark_indigo;
     }
 
     #top-holding-value {
       font-weight: 300;
-      color: #767e86;
+      color: $steel_grey;
     }
   }
 }
@@ -271,13 +276,13 @@
   
   #email-expand-title {
     font-size: 13px;
-    color: #767e86;
+    color: $steel_grey;
     margin-bottom: 10px;
   }
 
   #resync-update-text {
     font-size: 8px;
-    color: #767e86;
+    color: $steel_grey;
     font-weight: 600;
     margin-top: 5px;
   }
@@ -286,7 +291,7 @@
     font-size: 11px;
     font-weight: bold;
     text-transform: uppercase;
-    color: #767e86;
+    color: $steel_grey;
     margin-top: 40px;
   }
 }

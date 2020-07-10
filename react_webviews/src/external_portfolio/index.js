@@ -52,6 +52,7 @@ function external_portfolio(props) {
         <Switch>
           <Route path={`${url}/email_entry`} component={Email_entry} />
           <Route path={`${url}/statement_request/:email`} component={StatementRequestPage} />
+          <Route path={`${url}/statement_request`} component={StatementRequestPage} />
           <Route path={`${url}/email_not_received`} component={EmailNotReceived} />
           <Route path={`${url}/email_example_view`} component={EmailExampleView} />
           <Route path={`${url}/statement_not_received`} component={StatementNotReceived} />

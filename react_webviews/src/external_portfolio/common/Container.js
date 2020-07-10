@@ -294,7 +294,7 @@ class Container extends Component {
         }
 
         {this.props.subtitle &&
-          <div className="header-subtitle-text">
+          <div className="header-subtitle-text-hni">
             {this.props.subtitle}
           </div>
         }
