@@ -63,7 +63,7 @@ class GroupHealthLanding extends Component {
     ];
 
     let whats_covered = [
-      'Diseases occured before policy issuance will be covered after 3 year',
+      'Diseases occured before policy issuance will be covered after 3 years',
       'Ayurveda, unani, sidha and homeopathy  treatments',
       '60 days pre and 180 days post hospitalization expenses',
       'Organ donor expenses',
@@ -227,7 +227,7 @@ class GroupHealthLanding extends Component {
     ];
 
     let renderData = {
-      'header_title': 'Frequenty asked questions',
+      'header_title': 'Frequently asked questions',
       'header_subtitle': 'my: health Suraksha',
       'steps': {
         'options': options
@@ -254,7 +254,7 @@ class GroupHealthLanding extends Component {
         showLoader={this.state.show_loader}
         title={this.state.providerData.title}
         fullWidthButton={true}
-        buttonTitle="GET INSURED"
+        buttonTitle={this.state.quoteResume && this.state.quoteResume.id ? 'GET A NEW QUOTE' : "GET INSURED"}
         onlyButton={true}
         handleClick={() => this.handleClick()}
       >
@@ -336,7 +336,7 @@ class GroupHealthLanding extends Component {
           <div className="what-is-covered" onClick={() => this.handleClickPoints('whats_covered')}>
             <div className="top">
               <div className="wic-title">
-                What is covered?
+                What's included?
               </div>
               <div className="">
                 <SVG

@@ -41,6 +41,8 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let lead = this.state.lead || {};
 
+    let spouse_relation = lead.spouse_account_key ? lead.spouse_account_key.relation : '';
+
     let member_base = lead.member_base;
     let member_key = this.props.match.params.member_key;
 
@@ -55,7 +57,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     if (member_key === 'self') {
       header_title = 'Personal details';
-      header_subtitle = 'Provide details for application, your details are safe with us';
+      header_subtitle = 'We would need some details to complete your proposal';
     }
 
     let next_state = `/group-insurance/group-health/${this.state.provider}/contact`;
@@ -93,16 +95,21 @@ class GroupHealthPlanPersonalDetails extends Component {
       height_options.push(data);
     }
 
-    let selectedIndex = '';
+    var selectedIndex = 123;
+    let height = form_data.height || height_options[selectedIndex].value;
     if (form_data.height) {
       height_options.forEach(function (x, index) {
         if (x.value === parseInt(form_data.height,10)) {
-          selectedIndex = index;
+          return selectedIndex = index;
         }
       });
+    } else {
+      form_data.height = height;
     }
 
     form_data.selectedIndex = selectedIndex;
+
+    
 
     this.setState({
       providerData: health_providers[this.state.provider],
@@ -117,8 +124,9 @@ class GroupHealthPlanPersonalDetails extends Component {
       header_title: header_title,
       header_subtitle: header_subtitle,
       selectedIndex: selectedIndex,
-      height: '',
-      pan_needed: pan_needed
+      height: height,
+      pan_needed: pan_needed,
+      spouse_relation: spouse_relation
     }, () => {
       ReactTooltip.rebuild()
     })
@@ -137,7 +145,6 @@ class GroupHealthPlanPersonalDetails extends Component {
 
   handleChange = name => event => {
 
-
     var input = document.getElementById('dob');
     input.onkeyup = formatDate;
 
@@ -146,7 +153,6 @@ class GroupHealthPlanPersonalDetails extends Component {
     if (!name) {
       name = event.target.name;
     }
-
 
     if (name === 'height') {
       this.setState({
@@ -190,7 +196,6 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     let form_data = this.state.form_data;
-    console.log(form_data);
     for (var i = 0; i < keys_to_check.length; i++) {
       let key_check = keys_to_check[i];
       let first_error = key_check === 'gender' || key_check === 'height' ? 'Please select ' :
@@ -207,6 +212,16 @@ class GroupHealthPlanPersonalDetails extends Component {
     if (this.state.pan_needed && this.state.form_data.pan_number &&
       !validatePan(this.state.form_data.pan_number)) {
       form_data.pan_number_error = 'Invalid PAN number';
+    }
+
+    if((this.state.member_key === 'self' || this.state.member_key === 'applicant') && this.state.form_data.gender) {
+      if(this.state.spouse_relation === 'HUSBAND' && this.state.form_data.gender === 'MALE') {
+        form_data.gender_error = 'Invalid gender';
+      }
+
+      if(this.state.spouse_relation === 'WIFE' && this.state.form_data.gender === 'FEMALE') {
+        form_data.gender_error = 'Invalid gender';
+      }
     }
 
     if (this.state.form_data.name &&
@@ -505,7 +520,7 @@ class GroupHealthPlanPersonalDetails extends Component {
             error={(this.state.form_data.weight_error) ? true : false}
             helperText={this.state.form_data.weight_error}
             value={this.state.form_data.weight || ''}
-            onChange={this.handleChange()} />
+            onChange={this.handleChange('weight')} />
         </div>}
         <ConfirmDialog parent={this} />
         {this.renderBmiDialog()}

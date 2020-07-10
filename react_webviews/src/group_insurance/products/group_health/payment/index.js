@@ -16,19 +16,19 @@ import toast from '../../../../common/ui/Toast';
 const commonMapper = {
   'success': {
     'top_icon': 'ils_covid_success',
-    'top_title': 'Insurance payment successful',
+    'top_title': 'Payment successful',
     'mid_title': 'Insurance payment details',
     'button_title': 'CHECK REPORTS'
   },
   'pending': {
     'top_icon': 'ils_covid_pending',
-    'top_title': 'Insurance payment pending!',
+    'top_title': 'Payment pending!',
     'mid_title': 'Insurance payment details',
     'button_title': 'CHECK REPORTS'
   },
   'failed': {
     'top_icon': 'ils_covid_failed',
-    'top_title': 'Insurance payment failed',
+    'top_title': 'Payment failed',
     'mid_title': '',
     'button_title': 'RETRY'
   }

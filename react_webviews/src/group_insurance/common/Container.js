@@ -202,8 +202,8 @@ class Container extends Component {
     if(this.checkStringInString('group-health')) {
       let group_health_landing = '/group-insurance/group-health/landing';
 
-      if(this.checkStringInString('final-summary') || 
-      this.checkStringInString('insure-type') || this.checkStringInString('payment')) {
+      // this.checkStringInString('final-summary')
+      if(this.checkStringInString('insure-type') || this.checkStringInString('payment')) {
         this.navigate(group_health_landing);
         return;
       }

@@ -101,11 +101,13 @@ class GroupHealthPlanDetails extends Component {
         let data_mapper = {
             'whats_included': {
                 'header_title': 'What is included',
+                'header_subtitle': 'These are some of the benefits that are covered under this policy',
                 'steps': this.state.extra_data.whats_included,
                 'pathname': '/gold/common/render-benefits'
             },
             'whats_not_included': {
                 'header_title': "What's not included",
+                'header_subtitle' : 'These are some of the incidences that are not covered under this policy',
                 'steps': this.state.extra_data.whats_not_included,
                 'pathname': '/gold/common/render-benefits'
             },
@@ -120,7 +122,7 @@ class GroupHealthPlanDetails extends Component {
 
         let renderData = {
             'header_title': mapper_data.header_title,
-            'header_subtitle': `${this.state.common_data.base_plan_title} ${this.state.plan_selected.plan_title}`,
+            'header_subtitle': mapper_data.header_subtitle || `${this.state.common_data.base_plan_title} ${this.state.plan_selected.plan_title}`,
             'steps': {
                 'options': mapper_data.steps
             },
@@ -323,13 +325,13 @@ class GroupHealthPlanDetails extends Component {
                         </div>
                     </div>
 
-                    <div className="common-how-steps" style={{ border: 'none',marginTop:0 ,marginBottom:0 }}>
+                    <div className="common-how-steps" style={{ border: 'none',marginTop:-30 ,marginBottom:0 }}>
                         <div className="top-tile">
                             <div className="top-title">
                                 Waiting period
                             </div>
                         </div>
-                        <div className='common-steps-images'>
+                        <div className='common-steps-images' style={{marginTop:0}}>
                             {this.state.extra_data.waiting_period.map(this.renderSteps)}
                         </div>
 
@@ -358,7 +360,7 @@ class GroupHealthPlanDetails extends Component {
                         onClick={() => this.openInBrowser(this.state.premium_data.read_details_doc, 'read_document')}>
                         <img className="accident-plan-read-icon"
                             src={require(`assets/${this.state.productName}/ic_read.svg`)} alt="" />
-                        <div className="accident-plan-read-text" style={{ color: getConfig().primary }}>Read Detailed Document</div>
+                        <div className="accident-plan-read-text" style={{ color: getConfig().primary }}>For detailed list of terms and condition, please read policy prospectus</div>
                     </div>
                 </div>
             </Container>

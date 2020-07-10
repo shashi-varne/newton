@@ -37,6 +37,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
 
     componentWillMount() {
+        console.log(this.props.history);
         nativeCallback({ action: 'take_control_reset' });
         this.initialize();
     }
@@ -114,7 +115,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
             if (member.ped_diseases_name) {
                 let dis_data = {
-                    'title': `${member.relation}'s diseses`,
+                    'title': `${member.relation}'s diseases`,
                     'subtitle': member.ped_diseases_name
                 }
 

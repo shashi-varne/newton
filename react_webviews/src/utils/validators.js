@@ -176,6 +176,13 @@ export function validateNumber(number) {
   return rule.test(number);
 }
 
+export function isNumberKey(evt) {
+    var charCode = (evt.which) ? evt.which : evt.keyCode
+    if (charCode !== 43 && charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+    return true;
+}
+
 export function validatePan(string) {
   // eslint-disable-next-line
   let rule = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/;

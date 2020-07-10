@@ -53,14 +53,14 @@ class GroupHealthPlanSelectFloater extends Component {
 
                 let premium_data_floater = [
                     {
-                        'title': 'All the members',
+                        'title': 'Family floater',
                         'premium': premium_data_wf.net_premium,
                         'subtitle': 'in ' + inrFormatDecimal(premium_data_wf.net_premium),
                         'discount': premium_data_wf.account_type_discount ? inrFormatDecimal(premium_data_wf.account_type_discount) : '',
                         'key': 'WF'
                     },
                     {
-                        'title': 'Each member individualy',
+                        'title': 'Each member individually',
                         'subtitle': 'in ' + inrFormatDecimal(premium_data_nf.net_premium),
                         'premium': premium_data_nf.net_premium,
                         'discount': premium_data_nf.account_type_discount ? inrFormatDecimal(premium_data_nf.account_type_discount) : '',
@@ -234,13 +234,26 @@ class GroupHealthPlanSelectFloater extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
-                title={numDifferentiation(this.state.sum_assured) + ' sum assured For'}
+                title={'Select cover type'}
                 buttonTitle="CONTINUE"
                 withProvider={true}
                 buttonData={this.state.bottomButtonData}
                 handleClick={() => this.handleClick()}
             >
 
+                <div className="common-top-page-subtitle flex-between-center">
+                You can choose how to use the sum assured across family members
+                 <img 
+                        className="tooltip-icon"
+                        data-tip="For entire family -
+                        Sum insured is shared among the members. For ex- if the sum insured is INR 4 lacs, total claims of all the members together will be covered upto INR 4 lacs.
+
+                        For each member - 
+                        Sum insured limit is applicable for each member individually. For ex- if the sum insured is INR 4 lacs, each member can individually claim upto INR 4 lac"
+                        src={require(`assets/${this.state.productName}/info_icon.svg`)}
+                        alt="" />
+                </div>
+                
                 <div className="group-health-plan-select-floater">
 
                     <div className="generic-choose-input">

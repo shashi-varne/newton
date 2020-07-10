@@ -32,6 +32,12 @@ class CheckboxListClass extends Component {
             return;
         }
 
+        if(options[index].name === 'Other' && !options[index].checked) {
+            this.setState({
+                openPopUpInput: true
+            })
+        }
+
         options[index].checked = !options[index].checked;
         this.updateParent(options);
     }
@@ -47,6 +53,7 @@ class CheckboxListClass extends Component {
                             checked={props.checked || false}
                             color="default"
                             value="checked"
+                            style={{height: 25}}
                             onChange={() => this.handleClick(index)}
                             className="Checkbox" />
                     </Grid>

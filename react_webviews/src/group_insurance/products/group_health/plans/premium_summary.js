@@ -89,7 +89,6 @@ class GroupHealthPlanPremiumSummary extends Component {
             if (res.pfwresponse.status_code === 200) {
                 let lead = resultData.lead;
                 lead.member_base = ghGetMember(lead);
-                storageService().remove('groupHealthPlanData');
                 storageService().set('ghs_ergo_quote_id', lead.id);
                 this.navigate('personal-details/' + lead.member_base[0].key);
             } else {
@@ -184,10 +183,20 @@ class GroupHealthPlanPremiumSummary extends Component {
 
                         {this.state.plan_selected_final.total_discount > 0 &&
                             <div className="flex-between pi-tile">
-                                <div className="pi-tile-left">{this.state.plan_selected_final.tenure_discount_percentage}% discount</div>
+                                <div className="pi-tile-left">{this.state.plan_selected_final.total_discount_percentage}% discount</div>
                                 <div className="pi-tile-right">-{inrFormatDecimal(this.state.plan_selected_final.total_discount)}</div>
                             </div>
                         }
+
+                      
+
+                        <div className="generic-hr"></div>
+
+                        <div className="flex-between pi-tile">
+                            <div className="pi-tile-left">Net premium</div>
+                            <div className="pi-tile-right">{inrFormatDecimal(this.state.plan_selected_final.base_premium - 
+                                this.state.plan_selected_final.total_discount)}</div>
+                        </div>
 
                         <div className="flex-between pi-tile">
                             <div className="pi-tile-left">GST & other taxes</div>

@@ -23,7 +23,8 @@ class TooltipClass extends Component {
                 backgroundColor={getConfig().highlight_color}
                 textColor={'#767E86'}
                 place={'bottom'}
-                arrowColor={getConfig().highlight_color}
+                // arrowColor={getConfig().highlight_color}
+                arrowColor={'transparent'}
                 // effect="float"
                 />
         );

@@ -129,7 +129,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                 <div className="select-tile">
                     <div className="flex-column">
                         <div className="name">
-                            {props.tenure} year{props.tenure !== "1" && <span>s</span>} for {inrFormatDecimal(props.base_premium)}
+                            {props.tenure} year{props.tenure !== "1" && <span>s</span>} for {inrFormatDecimal(props.net_premium)}
                         </div>
                        {props.tenure_discount > 0 && 
                             <div className="flex" style={{margin: '4px 0 0 0'}}>
@@ -169,7 +169,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
             >
 
                 <div className="common-top-page-subtitle flex-between-center">
-                    The period for which health expenses will be covered
+                    Your health expenses will be covered for this period
                  <img 
                         className="tooltip-icon"
                         data-tip="As premium increases by insurer age, policy with longer cover period reduces the overall premium. 70% of our user has taken cover for 3 year period."

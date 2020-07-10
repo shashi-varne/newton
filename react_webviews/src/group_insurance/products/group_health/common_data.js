@@ -169,7 +169,12 @@ export async function updateLead(body, quote_id) {
 
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
-            this.navigate(this.state.next_state);
+            if(this.props.edit && !this.state.force_forward) {
+                this.props.history.goBack();
+            } else {
+                this.navigate(this.state.next_state);
+            }
+            
         } else {
             this.setState({
                 show_loader: false
@@ -195,7 +200,7 @@ export async function updateLead(body, quote_id) {
 export function navigate(pathname, data = {}) {
 
     if (this.props.edit || data.edit) {
-        this.props.history.push({
+        this.props.history.replace({
             pathname: pathname,
             search: getConfig().searchParams
         });

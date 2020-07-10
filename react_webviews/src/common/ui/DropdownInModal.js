@@ -178,7 +178,9 @@ class DropdownInModalClass extends Component {
                         })
                         
                     }}>
-                    <InputLabel htmlFor={this.props.id}>{this.props.label}</InputLabel>
+                    <InputLabel htmlFor={this.props.id}>
+                        <span style={{fontSize: '0.8rem'}}>{this.props.label}</span>
+                    </InputLabel>
 
                     <div className="input-box">
                     <div className="input-value">{this.props.parent.state[this.props.name] || this.props.value}</div>

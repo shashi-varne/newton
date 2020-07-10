@@ -54,7 +54,7 @@ class GroupHealthPlanIsPed extends Component {
 
         for (var mem in member_base) {
             let mem_info = member_base[mem];
-            if(mem_info.ped_exists) {
+            if (mem_info.ped_exists) {
                 is_ped = 'YES';
                 form_data[mem_info.key + '_checked'] = true;
             }
@@ -62,7 +62,7 @@ class GroupHealthPlanIsPed extends Component {
 
         form_data.is_ped = is_ped;
 
-        for(var key in form_data) {
+        for (var key in form_data) {
             this.setState({
                 [key]: form_data[key]
             });
@@ -128,16 +128,16 @@ class GroupHealthPlanIsPed extends Component {
         this.setState({
             form_data: form_data
         })
-            
+
         let member_base = this.state.lead.member_base;
 
-        
+
         let body = {};
         let next_state = '';
         body['self_account_key'] = {
             ped_exists: 'false'
         };
-        
+
         for (var i in member_base) {
             let key = member_base[i].key;
             let backend_key = member_base[i].backend_key;
@@ -145,7 +145,7 @@ class GroupHealthPlanIsPed extends Component {
             if (form_data[key + '_checked']) {
                 body[backend_key].ped_exists = 'true';
 
-                if(!next_state) {
+                if (!next_state) {
                     next_state = key;
                 }
             } else {
@@ -163,14 +163,20 @@ class GroupHealthPlanIsPed extends Component {
             body['self_account_key'].ped_exists = 'true';
         }
 
+        if(form_data.is_ped === 'YES') {
+            this.setState({
+                force_forward: true
+            })
+        }
+
         if (canSubmitForm) {
 
             this.setState({
-                next_state: next_state ?  `${this.props.edit  ? 'edit-' : ''}select-ped/` + next_state : this.state.next_state
+                next_state: next_state ? `${this.props.edit ? 'edit-' : ''}select-ped/` + next_state : this.state.next_state
             })
             this.updateLead(body);
         }
-        
+
     }
 
 
@@ -183,7 +189,7 @@ class GroupHealthPlanIsPed extends Component {
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'pre-existing_disease',
                 'from_edit': this.props.edit ? 'yes' : 'no',
-                'with_disease_list' : this.state.form_data.is_ped === 'YES' ? 'yes' : 'no'
+                'with_disease_list': this.state.form_data.is_ped === 'YES' ? 'yes' : 'no'
             }
         };
 
@@ -207,12 +213,12 @@ class GroupHealthPlanIsPed extends Component {
         form_data[name + '_error'] = '';
 
 
-        if(form_data.is_ped !== 'YES') {
+        if (form_data.is_ped !== 'YES') {
             for (var i in member_base) {
                 let key = member_base[i].key;
                 form_data[key + '_checked'] = false;
                 this.setState({
-                    [key + '_checked'] : false
+                    [key + '_checked']: false
                 })
             }
         }
@@ -224,7 +230,7 @@ class GroupHealthPlanIsPed extends Component {
     };
 
     renderMembers = (props, index) => {
-        if(props.key === 'applicant') {
+        if (props.key === 'applicant') {
             return;
         }
         return (
@@ -252,6 +258,9 @@ class GroupHealthPlanIsPed extends Component {
                 handleClick={() => this.handleClick()}
             >
 
+                <div className="common-top-page-subtitle">
+                    This is important to avoid claims rejection later
+                </div>
                 <FormControl fullWidth>
 
                     <div className="InputField">
@@ -269,7 +278,7 @@ class GroupHealthPlanIsPed extends Component {
                     </div>
 
                     {this.state.account_type !== 'self' &&
-                         this.state.form_data.is_ped === 'YES' &&
+                        this.state.form_data.is_ped === 'YES' &&
                         <div>
 
 
