@@ -279,7 +279,7 @@ class Container extends Component {
             style={this.props.styleHeader} 
             className={`header-title-page  ${this.props.classHeader}`}>
               {/* {this.state.inPageTitle &&  */}
-                <div className={`header-title-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{width: this.props.count ? '75%': ''}}>
+                <div className={`header-title-text-hni ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{width: this.props.count ? '75%': ''}}>
                   {this.props.title}
                 </div>
               {/* } */}

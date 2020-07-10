@@ -156,6 +156,7 @@ export default class ExternalPortfolio extends Component {
       asset_allocation,
       top_holdings
     } = portfolio;
+    top_holdings = top_holdings || [];
     annual_return = Number(annual_return);
     const assetAllocData = this.generateAllocationData(asset_allocation);
 
@@ -243,9 +244,9 @@ export default class ExternalPortfolio extends Component {
           {this.renderCustomLegend(asset_allocation)}
         </div>
         <div className="ext-pf-subheader">
-          <h4>Top 10 holdings</h4>
+          <h4>Top {top_holdings.length === 10 ? '10 ' : ''}holdings</h4>
           <TopHoldings
-            holdings={top_holdings || []}
+            holdings={top_holdings}
             onSeeMoreClicked={() => this.setState({ seeMoreClicked: true })}
           />
         </div>
