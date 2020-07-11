@@ -89,7 +89,7 @@ class email_entry extends Component {
     if (params) {
       if (params.comingFrom === 'statement_request') {
         this.navigate(
-          `statement_request/${this.state.email}`,
+          `statement_request/${params.email}`,
           {
             exitToApp: params.exitToApp,
             navigateBackTo: params.exitToApp ? null : params.navigateBackTo,
@@ -125,7 +125,7 @@ class email_entry extends Component {
           `}
         >
           <span className="header-title-text-hni">
-            Portfolio Tracker
+            Portfolio tracker
           </span>
           <span className="header-subtitle-text-hni">
             Get a consolidated view of all <br /> your external investments

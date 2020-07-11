@@ -162,10 +162,10 @@ export default class ExternalPortfolio extends Component {
 
     return (
       <Container
-        title="External Portfolio"
+        title="External portfolio"
         noFooter={true}
         noHeader={show_loader}
-        rightIcon={<SettingsIcon />}
+        rightIcon={settingsWithDot}
         handleRightIconClick={this.settingsClicked}
         hideInPageTitle={true}
         styleHeader={{
@@ -267,4 +267,10 @@ export default class ExternalPortfolio extends Component {
   }
 }
 
+const settingsWithDot = (
+  <div style={{ position: 'relative' }}>
+    <div id="hni-settings-dot"></div>
+    <SettingsIcon/>
+  </div>
+);
 

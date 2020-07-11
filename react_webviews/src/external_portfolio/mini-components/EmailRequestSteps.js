@@ -141,10 +141,13 @@ export default class EmailRequestSteps extends Component {
   }
 
   generateStatement = () => {
-    const { parent } = this.props;
+    const { parent, emailDetail } = this.props;
     if (parent) {
       parent.sendEvents('regenerate_stat');
     }
+    /* Store email detail in LS here so email_not_received and 
+    statement_not_received screens can use this data */
+    storageService().setObject('email_detail_hni', emailDetail);
     this.setState({ popupOpen: true });
   }
 
@@ -153,12 +156,11 @@ export default class EmailRequestSteps extends Component {
   }
 
   notReceivedHandler = () => {
-    const { notReceivedClick, parent, emailDetail } = this.props;
+    const { notReceivedClick, parent } = this.props;
 
     if (isFunction(notReceivedClick)) {
       notReceivedClick();
     } else {
-      storageService().setObject('email_detail_hni', emailDetail);
       parent.navigate('email_not_received');
     }
   }

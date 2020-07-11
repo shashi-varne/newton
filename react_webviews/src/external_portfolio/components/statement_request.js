@@ -8,17 +8,22 @@ import { nativeCallback } from 'utils/native_callback';
 import { storageService, getUrlParams } from '../../utils/validators';
 import toast from '../../common/ui/Toast';
 import { fetchEmails } from '../common/ApiCalls';
+import { regenTimeLimit } from '../constants';
 
 const productType = getConfig().productName;
 class StatementRequest extends Component {
   constructor(props) {
     super(props);
+
+    const params = this.props.location.params;
+
     this.state = {
       popupOpen: false,
       show_loader: false,
       loadingText: '',
       email_detail: '',
       selectedEmail: '',
+      exitToApp: params ? params.exitToApp : true,
     };
     this.navigate = navigate.bind(this);
     this.emailForwardedHandler = emailForwardedHandler.bind(this);
@@ -48,7 +53,7 @@ class StatementRequest extends Component {
     const matchParams = this.props.match.params || {};
     const queryParams = getUrlParams();
     const emailParam = matchParams.email || queryParams.email;
-
+    
     if (emailParam) {
       this.setState({ selectedEmail: emailParam });
       try {
@@ -57,13 +62,13 @@ class StatementRequest extends Component {
           let showRegenerateBtn = false;
           if (email.latest_statement) {
             showRegenerateBtn =
-              (new Date() - new Date(email.latest_statement.dt_updated)) / 60000 >= 30;
+              (new Date() - new Date(email.latest_statement.dt_updated)) / 60000 >= regenTimeLimit;
           }
           this.setState({
             email_detail: email || {},
             showRegenerateBtn,
           });
-          storageService().setObject('email_detail_hni', email);
+          // storageService().setObject('email_detail_hni', email);
         } else {
           throw 'Error fetching email details';
         }
@@ -89,14 +94,14 @@ class StatementRequest extends Component {
     this.navigate('email_entry', {
       comingFrom: 'statement_request',
       navigateBackTo: params.navigateBackTo,
-      exitToApp: params.exitToApp,
+      exitToApp: this.state.exitToApp,
       email: this.state.selectedEmail,
     });
   }
 
   goBack = (params) => {
     storageService().remove('email_detail_hni');
-    if (!params || params.exitToApp) {
+    if (!params || this.state.exitToApp) {
       nativeCallback({ action: 'exit', events: this.sendEvents('back') });
     } else if (params.navigateBackTo) { // available when coming from email_entry
       this.navigate(params.navigateBackTo);
@@ -109,8 +114,8 @@ class StatementRequest extends Component {
       /* Require these params to be sent back here, otherwise props
       will be lost when coming back from next page*/
       comingFrom: 'statement_request',
-      navigateBackTo: params.exitToApp ? null : params.navigateBackTo,
-      exitToApp: params.exitToApp,
+      exitToApp: this.state.exitToApp,
+      navigateBackTo: this.state.exitToApp ? null : params.navigateBackTo,
       noEmailChange: params.noEmailChange,
       email: this.state.selectedEmail,
     });
@@ -125,6 +130,7 @@ class StatementRequest extends Component {
       showRegenerateBtn,
     } = this.state;
     const params = this.props.location.params || {};
+    const showBack = Object.keys(params).length === 0;
     
     return (
       <Container
@@ -133,7 +139,7 @@ class StatementRequest extends Component {
         loaderData={{
           loadingText,
         }}
-        headerData={{ icon: 'close' }}
+        headerData={{ icon: showBack ? 'back' : 'close' }}
         noFooter={true}
         noHeader={show_loader}
         goBack={this.goBack}
@@ -156,6 +162,7 @@ class StatementRequest extends Component {
           emailForwardedHandler={() => this.emailForwardedHandler(email_detail.email)}
           showRegenerateBtn={showRegenerateBtn}
           emailLinkClick={() => this.emailLinkClick(params)}
+          emailDetail={email_detail}
           parent={this}
         />
       </Container>

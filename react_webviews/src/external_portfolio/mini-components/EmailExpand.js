@@ -10,6 +10,7 @@ import { navigate } from '../common/commonFunctions';
 import EmailRequestSteps from './EmailRequestSteps';
 import { requestStatement } from '../common/ApiCalls';
 import { formattedDate } from '../../utils/validators';
+import { regenTimeLimit } from '../constants';
 
 const theme = createMuiTheme({
   overrides: {
@@ -54,14 +55,14 @@ export default class EmailExpand extends Component {
 
   resync = async () => {
     const { email, parent } = this.props;
-    if (parent) {
-      parent.sendEvents('resync');
-    }
+    parent.sendEvents('resync');
     try {
+      parent.setLoader(true);
       await requestStatement({
         email: email.email,
         resync: 'true',
       });
+      parent.setLoader(false);
       parent.navigate(`statement_request/${email.email}`, {
         navigateBackTo: 'settings',
         noEmailChange: true,
@@ -98,7 +99,7 @@ export default class EmailExpand extends Component {
 
   renderStatementPending = () => {
     const { email, parent } = this.props;
-    const showRegenerateBtn = (new Date() - new Date(email.latest_statement.dt_updated)) / 60000 >= 30;
+    const showRegenerateBtn = (new Date() - new Date(email.latest_statement.dt_updated)) / 60000 >= regenTimeLimit;
     return (
       <div className="ext-pf-subheader">
         <h4>Statement request sent</h4>

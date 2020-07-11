@@ -41,6 +41,16 @@ $light_periwinkle: #d3dbe4;
   padding: 0 20px;
 }
 
+#hni-settings-dot {
+  height: 6px;
+  width: 6px;
+  background: #ff6868;
+  border-radius: 10px;
+  position: absolute;
+  bottom: 27px;
+  right: 0;
+}
+
 #cas-email-highlight {
   color: var(--primary);
   font-weight: bold;

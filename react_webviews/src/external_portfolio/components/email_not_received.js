@@ -55,14 +55,16 @@ class EmailNotReceived extends Component {
 
   goBack = () => {
     this.sendEvents('back');
+    storageService().remove('email_detail_hni');
     this.props.history.goBack();
   }
 
   render() {
+    const subtitleText = (<span>Please ensure that the correct email is forwarded to <span id="cas-email-highlight">cas@fisdom.com</span></span>);
     return (
       <EmailTemplate
         title="CAS email not received"
-        subtitle="Please ensure that the correct email is forwarded to cas@fisdom.com"
+        subtitle={subtitleText}
         showLoader={this.state.show_loader}
         noFooter={true}
         noHeader={this.state.show_loader}

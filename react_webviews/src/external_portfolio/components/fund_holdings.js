@@ -56,7 +56,7 @@ class FundHoldings extends Component {
   render() {
     return (
       <Container
-        title="Fund Holdings"
+        title="Fund holdings"
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         noFooter={true}
