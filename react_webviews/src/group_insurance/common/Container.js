@@ -197,13 +197,13 @@ class Container extends Component {
     }
     let { params } = this.props.location;
     let pathname = this.props.history.location.pathname;
-
+    console.log(params);
 
     if(this.checkStringInString('group-health')) {
       let group_health_landing = '/group-insurance/group-health/landing';
 
-      // this.checkStringInString('final-summary')
-      if(this.checkStringInString('insure-type') || this.checkStringInString('payment')) {
+      if(this.checkStringInString('insure-type') || this.checkStringInString('payment') || 
+      (this.checkStringInString('final-summary') && params.forceClose)) {
         this.navigate(group_health_landing);
         return;
       }

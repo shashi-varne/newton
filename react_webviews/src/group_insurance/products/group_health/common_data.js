@@ -207,7 +207,10 @@ export function navigate(pathname, data = {}) {
     } else {
         this.props.history.push({
             pathname: pathname,
-            search: getConfig().searchParams
+            search: getConfig().searchParams,
+            params: {
+                forceClose: this.state.forceClose || false
+            }
         });
     }
 

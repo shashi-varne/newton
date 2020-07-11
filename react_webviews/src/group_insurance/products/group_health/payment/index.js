@@ -5,7 +5,6 @@ import Container from '../../../common/Container';
 import { getUrlParams } from 'utils/validators';
 // eslint-disable-next-line
 import { nativeCallback } from 'utils/native_callback';
-import { getConfig } from 'utils/functions';
 import { inrFormatDecimal2, storageService, formatDateAmPm, numDifferentiationInr } from 'utils/validators';
 import ContactUs from '../../../../common/components/contact_us';
 import { initialize } from '../common_data';
@@ -116,13 +115,6 @@ class GroupHealthPayment extends Component {
     }
   }
 
-  navigate = (pathname) => {
-    this.props.history.push({
-      pathname: pathname,
-      search: getConfig().searchParams
-    });
-  }
-
   sendEvents(user_action, data = {}) {
     let eventObj = {
       "event_name": 'health_insurance',
@@ -147,12 +139,19 @@ class GroupHealthPayment extends Component {
 
     let state = '';
     if(this.state.paymentFailed) {
-      state =  `/group-insurance/group-health/${this.state.provider}/final-summary`
+      state =  `/group-insurance/group-health/${this.state.provider}/final-summary`;
+      this.setState({
+        forceClose: true
+      }, ()=> {
+        this.navigate(state);
+      })
+      
     } else {
-      state  = `/group-insurance/group-health/${this.state.provider}/reportdetails/${this.state.policy_data.lead_id}`
+      state  = `/group-insurance/group-health/${this.state.provider}/reportdetails/${this.state.policy_data.lead_id}`;
+      this.navigate(state);
     }
 
-    this.navigate(state);
+    
   }
 
   render() {

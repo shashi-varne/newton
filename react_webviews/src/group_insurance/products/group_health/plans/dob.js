@@ -114,6 +114,10 @@ class GroupHealthPlanDob extends Component {
             if (ui_members[key]) {
                 dob_data[i].value = ui_members[key + '_dob'] || '';
                 dob_data[i].age = calculateAge(ui_members[key + '_dob'] || '', 'byMonth');
+
+                if(!ui_members.father && key === 'mother') {
+                    dob_data[i].backend_key = 'parent_account1_key';
+                }
                 final_dob_data.push(dob_data[i]);
             }
         }

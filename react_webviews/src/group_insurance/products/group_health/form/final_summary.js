@@ -4,7 +4,7 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import toast from '../../../../common/ui/Toast';
-import { initialize, updateLead } from '../common_data';
+import { initialize, updateLead, resetQuote } from '../common_data';
 import BottomInfo from '../../../../common/ui/BottomInfo';
 import { numDifferentiationInr, inrFormatDecimal, 
     capitalizeFirstLetter, storageService } from 'utils/validators';
@@ -33,6 +33,7 @@ class GroupHealthPlanFinalSummary extends Component {
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
+        this.resetQuote = resetQuote.bind(this);
     }
 
 
@@ -452,7 +453,7 @@ class GroupHealthPlanFinalSummary extends Component {
               </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={this.handleReset} color="default">
+                    <Button onClick={this.resetQuote} color="default">
                         YES
               </Button>
                     <Button onClick={this.handleClose} color="default" autoFocus>
@@ -461,48 +462,6 @@ class GroupHealthPlanFinalSummary extends Component {
                 </DialogActions>
             </Dialog>
         );
-    }
-
-    handleReset = async () => {
-        
-
-        this.setState({
-            openDialogReset: false,
-            show_loader: true,
-            restart_conformation: true
-        }, () => {
-            this.sendEvents('next');
-        });
-
-
-        try {
-            const res = await Api.get(`/api/ins_service/api/insurance/hdfcergo/lead/cancel/${this.state.quote_id}`)
-
-            this.setState({
-                show_loader: false
-            });
-
-            var resultData = res.pfwresponse.result;
-            if (res.pfwresponse.status_code === 200) {
-
-                storageService().remove('groupHealthPlanData');
-                let next_state = `/group-insurance/group-health/${this.state.provider}/insure-type`;
-                this.navigate(next_state);
-                this.setState({
-                    resultData: resultData
-                })
-
-            } else {
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
-            }
-        } catch (err) {
-            console.log(err)
-            this.setState({
-                show_loader: false
-            });
-            toast('Something went wrong');
-        }
     }
 
     showDialog = () => {
