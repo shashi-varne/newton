@@ -142,7 +142,7 @@ class email_entry extends Component {
             type="email"
             width="40"
             label="Email"
-            class="Email"
+            class="Email address"
             id="email"
             name="email"
             value={this.state.email}
