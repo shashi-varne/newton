@@ -3,21 +3,17 @@ import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { health_providers } from '../../../constants';
 import BottomInfo from '../../../../common/ui/BottomInfo';
 import { storageService, calculateAge, isValidDate, IsFutureDate, formatDate } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import { initialize } from '../common_data';
-
+import toast from '../../../../common/ui/Toast';
 
 class GroupHealthPlanDob extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            type: getConfig().productName,
-            provider: this.props.match.params.provider,
-            groupHealthPlanData: storageService().getObject('groupHealthPlanData'),
             header_title: 'Your date of birth',
             final_dob_data: [],
             ui_members: {}
@@ -35,7 +31,7 @@ class GroupHealthPlanDob extends Component {
         let groupHealthPlanData = this.state.groupHealthPlanData;
 
         this.setState({
-            providerData: health_providers[this.state.provider],
+            account_type: groupHealthPlanData.account_type,
             header_title: groupHealthPlanData.account_type === 'self' ? 'Your date of birth' : 'Date of birth details'
         })
 
@@ -117,6 +113,7 @@ class GroupHealthPlanDob extends Component {
             let key = dob_data[i].key;
             if (ui_members[key]) {
                 dob_data[i].value = ui_members[key + '_dob'] || '';
+                dob_data[i].age = calculateAge(ui_members[key + '_dob'] || '', 'byMonth');
                 final_dob_data.push(dob_data[i]);
             }
         }
@@ -169,17 +166,29 @@ class GroupHealthPlanDob extends Component {
 
         this.sendEvents('next');
 
+        
         let canProceed = true;
         let final_dob_data = this.state.final_dob_data;
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let ui_members = groupHealthPlanData.ui_members || {};
+        let self_gender = ui_members.self_gender || '';
+        let manAgeCheck = '';
+        if(this.state.account_type === 'selfandfamily' || this.state.account_type === 'family') {
+            if(self_gender === 'MALE') {
+                manAgeCheck = 'self'
+            } else if((self_gender === 'FEMALE' && ui_members.husband) || ui_members.husband) {
+                manAgeCheck = 'husband'
+            }
+        }
 
+
+        let adult_ages = [];
+        let child_ages = [];
         for (var i = 0; i < final_dob_data.length; i++) {
 
             let dob = final_dob_data[i].value;
             let age = final_dob_data[i].age;
             let key = final_dob_data[i].key;
-
             let error = '';
             if (new Date(dob) > new Date() || !isValidDate(dob)) {
                 error = 'Please enter valid date';
@@ -193,12 +202,16 @@ class GroupHealthPlanDob extends Component {
                     if (age.age > 25 || (age.age === 0 && age.month < 3)) {
                         error = 'Valid age is between 3 months- 25 years';
                     }
+                    child_ages.push(age.age);
     
                 } else {
                     // adult
                     if (age.age > 90 || age.age < 18) {
                         error = 'Valid age is between 18 - 90 years';
+                    } else if(manAgeCheck === key && age.age < 21) {
+                        error = 'Minimum age is 21 for married male';
                     }
+                    adult_ages.push(age.age);
                 }
             }
            
@@ -225,6 +238,15 @@ class GroupHealthPlanDob extends Component {
         for (var mem in dob_data_base) {
             let backend_key = dob_data_base[mem].backend_key;
             post_body[backend_key] = {};
+        }
+
+        for(var age in child_ages) {
+            for(var adult in adult_ages) {
+                if(child_ages[age] > adult_ages[adult]) {
+                    toast('Parents age should not be less than child age');
+                    return;
+                }
+            }
         }
        
 

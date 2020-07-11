@@ -4,6 +4,8 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { storageService } from 'utils/validators';
+import {  genderOptions } from '../../../constants';
+
 // calculateAge, isValidDate, IsFutureDate
 import PlusMinusInput from '../../../../common/ui/PlusMinusInput';
 
@@ -72,7 +74,8 @@ class GroupHealthPlanAddMembers extends Component {
             father_checked: ui_members.father ? true : false,
             mother_checked: ui_members.mother ? true : false,
             other_adult_member: ui_members.other_adult_member || '',
-            ui_members: ui_members
+            ui_members: ui_members,
+            self_gender: ui_members.self_gender || ''
         }, () => {
             this.setMinMax();
         })
@@ -88,6 +91,8 @@ class GroupHealthPlanAddMembers extends Component {
     }
 
     handleClick = () => {
+
+        let canProceed = true;
 
         this.sendEvents('next');
         let ui_members = this.state.ui_members;
@@ -113,7 +118,7 @@ class GroupHealthPlanAddMembers extends Component {
             this.setState({
                 other_adult_member_error: 'Please select this option'
             });
-            return;
+            canProceed = false;
         }
 
         let keys_to_reset = ['self', 'wife', 'husband', 'father', 'mother', 'son', 'son1', 'son2',
@@ -189,12 +194,52 @@ class GroupHealthPlanAddMembers extends Component {
             child: child_total
         }
 
-        let groupHealthPlanData = this.state.groupHealthPlanData;
-        groupHealthPlanData.ui_members = ui_members;
-        groupHealthPlanData.post_body = post_body;
-        storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+        if(this.state.account_type === 'selfandfamily') {
 
-        this.navigate('plan-dob');
+            if(!this.state.self_gender) {
+                this.setState({
+                    self_gender_error: 'Please select this'
+                })
+                canProceed = false;
+            }
+
+            if((child_total + adult_total) <= 1) {
+                toast('Please select atleast one family member');
+                canProceed = false;
+            }
+
+            if(this.state.self_gender) {
+                if(this.state.self_gender === 'MALE' && this.state.other_adult_member === 'husband') {
+                    this.setState({
+                        other_adult_member_error :'Invalid choice'
+                    })
+                    canProceed = false;
+                }
+
+                if(this.state.self_gender === 'FEMALE' && this.state.other_adult_member === 'wife') {
+                    this.setState({
+                        other_adult_member_error :'Invalid choice'
+                    })
+                    canProceed = false;
+                }
+            }
+
+            ui_members.self_gender = this.state.self_gender || '';
+            
+        } else {
+            ui_members.self_gender = '';
+        }
+
+        if(canProceed) {
+            let groupHealthPlanData = this.state.groupHealthPlanData;
+            groupHealthPlanData.ui_members = ui_members;
+            groupHealthPlanData.post_body = post_body;
+            storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+    
+            this.navigate('plan-dob');
+        }
+
+        
     }
 
 
@@ -260,8 +305,13 @@ class GroupHealthPlanAddMembers extends Component {
     }
 
     handleChangeRadio = name => event => {
+
+        let options = other_adult_member_options;
+        if(name === 'self_gender') {
+            options = genderOptions;
+        }
         this.setState({
-            [name]: other_adult_member_options[event] ? other_adult_member_options[event].value : '',
+            [name]: options[event] ? options[event].value : '',
             [name + '_error']: ''
         })
 
@@ -298,6 +348,22 @@ class GroupHealthPlanAddMembers extends Component {
                         />
                     </div>
                 }
+
+            {['selfandfamily'].indexOf(this.state.account_type) !== -1 &&
+          <div className="InputField">
+            <RadioWithoutIcon
+              width="40"
+              label="Gender"
+              class="Gender:"
+              options={genderOptions}
+              id="self_gender"
+              name="self_gender"
+              error={(this.state.self_gender_error) ? true : false}
+              helperText={this.state.self_gender_error}
+              value={this.state.self_gender || ''}
+              onChange={this.handleChangeRadio('self_gender')} />
+          </div>}
+
 
                 {['selfandfamily', 'family'].indexOf(this.state.account_type) !== -1 &&
                     <div>

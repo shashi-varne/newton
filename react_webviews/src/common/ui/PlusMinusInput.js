@@ -114,7 +114,7 @@ class PlusMinusInputClass extends Component {
                                             />
                                             <div className="number">{parentState[name + '_total']}</div>
                                             <SVG className="plus-minus-icons"
-                                                style={{ opacity: parentState[name + '_ismax'] ? 0.3 : 1 }}
+                                                style={{ opacity: parentState[name + '_ismax'] || parentState[name + '_total'] === parentState[name + '_max'] ? 0.3 : 1 }}
                                                 preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
                                                 src={plus_icon}
                                                 onClick={() => this.handleClick(name, 'plus')}
