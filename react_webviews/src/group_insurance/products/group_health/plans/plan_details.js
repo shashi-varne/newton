@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
-import { nativeCallback, openPdfCall } from 'utils/native_callback';
+import { nativeCallback } from 'utils/native_callback';
 import { storageService, inrFormatDecimal, numDifferentiation } from 'utils/validators';
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
@@ -15,10 +15,6 @@ class GroupHealthPlanDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            productName: getConfig().productName,
-            provider: this.props.match.params.provider,
-            groupHealthPlanData: storageService().getObject('groupHealthPlanData'),
-            // show_loader: true,   
             premium_data: {
                 WF: []
             },
@@ -182,24 +178,6 @@ class GroupHealthPlanDetails extends Component {
         } else {
             nativeCallback({ events: eventObj });
         }
-    }
-
-    openInBrowser(url) {
-
-        this.sendEvents('tnc_clicked');
-        if (!getConfig().Web) {
-            this.setState({
-                show_loader: true
-            })
-        } 
-
-        let data = {
-            url: url,
-            header_title: 'Terms & Conditions',
-            icon : 'close'
-        };
-
-        openPdfCall(data);
     }
 
     handleClick = () => {

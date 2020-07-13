@@ -336,7 +336,7 @@ class GroupHealthLanding extends Component {
           <div className="what-is-covered" onClick={() => this.handleClickPoints('whats_covered')}>
             <div className="top">
               <div className="wic-title">
-                What's included?
+                What is covered?
               </div>
               <div className="">
                 <SVG

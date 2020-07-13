@@ -246,7 +246,7 @@ class GroupHealthPlanDob extends Component {
 
         for(var age in child_ages) {
             for(var adult in adult_ages) {
-                if(child_ages[age] > adult_ages[adult]) {
+                if(child_ages[age] >= adult_ages[adult]) {
                     toast('Parents age should not be less than child age');
                     return;
                 }
@@ -287,8 +287,12 @@ class GroupHealthPlanDob extends Component {
                 final_dob_data[0].backend_key = 'parent_account1_key';
             }
 
+            if(ui_members.self_gender && post_body.self_account_key) {
+                post_body.self_account_key.gender = ui_members.self_gender;
+            }
 
             groupHealthPlanData.post_body = post_body;
+
 
             storageService().setObject('groupHealthPlanData', groupHealthPlanData);
             this.navigate('plan-select-city');

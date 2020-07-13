@@ -198,7 +198,7 @@ class GroupHealthPlanAddMembers extends Component {
 
             if(!this.state.self_gender) {
                 this.setState({
-                    self_gender_error: 'Please select this'
+                    self_gender_error: 'Please select gender'
                 })
                 canProceed = false;
             }

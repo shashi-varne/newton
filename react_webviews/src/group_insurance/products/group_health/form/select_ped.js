@@ -37,6 +37,10 @@ class GroupHealthPlanSelectPed extends Component {
 
 
     onload = () => {
+
+        this.setState({
+            options: []
+        })
         let next_state = `/group-insurance/group-health/${this.state.provider}/final-summary`;
 
         let lead = this.state.lead;
@@ -88,15 +92,15 @@ class GroupHealthPlanSelectPed extends Component {
 
         if(other_diseases) {
             options[options.length - 1].checked = true;
-            this.setState({
-                otherInputData: {
-                    ...this.state.otherInputData,
-                    value: other_diseases
-                },
-                [this.state.otherInputData.name]: other_diseases
-            });
-
         }
+
+        this.setState({
+            otherInputData: {
+                ...this.state.otherInputData,
+                value: other_diseases
+            },
+            [this.state.otherInputData.name]: other_diseases
+        });
 
         this.setState({
             member_key: member_key,

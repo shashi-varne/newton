@@ -4,6 +4,7 @@ import { health_providers, ghGetMember } from '../../constants';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import {  openPdfCall } from 'utils/native_callback';
+import { nativeCallback } from 'utils/native_callback';
 
 export async function initialize() {
 
@@ -23,6 +24,7 @@ export async function initialize() {
         plan_selected: groupHealthPlanData && groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected : {},
         insured_account_type: groupHealthPlanData.account_type || ''
     })
+    nativeCallback({ action: 'take_control_reset' });
 
 
     let lead = {
@@ -230,7 +232,6 @@ export async function resetQuote() {
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
 
-            storageService().remove('groupHealthPlanData');
             let next_state = `/group-insurance/group-health/${this.state.provider}/insure-type`;
             this.navigate(next_state);
             this.setState({

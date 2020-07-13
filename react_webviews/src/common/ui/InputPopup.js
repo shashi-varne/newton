@@ -84,7 +84,7 @@ class InputPopupClass extends Component {
                                         class="data"
                                         id={this.props.name}
                                         name={this.props.name}
-                                        value={this.state.value}
+                                        value={this.state.value || this.props.value}
                                         onChange={this.handleChange()} />
                                 </div>
                             </FormControl>
