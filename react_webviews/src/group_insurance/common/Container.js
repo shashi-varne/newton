@@ -401,7 +401,7 @@ class Container extends Component {
         }
       };
       nativeCallback({ events: eventObj });
-      window.localStorage.setItem('show_quotes', true);
+      window.sessionStorage.setItem('show_quotes', true);
       this.navigate('/group-insurance/term/quote');
     } else if (this.state.callbackType === 'web_home') {
       this.navigate('/group-insurance')

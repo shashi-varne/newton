@@ -26,8 +26,8 @@ class BasicDetailsRedirectionForm extends Component {
             checked: false,
             parent: this.props.parent,
             show_loader: true,
-            premium_details_all: window.localStorage.getItem('group_insurance_plan_final_data') ?
-            JSON.parse(window.localStorage.getItem('group_insurance_plan_final_data')) : '',
+            premium_details_all: window.sessionStorage.getItem('group_insurance_plan_final_data') ?
+            JSON.parse(window.sessionStorage.getItem('group_insurance_plan_final_data')) : '',
             name: '',
             openModal: false,
             name_error: '',

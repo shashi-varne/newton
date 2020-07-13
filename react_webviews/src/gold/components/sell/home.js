@@ -267,7 +267,7 @@ class GoldSellHome extends Component {
   selectGoldProduct(index) {
     this.sendEvents('next', this.state.gold_products[index].disc);
     let selectedProduct = this.state.gold_products[index];
-    window.localStorage.setItem('goldProduct', JSON.stringify(selectedProduct));
+    window.sessionStorage.setItem('goldProduct', JSON.stringify(selectedProduct));
     this.navigate(this.state.provider + '/select-gold-product');
   };
 

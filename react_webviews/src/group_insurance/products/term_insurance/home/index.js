@@ -20,10 +20,10 @@ class InsuranceHome extends Component {
   }
 
   async componentDidMount() {
-    window.localStorage.setItem('excluded_providers', '');
-    window.localStorage.setItem('required_providers', '');
-    window.localStorage.setItem('quoteSelected', '');
-    window.localStorage.setItem('quoteData', '');
+    window.sessionStorage.setItem('excluded_providers', '');
+    window.sessionStorage.setItem('required_providers', '');
+    window.sessionStorage.setItem('quoteSelected', '');
+    window.sessionStorage.setItem('quoteData', '');
     try {
       const res = await Api.get('/api/insurance/all/summary')
 
@@ -53,7 +53,7 @@ class InsuranceHome extends Component {
             application: application,
             required_fields: required_fields
           }
-          window.localStorage.setItem('homeApplication', JSON.stringify(data));
+          window.sessionStorage.setItem('homeApplication', JSON.stringify(data));
           let search = application.profile_link.split('?')[1];
           let searchParamsMustAppend = getConfig().searchParamsMustAppend.split('?')[1];
           search +=  '&' + searchParamsMustAppend;
@@ -73,7 +73,7 @@ class InsuranceHome extends Component {
 
 
   navigate = (pathname, search) => {
-    window.localStorage.setItem('cameFromHome', true);
+    window.sessionStorage.setItem('cameFromHome', true);
     this.props.history.push({
       pathname: pathname,
       search: search ? search : getConfig().searchParams
@@ -81,7 +81,7 @@ class InsuranceHome extends Component {
   }
 
   handleClick = async () => {
-    // window.localStorage.setItem('quoteData', JSON.stringify(quoteData));
+    // window.sessionStorage.setItem('quoteData', JSON.stringify(quoteData));
     // this.navigate('cover-amount', quoteData.annual_income);
   }
 

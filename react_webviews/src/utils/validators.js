@@ -440,7 +440,7 @@ export function providerAsIpru(provider) {
 
 
 export function clearInsuranceQuoteData() {
-  window.localStorage.setItem('quoteSelected', '');
+  window.sessionStorage.setItem('quoteSelected', '');
 }
 
 export function getRecommendedIndex(array, value, AOB, Key) {
@@ -515,35 +515,35 @@ export function storageService() {
   return service;
 
   function set(key, value) {
-    window.localStorage.setItem(key, value);
+    window.sessionStorage.setItem(key, value);
   }
 
   function get(key) {
-    if (checkValidString(window.localStorage.getItem(key))) {
-      return window.localStorage.getItem(key) || false;
+    if (checkValidString(window.sessionStorage.getItem(key))) {
+      return window.sessionStorage.getItem(key) || false;
     }
 
     return false;
   }
 
   function setObject(key, value) {
-    window.localStorage.setItem(key, JSON.stringify(value));
+    window.sessionStorage.setItem(key, JSON.stringify(value));
   }
 
   function getObject(key) {
-    if (checkValidString(window.localStorage.getItem(key))) {
-      return JSON.parse(window.localStorage.getItem(key)) || {};
+    if (checkValidString(window.sessionStorage.getItem(key))) {
+      return JSON.parse(window.sessionStorage.getItem(key)) || {};
     }
 
     return false;
   }
 
   function remove(key) {
-    return window.localStorage.removeItem(key);
+    return window.sessionStorage.removeItem(key);
   }
 
   function clear() {
-    return window.localStorage.clear();
+    return window.sessionStorage.clear();
   }
 
 }
