@@ -147,7 +147,7 @@ class GroupHealthPlanSelectPed extends Component {
             return;
         } else {
 
-            let next_state = this.state.next_state;
+            let next_state = '';
             for (var i =0; i < member_base.length; i++) {
                 if(member_base[i].key === this.state.member_key && i !== member_base.length -1) {
                     if(member_base[i+1].ped_exists) {
@@ -178,7 +178,8 @@ class GroupHealthPlanSelectPed extends Component {
             }
 
             this.setState({
-                next_state: next_state
+                next_state: next_state,
+                force_forward: !!next_state
             })
 
 
