@@ -48,25 +48,29 @@ class GroupHealthPlanSelectFloater extends Component {
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
 
-                let premium_data_nf = resultData.premium[0].NF[0];
+                
                 let premium_data_wf = resultData.premium[0].WF[0];
+                let premium_data_nf = resultData.premium[0].NF[0];
 
                 let premium_data_floater = [
                     {
                         'title': 'Family floater',
                         'premium': premium_data_wf.net_premium,
                         'subtitle': 'in ' + inrFormatDecimal(premium_data_wf.net_premium),
-                        'discount': premium_data_wf.account_type_discount ? inrFormatDecimal(premium_data_wf.account_type_discount) : '',
+                        'discount': premium_data_wf.account_type_discount_percentage ? parseFloat(premium_data_wf.account_type_discount_percentage) : '',
                         'key': 'WF'
                     },
                     {
                         'title': 'Each member individually',
                         'subtitle': 'in ' + inrFormatDecimal(premium_data_nf.net_premium),
                         'premium': premium_data_nf.net_premium,
-                        'discount': premium_data_nf.account_type_discount ? inrFormatDecimal(premium_data_nf.account_type_discount) : '',
+                        'discount': premium_data_nf.account_type_discount_percentage ? parseFloat(premium_data_nf.account_type_discount_percentage) : '',
                         'key': 'NF'
                     }
                 ];
+
+                console.log(premium_data_nf);
+                console.log(premium_data_floater);
 
                 let ind_pre_data = [];
 
@@ -173,7 +177,7 @@ class GroupHealthPlanSelectFloater extends Component {
                             <span style={{
                                 color: '#4D890D', fontSize: 10,
                                 fontWeight: 400, margin: '0 0 0 4px'
-                            }}>save {props.discount} </span>
+                            }}>Discount {props.discount}% </span>
                         </div>}
                     </div>
                     <div className="completed-icon">
@@ -207,7 +211,7 @@ class GroupHealthPlanSelectFloater extends Component {
                             <div className="di-tile-right">{inrFormatDecimal(this.state.premium_data_nf.base_premium)}</div>
                         </div>
                        {this.state.premium_data_nf.account_type_discount > 0  &&
-                        <div className="flex-between di-tile">
+                        <div className="flex-between di-tile" style={{color: 'var(--primary)'}}>
                             <div className="di-tile-left">{this.state.premium_data_nf.account_type_discount_percentage}% discount</div>
                             <div className="di-tile-right">-{inrFormatDecimal(this.state.premium_data_nf.account_type_discount)}</div>
                         </div>}
