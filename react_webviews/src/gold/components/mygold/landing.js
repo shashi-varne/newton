@@ -121,8 +121,9 @@ class GoldSummary extends Component {
     ]
 
     var gold_offer_terms_safegold_july = [
-      'Offer is only valid till  23:59 hrs 30th July 2020.',
+      'Offer is only valid till  23:59 hrs 31st July 2020.',
       'For a customer to be valid for the offer (s)he should purchase gold worth at least 5gm during the offer period.',
+      '2500 gold back will be as per price on the day of allotment of gold back.',
       'This offer can be availed only once ( per device, per user, per account) during the offer period.',
       'Purchase can be done in a single transaction or multiple transactions but the total gold purchased during the offer period should be greater than or equal to 5gm.',
       'Offer is valid ONLY for the first 100 customers who purchase Gold (greater than or equal to 5gm) during the offer period for a Gold-back of Rs 2500/-.',
