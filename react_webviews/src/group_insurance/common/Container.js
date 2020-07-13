@@ -196,6 +196,9 @@ class Container extends Component {
       return;
     }
     let { params } = this.props.location;
+    if(!params) {
+      params = {};
+    }
     let pathname = this.props.history.location.pathname;
     console.log(params);
 

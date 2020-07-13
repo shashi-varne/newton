@@ -57,13 +57,14 @@ class GroupHealthPlanSelectCity extends Component {
 
     async componentDidMount() {
 
+        let city = this.state.groupHealthPlanData.city || '';
         this.setState({
             city: this.state.groupHealthPlanData.city || ''
         })
         try {
 
 
-            if(!this.state.city) {
+            if(!city) {
                 try {
                     const res = await Api.get('/api/ins_service/api/insurance/account/summary');
                     if (res.pfwresponse.status_code === 200) {
