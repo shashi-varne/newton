@@ -32,8 +32,9 @@ class GroupHealthPlanSelectFloater extends Component {
     async componentDidMount() {
 
         let post_body = this.state.groupHealthPlanData.post_body;
+        let selectedIndex = this.state.groupHealthPlanData.selectedIndexFloater || 0;
         this.setState({
-            selectedIndex: this.state.groupHealthPlanData.selectedIndexFloater || 0,
+            selectedIndex: selectedIndex,
             sum_assured: post_body.sum_assured,
             total_member: post_body.mem_info.adult + post_body.mem_info.child
         });
@@ -84,6 +85,8 @@ class GroupHealthPlanSelectFloater extends Component {
                         ind_pre_data.push(obj);
                     }
                 }
+
+                this.updateBottomPremium(premium_data_floater[selectedIndex].premium);
 
                 this.setState({
                     premium_data_floater: premium_data_floater,
