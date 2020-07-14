@@ -51,7 +51,6 @@ export async function initialize() {
 
                 lead = resultData.quote;
                 lead.member_base = ghGetMember(lead);
-                console.log(lead);
                 this.setState({
                     lead: resultData.quote || {},
                     common_data: resultData.common,
@@ -171,7 +170,6 @@ export async function updateLead(body, quote_id) {
 
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
-            console.log(this.state);
             if(this.props.edit && !this.state.force_forward) {
                 this.props.history.goBack();
             } else {
@@ -295,4 +293,27 @@ export function setEditTitle(string) {
     }
 
     return string;
+}
+
+export function openMedicalDialog(type) {
+    let data = {
+        'header_title': 'Free medical check-up',
+        'content': 'Based on your details, a medical checkup will be required to issue the policy. HDFC ERGO team will contact you for the <b>free medical checkup</b> after the policy payment.', //ppc
+        'icon': 'ic_medical_checkup2',
+        'dialog_name': 'medical_dialog',
+        'cta_title': 'CONTINUE TO PAYMENT',
+        'handleClick': this.startPayment
+    }
+
+    if(type === 'ped') {
+        data.content = 'Your details will be reviewed by the HDFC Ergo team before policy issuance. You may be contacted for a <b>free medical checkup</b> after the policy payment.'
+    }
+
+    this.setState({
+        medical_dialog: true,
+        medical_dialog_data: data,
+        medical_dialog_opened: true,
+        show_loader: false
+    })
+   
 }

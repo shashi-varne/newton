@@ -544,3 +544,29 @@ body[data-device="mobile"] {
 #generic-input-popup-dialog-title {
   margin: 0 0 10px -10px;
 }
+
+.generic-bottomsheet {
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 10px 0;
+  }
+
+  div#alert-dialog-description {
+      margin: -20px 0 0 0;
+  }
+
+  .header_title {
+      color: #0A1D32;
+      font-size: 16px;
+      font-weight: 400;
+  }
+
+  .content {
+      color: #767E86;
+      font-size: 14px;
+      line-height: 1.6;
+      font-weight: 400;
+  }
+}

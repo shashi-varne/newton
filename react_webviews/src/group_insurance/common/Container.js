@@ -200,7 +200,6 @@ class Container extends Component {
       params = {};
     }
     let pathname = this.props.history.location.pathname;
-    console.log(params);
 
     if(this.checkStringInString('group-health')) {
       let group_health_landing = '/group-insurance/group-health/landing';

@@ -95,8 +95,6 @@ class GroupHealthPlanSelectPed extends Component {
             options[options.length - 1].checked = true;
         }
 
-        console.log(other_diseases);
-
         this.setState({
             member_key: member_key,
             lead: lead,

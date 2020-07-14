@@ -69,9 +69,6 @@ class GroupHealthPlanSelectFloater extends Component {
                     }
                 ];
 
-                console.log(premium_data_nf);
-                console.log(premium_data_floater);
-
                 let ind_pre_data = [];
 
                 let final_dob_data = this.state.groupHealthPlanData.final_dob_data;

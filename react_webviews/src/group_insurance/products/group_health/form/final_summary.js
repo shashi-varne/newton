@@ -4,7 +4,7 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import toast from '../../../../common/ui/Toast';
-import { initialize, updateLead, resetQuote } from '../common_data';
+import { initialize, updateLead, resetQuote, openMedicalDialog } from '../common_data';
 import BottomInfo from '../../../../common/ui/BottomInfo';
 import { numDifferentiationInr, inrFormatDecimal, 
     capitalizeFirstLetter, storageService } from 'utils/validators';
@@ -15,6 +15,7 @@ import Dialog, {
     DialogContent,
     DialogContentText
 } from 'material-ui/Dialog';
+import BottomSheet from '../../../../common/ui/BottomSheet'; 
 
 class GroupHealthPlanFinalSummary extends Component {
 
@@ -34,11 +35,11 @@ class GroupHealthPlanFinalSummary extends Component {
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
         this.resetQuote = resetQuote.bind(this);
+        this.openMedicalDialog = openMedicalDialog.bind(this);
     }
 
 
     componentWillMount() {
-        console.log(this.props.history);
         nativeCallback({ action: 'take_control_reset' });
         this.initialize();
     }
@@ -207,6 +208,10 @@ class GroupHealthPlanFinalSummary extends Component {
 
 
     startPayment = async () => {
+        this.setState({
+            show_loader: true
+        })
+        this.handleClose();
         try {
             let res = await Api.get(`/api/ins_service/api/insurance/hdfcergo/start/payment?lead_id=${this.state.quote_id}`);
 
@@ -282,7 +287,11 @@ class GroupHealthPlanFinalSummary extends Component {
             if (res.pfwresponse.status_code === 200) {
 
                 let lead = resultData.quote_lead || {};
-                if (lead.status === 'ready_to_pay') {
+                if(lead.ped_check) {
+                    this.openMedicalDialog('ped');
+                } else if(lead.ppc_check) {
+                    this.openMedicalDialog('ppc');
+                }else if (lead.status === 'ready_to_pay') {
                     this.startPayment();
                 }
             } else {
@@ -435,7 +444,8 @@ class GroupHealthPlanFinalSummary extends Component {
 
     handleClose = () => {
         this.setState({
-            openDialogReset: false
+            openDialogReset: false,
+            medical_dialog: false
         })
     }
 
@@ -572,7 +582,8 @@ class GroupHealthPlanFinalSummary extends Component {
 
                     <BottomInfo baseData={{ 'content': 'Get best health insurance benefits at this amount and have a secured future.' }} />
                 </div>
-                
+                {this.state.medical_dialog_data && 
+                <BottomSheet parent={this} data={this.state.medical_dialog_data} />}
                 {this.renderDialog()}
             </Container>
         );
