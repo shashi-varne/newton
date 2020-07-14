@@ -14,6 +14,7 @@ import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
 import { initialize } from './common_data';
 import { ghGetMember, getCssMapperReport } from '../../constants';
 import download from 'assets/download.svg';
+import text_error_icon from 'assets/text_error_icon.svg';
 class GroupHealthReportDetails extends Component {
 
     constructor(props) {
@@ -423,6 +424,28 @@ class GroupHealthReportDetails extends Component {
                             </div>
                         </div>
                     </div>
+
+                   {this.state.policy_data.vendor_action_required_message & 
+                    <div style={{ margin: '30px 0 30px 0', display: 'flex', 
+                    position: 'relative',background: '#FDF5F6'}} 
+                    className="highlight-text highlight-color-info">
+                        <div>
+                        <img className="highlight-text11"
+                            src={text_error_icon}
+                            alt="info" />
+                        </div>
+
+                        <div>
+                            <div className="highlight-text1">
+                                <div className="highlight-text12" style={{ display: 'flex' }}>
+                                    {this.state.policy_data.vendor_action_required_title}
+                                </div>
+                            </div>
+                            <div className="highlight-text2" style={{ color: '#767E86', marginLeft: 7 }}>
+                                {this.state.policy_data.vendor_action_required_message}
+                            </div>
+                        </div>
+                    </div>}
 
                     {!this.state.showPlanDetails &&
                         <div className="report-detail-download">

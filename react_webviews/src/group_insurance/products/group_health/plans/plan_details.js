@@ -8,7 +8,7 @@ import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
-import {initialize} from '../common_data';
+import {initialize, openInBrowser} from '../common_data';
 
 class GroupHealthPlanDetails extends Component {
 
@@ -33,6 +33,7 @@ class GroupHealthPlanDetails extends Component {
         }
 
         this.initialize = initialize.bind(this);
+        this.openInBrowser = openInBrowser.bind(this);
     }
 
     componentWillMount() {
