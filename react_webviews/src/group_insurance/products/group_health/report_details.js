@@ -425,7 +425,7 @@ class GroupHealthReportDetails extends Component {
                         </div>
                     </div>
 
-                   {this.state.policy_data.vendor_action_required_message & 
+                   {this.state.policy_data.vendor_action_required_message &&
                     <div style={{ margin: '30px 0 30px 0', display: 'flex', 
                     position: 'relative',background: '#FDF5F6'}} 
                     className="highlight-text highlight-color-info">
