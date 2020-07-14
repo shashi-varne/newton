@@ -39,7 +39,8 @@ class GroupHealthPlanSelectPed extends Component {
     onload = () => {
 
         this.setState({
-            options: []
+            options: [],
+            show_checkbox: false
         })
         let next_state = `/group-insurance/group-health/${this.state.provider}/final-summary`;
 
@@ -94,21 +95,24 @@ class GroupHealthPlanSelectPed extends Component {
             options[options.length - 1].checked = true;
         }
 
-        this.setState({
-            otherInputData: {
-                ...this.state.otherInputData,
-                value: other_diseases
-            },
-            [this.state.otherInputData.name]: other_diseases
-        });
+        console.log(other_diseases);
 
         this.setState({
             member_key: member_key,
             lead: lead,
             backend_key: backend_key,
             options: options,
-            show_loader: false,
+            otherInputData: {
+                ...this.state.otherInputData,
+                value: other_diseases
+            },
+            [this.state.otherInputData.name]: other_diseases,
             next_state: next_state
+        }, ()=> {
+            this.setState({
+                show_checkbox: true,
+                show_loader: false,
+            })
         })
     }
 
@@ -182,8 +186,8 @@ class GroupHealthPlanSelectPed extends Component {
             }
 
             this.setState({
-                next_state: next_state,
-                force_forward: !!next_state
+                next_state: next_state || this.state.next_state,
+                force_forward: !!next_state && this.props.edit
             })
 
 
@@ -253,7 +257,7 @@ class GroupHealthPlanSelectPed extends Component {
 
                 <div className="group-health-select-ped">
                     <FormControl fullWidth>
-                        {this.state.options &&
+                        {this.state.options && this.state.show_checkbox &&
                             <CheckboxList options={this.state.options} parent={this} />}
                     </FormControl>
 

@@ -171,6 +171,7 @@ export async function updateLead(body, quote_id) {
 
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
+            console.log(this.state);
             if(this.props.edit && !this.state.force_forward) {
                 this.props.history.goBack();
             } else {

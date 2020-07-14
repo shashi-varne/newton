@@ -163,7 +163,7 @@ class GroupHealthPlanIsPed extends Component {
             body['self_account_key'].ped_exists = 'true';
         }
 
-        if(form_data.is_ped === 'YES') {
+        if(form_data.is_ped === 'YES' && this.props.edit) {
             this.setState({
                 force_forward: true
             })
