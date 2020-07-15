@@ -150,18 +150,11 @@ class Question extends Component {
 
     return (
       <Container
-        title={'Help & Support'}
+        title={questions.name || 'Help & Support'}
         background="white"
         noFooter={true}
         events={this.backButtonEvent()}
       >
-        <div className="Help pad20">
-          <div className="section-head">
-            <div className="main-title dark">
-              {questions.name}
-            </div>
-          </div>
-        </div>
         <div className="section-card no-margin">
           {questions && this.renderQuestions()}
         </div>
