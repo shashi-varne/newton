@@ -16,7 +16,7 @@ export default class FundDetailCard extends Component {
       scheme_type,
       investment_since,
       current_value,
-      xirr: annual_return,
+      xirr,
       total_amount_invested: invested_amt,
     } = this.props.fundDetails;
     return (
@@ -56,11 +56,11 @@ export default class FundDetailCard extends Component {
             </div>
             <div className="annual-ret">
               <div className="fund-numbers-title">
-                Annual return
+                XIRR
               </div>
               <div className="fund-numbers-value"
-                style={{ color: annual_return < 0 ? '#ba3366' : 'var(--secondary)'}}>
-                {Number(annual_return || '0000.888292').toFixed(2)} %
+                style={{ color: xirr < 0 ? '#ba3366' : 'var(--secondary)'}}>
+                {Number(xirr).toFixed(2)} %
               </div>
             </div>
             <div className="invested-amt">

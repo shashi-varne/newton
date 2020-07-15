@@ -2,23 +2,19 @@ $steel_grey: #767e86;
 $dark_indigo: #0a1d32;
 $light_periwinkle: #d3dbe4;
 
-.Footer {
-  margin: 0 !important;
-  padding: 20px;
-}
-
 .header-right-btn {
   position: absolute !important;
   right: 0 !important;
 }
 
 .hni-container {
-  padding: 20px 20px;
+  padding-right: 20px;
+  padding-left: 20px;
 }
 
-.m-b-60 {
-  margin-bottom: 60px;
-}
+// .m-b-60 {
+//   margin-bottom: 60px;
+// }
 
 .bg-highlight {
   background-color: var(--highlight) !important;
@@ -94,6 +90,7 @@ $light_periwinkle: #d3dbe4;
     font-size: 17px;
     font-weight: 500;
     margin-top: 0;
+    line-height: 27px;
   }
 
   .gen-statement-btn {
@@ -122,7 +119,7 @@ $light_periwinkle: #d3dbe4;
 .gen-statement-btn {
   border: 1.5px solid var(--secondary) !important;
   margin-top: 30px !important;
-  padding: 18px 50px !important;
+  padding: 18px 35px !important;
   background-color: white !important;
   border-radius: 4px !important;
 }
@@ -139,10 +136,11 @@ $light_periwinkle: #d3dbe4;
   display: block;
   width: 100%;
   height: auto;
+  margin-bottom: 20px;
 }
 
 .email_example_link {
-  font-size: 9px;
+  font-size: 10px;
   font-weight: bold;
   color: var(--secondary);
   text-transform: uppercase;

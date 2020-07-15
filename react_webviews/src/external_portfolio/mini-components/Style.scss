@@ -295,6 +295,17 @@ $dark_indigo: #0a1d32;
   }
 }
 
+#hni-custom-step-icon {
+  width: 21px;
+  height: 21px;
+  border-radius: 20px;
+  line-height: 22px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: bold;
+  border: 1px solid #ececec;
+}
+
 @media only screen and (max-width: 332px) {
   /* Since text wraps into 3 lines in container for this 
   screen width, need to increase container height to show all elements*/

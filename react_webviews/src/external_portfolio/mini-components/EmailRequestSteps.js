@@ -4,6 +4,7 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
+import DoneIcon from '@material-ui/icons/Done';
 import InfoBox from './InfoBox';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import RegenerateOptsPopup from './RegenerateOptsPopup';
@@ -36,6 +37,12 @@ const theme = createMuiTheme({
       }
     },
     MuiStepIcon: {
+      root: {
+        width: '20px',
+        height: '20px',
+        fontSize: '12px',
+        fontWeight: 'bold',
+      },
       active: {
         color: 'var(--primary) !important',
       },
@@ -81,7 +88,7 @@ export default class EmailRequestSteps extends Component {
       );
     }
     return (<Fragment>
-      In a few minutes, you’ll receive a CAS email on your email ID
+      You'll be receiving the statement email on your email id shortly
 
       <div
         className="email_example_link"
@@ -182,7 +189,7 @@ export default class EmailRequestSteps extends Component {
                 completed={index === 0}
                 disabled={[0, 2].includes(index)}
               >
-                <StepLabel>{label}</StepLabel>
+                <StepLabel icon={customStepIcon(index)}>{label}</StepLabel>
                 <StepContent>
                   {this.getStepContent(index)}
                 </StepContent>
@@ -200,3 +207,22 @@ export default class EmailRequestSteps extends Component {
     );
   }
 }
+
+const customStepIcon = (idx) => {
+  const iconMap = {
+    0: (<DoneIcon style={{fontSize: '18px', fontWeight: 'bold'}}/>),
+    1: '2',
+    2: '3',
+  };
+  return (
+    <div
+      id="hni-custom-step-icon"
+      style={{
+        color: idx === 2 ? '#767e86' : 'white',
+        background: idx === 2 ? 'white' : 'var(--primary)',
+        lineHeight: idx === 0 ? '30px' : '22px',
+      }}>
+      {iconMap[idx]}
+    </div>
+  );
+};

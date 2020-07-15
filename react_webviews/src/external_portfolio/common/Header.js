@@ -15,6 +15,14 @@ const headerIconMapper = {
   close: close_icn
 }
 
+const colorReplace = (code, headerData) => {
+  let color = getConfig().primary;
+  if (headerData && headerData.leftIconColor) {
+    color = headerData.leftIconColor;
+  }
+  return (code.replace(/fill=".*?"/g, 'fill=' + color));
+}
+
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, rightIcon, handleRightIconClick, smallTitle, disableBack, provider, 
   inPageTitle, force_hide_inpage_title, className ,style, headerData}) => (
@@ -33,7 +41,7 @@ const Header = ({ classes, title, count, total, current, goBack,
       <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={goBack}>
         {!disableBack && 
         <SVG
-          preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+          preProcessor={(code) => colorReplace(code, headerData)}
           src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
         />
         }
@@ -62,7 +70,7 @@ const Header = ({ classes, title, count, total, current, goBack,
           aria-label="Menu"
           onClick={handleRightIconClick}
         >
-          {rightIcon}
+          <SVG src={rightIcon}/>
         </IconButton>
       }
     </Toolbar>

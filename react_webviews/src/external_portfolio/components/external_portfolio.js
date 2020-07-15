@@ -6,7 +6,6 @@ import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import { Button } from 'material-ui';
 import TopHoldings from '../mini-components/TopHoldings';
 import { navigate, setLoader } from '../common/commonFunctions';
-import SettingsIcon from '@material-ui/icons/Settings';
 import { Doughnut } from 'react-chartjs-2';
 import toast from '../../common/ui/Toast';
 import { fetchExternalPortfolio, fetchAllPANs } from '../common/ApiCalls';
@@ -14,6 +13,7 @@ import { capitalize } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from '../../utils/functions';
 import { storageService, formatAmountInr } from '../../utils/validators';
+import SettingsWithDot from 'assets/ic_setting_active.svg';
 
 const productType = getConfig().productName;
 
@@ -64,7 +64,7 @@ export default class ExternalPortfolio extends Component {
         see_all_clicked: this.state.seeMoreClicked,
       }
     };
-
+    console.log(JSON.stringify(eventObj));
     if (['just_set_events', 'back'].includes(user_action)) {
       return eventObj;
     } else {
@@ -79,6 +79,10 @@ export default class ExternalPortfolio extends Component {
       let selectedPanRank = storageService().get('user_pan_rank') || null;
       if (!selectedPan) {
         let pans = await fetchAllPANs();
+        if (!pans.length) {
+          // Exit to app if no PANs
+          nativeCallback({ action: 'exit', events: this.sendEvents('back') });
+        }
         selectedPan = pans[0];
         selectedPanRank = 1;
         storageService().set('user_pan', selectedPan);
@@ -86,15 +90,16 @@ export default class ExternalPortfolio extends Component {
       }
       const result = await fetchExternalPortfolio({ pan: selectedPan });
       this.setState({
-        portfolio: result.response,
+        portfolio: result,
         selectedPan,
         selectedPanRank,
+        show_loader: false, // same as this.setLoader(false);
       });
     } catch(err) {
+      this.setLoader(false);
       console.log(err);
       toast(err);
     }
-    this.setLoader(false);
   }
 
   generateAllocationData = (data) => {
@@ -152,12 +157,12 @@ export default class ExternalPortfolio extends Component {
       total_current_value,
       one_day_change,
       one_day_change_perc,
-      portfolio_xirr: annual_return,
+      portfolio_xirr: xirr,
       asset_allocation,
       top_holdings
     } = portfolio;
     top_holdings = top_holdings || [];
-    annual_return = Number(annual_return);
+    xirr = Number(xirr);
     const assetAllocData = this.generateAllocationData(asset_allocation);
 
     return (
@@ -165,9 +170,12 @@ export default class ExternalPortfolio extends Component {
         title="External portfolio"
         noFooter={true}
         noHeader={show_loader}
-        rightIcon={settingsWithDot}
+        rightIcon={SettingsWithDot}
         handleRightIconClick={this.settingsClicked}
         hideInPageTitle={true}
+        headerData={{
+          leftIconColor: 'white',
+        }}
         styleHeader={{
           background: 'black',
         }}
@@ -201,12 +209,12 @@ export default class ExternalPortfolio extends Component {
               </div>
               <div id="portfolio-irr">
                 <div className="pf-detail-title">
-                  IRR
+                  XIRR
                 </div>
                 <div
                   className="pf-detail-value"
-                  style={{ color: annual_return < 0 ? '#ba3366' : 'var(--secondary)' }}>
-                  {annual_return.toFixed(1)}%
+                  style={{ color: xirr < 0 ? '#ba3366' : 'var(--secondary)' }}>
+                  {xirr.toFixed(1)}%
                 </div>
               </div>
             </div>
@@ -266,11 +274,4 @@ export default class ExternalPortfolio extends Component {
     );
   }
 }
-
-const settingsWithDot = (
-  <div style={{ position: 'relative' }}>
-    <div id="hni-settings-dot"></div>
-    <SettingsIcon/>
-  </div>
-);
 

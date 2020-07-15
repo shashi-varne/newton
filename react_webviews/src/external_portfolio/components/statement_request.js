@@ -14,15 +14,13 @@ const productType = getConfig().productName;
 class StatementRequest extends Component {
   constructor(props) {
     super(props);
-
     const params = this.props.location.params;
-
     this.state = {
       popupOpen: false,
       show_loader: false,
       loadingText: '',
       email_detail: '',
-      selectedEmail: '',
+      selectedEmail: this.getEmailParam(),
       exitToApp: params ? params.exitToApp : true,
     };
     this.navigate = navigate.bind(this);
@@ -41,7 +39,7 @@ class StatementRequest extends Component {
         status: this.state.showRegenerateBtn ? 'mail not recieved in 30 min' : 'before tracker setup',
       }
     };
-
+    console.log(JSON.stringify(eventObj));
     if (['just_set_events', 'back'].includes(user_action)) {
       return eventObj;
     } else {
@@ -49,11 +47,15 @@ class StatementRequest extends Component {
     }
   }
 
-  async componentDidMount() {
+  getEmailParam = () => {
     const matchParams = this.props.match.params || {};
     const queryParams = getUrlParams();
     const emailParam = matchParams.email || queryParams.email;
-    
+    return emailParam;
+  }
+
+  async componentDidMount() {
+    const emailParam = this.getEmailParam();
     if (emailParam) {
       this.setState({ selectedEmail: emailParam });
       try {
@@ -130,7 +132,7 @@ class StatementRequest extends Component {
       showRegenerateBtn,
     } = this.state;
     const params = this.props.location.params || {};
-    const showBack = Object.keys(params).length === 0;
+    const showBack = Object.keys(params).length === 0 || params.comingFrom === 'settings';
     
     return (
       <Container

@@ -28,7 +28,7 @@ class PANSelector extends Component {
                 ...params, 
             }
         };
-
+        console.log(JSON.stringify(eventObj));
         nativeCallback({ events: eventObj });
     }
 
@@ -38,12 +38,17 @@ class PANSelector extends Component {
             let pans = await fetchAllPANs();
             const selectedPan = storageService().get('user_pan');
             let selectedIndex = pans.indexOf(selectedPan);
-            this.setState({ pans, selectedIndex, selectedPan });
+            this.setState({
+                pans,
+                selectedIndex,
+                selectedPan,
+                show_loader: false, // same as this.setLoader(false);
+            });
         } catch(err) {
+            this.setLoader(false);
             console.log(err);
             toast(err);
         }
-        this.setLoader(false);
     }
 
     choosePAN = (index) => {

@@ -47,10 +47,10 @@ class EmailNotReceived extends Component {
         exitToApp: true,
       });
     } catch (err) {
+      this.setLoader(false);
       console.log(err);
       toast(err);
     }
-    this.setLoader(false);
   }
 
   goBack = () => {

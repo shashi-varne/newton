@@ -676,3 +676,10 @@ export function calculateAge(val) {
 export function isFunction(value) {
   return (typeof value === 'function') && (value instanceof Function);
 }
+
+export function isEmpty(value) {
+  return value === undefined ||
+    value === null ||
+    (typeof value === "object" && Object.keys(value).length === 0) ||
+    (typeof value === "string" && value.trim().length === 0);
+}

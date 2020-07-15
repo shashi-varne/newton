@@ -21,7 +21,7 @@ export default class RegenerateOptsPopup extends Component {
         "screen_name": 'reconfirm popup',
       }
     };
-
+    console.log(JSON.stringify(eventObj));
     if (['just_set_events', 'back'].includes(user_action)) {
       return eventObj;
     } else {

@@ -8,6 +8,14 @@ import { setLoader, navigate, emailForwardedHandler } from '../common/commonFunc
 import PopUp from '../common/PopUp';
 import { nativeCallback } from 'utils/native_callback';
 
+let keyedEmails = {}; // Setting this outside of component/state since its unnecessary there
+function setKeyedEmails (emails) {
+  emails = JSON.parse(JSON.stringify(emails));
+  keyedEmails = emails.reduce((emailMap, email) => {
+    emailMap[email.email] = email;
+    return emailMap;
+  }, {});
+}
 export default class Settings extends Component {
   constructor(props) {
     super(props);
@@ -30,7 +38,7 @@ export default class Settings extends Component {
         remove_email_clicked: this.state.removeClicked,
       }
     };
-
+    console.log(JSON.stringify(eventObj));
     if (['just_set_events'].includes(user_action)) {
       return eventObj;
     } else {
@@ -38,24 +46,19 @@ export default class Settings extends Component {
     }
   }
 
-  getData = async () => {
-    this.setLoader(true);
-    const emails = await fetchEmails();
-    this.setState({ emails });
-    const keyedEmails = emails.reduce((emailMap, email) => {
-      emailMap[email.email] = email;
-      return emailMap;
-    }, {});
-    storageService().setObject('keyedEmails', keyedEmails);
-    this.setLoader(false);
-  }
-
   async componentDidMount() {
     try {
-      await this.getData();
+      this.setLoader(true);
+      let emails = await fetchEmails();
+      emails = this.setEmailRemove(emails);
+      this.setState({
+        emails,
+        show_loader: false, // same as this.setLoader(false);
+      });
     } catch(err) {
-      toast(err);
       this.setLoader(false);
+      console.log(err);
+      toast(err);
     }
   }
 
@@ -73,6 +76,35 @@ export default class Settings extends Component {
     });
   }
 
+  setEmailRemove = (emails = []) => {
+    /* Logic: 
+      1. For emails that have never been successfully synced even once
+      (email.latest_success_statement is empty), the ‘remove’ control will always show.
+
+      2. For emails that have been successfully synced atleast once 
+      (email.latest_success_statement exists), the remove option will show
+      only when there are atleast 2 emails of this kind. If there is only 1 
+      successfully synced email, ‘remove’ control will be hidden for that email.
+    */
+    emails = JSON.parse(JSON.stringify(emails));
+    let last_success_email = '';
+    emails.map(email => {
+      if (email.latest_success_statement.statement_id) {
+        if (last_success_email) {
+          last_success_email.allowRemove = true;
+          email.allowRemove = true;
+        } else {
+          last_success_email = email;
+          last_success_email.allowRemove = false;
+        }
+      } else {
+        email.allowRemove = true;
+      }
+    });
+    setKeyedEmails(emails); // Update map here
+    return emails;
+  }
+
   removeEmail = async () => {
     this.setState({ openPopup: false, removeClicked: true });
     try {
@@ -81,30 +113,34 @@ export default class Settings extends Component {
       this.removeAndUpdateEmailList();
       this.setLoader(false);
     } catch (err) {
+      this.setLoader(false);
       console.log(err);
       toast(err);
     }
   }
 
   removeAndUpdateEmailList = () => {
-    let { email_to_remove, emails } = this.state;
-    emails = JSON.parse(JSON.stringify(emails));
+    let { email_to_remove } = this.state;
 
-    emails = emails.filter(email => email.email !== email_to_remove.email);
-    this.setState({ emails });
+    delete keyedEmails[email_to_remove.email];
+    let emails = Object.values(keyedEmails);
     if (email_to_remove.latest_success_statement.statement_id) {
-      /* This is required for when an email with a succesfully synced
+      // Reset allowRemove flag for emails when a successfully linked email is removed
+      emails = this.setEmailRemove(emails);
+
+      /* Below code is required for when an email with a succesfully synced
       statement is removed and the PAN selected by the user was the PAN
       associated with the email being removed */
       storageService().remove('user_pan');
     }
+    this.setState({ emails });
   }
 
   checkForRemoveCtrl = (emails) => {
     /* Function to check if there are atleast 2 emails 
     with successfully updated portfolio statements */
     const activeEmails = emails.filter(email => !!email.latest_success_statement.statement_id);
-    return activeEmails.length >= 2;
+    return !activeEmails.length || activeEmails.length >= 2;
   }
 
   addNewEmail = () => {
@@ -116,7 +152,6 @@ export default class Settings extends Component {
 
   render() {
     const { emails, show_loader, loadingText } = this.state;
-    const allowRemove = this.checkForRemoveCtrl(emails);
     return (
       <Container
         title="Investment email ids"
@@ -130,17 +165,19 @@ export default class Settings extends Component {
         goBack={() => { this.sendEvents('back'); this.navigate('external_portfolio');}}
         noHeader={show_loader}
       >
-        {emails.map(email => (
-          <EmailExpand
-            key={email.email}
-            allowRemove={allowRemove}
-            parent={this}
-            comingFrom="settings"
-            emailForwardedHandler={() => this.emailForwardedHandler(email.email)}
-            clickRemoveEmail={() => this.openRemoveConfirm(email)}
-            email={email}
-          />
-        ))}
+        <div style={{ marginBottom: '20px' }}>
+          {emails.map(email => (
+            <EmailExpand
+              key={email.email}
+              allowRemove={email.allowRemove}
+              parent={this}
+              comingFrom="settings"
+              emailForwardedHandler={() => this.emailForwardedHandler(email.email)}
+              clickRemoveEmail={() => this.openRemoveConfirm(email)}
+              email={email}
+            />
+          ))}
+        </div>
         <PopUp
           openPopup={this.state.openPopup}
           cancelText="Cancel"

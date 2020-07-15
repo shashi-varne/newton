@@ -7,6 +7,7 @@ import App from './App';
 import $ from 'jquery';
 import { isMobile } from 'utils/functions';
 import scrollIntoView from 'scroll-into-view-if-needed';
+import { storageService } from './utils/validators';
 
 $(document).ready(function () {
   if (isMobile.Android()) {
@@ -37,5 +38,7 @@ $(document).ready(function () {
     }, false)
   }
 });
+
+storageService().setObject('hni-boot', true);
 
 ReactDOM.render(<App />, document.getElementById('root'));

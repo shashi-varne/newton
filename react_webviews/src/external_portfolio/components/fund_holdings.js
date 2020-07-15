@@ -25,7 +25,7 @@ class FundHoldings extends Component {
         fund_card_clicked: this.state.fundClicked,
       }
     };
-
+    console.log(JSON.stringify(eventObj));
     if (['just_set_events'].includes(user_action)) {
       return eventObj;
     } else {
@@ -45,12 +45,15 @@ class FundHoldings extends Component {
         throw 'Please select a PAN';
       }
       const holdings = await fetchAllHoldings({ pan: selectedPan });
-      this.setState({ holdings });
+      this.setState({
+        holdings,
+        show_loader: false, // same as this.setLoader(false);
+      });
     } catch (err) {
+      this.setLoader(false);
       console.log(err);
       toast(err);
     }
-    this.setLoader(false);
   }
 
   render() {

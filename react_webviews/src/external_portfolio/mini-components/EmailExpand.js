@@ -62,12 +62,12 @@ export default class EmailExpand extends Component {
         email: email.email,
         resync: 'true',
       });
-      parent.setLoader(false);
       parent.navigate(`statement_request/${email.email}`, {
         navigateBackTo: 'settings',
         noEmailChange: true,
       });
     } catch (err) {
+      parent.setLoader(false);
       console.log(err);
       toast(err);
     }

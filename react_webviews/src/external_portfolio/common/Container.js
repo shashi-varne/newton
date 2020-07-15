@@ -306,7 +306,6 @@ class Container extends Component {
             Container hni-container
             ${this.props.classOverRideContainer}
             ${this.props.noPadding ? "no-padding" : ""}
-            ${this.props.noFooter ? '' : 'm-b-60'}
           `}
         >
           {this.props.children}

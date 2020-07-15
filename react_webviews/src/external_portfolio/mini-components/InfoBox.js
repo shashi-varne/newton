@@ -15,7 +15,9 @@ export default class InfoBox extends Component {
     if (copyToClipboard(this.props.textToCopy)) {
       toast("Text copied");
       this.setState({ copyText: 'Copied' });
-      // this.sendEvents('copy');
+      setTimeout(() => {
+        this.setState({ copyText: 'Copy' });
+      }, 3000);
     }
   }
 
