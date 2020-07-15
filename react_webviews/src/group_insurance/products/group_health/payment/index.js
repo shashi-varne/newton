@@ -10,7 +10,7 @@ import ContactUs from '../../../../common/components/contact_us';
 import { initialize } from '../common_data';
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
-
+import { getConfig } from 'utils/functions';
 
 const commonMapper = {
   'success': {
@@ -23,7 +23,7 @@ const commonMapper = {
     'top_icon': 'ils_covid_pending',
     'top_title': 'Payment pending!',
     'mid_title': 'Insurance payment details',
-    'button_title': 'CHECK REPORTS'
+    'button_title': 'OK'
   },
   'failed': {
     'top_icon': 'ils_covid_failed',
@@ -41,7 +41,9 @@ class GroupHealthPayment extends Component {
       params: getUrlParams(),
       commonMapper: {},
       lead: {},
-      policy_data: {}
+      policy_data: {},
+      providerData: {},
+      productName: getConfig().productName
     }
 
     this.initialize = initialize.bind(this);
@@ -49,14 +51,11 @@ class GroupHealthPayment extends Component {
 
 
   async componentWillMount() {
-
-    nativeCallback({ action: 'take_control_reset' });
-    this.initialize();
-
+    
     nativeCallback({ action: 'take_control_reset' });
     let { status } = this.state.params;
     let paymentFailed, paymentPending, paymentSuccess = false;
-
+    let get_lead  = false;
     if (status === 'success') {
       paymentSuccess = true;
     } else if (status === 'failed') {
@@ -66,6 +65,7 @@ class GroupHealthPayment extends Component {
       if (!status) {
         status = 'pending';
       }
+      get_lead = true;
     }
 
     this.setState({
@@ -73,10 +73,13 @@ class GroupHealthPayment extends Component {
       commonMapper: commonMapper[status],
       paymentSuccess: paymentSuccess,
       paymentPending: paymentPending,
-      paymentFailed: paymentFailed
+      paymentFailed: paymentFailed,
+      get_lead: get_lead
+    }, () => {
+      this.initialize();
     })
 
-    if(!paymentFailed) {
+    if(!paymentFailed && !get_lead) {
       try {
 
         this.setState({
@@ -146,6 +149,9 @@ class GroupHealthPayment extends Component {
         this.navigate(state);
       })
       
+    } else if(this.state.paymentPending) {
+      state  = `/group-insurance/group-health/landing`;
+      this.navigate(state);
     } else {
       state  = `/group-insurance/group-health/${this.state.provider}/reportdetails/${this.state.policy_data.lead_id}`;
       this.navigate(state);
