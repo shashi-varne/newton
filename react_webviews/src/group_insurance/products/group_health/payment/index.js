@@ -60,6 +60,7 @@ class GroupHealthPayment extends Component {
       paymentSuccess = true;
     } else if (status === 'failed') {
       paymentFailed = true;
+      get_lead = true;
     } else {
       paymentPending = true;
       if (!status) {
@@ -79,7 +80,7 @@ class GroupHealthPayment extends Component {
       this.initialize();
     })
 
-    if(!paymentFailed && !get_lead) {
+    if(!get_lead) {
       try {
 
         this.setState({
@@ -218,10 +219,10 @@ class GroupHealthPayment extends Component {
             {this.state.paymentSuccess &&
               <div style={{ margin: '30px 0 30px 0', display: 'flex', position: 'relative' }} className="highlight-text highlight-color-info">
                 <div>
-                  <img className="highlight-text11"
+                 {this.state.providerData.logo && <img className="highlight-text11"
                     src={require(`assets/${this.state.providerData.logo}`)}
                     style={{ width: 30 }}
-                    alt="info" />
+                    alt="info" />}
                 </div>
 
                 <div>
@@ -236,7 +237,7 @@ class GroupHealthPayment extends Component {
                   <div className="highlight-text2" style={{ color: '#767E86', marginLeft: 7 }}>
                     <div style={{ margin: '5px 0 6px 0' }}>Sum 
                     assured {numDifferentiationInr(this.state.lead.sum_assured)} for {this.state.lead.tenure} year</div>
-                    <div style={{ margin: '5px 0 6px 0' }}>Policy id: {this.state.policy_data.policy_number}</div>
+                    <div style={{ margin: '5px 0 6px 0' }}>Policy id: {this.state.policy_data.policy_number || '-'}</div>
                     <div style={{ margin: '5px 0 6px 0' }}>
                       {formatDateAmPm(this.state.policy_data.dt_created)}
                       </div>
