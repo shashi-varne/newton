@@ -58,6 +58,8 @@ class PANSelector extends Component {
         this.sendEvents('back', { account_changed: true });
         storageService().set('user_pan', new_pan);
         storageService().set('user_pan_rank', index + 1);
+        storageService().remove('hni-portfolio');
+        storageService().remove('hni-holdings');
         this.setState({
             selectedIndex: index,
             selectedPan: new_pan,

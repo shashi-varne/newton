@@ -91,6 +91,7 @@ class email_entry extends Component {
         this.navigate(
           `statement_request/${params.email}`,
           {
+            fromApp: params.fromApp,
             exitToApp: params.exitToApp,
             navigateBackTo: params.exitToApp ? null : params.navigateBackTo,
           },

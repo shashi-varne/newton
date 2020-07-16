@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../common/Container';
 import FundDetailCard from '../mini-components/FundDetailCard';
-import { fetchAllHoldings } from '../common/ApiCalls';
+import { fetchAllHoldings, hitNextPage } from '../common/ApiCalls';
 import { storageService } from '../../utils/validators';
 import toast from '../../common/ui/Toast';
 import { nativeCallback } from 'utils/native_callback';
@@ -11,7 +11,9 @@ class FundHoldings extends Component {
     super(props);
     this.state = {
       holdings: [],
+      next_page_url: '',
       show_loader: false,
+      loading_more: false,
     };
     this.setLoader = setLoader.bind(this);
   }
@@ -44,9 +46,10 @@ class FundHoldings extends Component {
       if (!selectedPan) {
         throw 'Please select a PAN';
       }
-      const holdings = await fetchAllHoldings({ pan: selectedPan });
+      const { response, next_page_url } = await fetchAllHoldings({ pan: selectedPan });
       this.setState({
-        holdings,
+        holdings: response.holdings || [],
+        next_page_url,
         show_loader: false, // same as this.setLoader(false);
       });
     } catch (err) {
@@ -54,6 +57,25 @@ class FundHoldings extends Component {
       console.log(err);
       toast(err);
     }
+  }
+
+  loadMore = async() => {
+    if (this.state.loading_more) return;
+    
+    this.setState({ loading_more: true });
+    try {
+      const { response, next_page_url } = await hitNextPage(this.state.next_page_url);
+      const existingHoldings = JSON.parse(JSON.stringify(this.state.holdings));
+
+      this.setState({
+        holdings: existingHoldings.concat(response.holdings),
+        next_page_url,
+      });
+    } catch(err) {
+      console.log(err);
+      toast(err);
+    }
+    this.setState({ loading_more: false });
   }
 
   render() {
@@ -71,6 +93,14 @@ class FundHoldings extends Component {
             key={idx}
           />
         )) : 'No fund holdings found'}
+        {!!this.state.next_page_url && !this.state.loading_more &&
+          <div className="show-more" onClick={() => this.loadMore()}>
+            SHOW MORE
+          </div>
+        }
+        {this.state.loading_more &&
+          <div className="loader">Loading...</div>
+        }
       </Container>
     );
   }

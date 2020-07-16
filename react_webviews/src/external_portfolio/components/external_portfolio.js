@@ -18,8 +18,8 @@ import SettingsWithDot from 'assets/ic_setting_active.svg';
 const productType = getConfig().productName;
 
 const doughnutConfigOpts = {
-  width: 250,
-  height: 250,
+  width: 200,
+  height: 200,
   options: {
     layout: {
       padding: {
@@ -181,13 +181,23 @@ export default class ExternalPortfolio extends Component {
         }}
         goBack={this.goBack}
         showLoader={show_loader}
-        classHeader="ext-pf-inPageHeader bg-black"
+        classHeader={`
+          ext-pf-inPageHeader 
+          ${productType === 'fisdom' ? 'fisdom-dark-bg' : 'myway-dark-bg'}
+        `}
       >
-        <div className="fullscreen-banner bg-black">
+        <div
+          className={`
+            fullscreen-banner
+            ${productType === 'fisdom' ? 'fisdom-dark-bg' : 'myway-dark-bg'}
+          `}>
           <span className="header-title-text-hni" style={{ color: 'white' }}>
             External Portfolio
           </span>
-          <div id="selected-pan" onClick={this.panSelectClicked}>
+          <div
+            id="selected-pan"
+            onClick={this.panSelectClicked}
+            style={{ background: productType === 'fisdom' ? '#0B0719' : '#061628' }}>
             <div className="selected-pan-initial">
               {selectedPan[0]}
             </div>
