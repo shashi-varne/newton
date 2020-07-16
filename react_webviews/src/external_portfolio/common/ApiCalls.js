@@ -7,14 +7,16 @@ function resetBootFlag() {
   boot = false;
   storageService().remove('hni-boot');
 }
+function resetLSKeys(keys = []) {
+  keys.forEach(key => storageService().remove(key));
+}
 
 storageService().setObject('hni-boot', boot);
+resetLSKeys(['hni-emails', 'hni-pans', 'hni-portfolio', 'hni-holdings', 'hni-holdings-next-page']);
 
 export const requestStatement = async (params) => {
   try {
     storageService().remove('hni-emails');
-    storageService().remove('hni-pans');
-    storageService().remove('hni-portfolio');
 
     const res = await Api.post('api/external_portfolio/cams/cas/send_mail', {
       ...params,
@@ -43,7 +45,10 @@ export const fetchExternalPortfolio = async (params) => {
     const portfolio = storageService().getObject('hni-portfolio');
 
     if (boot || !portfolio || isEmpty(portfolio)) {
+      // If Portfolio is being fetched fresh from Server, so should fund holdings
+      storageService().remove('hni-holdings');
       resetBootFlag();
+
       const res = await Api.get('api/external_portfolio/list/holdings', params);
 
       if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
@@ -128,9 +133,8 @@ export const fetchEmails = async (params = {}) => {
 
 export const deleteEmail = async (params) => {
   try {
+    // Deleting an email can result in deletion of PANs
     storageService().remove('hni-emails');
-    storageService().remove('hni-pans');
-    storageService().remove('hni-portfolio');
 
     const res = await Api.get('api/external_portfolio/hni/remove/statements', params);
 

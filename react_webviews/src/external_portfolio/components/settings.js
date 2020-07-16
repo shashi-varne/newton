@@ -132,6 +132,8 @@ export default class Settings extends Component {
       statement is removed and the PAN selected by the user was the PAN
       associated with the email being removed */
       storageService().remove('user_pan');
+      storageService().remove('hni-pans');
+      storageService().remove('hni-portfolio');
     }
     this.setState({ emails });
   }

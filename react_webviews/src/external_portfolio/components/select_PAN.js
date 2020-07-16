@@ -59,7 +59,6 @@ class PANSelector extends Component {
         storageService().set('user_pan', new_pan);
         storageService().set('user_pan_rank', index + 1);
         storageService().remove('hni-portfolio');
-        storageService().remove('hni-holdings');
         this.setState({
             selectedIndex: index,
             selectedPan: new_pan,
@@ -130,13 +129,15 @@ class PANSelector extends Component {
                 buttonTitle="CONTINUE"
                 goBack={this.goBack}
                 events={this.sendEvents('just_set_events')}
-            >
-                <div className="gold-sell-select-bank">
-                    {this.state.pans.length ?
-                        this.state.pans.map(this.renderPANs) :
-                        'No PANs found'
-                    }
-                </div>
+            >   
+                { this.state.pans.length ?
+                    <div className="gold-sell-select-bank">
+                        {this.state.pans.map(this.renderPANs)}
+                    </div> :
+                    <span>
+                        No PANs found
+                    </span>
+                }
             </Container>
         );
     }

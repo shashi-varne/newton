@@ -220,7 +220,7 @@ const customStepIcon = (idx) => {
       style={{
         color: idx === 2 ? '#767e86' : 'white',
         background: idx === 2 ? 'white' : 'var(--primary)',
-        lineHeight: idx === 0 ? '29px' : '21px',
+        lineHeight: idx === 0 ? '28px' : '20px',
       }}>
       {iconMap[idx]}
     </div>

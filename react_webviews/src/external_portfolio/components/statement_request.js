@@ -14,14 +14,14 @@ const productType = getConfig().productName;
 class StatementRequest extends Component {
   constructor(props) {
     super(props);
-    const params = this.props.location.params;
+    const params = this.props.location.params || {};
     this.state = {
       popupOpen: false,
       show_loader: false,
       loadingText: '',
       email_detail: '',
       selectedEmail: this.getEmailParam(),
-      exitToApp: params ? params.exitToApp : true,
+      exitToApp: params.exitToApp || this.cameFromApp(),
     };
     this.navigate = navigate.bind(this);
     this.emailForwardedHandler = emailForwardedHandler.bind(this);
@@ -45,6 +45,14 @@ class StatementRequest extends Component {
     } else {
       nativeCallback({ events: eventObj });
     }
+  }
+
+  cameFromApp = () => {
+    const params = this.props.location.params || {};
+    const urlParams = getUrlParams() || {};
+    const trueVals = [true, 'true'];
+
+    return trueVals.includes(params.fromApp) || trueVals.includes(urlParams.fromApp);
   }
 
   getEmailParam = () => {
@@ -93,10 +101,12 @@ class StatementRequest extends Component {
   onInfoCtrlClick = () => {
     this.sendEvents('email_change');
     const params = this.props.location.params || {};
+
     this.navigate('email_entry', {
       comingFrom: 'statement_request',
       navigateBackTo: params.navigateBackTo,
       exitToApp: this.state.exitToApp,
+      fromApp: this.cameFromApp(),
       email: this.state.selectedEmail,
     });
   }
@@ -119,6 +129,7 @@ class StatementRequest extends Component {
       exitToApp: this.state.exitToApp,
       navigateBackTo: this.state.exitToApp ? null : params.navigateBackTo,
       noEmailChange: params.noEmailChange,
+      fromApp: this.cameFromApp(),
       email: this.state.selectedEmail,
     });
   }
@@ -132,7 +143,7 @@ class StatementRequest extends Component {
       showRegenerateBtn,
     } = this.state;
     const params = this.props.location.params || {};
-    const showBack = Object.keys(params).length === 0 || params.comingFrom === 'settings';
+    const showBack = this.cameFromApp() || params.comingFrom === 'settings';
     
     return (
       <Container

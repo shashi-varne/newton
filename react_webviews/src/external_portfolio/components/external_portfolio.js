@@ -78,6 +78,9 @@ export default class ExternalPortfolio extends Component {
       let selectedPan = storageService().get('user_pan') || null;
       let selectedPanRank = storageService().get('user_pan_rank') || null;
       if (!selectedPan) {
+        /* For whatever reason, if there is no selected PAN in LS, force External Portfolio 
+        to get fresh data */
+        storageService().remove('hni-portfolio');
         let pans = await fetchAllPANs();
         if (!pans.length) {
           // Exit to app if no PANs
