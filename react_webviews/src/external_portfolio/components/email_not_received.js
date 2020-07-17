@@ -8,6 +8,8 @@ import { requestStatement } from '../common/ApiCalls';
 import toast from '../../common/ui/Toast';
 import { storageService } from '../../utils/validators';
 import { nativeCallback } from 'utils/native_callback';
+import { getConfig } from '../../utils/functions';
+const productType = getConfig().productName;
 
 class EmailNotReceived extends Component {
   constructor(props) {
@@ -60,7 +62,7 @@ class EmailNotReceived extends Component {
   }
 
   render() {
-    const subtitleText = (<span>Please ensure that the correct email is forwarded to <span id="cas-email-highlight">cas@fisdom.com</span></span>);
+    const subtitleText = (<span>Please ensure that the correct email is forwarded to <span id="cas-email-highlight">cas@{productType}.com</span></span>);
     return (
       <EmailTemplate
         title="CAS email not received"

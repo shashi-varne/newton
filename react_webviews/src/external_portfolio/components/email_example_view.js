@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import EmailTemplate from '../mini-components/email_template';
 import { nativeCallback } from 'utils/native_callback';
 import { navigate } from '../common/commonFunctions';
+import { getConfig } from '../../utils/functions';
+const productType = getConfig().productName;
 
 class EmailExampleView extends Component {
   constructor(props) {
@@ -38,7 +40,7 @@ class EmailExampleView extends Component {
   }
 
   render() {
-    const subtitleText = (<span>Please ensure that the correct email is forwarded to <span id="cas-email-highlight">cas@fisdom.com</span></span>);
+    const subtitleText = (<span>Please ensure that the correct email is forwarded to <span id="cas-email-highlight">cas@{productType}.com</span></span>);
     return (
       <EmailTemplate
         title="How to find the CAS email?"

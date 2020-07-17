@@ -107,10 +107,10 @@ class StatementNotReceived extends Component {
           <InfoBox
             classes={{ root: 'info-box-cut-out' }}
             isCopiable={true}
-            textToCopy="cas@fisdom.com"
+            textToCopy={`cas@${productType}.com`}
           >
             <span className="info-box-body-text">
-              cas@fisdom.com
+              cas@{productType}.com
             </span>
           </InfoBox>
         </div>
