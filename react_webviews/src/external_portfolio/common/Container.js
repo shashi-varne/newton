@@ -187,8 +187,13 @@ class Container extends Component {
   }
 
   getHeightFromTop() {
-    var el = document.getElementsByClassName('Container')[0];
-    var height = el.getBoundingClientRect().top;
+    let el = '';
+    if (this.props.hideInPageTitle) {
+      el = document.getElementById('hni-custom-title');
+    } else {
+      el = document.getElementsByClassName('Container')[0];
+    }
+    let height = el.getBoundingClientRect().top;
     return height;
   }
 
@@ -210,7 +215,8 @@ class Container extends Component {
 
   onScroll = () => {
     let inPageTitle = this.state.inPageTitle;
-    if (this.getHeightFromTop() >= 56) {
+    const heightLimit = this.props.hideInPageTitle ? 32 : 56;
+    if (this.getHeightFromTop() >= heightLimit) {
       //show up
       inPageTitle = true;
 
@@ -278,11 +284,11 @@ class Container extends Component {
           <div id="header-title-page"
             style={this.props.styleHeader} 
             className={`header-title-page  ${this.props.classHeader}`}>
-              {/* {this.state.inPageTitle &&  */}
+              {this.state.inPageTitle && 
                 <div className={`header-title-text-hni ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{width: this.props.count ? '75%': ''}}>
                   {this.props.title}
                 </div>
-              {/* } */}
+              }
               
               {this.state.inPageTitle && this.props.count &&
                 <span color="inherit" 

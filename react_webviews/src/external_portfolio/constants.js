@@ -1,1 +1,3 @@
-export const regenTimeLimit = 5;
+export const regenTimeLimit = 30;
+
+export const genericErrMsg = 'Something went wrong. Please try again';

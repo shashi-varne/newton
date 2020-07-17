@@ -125,9 +125,9 @@ class email_entry extends Component {
             ${productType === 'fisdom' ? 'fisdom-bg' : 'myway-bg' }
           `}
         >
-          <span className="header-title-text-hni">
+          <div className="header-title-text-hni" id="hni-custom-title">
             Portfolio tracker
-          </span>
+          </div>
           <span className="header-subtitle-text-hni">
             Get a consolidated view of all <br /> your external investments
           </span>

@@ -79,8 +79,6 @@ class StatementRequest extends Component {
             showRegenerateBtn,
           });
           // storageService().setObject('email_detail_hni', email);
-        } else {
-          throw 'Error fetching email details';
         }
       } catch (err) {
         console.log(err);

@@ -194,9 +194,9 @@ export default class ExternalPortfolio extends Component {
             fullscreen-banner
             ${productType === 'fisdom' ? 'fisdom-dark-bg' : 'myway-dark-bg'}
           `}>
-          <span className="header-title-text-hni" style={{ color: 'white' }}>
+          <div id="hni-custom-title" className="header-title-text-hni" style={{ color: 'white' }}>
             External Portfolio
-          </span>
+          </div>
           <div
             id="selected-pan"
             onClick={this.panSelectClicked}

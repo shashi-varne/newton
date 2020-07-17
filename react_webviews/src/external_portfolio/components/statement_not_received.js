@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Container from '../common/Container';
-import image from 'assets/contact_details_icn.svg';
 import InfoIcon from '@material-ui/icons/Info';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from '../../utils/functions';

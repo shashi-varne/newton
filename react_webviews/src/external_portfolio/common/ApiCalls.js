@@ -1,15 +1,16 @@
 import Api from '../../utils/api';
 import { getConfig } from '../../utils/functions';
 import { storageService, isEmpty } from '../../utils/validators';
-const platform = getConfig().productName;
-let boot = true;
+import { genericErrMsg } from '../constants';
 function resetBootFlag() {
   boot = false;
   storageService().remove('hni-boot');
 }
 function resetLSKeys(keys = []) {
-  keys.forEach(key => storageService().remove(key));
+  keys.map(key => storageService().remove(key));
 }
+const platform = getConfig().productName;
+let boot = true;
 
 storageService().setObject('hni-boot', boot);
 resetLSKeys(['hni-emails', 'hni-pans', 'hni-portfolio', 'hni-holdings', 'hni-holdings-next-page']);
@@ -24,7 +25,7 @@ export const requestStatement = async (params) => {
     });
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
-      throw ('Something went wrong. Please try again');
+      throw genericErrMsg;
     }
 
     const { result, status_code: status } = res.pfwresponse;
@@ -32,7 +33,7 @@ export const requestStatement = async (params) => {
     if (status === 200) {
       return result;
     } else {
-      throw (result.error || result.message || 'Something went wrong. Please try again');
+      throw (result.error || result.message || genericErrMsg);
     }
   } catch (e) {
     throw e;
@@ -50,9 +51,9 @@ export const fetchExternalPortfolio = async (params) => {
       resetBootFlag();
 
       const res = await Api.get('api/external_portfolio/list/holdings', params);
-
+      
       if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
-        throw ('Something went wrong. Please try again');
+        throw genericErrMsg;
       }
 
       const { result, status_code: status } = res.pfwresponse;
@@ -61,7 +62,7 @@ export const fetchExternalPortfolio = async (params) => {
         storageService().setObject('hni-portfolio', result.response);
         return result.response;
       } else {
-        throw (result.error || result.message || 'Something went wrong. Please try again');
+        throw (result.error || result.message || genericErrMsg);
       }
     } else {
       return portfolio;
@@ -83,7 +84,7 @@ export const fetchAllHoldings = async (params) => {
       );
 
       if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
-        throw ('Something went wrong. Please try again');
+        throw genericErrMsg;
       }
 
       const { result, status_code: status } = res.pfwresponse;
@@ -93,7 +94,7 @@ export const fetchAllHoldings = async (params) => {
         storageService().setObject('hni-holdings-next-page', result.next_page_url);
         return result;
       } else {
-        throw (result.error || result.message || 'Something went wrong. Please try again');
+        throw (result.error || result.message || genericErrMsg);
       }
     } else {
       return { response: { holdings }, next_page_url };
@@ -112,7 +113,7 @@ export const fetchEmails = async (params = {}) => {
       const res = await Api.get('api/external_portfolio/list/emails/requests', params);
       
       if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
-        throw ('Something went wrong. Please try again');
+        throw genericErrMsg;
       }
       
       const { result, status_code: status } = res.pfwresponse;
@@ -121,7 +122,7 @@ export const fetchEmails = async (params = {}) => {
         if (!params.email_id) storageService().setObject('hni-emails', result.emails);
         return result.emails || [];
       } else {
-        throw (result.error || result.message || 'Something went wrong. Please try again');
+        throw (result.error || result.message || genericErrMsg);
       }
     } else {
       return emails;
@@ -139,7 +140,7 @@ export const deleteEmail = async (params) => {
     const res = await Api.get('api/external_portfolio/hni/remove/statements', params);
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
-      throw ('Something went wrong. Please try again');
+      throw genericErrMsg;
     }
 
     const { result, status_code: status } = res.pfwresponse;
@@ -147,7 +148,7 @@ export const deleteEmail = async (params) => {
     if (status === 200) {
       return result;
     } else {
-      throw (result.error || result.message || 'Something went wrong. Please try again');
+      throw (result.error || result.message || genericErrMsg);
     }
   } catch (e) {
     throw e;
@@ -163,7 +164,7 @@ export const fetchAllPANs = async (params) => {
       const res = await Api.get('api/external_portfolio/hni/fetch/pans', params);
 
       if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
-        throw ('Something went wrong. Please try again');
+        throw genericErrMsg;
       }
 
       const { result, status_code: status } = res.pfwresponse;
@@ -172,7 +173,7 @@ export const fetchAllPANs = async (params) => {
         storageService().setObject('hni-pans', result.pans);
         return result.pans.sort();
       } else {
-        throw (result.error || result.message || 'Something went wrong. Please try again');
+        throw (result.error || result.message || genericErrMsg);
       }
     } else {
       return pans.sort();
@@ -187,7 +188,7 @@ export const hitNextPage = async (next_page_url, params) => {
     const res = await Api.get(next_page_url, params);
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
-      throw ('Something went wrong. Please try again');
+      throw genericErrMsg;
     }
 
     const { result, status_code: status } = res.pfwresponse;
@@ -195,7 +196,7 @@ export const hitNextPage = async (next_page_url, params) => {
     if (status === 200) {
       return result;
     } else {
-      throw (result.error || result.message || 'Something went wrong. Please try again');
+      throw (result.error || result.message || genericErrMsg);
     }
   } catch (e) {
     throw e;

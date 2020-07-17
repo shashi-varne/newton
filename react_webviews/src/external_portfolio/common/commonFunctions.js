@@ -41,6 +41,9 @@ export async function emailForwardedHandler(email_id) {
       loadingText: '',
     });
     if (status === 'success') {
+      /* If statement is successfully synced, refresh 
+      emails and pans list since they will now have updated values */
+      resetLSKeys(['hni-emails', 'hni-pans']);
       this.navigate('external_portfolio');
     } else {
       this.navigate('statement_not_received', { exitToApp: true });
@@ -48,5 +51,14 @@ export async function emailForwardedHandler(email_id) {
   } catch (err) {
     console.log(err);
     toast(err);
+  }
+}
+
+export function resetLSKeys(keys = []) {
+  try {
+    console.log(keys);
+    keys.map(key => storageService().remove(key));
+  } catch (e) {
+    console.log(e);
   }
 }

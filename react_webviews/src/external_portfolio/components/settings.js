@@ -3,8 +3,7 @@ import Container from '../common/Container';
 import EmailExpand from '../mini-components/EmailExpand';
 import toast from '../../common/ui/Toast';
 import { fetchEmails, deleteEmail } from '../common/ApiCalls';
-import { storageService } from '../../utils/validators';
-import { setLoader, navigate, emailForwardedHandler } from '../common/commonFunctions';
+import { setLoader, navigate, emailForwardedHandler, resetLSKeys } from '../common/commonFunctions';
 import PopUp from '../common/PopUp';
 import { nativeCallback } from 'utils/native_callback';
 
@@ -100,6 +99,7 @@ export default class Settings extends Component {
       } else {
         email.allowRemove = true;
       }
+      return email;
     });
     setKeyedEmails(emails); // Update map here
     return emails;
@@ -131,9 +131,7 @@ export default class Settings extends Component {
       /* Below code is required for when an email with a succesfully synced
       statement is removed and the PAN selected by the user was the PAN
       associated with the email being removed */
-      storageService().remove('user_pan');
-      storageService().remove('hni-pans');
-      storageService().remove('hni-portfolio');
+      resetLSKeys(['user_pan', 'hni-pans', 'hni-portfolio']);
     }
     this.setState({ emails });
   }
