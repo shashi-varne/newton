@@ -39,12 +39,12 @@ export default class RegenerateOptsPopup extends Component {
         <div className="statement-req-popup">
           <img
             alt="mail-check"
-            src={require(`assets/${productType}/btm_mail_check.svg`)}
+            src={require(`assets/${productType}/ic_btm_mail_check.svg`)}
             id="btm_mail_check_img"
           />
           <div
-            className="header-title-text-hni"
-            style={{ maxWidth: '55%', wordBreak: 'break-word' }}>
+            className="hni-req-popup-title"
+            style={{ maxWidth: '65%', wordBreak: 'break-word' }}>
             What is the status of the CAS email?
           </div>
           <Button

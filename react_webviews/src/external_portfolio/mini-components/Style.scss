@@ -93,16 +93,16 @@ $dark_indigo: #0a1d32;
 }
 
 .statement-req-popup {
-  height: 290px;
+  height: 310px;
   width: 100%;
-  padding: 20px;
+  padding: 30px;
   box-sizing: border-box;
 
-  .header-title-text-hni {
+  .hni-req-popup-title {
     font-weight: 500;
-    display: block;
     margin-bottom: 10px;
-    height: auto;
+    font-size: 22px;
+    line-height: 32px;
   }
 }
 
@@ -311,6 +311,6 @@ $dark_indigo: #0a1d32;
   /* Since text wraps into 3 lines in container for this 
   screen width, need to increase container height to show all elements*/
   .statement-req-popup {
-    height: 320px;
+    height: 345px;
   }
 }
