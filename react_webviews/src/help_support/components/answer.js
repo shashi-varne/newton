@@ -306,12 +306,13 @@ class Answer extends Component {
 
     return (
       <Container
-        title={answer.name ||this.props.location.state.title}
+        title={this.props.location.state.title}
         background="white"
         noFooter={true}
         events={this.backButtonEvent()}
       >
-        <div className="Help">
+        <div className="Help pad20">
+          <div className="question">{answer.name}</div>
           <div className="answer" dangerouslySetInnerHTML={{ __html: answer.answer }}></div>
           {answer.action_text && answer.action_path &&
             <div className="callback">

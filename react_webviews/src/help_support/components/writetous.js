@@ -308,7 +308,7 @@ class Writetous extends Component {
         handleClick={this.handleClick}
         events={this.backButtonEvent()}
       >
-        <div className="Help Form">
+        <div className="Help Form pad20">
           <div className="InputField">
             <div className="label">Subject</div>
             <div className="subject">{this.state.subcategory}</div>

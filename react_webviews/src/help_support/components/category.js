@@ -127,15 +127,19 @@ class Category extends Component {
 
     return (
       <Container
-        title={subcategories.name || 'Help & Support'}
+        title={'Help & Support'}
         noFooter={true}
         events={this.backButtonEvent()}
       >
-        <div className="Help">
-
-        <div className="common-top-page-subtitle">
-        Your query is related to
-        </div>
+        <div className="Help pad20">
+          <div className="section-head">
+            <div className="main-title">
+              {subcategories.name}
+            </div>
+            <div className="sub-title">
+              Your query is related to
+						</div>
+          </div>
           <div className="section-card">
             {subcategories && this.renderSubCategories()}
           </div>

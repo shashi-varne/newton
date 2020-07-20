@@ -210,7 +210,7 @@ class Thankyou extends Component {
         handleClick={this.handleClick}
         hideheader={true}
       >
-        <div className="Help">
+        <div className="Help pad20">
           <div className="thankyou">
             <img src={thumb} width="80" alt="" />
             <div className="title">Thank you for writing to us</div>
