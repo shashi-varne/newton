@@ -13,7 +13,8 @@ class Container extends Component {
     this.state = {
       openDialog: false,
       project: 'help',
-      inPageTitle: true
+      inPageTitle: false,
+      new_header: false
     }
 
     this.didmount = didmount.bind(this);
@@ -62,6 +63,7 @@ class Container extends Component {
               type={getConfig().productName}
               inPageTitle={this.state.inPageTitle}
               force_hide_inpage_title={this.state.force_hide_inpage_title}
+              new_header={this.state.new_header} 
              />
           }
 
@@ -69,7 +71,7 @@ class Container extends Component {
           {<div id="HeaderHeight" style={{ top: 56 }}>
           </div>}
 
-          {!this.state.force_hide_inpage_title && 
+          {!this.state.force_hide_inpage_title && this.state.new_header &&
             this.new_header_scroll() 
           }
 

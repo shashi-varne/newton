@@ -113,6 +113,12 @@ export function getHeightFromTop() {
 
 export function onScroll() {
 
+    if(!this.state.new_header) {
+        this.setState({
+          inPageTitle: false
+        })
+        return;
+    }
     let inPageTitle = this.state.inPageTitle;
     if (this.getHeightFromTop() >= 56) {
         //show up
