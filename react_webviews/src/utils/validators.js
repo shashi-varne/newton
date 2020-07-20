@@ -657,3 +657,13 @@ export function calculateAge(val) {
   }
   return age;
 }
+
+export function getEditTitle(string) {
+  if(!string) {
+    return;
+  }
+
+  string = 'Edit ' + (string).toLowerCase();
+
+  return string;
+}
