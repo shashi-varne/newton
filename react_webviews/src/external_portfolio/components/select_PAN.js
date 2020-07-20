@@ -28,7 +28,7 @@ class PANSelector extends Component {
                 ...params, 
             }
         };
-        console.log(JSON.stringify(eventObj));
+        
         nativeCallback({ events: eventObj });
     }
 

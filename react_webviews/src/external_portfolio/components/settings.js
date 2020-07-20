@@ -37,7 +37,7 @@ export default class Settings extends Component {
         remove_email_clicked: this.state.removeClicked,
       }
     };
-    console.log(JSON.stringify(eventObj));
+    
     if (['just_set_events'].includes(user_action)) {
       return eventObj;
     } else {
@@ -134,13 +134,6 @@ export default class Settings extends Component {
       resetLSKeys(['user_pan', 'hni-pans', 'hni-portfolio']);
     }
     this.setState({ emails });
-  }
-
-  checkForRemoveCtrl = (emails) => {
-    /* Function to check if there are atleast 2 emails 
-    with successfully updated portfolio statements */
-    const activeEmails = emails.filter(email => !!email.latest_success_statement.statement_id);
-    return !activeEmails.length || activeEmails.length >= 2;
   }
 
   addNewEmail = () => {

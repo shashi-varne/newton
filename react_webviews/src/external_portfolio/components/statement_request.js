@@ -39,7 +39,7 @@ class StatementRequest extends Component {
         status: this.state.showRegenerateBtn ? 'mail not recieved in 30 min' : 'before tracker setup',
       }
     };
-    console.log(JSON.stringify(eventObj));
+    
     if (['just_set_events', 'back'].includes(user_action)) {
       return eventObj;
     } else {

@@ -21,8 +21,9 @@ export default class TopHoldings extends Component {
 
   renderHoldings = () => {
     let holdings = (JSON.parse(JSON.stringify(this.props.holdings)));
+    const showMore = holdings.length > 5;
 
-    if (!this.state.open) holdings.splice(5);
+    if (!this.state.open) holdings.splice(5); // show first 5
 
     if (!holdings || !holdings.length) {
       return (
@@ -49,9 +50,11 @@ export default class TopHoldings extends Component {
             />
           </div>
         ))}
-        <div id="top-holdings-expand" onClick={this.toggleView}>
-          SEE {this.state.open ? 'Less' : 'More'}
-        </div>
+        {showMore && 
+          <div id="top-holdings-expand" onClick={this.toggleView}>
+            SEE {this.state.open ? 'Less' : 'More'}
+          </div>
+        }
       </Fragment>
     );
   }

@@ -21,7 +21,7 @@ export default class RegenerateOptsPopup extends Component {
         "screen_name": 'reconfirm popup',
       }
     };
-    console.log(JSON.stringify(eventObj));
+    
     if (['just_set_events', 'back'].includes(user_action)) {
       return eventObj;
     } else {
@@ -42,11 +42,11 @@ export default class RegenerateOptsPopup extends Component {
             src={require(`assets/${productType}/btm_mail_check.svg`)}
             id="btm_mail_check_img"
           />
-          <span
+          <div
             className="header-title-text-hni"
             style={{ maxWidth: '55%', wordBreak: 'break-word' }}>
             What is the status of the CAS email?
-          </span>
+          </div>
           <Button
             variant="outlined" color="secondary" fullWidth={true}
             classes={{

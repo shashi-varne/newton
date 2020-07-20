@@ -30,7 +30,7 @@ class StatementNotReceived extends Component {
         "screen_name": 'sent mail not found',
       }
     };
-    console.log(JSON.stringify(eventObj));
+    
     if (['just_set_events', 'back'].includes(user_action)) {
       return eventObj;
     } else {
@@ -89,7 +89,7 @@ class StatementNotReceived extends Component {
           <div className="ext-pf-subheader">
             <h4>Make sure your email id is correct</h4>
             <InfoBox
-            image={require(`assets/${productType}/ic_mail.svg`)}
+              image={require(`assets/${productType}/ic_mail.svg`)}
               imageAltText="mail-icon"
               ctrlText="Change"
               onCtrlClick={() => this.navigate('email_entry', {

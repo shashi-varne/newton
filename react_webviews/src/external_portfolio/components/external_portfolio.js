@@ -13,7 +13,7 @@ import { capitalize } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from '../../utils/functions';
 import { storageService, formatAmountInr } from '../../utils/validators';
-import SettingsWithDot from 'assets/ic_setting_active.svg';
+import SettingsWithBadge from 'assets/ic_setting_active.svg';
 
 const productType = getConfig().productName;
 
@@ -64,7 +64,7 @@ export default class ExternalPortfolio extends Component {
         see_all_clicked: this.state.seeMoreClicked,
       }
     };
-    console.log(JSON.stringify(eventObj));
+    
     if (['just_set_events', 'back'].includes(user_action)) {
       return eventObj;
     } else {
@@ -173,7 +173,7 @@ export default class ExternalPortfolio extends Component {
         title="External portfolio"
         noFooter={true}
         noHeader={show_loader}
-        rightIcon={SettingsWithDot}
+        rightIcon={SettingsWithBadge}
         handleRightIconClick={this.settingsClicked}
         hideInPageTitle={true}
         headerData={{

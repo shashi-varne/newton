@@ -20,7 +20,7 @@ class EmailExampleView extends Component {
         "screen_name": 'cas email ',
       }
     };
-    console.log(JSON.stringify(eventObj));
+    
     if (['just_set_events'].includes(user_action)) {
       return eventObj;
     } else {

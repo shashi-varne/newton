@@ -93,7 +93,7 @@ $dark_indigo: #0a1d32;
 }
 
 .statement-req-popup {
-  height: 300px;
+  height: 290px;
   width: 100%;
   padding: 20px;
   box-sizing: border-box;
@@ -101,7 +101,8 @@ $dark_indigo: #0a1d32;
   .header-title-text-hni {
     font-weight: 500;
     display: block;
-    margin: 10px 0;
+    margin-bottom: 10px;
+    height: auto;
   }
 }
 
@@ -110,7 +111,7 @@ $dark_indigo: #0a1d32;
   position: absolute;
   top: 0;
   right: 0;
-  width: 140px;
+  width: 110px;
 }
 
 .fund-details-container:first-child {

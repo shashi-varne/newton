@@ -27,7 +27,7 @@ class FundHoldings extends Component {
         fund_card_clicked: this.state.fundClicked,
       }
     };
-    console.log(JSON.stringify(eventObj));
+    
     if (['just_set_events'].includes(user_action)) {
       return eventObj;
     } else {
@@ -44,6 +44,7 @@ class FundHoldings extends Component {
       this.setLoader(true);
       const selectedPan = storageService().get('user_pan');
       if (!selectedPan) {
+        // eslint-disable-next-line
         throw 'Please select a PAN';
       }
       const { response, next_page_url } = await fetchAllHoldings({ pan: selectedPan });
