@@ -134,6 +134,7 @@ class Container extends Component {
           <Header
             title={this.props.title}
             goBack={this.historyGoBack}
+            noBack={this.props.noBack}
             type={getConfig().productName} />
         }
 

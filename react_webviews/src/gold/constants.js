@@ -190,7 +190,7 @@ export function setSellDataAfterUpdate(inputData, sellData) {
     storageService().setObject('sellData', sellData);
 }
 
-export const default_provider = 'mmtc';
+export const default_provider = 'safegold';
 
 export const gold_providers = {
     'mmtc': {
@@ -209,20 +209,22 @@ export const gold_providers = {
     }
 }
 
-export const gold_providers_array = [
-    {
-        key: 'mmtc',
-        title: 'MMTC-PAMP',
-        subtitle: '24 Karat | 99.99% pure',
-        logo: 'logo_mmtc.svg'
-    },
-    {
-        key: 'safegold',
-        title: 'Safegold',
-        subtitle: '24 Karat | 99.5% pure',
-        logo: 'logo_safegold.svg'
-    }
-]
+var gold_providers_array_base = [];
+if(default_provider === 'mmtc') {
+    gold_providers_array_base = [
+        gold_providers['mmtc'],
+        gold_providers['safegold']
+    ]
+} else {
+    gold_providers_array_base = [
+        gold_providers['safegold'],
+        gold_providers['mmtc']
+    ]
+}
+
+export const gold_providers_array = gold_providers_array_base;
+
+
 
 export function isUserRegistered(result) {
     let provider_info = result.gold_user_info.provider_info;

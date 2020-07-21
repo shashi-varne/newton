@@ -14,6 +14,10 @@ import { nativeCallback } from 'utils/native_callback';
 import goldOfferImageFisdom from 'assets/gold_offer_fisdom.jpg';
 import goldOfferImageMyway from 'assets/gold_offer_myway.jpg';
 
+
+import goldOfferSafegoldFisdom from 'assets/fisdom/Gold_banner.jpg';
+import goldOfferSafegoldMyway from 'assets/myway/Gold_banner.jpg';
+
 import goldOfferImageFisdom2 from 'assets/gold_offer2.png';
 import goldOfferImageMyway2 from 'assets/gold_offer2.png';
 
@@ -57,7 +61,7 @@ class GoldSummary extends Component {
       apiError: '',
       user_info: {},
       openDialogOffer: false,
-      showOffers: false, // to manage offer carousel
+      showOffers: true, // to manage offer carousel
       offerImageData: [],
       productName: getConfig().productName,
       mmtc_info: {},
@@ -83,7 +87,7 @@ class GoldSummary extends Component {
   componentWillMount() {
 
     nativeCallback({ action: 'take_control_reset' });
-    storageService().set('gold_provider', 'mmtc');
+    storageService().remove('gold_provider');
     let type = getConfig().productName;
     let typeCaps = type === 'fisdom' ? 'Fisdom' : 'Myway';
     
@@ -114,6 +118,18 @@ class GoldSummary extends Component {
       'Any conditions which are not explicitly covered would be at the sole discretion of ' + typeCaps + '. The decision of ' + typeCaps + ' in this regard will be final and the company has the right to change terms and conditions at any time.',
       'In case of any customer query or dispute, ' + typeCaps+  ' reserves the right to resolve the same on the basis of the terms and conditions of the offer at its sole discretion.',
       'Gold-back will be in the form of MMTC-PAMP balance and will be 1% of the value of gold purchased and upto a maximum of Rs 100. Below table shows how the gold-back will be done. '
+    ]
+
+    var gold_offer_terms_safegold_july = [
+      'Offer is only valid till  23:59 hrs 31st July 2020.',
+      'For a customer to be valid for the offer (s)he should purchase gold worth at least 5gm during the offer period.',
+      '2500 gold back will be as per price on the day of allotment of gold back.',
+      'This offer can be availed only once ( per device, per user, per account) during the offer period.',
+      'Purchase can be done in a single transaction or multiple transactions but the total gold purchased during the offer period should be greater than or equal to 5gm.',
+      'Offer is valid ONLY for the first 100 customers who purchase Gold (greater than or equal to 5gm) during the offer period for a Gold-back of Rs 2500/-.',
+      "Gold-back amounts for lucky winners will be credited to the customer's Safegold account by 15th August 2020.",
+      "Any conditions which are not explicitly covered would be at the sole discretion of Finwizard Technology Private Limited. The decision of "  + typeCaps +  " in this regard will be final and the company has the right to change terms and conditions at any time.",
+      "In case of any customer query or dispute, Finwizard Technology Private Limited reserves the right to resolve the same on the basis of the terms and conditions of the offer at its sole discretion."
     ]
 
     let offerImageDataBase = [
@@ -149,7 +165,14 @@ class GoldSummary extends Component {
           {'c1': '2000-4999', 'c2': '25'},
           {'c1': '5000 and above', 'c2': '100'}
         ]
-      }
+      },
+      {
+        src: type === 'fisdom' ? goldOfferSafegoldFisdom : goldOfferSafegoldMyway,
+        link: '',
+        terms: gold_offer_terms_safegold_july,
+        key: 'safegold_july',
+        canShow: true
+      },
     ];
 
     let offerImageData = [];
@@ -272,7 +295,7 @@ class GoldSummary extends Component {
     this.sendEvents('next', 'marketing_banner', index);
 
     if (offer.key === '5buy' || offer.key === '50delivery' || 
-    offer.key === 'mmtc_offer') {
+    offer.key === 'mmtc_offer' || offer.key === 'safegold_july') {
       this.setState({
         openDialogOffer: true,
         selectedIndexOffer: index

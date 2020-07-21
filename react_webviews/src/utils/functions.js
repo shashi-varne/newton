@@ -196,8 +196,8 @@ const partnersConfigBase = {
     secondary_color: "#F5821F",
     cta_disabled_color: "#ffffff",
     code: "subh",
-    email: "ask@fisdom.com",
-    mobile: "+91-76191-71846",
+    email: "support@shubhloans.com",
+    mobile: "+91-9019900199",
     message: "",
     banner: "bfdl_banner.png",
     back_button: "back_icon_white.png",
@@ -247,6 +247,19 @@ const partnersConfigBase = {
       nps: true,
       gold: true
     }
+  },
+  google: {
+    logo: "logo_white.png",
+    primary_color: "#4f2da7",
+    code: "google",
+    email: "ask@fisdom.com",
+    mobile: "+80-48-093070",
+    message: "",
+    banner: "obc_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png",
+    white_header: true
   }
 };
 
@@ -349,7 +362,8 @@ function getPartnerConfig(partner_code) {
     'back_button_color': 'back_button_color',
     'notifications_color': 'notifications_color',
     'header_title_color': 'header_title_color',
-    'inputFocusedColor': 'inputFocusedColor'
+    'inputFocusedColor': 'inputFocusedColor',
+    'white_header' : 'white_header'
   };
 
   config_to_return.isFinwiz = true;

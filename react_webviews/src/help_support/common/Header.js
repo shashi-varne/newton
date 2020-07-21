@@ -6,12 +6,14 @@ import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import Arrow from '@material-ui/icons/ArrowBack';
 
-const Header = ({ classes, title, count, total, current, goBack, edit, type }) => (
+const Header = ({ classes, title, count, total, current, goBack, edit, type, noBack}) => (
   <AppBar position="fixed" color="primary" className={`Header ${classes.root}`}>
     <Toolbar>
+      {!noBack && 
       <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={goBack}>
         <Arrow />
       </IconButton>
+      }
       <Typography variant="subheading" color="inherit" className={classes.flex}>
         {title}
       </Typography>
