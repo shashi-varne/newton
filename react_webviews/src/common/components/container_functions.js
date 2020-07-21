@@ -36,10 +36,12 @@ export function didmount() {
 
     this.setState({
         loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom,
-        mounted: true
+        mounted: true,
+        force_show_inpage_title : true,
+        inPageTitle: true
+    }, () => {
+        this.onScroll();
     })
-
-    this.check_hide_header_title();
 
     setHeights({ 'header': true, 'container': false });
 
@@ -128,6 +130,17 @@ export function onScroll() {
         //show down
         inPageTitle = false;
     }
+
+    if(this.state.force_show_inpage_title) {
+        inPageTitle = true;
+        let that = this;
+        setTimeout(function(){ 
+          that.setState({
+            force_show_inpage_title: false
+          })
+       }, 100);
+        
+      }
 
     this.setState({
         inPageTitle: inPageTitle

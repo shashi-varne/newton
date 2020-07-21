@@ -4,6 +4,9 @@ import Button from 'material-ui/Button';
 import { nativeCallback } from 'utils/native_callback';
 import crd_gold_info from 'assets/crd_gold_info.svg';
 import { initialize } from '../../common/functions';
+import Api from 'utils/api';
+import toast from '../../../common/ui/Toast';
+import { storageService } from 'utils/validators';
 
 class Landing extends Component {
   constructor(props) {
@@ -19,12 +22,54 @@ class Landing extends Component {
     this.initialize();
   }
 
-  onload = () => {
-    // ****************************************************
-    // code goes here
-    // common things can be added inside initialize
-    // use/add common functions from/to  ../../common/functions
+  onload = async () => {
+    let lead = {};
+    try {
 
+      this.setState({
+        show_loader: true
+      });
+
+      let body = {
+        "vendor_name": "DMI",
+        "application_info": "True",
+        // "personal_info": "True",
+        // "professional_info": "True",
+        // "address_info": "True",
+        // "bank_info": "True",
+        // "documents_info": "True",
+        // "vendor_info": "True"
+      };
+      const res = await Api.post('/relay/api/loan/get/application', body);
+
+
+      var resultData = res.pfwresponse.result;
+
+      this.setState({
+        show_loader: false
+      });
+
+      if (res.pfwresponse.status_code === 200) {
+
+        let id = resultData.data.application_info.application_id;
+        lead = resultData.quote;
+        storageService().set('loan_quote_id', id);
+        this.setState({
+          lead: resultData.data || {},
+        })
+      } else {
+        toast(resultData.error || resultData.message
+          || 'Something went wrong');
+      }
+    } catch (err) {
+      console.log(err)
+      this.setState({
+        show_loader: false,
+        lead: lead,
+        common_data: {}
+      });
+      toast('Something went wrong');
+    }
   }
 
   sendEvents(user_action) {
