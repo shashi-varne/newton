@@ -11,7 +11,7 @@ class FundHoldings extends Component {
     super(props);
     this.state = {
       holdings: [],
-      next_page_url: '',
+      next_page: '',
       show_loader: false,
       loading_more: false,
     };
@@ -47,10 +47,10 @@ class FundHoldings extends Component {
         // eslint-disable-next-line
         throw 'Please select a PAN';
       }
-      const { response, next_page_url } = await fetchAllHoldings({ pan: selectedPan });
+      const { holdings, next_page } = await fetchAllHoldings({ pan: selectedPan });
       this.setState({
-        holdings: response.holdings || [],
-        next_page_url,
+        holdings: holdings || [],
+        next_page,
         show_loader: false, // same as this.setLoader(false);
       });
     } catch (err) {
@@ -65,12 +65,12 @@ class FundHoldings extends Component {
     
     this.setState({ loading_more: true });
     try {
-      const { response, next_page_url } = await hitNextPage(this.state.next_page_url);
+      const { holdings, next_page } = await hitNextPage(this.state.next_page);
       const existingHoldings = JSON.parse(JSON.stringify(this.state.holdings));
 
       this.setState({
-        holdings: existingHoldings.concat(response.holdings),
-        next_page_url,
+        holdings: existingHoldings.concat(holdings),
+        next_page,
       });
     } catch(err) {
       console.log(err);
@@ -94,7 +94,7 @@ class FundHoldings extends Component {
             key={idx}
           />
         )) : 'No fund holdings found'}
-        {!!this.state.next_page_url && !this.state.loading_more &&
+        {!!this.state.next_page && !this.state.loading_more &&
           <div className="show-more" onClick={() => this.loadMore()}>
             SHOW MORE
           </div>

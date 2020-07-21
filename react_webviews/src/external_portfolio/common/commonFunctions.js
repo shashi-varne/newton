@@ -55,10 +55,5 @@ export async function emailForwardedHandler(email_id) {
 }
 
 export function resetLSKeys(keys = []) {
-  try {
-    console.log(keys);
-    keys.map(key => storageService().remove(key));
-  } catch (e) {
-    console.log(e);
-  }
+  keys.map(key => storageService().remove(key));
 }

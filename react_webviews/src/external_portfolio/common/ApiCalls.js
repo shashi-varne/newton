@@ -75,7 +75,7 @@ export const fetchExternalPortfolio = async (params) => {
 export const fetchAllHoldings = async (params) => {
   try {
     const holdings = storageService().getObject('hni-holdings');
-    const next_page_url = storageService().getObject('hni-holdings-next-page');
+    const next_page = storageService().getObject('hni-holdings-next-page');
 
     if (boot || !holdings || isEmpty(holdings)) {
       const res = await Api.get(
@@ -90,14 +90,14 @@ export const fetchAllHoldings = async (params) => {
       const { result, status_code: status } = res.pfwresponse;
 
       if (status === 200) {
-        storageService().setObject('hni-holdings', result.response.holdings);
-        storageService().setObject('hni-holdings-next-page', result.next_page_url);
+        storageService().setObject('hni-holdings', result.holdings);
+        storageService().setObject('hni-holdings-next-page', result.next_page);
         return result;
       } else {
         throw (result.error || result.message || genericErrMsg);
       }
     } else {
-      return { response: { holdings }, next_page_url };
+      return { holdings, next_page };
     }
   } catch (e) {
     throw e;
@@ -183,9 +183,9 @@ export const fetchAllPANs = async (params) => {
   }
 }
 
-export const hitNextPage = async (next_page_url, params) => {
+export const hitNextPage = async (next_page, params) => {
   try {
-    const res = await Api.get(next_page_url, params);
+    const res = await Api.get(next_page, params);
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;

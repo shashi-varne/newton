@@ -91,7 +91,6 @@ class Container extends Component {
     }
 
     if (isFunction(this.props.goBack)) {
-      console.log('CALLING GOBACK FUNCTION');
       return this.props.goBack(params);
     }
     nativeCallback({ events: this.getEvents('back') });
@@ -282,8 +281,8 @@ class Container extends Component {
 
         {!this.props.hideInPageTitle &&
           <div id="header-title-page"
-            style={this.props.styleHeader} 
-            className={`header-title-page  ${this.props.classHeader}`}>
+            style={Object.assign(this.props.styleHeader || {}, { padding: '0 20px' })} 
+            className={`header-title-page ${this.props.classHeader}`}>
               {this.state.inPageTitle && 
                 <div className={`header-title-text-hni ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{width: this.props.count ? '75%': ''}}>
                   {this.props.title}
