@@ -1,0 +1,79 @@
+#wr-login {
+  display: flex;
+  background-color: white;
+  
+  #wr-login-img {
+    height: 100%
+  }
+
+  #wr-login-right-panel {
+    padding: 160px 120px;
+    
+    h2 {
+      font-size: 36px;
+      font-weight: normal;
+    }
+  }
+
+  .wr-login-input {
+    margin-bottom: 60px;
+
+    div.subtitle {
+      max-width: 420px;
+      opacity: 0.5;
+      font-size: 20px;
+      line-height: 1.3;
+      letter-spacing: 0.4px;
+    }
+
+    div#wr-otp-opts {
+      margin-top: 48px;
+      span {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--primary);
+        margin-right: 40px;
+      }
+    }
+  }
+
+  .wr-login-btn {
+    max-width: 420px;
+  }
+}
+
+#wr-header-hero {
+  height: 206px;
+  width: 100%;
+  background: var(--primary);
+}
+
+#wr-header-bar {
+  position: fixed;
+  top: 144px;
+  left: 8.3%;
+  width: 83%;
+  height: 120px;
+  border-radius: 10px;
+  box-shadow: 0 1px 15px 0 rgba(69, 65, 78, 0.05);
+  border: solid 0.5px rgba(151, 151, 151, 0.1);
+  background-color: #ffffff;
+  display: flex;
+
+  .wr-header-tab {
+    flex: 1;
+    box-sizing: border-box;
+    padding: 28px;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 600;
+    font-style: normal;
+    line-height: 1;
+    color: #000000;
+    border-left: solid 0.5px rgba(151, 151, 151, 0.1);
+  }
+
+  #wr-header-pan-select{
+    flex-basis: 27%;
+  }
+}
