@@ -2,9 +2,19 @@
     margin-top: 40px;
 }
 
-.contents {
+.content-1 {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.content-2 {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 11px;
+    color: #64778d;
+    font-size: 12px;
+    font-weight: bold;
 }
 
 .name {
@@ -14,12 +24,7 @@
 
 .amount {
     font-size: 16px;
-}
-
-.max,
-.min {
-    font-size: 12px;
-    color: #79848f;
+    color: #0a1d32;
 }
 
 .container {
@@ -36,12 +41,14 @@
     height: 170px;
     position: relative;
     right: 15px;
+    color: #0a1d32;
 }
 
 .total {
     font-size: 25px;
     color: #3792fc;
-    font-family: sans-serif;
+    font-family: 'Roboto', 'Montserrat',  Helvetica, sans-serif;
+    font-weight: bold;
     margin-top: 9px;
     margin-bottom: 31px;
 }

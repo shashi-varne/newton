@@ -21,7 +21,7 @@ class Items extends Component {
     render() {
         return (
             <div className="container">
-                <div className="contents">
+                <div className="content-1">
                     <span className="name">{this.props.name}</span>
                     <span className="amount">
                         {this.props.name !== "Loan tenor" ?
@@ -36,7 +36,7 @@ class Items extends Component {
                     default={this.props.value}
                     onChange={this.onChange}
                 />
-                <div className="contents">
+                <div className="content-2">
                     <span className="min">{this.props.minValue}</span>
                     <span className="max">{this.props.maxValue}</span>
                 </div>

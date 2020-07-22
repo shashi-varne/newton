@@ -75,7 +75,7 @@ class Calculator extends Component {
             value="5"
             min="5"
             max="24"
-            minValue="5 MONTHS"
+            minValue="3 MONTHS"
             maxValue="24 MONTHS"
           />
 
