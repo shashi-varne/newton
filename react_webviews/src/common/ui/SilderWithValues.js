@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import "../Style.scss";
-import { formatAmount } from "../../../utils/validators";
+import "./style.scss";
+import { formatAmount } from "../../utils/validators";
 
-import CustomizedSlider from "../../../common/ui/Slider";
+import CustomizedSlider from "./Slider";
 
-class Items extends Component {
+class SliderWithValues extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -16,16 +16,16 @@ class Items extends Component {
         this.setState({
             value: `${val}`
         })
-        this.props.onChange(val, this.props.name)
+        this.props.onChange(val, this.props.val)
     };
 
     render() {
         return (
             <div className="container">
                 <div className="content-1">
-                    <span className="name">{this.props.name}</span>
+                    <span className="name">{this.props.label}</span>
                     <span className="amount">
-                        {this.props.name !== "Loan tenor" ?
+                        {this.props.label !== "Loan tenor" ?
                             '₹ '+formatAmount(this.state.value) :
                             this.state.value + " months"
                         }
@@ -45,5 +45,5 @@ class Items extends Component {
         );
     };
 };
- 
-export default Items;
+
+export default SliderWithValues;

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
-import Items from "./items";
+import SliderWithValues from "../../../common/ui/SilderWithValues"
 import "../Style.scss"
 import { formatAmount } from "../../../utils/validators";
 import Button from '../../../common/ui/Button';
@@ -53,15 +53,8 @@ class Calculator extends Component {
       this.sendEvents('next');
   }
 
-  onChange = (val, name) => {
-    if(name === "Net monthly income")
-      this.setState({Net_monthly_Income: val})
-    else if(name === "Loan tenor")
-      this.setState({Tenor: val})
-    else if(name === "Other EMIs")
-      this.setState({Other_EMIs: val})
-    else if(name === "Monthly expenses")
-      this.setState({Monthly_expenses: val})
+  onChange = (val, key) => {
+    this.setState({[key]: val})
   }
 
   render() {
@@ -84,9 +77,9 @@ class Calculator extends Component {
         noFooter={true}
       >
         <div className="loan-calculator">
-          {/* {code goes here} */}
-          <Items 
-            name="Net monthly income"
+          <SliderWithValues 
+            label="Net monthly income"
+            val="Net_monthly_Income"
             value={Net_monthly_Income}
             min="0"
             max="2500000"
@@ -95,8 +88,9 @@ class Calculator extends Component {
             onChange={this.onChange}
           />
 
-          <Items
-            name="Loan tenor"
+          <SliderWithValues
+            label="Loan tenor"
+            val="Tenor"
             value={Tenor}
             min="3"
             max="24"
@@ -105,8 +99,9 @@ class Calculator extends Component {
             onChange={this.onChange}
           />
 
-          <Items
-            name="Other EMIs"
+          <SliderWithValues
+            label="Other EMIs"
+            val="Other_EMIs"
             value={Other_EMIs}
             min="0"
             max="2500000"
@@ -115,8 +110,9 @@ class Calculator extends Component {
             onChange={this.onChange}
           />
 
-          <Items
-            name="Monthly expenses"
+          <SliderWithValues
+            label="Monthly expenses"
+            val="Monthly_expenses"
             value={Monthly_expenses}
             min="0"
             max="2500000"

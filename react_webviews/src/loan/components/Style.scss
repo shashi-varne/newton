@@ -1,38 +1,3 @@
-.loan-calculator {
-    margin-top: 40px;
-}
-
-.content-1 {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 16px;
-}
-
-.content-2 {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 11px;
-    color: #64778d;
-    font-size: 12px;
-    // font-family: 'Rubik', 'Roboto', sans-serif;
-    font-weight: 500;
-}
-
-.name {
-    font-size: 15px;
-    color: #79848f;
-}
-
-.amount {
-    font-size: 16px;
-    color: #0a1d32;
-    font-weight: 400;
-}
-
-.container {
-    margin-bottom: 30px;
-}
-
 .total-amount {
     text-align: center;
     padding: 20px 20px 0 15px;
@@ -47,7 +12,6 @@
 .total {
     font-size: 25px;
     color: #3792fc;
-    // font-family: 'Rubik';
     font-weight: 700;
     margin: 9px 0 31px 0;
 }
