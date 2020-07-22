@@ -10,7 +10,7 @@ const CustomizedSlider = (props) => {
   }
 
   return (
-    <div className="slidecontainer">
+    <div className="slider">
       <Slider
         defaultValue={Number(props.default)}
         min={Number(props.min)}

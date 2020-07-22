@@ -21,7 +21,7 @@ class SliderWithValues extends Component {
 
     render() {
         return (
-            <div className="container">
+            <div className="slide-container">
                 <div className="content-1">
                     <span className="name">{this.props.label}</span>
                     <span className="amount">
