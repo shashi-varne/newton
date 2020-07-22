@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
+import ils_loan_email from 'assets/myway/ils_loan_email.svg';
+import "../Style.scss";
 
 class ScheduleDoc extends Component {
   constructor(props) {
@@ -49,13 +51,28 @@ class ScheduleDoc extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="DUMMY_HEADER_TITLE"
+        title="Loan schedule document"
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
         buttonTitle="CONTINUE"
+        noFooter={true}
       >
         <div className="loan-schedule-doc">
           {/* {code goes here} */}
+          <img style={{marginTop: '40px'}} src={ils_loan_email} alt="" />
+          <div className="loan-schedule">
+            Loan schedule document has been sent <br />
+            to your registered email ID <br />
+            ........swan@gmail.com
+          </div>
+          <div className="query">
+            For any query, reach us at
+          </div>
+          <div className="contact">
+            <span style={{marginRight:'40px'}}>+80-30-408363</span>
+            |
+            <span style={{marginLeft:'40px'}}>ask@fisdom.com</span>
+          </div>
         </div>
       </Container>
     );

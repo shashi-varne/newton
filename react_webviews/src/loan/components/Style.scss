@@ -109,6 +109,29 @@
     }
 
     .link {
-        margin: 5px 0 0 88px;
+        margin-left: 88px;
+    }
+}
+
+.loan-schedule-doc {
+    .query {
+        color: #767e86;
+        text-align: center;
+        margin: 133px 0 10px 0;
+    }
+
+    .loan-schedule {
+        font-size: 16px;
+        color: #767e86;
+        padding-top: 20px;
+        height: 75px;
+        line-height: 24px;
+    }
+
+    .contact {
+        color: #767e86;
+        font-size: 10px;
+        text-align: center;
+        font-weight: bold;
     }
 }

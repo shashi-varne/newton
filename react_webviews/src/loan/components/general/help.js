@@ -55,7 +55,7 @@ class Help extends Component {
         noFooter={true}
       >
         <div className="loan-help">
-          <div className="label">
+          <div className="label" style={{lineHeight: '20px'}}>
             For any other queries/help, please connect at
             <br />
             below details:
@@ -74,7 +74,7 @@ class Help extends Component {
 
           <div className="label">
             Whatsapp bot:
-            <span className="details">
+            <span className="details" style={{lineHeight: '25px'}}>
               {` 9350657100`}
               <br />
               <div className="link">
