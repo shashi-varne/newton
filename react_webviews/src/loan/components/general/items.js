@@ -1,24 +1,48 @@
-import React from 'react';
+import React, { Component } from 'react';
 import "../Style.scss";
+import { formatAmountInr } from "../../../utils/validators";
 
-// import CustomizedSlider from "../../../common/ui/Slider";
+import CustomizedSlider from "../../../common/ui/Slider";
 
-const Items = (props) => {
+class Items extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: props.value,
+        }
+    };
 
-    const { name, amount, max, min } = props
-    
-    return (
-        <div className="container">
-            <div className="contents">
-                <span className="name">{name}</span>
-                <span className="amount">{amount}</span>
+    onChange = (val) => {
+        this.setState({
+            value: `${val}`
+        })
+    };
+
+    render() {
+        return (
+            <div className="container">
+                <div className="contents">
+                    <span className="name">{this.props.name}</span>
+                    <span className="amount">
+                        {this.props.name !== "Loan tenor" ?
+                            formatAmountInr(this.state.value) :
+                            this.state.value + " month"
+                        }
+                    </span>
+                </div>
+                <CustomizedSlider 
+                    min={this.props.min}
+                    max={this.props.max}
+                    default={this.props.value}
+                    onChange={this.onChange}
+                />
+                <div className="contents">
+                    <span className="min">{this.props.minValue}</span>
+                    <span className="max">{this.props.maxValue}</span>
+                </div>
             </div>
-            <div className="contents">
-                <span className="min">{min}</span>
-                <span className="max">{max}</span>
-            </div>
-        </div>
-    );
-}
+        );
+    };
+};
  
 export default Items;

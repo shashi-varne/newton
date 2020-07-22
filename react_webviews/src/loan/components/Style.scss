@@ -1,3 +1,7 @@
+.loan-calculator {
+    margin-top: 40px;
+}
+
 .contents {
     display: flex;
     justify-content: space-between;
@@ -19,11 +23,19 @@
 }
 
 .container {
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 .total-amount {
     text-align: center;
+    padding-top: 20px;
+    padding-right: 20px;
+    padding-left: 15px;
+    background-color: #f0f7ff;
+    width: 100%;
+    height: 170px;
+    position: relative;
+    right: 15px;
 }
 
 .total {
@@ -31,4 +43,5 @@
     color: #3792fc;
     font-family: sans-serif;
     margin-top: 9px;
+    margin-bottom: 31px;
 }
