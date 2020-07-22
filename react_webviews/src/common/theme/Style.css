@@ -481,7 +481,7 @@ input#pan {
 .header-title-page {
   background: white;
   color: #0a1c32;
-  height: 50px;
+  min-height: 50px;
   display: flex;
   align-items: flex-end;
   padding: 0 15px 0 15px;
