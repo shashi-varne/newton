@@ -4,7 +4,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
 import Items from "./items";
 import "../Style.scss"
-import { formatAmountInr } from "../../../utils/validators";
+import { formatAmount } from "../../../utils/validators";
 import Button from '../../../common/ui/Button';
 
 class Calculator extends Component {
@@ -100,7 +100,7 @@ class Calculator extends Component {
           <div className="total-amount">
             <div>You are elgible for upto</div>
             <div className="total">
-              {formatAmountInr(300000)}
+              {'₹ '+formatAmount(300000)}
             </div>
             <Button 
               type="default"

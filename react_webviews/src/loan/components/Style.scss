@@ -14,7 +14,8 @@
     margin-bottom: 11px;
     color: #64778d;
     font-size: 12px;
-    font-weight: bold;
+    font-family: 'Rubik', 'Roboto', sans-serif;
+    font-weight: 500;
 }
 
 .name {
@@ -25,6 +26,7 @@
 .amount {
     font-size: 16px;
     color: #0a1d32;
+    font-weight: 400;
 }
 
 .container {
@@ -45,7 +47,7 @@
 .total {
     font-size: 25px;
     color: #3792fc;
-    font-family: 'Roboto', 'Montserrat',  Helvetica, sans-serif;
-    font-weight: bold;
+    font-family: 'Rubik', 'Roboto', sans-serif;
+    font-weight: 700;
     margin: 9px 0 31px 0;
 }
