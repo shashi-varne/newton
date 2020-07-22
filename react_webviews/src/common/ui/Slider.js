@@ -27,7 +27,7 @@ const CustomizedSlider = (props) => {
           width: 15,
           backgroundColor: "#fff",
           border: 0,
-          boxShadow: '0 0 2px #000'
+          boxShadow: '0 1px 1px grey'
         }}
       />
     </div>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import "../Style.scss";
-import { formatAmountInr } from "../../../utils/validators";
+import { formatAmount } from "../../../utils/validators";
 
 import CustomizedSlider from "../../../common/ui/Slider";
 
@@ -16,6 +16,7 @@ class Items extends Component {
         this.setState({
             value: `${val}`
         })
+        this.props.onChange(val, this.props.name)
     };
 
     render() {
@@ -25,8 +26,8 @@ class Items extends Component {
                     <span className="name">{this.props.name}</span>
                     <span className="amount">
                         {this.props.name !== "Loan tenor" ?
-                            formatAmountInr(this.state.value) :
-                            this.state.value + " month"
+                            '₹ '+formatAmount(this.state.value) :
+                            this.state.value + " months"
                         }
                     </span>
                 </div>
