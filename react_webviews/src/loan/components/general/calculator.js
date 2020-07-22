@@ -72,8 +72,8 @@ class Calculator extends Component {
 
           <Items
             name="Loan tenor"
-            value="5"
-            min="5"
+            value="3"
+            min="3"
             max="24"
             minValue="3 MONTHS"
             maxValue="24 MONTHS"
