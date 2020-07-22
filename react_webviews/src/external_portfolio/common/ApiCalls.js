@@ -76,11 +76,12 @@ export const fetchAllHoldings = async (params) => {
   try {
     const holdings = storageService().getObject('hni-holdings');
     const next_page = storageService().getObject('hni-holdings-next-page');
+    const page_size = 10;
 
     if (boot || !holdings || isEmpty(holdings)) {
       const res = await Api.get(
         'api/external_portfolio/fetch/mf/holdings',
-        Object.assign({}, params, { page_size: 10 })
+        Object.assign({}, params, { page_size: page_size })
       );
 
       if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
@@ -90,6 +91,9 @@ export const fetchAllHoldings = async (params) => {
       const { result, status_code: status } = res.pfwresponse;
 
       if (status === 200) {
+        if (result.holdings.length < page_size) {
+          result.next_page = '';
+        }
         storageService().setObject('hni-holdings', result.holdings);
         storageService().setObject('hni-holdings-next-page', result.next_page);
         return result;
