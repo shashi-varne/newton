@@ -49,13 +49,57 @@ class Help extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="DUMMY_HEADER_TITLE"
+        title="Need help"
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
-        buttonTitle="CONTINUE"
+        noFooter={true}
       >
         <div className="loan-help">
-          {/* {code goes here} */}
+          <div className="label">
+            For any other queries/help, please connect at
+            <br />
+            below details:
+          </div>
+
+          <div className="customer-care">
+            DMI Customer Care:
+          </div>
+
+          <div className="label">
+            Email:
+            <span className="details">
+              {` customercare@dmifinance.in`}
+            </span>  
+          </div>
+
+          <div className="label">
+            Whatsapp bot:
+            <span className="details">
+              {` 9350657100`}
+              <br />
+              <div className="link">
+                https://bit.ly/DMIFINWA
+              </div>
+            </span>  
+          </div>
+
+          <div className="customer-care">
+            Fisdom Customer Care:
+          </div>
+
+          <div className="label">
+            Email:
+            <span className="details">
+              {` ask@fisdom.com`}
+            </span>  
+          </div>
+
+          <div className="label">
+            Call:
+            <span className="details">
+              {` +80-30-408363`}
+            </span>  
+          </div>
         </div>
       </Container>
     );

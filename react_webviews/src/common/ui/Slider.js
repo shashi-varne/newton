@@ -17,7 +17,8 @@ const CustomizedSlider = (props) => {
         max={Number(props.max)}
         onChange={handleChange}
         trackStyle={{
-          background: "var(--primary)"
+          // background: "var(--primary)",
+          background: "#3792fc"
         }}
         railStyle={{
           height: 4
