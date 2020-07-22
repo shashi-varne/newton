@@ -2,6 +2,7 @@ import React from 'react';
 import './style.scss';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
+import { getConfig } from 'utils/functions';
 
 const CustomizedSlider = (props) => {
 
@@ -17,8 +18,7 @@ const CustomizedSlider = (props) => {
         max={Number(props.max)}
         onChange={handleChange}
         trackStyle={{
-          // background: "var(--primary)",
-          background: "#3792fc"
+          background: getConfig().primary
         }}
         railStyle={{
           height: 4

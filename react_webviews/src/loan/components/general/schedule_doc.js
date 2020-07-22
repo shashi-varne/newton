@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
-import ils_loan_email from 'assets/myway/ils_loan_email.svg';
+import Contact from 'common/components/contact_us';
+import { getConfig } from 'utils/functions';
 import "../Style.scss";
 
 class ScheduleDoc extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false
+      show_loader: false,
+      productName: getConfig().productName
     }
 
     this.initialize = initialize.bind(this);
@@ -48,6 +50,8 @@ class ScheduleDoc extends Component {
   }
 
   render() {
+    console.log(this.state.productName)
+
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -58,21 +62,17 @@ class ScheduleDoc extends Component {
         noFooter={true}
       >
         <div className="loan-schedule-doc">
-          {/* {code goes here} */}
-          <img style={{marginTop: '40px'}} src={ils_loan_email} alt="" />
+          <img
+            src={ require(`assets/${this.state.productName}/ils_loan_email.svg`)}
+            style={{marginTop: '40px'}}
+            alt="" 
+          />
           <div className="loan-schedule">
             Loan schedule document has been sent <br />
             to your registered email ID <br />
             ........swan@gmail.com
           </div>
-          <div className="query">
-            For any query, reach us at
-          </div>
-          <div className="contact">
-            <span style={{marginRight:'40px'}}>+80-30-408363</span>
-            |
-            <span style={{marginLeft:'40px'}}>ask@fisdom.com</span>
-          </div>
+          <Contact />
         </div>
       </Container>
     );
