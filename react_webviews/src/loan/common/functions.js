@@ -36,8 +36,6 @@ export async function initialize() {
                 show_loader: true
             });
 
-            // let quote_id = storageService().get('loan_quote_id');
-
             let body = {
                 "vendor_name": "DMI",
                 "application_info": "True",
@@ -51,7 +49,7 @@ export async function initialize() {
                     "professional_info": "True",
                     "address_info": "True",
                     "bank_info": "True",
-                    "documents_info": "True",
+                    "document_info": "True",
                     "vendor_info": "True"
                 };
             }
@@ -68,9 +66,12 @@ export async function initialize() {
             });
             if (res.pfwresponse.status_code === 200) {
 
-                lead = resultData.data || {};
+                lead = resultData || {};
+                let application_id = (lead.application_info || {}).application_id;
+                storageService().set('loan_application_id', application_id)
                 this.setState({
-                    lead: resultData || {}
+                    lead: lead || {},
+                    application_id: application_id
                 }, () => {
                     if (this.onload && !this.state.ctaWithProvider) {
                         this.onload();
@@ -92,20 +93,25 @@ export async function initialize() {
             });
             toast('Something went wrong');
         }
+    } else {
+        let application_id = storageService().get('loan_application_id');
+        this.setState({
+            application_id: application_id
+        })
     }
 }
 
 
-export async function updateLead(body, quote_id) {
+export async function updateLead(body, application_id) {
     try {
 
-        if (!quote_id) {
+        if (!application_id) {
 
             if (this.state.lead.application_info &&
                 this.state.lead.application_info.application_id) {
-                quote_id = this.state.lead.application_info.application_id;
+                application_id = this.state.lead.application_info.application_id;
             } else {
-                quote_id = storageService().get('loan_quote_id');
+                application_id = storageService().get('loan_application_id');
             }
         }
 
@@ -113,7 +119,7 @@ export async function updateLead(body, quote_id) {
             show_loader: true
         });
 
-        const res = await Api.post('/relay/api/loan/update/application/' + quote_id,
+        const res = await Api.post('/relay/api/loan/update/application/' + application_id,
             body);
 
         var resultData = res.pfwresponse.result;
@@ -198,7 +204,7 @@ export function navigate(pathname, data = {}) {
     } else {
         this.props.history.push({
             pathname: pathname,
-            search: getConfig().searchParams,
+            search: data.searchParams || getConfig().searchParams,
             params: {
                 forceClose: this.state.forceClose || false
             }

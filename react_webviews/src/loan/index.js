@@ -30,6 +30,12 @@ import ProfessionalDetails from "./components/form/professional";
 import AddressDetails from "./components/form/address";
 import ReqDetails from "./components/form/requirements";
 import FormSummary from "./components/form/summary";
+import FormOtp from "./components/form/otp";
+import FormCreateProfile from "./components/form/create_profile";
+
+
+import InstantKycHome from "./components/kyc/instant_kyc";
+import KycStatus from "./components/kyc/status"
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -78,6 +84,9 @@ const Lending = props => {
           <Route path={`${url}/Schedule-Doc`} component={ScheduleDoc} />
 
 
+          <Route path={`${url}/instant-kyc`} component={InstantKycHome} />
+          <Route path={`${url}/instant-kyc-status`} component={KycStatus} />
+
           <Route path={`${url}/Loan-Apprvoed`} component={LoanApprvoed} />
           <Route path={`${url}/Loan-Otp`} component={LoanOtp} />
           <Route path={`${url}/Loan-Status`} component={LoanStatus} />
@@ -88,6 +97,9 @@ const Lending = props => {
           <Route path={`${url}/contact-details`} component={ContactDetails} />
           <Route path={`${url}/professional-details`} component={ProfessionalDetails} />
           <Route path={`${url}/address-details`} component={AddressDetails} />
+
+          <Route path={`${url}/form-otp`} component={FormOtp} />
+          <Route path={`${url}/form-create-profile`} component={FormCreateProfile} />
 
           {/* Edit paths */}
 

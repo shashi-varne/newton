@@ -651,11 +651,15 @@ input#pan {
   opacity: 1;
 }
 
+.generic-hr {
+  border-top: 1px solid #ededed;
+}
+
 .common-top-page-subtitle {
   color: #767E86;
   font-size: 14px;
   font-weight: 400;
-  margin: -20px 0 20px 0;
+  margin: -10px 0 20px 0;
   line-height: 1.6;
 }
 

@@ -53,7 +53,7 @@ class Landing extends Component {
 
         let id = resultData.data.application_info.application_id;
         lead = resultData.quote;
-        storageService().set('loan_quote_id', id);
+        storageService().set('loan_application_id', id);
         this.setState({
           lead: resultData.data || {},
         })
