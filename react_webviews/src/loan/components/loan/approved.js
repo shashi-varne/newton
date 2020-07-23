@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
+import Contact from 'common/components/contact_us';
+import { getConfig } from 'utils/functions';
 
 class LoanApprvoed extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false
+      show_loader: false,
+      productName: getConfig().productName
     }
 
     this.initialize = initialize.bind(this);
@@ -49,15 +52,31 @@ class LoanApprvoed extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="DUMMY_HEADER_TITLE"
+        title="Loan Approved"
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
         buttonTitle="CONTINUE"
       >
-        <div className="loan-approved">
+        <div className="OK">
+          <img
+            src={ require(`assets/${this.state.productName}/ils_loan_approve.svg`)}
+            style={{marginTop: '20px', width:"100%"}}
+            alt="" 
+          />
           
-            {/* {code goes here} */}
+          <div className="content">
+            Your application no <b>xxxxxx78</b> for Personal loan of <b>₹2,00,000</b> has been submitted and is under process.
+          </div>
 
+          <div className="content">
+            Upon DMI Finance completing due diligence, <b>you will receive the confirmation SMS from Fisdom and DMI Finance</b> in next 2 hours on your registered Mobile number. 
+          </div>
+
+          <div className="content">
+            Terms and Conditions accepted by you shall be emailed to your registered email id. Thank You.
+          </div>
+
+          <Contact />
         </div>
       </Container>
     );

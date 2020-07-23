@@ -87,7 +87,7 @@ const Lending = props => {
           <Route path={`${url}/instant-kyc`} component={InstantKycHome} />
           <Route path={`${url}/instant-kyc-status`} component={KycStatus} />
 
-          <Route path={`${url}/Loan-Apprvoed`} component={LoanApprvoed} />
+          <Route path={`${url}/Loan-Approved`} component={LoanApprvoed} />
           <Route path={`${url}/Loan-Otp`} component={LoanOtp} />
           <Route path={`${url}/Loan-Status`} component={LoanStatus} />
           <Route path={`${url}/Loan-Summary`} component={LoanSummary} />
