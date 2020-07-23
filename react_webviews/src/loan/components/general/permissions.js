@@ -62,18 +62,18 @@ class Permissions extends Component {
           <div style={{ display: 'flex'}}>
             <img
               src={ require(`assets/${this.state.productName}/ic_document_mobile.svg`)}
-              style={{marginBottom: '115px'}}
+              style={{marginBottom: '95px'}}
               alt="" 
             />
             <div className="container">
               <div className="head">Mobile</div>
               <div className="content">
-                Our app collects and monitors specific <br />
-                information about your device including <br />
-                your SIM Network service provider of your <br />
-                SMI.Device id and IP address. This help us <br />
-                to prevent fraud by uniquely identifying the <br />
-                devices.
+                {`Our app collects and monitors specific
+                information about your device including
+                your SIM Network service provider of your
+                SMI.Device id and IP address. This help us
+                to prevent fraud by uniquely identifying the
+                devices.`}
               </div> 
             </div>
           </div>
@@ -87,10 +87,10 @@ class Permissions extends Component {
             <div className="container">
               <div className="head">Location</div>
               <div className="content">
-                We collect and monitor the information about <br />
-                the location of your device for verifying the <br />
-                address, creating your risk profile, and make a <br />
-                better credit risk decision.
+                {`We collect and monitor the information about
+                the location of your device for verifying the
+                address, creating your risk profile, and make a
+                better credit risk decision.`}
               </div> 
             </div>
           </div>

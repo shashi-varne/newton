@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
+import Checkbox from "@material-ui/core/Checkbox";
 
 class LoanSummary extends Component {
   constructor(props) {
@@ -49,14 +50,55 @@ class LoanSummary extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="DUMMY_HEADER_TITLE"
+        title="Loan summary"
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
-        buttonTitle="CONTINUE"
+        buttonTitle="GET LOAN"
       >
         <div className="loan-summary">
-          
-            {/* {code goes here} */}
+            <div className="container">
+              <div style={{padding:'20px 20px 20px 20px'}}>
+                <div className="head" style={{paddingBottom: '22px'}}>Loan details</div>
+                <div className="items">
+                  <div>Sanctioned Loan Amount</div>
+                  <div>₹2 lac</div>
+                </div>
+                <div className="items">
+                  <div>Processing fee</div>
+                  <div>- ₹5,000</div>
+                </div>
+                <div className="items">
+                  <div>GST</div>
+                  <div>- ₹900</div>
+                </div>
+                <hr />
+                <div className="credit">
+                  <div>Amount credited to bank a/c</div>
+                  <div>₹1,98,100</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="emi-detail">
+              <div className="head">EMI detail</div>
+              <div style={{fontSize: '13px'}}>
+                ₹33,000/month for 3 months
+              </div>
+            </div>
+
+            <div className='head' style={{paddingBottom: '20px'}}>
+              Loan agreement
+            </div>
+
+            <div className="agreement">
+              Loan agreement for your convenience here.
+              We have summarized the key terms of the user loan agreement 
+              for your convenience here. Please read the entire agreement 
+              below before clicking the “I Agree” tab:
+            </div>
+            
+            <Checkbox color="primary" />
+            <label>I have read the agreement carefully.</label>
 
         </div>
       </Container>

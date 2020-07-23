@@ -64,13 +64,13 @@ class ScheduleDoc extends Component {
         <div className="loan-schedule-doc">
           <img
             src={ require(`assets/${this.state.productName}/ils_loan_email.svg`)}
-            style={{marginTop: '40px'}}
+            style={{marginTop: '40px', width:"100%"}}
             alt="" 
           />
           <div className="loan-schedule">
-            Loan schedule document has been sent <br />
-            to your registered email ID <br />
-            ........swan@gmail.com
+            {`Loan schedule document has been sent
+            to your registered email ID
+            ........swan@gmail.com`}
           </div>
           <Contact />
         </div>
