@@ -9,8 +9,9 @@ import { navigate, setLoader } from '../common/commonFunctions';
 import { requestStatement } from '../common/ApiCalls';
 import toast from '../../common/ui/Toast';
 import { storageService } from '../../utils/validators';
-
 const productType = getConfig().productName;
+const emailDomain = getConfig().email_domain;
+
 class StatementNotReceived extends Component {
   constructor(props) {
     super(props);
@@ -107,10 +108,10 @@ class StatementNotReceived extends Component {
           <InfoBox
             classes={{ root: 'info-box-cut-out' }}
             isCopiable={true}
-            textToCopy={`cas@${productType}.com`}
+            textToCopy={`cas@${emailDomain}`}
           >
             <span className="info-box-body-text">
-              cas@{productType}.com
+              cas@{emailDomain}
             </span>
           </InfoBox>
         </div>

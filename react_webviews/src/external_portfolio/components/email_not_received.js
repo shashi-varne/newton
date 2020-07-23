@@ -9,7 +9,7 @@ import toast from '../../common/ui/Toast';
 import { storageService } from '../../utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from '../../utils/functions';
-const productType = getConfig().productName;
+const emailDomain = getConfig().email_domain;
 
 class EmailNotReceived extends Component {
   constructor(props) {
@@ -62,7 +62,7 @@ class EmailNotReceived extends Component {
   }
 
   render() {
-    const subtitleText = (<span>Please ensure that the correct email is forwarded to <span id="cas-email-highlight">cas@{productType}.com</span></span>);
+    const subtitleText = (<span>Please ensure that the correct email is forwarded to <span id="cas-email-highlight">cas@{emailDomain}</span></span>);
     return (
       <EmailTemplate
         title="CAS email not received"

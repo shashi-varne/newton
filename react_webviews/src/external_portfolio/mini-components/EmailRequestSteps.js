@@ -10,7 +10,7 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import RegenerateOptsPopup from './RegenerateOptsPopup';
 import { isFunction, storageService } from '../../utils/validators';
 import { getConfig } from '../../utils/functions';
-const productType = getConfig().productName;
+const emailDomain = getConfig().email_domain;
 
 const theme = createMuiTheme({
   overrides: {
@@ -109,10 +109,10 @@ export default class EmailRequestSteps extends Component {
       <InfoBox
         classes={{ root: `info-box-cut-out ${classes.emailBox}` }}
         isCopiable={true}
-        textToCopy={`cas@${productType}.com`}
+        textToCopy={`cas@${emailDomain}`}
       >
         <span className="info-box-body-text">
-          cas@{productType}.com
+          cas@{emailDomain}
         </span>
       </InfoBox>
       {showRegenerateBtn &&

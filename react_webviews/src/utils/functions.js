@@ -315,7 +315,8 @@ function getPartnerConfig(partner_code) {
       mobile: '+91-8048093070',
       configPrimaryColorClass: 'configPrimaryColorClass',
       configPrimaryBackgroundColorClass: 'fisdomBackColor',
-      webAppUrl: 'https://app.fisdom.com/#!/'
+      webAppUrl: 'https://app.fisdom.com/#!/',
+      email_domain: 'fisdom.com',
     },
     'myway': {
       primary: '#3792fc',
@@ -333,7 +334,8 @@ function getPartnerConfig(partner_code) {
       askEmail: 'ask@mywaywealth.com',
       configPrimaryColorClass: 'configPrimaryColorClass',
       configPrimaryBackgroundColorClass: 'mywayBackColor',
-      webAppUrl: 'https://app.mywaywealth.com/#!/'
+      webAppUrl: 'https://app.mywaywealth.com/#!/',
+      email_domain: 'mywaywealth.com',
     }
   }
 
