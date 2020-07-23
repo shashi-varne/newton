@@ -21,7 +21,7 @@ class Container extends Component {
       popupText: "",
       callbackType: "",
       inPageTitle: true,
-      force_hide_inpage_title: false,
+      force_hide_inpage_title: this.props.hidePageTitle,
       new_header:true,
       project: 'lending' //to use in common functions
     };

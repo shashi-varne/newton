@@ -236,11 +236,67 @@
     }
 }
 
-.OK {
+.loan-approved {
     .content {
         font-size: 13px;
         line-height: 24px;
         color: #767e86;
         padding: 10px 0 20px 0;
+    }
+}
+
+.loan-status {
+    .values {
+        font-weight: 400;
+        padding: 10px 0 40px 0;
+    }
+
+    .container {
+        width: 100%;
+        height: 186px;
+        background: #f0f7ff;
+    }
+
+    .head {
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .items {
+        font-size: 13px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: 12px;
+    }
+
+    .credit {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .loan-eligible {
+        font-size: 14px;
+        text-align: center;
+        margin: 20px 0 10px 0
+    }
+
+    .loan-amount {
+        color: #3792fc;
+        font-size: 20px;
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 30px;
+    }
+
+    .loan-value {
+        font-size: 13px;
+        display: flex;
+        justify-content: space-between;
+        font-weight: 500;
+        text-align: center;
     }
 }

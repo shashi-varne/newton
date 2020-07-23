@@ -4,6 +4,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
+import { formatAmountInr } from "../../../utils/validators";
 
 class LoanSummary extends Component {
   constructor(props) {
@@ -58,24 +59,24 @@ class LoanSummary extends Component {
       >
         <div className="loan-summary">
             <div className="container">
-              <div style={{padding:'20px 20px 20px 20px'}}>
+              <div style={{padding:'20px 20px 29px 20px'}}>
                 <div className="head" style={{paddingBottom: '22px'}}>Loan details</div>
                 <div className="items">
                   <div>Sanctioned Loan Amount</div>
-                  <div>₹2 lac</div>
+                  <div>{formatAmountInr(200000)}</div>
                 </div>
                 <div className="items">
                   <div>Processing fee</div>
-                  <div>- ₹5,000</div>
+                  <div>{`- ${formatAmountInr(5000)}`}</div>
                 </div>
                 <div className="items">
-                  <div>GST</div>
-                  <div>- ₹900</div>
+                  <div>GST(18%)</div>
+                  <div>{`- ${formatAmountInr(900)}`}</div>
                 </div>
                 <hr style={{background:"#ccd3db"}} />
                 <div className="credit">
                   <div>Amount credited to bank a/c</div>
-                  <div>₹1,98,100</div>
+                  <div>{formatAmountInr(198100)}</div>
                 </div>
               </div>
             </div>

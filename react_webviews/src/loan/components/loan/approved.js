@@ -57,7 +57,7 @@ class LoanApprvoed extends Component {
         handleClick={this.handleClick}
         buttonTitle="CONTINUE"
       >
-        <div className="OK">
+        <div className="loan-approved">
           <img
             src={ require(`assets/${this.state.productName}/ils_loan_approve.svg`)}
             style={{marginTop: '20px', width:"100%"}}
