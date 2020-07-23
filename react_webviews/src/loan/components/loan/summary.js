@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
-import Checkbox from "@material-ui/core/Checkbox";
+import Checkbox from 'material-ui/Checkbox';
+import Grid from 'material-ui/Grid';
 
 class LoanSummary extends Component {
   constructor(props) {
@@ -71,7 +72,7 @@ class LoanSummary extends Component {
                   <div>GST</div>
                   <div>- ₹900</div>
                 </div>
-                <hr />
+                <hr style={{background:"#ccd3db"}} />
                 <div className="credit">
                   <div>Amount credited to bank a/c</div>
                   <div>₹1,98,100</div>
@@ -96,9 +97,21 @@ class LoanSummary extends Component {
               for your convenience here. Please read the entire agreement 
               below before clicking the “I Agree” tab:
             </div>
-            
-            <Checkbox color="primary" />
-            <label>I have read the agreement carefully.</label>
+
+            <Grid container spacing={16} alignItems="center">
+              <Grid item xs={1} className="TextCenter">
+                  <Checkbox
+                      defaultChecked
+                      checked={this.state.confirm_details_check}
+                      color="primary"
+                      value="confirm_details_check"
+                      name="confirm_details_check"
+                      className="Checkbox" />
+              </Grid>
+              <Grid item xs={11}>
+                  <label>I have read the agreement carefully.</label>
+              </Grid>
+            </Grid>
 
         </div>
       </Container>
