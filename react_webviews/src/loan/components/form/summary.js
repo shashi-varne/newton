@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
 
-import { getConfig } from 'utils/functions';
+// import {getConfig} from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import toast from '../../../common/ui/Toast';
 import { initialize } from '../../common/functions';
@@ -16,6 +16,21 @@ import Dialog, {
 import text_error_icon from 'assets/text_error_icon.svg';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
+import ReactHtmlParser from 'react-html-parser'; 
+import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
+
+import {storageService} from 'utils/validators';
+
+const agreeOptions = [
+    {
+        'name': 'I agree',
+        'value': 'agree'
+    },
+    {
+        'name': 'Decline',
+        'value': 'decline'
+    }
+];
 
 class FormSummary extends Component {
 
@@ -26,7 +41,10 @@ class FormSummary extends Component {
             fetch_all: true,
             accordianData: [],
             confirm_details_check: false,
-            application_info: {}
+            application_info: {},
+            agreement:[],
+            agree_check: '',
+            vendor_info: {}
         }
         this.initialize = initialize.bind(this);
     }
@@ -35,6 +53,25 @@ class FormSummary extends Component {
     componentWillMount() {
         nativeCallback({ action: 'take_control_reset' });
         this.initialize();
+
+        let agreement = [
+            'I/We hereby apply for a finance facility for the short term personal loan (“Facility”) mentioned in this application. I/We declare that all the particulars and information and details given/filled in this Application Form are true, correct, complete and up-to date in all respects and no information has been withheld. I/We understand that the information given in this application shall form the basis of any loan that DMI Finance Private Limited (“DMI”) may decide to grant to me/us and if at any stage of processing this application, it comes to the knowledge of DMI that, I/we have provided any incorrect or incomplete information, fabricated documents, or fake documents, they will be treated by DMI as having been manipulated by me/us and DMI shall have the right to forthwith reject this loan application, cancel / revoke any sanction or further drawdowns or recall any loan granted at any stage of processing the application, without assigning any reason whatsoever and DMI and its employees/ representatives/ agents / service providers shall not be responsible/liable in any manner whatsoever to me/us for such rejection or any delay in notifying me/us of such rejection (including for any payments which may have been made by me to any vendor/ service provider prior to cancellation).',
+            'I/We understand that DMI will also be procuring personal information from other sources/agents and I/We have no objection for the same. I/We authorize DMI to make reference and inquire relating to information in this application which DMI considers necessary, including from the banks where I/we hold bank accounts.',
+            'I/We hereby give my/our consent voluntarily for use of AADHAAR card/details for the purposes of availing the Facility including KYC purposes as required under applicable laws and as per DMI policies. I/We hereby give our consent to DMI to procure my /our  AADHAAR details, PAN No/copy of my/our PAN Card, other identity proof and Bank Account details from time to time, exchange, part with/share all information relating to my/our loan details and repayment history with other banks/financial institutions /CIBIL etc. and periodically obtain / generate CIBIL, Experian, Hunter and such other reports as may be required and shall not hold DMI liable for use of this information. I/We do hereby expressly and irrevocably authorize DMI to collect, store, share, obtain and authenticate any aspect of my/our personal information either directly or through any of the authorized agencies and disclose such information to its agents/contractors/service providers and to also use such information for the purposes of KYC authentication, grant of the Facility and for internal evaluation by DMI of its business. For more details please click here https://www.dmifinance.in/privacy-policy.html.',
+            'I/We, would like to know through telephonic calls, or SMS/WhatsApp on my mobile number mentioned in the Application Form as well as in this undertaking, or through any other communication mode, transactional information, various loan offer schemes or loan promotional schemes or any other promotional schemes which may be provided by DMI and hereby authorize DMI and their employee, agent, associate to do so. I confirm that laws in relation to the unsolicited communication referred in “National Do Not Call Registry” (the “NDNC Registry”) as laid down by TELECOM REGULATORY AUTHORITY OF INDIA will not be applicable for such communication/calls/SMSs/WhatsApp messages received from DMI, its employees, agents and/or associates.',
+            'I/We acknowledge that Sourcing Partner and DMI are independent of each other and I/we will not have any claim against DMI for any loan or other facility arranged/ provided by Sourcing Partner which is not sanctioned/ disbursed by DMI. I acknowledge that DMI does not in any manner make any representation, promise, statement or endorsement in respect of any other product of services which may be provided by Sourcing Partner  and will not be responsible or liable in any manner whatsoever for the same.',
+            'I/we understand that the I/we have an option of not providing the information as required in this application form or as may be required by DMI from time to time provided that on exercising such option DMI shall have the right to cancel the sanction or seek prepayment of the amounts due as per the terms of the GC.',
+            'I/ We declare that I/ We have not made any payment in cash, bearers cheques or by any other mode along with or in connection with this Application Form to the person collecting my/our Application Form. I/ We shall not hold DMI or its employees/representatives/agents/service providers liable for any such payment made by us to the person collecting this Application Form.',
+            '<b>I/We confirm that I/We have understood the terms of the application form.</b>',
+            `I/We authorize  ${this.state.productName} to share my investment data with DMI if I have made investment with ${this.state.productName} in past.`,
+            'I/We allow receiving communication from Fisdom via SMS and email.',
+            '<b> I/We confirm that I/We have understood the terms of the application form.</b>'
+
+        ]
+
+        this.setState({
+            agreement:agreement
+        })
     }
 
     onload = () => {
@@ -45,7 +82,7 @@ class FormSummary extends Component {
         let accordianData = [];
 
         let { personal_info, permanent_address_data, current_address_data,
-            professional_info, application_info } = lead;
+            professional_info, application_info, vendor_info } = lead;
 
         let personal_data = {
             'title': 'Personal details',
@@ -178,76 +215,9 @@ class FormSummary extends Component {
 
         this.setState({
             accordianData: accordianData,
-            application_info: application_info
+            application_info: application_info,
+            vendor_info: vendor_info
         })
-    }
-
-
-    startPayment = async () => {
-        this.setState({
-            show_loader: true
-        })
-        this.handleClose();
-        try {
-            let res = await Api.get(`/api/ins_service/api/insurance/hdfcergo/start/payment?lead_id=${this.state.quote_id}`);
-
-
-            var resultData = res.pfwresponse.result;
-            if (res.pfwresponse.status_code === 200) {
-
-
-                let current_url = window.location.href;
-                let nativeRedirectUrl = current_url;
-
-                let paymentRedirectUrl = encodeURIComponent(
-                    window.location.origin + `/group-insurance/group-health/${this.state.provider}/payment`
-                );
-
-
-                var payment_link = resultData.payment_link;
-                var pgLink = payment_link;
-                let app = getConfig().app;
-                var back_url = encodeURIComponent(current_url);
-                // eslint-disable-next-line
-                pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
-                    '&app=' + app + '&back_url=' + back_url;
-                if (getConfig().generic_callback) {
-                    pgLink += '&generic_callback=' + getConfig().generic_callback;
-                }
-
-
-                if (getConfig().app === 'ios') {
-                    nativeCallback({
-                        action: 'show_top_bar', message: {
-                            title: 'Payment'
-                        }
-                    });
-                }
-
-                nativeCallback({
-                    action: 'take_control', message: {
-                        back_url: nativeRedirectUrl,
-                        back_text: 'Are you sure you want to exit the payment process?'
-                    }
-                });
-
-                window.location.href = pgLink;
-
-
-            } else {
-                this.setState({
-                    show_loader: false
-                });
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
-            }
-        } catch (err) {
-            console.log(err)
-            this.setState({
-                show_loader: false
-            });
-            toast('Something went wrong');
-        }
     }
 
     handleClick = async () => {
@@ -256,35 +226,37 @@ class FormSummary extends Component {
         this.setState({
             show_loader: true
         });
-        try {
-            let res = await Api.post(`/api/ins_service/api/insurance/hdfcergo/ppc/check?quote_id=${this.state.quote_id}`);
 
+        storageService().set('loan_dmi_loan_status', this.state.vendor_info.dmi_loan_status);
 
-            var resultData = res.pfwresponse.result;
-            if (res.pfwresponse.status_code === 200) {
-
-                let lead = resultData.quote_lead || {};
-                if (lead.ped_check) {
-                    this.openMedicalDialog('ped');
-                } else if (lead.ppc_check) {
-                    this.openMedicalDialog('ppc');
-                } else if (lead.status === 'ready_to_pay') {
-                    this.startPayment();
+        if(this.state.vendor_info.lead_id) {
+            this.navigate('form-create-profile');
+        } else {
+            try {
+                let res = await Api.get(`/relay/api/loan/submit/application/${this.state.application_id}`);
+    
+    
+                var resultData = res.pfwresponse.result;
+                if (res.pfwresponse.status_code === 200 && !resultData.error) {
+    
+                   this.navigate('form-create-profile');
+                } else {
+                    this.setState({
+                        show_loader: false
+                    });
+                    toast(resultData.error || resultData.message
+                        || 'Something went wrong');
                 }
-            } else {
+            } catch (err) {
+                console.log(err)
                 this.setState({
                     show_loader: false
                 });
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
+                toast('Something went wrong');
             }
-        } catch (err) {
-            console.log(err)
-            this.setState({
-                show_loader: false
-            });
-            toast('Something went wrong');
         }
+       
+        
     }
 
 
@@ -426,6 +398,23 @@ class FormSummary extends Component {
         })
     };
 
+    handleChangeRadio = name => event => {
+
+        this.setState({
+            [name]: agreeOptions[event].value,
+            [name + '_error']: ''
+        })
+
+    };
+    renderAgreement = (props, index) => {
+        return(
+            <div key={index} id={'agreement_' + index} className="agree-tiles">
+                <div className="agree-tiles-left">{index + 1}</div>
+                <div className="agree-tiles-right">{ReactHtmlParser(props)}</div>
+            </div>
+        )
+    }
+
     render() {
 
         return (
@@ -491,6 +480,25 @@ class FormSummary extends Component {
                                 </Grid>
                             </Grid>
                         </div>
+                    </div>
+
+                    <div id="agreement" className="agreement-block">
+                        {this.state.agreement.map(this.renderAgreement)}
+                    </div>
+
+                    <div className="InputField" style={{margin: '30px 0 50px 0'}}>
+                        <RadioWithoutIcon
+                            width="40"
+                            label="I/We confirm that I/We have understood the
+                            terms of the application form."
+                            class="Gender:"
+                            options={agreeOptions}
+                            id="agree_check"
+                            name="agree_check"
+                            error={(this.state.agree_check_error) ? true : false}
+                            helperText={this.state.agree_check_error}
+                            value={this.state.agree_check || ''}
+                            onChange={this.handleChangeRadio('agree_check')} />
                     </div>
 
                     <BottomInfo baseData={{ 'content': 'You are one step away from knowing your eligibility' }} />
