@@ -44,7 +44,7 @@ class SelectGrp extends Component {
 
     return (
       <FormControl className="Dropdown" disabled={this.props.disabled}>
-        <InputLabel htmlFor={this.props.id}>{this.props.label} *</InputLabel>
+        <InputLabel htmlFor={this.props.id}>{this.props.label}</InputLabel>
         <Select
           error={this.props.error}
           className="Select"

@@ -24,6 +24,19 @@ import LoanOtp from "./components/loan/otp";
 import LoanStatus from "./components/loan/status";
 import LoanSummary from "./components/loan/summary";
 
+import ContactDetails from "./components/form/contact";
+import PersonalDetails from "./components/form/personal";
+import ProfessionalDetails from "./components/form/professional";
+import AddressDetails from "./components/form/address";
+import ReqDetails from "./components/form/requirements";
+import FormSummary from "./components/form/summary";
+import FormOtp from "./components/form/otp";
+import FormCreateProfile from "./components/form/create_profile";
+
+
+import InstantKycHome from "./components/kyc/instant_kyc";
+import KycStatus from "./components/kyc/status"
+
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
 import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
@@ -71,10 +84,44 @@ const Lending = props => {
           <Route path={`${url}/Schedule-Doc`} component={ScheduleDoc} />
 
 
+          <Route path={`${url}/instant-kyc`} component={InstantKycHome} />
+          <Route path={`${url}/instant-kyc-status`} component={KycStatus} />
+
           <Route path={`${url}/Loan-Apprvoed`} component={LoanApprvoed} />
           <Route path={`${url}/Loan-Otp`} component={LoanOtp} />
           <Route path={`${url}/Loan-Status`} component={LoanStatus} />
           <Route path={`${url}/Loan-Summary`} component={LoanSummary} />
+
+          <Route path={`${url}/requirements-details`} component={ReqDetails} />
+          <Route path={`${url}/personal-details`} component={PersonalDetails} />
+          <Route path={`${url}/contact-details`} component={ContactDetails} />
+          <Route path={`${url}/professional-details`} component={ProfessionalDetails} />
+          <Route path={`${url}/address-details`} component={AddressDetails} />
+
+          <Route path={`${url}/form-otp`} component={FormOtp} />
+          <Route path={`${url}/form-create-profile`} component={FormCreateProfile} />
+
+          {/* Edit paths */}
+
+         <Route path={`${url}/edit-requirements-details`} 
+          render={(props) => <ReqDetails {...props} edit={true} />} />
+
+          <Route path={`${url}/edit-personal-details`} 
+          render={(props) => <PersonalDetails {...props} edit={true} />} />
+
+          <Route path={`${url}/edit-contact-details`} 
+          render={(props) => <ContactDetails {...props} edit={true} />} />
+
+          <Route path={`${url}/edit-professional-details`} 
+          render={(props) => <ProfessionalDetails {...props} edit={true} />} />
+
+          <Route path={`${url}/edit-address-details`} 
+          render={(props) => <AddressDetails {...props} edit={true} />} />
+
+
+
+          <Route path={`${url}/form-summary`} component={FormSummary} />
+          
          
           <Route component={NotFound} />
 

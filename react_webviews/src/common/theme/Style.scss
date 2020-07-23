@@ -651,11 +651,15 @@ input#pan {
   opacity: 1;
 }
 
+.generic-hr {
+  border-top: 1px solid #ededed;
+}
+
 .common-top-page-subtitle {
   color: #767E86;
   font-size: 14px;
   font-weight: 400;
-  margin: -20px 0 20px 0;
+  margin: -10px 0 20px 0;
   line-height: 1.6;
 }
 
@@ -732,4 +736,31 @@ input#pan {
     font-size: 12px;
     font-weight: 500;
   }
+}
+
+.generic-page-button-small {
+  color: var(--secondary);
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid;
+  width: fit-content;
+  padding: 7px 20px 7px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.generic-page-button-small-with-back {
+  background: var(--secondary);
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid;
+  width: fit-content;
+  padding: 7px 20px 7px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: white;
 }

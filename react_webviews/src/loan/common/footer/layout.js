@@ -69,12 +69,16 @@ export class DefaultLayout extends Component {
 
   render() {
     const props = this.props;
-
     return (
-      <div className="FooterDefaultLayout" onClick={props.handleClick}>
+      <div className="FooterDefaultLayout" onClick={() => {
+        if(!props.disable) {
+          props.handleClick();
+        }
+      }}>
         <div className="FlexItem2">
           <Button
             type={props.type}
+            disable={props.disable}
             // arrow={(props.edit) ? false : true}
             {...props} />
         </div>
@@ -165,6 +169,7 @@ export class WithProviderLayout extends Component {
         <div className="FlexItem2 FlexItem2-withProvider-footer" onClick={props.handleClick}>
           <Button
             type={props.type}
+            disable={props.disable}
             {...props} />
         </div>
         {this.renderDialog()}

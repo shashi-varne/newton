@@ -22,6 +22,7 @@ class Container extends Component {
       callbackType: "",
       inPageTitle: true,
       force_hide_inpage_title: false,
+      new_header:true,
       project: 'lending' //to use in common functions
     };
 
@@ -61,8 +62,6 @@ class Container extends Component {
       return;
     }
 
-
-   
 
     switch (pathname) {
       case "/gold/gold-locker":
