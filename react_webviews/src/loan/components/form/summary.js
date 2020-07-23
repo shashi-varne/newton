@@ -217,7 +217,7 @@ class FormSummary extends Component {
             accordianData: accordianData,
             application_info: application_info,
             vendor_info: vendor_info
-        })
+        });
     }
 
     handleClick = async () => {
@@ -415,8 +415,18 @@ class FormSummary extends Component {
         )
     }
 
-    render() {
 
+
+    render() {
+        // let out = document.getElementById('agreement');
+        // let isScrolledtoBottom = out.scrollHeight - out.clientHeight <= out.scroll.Top + 1;
+        // console.log(isScrolledtoBottom);
+
+        // if(isScrolledtoBottom)
+        //     console.log('hi')
+        // var out = document.getElementById("agreement");
+        // var isScrolledToBottom = out.scrollHeight - out.clientHeight <= out.scrollTop + 1;
+        // console.log(isScrolledToBottom)
         return (
             <Container
 
@@ -482,11 +492,11 @@ class FormSummary extends Component {
                         </div>
                     </div>
 
-                    <div id="agreement" className="agreement-block">
+                    <div id="agreement" className="agreement-block" onScroll={this.onScroll}>
                         {this.state.agreement.map(this.renderAgreement)}
                     </div>
 
-                    <div className="InputField" style={{margin: '30px 0 50px 0'}}>
+                    <div className="InputField" style={{margin: '30px 0 50px 0', opacity: this.state.confirm_details_check ? 1 : 0.4}}>
                         <RadioWithoutIcon
                             width="40"
                             label="I/We confirm that I/We have understood the
@@ -495,6 +505,7 @@ class FormSummary extends Component {
                             options={agreeOptions}
                             id="agree_check"
                             name="agree_check"
+                            disabled
                             error={(this.state.agree_check_error) ? true : false}
                             helperText={this.state.agree_check_error}
                             value={this.state.agree_check || ''}
