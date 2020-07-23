@@ -486,7 +486,7 @@ class FormSummary extends Component {
                         {this.state.agreement.map(this.renderAgreement)}
                     </div>
 
-                    <div className="InputField" style={{margin: '30px 0 50px 0'}}>
+                    <div className="InputField" style={{margin: '30px 0 50px 0', opacity:'0'}}>
                         <RadioWithoutIcon
                             width="40"
                             label="I/We confirm that I/We have understood the

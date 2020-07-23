@@ -7,64 +7,108 @@
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-        }
-        
-        .mtr-top {
-            color: #0A1D32;
-            font-size: 8px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-        
-        .mtr-bottom {
-            color: #767E86;
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 1.6;
-        }
-    }  
-    
+      }
+      
+      .mtr-top {
+          color: #0A1D32;
+          font-size: 8px;
+          font-weight: 700;
+          text-transform: uppercase;
+      }
+      
+      .mtr-bottom {
+          color: #767E86;
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 1.6;
+      }
+    }
+  
     .bottom-content {
-        .bct-top {
-          display: flex;
-          justify-content: space-between;
-        }
-        
-        .bc-tile {
-            margin: 10px 0 10px 0;
-            padding: 6px 0 15px 0;
-            border-bottom: 1px solid #ededed;
-            cursor: pointer;
-        }
-        
-        .bct-top-title {
-            color: #0A1D32;
-            font-size: 14px;
-            font-weight: 500;
-        }
-        
-        .bct-content {
-            padding: 30px 0 20px 10px;
-        }
-        .bctc-tile {
-          margin: 0 0 20px 0;
-        }
-        
-        .title {
-            color: #767E86;
-            font-size: 10px;
-            font-weight: 700;
-        }
-        
-        .subtitle {
+      .bct-top {
+        display: flex;
+        justify-content: space-between;
+      }
+      
+      .bc-tile {
+          margin: 10px 0 10px 0;
+          padding: 6px 0 15px 0;
+          border-bottom: 1px solid #ededed;
+          cursor: pointer;
+      }
+      
+      .bct-top-title {
+          color: #0A1D32;
+          font-size: 14px;
+          font-weight: 500;
+      }
+      
+      .bct-content {
+          padding: 30px 0 20px 10px;
+      }
+      .bctc-tile {
+        margin: 0 0 20px 0;
+      }
+      
+      .title {
+          color: #767E86;
+          font-size: 10px;
+          font-weight: 700;
+      }
+      
+      .subtitle {
           color: #767E86;
           font-size: 14px;
           font-weight: 400;
           margin: 7px 0 0 0;
           line-height: 1.3;
+      }
+    }
+
+    .agreement-block {
+        height: 180px;
+        overflow: scroll;
+        overflow-y: scroll;
+
+        .agree-tiles {
+            display: flex;
+            align-items: baseline;
+        }
+        
+        .agree-tiles-left {
+            color: #0A1D32;
+            font-size: 13px;
+        }
+        
+        .agree-tiles-right {
+            margin: 0 0 0 10px;
+            color: #767E86;
+            font-size: 13px;
+            line-height: 1.6;
         }
     }
-}
+  }
+
+
+  .loan-instant-kyc-home {
+    .left {
+        color: #0A1D32;
+        font-size: 13px;
+        font-weight: 600;
+    }
+    
+    .action {
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid #ededed;
+        border-bottom: 1px solid #ededed;
+        padding: 20px 0 20px 0;
+        margin: 100px 0 0 0;
+    }
+    .right {
+        width: 14px;
+    }
+  }
 
 
 .loan-calculator {
