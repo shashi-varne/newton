@@ -17,13 +17,14 @@ const headerIconMapper = {
 
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
-  inPageTitle, force_hide_inpage_title, className ,style, headerData}) => (
+  inPageTitle, force_hide_inpage_title, className ,style, headerData={}}) => (
   <AppBar position="fixed" color="primary" 
   className={`Header transition ${classes.root} ${inPageTitle ? 'header-topbar-white' : 'header-topbar-white'} ${className}`}
   style={style}
   >
     <Toolbar>
-      <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={goBack}>
+      <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={headerData.goBack ||
+         goBack}>
         {!disableBack && 
         <SVG
           preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}

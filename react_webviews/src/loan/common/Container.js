@@ -57,7 +57,7 @@ class Container extends Component {
       return;
     }
     
-    if (checkStringInString(pathname, "payment")) {
+    if (checkStringInString(pathname, "instant-kyc-status")) {
       this.navigate("/gold/landing");
       return;
     }
@@ -127,7 +127,7 @@ class Container extends Component {
           {/*  */}
   
 
-          {!this.state.force_hide_inpage_title && 
+          {!this.state.force_hide_inpage_title &&  !this.props.noHeader &&
             this.new_header_scroll() 
           }
   

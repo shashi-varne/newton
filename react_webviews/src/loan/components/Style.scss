@@ -109,3 +109,55 @@
         width: 14px;
     }
   }
+
+
+.loan-landing {
+    padding-bottom: 30px;
+    .block1 {
+    }
+    .infoimage-block1 {
+      position: relative;
+      line-height: 1.6;
+      cursor: pointer;
+      .inner {
+        // position: absolute;
+        // top: 50px;
+        padding: 0 0 0 20px;
+      }
+      .title {
+        max-width: 60%;
+        margin: 10px 0 0px 0;
+        position: absolute;
+        top: 18%;
+      }
+      .button {
+        position: absolute;
+        top: 50%;
+        button {
+          box-shadow: none;
+          border-radius: 4px;
+        }
+      }
+      .bottom-content {
+        color: white;
+        font-size: 8px;
+        font-weight: 800;
+        // margin: 50px 0 0 0;
+        bottom: 20px;
+        position: absolute;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+    }
+
+    .action {
+        margin: 30px 0 0 0;
+    }
+    .faq {
+        display: flex;
+        align-items: center;
+        padding: 10px 0 10px 0;
+        cursor: pointer;
+      }
+  
+  }

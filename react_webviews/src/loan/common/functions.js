@@ -13,6 +13,7 @@ export async function initialize() {
     this.updateLead = updateLead.bind(this);
     this.formCheckUpdate = formCheckUpdate.bind(this);
     this.formHandleChange = formHandleChange.bind(this);
+    this.callBackApi = callBackApi.bind(this);
 
     nativeCallback({ action: 'take_control_reset' });
 
@@ -160,6 +161,35 @@ export async function updateLead(body, application_id) {
         toast('Something went wrong');
     }
 }
+
+export async function callBackApi(body) {
+    try {
+
+      
+      let res = await Api.post(`/relay/api/loan/dmi/callback/get/status/${this.state.application_id}`, body);
+      var resultData = res.pfwresponse.result;
+
+      this.setState({
+        show_loader: false
+      });
+      if (res.pfwresponse.status_code === 200 && !resultData.error) {
+        return resultData;
+      } else {
+        toast(resultData.error || resultData.message
+          || 'Something went wrong');
+        return {};
+      }
+      
+    } catch (err) {
+      console.log(err)
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
+      return {};
+    }
+
+  }
 
 export function openInBrowser(url, type) {
 

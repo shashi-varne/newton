@@ -9,7 +9,7 @@ import toast from '../../../common/ui/Toast';
 import RadioOptions from '../../../common/ui/RadioOptions';
 import { FormControl } from 'material-ui/Form';
 import DotDotLoader from '../../../common/ui/DotDotLoader';
-import {storageService} from 'utils/validators';
+import { storageService } from 'utils/validators';
 import { getConfig } from 'utils/functions';
 
 
@@ -33,15 +33,15 @@ class FormCreateProfile extends Component {
     }
 
     onload = () => {
-        if(this.state.dmi_loan_status === 'contact') {
+        if (this.state.dmi_loan_status === 'contact') {
             this.triggerOtp();
         } else {
             this.getDedupeCallback();
         }
-        
+
     }
 
-    getDedupeCallback = async() => {
+    getDedupeCallback = async () => {
         try {
 
             let body = {
@@ -51,15 +51,17 @@ class FormCreateProfile extends Component {
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200 && !resultData.error) {
 
-               if(resultData.callback_status) {
-                    if(resultData.dedupe_match) {
-                        // error screen
+                let searchParams = getConfig().searchParams + '&status=sorry';
+
+                if (resultData.callback_status) {
+                    if (resultData.dedupe_match) {
+                        this.navigate('instant-kyc-status', {searchParams: searchParams});
                     } else {
                         this.createContact();
                     }
-               } else {
-                        // error screen
-               }
+                } else {
+                    this.navigate('instant-kyc-status', {searchParams: searchParams});
+                }
             } else {
                 this.setState({
                     show_loader: false
@@ -76,9 +78,9 @@ class FormCreateProfile extends Component {
         }
     }
 
-    
 
-    createContact = async() => {
+
+    createContact = async () => {
         try {
 
             let res = await Api.get(`/relay/api/loan/dmi/create/contact/${this.state.application_id}`);
@@ -86,7 +88,7 @@ class FormCreateProfile extends Component {
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200 && !resultData.error) {
                 this.triggerOtp();
-               
+
             } else {
                 this.setState({
                     show_loader: false
@@ -103,7 +105,7 @@ class FormCreateProfile extends Component {
         }
     }
 
-    triggerOtp = async() => {
+    triggerOtp = async () => {
         try {
 
             let res = await Api.get(`/relay/api/loan/dmi/trigger_otp/${this.state.application_id}`);
@@ -114,18 +116,18 @@ class FormCreateProfile extends Component {
 
                     var message = 'An OTP is sent to your mobile number ' + result.mobile_no + ',  Enter OTP to verify and submit loan application.'
                     this.props.history.push({
-                      pathname: 'form-otp',
-                      search: getConfig().searchParams,
-                      params: {
-                        resend_link: result.resend_otp_url,
-                        verify_link: result.verify_otp_url,
-                        message: message, 
-                        mobile_no: result.mobile_no
-                      }
+                        pathname: 'form-otp',
+                        search: getConfig().searchParams,
+                        params: {
+                            resend_link: result.resend_otp_url,
+                            verify_link: result.verify_otp_url,
+                            message: message,
+                            mobile_no: result.mobile_no
+                        }
                     });
                     toast(message);
-                  }
-               
+                }
+
             } else {
                 this.setState({
                     show_loader: false

@@ -4,37 +4,77 @@ import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
 import ContactUs from '../../../common/components/contact_us';
 import { getUrlParams } from 'utils/validators';
+import { storageService } from 'utils/validators';
+
 const commonMapper = {
-    'success': {
-      'top_icon': 'ils_gold_purchase_success',
-      'top_title': 'Gold purchase successful!',
-      'mid_title': 'Payment details',
-      'button_title': 'GO TO LOCKER',
-      'cta_state': '/gold/gold-locker'
-    },
-    'pending': {
-      'top_icon': 'ils_gold_purchase_pending',
-      'top_title': 'Gold purchase pending!',
-      'mid_title': 'Payment details',
-      'button_title': 'GO TO LOCKER',
-      'cta_state':  '/gold/gold-locker'
-    },
-    'failed': {
-      'top_icon': 'ils_gold_purchase_failed',
-      'top_title': 'Oops! gold purchase failed',
-      'mid_title': '',
-      'button_title': 'RETRY BUY GOLD',
-      'cta_state': '/gold/buy'
-    }
+  'cancelled': {
+
+  },
+  'success': {
+
+  },
+  'pending': {
+    'top_icon': 'ils_covid_failed_copy_2',
+    'top_title': 'Instant KYC',
+    'mid_title': '',
+    'button_title': 'TRY LATER',
+    'cta_state': '/loan/home',
+    'close_state': '/loan/home'
+  },
+  'failed': {
+    'top_icon': 'error_illustration',
+    'top_title': 'Instant KYC failed!',
+    'mid_title': '',
+    'button_title': 'RETRY',
+    'cta_state': '/loan/instant-kyc',
+    'close_state': '/loan/journey'
+  },
+  'not_eligible': {//dropped for now
+    'top_icon': 'error_illustration',
+    'top_title': 'Instant KYC failed!',
+    'mid_title': '',
+    'button_title': 'RETRY',
+    'cta_state': '/loan/home',
+    'close_state': '/loan/journey'
+  },
+  'sorry': {//dropped for now
+    'top_icon': 'error_illustration',
+    'top_title': 'Sorry!',
+    'mid_title': '',
+    'button_title': 'OK',
+    'cta_state': '/loan/home',
+    'close_state': '/loan/home'
+  },
+  'eligible_sorry': {
+    'top_icon': 'error_illustration',
+    'top_title': 'Sorry!',
+    'mid_title': '',
+    'button_title': 'OK',
+    'cta_state': '/loan/home',
+    'close_state': '/loan/home'
+  },
+  'loan_not_eligible': {
+    'top_icon': 'ils_loan_failed',
+    'top_title': 'Sorry!',
+    'mid_title': '',
+    'button_title': 'OK',
+    'cta_state': '/loan/home',
+    'close_state': '/loan/home',
+    'noFooter': true,
+    'hide_contact': true
+  }
 }
+
+const outsiders = ['sorry', 'eligible_sorry', 'loan_not_eligible']
 
 class KycStatus extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false,
+      show_loader: true,
       params: getUrlParams(),
-      commonMapper: {}
+      commonMapper: {},
+      okyc_id: storageService().get('loan_okyc_id')
     }
 
     this.initialize = initialize.bind(this);
@@ -45,19 +85,57 @@ class KycStatus extends Component {
 
     let { status } = this.state.params;
 
-    status = 'success';
-    
+    if (!status) {
+      status = 'cancelled'
+    }
+
+    if (status === 'cancelled') {
+      this.navigate('/loan/instant-kyc');
+      return;
+    }
+
     this.setState({
       status: status,
       commonMapper: commonMapper[status]
     })
   }
 
+  kycCallback = async () => {
+
+    if (this.state.okyc_id) {
+      let status = this.state.status;
+      let body = {
+        "request_type": "okyc",
+        'okyc_id': this.state.okyc_id
+      }
+      let resultData = await this.callBackApi(body);
+      console.log(resultData)
+      if (resultData.callback_status) {
+        // no change required
+      } else {
+        status = 'pending';
+        this.setState({
+          status: status,
+          commonMapper: commonMapper[status]
+        })
+      }
+    } else {
+      this.setState({
+        show_loader: false
+      })
+    }
+
+  }
+
+
   onload = () => {
-    // ****************************************************
-    // code goes here
-    // common things can be added inside initialize
-    // use/add common functions from/to  ../../common/functions
+    if (outsiders.indexOf(this.state.status) !== -1) {
+      this.setState({
+        show_loader: false
+      })
+    } else {
+      this.kycCallback();
+    }
 
   }
 
@@ -78,64 +156,105 @@ class KycStatus extends Component {
   }
 
   handleClick = () => {
-      this.sendEvents('next');
+    this.sendEvents('next');
+    this.navigate(this.state.commonMapper.cta_state);
+  }
+
+  goBack = () => {
+    this.navigate(this.state.commonMapper.close_state);
   }
 
   render() {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="DUMMY_HEADER_TITLE"
+        title={this.state.commonMapper.top_title}
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
-        buttonTitle="CONTINUE"
+        buttonTitle={this.state.commonMapper.button_title}
+        headerData={{
+          icon: 'close',
+          goBack: this.goBack
+        }}
+        noFooter={this.state.commonMapper.noFooter}
       >
         <div className="gold-payment-container" id="goldSection">
           <div>
-          <img style={{width: '100%'}} 
-          src={ require(`assets/${this.state.productName}/${this.state.commonMapper['top_icon']}.svg`)} 
-          alt="Gold" />
+            {this.state.commonMapper['top_icon'] && <img style={{ width: '100%' }}
+              src={require(`assets/${this.state.productName}/${this.state.commonMapper['top_icon']}.svg`)}
+              alt="" />}
           </div>
-                <div className="main-tile">
-                  
-                    <div>
-                        {this.state.paymentSuccess && 
-                          <p className="top-content"> 
-                            If confirmed within 30 minutes we will place gold 
-                            purchase order (at live price) else it will be refunded in 3-5 business days.  
-                          </p>
-                        }
+          <div className="main-tile">
 
-                        {this.state.paymentPending && 
-                          <div>
-                            <p className="top-content"> 
-                            If confirmed within 30 minutes we will place gold 
-                            purchase order (at live price) else it will be refunded in 3-5 business days.  
-                            </p>
-                            <p className="top-content"> 
-                            If confirmed within 30 minutes we will place gold 
-                            purchase order (at live price) else it will be refunded in 3-5 business days.  
-                            </p>
-                          </div>
-                        }
+            <div>
+              {this.state.status === 'pending' &&
+                <p className="top-content">
+                  It is taking a little more time than usual. Please check after a while.
+                </p>
+              }
 
-                        {this.state.paymentFailed && 
-                          <div>
-                            <p className="top-content"> 
-                            If confirmed within 30 minutes we will place gold 
-                            purchase order (at live price) else it will be refunded in 3-5 business days.  
-                            </p>
-                            <p className="top-content"> 
-                              If any amount has been debited, it will be refunded within 3-5 business days.  
-                            </p>
-                          </div> 
-                        }
-                      
-                    </div>
-                  
+
+              {this.state.status === 'failed' &&
+                <div>
+                  <p className="top-content">
+                    Sorry, your instant KYC has failed due to some system issues. Please retry again.
+                  </p>
                 </div>
+              }
 
-                <ContactUs />
+              {this.state.status === 'not_eligible' &&
+                <div>
+                  <p className="top-content">
+                    Your KYC cannot be verified due to which you are not eligible for loan. Thank You.
+                  </p>
+                </div>
+              }
+
+
+              {this.state.status === 'sorry' &&
+                <div>
+                  <p className="top-content">
+                    We have captured your detail but due to some system issues,you cannot proceed further.
+                    Please try again after some time.
+                  </p>
+                  <p className="top-content">
+                    You will receive a communication on your E-mail id once the issue is resolved.
+                  </p>
+                </div>
+              }
+
+              {this.state.status === 'eligible_sorry' &&
+                <div>
+                  <p className="top-content">
+                    We have captured your detail but due to some system issues,you cannot proceed further.
+                    Please try again after some time.
+                  </p>
+                  <p className="top-content">
+                    You will receive a communication on your E-mail id once the issue is resolved.
+                  </p>
+                </div>
+              }
+
+              {this.state.status === 'loan_not_eligible' &&
+                <div>
+                  <p className="top-content">
+                    At the outset, we thank you for expressing interest in availing a loan.
+                  </p>
+                  <p className="top-content">
+                    We regret to inform you that <b>we cannot process your application further at this stage</b>,
+                    as it does not meet our partner’s policy criteria.
+                  </p>
+                  <p className="top-content">
+                    Hope to be of assistance in future.
+                  </p>
+                </div>
+              }
+
+            </div>
+
+          </div>
+
+          {!this.state.commonMapper.hide_contact && <ContactUs />}
         </div>
       </Container>
     );
