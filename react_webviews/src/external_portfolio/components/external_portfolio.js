@@ -167,7 +167,7 @@ export default class ExternalPortfolio extends Component {
     top_holdings = top_holdings || [];
     xirr = Number(xirr);
     const assetAllocData = this.generateAllocationData(asset_allocation);
-    console.log(doughnutConfigOpts);
+
     return (
       <Container
         title="External portfolio"
