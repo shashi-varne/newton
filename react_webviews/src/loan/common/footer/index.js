@@ -3,6 +3,7 @@ import React from 'react';
 import { DefaultLayout, WithProviderLayout } from './layout';
 
 const Footer = (props) => {
+  console.log(props)
   if(props.withProvider) {
     return (
    

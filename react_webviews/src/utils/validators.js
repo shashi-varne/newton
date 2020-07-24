@@ -274,18 +274,27 @@ export function inrFormatDecimalWithoutIcon(number) {
   }
 }
 
-export function numDifferentiation(val) {
+export function numDifferentiation(val, withSymbol) {
   if (!val) {
     val = '';
   }
+
   if (val >= 10000000) val = (val / 10000000).toFixed(2) + ' Cr';
-  else if (val >= 100000) val = (val / 100000).toFixed(2) + ' Lac';
+  else if (val >= 100000) val = (val / 100000).toFixed(2) + ' Lacs';
   else if (val) return inrFormatDecimal(val);
 
   val = val.toString();
   // remove .00
   val = val.replace(/\.00([^\d])/g, '$1');
+
+  if(withSymbol) {
+    val = '₹' + val;
+  }
   return val;
+}
+
+export function numDifferentiationInr(val) {
+  return numDifferentiation(val, true);
 }
 
 export function IsFutureDate(idate) {

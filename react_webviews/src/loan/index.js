@@ -75,7 +75,7 @@ const Lending = props => {
         <ToastContainer autoClose={3000} />
         <Switch>
 
-          <Route path={`${url}/landing`} component={Landing} />
+          <Route path={`${url}/home`} component={Landing} />
           <Route path={`${url}/Journey`} component={Journey} />
           <Route path={`${url}/Calculator`} component={Calculator} />
           <Route path={`${url}/Permissions`} component={Permissions} />
