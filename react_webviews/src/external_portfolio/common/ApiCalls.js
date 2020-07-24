@@ -75,7 +75,7 @@ export const fetchExternalPortfolio = async (params) => {
 export const fetchAllHoldings = async (params) => {
   try {
     const holdings = storageService().getObject('hni-holdings');
-    const next_page = storageService().getObject('hni-holdings-next-page');
+    const next_page = storageService().get('hni-holdings-next-page');
     const page_size = 10;
 
     if (boot || !holdings || isEmpty(holdings)) {
@@ -91,11 +91,12 @@ export const fetchAllHoldings = async (params) => {
       const { result, status_code: status } = res.pfwresponse;
 
       if (status === 200) {
+        console.log(result.holdings.length);
         if (result.holdings.length < page_size) {
           result.next_page = '';
         }
         storageService().setObject('hni-holdings', result.holdings);
-        storageService().setObject('hni-holdings-next-page', result.next_page);
+        storageService().set('hni-holdings-next-page', result.next_page);
         return result;
       } else {
         throw (result.error || result.message || genericErrMsg);

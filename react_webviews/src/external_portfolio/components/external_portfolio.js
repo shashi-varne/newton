@@ -23,7 +23,8 @@ const doughnutConfigOpts = {
   options: {
     layout: {
       padding: {
-        left: 0,
+        left: 10,
+        right: 10,
         bottom: 5,
         top: 5,
       }
