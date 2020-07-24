@@ -35,7 +35,9 @@ import FormCreateProfile from "./components/form/create_profile";
 
 
 import InstantKycHome from "./components/kyc/instant_kyc";
-import KycStatus from "./components/kyc/status"
+import KycStatus from "./components/kyc/status";
+
+import Reference from "./components/mandate/reference";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -100,6 +102,8 @@ const Lending = props => {
 
           <Route path={`${url}/form-otp`} component={FormOtp} />
           <Route path={`${url}/form-create-profile`} component={FormCreateProfile} />
+
+          <Route path={`${url}/reference`} component={Reference} />
 
           {/* Edit paths */}
 

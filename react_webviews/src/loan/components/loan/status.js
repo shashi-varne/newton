@@ -100,11 +100,11 @@ class LoanStatus extends Component {
               </div>
               <div className="items">
                 <div>Processing fee</div>
-                <div>{`- ${formatAmountInr(5000)}`}</div>
+                <div>{'- '+formatAmountInr(5000)}</div>
               </div>
               <div className="items">
                 <div>GST(18%)</div>
-                <div>{`- ${formatAmountInr(900)}`}</div>
+                <div>{'- '+formatAmountInr(900)}</div>
               </div>
               <hr style={{background:"#ccd3db"}} />
               <div className="credit">
