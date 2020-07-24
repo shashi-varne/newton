@@ -21,6 +21,7 @@ class Container extends Component {
       popupText: "",
       callbackType: "",
       inPageTitle: true,
+      new_header:true,
       force_hide_inpage_title: false,
       project: 'gold' //to use in common functions
     };
