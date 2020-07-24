@@ -47,7 +47,6 @@
     "promise": "8.0.1",
     "qs": "^6.5.2",
     "raf": "3.4.0",
-    "rc-slider": "^9.3.1",
     "react": "^16.3.2",
     "react-chartjs-2": "^2.9.0",
     "react-circular-progressbar": "^2.0.3",
