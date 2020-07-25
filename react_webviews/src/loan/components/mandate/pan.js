@@ -41,8 +41,29 @@ class MandatePan extends Component {
     }
   }
 
+  conversionCallBack = () => {
+    let body = {
+      "request_type": "conversion"
+    }
+
+    let resultData = await this.callBackApi(body);
+    if (resultData.callback_status) {
+      // upload pan and redirect to e-mandate
+    } else {
+      let searchParams = getConfig().searchParams + '&status=sorry';
+      this.navigate('instant-kyc-status', { searchParams: searchParams });
+    }
+  }
+
   handleClick = () => {
-      this.sendEvents('next');
+    this.sendEvents('next');
+
+    this.setState({
+      show_loader: true
+    })
+
+    // after api response hit this this.conversionCallBack();
+
   }
 
   render() {

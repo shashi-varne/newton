@@ -7,12 +7,6 @@ import toast from '../../../common/ui/Toast';
 import { initialize } from '../../common/functions';
 import BottomInfo from '../../../common/ui/BottomInfo';
 import Api from 'utils/api';
-import Button from 'material-ui/Button';
-import Dialog, {
-    DialogActions,
-    DialogContent,
-    DialogContentText
-} from 'material-ui/Dialog';
 import text_error_icon from 'assets/text_error_icon.svg';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
@@ -85,6 +79,15 @@ class FormSummary extends Component {
         let { personal_info, permanent_address_data, current_address_data,
             professional_info, application_info, vendor_info } = lead;
 
+
+        if(vendor_info && vendor_info.lead_id) {
+            this.setState({
+                isScrolledToBottom: true,
+                agree_check: 'agree',
+                confirm_details_check: true,
+                form_submitted: true
+            })
+        }
         let personal_data = {
             'title': 'Personal details',
             edit_state: `/loan/edit-personal-details`,
@@ -217,7 +220,7 @@ class FormSummary extends Component {
         this.setState({
             accordianData: accordianData,
             application_info: application_info,
-            vendor_info: vendor_info
+            vendor_info: vendor_info || {}
         })
     }
 
@@ -357,37 +360,6 @@ class FormSummary extends Component {
         })
     }
 
-    renderDialog = () => {
-        return (
-            <Dialog
-                fullScreen={false}
-                open={this.state.openDialogReset || false}
-                onClose={this.handleClose}
-                aria-labelledby="responsive-dialog-title"
-            >
-                <DialogContent>
-                    <DialogContentText>
-                        All the data will be saved. Are you sure you want to restart?
-              </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={this.resetQuote} color="default">
-                        YES
-              </Button>
-                    <Button onClick={this.handleClose} color="default" autoFocus>
-                        CANCEL
-              </Button>
-                </DialogActions>
-            </Dialog>
-        );
-    }
-
-    showDialog = () => {
-        this.setState({
-            openDialogReset: true
-        });
-    }
-
 
     handleChange = name => event => {
         if (!name) {
@@ -419,9 +391,12 @@ class FormSummary extends Component {
     onScroll = (e) => {
         const element = e.target;
         let isScrolled = element.scrollHeight - element.clientHeight <= element.scrollTop + 1;
-        this.setState({
-            isScrolledToBottom: isScrolled
-        })
+        if(!this.state.form_submitted) {
+            this.setState({
+                isScrolledToBottom: isScrolled
+            })
+        }
+        
     }
 
     render() {
@@ -429,13 +404,13 @@ class FormSummary extends Component {
             <Container
 
                 resetpage={true}
-                handleReset={this.showDialog}
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
                 title="Review application form"
                 fullWidthButton={true}
                 onlyButton={true}
                 buttonTitle={'SUBMIT'}
+                disable={!(this.state.confirm_details_check && this.state.agree_check === 'agree')}
                 handleClick={() => this.handleClick()}
             >
 
@@ -503,6 +478,7 @@ class FormSummary extends Component {
                             options={agreeOptions}
                             id="agree_check"
                             name="agree_check"
+                            disabled={!(this.state.confirm_details_check && this.state.isScrolledToBottom)}
                             error={(this.state.agree_check_error) ? true : false}
                             helperText={this.state.agree_check_error}
                             value={this.state.agree_check || ''}
@@ -512,7 +488,6 @@ class FormSummary extends Component {
                     <BottomInfo baseData={{ 'content': 'You are one step away from knowing your eligibility' }} />
                 </div>
 
-                {this.renderDialog()}
             </Container>
         );
     }

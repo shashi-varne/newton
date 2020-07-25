@@ -23,6 +23,7 @@ import LoanApprvoed from "./components/loan/approved";
 import LoanOtp from "./components/loan/otp";
 import LoanStatus from "./components/loan/status";
 import LoanSummary from "./components/loan/summary";
+import LoanEligible from "./components/loan/loan_eligible";
 
 import ContactDetails from "./components/form/contact";
 import PersonalDetails from "./components/form/personal";
@@ -94,6 +95,7 @@ const Lending = props => {
           <Route path={`${url}/loan-Otp`} component={LoanOtp} />
           <Route path={`${url}/loan-Status`} component={LoanStatus} />
           <Route path={`${url}/loan-Summary`} component={LoanSummary} />
+          <Route path={`${url}/loan-eligible`} component={LoanEligible} />
 
           <Route path={`${url}/requirements-details`} component={ReqDetails} />
           <Route path={`${url}/personal-details`} component={PersonalDetails} />

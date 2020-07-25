@@ -22,7 +22,7 @@ class Journey extends Component {
       journeyData: [],
       icon_mapper: icon_mapper,
       withProvider: false,
-      get_lead:true,
+      get_lead: true,
       getLeadBodyKeys: ['vendor_info'],
     }
 
@@ -52,28 +52,45 @@ class Journey extends Component {
     let application_status = application_info.application_status || '';
     let dmi_loan_status = vendor_info.dmi_loan_status;
 
-    console.log("application_status : "  + application_status);
-    console.log("dmi_loan_status : "  + dmi_loan_status);
+    console.log("application_status : " + application_status);
+    console.log("dmi_loan_status : " + dmi_loan_status);
 
     let next_state = '';
     let step_info = 1;
     let withProvider = this.state.withProvider;
+    let nextFunction = '';
 
-    if(application_status === 'application_incomplete') {
+    dmi_loan_status = 'callback_awaited_decision';
+
+    application_status = 'application_complete';
+    if (application_status === 'application_incomplete') {
       cta_title = 'CHECK ELIGIBILITY';
       next_state = 'requirements-details';
-    } else if(application_status === 'application_submitted') {
-      if(dmi_loan_status === 'lead') {
-        cta_title = 'CHECK ELIGIBILITY';
-        next_state = 'requirements-details';
-      } else if(dmi_loan_status === 'contact' || dmi_loan_status === 'verified_contact') {
-        cta_title = 'CHECK ELIGIBILITY';
+    } else if (application_status === 'application_submitted') {
+      cta_title = 'CHECK ELIGIBILITY';
+      next_state = 'requirements-details';
+    } else if (application_status === 'application_complete') {
+      if (dmi_loan_status === 'lead' || dmi_loan_status === 'contact') {
         next_state = 'form-summary';
+      } else if (dmi_loan_status === 'verified_contact' ||
+        dmi_loan_status === 'okyc') {
+        next_state = 'instant-kyc';
+      } else if (dmi_loan_status === 'callback_awaited_decision') {
+        nextFunction = this.decisionCallback;
+      } else if (dmi_loan_status === 'decision_done' || dmi_loan_status === 'callback_awaited_conversion' ||
+        dmi_loan_status === 'opportunity') {
+        withProvider = true;
+        step_info = 2;
+
+        if (dmi_loan_status === 'decision_done') {
+          cta_title = 'CONTINUE';
+        }
+
+        next_state = 'upload-pan';
       }
-      
     }
 
-   
+    console.log(next_state)
 
     this.setState({
       application_info: application_info,
@@ -100,10 +117,10 @@ class Journey extends Component {
       }
     ];
 
-    if(step_info === 2) {
+    if (step_info === 2) {
       journeyData[0].status = 'success';
       journeyData[1].status = 'init';
-    } else if(step_info === 3) {
+    } else if (step_info === 3) {
       journeyData[0].status = 'success';
       journeyData[1].status = 'success';
       journeyData[2].status = 'init';
@@ -111,10 +128,10 @@ class Journey extends Component {
       withProvider = true;
     }
 
-
     this.setState({
       journeyData: journeyData,
-      withProvider: withProvider
+      withProvider: withProvider,
+      nextFunction: nextFunction
     })
   }
 
@@ -136,7 +153,13 @@ class Journey extends Component {
 
   handleClick = () => {
     this.sendEvents('next');
-    this.navigate(this.state.next_state);
+
+    if (this.state.nextFunction) {
+      this.state.nextFunction();
+    } else {
+      this.navigate(this.state.next_state);
+    }
+
   }
 
   getJourneyBorder = (props, index) => {
@@ -177,15 +200,15 @@ class Journey extends Component {
           }
         </div>
         <div>
-        <div className={` title ${props.status === 'init' ? 'init-title' :
-          props.status === 'success' ? 'success-title' :
-            'pending-title'}`}>
-          {props.title}
-        </div>
-       {props.key === 'check_eligi' &&
-        <div style={{margin: '0 0 0 30px'}}>
-          {inrFormatDecimal(1000000)}
-        </div>}
+          <div className={` title ${props.status === 'init' ? 'init-title' :
+            props.status === 'success' ? 'success-title' :
+              'pending-title'}`}>
+            {props.title}
+          </div>
+          {props.key === 'check_eligi' &&
+            <div style={{ margin: '0 0 0 30px' }}>
+              {inrFormatDecimal(1000000)}
+            </div>}
         </div>
       </div>
 
