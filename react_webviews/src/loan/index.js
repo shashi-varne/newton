@@ -80,20 +80,20 @@ const Lending = props => {
 
           <Route path={`${url}/home`} component={Landing} />
           <Route path={`${url}/Journey`} component={Journey} />
-          <Route path={`${url}/Calculator`} component={Calculator} />
-          <Route path={`${url}/Permissions`} component={Permissions} />
-          <Route path={`${url}/Help`} component={Help} />
-          <Route path={`${url}/Report-Details`} component={ReportDetails} />
-          <Route path={`${url}/Schedule-Doc`} component={ScheduleDoc} />
+          <Route path={`${url}/calculator`} component={Calculator} />
+          <Route path={`${url}/permissions`} component={Permissions} />
+          <Route path={`${url}/help`} component={Help} />
+          <Route path={`${url}/report-Details`} component={ReportDetails} />
+          <Route path={`${url}/schedule-Doc`} component={ScheduleDoc} />
 
 
           <Route path={`${url}/instant-kyc`} component={InstantKycHome} />
           <Route path={`${url}/instant-kyc-status`} component={KycStatus} />
 
-          <Route path={`${url}/Loan-Approved`} component={LoanApprvoed} />
-          <Route path={`${url}/Loan-Otp`} component={LoanOtp} />
-          <Route path={`${url}/Loan-Status`} component={LoanStatus} />
-          <Route path={`${url}/Loan-Summary`} component={LoanSummary} />
+          <Route path={`${url}/loan-Approved`} component={LoanApprvoed} />
+          <Route path={`${url}/loan-Otp`} component={LoanOtp} />
+          <Route path={`${url}/loan-Status`} component={LoanStatus} />
+          <Route path={`${url}/loan-Summary`} component={LoanSummary} />
 
           <Route path={`${url}/requirements-details`} component={ReqDetails} />
           <Route path={`${url}/personal-details`} component={PersonalDetails} />
