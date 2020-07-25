@@ -2,12 +2,20 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
+import Input from "common/ui/Input";
+import { FormControl } from 'material-ui/Form';
+import MobileInputWithoutIcon from '../../../common/ui/MobileInputWithoutIcon';
+import Api from 'utils/api';
+import toast from '../../../common/ui/Toast';
+import {storageService} from 'utils/validators';
 
 class KycStatus extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false
+      show_loader: false,
+      form_data: {},
+      application_id: storageService().get('loan_application_id')
     }
 
     this.initialize = initialize.bind(this);
@@ -41,22 +49,110 @@ class KycStatus extends Component {
     }
   }
 
-  handleClick = () => {
-      this.sendEvents('next');
+  handleChange = name => event => {
+    this.formHandleChange(name, event);
+  };
+
+  handleClick = async () => {
+    
+    this.sendEvents('next');
+
+    let keys_to_check = ['ref_name_first', 'ref_contact_first', 'ref_name_second', 'ref_contact_second'];
+
+    let form_data = this.state.form_data;
+
+    this.formCheckUpdate(form_data, keys_to_check);
+
+    try {
+      this.setState({
+        show_loader: true
+      })
+
+      let body = form_data;
+
+      const res = await Api.post(`/relay/api/loan/reference/update/${this.state.application_id}`, body);
+
+      console.log(res.error)
+
+
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
+      console.log(err)
+    }
   }
 
   render() {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="DUMMY_HEADER_TITLE"
+        title="Reference information"
         events={this.sendEvents('just_set_events')}
-        handleClick={this.handleClick}
         buttonTitle="CONTINUE"
+        handleClick={() => this.handleClick()}
       >
-        <div className="loan-mandate-reference">
-          {/* {code goes here} */}
-        </div>
+        <FormControl fullWidth>
+          <div className="loan-mandate-reference">
+            <div style={{paddingBottom:'40px'}}>
+              <div style={{color: '#64778D',fontSize: 13, margin: '0 0 6px 0'}}>
+                1st reference
+              </div>
+              <div style={{marginBottom:'40px'}}>
+                <Input
+                  error={!!this.state.form_data.ref_name_first_error}
+                  helperText={this.state.form_data.ref_name_first_error}
+                  type="text"
+                  width="40"
+                  label="Full name"
+                  name="ref_name_first"
+                  onChange={this.handleChange()} 
+                />
+              </div>
+              <div style={{marginBottom:'40px'}}>
+                <MobileInputWithoutIcon
+                  error={!!this.state.form_data.ref_contact_first_error}
+                  helperText={this.state.form_data.ref_contact_first_error} 
+                  type="number"
+                  width="40"
+                  label="Mobile number"
+                  class="Mobile"
+                  maxLength={10}
+                  name="ref_contact_first"
+                  onChange={this.handleChange()} />          
+              </div>
+            </div>
+
+            <div style={{paddingBottom:'40px'}}>
+              <div style={{color: '#64778D',fontSize: 13, margin: '0 0 6px 0'}}>
+                2st reference
+              </div>
+              <div style={{marginBottom:'40px'}}>
+                <Input
+                  error={!!this.state.form_data.ref_name_second_error}
+                  helperText={this.state.form_data.ref_name_second_error}
+                  type="text"
+                  width="40"
+                  label="Full name"
+                  name="ref_name_second"
+                />
+              </div>
+              <div style={{marginBottom:'40px'}}>
+                <MobileInputWithoutIcon
+                  error={!!this.state.form_data.ref_contact_second_error}
+                  helperText={this.state.form_data.ref_contact_second_error} 
+                  type="number"
+                  width="40"
+                  label="Mobile number"
+                  class="Mobile"
+                  maxLength={10}
+                  name="ref_contact_second"
+                  onChange={this.handleChange()} />          
+              </div>
+            </div>
+          </div>
+        </FormControl>
       </Container>
     );
   }

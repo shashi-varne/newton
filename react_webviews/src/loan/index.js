@@ -35,7 +35,10 @@ import FormCreateProfile from "./components/form/create_profile";
 
 
 import InstantKycHome from "./components/kyc/instant_kyc";
-import KycStatus from "./components/kyc/status"
+import KycStatus from "./components/kyc/status";
+
+import Bank from "./components/mandate/bank";
+import Reference from "./components/mandate/reference";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -87,7 +90,7 @@ const Lending = props => {
           <Route path={`${url}/instant-kyc`} component={InstantKycHome} />
           <Route path={`${url}/instant-kyc-status`} component={KycStatus} />
 
-          <Route path={`${url}/Loan-Apprvoed`} component={LoanApprvoed} />
+          <Route path={`${url}/Loan-Approved`} component={LoanApprvoed} />
           <Route path={`${url}/Loan-Otp`} component={LoanOtp} />
           <Route path={`${url}/Loan-Status`} component={LoanStatus} />
           <Route path={`${url}/Loan-Summary`} component={LoanSummary} />
@@ -100,6 +103,9 @@ const Lending = props => {
 
           <Route path={`${url}/form-otp`} component={FormOtp} />
           <Route path={`${url}/form-create-profile`} component={FormCreateProfile} />
+
+          <Route path={`${url}/reference`} component={Reference} />
+          <Route path={`${url}/bank`} component={Bank} />
 
           {/* Edit paths */}
 

@@ -44,7 +44,8 @@ class FormSummary extends Component {
             application_info: {},
             agreement:[],
             agree_check: '',
-            vendor_info: {}
+            vendor_info: {},
+            isScrolledToBottom: false            
         }
         this.initialize = initialize.bind(this);
     }
@@ -415,8 +416,15 @@ class FormSummary extends Component {
         )
     }
 
-    render() {
+    onScroll = (e) => {
+        const element = e.target;
+        let isScrolled = element.scrollHeight - element.clientHeight <= element.scrollTop + 1;
+        this.setState({
+            isScrolledToBottom: isScrolled
+        })
+    }
 
+    render() {
         return (
             <Container
 
@@ -482,11 +490,11 @@ class FormSummary extends Component {
                         </div>
                     </div>
 
-                    <div id="agreement" className="agreement-block">
+                    <div id="agreement" className="agreement-block" onScroll={this.onScroll}>
                         {this.state.agreement.map(this.renderAgreement)}
                     </div>
 
-                    <div className="InputField" style={{margin: '30px 0 50px 0'}}>
+                    <div className="InputField" style={{margin: '30px 0 50px 0', opacity: this.state.confirm_details_check && this.state.isScrolledToBottom ? 1 : 0.4}}>
                         <RadioWithoutIcon
                             width="40"
                             label="I/We confirm that I/We have understood the

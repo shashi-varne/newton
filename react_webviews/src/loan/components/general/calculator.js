@@ -2,12 +2,20 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
+import SliderWithValues from "../../../common/ui/SilderWithValues"
+import "../Style.scss"
+import { formatAmount } from "../../../utils/validators";
+import Button from '../../../common/ui/Button';
 
 class Calculator extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false
+      show_loader: false,
+      Net_monthly_Income: 90000,
+      Tenor: 3,
+      Other_EMIs: 10000,
+      Monthly_expenses: 30000
     }
 
     this.initialize = initialize.bind(this);
@@ -45,17 +53,86 @@ class Calculator extends Component {
       this.sendEvents('next');
   }
 
+  onChange = (val, key) => {
+    this.setState({[key]: val})
+  }
+
   render() {
+    const {
+      Net_monthly_Income,
+      Tenor,
+      Other_EMIs,
+      Monthly_expenses
+    } = this.state;
+
+    const Loan_Eligibility = (Net_monthly_Income + Other_EMIs + Monthly_expenses) * 40/100 * Tenor;
+
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="DUMMY_HEADER_TITLE"
+        title="Loan eligibility calculator"
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
-        buttonTitle="CONTINUE"
+        buttonTitle="APPLY NOW"
+        noFooter={true}
       >
         <div className="loan-calculator">
-          {/* {code goes here} */}
+          <SliderWithValues 
+            label="Net monthly income"
+            val="Net_monthly_Income"
+            value={Net_monthly_Income}
+            min="0"
+            max="2500000"
+            minValue="0"
+            maxValue="₹ 25 Lacs"
+            onChange={this.onChange}
+          />
+
+          <SliderWithValues
+            label="Loan tenor"
+            val="Tenor"
+            value={Tenor}
+            min="3"
+            max="24"
+            minValue="3 MONTHS"
+            maxValue="24 MONTHS"
+            onChange={this.onChange}
+          />
+
+          <SliderWithValues
+            label="Other EMIs"
+            val="Other_EMIs"
+            value={Other_EMIs}
+            min="0"
+            max="2500000"
+            minValue="0"
+            maxValue="₹ 25 Lacs"
+            onChange={this.onChange}
+          />
+
+          <SliderWithValues
+            label="Monthly expenses"
+            val="Monthly_expenses"
+            value={Monthly_expenses}
+            min="0"
+            max="2500000"
+            minValue="0"
+            maxValue="₹ 25 Lacs"
+            onChange={this.onChange}
+          />
+
+          <div className="total-amount">
+            <div>You are elgible for upto</div>
+            <div className="total">
+              {'₹ ' + formatAmount(Loan_Eligibility)}
+            </div>
+            <Button 
+              type="default"
+              buttonTitle="APPLY NOW"
+            />
+          </div>
+
+          
         </div>
       </Container>
     );
