@@ -109,9 +109,10 @@ class KycStatus extends Component {
         'okyc_id': this.state.okyc_id
       }
       let resultData = await this.callBackApi(body);
-      console.log(resultData)
       if (resultData.callback_status) {
-        // no change required
+        if(this.state.status === 'success') {
+          this.navigate('/loan/instant-kyc');
+        }
       } else {
         status = 'pending';
         this.setState({

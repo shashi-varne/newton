@@ -144,8 +144,13 @@ class Landing extends Component {
   }
 
   handleClickTopCard = () => {
+    let dmi_loan_status = this.state.vendor_info.dmi_loan_status || '';
+
     if(false) {//condition for mobile
       this.navigate('permissions');
+    } else if(dmi_loan_status === 'application_rejected') {
+      let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
+      this.navigate('instant-kyc-status', {searchParams: searchParams});
     } else {
       this.navigate('journey');
     }
@@ -255,7 +260,8 @@ class Landing extends Component {
         showLoader={this.state.show_loader}
         title="Personal loan"
         noHeader={this.state.show_loader}
-        buttonTitle="APPLY NOW"
+        buttonTitle={this.state.top_cta_title}
+        handleClick={this.handleClickTopCard}
         events={this.sendEvents('just_set_events')}
       >
        
