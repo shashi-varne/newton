@@ -61,7 +61,7 @@ class KycStatus extends Component {
 
     let form_data = this.state.form_data;
 
-    this.formCheckUpdate(form_data, keys_to_check);
+    this.formCheckUpdate(keys_to_check, form_data);
 
     try {
       this.setState({

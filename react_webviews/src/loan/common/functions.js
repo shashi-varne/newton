@@ -14,6 +14,7 @@ export async function initialize() {
     this.formCheckUpdate = formCheckUpdate.bind(this);
     this.formHandleChange = formHandleChange.bind(this);
     this.callBackApi = callBackApi.bind(this);
+    this.decisionCallback = decisionCallback.bind(this);
 
     nativeCallback({ action: 'take_control_reset' });
 
@@ -42,7 +43,7 @@ export async function initialize() {
                 "application_info": "True",
             };
 
-            if(this.state.fetch_all) {
+            if (this.state.fetch_all) {
                 body = {
                     "vendor_name": "DMI",
                     "application_info": "True",
@@ -165,31 +166,31 @@ export async function updateLead(body, application_id) {
 export async function callBackApi(body) {
     try {
 
-      
-      let res = await Api.post(`/relay/api/loan/dmi/callback/get/status/${this.state.application_id}`, body);
-      var resultData = res.pfwresponse.result;
 
-      this.setState({
-        show_loader: false
-      });
-      if (res.pfwresponse.status_code === 200 && !resultData.error) {
-        return resultData;
-      } else {
-        toast(resultData.error || resultData.message
-          || 'Something went wrong');
-        return {};
-      }
-      
+        let res = await Api.post(`/relay/api/loan/dmi/callback/get/status/${this.state.application_id}`, body);
+        var resultData = res.pfwresponse.result;
+
+        this.setState({
+            show_loader: false
+        });
+        if (res.pfwresponse.status_code === 200 && !resultData.error) {
+            return resultData;
+        } else {
+            toast(resultData.error || resultData.message
+                || 'Something went wrong');
+            return {};
+        }
+
     } catch (err) {
-      console.log(err)
-      this.setState({
-        show_loader: false
-      });
-      toast('Something went wrong');
-      return {};
+        console.log(err)
+        this.setState({
+            show_loader: false
+        });
+        toast('Something went wrong');
+        return {};
     }
 
-  }
+}
 
 export function openInBrowser(url, type) {
 
@@ -298,7 +299,7 @@ export function formCheckUpdate(keys_to_check, form_data) {
         'p_country': 'country',
     }
 
-  
+
     let selectTypeInput = ['purpose', 'employment_type', 'gender', 'marital_status',
         'educational_qualification', 'residence_type'];
 
@@ -324,11 +325,13 @@ export function formCheckUpdate(keys_to_check, form_data) {
         form_data: form_data
     })
 
+    console.log(form_data)
+
 
     if (canSubmitForm) {
         let body = {};
 
-        if(this.state.screen_name === 'address-details') {
+        if (this.state.screen_name === 'address-details') {
             body = {
 
                 current_residence_type: form_data.residence_type || '',
@@ -338,7 +341,7 @@ export function formCheckUpdate(keys_to_check, form_data) {
                 current_city: form_data.city || '',
                 current_state: form_data.state || '',
                 current_country: form_data.country || '',
-    
+
                 permanent_address: form_data.p_address || '',
                 permanent_pincode: form_data.p_pincode || '',
                 permanent_city: form_data.p_city || '',
@@ -351,7 +354,7 @@ export function formCheckUpdate(keys_to_check, form_data) {
                 body[key] = form_data[key] || '';
             }
         }
-       
+
         this.updateLead(body);
     }
 }
@@ -379,4 +382,34 @@ export function formHandleChange(name, event) {
     this.setState({
         form_data: form_data
     })
+}
+
+export async function decisionCallback() {
+
+    this.setState({
+        show_loader: true
+    })
+    let body = {
+        "request_type": "decision"
+    }
+
+    let resultData = await this.callBackApi(body);
+    console.log(resultData);
+
+    if (resultData.callback_status) {
+        // no change required
+        if (resultData.eligible) {
+            this.navigate('loan-eligible');
+            // loan approved
+        } else {
+            // loan not approved
+            let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
+            this.navigate('instant-kyc-status', { searchParams: searchParams });
+        }
+    } else {
+        // sorry
+        let searchParams = getConfig().searchParams + '&status=eligible_sorry';
+        this.navigate('instant-kyc-status', { searchParams: searchParams });
+    }
+
 }

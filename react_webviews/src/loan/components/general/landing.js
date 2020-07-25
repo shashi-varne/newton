@@ -15,7 +15,7 @@ class Landing extends Component {
       show_loader: false,
       get_lead: true,
       getLeadBodyKeys: ['vendor_info'],
-      productName: getConfig().productName
+      top_cta_title: ''
     }
 
     this.initialize = initialize.bind(this);
@@ -39,7 +39,29 @@ class Landing extends Component {
   }
 
   onload = async () => {
-    console.log(this.state.lead);
+    let lead = this.state.lead || {};
+    let application_info = lead.application_info || {};
+    let vendor_info = lead.vendor_info || {};
+
+    let loan_apprroved = false;
+    let isResume = true;
+    let top_cta_title = 'RESUME';
+    if(application_info.application_status === 'application_incomplete') {
+      isResume = false;
+      top_cta_title = 'APPLY NOW';
+    }
+
+    if(application_info.application_status === 'loan_disbursed') {
+      loan_apprroved = true;
+    }
+
+    this.setState({
+      application_info: application_info,
+      vendor_info: vendor_info,
+      isResume: isResume,
+      loan_apprroved: loan_apprroved,
+      top_cta_title: top_cta_title
+    })
   }
 
   sendEvents(user_action) {
@@ -121,6 +143,116 @@ class Landing extends Component {
     });
   }
 
+  handleClickTopCard = () => {
+    let dmi_loan_status = this.state.vendor_info.dmi_loan_status || '';
+
+    if(false) {//condition for mobile
+      this.navigate('permissions');
+    } else if(dmi_loan_status === 'application_rejected') {
+      let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
+      this.navigate('instant-kyc-status', {searchParams: searchParams});
+    } else {
+      this.navigate('journey');
+    }
+    
+  }
+
+  renderUiBeforeApproval() {
+    if(!this.state.loan_apprroved) {
+      return(
+        <div className="loan-landing loan-instant-kyc-home" >
+        <div className="infoimage-block1" onClick={() => this.handleClickTopCard()} >
+        
+          <img style={{ width: '100%', cursor: 'pointer' }} 
+          src={require(`assets/${this.state.productName}/ils_loan_intro_card.svg`)} alt="" />
+          <div className="inner">
+            <div className="title generic-page-title" style={{color: 'white'}}>
+              Personalised instant loan
+            </div>
+            <div className="button">
+              <Button variant="raised"
+                size="large" color="secondary" autoFocus>
+                {this.state.top_cta_title}
+                </Button>
+            </div>
+            <div className="bottom-content">
+              No paper-work | Money in A/c within 2 hrs
+            </div>
+          </div>
+        </div>
+
+        <div className="action" onClick={() => this.redirectKyc()}>
+          <div className="left">
+          Loan eligibility calculator
+            </div>
+            <SVG
+              className="right"
+              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+              src={next_arrow}
+            />
+          
+        </div>
+
+        <HowToSteps style={{ marginTop: 20,marginBottom:0 }} baseData={this.state.stepsContentMapper} />
+
+        <div className="generic-page-title" style={{ margin: '20px 0 15px 0' }}>
+          Simple and hassle-free process
+        </div>
+
+        <div className="his">
+          <div className="horizontal-images-scroll">
+            <img className='image' src={require(`assets/${this.state.productName}/ic_why_loan2.svg`)} alt="" />
+            <img className='image' src={require(`assets/${this.state.productName}/ic_why_loan2.svg`)} alt="" />
+            <img className='image' src={require(`assets/${this.state.productName}/ic_why_loan2.svg`)} alt="" />
+            <img className='image' src={require(`assets/${this.state.productName}/ic_why_loan2.svg`)} alt="" />
+          </div>
+        </div>
+
+        <div className="generic-page-title" style={{margin:'30px 0 10px 0'}}>
+          Things to know
+        </div>
+        <div className="generic-hr"></div>
+        <div className="flex faq" onClick={() => this.openFaqs()}>
+          <div>
+            <img className="accident-plan-read-icon"
+              src={require(`assets/${this.state.productName}/ic_document_copy.svg`)} alt="" />
+          </div>
+          <div>
+            Frequently asked questions
+          </div>
+        </div>
+        <div className="generic-hr"></div>
+
+        <div className="dmi-info">
+          In partnership with
+          <img style={{marginLeft: 10}} src={dmi_logo} alt="" />
+        </div>
+
+      </div>
+      )
+    }
+
+    return null;
+  }
+
+  renderUiAfterApproval() {
+    if(this.state.loan_apprroved) {
+      return(
+        <div className="loan-landing loan-instant-kyc-home" >
+    
+
+        <div className="dmi-info">
+          In partnership with
+          <img style={{marginLeft: 10}} src={dmi_logo} alt="" />
+        </div>
+
+      </div>
+      )
+    }
+
+    return null;
+  }
+
 
   render() {
     return (
@@ -128,79 +260,13 @@ class Landing extends Component {
         showLoader={this.state.show_loader}
         title="Personal loan"
         noHeader={this.state.show_loader}
-        buttonTitle="APPLY NOW"
+        buttonTitle={this.state.top_cta_title}
+        handleClick={this.handleClickTopCard}
         events={this.sendEvents('just_set_events')}
       >
-        <div className="loan-landing loan-instant-kyc-home" >
-          <div className="infoimage-block1" onClick={() => this.navigate('check-how1')} >
-          
-            <img style={{ width: '100%', cursor: 'pointer' }} 
-            src={require(`assets/${this.state.productName}/ils_loan_intro_card.svg`)} alt="" />
-            <div className="inner">
-              <div className="title generic-page-title" style={{color: 'white'}}>
-                Personalised instant loan
-              </div>
-              <div className="button">
-                <Button variant="raised"
-                  size="large" color="secondary" autoFocus>
-                  Apply now
-                  </Button>
-              </div>
-              <div className="bottom-content">
-                No paper-work | Money in A/c within 2 hrs
-              </div>
-            </div>
-          </div>
-
-          <div className="action" onClick={() => this.redirectKyc()}>
-            <div className="left">
-            Loan eligibility calculator
-              </div>
-              <SVG
-                className="right"
-                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
-                src={next_arrow}
-              />
-            
-          </div>
-
-          <HowToSteps style={{ marginTop: 20,marginBottom:0 }} baseData={this.state.stepsContentMapper} />
-
-          <div className="generic-page-title" style={{ margin: '20px 0 15px 0' }}>
-            Simple and hassle-free process
-          </div>
-
-          <div className="his">
-            <div className="horizontal-images-scroll">
-              <img className='image' src={require(`assets/${this.state.productName}/ic_why_loan2.svg`)} alt="" />
-              <img className='image' src={require(`assets/${this.state.productName}/ic_why_loan2.svg`)} alt="" />
-              <img className='image' src={require(`assets/${this.state.productName}/ic_why_loan2.svg`)} alt="" />
-              <img className='image' src={require(`assets/${this.state.productName}/ic_why_loan2.svg`)} alt="" />
-            </div>
-          </div>
-
-          <div className="generic-page-title" style={{margin:'30px 0 10px 0'}}>
-            Things to know
-          </div>
-          <div className="generic-hr"></div>
-          <div className="flex faq" onClick={() => this.openFaqs()}>
-            <div>
-              <img className="accident-plan-read-icon"
-                src={require(`assets/${this.state.productName}/ic_document_copy.svg`)} alt="" />
-            </div>
-            <div>
-              Frequently asked questions
-            </div>
-          </div>
-          <div className="generic-hr"></div>
-
-          <div style={{color: '#0A1D32', fontSize:13}}>
-            In partnership with
-            <img style={{marginLeft: 10}} src={dmi_logo} alt="" />
-          </div>
-
-        </div>
-
+       
+        {this.renderUiBeforeApproval()}
+        {this.renderUiAfterApproval()}
       </Container>
     );
   }

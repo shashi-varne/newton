@@ -96,8 +96,7 @@ class FormOtp extends Component {
       if (res.pfwresponse.status_code === 200) {
 
         let result = res.pfwresponse.result;
-        if (result.message === 'success' || result.message === 'Success!!') {
-
+        if (!result.error) {
           this.navigate('instant-kyc');
         } else {
           this.setState({

@@ -9,6 +9,9 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import completed_step from "assets/completed_step.svg";
 import { storageService } from 'utils/validators';
+
+const portalStatus = ['verified_contact', 'okyc_failed', 'okyc_cancelled'];
+
 class InstantKycHome extends Component {
   constructor(props) {
     super(props);
@@ -56,7 +59,7 @@ class InstantKycHome extends Component {
 
   redirectKyc = async () => {
 
-    if (this.state.application_id && this.state.dmi_loan_status === 'verified_contact') {
+    if (this.state.application_id && portalStatus.indexOf(this.state.dmi_loan_status) !== -1) {
       this.setState({
         show_loader: true
       });
@@ -124,34 +127,24 @@ class InstantKycHome extends Component {
 
   }
 
+  kycCallback = async () => {
 
-  decisionCallback = async () => {
+      this.setState({
+        show_loader: true
+      });
 
-    this.setState({
-      eligi_checking: true
-    })
-    let body = {
-      "request_type": "decision"
-    }
-
-    let resultData = await this.callBackApi(body);
-    console.log(resultData);
-    
-    if (resultData.callback_status) {
-      // no change required
-      if(resultData.eligible) {
-        this.navigate('loan-eligible');
-        // loan approved
-      } else {
-        // loan not approved
-        let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
-        this.navigate('instant-kyc-status', {searchParams: searchParams});
+      let body = {
+        "request_type": "okyc",
+        'okyc_id': this.state.vendor_info.dmi_okyc_id
       }
-    } else {
-      // sorry
-      let searchParams = getConfig().searchParams + '&status=eligible_sorry';
-      this.navigate('instant-kyc-status', {searchParams: searchParams});
-    }
+      let resultData = await this.callBackApi(body);
+      if (resultData.callback_status) {
+        this.triggerDecision();
+      } else {
+        let searchParams = getConfig().searchParams + '&status=pending';
+        this.navigate('instant-kyc-status', { searchParams: searchParams });
+      }
+   
 
   }
 
@@ -166,6 +159,10 @@ class InstantKycHome extends Component {
       var resultData = res.pfwresponse.result;
       if (res.pfwresponse.status_code === 200 && !resultData.error) {
         //  
+        this.setState({
+          eligi_checking: true
+        })
+        this.decisionCallback();
 
       } else {
         this.setState({
@@ -186,14 +183,11 @@ class InstantKycHome extends Component {
 
   handleClick = () => {
     this.sendEvents('next');
-
+   
     if (this.state.dmi_loan_status === 'okyc_success') {
       //ready for decision
-      this.triggerDecision();
-    } else if(this.state.dmi_loan_status === 'okyc_failed' || this.state.dmi_loan_status === 'okyc_cancelled') {
-      let searchParams = getConfig().searchParams + '&status=pending';
-      this.navigate('instant-kyc-status', { searchParams: searchParams });
-    } else {
+      this.kycCallback();
+    }  else {
       this.decisionCallback();
     }
   }
@@ -240,13 +234,13 @@ class InstantKycHome extends Component {
               <div className="left">
                 Get your KYC done
               </div>
-              {this.state.dmi_loan_status !== 'okyc' &&
+              {portalStatus.indexOf(this.state.dmi_loan_status) !== -1 &&
                 <SVG
                   className="right"
                   preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
                   src={next_arrow}
                 />}
-              {this.state.dmi_loan_status === 'okyc' &&
+              {portalStatus.indexOf(this.state.dmi_loan_status) === -1 &&
                 <img className="right" src={completed_step} alt="" />}
             </div>
           </div>
@@ -270,7 +264,7 @@ class InstantKycHome extends Component {
         }}
         noHeader={this.state.eligi_checking}
         noFooter={this.state.eligi_checking}
-        disable={this.state.dmi_loan_status === 'verified_contact'}
+        disable={portalStatus.indexOf(this.state.dmi_loan_status) !== -1}
       >
 
         {this.renderMainUI()}
