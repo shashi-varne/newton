@@ -109,12 +109,7 @@ export async function updateLead(body, application_id) {
 
         if (!application_id) {
 
-            if (this.state.lead.application_info &&
-                this.state.lead.application_info.application_id) {
-                application_id = this.state.lead.application_info.application_id;
-            } else {
-                application_id = storageService().get('loan_application_id');
-            }
+            application_id = this.state.application_id || storageService().get('loan_application_id');
         }
 
         this.setState({
