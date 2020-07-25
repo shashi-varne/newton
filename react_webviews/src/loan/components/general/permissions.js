@@ -3,6 +3,7 @@ import Container from '../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
 import { getConfig } from 'utils/functions';
+import { storageService } from 'utils/validators';
 import '../Style.scss';
 
 class Permissions extends Component {
@@ -10,6 +11,8 @@ class Permissions extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      form_data: {},
+      next_state: 'journey',
       productName: getConfig().productName
     }
 
@@ -45,7 +48,16 @@ class Permissions extends Component {
   }
 
   handleClick = () => {
-      this.sendEvents('next');
+    this.sendEvents('next');
+    let that = this;
+    window.callbackWeb.get_data({
+      type: 'location_nsp_received',
+      location_nsp_received: function location_nsp_received(data) {
+        let body = { latitude: data.location.lat, longitude: data.location.lng, device_id: data.device_id, network_service_provider: data.nsp };
+        let application_id = storageService().get('loan_application_id');
+        that.updateLead(body, application_id);
+      }
+    });
   }
 
   render() {
@@ -55,15 +67,15 @@ class Permissions extends Component {
         title="Mandatory permissions"
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
-        buttonTitle="CONTINUE"
+        buttonTitle="I AGREE"
       >
         <div className="loan-permissions">
 
-          <div style={{ display: 'flex'}}>
+          <div style={{ display: 'flex' }}>
             <img
-              src={ require(`assets/${this.state.productName}/ic_document_mobile.svg`)}
-              style={{marginBottom: '95px'}}
-              alt="" 
+              src={require(`assets/${this.state.productName}/ic_document_mobile.svg`)}
+              style={{ marginBottom: '95px' }}
+              alt=""
             />
             <div className="container">
               <div className="head">Mobile</div>
@@ -74,15 +86,15 @@ class Permissions extends Component {
                 SMI.Device id and IP address. This help us
                 to prevent fraud by uniquely identifying the
                 devices.`}
-              </div> 
+              </div>
             </div>
           </div>
 
-          <div style={{ display: 'flex'}}>
+          <div style={{ display: 'flex' }}>
             <img
-              src={ require(`assets/${this.state.productName}/ic_document_location.svg`)}
-              style={{marginBottom: '80px'}}
-              alt="" 
+              src={require(`assets/${this.state.productName}/ic_document_location.svg`)}
+              style={{ marginBottom: '80px' }}
+              alt=""
             />
             <div className="container">
               <div className="head">Location</div>
@@ -91,7 +103,7 @@ class Permissions extends Component {
                 the location of your device for verifying the
                 address, creating your risk profile, and make a
                 better credit risk decision.`}
-              </div> 
+              </div>
             </div>
           </div>
 
