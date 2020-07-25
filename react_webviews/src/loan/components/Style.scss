@@ -352,6 +352,13 @@
         padding: 10px 0 10px 0;
         cursor: pointer;
       }
+
+    .card-info {
+        color: #19487f;
+        font-size: 13px;
+        width: 70%;
+        line-height: 20px;
+    }
   
   }
 
@@ -360,3 +367,45 @@
       margin: 20px 0 0 10px;
     }
   }
+
+  .loan-landing2 {
+    .container {
+        background: #0a1d32;
+        width: 97%;
+        position: relative;
+        right: 15px;
+        bottom: 20px;
+        padding: 30px 20px 0 20px;
+    }
+
+    .block2 {
+        flex: 1;
+        background: #fff;
+        border-radius: 6px;
+        box-shadow: 0 2px 5px 2px rgba(0, 0, 0, 0.1);
+        padding: 20px 0px 20px 20px;
+        margin: 20px 0 20px 0;
+    }
+
+    .dmi-info {
+        color: rgb(10, 29, 50);
+        font-size: 13px;
+        text-align: center;
+        margin: 40px 0 20px 0;
+    }
+
+    .block1 {
+        padding: 20px 0 20px 0;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .card-info {
+        display: flex;
+        font-size: 10px;
+        font-weight: bold;
+        color: #3d95fc;
+        align-items: center;
+    }
+  }
+
