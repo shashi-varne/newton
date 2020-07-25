@@ -324,6 +324,8 @@ export function formCheckUpdate(keys_to_check, form_data) {
         form_data: form_data
     })
 
+    console.log(form_data)
+
 
     if (canSubmitForm) {
         let body = {};
@@ -351,7 +353,7 @@ export function formCheckUpdate(keys_to_check, form_data) {
                 body[key] = form_data[key] || '';
             }
         }
-       
+
         this.updateLead(body);
     }
 }

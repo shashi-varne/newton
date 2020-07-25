@@ -20,7 +20,7 @@ class ProfessionalDetails extends Component {
             form_data: {},
             get_lead: true,
             getLeadBodyKeys: ['professional_info'],
-            next_state: 'contact-details'
+            next_state: 'address-details'
         }
         this.initialize = initialize.bind(this);
     }

@@ -1,6 +1,6 @@
 export function goBackMap(path) {
     let mapper = {
-        '/gold/sell': '/gold/landing',
+        '/loan/journey': '/loan/home',
     }
 
     return mapper[path] || false;

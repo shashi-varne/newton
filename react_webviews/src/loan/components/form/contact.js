@@ -73,7 +73,7 @@ class ContactDetails extends Component {
 
         }
 
-        this.formCheckUpdate(form_data, keys_to_check);
+        this.formCheckUpdate(keys_to_check, form_data);
     }
 
 
