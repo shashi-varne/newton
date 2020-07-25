@@ -8,6 +8,7 @@ import { getConfig } from "utils/functions";
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import completed_step from "assets/completed_step.svg";
+import { storageService } from 'utils/validators';
 class InstantKycHome extends Component {
   constructor(props) {
     super(props);
@@ -28,7 +29,6 @@ class InstantKycHome extends Component {
 
   onload = () => {
 
-    console.log(this.state.lead);
     let lead = this.state.lead || {};
     let vendor_info = lead.vendor_info || {};
 
@@ -56,24 +56,60 @@ class InstantKycHome extends Component {
 
   redirectKyc = async () => {
 
-    if(this.state.application_id) {
+    if (this.state.application_id && this.state.dmi_loan_status === 'verified_contact') {
       this.setState({
         show_loader: true
       });
       try {
-  
+
         let res = await Api.get(`/relay/api/loan/okyc/get/url/${this.state.application_id}`);
-  
-        this.setState({
-          show_loader: false
-        });
-  
+
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200 && !resultData.error) {
-          this.triggerOtp();
-  
+
+          let okyc_id = resultData.okyc_id;
+          storageService().set('loan_okyc_id', okyc_id);
+          let current_url = window.location.href;
+          let nativeRedirectUrl = current_url;
+
+          let paymentRedirectUrl = encodeURIComponent(
+            window.location.origin + `/loan/instant-kyc-status` + getConfig().searchParams
+          );
+
+          var payment_link = resultData.okyc_url;
+          var pgLink = payment_link;
+          let app = getConfig().app;
+          var back_url = encodeURIComponent(current_url);
+          // eslint-disable-next-line
+          pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
+            '&app=' + app + '&back_url=' + back_url;
+          if (getConfig().generic_callback) {
+            pgLink += '&generic_callback=' + getConfig().generic_callback;
+          }
+
+
+          if (getConfig().app === 'ios') {
+            nativeCallback({
+              action: 'show_top_bar', message: {
+                title: 'KYC'
+              }
+            });
+          }
+
+          nativeCallback({
+            action: 'take_control', message: {
+              back_url: nativeRedirectUrl,
+              back_text: 'Are you sure you want to exit the kyc process?'
+            }
+          });
+
+          window.location.href = pgLink;
+
         } else {
-         
+          this.setState({
+            show_loader: false
+          });
+
           toast(resultData.error || resultData.message
             || 'Something went wrong');
         }
@@ -85,11 +121,140 @@ class InstantKycHome extends Component {
         toast('Something went wrong');
       }
     }
-    
+
   }
+
+
+  decisionCallback = async () => {
+
+    this.setState({
+      eligi_checking: true
+    })
+    let body = {
+      "request_type": "decision"
+    }
+
+    let resultData = await this.callBackApi(body);
+    console.log(resultData);
+    
+    if (resultData.callback_status) {
+      // no change required
+      if(resultData.eligible) {
+        this.navigate('loan-eligible');
+        // loan approved
+      } else {
+        // loan not approved
+        let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
+        this.navigate('instant-kyc-status', {searchParams: searchParams});
+      }
+    } else {
+      // sorry
+      let searchParams = getConfig().searchParams + '&status=eligible_sorry';
+      this.navigate('instant-kyc-status', {searchParams: searchParams});
+    }
+
+  }
+
+  triggerDecision = async () => {
+    this.setState({
+      show_loader: true
+    });
+    try {
+
+      let res = await Api.get(`/relay/api/loan/dmi/accept_eligibility/${this.state.application_id}`);
+
+      var resultData = res.pfwresponse.result;
+      if (res.pfwresponse.status_code === 200 && !resultData.error) {
+        //  
+
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(resultData.error || resultData.message
+          || 'Something went wrong');
+      }
+    } catch (err) {
+      console.log(err)
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
+    }
+  }
+
 
   handleClick = () => {
     this.sendEvents('next');
+
+    if (this.state.dmi_loan_status === 'okyc_success') {
+      //ready for decision
+      this.triggerDecision();
+    } else if(this.state.dmi_loan_status === 'okyc_failed' || this.state.dmi_loan_status === 'okyc_cancelled') {
+      let searchParams = getConfig().searchParams + '&status=pending';
+      this.navigate('instant-kyc-status', { searchParams: searchParams });
+    } else {
+      this.decisionCallback();
+    }
+  }
+
+  renderEligibilityCheckUi() {
+
+    if (this.state.eligi_checking) {
+      return (
+        <div>
+
+          <div>
+            {this.state.productName && <img
+              src={require(`assets/${this.state.productName}/ic_purity.svg`)}
+              alt="Gold" />}
+          </div>
+          <div>
+            Calculating Eligibility….
+          </div>
+
+          <div>
+            Your eligible loan amount is being calculated by the lender using their own
+            proprietary algorithm, based on the data provided by you. This can take approximately 2 mins.
+          </div>
+        </div>
+      )
+    }
+
+    return null;
+
+  }
+
+  renderMainUI() {
+    if (!this.state.eligi_checking) {
+      return (
+        <div>
+          <div className="common-top-page-subtitle">
+            It is mandatory for lenders to get “Know your Customer” done before giving loan to a customer.
+            UIDAI has launched Aadhaar Paperless Offline KYC which is a secure sharable document that can be
+            used by any Aadhaar number holder for offline verification of Identification.
+        </div>
+          <div className="loan-instant-kyc-home">
+
+            <div className="action" onClick={() => this.redirectKyc()}>
+              <div className="left">
+                Get your KYC done
+              </div>
+              {this.state.dmi_loan_status !== 'okyc' &&
+                <SVG
+                  className="right"
+                  preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+                  src={next_arrow}
+                />}
+              {this.state.dmi_loan_status === 'okyc' &&
+                <img className="right" src={completed_step} alt="" />}
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    return null;
   }
 
   render() {
@@ -103,30 +268,13 @@ class InstantKycHome extends Component {
         headerData={{
           icon: 'close'
         }}
-        disable={this.state.dmi_loan_status !== 'okyc'}
+        noHeader={this.state.eligi_checking}
+        noFooter={this.state.eligi_checking}
+        disable={this.state.dmi_loan_status === 'verified_contact'}
       >
 
-        <div className="common-top-page-subtitle">
-          It is mandatory for lenders to get “Know your Customer” done before giving loan to a customer.
-          UIDAI has launched Aadhaar Paperless Offline KYC which is a secure sharable document that can be
-          used by any Aadhaar number holder for offline verification of Identification.
-        </div>
-        <div className="loan-instant-kyc-home">
-
-          <div className="action" onClick={() => this.redirectKyc()}>
-            <div className="left">
-              Get your KYC done
-              </div>
-            {this.state.dmi_loan_status !== 'okyc' &&
-              <SVG
-                className="right"
-                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
-                src={next_arrow}
-              />}
-            {this.state.dmi_loan_status === 'okyc' &&
-              <img className="right" src={completed_step} alt="" />}
-          </div>
-        </div>
+        {this.renderMainUI()}
+        {this.renderEligibilityCheckUi()}
       </Container>
     );
   }

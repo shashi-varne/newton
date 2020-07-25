@@ -37,6 +37,7 @@ import FormCreateProfile from "./components/form/create_profile";
 import InstantKycHome from "./components/kyc/instant_kyc";
 import KycStatus from "./components/kyc/status";
 
+import Bank from "./components/mandate/bank";
 import Reference from "./components/mandate/reference";
 
 import { create } from "jss";
@@ -77,7 +78,7 @@ const Lending = props => {
         <ToastContainer autoClose={3000} />
         <Switch>
 
-          <Route path={`${url}/landing`} component={Landing} />
+          <Route path={`${url}/home`} component={Landing} />
           <Route path={`${url}/Journey`} component={Journey} />
           <Route path={`${url}/Calculator`} component={Calculator} />
           <Route path={`${url}/Permissions`} component={Permissions} />
@@ -104,6 +105,7 @@ const Lending = props => {
           <Route path={`${url}/form-create-profile`} component={FormCreateProfile} />
 
           <Route path={`${url}/reference`} component={Reference} />
+          <Route path={`${url}/bank`} component={Bank} />
 
           {/* Edit paths */}
 

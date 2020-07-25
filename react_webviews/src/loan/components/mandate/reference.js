@@ -15,8 +15,6 @@ class KycStatus extends Component {
     this.state = {
       show_loader: false,
       form_data: {},
-      get_lead: true,
-      getLeadBodyKeys: ['personal_info'],
       application_id: storageService().get('loan_application_id')
     }
 
