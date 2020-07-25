@@ -91,10 +91,6 @@ export const fetchAllHoldings = async (params) => {
       const { result, status_code: status } = res.pfwresponse;
 
       if (status === 200) {
-        console.log(result.holdings.length);
-        if (result.holdings.length < page_size) {
-          result.next_page = '';
-        }
         storageService().setObject('hni-holdings', result.holdings);
         storageService().set('hni-holdings-next-page', result.next_page);
         return result;
