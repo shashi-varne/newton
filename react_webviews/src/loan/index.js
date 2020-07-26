@@ -42,6 +42,7 @@ import KycStatus from "./components/kyc/status";
 import Pan from "./components/mandate/pan";
 import Bank from "./components/mandate/bank";
 import Reference from "./components/mandate/reference";
+import MandateStatus from "./components/mandate/status";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -112,7 +113,8 @@ const Lending = props => {
 
           <Route path={`${url}/reference`} component={Reference} />
           <Route path={`${url}/bank`} component={Bank} />
-          <Route path={`${url}/pan`} component={Pan} />
+          <Route path={`${url}/upload-pan`} component={Pan} />
+          <Route path={`${url}/mandate-status`} component={MandateStatus} />
 
           {/* Edit paths */}
 

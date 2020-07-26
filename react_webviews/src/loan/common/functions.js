@@ -249,7 +249,7 @@ export function setEditTitle(string) {
 }
 
 
-export function formCheckUpdate(keys_to_check, form_data) {
+export function formCheckUpdate(keys_to_check, form_data, just_check) {
 
     if (!form_data) {
         form_data = this.state.form_data;
@@ -292,6 +292,11 @@ export function formCheckUpdate(keys_to_check, form_data) {
         'p_city': 'city',
         'p_state': 'state',
         'p_country': 'country',
+
+        'ref_name_first': '1st reference name',
+        'ref_contact_first': '1st reference contact',
+        'ref_name_second': '2nd reference name',
+        'ref_contact_second': '2nd reference contact',
     }
 
 
@@ -320,10 +325,7 @@ export function formCheckUpdate(keys_to_check, form_data) {
         form_data: form_data
     })
 
-    console.log(form_data)
-
-
-    if (canSubmitForm) {
+    if (canSubmitForm && !just_check) {
         let body = {};
 
         if (this.state.screen_name === 'address-details') {
@@ -351,6 +353,8 @@ export function formCheckUpdate(keys_to_check, form_data) {
         }
 
         this.updateLead(body);
+    } else {
+        return canSubmitForm
     }
 }
 
