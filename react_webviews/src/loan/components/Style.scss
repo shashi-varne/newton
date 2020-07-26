@@ -110,6 +110,22 @@
     }
   }
 
+  .loan-instant-kyc-eligi-checking {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .calculate {
+          font-size: 14px;
+          padding-bottom: 40px;
+      }
+
+      .check-eligiblity {
+          color: #767E86;
+          line-height: 24px;
+      }
+  }
+
 
 .loan-calculator {
     margin-top: 40px;
@@ -352,6 +368,13 @@
         padding: 10px 0 10px 0;
         cursor: pointer;
       }
+
+    .card-info {
+        color: #19487f;
+        font-size: 13px;
+        width: 70%;
+        line-height: 20px;
+    }
   
   }
 
@@ -359,4 +382,77 @@
     .generic-progress-vertical {
       margin: 20px 0 0 10px;
     }
+
+    .journey-card {
+        margin: 12px 0 0 30px;
+        height: 103px;
+        width: 240px;
+        background: #f0f7ff;
+        border-radius: 6px;
+        padding: 20px 0 0 20px;
+        line-height: 27px;
+    }
+
+    .journey-steps {
+        font-size: 10px;
+        color: #767e86;
+        font-weight: bold;
+        margin-left: 8px;
+    }
+
+    .card-content {
+        font-size: 10px;
+        color: #35cb5d;
+        letter-spacing: 1px;
+    }
+
+    .dot {
+        height: 6px;
+        width: 6px;
+        background-color: #35cb5d;
+        border-radius: 50%;
+        display: inline-block;
+      }
   }
+
+  .loan-landing2 {
+    .container {
+        background: #0a1d32;
+        width: 97%;
+        position: relative;
+        right: 15px;
+        bottom: 20px;
+        padding: 30px 20px 0 20px;
+    }
+
+    .block2 {
+        flex: 1;
+        background: #fff;
+        border-radius: 6px;
+        box-shadow: 0 2px 5px 2px rgba(0, 0, 0, 0.1);
+        padding: 20px 0px 20px 20px;
+        margin: 20px 0 20px 0;
+    }
+
+    .dmi-info {
+        color: rgb(10, 29, 50);
+        font-size: 13px;
+        text-align: center;
+        margin: 40px 0 20px 0;
+    }
+
+    .block1 {
+        padding: 20px 0 20px 0;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .card-info {
+        display: flex;
+        font-size: 10px;
+        font-weight: bold;
+        color: #3d95fc;
+        align-items: center;
+    }
+  }
+

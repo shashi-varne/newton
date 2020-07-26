@@ -5,6 +5,13 @@ import Header from '../../common/components/Header';
 import {didmount} from '../../common/components/container_functions';
 
 import Footer from "./footer";
+import Button from 'material-ui/Button';
+import Dialog, {
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+  DialogContentText
+} from 'material-ui/Dialog';
 
 import { nativeCallback } from "utils/native_callback";
 import '../../utils/native_listner';
@@ -50,7 +57,6 @@ class Container extends Component {
       this.navigate("/gold/landing");
       return;
     }
-
    
     if(goBackMap(pathname)) {
       this.navigate(goBackMap(pathname));
@@ -70,11 +76,28 @@ class Container extends Component {
       case "/gold":
         nativeCallback({ action: "native_back"});
         break;
+      case "/loan/Loan-Approved":
+        this.setState({
+          openPopup: true,
+          popupText: 'You are just one steps  away from getting money in your account. Do you really want to exit?'
+        })
+        break;
+      case "/loan/form-summary":
+        this.setState({
+          openPopup: true,
+          popupText: 'You are just two steps  away from getting money in your account. Do you really want to exit?'
+        })
+        break;
+      case "/loan/instant-kyc":
+        this.setState({
+          openPopup: true,
+          popupText: 'You are just 2 steps  away from getting money in your account. Do you really want to exit?'
+        })
+        break;
       default:
         this.props.history.goBack();
     }
   };
-
 
   componentDidUpdate(prevProps) {
     this.didupdate();
@@ -82,6 +105,44 @@ class Container extends Component {
 
   headerGoBack = () => {
     this.historyGoBack({fromHeader: true});
+  }
+
+  handleClose = () => {
+    this.setState({
+      openPopup: false
+    });
+  }
+
+  handlePopup = () => {
+    this.setState({
+      openPopup: false
+    });
+
+    nativeCallback({ action: this.state.callbackType });
+
+  }
+
+  renderPopup = () => {
+    return (
+      <Dialog
+          fullScreen={false}
+          open={this.state.openPopup}
+          onClose={this.handleClose}
+          aria-labelledby="responsive-dialog-title"
+      >
+          <DialogContent>
+              <DialogContentText>{this.state.popupText}</DialogContentText>
+          </DialogContent>
+          <DialogActions>
+              <Button onClick={this.handleClose} color="default">
+                  No
+        </Button>
+              <Button onClick={this.handlePopup} color="default" autoFocus>
+                  Yes
+        </Button>
+          </DialogActions>
+      </Dialog>
+  );
   }
 
   render() {
