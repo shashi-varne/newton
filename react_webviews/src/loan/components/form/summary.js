@@ -10,10 +10,10 @@ import Api from 'utils/api';
 import text_error_icon from 'assets/text_error_icon.svg';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
-import ReactHtmlParser from 'react-html-parser'; 
+import ReactHtmlParser from 'react-html-parser';
 import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
 
-import {storageService} from 'utils/validators';
+import { storageService } from 'utils/validators';
 
 const agreeOptions = [
     {
@@ -36,10 +36,10 @@ class FormSummary extends Component {
             accordianData: [],
             confirm_details_check: false,
             application_info: {},
-            agreement:[],
+            agreement: [],
             agree_check: '',
             vendor_info: {},
-            isScrolledToBottom: false            
+            isScrolledToBottom: false
         }
         this.initialize = initialize.bind(this);
     }
@@ -65,7 +65,7 @@ class FormSummary extends Component {
         ]
 
         this.setState({
-            agreement:agreement
+            agreement: agreement
         })
     }
 
@@ -80,7 +80,7 @@ class FormSummary extends Component {
             professional_info, application_info, vendor_info } = lead;
 
 
-        if(vendor_info && vendor_info.lead_id) {
+        if (vendor_info && vendor_info.lead_id) {
             this.setState({
                 isScrolledToBottom: true,
                 agree_check: 'agree',
@@ -233,17 +233,17 @@ class FormSummary extends Component {
 
         storageService().set('loan_dmi_loan_status', this.state.vendor_info.dmi_loan_status);
 
-        if(this.state.vendor_info.lead_id) {
+        if (this.state.vendor_info.lead_id) {
             this.navigate('form-create-profile');
         } else {
             try {
                 let res = await Api.get(`/relay/api/loan/submit/application/${this.state.application_id}`);
-    
-    
+
+
                 var resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200 && !resultData.error) {
-    
-                   this.navigate('form-create-profile');
+
+                    this.navigate('form-create-profile');
                 } else {
                     this.setState({
                         show_loader: false
@@ -259,8 +259,8 @@ class FormSummary extends Component {
                 toast('Something went wrong');
             }
         }
-       
-        
+
+
     }
 
 
@@ -380,7 +380,7 @@ class FormSummary extends Component {
 
     };
     renderAgreement = (props, index) => {
-        return(
+        return (
             <div key={index} id={'agreement_' + index} className="agree-tiles">
                 <div className="agree-tiles-left">{index + 1}</div>
                 <div className="agree-tiles-right">{ReactHtmlParser(props)}</div>
@@ -391,12 +391,12 @@ class FormSummary extends Component {
     onScroll = (e) => {
         const element = e.target;
         let isScrolled = element.scrollHeight - element.clientHeight <= element.scrollTop + 1;
-        if(!this.state.form_submitted) {
+        if (!this.state.form_submitted) {
             this.setState({
                 isScrolledToBottom: isScrolled
             })
         }
-        
+
     }
 
     render() {
@@ -412,6 +412,9 @@ class FormSummary extends Component {
                 buttonTitle={'SUBMIT'}
                 disable={!(this.state.confirm_details_check && this.state.agree_check === 'agree')}
                 handleClick={() => this.handleClick()}
+                headerData={{
+                    icon: 'close'
+                }}
             >
 
                 <div className="common-top-page-subtitle">
@@ -469,7 +472,7 @@ class FormSummary extends Component {
                         {this.state.agreement.map(this.renderAgreement)}
                     </div>
 
-                    <div className="InputField" style={{margin: '30px 0 50px 0', opacity: this.state.confirm_details_check && this.state.isScrolledToBottom ? 1 : 0.4}}>
+                    <div className="InputField" style={{ margin: '30px 0 50px 0', opacity: this.state.confirm_details_check && this.state.isScrolledToBottom ? 1 : 0.4 }}>
                         <RadioWithoutIcon
                             width="40"
                             label="I/We confirm that I/We have understood the

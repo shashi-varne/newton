@@ -2,7 +2,7 @@
 import { getConfig, setHeights } from 'utils/functions';
 import loader_fisdom from 'assets/loader_gif_fisdom.gif';
 import loader_myway from 'assets/loader_gif_myway.gif';
-import { nativeCallback } from "utils/native_callback";
+// import { nativeCallback } from "utils/native_callback";
 
 import React from "react";
 
@@ -30,7 +30,6 @@ export function didmount() {
     this.unmount = unmount.bind(this);
     this.navigate = navigate.bind(this);
     this.handleClose = handleClose.bind(this);
-    this.handlePopup = handlePopup.bind(this);
     this.didupdate = didupdate.bind(this);
     this.new_header_scroll = new_header_scroll.bind(this);
 
@@ -242,14 +241,6 @@ export function handleClose() {
     });
 };
 
-
-export function handlePopup() {
-    this.setState({
-        openPopup: false
-    });
-
-    nativeCallback({ action: "native_back", events: this.getEvents("back") });
-};
 
 export function calcReadtime(endtime) {
     var new_date = new Date(endtime - start_time);

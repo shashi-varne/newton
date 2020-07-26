@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
-import { formatAmount } from "../../../utils/validators";
-import { formatAmountInr } from "../../../utils/validators";
+import {  formatAmountInr } from "../../../utils/validators";
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 
@@ -24,7 +23,15 @@ class LoanEligible extends Component {
   }
 
   onload = () => {
-   
+    let lead = this.state.lead || {};
+    let application_info = lead.application_info || {};
+    let vendor_info = lead.vendor_info || {};
+
+    console.log(vendor_info);
+    this.setState({
+      vendor_info: vendor_info,
+      application_info: application_info
+    })
 
   }
 
@@ -80,6 +87,9 @@ class LoanEligible extends Component {
   }
 
   render() {
+
+    let vendor_info = this.state.vendor_info || {};
+
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -104,21 +114,21 @@ class LoanEligible extends Component {
           </div>
 
           <div className="loan-amount">
-            {'₹ '+formatAmount(200000)}
+            {formatAmountInr(vendor_info.approved_amount)}
           </div>
 
           <div className="loan-value">
             <div>
               <div>EMI amount</div>
-              <div className="values">{'₹ '+formatAmount(33000)}</div>
+              <div className="values">{formatAmountInr(vendor_info.approved_emi)}</div>
             </div>
             <div>
               <div>Tenor</div>
-              <div className="values">3 months</div>
+              <div className="values">{vendor_info.tenor} months</div>
             </div>
             <div>
               <div>Annual interest rate</div>
-              <div className="values">24%</div>
+                <div className="values">{vendor_info.loan_rate}</div>
             </div>
           </div>
 
@@ -129,20 +139,20 @@ class LoanEligible extends Component {
               </div>
               <div className="items">
                 <div>Sanctioned Loan Amount</div>
-                <div>{formatAmountInr(200000)}</div>
+                <div>{formatAmountInr(vendor_info.sanction_amount)}</div>
               </div>
               <div className="items">
                 <div>Processing fee</div>
-                <div>{'- '+formatAmountInr(5000)}</div>
+                <div>{'- '+formatAmountInr(vendor_info.processing_fee)}</div>
               </div>
               <div className="items">
                 <div>GST(18%)</div>
-                <div>{'- '+formatAmountInr(900)}</div>
+                <div>{'- '+formatAmountInr(vendor_info.gst)}</div>
               </div>
               <hr style={{background:"#ccd3db"}} />
               <div className="credit">
                 <div>Amount credited to bank a/c</div>
-                <div>{formatAmountInr(198100)}</div>
+                <div>{formatAmountInr(vendor_info.net_amount)}</div>
               </div>
             </div>
           </div>

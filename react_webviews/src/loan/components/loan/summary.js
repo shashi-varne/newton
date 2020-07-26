@@ -15,7 +15,8 @@ class LoanSummary extends Component {
     this.state = {
       show_loader: false,
       get_lead: true,
-      getLeadBodyKeys: ['vendor_info']
+      getLeadBodyKeys: ['vendor_info'],
+      confirm_details_check: true
     }
 
     this.initialize = initialize.bind(this);
@@ -121,7 +122,20 @@ class LoanSummary extends Component {
     }
   }
 
+  handleChange = name => event => {
+    if (!name) {
+      name = event.target.name;
+    }
+
+    this.setState({
+      [name]: event.target.checked
+    })
+  };
+
   render() {
+
+    let vendor_info = this.state.vendor_info || {};
+
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -129,6 +143,10 @@ class LoanSummary extends Component {
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
         buttonTitle="GET LOAN"
+        disable={!this.state.confirm_details_check}
+        headerData={{
+          icon: 'close'
+        }}
       >
         <div className="loan-summary">
           <div className="container">
@@ -136,20 +154,20 @@ class LoanSummary extends Component {
               <div className="head" style={{ paddingBottom: '22px' }}>Loan details</div>
               <div className="items">
                 <div>Sanctioned Loan Amount</div>
-                <div>{formatAmountInr(200000)}</div>
+                <div>{formatAmountInr(vendor_info.sanction_amount)}</div>
               </div>
               <div className="items">
                 <div>Processing fee</div>
-                <div>{'- ' + formatAmountInr(5000)}</div>
+                <div>{'- ' + formatAmountInr(vendor_info.processing_fee)}</div>
               </div>
               <div className="items">
                 <div>GST(18%)</div>
-                <div>{'- ' + formatAmountInr(900)}</div>
+                <div>{'- ' + formatAmountInr(vendor_info.gst)}</div>
               </div>
               <hr style={{ background: "#ccd3db" }} />
               <div className="credit">
                 <div>Amount credited to bank a/c</div>
-                <div>{formatAmountInr(198100)}</div>
+                <div>{formatAmountInr(vendor_info.net_amount)}</div>
               </div>
             </div>
           </div>
@@ -157,7 +175,7 @@ class LoanSummary extends Component {
           <div className="emi-detail">
             <div className="head">EMI detail</div>
             <div style={{ fontSize: '13px' }}>
-              ₹33,000/month for 3 months
+              {formatAmountInr(vendor_info.approved_emi)}/month for {vendor_info.tenor} months
               </div>
           </div>
 
@@ -180,6 +198,7 @@ class LoanSummary extends Component {
                 color="primary"
                 value="confirm_details_check"
                 name="confirm_details_check"
+                onChange={this.handleChange()}
                 className="Checkbox" />
             </Grid>
             <Grid item xs={11}>

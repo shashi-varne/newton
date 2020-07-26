@@ -8,7 +8,7 @@ import SVG from 'react-inlinesvg';
 import {getConfig} from 'utils/functions';
 import back_arrow from 'assets/back_arrow.svg';
 import close_icn from 'assets/close_icn.svg';
-
+import '../theme/Style.scss';
 
 const headerIconMapper = {
   back: back_arrow,

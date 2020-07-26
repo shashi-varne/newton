@@ -48,7 +48,12 @@ class Landing extends Component {
     let application_info = lead.application_info || {};
     let vendor_info = lead.vendor_info || {};
 
-    let loan_apprroved = false;
+    if(vendor_info.dmi_loan_status === 'complete') {
+      this.navigate('report');
+      return;
+    }
+
+    let process_done = false;
     let isResume = true;
     let top_cta_title = 'RESUME';
     if(application_info.application_status === 'application_incomplete') {
@@ -56,15 +61,15 @@ class Landing extends Component {
       top_cta_title = 'APPLY NOW';
     }
 
-    if(application_info.application_status === 'loan_disbursed') {
-      loan_apprroved = true;
+    if(['callback_awaited_disbursement_approval', 'disbursement_approved'].indexOf(vendor_info.dmi_loan_status) !== -1) {
+      process_done = true;
     }
 
     this.setState({
       application_info: application_info,
       vendor_info: vendor_info,
       isResume: isResume,
-      loan_apprroved: loan_apprroved,
+      process_done: process_done,
       top_cta_title: top_cta_title
     })
   }
@@ -151,21 +156,35 @@ class Landing extends Component {
   handleClickTopCard = () => {
     let dmi_loan_status = this.state.vendor_info.dmi_loan_status || '';
 
-    if(false) {//condition for mobile
-      this.navigate('permissions');
-    } else if(dmi_loan_status === 'application_rejected') {
-      let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
-      this.navigate('instant-kyc-status', {searchParams: searchParams});
+    if(this.state.process_done) {
+      this.navigate('report-details');
     } else {
-      this.navigate('journey');
+      if(!this.state.application_info.latitude || !this.state.application_info.network_service_provider) {//condition for mobile
+        this.navigate('permissions');
+      } else if(dmi_loan_status === 'application_rejected') {
+        let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
+        this.navigate('instant-kyc-status', {searchParams: searchParams});
+      } else {
+        this.navigate('journey');
+      }
     }
+   
     
   }
 
-  renderUiBeforeApproval() {
-    if(!this.state.loan_apprroved) {
-      return(
-        <div className="loan-landing loan-instant-kyc-home" >
+ 
+  render() {
+    return (
+      <Container
+        showLoader={this.state.show_loader}
+        title="Personal loan"
+        noHeader={this.state.show_loader}
+        buttonTitle={this.state.top_cta_title}
+        handleClick={this.handleClickTopCard}
+        events={this.sendEvents('just_set_events')}
+      >
+       
+       <div className="loan-landing loan-instant-kyc-home" >
         <div className="infoimage-block1" onClick={() => this.handleClickTopCard()} >
         
           <img style={{ width: '100%', cursor: 'pointer' }} 
@@ -186,7 +205,7 @@ class Landing extends Component {
           </div>
         </div>
 
-        <div className="action" onClick={() => this.redirectKyc()}>
+        <div className="action" onClick={ () => this.navigate('calculator')}>
           <div className="left">
           Loan eligibility calculator
             </div>
@@ -265,44 +284,6 @@ class Landing extends Component {
         </div>
 
       </div>
-      )
-    }
-
-    return null;
-  }
-
-  renderUiAfterApproval() {
-    if(this.state.loan_apprroved) {
-      return(
-        <div className="loan-landing loan-instant-kyc-home" >
-    
-
-        <div className="dmi-info">
-          In partnership with
-          <img style={{marginLeft: 10}} src={dmi_logo} alt="" />
-        </div>
-
-      </div>
-      )
-    }
-
-    return null;
-  }
-
-
-  render() {
-    return (
-      <Container
-        showLoader={this.state.show_loader}
-        title="Personal loan"
-        noHeader={this.state.show_loader}
-        buttonTitle={this.state.top_cta_title}
-        handleClick={this.handleClickTopCard}
-        events={this.sendEvents('just_set_events')}
-      >
-       
-        {this.renderUiBeforeApproval()}
-        {this.renderUiAfterApproval()}
       </Container>
     );
   }

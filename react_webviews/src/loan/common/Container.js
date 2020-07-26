@@ -50,48 +50,49 @@ class Container extends Component {
       nativeCallback({ events: this.getEvents("back") });
     }
     
-    let fromHeader = backData ? backData.fromHeader : false;
     let pathname = this.props.history.location.pathname;
 
-    if (fromHeader && checkStringInString(pathname, "check-how")) {
-      this.navigate("/gold/landing");
+    if (checkStringInString(pathname, "form-summary")) {
+      this.setState({
+        callbackType: 'loan_home',
+        openPopup: true,
+        popupText: 'You are just 2 steps  away from getting money in your account. Do you really want to exit?'
+      })
       return;
     }
-   
+
+    if (checkStringInString(pathname, "instant-kyc")) {
+      this.setState({
+        callbackType: 'loan_journey',
+        openPopup: true,
+        popupText: 'You are just 2 steps  away from getting money in your account. Do you really want to exit?'
+      })
+      return;
+    }
+
+    if (checkStringInString(pathname, "loan-summary")) {
+      this.setState({
+        callbackType: 'loan_home',
+        openPopup: true,
+        popupText: 'You are just one steps  away from getting money in your account. Do you really want to exit?'
+      })
+      return;
+    }
+
     if(goBackMap(pathname)) {
       this.navigate(goBackMap(pathname));
-      return;
-    }
-    
-    if (checkStringInString(pathname, "instant-kyc-status")) {
-      this.navigate("/gold/landing");
       return;
     }
 
 
     switch (pathname) {
-      case "/gold/gold-locker":
-        this.navigate("/gold/landing");
-        break;
-      case "/gold":
+      case "/loan/home":
         nativeCallback({ action: "native_back"});
-        break;
-      case "/loan/Loan-Approved":
-        this.setState({
-          openPopup: true,
-          popupText: 'You are just one steps  away from getting money in your account. Do you really want to exit?'
-        })
         break;
       case "/loan/form-summary":
         this.setState({
           openPopup: true,
           popupText: 'You are just two steps  away from getting money in your account. Do you really want to exit?'
-        })
-        break;
-      case "/loan/instant-kyc":
-        this.setState({
-          openPopup: true,
-          popupText: 'You are just 2 steps  away from getting money in your account. Do you really want to exit?'
         })
         break;
       default:
@@ -114,11 +115,18 @@ class Container extends Component {
   }
 
   handlePopup = () => {
+  
     this.setState({
       openPopup: false
     });
 
-    nativeCallback({ action: this.state.callbackType });
+    if(this.state.callbackType === 'loan_home') {
+      this.navigate('/loan/home');
+    } else if(this.state.callbackType === 'loan_journey') {
+      this.navigate('/loan/journey');
+    } else {
+      nativeCallback({ action: this.state.callbackType });
+    }
 
   }
 
@@ -159,7 +167,8 @@ class Container extends Component {
       return (
         <div className={`ContainerWrapper ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`}  >
           {/* Header Block */}
-          {(!this.props.noHeader && !getConfig().hide_header) &&<Header
+          {(!this.props.noHeader && !getConfig().hide_header) && !this.props.showLoader &&
+          <Header
             disableBack={this.props.disableBack}
             title={this.props.title}
             smallTitle={this.props.smallTitle}

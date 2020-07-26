@@ -4,6 +4,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
 import Contact from 'common/components/contact_us';
 import { getConfig } from 'utils/functions';
+import {  inrFormatDecimal } from 'utils/validators';
 
 class LoanApprvoed extends Component {
   constructor(props) {
@@ -12,7 +13,9 @@ class LoanApprvoed extends Component {
       show_loader: false,
       get_lead: true,
       getLeadBodyKeys: ['vendor_info'],
-      productName: getConfig().productName
+      productName: getConfig().productName,
+      vendor_info: {},
+      application_info: {}
     }
 
     this.initialize = initialize.bind(this);
@@ -73,7 +76,7 @@ class LoanApprvoed extends Component {
           />
           
           <div className="content">
-            Your application no <b>xxxxxx78</b> for Personal loan of <b>₹2,00,000</b> has been submitted and is under process.
+      Your application no <b>{this.state.application_info.application_id}</b> for Personal loan of <b>{inrFormatDecimal(this.state.vendor_info.sanction_amount)}</b> has been submitted and is under process.
           </div>
 
           <div className="content">

@@ -1,7 +1,7 @@
 export function goBackMap(path) {
     let mapper = {
         '/loan/journey': '/loan/home',
-        '/loan/instant-kyc': '/loan/journey',
+        '/loan/instant-kyc-status': '/loan/journey',
         '/loan/loan-eligible': '/loan/journey',
         '/loan/reference': '/loan/journey',
         '/loan/loan-approved': '/loan/report-details',
