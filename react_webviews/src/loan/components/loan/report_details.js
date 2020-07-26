@@ -89,7 +89,7 @@ class ReportDetails extends Component {
 
             <div className="member-tile">
               <div className="mt-left">
-                <img src={require(`assets/${this.state.productName}/ic_document_cash.svg`)} alt="" />
+                <img src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" />
               </div>
               <div className="mt-right">
                 <div className="mtr-top">
@@ -103,7 +103,7 @@ class ReportDetails extends Component {
 
             <div className="member-tile">
               <div className="mt-left">
-                <img src={require(`assets/${this.state.productName}/ic_document_cash.svg`)} alt="" />
+                <img src={require(`assets/${this.state.productName}/ic_how_to_claim.svg`)} alt="" />
               </div>
               <div className="mt-right">
                 <div className="mtr-top">
@@ -118,7 +118,7 @@ class ReportDetails extends Component {
 
             <div className="member-tile">
               <div className="mt-left">
-                <img src={require(`assets/${this.state.productName}/ic_document_cash.svg`)} alt="" />
+                <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
               </div>
               <div className="mt-right">
                 <div className="mtr-top">
@@ -132,7 +132,7 @@ class ReportDetails extends Component {
 
             <div className="member-tile">
               <div className="mt-left">
-                <img src={require(`assets/${this.state.productName}/ic_document_cash.svg`)} alt="" />
+                <img src={require(`assets/${this.state.productName}/ic_date_payment.svg`)} alt="" />
               </div>
               <div className="mt-right">
                 <div className="mtr-top">
@@ -146,7 +146,7 @@ class ReportDetails extends Component {
 
             <div className="member-tile">
               <div className="mt-left">
-                <img src={require(`assets/${this.state.productName}/ic_document_cash.svg`)} alt="" />
+                <img src={require(`assets/${this.state.productName}/ic_hs_medical_checkup.svg`)} alt="" />
               </div>
               <div className="mt-right">
                 <div className="mtr-top">
