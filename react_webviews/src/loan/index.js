@@ -38,6 +38,7 @@ import FormCreateProfile from "./components/form/create_profile";
 import InstantKycHome from "./components/kyc/instant_kyc";
 import KycStatus from "./components/kyc/status";
 
+import Pan from "./components/mandate/pan";
 import Bank from "./components/mandate/bank";
 import Reference from "./components/mandate/reference";
 
@@ -108,6 +109,7 @@ const Lending = props => {
 
           <Route path={`${url}/reference`} component={Reference} />
           <Route path={`${url}/bank`} component={Bank} />
+          <Route path={`${url}/pan`} component={Pan} />
 
           {/* Edit paths */}
 
