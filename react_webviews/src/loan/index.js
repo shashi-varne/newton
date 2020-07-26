@@ -81,13 +81,14 @@ const Lending = props => {
         <Switch>
 
           <Route path={`${url}/home`} component={Landing} />
-          <Route path={`${url}/landing`} component={Landing2} />
           <Route path={`${url}/Journey`} component={Journey} />
           <Route path={`${url}/calculator`} component={Calculator} />
           <Route path={`${url}/permissions`} component={Permissions} />
           <Route path={`${url}/help`} component={Help} />
           <Route path={`${url}/report-Details`} component={ReportDetails} />
           <Route path={`${url}/schedule-Doc`} component={ScheduleDoc} />
+          <Route path={`${url}/landing`} component={Landing2} />
+
 
 
           <Route path={`${url}/instant-kyc`} component={InstantKycHome} />

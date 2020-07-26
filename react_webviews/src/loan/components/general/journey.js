@@ -207,9 +207,9 @@ class Journey extends Component {
             {props.title}
           </div>
           {props.key === 'check_eligi' &&
-            <div style={{ margin: '12px 0 0 30px', height:'103px', width:'240px', background: '#f0f7ff', borderRadius: '6px', padding:'20px 0 0 20px', lineHeight: '27px' }}>
-              <div style={{fontSize: '10px', color:'#35CB5D', letterSpacing:'1px'}}>
-                <span>&bull;</span>
+            <div className="journey-card">
+              <div className="card-content">
+                <span className="dot"></span>
                 <b> ELIGIBLE</b>
               </div>
               <div style={{color: '#767e86'}}>Avail sanctioned loan of </div>
@@ -239,11 +239,11 @@ class Journey extends Component {
               <h2 style={{width:'70%'}}>Get loan in 3 easy steps</h2>
               <div>
                 <img src={ require(`assets/${this.state.productName}/ic_document_cash.svg`)} alt="" />
-                <span style={{fontSize:'10px', color:'#767e86', fontWeight:'bold', marginLeft:'8px'}}>Get money within 2 hrs</span>
+                <span className="journey-steps">Get money within 2 hrs</span>
               </div>
               <div>
                 <img src={ require(`assets/${this.state.productName}/ic_document_cloud.svg`)} alt="" />
-                <span style={{fontSize:'10px', color:'#767e86', fontWeight:'bold', marginLeft:'8px'}}>Completely digital and paperless</span>
+                <span className="journey-steps">Completely digital and paperless</span>
               </div>
             </div>
             <img src={ require(`assets/${this.state.productName}/ic_why_loan.svg`)} alt="" />
