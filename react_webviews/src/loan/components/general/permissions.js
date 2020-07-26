@@ -3,7 +3,6 @@ import Container from '../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
 import { getConfig } from 'utils/functions';
-import { storageService } from 'utils/validators';
 import '../Style.scss';
 
 class Permissions extends Component {
@@ -54,8 +53,7 @@ class Permissions extends Component {
       type: 'location_nsp_received',
       location_nsp_received: function location_nsp_received(data) {
         let body = { latitude: data.location.lat, longitude: data.location.lng, device_id: data.device_id, network_service_provider: data.nsp };
-        let application_id = storageService().get('loan_application_id');
-        that.updateLead(body, application_id);
+        that.updateLead(body);
       }
     });
   }
