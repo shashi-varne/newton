@@ -82,8 +82,8 @@ class Permissions extends Component {
               <div className="content">
                 {`Our app collects and monitors specific
                 information about your device including
-                your SIM Network service provider of your
-                SMI.Device id and IP address. This help us
+                Network Service Provider of your SIM,
+                Device id and IP address.This helps us
                 to prevent fraud by uniquely identifying the
                 devices.`}
               </div>
@@ -108,7 +108,7 @@ class Permissions extends Component {
           </div>
 
           <div className="content">
-            Please note that above information is needed by <b>DMI Finance Pvt Ltd</b>, it is mandatorily to perform your credit risk assessment and is securely shared with our registered third party service providers for generating loan offers for you.
+            Please note that above information is mandatory. It is needed by <b>DMI Finance Pvt Ltd</b>, to perform your credit risk assessment and generate loan offers for you.
           </div>
 
         </div>
