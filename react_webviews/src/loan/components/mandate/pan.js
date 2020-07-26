@@ -73,19 +73,19 @@ class MandatePan extends Component {
     }
   }
 
-  // conversionCallBack = () => {
-  //   let body = {
-  //     "request_type": "conversion"
-  //   }
+  conversionCallBack = async () => {
+    let body = {
+      "request_type": "conversion"
+    }
 
-  //   let resultData = await this.callBackApi(body);
-  //   if (resultData.callback_status) {
-  //     // upload pan and redirect to e-mandate
-  //   } else {
-  //     let searchParams = getConfig().searchParams + '&status=sorry';
-  //     this.navigate('instant-kyc-status', { searchParams: searchParams });
-  //   }
-  // }
+    let resultData = await this.callBackApi(body);
+    if (resultData.callback_status) {
+      // upload pan and redirect to e-mandate
+    } else {
+      let searchParams = getConfig().searchParams + '&status=sorry';
+      this.navigate('instant-kyc-status', { searchParams: searchParams });
+    }
+  }
 
   async uploadDocs(file) {
 
