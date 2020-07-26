@@ -13,7 +13,8 @@ class ScheduleDoc extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      productName: getConfig().productName
+      productName: getConfig().productName,
+      message: ''
     }
 
     this.initialize = initialize.bind(this);
@@ -31,7 +32,9 @@ class ScheduleDoc extends Component {
 
       let resultData  = res.pfwresponse.result;
       if (res.pfwresponse.status_code === 200 && !resultData.error) {
-        // -----------
+        this.setState({
+          message: resultData.message
+        })
 
       } else {
         this.setState({
@@ -96,9 +99,7 @@ class ScheduleDoc extends Component {
             alt="" 
           />
           <div className="loan-schedule">
-            {`Loan schedule document has been sent
-            to your registered email ID
-            ........swan@gmail.com`}
+            {this.state.message}
           </div>
           <Contact />
         </div>
