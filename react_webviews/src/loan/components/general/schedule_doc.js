@@ -29,7 +29,18 @@ class ScheduleDoc extends Component {
     try {
       let res = await Api.get(`/relay/api/loan/dmi/schedule/get/${this.state.application_id}`);
 
-      let result = res.pfwresponse.result;
+      let resultData  = res.pfwresponse.result;
+      if (res.pfwresponse.status_code === 200 && !resultData.error) {
+        // -----------
+
+      } else {
+        this.setState({
+          show_loader: false
+        });
+
+        toast(resultData.error || resultData.message
+          || 'Something went wrong');
+      }
 
     } catch (err) {
       this.setState({
