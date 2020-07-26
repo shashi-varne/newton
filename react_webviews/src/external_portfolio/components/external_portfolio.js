@@ -23,7 +23,6 @@ const doughnutConfigOpts = {
   options: {
     layout: {
       padding: {
-        left: 0,
         bottom: 5,
         top: 5,
       }
@@ -31,6 +30,7 @@ const doughnutConfigOpts = {
     events: [],
     tooltips: { enabled: false },
     maintainAspectRatio: false,
+    responsive: true,
   },
   legend: {
     display: false,
@@ -261,7 +261,10 @@ export default class ExternalPortfolio extends Component {
         </div>
         <div className="ext-pf-subheader">
           <h4>Asset Allocation</h4>
-          <Doughnut data={assetAllocData} {...doughnutConfigOpts}/>
+          {/* Require a container with specific height and width to prevent chart canvas from changing sizes*/}
+          <div style={{ height: '310px', width: '100%', position: 'relative' }}>
+            <Doughnut data={assetAllocData} {...doughnutConfigOpts} />
+          </div>
           {this.renderCustomLegend(asset_allocation)}
         </div>
         <div className="ext-pf-subheader">
