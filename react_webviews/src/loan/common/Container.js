@@ -8,7 +8,7 @@ import Footer from "./footer";
 import Button from 'material-ui/Button';
 import Dialog, {
   DialogActions,
-  DialogTitle,
+  // DialogTitle,
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';

@@ -10,6 +10,8 @@ class Permissions extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      form_data: {},
+      next_state: 'journey',
       productName: getConfig().productName
     }
 
@@ -45,7 +47,15 @@ class Permissions extends Component {
   }
 
   handleClick = () => {
-      this.sendEvents('next');
+    this.sendEvents('next');
+    let that = this;
+    window.callbackWeb.get_data({
+      type: 'location_nsp_received',
+      location_nsp_received: function location_nsp_received(data) {
+        let body = { latitude: data.location.lat, longitude: data.location.lng, device_id: data.device_id, network_service_provider: data.nsp };
+        that.updateLead(body);
+      }
+    });
   }
 
   render() {
@@ -55,34 +65,34 @@ class Permissions extends Component {
         title="Mandatory permissions"
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
-        buttonTitle="CONTINUE"
+        buttonTitle="I AGREE"
       >
         <div className="loan-permissions">
 
-          <div style={{ display: 'flex'}}>
+          <div style={{ display: 'flex' }}>
             <img
-              src={ require(`assets/${this.state.productName}/ic_document_mobile.svg`)}
-              style={{marginBottom: '95px'}}
-              alt="" 
+              src={require(`assets/${this.state.productName}/ic_document_mobile.svg`)}
+              style={{ marginBottom: '95px' }}
+              alt=""
             />
             <div className="container">
               <div className="head">Mobile</div>
               <div className="content">
                 {`Our app collects and monitors specific
                 information about your device including
-                your SIM Network service provider of your
-                SMI.Device id and IP address. This help us
+                Network Service Provider of your SIM,
+                Device id and IP address.This helps us
                 to prevent fraud by uniquely identifying the
                 devices.`}
-              </div> 
+              </div>
             </div>
           </div>
 
-          <div style={{ display: 'flex'}}>
+          <div style={{ display: 'flex' }}>
             <img
-              src={ require(`assets/${this.state.productName}/ic_document_location.svg`)}
-              style={{marginBottom: '80px'}}
-              alt="" 
+              src={require(`assets/${this.state.productName}/ic_document_location.svg`)}
+              style={{ marginBottom: '80px' }}
+              alt=""
             />
             <div className="container">
               <div className="head">Location</div>
@@ -91,12 +101,12 @@ class Permissions extends Component {
                 the location of your device for verifying the
                 address, creating your risk profile, and make a
                 better credit risk decision.`}
-              </div> 
+              </div>
             </div>
           </div>
 
           <div className="content">
-            Please note that above information is needed by <b>DMI Finance Pvt Ltd</b>, it is mandatorily to perform your credit risk assessment and is securely shared with our registered third party service providers for generating loan offers for you.
+            Please note that above information is mandatory. It is needed by <b>DMI Finance Pvt Ltd</b>, to perform your credit risk assessment and generate loan offers for you.
           </div>
 
         </div>

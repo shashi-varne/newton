@@ -2,12 +2,54 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
+import ContactUs from '../../../common/components/contact_us';
+import { getUrlParams } from 'utils/validators';
+import { storageService } from 'utils/validators';
+
+const commonMapper = {
+  'cancelled': {
+
+  },
+  'success': {
+
+  },
+  'pending': {
+    'top_icon': 'error_illustration',
+    'top_title': 'Sorry!',
+    'mid_title': '',
+    'button_title': 'OK',
+    'cta_state': '/loan/home',
+    'close_state': '/loan/home'
+  },
+  'failed': {
+    'top_icon': 'error_illustration',
+    'top_title': 'E-mandate failed',
+    'mid_title': '',
+    'button_title': 'RETRY',
+    'cta_state': '/loan/bank',
+    'close_state': '/loan/journey'
+  },
+  'loan_not_eligible': {
+    'top_icon': 'ils_loan_failed',
+    'top_title': 'Sorry!',
+    'mid_title': '',
+    'button_title': 'OK',
+    'cta_state': '/loan/home',
+    'close_state': '/loan/home',
+    'noFooter': true,
+    'hide_contact': true
+  }
+}
+
 
 class MandateStatus extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false
+      show_loader: true,
+      params: getUrlParams(),
+      commonMapper: {},
+      okyc_id: storageService().get('loan_okyc_id')
     }
 
     this.initialize = initialize.bind(this);
@@ -15,14 +57,41 @@ class MandateStatus extends Component {
 
   componentWillMount() {
     this.initialize();
+
+    let { status } = this.state.params;
+
+    if (!status) {
+      status = 'pending'
+    }
+
+    this.setState({
+      status: status,
+      commonMapper: commonMapper[status]
+    })
   }
 
-  onload = () => {
-    // ****************************************************
-    // code goes here
-    // common things can be added inside initialize
-    // use/add common functions from/to  ../../common/functions
+  getMandateCallback = async () => {
 
+      let body = {
+        "request_type": "emandate"
+      }
+
+      let resultData = await this.callBackApi(body);
+      if (resultData.callback_status) {
+         this.navigate('/loan/reference');
+      } else {
+        this.setState({
+          status: 'pending',
+          commonMapper: commonMapper['pending']
+        })
+      }
+   
+
+  }
+
+
+  onload = () => {
+    this.getMandateCallback();
   }
 
   sendEvents(user_action) {
@@ -42,20 +111,66 @@ class MandateStatus extends Component {
   }
 
   handleClick = () => {
-      this.sendEvents('next');
+    this.sendEvents('next');
+    this.navigate(this.state.commonMapper.cta_state);
+  }
+
+  goBack = () => {
+    this.navigate(this.state.commonMapper.close_state);
   }
 
   render() {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="DUMMY_HEADER_TITLE"
+        title={this.state.commonMapper.top_title}
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
-        buttonTitle="CONTINUE"
+        buttonTitle={this.state.commonMapper.button_title}
+        headerData={{
+          icon: 'close',
+          goBack: this.goBack
+        }}
+        noFooter={this.state.commonMapper.noFooter}
       >
-        <div className="loan-mandate-status">
-          {/* {code goes here} */}
+        <div className="gold-payment-container" id="goldSection">
+          <div>
+            {this.state.commonMapper['top_icon'] && <img style={{ width: '100%' }}
+              src={require(`assets/${this.state.productName}/${this.state.commonMapper['top_icon']}.svg`)}
+              alt="" />}
+          </div>
+          <div className="main-tile">
+
+            <div>
+
+              {this.state.status === 'failed' &&
+                <div>
+                  <p className="top-content">
+                      Sorry, E-mandate application has failed. Please retry again.
+                  </p>
+                </div>
+              }
+
+
+
+              {this.state.status === 'pending' &&
+                <div>
+                  <p className="top-content">
+                    We have captured your detail but due to some system issues,you cannot proceed further.
+                    Please try again after some time.
+                  </p>
+                  <p className="top-content">
+                    You will receive a communication on your E-mail id once the issue is resolved.
+                  </p>
+                </div>
+              }
+
+            
+            </div>
+
+          </div>
+
+          {!this.state.commonMapper.hide_contact && <ContactUs />}
         </div>
       </Container>
     );

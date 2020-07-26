@@ -61,9 +61,7 @@ class Journey extends Component {
     let withProvider = this.state.withProvider;
     let nextFunction = '';
 
-    dmi_loan_status = 'callback_awaited_decision';
 
-    application_status = 'application_complete';
     if (application_status === 'application_incomplete') {
       cta_title = 'CHECK ELIGIBILITY';
       next_state = 'requirements-details';

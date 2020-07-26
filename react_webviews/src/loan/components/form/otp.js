@@ -40,22 +40,29 @@ class FormOtp extends Component {
     this.initialize();
 
     let { params } = this.props.location;
+    if(!params) {
+      params = {};
+    }
 
-    if (!params || params.resend_link === null || params.verify_link === null) {
+    console.log(params);
+
+    if (!params || !params.resend_link || !params.verify_link) {
 
       this.props.history.goBack();
       return;
     }
 
     let otpBaseData = {
-      mobile_no: params ? params.mobile_no : ''
+      mobile_no: params.mobile_no || ''
     }
     this.setState({
       otpBaseData: otpBaseData,
-      mobile_no: otpBaseData.mobile_no || '',
-      resend_link: params ? params.resend_link : '',
-      verify_link: params ? params.verify_link : '',
-      messageOtp: params ? params.message : 'An OTP is sent to your registered mobile number, please verify to complete the process.',
+      mobile_no: params.mobile_no || '',
+      resend_link: params.resend_link || '',
+      verify_link: params.verify_link || '',
+      next_state: params.next_state || '',
+      from_state: params.from_state || '',
+      messageOtp: params.message || 'An OTP is sent to your registered mobile number, please verify to complete the process.',
     })
   }
 
@@ -97,7 +104,7 @@ class FormOtp extends Component {
 
         let result = res.pfwresponse.result;
         if (!result.error) {
-          this.navigate('instant-kyc');
+          this.navigate(this.state.next_state);
         } else {
           this.setState({
             show_loader: false,
@@ -203,7 +210,7 @@ class FormOtp extends Component {
         <div className="default-otp">
 
           <div className="title">
-            Enter OTP to login to your account
+            Enter OTP
                     </div>
           <div className="content">
 
@@ -211,7 +218,11 @@ class FormOtp extends Component {
                         {this.state.mobile_no &&
               <span> mobile number
                         <span className="content-auth"> {this.state.mobile_no} </span>
-              </span>} ,  Enter OTP to verify and submit loan application.
+              </span>} ,  
+              {this.state.from_state === 'loan-summary' &&
+               <span>Enter OTP to complete the process.</span>}
+               {this.state.from_state !== 'loan-summary' &&
+               <span>Enter OTP to verify and submit loan application.</span>}
 
           </div>
 

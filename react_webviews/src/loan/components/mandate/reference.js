@@ -7,7 +7,7 @@ import { FormControl } from 'material-ui/Form';
 import MobileInputWithoutIcon from '../../../common/ui/MobileInputWithoutIcon';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
-import {storageService} from 'utils/validators';
+import {getConfig} from 'utils/functions';
 
 class KycStatus extends Component {
   constructor(props) {
@@ -15,7 +15,8 @@ class KycStatus extends Component {
     this.state = {
       show_loader: false,
       form_data: {},
-      application_id: storageService().get('loan_application_id')
+      getLeadBodyKeys: ['personal_info'],
+      get_lead: true
     }
 
     this.initialize = initialize.bind(this);
@@ -26,10 +27,18 @@ class KycStatus extends Component {
   }
 
   onload = () => {
-    // ****************************************************
-    // code goes here
-    // common things can be added inside initialize
-    // use/add common functions from/to  ../../common/functions
+    let lead = this.state.lead;
+    let personal_info = lead.personal_info || {};
+    let form_data = {
+      "ref_name_first": personal_info.ref_name_first || '',
+      "ref_contact_first": personal_info.ref_contact_first || '',
+      "ref_name_second": personal_info.ref_name_second || '',
+      "ref_contact_second": personal_info.ref_contact_second || ''
+    };
+
+    this.setState({
+        form_data: form_data
+    })
 
   }
 
@@ -53,35 +62,68 @@ class KycStatus extends Component {
     this.formHandleChange(name, event);
   };
 
+
+  getMandateCallback = async () => {
+
+    let body = {
+      "request_type": "emandate"
+    }
+
+    let resultData = await this.callBackApi(body);
+    if (resultData.callback_status) {
+       this.navigate('/loan/loan-summary');
+    } else {
+      let searchParams = getConfig().searchParams + '&status=pending';
+      this.navigate('mandate-status', { searchParams: searchParams });
+    }
+}
+
   handleClick = async () => {
     
     this.sendEvents('next');
 
-    let keys_to_check = ['ref_name_first', 'ref_contact_first', 'ref_name_second', 'ref_contact_second'];
+    let keys_to_check = ['ref_name_first', 'ref_contact_first', 
+    'ref_name_second', 'ref_contact_second'];
 
     let form_data = this.state.form_data;
+    let canSubmitForm = this.formCheckUpdate(keys_to_check, form_data, true);
 
-    this.formCheckUpdate(keys_to_check, form_data);
+    if(canSubmitForm) {
+      try {
+        this.setState({
+          show_loader: true
+        })
+  
+        let body = {
+          "ref_name_first": form_data.ref_name_first,
+          "ref_contact_first": form_data.ref_contact_first,
+          "ref_name_second": form_data.ref_name_second,
+          "ref_contact_second": form_data.ref_contact_second
+        };
+  
+        const res = await Api.post(`/relay/api/loan/reference/update/${this.state.application_id}`, body);
+  
+        let resultData  = res.pfwresponse.result;
+        if (res.pfwresponse.status_code === 200 && !resultData.error) {
+          this.getMandateCallback();
+        } else {
+          this.setState({
+            show_loader: false
+          });
 
-    try {
-      this.setState({
-        show_loader: true
-      })
-
-      let body = form_data;
-
-      const res = await Api.post(`/relay/api/loan/reference/update/${this.state.application_id}`, body);
-
-      console.log(res.error)
-
-
-    } catch (err) {
-      this.setState({
-        show_loader: false
-      });
-      toast('Something went wrong');
-      console.log(err)
+          toast(resultData.error || resultData.message
+            || 'Something went wrong');
+        }
+  
+      } catch (err) {
+        this.setState({
+          show_loader: false
+        });
+        toast('Something went wrong');
+        console.log(err)
+      }
     }
+  
   }
 
   render() {
@@ -99,7 +141,7 @@ class KycStatus extends Component {
               <div style={{color: '#64778D',fontSize: 13, margin: '0 0 6px 0'}}>
                 1st reference
               </div>
-              <div style={{marginBottom:'40px'}}>
+              <div className="InputField">
                 <Input
                   error={!!this.state.form_data.ref_name_first_error}
                   helperText={this.state.form_data.ref_name_first_error}
@@ -107,10 +149,11 @@ class KycStatus extends Component {
                   width="40"
                   label="Full name"
                   name="ref_name_first"
+                  value={this.state.form_data.ref_name_first || ''}
                   onChange={this.handleChange()} 
                 />
               </div>
-              <div style={{marginBottom:'40px'}}>
+              <div className="InputField">
                 <MobileInputWithoutIcon
                   error={!!this.state.form_data.ref_contact_first_error}
                   helperText={this.state.form_data.ref_contact_first_error} 
@@ -120,6 +163,7 @@ class KycStatus extends Component {
                   class="Mobile"
                   maxLength={10}
                   name="ref_contact_first"
+                  value={this.state.form_data.ref_contact_first || ''}
                   onChange={this.handleChange()} />          
               </div>
             </div>
@@ -128,7 +172,7 @@ class KycStatus extends Component {
               <div style={{color: '#64778D',fontSize: 13, margin: '0 0 6px 0'}}>
                 2st reference
               </div>
-              <div style={{marginBottom:'40px'}}>
+              <div className="InputField">
                 <Input
                   error={!!this.state.form_data.ref_name_second_error}
                   helperText={this.state.form_data.ref_name_second_error}
@@ -136,9 +180,11 @@ class KycStatus extends Component {
                   width="40"
                   label="Full name"
                   name="ref_name_second"
+                  value={this.state.form_data.ref_name_second || ''}
+                  onChange={this.handleChange()}
                 />
               </div>
-              <div style={{marginBottom:'40px'}}>
+              <div className="InputField">
                 <MobileInputWithoutIcon
                   error={!!this.state.form_data.ref_contact_second_error}
                   helperText={this.state.form_data.ref_contact_second_error} 
@@ -148,6 +194,7 @@ class KycStatus extends Component {
                   class="Mobile"
                   maxLength={10}
                   name="ref_contact_second"
+                  value={this.state.form_data.ref_contact_second || ''}
                   onChange={this.handleChange()} />          
               </div>
             </div>

@@ -122,7 +122,8 @@ class FormCreateProfile extends Component {
                             resend_link: result.resend_otp_url,
                             verify_link: result.verify_otp_url,
                             message: message,
-                            mobile_no: result.mobile_no
+                            mobile_no: result.mobile_no,
+                            next_state: 'instant-kyc'
                         }
                     });
                     toast(message);

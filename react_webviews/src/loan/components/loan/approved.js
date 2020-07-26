@@ -10,6 +10,8 @@ class LoanApprvoed extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      get_lead: true,
+      getLeadBodyKeys: ['vendor_info'],
       productName: getConfig().productName
     }
 
@@ -21,11 +23,13 @@ class LoanApprvoed extends Component {
   }
 
   onload = () => {
-    // ****************************************************
-    // code goes here
-    // common things can be added inside initialize
-    // use/add common functions from/to  ../../common/functions
-
+    let lead = this.state.lead || {};
+    let application_info = lead.application_info || {};
+    let vendor_info = lead.vendor_info || {};
+    this.setState({
+      application_info: application_info,
+      vendor_info: vendor_info
+    })
   }
 
   sendEvents(user_action) {
@@ -46,6 +50,7 @@ class LoanApprvoed extends Component {
 
   handleClick = () => {
       this.sendEvents('next');
+      this.navigate('report-details');
   }
 
   render() {
@@ -55,7 +60,10 @@ class LoanApprvoed extends Component {
         title="Loan Approved"
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
-        buttonTitle="CONTINUE"
+        buttonTitle="OK"
+        headerData={{
+          icon: 'close'
+        }}
       >
         <div className="loan-approved">
           <img
