@@ -244,11 +244,11 @@ class MandateBank extends Component {
         handleClick={this.handleClick}
         buttonTitle="SETUP MANDATE"
         withProvider={this.state.withProvider}
-        bottomButtonData={this.state.bottomButtonData}
+        buttonData={this.state.bottomButtonData}
       >
         <FormControl fullWidth>
           <div className="loan-mandate-bank">
-            <div style={{color: '#64778D', margin: '0 0 20px 0'}}>
+            <div style={{color: '#64778D', margin: '0 0 20px 0', lineHeight: '24px'}}>
               Amount will be credited to this bank a/c. Please make sure that this bank a/c is in your name.
             </div>
 

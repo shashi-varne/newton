@@ -196,18 +196,19 @@ class InstantKycHome extends Component {
 
     if (this.state.eligi_checking) {
       return (
-        <div>
+        <div className="loan-instant-kyc-eligi-checking">
 
           <div>
             {this.state.productName && <img
               src={require(`assets/${this.state.productName}/ic_purity.svg`)}
+              style={{padding:'80px 0 30px 0'}}
               alt="Gold" />}
           </div>
-          <div>
+          <div className="calculate">
             Calculating Eligibility….
           </div>
 
-          <div>
+          <div className="check-eligiblity">
             Your eligible loan amount is being calculated by the lender using their own
             proprietary algorithm, based on the data provided by you. This can take approximately 2 mins.
           </div>

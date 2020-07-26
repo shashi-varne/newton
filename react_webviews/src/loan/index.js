@@ -12,6 +12,7 @@ import NotFound from "../common/components/NotFound";
 
 
 import Landing from "./components/general/landing";
+import Landing2 from "./components/general/landing2";
 import Journey from "./components/general/journey";
 import Calculator from "./components/general/calculator";
 import Help from "./components/general/help";
@@ -87,6 +88,8 @@ const Lending = props => {
           <Route path={`${url}/help`} component={Help} />
           <Route path={`${url}/report-Details`} component={ReportDetails} />
           <Route path={`${url}/schedule-Doc`} component={ScheduleDoc} />
+          <Route path={`${url}/landing`} component={Landing2} />
+
 
 
           <Route path={`${url}/instant-kyc`} component={InstantKycHome} />

@@ -8,6 +8,9 @@ import next_arrow from 'assets/next_arrow.svg';
 import SVG from 'react-inlinesvg';
 import HowToSteps from '../../../common/ui/HowToSteps';
 import dmi_logo from 'assets/dmi_logo.svg';
+import ic_why_hs_fisdom from 'assets/fisdom/ic_why_hs.svg';
+import ic_why_hs_myway from 'assets/myway/ic_why_hs.svg';
+
 class Landing extends Component {
   constructor(props) {
     super(props);
@@ -15,7 +18,9 @@ class Landing extends Component {
       show_loader: false,
       get_lead: true,
       getLeadBodyKeys: ['vendor_info'],
-      top_cta_title: ''
+      top_cta_title: '',
+      productName: getConfig().productName,
+      ic_why_hs: getConfig().productName === 'fisdom' ? ic_why_hs_fisdom : ic_why_hs_myway
     }
 
     this.initialize = initialize.bind(this);
@@ -201,10 +206,41 @@ class Landing extends Component {
 
         <div className="his">
           <div className="horizontal-images-scroll">
-            <img className='image' src={require(`assets/${this.state.productName}/ic_why_loan2.svg`)} alt="" />
-            <img className='image' src={require(`assets/${this.state.productName}/ic_why_loan2.svg`)} alt="" />
-            <img className='image' src={require(`assets/${this.state.productName}/ic_why_loan2.svg`)} alt="" />
-            <img className='image' src={require(`assets/${this.state.productName}/ic_why_loan2.svg`)} alt="" />
+            <div style={{height:'112px', width:'172px', marginRight:'16px',
+              backgroundImage: `url(${this.state.ic_why_hs})`
+            }}>
+              <div className="card-info" style={{padding:'10px 0 20px 20px'}}>
+                Complete digital and  paperless process
+              </div>
+              <div style={{float:'right', paddingRight:'25px'}}>
+                <img src={ require(`assets/${this.state.productName}/ic_document_note.svg`)} alt="" />
+              </div>
+            </div>
+
+
+            <div style={{height:'112px', width:'172px', marginRight:'16px',
+              backgroundImage: `url(${this.state.ic_why_hs})`
+            }}>
+              <div className="card-info" style={{padding:'10px 0 0 20px'}}>
+                You don't have to provide any security  for your loan
+              </div>
+              <div style={{float:'right', paddingRight:'25px'}}>
+                <img src={ require(`assets/${this.state.productName}/ic_document_amount.svg`)} alt="" />
+              </div>
+            </div>
+
+
+            <div style={{height:'112px', width:'172px', marginRight:'16px',
+              backgroundImage: `url(${this.state.ic_why_hs})`
+            }}>
+              <div className="card-info" style={{padding:'10px 0 0 20px'}}>
+                Repayment tenure ranging from 3 to 24 months
+              </div>
+              <div style={{float:'right', paddingRight:'25px'}}>
+                <img src={ require(`assets/${this.state.productName}/ic_document_card.svg`)} alt="" />
+              </div>
+            </div>
+
           </div>
         </div>
 
