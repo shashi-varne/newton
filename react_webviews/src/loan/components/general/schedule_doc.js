@@ -5,6 +5,8 @@ import { initialize } from '../../common/functions';
 import Contact from 'common/components/contact_us';
 import { getConfig } from 'utils/functions';
 import "../Style.scss";
+import Api from 'utils/api';
+import toast from '../../../common/ui/Toast';
 
 class ScheduleDoc extends Component {
   constructor(props) {
@@ -19,6 +21,22 @@ class ScheduleDoc extends Component {
 
   componentWillMount() {
     this.initialize();
+
+    this.getPaymentSchedule();
+  }
+
+  getPaymentSchedule = async () => {
+    try {
+      let res = await Api.get(`/relay/api/loan/dmi/schedule/get/${this.state.application_id}`);
+
+      let result = res.pfwresponse.result;
+
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong')
+    }
   }
 
   onload = () => {
@@ -50,7 +68,6 @@ class ScheduleDoc extends Component {
   }
 
   render() {
-    console.log(this.state.productName)
 
     return (
       <Container

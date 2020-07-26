@@ -74,12 +74,12 @@ class Landing2 extends Component {
 
                 <div className="block1">
                     <div style={{lineHeight:'24px'}}>
-                        <div style={{fontSize:'10px', fontWeight:'bold', color:'#767e86'}}>Loan amount</div>
-                        <div style={{color: '#d3dbe4', fontSize:'14px'}}>{inrFormatDecimal(300000)}</div>
+                        <div className="block1-head">Loan amount</div>
+                        <div className="block1-amount">{inrFormatDecimal(300000)}</div>
                     </div>
                     <div style={{lineHeight:'24px'}}>
-                        <div style={{fontSize:'10px', fontWeight:'bold', color:'#767e86'}}>Upcoming EMI</div>
-                        <div style={{color: '#d3dbe4', fontSize:'14px'}}>{inrFormatDecimal(300000)}
+                        <div className="block1-head">Upcoming EMI</div>
+                        <div className="block1-amount">{inrFormatDecimal(300000)}
                             <span style={{color:'#7ED321', fontSize:'12px'}}> (10 JULY 2020)</span>
                         </div>
                     </div>
@@ -88,7 +88,7 @@ class Landing2 extends Component {
 
                 <div className="block2">
                     <div className="card-info">
-                      <img src={require(`assets/${this.state.productName}/ic_document_copy.svg`)}
+                      <img src={require(`assets/${this.state.productName}/ic_read.svg`)}
                         style={{marginRight: 10}}
                         alt="" />
                         Get loan schedule document
