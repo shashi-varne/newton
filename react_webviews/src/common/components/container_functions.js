@@ -62,6 +62,8 @@ export function didmount() {
     }
 
     window.addEventListener("scroll", this.onScroll, false);
+
+    this.check_hide_header_title();
 }
 
 export function unmount() {
