@@ -3,7 +3,6 @@ import Container from '../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
 import Contact from 'common/components/contact_us';
-import { getConfig } from 'utils/functions';
 import "../Style.scss";
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
@@ -12,8 +11,7 @@ class ScheduleDoc extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false,
-      productName: getConfig().productName,
+      show_loader: true,
       message: ''
     }
 
@@ -22,8 +20,6 @@ class ScheduleDoc extends Component {
 
   componentWillMount() {
     this.initialize();
-
-    this.getPaymentSchedule();
   }
 
   getPaymentSchedule = async () => {
@@ -31,16 +27,17 @@ class ScheduleDoc extends Component {
       let res = await Api.get(`/relay/api/loan/dmi/schedule/get/${this.state.application_id}`);
 
       let resultData  = res.pfwresponse.result;
+
+      this.setState({
+        show_loader: false
+      });
+
       if (res.pfwresponse.status_code === 200 && !resultData.error) {
         this.setState({
           message: resultData.message
         })
 
       } else {
-        this.setState({
-          show_loader: false
-        });
-
         toast(resultData.error || resultData.message
           || 'Something went wrong');
       }
@@ -54,11 +51,7 @@ class ScheduleDoc extends Component {
   }
 
   onload = () => {
-    // ****************************************************
-    // code goes here
-    // common things can be added inside initialize
-    // use/add common functions from/to  ../../common/functions
-
+    this.getPaymentSchedule();
   }
 
   sendEvents(user_action) {

@@ -167,6 +167,7 @@ class Listing extends Component {
         showLoader={this.state.show_loader}
         title={'Help & Support'}
         noFooter={true}
+        noBack={ !(getConfig().isWebCode) && getConfig().app === 'android' }
         events={this.backButtonEvent()}
       >
         <div className="Help pad20">

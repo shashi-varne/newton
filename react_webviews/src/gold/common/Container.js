@@ -122,6 +122,14 @@ class Container extends Component {
     this.historyGoBack({fromHeader: true});
   }
 
+  handlePopup = () => {
+    this.setState({
+        openPopup: false
+    });
+
+    nativeCallback({ action: "native_back", events: this.getEvents("back") });
+  };
+
   render() {
     let steps = [];
     for (var i = 0; i < this.props.total; i++) {

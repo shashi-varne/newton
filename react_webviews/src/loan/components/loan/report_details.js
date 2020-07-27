@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
-import { numDifferentiationInr } from 'utils/validators';
+import { numDifferentiationInr, inrFormatDecimal } from 'utils/validators';
 import { getCssMapperReport } from '../../constants';
 import ContactUs from '../../../common/components/contact_us';
 
@@ -96,7 +96,7 @@ class ReportDetails extends Component {
                   Customer name
                 </div>
                 <div className="mtr-bottom">
-                  {this.state.personal_info.first_name} {this.state.personal_info.last_name}
+                  {this.state.personal_info.full_name}
                 </div>
               </div>
             </div>
@@ -111,7 +111,7 @@ class ReportDetails extends Component {
               </div>
                 <div className="mtr-bottom">
 
-                  {numDifferentiationInr(this.state.vendor_info_ui.sum_assured)}
+                  {numDifferentiationInr(this.state.vendor_info_ui.sanction_amount)}
                 </div>
               </div>
             </div>
@@ -125,7 +125,7 @@ class ReportDetails extends Component {
                   Emi amount
               </div>
                 <div className="mtr-bottom">
-                  {this.state.vendor_info_ui.tenure}
+                  {inrFormatDecimal(this.state.vendor_info_ui.approved_emi)}/month
                 </div>
               </div>
             </div>
@@ -139,7 +139,7 @@ class ReportDetails extends Component {
                   Date of approval
               </div>
                 <div className="mtr-bottom">
-                  {this.state.vendor_info_ui.tenure}
+                  {this.state.vendor_info_ui.dt_approval}
                 </div>
               </div>
             </div>
@@ -153,7 +153,7 @@ class ReportDetails extends Component {
                   Application number
               </div>
                 <div className="mtr-bottom">
-                  {this.state.vendor_info_ui.tenure}
+                  {this.state.vendor_info_ui.application_id}
                 </div>
               </div>
             </div>

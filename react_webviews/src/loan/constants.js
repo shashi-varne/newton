@@ -1,11 +1,12 @@
 export function goBackMap(path) {
     let mapper = {
         '/loan/journey': '/loan/home',
-        '/loan/instant-kyc': '/loan/journey',
+        '/loan/instant-kyc-status': '/loan/journey',
         '/loan/loan-eligible': '/loan/journey',
         '/loan/reference': '/loan/journey',
         '/loan/loan-approved': '/loan/report-details',
-        '/loan/report-details': '/loan/home'
+        '/loan/report-details': '/loan/home',
+        '/loan/form-otp': '/loan/journey'
     }
 
     return mapper[path] || false;

@@ -5,11 +5,13 @@ import { initialize } from '../../common/functions';
 import { inrFormatDecimal } from 'utils/validators';
 import dmi_logo from 'assets/dmi_logo.svg';
 
-class Landing2 extends Component {
+class Report extends Component {
     constructor(props) {
         super(props);
         this.state = {
             show_loader: false,
+            get_lead: true,
+            getLeadBodyKeys: ['vendor_info'],
         }
 
         this.initialize = initialize.bind(this);
@@ -20,10 +22,14 @@ class Landing2 extends Component {
     }
 
     onload = async () => {
-        // ****************************************************
-        // code goes here
-        // common things can be added inside initialize
-        // use/add common functions from/to  ../../common/functions
+        let lead = this.state.lead || {};
+        let application_info = lead.application_info || {};
+        let vendor_info = lead.vendor_info || {};
+
+        this.setState({
+            application_info: application_info,
+            vendor_info: vendor_info
+        })
 
     }
 
@@ -48,6 +54,7 @@ class Landing2 extends Component {
     }
 
     render() {
+        let vendor_info = this.state.vendor_info || {};
         return (
           <Container
             showLoader={this.state.show_loader}
@@ -56,10 +63,7 @@ class Landing2 extends Component {
             handleClick={this.handleClick}
             buttonTitle="CONTINUE"
             noFooter={true}
-            styleHeader={{
-              backgroundColor:'#0a1d32',
-              color:'#fff'
-            }}
+            classHeader="loan-report-header"
           >
             <div className="loan-landing2">
                 <div className="container">
@@ -75,7 +79,7 @@ class Landing2 extends Component {
                 <div className="block1">
                     <div style={{lineHeight:'24px'}}>
                         <div className="block1-head">Loan amount</div>
-                        <div className="block1-amount">{inrFormatDecimal(300000)}</div>
+                        <div className="block1-amount">{inrFormatDecimal(vendor_info.approved_amount_final)}</div>
                     </div>
                     <div style={{lineHeight:'24px'}}>
                         <div className="block1-head">Upcoming EMI</div>
@@ -86,7 +90,7 @@ class Landing2 extends Component {
                 </div>
                 </div>
 
-                <div className="block2">
+                <div className="block2" onClick={ () => this.navigate('schedule-Doc')}> 
                     <div className="card-info">
                       <img src={require(`assets/${this.state.productName}/ic_loan_schedule.svg`)}
                         style={{marginRight: 10}}
@@ -95,7 +99,7 @@ class Landing2 extends Component {
                     </div>
                 </div>
 
-                <div className="block2">
+                <div className="block2" onClick={() => {this.openInBrowser('https://portal.dmifinance.in/')}}>
                     <div className="card-info">
                       <img src={require(`assets/${this.state.productName}/ic_customer_portal.svg`)}
                         style={{marginRight: 10}}
@@ -104,7 +108,7 @@ class Landing2 extends Component {
                     </div>
                 </div>
 
-                <div className="block2">
+                <div className="block2" onClick={ () => this.navigate('help')}>
                     <div className="card-info">
                       <img src={require(`assets/${this.state.productName}/ic_help.svg`)}
                         style={{marginRight: 10}}
@@ -124,4 +128,4 @@ class Landing2 extends Component {
     }
 }
 
-export default Landing2;
+export default Report;
