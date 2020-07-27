@@ -90,8 +90,8 @@ class KycStatus extends Component {
     }
 
     if (status === 'cancelled') {
-      // this.navigate('/loan/instant-kyc');
-      // return;
+      this.navigate('/loan/instant-kyc');
+      return;
     }
 
     this.setState({
