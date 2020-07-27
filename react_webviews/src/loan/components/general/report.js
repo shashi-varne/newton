@@ -98,7 +98,7 @@ class Report extends Component {
                     </div>
                 </div>
 
-                <div className="block2" onClick={ () => this.navigate('schedule-Doc')}>
+                <div className="block2" onClick={() => {this.openInBrowser('https://portal.dmifinance.in/')}}>
                     <div className="card-info">
                       <img src={require(`assets/${this.state.productName}/ic_document_copy.svg`)}
                         style={{marginRight: 10}}

@@ -70,6 +70,12 @@
         overflow: scroll;
         overflow-y: scroll;
 
+        #link {
+            color: blue;
+            cursor: pointer;
+            font-weight: 400;
+        }
+
         .agree-tiles {
             display: flex;
             align-items: baseline;
@@ -384,6 +390,10 @@
   .loan-journey {
     .generic-progress-vertical {
       margin: 20px 0 0 10px;
+
+      .normal-step-icon {
+          top: 1px;
+      }
     }
 
     .journey-card {

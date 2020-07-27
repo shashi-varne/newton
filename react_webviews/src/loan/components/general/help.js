@@ -77,7 +77,7 @@ class Help extends Component {
             <span className="details" style={{lineHeight: '25px'}}>
               {` 9350657100`}
               <br />
-              <div className="link">
+              <div className="link" onClick={() => {this.openInBrowser('https://bit.ly/DMIFINWA')}}>
                 https://bit.ly/DMIFINWA
               </div>
             </span>  

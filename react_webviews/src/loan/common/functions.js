@@ -8,13 +8,14 @@ import { nativeCallback } from 'utils/native_callback';
 export async function initialize() {
 
     this.navigate = navigate.bind(this);
-    this.openInBrowser = openInBrowser.bind(this);
+    this.openPdf = openPdf.bind(this);
     this.setEditTitle = setEditTitle.bind(this);
     this.updateLead = updateLead.bind(this);
     this.formCheckUpdate = formCheckUpdate.bind(this);
     this.formHandleChange = formHandleChange.bind(this);
     this.callBackApi = callBackApi.bind(this);
     this.decisionCallback = decisionCallback.bind(this);
+    this.openInBrowser = openInBrowser.bind(this);
 
     nativeCallback({ action: 'take_control_reset' });
 
@@ -104,6 +105,15 @@ export async function initialize() {
 }
 
 
+export function openInBrowser(url) {
+    nativeCallback({
+      action: 'open_in_browser',
+      message: {
+        url: url
+      }
+    });
+  }
+
 export async function updateLead(body, application_id) {
     try {
 
@@ -136,11 +146,17 @@ export async function updateLead(body, application_id) {
                 resultData.error.length > 0) {
                 let form_data = this.state.form_data;
 
-                for (var i in resultData.invalid_fields) {
-                    form_data[resultData.invalid_fields[i] + '_error'] = resultData.error[i];
+                if(this.state.screen_name === 'address-details') {
+                    for (var j in resultData.invalid_fields) {
+                        toast(resultData.error[j]);
+                        break;
+                    }
+                } else {
+                    for (var i in resultData.invalid_fields) {
+                        form_data[resultData.invalid_fields[i] + '_error'] = resultData.error[i];
+                    }
                 }
 
-                console.log(form_data);
                 this.setState({
                     form_data: form_data
                 })
@@ -187,7 +203,7 @@ export async function callBackApi(body) {
 
 }
 
-export function openInBrowser(url, type) {
+export function openPdf(url, type) {
 
     if (!url) {
         return;
@@ -363,7 +379,13 @@ export function formHandleChange(name, event) {
     if (!name) {
         name = event.target.name;
     }
+
+    
     var value = event.target ? event.target.value : event;
+
+    if(name === 'pan_no' && value) {
+        value = value.toUpperCase();
+    }
     var form_data = this.state.form_data || {};
 
     if ((name === 'amount_required' || name === 'net_monthly_salary') &&

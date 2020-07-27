@@ -56,10 +56,6 @@ class Journey extends Component {
     let application_status = application_info.application_status || '';
     let dmi_loan_status = vendor_info.dmi_loan_status;
 
-    dmi_loan_status = 'reference_added'
-    console.log("application_status : " + application_status);
-    console.log("dmi_loan_status : " + dmi_loan_status);
-
     let next_state = '';
     let step_info = 1;
     let withProvider = this.state.withProvider;

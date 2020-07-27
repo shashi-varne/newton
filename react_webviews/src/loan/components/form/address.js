@@ -50,11 +50,8 @@ class AddressDetails extends Component {
 
         let lead = this.state.lead || {};
 
-        let address_info = lead.address_info || {};
-
         let current_address_data = lead.current_address_data || {};
         let permanent_address_data = lead.permanent_address_data || {};
-        console.log(address_info)
 
         let form_data = {
             residence_type: current_address_data.residence_type || '',
@@ -89,11 +86,12 @@ class AddressDetails extends Component {
     handleClick = async () => {
 
         this.sendEvents('next');
-        let keys_to_check = ['residence_type', 'duration', 'address', 'pincode', 'city',
-        'state', 'country','p_address', 'p_pincode', 'p_city', 'p_state', 'p_country'];
+        let keys_to_check = ['residence_type', 'duration', 'address', 'pincode','p_address', 
+        'p_pincode'];
 
 
         let form_data = this.state.form_data;
+        console.log(form_data);
 
         this.formCheckUpdate(keys_to_check, form_data);
     }
@@ -126,6 +124,7 @@ class AddressDetails extends Component {
         }
 
         let form_data = this.state.form_data;
+        console.log(name);
         form_data[name] = pincode;
         form_data[name + '_error'] = '';
 
