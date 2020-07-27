@@ -245,11 +245,10 @@
         padding: 30px 0 35px 0;
     }
 
-    .agreement {
-        width: 90%;
-        line-height: 22px;
-        color: #767e86;
-        padding-bottom: 13px;
+    .agreement-block {
+        height: 180px;
+        overflow: scroll;
+        overflow-y: scroll;
     }
 
     label {
@@ -487,4 +486,45 @@
   .loan-report-header {
     background-color: #0a1d32 !important;
     color: #fff !important;
+  }
+
+  .loan-agreement {
+
+    .agree-tiles {
+        display: flex;
+        align-items: baseline;
+    }
+    
+    .agree-tiles-left {
+        color: #0A1D32;
+        font-size: 13px;
+    }
+    
+    .agree-tiles-right {
+        margin: 0 0 0 10px;
+        color: #767E86;
+        font-size: 13px;
+        // line-height: 1.6;
+    }
+
+    .agree-tiles-right-2 {
+        margin: 0 0 0 20px;
+        color: #767E86;
+        font-size: 13px;
+        // line-height: 1.6;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+
+    table {
+        width: 100%;
+        margin: 10px 0 10px 0;
+    }
+
+    th, td {
+        width: 50%;
+    }
   }
