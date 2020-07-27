@@ -62,8 +62,6 @@ export const nativeCallback = async ({ action = null, message = null, events = n
 
   }
 
-  console.log(callbackData)
-
 
   if (getConfig().generic_callback) {
     if (action === 'take_control_reset_hard' || action === 'take_control_reset') {

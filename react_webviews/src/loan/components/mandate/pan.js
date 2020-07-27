@@ -117,24 +117,31 @@ class MandatePan extends Component {
     })
     this.sendEvents('next');
 
-    var uploadurl = '/relay/api/document/loan/upload'
+    var uploadurl = '/relay/api/document/loan/upload';
     const data = new FormData()
-    data.append('res', file, file.doc_type, this.state.application_id)
+    data.append('res', file);
+    data.append('doc_type', 'pan');
+    data.append('application_id', this.state.application_id);
 
     try {
       const res = await Api.post(uploadurl, data);
-      this.setState({
-        show_loader: false
-      });
-      if (res.pfwresponse.result.message === 'success') {
+
+
+      var resultData = res.pfwresponse.result || {};
+      if (res.pfwresponse.status_code === 200 && resultData.message) {
 
         this.checkNextState();
 
       } else {
 
-        toast(res.pfwresponse.result.error || 'Something went wrong');
+        this.setState({
+          show_loader: false
+        });
+
+        toast(resultData.error || 'Something went wrong');
       }
     } catch (err) {
+      console.log(err);
       this.setState({
         show_loader: false
       });

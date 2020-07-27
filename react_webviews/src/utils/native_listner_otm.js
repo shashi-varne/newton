@@ -120,35 +120,32 @@ if (getConfig().generic_callback) {
       }
     }
 
-    exports.get_data = function (listener) {
+    exports.get_device_data = function (listener) {
+      console.log("get device data")
       listeners.push(listener);
       let callbackData = {};
-      callbackData.action = 'get_data';
+      callbackData.action = 'get_device_data';
       if (typeof window.Android !== 'undefined') {
+        console.log("android")
         window.Android.callbackNative(JSON.stringify(callbackData));
       } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
         window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+      } else {
+        // need to write for web
       }
+
       // for testing added
-      window.callbackWeb.return_data();
+      // window.callbackWeb.send_device_data();
     }
 
-    exports.return_data = function (data_json_str) {
+    exports.send_device_data = function (data_json_str) {
       var json_data = {};
       if (data_json_str !== "" && typeof data_json_str === "string") {
         json_data = JSON.parse(data_json_str);
       } else {
         json_data = data_json_str;
       }
-      // test data
-      json_data = {
-        "location": {
-          "lat": 23.133,
-          "lng": 12.324
-        },
-        "nsp": "jio 4G",
-        "device_id": "dwqsdedw213213"
-      };
+
       for (var j = 0; j < listeners.length; j++) {
         var lis = listeners[j];
         if (lis.type === 'location_nsp_received') {
