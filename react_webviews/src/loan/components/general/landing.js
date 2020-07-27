@@ -56,10 +56,6 @@ class Landing extends Component {
     let process_done = false;
     let isResume = true;
     let top_cta_title = 'RESUME';
-    // if(application_info.application_status === 'application_incomplete') {
-    //   isResume = false;
-    //   top_cta_title = 'APPLY NOW';
-    // }
 
     if(!application_info.latitude || !application_info.network_service_provider) {
       this.setState({

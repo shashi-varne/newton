@@ -87,13 +87,8 @@ class Container extends Component {
 
     switch (pathname) {
       case "/loan/home":
+      case "/loan/report":
         nativeCallback({ action: "native_back"});
-        break;
-      case "/loan/form-summary":
-        this.setState({
-          openPopup: true,
-          popupText: 'You are just two steps  away from getting money in your account. Do you really want to exit?'
-        })
         break;
       default:
         this.props.history.goBack();

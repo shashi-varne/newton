@@ -54,6 +54,7 @@ class Report extends Component {
     }
 
     render() {
+        let vendor_info = this.state.vendor_info || {};
         return (
           <Container
             showLoader={this.state.show_loader}
@@ -78,7 +79,7 @@ class Report extends Component {
                 <div className="block1">
                     <div style={{lineHeight:'24px'}}>
                         <div className="block1-head">Loan amount</div>
-                        <div className="block1-amount">{inrFormatDecimal(300000)}</div>
+                        <div className="block1-amount">{inrFormatDecimal(vendor_info.approved_amount_final)}</div>
                     </div>
                     <div style={{lineHeight:'24px'}}>
                         <div className="block1-head">Upcoming EMI</div>
