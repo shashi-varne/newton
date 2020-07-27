@@ -286,7 +286,7 @@ class Landing extends Component {
         <div className="flex faq" onClick={() => this.openFaqs()}>
           <div>
             <img className="accident-plan-read-icon"
-              src={require(`assets/${this.state.productName}/ic_document_copy.svg`)} alt="" />
+              src={require(`assets/${this.state.productName}/ic_help.svg`)} alt="" />
           </div>
           <div>
             Frequently asked questions
