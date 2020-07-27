@@ -187,9 +187,9 @@ class KycStatus extends Component {
 
           <div>
             {this.state.productName && <img
-              src={require(`assets/${this.state.productName}/ic_purity.svg`)}
+              src={require(`assets/${this.state.productName}/loader_gif.gif`)}
               style={{ padding: '80px 0 30px 0' }}
-              alt="Gold" />}
+              alt="loader" />}
           </div>
           <div className="calculate">
             Calculating KYC Status.
