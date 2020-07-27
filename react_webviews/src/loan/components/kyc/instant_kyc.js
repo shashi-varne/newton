@@ -20,7 +20,11 @@ class InstantKycHome extends Component {
       get_lead: true,
       getLeadBodyKeys: ['vendor_info'],
       lead: {},
-      vendor_info: {}
+      vendor_info: {},
+      timeAlloted: 20,
+      screen_name: 'instant-kyc',
+      totalEligiRounds: 7,
+      currentEligiRounds:1
     }
 
     this.initialize = initialize.bind(this);
@@ -129,22 +133,22 @@ class InstantKycHome extends Component {
 
   kycCallback = async () => {
 
-      this.setState({
-        show_loader: true
-      });
+    this.setState({
+      show_loader: true
+    });
 
-      let body = {
-        "request_type": "okyc",
-        'okyc_id': this.state.vendor_info.dmi_okyc_id
-      }
-      let resultData = await this.callBackApi(body);
-      if (resultData.callback_status) {
-        this.triggerDecision();
-      } else {
-        let searchParams = getConfig().searchParams + '&status=pending';
-        this.navigate('instant-kyc-status', { searchParams: searchParams });
-      }
-   
+    let body = {
+      "request_type": "okyc",
+      'okyc_id': this.state.vendor_info.dmi_okyc_id
+    }
+    let resultData = await this.callBackApi(body);
+    if (resultData.callback_status) {
+      this.triggerDecision();
+    } else {
+      let searchParams = getConfig().searchParams + '&status=pending';
+      this.navigate('instant-kyc-status', { searchParams: searchParams });
+    }
+
 
   }
 
@@ -162,7 +166,8 @@ class InstantKycHome extends Component {
         this.setState({
           eligi_checking: true
         })
-        this.decisionCallback();
+
+        this.startEligiCheck();
 
       } else {
         this.setState({
@@ -183,12 +188,12 @@ class InstantKycHome extends Component {
 
   handleClick = () => {
     this.sendEvents('next');
-   
+
     if (this.state.dmi_loan_status === 'okyc_success') {
       //ready for decision
       this.kycCallback();
-    }  else {
-      this.decisionCallback();
+    } else {
+      this.startEligiCheck();
     }
   }
 
@@ -201,7 +206,7 @@ class InstantKycHome extends Component {
           <div>
             {this.state.productName && <img
               src={require(`assets/${this.state.productName}/ic_purity.svg`)}
-              style={{padding:'80px 0 30px 0'}}
+              style={{ padding: '80px 0 30px 0' }}
               alt="Gold" />}
           </div>
           <div className="calculate">
@@ -218,6 +223,46 @@ class InstantKycHome extends Component {
 
     return null;
 
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.countdownInterval);
+  }
+
+  countdown = () => {
+    let timeAvailable = this.state.timeAvailable;
+
+    console.log(timeAvailable)
+    timeAvailable--;
+    if (timeAvailable <= 0) {
+      timeAvailable = 0;
+      clearInterval(this.state.countdownInterval);
+      this.decisionCallback();
+    }
+
+    this.setState({
+      timeAvailable: timeAvailable
+    })
+  };
+
+  startEligiCheck = () => {
+    let intervalId = setInterval(this.countdown, 1000);
+    this.setState({
+      countdownInterval: intervalId,
+      eligi_checking: true,
+      timeAvailable: this.state.timeAlloted
+    });
+  }
+
+  reTriggerEligi() {
+
+    let intervalId = setInterval(this.countdown, 1000);
+
+    this.setState({
+      timeAvailable: this.state.totalTime,
+      countdownInterval: intervalId
+    });
+    this.props.parent.resendOtp();
   }
 
   renderMainUI() {

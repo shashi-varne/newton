@@ -3,7 +3,6 @@ import { Route, Switch } from "react-router-dom";
 import { withRouter } from "react-router";
 import { MuiThemeProvider, createMuiTheme } from "material-ui/styles";
 import "../common/theme/Style.scss";
-import "./common/Style.css";
 import { themeConfig } from 'utils/constants';
 import { ToastContainer } from 'react-toastify';
 

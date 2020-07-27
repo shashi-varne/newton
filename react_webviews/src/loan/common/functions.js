@@ -407,15 +407,26 @@ export function formHandleChange(name, event) {
 
 export async function decisionCallback() {
 
-    this.setState({
-        show_loader: true
-    })
+    let isKyc = this.state.screen_name === 'instant-kyc';
+
+    if(!isKyc) {
+        this.setState({
+            show_loader: true
+        })
+    }
+   
     let body = {
         "request_type": "decision"
     }
 
     let resultData = await this.callBackApi(body);
-    console.log(resultData);
+
+    let totalEligiRounds = this.state.totalEligiRounds;
+    let currentEligiRounds = this.state.currentEligiRounds;
+
+    this.setState({
+        currentEligiRounds:  currentEligiRounds + 1
+    })
 
     if (resultData.callback_status) {
         // no change required
@@ -429,8 +440,19 @@ export async function decisionCallback() {
         }
     } else {
         // sorry
-        let searchParams = getConfig().searchParams + '&status=eligible_sorry';
-        this.navigate('instant-kyc-status', { searchParams: searchParams });
+
+        if(isKyc) {
+            if(totalEligiRounds === currentEligiRounds) {
+                let searchParams = getConfig().searchParams + '&status=eligible_sorry';
+                this.navigate('instant-kyc-status', { searchParams: searchParams });
+            } else {
+                this.startEligiCheck();
+            }
+        } else {
+            let searchParams = getConfig().searchParams + '&status=eligible_sorry';
+            this.navigate('instant-kyc-status', { searchParams: searchParams });
+        }
+        
     }
 
 }
