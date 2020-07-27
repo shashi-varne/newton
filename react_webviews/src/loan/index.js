@@ -91,8 +91,6 @@ const Lending = props => {
           <Route path={`${url}/schedule-Doc`} component={ScheduleDoc} />
           <Route path={`${url}/landing`} component={Landing2} />
 
-
-
           <Route path={`${url}/instant-kyc`} component={InstantKycHome} />
           <Route path={`${url}/instant-kyc-status`} component={KycStatus} />
 

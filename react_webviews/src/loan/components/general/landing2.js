@@ -88,7 +88,7 @@ class Landing2 extends Component {
 
                 <div className="block2">
                     <div className="card-info">
-                      <img src={require(`assets/${this.state.productName}/ic_read.svg`)}
+                      <img src={require(`assets/${this.state.productName}/ic_loan_schedule.svg`)}
                         style={{marginRight: 10}}
                         alt="" />
                         Get loan schedule document
@@ -97,7 +97,7 @@ class Landing2 extends Component {
 
                 <div className="block2">
                     <div className="card-info">
-                      <img src={require(`assets/${this.state.productName}/ic_document_copy.svg`)}
+                      <img src={require(`assets/${this.state.productName}/ic_customer_portal.svg`)}
                         style={{marginRight: 10}}
                         alt="" />
                         DMI customer portal
@@ -106,7 +106,7 @@ class Landing2 extends Component {
 
                 <div className="block2">
                     <div className="card-info">
-                      <img src={require(`assets/${this.state.productName}/ic_document_copy.svg`)}
+                      <img src={require(`assets/${this.state.productName}/ic_help.svg`)}
                         style={{marginRight: 10}}
                         alt="" />
                         Need help
