@@ -56,7 +56,16 @@ class Landing extends Component {
     let process_done = false;
     let isResume = true;
     let top_cta_title = 'RESUME';
-    if(application_info.application_status === 'application_incomplete') {
+    // if(application_info.application_status === 'application_incomplete') {
+    //   isResume = false;
+    //   top_cta_title = 'APPLY NOW';
+    // }
+
+    if(!application_info.latitude || !application_info.network_service_provider) {
+      this.setState({
+        location_needed: true
+      })
+
       isResume = false;
       top_cta_title = 'APPLY NOW';
     }
@@ -159,7 +168,7 @@ class Landing extends Component {
     if(this.state.process_done) {
       this.navigate('report-details');
     } else {
-      if(!this.state.application_info.latitude || !this.state.application_info.network_service_provider) {//condition for mobile
+      if(this.state.location_needed) {//condition for mobile
         this.navigate('permissions');
       } else if(dmi_loan_status === 'application_rejected') {
         let searchParams = getConfig().searchParams + '&status=loan_not_eligible';

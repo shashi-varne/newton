@@ -3,9 +3,9 @@ import Container from '../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
 import SliderWithValues from "../../../common/ui/SilderWithValues"
-import "../Style.scss"
-import { formatAmount } from "../../../utils/validators";
-import Button from '../../../common/ui/Button';
+import "../Style.scss";
+import { formatAmountInr } from "../../../utils/validators";
+// import Button from '../../../common/ui/Button';
 
 class Calculator extends Component {
   constructor(props) {
@@ -51,6 +51,7 @@ class Calculator extends Component {
 
   handleClick = () => {
       this.sendEvents('next');
+      this.navigate('home');
   }
 
   onChange = (val, key) => {
@@ -65,7 +66,11 @@ class Calculator extends Component {
       Monthly_expenses
     } = this.state;
 
-    const Loan_Eligibility = (Net_monthly_Income + Other_EMIs + Monthly_expenses) * 40/100 * Tenor;
+    let Loan_Eligibility = (Net_monthly_Income - Other_EMIs - Monthly_expenses) * 40/100 * Tenor;
+    if(Loan_Eligibility <=0 || Loan_Eligibility > 100000) {
+      Loan_Eligibility = 100000;
+    }
+   
 
     return (
       <Container
@@ -74,7 +79,7 @@ class Calculator extends Component {
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
         buttonTitle="APPLY NOW"
-        noFooter={true}
+        // noFooter={true}
       >
         <div className="loan-calculator">
           <SliderWithValues 
@@ -122,14 +127,14 @@ class Calculator extends Component {
           />
 
           <div className="total-amount">
-            <div>You are elgible for upto</div>
+            <div>You are eligible for loan upto</div>
             <div className="total">
-              {'₹ ' + formatAmount(Loan_Eligibility)}
+              { formatAmountInr(Loan_Eligibility)}
             </div>
-            <Button 
+            {/* <Button 
               type="default"
               buttonTitle="APPLY NOW"
-            />
+            /> */}
           </div>
 
           
