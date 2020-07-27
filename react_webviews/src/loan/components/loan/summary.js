@@ -202,6 +202,7 @@ class LoanSummary extends Component {
           <Grid container spacing={16} alignItems="center">
             <Grid item xs={1} className="TextCenter">
               <Checkbox
+                defaultChecked
                 disabled={!this.state.isScrolledToBottom}
                 checked={this.state.confirm_details_check}
                 color="primary"
