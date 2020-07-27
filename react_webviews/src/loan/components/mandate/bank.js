@@ -261,6 +261,8 @@ class MandateBank extends Component {
 
           window.location.href = pgLink;
 
+          // this.openInTabApp(pgLink);
+
         } else {
           this.setState({
             show_loader: false
@@ -289,8 +291,6 @@ class MandateBank extends Component {
       form_data: form_data
     });
   };
-
-
 
   render() {
     return (

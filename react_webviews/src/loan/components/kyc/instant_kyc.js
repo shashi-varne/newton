@@ -24,7 +24,7 @@ class InstantKycHome extends Component {
       timeAlloted: 20,
       screen_name: 'instant-kyc',
       totalEligiRounds: 7,
-      currentEligiRounds:1
+      currentEligiRounds: 1
     }
 
     this.initialize = initialize.bind(this);
@@ -43,6 +43,7 @@ class InstantKycHome extends Component {
       vendor_info: lead.vendor_info,
       dmi_loan_status: vendor_info.dmi_loan_status
     })
+
   }
 
   sendEvents(user_action) {
@@ -77,7 +78,7 @@ class InstantKycHome extends Component {
           let okyc_id = resultData.okyc_id;
           storageService().set('loan_okyc_id', okyc_id);
           let current_url = window.location.href;
-          let nativeRedirectUrl = current_url;
+          // let nativeRedirectUrl = current_url;
 
           let paymentRedirectUrl = encodeURIComponent(
             window.location.origin + `/loan/instant-kyc-status` + getConfig().searchParams
@@ -95,22 +96,24 @@ class InstantKycHome extends Component {
           }
 
 
-          if (getConfig().app === 'ios') {
-            nativeCallback({
-              action: 'show_top_bar', message: {
-                title: 'KYC'
-              }
-            });
-          }
+          // if (getConfig().app === 'ios') {
+          //   nativeCallback({
+          //     action: 'show_top_bar', message: {
+          //       title: 'KYC'
+          //     }
+          //   });
+          // }
 
-          nativeCallback({
-            action: 'take_control', message: {
-              back_url: nativeRedirectUrl,
-              back_text: 'Are you sure you want to exit the kyc process?'
-            }
-          });
+          // nativeCallback({
+          //   action: 'take_control', message: {
+          //     back_url: nativeRedirectUrl,
+          //     back_text: 'Are you sure you want to exit the kyc process?'
+          //   }
+          // });
 
-          window.location.href = pgLink;
+          // window.location.href = pgLink;
+
+          this.openInTabApp(pgLink);
 
         } else {
           this.setState({

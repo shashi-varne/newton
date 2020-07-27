@@ -16,6 +16,7 @@ export async function initialize() {
     this.callBackApi = callBackApi.bind(this);
     this.decisionCallback = decisionCallback.bind(this);
     this.openInBrowser = openInBrowser.bind(this);
+    this.openInTabApp = openInTabApp.bind(this);
 
     nativeCallback({ action: 'take_control_reset' });
 
@@ -107,12 +108,21 @@ export async function initialize() {
 
 export function openInBrowser(url) {
     nativeCallback({
-      action: 'open_in_browser',
-      message: {
-        url: url
-      }
+        action: 'open_in_browser',
+        message: {
+            url: url
+        }
     });
-  }
+}
+
+export function openInTabApp(url) {
+    nativeCallback({
+        action: 'open_inapp_tab',
+        message: {
+            url: url
+        }
+    });
+}
 
 export async function updateLead(body, application_id) {
     try {
@@ -146,7 +156,7 @@ export async function updateLead(body, application_id) {
                 resultData.error.length > 0) {
                 let form_data = this.state.form_data;
 
-                if(this.state.screen_name === 'address-details') {
+                if (this.state.screen_name === 'address-details') {
                     for (var j in resultData.invalid_fields) {
                         toast(resultData.error[j]);
                         break;
@@ -380,10 +390,10 @@ export function formHandleChange(name, event) {
         name = event.target.name;
     }
 
-    
+
     var value = event.target ? event.target.value : event;
 
-    if(name === 'pan_no' && value) {
+    if (name === 'pan_no' && value) {
         value = value.toUpperCase();
     }
     var form_data = this.state.form_data || {};
@@ -409,12 +419,12 @@ export async function decisionCallback() {
 
     let isKyc = this.state.screen_name === 'instant-kyc';
 
-    if(!isKyc) {
+    if (!isKyc) {
         this.setState({
             show_loader: true
         })
     }
-   
+
     let body = {
         "request_type": "decision"
     }
@@ -425,7 +435,7 @@ export async function decisionCallback() {
     let currentEligiRounds = this.state.currentEligiRounds;
 
     this.setState({
-        currentEligiRounds:  currentEligiRounds + 1
+        currentEligiRounds: currentEligiRounds + 1
     })
 
     if (resultData.callback_status) {
@@ -441,8 +451,8 @@ export async function decisionCallback() {
     } else {
         // sorry
 
-        if(isKyc) {
-            if(totalEligiRounds === currentEligiRounds) {
+        if (isKyc) {
+            if (totalEligiRounds === currentEligiRounds) {
                 let searchParams = getConfig().searchParams + '&status=eligible_sorry';
                 this.navigate('instant-kyc-status', { searchParams: searchParams });
             } else {
@@ -452,7 +462,7 @@ export async function decisionCallback() {
             let searchParams = getConfig().searchParams + '&status=eligible_sorry';
             this.navigate('instant-kyc-status', { searchParams: searchParams });
         }
-        
+
     }
 
 }
