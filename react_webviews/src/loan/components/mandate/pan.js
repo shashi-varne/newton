@@ -8,8 +8,10 @@ import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
 import { getConfig } from 'utils/functions';
 import { getBase64 } from 'utils/functions';
-import { storageService, numDifferentiationInr } from 'utils/validators';
+import { numDifferentiationInr } from 'utils/validators';
 import Api from 'utils/api';
+import camera_grey from 'assets/take_pic_grey.svg';
+import $ from 'jquery';
 
 class MandatePan extends Component {
   constructor(props) {
@@ -17,7 +19,11 @@ class MandatePan extends Component {
     this.state = {
       show_loader: false,
       withProvider: true,
-      fileUploaded: false
+      fileUploaded: false,
+      get_lead: true,
+      getLeadBodyKeys: ['personal_info', 'vendor_info', 'document_info'],
+      personal_info: {},
+      application_info: {}
     }
 
     this.initialize = initialize.bind(this);
@@ -26,14 +32,6 @@ class MandatePan extends Component {
 
   componentWillMount() {
     this.initialize();
-    let bottomButtonData = {
-      leftTitle: 'Personal loan',
-      leftSubtitle: numDifferentiationInr(200000)
-    }
-
-    this.setState({
-      bottomButtonData: bottomButtonData
-    })
   }
 
   componentDidMount() {
@@ -50,10 +48,27 @@ class MandatePan extends Component {
   }
 
   onload = () => {
-    // ****************************************************
-    // code goes here
-    // common things can be added inside initialize
-    // use/add common functions from/to  ../../common/functions
+    let lead = this.state.lead;
+
+    let vendor_info = lead.vendor_info || {};
+    let bottomButtonData = {
+      leftTitle: 'Personal loan',
+      leftSubtitle: numDifferentiationInr(vendor_info.sanction_amount)
+    }
+
+    let document_info = lead.document_info || {};
+    let document_url = document_info.document_url || '';
+    let fileUploaded = !!document_url;
+
+    this.setState({
+      personal_info: lead.personal_info || {},
+      application_info: lead.application_info || {},
+      bottomButtonData: bottomButtonData,
+      vendor_info: vendor_info,
+      document_url: document_url,
+      document_info: document_info,
+      fileUploaded: fileUploaded
+    })
 
   }
 
@@ -80,10 +95,18 @@ class MandatePan extends Component {
 
     let resultData = await this.callBackApi(body);
     if (resultData.callback_status) {
-      // upload pan and redirect to e-mandate
+      this.navigate('bank');
     } else {
       let searchParams = getConfig().searchParams + '&status=sorry';
       this.navigate('instant-kyc-status', { searchParams: searchParams });
+    }
+  }
+
+  checkNextState = () => {
+    if (this.state.vendor_info.dmi_loan_status === 'opportunity') {
+      this.navigate('bank');
+    } else {
+      this.conversionCallBack();
     }
   }
 
@@ -93,10 +116,10 @@ class MandatePan extends Component {
       show_loader: true
     })
     this.sendEvents('next');
-    let application_id = storageService().get('loan_application_id')
-    var uploadurl = '/api/document/loan/upload'
+
+    var uploadurl = '/relay/api/document/loan/upload'
     const data = new FormData()
-    data.append('res', file, file.doc_type, application_id)
+    data.append('res', file, file.doc_type, this.state.application_id)
 
     try {
       const res = await Api.post(uploadurl, data);
@@ -104,7 +127,9 @@ class MandatePan extends Component {
         show_loader: false
       });
       if (res.pfwresponse.result.message === 'success') {
-        this.navigate('bank');
+
+        this.checkNextState();
+
       } else {
 
         toast(res.pfwresponse.result.error || 'Something went wrong');
@@ -200,10 +225,86 @@ class MandatePan extends Component {
     }
   }
 
+  openCameraWeb() {
+    $("input").trigger("click");
+  }
+
   startUpload(method_name, doc_type, doc_name, doc_side) {
     this.sendEvents(method_name);
-    this.native_call_handler(method_name, doc_type, doc_name, doc_side);
 
+    if (getConfig().html_camera) {
+      this.openCameraWeb();
+    } else {
+      this.native_call_handler(method_name, doc_type, doc_name, doc_side);
+    }
+
+  }
+
+  getPhoto = (e) => {
+
+    e.preventDefault();
+
+    let file = e.target.files[0];
+
+    let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp'];
+
+    if (acceptedType.indexOf(file.type) === -1) {
+      toast('Please select image file only');
+      return;
+    }
+
+    let that = this;
+    file.doc_type = file.type;
+    this.setState({
+      imageBaseFile: file
+    })
+    getBase64(file, function (img) {
+      that.setState({
+        imageBaseFileShow: img,
+        fileUploaded: true
+      })
+    });
+
+  }
+
+
+  renderHtmlCamera() {
+    return (
+      <div>
+        {!this.state.fileUploaded && <div style={{
+          border: '1px dashed #e1e1e1', padding: '10px 0px 0px 0px',
+          textAlign: 'center', fontWeight: 600
+        }}>
+          <div>Front side of PAN card</div>
+          <div style={{ margin: '20px 0 20px 0' }}>
+            <div onClick={() => this.startUpload('open_camera', 'pan', 'pan.jpg')} style={{
+              textAlign: 'center',
+            }}>
+              <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" />
+              <img src={camera_green} alt="PAN"></img>
+              <div style={{ color: '#28b24d' }}>Click here to upload</div>
+            </div>
+          </div>
+        </div>}
+        {this.state.fileUploaded && <div style={{
+          border: '1px dashed #e1e1e1', padding: '0px 0px 0px 0px',
+          textAlign: 'center'
+        }}>
+          <div>
+            <img style={{ width: '100%', height: 300 }} src={this.state.imageBaseFileShow || this.state.document_url} alt="PAN" />
+          </div>
+          <div style={{ margin: '20px 0 20px 0' }}>
+            <div onClick={() => this.startUpload('open_camera', 'pan', 'pan.jpg')} style={{
+              textAlign: 'center'
+            }}>
+              <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" />
+              <img src={camera_grey} alt="PAN"></img>
+              <div style={{ color: '#b4b4b4' }}>Click here to upload new</div>
+            </div>
+          </div>
+        </div>}
+      </div>
+    );
   }
 
   renderNativeCamera() {
@@ -234,7 +335,7 @@ class MandatePan extends Component {
           textAlign: 'center'
         }}>
           <div>
-            <img style={{ width: '100%', height: 300 }} src={this.state.imageBaseFileShow} alt="PAN" />
+            <img style={{ width: '100%', height: 300 }} src={this.state.imageBaseFileShow || this.state.document_url} alt="PAN" />
           </div>
           <div style={{ margin: '20px 0 20px 0', fontSize: '12px', lineHeight: '20px' }}>
             <div onClick={() => this.startUpload('open_camera', 'pan', 'pan.jpg')} style={{
@@ -254,17 +355,15 @@ class MandatePan extends Component {
 
   handleClick = () => {
     this.sendEvents('next');
-
     this.setState({
       show_loader: true
     })
 
-    if (!this.state.imageBaseFile) {
-      return;
+    if (this.state.imageBaseFile) {
+      this.uploadDocs(this.state.imageBaseFile);
+    } else {
+      this.checkNextState();
     }
-    this.uploadDocs(this.state.imageBaseFile);
-    // after api response hit this this.conversionCallBack();
-
   }
 
   render() {
@@ -273,14 +372,14 @@ class MandatePan extends Component {
         showLoader={this.state.show_loader}
         title="Upload PAN"
         events={this.sendEvents('just_set_events')}
-        isDisabled={!this.state.imageBaseFile}
+        disable={!this.state.fileUploaded}
         handleClick={this.handleClick}
         buttonTitle="CONTINUE"
         withProvider={this.state.withProvider}
         buttonData={this.state.bottomButtonData}
       >
         <div className="common-top-page-subtitle">
-          PAN Card: CXIPP4122M
+          PAN Card: {this.state.personal_info.pan_no}
         </div>
         <div style={{ margin: '30px 0 20px 0', display: 'flex', position: 'relative', background: '#FDF5F6', alignItems: 'baseline' }} className="highlight-text highlight-color-info">
           <div>
@@ -298,7 +397,8 @@ class MandatePan extends Component {
           </div>
         </div>
         <div className="loan-mandate-pan">
-          {this.renderNativeCamera()}
+          {getConfig().html_camera && this.renderHtmlCamera()}
+          {!getConfig().html_camera && this.renderNativeCamera()}
         </div>
       </Container>
     );

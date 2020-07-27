@@ -52,7 +52,12 @@ class Permissions extends Component {
     window.callbackWeb.get_data({
       type: 'location_nsp_received',
       location_nsp_received: function location_nsp_received(data) {
-        let body = { latitude: data.location.lat, longitude: data.location.lng, device_id: data.device_id, network_service_provider: data.nsp };
+        let body = {
+           latitude: data.location.lat, 
+           longitude: data.location.lng,
+           device_id: data.device_id, 
+           network_service_provider: data.nsp 
+        };
         that.updateLead(body);
       }
     });
@@ -69,7 +74,7 @@ class Permissions extends Component {
       >
         <div className="loan-permissions">
 
-          <div style={{ display: 'flex' }}>
+          <div style={{ display: 'flex',alignItems: 'flex-end' }}>
             <img
               src={require(`assets/${this.state.productName}/ic_document_mobile.svg`)}
               style={{ marginBottom: '95px' }}
@@ -88,7 +93,7 @@ class Permissions extends Component {
             </div>
           </div>
 
-          <div style={{ display: 'flex' }}>
+          <div style={{ display: 'flex',alignItems: 'flex-end' }}>
             <img
               src={require(`assets/${this.state.productName}/ic_document_location.svg`)}
               style={{ marginBottom: '80px' }}

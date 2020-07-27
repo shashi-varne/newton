@@ -93,8 +93,6 @@ class Journey extends Component {
       }
     }
 
-    console.log(next_state)
-
     this.setState({
       application_info: application_info,
       vendor_info: vendor_info,
