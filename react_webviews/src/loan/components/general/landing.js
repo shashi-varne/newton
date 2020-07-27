@@ -237,10 +237,10 @@ class Landing extends Component {
             <div style={{height:'112px', width:'172px', marginRight:'16px',
               backgroundImage: `url(${this.state.ic_why_hs})`
             }}>
-              <div className="card-info" style={{padding:'10px 0 20px 20px'}}>
+              <div className="card-info" style={{padding:'10px 0 30px 20px'}}>
                 Complete digital and  paperless process
               </div>
-              <div style={{float:'right', paddingRight:'25px'}}>
+              <div style={{float:'right', paddingRight:'22px'}}>
                 <img src={ require(`assets/${this.state.productName}/ic_document_note.svg`)} alt="" />
               </div>
             </div>
@@ -249,10 +249,10 @@ class Landing extends Component {
             <div style={{height:'112px', width:'172px', marginRight:'16px',
               backgroundImage: `url(${this.state.ic_why_hs})`
             }}>
-              <div className="card-info" style={{padding:'10px 0 0 20px'}}>
+              <div className="card-info" style={{padding:'10px 0 10px 20px'}}>
                 You don't have to provide any security  for your loan
               </div>
-              <div style={{float:'right', paddingRight:'25px'}}>
+              <div style={{float:'right', paddingRight:'22px'}}>
                 <img src={ require(`assets/${this.state.productName}/ic_document_amount.svg`)} alt="" />
               </div>
             </div>
@@ -261,11 +261,22 @@ class Landing extends Component {
             <div style={{height:'112px', width:'172px', marginRight:'16px',
               backgroundImage: `url(${this.state.ic_why_hs})`
             }}>
-              <div className="card-info" style={{padding:'10px 0 0 20px'}}>
-                Repayment tenure ranging from 3 to 24 months
+              <div className="card-info" style={{padding:'10px 0 30px 20px'}}>
+                No income documents required
               </div>
-              <div style={{float:'right', paddingRight:'25px'}}>
-                <img src={ require(`assets/${this.state.productName}/ic_document_card.svg`)} alt="" />
+              <div style={{float:'right', paddingRight:'22px'}}>
+                <img src={ require(`assets/${this.state.productName}/ic_why_loan_3.svg`)} alt="" />
+              </div>
+            </div>
+
+            <div style={{height:'112px', width:'172px', marginRight:'16px',
+              backgroundImage: `url(${this.state.ic_why_hs})`
+            }}>
+              <div className="card-info" style={{padding:'10px 0 10px 20px'}}>
+                Complete easy loan application process and get money in 2 hrs 
+              </div>
+              <div style={{float:'right', paddingRight:'22px'}}>
+                <img src={ require(`assets/${this.state.productName}/ic_why_loan_4.svg`)} alt="" />
               </div>
             </div>
 

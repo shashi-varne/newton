@@ -5,13 +5,16 @@ import { initialize } from '../../common/functions';
 import Contact from 'common/components/contact_us';
 import { getConfig } from 'utils/functions';
 import "../Style.scss";
+import Api from 'utils/api';
+import toast from '../../../common/ui/Toast';
 
 class ScheduleDoc extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
-      productName: getConfig().productName
+      productName: getConfig().productName,
+      message: ''
     }
 
     this.initialize = initialize.bind(this);
@@ -19,6 +22,35 @@ class ScheduleDoc extends Component {
 
   componentWillMount() {
     this.initialize();
+
+    this.getPaymentSchedule();
+  }
+
+  getPaymentSchedule = async () => {
+    try {
+      let res = await Api.get(`/relay/api/loan/dmi/schedule/get/${this.state.application_id}`);
+
+      let resultData  = res.pfwresponse.result;
+      if (res.pfwresponse.status_code === 200 && !resultData.error) {
+        this.setState({
+          message: resultData.message
+        })
+
+      } else {
+        this.setState({
+          show_loader: false
+        });
+
+        toast(resultData.error || resultData.message
+          || 'Something went wrong');
+      }
+
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong')
+    }
   }
 
   onload = () => {
@@ -50,7 +82,6 @@ class ScheduleDoc extends Component {
   }
 
   render() {
-    console.log(this.state.productName)
 
     return (
       <Container
@@ -68,9 +99,7 @@ class ScheduleDoc extends Component {
             alt="" 
           />
           <div className="loan-schedule">
-            {`Loan schedule document has been sent
-            to your registered email ID
-            ........swan@gmail.com`}
+            {this.state.message}
           </div>
           <Contact />
         </div>

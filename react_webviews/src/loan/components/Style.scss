@@ -375,7 +375,7 @@
     .card-info {
         color: #19487f;
         font-size: 13px;
-        width: 70%;
+        width: 77%;
         line-height: 20px;
     }
   
@@ -451,6 +451,17 @@
         padding: 20px 0 20px 0;
         display: flex;
         justify-content: space-between;
+    }
+
+    .block1-head {
+        font-size: 10px;
+        font-weight: bold;
+        color: #767e86;
+    }
+
+    .block1-amount {
+        font-size: 14px;
+        color: #d3dbe4;
     }
 
     .card-info {
