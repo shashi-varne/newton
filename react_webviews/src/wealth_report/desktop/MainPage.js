@@ -1,8 +1,5 @@
 import React, { Component } from "react";
-import {
-  Route,
-  Switch
-} from 'react-router-dom';
+import Overview from "./Overview";
 
 export default class MainPage extends Component {
   constructor(props) {
@@ -22,7 +19,7 @@ export default class MainPage extends Component {
     const { params } = this.props.match;
     console.log(params);
     return (
-      <div style={{ width: '100%', height: '100%', background: 'white' }}>
+      <div style={{ width: '100%', height: '100%', background: 'white', overflow: 'scroll' }}>
         <div id="wr-header-hero"></div>
         <div id="wr-header-bar">
           <div id="wr-header-pan-select" className="wr-header-tab"></div>
@@ -40,20 +37,6 @@ export default class MainPage extends Component {
   }
 }
 
-class Overview extends Component {
-  render() {
-    return (
-      <div id="key-numbers">
-        <div>Key Numbers</div>
-        <div>CURRENT VALUE</div>
-        <div>TOTAL INVESTED</div>
-        <div>XIRR</div>
-        <div>total Realised Gains</div>
-        <div>ASSET ALLOCATION</div>
-      </div>
-    );
-  }
-}
 class Analysis extends Component {
   render() {
     return (

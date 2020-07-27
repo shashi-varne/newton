@@ -14,8 +14,8 @@ import NotFound from '../common/components/NotFound';
 import { create } from 'jss';
 import JssProvider from 'react-jss/lib/JssProvider';
 import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
-import { Login } from './desktop/login';
-import MainPage from './desktop/mainPage';
+import { Login } from './desktop/Login';
+import MainPage from './desktop/MainPage';
 
 
 const generateClassName = createGenerateClassName({
@@ -53,8 +53,8 @@ const WealthReport = (props) => {
         <Switch>
           <Route exact path={`${url}`} component={Login} />
           <Route path={`${url}/login`} component={Login} />
-          {/* <Route path={`${url}/main`} component={MainPage} /> */}
           <Route path={`${url}/main/:tab`} component={MainPage} />
+          <Route path={`${url}/main`} component={MainPage} />
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>
