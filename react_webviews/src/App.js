@@ -14,6 +14,7 @@ import Mandate from './mandate_address';
 import Mandate_OTM from './mandate_otm';
 import EMandate from './e_mandate';
 import RiskProfiler from './risk_profiler';
+import HNI from './external_portfolio';
 import IsipBIller from './isip';
 import HelpSupport from './help_support';
 import CommonLanding from './common/components/landing';
@@ -35,6 +36,7 @@ class App extends Component {
           <Route path="/mandate-otm" component={Mandate_OTM} />
           <Route path="/e-mandate" component={EMandate} />
           <Route path="/risk" component={RiskProfiler} />
+          <Route path="/hni/" component={HNI} />
           <Route path="/isip" component={IsipBIller} />
           <Route path="/help" component={HelpSupport} />
           <Route path="/loan" component={Loan} />

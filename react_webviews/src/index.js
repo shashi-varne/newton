@@ -7,7 +7,6 @@ import App from './App';
 import $ from 'jquery';
 import { isMobile } from 'utils/functions';
 import scrollIntoView from 'scroll-into-view-if-needed';
-
 $(document).ready(function () {
   if (isMobile.Android()) {
     window.addEventListener('resize', function () {
