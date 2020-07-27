@@ -72,7 +72,7 @@ class Journey extends Component {
       if (dmi_loan_status === 'lead' || dmi_loan_status === 'contact') {
         next_state = 'form-summary';
       } else if (dmi_loan_status === 'verified_contact' ||
-        dmi_loan_status === 'okyc') {
+        dmi_loan_status.indexOf('okyc') >=0) {
         next_state = 'instant-kyc';
       } else if (dmi_loan_status === 'callback_awaited_decision') {
         nextFunction = this.decisionCallback;
