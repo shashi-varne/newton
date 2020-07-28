@@ -176,17 +176,22 @@ class MandateBank extends Component {
         if (res.pfwresponse.status_code === 200 && !resultData.error) {
 
          
-          let current_url = window.location.href;
-          // let nativeRedirectUrl = current_url;
 
           let paymentRedirectUrl = encodeURIComponent(
-            window.location.origin + `/loan/mandate-status` + getConfig().searchParams
+            window.location.origin + `/loan/redirection-status/mandate` + getConfig().searchParams
           );
+
+
+          let backParams = getConfig().searchParams;
+          backParams = (backParams).replace('generic_callback', "abcd");
+          let back_url = encodeURIComponent(
+            window.location.origin + `/loan/mandate-status` + backParams
+          );
+
 
           var payment_link = resultData.url;
           var pgLink = payment_link;
           let app = getConfig().app;
-          var back_url = encodeURIComponent(current_url);
           // eslint-disable-next-line
           pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
             '&app=' + app + '&back_url=' + back_url;
@@ -212,10 +217,19 @@ class MandateBank extends Component {
 
           // window.location.href = pgLink;
 
-          this.openInTabApp(pgLink);
-          this.setState({
-            show_loader: false
-          });
+          this.openInTabApp(
+            {
+              url: pgLink,
+              back_url: back_url
+            }
+          );
+
+          if(!getConfig().Web) {
+            this.setState({
+              show_loader: false
+            });
+          }
+          
 
         } else {
           this.setState({

@@ -82,8 +82,10 @@ class InstantKycHome extends Component {
             window.location.origin + `/loan/redirection-status/kyc` + getConfig().searchParams
           );
 
+          let backParams = getConfig().searchParams;
+          backParams = (backParams).replace('generic_callback', "abcd");
           let back_url = encodeURIComponent(
-            window.location.origin + `/loan/instant-kyc-status` + getConfig().searchParams + 
+            window.location.origin + `/loan/instant-kyc-status` + backParams + 
             '&flow=kyc&okyc_id=' + okyc_id
           );
 
@@ -107,9 +109,11 @@ class InstantKycHome extends Component {
             url: pgLink,
             back_url: back_url
           });
-          this.setState({
-            show_loader: false
-          })
+          if(!getConfig().Web) {
+            this.setState({
+              show_loader: false
+            });
+          }
 
         } else {
           this.setState({
