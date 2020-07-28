@@ -141,7 +141,7 @@ const Agreement = () => {
           str += i.repeat(q);
         }
       
-        return '('+str+')';
+        return `(${str})`;
       }
 
     const renderAgreement = (props, index) => {
