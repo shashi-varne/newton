@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactHtmlParser from 'react-html-parser';
+import { formatAmountInr } from "utils/validators";
 
-const Agreement = () => {
+const Agreement = (props) => {
 
     let terms = [
         '“Availability Period” shall mean the period within which the Borrower can request a Drawdown from the Facility and is as detailed in the Loan Details Sheet;',
@@ -117,7 +118,7 @@ const Agreement = () => {
         'DMI shall be entitled to sell, transfer, assign or securitise in any manner whatsoever (in whole or in part and including through grant of participation rights) all or any of its benefits, right, obligation, duties and / or liabilities under Financing Documents, without the prior written consent of, or intimation to the Borrower in such manner and such terms as DMI may decide. In the event of such transfer, assignment or securitization, the Borrower shall perform and be liable to perform their obligation under the Financing Documents to such assignee or transferor. In such event, the Borrower shall substitute the remaining PDCs/ECS in favour of the transferee/ assignee if called upon to do so by DMI. '
     ];
 
-    function convertToRoman(num) {
+    const convertToRoman = (num) => {
         var roman = {
           M: 1000,
           CM: 900,
@@ -322,24 +323,19 @@ const Agreement = () => {
                 <tbody>
                 <tr>
                     <td>Gross loan amount</td>
-                    <td></td>
+                    <td>{formatAmountInr(props.sanction_amount)}</td>
                 </tr>
                 <tr>
                     <td>Processing fee</td>
-                    <td></td>
+                    <td>{formatAmountInr(props.processing_fee)}</td>
                 </tr>
-                </tbody>
-            </table>
-
-            <table>
-                <tbody>
                 <tr>
-                    <td>GST</td>
-                    <td></td>
+                    <td>GST(18%)</td>
+                    <td>{formatAmountInr(props.gst)}</td>
                 </tr>
                 <tr>
                     <td>Net loan amount</td>
-                    <td></td>
+                    <td>{formatAmountInr(props.net_amount)}</td>
                 </tr>
                 </tbody>
             </table>
@@ -370,30 +366,30 @@ const Agreement = () => {
                     <td style={{width:'5px'}}>02.</td>
                     <td>Borrower Details</td>
                     <td>
-                        Name:  <br />
-                        Father's name: <br />
-                        Address:
+                        Name: {props.first_name+' '+props.last_name} <br />
+                        Father's name: {props.father_name}<br />
+                        Address: {props.address}
                     </td>
                 </tr>
                 <tr>
                     <td style={{width:'5px'}}>03.</td>
                     <td>Rate of Interest % P.A (Annualized)</td>
-                    <td></td>
+                    <td>{props.loan_rate}</td>
                 </tr>
                 <tr>
                     <td style={{width:'5px'}}>04.</td>
                     <td>EMI</td>
-                    <td></td>
+                    <td>{formatAmountInr(props.approved_emi)}</td>
                 </tr>
                 <tr>
                     <td style={{width:'5px'}}>05.</td>
                     <td>Tenor (Months)</td>
-                    <td></td>
+                    <td>{props.tenor} months</td>
                 </tr>
                 <tr>
                     <td style={{width:'5px'}}>06.</td>
                     <td>Processing Fees</td>
-                    <td></td>
+                    <td>{formatAmountInr(props.processing_fee)}</td>
                 </tr>
                 <tr>
                     <td style={{width:'5px'}}>07.</td>
@@ -424,23 +420,23 @@ const Agreement = () => {
                 <tbody>
                 <tr>
                     <td>Amount</td>
-                    <td></td>
+                    <td>{formatAmountInr(props.sanction_amount)}</td>
                 </tr>
                 <tr>
                     <td>Name of Bank</td>
-                    <td></td>
+                    <td>{props.bank_name}</td>
                 </tr>
                 <tr>
                     <td>Account Name</td>
-                    <td></td>
+                    <td>{props.account_holder_name}</td>
                 </tr>
                 <tr>
                     <td>Branch Name IFS Code:</td>
-                    <td></td>
+                    <td>{props.ifsc_code}</td>
                 </tr>
                 <tr>
                     <td>Account No.</td>
-                    <td></td>
+                    <td>{props.account_no}</td>
                 </tr>
                 </tbody>
             </table>

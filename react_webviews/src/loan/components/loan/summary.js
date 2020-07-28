@@ -196,7 +196,7 @@ class LoanSummary extends Component {
             </div>
 
           <div className="agreement-block" onScroll={this.onScroll}>
-            <Agreement />
+            <Agreement vendor_info={vendor_info}/>
           </div>
 
           <Grid container spacing={16} alignItems="center">
