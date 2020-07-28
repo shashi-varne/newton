@@ -15,7 +15,7 @@ class KycStatus extends Component {
     this.state = {
       show_loader: false,
       form_data: {},
-      getLeadBodyKeys: ['personal_info'],
+      getLeadBodyKeys: ['personal_info', 'vendor_info'],
       get_lead: true
     }
 
@@ -65,6 +65,9 @@ class KycStatus extends Component {
 
   getMandateCallback = async () => {
 
+    this.setState({
+      show_loader: true
+    })
     let body = {
       "request_type": "emandate"
     }
@@ -78,52 +81,54 @@ class KycStatus extends Component {
     }
 }
 
-  handleClick = async () => {
-    
-    this.sendEvents('next');
+submitRef = async() => {
+  let keys_to_check = ['ref_name_first', 'ref_contact_first', 
+  'ref_name_second', 'ref_contact_second'];
 
-    let keys_to_check = ['ref_name_first', 'ref_contact_first', 
-    'ref_name_second', 'ref_contact_second'];
+  let form_data = this.state.form_data;
+  let canSubmitForm = this.formCheckUpdate(keys_to_check, form_data, true);
 
-    let form_data = this.state.form_data;
-    let canSubmitForm = this.formCheckUpdate(keys_to_check, form_data, true);
+  if(canSubmitForm) {
+    try {
+      this.setState({
+        show_loader: true
+      })
 
-    if(canSubmitForm) {
-      try {
-        this.setState({
-          show_loader: true
-        })
-  
-        let body = {
-          "ref_name_first": form_data.ref_name_first,
-          "ref_contact_first": form_data.ref_contact_first,
-          "ref_name_second": form_data.ref_name_second,
-          "ref_contact_second": form_data.ref_contact_second
-        };
-  
-        const res = await Api.post(`/relay/api/loan/reference/update/${this.state.application_id}`, body);
-  
-        let resultData  = res.pfwresponse.result;
-        if (res.pfwresponse.status_code === 200 && !resultData.error) {
-          this.getMandateCallback();
-        } else {
-          this.setState({
-            show_loader: false
-          });
+      let body = {
+        "ref_name_first": form_data.ref_name_first,
+        "ref_contact_first": form_data.ref_contact_first,
+        "ref_name_second": form_data.ref_name_second,
+        "ref_contact_second": form_data.ref_contact_second
+      };
 
-          toast(resultData.error || resultData.message
-            || 'Something went wrong');
-        }
-  
-      } catch (err) {
+      const res = await Api.post(`/relay/api/loan/reference/update/${this.state.application_id}`, body);
+
+      let resultData  = res.pfwresponse.result;
+      if (res.pfwresponse.status_code === 200 && !resultData.error) {
+        this.navigate('/loan/loan-summary');
+      } else {
         this.setState({
           show_loader: false
         });
-        toast('Something went wrong');
-        console.log(err)
+
+        toast(resultData.error || resultData.message
+          || 'Something went wrong');
       }
+
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
+      console.log(err)
     }
-  
+  }
+
+}
+
+  handleClick = async () => {
+    this.sendEvents('next');
+    this.getMandateCallback();
   }
 
   render() {

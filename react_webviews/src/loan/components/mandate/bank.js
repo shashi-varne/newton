@@ -37,8 +37,7 @@ class MandateBank extends Component {
       accountTypeOptions: accountTypeOptions,
     });
 
-   
-  }
+    }
 
   onload = () => {
     let lead = this.state.lead || {};
