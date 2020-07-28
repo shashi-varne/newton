@@ -17,7 +17,7 @@ class LoanSummary extends Component {
       show_loader: false,
       get_lead: true,
       getLeadBodyKeys: ['vendor_info'],
-      confirm_details_check: true,
+      confirm_details_check: false,
       isScrolledToBottom: false
     }
 
