@@ -210,9 +210,12 @@ class MandateBank extends Component {
           //   }
           // });
 
-          window.location.href = pgLink;
+          // window.location.href = pgLink;
 
           this.openInTabApp(pgLink);
+          this.setState({
+            show_loader: false
+          });
 
         } else {
           this.setState({

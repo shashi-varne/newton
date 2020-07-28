@@ -10,7 +10,7 @@ import toast from '../../../common/ui/Toast';
 import completed_step from "assets/completed_step.svg";
 import { storageService } from 'utils/validators';
 
-const portalStatus = ['verified_contact', 'okyc_failed', 'okyc_cancelled'];
+const portalStatus = ['verified_contact','okyc', 'okyc_failed', 'okyc_cancelled'];
 
 class InstantKycHome extends Component {
   constructor(props) {
@@ -114,6 +114,9 @@ class InstantKycHome extends Component {
           // window.location.href = pgLink;
 
           this.openInTabApp(pgLink);
+          this.setState({
+            show_loader: false
+          })
 
         } else {
           this.setState({
