@@ -4,6 +4,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
 import { getConfig } from 'utils/functions';
 import '../Style.scss';
+import toast from '../../../common/ui/Toast';
 
 class Permissions extends Component {
   constructor(props) {
@@ -46,19 +47,57 @@ class Permissions extends Component {
     }
   }
 
+  updateData = (data) => {
+
+    this.setState({
+      show_loader: false,
+      loadingText: ''
+    })
+
+    if(data.location_permission_denied) {
+      toast('Location is required to proceed further');
+    } else {
+
+      let body = {
+        latitude: data.location.lat || '', 
+        longitude: data.location.lng || '',
+        device_id: data.device_id || '', 
+        network_service_provider: data.nsp || '' 
+     };
+
+     let haveAll = true;
+     for (var key in body) {
+       if(!body[key]){
+         haveAll = false;
+         break;
+       }
+     }
+
+     if(haveAll) {
+      this.updateLead(body);
+     } else {
+       toast('Something went wrong, please try again');
+     }
+     
+     
+    }
+  }
+
   handleClick = () => {
     this.sendEvents('next');
+
+    this.setState({
+      show_loader: true,
+      loadingText: 'Please wait...'
+    })
+
     let that = this;
-    window.callbackWeb.get_data({
+    window.callbackWeb.get_device_data({
       type: 'location_nsp_received',
       location_nsp_received: function location_nsp_received(data) {
-        let body = {
-           latitude: data.location.lat, 
-           longitude: data.location.lng,
-           device_id: data.device_id, 
-           network_service_provider: data.nsp 
-        };
-        that.updateLead(body);
+        
+        that.updateData(data);
+        
       }
     });
   }
@@ -71,6 +110,12 @@ class Permissions extends Component {
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
         buttonTitle="I AGREE"
+        loaderData= {
+          {
+              // 'loaderClass': 'Loader-Dialog',
+              'loadingText': this.state.loadingText || ''
+          }
+        }
       >
         <div className="loan-permissions">
 
