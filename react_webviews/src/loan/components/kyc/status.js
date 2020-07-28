@@ -74,7 +74,8 @@ class KycStatus extends Component {
       show_loader: true,
       params: getUrlParams(),
       commonMapper: {},
-      okyc_id: storageService().get('loan_okyc_id')
+      okyc_id: storageService().get('loan_okyc_id'),
+      timeAlloted: 20000
     }
 
     this.initialize = initialize.bind(this);
@@ -83,21 +84,24 @@ class KycStatus extends Component {
   componentWillMount() {
     this.initialize();
 
-    let { status, okyc_id } = this.state.params;
+    let { status, okyc_id,flow } = this.state.params;
+
+    if(flow === 'kyc') {
+      this.setState({
+        kyc_checking: true
+      })
+    }
 
     if (!status) {
       status = 'cancelled'
     }
 
-    if (status === 'cancelled') {
-      this.navigate('/loan/instant-kyc');
-      return;
-    }
 
     this.setState({
       status: status,
       okyc_id: okyc_id || this.state.okyc_id,
-      commonMapper: commonMapper[status]
+      commonMapper: commonMapper[status],
+      flow:flow
     })
   }
 
@@ -114,12 +118,22 @@ class KycStatus extends Component {
       this.setState({
         kyc_checking: false
       })
-      if (resultData.callback_status) {
-        if (this.state.status === 'success') {
-          this.navigate('/loan/instant-kyc');
-        }
+
+      let dmi_loan_status  = resultData.dmi_loan_status;
+
+      if (resultData.callback_status || dmi_loan_status === 'okyc_done') {
+        this.navigate('/loan/instant-kyc');
       } else {
-        status = 'pending';
+        if(dmi_loan_status === 'okyc_cancelled') {
+          status = 'cancelled';
+            this.navigate('/loan/instant-kyc');
+            return;
+        } else if(dmi_loan_status === 'okyc_failed') {
+          status = 'failed';
+        } else {
+          status = 'pending';
+        }
+        
         this.setState({
           status: status,
           commonMapper: commonMapper[status]
@@ -142,7 +156,8 @@ class KycStatus extends Component {
       this.setState({
         show_loader: false
       })
-    } else {
+    } else if(this.state.flow === 'kyc') {
+
       this.setState({
         kyc_checking: true,
         show_loader: false
@@ -151,7 +166,7 @@ class KycStatus extends Component {
       let that = this;
       setTimeout(function(){ 
         that.kycCallback();
-      }, 20000);
+      }, this.state.timeAlloted);
     }
 
   }

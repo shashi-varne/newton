@@ -115,11 +115,12 @@ export function openInBrowser(url) {
     });
 }
 
-export function openInTabApp(url) {
+export function openInTabApp(data={}) {
     nativeCallback({
         action: 'open_inapp_tab',
         message: {
-            url: url
+            url: data.url || '',
+            back_url: data.back_url || ''
         }
     });
 }

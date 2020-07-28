@@ -77,17 +77,24 @@ class InstantKycHome extends Component {
 
           let okyc_id = resultData.okyc_id;
           storageService().set('loan_okyc_id', okyc_id);
-          let current_url = window.location.href;
-          // let nativeRedirectUrl = current_url;
 
           let paymentRedirectUrl = encodeURIComponent(
-            window.location.origin + `/loan/instant-kyc-status` + getConfig().searchParams
+            window.location.origin + `/loan/redirection-status/kyc` + getConfig().searchParams
           );
+
+          let back_url = encodeURIComponent(
+            window.location.origin + `/loan/instant-kyc-status` + getConfig().searchParams + 
+            '&flow=kyc&okyc_id=' + okyc_id
+          );
+
+          // for web no issue
+          if(getConfig().Web) {
+            paymentRedirectUrl = back_url;
+          }
 
           var payment_link = resultData.okyc_url;
           var pgLink = payment_link;
           let app = getConfig().app;
-          var back_url = encodeURIComponent(current_url);
           // eslint-disable-next-line
           pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
             '&app=' + app + '&back_url=' + back_url;
@@ -95,25 +102,11 @@ class InstantKycHome extends Component {
             pgLink += '&generic_callback=' + getConfig().generic_callback;
           }
 
-
-          // if (getConfig().app === 'ios') {
-          //   nativeCallback({
-          //     action: 'show_top_bar', message: {
-          //       title: 'KYC'
-          //     }
-          //   });
-          // }
-
-          // nativeCallback({
-          //   action: 'take_control', message: {
-          //     back_url: nativeRedirectUrl,
-          //     back_text: 'Are you sure you want to exit the kyc process?'
-          //   }
-          // });
-
-          // window.location.href = pgLink;
-
-          this.openInTabApp(pgLink);
+        
+          this.openInTabApp({
+            url: pgLink,
+            back_url: back_url
+          });
           this.setState({
             show_loader: false
           })
