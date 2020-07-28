@@ -190,22 +190,32 @@
 }
 
 .loan-permissions {
-    .container {
-        margin: 20px 0 20px 0;
-        position: relative;
-        left: 15px;
-        width: 88%;
+    .box {
+        display: flex;
+        align-items: baseline;
     }
 
-    .head {
+    .container {
+        position: relative;
+        bottom:12px;
+        width: 88%;
+        margin-bottom: 15px;
+    }
+
+    .mobile-head{
         font-size: 15px;
+        margin: 0 0 15px 26px;
+    }
+
+    .location-head {
+        font-size: 15px;
+        margin: 0 0 15px 22px;
     }
 
     .content {
         font-size: 13px;
-        line-height: 20px;
+        line-height:1.6;
         color: #767e86;
-        padding-top: 10px;
     }
 }
 
