@@ -83,7 +83,7 @@ class KycStatus extends Component {
   componentWillMount() {
     this.initialize();
 
-    let { status } = this.state.params;
+    let { status, okyc_id } = this.state.params;
 
     if (!status) {
       status = 'cancelled'
@@ -96,14 +96,15 @@ class KycStatus extends Component {
 
     this.setState({
       status: status,
+      okyc_id: okyc_id || this.state.okyc_id,
       commonMapper: commonMapper[status]
     })
   }
 
   kycCallback = async () => {
 
+    let status = this.state.status;
     if (this.state.okyc_id) {
-      let status = this.state.status;
       let body = {
         "request_type": "okyc",
         'okyc_id': this.state.okyc_id
@@ -125,8 +126,11 @@ class KycStatus extends Component {
         })
       }
     } else {
+      status = 'pending';
       this.setState({
-        kyc_checking: false
+        status: status,
+        kyc_checking: false,
+        commonMapper: commonMapper[status]
       })
     }
 
@@ -148,8 +152,6 @@ class KycStatus extends Component {
       setTimeout(function(){ 
         that.kycCallback();
       }, 20000);
-
-      
     }
 
   }

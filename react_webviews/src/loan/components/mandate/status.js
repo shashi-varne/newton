@@ -151,8 +151,6 @@ class MandateStatus extends Component {
                 </div>
               }
 
-
-
               {this.state.status === 'pending' &&
                 <div>
                   <p className="top-content">
@@ -164,7 +162,6 @@ class MandateStatus extends Component {
                   </p>
                 </div>
               }
-
             
             </div>
 

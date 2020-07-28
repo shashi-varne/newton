@@ -192,7 +192,7 @@ class Container extends Component {
           {/*  */}
   
 
-          {!this.state.force_hide_inpage_title &&  !this.props.noHeader &&
+          {!this.state.force_hide_inpage_title &&  !this.props.noHeader && !this.props.hidePageTitle &&
             this.new_header_scroll() 
           }
   
