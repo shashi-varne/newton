@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Overview from "./Overview";
+import Holdings from "./Holdings";
 
 export default class MainPage extends Component {
   constructor(props) {
@@ -12,6 +13,11 @@ export default class MainPage extends Component {
   renderTab = (tab) => {
     if (tab === 'overview') {
       return <Overview />;
+    } else if (tab === 'analysis') {
+      return <Analysis />
+    } else if (tab === 'holdings') {
+      console.log('HERE');
+      return <Holdings />
     }
   }
 
@@ -41,13 +47,6 @@ class Analysis extends Component {
   render() {
     return (
       <span>Analysis</span>
-    );
-  }
-}
-class Holdings extends Component {
-  render() {
-    return (
-      <span>Holdings</span>
     );
   }
 }

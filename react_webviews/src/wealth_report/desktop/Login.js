@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { WrButton } from '../common/Button';
+import WrButton from '../common/Button';
 import WrOtpInput from '../common/OtpInput';
-
 
 export class Login extends Component {
   constructor(props) {

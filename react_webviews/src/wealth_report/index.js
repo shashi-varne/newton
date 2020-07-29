@@ -10,6 +10,7 @@ import { themeConfig } from 'utils/constants';
 import { ToastContainer } from 'react-toastify';
 import './common/Style.scss';
 import './desktop/Style.scss';
+import './mini-components/Style.scss';
 import NotFound from '../common/components/NotFound';
 import { create } from 'jss';
 import JssProvider from 'react-jss/lib/JssProvider';

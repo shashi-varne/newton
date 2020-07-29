@@ -39,6 +39,9 @@
 
   .wr-login-btn {
     max-width: 420px;
+    font-size: 20px;
+    letter-spacing: 0.4px;
+    font-weight: 600;
   }
 }
 
@@ -83,7 +86,7 @@
 }
 
 #wr-body {
-  margin: 20% 8.3%;
+  margin: 400px 8.3% 0;
 }
 
 #wr-overview-key-numbers {
@@ -207,5 +210,127 @@
       color: #000000;
       margin-top: 16px;
     }
+  }
+}
+
+.wr-holding-card-container {
+  border-radius: 10px;
+  border: solid 0.5px rgba(151, 151, 151, 0.12);
+  background-color: #ffffff;
+}
+
+.wr-holding-card {
+  display: flex;
+  color: black;
+  padding: 42px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wr-hc-col {
+  flex: 1;
+  margin-right: 10px;
+}
+
+span.wr-hc-col-val {
+  font-size: 20px;
+  color: #150731;
+  display: block;
+  margin-bottom: 10px;
+}
+
+span.wr-hc-col-title {
+  font-size: 15px;
+  color: #150731;
+  opacity: 0.5;
+}
+
+.wr-holding-card-expand {
+  background-color: #fbfaff;
+  min-height: 210px;
+  border-top: 1px solid rgba(102, 102, 102, 0.05);
+  padding: 24px 106px 41px 100px;
+  box-sizing: border-box;
+
+  #wr-hce-fund-details {
+    display: flex;
+    margin-top: 36px;
+    justify-content: space-between;
+  }
+
+  #wr-hce-past-trx {
+    margin-top: 36px;
+    max-height: 300px;
+    overflow-y: scroll;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.05 );
+    background: white;
+    padding: 5px 25px;
+  }
+
+  #wr-hce-past-trx::-webkit-scrollbar {
+    width: 10px;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
+  }
+
+  #wr-hce-past-trx::-webkit-scrollbar-thumb {
+    width: 6px;
+    height: 100px;
+    border-radius: 2.5px;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+}
+
+.wr-outlined-btn {
+  box-shadow: 0 1px 15px 0 rgba(215, 199, 250, 0.12) !important;
+  border: solid 0.5px rgba(151, 151, 151, 0.1) !important;
+  background-color: #ffffff !important;
+  font-size: 15px !important;
+  .MuiButton-label {
+    color: rgba(0,0,0,0.5) !important;
+  }
+}
+
+.wr-hc-amc-detail {
+  flex-basis: 45% !important;
+  img.amc-logo {
+    float: left;
+    width: 40px;
+    height: 40px;
+    margin-right: 24px;
+  }
+  .amc-detail-title {
+    font-size: 20px;
+    line-height: 1;
+    color: #000000;
+  }
+  .amc-detail-subtitle {
+    opacity: 0.5;
+    font-size: 15px;
+    line-height: 1;
+    margin-top: 10px;
+  }
+}
+
+.wr-fisdom-rating {
+  padding: 6px 8px;
+  border-radius: 4px;
+  width: 40px;
+  height: 25px;
+  display: inline-block;
+  box-sizing: border-box;
+  margin-left: 40px;
+
+  span.rating-num {
+    font-size: 15px;
+    font-weight: 600;
+    vertical-align: middle;
+  }
+
+  img.rating-star {
+    width: 10px;
+    height: 15px;
+    margin-left: 5px;
   }
 }

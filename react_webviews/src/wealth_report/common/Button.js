@@ -1,39 +1,42 @@
 import React, { Component } from 'react';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
-import { Button } from 'material-ui';
+import { Button, withTheme } from 'material-ui';
 
 const theme = createMuiTheme({
   overrides: {
     MuiButton: {
       root: {
         borderRadius: '6px',
-        boxShadow: 'none',
-        padding: '16px',
-        fontSize: '20px',
-        textTransform: 'capitalize',
-        letterSpacing: '0.4px',
-        fontWeight: '600',
-        color: 'white',
-        backgroundColor: 'var(--primary)',
+        padding: '12px 19px',
       },
       raised: {
-        color: 'white',
         boxShadow: 'none',
         backgroundColor: 'var(--primary)',
+        '&$hover': {
+          backgroundColor: 'green',
+        },
+      },
+      label: {
+        color: 'white',
+        fontSize: '17px',
+        letterSpacing: 'normal',
+        textTransform: 'none',
+        fontWeight: 'normal',
       }
     },
   },
 });
 
-export class WrButton extends Component {
+export default class WrButton extends Component {
   render() {
-    const { root, raised } = this.props.classes || {};
+    const { root, raised, label, contained, outlined } = this.props.classes || {};
     return (
       <MuiThemeProvider theme={theme}>
         <Button
-          variant="raised"
+          variant={this.props.variant || 'raised'}
           fullWidth={this.props.fullWidth}
-          classes={{ root, raised }}
+          classes={{ root, raised, label, contained, outlined }}
+          {...this.props}
         >
           {this.props.children}
         </Button>
