@@ -53,7 +53,7 @@ class MandatePan extends Component {
     let vendor_info = lead.vendor_info || {};
     let bottomButtonData = {
       leftTitle: 'Personal loan',
-      leftSubtitle: numDifferentiationInr(vendor_info.sanction_amount)
+      leftSubtitle: numDifferentiationInr(vendor_info.approved_amount_decision)
     }
 
     let document_info = lead.document_info || {};

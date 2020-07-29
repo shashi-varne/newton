@@ -18,6 +18,7 @@ import Help from "./components/general/help";
 import ScheduleDoc from "./components/general/schedule_doc";
 import Permissions from "./components/general/permissions";
 import Transaction from "./components/general/transactions";
+import RedirectionStatus from "./components/general/redirection_status";
 
 import ReportDetails from "./components/loan/report_details";
 import LoanApprvoed from "./components/loan/approved";
@@ -91,6 +92,7 @@ const Lending = props => {
           <Route path={`${url}/schedule-Doc`} component={ScheduleDoc} />
           <Route path={`${url}/report`} component={Report} />
           <Route path={`${url}/transactions`} component={Transaction} />
+          <Route path={`${url}/redirection-status/:flow`} component={RedirectionStatus} />
 
           <Route path={`${url}/instant-kyc`} component={InstantKycHome} />
           <Route path={`${url}/instant-kyc-status`} component={KycStatus} />

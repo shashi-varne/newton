@@ -45,7 +45,7 @@ class Journey extends Component {
 
     let bottomButtonData = {
       leftTitle: 'Personal loan',
-      leftSubtitle: numDifferentiationInr(vendor_info.sanction_amount)
+      leftSubtitle: numDifferentiationInr(vendor_info.approved_amount_decision)
     }
 
     this.setState({
@@ -61,29 +61,33 @@ class Journey extends Component {
     let withProvider = this.state.withProvider;
     let nextFunction = '';
 
-
     if (application_status === 'application_incomplete') {
       cta_title = 'CHECK ELIGIBILITY';
       next_state = 'requirements-details';
     } else if (application_status === 'application_submitted') {
       cta_title = 'CHECK ELIGIBILITY';
       next_state = 'requirements-details';
-    } else if (application_status === 'application_complete') {
+    } else if (application_status === 'application_complete' || 
+    application_status === 'offer_accepted') {
       if (dmi_loan_status === 'lead' || dmi_loan_status === 'contact') {
         next_state = 'form-summary';
       } else if (dmi_loan_status === 'verified_contact' ||
-        dmi_loan_status === 'okyc') {
+        dmi_loan_status.indexOf('okyc') >=0) {
         next_state = 'instant-kyc';
       } else if (dmi_loan_status === 'callback_awaited_decision') {
         nextFunction = this.decisionCallback;
-      }else if (dmi_loan_status === 'decision_done') {
+      } else if (dmi_loan_status === 'decision_done') {
         next_state = 'loan-eligible';
       } else if (dmi_loan_status === 'callback_awaited_conversion' ||
         dmi_loan_status === 'opportunity') {
         withProvider = true;
         step_info = 2;
         next_state = 'upload-pan';
-      } else if (['emandate', 'emandate_done', 'reference_added'].indexOf(dmi_loan_status) !== -1 ) {
+      }else if (['emandate', 'emandate_failed'].indexOf(dmi_loan_status) !== -1 ) {
+        withProvider = true;
+        step_info = 2;
+        next_state = 'bank';
+      } else if (['emandate_success', 'emandate_done', 'reference_added'].indexOf(dmi_loan_status) !== -1 ) {
         withProvider = true;
         step_info = 3;
         next_state = 'reference';
@@ -206,14 +210,14 @@ class Journey extends Component {
               'pending-title'}`}>
             {props.title}
           </div>
-          {props.key === 'check_eligi' && this.state.vendor_info.sanction_amount &&
+          {props.key === 'check_eligi' && this.state.vendor_info.approved_amount_decision &&
             <div className="journey-card">
               <div className="card-content">
                 <span className="dot"></span>
                 <b> ELIGIBLE</b>
               </div>
               <div style={{color: '#767e86'}}>Avail sanctioned loan of </div>
-              <div><b>{inrFormatDecimal(this.state.vendor_info.sanction_amount)}</b></div>
+              <div><b>{inrFormatDecimal(this.state.vendor_info.approved_amount_decision)}</b></div>
             </div>}
         </div>
       </div>

@@ -166,7 +166,7 @@ class LoanSummary extends Component {
               <div className="head" style={{ paddingBottom: '22px' }}>Loan details</div>
               <div className="items">
                 <div>Sanctioned Loan Amount</div>
-                <div>{formatAmountInr(vendor_info.sanction_amount)}</div>
+                <div>{formatAmountInr(vendor_info.approved_amount_decision)}</div>
               </div>
               <div className="items">
                 <div>Processing fee</div>

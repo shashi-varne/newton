@@ -135,15 +135,30 @@ if (getConfig().generic_callback) {
       }
 
       // for testing added
-      // window.callbackWeb.send_device_data();
+      if(getConfig().Web) {
+        window.callbackWeb.send_device_data();
+      }
+
     }
 
     exports.send_device_data = function (data_json_str) {
+      
       var json_data = {};
       if (data_json_str !== "" && typeof data_json_str === "string") {
         json_data = JSON.parse(data_json_str);
       } else {
         json_data = data_json_str;
+      }
+
+      if(getConfig().Web) {
+        json_data = {
+          'location': {
+            lat: "12.9951675",
+            lng: "77.6156386"
+          },
+          nsp: "Jio 4G",
+          device_id: "e3964eac6f4e48b6"
+        }
       }
 
       for (var j = 0; j < listeners.length; j++) {

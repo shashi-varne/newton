@@ -114,7 +114,7 @@ class LoanEligible extends Component {
           </div>
 
           <div className="loan-amount">
-            {formatAmountInr(vendor_info.approved_amount)}
+            {formatAmountInr(vendor_info.approved_amount_decision)}
           </div>
 
           <div className="loan-value">
@@ -139,7 +139,7 @@ class LoanEligible extends Component {
               </div>
               <div className="items">
                 <div>Sanctioned Loan Amount</div>
-                <div>{formatAmountInr(vendor_info.sanction_amount)}</div>
+                <div>{formatAmountInr(vendor_info.approved_amount_decision)}</div>
               </div>
               <div className="items">
                 <div>Processing fee</div>

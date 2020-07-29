@@ -56,6 +56,10 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       url += '&native_module=' + encodeURIComponent('app/open_inapp_tab');
       url += '&url=' + encodeURIComponent(message.url);
 
+      if(message.back_url) {
+        url += '&back_redirection_url=' + encodeURIComponent(message.back_url);
+      }
+
       nativeCallback({
         action: 'open_module', message: {
           action_url: url
