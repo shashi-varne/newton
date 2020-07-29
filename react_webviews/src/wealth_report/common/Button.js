@@ -20,7 +20,7 @@ const theme = createMuiTheme({
         color: 'white',
         fontSize: '17px',
         letterSpacing: 'normal',
-        textTransform: 'none',
+        textTransform: 'inherit',
         fontWeight: 'normal',
       }
     },

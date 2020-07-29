@@ -46,7 +46,7 @@ export default class HoldingCard extends Component {
     const { tabSelected, expanded } = this.state;
 
     return (
-      <div className="wr-holding-card-container">
+      <div className="wr-card-template">
         <div className="wr-holding-card">
           {AMCDetail()}
           <div className="wr-hc-col">
@@ -71,23 +71,21 @@ export default class HoldingCard extends Component {
         </div>
         {expanded ? 
           (<div className="wr-holding-card-expand">
-            <WrButton
-              classes={{
-                root: tabSelected === 'fund' ? '' : 'wr-outlined-btn'
-              }}
-              style={{ marginRight: '16px' }}
-              onClick={() => this.setState({ tabSelected: 'fund' })}
-              disableRipple>
-              Fund Summary
-            </WrButton>
-            <WrButton
-              classes={{
-                root: tabSelected === 'transactions' ? '' : 'wr-outlined-btn'
-              }}
-              onClick={() => this.setState({ tabSelected: 'transactions' })}
-              disableRipple>
-              Past Transactions
-            </WrButton>
+            {[
+              {tabName: 'fund', label: 'Fund Holdings'},
+              {tabName: 'transactions', label: 'Transactions'},
+             ].map(({ tabName, label }) => (
+              <WrButton
+                classes={{
+                  root: tabSelected === tabName ? '' : 'wr-outlined-btn'
+                }}
+                style={{ marginRight: '16px' }}
+                onClick={() => this.setState({ tabSelected: tabName })}
+                disableRipple>
+                {label}
+              </WrButton>
+              )
+            )}
             <div className="wr-hce-fund-details">
               {tabSelected === 'fund' ?
                 this.renderFundDetails() : this.renderPastTransactions()

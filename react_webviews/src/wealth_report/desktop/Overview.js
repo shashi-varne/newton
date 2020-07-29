@@ -23,7 +23,7 @@ export default class Overview extends Component {
   render() {
     return (
       <div>
-        <div id="wr-overview-key-numbers">
+        <div id="wr-overview-key-numbers" className="wr-card-template">
         <div className="wr-okn-box">Key Numbers</div>
         <div className="wr-okn-box">
           <div className="wr-okn-title">Current Value</div>

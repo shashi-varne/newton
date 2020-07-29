@@ -89,14 +89,17 @@
   margin: 400px 8.3% 0;
 }
 
+.wr-card-template {
+  box-shadow: 0 1px 15px 0 rgba(215, 199, 250, 0.12);
+  border: solid 0.5px rgba(151, 151, 151, 0.1);
+  background-color: #ffffff;
+}
+
 #wr-overview-key-numbers {
   display: flex;
   flex-flow: row wrap ;
   width: 100%;
   border-radius: 10px;
-  box-shadow: 0 1px 15px 0 rgba(215, 199, 250, 0.12);
-  border: solid 0.5px rgba(151, 151, 151, 0.1);
-  background-color: #ffffff;
 
   div.wr-okn-box:nth-child(1) {
     min-width: 100%;
@@ -213,12 +216,6 @@
   }
 }
 
-.wr-holding-card-container {
-  border-radius: 10px;
-  border: solid 0.5px rgba(151, 151, 151, 0.12);
-  background-color: #ffffff;
-}
-
 .wr-holding-card {
   display: flex;
   color: black;
@@ -333,4 +330,49 @@ span.wr-hc-col-title {
     height: 15px;
     margin-left: 5px;
   }
+}
+
+#wr-taxation {
+  min-height: 546px;
+
+  #wr-taxation-filter {
+    display: flex;
+    justify-content: flex-end;
+    padding: 24px;
+    border-bottom: 1px solid rgba(102, 102, 102, 0.05);
+  }
+
+  #wr-taxation-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(102, 102, 102, 0.05);
+    
+    .wr-taxation-summary-col {
+      line-height: 1;
+      color: #000000;
+      text-align: center;
+      flex-basis: 30%;
+      padding: 30px;
+
+      .wr-tsc-value {
+        font-size: 40px;
+        display: block;
+        margin-bottom: 14px;
+      }
+
+      .wr-tsc-label {
+        font-size: 17px;
+      }
+    }
+  }
+
+  #wr-taxation-detail {
+    padding: 24px 80px;
+  }
+}
+
+.wr-vertical-divider {
+  height: 60px;
+  border-right: 1px solid rgba(0,0,0,0.05)
 }

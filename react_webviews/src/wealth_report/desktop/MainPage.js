@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Overview from "./Overview";
 import Holdings from "./Holdings";
+import Taxation from "./Taxation";
 
 export default class MainPage extends Component {
   constructor(props) {
@@ -13,11 +14,10 @@ export default class MainPage extends Component {
   renderTab = (tab) => {
     if (tab === 'overview') {
       return <Overview />;
-    } else if (tab === 'analysis') {
-      return <Analysis />
     } else if (tab === 'holdings') {
-      console.log('HERE');
       return <Holdings />
+    } else if (tab === 'taxation') {
+      return <Taxation />
     }
   }
 
@@ -39,21 +39,6 @@ export default class MainPage extends Component {
         </div>
         <div id="wr-footer"></div>
       </div>
-    );
-  }
-}
-
-class Analysis extends Component {
-  render() {
-    return (
-      <span>Analysis</span>
-    );
-  }
-}
-class Taxation extends Component {
-  render() {
-    return (
-      <span>Taxation</span>
     );
   }
 }
