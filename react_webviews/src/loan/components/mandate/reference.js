@@ -183,7 +183,7 @@ class KycStatus extends Component {
 
             <div style={{ paddingBottom: '40px' }}>
               <div style={{ color: '#64778D', fontSize: 13, margin: '0 0 6px 0' }}>
-                2st reference
+                2nd reference
               </div>
               <div className="InputField">
                 <Input

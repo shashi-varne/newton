@@ -57,7 +57,7 @@ class MandatePan extends Component {
     }
 
     let document_info = lead.document_info || {};
-    let document_url = document_info.document_url || '';
+    let document_url = document_info.pan ?  document_info.pan.serving_url : '';
     let fileUploaded = !!document_url;
 
     this.setState({

@@ -44,8 +44,6 @@ class FormOtp extends Component {
       params = {};
     }
 
-    console.log(params);
-
     if (!params || !params.resend_link || !params.verify_link) {
 
       this.props.history.goBack();
