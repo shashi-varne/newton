@@ -26,10 +26,18 @@ class Calculator extends Component {
   }
 
   onload = () => {
-    // ****************************************************
-    // code goes here
-    // common things can be added inside initialize
-    // use/add common functions from/to  ../../common/functions
+    let { params } = this.props.location;
+    if(!params) {
+      params = {};
+    }
+
+    if(!params.next_state) {
+      this.navigate('home');
+    }
+
+    this.setState({
+      next_state: params.next_state
+    })
 
   }
 
@@ -51,7 +59,7 @@ class Calculator extends Component {
 
   handleClick = () => {
       this.sendEvents('next');
-      this.navigate('home');
+      this.navigate(this.state.next_state);
   }
 
   onChange = (val, key) => {

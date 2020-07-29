@@ -210,7 +210,12 @@ class Landing extends Component {
           </div>
         </div>
 
-        <div className="action" onClick={ () => this.navigate('calculator')}>
+        <div className="action" onClick={ () => this.navigate('calculator', {
+          params: {
+            next_state: this.state.location_needed ? 'permissions' :
+            this.state.process_done ? 'report-details' : 'journey'
+          }
+        })}>
           <div className="left">
           Loan eligibility calculator
             </div>
