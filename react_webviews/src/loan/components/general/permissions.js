@@ -119,16 +119,15 @@ class Permissions extends Component {
       >
         <div className="loan-permissions">
 
-          <div style={{ display: 'flex',alignItems: 'flex-end' }}>
-            <img
+          <div className="box">
+          <img
               src={require(`assets/${this.state.productName}/ic_document_mobile.svg`)}
-              style={{ marginBottom: '95px' }}
               alt=""
             />
             <div className="container">
-              <div className="head">Mobile</div>
-              <div className="content">
-                {`Our app collects and monitors specific
+              <div className="mobile-head">Mobile</div>
+              <div className="content" style={{margin:'0 0 0 26px'}}>
+              {`Our app collects and monitors specific
                 information about your device including
                 Network Service Provider of your SIM,
                 Device id and IP address.This helps us
@@ -138,16 +137,15 @@ class Permissions extends Component {
             </div>
           </div>
 
-          <div style={{ display: 'flex',alignItems: 'flex-end' }}>
-            <img
+          <div  className="box">
+          <img
               src={require(`assets/${this.state.productName}/ic_document_location.svg`)}
-              style={{ marginBottom: '80px' }}
               alt=""
             />
             <div className="container">
-              <div className="head">Location</div>
-              <div className="content">
-                {`We collect and monitor the information about
+              <div className="location-head">Location</div>
+              <div className="content" style={{margin:'0 0 0 22px'}}>
+              {`We collect and monitor the information about
                 the location of your device for verifying the
                 address, creating your risk profile, and make a
                 better credit risk decision.`}
