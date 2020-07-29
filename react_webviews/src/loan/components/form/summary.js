@@ -476,6 +476,10 @@ class FormSummary extends Component {
                         </div>
                     </div>
 
+                    <div className="generic-page-title" style={{margin:'0 0 20px 0 ',
+                opacity: this.state.confirm_details_check ? 1 : 0.4 }}>
+                    We need your consent
+                    </div>
                     <div id="agreement" className="agreement-block" onScroll={this.onScroll}>
                         {this.state.agreement.map(this.renderAgreement)}
                     </div>

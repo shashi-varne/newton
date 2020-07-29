@@ -192,7 +192,7 @@ class Landing extends Component {
        <div className="loan-landing loan-instant-kyc-home" >
         <div className="infoimage-block1" onClick={() => this.handleClickTopCard()} >
         
-          <img style={{ width: '100%', cursor: 'pointer' }} 
+          <img style={{ width: '100%', cursor: 'pointer', borderRadius: 6 }} 
           src={require(`assets/${this.state.productName}/ils_loan_intro_card.svg`)} alt="" />
           <div className="inner">
             <div className="title generic-page-title" style={{color: 'white'}}>
@@ -234,7 +234,7 @@ class Landing extends Component {
               backgroundImage: `url(${this.state.ic_why_hs})`
             }}>
               <div className="card-info" style={{padding:'10px 0 30px 20px'}}>
-                Complete digital and  paperless process
+              Get loan Instantly in your account with no human interaction
               </div>
               <div style={{float:'right', paddingRight:'22px'}}>
                 <img src={ require(`assets/${this.state.productName}/ic_document_note.svg`)} alt="" />

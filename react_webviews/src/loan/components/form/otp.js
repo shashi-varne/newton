@@ -210,7 +210,7 @@ class FormOtp extends Component {
         <div className="default-otp">
 
           <div className="title">
-            Enter OTP
+           OTP Verification
                     </div>
           <div className="content">
 
