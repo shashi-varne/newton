@@ -437,11 +437,8 @@
 .loan-landing2 {
   .container {
     background: #0a1d32;
-    width: 97%;
-    position: relative;
-    right: 15px;
-    bottom: 20px;
-    padding: 30px 20px 0 20px;
+    padding: 20px 15px 0 15px;
+    margin: -20px -15px 0 -15px;
   }
 
   .closing-principle {
@@ -551,11 +548,12 @@
 
 .loan-transactions {
   .block {
-    padding: 20px 0 20px 0;
+    padding: 20px 15px 20px 15px;
     display: flex;
     justify-content: space-between;
     line-height: 1.6;
     background-color: white;
+    margin: -20px -15px 0 -15px;
   }
 
   .block-head {
@@ -569,19 +567,18 @@
 
   .container {
     width: 100%;
-    height: 191px;
-    // background: var(--highlight);
-    margin-top: 20px;
+    margin-top: 0px;
+    padding-top: 20px;
   }
 
   .content {
-    padding: 20px 20px 29px 20px;
+    padding: 25px 25px 25px 20px;
   }
 
   .head {
-    font-size: 17px;
+    font-size: 10px;
     font-weight: bold;
-    padding-bottom: 22px;
+    padding-bottom: 12px;
   }
 
   .items {
@@ -589,7 +586,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding-bottom: 12px;
+    padding-bottom: 10px;
     color: #767e86;
   }
 
@@ -598,5 +595,18 @@
     flex-direction: row;
     justify-content: space-between;
     font-size: 13px;
+  }
+
+  .dot {
+    height: 6px;
+    width: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right:5px;
+  }
+
+  .arrow {
+    transform: rotate(270deg);
+    margin: 0 0 -1px 10px;
   }
 }
