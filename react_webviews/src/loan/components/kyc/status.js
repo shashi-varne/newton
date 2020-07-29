@@ -75,7 +75,7 @@ class KycStatus extends Component {
       params: getUrlParams(),
       commonMapper: {},
       okyc_id: storageService().get('loan_okyc_id'),
-      timeAlloted: 20000
+      timeAlloted: 20000,
     }
 
     this.initialize = initialize.bind(this);
@@ -83,7 +83,7 @@ class KycStatus extends Component {
 
   componentWillMount() {
     this.initialize();
-
+    
     let { status, okyc_id,flow } = this.state.params;
 
     if(flow === 'kyc') {

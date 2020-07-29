@@ -175,17 +175,13 @@ class MandateBank extends Component {
         let resultData  = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200 && !resultData.error) {
 
-         
-
           let paymentRedirectUrl = encodeURIComponent(
             window.location.origin + `/loan/redirection-status/mandate` + getConfig().searchParams
           );
 
 
-          let backParams = getConfig().searchParams;
-          backParams = (backParams).replace('generic_callback', "abcd");
           let back_url = encodeURIComponent(
-            window.location.origin + `/loan/mandate-status` + backParams
+            window.location.origin + `/loan/mandate-status` + getConfig().searchParams
           );
 
 
@@ -198,24 +194,6 @@ class MandateBank extends Component {
           if (getConfig().generic_callback) {
             pgLink += '&generic_callback=' + getConfig().generic_callback;
           }
-
-
-          // if (getConfig().app === 'ios') {
-          //   nativeCallback({
-          //     action: 'show_top_bar', message: {
-          //       title: 'KYC'
-          //     }
-          //   });
-          // }
-
-          // nativeCallback({
-          //   action: 'take_control', message: {
-          //     back_url: nativeRedirectUrl,
-          //     back_text: 'Are you sure you want to exit the process?'
-          //   }
-          // });
-
-          // window.location.href = pgLink;
 
           this.openInTabApp(
             {

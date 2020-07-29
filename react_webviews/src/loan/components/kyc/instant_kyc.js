@@ -82,10 +82,8 @@ class InstantKycHome extends Component {
             window.location.origin + `/loan/redirection-status/kyc` + getConfig().searchParams
           );
 
-          let backParams = getConfig().searchParams;
-          backParams = (backParams).replace('generic_callback', "abcd");
           let back_url = encodeURIComponent(
-            window.location.origin + `/loan/instant-kyc-status` + backParams + 
+            window.location.origin + `/loan/instant-kyc-status` + getConfig().searchParams + 
             '&flow=kyc&okyc_id=' + okyc_id
           );
 

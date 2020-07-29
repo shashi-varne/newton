@@ -57,7 +57,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       url += '&url=' + encodeURIComponent(message.url);
 
       if(message.back_url) {
-        url += '&back_redirection_url=' + encodeURIComponent(message.back_url);
+        url += '&back_redirection_url=' + message.back_url;
       }
 
       nativeCallback({

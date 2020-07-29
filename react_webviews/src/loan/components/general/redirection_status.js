@@ -4,23 +4,54 @@ import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
 import ContactUs from '../../../common/components/contact_us';
 import { getUrlParams } from 'utils/validators';
+import ReactHtmlParser from 'react-html-parser'; 
 
-const commonMapper = {
+const baseCommonMapper = {
   'kyc': {
+   'success': {
     'top_icon': 'ic_read',
-    'top_title': 'Sorry!',
-    'mid_title': '',
-    'button_title': 'OK',
-    'cta_state': '/loan/home',
-    'close_state': '/loan/home'
+    'top_title': '',
+    'content': [
+      'Press the X button to go back to Fisdom app and continue your journey.'
+    ]
+   },
+   'cancelled': {
+    'top_icon': 'ic_read',
+    'top_title': '',
+    'content': [
+      'Your KYC could not be completed. Please click on X button to go back to Fisdom app and resume your KYC journey.'
+    ]
+   },
+   'failed': {
+    'top_icon': 'ic_read',
+    'top_title': '',
+    'content': [
+      'Your KYC could not be completed. Please click on X button to go back to Fisdom app and resume your KYC journey.'
+    ]
+   }
   },
   'mandate': {
-    'top_icon': 'ic_read',
-    'top_title': 'E-mandate failed',
-    'mid_title': '',
-    'button_title': 'RETRY',
-    'cta_state': '/loan/home',
-    'close_state': '/loan/journey'
+    'success': {
+      'top_icon': 'ic_read',
+      'top_title': '',
+      'content': [
+        'Your KYC has been completed. Press the X button to go back to Fisdom app and continue your journey.'
+      ]
+     },
+     'cancelled': {
+      'top_icon': 'ic_read',
+      'top_title': '',
+      'content': [
+        'Press the X button to go back to Fisdom app and resume your KYC journey.'
+      ]
+     },
+     'failed': {
+      'top_icon': 'ic_read',
+      'top_title': '',
+      'content': [
+        'Your KYC could not be completed. Please click on X button to go back to Fisdom app and resume your KYC journey.'
+      ]
+     }
   }
 }
 
@@ -31,8 +62,10 @@ class RedirectionStatus extends Component {
     this.state = {
       show_loader: false,
       params: getUrlParams(),
-      flow: this.props.match.params.flow,
-      commonMapper: {},
+      flow: this.props.match.params.flow || '',
+      commonMapper: {
+        content: []
+      }
     }
 
     this.initialize = initialize.bind(this);
@@ -41,15 +74,18 @@ class RedirectionStatus extends Component {
   componentWillMount() {
     this.initialize();
 
-    let status = this.state.flow;
+    let flow = this.state.flow;
+    let { status } = this.state.params;
 
     if (!status) {
-      status = 'kyc'
+      status = 'cancelled';
     }
+
+    console.log(baseCommonMapper[flow][status]);
 
     this.setState({
       status: status,
-      commonMapper: commonMapper[status]
+      commonMapper: baseCommonMapper[flow][status],
     })
   }
 
@@ -83,6 +119,14 @@ class RedirectionStatus extends Component {
     this.navigate(this.state.commonMapper.close_state);
   }
 
+  renderContent = (props, index) => {
+    return(
+      <p key={index} className="top-content">
+      {ReactHtmlParser(props)}
+      </p>
+    )
+  }
+
   render() {
     return (
       <Container
@@ -108,21 +152,7 @@ class RedirectionStatus extends Component {
 
             <div>
 
-              {this.state.status === 'kyc' &&
-                <div>
-                  <p className="top-content">
-                  Please close this to continue journey..........
-                  </p>
-                </div>
-              }
-
-              {this.state.status === 'mandate' &&
-                <div>
-                  <p className="top-content">
-                   Please close this to continue journey..........
-                  </p>
-                </div>
-              }
+              {this.state.commonMapper.content.map(this.renderContent)}
 
             </div>
 
