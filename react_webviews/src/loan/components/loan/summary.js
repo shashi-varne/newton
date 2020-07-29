@@ -8,6 +8,7 @@ import { formatAmountInr } from "../../../utils/validators";
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
+import Agreement from './agreement';
 
 class LoanSummary extends Component {
   constructor(props) {
@@ -16,7 +17,8 @@ class LoanSummary extends Component {
       show_loader: false,
       get_lead: true,
       getLeadBodyKeys: ['vendor_info'],
-      confirm_details_check: true
+      confirm_details_check: false,
+      isScrolledToBottom: false
     }
 
     this.initialize = initialize.bind(this);
@@ -132,6 +134,16 @@ class LoanSummary extends Component {
     })
   };
 
+  onScroll = (e) => {
+    const element = e.target;
+    let isScrolled = element.scrollHeight - element.clientHeight <= element.scrollTop + 1;
+    if (!this.state.form_submitted) {
+        this.setState({
+            isScrolledToBottom: isScrolled
+        })
+    }
+  };
+
   render() {
 
     let vendor_info = this.state.vendor_info || {};
@@ -183,17 +195,15 @@ class LoanSummary extends Component {
             Loan agreement
             </div>
 
-          <div className="agreement">
-            Loan agreement for your convenience here.
-            We have summarized the key terms of the user loan agreement
-            for your convenience here. Please read the entire agreement
-            below before clicking the “I Agree” tab:
-            </div>
+          <div className="agreement-block" onScroll={this.onScroll}>
+            <Agreement vendor_info={vendor_info}/>
+          </div>
 
           <Grid container spacing={16} alignItems="center">
             <Grid item xs={1} className="TextCenter">
               <Checkbox
                 defaultChecked
+                disabled={!this.state.isScrolledToBottom}
                 checked={this.state.confirm_details_check}
                 color="primary"
                 value="confirm_details_check"
