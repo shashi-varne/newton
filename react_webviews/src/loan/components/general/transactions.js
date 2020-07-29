@@ -68,11 +68,11 @@ class Transactions extends Component {
               </div>
               <div className="items">
                 <div>Interest:</div>
-                <div>{'- ' + formatAmountInr()}</div>
+                <div>{formatAmountInr()}</div>
               </div>
               <div className="items">
                 <div>Additional charges</div>
-                <div>{'- ' + formatAmountInr()}</div>
+                <div>{formatAmountInr()}</div>
               </div>
               <hr />
               <div className="credit">
@@ -95,11 +95,11 @@ class Transactions extends Component {
               </div>
               <div className="items">
                 <div>Interest:</div>
-                <div>{'- ' + formatAmountInr()}</div>
+                <div>{formatAmountInr()}</div>
               </div>
               <div className="items">
                 <div>Additional charges</div>
-                <div>{'- ' + formatAmountInr()}</div>
+                <div>{formatAmountInr()}</div>
               </div>
               <hr style={{ color: "green" }} />
               <div className="credit">
@@ -121,11 +121,11 @@ class Transactions extends Component {
               </div>
               <div className="items">
                 <div>Interest:</div>
-                <div>{'- ' + formatAmountInr()}</div>
+                <div>{formatAmountInr()}</div>
               </div>
               <div className="items">
                 <div>Additional charges</div>
-                <div>{'- ' + formatAmountInr()}</div>
+                <div>{formatAmountInr()}</div>
               </div>
               <hr style={{ background: "#ccd3db" }} />
               <div className="credit">
