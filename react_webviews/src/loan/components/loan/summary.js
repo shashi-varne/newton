@@ -16,9 +16,15 @@ class LoanSummary extends Component {
     this.state = {
       show_loader: false,
       get_lead: true,
-      getLeadBodyKeys: ['vendor_info'],
+      fetch_all: true,
       confirm_details_check: false,
-      isScrolledToBottom: false
+      isScrolledToBottom: false,
+      vendor_info: {},
+      application_info : {},
+      personal_info: {},
+      address_info: {},
+      bank_info: {},
+      current_address_data: {}
     }
 
     this.initialize = initialize.bind(this);
@@ -29,10 +35,25 @@ class LoanSummary extends Component {
   }
 
   onload = () => {
-    // ****************************************************
-    // code goes here
-    // common things can be added inside initialize
-    // use/add common functions from/to  ../../common/functions
+    let lead = this.state.lead;
+    let vendor_info = lead.vendor_info || {};
+
+    if(vendor_info.dmi_loan_status === 'callback_awaited_disbursement_approval') {
+      this.navigate('report-details');
+      return;
+    }
+    let personal_info = lead.personal_info || {};
+    let application_info = lead.application_info || {};
+    let address_info = lead.address_info || {};
+    let bank_info = lead.bank_info || {}
+    this.setState({
+      vendor_info: vendor_info,
+      personal_info :personal_info,
+      application_info:application_info,
+      address_info:address_info,
+      bank_info:bank_info,
+      current_address_data: lead.current_address_data || {}
+    })
 
   }
 
@@ -70,7 +91,7 @@ class LoanSummary extends Component {
               verify_link: result.verify_otp_url,
               message: message,
               mobile_no: result.mobile_no,
-              next_state: 'instant-kyc',
+              next_state: 'report-details',
               from_state: 'loan-approved'
             }
           });
@@ -93,13 +114,7 @@ class LoanSummary extends Component {
     }
   }
 
-  handleClick = async () => {
-    this.sendEvents('next');
-
-    this.setState({
-      show_loader: true
-    })
-
+  acceptAgreement = async() => {
     try {
 
       let res = await Api.get(`/relay/api/loan/dmi/agreement/accept/${this.state.application_id}`);
@@ -124,6 +139,21 @@ class LoanSummary extends Component {
     }
   }
 
+  handleClick = async () => {
+    this.sendEvents('next');
+
+    this.setState({
+      show_loader: true
+    })
+
+    if(this.state.vendor_info.dmi_loan_status === 'e_agreement') {
+      this.triggerOtp();
+    } else {
+      this.acceptAgreement();
+    }
+    
+  }
+
   handleChange = name => event => {
     if (!name) {
       name = event.target.name;
@@ -137,7 +167,7 @@ class LoanSummary extends Component {
   onScroll = (e) => {
     const element = e.target;
     let isScrolled = element.scrollHeight - element.clientHeight <= element.scrollTop + 1;
-    if (!this.state.form_submitted) {
+    if (!this.state.isScrolledToBottom) {
         this.setState({
             isScrolledToBottom: isScrolled
         })
@@ -196,7 +226,7 @@ class LoanSummary extends Component {
             </div>
 
           <div className="agreement-block" onScroll={this.onScroll}>
-            <Agreement vendor_info={vendor_info}/>
+            <Agreement parent={this} vendor_info={vendor_info}/>
           </div>
 
           <Grid container spacing={16} alignItems="center">

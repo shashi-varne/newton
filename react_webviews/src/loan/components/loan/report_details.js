@@ -6,7 +6,6 @@ import { numDifferentiationInr, inrFormatDecimal } from 'utils/validators';
 import { getCssMapperReport } from '../../constants';
 import ContactUs from '../../../common/components/contact_us';
 
-
 class ReportDetails extends Component {
   constructor(props) {
     super(props);
@@ -24,25 +23,67 @@ class ReportDetails extends Component {
   }
 
   componentWillMount() {
+
     this.initialize();
+    
   }
 
-  onload = () => {
+  disbursementCallback = async () => {
 
-    let lead = this.state.lead || {};
-    let application_info = lead.application_info || {};
-    let vendor_info = lead.vendor_info || {};
-    let personal_info = lead.personal_info || {};
+    this.setState({
+      show_loader: true
+    })
+    let body = {
+      "request_type": "disbursement_approval"
+    }
+    let resultData = await this.callBackApi(body);
+    
+  
 
+    let vendor_info = this.state.vendor_info || {};
+    vendor_info.dmi_loan_status  = resultData.dmi_loan_status;
+
+    this.setVendorData(vendor_info);
+    // if (resultData.callback_status) {
+      
+    // } else {
+     
+    // }
+
+  }
+
+  setVendorData = (vendor_info) => {
     let data = getCssMapperReport(vendor_info);
 
     let vendor_info_ui = vendor_info;
     vendor_info_ui.status = data.status;
     vendor_info_ui.cssMapper = data.cssMapper;
     this.setState({
+      vendor_info_ui: vendor_info_ui,
+    })
+  }
+
+  onload = () => {
+
+   
+    
+    let lead = this.state.lead || {};
+    let application_info = lead.application_info || {};
+    let vendor_info = lead.vendor_info || {};
+    let personal_info = lead.personal_info || {};
+
+    // if(vendor_info.dmi_loan_status === 'callback_awaited_disbursement_approval') {
+    //   this.disbursementCallback();
+    // } else {
+    //   this.setVendorData(vendor_info);
+    // }
+
+    this.setVendorData(vendor_info);
+
+   
+    this.setState({
       application_info: application_info,
       vendor_info: vendor_info,
-      vendor_info_ui: vendor_info_ui,
       personal_info: personal_info
     })
 
@@ -111,7 +152,7 @@ class ReportDetails extends Component {
               </div>
                 <div className="mtr-bottom">
 
-                  {numDifferentiationInr(this.state.vendor_info_ui.sanction_amount)}
+                  {numDifferentiationInr(this.state.vendor_info_ui.approved_amount_final)}
                 </div>
               </div>
             </div>

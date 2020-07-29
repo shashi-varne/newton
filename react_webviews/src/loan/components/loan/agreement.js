@@ -3,7 +3,7 @@ import ReactHtmlParser from 'react-html-parser';
 import { formatAmountInr } from "utils/validators";
 
 const Agreement = (props) => {
-
+    const parentState = props.parent.state || {};
     let terms = [
         '“Availability Period” shall mean the period within which the Borrower can request a Drawdown from the Facility and is as detailed in the Loan Details Sheet;',
         '“Available Facility Amount” means at any point of time the undrawn amount of the Facility, including any amount of the Facility which becomes available pursuant to any repayment or prepayment of all or part of any previous Drawdown.',
@@ -323,19 +323,19 @@ const Agreement = (props) => {
                 <tbody>
                 <tr>
                     <td>Gross loan amount</td>
-                    <td>{formatAmountInr(props.sanction_amount)}</td>
+                    <td>{formatAmountInr(parentState.vendor_info.approved_amount_final)}</td>
                 </tr>
                 <tr>
                     <td>Processing fee</td>
-                    <td>{formatAmountInr(props.processing_fee)}</td>
+                    <td>{formatAmountInr(parentState.vendor_info.processing_fee_final)}</td>
                 </tr>
                 <tr>
                     <td>GST(18%)</td>
-                    <td>{formatAmountInr(props.gst)}</td>
+                    <td>{formatAmountInr(parentState.vendor_info.gst_final)}</td>
                 </tr>
                 <tr>
                     <td>Net loan amount</td>
-                    <td>{formatAmountInr(props.net_amount)}</td>
+                    <td>{formatAmountInr(parentState.vendor_info.net_amount_final)}</td>
                 </tr>
                 </tbody>
             </table>
@@ -366,30 +366,32 @@ const Agreement = (props) => {
                     <td style={{width:'5px'}}>02.</td>
                     <td>Borrower Details</td>
                     <td>
-                        Name: {props.first_name+' '+props.last_name} <br />
-                        Father's name: {props.father_name}<br />
-                        Address: {props.address}
+                        Name: {parentState.personal_info.full_name} <br />
+                        Father's name: {parentState.personal_info.father_name}<br />
+                        Address: {parentState.current_address_data.address}, {parentState.current_address_data.pincode},
+                    {parentState.current_address_data.city}, {parentState.current_address_data.state},
+                     {parentState.current_address_data.country}
                     </td>
                 </tr>
                 <tr>
                     <td style={{width:'5px'}}>03.</td>
                     <td>Rate of Interest % P.A (Annualized)</td>
-                    <td>{props.loan_rate}</td>
+                    <td>{parentState.vendor_info.loan_rate}</td>
                 </tr>
                 <tr>
                     <td style={{width:'5px'}}>04.</td>
                     <td>EMI</td>
-                    <td>{formatAmountInr(props.approved_emi)}</td>
+                    <td>{formatAmountInr(parentState.vendor_info.approved_emi)}</td>
                 </tr>
                 <tr>
                     <td style={{width:'5px'}}>05.</td>
                     <td>Tenor (Months)</td>
-                    <td>{props.tenor} months</td>
+                    <td>{parentState.vendor_info.tenor} months</td>
                 </tr>
                 <tr>
                     <td style={{width:'5px'}}>06.</td>
                     <td>Processing Fees</td>
-                    <td>{formatAmountInr(props.processing_fee)}</td>
+                    <td>{formatAmountInr(parentState.vendor_info.processing_fee_final)}</td>
                 </tr>
                 <tr>
                     <td style={{width:'5px'}}>07.</td>
@@ -420,23 +422,23 @@ const Agreement = (props) => {
                 <tbody>
                 <tr>
                     <td>Amount</td>
-                    <td>{formatAmountInr(props.sanction_amount)}</td>
+                    <td>{formatAmountInr(parentState.vendor_info.approved_amount_final)}</td>
                 </tr>
                 <tr>
                     <td>Name of Bank</td>
-                    <td>{props.bank_name}</td>
+                    <td>{parentState.bank_info.bank_name}</td>
                 </tr>
                 <tr>
                     <td>Account Name</td>
-                    <td>{props.account_holder_name}</td>
+                    <td>{parentState.bank_info.account_holder_name}</td>
                 </tr>
                 <tr>
                     <td>Branch Name IFS Code:</td>
-                    <td>{props.ifsc_code}</td>
+                    <td>{parentState.bank_info.ifsc_code}</td>
                 </tr>
                 <tr>
                     <td>Account No.</td>
-                    <td>{props.account_no}</td>
+                    <td>{parentState.bank_info.account_number}</td>
                 </tr>
                 </tbody>
             </table>

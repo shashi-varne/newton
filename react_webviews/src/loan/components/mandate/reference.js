@@ -7,7 +7,7 @@ import { FormControl } from 'material-ui/Form';
 import MobileInputWithoutIcon from '../../../common/ui/MobileInputWithoutIcon';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
-import {getConfig} from 'utils/functions';
+import { getConfig } from 'utils/functions';
 
 class KycStatus extends Component {
   constructor(props) {
@@ -16,7 +16,8 @@ class KycStatus extends Component {
       show_loader: false,
       form_data: {},
       getLeadBodyKeys: ['personal_info', 'vendor_info'],
-      get_lead: true
+      get_lead: true,
+      vendor_info: {}
     }
 
     this.initialize = initialize.bind(this);
@@ -29,6 +30,7 @@ class KycStatus extends Component {
   onload = () => {
     let lead = this.state.lead;
     let personal_info = lead.personal_info || {};
+    let vendor_info = lead.vendor_info || {};
     let form_data = {
       "ref_name_first": personal_info.ref_name_first || '',
       "ref_contact_first": personal_info.ref_contact_first || '',
@@ -37,7 +39,8 @@ class KycStatus extends Component {
     };
 
     this.setState({
-        form_data: form_data
+      form_data: form_data,
+      vendor_info: vendor_info
     })
 
   }
@@ -74,61 +77,66 @@ class KycStatus extends Component {
 
     let resultData = await this.callBackApi(body);
     if (resultData.callback_status) {
-       this.navigate('/loan/loan-summary');
+      this.submitRef();
     } else {
       let searchParams = getConfig().searchParams + '&status=pending';
       this.navigate('mandate-status', { searchParams: searchParams });
     }
-}
+  }
 
-submitRef = async() => {
-  let keys_to_check = ['ref_name_first', 'ref_contact_first', 
-  'ref_name_second', 'ref_contact_second'];
+  submitRef = async () => {
+    let keys_to_check = ['ref_name_first', 'ref_contact_first',
+      'ref_name_second', 'ref_contact_second'];
 
-  let form_data = this.state.form_data;
-  let canSubmitForm = this.formCheckUpdate(keys_to_check, form_data, true);
+    let form_data = this.state.form_data;
+    let canSubmitForm = this.formCheckUpdate(keys_to_check, form_data, true);
 
-  if(canSubmitForm) {
-    try {
-      this.setState({
-        show_loader: true
-      })
+    if (canSubmitForm) {
+      try {
+        this.setState({
+          show_loader: true
+        })
 
-      let body = {
-        "ref_name_first": form_data.ref_name_first,
-        "ref_contact_first": form_data.ref_contact_first,
-        "ref_name_second": form_data.ref_name_second,
-        "ref_contact_second": form_data.ref_contact_second
-      };
+        let body = {
+          "ref_name_first": form_data.ref_name_first,
+          "ref_contact_first": form_data.ref_contact_first,
+          "ref_name_second": form_data.ref_name_second,
+          "ref_contact_second": form_data.ref_contact_second
+        };
 
-      const res = await Api.post(`/relay/api/loan/reference/update/${this.state.application_id}`, body);
+        const res = await Api.post(`/relay/api/loan/reference/update/${this.state.application_id}`, body);
 
-      let resultData  = res.pfwresponse.result;
-      if (res.pfwresponse.status_code === 200 && !resultData.error) {
-        this.navigate('/loan/loan-summary');
-      } else {
+        let resultData = res.pfwresponse.result;
+        if (res.pfwresponse.status_code === 200 && !resultData.error) {
+          this.navigate('/loan/loan-summary');
+        } else {
+          this.setState({
+            show_loader: false
+          });
+
+          toast(resultData.error || resultData.message
+            || 'Something went wrong');
+        }
+
+      } catch (err) {
         this.setState({
           show_loader: false
         });
-
-        toast(resultData.error || resultData.message
-          || 'Something went wrong');
+        toast('Something went wrong');
+        console.log(err)
       }
-
-    } catch (err) {
-      this.setState({
-        show_loader: false
-      });
-      toast('Something went wrong');
-      console.log(err)
     }
-  }
 
-}
+  }
 
   handleClick = async () => {
     this.sendEvents('next');
-    this.getMandateCallback();
+    if (this.state.vendor_info.dmi_loan_status === 'emandate_done') {
+      this.submitRef();
+    } else {
+      this.getMandateCallback();
+    }
+
   }
 
   render() {
@@ -142,8 +150,8 @@ submitRef = async() => {
       >
         <FormControl fullWidth>
           <div className="loan-mandate-reference">
-            <div style={{paddingBottom:'40px'}}>
-              <div style={{color: '#64778D',fontSize: 13, margin: '0 0 6px 0'}}>
+            <div style={{ paddingBottom: '40px' }}>
+              <div style={{ color: '#64778D', fontSize: 13, margin: '0 0 6px 0' }}>
                 1st reference
               </div>
               <div className="InputField">
@@ -155,13 +163,13 @@ submitRef = async() => {
                   label="Full name"
                   name="ref_name_first"
                   value={this.state.form_data.ref_name_first || ''}
-                  onChange={this.handleChange()} 
+                  onChange={this.handleChange()}
                 />
               </div>
               <div className="InputField">
                 <MobileInputWithoutIcon
                   error={!!this.state.form_data.ref_contact_first_error}
-                  helperText={this.state.form_data.ref_contact_first_error} 
+                  helperText={this.state.form_data.ref_contact_first_error}
                   type="number"
                   width="40"
                   label="Mobile number"
@@ -169,12 +177,12 @@ submitRef = async() => {
                   maxLength={10}
                   name="ref_contact_first"
                   value={this.state.form_data.ref_contact_first || ''}
-                  onChange={this.handleChange()} />          
+                  onChange={this.handleChange()} />
               </div>
             </div>
 
-            <div style={{paddingBottom:'40px'}}>
-              <div style={{color: '#64778D',fontSize: 13, margin: '0 0 6px 0'}}>
+            <div style={{ paddingBottom: '40px' }}>
+              <div style={{ color: '#64778D', fontSize: 13, margin: '0 0 6px 0' }}>
                 2st reference
               </div>
               <div className="InputField">
@@ -192,7 +200,7 @@ submitRef = async() => {
               <div className="InputField">
                 <MobileInputWithoutIcon
                   error={!!this.state.form_data.ref_contact_second_error}
-                  helperText={this.state.form_data.ref_contact_second_error} 
+                  helperText={this.state.form_data.ref_contact_second_error}
                   type="number"
                   width="40"
                   label="Mobile number"
@@ -200,7 +208,7 @@ submitRef = async() => {
                   maxLength={10}
                   name="ref_contact_second"
                   value={this.state.form_data.ref_contact_second || ''}
-                  onChange={this.handleChange()} />          
+                  onChange={this.handleChange()} />
               </div>
             </div>
           </div>

@@ -184,6 +184,10 @@ class MandateBank extends Component {
             window.location.origin + `/loan/mandate-status` + getConfig().searchParams
           );
 
+           // for web no issue
+           if(getConfig().Web) {
+            paymentRedirectUrl = back_url;
+          }
 
           var payment_link = resultData.url;
           var pgLink = payment_link;

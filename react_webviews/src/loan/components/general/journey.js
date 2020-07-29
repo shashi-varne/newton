@@ -33,7 +33,7 @@ class Journey extends Component {
   componentWillMount() {
     this.initialize();
 
-    
+
   }
 
   onload = () => {
@@ -67,12 +67,12 @@ class Journey extends Component {
     } else if (application_status === 'application_submitted') {
       cta_title = 'CHECK ELIGIBILITY';
       next_state = 'requirements-details';
-    } else if (application_status === 'application_complete' || 
-    application_status === 'offer_accepted') {
+    } else if (application_status === 'application_complete' ||
+      application_status === 'offer_accepted') {
       if (dmi_loan_status === 'lead' || dmi_loan_status === 'contact') {
         next_state = 'form-summary';
       } else if (dmi_loan_status === 'verified_contact' ||
-        dmi_loan_status.indexOf('okyc') >=0) {
+        dmi_loan_status.indexOf('okyc') >= 0) {
         next_state = 'instant-kyc';
       } else if (dmi_loan_status === 'callback_awaited_decision') {
         nextFunction = this.decisionCallback;
@@ -83,17 +83,20 @@ class Journey extends Component {
         withProvider = true;
         step_info = 2;
         next_state = 'upload-pan';
-      }else if (['emandate', 'emandate_failed'].indexOf(dmi_loan_status) !== -1 ) {
+      } else if (['emandate', 'emandate_failed'].indexOf(dmi_loan_status) !== -1) {
         withProvider = true;
         step_info = 2;
         next_state = 'bank';
-      } else if (['emandate_success', 'emandate_done', 'reference_added'].indexOf(dmi_loan_status) !== -1 ) {
+      } else if (['emandate_success', 'emandate_done', 'reference_added', 'e_agreement'].indexOf(dmi_loan_status) !== -1) {
         withProvider = true;
         step_info = 3;
         next_state = 'reference';
-        if(dmi_loan_status === 'reference_added') {
+        if (dmi_loan_status === 'reference_added' || dmi_loan_status === 'e_agreement') {
           next_state = 'loan-summary';
         }
+      } else if (['callback_awaited_disbursement_approval', 'disbursement_approved', 'complete'].indexOf(dmi_loan_status) !== -1) {
+        this.navigate('report-Details');
+
       }
     }
 
@@ -131,6 +134,11 @@ class Journey extends Component {
       journeyData[2].status = 'init';
 
       withProvider = true;
+    } else if (step_info === 4) {
+      journeyData[0].status = 'success';
+      journeyData[1].status = 'success';
+      journeyData[2].status = 'success';
+
     }
 
     this.setState({
@@ -216,7 +224,7 @@ class Journey extends Component {
                 <span className="dot"></span>
                 <b> ELIGIBLE</b>
               </div>
-              <div style={{color: '#767e86'}}>Avail sanctioned loan of </div>
+              <div style={{ color: '#767e86' }}>Avail sanctioned loan of </div>
               <div><b>{inrFormatDecimal(this.state.vendor_info.approved_amount_decision)}</b></div>
             </div>}
         </div>
@@ -238,19 +246,19 @@ class Journey extends Component {
         hidePageTitle={true}
       >
         <div className="loan-journey">
-          <div style={{display:'flex'}}>
-            <div style={{lineHeight:'24px'}}>
-              <h2 style={{width:'70%'}}>Get loan in 3 easy steps</h2>
+          <div style={{ display: 'flex' }}>
+            <div style={{ lineHeight: '24px' }}>
+              <h2 style={{ width: '70%' }}>Get loan in 3 easy steps</h2>
               <div>
-                <img src={ require(`assets/${this.state.productName}/ic_document_cash.svg`)} alt="" />
+                <img src={require(`assets/${this.state.productName}/ic_document_cash.svg`)} alt="" />
                 <span className="journey-steps">Get money within 2 hrs</span>
               </div>
               <div>
-                <img src={ require(`assets/${this.state.productName}/ic_document_cloud.svg`)} alt="" />
+                <img src={require(`assets/${this.state.productName}/ic_document_cloud.svg`)} alt="" />
                 <span className="journey-steps">Completely digital and paperless</span>
               </div>
             </div>
-            <img src={ require(`assets/${this.state.productName}/ic_why_loan.svg`)} alt="" />
+            <img src={require(`assets/${this.state.productName}/ic_why_loan.svg`)} alt="" />
           </div>
           <div className="generic-progress-vertical">
             {this.state.journeyData.map(this.renderJourney)}

@@ -7,7 +7,8 @@ export function goBackMap(path) {
         '/loan/loan-approved': '/loan/report-details',
         '/loan/report-details': '/loan/home',
         '/loan/form-otp': '/loan/journey',
-        '/loan/bank': '/loan/journey'
+        '/loan/bank': '/loan/journey',
+        '/loan/permissions': '/loan/home'
     }
 
     return mapper[path] || false;
