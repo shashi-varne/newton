@@ -29,7 +29,7 @@ class FormCreateProfile extends Component {
 
 
     componentWillMount() {
-        this.initialize();
+        
 
         let { params } = this.props.location;
         if (!params) {
@@ -41,6 +41,8 @@ class FormCreateProfile extends Component {
             this.props.history.goBack();
             return;
         }
+
+        this.initialize();
 
     }
 
@@ -188,7 +190,8 @@ class FormCreateProfile extends Component {
             >
                 <div >
                     <div>
-                        <img style={{ width: '100%' }} src={require(`assets/${this.state.productName}/update_mobile.svg`)} alt="" />
+                        {this.state.productName && 
+                        <img style={{ width: '100%' }} src={require(`assets/${this.state.productName}/update_mobile.svg`)} alt="" />}
                     </div>
 
 
