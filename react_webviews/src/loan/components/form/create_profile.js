@@ -30,6 +30,18 @@ class FormCreateProfile extends Component {
 
     componentWillMount() {
         this.initialize();
+
+        let { params } = this.props.location;
+        if (!params) {
+            params = {};
+        }
+
+        if (!params || !params.fromSummary) {
+
+            this.props.history.goBack();
+            return;
+        }
+
     }
 
     onload = () => {
@@ -55,12 +67,12 @@ class FormCreateProfile extends Component {
 
                 if (resultData.callback_status) {
                     if (resultData.dedupe_match) {
-                        this.navigate('instant-kyc-status', {searchParams: searchParams});
+                        this.navigate('instant-kyc-status', { searchParams: searchParams });
                     } else {
                         this.createContact();
                     }
                 } else {
-                    this.navigate('instant-kyc-status', {searchParams: searchParams});
+                    this.navigate('instant-kyc-status', { searchParams: searchParams });
                 }
             } else {
                 this.setState({

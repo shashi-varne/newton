@@ -371,6 +371,8 @@ export function formCheckUpdate(keys_to_check, form_data, just_check) {
                 permanent_city: form_data.p_city || '',
                 permanent_state: form_data.p_state || '',
                 permanent_country: form_data.p_country || '',
+
+                application_filled: true // as last screen
             };
         } else {
             for (var j in keys_to_check) {

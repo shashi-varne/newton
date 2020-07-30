@@ -54,6 +54,7 @@ class Journey extends Component {
 
     let cta_title = 'RESUME';
     let application_status = application_info.application_status || '';
+    let application_filled = application_info.application_filled || '';
     let dmi_loan_status = vendor_info.dmi_loan_status;
 
     let next_state = '';
@@ -64,9 +65,12 @@ class Journey extends Component {
     if (application_status === 'application_incomplete') {
       cta_title = 'CHECK ELIGIBILITY';
       next_state = 'requirements-details';
+      if(application_filled) {
+        next_state = 'form-summary';
+      }
     } else if (application_status === 'application_submitted') {
       cta_title = 'CHECK ELIGIBILITY';
-      next_state = 'requirements-details';
+      next_state = 'form-summary';
     } else if (application_status === 'application_complete' ||
       application_status === 'offer_accepted') {
       if (dmi_loan_status === 'lead' || dmi_loan_status === 'contact') {

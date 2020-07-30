@@ -224,6 +224,14 @@ class FormSummary extends Component {
         })
     }
 
+    openCreateProfile = async () => {
+        this.navigate('form-create-profile', {
+            params: {
+                fromSummary: true
+            }
+        });
+    }
+
     handleClick = async () => {
         this.sendEvents('next');
 
@@ -234,7 +242,7 @@ class FormSummary extends Component {
         storageService().set('loan_dmi_loan_status', this.state.vendor_info.dmi_loan_status);
 
         if (this.state.vendor_info.lead_id) {
-            this.navigate('form-create-profile');
+            this.openCreateProfile();
         } else {
             try {
                 let res = await Api.get(`/relay/api/loan/submit/application/${this.state.application_id}`);
@@ -243,7 +251,7 @@ class FormSummary extends Component {
                 var resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200 && !resultData.error) {
 
-                    this.navigate('form-create-profile');
+                    this.openCreateProfile();
                 } else {
                     this.setState({
                         show_loader: false
