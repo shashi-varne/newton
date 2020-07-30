@@ -102,7 +102,12 @@ class FormOtp extends Component {
 
         let result = res.pfwresponse.result;
         if (!result.error) {
-          this.navigate(this.state.next_state);
+          if(this.state.from_state === 'loan-summary') {
+            this.acceptAgreement();
+          } else {
+            this.navigate(this.state.next_state);
+          }
+          
         } else {
           this.setState({
             show_loader: false,

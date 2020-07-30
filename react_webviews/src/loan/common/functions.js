@@ -1,6 +1,7 @@
-import { storageService, getEditTitle,
+import {
+    storageService, getEditTitle,
     //  inrFormatTest 
-    } from 'utils/validators';
+} from 'utils/validators';
 import { getConfig } from 'utils/functions';
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
@@ -19,6 +20,7 @@ export async function initialize() {
     this.decisionCallback = decisionCallback.bind(this);
     this.openInBrowser = openInBrowser.bind(this);
     this.openInTabApp = openInTabApp.bind(this);
+    this.acceptAgreement = acceptAgreement.bind(this);
 
     nativeCallback({ action: 'take_control_reset' });
 
@@ -117,7 +119,7 @@ export function openInBrowser(url) {
     });
 }
 
-export function openInTabApp(data={}) {
+export function openInTabApp(data = {}) {
     nativeCallback({
         action: 'open_inapp_tab',
         message: {
@@ -187,6 +189,33 @@ export async function updateLead(body, application_id) {
     }
 }
 
+
+export async function acceptAgreement() {
+    try {
+
+        let res = await Api.get(`/relay/api/loan/dmi/agreement/accept/${this.state.application_id}`);
+
+        var resultData = res.pfwresponse.result;
+        if (res.pfwresponse.status_code === 200 && !resultData.error) {
+            this.navigate(this.state.next_state || '/loan/home');
+
+        } else {
+            
+            this.setState({
+                show_loader: false
+            });
+            toast(resultData.error || resultData.message
+                || 'Something went wrong');
+            this.props.history.goBack();
+        }
+    } catch (err) {
+        console.log(err)
+        this.setState({
+            show_loader: false
+        });
+        toast('Something went wrong');
+    }
+}
 export async function callBackApi(body) {
     try {
 

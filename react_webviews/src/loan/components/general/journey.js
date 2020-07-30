@@ -91,13 +91,15 @@ class Journey extends Component {
         withProvider = true;
         step_info = 2;
         next_state = 'bank';
-      } else if (['emandate_success', 'emandate_done', 'reference_added', 'e_agreement'].indexOf(dmi_loan_status) !== -1) {
+      } else if (['emandate_success', 'emandate_done'].indexOf(dmi_loan_status) !== -1) {
         withProvider = true;
         step_info = 3;
         next_state = 'reference';
-        if (dmi_loan_status === 'reference_added' || dmi_loan_status === 'e_agreement') {
-          next_state = 'loan-summary';
-        }
+       
+      } else if (['reference_added'].indexOf(dmi_loan_status) !== -1) {
+        withProvider = true;
+        step_info = 3;
+        next_state = 'loan-summary';
       } else if (['callback_awaited_disbursement_approval', 'disbursement_approved', 'complete'].indexOf(dmi_loan_status) !== -1) {
         this.navigate('report-Details');
 

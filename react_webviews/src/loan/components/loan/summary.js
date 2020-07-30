@@ -38,10 +38,11 @@ class LoanSummary extends Component {
     let lead = this.state.lead;
     let vendor_info = lead.vendor_info || {};
 
-    // if(vendor_info.dmi_loan_status === 'callback_awaited_disbursement_approval') {
-    //   this.navigate('report-details');
-    //   return;
-    // }
+    let dmi_loan_status = vendor_info.dmi_loan_status || '';
+    if(dmi_loan_status === 'callback_awaited_disbursement_approval') {
+      this.navigate('loan-approved');
+      return;
+    }
     let personal_info = lead.personal_info || {};
     let application_info = lead.application_info || {};
     let address_info = lead.address_info || {};
@@ -91,8 +92,8 @@ class LoanSummary extends Component {
               verify_link: result.verify_otp_url,
               message: message,
               mobile_no: result.mobile_no,
-              next_state: 'report-details',
-              from_state: 'loan-approved'
+              next_state: 'loan-approved',
+              from_state: 'loan-summary'
             }
           });
           toast(message);
@@ -114,31 +115,6 @@ class LoanSummary extends Component {
     }
   }
 
-  acceptAgreement = async() => {
-    try {
-
-      let res = await Api.get(`/relay/api/loan/dmi/agreement/accept/${this.state.application_id}`);
-
-      var resultData = res.pfwresponse.result;
-      if (res.pfwresponse.status_code === 200 && !resultData.error) {
-        this.triggerOtp();
-
-      } else {
-        this.setState({
-          show_loader: false
-        });
-        toast(resultData.error || resultData.message
-          || 'Something went wrong');
-      }
-    } catch (err) {
-      console.log(err)
-      this.setState({
-        show_loader: false
-      });
-      toast('Something went wrong');
-    }
-  }
-
   handleClick = async () => {
     this.sendEvents('next');
 
@@ -146,11 +122,7 @@ class LoanSummary extends Component {
       show_loader: true
     })
 
-    if(this.state.vendor_info.dmi_loan_status === 'e_agreement') {
-      this.triggerOtp();
-    } else {
-      this.acceptAgreement();
-    }
+    this.triggerOtp();
     
   }
 

@@ -76,9 +76,12 @@ class FormSummary extends Component {
 
         let accordianData = [];
 
-        let { personal_info, permanent_address_data, current_address_data,
-            professional_info, application_info, vendor_info } = lead;
-
+        let personal_info = lead.personal_info || {};
+        let permanent_address_data = lead.permanent_address_data || {};
+        let current_address_data = lead.current_address_data || {};
+        let professional_info = lead.professional_info || {};
+        let application_info = lead.application_info || {};
+        let vendor_info = lead.vendor_info || {};
 
         if (vendor_info && vendor_info.lead_id) {
             this.setState({
