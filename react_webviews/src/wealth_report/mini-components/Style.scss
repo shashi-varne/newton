@@ -41,15 +41,25 @@
 
   .wr-header-tab {
     flex: 1;
-    // box-sizing: border-box;
-    // padding: 28px;
-    // text-align: center;
-    // font-size: 17px;
-    // font-weight: 600;
-    // font-style: normal;
-    // line-height: 1;
+    box-sizing: border-box;
+    padding: 27px;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 600;
+    font-style: normal;
+    line-height: 1;
+
+    align-items: center;
     color: #000000;
     border-left: solid 0.5px rgba(151, 151, 151, 0.1);
+  }
+
+  .wr-select {
+    padding: 22px;
+  }
+
+  .generic-hr {
+    
   }
 
   #wr-header-pan-select{

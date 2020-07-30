@@ -13,8 +13,9 @@ class Header extends Component {
             <div id="wr-header-bar">
                 <div id="wr-header-pan-select" className="wr-header-tab"></div>
                 <div className="wr-header-tab">
-                    <img alt="overview" src={require()} />
-                  Overview
+                <img src={require('assets/fisdom/ic-nav-overview-active.svg')} alt="" />
+                <div className="wr-select">Overview</div>
+                <div className="generic-hr"></div>
                 </div>
                 <div className="wr-header-tab">Analysis</div>
                 <div className="wr-header-tab">Holdings</div>
