@@ -35,7 +35,7 @@ export default class MainPage extends Component {
           <div className="wr-header-tab">Holdings</div>
           <div className="wr-header-tab">Taxation</div>
         </div> */}
-        <Header />
+        <Header params={params.tab} />
         <div id="wr-body">
           {this.renderTab(params.tab)}
         </div>
