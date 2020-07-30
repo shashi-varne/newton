@@ -47,6 +47,10 @@ class ContactDetails extends Component {
             'Other Personal expenses'
         ];
 
+        let tenorOptions = [
+            '6','12','18','24'
+        ]
+
         let empTypeOptions = [
             {
                 'name': 'Salaried',
@@ -64,7 +68,8 @@ class ContactDetails extends Component {
 
         this.setState({
             purposeOptions: purposeOptions,
-            empTypeOptions: empTypeOptions
+            empTypeOptions: empTypeOptions,
+            tenorOptions:tenorOptions
         })
     }
 
@@ -180,16 +185,15 @@ class ContactDetails extends Component {
                             onChange={this.handleChange('purpose')} />
                     </div>
                     <div className="InputField">
-                        <Input
-                            type="number"
+                        <DropdownWithoutIcon
                             width="40"
-                            label="Loan period (in months)"
-                            class="Name"
+                            options={this.state.tenorOptions}
                             id="tenor"
-                            name="tenor"
-                            error={(this.state.form_data.tenor_error) ? true : false}
+                            label="Loan period (in months)"
+                            error={this.state.form_data.tenor_error ? true : false}
                             helperText={this.state.form_data.tenor_error}
                             value={this.state.form_data.tenor || ''}
+                            name="tenor"
                             onChange={this.handleChange('tenor')} />
                     </div>
 
@@ -215,6 +219,7 @@ class ContactDetails extends Component {
                             class="Name"
                             id="work_experience"
                             name="work_experience"
+                            placeholder="Minimum work experience of 1 yrs needed"
                             error={!!this.state.form_data.work_experience_error}
                             helperText={this.state.form_data.work_experience_error}
                             value={this.state.form_data.work_experience || ''}
@@ -229,6 +234,7 @@ class ContactDetails extends Component {
                             class="Name"
                             id="net_monthly_salary"
                             name="net_monthly_salary"
+                            placeholder="Minimum monthly salary of Rs 30,000 needed"
                             error={!!this.state.form_data.net_monthly_salary_error}
                             helperText={this.state.form_data.net_monthly_salary_error || numDifferentiation(this.state.form_data.net_monthly_salary)}
                             value={this.state.form_data.net_monthly_salary || ''}

@@ -197,6 +197,7 @@ class AddressDetails extends Component {
                             type="number"
                             width="40"
                             label="No of months in current residence"
+                            placeholder="Minimum requirement is 6 months"
                             class="Name"
                             id="duration"
                             name="duration"

@@ -143,16 +143,16 @@ class LoanEligible extends Component {
               </div>
               <div className="items">
                 <div>Processing fee</div>
-                <div>{'- '+formatAmountInr(vendor_info.processing_fee)}</div>
+                <div>{'- '+formatAmountInr(vendor_info.processing_fee_decision)}</div>
               </div>
               <div className="items">
                 <div>GST(18%)</div>
-                <div>{'- '+formatAmountInr(vendor_info.gst)}</div>
+                <div>{'- '+formatAmountInr(vendor_info.gst_decision)}</div>
               </div>
               <hr style={{background:"#ccd3db"}} />
               <div className="credit">
                 <div>Amount credited to bank a/c</div>
-                <div>{formatAmountInr(vendor_info.net_amount)}</div>
+                <div>{formatAmountInr(vendor_info.net_amount_decision)}</div>
               </div>
             </div>
           </div>

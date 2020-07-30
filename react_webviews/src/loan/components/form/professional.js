@@ -30,13 +30,14 @@ class ProfessionalDetails extends Component {
         this.initialize();
 
         let eduQuaOptions = [
-            'Illiterate',
-            'Below 10th',
-            'Under Graduate',
             'Graduate',
-            'Post Graduate',
+            'PG',
             'Professional',
-            'Diploma'
+            'Primary School (upto 5th)',
+            'Middle School (Illiterate)',
+            '10th',
+            '12th',
+            'Illiterate'
         ];
 
         this.setState({
@@ -203,6 +204,7 @@ class ProfessionalDetails extends Component {
                             label="No. of months in current job"
                             class="Name"
                             id="duration"
+                            placeholder="Minimum requirement is 6 months"
                             name="duration"
                             error={!!this.state.form_data.duration_error}
                             helperText={this.state.form_data.duration_error}

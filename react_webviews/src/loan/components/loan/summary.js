@@ -38,10 +38,10 @@ class LoanSummary extends Component {
     let lead = this.state.lead;
     let vendor_info = lead.vendor_info || {};
 
-    if(vendor_info.dmi_loan_status === 'callback_awaited_disbursement_approval') {
-      this.navigate('report-details');
-      return;
-    }
+    // if(vendor_info.dmi_loan_status === 'callback_awaited_disbursement_approval') {
+    //   this.navigate('report-details');
+    //   return;
+    // }
     let personal_info = lead.personal_info || {};
     let application_info = lead.application_info || {};
     let address_info = lead.address_info || {};
@@ -196,20 +196,20 @@ class LoanSummary extends Component {
               <div className="head" style={{ paddingBottom: '22px' }}>Loan details</div>
               <div className="items">
                 <div>Sanctioned Loan Amount</div>
-                <div>{formatAmountInr(vendor_info.approved_amount_decision)}</div>
+                <div>{formatAmountInr(vendor_info.approved_amount_final)}</div>
               </div>
               <div className="items">
                 <div>Processing fee</div>
-                <div>{'- ' + formatAmountInr(vendor_info.processing_fee)}</div>
+                <div>{'- ' + formatAmountInr(vendor_info.processing_fee_final)}</div>
               </div>
               <div className="items">
                 <div>GST(18%)</div>
-                <div>{'- ' + formatAmountInr(vendor_info.gst)}</div>
+                <div>{'- ' + formatAmountInr(vendor_info.gst_final)}</div>
               </div>
               <hr style={{ background: "#ccd3db" }} />
               <div className="credit">
                 <div>Amount credited to bank a/c</div>
-                <div>{formatAmountInr(vendor_info.net_amount)}</div>
+                <div>{formatAmountInr(vendor_info.net_amount_final)}</div>
               </div>
             </div>
           </div>

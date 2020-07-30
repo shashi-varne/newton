@@ -114,8 +114,23 @@ class KycStatus extends Component {
             show_loader: false
           });
 
-          toast(resultData.error || resultData.message
-            || 'Something went wrong');
+          if (resultData.invalid_fields && resultData.invalid_fields.length > 0 && resultData.error &&
+            resultData.error.length > 0) {
+            let form_data = this.state.form_data;
+
+            for (var i in resultData.invalid_fields) {
+              form_data[resultData.invalid_fields[i] + '_error'] = resultData.error[i];
+            }
+
+            this.setState({
+              form_data: form_data
+            })
+          } else {
+            toast(resultData.error || resultData.message
+              || 'Something went wrong');
+          }
+
+
         }
 
       } catch (err) {

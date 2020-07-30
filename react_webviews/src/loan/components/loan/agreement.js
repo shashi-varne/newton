@@ -346,11 +346,11 @@ const Agreement = (props) => {
                 <tbody>
                 <tr>
                     <td>Transaction ID:</td>
-                    <td></td>
+                    <td>{parentState.vendor_info.application_id} </td>
                 </tr>
                 <tr>
                     <td>Date:</td>
-                    <td></td>
+                    <td>{parentState.vendor_info.dt_agreement} </td>
                 </tr>
                 </tbody>
             </table>

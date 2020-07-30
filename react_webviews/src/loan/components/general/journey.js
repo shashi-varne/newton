@@ -113,7 +113,7 @@ class Journey extends Component {
 
     let journeyData = [
       {
-        'title': 'Check eligibility in 5 min',
+        'title': 'Check eligibility in 5 mins',
         'key': 'check_eligi',
         'status': 'init'
       },

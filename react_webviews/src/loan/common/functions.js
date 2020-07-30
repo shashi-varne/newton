@@ -154,7 +154,7 @@ export async function updateLead(body, application_id) {
             this.setState({
                 show_loader: false
             });
-            console.log(resultData)
+
             if (resultData.invalid_fields && resultData.invalid_fields.length > 0 && resultData.error &&
                 resultData.error.length > 0) {
                 let form_data = this.state.form_data;
