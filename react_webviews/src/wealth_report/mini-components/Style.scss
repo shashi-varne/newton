@@ -25,3 +25,34 @@
     font-size: 15px;
   }
 }
+
+#wr-header-bar {
+  position: absolute;
+  top: 144px;
+  left: 8.3%;
+  width: 83%;
+  height: 120px;
+  border-radius: 10px;
+  box-shadow: 0 1px 15px 0 rgba(69, 65, 78, 0.05);
+  border: solid 0.5px rgba(151, 151, 151, 0.1);
+  background-color: #ffffff;
+  display: flex;
+  z-index: 9999;
+
+  .wr-header-tab {
+    flex: 1;
+    // box-sizing: border-box;
+    // padding: 28px;
+    // text-align: center;
+    // font-size: 17px;
+    // font-weight: 600;
+    // font-style: normal;
+    // line-height: 1;
+    color: #000000;
+    border-left: solid 0.5px rgba(151, 151, 151, 0.1);
+  }
+
+  #wr-header-pan-select{
+    flex-basis: 27%;
+  }
+}
