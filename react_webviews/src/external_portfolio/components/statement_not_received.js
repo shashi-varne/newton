@@ -52,6 +52,7 @@ class StatementNotReceived extends Component {
       this.navigate(`statement_request/${email_detail.email}`, {
         exitToApp: true,
         noEmailChange: true,
+        fromRegenerate: true,
       });
     } catch (err) {
       this.setLoader(false);

@@ -87,6 +87,7 @@ class email_entry extends Component {
 
   goBack = (params) => {
     if (params) {
+      nativeCallback({ events: this.sendEvents('back') });
       if (params.comingFrom === 'statement_request') {
         this.navigate(
           `statement_request/${params.email}`,

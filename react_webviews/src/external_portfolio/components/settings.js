@@ -22,6 +22,7 @@ export default class Settings extends Component {
       show_loader: false,
       openPopup: false,
       emails: [],
+      removeClicked: false,
     };
     this.setLoader = setLoader.bind(this);
     this.navigate = navigate.bind(this);
