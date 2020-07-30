@@ -10,21 +10,18 @@ const baseCommonMapper = {
   'kyc': {
    'success': {
     'top_icon': 'ic_read',
-    'top_title': '',
     'content': [
       'Press the X button to go back to Fisdom app and continue your journey.'
     ]
    },
    'cancelled': {
     'top_icon': 'ic_read',
-    'top_title': '',
     'content': [
       'Your KYC could not be completed. Please click on X button to go back to Fisdom app and resume your KYC journey.'
     ]
    },
    'failed': {
     'top_icon': 'ic_read',
-    'top_title': '',
     'content': [
       'Your KYC could not be completed. Please click on X button to go back to Fisdom app and resume your KYC journey.'
     ]
@@ -33,20 +30,17 @@ const baseCommonMapper = {
   'mandate': {
     'success': {
       'top_icon': 'ic_read',
-      'top_title': '',
       'content': [
         'Your KYC has been completed. Press the X button to go back to Fisdom app and continue your journey.'
       ]
      },
      'cancelled': {
       'top_icon': 'ic_read',
-      'top_title': '',
       'content': [
         'Press the X button to go back to Fisdom app and resume your KYC journey.'
       ]
      },
      'failed': {
-      'top_icon': 'ic_read',
       'top_title': '',
       'content': [
         'Your KYC could not be completed. Please click on X button to go back to Fisdom app and resume your KYC journey.'

@@ -1,4 +1,6 @@
-import { storageService, getEditTitle, inrFormatTest } from 'utils/validators';
+import { storageService, getEditTitle,
+    //  inrFormatTest 
+    } from 'utils/validators';
 import { getConfig } from 'utils/functions';
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
@@ -397,10 +399,10 @@ export function formHandleChange(name, event) {
     }
     var form_data = this.state.form_data || {};
 
-    if ((name === 'amount_required' || name === 'net_monthly_salary') &&
-        !inrFormatTest(value)) {
-        return;
-    }
+    // if ((name === 'amount_required' || name === 'net_monthly_salary') &&
+    //     !inrFormatTest(value)) {
+    //     return;
+    // }
 
     if (name === 'mobile_no' && value.length > 10) {
         return;

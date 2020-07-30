@@ -5,7 +5,8 @@ import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
 
 import {
-    formatAmount, numDifferentiation
+    // formatAmount, 
+    numDifferentiation
 } from 'utils/validators';
 import Input from '../../../common/ui/Input';
 import { initialize } from '../../common/functions';
@@ -160,9 +161,11 @@ class ContactDetails extends Component {
                             name="amount_required"
                             error={!!this.state.form_data.amount_required_error}
                             helperText={this.state.form_data.amount_required_error || numDifferentiation(this.state.form_data.amount_required)}
-                            value={formatAmount(this.state.form_data.amount_required || '')}
+                            // value={formatAmount(this.state.form_data.amount_required || '')}
+                            value={this.state.form_data.amount_required || ''}
                             onChange={this.handleChange('amount_required')}
-                            onKeyChange={this.handleKeyChange('amount_required')} />
+                            // onKeyChange={this.handleKeyChange('amount_required')} 
+                            />
                     </div>
                     <div className="InputField">
                         <DropdownWithoutIcon
@@ -228,9 +231,10 @@ class ContactDetails extends Component {
                             name="net_monthly_salary"
                             error={!!this.state.form_data.net_monthly_salary_error}
                             helperText={this.state.form_data.net_monthly_salary_error || numDifferentiation(this.state.form_data.net_monthly_salary)}
-                            value={formatAmount(this.state.form_data.net_monthly_salary || '')}
+                            value={this.state.form_data.net_monthly_salary || ''}
                             onChange={this.handleChange('net_monthly_salary')}
-                            onKeyChange={this.handleKeyChange('net_monthly_salary')} />
+                            // onKeyChange={this.handleKeyChange('net_monthly_salary')}
+                             />
                     </div>
                     {/* employment_type */}
                 </FormControl>
