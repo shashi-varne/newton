@@ -117,7 +117,7 @@ class MandatePan extends Component {
     })
     this.sendEvents('next');
 
-    var uploadurl = '/relay/api/document/loan/upload';
+    var uploadurl = '/relay/api/loan/document/upload';
     const data = new FormData()
     data.append('res', file);
     data.append('doc_type', 'pan');
