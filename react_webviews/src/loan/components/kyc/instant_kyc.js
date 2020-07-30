@@ -135,7 +135,7 @@ class InstantKycHome extends Component {
   kycCallback = async () => {
 
     this.setState({
-      show_loader: true
+      eligi_checking: true
     });
 
     let body = {
@@ -155,7 +155,7 @@ class InstantKycHome extends Component {
 
   triggerDecision = async () => {
     this.setState({
-      show_loader: true
+      eligi_checking: true
     });
     try {
 
@@ -172,7 +172,7 @@ class InstantKycHome extends Component {
 
       } else {
         this.setState({
-          show_loader: false
+          eligi_checking: false
         });
         toast(resultData.error || resultData.message
           || 'Something went wrong');
@@ -180,7 +180,7 @@ class InstantKycHome extends Component {
     } catch (err) {
       console.log(err)
       this.setState({
-        show_loader: false
+        eligi_checking: false
       });
       toast('Something went wrong');
     }
