@@ -219,7 +219,7 @@ class ContactDetails extends Component {
                             class="Name"
                             id="work_experience"
                             name="work_experience"
-                            placeholder="Minimum work experience of 1 yrs needed"
+                            placeholder="Minimum work experience of 1 yr needed"
                             error={!!this.state.form_data.work_experience_error}
                             helperText={this.state.form_data.work_experience_error}
                             value={this.state.form_data.work_experience || ''}

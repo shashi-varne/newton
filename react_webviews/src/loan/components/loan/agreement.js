@@ -401,7 +401,9 @@ const Agreement = (props) => {
                 <tr>
                     <td style={{width:'5px'}}>08.</td>
                     <td>Prepayment Charges</td>
-                    <td></td>
+                    <td>
+                    Prepayment not allowed for first 6 months. Prepayment charges of 3% flat on the o/s principal to be applied post this.
+                    </td>
                 </tr>
                 <tr>
                     <td style={{width:'5px'}}>09.</td>
