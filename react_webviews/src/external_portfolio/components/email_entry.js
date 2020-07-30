@@ -4,8 +4,8 @@ import toast from '../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import Input from '../../common/ui/Input';
-import { validateEmail } from '../../utils/validators.js';
-import { navigate, setLoader } from '../common/commonFunctions.js';
+import { validateEmail, storageService } from '../../utils/validators.js';
+import { navigate, setLoader, setPlatformAndUser } from '../common/commonFunctions.js';
 import { requestStatement, fetchEmails } from '../common/ApiCalls.js';
 import PopUp from '../common/PopUp.js';
 
@@ -22,6 +22,7 @@ class email_entry extends Component {
     };
     this.navigate = navigate.bind(this);
     this.setLoader = setLoader.bind(this);
+    setPlatformAndUser();
   }
 
   sendEvents(user_action) {
@@ -30,6 +31,7 @@ class email_entry extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'email entry',
+        performed_by: storageService().get('hni-platform') === 'rmapp' ? 'RM' : 'user',
       }
     };
     

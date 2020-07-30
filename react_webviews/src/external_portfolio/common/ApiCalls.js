@@ -22,6 +22,7 @@ export const requestStatement = async (params) => {
     const res = await Api.post('api/external_portfolio/cams/cas/send_mail', {
       ...params,
       platform,
+      user_id: storageService().get('hni-user') || undefined,
     });
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
@@ -50,7 +51,10 @@ export const fetchExternalPortfolio = async (params) => {
       storageService().remove('hni-holdings');
       resetBootFlag();
 
-      const res = await Api.get('api/external_portfolio/list/holdings', params);
+      const res = await Api.get('api/external_portfolio/list/holdings', {
+        ...params,
+        user_id: storageService().get('hni-user') || undefined,
+      });
       
       if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
         throw genericErrMsg;
@@ -79,10 +83,11 @@ export const fetchAllHoldings = async (params) => {
     const page_size = 10;
 
     if (boot || !holdings || isEmpty(holdings)) {
-      const res = await Api.get(
-        'api/external_portfolio/fetch/mf/holdings',
-        Object.assign({}, params, { page_size: page_size })
-      );
+      const res = await Api.get('api/external_portfolio/fetch/mf/holdings', {
+        ...params,
+        page_size,
+        user_id: storageService().get('hni-user') || undefined,
+      });
 
       if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
         throw genericErrMsg;
@@ -111,7 +116,10 @@ export const fetchEmails = async (params = {}) => {
 
     if (boot || !emails || isEmpty(emails) || params.email_id) {
       resetBootFlag();
-      const res = await Api.get('api/external_portfolio/list/emails/requests', params);
+      const res = await Api.get('api/external_portfolio/list/emails/requests', {
+        ...params,
+        user_id: storageService().get('hni-user') || undefined,
+      });
       
       if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
         throw genericErrMsg;
@@ -138,7 +146,10 @@ export const deleteEmail = async (params) => {
     // Deleting an email can result in deletion of PANs
     storageService().remove('hni-emails');
 
-    const res = await Api.get('api/external_portfolio/hni/remove/statements', params);
+    const res = await Api.get('api/external_portfolio/hni/remove/statements', {
+      ...params,
+      user_id: storageService().get('hni-user') || undefined,
+    });
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
@@ -162,7 +173,10 @@ export const fetchAllPANs = async (params) => {
 
     if (boot || !pans || isEmpty(pans)) {
       resetBootFlag();
-      const res = await Api.get('api/external_portfolio/hni/fetch/pans', params);
+      const res = await Api.get('api/external_portfolio/hni/fetch/pans', {
+        ...params,
+        user_id: storageService().get('hni-user') || undefined,
+      });
 
       if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
         throw genericErrMsg;
@@ -186,7 +200,10 @@ export const fetchAllPANs = async (params) => {
 
 export const hitNextPage = async (next_page, params) => {
   try {
-    const res = await Api.get(next_page, params);
+    const res = await Api.get(next_page, {
+      ...params,
+      user_id: storageService().get('hni-user') || undefined,
+    });
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;

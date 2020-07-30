@@ -6,6 +6,7 @@ import { fetchEmails, deleteEmail } from '../common/ApiCalls';
 import { setLoader, navigate, emailForwardedHandler, resetLSKeys } from '../common/commonFunctions';
 import PopUp from '../common/PopUp';
 import { nativeCallback } from 'utils/native_callback';
+import { storageService } from '../../utils/validators';
 
 let keyedEmails = {}; // Setting this outside of component/state since its unnecessary there
 function setKeyedEmails (emails) {
@@ -23,6 +24,7 @@ export default class Settings extends Component {
       openPopup: false,
       emails: [],
       removeClicked: false,
+      hideRemoveEmail: storageService().get('hni-platform') === 'rmapp', // Hide "Remove Email" option when webview is opened through RM App
     };
     this.setLoader = setLoader.bind(this);
     this.navigate = navigate.bind(this);
@@ -36,6 +38,7 @@ export default class Settings extends Component {
         "user_action": user_action,
         "screen_name": 'settings',
         remove_email_clicked: this.state.removeClicked,
+        performed_by: storageService().get('hni-platform') === 'rmapp' ? 'RM' : 'user',
       }
     };
     
@@ -77,6 +80,7 @@ export default class Settings extends Component {
   }
 
   setEmailRemove = (emails = []) => {
+    if (this.state.hideRemoveEmail) return emails;
     /* Logic: 
       1. For emails that have never been successfully synced even once
       (email.latest_success_statement is empty), the ‘remove’ control will always show.
@@ -145,7 +149,8 @@ export default class Settings extends Component {
   }
 
   render() {
-    const { emails, show_loader, loadingText } = this.state;
+    const { emails, show_loader, loadingText, hideRemoveEmail } = this.state;
+
     return (
       <Container
         title="Investment email ids"
@@ -163,7 +168,7 @@ export default class Settings extends Component {
           {emails.map(email => (
             <EmailExpand
               key={email.email}
-              allowRemove={email.allowRemove}
+              allowRemove={hideRemoveEmail ? false : email.allowRemove} // Hide "Remove Email" option when webview is opened through RM App
               parent={this}
               comingFrom="settings"
               emailForwardedHandler={() => this.emailForwardedHandler(email.email)}

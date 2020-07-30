@@ -3,7 +3,7 @@ import Container from '../common/Container';
 import EmailRequestSteps from '../mini-components/EmailRequestSteps';
 import { getConfig } from '../../utils/functions';
 import InfoBox from '../mini-components/InfoBox';
-import { navigate, emailForwardedHandler } from '../common/commonFunctions';
+import { navigate, emailForwardedHandler, setPlatformAndUser } from '../common/commonFunctions';
 import { nativeCallback } from 'utils/native_callback';
 import { storageService, getUrlParams } from '../../utils/validators';
 import toast from '../../common/ui/Toast';
@@ -26,6 +26,7 @@ class StatementRequest extends Component {
     this.navigate = navigate.bind(this);
     this.emailForwardedHandler = emailForwardedHandler.bind(this);
     this.setEntryPoint();
+    setPlatformAndUser();
   }
 
   setEntryPoint() {
@@ -45,6 +46,7 @@ class StatementRequest extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'statement request sent',
+        performed_by: storageService().get('hni-platform') === 'rmapp' ? 'RM' : 'user',
         email_look_clicked: params.comingFrom === 'email_example_view',
         entry_point: storageService().get('statement-req-entry-point') || null,
         status: this.state.showRegenerateBtn ? 'mail not recieved in 30 min' : 'before tracker setup',
