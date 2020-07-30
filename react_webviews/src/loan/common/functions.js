@@ -439,7 +439,7 @@ export function formHandleChange(name, event) {
         return;
     }
 
-    form_data[name] = value.replace(/,/g, "");
+    form_data[name] = typeof value === 'string' ?  value.replace(/,/g, "") : value;
     form_data[name + '_error'] = '';
 
     this.setState({
