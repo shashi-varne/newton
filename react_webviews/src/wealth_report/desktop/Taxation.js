@@ -10,6 +10,26 @@ export default class Taxation extends Component {
     };
   }
 
+  renderTaxDetailRow = () => {
+    return (
+      <div className="wr-taxation-detail-row">
+        <div className="wr-tdr-title">Overall STCG</div>
+        <div className="wr-small-col">
+          <span className="wr-small-col-val">₹ 12,421</span>
+          <span className="wr-small-col-title">Overall Tax</span>
+        </div>
+        <div className="wr-small-col">
+          <span className="wr-small-col-val">₹ 12,421</span>
+          <span className="wr-small-col-title">Overall Tax</span>
+        </div>
+        <div className="wr-small-col">
+          <span className="wr-small-col-val">₹ 12,421</span>
+          <span className="wr-small-col-title">Overall Tax</span>
+        </div>
+      </div>
+    );
+  }
+
   render() {
     const { tabSelected } = this.state;
     return (
@@ -46,12 +66,7 @@ export default class Taxation extends Component {
               {tab}
             </WrButton>
           ))}
-          <div className="wr-taxation-detail-row">
-            <div className="wr-tdr-title"></div>
-            <div className="wr-tdr-box"></div>
-            <div className="wr-tdr-box"></div>
-            <div className="wr-tdr-box"></div>
-          </div>
+          {this.renderTaxDetailRow()}
         </div>
       </div>
     );
