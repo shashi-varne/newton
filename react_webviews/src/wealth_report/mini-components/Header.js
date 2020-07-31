@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 
 const tabs = [
   {
@@ -45,17 +45,12 @@ class Header extends Component {
     });
   };
 
-  navigate = (pathname) => {
-    let searchParams = this.props.location.search;
-    this.props.history.push({
-      pathname: pathname,
-      search: searchParams,
-    });
+  selectTab = (tab) => {
     this.setState({
       dropdown_open: false,
-      activeTab: pathname
+      activeTab: tab
     })
-  };
+  }
 
   selectPan = (pan) => {
     this.setState({
@@ -79,7 +74,7 @@ class Header extends Component {
                 alt=""
               />
 
-              <div style={{ paddingLeft: "16px" }}>
+              <div style={{ padding: "0 75px 0 16px" }}>
                 <div style={{ fontSize: "15px", color:'#a9a9a9' }}>Showing report for</div>
                 <div className="wr-pan">{selectedPan}</div>
               </div>
@@ -99,9 +94,8 @@ class Header extends Component {
                     <img
                       src={require(`assets/fisdom/ic-added-pans.svg`)}
                       alt=""
-                      style={{ paddingLeft: "17px" }}
                     />
-                    <div style={{ paddingLeft: "16px" }}>
+                    <div style={{ padding: "0 75px 0 16px" }}>
                       <div style={{ fontSize: "15px", color:'#a9a9a9' }}>{`PAN ${++count}`}</div>
                       <div className="wr-pan">{pan}</div>
                     </div>
@@ -114,8 +108,8 @@ class Header extends Component {
         </div>
 
         {tabs.map(tab => (
-          <div
-            onClick={() => this.navigate(tab.id)}
+          <Link to={`${tab.id + this.props.location.search}`}
+            onClick={() => this.selectTab(tab.id)}
             className="wr-header-tab"
             style={{borderBottom: activeTab === tab.id ? 'solid 4px #6530af' : ''}}
           >
@@ -129,7 +123,7 @@ class Header extends Component {
             >
               {tab.name}
             </div>
-          </div>
+          </Link>
         ))}
 
       </div>
