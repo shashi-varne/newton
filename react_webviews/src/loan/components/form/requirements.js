@@ -6,7 +6,7 @@ import { FormControl } from 'material-ui/Form';
 
 import {
     // formatAmount, 
-    numDifferentiation
+    numDifferentiationInr
 } from 'utils/validators';
 import Input from '../../../common/ui/Input';
 import { initialize } from '../../common/functions';
@@ -158,14 +158,14 @@ class ContactDetails extends Component {
 
                     <div className="InputField">
                         <Input
-                            type="text"
+                            type="number"
                             width="40"
                             label="Loan amount (in rupees)"
                             class="Name"
                             id="amount_required"
                             name="amount_required"
                             error={!!this.state.form_data.amount_required_error}
-                            helperText={this.state.form_data.amount_required_error || numDifferentiation(this.state.form_data.amount_required)}
+                            helperText={this.state.form_data.amount_required_error || numDifferentiationInr(this.state.form_data.amount_required)}
                             // value={formatAmount(this.state.form_data.amount_required || '')}
                             value={this.state.form_data.amount_required || ''}
                             onChange={this.handleChange('amount_required')}
@@ -211,38 +211,41 @@ class ContactDetails extends Component {
                             onChange={this.handleChange('employment_type')} />
                     </div>
 
+                   {this.state.form_data.employment_type &&
                     <div className="InputField">
                         <Input
                             type="number"
                             width="40"
-                            label="Total work experience (years)"
+                            label={this.state.form_data.employment_type === 'Salaried' ?  "Total work experience (years)" : "Total business experience (years)"}
                             class="Name"
                             id="work_experience"
                             name="work_experience"
-                            placeholder="Minimum work experience of 1 yr needed"
+                            placeholder={this.state.form_data.employment_type === 'Salaried' ? 
+                            "Minimum work experience of 1 yr needed" : ""}
                             error={!!this.state.form_data.work_experience_error}
                             helperText={this.state.form_data.work_experience_error}
                             value={this.state.form_data.work_experience || ''}
                             onChange={this.handleChange('work_experience')} />
-                    </div>
+                    </div>}
 
+                   {this.state.form_data.employment_type &&
                     <div className="InputField">
                         <Input
-                            type="text"
+                            type="number"
                             width="40"
-                            label="Net monthly salary (in rupees)"
+                            label={this.state.form_data.employment_type === 'Salaried' ?  "Net monthly salary (in rupees)" : "Net monthly income (in rupees)"}
                             class="Name"
                             id="net_monthly_salary"
                             name="net_monthly_salary"
-                            placeholder="Minimum monthly salary of Rs 30,000 needed"
+                            placeholder={this.state.form_data.employment_type === 'Salaried' ? 
+                            "Minimum monthly salary of Rs 30,000 needed" : ""}
                             error={!!this.state.form_data.net_monthly_salary_error}
-                            helperText={this.state.form_data.net_monthly_salary_error || numDifferentiation(this.state.form_data.net_monthly_salary)}
+                            helperText={this.state.form_data.net_monthly_salary_error || numDifferentiationInr(this.state.form_data.net_monthly_salary)}
                             value={this.state.form_data.net_monthly_salary || ''}
                             onChange={this.handleChange('net_monthly_salary')}
                             // onKeyChange={this.handleKeyChange('net_monthly_salary')}
                              />
-                    </div>
-                    {/* employment_type */}
+                    </div>}
                 </FormControl>
             </Container>
         );

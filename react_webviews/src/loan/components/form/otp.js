@@ -215,19 +215,30 @@ class FormOtp extends Component {
           <div className="title">
            OTP Verification
                     </div>
+         {this.state.from_state !== 'loan-summary' &&
+          <div className="content">
+
+            OTP has been sent by DMI Finance Pvt Ltd to your mobile number 
+              {this.state.mobile_no &&
+              <span className="content-auth"> {this.state.mobile_no} </span>
+             } ,  
+              <span>Enter OTP to submit the loan application.</span>
+
+          </div>
+          }
+
+          {this.state.from_state === 'loan-summary' &&
           <div className="content">
 
             An OTP is sent to your mobile number
                         {this.state.mobile_no &&
-              <span> mobile number
+              <span>
                         <span className="content-auth"> {this.state.mobile_no} </span>
               </span>} ,  
-              {this.state.from_state === 'loan-summary' &&
-               <span>Enter OTP to complete the process.</span>}
-               {this.state.from_state !== 'loan-summary' &&
-               <span>Enter OTP to verify and submit loan application.</span>}
+              <span>Enter OTP to complete the process.</span>
 
           </div>
+          }
 
           <OtpDefault parent={this} />
           {this.state.otp_error &&

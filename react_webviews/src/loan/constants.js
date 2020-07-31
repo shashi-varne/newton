@@ -8,7 +8,7 @@ export function goBackMap(path) {
         '/loan/loan-approved': '/loan/home',
         '/loan/report-details': '/loan/home',
         // '/loan/form-otp': '/loan/journey',
-        '/loan/bank': '/loan/journey',
+        // '/loan/bank': '/loan/journey',
         '/loan/permissions': '/loan/home'
     }
 

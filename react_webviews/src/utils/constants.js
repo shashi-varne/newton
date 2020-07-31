@@ -90,7 +90,9 @@ export const themeConfig = {
                     backgroundColor: getConfig().secondary
                 },
                 backgroundColor: getConfig().secondary,
-                color: '#fff'
+                color: '#fff',
+                borderRadius: 4,
+                boxShadow: 'none'
             },
             disabled: {
                 // opacity: 0.4,

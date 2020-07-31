@@ -9,7 +9,6 @@ import { FormControl } from 'material-ui/Form';
 import toast from '../../../common/ui/Toast';
 import BottomInfo from '../../../common/ui/BottomInfo';
 import { numDifferentiationInr } from 'utils/validators';
-import { getConfig } from "utils/functions";
 
 class MandateBank extends Component {
   constructor(props) {
@@ -164,64 +163,6 @@ class MandateBank extends Component {
     })
 
   };
-
-  redirectMandate = async() => {
-
-    this.setState({
-      show_loader :true
-    })
-    const res = await Api.get(`/relay/api/loan/eMandate/application/${this.state.application_id}`);
-  
-        let resultData  = res.pfwresponse.result;
-        if (res.pfwresponse.status_code === 200 && !resultData.error) {
-
-          let paymentRedirectUrl = encodeURIComponent(
-            window.location.origin + `/loan/redirection-status/mandate` + getConfig().searchParams
-          );
-
-
-          let back_url = encodeURIComponent(
-            window.location.origin + `/loan/mandate-status` + getConfig().searchParams
-          );
-
-           // for web no issue
-           if(getConfig().Web) {
-            paymentRedirectUrl = back_url;
-          }
-
-          var payment_link = resultData.url;
-          var pgLink = payment_link;
-          let app = getConfig().app;
-          // eslint-disable-next-line
-          pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
-            '&app=' + app + '&back_url=' + back_url;
-          if (getConfig().generic_callback) {
-            pgLink += '&generic_callback=' + getConfig().generic_callback;
-          }
-
-          this.openInTabApp(
-            {
-              url: pgLink,
-              back_url: back_url
-            }
-          );
-
-          if(!getConfig().Web) {
-            this.setState({
-              show_loader: false
-            });
-          }
-          
-
-        } else {
-          this.setState({
-            show_loader: false
-          });
-
-          toast(resultData.error || resultData.message
-            || 'Something went wrong');
-        }
-  }
 
   handleClick = async () => {
     this.sendEvents('next');

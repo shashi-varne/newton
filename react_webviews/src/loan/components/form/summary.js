@@ -224,6 +224,8 @@ class FormSummary extends Component {
             accordianData: accordianData,
             application_info: application_info,
             vendor_info: vendor_info || {}
+        }, () => {
+            this.handleAccordian(0);
         })
     }
 
@@ -237,6 +239,11 @@ class FormSummary extends Component {
 
     handleClick = async () => {
         this.sendEvents('next');
+
+        if(this.state.agree_check !== 'agree') {
+            toast('It is mandatory to agree to Terms & Conditions for submitting your application.');
+            return;
+        }
 
         this.setState({
             show_loader: true
@@ -429,7 +436,7 @@ class FormSummary extends Component {
                 fullWidthButton={true}
                 onlyButton={true}
                 buttonTitle={'SUBMIT'}
-                disable={!(this.state.confirm_details_check && this.state.agree_check === 'agree')}
+                disable={!(this.state.confirm_details_check)}
                 handleClick={() => this.handleClick()}
                 headerData={{
                     icon: 'close'
@@ -437,7 +444,7 @@ class FormSummary extends Component {
             >
 
                 <div className="common-top-page-subtitle">
-                    Application no: <b>{this.state.application_info.application_id}</b>
+                    Application no.: <b>{this.state.application_info.application_id}</b>
                 </div>
                 <div className="loan-form-summary">
 
@@ -468,20 +475,20 @@ class FormSummary extends Component {
                     </div>
 
                     <div className="InputField" style={{ marginBottom: '0px !important' }}>
-                        <div className="CheckBlock2" style={{ margin: '10px 0' }}>
+                        <div className="CheckBlock2 checkbox-loan" style={{ margin: '10px 0' }}>
                             <Grid container spacing={16} alignItems="center">
                                 <Grid item xs={1} className="TextCenter">
                                     <Checkbox
                                         defaultChecked
                                         checked={this.state.confirm_details_check}
-                                        color="default"
+                                        color="secondary"
                                         value="confirm_details_check"
                                         name="confirm_details_check"
                                         onChange={this.handleChange()}
                                         className="Checkbox" />
                                 </Grid>
                                 <Grid item xs={11}>
-                                    <div className="checkbox-text">I confirm my above mentioned details </div>
+                                    <div className="checkbox-text"><span className="secondary-color">I confirm</span> my above mentioned details </div>
                                 </Grid>
                             </Grid>
                         </div>
@@ -491,11 +498,12 @@ class FormSummary extends Component {
                 opacity: this.state.confirm_details_check ? 1 : 0.4 }}>
                     We need your consent
                     </div>
-                    <div id="agreement" className="agreement-block" onScroll={this.onScroll}>
+                    <div id="agreement" className="agreement-block" style={{
+                opacity: this.state.confirm_details_check ? 1 : 0.4 }} onScroll={this.onScroll}>
                         {this.state.agreement.map(this.renderAgreement)}
                     </div>
 
-                    <div className="InputField" style={{ margin: '30px 0 50px 0', opacity: this.state.confirm_details_check && this.state.isScrolledToBottom ? 1 : 0.4 }}>
+                    <div className="InputField" style={{ margin: '30px 0 50px 0', opacity: this.state.confirm_details_check ? 1 : 0.4 }}>
                         <RadioWithoutIcon
                             width="40"
                             label="I/We confirm that I/We have understood the
@@ -504,7 +512,7 @@ class FormSummary extends Component {
                             options={agreeOptions}
                             id="agree_check"
                             name="agree_check"
-                            disabled={!(this.state.confirm_details_check && this.state.isScrolledToBottom)}
+                            disabled={!(this.state.confirm_details_check)}
                             error={(this.state.agree_check_error) ? true : false}
                             helperText={this.state.agree_check_error}
                             value={this.state.agree_check || ''}

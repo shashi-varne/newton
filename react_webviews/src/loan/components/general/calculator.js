@@ -4,7 +4,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
 import SliderWithValues from "../../../common/ui/SilderWithValues"
 import "../Style.scss";
-import { formatAmountInr } from "../../../utils/validators";
+import { inrFormatDecimal } from "../../../utils/validators";
 // import Button from '../../../common/ui/Button';
 
 class Calculator extends Component {
@@ -13,7 +13,7 @@ class Calculator extends Component {
     this.state = {
       show_loader: false,
       Net_monthly_Income: 90000,
-      Tenor: 3,
+      Tenor: 6,
       Other_EMIs: 10000,
       Monthly_expenses: 30000
     }
@@ -75,11 +75,15 @@ class Calculator extends Component {
     } = this.state;
 
     let Loan_Eligibility = (Net_monthly_Income - Other_EMIs - Monthly_expenses) * 40/100 * Tenor;
-    if(Loan_Eligibility <=0 || Loan_Eligibility > 100000) {
+
+    if(Net_monthly_Income < 30000) {
+      Loan_Eligibility = 0;
+    } else if(Loan_Eligibility > 100000) {
       Loan_Eligibility = 100000;
+    } else if(Loan_Eligibility <=0) {
+      Loan_Eligibility = 0;
     }
    
-
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -95,9 +99,9 @@ class Calculator extends Component {
             val="Net_monthly_Income"
             value={Net_monthly_Income}
             min="0"
-            max="2500000"
+            max="1000000"
             minValue="0"
-            maxValue="₹ 25 Lacs"
+            maxValue="₹ 10 Lacs"
             onChange={this.onChange}
           />
 
@@ -105,9 +109,9 @@ class Calculator extends Component {
             label="Loan tenor"
             val="Tenor"
             value={Tenor}
-            min="3"
+            min="6"
             max="24"
-            minValue="3 MONTHS"
+            minValue="6 MONTHS"
             maxValue="24 MONTHS"
             onChange={this.onChange}
           />
@@ -117,9 +121,9 @@ class Calculator extends Component {
             val="Other_EMIs"
             value={Other_EMIs}
             min="0"
-            max="2500000"
+            max="500000"
             minValue="0"
-            maxValue="₹ 25 Lacs"
+            maxValue="₹ 5 Lacs"
             onChange={this.onChange}
           />
 
@@ -128,16 +132,16 @@ class Calculator extends Component {
             val="Monthly_expenses"
             value={Monthly_expenses}
             min="0"
-            max="2500000"
+            max="1000000"
             minValue="0"
-            maxValue="₹ 25 Lacs"
+            maxValue="₹ 10 Lacs"
             onChange={this.onChange}
           />
 
           <div className="total-amount">
             <div>You are eligible for loan upto</div>
             <div className="total">
-              { formatAmountInr(Loan_Eligibility)}
+              { inrFormatDecimal(Loan_Eligibility)}
             </div>
             {/* <Button 
               type="default"

@@ -208,12 +208,12 @@ export function renderPopup() {
                 <DialogContentText>{this.state.popupText}</DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={this.handleClose} color="default">
-                    No
-          </Button>
                 <Button onClick={this.handlePopup} color="default" autoFocus>
                     Yes
-          </Button>
+                </Button>
+                <Button onClick={this.handleClose} color="default">
+                    No
+                </Button>
             </DialogActions>
         </Dialog>
     );

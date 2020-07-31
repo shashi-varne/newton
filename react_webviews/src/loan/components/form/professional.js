@@ -29,15 +29,40 @@ class ProfessionalDetails extends Component {
     componentWillMount() {
         this.initialize();
 
+      
         let eduQuaOptions = [
-            'Graduate',
-            'PG',
-            'Professional',
-            'Primary School (upto 5th)',
-            'Middle School (Illiterate)',
-            '10th',
-            '12th',
-            'Illiterate'
+            {
+                'name': 'Graduate',
+                'value': 'Graduate'
+            },
+            {
+                'name': 'Post Graduate',
+                'value': 'PG'
+            },
+            {
+                'name': 'Professional',
+                'value': 'Professional'
+            },
+            {
+                'name': 'Primary School (upto 5th)',
+                'value': 'Primary School (upto 5th)'
+            },
+            {
+                'name': 'Middle School (Illiterate)',
+                'value': 'Middle School (Illiterate)'
+            },
+            {
+                'name': '10th',
+                'value': '10th'
+            },
+            {
+                'name': '12th',
+                'value': '12th'
+            },
+            {
+                'name': 'Illiterate',
+                'value': 'Illiterate'
+            },
         ];
 
         this.setState({
@@ -181,6 +206,7 @@ class ProfessionalDetails extends Component {
                             helperText={this.state.form_data.educational_qualification_error}
                             value={this.state.form_data.educational_qualification || ''}
                             name="educational_qualification"
+                            dataType="AOB"
                             onChange={this.handleChange('educational_qualification')} />
                     </div>
                     <div className="InputField">

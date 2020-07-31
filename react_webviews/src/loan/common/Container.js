@@ -137,12 +137,12 @@ class Container extends Component {
               <DialogContentText>{this.state.popupText}</DialogContentText>
           </DialogContent>
           <DialogActions>
-              <Button onClick={this.handleClose} color="default">
-                  No
-        </Button>
               <Button onClick={this.handlePopup} color="default" autoFocus>
                   Yes
-        </Button>
+              </Button>
+              <Button onClick={this.handleClose} color="default">
+                  No
+              </Button>
           </DialogActions>
       </Dialog>
   );
@@ -160,7 +160,7 @@ class Container extends Component {
 
     if (this.state.mounted) { 
       return (
-        <div className={`ContainerWrapper ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`}  >
+        <div className={`ContainerWrapper loanMainContainer ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`}  >
           {/* Header Block */}
           {(!this.props.noHeader && !getConfig().hide_header) && !this.props.showLoader &&
           <Header

@@ -128,7 +128,7 @@ class LoanEligible extends Component {
             </div>
             <div>
               <div>Annual interest rate</div>
-                <div className="values">{vendor_info.loan_rate}</div>
+                <div className="values">{vendor_info.loan_rate}%</div>
             </div>
           </div>
 

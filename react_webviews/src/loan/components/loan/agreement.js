@@ -360,7 +360,7 @@ const Agreement = (props) => {
                 <tr>
                     <td style={{width:'5px'}}>01.</td>
                     <td>Loan Reference No.</td>
-                    <td></td>
+                    <td>{parentState.vendor_info.opportunity_name}</td>
                 </tr>
                 <tr>
                     <td style={{width:'5px'}}>02.</td>
@@ -376,7 +376,7 @@ const Agreement = (props) => {
                 <tr>
                     <td style={{width:'5px'}}>03.</td>
                     <td>Rate of Interest % P.A (Annualized)</td>
-                    <td>{parentState.vendor_info.loan_rate}</td>
+                    <td>{parentState.vendor_info.loan_rate}%</td>
                 </tr>
                 <tr>
                     <td style={{width:'5px'}}>04.</td>

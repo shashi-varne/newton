@@ -121,7 +121,13 @@ class MandateStatus extends Component {
 
   handleClick = () => {
     this.sendEvents('next');
-    this.navigate(this.state.commonMapper.cta_state);
+
+    if(this.state.status === 'failed') {
+      this.redirectMandate();
+    } else {
+      this.navigate(this.state.commonMapper.cta_state);
+    }
+    
   }
 
   goBack = () => {

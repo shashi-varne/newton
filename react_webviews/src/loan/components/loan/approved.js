@@ -76,7 +76,7 @@ class LoanApprvoed extends Component {
           />
           
           <div className="content">
-      Your application no <b>{this.state.application_info.application_id}</b> for Personal loan of <b>{inrFormatDecimal(this.state.vendor_info.approved_amount_decision)}</b> has been submitted and is under process.
+      Your application no. <b>{this.state.application_info.application_id}</b> for Personal loan of <b>{inrFormatDecimal(this.state.vendor_info.approved_amount_decision)}</b> has been submitted and is under process.
           </div>
 
           <div className="content">

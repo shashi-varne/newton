@@ -209,7 +209,7 @@ class KycStatus extends Component {
               alt="loader" />}
           </div>
           <div className="calculate">
-            Calculating KYC Status.
+          Fetching KYC status.
           </div>
 
           <div className="check-eligiblity">

@@ -185,6 +185,7 @@ class Landing extends Component {
         title="Personal loan"
         noHeader={this.state.show_loader}
         buttonTitle={this.state.top_cta_title}
+        noFooter={true}
         handleClick={this.handleClickTopCard}
         events={this.sendEvents('just_set_events')}
       >
@@ -199,7 +200,7 @@ class Landing extends Component {
               Personalised instant loan
             </div>
             <div className="button">
-              <Button variant="raised"
+              <Button  variant="raised"
                 size="large" color="secondary" autoFocus>
                 {this.state.top_cta_title}
                 </Button>
@@ -238,7 +239,7 @@ class Landing extends Component {
             <div style={{height:'112px', width:'172px', marginRight:'16px',
               backgroundImage: `url(${this.state.ic_why_hs})`
             }}>
-              <div className="card-info" style={{padding:'10px 0 30px 20px'}}>
+              <div className="card-info" style={{padding:'10px 0 10px 20px'}}>
               Get loan Instantly in your account with no human interaction
               </div>
               <div style={{float:'right', paddingRight:'22px'}}>
@@ -303,6 +304,12 @@ class Landing extends Component {
           In partnership with
           <img style={{marginLeft: 10}} src={dmi_logo} alt="" />
         </div>
+
+        <Button style={{height: 50}} fullWidth={true} variant="raised"
+                      size="large" onClick={this.handleClickTopCard} color="secondary"
+        >
+                    {this.state.top_cta_title}
+        </Button>
 
       </div>
       </Container>

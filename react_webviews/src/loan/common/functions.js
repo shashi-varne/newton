@@ -21,6 +21,7 @@ export async function initialize() {
     this.openInBrowser = openInBrowser.bind(this);
     this.openInTabApp = openInTabApp.bind(this);
     this.acceptAgreement = acceptAgreement.bind(this);
+    this.redirectMandate =redirectMandate.bind(this);
 
     nativeCallback({ action: 'take_control_reset' });
 
@@ -433,7 +434,7 @@ export function formHandleChange(name, event) {
     //     return;
     // }
 
-    if (name === 'mobile_no' && value.length > 10) {
+    if (['ref_contact_first', 'ref_contact_second', 'mobile_no'].indexOf(name) !== -1 && value.length > 10) {
         return;
     }
 
@@ -444,6 +445,64 @@ export function formHandleChange(name, event) {
         form_data: form_data
     })
 }
+
+export async function redirectMandate () {
+
+    this.setState({
+      show_loader :true
+    })
+    const res = await Api.get(`/relay/api/loan/eMandate/application/${this.state.application_id}`);
+  
+        let resultData  = res.pfwresponse.result;
+        if (res.pfwresponse.status_code === 200 && !resultData.error) {
+
+          let paymentRedirectUrl = encodeURIComponent(
+            window.location.origin + `/loan/redirection-status/mandate` + getConfig().searchParams
+          );
+
+
+          let back_url = encodeURIComponent(
+            window.location.origin + `/loan/mandate-status` + getConfig().searchParams
+          );
+
+           // for web no issue
+           if(getConfig().Web) {
+            paymentRedirectUrl = back_url;
+          }
+
+          var payment_link = resultData.url;
+          var pgLink = payment_link;
+          let app = getConfig().app;
+          // eslint-disable-next-line
+          pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
+            '&app=' + app + '&back_url=' + back_url;
+          if (getConfig().generic_callback) {
+            pgLink += '&generic_callback=' + getConfig().generic_callback;
+          }
+
+          this.openInTabApp(
+            {
+              url: pgLink,
+              back_url: back_url
+            }
+          );
+
+          if(!getConfig().Web) {
+            this.setState({
+              show_loader: false
+            });
+          }
+          
+
+        } else {
+          this.setState({
+            show_loader: false
+          });
+
+          toast(resultData.error || resultData.message
+            || 'Something went wrong');
+        }
+  }
 
 export async function decisionCallback() {
 

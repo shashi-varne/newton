@@ -82,6 +82,7 @@ class FormCreateProfile extends Component {
                 });
                 toast(resultData.error || resultData.message
                     || 'Something went wrong');
+                this.props.history.goBack();
             }
         } catch (err) {
             console.log(err)
@@ -116,6 +117,7 @@ class FormCreateProfile extends Component {
                 show_loader: false
             });
             toast('Something went wrong');
+            this.props.history.goBack();
         }
     }
 
@@ -149,6 +151,7 @@ class FormCreateProfile extends Component {
                 });
                 toast(result.error || result.message
                     || 'Something went wrong');
+                this.props.history.goBack();
             }
         } catch (err) {
             console.log(err)
@@ -189,9 +192,9 @@ class FormCreateProfile extends Component {
                 handleClick={() => this.handleClick()}
             >
                 <div >
-                    <div>
+                    <div style={{margin: '0 0 30px 0', textAlign: 'center'}}>
                         {this.state.productName && 
-                        <img style={{ width: '100%' }} src={require(`assets/${this.state.productName}/update_mobile.svg`)} alt="" />}
+                        <img src={require(`assets/${this.state.productName}/update_mobile.svg`)} alt="" />}
                     </div>
 
 
