@@ -5,26 +5,26 @@ const tabs = [
   {
     'name': 'Overview',
     'id': 'overview',
-    'color': '#a9a9a9',
-    'image': 'ic-nav-overview-inactive.svg'
+    'image-active': 'ic-nav-overview-active.svg',
+    'image-inactive': 'ic-nav-overview-inactive.svg'
   },
   {
     'name': 'Analysis',
     'id': 'analysis',
-    'color': '#a9a9a9',
-    'image': 'ic-nav-analysis-inactive.svg'
+    'image-active': 'ic-nav-analysis-active.svg',
+    'image-inactive': 'ic-nav-analysis-inactive.svg'
   },
   {
     'name': 'Holdings',
     'id': 'holdings',
-    'color': '#a9a9a9',
-    'image': 'ic-nav-holdings-inactive.svg'
+    'image-active': 'ic-nav-holdings-active.svg',
+    'image-inactive': 'ic-nav-holdings-inactive.svg'
   },
   {
     'name': 'Taxation',
     'id': 'taxation',
-    'color': '#a9a9a9',
-    'image': 'ic-nav-taxation-inactive.svg'
+    'image-active': 'ic-nav-taxation-active.svg',
+    'image-inactive': 'ic-nav-taxation-inactive.svg'
   }
 ];
 
@@ -35,6 +35,7 @@ class Header extends Component {
       dropdown_open: false,
       selectedPan: 'BXRPR87008N',
       pans: ['BXRPR87008N', 'QWCTE6223N', 'TRQEW2995K'],
+      activeTab: props.params
     };
   }
 
@@ -51,7 +52,8 @@ class Header extends Component {
       search: searchParams,
     });
     this.setState({
-      dropdown_open: false
+      dropdown_open: false,
+      activeTab: pathname
     })
   };
 
@@ -63,15 +65,15 @@ class Header extends Component {
   }
 
   render() {
-    let { params } = this.props;
-    let { dropdown_open, pans, selectedPan } = this.state;
+    let { dropdown_open, pans, selectedPan, activeTab } = this.state;
     let count = 1;
+    console.log(this.props)
 
     return (
       <div id="wr-header-bar">
         <div className="wr-pan-dropdown">
           <div className="wr-header-pan-select">
-            <div className="wr-pan-content" onClick={this.handleClick} style={{ paddingLeft: "17px" }}>
+            <div className="wr-pan-content" onClick={this.handleClick}>
               <img
                 src={require(`assets/fisdom/ic-added-pans.svg`)}
                 alt=""
@@ -115,14 +117,15 @@ class Header extends Component {
           <div
             onClick={() => this.navigate(tab.id)}
             className="wr-header-tab"
+            style={{borderBottom: activeTab === tab.id ? 'solid 4px #6530af' : ''}}
           >
             <img
-              src={require(`assets/fisdom/${tab.image}`)}
+              src={require(`assets/fisdom/${activeTab === tab.id ? tab["image-active"] : tab["image-inactive"]}`)}
               alt=""
             />
             <div
               className="wr-select"
-              style={{ color: tab.color }}
+              style={{ color: activeTab === tab.id ? '#000' : '#a9a9a9' }}
             >
               {tab.name}
             </div>
