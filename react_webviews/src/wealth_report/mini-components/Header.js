@@ -7,7 +7,7 @@ class Header extends Component {
     this.state = {
       dropdown_open: false,
       selectedPan: 'BXRPR87008N',
-      pans: ['BXRPR87008N', 'QWCTE6223N', 'TRQEW2995K', 'PRQEW2900K']
+      pans: ['BXRPR87008N', 'QWCTE6223N', 'TRQEW2995K']
     };
   }
 
@@ -52,7 +52,7 @@ class Header extends Component {
               />
 
               <div style={{ paddingLeft: "16px" }}>
-                <div style={{ fontSize: "15px" }}>Showing report for</div>
+                <div style={{ fontSize: "15px", color:'#a9a9a9' }}>Showing report for</div>
                 <div className="wr-pan">{selectedPan}</div>
               </div>
 
@@ -74,7 +74,7 @@ class Header extends Component {
                       style={{ paddingLeft: "17px" }}
                     />
                     <div style={{ paddingLeft: "16px" }}>
-                      <div style={{ fontSize: "15px" }}>{`PAN ${++count}`}</div>
+                      <div style={{ fontSize: "15px", color:'#a9a9a9' }}>{`PAN ${++count}`}</div>
                       <div className="wr-pan">{pan}</div>
                     </div>
                   </div>
