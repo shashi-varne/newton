@@ -3,24 +3,28 @@ import { withRouter } from "react-router-dom";
 
 const tabs = [
   {
-    'name': 'overview',
+    'name': 'Overview',
+    'id': 'overview',
     'color': '#a9a9a9',
     'image': 'ic-nav-overview-inactive.svg'
   },
   {
-    'name': 'analysis',
+    'name': 'Analysis',
+    'id': 'analysis',
     'color': '#a9a9a9',
-    'image': 'ic-nav-overview-inactive.svg'
+    'image': 'ic-nav-analysis-inactive.svg'
   },
   {
-    'name': 'holdings',
+    'name': 'Holdings',
+    'id': 'holdings',
     'color': '#a9a9a9',
-    'image': 'ic-nav-overview-inactive.svg'
+    'image': 'ic-nav-holdings-inactive.svg'
   },
   {
-    'name': 'taxation',
+    'name': 'Taxation',
+    'id': 'taxation',
     'color': '#a9a9a9',
-    'image': 'ic-nav-overview-inactive.svg'
+    'image': 'ic-nav-taxation-inactive.svg'
   }
 ];
 
@@ -31,7 +35,6 @@ class Header extends Component {
       dropdown_open: false,
       selectedPan: 'BXRPR87008N',
       pans: ['BXRPR87008N', 'QWCTE6223N', 'TRQEW2995K'],
-      // tabs: { overview: }
     };
   }
 
@@ -68,11 +71,10 @@ class Header extends Component {
       <div id="wr-header-bar">
         <div className="wr-pan-dropdown">
           <div className="wr-header-pan-select">
-            <div className="wr-pan-content" onClick={this.handleClick}>
+            <div className="wr-pan-content" onClick={this.handleClick} style={{ paddingLeft: "17px" }}>
               <img
                 src={require(`assets/fisdom/ic-added-pans.svg`)}
                 alt=""
-                style={{ paddingLeft: "17px" }}
               />
 
               <div style={{ paddingLeft: "16px" }}>
@@ -109,89 +111,24 @@ class Header extends Component {
           </div>
         </div>
 
-        <div>
-          {}
-        </div>
-
-        <div
-          onClick={() => this.navigate("overview")}
-          className="wr-header-tab"
-        >
-          <img
-            src={require(`assets/fisdom/${
-              params === "overview"
-                ? "ic-nav-overview-active.svg"
-                : "ic-nav-overview-inactive.svg"
-            }`)}
-            alt=""
-          />
+        {tabs.map(tab => (
           <div
-            className="wr-select"
-            style={{ color: params === "overview" ? "#000" : "#a9a9a9" }}
+            onClick={() => this.navigate(tab.id)}
+            className="wr-header-tab"
           >
-            Overview
+            <img
+              src={require(`assets/fisdom/${tab.image}`)}
+              alt=""
+            />
+            <div
+              className="wr-select"
+              style={{ color: tab.color }}
+            >
+              {tab.name}
+            </div>
           </div>
-        </div>
+        ))}
 
-        {/* <div
-          onClick={() => this.navigate("analysis")}
-          className="wr-header-tab"
-        >
-          <img
-            src={require(`assets/fisdom/${
-              params === "analysis"
-                ? "ic-nav-analysis-active.svg"
-                : "ic-nav-analysis-inactive.svg"
-            }`)}
-            alt=""
-          />
-          <div
-            className="wr-select"
-            style={{ color: params === "analysis" ? "#000" : "#a9a9a9" }}
-          >
-            Analysis
-          </div>
-        </div>
-
-        <div
-          onClick={() => this.navigate("holdings")}
-          className="wr-header-tab"
-        >
-          <img
-            src={require(`assets/fisdom/${
-              params === "holdings"
-                ? "ic-nav-holdings-active.svg"
-                : "ic-nav-holdings-inactive.svg"
-            }`)}
-            alt=""
-          />
-          <div
-            className="wr-select"
-            style={{ color: params === "holdings" ? "#000" : "#a9a9a9" }}
-          >
-            Holdings
-          </div>
-        </div>
-
-        <div
-          onClick={() => this.navigate("taxation")}
-          className="wr-header-tab"
-        >
-          <img
-            src={require(`assets/fisdom/${
-              params === "taxation"
-                ? "ic-nav-taxation-active.svg"
-                : "ic-nav-taxation-inactive.svg"
-            }`)}
-            alt=""
-          />
-          <div
-            className="wr-select"
-            style={{ color: params === "taxation" ? "#000" : "#a9a9a9" }}
-          >
-            Taxation
-          </div>
-        </div> */}
       </div>
     );
   }
