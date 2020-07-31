@@ -13,6 +13,7 @@ export default class MainPage extends Component {
   }
 
   renderTab = (tab) => {
+
     if (tab === 'overview') {
       return <Overview />;
     } else if (tab === 'holdings') {
@@ -28,7 +29,7 @@ export default class MainPage extends Component {
     return (
       <div style={{ width: '100%', height: '100%', background: 'white', overflow: 'scroll' }}>
         <div id="wr-header-hero"></div>
-        <Header params={params.tab} />
+        <Header />
         <div id="wr-body">
           {this.renderTab(params.tab)}
         </div>

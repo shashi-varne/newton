@@ -35,7 +35,7 @@ class Header extends Component {
       dropdown_open: false,
       selectedPan: 'BXRPR87008N',
       pans: ['BXRPR87008N', 'QWCTE6223N', 'TRQEW2995K'],
-      activeTab: props.params
+      activeTab: this.props.match.params.tab
     };
   }
 
@@ -62,7 +62,6 @@ class Header extends Component {
   render() {
     let { dropdown_open, pans, selectedPan, activeTab } = this.state;
     let count = 1;
-    console.log(this.props)
 
     return (
       <div id="wr-header-bar">
@@ -82,7 +81,6 @@ class Header extends Component {
               <img
                 src={require("assets/fisdom/ic-dropdown.svg")}
                 alt=""
-                className="wr-dropdown"
               />
             </div>
 
@@ -111,7 +109,7 @@ class Header extends Component {
           <Link to={`${tab.id + this.props.location.search}`}
             onClick={() => this.selectTab(tab.id)}
             className="wr-header-tab"
-            style={{borderBottom: activeTab === tab.id ? 'solid 4px #6530af' : ''}}
+            style={{borderBottom: activeTab === tab.id ? 'solid 4px var(--primary)' : ''}}
           >
             <img
               src={require(`assets/fisdom/${activeTab === tab.id ? tab["image-active"] : tab["image-inactive"]}`)}
