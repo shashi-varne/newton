@@ -42,7 +42,7 @@ class Header extends Component {
 
     return (
       <div id="wr-header-bar">
-        <div>
+        <div className="wr-pan-dropdown">
           <div className="wr-header-pan-select">
             <div className="wr-pan-content" onClick={this.handleClick}>
               <img
