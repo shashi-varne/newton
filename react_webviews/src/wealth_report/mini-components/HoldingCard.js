@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import WrButton from '../common/Button';
 import WrTable from './WrTable';
+import { IconButton } from '@material-ui/core';
 
 export default class HoldingCard extends Component {
   constructor(props) {
@@ -62,11 +63,12 @@ export default class HoldingCard extends Component {
             <span className="wr-small-col-title">IRR</span>
           </div>
           <div>
-            <img
-              src={require(`assets/fisdom/${expanded ? 'down_arrow_fisdom' : 'ic-right-chevron' }.svg`)}
-              alt="expand"
-              onClick={() => this.setState({ expanded: !this.state.expanded })}
-              style={{ cursor: 'pointer' }}/>
+            <IconButton classes={{ root: 'wr-icon-button' }} color="inherit" aria-label="Menu" onClick={() => this.setState({ expanded: !this.state.expanded })}>
+              <img
+                src={require(`assets/fisdom/${expanded ? 'down_arrow_fisdom' : 'ic-right-chevron' }.svg`)}
+                alt="expand"
+                style={{ cursor: 'pointer' }}/>
+            </IconButton>
           </div>
         </div>
         {expanded ? 

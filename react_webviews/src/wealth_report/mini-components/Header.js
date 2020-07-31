@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
+import { IconButton } from "@material-ui/core";
 
 const tabs = [
   {
@@ -78,10 +79,12 @@ class Header extends Component {
                 <div className="wr-pan">{selectedPan}</div>
               </div>
 
-              <img
-                src={require("assets/fisdom/ic-dropdown.svg")}
-                alt=""
-              />
+              <IconButton classes={{ root: 'wr-icon-button' }} color="inherit" aria-label="Menu">
+                <img
+                  src={require("assets/fisdom/ic-dropdown.svg")}
+                  alt=""
+                />
+              </IconButton>
             </div>
 
             <div style={{ display: dropdown_open ? "inherit" : "none" }}>

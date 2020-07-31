@@ -1,3 +1,9 @@
+.wr-icon-button {
+  border-radius: 100px !important;
+  height: 48px !important;
+  width: 48px !important;
+}
+
 .wr-table {
   width: 100%;
   border-spacing: 0;
@@ -204,5 +210,47 @@ span.wr-small-col-title {
     margin-top: 6px;
     font-weight: 500;
     width: 128px;
+  }
+}
+
+#wr-email-list {
+  .wr-email-list-item {
+    padding-top: 16px;
+  }
+}
+
+#wr-email-list-title {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.5);
+  margin-top: 26px;
+}
+
+.wr-email-list-item {
+  padding: 24px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: solid 0.5px rgba(151, 151, 151, 0.1);;
+  
+  span.wr-eli-email {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  span.wr-eli-synced {
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.5);
+  }
+}
+
+.wr-add-email-btn {
+  background-color: rgba(80, 45, 168, 0.1) !important;
+  
+  .MuiButton-label {
+    color: var(--primary);
+    font-weight: 600;
+    text-transform: capitalize;
   }
 }
