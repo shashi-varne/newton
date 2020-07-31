@@ -46,14 +46,18 @@ class LoanSummary extends Component {
     let personal_info = lead.personal_info || {};
     let application_info = lead.application_info || {};
     let address_info = lead.address_info || {};
-    let bank_info = lead.bank_info || {}
+    let bank_info = lead.bank_info || {};
+
+    let currentDate = new Date().toISOString().slice(0, 10);
+    currentDate = currentDate.replace(/\\-/g, '/').split('-').reverse().join('/');
     this.setState({
       vendor_info: vendor_info,
       personal_info :personal_info,
       application_info:application_info,
       address_info:address_info,
       bank_info:bank_info,
-      current_address_data: lead.current_address_data || {}
+      current_address_data: lead.current_address_data || {},
+      currentDate:currentDate
     })
 
   }

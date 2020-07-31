@@ -350,7 +350,7 @@ const Agreement = (props) => {
                 </tr>
                 <tr>
                     <td>Date:</td>
-                    <td>{parentState.vendor_info.dt_agreement} </td>
+                    <td>{parentState.currentDate} </td>
                 </tr>
                 </tbody>
             </table>

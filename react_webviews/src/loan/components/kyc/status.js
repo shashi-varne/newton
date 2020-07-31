@@ -55,7 +55,7 @@ const commonMapper = {
   },
   'loan_not_eligible': {
     'top_icon': 'ils_loan_failed',
-    'top_title': 'Not eligible for loan!',
+    'top_title': 'Not eligible for loan',
     'mid_title': '',
     'button_title': 'OK',
     'cta_state': '/loan/home',
