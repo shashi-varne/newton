@@ -1,6 +1,29 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 
+const tabs = [
+  {
+    'name': 'overview',
+    'color': '#a9a9a9',
+    'image': 'ic-nav-overview-inactive.svg'
+  },
+  {
+    'name': 'analysis',
+    'color': '#a9a9a9',
+    'image': 'ic-nav-overview-inactive.svg'
+  },
+  {
+    'name': 'holdings',
+    'color': '#a9a9a9',
+    'image': 'ic-nav-overview-inactive.svg'
+  },
+  {
+    'name': 'taxation',
+    'color': '#a9a9a9',
+    'image': 'ic-nav-overview-inactive.svg'
+  }
+];
+
 class Header extends Component {
   constructor(props) {
     super(props);
@@ -86,6 +109,10 @@ class Header extends Component {
           </div>
         </div>
 
+        <div>
+          {}
+        </div>
+
         <div
           onClick={() => this.navigate("overview")}
           className="wr-header-tab"
@@ -106,7 +133,7 @@ class Header extends Component {
           </div>
         </div>
 
-        <div
+        {/* <div
           onClick={() => this.navigate("analysis")}
           className="wr-header-tab"
         >
@@ -164,7 +191,7 @@ class Header extends Component {
           >
             Taxation
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }
