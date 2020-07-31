@@ -177,7 +177,7 @@ class AddressDetails extends Component {
             >
                 <FormControl fullWidth>
                     <div style={{color: '#64778D',fontSize: 13, fontWeight: 300,margin: '0 0 6px 0'}}>
-                    Current residence detail
+                    Aadhaar Address Details
                     </div>
                     <div className="InputField">
                         <DropdownWithoutIcon
@@ -196,7 +196,7 @@ class AddressDetails extends Component {
                         <Input
                             type="number"
                             width="40"
-                            label="No of months in current residence"
+                            label="No of yrs in residence"
                             placeholder="Minimum requirement is 6 months"
                             class="Name"
                             id="duration"

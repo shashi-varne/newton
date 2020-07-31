@@ -87,7 +87,7 @@ class LoanSummary extends Component {
       if (res.pfwresponse.status_code === 200 && !result.error) {
         if (result.resend_otp_url !== '' && result.verify_otp_url !== '') {
 
-          var message = 'An OTP is sent to your mobile number ' + result.mobile_no + ',  Enter OTP to verify and complete loan application.'
+          var message = 'An OTP is sent to your mobile number ' + result.mobile_no + '.  Enter OTP to verify and complete loan application.'
           this.props.history.push({
             pathname: 'form-otp',
             search: getConfig().searchParams,

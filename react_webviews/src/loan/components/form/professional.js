@@ -48,8 +48,8 @@ class ProfessionalDetails extends Component {
                 'value': 'Primary School (upto 5th)'
             },
             {
-                'name': 'Middle School (Illiterate)',
-                'value': 'Middle School (Illiterate)'
+                'name': 'Middle School (upto 8th)',
+                'value': 'Middle School (upto 8th)'
             },
             {
                 'name': '10th',
