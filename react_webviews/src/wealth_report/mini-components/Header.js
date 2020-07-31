@@ -7,7 +7,8 @@ class Header extends Component {
     this.state = {
       dropdown_open: false,
       selectedPan: 'BXRPR87008N',
-      pans: ['BXRPR87008N', 'QWCTE6223N', 'TRQEW2995K']
+      pans: ['BXRPR87008N', 'QWCTE6223N', 'TRQEW2995K'],
+      // tabs: { overview: }
     };
   }
 
@@ -103,10 +104,6 @@ class Header extends Component {
           >
             Overview
           </div>
-          <div
-            className="generic-hr"
-            style={{ display: params === "overview" ? "inherit" : "none" }}
-          ></div>
         </div>
 
         <div
@@ -127,10 +124,6 @@ class Header extends Component {
           >
             Analysis
           </div>
-          <div
-            className="generic-hr"
-            style={{ display: params === "analysis" ? "inherit" : "none" }}
-          ></div>
         </div>
 
         <div
@@ -151,10 +144,6 @@ class Header extends Component {
           >
             Holdings
           </div>
-          <div
-            className="generic-hr"
-            style={{ display: params === "holdings" ? "inherit" : "none" }}
-          ></div>
         </div>
 
         <div
@@ -175,10 +164,6 @@ class Header extends Component {
           >
             Taxation
           </div>
-          <div
-            className="generic-hr"
-            style={{ display: params === "taxation" ? "inherit" : "none" }}
-          ></div>
         </div>
       </div>
     );
