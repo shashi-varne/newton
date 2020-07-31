@@ -12,9 +12,9 @@ class Calculator extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      Net_monthly_Income: 90000,
-      Tenor: 6,
-      Other_EMIs: 10000,
+      Net_monthly_Income: 75000,
+      Tenor: 18,
+      Other_EMIs: 0,
       Monthly_expenses: 30000
     }
 
