@@ -35,7 +35,7 @@ export default class Overview extends Component {
           <div className="wr-okn-value">₹ 56.3L</div>
         </div>
         <div className="wr-okn-box">
-          <div className="wr-okn-title" style={{alignItems:'center'}}>XIRR
+          <div className="wr-okn-title">XIRR
             <Tooltip />
           </div>
           <div className="wr-okn-value">17%</div>

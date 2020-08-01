@@ -24,23 +24,16 @@ const styles = theme => ({
 });
 
 class CustomizedTooltips extends React.Component {
-  constructor(props) {
-    super(props);
-    this.myRef = React.createRef();
+
+  state = {
+    arrowRef: null,
   }
 
-
-    state = {
-        arrowRef: null,
-      }
-    
-      handleArrowRef = node => {
-        console.log(node)
-        this.setState({
-          arrowRef: node,
-        })
-        return node;
-      }
+  handleArrowRef = node => {
+    this.setState({
+      arrowRef: node,
+    })
+  }
 
   render() {
     const { classes } = this.props;
@@ -72,7 +65,7 @@ class CustomizedTooltips extends React.Component {
         >
         <img
           src={require(`assets/fisdom/ic-info-xirr-overview.svg`)}
-          style={{marginLeft:'300px', marginTop:'0px'}}
+          style={{marginLeft:'6px'}}
           alt=""
         />
         </Tooltip>

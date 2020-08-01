@@ -57,7 +57,6 @@ const WealthReport = (props) => {
           <Route path={`${url}/login`} component={Login} />
           <Route path={`${url}/main/:tab`} component={MainPage} />
           <Route path={`${url}/main`} component={MainPage} />
-          <Route path={`${url}/test/te`} component={Test} />
           <Route component={NotFound} />
           
         </Switch>
