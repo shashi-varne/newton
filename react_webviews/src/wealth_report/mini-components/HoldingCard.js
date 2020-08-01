@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import WrButton from '../common/Button';
 import WrTable from './WrTable';
+import { IconButton } from '@material-ui/core';
 
 export default class HoldingCard extends Component {
   constructor(props) {
@@ -14,24 +15,24 @@ export default class HoldingCard extends Component {
   renderFundDetails = () => (
     <div id="wr-hce-fund-details">
       <div>
-        <span className="wr-hc-col-val">10 Aug, 2016</span>
-        <span className="wr-hc-col-title">Launch Date</span>
+        <span className="wr-small-col-val">10 Aug, 2016</span>
+        <span className="wr-small-col-title">Launch Date</span>
       </div>
       <div>
-        <span className="wr-hc-col-val">₹ 1.2Cr </span>
-        <span className="wr-hc-col-title">AUM</span>
+        <span className="wr-small-col-val">₹ 1.2Cr </span>
+        <span className="wr-small-col-title">AUM</span>
       </div>
       <div>
-        <span className="wr-hc-col-val">₹ 1.6L</span>
-        <span className="wr-hc-col-title">1 Year Return</span>
+        <span className="wr-small-col-val">₹ 1.6L</span>
+        <span className="wr-small-col-title">1 Year Return</span>
       </div>
       <div>
-        <span className="wr-hc-col-val">₹ 4.5L</span>
-        <span className="wr-hc-col-title">3 Year Return</span>
+        <span className="wr-small-col-val">₹ 4.5L</span>
+        <span className="wr-small-col-title">3 Year Return</span>
       </div>
       <div>
-        <span className="wr-hc-col-val">₹ 6.7L</span>
-        <span className="wr-hc-col-title">5 Year Return</span>
+        <span className="wr-small-col-val">₹ 6.7L</span>
+        <span className="wr-small-col-title">5 Year Return</span>
       </div>
     </div>
   );
@@ -49,24 +50,25 @@ export default class HoldingCard extends Component {
       <div className="wr-card-template">
         <div className="wr-holding-card">
           {AMCDetail()}
-          <div className="wr-hc-col">
-            <span className="wr-hc-col-val">₹ 10.3L</span>
-            <span className="wr-hc-col-title">Invested Amount</span>
+          <div className="wr-small-col">
+            <span className="wr-small-col-val">₹ 10.3L</span>
+            <span className="wr-small-col-title">Invested Amount</span>
           </div>
-          <div className="wr-hc-col">
-            <span className="wr-hc-col-val">₹ 12.5L</span>
-            <span className="wr-hc-col-title">Current Value</span>
+          <div className="wr-small-col">
+            <span className="wr-small-col-val">₹ 12.5L</span>
+            <span className="wr-small-col-title">Current Value</span>
           </div>
-          <div className="wr-hc-col">
-            <span className="wr-hc-col-val">23%</span>
-            <span className="wr-hc-col-title">IRR</span>
+          <div className="wr-small-col">
+            <span className="wr-small-col-val">23%</span>
+            <span className="wr-small-col-title">IRR</span>
           </div>
           <div>
-            <img
-              src={require(`assets/fisdom/${expanded ? 'down_arrow_fisdom' : 'ic-right-chevron' }.svg`)}
-              alt="expand"
-              onClick={() => this.setState({ expanded: !this.state.expanded })}
-              style={{ cursor: 'pointer' }}/>
+            <IconButton classes={{ root: 'wr-icon-button' }} color="inherit" aria-label="Menu" onClick={() => this.setState({ expanded: !this.state.expanded })}>
+              <img
+                src={require(`assets/fisdom/${expanded ? 'down_arrow_fisdom' : 'ic-right-chevron' }.svg`)}
+                alt="expand"
+                style={{ cursor: 'pointer' }}/>
+            </IconButton>
           </div>
         </div>
         {expanded ? 
@@ -86,7 +88,7 @@ export default class HoldingCard extends Component {
               </WrButton>
               )
             )}
-            <div className="wr-hce-fund-details">
+            <div>
               {tabSelected === 'fund' ?
                 this.renderFundDetails() : this.renderPastTransactions()
               }

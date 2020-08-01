@@ -440,6 +440,7 @@ input#pan {
 .LoaderOverlayText {
   color: #0A1D32;
   font-size: 14px;
+  line-height: 19px;
   margin: 10px 0 0 0;
   font-weight: 400;
 }
@@ -603,7 +604,7 @@ input#pan {
 .header-title-page {
   background: white;
   color: #0A1C32;
-  height: 50px;
+  min-height: 50px;
   display: flex;
   align-items: flex-end;
   padding: 0 15px 0 15px;
