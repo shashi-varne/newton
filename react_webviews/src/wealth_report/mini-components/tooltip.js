@@ -19,7 +19,6 @@ const styles = theme => ({
       borderWidth: '10px',
       borderStyle: 'solid',
       borderColor: 'transparent transparent #ffffff transparent',
-      
     },
 });
 
