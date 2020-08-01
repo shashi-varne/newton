@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { LinearProgress, createMuiTheme, MuiThemeProvider } from 'material-ui';
 import Graph from './Graph';
+import Tooltip from '../mini-components/tooltip';
 
 const theme = createMuiTheme({
   overrides: {
@@ -34,7 +35,9 @@ export default class Overview extends Component {
           <div className="wr-okn-value">₹ 56.3L</div>
         </div>
         <div className="wr-okn-box">
-          <div className="wr-okn-title">XIRR</div>
+          <div className="wr-okn-title" style={{alignItems:'center'}}>XIRR
+            <Tooltip />
+          </div>
           <div className="wr-okn-value">17%</div>
         </div>
         <div className="wr-okn-box">
@@ -73,7 +76,7 @@ const assetAllocNums = (val) => (
 
 const portfolioCard = (title, subtitle, icon, desc) => (
   <div className="wr-pi-card">
-    <img src={require('assets/fisdom/ic-investment-strategy.svg')}/>
+    <img src={require('assets/fisdom/ic-investment-strategy.svg')} alt="" />
     <div className="wr-pi-content">
       <div className="wr-pi-content-title">
         Investment Strategy
