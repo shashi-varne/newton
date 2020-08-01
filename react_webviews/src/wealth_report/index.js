@@ -56,7 +56,6 @@ const WealthReport = (props) => {
           <Route path={`${url}/login`} component={Login} />
           <Route path={`${url}/main/:tab`} component={MainPage} />
           <Route path={`${url}/main`} component={MainPage} />
-          <Route path={`${url}/test`} component={Test}/>
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>
