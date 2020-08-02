@@ -5,7 +5,7 @@ import HoldingFilter from '../mini-components/holdingFilter';
 export default class Holdings extends Component {
   render() {
     return (
-      <div>
+      <div className="wr">
         <HoldingFilter />
         <HoldingCard />
       </div>

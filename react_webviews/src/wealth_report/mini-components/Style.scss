@@ -259,20 +259,14 @@ span.wr-small-col-title {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 40px;
-  
-    
-    .wr-button {
-      background-color: var(--primary);
-      color: #ffffff;
-      box-shadow: none;
-      text-transform: none;
-      font-size: 13px;
-      font-weight: 400;
-      border-radius: 15px; 
-    }
-  
-    .wr-button:hover {
-      background-color: var(--primary);
+
+    .wr-btn {
+      background-color: var(--primary) !important;
+      border-radius: 15px;
+      .MuiButton-label {
+        font-size: 13px;
+        padding: 0 7px 0 7px
+      }
     }
   }
   
@@ -292,21 +286,27 @@ span.wr-small-col-title {
       font-size: 13px;
       color: #150731;
     }
-
-    .wr-button {
-      background-color: rgba(149, 149, 149, 0.08);
-      color: #150731;
-      box-shadow: none;
-      text-transform: none;
-      font-size: 13px;
-      font-weight: 400;
+  
+    .wr-btn {
+      background-color: rgba(149, 149, 149, 0.08) !important;
       border-radius: 15px;
       margin-left: 12px;
+      .MuiButton-label {
+        font-size: 13px;
+        padding: 0 8px 0 8px;
+        color: #150731
+      }
     }
-  
-    // .wr-button:hover {
-    //   background-color: var(--primary);
-    // }
+
+    .wr-select-btn {
+      background-color: var(--primary) !important;
+      border-radius: 15px;
+      margin-left: 12px;
+      .MuiButton-label {
+        font-size: 13px;
+        padding: 0 8px 0 8px;
+      }
+    }
 
     .vl {
       border-left: 1px solid #150731;

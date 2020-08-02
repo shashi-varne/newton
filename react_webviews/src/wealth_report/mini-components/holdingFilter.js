@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
-import Button from '@material-ui/core/Button';
 import Grow from '@material-ui/core/Grow';
+import WrButton from '../common/Button';
 
 const Filters = [
     {
-        'category': 'Fund Type:',
-        'filter': ['Debt', 'Equity', 'Other']
+        'category': 'Fund Type',
+        'filters': ['Debt', 'Equity', 'Other']
     },
     {
-        'category': 'Current Value:',
-        'filter': ['<1L', '1.5L', '5-10L', '10L+']
+        'category': 'Current Value',
+        'filters': ['<1L', '1.5L', '5-10L', '10L+']
     },
     {
-        'category': 'Fisdom Rating:',
-        'filter': ['3 & Below', '4 & above']
+        'category': 'Fisdom Rating',
+        'filters': ['3 & Below', '4 & above']
     }
 ]
 
@@ -22,7 +22,7 @@ export default class HoldingFilter extends Component {
     super(props);
     this.state = {
       clicked: false,
-      checked: false,
+      checked: false
     };
   }
 
@@ -33,23 +33,29 @@ export default class HoldingFilter extends Component {
     })
   }
 
+  selectCategory = (category, filter) => {
+    this.setState({
+      [category]: filter
+    })
+  }
+
   render() {
-    let { clicked, checked } = this.state;
+    let { clicked, checked} = this.state;
     let time = 1500;
 
     return (
       <React.Fragment>
         <div className="wr-filter" style={{display: clicked ? 'none' : 'flex'}}>
-          <Button
-            variant="contained"
-            disableRipple
-            className="wr-button"
-            onClick={this.handleClick}
-            size="small"
+          <WrButton 
+          classes={{
+            root: 'wr-btn'
+          }}
+          disableRipple size="small"
+          onClick={this.handleClick}
           >
             Filter
-            <img src={require(`assets/fisdom/ic-filter.svg`)} alt="" style={{marginLeft:'8px'}}/>
-          </Button>
+              <img src={require(`assets/fisdom/ic-filter.svg`)} alt="" style={{marginLeft:'8px'}}/>
+          </WrButton>
         </div>
 
         <div className="wr-filter-content" style={{display: clicked ? 'flex' : 'none'}}>
@@ -59,25 +65,28 @@ export default class HoldingFilter extends Component {
               return (
                 <Grow in={checked}
                  {...(checked ? { timeout: time } : {})}
+                 key={item.category}
                  >
                   <div className="wr-head">
-                    {item.category}
-                    {item.filter.map(item => (
-                      <Button
-                          variant="contained"
-                          disableRipple
-                          className="wr-button"
-                          size="small"
+                    {`${item.category}:`}
+                    {item.filters.map(filter => (
+                      <WrButton 
+                        key={filter}
+                        classes={{
+                          root: this.state[item.category] === filter ? 'wr-select-btn' : 'wr-btn'
+                        }}
+                        disableRipple size="small"
+                        onClick={() => this.selectCategory(item.category, filter)}
                       >
-                        {item}
-                      </Button>
+                        {filter}
+                      </WrButton>
                     ))}
                   </div>
                 </Grow>
             )})}
           </div>
             
-          <div class="vl"></div>
+          <div className="vl"></div>
           <img src={require(`assets/fisdom/ic-clear-filter.svg`)} alt=""
            style={{marginLeft:'16px', cursor: 'pointer' }}
            onClick={this.handleClick}
