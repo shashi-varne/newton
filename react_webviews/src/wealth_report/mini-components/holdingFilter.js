@@ -4,14 +4,17 @@ import WrButton from '../common/Button';
 
 const Filters = [
     {
+        'id': 'fund_type',
         'category': 'Fund Type',
         'filters': ['Debt', 'Equity', 'Other']
     },
     {
+        'id': 'current_value',
         'category': 'Current Value',
         'filters': ['<1L', '1.5L', '5-10L', '10L+']
     },
     {
+        'id': 'rating',
         'category': 'Fisdom Rating',
         'filters': ['3 & Below', '4 & above']
     }
@@ -22,21 +25,33 @@ export default class HoldingFilter extends Component {
     super(props);
     this.state = {
       clicked: false,
-      checked: false
+      checked: false,
+      fund_type: '',
+      current_value: '',
+      rating: ''
     };
   }
 
   handleClick = () => {
     this.setState({
       clicked: !this.state.clicked,
-      checked: !this.state.checked
+      checked: !this.state.checked,
+      fund_type: '',
+      current_value: '',
+      rating: ''
     })
   }
 
   selectCategory = (category, filter) => {
     this.setState({
       [category]: filter
-    })
+    });
+
+    if (this.state[category] === filter) {
+      this.setState({
+        [category]: ''
+      })
+    };
   }
 
   render() {
@@ -73,10 +88,10 @@ export default class HoldingFilter extends Component {
                       <WrButton 
                         key={filter}
                         classes={{
-                          root: this.state[item.category] === filter ? 'wr-select-btn' : 'wr-btn'
+                          root: this.state[item.id] === filter ? 'wr-select-btn' : 'wr-btn'
                         }}
                         disableRipple size="small"
-                        onClick={() => this.selectCategory(item.category, filter)}
+                        onClick={() => this.selectCategory(item.id, filter)}
                       >
                         {filter}
                       </WrButton>

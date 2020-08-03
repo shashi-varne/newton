@@ -28,15 +28,19 @@ export default class MainPage extends Component {
     const { params } = this.props.match;
     console.log(params);
     return (
+      <React.Fragment>
       <div style={{ width: '100%', height: '100%', background: 'white', overflow: 'scroll' }}>
         <div id="wr-header-hero"></div>
         <Header />
         <div id="wr-body">
           {this.renderTab(params.tab)}
         </div>
-        <div id="wr-footer"></div>
+        <div id="wr-footer">
         <Footer />
+        </div>
       </div>
+      
+      </React.Fragment>
     );
   }
 }
