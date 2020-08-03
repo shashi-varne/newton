@@ -6,6 +6,7 @@ import SliderWithValues from "../../../common/ui/SilderWithValues"
 import "../Style.scss";
 import { inrFormatDecimal } from "../../../utils/validators";
 // import Button from '../../../common/ui/Button';
+import { getConfig} from 'utils/functions';
 
 class Calculator extends Component {
   constructor(props) {
@@ -36,7 +37,8 @@ class Calculator extends Component {
     }
 
     this.setState({
-      next_state: params.next_state
+      next_state: params.next_state,
+      cta_title: params.cta_title
     })
 
   }
@@ -59,7 +61,14 @@ class Calculator extends Component {
 
   handleClick = () => {
       this.sendEvents('next');
-      this.navigate(this.state.next_state);
+
+      let state = this.state.next_state;
+      if(state === 'instant-kyc-status') {
+        let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
+        this.navigate(state, {searchParams: searchParams});
+      } else {
+        this.navigate(state);
+      }
   }
 
   onChange = (val, key) => {
@@ -90,7 +99,7 @@ class Calculator extends Component {
         title="Loan eligibility calculator"
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
-        buttonTitle="APPLY NOW"
+        buttonTitle={this.state.cta_title || "APPLY NOW"}
         // noFooter={true}
       >
         <div className="loan-calculator">

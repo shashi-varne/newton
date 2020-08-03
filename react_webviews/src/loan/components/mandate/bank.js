@@ -45,7 +45,8 @@ class MandateBank extends Component {
 
     let dmi_loan_status = vendor_info.dmi_loan_status  || '';
     let formDisabled = false;
-    if(dmi_loan_status === 'emandate' || dmi_loan_status === 'emandate_failed') {
+    if(dmi_loan_status === 'emandate' || dmi_loan_status === 'emandate_failed' || 
+    dmi_loan_status === 'emandate_exit') {
       formDisabled = true;
     }
 

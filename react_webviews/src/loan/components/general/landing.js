@@ -158,22 +158,35 @@ class Landing extends Component {
     });
   }
 
-  handleClickTopCard = () => {
+  getNextState = () => {
     let dmi_loan_status = this.state.vendor_info.dmi_loan_status || '';
 
+    let state = '';
     if(this.state.process_done) {
-      this.navigate('report-details');
+      state = 'report-details';
     } else {
       if(this.state.location_needed) {//condition for mobile
-        this.navigate('permissions');
+        state = 'permissions';
       } else if(dmi_loan_status === 'application_rejected') {
-        let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
-        this.navigate('instant-kyc-status', {searchParams: searchParams});
+        state = 'instant-kyc-status';
       } else {
-        this.navigate('journey');
+        state = 'journey';
       }
     }
-   
+
+    return state;
+  }
+
+  handleClickTopCard = () => {
+
+    let state =  this.getNextState();
+
+    if(state === 'instant-kyc-status') {
+      let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
+      this.navigate(state, {searchParams: searchParams});
+    } else {
+      this.navigate(state);
+    }
     
   }
 
@@ -213,8 +226,8 @@ class Landing extends Component {
 
         <div className="action" onClick={ () => this.navigate('calculator', {
           params: {
-            next_state: this.state.location_needed ? 'permissions' :
-            this.state.process_done ? 'report-details' : 'journey'
+            next_state: this.getNextState(),
+            cta_title: this.state.top_cta_title
           }
         })}>
           <div className="left">

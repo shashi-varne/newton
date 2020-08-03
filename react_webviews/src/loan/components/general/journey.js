@@ -67,9 +67,10 @@ class Journey extends Component {
       next_state = 'requirements-details';
       if(application_filled) {
         next_state = 'form-summary';
+        cta_title = 'RESUME';
       }
     } else if (application_status === 'application_submitted') {
-      cta_title = 'CHECK ELIGIBILITY';
+      cta_title = 'RESUME';
       next_state = 'form-summary';
     } else if (application_status === 'application_complete' ||
       application_status === 'offer_accepted') {
@@ -84,11 +85,13 @@ class Journey extends Component {
         next_state = 'loan-eligible';
       } else if (dmi_loan_status === 'callback_awaited_conversion' ||
         dmi_loan_status === 'opportunity') {
+          cta_title = 'CONTINUE';
         withProvider = true;
         step_info = 2;
         next_state = 'upload-pan';
-      } else if (['emandate', 'emandate_failed'].indexOf(dmi_loan_status) !== -1) {
+      } else if (['emandate', 'emandate_failed', 'emandate_exit'].indexOf(dmi_loan_status) !== -1) {
         withProvider = true;
+        cta_title = 'CONTINUE';
         step_info = 2;
         next_state = 'bank';
       } else if (['emandate_success', 'emandate_done'].indexOf(dmi_loan_status) !== -1) {

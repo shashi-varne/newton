@@ -76,6 +76,7 @@ class KycStatus extends Component {
       commonMapper: {},
       okyc_id: storageService().get('loan_okyc_id'),
       timeAlloted: 20000,
+      onloadApi: true
     }
 
     this.initialize = initialize.bind(this);
@@ -115,23 +116,37 @@ class KycStatus extends Component {
       }
       let resultData = await this.callBackApi(body);
 
-      this.setState({
-        kyc_checking: false
-      })
-
       let dmi_loan_status  = resultData.dmi_loan_status;
 
+      if(this.state.onloadApi && ['okyc_done', 'okyc_success'].indexOf(dmi_loan_status) !== -1) {
+        this.setState({
+          onloadApi: false
+        })
+
+        let that = this;
+        setTimeout(function(){ 
+          that.kycCallback();
+        }, that.timeAlloted);
+
+        return;
+      } else {
+        this.setState({
+          onloadApi: false,
+          kyc_checking: false
+        })
+      }
+     
       if (resultData.callback_status || dmi_loan_status === 'okyc_done') {
         this.navigate('/loan/instant-kyc');
       } else {
-        if(dmi_loan_status === 'okyc_cancelled') {
-          status = 'cancelled';
-            this.navigate('/loan/instant-kyc');
-            return;
-        } else if(dmi_loan_status === 'okyc_failed') {
+        if(dmi_loan_status === 'okyc_failed') {
           status = 'failed';
-        } else {
+        } else if(dmi_loan_status === 'okyc_success') {
           status = 'pending';
+        } else {
+          status = 'cancelled';
+          this.navigate('/loan/instant-kyc');
+          return;
         }
         
         this.setState({
@@ -166,7 +181,7 @@ class KycStatus extends Component {
       let that = this;
       setTimeout(function(){ 
         that.kycCallback();
-      }, this.state.timeAlloted);
+      }, 2000);
     }
 
   }

@@ -23,7 +23,7 @@ const genderOptions = [
     },
     {
         'name': 'Other',
-        'value': 'Other'
+        'value': 'OTHER'
     }
 ];
 

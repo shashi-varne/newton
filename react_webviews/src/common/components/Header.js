@@ -25,13 +25,14 @@ const Header = ({ classes, title, count, total, current, goBack,
     <Toolbar>
       <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={headerData.goBack ||
          goBack}>
-        {!disableBack && 
+        {!disableBack && !headerData.hide_icon &&
         <SVG
           preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
           src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
         />
         }
-        {(disableBack === true) && <Close />}
+        {(disableBack === true) && !headerData.hide_icon &&
+         <Close />}
       </IconButton>
 
       <div>

@@ -189,6 +189,9 @@ class FormCreateProfile extends Component {
                 title=""
                 buttonTitle="CONTINUE"
                 noFooter={true}
+                headerData={{
+                    hide_icon: true
+                }}
                 handleClick={() => this.handleClick()}
             >
                 <div >
