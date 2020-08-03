@@ -118,7 +118,8 @@ class KycStatus extends Component {
 
       let dmi_loan_status  = resultData.dmi_loan_status;
 
-      if(this.state.onloadApi && ['okyc_done', 'okyc_success'].indexOf(dmi_loan_status) !== -1) {
+      if(!resultData.callback_status && this.state.onloadApi && 
+        ['okyc_done', 'okyc_success'].indexOf(dmi_loan_status) !== -1) {
         this.setState({
           onloadApi: false
         })
