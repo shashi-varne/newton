@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import { withRouter } from "react-router";
 import { MuiThemeProvider, createMuiTheme } from "material-ui/styles";
-import "../common/theme/Style.css";
+import "../common/theme/Style.scss";
 import { themeConfig } from 'utils/constants';
 import { ToastContainer } from 'react-toastify';
 

@@ -77,13 +77,17 @@
     }
 
     .agree-tiles {
-      display: flex;
-      align-items: baseline;
+      display: -webkit-box;
+      margin: 0 0 10px 0;
     }
-
+  
     .agree-tiles-left {
       color: #0a1d32;
-      font-size: 13px;
+      height: 6px;
+      width: 6px;
+      background-color: #0a1d32;
+      border-radius: 50%;
+      display: inline-block;
     }
 
     .agree-tiles-right {
@@ -633,6 +637,9 @@
   }
   .MuiToolbar-gutters {
     padding-left: 14px !important;
+  }
+  .Footer {
+    margin: 0px 20px 15px 20px;
   }
 }
 

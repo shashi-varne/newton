@@ -408,7 +408,7 @@ class FormSummary extends Component {
         return (
             <div key={index} id={'agreement_' + index} className="agree-tiles"
             onClick={() => this.handleAgreement(props)}>
-                <div className="agree-tiles-left">{index + 1}</div>
+                <div className="agree-tiles-left"></div>
                 <div className="agree-tiles-right">{ReactHtmlParser(props)}</div>
             </div>
         )

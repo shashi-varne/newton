@@ -83,7 +83,7 @@ class Journey extends Component {
         next_state = 'loan-eligible';
       } else if (dmi_loan_status === 'callback_awaited_conversion' ||
         dmi_loan_status === 'opportunity') {
-          cta_title = 'CONTINUE';
+        cta_title = 'CONTINUE';
         withProvider = true;
         step_info = 2;
         next_state = 'upload-pan';
