@@ -394,6 +394,9 @@
     width: 77%;
     line-height: 20px;
   }
+  .card-info.fisdom {
+    color: #331C6B;
+  }
 }
 
 .loan-journey {
@@ -413,12 +416,11 @@
 
   .journey-card {
     margin: 12px 0 0 30px;
-    height: 103px;
-    width: 240px;
     background: var(--highlight);
     border-radius: 6px;
-    padding: 20px 0 0 20px;
+    padding: 20px 0 20px 20px;
     line-height: 27px;
+    width: 80%;
   }
 
   .journey-steps {

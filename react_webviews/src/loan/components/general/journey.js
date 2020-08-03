@@ -32,8 +32,6 @@ class Journey extends Component {
 
   componentWillMount() {
     this.initialize();
-
-
   }
 
   onload = () => {
@@ -221,7 +219,7 @@ class Journey extends Component {
             <p className="text-on-img">{index + 1}</p>
           }
         </div>
-        <div>
+        <div style={{width:'100%'}}>
           <div className={` title ${props.status === 'init' ? 'init-title' :
             props.status === 'success' ? 'success-title' :
               'pending-title'}`}>

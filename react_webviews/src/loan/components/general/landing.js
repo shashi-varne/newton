@@ -252,7 +252,7 @@ class Landing extends Component {
             <div style={{height:'112px', width:'172px', marginRight:'16px',
               backgroundImage: `url(${this.state.ic_why_hs})`
             }}>
-              <div className="card-info" style={{padding:'10px 0 10px 20px'}}>
+              <div className={`card-info ${this.state.productName}`} style={{padding:'10px 0 10px 20px'}}>
               Get loan Instantly in your account with no human interaction
               </div>
               <div style={{float:'right', paddingRight:'22px'}}>
@@ -264,7 +264,7 @@ class Landing extends Component {
             <div style={{height:'112px', width:'172px', marginRight:'16px',
               backgroundImage: `url(${this.state.ic_why_hs})`
             }}>
-              <div className="card-info" style={{padding:'10px 0 10px 20px'}}>
+              <div className={`card-info ${this.state.productName}`} style={{padding:'10px 0 10px 20px'}}>
                 You don't have to provide any security  for your loan
               </div>
               <div style={{float:'right', paddingRight:'22px'}}>
@@ -276,7 +276,7 @@ class Landing extends Component {
             <div style={{height:'112px', width:'172px', marginRight:'16px',
               backgroundImage: `url(${this.state.ic_why_hs})`
             }}>
-              <div className="card-info" style={{padding:'10px 0 30px 20px'}}>
+              <div className={`card-info ${this.state.productName}`} style={{padding:'10px 0 30px 20px'}}>
                 No income documents required
               </div>
               <div style={{float:'right', paddingRight:'22px'}}>
@@ -287,7 +287,7 @@ class Landing extends Component {
             <div style={{height:'112px', width:'172px', marginRight:'16px',
               backgroundImage: `url(${this.state.ic_why_hs})`
             }}>
-              <div className="card-info" style={{padding:'10px 0 10px 20px'}}>
+              <div className={`card-info ${this.state.productName}`} style={{padding:'10px 0 10px 20px'}}>
                 Complete easy loan application process and get money in 2 hrs 
               </div>
               <div style={{float:'right', paddingRight:'22px'}}>

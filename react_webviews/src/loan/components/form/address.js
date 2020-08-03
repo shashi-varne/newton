@@ -8,7 +8,8 @@ import Input from '../../../common/ui/Input';
 import { initialize } from '../../common/functions';
 import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
 import Api from 'utils/api';
-
+import Checkbox from 'material-ui/Checkbox';
+import Grid from 'material-ui/Grid';
 
 class AddressDetails extends Component {
 
@@ -19,7 +20,8 @@ class AddressDetails extends Component {
             get_lead: true,
             getLeadBodyKeys: ['address_info'],
             next_state: 'form-summary',
-            screen_name: 'address-details'
+            screen_name: 'address-details',
+            checked: false
         }
         this.initialize = initialize.bind(this);
     }
@@ -28,11 +30,11 @@ class AddressDetails extends Component {
         this.initialize();
 
         let residentialOptions = [
-          'Owned',
-          'Rented',
-          'PG',
-          'Hostel',
-          'Batchlor Accomodation'
+            'Owned',
+            'Rented',
+            'PG',
+            'Hostel',
+            'Batchlor Accomodation'
         ];
 
         this.setState({
@@ -67,31 +69,63 @@ class AddressDetails extends Component {
             p_city: permanent_address_data.city || '',
             p_state: permanent_address_data.state || '',
             p_country: permanent_address_data.country || '',
-            
+            permanent_address_same_as_current: permanent_address_data.permanent_address_same_as_current
+
         };
 
 
         this.setState({
             form_data: form_data,
             lead: lead,
+            checked: !!form_data.permanent_address_same_as_current
         })
 
     }
 
+    setPermAddress = () => {
+        let form_data = this.state.form_data;
+
+        if (this.state.checked) {
+            form_data.p_address = form_data.address;
+            form_data.p_pincode = form_data.pincode;
+            form_data.p_city = form_data.city;
+            form_data.p_state = form_data.state;
+            form_data.p_country = form_data.country;
+        } else {
+            form_data.p_address = '';
+            form_data.p_pincode = '';
+            form_data.p_city = '';
+            form_data.p_state = '';
+            form_data.p_country = '';
+        }
+
+        this.setState({
+            form_data: form_data
+        })
+    }
+
+    handleCheckBox = name => event => {
+        this.setState({
+            [name]: event.target.checked
+        }, () => {
+            this.setPermAddress();
+        })
+
+    };
+
     handleChange = name => event => {
-      this.formHandleChange(name, event);
+        this.formHandleChange(name, event);
     };
 
 
     handleClick = async () => {
 
         this.sendEvents('next');
-        let keys_to_check = ['residence_type', 'duration', 'address', 'pincode','p_address', 
-        'p_pincode'];
+        let keys_to_check = ['residence_type', 'duration', 'address', 'pincode', 'p_address',
+            'p_pincode'];
 
 
         let form_data = this.state.form_data;
-        console.log(form_data);
 
         this.formCheckUpdate(keys_to_check, form_data);
     }
@@ -124,12 +158,11 @@ class AddressDetails extends Component {
         }
 
         let form_data = this.state.form_data;
-        console.log(name);
         form_data[name] = pincode;
         form_data[name + '_error'] = '';
 
         this.setState({
-          form_data: form_data
+            form_data: form_data
         })
 
         if (pincode.length === 6) {
@@ -147,18 +180,18 @@ class AddressDetails extends Component {
                 pincode_error = 'Invalid pincode';
             }
 
-            if(name === 'pincode') {
-              form_data.city = city;
-              form_data.state = state;
-              form_data.pincode_error = pincode_error;
-              form_data.country = country || 'India';
+            if (name === 'pincode') {
+                form_data.city = city;
+                form_data.state = state;
+                form_data.pincode_error = pincode_error;
+                form_data.country = country || 'India';
             } else {
-              form_data.p_city = city;
-              form_data.p_state = state;
-              form_data.p_pincode_error = pincode_error;
-              form_data.p_country = country || 'India';
+                form_data.p_city = city;
+                form_data.p_state = state;
+                form_data.p_pincode_error = pincode_error;
+                form_data.p_country = country || 'India';
             }
-            
+
         }
 
         this.setState({
@@ -176,8 +209,8 @@ class AddressDetails extends Component {
                 handleClick={() => this.handleClick()}
             >
                 <FormControl fullWidth>
-                    <div style={{color: '#64778D',fontSize: 13, fontWeight: 300,margin: '0 0 6px 0'}}>
-                    Aadhaar Address Details
+                    <div style={{ color: '#64778D', fontSize: 13, fontWeight: 300, margin: '0 0 6px 0' }}>
+                        Aadhaar Address Details
                     </div>
                     <div className="InputField">
                         <DropdownWithoutIcon
@@ -206,7 +239,7 @@ class AddressDetails extends Component {
                             value={this.state.form_data.duration || ''}
                             onChange={this.handleChange()} />
                     </div>
-                   
+
                     <div className="InputField">
                         <Input
                             type="number"
@@ -263,65 +296,93 @@ class AddressDetails extends Component {
                     </div>
 
 
-                    <div style={{color: '#64778D',fontSize: 13, fontWeight: 300,margin: '30px 0 6px 0'}}>
-                    Permanent residence address
+                    <div className="InputField" style={{ marginBottom: '0px !important' }}>
+                        <div className="CheckBlock2" style={{ margin: '10px 0' }}>
+                            <Grid container spacing={16} alignItems="center">
+                                <Grid item xs={1} className="TextCenter">
+                                    <Checkbox
+                                        defaultChecked
+                                        checked={this.state.checked}
+                                        color="default"
+                                        // value={this.state.checked || false}
+                                        name="checked"
+                                        onChange={this.handleCheckBox('checked')}
+                                        className="Checkbox" />
+                                </Grid>
+                                <Grid item xs={11}>
+                                    <div className="checkbox-text">Permanent residence address same as
+                                    Aadhaar address details
+                                </div>
+                                </Grid>
+                            </Grid>
+                        </div>
                     </div>
-                   
-                    <div className="InputField">
-                        <Input
-                            type="number"
-                            width="40"
-                            label="Pincode"
-                            id="p_pincode"
-                            name="p_pincode"
-                            maxLength="6"
-                            error={(this.state.form_data.p_pincode_error) ? true : false}
-                            helperText={this.state.form_data.p_pincode_error}
-                            value={this.state.form_data.p_pincode || ''}
-                            onChange={this.handlePincode('p_pincode')} />
-                    </div>
+                    {/* {!this.state.checked && */}
 
-                    <div className="InputField">
-                        <Input
-                            type="text"
-                            id="address"
-                            label="Address"
-                            name="p_address"
-                            placeholder="ex: 16/1 Queens paradise"
-                            error={(this.state.form_data.p_address_error) ? true : false}
-                            helperText={this.state.form_data.p_address_error}
-                            value={this.state.form_data.p_address || ''}
-                            onChange={this.handleChange()} />
-                    </div>
+                        <div>
+                            <div style={{ color: '#64778D', fontSize: 13, fontWeight: 300, margin: '-10px 0px 6px' }}>
+                                Aadhaar Address Details
+                        </div>
 
-                    <div className="InputField">
-                        <Input
-                            disabled={true}
-                            id="p_city"
-                            label="City"
-                            name="p_city"
-                            value={this.state.form_data.p_city || ''}
-                        />
-                    </div>
-                    <div className="InputField">
-                        <Input
-                            disabled={true}
-                            id="p_state"
-                            label="State"
-                            name="p_state"
-                            value={this.state.form_data.p_state || ''}
-                        />
-                    </div>
-                    <div className="InputField">
-                        <Input
-                            disabled={true}
-                            id="p_country"
-                            label="Country"
-                            name="p_country"
-                            value={this.state.form_data.p_country || ''}
-                        />
-                    </div>
+                            <div className="InputField">
+                                <Input
+                                    type="number"
+                                    width="40"
+                                    disabled={this.state.checked}
+                                    label="Pincode"
+                                    id="p_pincode"
+                                    name="p_pincode"
+                                    maxLength="6"
+                                    error={(this.state.form_data.p_pincode_error) ? true : false}
+                                    helperText={this.state.form_data.p_pincode_error}
+                                    value={this.state.form_data.p_pincode || ''}
+                                    onChange={this.handlePincode('p_pincode')} />
+                            </div>
 
+                            <div className="InputField">
+                                <Input
+                                    type="text"
+                                    disabled={this.state.checked}
+                                    id="address"
+                                    label="Address"
+                                    name="p_address"
+                                    placeholder="ex: 16/1 Queens paradise"
+                                    error={(this.state.form_data.p_address_error) ? true : false}
+                                    helperText={this.state.form_data.p_address_error}
+                                    value={this.state.form_data.p_address || ''}
+                                    onChange={this.handleChange()} />
+                            </div>
+
+                            <div className="InputField">
+                                <Input
+                                    disabled={true}
+                                    id="p_city"
+                                    label="City"
+                                    name="p_city"
+                                    value={this.state.form_data.p_city || ''}
+                                />
+                            </div>
+                            <div className="InputField">
+                                <Input
+                                    disabled={true}
+                                    id="p_state"
+                                    label="State"
+                                    name="p_state"
+                                    value={this.state.form_data.p_state || ''}
+                                />
+                            </div>
+                            <div className="InputField">
+                                <Input
+                                    disabled={true}
+                                    id="p_country"
+                                    label="Country"
+                                    name="p_country"
+                                    value={this.state.form_data.p_country || ''}
+                                />
+                            </div>
+
+                        </div>
+                    {/* } */}
                 </FormControl>
             </Container>
         );

@@ -41,6 +41,11 @@ export const themeConfig = {
                 }
             }, 
         },
+        MuiFormHelperText: {
+            root: {
+                marginBottom: 10
+            }
+        },
         MuiInput: {
             input: {
                 padding: '11px 0 7px',

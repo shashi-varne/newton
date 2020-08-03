@@ -1,6 +1,6 @@
 import {
-    storageService, getEditTitle,
-    //  inrFormatTest 
+    storageService, getEditTitle, dobFormatTest,
+    inrFormatTest
 } from 'utils/validators';
 import { getConfig } from 'utils/functions';
 import Api from 'utils/api';
@@ -21,7 +21,7 @@ export async function initialize() {
     this.openInBrowser = openInBrowser.bind(this);
     this.openInTabApp = openInTabApp.bind(this);
     this.acceptAgreement = acceptAgreement.bind(this);
-    this.redirectMandate =redirectMandate.bind(this);
+    this.redirectMandate = redirectMandate.bind(this);
 
     nativeCallback({ action: 'take_control_reset' });
 
@@ -201,7 +201,7 @@ export async function acceptAgreement() {
             this.navigate(this.state.next_state || '/loan/home');
 
         } else {
-            
+
             this.setState({
                 show_loader: false
             });
@@ -400,7 +400,9 @@ export function formCheckUpdate(keys_to_check, form_data, just_check) {
                 permanent_pincode: form_data.p_pincode || '',
                 permanent_city: form_data.p_city || '',
                 permanent_state: form_data.p_state || '',
-                permanent_country: form_data.p_country || ''
+                permanent_country: form_data.p_country || '',
+
+                permanent_address_same_as_current: this.state.checked || false
             };
         } else {
             for (var j in keys_to_check) {
@@ -424,21 +426,25 @@ export function formHandleChange(name, event) {
 
     var value = event.target ? event.target.value : event;
 
+    if (name === 'dob' && !dobFormatTest(value)) {
+        return;
+    }
+
     if (name === 'pan_no' && value) {
         value = value.toUpperCase();
     }
     var form_data = this.state.form_data || {};
 
-    // if ((name === 'amount_required' || name === 'net_monthly_salary') &&
-    //     !inrFormatTest(value)) {
-    //     return;
-    // }
+    if ((name === 'amount_required' || name === 'net_monthly_salary') &&
+        !inrFormatTest(value)) {
+        return;
+    }
 
     if (['ref_contact_first', 'ref_contact_second', 'mobile_no'].indexOf(name) !== -1 && value.length > 10) {
         return;
     }
 
-    form_data[name] = typeof value === 'string' ?  value.replace(/,/g, "") : value;
+    form_data[name] = typeof value === 'string' ? value.replace(/,/g, "") : value;
     form_data[name + '_error'] = '';
 
     this.setState({
@@ -446,63 +452,63 @@ export function formHandleChange(name, event) {
     })
 }
 
-export async function redirectMandate () {
+export async function redirectMandate() {
 
     this.setState({
-      show_loader :true
+        show_loader: true
     })
     const res = await Api.get(`/relay/api/loan/eMandate/application/${this.state.application_id}`);
-  
-        let resultData  = res.pfwresponse.result;
-        if (res.pfwresponse.status_code === 200 && !resultData.error) {
 
-          let paymentRedirectUrl = encodeURIComponent(
+    let resultData = res.pfwresponse.result;
+    if (res.pfwresponse.status_code === 200 && !resultData.error) {
+
+        let paymentRedirectUrl = encodeURIComponent(
             window.location.origin + `/loan/redirection-status/mandate` + getConfig().searchParams
-          );
+        );
 
 
-          let back_url = encodeURIComponent(
+        let back_url = encodeURIComponent(
             window.location.origin + `/loan/mandate-status` + getConfig().searchParams
-          );
+        );
 
-           // for web no issue
-           if(getConfig().Web) {
+        // for web no issue
+        if (getConfig().Web) {
             paymentRedirectUrl = back_url;
-          }
-
-          var payment_link = resultData.url;
-          var pgLink = payment_link;
-          let app = getConfig().app;
-          // eslint-disable-next-line
-          pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
-            '&app=' + app + '&back_url=' + back_url;
-          if (getConfig().generic_callback) {
-            pgLink += '&generic_callback=' + getConfig().generic_callback;
-          }
-
-          this.openInTabApp(
-            {
-              url: pgLink,
-              back_url: back_url
-            }
-          );
-
-          if(!getConfig().Web) {
-            this.setState({
-              show_loader: false
-            });
-          }
-          
-
-        } else {
-          this.setState({
-            show_loader: false
-          });
-
-          toast(resultData.error || resultData.message
-            || 'Something went wrong');
         }
-  }
+
+        var payment_link = resultData.url;
+        var pgLink = payment_link;
+        let app = getConfig().app;
+        // eslint-disable-next-line
+        pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
+            '&app=' + app + '&back_url=' + back_url;
+        if (getConfig().generic_callback) {
+            pgLink += '&generic_callback=' + getConfig().generic_callback;
+        }
+
+        this.openInTabApp(
+            {
+                url: pgLink,
+                back_url: back_url
+            }
+        );
+
+        if (!getConfig().Web) {
+            this.setState({
+                show_loader: false
+            });
+        }
+
+
+    } else {
+        this.setState({
+            show_loader: false
+        });
+
+        toast(resultData.error || resultData.message
+            || 'Something went wrong');
+    }
+}
 
 export async function decisionCallback() {
 

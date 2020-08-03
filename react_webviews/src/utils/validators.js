@@ -281,6 +281,7 @@ export function numDifferentiation(val, withSymbol) {
 
   if (val >= 10000000) val = (val / 10000000).toFixed(2) + ' Cr';
   else if (val >= 100000) val = (val / 100000).toFixed(2) + ' Lacs';
+  else if (val >= 1000) val = (val / 1000).toFixed(2) + ' Thousand';
   else if (val) return inrFormatDecimal(val);
 
   val = val.toString();
@@ -622,12 +623,23 @@ export function inrFormatTest(value) {
     return true;
   }
 
-  let rule = /^[0-9,]/;
+  let rule = /^[0-9,]*$/;
+
+  return rule.test(value);
+}
+
+export function dobFormatTest(value) {
+  if (value === '') {
+    return true;
+  }
+
+  let rule = /^[0-9/]*$/;
 
   return rule.test(value);
 }
 
 export function formatDate(event) {
+
   var key = event.keyCode || event.charCode;
 
   var thisVal;
