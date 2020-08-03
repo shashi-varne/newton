@@ -17,7 +17,6 @@ import JssProvider from 'react-jss/lib/JssProvider';
 import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
 import { Login } from './desktop/Login';
 import MainPage from './desktop/MainPage';
-import Tool from './mini-components/tool';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -56,7 +55,6 @@ const WealthReport = (props) => {
           <Route path={`${url}/login`} component={Login} />
           <Route path={`${url}/main/:tab`} component={MainPage} />
           <Route path={`${url}/main`} component={MainPage} />
-          <Route path={`${url}/test`} component={Tool} />
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>

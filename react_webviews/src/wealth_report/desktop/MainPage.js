@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import Overview from "./Overview";
 import Holdings from "./Holdings";
 import Taxation from "./Taxation";
-import Header from "../mini-components/Header"
+import Header from "../mini-components/Header";
+import Footer from "../common/Footer";
 
 export default class MainPage extends Component {
   constructor(props) {
@@ -34,6 +35,7 @@ export default class MainPage extends Component {
           {this.renderTab(params.tab)}
         </div>
         <div id="wr-footer"></div>
+        <Footer />
       </div>
     );
   }

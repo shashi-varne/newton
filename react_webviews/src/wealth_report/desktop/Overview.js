@@ -36,7 +36,9 @@ export default class Overview extends Component {
         </div>
         <div className="wr-okn-box">
           <div className="wr-okn-title">XIRR
-            <Tooltip />
+            <span style={{margin:'0 0 0 6px'}}>
+              <Tooltip />
+            </span>
           </div>
           <div className="wr-okn-value">17%</div>
         </div>
