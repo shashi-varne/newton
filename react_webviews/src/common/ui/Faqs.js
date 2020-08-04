@@ -28,6 +28,19 @@ class FaqsClass extends Component {
        
     }
 
+    renderPoints = (option, index) => {
+        return (
+            <div key={index} style={{display:'flex'}}>
+              <div className='subtitle' style={{margin: '10px 0 0px 0',marginRight:5}}>
+                        {index + 1}.
+               </div>
+               <div className='subtitle' style={{margin: '10px 0 0px 0'}}>
+                        {ReactHtmlParser(option)}
+               </div>
+            </div>
+        );
+    }
+
     renderList = (option, index) => {
         let isSelected = this.state.selectedIndex === index;
         return (
@@ -43,9 +56,14 @@ class FaqsClass extends Component {
                     </div>
                 </div>
 
-                {isSelected &&
+                {isSelected && !option.points &&
                     <div className='subtitle'>
                         {ReactHtmlParser(option.subtitle)}
+                    </div>
+                }
+                {isSelected && option.points &&
+                    <div>
+                        {option.points.map(this.renderPoints)}
                     </div>
                 }
             </div>

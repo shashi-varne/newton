@@ -144,12 +144,12 @@ class Landing extends Component {
       },
       {
         'title': `What are the benefits of applying for a personal loan from ${typeCaps} ?`,
-        'subtitle': `
-        1. Digital loans: Bid farewell to piles of paperwork and branch visits</br>
-        2. Zero documentation: No income documents required</br>
-        3. Money in account within 2 hrs: Submit loan application in 10 mins and get credit within 2 hrs</br>
-        4. Collateral free loan: You don’t have to provide any security for your loan
-        `
+        points: [
+          'Digital loans: Bid farewell to piles of paperwork and branch visits',
+          'Zero documentation: No income documents required',
+          'Money in account within 2 hrs: Submit loan application in 10 mins and get credit within 2 hrs',
+          'Collateral free loan: You don’t have to provide any security for your loan'
+        ]
       },
       {
         'title': `What documents are required to get a Personal loan from ${typeCaps}?`,
