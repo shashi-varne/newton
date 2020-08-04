@@ -229,7 +229,7 @@ class AddressDetails extends Component {
                         <Input
                             type="number"
                             width="40"
-                            label="No of yrs in residence"
+                            label="No of months in residence"
                             placeholder="Minimum requirement is 6 months"
                             class="Name"
                             id="duration"
@@ -310,8 +310,7 @@ class AddressDetails extends Component {
                                         className="Checkbox" />
                                 </Grid>
                                 <Grid item xs={11}>
-                                    <div className="checkbox-text">Permanent residence address same as
-                                    Aadhaar address details
+                                    <div className="checkbox-text">Permanent address is same as Aadhaar address
                                 </div>
                                 </Grid>
                             </Grid>
@@ -321,7 +320,7 @@ class AddressDetails extends Component {
 
                         <div>
                             <div style={{ color: '#64778D', fontSize: 13, fontWeight: 300, margin: '-10px 0px 6px' }}>
-                                Aadhaar Address Details
+                            Permanent Address Details
                         </div>
 
                             <div className="InputField">
