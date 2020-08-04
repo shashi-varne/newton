@@ -493,11 +493,11 @@ export async function redirectMandate() {
             }
         );
 
-        if (!getConfig().Web) {
-            this.setState({
-                show_loader: false
-            });
-        }
+        // if (!getConfig().Web) {
+        //     this.setState({
+        //         show_loader: false
+        //     });
+        // }
 
 
     } else {

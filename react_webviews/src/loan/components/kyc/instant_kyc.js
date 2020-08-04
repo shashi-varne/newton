@@ -107,11 +107,11 @@ class InstantKycHome extends Component {
             url: pgLink,
             back_url: back_url
           });
-          if(!getConfig().Web) {
-            this.setState({
-              show_loader: false
-            });
-          }
+          // if(!getConfig().Web) {
+          //   this.setState({
+          //     show_loader: false
+          //   });
+          // }
 
         } else {
           this.setState({
