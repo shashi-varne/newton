@@ -329,7 +329,7 @@ class GoldSummary extends Component {
         {index !== 5 ? `${index + 1}. ${props}` : 
           <ul>
             {props.map(offers => (
-              <li>{offers}</li>
+              <li><b>{offers}</b></li>
             ))}
           </ul>
         }
