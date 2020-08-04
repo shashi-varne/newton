@@ -61,7 +61,7 @@ class Container extends Component {
       return;
     }
 
-    if (checkStringInString(pathname, "instant-kyc")) {
+    if (checkStringInString(pathname, "instant-kyc") && !checkStringInString(pathname, "instant-kyc-status")) {
       this.setState({
         callbackType: 'loan_journey',
         openPopup: true,
