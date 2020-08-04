@@ -131,7 +131,7 @@ class Landing extends Component {
       },
       {
         'title': 'On what criteria will the loan be sanctioned to me ?',
-        'subtitle': 'The final amount sanctioned will depend on your net monthly income,your credit bureau and other eligibility criterias.'
+        'subtitle': 'The final amount sanctioned will depend on your net monthly income, your credit bureau and other eligibility criterias.'
       },
       {
         'title': `Is ${typeCaps} the lender ?`,
@@ -145,10 +145,10 @@ class Landing extends Component {
       {
         'title': `What are the benefits of applying for a personal loan from ${typeCaps} ?`,
         'subtitle': `
-        1. Digital loans: Bid farewell to piles of paperwork and branch visits.</br>
-        2. Zero documentation: No income documents required.</br>
-        3. Money in account within 2 hrs: Submit loan application in 10 mins and get credit within 2 hrs.</br>
-        4. Collateral free loan: You don’t have to provide any security for your loan.</br>
+        1. Digital loans: Bid farewell to piles of paperwork and branch visits</br>
+        2. Zero documentation: No income documents required</br>
+        3. Money in account within 2 hrs: Submit loan application in 10 mins and get credit within 2 hrs</br>
+        4. Collateral free loan: You don’t have to provide any security for your loan
         `
       },
       {
@@ -290,7 +290,7 @@ class Landing extends Component {
         <HowToSteps style={{ marginTop: 20,marginBottom:0 }} baseData={this.state.stepsContentMapper} />
 
         <div className="generic-page-title" style={{ margin: '20px 0 15px 0' }}>
-        Simple and hassle-free process to "Benefits & Features"
+        Benefits & Features
         </div>
 
         <div className="his">
