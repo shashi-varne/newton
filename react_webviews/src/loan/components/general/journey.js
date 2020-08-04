@@ -50,7 +50,8 @@ class Journey extends Component {
       bottomButtonData: bottomButtonData
     })
 
-    let cta_title = 'RESUME';
+    // let cta_title = 'RESUME';
+    let cta_title = 'CONTINUE';
     let application_status = application_info.application_status || '';
     let application_filled = application_info.application_filled || '';
     let dmi_loan_status = vendor_info.dmi_loan_status;
@@ -65,18 +66,21 @@ class Journey extends Component {
       next_state = 'requirements-details';
       if(application_filled) {
         next_state = 'form-summary';
-        cta_title = 'RESUME';
+        // cta_title = 'RESUME';
       }
     } else if (application_status === 'application_submitted') {
-      cta_title = 'RESUME';
+      // cta_title = 'RESUME';
+      cta_title = 'CHECK ELIGIBILITY';
       next_state = 'form-summary';
     } else if (application_status === 'application_complete' ||
       application_status === 'offer_accepted') {
       if (dmi_loan_status === 'lead' || dmi_loan_status === 'contact') {
         next_state = 'form-summary';
+        cta_title = 'CHECK ELIGIBILITY';
       } else if (dmi_loan_status === 'verified_contact' ||
         dmi_loan_status.indexOf('okyc') >= 0) {
         next_state = 'instant-kyc';
+        cta_title = 'CHECK ELIGIBILITY';
       } else if (dmi_loan_status === 'callback_awaited_decision') {
         nextFunction = this.decisionCallback;
       } else if (dmi_loan_status === 'decision_done') {
