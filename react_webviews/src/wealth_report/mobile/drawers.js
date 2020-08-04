@@ -111,8 +111,8 @@ class Drawers extends Component {
   render() {
     return (
       <Container openPopup={false}>
-        <Button onClick={this.toggleDrawer(true)}>sopen drawer</Button>
-        {this.renderdialog()}
+        <Button onClick={this.toggleDrawer(true)}>open drawer</Button>
+        {this.renderdialog2()}
       </Container>
     );
   }

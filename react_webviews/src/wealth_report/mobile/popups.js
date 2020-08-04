@@ -50,6 +50,7 @@ class Popups extends Component {
       <React.Fragment>
         <div className="wr-welcome">
           <img src={require(`assets/fisdom/ic-profile-avatar.svg`)} alt="" />
+          <img src={require(`assets/fisdom/ic-mob-add-pic.svg`)} alt="" style={{marginLeft:'-27px'}} />
           <div className="wr-head">Welcome</div>
           <div className="wr-number">+91 92374 82739</div>
         </div>
@@ -82,8 +83,8 @@ class Popups extends Component {
 
     return (
       <Container
-        dialogContent={dialog4}
-        openPopup={this.handlePopup}
+        dialogContent={dialog3}
+        openPopup={true}
       >
         <Button onClick={this.handlePopup}>Logout</Button>
       </Container>
