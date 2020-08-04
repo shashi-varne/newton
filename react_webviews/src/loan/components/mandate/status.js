@@ -27,7 +27,7 @@ const commonMapper = {
     'mid_title': '',
     'button_title': 'RETRY',
     'cta_state': '/loan/bank',
-    'close_state': '/loan/journey'
+    'close_state': '/loan/home'
   },
   'loan_not_eligible': {
     'top_icon': 'ils_loan_failed',
