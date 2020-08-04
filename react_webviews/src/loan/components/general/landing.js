@@ -33,7 +33,7 @@ class Landing extends Component {
       title: 'Eligibility criteria',
       options: [
         { 'icon': 'ic_why_loan1', 'subtitle': 'Salaried and resident Indian citizens' },
-        { 'icon': 'ic_why_loan2', 'subtitle': 'Aged between 21 and 58 years' },
+        { 'icon': 'ic_why_loan2', 'subtitle': 'Age between 23 and 55 years' },
         { 'icon': 'ic_why_loan3', 'subtitle': 'Employed with a private, public limited company, or an MNC' }
       ]
     }
@@ -98,45 +98,54 @@ class Landing extends Component {
 
   openFaqs = () => {
 
+    let type = this.state.productName;
+    let typeCaps = type === 'fisdom' ? 'Fisdom' : 'Myway';
+
     this.sendEvents('next', {things_to_know: 'faq'})
     let options = [
       {
-        'title': 'What is the max loan amount you can get when you apply for a salaried personal loan?',
-        'subtitle': 'You can avail an instant personal amount up to 1 lakh.'
+        'title': 'What is the max loan amount for salaried Personal loan ?',
+        'subtitle': 'Max loan amount is 1 lac.'
       },
       {
         'title': 'On what criteria will the loan be sanctioned to me ?',
-        'subtitle': 'The final amount sanctioned will depend on your income, your CIBIL score and other eligibility criteria.'
+        'subtitle': 'The final amount sanctioned will depend on your net monthly income,your credit bureau and other eligibility criterias.'
       },
       {
-        'title': `Is ${this.state.productName} the lender ?`,
-        'subtitle': `No. ${this.state.productName} is not the lender. ${this.state.productName} will only facilitate your 
-        loan application for availing credit facilities. ${this.state.productName} has a contractual 
+        'title': `Is ${typeCaps} the lender ?`,
+        'subtitle': `${typeCaps} is not the lender. ${typeCaps} will only facilitate your 
+        loan application for availing credit facilities. ${typeCaps} has a contractual 
         relationship with DMI Finance Pvt Ltd who offers credit facilities to the users of the app. 
         Any credit facility offered to you by any lender on App shall be governed by Terms and 
         Conditions agreed 
-        between you and the lender and ${this.state.productName} shall not be a party to the same.`
+        between you and the lender and ${typeCaps} shall not be a party to the same.`
       },
       {
-        'title': `What are the benefits of applying for loan from ${this.state.productName}?`,
-        'subtitle': `1.     Digital loans: Bid farewell to piles of paperwork and branch visits
-        2.     Zero documentation: No income documents required
-        3. Money in account within 2 hrs: Submit loan application in 10 mins and get credit within 2 hrs
-        4.  Collateral free loan: You don’t have to provide any security for your loan
+        'title': `What are the benefits of applying for a personal loan from ${typeCaps} ?`,
+        'subtitle': `
+        1. Digital loans: Bid farewell to piles of paperwork and branch visits.</br>
+        2. Zero documentation: No income documents required.</br>
+        3. Money in account within 2 hrs: Submit loan application in 10 mins and get credit within 2 hrs.</br>
+        4. Collateral free loan: You don’t have to provide any security for your loan.</br>
         `
       },
       {
-        'title': `What documents are required to get a Personal loan from ${this.state.productName}?`,
+        'title': `What documents are required to get a Personal loan from ${typeCaps}?`,
         'subtitle': `You just need to upload a photo of your PAN card to get a Personal 
-        loan from ${this.state.productName}. No other documents are required `
+        loan from ${typeCaps}. No other documents are required.`
       },
       {
-        'title': 'What will be my EMI payment date ?',
-        'subtitle': 'If the loan disbursal date is before 20th or on 20th of a month, EMI date will be 5th of next month. If the loan disbursal date is after the 20th of a particular month then EMI date will be 5th of next to next month.'
+        'title': 'What will be my First EMI payment date ?',
+        'subtitle': `
+        1. Cases disbursed between 1st to 20th of the month – will have their first EMI on 5th of coming month.</br>
+        2. Cases disbursed between 21st till last day of month – will have first EMI on 5th of next to next month.</br>
+        3· Please note – there will be few cases approved on 20th but will get disbursed on 21st or later date 
+        (due to bank holiday or late hours), but their first EMI will be on 5th of next month only.</br>
+        `
       },
       {
-        'title': 'Are there any foreclosure and prepayment charge?',
-        'subtitle': 'Yes, there are foreclosure and part-prepayment charges applicable which will be mentioned in your loan agreement.'
+        'title': 'Are there any prepayment charges ?',
+        'subtitle': 'Prepayment not allowed for first 6 months. Prepayment charges of 3% flat on the o/s principal to be applied post this.'
       }
     ];
 
@@ -244,7 +253,7 @@ class Landing extends Component {
         <HowToSteps style={{ marginTop: 20,marginBottom:0 }} baseData={this.state.stepsContentMapper} />
 
         <div className="generic-page-title" style={{ margin: '20px 0 15px 0' }}>
-          Simple and hassle-free process
+        Simple and hassle-free process to "Benefits & Features"
         </div>
 
         <div className="his">
@@ -253,25 +262,12 @@ class Landing extends Component {
               backgroundImage: `url(${this.state.ic_why_hs})`
             }}>
               <div className={`card-info ${this.state.productName}`} style={{padding:'10px 0 10px 20px'}}>
-              Get loan Instantly in your account with no human interaction
+              Get loan upto 1 lac with no human interaction
               </div>
               <div style={{float:'right', paddingRight:'22px'}}>
                 <img src={ require(`assets/${this.state.productName}/ic_document_note.svg`)} alt="" />
               </div>
             </div>
-
-
-            <div style={{height:'112px', width:'172px', marginRight:'16px',
-              backgroundImage: `url(${this.state.ic_why_hs})`
-            }}>
-              <div className={`card-info ${this.state.productName}`} style={{padding:'10px 0 10px 20px'}}>
-                You don't have to provide any security  for your loan
-              </div>
-              <div style={{float:'right', paddingRight:'22px'}}>
-                <img src={ require(`assets/${this.state.productName}/ic_document_amount.svg`)} alt="" />
-              </div>
-            </div>
-
 
             <div style={{height:'112px', width:'172px', marginRight:'16px',
               backgroundImage: `url(${this.state.ic_why_hs})`
@@ -292,6 +288,17 @@ class Landing extends Component {
               </div>
               <div style={{float:'right', paddingRight:'22px'}}>
                 <img src={ require(`assets/${this.state.productName}/ic_why_loan_4.svg`)} alt="" />
+              </div>
+            </div>
+
+            <div style={{height:'112px', width:'172px', marginRight:'16px',
+              backgroundImage: `url(${this.state.ic_why_hs})`
+            }}>
+              <div className={`card-info ${this.state.productName}`} style={{padding:'10px 0 10px 20px'}}>
+                You don't have to provide any security  for your loan
+              </div>
+              <div style={{float:'right', paddingRight:'22px'}}>
+                <img src={ require(`assets/${this.state.productName}/ic_document_amount.svg`)} alt="" />
               </div>
             </div>
 

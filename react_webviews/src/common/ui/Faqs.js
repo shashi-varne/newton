@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './style.css';
 import { getConfig } from 'utils/functions';
+import ReactHtmlParser from 'react-html-parser'; 
 
 class FaqsClass extends Component {
     constructor(props) {
@@ -44,7 +45,7 @@ class FaqsClass extends Component {
 
                 {isSelected &&
                     <div className='subtitle'>
-                        {option.subtitle}
+                        {ReactHtmlParser(option.subtitle)}
                     </div>
                 }
             </div>

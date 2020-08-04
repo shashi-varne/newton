@@ -432,7 +432,7 @@ class FormSummary extends Component {
                 resetpage={true}
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
-                title="Review application form"
+                title="Review Application Form"
                 fullWidthButton={true}
                 onlyButton={true}
                 buttonTitle={'SUBMIT'}
@@ -488,7 +488,7 @@ class FormSummary extends Component {
                                         className="Checkbox" />
                                 </Grid>
                                 <Grid item xs={11}>
-                                    <div className="checkbox-text"><span className="secondary-color">I confirm</span> my above mentioned details </div>
+                                    <div className="checkbox-text"><span className="secondary-color">I confirm</span> my above mentioned details. </div>
                                 </Grid>
                             </Grid>
                         </div>

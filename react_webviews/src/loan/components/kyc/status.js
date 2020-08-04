@@ -229,8 +229,7 @@ class KycStatus extends Component {
           </div>
 
           <div className="check-eligiblity">
-            KYC verification will take little time.
-            Please wait !!. This can take approximately 20 seconds.
+          "KYC verification will take time. Please wait as this can take approximately 20 seconds."
           </div>
         </div>
       )
