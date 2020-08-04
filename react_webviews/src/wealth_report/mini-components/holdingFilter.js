@@ -24,7 +24,7 @@ export default class HoldingFilter extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      clicked: false,
+      render_filter: false,
       checked: false,
       fund_type: '',
       current_value: '',
@@ -34,7 +34,7 @@ export default class HoldingFilter extends Component {
 
   handleClick = () => {
     this.setState({
-      clicked: !this.state.clicked,
+      render_filter: !this.state.render_filter,
       checked: !this.state.checked,
       fund_type: '',
       current_value: '',
@@ -55,12 +55,12 @@ export default class HoldingFilter extends Component {
   }
 
   render() {
-    let { clicked, checked} = this.state;
+    let { render_filter, checked} = this.state;
     let time = 1500;
 
     return (
       <React.Fragment>
-        <div className="wr-filter" style={{display: clicked ? 'none' : 'flex'}}>
+        <div className="wr-filter" style={{display: render_filter ? 'none' : 'flex'}}>
           <WrButton 
           classes={{
             root: 'wr-btn'
@@ -73,7 +73,7 @@ export default class HoldingFilter extends Component {
           </WrButton>
         </div>
 
-        <div className="wr-filter-content" style={{display: clicked ? 'flex' : 'none'}}>
+        <div className="wr-filter-content" style={{display: render_filter ? 'flex' : 'none'}}>
           <div className="wr-category">
             {Filters.map(item => {
               time = time - 400;

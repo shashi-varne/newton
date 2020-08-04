@@ -1,82 +1,73 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router';
-import { getConfig, setHeights } from 'utils/functions';
-import Button from 'material-ui/Button';
+import React, { Component } from "react";
+import { withRouter } from "react-router";
+import Button from "material-ui/Button";
 import Dialog, {
-  DialogActions,
-  // DialogTitle,
   DialogContent,
-  DialogContentText
-} from 'material-ui/Dialog';
+} from "material-ui/Dialog";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
+const theme = createMuiTheme({
+  overrides: {
+    MuiDialog: {
+      root: {},
+      paper: {
+        borderRadius: "6px",
+        width: "100%",
+      },
+    },
+  },
+});
 
 class Container extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
-        openDialog: false,
-        openPopup: false,
-    }
+      openPopup: props.openPopup,
+    };
   }
 
-  componentDidMount() {
-
-  }
+  componentDidMount() {}
 
   handleClose = () => {
     this.setState({
-      openPopup: false
+      openPopup: false,
     });
-  }
+  };
 
   handlePopup = () => {
-  
     this.setState({
-      openPopup: false
+      openPopup: false,
     });
-
-    
-
-  }
-
+  };
 
   renderPopup = () => {
-      console.log('hi')
     return (
-      <Dialog
+      <MuiThemeProvider theme={theme}>
+        <Dialog
           fullScreen={false}
           open={this.state.openPopup}
           onClose={this.handleClose}
           aria-labelledby="responsive-dialog-title"
-      >
+          className="dialog"
+        >
           <DialogContent>
-              <DialogContentText>gfhjvcghjbnvnhj</DialogContentText>
+            {this.props.dialogContent}
           </DialogContent>
-          <DialogActions>
-              <Button onClick={this.handleClose} color="default">
-                  No
-        </Button>
-              <Button onClick={this.handlePopup} color="default" autoFocus>
-                  Yes
-        </Button>
-          </DialogActions>
-      </Dialog>
-  );
-  }
-
-
+        </Dialog>
+      </MuiThemeProvider>
+    );
+  };
 
   render() {
-
     return (
-      <div className={`ContainerWrapper`} >
-            <div onClick={this.renderPopup} >
-                huoijvjhiuhhgi
-            </div>
+      <div className={`ContainerWrapper`}>
+        <div className={`Container ${this.props.classOverRideContainer}`}>
+          {this.props.children}
+        </div>
+        {this.renderPopup()}
       </div>
     );
   }
-};
+}
 
 export default withRouter(Container);
