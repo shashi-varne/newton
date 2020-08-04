@@ -327,11 +327,11 @@ class GoldSummary extends Component {
     return (
       <span className="gold-offer-terms" key={index}>
         {index !== 5 ? `${index + 1}. ${props}` : 
-          <ul>
-            {props.map(offers => (
-              <li><b>{offers}</b></li>
-            ))}
-          </ul>
+          // <ul>
+            props.map(offers => (
+              <div><b>&bull;{offers}</b></div>
+            ))
+          // </ul>
         }
       </span>
     )
