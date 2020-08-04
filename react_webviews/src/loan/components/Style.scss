@@ -393,15 +393,35 @@
     cursor: pointer;
   }
 
-  .card-info {
-    color: #19487f;
-    font-size: 13px;
-    width: 77%;
-    line-height: 20px;
+  .hassle-free-tile {
+    width: 172px;
+    margin: 0 20px 0 0;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+
+    .hft-icon {
+      text-align: right;
+      padding: 0px 20px 10px 0;
+    }
+
+
+    .card-info {
+      color: #19487f;
+      font-size: 13px;
+      width: 80%;
+      margin: 0 auto;
+      line-height: 20px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+    .card-info.fisdom {
+      color: #331C6B;
+    }
   }
-  .card-info.fisdom {
-    color: #331C6B;
-  }
+
+
+
 }
 
 .loan-journey {

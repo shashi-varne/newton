@@ -18,6 +18,7 @@ class Landing extends Component {
       show_loader: false,
       get_lead: true,
       getLeadBodyKeys: ['vendor_info'],
+      hassleFreePoints: [],
       top_cta_title: '',
       productName: getConfig().productName,
       ic_why_hs: getConfig().productName === 'fisdom' ? ic_why_hs_fisdom : ic_why_hs_myway
@@ -38,8 +39,29 @@ class Landing extends Component {
       ]
     }
 
+    let hassleFreePoints = [
+
+      {
+          'title': 'Get loan upto 1 lac with no human interaction',
+          'icon' : 'ic_document_note'
+      },
+       {
+          'title': 'No income documents required',
+          'icon' : 'ic_why_loan_3'
+      },
+       {
+          'title': 'Complete easy loan application process and get money in 2 hrs',
+          'icon' : 'ic_why_loan_4'
+      },
+       {
+          'title': "You don't have to provide any security  for your loan",
+          'icon' : 'ic_document_amount'
+      }
+  ]
+
     this.setState({
-      stepsContentMapper
+      stepsContentMapper:stepsContentMapper,
+      hassleFreePoints:hassleFreePoints
     })
   }
 
@@ -137,9 +159,9 @@ class Landing extends Component {
       {
         'title': 'What will be my First EMI payment date ?',
         'subtitle': `
-        1. Cases disbursed between 1st to 20th of the month – will have their first EMI on 5th of coming month.</br>
-        2. Cases disbursed between 21st till last day of month – will have first EMI on 5th of next to next month.</br>
-        3· Please note – there will be few cases approved on 20th but will get disbursed on 21st or later date 
+        Cases disbursed between 1st to 20th of the month – will have their first EMI on 5th of coming month.</br>
+        Cases disbursed between 21st till last day of month – will have first EMI on 5th of next to next month.</br>
+        Please note – there will be few cases approved on 20th but will get disbursed on 21st or later date 
         (due to bank holiday or late hours), but their first EMI will be on 5th of next month only.</br>
         `
       },
@@ -197,6 +219,21 @@ class Landing extends Component {
       this.navigate(state);
     }
     
+  }
+
+  renderHasslePoints = (props, index) => {
+    return(
+      <div key={index} className="hassle-free-tile" style={{
+      backgroundImage: `url(${this.state.ic_why_hs})`
+    }}>
+      <div className={`card-info ${this.state.productName} hft-title`}>
+      {props.title}
+      </div>
+      <div className="hft-icon">
+        <img src={ require(`assets/${this.state.productName}/${props.icon}.svg`)} alt="" />
+      </div>
+    </div>
+    )
   }
 
  
@@ -258,50 +295,7 @@ class Landing extends Component {
 
         <div className="his">
           <div className="horizontal-images-scroll">
-            <div style={{height:'112px', width:'172px', marginRight:'16px',
-              backgroundImage: `url(${this.state.ic_why_hs})`
-            }}>
-              <div className={`card-info ${this.state.productName}`} style={{padding:'10px 0 10px 20px'}}>
-              Get loan upto 1 lac with no human interaction
-              </div>
-              <div style={{float:'right', paddingRight:'22px'}}>
-                <img src={ require(`assets/${this.state.productName}/ic_document_note.svg`)} alt="" />
-              </div>
-            </div>
-
-            <div style={{height:'112px', width:'172px', marginRight:'16px',
-              backgroundImage: `url(${this.state.ic_why_hs})`
-            }}>
-              <div className={`card-info ${this.state.productName}`} style={{padding:'10px 0 30px 20px'}}>
-                No income documents required
-              </div>
-              <div style={{float:'right', paddingRight:'22px'}}>
-                <img src={ require(`assets/${this.state.productName}/ic_why_loan_3.svg`)} alt="" />
-              </div>
-            </div>
-
-            <div style={{height:'112px', width:'172px', marginRight:'16px',
-              backgroundImage: `url(${this.state.ic_why_hs})`
-            }}>
-              <div className={`card-info ${this.state.productName}`} style={{padding:'10px 0 10px 20px'}}>
-                Complete easy loan application process and get money in 2 hrs 
-              </div>
-              <div style={{float:'right', paddingRight:'22px'}}>
-                <img src={ require(`assets/${this.state.productName}/ic_why_loan_4.svg`)} alt="" />
-              </div>
-            </div>
-
-            <div style={{height:'112px', width:'172px', marginRight:'16px',
-              backgroundImage: `url(${this.state.ic_why_hs})`
-            }}>
-              <div className={`card-info ${this.state.productName}`} style={{padding:'10px 0 10px 20px'}}>
-                You don't have to provide any security  for your loan
-              </div>
-              <div style={{float:'right', paddingRight:'22px'}}>
-                <img src={ require(`assets/${this.state.productName}/ic_document_amount.svg`)} alt="" />
-              </div>
-            </div>
-
+                {this.state.hassleFreePoints.map(this.renderHasslePoints)}
           </div>
         </div>
 
