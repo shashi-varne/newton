@@ -100,7 +100,7 @@ class FormSummary extends Component {
                     'subtitle': personal_info.pan_no
                 },
                 {
-                    'title': 'Insured name',
+                    'title': "Borrower's name",
                     'subtitle': personal_info.first_name + ' ' + personal_info.last_name
                 },
                 {

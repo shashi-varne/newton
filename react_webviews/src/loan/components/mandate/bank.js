@@ -32,21 +32,29 @@ class MandateBank extends Component {
       'Current'
     ];
 
+
+    let { params } = this.props.location;
+    if (!params) {
+      params = {};
+    }
+
+
     this.setState({
       accountTypeOptions: accountTypeOptions,
+      fromPanScreen: !!params.fromPanScreen
     });
 
-    }
+  }
 
   onload = () => {
     let lead = this.state.lead || {};
     let bank_info = lead.bank_info || {};
     let vendor_info = lead.vendor_info || {};
 
-    let dmi_loan_status = vendor_info.dmi_loan_status  || '';
+    let dmi_loan_status = vendor_info.dmi_loan_status || '';
     let formDisabled = false;
-    if(dmi_loan_status === 'emandate' || dmi_loan_status === 'emandate_failed' || 
-    dmi_loan_status === 'emandate_exit') {
+    if (dmi_loan_status === 'emandate' || dmi_loan_status === 'emandate_failed' ||
+      dmi_loan_status === 'emandate_exit' || dmi_loan_status === 'emandate_discrepancy') {
       formDisabled = true;
     }
 
@@ -66,10 +74,10 @@ class MandateBank extends Component {
     }
 
     this.setState({
-        form_data: form_data,
-        vendor_info: vendor_info,
-        bottomButtonData:bottomButtonData,
-        formDisabled: formDisabled
+      form_data: form_data,
+      vendor_info: vendor_info,
+      bottomButtonData: bottomButtonData,
+      formDisabled: formDisabled
     })
 
   }
@@ -94,7 +102,7 @@ class MandateBank extends Component {
     }
   }
 
-   checkIFSCFormat = async(ifsc_code) => {
+  checkIFSCFormat = async (ifsc_code) => {
 
     let form_data = this.state.form_data;
     if (ifsc_code && ('' + ifsc_code).length === 11) {
@@ -168,28 +176,28 @@ class MandateBank extends Component {
   handleClick = async () => {
     this.sendEvents('next');
 
-    if(this.state.formDisabled) {
+    if (this.state.formDisabled) {
       this.redirectMandate();
     } else {
       let form_data = this.state.form_data;
 
       let canSubmitForm = true;
-      
-  
+
+
       if (!form_data.account_no) {
         form_data.account_no_error = 'Please enter account number';
       } else if (form_data.account_no.length < 5) {
         form_data.account_no_error = 'Minimum length for account number is 5'
       }
-  
+
       if (!form_data.account_type) {
         form_data.account_type_error = 'Please select account type';
       }
-  
+
       if (!form_data.name) {
         form_data.name_error = 'Please enter name'
       }
-  
+
       if (!form_data.confirm_account_no) {
         form_data.confirm_account_no_error = 'This field is required';
       } else if (form_data.account_no !== form_data.confirm_account_no) {
@@ -199,38 +207,38 @@ class MandateBank extends Component {
       } else {
         form_data.confirm_account_no_error = '';
       }
-  
+
       if (!form_data.ifsc_code) {
         form_data.ifsc_error = 'Please enter IFSC Code';
       } else if (form_data.ifsc_code && (form_data.ifsc_code.length < 11 || form_data.ifsc_code.length > 11)) {
         form_data.ifsc_error = 'Invalid IFSC Code';
       }
-  
+
       console.log(form_data);
-  
+
       this.setState({
         form_data: form_data
       })
-  
+
       // let keysToCheck = ['account_no', 'confirm_account_no', 
       // 'ifsc', 'account_type'];
-  
-  
+
+
       for (var key in form_data) {
         if (key.indexOf('error') >= 0) {
-            if (form_data[key]) {
-                canSubmitForm = false;
-                break;
-            }
+          if (form_data[key]) {
+            canSubmitForm = false;
+            break;
+          }
         }
       }
-  
+
       if (canSubmitForm) {
         try {
           this.setState({
             show_loader: true
           })
-    
+
           let body = {
             bank_name: form_data.bank_name,
             account_no: form_data.account_no,
@@ -238,36 +246,36 @@ class MandateBank extends Component {
             account_type: form_data.account_type,
             account_holder_name: form_data.name
           };
-    
+
           const res = await Api.post(`/relay/api/loan/bank/update/${this.state.application_id}`, body);
-    
-          let resultData  = res.pfwresponse.result;
+
+          let resultData = res.pfwresponse.result;
           if (res.pfwresponse.status_code === 200 && !resultData.error) {
             this.redirectMandate();
-  
+
           } else {
             this.setState({
               show_loader: false
             });
-  
+
             if (resultData.invalid_fields && resultData.invalid_fields.length > 0 && resultData.error &&
               resultData.error.length > 0) {
               let form_data = this.state.form_data;
-  
+
               for (var i in resultData.invalid_fields) {
                 form_data[resultData.invalid_fields[i] + '_error'] = resultData.error[i];
               }
-  
+
               this.setState({
-                  form_data: form_data
+                form_data: form_data
               })
-          } else {
+            } else {
               toast(resultData.error || resultData.message
-                  || 'Something went wrong');
+                || 'Something went wrong');
+            }
           }
-          }
-    
-    
+
+
         } catch (err) {
           this.setState({
             show_loader: false
@@ -278,7 +286,7 @@ class MandateBank extends Component {
       }
     }
 
-    
+
   }
 
   handleAccountTypeRadioValue = name => value => {
@@ -290,6 +298,10 @@ class MandateBank extends Component {
     });
   };
 
+  goBack = () => {
+    this.navigate('upload-pan');
+  }
+
   render() {
     return (
       <Container
@@ -300,10 +312,13 @@ class MandateBank extends Component {
         buttonTitle="SETUP MANDATE"
         withProvider={this.state.withProvider}
         buttonData={this.state.bottomButtonData}
+        headerData={{
+          goBack: this.state.fromPanScreen ? this.goBack : ''
+        }}
       >
         <FormControl fullWidth>
           <div className="loan-mandate-bank">
-            <div style={{color: '#64778D', margin: '0 0 20px 0', lineHeight: '24px'}}>
+            <div style={{ color: '#64778D', margin: '0 0 20px 0', lineHeight: '24px' }}>
               Amount will be credited to this bank a/c. Please make sure that this bank a/c is in your name.
             </div>
 
@@ -324,9 +339,9 @@ class MandateBank extends Component {
               />
             </div>
 
-            <div className="InputField" style={{position: 'relative'}}>
+            <div className="InputField" style={{ position: 'relative' }}>
               <Input
-              disabled={this.state.formDisabled}
+                disabled={this.state.formDisabled}
                 error={(this.state.form_data.ifsc_error) ? true : false}
                 helperText={this.state.form_data.ifsc_error}
                 type="text"
@@ -337,7 +352,7 @@ class MandateBank extends Component {
                   maxLength: 11,
                 }}
                 value={this.state.form_data.ifsc_code || ''}
-                onChange={this.handleChange('ifsc_code')} 
+                onChange={this.handleChange('ifsc_code')}
               />
 
               {this.state.form_data.bank_image &&
@@ -353,7 +368,7 @@ class MandateBank extends Component {
 
             <div className="InputField">
               <Input
-              disabled={this.state.formDisabled}
+                disabled={this.state.formDisabled}
                 error={(this.state.form_data.account_no_error) ? true : false}
                 helperText={this.state.form_data.account_no_error}
                 type="password"
@@ -371,7 +386,7 @@ class MandateBank extends Component {
 
             <div className="InputField">
               <Input
-              disabled={this.state.formDisabled}
+                disabled={this.state.formDisabled}
                 error={(this.state.form_data.confirm_account_no_error) ? true : false}
                 helperText={this.state.form_data.confirm_account_no_error}
                 type="number"
@@ -388,7 +403,7 @@ class MandateBank extends Component {
 
             <div className="InputField">
               <DropdownWithoutIcon
-              disabled={this.state.formDisabled}
+                disabled={this.state.formDisabled}
                 width="40"
                 options={this.state.accountTypeOptions}
                 id="select_account_type"

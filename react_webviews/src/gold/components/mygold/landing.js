@@ -120,17 +120,6 @@ class GoldSummary extends Component {
       'Gold-back will be in the form of MMTC-PAMP balance and will be 1% of the value of gold purchased and upto a maximum of Rs 100. Below table shows how the gold-back will be done. '
     ]
 
-    var gold_offer_terms_safegold_july = [
-      'Offer is only valid till  23:59 hrs 31st July 2020.',
-      'For a customer to be valid for the offer (s)he should purchase gold worth at least 5gm during the offer period.',
-      '2500 gold back will be as per price on the day of allotment of gold back.',
-      'This offer can be availed only once ( per device, per user, per account) during the offer period.',
-      'Purchase can be done in a single transaction or multiple transactions but the total gold purchased during the offer period should be greater than or equal to 5gm.',
-      'Offer is valid ONLY for the first 100 customers who purchase Gold (greater than or equal to 5gm) during the offer period for a Gold-back of Rs 2500/-.',
-      "Gold-back amounts for lucky winners will be credited to the customer's Safegold account by 15th August 2020.",
-      "Any conditions which are not explicitly covered would be at the sole discretion of Finwizard Technology Private Limited. The decision of "  + typeCaps +  " in this regard will be final and the company has the right to change terms and conditions at any time.",
-      "In case of any customer query or dispute, Finwizard Technology Private Limited reserves the right to resolve the same on the basis of the terms and conditions of the offer at its sole discretion."
-    ]
 
     var gold_offer_terms_safegold_august = [
       'Offer is only valid till  23:59 hrs 17th August 2020.',

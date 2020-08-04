@@ -91,7 +91,7 @@ class Journey extends Component {
         withProvider = true;
         step_info = 2;
         next_state = 'upload-pan';
-      } else if (['emandate', 'emandate_failed', 'emandate_exit'].indexOf(dmi_loan_status) !== -1) {
+      } else if (['emandate', 'emandate_failed', 'emandate_exit', 'emandate_discrepancy'].indexOf(dmi_loan_status) !== -1) {
         withProvider = true;
         cta_title = 'CONTINUE';
         step_info = 2;

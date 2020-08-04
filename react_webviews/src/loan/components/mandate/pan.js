@@ -95,7 +95,11 @@ class MandatePan extends Component {
 
     let resultData = await this.callBackApi(body);
     if (resultData.callback_status) {
-      this.navigate('bank');
+      this.navigate('bank', {
+        params: {
+          fromPanScreen: true
+        }
+      });
     } else {
       let searchParams = getConfig().searchParams + '&status=sorry';
       this.navigate('instant-kyc-status', { searchParams: searchParams });
@@ -104,7 +108,11 @@ class MandatePan extends Component {
 
   checkNextState = () => {
     if (this.state.vendor_info.dmi_loan_status === 'opportunity') {
-      this.navigate('bank');
+      this.navigate('bank', {
+        params: {
+          fromPanScreen: true
+        }
+      });
     } else {
       this.conversionCallBack();
     }
