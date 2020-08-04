@@ -207,7 +207,7 @@ class FormCreateProfile extends Component {
                 </div>
 
                 <FormControl fullWidth>
-                    <div className="InputField" style={{ margin: '0 0 -30px 0' }}>
+                    <div className="InputField" style={{ margin: '0px 0px -20px 0px' }}>
                         <RadioOptions
                             width="40"
                             label=""
@@ -218,6 +218,7 @@ class FormCreateProfile extends Component {
                                     value: '1'
                                 }
                             ]}
+                            color={getConfig().primary}
                             value={this.state.step1 || ''}
                             onChange={() => { }} />
                     </div>
@@ -233,6 +234,7 @@ class FormCreateProfile extends Component {
                                     value: '1'
                                 }
                             ]}
+                            color={getConfig().primary}
                             value={this.state.step2 || ''}
                             onChange={() => { }} />
                     </div>
