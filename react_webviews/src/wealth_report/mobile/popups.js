@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Container from "./container";
 import "./Style.scss";
 import Button from "material-ui/Button";
+import { getConfig } from 'utils/functions';
+import $ from 'jquery';
 
 class Popups extends Component {
   constructor(props) {
@@ -9,7 +11,23 @@ class Popups extends Component {
     this.state = {
       accounts: ['Abishmathew21@yahoo.co.in', 'Abishmathew21@yahoo.co.in'],
       openPopup: false,
+      fileUploaded: false
     };
+  }
+
+  openCameraWeb() {
+    $("input").trigger("click");
+  }
+
+  startUpload(method_name, doc_type, doc_name, doc_side) {
+    // this.sendEvents(method_name);
+
+    // if (getConfig().html_camera) {
+      this.openCameraWeb();
+    // } else {
+    //   this.native_call_handler(method_name, doc_type, doc_name, doc_side);
+    // }
+
   }
 
   render() {
@@ -49,8 +67,22 @@ class Popups extends Component {
     const dialog3 = (
       <React.Fragment>
         <div className="wr-welcome">
-          <img src={require(`assets/fisdom/ic-profile-avatar.svg`)} alt="" />
-          <img src={require(`assets/fisdom/ic-mob-add-pic.svg`)} alt="" style={{marginLeft:'-27px'}} />
+          {/* <img src={require(`assets/fisdom/ic-profile-avatar.svg`)} alt="" /> */}
+          {/* <img src={require(`assets/fisdom/ic-mob-add-pic.svg`)} alt="" style={{marginLeft:'-27px'}} /> */}
+
+          {/* <div onClick={() => this.startUpload('open_camera', 'pan', 'pan.jpg')} style={{
+              textAlign: 'center',
+            }}>
+              <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" />
+              <img src="" alt="PAN"></img>
+              <div style={{ color: '#28b24d' }}>Click here to upload</div>
+            </div> */}
+            <input type="file" style={{display: 'inherit'}} />
+            <img src={require(`assets/fisdom/ic-profile-avatar.svg`)} alt="" />
+            <img src={require(`assets/fisdom/ic-mob-add-pic.svg`)} alt="" style={{marginLeft:'-27px'}} />
+            
+
+
           <div className="wr-head">Welcome</div>
           <div className="wr-number">+91 92374 82739</div>
         </div>
