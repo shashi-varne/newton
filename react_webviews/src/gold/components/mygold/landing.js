@@ -145,7 +145,7 @@ class GoldSummary extends Component {
         'Gold purchased greater than 20 gm : Rs 10000/- for first 10 customers'
       ],
       "Gold-back amounts for lucky winners will be credited to the customer's Safegold account by 30th August 2020.",
-      'Any conditions which are not explicitly covered would be at the sole discretion of Finwizard Technology Private Limited. The decision of Fisdom in this regard will be final and the company has the right to change terms and conditions at any time.',
+      'Any conditions which are not explicitly covered would be at the sole discretion of Finwizard Technology Private Limited. The decision of '  + typeCaps +  ' in this regard will be final and the company has the right to change terms and conditions at any time.',
       'In case of any customer query or dispute, Finwizard Technology Private Limited reserves the right to resolve the same on the basis of the terms and conditions of the offer at its sole discretion.',
     ]
 
