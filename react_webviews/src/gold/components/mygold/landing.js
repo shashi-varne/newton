@@ -132,6 +132,23 @@ class GoldSummary extends Component {
       "In case of any customer query or dispute, Finwizard Technology Private Limited reserves the right to resolve the same on the basis of the terms and conditions of the offer at its sole discretion."
     ]
 
+    var gold_offer_terms_safegold_august = [
+      'Offer is only valid till  23:59 hrs 17th August 2020.',
+      'For a customer to be valid for the offer (s)he should purchase gold worth at least 2gm during the offer period.',
+      'This offer can be availed only once ( per device, per user, per account) during the offer period. Highest Goldback applicable will be given to the customer.',
+      'Purchase can be done in a single transaction or multiple transaction but the total gold should be greater than at least 2gm.',
+      'Goldback will be allotted as per below mentioned criteria as per the price of Gold on the allocation date as mentioned below:',
+      [
+        'Gold purchased 2gm to 4gm : Rs 750/- for first 50 customers',
+        'Gold purchased 5 gm to 9gm : Rs 1250/- for first 50 customers',
+        'Gold purchased greater than 10gm : Rs 5000/- for first 10 customers',
+        'Gold purchased greater than 20 gm : Rs 10000/- for first 10 customers'
+      ],
+      "Gold-back amounts for lucky winners will be credited to the customer's Safegold account by 30th August 2020.",
+      'Any conditions which are not explicitly covered would be at the sole discretion of Finwizard Technology Private Limited. The decision of '  + typeCaps +  ' in this regard will be final and the company has the right to change terms and conditions at any time.',
+      'In case of any customer query or dispute, Finwizard Technology Private Limited reserves the right to resolve the same on the basis of the terms and conditions of the offer at its sole discretion.',
+    ]
+
     let offerImageDataBase = [
       {
         src: type === 'fisdom' ? goldOfferImageFisdom : goldOfferImageMyway,
@@ -169,8 +186,8 @@ class GoldSummary extends Component {
       {
         src: type === 'fisdom' ? goldOfferSafegoldFisdom : goldOfferSafegoldMyway,
         link: '',
-        terms: gold_offer_terms_safegold_july,
-        key: 'safegold_july',
+        terms: gold_offer_terms_safegold_august,
+        key: 'safegold_august',
         canShow: true
       },
     ];
@@ -295,7 +312,7 @@ class GoldSummary extends Component {
     this.sendEvents('next', 'marketing_banner', index);
 
     if (offer.key === '5buy' || offer.key === '50delivery' || 
-    offer.key === 'mmtc_offer' || offer.key === 'safegold_july') {
+    offer.key === 'mmtc_offer' || offer.key === 'safegold_august') {
       this.setState({
         openDialogOffer: true,
         selectedIndexOffer: index
@@ -309,7 +326,13 @@ class GoldSummary extends Component {
   renderOfferTerms(props, index) {
     return (
       <span className="gold-offer-terms" key={index}>
-        {index + 1}. {props}
+        {index !== 5 ? `${index + 1}. ${props}` : 
+          props.map(offer => (
+            <span key={offer}>
+              <b>&bull; {offer} <br /></b>
+            </span>
+          ))
+        }
       </span>
     )
   }

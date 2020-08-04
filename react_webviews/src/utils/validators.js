@@ -498,6 +498,18 @@ export function checkStringInString(string_base, string_to_check) {
 }
 
 export function storageService() {
+  function lsTest() {
+    const test = 'test';
+    try {
+      window.localStorage.setItem(test, test);
+      window.localStorage.removeItem(test);
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  }
+  const localStorageValid = lsTest();
   var service = {
     set: set,
     get: get,
@@ -509,11 +521,13 @@ export function storageService() {
   return service;
 
   function set(key, value) {
-    window.localStorage.setItem(key, value);
+    if (localStorageValid) {
+      window.localStorage.setItem(key, value);
+    }
   }
 
   function get(key) {
-    if (checkValidString(window.localStorage.getItem(key))) {
+    if (localStorageValid && checkValidString(window.localStorage.getItem(key))) {
       return window.localStorage.getItem(key) || false;
     }
 
@@ -521,11 +535,13 @@ export function storageService() {
   }
 
   function setObject(key, value) {
-    window.localStorage.setItem(key, JSON.stringify(value));
+    if (localStorageValid) {
+      window.localStorage.setItem(key, JSON.stringify(value));
+    }
   }
 
   function getObject(key) {
-    if (checkValidString(window.localStorage.getItem(key))) {
+    if (localStorageValid && checkValidString(window.localStorage.getItem(key))) {
       return JSON.parse(window.localStorage.getItem(key)) || {};
     }
 
@@ -533,11 +549,15 @@ export function storageService() {
   }
 
   function remove(key) {
-    return window.localStorage.removeItem(key);
+    if (localStorageValid) {
+      return window.localStorage.removeItem(key);
+    }
   }
 
   function clear() {
-    return window.localStorage.clear();
+    if (localStorageValid) {
+      return window.localStorage.clear();
+    }
   }
 
 }
