@@ -220,9 +220,9 @@ class FormOtp extends Component {
 
             OTP has been sent by DMI Finance Pvt Ltd to your mobile number 
               {this.state.mobile_no &&
-              <span className="content-auth"> {this.state.mobile_no} </span>
+              <span className="content-auth"> {this.state.mobile_no}</span>
              }.
-              <span>Enter OTP to submit the loan application.</span>
+              <span> Enter OTP to submit the loan application.</span>
 
           </div>
           }
@@ -233,9 +233,9 @@ class FormOtp extends Component {
             An OTP is sent to your mobile number
                         {this.state.mobile_no &&
               <span>
-                        <span className="content-auth"> {this.state.mobile_no} </span>
-              </span>} .  
-              <span>Enter OTP to complete the process.</span>
+                        <span className="content-auth"> {this.state.mobile_no}</span>
+              </span>}.  
+              <span> Enter OTP to complete the process.</span>
 
           </div>
           }
