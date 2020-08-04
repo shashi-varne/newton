@@ -20,7 +20,6 @@ import MainPage from './desktop/MainPage';
 
 import Popups from './mobile/popups';
 import Drawers from './mobile/drawers';
-import Image from './mobile/image-upload';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -62,7 +61,6 @@ const WealthReport = (props) => {
 
           <Route path={`${url}/popups`} component={Popups} />
           <Route path={`${url}/drawers`} component={Drawers} />
-          <Route path={`${url}/profile`} component={Image} />
           
           <Route component={NotFound} />
         </Switch>

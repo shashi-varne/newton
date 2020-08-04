@@ -70,6 +70,12 @@
   font-size: 15px;
   border-bottom: solid 1px #f5f6f8;
 
+  .wr-profile {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+  }
+
   .wr-head {
     color: #a9a9a9;
     margin: 17px 0 6px 0;
@@ -83,13 +89,15 @@
 }
 
 .wr-logout {
-  background: #f3cece;
-  // color: #e02020;
-  // height: 47px;
-  margin-top: 15px;
-
-  img {
-    margin-right: 9px;
+  .wr-logout-btn {
+    background: #f3cece;
+    color: #e02020;
+    height: 47px;
+    margin-top: 15px;
+  
+    img {
+      margin-right: 9px;
+    }
   }
 }
 
@@ -134,30 +142,11 @@
   margin-bottom: 20px;
 }
 
-.btn {
-  margin-top: 32px;
-
-  .wr-outlined-btn {
-    background-color: #000;
-    border: solid 1px #421f88;
-    width: 30px;
-    margin-right: 20px;
-    height: 40px;
-    width: 100px;
-    border-radius: 6px;
-    color: #421f88;
+  .wr-input-addmail {
+    border-radius: 2px;
+    height: 30px;
+    background-color: #fff;
+    border: 1px solid #acb4be;
+    font-size: 15px;
+    padding: 10px 12px;
   }
-}
-
-.wr-text-field {
-  padding: 0px;
-}
-
-.wr-input {
-  border-radius: 6px;
-  background-color: #fff;
-  border: 1px solid #000;
-  font-size: 15px;
-  padding: 10px 12px;
-
-}

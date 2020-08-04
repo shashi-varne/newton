@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import Container from "./container";
 import "./Style.scss";
 import Button from "material-ui/Button";
-import { getConfig } from 'utils/functions';
-import $ from 'jquery';
+import { getBase64 } from "utils/functions";
+import $ from "jquery";
 
 class Popups extends Component {
   constructor(props) {
@@ -19,16 +19,34 @@ class Popups extends Component {
     $("input").trigger("click");
   }
 
-  startUpload(method_name, doc_type, doc_name, doc_side) {
-    // this.sendEvents(method_name);
-
-    // if (getConfig().html_camera) {
-      this.openCameraWeb();
-    // } else {
-    //   this.native_call_handler(method_name, doc_type, doc_name, doc_side);
-    // }
-
+  startUpload() {
+    this.openCameraWeb();
   }
+
+  getPhoto = (e) => {
+    e.preventDefault();
+
+    let file = e.target.files[0];
+
+    let acceptedType = ["image/jpeg", "image/jpg", "image/png", "image/bmp"];
+
+    if (acceptedType.indexOf(file.type) === -1) {
+      console.log("please select image file only");
+      return;
+    }
+
+    let that = this;
+    file.doc_type = file.type;
+    this.setState({
+      imageBaseFile: file,
+    });
+    getBase64(file, function (img) {
+      that.setState({
+        imageBaseFileShow: img,
+        fileUploaded: true,
+      });
+    });
+  };
 
   render() {
     const dialog = (
@@ -67,39 +85,48 @@ class Popups extends Component {
     const dialog3 = (
       <React.Fragment>
         <div className="wr-welcome">
-          {/* <img src={require(`assets/fisdom/ic-profile-avatar.svg`)} alt="" /> */}
-          {/* <img src={require(`assets/fisdom/ic-mob-add-pic.svg`)} alt="" style={{marginLeft:'-27px'}} /> */}
+          <div
+            style={{ textAlign: "center" }}
+            onClick={() => this.startUpload()}
+          >
+            <input
+              type="file"
+              style={{ display: "none" }}
+              onChange={this.getPhoto}
+              id="myFile"
+            />
 
-          {/* <div onClick={() => this.startUpload('open_camera', 'pan', 'pan.jpg')} style={{
-              textAlign: 'center',
-            }}>
-              <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" />
-              <img src="" alt="PAN"></img>
-              <div style={{ color: '#28b24d' }}>Click here to upload</div>
-            </div> */}
-            <input type="file" style={{display: 'inherit'}} />
-            <img src={require(`assets/fisdom/ic-profile-avatar.svg`)} alt="" />
-            <img src={require(`assets/fisdom/ic-mob-add-pic.svg`)} alt="" style={{marginLeft:'-27px'}} />
-            
+            {!this.state.fileUploaded && (
+              <img
+                src={require(`assets/fisdom/ic-profile-avatar.svg`)}
+                alt="avatar"
+              />
+            )}
 
+            {this.state.fileUploaded && (
+              <img
+                className="wr-profile"
+                src={this.state.imageBaseFileShow || this.state.document_url}
+                alt="profile"
+              />
+            )}
 
+            <img
+              src={require(`assets/fisdom/ic-mob-add-pic.svg`)}
+              alt="camera"
+              style={{ marginLeft: "-27px" }}
+            />
+          </div>
           <div className="wr-head">Welcome</div>
           <div className="wr-number">+91 92374 82739</div>
         </div>
 
-        <Button
-          fullWidth={true}
-          style={{
-            background: "#f3cece",
-            height: "47px",
-            color: "#e02020",
-            marginTop: "15px",
-          }}
-          className="wr-logout"
-        >
-          <img src={require(`assets/fisdom/ic-mob-logout.svg`)} alt="" />
-          Logout
-        </Button>
+        <div className="wr-logout">
+          <Button fullWidth={true} className="wr-logout-btn">
+            <img src={require(`assets/fisdom/ic-mob-logout.svg`)} alt="" />
+            Logout
+          </Button>
+        </div>
       </React.Fragment>
     );
 

@@ -5,7 +5,7 @@ import Button from "material-ui/Button";
 import { withStyles } from "@material-ui/core/styles";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
-import TextField from "./Input";
+import TextField from 'material-ui/TextField';
 
 import Drawer from "@material-ui/core/Drawer";
 import Radio from "@material-ui/core/Radio";
@@ -36,7 +36,7 @@ class Drawers extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      bottom: false,
+      bottom: true,
       members: ['BZRWR54332M', 'BZRWR54332M'],
     };
   }
@@ -82,12 +82,27 @@ class Drawers extends Component {
         <div className="wr-mail-content">
           Add the email address and get insights on your portfolio from fisdom
         </div>
-        <TextField />
-        <div className="btn">
+          <TextField
+            variant='outlined'
+            placeholder='Enter new email...'
+            InputProps={{
+              disableUnderline: true,
+              className:'wr-input-addmail'
+            }}
+          />
+
+        <div style={{marginTop:'32px', display:'flex', justifyContent:'space-between'}}>
           <Button
             variant="outlined"
-            className="wr-outlined-btn"
+            className="wr-cancel-btn"
             color="primary"
+            style={{
+              backgroundColor:'#fff',
+              border:'solid 2px #421f88',
+              height:'47px',
+              width:'35%',
+              borderRadius:'6px'
+            }}
           >
             Cancel
           </Button>
@@ -97,7 +112,7 @@ class Drawers extends Component {
               background: "#421f88",
               color: "#fff",
               width: "60%",
-              height: "40px",
+              height: "47px",
               borderRadius: "6px",
             }}
           >
