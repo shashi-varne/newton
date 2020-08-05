@@ -20,7 +20,8 @@ class FormCreateProfile extends Component {
         this.state = {
             step1: '1',
             dmi_loan_status: storageService().get('loan_dmi_loan_status') || '',
-            application_id: storageService().get('loan_application_id')
+            application_id: storageService().get('loan_application_id'),
+            show_loader:true
         }
 
         this.initialize = initialize.bind(this);
@@ -41,6 +42,10 @@ class FormCreateProfile extends Component {
             this.props.history.goBack();
             return;
         }
+
+        this.setState({
+            show_loader:false
+        })
 
         this.initialize();
 

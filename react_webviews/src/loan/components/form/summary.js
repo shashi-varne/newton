@@ -73,8 +73,6 @@ class FormSummary extends Component {
     onload = () => {
         let lead = this.state.lead;
 
-        console.log(lead);
-
         let accordianData = [];
 
         let personal_info = lead.personal_info || {};
@@ -226,7 +224,10 @@ class FormSummary extends Component {
             application_info: application_info,
             vendor_info: vendor_info || {}
         }, () => {
-            this.handleAccordian(0);
+            if(!this.state.form_submitted) {
+                this.handleAccordian(0);
+            }
+            
         })
     }
 
@@ -338,9 +339,11 @@ class FormSummary extends Component {
                 {props.open &&
                     <div className="bct-content">
                         {props.data.map(this.renderAccordiansubData)}
-                        <div onClick={() => this.openEdit(props.edit_state)} className="generic-page-button-small">
+                        {!this.state.form_submitted &&
+                         <div onClick={() => this.openEdit(props.edit_state)} className="generic-page-button-small">
                             EDIT
                         </div>
+                        }
                     </div>}
             </div>
         );
