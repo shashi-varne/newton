@@ -461,7 +461,7 @@ const Agreement = (props) => {
                     <td>{parentState.bank_info.bank_name}</td>
                 </tr>
                 <tr>
-                    <td>Branch Name IFS Code:</td>
+                    <td>Branch Name IFSC Code:</td>
                     <td>{parentState.bank_info.ifsc_code}</td>
                 </tr>
                 
