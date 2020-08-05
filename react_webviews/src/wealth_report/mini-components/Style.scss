@@ -34,15 +34,24 @@
 
 .wr-holding-card {
   display: flex;
+  flex-flow: wrap;
   color: black;
-  padding: 42px;
   align-items: center;
+}
+
+.wr-hc-user-data {
+  display: flex;
+  padding: 42px;
+  flex-basis: 55%;
+  box-sizing: border-box;
+  flex: 1;
   justify-content: space-between;
+  align-items: center;
 }
 
 .wr-small-col {
-  flex: 1;
   margin-right: 10px;
+  max-width: 30%;
 }
 
 span.wr-small-col-val {
@@ -74,6 +83,10 @@ span.wr-small-col-title {
   .span.wr-small-col-val {
     font-size: 20px;
   }
+
+  div#wr-hce-space {
+    display: none;
+  }
 }
 
 #wr-hce-past-trx {
@@ -100,9 +113,14 @@ span.wr-small-col-title {
 }
 
 .wr-hc-amc-detail {
-  flex-basis: 45% !important;
+  flex-basis: 40% !important;
+  padding: 42px;
+  box-sizing: border-box;
+  display: flex;
+  max-width: 40%;
+  justify-content: space-between;
+
   img.amc-logo {
-    float: left;
     width: 40px;
     height: 40px;
     margin-right: 24px;
@@ -111,6 +129,9 @@ span.wr-small-col-title {
     font-size: 20px;
     line-height: 1;
     color: #000000;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
   .amc-detail-subtitle {
     opacity: 0.5;
@@ -121,18 +142,16 @@ span.wr-small-col-title {
 }
 
 .wr-fisdom-rating {
-  padding: 6px 8px;
+  padding: 4px 8px;
   border-radius: 4px;
   width: 40px;
   height: 25px;
-  display: inline-block;
+  display: flex;
   box-sizing: border-box;
-  margin-left: 40px;
 
   span.rating-num {
     font-size: 15px;
     font-weight: 600;
-    vertical-align: middle;
   }
 
   img.rating-star {
@@ -145,8 +164,10 @@ span.wr-small-col-title {
 #wr-header-bar {
   position: absolute;
   top: 144px;
-  left: 8.3%;
-  width: 83%;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 94%;
   height: 124px;
   border-radius: 10px;
   box-shadow: 0 1px 15px 0 rgba(69, 65, 78, 0.05);
@@ -158,17 +179,16 @@ span.wr-small-col-title {
   .wr-header-tab {
     flex: 1;
     box-sizing: border-box;
-    padding-top: 27px;
-    text-align: center;
     font-size: 17px;
     font-weight: 600;
-    font-style: normal;
-    line-height: 1;
     cursor: pointer;
-    align-items: center;
     color: #000000;
     border-left: solid 0.5px rgba(151, 151, 151, 0.1);
-    text-decoration: inherit;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: space-evenly;
+    text-decoration: none;
 
     img {
       width: 30px;
@@ -178,8 +198,8 @@ span.wr-small-col-title {
 
   .wr-select {
     font-size: 17px;
-    padding: 20px 0 0 0;
     font-weight: 500;
+    text-decoration: none;
   }
 
   .hr {
@@ -252,5 +272,247 @@ span.wr-small-col-title {
     color: var(--primary);
     font-weight: 600;
     text-transform: capitalize;
+  }
+}
+
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 812px) {
+
+  .wr-icon-button {
+    border-radius: 100px !important;
+    height: 48px !important;
+    width: 48px !important;
+  }
+
+  .wr-table {
+    width: 100%;
+    border-spacing: 0;
+
+    thead {
+      td {
+        border-bottom: 1px solid rgba(110, 110, 110, 0.05);
+        text-transform: capitalize;
+        color: rgba(0, 0, 0, 0.6);
+      }
+    }
+    tbody {
+      tr:nth-child(1) {
+        td {
+          border-top: none;
+        }
+      }
+      td {
+        border-top: 1px solid rgba(110, 110, 110, 0.05);
+      }
+    }
+    td {
+      padding: 14px 5px;
+      font-size: 12px;
+    }
+  }
+
+  .wr-holding-card {
+    justify-content: space-between;
+  }
+
+  .wr-hc-amc-detail {
+    flex-basis: 100% !important;
+    padding: 16px;
+    border-bottom: 1px solid rgba(102, 102, 102, 0.05);
+    max-width: 100%;
+
+    img.amc-logo {
+      width: 27px;
+      height: 27px;
+      margin-right: 12px;
+    }
+    .amc-detail-title {
+      font-size: 14px;
+    }
+    .amc-detail-subtitle {
+      font-size: 12px;
+      margin-top: 6px;
+    }
+  }
+
+  .wr-hc-user-data {
+    padding: 16px;
+  }
+
+  .wr-fisdom-rating {
+    width: 36px;
+    height: 23px;
+
+    span.rating-num {
+      font-size: 14px;
+    }
+
+    img.rating-star {
+      height: 13px;
+    }
+  }
+
+  .wr-small-col {
+    margin-right: 5px;
+  }
+
+  span.wr-small-col-val {
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+
+  span.wr-small-col-title {
+    font-size: 12px;
+  }
+
+  .wr-holding-card-expand {
+    background-color: #fbfaff;
+    min-height: 210px;
+    padding: 16px;
+  }
+
+  #wr-hce-fund-details {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0;
+
+    span.wr-small-col-val {
+      font-weight: 500;
+    }
+    div {
+      flex-basis: 25%;
+      margin-top: 28px;
+      margin-right: 10px;
+    }
+    div#wr-hce-space {
+      display: block;
+    }
+  }
+
+  #wr-hce-past-trx {
+    margin-top: 28px;
+    max-height: 300px;
+    border: none;
+    background: inherit;
+    padding: 5px 7px;
+    overflow-y: hidden;
+  }
+
+  #wr-header-bar {
+    position: absolute;
+    top: 132px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 94%;
+    height: 74px;
+    border-radius: 10px;
+    box-shadow: 0 1px 15px 0 rgba(69, 65, 78, 0.05);
+    border: solid 0.5px rgba(151, 151, 151, 0.1);
+    background-color: #ffffff;
+    display: flex;
+    z-index: 9999;
+    
+    .wr-header-tab {
+      flex: 1;
+      box-sizing: border-box;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.17;
+      cursor: pointer;
+      color: #000000;
+      border-left: solid 0.5px rgba(151, 151, 151, 0.1);
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+      justify-content: space-evenly;
+      text-decoration: none;
+
+      img {
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    .wr-select {
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .hr {
+      border-top: 1px solid rgba(151, 151, 151, 0.1);
+      margin-left: 2px;
+      width: 99%;
+    }
+
+    .wr-header-pan-select {
+      display: none; // TODO: remove this
+      border: solid 0.5px rgba(151, 151, 151, 0.1);
+      overflow: hidden;
+      border-radius: 10px 0 0 10px;
+      background-color: #ffffff;
+      box-shadow: 1px 1px rgba(69, 65, 78, 0.05);
+    }
+
+    .wr-pan-content {
+      display: none; //Todo: remove this
+      flex-basis: 27%;
+      display: flex;
+      align-items: center;
+      height: 123px;
+      cursor: pointer;
+      padding: 0 17px 0 17px;
+    }
+
+    .wr-pan {
+      font-size: 20px;
+      margin-top: 6px;
+      font-weight: 500;
+      width: 128px;
+    }
+  }
+
+  #wr-email-list {
+    .wr-email-list-item {
+      padding-top: 16px;
+    }
+  }
+
+  #wr-email-list-title {
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.5);
+    margin-top: 26px;
+  }
+
+  .wr-email-list-item {
+    padding: 24px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: solid 0.5px rgba(151, 151, 151, 0.1);;
+    
+    span.wr-eli-email {
+      display: block;
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    span.wr-eli-synced {
+      font-size: 13px;
+      color: rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  .wr-add-email-btn {
+    background-color: rgba(80, 45, 168, 0.1) !important;
+    
+    .MuiButton-label {
+      color: var(--primary);
+      font-weight: 600;
+      text-transform: capitalize;
+    }
   }
 }

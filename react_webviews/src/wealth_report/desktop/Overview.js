@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { LinearProgress, createMuiTheme, MuiThemeProvider } from 'material-ui';
-import Graph from './Graph';
 
 const theme = createMuiTheme({
   overrides: {
@@ -50,7 +49,6 @@ export default class Overview extends Component {
           </div>
         </div>
       </div>
-        {/* <Graph></Graph> */}
         <div id="portfolio-insights-header">Portfolio Insights</div>
         <div id="wr-portfolio-insights-container">
           {portfolioCard()}
