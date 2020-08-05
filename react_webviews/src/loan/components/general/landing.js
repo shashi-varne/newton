@@ -35,7 +35,7 @@ class Landing extends Component {
       options: [
         { 'icon': 'ic_why_loan1', 'subtitle': 'Salaried and resident Indian citizens' },
         { 'icon': 'ic_why_loan2', 'subtitle': 'Age between 23 and 55 years' },
-        { 'icon': 'ic_why_loan3', 'subtitle': 'Employed with a private, public limited company, or an MNC' }
+        { 'icon': 'ic_why_loan3', 'subtitle': 'Employed with a private, public limited company, or a MNC' }
       ]
     }
 

@@ -99,7 +99,7 @@ class FormSummary extends Component {
                     'subtitle': personal_info.pan_no
                 },
                 {
-                    'title': "Borrower's name",
+                    'title': "Borrower name",
                     'subtitle': personal_info.first_name + ' ' + personal_info.last_name
                 },
                 {
@@ -107,7 +107,7 @@ class FormSummary extends Component {
                     'subtitle': personal_info.dob
                 },
                 {
-                    'title': "Father's name",
+                    'title': "Father name",
                     'subtitle': personal_info.father_name
                 },
                 {
@@ -509,7 +509,7 @@ class FormSummary extends Component {
                                         className="Checkbox" />
                                 </Grid>
                                 <Grid item xs={11}>
-                                    <div className="checkbox-text"><span className="secondary-color">I confirm</span> my above mentioned details. </div>
+                                    <div className="checkbox-text"><span className="secondary-color">I confirm</span> above mentioned details. </div>
                                 </Grid>
                             </Grid>
                         </div>

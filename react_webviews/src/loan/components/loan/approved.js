@@ -86,9 +86,6 @@ class LoanApprvoed extends Component {
           <div className="content">
             Terms and Conditions accepted by you shall be emailed to your registered email id.
           </div>
-          <div className="content" style={{marginTop: -30}}>
-            Thank You.
-          </div>
 
           <Contact />
         </div>

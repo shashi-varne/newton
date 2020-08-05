@@ -164,7 +164,11 @@ class MandateStatus extends Component {
               {this.state.status === 'failed' &&
                 <div>
                   <p className="top-content">
-                    Sorry, E-mandate application has failed. Please retry again.
+                  Something went wrong!
+                  </p>
+
+                  <p className="top-content">
+                  We are unable to setup e-mandate because of some issues. Please retry again.
                   </p>
                 </div>
               }

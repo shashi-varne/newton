@@ -134,7 +134,7 @@ class ReportDetails extends Component {
               </div>
               <div className="mt-right">
                 <div className="mtr-top">
-                  Customer name
+                Borrower name
                 </div>
                 <div className="mtr-bottom">
                   {this.state.personal_info.full_name}

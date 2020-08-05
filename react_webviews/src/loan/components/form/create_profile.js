@@ -207,7 +207,7 @@ class FormCreateProfile extends Component {
 
 
                     <div style={{ color: '#6d7278', fontSize: 13 }}>
-                        Please wait while we create your profile. An OTP will be sent to your mobile no shortly.
+                        Please wait while we create your profile. An OTP will be sent to your mobile no. shortly.
                     </div>
                 </div>
 

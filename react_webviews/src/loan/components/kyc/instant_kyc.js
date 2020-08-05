@@ -215,8 +215,7 @@ class InstantKycHome extends Component {
           </div>
 
           <div className="check-eligiblity">
-            Your eligible loan amount is being calculated by the lender using their own
-            proprietary algorithm, based on the data provided by you. This can take approximately 2 mins.
+          Hold on while we check your loan eligibility!
           </div>
         </div>
       )
