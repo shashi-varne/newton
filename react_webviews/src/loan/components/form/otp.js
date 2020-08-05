@@ -15,7 +15,6 @@ class FormOtp extends Component {
     this.state = {
       otpnumber: '',
       otpnumber_error: '',
-      messageOtp: '',
       openResponseDialog: false,
       otpVerified: false,
       otp: '',
@@ -60,7 +59,7 @@ class FormOtp extends Component {
       verify_link: params.verify_link || '',
       next_state: params.next_state || '',
       from_state: params.from_state || '',
-      messageOtp: params.message || 'An OTP is sent to your registered mobile number, please verify to complete the process.',
+      // messageOtp: params.message || 'An OTP is sent to your registered mobile number, please verify to complete the process.',
     })
   }
 
@@ -157,13 +156,13 @@ class FormOtp extends Component {
 
         let result = res.pfwresponse.result;
         if (result.resend_otp_url !== '' && result.verify_otp_url !== '') {
-          // var message = 'An OTP is sent to your mobile number ' + this.state.mobile_no + ', please verify.'
+          var message = 'OTP sent to the mobile number ' + this.state.mobile_no + ', please verify.'
           this.setState({
             show_loader: false,
             resend_link: result.resend_otp_url,
             verify_link: result.verify_otp_url
           })
-          toast(result.message);
+          toast(message || result.message);
         }
         this.setState({
           show_loader: false
