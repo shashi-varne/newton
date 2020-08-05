@@ -40,7 +40,8 @@ class CommonLanding extends Component {
             'gold-buy': '/gold/buy',
             'gold-locker': '/gold/gold-locker',
             'gold-sell': '/gold/sell',
-            'gold-delivery': '/gold/delivery'
+            'gold-delivery': '/gold/delivery',
+            'loan': '/loan/home'
         };
 
         let pathname = navigateMapper[main_module] || '';
