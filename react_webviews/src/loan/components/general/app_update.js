@@ -68,8 +68,9 @@ class AppUpdate extends Component {
 
           </div>
 
-          <div style={{ color: '#6d7278', fontSize: 13 }}>
-          We have added loan products in our product suite so that you can have the money you want.
+          <div style={{ color: '#6d7278', fontSize: 13,textAlign: 'left' }}>
+          Introducing Personal loans! Now you can borrow too with your {this.state.productName} app. 
+          Update your app now to get the best offer for Personal Loans
        </div>
         </div>
       </Container>
