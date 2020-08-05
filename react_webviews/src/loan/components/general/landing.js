@@ -224,7 +224,7 @@ class Landing extends Component {
   renderHasslePoints = (props, index) => {
     return(
       <div key={index} className="hassle-free-tile" style={{
-      backgroundImage: `url(${this.state.ic_why_hs})`
+      backgroundImage: `url(${this.state.ic_why_hs})`,backgroundRepeat: 'no-repeat'
     }}>
       <div className={`card-info ${this.state.productName} hft-title`}>
       {props.title}
