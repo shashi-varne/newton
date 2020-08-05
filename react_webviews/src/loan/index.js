@@ -15,6 +15,7 @@ import Report from "./components/general/report";
 import Journey from "./components/general/journey";
 import Calculator from "./components/general/calculator";
 import Help from "./components/general/help";
+import AppUpdate from "./components/general/app_update";
 import ScheduleDoc from "./components/general/schedule_doc";
 import Permissions from "./components/general/permissions";
 import Transaction from "./components/general/transactions";
@@ -84,6 +85,7 @@ const Lending = props => {
         <Switch>
 
           <Route path={`${url}/home`} component={Landing} />
+          <Route path={`${url}/app-update`} component={AppUpdate} />
           <Route path={`${url}/journey`} component={Journey} />
           <Route path={`${url}/calculator`} component={Calculator} />
           <Route path={`${url}/permissions`} component={Permissions} />
