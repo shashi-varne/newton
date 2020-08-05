@@ -10,6 +10,7 @@ import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
 import Api from 'utils/api';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
+import scrollIntoView from 'scroll-into-view-if-needed';
 
 class AddressDetails extends Component {
 
@@ -24,6 +25,8 @@ class AddressDetails extends Component {
             checked: false
         }
         this.initialize = initialize.bind(this);
+
+        this.addressRef = React.createRef();
     }
 
     componentWillMount() {
@@ -77,31 +80,15 @@ class AddressDetails extends Component {
         this.setState({
             form_data: form_data,
             lead: lead,
-            checked: !!form_data.permanent_address_same_as_current
+            // checked: !!form_data.permanent_address_same_as_current
         })
 
     }
 
     setPermAddress = () => {
-        let form_data = this.state.form_data;
-
-        if (this.state.checked) {
-            form_data.p_address = form_data.address;
-            form_data.p_pincode = form_data.pincode;
-            form_data.p_city = form_data.city;
-            form_data.p_state = form_data.state;
-            form_data.p_country = form_data.country;
-        } else {
-            form_data.p_address = '';
-            form_data.p_pincode = '';
-            form_data.p_city = '';
-            form_data.p_state = '';
-            form_data.p_country = '';
+        if (!this.state.checked) {
+            this.handleScroll();
         }
-
-        this.setState({
-            form_data: form_data
-        })
     }
 
     handleCheckBox = name => event => {
@@ -121,8 +108,13 @@ class AddressDetails extends Component {
     handleClick = async () => {
 
         this.sendEvents('next');
+
         let keys_to_check = ['residence_type', 'duration', 'address', 'pincode', 'p_address',
             'p_pincode'];
+
+        if (this.state.checked) {
+            keys_to_check = ['residence_type', 'duration', 'address', 'pincode',];
+        }
 
 
         let form_data = this.state.form_data;
@@ -197,6 +189,23 @@ class AddressDetails extends Component {
         this.setState({
             form_data: form_data
         })
+    }
+
+
+    handleScroll = (value) => {
+        setTimeout(function () {
+            let element = document.getElementById('addressScroll');
+            if (!element || element === null) {
+                return;
+            }
+
+            scrollIntoView(element, {
+                block: 'start',
+                inline: 'nearest',
+                behavior: 'smooth'
+            })
+
+        }, 50);
     }
 
     render() {
@@ -316,11 +325,11 @@ class AddressDetails extends Component {
                             </Grid>
                         </div>
                     </div>
-                    {/* {!this.state.checked && */}
+                    {!this.state.checked &&
 
                         <div>
                             <div style={{ color: '#64778D', fontSize: 13, fontWeight: 300, margin: '-10px 0px 6px' }}>
-                            Permanent Address Details
+                                Permanent Address Details
                         </div>
 
                             <div className="InputField">
@@ -370,7 +379,7 @@ class AddressDetails extends Component {
                                     value={this.state.form_data.p_state || ''}
                                 />
                             </div>
-                            <div className="InputField">
+                            <div id="addressScroll" ref={this.addressRef} className="InputField">
                                 <Input
                                     disabled={true}
                                     id="p_country"
@@ -381,7 +390,7 @@ class AddressDetails extends Component {
                             </div>
 
                         </div>
-                    {/* } */}
+                    }
                 </FormControl>
             </Container>
         );

@@ -14,6 +14,8 @@ import ReactHtmlParser from 'react-html-parser';
 import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
 import { storageService } from 'utils/validators';
 import {checkStringInString} from 'utils/validators';
+import scrollIntoView from 'scroll-into-view-if-needed';
+
 const agreeOptions = [
     {
         'name': 'I agree',
@@ -41,6 +43,7 @@ class FormSummary extends Component {
             isScrolledToBottom: false
         }
         this.initialize = initialize.bind(this);
+        this.agreeRef = React.createRef();
     }
 
 
@@ -239,6 +242,7 @@ class FormSummary extends Component {
         this.sendEvents('next');
 
         if(this.state.agree_check !== 'agree') {
+            this.handleScroll();
             toast('It is mandatory to agree to Terms & Conditions for submitting your application.');
             return;
         }
@@ -423,6 +427,22 @@ class FormSummary extends Component {
 
     }
 
+    handleScroll =() => {
+        setTimeout(function () {
+            let element = document.getElementById('agreeScroll');
+            if (!element || element === null) {
+              return;
+            }
+    
+            scrollIntoView(element, {
+              block: 'start',
+              inline: 'nearest',
+              behavior: 'smooth'
+            })
+    
+        }, 50);
+      }
+
     render() {
         return (
             <Container
@@ -501,7 +521,7 @@ class FormSummary extends Component {
                         {this.state.agreement.map(this.renderAgreement)}
                     </div>
 
-                    <div className="InputField" style={{ margin: '30px 0 50px 0', opacity: this.state.confirm_details_check ? 1 : 0.4 }}>
+                    <div id="agreeScroll" ref={this.agreeRef} className="InputField" style={{ margin: '30px 0 50px 0', opacity: this.state.confirm_details_check ? 1 : 0.4 }}>
                         <RadioWithoutIcon
                             width="40"
                             label="I/We confirm that I/We have understood the

@@ -386,6 +386,9 @@ export function formCheckUpdate(keys_to_check, form_data, just_check) {
         let body = {};
 
         if (this.state.screen_name === 'address-details') {
+
+            let checked = this.state.checked;
+           
             body = {
 
                 current_residence_type: form_data.residence_type || '',
@@ -396,13 +399,13 @@ export function formCheckUpdate(keys_to_check, form_data, just_check) {
                 current_state: form_data.state || '',
                 current_country: form_data.country || '',
 
-                permanent_address: form_data.p_address || '',
-                permanent_pincode: form_data.p_pincode || '',
-                permanent_city: form_data.p_city || '',
-                permanent_state: form_data.p_state || '',
-                permanent_country: form_data.p_country || '',
+                permanent_address: checked ? form_data.address : form_data.p_address,
+                permanent_pincode: checked ? form_data.pincode : form_data.p_pincode ,
+                permanent_city: checked ? form_data.city : form_data.p_city ,
+                permanent_state:  checked ? form_data.state : form_data.p_state,
+                permanent_country: checked ? form_data.country : form_data.p_country ,
 
-                permanent_address_same_as_current: this.state.checked || false
+                // permanent_address_same_as_current: this.state.checked || false
             };
         } else {
             for (var j in keys_to_check) {
