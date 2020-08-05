@@ -51,12 +51,12 @@ class MandateBank extends Component {
     let bank_info = lead.bank_info || {};
     let vendor_info = lead.vendor_info || {};
 
-    let dmi_loan_status = vendor_info.dmi_loan_status || '';
+    // let dmi_loan_status = vendor_info.dmi_loan_status || '';
     let formDisabled = false;
 
-    if (['emandate', 'emandate_failed', 'emandate_exit'].indexOf(dmi_loan_status) !== -1) {
-      formDisabled = true;
-    }
+    // if (['emandate', 'emandate_failed', 'emandate_exit'].indexOf(dmi_loan_status) !== -1) {
+    //   formDisabled = true;
+    // }
 
     let form_data = {
       "bank_name": bank_info.bank_name || '',
