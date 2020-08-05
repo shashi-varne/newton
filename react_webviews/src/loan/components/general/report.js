@@ -71,7 +71,7 @@ class Report extends Component {
                 Closing principle balance
               </div>
               <div className="principle-balance">
-                {inrFormatDecimal(288000)}
+                {inrFormatDecimal(vendor_info.closing_principal_balance)}
               </div>
             </div>
 
@@ -85,10 +85,10 @@ class Report extends Component {
               <div style={{ lineHeight: "24px" }}>
                 <div className="block1-head">Upcoming EMI</div>
                 <div className="block1-amount">
-                  {inrFormatDecimal(300000)}
+                  {inrFormatDecimal(vendor_info.emi_amount)}
                   <span style={{ color: "#7ED321", fontSize: "12px" }}>
                     {" "}
-                    (10 JULY 2020)
+                    ({vendor_info.dt_next_payment})
                   </span>
                 </div>
               </div>
