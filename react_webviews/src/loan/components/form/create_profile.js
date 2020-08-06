@@ -55,7 +55,11 @@ class FormCreateProfile extends Component {
         if (this.state.dmi_loan_status === 'contact') {
             this.triggerOtp();
         } else {
-            this.getDedupeCallback();
+
+            let that = this;
+            setTimeout(function(){ 
+              that.getDedupeCallback();
+            }, 2000);
         }
 
     }
