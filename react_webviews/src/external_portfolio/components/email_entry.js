@@ -4,7 +4,7 @@ import toast from '../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import Input from '../../common/ui/Input';
-import { validateEmail, storageService, getUrlParams } from '../../utils/validators.js';
+import { validateEmail, storageService } from '../../utils/validators.js';
 import { navigate, setLoader, setPlatformAndUser } from '../common/commonFunctions.js';
 import { requestStatement, fetchEmails } from '../common/ApiCalls.js';
 import PopUp from '../common/PopUp.js';
@@ -152,13 +152,6 @@ class email_entry extends Component {
             value={this.state.email}
             variant="filled"
             onChange={this.handleChange('email')} />
-        </div>
-        <div style={{ wordBreak: 'break-word' }}>
-          <b>URL:</b> { this.props.location.search }
-          <br />
-          <b>customer_id:</b> { getUrlParams().customer_id }
-          <br />
-          <b>platform:</b> { getUrlParams().platform }
         </div>
         <PopUp
           openPopup={this.state.openPopup}

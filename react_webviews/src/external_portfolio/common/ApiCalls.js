@@ -19,10 +19,16 @@ export const requestStatement = async (params) => {
   try {
     storageService().remove('hni-emails');
 
-    const res = await Api.post('api/external_portfolio/cams/cas/send_mail', {
+    let apiToHit = 'api/external_portfolio/cams/cas/send_mail';
+    const user_id = storageService().get('hni-user') || undefined;
+
+    if (user_id) {
+      // user_id must always go as a request param ONLY
+      apiToHit = apiToHit + `?user_id=${user_id}`;
+    }
+    const res = await Api.post(apiToHit, {
       ...params,
       platform,
-      user_id: storageService().get('hni-user') || undefined,
     });
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
