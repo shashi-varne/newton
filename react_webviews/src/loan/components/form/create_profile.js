@@ -119,6 +119,7 @@ class FormCreateProfile extends Component {
                 });
                 toast(resultData.error || resultData.message
                     || 'Something went wrong');
+                this.props.history.goBack();
             }
         } catch (err) {
             console.log(err)
