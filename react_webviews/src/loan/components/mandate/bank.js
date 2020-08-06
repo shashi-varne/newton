@@ -68,6 +68,7 @@ class MandateBank extends Component {
       "bank_image": bank_info.bank_image || ''
     };
 
+
     let bottomButtonData = {
       leftTitle: 'Personal loan',
       leftSubtitle: numDifferentiationInr(vendor_info.approved_amount_decision)
@@ -78,6 +79,10 @@ class MandateBank extends Component {
       vendor_info: vendor_info,
       bottomButtonData: bottomButtonData,
       formDisabled: formDisabled
+    }, () => {
+      if(form_data.ifsc_code) {
+        this.checkIFSCFormat(form_data.ifsc_code);
+      }
     })
 
   }
