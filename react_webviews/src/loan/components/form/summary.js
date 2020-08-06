@@ -146,15 +146,15 @@ class FormSummary extends Component {
             edit_state: `/loan/edit-address-details`,
             data: [
                 {
-                    'title': 'Residence type (current address)',
+                    'title': 'Residence type (aadhaar address)',
                     'subtitle': current_address_data.residence_type
                 },
                 {
-                    'title': 'Duration (current address)',
+                    'title': 'Duration (aadhaar address)',
                     'subtitle': current_address_data.duration
                 },
                 {
-                    'title': 'Current address',
+                    'title': 'Aadhaar address',
                     'subtitle': `${current_address_data.address}, ${current_address_data.pincode},
                     ${current_address_data.city}, ${current_address_data.state},
                      ${current_address_data.country}`
