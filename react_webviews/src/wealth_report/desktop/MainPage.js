@@ -29,7 +29,9 @@ export default class MainPage extends Component {
     console.log(params);
     return (
       <div style={{ width: '100%', height: '100%', background: 'white', overflow: 'scroll' }}>
-        <div id="wr-header-hero"></div>
+        <div id="wr-header-hero">
+          ghvtuyiokjghyu
+        </div>
         <Header />
         <div id="wr-body">
           {this.renderTab(params.tab)}

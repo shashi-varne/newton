@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { LinearProgress, createMuiTheme, MuiThemeProvider } from 'material-ui';
 import Graph from './Graph';
-import Tooltip from '../mini-components/tooltip';
+// import Tooltip from 'common/ui/Tooltip';
+import Tooltip from '@material-ui/core/Tooltip';
+
 
 const theme = createMuiTheme({
   overrides: {
@@ -16,12 +18,44 @@ const theme = createMuiTheme({
       bar1Determinate: {
         backgroundColor: '#cbbeee',
       },
+    },
+    MuiTooltip: {
+      popper: {
+        // margin:'0 255px 0 235px',
+        backgroundColor:'yellow'
+      },
+      tooltip: {
+        backgroundColor:'green !important',
+        opacity:'1',
+      }
     }
   }
 });
 
 export default class Overview extends Component {
   render() {
+
+    // const logo = (
+    //   <img
+    //     src={require(`assets/fisdom/ic-info-xirr-overview.svg`)}
+    //     style={{ cursor: "pointer" }}
+    //     alt=""
+    //     data-tip={'tipcontent'}
+    //   />
+    // );
+
+    const tipcontent = (
+      <div className="wr-xirr-tooltip">
+        <div className="wr-tooltip-head">
+          XIRR ( Extended Internal Return Rate)
+        </div>
+        <div className="wr-tooltip-content">
+          XIRR or extended internal return rate is the standard return metricis
+          for measuring the annual performance of the mutual funds
+        </div>
+      </div>
+    )
+
     return (
       <div>
         <div id="wr-overview-key-numbers" className="wr-card-template">
@@ -35,11 +69,25 @@ export default class Overview extends Component {
           <div className="wr-okn-value">₹ 56.3L</div>
         </div>
         <div className="wr-okn-box">
-          <div className="wr-okn-title">XIRR
+          <div className="wr-okn-title" >XIRR
             <span style={{margin:'0 0 0 6px'}}>
-              <Tooltip />
+              {/* <Tooltip tip={logo} content={tipcontent} /> */}
+              {/* <MuiThemeProvider theme={theme}> */}
+                <Tooltip title={tipcontent}>
+                  <span style={{backgroundColor:'white !important'}}>
+                  <img
+                  src={require(`assets/fisdom/ic-info-xirr-overview.svg`)}
+                  style={{ cursor: "pointer" }}
+                  alt=""
+                />
+                  </span>
+                
+                </Tooltip>
+              {/* </MuiThemeProvider> */}
+              
             </span>
           </div>
+
           <div className="wr-okn-value">17%</div>
         </div>
         <div className="wr-okn-box">

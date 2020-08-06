@@ -124,6 +124,23 @@
   }
 }
 
+.wr-xirr-tooltip {
+  width: 300px;
+
+  .wr-tooltip-head {
+    font-size: 15px;
+    color: #432088;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .wr-tooltip-content {
+    color: #a9a9a9;
+    font-size: 15px;
+    line-height: 20px;
+  }
+}
+
 #wr-portfolio-insights-container {
   display: flex;
   flex-wrap: wrap;
