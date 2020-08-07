@@ -13,15 +13,15 @@ class Account extends Component {
       croppedImageUrl: "",
       cropped: false,
     };
-  };
+  }
 
   getImage = (url) => {
     this.setState({
       croppedImageUrl: url,
-      cropped:true
-    })
-    console.log(url)
-  }
+      cropped: true,
+    });
+    console.log(url);
+  };
 
   openCameraWeb() {
     $("input").trigger("click");
@@ -29,8 +29,8 @@ class Account extends Component {
 
   startUpload() {
     this.setState({
-      fileUploaded: false
-    })
+      fileUploaded: false,
+    });
     this.openCameraWeb();
   }
 
@@ -61,7 +61,7 @@ class Account extends Component {
 
   render() {
     return (
-      <React.Fragment>
+      <div style={{ width: "300px" }}>
         <div className="wr-welcome">
           <div
             style={{ textAlign: "center" }}
@@ -105,7 +105,7 @@ class Account extends Component {
             Logout
           </Button>
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }

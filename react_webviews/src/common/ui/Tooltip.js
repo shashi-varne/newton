@@ -6,25 +6,25 @@ class Tooltips extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { tipOpen: false };
+    // this.state = { tipOpen: true };
 
-    this.toggleTip = this.toggleTip.bind(this);
+    // this.toggleTip = this.toggleTip.bind(this);
   }
 
-  componentDidMount() {
-    document.addEventListener("mousedown", this.bodyClick);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener("mousedown", this.bodyClick);
-  }
+  // componentDidMount() {
+    // document.addEventListener("mousedown", this.bodyClick);
+  // }
+// 
+  // componentWillUnmount() {
+    // document.removeEventListener("mousedown", this.bodyClick);
+  // }
 
   tipContentRef;
 
   buttonRef;
 
   toggleTip() {
-    this.setState((prevState) => ({ tipOpen: !prevState.tipOpen }));
+    // this.setState((prevState) => ({ tipOpen: !prevState.tipOpen }));
   }
 
   render() {

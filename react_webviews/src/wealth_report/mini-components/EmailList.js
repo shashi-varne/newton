@@ -23,7 +23,7 @@ export default class EmailList extends Component {
 
   render() {
     return (
-      <div>
+      <div  style={{width:'300px'}}>
         <WrButton
           fullWidth={true}
           classes={{ root: 'wr-add-email-btn' }}>
