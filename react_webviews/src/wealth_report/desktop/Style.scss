@@ -53,13 +53,13 @@
   top: 0;
   z-index: 9998;
 
-  .hero-container {
+  .wr-hero-container {
     display: flex;
     justify-content: space-between;
     padding: 43px 180px 0 180px;
     align-items: center;
 
-    .vl {
+    .wr-vl {
       border-left: 1px solid #fff;
       height: 25px;
       margin-left: 16px;
@@ -82,7 +82,7 @@
 }
 
 #wr-body {
-  margin: 330px 8.3% 0;
+  margin: 400px 8.3% 0;
 }
 
 .wr-card-template {

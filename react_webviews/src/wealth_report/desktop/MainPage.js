@@ -52,7 +52,7 @@ export default class MainPage extends Component {
     return (
       <div style={{ width: '100%', height: '100%', background: 'white', overflow: 'scroll' }}>
         <div id="wr-header-hero">
-          <div className="hero-container">
+          <div className="wr-hero-container">
 
           <div>
             <img src='' alt="fisdom" />

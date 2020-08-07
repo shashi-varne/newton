@@ -36,7 +36,7 @@ class Tooltips extends React.Component {
         className="target"
         tagName="span"
         zIndex={100000}
-        direction="down"
+        direction="down-end"
         arrowContent={(
           <svg style={{ display: 'block' }} viewBox="0 0 21 11" width="20px" height="10px">
             <path
