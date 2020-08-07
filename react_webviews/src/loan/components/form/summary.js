@@ -13,7 +13,7 @@ import Grid from 'material-ui/Grid';
 import ReactHtmlParser from 'react-html-parser';
 import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
 import { storageService } from 'utils/validators';
-import {checkStringInString} from 'utils/validators';
+import { checkStringInString } from 'utils/validators';
 import scrollIntoView from 'scroll-into-view-if-needed';
 
 const agreeOptions = [
@@ -224,10 +224,10 @@ class FormSummary extends Component {
             application_info: application_info,
             vendor_info: vendor_info || {}
         }, () => {
-            if(!this.state.form_submitted) {
+            if (!this.state.form_submitted) {
                 this.handleAccordian(0);
             }
-            
+
         })
     }
 
@@ -242,7 +242,7 @@ class FormSummary extends Component {
     handleClick = async () => {
         this.sendEvents('next');
 
-        if(this.state.agree_check !== 'agree') {
+        if (this.state.agree_check !== 'agree') {
             this.handleScroll();
             toast('It is mandatory to agree to Terms & Conditions for submitting your application.');
             return;
@@ -340,8 +340,8 @@ class FormSummary extends Component {
                     <div className="bct-content">
                         {props.data.map(this.renderAccordiansubData)}
                         {!this.state.form_submitted &&
-                         <div onClick={() => this.openEdit(props.edit_state)} className="generic-page-button-small">
-                            EDIT
+                            <div onClick={() => this.openEdit(props.edit_state)} className="generic-page-button-small">
+                                EDIT
                         </div>
                         }
                     </div>}
@@ -404,15 +404,15 @@ class FormSummary extends Component {
     };
 
     handleAgreement = (props) => {
-        if(checkStringInString(props, "https://www.dmifinance.in/privacy-policy.html")) {
-        this.openInBrowser('https://www.dmifinance.in/privacy-policy.html');
+        if (checkStringInString(props, "https://www.dmifinance.in/privacy-policy.html")) {
+            this.openInBrowser('https://www.dmifinance.in/privacy-policy.html');
         }
     }
 
     renderAgreement = (props, index) => {
         return (
             <div key={index} id={'agreement_' + index} className="agree-tiles"
-            onClick={() => this.handleAgreement(props)}>
+                onClick={() => this.handleAgreement(props)}>
                 <div className="agree-tiles-left"></div>
                 <div className="agree-tiles-right">{ReactHtmlParser(props)}</div>
             </div>
@@ -430,21 +430,21 @@ class FormSummary extends Component {
 
     }
 
-    handleScroll =() => {
+    handleScroll = () => {
         setTimeout(function () {
             let element = document.getElementById('agreeScroll');
             if (!element || element === null) {
-              return;
+                return;
             }
-    
+
             scrollIntoView(element, {
-              block: 'start',
-              inline: 'nearest',
-              behavior: 'smooth'
+                block: 'start',
+                inline: 'nearest',
+                behavior: 'smooth'
             })
-    
+
         }, 50);
-      }
+    }
 
     render() {
         return (
@@ -515,12 +515,15 @@ class FormSummary extends Component {
                         </div>
                     </div>
 
-                    <div className="generic-page-title" style={{margin:'0 0 20px 0 ',
-                opacity: this.state.confirm_details_check ? 1 : 0.4 }}>
-                    We need your consent
+                    <div className="generic-page-title" style={{
+                        margin: '0 0 20px 0 ',
+                        opacity: this.state.confirm_details_check ? 1 : 0.4
+                    }}>
+                        We need your consent
                     </div>
                     <div id="agreement" className="agreement-block" style={{
-                opacity: this.state.confirm_details_check ? 1 : 0.4 }} onScroll={this.onScroll}>
+                        opacity: this.state.confirm_details_check ? 1 : 0.4
+                    }} onScroll={this.onScroll}>
                         {this.state.agreement.map(this.renderAgreement)}
                     </div>
 

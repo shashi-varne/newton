@@ -9,6 +9,8 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import Agreement from './agreement';
+import scrollIntoView from 'scroll-into-view-if-needed';
+
 
 class LoanSummary extends Component {
   constructor(props) {
@@ -20,13 +22,14 @@ class LoanSummary extends Component {
       confirm_details_check: false,
       isScrolledToBottom: false,
       vendor_info: {},
-      application_info : {},
+      application_info: {},
       personal_info: {},
       address_info: {},
       bank_info: {},
       current_address_data: {}
     }
 
+    this.agreeRef = React.createRef();
     this.initialize = initialize.bind(this);
   }
 
@@ -39,7 +42,7 @@ class LoanSummary extends Component {
     let vendor_info = lead.vendor_info || {};
 
     let dmi_loan_status = vendor_info.dmi_loan_status || '';
-    if(dmi_loan_status === 'callback_awaited_disbursement_approval') {
+    if (dmi_loan_status === 'callback_awaited_disbursement_approval') {
       this.navigate('loan-approved');
       return;
     }
@@ -52,12 +55,12 @@ class LoanSummary extends Component {
     currentDate = currentDate.replace(/\\-/g, '/').split('-').reverse().join('/');
     this.setState({
       vendor_info: vendor_info,
-      personal_info :personal_info,
-      application_info:application_info,
-      address_info:address_info,
-      bank_info:bank_info,
+      personal_info: personal_info,
+      application_info: application_info,
+      address_info: address_info,
+      bank_info: bank_info,
       current_address_data: lead.current_address_data || {},
-      currentDate:currentDate
+      currentDate: currentDate
     })
 
   }
@@ -122,17 +125,34 @@ class LoanSummary extends Component {
   handleClick = async () => {
     this.sendEvents('next');
 
+
+    if (!this.state.confirm_details_check) {
+      this.handleScroll();
+      toast('It is mandatory to read and accept the agreement for availing a loan.');
+      return;
+    }
+
+    if (!this.state.isScrolledToBottom) {
+      toast('Please scroll down and read the entire agreement.');
+      return;
+    }
+
     this.setState({
       show_loader: true
     })
 
     this.triggerOtp();
-    
+
   }
 
   handleChange = name => event => {
     if (!name) {
       name = event.target.name;
+    }
+
+    if(event.target.checked && !this.state.isScrolledToBottom) {
+      toast('Please scroll down and read the entire agreement.');
+      return;
     }
 
     this.setState({
@@ -144,11 +164,27 @@ class LoanSummary extends Component {
     const element = e.target;
     let isScrolled = element.scrollHeight - element.clientHeight <= element.scrollTop + 1;
     if (!this.state.isScrolledToBottom) {
-        this.setState({
-            isScrolledToBottom: isScrolled
-        })
+      this.setState({
+        isScrolledToBottom: isScrolled
+      })
     }
   };
+
+  handleScroll = () => {
+    setTimeout(function () {
+      let element = document.getElementById('agreeScroll');
+      if (!element || element === null) {
+        return;
+      }
+
+      scrollIntoView(element, {
+        block: 'start',
+        inline: 'nearest',
+        behavior: 'smooth'
+      })
+
+    }, 50);
+  }
 
   render() {
 
@@ -161,7 +197,7 @@ class LoanSummary extends Component {
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
         buttonTitle="GET LOAN"
-        disable={!this.state.confirm_details_check}
+        // disable={!this.state.confirm_details_check}
         headerData={{
           icon: 'close'
         }}
@@ -202,14 +238,14 @@ class LoanSummary extends Component {
             </div>
 
           <div className="agreement-block" onScroll={this.onScroll}>
-            <Agreement parent={this} vendor_info={vendor_info}/>
+            <Agreement parent={this} vendor_info={vendor_info} />
           </div>
 
-          <Grid container spacing={16} alignItems="center">
+          <Grid id="agreeScroll" ref={this.agreeRef} container spacing={16} alignItems="center">
             <Grid item xs={1} className="TextCenter">
               <Checkbox
                 defaultChecked
-                disabled={!this.state.isScrolledToBottom}
+                // disabled={!this.state.isScrolledToBottom}
                 checked={this.state.confirm_details_check}
                 color="primary"
                 value="confirm_details_check"
