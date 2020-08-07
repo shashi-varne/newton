@@ -1,20 +1,17 @@
 import React, { Component } from "react";
-import Container from "./container";
-import "./Style.scss";
 import Button from "material-ui/Button";
 import { getBase64 } from "utils/functions";
 import $ from "jquery";
-import ImageCrop from '../mini-components/ImageCrop';
 
-class Popups extends Component {
+class Account extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      accounts: ['Abishmathew21@yahoo.co.in', 'Abishmathew21@yahoo.co.in'],
+      accounts: ["Abishmathew21@yahoo.co.in", "Abishmathew21@yahoo.co.in"],
       openPopup: false,
       fileUploaded: false,
-      croppedImageUrl:'',
-      cropped: false
+      croppedImageUrl: "",
+      cropped: false,
     };
   };
 
@@ -31,15 +28,14 @@ class Popups extends Component {
   }
 
   startUpload() {
+    this.setState({
+      fileUploaded: false
+    })
     this.openCameraWeb();
   }
 
   getPhoto = (e) => {
     e.preventDefault();
-    this.setState({
-      fileUploaded: false,
-      cropped:false
-    })
 
     let file = e.target.files[0];
 
@@ -64,40 +60,7 @@ class Popups extends Component {
   };
 
   render() {
-    const dialog = (
-      <div className="wr-accounts">
-        <Button fullWidth={true} className="wr-button">
-          <img
-            src={require(`assets/fisdom/ic-mob-add-email.svg`)}
-            alt=""
-            style={{ marginRight: "9px" }}
-          />
-          Add new email
-        </Button>
-        <div style={{ margin: "28px 10px 0 10px" }}>
-          <div className="wr-all-mails">All emails</div>
-          {this.state.accounts.map((account) => (
-            <div className="wr-mails">
-              <div>
-                <div className="wr-account">Abishmathew21@yahoo.co.in</div>
-                <div className="wr-sync">Synced on Jun 23, 09:45am</div>
-              </div>
-              <img src={require(`assets/fisdom/ic-email-sync.svg`)} alt="" />
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-
-    const dialog2 = (
-      <div className="wr-email-added">
-        <img src={require(`assets/fisdom/ic-mob-success.svg`)} alt="" />
-        <div className="wr-content">Email has been added successfully!</div>
-        <div className="wr-continue">Continue</div>
-      </div>
-    );
-
-    const dialog3 = (
+    return (
       <React.Fragment>
         <div className="wr-welcome">
           <div
@@ -144,33 +107,7 @@ class Popups extends Component {
         </div>
       </React.Fragment>
     );
-
-    const dialog4 = (
-      <div className="wr-estd-tax">
-        <div className="head">Estimated Tax</div>
-        <div className="content">
-          Disclaimer: Calculation is solely based on the statement provided by
-          you.
-        </div>
-      </div>
-    );
-
-    const dialog5 = (
-      <ImageCrop 
-      image={this.state.imageBaseFileShow}
-        getImage={this.getImage}
-      />
-    )
-
-    return (
-      <Container
-        dialogContent={this.state.fileUploaded ? this.state.cropped ? dialog3 : dialog5 : dialog3}
-        openPopup={true}
-      >
-        <Button onClick={this.handlePopup}>Logout</Button>
-      </Container>
-    );
   }
 }
 
-export default Popups;
+export default Account;

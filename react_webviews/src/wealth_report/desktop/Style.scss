@@ -52,6 +52,33 @@
   position: absolute;
   top: 0;
   z-index: 9998;
+
+  .hero-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 43px 180px 0 180px;
+    align-items: center;
+
+    .vl {
+      border-left: 1px solid #fff;
+      height: 25px;
+      margin-left: 16px;
+    }
+  
+    .wr-report {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: normal;
+      letter-spacing: normal;
+      color: #a9a9a9;
+    }
+
+    .wr-account {
+      width: 100px;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
 }
 
 #wr-body {

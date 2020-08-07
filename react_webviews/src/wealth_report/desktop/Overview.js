@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { LinearProgress, createMuiTheme, MuiThemeProvider } from 'material-ui';
 import Graph from './Graph';
-// import Tooltip from 'common/ui/Tooltip';
-import Tooltip from '@material-ui/core/Tooltip';
-
+import Tooltip from 'common/ui/Tooltip';
 
 const theme = createMuiTheme({
   overrides: {
@@ -18,16 +16,6 @@ const theme = createMuiTheme({
       bar1Determinate: {
         backgroundColor: '#cbbeee',
       },
-    },
-    MuiTooltip: {
-      popper: {
-        // margin:'0 255px 0 235px',
-        backgroundColor:'yellow'
-      },
-      tooltip: {
-        backgroundColor:'green !important',
-        opacity:'1',
-      }
     }
   }
 });
@@ -35,14 +23,15 @@ const theme = createMuiTheme({
 export default class Overview extends Component {
   render() {
 
-    // const logo = (
-    //   <img
-    //     src={require(`assets/fisdom/ic-info-xirr-overview.svg`)}
-    //     style={{ cursor: "pointer" }}
-    //     alt=""
-    //     data-tip={'tipcontent'}
-    //   />
-    // );
+    const logo = (
+      <span>
+        <img
+        src={require(`assets/fisdom/ic-info-xirr-overview.svg`)}
+        style={{ cursor: "pointer" }}
+        alt=""
+      />
+      </span>
+    );
 
     const tipcontent = (
       <div className="wr-xirr-tooltip">
@@ -55,6 +44,7 @@ export default class Overview extends Component {
         </div>
       </div>
     )
+
 
     return (
       <div>
@@ -70,21 +60,8 @@ export default class Overview extends Component {
         </div>
         <div className="wr-okn-box">
           <div className="wr-okn-title" >XIRR
-            <span style={{margin:'0 0 0 6px'}}>
-              {/* <Tooltip tip={logo} content={tipcontent} /> */}
-              {/* <MuiThemeProvider theme={theme}> */}
-                <Tooltip title={tipcontent}>
-                  <span style={{backgroundColor:'white !important'}}>
-                  <img
-                  src={require(`assets/fisdom/ic-info-xirr-overview.svg`)}
-                  style={{ cursor: "pointer" }}
-                  alt=""
-                />
-                  </span>
-                
-                </Tooltip>
-              {/* </MuiThemeProvider> */}
-              
+            <span style={{marginLeft:'6px'}}>
+              <Tooltip content={tipcontent} tip={logo} />
             </span>
           </div>
 

@@ -1,31 +1,55 @@
 import React from "react";
-import { StatefulToolTip } from "react-portal-tooltip";
+import Tooltip from "react-tooltip-lite";
+import "./style.scss";
 
-const Tooltip = (props) => {
-  let style = {
-    style: {
-      background: "white",
-      padding: 20,
-      borderRadius: "10px",
-      border: "0.5px solid rgba(151, 151, 151, 0.1)",
-      boxShadow: "1px 1px 1px 1px rgba(0, 0, 0, 0.05)",
-    },
-    arrowStyle: {
-      color: "white",
-      borderColor: "rgba(0, 0, 0, 0.15)",
-    },
-  };
+class Tooltips extends React.Component {
+  constructor(props) {
+    super(props);
 
-  return (
-    <StatefulToolTip
-      position="bottom"
-      arrow="center"
-      parent={props.tip}
-      style={style}
-    >
-      {props.content}
-    </StatefulToolTip>
-  );
-};
+    this.state = { tipOpen: false };
 
-export default Tooltip;
+    this.toggleTip = this.toggleTip.bind(this);
+  }
+
+  componentDidMount() {
+    document.addEventListener("mousedown", this.bodyClick);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("mousedown", this.bodyClick);
+  }
+
+  tipContentRef;
+
+  buttonRef;
+
+  toggleTip() {
+    this.setState((prevState) => ({ tipOpen: !prevState.tipOpen }));
+  }
+
+  render() {
+    return (
+      <Tooltip
+        padding={20}
+        background="white"
+        content={this.props.content}
+        className="target"
+        tagName="span"
+        zIndex={100000}
+        direction="down"
+        arrowContent={(
+          <svg style={{ display: 'block' }} viewBox="0 0 21 11" width="20px" height="10px">
+            <path
+              d="M0,11 L9.43630703,1.0733987 L9.43630703,1.0733987 C10.1266203,0.3284971 11.2459708,0 11.936284,1.0733987 L20,11"
+              style={{ stroke: '#d3d3d3', fill: 'white' }}
+            />
+          </svg>
+        )}
+      >
+        {this.props.tip}
+      </Tooltip>
+    );
+  }
+}
+
+export default Tooltips;
