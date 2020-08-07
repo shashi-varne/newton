@@ -164,7 +164,8 @@ class Popups extends Component {
 
     return (
       <Container
-        dialogContent={this.state.fileUploaded ? this.state.cropped ? dialog3 : dialog5 : dialog3}
+        // dialogContent={this.state.fileUploaded ? this.state.cropped ? dialog3 : dialog5 : dialog3}
+        dialogContent={dialog}
         openPopup={true}
       >
         <Button onClick={this.handlePopup}>Logout</Button>
