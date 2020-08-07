@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
-import { Button, withTheme } from 'material-ui';
+import { Button } from 'material-ui';
 
 const theme = createMuiTheme({
   overrides: {

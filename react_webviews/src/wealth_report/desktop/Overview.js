@@ -71,7 +71,7 @@ const assetAllocNums = (val) => (
 
 const portfolioCard = (title, subtitle, icon, desc) => (
   <div className="wr-pi-card">
-    <img src={require('assets/fisdom/ic-investment-strategy.svg')}/>
+    <img src={require('assets/fisdom/ic-investment-strategy.svg')} alt=""/>
     <div className="wr-pi-content">
       <div className="wr-pi-content-title">
         Investment Strategy
