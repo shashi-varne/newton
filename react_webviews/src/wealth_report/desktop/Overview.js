@@ -50,7 +50,7 @@ export default class Overview extends Component {
         <div className="wr-okn-box">
           <div className="wr-okn-title" >XIRR
             <span style={{marginLeft:'6px'}}>
-              <Tooltip content={tipcontent}>
+              <Tooltip content={tipcontent} direction="down">
                 <img
                   src={require(`assets/fisdom/ic-info-xirr-overview.svg`)}
                   style={{ cursor: "pointer" }}

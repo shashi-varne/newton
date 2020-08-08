@@ -43,7 +43,7 @@ export default class MainPage extends Component {
           </div>
 
           <div className="wr-account">
-            <Tooltip content={<EmailList />} eventToggle="onClick" >
+            <Tooltip content={<EmailList />} eventToggle="onClick" direction="down" >
             <img
               src={require(`assets/fisdom/ic-emails.svg`)}
               style={{ cursor: "pointer" }}
@@ -51,7 +51,7 @@ export default class MainPage extends Component {
             />
             </Tooltip>
 
-            <Tooltip content={<UserAccount />} eventToggle="onClick" >
+            <Tooltip content={<UserAccount />} eventToggle="onClick" direction="down" >
             <img
               src={require(`assets/fisdom/ic-account.svg`)}
               style={{ cursor: "pointer" }}

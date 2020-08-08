@@ -3,29 +3,6 @@ import Tooltip from "react-tooltip-lite";
 import "./style.scss";
 
 class Tooltips extends React.Component {
-  constructor(props) {
-    super(props);
-
-    // this.state = { tipOpen: true };
-
-    // this.toggleTip = this.toggleTip.bind(this);
-  }
-
-  // componentDidMount() {
-    // document.addEventListener("mousedown", this.bodyClick);
-  // }
-// 
-  // componentWillUnmount() {
-    // document.removeEventListener("mousedown", this.bodyClick);
-  // }
-
-  tipContentRef;
-
-  buttonRef;
-
-  toggleTip() {
-    // this.setState((prevState) => ({ tipOpen: !prevState.tipOpen }));
-  }
 
   render() {
     return (
@@ -33,10 +10,9 @@ class Tooltips extends React.Component {
         padding={20}
         background="white"
         content={this.props.content}
-        className="target"
         tagName="span"
         zIndex={100000}
-        direction="down"
+        direction={this.props.direction}
         eventToggle={this.props.eventToggle}
         arrowContent={(
           <svg style={{ display: 'block' }} viewBox="0 0 21 11" width="20px" height="10px">

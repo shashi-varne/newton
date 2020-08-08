@@ -70,8 +70,8 @@ class SelectMembers extends Component {
           onClose={this.toggleDrawer(false)}
         >
           <div className="wr-select-members">Select Member</div>
-          {members.map((member) => (
-            <div className="wr-members">
+          {members.map((member, index) => (
+            <div className="wr-members" key={index}>
               <div className="wr-container">
                 <div className="wr-head">{member.pan}</div>
                 <div className="wr-level">{member.level}</div>
