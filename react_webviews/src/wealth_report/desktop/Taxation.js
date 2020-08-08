@@ -13,7 +13,10 @@ export default class Taxation extends Component {
   renderTaxDetailRow = () => {
     return (
       <div className="wr-taxation-detail-row">
-        <div className="wr-tdr-title">Overall STCG</div>
+        <div className="wr-tdr-title">
+          Overall STCG
+          <hr></hr>
+        </div>
         <div className="wr-small-col">
           <span className="wr-small-col-val">₹ 12,421</span>
           <span className="wr-small-col-title">Overall Tax</span>

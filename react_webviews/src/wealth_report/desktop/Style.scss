@@ -56,7 +56,7 @@
   .wr-hero-container {
     display: flex;
     justify-content: space-between;
-    padding: 43px 180px 0 180px;
+    padding: 43px 80px 0 80px;
     align-items: center;
 
     .wr-vl {
@@ -82,7 +82,7 @@
 }
 
 #wr-body {
-  margin: 400px 8.3% 0;
+  margin: 400px 3% 0;
 }
 
 .wr-card-template {
@@ -99,7 +99,7 @@
 
   div.wr-okn-box:nth-child(1) {
     min-width: 100%;
-    height: 70px;
+    min-height: 70px;
     opacity: 0.6;
     font-size: 17px;
     font-weight: 600;
@@ -116,7 +116,8 @@
     padding: 38px;
     min-width: 30%;
     box-sizing: border-box;
-    height: 185px;
+    min-height: 185px;
+    height: auto;
     color: black;
     border-bottom: 1px solid rgba(102, 102, 102, 0.05);    
     border-right: 1px solid rgba(102, 102, 102, 0.05);    
@@ -176,14 +177,15 @@
   padding: 40px;
   box-sizing: border-box;
   display: flex;
-  justify-content: space-between;
   margin-bottom: 34px;
+  align-items: center;
   
   img {
     width: 40px;
     height: 53px;
-    margin-top: 6px;
-    margin-right: 12%;
+    margin-right: 52px;
+    align-self: flex-start;
+    margin-top: 3px;
   }
 
   div.wr-pi-content {
@@ -241,7 +243,7 @@
     .wr-taxation-summary-col {
       line-height: 1;
       color: #000000;
-      text-align: center;
+      text-align: left;
       flex-basis: 30%;
       padding: 30px;
 
@@ -262,19 +264,20 @@
     
     .wr-taxation-detail-row {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
       margin-top: 35px;
 
       .wr-tdr-title {
         font-size: 17px;
-        flex: 1;
+        margin-right: 10px;
         color: rgba(0, 0, 0, 0.6);
         font-weight: 500;
-      }
 
-      .wr-small-col {
-        text-align: center;
+        hr {
+          display: none;
+        }
       }
     }
   }
@@ -301,3 +304,181 @@
     line-height: 20px;
   }
 }
+  
+@media only screen 
+  and (min-device-width: 330px) 
+  and (max-device-width: 812px) { 
+
+  #wr-header-hero {
+    height: 174px;
+    border-radius: 0 0 15px 15px;
+    width: 100%;
+    background: var(--primary);
+    position: absolute;
+    top: 0;
+    z-index: 9998;
+  }
+
+  #wr-body {
+    margin: 240px 3.1% 0;
+  }
+
+  .wr-card-template {
+    box-shadow: 0 1px 15px 0 rgba(215, 199, 250, 0.12);
+    border: solid 0.5px rgba(151, 151, 151, 0.1);
+    background-color: #ffffff;
+  }
+
+  #wr-overview-key-numbers {
+    display: flex;
+    flex-flow: row wrap ;
+    width: 100%;
+    border-radius: 10px;
+
+    div.wr-okn-box:nth-child(1) {
+      min-height: 40px;
+      opacity: 0.8;
+      font-size: 12px;
+      font-weight: normal;
+    }
+    div.wr-okn-box:nth-child(6) {
+      min-width: 60%;
+    }
+    div.wr-okn-box {
+      text-align: center;
+      padding: 15px 12px;
+      min-width: 50%;
+      height: auto;
+      min-height: 79px;
+      
+      .wr-okn-title {
+        font-size: 10px;
+        font-weight: normal;
+      }
+
+      .wr-okn-value {
+        font-size: 15px;
+        line-height: 0.78;
+        margin-top: 10px;
+      }
+
+      #wr-okn-asset-alloc-title {
+        font-size: 12px;
+      }
+    }
+  }
+
+  #wr-portfolio-insights-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  #portfolio-insights-header {
+    text-align: left;
+    margin: 26px 0 14px 12px;
+    font-size: 12px;
+    font-weight: normal;
+    opacity: 0.8;
+  }
+
+  .wr-pi-card {
+    flex-basis: 100%;
+    padding: 16px 12px 16px 24px;
+    margin-bottom: 10px;
+    align-items: center;
+    
+    img {
+      width: 32px;
+      height: 32px;
+      margin-right: 24px;
+    }
+
+    div.wr-pi-content {
+      flex-basis: 80%;
+
+      .wr-pi-content-title {
+        font-size: 14px;
+      }
+
+      .wr-pi-content-subtitle {
+        font-size: 12px;
+      }
+
+      .wr-pi-content-desc {
+        display: none;
+      }
+    }
+  }
+
+  .wr-outlined-btn {
+    box-shadow: 0 1px 15px 0 rgba(215, 199, 250, 0.12) !important;
+    border: solid 0.5px rgba(151, 151, 151, 0.1) !important;
+    background-color: #ffffff !important;
+    font-size: 15px !important;
+    .MuiButton-label {
+      color: rgba(0,0,0,0.5) !important;
+    }
+  }
+
+  #wr-taxation {
+    min-height: 546px;
+
+    #wr-taxation-filter {
+      display: flex;
+      justify-content: flex-end;
+      padding: 24px;
+      border-bottom: 1px solid rgba(102, 102, 102, 0.05);
+    }
+
+    #wr-taxation-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(102, 102, 102, 0.05);
+      
+      .wr-taxation-summary-col {
+        flex-basis: unset;
+        padding: 16px;
+
+        .wr-tsc-value {
+          font-size: 16px;
+          margin-bottom: 6px;
+          font-weight: 600;
+        }
+
+        .wr-tsc-label {
+          font-size: 12px;
+          color: rgba(21, 7, 49, 0.5);
+        }
+      }
+    }
+
+    #wr-taxation-detail {
+      padding: 16px;
+      
+      .wr-taxation-detail-row {
+        margin-top: 24px;
+
+        .wr-tdr-title {
+          font-size: 12px;
+          flex-basis: 100%;
+          margin-bottom: 14px;
+
+          hr {
+            width: 75%;
+            display: inline-block;
+            border: 0.5px solid rgba(21, 7, 49, 0.05);
+            border-style: outset;
+            margin-left: 7px;
+            vertical-align: bottom;
+          }
+        }
+      }
+    }
+
+    .wr-vertical-divider {
+      height: 20px;
+    }
+  }
+} 

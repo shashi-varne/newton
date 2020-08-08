@@ -36,7 +36,8 @@ class Tooltips extends React.Component {
         className="target"
         tagName="span"
         zIndex={100000}
-        direction="down-end"
+        direction="down"
+        eventToggle={this.props.eventToggle}
         arrowContent={(
           <svg style={{ display: 'block' }} viewBox="0 0 21 11" width="20px" height="10px">
             <path
@@ -46,7 +47,7 @@ class Tooltips extends React.Component {
           </svg>
         )}
       >
-        {this.props.tip}
+        {this.props.children}
       </Tooltip>
     );
   }

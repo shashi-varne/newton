@@ -5,8 +5,8 @@ import Taxation from "./Taxation";
 import Header from "../mini-components/Header";
 import Footer from "../common/Footer";
 import Tooltip from 'common/ui/Tooltip';
-import Email from "../mini-components/EmailList";
-import Account from '../mini-components/Account';
+import EmailList from "../mini-components/EmailList";
+import UserAccount from '../mini-components/UserAccount';
 
 export default class MainPage extends Component {
   constructor(props) {
@@ -31,24 +31,7 @@ export default class MainPage extends Component {
   render() {
     const { params } = this.props.match;
     console.log(params);
-
-    const mail = (
-      <img
-        src={require(`assets/fisdom/ic-emails.svg`)}
-        style={{ cursor: "pointer" }}
-        alt=""
-      />
-      )
-
-    const account = (
-      <img
-        src={require(`assets/fisdom/ic-account.svg`)}
-        style={{ cursor: "pointer" }}
-        alt=""
-      />
-    )
     
-
     return (
       <div style={{ width: '100%', height: '100%', background: 'white', overflow: 'scroll' }}>
         <div id="wr-header-hero">
@@ -60,8 +43,21 @@ export default class MainPage extends Component {
           </div>
 
           <div className="wr-account">
-            <Tooltip content={<Email />} tip={mail} />
-            <Tooltip content={<Account />} tip={account} />
+            <Tooltip content={<EmailList />} eventToggle="onClick" >
+            <img
+              src={require(`assets/fisdom/ic-emails.svg`)}
+              style={{ cursor: "pointer" }}
+              alt=""
+            />
+            </Tooltip>
+
+            <Tooltip content={<UserAccount />} eventToggle="onClick" >
+            <img
+              src={require(`assets/fisdom/ic-account.svg`)}
+              style={{ cursor: "pointer" }}
+              alt=""
+            />
+            </Tooltip>
           </div>
 
           </div>

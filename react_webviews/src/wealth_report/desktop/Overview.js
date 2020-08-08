@@ -23,16 +23,6 @@ const theme = createMuiTheme({
 export default class Overview extends Component {
   render() {
 
-    const logo = (
-      <span>
-        <img
-        src={require(`assets/fisdom/ic-info-xirr-overview.svg`)}
-        style={{ cursor: "pointer" }}
-        alt=""
-      />
-      </span>
-    );
-
     const tipcontent = (
       <div className="wr-xirr-tooltip">
         <div className="wr-tooltip-head">
@@ -44,7 +34,6 @@ export default class Overview extends Component {
         </div>
       </div>
     )
-
 
     return (
       <div>
@@ -61,7 +50,13 @@ export default class Overview extends Component {
         <div className="wr-okn-box">
           <div className="wr-okn-title" >XIRR
             <span style={{marginLeft:'6px'}}>
-              <Tooltip content={tipcontent} tip={logo} />
+              <Tooltip content={tipcontent}>
+                <img
+                  src={require(`assets/fisdom/ic-info-xirr-overview.svg`)}
+                  style={{ cursor: "pointer" }}
+                  alt=""
+                />
+              </Tooltip>
             </span>
           </div>
 
@@ -80,7 +75,6 @@ export default class Overview extends Component {
           </div>
         </div>
       </div>
-        {/* <Graph></Graph> */}
         <div id="portfolio-insights-header">Portfolio Insights</div>
         <div id="wr-portfolio-insights-container">
           {portfolioCard()}
@@ -103,7 +97,7 @@ const assetAllocNums = (val) => (
 
 const portfolioCard = (title, subtitle, icon, desc) => (
   <div className="wr-pi-card">
-    <img src={require('assets/fisdom/ic-investment-strategy.svg')} alt="" />
+    <img src={require('assets/fisdom/ic-investment-strategy.svg')} alt=""/>
     <div className="wr-pi-content">
       <div className="wr-pi-content-title">
         Investment Strategy

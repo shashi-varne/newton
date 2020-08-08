@@ -26,6 +26,7 @@ export default class HoldingCard extends Component {
         <span className="wr-small-col-val">₹ 1.6L</span>
         <span className="wr-small-col-title">1 Year Return</span>
       </div>
+      <div id="wr-hce-space"></div> {/*This div is required to create space for mobile view*/}
       <div>
         <span className="wr-small-col-val">₹ 4.5L</span>
         <span className="wr-small-col-title">3 Year Return</span>
@@ -50,25 +51,27 @@ export default class HoldingCard extends Component {
       <div className="wr-card-template">
         <div className="wr-holding-card">
           {AMCDetail()}
-          <div className="wr-small-col">
-            <span className="wr-small-col-val">₹ 10.3L</span>
-            <span className="wr-small-col-title">Invested Amount</span>
-          </div>
-          <div className="wr-small-col">
-            <span className="wr-small-col-val">₹ 12.5L</span>
-            <span className="wr-small-col-title">Current Value</span>
-          </div>
-          <div className="wr-small-col">
-            <span className="wr-small-col-val">23%</span>
-            <span className="wr-small-col-title">IRR</span>
-          </div>
-          <div>
-            <IconButton classes={{ root: 'wr-icon-button' }} color="inherit" aria-label="Menu" onClick={() => this.setState({ expanded: !this.state.expanded })}>
-              <img
-                src={require(`assets/fisdom/${expanded ? 'down_arrow_fisdom' : 'ic-right-chevron' }.svg`)}
-                alt="expand"
-                style={{ cursor: 'pointer' }}/>
-            </IconButton>
+          <div className="wr-hc-user-data">
+            <div className="wr-small-col">
+              <span className="wr-small-col-val">₹ 10.3L</span>
+              <span className="wr-small-col-title">Invested Amount</span>
+            </div>
+            <div className="wr-small-col">
+              <span className="wr-small-col-val">₹ 12.5L</span>
+              <span className="wr-small-col-title">Current Value</span>
+            </div>
+            <div className="wr-small-col">
+              <span className="wr-small-col-val">23%</span>
+              <span className="wr-small-col-title">IRR</span>
+            </div>
+            <div>
+              <IconButton classes={{ root: 'wr-icon-button' }} color="inherit" aria-label="Menu" onClick={() => this.setState({ expanded: !this.state.expanded })}>
+                <img
+                  src={require(`assets/fisdom/${expanded ? 'down_arrow_fisdom' : 'ic-right-chevron' }.svg`)}
+                  alt="expand"
+                  style={{ cursor: 'pointer' }}/>
+              </IconButton>
+            </div>
           </div>
         </div>
         {expanded ? 
@@ -103,8 +106,11 @@ export default class HoldingCard extends Component {
 const AMCDetail = () => (
   <div className="wr-hc-amc-detail">
     <img className="amc-logo" src={require('assets/fisdom/ic-investment-strategy.svg')} alt="amc-logo"/>
-    <div className="amc-detail-title">Axis Long Term Equity Gr {FisdomRating(4)}</div>
-    <div className="amc-detail-subtitle">ELSS (Tax Savings) · Since Aug 2019</div>
+    <div style={{ marginRight: '36px', maxWidth: '68%' }}>
+      <div className="amc-detail-title">Axis Long Term Equity GrAxis Long Term Equity GrAxis Long Term Equity Gr</div>
+      <div className="amc-detail-subtitle">ELSS (Tax Savings) · Since Aug 2019</div>
+    </div>
+    {FisdomRating(4)}
   </div>
 );
 

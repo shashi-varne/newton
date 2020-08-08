@@ -18,8 +18,7 @@ import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
 import { Login } from './desktop/Login';
 import MainPage from './desktop/MainPage';
 
-import Popups from './mobile/popups';
-import Drawers from './mobile/drawers';
+import Container from './mobile/Container';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -59,8 +58,7 @@ const WealthReport = (props) => {
           <Route path={`${url}/main/:tab`} component={MainPage} />
           <Route path={`${url}/main`} component={MainPage} />
 
-          <Route path={`${url}/popups`} component={Popups} />
-          <Route path={`${url}/drawers`} component={Drawers} />
+          <Route path={`${url}/container`} component={Container} />
           
           <Route component={NotFound} />
         </Switch>
