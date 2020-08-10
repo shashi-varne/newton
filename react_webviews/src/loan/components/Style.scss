@@ -399,6 +399,9 @@
     display: flex;
     justify-content: space-between;
     flex-direction: column;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 4px;
 
     .hft-icon {
       text-align: right;
