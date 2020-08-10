@@ -54,32 +54,34 @@ class Permissions extends Component {
       loadingText: ''
     })
 
-    if(data.location_permission_denied) {
+    if (!data.nsp) {
+      toast('Please insert a SIM card to continue with loan application.');
+    } else if (data.location_permission_denied) {
       toast('Location is required to proceed further');
     } else {
 
       let body = {
-        latitude: data.location.lat || '', 
+        latitude: data.location.lat || '',
         longitude: data.location.lng || '',
-        device_id: data.device_id || '', 
-        network_service_provider: data.nsp || '' 
-     };
+        device_id: data.device_id || '',
+        network_service_provider: data.nsp || ''
+      };
 
-     let haveAll = true;
-     for (var key in body) {
-       if(!body[key]){
-         haveAll = false;
-         break;
-       }
-     }
+      let haveAll = true;
+      for (var key in body) {
+        if (!body[key]) {
+          haveAll = false;
+          break;
+        }
+      }
 
-     if(haveAll) {
-      this.updateLead(body);
-     } else {
-       toast('Something went wrong, please try again');
-     }
-     
-     
+      if (haveAll) {
+        this.updateLead(body);
+      } else {
+        toast('Something went wrong, please try again');
+      }
+
+
     }
   }
 
@@ -95,9 +97,9 @@ class Permissions extends Component {
     window.callbackWeb.get_device_data({
       type: 'location_nsp_received',
       location_nsp_received: function location_nsp_received(data) {
-        
+
         that.updateData(data);
-        
+
       }
     });
   }
@@ -110,24 +112,24 @@ class Permissions extends Component {
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
         buttonTitle="I AGREE"
-        loaderData= {
+        loaderData={
           {
-              // 'loaderClass': 'Loader-Dialog',
-              'loadingText': this.state.loadingText || ''
+            // 'loaderClass': 'Loader-Dialog',
+            'loadingText': this.state.loadingText || ''
           }
         }
       >
         <div className="loan-permissions">
 
           <div className="box">
-          <img
+            <img
               src={require(`assets/${this.state.productName}/ic_document_mobile.svg`)}
               alt=""
             />
             <div className="container">
               <div className="mobile-head">Mobile</div>
-              <div className="content" style={{margin:'0 0 0 26px'}}>
-              {`Our app collects and monitors specific
+              <div className="content" style={{ margin: '0 0 0 26px' }}>
+                {`Our app collects and monitors specific
                 information about your device including
                 Network Service Provider of your SIM,
                 Device id and IP address.This helps us
@@ -137,15 +139,15 @@ class Permissions extends Component {
             </div>
           </div>
 
-          <div  className="box">
-          <img
+          <div className="box">
+            <img
               src={require(`assets/${this.state.productName}/ic_document_location.svg`)}
               alt=""
             />
             <div className="container">
               <div className="location-head">Location</div>
-              <div className="content" style={{margin:'0 0 0 22px'}}>
-              {`We collect and monitor the information about
+              <div className="content" style={{ margin: '0 0 0 22px' }}>
+                {`We collect and monitor the information about
                 the location of your device for verifying the
                 address, creating your risk profile, and make a
                 better credit risk decision.`}

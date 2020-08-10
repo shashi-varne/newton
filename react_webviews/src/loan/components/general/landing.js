@@ -147,7 +147,7 @@ class Landing extends Component {
         points: [
           'Digital loans: Bid farewell to piles of paperwork and branch visits',
           'Zero documentation: No income documents required',
-          'Money in account within 2 hrs: Submit loan application in 10 mins and get credit within 2 hrs',
+          'Money in account within 12 hrs: Submit loan application in 10 mins and get credit within 12 hrs',
           'Collateral free loan: You don’t have to provide any security for your loan'
         ]
       },
@@ -265,7 +265,7 @@ class Landing extends Component {
                 </Button>
             </div>
             <div className="bottom-content">
-              No paper-work | Money in A/c within 2 hrs
+              No paper-work | Money in A/c within 12 hrs
             </div>
           </div>
         </div>
