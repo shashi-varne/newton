@@ -106,6 +106,9 @@ export const themeConfig = {
             },
             label: {
                 textTransform: 'capitalize'
+            },
+            root: {
+                boxShadow: 'none !important'
             }
         },
         MuiIconButton: {
