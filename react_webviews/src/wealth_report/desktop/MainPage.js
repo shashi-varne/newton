@@ -9,13 +9,15 @@ import UserAccount from '../mini-components/UserAccount';
 import EmailList from '../mini-components/EmailList';
 import UserAccountMobile from '../mini-components/UserAccountMobile';
 import { isMobileDevice } from 'utils/functions';
+import EmailListMobile from "../mini-components/EmailList";
 
 export default class MainPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       mailList: false,
-      account: false
+      account: false,
+      addMail: false
     };
   }
 
@@ -41,6 +43,7 @@ export default class MainPage extends Component {
     this.setState({
       addMail: true
     })
+    console.log('hi')
   }
 
   render() {
