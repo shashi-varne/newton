@@ -49,7 +49,6 @@ export default class Holdings extends Component {
           )}
         </Button>
 
-        {/* <FilterMobile open={this.state.open} onClose={this.handleClose} /> */}
       </div>
     );
   }

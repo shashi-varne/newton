@@ -30,6 +30,13 @@ export default class MainPage extends Component {
     }
   }
 
+  handleClose = () => {
+    this.setState({
+      mailList: false,
+      account: false
+    })
+  }
+
   render() {
     const { params } = this.props.match;
     console.log(params);
