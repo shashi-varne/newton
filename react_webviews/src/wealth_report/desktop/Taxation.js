@@ -56,9 +56,9 @@ export default class Taxation extends Component {
         <div id="wr-taxation-summary">
           <div className="wr-taxation-summary-col">
             <span className="wr-tsc-value">₹ 2,848</span>
-            <span className="wr-tsc-label" style={{display:'flex', justifyContent:'start'}}>
-              <div>Estimated Tax</div>
-              <div style={{ marginLeft: "6px" }}>
+            <span className="wr-tsc-label">
+              Estimated Tax
+              <span style={{ marginLeft: "6px" }}>
                 <Tooltip
                   content={tipcontent}
                   direction="down"
@@ -69,7 +69,7 @@ export default class Taxation extends Component {
                     alt=""
                   />
                 </Tooltip>
-              </div>
+              </span>
             </span>
           </div>
           <div className="wr-vertical-divider"></div>

@@ -317,6 +317,13 @@
     position: absolute;
     top: 0;
     z-index: 9998;
+
+    .wr-hero-container {
+      display: flex;
+      justify-content: flex-end;
+      padding: 21px 28px;
+      align-items: center;
+    }
   }
 
   #wr-body {

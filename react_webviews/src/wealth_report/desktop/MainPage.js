@@ -33,7 +33,13 @@ export default class MainPage extends Component {
   handleClose = () => {
     this.setState({
       mailList: false,
-      account: false
+      account: false,
+    })
+  }
+
+  handleClick = () => {
+    this.setState({
+      addMail: true
     })
   }
 
@@ -60,8 +66,8 @@ export default class MainPage extends Component {
           </div> : ''}
 
           <div className="wr-user-account">
-            {!isMobileDevice() ?
-              <Tooltip content={<EmailList />} eventToggle="onClick" direction="down" >
+            {!isMobileDevice()  ?
+              <Tooltip content={<EmailList onClick={this.handleClick}/>} eventToggle="onClick" direction="down" >
               {email}
               </Tooltip> : 
               <React.Fragment>
@@ -89,7 +95,7 @@ export default class MainPage extends Component {
           {this.renderTab(params.tab)}
         </div>
         <div id="wr-footer">
-        <Footer />
+        {!isMobileDevice() && <Footer />}
         </div>
       </div>
     );

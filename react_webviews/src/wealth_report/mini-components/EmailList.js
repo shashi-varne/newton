@@ -23,6 +23,7 @@ class EmailListMobile extends Component {
     this.setState({
       addEmail: true,
     });
+    this.props.onClick();
   };
 
   renderEmailList = () => (

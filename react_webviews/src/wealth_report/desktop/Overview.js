@@ -48,17 +48,17 @@ export default class Overview extends Component {
           <div className="wr-okn-value">₹ 56.3L</div>
         </div>
         <div className="wr-okn-box">
-          <div className="wr-okn-title"  style={{display:'flex', justifyContent:'center'}}>
-            <div>XIRR</div>
-            <div style={{marginLeft:'6px'}}>
+          <div className="wr-okn-title">
+           XIRR
+            <span style={{marginLeft:'6px'}}>
               <Tooltip content={tipcontent} direction="down">
                 <img
                   src={require(`assets/fisdom/ic-info-xirr-overview.svg`)}
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer"}}
                   alt=""
                 />
               </Tooltip>
-            </div>
+            </span>
           </div>
 
           <div className="wr-okn-value">17%</div>
