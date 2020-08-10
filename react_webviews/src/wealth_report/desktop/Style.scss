@@ -73,7 +73,7 @@
       color: #a9a9a9;
     }
 
-    .wr-account {
+    .wr-user-account {
       width: 100px;
       display: flex;
       justify-content: space-between;
@@ -481,4 +481,15 @@
       height: 20px;
     }
   }
-} 
+}
+
+.wr-holdings {
+  .wr-fab-btn {
+    background-color: var(--primary) !important;
+    color: #fff;
+    position: fixed;
+    right: 28px;
+    bottom: 28px;
+    z-index: 1000000;
+  }
+}

@@ -4,7 +4,7 @@ import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import TextField from "material-ui/TextField";
 import Drawer from "@material-ui/core/Drawer";
 import Dialog from "common/ui/Dialog";
-import FormControl from '@material-ui/core/FormControl';
+import FormControl from "@material-ui/core/FormControl";
 import WrButton from "../common/Button";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 
@@ -27,7 +27,7 @@ class EmailListMobile extends Component {
       bottom: false,
       open: true,
       emailAdded: false,
-      mailInput: ''
+      mailInput: "",
     };
   }
 
@@ -69,13 +69,15 @@ class EmailListMobile extends Component {
     this.setState({
       emailAdded: true,
       bottom: false,
-      open: true
-    })
+      open: true,
+    });
   };
 
   handleInput = (e) => {
-    console.log(e.target.value)
-  }
+    this.setState({
+      mailInput: e.target.value
+    })
+  };
 
   renderAddEmail = () => (
     <MuiThemeProvider theme={theme}>
@@ -94,26 +96,25 @@ class EmailListMobile extends Component {
             Add the email address and get insights on your portfolio from fisdom
           </div>
 
-          <form>
-          <TextField
-            variant="outlined"
-            placeholder="Enter new email..."
-            InputProps={{
-              disableUnderline: true,
-              className: "wr-input-addmail",
-            }}
-            onChange={this.handleInput}
-          />
-          
+          <FormControl>
+            <TextField
+              variant="outlined"
+              placeholder="Enter new email..."
+              InputProps={{
+                disableUnderline: true,
+                className: "wr-input-addmail",
+              }}
+              onChange={this.handleInput}
+            />
+          </FormControl>
 
           <div className="wr-btn">
             <Button className="wr-cancel-btn">Cancel</Button>
 
-            <Button className="wr-add-btn" type="Submit" onClick={this.addMail}>
+            <Button className="wr-add-btn" onClick={this.addMail}>
               Add email
             </Button>
           </div>
-          </form>
         </div>
       </Drawer>
     </MuiThemeProvider>

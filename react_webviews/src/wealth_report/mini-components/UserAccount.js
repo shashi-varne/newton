@@ -61,7 +61,7 @@ class Account extends Component {
 
   render() {
     return (
-      <div style={{ width: "300px" }}>
+      <div style={{ width: "250px" }}>
         <div className="wr-welcome">
           <div
             style={{ textAlign: "center" }}

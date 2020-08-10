@@ -14,8 +14,8 @@ export default class MainPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false,
-      bottom: false,
+      mailList: false,
+      account: false
     };
   }
 
@@ -30,24 +30,17 @@ export default class MainPage extends Component {
     }
   }
 
-  handleOpen = () => {
-    this.setState({
-      open: true,
-    });
-  };
-
-  handleClose = () => {
-    this.setState({
-      open: false,
-    });
-  };
-
   render() {
     const { params } = this.props.match;
     console.log(params);
 
-    const email = <img src={require(`assets/fisdom/ic-emails.svg`)} alt="" onClick={this.handleOpen} />;
-    const account = <img src={require(`assets/fisdom/ic-account.svg`)} alt="" onClick={this.handleOpen} />;
+    const email = <img src={require(`assets/fisdom/ic-emails.svg`)} 
+                    alt="" 
+                    onClick={() => this.setState({mailList: true})} />;
+
+    const user_account = <img src={require(`assets/fisdom/ic-account.svg`)}
+                    alt=""
+                    onClick={() => this.setState({account: true})} />;
     
     return (
       <div style={{ width: '100%', height: '100%', background: 'white', overflow: 'scroll' }}>
@@ -59,24 +52,24 @@ export default class MainPage extends Component {
             <span className="wr-report">Mutual fund report</span>
           </div> : ''}
 
-          <div className="wr-account">
+          <div className="wr-user-account">
             {window.innerWidth > 812 ?
               <Tooltip content={<EmailList />} eventToggle="onClick" direction="down" >
               {email}
               </Tooltip> : 
               <React.Fragment>
                 {email}
-                <EmailListMobile open={this.state.open} onClose={this.handleClose} />
+                <EmailListMobile open={this.state.mailList} onClose={this.handleClose} />
               </React.Fragment>
             }
 
             {window.innerWidth > 812 ?
               <Tooltip content={<UserAccount />} eventToggle="onClick" direction="down" >
-              {account}
+              {user_account}
               </Tooltip> : 
               <React.Fragment>
-                {account}
-                <UserAccountMobile open={false} onClose={this.handleClose} />
+                {user_account}
+                <UserAccountMobile open={this.state.account} onClose={this.handleClose} />
               </React.Fragment>
             }
           </div>
