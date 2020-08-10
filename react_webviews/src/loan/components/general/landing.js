@@ -50,7 +50,7 @@ class Landing extends Component {
           'icon' : 'ic_why_loan_3'
       },
        {
-          'title': 'Complete easy loan application process and get money in 2 hrs',
+          'title': 'Complete easy loan application process and get money in 12 hrs',
           'icon' : 'ic_why_loan_4'
       },
        {

@@ -262,7 +262,7 @@ class Journey extends Component {
               <h2 style={{ width: '70%' }}>Get loan in 3 easy steps</h2>
               <div>
                 <img src={require(`assets/${this.state.productName}/ic_document_cash.svg`)} alt="" />
-                <span className="journey-steps">Get money within 2 hrs</span>
+                <span className="journey-steps">Get money within 12 hrs</span>
               </div>
               <div>
                 <img src={require(`assets/${this.state.productName}/ic_document_cloud.svg`)} alt="" />
