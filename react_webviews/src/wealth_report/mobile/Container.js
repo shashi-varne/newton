@@ -2,9 +2,12 @@ import React, { Component } from "react";
 import "./Style.scss";
 import Button from "material-ui/Button";
 import EmailListMobile from "../mini-components/EmailListMobile";
-import UserAccountMobile from "../mini-components/UserAccountMobile";
-import SelectedMember from "../mini-components/SelectMembersMobile";
+// import UserAccountMobile from "../mini-components/UserAccountMobile";
+// import FilterMobile from "../mini-components/FIlterMobile";
+// import SelectedMember from "../mini-components/SelectMembersMobile";
 import { withRouter } from "react-router";
+import CloseIcon from "@material-ui/icons/Close";
+import Icon from "@material-ui/core/Icon";
 
 class Popups extends Component {
   state = {
@@ -46,12 +49,28 @@ class Popups extends Component {
         <div className={`Container ${this.props.classOverRideContainer}`}>
           <Button onClick={this.handleOpen}>Logout</Button>
           <Button onClick={this.toggleDrawer(true)}>open drawer</Button>
-          <SelectedMember
+          <EmailListMobile
             open={this.state.open}
             onClose={this.handleClose}
             bottom={this.state.bottom}
             close={this.toggleDrawer(false)}
           />
+          {/* <FilterMobile open={this.state.open} onClose={this.handleClose} /> */}
+          {/* <Button
+            onClick={this.handleOpen}
+            variant="fab"
+            style={{
+              backgroundColor: "var(--primary",
+              color: "white",
+              position: "fixed",
+              right: "28px",
+              bottom: "28px",
+              zIndex: 1000000,
+            }}
+          >
+            <CloseIcon />
+            <img src={require("assets/fisdom/ic-mob-filter.svg")} alt="" />
+          </Button> */}
         </div>
       </div>
     );

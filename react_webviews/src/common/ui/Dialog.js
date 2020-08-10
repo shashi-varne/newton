@@ -36,7 +36,6 @@ class DialogBox extends Component {
           open={this.props.open}
           onClose={this.props.onClose}
           aria-labelledby="responsive-dialog-title"
-          className="dialog"
         >
           <DialogContent>{this.props.children}</DialogContent>
         </Dialog>

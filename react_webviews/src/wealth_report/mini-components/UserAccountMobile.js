@@ -110,11 +110,14 @@ class UserAccountMobile extends Component {
     <ImageCrop image={this.state.imageBaseFileShow} getImage={this.getImage} />
   );
 
+
+  
+
   render() {
     return (
       <React.Fragment>
         <Dialog
-          open={this.props.open && this.state.open}
+          open={this.props.open}
           onClose={this.props.onClose}
         >
           {this.state.fileUploaded

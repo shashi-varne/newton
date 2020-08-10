@@ -4,7 +4,7 @@ import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import TextField from "material-ui/TextField";
 import Drawer from "@material-ui/core/Drawer";
 import Dialog from "common/ui/Dialog";
-
+import FormControl from '@material-ui/core/FormControl';
 import WrButton from "../common/Button";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 
@@ -12,7 +12,7 @@ const theme = createMuiTheme({
   overrides: {
     MuiDrawer: {
       paper: {
-        padding: "24px 24px 24px 24px",
+        padding: "20px 24px 24px 24px",
         borderRadius: "6px 6px 0 0",
       },
     },
@@ -24,16 +24,17 @@ class EmailListMobile extends Component {
     super(props);
     this.state = {
       accounts: ["Abishmathew21@yahoo.co.in", "Abishmathew21@yahoo.co.in"],
-      bottom : false,
+      bottom: false,
       open: true,
-      emailAdded: false
+      emailAdded: false,
+      mailInput: ''
     };
   }
 
   toggleDrawer = (open) => () => {
     this.setState({
       bottom: open,
-      open: false
+      open: false,
     });
   };
 
@@ -64,6 +65,18 @@ class EmailListMobile extends Component {
     </div>
   );
 
+  addMail = (e) => {
+    this.setState({
+      emailAdded: true,
+      bottom: false,
+      open: true
+    })
+  };
+
+  handleInput = (e) => {
+    console.log(e.target.value)
+  }
+
   renderAddEmail = () => (
     <MuiThemeProvider theme={theme}>
       <Drawer
@@ -71,54 +84,36 @@ class EmailListMobile extends Component {
         open={this.state.bottom}
         onClose={this.props.close}
       >
-        <div className="wr-new-email">
-          <img src={require(`assets/fisdom/ic-mob-add-mail.svg`)} alt="" />
-          <div>Add new email</div>
-        </div>
-        <div className="wr-mail-content">
-          Add the email address and get insights on your portfolio from fisdom
-        </div>
-        <TextField
-          variant="outlined"
-          placeholder="Enter new email..."
-          InputProps={{
-            disableUnderline: true,
-            className: "wr-input-addmail",
-          }}
-        />
+        <div className="wr-add-mail">
+          <div className="wr-new-email">
+            <img src={require(`assets/fisdom/ic-emails.svg`)} alt="" />
+            <div>Add new email</div>
+          </div>
 
-        <div
-          style={{
-            marginTop: "32px",
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <Button
-            className="wr-cancel-btn"
-            color="primary"
-            style={{
-              backgroundColor: "#fff",
-              border: "solid 2px #421f88",
-              height: "47px",
-              width: "35%",
-              borderRadius: "6px",
-            }}
-          >
-            Cancel
-          </Button>
+          <div className="wr-mail-content">
+            Add the email address and get insights on your portfolio from fisdom
+          </div>
 
-          <Button
-            style={{
-              background: "#421f88",
-              color: "#fff",
-              width: "60%",
-              height: "47px",
-              borderRadius: "6px",
+          <form>
+          <TextField
+            variant="outlined"
+            placeholder="Enter new email..."
+            InputProps={{
+              disableUnderline: true,
+              className: "wr-input-addmail",
             }}
-          >
-            Add email
-          </Button>
+            onChange={this.handleInput}
+          />
+          
+
+          <div className="wr-btn">
+            <Button className="wr-cancel-btn">Cancel</Button>
+
+            <Button className="wr-add-btn" type="Submit" onClick={this.addMail}>
+              Add email
+            </Button>
+          </div>
+          </form>
         </div>
       </Drawer>
     </MuiThemeProvider>
@@ -130,7 +125,7 @@ class EmailListMobile extends Component {
       <div className="wr-content">Email has been added successfully!</div>
       <div className="wr-continue">Continue</div>
     </div>
-  )
+  );
 
   render() {
     return (
@@ -138,7 +133,9 @@ class EmailListMobile extends Component {
         <Dialog
           open={this.props.open && this.state.open}
           onClose={this.props.onClose}
-        >{this.renderEmailList()}</Dialog>
+        >
+          {this.renderEmailList()}
+        </Dialog>
 
         {this.state.bottom && this.renderAddEmail()}
 
@@ -146,7 +143,9 @@ class EmailListMobile extends Component {
           <Dialog
             open={this.props.open && this.state.open}
             onClose={this.props.onClose}
-          >{this.renderEmailAdded()}</Dialog>
+          >
+            {this.renderEmailAdded()}
+          </Dialog>
         )}
       </React.Fragment>
     );
