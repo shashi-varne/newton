@@ -3,7 +3,7 @@ import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import Button from "material-ui/Button";
 
-class Crops extends PureComponent {
+class ImageCrop extends PureComponent {
   state = {
     src: this.props.image,
     crop: {
@@ -116,4 +116,4 @@ class Crops extends PureComponent {
   }
 }
 
-export default Crops;
+export default ImageCrop;

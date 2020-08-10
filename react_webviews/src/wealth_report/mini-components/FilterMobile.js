@@ -56,7 +56,6 @@ class FilterMobile extends Component {
   };
 
   handleChanges = () => {
-    console.log('hi')
     this.setState({
       filters: [
         this.state.fund_type,
