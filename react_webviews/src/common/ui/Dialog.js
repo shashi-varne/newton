@@ -7,8 +7,7 @@ const theme = createMuiTheme({
     MuiDialog: {
       root: {},
       paper: {
-        borderRadius: "6px",
-        width: "100%",
+        // width: "100%",
       },
     },
   },
@@ -29,13 +28,16 @@ class DialogBox extends Component {
   };
 
   render() {
+    const { root, paper, container } = this.props.classes || {};
     return (
       <MuiThemeProvider theme={theme}>
         <Dialog
-          fullScreen={false}
+          fullScreen={this.props.fullwidth}
           open={this.props.open}
           onClose={this.props.onClose}
           aria-labelledby="responsive-dialog-title"
+          classes={{root, paper}}
+          {...this.props}
         >
           <DialogContent>{this.props.children}</DialogContent>
         </Dialog>

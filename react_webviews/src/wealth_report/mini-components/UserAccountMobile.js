@@ -110,15 +110,14 @@ class UserAccountMobile extends Component {
     <ImageCrop image={this.state.imageBaseFileShow} getImage={this.getImage} />
   );
 
-
-  
-
   render() {
     return (
       <React.Fragment>
         <Dialog
           open={this.props.open}
           onClose={this.props.onClose}
+          className="wr-paper-dialog"
+          fullWidth={true}
         >
           {this.state.fileUploaded
             ? this.state.cropped

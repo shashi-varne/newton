@@ -41,7 +41,7 @@ export default class Taxation extends Component {
         <div className="head">Estimated Tax</div>
         <div className="content">
           Disclaimer: Calculation is solely based <br />₹ 2,848
-Estimated Tax on the statement provided by
+          Estimated Tax on the statement provided by
           you.
         </div>
       </div>
@@ -56,9 +56,9 @@ Estimated Tax on the statement provided by
         <div id="wr-taxation-summary">
           <div className="wr-taxation-summary-col">
             <span className="wr-tsc-value">₹ 2,848</span>
-            <span className="wr-tsc-label">
-              Estimated Tax
-              <span style={{ marginLeft: "6px" }}>
+            <span className="wr-tsc-label" style={{display:'flex', justifyContent:'start'}}>
+              <div>Estimated Tax</div>
+              <div style={{ marginLeft: "6px" }}>
                 <Tooltip
                   content={tipcontent}
                   direction="down"
@@ -69,7 +69,7 @@ Estimated Tax on the statement provided by
                     alt=""
                   />
                 </Tooltip>
-              </span>
+              </div>
             </span>
           </div>
           <div className="wr-vertical-divider"></div>

@@ -5,10 +5,10 @@ import Taxation from "./Taxation";
 import Header from "../mini-components/Header";
 import Footer from "../common/Footer";
 import Tooltip from 'common/ui/Tooltip';
-import EmailList from "../mini-components/EmailList";
 import UserAccount from '../mini-components/UserAccount';
-import EmailListMobile from '../mini-components/EmailListMobile';
+import EmailList from '../mini-components/EmailList';
 import UserAccountMobile from '../mini-components/UserAccountMobile';
+import { getConfig } from 'utils/functions';
 
 export default class MainPage extends Component {
   constructor(props) {
@@ -54,23 +54,23 @@ export default class MainPage extends Component {
         <div id="wr-header-hero">
           <div className="wr-hero-container">
 
-          {window.innerWidth > 812 ? <div>
+          {getConfig().isMobileDevice() ? <div>
             <img src='' alt="fisdom" />
             <span className="wr-report">Mutual fund report</span>
           </div> : ''}
 
           <div className="wr-user-account">
-            {window.innerWidth > 812 ?
+            {getConfig().isMobileDevice() ?
               <Tooltip content={<EmailList />} eventToggle="onClick" direction="down" >
               {email}
               </Tooltip> : 
               <React.Fragment>
                 {email}
-                <EmailListMobile open={this.state.mailList} onClose={this.handleClose} />
+                <EmailList open={this.state.mailList} onClose={this.handleClose} />
               </React.Fragment>
             }
 
-            {window.innerWidth > 812 ?
+            {getConfig().isMobileDevice() ?
               <Tooltip content={<UserAccount />} eventToggle="onClick" direction="down" >
               {user_account}
               </Tooltip> : 

@@ -102,8 +102,8 @@ export default class HoldingFilter extends Component {
                         classes={{
                           root:
                             this.state[item.id] === filter
-                              ? "wr-select-btn"
-                              : "wr-btn",
+                              ? "wr-selected-btn"
+                              : "wr-non-selected-btn",
                         }}
                         disableRipple
                         size="small"
