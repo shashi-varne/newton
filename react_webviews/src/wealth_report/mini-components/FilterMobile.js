@@ -86,8 +86,8 @@ class FilterMobile extends Component {
                 classes={{
                   root:
                     this.state[item.id] === filter
-                      ? "wr-selected-btn"
-                      : "wr-non-selected-btn",
+                      ? "wr-selected-filters"
+                      : "wr-non-selected-filters",
                 }}
                 disableRipple
                 size="small"

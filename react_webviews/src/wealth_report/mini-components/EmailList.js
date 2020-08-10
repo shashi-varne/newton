@@ -5,7 +5,7 @@ import Dialog from "common/ui/Dialog";
 import FormControl from "@material-ui/core/FormControl";
 import WrButton from "../common/Button";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import { getConfig } from 'utils/functions';
+import { isMobileDevice } from 'utils/functions';
 
 class EmailListMobile extends Component {
   constructor(props) {
@@ -110,7 +110,7 @@ class EmailListMobile extends Component {
   render() {
     return (
       <React.Fragment>
-        {getConfig().isMobileDevice() && !this.state.addEmail ? (
+        {!isMobileDevice() && !this.state.addEmail ? (
           this.renderEmailList()
         ) : (
           <Dialog

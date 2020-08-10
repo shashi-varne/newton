@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import HoldingCard from "../mini-components/HoldingCard";
 import Filter from "../mini-components/Filter";
 import FilterMobile from "../mini-components/FilterMobile";
-import { getConfig } from 'utils/functions';
+import { isMobileDevice } from 'utils/functions';
 import CloseIcon from "@material-ui/icons/Close";
 import Button from "material-ui/Button";
 
@@ -29,7 +29,7 @@ export default class Holdings extends Component {
   render() {
     return (
       <div className="wr-holdings">
-        {getConfig().isMobileDevice() && <Filter />}
+        {!isMobileDevice() && <Filter />}
         <FilterMobile open={this.state.open} onClose={this.handleClose} onClick={this.handleClose} />
         <HoldingCard />
         <Button

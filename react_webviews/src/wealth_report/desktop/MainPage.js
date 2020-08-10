@@ -8,7 +8,7 @@ import Tooltip from 'common/ui/Tooltip';
 import UserAccount from '../mini-components/UserAccount';
 import EmailList from '../mini-components/EmailList';
 import UserAccountMobile from '../mini-components/UserAccountMobile';
-import { getConfig } from 'utils/functions';
+import { isMobileDevice } from 'utils/functions';
 
 export default class MainPage extends Component {
   constructor(props) {
@@ -54,13 +54,13 @@ export default class MainPage extends Component {
         <div id="wr-header-hero">
           <div className="wr-hero-container">
 
-          {getConfig().isMobileDevice() ? <div>
+          {!isMobileDevice() ? <div>
             <img src='' alt="fisdom" />
             <span className="wr-report">Mutual fund report</span>
           </div> : ''}
 
           <div className="wr-user-account">
-            {getConfig().isMobileDevice() ?
+            {!isMobileDevice() ?
               <Tooltip content={<EmailList />} eventToggle="onClick" direction="down" >
               {email}
               </Tooltip> : 
@@ -70,7 +70,7 @@ export default class MainPage extends Component {
               </React.Fragment>
             }
 
-            {getConfig().isMobileDevice() ?
+            {!isMobileDevice() ?
               <Tooltip content={<UserAccount />} eventToggle="onClick" direction="down" >
               {user_account}
               </Tooltip> : 

@@ -3,6 +3,7 @@ import Button from "material-ui/Button";
 import { getBase64 } from "utils/functions";
 import $ from "jquery";
 import ImageCrop from "common/ui/ImageCrop";
+import { getImageFile } from '../common/commonFunctions';
 import Dialog from "common/ui/Dialog";
 
 class UserAccountMobile extends Component {
@@ -21,10 +22,13 @@ class UserAccountMobile extends Component {
       croppedImageUrl: url,
       cropped: true,
     });
-    console.log(url);
   };
 
   openCameraWeb() {
+    this.setState({
+      fileUploaded: false,
+      cropped: false,
+    });
     $("input").trigger("click");
   }
 
@@ -33,33 +37,15 @@ class UserAccountMobile extends Component {
   }
 
   getPhoto = (e) => {
-    e.preventDefault();
-    this.setState({
-      fileUploaded: false,
-      cropped: false,
-    });
-
-    let file = e.target.files[0];
-
-    let acceptedType = ["image/jpeg", "image/jpg", "image/png", "image/bmp"];
-
-    if (acceptedType.indexOf(file.type) === -1) {
-      console.log("please select image file only");
-      return;
-    }
-
+    const image = getImageFile(e)
     let that = this;
-    file.doc_type = file.type;
-    this.setState({
-      imageBaseFile: file,
-    });
-    getBase64(file, function (img) {
+    getBase64(image, function (img) {
       that.setState({
         imageBaseFileShow: img,
         fileUploaded: true,
       });
     });
-  };
+  }
 
   renderd1 = () => (
     <React.Fragment>
