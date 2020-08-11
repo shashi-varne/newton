@@ -74,11 +74,9 @@ export default class Overview extends Component {4
           <div className="wr-okn-value">₹ 56.3L</div>
         </div>
         <div className="wr-okn-box">
-          <div className="wr-okn-title"
-            style={{display:'flex', justifyContent:'center'}}
-          >
-            <div>XIRR</div>
-            <span style={{ marginLeft: "6px" }}>
+          <div className="wr-okn-title">
+            XIRR
+            <span style={{ marginLeft: "6px", verticalAlign:'middle' }}>
               {!isMobileDevice() ? 
               <Tooltip content={tipcontent} direction="down">
                 {i_btn}

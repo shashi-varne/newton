@@ -1,3 +1,5 @@
+// common for both mobile view and web view
+
 import React, { Component } from "react";
 import Button from "material-ui/Button";
 import { getBase64 } from "utils/functions";
@@ -7,6 +9,7 @@ import { getImageFile } from "../common/commonFunctions";
 import Dialog from "common/ui/Dialog";
 import Tooltip from "common/ui/Tooltip";
 import { isMobileDevice } from "utils/functions";
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 
 class UserAccountMobile extends Component {
   constructor(props) {
@@ -41,6 +44,8 @@ class UserAccountMobile extends Component {
   getPhoto = (e) => {
     const image = getImageFile(e);
     let that = this;
+
+    //will get the image url
     getBase64(image, function (img) {
       that.setState({
         imageBaseFileShow: img,
@@ -55,7 +60,14 @@ class UserAccountMobile extends Component {
     });
   };
 
-  renderd1 = () => (
+  handleTooltipClose = () => {
+    this.setState({
+      open: false
+    })
+  }
+
+  // will render user account profile info
+  renderUserAccount = () => (
     <React.Fragment>
       <div className="wr-welcome" style={{ width: "300px" }}>
         <div style={{ textAlign: "center" }} onClick={() => this.startUpload()}>
@@ -100,7 +112,8 @@ class UserAccountMobile extends Component {
     </React.Fragment>
   );
 
-  renderd2 = () => (
+  // will use to crop the uploaded image
+  renderImageCrop = () => (
     <ImageCrop image={this.state.imageBaseFileShow} getImage={this.getImage} />
   );
 
@@ -119,21 +132,25 @@ class UserAccountMobile extends Component {
     return (
       <React.Fragment>
         {!isMobileDevice() ? (
-          <Tooltip
-            content={
-              this.state.fileUploaded
-                ? this.state.cropped
-                  ? this.renderd1()
-                  : this.renderd2()
-                : this.renderd1()
-            }
-            isOpen={this.state.open}
-            direction="down"
-            forceDirection
-          >
-            {user_account}
-          </Tooltip>
+          // will show the tooltip if webview else Modal of user account
+          <ClickAwayListener onClickAway={this.handleTooltipClose}>
+            <Tooltip
+              content={
+                this.state.fileUploaded
+                  ? this.state.cropped
+                    ? this.renderUserAccount()
+                    : this.renderImageCrop()
+                  : this.renderUserAccount()
+              }
+              isOpen={this.state.open}
+              direction="down"
+              forceDirection
+            >
+              {user_account}
+            </Tooltip>
+          </ClickAwayListener>
         ) : (
+          // mobile view 
           <React.Fragment>
             {user_account}
             <Dialog
@@ -143,9 +160,9 @@ class UserAccountMobile extends Component {
             >
               {this.state.fileUploaded
                 ? this.state.cropped
-                  ? this.renderd1()
-                  : this.renderd2()
-                : this.renderd1()}
+                  ? this.renderUserAccount()
+                  : this.renderImageCrop()
+                : this.renderUserAccount()}
             </Dialog>
           </React.Fragment>
         )}

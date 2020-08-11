@@ -10,7 +10,7 @@ export default class Taxation extends Component {
     super(props);
     this.state = {
       tabSelected: "stcg",
-      openModal: false
+      openModal: false,
     };
   }
 
@@ -38,17 +38,17 @@ export default class Taxation extends Component {
   };
 
   handleClose = () => {
-    this.setState({openModal: false})
-  }
+    this.setState({ openModal: false });
+  };
 
   render() {
     const { tabSelected } = this.state;
     const tipcontent = (
-      <div className="wr-estd-tax" style={{width: '300px'}}>
+      <div className="wr-estd-tax" style={{ width: "300px" }}>
         <div className="head">Estimated Tax</div>
         <div className="content">
-          Disclaimer: Calculation is solely based 
-           ₹2,848  Estimated Tax on the statement provided by you.
+          Disclaimer: Calculation is solely based ₹2,848 Estimated Tax on the
+          statement provided by you.
         </div>
       </div>
     );
@@ -61,7 +61,7 @@ export default class Taxation extends Component {
           width: isMobileDevice() && "10px",
         }}
         alt=""
-        onClick={() => this.setState({openModal: true})}
+        onClick={() => this.setState({ openModal: true })}
       />
     );
 
@@ -74,27 +74,25 @@ export default class Taxation extends Component {
         <div id="wr-taxation-summary">
           <div className="wr-taxation-summary-col">
             <span className="wr-tsc-value">₹ 2,848</span>
-            <span
-              className="wr-tsc-label"
-              style={{ display: "flex", justifyContent: "start" }}
-            >
+            <span className="wr-tsc-label">
               Estimated Tax
-              <span style={{ marginLeft: "6px" }}>
-                {!isMobileDevice() ? 
-                <Tooltip content={tipcontent} direction="down">
-                  {i_btn}
-                </Tooltip> : 
-                <React.Fragment>
-                  {i_btn}
-                  <Dialog
-                    open={this.state.openModal}
-                    onClose={this.handleClose}
-                    classes={{ paper: "wr-dialog-info" }}
-                  >
-                    {tipcontent}
-                  </Dialog>
-                </React.Fragment>
-                }
+              <span style={{ marginLeft: "6px", verticalAlign:'middle' }}>
+                {!isMobileDevice() ? (
+                  <Tooltip content={tipcontent} direction="down">
+                    {i_btn}
+                  </Tooltip>
+                ) : (
+                  <React.Fragment>
+                    {i_btn}
+                    <Dialog
+                      open={this.state.openModal}
+                      onClose={this.handleClose}
+                      classes={{ paper: "wr-dialog-info" }}
+                    >
+                      {tipcontent}
+                    </Dialog>
+                  </React.Fragment>
+                )}
               </span>
             </span>
           </div>

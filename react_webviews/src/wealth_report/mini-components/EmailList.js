@@ -1,3 +1,5 @@
+// common for both mobile view and web view
+
 import React, { Component } from "react";
 import Button from "material-ui/Button";
 import TextField from "material-ui/TextField";
@@ -7,6 +9,7 @@ import WrButton from "../common/Button";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import { isMobileDevice } from "utils/functions";
 import Tooltip from "common/ui/Tooltip";
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 
 class EmailListMobile extends Component {
   constructor(props) {
@@ -54,6 +57,13 @@ class EmailListMobile extends Component {
     });
   };
 
+  handleTooltipClose = () => {
+    this.setState({
+      openTooltip: false
+    })
+  }
+
+  // will render Listing of emails
   renderEmailList = () => (
     <div className="wr-accounts" style={{ width: "300px" }}>
       <WrButton
@@ -81,6 +91,7 @@ class EmailListMobile extends Component {
     </div>
   );
 
+  // will display a form to add the email 
   renderAddEmail = () => (
     <div className="wr-add-mail">
       <div className="wr-new-email">
@@ -117,6 +128,7 @@ class EmailListMobile extends Component {
     </div>
   );
 
+  // will render successfully added email modal
   renderEmailAdded = () => (
     <div className="wr-email-added">
       <img src={require(`assets/fisdom/ic-mob-success.svg`)} alt="" />
@@ -144,18 +156,23 @@ class EmailListMobile extends Component {
         }
       />
     );
+
     return (
       <React.Fragment>
         {!isMobileDevice() ? (
-          <Tooltip
-            content={this.renderEmailList()}
-            isOpen={this.state.openTooltip}
-            direction="down"
-            forceDirection
-          >
-            {email}
-          </Tooltip>
+          // will show the tooltip not a mobile device else modal for mobile view
+          <ClickAwayListener onClickAway={this.handleTooltipClose}>
+            <Tooltip
+              content={this.renderEmailList()}
+              isOpen={this.state.openTooltip}
+              direction="down"
+              forceDirection
+            >
+              {email}
+            </Tooltip>
+          </ClickAwayListener>
         ) : (
+          //mobile view
           <React.Fragment>
             {email}
             <Dialog
@@ -169,6 +186,7 @@ class EmailListMobile extends Component {
         )}
 
         {this.state.addEmail && (
+          //common for both mobile and webview
           <Dialog
             open={this.state.addEmailModal}
             onClose={this.handleClose}
@@ -179,6 +197,7 @@ class EmailListMobile extends Component {
         )}
 
         {this.state.emailAdded && (
+          //common for both mobile and webview
           <Dialog
             open={this.state.emailAddedModal}
             onClose={this.handleClose}

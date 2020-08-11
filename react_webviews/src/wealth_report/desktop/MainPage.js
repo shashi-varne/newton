@@ -5,7 +5,7 @@ import Taxation from "./Taxation";
 import Header from "../mini-components/Header";
 import Footer from "../common/Footer";
 import EmailList from '../mini-components/EmailList';
-import UserAccountMobile from '../mini-components/UserAccountMobile';
+import UserAccount from '../mini-components/UserAccount';
 import { isMobileDevice } from 'utils/functions';
 
 export default class MainPage extends Component {
@@ -51,15 +51,15 @@ export default class MainPage extends Component {
         <div id="wr-header-hero">
           <div className="wr-hero-container">
 
-          {!isMobileDevice() ? <div>
-            <img src='' alt="fisdom" />
-            <span className="wr-report">Mutual fund report</span>
-          </div> : ''}
-
-          <div className="wr-user-account">
-            <EmailList />
-            <UserAccountMobile />
-          </div>
+            {!isMobileDevice() ? <div>
+              <img src='' alt="fisdom" />
+              <span className="wr-report">Mutual fund report</span>
+            </div> : ''}
+            
+            <div className="wr-user-account">
+              <EmailList />
+              <UserAccount />
+            </div>
 
           </div>
         </div>
