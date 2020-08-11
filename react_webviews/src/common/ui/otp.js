@@ -39,7 +39,8 @@ class OtpDefaultClass extends Component {
     componentDidMount() {
         var inputs = document.getElementsByTagName('input');
         for (var index = 0; index < inputs.length; ++index) {
-            inputs[index].placeholder = 'X';
+            // inputs[index].placeholder = 'X';
+            inputs[index].placeholder = '';
         }
 
         let intervalId = setInterval(this.countdown, 1000);

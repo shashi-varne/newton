@@ -77,7 +77,7 @@ class RadioButtonsGroup extends Component {
               icon={this.props.icon_type === 'blue_icon' ? <RadioButtonUnchecked /> : <CircleUnchecked />}
               checkedIcon={
                 this.props.icon_type === 'blue_icon' ? <RadioButtonChecked /> : <CircleCheckedFilled
-                  style={{ color: (this.props.icon_type === 'blue_icon' ? getConfig().primary : getConfig().secondary) }} />
+                  style={{ color: (this.props.icon_type === 'blue_icon' ? getConfig().primary : this.props.color || getConfig().secondary) }} />
               } />}
             label={option.inputToRender && option.inputToRender.inputKeyName === this.props.value ? 
               <Input
@@ -144,7 +144,7 @@ class RadioButtonsGroup extends Component {
 const RadioOptions = (props) => (
   <RadioButtonsGroup label={props.label} icon_type={props.icon_type} disabled={props.disabled}
     options={props.options} type={props.type} value={props.value}
-    onChange={props.onChange} helperText={props.helperText} />
+    onChange={props.onChange} helperText={props.helperText}  {...props} />
 );
 
 export default RadioOptions;

@@ -15,6 +15,10 @@ class RadioGrp extends Component {
   }
 
   toggleRadioBtn = (index) => {
+              
+    if(this.props.disabled) {
+      return;
+    }
     this.props.onChange(index);
     this.setState({
       selectedIndex: index,
@@ -41,7 +45,7 @@ class RadioGrp extends Component {
         );
       } else {
         return (
-          <Grid item xs={5} key={i}>
+          <Grid item xs={this.props.isVertical ? 7 : 5} key={i}>
             <RadioBtn
               isChecked={(this.state.selectedIndex === i || option.value === this.props.value)}
               text={option.name}
@@ -70,7 +74,7 @@ class RadioGrp extends Component {
 }
 
 const RadioWithoutIcon = (props) => (
-  <Grid container spacing={16} alignItems="flex-start">
+  <Grid container spacing={16} alignItems="flex-start" direction={props.isVertical ? 'column' : 'row'}>
     <Grid item xs={12}>
       <RadioGrp
         {...props} />

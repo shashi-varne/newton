@@ -472,6 +472,8 @@ export const getConfig = () => {
   } else if (main_pathname.indexOf('help') >= 0) {
     project = 'help';
     generic_callback = "true";
+  } else if (main_pathname.indexOf('loan') >= 0) {
+    project = 'loan';
   }
 
   let search = window.location.search;
@@ -566,6 +568,13 @@ export const getConfig = () => {
     if (returnConfig.iOS && !returnConfig.campaign_version) {
       returnConfig.hide_header = true;
     }
+  }
+
+  if(project === 'loan') {
+    
+    // eslint-disable-next-line
+    returnConfig.html_camera = ((returnConfig.iOS || returnConfig.Web)) ? true : false;
+    
   }
 
   if (project === 'isip') {
