@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { IconButton } from "@material-ui/core";
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 
 const tabs = [
   {
@@ -46,6 +47,12 @@ class Header extends Component {
     });
   };
 
+  handleClose = () => {
+    this.setState({
+      dropdown_open: false,
+    });
+  }
+
   selectTab = (tab) => {
     this.setState({
       dropdown_open: false,
@@ -68,6 +75,7 @@ class Header extends Component {
       <div id="wr-header-bar">
         <div className="wr-pan-dropdown">
           <div className="wr-header-pan-select">
+            <ClickAwayListener onClickAway={this.handleClose}>
             <div className="wr-pan-content" onClick={this.handleClick}>
               <img
                 src={require(`assets/fisdom/ic-added-pans.svg`)}
@@ -86,6 +94,7 @@ class Header extends Component {
                 />
               </IconButton>
             </div>
+            </ClickAwayListener>
 
             <div style={{ display: dropdown_open ? "inherit" : "none" }}>
               {pans.map((pan, index) => pan !== selectedPan && (
