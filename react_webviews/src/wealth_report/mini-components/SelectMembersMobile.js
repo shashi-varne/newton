@@ -19,7 +19,7 @@ const PrimaryRadio = withStyles({
   root: {
     color: "#d1d1d1",
     "&$checked": {
-      color: "#var(--primary)",
+      color: "var(--primary)",
     },
     width: "22px",
   },
