@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import { LinearProgress, createMuiTheme, MuiThemeProvider } from 'material-ui';
+import Graph from './Graph';
+import Tooltip from 'common/ui/Tooltip';
+import { isMobileDevice } from "utils/functions";
+import Dialog from "common/ui/Dialog";
 
 const theme = createMuiTheme({
   overrides: {
@@ -18,8 +22,45 @@ const theme = createMuiTheme({
   }
 });
 
-export default class Overview extends Component {
+export default class Overview extends Component {4
+  constructor(props) {
+    super(props);
+    this.state = {
+      openModal: false
+    };
+  }
+
+
+  handleClose = () => {
+    this.setState({openModal: false})
+  }
+
   render() {
+
+    const tipcontent = (
+      <div className="wr-xirr-tooltip">
+        <div className="wr-tooltip-head">
+          XIRR ( Extended Internal Return Rate)
+        </div>
+        <div className="wr-tooltip-content">
+          XIRR or extended internal return rate is the standard return metricis
+          for measuring the annual performance of the mutual funds
+        </div>
+      </div>
+    )
+
+    const i_btn = (
+      <img
+        src={require(`assets/fisdom/ic-info-xirr-overview.svg`)}
+        style={{
+          height: isMobileDevice() && "10px",
+          width: isMobileDevice() && "10px",
+        }}
+        alt=""
+        onClick={() => this.setState({openModal: true})}
+      />
+    );
+
     return (
       <div>
         <div id="wr-overview-key-numbers" className="wr-card-template">
@@ -33,7 +74,27 @@ export default class Overview extends Component {
           <div className="wr-okn-value">₹ 56.3L</div>
         </div>
         <div className="wr-okn-box">
-          <div className="wr-okn-title">XIRR</div>
+          <div className="wr-okn-title">
+            XIRR
+            <span style={{ marginLeft: "6px", verticalAlign:'middle' }}>
+              {!isMobileDevice() ? 
+              <Tooltip content={tipcontent} direction="down">
+                {i_btn}
+              </Tooltip> : 
+              <React.Fragment>
+                {i_btn}
+                <Dialog
+                  open={this.state.openModal}
+                  onClose={this.handleClose}
+                  classes={{ paper: "wr-dialog-info" }}
+                >
+                  {tipcontent}
+                </Dialog>
+              </React.Fragment>
+              }
+            </span>
+          </div>
+
           <div className="wr-okn-value">17%</div>
         </div>
         <div className="wr-okn-box">

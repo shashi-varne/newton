@@ -18,7 +18,6 @@ import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
 import { Login } from './desktop/Login';
 import MainPage from './desktop/MainPage';
 
-
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
   productionPrefix: 'f',

@@ -89,7 +89,7 @@ class Header extends Component {
 
             <div style={{ display: dropdown_open ? "inherit" : "none" }}>
               {pans.map((pan, index) => pan !== selectedPan && (
-                <div onClick={() => this.selectPan(pan)}>
+                <div onClick={() => this.selectPan(pan)} key={pan}>
                   <div className="hr"></div>
                   <div className="wr-pan-content">
                     <img
@@ -113,6 +113,7 @@ class Header extends Component {
             onClick={() => this.selectTab(tab.id)}
             className="wr-header-tab"
             style={{borderBottom: activeTab === tab.id ? 'solid 4px var(--primary)' : ''}}
+            key={tab.name}
           >
             <img
               src={require(`assets/fisdom/${activeTab === tab.id ? tab["image-active"] : tab["image-inactive"]}`)}
