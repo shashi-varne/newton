@@ -100,7 +100,7 @@ class ImageCrop extends PureComponent {
             onImageLoaded={this.onImageLoaded}
             onComplete={this.onCropComplete}
             onChange={this.onCropChange}
-            style={{ height: "40%", width: "50%" }}
+            style={{ height: "100%", width: "100%" }}
           />
         )}
         {croppedImageUrl && (

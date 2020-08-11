@@ -304,6 +304,20 @@
     line-height: 20px;
   }
 }
+
+.wr-estd-tax {
+  font-size: 15px;
+  .head {
+    font-weight: 500;
+    color: #432088;
+  }
+
+  .content {
+    color: #a9a9a9;
+    margin-top: 5px;
+    line-height: 20px;
+  }
+}
   
 @media only screen 
   and (min-device-width: 330px) 
@@ -487,6 +501,10 @@
     .wr-vertical-divider {
       height: 20px;
     }
+  }
+
+  .wr-user-account {
+    width: 75px !important;
   }
 }
 

@@ -1,5 +1,3 @@
-import { getBase64 } from "utils/functions";
-
 export function getHeightFromTop() {
   var el = document.getElementsByClassName('Container')[0];
   var height = el.getBoundingClientRect().top;

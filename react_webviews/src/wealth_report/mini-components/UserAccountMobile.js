@@ -3,14 +3,16 @@ import Button from "material-ui/Button";
 import { getBase64 } from "utils/functions";
 import $ from "jquery";
 import ImageCrop from "common/ui/ImageCrop";
-import { getImageFile } from '../common/commonFunctions';
+import { getImageFile } from "../common/commonFunctions";
 import Dialog from "common/ui/Dialog";
+import Tooltip from "common/ui/Tooltip";
+import { isMobileDevice } from "utils/functions";
 
 class UserAccountMobile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: true,
+      open: false,
       fileUploaded: false,
       croppedImageUrl: "",
       cropped: false,
@@ -37,7 +39,7 @@ class UserAccountMobile extends Component {
   }
 
   getPhoto = (e) => {
-    const image = getImageFile(e)
+    const image = getImageFile(e);
     let that = this;
     getBase64(image, function (img) {
       that.setState({
@@ -45,11 +47,17 @@ class UserAccountMobile extends Component {
         fileUploaded: true,
       });
     });
-  }
+  };
+
+  handleClose = () => {
+    this.setState({
+      open: false,
+    });
+  };
 
   renderd1 = () => (
     <React.Fragment>
-      <div className="wr-welcome">
+      <div className="wr-welcome" style={{ width: "300px" }}>
         <div style={{ textAlign: "center" }} onClick={() => this.startUpload()}>
           <input
             type="file"
@@ -97,20 +105,50 @@ class UserAccountMobile extends Component {
   );
 
   render() {
+    const user_account = (
+      <img
+        src={require(`assets/fisdom/ic-account.svg`)}
+        alt=""
+        style={{
+          height: isMobileDevice() && "30px",
+          width: isMobileDevice() && "30px",
+        }}
+        onClick={() => this.setState({ open: !this.state.open })}
+      />
+    );
     return (
       <React.Fragment>
-        <Dialog
-          open={this.props.open}
-          onClose={this.props.onClose}
-          className="wr-paper-dialog"
-          fullWidth={true}
-        >
-          {this.state.fileUploaded
-            ? this.state.cropped
-              ? this.renderd1()
-              : this.renderd2()
-            : this.renderd1()}
-        </Dialog>
+        {!isMobileDevice() ? (
+          <Tooltip
+            content={
+              this.state.fileUploaded
+                ? this.state.cropped
+                  ? this.renderd1()
+                  : this.renderd2()
+                : this.renderd1()
+            }
+            isOpen={this.state.open}
+            direction="down"
+            forceDirection
+          >
+            {user_account}
+          </Tooltip>
+        ) : (
+          <React.Fragment>
+            {user_account}
+            <Dialog
+              open={this.state.open}
+              onClose={this.handleClose}
+              classes={{ paper: "wr-dialog-paper" }}
+            >
+              {this.state.fileUploaded
+                ? this.state.cropped
+                  ? this.renderd1()
+                  : this.renderd2()
+                : this.renderd1()}
+            </Dialog>
+          </React.Fragment>
+        )}
       </React.Fragment>
     );
   }

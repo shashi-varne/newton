@@ -140,6 +140,8 @@ class FilterMobile extends Component {
         <Dialog
             open={this.props.open}
             onClose={this.props.onClose}
+            style={{marginTop:'60px'}}
+            classes={{ paper: "wr-paper-filter" }}
         >
           {this.renderFilterModal()}
         </Dialog>

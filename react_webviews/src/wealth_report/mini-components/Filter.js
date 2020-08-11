@@ -118,7 +118,7 @@ export default class HoldingFilter extends Component {
             })}
           </div>
 
-          <div className="vl"></div>
+          <div className="wr-vertical-divider"></div>
           <img
             src={require(`assets/fisdom/ic-clear-filter.svg`)}
             alt=""

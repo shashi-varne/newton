@@ -329,10 +329,10 @@ span.wr-small-col-title {
     }
   }
 
-  .vl {
-    border-left: 1px solid #150731;
+  .wr-vertical-divider {
     height: 25px;
     margin-left: 16px;
+    border-color: #150731;
   }
 }
 
@@ -347,12 +347,13 @@ span.wr-small-col-title {
     .wr-selected-filters {
       background-color: var(--primary) !important;
       box-shadow: 0 1px 15px 0 rgba(215, 199, 250, 0.12) !important;
-      border-radius: 15px;
+      border-radius: 20px;
       margin: 16px 12px 0 0;
       .MuiButton-label {
         font-size: 12px;
-        padding: 0 5px 0 5px;
         font-weight: 500;
+        text-transform: lowercase;
+        padding: 0 2px;
       }
     }
   
@@ -363,8 +364,9 @@ span.wr-small-col-title {
       margin: 16px 12px 0 0;
       .MuiButton-label {
         font-size: 12px;
-        padding: 0 5px 0 5px;
         color: #000;
+        text-transform: lowercase;
+        padding: 0 2px;
       }
     }
 
@@ -385,10 +387,9 @@ span.wr-small-col-title {
       margin: 30px 0 0 0;
       .MuiButton-label {
         font-size: 15px;
-        color: #000;
         font-weight: 600;
         line-height: 1px;
-        color: #4f2ca5;
+        color: var(--primary);
       }
     }
   }
@@ -654,19 +655,54 @@ span.wr-small-col-title {
       text-transform: capitalize;
     }
   }
-}
 
-.wr-estd-tax {
-  font-size: 15px;
-  .head {
-    font-weight: 500;
-    color: #432088;
+  .wr-add-mail {
+    width: 296px !important;
+    .wr-new-email {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      padding-bottom: 16px;
+      border-bottom: solid 1px #f5f6f8;
+    }
+  
+    .wr-mail-content {
+      color: #a9a9a9;
+      line-height: 22px;
+      font-size: 15px;
+      margin: 20px 0 20px 0;
+    }
+  
+    .wr-input-addmail {
+      border-radius: 2px;
+      width: 265px !important;
+      height: 30px;
+      background-color: #fff;
+      border: 1px solid #acb4be;
+      font-size: 15px;
+      padding: 10px 10px;
+    }
+  
+    .wr-btn {
+      margin-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      width: 288px !important;
+    }
   }
 
-  .content {
-    color: #a9a9a9;
-    margin-top: 5px;
-    line-height: 20px;
+  .wr-email-added {
+    width: 296px !important;
+  }
+
+  .wr-accounts {
+    width: 300px !important;
+  }
+
+  .wr-paper {
+    border-radius: 0px !important;
   }
 }
 
@@ -703,8 +739,8 @@ span.wr-small-col-title {
     color: #a9a9a9;
   }
 }
-
 .wr-email-added {
+  // width: 485px;
   text-align: center;
   font-size: 17px;
   margin: 20px 0 10px 0;
@@ -718,7 +754,6 @@ span.wr-small-col-title {
     font-weight: 500;
   }
 }
-
 .wr-welcome {
   text-align: center;
   font-size: 15px;
@@ -786,25 +821,27 @@ span.wr-small-col-title {
 
 .wr-add-mail {
   padding: 0 10px;
+  // width: 485px;
   .wr-new-email {
     font-size: 20px;
     font-weight: 600;
     color: #421f88;
     display: flex;
     align-items: center;
-    padding-bottom: 6px;
+    padding-bottom: 16px;
     border-bottom: solid 1px #f5f6f8;
   }
 
   .wr-mail-content {
     color: #a9a9a9;
-    line-height: 18px;
+    line-height: 22px;
+    font-size: 15px;
     margin: 20px 0 20px 0;
   }
 
   .wr-input-addmail {
     border-radius: 2px;
-    width: 92%;
+    width: 415px;
     height: 30px;
     background-color: #fff;
     border: 1px solid #acb4be;
@@ -820,15 +857,17 @@ span.wr-small-col-title {
 
   .wr-cancel-btn {
     background-color: #fff;
-    border: solid 1px #421f88;
+    border: solid 1px var(--primary);
     height: 47px;
     width: 35%;
     border-radius: 6px;
-    color: #421f88;
+    .MuiButton-label{
+      color: var(--primary);
+    }
   }
 
   .wr-add-btn {
-    background-color: #421f88;
+    background-color: var(--primary);
     color: #fff;
     width: 60%;
     height: 47px;
@@ -836,3 +875,15 @@ span.wr-small-col-title {
   }
 }
 
+.wr-dialog-paper {
+  border-radius: 8px !important;
+  width: 485px;
+}
+
+.wr-paper-filter {
+  border-radius: 6px !important;
+}
+
+.wr-dialog-info {
+  border-radius: 6px !important;
+}

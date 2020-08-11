@@ -5,7 +5,8 @@ import Dialog from "common/ui/Dialog";
 import FormControl from "@material-ui/core/FormControl";
 import WrButton from "../common/Button";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import { isMobileDevice } from 'utils/functions';
+import { isMobileDevice } from "utils/functions";
+import Tooltip from "common/ui/Tooltip";
 
 class EmailListMobile extends Component {
   constructor(props) {
@@ -13,7 +14,10 @@ class EmailListMobile extends Component {
     this.state = {
       accounts: ["Abishmathew21@yahoo.co.in", "Abishmathew21@yahoo.co.in"],
       addEmail: false,
-      open: true,
+      emailListModal: false,
+      openTooltip: false,
+      addEmailModal: false,
+      emailAddedModal: false,
       emailAdded: false,
       mailInput: "",
     };
@@ -22,8 +26,32 @@ class EmailListMobile extends Component {
   handleClick = () => {
     this.setState({
       addEmail: true,
+      openTooltip: false,
+      addEmailModal: true,
     });
-    this.props.onClick();
+  };
+
+  handleClose = () => {
+    this.setState({
+      addEmailModal: false,
+      emailAddedModal: false,
+      emailListModal: false,
+    });
+  };
+
+  addMail = () => {
+    this.setState({
+      emailAdded: true,
+      bottom: false,
+      addEmailModal: false,
+      emailAddedModal: true,
+    });
+  };
+
+  handleInput = (e) => {
+    this.setState({
+      mailInput: e.target.value,
+    });
   };
 
   renderEmailList = () => (
@@ -53,29 +81,16 @@ class EmailListMobile extends Component {
     </div>
   );
 
-  addMail = (e) => {
-    this.setState({
-      emailAdded: true,
-      bottom: false,
-      open: true,
-    });
-  };
-
-  handleInput = (e) => {
-    this.setState({
-      mailInput: e.target.value,
-    });
-  };
-
   renderAddEmail = () => (
     <div className="wr-add-mail">
       <div className="wr-new-email">
-        <img src={require(`assets/fisdom/ic-emails.svg`)} alt="" />
-        <div>Add new email</div>
+        <img src={require(`assets/fisdom/ic-mob-emails.svg`)} alt="" />
+        <div style={{ marginLeft: "12px" }}>Add new email</div>
       </div>
 
       <div className="wr-mail-content">
-        Add the email address and get insights on your portfolio from fisdom
+        Add the email address that you want to track on the fisdom platform and
+        we will share the insights
       </div>
 
       <FormControl fullWidth>
@@ -91,7 +106,9 @@ class EmailListMobile extends Component {
       </FormControl>
 
       <div className="wr-btn">
-        <Button className="wr-cancel-btn">Cancel</Button>
+        <Button className="wr-cancel-btn" onClick={this.handleClose}>
+          Cancel
+        </Button>
 
         <Button className="wr-add-btn" onClick={this.addMail}>
           Add email
@@ -104,29 +121,58 @@ class EmailListMobile extends Component {
     <div className="wr-email-added">
       <img src={require(`assets/fisdom/ic-mob-success.svg`)} alt="" />
       <div className="wr-content">Email has been added successfully!</div>
-      <div className="wr-continue">Continue</div>
+      <div className="wr-continue" onClick={this.handleClose}>
+        Continue
+      </div>
     </div>
   );
 
   render() {
+    const email = (
+      <img
+        src={require(`assets/fisdom/ic-emails.svg`)}
+        alt=""
+        style={{
+          height: isMobileDevice() && "30px",
+          width: isMobileDevice() && "30px",
+        }}
+        onClick={() =>
+          this.setState({
+            openTooltip: !this.state.openTooltip,
+            emailListModal: !this.state.emailListModal,
+          })
+        }
+      />
+    );
     return (
       <React.Fragment>
-        {!isMobileDevice() && !this.state.addEmail ? (
-          this.renderEmailList()
-        ) : (
-          <Dialog
-            open={this.props.open && this.state.open}
-            onClose={this.props.onClose}
-            fullWidth={true}
+        {!isMobileDevice() ? (
+          <Tooltip
+            content={this.renderEmailList()}
+            isOpen={this.state.openTooltip}
+            direction="down"
+            forceDirection
           >
-            {this.renderEmailList()}
-          </Dialog>
+            {email}
+          </Tooltip>
+        ) : (
+          <React.Fragment>
+            {email}
+            <Dialog
+              open={this.state.emailListModal}
+              onClose={this.handleClose}
+              classes={{ paper: "wr-dialog-paper" }}
+            >
+              {this.renderEmailList()}
+            </Dialog>
+          </React.Fragment>
         )}
 
         {this.state.addEmail && (
           <Dialog
-            open={this.props.open && this.state.open}
-            onClose={this.props.onClose}
+            open={this.state.addEmailModal}
+            onClose={this.handleClose}
+            classes={{ paper: "wr-dialog-paper" }}
           >
             {this.renderAddEmail()}
           </Dialog>
@@ -134,8 +180,9 @@ class EmailListMobile extends Component {
 
         {this.state.emailAdded && (
           <Dialog
-            open={this.props.open && this.state.open}
-            onClose={this.props.onClose}
+            open={this.state.emailAddedModal}
+            onClose={this.handleClose}
+            classes={{ paper: "wr-dialog-paper" }}
           >
             {this.renderEmailAdded()}
           </Dialog>

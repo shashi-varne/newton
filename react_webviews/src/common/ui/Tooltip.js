@@ -14,6 +14,7 @@ class Tooltips extends React.Component {
         zIndex={100000}
         direction={this.props.direction}
         eventToggle={this.props.eventToggle}
+        isOpen={this.props.isOpen}
         arrowContent={(
           <svg style={{ display: 'block' }} viewBox="0 0 21 11" width="20px" height="10px">
             <path
