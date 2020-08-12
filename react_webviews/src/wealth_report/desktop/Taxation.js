@@ -76,9 +76,9 @@ export default class Taxation extends Component {
             <span className="wr-tsc-value">₹ 2,848</span>
             <span className="wr-tsc-label">
               Estimated Tax
-              <span style={{ marginLeft: "6px", verticalAlign:'middle' }}>
+              <span style={{ marginLeft: "6px", verticalAlign:"middle" }}>
                 {!isMobileDevice() ? (
-                  <Tooltip content={tipcontent} direction="down">
+                  <Tooltip content={tipcontent} direction="down" className="wr-estd-tax-info">
                     {i_btn}
                   </Tooltip>
                 ) : (
@@ -108,13 +108,14 @@ export default class Taxation extends Component {
           </div>
         </div>
         <div id="wr-taxation-detail">
-          {["stcg", "ltcg"].map((tab) => (
+          {["stcg", "ltcg"].map((tab, index) => (
             <WrButton
               classes={{
                 root: tabSelected === tab ? "" : "wr-outlined-btn",
               }}
               style={{ marginRight: "16px", textTransform: "uppercase" }}
               onClick={() => this.setState({ tabSelected: tab })}
+              key={index}
               disableRipple
             >
               {tab}

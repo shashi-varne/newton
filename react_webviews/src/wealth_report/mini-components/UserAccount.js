@@ -69,7 +69,8 @@ class UserAccountMobile extends Component {
   // will render user account profile info
   renderUserAccount = () => (
     <React.Fragment>
-      <div className="wr-welcome" style={{ width: "300px" }}>
+      {/* visibility will be modified based on the condition in media queries */}
+      <div className="wr-welcome">
         <div style={{ textAlign: "center" }} onClick={() => this.startUpload()}>
           <input
             type="file"
@@ -112,7 +113,7 @@ class UserAccountMobile extends Component {
     </React.Fragment>
   );
 
-  // will use to crop the uploaded image
+  // use to crop the uploaded image
   renderImageCrop = () => (
     <ImageCrop image={this.state.imageBaseFileShow} getImage={this.getImage} />
   );
@@ -122,17 +123,14 @@ class UserAccountMobile extends Component {
       <img
         src={require(`assets/fisdom/ic-account.svg`)}
         alt=""
-        style={{
-          height: isMobileDevice() && "30px",
-          width: isMobileDevice() && "30px",
-        }}
+        id="wr-account-img"
         onClick={() => this.setState({ open: !this.state.open })}
       />
     );
     return (
       <React.Fragment>
         {!isMobileDevice() ? (
-          // will show the tooltip if webview else Modal of user account
+          // will show the tooltip for desktop view else dialog box for mobile view
           <ClickAwayListener onClickAway={this.handleTooltipClose}>
             <Tooltip
               content={
@@ -145,6 +143,7 @@ class UserAccountMobile extends Component {
               isOpen={this.state.open}
               direction="down"
               forceDirection
+              className="wr-user"
             >
               {user_account}
             </Tooltip>

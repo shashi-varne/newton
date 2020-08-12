@@ -65,7 +65,7 @@ class EmailListMobile extends Component {
 
   // will render Listing of emails
   renderEmailList = () => (
-    <div className="wr-accounts" style={{ width: "300px" }}>
+    <div className="wr-accounts">
       <WrButton
         fullWidth={true}
         classes={{ root: "wr-add-email-btn" }}
@@ -94,6 +94,7 @@ class EmailListMobile extends Component {
   // will display a form to add the email 
   renderAddEmail = () => (
     <div className="wr-add-mail">
+      {/* visibility will be modified based on the condition in media queries */}
       <div className="wr-new-email">
         <img src={require(`assets/fisdom/ic-mob-emails.svg`)} alt="" />
         <div style={{ marginLeft: "12px" }}>Add new email</div>
@@ -144,10 +145,7 @@ class EmailListMobile extends Component {
       <img
         src={require(`assets/fisdom/ic-emails.svg`)}
         alt=""
-        style={{
-          height: isMobileDevice() && "30px",
-          width: isMobileDevice() && "30px",
-        }}
+        id="wr-account-img"
         onClick={() =>
           this.setState({
             openTooltip: !this.state.openTooltip,
@@ -160,13 +158,14 @@ class EmailListMobile extends Component {
     return (
       <React.Fragment>
         {!isMobileDevice() ? (
-          // will show the tooltip not a mobile device else modal for mobile view
+          // will show the tooltip for desktop view and dialog box for the mobile view
           <ClickAwayListener onClickAway={this.handleTooltipClose}>
             <Tooltip
               content={this.renderEmailList()}
               isOpen={this.state.openTooltip}
               direction="down"
               forceDirection
+              className='wr-email-list'
             >
               {email}
             </Tooltip>

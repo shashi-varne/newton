@@ -24,7 +24,6 @@ class FilterMobile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: true,
       checked: false,
       fund_type: "",
       current_value: "",
