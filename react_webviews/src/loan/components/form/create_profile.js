@@ -59,7 +59,7 @@ class FormCreateProfile extends Component {
             let that = this;
             setTimeout(function(){ 
               that.getDedupeCallback();
-            }, 2000);
+            }, 3000);
         }
 
     }
@@ -74,7 +74,7 @@ class FormCreateProfile extends Component {
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200 && !resultData.error) {
 
-                let searchParams = getConfig().searchParams + '&status=sorry';
+                let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
 
                 if (resultData.callback_status) {
                     if (resultData.dedupe_match) {
