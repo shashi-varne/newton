@@ -43,6 +43,7 @@ class PanSelect extends Component {
     return (
       <div className="wr-pan-dropdown">
         <div className="wr-header-pan-select">
+          {/* visibility will be modified based on the condition in media queries */}
           <ClickAwayListener onClickAway={this.handleClose}>
             <div className="wr-pan-content">
               <img
@@ -72,6 +73,7 @@ class PanSelect extends Component {
             </div>
           </ClickAwayListener>
 
+          {/* visibility will be modified based on condition 'isMobileDevice()' */}
           {!isMobileDevice() && (
             <div style={{ display: dropdown_open ? "inherit" : "none" }}>
               {pans.map(
@@ -96,6 +98,7 @@ class PanSelect extends Component {
             </div>
           )}
 
+          {/* visibility will be modified based on condition 'isMobileDevice()' */}
           {isMobileDevice() && (
             <Dialog
               open={this.state.panModal}

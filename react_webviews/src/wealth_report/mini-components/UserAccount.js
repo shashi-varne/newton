@@ -69,6 +69,7 @@ class UserAccountMobile extends Component {
   // will render user account profile info
   renderUserAccount = () => (
     <React.Fragment>
+      {/* visibility will be modified based on the condition in media queries */}
       <div className="wr-welcome">
         <div style={{ textAlign: "center" }} onClick={() => this.startUpload()}>
           <input
@@ -112,7 +113,7 @@ class UserAccountMobile extends Component {
     </React.Fragment>
   );
 
-  // will use to crop the uploaded image
+  // use to crop the uploaded image
   renderImageCrop = () => (
     <ImageCrop image={this.state.imageBaseFileShow} getImage={this.getImage} />
   );
@@ -129,7 +130,7 @@ class UserAccountMobile extends Component {
     return (
       <React.Fragment>
         {!isMobileDevice() ? (
-          // will show the tooltip if webview else Modal of user account
+          // will show the tooltip for desktop view else dialog box for mobile view
           <ClickAwayListener onClickAway={this.handleTooltipClose}>
             <Tooltip
               content={

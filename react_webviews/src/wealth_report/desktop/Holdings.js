@@ -28,9 +28,14 @@ export default class Holdings extends Component {
   render() {
     return (
       <div className="wr-holdings">
+        {/* will be hidden for the mobile view visible for desktop view */}
         <Filter />
+
+        {/* will be hidden for the desktop view and visible for mobile view */}
         <FilterMobile open={this.state.open} onClose={this.handleClose} onClick={this.handleClose} />
+
         <HoldingCard />
+
         <Button
           variant="fab"
           style={{

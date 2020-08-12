@@ -32,8 +32,8 @@ class DialogBox extends Component {
     return (
       <MuiThemeProvider theme={theme}>
         <Dialog
-          fullScreen={this.props.fullwidth}
-          fullWidth={true}
+          fullScreen={this.props.fullScreen}
+          fullWidth={this.props.fullWidth}
           open={this.props.open}
           onClose={this.props.onClose}
           aria-labelledby="responsive-dialog-title"

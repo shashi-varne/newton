@@ -6,7 +6,6 @@ import Header from "../mini-components/Header";
 import Footer from "../common/Footer";
 import EmailList from '../mini-components/EmailList';
 import UserAccount from '../mini-components/UserAccount';
-import { isMobileDevice } from 'utils/functions';
 import PanSelect from '../mini-components/PanSelect';
 
 export default class MainPage extends Component {
@@ -17,10 +16,6 @@ export default class MainPage extends Component {
       account: false,
       addMail: false
     };
-  }
-
-  componentDidMount() {
-    isMobileDevice();
   }
 
   renderTab = (tab) => {
@@ -56,14 +51,17 @@ export default class MainPage extends Component {
         <div id="wr-header-hero">
           <div className="wr-hero-container">
 
+            {/* will be hidden for mobile view and visible for desktop view */}
             <div className="wr-fisdom">
               <img src='' alt="fisdom" />
               <span className='wr-vertical-divider'></span>
               <span className="wr-report">Mutual fund report</span>
             </div>
             
+            {/* will be hidden for desktop view and visible for mobile view */}
             <PanSelect />
             
+            {/* visbility will be modified based on condition in media queries */}
             <div className="wr-user-account">
               <EmailList />
               <UserAccount />
@@ -78,6 +76,7 @@ export default class MainPage extends Component {
           {this.renderTab(params.tab)}
         </div>
 
+        {/* will be hidden for the mobile view */}
         <div id="wr-footer">
           <Footer />
         </div>
