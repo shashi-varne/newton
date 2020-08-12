@@ -78,7 +78,7 @@ export default class Overview extends Component {4
             XIRR
             <span style={{ marginLeft: "6px", verticalAlign:'middle' }}>
               {!isMobileDevice() ? 
-              <Tooltip content={tipcontent} direction="down">
+              <Tooltip content={tipcontent} direction="down" className="wr-xirr-info">
                 {i_btn}
               </Tooltip> : 
               <React.Fragment>

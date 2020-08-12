@@ -65,7 +65,7 @@ class EmailListMobile extends Component {
 
   // will render Listing of emails
   renderEmailList = () => (
-    <div className="wr-accounts" style={{ width: "300px" }}>
+    <div className="wr-accounts">
       <WrButton
         fullWidth={true}
         classes={{ root: "wr-add-email-btn" }}
@@ -144,10 +144,7 @@ class EmailListMobile extends Component {
       <img
         src={require(`assets/fisdom/ic-emails.svg`)}
         alt=""
-        style={{
-          height: isMobileDevice() && "30px",
-          width: isMobileDevice() && "30px",
-        }}
+        id="wr-email-img"
         onClick={() =>
           this.setState({
             openTooltip: !this.state.openTooltip,
@@ -167,6 +164,7 @@ class EmailListMobile extends Component {
               isOpen={this.state.openTooltip}
               direction="down"
               forceDirection
+              className='wr-email-list'
             >
               {email}
             </Tooltip>

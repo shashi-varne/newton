@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
-import { IconButton } from "@material-ui/core";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
+import PanSelect from './PanSelect';
 
 const tabs = [
   {
@@ -41,18 +40,6 @@ class Header extends Component {
     };
   }
 
-  handleClick = () => {
-    this.setState({
-      dropdown_open: !this.state.dropdown_open,
-    });
-  };
-
-  handleClose = () => {
-    this.setState({
-      dropdown_open: false,
-    });
-  }
-
   selectTab = (tab) => {
     this.setState({
       dropdown_open: false,
@@ -60,62 +47,12 @@ class Header extends Component {
     })
   }
 
-  selectPan = (pan) => {
-    this.setState({
-      dropdown_open: false,
-      selectedPan: pan
-    })
-  }
-
   render() {
-    let { dropdown_open, pans, selectedPan, activeTab } = this.state;
-    let count = 1;
+    let { activeTab } = this.state;
 
     return (
       <div id="wr-header-bar">
-        <div className="wr-pan-dropdown">
-          <div className="wr-header-pan-select">
-            <ClickAwayListener onClickAway={this.handleClose}>
-            <div className="wr-pan-content" onClick={this.handleClick}>
-              <img
-                src={require(`assets/fisdom/ic-added-pans.svg`)}
-                alt=""
-              />
-
-              <div style={{ padding: "0 75px 0 16px" }}>
-                <div style={{ fontSize: "15px", color:'#a9a9a9' }}>Showing report for</div>
-                <div className="wr-pan">{selectedPan}</div>
-              </div>
-
-              <IconButton classes={{ root: 'wr-icon-button' }} color="inherit" aria-label="Menu">
-                <img
-                  src={require("assets/fisdom/ic-dropdown.svg")}
-                  alt=""
-                />
-              </IconButton>
-            </div>
-            </ClickAwayListener>
-
-            <div style={{ display: dropdown_open ? "inherit" : "none" }}>
-              {pans.map((pan, index) => pan !== selectedPan && (
-                <div onClick={() => this.selectPan(pan)} key={pan}>
-                  <div className="hr"></div>
-                  <div className="wr-pan-content">
-                    <img
-                      src={require(`assets/fisdom/ic-added-pans.svg`)}
-                      alt=""
-                    />
-                    <div style={{ padding: "0 75px 0 16px" }}>
-                      <div style={{ fontSize: "15px", color:'#a9a9a9' }}>{`PAN ${++count}`}</div>
-                      <div className="wr-pan">{pan}</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-          </div>
-        </div>
+        <PanSelect />
 
         {tabs.map(tab => (
           <Link to={`${tab.id + this.props.location.search}`}

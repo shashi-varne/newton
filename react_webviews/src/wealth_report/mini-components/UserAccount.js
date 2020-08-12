@@ -69,7 +69,7 @@ class UserAccountMobile extends Component {
   // will render user account profile info
   renderUserAccount = () => (
     <React.Fragment>
-      <div className="wr-welcome" style={{ width: "300px" }}>
+      <div className="wr-welcome">
         <div style={{ textAlign: "center" }} onClick={() => this.startUpload()}>
           <input
             type="file"
@@ -122,10 +122,7 @@ class UserAccountMobile extends Component {
       <img
         src={require(`assets/fisdom/ic-account.svg`)}
         alt=""
-        style={{
-          height: isMobileDevice() && "30px",
-          width: isMobileDevice() && "30px",
-        }}
+        id="wr-account-img"
         onClick={() => this.setState({ open: !this.state.open })}
       />
     );
@@ -145,6 +142,7 @@ class UserAccountMobile extends Component {
               isOpen={this.state.open}
               direction="down"
               forceDirection
+              className="wr-user"
             >
               {user_account}
             </Tooltip>

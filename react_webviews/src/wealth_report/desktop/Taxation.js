@@ -78,7 +78,7 @@ export default class Taxation extends Component {
               Estimated Tax
               <span style={{ marginLeft: "6px", verticalAlign:'middle' }}>
                 {!isMobileDevice() ? (
-                  <Tooltip content={tipcontent} direction="down">
+                  <Tooltip content={tipcontent} direction="down" className='wr-estd-tax-info'>
                     {i_btn}
                   </Tooltip>
                 ) : (

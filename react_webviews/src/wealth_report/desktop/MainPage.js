@@ -7,6 +7,7 @@ import Footer from "../common/Footer";
 import EmailList from '../mini-components/EmailList';
 import UserAccount from '../mini-components/UserAccount';
 import { isMobileDevice } from 'utils/functions';
+import PanSelect from '../mini-components/PanSelect';
 
 export default class MainPage extends Component {
   constructor(props) {
@@ -16,6 +17,10 @@ export default class MainPage extends Component {
       account: false,
       addMail: false
     };
+  }
+
+  componentDidMount() {
+    isMobileDevice();
   }
 
   renderTab = (tab) => {
@@ -51,10 +56,13 @@ export default class MainPage extends Component {
         <div id="wr-header-hero">
           <div className="wr-hero-container">
 
-            {!isMobileDevice() ? <div>
+            <div className="wr-fisdom">
               <img src='' alt="fisdom" />
+              <span className='wr-vertical-divider'></span>
               <span className="wr-report">Mutual fund report</span>
-            </div> : ''}
+            </div>
+            
+            <PanSelect />
             
             <div className="wr-user-account">
               <EmailList />
@@ -71,7 +79,7 @@ export default class MainPage extends Component {
         </div>
 
         <div id="wr-footer">
-        {!isMobileDevice() && <Footer />}
+          <Footer />
         </div>
       </div>
     );

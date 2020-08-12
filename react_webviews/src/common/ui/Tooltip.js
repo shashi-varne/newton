@@ -15,7 +15,7 @@ class Tooltips extends React.Component {
         direction={this.props.direction}
         eventToggle={this.props.eventToggle}
         isOpen={this.props.isOpen}
-        ClassName="react-tooltip-lit"
+        className={this.props.className}
         arrowContent={(
           <svg style={{ display: 'block' }} viewBox="0 0 21 11" width="20px" height="10px">
             <path
