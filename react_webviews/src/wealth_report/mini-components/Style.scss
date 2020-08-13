@@ -37,6 +37,19 @@
   flex-flow: wrap;
   color: black;
   align-items: center;
+  flex: 1;
+}
+
+.wr-amc-label{
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+  margin-bottom: -40px;
+}
+
+#wr-amc-img{
+  margin-top: 10px;
+  margin-right: -8px;
 }
 
 .wr-hc-user-data {
@@ -112,6 +125,8 @@ span.wr-small-col-title {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
+
+
 .wr-hc-amc-detail {
   flex-basis: 40% !important;
   padding: 42px;
@@ -125,19 +140,29 @@ span.wr-small-col-title {
     height: 40px;
     margin-right: 24px;
   }
-  .amc-detail-title {
-    font-size: 20px;
-    line-height: 1;
-    color: #000000;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-  .amc-detail-subtitle {
-    opacity: 0.5;
-    font-size: 15px;
-    line-height: 1;
-    margin-top: 10px;
+
+  .wr-amc-detail {
+    margin-right: 36px;
+    max-width: 68%;
+
+    .amc-detail-title {
+      font-size: 20px;
+      line-height: 1;
+      color: #000000;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    .amc-detail-subtitle {
+      opacity: 0.5;
+      font-size: 15px;
+      line-height: 1;
+      margin-top: 10px;
+    }
+  
+    .wr-EL-label {
+      display: none;
+    }
   }
 }
 
@@ -495,6 +520,10 @@ span.wr-small-col-title {
     justify-content: space-between;
   }
 
+  .wr-amc-label {
+    display: none;
+  }
+
   .wr-hc-amc-detail {
     flex-basis: 100% !important;
     padding: 16px;
@@ -506,12 +535,29 @@ span.wr-small-col-title {
       height: 27px;
       margin-right: 12px;
     }
-    .amc-detail-title {
-      font-size: 14px;
-    }
-    .amc-detail-subtitle {
-      font-size: 12px;
-      margin-top: 6px;
+
+    .wr-amc-detail {
+      margin-right: 30px;
+      .amc-detail-title {
+        font-size: 14px;
+      }
+      .amc-detail-subtitle {
+        font-size: 12px;
+        margin-top: 6px;
+      }
+
+      .wr-EL-label{
+        display: block;
+        font-size: 10px;
+        color: #4a4a4a;
+        font-weight: 500;
+        width: 100px;
+        line-height: 13px;
+        padding: 6px 9px;
+        border-radius: 4px;
+        background-color: rgba(129, 129, 129, 0.08);
+        margin-top: 6px;
+      }
     }
   }
 
@@ -537,8 +583,9 @@ span.wr-small-col-title {
   }
 
   span.wr-small-col-val {
-    font-size: 14px;
+    font-size: 12px;
     margin-bottom: 5px;
+    font-weight: 500;
   }
 
   span.wr-small-col-title {
@@ -549,6 +596,10 @@ span.wr-small-col-title {
     background-color: #fbfaff;
     min-height: 210px;
     padding: 16px;
+
+    // .wr-holdings-btn {
+    //   display: flex;
+    // }
   }
 
   #wr-hce-fund-details {
@@ -877,6 +928,12 @@ span.wr-small-col-title {
   text-align: center;
   font-size: 15px;
   border-bottom: solid 1px #f5f6f8;
+
+  .wr-profile-img {
+    margin: auto;
+    width: 80px;
+    height: 80px;
+  }
 
   .wr-profile {
     width: 80px;

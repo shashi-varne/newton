@@ -26,60 +26,39 @@ const PrimaryRadio = withStyles({
   checked: {},
 })((props) => <Radio color="default" {...props} />);
 
-const members = [
-  {
-    pan: "BZRWR54332M",
-    level: "2nd level data",
-  },
-  {
-    pan: "BZRWR54332J",
-    level: "2nd level data",
-  },
-];
-
 class SelectMembers extends Component {
   constructor(props) {
     super(props);
     this.state = {
       bottom: false,
-      selectedMember: "BZRWR54332M",
     };
   }
 
   toggleDrawer = (open) => () => {
     this.setState({
       bottom: open,
-      open: false,
-    });
-  };
-
-  handleChange = (pan) => {
-    this.setState({
-      selectedMember: pan,
     });
   };
 
   render() {
-    const {selectedMember} = this.state;
-
     return (
       <MuiThemeProvider theme={theme}>
         <Drawer
           anchor="bottom"
-          open={this.props.bottom}
+          open={this.props.open}
           onClose={this.toggleDrawer(false)}
         >
           <div className="wr-select-members">Select Member</div>
-          {members.map((member, index) => (
+          {this.props.pans.map((member, index) => (
             <div className="wr-members" key={index}>
               <div className="wr-container">
-                <div className="wr-head">{member.pan}</div>
-                <div className="wr-level">{member.level}</div>
+                <div className="wr-head">{member}</div>
+                <div className="wr-level">2nd level data</div>
               </div>
               <PrimaryRadio
-                checked={selectedMember === member.pan}
+                checked={this.props.selectedPan === member}
                 disableRipple
-                onChange={() => this.handleChange(member.pan)}
+                onChange={() => this.props.selectPan(member)}
               />
             </div>
           ))}

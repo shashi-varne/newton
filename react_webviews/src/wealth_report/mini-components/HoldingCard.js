@@ -9,6 +9,7 @@ export default class HoldingCard extends Component {
     this.state = {
       tabSelected: 'fund',
       expanded: false,
+      condition: true
     };
   }
 
@@ -49,6 +50,10 @@ export default class HoldingCard extends Component {
 
     return (
       <div className="wr-card-template">
+        {/* based on the condition visbility is modified */}
+        {this.state.condition && <div className="wr-amc-label">
+          <img src={require('assets/fisdom/label.svg')} alt="amc-logo" id="wr-amc-img" />
+        </div>}
         <div className="wr-holding-card">
           {AMCDetail()}
           <div className="wr-hc-user-data">
@@ -76,21 +81,23 @@ export default class HoldingCard extends Component {
         </div>
         {expanded ? 
           (<div className="wr-holding-card-expand">
-            {[
-              {tabName: 'fund', label: 'Fund Holdings'},
-              {tabName: 'transactions', label: 'Transactions'},
-             ].map(({ tabName, label }) => (
-              <WrButton
-                classes={{
-                  root: tabSelected === tabName ? '' : 'wr-outlined-btn'
-                }}
-                style={{ marginRight: '16px' }}
-                onClick={() => this.setState({ tabSelected: tabName })}
-                disableRipple>
-                {label}
-              </WrButton>
-              )
-            )}
+            <div className="wr-holdings-btn">
+              {[
+                {tabName: 'fund', label: 'Fund Summary'},
+                {tabName: 'transactions', label: 'Past Transactions'},
+               ].map(({ tabName, label }) => (
+                <WrButton
+                  classes={{
+                    root: tabSelected === tabName ? '' : 'wr-outlined-btn'
+                  }}
+                  style={{ marginRight: '16px' }}
+                  onClick={() => this.setState({ tabSelected: tabName })}
+                  disableRipple>
+                  {label}
+                </WrButton>
+                )
+              )}
+            </div>
             <div>
               {tabSelected === 'fund' ?
                 this.renderFundDetails() : this.renderPastTransactions()
@@ -104,11 +111,13 @@ export default class HoldingCard extends Component {
 }
 
 const AMCDetail = () => (
-  <div className="wr-hc-amc-detail">
+    <div className="wr-hc-amc-detail">
     <img className="amc-logo" src={require('assets/fisdom/ic-investment-strategy.svg')} alt="amc-logo"/>
-    <div style={{ marginRight: '36px', maxWidth: '68%' }}>
+    <div className="wr-amc-detail">
       <div className="amc-detail-title">Axis Long Term Equity GrAxis Long Term Equity GrAxis Long Term Equity Gr</div>
       <div className="amc-detail-subtitle">ELSS (Tax Savings) · Since Aug 2019</div>
+      {/* // visbility will be modified based on the condition */}
+      {this && <div className="wr-EL-label">Free from EL / Lock-in</div>}
     </div>
     {FisdomRating(4)}
   </div>

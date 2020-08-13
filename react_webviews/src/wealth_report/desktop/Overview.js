@@ -85,10 +85,7 @@ export default function Overview(props) {
   const i_btn = (
     <img
       src={require(`assets/fisdom/ic-info-xirr-overview.svg`)}
-      style={{
-        height: isMobileDevice() && "10px",
-        width: isMobileDevice() && "10px",
-      }}
+      id="wr-i-btn"
       alt=""
       onClick={() => toggleModal(true)}
     />
@@ -141,6 +138,14 @@ export default function Overview(props) {
             <MuiThemeProvider theme={theme}>
               <LinearProgress variant="determinate" value={37} />
             </MuiThemeProvider>
+            <div className="wr-metrics">
+              <span>0</span>
+              <span>20</span>
+              <span>40</span>
+              <span>60</span>
+              <span>80</span>
+              <span>100</span>
+            </div>
           </div>
         </div>
         </div>
@@ -194,9 +199,14 @@ const portfolioCard = (title, subtitle, icon, desc) => (
       <div className="wr-pi-content-title">
         Investment Strategy
       </div>
-      <div className="wr-pi-content-subtitle">
-        Very Conservative
-      </div>
+     
+     <div className="wr-tag">
+      <span className="wr-pi-content-subtitle">
+         Very Conservative
+       </span>
+      <span className="wr-inward-arrow"></span>
+     </div>
+      
       <div className="wr-pi-content-desc">
         Your investment strategy is very conservative, generally recommended for people approaching their
         retirement.

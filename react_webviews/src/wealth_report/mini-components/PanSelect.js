@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { IconButton } from "@material-ui/core";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import { isMobileDevice } from "utils/functions";
-import Dialog from "common/ui/Dialog";
+import SelectMembers from './SelectMembersMobile';
 
 class PanSelect extends Component {
   constructor(props) {
@@ -100,28 +100,10 @@ class PanSelect extends Component {
 
           {/* visibility will be modified based on condition 'isMobileDevice()' */}
           {isMobileDevice() && (
-            <Dialog
-              open={this.state.panModal}
-              onClose={this.handleClose}
-              classes={{ paper: "wr-dialog-paper" }}
-            >
-              {pans.map((pan, index) => (
-                <div onClick={() => this.selectPan(pan)} key={index}>
-                  {index !== 0 && <div className="wr-pan-hr"></div>}
-                  <div className="wr-pan-select-content">
-                    <img
-                      id="wr-pan-logo"
-                      src={require(`assets/fisdom/ic-added-pans.svg`)}
-                      alt=""
-                    />
-                    <span className="wr-pan-detail">
-                      <div className="wr-pan-title">{`PAN ${index + 1}`}</div>
-                      <div className="wr-pan">{pan}</div>
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </Dialog>
+            <SelectMembers open={this.state.panModal} pans={this.state.pans} 
+              selectPan={this.selectPan}
+              selectedPan={this.state.selectedPan}
+            />
           )}
         </div>
       </div>

@@ -59,6 +59,7 @@ export default class WrSelect extends Component {
             IconComponent={ExpandMoreIcon}
             style={this.props.style}
             classes={this.props.classes}
+            disableUnderline= {this.props.disableUnderline}
           >
             <MenuItem value="" disabled>
               {this.props.placeholder}
