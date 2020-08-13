@@ -125,6 +125,8 @@ span.wr-small-col-title {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
+
+
 .wr-hc-amc-detail {
   flex-basis: 40% !important;
   padding: 42px;
@@ -138,23 +140,29 @@ span.wr-small-col-title {
     height: 40px;
     margin-right: 24px;
   }
-  .amc-detail-title {
-    font-size: 20px;
-    line-height: 1;
-    color: #000000;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-  .amc-detail-subtitle {
-    opacity: 0.5;
-    font-size: 15px;
-    line-height: 1;
-    margin-top: 10px;
-  }
 
-  .wr-EL-label {
-    display: none;
+  .wr-amc-detail {
+    margin-right: 36px;
+    max-width: 68%;
+
+    .amc-detail-title {
+      font-size: 20px;
+      line-height: 1;
+      color: #000000;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    .amc-detail-subtitle {
+      opacity: 0.5;
+      font-size: 15px;
+      line-height: 1;
+      margin-top: 10px;
+    }
+  
+    .wr-EL-label {
+      display: none;
+    }
   }
 }
 
@@ -505,25 +513,29 @@ span.wr-small-col-title {
       height: 27px;
       margin-right: 12px;
     }
-    .amc-detail-title {
-      font-size: 14px;
-    }
-    .amc-detail-subtitle {
-      font-size: 12px;
-      margin-top: 6px;
-    }
 
-    .wr-EL-label{
-      display: block;
-      font-size: 10px;
-      color: #4a4a4a;
-      font-weight: 500;
-      width: 100px;
-      line-height: 13px;
-      padding: 6px 9px;
-      border-radius: 4px;
-      background-color: rgba(129, 129, 129, 0.08);
-      margin-top: 6px;
+    .wr-amc-detail {
+      margin-right: 30px;
+      .amc-detail-title {
+        font-size: 14px;
+      }
+      .amc-detail-subtitle {
+        font-size: 12px;
+        margin-top: 6px;
+      }
+
+      .wr-EL-label{
+        display: block;
+        font-size: 10px;
+        color: #4a4a4a;
+        font-weight: 500;
+        width: 100px;
+        line-height: 13px;
+        padding: 6px 9px;
+        border-radius: 4px;
+        background-color: rgba(129, 129, 129, 0.08);
+        margin-top: 6px;
+      }
     }
   }
 

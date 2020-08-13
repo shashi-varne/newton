@@ -65,8 +65,8 @@ export default class Taxation extends Component {
     return (
       <div id="wr-taxation" className="wr-card-template">
         <div id="wr-taxation-filter">
-          <WrSelect style={{ marginRight: "24px" }}></WrSelect>
-          <WrSelect></WrSelect>
+          <WrSelect disableUnderline={true} style={{ marginRight: "24px" }}></WrSelect>
+          <WrSelect disableUnderline={true}></WrSelect>
         </div>
         <div id="wr-taxation-summary">
           <div className="wr-taxation-summary-col">

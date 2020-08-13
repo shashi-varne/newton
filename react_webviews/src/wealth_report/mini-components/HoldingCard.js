@@ -113,7 +113,7 @@ export default class HoldingCard extends Component {
 const AMCDetail = () => (
     <div className="wr-hc-amc-detail">
     <img className="amc-logo" src={require('assets/fisdom/ic-investment-strategy.svg')} alt="amc-logo"/>
-    <div style={{ marginRight: '36px', maxWidth: '68%' }}>
+    <div className="wr-amc-detail">
       <div className="amc-detail-title">Axis Long Term Equity GrAxis Long Term Equity GrAxis Long Term Equity Gr</div>
       <div className="amc-detail-subtitle">ELSS (Tax Savings) · Since Aug 2019</div>
       {/* // visbility will be modified based on the condition */}
