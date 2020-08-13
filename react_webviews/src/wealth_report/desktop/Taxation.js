@@ -56,10 +56,7 @@ export default class Taxation extends Component {
     const i_btn = (
       <img
         src={require(`assets/fisdom/ic-info-xirr-overview.svg`)}
-        style={{
-          height: isMobileDevice() && "10px",
-          width: isMobileDevice() && "10px",
-        }}
+        id="wr-i-btn"
         alt=""
         onClick={() => this.setState({ openModal: true })}
       />

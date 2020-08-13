@@ -6,7 +6,7 @@ class Footer extends Component {
     return (
       <div className="wr-footer">
         <div className="wr-privacy">
-        <img src={require(`assets/fisdom/secure.svg`)} alt="" />
+        <img src={require(`assets/fisdom/ic-secure.svg`)} alt="" />
           Fisdom ensures privacy for your data. <b>Learn more</b>
         </div>
         <div className="wr-register">

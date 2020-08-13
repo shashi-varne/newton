@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="132" height="38" viewBox="0 0 132 38">
+    <g fill="none" fill-rule="evenodd">
+        <path fill="#EEEAF7" d="M2 0h128c1.105 0 2 .895 2 2v29H2c-1.105 0-2-.895-2-2V2C0 .895.895 0 2 0z"/>
+        <text fill="#502DA8" font-family="SourceSansPro-Regular, Source Sans Pro" font-size="10">
+            <tspan x="19" y="19">Free from EL / Lock-in</tspan>
+        </text>
+        <path fill="#502DA8" d="M125 31L132 31 125 38z" opacity=".25"/>
+    </g>
+</svg>

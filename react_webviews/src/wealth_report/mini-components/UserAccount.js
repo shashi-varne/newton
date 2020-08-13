@@ -71,7 +71,7 @@ class UserAccountMobile extends Component {
     <React.Fragment>
       {/* visibility will be modified based on the condition in media queries */}
       <div className="wr-welcome">
-        <div style={{ textAlign: "center" }} onClick={() => this.startUpload()}>
+        <div className="wr-profile-img" onClick={() => this.startUpload()}>
           <input
             type="file"
             style={{ display: "none" }}
@@ -97,7 +97,7 @@ class UserAccountMobile extends Component {
           <img
             src={require(`assets/fisdom/ic-mob-add-pic.svg`)}
             alt="camera"
-            style={{ marginLeft: "-27px" }}
+            style={{ margin: "-35px 0 100px 50px" }}
           />
         </div>
         <div className="wr-head">Welcome</div>
