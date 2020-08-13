@@ -11,3 +11,33 @@
   color: var(--primary);
   font-weight: 600;
 }
+
+.wr-footer {
+  img {
+    padding-right: 20px;
+  }
+
+  .wr-privacy {
+    text-align: center;
+    color: #a9a9a9;
+    margin: 100px 0 17px 0;
+    height: 28px;
+  }
+
+  .wr-register {
+    display: flex;
+    color: #a9a9a9;
+    letter-spacing: 0.76px;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background-color: rgba(149, 149, 149, 0.08);
+    height: 77px;
+    align-items: center;
+  }
+
+  .wr-logo {
+    height: 29px;
+    display: flex;
+    align-items: center;
+  }
+}

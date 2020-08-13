@@ -52,6 +52,44 @@
   position: absolute;
   top: 0;
   z-index: 9998;
+
+  .wr-hero-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 43px 90px 0 90px;
+    align-items: center;
+
+    .wr-fisdom{
+      height: 42px;
+      vertical-align: middle;
+      .wr-vertical-divider {
+        height: 33px !important;
+        border-right: 1px solid #fff
+      }
+
+      .wr-report {
+        font-size: 20px;
+        font-weight: 600;
+        line-height: normal;
+        letter-spacing: normal;
+        color: #ffffff;
+        opacity: 0.7;
+        margin-left: 24px;
+      }
+    }
+  
+
+
+    .wr-user-account {
+      width: 100px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .wr-pan-dropdown {
+      display: none;
+    }
+  }
 }
 
 #wr-body {
@@ -364,6 +402,37 @@
   border-right: 1px solid rgba(0,0,0,0.05)
 }
 
+.wr-xirr-tooltip {
+  width: 300px;
+
+  .wr-tooltip-head {
+    font-size: 15px;
+    color: #432088;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .wr-tooltip-content {
+    color: #a9a9a9;
+    font-size: 15px;
+    line-height: 20px;
+  }
+}
+
+.wr-estd-tax {
+  font-size: 15px;
+  .head {
+    font-weight: 500;
+    color: #432088;
+  }
+
+  .content {
+    color: #a9a9a9;
+    margin-top: 5px;
+    line-height: 20px;
+  }
+}
+  
 @media only screen 
   and (min-device-width: 330px) 
   and (max-device-width: 812px) { 
@@ -375,7 +444,17 @@
     background: var(--primary);
     position: absolute;
     top: 0;
-    z-index: 9998;
+
+    .wr-hero-container {
+      display: flex;
+      justify-content: space-between;
+      padding: 21px 28px;
+      align-items: center;
+
+      .wr-pan-dropdown {
+        display: inherit;
+      }
+    }
   }
 
   #wr-body {
@@ -537,5 +616,20 @@
     .wr-vertical-divider {
       height: 20px;
     }
+  }
+
+  .wr-user-account {
+    width: 75px !important;
+  }
+}
+
+.wr-holdings {
+  .wr-fab-btn {
+    background-color: var(--primary) !important;
+    color: #fff;
+    position: fixed;
+    right: 28px;
+    bottom: 28px;
+    z-index: 1000000;
   }
 }

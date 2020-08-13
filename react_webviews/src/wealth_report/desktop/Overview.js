@@ -1,8 +1,10 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import { LinearProgress, createMuiTheme, MuiThemeProvider } from 'material-ui';
 import MyResponsiveLine from '../mini-components/LineGraph';
-import { getConfig } from 'utils/functions';
 import { growthObj1mo, growthObj3mo, growthObj6mo, growthObjYear, growthObj3Year, growthObj5Year, createGrowthData } from '../constants';
+import Tooltip from 'common/ui/Tooltip';
+import Dialog from "common/ui/Dialog";
+import { getConfig, isMobileDevice } from "utils/functions";
 
 const dateRanges = [{
     label: getConfig().isMobileDevice ? '1m' : '1 Month',
@@ -62,17 +64,41 @@ const theme = createMuiTheme({
 export default function Overview(props) {
   const [timeRange, setRange] = useState(dateRanges[0]);
   const [dateOb, setGrowthObj] = useState(dateRanges[0].dateObj);
+  const [openModal, toggleModal] = useState(false);
 
   const selectRange = (rangeObj) => {
     setRange(rangeObj);
     setGrowthObj(rangeObj.dateObj); // This will be replaced by API data
   };
-  
+  const tipcontent = (
+    <div className="wr-xirr-tooltip">
+      <div className="wr-tooltip-head">
+        XIRR ( Extended Internal Return Rate)
+        </div>
+      <div className="wr-tooltip-content">
+        XIRR or extended internal return rate is the standard return metricis
+        for measuring the annual performance of the mutual funds
+        </div>
+    </div>
+  )
+
+  const i_btn = (
+    <img
+      src={require(`assets/fisdom/ic-info-xirr-overview.svg`)}
+      style={{
+        height: isMobileDevice() && "10px",
+        width: isMobileDevice() && "10px",
+      }}
+      alt=""
+      onClick={() => toggleModal(true)}
+    />
+  );
+
   return (
     <React.Fragment>
       <div className="wr-card-template">
         <div className="wr-card-template-header">Key Numbers</div>
-        <div id="wr-overview-key-numbers">
+        <div id="wr-overview-key-numbers"></div>
         <div className="wr-okn-box">
           <div className="wr-okn-title">Current Value</div>
           <div className="wr-okn-value">₹ 2.83Cr</div>
@@ -82,7 +108,27 @@ export default function Overview(props) {
           <div className="wr-okn-value">₹ 56.3L</div>
         </div>
         <div className="wr-okn-box">
-          <div className="wr-okn-title">XIRR</div>
+          <div className="wr-okn-title">
+            XIRR
+            <span style={{ marginLeft: "6px", verticalAlign:'middle' }}>
+              {!isMobileDevice() ? 
+              <Tooltip content={tipcontent} direction="down" className="wr-xirr-info">
+                {i_btn}
+              </Tooltip> : 
+              <React.Fragment>
+                {i_btn}
+                <Dialog
+                  open={openModal}
+                  onClose={() => toggleModal(false)}
+                  classes={{ paper: "wr-dialog-info" }}
+                >
+                  {tipcontent}
+                </Dialog>
+              </React.Fragment>
+              }
+            </span>
+          </div>
+
           <div className="wr-okn-value">17%</div>
         </div>
         <div className="wr-okn-box">
@@ -97,7 +143,6 @@ export default function Overview(props) {
             </MuiThemeProvider>
           </div>
         </div>
-      </div>
       </div>
       <div className="wr-card-template">
         <div className="wr-card-template-header">Portfolio Growth</div>
