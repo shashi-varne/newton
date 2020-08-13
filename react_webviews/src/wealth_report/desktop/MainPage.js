@@ -7,6 +7,7 @@ import Footer from "../common/Footer";
 import EmailList from '../mini-components/EmailList';
 import UserAccount from '../mini-components/UserAccount';
 import PanSelect from '../mini-components/PanSelect';
+import Analysis from '../desktop/Analysis';
 
 export default class MainPage extends Component {
   constructor(props) {

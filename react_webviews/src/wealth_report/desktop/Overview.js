@@ -98,50 +98,51 @@ export default function Overview(props) {
     <React.Fragment>
       <div className="wr-card-template">
         <div className="wr-card-template-header">Key Numbers</div>
-        <div id="wr-overview-key-numbers"></div>
-        <div className="wr-okn-box">
-          <div className="wr-okn-title">Current Value</div>
-          <div className="wr-okn-value">₹ 2.83Cr</div>
-        </div>
-        <div className="wr-okn-box">
-          <div className="wr-okn-title">Analysis</div>
-          <div className="wr-okn-value">₹ 56.3L</div>
-        </div>
-        <div className="wr-okn-box">
-          <div className="wr-okn-title">
-            XIRR
-            <span style={{ marginLeft: "6px", verticalAlign:'middle' }}>
-              {!isMobileDevice() ? 
-              <Tooltip content={tipcontent} direction="down" className="wr-xirr-info">
-                {i_btn}
-              </Tooltip> : 
-              <React.Fragment>
-                {i_btn}
-                <Dialog
-                  open={openModal}
-                  onClose={() => toggleModal(false)}
-                  classes={{ paper: "wr-dialog-info" }}
-                >
-                  {tipcontent}
-                </Dialog>
-              </React.Fragment>
-              }
-            </span>
+        <div id="wr-overview-key-numbers">  
+          <div className="wr-okn-box">
+            <div className="wr-okn-title">Current Value</div>
+            <div className="wr-okn-value">₹ 2.83Cr</div>
           </div>
+          <div className="wr-okn-box">
+            <div className="wr-okn-title">Analysis</div>
+            <div className="wr-okn-value">₹ 56.3L</div>
+          </div>
+          <div className="wr-okn-box">
+            <div className="wr-okn-title">
+              XIRR
+              <span style={{ marginLeft: "6px", verticalAlign:'middle' }}>
+                {!isMobileDevice() ? 
+                <Tooltip content={tipcontent} direction="down" className="wr-xirr-info">
+                  {i_btn}
+                </Tooltip> : 
+                <React.Fragment>
+                  {i_btn}
+                  <Dialog
+                    open={openModal}
+                    onClose={() => toggleModal(false)}
+                    classes={{ paper: "wr-dialog-info" }}
+                  >
+                    {tipcontent}
+                  </Dialog>
+                </React.Fragment>
+                }
+              </span>
+            </div>
 
-          <div className="wr-okn-value">17%</div>
-        </div>
-        <div className="wr-okn-box">
-          <div className="wr-okn-title">Total Realised Gains</div>
-          <div className="wr-okn-value">₹ 38.23L</div>
-        </div>
-        <div className="wr-okn-box">
+            <div className="wr-okn-value">17%</div>
+          </div>
+          <div className="wr-okn-box">
+            <div className="wr-okn-title">Total Realised Gains</div>
+            <div className="wr-okn-value">₹ 38.23L</div>
+          </div>
+          <div className="wr-okn-box">
           <div className="wr-okn-title">Asset Allocation &nbsp;&nbsp;{assetAllocNums(37)}</div>
           <div className="wr-okn-value">
             <MuiThemeProvider theme={theme}>
               <LinearProgress variant="determinate" value={37} />
             </MuiThemeProvider>
           </div>
+        </div>
         </div>
       </div>
       <div className="wr-card-template">
