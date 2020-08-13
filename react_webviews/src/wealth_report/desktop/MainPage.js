@@ -7,6 +7,7 @@ import Footer from "../common/Footer";
 import EmailList from '../mini-components/EmailList';
 import UserAccount from '../mini-components/UserAccount';
 import PanSelect from '../mini-components/PanSelect';
+import Analysis from '../desktop/Analysis';
 
 export default class MainPage extends Component {
   constructor(props) {
@@ -18,10 +19,28 @@ export default class MainPage extends Component {
     };
   }
 
+  getHeightFromTop = () => {
+    var el = document.getElementById('wr-body');
+    var height = el.getBoundingClientRect().top;
+    return height;
+  }
+
+  onScroll = () => {
+    if (this.getHeightFromTop() < 268) {
+      console.log('Swipe up');
+    }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.onScroll, false);
+  }
+
   renderTab = (tab) => {
 
     if (tab === 'overview') {
       return <Overview />;
+    } else if (tab === 'analysis') {
+      return <Analysis />
     } else if (tab === 'holdings') {
       return <Holdings />
     } else if (tab === 'taxation') {

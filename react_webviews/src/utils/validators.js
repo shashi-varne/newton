@@ -693,6 +693,14 @@ export function calculateAge(val) {
   return age;
 }
 
+export function convertToThousand(val) {
+  const numVal = Number(val);
+  if (isNaN(numVal) || !val) return 0;
+
+  const roundedVal = parseInt(numVal/1000);
+  return `${roundedVal}K`;
+}
+
 export function isFunction(value) {
   return (typeof value === 'function') && (value instanceof Function);
 }

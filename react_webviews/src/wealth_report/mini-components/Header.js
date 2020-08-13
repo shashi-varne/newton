@@ -36,7 +36,7 @@ class Header extends Component {
       dropdown_open: false,
       selectedPan: 'BXRPR87008N',
       pans: ['BXRPR87008N', 'QWCTE6223N', 'TRQEW2995K'],
-      activeTab: this.props.match.params.tab
+      activeTab: this.props.match.params.tab,
     };
   }
 
@@ -54,10 +54,11 @@ class Header extends Component {
       <div id="wr-header-bar">
         <PanSelect />
 
-        {tabs.map(tab => (
+        {tabs.map((tab, index) => (
           <Link to={`${tab.id + this.props.location.search}`}
             onClick={() => this.selectTab(tab.id)}
             className="wr-header-tab"
+            key={index}
             style={{borderBottom: activeTab === tab.id ? 'solid 4px var(--primary)' : ''}}
             key={tab.name}
           >
