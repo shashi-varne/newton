@@ -107,6 +107,14 @@ export default class Overview extends Component {4
             <MuiThemeProvider theme={theme}>
               <LinearProgress variant="determinate" value={37} />
             </MuiThemeProvider>
+            <div className="wr-metrics">
+              <span>0</span>
+              <span>20</span>
+              <span>40</span>
+              <span>60</span>
+              <span>80</span>
+              <span>100</span>
+            </div>
           </div>
         </div>
       </div>
