@@ -2,15 +2,13 @@ import React from 'react';
 import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
-// import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
-// import Arrow from '@material-ui/icons/ArrowBack';
 import Close from '@material-ui/icons/Close';
 import SVG from 'react-inlinesvg';
 import {getConfig} from 'utils/functions';
 import back_arrow from 'assets/back_arrow.svg';
 import close_icn from 'assets/close_icn.svg';
-
+import '../theme/Style.scss';
 
 const headerIconMapper = {
   back: back_arrow,
@@ -19,20 +17,22 @@ const headerIconMapper = {
 
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
-  inPageTitle, force_hide_inpage_title, className ,style, headerData}) => (
+  inPageTitle, force_hide_inpage_title, className ,style, headerData={}}) => (
   <AppBar position="fixed" color="primary" 
   className={`Header transition ${classes.root} ${inPageTitle ? 'header-topbar-white' : 'header-topbar-white'} ${className}`}
   style={style}
   >
     <Toolbar>
-      <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={goBack}>
-        {!disableBack && 
+      <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={headerData.goBack ||
+         goBack}>
+        {!disableBack && !headerData.hide_icon &&
         <SVG
           preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
           src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
         />
         }
-        {(disableBack === true) && <Close />}
+        {(disableBack === true) && !headerData.hide_icon &&
+         <Close />}
       </IconButton>
 
       <div>

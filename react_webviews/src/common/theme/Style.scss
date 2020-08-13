@@ -5,6 +5,9 @@
 .configPrimaryBackgroundColorClass {
   background-color: var(--primary) !important;
 }
+.secondary-color {
+  color: var(--secondary) !important;
+}
 
 .ContainerWrapper {
   background-color: #fff;
@@ -246,8 +249,13 @@ body[data-device="web"] {
 
 button.MuiButtonBase-root.MuiButton-root.MuiButton-raised.MuiButton-raisedSecondary.MuiButton-sizeLarge.CustomButton-button-100 {
   border-radius: 6px;
-  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149);
+  // box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149);
+  box-shadow: none !important;
 }
+button {
+  box-shadow: none !important;
+}
+
 
 .FooterButtonArrow {
   margin-left: 20px;
@@ -445,6 +453,7 @@ input#pan {
 .LoaderOverlayText {
   color: #0a1d32;
   font-size: 14px;
+  line-height: 19px;
   margin: 10px 0 0 0;
   font-weight: 400;
 }
@@ -607,8 +616,8 @@ input#pan {
 
 .header-title-page {
   background: white;
-  color: #0a1c32;
-  height: 50px;
+  color: #0A1C32;
+  min-height: 50px;
   display: flex;
   align-items: flex-end;
   padding: 0 15px 0 15px;
@@ -636,7 +645,7 @@ input#pan {
 
 .main-top-title-header {
   font-size: 16px !important;
-  color: #160d2e !important;
+  color: #160d2e;
   font-weight: 400 !important;
 }
 
@@ -675,6 +684,9 @@ input#pan {
 .flex-column {
   display: flex;
   flex-direction: column;
+}
+.generic-hr {
+  border-top: 1px solid #ededed;
 }
 
 .common-top-page-subtitle {
@@ -727,22 +739,9 @@ input#pan {
   color: #767e86;
   font-size: 13px;
   font-weight: 400;
+  margin: -10px 0 20px 0;
   line-height: 1.6;
 }
-
-.common-bottom-info {
-  margin: 30px 0 30px 0;
-  background-color: var(--highlight);
-  padding: 15px;
-  text-align: center;
-  border-radius: 4px;
-  .content {
-    color: #767e86;
-    font-size: 12px;
-    font-weight: 500;
-  }
-}
-
 .common-steps-images {
   .content {
     // color: #767e86;
@@ -766,6 +765,57 @@ input#pan {
     font-size: 13px;
     font-weight: 400;
     line-height: 1.6;
+  }
+}
+
+.his {
+  margin: 0 -15px 0px -15px;
+  padding: 0 15px 0 15px;
+  overflow: hidden;
+  overflow-x: scroll;
+  .horizontal-images-scroll {
+    display: flex;
+    width: fit-content;
+    .image {
+      margin: 0 20px 0px 0;
+      border-radius: 4px;
+      display: block;
+    }
+  }
+}
+
+
+.common-faqs {
+  .common-faqs-tile {
+    border-bottom: 1px solid #d7d4d4;
+    cursor: pointer;
+    padding: 5px 0 5px 0;
+  }
+
+  .top-tile {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0 10px 0;
+    color: WorkSans-Regular_Medium;
+    font-weight: 500;
+  }
+  .subtitle {
+    color: #767e86;
+    margin: 20px 0 10px 0;
+    line-height: 1.6;
+  }
+}
+
+.common-bottom-info {
+  margin: 30px 0 30px 0;
+  background-color: var(--highlight);
+  padding: 15px;
+  text-align: center;
+  border-radius: 4px;
+  .content {
+    color: #767e86;
+    font-size: 12px;
+    font-weight: 500;
   }
 }
 
@@ -905,6 +955,18 @@ input#pan {
 .react-autosuggest__suggestion-match {
   font-weight: bold;
 }
+.common-bottom-info {
+  margin: 30px 0 30px 0;
+  background-color: var(--highlight);
+  padding: 15px;
+  text-align: center;
+  border-radius: 4px;
+  .content {
+    color: #767e86;
+    font-size: 12px;
+    font-weight: 500;
+  }
+}
 
 .generic-page-button-small {
   color: var(--secondary);
@@ -953,26 +1015,5 @@ input#pan {
       border-radius: 4px;
       display: block;
     }
-  }
-}
-
-.common-faqs {
-  .common-faqs-tile {
-    border-bottom: 1px solid #d7d4d4;
-    cursor: pointer;
-    padding: 5px 0 5px 0;
-  }
-
-  .top-tile {
-    display: flex;
-    justify-content: space-between;
-    margin: 10px 0 10px 0;
-    color: WorkSans-Regular_Medium;
-    font-weight: 500;
-  }
-  .subtitle {
-    color: #767e86;
-    margin: 20px 0 10px 0;
-    line-height: 1.6;
   }
 }

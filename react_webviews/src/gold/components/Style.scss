@@ -1162,7 +1162,7 @@ img.gold-offer-slide-img {
   }
   .text-on-img {
     position: absolute;
-    top: -13px;
+    top: -15px;
     left: -5px;
   }
 
@@ -1174,6 +1174,25 @@ img.gold-offer-slide-img {
     left: -10px;
     width: 18px;
     height: 18px;
+  }
+  .init-text {
+    position: absolute;
+    top: -15px;
+    left: -10px;
+    background: var(--primary);
+    color: white;
+    font-weight: 800;
+    border-radius: 50%;
+    height: 15px;
+    width: 15px;
+    text-align: center;
+    padding: 2px 2px 2px 2px;
+  }
+  .init-title {
+    color: var(--primary) !important;
+  }
+  .pending-title {
+    color: #767E86 !important;
   }
 }
 

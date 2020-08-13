@@ -23,6 +23,7 @@ const Input = (props) => {
         label={props.label}
         onFocus={props.onFocus}
         name={props.name}
+        variant={props.variant}
         onChange={props.onChange}
       />
     );
@@ -44,6 +45,7 @@ const Input = (props) => {
         onFocus={props.onFocus}
         name={props.name}
         onChange={props.onChange}
+        variant={props.variant}
         onKeyPress={props.onKeyChange}
         inputProps={{
           maxLength: props.maxLength

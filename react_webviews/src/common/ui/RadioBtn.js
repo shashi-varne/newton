@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { getConfig } from 'utils/functions';
-import './style.css';
+import './style.scss';
 import check_selected_blue from 'assets/check_selected_blue.svg';
 import SVG from 'react-inlinesvg';
 

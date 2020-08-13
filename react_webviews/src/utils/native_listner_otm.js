@@ -120,6 +120,56 @@ if (getConfig().generic_callback) {
       }
     }
 
+    exports.get_device_data = function (listener) {
+      console.log("get device data")
+      listeners.push(listener);
+      let callbackData = {};
+      callbackData.action = 'get_device_data';
+      if (typeof window.Android !== 'undefined') {
+        console.log("android")
+        window.Android.callbackNative(JSON.stringify(callbackData));
+      } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
+        window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+      } else {
+        // need to write for web
+      }
+
+      // for testing added
+      if(getConfig().Web) {
+        window.callbackWeb.send_device_data();
+      }
+
+    }
+
+    exports.send_device_data = function (data_json_str) {
+      
+      var json_data = {};
+      if (data_json_str !== "" && typeof data_json_str === "string") {
+        json_data = JSON.parse(data_json_str);
+      } else {
+        json_data = data_json_str;
+      }
+
+      if(getConfig().Web) {
+        json_data = {
+          'location': {
+            lat: "12.9951675",
+            lng: "77.6156386"
+          },
+          nsp: "Jio 4G",
+          device_id: "e3964eac6f4e48b6"
+        }
+      }
+
+      for (var j = 0; j < listeners.length; j++) {
+        var lis = listeners[j];
+        if (lis.type === 'location_nsp_received') {
+          lis.location_nsp_received(json_data);
+          break;
+        }
+      }
+    }
+
   })(window.callbackWeb ? window.callbackWeb : (window.callbackWeb = {}));
 } else {
   (function (exports) {

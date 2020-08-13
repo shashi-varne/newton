@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <svg xmlns="http://www.w3.org/2000/svg" width="172" height="112" viewBox="0 0 172 112">
     <g fill="none" fill-rule="evenodd">
         <rect width="172" height="112" fill="#3993FC" opacity=".185" rx="4"/>
@@ -14,5 +15,18 @@
                 <path d="M8.85 15.047c.186.188.429.281.672.281.243 0 .486-.093.671-.28l4.748-4.792c.37-.374.37-.981 0-1.355-.37-.375-.972-.375-1.343 0l-4.076 4.113-2.178-2.196c-.37-.375-.972-.375-1.342 0-.371.374-.371.98 0 1.354l2.848 2.875z" transform="translate(132 79)"/>
             </g>
         </g>
+=======
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="172" height="112" viewBox="0 0 172 112">
+    <defs>
+        <rect id="prefix__a" width="172" height="112" x="0" y="0" rx="4"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <mask id="prefix__b" fill="#fff">
+            <use xlink:href="#prefix__a"/>
+        </mask>
+        <use fill="#3993FC" opacity=".185" xlink:href="#prefix__a"/>
+        <path fill="#EFF5FF" fill-rule="nonzero" d="M-3.333 21.97C-10.88 17.968-14.77 10.645-15 0h125v61.791C106.667 67.627 98.75 69 86.667 69c-12.084 0-28.75-1.716-37.083-17.507C41.25 35.7 44.116 31.65 32.917 25.403c-11.199-6.248-24.927 2.57-36.25-3.433z" mask="url(#prefix__b)" opacity=".651" transform="matrix(-1 0 0 1 95 0)"/>
+        <path fill="#EFF5FF" fill-rule="nonzero" d="M171.647 50.745c4.139 4.483 4.653 8.54 5.135 13.089.283 2.674.29 21.023.022 55.048-.012 1.505-1.235 2.718-2.74 2.718h-32.81c2.723-6.443-23.48-29.492-24.206-46.455-.726-16.964 6.795-27.451 20.809-32.942 14.014-5.49 25.905 0 33.79 8.542z" mask="url(#prefix__b)" opacity=".582"/>
+>>>>>>> 2650897520badc1749d192a2040ad89e17e698b1
     </g>
 </svg>

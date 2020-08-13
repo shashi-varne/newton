@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import './style.css';
+import './style.scss';
+import '../theme/Style.scss';
 import { getConfig } from 'utils/functions';
 
 class HowToStepsClass extends Component {

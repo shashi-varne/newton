@@ -19,6 +19,10 @@ class RadioGrp extends Component {
     if(this.props.canUnSelect && this.state.selectedIndex === index) {
       index = '';
     }
+              
+    if(this.props.disabled) {
+      return;
+    }
     this.props.onChange(index);
     this.setState({
       selectedIndex: index,

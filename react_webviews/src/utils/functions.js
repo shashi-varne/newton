@@ -196,8 +196,8 @@ const partnersConfigBase = {
     secondary_color: "#F5821F",
     cta_disabled_color: "#ffffff",
     code: "subh",
-    email: "ask@fisdom.com",
-    mobile: "+91-76191-71846",
+    email: "support@shubhloans.com",
+    mobile: "+91-9019900199",
     message: "",
     banner: "bfdl_banner.png",
     back_button: "back_icon_white.png",
@@ -308,14 +308,15 @@ function getPartnerConfig(partner_code) {
       type: 'fisdom',
       // inputFocusedColor: '#4f2da7', 
       productName: 'fisdom',
-      appLink: 'http://m.onelink.me/32660e84',
+      appLink: 'https://fisdom.onelink.me/CQFA/3e75c8f6',
       termsLink: 'https://www.fisdom.com/terms/',
       schemeLink: 'https://www.fisdom.com/scheme-offer-documents/',
       askEmail: 'ask@fisdom.com',
       mobile: '+91-8048093070',
       configPrimaryColorClass: 'configPrimaryColorClass',
       configPrimaryBackgroundColorClass: 'fisdomBackColor',
-      webAppUrl: 'https://app.fisdom.com/#!/'
+      webAppUrl: 'https://app.fisdom.com/#!/',
+      email_domain: 'fisdom.com',
     },
     'myway': {
       primary: '#3792fc',
@@ -327,13 +328,14 @@ function getPartnerConfig(partner_code) {
       // inputFocusedColor: '#3792fc',
       productName: 'myway',
       mobile: '+91-8048039999',
-      appLink: 'https://go.onelink.me/6fHB/b750d9ac',
+      appLink: 'https://myway.onelink.me/W4GN/1f539fd2',
       termsLink: 'https://mywaywealth.com/terms/',
       schemeLink: 'https://mywaywealth.com/scheme/',
       askEmail: 'ask@mywaywealth.com',
       configPrimaryColorClass: 'configPrimaryColorClass',
       configPrimaryBackgroundColorClass: 'mywayBackColor',
-      webAppUrl: 'https://app.mywaywealth.com/#!/'
+      webAppUrl: 'https://app.mywaywealth.com/#!/',
+      email_domain: 'mywaywealth.com',
     }
   }
 
@@ -471,6 +473,8 @@ export const getConfig = () => {
   } else if (main_pathname.indexOf('help') >= 0) {
     project = 'help';
     generic_callback = "true";
+  } else if (main_pathname.indexOf('loan') >= 0) {
+    project = 'loan';
   }
 
   let search = window.location.search;
@@ -565,6 +569,13 @@ export const getConfig = () => {
     if (returnConfig.iOS && !returnConfig.campaign_version) {
       returnConfig.hide_header = true;
     }
+  }
+
+  if(project === 'loan') {
+    
+    // eslint-disable-next-line
+    returnConfig.html_camera = ((returnConfig.iOS || returnConfig.Web)) ? true : false;
+    
   }
 
   if (project === 'isip') {

@@ -1,69 +1,37 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 
-import Header from './Header';
+import Header from '../../common/components/Header';
+import { didmount } from '../../common/components/container_functions';
 import Footer from './footer';
-import loader_fisdom from 'assets/loader_gif_fisdom.gif';
-import loader_myway from 'assets/loader_gif_myway.gif';
 import { nativeCallback } from 'utils/native_callback';
-import Button from 'material-ui/Button';
-import Dialog, {
-  DialogActions,
-  DialogTitle,
-  DialogContent,
-  DialogContentText
-} from 'material-ui/Dialog';
-import 'utils/native_listner_otm';
-import { setHeights } from 'utils/functions';
 import { getConfig } from '../../utils/functions';
-
-let start_time = '';
 
 class Container extends Component {
   constructor(props) {
     super(props);
     this.state = {
       openDialog: false,
-      loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
+      project: 'help',
+      inPageTitle: false,
+      new_header: false
     }
+
+    this.didmount = didmount.bind(this);
   }
 
   componentDidMount() {
-    setHeights({ 'header': true, 'container': false });
-    start_time = new Date();
-
-    let that = this;
-    window.callbackWeb.add_listener({
-      type: 'back_pressed',
-      go_back: function () {
-        that.historyGoBack();
-      }
-    });
+    this.didmount();
   }
 
   componentWillUnmount() {
-    window.callbackWeb.remove_listener({});
+    this.unmount();
   }
 
   componentDidUpdate(prevProps) {
-    setHeights({ 'header': true, 'container': false });
+    this.didupdate();
   }
-
-  calcReadtime = (endtime) => {
-    var new_date = new Date(endtime - start_time);
-    return new_date.getUTCMinutes() + '.' + new_date.getUTCSeconds();
-  }
-
-  getEvents() {
-    if (!this || !this.props || !this.props.events) {
-      return;
-    }
-
-    let events = this.props.events;
-    events.properties.time_spent = this.calcReadtime(new Date());
-    return events;
-  }
-
+  
   historyGoBack = () => {
     let pathname = this.props.history.location.pathname;
 
@@ -83,86 +51,52 @@ class Container extends Component {
     }
   }
 
-  renderDialog = () => {
-    return (
-      <Dialog
-        fullScreen={false}
-        open={this.state.openDialog}
-        onClose={this.handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">No Internet Found</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Check your connection and try again.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button className="DialogButtonFullWidth" onClick={this.handleClose} color="default" autoFocus>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  }
-
-  handleClose = () => {
-    this.setState({
-      openDialog: false
-    });
-  }
-
-  renderPageLoader = () => {
-    if (this.props.showLoader) {
+  render() {
+    if (this.state.mounted) {
       return (
-        <div className="Loader">
-          <div className="LoaderOverlay">
-            <img src={this.state.loaderMain} alt="" />
+        <div className="ContainerWrapper">
+          {/* Header Block */}
+          {!this.props.hideheader &&
+            <Header
+              title={this.props.title}
+              goBack={this.historyGoBack}
+              type={getConfig().productName}
+              inPageTitle={this.state.inPageTitle}
+              force_hide_inpage_title={this.state.force_hide_inpage_title}
+              new_header={this.state.new_header} 
+             />
+          }
+
+          {/* Below Header Block */}
+          {<div id="HeaderHeight" style={{ top: 56 }}>
+          </div>}
+
+          {!this.state.force_hide_inpage_title && this.state.new_header &&
+            this.new_header_scroll() 
+          }
+
+          {/* Children Block */}
+          <div className={`Container HelpContainer ${this.props.background}`}>
+            {this.props.children}
           </div>
+
+          {/* Footer Block */}
+          {!this.props.noFooter &&
+            <Footer
+              fullWidthButton={this.props.fullWidthButton}
+              buttonTitle={this.props.buttonTitle}
+              handleClick={this.props.handleClick}
+              noFooter={this.props.noFooter}
+              isDisabled={this.props.isDisabled} />
+          }
+
+          {/* No Internet */}
+          {this.renderDialog()}
         </div>
       );
-    } else {
-      return null;
     }
-  }
 
-  render() {
-    return (
-      <div className="ContainerWrapper">
-        {/* Header Block */}
-        {!this.props.hideheader &&
-          <Header
-            title={this.props.title}
-            goBack={this.historyGoBack}
-            type={getConfig().productName} />
-        }
-
-        {/* Below Header Block */}
-        {<div id="HeaderHeight" style={{ top: 56 }}>
-        </div>}
-
-        {/* Loader Block */}
-        {this.renderPageLoader()}
-
-        {/* Children Block */}
-        <div className={`Container HelpContainer ${this.props.background}`}>
-          {this.props.children}
-        </div>
-
-        {/* Footer Block */}
-        {!this.props.noFooter &&
-          <Footer
-            fullWidthButton={this.props.fullWidthButton}
-            buttonTitle={this.props.buttonTitle}
-            handleClick={this.props.handleClick}
-            noFooter={this.props.noFooter}
-            isDisabled={this.props.isDisabled} />
-        }
-
-        {/* No Internet */}
-        {this.renderDialog()}
-      </div>
-    );
+    return null;
   }
 };
 

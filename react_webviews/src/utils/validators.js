@@ -288,6 +288,7 @@ export function numDifferentiation(val, withSymbol) {
 
   if (val >= 10000000) val = (val / 10000000).toFixed(2) + ' Cr';
   else if (val >= 100000) val = (val / 100000).toFixed(2) + ' Lacs';
+  else if (val >= 1000) val = (val / 1000).toFixed(2) + ' Thousand';
   else if (val) return inrFormatDecimal(val);
 
   val = val.toString();
@@ -504,6 +505,18 @@ export function checkStringInString(string_base, string_to_check) {
 }
 
 export function storageService() {
+  function lsTest() {
+    const test = 'test';
+    try {
+      window.sessionStorage.setItem(test, test);
+      window.sessionStorage.removeItem(test);
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  }
+  const sessionStorageValid = lsTest();
   var service = {
     set: set,
     get: get,
@@ -515,11 +528,13 @@ export function storageService() {
   return service;
 
   function set(key, value) {
-    window.sessionStorage.setItem(key, value);
+    if (sessionStorageValid) {
+      window.sessionStorage.setItem(key, value);
+    }
   }
 
   function get(key) {
-    if (checkValidString(window.sessionStorage.getItem(key))) {
+    if (sessionStorageValid && checkValidString(window.sessionStorage.getItem(key))) {
       return window.sessionStorage.getItem(key) || false;
     }
 
@@ -527,11 +542,13 @@ export function storageService() {
   }
 
   function setObject(key, value) {
-    window.sessionStorage.setItem(key, JSON.stringify(value));
+    if (sessionStorageValid) {
+      window.sessionStorage.setItem(key, JSON.stringify(value));
+    }
   }
 
   function getObject(key) {
-    if (checkValidString(window.sessionStorage.getItem(key))) {
+    if (sessionStorageValid && checkValidString(window.sessionStorage.getItem(key))) {
       return JSON.parse(window.sessionStorage.getItem(key)) || {};
     }
 
@@ -539,11 +556,15 @@ export function storageService() {
   }
 
   function remove(key) {
-    return window.sessionStorage.removeItem(key);
+    if (sessionStorageValid) {
+      return window.sessionStorage.removeItem(key);
+    }
   }
 
   function clear() {
-    return window.sessionStorage.clear();
+    if (sessionStorageValid) {
+      return window.sessionStorage.clear();
+    }
   }
 
 }
@@ -580,7 +601,7 @@ function formatAMPM(date) {
   return strTime;
 }
 
-export function formatDateAmPm(date) {
+export function getDateBreakup(date) {
 
   let monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
@@ -595,18 +616,33 @@ export function formatDateAmPm(date) {
   date = date.replace(/-/g, '/');
 
   let date2 = new Date(date);
-
   let dom = date2.getDate();
   dom = dateOrdinal(dom);
 
   let month = monthNames[date2.getMonth()];
-  // let year = date2.getFullYear();
+  let year = date2.getFullYear();
   let time = formatAMPM(date2);
 
-  let final_date = dom + ' ' + month + ', ' + time;
+  return { dom, month, time, year };
+}
 
-  return final_date;
+export function formatDateAmPm(date) {
+  return formattedDate(date, 'd m, t');
+}
 
+export function formattedDate(date, pattern = '') {
+  pattern = pattern.toLowerCase();
+  const validPatterns = ['d m, t', 'd m y'];
+
+  if (!date) return '';
+  else if (!validPatterns.includes(pattern)) return date;
+  let { dom, month, time, year } = getDateBreakup(date);
+  const patternMap = {
+    'd m, t': `${dom} ${month}, ${time}`,
+    'd m y': `${dom} ${month} ${year}`,
+    // Enter custom patterns here
+  };
+  return patternMap[pattern];
 }
 
 export function inrFormatTest(value) {
@@ -614,12 +650,23 @@ export function inrFormatTest(value) {
     return true;
   }
 
-  let rule = /^[0-9,]/;
+  let rule = /^[0-9,]*$/;
+
+  return rule.test(value);
+}
+
+export function dobFormatTest(value) {
+  if (value === '') {
+    return true;
+  }
+
+  let rule = /^[0-9/]*$/;
 
   return rule.test(value);
 }
 
 export function formatDate(event) {
+
   var key = event.keyCode || event.charCode;
 
   var thisVal;
@@ -711,4 +758,15 @@ export function getEditTitle(string) {
   string = 'Edit ' + (string).toLowerCase();
 
   return string;
+}
+
+export function isFunction(value) {
+  return (typeof value === 'function') && (value instanceof Function);
+}
+
+export function isEmpty(value) {
+  return value === undefined ||
+    value === null ||
+    (typeof value === "object" && Object.keys(value).length === 0) ||
+    (typeof value === "string" && value.trim().length === 0);
 }

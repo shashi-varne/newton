@@ -376,7 +376,7 @@ class GoldTransactionDetail extends Component {
                 </div>
               {this.state.order.courier_tracking_id &&
                 <div className="subtitle">
-                  <span>Couriour service : {this.state.order.courier_company || ' -'}</span>
+                  <span>Courier service : {this.state.order.courier_company || ' -'}</span>
                   <div style={{
                     display: 'flex', justifyContent: 'space-between',
                     margin: '3px 0 0 0', alignItems: 'center'
