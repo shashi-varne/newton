@@ -1,5 +1,46 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { LinearProgress, createMuiTheme, MuiThemeProvider } from 'material-ui';
+import MyResponsiveLine from '../mini-components/LineGraph';
+import { getConfig } from 'utils/functions';
+import { growthObj1mo, growthObj3mo, growthObj6mo, growthObjYear, growthObj3Year, growthObj5Year, createGrowthData } from '../constants';
+
+const dateRanges = [{
+    label: getConfig().isMobileDevice ? '1m' : '1 Month',
+    value: '1 month',
+    dateObj: growthObj1mo,
+    tickFormat: '%b %d',
+    tickInterval: 'every 2 days',
+  }, {
+    label: getConfig().isMobileDevice ? '3m' : '3 Months',
+    value: '3 months',
+    dateObj: growthObj3mo,
+    tickFormat: '%b %d',
+    tickInterval: 'every week',
+  }, {
+    label: getConfig().isMobileDevice ? '6m' : '6 Months',
+    value: '6 months',
+    dateObj: growthObj6mo,
+    tickFormat: '%b %d',
+    tickInterval: 'every 15 days',
+  }, {
+    label: getConfig().isMobileDevice ? '1y' : '1 Year',
+    value: '1 year',
+    dateObj: growthObjYear,
+    tickFormat: '%b',
+    tickInterval: 'every month',
+  }, {
+    label: getConfig().isMobileDevice ? '3y' : '3 Years',
+    value: '3 years',
+    dateObj: growthObj3Year,
+    tickFormat: '%b %y',
+    tickInterval: 'every 3 months',
+  }, {
+    label: getConfig().isMobileDevice ? '5y' : '5 Years',
+    value: '5 years',
+    dateObj: growthObj5Year,
+    tickFormat: '%b %y',
+    tickInterval: 'every 5 months',
+  }];
 
 const theme = createMuiTheme({
   overrides: {
@@ -18,12 +59,20 @@ const theme = createMuiTheme({
   }
 });
 
-export default class Overview extends Component {
-  render() {
-    return (
-      <div>
-        <div id="wr-overview-key-numbers" className="wr-card-template">
-        <div className="wr-okn-box">Key Numbers</div>
+export default function Overview(props) {
+  const [timeRange, setRange] = useState(dateRanges[0]);
+  const [dateOb, setGrowthObj] = useState(dateRanges[0].dateObj);
+
+  const selectRange = (rangeObj) => {
+    setRange(rangeObj);
+    setGrowthObj(rangeObj.dateObj); // This will be replaced by API data
+  };
+  
+  return (
+    <React.Fragment>
+      <div className="wr-card-template">
+        <div className="wr-card-template-header">Key Numbers</div>
+        <div id="wr-overview-key-numbers">
         <div className="wr-okn-box">
           <div className="wr-okn-title">Current Value</div>
           <div className="wr-okn-value">₹ 2.83Cr</div>
@@ -49,18 +98,41 @@ export default class Overview extends Component {
           </div>
         </div>
       </div>
-        <div id="portfolio-insights-header">Portfolio Insights</div>
-        <div id="wr-portfolio-insights-container">
-          {portfolioCard()}
-          {portfolioCard()}
-          {portfolioCard()}
-          {portfolioCard()}
-          {portfolioCard()}
-          {portfolioCard()}
+      </div>
+      <div className="wr-card-template">
+        <div className="wr-card-template-header">Portfolio Growth</div>
+        <div id="wr-growth-graph">
+          <div id="wr-gg-date-select">
+          {dateRanges.map(rangeObj => (
+            <span
+              onClick={() => selectRange(rangeObj)}
+              className={
+                `${timeRange.value === rangeObj.value ? 'selected' : ''}
+                wr-gg-date-select-item`
+              }>
+              {rangeObj.label}
+            </span>
+          ))}
+          </div>
+          <div style={{ width: '100%', height: '400px', clear: 'right'}}>
+            <MyResponsiveLine
+              data={createGrowthData(dateOb)}
+              params={{ tickFormat: timeRange.tickFormat, tickInterval: timeRange.tickInterval }}
+            ></MyResponsiveLine>
+          </div>
         </div>
       </div>
-    );
-  }
+      <div id="portfolio-insights-header">Portfolio Insights</div>
+      <div id="wr-portfolio-insights-container">
+        {portfolioCard()}
+        {portfolioCard()}
+        {portfolioCard()}
+        {portfolioCard()}
+        {portfolioCard()}
+        {portfolioCard()}
+      </div>
+    </React.Fragment>
+  );
 }
 
 const assetAllocNums = (val) => (

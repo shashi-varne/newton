@@ -36,7 +36,7 @@ class Header extends Component {
       dropdown_open: false,
       selectedPan: 'BXRPR87008N',
       pans: ['BXRPR87008N', 'QWCTE6223N', 'TRQEW2995K'],
-      activeTab: this.props.match.params.tab
+      activeTab: this.props.match.params.tab,
     };
   }
 
@@ -65,7 +65,10 @@ class Header extends Component {
     let count = 1;
 
     return (
-      <div id="wr-header-bar">
+      <div
+        id="wr-header-bar"
+        className={`wr-header-${this.props.slideUp ? 'slideUp' : 'slideDown'}`}
+        >
         <div className="wr-pan-dropdown">
           <div className="wr-header-pan-select">
             <div className="wr-pan-content" onClick={this.handleClick}>
@@ -89,7 +92,7 @@ class Header extends Component {
 
             <div style={{ display: dropdown_open ? "inherit" : "none" }}>
               {pans.map((pan, index) => pan !== selectedPan && (
-                <div onClick={() => this.selectPan(pan)}>
+                <div onClick={() => this.selectPan(pan)} key={index}>
                   <div className="hr"></div>
                   <div className="wr-pan-content">
                     <img
@@ -108,10 +111,11 @@ class Header extends Component {
           </div>
         </div>
 
-        {tabs.map(tab => (
+        {tabs.map((tab, index) => (
           <Link to={`${tab.id + this.props.location.search}`}
             onClick={() => this.selectTab(tab.id)}
             className="wr-header-tab"
+            key={index}
             style={{borderBottom: activeTab === tab.id ? 'solid 4px var(--primary)' : ''}}
           >
             <img
