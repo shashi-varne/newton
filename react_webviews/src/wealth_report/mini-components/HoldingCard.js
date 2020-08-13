@@ -83,8 +83,8 @@ export default class HoldingCard extends Component {
           (<div className="wr-holding-card-expand">
             <div className="wr-holdings-btn">
               {[
-                {tabName: 'fund', label: 'Fund Holdings'},
-                {tabName: 'transactions', label: 'Transactions'},
+                {tabName: 'fund', label: 'Fund Summary'},
+                {tabName: 'transactions', label: 'Past Transactions'},
                ].map(({ tabName, label }) => (
                 <WrButton
                   classes={{
