@@ -45,6 +45,13 @@
   }
 }
 
+#wr-main {
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  overflow: scroll;
+}
+
 #wr-header-hero {
   height: 206px;
   width: 100%;
@@ -360,7 +367,11 @@
   
 @media only screen 
   and (min-device-width: 330px) 
-  and (max-device-width: 812px) { 
+  and (max-device-width: 812px) {
+  
+  #wr-main {
+    background-color: #f5f6f8 !important;
+  }
 
   #wr-header-hero {
     height: 174px;

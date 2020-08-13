@@ -40,16 +40,20 @@
   flex: 1;
 }
 
-.wr-amc-label{
+.wr-amc-label {
   display: flex;
   flex: 1;
   justify-content: flex-end;
   margin-bottom: -40px;
 }
 
-#wr-amc-img{
+#wr-amc-img {
   margin-top: 10px;
   margin-right: -8px;
+}
+
+#wr-account-img {
+  cursor: pointer;
 }
 
 .wr-hc-user-data {
