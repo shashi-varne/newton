@@ -362,23 +362,27 @@ class GroupHealthReportDetails extends Component {
                                 <div className="mtr-top">
                                     TOTAL PREMIUM
                                 </div>
+
                                 <div className="mtr-bottom flex">
-                                    <div>
-                                        {inrFormatDecimal(this.state.lead.premium)} (Basic premium)
+                                        <div>
+                                            <div> {inrFormatDecimal(this.state.lead.premium)} </div>
+                                            <div style={{fontSize:10}}> (Basic premium)</div>
                                         </div>
-                                    <div>
-                                        &nbsp;+&nbsp;
+                                        <div>
+                                            &nbsp;+&nbsp;
                                         </div>
-                                    <div>
-                                        {inrFormatDecimal(this.state.lead.tax_amount)} (18% GST & other taxes)
+                                        <div>
+                                            <div>{inrFormatDecimal(this.state.lead.tax_amount)} </div>
+                                            <div style={{fontSize:10}}>(18% GST & other taxes) </div>
                                         </div>
-                                    <div>
+                                        <div>
                                         &nbsp;=&nbsp;
                                         </div>
-                                    <div>
-                                        {inrFormatDecimal(this.state.lead.total_amount)}
-                                    </div>
+                                        <div>
+                                         {inrFormatDecimal(this.state.lead.total_amount)}
+                                        </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
