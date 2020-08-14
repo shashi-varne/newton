@@ -105,14 +105,15 @@ class EmailListMobile extends Component {
         we will share the insights
       </div>
 
-      <FormControl fullWidth>
+      <FormControl className="wr-form">
         <TextField
           variant="outlined"
           placeholder="Enter new email..."
           InputProps={{
             disableUnderline: true,
-            className: "wr-input-addmail",
+            // className: "wr-input-addmail",
           }}
+          classes={{root: "wr-input-addmail"}}
           onChange={this.handleInput}
         />
       </FormControl>
