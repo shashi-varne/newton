@@ -151,7 +151,11 @@ export class Login extends Component {
       </div>
 
       <div id="wr-login-mobile">
-        <LoginMobile />
+        <LoginMobile 
+          handleOtp={this.handleOtp}
+          otp={this.state.otp}
+          otp_error={this.state.otp_error}
+        />
       </div>
 
       </Fragment>

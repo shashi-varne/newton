@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import WrButton from "../common/Button";
 import WrOtpInput from "../common/OtpInput";
-import MuiPhoneNumber from "material-ui-phone-number";
+// import MuiPhoneNumber from "material-ui-phone-number";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 
@@ -43,9 +43,9 @@ class LoginMobile extends Component {
         </div>
         <div>
           <WrOtpInput
-            onChange={this.handleOtp}
-            value={this.state.otp}
-            errorText={this.state.otp_error}
+            onChange={this.props.handleOtp}
+            value={this.props.otp}
+            errorText={this.props.otp_error}
           />
         </div>
         <div id="wr-otp-opts">
@@ -128,8 +128,8 @@ class LoginMobile extends Component {
           margin: "auto",
         }}
       >
-        {this.renderContinueView()}
-        {/* {this.renderOTPView()} */}
+        {/* {this.renderContinueView()} */}
+        {this.renderOTPView()}
         {/* {this.renderEmailView()} */}
         <div className="wr-continue-btn">
           <WrButton fullWidth={true} classes={{ root: "wr-login-btn" }}>
