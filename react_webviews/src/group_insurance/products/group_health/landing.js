@@ -15,7 +15,7 @@ import down_arrow from 'assets/down_arrow.svg';
 import up_arrow from 'assets/up_arrow.svg';
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import {openInBrowser} from './common_data';
+import { openInBrowser } from './common_data';
 
 
 class GroupHealthLanding extends Component {
@@ -40,7 +40,7 @@ class GroupHealthLanding extends Component {
 
   componentWillMount() {
     nativeCallback({ action: 'take_control_reset' });
-    
+
     let stepsContentMapper = {
       title: 'Why buy on ' + this.state.productName + '??',
       options: [
@@ -140,16 +140,16 @@ class GroupHealthLanding extends Component {
   }
 
 
-  sendEvents(user_action, data={}) {
+  sendEvents(user_action, data = {}) {
     let eventObj = {
       "event_name": 'health_insurance',
-       "properties": {
+      "properties": {
         "user_action": user_action,
         "product": 'health suraksha',
         "screen_name": 'introduction',
-        "coverage_overview_click" : `${(this.state.whats_covered_clicked ? 'what is covered,' : '' )} ${(this.state.whats_not_covered_clicked ? 'what is not covered'  : '')}` ,
+        "coverage_overview_click": `${(this.state.whats_covered_clicked ? 'what is covered,' : '')} ${(this.state.whats_not_covered_clicked ? 'what is not covered' : '')}`,
         "things_to_know": data.things_to_know || '',
-        "benifits_carousel": this.state.selectedIndex  + 1,
+        "benifits_carousel": this.state.selectedIndex + 1,
         "resume_clicked": this.state.resume_clicked ? 'yes' : 'no'
       }
     };
@@ -184,7 +184,7 @@ class GroupHealthLanding extends Component {
   handleClickPoints = (key) => {
     this.setState({
       [key + '_open']: !this.state[key + '_open'],
-      [key + '_clicked'] : true
+      [key + '_clicked']: true
     })
   }
 
@@ -192,22 +192,24 @@ class GroupHealthLanding extends Component {
 
     this.setState({
       resume_clicked: true
-    },() => {
+    }, () => {
       this.sendEvents('next');
+
+      storageService().set('ghs_ergo_quote_id', this.state.quoteResume.id);
+      if (this.state.quoteResume.status !== 'init') {
+        this.navigate('final-summary');
+      } else {
+        this.navigate(`personal-details/${this.state.quoteResume.member_base[0].key}`);
+      }
+
     })
-    
-    storageService().set('ghs_ergo_quote_id', this.state.quoteResume.id);
-    if (this.state.quoteResume.status !== 'init') {
-      this.navigate('final-summary');
-    } else {
-      this.navigate(`personal-details/${this.state.quoteResume.member_base[0].key}`);
-    }
+
 
   }
 
   openFaqs = () => {
 
-    this.sendEvents('next', {things_to_know: 'faq'})
+    this.sendEvents('next', { things_to_know: 'faq' })
     let options = [
       {
         'title': 'Why do I need health insurance?',
@@ -389,7 +391,7 @@ class GroupHealthLanding extends Component {
             </div>
           </div>
 
-          <HowToSteps style={{ marginTop: 20,marginBottom:0 }} baseData={this.state.stepsContentMapper} />
+          <HowToSteps style={{ marginTop: 20, marginBottom: 0 }} baseData={this.state.stepsContentMapper} />
 
 
           <div className="generic-page-title">

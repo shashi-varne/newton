@@ -93,9 +93,7 @@ class GroupHealthPlanAddMembers extends Component {
     handleClick = () => {
 
         let canProceed = true;
-        
         let ui_members = this.state.ui_members;
-        
 
         if (this.state.account_type === 'family') {
             if (!this.state.other_adult_member && !this.state.son_total &&
@@ -241,7 +239,6 @@ class GroupHealthPlanAddMembers extends Component {
     
             this.navigate('plan-dob');
         }
-
         
     }
 
