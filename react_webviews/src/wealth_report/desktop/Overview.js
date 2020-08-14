@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { LinearProgress, createMuiTheme, MuiThemeProvider } from 'material-ui';
+import { LinearProgress, createMuiTheme, MuiThemeProvider, IconButton } from 'material-ui';
 import MyResponsiveLine from '../mini-components/LineGraph';
-import { growthObj1mo, growthObj3mo, growthObj6mo, growthObjYear, growthObj3Year, growthObj5Year, createGrowthData } from '../constants';
+import { growthObj1mo, growthObj3mo, growthObj6mo, growthObjYear, growthObj3Year, createGrowthData } from '../constants';
 import Tooltip from 'common/ui/Tooltip';
 import Dialog from "common/ui/Dialog";
 import { getConfig, isMobileDevice } from "utils/functions";
@@ -39,7 +39,7 @@ const dateRanges = [{
   }, {
     label: getConfig().isMobileDevice ? '5y' : '5 Years',
     value: '5 years',
-    dateObj: growthObj5Year,
+    dateObj: {},
     tickFormat: '%b %y',
     tickInterval: 'every 5 months',
   }];
@@ -62,8 +62,8 @@ const theme = createMuiTheme({
 });
 
 export default function Overview(props) {
-  const [timeRange, setRange] = useState(dateRanges[0]);
-  const [dateOb, setGrowthObj] = useState(dateRanges[0].dateObj);
+  const [timeRange, setRange] = useState(dateRanges[1]);
+  const [dateOb, setGrowthObj] = useState(dateRanges[1].dateObj);
   const [openModal, toggleModal] = useState(false);
 
   const selectRange = (rangeObj) => {
@@ -90,7 +90,7 @@ export default function Overview(props) {
       onClick={() => toggleModal(true)}
     />
   );
-
+  console.log(createGrowthData(growthObj3mo));
   return (
     <React.Fragment>
       <div className="wr-card-template">
@@ -192,25 +192,45 @@ const assetAllocNums = (val) => (
   </span>
 );
 
-const portfolioCard = (title, subtitle, icon, desc) => (
-  <div className="wr-pi-card">
-    <img src={require('assets/fisdom/ic-investment-strategy.svg')} alt=""/>
-    <div className="wr-pi-content">
-      <div className="wr-pi-content-title">
-        Investment Strategy
+const portfolioCard = (title, subtitle, icon, desc) => {
+  const [expanded, toggleExpand] = useState(false);
+  return (
+    <div className="wr-pi-card-container">
+    <div className="wr-pi-card">
+      <img className="wi-pi-card-img" src={require('assets/fisdom/ic-investment-strategy.svg')} alt=""/>
+      <div className="wr-pi-content">
+        <div className="wr-pi-content-title">
+          Investment Strategy
+        </div>
+        <span className="wr-pi-content-subtitle">
+          Very Conservative
+        </span>
+        <div className="wr-pi-content-desc">
+          Your investment strategy is very conservative, generally recommended for people approaching their
+          retirement.
+        </div>
       </div>
-     
-     <div className="wr-tag">
-      <span className="wr-pi-content-subtitle">
-         Very Conservative
-       </span>
-      <span className="wr-inward-arrow"></span>
-     </div>
-      
-      <div className="wr-pi-content-desc">
-        Your investment strategy is very conservative, generally recommended for people approaching their
-        retirement.
+      <div className="wr-pi-card-expand">
+        <IconButton classes={{ root: 'wr-icon-button' }} color="inherit" aria-label="Menu" onClick={() => toggleExpand(!expanded)}>
+          <img
+            src={require(`assets/fisdom/${expanded ? 'down_arrow_fisdom' : 'ic-right-chevron'}.svg`)}
+            alt="expand"
+            style={{ cursor: 'pointer' }} />
+        </IconButton>
       </div>
     </div>
+    {
+        expanded && (
+          <div className="wr-pi-card-expanded">
+            <div className="wi-pi-card-img"></div>
+            <div className="wr-pi-content-desc">
+              Your investment strategy is very conservative, generally recommended for people approaching their
+              retirement.
+            </div>
+          </div>
+        )
+    }
+    
   </div>
-);
+  );
+};

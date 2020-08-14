@@ -5,17 +5,24 @@ export const createGrowthData = (dataObj) => {
     invested_amount: [],
   };
   const percentages = [0.50, 0.60, 0.70, 0.80, 0.90, 1.00, 1.2, 1.3, 1.5];
-  for (let [key, val] of Object.entries(dataObj)) {
-    const rand = Math.floor(Math.random() * Math.floor(9));
+  for (let dataOb of dataObj) {
+    const { data } = dataOb;
+    if (dataOb.id === 'current_amount') {
+      data.map(point => obj[dataOb.id].push({
+        x: point.date,
+        y: point.value,
+      }));
+    } else {
+      data.map((point, idx) => {
+        const rand = Math.floor(Math.random() * Math.floor(9));
+
+        obj[dataOb.id].push({
+          x: point.date,
+          y: obj['current_amount'][idx].y * percentages[rand],
+        });
+      });
+    }
     
-    obj['current_amount'].push({
-      x: key,
-      y: val['invested_amount'] * percentages[rand],
-    });
-    obj['invested_amount'].push({
-      x: key,
-      y: val['invested_amount'],
-    });
   }
   return [{
     id: 'current_amount',
@@ -278,56 +285,178 @@ export const growthObj1mo = {
   },
 };
 
-export const growthObj3mo = {
-  "2020-05-21": {
-    "current_amount": "0.00",
-    "invested_amount": "1545434.07"
+export const growthObj3mo = [
+  {
+    "data": [
+      {
+        "value": 44000.0,
+        "date": "17-05-2020"
+      },
+      {
+        "value": 44000.0,
+        "date": "23-05-2020"
+      },
+      {
+        "value": 44000.0,
+        "date": "25-05-2020"
+      },
+      {
+        "value": 44000.0,
+        "date": "30-05-2020"
+      },
+      {
+        "value": 44000.0,
+        "date": "02-06-2020"
+      },
+      {
+        "value": 44000.0,
+        "date": "07-06-2020"
+      },
+      {
+        "value": 44000.0,
+        "date": "14-06-2020"
+      },
+      {
+        "value": 44000.0,
+        "date": "22-06-2020"
+      },
+      {
+        "value": 44000.0,
+        "date": "29-06-2020"
+      },
+      {
+        "value": 44000.0,
+        "date": "30-06-2020"
+      },
+      {
+        "value": 44000.0,
+        "date": "07-07-2020"
+      },
+      {
+        "value": 44000.0,
+        "date": "08-07-2020"
+      },
+      {
+        "value": 44000.0,
+        "date": "14-07-2020"
+      },
+      {
+        "value": 44000.0,
+        "date": "16-07-2020"
+      },
+      {
+        "value": 44000.0,
+        "date": "22-07-2020"
+      },
+      {
+        "value": 44000.0,
+        "date": "24-07-2020"
+      },
+      {
+        "value": 44000.0,
+        "date": "29-07-2020"
+      },
+      {
+        "value": 44000.0,
+        "date": "01-08-2020"
+      },
+      {
+        "value": 44000.0,
+        "date": "06-08-2020"
+      },
+      {
+        "value": 44000.0,
+        "date": "13-08-2020"
+      }
+    ],
+    "id": "current_amount"
   },
-  "2020-05-28": {
-    "current_amount": "0.00",
-    "invested_amount": "1545434.07"
-  },
-  "2020-06-05": {
-    "current_amount": "0.00",
-    "invested_amount": "1545434.07"
-  },
-  "2020-06-12": {
-    "current_amount": "43787.49",
-    "invested_amount": "1545434.07"
-  },
-  "2020-06-20": {
-    "current_amount": "43787.49",
-    "invested_amount": "1545434.07"
-  },
-  "2020-06-27": {
-    "current_amount": "43787.49",
-    "invested_amount": "1545434.07"
-  },
-  "2020-07-05": {
-    "current_amount": "43787.49",
-    "invested_amount": "1545434.07"
-  },
-  "2020-07-12": {
-    "current_amount": "43787.49",
-    "invested_amount": "1545434.07"
-  },
-  "2020-07-20": {
-    "current_amount": "43787.49",
-    "invested_amount": "1545434.07"
-  },
-  "2020-07-27": {
-    "current_amount": "43787.49",
-    "invested_amount": "1545434.07"
-  },
-  "2020-08-04": {
-    "current_amount": "43787.49",
-    "invested_amount": "1545434.07"
-  },
-  "2020-08-11": {
-    "current_amount": "43787.49",
-    "invested_amount": "1545434.07"
-  },
-};
+  {
+    "data": [
+      {
+        "value": 1545000.0,
+        "date": "17-05-2020"
+      },
+      {
+        "value": 1545000.0,
+        "date": "23-05-2020"
+      },
+      {
+        "value": 1545000.0,
+        "date": "25-05-2020"
+      },
+      {
+        "value": 1545000.0,
+        "date": "30-05-2020"
+      },
+      {
+        "value": 1545000.0,
+        "date": "02-06-2020"
+      },
+      {
+        "value": 1545000.0,
+        "date": "07-06-2020"
+      },
+      {
+        "value": 1545000.0,
+        "date": "14-06-2020"
+      },
+      {
+        "value": 1545000.0,
+        "date": "22-06-2020"
+      },
+      {
+        "value": 1545000.0,
+        "date": "29-06-2020"
+      },
+      {
+        "value": 1545000.0,
+        "date": "30-06-2020"
+      },
+      {
+        "value": 1545000.0,
+        "date": "07-07-2020"
+      },
+      {
+        "value": 1545000.0,
+        "date": "08-07-2020"
+      },
+      {
+        "value": 1545000.0,
+        "date": "14-07-2020"
+      },
+      {
+        "value": 1545000.0,
+        "date": "16-07-2020"
+      },
+      {
+        "value": 1545000.0,
+        "date": "22-07-2020"
+      },
+      {
+        "value": 1545000.0,
+        "date": "24-07-2020"
+      },
+      {
+        "value": 1545000.0,
+        "date": "29-07-2020"
+      },
+      {
+        "value": 1545000.0,
+        "date": "01-08-2020"
+      },
+      {
+        "value": 1545000.0,
+        "date": "06-08-2020"
+      },
+      {
+        "value": 1545000.0,
+        "date": "13-08-2020"
+      }
+    ],
+    "id": "invested_amount"
+  }
+];
 
 export const growthObj6mo = {
   "2020-02-28": {
@@ -380,106 +509,269 @@ export const growthObj6mo = {
   },
 };
 
-export const growthObj3Year = {
-  "2017-11-12": {
-    "current_amount": "0.00",
-    "invested_amount": "321567.04"
-  },
-  "2018-02-11": {
-    "current_amount": "0.00",
-    "invested_amount": "393568.04"
-  },
-  "2018-05-13": {
-    "current_amount": "0.00",
-    "invested_amount": "457568.04"
-  },
-  "2018-08-12": {
-    "current_amount": "0.00",
-    "invested_amount": "600590.95"
-  },
-  "2018-11-12": {
-    "current_amount": "0.00",
-    "invested_amount": "644303.28"
-  },
-  "2019-02-11": {
-    "current_amount": "0.00",
-    "invested_amount": "700658.68"
-  },
-  "2019-05-13": {
-    "current_amount": "0.00",
-    "invested_amount": "860358.81"
-  },
-  "2019-08-12": {
-    "current_amount": "0.00",
-    "invested_amount": "953658.97"
-  },
-  "2019-11-12": {
-    "current_amount": "29311.06",
-    "invested_amount": "1103159.06"
-  },
-  "2020-02-11": {
-    "current_amount": "38813.90",
-    "invested_amount": "1399534.06"
-  },
-  "2020-05-12": {
-    "current_amount": "43787.49",
-    "invested_amount": "1545434.07"
-  },
-  "2020-08-11": {
-    "current_amount": "43787.49",
-    "invested_amount": "1545434.07"
-  }
-};
-
-export const growthObj5Year = {
-  "2016-01-13": {
-    "current_amount": 0,
-    "invested_amount": 10,
-  },
-  "2016-06-13": {
-    "current_amount": 0,
-    "invested_amount": 10,
-  },
-  "2016-11-12": {
-    "current_amount": 0,
-    "invested_amount": 10,
-  },
-  "2017-04-13": {
-    "current_amount": "0.00",
-    "invested_amount": "260567.04"
-  },
-  "2017-09-12": {
-    "current_amount": "0.00",
-    "invested_amount": "316567.04"
-  },
-  "2018-02-11": {
-    "current_amount": "0.00",
-    "invested_amount": "393568.04"
-  },
-  "2018-07-13": {
-    "current_amount": "0.00",
-    "invested_amount": "504490.86"
-  },
-  "2018-12-12": {
-    "current_amount": "0.00",
-    "invested_amount": "679030.68"
-  },
-  "2019-05-13": {
-    "current_amount": "0.00",
-    "invested_amount": "860358.81"
-  },
-  "2019-10-12": {
-    "current_amount": "27335.65",
-    "invested_amount": "1036359.08"
-  },
-  "2020-03-12": {
-    "current_amount": "40005.83",
-    "invested_amount": "1439234.03"
-  },
-  "2020-08-11": {
-    "current_amount": "43787.49",
-    "invested_amount": "1545434.07"
-  },
-};
-
-export const dummyGrowth2 = createGrowthData(growthObjYear);
+export const growthObj3Year = [{
+  "data": [
+    {
+      "value": 8000.0,
+      "date": "28-09-2017"
+    },
+    {
+      "value": 8000.0,
+      "date": "14-11-2017"
+    },
+    {
+      "value": 8000.0,
+      "date": "17-11-2017"
+    },
+    {
+      "value": 8000.0,
+      "date": "06-01-2018"
+    },
+    {
+      "value": 10000.0,
+      "date": "13-02-2018"
+    },
+    {
+      "value": 10000.0,
+      "date": "25-02-2018"
+    },
+    {
+      "value": 12000.0,
+      "date": "16-04-2018"
+    },
+    {
+      "value": 12000.0,
+      "date": "15-05-2018"
+    },
+    {
+      "value": 12000.0,
+      "date": "05-06-2018"
+    },
+    {
+      "value": 14000.0,
+      "date": "25-07-2018"
+    },
+    {
+      "value": 18000.0,
+      "date": "14-08-2018"
+    },
+    {
+      "value": 18000.0,
+      "date": "13-09-2018"
+    },
+    {
+      "value": 19000.0,
+      "date": "02-11-2018"
+    },
+    {
+      "value": 19000.0,
+      "date": "14-11-2018"
+    },
+    {
+      "value": 20000.0,
+      "date": "22-12-2018"
+    },
+    {
+      "value": 20000.0,
+      "date": "13-02-2019"
+    },
+    {
+      "value": 22000.0,
+      "date": "01-04-2019"
+    },
+    {
+      "value": 23000.0,
+      "date": "15-05-2019"
+    },
+    {
+      "value": 23000.0,
+      "date": "21-05-2019"
+    },
+    {
+      "value": 24000.0,
+      "date": "10-07-2019"
+    },
+    {
+      "value": 25000.0,
+      "date": "14-08-2019"
+    },
+    {
+      "value": 25000.0,
+      "date": "29-08-2019"
+    },
+    {
+      "value": 27000.0,
+      "date": "18-10-2019"
+    },
+    {
+      "value": 29000.0,
+      "date": "14-11-2019"
+    },
+    {
+      "value": 30000.0,
+      "date": "07-12-2019"
+    },
+    {
+      "value": 33000.0,
+      "date": "26-01-2020"
+    },
+    {
+      "value": 39000.0,
+      "date": "13-02-2020"
+    },
+    {
+      "value": 40000.0,
+      "date": "16-03-2020"
+    },
+    {
+      "value": 42000.0,
+      "date": "05-05-2020"
+    },
+    {
+      "value": 44000.0,
+      "date": "14-05-2020"
+    },
+    {
+      "value": 44000.0,
+      "date": "24-06-2020"
+    },
+    {
+      "value": 44000.0,
+      "date": "13-08-2020"
+    }
+  ],
+  "id": "current_amount"
+},
+  {
+    "data": [
+      {
+        "value": 318000.0,
+        "date": "28-09-2017"
+      },
+      {
+        "value": 322000.0,
+        "date": "14-11-2017"
+      },
+      {
+        "value": 322000.0,
+        "date": "17-11-2017"
+      },
+      {
+        "value": 327000.0,
+        "date": "06-01-2018"
+      },
+      {
+        "value": 394000.0,
+        "date": "13-02-2018"
+      },
+      {
+        "value": 394000.0,
+        "date": "25-02-2018"
+      },
+      {
+        "value": 456000.0,
+        "date": "16-04-2018"
+      },
+      {
+        "value": 458000.0,
+        "date": "15-05-2018"
+      },
+      {
+        "value": 486000.0,
+        "date": "05-06-2018"
+      },
+      {
+        "value": 510000.0,
+        "date": "25-07-2018"
+      },
+      {
+        "value": 602000.0,
+        "date": "14-08-2018"
+      },
+      {
+        "value": 620000.0,
+        "date": "13-09-2018"
+      },
+      {
+        "value": 640000.0,
+        "date": "02-11-2018"
+      },
+      {
+        "value": 644000.0,
+        "date": "14-11-2018"
+      },
+      {
+        "value": 685000.0,
+        "date": "22-12-2018"
+      },
+      {
+        "value": 727000.0,
+        "date": "13-02-2019"
+      },
+      {
+        "value": 806000.0,
+        "date": "01-04-2019"
+      },
+      {
+        "value": 861000.0,
+        "date": "15-05-2019"
+      },
+      {
+        "value": 863000.0,
+        "date": "21-05-2019"
+      },
+      {
+        "value": 917000.0,
+        "date": "10-07-2019"
+      },
+      {
+        "value": 962000.0,
+        "date": "14-08-2019"
+      },
+      {
+        "value": 964000.0,
+        "date": "29-08-2019"
+      },
+      {
+        "value": 1041000.0,
+        "date": "18-10-2019"
+      },
+      {
+        "value": 1103000.0,
+        "date": "14-11-2019"
+      },
+      {
+        "value": 1124000.0,
+        "date": "07-12-2019"
+      },
+      {
+        "value": 1225000.0,
+        "date": "26-01-2020"
+      },
+      {
+        "value": 1400000.0,
+        "date": "13-02-2020"
+      },
+      {
+        "value": 1444000.0,
+        "date": "16-03-2020"
+      },
+      {
+        "value": 1506000.0,
+        "date": "05-05-2020"
+      },
+      {
+        "value": 1545000.0,
+        "date": "14-05-2020"
+      },
+      {
+        "value": 1545000.0,
+        "date": "24-06-2020"
+      },
+      {
+        "value": 1545000.0,
+        "date": "13-08-2020"
+      }
+    ],
+    "id": "invested_amount"
+}];

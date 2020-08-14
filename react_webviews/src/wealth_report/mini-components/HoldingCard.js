@@ -40,7 +40,7 @@ export default class HoldingCard extends Component {
   );
 
   renderPastTransactions = () => (
-    <div id="wr-hce-past-trx">
+    <div className="wr-hce-past-trx wr-table-container">
       <WrTable></WrTable>
     </div>
   );
