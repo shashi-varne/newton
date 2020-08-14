@@ -6,14 +6,13 @@ import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 
 import PhoneInput from "react-phone-input-2";
-
-import 'react-phone-input-2/lib/material.css'
+import 'react-phone-input-2/lib/material.css';
 
 class LoginMobile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      phone:'91'
+      phone:''
     };
   }
 
@@ -129,8 +128,9 @@ class LoginMobile extends Component {
         }}
       >
         {/* {this.renderContinueView()} */}
-        {this.renderOTPView()}
+        {/* {this.renderOTPView()} */}
         {/* {this.renderEmailView()} */}
+        {this.renderNumberView()}
         <div className="wr-continue-btn">
           <WrButton fullWidth={true} classes={{ root: "wr-login-btn" }}>
             Continue

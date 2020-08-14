@@ -95,9 +95,7 @@ export class Login extends Component {
           Please enter your 10 digit mobile number to access your wealth report
         </div>
         <div>
-        <MuiPhoneNumber defaultCountry={'us'} onChange={this.handleOnChange}>
-          <div>hijkhiu</div>
-          </MuiPhoneNumber>
+        <MuiPhoneNumber defaultCountry={'us'} onChange={this.handleOnChange} />
         </div>
       </div>
     );
