@@ -93,9 +93,9 @@ class GroupHealthPlanAddMembers extends Component {
     handleClick = () => {
 
         let canProceed = true;
-
-        this.sendEvents('next');
+        
         let ui_members = this.state.ui_members;
+        
 
         if (this.state.account_type === 'family') {
             if (!this.state.other_adult_member && !this.state.son_total &&
@@ -230,6 +230,9 @@ class GroupHealthPlanAddMembers extends Component {
             ui_members.self_gender = '';
         }
 
+        this.sendEvents('next', ui_members);
+
+
         if(canProceed) {
             let groupHealthPlanData = this.state.groupHealthPlanData;
             groupHealthPlanData.ui_members = ui_members;
@@ -243,7 +246,9 @@ class GroupHealthPlanAddMembers extends Component {
     }
 
 
-    sendEvents(user_action) {
+    sendEvents(user_action, ui_members) {
+        ui_members = ui_members || this.state.ui_members;
+
         let eventObj = {
             "event_name": 'health_insurance',
             "properties": {
@@ -252,10 +257,10 @@ class GroupHealthPlanAddMembers extends Component {
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'add members',
                 'adult_member': this.state.other_adult_member || '',
-                'son': this.state.ui_members.son_total || '',
-                'daughter': this.state.ui_members.daughter_total || '',
-                'self' : this.state.ui_members.account_type === 'selfandfamily' ? 'yes' : 'no',
-                'parent' : (this.state.ui_members.father_checked ? 'father, ' : '' + this.state.ui_members.mother_checked ? 'mother, ' : ''),
+                'son': ui_members.son_total || '',
+                'daughter': ui_members.daughter_total || '',
+                'self' : this.state.insured_account_type === 'selfandfamily' || this.state.insured_account_type === 'self' ? 'yes' : 'no',
+                'parent' : `${(ui_members.father ? 'father, ' : '')} ${(ui_members.mother ? 'mother' : '') }`,
             }
         };
 

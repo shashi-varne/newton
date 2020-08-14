@@ -189,7 +189,7 @@ class GroupHealthPlanIsPed extends Component {
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'pre-existing_disease',
                 'from_edit': this.props.edit ? 'yes' : 'no',
-                'with_disease_list': this.state.form_data.is_ped === 'YES' ? 'yes' : 'no'
+                'pre-existing_disease': this.state.form_data.is_ped === 'YES' ? 'yes' : 'no'
             }
         };
 

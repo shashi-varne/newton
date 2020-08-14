@@ -23,7 +23,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   redirect_url = decodeURIComponent(redirect_url);
 
   if(events && events.properties) {
-    // console.log(events.properties);
+    console.log(events.properties);
   }
  
   if(project === 'loan') {

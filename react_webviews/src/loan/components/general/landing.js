@@ -181,7 +181,7 @@ class Landing extends Component {
     }
 
     this.props.history.push({
-      pathname: '/common/render-faqs',
+      pathname: '/gold/common/render-faqs',
       search: getConfig().searchParams,
       params: {
         renderData: renderData

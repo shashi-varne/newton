@@ -308,7 +308,7 @@ class GroupHealthPlanDob extends Component {
                 "product": 'health suraksha',
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'enter birthday',
-                'eldest_member': this.state.groupHealthPlanData.ui_members.other_adult_member || '',
+                // 'eldest_member': this.state.groupHealthPlanData.ui_members.other_adult_member || '',
             }
         };
 

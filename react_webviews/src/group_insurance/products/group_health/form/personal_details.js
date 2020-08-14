@@ -275,7 +275,7 @@ class GroupHealthPlanPersonalDetails extends Component {
   }
 
 
-  sendEvents(user_action) {
+  sendEvents(user_action, data={}) {
     let eventObj = {
       "event_name": 'health_insurance',
        "properties": {
@@ -288,7 +288,8 @@ class GroupHealthPlanPersonalDetails extends Component {
         'height': this.state.form_data.height ? 'yes' : 'no',
         'weight': this.state.form_data.weight ? 'yes' : 'no',
         'gender': this.state.form_data.gender ? 'yes' : 'no',
-        'from_edit': this.props.edit ? 'yes' : 'no'
+        'from_edit': this.props.edit ? 'yes' : 'no',
+        'policy_cannot_be_issued': data.bmi_check ? 'yes' : 'no'
       }
     };
 

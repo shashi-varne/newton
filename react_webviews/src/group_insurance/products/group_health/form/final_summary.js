@@ -208,6 +208,10 @@ class GroupHealthPlanFinalSummary extends Component {
 
 
     startPayment = async () => {
+
+        if(this.state.medical_dialog) {
+            this.sendEventsPopup('next');
+        }
         this.setState({
             show_loader: true
         })
@@ -224,7 +228,7 @@ class GroupHealthPlanFinalSummary extends Component {
             let nativeRedirectUrl = current_url;
 
             let paymentRedirectUrl = encodeURIComponent(
-            window.location.origin + `/group-insurance/group-health/${this.state.provider}/payment`
+            window.location.origin + `/group-insurance/group-health/${this.state.provider}/payment` + getConfig().searchParams
             );
 
 
@@ -337,6 +341,24 @@ class GroupHealthPlanFinalSummary extends Component {
         }
     }
 
+    sendEventsPopup(user_action, data={}) {
+        let eventObj = {
+            "event_name": 'health_insurance',
+            "properties": {
+                "user_action": user_action,
+                "product": 'health suraksha',
+                "flow": this.state.insured_account_type || '',
+                "screen_name": 'free_medical_checkup',
+            }
+        };
+
+        if (user_action === 'just_set_events') {
+            return eventObj;
+        } else {
+            nativeCallback({ events: eventObj });
+        }
+    }
+
 
     renderMembertop = (props, index) => {
         if(props.key === 'applicant') {
@@ -407,7 +429,7 @@ class GroupHealthPlanFinalSummary extends Component {
                 {props.open &&
                     <div className="bct-content">
                         {props.data.map(this.renderAccordiansubData)}
-                        <div onClick={() => this.openEdit(props.edit_state)} className="generic-page-button-small">
+                        <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
                             EDIT
                         </div>
                     </div>}
@@ -437,12 +459,16 @@ class GroupHealthPlanFinalSummary extends Component {
         })
     }
 
-    openEdit = (state) => {
-        this.sendEvents('next', {edit_clicked: state});
+    openEdit = (state, title) => {
+        this.sendEvents('next', {edit_clicked: title});
         this.navigate(state);
     }
 
     handleClose = () => {
+
+        if(this.state.medical_dialog) {
+            this.sendEventsPopup('close');
+        }
         this.setState({
             openDialogReset: false,
             medical_dialog: false

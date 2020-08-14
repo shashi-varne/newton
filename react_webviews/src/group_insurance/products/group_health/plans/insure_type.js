@@ -49,7 +49,7 @@ class GroupHealthSelectInsureType extends Component {
 
   handleClick = () => {
 
-    this.sendEvents('next');
+    
     if (!this.state.account_type) {
       this.setState({
         account_type_error: 'Please select one'
@@ -66,6 +66,7 @@ class GroupHealthSelectInsureType extends Component {
     groupHealthPlanData.post_body = post_body;
     storageService().setObject('groupHealthPlanData', groupHealthPlanData);
 
+    this.sendEvents('next');
     if (this.state.account_type === 'self') {
 
       groupHealthPlanData.post_body.mem_info = {
@@ -104,7 +105,6 @@ class GroupHealthSelectInsureType extends Component {
       "properties": {
         "user_action": user_action,
         "product": 'health suraksha',
-                "flow": this.state.insured_account_type || '',
         "screen_name": 'who is covered',
         "insuring": this.state.account_type
       }

@@ -70,10 +70,10 @@ class GroupHealthPlanNomineeDetails extends Component {
                 'name': 'SPOUSE',
                 'value': 'SPOUSE'
             },
-            {
-                'name': 'OTHER',
-                'value': 'OTHER'
-            }
+            // {
+            //     'name': 'OTHER',
+            //     'value': 'OTHER'
+            // }
         ]
 
         this.setState({

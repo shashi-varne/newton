@@ -151,60 +151,67 @@ class GroupHealthReportDetails extends Component {
 
     navigateBenefits = (type) => {
 
-        let data_mapper = {
-            'whats_included': {
-                'header_title': "What's included",
-                'header_subtitle': 'These are some of the benefits that are covered under this policy',
-                'steps': this.state.extra_data.whats_included,
-                'pathname': '/gold/common/render-benefits'
-            },
-            'whats_not_included': {
-                'header_title': "What's not included",
-                'header_subtitle' : 'These are some of the incidences that are not covered under this policy',
-                'steps': this.state.extra_data.whats_not_included,
-                'pathname': '/gold/common/render-benefits'
-            },
-            'how_to_claim': {
-                'header_title': "How to claim",
-                'pathname': `/group-insurance/group-health/${this.state.provider}/how-to-claim`
-            }
-        }
+        this.setState({
+            how_to_claim_clicked: true
+        }, () => {
+            this.sendEvents('next');
 
-
-        let mapper_data = data_mapper[type];
-
-        let renderData = {
-            'header_title': mapper_data.header_title,
-            'header_subtitle': `${this.state.providerData.subtitle} ${this.state.lead.plan_title}`,
-            'steps': {
-                'options': mapper_data.steps
-            },
-            'cta_title': 'OK'
-        }
-
-        if (type === 'how_to_claim') {
-            renderData.page_title = 'HDFC ERGO provides cashless as well as reimbursement claim facility';
-            renderData.contact_email = 'healthclaims@hdfcergo.com';
-            renderData.steps = [
-                {
-                    'title': 'Cashless claims:',
-                    'subtitle': 'In this type of health insurance claim, the insurer company settles all the hospitalization bills with the hospital directly. However, an insured needs to be hospitalized only at a network hospital and have to show the health card (issued after policy generation)  and valid photo ID'
+            let data_mapper = {
+                'whats_included': {
+                    'header_title': "What's included",
+                    'header_subtitle': 'These are some of the benefits that are covered under this policy',
+                    'steps': this.state.extra_data.whats_included,
+                    'pathname': '/gold/common/render-benefits'
                 },
-                {
-                    'title': 'Reimbusment claims :',
-                    'subtitle': 'In this type of claim process, the policyholder pays for the hospitalization expenses upfront and requests for reimbursement by the insurance provider later. One can get reimbursement facility at both network and non-network hospitals in this case. In order to avail reimbursement claim you have to provide the necessary documents including original bills to the insurance provider. The company will then evaluate the claim to see its scope under the policy cover and then makes a payment to the insured.'
+                'whats_not_included': {
+                    'header_title': "What's not included",
+                    'header_subtitle' : 'These are some of the incidences that are not covered under this policy',
+                    'steps': this.state.extra_data.whats_not_included,
+                    'pathname': '/gold/common/render-benefits'
+                },
+                'how_to_claim': {
+                    'header_title': "How to claim",
+                    'pathname': `/group-insurance/group-health/${this.state.provider}/how-to-claim`
                 }
-            ]
-
-        }
-
-        this.props.history.push({
-            pathname: mapper_data.pathname,
-            search: getConfig().searchParams,
-            params: {
-                renderData: renderData
             }
-        });
+    
+    
+            let mapper_data = data_mapper[type];
+    
+            let renderData = {
+                'header_title': mapper_data.header_title,
+                'header_subtitle': `${this.state.providerData.subtitle} ${this.state.lead.plan_title}`,
+                'steps': {
+                    'options': mapper_data.steps
+                },
+                'cta_title': 'OK'
+            }
+    
+            if (type === 'how_to_claim') {
+                renderData.page_title = 'HDFC ERGO provides cashless as well as reimbursement claim facility';
+                renderData.contact_email = 'healthclaims@hdfcergo.com';
+                renderData.steps = [
+                    {
+                        'title': 'Cashless claims:',
+                        'subtitle': 'In this type of health insurance claim, the insurer company settles all the hospitalization bills with the hospital directly. However, an insured needs to be hospitalized only at a network hospital and have to show the health card (issued after policy generation)  and valid photo ID'
+                    },
+                    {
+                        'title': 'Reimbusment claims :',
+                        'subtitle': 'In this type of claim process, the policyholder pays for the hospitalization expenses upfront and requests for reimbursement by the insurance provider later. One can get reimbursement facility at both network and non-network hospitals in this case. In order to avail reimbursement claim you have to provide the necessary documents including original bills to the insurance provider. The company will then evaluate the claim to see its scope under the policy cover and then makes a payment to the insured.'
+                    }
+                ]
+    
+            }
+    
+            this.props.history.push({
+                pathname: mapper_data.pathname,
+                search: getConfig().searchParams,
+                params: {
+                    renderData: renderData
+                }
+            });
+        })
+       
     }
 
 
@@ -223,7 +230,9 @@ class GroupHealthReportDetails extends Component {
                 "user_action": user_action,
                 "product": 'health suraksha',
                 "flow": this.state.insured_account_type || '',
-                "screen_name": 'report details'
+                "screen_name": 'report details',
+                "how_to_claim": this.state.how_to_claim_clicked ? 'yes' : 'no',
+                "plan_details": this.state.plan_details_clicked ? 'yes': 'no'
             }
         };
 
@@ -456,7 +465,8 @@ class GroupHealthReportDetails extends Component {
 
                             <div className="report-detail-download-text" style={{ fontWeight: 400 }} onClick={() => {
                                 this.setState({
-                                    showPlanDetails: !this.state.showPlanDetails
+                                    showPlanDetails: !this.state.showPlanDetails,
+                                    plan_details_clicked: true
                                 })
                             }}>
                                 Plan Details

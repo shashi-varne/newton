@@ -183,6 +183,8 @@ export async function updateLead(body, quote_id) {
             if (resultData.bmi_check) {
                 this.setState({
                     openBmiDialog: true
+                }, () => {
+                    this.sendEvents('next', {bmi_check: true})
                 })
             } else {
                 toast(resultData.error || resultData.message
@@ -222,7 +224,8 @@ export async function resetQuote() {
     this.handleClose();
     let quote_id = storageService().get('ghs_ergo_quote_id');
     this.setState({
-        show_loader: true
+        show_loader: true,
+        restart_conformation: true
     });
 
     try {
@@ -296,6 +299,7 @@ export function setEditTitle(string) {
 }
 
 export function openMedicalDialog(type) {
+    
     let data = {
         'header_title': 'Free medical check-up',
         'content': 'Based on your details, a medical checkup will be required to issue the policy. HDFC ERGO team will contact you for the <b>free medical checkup</b> after the policy payment.', //ppc

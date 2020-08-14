@@ -237,9 +237,14 @@ class GroupHealthPayment extends Component {
                   <div className="highlight-text2" style={{ color: '#767E86', marginLeft: 7 }}>
                     <div style={{ margin: '5px 0 6px 0' }}>Sum 
                     assured {numDifferentiationInr(this.state.lead.sum_assured)} for {this.state.lead.tenure} year</div>
+                    {this.state.policy_data.policy_number && 
                     <div style={{ margin: '5px 0 6px 0' }}>Policy id: {this.state.policy_data.policy_number || '-'}</div>
+                    }
+                    {!this.state.policy_data.policy_number && 
+                    <div style={{ margin: '5px 0 6px 0' }}>Transaction no. : {this.state.policy_data.ergo_payment_id || '-'}</div>
+                    }
                     <div style={{ margin: '5px 0 6px 0' }}>
-                      {formatDateAmPm(this.state.policy_data.dt_created)}
+                      {formatDateAmPm(this.state.policy_data.transaction_date)}
                       </div>
                   </div>
                 </div>
