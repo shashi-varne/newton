@@ -4,7 +4,8 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import BottomInfo from '../../../../common/ui/BottomInfo';
-import { storageService, calculateAge, isValidDate, IsFutureDate, formatDate } from 'utils/validators';
+import { storageService, calculateAge, isValidDate,
+     IsFutureDate, formatDate, dobFormatTest } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import { initialize } from '../common_data';
 import toast from '../../../../common/ui/Toast';
@@ -137,7 +138,14 @@ class GroupHealthPlanDob extends Component {
         if (!name) {
             name = event.target.name;
         }
+
         var value = event.target ? event.target.value : '';
+
+        if (!dobFormatTest(value)) {
+            return;
+        }
+
+       
 
         let errorDate = '';
         if (value.length > 10) {
@@ -173,6 +181,7 @@ class GroupHealthPlanDob extends Component {
         
         let canProceed = true;
         let final_dob_data = this.state.final_dob_data;
+        console.log(final_dob_data);
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let ui_members = groupHealthPlanData.ui_members || {};
         let self_gender = ui_members.self_gender || '';

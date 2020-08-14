@@ -469,6 +469,10 @@ class GroupHealthPlanFinalSummary extends Component {
         if(this.state.medical_dialog) {
             this.sendEventsPopup('close');
         }
+
+        if(this.state.openDialogReset) {
+            this.sendEvents('next');
+        }
         this.setState({
             openDialogReset: false,
             medical_dialog: false
@@ -504,6 +508,8 @@ class GroupHealthPlanFinalSummary extends Component {
         this.setState({ 
             openDialogReset: true,
             restart_clicked: true
+        }, () => {
+            this.sendEvents('next');
         });
     }
 

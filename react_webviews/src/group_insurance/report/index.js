@@ -42,7 +42,7 @@ class Report extends Component {
     if (provider === 'HDFCERGO') {
       obj = {
         ...obj,
-        product_name: policy.base_plan_title,
+        product_name: policy.base_plan_title + ' ' + policy.product_title,
         top_title: 'Health insurance',
         key: 'HDFCERGO',
         id: policy.lead_id

@@ -79,7 +79,7 @@ class GroupHealthPlanList extends Component {
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'select plan',
                 'plan_health_suraksha' : plan.plan_type || '',
-                'plan': plan.recommendation_tag || ''
+                'recommendation_tag': plan.recommendation_tag || ''
             }
         };
 

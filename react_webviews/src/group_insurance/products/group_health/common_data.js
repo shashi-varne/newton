@@ -226,6 +226,8 @@ export async function resetQuote() {
     this.setState({
         show_loader: true,
         restart_conformation: true
+    }, () => {
+        this.sendEvents('next');
     });
 
     try {

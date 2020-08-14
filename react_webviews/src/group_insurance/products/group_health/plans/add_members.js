@@ -253,7 +253,6 @@ class GroupHealthPlanAddMembers extends Component {
                 "product": 'health suraksha',
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'add members',
-                'adult_member': this.state.other_adult_member || '',
                 'son': ui_members.son_total || '',
                 'daughter': ui_members.daughter_total || '',
                 'self' : this.state.insured_account_type === 'selfandfamily' || this.state.insured_account_type === 'self' ? 'yes' : 'no',

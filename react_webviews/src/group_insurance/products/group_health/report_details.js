@@ -152,7 +152,7 @@ class GroupHealthReportDetails extends Component {
     navigateBenefits = (type) => {
 
         this.setState({
-            how_to_claim_clicked: true
+            how_to_claim_clicked: type === 'how_to_claim' ? true : false
         }, () => {
             this.sendEvents('next');
 
@@ -467,6 +467,8 @@ class GroupHealthReportDetails extends Component {
                                 this.setState({
                                     showPlanDetails: !this.state.showPlanDetails,
                                     plan_details_clicked: true
+                                }, () => {
+                                    this.sendEvents('next');
                                 })
                             }}>
                                 Plan Details
