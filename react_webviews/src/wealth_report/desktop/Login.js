@@ -1,6 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import WrButton from '../common/Button';
 import WrOtpInput from '../common/OtpInput';
+import TextField from "@material-ui/core/TextField";
+import FormControl from "@material-ui/core/FormControl";
+
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import LoginMobile from './LoginMobile';
+import MuiPhoneNumber from 'material-ui-phone-number';
 
 export class Login extends Component {
   constructor(props) {
@@ -8,6 +15,7 @@ export class Login extends Component {
     this.state = {
       otp: '',
       otp_error: 'Invalid OTP. Please try again',
+      code: +91
     };
   }
 
@@ -37,6 +45,49 @@ export class Login extends Component {
     );
   }
 
+  handleChange = (event) => {
+    this.setState({
+      code: event.target.value
+    })
+  }
+
+  renderEmailView() {
+    return (
+      <div className="wr-login-input">
+        <div className="subtitle">
+          Please enter your email address and password
+        </div>
+        <div>
+        <FormControl className="wr-form">
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            classes={{ root: "wr-root" }}
+            InputProps={{
+              disableUnderline: true,
+              placeholder:'Enter email address'
+            }}
+          />
+        </FormControl>
+        <FormControl className="wr-form">
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            classes={{ root: "wr-root" }}
+            InputProps={{
+              disableUnderline: true,
+              type:'password',
+              placeholder:'Enter password'
+            }}
+          />
+        </FormControl>
+        <div id="wr-forgot">Forgot password</div>
+        </div>
+      </div>
+
+    )
+  }
+
   renderNumberView() {
     return (
       <div className="wr-login-input">
@@ -44,29 +95,66 @@ export class Login extends Component {
           Please enter your 10 digit mobile number to access your wealth report
         </div>
         <div>
+        <MuiPhoneNumber defaultCountry={'us'} onChange={this.handleOnChange}>
+          <div>hijkhiu</div>
+          </MuiPhoneNumber>
         </div>
       </div>
     );
   }
+
+  renderNum = () => {
+    return (
+      <div className="wr-login-input">
+        <div className="subtitle">
+          Please enter your 10 digit mobile number to access your wealth report
+        </div>
+        <div>
+        <FormControl className=''>
+        <Select
+          labelId="demo-customized-select-label"
+          id="demo-customized-select"
+          value={this.state.code}
+          onChange={this.handleChange}
+          disableUnderline={true}
+        >
+          {/* {codes.map(code => (
+            <MenuItem>{`+${code}`}</MenuItem>
+          ))} */}
+        </Select>
+      </FormControl>
+        </div>
+      </div>
+    );
+  }
+
   render() {
     // const { isPhone, isOtp, isEmail } = this.props.location.params || {};
     const isOtp = true, isPhone = false; // TODO: Remove hardcoding
+
     return(
-      <div id="wr-login">
-        <img
-          src={require('assets/ic-login-abstract.svg')}
-          alt="banner"
-          id="wr-login-img"  
+      <Fragment>
+        <div id="wr-login">
+          <img
+            src={require('assets/ic-login-abstract.svg')}
+            alt="banner"
+            id="wr-login-img"  
           />
-        <div id="wr-login-right-panel">
-          <img src="" alt="fisdom"/> {/* fisdom logo */}
-          <h2>Welcome to Fisdom!</h2>
-          { isPhone ? this.renderNumberView() : '' }
-          { isOtp ? this.renderOTPView() : '' }
-          {/* { isEmail ? this.renderNumberView() : '' } */}
+          <div id="wr-login-right-panel">
+            <img src="" alt="fisdom"/> {/* fisdom logo */}
+            <h2>Welcome to Fisdom!</h2>
+            {/* { isPhone ? this.renderNumberView() : '' } */}
+            { isOtp ? this.renderOTPView() : '' }
+            {/* { isEmail ? this.renderNumberView() : '' } */}
           <WrButton fullWidth={true} classes={{ root: 'wr-login-btn' }}>Continue</WrButton>
         </div>
       </div>
+
+      <div id="wr-login-mobile">
+        <LoginMobile />
+      </div>
+
+      </Fragment>
     );
   }
 }
