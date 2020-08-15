@@ -45,7 +45,7 @@ class PanSelect extends Component {
         <div className="wr-header-pan-select">
           {/* visibility will be modified based on the condition in media queries */}
           <ClickAwayListener onClickAway={this.handleClose}>
-            <div className="wr-pan-content">
+            <div className="wr-pan-content" style={{cursor:'default'}}>
               <img
                 id="wr-pan-logo"
                 src={require(`assets/fisdom/ic-added-pans.svg`)}
