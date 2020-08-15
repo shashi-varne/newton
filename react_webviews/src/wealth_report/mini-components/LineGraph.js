@@ -1,6 +1,7 @@
 import React from 'react';
 import { ResponsiveLine } from '@nivo/line';
 import { convertToThousand } from 'utils/validators';
+import { formattedDate } from '../../utils/validators';
 
 const styleById = {
   'current_amount': {
@@ -33,25 +34,20 @@ const MyResponsiveLine = (props) => {
   return (
     <ResponsiveLine
       data={props.data}
-      margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+      margin={{ top: 50, right: 20, bottom: 50, left: 50 }}
       xScale={{
-        type: 'time',
-        format: '%Y-%m-%d',
-        useUTC: false,
-        // precision: 'month',
+        type: 'point',
       }}
-      xFormat="time:%Y-%m-%d"
       yScale={{
         type: 'linear',
-        // base: 2,
-        min: 400000,
+        min: 'auto',
         max: 'auto',
         stacked: false,
         reverse: false
       }}
       axisBottom={{
-        format: props.params.tickFormat,
-        tickValues: props.params.tickInterval,
+        format: value => formattedDate(value, 'd m', true),
+        // tickValues: props.params.tickInterval,
         tickPadding: 20,
         tickSize: 0,
       }}
@@ -68,6 +64,22 @@ const MyResponsiveLine = (props) => {
       enableSlices="x"
       crosshairType="x"
       useMesh={true}
+      theme={{
+        axis: {
+          ticks: {
+            text: {
+              fill: "#b0bac9",
+              fontSize: '10px',
+            }
+          }
+        },
+        grid: {
+          line: {
+            stroke: "rgba(80, 45, 168, 0.05)",
+            strokeWidth: 0.5,
+          }
+        }
+      }}
       layers={['grid', 'markers', 'areas', DashedLine, 'slices', 'points', 'axes', 'legends']}
     />
   );

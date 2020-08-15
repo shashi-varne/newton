@@ -50,6 +50,7 @@
 #wr-amc-img {
   margin-top: 10px;
   margin-right: -8px;
+  width: 155px;
 }
 
 #wr-account-img {
@@ -106,7 +107,7 @@ span.wr-small-col-title {
   }
 }
 
-#wr-hce-past-trx {
+.wr-hce-past-trx {
   margin-top: 36px;
   max-height: 300px;
   overflow-y: scroll;
@@ -115,21 +116,6 @@ span.wr-small-col-title {
   background: white;
   padding: 5px 25px;
 }
-
-#wr-hce-past-trx::-webkit-scrollbar {
-  width: 10px;
-  background-color: rgba(0, 0, 0, 0.05);
-  border-radius: 5px;
-}
-
-#wr-hce-past-trx::-webkit-scrollbar-thumb {
-  width: 6px;
-  height: 100px;
-  border-radius: 2.5px;
-  background-color: rgba(0, 0, 0, 0.3);
-}
-
-
 
 .wr-hc-amc-detail {
   flex-basis: 40% !important;
@@ -346,10 +332,12 @@ span.wr-small-col-title {
 
   .wr-btn {
     background-color: var(--primary) !important;
-    border-radius: 15px;
+    padding: 9px 16px;
+    border-radius: 20px;
+
     .MuiButton-label {
-      font-size: 13px;
-      padding: 0 7px 0 7px;
+      font-size: 15px;
+      text-transform: capitalize;
     }
   }
 }
@@ -625,7 +613,7 @@ span.wr-small-col-title {
     }
   }
 
-  #wr-hce-past-trx {
+  .wr-hce-past-trx {
     margin-top: 28px;
     max-height: 300px;
     border: none;

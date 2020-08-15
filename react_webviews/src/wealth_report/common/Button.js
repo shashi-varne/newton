@@ -1,46 +1,42 @@
-import React, { Component } from 'react';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import React from 'react';
+import { withStyles } from '@material-ui/core/styles';
 import { Button } from 'material-ui';
 
-const theme = createMuiTheme({
-  overrides: {
-    MuiButton: {
-      root: {
-        borderRadius: '6px',
-        padding: '12px 19px',
-      },
-      raised: {
-        boxShadow: 'none',
-        backgroundColor: 'var(--primary)',
-        '&$hover': {
-          backgroundColor: 'green',
-        },
-      },
-      label: {
-        color: 'white',
-        fontSize: '17px',
-        letterSpacing: 'normal',
-        textTransform: 'inherit',
-        fontWeight: 'normal',
-      }
+const NewButton = (props) => {
+  const { root, raised, label } = props.classes || {};
+
+  return (
+    <Button
+      variant={props.variant || 'raised'}
+      fullWidth={props.fullWidth}
+      classes={{ root, raised, label }}
+      {...props}
+    >
+      {props.children}
+    </Button>
+  );
+};
+
+const WrButton = withStyles({
+  root: {
+    borderRadius: '6px',
+    padding: '12px 19px',
+  },
+  raised: {
+    boxShadow: 'none',
+    backgroundColor: 'var(--primary)',
+    '&:hover': {
+      backgroundColor: 'var(--primary)',
+      opacity: 0.9,
     },
   },
-});
+  label: {
+    color: 'white',
+    fontSize: '17px',
+    letterSpacing: 'normal',
+    textTransform: 'inherit',
+    fontWeight: 'normal',
+  },
+})(NewButton);
 
-export default class WrButton extends Component {
-  render() {
-    const { root, raised, label, contained, outlined } = this.props.classes || {};
-    return (
-      <MuiThemeProvider theme={theme}>
-        <Button
-          variant={this.props.variant || 'raised'}
-          fullWidth={this.props.fullWidth}
-          classes={{ root, raised, label, contained, outlined }}
-          {...this.props}
-        >
-          {this.props.children}
-        </Button>
-      </MuiThemeProvider>
-    );
-  }
-}
+export default WrButton;

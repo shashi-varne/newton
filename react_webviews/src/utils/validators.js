@@ -599,30 +599,33 @@ export function getDateBreakup(date) {
   date = date.replace(/-/g, '/');
 
   let date2 = new Date(date);
-  let dom = date2.getDate();
-  dom = dateOrdinal(dom);
+  let plainDate = date2.getDate();
+  let dom = dateOrdinal(plainDate); // converts 16 to 16th, 2 to 2nd, etc.
 
   let month = monthNames[date2.getMonth()];
   let year = date2.getFullYear();
   let time = formatAMPM(date2);
 
-  return { dom, month, time, year };
+  return { plainDate, dom, month, time, year };
 }
 
 export function formatDateAmPm(date) {
   return formattedDate(date, 'd m, t');
 }
 
-export function formattedDate(date, pattern = '') {
+export function formattedDate(date, pattern = '', usePlainDate = false) {
   pattern = pattern.toLowerCase();
-  const validPatterns = ['d m, t', 'd m y'];
+  const validPatterns = ['d m, t', 'd m y', 'd m', 'm y'];
 
   if (!date) return '';
   else if (!validPatterns.includes(pattern)) return date;
-  let { dom, month, time, year } = getDateBreakup(date);
+  const { plainDate, dom, month, time, year } = getDateBreakup(date);
+  const dateVal = usePlainDate ? plainDate : dom;
   const patternMap = {
-    'd m, t': `${dom} ${month}, ${time}`,
-    'd m y': `${dom} ${month} ${year}`,
+    'd m, t': `${dateVal} ${month}, ${time}`,
+    'd m y': `${dateVal} ${month} ${year}`,
+    'd m': `${dateVal} ${month}`,
+    'm y': `${month} ${year}`,
     // Enter custom patterns here
   };
   return patternMap[pattern];
