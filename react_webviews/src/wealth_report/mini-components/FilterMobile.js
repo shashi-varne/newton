@@ -1,30 +1,12 @@
 import React, { Component } from "react";
 import Dialog from "common/ui/Dialog";
 import WrButton from "../common/Button";
-
-const Filters = [
-  {
-    id: "fund_type",
-    category: "Fund Type",
-    filters: ["Debt", "Equity", "Other"],
-  },
-  {
-    id: "current_value",
-    category: "Current Value",
-    filters: ["<1L", "1.5L", "5-10L", "10L+"],
-  },
-  {
-    id: "rating",
-    category: "Fisdom Rating",
-    filters: ["3 & Below", "4 & above"],
-  },
-];
+import { HoldingFilterOptions as Filters } from "../constants";
 
 class FilterMobile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      checked: false,
       fund_type: "",
       current_value: "",
       rating: "",
@@ -32,45 +14,36 @@ class FilterMobile extends Component {
     };
   }
 
-  handleClick = () => {
+  selectCategory = (category, newFilter, reApplyFilter) => {
+    const currentFilter = this.state[category];
+    const filterChanged = currentFilter.value !== newFilter.value;
+
     this.setState({
-      render_filter: !this.state.render_filter,
-      checked: !this.state.checked,
-      fund_type: "",
-      current_value: "",
-      rating: "",
+      [category]: filterChanged ? newFilter : {},
+    }, () => { //to get updated state immediately https://stackoverflow.com/questions/41446560/react-setstate-not-updating-state
+      if (reApplyFilter) this.applyFilters();
     });
-  };
-
-  selectCategory = (category, filter) => {
-    this.setState({
-      [category]: filter,
-    });
-
-    if (this.state[category] === filter) {
-      this.setState({
-        [category]: "",
-      });
-    }
-  };
-
-  handleChanges = () => {
-    this.setState({
-      filters: [
-        this.state.fund_type,
-        this.state.current_value,
-        this.state.rating,
-      ]
-    });
-    this.props.onClick()
-
-  };
-
-  handleClear = () => {
-    this.setState({
-      filters: []
-    })
   }
+
+  applyFilters = () => {
+    const filters = ['fund_type', 'current_value', 'rating'].map(kind => ({
+      category: kind,
+      label: this.state[kind].label || '',
+      value: this.state[kind].value || '',
+    }));
+
+    this.setState({ filters });
+    this.props.onFilterChange(filters);
+  };
+
+  clearFilters = () => {
+    this.setState({
+      filters: [],
+      fund_type: {},
+      current_value: {},
+      rating: {},
+    });
+  };
 
   renderFilterModal = () => (
     <div className="wr-mobile-filter">
@@ -84,7 +57,7 @@ class FilterMobile extends Component {
                 key={index}
                 classes={{
                   root:
-                    this.state[item.id] === filter
+                    this.state[item.id].value === filter.value
                       ? "wr-selected-filters"
                       : "wr-non-selected-filters",
                 }}
@@ -92,7 +65,7 @@ class FilterMobile extends Component {
                 size="small"
                 onClick={() => this.selectCategory(item.id, filter)}
               >
-                {filter}
+                {filter.label}
               </WrButton>
             ))}
             {index !== Filters.length - 1 ? <hr /> : ""}
@@ -106,7 +79,7 @@ class FilterMobile extends Component {
           }}
           disableRipple
           size="small"
-          onClick={this.handleChanges}
+          onClick={this.applyFilters}
         >
           APPLY CHANGES
         </WrButton>
@@ -114,24 +87,29 @@ class FilterMobile extends Component {
     </div>
   );
 
-  renderFilter = () => (
-    <div className="wr-filter-category">
-      <div>Filter:
-        {this.state.filters.map((item, index) => item !== '' && (
-          <WrButton size='small' disableRipple key={index}
-            classes={{
-              root:'wr-filter-btn'
-            }}
-          >
-            {item}
-          </WrButton>
-        ))}
+  renderSelectedFilters = () => {
+    const selectedFilters = this.state.filters.filter(obj => obj.value);
+    
+    return selectedFilters.length ? (
+      <div className="wr-filter-category">
+        <div>Filter:
+          {this.state.filters.map(({ category, label, value }) => value && (
+            <WrButton size='small' disableRipple key={value}
+              classes={{
+                root:'wr-filter-btn'
+              }}
+              onClick={() => this.selectCategory(category, { label, value }, true)}
+            >
+              {label}
+            </WrButton>
+          ))}
+        </div>
+        <div style={{color:'var(--primary'}} onClick={this.clearFilters}>
+          Clear All
+        </div>
       </div>
-      <div style={{color:'var(--primary'}} onClick={this.handleClear}>
-        Clear All
-      </div>
-    </div>
-  );
+    ) : '';
+  }
 
   render() {
     return (
@@ -144,7 +122,7 @@ class FilterMobile extends Component {
         >
           {this.renderFilterModal()}
         </Dialog>
-        {this.state.filters.length > 0 && this.renderFilter()}
+        {this.state.filters.length > 0 && this.renderSelectedFilters()}
       </React.Fragment>
     );
   }
