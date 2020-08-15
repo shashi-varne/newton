@@ -32,6 +32,52 @@ export const createGrowthData = (dataObj) => {
     data: obj.invested_amount,
   }];
 };
+
+export const HoldingFilterOptions = [
+  {
+    id: "fund_type",
+    category: "Fund Type",
+    filters: [{
+      label: 'Debt',
+      value: 'debt',
+    }, {
+      label: 'Equity',
+      value: 'equity',
+    }, {
+      label: 'Other',
+      value: 'others',
+    }],
+  },
+  {
+    id: "current_value",
+    category: "Current Value",
+    filters: [{
+      label: '<1L',
+      value: '1',
+    }, {
+      label: '1.5L',
+      value: '2',
+    }, {
+      label: '5-10L',
+      value: '3',
+    }, {
+      label: '10L+',
+      value: '4',
+    }],
+  },
+  {
+    id: "rating",
+    category: "Fisdom Rating",
+    filters: [{
+      label: '3 & Below',
+      value: '1',
+    }, {
+      label: '4 & above',
+      value: '2',
+    }],
+  },
+];
+
 export const genericErrMsg = 'Something went wrong. Please try again';
 
 export const dummyAlloc = [{
@@ -50,6 +96,22 @@ export const dummyAlloc = [{
   value: 45,
   "color": "#512ea7",
 }];
+
+export const dummyTableData = [
+  { date: '20 Apr 2020', type: 'Investment', amount: '₹ 2.30L' },
+  { date: '8 Oct 2019', type: 'Withdrawal', amount: '₹ 1.80L' },
+  { date: '20 Apr 2020', type: 'Investment', amount: '₹ 2.30L' },
+  { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L' },
+  { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L' },
+  { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L' },
+  { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L' },
+  { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L' },
+  { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L' },
+  { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L' },
+  { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L' },
+  { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L' },
+  { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L' },
+];
 
 const sectorObj = {
   "Others": "0.0698989",

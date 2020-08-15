@@ -1,14 +1,14 @@
 #wr-login {
   display: flex;
   background-color: white;
-  
+
   #wr-login-img {
-    height: 100%
+    height: 100%;
   }
 
   #wr-login-right-panel {
     padding: 160px 120px;
-    
+
     h2 {
       font-size: 36px;
       font-weight: normal;
@@ -17,6 +17,12 @@
 
   .wr-login-input {
     margin-bottom: 60px;
+
+    #wr-logo,
+    #wr-title,
+    #wr-input {
+      display: none;
+    }
 
     div.subtitle {
       max-width: 420px;
@@ -59,6 +65,45 @@
       color: var(--primary);
       margin: 28px 0 0 6px;
     }
+
+    .wr-input-form {
+      margin-top: 40px;
+      .wr-code-input {
+        width: 21% !important;
+        border-radius: 4px;
+        border: 1px solid #dadaed;
+        .MuiInput-input {
+          font-size: 22px !important;
+          font-weight: 500;
+        }
+        .MuiSelect-select {
+          padding-right: 0px !important;
+        }
+      }
+
+      .wr-select-input {
+        padding: 5px 0px 5px 10px !important;
+      }
+      .MuiFormControl-marginNormal {
+        margin: 0px !important;
+      }
+
+      .wr-mob-input {
+        width: 72.5% !important;
+        margin-left: 16px;
+        border-radius: 4px;
+        border: 1px solid #dadaed;
+        .MuiInput-input {
+          font-size: 22px !important;
+          font-weight: 500;
+          padding: 13px 16px 16px 16px;
+        }
+      }
+
+      .MuiMenu-paper {
+        max-height: 40vh !important;
+      }
+    }
   }
 
   .wr-login-btn {
@@ -94,12 +139,12 @@
     padding: 43px 90px 0 90px;
     align-items: center;
 
-    .wr-fisdom{
+    .wr-fisdom {
       height: 42px;
       vertical-align: middle;
       .wr-vertical-divider {
         height: 33px !important;
-        border-right: 1px solid #fff
+        border-right: 1px solid #fff;
       }
 
       .wr-report {
@@ -112,8 +157,6 @@
         margin-left: 24px;
       }
     }
-  
-
 
     .wr-user-account {
       width: 100px;
@@ -153,13 +196,13 @@
     text-align: center;
     padding: 24px;
     box-sizing: border-box;
-    border-bottom: 1px solid rgba(102, 102, 102, 0.05);    
+    border-bottom: 1px solid rgba(102, 102, 102, 0.05);
   }
 }
 
 #wr-overview-key-numbers {
   display: flex;
-  flex-flow: row wrap ;
+  flex-flow: row wrap;
   width: 100%;
   border-radius: 10px;
 
@@ -175,9 +218,9 @@
     min-height: 185px;
     height: auto;
     color: black;
-    border-bottom: 1px solid rgba(102, 102, 102, 0.05);    
-    border-right: 1px solid rgba(102, 102, 102, 0.05);    
-    
+    border-bottom: 1px solid rgba(102, 102, 102, 0.05);
+    border-right: 1px solid rgba(102, 102, 102, 0.05);
+
     .wr-okn-title {
       font-size: 17px;
       font-weight: normal;
@@ -224,7 +267,7 @@
   height: auto;
 
   #wr-gg-date-select {
-    background: rgba(80,45,168,0.1);
+    background: rgba(80, 45, 168, 0.1);
     width: auto;
     float: right;
     border-radius: 6px;
@@ -240,7 +283,7 @@
       cursor: pointer;
 
       &.selected {
-        background: rgb(80,45,168);
+        background: rgb(80, 45, 168);
         color: white;
         font-weight: 600;
         border-radius: 4px;
@@ -300,7 +343,7 @@
       font-size: 13px;
       color: #502da8;
       margin-top: 12px;
-      padding: 10px 30px 10px 14px;;
+      padding: 10px 30px 10px 14px;
       clip-path: polygon(100% 0%, 93% 50%, 100% 100%, 0 100%, 0% 50%, 0 0);
     }
 
@@ -337,7 +380,7 @@
   background-color: #ffffff !important;
   font-size: 15px !important;
   .MuiButton-label {
-    color: rgba(0,0,0,0.5) !important;
+    color: rgba(0, 0, 0, 0.5) !important;
   }
 }
 
@@ -449,7 +492,7 @@
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid rgba(102, 102, 102, 0.05);
-    
+
     .wr-taxation-summary-col {
       line-height: 1;
       color: #000000;
@@ -471,7 +514,7 @@
 
   #wr-taxation-detail {
     padding: 24px 80px;
-    
+
     .wr-taxation-detail-row {
       display: flex;
       flex-wrap: wrap;
@@ -495,7 +538,7 @@
 
 .wr-vertical-divider {
   height: 60px;
-  border-right: 1px solid rgba(0,0,0,0.05)
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .wr-xirr-tooltip {
@@ -534,23 +577,29 @@
     background-color: var(--primary) !important;
     color: #fff;
     position: fixed;
+    border-radius: 28px;
     right: 28px;
     bottom: 28px;
     z-index: 1000000;
   }
 }
-  
-@media only screen 
-  and (min-device-width: 330px) 
-  and (max-device-width: 812px) {
 
+@media only screen and (min-device-width: 330px) and (max-device-width: 812px) {
   #wr-login {
     display: none;
   }
 
   #wr-login-mobile {
-    display: block;
+    width: 100%;
     height: 100%;
+    background-color: #ffffff;
+    display: block;
+  }
+
+  #wr-mobile-view {
+    height: 100%;
+    width: 90%;
+    margin: auto;
     // background-color: var(--primary);
   }
 
@@ -580,6 +629,13 @@
     padding-top: 53px;
     height: 90%;
 
+    #wr-logo,
+    #wr-title,
+    #wr-input,
+    #wr-input {
+      display: inherit;
+    }
+
     #wr-title {
       font-size: 20px;
       font-weight: 600;
@@ -600,14 +656,14 @@
       margin-bottom: 37px;
     }
 
-    #wr-otp {
+    #wr-otp-opts {
       font-size: 12px;
       line-height: 15px;
       font-weight: 500;
       display: flex;
       justify-content: space-between;
       width: 294px;
-      margin:0 0 7px 4px;
+      margin: 0 0 7px 4px;
     }
 
     div#wr-otp-opts {
@@ -623,8 +679,16 @@
       font-size: 12px;
       line-height: 15px;
       font-weight: 500;
-      margin:9px 0 0 4px;
+      margin: 9px 0 6px 4px;
       color: #a9aebe;
+
+      .MuiButton-label {
+        padding: 30px 8px;
+      }
+    }
+
+    .MuiInputAdornment-positionStart {
+      padding: 3px 0px 0 4px;
     }
 
     .wr-form {
@@ -642,6 +706,38 @@
         padding: 14px 16px;
       }
     }
+
+    .wr-code-input {
+      width: 21% !important;
+      border-radius: 4px 0 0 4px;
+      border: 1px solid #dadaed;
+      border-right: 0 !important;
+      .MuiInput-input {
+        font-size: 16px !important;
+      }
+      .MuiSelect-select {
+        padding-right: 0px !important;
+      }
+    }
+
+    .wr-select-input {
+      padding: 5px 0px 5px 10px !important;
+    }
+
+    .MuiFormControl-marginNormal {
+      margin: 0px !important;
+    }
+
+    .wr-mob-input {
+      width: 77.5% !important;
+      border-radius: 0 4px 4px 0;
+      border: 1px solid #dadaed;
+      .MuiInput-input {
+        font-size: 16px !important;
+        font-weight: 500;
+        padding: 16px 16px 12px 16px;
+      }
+    }
   }
 
   .react-tel-input .form-control {
@@ -654,8 +750,6 @@
     width: 90%;
   }
 
-
-  
   #wr-main {
     background-color: #f5f6f8 !important;
   }
@@ -698,7 +792,7 @@
 
   #wr-overview-key-numbers {
     display: flex;
-    flex-flow: row wrap ;
+    flex-flow: row wrap;
     width: 100%;
     border-radius: 10px;
 
@@ -711,7 +805,7 @@
       min-width: 50%;
       height: auto;
       min-height: 79px;
-      
+
       .wr-okn-title {
         font-size: 10px;
         font-weight: normal;
@@ -899,7 +993,7 @@
     background-color: #ffffff !important;
     font-size: 15px !important;
     .MuiButton-label {
-      color: rgba(0,0,0,0.5) !important;
+      color: rgba(0, 0, 0, 0.5) !important;
     }
   }
 
@@ -918,12 +1012,12 @@
       align-items: center;
       justify-content: space-between;
       border-bottom: 1px solid rgba(102, 102, 102, 0.05);
-      
+
       .wr-taxation-summary-col {
         flex-basis: unset;
         text-align: left;
         padding: 16px 13px;
- 
+
         .wr-tsc-value {
           font-size: 16px;
           margin-bottom: 6px;
@@ -939,7 +1033,7 @@
 
     #wr-taxation-detail {
       padding: 16px;
-      
+
       .wr-taxation-detail-row {
         margin-top: 24px;
 

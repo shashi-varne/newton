@@ -326,8 +326,7 @@ span.wr-small-col-title {
 }
 
 .wr-filter {
-  display: flex;
-  justify-content: flex-end;
+  text-align: right;
   margin-bottom: 40px;
 
   .wr-btn {
@@ -358,33 +357,34 @@ span.wr-small-col-title {
     color: #150731;
   }
 
-  .wr-non-selected-filters {
-    background-color: rgba(149, 149, 149, 0.08) !important;
-    box-shadow: 0 1px 15px 0 rgba(215, 199, 250, 0.12) !important;
-    border-radius: 15px;
-    margin-left: 12px;
-    .MuiButton-label {
-      font-size: 13px;
-      padding: 0 8px 0 8px;
-      color: #150731;
-    }
-  }
-
-  .wr-selected-filters {
-    background-color: var(--primary) !important;
-    box-shadow: 0 1px 15px 0 rgba(215, 199, 250, 0.12) !important;
-    border-radius: 15px;
-    margin-left: 12px;
-    .MuiButton-label {
-      font-size: 13px;
-      padding: 0 8px 0 8px;
-    }
-  }
-
   .wr-vertical-divider {
     height: 25px;
     margin-left: 16px;
     border-color: #150731;
+  }
+}
+
+.wr-non-selected-filters {
+  background-color: rgba(149, 149, 149, 0.08) !important;
+  box-shadow: 0 1px 15px 0 rgba(215, 199, 250, 0.12) !important;
+  border-radius: 25px;
+  margin-left: 12px;
+  padding: 9px 16px;
+
+  .MuiButton-label {
+    font-size: 13px;
+    color: #150731;
+  }
+}
+
+.wr-selected-filters {
+  @extend .wr-non-selected-filters;
+
+  background-color: var(--primary) !important;
+
+  .MuiButton-label {
+    font-size: 13px;
+    color: white;
   }
 }
 
@@ -397,28 +397,25 @@ span.wr-small-col-title {
     color: #a9a9a9;
   
     .wr-selected-filters {
-      background-color: var(--primary) !important;
-      box-shadow: 0 1px 15px 0 rgba(215, 199, 250, 0.12) !important;
-      border-radius: 20px;
+      @extend .wr-selected-filters;
+      padding: 5px 8px;
       margin: 16px 12px 0 0;
+
       .MuiButton-label {
         font-size: 12px;
         font-weight: 500;
-        text-transform: lowercase;
-        padding: 0 2px;
+        text-transform: capitalize;
       }
     }
   
     .wr-non-selected-filters {
-      background-color: rgba(149, 149, 149, 0.08) !important;
-      box-shadow: 0 1px 15px 0 rgba(215, 199, 250, 0.12) !important;
-      border-radius: 15px;
+      @extend .wr-non-selected-filters;
+      padding: 5px 8px;
       margin: 16px 12px 0 0;
+
       .MuiButton-label {
         font-size: 12px;
-        color: #000;
-        text-transform: lowercase;
-        padding: 0 2px;
+        text-transform: capitalize;
       }
     }
 
@@ -456,13 +453,15 @@ span.wr-small-col-title {
   color: #a9a9a9;
 
   .wr-filter-btn {
-    background-color: var(--primary) !important;
-    box-shadow: 0 1px 15px 0 rgba(215, 199, 250, 0.12) !important;
-    border-radius: 15px;
+    @extend .wr-selected-filters;
+
     margin-left: 6px;
+    padding: 5px 8px;
+
     .MuiButton-label {
       font-size: 11px;
       font-weight: 500;
+      text-transform: capitalize;
     }
   }
 }

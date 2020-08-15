@@ -1,50 +1,36 @@
-import React, { Component } from "react";
+import React from "react";
+/* Use 'headersMap' prop to send a list of column header - data property mapping 
+  Structure is as follows:
 
-export default class WrTable extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      columnHeaders: ['date', 'type', 'amount'],
-      tableData: [
-        { date: '20 Apr 2020', type: 'Investment', amount: '₹ 2.30L'},
-        { date: '8 Oct 2019', type: 'Withdrawal', amount: '₹ 1.80L'},
-        { date: '20 Apr 2020', type: 'Investment', amount: '₹ 2.30L'},
-        { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L'},
-        { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L'},
-        { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L'},
-        { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L'},
-        { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L'},
-        { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L'},
-        { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L'},
-        { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L'},
-        { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L'},
-        { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L'},
-      ],
-    };
-  }
+  [{
+    label: // Text to show as column header for table
+    accessor: // Name of property to access within 'data' for this column
+  }]
 
-  render() {
-    const { columnHeaders, tableData } = this.state;
+*/
+const WrTable = (props) => {
+  const { headerMap: columnHeaders, data: tableData } = props;
 
-    return (
-      <table className={`wr-table ${this.props.classes}`} style={this.props.style || {}}>
-          <thead>
-            <tr>
-              {columnHeaders.map(col => (
-                <td key={col}>{col}</td>
+  return (
+    <table className={`wr-table ${this.props.classes}`} style={this.props.style || {}}>
+        <thead>
+          <tr>
+            {columnHeaders.map(col => (
+              <td key={col.label}>{col.label}</td>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {tableData.map((row, idx) => (
+            <tr key={idx}>
+              {columnHeaders.map(({ accessor }) => (
+                <td key={accessor}>{row[accessor]}</td>
               ))}
             </tr>
-          </thead>
-          <tbody>
-            {tableData.map((row, idx) => (
-              <tr key={idx}>
-                {columnHeaders.map(col => (
-                  <td key={col}>{row[col]}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-    );
-  }
-}
+          ))}
+        </tbody>
+      </table>
+  );
+};
+
+export default WrTable;

@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LinearProgress, createMuiTheme, MuiThemeProvider, IconButton } from 'material-ui';
 import MyResponsiveLine from '../mini-components/LineGraph';
 import { growthObj1mo, growthObj3mo, growthObj6mo, growthObjYear, growthObj3Year, createGrowthData } from '../constants';
 import Tooltip from 'common/ui/Tooltip';
+import toast from '../../common/ui/Toast';
 import Dialog from "common/ui/Dialog";
 import { getConfig, isMobileDevice } from "utils/functions";
+import { fetchOverview } from '../common/ApiCalls';
 
 const dateRanges = [{
     label: getConfig().isMobileDevice ? '1m' : '1 Month',
@@ -66,10 +68,22 @@ export default function Overview(props) {
   const [dateOb, setGrowthObj] = useState(dateRanges[1].dateObj);
   const [openModal, toggleModal] = useState(false);
 
+  const [overviewData, setOverviewData] = useState();
+  useEffect(async () => {
+    try {
+      const data = await fetchOverview({ pan: props.pan });
+      setOverviewData(data);
+    } catch (err) {
+      console.log(err);
+      toast(err);
+    }
+  });
+
   const selectRange = (rangeObj) => {
     setRange(rangeObj);
     setGrowthObj(rangeObj.dateObj); // This will be replaced by API data
   };
+
   const tipcontent = (
     <div className="wr-xirr-tooltip">
       <div className="wr-tooltip-head">
@@ -98,45 +112,48 @@ export default function Overview(props) {
         <div id="wr-overview-key-numbers">  
           <div className="wr-okn-box">
             <div className="wr-okn-title">Current Value</div>
-            <div className="wr-okn-value">₹ 2.83Cr</div>
+            <div className="wr-okn-value">₹ {overviewData.current_value}</div>
           </div>
           <div className="wr-okn-box">
-            <div className="wr-okn-title">Analysis</div>
-            <div className="wr-okn-value">₹ 56.3L</div>
+            <div className="wr-okn-title">Total Invested</div>
+            <div className="wr-okn-value">₹ {overviewData.total_invested}</div>
           </div>
           <div className="wr-okn-box">
             <div className="wr-okn-title">
               XIRR
               <span style={{ marginLeft: "6px", verticalAlign:'middle' }}>
                 {!isMobileDevice() ? 
-                <Tooltip content={tipcontent} direction="down" className="wr-xirr-info">
-                  {i_btn}
-                </Tooltip> : 
-                <React.Fragment>
-                  {i_btn}
-                  <Dialog
-                    open={openModal}
-                    onClose={() => toggleModal(false)}
-                    classes={{ paper: "wr-dialog-info" }}
-                  >
-                    {tipcontent}
-                  </Dialog>
-                </React.Fragment>
+                  <Tooltip content={tipcontent} direction="down" className="wr-xirr-info">
+                    {i_btn}
+                  </Tooltip> : 
+                  <React.Fragment>
+                    {i_btn}
+                    <Dialog
+                      open={openModal}
+                      onClose={() => toggleModal(false)}
+                      classes={{ paper: "wr-dialog-info" }}
+                    >
+                      {tipcontent}
+                    </Dialog>
+                  </React.Fragment>
                 }
               </span>
             </div>
-
-            <div className="wr-okn-value">17%</div>
+            <div className="wr-okn-value">{overviewData.xirr}%</div>
           </div>
           <div className="wr-okn-box">
             <div className="wr-okn-title">Total Realised Gains</div>
-            <div className="wr-okn-value">₹ 38.23L</div>
+            <div className="wr-okn-value">₹ {overviewData.realised_gains}</div>
           </div>
           <div className="wr-okn-box">
-          <div className="wr-okn-title">Asset Allocation &nbsp;&nbsp;{assetAllocNums(37)}</div>
+            <div className="wr-okn-title">
+              Asset Allocation
+              &nbsp;&nbsp;
+              {assetAllocNums(overviewData.asset_allocation.debt)}
+            </div>
           <div className="wr-okn-value">
             <MuiThemeProvider theme={theme}>
-              <LinearProgress variant="determinate" value={37} />
+              <LinearProgress variant="determinate" value={Number(overviewData.asset_allocation.debt)} />
             </MuiThemeProvider>
             <div className="wr-metrics">
               <span>0</span>
@@ -175,12 +192,9 @@ export default function Overview(props) {
       </div>
       <div id="portfolio-insights-header">Portfolio Insights</div>
       <div id="wr-portfolio-insights-container">
-        {portfolioCard()}
-        {portfolioCard()}
-        {portfolioCard()}
-        {portfolioCard()}
-        {portfolioCard()}
-        {portfolioCard()}
+        {overviewData.insights.map(insight => (
+          portfolioCard(insight)
+        ))}
       </div>
     </React.Fragment>
   );
@@ -192,45 +206,55 @@ const assetAllocNums = (val) => (
   </span>
 );
 
-const portfolioCard = (title, subtitle, icon, desc) => {
+const insightMap = {
+  'portfolio_composition': {
+    icon: 'assets/fisdom/ic-investment-strategy.svg',
+    title: 'Portfolio Composition',
+  }, 
+  'investment_strategy': {
+    icon: 'assets/fisdom/ic-investment-strategy.svg',
+    title: 'Investment Strategy',
+  },
+
+}
+const portfolioCard = ({ type, tag, verbatim }) => {
   const [expanded, toggleExpand] = useState(false);
+  const insight = insightMap[type];
+
   return (
     <div className="wr-pi-card-container">
-    <div className="wr-pi-card">
-      <img className="wi-pi-card-img" src={require('assets/fisdom/ic-investment-strategy.svg')} alt=""/>
-      <div className="wr-pi-content">
-        <div className="wr-pi-content-title">
-          Investment Strategy
+      <div className="wr-pi-card">
+        <img className="wi-pi-card-img" src={require(insight.icon)} alt=""/>
+        <div className="wr-pi-content">
+          <div className="wr-pi-content-title">
+            {insight.title}
+          </div>
+          <span className="wr-pi-content-subtitle">
+            {tag}
+          </span>
+          <div className="wr-pi-content-desc">
+            {verbatim}
+          </div>
         </div>
-        <span className="wr-pi-content-subtitle">
-          Very Conservative
-        </span>
-        <div className="wr-pi-content-desc">
-          Your investment strategy is very conservative, generally recommended for people approaching their
-          retirement.
+        <div className="wr-pi-card-expand">
+          <IconButton classes={{ root: 'wr-icon-button' }} color="inherit" aria-label="Menu" onClick={() => toggleExpand(!expanded)}>
+            <img
+              src={require(`assets/fisdom/${expanded ? 'down_arrow_fisdom' : 'ic-right-chevron'}.svg`)}
+              alt="expand"
+              style={{ cursor: 'pointer' }} />
+          </IconButton>
         </div>
       </div>
-      <div className="wr-pi-card-expand">
-        <IconButton classes={{ root: 'wr-icon-button' }} color="inherit" aria-label="Menu" onClick={() => toggleExpand(!expanded)}>
-          <img
-            src={require(`assets/fisdom/${expanded ? 'down_arrow_fisdom' : 'ic-right-chevron'}.svg`)}
-            alt="expand"
-            style={{ cursor: 'pointer' }} />
-        </IconButton>
-      </div>
-    </div>
-    {
+      {
         expanded && (
           <div className="wr-pi-card-expanded">
             <div className="wi-pi-card-img"></div>
             <div className="wr-pi-content-desc">
-              Your investment strategy is very conservative, generally recommended for people approaching their
-              retirement.
+              {verbatim}
             </div>
           </div>
         )
-    }
-    
-  </div>
+      }
+    </div>
   );
 };

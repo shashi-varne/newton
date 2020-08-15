@@ -29,10 +29,15 @@ export default class Holdings extends Component {
     return (
       <div className="wr-holdings">
         {/* will be hidden for the mobile view visible for desktop view */}
-        <Filter />
+        <Filter onFilterChange={(filterObj) => { console.log(filterObj) }}/>
 
         {/* will be hidden for the desktop view and visible for mobile view */}
-        <FilterMobile open={this.state.open} onClose={this.handleClose} onClick={this.handleClose} />
+        <FilterMobile
+          open={this.state.open}
+          onClose={this.handleClose}
+          onClick={this.handleClose}
+          onFilterChange={(filterArr) => { console.log(filterArr) }}
+        />
 
         <HoldingCard />
 
