@@ -1,14 +1,14 @@
 #wr-login {
   display: flex;
   background-color: white;
-  
+
   #wr-login-img {
-    height: 100%
+    height: 100%;
   }
 
   #wr-login-right-panel {
     padding: 160px 120px;
-    
+
     h2 {
       font-size: 36px;
       font-weight: normal;
@@ -18,12 +18,11 @@
   .wr-login-input {
     margin-bottom: 60px;
 
-    
-    #wr-logo, #wr-title, #wr-input {
+    #wr-logo,
+    #wr-title,
+    #wr-input {
       display: none;
     }
-
-
 
     div.subtitle {
       max-width: 420px;
@@ -81,14 +80,14 @@
           padding-right: 0px !important;
         }
       }
-  
+
       .wr-select-input {
         padding: 5px 0px 5px 10px !important;
       }
-      .MuiFormControl-marginNormal{
+      .MuiFormControl-marginNormal {
         margin: 0px !important;
       }
-      
+
       .wr-mob-input {
         width: 72.5% !important;
         margin-left: 16px;
@@ -140,12 +139,12 @@
     padding: 43px 90px 0 90px;
     align-items: center;
 
-    .wr-fisdom{
+    .wr-fisdom {
       height: 42px;
       vertical-align: middle;
       .wr-vertical-divider {
         height: 33px !important;
-        border-right: 1px solid #fff
+        border-right: 1px solid #fff;
       }
 
       .wr-report {
@@ -158,8 +157,6 @@
         margin-left: 24px;
       }
     }
-  
-
 
     .wr-user-account {
       width: 100px;
@@ -177,6 +174,12 @@
   margin: 400px 3% 0;
 }
 
+#wr-footer {
+  position: relative;
+  width: 100%;
+  bottom: 0;
+}
+
 .wr-card-template {
   box-shadow: 0 1px 15px 0 rgba(215, 199, 250, 0.12);
   border: solid 0.5px rgba(151, 151, 151, 0.1);
@@ -190,16 +193,16 @@
     font-weight: 600;
     line-height: 1;
     color: #000000;
-    text-align: left;
+    text-align: center;
     padding: 24px;
     box-sizing: border-box;
-    border-bottom: 1px solid rgba(102, 102, 102, 0.05);    
+    border-bottom: 1px solid rgba(102, 102, 102, 0.05);
   }
 }
 
 #wr-overview-key-numbers {
   display: flex;
-  flex-flow: row wrap ;
+  flex-flow: row wrap;
   width: 100%;
   border-radius: 10px;
 
@@ -215,9 +218,9 @@
     min-height: 185px;
     height: auto;
     color: black;
-    border-bottom: 1px solid rgba(102, 102, 102, 0.05);    
-    border-right: 1px solid rgba(102, 102, 102, 0.05);    
-    
+    border-bottom: 1px solid rgba(102, 102, 102, 0.05);
+    border-right: 1px solid rgba(102, 102, 102, 0.05);
+
     .wr-okn-title {
       font-size: 17px;
       font-weight: normal;
@@ -264,24 +267,29 @@
   height: auto;
 
   #wr-gg-date-select {
-    background: rgba(80,45,168,0.1);
+    background: rgba(80, 45, 168, 0.1);
     width: auto;
     float: right;
-    // display: flex;
+    border-radius: 6px;
+    display: flex;
 
     .wr-gg-date-select-item {
       display: inline-block;
-      padding: 9px 12px;
+      padding: 12px 18px;
       font-size: 13px;
       line-height: 1.15;
+      text-align: center;
       color: rgba(0, 0, 0, 0.5);
       cursor: pointer;
 
       &.selected {
-        background: rgb(80,45,168);
+        background: rgb(80, 45, 168);
         color: white;
-        line-height: 1;
         font-weight: 600;
+        border-radius: 4px;
+        box-shadow: 0 1px 15px 0 rgba(69, 65, 78, 0.08);
+        margin: -3px;
+        line-height: 1.5;
       }
     }
   }
@@ -303,26 +311,20 @@
   text-transform: uppercase;
 }
 
+.wr-pi-card-container {
+  margin-bottom: 34px;
+  flex-basis: 48%;
+}
+
 .wr-pi-card {
-  height: 8.8%;
   border-radius: 10px;
   box-shadow: 0 1px 15px 0 rgba(215, 199, 250, 0.12);
   border: solid 0.5px rgba(151, 151, 151, 0.1);
   background-color: #ffffff;
-  flex-basis: 48%;
   padding: 40px;
   box-sizing: border-box;
   display: flex;
-  margin-bottom: 34px;
   align-items: center;
-  
-  img {
-    width: 40px;
-    height: 53px;
-    margin-right: 52px;
-    align-self: flex-start;
-    margin-top: 3px;
-  }
 
   div.wr-pi-content {
     flex-basis: 80%;
@@ -334,28 +336,15 @@
       color: #000000;
     }
 
-    .wr-tag{
-      display: flex;
-
-      .wr-pi-content-subtitle {
-        width: 110px;
-        background-color: rgba(80, 45, 168, 0.1);
-        font-size: 13px;
-        color: #502da8;
-        margin-top: 12px;
-        padding: 10px 14px;
-      }
-
-      .wr-inward-arrow{
-        margin-top: 12px;
-        height: 0px;
-        width: 0px;
-        background-color: rgba(80, 45, 168, 0.1);
-        border-top: 18px solid transparent;
-        border-bottom: 18px solid transparent;
-        border-right: 10px solid #ffffff;
-      }
-
+    .wr-pi-content-subtitle {
+      display: inline-block;
+      box-sizing: border-box;
+      background-color: rgba(80, 45, 168, 0.1);
+      font-size: 13px;
+      color: #502da8;
+      margin-top: 12px;
+      padding: 10px 30px 10px 14px;
+      clip-path: polygon(100% 0%, 93% 50%, 100% 100%, 0 100%, 0% 50%, 0 0);
     }
 
     .wr-pi-content-desc {
@@ -366,6 +355,23 @@
       margin-top: 16px;
     }
   }
+
+  div.pi-card-expand {
+    display: none;
+  }
+}
+
+.wi-pi-card-img {
+  width: 40px;
+  height: 53px;
+  flex-basis: 10%;
+  margin-right: 52px;
+  align-self: flex-start;
+  margin-top: 3px;
+}
+
+.wr-pi-card-expanded {
+  display: none;
 }
 
 .wr-outlined-btn {
@@ -374,17 +380,18 @@
   background-color: #ffffff !important;
   font-size: 15px !important;
   .MuiButton-label {
-    color: rgba(0,0,0,0.5) !important;
+    color: rgba(0, 0, 0, 0.5) !important;
   }
 }
 
 #wr-analysis-graph {
-  padding: 20px;
+  padding: 70px;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 465px;
+  height: auto;
   box-sizing: border-box;
+  flex-wrap: wrap;
 }
 
 .wr-allocation-graph-legend {
@@ -399,6 +406,7 @@
     border-radius: 10px;
     background: yellowgreen;
     color: #ffffff;
+    box-sizing: border-box;
 
     .wr-agl-item-label {
       font-size: 20px;
@@ -447,6 +455,28 @@
   }
 }
 
+#wr-analysis-top-holdings {
+  padding: 50px;
+
+  .wr-table-container {
+    max-height: 350px;
+    overflow-y: scroll;
+  }
+}
+
+.wr-table-container::-webkit-scrollbar {
+  width: 10px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 5px;
+}
+
+.wr-table-container::-webkit-scrollbar-thumb {
+  width: 6px;
+  height: 100px;
+  border-radius: 2.5px;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
 #wr-taxation {
   min-height: 546px;
 
@@ -462,7 +492,7 @@
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid rgba(102, 102, 102, 0.05);
-    
+
     .wr-taxation-summary-col {
       line-height: 1;
       color: #000000;
@@ -484,7 +514,7 @@
 
   #wr-taxation-detail {
     padding: 24px 80px;
-    
+
     .wr-taxation-detail-row {
       display: flex;
       flex-wrap: wrap;
@@ -508,7 +538,7 @@
 
 .wr-vertical-divider {
   height: 60px;
-  border-right: 1px solid rgba(0,0,0,0.05)
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .wr-xirr-tooltip {
@@ -542,11 +572,18 @@
   }
 }
 
-  
-@media only screen 
-  and (min-device-width: 330px) 
-  and (max-device-width: 812px) {
+.wr-holdings {
+  .wr-fab-btn {
+    background-color: var(--primary) !important;
+    color: #fff;
+    position: fixed;
+    right: 28px;
+    bottom: 28px;
+    z-index: 1000000;
+  }
+}
 
+@media only screen and (min-device-width: 330px) and (max-device-width: 812px) {
   #wr-login {
     display: none;
   }
@@ -591,7 +628,10 @@
     padding-top: 53px;
     height: 90%;
 
-    #wr-logo, #wr-title, #wr-input, #wr-input {
+    #wr-logo,
+    #wr-title,
+    #wr-input,
+    #wr-input {
       display: inherit;
     }
 
@@ -622,7 +662,7 @@
       display: flex;
       justify-content: space-between;
       width: 294px;
-      margin:0 0 7px 4px;
+      margin: 0 0 7px 4px;
     }
 
     div#wr-otp-opts {
@@ -638,7 +678,7 @@
       font-size: 12px;
       line-height: 15px;
       font-weight: 500;
-      margin:9px 0 6px 4px;
+      margin: 9px 0 6px 4px;
       color: #a9aebe;
 
       .MuiButton-label {
@@ -646,11 +686,9 @@
       }
     }
 
-    .MuiInputAdornment-positionStart  {
+    .MuiInputAdornment-positionStart {
       padding: 3px 0px 0 4px;
     }
-    
-
 
     .wr-form {
       width: 99%;
@@ -685,10 +723,10 @@
       padding: 5px 0px 5px 10px !important;
     }
 
-    .MuiFormControl-marginNormal{
+    .MuiFormControl-marginNormal {
       margin: 0px !important;
     }
-    
+
     .wr-mob-input {
       width: 77.5% !important;
       border-radius: 0 4px 4px 0;
@@ -701,14 +739,16 @@
     }
   }
 
+  .react-tel-input .form-control {
+    width: 100% !important;
+  }
+
   .wr-continue-btn {
     position: fixed;
     bottom: 50px;
     width: 90%;
   }
 
-
-  
   #wr-main {
     background-color: #f5f6f8 !important;
   }
@@ -738,8 +778,11 @@
   }
 
   .wr-card-template {
+    margin-bottom: 24px;
+
     .wr-card-template-header {
       min-height: 40px;
+      padding: 14px;
       opacity: 0.8;
       font-size: 12px;
       font-weight: normal;
@@ -748,7 +791,7 @@
 
   #wr-overview-key-numbers {
     display: flex;
-    flex-flow: row wrap ;
+    flex-flow: row wrap;
     width: 100%;
     border-radius: 10px;
 
@@ -761,7 +804,7 @@
       min-width: 50%;
       height: auto;
       min-height: 79px;
-      
+
       .wr-okn-title {
         font-size: 10px;
         font-weight: normal;
@@ -775,6 +818,22 @@
 
       #wr-okn-asset-alloc-title {
         font-size: 12px;
+      }
+    }
+  }
+
+  #wr-growth-graph {
+    padding: 24px;
+    width: 100%;
+    box-sizing: border-box;
+    height: auto;
+
+    #wr-gg-date-select {
+      width: 100%;
+
+      .wr-gg-date-select-item {
+        flex: 1;
+        padding: 12px 15px;
       }
     }
   }
@@ -807,17 +866,14 @@
     width: 100%;
   }
 
-  .wr-pi-card {
-    flex-basis: 100%;
-    padding: 16px 12px 16px 24px;
+  .wr-pi-card-container {
     margin-bottom: 10px;
+    flex-basis: 100%;
+  }
+
+  .wr-pi-card {
+    padding: 16px 12px 16px 24px;
     align-items: center;
-    
-    img {
-      width: 32px;
-      height: 32px;
-      margin-right: 24px;
-    }
 
     div.wr-pi-content {
       flex-basis: 80%;
@@ -828,12 +884,106 @@
 
       .wr-pi-content-subtitle {
         font-size: 12px;
+        margin-top: 7px;
+        padding: 5px 20px 5px 8px;
       }
 
       .wr-pi-content-desc {
         display: none;
       }
     }
+
+    div.pi-card-expand {
+      display: block;
+    }
+  }
+
+  .wi-pi-card-img {
+    width: 32px;
+    height: 32px;
+    margin-right: 24px;
+  }
+
+  .wr-pi-card-expanded {
+    display: block;
+    flex-basis: 100%;
+    padding: 16px 12px 16px 24px;
+    align-items: center;
+    box-sizing: border-box;
+    display: flex;
+    margin-top: -5px; // to make this div look like its part of the div above
+    background: #fbfaff;
+
+    .wr-pi-content-desc {
+      flex-basis: 80%;
+      font-size: 12px;
+      line-height: 1.3;
+      color: rgba(0, 0, 0, 0.8);
+    }
+  }
+
+  .wr-allocation-graph-legend {
+    margin: 30px 0 0 0;
+    flex-basis: 100%;
+    justify-content: space-between;
+
+    .wr-agl-item {
+      margin-right: 0;
+      padding: 15px;
+      width: 90px;
+
+      .wr-agl-item-label {
+        font-size: 13px;
+        margin-bottom: 10px;
+      }
+
+      .wr-agl-item-value {
+        line-height: 1;
+        font-size: 16px;
+      }
+    }
+  }
+
+  .wr-sector-graph-legend {
+    justify-content: unset;
+    align-content: space-between;
+    height: 180px;
+    flex-basis: 100%;
+    margin: 30px 0 0 0;
+
+    .wr-sgl-item {
+      height: auto;
+      width: auto;
+      margin-bottom: 13px;
+
+      .wr-sgl-item-chip {
+        width: 10px;
+        height: 10px;
+        margin-right: 6px;
+      }
+
+      .wr-sgl-item-label {
+        font-size: 10px;
+        vertical-align: middle;
+      }
+    }
+
+    .wr-sgl-item:hover {
+      opacity: 1;
+      font-weight: 600;
+    }
+  }
+
+  #wr-analysis-top-holdings {
+    padding: 20px;
+
+    .wr-table-container {
+      max-height: 250px;
+    }
+  }
+
+  .wr-table-container::-webkit-scrollbar {
+    display: none;
   }
 
   .wr-outlined-btn {
@@ -842,7 +992,7 @@
     background-color: #ffffff !important;
     font-size: 15px !important;
     .MuiButton-label {
-      color: rgba(0,0,0,0.5) !important;
+      color: rgba(0, 0, 0, 0.5) !important;
     }
   }
 
@@ -861,12 +1011,12 @@
       align-items: center;
       justify-content: space-between;
       border-bottom: 1px solid rgba(102, 102, 102, 0.05);
-      
+
       .wr-taxation-summary-col {
         flex-basis: unset;
         text-align: left;
         padding: 16px 13px;
- 
+
         .wr-tsc-value {
           font-size: 16px;
           margin-bottom: 6px;
@@ -882,7 +1032,7 @@
 
     #wr-taxation-detail {
       padding: 16px;
-      
+
       .wr-taxation-detail-row {
         margin-top: 24px;
 
@@ -911,16 +1061,5 @@
 
   .wr-user-account {
     width: 75px !important;
-  }
-}
-
-.wr-holdings {
-  .wr-fab-btn {
-    background-color: var(--primary) !important;
-    color: #fff;
-    position: fixed;
-    right: 28px;
-    bottom: 28px;
-    z-index: 1000000;
   }
 }
