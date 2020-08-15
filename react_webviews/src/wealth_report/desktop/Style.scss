@@ -18,6 +18,13 @@
   .wr-login-input {
     margin-bottom: 60px;
 
+    
+    #wr-logo, #wr-title, #wr-input {
+      display: none;
+    }
+
+
+
     div.subtitle {
       max-width: 420px;
       opacity: 0.5;
@@ -545,8 +552,16 @@
   }
 
   #wr-login-mobile {
-    display: block;
+    width: 100%;
     height: 100%;
+    background-color: #ffffff;
+    display: block;
+  }
+
+  #wr-mobile-view {
+    height: 100%;
+    width: 90%;
+    margin: auto;
     // background-color: var(--primary);
   }
 
@@ -576,6 +591,10 @@
     padding-top: 53px;
     height: 90%;
 
+    #wr-logo, #wr-title, #wr-input, #wr-input {
+      display: inherit;
+    }
+
     #wr-title {
       font-size: 20px;
       font-weight: 600;
@@ -596,7 +615,7 @@
       margin-bottom: 37px;
     }
 
-    #wr-otp {
+    #wr-otp-opts {
       font-size: 12px;
       line-height: 15px;
       font-weight: 500;
