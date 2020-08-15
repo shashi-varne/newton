@@ -40,17 +40,21 @@
   flex: 1;
 }
 
-.wr-amc-label{
+.wr-amc-label {
   display: flex;
   flex: 1;
   justify-content: flex-end;
   margin-bottom: -40px;
 }
 
-#wr-amc-img{
+#wr-amc-img {
   margin-top: 10px;
   margin-right: -8px;
   width: 155px;
+}
+
+#wr-account-img {
+  cursor: pointer;
 }
 
 .wr-hc-user-data {
@@ -1003,13 +1007,22 @@ span.wr-small-col-title {
     margin: 20px 0 20px 0;
   }
 
+  .wr-form {
+    width: 88%;
+    border: 1px solid #dadaed;
+    border-radius: 4px;
+    padding: 14px 16px !important;
+  }
+
   .wr-input-addmail {
-    border-radius: 2px;
-    height: 30px;
-    background-color: #fff;
-    border: 1px solid #acb4be;
-    font-size: 15px;
-    padding: 10px 10px;
+    width: 100% !important;
+    border: 0px !important;
+    padding: 0 !important;
+    .MuiInput-input {
+      font-size: 16px !important;
+      line-height: 20px !important;
+      font-weight: 500;
+    }
   }
 
   .wr-btn {

@@ -66,7 +66,7 @@ export default class MainPage extends Component {
     console.log(params);
     
     return (
-      <div style={{ width: '100%', height: '100%', background: 'white', overflowY: 'scroll' }}>
+      <div id="wr-main" style={{ width: '100%', height: '100%', background: 'white', overflow: 'scroll' }}>
         <div id="wr-header-hero">
           <div className="wr-hero-container">
 
