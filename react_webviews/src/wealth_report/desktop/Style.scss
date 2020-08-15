@@ -59,6 +59,45 @@
       color: var(--primary);
       margin: 28px 0 0 6px;
     }
+
+    .wr-input-form {
+      margin-top: 40px;
+      .wr-code-input {
+        width: 21% !important;
+        border-radius: 4px;
+        border: 1px solid #dadaed;
+        .MuiInput-input {
+          font-size: 22px !important;
+          font-weight: 500;
+        }
+        .MuiSelect-select {
+          padding-right: 0px !important;
+        }
+      }
+  
+      .wr-select-input {
+        padding: 5px 0px 5px 10px !important;
+      }
+      .MuiFormControl-marginNormal{
+        margin: 0px !important;
+      }
+      
+      .wr-mob-input {
+        width: 72.5% !important;
+        margin-left: 16px;
+        border-radius: 4px;
+        border: 1px solid #dadaed;
+        .MuiInput-input {
+          font-size: 22px !important;
+          font-weight: 500;
+          padding: 13px 16px 16px 16px;
+        }
+      }
+
+      .MuiMenu-paper {
+        max-height: 40vh !important;
+      }
+    }
   }
 
   .wr-login-btn {
@@ -580,9 +619,19 @@
       font-size: 12px;
       line-height: 15px;
       font-weight: 500;
-      margin:9px 0 0 4px;
+      margin:9px 0 6px 4px;
       color: #a9aebe;
+
+      .MuiButton-label {
+        padding: 30px 8px;
+      }
     }
+
+    .MuiInputAdornment-positionStart  {
+      padding: 3px 0px 0 4px;
+    }
+    
+
 
     .wr-form {
       width: 99%;
@@ -599,10 +648,38 @@
         padding: 14px 16px;
       }
     }
-  }
 
-  .react-tel-input .form-control {
-    width: 100% !important;
+    .wr-code-input {
+      width: 21% !important;
+      border-radius: 4px 0 0 4px;
+      border: 1px solid #dadaed;
+      border-right: 0 !important;
+      .MuiInput-input {
+        font-size: 16px !important;
+      }
+      .MuiSelect-select {
+        padding-right: 0px !important;
+      }
+    }
+
+    .wr-select-input {
+      padding: 5px 0px 5px 10px !important;
+    }
+
+    .MuiFormControl-marginNormal{
+      margin: 0px !important;
+    }
+    
+    .wr-mob-input {
+      width: 77.5% !important;
+      border-radius: 0 4px 4px 0;
+      border: 1px solid #dadaed;
+      .MuiInput-input {
+        font-size: 16px !important;
+        font-weight: 500;
+        padding: 16px 16px 12px 16px;
+      }
+    }
   }
 
   .wr-continue-btn {

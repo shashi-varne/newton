@@ -3,11 +3,11 @@ import WrButton from '../common/Button';
 import WrOtpInput from '../common/OtpInput';
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
-
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
+import MenuItem from "@material-ui/core/MenuItem";
+import CountryData from "country-telephone-data";
+import InputMask from "react-input-mask";
+import Select from "@material-ui/core/Select";
 import LoginMobile from './LoginMobile';
-import MuiPhoneNumber from 'material-ui-phone-number';
 
 export class Login extends Component {
   constructor(props) {
@@ -15,7 +15,9 @@ export class Login extends Component {
     this.state = {
       otp: '',
       otp_error: 'Invalid OTP. Please try again',
-      code: +91
+      phone: "91",
+      format: "99999-99999",
+      number: "",
     };
   }
 
@@ -51,76 +53,78 @@ export class Login extends Component {
     })
   }
 
-  renderEmailView() {
-    return (
-      <div className="wr-login-input">
-        <div className="subtitle">
-          Please enter your email address and password
-        </div>
-        <div>
-        <FormControl className="wr-form">
-          <TextField
-            id="outlined-basic"
-            variant="outlined"
-            classes={{ root: "wr-root" }}
-            InputProps={{
-              disableUnderline: true,
-              placeholder:'Enter email address'
-            }}
-          />
-        </FormControl>
-        <FormControl className="wr-form">
-          <TextField
-            id="outlined-basic"
-            variant="outlined"
-            classes={{ root: "wr-root" }}
-            InputProps={{
-              disableUnderline: true,
-              type:'password',
-              placeholder:'Enter password'
-            }}
-          />
-        </FormControl>
-        <div id="wr-forgot">Forgot password</div>
-        </div>
-      </div>
+  handleCodeChange = (event) => {
+    let value = event.target.value.split("/");
+    let code = value[0];
+    let format =
+      code.length <= 2
+        ? value[1].slice(code.length + 1) + "99"
+        : "9999 9999 9999";
 
-    )
-  }
+    this.setState({
+      phone: event.target.value,
+      format: format.split(".").join("9"),
+    });
+  };
+
+  onChange = (event) => {
+    this.setState({
+      number: event.target.value,
+    });
+  };
 
   renderNumberView() {
-    return (
-      <div className="wr-login-input">
-        <div className="subtitle">
-          Please enter your 10 digit mobile number to access your wealth report
-        </div>
-        <div>
-        <MuiPhoneNumber defaultCountry={'us'} onChange={this.handleOnChange} />
-        </div>
-      </div>
+    const result = CountryData.allCountries.filter(
+      (code, index) => code.format !== undefined
     );
-  }
-
-  renderNum = () => {
+    let { phone } = this.state;
     return (
       <div className="wr-login-input">
         <div className="subtitle">
           Please enter your 10 digit mobile number to access your wealth report
         </div>
-        <div>
-        <FormControl className=''>
-        <Select
-          labelId="demo-customized-select-label"
-          id="demo-customized-select"
-          value={this.state.code}
-          onChange={this.handleChange}
-          disableUnderline={true}
-        >
-          {/* {codes.map(code => (
-            <MenuItem>{`+${code}`}</MenuItem>
-          ))} */}
-        </Select>
-      </FormControl>
+        <div className="wr-input-form">
+          <FormControl className="wr-code-input">
+            <Select
+              value={phone}
+              renderValue={(phone) => `+${phone.split("/")[0]}`}
+              onChange={this.handleCodeChange}
+              disableUnderline={true}
+              inputProps={{
+                name: "phone",
+              }}
+              classes={{root: "wr-select-input"}}
+              disableFocusRipple={true}
+            >
+              {result.map((code, index) => (
+                <MenuItem key={index} value={code.dialCode + "/" + code.format}>
+                  {`${code.name} +${code.dialCode}`}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl className="wr-mob-input" style={{width:'70%'}}>
+            <InputMask
+              mask={this.state.format}
+              maskChar=""
+              value={this.state.number}
+              onChange={this.onChange}
+            >
+              {() => (
+                <TextField
+                  margin="normal"
+                  type="text"
+                  value={this.state.number}
+                  placeholder={this.state.format}
+                  InputProps={{
+                    disableUnderline:true,
+                    root:'wr-mob-input'
+                  }}
+                />
+              )}
+            </InputMask>
+          </FormControl>
         </div>
       </div>
     );
@@ -142,8 +146,8 @@ export class Login extends Component {
             <img src="" alt="fisdom"/> {/* fisdom logo */}
             <h2>Welcome to Fisdom!</h2>
             {/* { isPhone ? this.renderNumberView() : '' } */}
-            { isOtp ? this.renderOTPView() : '' }
-            {/* { isEmail ? this.renderNumberView() : '' } */}
+            {/* { isOtp ? this.renderOTPView() : '' } */}
+            {this.renderNumberView()}
           <WrButton fullWidth={true} classes={{ root: 'wr-login-btn' }}>Continue</WrButton>
         </div>
       </div>
