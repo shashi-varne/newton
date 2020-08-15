@@ -8,8 +8,8 @@ export default function PieChart (props) {
     <div style={{ width: `${width}px`, height: `${height}px` }}>
       <ResponsivePie
         data={props.data}
-        height={height}
-        width={width}
+        // height={height}
+        // width={width}
         innerRadius={0.6}
         sortByValue={true}
         enableRadialLabels={false}
