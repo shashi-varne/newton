@@ -16,16 +16,14 @@ export default function PanSelect(props) {
     try {
       const data = await fetchAllPANs();
       setPanData(data);
+      setPan(data[1])
     } catch (err) {
+      console.log(err);
       toast(err);
     }
   });
 
   const selectPan = (pan) => {
-    this.setState({
-      dropdown_open: false,
-      selectedPan: pan,
-    });
     toggleDropdown(false);
     setPan(pan)
   };
