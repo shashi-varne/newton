@@ -230,7 +230,7 @@ export default class ExternalPortfolio extends Component {
                 <div
                   className="pf-detail-value"
                   style={{ color: xirr < 0 ? '#ba3366' : 'var(--secondary)' }}>
-                  {xirr.toFixed(1)}%
+                  {xirr ? `${xirr.toFixed(1)}%` : 'N/A'}
                 </div>
               </div>
             </div>
@@ -254,9 +254,6 @@ export default class ExternalPortfolio extends Component {
                     ) : ''
                   }
                   {formatAmountInr(one_day_change)}
-                  <span style={{ color: one_day_change < 0 ? '#ba3366' : 'var(--secondary)'}}>
-                    &nbsp;({one_day_change_perc}%)
-                  </span>
                 </div>
               </div>
             </div>
