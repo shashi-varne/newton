@@ -40,9 +40,7 @@ const theme = createMuiTheme({
 export default class WrSelect extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      age: 10,
-    };
+    this.state = {};
   }
 
   render() {
@@ -51,9 +49,9 @@ export default class WrSelect extends Component {
       <MuiThemeProvider theme={theme}>
         <FormControl className={classes.formControl}>
           <Select
-            value={this.state.age}
-            onChange={() => this.setState({ age: 10 })}
-            name="age"
+            value={this.props.selectedValue}
+            onChange={() => this.props.onSelect()}
+            name={this.props.name}
             displayEmpty
             className={this.props.className}
             IconComponent={ExpandMoreIcon}
@@ -64,9 +62,7 @@ export default class WrSelect extends Component {
             <MenuItem value="" disabled>
               {this.props.placeholder}
             </MenuItem>
-            <MenuItem value={10}>FY 2019 - 20</MenuItem>
-            <MenuItem value={20}>FY 2018 - 19</MenuItem>
-            <MenuItem value={30}>FY 2017 - 18</MenuItem>
+            <MenuItem value={this.props.value}>{this.props.menu}</MenuItem>
           </Select>
         </FormControl>
       </MuiThemeProvider>

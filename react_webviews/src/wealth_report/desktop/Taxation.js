@@ -16,6 +16,7 @@ const Taxation = (props) => {
   const [taxFilters, setTaxFilters] = useState('');
   const [selectedFinYear, setFinYear] = useState('');
   const [selectedTaxSlab, setTaxSlab] = useState('');
+  
   useEffect(async () => {
     try {
       const taxFilters = await fetchTaxFilters({ pan: props.pan });
@@ -33,6 +34,10 @@ const Taxation = (props) => {
       toast(err);
     }
   });
+
+  const handleSelect = () => {
+
+  }
 
   const renderTaxDetailRows = () => {
     const { overall, debt, equity } = taxationData[`${tabSelected}_tax_data`];
@@ -129,8 +134,29 @@ const Taxation = (props) => {
   return (
     <div id="wr-taxation" className="wr-card-template">
       <div id="wr-taxation-filter">
-        <WrSelect disableUnderline={true} style={{ marginRight: "24px" }}></WrSelect>
-        <WrSelect disableUnderline={true}></WrSelect>
+        {taxFilters.tax_slabs.map((slab,index) => (
+          <WrSelect 
+            disableUnderline={true}
+            style={{marginRight: '24px'}}
+            value={index}
+            menu={slab}
+            onSelect={handleSelect}
+            selectedValue={selectedFinYear}
+            name="year"
+          />
+        ))}
+        
+        {taxFilters.financial_years.map((year,index) => (
+          <WrSelect 
+            disableUnderline={true}
+            style={{marginRight: '24px'}}
+            value={index}
+            menu={year}
+            onSelect={handleSelect}
+            selectedValue={selectedTaxSlab}
+            name="slab"
+          />
+        ))}
       </div>
       <div id="wr-taxation-summary">
         <div className="wr-taxation-summary-col">
