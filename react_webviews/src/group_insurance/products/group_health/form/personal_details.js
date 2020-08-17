@@ -44,7 +44,8 @@ class GroupHealthPlanPersonalDetails extends Component {
     let spouse_relation = lead.spouse_account_key ? lead.spouse_account_key.relation : '';
 
     let member_base = lead.member_base;
-    let member_key = this.props.match.params.member_key;
+    // let member_key = this.props.match.params.member_key;
+    let member_key = this.props.member_key;
 
     let pan_needed = false;
     if (lead.total_amount > 100000 && (member_key === 'self' || member_key === 'applicant')) {
@@ -133,7 +134,7 @@ class GroupHealthPlanPersonalDetails extends Component {
   }
 
   async componentDidUpdate(prevState) {
-    if (this.state.member_key && this.state.member_key !== this.props.match.params.member_key) {
+    if (this.state.member_key && this.state.member_key !== this.props.member_key) {
       this.onload();
     }
   }

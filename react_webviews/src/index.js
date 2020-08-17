@@ -10,8 +10,8 @@ import scrollIntoView from 'scroll-into-view-if-needed';
 $(document).ready(function () {
   if (isMobile.Android()) {
     window.addEventListener('resize', function () {
-      let body =  document.getElementsByTagName('body') ?document.getElementsByTagName('body')[0].offsetHeight : 0;
-      let head = document.getElementsByClassName('Header') ? document.getElementsByClassName('Header')[0].offsetHeight : 0;
+      let body =  document.getElementsByTagName('body') && document.getElementsByTagName('body')[0] ?document.getElementsByTagName('body')[0].offsetHeight : 0;
+      let head = document.getElementsByClassName('Header') && document.getElementsByClassName('Header')[0] ? document.getElementsByClassName('Header')[0].offsetHeight : 0;
       let foot = document.getElementsByClassName('Footer') && document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight: 0;
       let banner = document.getElementsByClassName('Banner') ?  document.getElementsByClassName('Banner')[0] : {};
       let bannerHeight = (banner) ? banner.offsetHeight : 0;
