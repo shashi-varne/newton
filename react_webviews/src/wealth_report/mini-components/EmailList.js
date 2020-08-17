@@ -13,16 +13,13 @@ import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import { fetchEmails } from "../common/ApiCalls";
 import toast from "../../common/ui/Toast";
 
-export default function EmailListMobile(props) {
-  const [accounts, setAccounts] = useState([
-    "Abishmathew21@yahoo.co.in",
-    "Abishmathew21@yahoo.co.in",
-  ]);
+export default function EmailList(props) {
+  const [accounts, setAccounts] = useState([]);
   const [addEmail, setAddEmail] = useState(false);
   const [emailListModal, toggleEmailListModal] = useState(false);
-  const [openTooltip, toggleTooltip] = useState(false);
-  const [addEmailModal, toggleAddEmail] = useState(false);
-  const [emailAddedModal, toggleEmailModal] = useState(false);
+  const [openTooltip, toggleToolTip] = useState(false);
+  const [addEmailModal, toggleEmailModal] = useState(false);
+  const [emailAddedModal, toggleEmailAddedModal] = useState(false);
   const [emailAdded, setEmailAdded] = useState(false);
   const [mailInput, setMailInput] = useState("");
 
@@ -32,26 +29,26 @@ export default function EmailListMobile(props) {
       setAccounts(data);
     } catch (err) {
       console.log(err);
-      toast(err)
+      toast(err);
     }
   })
 
   const handleClick = () => {
-    setAddEmail(false);
-    toggleTooltip(false);
-    toggleAddEmail(true);
+    setAddEmail(true);
+    toggleEmailModal(true);
+    toggleToolTip(false)
   };
 
   const handleClose = () => {
-    toggleAddEmail(false);
     toggleEmailModal(false);
-    toggleEmailListModal(false);
+    toggleEmailAddedModal(false);
+    toggleEmailListModal(false)
   };
 
   const addMail = () => {
     setEmailAdded(true);
-    toggleAddEmail(false);
-    toggleEmailModal(true)
+    toggleEmailModal(false);
+    toggleEmailAddedModal(true)
   };
 
   const handleInput = (e) => {
@@ -59,7 +56,7 @@ export default function EmailListMobile(props) {
   };
 
   const handleTooltipClose = () => {
-    toggleTooltip(false);
+    toggleToolTip(false)
   };
 
   // will render Listing of emails
@@ -68,7 +65,7 @@ export default function EmailListMobile(props) {
       <WrButton
         fullWidth={true}
         classes={{ root: "wr-add-email-btn" }}
-        onClick={handleClick()}
+        onClick={() => handleClick()}
       >
         <AddCircleOutlineIcon
           style={{ fontSize: "18px", marginRight: "10px" }}
@@ -80,8 +77,8 @@ export default function EmailListMobile(props) {
         {accounts.map((account, index) => (
           <div className="wr-mails" key={index}>
             <div>
-              <div className="wr-eli-email">Abishmathew21@yahoo.co.in</div>
-              <div className="wr-eli-sync">Synced on Jun 23, 09:45am</div>
+              <div className="wr-eli-email">account.email</div>
+              <div className="wr-eli-sync">{`Synced on ${account.latest_success_statement.dt_updated}`}</div>
             </div>
             <img src={require(`assets/fisdom/ic-email-sync.svg`)} alt="" />
           </div>
@@ -91,7 +88,7 @@ export default function EmailListMobile(props) {
   );
 
   // will display a form to add the email
-  const renderAddEmail = () => (
+  const renderAddEmail = (
     <div className="wr-add-mail">
       {/* visibility will be modified based on the condition in media queries */}
       <div className="wr-new-email">
@@ -113,16 +110,16 @@ export default function EmailListMobile(props) {
             // className: "wr-input-addmail",
           }}
           classes={{ root: "wr-input-addmail" }}
-          onChange={handleInput()}
+          onChange={(e) => handleInput(e)}
         />
       </FormControl>
 
       <div className="wr-btn">
-        <Button className="wr-cancel-btn" onClick={handleClose()}>
+        <Button className="wr-cancel-btn" onClick={() => handleClose()}>
           Cancel
         </Button>
 
-        <Button className="wr-add-btn" onClick={addMail()}>
+        <Button className="wr-add-btn" onClick={() => addMail()}>
           Add email
         </Button>
       </div>
@@ -134,24 +131,21 @@ export default function EmailListMobile(props) {
     <div className="wr-email-added">
       <img src={require(`assets/fisdom/ic-mob-success.svg`)} alt="" />
       <div className="wr-content">Email has been added successfully!</div>
-      <div className="wr-continue" onClick={handleClose()}>
+      <div className="wr-continue" onClick={() => handleClose()}>
         Continue
       </div>
     </div>
   );
 
-  // render() {
   const email = (
     <img
       src={require(`assets/fisdom/ic-emails.svg`)}
       alt=""
       id="wr-account-img"
-      onClick={() =>
-        setState({
-          openTooltip: !openTooltip,
-          emailListModal: !emailListModal,
-        })
-      }
+      onClick={() => {
+        toggleToolTip(!openTooltip);
+        toggleEmailListModal(!emailListModal);
+      }}
     />
   );
 
@@ -159,7 +153,7 @@ export default function EmailListMobile(props) {
     <React.Fragment>
       {!isMobileDevice() ? (
         // will show the tooltip for desktop view and dialog box for the mobile view
-        <ClickAwayListener onClickAway={handleTooltipClose()}>
+        <ClickAwayListener onClickAway={() => handleTooltipClose()}>
           <Tooltip
             content={renderEmailList()}
             isOpen={openTooltip}
@@ -176,7 +170,7 @@ export default function EmailListMobile(props) {
           {email}
           <Dialog
             open={emailListModal}
-            onClose={handleClose()}
+            onClose={() => handleClose()}
             classes={{ paper: "wr-dialog-paper" }}
           >
             {renderEmailList()}
@@ -188,10 +182,10 @@ export default function EmailListMobile(props) {
         //common for both mobile and webview
         <Dialog
           open={addEmailModal}
-          onClose={handleClose()}
+          onClose={() => handleClose()}
           classes={{ paper: "wr-dialog-paper" }}
         >
-          {renderAddEmail()}
+          {renderAddEmail}
         </Dialog>
       )}
 
@@ -199,7 +193,7 @@ export default function EmailListMobile(props) {
         //common for both mobile and webview
         <Dialog
           open={emailAddedModal}
-          onClose={handleClose()}
+          onClose={() => handleClose()}
           classes={{ paper: "wr-dialog-paper" }}
         >
           {renderEmailAdded()}
@@ -207,4 +201,4 @@ export default function EmailListMobile(props) {
       )}
     </React.Fragment>
   );
-}
+};

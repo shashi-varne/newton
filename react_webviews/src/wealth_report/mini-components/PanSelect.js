@@ -10,7 +10,7 @@ export default function PanSelect(props) {
   const [dropdown_open, toggleDropdown] = useState(false);
   const [selectedPan, setPan] = useState("");
   const [panModal, toggleModal] = useState(false);
-  const [panData, setPanData] = useState();
+  const [panData, setPanData] = useState([]);
 
   useEffect(async () => {
     try {
