@@ -40,9 +40,9 @@ const Taxation = (props) => {
     const name = event.target.name;
     const value = event.target.value;
 
-    if ((name = "year")) {
+    if ((name === "year")) {
       setFinYear(value);
-    } else if ((name = "slab")) {
+    } else if ((name === "slab")) {
       setTaxSlab(value);
     }
   };
