@@ -59,7 +59,7 @@ class FormCreateProfile extends Component {
             let that = this;
             setTimeout(function(){ 
               that.getDedupeCallback();
-            }, 2000);
+            }, 3000);
         }
 
     }
@@ -74,15 +74,17 @@ class FormCreateProfile extends Component {
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200 && !resultData.error) {
 
-                let searchParams = getConfig().searchParams + '&status=sorry';
+                
 
                 if (resultData.callback_status) {
                     if (resultData.dedupe_match) {
+                        let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
                         this.navigate('instant-kyc-status', { searchParams: searchParams });
                     } else {
                         this.createContact();
                     }
                 } else {
+                    let searchParams = getConfig().searchParams + '&status=sorry';
                     this.navigate('instant-kyc-status', { searchParams: searchParams });
                 }
             } else {
