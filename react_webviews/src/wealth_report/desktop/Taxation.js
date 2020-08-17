@@ -3,25 +3,26 @@ import WrSelect from "../common/Select";
 import WrButton from "../common/Button";
 import Tooltip from "common/ui/Tooltip";
 import { isMobileDevice } from "utils/functions";
-import toast from '../../common/ui/Toast';
+import toast from "../../common/ui/Toast";
 import Dialog from "common/ui/Dialog";
 import { fetchTaxation, fetchTaxFilters } from "../common/ApiCalls";
 import { inrFormatDecimal } from "../../utils/validators";
 
 const Taxation = (props) => {
-  const [tabSelected, selectTab] = useState('stcg');
+  const [tabSelected, selectTab] = useState("stcg");
   const [openModal, toggleModal] = useState(false);
 
   const [taxationData, setTaxationData] = useState({});
-  const [taxFilters, setTaxFilters] = useState('');
-  const [selectedFinYear, setFinYear] = useState('');
-  const [selectedTaxSlab, setTaxSlab] = useState('');
-  
+  const [taxFilters, setTaxFilters] = useState("");
+  const [selectedFinYear, setFinYear] = useState("");
+  const [selectedTaxSlab, setTaxSlab] = useState("");
+
   useEffect(async () => {
     try {
       const taxFilters = await fetchTaxFilters({ pan: props.pan });
       setTaxFilters(taxFilters);
-      const financial_year = selectedFinYear || taxFilters.financial_years.pop();
+      const financial_year =
+        selectedFinYear || taxFilters.financial_years.pop();
       const tax_slab = selectedTaxSlab || taxFilters.tax_slabs.pop();
       const data = await fetchTaxation({
         pan: props.pan,
@@ -35,80 +36,84 @@ const Taxation = (props) => {
     }
   });
 
-  const handleSelect = () => {
+  const handleSelect = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
 
-  }
+    if ((name = "year")) {
+      setFinYear(value);
+    } else if ((name = "slab")) {
+      setTaxSlab(value);
+    }
+  };
 
   const renderTaxDetailRows = () => {
     const { overall, debt, equity } = taxationData[`${tabSelected}_tax_data`];
     const colMapping = {
       overall: [
-        { propName: 'estimated_tax', label: 'Overall Tax'},
-        { propName: `realized_${tabSelected}`, label: 'Overall Realized'},
-        { propName: `taxable_${tabSelected}`, label: 'Overall Taxable'},
+        { propName: "estimated_tax", label: "Overall Tax" },
+        { propName: `realized_${tabSelected}`, label: "Overall Realized" },
+        { propName: `taxable_${tabSelected}`, label: "Overall Taxable" },
       ],
       debt: [
-        { propName: 'estimated_tax', label: 'Tax to be Paid' },
-        { propName: `realized_${tabSelected}`, label: `Realized ${tabSelected}` },
+        { propName: "estimated_tax", label: "Tax to be Paid" },
+        {
+          propName: `realized_${tabSelected}`,
+          label: `Realized ${tabSelected}`,
+        },
         { propName: `taxable_${tabSelected}`, label: `Taxable ${tabSelected}` },
       ],
       equity: [
-        { propName: 'estimated_tax', label: 'Tax to be Paid' },
-        { propName: `realized_${tabSelected}`, label: `Realized ${tabSelected}` },
+        { propName: "estimated_tax", label: "Tax to be Paid" },
+        {
+          propName: `realized_${tabSelected}`,
+          label: `Realized ${tabSelected}`,
+        },
         { propName: `taxable_${tabSelected}`, label: `Taxable ${tabSelected}` },
-      ]
+      ],
     };
 
     return (
       <div className="wr-taxation-detail-row">
         <div className="wr-tdr-title">
-          Overall <span style={{ textTransform: 'uppercase' }}>{tabSelected}</span>
+          Overall{" "}
+          <span style={{ textTransform: "uppercase" }}>{tabSelected}</span>
           <hr></hr>
         </div>
-        {
-          colMapping.overall.map(col => (
-            <div className="wr-small-col">
-              <span className="wr-small-col-val">
-                {inrFormatDecimal(overall[col.propName])}
-              </span>
-              <span className="wr-small-col-title">
-                {col.label}
-              </span>
-            </div>
-          ))
-        }
+        {colMapping.overall.map((col) => (
+          <div className="wr-small-col">
+            <span className="wr-small-col-val">
+              {inrFormatDecimal(overall[col.propName])}
+            </span>
+            <span className="wr-small-col-title">{col.label}</span>
+          </div>
+        ))}
         <div className="wr-tdr-title">
-          Debt Funds <span style={{ textTransform: 'uppercase' }}>{tabSelected}</span>
+          Debt Funds{" "}
+          <span style={{ textTransform: "uppercase" }}>{tabSelected}</span>
           <hr></hr>
         </div>
-        {
-          colMapping.debt.map(col => (
-            <div className="wr-small-col">
-              <span className="wr-small-col-val">
-                {inrFormatDecimal(debt[col.propName])}
-              </span>
-              <span className="wr-small-col-title">
-                {col.label}
-              </span>
-            </div>
-          ))
-        }
+        {colMapping.debt.map((col) => (
+          <div className="wr-small-col">
+            <span className="wr-small-col-val">
+              {inrFormatDecimal(debt[col.propName])}
+            </span>
+            <span className="wr-small-col-title">{col.label}</span>
+          </div>
+        ))}
         <div className="wr-tdr-title">
-          Equity Funds <span style={{ textTransform: 'uppercase' }}>{tabSelected}</span>
+          Equity Funds{" "}
+          <span style={{ textTransform: "uppercase" }}>{tabSelected}</span>
           <hr></hr>
         </div>
-        {
-          colMapping.equity.map(col => (
-            <div className="wr-small-col">
-              <span className="wr-small-col-val">
-                {inrFormatDecimal(equity[col.propName])}
-              </span>
-              <span className="wr-small-col-title">
-                {col.label}
-              </span>
-            </div>
-          ))
-        }
+        {colMapping.equity.map((col) => (
+          <div className="wr-small-col">
+            <span className="wr-small-col-val">
+              {inrFormatDecimal(equity[col.propName])}
+            </span>
+            <span className="wr-small-col-title">{col.label}</span>
+          </div>
+        ))}
       </div>
     );
   };
@@ -117,7 +122,8 @@ const Taxation = (props) => {
     <div className="wr-estd-tax" style={{ width: "300px" }}>
       <div className="head">Estimated Tax</div>
       <div className="content">
-        Disclaimer: Calculation is solely based on the statement provided by you.
+        Disclaimer: Calculation is solely based on the statement provided by
+        you.
       </div>
     </div>
   );
@@ -134,24 +140,22 @@ const Taxation = (props) => {
   return (
     <div id="wr-taxation" className="wr-card-template">
       <div id="wr-taxation-filter">
-        {taxFilters.tax_slabs.map((slab,index) => (
-          <WrSelect 
+        {taxFilters.tax_slabs.map((slab, index) => (
+          <WrSelect
             disableUnderline={true}
-            style={{marginRight: '24px'}}
-            value={index}
-            menu={slab}
+            style={{ marginRight: "24px" }}
+            value={slab}
             onSelect={handleSelect}
             selectedValue={selectedFinYear}
             name="year"
           />
         ))}
-        
-        {taxFilters.financial_years.map((year,index) => (
-          <WrSelect 
+
+        {taxFilters.financial_years.map((year, index) => (
+          <WrSelect
             disableUnderline={true}
-            style={{marginRight: '24px'}}
-            value={index}
-            menu={year}
+            style={{ marginRight: "24px" }}
+            value={year}
             onSelect={handleSelect}
             selectedValue={selectedTaxSlab}
             name="slab"
@@ -165,9 +169,13 @@ const Taxation = (props) => {
           </span>
           <span className="wr-tsc-label">
             Estimated Tax
-            <span style={{ marginLeft: "6px", verticalAlign:"middle" }}>
+            <span style={{ marginLeft: "6px", verticalAlign: "middle" }}>
               {!isMobileDevice() ? (
-                <Tooltip content={tipcontent} direction="down" className="wr-estd-tax-info">
+                <Tooltip
+                  content={tipcontent}
+                  direction="down"
+                  className="wr-estd-tax-info"
+                >
                   {i_btn}
                 </Tooltip>
               ) : (

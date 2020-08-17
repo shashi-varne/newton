@@ -50,7 +50,7 @@ export default class WrSelect extends Component {
         <FormControl className={classes.formControl}>
           <Select
             value={this.props.selectedValue}
-            onChange={() => this.props.onSelect()}
+            onChange={(event) => this.props.onSelect(event)}
             name={this.props.name}
             displayEmpty
             className={this.props.className}
@@ -62,7 +62,7 @@ export default class WrSelect extends Component {
             <MenuItem value="" disabled>
               {this.props.placeholder}
             </MenuItem>
-            <MenuItem value={this.props.value}>{this.props.menu}</MenuItem>
+            <MenuItem value={this.props.value}>{this.props.value}</MenuItem>
           </Select>
         </FormControl>
       </MuiThemeProvider>
