@@ -228,7 +228,8 @@ class GroupHealthPlanSelectPed extends Component {
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'pre-existing disease_list',
                 'from_edit': this.props.edit ? 'yes' : 'no',
-                'disease' : this.getTotalDisease()
+                'disease' : this.getTotalDisease(),
+                'member': this.state.member_key || ''
             }
         };
 

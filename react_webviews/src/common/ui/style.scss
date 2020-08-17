@@ -601,3 +601,38 @@ body[data-device="mobile"] {
     font-weight: 400;
   }
 }
+
+
+.helper-text {
+  color: rgba(0, 0, 0, 0.54);
+    margin: 0;
+    font-size: 0.75rem;
+    text-align: left;
+    margin-top: 8px;
+    min-height: 1em;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    line-height: 1em;
+    margin-bottom: 10px;
+    position: relative;
+    top: 5px;
+}
+
+.searchbox {
+  .label-custom {
+    color: #a2a2a2;
+    font-size: 0.9rem;
+    font-weight: normal;
+    margin: 0 0 0 0;
+  }
+
+  input {
+    font: inherit;
+    border: none;
+    border-bottom: 1px solid rgba(0,0,0,0.42) !important;
+    padding: 13px 0 4px 0px;
+    font-size: 14px;
+    border-radius: initial;
+    margin-top: 0px !important;
+    height: auto;
+  }
+}

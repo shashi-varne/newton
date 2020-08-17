@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
-import Grid from 'material-ui/Grid';
-import Autosuggest from "react-autosuggest";
-import match from "autosuggest-highlight/match";
-import parse from "autosuggest-highlight/parse";
-import { InputLabel } from 'material-ui/Input';
-import { FormControl } from 'material-ui/Form';
 
+import ReactSearchBox from 'react-search-box'
 import './style.scss';
-import '../theme/Style.scss';
+
 
 class AutosuggestInput extends Component {
   constructor(props) {
@@ -28,115 +23,40 @@ class AutosuggestInput extends Component {
     }
   }
 
-  escapeRegexCharacters(str) {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  }
+  handleChange = (value) => {
+    this.props.onChange(value);
 
-  getSuggestions(value) {
-    const escapedValue = this.escapeRegexCharacters((value || '').trim());
-
-    if (escapedValue === '') {
-      return [];
-    }
-
-    const regex = new RegExp('^' + escapedValue, 'i');
-
-    return this.props.parent.state.suggestions_list.filter(data => regex.test(data.name));
-  }
-
-  getSuggestionValue(suggestion) {
-    return suggestion.name;
-  }
-
-  renderSuggestion(suggestion, { query }) {
-    const matches = match(suggestion.name, query);
-    const parts = parse(suggestion.name, matches);
-    if(parts) {
-      return (
-        <span>
-          {parts.map((part, index) => {
-            const className = part.highlight ? 'react-autosuggest__suggestion-match' : null;
-  
-            return (
-              <span className={className} key={index}>
-                {part.text}
-              </span>
-            );
-          })}
-        </span>
-      );
-    }
-    
-  }
-
-  handleChange = (event, { newValue }) => {
-    newValue = newValue || '';
-    this.setState({ selectedValue: event.target.value });
-    if(typeof newValue === 'number') {
-      this.props.onChange(this.state.suggestions[newValue].value);
-    } else {
-      this.props.onChange(newValue);
-    }
-    
   };
-
-  onSuggestionsFetchRequested = ({ value }) => {
-    this.setState({
-      suggestions: this.getSuggestions(value)
-    });
-  };
-
-  onSuggestionsClearRequested = () => {
-    this.setState({
-      suggestions: []
-    });
-  };
-
-  renderItem(item, isHighlighted) {
-    return (
-      <div style={{ background: isHighlighted ? 'lightgray' : 'white' }}>
-        {item.name}
-      </div>
-    );
-  }
-
-  handleSuggestionClick =   (e, {suggestion, suggestionValue}) => {
-    this.setState({
-      value: suggestionValue
-    })
-  }
 
   render() {
-    const inputProps = {
-      value: this.state.value,
-      onChange: this.handleChange
-    };
-
     return (
-      <FormControl className="Dropdown" disabled={this.props.disabled}>
-        <InputLabel shrink={true} htmlFor={this.props.id}>{this.props.label} *</InputLabel>
-        <Autosuggest
-          suggestions={this.state.suggestions}
-          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-          getSuggestionValue={this.getSuggestionValue}
-          renderSuggestion={this.renderSuggestion}
-          onSuggestionSelected={this.handleSuggestionClick}
-          inputProps={inputProps}
+      <div className="searchbox">
+        <div className="label-custom">
+        {this.props.label}
+        </div>
+        <ReactSearchBox
+          placeholder={this.props.placeholder}
+          data={this.props.options}
+          // onSelect={record => console.log(record)}
+          // onFocus={() => {
+          //   console.log('This function is called when is focussed')
+          // }}
+          onChange={(value) => this.handleChange(value)}
+          // fuseConfigs={{
+          //   threshold: 0.05,
+          // }}
+          value={this.props.value}
         />
-        <span className='error-radiogrp'>{(this.props.error) ? (this.props.helperText ? this.props.helperText : 'Please select an option') : ''}</span>
-      </FormControl>
+        <span className={`${this.props.error ? 'error-radiogrp' : 'helper-text'}`}>{this.props.helperText}</span>
+      </div>
     );
   }
 }
 
 const Autosuggests = (props) => (
-  <Grid container spacing={16} alignItems="flex-end">
-    <Grid item xs={12}>
-      <AutosuggestInput
-        {...props} />
-    </Grid>
-  </Grid>
+  <AutosuggestInput
+    {...props} />
 );
 
 export default Autosuggests;
+

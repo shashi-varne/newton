@@ -37,6 +37,9 @@ class GroupHealthPlanSelectCity extends Component {
 
     checkCity = (city, proceed) => {
         if(!city) {
+            this.setState({
+                city_error: 'Please select city from provided list'
+            });
             return;
         }
         let data  = this.state.suggestions_list.filter(data => (data.name).toUpperCase() === (city).toUpperCase());
@@ -177,7 +180,8 @@ class GroupHealthPlanSelectCity extends Component {
                      <Autosuggests
                         parent={this}
                         width="40"
-                        employers={this.state.suggestions_list}
+                        placeholder="Search for city"
+                        options={this.state.suggestions_list}
                         label="City"
                         id="city"
                         name="city"
@@ -187,22 +191,7 @@ class GroupHealthPlanSelectCity extends Component {
                         onChange={this.handleChange('city')} />
                     }
                     </div>
-
-
-
                 </FormControl>
-                {/* <div className="InputField">
-                    <Input
-                        type="text"
-                        width="40"
-                        label="City"
-                        id="city"
-                        name="city"
-                        error={(this.state.city_error) ? true : false}
-                        helperText={this.state.city_error || 'Premium depends on city of residence'}
-                        value={this.state.city}
-                        onChange={this.handleChange()} />
-                </div> */}
                 <BottomInfo baseData={{ 'content': 'Get cashless treatments at 10000+ cities' }} />
             </Container>
         );
