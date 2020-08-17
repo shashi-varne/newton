@@ -58,7 +58,7 @@ export class Login extends Component {
         : "9999 9999 9999";
 
     this.setState({
-      phone: event.target.value,
+      phone: value[0],
       format: format.split(".").join("9"),
     });
   };
@@ -84,6 +84,7 @@ export class Login extends Component {
           phone={this.state.phone}
           format={this.state.format}
           number={this.state.number}
+          submit={this.handleSubmit}
         />
       </div>
     );
@@ -100,6 +101,12 @@ export class Login extends Component {
       </div>
     </div>
   );
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    let str = this.state.phone + this.state.number;
+    console.log(str.match(/\d/g).join(''))
+  }
 
   render() {
     // const { isPhone, isOtp, isEmail } = this.props.location.params || {};
@@ -120,10 +127,12 @@ export class Login extends Component {
             {/* { isPhone ? this.renderNumberView() : '' } */}
             {/* { isOtp ? this.renderOTPView() : '' } */}
             {/* {this.renderOTPView()} */}
-            {this.renderNumberView()}
-            <WrButton fullWidth={true} classes={{ root: "wr-login-btn" }}>
-              Continue
-            </WrButton>
+            {/* <form onSubmit={this.handleSubmit}> */}
+              {this.renderNumberView()}
+              <WrButton fullWidth={true} classes={{ root: "wr-login-btn" }} onClick={this.handleSubmit}>
+                Continue
+              </WrButton>
+            {/* </form> */}
           </div>
         </div>
 
