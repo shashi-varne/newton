@@ -21,7 +21,7 @@ const Taxation = (props) => {
   const [selectedFinYear, setFinYear] = useState("");
   const [selectedTaxSlab, setTaxSlab] = useState("");
 
-  useEffect(() =>{
+  useEffect(() => {
     (async () => {
       try {
         const taxFilters = await fetchTaxFilters({ pan : props.pan });
@@ -31,17 +31,26 @@ const Taxation = (props) => {
         const tax_slab = selectedTaxSlab || taxFilters.tax_slabs[0].value;
         setFinYear(financial_year)
         setTaxSlab(tax_slab)
+      } catch (err) {
+        console.log(err);
+        toast(err);
+      }})();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
         const data = await fetchTaxation({
           pan: props.pan,
-          financial_year,
-          tax_slab,
+          financial_year: selectedFinYear,
+          tax_slab: selectedTaxSlab,
         });
         setTaxationData(data);
       } catch (err) {
         console.log(err);
         toast(err);
       }})();
-  }, [selectedFinYear, selectedTaxSlab]);
+  }, [selectedFinYear, selectedTaxSlab])
 
   const handleSelect = (event) => {
     const name = event.target.name;
