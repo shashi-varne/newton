@@ -30,6 +30,10 @@ const WrButton = withStyles({
       opacity: 0.9,
     },
   },
+  disabled: {
+    backgroundColor: 'var(--primary) !important',
+    opacity: 0.6,
+  },
   label: {
     color: 'white',
     fontSize: '17px',

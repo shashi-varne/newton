@@ -14,8 +14,58 @@ storageService().setObject('wr-boot', boot);
 resetLSKeys(['wr-emails', 'wr-pans', 'wr-holdings']);
 
 export const login = async (params) => {
+  const { mobileNo, countryCode, ...rest } = params;
   try {
-    const res = await Api.post('api/user/login', params);
+    const res = await Api.get('api/iam/userauthstatus', {
+      auth_type: "mobile",
+      auth_value: `${params.countryCode}|${params.mobileNo}`,
+      ...rest,
+    });
+
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result;
+    } else {
+      throw (result.error || result.message || genericErrMsg);
+    }
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const verifyOtp = async (params) => {
+  const { mobileNo, countryCode, otp, ...rest } = params;
+  try {
+    const res = await Api.get('api/mobile/login', {
+      mobile_number: `${params.countryCode}|${params.mobileNo}`,
+      otp,
+      ...rest,
+    });
+
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result;
+    } else {
+      throw (result.error || result.message || genericErrMsg);
+    }
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const resendOtp = async () => {
+  try {
+    const res = await Api.get('api/resendotp', {});
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
@@ -148,7 +198,7 @@ export const fetchOverview = async (params = {}) => {
       const { result, status_code: status } = res.pfwresponse;
 
       if (status === 200) {
-        return result || {};
+        return result.response || {};
       } else {
         throw (result.error || result.message || genericErrMsg);
       }

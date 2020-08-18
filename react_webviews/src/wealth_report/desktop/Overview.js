@@ -68,16 +68,19 @@ export default function Overview(props) {
   const [dateOb, setGrowthObj] = useState(dateRanges[1].dateObj);
   const [openModal, toggleModal] = useState(false);
 
-  const [overviewData, setOverviewData] = useState();
-  useEffect(async () => {
-    try {
-      const data = await fetchOverview({ pan: props.pan });
-      setOverviewData(data);
-    } catch (err) {
-      console.log(err);
-      toast(err);
-    }
-  });
+  const [overviewData, setOverviewData] = useState({});
+  useEffect(() => {
+    (async() => {
+      try {
+        const data = await fetchOverview({ pan: props.pan });
+        console.log(data);
+        setOverviewData({});
+      } catch (err) {
+        console.log(err);
+        toast(err);
+      }
+    })();
+  }, []);
 
   const selectRange = (rangeObj) => {
     setRange(rangeObj);
@@ -149,11 +152,14 @@ export default function Overview(props) {
             <div className="wr-okn-title">
               Asset Allocation
               &nbsp;&nbsp;
-              {assetAllocNums(overviewData.asset_allocation.debt)}
+              {assetAllocNums((overviewData.asset_allocation || {}).debt)}
             </div>
           <div className="wr-okn-value">
             <MuiThemeProvider theme={theme}>
-              <LinearProgress variant="determinate" value={Number(overviewData.asset_allocation.debt)} />
+              <LinearProgress
+                variant="determinate"
+                value={Number((overviewData.asset_allocation || {}).debt)}
+              />
             </MuiThemeProvider>
             <div className="wr-metrics">
               <span>0</span>
@@ -192,8 +198,8 @@ export default function Overview(props) {
       </div>
       <div id="portfolio-insights-header">Portfolio Insights</div>
       <div id="wr-portfolio-insights-container">
-        {overviewData.insights.map(insight => (
-          portfolioCard(insight)
+        {(overviewData.insights || []).map(insight => (
+          <portfolioCard insight={insight}/>
         ))}
       </div>
     </React.Fragment>
@@ -217,7 +223,8 @@ const insightMap = {
   },
 
 }
-const portfolioCard = ({ type, tag, verbatim }) => {
+const portfolioCard = (props) => {
+  const { type, tag, verbatim } = props.insight;
   const [expanded, toggleExpand] = useState(false);
   const insight = insightMap[type];
 

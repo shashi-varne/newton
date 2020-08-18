@@ -11,7 +11,7 @@ export default class WrOtpInput extends Component {
     return (
       <Fragment>
         <OtpInput
-          numInputs={5}
+          numInputs={4}
           containerStyle="wr-otp-container"
           inputStyle="wr-otp-input"
           onChange={this.props.onChange}
@@ -19,7 +19,7 @@ export default class WrOtpInput extends Component {
           value={this.props.value}
         />
         {this.props.errorText &&
-          <div style={{ color: 'red', margin: '14px 0 0 0', fontSize: '16px' }}>
+          <div style={{ color: 'red', margin: '14px 0 0 0', fontSize: '14px' }}>
           {this.props.errorText}
           </div>
         }

@@ -15,7 +15,7 @@ import NotFound from '../common/components/NotFound';
 import { create } from 'jss';
 import JssProvider from 'react-jss/lib/JssProvider';
 import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
-import { Login } from './desktop/Login';
+import Login from './desktop/Login';
 import MainPage from './desktop/MainPage';
 
 const generateClassName = createGenerateClassName({
