@@ -31,7 +31,7 @@ export default function EmailList(props) {
       console.log(err);
       toast(err);
     }
-  })
+  },[])
 
   const handleClick = () => {
     setAddEmail(true);

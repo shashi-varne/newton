@@ -12,19 +12,25 @@ const Taxation = (props) => {
   const [tabSelected, selectTab] = useState("stcg");
   const [openModal, toggleModal] = useState(false);
 
-  const [taxationData, setTaxationData] = useState({});
+  const [taxationData, setTaxationData] = useState({
+    combined_tax_data: {},
+    stcg_tax_data: {},
+    ltcg_tax_data: {}
+  });
   const [taxFilters, setTaxFilters] = useState({tax_slabs:[], financial_years:[]});
   const [selectedFinYear, setFinYear] = useState("");
   const [selectedTaxSlab, setTaxSlab] = useState("");
 
-  useEffect(() => {
+  useEffect(() =>{
     (async () => {
       try {
-        const taxFilters = await fetchTaxFilters({ pan: props.pan });
+        const taxFilters = await fetchTaxFilters({ pan : props.pan });
         setTaxFilters(taxFilters);
         const financial_year =
-          selectedFinYear || taxFilters.financial_years.pop();
-        const tax_slab = selectedTaxSlab || taxFilters.tax_slabs.pop();
+          selectedFinYear || taxFilters.financial_years[0].value;
+        const tax_slab = selectedTaxSlab || taxFilters.tax_slabs[0].value;
+        setFinYear(financial_year)
+        setTaxSlab(tax_slab)
         const data = await fetchTaxation({
           pan: props.pan,
           financial_year,
@@ -34,9 +40,8 @@ const Taxation = (props) => {
       } catch (err) {
         console.log(err);
         toast(err);
-      }
-    })();
-  }, []);
+      }})();
+  }, [selectedFinYear, selectedTaxSlab]);
 
   const handleSelect = (event) => {
     const name = event.target.name;
@@ -50,7 +55,7 @@ const Taxation = (props) => {
   };
 
   const renderTaxDetailRows = () => {
-    const { overall, debt, equity } = taxationData[`${tabSelected}_tax_data`];
+    let { overall = [], debt = [], equity = [] } = taxationData[`${tabSelected}_tax_data`];
     const colMapping = {
       overall: [
         { propName: "estimated_tax", label: "Overall Tax" },
@@ -142,32 +147,28 @@ const Taxation = (props) => {
   return (
     <div id="wr-taxation" className="wr-card-template">
       <div id="wr-taxation-filter">
-        {taxFilters.tax_slabs.map((slab, index) => (
-          <WrSelect
-            disableUnderline={true}
-            style={{ marginRight: "24px" }}
-            value={slab}
-            onSelect={handleSelect}
-            selectedValue={selectedFinYear}
-            name="year"
-          />
-        ))}
+        <WrSelect
+          disableUnderline={true}
+          style={{ marginRight: "24px" }}
+          menu={taxFilters.financial_years}
+          onSelect={handleSelect}
+          selectedValue={selectedFinYear}
+          name="year"
+        />
 
-        {taxFilters.financial_years.map((year, index) => (
-          <WrSelect
-            disableUnderline={true}
-            style={{ marginRight: "24px" }}
-            value={year}
-            onSelect={handleSelect}
-            selectedValue={selectedTaxSlab}
-            name="slab"
-          />
-        ))}
+        <WrSelect
+          disableUnderline={true}
+          style={{ marginRight: "24px" }}
+          menu={taxFilters.tax_slabs}
+          onSelect={handleSelect}
+          selectedValue={selectedTaxSlab}
+          name="slab"
+        />
       </div>
       <div id="wr-taxation-summary">
         <div className="wr-taxation-summary-col">
           <span className="wr-tsc-value">
-            {inrFormatDecimal(taxationData.combined_tax_data.estimated_tax)}
+            {inrFormatDecimal(taxationData.combined_tax_data.estimated_tax || "")}
           </span>
           <span className="wr-tsc-label">
             Estimated Tax
@@ -198,14 +199,14 @@ const Taxation = (props) => {
         <div className="wr-vertical-divider"></div>
         <div className="wr-taxation-summary-col">
           <span className="wr-tsc-value">
-            {inrFormatDecimal(taxationData.combined_tax_data.realized_gains)}
+            {inrFormatDecimal(taxationData.combined_tax_data.realized_gains || "")}
           </span>
           <span className="wr-tsc-label">Total realized gains</span>
         </div>
         <div className="wr-vertical-divider"></div>
         <div className="wr-taxation-summary-col">
           <span className="wr-tsc-value">
-            {inrFormatDecimal(taxationData.combined_tax_data.taxable_gains)}
+            {inrFormatDecimal(taxationData.combined_tax_data.taxable_gains || "")}
           </span>
           <span className="wr-tsc-label">Taxable gains</span>
         </div>
@@ -224,7 +225,7 @@ const Taxation = (props) => {
             {tab}
           </WrButton>
         ))}
-        {this.renderTaxDetailRows()}
+        {renderTaxDetailRows()}
       </div>
     </div>
   );

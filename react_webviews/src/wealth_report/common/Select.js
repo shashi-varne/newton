@@ -43,20 +43,22 @@ const WrSelect = (props) => {
     <MuiThemeProvider theme={theme}>
       <FormControl className={classes.formControl}>
         <Select
-          value={this.props.selectedValue}
-          onChange={(event) => this.props.onSelect(event)}
-          name={this.props.name}
+          value={props.selectedValue}
+          onChange={(event) => props.onSelect(event)}
+          name={props.name}
           displayEmpty
-          className={this.props.className}
+          className={props.className}
           IconComponent={ExpandMoreIcon}
-          style={this.props.style}
-          classes={this.props.classes}
-          disableUnderline={this.props.disableUnderline}
+          style={props.style}
+          classes={props.classes}
+          disableUnderline={props.disableUnderline}
         >
           <MenuItem value="" disabled>
-            {this.props.placeholder}
+            {props.placeholder}
           </MenuItem>
-          <MenuItem value={this.props.value}>{this.props.value}</MenuItem>
+          {props.menu.map((filter, index) => (
+            <MenuItem key={index} value={filter.value}>{filter.label}</MenuItem>
+          ))}
         </Select>
       </FormControl>
     </MuiThemeProvider>
