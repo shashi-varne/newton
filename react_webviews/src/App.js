@@ -37,7 +37,7 @@ class App extends Component {
           <Route path="/risk" component={RiskProfiler} />
           <Route path="/hni/" component={HNI} />
           <Route path="/isip" component={IsipBIller} />
-          <Route path="/wealth-report" component={WealthReport} />
+          <Route path="/w-report" component={WealthReport} />
           <Route path="/help" component={HelpSupport} />
           <Route path="/webview/:main_module/:sub_module" component={CommonLanding} />
           <Route path="/webview/:main_module" component={CommonLanding} />

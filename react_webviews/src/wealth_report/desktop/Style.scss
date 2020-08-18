@@ -105,12 +105,15 @@
       }
     }
   }
+}
 
-  .wr-login-btn {
-    max-width: 420px;
-    font-size: 20px;
-    letter-spacing: 0.4px;
-    font-weight: 600;
+.wr-login-btn {
+  max-width: 420px;
+
+  .MuiButton-label {
+    font-size: 20px !important;
+    letter-spacing: 0.4px !important;
+    text-transform: none !important;
   }
 }
 
@@ -584,7 +587,7 @@
   }
 }
 
-@media only screen and (min-device-width: 330px) and (max-device-width: 812px) {
+@media only screen and (min-device-width: 310px) and (max-device-width: 812px) {
   #wr-login {
     display: none;
   }
@@ -594,6 +597,16 @@
     height: 100%;
     background-color: #ffffff;
     display: block;
+  }
+
+  .wr-splash-btn {
+    background-color: white;
+
+    .MuiButton-label {
+      color: var(--primary);
+      text-transform: none;
+      font-weight: 600;
+    }
   }
 
   #wr-mobile-view {
@@ -656,22 +669,18 @@
       margin-bottom: 37px;
     }
 
-    #wr-otp-opts {
-      font-size: 12px;
-      line-height: 15px;
-      font-weight: 500;
-      display: flex;
-      justify-content: space-between;
-      width: 294px;
-      margin: 0 0 7px 4px;
-    }
-
     div#wr-otp-opts {
-      margin-top: 6px;
+      margin-top: 40px;
+
       span {
-        font-size: 12px;
+        cursor: pointer;
+        font-size: 13px;
         font-weight: 600;
         color: var(--primary);
+      }
+
+      span:nth-of-type(1) {
+        margin-right: 50px;
       }
     }
 
