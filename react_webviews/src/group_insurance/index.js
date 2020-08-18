@@ -359,8 +359,8 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/:provider/personal-details/son2`}
             render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'son2'} />} />
 
-          <Route path={`${url}/group-health/:provider/personal-details/wife`}
-            render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'wife'} />} />
+          <Route path={`${url}/group-health/:provider/personal-details/mother`}
+            render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'mother'} />} />
 
           <Route path={`${url}/group-health/:provider/personal-details/daughter`}
             render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'daughter'} />} />
