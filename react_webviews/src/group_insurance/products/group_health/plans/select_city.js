@@ -37,9 +37,13 @@ class GroupHealthPlanSelectCity extends Component {
 
     checkCity = (city, proceed) => {
         if(!city) {
-            this.setState({
-                city_error: 'Please select city from provided list'
-            });
+
+            if(proceed) {
+                this.setState({
+                    city_error: 'Please select city from provided list'
+                });
+            }
+            
             return;
         }
         let data  = this.state.suggestions_list.filter(data => (data.name).toUpperCase() === (city).toUpperCase());
