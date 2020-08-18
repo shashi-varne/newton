@@ -17,7 +17,6 @@ export default function PanSelect(props) {
         const data = await fetchAllPANs({});
         setPanData(data);
         setPan(data[0])
-        console.log(data)
       } catch (err) {
         console.log(err);
         toast(err);
