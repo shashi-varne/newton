@@ -5,7 +5,7 @@ import Button from "material-ui/Button";
 import { getBase64 } from "utils/functions";
 import $ from "jquery";
 import ImageCrop from "common/ui/ImageCrop";
-import { getImageFile } from "../common/commonFunctions";
+// import { getImageFile } from "../common/commonFunctions";
 import Dialog from "common/ui/Dialog";
 import Tooltip from "common/ui/Tooltip";
 import { isMobileDevice } from "utils/functions";
@@ -22,37 +22,37 @@ class UserAccountMobile extends Component {
     };
   }
 
-  getImage = (url) => {
-    this.setState({
-      croppedImageUrl: url,
-      cropped: true,
-    });
-  };
+  // getImage = (url) => {
+  //   this.setState({
+  //     croppedImageUrl: url,
+  //     cropped: true,
+  //   });
+  // };
 
-  openCameraWeb() {
-    this.setState({
-      fileUploaded: false,
-      cropped: false,
-    });
-    $("input").trigger("click");
-  }
+  // openCameraWeb() {
+  //   this.setState({
+  //     fileUploaded: false,
+  //     cropped: false,
+  //   });
+  //   $("input").trigger("click");
+  // }
 
-  startUpload() {
-    this.openCameraWeb();
-  }
+  // startUpload() {
+  //   this.openCameraWeb();
+  // }
 
-  getPhoto = (e) => {
-    const image = getImageFile(e);
-    let that = this;
+  // getPhoto = (e) => {
+  //   const image = getImageFile(e);
+  //   let that = this;
 
-    //will get the image url
-    getBase64(image, function (img) {
-      that.setState({
-        imageBaseFileShow: img,
-        fileUploaded: true,
-      });
-    });
-  };
+  //   //will get the image url
+  //   getBase64(image, function (img) {
+  //     that.setState({
+  //       imageBaseFileShow: img,
+  //       fileUploaded: true,
+  //     });
+  //   });
+  // };
 
   handleClose = () => {
     this.setState({
@@ -71,7 +71,7 @@ class UserAccountMobile extends Component {
     <React.Fragment>
       {/* visibility will be modified based on the condition in media queries */}
       <div className="wr-welcome">
-        <div className="wr-profile-img" onClick={() => this.startUpload()}>
+        <div className="wr-profile-img" onClick={() => {}}>
           <input
             type="file"
             style={{ display: "none" }}

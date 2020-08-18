@@ -38,13 +38,13 @@ export default class MainPage extends Component {
   renderTab = (tab) => {
 
     if (tab === 'overview') {
-      return <Overview />;
+      return <Overview pan={'FRVPS7662K'}/>;
     } else if (tab === 'analysis') {
-      return <Analysis />
+      return <Analysis pan={'FRVPS7662K'}/>
     } else if (tab === 'holdings') {
-      return <Holdings />
+      return <Holdings pan={'FRVPS7662K'}/>
     } else if (tab === 'taxation') {
-      return <Taxation />
+      return <Taxation pan={'FRVPS7662K'}/>
     }
   }
 

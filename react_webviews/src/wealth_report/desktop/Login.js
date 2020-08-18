@@ -1,26 +1,39 @@
-import React, { Component, Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import WrButton from "../common/Button";
 import WrOtpInput from "../common/OtpInput";
 import WrPhoneInput from "../common/PhoneInput";
+import { getConfig } from "utils/functions";
+import { resendOtp, login, verifyOtp } from "../common/ApiCalls";
+import toast from '../../common/ui/Toast';
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { navigate } from "../common/commonFunctions";
+const isMobileView = getConfig().isMobileDevice;
 
-export class Login extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      otp: "",
-      otp_error: "Invalid OTP. Please try again",
-      phone: "91",
-      format: "99999-99999",
-      number: "",
-    };
-  }
+const Login = (props) => {
+  const [otp, setOtp] = useState('');
+  const [otpErr, setOtpErr] = useState('');
+  const [countryCode, setCountryCode] = useState('91');
+  const [format, setFormat] = useState('99999-99999');
+  const [number, setNumber] = useState('');
+  const [view, setView] = useState(isMobileView ? 'splash' : 'phone');
+  const [opLoading, setOpLoading] = useState(false);
 
-  handleOtp = (val) => {
+  const handleOtp = (val) => {
     console.log(val);
-    this.setState({ otp: val });
+    setOtpErr('');
+    setOtp(val);
   };
 
-  renderOTPView() {
+  const resend = async() => {
+    try {
+      await resendOtp();
+    } catch(err) {
+      console.log(err);
+      toast(err);
+    }
+  };
+
+  const renderOTPView = () => {
     return (
       <div className="wr-login-input">
         <img src={require("assets/fisdom/ic-mobile-verification.svg")} id="wr-logo" alt="" />
@@ -30,26 +43,20 @@ export class Login extends Component {
         </div>
         <div>
           <WrOtpInput
-            onChange={this.handleOtp}
-            value={this.state.otp}
-            errorText={this.state.otp_error}
+            onChange={handleOtp}
+            value={otp}
+            errorText={otpErr}
           />
         </div>
         <div id="wr-otp-opts">
-          <span>Resend OTP</span>
-          <span>Enter number again?</span>
+          <span onClick={resend}>Resend OTP</span>
+          <span onClick={() => setView('phone')}>Enter number again?</span>
         </div>
       </div>
     );
   }
 
-  handleChange = (event) => {
-    this.setState({
-      code: event.target.value,
-    });
-  };
-
-  handleCodeChange = (event) => {
+  const handleCodeChange = (event) => {
     let value = event.target.value.split("/");
     let code = value[0];
     let format =
@@ -57,19 +64,43 @@ export class Login extends Component {
         ? value[1].slice(code.length + 1) + "99"
         : "9999 9999 9999";
 
-    this.setState({
-      phone: event.target.value,
-      format: format.split(".").join("9"),
-    });
+    setCountryCode(event.target.value);
+    setFormat(format.split(".").join("9"));
   };
 
-  onChange = (event) => {
-    this.setState({
-      number: event.target.value,
-    });
-  };
+  const triggerOtp = async() => {
+    try {
+      setOpLoading(true);
+      await login({ mobileNo: number, countryCode });
+      setView('otp');
+    } catch(err) {
+      console.log(err);
+      toast(err);
+    }
+    setOpLoading(false);
+  }
 
-  renderNumberView() {
+  const verify = async() => {
+    try {
+      setOpLoading(true);
+      await verifyOtp({ mobileNo: number, countryCode, otp });
+      setView('loading');
+      setTimeout(()=>{
+        navigate(props, 'main/overview');
+      }, 3000);
+      // navigate to homepage
+    } catch(err) {
+      if (err.includes('wrong OTP')) {
+        setOtpErr('Incorrect OTP');
+      } else {
+        console.log(err);
+        toast(err);
+      }
+    }
+    setOpLoading(false);
+  }
+
+  const renderNumberView = () => {
     return (
       <div className="wr-login-input">
         <img src={require("assets/fisdom/ic-fisdom-logo.jpg")} id="wr-logo" alt="" />
@@ -79,35 +110,83 @@ export class Login extends Component {
         </div>
         <div id="wr-input">Enter phone number</div>
         <WrPhoneInput 
-          onCodeChange={this.handleCodeChange}
-          onInputChange={this.onChange}
-          phone={this.state.phone}
-          format={this.state.format}
-          number={this.state.number}
+          onCodeChange={handleCodeChange}
+          onInputChange={event => setNumber(event.target.value)}
+          phone={countryCode}
+          format={format}
+          number={number}
         />
       </div>
     );
   }
 
-  renderContinueView = () => (
-    <div id="wr-continue">
-      <img src="" alt="fisdom" />
-      <div id="wr-title">Wealth Report</div>
-      <div id="wr-subtitle">
-        Now investing money made more easy and safe. We at fisdom monitor your
-        money closely at all times to ensure it is always making the most for
-        you.
+  const renderContinueView = () => (
+    <Fragment>
+      <div id="wr-continue">
+        <img src="" alt="fisdom" />
+        <div id="wr-title">Wealth Report</div>
+        <div id="wr-subtitle">
+          Now investing money made more easy and safe. We at fisdom monitor your
+          money closely at all times to ensure it is always making the most for
+          you.
+        </div>
       </div>
-    </div>
+      <div className="wr-continue-btn">
+        <WrButton
+          fullWidth={true}
+          style={{
+            backgroundColor: view === 'splash' ? 'white' : 'var(--primary)',
+            color: view === 'splash' ? 'var(--primary)' : 'white'
+          }}
+          classes={{ root: "wr-splash-btn" }}
+          onClick={clickContinue}>
+          Login to Continue
+        </WrButton>
+      </div>
+    </Fragment>
   );
 
-  render() {
-    // const { isPhone, isOtp, isEmail } = this.props.location.params || {};
-    const isOtp = true,
-      isPhone = false; // TODO: Remove hardcoding
+  const clickContinue = () => {
+    if (view === 'splash') {
+      setView('phone');
+    } else if (view === 'phone') {
+      triggerOtp();
+    } else if (view === 'otp') {
+      verify();
+    }
+  }
 
+  const renderLoadingScreen = () => {
     return (
-      <Fragment>
+      <div style={{
+        height: '100%',
+        width: '100%',
+        backgroundColor: "#ffffff",
+      }}>
+        <div
+          style={{
+            textAlign: 'center',
+            position: 'relative',
+            top: '40%',
+            margin: 'auto',
+          }}
+        >
+          <CircularProgress size={isMobileView ? 65 : 100} thickness={4} />
+          <div
+            style={{
+              fontSize: isMobileView ? '18px' : '24px',
+              marginTop: '45px'
+            }}>
+            Preparing your report, please wait...
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <Fragment>
+      {!isMobileView && view !== 'loading' &&
         <div id="wr-login">
           <img
             src={require("assets/ic-login-abstract.svg")}
@@ -117,29 +196,44 @@ export class Login extends Component {
           <div id="wr-login-right-panel">
             <img src="" alt="fisdom" /> {/* fisdom logo */}
             <h2>Welcome to Fisdom!</h2>
-            {/* { isPhone ? this.renderNumberView() : '' } */}
-            {/* { isOtp ? this.renderOTPView() : '' } */}
-            {/* {this.renderOTPView()} */}
-            {this.renderNumberView()}
-            <WrButton fullWidth={true} classes={{ root: "wr-login-btn" }}>
+            {view === 'phone' && renderNumberView()}
+            {view === 'otp' && renderOTPView()}
+            <WrButton
+              fullWidth={true}
+              classes={{ root: "wr-login-btn" }}
+              onClick={clickContinue}>
               Continue
             </WrButton>
           </div>
         </div>
-
-        <div id="wr-login-mobile">
+      }
+      {isMobileView && view !== 'loading' &&
+        <div
+          id="wr-login-mobile"
+          style={{ backgroundColor: view === 'splash' ? 'var(--primary)' : 'white' }}>
           <div id="wr-mobile-view">
-            {/* {this.renderContinueView()} */}
-            {/* {this.renderOTPView()} */}
-            {this.renderNumberView()}
-            <div className="wr-continue-btn">
-              <WrButton fullWidth={true} classes={{ root: "wr-login-btn" }}>
-                Continue
-              </WrButton>
-            </div>
+            {view === 'splash' && renderContinueView()}
+            {view === 'phone' && renderNumberView()}
+            {view === 'otp' && renderOTPView()}
+            {view !== 'splash' && <div className="wr-continue-btn">
+                <WrButton
+                  fullWidth={true}
+                  classes={{ root: "wr-login-btn" }}
+                  onClick={clickContinue}
+                  disabled={opLoading}>
+                  {opLoading ?
+                    <CircularProgress size={20} thickness={4} color="white" /> :
+                    'Continue'
+                  }
+                </WrButton>
+              </div>
+            }
           </div>
         </div>
-      </Fragment>
-    );
-  }
+      }
+      {view === 'loading' && renderLoadingScreen()}
+    </Fragment>
+  );
 }
+
+export default Login;
