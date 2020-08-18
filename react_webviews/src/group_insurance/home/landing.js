@@ -49,7 +49,6 @@ class Landing extends Component {
   }
 
   componentWillMount() {
-    this.navigate('/risk/intro');
     window.localStorage.setItem('group_insurance_payment_started', '');
     window.localStorage.setItem('group_insurance_payment_urlsafe', '');
     window.localStorage.setItem('group_insurance_plan_final_data', '');
