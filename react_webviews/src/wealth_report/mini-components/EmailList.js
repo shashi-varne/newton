@@ -1,6 +1,6 @@
 // common for both mobile view and web view
 
-import React, { Component, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "material-ui/Button";
 import TextField from "material-ui/TextField";
 import Dialog from "common/ui/Dialog";

@@ -42,7 +42,6 @@ class WrPhoneInput extends Component {
             onChange={this.props.onInputChange}
           >
             {() => (
-              <form onSubmit={this.props.submit}>
                 <TextField
                   margin="normal"
                   type="text"
@@ -53,7 +52,6 @@ class WrPhoneInput extends Component {
                     root: "wr-mob-input",
                   }}
                 />
-              </form>
             )}
           </InputMask>
         </FormControl>
