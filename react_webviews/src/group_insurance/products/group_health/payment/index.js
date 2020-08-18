@@ -189,8 +189,9 @@ class GroupHealthPayment extends Component {
               {this.state.paymentSuccess &&
                 <p className="top-content">
                   Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for HDFC ERGO my health
-                           Suraksha {this.state.lead.plan_title} is successful. Now you have access to 10000+ cashless hospitals.
-                          </p>
+                           Suraksha {this.state.lead.plan_title} is successful.
+                           {this.state.policy_data.policy_number && <span>Now you have access to 10000+ cashless hospitals.</span>}
+                </p>
               }
 
               {this.state.paymentPending &&
