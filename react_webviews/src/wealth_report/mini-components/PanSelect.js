@@ -12,8 +12,7 @@ export default function PanSelect(props) {
   const [panModal, toggleModal] = useState(false);
   const [panData, setPanData] = useState([]);
 
-  useEffect(() => {
-    (async () => {
+  useEffect(async () => {
       try {
         const data = await fetchAllPANs({});
         setPanData(data);
@@ -23,8 +22,7 @@ export default function PanSelect(props) {
         console.log(err);
         toast(err);
       }
-    })();
-  }, []);
+    }, []);
 
   const selectPan = (pan) => {
     toggleDropdown(false);
