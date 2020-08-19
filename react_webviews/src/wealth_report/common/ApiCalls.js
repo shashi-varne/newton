@@ -212,24 +212,18 @@ export const fetchOverview = async (params = {}) => {
 
 export const fetchAnalysis = async (params = {}) => {
   try {
-    const analysis = storageService().getObject('wr-analysis');
-    if (boot || !analysis || isEmpty(analysis)) {
-      resetBootFlag();
-      const res = await Api.get('api/external_portfolio/report/fetch/analysis', params);
+    const res = await Api.get('api/external_portfolio/report/fetch/analysis', params);
 
-      if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
-        throw genericErrMsg;
-      }
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
 
-      const { result, status_code: status } = res.pfwresponse;
+    const { result, status_code: status } = res.pfwresponse;
 
-      if (status === 200) {
-        return result || {};
-      } else {
-        throw (result.error || result.message || genericErrMsg);
-      }
+    if (status === 200) {
+      return result.response || {};
     } else {
-      return analysis;
+      throw (result.error || result.message || genericErrMsg);
     }
   } catch (e) {
     throw e;
@@ -288,7 +282,7 @@ export const fetchTaxation = async (params = {}) => {
   }
 };
 
-export const portfolioGrowth = async (params = {}) => {
+export const fetchPortfolioGrowth = async (params = {}) => {
   try {
     const res = await Api.post('api/external_portfolio/report/graph', params);
 

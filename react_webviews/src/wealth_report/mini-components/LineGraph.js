@@ -47,7 +47,7 @@ const MyResponsiveLine = (props) => {
       }}
       axisBottom={{
         format: value => formattedDate(value, 'd m', true),
-        // tickValues: props.params.tickInterval,
+        tickValues: props.params.date_ticks || [],
         tickPadding: 20,
         tickSize: 0,
       }}

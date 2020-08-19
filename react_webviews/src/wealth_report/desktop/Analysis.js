@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import PieChart from '../mini-components/PieChart';
 import toast from '../../common/ui/Toast';
-import { dummyAlloc, dummySector } from '../constants';
+import { TriColorScheme, MultiColorScheme } from '../constants';
 import { getConfig } from 'utils/functions';
 import WrTable from '../mini-components/WrTable';
 import { fetchAnalysis } from '../common/ApiCalls';
+import { isEmpty } from '../../utils/validators';
+import { CircularProgress } from 'material-ui';
 const isMobileDevice = getConfig().isMobileDevice;
 const tabSpecificData = {
   equity: {
@@ -36,68 +38,104 @@ export default function Analysis(props) {
   const [graph1Data, setGraph1] = useState([]);
   const [graph2Data, setGraph2] = useState([]);
   const [holdingsData, setHoldings] = useState([]);
+  const [graphLoading, setGraphLoad] = useState(true);
 
-  const [analysisData, setAnalysisData] = useState();
-  useEffect(async () => {
-    try {
-      const data = await fetchAnalysis({ pan: props.pan });
-      setAnalysisData(data);
-    } catch (err) {
-      console.log(err);
-      toast(err);
-    }
+  const [analysisData, setAnalysisData] = useState({
+    debt_dict: {},
+    equity_dict: {},
+    top_holdings: {},
+    percent_split: {},
   });
+  useEffect(() => {
+    (async() => {
+      try {
+        setGraphLoad(true);
+        const data = await fetchAnalysis({ pan: props.pan });
+        setAnalysisData(data);
+        initialiseTabData(data);
+        setGraphLoad(false);
+      } catch (err) {
+        console.log(err);
+        toast(err);
+      }
+    })();
+  }, [props.pan]);
 
-  const changeTab = (tabName) => {
-    const { graph1Accessor, graph2Accessor } = tabSpecificData[tabName];
-    setTab(tabName);
-    setGraph1(analysisData[`${tabName}_dict`][graph1Accessor]);
-    setGraph2(analysisData[`${tabName}_dict`][graph2Accessor]);
-    setHoldings(analysisData.top_holdings[tabName]);
+  const initialiseTabData = (data) => {
+    console.log(data, !data);
+    if (!data || isEmpty(data)) data = analysisData || {};
+    const { graph1Accessor, graph2Accessor } = tabSpecificData[selectedTab];
+    setGraph1(data[`${selectedTab}_dict`][graph1Accessor] || []);
+    setGraph2(data[`${selectedTab}_dict`][graph2Accessor] || []);
+    setHoldings(data.top_holdings[selectedTab]);
   };
 
   return (
     <React.Fragment>
       <div className="wr-card-template">
         <div className="wr-card-template-header">
-          {tabSpecificData[selectedTab].graph1Name}
+          {(tabSpecificData[selectedTab] || {}).graph1Name}
         </div>
         <div id="wr-analysis-graph">
-          <PieChart
-            height={isMobileDevice ? 200 : 280}
-            width={isMobileDevice ? 200 : 280}
-            data={graph1Data}
-            // margin={{ bottom: 100, left: 40 }}
-          ></PieChart>
-          <div className="wr-allocation-graph-legend">
-            {graph1Data.map(alloc => (
-              <div className="wr-agl-item">
-                <div className="wr-agl-item-label">{alloc.label}</div>
-                <div className="wr-agl-item-value">{alloc.value}%</div>
+          {graphLoading ?
+            (
+              <div style={{textAlign: 'center'}}>
+                <CircularProgress size={50} thickness={4} />
               </div>
-            ))}
-          </div>
+            ) :
+            (
+              <Fragment>
+                <PieChart
+                  height={isMobileDevice ? 200 : 280}
+                  width={isMobileDevice ? 200 : 280}
+                  data={graph1Data}
+                  colors={TriColorScheme}
+                  // margin={{ bottom: 100, left: 40 }}
+                ></PieChart>
+                <div className="wr-allocation-graph-legend">
+                  {graph1Data.map((alloc, idx) => (
+                    <div className="wr-agl-item" style={{ backgroundColor: TriColorScheme[idx] }}>
+                      <div className="wr-agl-item-label">{alloc.label}</div>
+                      <div className="wr-agl-item-value">{alloc.value}%</div>
+                    </div>
+                  ))}
+                </div>
+              </Fragment>
+            )
+          }
         </div>
       </div>
       <div className="wr-card-template">
         <div className="wr-card-template-header">
-          {tabSpecificData[selectedTab].graph2Name}
+          {(tabSpecificData[selectedTab] || {}).graph2Name}
         </div>
         <div id="wr-analysis-graph">
-          <PieChart
-            height={isMobileDevice ? 200 : 280}
-            width={isMobileDevice ? 200 : 280}
-            data={graph2Data}
-          // margin={{ bottom: 100, left: 40 }}dummySector
-          ></PieChart>
-          <div className="wr-sector-graph-legend">
-            {graph2Data.map(({ label, value, color }) => (
-              <div className="wr-sgl-item">
-                <div className="wr-sgl-item-chip" style={{ backgroundColor: color || 'red' }}></div>
-                <span className="wr-sgl-item-label">{label} · {Number(value).toFixed(2)}%</span>
+          {graphLoading ?
+            (
+              <div style={{textAlign: 'center'}}>
+                <CircularProgress size={50} thickness={4} />
               </div>
-            ))}
-          </div>
+            ) :
+            (
+              <Fragment>
+                <PieChart
+                  height={isMobileDevice ? 200 : 280}
+                  width={isMobileDevice ? 200 : 280}
+                  data={graph2Data}
+                  colors={MultiColorScheme}
+                // margin={{ bottom: 100, left: 40 }}dummySector
+                ></PieChart>
+                <div className="wr-sector-graph-legend">
+                  {graph2Data.map(({ label, value }, idx) => (
+                    <div className="wr-sgl-item">
+                      <div className="wr-sgl-item-chip" style={{ backgroundColor: MultiColorScheme[idx] || 'grey' }}></div>
+                      <span className="wr-sgl-item-label">{label} · {Number(value).toFixed(2)}%</span>
+                    </div>
+                  ))}
+                </div>
+              </Fragment>
+            )
+          }
         </div>
       </div>
       <div className="wr-card-template">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 /* Use 'headersMap' prop to send a list of column header - data property mapping 
   Structure is as follows:
 
@@ -9,10 +9,16 @@ import React from "react";
 
 */
 const WrTable = (props) => {
-  const { headerMap: columnHeaders, data: tableData } = props;
+  const [columnHeaders, setColumnHeaders] = useState([]);
+  const [tableData, setTableData] = useState([]);
+  useEffect(() => {
+    const { headersMap, data } = props;
+    setColumnHeaders(headersMap || []);
+    setTableData(data || []);
+  }, [props]);
 
   return (
-    <table className={`wr-table ${this.props.classes}`} style={this.props.style || {}}>
+    <table className={`wr-table ${props.classes}`} style={props.style || {}}>
         <thead>
           <tr>
             {columnHeaders.map(col => (
