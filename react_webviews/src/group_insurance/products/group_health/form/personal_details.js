@@ -3,7 +3,7 @@ import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { health_providers, genderOptions } from '../../../constants';
+import { health_providers, genderOptions, childeNameMapper } from '../../../constants';
 import { calculateAge, toFeet, capitalizeFirstLetter, 
   formatDate, validatePan, validateAlphabets, dobFormatTest } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
@@ -53,7 +53,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
 
-    let header_title = `${capitalizeFirstLetter(member_key)}'s details`;
+    let header_title = `${capitalizeFirstLetter(childeNameMapper(member_key))}'s details`;
     let header_subtitle = '';
 
     if (member_key === 'self') {

@@ -16,6 +16,7 @@ import Dialog, {
     DialogContentText
 } from 'material-ui/Dialog';
 import BottomSheet from '../../../../common/ui/BottomSheet'; 
+import {childeNameMapper } from '../../../constants';
 
 class GroupHealthPlanFinalSummary extends Component {
 
@@ -78,7 +79,7 @@ class GroupHealthPlanFinalSummary extends Component {
             let member = Object.assign({}, member_base[i]);
 
             let obj = {
-                title: `${capitalizeFirstLetter(member.key)}'s details ${member_base.length > 1 ?  ('(insured ' + (i+1) + ')') : ''}`,
+                title: `${capitalizeFirstLetter(childeNameMapper(member.key))}'s details ${member_base.length > 1 ?  ('(insured ' + (i+1) + ')') : ''}`,
                 edit_state: `/group-insurance/group-health/${this.state.provider}/edit-personal-details/${member.key}`
             }
 

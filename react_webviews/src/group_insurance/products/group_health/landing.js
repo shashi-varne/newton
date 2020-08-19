@@ -42,7 +42,7 @@ class GroupHealthLanding extends Component {
     nativeCallback({ action: 'take_control_reset' });
 
     let stepsContentMapper = {
-      title: 'Why buy on ' + this.state.productName + '?',
+      title: 'Why choose us?',
       options: [
         { 'icon': 'icn_hs_no_document', 'title': 'No document required', 'subtitle': 'Easy and paperless process' },
         { 'icon': 'icn_hs_assistance', 'title': 'Complete assistance', 'subtitle': 'Our experts will help in purchase and claim of policy' },
@@ -340,7 +340,9 @@ class GroupHealthLanding extends Component {
             Overview
           </div>
 
-          <div className="what-is-covered" onClick={() => this.handleClickPoints('whats_covered')}>
+          <div className="what-is-covered" 
+          style={{background: this.state.productName === 'fisdom' ? '#5721AE' : '#19487F'}} 
+          onClick={() => this.handleClickPoints('whats_covered')}>
             <div className="top">
               <div className="wic-title">
                 What is covered?
@@ -361,7 +363,9 @@ class GroupHealthLanding extends Component {
             }
           </div>
 
-          <div className="what-is-covered" onClick={() => this.handleClickPoints('whats_not_covered')}>
+          <div className="what-is-covered" 
+          style={{background: this.state.productName === 'fisdom' ? '#5721AE' : '#19487F'}} 
+          onClick={() => this.handleClickPoints('whats_not_covered')}>
             <div className="top">
               <div className="wic-title">
                 What is not covered?

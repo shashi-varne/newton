@@ -36,7 +36,7 @@ class AutosuggestInput extends Component {
         </div>
         <ReactSearchBox
           placeholder={this.props.placeholder}
-          data={this.props.value.length >= 2 ? this.props.options : []}
+          data={this.props.value && this.props.value.length >= 2 ? this.props.options : []}
           // onSelect={record => console.log(record)}
           // onFocus={() => {
           //   console.log('This function is called when is focussed')

@@ -96,13 +96,13 @@ class GroupHealthPlanDetails extends Component {
         this.sendEvents('next', {more_info: type});
         let data_mapper = {
             'whats_included': {
-                'header_title': "What's included",
+                'header_title': "What's included?",
                 'header_subtitle': 'These are some of the benefits that are covered under this policy',
                 'steps': this.state.extra_data.whats_included,
                 'pathname': '/gold/common/render-benefits'
             },
             'whats_not_included': {
-                'header_title': "What's not included",
+                'header_title': "What's not included?",
                 'header_subtitle' : 'These are some of the incidences that are not covered under this policy',
                 'steps': this.state.extra_data.whats_not_included,
                 'pathname': '/gold/common/render-benefits'

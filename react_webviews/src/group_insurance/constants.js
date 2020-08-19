@@ -753,3 +753,15 @@ export function getCssMapperReport(policy) {
 
   return obj;
 }
+
+export function childeNameMapper(name) {
+  let mapper = {
+    'son1': '1st Son',
+    'son2': '2nd Son',
+    'daughter1': '1st Daughter',
+    'daughter2': '2nd Daughter'
+  };
+
+  return mapper[name] || name;
+  
+}
