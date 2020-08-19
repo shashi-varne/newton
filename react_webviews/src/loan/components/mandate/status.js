@@ -138,6 +138,7 @@ class MandateStatus extends Component {
   }
 
   render() {
+    console.log(this)
     return (
       <Container
         showLoader={this.state.show_loader}

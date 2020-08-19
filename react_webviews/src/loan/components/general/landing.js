@@ -21,7 +21,10 @@ class Landing extends Component {
       hassleFreePoints: [],
       top_cta_title: '',
       productName: getConfig().productName,
-      ic_why_hs: getConfig().productName === 'fisdom' ? ic_why_hs_fisdom : ic_why_hs_myway
+      ic_why_hs: getConfig().productName === 'fisdom' ? ic_why_hs_fisdom : ic_why_hs_myway,
+      calculator_clicked: false,
+      resume_clicked: false,
+      faq_clicked: false
     }
 
     this.initialize = initialize.bind(this);
@@ -79,6 +82,10 @@ class Landing extends Component {
     let isResume = true;
     let top_cta_title = 'RESUME';
 
+    this.setState({
+      isResume: isResume
+    })
+
     if(!application_info.latitude || !application_info.network_service_provider) {
       this.setState({
         location_needed: true
@@ -86,6 +93,10 @@ class Landing extends Component {
 
       isResume = false;
       top_cta_title = 'APPLY NOW';
+
+      this.setState({
+        isResume: isResume
+      })
     }
 
     if(['callback_awaited_disbursement_approval', 'disbursement_approved'].indexOf(vendor_info.dmi_loan_status) !== -1) {
@@ -101,12 +112,16 @@ class Landing extends Component {
     })
   }
 
-  sendEvents(user_action) {
+  sendEvents(user_action, data = {}) {
     let eventObj = {
       "event_name": 'lending',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'introduction'
+        "screen_name": 'introduction',
+        "action": 'bannerapply_now',
+        "calculator_clicked": this.state.calculator_clicked ? "yes" : "no",
+        "resume_clicked": this.state.isResume ? 'yes' : 'no',
+        "faq_clicked": data.things_to_know === 'faq' ? 'yes' : 'no'
       }
     };
 
@@ -270,12 +285,16 @@ class Landing extends Component {
           </div>
         </div>
 
-        <div className="action" onClick={ () => this.navigate('calculator', {
+        <div className="action" onClick={ () => {
+          this.setState({
+            calculator_clicked: true
+          })
+          this.navigate('calculator', {
           params: {
             next_state: this.getNextState(),
             cta_title: this.state.top_cta_title
-          }
-        })}>
+          }});
+        }}>
           <div className="left">
           Loan eligibility calculator
             </div>

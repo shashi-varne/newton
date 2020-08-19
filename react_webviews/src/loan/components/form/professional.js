@@ -126,14 +126,14 @@ class ProfessionalDetails extends Component {
 
 
     sendEvents(user_action) {
+        let { form_data } = this.state;
+
         let eventObj = {
             "event_name": 'lending',
             "properties": {
                 "user_action": user_action,
-                "screen_name": 'contact details',
-                'email': this.state.form_data.email ? 'yes' : 'no',
-                'mobile_number': this.state.form_data.mobile_number ? 'yes' : 'no',
-                'from_edit': this.props.edit ? 'yes' : 'no'
+                "screen_name": 'professional details',
+                ...form_data
             }
         };
 

@@ -181,7 +181,7 @@ class FormCreateProfile extends Component {
             "event_name": 'lending',
             "properties": {
                 "user_action": user_action,
-                "screen_name": 'contact details',
+                "screen_name": 'creating profile',
             }
         };
 

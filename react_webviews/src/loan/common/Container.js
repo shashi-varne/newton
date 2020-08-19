@@ -44,6 +44,15 @@ class Container extends Component {
     this.unmount();
   }
 
+  getEvents(user_action) {
+    if (!this || !this.props || !this.props.events) {
+      return;
+    }
+    let events = this.props.events;
+    events.properties.user_action = user_action;
+    return events;
+  }
+
   historyGoBack = (backData) => {
     
     if (this.getEvents("back")) {

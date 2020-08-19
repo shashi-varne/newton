@@ -83,8 +83,8 @@ class ContactDetails extends Component {
             "properties": {
                 "user_action": user_action,
                 "screen_name": 'contact details',
-                'email': this.state.form_data.email_id ? 'yes' : 'no',
-                'mobile_no': this.state.form_data.mobile_no ? 'yes' : 'no',
+                'email': this.state.form_data.email ? 'yes' : 'no',
+                'mobile_number': this.state.form_data.mobile_number ? 'yes' : 'no',
                 'from_edit': this.props.edit ? 'yes' : 'no'
             }
         };

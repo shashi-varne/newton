@@ -77,7 +77,9 @@ class MandatePan extends Component {
       "event_name": 'lending',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'introduction'
+        "screen_name": 'pan upload',
+        "type": getConfig().html_camera ? 'yes' : 'no',
+        "pan_uploaded": this.state.fileUploaded ? 'yes' : 'no'
       }
     };
 
@@ -382,6 +384,7 @@ class MandatePan extends Component {
   }
 
   render() {
+    console.log(this.state)
     return (
       <Container
         showLoader={this.state.show_loader}

@@ -286,16 +286,33 @@ class FormSummary extends Component {
 
 
     sendEvents(user_action, data = {}) {
+        var detail_click;
+        switch(this.state.selectedIndex) {
+            case 0: 
+                detail_click = 'personal';
+                break;
+            case 1: 
+                detail_click = 'contact';
+                break;
+            case 2: 
+                detail_click = 'address';
+                break;
+            case 3:
+                detail_click = 'professional';
+                break;
+            default: 
+                detail_click = 'none';
+        }
+            
         let eventObj = {
-            "event_name": 'health_insurance',
+            "event_name": 'lending',
             "properties": {
                 "user_action": user_action,
-                "product": 'health suraksha',
-                "flow": this.state.insured_account_type || '',
-                "screen_name": 'summary',
-                'restart_clicked': this.state.restart_clicked ? 'yes' : 'no',
-                'restart_conformation': this.state.restart_conformation ? 'yes' : 'no',
-                'edit_clicked': data.edit_clicked || ''
+                "screen_name": 'application form',
+                "edit": data.edit_clicked || '',
+                "detail_click": detail_click,
+                "consent": this.state.agree_check ? 'agreed' : 'declined',
+                "confirm_details": this.state.confirm_details_check ? 'yes' : 'no'
             }
         };
 
@@ -372,6 +389,7 @@ class FormSummary extends Component {
     }
 
     openEdit = (state) => {
+        console.log(state)
         this.sendEvents('next', { edit_clicked: state });
         this.navigate(state);
     }

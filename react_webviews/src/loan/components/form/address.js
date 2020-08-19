@@ -124,14 +124,16 @@ class AddressDetails extends Component {
 
 
     sendEvents(user_action) {
+        let { form_data } = this.state
         let eventObj = {
             "event_name": 'lending',
             "properties": {
                 "user_action": user_action,
-                "screen_name": 'contact details',
-                'email': this.state.form_data.email ? 'yes' : 'no',
-                'mobile_number': this.state.form_data.mobile_number ? 'yes' : 'no',
-                'from_edit': this.props.edit ? 'yes' : 'no'
+                "screen_name": 'address details',
+                "residence_type": form_data.residence_type,
+                "duration": form_data.duration,
+                "state": form_data.state,
+                "pincode": form_data.pincode
             }
         };
 

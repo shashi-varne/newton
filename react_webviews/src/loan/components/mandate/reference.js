@@ -50,7 +50,7 @@ class KycStatus extends Component {
       "event_name": 'lending',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'introduction'
+        "screen_name": 'reference info'
       }
     };
 
