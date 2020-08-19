@@ -542,6 +542,12 @@ class Payment extends Component {
                             purchase order (at live price) else it will be refunded in 3-5 business days.  
                             </p>
                         }
+
+                        {this.state.paymentFailed && 
+                            <p className="top-content"> 
+                           If amount has been debited it will be refunded back to you in 3-5 business days.
+                            </p>
+                        }
                       
                     </div>
                   
