@@ -41,23 +41,6 @@ export default class Holdings extends Component {
 
         <HoldingCard />
 
-        <Button
-          variant="fab"
-          style={{
-            display: window.innerWidth > 812 ? "none" : "",
-          }}
-          className='wr-fab-btn'
-          onClick={this.handleClick}
-          disableRipple
-          disableFocusRipple
-        >
-          {this.state.open ? (
-            <CloseIcon />
-          ) : (
-            <img src={require("assets/fisdom/ic-mob-filter.svg")} alt="" />
-          )}
-        </Button>
-
       </div>
     );
   }
