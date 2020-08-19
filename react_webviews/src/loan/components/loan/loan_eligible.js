@@ -89,7 +89,6 @@ class LoanEligible extends Component {
   render() {
 
     let vendor_info = this.state.vendor_info || {};
-    console.log(this)
     return (
       <Container
         showLoader={this.state.show_loader}

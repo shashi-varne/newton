@@ -384,7 +384,6 @@ class MandatePan extends Component {
   }
 
   render() {
-    console.log(this.state)
     return (
       <Container
         showLoader={this.state.show_loader}
