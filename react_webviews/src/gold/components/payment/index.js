@@ -538,8 +538,8 @@ class Payment extends Component {
 
                         {this.state.paymentPending && 
                             <p className="top-content"> 
-                            If confirmed within 30 minutes we will place gold 
-                            purchase order (at live price) else it will be refunded in 3-5 business days.  
+                           If confirmed within 30 minutes we will place delivery 
+                           order of gold coin else amount will be refunded in 3-5 business days.
                             </p>
                         }
 
