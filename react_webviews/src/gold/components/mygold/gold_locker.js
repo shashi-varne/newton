@@ -445,10 +445,11 @@ class GoldLocker extends Component {
                  style={{width: '100%'}}
                   src={require(`assets/${this.state.productName}/ils_alternate_assets.svg`)} alt="Gold" />
               </div>
+              {this.state.selected_provider_info.local &&
               <div style={{ color: '#0A1D32', fontSize: 14, fontWeight: 400, margin: '20px 0 30px 0',
             lineHeight: 1.6 }}>
                 Seems like you have not invested in {this.state.selected_provider_info.local.title} yet, <b>buy 24K gold</b> to create long term wealth.
-            </div>
+            </div>}
             </div>
           }
 

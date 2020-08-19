@@ -5,6 +5,9 @@
 .configPrimaryBackgroundColorClass {
   background-color: var(--primary) !important;
 }
+.secondary-color {
+  color: var(--secondary) !important;
+}
 
 .ContainerWrapper {
   background-color: #fff;
@@ -244,8 +247,13 @@ body[data-device="web"] {
 
 button.MuiButtonBase-root.MuiButton-root.MuiButton-raised.MuiButton-raisedSecondary.MuiButton-sizeLarge.CustomButton-button-100 {
   border-radius: 6px;
-  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149);
+  // box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149);
+  box-shadow: none !important;
 }
+button {
+  box-shadow: none !important;
+}
+
 
 .FooterButtonArrow {
   margin-left: 20px;
@@ -632,7 +640,7 @@ input#pan {
 
 .main-top-title-header {
   font-size: 16px !important;
-  color: #160d2e !important;
+  color: #160d2e;
   font-weight: 400 !important;
 }
 
@@ -652,12 +660,103 @@ input#pan {
   opacity: 1;
 }
 
+.generic-hr {
+  border-top: 1px solid #ededed;
+}
+
 .common-top-page-subtitle {
   color: #767E86;
   font-size: 14px;
   font-weight: 400;
-  margin: -20px 0 20px 0;
+  margin: -10px 0 20px 0;
   line-height: 1.6;
+}
+.common-steps-images {
+  .content {
+    // color: #767e86;
+    // font-size: 13px;
+    margin: 0 0 0 20px;
+  }
+  .tile {
+    display: flex;
+    align-items: center;
+    margin: 30px 0 30px 0px;
+  }
+  .content-title {
+    color: #041d34;
+    font-size: 14px;
+    font-weight: 400;
+    margin: 0 0 8px 0;
+  }
+
+  .content-subtitle {
+    color: #747e87;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+}
+
+.his {
+  margin: 0 -15px 0px -15px;
+  padding: 0 15px 0 15px;
+  overflow: hidden;
+  overflow-x: scroll;
+  .horizontal-images-scroll {
+    display: flex;
+    width: fit-content;
+    .image {
+      margin: 0 20px 0px 0;
+      border-radius: 4px;
+      display: block;
+    }
+  }
+}
+
+
+.common-faqs {
+  .common-faqs-tile {
+    border-bottom: 1px solid #d7d4d4;
+    cursor: pointer;
+    padding: 5px 0 5px 0;
+  }
+
+  .top-tile {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0 10px 0;
+    color: WorkSans-Regular_Medium;
+    font-weight: 500;
+  }
+  .subtitle {
+    color: #767e86;
+    margin: 20px 0 10px 0;
+    line-height: 1.6;
+  }
+}
+
+
+.common-how-steps {
+  margin: 50px 0 40px 0;
+  border-top: 1px solid #ededed;
+  border-bottom: 1px solid #ededed;
+  padding: 20px 0 20px 0;
+
+  .top-tile {
+    display: flex;
+    justify-content: space-between;
+  }
+  .top-title {
+    color: #0a1c32;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .top-icon {
+    width: 14px;
+  }
+  .common-steps-images {
+    margin: 40px 0 0 0;
+  }
 }
 
 /* used in gold  */
@@ -720,4 +819,44 @@ input#pan {
   left: -20px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+}
+
+.common-bottom-info {
+  margin: 30px 0 30px 0;
+  background-color: var(--highlight);
+  padding: 15px;
+  text-align: center;
+  border-radius: 4px;
+  .content {
+    color: #767e86;
+    font-size: 12px;
+    font-weight: 500;
+  }
+}
+
+.generic-page-button-small {
+  color: var(--secondary);
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid;
+  width: fit-content;
+  padding: 7px 20px 7px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.generic-page-button-small-with-back {
+  background: var(--secondary);
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid;
+  width: fit-content;
+  padding: 7px 20px 7px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: white;
 }

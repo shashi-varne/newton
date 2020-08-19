@@ -61,7 +61,7 @@ class GoldSummary extends Component {
       apiError: '',
       user_info: {},
       openDialogOffer: false,
-      showOffers: true, // to manage offer carousel
+      showOffers: false, // to manage offer carousel
       offerImageData: [],
       productName: getConfig().productName,
       mmtc_info: {},
@@ -120,16 +120,22 @@ class GoldSummary extends Component {
       'Gold-back will be in the form of MMTC-PAMP balance and will be 1% of the value of gold purchased and upto a maximum of Rs 100. Below table shows how the gold-back will be done. '
     ]
 
-    var gold_offer_terms_safegold_july = [
-      'Offer is only valid till  23:59 hrs 31st July 2020.',
-      'For a customer to be valid for the offer (s)he should purchase gold worth at least 5gm during the offer period.',
-      '2500 gold back will be as per price on the day of allotment of gold back.',
-      'This offer can be availed only once ( per device, per user, per account) during the offer period.',
-      'Purchase can be done in a single transaction or multiple transactions but the total gold purchased during the offer period should be greater than or equal to 5gm.',
-      'Offer is valid ONLY for the first 100 customers who purchase Gold (greater than or equal to 5gm) during the offer period for a Gold-back of Rs 2500/-.',
-      "Gold-back amounts for lucky winners will be credited to the customer's Safegold account by 15th August 2020.",
-      "Any conditions which are not explicitly covered would be at the sole discretion of Finwizard Technology Private Limited. The decision of "  + typeCaps +  " in this regard will be final and the company has the right to change terms and conditions at any time.",
-      "In case of any customer query or dispute, Finwizard Technology Private Limited reserves the right to resolve the same on the basis of the terms and conditions of the offer at its sole discretion."
+
+    var gold_offer_terms_safegold_august = [
+      'Offer is only valid till  23:59 hrs 17th August 2020.',
+      'For a customer to be valid for the offer (s)he should purchase gold worth at least 2gm during the offer period.',
+      'This offer can be availed only once ( per device, per user, per account) during the offer period. Highest Goldback applicable will be given to the customer.',
+      'Purchase can be done in a single transaction or multiple transaction but the total gold should be greater than at least 2gm.',
+      'Goldback will be allotted as per below mentioned criteria as per the price of Gold on the allocation date as mentioned below:',
+      [
+        'Gold purchased 2gm to 4gm : Rs 750/- for first 50 customers',
+        'Gold purchased 5 gm to 9gm : Rs 1250/- for first 50 customers',
+        'Gold purchased greater than 10gm : Rs 5000/- for first 10 customers',
+        'Gold purchased greater than 20 gm : Rs 10000/- for first 10 customers'
+      ],
+      "Gold-back amounts for lucky winners will be credited to the customer's Safegold account by 30th August 2020.",
+      'Any conditions which are not explicitly covered would be at the sole discretion of Finwizard Technology Private Limited. The decision of '  + typeCaps +  ' in this regard will be final and the company has the right to change terms and conditions at any time.',
+      'In case of any customer query or dispute, Finwizard Technology Private Limited reserves the right to resolve the same on the basis of the terms and conditions of the offer at its sole discretion.',
     ]
 
     let offerImageDataBase = [
@@ -169,8 +175,8 @@ class GoldSummary extends Component {
       {
         src: type === 'fisdom' ? goldOfferSafegoldFisdom : goldOfferSafegoldMyway,
         link: '',
-        terms: gold_offer_terms_safegold_july,
-        key: 'safegold_july',
+        terms: gold_offer_terms_safegold_august,
+        key: 'safegold_august',
         canShow: true
       },
     ];
@@ -295,7 +301,7 @@ class GoldSummary extends Component {
     this.sendEvents('next', 'marketing_banner', index);
 
     if (offer.key === '5buy' || offer.key === '50delivery' || 
-    offer.key === 'mmtc_offer' || offer.key === 'safegold_july') {
+    offer.key === 'mmtc_offer' || offer.key === 'safegold_august') {
       this.setState({
         openDialogOffer: true,
         selectedIndexOffer: index
@@ -309,7 +315,13 @@ class GoldSummary extends Component {
   renderOfferTerms(props, index) {
     return (
       <span className="gold-offer-terms" key={index}>
-        {index + 1}. {props}
+        {index !== 5 ? `${index + 1}. ${props}` : 
+          props.map(offer => (
+            <span key={offer}>
+              <b>&bull; {offer} <br /></b>
+            </span>
+          ))
+        }
       </span>
     )
   }
