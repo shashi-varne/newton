@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import Dialog from "common/ui/Dialog";
 import WrButton from "../common/Button";
 import { HoldingFilterOptions as Filters } from "../constants";
+import Button from "material-ui/Button";
+import { isMobileDevice } from "utils/functions";
+import CloseIcon from "@material-ui/icons/Close";
 
 class FilterMobile extends Component {
   constructor(props) {
@@ -11,8 +14,21 @@ class FilterMobile extends Component {
       current_value: "",
       rating: "",
       filters: [],
+      open: false
     };
   }
+
+  handleClick = () => {
+    this.setState({
+      open: !this.state.open,
+    });
+  };
+
+  handleClose = () => {
+    this.setState({
+      open: false,
+    });
+  };
 
   selectCategory = (category, newFilter, reApplyFilter) => {
     const currentFilter = this.state[category];
@@ -123,6 +139,22 @@ class FilterMobile extends Component {
           {this.renderFilterModal()}
         </Dialog>
         {this.state.filters.length > 0 && this.renderSelectedFilters()}
+        <Button
+          variant="fab"
+          style={{
+            display: isMobileDevice() ? "none" : "",
+          }}
+          className='wr-fab-btn'
+          onClick={this.handleClick}
+          disableRipple
+          disableFocusRipple
+        >
+          {this.state.open ? (
+            <CloseIcon />
+          ) : (
+            <img src={require("assets/fisdom/ic-mob-filter.svg")} alt="" />
+          )}
+        </Button>
       </React.Fragment>
     );
   }

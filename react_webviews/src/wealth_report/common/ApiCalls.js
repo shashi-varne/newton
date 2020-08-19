@@ -142,7 +142,7 @@ export const fetchAllPANs = async (params) => {
 
     if (boot || !pans || isEmpty(pans)) {
       resetBootFlag();
-      const res = await Api.get('api/external_portfolio/wr/fetch/pans', params);
+      const res = await Api.get('api/external_portfolio/hni/fetch/pans');
 
       if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
         throw genericErrMsg;
@@ -268,7 +268,6 @@ export const fetchTaxation = async (params = {}) => {
     if (boot || !taxation || isEmpty(taxation)) {
       resetBootFlag();
       const res = await Api.post('api/external_portfolio/report/fetch/tax-info', params);
-
       if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
         throw genericErrMsg;
       }

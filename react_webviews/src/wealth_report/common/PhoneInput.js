@@ -42,16 +42,16 @@ class WrPhoneInput extends Component {
             onChange={this.props.onInputChange}
           >
             {() => (
-              <TextField
-                margin="normal"
-                type="text"
-                value={number}
-                placeholder={format}
-                InputProps={{
-                  disableUnderline: true,
-                  root: "wr-mob-input",
-                }}
-              />
+                <TextField
+                  margin="normal"
+                  type="text"
+                  value={number}
+                  placeholder={format}
+                  InputProps={{
+                    disableUnderline: true,
+                    root: "wr-mob-input",
+                  }}
+                />
             )}
           </InputMask>
         </FormControl>
