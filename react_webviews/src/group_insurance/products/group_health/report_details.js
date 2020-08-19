@@ -426,7 +426,7 @@ class GroupHealthReportDetails extends Component {
 
                     <div className="member-tile">
                         <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/ic_date_payment.svg`)} alt="" />
+                            <img src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
