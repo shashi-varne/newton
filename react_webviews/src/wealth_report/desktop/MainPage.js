@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import Overview from "./Overview";
 import Holdings from "./Holdings";
 import Taxation from "./Taxation";
@@ -8,98 +8,76 @@ import EmailList from '../mini-components/EmailList';
 import UserAccount from '../mini-components/UserAccount';
 import PanSelect from '../mini-components/PanSelect';
 import Analysis from '../desktop/Analysis';
+import LoadingScreen from "../mini-components/LoadingScreen";
 
-export default class MainPage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      mailList: false,
-      account: false,
-      addMail: false
-    };
-  }
+const MainPage = (props) => {
+  const { params } = props.match;
+  const [pan, setPan] = useState('');
 
-  getHeightFromTop = () => {
+  const getHeightFromTop = () => {
     var el = document.getElementById('wr-body');
     var height = el.getBoundingClientRect().top;
     return height;
-  }
+    // window.removeEventListener('scroll', this.onScroll, false);
+  };
 
-  onScroll = () => {
+  const onScroll = () => {
     if (this.getHeightFromTop() < 268) {
       console.log('Swipe up');
     }
-  }
+  };
 
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.onScroll, false);
-  }
-
-  renderTab = (tab) => {
-
+  const renderTab = (tab) => {
     if (tab === 'overview') {
-      return <Overview pan={'FRVPS7662K'}/>;
+      return <Overview pan={pan} />
     } else if (tab === 'analysis') {
-      return <Analysis pan={'FRVPS7662K'}/>
+      return <Analysis pan={pan} />
     } else if (tab === 'holdings') {
-      return <Holdings pan={'FRVPS7662K'}/>
+      return <Holdings pan={pan} />
     } else if (tab === 'taxation') {
-      return <Taxation pan={'FRVPS7662K'}/>
+      return <Taxation pan={pan} />
     }
-  }
+  };
 
-  handleClose = () => {
-    this.setState({
-      mailList: false,
-      account: false,
-    })
-  }
+  return (
+    <div id="wr-main">
+      <div id="wr-header-hero">
+        <div className="wr-hero-container">
 
-  handleClick = () => {
-    this.setState({
-      addMail: true
-    })
-  }
-
-  render() {
-    const { params } = this.props.match;
-    console.log(params);
-    
-    return (
-      <div id="wr-main" style={{ width: '100%', height: '100%', background: 'white', overflow: 'scroll' }}>
-        <div id="wr-header-hero">
-          <div className="wr-hero-container">
-
-            {/* will be hidden for mobile view and visible for desktop view */}
-            <div className="wr-fisdom">
-              <img src='' alt="fisdom" />
-              <span className='wr-vertical-divider'></span>
-              <span className="wr-report">Mutual fund report</span>
-            </div>
-            
-            {/* will be hidden for desktop view and visible for mobile view */}
-            <PanSelect />
-            
-            {/* visbility will be modified based on condition in media queries */}
-            <div className="wr-user-account">
-              <EmailList />
-              <UserAccount />
-            </div>
-
+          {/* will be hidden for mobile view and visible for desktop view */}
+          <div className="wr-fisdom">
+            <img src='' alt="fisdom" />
+            <span className='wr-vertical-divider'></span>
+            <span className="wr-report">Mutual fund report</span>
           </div>
-        </div>
+          
+          {/* will be hidden for desktop view and visible for mobile view */}
+          <PanSelect onPanSelect={setPan}/>
+          
+          {/* visbility will be modified based on condition in media queries */}
+          <div className="wr-user-account">
+            <EmailList />
+            <UserAccount />
+          </div>
 
-        <Header />
-        
-        <div id="wr-body">
-          {this.renderTab(params.tab)}
-        </div>
-
-        {/* will be hidden for the mobile view */}
-        <div id="wr-footer">
-          <Footer />
         </div>
       </div>
-    );
-  }
+
+      <Header onPanSelect={setPan}/>
+
+      {!pan ? 
+        (<LoadingScreen text="Preparing your report, please wait..." />) :
+        (<div id="wr-body">
+          {renderTab(params.tab)}
+        </div>)
+      }
+
+      {/* will be hidden for the mobile view */}
+      <div id="wr-footer">
+        <Footer />
+      </div>
+    </div>
+  );
 }
+
+export default MainPage;

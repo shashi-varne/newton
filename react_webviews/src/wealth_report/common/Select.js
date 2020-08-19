@@ -24,6 +24,7 @@ const theme = createMuiTheme({
         letterSpacing: "0.76px",
         color: "var(--primary)",
         textTransform: "uppercase",
+        textAlign: "center"
       },
       icon: {
         right: "12px",
@@ -41,7 +42,7 @@ const WrSelect = (props) => {
   const classes = {};
   return (
     <MuiThemeProvider theme={theme}>
-      <FormControl className={classes.formControl}>
+      <FormControl className={classes.formControl} disabled={props.disabled}>
         <Select
           value={props.selectedValue}
           onChange={(event) => props.onSelect(event)}

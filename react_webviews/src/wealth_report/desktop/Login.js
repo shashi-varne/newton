@@ -7,6 +7,7 @@ import { resendOtp, login, verifyOtp } from "../common/ApiCalls";
 import toast from '../../common/ui/Toast';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { navigate } from "../common/commonFunctions";
+import LoadingScreen from "../mini-components/LoadingScreen";
 const isMobileView = getConfig().isMobileDevice;
 
 const Login = (props) => {
@@ -156,34 +157,6 @@ const Login = (props) => {
     }
   }
 
-  const renderLoadingScreen = () => {
-    return (
-      <div style={{
-        height: '100%',
-        width: '100%',
-        backgroundColor: "#ffffff",
-      }}>
-        <div
-          style={{
-            textAlign: 'center',
-            position: 'relative',
-            top: '40%',
-            margin: 'auto',
-          }}
-        >
-          <CircularProgress size={isMobileView ? 65 : 100} thickness={4} />
-          <div
-            style={{
-              fontSize: isMobileView ? '18px' : '24px',
-              marginTop: '45px'
-            }}>
-            Preparing your report, please wait...
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <Fragment>
       {!isMobileView && view !== 'loading' &&
@@ -231,7 +204,9 @@ const Login = (props) => {
           </div>
         </div>
       }
-      {view === 'loading' && renderLoadingScreen()}
+      {view === 'loading' &&
+        <LoadingScreen text="Preparing your report, please wait..." />
+      }
     </Fragment>
   );
 }

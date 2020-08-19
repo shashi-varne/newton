@@ -5,27 +5,33 @@ import { isMobileDevice } from "utils/functions";
 import SelectMembers from "./SelectMembersMobile";
 import toast from "../../common/ui/Toast";
 import { fetchAllPANs } from "../common/ApiCalls";
+import DotDotLoader from "../../common/ui/DotDotLoader";
 
 export default function PanSelect(props) {
   const [dropdown_open, toggleDropdown] = useState(false);
   const [selectedPan, setPan] = useState("");
   const [panModal, toggleModal] = useState(false);
   const [panData, setPanData] = useState([]);
+  const [loadingPans, setLoading] = useState(true);
 
-  useEffect(async () => {
+  useEffect(() => {
+    (async () => {
       try {
-        const data = await fetchAllPANs({});
+        const data = await fetchAllPANs();
         setPanData(data);
-        setPan(data[0])
+        selectPan(data[0]);
       } catch (err) {
         console.log(err);
         toast(err);
       }
-    }, []);
+      setLoading(false);
+    })();
+  }, []);
 
   const selectPan = (pan) => {
     toggleDropdown(false);
-    setPan(pan)
+    setPan(pan);
+    props.onPanSelect(pan);
   };
 
   const handleClick = () => {
@@ -37,9 +43,6 @@ export default function PanSelect(props) {
     toggleDropdown(false);
     toggleModal(false);
   };
-
-  // let { dropdown_open, pans, selectedPan } = this.state;
-  let count = 1;
 
   return (
     <div className="wr-pan-dropdown">
@@ -55,7 +58,11 @@ export default function PanSelect(props) {
 
             <div className="wr-pan-detail">
               <div className="wr-pan-title">Showing report for</div>
-              <div className="wr-pan">{selectedPan}</div>
+              {
+                loadingPans ? 
+                  <DotDotLoader className="wr-dot-loader" /> :
+                  <div className="wr-pan">{selectedPan}</div>
+              }
             </div>
 
             <IconButton
@@ -93,7 +100,7 @@ export default function PanSelect(props) {
                         alt=""
                       />
                       <div className="wr-pan-detail">
-                        <div className="wr-pan-title">{`PAN ${++count}`}</div>
+                        <div className="wr-pan-title">{`PAN ${index+1}`}</div>
                         <div className="wr-pan">{pan}</div>
                       </div>
                     </div>
@@ -108,7 +115,7 @@ export default function PanSelect(props) {
           <SelectMembers
             open={panModal}
             pans={panData}
-            selectPan={selectPan()}
+            selectPan={selectPan}
             selectedPan={selectedPan}
           />
         )}

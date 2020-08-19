@@ -6,7 +6,7 @@ export const genericErrMsg = 'Something went wrong. Please try again';
 
 export const HoldingFilterOptions = [
   {
-    id: "fund_type",
+    id: "scheme_type",
     category: "Fund Type",
     filters: [{
       label: 'Debt',
@@ -20,7 +20,7 @@ export const HoldingFilterOptions = [
     }],
   },
   {
-    id: "current_value",
+    id: "current_value_type",
     category: "Current Value",
     filters: [{
       label: '<1L',
@@ -37,7 +37,7 @@ export const HoldingFilterOptions = [
     }],
   },
   {
-    id: "rating",
+    id: "fisdom_rating",
     category: "Fisdom Rating",
     filters: [{
       label: '3 & Below',

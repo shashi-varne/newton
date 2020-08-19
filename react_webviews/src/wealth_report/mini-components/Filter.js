@@ -22,13 +22,12 @@ export default class HoldingFilter extends Component {
 
   selectCategory = (category, newFilter) => {
     const currentFilter = this.state[category];
-    const filterChanged = currentFilter !== newFilter;
+    const filterObj = {
+      [category]: currentFilter !== newFilter ? newFilter : '',
+    };
 
-    this.setState({
-      [category]: filterChanged ? newFilter : '',
-    });
-
-    this.props.onFilterChange({ category, value: filterChanged ? newFilter : '' });
+    this.setState(filterObj);
+    this.props.onFilterChange(filterObj);
   };
 
   render() {

@@ -144,6 +144,7 @@ span.wr-small-col-title {
       overflow: hidden;
     }
     .amc-detail-subtitle {
+      text-transform: capitalize;
       opacity: 0.5;
       font-size: 15px;
       line-height: 1;
@@ -162,6 +163,7 @@ span.wr-small-col-title {
   width: 40px;
   height: 25px;
   display: flex;
+  justify-content: center;
   box-sizing: border-box;
 
   span.rating-num {
@@ -367,13 +369,13 @@ span.wr-small-col-title {
 .wr-non-selected-filters {
   background-color: rgba(149, 149, 149, 0.08) !important;
   box-shadow: 0 1px 15px 0 rgba(215, 199, 250, 0.12) !important;
-  border-radius: 25px;
-  margin-left: 12px;
-  padding: 9px 16px;
+  border-radius: 25px !important;
+  margin-left: 12px !important;
+  padding: 9px 16px !important;
 
   .MuiButton-label {
-    font-size: 13px;
-    color: #150731;
+    font-size: 13px !important;
+    color: #150731 !important;
   }
 }
 
@@ -383,8 +385,8 @@ span.wr-small-col-title {
   background-color: var(--primary) !important;
 
   .MuiButton-label {
-    font-size: 13px;
-    color: white;
+    font-size: 13px !important;
+    color: white !important;
   }
 }
 
@@ -410,12 +412,12 @@ span.wr-small-col-title {
   
     .wr-non-selected-filters {
       @extend .wr-non-selected-filters;
-      padding: 5px 8px;
-      margin: 16px 12px 0 0;
+      padding: 5px 8px !important;
+      margin: 16px 12px 0 0 !important;
 
       .MuiButton-label {
-        font-size: 12px;
-        text-transform: capitalize;
+        font-size: 12px !important;
+        text-transform: capitalize !important;
       }
     }
 

@@ -52,7 +52,7 @@ class Header extends Component {
 
     return (
       <div id="wr-header-bar">
-        <PanSelect />
+        <PanSelect onPanSelect={this.props.onPanSelect}/>
 
         {tabs.map((tab, index) => (
           <Link to={`${tab.id + this.props.location.search}`}
@@ -60,7 +60,6 @@ class Header extends Component {
             className="wr-header-tab"
             key={index}
             style={{borderBottom: activeTab === tab.id ? 'solid 4px var(--primary)' : ''}}
-            key={tab.name}
           >
             <img
               src={require(`assets/fisdom/${activeTab === tab.id ? tab["image-active"] : tab["image-inactive"]}`)}

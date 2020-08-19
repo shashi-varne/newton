@@ -79,9 +79,7 @@ export default function Analysis(props) {
         <div id="wr-analysis-graph">
           {graphLoading ?
             (
-              <div style={{textAlign: 'center'}}>
-                <CircularProgress size={50} thickness={4} />
-              </div>
+              <Loader />
             ) :
             (
               <Fragment>
@@ -112,9 +110,7 @@ export default function Analysis(props) {
         <div id="wr-analysis-graph">
           {graphLoading ?
             (
-              <div style={{textAlign: 'center'}}>
-                <CircularProgress size={50} thickness={4} />
-              </div>
+              <Loader />
             ) :
             (
               <Fragment>
@@ -142,13 +138,22 @@ export default function Analysis(props) {
         <div className="wr-card-template-header">Top Holdings</div>
         <div id="wr-analysis-top-holdings">
           <div className="wr-table-container">
-            <WrTable
-              data={holdingsData}
-              headersMap={tableHeadersMap}
-            />
+            {!holdingsData.length ?
+              (<Loader />) :
+              (<WrTable
+                data = { holdingsData }
+                headersMap = { tableHeadersMap }
+              />)
+            }
           </div>
         </div>
       </div>
     </React.Fragment>
   )
-}
+};
+
+const Loader = () => (
+  <div style={{ textAlign: 'center' }}>
+    <CircularProgress size={50} thickness={4} />
+  </div>
+);

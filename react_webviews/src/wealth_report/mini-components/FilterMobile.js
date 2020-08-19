@@ -3,16 +3,17 @@ import Dialog from "common/ui/Dialog";
 import WrButton from "../common/Button";
 import { HoldingFilterOptions as Filters } from "../constants";
 import Button from "material-ui/Button";
-import { isMobileDevice } from "utils/functions";
+import { getConfig } from "utils/functions";
 import CloseIcon from "@material-ui/icons/Close";
+const isMobileView = getConfig().isMobileDevice;
 
 class FilterMobile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fund_type: "",
-      current_value: "",
-      rating: "",
+      scheme_type: {},
+      current_value_type: {},
+      fisdom_rating: {},
       filters: [],
       open: false
     };
@@ -42,22 +43,27 @@ class FilterMobile extends Component {
   }
 
   applyFilters = () => {
-    const filters = ['fund_type', 'current_value', 'rating'].map(kind => ({
+    const filterKeys = Filters.map(filter => filter.id);
+    const filters = filterKeys.map(kind => ({
       category: kind,
       label: this.state[kind].label || '',
       value: this.state[kind].value || '',
     }));
+    const filtersObj = filters.reduce((obj, currentObj) => {
+      obj[currentObj.category] = currentObj.value;
+      return obj;
+    }, {});
 
     this.setState({ filters });
-    this.props.onFilterChange(filters);
+    this.props.onFilterChange(filtersObj);
   };
 
   clearFilters = () => {
     this.setState({
       filters: [],
-      fund_type: {},
-      current_value: {},
-      rating: {},
+      scheme_type: {},
+      current_value_type: {},
+      fisdom_rating: {},
     });
   };
 
@@ -131,8 +137,8 @@ class FilterMobile extends Component {
     return (
       <React.Fragment>
         <Dialog
-            open={this.props.open}
-            onClose={this.props.onClose}
+            open={this.state.open}
+            onClose={() => this.setState({ open: false })}
             style={{marginTop:'60px'}}
             classes={{ paper: "wr-paper-filter" }}
         >
@@ -142,7 +148,7 @@ class FilterMobile extends Component {
         <Button
           variant="fab"
           style={{
-            display: isMobileDevice() ? "none" : "",
+            display: isMobileView ? "" : "none",
           }}
           className='wr-fab-btn'
           onClick={this.handleClick}
