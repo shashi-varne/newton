@@ -2,7 +2,7 @@ import React from 'react';
 import { withStyles } from 'material-ui/styles';
 
 import hand from 'assets/hand_icon.png';
-import './style.css';
+import './style.scss';
 
 const Banner = (props) => (
   <div className="Banner">

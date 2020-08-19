@@ -1,5 +1,5 @@
 .result-container-risk {
-  background-color: #155acf;
+  background-color: #155acf !important;
   /* autoprefixer: off */
   height: -webkit-fill-available; 
   margin-bottom: 0px;
