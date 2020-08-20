@@ -123,7 +123,7 @@ class ContactDetails extends Component {
             "properties": {
                 "user_action": user_action,
                 "screen_name": 'loan requirements',
-                "employment_type": employment_type || '' ? employment_type === "Salaried" ? "salaried" : "self employed" : ""
+                "employment_type": employment_type || ''
             }
         };
 

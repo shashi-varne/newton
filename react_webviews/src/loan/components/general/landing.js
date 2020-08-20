@@ -25,7 +25,6 @@ class Landing extends Component {
       calculator_clicked: false,
       resume_clicked: false,
       faq_clicked: false,
-      isResume: true
     }
 
     this.initialize = initialize.bind(this);
@@ -115,7 +114,7 @@ class Landing extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'introduction',
-        "action": this.state.action === 'banner' ? 'banner' : this.state.top_cta_title,
+        "action": data.action,
         "calculator_clicked": this.state.calculator_clicked ? "yes" : "no",
         "resume_clicked": this.state.isResume ? 'yes' : 'no',
         "faq_clicked": data.things_to_know === 'faq' ? 'yes' : 'no'
@@ -220,14 +219,13 @@ class Landing extends Component {
     return state;
   }
 
-  handleClickTopCard = (event) => {
-    if (event.target.className === 'wr-banner') {
-      this.setState({
-        action: 'banner'
-      })
+  handleClickTopCard = (action) => {
+    if (action === 'banner') {
+      this.sendEvents('next', {action: 'banner'})
+    } else {
+      this.sendEvents('next', { action: this.state.this.state.top_cta_title });
     }
-    console.log(event.target)
-    this.sendEvents('next');
+
     let state =  this.getNextState();
 
     if(state === 'instant-kyc-status') {
@@ -268,9 +266,9 @@ class Landing extends Component {
       >
        
        <div className="loan-landing loan-instant-kyc-home" >
-        <div className="infoimage-block1" onClick={(event) => this.handleClickTopCard(event)} >
+        <div className="infoimage-block1" onClick={() => this.handleClickTopCard("banner")} >
         
-          <img style={{ width: '100%', cursor: 'pointer', borderRadius: 6 }} id="wr-banner"
+          <img style={{ width: '100%', cursor: 'pointer', borderRadius: 6 }}
           src={require(`assets/${this.state.productName}/ils_loan_intro_card.svg`)} alt="" />
           <div className="inner">
             <div className="title generic-page-title" style={{color: 'white'}}>

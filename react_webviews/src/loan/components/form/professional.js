@@ -11,7 +11,6 @@ import {
      validateAlphabets
 } from 'utils/validators';
 import Api from 'utils/api';
-import { format } from 'crypto-js';
 
 class ProfessionalDetails extends Component {
 
