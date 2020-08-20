@@ -286,23 +286,7 @@ class FormSummary extends Component {
 
 
     sendEvents(user_action, data = {}) {
-        var detail_click;
-        switch(this.state.selectedIndex) {
-            case 0: 
-                detail_click = 'personal';
-                break;
-            case 1: 
-                detail_click = 'contact';
-                break;
-            case 2: 
-                detail_click = 'address';
-                break;
-            case 3:
-                detail_click = 'professional';
-                break;
-            default: 
-                detail_click = 'none';
-        }
+        let detail_click = this.state.accordianData[this.state.selectedIndex].title;
             
         let eventObj = {
             "event_name": 'lending',
@@ -389,7 +373,6 @@ class FormSummary extends Component {
     }
 
     openEdit = (state) => {
-        console.log(state)
         this.sendEvents('next', { edit_clicked: state });
         this.navigate(state);
     }

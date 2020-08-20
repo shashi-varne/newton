@@ -97,7 +97,6 @@ class MandateBank extends Component {
         'confirm_account_no': this.state.form_data.confirm_account_no ? 'yes' : 'no',
         'ifsc_code': this.state.form_data.ifsc_code ? 'yes' : 'no',
         'account_type': this.state.form_data.account_type ? 'yes' : 'no',
-        'cta_activated': this.state.withProvider ? 'yes' : 'no'
       }
     };
 

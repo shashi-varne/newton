@@ -24,7 +24,8 @@ class Landing extends Component {
       ic_why_hs: getConfig().productName === 'fisdom' ? ic_why_hs_fisdom : ic_why_hs_myway,
       calculator_clicked: false,
       resume_clicked: false,
-      faq_clicked: false
+      faq_clicked: false,
+      isResume: true
     }
 
     this.initialize = initialize.bind(this);
@@ -81,10 +82,6 @@ class Landing extends Component {
     let process_done = false;
     let isResume = true;
     let top_cta_title = 'RESUME';
-
-    this.setState({
-      isResume: isResume
-    })
 
     if(!application_info.latitude || !application_info.network_service_provider) {
       this.setState({
@@ -223,8 +220,14 @@ class Landing extends Component {
     return state;
   }
 
-  handleClickTopCard = () => {
-
+  handleClickTopCard = (event) => {
+    if (event.target.className === 'infoimage-block1') {
+      this.setState({
+        action: 'banner'
+      })
+    }
+    console.log(event.target)
+    this.sendEvents('next');
     let state =  this.getNextState();
 
     if(state === 'instant-kyc-status') {
@@ -265,7 +268,7 @@ class Landing extends Component {
       >
        
        <div className="loan-landing loan-instant-kyc-home" >
-        <div className="infoimage-block1" onClick={() => this.handleClickTopCard()} >
+        <div className="infoimage-block1" onClick={(event) => this.handleClickTopCard(event)} >
         
           <img style={{ width: '100%', cursor: 'pointer', borderRadius: 6 }} 
           src={require(`assets/${this.state.productName}/ils_loan_intro_card.svg`)} alt="" />

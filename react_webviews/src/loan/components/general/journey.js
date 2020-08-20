@@ -25,7 +25,6 @@ class Journey extends Component {
       get_lead: true,
       getLeadBodyKeys: ['vendor_info'],
       productName: getConfig().productName,
-      stage: 'check eligibility'
     }
 
     this.initialize = initialize.bind(this);
@@ -156,18 +155,27 @@ class Journey extends Component {
     this.setState({
       journeyData: journeyData,
       withProvider: withProvider,
-      nextFunction: nextFunction
+      nextFunction: nextFunction,
+      step_info: step_info
     })
   }
 
   sendEvents(user_action) {
+    let { step_info } = this.state
+    let stage;
+    if (step_info === 1)
+      stage = 'check eligibility'
+    else if (step_info === 2)
+      stage = 'provide bank detail'
+    else if (step_info === 3)
+      stage = 'get money'
 
     let eventObj = {
       "event_name": 'lending',
       "properties": {
         "user_action": user_action,
         "screen_name": 'lending journey',
-        "stage": this.state.stage
+        "stage": stage
       }
     };
 
@@ -200,16 +208,7 @@ class Journey extends Component {
   }
 
   renderJourney = (props, index) => {
-    let { journeyData } = this.state
-    if(props.status === 'init') {
-      if (props.title === journeyData[0])
-        this.setState({ stage: 'check eligibility' });
-      if (props.title === journeyData[1])
-        this.setState({ stage: 'provide bank detail' });
-      if (props.title === journeyData[2])
-        this.setState({ stage: 'get money' });
-    }
-    return (
+        return (
       <div key={index} className="tile" style={{ borderLeft: this.getJourneyBorder(props, index) }}>
         <div style={{ position: 'relative' }}>
           {props.status === 'success' &&
