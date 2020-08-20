@@ -533,10 +533,15 @@
         margin-right: 10px;
         color: rgba(0, 0, 0, 0.6);
         font-weight: 500;
+        width: 15%;
 
         hr {
           display: none;
         }
+      }
+
+      .wr-small-col {
+        flex-basis: 15%;
       }
     }
   }
@@ -1037,6 +1042,12 @@
     }
   }
 
+  #wr-holdings {
+    .wr-card-template {
+      margin-bottom: 16px;
+    }
+  }
+
   #wr-taxation {
     min-height: 540px;
 
@@ -1081,15 +1092,13 @@
           font-size: 12px;
           flex-basis: 100%;
           margin-bottom: 14px;
+          display: flex;
 
           hr {
-            width: 65%;
+            width: 68%;
             display: inline-block;
-            border: 0.5px solid rgba(21, 7, 49, 0.05);
-            border-style: outset;
-            margin: 7px;
+            border: 0.5px solid rgba(21,7,49,0.05);
             vertical-align: bottom;
-            position: absolute;
           }
         }
       }

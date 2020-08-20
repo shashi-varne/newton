@@ -312,15 +312,7 @@ export const fetchTaxFilters = async (params = {}) => {
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
-      return {
-        financial_years: (result.financial_years || []).map(filter => ({
-          label: filter, value: filter,
-        })),
-        tax_slabs: (result.tax_slabs || []).map(filter => ({
-          label: `${filter}%`,
-          value: filter,
-        })),
-      };
+      return result;
     } else {
       throw (result.error || result.message || genericErrMsg);
     }

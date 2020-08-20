@@ -7,6 +7,7 @@ import WrTable from '../mini-components/WrTable';
 import { fetchAnalysis } from '../common/ApiCalls';
 import { isEmpty } from '../../utils/validators';
 import { CircularProgress } from 'material-ui';
+import CardLoader from '../mini-components/CardLoader';
 const isMobileDevice = getConfig().isMobileDevice;
 const tabSpecificData = {
   equity: {
@@ -79,7 +80,7 @@ export default function Analysis(props) {
         <div id="wr-analysis-graph">
           {graphLoading ?
             (
-              <Loader />
+              <CardLoader />
             ) :
             (
               <Fragment>
@@ -110,7 +111,7 @@ export default function Analysis(props) {
         <div id="wr-analysis-graph">
           {graphLoading ?
             (
-              <Loader />
+              <CardLoader />
             ) :
             (
               <Fragment>

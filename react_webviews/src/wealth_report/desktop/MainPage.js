@@ -29,13 +29,13 @@ const MainPage = (props) => {
 
   const renderTab = (tab) => {
     if (tab === 'overview') {
-      return <Overview pan={pan} />
+      return <Overview pan={pan} parentProps={props}/>
     } else if (tab === 'analysis') {
-      return <Analysis pan={pan} />
+      return <Analysis pan={pan} parentProps={props}/>
     } else if (tab === 'holdings') {
-      return <Holdings pan={pan} />
+      return <Holdings pan={pan} parentProps={props}/>
     } else if (tab === 'taxation') {
-      return <Taxation pan={pan} />
+      return <Taxation pan={pan} parentProps={props}/>
     }
   };
 

@@ -23,7 +23,7 @@ const theme = createMuiTheme({
         lineHeight: "1.2",
         letterSpacing: "0.76px",
         color: "var(--primary)",
-        textTransform: "uppercase",
+        textTransform: "capitalize",
         textAlign: "center"
       },
       icon: {

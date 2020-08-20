@@ -119,6 +119,7 @@ span.wr-small-col-title {
 
 .wr-hc-amc-detail {
   flex-basis: 40% !important;
+  background-color: white;
   padding: 42px;
   box-sizing: border-box;
   display: flex;
@@ -469,7 +470,7 @@ span.wr-small-col-title {
 }
 
 @media only screen 
-  and (min-device-width: 375px) 
+  and (min-device-width: 310px) 
   and (max-device-width: 812px) {
 
   .wr-dialog-paper {
@@ -502,6 +503,14 @@ span.wr-small-col-title {
     td {
       padding: 14px 5px;
       font-size: 12px;
+    }
+  }
+
+  .wr-transaction-table {
+    tbody {
+      td:nth-child(1) {
+        width: 35%;
+      }
     }
   }
 

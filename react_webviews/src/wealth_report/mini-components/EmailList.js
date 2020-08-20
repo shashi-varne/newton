@@ -23,15 +23,17 @@ export default function EmailList(props) {
   const [emailAdded, setEmailAdded] = useState(false);
   const [mailInput, setMailInput] = useState("");
 
-  useEffect(async () => {
-    try {
-      const data = await fetchEmails();
-      setAccounts(data);
-    } catch (err) {
-      console.log(err);
-      toast(err);
-    }
-  },[])
+  useEffect(() => {
+    (async() => {
+      try {
+        const data = await fetchEmails();
+        setAccounts(data);
+      } catch (err) {
+        console.log(err);
+        toast(err);
+      }
+    })();
+  },[]);
 
   const handleClick = () => {
     setAddEmail(true);

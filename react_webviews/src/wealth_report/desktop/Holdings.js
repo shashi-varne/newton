@@ -18,7 +18,7 @@ export default function Holdings(props) {
       let data;
       try {
         if (nextPage) {
-          data = await hitNextPage({ pan: props.pan, ...selectedFilters });
+          data = await hitNextPage(nextPage);
         } else {
           setLoading(true);
           data = await fetchHoldings({ pan: props.pan, ...selectedFilters });
@@ -63,7 +63,12 @@ export default function Holdings(props) {
       }
 
       {!isLoading && !!holdingsData.length && holdingsData.map((holding, idx) => (
-        <HoldingCard key={idx} holding={holding} />
+        <HoldingCard
+          key={idx}
+          holding={holding}
+          pan={props.pan}
+          parentProps={props.parentProps}
+        />
       ))}
 
       {!!nextPage && !loadingMore &&

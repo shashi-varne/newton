@@ -3,6 +3,9 @@ import WrButton from '../common/Button';
 import WrTable from './WrTable';
 import { IconButton } from '@material-ui/core';
 import { numDifferentiationInr, formattedDate } from '../../utils/validators';
+import AMCDetail from './AMCDetail';
+import { Button } from 'material-ui';
+import { navigate } from '../common/commonFunctions';
 
 export default function HoldingCard(props) {
   const [expanded, expandCard] = useState(false);
@@ -35,24 +38,16 @@ export default function HoldingCard(props) {
     </div>
   );
 
-  const renderPastTransactions = () => (
-    <div className="wr-hce-past-trx wr-table-container">
-      <WrTable></WrTable>
-    </div>
-  );
-
-  const AMCDetail = () => (
-    <div className="wr-hc-amc-detail">
-      <img className="amc-logo" src={require('assets/fisdom/ic-investment-strategy.svg')} alt="amc-logo" />
-      <div className="wr-amc-detail">
-        <div className="amc-detail-title">{holding.fund_name}</div>
-        <div className="amc-detail-subtitle">{holding.scheme_type} · Since {formattedDate(holding.investment_since, 'm y')}</div>
-        {/* // visbility will be modified based on the condition */}
-        {holding.free_from_el_lockin && <div className="wr-EL-label">Free from EL / Lock-in</div>}
+  const renderPastTransactions = () => {
+    return (
+      <div className="wr-hce-past-trx wr-table-container">
+        <Button onClick={() => navigate(props.parentProps, '/w-report/transactions', {
+          holding,
+          pan: props.pan,
+        })} />
       </div>
-      {FisdomRating(holding.fisdom_rating)}
-    </div>
-  );
+    );
+  }
 
   return (
     <div className="wr-card-template">
@@ -61,7 +56,7 @@ export default function HoldingCard(props) {
         <img src={require('assets/fisdom/label.svg')} alt="amc-logo" id="wr-amc-img" />
       </div>
       <div className="wr-holding-card">
-        {AMCDetail()}
+        {AMCDetail(holding)}
         <div className="wr-hc-user-data">
           <div className="wr-small-col">
             <span className="wr-small-col-val">{numDifferentiationInr(holding.total_amount_invested)}</span>
@@ -114,37 +109,3 @@ export default function HoldingCard(props) {
     </div>
   );
 };
-
-const FisdomRating = (rating = 0) => {
-  rating = parseInt(rating, 10);
-  if (rating === 0) {
-    return (<div
-      className="wr-fisdom-rating"
-      style={{ background: 'rgba(129, 129, 129, 0.08)' }}>
-      <span
-        className="rating-num"
-        style={{ color: 'rgba(129, 129, 129, 0.5)' }}>
-        --
-      </span>
-    </div>);
-  }
-
-  return (
-    <div
-      className="wr-fisdom-rating"
-      style={{
-        background: rating < 4 ? 'rgba(208,2,27,0.1)' : 'rgba(86,174,98,0.1)'
-      }}>
-      <span
-        className="rating-num"
-        style={{ color: rating < 4 ? '#d0021b' : '#56ae62' }}>
-        {rating}
-      </span>
-      <img
-        alt="star"
-        src={require(`assets/ic-star-${rating < 4 ? 'red' : 'green'}.svg`)}
-        className="rating-star"
-      />
-    </div>
-  );
-}

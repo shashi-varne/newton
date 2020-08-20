@@ -1,6 +1,8 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Button } from 'material-ui';
+import { getConfig } from "utils/functions";
+const isMobileView = getConfig().isMobileDevice;
 
 const NewButton = (props) => {
   const { root, raised, label } = props.classes || {};
@@ -20,7 +22,7 @@ const NewButton = (props) => {
 const WrButton = withStyles({
   root: {
     borderRadius: '6px',
-    padding: '12px 19px',
+    padding: isMobileView ? '8px' : '12px 19px',
   },
   raised: {
     boxShadow: 'none',
@@ -36,9 +38,9 @@ const WrButton = withStyles({
   },
   label: {
     color: 'white',
-    fontSize: '17px',
+    fontSize: isMobileView ? '12px' : '17px',
     letterSpacing: 'normal',
-    textTransform: 'inherit',
+    textTransform: 'capitalize',
     fontWeight: 'normal',
   },
 })(NewButton);

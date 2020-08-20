@@ -26,8 +26,10 @@ const Taxation = (props) => {
   useEffect(() => {
     (async () => {
       try {
-        const taxFilters = await fetchTaxFilters({ pan : props.pan });
+        let taxFilters = await fetchTaxFilters({ pan : props.pan });
+        taxFilters = formatFilters(taxFilters);
         setTaxFilters(taxFilters);
+        // TODO: Save values to LS
         const financial_year =
           selectedFinYear || taxFilters.financial_years[0].value;
         const tax_slab = selectedTaxSlab || taxFilters.tax_slabs[0].value;
@@ -58,6 +60,24 @@ const Taxation = (props) => {
       setLoading(false);
     })();
   }, [selectedFinYear, selectedTaxSlab]);
+
+  const formatFilters = (filtersObj) => {
+    const yearFormatter = (val) => {
+      const [year1, year2] = val.split(' - ');
+      return `FY ${year1} - ${year2.slice(-2)}`;
+    };
+
+    return {
+      financial_years: (filtersObj.financial_years || []).map(filter => ({
+        label: yearFormatter(filter),
+        value: filter,
+      })),
+      tax_slabs: (filtersObj.tax_slabs || []).map(filter => ({
+        label: `Slab ${filter}%`,
+        value: filter,
+      })),
+    };
+  };
 
   const handleSelect = (event) => {
     const name = event.target.name;
@@ -101,12 +121,11 @@ const Taxation = (props) => {
       <Fragment>
         <div className="wr-taxation-detail-row">
           <div className="wr-tdr-title">
-            Overall
-            <span style={{ textTransform: "uppercase" }}> {tabSelected}</span>
+            Overall {tabSelected.toUpperCase()}
             <hr></hr>
           </div>
-          {colMapping.overall.map((col) => (
-            <div className="wr-small-col">
+          {colMapping.overall.map((col, idx) => (
+            <div className="wr-small-col" key={idx}>
               <span className="wr-small-col-val">
                 {inrFormatDecimal(overall[col.propName])}
               </span>
@@ -119,8 +138,8 @@ const Taxation = (props) => {
             Debt Funds
             <hr></hr>
           </div>
-          {colMapping.debt.map((col) => (
-            <div className="wr-small-col">
+          {colMapping.debt.map((col, idx) => (
+            <div className="wr-small-col" key={idx}>
               <span className="wr-small-col-val">
                 {inrFormatDecimal(debt[col.propName])}
               </span>
@@ -133,8 +152,8 @@ const Taxation = (props) => {
             Equity Funds
             <hr></hr>
           </div>
-          {colMapping.equity.map((col) => (
-            <div className="wr-small-col">
+          {colMapping.equity.map((col, idx) => (
+            <div className="wr-small-col" key={idx}>
               <span className="wr-small-col-val">
                 {inrFormatDecimal(equity[col.propName])}
               </span>
@@ -204,7 +223,7 @@ const Taxation = (props) => {
                 </span>
                 <span className="wr-tsc-label">
                   Estimated Tax
-              <span style={{ marginLeft: "6px", verticalAlign: "middle" }}>
+                  <span style={{ marginLeft: "6px", verticalAlign: "middle" }}>
                     {!isMobileDevice() ? (
                       <Tooltip
                         content={tipcontent}
@@ -249,12 +268,12 @@ const Taxation = (props) => {
                   classes={{
                     root: tabSelected === tab ? "" : "wr-outlined-btn",
                   }}
-                  style={{ marginRight: "16px", textTransform: "uppercase" }}
+                  style={{ marginRight: "16px" }}
                   onClick={() => selectTab(tab)}
                   key={index}
                   disableRipple
                 >
-                  {tab}
+                  {tab.toUpperCase()}
                 </WrButton>
               ))}
               {renderTaxDetailRows()}
