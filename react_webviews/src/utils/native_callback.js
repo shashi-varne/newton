@@ -29,6 +29,10 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     return;
   }
 
+  if(events && events.properties) {
+    console.log(events.properties);
+  }
+
 
   if (callbackData.action === 'open_pdf') {
     callbackData.action = 'open_url';
