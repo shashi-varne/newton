@@ -354,6 +354,8 @@ function getPartnerConfig(partner_code) {
     // config_to_return.webAppUrl = 'http://localhost:3001/#!/';
   }
 
+  config_to_return.isStaging = isStaging;
+
   let partnerKeysMapper = {
     'askEmail': 'email',
     'mobile': 'mobile',
@@ -596,9 +598,6 @@ export const getConfig = () => {
     searchParamsMustAppend += `&app_version=${app_version}`;
   }
 
-
-
-
   // should be last
   returnConfig.current_params = main_query_params;
   returnConfig.base_url = base_url;
@@ -611,35 +610,40 @@ export const getConfig = () => {
 }
 
 export function isFeatureEnabled(config, feature) {
-  // let partner_code = config.code;
+  let partner_code = config.type;
   let app = config.app;
   let app_version = config.app_version;
+  
+  if(config.isStaging) {
+    app_version = '999';
+  }
 
   if(app === 'web') {
     return true;
   }
 
+
   if(feature === 'etli_download' && app === 'android' && parseInt(app_version, 10) >= 999) {
     return true;
   }
 
-  // let mapper = {
-  //   'etli_download': {
-  //     'fisdom': {
-  //       'android': '201',
-  //       'ios': ''
-  //     },
-  //     'myway': {
-  //       'android': '98',
-  //       'ios': ''
-  //     }
-  //   }
-  // }
+  let mapper = {
+    'open_inapp_tab_hs': {
+      'fisdom': {
+        'android': '999',
+        'ios': ''
+      },
+      'myway': {
+        'android': '999',
+        'ios': ''
+      }
+    }
+  }
 
-  // if(mapper[feature] && mapper[feature][partner_code] && mapper[feature][partner_code][app] &&
-  //   mapper[feature][partner_code][app] === app_version) {
-  //   return true;
-  // }
+  if(mapper[feature] && mapper[feature][partner_code] && mapper[feature][partner_code][app] &&
+    mapper[feature][partner_code][app] === app_version) {
+    return true;
+  }
 
   return false;
 }

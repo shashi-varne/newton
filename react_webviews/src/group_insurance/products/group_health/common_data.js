@@ -1,5 +1,5 @@
 import { storageService, inrFormatDecimal, getEditTitle } from 'utils/validators';
-import { getConfig } from 'utils/functions';
+import { getConfig, isFeatureEnabled } from 'utils/functions';
 import { health_providers, ghGetMember } from '../../constants';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
@@ -264,31 +264,49 @@ export function openInBrowser(url, type) {
     if(!url) {
         return;
     }
-    this.sendEvents('tnc_clicked');
-    if (!getConfig().Web) {
-        this.setState({
-            show_loader: true
-        })
-    }
+    this.sendEvents(type);
 
-    let mapper = {
-        'tnc' : {
-            header_title: 'Terms & Conditions',
-        },
-        'read_document' : {
-            header_title: 'Read Detailed Document',
+    let open_inapp_tab_hs = isFeatureEnabled(getConfig(), 'open_inapp_tab_hs');
+
+    if(open_inapp_tab_hs) {
+
+        if(!getConfig().Web) {
+            url = "https://docs.google.com/gview?embedded=true&url=" + url;
         }
+        
+        nativeCallback({
+            action: 'open_inapp_tab',
+            message: {
+                url: url || ''
+            }
+        });
+    } else {
+        if (!getConfig().Web) {
+            this.setState({
+                show_loader: true
+            })
+        }
+    
+        let mapper = {
+            'tnc' : {
+                header_title: 'Terms & Conditions',
+            },
+            'read_document' : {
+                header_title: 'Read Detailed Document',
+            }
+        }
+    
+        let mapper_data = mapper[type];
+    
+        let data = {
+            url: url,
+            header_title: mapper_data.header_title,
+            icon: 'close'
+        };
+    
+        openPdfCall(data);
     }
-
-    let mapper_data = mapper[type];
-
-    let data = {
-        url: url,
-        header_title: mapper_data.header_title,
-        icon: 'close'
-    };
-
-    openPdfCall(data);
+    
 }
 
 export function setEditTitle(string) {
