@@ -10,6 +10,7 @@ import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
 import { yesNoOptions } from '../../../constants';
 import PlusMinusInput from '../../../../common/ui/PlusMinusInput';
+import { childeNameMapper } from '../../../constants';
 class GroupHealthPlanIsPed extends Component {
 
     constructor(props) {
@@ -237,6 +238,7 @@ class GroupHealthPlanIsPed extends Component {
             <div key={index}>
                 <PlusMinusInput
                     name={props.key}
+                    label={childeNameMapper(props.key)}
                     parent={this}
                 />
                 <div className="generic-hr"></div>

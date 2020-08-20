@@ -9,6 +9,8 @@ import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
 import CheckboxList from '../../../../common/ui/CheckboxList';
 import {  capitalizeFirstLetter } from 'utils/validators';
+import { childeNameMapper } from '../../../constants';
+
 class GroupHealthPlanSelectPed extends Component {
 
     constructor(props) {
@@ -246,7 +248,7 @@ class GroupHealthPlanSelectPed extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
-                title={this.setEditTitle(capitalizeFirstLetter(this.state.member_key) + "'s pre-existing diseases")}
+                title={this.setEditTitle(capitalizeFirstLetter(childeNameMapper(this.state.member_key)) + "'s pre-existing diseases")}
                 buttonTitle="CONTINUE"
                 withProvider={true}
                 handleClick2={this.handleClick2}

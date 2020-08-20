@@ -9,6 +9,7 @@ import { initialize, updateBottomPremium } from '../common_data';
 
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
+import { childeNameMapper } from '../../../constants';
 class GroupHealthPlanSelectFloater extends Component {
 
     constructor(props) {
@@ -79,7 +80,7 @@ class GroupHealthPlanSelectFloater extends Component {
 
                     if (premium_data_nf[backend_key]) {
                         let obj = {
-                            name: numDifferentiation(this.state.sum_assured) + ' for ' + mem.key,
+                            name: numDifferentiation(this.state.sum_assured) + ' for ' + childeNameMapper(mem.key).toLowerCase(),
                             value: inrFormatDecimal(premium_data_nf[backend_key])
                         };
                         ind_pre_data.push(obj);

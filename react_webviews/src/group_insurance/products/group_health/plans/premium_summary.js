@@ -8,6 +8,7 @@ import { initialize } from '../common_data';
 import BottomInfo from '../../../../common/ui/BottomInfo';
 
 import Api from 'utils/api';
+import { childeNameMapper } from '../../../constants';
 import toast from '../../../../common/ui/Toast';
 class GroupHealthPlanPremiumSummary extends Component {
 
@@ -110,7 +111,7 @@ class GroupHealthPlanPremiumSummary extends Component {
     renderIndPremium = (props, index) => {
         return (
             <div key={index} className="nf-info flex-between" style={{ margin: '0 0 6px 0' }}>
-                <div>{props.key}</div>
+                <div style={{textTransform: 'capitalize'}}>{childeNameMapper(props.key)}</div>
                 <div>{inrFormatDecimal(this.state.plan_selected_final[props.backend_key])}</div>
             </div>
         )

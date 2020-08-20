@@ -103,7 +103,7 @@ class PlusMinusInputClass extends Component {
                         
                             <Grid item xs={11}>
                                 <div className="right-data">
-                                    <div className="content" style={{textTransform: 'capitalize'}}>{name}</div>
+                                    <div className="content" style={{textTransform: 'capitalize'}}>{this.props.label || name}</div>
                                     {parentState[name + '_checked'] &&
                                      (!parentState[name + '_onlycheckbox'] && !parentState.onlycheckbox) &&
                                         <div className="images">
