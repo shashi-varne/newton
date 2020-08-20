@@ -224,7 +224,7 @@ class Landing extends Component {
     if (action === 'banner') {
       this.sendEvents('next', {action: 'banner'})
     } else {
-      this.sendEvents('next', { action: this.state.this.state.top_cta_title });
+      this.sendEvents('next', { action: this.state.top_cta_title });
     }
 
     let state =  this.getNextState();
