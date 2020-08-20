@@ -115,7 +115,7 @@ export default function Overview(props) {
   const tooltip = (
     <span style={{ marginLeft: "6px", verticalAlign:'middle' }}>
       {!isMobileView ? 
-        <Tooltip content={tipcontent} direction="down" className="wr-xirr-info">
+        <Tooltip content={tipcontent} direction="down" className="wr-xirr-info2">
           {i_btn}
         </Tooltip> : 
         <React.Fragment>
@@ -154,7 +154,25 @@ export default function Overview(props) {
               <div className="wr-okn-box">
                 <div className="wr-okn-title">
                   XIRR
-                  {tooltip}
+                  {
+                    <span style={{ marginLeft: "6px", verticalAlign:'middle' }}>
+                      {!isMobileView ? 
+                        <Tooltip content={tipcontent} direction="down" className="wr-xirr-info">
+                          {i_btn}
+                        </Tooltip> : 
+                        <React.Fragment>
+                          {i_btn}
+                          <Dialog
+                            open={openModal}
+                            onClose={() => toggleModal(false)}
+                            classes={{ paper: "wr-dialog-info" }}
+                          >
+                            {tipcontent}
+                          </Dialog>
+                        </React.Fragment>
+                      }
+                    </span>
+                  }
                 </div>
                 <div className="wr-okn-value">
                   {xirrPercent.xirr ? `${Math.round(xirrPercent.xirr)}%` : 'N/A'}
@@ -213,12 +231,30 @@ export default function Overview(props) {
               ) :
               (
                 <div style={{ width: '100%', height: '400px', clear: 'right' }}>
-                  <div style={{ width:'102px', height: '85px', backgroundColor:'rgba(80,45,168,0.1)', textAlign:'center', padding:'22px' }}>
-                    <div style={{color:'#502da8'}}>
+                  <div style={{ width:'102px', backgroundColor:'rgba(80,45,168,0.1)', textAlign:'center', padding:'22px 0', color:'var(--primary)' }}>
+                    <div>
                       XIRR
-                      {tooltip}
+                      {
+                        <span style={{ marginLeft: "6px", verticalAlign:'middle' }}>
+                          {!isMobileView ? 
+                            <Tooltip content={tipcontent} direction="down" className="wr-xirr-info-2">
+                              {i_btn}
+                            </Tooltip> : 
+                            <React.Fragment>
+                              {i_btn}
+                              <Dialog
+                                open={openModal}
+                                onClose={() => toggleModal(false)}
+                                classes={{ paper: "wr-dialog-info" }}
+                              >
+                                {tipcontent}
+                              </Dialog>
+                            </React.Fragment>
+                          }
+                        </span>
+                      }
                     </div>
-                    <div className="">
+                    <div style={{fontSize:'24px', fontWeight:600, lineHeight:1}}>
                       {xirrPercent.xirr ? `${Math.round(xirrPercent.xirr)}%` : 'N/A'}
                     </div>
                   </div>
