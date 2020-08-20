@@ -619,6 +619,14 @@
   color: var(--primary);
 }
 
+#wr-xirr {
+  width: 102px;
+  background-color: rgba(80,45,168,0.1);
+  text-align: center;
+  padding: 22px 0;
+  color: var(--primary);
+}
+
 @media only screen and (min-device-width: 310px) and (max-device-width: 812px) {
   #wr-login {
     display: none;

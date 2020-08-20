@@ -231,7 +231,7 @@ export default function Overview(props) {
               ) :
               (
                 <div style={{ width: '100%', height: '400px', clear: 'right' }}>
-                  <div style={{ width:'102px', backgroundColor:'rgba(80,45,168,0.1)', textAlign:'center', padding:'22px 0', color:'var(--primary)' }}>
+                  <div id="wr-xirr">
                     <div>
                       XIRR
                       {
