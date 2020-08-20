@@ -94,7 +94,7 @@ class ReportDetails extends Component {
       "event_name": 'lending',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'report details'
+        "screen_name": 'loan details'
       }
     };
 

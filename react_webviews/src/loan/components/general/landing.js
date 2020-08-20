@@ -115,7 +115,7 @@ class Landing extends Component {
         "user_action": user_action,
         "screen_name": 'introduction',
         "action": data.action,
-        "calculator_clicked": this.state.calculator_clicked ? "yes" : "no",
+        "calculator_clicked": data.calculator_clicked ? "yes" : "no",
         "resume_clicked": this.state.isResume ? 'yes' : 'no',
         "faq_clicked": data.things_to_know === 'faq' ? 'yes' : 'no',
         "bottom_cta_click": data.action !== 'banner' ? 'yes' : 'no'
@@ -223,6 +223,8 @@ class Landing extends Component {
   handleClickTopCard = (action) => {
     if (action === 'banner') {
       this.sendEvents('next', {action: 'banner'})
+    } else if (action === 'calculator') {
+      this.sendEvents('next', {calculator_clicked: true})
     } else {
       this.sendEvents('next', { action: this.state.top_cta_title });
     }
@@ -288,9 +290,7 @@ class Landing extends Component {
         </div>
 
         <div className="action" onClick={ () => {
-          this.setState({
-            calculator_clicked: true
-          })
+          this.handleClickTopCard('calculator')
           this.navigate('calculator', {
           params: {
             next_state: this.getNextState(),
