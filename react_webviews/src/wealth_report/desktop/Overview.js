@@ -258,6 +258,17 @@ export default function Overview(props) {
                       {xirrPercent.xirr ? `${Math.round(xirrPercent.xirr)}%` : 'N/A'}
                     </div>
                   </div>
+                  <div id="wr-xirr-mob">
+                    {`XIRR: ${Math.round(xirrPercent.xirr)}%`}
+                    <div id="wr-invest">
+                      <span id="wr-dot"></span>
+                      Invested
+                    </div>
+                    <div id="wr-current">
+                      <span id="wr-dot"></span>
+                      Current
+                    </div>
+                  </div>
                   <MyResponsiveLine
                     data={formatGrowthData(growthGraph.data)}
                     params={{ date_ticks: growthGraph.date_ticks }}

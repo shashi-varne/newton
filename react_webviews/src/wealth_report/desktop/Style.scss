@@ -627,6 +627,10 @@
   color: var(--primary);
 }
 
+#wr-xirr-mob {
+  display: none;
+}
+
 @media only screen and (min-device-width: 310px) and (max-device-width: 812px) {
   #wr-login {
     display: none;
@@ -885,6 +889,36 @@
         flex: 1;
         padding: 12px 15px;
       }
+    }
+  }
+
+  #wr-xirr {
+    display: none !important;
+  }
+
+  #wr-xirr-mob {
+    display: flex !important;
+    justify-content: space-between;
+    padding-top: 30px !important;
+    color: var(--primary);
+
+    #wr-invest {
+      color: #8798ad;
+    }
+
+    #wr-current {
+      color: #8798ad;
+
+      #wr-dot {
+        background-color: #b9abdd !important;
+      }
+    }
+
+    #wr-dot {
+      background-color: var(--primary);
+      border-radius: 50% !important;
+      padding: 0 8px;
+      margin-right: 3px;
     }
   }
 
