@@ -2,6 +2,8 @@
 import { getConfig } from "utils/functions";
 const isMobileView = getConfig().isMobileDevice;
 
+export const regenTimeLimit = 30;
+
 export const genericErrMsg = 'Something went wrong. Please try again';
 
 export const HoldingFilterOptions = [
@@ -143,18 +145,3 @@ export const dummyTableData = [
   { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L' },
   { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L' },
 ];
-
-const sectorObj = {
-  "Others": "0.0698989",
-    "Basic Materials": "0.422978",
-      "Financial Services": "0.446535",
-        "Healthcare": "0.771251",
-          "Energy": "0.932876",
-            "Technology": "0.969383",
-              "Consumer Cyclical": "0.0211980",
-                "Consumer Defensive": "0.0951220",
-                  "Utilities": "1.08820",
-                    "Real Estate": "0.0122845",
-                      "Communication Services": "0.254756",
-                        "Industrials": "0.390771"
-};

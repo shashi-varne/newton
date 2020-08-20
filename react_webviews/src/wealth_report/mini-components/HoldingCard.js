@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import WrButton from '../common/Button';
-import WrTable from './WrTable';
 import { IconButton } from '@material-ui/core';
 import { numDifferentiationInr, formattedDate } from '../../utils/validators';
 import AMCDetail from './AMCDetail';

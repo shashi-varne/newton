@@ -38,6 +38,27 @@ export const login = async (params) => {
   }
 };
 
+export const logout = async (params) => {
+  try {
+    const res = await Api.get('api/logout');
+
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      storageService().clear();
+      return result;
+    } else {
+      throw (result.error || result.message || genericErrMsg);
+    }
+  } catch (e) {
+    throw e;
+  }
+};
+
 export const verifyOtp = async (params) => {
   const { mobileNo, countryCode, otp, ...rest } = params;
   try {

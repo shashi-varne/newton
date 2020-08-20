@@ -3,6 +3,7 @@ import WrButton from "../common/Button";
 import WrOtpInput from "../common/OtpInput";
 import WrPhoneInput from "../common/PhoneInput";
 import { getConfig } from "utils/functions";
+import SplashBg from "assets/fisdom/bg_image_hni.png";
 import { resendOtp, login, verifyOtp } from "../common/ApiCalls";
 import toast from '../../common/ui/Toast';
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -121,10 +122,13 @@ const Login = (props) => {
     );
   }
 
-  const renderContinueView = () => (
+  const renderSplashScreen = () => (
     <Fragment>
       <div id="wr-continue">
-        <img src="" alt="fisdom" />
+        <img
+          src={require('assets/fisdom/fisdom_logo.png')}
+          alt="fisdom"
+        />
         <div id="wr-title">Wealth Report</div>
         <div id="wr-subtitle">
           Now investing money made more easy and safe. We at fisdom monitor your
@@ -183,9 +187,14 @@ const Login = (props) => {
       {isMobileView && view !== 'loading' &&
         <div
           id="wr-login-mobile"
-          style={{ backgroundColor: view === 'splash' ? 'var(--primary)' : 'white' }}>
+          style={{
+            backgroundImage: view === 'splash' ? `url(${SplashBg})` : '',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+          }}
+        >
           <div id="wr-mobile-view">
-            {view === 'splash' && renderContinueView()}
+            {view === 'splash' && renderSplashScreen()}
             {view === 'phone' && renderNumberView()}
             {view === 'otp' && renderOTPView()}
             {view !== 'splash' && <div className="wr-continue-btn">

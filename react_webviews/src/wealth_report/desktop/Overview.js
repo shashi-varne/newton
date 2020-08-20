@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { LinearProgress, createMuiTheme, MuiThemeProvider, IconButton, CircularProgress } from 'material-ui';
+import { LinearProgress, createMuiTheme, MuiThemeProvider, IconButton } from 'material-ui';
 import MyResponsiveLine from '../mini-components/LineGraph';
 import { InsightMap, GraphDateRanges } from '../constants';
 import Tooltip from 'common/ui/Tooltip';

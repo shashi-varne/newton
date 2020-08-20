@@ -296,7 +296,7 @@ span.wr-small-col-title {
   }
 }
 
-.wr-add-email-btn {
+.wr-add-email-btn, .wr-add-email-btn:hover {
   background-color: rgba(80, 45, 168, 0.1) !important;
 
   .MuiButton-label {
@@ -850,10 +850,6 @@ span.wr-small-col-title {
     height: 30px  !important;
     width: 30px  !important;
   }
-
-  .wr-fisdom {
-    display: none;
-  }
 }
 
 .wr-email-list .react-tooltip-lite {
@@ -893,8 +889,15 @@ span.wr-small-col-title {
   .wr-mails {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 15px 0 20px 0;
     border-bottom: solid 1px #f5f6f8;
+    
+    .MuiIconButton-root {
+      height: 48px;
+      width: 48px;
+    }
+  
   }
 
   .wr-eli-email {
@@ -911,15 +914,22 @@ span.wr-small-col-title {
   // width: 485px;
   text-align: center;
   font-size: 17px;
-  margin: 20px 0 10px 0;
 
   .wr-content {
     margin: 31px 0 54px 0;
   }
 
-  .wr-continue {
-    color: #421f88;
-    font-weight: 500;
+  .wr-continue-btn {
+    border-radius: 6px;
+    border: solid 0.5px rgba(80, 45, 168, 0.1);
+    background-color: #ffffff;
+    padding: 15px;
+
+    .MuiButton-label {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--primary);
+    }
   }
 }
 .wr-welcome {
@@ -953,9 +963,10 @@ span.wr-small-col-title {
 
 .wr-logout {
   .wr-logout-btn {
-    background: #f3cece;
+    background-color: #f3cece !important;
     height: 47px;
     margin-top: 15px;
+
     .MuiButton-label{
       font-size: 15px;
       color: #e02020;
@@ -1039,12 +1050,14 @@ span.wr-small-col-title {
 
   .wr-cancel-btn {
     background-color: #fff;
-    border: solid 1px var(--primary);
-    height: 47px;
+    border: solid 1px var(--primary) !important;
     width: 35%;
     border-radius: 6px;
+    padding: 12px;
+
     .MuiButton-label{
-      color: var(--primary);
+      color: var(--primary) !important;
+      font-size: 17px;
     }
   }
 

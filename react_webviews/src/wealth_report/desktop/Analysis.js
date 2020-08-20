@@ -8,6 +8,7 @@ import { fetchAnalysis } from '../common/ApiCalls';
 import { isEmpty } from '../../utils/validators';
 import { CircularProgress } from 'material-ui';
 import CardLoader from '../mini-components/CardLoader';
+import WrButton from '../common/Button';
 const isMobileDevice = getConfig().isMobileDevice;
 const tabSpecificData = {
   equity: {
@@ -63,16 +64,41 @@ export default function Analysis(props) {
   }, [props.pan]);
 
   const initialiseTabData = (data) => {
-    console.log(data, !data);
+    console.log('initializing');
     if (!data || isEmpty(data)) data = analysisData || {};
     const { graph1Accessor, graph2Accessor } = tabSpecificData[selectedTab];
     setGraph1(data[`${selectedTab}_dict`][graph1Accessor] || []);
     setGraph2(data[`${selectedTab}_dict`][graph2Accessor] || []);
-    setHoldings(data.top_holdings[selectedTab]);
+    setHoldings(data.top_holdings[selectedTab] || []);
+  };
+
+  useEffect(() => {
+    initialiseTabData();
+    return () => {};
+  }, [selectedTab]);
+
+  const changeTab = (tab) => {
+    setTab(tab);
+    // initialiseTabData();
   };
 
   return (
     <React.Fragment>
+      <div id="wr-analysis-tabs">
+        {["equity", "debt"].map((tab, index) => (
+          <WrButton
+            classes={{
+              root: selectedTab === tab ? "" : "wr-outlined-btn",
+            }}
+            style={{ marginRight: "24px" }}
+            onClick={() => changeTab(tab)}
+            key={index}
+            disableRipple
+          >
+            {`${tab} · ${parseInt(analysisData.percent_split[tab] || 0, 10)}%`}
+          </WrButton>
+        ))}
+      </div>    
       <div className="wr-card-template">
         <div className="wr-card-template-header">
           {(tabSpecificData[selectedTab] || {}).graph1Name}
@@ -93,9 +119,9 @@ export default function Analysis(props) {
                 ></PieChart>
                 <div className="wr-allocation-graph-legend">
                   {graph1Data.map((alloc, idx) => (
-                    <div className="wr-agl-item" style={{ backgroundColor: TriColorScheme[idx] }}>
+                    <div className="wr-agl-item" style={{ backgroundColor: TriColorScheme[idx] }} key={idx}>
                       <div className="wr-agl-item-label">{alloc.label}</div>
-                      <div className="wr-agl-item-value">{alloc.value}%</div>
+                      <div className="wr-agl-item-value">{Math.round(alloc.value)}%</div>
                     </div>
                   ))}
                 </div>
@@ -122,9 +148,15 @@ export default function Analysis(props) {
                   colors={MultiColorScheme}
                 // margin={{ bottom: 100, left: 40 }}dummySector
                 ></PieChart>
-                <div className="wr-sector-graph-legend">
+                <div
+                  className="wr-sector-graph-legend"
+                  style={selectedTab === 'debt' ? {
+                    height: 'auto',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  } : {}}>
                   {graph2Data.map(({ label, value }, idx) => (
-                    <div className="wr-sgl-item">
+                    <div className="wr-sgl-item" key={idx}>
                       <div className="wr-sgl-item-chip" style={{ backgroundColor: MultiColorScheme[idx] || 'grey' }}></div>
                       <span className="wr-sgl-item-label">{label} · {Number(value).toFixed(2)}%</span>
                     </div>
