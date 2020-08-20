@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from 'material-ui/styles';
 import { Button } from 'material-ui';
 import { getConfig } from "utils/functions";
 const isMobileView = getConfig().isMobileDevice;
@@ -21,11 +21,12 @@ const NewButton = (props) => {
 
 const WrButton = withStyles({
   root: {
-    borderRadius: '6px',
-    padding: isMobileView ? '8px' : '12px 19px',
+    textTransform: 'capitalize',
   },
   raised: {
     boxShadow: 'none',
+    borderRadius: '6px',
+    padding: isMobileView ? '8px' : '12px 19px',
     backgroundColor: 'var(--primary)',
     '&:hover': {
       backgroundColor: 'var(--primary)',

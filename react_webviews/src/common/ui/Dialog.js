@@ -10,6 +10,11 @@ const theme = createMuiTheme({
         margin: '0 12px !important'
       },
     },
+    MuiDialogContent: {
+      root: {
+        padding: '14px !important',
+      },
+    },
   },
 });
 

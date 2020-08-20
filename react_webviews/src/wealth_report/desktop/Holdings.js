@@ -15,25 +15,35 @@ export default function Holdings(props) {
   const [isLoading, setLoading] = useState(true);
   useEffect(() => {
     (async () => {
-      let data;
       try {
-        if (nextPage) {
-          data = await hitNextPage(nextPage);
-        } else {
-          setLoading(true);
-          data = await fetchHoldings({ pan: props.pan, ...selectedFilters });
-          if (!data.holdings || !data.holdings.length) setNoHoldings(true);
+        setLoading(true);
+        setNoHoldings(false);
+        const data = await fetchHoldings({ pan: props.pan, ...selectedFilters });
+        if (!data.holdings || !data.holdings.length) {
+          setNoHoldings(true);
         }
         setHoldingsData(data.holdings);
         setNextPage(data.next_page);
-      } catch (err) {
+      } catch(err) {
         console.log(err);
         toast(err);
       }
-      setLoadMore(false);
       setLoading(false);
     })();
-  }, [props.pan, loadingMore, selectedFilters]);
+  }, [props.pan, selectedFilters]);
+
+  const loadMoreEntries = async () => {
+    try {
+      setLoadMore(true);
+      const { holdings, next_page } = await hitNextPage(nextPage);
+      setHoldingsData([...holdingsData, ...holdings]);
+      setNextPage(next_page);
+    } catch (err) {
+      console.log(err);
+      toast(err);
+    }
+    setLoadMore(false);
+  };
 
   return (
     <div id="wr-holdings">
@@ -71,8 +81,8 @@ export default function Holdings(props) {
         />
       ))}
 
-      {!!nextPage && !loadingMore &&
-        <div className="show-more" onClick={() => setLoadMore(true)}>
+      {!!nextPage && !loadingMore && !isLoading &&
+        <div className="show-more" onClick={loadMoreEntries}>
           SHOW MORE
         </div>
       }

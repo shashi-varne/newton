@@ -1,3 +1,24 @@
+#wr-no-pan-screen {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: var(--primary);
+
+  #wr-no-pan-back {
+    font-size: 16px;
+    font-weight: 300;
+    margin-top: 30px;
+    cursor: pointer;
+    border: 1px solid var(--primary);
+    padding: 16px;
+    border-radius: 3px;
+  }
+}
+
 #wr-login {
   display: flex;
   background-color: white;
@@ -34,11 +55,13 @@
 
     div#wr-otp-opts {
       margin-top: 48px;
+      
       span {
         font-size: 18px;
         font-weight: 600;
         color: var(--primary);
         margin-right: 40px;
+        cursor: pointer;
       }
     }
 
@@ -109,9 +132,10 @@
 
 .wr-login-btn {
   max-width: 420px;
+  padding: 13px !important;
 
   .MuiButton-label {
-    font-size: 20px !important;
+    font-size: 17px !important;
     letter-spacing: 0.4px !important;
     text-transform: none !important;
   }
@@ -121,11 +145,20 @@
   display: none;
 }
 
+.wr-login-mobile-bg {
+   // background-image: url('src/assets/fisdom/bg_image_hni.png');
+}
+
 #wr-main {
   width: 100%;
   height: 100%;
   background-color: #ffffff;
   overflow-y: scroll;
+
+  .MuiButton-disabled {
+    background-color: inherit !important;
+    opacity: 0.8 !important;
+  }
 }
 
 #wr-header-hero {
@@ -143,11 +176,13 @@
     align-items: center;
 
     .wr-fisdom {
-      height: 42px;
-      vertical-align: middle;
+      display: flex;
+      align-items: center;
+
       .wr-vertical-divider {
         height: 33px !important;
         border-right: 1px solid #fff;
+        margin: 0 24px;
       }
 
       .wr-report {
@@ -157,7 +192,6 @@
         letter-spacing: normal;
         color: #ffffff;
         opacity: 0.7;
-        margin-left: 24px;
       }
     }
 
@@ -330,7 +364,7 @@
   padding: 40px;
   box-sizing: border-box;
   display: flex;
-  align-items: center;
+  height: 224px;
 
   div.wr-pi-content {
     flex-basis: 80%;
@@ -376,6 +410,10 @@
   margin-top: 3px;
 }
 
+.wr-pi-card-expand {
+  display: none;
+}
+
 .wr-pi-card-expanded {
   display: none;
 }
@@ -388,6 +426,11 @@
   .MuiButton-label {
     color: rgba(0, 0, 0, 0.5) !important;
   }
+}
+
+#wr-analysis-tabs {
+  text-align: center;
+  margin: 0 0 60px 0;
 }
 
 #wr-analysis-graph {
@@ -432,8 +475,8 @@
   flex-flow: column wrap;
   justify-content: space-between;
   height: 305px;
-  flex-basis: 35%;
   margin-left: 150px;
+  min-width: 55%;
 
   .wr-sgl-item {
     cursor: pointer;
@@ -645,11 +688,13 @@
 
   .wr-splash-btn {
     background-color: white;
+    padding: 13px !important;
 
     .MuiButton-label {
       color: var(--primary);
       text-transform: none;
       font-weight: 600;
+      font-size: 17px;
     }
   }
 
@@ -808,8 +853,8 @@
   }
 
   #wr-header-hero {
-    height: 174px;
-    border-radius: 0 0 15px 15px;
+    height: 155px;
+    border-radius: 0 0 12px 12px;
     width: 100%;
     background: var(--primary);
     position: absolute;
@@ -824,11 +869,15 @@
       .wr-pan-dropdown {
         display: inherit;
       }
+
+      .wr-fisdom {
+        display: none;
+      }
     }
   }
 
   #wr-body {
-    margin: 240px 3.1% 0;
+    margin: 220px 3.1% 0;
   }
 
   .wr-card-template {
@@ -958,6 +1007,7 @@
   .wr-pi-card {
     padding: 16px 12px 16px 24px;
     align-items: center;
+    height: 79px;
 
     div.wr-pi-content {
       flex-basis: 80%;
@@ -987,6 +1037,9 @@
     height: 32px;
     margin-right: 24px;
   }
+  .wr-pi-card-expand {
+    display: block;
+  }
 
   .wr-pi-card-expanded {
     display: block;
@@ -1004,6 +1057,11 @@
       line-height: 1.3;
       color: rgba(0, 0, 0, 0.8);
     }
+  }
+
+  #wr-analysis-tabs {
+    text-align: center;
+    margin: 0 0 24px 0;
   }
   
   #wr-analysis-graph {
@@ -1143,6 +1201,10 @@
             vertical-align: bottom;
           }
         }
+
+        .wr-small-col {
+          flex-basis: 30%;
+        }
       }
     }
 
@@ -1158,4 +1220,48 @@
   .wr-dot-loader-text {
     font-size: 18px;
   }
+}
+
+@keyframes fadeInUp {
+  from {
+      transform: translate3d(0,40px,0)
+  }
+
+  to {
+      transform: translate3d(0,0,0);
+      opacity: 1
+  }
+}
+
+@-webkit-keyframes fadeInUp {
+  from {
+      transform: translate3d(0,40px,0)
+  }
+
+  to {
+      transform: translate3d(0,0,0);
+      opacity: 1
+  }
+}
+
+.animated {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  -webkit-animation-duration: 1s;
+  animation-delay: 0.5s;
+  -webkit-animation-fill-mode: both
+}
+
+.animated:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.animatedFadeInUp {
+  opacity: 0
+}
+
+.fadeInUp {
+  opacity: 0;
+  animation-name: fadeInUp;
+  -webkit-animation-name: fadeInUp;
 }

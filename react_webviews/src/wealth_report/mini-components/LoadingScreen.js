@@ -14,14 +14,14 @@ const LoadingScreen = (props) => {
         style={{
           textAlign: 'center',
           position: 'relative',
-          top: '40%',
+          top: `${isMobileView ? 40 : 55}%`,
           margin: 'auto',
         }}
       >
-        <CircularProgress size={isMobileView ? 65 : 100} thickness={4} />
+        <CircularProgress size={isMobileView ? 65 : 80} thickness={4} />
         <div
           style={{
-            fontSize: isMobileView ? '18px' : '24px',
+            fontSize: isMobileView ? '18px' : '22px',
             marginTop: '45px'
           }}>
           {props.text}

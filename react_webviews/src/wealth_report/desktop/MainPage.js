@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Overview from "./Overview";
 import Holdings from "./Holdings";
 import Taxation from "./Taxation";
@@ -9,23 +9,46 @@ import UserAccount from '../mini-components/UserAccount';
 import PanSelect from '../mini-components/PanSelect';
 import Analysis from '../desktop/Analysis';
 import LoadingScreen from "../mini-components/LoadingScreen";
+import { navigate } from "../common/commonFunctions";
+import Api from '../../utils/api';
 
 const MainPage = (props) => {
   const { params } = props.match;
   const [pan, setPan] = useState('');
+  useEffect(() => {
+    (async() => {
+      try {
+        const res = await Api.get('api/whoami');
+        if (!res || res.pfwstatus_code !== 200) {
+          navigate(props, '/w-report/login');
+        }
+      } catch(err) {
+        console.log(err);
+        navigate(props, '/w-report/login');
+      }
+    })();
+  }, []);
 
-  const getHeightFromTop = () => {
-    var el = document.getElementById('wr-body');
-    var height = el.getBoundingClientRect().top;
-    return height;
-    // window.removeEventListener('scroll', this.onScroll, false);
-  };
-
-  const onScroll = () => {
-    if (this.getHeightFromTop() < 268) {
-      console.log('Swipe up');
+  const onPanChange = (pan) => {
+    if (pan === 'empty' || !pan) {
+      navigate(props, '/w-report/no-pan-screen');
+    } else {
+      setPan(pan);
     }
   };
+
+  // const getHeightFromTop = () => {
+  //   var el = document.getElementById('wr-body');
+  //   var height = el.getBoundingClientRect().top;
+  //   return height;
+  //   // window.removeEventListener('scroll', this.onScroll, false);
+  // };
+
+  // const onScroll = () => {
+  //   if (this.getHeightFromTop() < 268) {
+  //     console.log('Swipe up');
+  //   }
+  // };
 
   const renderTab = (tab) => {
     if (tab === 'overview') {
@@ -46,18 +69,18 @@ const MainPage = (props) => {
 
           {/* will be hidden for mobile view and visible for desktop view */}
           <div className="wr-fisdom">
-            <img src='' alt="fisdom" />
+            <img src={require('assets/fisdom/fisdom_logo.png')} alt="fisdom" />
             <span className='wr-vertical-divider'></span>
             <span className="wr-report">Mutual fund report</span>
           </div>
           
           {/* will be hidden for desktop view and visible for mobile view */}
-          <PanSelect onPanSelect={setPan}/>
+          <PanSelect onPanSelect={onPanChange}/>
           
           {/* visbility will be modified based on condition in media queries */}
           <div className="wr-user-account">
             <EmailList />
-            <UserAccount />
+            <UserAccount parentProps={props} />
           </div>
 
         </div>

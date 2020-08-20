@@ -1,7 +1,7 @@
 import React from 'react';
 import { ResponsiveLine } from '@nivo/line';
 import { convertToThousand } from 'utils/validators';
-import { formattedDate } from '../../utils/validators';
+import { formattedDate, formatAmountInr } from '../../utils/validators';
 
 const styleById = {
   'current_amount': {
@@ -80,9 +80,28 @@ const MyResponsiveLine = (props) => {
           }
         }
       }}
+      sliceTooltip={WrLineLegend}
       layers={['grid', 'markers', 'areas', DashedLine, 'slices', 'points', 'axes', 'legends']}
     />
   );
 };
 
 export default MyResponsiveLine;
+
+const WrLineLegend = ({ slice }) => {
+  const [date] = slice.points.map(point => point.data.x);
+  return (
+    <div className="wr-legend">
+      <div className="wr-legend-header">{formattedDate(date, 'd m, y')}</div>
+      {slice.points.map(point => {
+        const { data: {yFormatted: value}, serieId: label } = point;
+        return (
+          <div className="wr-legend-item">
+            <span className="wr-li-label">{label.split('_')[0]}:</span>
+            &nbsp;&nbsp;<span className="wr-li-value">{formatAmountInr(value)}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
