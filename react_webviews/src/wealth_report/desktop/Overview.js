@@ -248,7 +248,7 @@ const PortfolioCard = (props) => {
 
   return (
     <div className="wr-pi-card-container">
-      <div className="wr-pi-card">
+      <div className="wr-pi-card" onClick={() => toggleExpand(!expanded)}>
         <img
           className="wi-pi-card-img"
           src={insight.icon ? require(`assets/fisdom/${insight.icon}.svg`) : ''} alt=""/>

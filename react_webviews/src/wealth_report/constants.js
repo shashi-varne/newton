@@ -101,16 +101,21 @@ export const GraphDateRanges = [{
 export const TriColorScheme = ['#856cc1', '#7458b9', '#512ea7'];
 
 export const MultiColorScheme = [
-  '#eee7ff',
-  '#dacbff',
-  '#cab6fd',
-  '#bca5f8',
-  '#9885c8',
-  '#7f67bc',
-  '#6749b0',
-  '#5f41a8',
-  '#4f2ca5',
-  '#43268c',
+  '#f2effb',
+  '#e4ddf7',
+  '#d7cef3',
+  '#c9beef',
+  '#bcaeea',
+  '#af9de7',
+  '#a28ee2',
+  '#957cde',
+  '#896bda',
+  '#795cd6',
+  '#6d4bd2',
+  '#603cce',
+  '#5631c4',
+  '#4f2eb4',
+  '#4828a3',
 ];
 
 export const dummyAlloc = [{

@@ -59,7 +59,7 @@ const Taxation = (props) => {
       }
       setLoading(false);
     })();
-  }, [selectedFinYear, selectedTaxSlab]);
+  }, [props.pan, selectedFinYear, selectedTaxSlab]);
 
   const formatFilters = (filtersObj) => {
     const yearFormatter = (val) => {

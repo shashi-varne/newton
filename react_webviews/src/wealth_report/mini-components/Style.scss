@@ -135,6 +135,7 @@ span.wr-small-col-title {
   .wr-amc-detail {
     margin-right: 36px;
     max-width: 68%;
+    width: 70%;
 
     .amc-detail-title {
       font-size: 20px;
@@ -170,6 +171,7 @@ span.wr-small-col-title {
   span.rating-num {
     font-size: 15px;
     font-weight: 600;
+    overflow: hidden;
   }
 
   img.rating-star {
@@ -298,6 +300,7 @@ span.wr-small-col-title {
 
 .wr-add-email-btn, .wr-add-email-btn:hover {
   background-color: rgba(80, 45, 168, 0.1) !important;
+  padding: 13px !important;
 
   .MuiButton-label {
     color: var(--primary);
@@ -469,12 +472,277 @@ span.wr-small-col-title {
   }
 }
 
+
+.wr-email-list .react-tooltip-lite {
+  margin-left: -37px !important;
+  width: 350px !important;
+}
+
+.wr-user .react-tooltip-lite {
+  margin-left: -37px !important;
+  width: 350px;
+}
+
+.wr-estd-tax-info .react-tooltip-lite {
+  margin-left: 100px !important;
+}
+
+.wr-xirr-info .react-tooltip-lite {
+  margin-left: -90px !important;
+}
+
+.wr-accounts {
+  .wr-button {
+    background-color: rgba(80, 45, 168, 0.1);
+    height: 47px;
+    font-size: 17px;
+    color: #502da8;
+    font-weight: 400;
+    border-radius: 6px;
+  }
+
+  .wr-email-list-title {
+    font-size: 12px;
+    font-weight: 500;
+    color: #a9a9a9;
+  }
+
+  .wr-mails {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0 20px 0;
+    border-bottom: solid 1px #f5f6f8;
+    
+    .MuiIconButton-root {
+      height: 48px;
+      width: 48px;
+    }
+  
+  }
+
+  .wr-eli-email {
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+
+  .wr-eli-sync {
+    font-size: 13px;
+    color: #a9a9a9;
+  }
+}
+
+.wr-email-added {
+  // width: 485px;
+  text-align: center;
+  font-size: 17px;
+
+  .wr-content {
+    margin: 31px 0 54px 0;
+  }
+
+  .wr-continue-btn {
+    border-radius: 6px;
+    border: solid 0.5px rgba(80, 45, 168, 0.1);
+    background-color: #ffffff;
+    padding: 15px;
+
+    .MuiButton-label {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--primary);
+    }
+  }
+}
+
+.wr-welcome {
+  text-align: center;
+  font-size: 15px;
+  border-bottom: solid 1px #f5f6f8;
+
+  .wr-profile-img {
+    margin: auto;
+    width: 80px;
+    height: 80px;
+  }
+
+  .wr-profile {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+  }
+
+  .wr-head {
+    color: #a9a9a9;
+    margin: 17px 0 6px 0;
+  }
+
+  .wr-number {
+    font-size: 17px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+}
+
+.wr-logout {
+  .wr-logout-btn {
+    background-color: #f3cece !important;
+    height: 47px;
+    margin-top: 15px;
+
+    .MuiButton-label{
+      font-size: 15px;
+      color: #e02020;
+      text-transform: capitalize;
+    }
+
+    img {
+      margin-right: 9px;
+    }
+  }
+}
+
+.wr-select-members {
+  font-size: 15px;
+  color: #502da8;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.wr-members {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: solid 1px #f5f6f8;
+
+  .wr-container {
+    margin: 15px 0 15px 0;
+
+    .wr-head {
+      margin-bottom: 8px;
+    }
+
+    .wr-level {
+      font-size: 13px;
+      color: #a9a9a9;
+    }
+  }
+}
+
+.wr-add-mail {
+  padding: 0 10px;
+  // width: 485px;
+  .wr-new-email {
+    font-size: 20px;
+    font-weight: 600;
+    color: #421f88;
+    display: flex;
+    align-items: center;
+    padding-bottom: 16px;
+    border-bottom: solid 1px #f5f6f8;
+  }
+
+  .wr-mail-content {
+    color: #a9a9a9;
+    line-height: 22px;
+    font-size: 15px;
+    margin: 20px 0 20px 0;
+  }
+
+  .wr-form {
+    width: 88%;
+    border: 1px solid #dadaed;
+    border-radius: 4px;
+    padding: 14px 16px !important;
+  }
+
+  .wr-input-addmail {
+    width: 100% !important;
+    border: 0px !important;
+    padding: 0 !important;
+    .MuiInput-input {
+      font-size: 16px !important;
+      line-height: 20px !important;
+      font-weight: 500;
+    }
+  }
+
+  .wr-btn {
+    margin-top: 71px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .wr-cancel-btn, .wr-add-btn {
+    background-color: #fff;
+    border: solid 1px var(--primary) !important;
+    width: 35%;
+    border-radius: 6px;
+    padding: 12px;
+
+    .MuiButton-label{
+      color: var(--primary) !important;
+      text-transform: capitalize;
+      font-size: 16px !important;
+    }
+  }
+
+  .wr-add-btn {
+    background-color: var(--primary);
+    width: 60%;
+
+    .MuiButton-label{
+      color: white !important;
+    }
+  }
+}
+
+.wr-dialog-paper {
+  border-radius: 8px !important;
+  width: 485px;
+}
+
+.wr-paper-filter {
+  border-radius: 6px !important;
+  // width: 94% !important;
+}
+
+.wr-dialog-info {
+  border-radius: 6px !important;
+  width: 100% !important;
+  padding: 0 10px;
+}
+
+.wr-legend {
+  box-shadow: 0 0 12px 0 rgba(200, 200, 200, 0.2);
+  background-color: #ffffff;
+  padding: 10px;
+
+  .wr-legend-header {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 15px;
+  }
+
+  .wr-legend-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+
+    span {
+      font-size: 13px;
+      text-transform: capitalize;
+      color: rgba(0, 0, 0, 0.8);
+    }
+  }
+}
+
 @media only screen 
   and (min-device-width: 310px) 
   and (max-device-width: 812px) {
 
   .wr-dialog-paper {
-    border-radius: 30px !important;
+    border-radius: 6px !important;
   }
 
   .wr-icon-button {
@@ -630,7 +898,7 @@ span.wr-small-col-title {
 
   #wr-header-bar {
     position: absolute;
-    top: 132px;
+    top: 110px;
     left: 0;
     right: 0;
     margin: auto;
@@ -850,238 +1118,19 @@ span.wr-small-col-title {
     height: 30px  !important;
     width: 30px  !important;
   }
-}
 
-.wr-email-list .react-tooltip-lite {
-  margin-left: -37px !important;
-  width: 350px !important;
-}
-
-.wr-user .react-tooltip-lite {
-  margin-left: -37px !important;
-  width: 350px;
-}
-
-.wr-estd-tax-info .react-tooltip-lite {
-  margin-left: 100px !important;
-}
-
-.wr-xirr-info .react-tooltip-lite {
-  margin-left: -90px !important;
-}
-
-.wr-accounts {
-  .wr-button {
-    background-color: rgba(80, 45, 168, 0.1);
-    height: 47px;
-    font-size: 17px;
-    color: #502da8;
-    font-weight: 400;
-    border-radius: 6px;
-  }
-
-  .wr-email-list-title {
-    font-size: 12px;
-    font-weight: 500;
-    color: #a9a9a9;
-  }
-
-  .wr-mails {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 0 20px 0;
-    border-bottom: solid 1px #f5f6f8;
-    
-    .MuiIconButton-root {
-      height: 48px;
-      width: 48px;
-    }
-  
-  }
-
-  .wr-eli-email {
-    font-size: 15px;
-    margin-bottom: 8px;
-  }
-
-  .wr-eli-sync {
-    font-size: 13px;
-    color: #a9a9a9;
-  }
-}
-.wr-email-added {
-  // width: 485px;
-  text-align: center;
-  font-size: 17px;
-
-  .wr-content {
-    margin: 31px 0 54px 0;
-  }
-
-  .wr-continue-btn {
-    border-radius: 6px;
-    border: solid 0.5px rgba(80, 45, 168, 0.1);
-    background-color: #ffffff;
-    padding: 15px;
-
-    .MuiButton-label {
-      font-size: 17px;
-      font-weight: 600;
-      color: var(--primary);
-    }
-  }
-}
-.wr-welcome {
-  text-align: center;
-  font-size: 15px;
-  border-bottom: solid 1px #f5f6f8;
-
-  .wr-profile-img {
-    margin: auto;
-    width: 80px;
-    height: 80px;
-  }
-
-  .wr-profile {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-  }
-
-  .wr-head {
-    color: #a9a9a9;
-    margin: 17px 0 6px 0;
-  }
-
-  .wr-number {
-    font-size: 17px;
-    font-weight: 500;
-    margin-bottom: 16px;
-  }
-}
-
-.wr-logout {
-  .wr-logout-btn {
-    background-color: #f3cece !important;
-    height: 47px;
-    margin-top: 15px;
-
-    .MuiButton-label{
-      font-size: 15px;
-      color: #e02020;
+  .wr-legend {
+    .wr-legend-header {
+      font-size: 12px;
+      margin-bottom: 10px;
     }
 
-    img {
-      margin-right: 9px;
+    .wr-legend-item {
+      margin-bottom: 6px;
+
+      span {
+        font-size: 12px;
+      }
     }
   }
-}
-
-.wr-select-members {
-  font-size: 15px;
-  color: #502da8;
-  font-weight: 500;
-  margin-bottom: 8px;
-}
-
-.wr-members {
-  display: flex;
-  justify-content: space-between;
-  border-bottom: solid 1px #f5f6f8;
-
-  .wr-container {
-    margin: 15px 0 15px 0;
-
-    .wr-head {
-      margin-bottom: 8px;
-    }
-
-    .wr-level {
-      font-size: 13px;
-      color: #a9a9a9;
-    }
-  }
-}
-
-.wr-add-mail {
-  padding: 0 10px;
-  // width: 485px;
-  .wr-new-email {
-    font-size: 20px;
-    font-weight: 600;
-    color: #421f88;
-    display: flex;
-    align-items: center;
-    padding-bottom: 16px;
-    border-bottom: solid 1px #f5f6f8;
-  }
-
-  .wr-mail-content {
-    color: #a9a9a9;
-    line-height: 22px;
-    font-size: 15px;
-    margin: 20px 0 20px 0;
-  }
-
-  .wr-form {
-    width: 88%;
-    border: 1px solid #dadaed;
-    border-radius: 4px;
-    padding: 14px 16px !important;
-  }
-
-  .wr-input-addmail {
-    width: 100% !important;
-    border: 0px !important;
-    padding: 0 !important;
-    .MuiInput-input {
-      font-size: 16px !important;
-      line-height: 20px !important;
-      font-weight: 500;
-    }
-  }
-
-  .wr-btn {
-    margin-top: 71px;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .wr-cancel-btn {
-    background-color: #fff;
-    border: solid 1px var(--primary) !important;
-    width: 35%;
-    border-radius: 6px;
-    padding: 12px;
-
-    .MuiButton-label{
-      color: var(--primary) !important;
-      font-size: 17px;
-    }
-  }
-
-  .wr-add-btn {
-    background-color: var(--primary);
-    color: #fff;
-    width: 60%;
-    height: 47px;
-    border-radius: 6px;
-  }
-}
-
-.wr-dialog-paper {
-  border-radius: 8px !important;
-  width: 485px;
-}
-
-.wr-paper-filter {
-  border-radius: 6px !important;
-  // width: 94% !important;
-}
-
-.wr-dialog-info {
-  border-radius: 6px !important;
-  width: 100% !important;
-  padding: 0 10px;
 }

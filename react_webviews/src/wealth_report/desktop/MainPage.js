@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Overview from "./Overview";
 import Holdings from "./Holdings";
 import Taxation from "./Taxation";
@@ -10,16 +10,30 @@ import PanSelect from '../mini-components/PanSelect';
 import Analysis from '../desktop/Analysis';
 import LoadingScreen from "../mini-components/LoadingScreen";
 import { navigate } from "../common/commonFunctions";
+import Api from '../../utils/api';
 
 const MainPage = (props) => {
   const { params } = props.match;
   const [pan, setPan] = useState('');
+  useEffect(() => {
+    (async() => {
+      try {
+        const res = await Api.get('api/whoami');
+        if (!res || res.pfwstatus_code !== 200) {
+          navigate(props, '/w-report/login');
+        }
+      } catch(err) {
+        console.log(err);
+        navigate(props, '/w-report/login');
+      }
+    })();
+  }, []);
 
   const onPanChange = (pan) => {
-    if(pan) {
-      setPan(pan);
-    } else {
+    if (pan === 'empty' || !pan) {
       navigate(props, '/w-report/no-pan-screen');
+    } else {
+      setPan(pan);
     }
   };
 

@@ -45,9 +45,10 @@ export default function EmailList(props) {
     })();
   },[]);
 
-  const handleClick = () => {
+  const addNewEmail = () => {
     toggleEmailModal(true);
     toggleToolTip(false);
+    toggleEmailListModal(false);
   };
 
   const handleClose = () => {
@@ -104,7 +105,7 @@ export default function EmailList(props) {
       <Button
         fullWidth={true}
         classes={{ root: "wr-add-email-btn" }}
-        onClick={handleClick}
+        onClick={addNewEmail}
       >
         <AddCircleOutlineIcon
           style={{ fontSize: "18px", marginRight: "10px" }}
@@ -240,7 +241,7 @@ export default function EmailList(props) {
       {emailAddedModal && (
         //common for both mobile and webview
         <Dialog
-          open={true}
+          open={emailAddedModal}
           onClose={handleClose}
           classes={{ paper: "wr-dialog-paper" }}
         >

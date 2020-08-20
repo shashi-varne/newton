@@ -8,6 +8,7 @@ import { resendOtp, login, verifyOtp } from "../common/ApiCalls";
 import toast from '../../common/ui/Toast';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { navigate } from "../common/commonFunctions";
+import SVG from 'react-inlinesvg';
 import LoadingScreen from "../mini-components/LoadingScreen";
 const isMobileView = getConfig().isMobileDevice;
 
@@ -19,9 +20,9 @@ const Login = (props) => {
   const [number, setNumber] = useState('');
   const [view, setView] = useState(isMobileView ? 'splash' : 'phone');
   const [opLoading, setOpLoading] = useState(false);
+  const [phoneErr, setPhoneErr] = useState('');
 
   const handleOtp = (val) => {
-    console.log(val);
     setOtpErr('');
     setOtp(val);
   };
@@ -68,6 +69,12 @@ const Login = (props) => {
 
     setCountryCode(event.target.value);
     setFormat(format.split(".").join("9"));
+    setPhoneErr('');
+  };
+
+  const handleNumberChange = (event) => {
+    setPhoneErr('');
+    setNumber(event.target.value);
   };
 
   const triggerOtp = async() => {
@@ -102,6 +109,32 @@ const Login = (props) => {
     setOpLoading(false);
   }
 
+  const validatePhone = () => {
+    let err = '';
+    if (!countryCode) {
+      err = "Please select a country code";
+    } else if (!number || number.split('-').join('').length !== 10) {
+      err = "Please enter a valid number";
+    }
+    return err;
+  }
+
+  const clickContinue = () => {
+    if (view === 'splash') {
+      setView('phone');
+    } else if (view === 'phone') {
+      const err = validatePhone();
+      if (err) {
+        setPhoneErr(err);
+      } else {
+        triggerOtp();
+      }
+    } else if (view === 'otp') {
+      verify();
+    }
+  }
+
+
   const renderNumberView = () => {
     return (
       <div className="wr-login-input">
@@ -113,11 +146,20 @@ const Login = (props) => {
         <div id="wr-input">Enter phone number</div>
         <WrPhoneInput 
           onCodeChange={handleCodeChange}
-          onInputChange={event => setNumber(event.target.value)}
+          onInputChange={handleNumberChange}
           phone={countryCode}
           format={format}
           number={number}
         />
+        {phoneErr &&
+          <div style={{
+            marginTop: "10px",
+            color: "red",
+            letterSpacing: "0.5px"
+          }}>
+            {phoneErr}
+          </div>
+        }
       </div>
     );
   }
@@ -151,16 +193,6 @@ const Login = (props) => {
     </Fragment>
   );
 
-  const clickContinue = () => {
-    if (view === 'splash') {
-      setView('phone');
-    } else if (view === 'phone') {
-      triggerOtp();
-    } else if (view === 'otp') {
-      verify();
-    }
-  }
-
   return (
     <Fragment>
       {!isMobileView && view !== 'loading' &&
@@ -171,7 +203,7 @@ const Login = (props) => {
             id="wr-login-img"
           />
           <div id="wr-login-right-panel">
-            <img src="" alt="fisdom" /> {/* fisdom logo */}
+            <img src={require('assets/fisdom/fisdom_logo.png')} alt="fisdom" />
             <h2>Welcome to Fisdom!</h2>
             {view === 'phone' && renderNumberView()}
             {view === 'otp' && renderOTPView()}
@@ -179,7 +211,10 @@ const Login = (props) => {
               fullWidth={true}
               classes={{ root: "wr-login-btn" }}
               onClick={clickContinue}>
-              Continue
+              {opLoading ?
+                <CircularProgress size={20} thickness={4} color="white" /> :
+                'Continue'
+              }
             </WrButton>
           </div>
         </div>

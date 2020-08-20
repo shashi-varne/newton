@@ -77,11 +77,6 @@ export default function Analysis(props) {
     return () => {};
   }, [selectedTab]);
 
-  const changeTab = (tab) => {
-    setTab(tab);
-    // initialiseTabData();
-  };
-
   return (
     <React.Fragment>
       <div id="wr-analysis-tabs">
@@ -91,11 +86,11 @@ export default function Analysis(props) {
               root: selectedTab === tab ? "" : "wr-outlined-btn",
             }}
             style={{ marginRight: "24px" }}
-            onClick={() => changeTab(tab)}
+            onClick={() => setTab(tab)}
             key={index}
             disableRipple
           >
-            {`${tab} · ${parseInt(analysisData.percent_split[tab] || 0, 10)}%`}
+            {`${tab} · ${Math.round(analysisData.percent_split[tab] || 0)}%`}
           </WrButton>
         ))}
       </div>    

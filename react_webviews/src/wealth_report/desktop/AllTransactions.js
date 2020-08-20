@@ -26,9 +26,8 @@ export default function AllTransactions(props) {
   useEffect(() => {
     (async() => {
       try {
-        let data;
         setLoading(true);
-        data = await fetchTransactions({
+        const data = await fetchTransactions({
           pan: params.pan,
           isin: params.holding.isin,
           page_size: 20,
@@ -47,7 +46,7 @@ export default function AllTransactions(props) {
     try {
       setLoadMore(true);
       const { transactions: data, next_page } = await hitNextPage(nextPage);
-      setTransactions([...data, ...transactions]);
+      setTransactions([...transactions, ...data]);
       setNextPage(next_page);
     } catch(err) {
       console.log(err);

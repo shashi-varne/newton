@@ -55,11 +55,13 @@
 
     div#wr-otp-opts {
       margin-top: 48px;
+      
       span {
         font-size: 18px;
         font-weight: 600;
         color: var(--primary);
         margin-right: 40px;
+        cursor: pointer;
       }
     }
 
@@ -468,8 +470,8 @@
   flex-flow: column wrap;
   justify-content: space-between;
   height: 305px;
-  flex-basis: 35%;
   margin-left: 150px;
+  min-width: 55%;
 
   .wr-sgl-item {
     cursor: pointer;
@@ -834,8 +836,8 @@
   }
 
   #wr-header-hero {
-    height: 174px;
-    border-radius: 0 0 15px 15px;
+    height: 155px;
+    border-radius: 0 0 12px 12px;
     width: 100%;
     background: var(--primary);
     position: absolute;
@@ -858,7 +860,7 @@
   }
 
   #wr-body {
-    margin: 240px 3.1% 0;
+    margin: 220px 3.1% 0;
   }
 
   .wr-card-template {
@@ -1171,4 +1173,48 @@
   .wr-dot-loader-text {
     font-size: 18px;
   }
+}
+
+@keyframes fadeInUp {
+  from {
+      transform: translate3d(0,40px,0)
+  }
+
+  to {
+      transform: translate3d(0,0,0);
+      opacity: 1
+  }
+}
+
+@-webkit-keyframes fadeInUp {
+  from {
+      transform: translate3d(0,40px,0)
+  }
+
+  to {
+      transform: translate3d(0,0,0);
+      opacity: 1
+  }
+}
+
+.animated {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  -webkit-animation-duration: 1s;
+  animation-delay: 0.5s;
+  -webkit-animation-fill-mode: both
+}
+
+.animated:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.animatedFadeInUp {
+  opacity: 0
+}
+
+.fadeInUp {
+  opacity: 0;
+  animation-name: fadeInUp;
+  -webkit-animation-name: fadeInUp;
 }
