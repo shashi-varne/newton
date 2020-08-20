@@ -78,7 +78,7 @@ class MandatePan extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'pan upload',
-        "type": getConfig().html_camera ? 'yes' : 'no',
+        "type": user_action === 'open_camera' ? 'camera' : 'gallery',
         "pan_uploaded": this.state.fileUploaded ? 'yes' : 'no'
       }
     };

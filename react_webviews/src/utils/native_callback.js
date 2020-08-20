@@ -24,7 +24,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
 
   if(project === 'loan') {
     // events = ''; //disabled the events for now
-    console.log(events)
+    console.log(events);
   }
   
   if (action) {

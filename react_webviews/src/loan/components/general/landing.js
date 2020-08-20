@@ -115,7 +115,7 @@ class Landing extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'introduction',
-        "action": 'bannerapply_now',
+        "action": this.state.action === 'banner' ? 'banner' : this.state.top_cta_title,
         "calculator_clicked": this.state.calculator_clicked ? "yes" : "no",
         "resume_clicked": this.state.isResume ? 'yes' : 'no',
         "faq_clicked": data.things_to_know === 'faq' ? 'yes' : 'no'
@@ -221,7 +221,7 @@ class Landing extends Component {
   }
 
   handleClickTopCard = (event) => {
-    if (event.target.className === 'infoimage-block1') {
+    if (event.target.className === 'wr-banner') {
       this.setState({
         action: 'banner'
       })
@@ -270,7 +270,7 @@ class Landing extends Component {
        <div className="loan-landing loan-instant-kyc-home" >
         <div className="infoimage-block1" onClick={(event) => this.handleClickTopCard(event)} >
         
-          <img style={{ width: '100%', cursor: 'pointer', borderRadius: 6 }} 
+          <img style={{ width: '100%', cursor: 'pointer', borderRadius: 6 }} id="wr-banner"
           src={require(`assets/${this.state.productName}/ils_loan_intro_card.svg`)} alt="" />
           <div className="inner">
             <div className="title generic-page-title" style={{color: 'white'}}>
