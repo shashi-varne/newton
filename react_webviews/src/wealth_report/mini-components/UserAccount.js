@@ -93,12 +93,7 @@ class UserAccountMobile extends Component {
               alt="profile"
             />
           )}
-
-          <img
-            src={require(`assets/fisdom/ic-mob-add-pic.svg`)}
-            alt="camera"
-            style={{ margin: "-35px 0 100px 50px" }}
-          />
+          
         </div>
         <div className="wr-head">Welcome</div>
         <div className="wr-number">+91 92374 82739</div>
