@@ -15,6 +15,7 @@ import toast from "../../common/ui/Toast";
 import { IconButton } from "material-ui";
 import { regenTimeLimit } from "../constants";
 import { CircularProgress } from "@material-ui/core";
+import { validateEmail } from "../../utils/validators";
 const isMobileView = getConfig().isMobileDevice;
 
 export default function EmailList(props) {
@@ -24,6 +25,7 @@ export default function EmailList(props) {
   const [addEmailModal, toggleEmailModal] = useState(false);
   const [emailAddedModal, toggleEmailAddedModal] = useState(false);
   const [email, setEmail] = useState("");
+  const [emailErr, setEmailErr] = useState("");
   const [isLoading, setLoading] = useState(false);
   const [isSyncing, setSyncLoad] = useState(false);
 
@@ -59,9 +61,13 @@ export default function EmailList(props) {
 
   const addMail = async () => {
     try {
-      setLoading(true);
-      await requestStatement({ email: email }); 
-      await fetchEmailList();
+      if (!validateEmail(email)) {
+        return setEmailErr('Please enter a valid email');
+      } else {
+        setLoading(true);
+        await requestStatement({ email }); 
+        await fetchEmailList();
+      }
     } catch(err) {
       console.log(err);
       toast(err);
@@ -72,6 +78,7 @@ export default function EmailList(props) {
   };
 
   const handleInput = (e) => {
+    setEmailErr('');
     setEmail(e.target.value);
   };
 
@@ -160,9 +167,17 @@ export default function EmailList(props) {
           onChange={(e) => handleInput(e)}
         />
       </FormControl>
+      {!!emailErr && <div style={{
+          marginTop: "10px",
+          color: "red",
+          letterSpacing: "0.5px"
+        }}>
+        {emailErr}
+        </div>
+      }
 
       <div className="wr-btn">
-        <Button className="wr-cancel-btn" onClick={handleClose}>
+        <Button className="wr-cancel-btn" onClick={handleClose} disabled={true}>
           Cancel
         </Button>
 

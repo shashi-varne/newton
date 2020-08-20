@@ -1,15 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import WrButton from '../common/Button';
 import { IconButton } from '@material-ui/core';
 import { numDifferentiationInr, formattedDate } from '../../utils/validators';
 import AMCDetail from './AMCDetail';
-import { Button } from 'material-ui';
+import { CircularProgress } from 'material-ui';
 import { navigate } from '../common/commonFunctions';
+import WrTable from './WrTable';
+import { fetchTransactions, hitNextPage } from '../common/ApiCalls';
+import { toast } from 'react-toastify';
+import { getConfig } from "utils/functions";
+import CardLoader from './CardLoader';
+const isMobileView = getConfig().isMobileDevice;
+const tableHeadersMap = [{
+  label: 'Date',
+  accessor: 'date',
+}, {
+  label: 'Type',
+  accessor: 'type',
+}, {
+  label: 'Amount',
+  accessor: 'amount',
+}];
 
 export default function HoldingCard(props) {
   const [expanded, expandCard] = useState(false);
   const [tabSelected, selectTab] = useState('fund');
+  const [loadingMore, setLoadMore] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [nextPage, setNextPage] = useState('');
+  const [transactions, setTransactions] = useState([]);
   const { fund_summary = {}, ...holding = {} } = props.holding;
+
+  useEffect(() => {
+    (async() => {
+      try {
+        if (tabSelected === 'transactions') {
+          setLoading(true);
+          const data = await fetchTransactions({
+            pan: props.pan,
+            isin: holding.isin,
+            page_size: 10,
+          });
+          setTransactions(data.transactions);
+          setNextPage(data.next_page);
+        }
+      } catch (err) {
+        console.log(err);
+        toast(err);
+      }
+      setLoading(false);
+    })();
+  }, [tabSelected]);
   
   const renderFundDetails = () => (
     <div id="wr-hce-fund-details">
@@ -39,14 +80,49 @@ export default function HoldingCard(props) {
 
   const renderPastTransactions = () => {
     return (
-      <div className="wr-hce-past-trx wr-table-container">
-        <Button onClick={() => navigate(props.parentProps, '/w-report/transactions', {
-          holding,
-          pan: props.pan,
-        })} />
-      </div>
+      <Fragment>
+        <div className="wr-hce-past-trx wr-table-container">
+          {isLoading ?
+            (<CardLoader />) :
+            (<WrTable
+              data={transactions}
+              headersMap={tableHeadersMap}
+            />)
+          }
+        </div>
+        <div
+          className="wr-past-trx-more"
+          onClick={seeMoreClicked}>
+          {!!nextPage && loadingMore && (
+            <Fragment><CircularProgress size={20}/> &nbsp;&nbsp; Fetching ...</Fragment>
+          )}
+          {!!nextPage && !loadingMore && isMobileView && 'View All'}
+          {!!nextPage && !loadingMore && !isMobileView && 'Load More'}
+         
+        </div>
+      </Fragment>
     );
   }
+
+  const seeMoreClicked = async() => {
+    try {
+      if (isMobileView) {
+        navigate(props.parentProps, '/w-report/transactions', {
+          holding,
+          pan: props.pan,
+        });
+      } else {
+        setLoadMore(true);
+        const { transactions: data, next_page } = await hitNextPage(nextPage);
+        setTransactions([...transactions, ...data]);
+        setNextPage(next_page);
+      }
+      setLoadMore(false);
+    } catch(err) {
+      console.log(err);
+      toast(err);
+    }
+  };
 
   return (
     <div className="wr-card-template">
@@ -87,6 +163,7 @@ export default function HoldingCard(props) {
               {tabName: 'transactions', label: 'Past Transactions'},
               ].map(({ tabName, label }) => (
               <WrButton
+                key="label"
                 classes={{
                   root: tabSelected === tabName ? '' : 'wr-outlined-btn'
                 }}
