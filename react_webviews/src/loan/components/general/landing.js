@@ -117,7 +117,8 @@ class Landing extends Component {
         "action": data.action,
         "calculator_clicked": this.state.calculator_clicked ? "yes" : "no",
         "resume_clicked": this.state.isResume ? 'yes' : 'no',
-        "faq_clicked": data.things_to_know === 'faq' ? 'yes' : 'no'
+        "faq_clicked": data.things_to_know === 'faq' ? 'yes' : 'no',
+        "bottom_cta_click": data.action !== 'banner' ? 'yes' : 'no'
       }
     };
 
