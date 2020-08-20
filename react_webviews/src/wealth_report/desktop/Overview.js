@@ -6,7 +6,7 @@ import Tooltip from 'common/ui/Tooltip';
 import toast from '../../common/ui/Toast';
 import Dialog from "common/ui/Dialog";
 import { getConfig } from "utils/functions";
-import { fetchOverview, fetchPortfolioGrowth } from '../common/ApiCalls';
+import { fetchOverview, fetchPortfolioGrowth, fetchXIRR } from '../common/ApiCalls';
 import { formatGrowthData } from '../common/commonFunctions';
 import { numDifferentiation } from '../../utils/validators';
 import CardLoader from '../mini-components/CardLoader';
@@ -39,6 +39,7 @@ export default function Overview(props) {
     insights: [],
     asset_allocation: {},
   });
+  const [xirrPercent, setXirrPercent] = useState({});
   const [growthGraph, setGrowthGraph] = useState({});
   useEffect(() => {
     (async() => {
@@ -46,7 +47,9 @@ export default function Overview(props) {
         setGraphLoad(true);
         setLoading(true);
         const data = await fetchOverview({ pan: props.pan });
+        const xirr_percent = await fetchXIRR({ pan: props.pan, year: 2 });
         setOverviewData(data);
+        setXirrPercent(xirr_percent)
         const { combined_amount_data, date_ticks } = await fetchPortfolioGrowth({
           pan: props.pan,
           date_range: selectedRange,
@@ -109,6 +112,26 @@ export default function Overview(props) {
     />
   );
 
+  const tooltip = (
+    <span style={{ marginLeft: "6px", verticalAlign:'middle' }}>
+      {!isMobileView ? 
+        <Tooltip content={tipcontent} direction="down" className="wr-xirr-info">
+          {i_btn}
+        </Tooltip> : 
+        <React.Fragment>
+          {i_btn}
+          <Dialog
+            open={openModal}
+            onClose={() => toggleModal(false)}
+            classes={{ paper: "wr-dialog-info" }}
+          >
+            {tipcontent}
+          </Dialog>
+        </React.Fragment>
+      }
+    </span>
+  )
+
   return (
     <React.Fragment>
       <div className="wr-card-template">
@@ -131,26 +154,10 @@ export default function Overview(props) {
               <div className="wr-okn-box">
                 <div className="wr-okn-title">
                   XIRR
-                  <span style={{ marginLeft: "6px", verticalAlign:'middle' }}>
-                    {!isMobileView ? 
-                      <Tooltip content={tipcontent} direction="down" className="wr-xirr-info">
-                        {i_btn}
-                      </Tooltip> : 
-                      <React.Fragment>
-                        {i_btn}
-                        <Dialog
-                          open={openModal}
-                          onClose={() => toggleModal(false)}
-                          classes={{ paper: "wr-dialog-info" }}
-                        >
-                          {tipcontent}
-                        </Dialog>
-                      </React.Fragment>
-                    }
-                  </span>
+                  {tooltip}
                 </div>
                 <div className="wr-okn-value">
-                  {overviewData.xirr ? `${overviewData.xirr}%` : 'N/A'}
+                  {xirrPercent.xirr ? `${Math.round(xirrPercent.xirr)}%` : 'N/A'}
                 </div>
               </div>
               <div className="wr-okn-box">
@@ -206,6 +213,15 @@ export default function Overview(props) {
               ) :
               (
                 <div style={{ width: '100%', height: '400px', clear: 'right' }}>
+                  <div style={{ width:'102px', height: '85px', backgroundColor:'rgba(80,45,168,0.1)', textAlign:'center', padding:'22px' }}>
+                    <div style={{color:'#502da8'}}>
+                      XIRR
+                      {tooltip}
+                    </div>
+                    <div className="">
+                      {xirrPercent.xirr ? `${Math.round(xirrPercent.xirr)}%` : 'N/A'}
+                    </div>
+                  </div>
                   <MyResponsiveLine
                     data={formatGrowthData(growthGraph.data)}
                     params={{ date_ticks: growthGraph.date_ticks }}
