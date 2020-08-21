@@ -54,19 +54,32 @@ class Permissions extends Component {
       loadingText: ''
     })
 
-    if (!data.nsp) {
+    if (!data.nsp && !getConfig().Web) {
       toast('Please insert a SIM card to continue with loan application.');
-    } else if (data.location_permission_denied) {
+    } else if (data.location_permission_denied || data.permission === 'denied') {
       toast('Location is required to proceed further');
     } else {
 
-      let body = {
-        latitude: data.location.lat || '',
-        longitude: data.location.lng || '',
-        device_id: data.device_id || '',
-        network_service_provider: data.nsp || ''
-      };
+      let body;
 
+      if (getConfig().Web) {
+
+        body = {
+          latitude: data.location.lat || '',
+          longitude: data.location.lng || ''
+        };
+
+      } else {
+
+        body = {
+          latitude: data.location.lat || '',
+          longitude: data.location.lng || '',
+          device_id: data.device_id || '',
+          network_service_provider: data.nsp || ''
+        };
+
+      }
+      
       let haveAll = true;
       for (var key in body) {
         if (!body[key]) {
@@ -80,8 +93,6 @@ class Permissions extends Component {
       } else {
         toast('Something went wrong, please try again');
       }
-
-
     }
   }
 

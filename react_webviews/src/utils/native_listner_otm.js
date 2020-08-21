@@ -131,36 +131,45 @@ if (getConfig().generic_callback) {
       } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
         window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
       } else {
-        window.navigator.geolocation.getCurrentPosition(position => {
-          window.callbackWeb.send_device_data(position)
+        navigator.permissions.query({
+          name: 'geolocation'
+        }).then(function(result) {
+            navigator.geolocation.getCurrentPosition(position => {
+              window.callbackWeb.send_device_data('granted', position.coords);
+            })
+    
+            if (result.state === 'denied') {
+              window.callbackWeb.send_device_data('denied');
+            }
+    
+            result.onchange = function() {
+              if (result.state === 'denied') {
+                window.callbackWeb.send_device_data('denied');
+              }
+            }
         })
       }
 
       // for testing added
       // if(getConfig().Web) {
-        // window.callbackWeb.send_device_data();
+      //   window.callbackWeb.send_device_data();
       // }
 
     }
 
-    exports.send_device_data = function (data_json_str) {
-      var {coords} = data_json_str 
+    exports.send_device_data = function (permission, coords = {}) {
       
       var json_data = {};
-      if (data_json_str !== "" && typeof data_json_str === "string") {
-        json_data = JSON.parse(data_json_str);
-      } else {
-        json_data = data_json_str;
-      }
 
       if(getConfig().Web) {
         json_data = {
           'location': {
-            lat: coords.latitude,
-            lng: coords.longitude
+            lat: coords.latitude || '',
+            lng: coords.longitude || ''
           },
-          nsp: "Jio 4G",
-          device_id: "e3964eac6f4e48b6"
+          'permission': permission
+          // nsp: "Jio 4G",
+          // device_id: "e3964eac6f4e48b6"
         }
       }
 
