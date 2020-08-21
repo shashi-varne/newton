@@ -97,7 +97,7 @@ class Permissions extends Component {
     window.callbackWeb.get_device_data({
       type: 'location_nsp_received',
       location_nsp_received: function location_nsp_received(data) {
-
+        console.log(data)
         that.updateData(data);
 
       }
