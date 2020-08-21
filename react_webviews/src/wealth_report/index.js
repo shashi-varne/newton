@@ -16,6 +16,7 @@ import { create } from 'jss';
 import JssProvider from 'react-jss/lib/JssProvider';
 import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
 import Login from './desktop/Login';
+import NoPan from './desktop/NoPan';
 import MainPage from './desktop/MainPage';
 import AllTransactions from './desktop/AllTransactions';
 
@@ -54,6 +55,7 @@ const WealthReport = (props) => {
         <Switch>
           <Route exact path={`${url}`} component={Login} />
           <Route path={`${url}/login`} component={Login} />
+          <Route path={`${url}/no-pan-screen`} component={NoPan} />
           <Route path={`${url}/transactions`} component={AllTransactions} />
           <Route path={`${url}/main/:tab`} component={MainPage} />
           <Route path={`${url}/main`} component={MainPage} />

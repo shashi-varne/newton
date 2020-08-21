@@ -2,6 +2,8 @@
 import { getConfig } from "utils/functions";
 const isMobileView = getConfig().isMobileDevice;
 
+export const regenTimeLimit = 30;
+
 export const genericErrMsg = 'Something went wrong. Please try again';
 
 export const HoldingFilterOptions = [
@@ -99,16 +101,21 @@ export const GraphDateRanges = [{
 export const TriColorScheme = ['#856cc1', '#7458b9', '#512ea7'];
 
 export const MultiColorScheme = [
-  '#eee7ff',
-  '#dacbff',
-  '#cab6fd',
-  '#bca5f8',
-  '#9885c8',
-  '#7f67bc',
-  '#6749b0',
-  '#5f41a8',
-  '#4f2ca5',
-  '#43268c',
+  '#f2effb',
+  '#e4ddf7',
+  '#d7cef3',
+  '#c9beef',
+  '#bcaeea',
+  '#af9de7',
+  '#a28ee2',
+  '#957cde',
+  '#896bda',
+  '#795cd6',
+  '#6d4bd2',
+  '#603cce',
+  '#5631c4',
+  '#4f2eb4',
+  '#4828a3',
 ];
 
 export const dummyAlloc = [{
@@ -143,18 +150,3 @@ export const dummyTableData = [
   { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L' },
   { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L' },
 ];
-
-const sectorObj = {
-  "Others": "0.0698989",
-    "Basic Materials": "0.422978",
-      "Financial Services": "0.446535",
-        "Healthcare": "0.771251",
-          "Energy": "0.932876",
-            "Technology": "0.969383",
-              "Consumer Cyclical": "0.0211980",
-                "Consumer Defensive": "0.0951220",
-                  "Utilities": "1.08820",
-                    "Real Estate": "0.0122845",
-                      "Communication Services": "0.254756",
-                        "Industrials": "0.390771"
-};

@@ -1,25 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { IconButton } from "@material-ui/core";
+import { IconButton } from "material-ui";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import { isMobileDevice } from "utils/functions";
 import SelectMembers from "./SelectMembersMobile";
 import toast from "../../common/ui/Toast";
 import { fetchAllPANs } from "../common/ApiCalls";
 import DotDotLoader from "../../common/ui/DotDotLoader";
+import { isEmpty } from "../../utils/validators";
 
 export default function PanSelect(props) {
   const [dropdown_open, toggleDropdown] = useState(false);
   const [selectedPan, setPan] = useState("");
   const [panModal, toggleModal] = useState(false);
-  const [panData, setPanData] = useState([]);
+  const [panList, setPanList] = useState([]);
   const [loadingPans, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
       try {
         const data = await fetchAllPANs();
-        setPanData(data);
-        selectPan(data[0]);
+        setPanList(data);
+        if (!data.length || isEmpty(data)) {
+          selectPan('empty'); //To let Main Page know when there's no registered PANs
+        } else {
+          selectPan(data[0]);
+        }
       } catch (err) {
         console.log(err);
         toast(err);
@@ -88,7 +93,7 @@ export default function PanSelect(props) {
         {/* visibility will be modified based on condition 'isMobileDevice()' */}
         {!isMobileDevice() && (
           <div style={{ display: dropdown_open ? "inherit" : "none" }}>
-            {panData.map(
+            {panList.map(
               (pan, index) =>
                 pan !== selectedPan && (
                   <div onClick={() => selectPan(pan)} key={index}>
@@ -114,7 +119,7 @@ export default function PanSelect(props) {
         {isMobileDevice() && (
           <SelectMembers
             open={panModal}
-            pans={panData}
+            pans={panList}
             selectPan={selectPan}
             selectedPan={selectedPan}
           />

@@ -1,15 +1,15 @@
 // common for both mobile view and web view
 
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import Button from "material-ui/Button";
-import { getBase64 } from "utils/functions";
-import $ from "jquery";
 import ImageCrop from "common/ui/ImageCrop";
-// import { getImageFile } from "../common/commonFunctions";
 import Dialog from "common/ui/Dialog";
 import Tooltip from "common/ui/Tooltip";
 import { isMobileDevice } from "utils/functions";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
+import { toast } from "react-toastify";
+import { logout } from "../common/ApiCalls";
+import { navigate } from '../common/commonFunctions';
+import { CircularProgress } from "material-ui";
 
 class UserAccountMobile extends Component {
   constructor(props) {
@@ -19,6 +19,7 @@ class UserAccountMobile extends Component {
       fileUploaded: false,
       croppedImageUrl: "",
       cropped: false,
+      loggingOut: false,
     };
   }
 
@@ -63,8 +64,20 @@ class UserAccountMobile extends Component {
   handleTooltipClose = () => {
     this.setState({
       open: false
-    })
+    });
   }
+
+  logoutUser = async() => {
+    try {
+      this.setState({ loggingOut: true });
+      await logout();
+      navigate(this.props.parentProps, '/w-report/login');
+    } catch(err) {
+      console.log(err);
+      toast(err);
+    }
+    this.setState({ loggingOut: false });
+  };
 
   // will render user account profile info
   renderUserAccount = () => (
@@ -93,16 +106,22 @@ class UserAccountMobile extends Component {
               alt="profile"
             />
           )}
-          
         </div>
         <div className="wr-head">Welcome</div>
         <div className="wr-number">+91 92374 82739</div>
       </div>
 
       <div className="wr-logout">
-        <Button fullWidth={true} className="wr-logout-btn">
-          <img src={require(`assets/fisdom/ic-mob-logout.svg`)} alt="" />
-          Logout
+        <Button fullWidth={true} className="wr-logout-btn" onClick={this.logoutUser}>
+          {this.state.loggingOut ?
+            <CircularProgress size={25} /> : 
+            (
+              <Fragment>
+                <img src={require(`assets/fisdom/ic-mob-logout.svg`)} alt="out" />
+                Logout
+              </Fragment>
+            )
+          }
         </Button>
       </div>
     </React.Fragment>
@@ -126,23 +145,22 @@ class UserAccountMobile extends Component {
       <React.Fragment>
         {!isMobileDevice() ? (
           // will show the tooltip for desktop view else dialog box for mobile view
-          <ClickAwayListener onClickAway={this.handleTooltipClose}>
-            <Tooltip
-              content={
-                this.state.fileUploaded
-                  ? this.state.cropped
-                    ? this.renderUserAccount()
-                    : this.renderImageCrop()
-                  : this.renderUserAccount()
-              }
-              isOpen={this.state.open}
-              direction="down"
-              forceDirection
-              className="wr-user"
-            >
-              {user_account}
-            </Tooltip>
-          </ClickAwayListener>
+          <Tooltip
+            onClickAway={this.handleTooltipClose}
+            content={
+              this.state.fileUploaded
+                ? this.state.cropped
+                  ? this.renderUserAccount()
+                  : this.renderImageCrop()
+                : this.renderUserAccount()
+            }
+            isOpen={this.state.open}
+            direction="down"
+            forceDirection
+            className="wr-user"
+          >
+            {user_account}
+          </Tooltip>
         ) : (
           // mobile view 
           <React.Fragment>

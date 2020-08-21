@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { LinearProgress, createMuiTheme, MuiThemeProvider, IconButton, CircularProgress } from 'material-ui';
+import { LinearProgress, createMuiTheme, MuiThemeProvider, IconButton } from 'material-ui';
 import MyResponsiveLine from '../mini-components/LineGraph';
 import { InsightMap, GraphDateRanges } from '../constants';
 import Tooltip from 'common/ui/Tooltip';
@@ -281,7 +281,7 @@ const PortfolioCard = (props) => {
 
   return (
     <div className="wr-pi-card-container">
-      <div className="wr-pi-card">
+      <div className="wr-pi-card" onClick={() => toggleExpand(!expanded)}>
         <img
           className="wi-pi-card-img"
           src={insight.icon ? require(`assets/fisdom/${insight.icon}.svg`) : ''} alt=""/>
