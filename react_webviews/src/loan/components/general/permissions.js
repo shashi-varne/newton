@@ -93,12 +93,18 @@ class Permissions extends Component {
       loadingText: 'Please wait...'
     })
 
+    window.navigator.geolocation.getCurrentPosition(function(position) {
+      console.log("Latitude is :", position.coords.latitude);
+      console.log("Longitude is :", position.coords.longitude);
+    });
+
     let that = this;
     window.callbackWeb.get_device_data({
       type: 'location_nsp_received',
       location_nsp_received: function location_nsp_received(data) {
 
         that.updateData(data);
+        console.log(data)
 
       }
     });

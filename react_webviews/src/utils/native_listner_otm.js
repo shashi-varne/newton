@@ -132,10 +132,16 @@ if (getConfig().generic_callback) {
         window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
       } else {
         // need to write for web
+        window.navigator.geolocation.getCurrentPosition(function(position) {
+          console.log("Latitude is :", position.coords.latitude);
+          console.log("Longitude is :", position.coords.longitude);
+        });
+        console.log(callbackData)
       }
 
       // for testing added
       if(getConfig().Web) {
+        console.log('hi')
         window.callbackWeb.send_device_data();
       }
 

@@ -135,7 +135,7 @@ class Transactions extends Component {
             </div>
           </div>
 
-          <div style={{fontSize:'12px', color:'#35cb5d', textAlign:'center', paddingTop:'40px', letterSpacing:'1px'}}><b>VIEW MORE</b>
+          <div className="view-more"><b>VIEW MORE</b>
             <SVG
             preProcessor={code => code.replace(/fill=".*?"/g, 'fill=#35cb5d')}
             className="arrow"

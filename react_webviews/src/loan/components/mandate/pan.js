@@ -293,7 +293,7 @@ class MandatePan extends Component {
           <div>Front side of PAN card</div>
           <div style={{ margin: '20px 0 20px 0' }}>
             <div onClick={() => this.startUpload('open_camera', 'pan', 'pan.jpg')} style={{
-              textAlign: 'center',
+              textAlign: 'center', cursor: 'pointer'
             }}>
               <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" />
               <img src={camera_green} alt="PAN"></img>
