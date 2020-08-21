@@ -1,5 +1,7 @@
 import { storageService, inrFormatDecimal, getEditTitle } from 'utils/validators';
-import { getConfig, isFeatureEnabled } from 'utils/functions';
+import { getConfig, 
+    // isFeatureEnabled
+ } from 'utils/functions';
 import { health_providers, ghGetMember } from '../../constants';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
@@ -266,37 +268,37 @@ export function openInBrowser(url, type) {
     }
     this.sendEvents(type);
 
-    let open_inapp_tab_hs = isFeatureEnabled(getConfig(), 'open_inapp_tab_hs');
-
-    if(open_inapp_tab_hs) {
-
-        if(!getConfig().Web) {
-            url = "https://docs.google.com/gview?embedded=true&url=" + url;
+    let mapper = {
+        'tnc' : {
+            header_title: 'Terms & Conditions',
+            file_name: 'terms_and_conditions'
+        },
+        'read_document' : {
+            header_title: 'Read Detailed Document',
+            file_name: 'read_detailed_document'
         }
-        
+    }
+
+    let mapper_data = mapper[type];
+
+    if(getConfig().Android && !getConfig().isWebCode) {
         nativeCallback({
-            action: 'open_inapp_tab',
+            action: 'download_on_device',
             message: {
-                url: url || ''
+                url: url || '',
+                file_name: mapper_data.file_name + '.pdf'
             }
         });
     } else {
+
         if (!getConfig().Web) {
             this.setState({
                 show_loader: true
             })
         }
     
-        let mapper = {
-            'tnc' : {
-                header_title: 'Terms & Conditions',
-            },
-            'read_document' : {
-                header_title: 'Read Detailed Document',
-            }
-        }
     
-        let mapper_data = mapper[type];
+        
     
         let data = {
             url: url,
@@ -305,7 +307,50 @@ export function openInBrowser(url, type) {
         };
     
         openPdfCall(data);
+
+        // let open_inapp_tab_hs = isFeatureEnabled(getConfig(), 'open_inapp_tab_hs');
+
+        // if(open_inapp_tab_hs) {
+    
+        //     if(!getConfig().Web) {
+        //         url = "https://docs.google.com/gview?embedded=true&url=" + url;
+        //     }
+            
+        //     nativeCallback({
+        //         action: 'open_inapp_tab',
+        //         message: {
+        //             url: url || ''
+        //         }
+        //     });
+        // } else {
+        //     if (!getConfig().Web) {
+        //         this.setState({
+        //             show_loader: true
+        //         })
+        //     }
+        
+        //     let mapper = {
+        //         'tnc' : {
+        //             header_title: 'Terms & Conditions',
+        //         },
+        //         'read_document' : {
+        //             header_title: 'Read Detailed Document',
+        //         }
+        //     }
+        
+        //     let mapper_data = mapper[type];
+        
+        //     let data = {
+        //         url: url,
+        //         header_title: mapper_data.header_title,
+        //         icon: 'close'
+        //     };
+        
+        //     openPdfCall(data);
+        // }
     }
+
+    
     
 }
 
