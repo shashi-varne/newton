@@ -99,7 +99,6 @@ class Permissions extends Component {
       location_nsp_received: function location_nsp_received(data) {
 
         that.updateData(data);
-
       }
     });
   }
