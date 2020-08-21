@@ -5,10 +5,6 @@ class Footer extends Component {
   render() {
     return (
       <div className="wr-footer">
-        <div className="wr-privacy">
-          <img src={require(`assets/fisdom/ic-mob-trust.svg`)} alt="" />
-          Fisdom ensures privacy for your data. <b>Learn more</b>
-        </div>
         <div className="wr-register">
           <div className="wr-title">
             <img src={require(`assets/fisdom/sebi-logo-svg.jpg`)} alt="" />

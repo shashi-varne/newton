@@ -177,7 +177,7 @@ const Taxation = (props) => {
 
   const i_btn = (
     <img
-      src={require(`assets/fisdom/ic-info-xirr-overview.svg`)}
+      src={require(`assets/fisdom/ic-info.svg`)}
       id="wr-i-btn"
       alt=""
       onClick={() => toggleModal(true)}

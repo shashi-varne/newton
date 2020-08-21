@@ -103,34 +103,14 @@ export default function Overview(props) {
     </div>
   )
 
-  const i_btn = (
+  const i_btn = (info) => (
     <img
-      src={require(`assets/fisdom/ic-info-xirr-overview.svg`)}
+      src={require(`assets/fisdom/${info}.svg`)}
       id="wr-i-btn"
       alt=""
       onClick={() => toggleModal(true)}
     />
   );
-
-  const tooltip = (
-    <span style={{ marginLeft: "6px", verticalAlign:'middle' }}>
-      {!isMobileView ? 
-        <Tooltip content={tipcontent} direction="down" className="wr-xirr-info2">
-          {i_btn}
-        </Tooltip> : 
-        <React.Fragment>
-          {i_btn}
-          <Dialog
-            open={openModal}
-            onClose={() => toggleModal(false)}
-            classes={{ paper: "wr-dialog-info" }}
-          >
-            {tipcontent}
-          </Dialog>
-        </React.Fragment>
-      }
-    </span>
-  )
 
   return (
     <React.Fragment>
@@ -158,10 +138,10 @@ export default function Overview(props) {
                     <span style={{ marginLeft: "6px", verticalAlign:'middle' }}>
                       {!isMobileView ? 
                         <Tooltip content={tipcontent} direction="down" className="wr-xirr-info">
-                          {i_btn}
+                          {i_btn('ic-info')}
                         </Tooltip> : 
                         <React.Fragment>
-                          {i_btn}
+                          {i_btn('ic-info')}
                           <Dialog
                             open={openModal}
                             onClose={() => toggleModal(false)}
@@ -230,30 +210,18 @@ export default function Overview(props) {
                 <CardLoader />
               ) :
               (
-                <div style={{ width: '100%', height: '400px', clear: 'right' }}>
+                <div>
                   <div id="wr-xirr">
-                    <div>
                       XIRR
                       {
                         <span style={{ marginLeft: "6px", verticalAlign:'middle' }}>
                           {!isMobileView ? 
                             <Tooltip content={tipcontent} direction="down" className="wr-xirr-info-2">
-                              {i_btn}
-                            </Tooltip> : 
-                            <React.Fragment>
-                              {i_btn}
-                              <Dialog
-                                open={openModal}
-                                onClose={() => toggleModal(false)}
-                                classes={{ paper: "wr-dialog-info" }}
-                              >
-                                {tipcontent}
-                              </Dialog>
-                            </React.Fragment>
+                              {i_btn('ic-info-primary')}
+                            </Tooltip> : ""
                           }
                         </span>
                       }
-                    </div>
                     <div style={{fontSize:'24px', fontWeight:600, lineHeight:1}}>
                       {xirrPercent.xirr ? `${Math.round(xirrPercent.xirr)}%` : 'N/A'}
                     </div>
@@ -269,10 +237,12 @@ export default function Overview(props) {
                       Current
                     </div>
                   </div>
-                  <MyResponsiveLine
-                    data={formatGrowthData(growthGraph.data)}
-                    params={{ date_ticks: growthGraph.date_ticks }}
-                  ></MyResponsiveLine>
+                  <div style={{ width: '100%', height: '400px', clear: 'right' }}>
+                    <MyResponsiveLine
+                      data={formatGrowthData(growthGraph.data)}
+                      params={{ date_ticks: growthGraph.date_ticks }}
+                    ></MyResponsiveLine>
+                  </div>
                 </div>
               )
           }
