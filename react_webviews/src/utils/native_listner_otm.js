@@ -131,23 +131,20 @@ if (getConfig().generic_callback) {
       } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
         window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
       } else {
-        // need to write for web
-        window.navigator.geolocation.getCurrentPosition(function(position) {
-          console.log("Latitude is :", position.coords.latitude);
-          console.log("Longitude is :", position.coords.longitude);
-        });
-        console.log(callbackData)
+        window.navigator.geolocation.getCurrentPosition(position => {
+          window.callbackWeb.send_device_data(position)
+        })
       }
 
       // for testing added
-      if(getConfig().Web) {
-        console.log('hi')
-        window.callbackWeb.send_device_data();
-      }
+      // if(getConfig().Web) {
+        // window.callbackWeb.send_device_data();
+      // }
 
     }
 
     exports.send_device_data = function (data_json_str) {
+      var {coords} = data_json_str 
       
       var json_data = {};
       if (data_json_str !== "" && typeof data_json_str === "string") {
@@ -159,8 +156,8 @@ if (getConfig().generic_callback) {
       if(getConfig().Web) {
         json_data = {
           'location': {
-            lat: "12.9951675",
-            lng: "77.6156386"
+            lat: coords.latitude,
+            lng: coords.longitude
           },
           nsp: "Jio 4G",
           device_id: "e3964eac6f4e48b6"
