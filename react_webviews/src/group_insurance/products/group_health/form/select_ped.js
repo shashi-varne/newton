@@ -158,9 +158,11 @@ class GroupHealthPlanSelectPed extends Component {
             let next_state = '';
             for (var i =0; i < member_base.length; i++) {
                 if(member_base[i].key === this.state.member_key && i !== member_base.length -1) {
-                    if(member_base[i+1].ped_exists) {
-                        next_state = member_base[i+1].key;
-                        break;
+                    for (var k =i+1; k < member_base.length; k++) {
+                        if(member_base[k].ped_exists) {
+                            next_state = member_base[k].key;
+                            break;
+                        }
                     }
                 }
             }
