@@ -5,18 +5,22 @@ class Footer extends Component {
   render() {
     return (
       <div className="wr-footer">
-        <div className="wr-privacy">
-        <img src={require(`assets/fisdom/ic-secure.svg`)} alt="" />
-          Fisdom ensures privacy for your data. <b>Learn more</b>
-        </div>
         <div className="wr-register">
-          <div className="wr-logo">
+          <div className="wr-title">
             <img src={require(`assets/fisdom/sebi-logo-svg.jpg`)} alt="" />
             SEBI REGISTERED INVESTMENT ADVISOR INA200005323
           </div>
-          <div className="wr-logo">
+          <div className="wr-title-mob">
+            <img src={require(`assets/fisdom/sebi-logo-mob.jpg`)} alt="" />
+            SEBI REGISTERED INVESTMENT ADVISOR
+          </div>
+          <div className="wr-title">
             <img src={require(`assets/fisdom/bse-logo.jpg`)} alt="" />
             BSE REGISTERED MUTUAL FUND DISTRIBUTOR MUTUAL FUND CODE NO:10140
+          </div>
+          <div className="wr-title-mob">
+            <img src={require(`assets/fisdom/bse-logo-mob.jpg`)} alt="" />
+            BSE REGISTERED MUTUAL FUND DISTRIBUTOR
           </div>
         </div>
       </div>

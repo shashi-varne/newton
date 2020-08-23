@@ -373,7 +373,7 @@ export const fetchXIRR = async (params = {}) => {
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
-      return result || {};
+      return result.response || {};
     } else {
       throw (result.error || result.message || genericErrMsg);
     }

@@ -6,7 +6,7 @@ import Tooltip from 'common/ui/Tooltip';
 import toast from '../../common/ui/Toast';
 import Dialog from "common/ui/Dialog";
 import { getConfig } from "utils/functions";
-import { fetchOverview, fetchPortfolioGrowth } from '../common/ApiCalls';
+import { fetchOverview, fetchPortfolioGrowth, fetchXIRR } from '../common/ApiCalls';
 import { formatGrowthData } from '../common/commonFunctions';
 import { numDifferentiation } from '../../utils/validators';
 import CardLoader from '../mini-components/CardLoader';
@@ -39,6 +39,7 @@ export default function Overview(props) {
     insights: [],
     asset_allocation: {},
   });
+  const [xirrPercent, setXirrPercent] = useState({});
   const [growthGraph, setGrowthGraph] = useState({});
   useEffect(() => {
     (async() => {
@@ -46,7 +47,9 @@ export default function Overview(props) {
         setGraphLoad(true);
         setLoading(true);
         const data = await fetchOverview({ pan: props.pan });
+        const xirr_percent = await fetchXIRR({ pan: props.pan, year: 2 });
         setOverviewData(data);
+        setXirrPercent(xirr_percent)
         const { combined_amount_data, date_ticks } = await fetchPortfolioGrowth({
           pan: props.pan,
           date_range: selectedRange,
@@ -100,9 +103,9 @@ export default function Overview(props) {
     </div>
   )
 
-  const i_btn = (
+  const i_btn = (info) => (
     <img
-      src={require(`assets/fisdom/ic-info-xirr-overview.svg`)}
+      src={require(`assets/fisdom/${info}.svg`)}
       id="wr-i-btn"
       alt=""
       onClick={() => toggleModal(true)}
@@ -131,26 +134,28 @@ export default function Overview(props) {
               <div className="wr-okn-box">
                 <div className="wr-okn-title">
                   XIRR
-                  <span style={{ marginLeft: "6px", verticalAlign:'middle' }}>
-                    {!isMobileView ? 
-                      <Tooltip content={tipcontent} direction="down" className="wr-xirr-info">
-                        {i_btn}
-                      </Tooltip> : 
-                      <React.Fragment>
-                        {i_btn}
-                        <Dialog
-                          open={openModal}
-                          onClose={() => toggleModal(false)}
-                          classes={{ paper: "wr-dialog-info" }}
-                        >
-                          {tipcontent}
-                        </Dialog>
-                      </React.Fragment>
-                    }
-                  </span>
+                  {
+                    <span style={{ marginLeft: "6px", verticalAlign:'middle' }}>
+                      {!isMobileView ? 
+                        <Tooltip content={tipcontent} direction="down" className="wr-xirr-info">
+                          {i_btn('ic-info')}
+                        </Tooltip> : 
+                        <React.Fragment>
+                          {i_btn('ic-info')}
+                          <Dialog
+                            open={openModal}
+                            onClose={() => toggleModal(false)}
+                            classes={{ paper: "wr-dialog-info" }}
+                          >
+                            {tipcontent}
+                          </Dialog>
+                        </React.Fragment>
+                      }
+                    </span>
+                  }
                 </div>
                 <div className="wr-okn-value">
-                  {overviewData.xirr ? `${overviewData.xirr}%` : 'N/A'}
+                  {xirrPercent.xirr ? `${Math.round(xirrPercent.xirr)}%` : 'N/A'}
                 </div>
               </div>
               <div className="wr-okn-box">
@@ -205,11 +210,39 @@ export default function Overview(props) {
                 <CardLoader />
               ) :
               (
-                <div style={{ width: '100%', height: '400px', clear: 'right' }}>
-                  <MyResponsiveLine
-                    data={formatGrowthData(growthGraph.data)}
-                    params={{ date_ticks: growthGraph.date_ticks }}
-                  ></MyResponsiveLine>
+                <div>
+                  <div id="wr-xirr">
+                      XIRR
+                      {
+                        <span style={{ marginLeft: "6px", verticalAlign:'middle' }}>
+                          {!isMobileView ? 
+                            <Tooltip content={tipcontent} direction="down" className="wr-xirr-info-2">
+                              {i_btn('ic-info-primary')}
+                            </Tooltip> : ""
+                          }
+                        </span>
+                      }
+                    <div style={{fontSize:'24px', fontWeight:600, lineHeight:1}}>
+                      {xirrPercent.xirr ? `${Math.round(xirrPercent.xirr)}%` : 'N/A'}
+                    </div>
+                  </div>
+                  <div id="wr-xirr-mob">
+                    {`XIRR: ${Math.round(xirrPercent.xirr)}%`}
+                    <div id="wr-invest">
+                      <span id="wr-dot"></span>
+                      Invested
+                    </div>
+                    <div id="wr-current">
+                      <span id="wr-dot"></span>
+                      Current
+                    </div>
+                  </div>
+                  <div style={{ width: '100%', height: '400px', clear: 'right' }}>
+                    <MyResponsiveLine
+                      data={formatGrowthData(growthGraph.data)}
+                      params={{ date_ticks: growthGraph.date_ticks }}
+                    ></MyResponsiveLine>
+                  </div>
                 </div>
               )
           }
