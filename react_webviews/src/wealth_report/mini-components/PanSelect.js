@@ -35,7 +35,7 @@ export default function PanSelect(props) {
 
   const selectPan = (pan) => {
     toggleDropdown(false);
-    setPan(pan);
+    setPan(pan === 'empty' ? '' : pan);
     props.onPanSelect(pan);
   };
 
@@ -66,7 +66,7 @@ export default function PanSelect(props) {
               {
                 loadingPans ? 
                   <DotDotLoader className="wr-dot-loader" /> :
-                  <div className="wr-pan">{selectedPan}</div>
+                  <div className="wr-pan">{selectedPan || '--'}</div>
               }
             </div>
 

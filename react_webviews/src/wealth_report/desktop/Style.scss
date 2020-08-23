@@ -6,17 +6,63 @@
   align-items: center;
   justify-content: center;
   font-size: 22px;
-  color: var(--primary);
+  font-weight: 300;
+  color: rgba(80, 45, 168, 0.8);
+  text-align: center;
 
-  #wr-no-pan-back {
+  div.wr-no-pan-content {
+    line-height: 1.8;
+    max-width: 800px;
+  }
+
+  div.wr-no-pan-content:nth-child(n) {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  div.wr-no-pan-content:nth-child(1) {
+    margin-bottom: 35px;
+    font-size: 22px;
+    font-weight: normal;
+  }
+
+  .wr-no-pan-back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 16px;
-    font-weight: 300;
-    margin-top: 30px;
-    cursor: pointer;
     border: 1px solid var(--primary);
+    color: var(--primary);
+    background-color: white;
     padding: 16px;
     border-radius: 3px;
+    font-weight: 300;
+    font-size: 16px;
+    width: 130px;
+    min-width: 130px;
+    cursor: pointer;
+    min-height: 55px;
+    box-sizing: border-box;
   }
+
+  .expand {
+    //  cubic-bezier(0.02, 0.01, 0.01, 1.01) cubic-bezier(0.22, 0.61, 0.36, 1) cubic-bezier(0.93, 0.25, 0.35, 1.24)
+    transition: width 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+    width: 400px !important;
+    cursor: default !important;
+  }
+
+  .wr-no-pan-input {
+    font-size: 18px;
+    font-weight: normal;
+    padding: 0 16px 0 0;
+    animation: fadeIn 2s;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 #wr-login {
@@ -209,6 +255,7 @@
 
 #wr-body {
   width: 94%;
+  height: -webkit-fill-available;
   margin: 330px auto 0;
 }
 
@@ -219,6 +266,7 @@
 }
 
 .wr-card-template {
+  @extend .animated, .animatedFadeInUp, .fadeInUp;
   box-shadow: 0 1px 15px 0 rgba(215, 199, 250, 0.12);
   border: solid 0.5px rgba(151, 151, 151, 0.1);
   background-color: #ffffff;
@@ -674,7 +722,94 @@
   display: none;
 }
 
+
+@keyframes fadeInUp {
+  from {
+    transform: translate3d(0,40px,0)
+  }
+
+  to {
+    transform: translate3d(0,0,0);
+    opacity: 1
+  }
+}
+
+@-webkit-keyframes fadeInUp {
+  from {
+    transform: translate3d(0,40px,0)
+  }
+
+  to {
+    transform: translate3d(0,0,0);
+    opacity: 1
+  }
+}
+
+.animated {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  -webkit-animation-duration: 1s;
+  animation-delay: 1s;
+  -webkit-animation-fill-mode: both
+}
+
+@for $i from 1 through 10 {
+  .animated:nth-child(#{$i}n) {
+    animation-delay: #{$i * 0.8}s;
+  }
+}
+
+@for $i from 1 through 10 {
+  .wr-holding.animated:nth-child(#{$i}n) {
+      animation-delay: #{$i * 0.2}s;
+  }
+}
+
+// .animated:nth-child(1) {
+//   animation-delay: 0s;
+// }
+
+.animatedFadeInUp {
+  opacity: 0
+}
+
+.fadeInUp {
+  opacity: 0;
+  animation-name: fadeInUp;
+  -webkit-animation-name: fadeInUp;
+}
+
+
 @media only screen and (min-device-width: 310px) and (max-device-width: 812px) {
+  #wr-no-pan-screen {
+    font-size: 18px;
+    
+    div.wr-no-pan-content:nth-child(n) {
+      font-size: 16px;
+      margin-bottom: 18px;
+    }
+    
+    div.wr-no-pan-content:nth-child(1) {
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+    
+    .wr-no-pan-back {
+      font-size: 16px;
+      padding: 14px;
+    }
+
+    .expand {
+      transition-duration: 0.5s;
+      width: 300px !important;
+    }
+
+    .wr-no-pan-input {
+      font-size: 14px;
+      font-weight: normal;
+    }
+  }
+
   #wr-login {
     display: none;
   }
@@ -1220,48 +1355,4 @@
   .wr-dot-loader-text {
     font-size: 18px;
   }
-}
-
-@keyframes fadeInUp {
-  from {
-      transform: translate3d(0,40px,0)
-  }
-
-  to {
-      transform: translate3d(0,0,0);
-      opacity: 1
-  }
-}
-
-@-webkit-keyframes fadeInUp {
-  from {
-      transform: translate3d(0,40px,0)
-  }
-
-  to {
-      transform: translate3d(0,0,0);
-      opacity: 1
-  }
-}
-
-.animated {
-  animation-duration: 1s;
-  animation-fill-mode: both;
-  -webkit-animation-duration: 1s;
-  animation-delay: 0.5s;
-  -webkit-animation-fill-mode: both
-}
-
-.animated:nth-child(1) {
-  animation-delay: 0s;
-}
-
-.animatedFadeInUp {
-  opacity: 0
-}
-
-.fadeInUp {
-  opacity: 0;
-  animation-name: fadeInUp;
-  -webkit-animation-name: fadeInUp;
 }

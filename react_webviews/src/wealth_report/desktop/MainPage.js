@@ -11,6 +11,7 @@ import Analysis from '../desktop/Analysis';
 import LoadingScreen from "../mini-components/LoadingScreen";
 import { navigate } from "../common/commonFunctions";
 import Api from '../../utils/api';
+import NoPan from "./NoPan";
 
 const MainPage = (props) => {
   const { params } = props.match;
@@ -29,14 +30,6 @@ const MainPage = (props) => {
     })();
   }, []);
 
-  const onPanChange = (pan) => {
-    if (pan === 'empty' || !pan) {
-      navigate(props, '/w-report/no-pan-screen');
-    } else {
-      setPan(pan);
-    }
-  };
-
   // const getHeightFromTop = () => {
   //   var el = document.getElementById('wr-body');
   //   var height = el.getBoundingClientRect().top;
@@ -49,6 +42,11 @@ const MainPage = (props) => {
   //     console.log('Swipe up');
   //   }
   // };
+
+  const addNewEmail = () => {
+    const elem = document.getElementById('wr-account-img');
+    elem.click();
+  };
 
   const renderTab = (tab) => {
     if (tab === 'overview') {
@@ -64,7 +62,7 @@ const MainPage = (props) => {
 
   return (
     <div id="wr-main">
-      <div id="wr-header-hero">
+      <div id="wr-header-hero" className="animated animatedFadeInUp fadeInUp">
         <div className="wr-hero-container">
 
           {/* will be hidden for mobile view and visible for desktop view */}
@@ -75,7 +73,7 @@ const MainPage = (props) => {
           </div>
           
           {/* will be hidden for desktop view and visible for mobile view */}
-          <PanSelect onPanSelect={onPanChange}/>
+          <PanSelect onPanSelect={setPan}/>
           
           {/* visbility will be modified based on condition in media queries */}
           <div className="wr-user-account">
@@ -90,9 +88,14 @@ const MainPage = (props) => {
 
       {!pan ? 
         (<LoadingScreen text="Preparing your report, please wait..." />) :
-        (<div id="wr-body">
-          {renderTab(params.tab)}
-        </div>)
+        (
+          <div id="wr-body">
+          {pan === 'empty' ? 
+            <NoPan onSyncClick={addNewEmail}/> :
+            renderTab(params.tab)
+          }
+        </div>
+        )
       }
 
       {/* will be hidden for the mobile view */}

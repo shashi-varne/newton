@@ -51,7 +51,7 @@ class Header extends Component {
     let { activeTab } = this.state;
 
     return (
-      <div id="wr-header-bar">
+      <div id="wr-header-bar" className="animated animatedFadeInUp fadeInUp">
         <PanSelect onPanSelect={this.props.onPanSelect}/>
 
         {tabs.map((tab, index) => (

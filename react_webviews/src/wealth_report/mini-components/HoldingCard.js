@@ -125,7 +125,7 @@ export default function HoldingCard(props) {
   };
 
   return (
-    <div className="wr-card-template">
+    <div className="wr-card-template wr-holding">
       {/* based on the condition visbility is modified */}
       <div className="wr-amc-label">
         <img src={require('assets/fisdom/label.svg')} alt="amc-logo" id="wr-amc-img" />
