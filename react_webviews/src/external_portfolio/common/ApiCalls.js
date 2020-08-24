@@ -20,7 +20,7 @@ export const requestStatement = async (params) => {
     storageService().remove('hni-emails');
 
     let apiToHit = 'api/external_portfolio/cams/cas/send_mail';
-    const user_id = storageService().get('hni-user') || undefined;
+    const user_id = storageService().get('hni-user') || '';
 
     if (user_id) {
       // user_id must always go as a request param ONLY
@@ -59,7 +59,7 @@ export const fetchExternalPortfolio = async (params) => {
 
       const res = await Api.get('api/external_portfolio/list/holdings', {
         ...params,
-        user_id: storageService().get('hni-user') || undefined,
+        user_id: storageService().get('hni-user') || '',
       });
       
       if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
@@ -92,7 +92,7 @@ export const fetchAllHoldings = async (params) => {
       const res = await Api.get('api/external_portfolio/fetch/mf/holdings', {
         ...params,
         page_size,
-        user_id: storageService().get('hni-user') || undefined,
+        user_id: storageService().get('hni-user') || '',
       });
 
       if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
@@ -124,7 +124,7 @@ export const fetchEmails = async (params = {}) => {
       resetBootFlag();
       const res = await Api.get('api/external_portfolio/list/emails/requests', {
         ...params,
-        user_id: storageService().get('hni-user') || undefined,
+        user_id: storageService().get('hni-user') || '',
       });
       
       if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
@@ -154,7 +154,7 @@ export const deleteEmail = async (params) => {
 
     const res = await Api.get('api/external_portfolio/hni/remove/statements', {
       ...params,
-      user_id: storageService().get('hni-user') || undefined,
+      user_id: storageService().get('hni-user') || '',
     });
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
@@ -181,7 +181,7 @@ export const fetchAllPANs = async (params) => {
       resetBootFlag();
       const res = await Api.get('api/external_portfolio/hni/fetch/pans', {
         ...params,
-        user_id: storageService().get('hni-user') || undefined,
+        user_id: storageService().get('hni-user') || '',
       });
 
       if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
@@ -208,7 +208,7 @@ export const hitNextPage = async (next_page, params) => {
   try {
     const res = await Api.get(next_page, {
       ...params,
-      user_id: storageService().get('hni-user') || undefined,
+      user_id: storageService().get('hni-user') || '',
     });
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
