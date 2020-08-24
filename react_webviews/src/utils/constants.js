@@ -41,6 +41,11 @@ export const themeConfig = {
                 }
             }, 
         },
+        MuiFormHelperText: {
+            root: {
+                marginBottom: 10
+            }
+        },
         MuiInput: {
             input: {
                 padding: '11px 0 7px',
@@ -90,7 +95,9 @@ export const themeConfig = {
                     backgroundColor: getConfig().secondary
                 },
                 backgroundColor: getConfig().secondary,
-                color: '#fff'
+                color: '#fff',
+                borderRadius: 4,
+                boxShadow: 'none'
             },
             disabled: {
                 // opacity: 0.4,
@@ -99,6 +106,9 @@ export const themeConfig = {
             },
             label: {
                 textTransform: 'capitalize'
+            },
+            root: {
+                boxShadow: 'none !important'
             }
         },
         MuiIconButton: {

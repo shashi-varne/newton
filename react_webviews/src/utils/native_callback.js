@@ -21,6 +21,11 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   let project = getConfig().project;
   let redirect_url = getConfig().redirect_url;
   redirect_url = decodeURIComponent(redirect_url);
+
+  if(project === 'loan') {
+    events = ''; //disabled the events for now
+  }
+  
   if (action) {
     callbackData.action = action;
   }
@@ -34,6 +39,34 @@ export const nativeCallback = async ({ action = null, message = null, events = n
 
     if (getConfig().Android) {
       message.url = "https://docs.google.com/gview?embedded=true&url=" + message.url;
+    }
+
+  }
+
+  if (callbackData.action === 'open_inapp_tab') {
+
+    if (getConfig().Web) {
+      open_browser_web(message.url, '_self')
+    } else {
+      let url = 'https://fis.do/m/module?action_type=native';
+      if (getConfig().productName === 'myway') {
+        url = 'https://w-ay.in/m/module?action_type=native';
+      }
+
+      url += '&native_module=' + encodeURIComponent('app/open_inapp_tab');
+      url += '&url=' + encodeURIComponent(message.url);
+
+      if(message.back_url) {
+        url += '&back_redirection_url=' + message.back_url;
+      }
+
+      nativeCallback({
+        action: 'open_module', message: {
+          action_url: url
+        }
+      });
+
+      return;
     }
 
   }
@@ -236,8 +269,8 @@ export function getWebUrlByPath(path) {
   }
 
   let web_url = getConfig().webAppUrl + path //can accept params with path also, below it handlled
-  
-  if(getConfig().webAppParams) {
+
+  if (getConfig().webAppParams) {
     // eslint-disable-next-line
     web_url += (web_url.match(/[\?]/g) ? "&" : "?") + getConfig().webAppParams;
   }
@@ -249,7 +282,7 @@ export function openNativeModule(moduleName) {
 
 
   let url = 'https://fis.do/m/module?action_type=native';
-  if(getConfig().productName === 'myway') {
+  if (getConfig().productName === 'myway') {
     url = 'https://w-ay.in/m/module?action_type=native';
   }
 
@@ -269,7 +302,7 @@ export function openModule(moduleName) {
       'app/portfolio': 'reports',
       'app/profile': 'my-account',
       'invest/save_tax': 'invest',
-      'invest/nps': 'nps/info', 
+      'invest/nps': 'nps/info',
     }
 
     let moduleNameWeb = module_mapper[moduleName] || '';
@@ -281,44 +314,44 @@ export function openModule(moduleName) {
   }
 }
 
-export function openPdfCall(data={}) {
+export function openPdfCall(data = {}) {
 
   let url = data.url || '';
   if (!url) {
-      return;
+    return;
   }
 
 
   let current_url = window.location.href;
 
-  if(!data.back_url) {
+  if (!data.back_url) {
     data.back_url = current_url;
   }
 
   if (getConfig().Web) {
-      nativeCallback({
-          action: 'open_in_browser',
-          message: {
-              url: url
-          }
-      });
+    nativeCallback({
+      action: 'open_in_browser',
+      message: {
+        url: url
+      }
+    });
   } else {
 
-      nativeCallback({
-          action: 'take_control', message: {
-              back_url: data.back_url,
-              show_top_bar: false
-          },
+    nativeCallback({
+      action: 'take_control', message: {
+        back_url: data.back_url,
+        show_top_bar: false
+      },
 
-      });
+    });
 
-      nativeCallback({
-          action: 'show_top_bar', message: {
-              title: data.header_title, icon: data.icon || 'close'
-          }
-      });
+    nativeCallback({
+      action: 'show_top_bar', message: {
+        title: data.header_title, icon: data.icon || 'close'
+      }
+    });
 
-      nativeCallback({ action: 'open_pdf', message: { url: url } });
+    nativeCallback({ action: 'open_pdf', message: { url: url } });
   }
 
 }

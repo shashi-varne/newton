@@ -162,7 +162,6 @@ export default class ExternalPortfolio extends Component {
       total_investment,
       total_current_value,
       one_day_change,
-      one_day_change_perc,
       portfolio_xirr: xirr,
       asset_allocation,
       top_holdings

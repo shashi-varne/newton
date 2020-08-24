@@ -5,7 +5,7 @@ import { MenuItem } from 'material-ui/Menu';
 import { InputLabel } from 'material-ui/Input';
 import { FormControl } from 'material-ui/Form';
 
-import './style.css';
+import './style.scss';
 
 class SelectGrp extends Component {
   constructor(props) {
@@ -44,7 +44,7 @@ class SelectGrp extends Component {
 
     return (
       <FormControl className="Dropdown" disabled={this.props.disabled}>
-        <InputLabel htmlFor={this.props.id}>{this.props.label} *</InputLabel>
+        <InputLabel htmlFor={this.props.id}>{this.props.label}</InputLabel>
         <Select
           error={this.props.error}
           className="Select"

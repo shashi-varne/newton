@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import tick_icon_fisdom from 'assets/selected_option.png';
 import tick_icon_myway from 'assets/check_selected_blue.svg';
-import './style.css';
+import './style.scss';
 import { getConfig } from 'utils/functions';
 import scrollIntoView from 'scroll-into-view-if-needed'
 

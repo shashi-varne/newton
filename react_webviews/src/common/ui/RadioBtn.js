@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { getConfig } from 'utils/functions';
-import './style.css';
+import './style.scss';
+import check_selected_blue from 'assets/check_selected_blue.svg';
+import SVG from 'react-inlinesvg';
+
 
 export default class RadioBtn extends Component {
   handleClick() {
@@ -18,8 +21,16 @@ export default class RadioBtn extends Component {
           data-value={this.props.value} >
           <label
             className={`${this.props.type} ${this.props.isChecked ? getConfig().configPrimaryColorClass + ' RadioLabelChecked' :
-              ''}`}
-          >{this.props.text}</label>
+              ''} ${this.props.disabledWithValue ? " radioDisabledWithValue" : ""}`}
+          >
+            <div className="inside-text">{this.props.text}</div>
+            {this.props.isChecked && 
+             <SVG className="tickmark-img"
+             preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+             src={check_selected_blue}
+            />
+            }
+          </label>
         </div>
       </div>
     );

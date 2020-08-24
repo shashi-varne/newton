@@ -6,7 +6,7 @@ import {
 import { withRouter } from "react-router";
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 
-import '../common/theme/Style.css';
+import '../common/theme/Style.scss';
 import './common/Style.css';
 import NotFound from '../common/components/NotFound';
 import Listing from './components/listing';
