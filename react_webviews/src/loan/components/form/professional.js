@@ -82,7 +82,6 @@ class ProfessionalDetails extends Component {
 
         let professional_info = lead.professional_info || {};
 
-        console.log(professional_info)
         let form_data = {
             company_name: professional_info.company_name || '',
             duration: professional_info.duration || '',
