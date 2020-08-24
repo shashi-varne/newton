@@ -199,7 +199,25 @@ class KycStatus extends Component {
       stage = 'waiting'
 
     let eventObj;
-    if (this.state.flow === 'kyc') {
+    if (this.state.status === 'loan_not_eligible') {
+      eventObj = {
+        "event_name": 'lending',
+        "properties": {
+          "user_action": user_action,
+          "screen_name": 'loan-eligibility',
+          "stage": 'not eligible'
+        }
+      };
+    } else if (this.state.status === 'sorry') {
+      eventObj = {
+        "event_name": 'lending',
+        "properties": {
+          "user_action": user_action,
+          "screen_name": 'Sorry',
+          "stage": 'creating profile failure'
+        }
+      }
+    } else {
       eventObj = {
         "event_name": 'lending',
         "properties": {
@@ -207,18 +225,9 @@ class KycStatus extends Component {
           "screen_name": 'kyc-response',
           "stage": stage
         }
-      };
-    } else {
-      eventObj = {
-        "event_name": 'lending',
-        "properties": {
-          "user_action": user_action,
-          "screen_name": 'loan-eligibility',
-          "stage": this.state.status === 'loan_not_eligible' ? 'not eligible' : 
-                   this.state.status === 'pending' ? 'waiting' : 'eligible'
-        }
-      };
-    }
+      }
+    };
+    
 
     if (user_action === 'just_set_events') {
       return eventObj;

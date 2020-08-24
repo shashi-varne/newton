@@ -40,7 +40,8 @@ class LoanEligible extends Component {
       "event_name": 'lending',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'loan eligibility'
+        "screen_name": 'loan eligibility',
+        "stage": 'eligible'
       }
     };
 
