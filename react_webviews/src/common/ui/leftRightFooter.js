@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import next_arrow from  'assets/arrow_next.svg';
 import back_arrow from  'assets/arrow_back.svg';
-import './style.css';
+import './style.scss';
 import SVG from 'react-inlinesvg';
 // import {getConfig} from 'utils/functions';
 

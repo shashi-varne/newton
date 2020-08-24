@@ -1,4 +1,4 @@
-// import colors from '../common/theme/Style.css';
+// import colors from '../common/theme/Style.scss';
 import { checkValidString, getUrlParams } from './validators';
 import $ from 'jquery';
 

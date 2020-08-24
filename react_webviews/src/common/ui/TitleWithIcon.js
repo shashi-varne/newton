@@ -2,7 +2,7 @@
 import React from 'react';
 import Grid from 'material-ui/Grid';
 
-import './style.css';
+import './style.scss';
 import Icon from './Icon';
 
 const TitleWithIcon = (props) => (

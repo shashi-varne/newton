@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './style.css';
+import './style.scss';
 import OtpInput from 'react-otp-input';
 import { getConfig } from 'utils/functions';
 import { CircularProgressbar } from 'react-circular-progressbar';

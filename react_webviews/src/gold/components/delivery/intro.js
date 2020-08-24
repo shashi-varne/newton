@@ -17,7 +17,7 @@ class DeliveryIntro extends Component {
       show_loader: false,
       provider: this.props.match.params.provider,
       productName: getConfig().productName,
-      deliveryDisabled: true
+      deliveryDisabled: false
     }
   }
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Grid from 'material-ui/Grid';
 
-import './style.css';
+import './style.scss';
 import Icon from './Icon';
 import RadioBtn from './RadioBtn';
 

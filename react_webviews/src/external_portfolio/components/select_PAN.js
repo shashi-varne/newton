@@ -25,6 +25,7 @@ class PANSelector extends Component {
             "properties": {
                 "user_action": user_action,
                 "screen_name": 'accounts',
+                performed_by: storageService().get('hni-platform') === 'rmapp' ? 'RM' : 'user',
                 ...params, 
             }
         };

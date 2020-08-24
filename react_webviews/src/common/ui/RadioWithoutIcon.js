@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Grid from 'material-ui/Grid';
 
-import './style.css';
+import './style.scss';
 import RadioBtn from './RadioBtn';
 
 class RadioGrp extends Component {

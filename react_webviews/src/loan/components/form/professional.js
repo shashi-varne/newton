@@ -8,7 +8,7 @@ import Input from '../../../common/ui/Input';
 import { initialize } from '../../common/functions';
 import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
 import {
-     validateAlphabets
+     validateAlphabets, validateNumber
 } from 'utils/validators';
 import Api from 'utils/api';
 
@@ -82,7 +82,6 @@ class ProfessionalDetails extends Component {
 
         let professional_info = lead.professional_info || {};
 
-        console.log(professional_info)
         let form_data = {
             company_name: professional_info.company_name || '',
             duration: professional_info.duration || '',
@@ -112,13 +111,17 @@ class ProfessionalDetails extends Component {
 
         this.sendEvents('next');
         let keys_to_check = ['company_name', 'duration', 'office_address', 'office_pincode',
-            'office_email', 'educational_qualification', 'office_city', 'office_state',
-           'office_country'];
+            'office_email', 'educational_qualification'];
 
         let form_data = this.state.form_data;
 
         if (form_data.first_name && !validateAlphabets(form_data.first_name)) {
             form_data.first_name_error = 'Invalid first name';
+        }
+
+        if (form_data.office_pincode.length !== 6 || !validateNumber(form_data.office_pincode) || 
+        form_data.office_pincode_error) {
+            form_data['office_pincode_error'] = 'Please enter valid pincode';
         }
 
         this.formCheckUpdate(keys_to_check, form_data);
@@ -159,10 +162,11 @@ class ProfessionalDetails extends Component {
             form_data: form_data
         })
 
+        let { office_city, office_state, office_country } = form_data;
         if (pincode.length === 6) {
             const res = await Api.get('/api/pincode/' + pincode);
 
-            let { office_city, office_state, office_country } = form_data;
+            
             let office_pincode_error = '';
             if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
                 office_city = res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name;
@@ -174,11 +178,15 @@ class ProfessionalDetails extends Component {
                 office_pincode_error = 'Invalid pincode';
             }
 
-            form_data.office_city = office_city;
-            form_data.office_state = office_state;
             form_data.office_pincode_error = office_pincode_error;
             form_data.office_country = office_country || 'India';
+        } else {
+            office_city = '';
+            office_state = '';
         }
+
+        form_data.office_city = office_city;
+        form_data.office_state = office_state;
 
         this.setState({
             form_data: form_data
