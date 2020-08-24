@@ -53,7 +53,7 @@ class InstantKycHome extends Component {
         "user_action": user_action,
         "screen_name": 'instant kyc',
         "get_kyc_done": data.get_kyc_done? 'yes' : 'no',
-        "stage": this.state.dmi_loan_status === 'okyc_success' ? 'default' : 'approved'
+        "stage": this.state.dmi_loan_status === 'okyc_success' ? 'approved' : 'default'
       }
     };
 
