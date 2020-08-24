@@ -372,7 +372,7 @@ class GoldTransactionDetail extends Component {
               src={require(`assets/${this.state.productName}/track_order.svg`)} alt="Gold" />
             <div className="block2">
               <div className="title">
-                Tracking URL
+                Tracking details
                 </div>
               {this.state.order.courier_tracking_id &&
                 <div className="subtitle">
