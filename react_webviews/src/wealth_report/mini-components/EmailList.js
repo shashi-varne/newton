@@ -177,7 +177,7 @@ export default function EmailList(props) {
       }
 
       <div className="wr-btn">
-        <Button className="wr-cancel-btn" onClick={handleClose} disabled={true}>
+        <Button className="wr-cancel-btn" onClick={handleClose} disabled={isLoading}>
           Cancel
         </Button>
 

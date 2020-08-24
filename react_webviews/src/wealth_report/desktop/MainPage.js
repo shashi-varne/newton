@@ -11,11 +11,41 @@ import Analysis from '../desktop/Analysis';
 import LoadingScreen from "../mini-components/LoadingScreen";
 import { navigate } from "../common/commonFunctions";
 import Api from '../../utils/api';
+import { isEmpty } from "../../utils/validators";
+import { heightThreshold } from "../constants";
 
 const MainPage = (props) => {
+  const [headerAnimation, setHeaderAnimation] = useState('');
+  function getHeightFromTop() {
+    var el = document.getElementById('wr-body');
+    if (el && !isEmpty(el)) {
+      var height = el.getBoundingClientRect().top;
+      console.log(height);
+      return height;
+    }
+  }
+  const onScroll = () => {
+    if (getHeightFromTop() < heightThreshold) {
+      setHeaderAnimation('snapUp');
+    } else {
+      setHeaderAnimation('');
+    }
+  };
+  function setScrollEvent(setScroll) {
+    const elem = document.getElementById('wr-main');
+    if (elem && !isEmpty(elem)) {
+      if (setScroll) {
+        elem.addEventListener('scroll', onScroll, false);
+      } else {
+        elem.removeEventListener('scroll', onScroll, false);
+      }
+    }
+  }
+
   const { params } = props.match;
   const [pan, setPan] = useState('');
   useEffect(() => {
+    setScrollEvent(true);
     (async() => {
       try {
         const res = await Api.get('api/whoami');
@@ -27,6 +57,9 @@ const MainPage = (props) => {
         navigate(props, '/w-report/login');
       }
     })();
+    return function cleanup() {
+      setScrollEvent(false);
+    };
   }, []);
 
   const onPanChange = (pan) => {
@@ -36,19 +69,6 @@ const MainPage = (props) => {
       setPan(pan);
     }
   };
-
-  // const getHeightFromTop = () => {
-  //   var el = document.getElementById('wr-body');
-  //   var height = el.getBoundingClientRect().top;
-  //   return height;
-  //   // window.removeEventListener('scroll', this.onScroll, false);
-  // };
-
-  // const onScroll = () => {
-  //   if (this.getHeightFromTop() < 268) {
-  //     console.log('Swipe up');
-  //   }
-  // };
 
   const renderTab = (tab) => {
     if (tab === 'overview') {
@@ -64,7 +84,8 @@ const MainPage = (props) => {
 
   return (
     <div id="wr-main">
-      <div id="wr-header-hero">
+      <div
+        id="wr-header-hero" className={headerAnimation}>
         <div className="wr-hero-container">
 
           {/* will be hidden for mobile view and visible for desktop view */}
@@ -86,7 +107,7 @@ const MainPage = (props) => {
         </div>
       </div>
 
-      <Header onPanSelect={setPan}/>
+      <Header onPanSelect={setPan} animation={headerAnimation}/>
 
       {!pan ? 
         (<LoadingScreen text="Preparing your report, please wait..." />) :

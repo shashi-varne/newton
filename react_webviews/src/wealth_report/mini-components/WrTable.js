@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { isFunction } from "../../utils/validators";
 /* Use 'headersMap' prop to send a list of column header - data property mapping 
   Structure is as follows:
 
@@ -29,8 +30,9 @@ const WrTable = (props) => {
         <tbody>
           {tableData.map((row, idx) => (
             <tr key={idx}>
-              {columnHeaders.map(({ accessor }) => (
-                <td key={accessor}>{row[accessor]}</td>
+              {columnHeaders.map(({ accessor, formatter }) => (
+                <td key={accessor}>
+                  {isFunction(formatter) ? formatter(row[accessor]) : row[accessor]}</td>
               ))}
             </tr>
           ))}

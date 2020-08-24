@@ -1,16 +1,17 @@
 import React from 'react';
 import { ResponsivePie } from '@nivo/pie';
 
-const preProcessData = (data) => (
-  data.map(dataObj => {
+const preProcessData = (data, colors = []) => (
+  data.map((dataObj, idx) => {
     dataObj.value = parseInt(dataObj.value, 10);
+    dataObj.color = colors[idx];
     return dataObj;
   })
 );
 
 export default function PieChart (props) {
   const { width = 0, height = 0, colors = [], ...otherProps } = props;
-  let data = preProcessData(props.data);
+  let data = preProcessData(props.data, colors);
   
   return (
     // Require a container div since ResponsivePieChart fit to size of its contianer
@@ -25,7 +26,7 @@ export default function PieChart (props) {
         enableSlicesLabels={false}
         animate={true}
         tooltip={customTooltip}
-        colors={colors}
+        colors={item => item.color}
         theme={{
           tooltip: {
             container: {

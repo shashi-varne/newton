@@ -49,7 +49,7 @@ export default function Overview(props) {
         const data = await fetchOverview({ pan: props.pan });
         const xirr_percent = await fetchXIRR({ pan: props.pan, year: 2 });
         setOverviewData(data);
-        setXirrPercent(xirr_percent)
+        setXirrPercent(xirr_percent);
         const { combined_amount_data, date_ticks } = await fetchPortfolioGrowth({
           pan: props.pan,
           date_range: selectedRange,
@@ -72,6 +72,8 @@ export default function Overview(props) {
           pan: props.pan,
           date_range: selectedRange,
         });
+        const xirr_percent = await fetchXIRR({ pan: props.pan, year: 2 });
+        setXirrPercent(xirr_percent);
         setGraphLoad(false);
         setGrowthGraph({ data: combined_amount_data, date_ticks: filterDateTicks(date_ticks) });
       } catch (err) {
@@ -193,8 +195,9 @@ export default function Overview(props) {
         <div className="wr-card-template-header">Portfolio Growth</div>
         <div id="wr-growth-graph">
           <div id="wr-gg-date-select">
-            {GraphDateRanges.map(rangeObj => (
+            {GraphDateRanges.map((rangeObj, idx) => (
               <span
+                key={idx}
                 onClick={() => setSelectedRange(rangeObj.value)}
                 className={
                   `${selectedRange === rangeObj.value ? 'selected' : ''}
@@ -227,13 +230,13 @@ export default function Overview(props) {
                     </div>
                   </div>
                   <div id="wr-xirr-mob">
-                    {`XIRR: ${Math.round(xirrPercent.xirr)}%`}
-                    <div id="wr-invest">
-                      <span id="wr-dot"></span>
+                    <span>{`XIRR: ${Math.round(xirrPercent.xirr)}%`}</span>
+                    <div>
+                      <div className="wr-dot"></div>
                       Invested
                     </div>
-                    <div id="wr-current">
-                      <span id="wr-dot"></span>
+                    <div>
+                      <div className="wr-dot"></div>
                       Current
                     </div>
                   </div>
@@ -254,8 +257,8 @@ export default function Overview(props) {
           <Fragment>
             <div id="portfolio-insights-header">Portfolio Insights</div>
             <div id="wr-portfolio-insights-container">
-              {(overviewData.insights).map(insight =>
-                <PortfolioCard insight={insight} />
+              {(overviewData.insights).map((insight, idx) =>
+                <PortfolioCard insight={insight} key={idx} />
               )}
             </div>
           </Fragment>

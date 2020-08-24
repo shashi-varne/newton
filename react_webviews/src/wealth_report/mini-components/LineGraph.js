@@ -34,7 +34,7 @@ const MyResponsiveLine = (props) => {
   return (
     <ResponsiveLine
       data={props.data}
-      margin={{ top: 50, right: 20, bottom: 50, left: 50 }}
+      margin={{ top: 20, right: 20, bottom: 50, left: 50 }}
       xScale={{
         type: 'point',
       }}
@@ -80,7 +80,7 @@ const MyResponsiveLine = (props) => {
           }
         }
       }}
-      sliceTooltip={WrLineLegend}
+      sliceTooltip={WrLineTooltip}
       layers={['grid', 'markers', 'areas', DashedLine, 'slices', 'points', 'axes', 'legends']}
     />
   );
@@ -88,15 +88,15 @@ const MyResponsiveLine = (props) => {
 
 export default MyResponsiveLine;
 
-const WrLineLegend = ({ slice }) => {
+const WrLineTooltip = ({ slice }) => {
   const [date] = slice.points.map(point => point.data.x);
   return (
     <div className="wr-legend">
       <div className="wr-legend-header">{formattedDate(date, 'd m, y')}</div>
-      {slice.points.map(point => {
+      {slice.points.map((point, idx) => {
         const { data: {yFormatted: value}, serieId: label } = point;
         return (
-          <div className="wr-legend-item">
+          <div className="wr-legend-item" key={idx}>
             <span className="wr-li-label">{label.split('_')[0]}:</span>
             &nbsp;&nbsp;<span className="wr-li-value">{formatAmountInr(value)}</span>
           </div>

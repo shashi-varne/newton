@@ -14,12 +14,14 @@ const isMobileView = getConfig().isMobileDevice;
 const tableHeadersMap = [{
   label: 'Date',
   accessor: 'date',
+  formatter: (val) => formattedDate(val, 'd m y'),
 }, {
   label: 'Type',
   accessor: 'type',
 }, {
   label: 'Amount',
   accessor: 'amount',
+  formatter: (val) => numDifferentiationInr(val),
 }];
 
 export default function HoldingCard(props) {
@@ -163,7 +165,7 @@ export default function HoldingCard(props) {
               {tabName: 'transactions', label: 'Past Transactions'},
               ].map(({ tabName, label }) => (
               <WrButton
-                key="label"
+                key={label}
                 classes={{
                   root: tabSelected === tabName ? '' : 'wr-outlined-btn'
                 }}

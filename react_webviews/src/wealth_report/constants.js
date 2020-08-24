@@ -4,6 +4,8 @@ const isMobileView = getConfig().isMobileDevice;
 
 export const regenTimeLimit = 30;
 
+export const heightThreshold = isMobileView ? 160 : 275;
+
 export const genericErrMsg = 'Something went wrong. Please try again';
 
 export const HoldingFilterOptions = [
@@ -99,6 +101,8 @@ export const GraphDateRanges = [{
 }];
 
 export const TriColorScheme = ['#856cc1', '#7458b9', '#512ea7'];
+
+export const QuadColorScheme = ['#d7cef3', '#856cc1', '#7458b9', '#512ea7'];
 
 export const MultiColorScheme = [
   '#f2effb',

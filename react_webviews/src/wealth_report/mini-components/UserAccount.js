@@ -61,11 +61,17 @@ class UserAccountMobile extends Component {
     });
   };
 
-  handleTooltipClose = () => {
+  handleTooltipClose = (event) => {
+    console.log(event);
+    // If click event is triggered from within tooltip, skip it
+    const clickInsideTooltip = event.path.find((element) =>
+      element.nodeName === 'DIV' && element.classList.contains("wr-user")
+    );
+    if (clickInsideTooltip) return;
     this.setState({
-      open: false
+      open: false,
     });
-  }
+  };
 
   logoutUser = async() => {
     try {

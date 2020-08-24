@@ -204,6 +204,7 @@ span.wr-small-col-title {
   background-color: #ffffff;
   display: flex;
   z-index: 99999;
+  transition: all 0.2s ease-in;
 
   .wr-header-tab {
     flex: 1;
@@ -239,9 +240,8 @@ span.wr-small-col-title {
 
   .wr-header-pan-select{
     border: solid 0.5px rgba(151, 151, 151, 0.1);
-    overflow: hidden;
-    border-radius: 10px 0 0 10px;
     background-color: #ffffff;
+    border-radius: 10px 0 0 10px;
     box-shadow: 1px 1px rgba(69, 65, 78, 0.05);
 
     .wr-pan-content {
@@ -273,6 +273,13 @@ span.wr-small-col-title {
       }
     }
   }
+}
+
+#wr-header-bar.snapUp {
+  width: 100% !important;
+  top: 0 !important;
+  border-radius: 3px !important;
+  transition: all 0.2s ease-in;
 }
 
 #wr-email-list {
@@ -745,6 +752,7 @@ span.wr-small-col-title {
     }
   }
 }
+
 
 @media only screen 
   and (min-device-width: 310px) 
