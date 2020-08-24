@@ -22,7 +22,6 @@ class Landing extends Component {
       top_cta_title: '',
       productName: getConfig().productName,
       ic_why_hs: getConfig().productName === 'fisdom' ? ic_why_hs_fisdom : ic_why_hs_myway,
-      calculator_clicked: false,
       resume_clicked: false,
       faq_clicked: false,
     }
@@ -118,7 +117,6 @@ class Landing extends Component {
         "calculator_clicked": data.calculator_clicked ? "yes" : "no",
         "resume_clicked": this.state.isResume ? 'yes' : 'no',
         "faq_clicked": data.things_to_know === 'faq' ? 'yes' : 'no',
-        "bottom_cta_click": data.action !== 'banner' ? 'yes' : 'no'
       }
     };
 
@@ -223,8 +221,6 @@ class Landing extends Component {
   handleClickTopCard = (action) => {
     if (action === 'banner') {
       this.sendEvents('next', {action: 'banner'})
-    } else if (action === 'calculator') {
-      this.sendEvents('next', {calculator_clicked: true})
     } else {
       this.sendEvents('next', { action: this.state.top_cta_title });
     }
@@ -290,7 +286,7 @@ class Landing extends Component {
         </div>
 
         <div className="action" onClick={ () => {
-          this.handleClickTopCard('calculator')
+          this.sendEvents('next', {calculator_clicked: true})
           this.navigate('calculator', {
           params: {
             next_state: this.getNextState(),

@@ -78,7 +78,7 @@ class MandatePan extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'pan upload',
-        "type": user_action === 'open_camera' ? 'camera' : 'gallery',
+        "type": this.state.type === 'open_camera' ? 'camera' : 'gallery',
         "pan_uploaded": this.state.fileUploaded ? 'yes' : 'no'
       }
     };
@@ -247,7 +247,9 @@ class MandatePan extends Component {
   }
 
   startUpload(method_name, doc_type, doc_name, doc_side) {
-    this.sendEvents(method_name);
+    this.setState({
+      type: method_name
+    })
 
     if (getConfig().html_camera) {
       this.openCameraWeb();
@@ -294,7 +296,7 @@ class MandatePan extends Component {
         }}>
           <div>Front side of PAN card</div>
           <div style={{ margin: '20px 0 20px 0' }}>
-            <div onClick={() => this.startUpload('open_camera', 'pan', 'pan.jpg')} style={{
+            <div onClick={() => this.startUpload('open_gallery', 'pan', 'pan.jpg')} style={{
               textAlign: 'center',
             }}>
               <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" />
@@ -311,7 +313,7 @@ class MandatePan extends Component {
             <img style={{ width: '100%', height: 300 }} src={this.state.imageBaseFileShow || this.state.document_url} alt="PAN" />
           </div>
           <div style={{ margin: '20px 0 20px 0' }}>
-            <div onClick={() => this.startUpload('open_camera', 'pan', 'pan.jpg')} style={{
+            <div onClick={() => this.startUpload('open_gallery', 'pan', 'pan.jpg')} style={{
               textAlign: 'center'
             }}>
               <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" />

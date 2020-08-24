@@ -116,14 +116,17 @@ class ContactDetails extends Component {
     }
 
     sendEvents(user_action) {
-        let { employment_type } = this.state.form_data; 
+        let { form_data } = this.state; 
         
         let eventObj = {
             "event_name": 'lending',
             "properties": {
                 "user_action": user_action,
                 "screen_name": 'loan requirements',
-                "employment_type": employment_type || ''
+                "loan_amount": form_data.amount_required || '',
+                "loan_purpose": form_data.purpose || '',
+                "loan_period": form_data.tenor || '',
+                "employment_type": form_data.employment_type || ''
             }
         };
 

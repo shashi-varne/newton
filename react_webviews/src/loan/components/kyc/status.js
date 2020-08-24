@@ -188,15 +188,24 @@ class KycStatus extends Component {
   }
 
   sendEvents(user_action) {
+    let stage;
+    if (this.state.status === 'not_eligible')
+      stage = 'dmi fail'
+    else if (this.state.status === 'failed')
+      stage = 'third party fail'
+    else if (this.state.status === 'pending')
+      stage = 'no response'
+    else
+      stage = 'waiting'
+
     let eventObj;
-    if (this.state.flow) {
+    if (this.state.flow === 'kyc') {
       eventObj = {
         "event_name": 'lending',
         "properties": {
           "user_action": user_action,
           "screen_name": 'kyc-response',
-          "stage": this.state.status === 'failed' ? 'dmi fail' : 
-                   this.state.status === 'sorry' ? 'no response' : 'waiting'
+          "stage": stage
         }
       };
     } else {
@@ -205,7 +214,7 @@ class KycStatus extends Component {
         "properties": {
           "user_action": user_action,
           "screen_name": 'loan-eligibility',
-          "stage": this.state.status === 'not_eligible' ? 'not eligible' : 
+          "stage": this.state.status === 'loan_not_eligible' ? 'not eligible' : 
                    this.state.status === 'pending' ? 'waiting' : 'eligible'
         }
       };

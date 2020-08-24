@@ -52,7 +52,8 @@ class InstantKycHome extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'instant kkyc',
-        "get_kyc_done": portalStatus.indexOf(this.state.dmi_loan_status) === -1 ? 'yes' : 'no'
+        "get_kyc_done": portalStatus.indexOf(this.state.dmi_loan_status) === -1 ? 'yes' : 'no',
+        "stage": portalStatus.indexOf(this.state.dmi_loan_status) !== -1 ? 'default' : 'approved'
       }
     };
 

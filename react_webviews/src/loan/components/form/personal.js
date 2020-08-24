@@ -68,7 +68,6 @@ class PersonalDetails extends Component {
         let lead = this.state.lead || {};
 
         let personal_info = lead.personal_info || {};
-        console.log(personal_info);
         let form_data = {
             pan_no: personal_info.pan_no || '',
             first_name: personal_info.first_name || '',
@@ -135,13 +134,14 @@ class PersonalDetails extends Component {
             "properties": {
                 "user_action": user_action,
                 "screen_name": "personal details",
-                "dob": form_data.dob,
-                "father_name": form_data.father_name,
-                "first_name": form_data.first_name,
-                "last_name": form_data.last_name,
-                "gender": form_data.gender,
-                "pan_no": form_data.pan_no,
-                "marital_status": form_data.marital_status
+                "dob": form_data.dob || '',
+                "father_name": form_data.father_name || '',
+                "first_name": form_data.first_name || '',
+                "last_name": form_data.last_name || '',
+                "gender": form_data.gender || '',
+                "pan_no": form_data.pan_no || '',
+                "marital_status": form_data.marital_status || '',
+                'from_edit': this.props.edit ? 'yes' : 'no'
             }
         }
 

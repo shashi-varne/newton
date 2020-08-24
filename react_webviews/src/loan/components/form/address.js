@@ -133,7 +133,8 @@ class AddressDetails extends Component {
                 "residence_type": form_data.residence_type,
                 "duration": form_data.duration,
                 "state": form_data.state,
-                "pincode": form_data.pincode
+                "pincode": form_data.pincode,
+                'from_edit': this.props.edit ? 'yes' : 'no'
             }
         };
 

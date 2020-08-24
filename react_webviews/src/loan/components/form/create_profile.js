@@ -193,7 +193,6 @@ class FormCreateProfile extends Component {
     }
 
     render() {
-
         return (
             <Container
                 events={this.sendEvents('just_set_events')}

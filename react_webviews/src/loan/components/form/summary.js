@@ -286,7 +286,7 @@ class FormSummary extends Component {
 
 
     sendEvents(user_action, data = {}) {
-        let detail_click = this.state.accordianData[this.state.selectedIndex].title;
+        // let detail_click = this.state.accordianData[this.state.selectedIndex].title;
             
         let eventObj = {
             "event_name": 'lending',
@@ -294,7 +294,7 @@ class FormSummary extends Component {
                 "user_action": user_action,
                 "screen_name": 'application form',
                 "edit": data.edit_clicked || '',
-                "detail_click": detail_click,
+                // "detail_click": detail_click,
                 "consent": this.state.agree_check ? 'agreed' : 'declined',
                 "confirm_details": this.state.confirm_details_check ? 'yes' : 'no'
             }
