@@ -291,7 +291,7 @@ class MandatePan extends Component {
           textAlign: 'center', fontWeight: 600
         }}>
           <div>Front side of PAN card</div>
-          <div style={{ margin: '20px 0 20px 0' }}>
+          <div style={{ margin: '20px 0 20px 0', cursor: 'pointer'  }}>
             <div onClick={() => this.startUpload('open_camera', 'pan', 'pan.jpg')} style={{
               textAlign: 'center', cursor: 'pointer'
             }}>
@@ -308,7 +308,7 @@ class MandatePan extends Component {
           <div>
             <img style={{ width: '100%', height: 300 }} src={this.state.imageBaseFileShow || this.state.document_url} alt="PAN" />
           </div>
-          <div style={{ margin: '20px 0 20px 0' }}>
+          <div style={{ margin: '20px 0 20px 0', cursor: 'pointer' }}>
             <div onClick={() => this.startUpload('open_camera', 'pan', 'pan.jpg')} style={{
               textAlign: 'center'
             }}>
