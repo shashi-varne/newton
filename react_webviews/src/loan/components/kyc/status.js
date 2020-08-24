@@ -362,6 +362,7 @@ class KycStatus extends Component {
   }
 
   render() {
+    console.log(this.state.flow)
     return (
       <Container
         showLoader={this.state.show_loader}
