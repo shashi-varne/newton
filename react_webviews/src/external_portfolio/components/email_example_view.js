@@ -3,6 +3,7 @@ import EmailTemplate from '../mini-components/email_template';
 import { nativeCallback } from 'utils/native_callback';
 import { navigate } from '../common/commonFunctions';
 import { getConfig } from '../../utils/functions';
+import { storageService } from '../../utils/validators';
 const emailDomain = getConfig().email_domain;
 
 class EmailExampleView extends Component {
@@ -18,6 +19,7 @@ class EmailExampleView extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'cas email ',
+        performed_by: storageService().get('hni-platform') === 'rmapp' ? 'RM' : 'user',
       }
     };
     
@@ -33,7 +35,10 @@ class EmailExampleView extends Component {
 
     this.sendEvents('back');
     if (params.comingFrom === 'statement_request') {
-      this.navigate(`statement_request/${params.email}`, params);
+      this.navigate(
+        `statement_request/${params.email}`,
+        Object.assign(params, { comingFrom: 'email_example_view'})
+      );
     } else {
       this.props.history.goBack();
     }
