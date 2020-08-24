@@ -41,6 +41,7 @@ class FormSummary extends Component {
             agree_check: '',
             vendor_info: {},
             isScrolledToBottom: false,
+            detail_clicked: []
         }
         this.initialize = initialize.bind(this);
         this.agreeRef = React.createRef();
@@ -286,17 +287,17 @@ class FormSummary extends Component {
 
 
     sendEvents(user_action, data = {}) {
-        let detail_clicked;
-        if(this.state.accordianData[this.state.selectedIndex] !== undefined) {
-            detail_clicked = this.state.accordianData[this.state.selectedIndex].title
-        }   
+        let detail_clicked = this.state.detail_clicked.filter((item, index) => 
+            this.state.detail_clicked.indexOf(item) === index
+        );
+
         let eventObj = {
             "event_name": 'lending',
             "properties": {
                 "user_action": user_action,
                 "screen_name": 'application form',
                 "edit": data.edit_clicked || '',
-                "detail_click": detail_clicked || '',
+                "detail_click": detail_clicked.join(','),
                 "consent": this.state.agree_check ? 'agreed' : 'declined',
                 "confirm_details": this.state.confirm_details_check ? 'yes' : 'no'
             }
@@ -370,7 +371,8 @@ class FormSummary extends Component {
 
         this.setState({
             accordianData: accordianData,
-            selectedIndex: selectedIndex
+            selectedIndex: selectedIndex,
+            detail_clicked: [...this.state.detail_clicked, accordianData[selectedIndex].title]
         })
     }
 
