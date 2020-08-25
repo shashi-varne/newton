@@ -63,7 +63,7 @@ class GroupHealthLanding extends Component {
     ];
 
     let whats_covered = [
-      'Diseases occured before policy issuance will be covered after 3 years',
+      'Diseases occurred before policy issuance will be covered after 3 years',
       'Ayurveda, unani, sidha and homeopathy  treatments',
       '60 days pre and 180 days post hospitalization expenses',
       'Organ donor expenses',
