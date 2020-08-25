@@ -49,6 +49,12 @@ class GroupHealthPlanFinalSummary extends Component {
         let lead = this.state.lead;
         let member_base = lead.member_base;
 
+        let pan_needed = false;
+        if (lead.total_amount > 100000) {
+            pan_needed = true;
+        }
+
+
         let personal_details_to_copy = [
             {
                 'title': 'Insured name',
@@ -98,14 +104,22 @@ class GroupHealthPlanFinalSummary extends Component {
                 info = Object.assign({}, personal_details_to_copy[pc]);
                 info.subtitle = member[info.key];
 
-                if(member.key === 'applicant' && info.key === 'name') {
-                    info.title = 'Applicant name';
+                if(member.key === 'applicant') {
+
+                    if(info.key === 'name') {
+                        info.title = 'Applicant name';
+                    }
+
+                    if(info.key === 'height' || info.key === 'weight') {
+                        continue;
+                    }
                 }
                 data.push(info);
             }
 
 
-            if((member.key === 'applicant' || member.key === 'self') && lead.self_account_key.pan_number) {
+            if(pan_needed && (member.key === 'applicant' || member.key === 'self') && 
+                lead.self_account_key.pan_number) {
                 data.push({
                     'title': 'PAN number',
                     'key': 'pan',

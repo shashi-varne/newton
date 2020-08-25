@@ -219,9 +219,9 @@ class GroupHealthPlanDob extends Component {
     
                 } else {
                     // adult
-                    if (age.age > 90 || age.age < 18) {
+                    if (age.age > 90 || age.age < 19) {
                         error = 'Valid age is between 18 - 90 years';
-                    } else if(manAgeCheck === key && age.age < 21) {
+                    } else if(manAgeCheck === key && age.age < 22) {
                         error = 'Minimum age is 21 for married male';
                     }
                     adult_ages.push(age.age);
