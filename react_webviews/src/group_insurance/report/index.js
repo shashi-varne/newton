@@ -55,7 +55,7 @@ class Report extends Component {
         product_name: 'Bharti AXA General Insurances',
         top_title: policy.product_title,
         product_key: policy.product_name,
-        id: policy.policy_id
+        id: policy.id
       }
     } else if (provider === 'EDELWEISS') {
       obj = {
