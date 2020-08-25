@@ -129,6 +129,15 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "babel": {
+    "presets": [
+      "@babel/env",
+      "@babel/react"
+    ],
+    "plugins": [
+      "@babel/plugin-proposal-class-properties"
+    ]
+  },
   "homepage": "https://wv.fisdom.com",
   "devDependencies": {
     "babel-eslint": "^8.2.6",
