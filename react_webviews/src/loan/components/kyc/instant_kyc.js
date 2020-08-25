@@ -79,6 +79,7 @@ class InstantKycHome extends Component {
 
           let okyc_id = resultData.okyc_id;
           storageService().set('loan_okyc_id', okyc_id);
+          console.log(okyc_id)
 
           let paymentRedirectUrl = encodeURIComponent(
             window.location.origin + `/loan/redirection-status/kyc` + getConfig().searchParams
@@ -304,6 +305,7 @@ class InstantKycHome extends Component {
   }
 
   render() {
+    console.log(this.state.vendor_info)
     return (
       <Container
         showLoader={this.state.show_loader}
