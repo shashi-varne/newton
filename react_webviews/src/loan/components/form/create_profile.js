@@ -185,7 +185,7 @@ class FormCreateProfile extends Component {
                 "properties": {
                     "user_action": user_action,
                     "screen_name": 'Sorry',
-                    "stage": 'creating profile failed'
+                    "stage": 'creating contact failed'
                 }
             }
         } else {
