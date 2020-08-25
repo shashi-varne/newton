@@ -258,7 +258,7 @@ class GroupHealthPlanDetails extends Component {
                         <div className="ci-right">
                             <img 
                             className="tooltip-icon"
-                            data-tip={this.state.plan_selected.recovery_benefit_content}
+                            data-tip={this.state.plan_selected.copay}
                             src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
                         </div>
                     </div>
