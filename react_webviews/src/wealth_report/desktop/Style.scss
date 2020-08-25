@@ -1,3 +1,17 @@
+#wr-main::-webkit-scrollbar {
+  width: 10px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 5px;
+}
+
+#wr-main::-webkit-scrollbar-thumb {
+  width: 6px;
+  height: 100px;
+  border-radius: 2.5px;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+
 #wr-no-pan-screen {
   height: 100%;
   width: 100%;
@@ -168,6 +182,8 @@
   position: absolute;
   top: 0;
   z-index: 9998;
+  overflow: hidden;
+  transition: height 0.2s ease-in;
 
   .wr-hero-container {
     display: flex;
@@ -205,6 +221,10 @@
       display: none;
     }
   }
+}
+
+#wr-header-hero.snapUp {
+  height: 0 !important;
 }
 
 #wr-body {
@@ -431,6 +451,22 @@
 #wr-analysis-tabs {
   text-align: center;
   margin: 0 0 60px 0;
+
+  .wr-outlined-btn {
+    padding: 15px 24px;
+
+    .MuiButton-label {
+      font-weight: 600 !important;
+    }
+  }
+
+  .wr-analysis-tab-btn {
+    padding: 15px 24px;
+
+    .MuiButton-label {
+      font-weight: 600 !important;
+    }
+  }
 }
 
 #wr-analysis-graph {
@@ -444,11 +480,11 @@
   flex-wrap: wrap;
 }
 
-.wr-allocation-graph-legend {
+.wr-pie-1-legend {
   display: flex;
   margin-left: 150px;
 
-  .wr-agl-item {
+  .wr-p1l-item {
     margin-right: 24px;
     width: 140px;
     padding: 20px;
@@ -457,12 +493,12 @@
     color: #ffffff;
     box-sizing: border-box;
 
-    .wr-agl-item-label {
+    .wr-p1l-item-label {
       font-size: 20px;
       margin-bottom: 10px;
     }
 
-    .wr-agl-item-value {
+    .wr-p1l-item-value {
       line-height: 1.2;
       font-size: 25px;
       font-weight: 600;
@@ -470,7 +506,7 @@
   }
 }
 
-.wr-sector-graph-legend {
+.wr-pie-2-legend {
   display: flex;
   flex-flow: column wrap;
   justify-content: space-between;
@@ -478,12 +514,12 @@
   margin-left: 150px;
   min-width: 55%;
 
-  .wr-sgl-item {
+  .wr-p2l-item {
     cursor: pointer;
     height: 50px;
     width: 50%;
 
-    .wr-sgl-item-chip {
+    .wr-p2l-item-chip {
       width: 20px;
       height: 20px;
       border-radius: 10px;
@@ -491,14 +527,14 @@
       margin-right: 16px;
     }
 
-    .wr-sgl-item-label {
+    .wr-p2l-item-label {
       font-size: 15px;
       color: rgba(0, 0, 0, 0.7);
       vertical-align: top;
     }
   }
 
-  .wr-sgl-item:hover {
+  .wr-p2l-item:hover {
     opacity: 1;
     font-weight: 600;
   }
@@ -508,6 +544,7 @@
   padding: 50px;
 
   .wr-table-container {
+    min-height: 200px;
     max-height: 350px;
     overflow-y: scroll;
   }
@@ -935,6 +972,7 @@
 
     #wr-gg-date-select {
       width: 100%;
+      float: none;
 
       .wr-gg-date-select-item {
         flex: 1;
@@ -950,26 +988,26 @@
   #wr-xirr-mob {
     display: flex !important;
     justify-content: space-between;
-    padding-top: 30px !important;
-    color: var(--primary);
-
-    #wr-invest {
-      color: #8798ad;
+    margin-top: 30px !important;
+    font-size: 12px;
+    color: #8798ad;
+    
+    span {
+      color: var(--primary);
+      flex-basis: 45%;
     }
 
-    #wr-current {
-      color: #8798ad;
-
-      #wr-dot {
-        background-color: #b9abdd !important;
-      }
-    }
-
-    #wr-dot {
+    .wr-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 16px;
+      margin-right: 7px;
       background-color: var(--primary);
-      border-radius: 50% !important;
-      padding: 0 8px;
-      margin-right: 3px;
+      display: inline-block;
+    }
+
+    div:nth-of-type(2) > div.wr-dot {
+      background-color: #b9abdd;
     }
   }
 
@@ -1070,53 +1108,54 @@
     padding: 20px;
   }
 
-  .wr-allocation-graph-legend {
+  .wr-pie-1-legend {
     margin: 30px 0 0 0;
     flex-basis: 100%;
+    flex-wrap: wrap;
     justify-content: space-between;
 
-    .wr-agl-item {
-      margin-right: 0;
+    .wr-p1l-item {
+      margin: 16px 16px 0 0;
       padding: 15px;
       width: 90px;
 
-      .wr-agl-item-label {
+      .wr-p1l-item-label {
         font-size: 13px;
         margin-bottom: 10px;
       }
 
-      .wr-agl-item-value {
+      .wr-p1l-item-value {
         line-height: 1;
         font-size: 16px;
       }
     }
   }
 
-  .wr-sector-graph-legend {
+  .wr-pie-2-legend {
     justify-content: unset;
     align-content: space-between;
     height: 180px;
     flex-basis: 100%;
     margin: 30px 0 0 0;
 
-    .wr-sgl-item {
+    .wr-p2l-item {
       height: auto;
       width: auto;
       margin-bottom: 13px;
 
-      .wr-sgl-item-chip {
+      .wr-p2l-item-chip {
         width: 10px;
         height: 10px;
         margin-right: 6px;
       }
 
-      .wr-sgl-item-label {
+      .wr-p2l-item-label {
         font-size: 10px;
         vertical-align: middle;
       }
     }
 
-    .wr-sgl-item:hover {
+    .wr-p2l-item:hover {
       opacity: 1;
       font-weight: 600;
     }
@@ -1126,6 +1165,7 @@
     padding: 20px;
 
     .wr-table-container {
+      min-height: 150px;
       max-height: 250px;
     }
   }

@@ -1,7 +1,7 @@
 // common for both mobile view and web view
 
 import React, { useState, useEffect } from "react";
-import Button from "material-ui/Button";
+import { Button } from "material-ui";
 import TextField from "material-ui/TextField";
 import Dialog from "common/ui/Dialog";
 import FormControl from "@material-ui/core/FormControl";
@@ -177,7 +177,7 @@ export default function EmailList(props) {
       }
 
       <div className="wr-btn">
-        <Button className="wr-cancel-btn" onClick={handleClose} disabled={true}>
+        <Button className="wr-cancel-btn" onClick={handleClose} disabled={isLoading}>
           Cancel
         </Button>
 

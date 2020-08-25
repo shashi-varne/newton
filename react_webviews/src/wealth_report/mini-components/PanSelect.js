@@ -51,7 +51,7 @@ export default function PanSelect(props) {
 
   return (
     <div className="wr-pan-dropdown">
-      <div className="wr-header-pan-select">
+      <div className={`wr-header-pan-select ${dropdown_open ? 'wr-pan-list-open' : ''}`}>
         {/* visibility will be modified based on the condition in media queries */}
         <ClickAwayListener onClickAway={handleClose}>
           <div className="wr-pan-content" style={{ cursor: "default" }}>

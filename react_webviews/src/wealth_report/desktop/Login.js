@@ -173,9 +173,9 @@ const Login = (props) => {
         />
         <div id="wr-title">Wealth Report</div>
         <div id="wr-subtitle">
-          Now investing money made more easy and safe. We at fisdom monitor your
-          money closely at all times to ensure it is always making the most for
-          you.
+          Now investing money made more easy and safe. 
+          We at fisdom monitor your money closely at all times to ensure it 
+          is always making the most for you.
         </div>
       </div>
       <div className="wr-continue-btn">

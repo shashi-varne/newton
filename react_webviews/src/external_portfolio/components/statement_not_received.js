@@ -29,6 +29,7 @@ class StatementNotReceived extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'sent mail not found',
+        performed_by: storageService().get('hni-platform') === 'rmapp' ? 'RM' : 'user',
       }
     };
     
@@ -52,6 +53,7 @@ class StatementNotReceived extends Component {
       this.navigate(`statement_request/${email_detail.email}`, {
         exitToApp: true,
         noEmailChange: true,
+        fromRegenerate: true,
       });
     } catch (err) {
       this.setLoader(false);

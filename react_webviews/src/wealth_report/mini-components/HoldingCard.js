@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import WrButton from '../common/Button';
-import { IconButton } from '@material-ui/core';
+import { IconButton } from 'material-ui';
 import { numDifferentiationInr, formattedDate } from '../../utils/validators';
 import AMCDetail from './AMCDetail';
 import { CircularProgress } from 'material-ui';
@@ -14,12 +14,14 @@ const isMobileView = getConfig().isMobileDevice;
 const tableHeadersMap = [{
   label: 'Date',
   accessor: 'date',
+  formatter: (val) => formattedDate(val, 'd m y'),
 }, {
   label: 'Type',
   accessor: 'type',
 }, {
   label: 'Amount',
   accessor: 'amount',
+  formatter: (val) => numDifferentiationInr(val),
 }];
 
 export default function HoldingCard(props) {
@@ -98,7 +100,6 @@ export default function HoldingCard(props) {
           )}
           {!!nextPage && !loadingMore && isMobileView && 'View All'}
           {!!nextPage && !loadingMore && !isMobileView && 'Load More'}
-         
         </div>
       </Fragment>
     );
@@ -163,7 +164,7 @@ export default function HoldingCard(props) {
               {tabName: 'transactions', label: 'Past Transactions'},
               ].map(({ tabName, label }) => (
               <WrButton
-                key="label"
+                key={label}
                 classes={{
                   root: tabSelected === tabName ? '' : 'wr-outlined-btn'
                 }}

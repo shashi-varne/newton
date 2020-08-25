@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { withRouter, Link } from "react-router-dom";
 import PanSelect from './PanSelect';
 
@@ -29,54 +29,36 @@ const tabs = [
   }
 ];
 
-class Header extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      dropdown_open: false,
-      selectedPan: 'BXRPR87008N',
-      pans: ['BXRPR87008N', 'QWCTE6223N', 'TRQEW2995K'],
-      activeTab: this.props.match.params.tab,
-    };
-  }
+const Header = (props) => {
+  const { animation, match, location, onPanSelect } = props;
+  const [activeTab, setActiveTab] = useState(match.params.tab);
+  
+  return (
+    <div id="wr-header-bar" className={animation || ''}>
+      <PanSelect onPanSelect={onPanSelect}/>
 
-  selectTab = (tab) => {
-    this.setState({
-      dropdown_open: false,
-      activeTab: tab
-    })
-  }
-
-  render() {
-    let { activeTab } = this.state;
-
-    return (
-      <div id="wr-header-bar">
-        <PanSelect onPanSelect={this.props.onPanSelect}/>
-
-        {tabs.map((tab, index) => (
-          <Link to={`${tab.id + this.props.location.search}`}
-            onClick={() => this.selectTab(tab.id)}
-            className="wr-header-tab"
-            key={index}
-            style={{borderBottom: activeTab === tab.id ? 'solid 4px var(--primary)' : ''}}
+      {tabs.map((tab, index) => (
+        <Link to={`${tab.id + location.search}`}
+          onClick={() => setActiveTab(tab.id)}
+          className="wr-header-tab"
+          key={index}
+          style={{borderBottom: activeTab === tab.id ? 'solid 4px var(--primary)' : ''}}
+        >
+          <img
+            src={require(`assets/fisdom/${activeTab === tab.id ? tab["image-active"] : tab["image-inactive"]}`)}
+            alt=""
+          />
+          <div
+            className="wr-select"
+            style={{ color: activeTab === tab.id ? '#000' : '#a9a9a9' }}
           >
-            <img
-              src={require(`assets/fisdom/${activeTab === tab.id ? tab["image-active"] : tab["image-inactive"]}`)}
-              alt=""
-            />
-            <div
-              className="wr-select"
-              style={{ color: activeTab === tab.id ? '#000' : '#a9a9a9' }}
-            >
-              {tab.name}
-            </div>
-          </Link>
-        ))}
+            {tab.name}
+          </div>
+        </Link>
+      ))}
 
-      </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default withRouter(Header);
