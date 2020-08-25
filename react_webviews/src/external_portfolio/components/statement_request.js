@@ -3,7 +3,7 @@ import Container from '../common/Container';
 import EmailRequestSteps from '../mini-components/EmailRequestSteps';
 import { getConfig } from '../../utils/functions';
 import InfoBox from '../mini-components/InfoBox';
-import { navigate, emailForwardedHandler } from '../common/commonFunctions';
+import { navigate, emailForwardedHandler, setPlatformAndUser } from '../common/commonFunctions';
 import { nativeCallback } from 'utils/native_callback';
 import { storageService, getUrlParams } from '../../utils/validators';
 import toast from '../../common/ui/Toast';
@@ -25,6 +25,18 @@ class StatementRequest extends Component {
     };
     this.navigate = navigate.bind(this);
     this.emailForwardedHandler = emailForwardedHandler.bind(this);
+    this.setEntryPoint();
+    setPlatformAndUser();
+  }
+
+  setEntryPoint() {
+    const params = this.props.location.params || {};
+    let entry_point = '';
+    if (this.cameFromApp()) entry_point = 'app';
+    else if (params.fromRegenerate) entry_point = 'regenerate_stat';
+    else entry_point = 'email_entry';
+    
+    storageService().set('statement-req-entry-point', entry_point);
   }
 
   sendEvents(user_action) {
@@ -34,12 +46,13 @@ class StatementRequest extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'statement request sent',
-        email_look_clicked: this.state.emailLinkClicked,
-        entry_point: params.comingFrom === 'email_entry' ? 'email entry' : 'regenerate_stat',
+        performed_by: storageService().get('hni-platform') === 'rmapp' ? 'RM' : 'user',
+        email_look_clicked: params.comingFrom === 'email_example_view',
+        entry_point: storageService().get('statement-req-entry-point') || null,
         status: this.state.showRegenerateBtn ? 'mail not recieved in 30 min' : 'before tracker setup',
       }
     };
-    
+
     if (['just_set_events', 'back'].includes(user_action)) {
       return eventObj;
     } else {
@@ -102,6 +115,7 @@ class StatementRequest extends Component {
 
     this.navigate('email_entry', {
       comingFrom: 'statement_request',
+      fromRegenerate: params.fromRegenerate,
       navigateBackTo: params.navigateBackTo,
       exitToApp: this.state.exitToApp,
       fromApp: this.cameFromApp(),
@@ -124,6 +138,7 @@ class StatementRequest extends Component {
       /* Require these params to be sent back here, otherwise props
       will be lost when coming back from next page*/
       comingFrom: 'statement_request',
+      fromRegenerate: params.fromRegenerate,
       exitToApp: this.state.exitToApp,
       navigateBackTo: this.state.exitToApp ? null : params.navigateBackTo,
       noEmailChange: params.noEmailChange,

@@ -1,7 +1,7 @@
 import { getConfig } from 'utils/functions';
 import { fetchEmails } from './ApiCalls';
 import toast from '../../common/ui/Toast';
-import { storageService } from '../../utils/validators';
+import { storageService, getUrlParams } from '../../utils/validators';
 
 export function navigate(pathname, params, replace) {
   if (!replace) {
@@ -56,4 +56,14 @@ export async function emailForwardedHandler(email_id) {
 
 export function resetLSKeys(keys = []) {
   keys.map(key => storageService().remove(key));
+}
+
+export function setPlatformAndUser() {
+  const { customer_id, platform } = getUrlParams() || {};
+  if (customer_id) {
+    storageService().set('hni-user', customer_id);
+  }
+  if (platform) {
+    storageService().set('hni-platform', platform);
+  }
 }
