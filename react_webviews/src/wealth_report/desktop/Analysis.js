@@ -37,6 +37,7 @@ const tableHeadersMap = [{
 }, {
   label: '% Share',
   accessor: 'share',
+  formatter: (val) => Number(val).toFixed(2),
 }];
 
 export default function Analysis(props) {
@@ -176,7 +177,7 @@ export default function Analysis(props) {
         <div id="wr-analysis-top-holdings">
           <div className="wr-table-container">
             {!holdingsData.length ?
-              (<Loader />) :
+              (<CardLoader />) :
               (<WrTable
                 data = { holdingsData }
                 headersMap = { tableHeadersMap }
@@ -188,9 +189,3 @@ export default function Analysis(props) {
     </React.Fragment>
   )
 };
-
-const Loader = () => (
-  <div style={{ textAlign: 'center' }}>
-    <CircularProgress size={50} thickness={4} />
-  </div>
-);

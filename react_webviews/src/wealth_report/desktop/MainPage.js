@@ -20,7 +20,6 @@ const MainPage = (props) => {
     var el = document.getElementById('wr-body');
     if (el && !isEmpty(el)) {
       var height = el.getBoundingClientRect().top;
-      console.log(height);
       return height;
     }
   }

@@ -30,18 +30,19 @@ const DashedLine = ({ series, lineGenerator, xScale, yScale }) => {
   ))
 };
 
-const MyResponsiveLine = (props) => {
+const WrGrowthGraph = (props) => {
+  console.log(props);
   return (
     <ResponsiveLine
-      data={props.data}
+      data={props.data || []}
       margin={{ top: 20, right: 20, bottom: 50, left: 50 }}
       xScale={{
         type: 'point',
       }}
       yScale={{
         type: 'linear',
-        min: 'auto',
-        max: 'auto',
+        min: props.min || 'auto',
+        max: props.max || 'auto',
         stacked: false,
         reverse: false
       }}
@@ -58,8 +59,9 @@ const MyResponsiveLine = (props) => {
         tickPadding: 10,
         tickSize: 0,
       }}
+      curve="natural"
       enableGridX={false}
-      colors={{ scheme: 'nivo' }}
+      colors={['#b9abdd', '#502da8']}
       enablePoints={false}
       enableSlices="x"
       crosshairType="x"
@@ -86,19 +88,20 @@ const MyResponsiveLine = (props) => {
   );
 };
 
-export default MyResponsiveLine;
+export default WrGrowthGraph;
 
 const WrLineTooltip = ({ slice }) => {
   const [date] = slice.points.map(point => point.data.x);
   return (
-    <div className="wr-legend">
-      <div className="wr-legend-header">{formattedDate(date, 'd m, y')}</div>
+    <div className="wr-growth-graph-legend">
+      <div className="wr-ggl-header">{formattedDate(date, 'd m, y')}</div>
       {slice.points.map((point, idx) => {
         const { data: {yFormatted: value}, serieId: label } = point;
         return (
-          <div className="wr-legend-item" key={idx}>
-            <span className="wr-li-label">{label.split('_')[0]}:</span>
-            &nbsp;&nbsp;<span className="wr-li-value">{formatAmountInr(value)}</span>
+          <div className="wr-ggl-item" key={idx}>
+            <div className="wr-ggli-color-bubble" style={{ background: point.color }}></div>
+            <span className="wr-ggli-label">{label.split('_')[0]}:</span>
+            &nbsp;&nbsp;<span className="wr-ggli-value">{formatAmountInr(value)}</span>
           </div>
         );
       })}

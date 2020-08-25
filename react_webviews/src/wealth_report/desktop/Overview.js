@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { LinearProgress, createMuiTheme, MuiThemeProvider, IconButton } from 'material-ui';
-import MyResponsiveLine from '../mini-components/LineGraph';
+import WrGrowthGraph from '../mini-components/WrGrowthGraph';
 import { InsightMap, GraphDateRanges } from '../constants';
 import Tooltip from 'common/ui/Tooltip';
 import toast from '../../common/ui/Toast';
@@ -241,10 +241,10 @@ export default function Overview(props) {
                     </div>
                   </div>
                   <div style={{ width: '100%', height: '400px', clear: 'right' }}>
-                    <MyResponsiveLine
-                      data={formatGrowthData(growthGraph.data)}
+                    <WrGrowthGraph
+                      {...formatGrowthData(growthGraph.data)}
                       params={{ date_ticks: growthGraph.date_ticks }}
-                    ></MyResponsiveLine>
+                    ></WrGrowthGraph>
                   </div>
                 </div>
               )

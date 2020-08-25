@@ -21,7 +21,6 @@ export default function PieChart (props) {
         // height={height}
         // width={width}
         innerRadius={0.6}
-        sortByValue={true}
         enableRadialLabels={false}
         enableSlicesLabels={false}
         animate={true}

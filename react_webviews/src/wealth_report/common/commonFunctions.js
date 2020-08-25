@@ -22,24 +22,38 @@ export function navigate(props, pathname, params, replace) {
 
 // Todo: Optimize this function
 export const formatGrowthData = (dataObj) => {
-  if (isEmpty(dataObj) || !dataObj) return [];
+  if (isEmpty(dataObj) || !dataObj) return { data: [] };
   const obj = {
     current_amount: [],
     invested_amount: [],
   };
+  let max, min;
 
   for (let dataOb of dataObj) {
     const { data } = dataOb;
-    data.map(point => obj[dataOb.id].push({
-      x: point.date,
-      y: point.value,
-    }));
+    max = max || data[0].value;
+    min = min || data[0].value;
+    // eslint-disable-next-line no-loop-func
+    data.map(point => {
+      const numVal = Number(point.value);
+      max = numVal > max ? numVal : max;
+      min = numVal < min ? numVal : min;
+      obj[dataOb.id].push({
+        x: point.date,
+        y: point.value,
+        color: dataOb.id === 'current_amount' ? '#b9abdd' : '#502da8',
+      });
+    });
   }
-  return [{
-    id: 'current_amount',
-    data: obj.current_amount,
-  }, {
-    id: 'invested_amount',
-    data: obj.invested_amount,
-  }];
+  return {
+    min: min * 0.7,
+    max: max * 1.2,
+    data: [{
+      id: 'current_amount',
+      data: obj.current_amount,
+    }, {
+      id: 'invested_amount',
+      data: obj.invested_amount,
+    }],
+  };
 };

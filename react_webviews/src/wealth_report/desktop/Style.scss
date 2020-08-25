@@ -544,6 +544,7 @@
   padding: 50px;
 
   .wr-table-container {
+    min-height: 200px;
     max-height: 350px;
     overflow-y: scroll;
   }
@@ -1164,6 +1165,7 @@
     padding: 20px;
 
     .wr-table-container {
+      min-height: 150px;
       max-height: 250px;
     }
   }

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Dialog from "common/ui/Dialog";
 import WrButton from "../common/Button";
 import { HoldingFilterOptions as Filters } from "../constants";
-import Button from "material-ui/Button";
+import { Button } from "material-ui";
 import { getConfig } from "utils/functions";
 import CloseIcon from "@material-ui/icons/Close";
 const isMobileView = getConfig().isMobileDevice;

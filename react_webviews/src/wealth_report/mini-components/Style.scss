@@ -728,25 +728,33 @@ span.wr-small-col-title {
   padding: 0 10px;
 }
 
-.wr-legend {
+.wr-growth-graph-legend {
   box-shadow: 0 0 12px 0 rgba(200, 200, 200, 0.2);
   background-color: #ffffff;
   padding: 10px;
 
-  .wr-legend-header {
+  .wr-ggl-header {
     font-size: 13px;
     font-weight: 600;
     color: var(--primary);
     margin-bottom: 15px;
   }
 
-  .wr-legend-item {
+  .wr-ggl-item {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
     margin-bottom: 10px;
+
+    .wr-ggli-color-bubble {
+      width: 8px;
+      height: 8px;
+      border-radius: 10px;
+      margin-right: 6px;
+    }
 
     span {
       font-size: 13px;
+      flex: 1;
       text-transform: capitalize;
       color: rgba(0, 0, 0, 0.8);
     }
@@ -1132,13 +1140,13 @@ span.wr-small-col-title {
     width: 30px  !important;
   }
 
-  .wr-legend {
-    .wr-legend-header {
+  .wr-ggl {
+    .wr-ggl-header {
       font-size: 12px;
       margin-bottom: 10px;
     }
 
-    .wr-legend-item {
+    .wr-ggl-item {
       margin-bottom: 6px;
 
       span {

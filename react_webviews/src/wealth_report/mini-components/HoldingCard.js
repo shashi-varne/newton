@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import WrButton from '../common/Button';
-import { IconButton } from '@material-ui/core';
+import { IconButton } from 'material-ui';
 import { numDifferentiationInr, formattedDate } from '../../utils/validators';
 import AMCDetail from './AMCDetail';
 import { CircularProgress } from 'material-ui';
@@ -100,7 +100,6 @@ export default function HoldingCard(props) {
           )}
           {!!nextPage && !loadingMore && isMobileView && 'View All'}
           {!!nextPage && !loadingMore && !isMobileView && 'Load More'}
-         
         </div>
       </Fragment>
     );
