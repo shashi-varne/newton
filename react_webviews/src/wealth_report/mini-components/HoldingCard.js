@@ -31,7 +31,7 @@ export default function HoldingCard(props) {
   const [isLoading, setLoading] = useState(false);
   const [nextPage, setNextPage] = useState('');
   const [transactions, setTransactions] = useState([]);
-  const { fund_summary = {}, ...holding = {} } = props.holding;
+  const { fund_summary = {}, holding = {...holding} } = props.holding;
 
   useEffect(() => {
     (async() => {
