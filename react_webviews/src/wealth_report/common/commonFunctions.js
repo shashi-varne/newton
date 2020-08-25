@@ -20,7 +20,6 @@ export function navigate(props, pathname, params, replace) {
   }
 }
 
-// Todo: Optimize this function
 export const formatGrowthData = (dataObj) => {
   if (isEmpty(dataObj) || !dataObj) return { data: [] };
   const obj = {
@@ -38,7 +37,7 @@ export const formatGrowthData = (dataObj) => {
       const numVal = Number(point.value);
       max = numVal > max ? numVal : max;
       min = numVal < min ? numVal : min;
-      obj[dataOb.id].push({
+      return obj[dataOb.id].push({
         x: point.date,
         y: point.value,
         color: dataOb.id === 'current_amount' ? '#b9abdd' : '#502da8',

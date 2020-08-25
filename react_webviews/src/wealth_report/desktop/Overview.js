@@ -40,7 +40,7 @@ export default function Overview(props) {
     asset_allocation: {},
   });
   const [xirrPercent, setXirrPercent] = useState({});
-  const [growthGraph, setGrowthGraph] = useState({});
+  const [growthGraphData, setgrowthGraphData] = useState({});
   useEffect(() => {
     (async() => {
       try {
@@ -54,7 +54,11 @@ export default function Overview(props) {
           pan: props.pan,
           date_range: selectedRange,
         });
-        setGrowthGraph({ data: combined_amount_data, date_ticks: filterDateTicks(date_ticks) });
+        const formattedData = formatGrowthData(combined_amount_data);
+        setgrowthGraphData({
+          ...formattedData,
+          date_ticks: filterDateTicks(date_ticks),
+        });
       } catch (err) {
         console.log(err);
         toast(err);
@@ -75,7 +79,7 @@ export default function Overview(props) {
         const xirr_percent = await fetchXIRR({ pan: props.pan, year: 2 });
         setXirrPercent(xirr_percent);
         setGraphLoad(false);
-        setGrowthGraph({ data: combined_amount_data, date_ticks: filterDateTicks(date_ticks) });
+        setgrowthGraphData({ data: combined_amount_data, date_ticks: filterDateTicks(date_ticks) });
       } catch (err) {
         console.log(err);
         toast(err);
@@ -242,8 +246,12 @@ export default function Overview(props) {
                   </div>
                   <div style={{ width: '100%', height: '400px', clear: 'right' }}>
                     <WrGrowthGraph
-                      {...formatGrowthData(growthGraph.data)}
-                      params={{ date_ticks: growthGraph.date_ticks }}
+                      data={growthGraphData.data}
+                      params={{
+                        date_ticks: growthGraphData.date_ticks,
+                        min: growthGraphData.min,
+                        max: growthGraphData.max,
+                      }}
                     ></WrGrowthGraph>
                   </div>
                 </div>

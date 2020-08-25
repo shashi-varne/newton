@@ -8,7 +8,6 @@ import { resendOtp, login, verifyOtp } from "../common/ApiCalls";
 import toast from '../../common/ui/Toast';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { navigate } from "../common/commonFunctions";
-import SVG from 'react-inlinesvg';
 import LoadingScreen from "../mini-components/LoadingScreen";
 const isMobileView = getConfig().isMobileDevice;
 
@@ -134,7 +133,6 @@ const Login = (props) => {
     }
   }
 
-
   const renderNumberView = () => {
     return (
       <div className="wr-login-input">
@@ -203,7 +201,7 @@ const Login = (props) => {
             id="wr-login-img"
           />
           <div id="wr-login-right-panel">
-            <img src={require('assets/fisdom/fisdom_logo.png')} alt="fisdom" />
+            <img src={require('assets/fisdom/fisdom_logo_coloured.png')} alt="fisdom" width={130}/>
             <h2>Welcome to Fisdom!</h2>
             {view === 'phone' && renderNumberView()}
             {view === 'otp' && renderOTPView()}

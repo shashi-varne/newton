@@ -31,24 +31,24 @@ const DashedLine = ({ series, lineGenerator, xScale, yScale }) => {
 };
 
 const WrGrowthGraph = (props) => {
-  console.log(props);
+  const { params = {}, data = [] } = props;
   return (
     <ResponsiveLine
-      data={props.data || []}
+      data={data}
       margin={{ top: 20, right: 20, bottom: 50, left: 50 }}
       xScale={{
         type: 'point',
       }}
       yScale={{
         type: 'linear',
-        min: props.min || 'auto',
-        max: props.max || 'auto',
+        min: params.min || 'auto',
+        max: params.max || 'auto',
         stacked: false,
         reverse: false
       }}
       axisBottom={{
         format: value => formattedDate(value, 'd m', true),
-        tickValues: props.params.date_ticks || [],
+        tickValues: params.date_ticks || [],
         tickPadding: 20,
         tickSize: 0,
       }}

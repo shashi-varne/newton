@@ -6,7 +6,6 @@ import { getConfig } from 'utils/functions';
 import WrTable from '../mini-components/WrTable';
 import { fetchAnalysis } from '../common/ApiCalls';
 import { isEmpty } from '../../utils/validators';
-import { CircularProgress } from 'material-ui';
 import CardLoader from '../mini-components/CardLoader';
 import WrButton from '../common/Button';
 const isMobileDevice = getConfig().isMobileDevice;

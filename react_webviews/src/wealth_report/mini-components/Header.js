@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState } from "react";
 import { withRouter, Link } from "react-router-dom";
 import PanSelect from './PanSelect';
 
