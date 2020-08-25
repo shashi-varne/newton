@@ -119,25 +119,27 @@ export default function EmailList(props) {
         />
         Add new Email
       </Button>
-      <div style={{ margin: "28px 10px 0 10px" }}>
-        <div className="wr-email-list-title">All emails</div>
-        {accounts.map((account, index) => (
-          <div className="wr-mails" key={index}>
-            <div>
-              <div className="wr-eli-email">{account.email}</div>
-              <div className="wr-eli-sync">
-                {`Synced on ${formatDateAmPm(account.latest_statement.dt_updated)}`}</div>
+      {!!accounts.length && 
+        <div style={{ margin: "28px 10px 0 10px" }}>
+          <div className="wr-email-list-title">All emails</div>
+          {accounts.map((account, index) => (
+            <div className="wr-mails" key={index}>
+              <div>
+                <div className="wr-eli-email">{account.email}</div>
+                <div className="wr-eli-sync">
+                  {`Synced on ${formatDateAmPm(account.latest_statement.dt_updated)}`}</div>
+              </div>
+              {/* Checking if regenerate time limit has elapsed in order to show resync option */}
+              { 
+                (new Date() - new Date(account.latest_statement.dt_updated)) / 60000 >= regenTimeLimit &&
+                <IconButton onClick={() => resyncEmail(account.email)}>
+                  <img src={require(`assets/fisdom/ic-email-sync.svg`)} alt="resync" />
+                </IconButton>
+              }
             </div>
-            {/* Checking if regenerate time limit has elapsed in order to show resync option */}
-            { 
-              (new Date() - new Date(account.latest_statement.dt_updated)) / 60000 >= regenTimeLimit &&
-              <IconButton onClick={() => resyncEmail(account.email)}>
-                <img src={require(`assets/fisdom/ic-email-sync.svg`)} alt="resync" />
-              </IconButton>
-            }
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      }
     </div>
   );
 

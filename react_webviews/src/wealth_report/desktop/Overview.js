@@ -66,26 +66,26 @@ export default function Overview(props) {
       setGraphLoad(false);
       setLoading(false);
     })();
-  }, [props.pan]);
+  }, [props.pan, selectedRange]);
 
-  useEffect(() => {
-    (async() => {
-      try {
-        setGraphLoad(true);
-        const { combined_amount_data, date_ticks } = await fetchPortfolioGrowth({
-          pan: props.pan,
-          date_range: selectedRange,
-        });
-        const xirr_percent = await fetchXIRR({ pan: props.pan, year: 2 });
-        setXirrPercent(xirr_percent);
-        setGraphLoad(false);
-        setgrowthGraphData({ data: combined_amount_data, date_ticks: filterDateTicks(date_ticks) });
-      } catch (err) {
-        console.log(err);
-        toast(err);
-      }
-    })();
-  }, [selectedRange]);
+  // useEffect(() => {
+  //   (async() => {
+  //     try {
+  //       setGraphLoad(true);
+  //       const { combined_amount_data, date_ticks } = await fetchPortfolioGrowth({
+  //         pan: props.pan,
+  //         date_range: selectedRange,
+  //       });
+  //       const xirr_percent = await fetchXIRR({ pan: props.pan, year: 2 });
+  //       setXirrPercent(xirr_percent);
+  //       setGraphLoad(false);
+  //       setgrowthGraphData({ data: combined_amount_data, date_ticks: filterDateTicks(date_ticks) });
+  //     } catch (err) {
+  //       console.log(err);
+  //       toast(err);
+  //     }
+  //   })();
+  // }, [selectedRange]);
 
   // TODO: Optimize this function
   const filterDateTicks = (ticks = []) => {

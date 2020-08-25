@@ -31,7 +31,8 @@ export default function HoldingCard(props) {
   const [isLoading, setLoading] = useState(false);
   const [nextPage, setNextPage] = useState('');
   const [transactions, setTransactions] = useState([]);
-  const { fund_summary = {}, holding = {...holding} } = props.holding;
+  const { holding = {} } = props;
+  const { fund_summary = {} } = {holding};
 
   useEffect(() => {
     (async() => {
@@ -126,7 +127,7 @@ export default function HoldingCard(props) {
   };
 
   return (
-    <div className="wr-card-template">
+    <div className="wr-card-template wr-holding">
       {/* based on the condition visbility is modified */}
       <div className="wr-amc-label">
         <img src={require('assets/fisdom/label.svg')} alt="amc-logo" id="wr-amc-img" />

@@ -100,7 +100,7 @@ export default function Analysis(props) {
           </WrButton>
         ))}
       </div>    
-      <div className="wr-card-template">
+      <div className="wr-card-template animated animatedFadeInUp fadeInUp">
         <div className="wr-card-template-header">
           {tabProps.graph1Name}
         </div>
@@ -133,7 +133,7 @@ export default function Analysis(props) {
           }
         </div>
       </div>
-      <div className="wr-card-template">
+      <div className="wr-card-template animated animatedFadeInUp fadeInUp">
         <div className="wr-card-template-header">
           {tabProps.graph2Name}
         </div>
@@ -171,7 +171,7 @@ export default function Analysis(props) {
           }
         </div>
       </div>
-      <div className="wr-card-template">
+      <div className="wr-card-template animated animatedFadeInUp fadeInUp">
         <div className="wr-card-template-header">Top Holdings</div>
         <div id="wr-analysis-top-holdings">
           <div className="wr-table-container">

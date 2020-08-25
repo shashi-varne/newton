@@ -34,7 +34,10 @@ const Header = (props) => {
   const [activeTab, setActiveTab] = useState(match.params.tab);
   
   return (
-    <div id="wr-header-bar" className={animation || ''}>
+    <div id="wr-header-bar" className={
+      `${animation || ''}
+      animated animatedFadeInUp fadeInUp`
+    }>
       <PanSelect onPanSelect={onPanSelect}/>
 
       {tabs.map((tab, index) => (

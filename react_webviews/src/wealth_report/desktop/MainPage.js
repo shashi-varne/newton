@@ -13,6 +13,7 @@ import { navigate } from "../common/commonFunctions";
 import Api from '../../utils/api';
 import { isEmpty } from "../../utils/validators";
 import { heightThreshold } from "../constants";
+import NoPan from "./NoPan";
 
 const MainPage = (props) => {
   const [headerAnimation, setHeaderAnimation] = useState('');
@@ -84,7 +85,10 @@ const MainPage = (props) => {
   return (
     <div id="wr-main">
       <div
-        id="wr-header-hero" className={headerAnimation}>
+        id="wr-header-hero" className={
+          `${headerAnimation}
+          animated animatedFadeInUp fadeInUp`
+        }>
         <div className="wr-hero-container">
 
           {/* will be hidden for mobile view and visible for desktop view */}
@@ -95,7 +99,7 @@ const MainPage = (props) => {
           </div>
           
           {/* will be hidden for desktop view and visible for mobile view */}
-          <PanSelect onPanSelect={onPanChange}/>
+          <PanSelect onPanSelect={setPan}/>
           
           {/* visbility will be modified based on condition in media queries */}
           <div className="wr-user-account">
@@ -110,9 +114,14 @@ const MainPage = (props) => {
 
       {!pan ? 
         (<LoadingScreen text="Preparing your report, please wait..." />) :
-        (<div id="wr-body">
-          {renderTab(params.tab)}
-        </div>)
+        (
+          <div id="wr-body">
+          {pan === 'empty' ? 
+            <NoPan /> :
+            renderTab(params.tab)
+          }
+        </div>
+        )
       }
 
       {/* will be hidden for the mobile view */}
