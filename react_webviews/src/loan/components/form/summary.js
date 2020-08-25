@@ -288,7 +288,8 @@ class FormSummary extends Component {
 
     sendEvents(user_action, data = {}) {
         let detail_clicked = this.state.detail_clicked.filter((item, index) => 
-            this.state.detail_clicked.indexOf(item) === index
+            this.state.detail_clicked.indexOf(item) === index &&
+            item !== false
         );
 
         let eventObj = {
@@ -296,9 +297,9 @@ class FormSummary extends Component {
             "properties": {
                 "user_action": user_action,
                 "screen_name": 'application form',
-                "edit": data.edit_clicked || '',
-                "detail_click": detail_clicked.join(','),
-                "consent": this.state.agree_check ? 'agreed' : 'declined',
+                "edit": data.edit_clicked || 'none',
+                "detail_click": detail_clicked.length !== 0 ? detail_clicked.join(',') : 'none',
+                "consent": this.state.agree_check,
                 "confirm_details": this.state.confirm_details_check ? 'yes' : 'no'
             }
         };
@@ -344,7 +345,11 @@ class FormSummary extends Component {
                     <div className="bct-content">
                         {props.data.map(this.renderAccordiansubData)}
                         {!this.state.form_submitted &&
-                            <div onClick={() => this.openEdit(props.edit_state)} className="generic-page-button-small">
+                            <div
+                                onClick={() => {
+                                    this.sendEvents('next', { edit_clicked: props.title.split(' ')[0] });
+                                    this.openEdit(props.edit_state)
+                                }} className="generic-page-button-small">
                                 EDIT
                         </div>
                         }
@@ -372,12 +377,12 @@ class FormSummary extends Component {
         this.setState({
             accordianData: accordianData,
             selectedIndex: selectedIndex,
-            detail_clicked: [...this.state.detail_clicked, accordianData[selectedIndex].title]
+            detail_clicked: [...this.state.detail_clicked, selectedIndex !== -1 && accordianData[selectedIndex].title.split(' ')[0]]
         })
     }
 
     openEdit = (state) => {
-        this.sendEvents('next', { edit_clicked: state });
+        
         this.navigate(state);
     }
 

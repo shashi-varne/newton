@@ -132,13 +132,14 @@ class AddressDetails extends Component {
                 "screen_name": 'address details',
                 "residence_type": form_data.residence_type,
                 "duration": form_data.duration,
-                "permanent_pincode": form_data.p_pincode,
-                "permanent_address": form_data.p_address,
-                "permanent_city": form_data.p_city,
-                "permanent_state": form_data.p_state,
+                "permanent_pincode": !this.state.checked ? form_data.p_pincode : form_data.pincode,
+                "permanent_address": !this.state.checked ? form_data.p_address : form_data.address,
+                "permanent_city": !this.state.checked ? form_data.p_city : form_data.city,
+                "permanent_state": !this.state.checked ? form_data.p_state : form_data.state,
                 "current_pincode": form_data.pincode,
                 "current_address": form_data.address,
                 "current_city": form_data.city,
+                "current_state": form_data.state,
                 'from_edit': this.props.edit ? 'yes' : 'no',
             }
         };
