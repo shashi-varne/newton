@@ -6,7 +6,7 @@
     "node": ">=8.11.1"
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.46",
+    "@babel/runtime": "<=7.0.0-beta.55",
     "@material-ui/core": "^1.0.0-rc.0",
     "@material-ui/icons": "^1.0.0-rc.0",
     "autoprefixer": "7.1.6",
