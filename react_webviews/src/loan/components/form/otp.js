@@ -145,7 +145,7 @@ class FormOtp extends Component {
       timeAvailable: this.state.totalTime,
       resend_otp_clicked: true
     })
-
+    this.sendEvents('next', { resend_otp_clicked: true })
     try {
       this.setState({
         show_loader: true
@@ -183,14 +183,14 @@ class FormOtp extends Component {
   };
 
 
-  sendEvents(user_action) {
+  sendEvents(user_action, data={}) {
 
     let eventObj = {
       "event_name": 'lending',
       "properties": {
         "user_action": user_action,
         "screen_name": 'otp verification',
-        "resend_clicked": this.state.resend_otp_clicked ? 'yes' : 'no',
+        "resend_clicked": data.resend_otp_clicked ? 'yes' : 'no',
         "stage": this.state.from_state === 'loan-summary' ? 'agreement' : 'application form'
       }
     };
