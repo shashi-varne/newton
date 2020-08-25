@@ -25,6 +25,7 @@ class FundHoldings extends Component {
         "user_action": user_action,
         "screen_name": 'fund holdings',
         fund_card_clicked: this.state.fundClicked,
+        performed_by: storageService().get('hni-platform') === 'rmapp' ? 'RM' : 'user',
       }
     };
     
