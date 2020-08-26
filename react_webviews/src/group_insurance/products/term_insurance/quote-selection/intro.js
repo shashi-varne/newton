@@ -49,10 +49,10 @@ class Intro extends Component {
       })
       if (res2.pfwresponse.status_code === 200) {
 
-        window.localStorage.setItem('excluded_providers', '');
-        window.localStorage.setItem('required_providers', '');
-        window.localStorage.setItem('quoteSelected', '');
-        window.localStorage.setItem('quoteData', '');
+        window.sessionStorage.setItem('excluded_providers', '');
+        window.sessionStorage.setItem('required_providers', '');
+        window.sessionStorage.setItem('quoteSelected', '');
+        window.sessionStorage.setItem('quoteData', '');
         let pathname = '';
         let resumeFlagTerm = false;
         let termData = res2.pfwresponse.result;
@@ -85,8 +85,8 @@ class Intro extends Component {
               application: application,
               required_fields: required_fields
             }
-            window.localStorage.setItem('cameFromHome', true);
-            window.localStorage.setItem('homeApplication', JSON.stringify(data));
+            window.sessionStorage.setItem('cameFromHome', true);
+            window.sessionStorage.setItem('homeApplication', JSON.stringify(data));
             pathname = 'journey';
             this.setState({
               termApplication: application
@@ -128,7 +128,7 @@ class Intro extends Component {
 
   async getQuotes() {
 
-    window.localStorage.setItem('quote_redirect_data', ''); 
+    window.sessionStorage.setItem('quote_redirect_data', ''); 
     try {
       
       const res = await Api.get('/api/ins_service/api/insurance/providers/all');
@@ -175,7 +175,7 @@ class Intro extends Component {
   selectQuote(quote, index) {
 
     let tnc = quote.terms_and_conditions;
-    window.localStorage.setItem('term_ins_tnc', tnc);
+    window.sessionStorage.setItem('term_ins_tnc', tnc);
 
     this.setState({
       quoteSelected: quote,

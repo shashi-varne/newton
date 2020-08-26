@@ -39,6 +39,17 @@ export const smokingOptions = [
   }
 ]
 
+export const yesNoOptions = [
+  {
+    'name': 'Yes',
+    'value': 'YES'
+  },
+  {
+    'name': 'No',
+    'value': 'NO'
+  }
+]
+
 export const relationshipOptions = [
   'BROTHER',
   'DAUGHTER',
@@ -516,7 +527,9 @@ export const back_button_mapper = {
   '/group-insurance/term/etli/personal-details2': '/group-insurance/term/etli/personal-details1',
   '/group-insurance/term/etli/personal-details1': '/group-insurance/term/intro',
   '/group-insurance/term/personal-details-redirect' : '/group-insurance/term/intro',
-  '/group-insurance/term/intro' : '/group-insurance'
+  '/group-insurance/term/intro' : '/group-insurance',
+  '/group-insurance/group-health/landing' : '/group-insurance/health/landing',
+  '/group-insurance/health/landing': '/group-insurance'
 };
 
 export const insuranceMaritalStatus = [
@@ -574,4 +587,181 @@ export function getBhartiaxaStatusToState(policy) {
   }
 
   return path;
+}
+
+export const health_providers = {
+  'HDFCERGO': {
+      key: 'HDFCERGO',
+      title: 'HDFC ERGO',
+      subtitle: 'my: health Suraksha',
+      logo: 'hdfc_ergo_ic_logo_cta.svg',
+      logo_card: 'hdfc_ergo_ic_logo_card.svg',
+      logo_cta: 'hdfc_ergo_ic_logo_cta.svg',
+      logo_summary: 'hdfc_ergo_ic_logo_summary.svg'
+  }
+}
+
+
+export function ghGetMember(lead) {
+  
+  let backend_keys = ['self_account_key', 'spouse_account_key', 'child_account1_key',
+                      'child_account2_key', 'parent_account1_key', 'parent_account2_key'];
+
+  let member_base = [];
+
+  let allowed_as_per_account = {
+    'self': ['self_account_key'],
+    'family': ['spouse_account_key', 'child_account1_key',
+    'child_account2_key'],
+    'selfandfamily': ['self_account_key', 'spouse_account_key', 'child_account1_key',
+    'child_account2_key'],
+    'parents': ['parent_account1_key', 'parent_account2_key']
+  }
+
+
+  let total_son = 0;
+  let total_daughter = 0;
+
+  if(lead.child_account1_key.dob) {
+    if((lead.child_account1_key.relation || '').toUpperCase() === 'SON') {
+      total_son++;
+    } else if((lead.child_account2_key.relation || '').toUpperCase() === 'DAUGHTER') {
+      total_daughter++;
+    }
+  }
+
+  if(lead.child_account2_key.dob) {
+    if((lead.child_account2_key.relation || '').toUpperCase() === 'SON') {
+      total_son++;
+    } else if((lead.child_account2_key.relation || '').toUpperCase() === 'DAUGHTER') {
+      total_daughter++;
+    }
+  }
+
+  for (var i in backend_keys) {
+    let key = backend_keys[i];
+
+    let allowed_mapper = allowed_as_per_account[lead.account_type];
+
+    if(allowed_mapper.indexOf(key) !== -1 &&
+     lead[key] && lead[key].dob) {
+      let obj = lead[key];
+      obj.backend_key = key;
+
+      obj.key = (lead[key].relation || '').toLowerCase();
+
+      if(total_son === 2) {
+
+        if(key === 'child_account1_key') {
+          obj.key = 'son1'
+        }
+
+        if(key === 'child_account2_key') {
+          obj.key = 'son2'
+        }
+        
+      } else if(total_daughter === 2) {
+
+        if(key === 'child_account1_key') {
+          obj.key = 'daughter1'
+        }
+
+        if(key === 'child_account2_key') {
+          obj.key = 'daughter2'
+        }
+      }
+
+      member_base.push(obj);
+    }
+  }
+
+  if(lead.account_type === 'parents' || lead.account_type === 'family') {
+    let obj = lead['self_account_key'];
+    obj.backend_key = 'self_account_key';
+    obj.key = 'applicant';
+    member_base.push(obj);
+  }
+
+  return member_base;
+
+}
+
+export function getCssMapperReport(policy) {
+
+  let provider = policy.provider;
+
+  let cssMapper = {
+    'init': {
+      color: 'yellow',
+      disc: 'Policy Pending'
+    },
+    'incomplete': {
+      color: 'yellow',
+      disc: 'Policy Pending'
+    },
+    'policy_issued': {
+      color: 'green',
+      disc: 'Policy Issued'
+    },
+    'success': {
+      color: 'green',
+      disc: 'Policy Issued'
+    },
+    'complete': {
+      color: 'green',
+      disc: 'Policy Issued'
+    },
+    'policy_expired': {
+      color: 'red',
+      disc: 'Policy Expired'
+    },
+    'rejected': {
+      color: 'red',
+      disc: 'Policy Rejected'
+    },
+    'failed': {
+      color: 'red',
+      disc: 'Policy Failed'
+    },
+    'cancelled': {
+      color: 'red',
+      disc: 'Policy Cancelled'
+    }
+  }
+
+  if(provider === 'HDFCERGO') {
+   
+    cssMapper.complete.disc = 'Issued on ' + (policy.dt_policy_start || '');
+    cssMapper.success.disc = 'Issued on ' + (policy.dt_policy_start || '');
+  }
+
+
+  let obj = {}
+  if (policy.key === 'TERM_INSURANCE') {
+    if (policy.status === 'failed') {
+      obj.status = 'rejected';
+    } else if (policy.status === 'success') {
+      obj.status = 'policy_issued';
+    } else {
+      obj.status = 'init';
+    }
+  } else {
+    obj.status = policy.status;
+  }
+
+  obj.cssMapper = cssMapper[obj.status] || cssMapper['init'];
+
+  return obj;
+}
+
+export function childeNameMapper(name) {
+  let mapper = {
+    'son1': '1st Son',
+    'son2': '2nd Son',
+    'daughter1': '1st Daughter',
+    'daughter2': '2nd Daughter'
+  };
+
+  return mapper[name] || name;
+  
 }

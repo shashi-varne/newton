@@ -37,7 +37,7 @@ class ReportDetails extends Component {
 
   componentWillMount() {
 
-    let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
+    let lead_id = window.sessionStorage.getItem('group_insurance_lead_id_selected');
     const { policy_id } = this.props.match.params;
 
     this.setState({
@@ -133,7 +133,7 @@ class ReportDetails extends Component {
 
     this.sendEvents(this.state.buttonTitle);
     let lead_id = this.state.policyData.lead_id;
-    window.localStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
+    window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
     this.navigate(this.state.redirectPath);
   }
 

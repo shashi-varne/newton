@@ -18,7 +18,7 @@ import TermsAndConditions from '../../../../common/ui/tnc';
 
 class PersonalDetailsIntro extends Component {
   constructor(props) {
-    var quoteData = window.localStorage.getItem('quoteData') ? JSON.parse(window.localStorage.getItem('quoteData')) : {};
+    var quoteData = window.sessionStorage.getItem('quoteData') ? JSON.parse(window.sessionStorage.getItem('quoteData')) : {};
     super(props);
     this.state = {
       show_loader: true,
@@ -28,7 +28,7 @@ class PersonalDetailsIntro extends Component {
       dob: '',
       gender: '',
       quoteData: quoteData,
-      tnc: window.localStorage.getItem('term_ins_tnc'),
+      tnc: window.sessionStorage.getItem('term_ins_tnc'),
       checked: true
     }
   }
@@ -173,7 +173,7 @@ class PersonalDetailsIntro extends Component {
       let quoteData = this.state.quoteData;
       quoteData.dob = this.state.dob;
       quoteData.gender = this.state.gender;
-      window.localStorage.setItem('quoteData', JSON.stringify(quoteData));
+      window.sessionStorage.setItem('quoteData', JSON.stringify(quoteData));
       this.navigate('annual-income')
     }
 

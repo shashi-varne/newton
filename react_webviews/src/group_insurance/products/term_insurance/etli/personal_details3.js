@@ -27,8 +27,8 @@ class EtliPersonalDetails3 extends Component {
             checked: false,
             show_loader: true,
             openModal:false,
-            quote_redirect_data: window.localStorage.getItem('quote_redirect_data') ?
-                JSON.parse(window.localStorage.getItem('quote_redirect_data')) : {},
+            quote_redirect_data: window.sessionStorage.getItem('quote_redirect_data') ?
+                JSON.parse(window.sessionStorage.getItem('quote_redirect_data')) : {},
             type: getConfig().productName,
             basic_details_data: {
                 email: '',
@@ -162,7 +162,7 @@ class EtliPersonalDetails3 extends Component {
             prevData.email = basic_details_data.email;
             prevData.mobile_no = basic_details_data.mobile_no;
 
-            window.localStorage.setItem('quote_redirect_data', JSON.stringify(prevData));
+            window.sessionStorage.setItem('quote_redirect_data', JSON.stringify(prevData));
 
             this.setState({
                 show_loader: true

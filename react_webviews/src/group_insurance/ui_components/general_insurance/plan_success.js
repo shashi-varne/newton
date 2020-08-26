@@ -61,7 +61,7 @@ class PlanSuccessClass extends Component {
       congratulations_icon: this.state.type !== 'fisdom' ? congratulations_myway : congratulations_fisdom
     })
 
-    let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
+    let lead_id = window.sessionStorage.getItem('group_insurance_lead_id_selected');
     this.setState({
       lead_id: lead_id || ''
     })
