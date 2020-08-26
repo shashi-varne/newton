@@ -25,6 +25,7 @@ class EmailNotReceived extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'cas email not received',
+        performed_by: storageService().get('hni-platform') === 'rmapp' ? 'RM' : 'user',
       }
     };
 
@@ -47,6 +48,7 @@ class EmailNotReceived extends Component {
       });
       this.navigate(`statement_request/${email_detail.email}`, {
         exitToApp: true,
+        fromRegenerate: true,
       });
     } catch (err) {
       this.setLoader(false);

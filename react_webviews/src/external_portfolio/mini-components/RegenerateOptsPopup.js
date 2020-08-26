@@ -3,6 +3,7 @@ import { Drawer, Button } from 'material-ui';
 import { getConfig } from '../../utils/functions';
 import { navigate } from '../common/commonFunctions';
 import { nativeCallback } from 'utils/native_callback';
+import { storageService } from '../../utils/validators';
 
 const productType = getConfig().productName;
 
@@ -19,6 +20,7 @@ export default class RegenerateOptsPopup extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'reconfirm popup',
+        performed_by: storageService().get('hni-platform') === 'rmapp' ? 'RM' : 'user',
       }
     };
     
