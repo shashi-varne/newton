@@ -306,6 +306,7 @@ class MandateBank extends Component {
   };
 
   goBack = () => {
+    this.sendEvents('back');
     this.navigate('upload-pan');
   }
 
