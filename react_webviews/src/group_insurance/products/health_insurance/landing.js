@@ -101,7 +101,7 @@ class HealthInsuranceLanding extends Component {
 
     var fullPath = 'health/' + stateMapper[product_key] + '/plan';
 
-    if(product_key === 'HEALTH_SURAKSHA') {
+    if(product_key === 'HEALTH_SURAKSHA' && !getConfig().iOS) {
       fullPath = 'group-health/landing';
     }
     this.navigate('/group-insurance/' + fullPath);
