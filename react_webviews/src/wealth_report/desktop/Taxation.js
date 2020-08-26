@@ -1,17 +1,14 @@
 import React, { useState, useEffect, Fragment } from "react";
 import WrSelect from "../common/Select";
 import WrButton from "../common/Button";
-import Tooltip from "common/ui/Tooltip";
-import { isMobileDevice } from "utils/functions";
 import toast from "../../common/ui/Toast";
-import Dialog from "common/ui/Dialog";
 import { fetchTaxation, fetchTaxFilters } from "../common/ApiCalls";
 import { inrFormatDecimal } from "../../utils/validators";
 import { CircularProgress } from "material-ui";
+import WrTooltip from "../common/WrTooltip";
 
 const Taxation = (props) => {
   const [tabSelected, selectTab] = useState("stcg");
-  const [openModal, toggleModal] = useState(false);
   const [isLoading, setLoading] = useState(true);
 
   const [taxationData, setTaxationData] = useState({
@@ -119,7 +116,7 @@ const Taxation = (props) => {
 
     return (
       <Fragment>
-        <div className="wr-taxation-detail-row">
+        <div className="wr-taxation-detail-row animated animatedFadeInUp fadeInUp">
           <div className="wr-tdr-title">
             Overall {tabSelected.toUpperCase()}
             <hr></hr>
@@ -133,7 +130,7 @@ const Taxation = (props) => {
             </div>
           ))}
         </div>
-        <div className="wr-taxation-detail-row">
+        <div className="wr-taxation-detail-row animated animatedFadeInUp fadeInUp">
           <div className="wr-tdr-title">
             Debt Funds
             <hr></hr>
@@ -147,7 +144,7 @@ const Taxation = (props) => {
             </div>
           ))}
         </div>
-        <div className="wr-taxation-detail-row">
+        <div className="wr-taxation-detail-row animated animatedFadeInUp fadeInUp">
           <div className="wr-tdr-title">
             Equity Funds
             <hr></hr>
@@ -165,23 +162,14 @@ const Taxation = (props) => {
     );
   };
 
-  const tipcontent = (
-    <div className="wr-estd-tax" style={{ width: "300px" }}>
-      <div className="head">Estimated Tax</div>
-      <div className="content">
+  const estdTaxTooltip = (
+    <div className="wr-xirr-tooltip" style={{ width: "300px" }}>
+      <div className="wr-tooltip-head">Estimated Tax</div>
+      <div className="wr-tooltip-content">
         Disclaimer: Calculation is solely based on the statement provided by
         you.
       </div>
     </div>
-  );
-
-  const i_btn = (
-    <img
-      src={require(`assets/fisdom/ic-info.svg`)}
-      id="wr-i-btn"
-      alt=""
-      onClick={() => toggleModal(true)}
-    />
   );
 
   return (
@@ -194,6 +182,7 @@ const Taxation = (props) => {
           onSelect={handleSelect}
           selectedValue={selectedFinYear}
           name="year"
+          classes={{ formControl: "animated animatedFadeInUp fadeInUp" }}
           disabled={isLoading}
         />
 
@@ -204,6 +193,7 @@ const Taxation = (props) => {
           onSelect={handleSelect}
           selectedValue={selectedTaxSlab}
           name="slab"
+          classes={{ formControl: "animated animatedFadeInUp fadeInUp" }}
           disabled={isLoading}
         />
       </div>
@@ -216,35 +206,14 @@ const Taxation = (props) => {
         ) :
         (
           <Fragment>
-            <div id="wr-taxation-summary">
+            <div id="wr-taxation-summary" className="animated animatedFadeInUp fadeInUp">
               <div className="wr-taxation-summary-col">
                 <span className="wr-tsc-value">
                   {inrFormatDecimal(taxationData.combined_tax_data.estimated_tax || "")}
                 </span>
                 <span className="wr-tsc-label">
-                  Estimated Tax
-                  <span style={{ marginLeft: "6px", verticalAlign: "middle" }}>
-                    {!isMobileDevice() ? (
-                      <Tooltip
-                        content={tipcontent}
-                        direction="down"
-                        className="wr-estd-tax-info"
-                      >
-                        {i_btn}
-                      </Tooltip>
-                    ) : (
-                        <React.Fragment>
-                          {i_btn}
-                          <Dialog
-                            open={openModal}
-                            onClose={() => toggleModal(false)}
-                            classes={{ paper: "wr-dialog-info" }}
-                          >
-                            {tipcontent}
-                          </Dialog>
-                        </React.Fragment>
-                      )}
-                  </span>
+                    Estimated Tax
+                  <WrTooltip tipContent={estdTaxTooltip}/>
                 </span>
               </div>
               <div className="wr-vertical-divider"></div>
@@ -262,7 +231,7 @@ const Taxation = (props) => {
                 <span className="wr-tsc-label">Taxable gains</span>
               </div>
             </div>
-            <div id="wr-taxation-detail">
+            <div id="wr-taxation-detail" className="animated animatedFadeInUp fadeInUp">
               {["stcg", "ltcg"].map((tab, index) => (
                 <WrButton
                   classes={{

@@ -1,10 +1,12 @@
 import React, { Component } from "react";
-import TextField from "@material-ui/core/TextField";
-import FormControl from "@material-ui/core/FormControl";
-import MenuItem from "@material-ui/core/MenuItem";
+import {
+  FormControl,
+  Select,
+  MenuItem,
+  TextField
+} from "material-ui";
 import CountryData from "country-telephone-data";
 import InputMask from "react-input-mask";
-import Select from "@material-ui/core/Select";
 
 class WrPhoneInput extends Component {
 

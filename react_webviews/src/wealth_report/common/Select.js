@@ -39,7 +39,7 @@ const theme = createMuiTheme({
 });
 
 const WrSelect = (props) => {
-  const classes = {};
+  const { classes = {} } = props;
   return (
     <MuiThemeProvider theme={theme}>
       <FormControl className={classes.formControl} disabled={props.disabled}>
@@ -48,10 +48,9 @@ const WrSelect = (props) => {
           onChange={(event) => props.onSelect(event)}
           name={props.name}
           displayEmpty
-          className={props.className}
           IconComponent={ExpandMoreIcon}
           style={props.style}
-          classes={props.classes}
+          classes={classes.select}
           disableUnderline={props.disableUnderline}
         >
           <MenuItem value="" disabled>

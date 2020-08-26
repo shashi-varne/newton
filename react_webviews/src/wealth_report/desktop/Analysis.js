@@ -84,7 +84,7 @@ export default function Analysis(props) {
 
   return (
     <React.Fragment>
-      <div id="wr-analysis-tabs">
+      <div id="wr-analysis-tabs" className="animated animatedFadeInUp fadeInUp">
         {["equity", "debt"].map((tab, idx) => (
           <WrButton
             classes={{
@@ -100,8 +100,8 @@ export default function Analysis(props) {
           </WrButton>
         ))}
       </div>    
-      <div className="wr-card-template animated animatedFadeInUp fadeInUp">
-        <div className="wr-card-template-header">
+      <div className="wr-card-template">
+        <div className="wr-card-template-header" >
           {tabProps.graph1Name}
         </div>
         <div id="wr-analysis-graph">
@@ -117,7 +117,7 @@ export default function Analysis(props) {
                   data={graph1Data}
                   colors={tabProps.graph1ColorScheme}
                 ></PieChart>
-                <div className="wr-pie-1-legend">
+                <div className="wr-pie-1-legend animated animatedFadeInUp fadeInUp">
                   {graph1Data.map((alloc, idx) => (
                     <div
                       className="wr-p1l-item"
@@ -133,7 +133,7 @@ export default function Analysis(props) {
           }
         </div>
       </div>
-      <div className="wr-card-template animated animatedFadeInUp fadeInUp">
+      <div className="wr-card-template">
         <div className="wr-card-template-header">
           {tabProps.graph2Name}
         </div>
@@ -151,7 +151,7 @@ export default function Analysis(props) {
                   colors={tabProps.graph2ColorScheme}
                 ></PieChart>
                 <div
-                  className="wr-pie-2-legend"
+                  className="wr-pie-2-legend animated animatedFadeInUp fadeInUp"
                   style={selectedTab === 'debt' ? {
                     height: 'auto',
                     flexDirection: 'row',
@@ -171,7 +171,7 @@ export default function Analysis(props) {
           }
         </div>
       </div>
-      <div className="wr-card-template animated animatedFadeInUp fadeInUp">
+      <div className="wr-card-template">
         <div className="wr-card-template-header">Top Holdings</div>
         <div id="wr-analysis-top-holdings">
           <div className="wr-table-container">

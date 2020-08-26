@@ -15,7 +15,9 @@ export default function PieChart (props) {
   
   return (
     // Require a container div since ResponsivePieChart fit to size of its contianer
-    <div style={{ width: `${width}px`, height: `${height}px` }}>
+    <div
+      style={{ width: `${width}px`, height: `${height}px` }}
+      className="animated animatedFadeInUp fadeInUp">
       <ResponsivePie
         data={data}
         // height={height}

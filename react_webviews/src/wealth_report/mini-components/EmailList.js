@@ -8,15 +8,13 @@ import FormControl from "@material-ui/core/FormControl";
 import WrButton from "../common/Button";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import { formatDateAmPm } from 'utils/validators';
-import { getConfig } from "utils/functions";
-import Tooltip from "common/ui/Tooltip";
 import { fetchEmails, requestStatement } from "../common/ApiCalls";
 import toast from "../../common/ui/Toast";
 import { IconButton } from "material-ui";
 import { regenTimeLimit } from "../constants";
 import { CircularProgress } from "@material-ui/core";
 import { validateEmail } from "../../utils/validators";
-const isMobileView = getConfig().isMobileDevice;
+import WrTooltip from "../common/WrTooltip";
 
 export default function EmailList(props) {
   const [accounts, setAccounts] = useState([]);
@@ -107,7 +105,7 @@ export default function EmailList(props) {
   };
 
   // will render Listing of emails
-  const renderEmailList = () => (
+  const EmailListElement = (
     <div className="wr-accounts">
       <Button
         fullWidth={true}
@@ -218,31 +216,15 @@ export default function EmailList(props) {
 
   return (
     <React.Fragment>
-      {!isMobileView ? (
-        // will show the tooltip for desktop view and dialog box for the mobile view
-        <Tooltip
-          onClickAway={handleTooltipClose}
-          content={renderEmailList()}
-          isOpen={openTooltip}
-          direction="down"
-          forceDirection
-          className="wr-email-list"
-        >
-          {emailIcon}
-        </Tooltip>
-      ) : (
-        //mobile view
-        <React.Fragment>
-          {emailIcon}
-          <Dialog
-            open={emailListModal}
-            onClose={handleClose}
-            classes={{ paper: "wr-dialog-paper" }}
-          >
-            {renderEmailList()}
-          </Dialog>
-        </React.Fragment>
-      )}
+      <WrTooltip
+        trigger={emailIcon}
+        tipContent={EmailListElement}
+        onClickAway={handleTooltipClose}
+        content={EmailListElement}
+        forceDirection={true}
+        openOnClick={true}
+        tooltipClass="wr-email-list"
+      />
 
       {addEmailModal && (
         //common for both mobile and webview

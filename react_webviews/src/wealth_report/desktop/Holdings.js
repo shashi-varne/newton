@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import HoldingCard from "../mini-components/HoldingCard";
 import Filter from "../mini-components/Filter";
 import FilterMobile from "../mini-components/FilterMobile";
 import toast from '../../common/ui/Toast';
 import { fetchHoldings, hitNextPage } from "../common/ApiCalls";
 import DotDotLoader from '../../common/ui/DotDotLoader';
+import { CircularProgress } from "material-ui";
 
 export default function Holdings(props) {
   const [nextPage, setNextPage] = useState('');
@@ -33,6 +34,7 @@ export default function Holdings(props) {
   }, [props.pan, selectedFilters]);
 
   const loadMoreEntries = async () => {
+    if (isLoading || loadingMore) return;
     try {
       setLoadMore(true);
       const { holdings, next_page } = await hitNextPage(nextPage);
@@ -80,15 +82,15 @@ export default function Holdings(props) {
           parentProps={props.parentProps}
         />
       ))}
-
-      {!!nextPage && !loadingMore && !isLoading &&
-        <div className="show-more" onClick={loadMoreEntries}>
-          SHOW MORE
-        </div>
-      }
-      {loadingMore &&
-        <div className="loader">Loading...</div>
-      }
+      <div
+        className="wr-load-more"
+        style={{ justifyContent: 'center', fontSize: '18px', marginTop: '70px' }}
+        onClick={loadMoreEntries}>
+        {!!nextPage && loadingMore && (
+          <Fragment><CircularProgress size={20} /> &nbsp;&nbsp; Fetching ...</Fragment>
+        )}
+        {!!nextPage && !loadingMore && !isLoading && 'Load More'}
+      </div>
     </div>
   );
 };

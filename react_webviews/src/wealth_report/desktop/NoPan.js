@@ -1,12 +1,9 @@
 /* eslint-disable no-ex-assign */
-import React, { useState, Fragment } from 'react';
-import { Button, TextField, CircularProgress } from 'material-ui';
-import WrButton from '../common/Button';
-import { getConfig } from "utils/functions";
+import React, { useState } from 'react';
+import { TextField, CircularProgress } from 'material-ui';
 import { requestStatement } from '../common/ApiCalls';
 import toast from '../../common/ui/Toast';
 import { storageService, validateEmail } from '../../utils/validators';
-const isMobileView = getConfig().isMobileDevice;
 
 export default function NoPan(props) {
   const [syncClicked, clickSync] = useState(false);

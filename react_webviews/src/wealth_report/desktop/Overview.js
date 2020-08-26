@@ -2,14 +2,13 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { LinearProgress, createMuiTheme, MuiThemeProvider, IconButton } from 'material-ui';
 import WrGrowthGraph from '../mini-components/WrGrowthGraph';
 import { InsightMap, GraphDateRanges } from '../constants';
-import Tooltip from 'common/ui/Tooltip';
 import toast from '../../common/ui/Toast';
-import Dialog from "common/ui/Dialog";
 import { getConfig } from "utils/functions";
 import { fetchOverview, fetchPortfolioGrowth, fetchXIRR } from '../common/ApiCalls';
 import { formatGrowthData } from '../common/commonFunctions';
 import { numDifferentiation } from '../../utils/validators';
 import CardLoader from '../mini-components/CardLoader';
+import WrTooltip from '../common/WrTooltip';
 const isMobileView = getConfig().isMobileDevice;
 
 const theme = createMuiTheme({
@@ -31,7 +30,6 @@ const theme = createMuiTheme({
 
 export default function Overview(props) {
   const [selectedRange, setSelectedRange] = useState('1 year');
-  const [openModal, toggleModal] = useState(false);
   const [graphLoading, setGraphLoad] = useState(true); //when loading graph
   const [isLoading, setLoading] = useState(true); //when loading anything else
 
@@ -97,7 +95,7 @@ export default function Overview(props) {
     }
   };
 
-  const tipcontent = (
+  const xirrTooltipContent = (
     <div className="wr-xirr-tooltip">
       <div className="wr-tooltip-head">
         XIRR ( Extended Internal Return Rate)
@@ -108,15 +106,6 @@ export default function Overview(props) {
         </div>
     </div>
   )
-
-  const i_btn = (info) => (
-    <img
-      src={require(`assets/fisdom/${info}.svg`)}
-      id="wr-i-btn"
-      alt=""
-      onClick={() => toggleModal(true)}
-    />
-  );
 
   return (
     <React.Fragment>
@@ -139,26 +128,8 @@ export default function Overview(props) {
               </div>
               <div className="wr-okn-box">
                 <div className="wr-okn-title">
-                  XIRR
-                  {
-                    <span style={{ marginLeft: "6px", verticalAlign:'middle' }}>
-                      {!isMobileView ? 
-                        <Tooltip content={tipcontent} direction="down" className="wr-xirr-info">
-                          {i_btn('ic-info')}
-                        </Tooltip> : 
-                        <React.Fragment>
-                          {i_btn('ic-info')}
-                          <Dialog
-                            open={openModal}
-                            onClose={() => toggleModal(false)}
-                            classes={{ paper: "wr-dialog-info" }}
-                          >
-                            {tipcontent}
-                          </Dialog>
-                        </React.Fragment>
-                      }
-                    </span>
-                  }
+                    XIRR
+                  <WrTooltip tipContent={xirrTooltipContent} tooltipClass="wr-xirr-info"/>
                 </div>
                 <div className="wr-okn-value">
                   {xirrPercent.xirr ? `${Math.round(xirrPercent.xirr)}%` : 'N/A'}
@@ -219,16 +190,8 @@ export default function Overview(props) {
               (
                 <div>
                   <div id="wr-xirr">
-                      XIRR
-                      {
-                        <span style={{ marginLeft: "6px", verticalAlign:'middle' }}>
-                          {!isMobileView ? 
-                            <Tooltip content={tipcontent} direction="down" className="wr-xirr-info-2">
-                              {i_btn('ic-info-primary')}
-                            </Tooltip> : ""
-                          }
-                        </span>
-                      }
+                    XIRR
+                    <WrTooltip tipContent={xirrTooltipContent} />
                     <div style={{fontSize:'24px', fontWeight:600, lineHeight:1}}>
                       {xirrPercent.xirr ? `${Math.round(xirrPercent.xirr)}%` : 'N/A'}
                     </div>

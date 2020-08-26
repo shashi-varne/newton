@@ -32,7 +32,7 @@ export default function HoldingCard(props) {
   const [nextPage, setNextPage] = useState('');
   const [transactions, setTransactions] = useState([]);
   const { holding = {} } = props;
-  const { fund_summary = {} } = {holding};
+  const { fund_summary = {} } = holding;
 
   useEffect(() => {
     (async() => {
@@ -94,7 +94,7 @@ export default function HoldingCard(props) {
           }
         </div>
         <div
-          className="wr-past-trx-more"
+          className="wr-load-more"
           onClick={seeMoreClicked}>
           {!!nextPage && loadingMore && (
             <Fragment><CircularProgress size={20}/> &nbsp;&nbsp; Fetching ...</Fragment>
@@ -127,11 +127,13 @@ export default function HoldingCard(props) {
   };
 
   return (
-    <div className="wr-card-template wr-holding">
+    <div className="wr-card-template wr-holding" onClick={() => expandCard(!expanded)}>
       {/* based on the condition visbility is modified */}
-      <div className="wr-amc-label">
-        <img src={require('assets/fisdom/label.svg')} alt="amc-logo" id="wr-amc-img" />
-      </div>
+      {holding.free_from_el_lockin && 
+        <div className="wr-amc-label">
+          <img src={require('assets/fisdom/label.svg')} alt="amc-logo" id="wr-amc-img" />
+        </div>
+      }
       <div className="wr-holding-card">
         {AMCDetail(holding)}
         <div className="wr-hc-user-data">
@@ -148,7 +150,7 @@ export default function HoldingCard(props) {
             <span className="wr-small-col-title">IRR</span>
           </div>
           <div>
-            <IconButton classes={{ root: 'wr-icon-button' }} color="inherit" aria-label="Menu" onClick={() => expandCard(!expanded)}>
+            <IconButton classes={{ root: 'wr-icon-button' }} color="inherit" aria-label="Menu">
               <img
                 src={require(`assets/fisdom/${expanded ? 'down_arrow_fisdom' : 'ic-right-chevron' }.svg`)}
                 alt="expand"

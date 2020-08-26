@@ -56,7 +56,7 @@ export default function AllTransactions(props) {
   };
 
   return (
-    <div style={{ backgroundColor: '#f5f6f8', height: '100%' }}>
+    <div id="wr-all-trx">
       <div style={{ background: 'white' }}>
         <IconButton onClick={() => props.history.goBack()}>
           <img

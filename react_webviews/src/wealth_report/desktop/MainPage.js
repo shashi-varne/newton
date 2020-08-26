@@ -62,14 +62,6 @@ const MainPage = (props) => {
     };
   }, []);
 
-  const onPanChange = (pan) => {
-    if (pan === 'empty' || !pan) {
-      navigate(props, '/w-report/no-pan-screen');
-    } else {
-      setPan(pan);
-    }
-  };
-
   const renderTab = (tab) => {
     if (tab === 'overview') {
       return <Overview pan={pan} parentProps={props}/>

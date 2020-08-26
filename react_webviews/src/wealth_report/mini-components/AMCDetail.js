@@ -6,7 +6,7 @@ export default function AMCDetail(holding) {
     <div className="wr-hc-amc-detail">
       <img
         className="amc-logo"
-        src={require('assets/fisdom/ic-investment-strategy.svg')}
+        src={holding.amc_logo}
         alt="amc-logo"
       />
       <div className="wr-amc-detail">

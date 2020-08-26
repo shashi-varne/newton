@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { IconButton } from "material-ui";
+import { IconButton, Collapse } from "material-ui";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import { isMobileDevice } from "utils/functions";
 import SelectMembers from "./SelectMembersMobile";
 import toast from "../../common/ui/Toast";
 import { fetchAllPANs } from "../common/ApiCalls";
 import DotDotLoader from "../../common/ui/DotDotLoader";
 import { isEmpty } from "../../utils/validators";
+import { getConfig } from "utils/functions";
+const isMobileView = getConfig().isMobileDevice;
 
 export default function PanSelect(props) {
   const [dropdown_open, toggleDropdown] = useState(false);
@@ -51,10 +52,10 @@ export default function PanSelect(props) {
 
   return (
     <div className="wr-pan-dropdown">
-      <div className={`wr-header-pan-select ${dropdown_open ? 'wr-pan-list-open' : ''}`}>
+      <div className={`wr-header-pan-select ${dropdown_open ? 'wr-pan-list-open' : ''}`} onClick={handleClick}>
         {/* visibility will be modified based on the condition in media queries */}
         <ClickAwayListener onClickAway={handleClose}>
-          <div className="wr-pan-content" style={{ cursor: "default" }}>
+          <div className="wr-pan-content">
             <img
               id="wr-pan-logo"
               src={require(`assets/fisdom/ic-added-pans.svg`)}
@@ -74,7 +75,6 @@ export default function PanSelect(props) {
               classes={{ root: "wr-icon-button" }}
               color="inherit"
               aria-label="Menu"
-              onClick={handleClick}
             >
               <img
                 src={require(`assets/fisdom/ic-dropdown.svg`)}
@@ -90,12 +90,11 @@ export default function PanSelect(props) {
           </div>
         </ClickAwayListener>
 
-        {/* visibility will be modified based on condition 'isMobileDevice()' */}
-        {!isMobileDevice() && (
-          <div style={{ display: dropdown_open ? "inherit" : "none" }}>
-            {panList.map(
-              (pan, index) =>
-                pan !== selectedPan && (
+        {/* visibility will be modified based on condition 'isMobileView' */}
+        {!isMobileView && (
+          <Collapse in={dropdown_open}>
+            <div>
+              {panList.map((pan, index) => pan !== selectedPan && (
                   <div onClick={() => selectPan(pan)} key={index}>
                     {index !== 0 && <div className="hr"></div>}
                     <div className="wr-pan-content">
@@ -110,13 +109,13 @@ export default function PanSelect(props) {
                       </div>
                     </div>
                   </div>
-                )
-            )}
-          </div>
+              ))}
+            </div>
+          </Collapse>
         )}
 
-        {/* visibility will be modified based on condition 'isMobileDevice()' */}
-        {isMobileDevice() && (
+        {/* visibility will be modified based on condition 'isMobileView' */}
+        {isMobileView && (
           <SelectMembers
             open={panModal}
             pans={panList}
