@@ -31,7 +31,7 @@ class Help extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'need help',
-        "link_clicked": data.link_clicked
+        "link_clicked": data.link_clicked ? 'yes' : 'no'
       }
     };
 
