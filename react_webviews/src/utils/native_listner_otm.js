@@ -168,8 +168,8 @@ if (getConfig().generic_callback) {
             lng: coords.longitude || ''
           },
           'permission': permission,
-          // nsp: "Jio 4G",
-          device_id: "e3964eac6f4e48b6"
+          nsp: "ABC",
+          device_id: "0000000000000000"
         }
       }
 
