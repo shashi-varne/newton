@@ -111,9 +111,14 @@ class ProfessionalDetails extends Component {
 
         this.sendEvents('next');
         let keys_to_check = ['company_name', 'duration', 'office_address', 'office_pincode',
-            'office_email', 'educational_qualification'];
+            'office_email', 'educational_qualification', 
+            'office_city', 'office_state', 'office_country'];
 
         let form_data = this.state.form_data;
+
+        form_data.office_city_error = '';
+        form_data.office_state_error = '';
+        form_data.office_country_error = '';
 
         if (form_data.first_name && !validateAlphabets(form_data.first_name)) {
             form_data.first_name_error = 'Invalid first name';
