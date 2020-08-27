@@ -31,7 +31,7 @@ class Help extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'need help',
-        "link_clicked": this.state.link_clicked || data.link_clicked ? 'yes' : 'no'
+        "link_clicked": this.state.link_clicked ? 'yes' : 'no'
       }
     };
 
@@ -44,11 +44,9 @@ class Help extends Component {
 
   handleClick = (link_clicked) => {
       
-      this.setState({
-        link_clicked: link_clicked
-      });
-      
-      this.sendEvents('next', {link_clicked});
+    this.setState({
+      link_clicked: link_clicked
+    }, () => this.sendEvents('next'));
   }
 
   render() {
