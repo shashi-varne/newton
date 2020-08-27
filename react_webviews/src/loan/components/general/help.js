@@ -52,7 +52,6 @@ class Help extends Component {
   }
 
   render() {
-    console.log(this.state.link_clicked)
     return (
       <Container
         showLoader={this.state.show_loader}
