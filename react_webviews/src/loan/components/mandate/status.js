@@ -135,6 +135,7 @@ class MandateStatus extends Component {
   }
 
   goBack = () => {
+    this.sendEvents('back');
     this.navigate(this.state.commonMapper.close_state);
   }
 
