@@ -75,11 +75,22 @@ class Landing extends Component {
       return;
     }
 
+    console.log(application_info)
     let process_done = false;
     let isResume = true;
     let top_cta_title = 'RESUME';
 
-    if(!application_info.latitude || !application_info.network_service_provider) {
+    if (getConfig().Web) {
+      if (!application_info.latitude) {
+        this.setState({
+          location_needed: true
+        })
+
+        isResume = false;
+        top_cta_title = 'APPLY NOW';
+      }
+
+    } else if(!application_info.latitude || !application_info.network_service_provider) {
       this.setState({
         location_needed: true
       })
