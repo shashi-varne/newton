@@ -305,7 +305,6 @@ class InstantKycHome extends Component {
   }
 
   render() {
-    console.log(this.state.vendor_info)
     return (
       <Container
         showLoader={this.state.show_loader}
