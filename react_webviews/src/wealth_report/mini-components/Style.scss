@@ -41,17 +41,10 @@
   cursor: pointer;
 }
 
-.wr-amc-label {
-  display: flex;
-  flex: 1;
-  justify-content: flex-end;
-  margin-bottom: -40px;
-}
-
-#wr-amc-img {
-  margin-top: 10px;
-  margin-right: -8px;
-  width: 155px;
+.wr-free-EL-label {
+  position: absolute;
+  top: 10px;
+  right: -8px;
 }
 
 #wr-account-img {
@@ -144,6 +137,7 @@ span.wr-small-col-title {
       color: #000000;
       white-space: nowrap;
       text-overflow: ellipsis;
+      text-transform: capitalize;
       overflow: hidden;
     }
     .amc-detail-subtitle {
@@ -788,7 +782,7 @@ span.wr-small-col-title {
     justify-content: space-between;
   }
 
-  .wr-amc-label {
+  .wr-free-EL-label {
     display: none;
   }
 

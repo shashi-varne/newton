@@ -17,9 +17,10 @@ export default function WrTooltip(props) {
   const [openModal, toggleModal] = useState(false);
 
   const i_btn = (info) => (
-    <span style={{ marginLeft: "6px", verticalAlign: 'middle' }}>
+    <span style={{ marginLeft: "6px" }}>
       <img
         src={require(`assets/fisdom/${info}.svg`)}
+        width={12}
         id="wr-i-btn"
         alt=""
       />

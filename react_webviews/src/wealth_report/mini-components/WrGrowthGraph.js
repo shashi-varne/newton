@@ -1,7 +1,6 @@
 import React from 'react';
 import { ResponsiveLine } from '@nivo/line';
-import { convertToThousand } from 'utils/validators';
-import { formattedDate, formatAmountInr } from '../../utils/validators';
+import { formattedDate, formatAmountInr, numDifferentiationInr } from '../../utils/validators';
 
 const styleById = {
   'current_amount': {
@@ -31,60 +30,70 @@ const DashedLine = ({ series, lineGenerator, xScale, yScale }) => {
 };
 
 const WrGrowthGraph = (props) => {
-  const { params = {}, data = [] } = props;
+  const { params = {}, data = [], width = 0, height = 0 } = props;
   return (
-    <ResponsiveLine
-      data={data}
-      margin={{ top: 20, right: 20, bottom: 50, left: 50 }}
-      xScale={{
-        type: 'point',
-      }}
-      yScale={{
-        type: 'linear',
-        min: params.min || 'auto',
-        max: params.max || 'auto',
-        stacked: false,
-        reverse: false
-      }}
-      axisBottom={{
-        format: value => formattedDate(value, 'd m', true),
-        tickValues: params.date_ticks || [],
-        tickPadding: 20,
-        tickSize: 0,
-      }}
-      axisLeft={{
-        orient: 'left',
-        tickValues: 6,
-        format: value => convertToThousand(value), //converts 40000 to 40K
-        tickPadding: 10,
-        tickSize: 0,
-      }}
-      curve="natural"
-      enableGridX={false}
-      colors={['#b9abdd', '#502da8']}
-      enablePoints={false}
-      enableSlices="x"
-      crosshairType="x"
-      useMesh={true}
-      theme={{
-        axis: {
-          ticks: {
-            text: {
-              fill: "#b0bac9",
-              fontSize: '10px',
+    <div style={{ width, height }}>
+      <ResponsiveLine
+        data={data}
+        margin={{ top: 20, right: 20, bottom: 50, left: 50 }}
+        xScale={{
+          type: 'point',
+        }}
+        yScale={{
+          type: 'linear',
+          min: params.min || 'auto',
+          max: params.max || 'auto',
+          stacked: false,
+          reverse: false
+        }}
+        axisBottom={{
+          format: value => formattedDate(value, 'd m', true),
+          tickValues: params.date_ticks || [],
+          tickPadding: 20,
+          tickSize: 0,
+        }}
+        axisLeft={{
+          orient: 'left',
+          tickValues: 6,
+          format: value => numDifferentiationInr(value), //converts 40000 to 40K
+          tickPadding: 10,
+          tickSize: 0,
+        }}
+        curve="natural"
+        enableGridX={false}
+        colors={['#b9abdd', '#502da8']}
+        enablePoints={false}
+        enableSlices="x"
+        enableCrosshair={true}
+        crosshairType="x"
+        useMesh={true}
+        theme={{
+          axis: {
+            ticks: {
+              text: {
+                fill: "rgba(135, 135, 135, 0.85)",
+                fontSize: '10px',
+              }
             }
+          },
+          grid: {
+            line: {
+              stroke: "rgba(80, 45, 168, 0.05)",
+              strokeWidth: 0.5,
+            }
+          },
+          crosshair: {
+            line: {
+              stroke: '#150731',
+              strokeWidth: 0.9,
+              strokeOpacity: 0.1,
+            },
           }
-        },
-        grid: {
-          line: {
-            stroke: "rgba(80, 45, 168, 0.05)",
-            strokeWidth: 0.5,
-          }
-        }
-      }}
-      sliceTooltip={WrLineTooltip}
-      layers={['grid', 'markers', 'areas', DashedLine, 'slices', 'points', 'axes', 'legends']}
-    />
+        }}
+        sliceTooltip={WrLineTooltip}
+        layers={['grid', 'markers', 'areas', 'crosshair', DashedLine, 'slices', 'points', 'axes', 'legends']}
+      />
+    </div>
   );
 };
 

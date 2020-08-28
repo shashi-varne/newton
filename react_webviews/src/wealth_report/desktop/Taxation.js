@@ -4,8 +4,8 @@ import WrButton from "../common/Button";
 import toast from "../../common/ui/Toast";
 import { fetchTaxation, fetchTaxFilters } from "../common/ApiCalls";
 import { inrFormatDecimal } from "../../utils/validators";
-import { CircularProgress } from "material-ui";
 import WrTooltip from "../common/WrTooltip";
+import CardLoader from "../mini-components/CardLoader";
 
 const Taxation = (props) => {
   const [tabSelected, selectTab] = useState("stcg");
@@ -197,59 +197,61 @@ const Taxation = (props) => {
           disabled={isLoading}
         />
       </div>
-      {
-        isLoading ?
-        (
-          <div style={{ textAlign: 'center', marginTop: '120px' }}>
-            <CircularProgress size={50} thickness={4} />
-          </div>
-        ) :
-        (
-          <Fragment>
-            <div id="wr-taxation-summary" className="animated animatedFadeInUp fadeInUp">
-              <div className="wr-taxation-summary-col">
-                <span className="wr-tsc-value">
-                  {inrFormatDecimal(taxationData.combined_tax_data.estimated_tax || "")}
-                </span>
-                <span className="wr-tsc-label">
-                    Estimated Tax
-                  <WrTooltip tipContent={estdTaxTooltip}/>
-                </span>
+      <div style={{ height: '500px' }}>
+        {
+          isLoading ?
+          (
+            <CardLoader />
+          ) :
+          (
+            <Fragment>
+              <div id="wr-taxation-summary" className="fadeIn">
+                <div className="wr-taxation-summary-col">
+                  <span className="wr-tsc-value">
+                    {inrFormatDecimal(taxationData.combined_tax_data.estimated_tax || "")}
+                  </span>
+                  <span className="wr-tsc-label">
+                      Estimated Tax
+                    <WrTooltip tipContent={estdTaxTooltip}/>
+                  </span>
+                </div>
+                <div className="wr-vertical-divider"></div>
+                <div className="wr-taxation-summary-col">
+                  <span className="wr-tsc-value">
+                    {inrFormatDecimal(taxationData.combined_tax_data.realized_gains || "")}
+                  </span>
+                  <span className="wr-tsc-label">Total realized gains</span>
+                </div>
+                <div className="wr-vertical-divider"></div>
+                <div className="wr-taxation-summary-col">
+                  <span className="wr-tsc-value">
+                    {inrFormatDecimal(taxationData.combined_tax_data.taxable_gains || "")}
+                  </span>
+                  <span className="wr-tsc-label">Taxable gains</span>
+                </div>
               </div>
-              <div className="wr-vertical-divider"></div>
-              <div className="wr-taxation-summary-col">
-                <span className="wr-tsc-value">
-                  {inrFormatDecimal(taxationData.combined_tax_data.realized_gains || "")}
-                </span>
-                <span className="wr-tsc-label">Total realized gains</span>
+              <div id="wr-taxation-detail">
+                <div className="animated animatedFadeInUp fadeInUp">
+                  {["stcg", "ltcg"].map((tab, index) => (
+                    <WrButton
+                      classes={{
+                        root: tabSelected === tab ? "" : "wr-outlined-btn",
+                      }}
+                      style={{ marginRight: "16px" }}
+                      onClick={() => selectTab(tab)}
+                      key={index}
+                      disableRipple
+                    >
+                      {tab.toUpperCase()}
+                    </WrButton>
+                  ))}
+                </div>
+                {renderTaxDetailRows()}
               </div>
-              <div className="wr-vertical-divider"></div>
-              <div className="wr-taxation-summary-col">
-                <span className="wr-tsc-value">
-                  {inrFormatDecimal(taxationData.combined_tax_data.taxable_gains || "")}
-                </span>
-                <span className="wr-tsc-label">Taxable gains</span>
-              </div>
-            </div>
-            <div id="wr-taxation-detail" className="animated animatedFadeInUp fadeInUp">
-              {["stcg", "ltcg"].map((tab, index) => (
-                <WrButton
-                  classes={{
-                    root: tabSelected === tab ? "" : "wr-outlined-btn",
-                  }}
-                  style={{ marginRight: "16px" }}
-                  onClick={() => selectTab(tab)}
-                  key={index}
-                  disableRipple
-                >
-                  {tab.toUpperCase()}
-                </WrButton>
-              ))}
-              {renderTaxDetailRows()}
-            </div>
-          </Fragment>
-        )
-      }
+            </Fragment>
+          )
+        }
+      </div>
     </div>
   );
 };

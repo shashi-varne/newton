@@ -12,8 +12,10 @@ export default function UserAccountMobile(props) {
   const [loggingOut, setLoggingOut] = useState(false);
 
   function handleTooltipClose(event, toggleFunction) {
+    var path = event.path || (event.composedPath && event.composedPath());
+    if (!event || !path) return;
     // If click event is triggered from within tooltip, skip it
-    const clickInsideTooltip = event.path.find((element) =>
+    const clickInsideTooltip = path.find((element) =>
       element.nodeName === 'DIV' && element.classList.contains("wr-user")
     );
     if (clickInsideTooltip) return;

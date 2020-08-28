@@ -1,13 +1,14 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { LinearProgress, createMuiTheme, MuiThemeProvider, IconButton } from 'material-ui';
+import { LinearProgress, createMuiTheme, MuiThemeProvider, IconButton, Card } from 'material-ui';
 import WrGrowthGraph from '../mini-components/WrGrowthGraph';
 import { InsightMap, GraphDateRanges } from '../constants';
 import toast from '../../common/ui/Toast';
 import { getConfig } from "utils/functions";
 import { fetchOverview, fetchPortfolioGrowth, fetchXIRR } from '../common/ApiCalls';
 import { formatGrowthData } from '../common/commonFunctions';
-import { numDifferentiation } from '../../utils/validators';
+import { numDifferentiationInr } from '../../utils/validators';
 import CardLoader from '../mini-components/CardLoader';
+import DotDotLoader from '../../common/ui/DotDotLoader';
 import WrTooltip from '../common/WrTooltip';
 const isMobileView = getConfig().isMobileDevice;
 
@@ -30,33 +31,19 @@ const theme = createMuiTheme({
 
 export default function Overview(props) {
   const [selectedRange, setSelectedRange] = useState('1 year');
-  const [graphLoading, setGraphLoad] = useState(true); //when loading graph
   const [isLoading, setLoading] = useState(true); //when loading anything else
 
   const [overviewData, setOverviewData] = useState({
     insights: [],
     asset_allocation: {},
   });
-  const [xirrPercent, setXirrPercent] = useState({});
-  const [growthGraphData, setgrowthGraphData] = useState({});
   useEffect(() => {
     (async() => {
       try {
         setGraphLoad(true);
         setLoading(true);
         const data = await fetchOverview({ pan: props.pan });
-        const xirr_percent = await fetchXIRR({ pan: props.pan, year: 2 });
         setOverviewData(data);
-        setXirrPercent(xirr_percent);
-        const { combined_amount_data, date_ticks } = await fetchPortfolioGrowth({
-          pan: props.pan,
-          date_range: selectedRange,
-        });
-        const formattedData = formatGrowthData(combined_amount_data);
-        setgrowthGraphData({
-          ...formattedData,
-          date_ticks: filterDateTicks(date_ticks),
-        });
       } catch (err) {
         console.log(err);
         toast(err);
@@ -64,26 +51,36 @@ export default function Overview(props) {
       setGraphLoad(false);
       setLoading(false);
     })();
-  }, [props.pan, selectedRange]);
+  }, [props.pan]);
 
-  // useEffect(() => {
-  //   (async() => {
-  //     try {
-  //       setGraphLoad(true);
-  //       const { combined_amount_data, date_ticks } = await fetchPortfolioGrowth({
-  //         pan: props.pan,
-  //         date_range: selectedRange,
-  //       });
-  //       const xirr_percent = await fetchXIRR({ pan: props.pan, year: 2 });
-  //       setXirrPercent(xirr_percent);
-  //       setGraphLoad(false);
-  //       setgrowthGraphData({ data: combined_amount_data, date_ticks: filterDateTicks(date_ticks) });
-  //     } catch (err) {
-  //       console.log(err);
-  //       toast(err);
-  //     }
-  //   })();
-  // }, [selectedRange]);
+  const [xirrPercent, setXirrPercent] = useState({});
+  const [xirrLoading, setXirrLoading] = useState({});
+  const [growthGraphData, setGrowthGraphData] = useState({});
+  const [graphLoading, setGraphLoad] = useState(true); // when loading graph
+  useEffect(() => {
+    (async() => {
+      try {
+        setGraphLoad(true);
+        setXirrLoading(true);
+        const { combined_amount_data, date_ticks } = await fetchPortfolioGrowth({
+          pan: props.pan,
+          date_range: selectedRange,
+        });
+        const formattedData = formatGrowthData(combined_amount_data);
+        setGrowthGraphData({
+          ...formattedData,
+          date_ticks: filterDateTicks(date_ticks),
+        });
+        setGraphLoad(false);
+        const xirr_percent = await fetchXIRR({ pan: props.pan, date_range: selectedRange, });
+        setXirrPercent(xirr_percent);
+        setXirrLoading(false);
+      } catch (err) {
+        console.log(err);
+        toast(err);
+      }
+    })();
+  }, [selectedRange]);
 
   // TODO: Optimize this function
   const filterDateTicks = (ticks = []) => {
@@ -120,28 +117,30 @@ export default function Overview(props) {
             <div id="wr-overview-key-numbers">  
               <div className="wr-okn-box">
                 <div className="wr-okn-title">Current Value</div>
-                <div className="wr-okn-value">₹{numDifferentiation(overviewData.current_value)}</div>
+                <div className="wr-okn-value">{numDifferentiationInr(overviewData.current_value)}</div>
               </div>
               <div className="wr-okn-box">
                 <div className="wr-okn-title">Total Invested</div>
-                <div className="wr-okn-value">₹{numDifferentiation(overviewData.total_invested)}</div>
+                <div className="wr-okn-value">{numDifferentiationInr(overviewData.total_invested)}</div>
               </div>
               <div className="wr-okn-box">
                 <div className="wr-okn-title">
                     XIRR
-                  <WrTooltip tipContent={xirrTooltipContent} tooltipClass="wr-xirr-info"/>
+                  <WrTooltip tipContent={xirrTooltipContent} tooltipClass="wr-xirr-info" forceDirection={true}/>
                 </div>
                 <div className="wr-okn-value">
-                  {xirrPercent.xirr ? `${Math.round(xirrPercent.xirr)}%` : 'N/A'}
+                  {`${xirrPercent.portfolio_xirr ? Math.round(xirrPercent.portfolio_xirr) + '%' : '--'}`}
                 </div>
               </div>
               <div className="wr-okn-box">
                 <div className="wr-okn-title">Total Realised Gains</div>
-                <div className="wr-okn-value">{numDifferentiation(overviewData.realised_gains)}</div>
+                <div className="wr-okn-value">{numDifferentiationInr(overviewData.realised_gains)}</div>
               </div>
               <div className="wr-okn-box">
                 <div className="wr-okn-title">
-                  Asset Allocation
+                  <span style={{ verticalAlign: 'middle', lineHeight: 1 }}>
+                    Asset Allocation
+                  </span>
                   &nbsp;&nbsp;
                   {assetAllocNums((overviewData.asset_allocation || {}).debt)}
                 </div>
@@ -169,11 +168,13 @@ export default function Overview(props) {
       <div className="wr-card-template">
         <div className="wr-card-template-header">Portfolio Growth</div>
         <div id="wr-growth-graph">
-          <div id="wr-gg-date-select">
+          <div
+            id="wr-gg-date-select"
+            style={{ cursor: graphLoading ? "not-allowed" : "pointer" }}>
             {GraphDateRanges.map((rangeObj, idx) => (
               <span
                 key={idx}
-                onClick={() => setSelectedRange(rangeObj.value)}
+                onClick={() => graphLoading ? '' : setSelectedRange(rangeObj.value) }
                 className={
                   `${selectedRange === rangeObj.value ? 'selected' : ''}
                   wr-gg-date-select-item`
@@ -182,58 +183,69 @@ export default function Overview(props) {
               </span>
             ))}
           </div>
-          {
-            graphLoading ?
-              (
-                <CardLoader />
-              ) :
-              (
-                <div>
-                  <div id="wr-xirr">
-                    XIRR
-                    <WrTooltip tipContent={xirrTooltipContent} />
-                    <div style={{fontSize:'24px', fontWeight:600, lineHeight:1}}>
-                      {xirrPercent.xirr ? `${Math.round(xirrPercent.xirr)}%` : 'N/A'}
-                    </div>
-                  </div>
-                  <div id="wr-xirr-mob">
-                    <span>{`XIRR: ${Math.round(xirrPercent.xirr)}%`}</span>
-                    <div>
-                      <div className="wr-dot"></div>
-                      Invested
-                    </div>
-                    <div>
-                      <div className="wr-dot"></div>
-                      Current
-                    </div>
-                  </div>
-                  <div style={{ width: '100%', height: '400px', clear: 'right' }}>
+          <div style={{ height: '500px', clear: 'right' }}>
+            <div id="wr-xirr">
+              XIRR
+              <WrTooltip tipContent={xirrTooltipContent} forceDirection={true} />
+              <div style={{
+                fontSize: '24px',
+                fontWeight: 600,
+                lineHeight: 1,
+                marginTop: '8px'
+              }}>
+                {xirrLoading ?
+                  <DotDotLoader className="wr-dot-loader" /> :
+                  `${xirrPercent.xirr ? Math.round(xirrPercent.xirr) + '%' : '--'}`
+                }
+              </div>
+            </div>
+            <div id="wr-xirr-mob">
+              {true ?
+                <DotDotLoader /> :
+                `${xirrPercent.xirr ? Math.round(xirrPercent.xirr) + '%' : '--'}`
+              }
+              <div>
+                <div className="wr-dot"></div>Invested
+              </div>
+              <div>
+                <div className="wr-dot"></div>Current
+              </div>
+            </div>
+            {
+              graphLoading ?
+                (
+                  <CardLoader />
+                ) :
+                (
+                  <Fragment>
                     <WrGrowthGraph
                       data={growthGraphData.data}
+                      width="100%"
+                      height="400px"
                       params={{
                         date_ticks: growthGraphData.date_ticks,
                         min: growthGraphData.min,
                         max: growthGraphData.max,
                       }}
                     ></WrGrowthGraph>
-                  </div>
-                </div>
-              )
-          }
+                  </Fragment>
+                )
+            }
+          </div>
         </div>
       </div>
-      {
-        !isLoading && !!overviewData.insights.length &&
-        (
-          <Fragment>
-            <div id="portfolio-insights-header">Portfolio Insights</div>
-            <div id="wr-portfolio-insights-container">
-              {(overviewData.insights).map((insight, idx) =>
-                <PortfolioCard insight={insight} key={idx} />
-              )}
-            </div>
-          </Fragment>
-        )
+      <div
+        id="portfolio-insights-header"
+        className="animated animatedFadeInUp fadeInUp">
+        Portfolio Insights
+      </div>
+      {isLoading ?
+        <CardLoader /> :
+        <div id="wr-portfolio-insights-container">
+          {(overviewData.insights).map((insight, idx) =>
+            <PortfolioCard insight={insight} key={idx} />
+          )}
+        </div>
       }
     </React.Fragment>
   );
@@ -254,7 +266,7 @@ const PortfolioCard = (props) => {
   const insight = InsightMap[type] || {};
 
   return (
-    <div className="wr-pi-card-container">
+    <div className="wr-pi-card-container animated animatedFadeInUp fadeInUp">
       <div className="wr-pi-card" onClick={() => toggleExpand(!expanded)}>
         <img
           className="wi-pi-card-img"

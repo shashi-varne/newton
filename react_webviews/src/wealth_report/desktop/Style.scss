@@ -1,3 +1,11 @@
+@mixin animatedDelay($n, $delay) {
+  @for $i from 1 through $n {
+    .animated:nth-child(#{$i}) {
+      animation-delay: #{$i * $delay}s;
+    }
+  } 
+}
+
 #wr-no-pan-screen {
   height: 55vh;
   width: 100%;
@@ -56,6 +64,10 @@
     padding: 0 16px 0 0;
     animation: fadeIn 2s;
   }
+}
+
+.fadeIn {
+  animation: fadeIn 2s;
 }
 
 @keyframes fadeIn {
@@ -281,7 +293,7 @@
 #wr-body {
   width: 94%;
   height: auto;
-  min-height: 100vh;
+  // min-height: 100vh;
   margin: 330px auto 0;
 }
 
@@ -304,6 +316,7 @@
     opacity: 0.6;
     font-size: 17px;
     font-weight: 600;
+    text-transform: capitalize;
     line-height: 1;
     color: #000000;
     text-align: center;
@@ -377,7 +390,7 @@
   padding: 30px 50px;
   width: 100%;
   box-sizing: border-box;
-  min-height: 300px;
+  min-height: 600px;
   height: auto;
 
   #wr-gg-date-select {
@@ -394,7 +407,7 @@
       line-height: 1.15;
       text-align: center;
       color: rgba(0, 0, 0, 0.5);
-      cursor: pointer;
+      cursor: inherit;
 
       &.selected {
         background: rgb(80, 45, 168);
@@ -421,7 +434,7 @@
   margin-bottom: 44px;
   font-size: 17px;
   font-weight: 600;
-  opacity: 0.6;
+  color: rgba(0, 0, 0, 0.5);
   text-transform: uppercase;
 }
 
@@ -680,7 +693,7 @@
       }
     }
   }
-}
+} 
 
 .wr-vertical-divider {
   height: 60px;
@@ -720,13 +733,6 @@
   .wr-card-template {
     margin-bottom: 40px;
   }
-
-  @for $i from 0 through 30 {
-    $iby13: $i%13;
-    .wr-holding.animated:nth-child(#{$i}) {
-      animation-delay: #{$iby13 * 0.2}s;
-    }
-  }
 }
 
 #wr-all-trx {
@@ -743,6 +749,10 @@
   div {
     margin-left: 5px;
     background: #c4adff;
+  }
+
+  div.bounce1 {
+    margin-left: 0;
   }
 }
 
@@ -762,6 +772,8 @@
   color: var(--primary);
   margin-top: 50px;
   border-radius: 6px;
+  font-size: 17px;
+  line-height: 1.2;
 }
 
 #wr-xirr-mob {
@@ -777,6 +789,24 @@
   align-items: center;
 }
 
+.animated {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  -webkit-animation-duration: 1s;
+  animation-delay: 1s;
+  -webkit-animation-fill-mode: both
+}
+
+.animatedFadeInUp {
+  opacity: 0;
+}
+
+.fadeInUp {
+  opacity: 0;
+  animation-name: fadeInUp;
+  -webkit-animation-name: fadeInUp;
+}
+
 
 @keyframes fadeInUp {
   from {
@@ -785,7 +815,7 @@
 
   to {
     transform: translate3d(0,0,0);
-    opacity: 1
+    opacity: 1;
   }
 }
 
@@ -800,30 +830,17 @@
   }
 }
 
-.animated {
-  animation-duration: 1s;
-  animation-fill-mode: both;
-  -webkit-animation-duration: 1s;
-  animation-delay: 1s;
-  -webkit-animation-fill-mode: both
-}
+@include animatedDelay(10, 0.6);
 
-@for $i from 1 through 10 {
-  .animated:nth-child(#{$i}) {
-    animation-delay: #{$i * 0.6}s;
+#wr-portfolio-insights-container, #wr-taxation-detail, #wr-holdings {
+  $delayFactor: 1;
+  @for $i from 1 through 30 {
+    .animated:nth-child(#{$i}) {
+      animation-delay: #{$delayFactor * 0.2}s;
+    }
+    $delayFactor: if($i%10 == 0, 1, $delayFactor + 1); // reset delay factor every 10 counts
   }
 }
-
-.animatedFadeInUp {
-  opacity: 0
-}
-
-.fadeInUp {
-  opacity: 0;
-  animation-name: fadeInUp;
-  -webkit-animation-name: fadeInUp;
-}
-
 
 @media only screen and (min-device-width: 310px) and (max-device-width: 812px) {
   #wr-no-pan-screen {

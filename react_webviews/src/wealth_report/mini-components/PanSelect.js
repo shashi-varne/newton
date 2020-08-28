@@ -52,10 +52,10 @@ export default function PanSelect(props) {
 
   return (
     <div className="wr-pan-dropdown">
-      <div className={`wr-header-pan-select ${dropdown_open ? 'wr-pan-list-open' : ''}`} onClick={handleClick}>
+      <div className={`wr-header-pan-select ${dropdown_open ? 'wr-pan-list-open' : ''}`}>
         {/* visibility will be modified based on the condition in media queries */}
         <ClickAwayListener onClickAway={handleClose}>
-          <div className="wr-pan-content">
+          <div className="wr-pan-content" onClick={handleClick}>
             <img
               id="wr-pan-logo"
               src={require(`assets/fisdom/ic-added-pans.svg`)}

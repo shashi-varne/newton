@@ -80,13 +80,15 @@ export default function EmailList(props) {
     setEmail(e.target.value);
   };
 
-  const handleTooltipClose = (event) => {
+  const handleTooltipClose = (event = {}, toggleFunction) => {
+    var path = event.path || (event.composedPath && event.composedPath());
+    if (!event || !path) return;
     // If click event is triggered from within tooltip, skip it
-    const clickInsideTooltip = event.path.find((element) =>
+    const clickInsideTooltip = path.find((element) =>
       element.nodeName === 'DIV' && element.classList.contains("wr-accounts")
     );
     if (clickInsideTooltip) return;
-    toggleToolTip(false);
+    toggleFunction(false);
   };
 
   const resyncEmail = async(email) => {
@@ -192,7 +194,7 @@ export default function EmailList(props) {
   );
 
   // will render successfully added email modal
-  const renderEmailAdded = () => (
+  const renderEmailAdded = (
     <div className="wr-email-added">
       <img src={require(`assets/fisdom/ic-mob-success.svg`)} alt="success" />
       <div className="wr-content">Email has been added successfully!</div>
@@ -244,7 +246,7 @@ export default function EmailList(props) {
           onClose={handleClose}
           classes={{ paper: "wr-dialog-paper" }}
         >
-          {renderEmailAdded()}
+          {renderEmailAdded}
         </Dialog>
       )}
     </React.Fragment>

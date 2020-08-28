@@ -95,8 +95,13 @@ export default function Analysis(props) {
             key={idx}
             disableRipple
           >
-            {`${tab === 'debt' ? 'Debt & Cash' : tab} · 
-            ${Math.round(analysisData.percent_split[tab] || 0)}%`}
+            {
+              `${tab === 'debt' ? 'Debt & Cash' : tab}
+              ${
+                Math.round(analysisData.percent_split[tab] || 0) ? 
+                ` · ${Math.round(analysisData.percent_split[tab] || 0)}%` : ''
+              }`
+            }
           </WrButton>
         ))}
       </div>    
@@ -174,7 +179,7 @@ export default function Analysis(props) {
       <div className="wr-card-template">
         <div className="wr-card-template-header">Top Holdings</div>
         <div id="wr-analysis-top-holdings">
-          <div className="wr-table-container">
+          {/* <div className="wr-table-container"> */}
             {!holdingsData.length ?
               (<CardLoader />) :
               (<WrTable
@@ -182,7 +187,7 @@ export default function Analysis(props) {
                 headersMap = { tableHeadersMap }
               />)
             }
-          </div>
+          {/* </div> */}
         </div>
       </div>
     </React.Fragment>

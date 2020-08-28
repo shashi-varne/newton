@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import WrButton from '../common/Button';
 import { IconButton } from 'material-ui';
-import { numDifferentiationInr, formattedDate } from '../../utils/validators';
+import { numDifferentiationInr, formattedDate, inrFormatDecimal2 } from '../../utils/validators';
 import AMCDetail from './AMCDetail';
 import { CircularProgress } from 'material-ui';
 import { navigate } from '../common/commonFunctions';
@@ -14,14 +14,14 @@ const isMobileView = getConfig().isMobileDevice;
 const tableHeadersMap = [{
   label: 'Date',
   accessor: 'date',
-  formatter: (val) => formattedDate(val, 'd m y'),
+  formatter: (val) => formattedDate(val, 'd m, y', true),
 }, {
   label: 'Type',
   accessor: 'type',
 }, {
   label: 'Amount',
   accessor: 'amount',
-  formatter: (val) => numDifferentiationInr(val),
+  formatter: (val) => inrFormatDecimal2(val),
 }];
 
 export default function HoldingCard(props) {
@@ -127,14 +127,14 @@ export default function HoldingCard(props) {
   };
 
   return (
-    <div className="wr-card-template wr-holding" onClick={() => expandCard(!expanded)}>
+    <div className="wr-card-template wr-holding">
       {/* based on the condition visbility is modified */}
       {holding.free_from_el_lockin && 
-        <div className="wr-amc-label">
-          <img src={require('assets/fisdom/label.svg')} alt="amc-logo" id="wr-amc-img" />
+        <div className="wr-free-EL-label">
+          <img src={require('assets/fisdom/label.svg')} alt="Lock-in free" />
         </div>
       }
-      <div className="wr-holding-card">
+      <div className="wr-holding-card" onClick={() => expandCard(!expanded)}>
         {AMCDetail(holding)}
         <div className="wr-hc-user-data">
           <div className="wr-small-col">

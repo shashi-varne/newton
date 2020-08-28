@@ -32,7 +32,13 @@ const tabs = [
 const Header = (props) => {
   const { animation, match, location, onPanSelect } = props;
   const [activeTab, setActiveTab] = useState(match.params.tab);
-  
+
+  const onTabClick = (tab) => {
+    setActiveTab(tab);
+    const elem = document.getElementById('wr-main');
+    if (elem) elem.scrollTo(0, 0); // Scroll to top of page everytime tab is changed
+  };
+
   return (
     <div id="wr-header-bar" className={
       `${animation || ''}
@@ -42,7 +48,7 @@ const Header = (props) => {
 
       {tabs.map((tab, index) => (
         <Link to={`${tab.id + location.search}`}
-          onClick={() => setActiveTab(tab.id)}
+          onClick={() => onTabClick(tab.id)}
           className="wr-header-tab"
           key={index}
           style={{borderBottom: activeTab === tab.id ? 'solid 4px var(--primary)' : ''}}

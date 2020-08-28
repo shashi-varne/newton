@@ -74,14 +74,16 @@ export default function Holdings(props) {
         </div>
       }
 
-      {!isLoading && !!holdingsData.length && holdingsData.map((holding, idx) => (
-        <HoldingCard
-          key={idx}
-          holding={holding}
-          pan={props.pan}
-          parentProps={props.parentProps}
-        />
-      ))}
+      <div>
+        {!isLoading && !!holdingsData.length && holdingsData.map((holding, idx) => (
+          <HoldingCard
+            key={idx}
+            holding={holding}
+            pan={props.pan}
+            parentProps={props.parentProps}
+          />
+        ))}
+      </div>
       <div
         className="wr-load-more"
         style={{ justifyContent: 'center', fontSize: '18px', marginTop: '70px' }}
