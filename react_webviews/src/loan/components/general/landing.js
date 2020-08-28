@@ -191,7 +191,7 @@ class Landing extends Component {
 
   getNextState = () => {
     let dmi_loan_status = this.state.vendor_info.dmi_loan_status || '';
-
+    let application_status = this.state.application_info.application_status || ''
     let state = '';
     if(this.state.process_done) {
       state = 'report-details';
@@ -200,6 +200,8 @@ class Landing extends Component {
         state = 'permissions';
       } else if(dmi_loan_status === 'application_rejected') {
         state = 'instant-kyc-status';
+      } else if(application_status === 'internally_rejected') {
+        state = 'instant-kyc-status'
       } else {
         state = 'journey';
       }

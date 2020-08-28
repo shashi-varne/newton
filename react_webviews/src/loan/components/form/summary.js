@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
 
-// import {getConfig} from 'utils/functions';
+import {getConfig} from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import toast from '../../../common/ui/Toast';
 import { initialize } from '../../common/functions';
@@ -263,8 +263,13 @@ class FormSummary extends Component {
 
                 var resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200 && !resultData.error) {
-
-                    this.openCreateProfile();
+                    console.log(resultData)
+                    if (resultData.status === 'Application Rejected') {
+                        let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
+                        this.navigate('instant-kyc-status', { searchParams: searchParams });                     
+                    } else {
+                        this.openCreateProfile();
+                    }
                 } else {
                     this.setState({
                         show_loader: false
