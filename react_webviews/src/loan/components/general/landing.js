@@ -75,7 +75,7 @@ class Landing extends Component {
       return;
     }
 
-    console.log(application_info)
+    console.log(application_info)////////////////////////////////////////////////////
     let process_done = false;
     let isResume = true;
     let top_cta_title = 'RESUME';
@@ -202,8 +202,11 @@ class Landing extends Component {
 
   getNextState = () => {
     let dmi_loan_status = this.state.vendor_info.dmi_loan_status || '';
-    let application_status = this.state.application_info.application_status || ''
+    let application_status = this.state.application_info.application_status || '';
+    let rejection_reason = this.state.application_info.rejection_reason || ''
+
     let state = '';
+    let reason = '';
     if(this.state.process_done) {
       state = 'report-details';
     } else {
@@ -211,25 +214,35 @@ class Landing extends Component {
         state = 'permissions';
       } else if(dmi_loan_status === 'application_rejected') {
         state = 'instant-kyc-status';
-      } else if(application_status === 'internally_rejected') {
-        state = 'instant-kyc-status'
+      } else if(application_status === 'internally_rejected' && rejection_reason === "Employment Status Not Qualified For Personal Loan") {
+        state = 'instant-kyc-status';
+        reason = 'occupation';
+      } else if(application_status === 'internally_rejected' && rejection_reason === "Aadhar City Not Supported By Partner DMI") {
+        state = 'instant-kyc-status';
+        reason = 'location';
       } else {
         state = 'journey';
       }
     }
 
-    return state;
+    return [state, reason];
   }
 
   handleClickTopCard = () => {
 
     let state =  this.getNextState();
 
-    if(state === 'instant-kyc-status') {
+    if(state[0] === 'instant-kyc-status' && state[1] === 'occupation') {
+      let searchParams = getConfig().searchParams + '&reason=occupation&status=loan_not_eligible';
+      this.navigate(state[0], {searchParams: searchParams});
+    } else if (state[0] === 'instant-kyc-status' && state[1] === 'location') {
+      let searchParams = getConfig().searchParams + '&reason=location&status=loan_not_eligible';
+      this.navigate(state[0], {searchParams: searchParams});
+    } else if (state[0] === 'instant-kyc-status' && !state[1]) {
       let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
-      this.navigate(state, {searchParams: searchParams});
+      this.navigate(state[0], {searchParams: searchParams});
     } else {
-      this.navigate(state);
+      this.navigate(state[0]);
     }
     
   }

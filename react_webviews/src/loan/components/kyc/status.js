@@ -85,8 +85,8 @@ class KycStatus extends Component {
   componentWillMount() {
     this.initialize();
     
-    let { status, okyc_id,flow } = this.state.params;
-
+    let { status, okyc_id,flow, reason } = this.state.params;
+    console.log(this.state.params)
     if(flow === 'kyc') {
       this.setState({
         kyc_checking: true
@@ -100,6 +100,7 @@ class KycStatus extends Component {
 
     this.setState({
       status: status,
+      reason: reason,
       okyc_id: okyc_id || this.state.okyc_id,
       commonMapper: commonMapper[status],
       flow:flow
@@ -300,7 +301,7 @@ class KycStatus extends Component {
               </div>
             }
 
-            {this.state.status === 'loan_not_eligible' &&
+            {(this.state.status === 'loan_not_eligible' && !this.state.reason) &&
               <div>
                 <p className="top-content">
                   At the outset, we thank you for expressing interest in availing a loan.
@@ -308,6 +309,36 @@ class KycStatus extends Component {
                 <p className="top-content">
                   We regret to inform you that <b>we cannot process your application further at this stage</b>,
                   as it does not meet our partner’s policy criteria.
+                </p>
+                <p className="top-content">
+                  Hope to be of assistance in future.
+                </p>
+              </div>
+            }
+
+            {this.state.reason === 'occupation' &&
+              <div>
+                <p className="top-content">
+                  At the outset, we thank you for expressing interest in availing a loan.
+                </p>
+                <p className="top-content">
+                  We regret to inform you that <b>we cannot process your application further at this stage</b>,
+                  as Employment status is not qualified for personal loan.
+                </p>
+                <p className="top-content">
+                  Hope to be of assistance in future.
+                </p>
+              </div>
+            }
+
+            {this.state.reason === 'location' &&
+              <div>
+                <p className="top-content">
+                  At the outset, we thank you for expressing interest in availing a loan.
+                </p>
+                <p className="top-content">
+                  We regret to inform you that <b>we cannot process your application further at this stage</b>,
+                  as Aadhar City is not supported by partner DMI.
                 </p>
                 <p className="top-content">
                   Hope to be of assistance in future.
