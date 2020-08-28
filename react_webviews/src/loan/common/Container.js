@@ -42,6 +42,7 @@ class Container extends Component {
 
   componentWillUnmount() {
     this.unmount();
+
   }
 
   historyGoBack = (backData) => {

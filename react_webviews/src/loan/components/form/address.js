@@ -117,6 +117,7 @@ class AddressDetails extends Component {
 
         if (this.state.checked) {
             form_data.p_pincode_error = '';
+            form_data.p_address_error = '';
             keys_to_check = ['residence_type', 'duration', 'address', 'pincode',];
         }
 
@@ -129,7 +130,6 @@ class AddressDetails extends Component {
         form_data.p_pincode_error)) {
             form_data['p_pincode_error'] = 'Please enter valid pincode';
         }
-
 
         this.formCheckUpdate(keys_to_check, form_data);
     }
