@@ -8,8 +8,8 @@ import next_arrow from 'assets/next_arrow.svg';
 import SVG from 'react-inlinesvg';
 import HowToSteps from '../../../common/ui/HowToSteps';
 import dmi_logo from 'assets/dmi_logo.svg';
-import ic_why_hs_fisdom from 'assets/fisdom/ic_why_hs.svg';
-import ic_why_hs_myway from 'assets/myway/ic_why_hs.svg';
+import ic_why_hs_fisdom from 'assets/fisdom/ic_why_hs_loan.svg';
+import ic_why_hs_myway from 'assets/myway/ic_why_hs_loan.svg';
 
 class Landing extends Component {
   constructor(props) {
@@ -188,7 +188,7 @@ class Landing extends Component {
     }
 
     this.props.history.push({
-      pathname: '/common/render-faqs',
+      pathname: '/gold/common/render-faqs',
       search: getConfig().searchParams,
       params: {
         renderData: renderData

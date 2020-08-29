@@ -21,7 +21,7 @@ class PlanSummaryClass extends Component {
       parent: this.props.parent,
       summaryData: {},
       type: getConfig().productName,
-      group_insurance_payment_started: window.localStorage.getItem('group_insurance_payment_started') || ''
+      group_insurance_payment_started: window.sessionStorage.getItem('group_insurance_payment_started') || ''
     };
 
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
@@ -31,13 +31,13 @@ class PlanSummaryClass extends Component {
   componentWillMount() {
 
     if (this.state.group_insurance_payment_started) {
-      window.localStorage.setItem('group_insurance_payment_started', '');
+      window.sessionStorage.setItem('group_insurance_payment_started', '');
     }
 
     let instant_icon = this.state.type !== 'fisdom' ? instant_myway : instant_fisdom;
     let product_title = insuranceProductTitleMapper[this.props.parent ? this.props.parent.state.product_key : ''];
     nativeCallback({ action: 'take_control_reset' });
-    let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
+    let lead_id = window.sessionStorage.getItem('group_insurance_lead_id_selected');
     this.setState({
       lead_id: lead_id || '',
       instant_icon: instant_icon,
@@ -149,9 +149,9 @@ class PlanSummaryClass extends Component {
         }
         this.sendEvents('next');
 
-        window.localStorage.setItem('group_insurance_payment_url', pgLink);
-        window.localStorage.setItem('group_insurance_payment_urlsafe', res2.pfwresponse.result.insurance_payment_urlsafe || '');
-        window.localStorage.setItem('group_insurance_payment_started', true);
+        window.sessionStorage.setItem('group_insurance_payment_url', pgLink);
+        window.sessionStorage.setItem('group_insurance_payment_urlsafe', res2.pfwresponse.result.insurance_payment_urlsafe || '');
+        window.sessionStorage.setItem('group_insurance_payment_started', true);
 
         if (getConfig().app === 'ios') {
           nativeCallback({

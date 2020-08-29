@@ -209,7 +209,7 @@ class Answer extends Component {
   }
 
   renderRelatedQuestions() {
-    let ques = JSON.parse(window.localStorage.getItem('helpsupport_questions'));
+    let ques = JSON.parse(window.sessionStorage.getItem('helpsupport_questions'));
 
     let rel_ques_ids = [];
     this.props.location.state.answer.related_question.forEach((val) => {

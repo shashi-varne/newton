@@ -21,8 +21,8 @@ class PaymentCallbackClass extends Component {
 
   componentWillMount() {
 
-    let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
-    let group_insurance_payment_urlsafe = window.localStorage.getItem('group_insurance_payment_urlsafe');
+    let lead_id = window.sessionStorage.getItem('group_insurance_lead_id_selected');
+    let group_insurance_payment_urlsafe = window.sessionStorage.getItem('group_insurance_payment_urlsafe');
     
     this.setState({
       lead_id: lead_id || '',
@@ -98,9 +98,9 @@ class PaymentCallbackClass extends Component {
         }
         this.sendEvents('next');
 
-        window.localStorage.setItem('group_insurance_payment_url', pgLink);
-        window.localStorage.setItem('group_insurance_payment_urlsafe', res2.pfwresponse.result.insurance_payment_urlsafe || '');
-        window.localStorage.setItem('group_insurance_payment_started', true);
+        window.sessionStorage.setItem('group_insurance_payment_url', pgLink);
+        window.sessionStorage.setItem('group_insurance_payment_urlsafe', res2.pfwresponse.result.insurance_payment_urlsafe || '');
+        window.sessionStorage.setItem('group_insurance_payment_started', true);
 
         if (getConfig().app === 'ios') {
           nativeCallback({

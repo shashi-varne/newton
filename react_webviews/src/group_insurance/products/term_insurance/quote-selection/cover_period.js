@@ -19,7 +19,7 @@ import { checkValidNumber } from 'utils/validators';
 
 class CoverPeriod extends Component {
   constructor(props) {
-    var quoteData = JSON.parse(window.localStorage.getItem('quoteData')) || {};
+    var quoteData = JSON.parse(window.sessionStorage.getItem('quoteData')) || {};
     super(props);
     this.state = {
       show_loader: true,
@@ -84,7 +84,7 @@ class CoverPeriod extends Component {
     quoteData.selectedIndexCoverPeriod = this.state.selectedIndex;
     quoteData.coverPeriodList = this.state.coverPeriodList;
     quoteData.recommendedIndexCoverPeriod = this.state.recommendedIndex;
-    window.localStorage.setItem('quoteData', JSON.stringify(quoteData));
+    window.sessionStorage.setItem('quoteData', JSON.stringify(quoteData));
     this.navigate('lifestyle')
   }
 

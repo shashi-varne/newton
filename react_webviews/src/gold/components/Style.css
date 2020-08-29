@@ -838,27 +838,6 @@ img.gold-offer-slide-img {
   letter-spacing: 1.1px;
   text-transform: uppercase;
 }
-.gold-how-steps {
-  margin: 50px 0 40px 0;
-  border-top: 1px solid #ededed;
-  border-bottom: 1px solid #ededed;
-  padding: 20px 0 20px 0;
-}
-.gold-how-steps .top-tile {
-  display: flex;
-  justify-content: space-between;
-}
-.gold-how-steps .top-title {
-  color: #0a1c32;
-  font-size: 14px;
-  font-weight: 600;
-}
-.gold-how-steps .top-icon {
-  width: 14px;
-}
-.gold-how-steps .gold-steps-images {
-  margin: 40px 0 0 0;
-}
 .gold-bottom-secure-info {
   margin: 50px 0 0 0;
 }
@@ -875,16 +854,6 @@ img.gold-offer-slide-img {
 }
 .gold-bottom-secure-info .images img {
   margin: 0 10px 0 0;
-}
-.gold-steps-images .content {
-  color: #767e86;
-  font-size: 13px;
-  margin: 0 0 0 20px;
-}
-.gold-steps-images .tile {
-  display: flex;
-  align-items: center;
-  margin: 20px 0 20px 0;
 }
 .gold-locker-tabs {
   display: -ms-flexbox;

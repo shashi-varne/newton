@@ -22,6 +22,10 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   let redirect_url = getConfig().redirect_url;
   redirect_url = decodeURIComponent(redirect_url);
 
+  if(events && events.properties) {
+    console.log(events.properties);
+  }
+ 
   if(project === 'loan') {
     events = ''; //disabled the events for now
   }
@@ -46,7 +50,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   if (callbackData.action === 'open_inapp_tab') {
 
     if (getConfig().Web) {
-      open_browser_web(message.url, '_self')
+      open_browser_web(message.url, '_blank')
     } else {
       let url = 'https://fis.do/m/module?action_type=native';
       if (getConfig().productName === 'myway') {
@@ -328,13 +332,13 @@ export function openPdfCall(data = {}) {
     data.back_url = current_url;
   }
 
-  if (getConfig().Web) {
-    nativeCallback({
-      action: 'open_in_browser',
-      message: {
-        url: url
-      }
-    });
+  if (getConfig().isWebCode) {
+      nativeCallback({
+          action: 'open_in_browser',
+          message: {
+              url: url
+          }
+      });
   } else {
 
     nativeCallback({

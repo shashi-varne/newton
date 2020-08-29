@@ -21,7 +21,7 @@ import Dialog, {
 
 class CoverAmount extends Component {
   constructor(props) {
-    var quoteData = JSON.parse(window.localStorage.getItem('quoteData')) || {};
+    var quoteData = JSON.parse(window.sessionStorage.getItem('quoteData')) || {};
     super(props);
     this.state = {
       show_loader: true,
@@ -130,7 +130,7 @@ class CoverAmount extends Component {
     quoteData.coverAmountToShow = this.state.coverAmountToShow;
     quoteData.recommendedIndexCoverAmount = this.state.recommendedIndex;
     quoteData.inputToRender_cover_amount = this.state.inputToRender;
-    window.localStorage.setItem('quoteData', JSON.stringify(quoteData));
+    window.sessionStorage.setItem('quoteData', JSON.stringify(quoteData));
     this.navigate('cover-period')
   }
 

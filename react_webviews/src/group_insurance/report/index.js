@@ -9,6 +9,7 @@ import {
   inrFormatDecimalWithoutIcon
 } from '../../utils/validators';
 import { nativeCallback } from 'utils/native_callback';
+import { getCssMapperReport } from '../constants';
 
 class Report extends Component {
 
@@ -31,6 +32,45 @@ class Report extends Component {
         backToState: 'report'
       }
     });
+  }
+
+  getProviderObject = (policy) => {
+    let provider = policy.provider;
+    let obj = policy;
+    obj.key = provider;
+
+    if (provider === 'HDFCERGO') {
+      obj = {
+        ...obj,
+        product_name: policy.base_plan_title + ' ' + policy.product_title,
+        top_title: 'Health insurance',
+        key: 'HDFCERGO',
+        id: policy.lead_id,
+        premium: policy.total_amount
+      };
+    } else if (provider === 'BHARTIAXA') {
+      obj = {
+        ...obj,
+        // product_name: policy.product_title,
+        product_name: 'Bharti AXA General Insurances',
+        top_title: policy.product_title,
+        product_key: policy.product_name,
+        id: policy.policy_id
+      }
+    } else if (provider === 'EDELWEISS') {
+      obj = {
+        ...obj,
+        product_name: 'Term insurance (Edelweiss tokio life zindagi plus)',
+        top_title: 'Term insurance',
+        id: policy.policy_id
+      }
+    }
+
+    let data = getCssMapperReport(obj);
+    obj.status = data.status;
+    obj.cssMapper = data.cssMapper;
+
+    return obj;
   }
 
   setReportData(termData, group_insurance_policies) {
@@ -74,7 +114,7 @@ class Report extends Component {
       let termReport = {
         status: application.status,
         product_name: application.quote.insurance_title,
-        cover_amount: application.quote.cover_amount,
+        sum_assured: application.quote.sum_assured,
         premium: application.quote.quote_json.premium,
         key: 'TERM_INSURANCE',
         id: application.id
@@ -84,7 +124,7 @@ class Report extends Component {
         termReport.product_name = application.quote.quote_provider + ' ' + application.quote.quote_json.cover_plan;
       }
 
-      let data = this.statusMapper(termReport);
+      let data = getCssMapperReport(termReport);
       termReport.status = data.status;
       termReport.cssMapper = data.cssMapper;
 
@@ -94,49 +134,12 @@ class Report extends Component {
 
     let ins_policies = group_insurance_policies.ins_policies || [];
     for (var i = 0; i < ins_policies.length; i++) {
-      let policy = ins_policies[i];
-      let obj = {
-        status: policy.status,
-        product_name: policy.product_title,
-        product_key: policy.product_name,
-        cover_amount: policy.sum_assured,
-        product_coverage: policy.insured_details.product_coverage,
-        premium: policy.premium,
-        key: 'BHARTIAXA',
-        provider: 'BHARTIAXA',
-        id: policy.id
-      }
-
-      let data = this.statusMapper(obj);
-      obj.status = data.status;
-      obj.cssMapper = data.cssMapper;
-
-      reportData.push(obj);
+      let policy = this.getProviderObject(ins_policies[i]);
+      reportData.push(policy);
     }
 
-    // edelwisss
+    console.log(reportData);
 
-    let edelweiss_ins = group_insurance_policies.edelweiss_ins || [];
-    for (var j = 0; j < edelweiss_ins.length; j++) {
-      let policy = edelweiss_ins[j];
-      let obj = {
-        status: policy.status,
-        product_name: 'Term insurance (Edelweiss tokio life zindagi plus)',
-        product_key: policy.provider,
-        cover_amount: policy.sum_assured,
-        premium: policy.premium,
-        key: policy.provider,
-        provider: policy.provider,
-        id: policy.policy_id,
-        transaction_id: policy.transaction_id,
-      }
-
-      let data = this.statusMapper(obj);
-      obj.status = data.status;
-      obj.cssMapper = data.cssMapper;
-
-      reportData.push(obj);
-    }
 
     this.setState({
       reportData: reportData,
@@ -172,6 +175,7 @@ class Report extends Component {
       }
 
     } catch (err) {
+      console.log(err)
       this.setState({
         show_loader: false
       });
@@ -192,10 +196,13 @@ class Report extends Component {
   redirectCards(policy) {
     this.sendEvents('next', policy.key);
     let path = '';
-    if (policy.key === 'TERM_INSURANCE') {
+    let key = policy.key;
+    if (key === 'TERM_INSURANCE') {
       if (this.state.termRedirectionPath) {
         path = this.state.termRedirectionPath;
       }
+    } else if (key === 'HDFCERGO') {
+      path = `/group-insurance/group-health/${key}/reportdetails/${policy.id}`;
     } else {
       path = '/group-insurance/common/reportdetails/' + policy.id;
     }
@@ -203,82 +210,58 @@ class Report extends Component {
     this.navigate(path, policy.provider);
   }
 
-  statusMapper(policy) {
-    let cssMapper = {
-      'init': {
-        color: 'yellow',
-        disc: 'Policy Pending'
-      },
-      'policy_issued': {
-        color: 'green',
-        disc: 'Policy Issued'
-      },
-      'complete': {
-        color: 'green',
-        disc: 'PAYMENT DONE'
-      },
-      'policy_expired': {
-        color: 'red',
-        disc: 'Policy Expired'
-      },
-      'rejected': {
-        color: 'red',
-        disc: 'Policy Rejected'
-      },
-      'cancelled': {
-        color: 'red',
-        disc: 'Policy Cancelled'
-      }
-    }
-
-
-    let obj = {}
-    if (policy.key === 'TERM_INSURANCE') {
-      if (policy.status === 'failed') {
-        obj.status = 'rejected';
-      } else if (policy.status === 'success') {
-        obj.status = 'policy_issued';
-      } else {
-        obj.status = 'init';
-      }
-    } else {
-      obj.status = policy.status;
-    }
-
-    obj.cssMapper = cssMapper[obj.status] || cssMapper['init'];
-
-    return obj;
-  }
-
   renderReportCards(props, index) {
     return (
-      <div onClick={() => this.redirectCards(props)} key={index} style={{ cursor: 'pointer' }} className="card">
+      <div className="group-insurance-report card"
+        onClick={() => this.redirectCards(props)} key={index} style={{ cursor: 'pointer' }}>
+
+        <div className="top-title">{props.top_title}</div>
         <div className={`report-color-state ${(props.cssMapper.color)}`}>
           <div className="circle"></div>
           <div className="report-color-state-title">{(props.cssMapper.disc)}</div>
         </div>
-        <div className="report-ins-name">{props.product_name}</div>
-        {props.product_key !== 'EDELWEISS' &&
-          <div className="report-cover">
-            <div className="report-cover-amount"><span>Cover amount:</span> ₹{inrFormatDecimalWithoutIcon(props.cover_amount)}
-              {props.product_key === 'HOSPICASH' && <span style={{ fontWeight: 400 }}>/day</span>}
-            </div>
-           {props.product_key !== 'CORONA' && <div className="report-cover-amount"><span>Premium:</span> ₹{inrFormatDecimalWithoutIcon(props.premium)}
-              {props.key !== 'TERM_INSURANCE' &&
-              <span>/yr</span>
-              }
-            </div>}
-            {props.product_key === 'CORONA' &&
-              <div className="report-cover-amount"><span>Cover Peroid:</span> {props.product_coverage} year</div>
+
+        <div className="flex">
+          <div>
+            <img style={{ width: 50 }} src={props.logo} alt="" />
+          </div>
+
+          <div style={{ margin: '0 0 0 7px' }}>
+            <div className="report-ins-name">{props.product_name}</div>
+            {props.provider !== 'EDELWEISS' && props.provider !== 'HDFCERGO' &&
+              <div className="report-cover">
+                <div className="report-cover-amount"><span>Cover amount:</span> ₹{inrFormatDecimalWithoutIcon(props.sum_assured)}
+                  {props.product_key === 'HOSPICASH' && <span style={{ fontWeight: 400 }}>/day</span>}
+                </div>
+                {props.product_key !== 'CORONA' && <div className="report-cover-amount"><span>Premium:</span> ₹{inrFormatDecimalWithoutIcon(props.premium)}
+                  {props.key !== 'TERM_INSURANCE' &&
+                    ' annually'
+                  }
+                </div>}
+                {props.product_key === 'CORONA' &&
+                  <div className="report-cover-amount"><span>Cover Peroid:</span> {props.tenure} year</div>
+                }
+              </div>
+            }
+            {props.provider === 'EDELWEISS' &&
+              <div className="report-cover">
+                <div className="report-cover-amount"><span>Transaction ID:</span> {props.transaction_id}
+                </div>
+              </div>
+            }
+
+            {props.provider === 'HDFCERGO' &&
+              <div className="report-cover">
+                <div className="report-cover-amount"><span>Cover amount:</span>
+                    ₹{inrFormatDecimalWithoutIcon(props.sum_assured)}
+                </div>
+                <div className="report-cover-amount"><span>Premium:
+                    </span> ₹{inrFormatDecimalWithoutIcon(props.premium)} for {props.tenure} year
+                  </div>
+              </div>
             }
           </div>
-        }
-        {props.product_key === 'EDELWEISS' &&
-          <div className="report-cover">
-            <div className="report-cover-amount"><span>Transaction ID:</span> {props.transaction_id}
-            </div>
-          </div>
-        }
+        </div>
       </div>
     )
   }
@@ -311,21 +294,8 @@ class Report extends Component {
         var newReportData = [];
 
         for (var i = 0; i < policyData.group_insurance.ins_policies.length; i++) {
-          let policy = policyData.group_insurance.ins_policies[i];
-          let obj = {
-            status: policy.status,
-            product_name: policy.product_title,
-            product_key: policy.product_name,
-            cover_amount: policy.sum_assured,
-            premium: policy.premium,
-            key: 'BHARTIAXA',
-            id: policy.id
-          }
-
-          let data = this.statusMapper(obj);
-          obj.status = data.status;
-          obj.cssMapper = data.cssMapper;
-          newReportData.push(obj);
+          let policy = this.getProviderObject(policyData.group_insurance.ins_policies[i]);
+          newReportData.push(policy);
         }
 
         this.setState((prevState) => ({
@@ -377,7 +347,6 @@ class Report extends Component {
       if (this.state.nextPage) {
         this.loadMore();
       }
-
     }
   };
 
