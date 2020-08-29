@@ -87,7 +87,7 @@ class eMandateOtpClass extends Component {
       })
       if (res.pfwresponse.status_code === 200) {
 
-        window.localStorage.setItem('session_less_enach', true);
+        window.sessionStorage.setItem('session_less_enach', true);
         let result = res.pfwresponse.result;
         if (result.message === 'success') {
           this.navigate('/e-mandate/select-bank', result.urlsafe);

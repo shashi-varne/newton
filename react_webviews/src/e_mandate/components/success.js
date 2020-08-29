@@ -14,7 +14,7 @@ class MandateSuccess extends Component {
       show_loader: false,
       params: qs.parse(props.history.location.search.slice(1)),
       sip_resumed: getConfig().productName !== 'fisdom' ? sip_resumed_myway : sip_resumed_fisdom,
-      session_less_enach: window.localStorage.getItem('session_less_enach') || ''
+      session_less_enach: window.sessionStorage.getItem('session_less_enach') || ''
     }
   }
 

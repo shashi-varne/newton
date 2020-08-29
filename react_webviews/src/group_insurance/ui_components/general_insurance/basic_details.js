@@ -55,7 +55,7 @@ class BasicDetailsForm extends Component {
       inputDisabled.marital_status = true;
     }
 
-    let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
+    let lead_id = window.sessionStorage.getItem('group_insurance_lead_id_selected');
     let { params } = this.props.parent.props.location || {};
     this.setState({
       premium_details: params ? params.premium_details : {},
@@ -523,7 +523,7 @@ class BasicDetailsForm extends Component {
         })
         if (res2.pfwresponse.status_code === 200) {
           var lead_id_updated = this.state.lead_id || res2.pfwresponse.result.lead.id;
-          window.localStorage.setItem('group_insurance_lead_id_selected', lead_id_updated || '');
+          window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id_updated || '');
           this.navigate('summary')
         } else {
           if ('error' in res2.pfwresponse.result) {

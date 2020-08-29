@@ -557,7 +557,7 @@ export function getUniversalTransStatus(order) {
     let statusToCheck = order.final_status;
 
     // let pendingStatus = ['init', 'payment_pending', 'payment_failed', 'payment_success'];
-    let failedStatus = ['failed', 'delivery_initiated', 'in_transit'];
+    let failedStatus = ['failed'];
     let successStatus = ['success', 'processed'];
 
     let uniStatus = 'pending';
