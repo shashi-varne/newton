@@ -70,27 +70,23 @@ class Landing extends Component {
     let application_info = lead.application_info || {};
     let vendor_info = lead.vendor_info || {};
 
+    let rejection_reason = application_info.rejection_reason || '';
+
+    if (rejection_reason === "Employment Status Not Qualified For Personal Loan")
+      this.setState({ reason: 'occupation'});
+    else if (rejection_reason === "Aadhar City Not Supported By Partner DMI")
+      this.setState({ reason: 'location'});
+
     if(vendor_info.dmi_loan_status === 'complete') {
       this.navigate('report');
       return;
     }
 
-    console.log(application_info)////////////////////////////////////////////////////
     let process_done = false;
     let isResume = true;
     let top_cta_title = 'RESUME';
 
-    if (getConfig().Web) {
-      if (!application_info.latitude) {
-        this.setState({
-          location_needed: true
-        })
-
-        isResume = false;
-        top_cta_title = 'APPLY NOW';
-      }
-
-    } else if(!application_info.latitude || !application_info.network_service_provider) {
+    if(!application_info.latitude || !application_info.network_service_provider) {
       this.setState({
         location_needed: true
       })
@@ -203,10 +199,8 @@ class Landing extends Component {
   getNextState = () => {
     let dmi_loan_status = this.state.vendor_info.dmi_loan_status || '';
     let application_status = this.state.application_info.application_status || '';
-    let rejection_reason = this.state.application_info.rejection_reason || ''
 
     let state = '';
-    let reason = '';
     if(this.state.process_done) {
       state = 'report-details';
     } else {
@@ -214,35 +208,34 @@ class Landing extends Component {
         state = 'permissions';
       } else if(dmi_loan_status === 'application_rejected') {
         state = 'instant-kyc-status';
-      } else if(application_status === 'internally_rejected' && rejection_reason === "Employment Status Not Qualified For Personal Loan") {
+      } else if(application_status === 'internally_rejected') {
         state = 'instant-kyc-status';
-        reason = 'occupation';
-      } else if(application_status === 'internally_rejected' && rejection_reason === "Aadhar City Not Supported By Partner DMI") {
-        state = 'instant-kyc-status';
-        reason = 'location';
-      } else {
+      }else {
         state = 'journey';
       }
     }
 
-    return [state, reason];
+    return state;
   }
 
   handleClickTopCard = () => {
 
     let state =  this.getNextState();
+    let rejection_reason = this.state.reason || ''
 
-    if(state[0] === 'instant-kyc-status' && state[1] === 'occupation') {
+    if(state === 'instant-kyc-status' && rejection_reason === "occupation") {
       let searchParams = getConfig().searchParams + '&reason=occupation&status=loan_not_eligible';
-      this.navigate(state[0], {searchParams: searchParams});
-    } else if (state[0] === 'instant-kyc-status' && state[1] === 'location') {
+      this.navigate(state, {searchParams: searchParams});
+
+    } else if (state === 'instant-kyc-status' && rejection_reason === "location") {
       let searchParams = getConfig().searchParams + '&reason=location&status=loan_not_eligible';
-      this.navigate(state[0], {searchParams: searchParams});
-    } else if (state[0] === 'instant-kyc-status' && !state[1]) {
+      this.navigate(state, {searchParams: searchParams});
+
+    } else if (state === 'instant-kyc-status' && !rejection_reason) {
       let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
-      this.navigate(state[0], {searchParams: searchParams});
+      this.navigate(state, {searchParams: searchParams});
     } else {
-      this.navigate(state[0]);
+      this.navigate(state);
     }
     
   }
@@ -299,7 +292,8 @@ class Landing extends Component {
         <div className="action" onClick={ () => this.navigate('calculator', {
           params: {
             next_state: this.getNextState(),
-            cta_title: this.state.top_cta_title
+            cta_title: this.state.top_cta_title,
+            rejection_reason: this.state.reason
           }
         })}>
           <div className="left">

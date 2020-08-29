@@ -263,13 +263,19 @@ class FormSummary extends Component {
 
                 var resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200 && !resultData.error) {
-                    console.log(resultData)
-                    if (resultData.status === 'Application Rejected') {
-                        let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
-                        this.navigate('instant-kyc-status', { searchParams: searchParams });                     
+
+                    if (resultData.status === 'Application Rejected' && resultData.rejection_reason === "Employment Status Not Qualified For Personal Loan") {
+                        let searchParams = getConfig().searchParams + '&reason=occupation&&status=loan_not_eligible';
+                        this.navigate('instant-kyc-status', { searchParams: searchParams });
+
+                    } else if (resultData.status === 'Application Rejected' && resultData.rejection_reason === "Aadhar City Not Supported By Partner DMI") {
+                        let searchParams = getConfig().searchParams + '&reason=location&&status=loan_not_eligible';
+                        this.navigate('instant-kyc-status', { searchParams: searchParams });
+
                     } else {
                         this.openCreateProfile();
                     }
+
                 } else {
                     this.setState({
                         show_loader: false

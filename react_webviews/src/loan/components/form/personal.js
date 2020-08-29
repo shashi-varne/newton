@@ -68,7 +68,6 @@ class PersonalDetails extends Component {
         let lead = this.state.lead || {};
 
         let personal_info = lead.personal_info || {};
-        console.log(personal_info);
         let form_data = {
             pan_no: personal_info.pan_no || '',
             first_name: personal_info.first_name || '',

@@ -27,7 +27,6 @@ class LoanEligible extends Component {
     let application_info = lead.application_info || {};
     let vendor_info = lead.vendor_info || {};
 
-    console.log(vendor_info);
     this.setState({
       vendor_info: vendor_info,
       application_info: application_info

@@ -171,13 +171,14 @@ class AddressDetails extends Component {
 
         if (pincode.length === 6) {
             const res = await Api.get('/relay/api/loan/pincode/get/' + pincode);
+            let resultData = res.pfwresponse.result[0];
 
             let { city, state, country } = form_data;
             let pincode_error = '';
             if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
-                city = res.pfwresponse.result[0].dmi_city_name || res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name;
-                state = res.pfwresponse.result[0].state_name;
-                country = res.pfwresponse.result[0].country_name;
+                city = resultData.dmi_city_name || resultData.district_name || resultData.division_name || resultData.taluk;
+                state = resultData.state_name;
+                country = resultData.country_name;
             } else {
                 city = '';
                 state = '';
