@@ -67,17 +67,13 @@ class Calculator extends Component {
       let rejection_reason = this.state.rejection_reason;
 
       if(state === 'instant-kyc-status') {
-
-        if(rejection_reason === 'occupation') {
-          let searchParams = getConfig().searchParams + '&reason=occupation&status=loan_not_eligible';
-          this.navigate(state, {searchParams: searchParams});
-        } else if (rejection_reason === 'location') {
-          let searchParams = getConfig().searchParams + '&reason=location&status=loan_not_eligible';
-          this.navigate(state, {searchParams: searchParams});
-        } else {
-          let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
-          this.navigate(state, {searchParams: searchParams});
-        }
+        let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
+        this.navigate(state, {
+          searchParams: searchParams,
+          params: {
+            rejection_reason: rejection_reason
+          }
+        });
 
       } else {
         this.navigate(state);

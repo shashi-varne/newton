@@ -221,19 +221,17 @@ class Landing extends Component {
   handleClickTopCard = () => {
 
     let state =  this.getNextState();
-    let rejection_reason = this.state.reason || ''
+    let rejection_reason = this.state.reason || '';
 
-    if(state === 'instant-kyc-status' && rejection_reason === "occupation") {
-      let searchParams = getConfig().searchParams + '&reason=occupation&status=loan_not_eligible';
-      this.navigate(state, {searchParams: searchParams});
-
-    } else if (state === 'instant-kyc-status' && rejection_reason === "location") {
-      let searchParams = getConfig().searchParams + '&reason=location&status=loan_not_eligible';
-      this.navigate(state, {searchParams: searchParams});
-
-    } else if (state === 'instant-kyc-status' && !rejection_reason) {
+    if (state === 'instant-kyc-status') {
       let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
-      this.navigate(state, {searchParams: searchParams});
+      this.navigate(state, {
+        searchParams: searchParams,
+        params: {
+          rejection_reason: rejection_reason
+        }
+      });
+    
     } else {
       this.navigate(state);
     }
