@@ -62,15 +62,6 @@ class Permissions extends Component {
 
       let body;
 
-      // if (getConfig().Web) {
-
-      //   body = {
-      //     latitude: data.location.lat || '',
-      //     longitude: data.location.lng || ''
-      //   };
-
-      // } else {
-
         body = {
           latitude: data.location.lat || '',
           longitude: data.location.lng || '',
@@ -78,8 +69,6 @@ class Permissions extends Component {
           network_service_provider: data.nsp || ''
         };
 
-      // }
-      
       let haveAll = true;
       for (var key in body) {
         if (!body[key]) {
