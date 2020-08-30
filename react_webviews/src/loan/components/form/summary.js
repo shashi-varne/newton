@@ -260,17 +260,26 @@ class FormSummary extends Component {
             try {
                 let res = await Api.get(`/relay/api/loan/submit/application/${this.state.application_id}`);
 
-
                 var resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200 && !resultData.error) {
 
                     if (resultData.status === 'Application Rejected' && resultData.rejection_reason === "Employment Status Not Qualified For Personal Loan") {
-                        let searchParams = getConfig().searchParams + '&reason=occupation&&status=loan_not_eligible';
-                        this.navigate('instant-kyc-status', { searchParams: searchParams });
+                        let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
+                        this.navigate('instant-kyc-status', {
+                            searchParams: searchParams,
+                            params: {
+                                rejection_reason: 'occupation'
+                            }
+                        });
 
                     } else if (resultData.status === 'Application Rejected' && resultData.rejection_reason === "Aadhar City Not Supported By Partner DMI") {
-                        let searchParams = getConfig().searchParams + '&reason=location&&status=loan_not_eligible';
-                        this.navigate('instant-kyc-status', { searchParams: searchParams });
+                        let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
+                        this.navigate('instant-kyc-status', {
+                            searchParams: searchParams,
+                            params: {
+                                rejection_reason: 'location'
+                            }
+                        });
 
                     } else {
                         this.openCreateProfile();

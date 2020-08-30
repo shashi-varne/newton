@@ -85,7 +85,7 @@ class KycStatus extends Component {
   componentWillMount() {
     this.initialize();
     
-    let { status, okyc_id,flow, reason } = this.state.params;
+    let { status, okyc_id,flow } = this.state.params;
     if(flow === 'kyc') {
       this.setState({
         kyc_checking: true
@@ -96,10 +96,15 @@ class KycStatus extends Component {
       status = 'cancelled'
     }
 
+    let { params } = this.props.location;
+    if (!params) {
+      params = {};
+    }
+
 
     this.setState({
       status: status,
-      reason: reason,
+      rejection_reason: params.rejection_reason,
       okyc_id: okyc_id || this.state.okyc_id,
       commonMapper: commonMapper[status],
       flow:flow
@@ -306,21 +311,21 @@ class KycStatus extends Component {
                   At the outset, we thank you for expressing interest in availing a loan.
                 </p>
 
-                {this.state.reason === 'location' && 
+                {this.state.rejection_reason === 'location' && 
                   <p className="top-content">
                     We regret to inform you that <b>we cannot process your application further at this stage</b>,
                     as Aadhar City is not supported by partner DMI.
                   </p>
                 }
 
-                {this.state.reason === 'occupation' && 
+                {this.state.rejection_reason === 'occupation' && 
                   <p className="top-content">
                     We regret to inform you that <b>we cannot process your application further at this stage</b>,
                     as Employment status is not qualified for personal loan.
                   </p>
                 }
 
-                {!this.state.reason &&
+                {!this.state.rejection_reason &&
                   <p className="top-content">
                     We regret to inform you that <b>we cannot process your application further at this stage</b>,
                     as it does not meet our partner’s policy criteria.
