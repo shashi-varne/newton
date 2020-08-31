@@ -71,12 +71,10 @@ class Landing extends Component {
     let vendor_info = lead.vendor_info || {};
 
     let rejection_reason = application_info.rejection_reason || '';
-    console.log(application_info.rejection_reason)
 
-    if (rejection_reason === "occupation")
-      this.setState({ reason: 'occupation'});
-    else if (rejection_reason === "location")
-      this.setState({ reason: 'location'});
+    this.setState({
+      reason: rejection_reason
+    });
 
     if(vendor_info.dmi_loan_status === 'complete') {
       this.navigate('report');
