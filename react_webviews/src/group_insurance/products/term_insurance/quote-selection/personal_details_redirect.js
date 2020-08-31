@@ -40,7 +40,7 @@ class PersonalDetails1 extends Component {
       params: qs.parse(props.history.location.search.slice(1)),
       type: getConfig().productName,
       loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom,
-      tnc: window.localStorage.getItem('term_ins_tnc'),
+      tnc: window.sessionStorage.getItem('term_ins_tnc'),
       checked: true
     }
   }

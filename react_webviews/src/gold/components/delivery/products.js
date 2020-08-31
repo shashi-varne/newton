@@ -154,7 +154,8 @@ class GoldDeliveryProducts extends Component {
   renderDeliveryProducts =(props, index)  =>{
     return (
       <div key={index} onClick={() => this.selectGoldProduct(index)} className="delivery-tile">
-        <img alt="Gold" className="delivery-icon" src={props.media.images[0]} width="80" />
+        {props.media.images && 
+        <img alt="Gold" className="delivery-icon" src={props.media.images[0]} width="80" />}
 
         <div className="disc">{props.description}</div>
         <div className="making-charges">Making charges</div>
@@ -214,7 +215,7 @@ class GoldDeliveryProducts extends Component {
           SHOW MORE
         </div> */}
 
-        <div className="gold-how-steps pointer" onClick={() => this.showHideSteps()}>
+        <div className="common-how-steps pointer" onClick={() => this.showHideSteps()}>
             <div className="top-tile">
               <div className="top-title">
               How to get gold coin delivered?
@@ -226,7 +227,7 @@ class GoldDeliveryProducts extends Component {
 
 
           {this.state.showSteps &&
-            <div className='gold-steps-images'>
+            <div className='common-steps-images'>
               {stepsContentMapper.map(this.renderInfoSteps)}
             </div>
           }

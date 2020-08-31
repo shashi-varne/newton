@@ -18,9 +18,9 @@ import HNI from './external_portfolio';
 import IsipBIller from './isip';
 import HelpSupport from './help_support';
 import CommonLanding from './common/components/landing';
+// import CommonRenderFaqs from './common/components/RenderFaqs';
 import Fhc from './fhc';
 import Loan from './loan';
-import CommonRenderFaqs from './common/components/RenderFaqs';
 
 class App extends Component {
   render() {
@@ -42,7 +42,7 @@ class App extends Component {
           <Route path="/loan" component={Loan} />
           <Route path="/webview/:main_module/:sub_module" component={CommonLanding} />
           <Route path="/webview/:main_module" component={CommonLanding} />
-          <Route path="/common/render-faqs" component={CommonRenderFaqs} />
+          {/* <Route path="/common/render-faqs" component={CommonRenderFaqs} /> */}
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>

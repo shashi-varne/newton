@@ -56,7 +56,7 @@ class About extends Component {
   }
   componentWillMount() {
     if(!this.state.params.referral_code) {
-      window.localStorage.setItem('session_less_enach', '');
+      window.sessionStorage.setItem('session_less_enach', '');
     }
     
     const emandate_easysip = [

@@ -18,7 +18,7 @@ class EnpsSuccess extends Component {
       params: qs.parse(props.history.location.search.slice(1)),
       sip_resumed: getConfig().productName !== 'fisdom' ? sip_resumed_myway : sip_resumed_fisdom,
       highlight_text: getConfig().productName !== 'fisdom' ? 'highlight-text-myway' : 'highlight-text',
-      session_less_enps: window.localStorage.getItem('session_less_enps') || '',
+      session_less_enps: window.sessionStorage.getItem('session_less_enps') || '',
       pc_urlsafe: getConfig().pc_urlsafe,
       orderdata: {},
       type: getConfig().productName

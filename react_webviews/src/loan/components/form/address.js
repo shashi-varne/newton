@@ -11,7 +11,9 @@ import Api from 'utils/api';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 import scrollIntoView from 'scroll-into-view-if-needed';
-
+import {
+      validateNumber
+} from 'utils/validators';
 class AddressDetails extends Component {
 
     constructor(props) {
@@ -109,29 +111,48 @@ class AddressDetails extends Component {
 
         this.sendEvents('next');
 
+        let form_data = this.state.form_data;
         let keys_to_check = ['residence_type', 'duration', 'address', 'pincode', 'p_address',
             'p_pincode'];
 
         if (this.state.checked) {
+            form_data.p_pincode_error = '';
             keys_to_check = ['residence_type', 'duration', 'address', 'pincode',];
         }
 
+        if (form_data.pincode.length !== 6 || !validateNumber(form_data.pincode) || 
+        form_data.pincode_error) {
+            form_data['pincode_error'] = 'Please enter valid pincode';
+        }
 
-        let form_data = this.state.form_data;
+        if (!this.state.checked && (form_data.p_pincode.length !== 6 || !validateNumber(form_data.p_pincode) || 
+        form_data.p_pincode_error)) {
+            form_data['p_pincode_error'] = 'Please enter valid pincode';
+        }
+
 
         this.formCheckUpdate(keys_to_check, form_data);
     }
 
 
     sendEvents(user_action) {
+        let { form_data } = this.state
         let eventObj = {
             "event_name": 'lending',
             "properties": {
                 "user_action": user_action,
-                "screen_name": 'contact details',
-                'email': this.state.form_data.email ? 'yes' : 'no',
-                'mobile_number': this.state.form_data.mobile_number ? 'yes' : 'no',
-                'from_edit': this.props.edit ? 'yes' : 'no'
+                "screen_name": 'address details',
+                "residence_type": form_data.residence_type,
+                "duration": form_data.duration,
+                "permanent_pincode": !this.state.checked ? form_data.p_pincode : form_data.pincode,
+                "permanent_address": !this.state.checked ? form_data.p_address : form_data.address,
+                "permanent_city": !this.state.checked ? form_data.p_city : form_data.city,
+                "permanent_state": !this.state.checked ? form_data.p_state : form_data.state,
+                "current_pincode": form_data.pincode,
+                "current_address": form_data.address,
+                "current_city": form_data.city,
+                "current_state": form_data.state,
+                'from_edit': this.props.edit ? 'yes' : 'no',
             }
         };
 
@@ -158,12 +179,12 @@ class AddressDetails extends Component {
         })
 
         if (pincode.length === 6) {
-            const res = await Api.get('/api/pincode/' + pincode);
+            const res = await Api.get('/relay/api/loan/pincode/get/' + pincode);
 
             let { city, state, country } = form_data;
             let pincode_error = '';
             if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
-                city = res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name;
+                city = res.pfwresponse.result[0].dmi_city_name || res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name;
                 state = res.pfwresponse.result[0].state_name;
                 country = res.pfwresponse.result[0].country_name;
             } else {

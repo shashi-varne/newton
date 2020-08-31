@@ -188,13 +188,46 @@ class KycStatus extends Component {
   }
 
   sendEvents(user_action) {
-    let eventObj = {
-      "event_name": 'lending',
-      "properties": {
-        "user_action": user_action,
-        "screen_name": 'introduction'
+    let stage;
+    if (this.state.status === 'not_eligible')
+      stage = 'dmi fail'
+    else if (this.state.status === 'failed')
+      stage = 'third party fail'
+    else if (this.state.status === 'pending')
+      stage = 'no response'
+    else
+      stage = 'waiting'
+
+    let eventObj;
+    if (this.state.status === 'loan_not_eligible') {
+      eventObj = {
+        "event_name": 'lending',
+        "properties": {
+          "user_action": user_action,
+          "screen_name": 'loan-eligibility',
+          "stage": 'not eligible'
+        }
+      };
+    } else if (this.state.status === 'sorry') {
+      eventObj = {
+        "event_name": 'lending',
+        "properties": {
+          "user_action": user_action,
+          "screen_name": 'Sorry',
+          "stage": 'creating profile failure'
+        }
+      }
+    } else {
+      eventObj = {
+        "event_name": 'lending',
+        "properties": {
+          "user_action": user_action,
+          "screen_name": 'kyc-response',
+          "stage": stage
+        }
       }
     };
+    
 
     if (user_action === 'just_set_events') {
       return eventObj;
@@ -209,6 +242,7 @@ class KycStatus extends Component {
   }
 
   goBack = () => {
+    this.sendEvents('back');
     this.navigate(this.state.commonMapper.close_state);
   }
 

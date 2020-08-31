@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './style.css';
+import './style.scss';
 
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';

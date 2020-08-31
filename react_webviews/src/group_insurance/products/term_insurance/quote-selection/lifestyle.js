@@ -11,7 +11,7 @@ import DropdownInPage from '../../../../common/ui/DropdownInPage';
 
 class LifeStyle extends Component {
   constructor(props) {
-    var quoteData = JSON.parse(window.localStorage.getItem('quoteData')) || {};
+    var quoteData = JSON.parse(window.sessionStorage.getItem('quoteData')) || {};
     super(props);
     this.state = {
       params: qs.parse(props.history.location.search.slice(1)),
@@ -40,7 +40,7 @@ class LifeStyle extends Component {
     quoteData.tobacco_choice = this.state.tobacco_choice === 'Yes' ? 'Y' : 'N';
     quoteData.selectedIndexSmoke = this.state.selectedIndex;
     quoteData.smokeList = this.state.smokeList;
-    window.localStorage.setItem('quoteData', JSON.stringify(quoteData));
+    window.sessionStorage.setItem('quoteData', JSON.stringify(quoteData));
     this.navigate('lifestyle')
     this.navigate('quote')
   }

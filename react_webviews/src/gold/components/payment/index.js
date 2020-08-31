@@ -229,7 +229,7 @@ class Payment extends Component {
   }
 
   trackDelivery() {
-    window.localStorage.setItem('deliveryTransaction', 'delivery');
+    window.sessionStorage.setItem('deliveryTransaction', 'delivery');
     this.navigate('/gold/gold-transactions')
     this.props.history.push({
       pathname: '/gold/gold-transactions',
@@ -538,8 +538,14 @@ class Payment extends Component {
 
                         {this.state.paymentPending && 
                             <p className="top-content"> 
-                            If confirmed within 30 minutes we will place gold 
-                            purchase order (at live price) else it will be refunded in 3-5 business days.  
+                           If confirmed within 30 minutes we will place delivery 
+                           order of gold coin else amount will be refunded in 3-5 business days.
+                            </p>
+                        }
+
+                        {this.state.paymentFailed && 
+                            <p className="top-content"> 
+                           If amount has been debited it will be refunded back to you in 3-5 business days.
                             </p>
                         }
                       

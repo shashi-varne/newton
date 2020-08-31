@@ -24,8 +24,8 @@ class BuyOrder extends Component {
 
   componentWillMount() {
     nativeCallback({ action: 'take_control_reset' });
-    let buyData = JSON.parse(window.localStorage.getItem('buyData'));
-    let timeAvailable = window.localStorage.getItem('timeAvailable');
+    let buyData = JSON.parse(window.sessionStorage.getItem('buyData'));
+    let timeAvailable = window.sessionStorage.getItem('timeAvailable');
     // let timeAvailable = 3456;
     this.setState({
       buyData: buyData,
@@ -135,7 +135,7 @@ class BuyOrder extends Component {
       minutes: minutes,
       seconds: seconds
     })
-    window.localStorage.setItem('timeAvailable', timeAvailable);
+    window.sessionStorage.setItem('timeAvailable', timeAvailable);
   };
 
   render() {

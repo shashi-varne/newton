@@ -42,7 +42,7 @@ class AccidentPlanDetails extends Component {
 
   componentWillMount() {
 
-    let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
+    let lead_id = window.sessionStorage.getItem('group_insurance_lead_id_selected');
     let { params } = this.props.location;
     this.setState({
       premium_details: params ? params.premium_details : {},

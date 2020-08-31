@@ -94,7 +94,7 @@ class ReportDetails extends Component {
       "event_name": 'lending',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'introduction'
+        "screen_name": 'loan details'
       }
     };
 
@@ -144,7 +144,7 @@ class ReportDetails extends Component {
 
             <div className="member-tile">
               <div className="mt-left">
-                <img src={require(`assets/${this.state.productName}/ic_how_to_claim.svg`)} alt="" />
+                <img src={require(`assets/${this.state.productName}/ic_how_to_claim2.svg`)} alt="" />
               </div>
               <div className="mt-right">
                 <div className="mtr-top">

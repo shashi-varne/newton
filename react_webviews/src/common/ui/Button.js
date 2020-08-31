@@ -4,7 +4,7 @@ import { withStyles } from 'material-ui/styles';
 import arrow from 'assets/next_arrow.png';
 import download from 'assets/download.svg';
 import SVG from 'react-inlinesvg';
-import './style.css';
+import './style.scss';
 import { getConfig } from 'utils/functions';
 
 class CustomButton extends Component {

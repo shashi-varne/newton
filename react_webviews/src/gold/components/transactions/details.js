@@ -295,6 +295,15 @@ class GoldTransactionDetail extends Component {
     }
   }
 
+  openInBrowser = (url) => {
+    nativeCallback({
+      action: 'open_in_browser',
+      message: {
+        url: url
+      }
+    });
+  }
+
 
   getPurchaseTitle = () => {
     let title = 'Gold purchase amount';
@@ -372,7 +381,7 @@ class GoldTransactionDetail extends Component {
               src={require(`assets/${this.state.productName}/track_order.svg`)} alt="Gold" />
             <div className="block2">
               <div className="title">
-                Tracking URL
+                Tracking details
                 </div>
               {this.state.order.courier_tracking_id &&
                 <div className="subtitle">
@@ -382,12 +391,25 @@ class GoldTransactionDetail extends Component {
                     margin: '3px 0 0 0', alignItems: 'center'
                   }}>
                     <span>Tracking number : {this.state.order.courier_tracking_id || ' -'}</span>
+
+                    {this.state.order.tracking_link &&
+                      <span
+                        onClick={() => this.openInBrowser(this.state.order.tracking_link)}
+                        style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase',
+                        color: getConfig().primary,marginLeft:10, cursor: 'pointer',
+                        textDecoration:'underline' }}>Track
+                      </span>
+                    }
+
                     {this.state.order.courier_tracking_id &&
                       <span
                         onClick={() => this.copyItem(this.state.order.courier_tracking_id)}
-                        style={{ fontSize: 10, fontWeight: 700, color: getConfig().secondary }}>{this.state.copyText}
+                        style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase',
+                        color: getConfig().secondary,marginLeft:10, cursor: 'pointer' }}>{this.state.copyText}
                       </span>
                     }
+
+                    
                   </div>
                 </div>
               }

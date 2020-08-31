@@ -36,18 +36,18 @@ class QuestionScreen1 extends Component {
         let questionnaire = res.pfwresponse.result.questionnaire;
         let questionnaireLength = questionnaire.length;
         let questionnaireResponse;
-        if (!window.localStorage.getItem('questionnaireResponse')) {
+        if (!window.sessionStorage.getItem('questionnaireResponse')) {
           questionnaireResponse = [];
           for (var i = 0; i < questionnaireLength; i++) {
             let obj = { "question_id": questionnaire[i].question_id, "choice_id": '' };
             questionnaireResponse.push(obj);
           }
-          window.localStorage.setItem('questionnaireResponse', JSON.stringify(questionnaireResponse));
+          window.sessionStorage.setItem('questionnaireResponse', JSON.stringify(questionnaireResponse));
         } else {
-          questionnaireResponse = JSON.parse(window.localStorage.getItem('questionnaireResponse'));
+          questionnaireResponse = JSON.parse(window.sessionStorage.getItem('questionnaireResponse'));
         }
 
-        window.localStorage.setItem('questionnaire', JSON.stringify(questionnaire));
+        window.sessionStorage.setItem('questionnaire', JSON.stringify(questionnaire));
         let totalScreen = (questionnaireLength / 2).toFixed(0);
         let currentScreen = 1;
 
@@ -137,10 +137,10 @@ class QuestionScreen1 extends Component {
       this.sendEventsForInputsNextClick('next');
     } else {
       this.sendEventsForInputsNextClick('next');
-      let questionnaireResponse = JSON.parse(window.localStorage.getItem('questionnaireResponse'));
+      let questionnaireResponse = JSON.parse(window.sessionStorage.getItem('questionnaireResponse'));
       questionnaireResponse[this.state.indexMain].choice_id = this.state.question1;
       questionnaireResponse[this.state.indexMain + 1].choice_id = this.state.question2;
-      window.localStorage.setItem('questionnaireResponse', JSON.stringify(questionnaireResponse));
+      window.sessionStorage.setItem('questionnaireResponse', JSON.stringify(questionnaireResponse));
       this.navigate('question2');
     }
   }

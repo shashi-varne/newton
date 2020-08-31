@@ -38,7 +38,23 @@ const commonMapper = {
     'close_state': '/loan/home',
     'noFooter': true,
     'hide_contact': true
-  }
+  },
+  'exit': {
+    'top_icon': 'error_illustration',
+    'top_title': 'E-mandate failed',
+    'mid_title': '',
+    'button_title': 'RETRY',
+    'cta_state': '/loan/home',
+    'close_state': '/loan/home'
+  },
+  'discrepancy': {
+    'top_icon': 'error_illustration',
+    'top_title': 'E-mandate failed',
+    'mid_title': '',
+    'button_title': 'RETRY',
+    'cta_state': '/loan/home',
+    'close_state': '/loan/home'
+  },
 }
 
 
@@ -111,7 +127,8 @@ class MandateStatus extends Component {
       "event_name": 'lending',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'introduction'
+        "screen_name": 'e mandate response',
+        "status": this.state.status === 'failed' ? 'third party fail' : 'dmi pending'
       }
     };
 
@@ -134,6 +151,7 @@ class MandateStatus extends Component {
   }
 
   goBack = () => {
+    this.sendEvents('back');
     this.navigate(this.state.commonMapper.close_state);
   }
 

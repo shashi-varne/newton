@@ -27,7 +27,7 @@ class QuestionScreen5 extends Component {
   }
 
   async componentDidMount() {
-    let questionnaire = JSON.parse(window.localStorage.getItem('questionnaire'));
+    let questionnaire = JSON.parse(window.sessionStorage.getItem('questionnaire'));
     let question1Options = [], question2Options = [];
     question1Options = questionnaire[this.state.indexMain].choices;
 
@@ -35,7 +35,7 @@ class QuestionScreen5 extends Component {
       question2Options = questionnaire[this.state.indexMain + 1].choices;
     }
 
-    let questionnaireResponse = JSON.parse(window.localStorage.getItem('questionnaireResponse'));
+    let questionnaireResponse = JSON.parse(window.sessionStorage.getItem('questionnaireResponse'));
     this.setState({
       show_loader: false,
       questionnaire: questionnaire,
@@ -100,10 +100,10 @@ class QuestionScreen5 extends Component {
     } else {
       this.sendEventsForInputsNextClick();
 
-      let questionnaireResponse = JSON.parse(window.localStorage.getItem('questionnaireResponse'));
+      let questionnaireResponse = JSON.parse(window.sessionStorage.getItem('questionnaireResponse'));
       questionnaireResponse[this.state.indexMain].choice_id = this.state.question1;
       questionnaireResponse[this.state.indexMain + 1].choice_id = this.state.question2;
-      window.localStorage.setItem('questionnaireResponse', JSON.stringify(questionnaireResponse));
+      window.sessionStorage.setItem('questionnaireResponse', JSON.stringify(questionnaireResponse));
 
       let options = [];
       for (var i = 0; i < questionnaireResponse.length; i++) {
@@ -120,7 +120,7 @@ class QuestionScreen5 extends Component {
         const res = await Api.post('/api/risk/profile/user/questionnaire', options);
         if (res.pfwresponse.result.message === 'success') {
           let score = res.pfwresponse.result.score;
-          window.localStorage.setItem('score', JSON.stringify(score));
+          window.sessionStorage.setItem('score', JSON.stringify(score));
           this.navigate('result')
         }
 

@@ -20,7 +20,7 @@ class PaymentFailedClass extends Component {
     this.setState({
       show_loader: true
     })
-    let pgLink = window.localStorage.getItem('group_insurance_payment_url');
+    let pgLink = window.sessionStorage.getItem('group_insurance_payment_url');
     if (pgLink) {
       this.sendEvents('next');
       window.location.href = pgLink;

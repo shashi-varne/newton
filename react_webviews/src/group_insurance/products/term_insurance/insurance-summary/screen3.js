@@ -240,16 +240,16 @@ class Journey extends Component {
     try {
       let application, required_fields;
 
-      let cameFromHome = window.localStorage.getItem('cameFromHome');
+      let cameFromHome = window.sessionStorage.getItem('cameFromHome');
 
       let homeApplication = []
-      if (window.localStorage.getItem('homeApplication')) {
-        homeApplication = JSON.parse(window.localStorage.getItem('homeApplication')) || [];
+      if (window.sessionStorage.getItem('homeApplication')) {
+        homeApplication = JSON.parse(window.sessionStorage.getItem('homeApplication')) || [];
       }
 
       if (cameFromHome && homeApplication.length !== 0) {
-        window.localStorage.setItem('cameFromHome', '');
-        window.localStorage.setItem('homeApplication', '')
+        window.sessionStorage.setItem('cameFromHome', '');
+        window.sessionStorage.setItem('homeApplication', '')
         application = homeApplication.application;
         required_fields = homeApplication.required_fields;
       } else {
@@ -795,7 +795,7 @@ class Journey extends Component {
       insurance_app_id: this.state.insurance_id
     });
     if (res.pfwresponse.status_code === 200) {
-      window.localStorage.setItem('excludedd_providers', '');
+      window.sessionStorage.setItem('excludedd_providers', '');
       this.navigate('intro');
     } else {
       this.setState({ openModal: false, openModalMessage: '', openResponseDialog: true, apiError: res.pfwresponse.result.error });

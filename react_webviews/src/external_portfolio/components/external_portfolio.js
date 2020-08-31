@@ -5,7 +5,7 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import { Button } from 'material-ui';
 import TopHoldings from '../mini-components/TopHoldings';
-import { navigate, setLoader } from '../common/commonFunctions';
+import { navigate, setLoader, setPlatformAndUser } from '../common/commonFunctions';
 import { Doughnut } from 'react-chartjs-2';
 import toast from '../../common/ui/Toast';
 import { fetchExternalPortfolio, fetchAllPANs } from '../common/ApiCalls';
@@ -50,9 +50,11 @@ export default class ExternalPortfolio extends Component {
       show_loader: false,
       selectedPan: '',
       selectedPanRank: '',
+      seeMoreClicked: false,
     };
     this.navigate = navigate.bind(this);
     this.setLoader = setLoader.bind(this);
+    setPlatformAndUser();
   }
 
   sendEvents(user_action) {
@@ -62,6 +64,7 @@ export default class ExternalPortfolio extends Component {
         "user_action": user_action,
         "screen_name": 'external portfolio',
         see_all_clicked: this.state.seeMoreClicked,
+        performed_by: storageService().get('hni-platform') === 'rmapp' ? 'RM' : 'user',
       }
     };
     
@@ -159,7 +162,6 @@ export default class ExternalPortfolio extends Component {
       total_investment,
       total_current_value,
       one_day_change,
-      one_day_change_perc,
       portfolio_xirr: xirr,
       asset_allocation,
       top_holdings
@@ -227,7 +229,7 @@ export default class ExternalPortfolio extends Component {
                 <div
                   className="pf-detail-value"
                   style={{ color: xirr < 0 ? '#ba3366' : 'var(--secondary)' }}>
-                  {xirr.toFixed(1)}%
+                  {xirr ? `${xirr.toFixed(1)}%` : 'N/A'}
                 </div>
               </div>
             </div>
@@ -251,9 +253,6 @@ export default class ExternalPortfolio extends Component {
                     ) : ''
                   }
                   {formatAmountInr(one_day_change)}
-                  <span style={{ color: one_day_change < 0 ? '#ba3366' : 'var(--secondary)'}}>
-                    &nbsp;({one_day_change_perc}%)
-                  </span>
                 </div>
               </div>
             </div>

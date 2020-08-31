@@ -8,6 +8,7 @@ import MobileInputWithoutIcon from '../../../common/ui/MobileInputWithoutIcon';
 import {validateEmail, numberShouldStartWith, validateNumber } from 'utils/validators';
 import Input from '../../../common/ui/Input';
 import { initialize } from '../../common/functions';
+
 class ContactDetails extends Component {
 
     constructor(props) {
@@ -78,13 +79,15 @@ class ContactDetails extends Component {
 
 
     sendEvents(user_action) {
+        let { form_data } = this.state;
+
         let eventObj = {
             "event_name": 'lending',
             "properties": {
                 "user_action": user_action,
                 "screen_name": 'contact details',
-                'email': this.state.form_data.email_id ? 'yes' : 'no',
-                'mobile_no': this.state.form_data.mobile_no ? 'yes' : 'no',
+                'email': form_data.email_id || '',
+                'mobile_number': form_data.mobile_no || '',
                 'from_edit': this.props.edit ? 'yes' : 'no'
             }
         };
@@ -97,7 +100,6 @@ class ContactDetails extends Component {
     }
 
     render() {
-
         return (
             <Container
                 events={this.sendEvents('just_set_events')}
