@@ -11,7 +11,9 @@ import Api from 'utils/api';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 import scrollIntoView from 'scroll-into-view-if-needed';
-
+import {
+      validateNumber
+} from 'utils/validators';
 class AddressDetails extends Component {
 
     constructor(props) {
@@ -109,14 +111,25 @@ class AddressDetails extends Component {
 
         this.sendEvents('next');
 
+        let form_data = this.state.form_data;
         let keys_to_check = ['residence_type', 'duration', 'address', 'pincode', 'p_address',
             'p_pincode'];
 
         if (this.state.checked) {
+            form_data.p_pincode_error = '';
             keys_to_check = ['residence_type', 'duration', 'address', 'pincode',];
         }
 
-        let form_data = this.state.form_data;
+        if (form_data.pincode.length !== 6 || !validateNumber(form_data.pincode) || 
+        form_data.pincode_error) {
+            form_data['pincode_error'] = 'Please enter valid pincode';
+        }
+
+        if (!this.state.checked && (form_data.p_pincode.length !== 6 || !validateNumber(form_data.p_pincode) || 
+        form_data.p_pincode_error)) {
+            form_data['p_pincode_error'] = 'Please enter valid pincode';
+        }
+
 
         this.formCheckUpdate(keys_to_check, form_data);
     }

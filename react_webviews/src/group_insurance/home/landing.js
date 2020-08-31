@@ -49,11 +49,11 @@ class Landing extends Component {
   }
 
   componentWillMount() {
-    window.localStorage.setItem('group_insurance_payment_started', '');
-    window.localStorage.setItem('group_insurance_payment_urlsafe', '');
-    window.localStorage.setItem('group_insurance_plan_final_data', '');
+    window.sessionStorage.setItem('group_insurance_payment_started', '');
+    window.sessionStorage.setItem('group_insurance_payment_urlsafe', '');
+    window.sessionStorage.setItem('group_insurance_plan_final_data', '');
     nativeCallback({ action: 'take_control_reset' });
-    window.localStorage.setItem('group_insurance_payment_url', '');
+    window.sessionStorage.setItem('group_insurance_payment_url', '');
     let insurance = this.state.type !== 'fisdom' ? insurance_myway : insurance_fisdom;
     //  let  health_icon  = this.state.type !== 'fisdom' ? health_myway : health_fisdom;
     let hospicash = this.state.type !== 'fisdom' ? hospicash_myway : hospicash_fisdom;
@@ -262,10 +262,10 @@ class Landing extends Component {
 
   setTermInsData(termData) {
 
-    window.localStorage.setItem('excluded_providers', '');
-    window.localStorage.setItem('required_providers', '');
-    window.localStorage.setItem('quoteSelected', '');
-    window.localStorage.setItem('quoteData', '');
+    window.sessionStorage.setItem('excluded_providers', '');
+    window.sessionStorage.setItem('required_providers', '');
+    window.sessionStorage.setItem('quoteSelected', '');
+    window.sessionStorage.setItem('quoteData', '');
     let pathname = '';
     let resumeFlagTerm = false;
 
@@ -297,8 +297,8 @@ class Landing extends Component {
           application: application,
           required_fields: required_fields
         }
-        window.localStorage.setItem('cameFromHome', true);
-        window.localStorage.setItem('homeApplication', JSON.stringify(data));
+        window.sessionStorage.setItem('cameFromHome', true);
+        window.sessionStorage.setItem('homeApplication', JSON.stringify(data));
         pathname = 'journey';
         this.setState({
           termApplication: application
@@ -354,7 +354,7 @@ class Landing extends Component {
     }
 
 
-    window.localStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
+    window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
     this.navigate('group-insurance/' + fullPath);
   }
 

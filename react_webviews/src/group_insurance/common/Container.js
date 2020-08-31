@@ -15,7 +15,7 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import '../../utils/native_listner';
-
+import {checkStringInString} from 'utils/validators';
 import { back_button_mapper } from '../constants';
 
 
@@ -28,12 +28,30 @@ class Container extends Component {
       openPopup: false,
       popupText: '',
       callbackType: '',
-      loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
+      loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom,
+      inPageTitle: false,
+      force_hide_inpage_title: false
     }
     this.historyGoBack = this.historyGoBack.bind(this);
   }
 
   componentDidMount() {
+
+    window.addEventListener("scroll", this.onScroll, false);
+    let pathname = this.props.history.location.pathname;
+    if (pathname.indexOf('group-health') >= 0) {
+      this.setState({
+        new_header: true,
+        inPageTitle: true,
+        force_show_inpage_title : true
+      }, () => {
+        this.onScroll();
+      })
+    } else {
+      this.setState({
+        new_header: false
+      })
+    }
     setHeights({ 'header': true, 'container': false });
     let that = this;
     if (getConfig().generic_callback) {
@@ -51,7 +69,12 @@ class Container extends Component {
         }
       });
     }
+  }
 
+  checkStringInString = (string) => {
+    let pathname = this.props.history.location.pathname;
+
+    return checkStringInString(pathname, string);
   }
 
   componentWillUnmount() {
@@ -61,7 +84,71 @@ class Container extends Component {
     } else {
       window.PlutusSdk.remove_listener({});
     }
+
+    window.removeEventListener("scroll", this.onScroll, false);
   }
+
+  getHeightFromTop() {
+    var el = document.getElementsByClassName('Container')[0];
+    var height = el.getBoundingClientRect().top;
+    return height;
+  }
+
+  check_hide_header_title() {
+    let force_hide_inpage_title;
+    let restrict_in_page_titles = [];
+    if(restrict_in_page_titles.indexOf(this.props.headerType) !== -1) {
+      force_hide_inpage_title = true;
+    }
+
+    this.setState({
+      force_hide_inpage_title: force_hide_inpage_title || false
+    })
+
+    if(this.props.updateChild) {
+      this.props.updateChild('inPageTitle', force_hide_inpage_title);
+    }
+
+  }
+
+  onScroll = () => {
+   
+    if(!this.state.new_header) {
+      this.setState({
+        inPageTitle: false
+      })
+      return;
+    }
+    let inPageTitle = this.state.inPageTitle;
+    if (this.getHeightFromTop() >= 56) {
+      //show down
+      inPageTitle = true;
+
+    } else {
+      //show up
+      inPageTitle = false;
+    }
+
+    if(this.state.force_show_inpage_title) {
+      inPageTitle = true;
+      let that = this;
+      setTimeout(function(){ 
+        that.setState({
+          force_show_inpage_title: false
+        })
+     }, 100);
+      
+    }
+
+    this.setState({
+      inPageTitle: inPageTitle
+    })
+
+    if(this.props.updateChild) {
+      this.props.updateChild('inPageTitle', inPageTitle);
+    }
+
+  };
 
   navigate = (pathname, user_action) => {
 
@@ -109,7 +196,27 @@ class Container extends Component {
       return;
     }
     let { params } = this.props.location;
+    if(!params) {
+      params = {};
+    }
     let pathname = this.props.history.location.pathname;
+
+    if(this.checkStringInString('group-health')) {
+      let group_health_landing = '/group-insurance/group-health/landing';
+
+      if(this.checkStringInString('insure-type') || this.checkStringInString('payment') || 
+      this.checkStringInString('final-summary')) {
+        this.navigate(group_health_landing);
+        return;
+      }
+
+      if(this.checkStringInString('reportdetails')) {
+        this.navigate('/group-insurance/common/report');
+        return;
+      }
+      
+    }
+
     if (project_child === 'bhartiaxa' && pathname.indexOf('payment-success') >= 0
       && this.props.disableBack) {
       this.setState({
@@ -148,27 +255,31 @@ class Container extends Component {
       return;
     }
 
-    if (project_child === 'bhartiaxa' && pathname.indexOf('/home_insurance') >= 0 && 
-    pathname.indexOf('/plan') >= 0) {
-      this.navigate('/group-insurance');
-      return;
+    if(pathname.indexOf('/group-health') < 0) {
+      if (project_child === 'bhartiaxa' && pathname.indexOf('/home_insurance') >= 0 && 
+      pathname.indexOf('/plan') >= 0) {
+        this.navigate('/group-insurance');
+        return;
+      }
+  
+     
+      if (project_child === 'bhartiaxa' && pathname.indexOf('/plan') >= 0 &&
+      pathname.indexOf('/health') >= 0) {
+        this.navigate('/group-insurance/health/landing');
+        return;
+      }
+  
+      if (project_child === 'bhartiaxa' && pathname.indexOf('/plan') >= 0) {
+        this.backMapperBharti('/plan');
+        return;
+      }
+  
+      if (project_child === 'bhartiaxa' && pathname.indexOf('/health/landing') >= 0) {
+        this.navigate('/group-insurance');
+        return;
+      }
     }
-
-    if (project_child === 'bhartiaxa' && pathname.indexOf('/plan') >= 0 &&
-    pathname.indexOf('/health') >= 0) {
-      this.navigate('/group-insurance/health/landing');
-      return;
-    }
-
-    if (project_child === 'bhartiaxa' && pathname.indexOf('/plan') >= 0) {
-      this.backMapperBharti('/plan');
-      return;
-    }
-
-    if (project_child === 'bhartiaxa' && pathname.indexOf('/health/landing') >= 0) {
-      this.navigate('/group-insurance');
-      return;
-    }
+   
 
     if (project_child === 'term') {
       if(params && params.backToState === 'report') {
@@ -212,7 +323,6 @@ class Container extends Component {
         break;
       case "/group-insurance/common/report":
         openModule('app/portfolio')
-        // nativeCallback({ action: 'exit', events: this.getEvents('back') });
         break;
       case "/group-insurance/term/resume":
       case "/group-insurance/term/journey":
@@ -293,7 +403,7 @@ class Container extends Component {
         }
       };
       nativeCallback({ events: eventObj });
-      window.localStorage.setItem('show_quotes', true);
+      window.sessionStorage.setItem('show_quotes', true);
       this.navigate('/group-insurance/term/quote');
     } else if (this.state.callbackType === 'web_home') {
       this.navigate('/group-insurance')
@@ -364,7 +474,7 @@ class Container extends Component {
     return (
       <div className={`ContainerWrapper ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`}  >
         {/* Header Block */}
-        {!this.props.hide_header && <Header
+        {!this.props.hide_header && !this.props.showLoader && <Header
           disableBack={this.props.disableBack}
           title={this.props.title}
           smallTitle={this.props.smallTitle}
@@ -376,9 +486,14 @@ class Container extends Component {
           edit={this.props.edit}
           type={getConfig().productName}
           resetpage={this.props.resetpage}
+          inPageTitle={this.state.inPageTitle}
+          force_hide_inpage_title={this.state.force_hide_inpage_title}
           handleReset={this.props.handleReset}
           filterPgae={this.props.filterPgae}
-          handleFilter={this.props.handleFilter} />}
+          handleFilter={this.props.handleFilter} 
+          new_header={this.state.new_header} 
+          headerData={this.props.headerData}
+        />}
 
         {/* Below Header Block */}
         <div id="HeaderHeight" style={{ top: 56 }}>
@@ -394,6 +509,23 @@ class Container extends Component {
           {!this.props.showLoader && this.props.banner && <Banner text={this.props.bannerText} />}
 
         </div>
+
+        {!this.state.force_hide_inpage_title && this.state.new_header &&
+          <div id="header-title-page"
+            style={this.props.styleHeader} 
+            className={`header-title-page  ${this.props.classHeader}`}>
+                <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{width: this.props.count ? '75%': ''}}>
+                  {this.props.title}
+                </div>
+              
+              {this.state.inPageTitle && this.props.count &&
+                <span color="inherit" 
+                className={`${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}
+                style={{ fontSize: 10 }}>
+                  <span style={{ fontWeight: 600 }}>{this.props.current}</span>/<span>{this.props.total}</span>
+                </span>}
+          </div>
+         }
 
         {/* Children Block */}
         <div className={`Container ${this.props.classOverRideContainer}`}>
@@ -415,12 +547,15 @@ class Container extends Component {
             edit={this.props.edit}
             resetpage={this.props.resetpage}
             handleClick={this.props.handleClick}
+            handleClick2={this.props.handleClick2}
             handleClickOne={this.props.handleClickOne}
             handleClickTwo={this.props.handleClickTwo}
             handleReset={this.props.handleReset}
             onlyButton={this.props.onlyButton}
             showDotDot={this.props.showDotDot}
-            noFooter={this.props.noFooter} />
+            noFooter={this.props.noFooter}
+            withProvider={this.props.withProvider}
+            buttonData={this.props.buttonData} />
         }
         {/* No Internet */}
         {this.renderDialog()}

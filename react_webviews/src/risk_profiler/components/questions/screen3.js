@@ -25,7 +25,7 @@ class QuestionScreen3 extends Component {
   }
 
   async componentDidMount() {
-    let questionnaire = JSON.parse(window.localStorage.getItem('questionnaire'));
+    let questionnaire = JSON.parse(window.sessionStorage.getItem('questionnaire'));
     let question1Options = [], question2Options = [];
     question1Options = questionnaire[this.state.indexMain].choices;
 
@@ -33,7 +33,7 @@ class QuestionScreen3 extends Component {
       question2Options = questionnaire[this.state.indexMain + 1].choices;
     }
 
-    let questionnaireResponse = JSON.parse(window.localStorage.getItem('questionnaireResponse'));
+    let questionnaireResponse = JSON.parse(window.sessionStorage.getItem('questionnaireResponse'));
     this.setState({
       show_loader: false,
       questionnaire: questionnaire,
@@ -98,10 +98,10 @@ class QuestionScreen3 extends Component {
       this.sendEventsForInputsNextClick();
     } else {
       this.sendEventsForInputsNextClick();
-      let questionnaireResponse = JSON.parse(window.localStorage.getItem('questionnaireResponse'));
+      let questionnaireResponse = JSON.parse(window.sessionStorage.getItem('questionnaireResponse'));
       questionnaireResponse[this.state.indexMain].choice_id = this.state.question1;
       questionnaireResponse[this.state.indexMain + 1].choice_id = this.state.question2;
-      window.localStorage.setItem('questionnaireResponse', JSON.stringify(questionnaireResponse));
+      window.sessionStorage.setItem('questionnaireResponse', JSON.stringify(questionnaireResponse));
       this.navigate('question4');
     }
   }

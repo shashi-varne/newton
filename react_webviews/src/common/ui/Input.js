@@ -1,6 +1,6 @@
 import React from 'react';
 import TextField from 'material-ui/TextField';
-import './style.css';
+import './style.scss';
 
 const Input = (props) => {
   if (props.type === 'date' || props.shrink) {
@@ -30,7 +30,7 @@ const Input = (props) => {
   } else {
     return (
       <TextField
-      inputref={props.inputref}
+        inputref={props.inputref}
         error={props.error}
         disabled={props.disabled}
         type={props.type}

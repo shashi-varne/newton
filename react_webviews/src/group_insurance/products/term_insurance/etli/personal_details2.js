@@ -33,8 +33,8 @@ class EtliPersonalDetails2 extends Component {
         this.state = {
             checked: false,
             show_loader: true,
-            quote_redirect_data: window.localStorage.getItem('quote_redirect_data') ?
-                JSON.parse(window.localStorage.getItem('quote_redirect_data')) : {},
+            quote_redirect_data: window.sessionStorage.getItem('quote_redirect_data') ?
+                JSON.parse(window.sessionStorage.getItem('quote_redirect_data')) : {},
             provider: 'EDELWEISS',
             params: qs.parse(this.props.history.location.search.slice(1)),
             type: getConfig().productName,
@@ -143,7 +143,7 @@ class EtliPersonalDetails2 extends Component {
             let prevData = this.state.quote_redirect_data || {};
             prevData.smoking = basic_details_data.smoking;
             prevData.annual_income = basic_details_data.annual_income;
-            window.localStorage.setItem('quote_redirect_data', JSON.stringify(prevData));
+            window.sessionStorage.setItem('quote_redirect_data', JSON.stringify(prevData));
 
             this.setState({
                 show_loader: true

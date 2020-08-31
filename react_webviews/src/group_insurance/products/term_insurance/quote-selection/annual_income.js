@@ -20,7 +20,7 @@ import DropdownInPage from '../../../../common/ui/DropdownInPage';
 class AnnualIncome extends Component {
 
   constructor(props) {
-    var quoteData = JSON.parse(window.localStorage.getItem('quoteData') || {});
+    var quoteData = JSON.parse(window.sessionStorage.getItem('quoteData') || {});
     super(props);
     this.state = {
       show_loader: true,
@@ -82,7 +82,7 @@ class AnnualIncome extends Component {
     quoteData.annual_income = this.state.incomeList[this.state.selectedIndex].name;
     quoteData.selectedIndexIncome = this.state.selectedIndex;
     quoteData.incomeList = this.state.incomeList;
-    window.localStorage.setItem('quoteData', JSON.stringify(quoteData));
+    window.sessionStorage.setItem('quoteData', JSON.stringify(quoteData));
     this.navigate('cover-amount', quoteData.annual_income);
   }
 

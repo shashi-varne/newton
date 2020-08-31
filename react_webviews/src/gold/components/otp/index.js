@@ -205,10 +205,10 @@ class Otp extends Component {
     } else if (this.state.orderType === 'sell') {
       this.navigate(this.state.provider + '/sell-gold-order');
     } else if (this.state.orderType === 'delivery') {
-      if (window.localStorage.getItem('goldProduct')) {
-        let product = JSON.parse(window.localStorage.getItem('goldProduct'));
+      if (window.sessionStorage.getItem('goldProduct')) {
+        let product = JSON.parse(window.sessionStorage.getItem('goldProduct'));
         product.isFisdomVerified = true;
-        window.localStorage.setItem('goldProduct', JSON.stringify(product));
+        window.sessionStorage.setItem('goldProduct', JSON.stringify(product));
         this.navigate(this.state.provider + '/gold-delivery-order');
       } else {
         this.navigate('/gold');

@@ -228,7 +228,7 @@ class GoldRegister extends Component {
         });
         let result = res.pfwresponse.result;
         if (result.resend_verification_otp_link !== '' && result.verification_link !== '') {
-          window.localStorage.setItem('fromType', 'buy')
+          window.sessionStorage.setItem('fromType', 'buy')
           var message = 'An OTP is sent to your mobile number ' + this.state.mobile_no + ', please verify to complete registration.'
           this.props.history.push({
             pathname: 'buy/verify',

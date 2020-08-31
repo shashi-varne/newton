@@ -46,6 +46,9 @@ import AddEditAddressDelivery from "./components/delivery/address_add_edit";
 import DeliveryIntro from  "./components/delivery/intro";
 import GoldDeliveryProducts from "./components/delivery/products";
 
+import CommonRenderBenefits from './components/common/RenderBenefits';
+import CommonRenderFaqs from './components/common/RenderFaqs';
+
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
 import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
@@ -93,8 +96,8 @@ const Gold = props => {
           <Route path={`${url}/check-how1`} component={CheckHow1} />
           <Route path={`${url}/check-how2`} component={CheckHow2} />
           <Route path={`${url}/check-how3`} component={CheckHow3} />
-          
-          
+          <Route path={`${url}/common/render-benefits`} component={CommonRenderBenefits} />
+          <Route path={`${url}/common/render-faqs`} component={CommonRenderFaqs} />
 
            {/* common */}
            <Route path={`${url}/my-gold`} component={GoldLanding} />

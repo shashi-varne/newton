@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Grid from 'material-ui/Grid';
 
-import './style.css';
+import './style.scss';
 import RadioBtn from './RadioBtn';
 
 class RadioGrp extends Component {
@@ -15,6 +15,10 @@ class RadioGrp extends Component {
   }
 
   toggleRadioBtn = (index) => {
+
+    if(this.props.canUnSelect && this.state.selectedIndex === index) {
+      index = '';
+    }
               
     if(this.props.disabled) {
       return;
@@ -51,6 +55,7 @@ class RadioGrp extends Component {
               text={option.name}
               value={option.value}
               index={i}
+              disabledWithValue={this.props.disabledWithValue}
               type={this.props.type}
               handler={this.toggleRadioBtn} />
           </Grid>

@@ -1,7 +1,7 @@
 import React from 'react';
 import Grid from 'material-ui/Grid';
 
-import './style.css';
+import './style.scss';
 import Input from './Input';
 import Icon from './Icon';
 

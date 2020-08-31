@@ -5,7 +5,7 @@ import { MenuItem } from 'material-ui/Menu';
 import { InputLabel } from 'material-ui/Input';
 import { FormControl } from 'material-ui/Form';
 
-import './style.css';
+import './style.scss';
 import Icon from './Icon';
 
 class SelectGrp extends Component {

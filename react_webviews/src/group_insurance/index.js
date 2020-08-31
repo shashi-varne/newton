@@ -5,12 +5,12 @@ import {
 } from 'react-router-dom';
 import { withRouter } from "react-router";
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
-import '../common/theme/Style.css';
+import '../common/theme/Style.scss';
 // import { getConfig } from 'utils/functions';
 import { themeConfig } from 'utils/constants';
 import { ToastContainer } from 'react-toastify';
 
-import './common/Style.css';
+import './common/Style.scss';
 import './products/term_insurance/Style.css';
 import NotFound from '../common/components/NotFound';
 import Landing from './home/landing';
@@ -129,6 +129,28 @@ import HealthSuperTopupForm from './products/health_insurance/super_topup/form'
 import HomeInsurance from './products/home_insurance/general/plan_details';
 import HomeInsuranceForm from './products/home_insurance/general/form';
 
+/*******************Group  Health ******************/
+import GroupHealthLanding from './products/group_health/landing';
+import GroupHealthSelectInsureType from './products/group_health/plans/insure_type';
+import GroupHealthPlanDob from './products/group_health/plans/dob';
+import GroupHealthPlanAddMembers from './products/group_health/plans/add_members';
+import GroupHealthPlanSelectCity from './products/group_health/plans/select_city';
+import GroupHealthPlanList from './products/group_health/plans/plan_list';
+import GroupHealthPlanDetails from './products/group_health/plans/plan_details';
+import GroupHealthPlanSelectSumAssured from './products/group_health/plans/select_sum_assured';
+import GroupHealthPlanSelectCoverPeriod from './products/group_health/plans/select_cover_period';
+import GroupHealthPlanSelectFloater from './products/group_health/plans/select_floater';
+import GroupHealthPlanPremiumSummary from './products/group_health/plans/premium_summary';
+import GroupHealthPlanHowToClaim from './products/group_health/plans/how_to_claim';
+import GroupHealthPlanPersonalDetails from './products/group_health/form/personal_details';
+import GroupHealthPlanContactDetails from './products/group_health/form/contact';
+import GroupHealthPlanAddressDetails from './products/group_health/form/address';
+import GroupHealthPlanNomineeDetails from './products/group_health/form/nominee';
+import GroupHealthPlanIsPed from './products/group_health/form/is_ped';
+import GroupHealthPlanSelectPed from './products/group_health/form/select_ped';
+import GroupHealthPlanFinalSummary from './products/group_health/form/final_summary';
+import GroupHealthPayment from './products/group_health/payment/index';
+import GroupHealthReportDetails from './products/group_health/report_details';
 
 // etli
 import EtliPersonalDetails1 from './products/term_insurance/etli/personal_details1';
@@ -144,6 +166,8 @@ import RenderDiseasesClass from './ui_components/general_insurance/diseases';
 import RenderCoverClass from './ui_components/general_insurance/cover';
 import RenderNotCoverClass from './ui_components/general_insurance/notcover';
 import RenderClaimClass from './ui_components/general_insurance/claim';
+
+import Tooltip from '../common/ui/Tooltip';
 
 
 const generateClassName = createGenerateClassName({
@@ -178,6 +202,7 @@ const Insurance = (props) => {
       <MuiThemeProvider theme={theme}>
         <ScrollToTop />
         <ToastContainer autoClose={3000} />
+        <Tooltip />
         <Switch>
           <Route exact path={`${url}`} component={Landing} />
 
@@ -218,14 +243,14 @@ const Insurance = (props) => {
           <Route path={`${url}/term/edit-appointee`} render={(props) => <AppointeeDetails {...props} edit={true} />} />
           <Route path={`${url}/term/edit-professional`} render={(props) => <ProfessionalDetails1 {...props} edit={true} />} />
           <Route path={`${url}/term/edit-professional1`} render={(props) => <ProfessionalDetails2 {...props} edit={true} />} />
-          
+
 
           {/* etli */}
           <Route path={`${url}/term/etli/personal-details1`} component={EtliPersonalDetails1} />
           <Route path={`${url}/term/etli/personal-details2`} component={EtliPersonalDetails2} />
           <Route path={`${url}/term/etli/personal-details3`} component={EtliPersonalDetails3} />
           <Route path={`${url}/term/etli/auth-failed`} component={EtliAuthFailed} />
-       
+
           {/********** Accident **********/}
           <Route path={`${url}/accident/plan`} component={AccidentPlanDetails} />
           <Route path={`${url}/accident/form`} component={AccidentForm} />
@@ -286,7 +311,7 @@ const Insurance = (props) => {
           {/* critical illness */}
           <Route path={`${url}/health/critical_illness/plan`} component={HealthCriticalIllness} />
           <Route path={`${url}/health/critical_illness/form-redirection`} component={HealthCriticalIllnessForm} />
-          
+
 
           {/* super topup */}
           <Route path={`${url}/health/super_topup/plan`} component={HealthSuperTopup} />
@@ -296,8 +321,121 @@ const Insurance = (props) => {
           {/* home insurance */}
           <Route path={`${url}/home_insurance/general/plan`} component={HomeInsurance} />
           <Route path={`${url}/home_insurance/general/form-redirection`} component={HomeInsuranceForm} />
-          
 
+
+
+          {/********** Group Health Insurance **********/}
+          <Route path={`${url}/group-health/landing`} component={GroupHealthLanding} />
+          <Route path={`${url}/group-health/:provider/insure-type`} component={GroupHealthSelectInsureType} />
+          <Route path={`${url}/group-health/:provider/plan-dob`} component={GroupHealthPlanDob} />
+          <Route path={`${url}/group-health/:provider/plan-add-members`} component={GroupHealthPlanAddMembers} />
+          <Route path={`${url}/group-health/:provider/plan-select-city`} component={GroupHealthPlanSelectCity} />
+          <Route path={`${url}/group-health/:provider/plan-list`} component={GroupHealthPlanList} />
+          <Route path={`${url}/group-health/:provider/plan-details`} component={GroupHealthPlanDetails} />
+          <Route path={`${url}/group-health/:provider/plan-select-sum-assured`} component={GroupHealthPlanSelectSumAssured} />
+          <Route path={`${url}/group-health/:provider/plan-select-cover-period`} component={GroupHealthPlanSelectCoverPeriod} />
+          <Route path={`${url}/group-health/:provider/plan-select-floater`} component={GroupHealthPlanSelectFloater} />
+          <Route path={`${url}/group-health/:provider/plan-premium-summary`} component={GroupHealthPlanPremiumSummary} />
+          <Route path={`${url}/group-health/:provider/how-to-claim`} component={GroupHealthPlanHowToClaim} />
+
+          <Route path={`${url}/group-health/:provider/personal-details/self`}
+            render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'self'} />} />
+
+          <Route path={`${url}/group-health/:provider/personal-details/wife`}
+            render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'wife'} />} />
+
+          <Route path={`${url}/group-health/:provider/personal-details/husband`}
+            render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'husband'} />} />
+
+          <Route path={`${url}/group-health/:provider/personal-details/father`}
+            render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'father'} />} />
+
+          <Route path={`${url}/group-health/:provider/personal-details/son`}
+            render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'son'} />} />
+
+          <Route path={`${url}/group-health/:provider/personal-details/son1`}
+            render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'son1'} />} />
+
+          <Route path={`${url}/group-health/:provider/personal-details/son2`}
+            render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'son2'} />} />
+
+          <Route path={`${url}/group-health/:provider/personal-details/mother`}
+            render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'mother'} />} />
+
+          <Route path={`${url}/group-health/:provider/personal-details/daughter`}
+            render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'daughter'} />} />
+
+          <Route path={`${url}/group-health/:provider/personal-details/daughter1`}
+            render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'daughter1'} />} />
+
+          <Route path={`${url}/group-health/:provider/personal-details/daughter2`}
+            render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'daughter2'} />} />
+
+          <Route path={`${url}/group-health/:provider/personal-details/applicant`}
+            render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'applicant'} />} />
+
+
+          <Route path={`${url}/group-health/:provider/contact`} component={GroupHealthPlanContactDetails} />
+          <Route path={`${url}/group-health/:provider/address`} component={GroupHealthPlanAddressDetails} />
+          <Route path={`${url}/group-health/:provider/nominee`} component={GroupHealthPlanNomineeDetails} />
+          <Route path={`${url}/group-health/:provider/is-ped`} component={GroupHealthPlanIsPed} />
+          <Route path={`${url}/group-health/:provider/select-ped/:member_key`} component={GroupHealthPlanSelectPed} />
+          <Route path={`${url}/group-health/:provider/final-summary`} component={GroupHealthPlanFinalSummary} />
+          <Route path={`${url}/group-health/:provider/payment`} component={GroupHealthPayment} />
+          <Route path={`${url}/group-health/:provider/reportdetails/:policy_id`} component={GroupHealthReportDetails} />
+
+          {/* Edit paths */}
+
+          <Route path={`${url}/group-health/:provider/edit-personal-details/self`}
+            render={(props) => <GroupHealthPlanPersonalDetails {...props} member_key={'self'} edit={true} />} />
+
+          <Route path={`${url}/group-health/:provider/edit-personal-details/wife`}
+            render={(props) => <GroupHealthPlanPersonalDetails {...props} member_key={'wife'} edit={true} />} />
+
+          <Route path={`${url}/group-health/:provider/edit-personal-details/husband`}
+            render={(props) => <GroupHealthPlanPersonalDetails {...props} member_key={'husband'} edit={true} />} />
+
+          <Route path={`${url}/group-health/:provider/edit-personal-details/father`}
+            render={(props) => <GroupHealthPlanPersonalDetails {...props} member_key={'father'} edit={true} />} />
+
+          <Route path={`${url}/group-health/:provider/edit-personal-details/mother`}
+            render={(props) => <GroupHealthPlanPersonalDetails {...props} member_key={'mother'} edit={true} />} />
+
+          <Route path={`${url}/group-health/:provider/edit-personal-details/son`}
+            render={(props) => <GroupHealthPlanPersonalDetails {...props} member_key={'son'} edit={true} />} />
+
+          <Route path={`${url}/group-health/:provider/edit-personal-details/son1`}
+            render={(props) => <GroupHealthPlanPersonalDetails {...props} member_key={'son1'} edit={true} />} />
+
+          <Route path={`${url}/group-health/:provider/edit-personal-details/son2`}
+            render={(props) => <GroupHealthPlanPersonalDetails {...props} member_key={'son2'} edit={true} />} />
+
+          <Route path={`${url}/group-health/:provider/edit-personal-details/daughter`}
+            render={(props) => <GroupHealthPlanPersonalDetails {...props} member_key={'daughter'} edit={true} />} />
+
+          <Route path={`${url}/group-health/:provider/edit-personal-details/daughter1`}
+            render={(props) => <GroupHealthPlanPersonalDetails {...props} member_key={'daughter1'} edit={true} />} />
+
+          <Route path={`${url}/group-health/:provider/edit-personal-details/daughter2`}
+            render={(props) => <GroupHealthPlanPersonalDetails {...props} member_key={'daughter2'} edit={true} />} />
+
+          <Route path={`${url}/group-health/:provider/edit-personal-details/applicant`}
+            render={(props) => <GroupHealthPlanPersonalDetails {...props} member_key={'applicant'} edit={true} />} />
+
+          <Route path={`${url}/group-health/:provider/edit-contact`}
+            render={(props) => <GroupHealthPlanContactDetails  {...props} edit={true} />} />
+
+          <Route path={`${url}/group-health/:provider/edit-address`}
+            render={(props) => <GroupHealthPlanAddressDetails  {...props} edit={true} />} />
+
+          <Route path={`${url}/group-health/:provider/edit-nominee`}
+            render={(props) => <GroupHealthPlanNomineeDetails  {...props} edit={true} />} />
+
+          <Route path={`${url}/group-health/:provider/edit-is-ped`}
+            render={(props) => <GroupHealthPlanIsPed  {...props} edit={true} />} />
+
+          <Route path={`${url}/group-health/:provider/edit-select-ped/:member_key`}
+            render={(props) => <GroupHealthPlanSelectPed  {...props} edit={true} />} />
 
           {/* common */}
           <Route path={`${url}/common/report`} component={Report} />

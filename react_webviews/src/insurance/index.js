@@ -5,7 +5,7 @@ import {
 } from 'react-router-dom';
 import { withRouter } from "react-router";
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
-import '../common/theme/Style.css';
+import '../common/theme/Style.scss';
 // import { getConfig } from 'utils/functions';
 import { ToastContainer } from 'react-toastify';
 import { themeConfig } from 'utils/constants';
