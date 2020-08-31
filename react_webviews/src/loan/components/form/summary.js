@@ -262,7 +262,7 @@ class FormSummary extends Component {
 
                 var resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200 && !resultData.error) {
-
+                    console.log(resultData)
                     if (resultData.status === 'Application Rejected' && resultData.rejection_reason === "occupation") {
                         let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
                         this.navigate('instant-kyc-status', {

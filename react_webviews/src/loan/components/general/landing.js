@@ -71,6 +71,7 @@ class Landing extends Component {
     let vendor_info = lead.vendor_info || {};
 
     let rejection_reason = application_info.rejection_reason || '';
+    console.log(application_info.rejection_reason)
 
     if (rejection_reason === "occupation")
       this.setState({ reason: 'occupation'});

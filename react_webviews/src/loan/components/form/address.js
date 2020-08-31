@@ -176,7 +176,11 @@ class AddressDetails extends Component {
             let { city, state, country } = form_data;
             let pincode_error = '';
             if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
-                city = resultData.dmi_city_name || resultData.district_name || resultData.division_name || resultData.taluk;
+                if (resultData.dmi_city_name === 'NA') {
+                    city = resultData.district_name || resultData.division_name || resultData.taluk;
+                } else {
+                    city = resultData.district_name;
+                }
                 state = resultData.state_name;
                 country = resultData.country_name;
             } else {
