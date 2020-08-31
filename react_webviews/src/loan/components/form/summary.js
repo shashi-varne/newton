@@ -263,7 +263,7 @@ class FormSummary extends Component {
                 var resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200 && !resultData.error) {
 
-                    if (resultData.status === 'Application Rejected' && resultData.rejection_reason === "Employment Status Not Qualified For Personal Loan") {
+                    if (resultData.status === 'Application Rejected' && resultData.rejection_reason === "occupation") {
                         let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
                         this.navigate('instant-kyc-status', {
                             searchParams: searchParams,
@@ -272,7 +272,7 @@ class FormSummary extends Component {
                             }
                         });
 
-                    } else if (resultData.status === 'Application Rejected' && resultData.rejection_reason === "Aadhar City Not Supported By Partner DMI") {
+                    } else if (resultData.status === 'Application Rejected' && resultData.rejection_reason === "location") {
                         let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
                         this.navigate('instant-kyc-status', {
                             searchParams: searchParams,

@@ -72,9 +72,9 @@ class Landing extends Component {
 
     let rejection_reason = application_info.rejection_reason || '';
 
-    if (rejection_reason === "Employment Status Not Qualified For Personal Loan")
+    if (rejection_reason === "occupation")
       this.setState({ reason: 'occupation'});
-    else if (rejection_reason === "Aadhar City Not Supported By Partner DMI")
+    else if (rejection_reason === "location")
       this.setState({ reason: 'location'});
 
     if(vendor_info.dmi_loan_status === 'complete') {
