@@ -262,25 +262,16 @@ class FormSummary extends Component {
 
                 var resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200 && !resultData.error) {
-                    console.log(resultData)
-                    if (resultData.status === 'Application Rejected' && resultData.rejection_reason === "occupation") {
+
+                    if (resultData.status === 'Application Rejected') {
                         let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
                         this.navigate('instant-kyc-status', {
                             searchParams: searchParams,
                             params: {
-                                rejection_reason: 'occupation'
+                                rejection_reason: resultData.rejection_reason
                             }
                         });
-
-                    } else if (resultData.status === 'Application Rejected' && resultData.rejection_reason === "location") {
-                        let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
-                        this.navigate('instant-kyc-status', {
-                            searchParams: searchParams,
-                            params: {
-                                rejection_reason: 'location'
-                            }
-                        });
-
+                        
                     } else {
                         this.openCreateProfile();
                     }

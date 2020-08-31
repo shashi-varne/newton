@@ -171,7 +171,7 @@ class AddressDetails extends Component {
 
         if (pincode.length === 6) {
             const res = await Api.get('/relay/api/loan/pincode/get/' + pincode);
-            let resultData = res.pfwresponse.result[0];
+            let resultData = res.pfwresponse.result[0] || '';
 
             let { city, state, country } = form_data;
             let pincode_error = '';
@@ -179,7 +179,7 @@ class AddressDetails extends Component {
                 if (resultData.dmi_city_name === 'NA') {
                     city = resultData.district_name || resultData.division_name || resultData.taluk;
                 } else {
-                    city = resultData.district_name;
+                    city = resultData.dmi_city_name;
                 }
                 state = resultData.state_name;
                 country = resultData.country_name;
