@@ -115,7 +115,7 @@ class Landing extends Component {
         "screen_name": 'introduction',
         "action": data.action,
         "calculator_clicked": data.calculator_clicked ? "yes" : "no",
-        "resume_clicked": this.state.isResume ? 'yes' : 'no',
+        "resume_clicked": this.state.isResume && !data.action ? 'no' : 'yes',
         "faq_clicked": data.things_to_know === 'faq' ? 'yes' : 'no',
       }
     };
