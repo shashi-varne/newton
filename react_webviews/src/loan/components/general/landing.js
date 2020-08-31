@@ -69,6 +69,7 @@ class Landing extends Component {
     let lead = this.state.lead || {};
     let application_info = lead.application_info || {};
     let vendor_info = lead.vendor_info || {};
+    console.log(application_info)
 
     let rejection_reason = application_info.rejection_reason || '';
 
