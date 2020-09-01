@@ -179,12 +179,12 @@ class AddressDetails extends Component {
         })
 
         if (pincode.length === 6) {
-            const res = await Api.get('/relay/api/loan/pincode/get/' + pincode);
+            const res = await Api.get('/api/pincode/' + pincode);
 
             let { city, state, country } = form_data;
             let pincode_error = '';
             if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
-                city = res.pfwresponse.result[0].dmi_city_name || res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name;
+                city = res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name;
                 state = res.pfwresponse.result[0].state_name;
                 country = res.pfwresponse.result[0].country_name;
             } else {
@@ -192,7 +192,7 @@ class AddressDetails extends Component {
                 state = '';
                 pincode_error = 'Invalid pincode';
             }
-
+            
             if (name === 'pincode') {
                 form_data.city = city;
                 form_data.state = state;

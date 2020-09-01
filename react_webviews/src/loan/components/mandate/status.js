@@ -38,23 +38,7 @@ const commonMapper = {
     'close_state': '/loan/home',
     'noFooter': true,
     'hide_contact': true
-  },
-  'exit': {
-    'top_icon': 'error_illustration',
-    'top_title': 'E-mandate failed',
-    'mid_title': '',
-    'button_title': 'RETRY',
-    'cta_state': '/loan/home',
-    'close_state': '/loan/home'
-  },
-  'discrepancy': {
-    'top_icon': 'error_illustration',
-    'top_title': 'E-mandate failed',
-    'mid_title': '',
-    'button_title': 'RETRY',
-    'cta_state': '/loan/home',
-    'close_state': '/loan/home'
-  },
+  }
 }
 
 
