@@ -21,7 +21,9 @@ class Landing extends Component {
       hassleFreePoints: [],
       top_cta_title: '',
       productName: getConfig().productName,
-      ic_why_hs: getConfig().productName === 'fisdom' ? ic_why_hs_fisdom : ic_why_hs_myway
+      ic_why_hs: getConfig().productName === 'fisdom' ? ic_why_hs_fisdom : ic_why_hs_myway,
+      resume_clicked: false,
+      faq_clicked: false,
     }
 
     this.initialize = initialize.bind(this);
@@ -86,6 +88,10 @@ class Landing extends Component {
 
       isResume = false;
       top_cta_title = 'APPLY NOW';
+
+      this.setState({
+        isResume: isResume
+      })
     }
 
     if(['callback_awaited_disbursement_approval', 'disbursement_approved'].indexOf(vendor_info.dmi_loan_status) !== -1) {
@@ -101,12 +107,16 @@ class Landing extends Component {
     })
   }
 
-  sendEvents(user_action) {
+  sendEvents(user_action, data = {}) {
     let eventObj = {
       "event_name": 'lending',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'introduction'
+        "screen_name": 'introduction',
+        "action": data.action,
+        "calculator_clicked": data.calculator_clicked ? "yes" : "no",
+        "resume_clicked": this.state.isResume && !data.action ? 'no' : 'yes',
+        "faq_clicked": data.things_to_know === 'faq' ? 'yes' : 'no',
       }
     };
 
@@ -208,7 +218,12 @@ class Landing extends Component {
     return state;
   }
 
-  handleClickTopCard = () => {
+  handleClickTopCard = (action) => {
+    if (action === 'banner') {
+      this.sendEvents('next', {action: 'banner'})
+    } else {
+      this.sendEvents('next', { action: this.state.top_cta_title });
+    }
 
     let state =  this.getNextState();
 
@@ -250,9 +265,9 @@ class Landing extends Component {
       >
        
        <div className="loan-landing loan-instant-kyc-home" >
-        <div className="infoimage-block1" onClick={() => this.handleClickTopCard()} >
+        <div className="infoimage-block1" onClick={() => this.handleClickTopCard("banner")} >
         
-          <img style={{ width: '100%', cursor: 'pointer', borderRadius: 6 }} 
+          <img style={{ width: '100%', cursor: 'pointer', borderRadius: 6 }}
           src={require(`assets/${this.state.productName}/ils_loan_intro_card.svg`)} alt="" />
           <div className="inner">
             <div className="title generic-page-title" style={{color: 'white'}}>
@@ -270,12 +285,14 @@ class Landing extends Component {
           </div>
         </div>
 
-        <div className="action" onClick={ () => this.navigate('calculator', {
+        <div className="action" onClick={ () => {
+          this.sendEvents('next', {calculator_clicked: true})
+          this.navigate('calculator', {
           params: {
             next_state: this.getNextState(),
             cta_title: this.state.top_cta_title
-          }
-        })}>
+          }});
+        }}>
           <div className="left">
           Loan eligibility calculator
             </div>

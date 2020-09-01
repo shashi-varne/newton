@@ -111,7 +111,8 @@ class MandateStatus extends Component {
       "event_name": 'lending',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'introduction'
+        "screen_name": 'e mandate response',
+        "status": this.state.status === 'failed' ? 'third party fail' : 'dmi pending'
       }
     };
 
@@ -134,6 +135,7 @@ class MandateStatus extends Component {
   }
 
   goBack = () => {
+    this.sendEvents('back');
     this.navigate(this.state.commonMapper.close_state);
   }
 

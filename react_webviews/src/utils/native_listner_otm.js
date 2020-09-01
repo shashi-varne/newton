@@ -142,7 +142,7 @@ if (getConfig().generic_callback) {
     }
 
     exports.send_device_data = function (data_json_str) {
-      
+
       var json_data = {};
       if (data_json_str !== "" && typeof data_json_str === "string") {
         json_data = JSON.parse(data_json_str);
