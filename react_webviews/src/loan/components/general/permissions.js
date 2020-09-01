@@ -54,7 +54,7 @@ class Permissions extends Component {
       loadingText: ''
     })
 
-    if (!data.nsp && !getConfig().Web) {
+    if (!data.nsp) {
       toast('Please insert a SIM card to continue with loan application.');
     } else if (data.location_permission_denied || data.permission === 'denied') {
       toast('Location is required to proceed further');
