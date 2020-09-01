@@ -206,9 +206,7 @@ class Landing extends Component {
     } else {
       if(this.state.location_needed) {//condition for mobile
         state = 'permissions';
-      } else if(dmi_loan_status === 'application_rejected') {
-        state = 'instant-kyc-status';
-      } else if(application_status === 'internally_rejected') {
+      } else if(dmi_loan_status === 'application_rejected' || application_status === 'internally_rejected') {
         state = 'instant-kyc-status';
       }else {
         state = 'journey';

@@ -135,16 +135,27 @@ if (getConfig().generic_callback) {
           name: 'geolocation'
         }).then(function(result) {
             navigator.geolocation.getCurrentPosition(position => {
-              window.callbackWeb.send_device_data('granted', position.coords);
+              let data = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                location_permission_denied: false
+              }
+              window.callbackWeb.send_device_data(data);
             })
     
             if (result.state === 'denied') {
-              window.callbackWeb.send_device_data('denied');
+              let data = {
+                location_permission_denied: true
+              }
+              window.callbackWeb.send_device_data(data);
             }
     
             result.onchange = function() {
               if (result.state === 'denied') {
-                window.callbackWeb.send_device_data('denied');
+                let data = {
+                  location_permission_denied: true
+                }
+                window.callbackWeb.send_device_data(data);
               }
             }
         })
@@ -157,16 +168,16 @@ if (getConfig().generic_callback) {
 
     }
 
-    exports.send_device_data = function (data_json_str, coords = {}) {
+    exports.send_device_data = function (data_json_str) {
       var json_data = {};
 
       if(getConfig().Web) {
         json_data = {
           'location': {
-            lat: coords.latitude || '',
-            lng: coords.longitude || ''
+            lat: data_json_str.latitude || '',
+            lng: data_json_str.longitude || ''
           },
-          'permission': data_json_str,
+          'location_permission_denied': data_json_str.location_permission_denied,
           nsp: "ABC",
           device_id: "0000000000000000"
         }

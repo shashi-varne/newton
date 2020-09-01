@@ -27,11 +27,7 @@ class KycStatus extends Component {
   componentWillMount() {
     this.initialize();
   }
-
-  componentWillUnmount() {
-
-  }
-
+  
   onload = () => {
     let lead = this.state.lead;
     let personal_info = lead.personal_info || {};
