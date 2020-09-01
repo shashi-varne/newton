@@ -27,8 +27,8 @@ class EtliPersonalDetails1 extends Component {
         this.state = {
             checked: true,
             show_loader: true,
-            quote_redirect_data: window.localStorage.getItem('quote_redirect_data') ?
-                JSON.parse(window.localStorage.getItem('quote_redirect_data')) : {},
+            quote_redirect_data: window.sessionStorage.getItem('quote_redirect_data') ?
+                JSON.parse(window.sessionStorage.getItem('quote_redirect_data')) : {},
             provider: 'EDELWEISS',
             type: getConfig().productName,
             basic_details_data: {
@@ -37,7 +37,7 @@ class EtliPersonalDetails1 extends Component {
                 gender: '',
                 marital_status: ''
             },
-            tnc: window.localStorage.getItem('term_ins_tnc')
+            tnc: window.sessionStorage.getItem('term_ins_tnc')
         };
     }
 
@@ -233,7 +233,7 @@ class EtliPersonalDetails1 extends Component {
             prevData.gender = basic_details_data.gender;
             prevData.marital_status = basic_details_data.marital_status;
             prevData.dob = basic_details_data.dob;
-            window.localStorage.setItem('quote_redirect_data', JSON.stringify(prevData));
+            window.sessionStorage.setItem('quote_redirect_data', JSON.stringify(prevData));
 
             this.setState({
                 show_loader: true

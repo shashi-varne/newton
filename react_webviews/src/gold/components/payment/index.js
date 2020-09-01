@@ -229,7 +229,7 @@ class Payment extends Component {
   }
 
   trackDelivery() {
-    window.localStorage.setItem('deliveryTransaction', 'delivery');
+    window.sessionStorage.setItem('deliveryTransaction', 'delivery');
     this.navigate('/gold/gold-transactions')
     this.props.history.push({
       pathname: '/gold/gold-transactions',

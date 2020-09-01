@@ -176,6 +176,13 @@ export function validateNumber(number) {
   return rule.test(number);
 }
 
+export function isNumberKey(evt) {
+    var charCode = (evt.which) ? evt.which : evt.keyCode
+    if (charCode !== 43 && charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+    return true;
+}
+
 export function validatePan(string) {
   // eslint-disable-next-line
   let rule = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/;
@@ -434,7 +441,7 @@ export function providerAsIpru(provider) {
 
 
 export function clearInsuranceQuoteData() {
-  window.localStorage.setItem('quoteSelected', '');
+  window.sessionStorage.setItem('quoteSelected', '');
 }
 
 export function getRecommendedIndex(array, value, AOB, Key) {
@@ -501,15 +508,15 @@ export function storageService() {
   function lsTest() {
     const test = 'test';
     try {
-      window.localStorage.setItem(test, test);
-      window.localStorage.removeItem(test);
+      window.sessionStorage.setItem(test, test);
+      window.sessionStorage.removeItem(test);
       return true;
     } catch (e) {
       console.log(e);
       return false;
     }
   }
-  const localStorageValid = lsTest();
+  const sessionStorageValid = lsTest();
   var service = {
     set: set,
     get: get,
@@ -521,42 +528,42 @@ export function storageService() {
   return service;
 
   function set(key, value) {
-    if (localStorageValid) {
-      window.localStorage.setItem(key, value);
+    if (sessionStorageValid) {
+      window.sessionStorage.setItem(key, value);
     }
   }
 
   function get(key) {
-    if (localStorageValid && checkValidString(window.localStorage.getItem(key))) {
-      return window.localStorage.getItem(key) || false;
+    if (sessionStorageValid && checkValidString(window.sessionStorage.getItem(key))) {
+      return window.sessionStorage.getItem(key) || false;
     }
 
     return false;
   }
 
   function setObject(key, value) {
-    if (localStorageValid) {
-      window.localStorage.setItem(key, JSON.stringify(value));
+    if (sessionStorageValid) {
+      window.sessionStorage.setItem(key, JSON.stringify(value));
     }
   }
 
   function getObject(key) {
-    if (localStorageValid && checkValidString(window.localStorage.getItem(key))) {
-      return JSON.parse(window.localStorage.getItem(key)) || {};
+    if (sessionStorageValid && checkValidString(window.sessionStorage.getItem(key))) {
+      return JSON.parse(window.sessionStorage.getItem(key)) || {};
     }
 
     return false;
   }
 
   function remove(key) {
-    if (localStorageValid) {
-      return window.localStorage.removeItem(key);
+    if (sessionStorageValid) {
+      return window.sessionStorage.removeItem(key);
     }
   }
 
   function clear() {
-    if (localStorageValid) {
-      return window.localStorage.clear();
+    if (sessionStorageValid) {
+      return window.sessionStorage.clear();
     }
   }
 
@@ -703,19 +710,60 @@ export function formatDate(event) {
   }
 }
 
-export function calculateAge(val) {
+
+function monthDiff(dateFrom, dateTo) {
+
+  let diff = dateTo.getMonth() - dateFrom.getMonth() + 
+  (12 * (dateTo.getFullYear() - dateFrom.getFullYear()));
+
+
+  if(dateTo.getDate() <= dateFrom.getDate()) {
+    diff--;
+  }
+  return diff
+}
+
+// function Difference_In_Days(dateFrom, dateTo) {
+//   var Difference_In_Time = dateTo.getTime() - dateFrom.getTime(); 
+//   var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24); 
+
+//   return Difference_In_Days;
+// }
+
+export function calculateAge(val, byMonth) {
   if (!val) {
     return 0;
   }
   const birthday = val.toString().replace(/\\-/g, '/').split('/').reverse().join('/');
   const today = new Date();
   const birthDate = new Date(birthday);
-  let age = today.getFullYear() - birthDate.getFullYear();
+  let age2 = today.getFullYear() - birthDate.getFullYear();
   const m = today.getMonth() - birthDate.getMonth();
   if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-    age--;
+    age2--;
   }
-  return age;
+
+  if (age2 && (m === 0 && today.getDate() >= birthDate.getDate())) {
+    age2++;
+  }
+
+  // let age = Difference_In_Days(birthDate, today)/365;
+
+  if(byMonth) {
+    return {
+      age: age2,
+      month: monthDiff(birthDate, today)
+    }
+  }
+
+  return age2;
+}
+
+export function toFeet(n) {
+  var realFeet = ((n*0.393700) / 12);
+  var feet = Math.floor(realFeet);
+  var inches = Math.round((realFeet - feet) * 12);
+  return feet + 'ft ' + inches + 'in';
 }
 
 export function convertToThousand(val) {
@@ -725,6 +773,14 @@ export function convertToThousand(val) {
   const roundedVal = parseInt(numVal/1000, 10);
   return `${roundedVal}K`;
 }
+
+export function capitalizeFirstLetter(string) {
+  if(!string) {
+    return '';
+  }
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 
 export function getEditTitle(string) {
   if(!string) {

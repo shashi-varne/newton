@@ -97,9 +97,9 @@ class Recommendation extends Component {
   }
 
   async componentDidMount() {
-    if (window.localStorage.getItem('backData')) {
-      let backData = JSON.parse(window.localStorage.getItem('backData'));
-      window.localStorage.setItem('backData', '');
+    if (window.sessionStorage.getItem('backData')) {
+      let backData = JSON.parse(window.sessionStorage.getItem('backData'));
+      window.sessionStorage.setItem('backData', '');
       this.setState({
         mfTab: backData.mfTab,
         yearTab: backData.yearTab,
@@ -211,7 +211,7 @@ class Recommendation extends Component {
       yearTab: this.state.yearTab,
       amount: this.state.amount
     }
-    window.localStorage.setItem('backData', JSON.stringify(backData));
+    window.sessionStorage.setItem('backData', JSON.stringify(backData));
 
     let investment = {
       name: this.state.funds[0].itype,

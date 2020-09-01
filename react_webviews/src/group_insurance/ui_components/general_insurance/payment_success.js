@@ -41,7 +41,7 @@ class PaymentSuccessClass extends Component {
   componentWillMount() {
 
     let { params } = this.props.parent.props.location || {};
-    let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected');
+    let lead_id = window.sessionStorage.getItem('group_insurance_lead_id_selected');
     this.setState({
       lead_id: lead_id || '',
       fromHome: params && params.fromHome ? true : false,

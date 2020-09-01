@@ -465,10 +465,10 @@ class Pincode extends Component {
     });
     if (res.pfwresponse.status_code === 200) {
       clearInsuranceQuoteData();
-      let excluded_providers = window.localStorage.getItem('excluded_providers') ?
-        JSON.parse(window.localStorage.getItem('excluded_providers')) : [];
+      let excluded_providers = window.sessionStorage.getItem('excluded_providers') ?
+        JSON.parse(window.sessionStorage.getItem('excluded_providers')) : [];
       excluded_providers.push(this.state.provider);
-      window.localStorage.setItem('excluded_providers', JSON.stringify(excluded_providers));
+      window.sessionStorage.setItem('excluded_providers', JSON.stringify(excluded_providers));
       this.navigate('quote');
     } else {
       this.setState({

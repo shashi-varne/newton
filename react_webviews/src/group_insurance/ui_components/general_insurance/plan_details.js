@@ -92,8 +92,8 @@ class PlanDetailsClass extends Component {
       type: getConfig().productName,
       color: getConfig().primary,
       quoteData: {},
-      premiudmDtailsStored: window.localStorage.getItem('group_insurance_plan_final_data') ?
-        JSON.parse(window.localStorage.getItem('group_insurance_plan_final_data')) : ''
+      premiudmDtailsStored: window.sessionStorage.getItem('group_insurance_plan_final_data') ?
+        JSON.parse(window.sessionStorage.getItem('group_insurance_plan_final_data')) : ''
     };
 
     this.renderPlans = this.renderPlans.bind(this);
@@ -111,7 +111,7 @@ class PlanDetailsClass extends Component {
     let instant_issuance = this.props.parent.state.integeration_type === 'redirection' ? false : true;
     let isRedirectionModal = this.props.parent.state.integeration_type === 'redirection' ? true : false;
     let instant_icon = this.state.type !== 'fisdom' ? instant_myway : instant_fisdom;
-    let lead_id = window.localStorage.getItem('group_insurance_lead_id_selected') || '';
+    let lead_id = window.sessionStorage.getItem('group_insurance_lead_id_selected') || '';
     let ic_ci_d1_icon = this.state.type !== 'fisdom' ? ic_ci_d1_myway : ic_ci_d1_fisdom;
     this.setState({
       lead_id: lead_id || '',
@@ -429,7 +429,7 @@ class PlanDetailsClass extends Component {
 
     let group_insurance_plan_final_data = this.state.group_insurance_plan_final_data || {};
     group_insurance_plan_final_data[final_data.product_name] = final_data;
-    window.localStorage.setItem('group_insurance_plan_final_data',
+    window.sessionStorage.setItem('group_insurance_plan_final_data',
       JSON.stringify(group_insurance_plan_final_data));
 
     this.setState({

@@ -59,7 +59,7 @@ class Listing extends Component {
           })
         });
 
-        window.localStorage.setItem('helpsupport_questions', JSON.stringify(questions_array));
+        window.sessionStorage.setItem('helpsupport_questions', JSON.stringify(questions_array));
 
         this.setState({
           show_loader: false,

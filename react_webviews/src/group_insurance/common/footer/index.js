@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { DefaultLayout, SummaryLayout, TwoButtonLayout } from './layout';
+import { DefaultLayout, SummaryLayout, TwoButtonLayout, WithProviderLayout } from './layout';
 import { getConfig } from 'utils/functions';
 
 const Footer = (props) => {
@@ -17,6 +17,13 @@ const Footer = (props) => {
         <TwoButtonLayout type="twobutton" {...props} />
       </div>
     );
+  } else if(props.withProvider) {
+    return (
+   
+        <div className="Footer" style={{border: '1px solid rgb(235, 235, 226)'}}>
+          <WithProviderLayout type="default" {...props} />
+        </div>
+    );   
   } else {
     return (
       <div className="Footer" style={{border: '1px solid' + getConfig().secondary,
