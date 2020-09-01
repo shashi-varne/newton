@@ -15,7 +15,6 @@ import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
 import { storageService } from 'utils/validators';
 import { checkStringInString } from 'utils/validators';
 import scrollIntoView from 'scroll-into-view-if-needed';
-import { getConfig } from "utils/functions";
 
 const agreeOptions = [
     {
