@@ -181,10 +181,12 @@ if (getConfig().generic_callback) {
           nsp: "ABC",
           device_id: "0000000000000000"
         }
-      } else if (data_json_str !== "" && typeof data_json_str === "string") {
-        json_data = JSON.parse(data_json_str);
       } else {
-        json_data = data_json_str;
+        if (data_json_str !== "" && typeof data_json_str === "string") {
+          json_data = JSON.parse(data_json_str);
+        } else {
+          json_data = data_json_str;
+        }
       }
 
       for (var j = 0; j < listeners.length; j++) {
