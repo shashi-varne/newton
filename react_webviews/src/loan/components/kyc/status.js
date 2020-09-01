@@ -305,35 +305,37 @@ class KycStatus extends Component {
               </div>
             }
 
-            {(this.state.status === 'loan_not_eligible') &&
+            {(this.state.status === 'loan_not_eligible' && !this.state.rejection_reason) &&
               <div>
                 <p className="top-content">
                   At the outset, we thank you for expressing interest in availing a loan.
                 </p>
 
-                {this.state.rejection_reason === 'location' && 
-                  <p className="top-content">
-                    We regret to inform you that <b>we cannot process your application further at this stage</b>,
-                    as Aadhar City is not supported by partner DMI.
-                  </p>
-                }
-
-                {this.state.rejection_reason === 'occupation' && 
-                  <p className="top-content">
-                    We regret to inform you that <b>we cannot process your application further at this stage</b>,
-                    as Employment status is not qualified for personal loan.
-                  </p>
-                }
-
-                {!this.state.rejection_reason &&
-                  <p className="top-content">
-                    We regret to inform you that <b>we cannot process your application further at this stage</b>,
-                    as it does not meet our partner’s policy criteria.
-                  </p>
-                }
+                <p className="top-content">
+                  We regret to inform you that <b>we cannot process your application further at this stage</b>,
+                  as it does not meet our partner’s policy criteria.
+                </p>
                 
                 <p className="top-content">
                   Hope to be of assistance in future.
+                </p>
+              </div>
+            }
+
+            {this.state.rejection_reason === 'location' && 
+              <div>
+                <p>Sorry! We don't serve in the selected location yet.</p>
+                <p className="top-content">
+                  Thank you for expressing interest in availing a loan. Hope to be of assistance in future.
+                </p>
+              </div>
+            }
+
+            {this.state.rejection_reason === 'occupation' &&
+              <div>
+                <p>Sorry! As of now, we are only serving salaried professionals.</p>
+                <p className="top-content">
+                  Thank you for expressing interest in availing a loan. Hope to be of assistance in future.
                 </p>
               </div>
             }
