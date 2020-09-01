@@ -262,15 +262,11 @@ class FormSummary extends Component {
             try {
                 let res = await Api.get(`/relay/api/loan/submit/application/${this.state.application_id}`);
 
+
                 var resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200 && !resultData.error) {
-                    console.log(resultData)
-                    if (resultData.status === 'Application Rejected') {
-                        let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
-                        this.navigate('instant-kyc-status', { searchParams: searchParams });                     
-                    } else {
-                        this.openCreateProfile();
-                    }
+
+                    this.openCreateProfile();
                 } else {
                     this.setState({
                         show_loader: false

@@ -38,13 +38,7 @@ const commonMapper = {
     'close_state': '/loan/home',
     'noFooter': true,
     'hide_contact': true
-  },
-  'exit': {
-
-  },
-  'discrepancy': {
-    
-  },
+  }
 }
 
 
