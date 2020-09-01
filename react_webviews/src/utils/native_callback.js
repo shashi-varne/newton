@@ -21,20 +21,16 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   let project = getConfig().project;
   let redirect_url = getConfig().redirect_url;
   redirect_url = decodeURIComponent(redirect_url);
-
-  if(events && events.properties) {
-    console.log(events.properties);
-  }
- 
-  if(project === 'loan') {
-    events = ''; //disabled the events for now
-  }
   
   if (action) {
     callbackData.action = action;
   }
   if (!action && !events) {
     return;
+  }
+
+  if(events && events.properties) {
+    console.log(events.properties);
   }
 
 

@@ -77,7 +77,9 @@ class MandatePan extends Component {
       "event_name": 'lending',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'introduction'
+        "screen_name": 'pan upload',
+        "type": this.state.type === 'open_camera' ? 'camera' : 'gallery',
+        "pan_uploaded": this.state.fileUploaded ? 'yes' : 'no'
       }
     };
 
@@ -245,7 +247,9 @@ class MandatePan extends Component {
   }
 
   startUpload(method_name, doc_type, doc_name, doc_side) {
-    this.sendEvents(method_name);
+    this.setState({
+      type: method_name
+    })
 
     if (getConfig().html_camera) {
       this.openCameraWeb();

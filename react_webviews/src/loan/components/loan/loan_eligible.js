@@ -39,7 +39,8 @@ class LoanEligible extends Component {
       "event_name": 'lending',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'introduction'
+        "screen_name": 'loan eligibility',
+        "stage": 'eligible'
       }
     };
 
@@ -88,7 +89,6 @@ class LoanEligible extends Component {
   render() {
 
     let vendor_info = this.state.vendor_info || {};
-
     return (
       <Container
         showLoader={this.state.show_loader}

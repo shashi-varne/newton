@@ -25,12 +25,13 @@ class Help extends Component {
 
   }
 
-  sendEvents(user_action) {
+  sendEvents(user_action, data={} ) {
     let eventObj = {
       "event_name": 'lending',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'introduction'
+        "screen_name": 'need help',
+        "link_clicked": this.state.link_clicked ? 'yes' : 'no'
       }
     };
 
@@ -41,8 +42,11 @@ class Help extends Component {
     }
   }
 
-  handleClick = () => {
-      this.sendEvents('next');
+  handleClick = (link_clicked) => {
+      
+    this.setState({
+      link_clicked: link_clicked
+    }, () => this.sendEvents('next'));
   }
 
   render() {
@@ -77,7 +81,10 @@ class Help extends Component {
             <span className="details" style={{lineHeight: '25px'}}>
               {` 9350657100`}
               <br />
-              <div className="link" onClick={() => {this.openInBrowser('https://bit.ly/DMIFINWA')}}>
+              <div className="link" onClick={() => {
+                this.handleClick(true)
+                this.openInBrowser('https://bit.ly/DMIFINWA')
+              }}>
                 https://bit.ly/DMIFINWA
               </div>
             </span>  

@@ -134,13 +134,22 @@ class ProfessionalDetails extends Component {
 
 
     sendEvents(user_action) {
+        let { form_data } = this.state;
+
         let eventObj = {
             "event_name": 'lending',
             "properties": {
                 "user_action": user_action,
-                "screen_name": 'contact details',
-                'email': this.state.form_data.email ? 'yes' : 'no',
-                'mobile_number': this.state.form_data.mobile_number ? 'yes' : 'no',
+                "screen_name": 'professional details',
+                "company_name": form_data.company_name || '',
+                "duration": form_data.duration || '',
+                "educational_qualification": form_data.educational_qualification || '',
+                "office_address": form_data.office_address || '',
+                "office_city": form_data.office_city || '',
+                "office_country": form_data.office_country || '',
+                "office_email": form_data.office_email || '',
+                "office_pincode": form_data.office_pincode || '',
+                "office_state": form_data.office_state || '',
                 'from_edit': this.props.edit ? 'yes' : 'no'
             }
         };

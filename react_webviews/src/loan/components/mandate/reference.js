@@ -47,11 +47,17 @@ class KycStatus extends Component {
   }
 
   sendEvents(user_action) {
+    let { form_data } = this.state;
+
     let eventObj = {
       "event_name": 'lending',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'introduction'
+        "screen_name": 'reference info',
+        "ref_contact_first": form_data.ref_contact_first,
+        "ref_contact_second": form_data.ref_contact_second,
+        "ref_name_first": form_data.ref_name_first,
+        "ref_name_second": form_data.ref_name_second
       }
     };
 

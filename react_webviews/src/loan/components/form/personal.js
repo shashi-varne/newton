@@ -127,16 +127,23 @@ class PersonalDetails extends Component {
 
 
     sendEvents(user_action) {
+        let { form_data } = this.state;
+         
         let eventObj = {
             "event_name": 'lending',
             "properties": {
                 "user_action": user_action,
-                "screen_name": 'contact details',
-                'email': this.state.form_data.email ? 'yes' : 'no',
-                'mobile_number': this.state.form_data.mobile_number ? 'yes' : 'no',
+                "screen_name": "personal details",
+                "dob": form_data.dob || '',
+                "father_name": form_data.father_name || '',
+                "first_name": form_data.first_name || '',
+                "last_name": form_data.last_name || '',
+                "gender": form_data.gender || '',
+                "pan_no": form_data.pan_no || '',
+                "marital_status": form_data.marital_status || '',
                 'from_edit': this.props.edit ? 'yes' : 'no'
             }
-        };
+        }
 
         if (user_action === 'just_set_events') {
             return eventObj;
