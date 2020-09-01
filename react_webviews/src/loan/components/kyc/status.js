@@ -342,7 +342,7 @@ class KycStatus extends Component {
 
             {(this.state.status === 'loan_not_eligible') &&
               <div>
-                {this.state.rejection_reason === 'Rejected by DMI' && <div>
+                {(this.state.rejection_reason !== 'location' && this.state.rejection_reason !== 'occupation') && <div>
                   <p className="top-content">
                     At the outset, we thank you for expressing interest in availing a loan.
                   </p>
