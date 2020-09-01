@@ -15,32 +15,35 @@ import icn_phonepe from 'assets/icn_phonepe.svg';
 import icn_paytm from 'assets/icn_paytm.svg';
 import icn_more from 'assets/icn_more.svg';
 import icn_secure_payment from 'assets/icn_secure_payment.svg'
+import Api from 'utils/api';
 
-const store = {
-  message: '',
-  show_debit: true,
-  show_netbanking: true,
-  allow_neft: true,
-  neft_callback_url: '',
-  bank_list_url: '',
-  upi_add_bank_url: '',
-  banks: [{ "penny_verification_reference": {}, "obscured_account_number": "xx22", "ifsc_details": { "city": "PATNA", "district": "PATNA", "new_ifsc": null, "ifsc": "SBIN0001513", "micr": "800002033", "state": "BIHAR", "contact": "0", "branch": "PATLIPUTRA", "address": "DISTPATNA  BIHAR 800013", "id": 4871689867362304, "bank": "STATE BANK OF INDIA" }, "name_match_state": null, "image": "https://test-dot-plutus-staging.appspot.com/static/img/banks/SBI.png", "bank_status": "submitted", "bank_id": 192870294, "non_editable_details": [], "billdesk_supported": true, "partner": null, "source_of_info": null, "actual_ifsc_code": "SBIN0001513", "received_name": "", "user_id": 6503257211928577, "razorpay_supported": true, "ifsc_code": "SBIN0001513", "rejection_allowed": true, "bank_short_name": "SBI", "bank_name": "STATE BANK OF INDIA", "upi_supported": true, "account_type": "SB-NRE", "bank_code": "SBI", "neft_supported": true, "rejection_details": "None", "kyc_bank_code": "SBIN", "branch_name": "PATLIPUTRA", "dt_created": "01/24/20 05:30:00", "pg_code": "SBI", "dt_updated": "01/28/20 05:30:00", "name": null, "bank_supported": true, "version_flag": "migrated", "user_rejection_attempts": 3, "ifsc_image": "https://test-dot-plutus-staging.appspot.com/static/img/bank_logos/SBI.png", "account_number": "1236", "module_name": "kyc", "is_primary_bank": false }, { "penny_verification_reference": {}, "obscured_account_number": "xx34", "ifsc_details": { "city": "FEROZPUR", "district": "PANJKOSI", "new_ifsc": null, "ifsc": "HDFC0003132", "micr": "152240007", "state": "PUNJAB", "contact": "9815331111", "branch": "PANJE KE", "address": "HDFC BANK LTD PREMISES ADJOINING MAIN MARKET, VPO PANJE KE, DISTT. FEROZEPUR, PANJE KE PUNJAB 152024", "id": 6538793502900224, "bank": "HDFC BANK" }, "name_match_state": null, "image": "https://test-dot-plutus-staging.appspot.com/static/img/banks/HDF.png", "bank_status": "submitted", "bank_id": 200880194, "non_editable_details": [], "billdesk_supported": true, "partner": null, "source_of_info": null, "actual_ifsc_code": "HDFC0003132", "received_name": "", "user_id": 6503257211928577, "razorpay_supported": true, "ifsc_code": "HDFC0003132", "rejection_allowed": true, "bank_short_name": "HDFC", "bank_name": "HDFC BANK", "upi_supported": true, "account_type": "SB", "bank_code": "HDF", "neft_supported": true, "rejection_details": "None", "kyc_bank_code": "HDFC", "branch_name": "PANJE KE", "dt_created": "01/24/20 05:30:00", "pg_code": "HDF", "dt_updated": "01/24/20 05:30:00", "name": null, "bank_supported": true, "version_flag": "migrated", "user_rejection_attempts": 3, "ifsc_image": "https://test-dot-plutus-staging.appspot.com/static/img/bank_logos/HDF.png", "account_number": "1234", "is_primary_bank": false }, { "penny_verification_reference": {}, "obscured_account_number": "xx36", "ifsc_details": { "city": "PATNA", "district": "PATNA", "new_ifsc": null, "ifsc": "SBIN0001513", "micr": "800002033", "state": "BIHAR", "contact": "0", "branch": "PATLIPUTRA", "address": "DISTPATNA  BIHAR 800013", "id": 4871689867362304, "bank": "STATE BANK OF INDIA" }, "name_match_state": null, "image": "https://test-dot-plutus-staging.appspot.com/static/img/banks/SBI.png", "bank_status": "submitted", "bank_id": 192870294, "non_editable_details": [], "billdesk_supported": true, "partner": null, "source_of_info": null, "actual_ifsc_code": "SBIN0001513", "received_name": "", "user_id": 6503257211928577, "razorpay_supported": true, "ifsc_code": "SBIN0001513", "rejection_allowed": true, "bank_short_name": "SBI", "bank_name": "STATE BANK OF INDIA", "upi_supported": true, "account_type": "SB-NRE", "bank_code": "SBI", "neft_supported": true, "rejection_details": "None", "kyc_bank_code": "SBIN", "branch_name": "PATLIPUTRA", "dt_created": "01/24/20 05:30:00", "pg_code": "SBI", "dt_updated": "01/28/20 05:30:00", "name": null, "bank_supported": true, "version_flag": "migrated", "user_rejection_attempts": 3, "ifsc_image": "https://test-dot-plutus-staging.appspot.com/static/img/bank_logos/SBI.png", "account_number": "123456", "module_name": "kyc", "is_primary_bank": true }],
-  show_warning: '',
-  url: '',
-  amount: 5000,
-  upi_enabled: true,
-  has_upi_banks: true,
-  funds: {},
-  supported_bank_list: {},
-  flow: '',
-  investor: '',
-  is_nri: false,
-  app: 'fisdom',
-  user: {},
-  preferred_banks: [{ "bank_name": "State Bank of India", "image": "https://test-dot-plutus-staging.appspot.com/static/img/banks/SBI.png", "bank_short_name": "SBI", "pg_code": "SBI", "bank_code": "SBIN" }, { "bank_name": "HDFC Bank", "image": "https://test-dot-plutus-staging.appspot.com/static/img/banks/HDF.png", "bank_short_name": "HDFC", "pg_code": "HDF", "bank_code": "HDFC" }, { "bank_name": "SBI Bank", "image": "https://test-dot-plutus-staging.appspot.com/static/img/banks/ICI.png", "bank_short_name": "SBI", "pg_code": "SBI", "bank_code": "SBIN" }],
-  generic_callback: true,
-  partner: 'obc'
-}
+let store = {}
+
+// const store = {
+//   message: '',
+//   show_debit: true,
+//   show_netbanking: true,
+//   allow_neft: true,
+//   neft_callback_url: '',
+//   bank_list_url: '',
+//   upi_add_bank_url: '',
+//   banks: [{ "penny_verification_reference": {}, "obscured_account_number": "xx22", "ifsc_details": { "city": "PATNA", "district": "PATNA", "new_ifsc": null, "ifsc": "SBIN0001513", "micr": "800002033", "state": "BIHAR", "contact": "0", "branch": "PATLIPUTRA", "address": "DISTPATNA  BIHAR 800013", "id": 4871689867362304, "bank": "STATE BANK OF INDIA" }, "name_match_state": null, "image": "https://test-dot-plutus-staging.appspot.com/static/img/banks/SBI.png", "bank_status": "submitted", "bank_id": 192870294, "non_editable_details": [], "billdesk_supported": true, "partner": null, "source_of_info": null, "actual_ifsc_code": "SBIN0001513", "received_name": "", "user_id": 6503257211928577, "razorpay_supported": true, "ifsc_code": "SBIN0001513", "rejection_allowed": true, "bank_short_name": "SBI", "bank_name": "STATE BANK OF INDIA", "upi_supported": true, "account_type": "SB-NRE", "bank_code": "SBI", "neft_supported": true, "rejection_details": "None", "kyc_bank_code": "SBIN", "branch_name": "PATLIPUTRA", "dt_created": "01/24/20 05:30:00", "pg_code": "SBI", "dt_updated": "01/28/20 05:30:00", "name": null, "bank_supported": true, "version_flag": "migrated", "user_rejection_attempts": 3, "ifsc_image": "https://test-dot-plutus-staging.appspot.com/static/img/bank_logos/SBI.png", "account_number": "1236", "module_name": "kyc", "is_primary_bank": false }, { "penny_verification_reference": {}, "obscured_account_number": "xx34", "ifsc_details": { "city": "FEROZPUR", "district": "PANJKOSI", "new_ifsc": null, "ifsc": "HDFC0003132", "micr": "152240007", "state": "PUNJAB", "contact": "9815331111", "branch": "PANJE KE", "address": "HDFC BANK LTD PREMISES ADJOINING MAIN MARKET, VPO PANJE KE, DISTT. FEROZEPUR, PANJE KE PUNJAB 152024", "id": 6538793502900224, "bank": "HDFC BANK" }, "name_match_state": null, "image": "https://test-dot-plutus-staging.appspot.com/static/img/banks/HDF.png", "bank_status": "submitted", "bank_id": 200880194, "non_editable_details": [], "billdesk_supported": true, "partner": null, "source_of_info": null, "actual_ifsc_code": "HDFC0003132", "received_name": "", "user_id": 6503257211928577, "razorpay_supported": true, "ifsc_code": "HDFC0003132", "rejection_allowed": true, "bank_short_name": "HDFC", "bank_name": "HDFC BANK", "upi_supported": true, "account_type": "SB", "bank_code": "HDF", "neft_supported": true, "rejection_details": "None", "kyc_bank_code": "HDFC", "branch_name": "PANJE KE", "dt_created": "01/24/20 05:30:00", "pg_code": "HDF", "dt_updated": "01/24/20 05:30:00", "name": null, "bank_supported": true, "version_flag": "migrated", "user_rejection_attempts": 3, "ifsc_image": "https://test-dot-plutus-staging.appspot.com/static/img/bank_logos/HDF.png", "account_number": "1234", "is_primary_bank": false }, { "penny_verification_reference": {}, "obscured_account_number": "xx36", "ifsc_details": { "city": "PATNA", "district": "PATNA", "new_ifsc": null, "ifsc": "SBIN0001513", "micr": "800002033", "state": "BIHAR", "contact": "0", "branch": "PATLIPUTRA", "address": "DISTPATNA  BIHAR 800013", "id": 4871689867362304, "bank": "STATE BANK OF INDIA" }, "name_match_state": null, "image": "https://test-dot-plutus-staging.appspot.com/static/img/banks/SBI.png", "bank_status": "submitted", "bank_id": 192870294, "non_editable_details": [], "billdesk_supported": true, "partner": null, "source_of_info": null, "actual_ifsc_code": "SBIN0001513", "received_name": "", "user_id": 6503257211928577, "razorpay_supported": true, "ifsc_code": "SBIN0001513", "rejection_allowed": true, "bank_short_name": "SBI", "bank_name": "STATE BANK OF INDIA", "upi_supported": true, "account_type": "SB-NRE", "bank_code": "SBI", "neft_supported": true, "rejection_details": "None", "kyc_bank_code": "SBIN", "branch_name": "PATLIPUTRA", "dt_created": "01/24/20 05:30:00", "pg_code": "SBI", "dt_updated": "01/28/20 05:30:00", "name": null, "bank_supported": true, "version_flag": "migrated", "user_rejection_attempts": 3, "ifsc_image": "https://test-dot-plutus-staging.appspot.com/static/img/bank_logos/SBI.png", "account_number": "123456", "module_name": "kyc", "is_primary_bank": true }],
+//   show_warning: '',
+//   url: '',
+//   amount: 5000,
+//   upi_enabled: true,
+//   has_upi_banks: true,
+//   funds: {},
+//   supported_bank_list: {},
+//   flow: '',
+//   investor: '',
+//   is_nri: false,
+//   app: 'fisdom',
+//   user: {},
+//   preferred_banks: [{ "bank_name": "State Bank of India", "image": "https://test-dot-plutus-staging.appspot.com/static/img/banks/SBI.png", "bank_short_name": "SBI", "pg_code": "SBI", "bank_code": "SBIN" }, { "bank_name": "HDFC Bank", "image": "https://test-dot-plutus-staging.appspot.com/static/img/banks/HDF.png", "bank_short_name": "HDFC", "pg_code": "HDF", "bank_code": "HDFC" }, { "bank_name": "SBI Bank", "image": "https://test-dot-plutus-staging.appspot.com/static/img/banks/ICI.png", "bank_short_name": "SBI", "pg_code": "SBI", "bank_code": "SBIN" }],
+//   generic_callback: true,
+//   partner: 'obc'
+// }
 let show_reason = false;
 let retry_enabled = true;
 let intent_supported = true;
@@ -80,7 +83,7 @@ class PaymentOption extends React.Component {
       isUpiModalOpen: false,
       upiBanks: [],
       neftBanks: [],
-      hasAccount: store.banks.length,
+      // hasAccount: store.banks.length,
       notSupportedBankCount: 0,
       supportedBanks: [],
       unSupportedBanks: [],
@@ -114,7 +117,11 @@ class PaymentOption extends React.Component {
     this.sendReason = this.sendReason.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
-  componentDidMount() {
+  componentDidMount = async () => {
+    let res = await Api.get(`https://payment-dot-plutus-staging.appspot.com/api/invest/test/pg/summary/ahBzfnBsdXR1cy1zdGFnaW5nch8LEhJJbnZlc3RtZW50X1BheW1lbnQYgYDAmq6p2wsM`);
+    let resultData = res.pfwresponse.result;
+    store = resultData;
+    console.log(resultData.banks)
     const supportedBanks = store.banks.filter((item, i) => {
       return item.bank_supported;
     });
@@ -452,40 +459,41 @@ class PaymentOption extends React.Component {
 
   render() {
     let carouselItems;
-
-    if (this.state.supportedBanks.length > 0) {
-      carouselItems = this.state.supportedBanks.map((item, i) => {
-        return (
-          <div className={`carousel-item ${(this.state.netbank.code == item.bank_code) ? 'active' : ''}`} key={i} onClick={() => this.selectNetBank(item)}>
-            <div className="flex">
-              <div className="item">
-                <img src={item.image} width="30" />
-              </div>
-              <div className="item">
-                <div className="dark-grey-text uppercase">{item.bank_short_name}</div>
-                <div className="light-grey">{item.obscured_account_number}</div>
-              </div>
-            </div>
-          </div>
-        );
-      });
-    } else {
-      carouselItems = store.preferred_banks.map((item, i) => {
-        return (
-          <div className={`carousel-item ${(this.state.netbank.code == item.bank_code) ? 'active' : ''}`} key={i} onClick={() => this.selectUnsupportedNetBank(item)}>
-            <div className="flex">
-              <div className="item">
-                <img src={item.image} width="30" />
-              </div>
-              <div className="item">
-                <div className="dark-grey-text uppercase">{item.bank_short_name}</div>
+    if (store.banks && store.banks.length) {
+      if (this.state.supportedBanks.length > 0) {
+        carouselItems = this.state.supportedBanks.map((item, i) => {
+          return (
+            <div className={`carousel-item ${(this.state.netbank.code == item.bank_code) ? 'active' : ''}`} key={i} onClick={() => this.selectNetBank(item)}>
+              <div className="flex">
+                <div className="item">
+                  <img src={item.image} width="30" />
+                </div>
+                <div className="item">
+                  <div className="dark-grey-text uppercase">{item.bank_short_name}</div>
+                  <div className="light-grey">{item.obscured_account_number}</div>
+                </div>
               </div>
             </div>
-          </div>
-        );
-      });
+          );
+        });
+      } else {
+        carouselItems = store.preferred_banks.map((item, i) => {
+          return (
+            <div className={`carousel-item ${(this.state.netbank.code == item.bank_code) ? 'active' : ''}`} key={i} onClick={() => this.selectUnsupportedNetBank(item)}>
+              <div className="flex">
+                <div className="item">
+                  <img src={item.image} width="30" />
+                </div>
+                <div className="item">
+                  <div className="dark-grey-text uppercase">{item.bank_short_name}</div>
+                </div>
+              </div>
+            </div>
+          );
+        });
+      }
     }
-    if (this.state.selectedBank) {
+    if (this.state.selectedBank && store.banks && store.banks.length) {
       return (
         <Container
           title=""
