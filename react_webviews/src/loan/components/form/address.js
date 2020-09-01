@@ -236,7 +236,7 @@ class AddressDetails extends Component {
             >
                 <FormControl fullWidth>
                     <div style={{ color: '#64778D', fontSize: 13, fontWeight: 300, margin: '0 0 6px 0' }}>
-                        Aadhaar Address Details
+                        Current Residence Address
                     </div>
                     <div className="InputField">
                         <DropdownWithoutIcon
@@ -336,7 +336,7 @@ class AddressDetails extends Component {
                                         className="Checkbox" />
                                 </Grid>
                                 <Grid item xs={11}>
-                                    <div className="checkbox-text">Permanent address is same as Aadhaar address
+                                    <div className="checkbox-text">Permanent address is same as Current address
                                 </div>
                                 </Grid>
                             </Grid>
