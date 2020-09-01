@@ -48,8 +48,6 @@ class Permissions extends Component {
   }
 
   updateData = (data) => {
-    console.log(data)
-
     this.setState({
       show_loader: false,
       loadingText: ''
