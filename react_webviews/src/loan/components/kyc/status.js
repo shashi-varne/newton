@@ -324,7 +324,7 @@ class KycStatus extends Component {
 
             {this.state.rejection_reason === 'location' && 
               <div>
-                <p>Sorry! We don't serve in the selected location yet.</p>
+                <p className="top-content">Sorry! We don't serve in the selected location yet.</p>
                 <p className="top-content">
                   Thank you for expressing interest in availing a loan. Hope to be of assistance in future.
                 </p>
@@ -333,7 +333,7 @@ class KycStatus extends Component {
 
             {this.state.rejection_reason === 'occupation' &&
               <div>
-                <p>Sorry! As of now, we are only serving salaried professionals.</p>
+                <p className="top-content">Sorry! As of now, we are only serving salaried professionals.</p>
                 <p className="top-content">
                   Thank you for expressing interest in availing a loan. Hope to be of assistance in future.
                 </p>
