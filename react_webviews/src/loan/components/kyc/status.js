@@ -339,7 +339,7 @@ class KycStatus extends Component {
               </div>
             }
 
-            {(this.state.status === 'loan_not_eligible' && !this.state.rejection_reason) &&
+            {(this.state.status === 'loan_not_eligible') &&
               <div>
                 <p className="top-content">
                   At the outset, we thank you for expressing interest in availing a loan.
@@ -356,7 +356,7 @@ class KycStatus extends Component {
               </div>
             }
 
-            {this.state.rejection_reason === 'location' && 
+            {(this.state.status === 'loan_not_eligible' && this.state.rejection_reason === 'location') && 
               <div>
                 <p className="top-content">Sorry! We don't serve in the selected location yet.</p>
                 <p className="top-content">
@@ -365,7 +365,7 @@ class KycStatus extends Component {
               </div>
             }
 
-            {this.state.rejection_reason === 'occupation' &&
+            {(this.state.status === 'loan_not_eligible' && this.state.rejection_reason === 'occupation') &&
               <div>
                 <p className="top-content">Sorry! As of now, we are only serving salaried professionals.</p>
                 <p className="top-content">
