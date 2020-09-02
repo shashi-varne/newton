@@ -211,7 +211,7 @@ class KycStatus extends Component {
           "user_action": user_action,
           "screen_name": 'loan-eligibility',
           "stage": 'not eligible',
-          "rejection_reason": this.state.rejection_reason
+          "rejection_reason": this.state.rejection_reason === undefined ? 'Rejected by DMI' : this.state.rejection_reason
         }
       };
     } else if (this.state.status === 'sorry') {
