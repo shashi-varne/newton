@@ -1,6 +1,3 @@
-.wr-otp-container {
-  margin-top: 40px;
-}
 .wr-otp-input {
   width: 45px !important;
   height: 45px;
@@ -56,10 +53,55 @@
   padding: 20px;
 }
 
-@media only screen and (min-device-width: 375px) and (max-device-width: 812px) {
-  .wr-otp-container {
-    margin-top: 0px;
+.wr-input-form {
+  margin: 40px 0 30px;
+  display: flex;
+
+  .wr-code-input {
+    width: 21% !important;
+    border-radius: 4px;
+    border: 1px solid #dadaed;
+
+    .MuiInput-input {
+      font-size: 22px !important;
+      font-weight: 500;
+      line-height: 1.2;
+    }
+    .MuiSelect-select {
+      padding-right: 0px !important;
+    }
+    .MuiSelect-select:focus {
+      background: white;
+    }
   }
+
+  .wr-select-input {
+    padding: 5px 0px 5px 10px !important;
+  }
+
+  .MuiFormControl-marginNormal {
+    margin: 0px !important;
+  }
+
+  .wr-mob-input {
+    width: 72.5% !important;
+    margin-left: 16px;
+    border-radius: 4px;
+    border: 1px solid #dadaed;
+
+    .MuiInput-input {
+      font-size: 22px !important;
+      font-weight: 500;
+      padding: 16px;
+    }
+  }
+
+  .MuiMenu-paper {
+    max-height: 40vh !important;
+  }
+}
+
+@media only screen and (min-device-width: 375px) and (max-device-width: 812px) {
   .wr-otp-input {
     width: 48px !important;
     height: 48px !important;
@@ -69,6 +111,43 @@
     font-size: 24px;
     color: var(--primary);
     font-weight: 600;
+  }
+
+  .wr-input-form {
+    margin: 10px 0 40px;
+    
+    .wr-code-input {
+      width: 21% !important;
+      border-radius: 4px 0 0 4px;
+      border: 1px solid #dadaed;
+      border-right: 0 !important;
+      min-height: 56px !important;
+
+      .MuiInput-input {
+        font-size: 16px !important;
+      }
+      .MuiSelect-select {
+        padding-right: 0px !important;
+      }
+    }
+
+    .wr-select-input {
+      padding: 9px 0px 9px 14px !important;
+    }
+
+    .wr-mob-input {
+      width: 77.5% !important;
+      min-height: 56px !important;
+      margin-left: 0;
+      border-radius: 0 4px 4px 0;
+      border: 1px solid #dadaed;
+
+      .MuiInput-input {
+        font-size: 16px !important;
+        font-weight: 500;
+        padding: 16px 16px 12px 16px;
+      }
+    }
   }
 
   .wr-footer {

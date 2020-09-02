@@ -51,7 +51,7 @@ class WrPhoneInput extends Component {
                   placeholder={format}
                   InputProps={{
                     disableUnderline: true,
-                    root: "wr-mob-input",
+                    style: { minHeight: '56px' },
                   }}
                 />
             )}

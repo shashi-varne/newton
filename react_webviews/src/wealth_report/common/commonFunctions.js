@@ -4,7 +4,7 @@ import { isEmpty } from '../../utils/validators';
 export function navigate(props, pathname, params, replace) {
   if (!replace) {
     props.history.push({
-      pathname: pathname,
+      pathname: `/w-report/${pathname}`,
       search: getConfig().searchParams,
       params,
     });
@@ -13,7 +13,7 @@ export function navigate(props, pathname, params, replace) {
       the history sequence when moving back through history using
       history.goBack() */
     props.history.replace({
-      pathname: pathname,
+      pathname: `/w-report/${pathname}`,
       search: getConfig().searchParams,
       params,
     });

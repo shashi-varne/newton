@@ -54,6 +54,7 @@ const WealthReport = (props) => {
         <ToastContainer autoClose={3000} />
         <Switch>
           <Route exact path={`${url}`} component={Login} />
+          <Route path={`${url}/login/:view`} component={Login} />
           <Route path={`${url}/login`} component={Login} />
           <Route path={`${url}/no-pan-screen`} component={NoPan} />
           <Route path={`${url}/transactions`} component={AllTransactions} />

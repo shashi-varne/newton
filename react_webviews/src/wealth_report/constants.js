@@ -104,6 +104,8 @@ export const TriColorScheme = ['#856cc1', '#7458b9', '#512ea7'];
 
 export const QuadColorScheme = ['#d7cef3', '#856cc1', '#7458b9', '#512ea7'];
 
+export const PentaColorScheme = ['#d7cef3', '#856cc1', '#7458b9', '#512ea7', '#392183'];
+
 export const MultiColorScheme = [
   '#f2effb',
   '#e4ddf7',

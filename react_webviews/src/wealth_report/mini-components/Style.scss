@@ -238,10 +238,6 @@ span.wr-small-col-title {
       cursor: pointer;
       padding: 0 17px 0 17px;
 
-      #wr-ic-mob-drop {
-        display: none;
-      }
-
       .wr-pan-detail {
         padding: 0 75px 0 16px;
 
@@ -350,7 +346,6 @@ span.wr-small-col-title {
 }
 
 .wr-filter-content {
-  margin-bottom: 40px;
   display: flex;
   align-items: center;
 
@@ -534,7 +529,7 @@ span.wr-small-col-title {
     margin: 31px 0 54px 0;
   }
 
-  .wr-continue-btn {
+  .wr-email-continue-btn {
     border-radius: 6px;
     border: solid 0.5px rgba(80, 45, 168, 0.1);
     background-color: #ffffff;
@@ -967,10 +962,6 @@ span.wr-small-col-title {
         width: 16px;
       }
 
-      #wr-ic-drop {
-        display: none;
-      }
-  
       .wr-pan-detail {
     
         .wr-pan-title{

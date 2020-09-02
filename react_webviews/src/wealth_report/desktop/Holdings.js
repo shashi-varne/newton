@@ -6,6 +6,10 @@ import toast from '../../common/ui/Toast';
 import { fetchHoldings, hitNextPage } from "../common/ApiCalls";
 import DotDotLoader from '../../common/ui/DotDotLoader';
 import { CircularProgress } from "material-ui";
+import ErrorScreen from "../mini-components/ErrorScreen";
+import { isEmpty } from "../../utils/validators";
+import { getConfig } from "utils/functions";
+const isMobileView = getConfig().isMobileDevice;
 
 export default function Holdings(props) {
   const [nextPage, setNextPage] = useState('');
@@ -14,9 +18,11 @@ export default function Holdings(props) {
   const [selectedFilters, setFilters] = useState({});
   const [noHoldings, setNoHoldings] = useState(false);
   const [isLoading, setLoading] = useState(true);
+  const [pageErr, setPageErr] = useState(false);
   useEffect(() => {
     (async () => {
       try {
+        setPageErr(false);
         setLoading(true);
         setNoHoldings(false);
         const data = await fetchHoldings({ pan: props.pan, ...selectedFilters });
@@ -26,6 +32,7 @@ export default function Holdings(props) {
         setHoldingsData(data.holdings);
         setNextPage(data.next_page);
       } catch(err) {
+        setPageErr(true);
         console.log(err);
         toast(err);
       }
@@ -59,8 +66,6 @@ export default function Holdings(props) {
         onFilterChange={(filterObj) => setFilters(Object.assign({}, selectedFilters, filterObj))}
       />
 
-      {noHoldings && <div>No holdings found</div>}
-
       {isLoading && <div style={{
           position: 'relative',
           top: '200px',
@@ -74,7 +79,7 @@ export default function Holdings(props) {
         </div>
       }
 
-      <div>
+      <div style={{ marginTop: noHoldings && !isMobileView ? '100px' : '40px' }}>
         {!isLoading && !!holdingsData.length && holdingsData.map((holding, idx) => (
           <HoldingCard
             key={idx}
@@ -83,6 +88,25 @@ export default function Holdings(props) {
             parentProps={props.parentProps}
           />
         ))}
+        {!isLoading && noHoldings && !isEmpty(selectedFilters) &&
+          <ErrorScreen
+            templateSvgPath="fisdom/no-filter-results"
+            templateText="No results for the applied filters! Please try removing filters to see holdings data."
+            useTemplate={true}
+          />
+        }
+        {!isLoading && noHoldings && isEmpty(selectedFilters) &&
+          <ErrorScreen
+            templateSvgPath="fisdom/exclamation"
+            templateText="No holdings to show."
+            useTemplate={true}
+          />
+        }
+        {pageErr && <ErrorScreen 
+          templateSvgPath="fisdom/exclamation"
+          templateText="Oops! Looks like something went wrong. Please try again later"
+          useTemplate={true}
+        />}
       </div>
       <div
         className="wr-load-more"

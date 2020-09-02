@@ -54,7 +54,7 @@ class FilterMobile extends Component {
       return obj;
     }, {});
 
-    this.setState({ filters });
+    this.setState({ filters, open: false });
     this.props.onFilterChange(filtersObj);
   };
 
@@ -65,6 +65,17 @@ class FilterMobile extends Component {
       current_value_type: {},
       fisdom_rating: {},
     });
+    const filterKeys = Filters.map(filter => filter.id);
+    const filters = filterKeys.map(kind => ({
+      category: kind,
+      label: '',
+      value: '',
+    }));
+    const filtersObj = filters.reduce((obj, currentObj) => {
+      obj[currentObj.category] = currentObj.value;
+      return obj;
+    }, {});
+    this.props.onFilterChange(filtersObj);
   };
 
   renderFilterModal = () => (

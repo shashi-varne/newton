@@ -12,6 +12,7 @@ const NewButton = (props) => {
       variant={props.variant || 'raised'}
       fullWidth={props.fullWidth}
       classes={{ root, raised, label }}
+      style={props.style}
       {...props}
     >
       {props.children}

@@ -6,11 +6,11 @@ import { fetchTaxation, fetchTaxFilters } from "../common/ApiCalls";
 import { inrFormatDecimal } from "../../utils/validators";
 import WrTooltip from "../common/WrTooltip";
 import CardLoader from "../mini-components/CardLoader";
+import ErrorScreen from "../mini-components/ErrorScreen";
 
 const Taxation = (props) => {
   const [tabSelected, selectTab] = useState("stcg");
   const [isLoading, setLoading] = useState(true);
-
   const [taxationData, setTaxationData] = useState({
     combined_tax_data: {},
     stcg_tax_data: {},
@@ -19,6 +19,7 @@ const Taxation = (props) => {
   const [taxFilters, setTaxFilters] = useState({ tax_slabs:[], financial_years:[] });
   const [selectedFinYear, setFinYear] = useState("");
   const [selectedTaxSlab, setTaxSlab] = useState("");
+  const [pageErr, setPageErr] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -26,6 +27,7 @@ const Taxation = (props) => {
         let taxFilters = await fetchTaxFilters({ pan : props.pan });
         taxFilters = formatFilters(taxFilters);
         setTaxFilters(taxFilters);
+        setPageErr(false);
         // TODO: Save values to LS
         const financial_year =
           selectedFinYear || taxFilters.financial_years[0].value;
@@ -34,6 +36,7 @@ const Taxation = (props) => {
         setTaxSlab(tax_slab);
       } catch (err) {
         console.log(err);
+        setPageErr(true);
         toast(err);
       }
     })();
@@ -172,88 +175,103 @@ const Taxation = (props) => {
     </div>
   );
 
-  return (
-    <div id="wr-taxation" className="wr-card-template">
-      <div id="wr-taxation-filter">
-        <WrSelect
-          disableUnderline={true}
-          style={{ marginRight: "24px" }}
-          menu={taxFilters.financial_years}
-          onSelect={handleSelect}
-          selectedValue={selectedFinYear}
-          name="year"
-          classes={{ formControl: "animated animatedFadeInUp fadeInUp" }}
-          disabled={isLoading}
-        />
-
-        <WrSelect
-          disableUnderline={true}
-          style={{ marginRight: "24px" }}
-          menu={taxFilters.tax_slabs}
-          onSelect={handleSelect}
-          selectedValue={selectedTaxSlab}
-          name="slab"
-          classes={{ formControl: "animated animatedFadeInUp fadeInUp" }}
-          disabled={isLoading}
-        />
+  if (pageErr) {
+    return (
+      <ErrorScreen
+        useTemplate={true}
+        templateSvgPath="fisdom/exclamation"
+        templateText="Sorry! no taxation data available for the provided PAN number."
+      />
+    );
+  } else {
+    return (
+      <div id="wr-taxation" className="wr-card-template">
+        {pageErr && <ErrorScreen
+          templateSvgPath="fisdom/exclamation"
+          templateText="Oops! Looks like something went wrong. Please try again later"
+          useTemplate={true}
+        />}
+        <div id="wr-taxation-filter">
+          <WrSelect
+            disableUnderline={true}
+            style={{ marginRight: "24px" }}
+            menu={taxFilters.financial_years}
+            onSelect={handleSelect}
+            selectedValue={selectedFinYear}
+            name="year"
+            classes={{ formControl: "animated animatedFadeInUp fadeInUp" }}
+            disabled={isLoading}
+          />
+  
+          <WrSelect
+            disableUnderline={true}
+            style={{ marginRight: "24px" }}
+            menu={taxFilters.tax_slabs}
+            onSelect={handleSelect}
+            selectedValue={selectedTaxSlab}
+            name="slab"
+            classes={{ formControl: "animated animatedFadeInUp fadeInUp" }}
+            disabled={isLoading}
+          />
+        </div>
+        <div style={{ height: '500px' }}>
+          {
+            isLoading ?
+            (
+              <CardLoader />
+            ) :
+            (
+              <Fragment>
+                <div id="wr-taxation-summary" className="fadeIn">
+                  <div className="wr-taxation-summary-col">
+                    <span className="wr-tsc-value">
+                      {inrFormatDecimal(taxationData.combined_tax_data.estimated_tax || "")}
+                    </span>
+                    <span className="wr-tsc-label">
+                        Estimated Tax
+                      <WrTooltip tipContent={estdTaxTooltip}/>
+                    </span>
+                  </div>
+                  <div className="wr-vertical-divider"></div>
+                  <div className="wr-taxation-summary-col">
+                    <span className="wr-tsc-value">
+                      {inrFormatDecimal(taxationData.combined_tax_data.realized_gains || "")}
+                    </span>
+                    <span className="wr-tsc-label">Total realized gains</span>
+                  </div>
+                  <div className="wr-vertical-divider"></div>
+                  <div className="wr-taxation-summary-col">
+                    <span className="wr-tsc-value">
+                      {inrFormatDecimal(taxationData.combined_tax_data.taxable_gains || "")}
+                    </span>
+                    <span className="wr-tsc-label">Taxable gains</span>
+                  </div>
+                </div>
+                <div id="wr-taxation-detail">
+                  <div className="animated animatedFadeInUp fadeInUp">
+                    {["stcg", "ltcg"].map((tab, index) => (
+                      <WrButton
+                        classes={{
+                          root: tabSelected === tab ? "" : "wr-outlined-btn",
+                        }}
+                        style={{ marginRight: "16px" }}
+                        onClick={() => selectTab(tab)}
+                        key={index}
+                        disableRipple
+                      >
+                        {tab.toUpperCase()}
+                      </WrButton>
+                    ))}
+                  </div>
+                  {renderTaxDetailRows()}
+                </div>
+              </Fragment>
+            )
+          }
+        </div>
       </div>
-      <div style={{ height: '500px' }}>
-        {
-          isLoading ?
-          (
-            <CardLoader />
-          ) :
-          (
-            <Fragment>
-              <div id="wr-taxation-summary" className="fadeIn">
-                <div className="wr-taxation-summary-col">
-                  <span className="wr-tsc-value">
-                    {inrFormatDecimal(taxationData.combined_tax_data.estimated_tax || "")}
-                  </span>
-                  <span className="wr-tsc-label">
-                      Estimated Tax
-                    <WrTooltip tipContent={estdTaxTooltip}/>
-                  </span>
-                </div>
-                <div className="wr-vertical-divider"></div>
-                <div className="wr-taxation-summary-col">
-                  <span className="wr-tsc-value">
-                    {inrFormatDecimal(taxationData.combined_tax_data.realized_gains || "")}
-                  </span>
-                  <span className="wr-tsc-label">Total realized gains</span>
-                </div>
-                <div className="wr-vertical-divider"></div>
-                <div className="wr-taxation-summary-col">
-                  <span className="wr-tsc-value">
-                    {inrFormatDecimal(taxationData.combined_tax_data.taxable_gains || "")}
-                  </span>
-                  <span className="wr-tsc-label">Taxable gains</span>
-                </div>
-              </div>
-              <div id="wr-taxation-detail">
-                <div className="animated animatedFadeInUp fadeInUp">
-                  {["stcg", "ltcg"].map((tab, index) => (
-                    <WrButton
-                      classes={{
-                        root: tabSelected === tab ? "" : "wr-outlined-btn",
-                      }}
-                      style={{ marginRight: "16px" }}
-                      onClick={() => selectTab(tab)}
-                      key={index}
-                      disableRipple
-                    >
-                      {tab.toUpperCase()}
-                    </WrButton>
-                  ))}
-                </div>
-                {renderTaxDetailRows()}
-              </div>
-            </Fragment>
-          )
-        }
-      </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default Taxation;

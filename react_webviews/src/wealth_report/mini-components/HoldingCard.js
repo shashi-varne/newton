@@ -109,7 +109,7 @@ export default function HoldingCard(props) {
   const seeMoreClicked = async() => {
     try {
       if (isMobileView) {
-        navigate(props.parentProps, '/w-report/transactions', {
+        navigate(props.parentProps, 'transactions', {
           holding,
           pan: props.pan,
         });

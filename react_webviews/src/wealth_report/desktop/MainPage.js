@@ -14,6 +14,8 @@ import Api from '../../utils/api';
 import { isEmpty } from "../../utils/validators";
 import { heightThreshold } from "../constants";
 import NoPan from "./NoPan";
+import { getConfig } from "utils/functions";
+const isMobileView = getConfig().isMobileDevice;
 
 const MainPage = (props) => {
   const [headerAnimation, setHeaderAnimation] = useState('');
@@ -50,11 +52,11 @@ const MainPage = (props) => {
       try {
         const res = await Api.get('api/whoami');
         if (!res || res.pfwstatus_code !== 200) {
-          navigate(props, '/w-report/login');
+          navigate(props, 'login');
         }
       } catch(err) {
         console.log(err);
-        navigate(props, '/w-report/login');
+        navigate(props, 'login');
       }
     })();
     return function cleanup() {
@@ -91,7 +93,7 @@ const MainPage = (props) => {
           </div>
           
           {/* will be hidden for desktop view and visible for mobile view */}
-          <PanSelect onPanSelect={setPan}/>
+          {isMobileView && <PanSelect onPanSelect={setPan}/>}
           
           {/* visbility will be modified based on condition in media queries */}
           <div className="wr-user-account">

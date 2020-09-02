@@ -12,7 +12,6 @@ export default class WrOtpInput extends Component {
       <Fragment>
         <OtpInput
           numInputs={4}
-          containerStyle="wr-otp-container"
           inputStyle="wr-otp-input"
           onChange={this.props.onChange}
           hasErrored={!!this.props.errorText}

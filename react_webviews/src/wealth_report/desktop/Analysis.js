@@ -1,13 +1,14 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import PieChart from '../mini-components/PieChart';
 import toast from '../../common/ui/Toast';
-import { TriColorScheme, MultiColorScheme, QuadColorScheme } from '../constants';
+import { TriColorScheme, MultiColorScheme, QuadColorScheme, PentaColorScheme } from '../constants';
 import { getConfig } from 'utils/functions';
 import WrTable from '../mini-components/WrTable';
 import { fetchAnalysis } from '../common/ApiCalls';
-import { isEmpty } from '../../utils/validators';
 import CardLoader from '../mini-components/CardLoader';
 import WrButton from '../common/Button';
+import InternalStorage from '../InternalStorage';
+import { isEmpty } from '../../utils/validators';
 const isMobileDevice = getConfig().isMobileDevice;
 const tabSpecificData = {
   equity: {
@@ -21,7 +22,7 @@ const tabSpecificData = {
   debt: {
     graph1Name: 'Ratio wise exposure',
     graph1Accessor: 'ratio_wise_exposure',
-    graph1ColorScheme: QuadColorScheme,
+    graph1ColorScheme: PentaColorScheme,
     graph2Name: 'Maturity wise exposure',
     graph2Accessor: 'maturity_wise_exposure',
     graph2ColorScheme: QuadColorScheme,
@@ -57,9 +58,12 @@ export default function Analysis(props) {
     (async() => {
       try {
         setGraphLoad(true);
-        const data = await fetchAnalysis({ pan: props.pan });
+        let data = InternalStorage.getData('analysisData');
+        if (isEmpty(data)) {
+          data = await fetchAnalysis({ pan: props.pan });
+          InternalStorage.setData('analysisData', data);
+        }
         setAnalysisData(data);
-        initialiseTabData(data);
         setGraphLoad(false);
       } catch (err) {
         console.log(err);
@@ -68,9 +72,10 @@ export default function Analysis(props) {
     })();
   }, [props.pan]);
 
-  const initialiseTabData = (data) => {
-    if (!data || isEmpty(data)) data = analysisData || {};
+  const initialiseTabData = () => {
+    const data = analysisData || {};
     const { graph1Accessor, graph2Accessor } = tabSpecificData[selectedTab];
+
     setGraph1(data[`${selectedTab}_dict`][graph1Accessor] || []);
     setGraph2(data[`${selectedTab}_dict`][graph2Accessor] || []);
     setHoldings(data.top_holdings[selectedTab] || []);
@@ -80,7 +85,7 @@ export default function Analysis(props) {
   useEffect(() => {
     initialiseTabData();
     return () => {};
-  }, [selectedTab]);
+  }, [selectedTab, analysisData]);
 
   return (
     <React.Fragment>

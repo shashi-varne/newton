@@ -26,7 +26,7 @@ export default function UserAccountMobile(props) {
     try {
       setLoggingOut(true);
       await logout();
-      navigate(props.parentProps, '/w-report/login');
+      navigate(props.parentProps, 'login');
     } catch(err) {
       console.log(err);
       toast(err);

@@ -14,6 +14,7 @@ export default function PanSelect(props) {
   const [selectedPan, setPan] = useState("");
   const [panModal, toggleModal] = useState(false);
   const [panList, setPanList] = useState([]);
+  const [tooltipMsg, setTooltipMsg] = useState("");
   const [loadingPans, setLoading] = useState(true);
 
   useEffect(() => {
@@ -22,8 +23,10 @@ export default function PanSelect(props) {
         const data = await fetchAllPANs();
         setPanList(data);
         if (!data.length || isEmpty(data)) {
+          setTooltipMsg("No PANs found");
           selectPan('empty'); //To let Main Page know when there's no registered PANs
         } else {
+          if (data.length === 1) setTooltipMsg("No more PANs to show");
           selectPan(data[0]);
         }
       } catch (err) {
@@ -70,23 +73,22 @@ export default function PanSelect(props) {
                   <div className="wr-pan">{selectedPan || '--'}</div>
               }
             </div>
-
-            <IconButton
-              classes={{ root: "wr-icon-button" }}
-              color="inherit"
-              aria-label="Menu"
-            >
-              <img
-                src={require(`assets/fisdom/ic-dropdown.svg`)}
-                id="wr-ic-drop"
-                alt=""
-              />
-              <img
-                src={require(`assets/fisdom/ic-mob-dropdown.svg`)}
-                id="wr-ic-mob-drop"
-                alt=""
-              />
-            </IconButton>
+            
+            <div title={tooltipMsg || ''}>
+              <IconButton
+                classes={{ root: "wr-icon-button" }}
+                color="inherit"
+                aria-label="Menu"
+                disabled={tooltipMsg}
+              >
+                <img
+                  src={require(
+                    `assets/fisdom/${isMobileView ? 'ic-mob' : 'ic'}-dropdown.svg`
+                  )}
+                  alt=""
+                />
+              </IconButton>
+            </div>
           </div>
         </ClickAwayListener>
 

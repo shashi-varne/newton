@@ -86,6 +86,7 @@
 
   #wr-login-right-panel {
     padding: 160px 120px;
+    max-width: 420px;
 
     h2 {
       font-size: 36px;
@@ -98,7 +99,7 @@
 
     #wr-logo,
     #wr-title,
-    #wr-input {
+    #wr-input-label {
       display: none;
     }
 
@@ -108,6 +109,7 @@
       font-size: 20px;
       line-height: 1.3;
       letter-spacing: 0.4px;
+      margin-bottom: 40px;
     }
 
     div#wr-otp-opts {
@@ -120,13 +122,6 @@
         margin-right: 40px;
         cursor: pointer;
       }
-    }
-
-    .wr-form {
-      max-width: 420px;
-      border: 1px solid #e4e7f7;
-      border-radius: 4px;
-      margin-top: 28px;
     }
 
     .wr-root {
@@ -145,59 +140,20 @@
       color: var(--primary);
       margin: 28px 0 0 6px;
     }
-
-    .wr-input-form {
-      margin-top: 40px;
-      display: flex;
-
-      .wr-code-input {
-        width: 21% !important;
-        border-radius: 4px;
-        border: 1px solid #dadaed;
-
-        .MuiInput-input {
-          font-size: 22px !important;
-          font-weight: 500;
-          line-height: 1.2;
-        }
-        .MuiSelect-select {
-          padding-right: 0px !important;
-        }
-        .MuiSelect-select:focus {
-          background: white;
-        }
-      }
-
-      .wr-select-input {
-        padding: 5px 0px 5px 10px !important;
-      }
-
-      .MuiFormControl-marginNormal {
-        margin: 0px !important;
-      }
-
-      .wr-mob-input {
-        width: 72.5% !important;
-        margin-left: 16px;
-        border-radius: 4px;
-        border: 1px solid #dadaed;
-
-        .MuiInput-input {
-          font-size: 22px !important;
-          font-weight: 500;
-          padding: 16px;
-        }
-      }
-
-      .MuiMenu-paper {
-        max-height: 40vh !important;
-      }
-    }
   }
+}
+
+.wr-form {
+  max-width: 420px !important;
+  padding: 14px 16px !important;
+  border: 1px solid #e4e7f7 !important;
+  border-radius: 4px !important;
+  box-sizing: border-box;
 }
 
 .wr-login-btn {
   max-width: 420px;
+  min-height: 56px !important;
   padding: 13px !important;
 
   .MuiButton-label {
@@ -207,9 +163,48 @@
   }
 }
 
+.wr-email-login-btn {
+  @extend .wr-login-btn;
+  border: 1px solid #DADAED !important;
+  background-color: white !important;
+
+  .MuiButton-label {
+    color: black !important;
+  }
+}
+
+.wr-social-btn {
+  @extend .wr-email-login-btn;
+}
+
+.wr-social-btn:nth-child(1) {
+ margin-right: 12px !important;
+}
+
 #wr-login-mobile {
   font-family: 'Source Sans Pro', sans-serif;
   display: none;
+}
+
+.wr-input-addmail {
+  border-radius: 2px;
+  width: 90% !important;
+  background-color: #fff;
+  
+  .MuiInput-input {
+    font-size: 23px;
+    line-height: 1.2;
+    font-weight: 500;
+    padding: 6px 7px;
+  }
+}
+
+.wr-forgot-pwd {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 40px;
+  cursor: pointer;
 }
 
 #wr-main {
@@ -876,6 +871,21 @@
     display: none;
   }
 
+  .wr-input-addmail {
+    border-radius: 2px;
+    height: 30px;
+    background-color: #fff;
+    font-size: 15px;
+
+    .MuiInput-input {
+      font-size: 16px !important;
+    }
+
+    input:-internal-autofill-selected {
+      background-color: transparent !important;
+    }
+  }
+
   #wr-login-mobile {
     width: 100%;
     height: 100%;
@@ -899,7 +909,7 @@
     height: 100%;
     width: 90%;
     margin: auto;
-    // background-color: var(--primary);
+    position: relative;
   }
 
   #wr-continue {
@@ -926,12 +936,12 @@
 
   .wr-login-input {
     padding-top: 53px;
-    height: 90%;
+    height: auto;
 
     #wr-logo,
     #wr-title,
-    #wr-input,
-    #wr-input {
+    #wr-input-label,
+    #wr-input-label {
       display: inherit;
     }
 
@@ -970,7 +980,7 @@
       }
     }
 
-    #wr-input {
+    #wr-input-label {
       font-size: 12px;
       line-height: 15px;
       font-weight: 500;
@@ -986,12 +996,6 @@
       padding: 3px 0px 0 4px;
     }
 
-    .wr-form {
-      width: 99%;
-      border: 1px solid #dadaed;
-      border-radius: 4px;
-    }
-
     .wr-root {
       width: 100%;
       .MuiInput-input {
@@ -1002,37 +1006,17 @@
       }
     }
 
-    .wr-code-input {
-      width: 21% !important;
-      border-radius: 4px 0 0 4px;
-      border: 1px solid #dadaed;
-      border-right: 0 !important;
-      .MuiInput-input {
-        font-size: 16px !important;
-      }
-      .MuiSelect-select {
-        padding-right: 0px !important;
-      }
-    }
-
-    .wr-select-input {
-      padding: 5px 0px 5px 10px !important;
-    }
-
     .MuiFormControl-marginNormal {
       margin: 0px !important;
     }
+  }
 
-    .wr-mob-input {
-      width: 77.5% !important;
-      border-radius: 0 4px 4px 0;
-      border: 1px solid #dadaed;
-      .MuiInput-input {
-        font-size: 16px !important;
-        font-weight: 500;
-        padding: 16px 16px 12px 16px;
-      }
-    }
+  .wr-forgot-pwd {
+    font-size: 16px;
+  }
+
+  .wr-form {
+    width: 100% !important;
   }
 
   .react-tel-input .form-control {
@@ -1040,9 +1024,9 @@
   }
 
   .wr-continue-btn {
-    position: fixed;
-    bottom: 50px;
-    width: 90%;
+    position: absolute;
+    bottom: 3%;
+    width: 100%;
   }
 
   #wr-main {
@@ -1270,7 +1254,7 @@
     margin: 30px 0 0 0;
     flex-basis: 100%;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
 
     .wr-p1l-item {
       margin: 16px 16px 0 0;

@@ -130,9 +130,10 @@ export default function EmailList(props) {
                   {`Synced on ${formatDateAmPm(account.latest_statement.dt_updated)}`}</div>
               </div>
               {/* Checking if regenerate time limit has elapsed in order to show resync option */}
+              {/* TODO: Remove key from iconButton */}
               { 
                 (new Date() - new Date(account.latest_statement.dt_updated)) / 60000 >= regenTimeLimit &&
-                <IconButton onClick={() => resyncEmail(account.email)}>
+                <IconButton onClick={() => resyncEmail(account.email)} key={isSyncing}>
                   <img src={require(`assets/fisdom/ic-email-sync.svg`)} alt="resync" />
                 </IconButton>
               }
@@ -198,7 +199,7 @@ export default function EmailList(props) {
     <div className="wr-email-added">
       <img src={require(`assets/fisdom/ic-mob-success.svg`)} alt="success" />
       <div className="wr-content">Email has been added successfully!</div>
-      <Button className="wr-continue-btn" onClick={handleClose} fullWidth={true}>
+      <Button className="wr-email-continue-btn" onClick={handleClose} fullWidth={true}>
         Okay
       </Button>
     </div>

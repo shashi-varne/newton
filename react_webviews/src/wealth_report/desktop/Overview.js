@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { LinearProgress, createMuiTheme, MuiThemeProvider, IconButton, Card } from 'material-ui';
+import { LinearProgress, createMuiTheme, MuiThemeProvider, IconButton } from 'material-ui';
 import WrGrowthGraph from '../mini-components/WrGrowthGraph';
 import { InsightMap, GraphDateRanges } from '../constants';
 import toast from '../../common/ui/Toast';
@@ -16,8 +16,8 @@ const theme = createMuiTheme({
   overrides: {
     MuiLinearProgress: {
       root: {
-        borderRadius: '4px',
-        height: '36px',
+        borderRadius: '10px',
+        height: '16px',
         maxWidth: '540px',
         margin: 'auto',
         backgroundColor: '#7357ba !important',
@@ -255,7 +255,7 @@ const assetAllocNums = (val = 0) => {
   val = parseInt(val, 10);
   return (
     <span id="wr-okn-asset-alloc-title">
-      <span id="left">{val}</span> : <span id="right">{100-val}</span>
+      <span id="left">Equity ({val})</span> : <span id="right">Debt ({100-val})</span>
     </span>
   );
 };

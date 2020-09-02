@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { getConfig } from 'utils/functions';
-import Tooltip from 'common/ui/Tooltip';
+import Tooltip from 'common/ui/TooltipLite';
 import { Dialog } from 'material-ui';
 const isMobileView = getConfig().isMobileDevice;
 
