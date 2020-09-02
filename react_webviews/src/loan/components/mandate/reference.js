@@ -9,6 +9,7 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 
+
 class KycStatus extends Component {
   constructor(props) {
     super(props);
@@ -26,7 +27,7 @@ class KycStatus extends Component {
   componentWillMount() {
     this.initialize();
   }
-
+  
   onload = () => {
     let lead = this.state.lead;
     let personal_info = lead.personal_info || {};

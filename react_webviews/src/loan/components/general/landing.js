@@ -72,6 +72,12 @@ class Landing extends Component {
     let application_info = lead.application_info || {};
     let vendor_info = lead.vendor_info || {};
 
+    let rejection_reason = application_info.rejection_reason || '';
+
+    this.setState({
+      reason: rejection_reason
+    });
+
     if(vendor_info.dmi_loan_status === 'complete') {
       this.navigate('report');
       return;
@@ -201,6 +207,7 @@ class Landing extends Component {
 
   getNextState = () => {
     let dmi_loan_status = this.state.vendor_info.dmi_loan_status || '';
+    let application_status = this.state.application_info.application_status || '';
 
     let state = '';
     if(this.state.process_done) {
@@ -208,9 +215,9 @@ class Landing extends Component {
     } else {
       if(this.state.location_needed) {//condition for mobile
         state = 'permissions';
-      } else if(dmi_loan_status === 'application_rejected') {
+      } else if(dmi_loan_status === 'application_rejected' || application_status === 'internally_rejected') {
         state = 'instant-kyc-status';
-      } else {
+      }else {
         state = 'journey';
       }
     }
@@ -226,10 +233,17 @@ class Landing extends Component {
     }
 
     let state =  this.getNextState();
+    let rejection_reason = this.state.reason || '';
 
-    if(state === 'instant-kyc-status') {
+    if (state === 'instant-kyc-status') {
       let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
-      this.navigate(state, {searchParams: searchParams});
+      this.navigate(state, {
+        searchParams: searchParams,
+        params: {
+          rejection_reason: rejection_reason
+        }
+      });
+    
     } else {
       this.navigate(state);
     }
@@ -290,9 +304,10 @@ class Landing extends Component {
           this.navigate('calculator', {
           params: {
             next_state: this.getNextState(),
-            cta_title: this.state.top_cta_title
-          }});
-        }}>
+            cta_title: this.state.top_cta_title,
+            rejection_reason: this.state.reason
+          }
+        })}}>
           <div className="left">
           Loan eligibility calculator
             </div>

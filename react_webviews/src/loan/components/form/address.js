@@ -117,6 +117,7 @@ class AddressDetails extends Component {
 
         if (this.state.checked) {
             form_data.p_pincode_error = '';
+            form_data.p_address_error = '';
             keys_to_check = ['residence_type', 'duration', 'address', 'pincode',];
         }
 
@@ -129,7 +130,6 @@ class AddressDetails extends Component {
         form_data.p_pincode_error)) {
             form_data['p_pincode_error'] = 'Please enter valid pincode';
         }
-
 
         this.formCheckUpdate(keys_to_check, form_data);
     }
@@ -179,14 +179,19 @@ class AddressDetails extends Component {
         })
 
         if (pincode.length === 6) {
-            const res = await Api.get('/api/pincode/' + pincode);
+            const res = await Api.get('/relay/api/loan/pincode/get/' + pincode);
+            let resultData = res.pfwresponse.result[0] || '';
 
             let { city, state, country } = form_data;
             let pincode_error = '';
             if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
-                city = res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name;
-                state = res.pfwresponse.result[0].state_name;
-                country = res.pfwresponse.result[0].country_name;
+                if (resultData.dmi_city_name === 'NA') {
+                    city = resultData.district_name || resultData.division_name || resultData.taluk;
+                } else {
+                    city = resultData.dmi_city_name;
+                }
+                state = resultData.state_name;
+                country = resultData.country_name;
             } else {
                 city = '';
                 state = '';
@@ -240,7 +245,7 @@ class AddressDetails extends Component {
             >
                 <FormControl fullWidth>
                     <div style={{ color: '#64778D', fontSize: 13, fontWeight: 300, margin: '0 0 6px 0' }}>
-                        Aadhaar Address Details
+                        Current Residence Address
                     </div>
                     <div className="InputField">
                         <DropdownWithoutIcon
@@ -340,7 +345,7 @@ class AddressDetails extends Component {
                                         className="Checkbox" />
                                 </Grid>
                                 <Grid item xs={11}>
-                                    <div className="checkbox-text">Permanent address is same as Aadhaar address
+                                    <div className="checkbox-text">Permanent address is same as Current address
                                 </div>
                                 </Grid>
                             </Grid>

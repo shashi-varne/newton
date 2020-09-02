@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
 
-// import {getConfig} from 'utils/functions';
+import {getConfig} from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import toast from '../../../common/ui/Toast';
 import { initialize } from '../../common/functions';
@@ -147,15 +147,15 @@ class FormSummary extends Component {
             edit_state: `/loan/edit-address-details`,
             data: [
                 {
-                    'title': 'Residence type (aadhaar address)',
+                    'title': 'Residence type (Current address)',
                     'subtitle': current_address_data.residence_type
                 },
                 {
-                    'title': 'Duration (aadhaar address)',
+                    'title': 'Duration (Current address)',
                     'subtitle': current_address_data.duration
                 },
                 {
-                    'title': 'Aadhaar address',
+                    'title': 'Current address',
                     'subtitle': `${current_address_data.address}, ${current_address_data.pincode},
                     ${current_address_data.city}, ${current_address_data.state},
                      ${current_address_data.country}`
@@ -261,11 +261,22 @@ class FormSummary extends Component {
             try {
                 let res = await Api.get(`/relay/api/loan/submit/application/${this.state.application_id}`);
 
-
                 var resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200 && !resultData.error) {
 
-                    this.openCreateProfile();
+                    if (resultData.status === 'Application Rejected' && ['location', 'occupation'].indexOf(resultData.rejection_reason) !== -1) {
+                        let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
+                        this.navigate('instant-kyc-status', {
+                            searchParams: searchParams,
+                            params: {
+                                rejection_reason: resultData.rejection_reason
+                            }
+                        });
+                        
+                    } else {
+                        this.openCreateProfile();
+                    }
+
                 } else {
                     this.setState({
                         show_loader: false

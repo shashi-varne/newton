@@ -38,6 +38,12 @@ const commonMapper = {
     'close_state': '/loan/home',
     'noFooter': true,
     'hide_contact': true
+  },
+  'exit': {
+
+  },
+  'discrepancy': {
+
   }
 }
 
@@ -66,7 +72,7 @@ class MandateStatus extends Component {
 
     this.setState({
       status: status,
-      commonMapper: commonMapper[status]
+      commonMapper: commonMapper[status] || commonMapper['pending']
     })
   }
 

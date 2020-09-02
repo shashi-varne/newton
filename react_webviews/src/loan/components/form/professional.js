@@ -178,14 +178,18 @@ class ProfessionalDetails extends Component {
 
         let { office_city, office_state, office_country } = form_data;
         if (pincode.length === 6) {
-            const res = await Api.get('/api/pincode/' + pincode);
-
+            const res = await Api.get('/relay/api/loan/pincode/get/' + pincode);
+            let resultData = res.pfwresponse.result[0] || '';
             
             let office_pincode_error = '';
             if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
-                office_city = res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name;
-                office_state = res.pfwresponse.result[0].state_name;
-                office_country = res.pfwresponse.result[0].country_name;
+                if (resultData.dmi_city_name === 'NA') {
+                    office_city = resultData.district_name || resultData.division_name || resultData.taluk;
+                } else {
+                    office_city = resultData.dmi_city_name;
+                }
+                office_state = resultData.state_name;
+                office_country = resultData.country_name;
             } else {
                 office_city = '';
                 office_state = '';

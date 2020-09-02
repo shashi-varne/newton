@@ -48,24 +48,24 @@ class Permissions extends Component {
   }
 
   updateData = (data) => {
-
     this.setState({
       show_loader: false,
       loadingText: ''
     })
-
     if (!data.nsp) {
       toast('Please insert a SIM card to continue with loan application.');
     } else if (data.location_permission_denied) {
       toast('Location is required to proceed further');
     } else {
 
-      let body = {
-        latitude: data.location.lat || '',
-        longitude: data.location.lng || '',
-        device_id: data.device_id || '',
-        network_service_provider: data.nsp || ''
-      };
+      let body;
+
+        body = {
+          latitude: data.location.lat || '',
+          longitude: data.location.lng || '',
+          device_id: data.device_id || '',
+          network_service_provider: data.nsp || ''
+        };
 
       let haveAll = true;
       for (var key in body) {
@@ -80,8 +80,6 @@ class Permissions extends Component {
       } else {
         toast('Something went wrong, please try again');
       }
-
-
     }
   }
 
@@ -99,7 +97,6 @@ class Permissions extends Component {
       location_nsp_received: function location_nsp_received(data) {
 
         that.updateData(data);
-
       }
     });
   }
