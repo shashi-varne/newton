@@ -8,9 +8,9 @@ export default class HoldingFilter extends Component {
     super(props);
     this.state = {
       expand_filter: false,
-      fund_type: "",
-      current_value: "",
-      rating: "",
+      scheme_type: "",
+      current_value_type: "",
+      fisdom_rating: "",
     };
   }
 
@@ -22,12 +22,16 @@ export default class HoldingFilter extends Component {
 
   selectCategory = (category, newFilter) => {
     const currentFilter = this.state[category];
-    const filterObj = {
-      [category]: currentFilter !== newFilter ? newFilter : '',
-    };
 
-    this.setState(filterObj);
-    this.props.onFilterChange(filterObj);
+    this.setState({
+      [category]: currentFilter !== newFilter ? newFilter : '',
+    }, () => {
+      this.props.onFilterChange({
+        scheme_type: this.state.scheme_type,
+        current_value_type: this.state.current_value_type,
+        fisdom_rating: this.state.fisdom_rating,
+      });
+    });
   };
 
   render() {

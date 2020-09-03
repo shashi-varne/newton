@@ -9,6 +9,7 @@ import { CircularProgress } from "material-ui";
 import ErrorScreen from "../mini-components/ErrorScreen";
 import { isEmpty } from "../../utils/validators";
 import { getConfig } from "utils/functions";
+import { debounce } from 'lodash';
 const isMobileView = getConfig().isMobileDevice;
 
 export default function Holdings(props) {
@@ -54,17 +55,17 @@ export default function Holdings(props) {
     setLoadMore(false);
   };
 
+  const debouncedFilterChange = debounce((filterObj) => {
+    setFilters(Object.assign({}, selectedFilters, filterObj));
+  }, 3000, { trailing: true }); // Debounced to prevent repeated API calls on filter clicks
+
   return (
     <div id="wr-holdings">
       {/* will be hidden for the mobile view visible for desktop view */}
-      <Filter
-        onFilterChange={(filterObj) => setFilters(Object.assign({}, selectedFilters, filterObj))}
-      />
+      <Filter onFilterChange={debouncedFilterChange} />
 
       {/* will be hidden for the desktop view and visible for mobile view */}
-      <FilterMobile
-        onFilterChange={(filterObj) => setFilters(Object.assign({}, selectedFilters, filterObj))}
-      />
+      <FilterMobile onFilterChange={debouncedFilterChange} />
 
       {isLoading && <div style={{
           position: 'relative',

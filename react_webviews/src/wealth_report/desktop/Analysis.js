@@ -9,6 +9,7 @@ import CardLoader from '../mini-components/CardLoader';
 import WrButton from '../common/Button';
 import InternalStorage from '../InternalStorage';
 import { isEmpty } from '../../utils/validators';
+import ErrorScreen from '../mini-components/ErrorScreen';
 const isMobileDevice = getConfig().isMobileDevice;
 const tabSpecificData = {
   equity: {
@@ -44,7 +45,9 @@ export default function Analysis(props) {
   const [selectedTab, setTab] = useState('equity');
   const [tabProps, setTabProps] = useState(tabSpecificData.equity);
   const [graph1Data, setGraph1] = useState([]);
+  const [graph1Err, setGraph1Err] = useState(false);
   const [graph2Data, setGraph2] = useState([]);
+  const [graph2Err, setGraph2Err] = useState(false);
   const [holdingsData, setHoldings] = useState([]);
   const [graphLoading, setGraphLoad] = useState(true);
 
@@ -72,11 +75,20 @@ export default function Analysis(props) {
     })();
   }, [props.pan]);
 
+  useEffect(() => {
+    if (!isEmpty(analysisData)) {
+      if (isEmpty(graph1Data)) setGraph1Err(true);
+      if (isEmpty(graph2Data)) setGraph2Err(true);
+    }
+  }, [graph1Data, graph2Data]);
+
   const initialiseTabData = () => {
     const data = analysisData || {};
     const { graph1Accessor, graph2Accessor } = tabSpecificData[selectedTab];
-
+    
+    setGraph1Err(false);
     setGraph1(data[`${selectedTab}_dict`][graph1Accessor] || []);
+    setGraph2Err(false);
     setGraph2(data[`${selectedTab}_dict`][graph2Accessor] || []);
     setHoldings(data.top_holdings[selectedTab] || []);
     setTabProps(tabSpecificData[selectedTab]);
@@ -114,85 +126,100 @@ export default function Analysis(props) {
         <div className="wr-card-template-header" >
           {tabProps.graph1Name}
         </div>
-        <div id="wr-analysis-graph">
-          {graphLoading ?
-            (
-              <CardLoader />
-            ) :
-            (
-              <Fragment>
-                <PieChart
-                  height={isMobileDevice ? 200 : 280}
-                  width={isMobileDevice ? 200 : 280}
-                  data={graph1Data}
-                  colors={tabProps.graph1ColorScheme}
-                ></PieChart>
-                <div className="wr-pie-1-legend animated animatedFadeInUp fadeInUp">
-                  {graph1Data.map((alloc, idx) => (
-                    <div
-                      className="wr-p1l-item"
-                      style={{ backgroundColor: tabProps.graph1ColorScheme[idx] }}
-                      key={idx}>
-                      <div className="wr-p1l-item-label">{alloc.label}</div>
-                      <div className="wr-p1l-item-value">{Math.round(alloc.value)}%</div>
-                    </div>
-                  ))}
-                </div>
-              </Fragment>
-            )
-          }
-        </div>
+        {graph1Err &&
+          <ErrorScreen
+            useTemplate={true}
+            templateSvgPath="fisdom/exclamation"
+            templateText={`Could not fetch data for ${tabProps.graph1Name}`}
+          />}
+        {!graph1Err &&
+          <div id="wr-analysis-graph">
+            {graphLoading ?
+              (
+                <CardLoader />
+              ) :
+              (
+                <Fragment>
+                  <PieChart
+                    height={isMobileDevice ? 200 : 280}
+                    width={isMobileDevice ? 200 : 280}
+                    data={graph1Data}
+                    colors={tabProps.graph1ColorScheme}
+                  ></PieChart>
+                  <div className="wr-pie-1-legend animated animatedFadeInUp fadeInUp">
+                    {graph1Data.map((alloc, idx) => (
+                      <div
+                        className="wr-p1l-item"
+                        style={{ backgroundColor: tabProps.graph1ColorScheme[idx] }}
+                        key={idx}>
+                        <div className="wr-p1l-item-label">{alloc.label}</div>
+                        <div className="wr-p1l-item-value">{Math.round(alloc.value)}%</div>
+                      </div>
+                    ))}
+                  </div>
+                </Fragment>
+              )
+            }
+          </div>
+        }
       </div>
       <div className="wr-card-template">
         <div className="wr-card-template-header">
           {tabProps.graph2Name}
         </div>
-        <div id="wr-analysis-graph">
-          {graphLoading ?
-            (
-              <CardLoader />
-            ) :
-            (
-              <Fragment>
-                <PieChart
-                  height={isMobileDevice ? 200 : 280}
-                  width={isMobileDevice ? 200 : 280}
-                  data={graph2Data}
-                  colors={tabProps.graph2ColorScheme}
-                ></PieChart>
-                <div
-                  className="wr-pie-2-legend animated animatedFadeInUp fadeInUp"
-                  style={selectedTab === 'debt' ? {
-                    height: 'auto',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  } : {}}>
-                  {graph2Data.map(({ label, value }, idx) => (
-                    <div className="wr-p2l-item" key={idx}>
-                      <div
-                        className="wr-p2l-item-chip"
-                        style={{ backgroundColor: tabProps.graph2ColorScheme[idx] || 'grey' }}></div>
-                      <span className="wr-p2l-item-label">{label} · {Number(value).toFixed(2)}%</span>
-                    </div>
-                  ))}
-                </div>
-              </Fragment>
-            )
-          }
-        </div>
+        {graph2Err &&
+          <ErrorScreen
+            useTemplate={true}
+            templateSvgPath="fisdom/exclamation"
+            templateText={`Could not fetch data for ${tabProps.graph2Name}`}
+          />
+        }
+        {!graph2Err &&
+          <div id="wr-analysis-graph">
+            {graphLoading ?
+              (
+                <CardLoader />
+              ) :
+              (
+                <Fragment>
+                  <PieChart
+                    height={isMobileDevice ? 200 : 280}
+                    width={isMobileDevice ? 200 : 280}
+                    data={graph2Data}
+                    colors={tabProps.graph2ColorScheme}
+                  ></PieChart>
+                  <div
+                    className="wr-pie-2-legend animated animatedFadeInUp fadeInUp"
+                    style={selectedTab === 'debt' ? {
+                      height: 'auto',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    } : {}}>
+                    {graph2Data.map(({ label, value }, idx) => (
+                      <div className="wr-p2l-item" key={idx}>
+                        <div
+                          className="wr-p2l-item-chip"
+                          style={{ backgroundColor: tabProps.graph2ColorScheme[idx] || 'grey' }}></div>
+                        <span className="wr-p2l-item-label">{label} · {Number(value).toFixed(2)}%</span>
+                      </div>
+                    ))}
+                  </div>
+                </Fragment>
+              )
+            }
+          </div>
+        }
       </div>
       <div className="wr-card-template">
         <div className="wr-card-template-header">Top Holdings</div>
         <div id="wr-analysis-top-holdings">
-          {/* <div className="wr-table-container"> */}
-            {!holdingsData.length ?
-              (<CardLoader />) :
-              (<WrTable
-                data = { holdingsData }
-                headersMap = { tableHeadersMap }
-              />)
-            }
-          {/* </div> */}
+          {graphLoading ?
+            (<CardLoader />) :
+            <WrTable
+              data={holdingsData}
+              headersMap={tableHeadersMap}
+            />
+          }
         </div>
       </div>
     </React.Fragment>

@@ -10,6 +10,7 @@ import { numDifferentiationInr } from '../../utils/validators';
 import CardLoader from '../mini-components/CardLoader';
 import DotDotLoader from '../../common/ui/DotDotLoader';
 import WrTooltip from '../common/WrTooltip';
+import ErrorScreen from '../mini-components/ErrorScreen';
 const isMobileView = getConfig().isMobileDevice;
 
 const theme = createMuiTheme({
@@ -18,7 +19,7 @@ const theme = createMuiTheme({
       root: {
         borderRadius: '10px',
         height: '16px',
-        maxWidth: '540px',
+        maxWidth: isMobileView ? '310px' : '540px',
         margin: 'auto',
         backgroundColor: '#7357ba !important',
       },
@@ -57,16 +58,18 @@ export default function Overview(props) {
   const [xirrLoading, setXirrLoading] = useState({});
   const [growthGraphData, setGrowthGraphData] = useState({});
   const [graphLoading, setGraphLoad] = useState(true); // when loading graph
+  const [graphErr, setGraphErr] = useState(false); // for graph error handling
   useEffect(() => {
     (async() => {
       try {
         setGraphLoad(true);
+        setGraphErr(false);
         setXirrLoading(true);
-        const { combined_amount_data, date_ticks } = await fetchPortfolioGrowth({
+        const { current_amount_data, invested_amount_data, date_ticks } = await fetchPortfolioGrowth({
           pan: props.pan,
           date_range: selectedRange,
         });
-        const formattedData = formatGrowthData(combined_amount_data);
+        const formattedData = formatGrowthData(current_amount_data, invested_amount_data);
         setGrowthGraphData({
           ...formattedData,
           date_ticks: filterDateTicks(date_ticks),
@@ -76,6 +79,7 @@ export default function Overview(props) {
         setXirrPercent(xirr_percent);
         setXirrLoading(false);
       } catch (err) {
+        setGraphErr(true);
         console.log(err);
         toast(err);
       }
@@ -167,72 +171,82 @@ export default function Overview(props) {
       </div>
       <div className="wr-card-template">
         <div className="wr-card-template-header">Portfolio Growth</div>
-        <div id="wr-growth-graph">
-          <div
-            id="wr-gg-date-select"
-            style={{ cursor: graphLoading ? "not-allowed" : "pointer" }}>
-            {GraphDateRanges.map((rangeObj, idx) => (
-              <span
-                key={idx}
-                onClick={() => graphLoading ? '' : setSelectedRange(rangeObj.value) }
-                className={
-                  `${selectedRange === rangeObj.value ? 'selected' : ''}
+        {graphErr && <ErrorScreen 
+          useTemplate={true}
+          templateSvgPath="fisdom/exclamation"
+          templateText="Could not fetch Growth graph data"
+        />}
+        {!graphErr &&
+          <div id="wr-growth-graph">
+            <div
+              id="wr-gg-date-select"
+              style={{ cursor: graphLoading ? "not-allowed" : "pointer" }}>
+              {GraphDateRanges.map((rangeObj, idx) => (
+                <span
+                  key={idx}
+                  onClick={() => graphLoading ? '' : setSelectedRange(rangeObj.value)}
+                  className={
+                    `${selectedRange === rangeObj.value ? 'selected' : ''}
                   wr-gg-date-select-item`
-                }>
-                {rangeObj.label}
-              </span>
-            ))}
-          </div>
-          <div style={{ height: '500px', clear: 'right' }}>
-            <div id="wr-xirr">
-              XIRR
+                  }>
+                  {rangeObj.label}
+                </span>
+              ))}
+            </div>
+            <div style={{ clear: 'right' }}>
+              <div id="wr-xirr">
+                XIRR
               <WrTooltip tipContent={xirrTooltipContent} forceDirection={true} />
-              <div style={{
-                fontSize: '24px',
-                fontWeight: 600,
-                lineHeight: 1,
-                marginTop: '8px'
-              }}>
-                {xirrLoading ?
-                  <DotDotLoader className="wr-dot-loader" /> :
-                  `${xirrPercent.xirr ? Math.round(xirrPercent.xirr) + '%' : '--'}`
-                }
+                <div style={{
+                  fontSize: '24px',
+                  fontWeight: 600,
+                  lineHeight: 1,
+                  marginTop: '8px'
+                }}>
+                  {xirrLoading ?
+                    <DotDotLoader className="wr-dot-loader" /> :
+                    `${xirrPercent.xirr ? Math.round(xirrPercent.xirr) + '%' : '--'}`
+                  }
+                </div>
               </div>
-            </div>
-            <div id="wr-xirr-mob">
-              {true ?
-                <DotDotLoader /> :
-                `${xirrPercent.xirr ? Math.round(xirrPercent.xirr) + '%' : '--'}`
+              <div id="wr-xirr-mob">
+                <span id="wr-xm-irr">
+                  {
+                    `IRR: ${xirrPercent.xirr ? Math.round(xirrPercent.xirr) + '%' : '--'}`
+                  }
+                </span>
+                <div>
+                  <div className="wr-dot"></div>
+                  <span>Invested</span>
+                </div>
+                <div>
+                  <div className="wr-dot"></div>
+                  <span>Current</span>
+                </div>
+              </div>
+              {
+                graphLoading ?
+                  (
+                    <CardLoader />
+                  ) :
+                  (
+                    <Fragment>
+                      <WrGrowthGraph
+                        data={growthGraphData.data}
+                        width="100%"
+                        height="400px"
+                        params={{
+                          date_ticks: growthGraphData.date_ticks,
+                          min: growthGraphData.min,
+                          max: growthGraphData.max,
+                        }}
+                      ></WrGrowthGraph>
+                    </Fragment>
+                  )
               }
-              <div>
-                <div className="wr-dot"></div>Invested
-              </div>
-              <div>
-                <div className="wr-dot"></div>Current
-              </div>
             </div>
-            {
-              graphLoading ?
-                (
-                  <CardLoader />
-                ) :
-                (
-                  <Fragment>
-                    <WrGrowthGraph
-                      data={growthGraphData.data}
-                      width="100%"
-                      height="400px"
-                      params={{
-                        date_ticks: growthGraphData.date_ticks,
-                        min: growthGraphData.min,
-                        max: growthGraphData.max,
-                      }}
-                    ></WrGrowthGraph>
-                  </Fragment>
-                )
-            }
           </div>
-        </div>
+        }
       </div>
       <div
         id="portfolio-insights-header"

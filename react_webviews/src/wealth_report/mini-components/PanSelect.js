@@ -39,8 +39,9 @@ export default function PanSelect(props) {
 
   const selectPan = (pan) => {
     toggleDropdown(false);
-    setPan(pan === 'empty' ? '' : pan);
-    props.onPanSelect(pan);
+    setPan(pan === 'empty' ? {} : pan);
+    props.onPanSelect(pan.pan || pan); // send selected pan to parent element
+    // TODO: remove fall back
   };
 
   const handleClick = () => {
@@ -106,8 +107,8 @@ export default function PanSelect(props) {
                         alt=""
                       />
                       <div className="wr-pan-detail">
-                        <div className="wr-pan-title">{`PAN ${index+1}`}</div>
-                        <div className="wr-pan">{pan}</div>
+                        <div className="wr-pan-title">{pan.name}</div>
+                        <div className="wr-pan">{pan.pan}</div>
                       </div>
                     </div>
                   </div>

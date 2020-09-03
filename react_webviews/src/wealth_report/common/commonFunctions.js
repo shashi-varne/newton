@@ -20,33 +20,33 @@ export function navigate(props, pathname, params, replace) {
   }
 }
 
-export const formatGrowthData = (dataObj) => {
-  if (isEmpty(dataObj) || !dataObj) return { data: [] };
+export const formatGrowthData = (current_amt_arr = [], invested_amt_arr = []) => {
+  if (!current_amt_arr.length || !invested_amt_arr.length) return { data: [] };
   const obj = {
     current_amount: [],
     invested_amount: [],
   };
-  let max, min;
+  let max = current_amt_arr[0].value, min = current_amt_arr[0].value, curr_val, inv_val;
 
-  for (let dataOb of dataObj) {
-    const { data } = dataOb;
-    max = max || data[0].value;
-    min = min || data[0].value;
-    // eslint-disable-next-line no-loop-func
-    data.map(point => {
-      const numVal = Number(point.value);
-      max = numVal > max ? numVal : max;
-      min = numVal < min ? numVal : min;
-      return obj[dataOb.id].push({
-        x: point.date,
-        y: point.value,
-        color: dataOb.id === 'current_amount' ? '#b9abdd' : '#502da8',
-      });
+  for (let i = 0; i < current_amt_arr.length; i++) {
+    curr_val = current_amt_arr[i]; inv_val = invested_amt_arr[i];
+    max = Math.max(max, Number(curr_val.value), Number(inv_val.value));
+    min = Math.min(min, Number(curr_val.value), Number(inv_val.value));
+    obj.current_amount.push({
+      x: curr_val.date,
+      y: curr_val.value,
+      color: '#b9abdd',
+    });
+    obj.invested_amount.push({
+      x: inv_val.date,
+      y: inv_val.value,
+      color: '#502da8',
     });
   }
+
   return {
-    min: min * 0.7,
-    max: max * 1.2,
+    min: min * 0.7, // Multiplying by a factor to provide some padding area
+    max: max * 1.2, // Multiplying by a factor to provide some padding area
     data: [{
       id: 'current_amount',
       data: obj.current_amount,

@@ -1079,7 +1079,7 @@
     width: 100%;
     border-radius: 10px;
 
-    div.wr-okn-box:nth-child(6) {
+    div.wr-okn-box:nth-child(5) {
       min-width: 60%;
     }
     div.wr-okn-box {
@@ -1100,6 +1100,12 @@
         margin-top: 10px;
       }
 
+      .wr-metrics {
+        font-size: 11px;
+        font-weight: normal;
+        max-width: 310px;
+      }
+
       #wr-okn-asset-alloc-title {
         font-size: 12px;
       }
@@ -1110,6 +1116,7 @@
     padding: 24px;
     width: 100%;
     box-sizing: border-box;
+    min-height: 400px;
     height: auto;
 
     #wr-gg-date-select {
@@ -1134,9 +1141,14 @@
     font-size: 12px;
     color: #8798ad;
     
-    span {
+    #wr-xm-irr {
       color: var(--primary);
       flex-basis: 45%;
+      font-weight: 600;
+    }
+
+    span {
+      vertical-align: middle;
     }
 
     .wr-dot {
@@ -1146,6 +1158,7 @@
       margin-right: 7px;
       background-color: var(--primary);
       display: inline-block;
+      vertical-align: middle;
     }
 
     div:nth-of-type(2) > div.wr-dot {
