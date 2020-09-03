@@ -117,7 +117,8 @@ class FormCreateProfile extends Component {
 
             } else {
                 this.setState({
-                    show_loader: false
+                    show_loader: false,
+                    creating_contact_failed: true
                 });
                 toast(resultData.error || resultData.message
                     || 'Something went wrong');
@@ -177,13 +178,26 @@ class FormCreateProfile extends Component {
 
 
     sendEvents(user_action) {
-        let eventObj = {
-            "event_name": 'lending',
-            "properties": {
-                "user_action": user_action,
-                "screen_name": 'contact details',
+        let eventObj;
+        if (this.state.creating_contact_failed) {
+            eventObj = {
+                "event_name": 'lending',
+                "properties": {
+                    "user_action": user_action,
+                    "screen_name": 'Sorry',
+                    "stage": 'creating contact failed'
+                }
             }
-        };
+        } else {
+            eventObj = {
+                "event_name": 'lending',
+                "properties": {
+                    "user_action": user_action,
+                    "screen_name": 'creating profile',
+                }
+            };
+        }
+
 
         if (user_action === 'just_set_events') {
             return eventObj;
@@ -193,7 +207,6 @@ class FormCreateProfile extends Component {
     }
 
     render() {
-
         return (
             <Container
                 events={this.sendEvents('just_set_events')}

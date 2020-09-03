@@ -70,7 +70,8 @@ class LoanSummary extends Component {
       "event_name": 'lending',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'introduction'
+        "screen_name": 'agreement',
+        "agreement_agreed": this.state.confirm_details_check
       }
     };
 

@@ -38,7 +38,8 @@ class Calculator extends Component {
 
     this.setState({
       next_state: params.next_state,
-      cta_title: params.cta_title
+      cta_title: params.cta_title,
+      rejection_reason: params.rejection_reason
     })
 
   }
@@ -48,7 +49,7 @@ class Calculator extends Component {
       "event_name": 'lending',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'introduction'
+        "screen_name": 'calculator',
       }
     };
 
@@ -63,9 +64,17 @@ class Calculator extends Component {
       this.sendEvents('next');
 
       let state = this.state.next_state;
+      let rejection_reason = this.state.rejection_reason;
+
       if(state === 'instant-kyc-status') {
         let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
-        this.navigate(state, {searchParams: searchParams});
+        this.navigate(state, {
+          searchParams: searchParams,
+          params: {
+            rejection_reason: rejection_reason
+          }
+        });
+
       } else {
         this.navigate(state);
       }

@@ -46,12 +46,14 @@ class InstantKycHome extends Component {
 
   }
 
-  sendEvents(user_action) {
+  sendEvents(user_action, data = {}) {
     let eventObj = {
       "event_name": 'lending',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'introduction'
+        "screen_name": 'instant kyc',
+        "get_kyc_done": portalStatus.indexOf(this.state.dmi_loan_status) === -1 ? 'yes' : 'no',
+        "stage": portalStatus.indexOf(this.state.dmi_loan_status) === -1 ? 'approved' : 'default'
       }
     };
 
@@ -276,7 +278,11 @@ class InstantKycHome extends Component {
         </div>
           <div className="loan-instant-kyc-home">
 
-            <div className="action" onClick={() => this.redirectKyc()}>
+            <div className="action" onClick={() => {
+              portalStatus.indexOf(this.state.dmi_loan_status) !== -1 &&
+                    this.sendEvents('next')
+              this.redirectKyc()
+            }}>
               <div className="left">
                 Get your KYC done
               </div>
