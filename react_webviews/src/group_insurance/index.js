@@ -134,6 +134,8 @@ import GroupHealthLanding from './products/group_health/landing';
 import GroupHealthSelectInsureType from './products/group_health/plans/insure_type';
 import GroupHealthPlanDob from './products/group_health/plans/dob';
 import GroupHealthPlanAddMembers from './products/group_health/plans/add_members';
+import GroupHealthPlanAddOns from './products/group_health/plans/select_add_ons';
+
 import GroupHealthPlanSelectCity from './products/group_health/plans/select_city';
 import GroupHealthPlanList from './products/group_health/plans/plan_list';
 import GroupHealthPlanDetails from './products/group_health/plans/plan_details';
@@ -329,6 +331,7 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/:provider/insure-type`} component={GroupHealthSelectInsureType} />
           <Route path={`${url}/group-health/:provider/plan-dob`} component={GroupHealthPlanDob} />
           <Route path={`${url}/group-health/:provider/plan-add-members`} component={GroupHealthPlanAddMembers} />
+          <Route path={`${url}/group-health/:provider/plan-select-add-ons`} component={GroupHealthPlanAddOns} />
           <Route path={`${url}/group-health/:provider/plan-select-city`} component={GroupHealthPlanSelectCity} />
           <Route path={`${url}/group-health/:provider/plan-list`} component={GroupHealthPlanList} />
           <Route path={`${url}/group-health/:provider/plan-details`} component={GroupHealthPlanDetails} />
