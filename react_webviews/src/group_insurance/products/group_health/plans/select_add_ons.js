@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
-
+import { formatAmountInr } from "../../../../utils/validators";
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
@@ -17,6 +17,7 @@ class GroupHealthPlanAddOns extends Component {
         this.state = {
             checked: false,
             ctaWithProvider: true,
+            product_name: getConfig().productName,
             add_ons_data: []
         }
 
@@ -42,11 +43,15 @@ class GroupHealthPlanAddOns extends Component {
                 'key': 'OPD',
                 'default_cover_amount': '2000',
                 'default_premium': '2000',
-                'options': [
-                    {premium:'4500', cover_amount:'30000'},
-                    {premium:'2000', cover_amount:'30000'},
-                    {premium:'4600', cover_amount:'30000'}
-                ]
+                'OPD_DICT': {
+                    "5000": 3536.0,
+                    "10000": 6467.0,
+                    "15000": 9730.0,
+                    "35000": 20069.0,
+                    "40000": 22507.0,
+                    "45000": 25067.0,
+                    "50000": 27574.0
+                }
             },
             {
                 'title': 'Reduction in PED Wait Period',
@@ -65,9 +70,10 @@ class GroupHealthPlanAddOns extends Component {
         ];
 
         let amount_options = [];
+        let sum_assured_list = Object.keys(add_ons_data[1].OPD_DICT)
 
-        amount_options = add_ons_data[1].options.map(item => {
-            return {name: item.cover_amount, value: item.cover_amount}
+        amount_options = sum_assured_list.map(amount => {
+            return {name: formatAmountInr(amount), value: amount}
         })
 
 
@@ -115,14 +121,16 @@ class GroupHealthPlanAddOns extends Component {
                     </Grid>
                     <Grid item xs={11}>
                     <span className="flex-between" style={{alignItems:'start'}}>
-                        <div>
+                        <div style={{color:'#0A1D32'}}>
                             <span style={{fontSize:"16px", fontWeight:'600'}}>{option.title}</span>
-                            <div style={{marginTop:'10px', fontSize:'14px'}}>{`in ${option.default_premium}`}</div>
+                            <div style={{marginTop:'10px', fontSize:'14px'}}>
+                                {`in ${option.OPD_DICT ? formatAmountInr(option.OPD_DICT[this.state.amount] || 0) : formatAmountInr(option.default_premium)}`}
+                            </div>
                         </div>
                         <img
                         className="tooltip-icon"
                         data-tip={option.tooltip}
-                        src={require(`assets/fisdom/info_icon.svg`)} alt="" />
+                        src={require(`assets/${this.state.product_name}/info_icon.svg`)} alt="" />
                     </span>
                     {option.key === 'OPD' && this.state[option.key] && <DropdownInModal
                         parent={this}
