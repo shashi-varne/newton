@@ -15,97 +15,100 @@ class GroupHealthPlanAddOns extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            checked: false,
             ctaWithProvider: true,
-            options: []
+            add_ons_data: []
         }
 
         this.initialize = initialize.bind(this);
         this.updateBottomPremium = updateBottomPremium.bind(this);
-    }
+    };
 
-    onload = () => {
+    componentWillMount() {
+        
+        this.initialize();
 
-        this.setState({
-            options: [],
-            show_checkbox: false
-        });
-
-        let options = [
-            { 'name': 'Unlimited Automatic Recharge', 'rate': '₹710' },
-            { 'name': 'OPD care', 'rate': '₹456' },
-            { 'name': 'Reduction in PED Wait Period', 'rate': '₹3456' }
+        let add_ons_data = [
+            {
+                'title': 'Unlimited Automatic Recharge',
+                'tooltip': 'Unlimited Automatic Recharge',
+                'key': 'UAR',
+                'default_cover_amount': '2000',
+                'default_premium': '2000',
+            },
+            {
+                'title': 'OPD care',
+                'tooltip': 'OPD care',
+                'key': 'OPD',
+                'default_cover_amount': '2000',
+                'default_premium': '2000',
+                'options': [
+                    {premium:'4500', cover_amount:'30000'},
+                    {premium:'2000', cover_amount:'30000'},
+                    {premium:'4600', cover_amount:'30000'}
+                ]
+            },
+            {
+                'title': 'Reduction in PED Wait Period',
+                'tooltip': 'Reduction in PED Wait Period',
+                'key': 'REDPEDWAITPRD',
+                'default_cover_amount': '2000',
+                'default_premium': '2000'
+            },
+            {
+                'title': 'No Claim Bonus Super',
+                'tooltip': 'No Claim Bonus Super',
+                'key': 'CAREWITHNCB',
+                'default_cover_amount': '2000',
+                'default_premium': '2000'
+            }
         ];
-
-        this.setState({
-            options: options
-        }, () => {
-            this.setState({
-                show_checkbox: true,
-                show_loader: false
-            })
-        })
 
         let amount_options = [];
 
-        for (var j =  1000; j < 10000; j+2000) {
-            let data = {
-              name: j,
-              value: j
-            };
-            amount_options.push(data);
-        }
-
-        this.setState({
-            amount_options: amount_options
+        amount_options = add_ons_data[1].options.map(item => {
+            return {name: item.cover_amount, value: item.cover_amount}
         })
 
-    }
 
-    componentWillMount() {
-        this.initialize();
-        this.onload();
-    }
-
-    async componentDidMount() {
         this.setState({
-            selectedIndex: this.state.groupHealthPlanData.selectedIndexSumAssured || 0
-        }, () => {
-            this.updateBottomPremium();
+            add_ons_data: add_ons_data,
+            amount_options: amount_options
         })
     }
 
     handleChange = name => event => {
         if (!name) {
             name = event.target.name;
+
+            this.setState({
+                [name]: event.target.checked
+            })
         }
 
-        this.setState({
-            [name]: event.target.checked
-        })
-    }
-
-    handleAmountChange = name => event => {
+        if (name === 'amount') {
             this.setState({
-              selectedIndex: event
+                selectedIndex: event
             }, () => {
               this.setState({
                 amount: this.state.amount_options[this.state.selectedIndex].value
               })
             });
+        }
     }
 
-    renderOptions = (options) => {
+    renderOptions = (add_ons_data) => {
         return (
             <div>
-                {options.map((option, index) => (
+                {add_ons_data.map((option, index) => (
                     <Grid container spacing={16} key={index}>
                     <Grid item xs={1} className="">
                     <Checkbox
                       style={{alignItems:'start'}}
-                      checked={this.state[option.name]}
+                      checked={this.state[option.key]}
                       color="primary"
-                      value={option.name}
-                      name={option.name}
+                      value={option.key}
+                      name={option.key}
                       disableRipple
                       onChange={this.handleChange()}
                       className="Checkbox" />
@@ -113,27 +116,26 @@ class GroupHealthPlanAddOns extends Component {
                     <Grid item xs={11}>
                     <span className="flex-between" style={{alignItems:'start'}}>
                         <div>
-                            <span style={{fontSize:"16px", fontWeight:'600'}}>{option.name}</span>
-                            <div style={{marginTop:'10px', fontSize:'14px'}}>{`in ${option.rate}`}</div>
+                            <span style={{fontSize:"16px", fontWeight:'600'}}>{option.title}</span>
+                            <div style={{marginTop:'10px', fontSize:'14px'}}>{`in ${option.default_premium}`}</div>
                         </div>
                         <img
                         className="tooltip-icon"
-                        data-tip=""
+                        data-tip={option.tooltip}
                         src={require(`assets/fisdom/info_icon.svg`)} alt="" />
-                        
                     </span>
-                    {<DropdownInModal
+                    {option.key === 'OPD' && this.state[option.key] && <DropdownInModal
                         parent={this}
                         options={this.state.amount_options}
                         header_title="Select amount"
                         cta_title="SAVE"
                         selectedIndex={this.state.selectedIndex}
+                        value={this.state.amount}
                         width="30"
                         label="Select amount"
-                        class="Education"
                         id="amount"
                         name="amount"
-                        onChange={this.handleAmountChange('amount')} />}
+                        onChange={this.handleChange('amount')} />}
                     </Grid>
                     </Grid>
                 ))}
@@ -169,7 +171,8 @@ class GroupHealthPlanAddOns extends Component {
     }
 
     render() {
-        let { options } = this.state;
+        let { add_ons_data } = this.state;
+
         return (
             <Container
                 events={this.sendEvents('just_set_events')}
@@ -185,7 +188,7 @@ class GroupHealthPlanAddOns extends Component {
                 </div>
                 <div className="group-health-plan-select-add-ons">
                     <FormControl fullWidth>
-                        {this.renderOptions(options)}
+                        {this.renderOptions(add_ons_data)}
                     </FormControl>
                 </div>
             </Container>
