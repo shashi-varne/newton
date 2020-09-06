@@ -445,7 +445,6 @@ const Insurance = (props) => {
           <Route path={`${url}/common/notcover`} component={RenderNotCoverClass} />
           <Route path={`${url}/common/claim`} component={RenderClaimClass} />
 
-
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>
