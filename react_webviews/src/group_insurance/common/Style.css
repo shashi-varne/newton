@@ -669,6 +669,7 @@
   line-height: 25px;
   color: #160d2e; 
   font-size: 20px;
+  margin-bottom: 30px;
 }
 
 .insurance_plans{
@@ -686,7 +687,7 @@
 }
 
 .insurance_plans_logos{
-  margin-right:15px;
+  margin-right:25px;
   width: 40px;
   height: 40px;
   border-radius: 2px;
