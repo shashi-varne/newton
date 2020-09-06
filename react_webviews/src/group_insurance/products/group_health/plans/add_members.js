@@ -53,9 +53,7 @@ class GroupHealthPlanAddMembers extends Component {
 
     componentWillMount() {
         this.initialize();
-    }Open
-
-
+    }
 
     async componentDidMount() {
 

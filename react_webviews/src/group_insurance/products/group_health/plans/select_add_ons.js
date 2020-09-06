@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
-import { formatAmountInr } from "../../../../utils/validators";
+import { formatAmountInr } from "utils/validators";
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';

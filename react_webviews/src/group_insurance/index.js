@@ -135,6 +135,8 @@ import GroupHealthSelectInsureType from './products/group_health/plans/insure_ty
 import GroupHealthPlanDob from './products/group_health/plans/dob';
 import GroupHealthPlanAddMembers from './products/group_health/plans/add_members';
 import GroupHealthPlanAddOns from './products/group_health/plans/select_add_ons';
+import GroupHealthPlanMedicalHistory from './products/group_health/plans/medical_history';
+import GroupHealthPlanLifestyleDetail from './products/group_health/plans/lifeStyle_details';
 
 import GroupHealthPlanSelectCity from './products/group_health/plans/select_city';
 import GroupHealthPlanList from './products/group_health/plans/plan_list';
@@ -332,6 +334,8 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/:provider/plan-dob`} component={GroupHealthPlanDob} />
           <Route path={`${url}/group-health/:provider/plan-add-members`} component={GroupHealthPlanAddMembers} />
           <Route path={`${url}/group-health/:provider/plan-select-add-ons`} component={GroupHealthPlanAddOns} />
+          <Route path={`${url}/group-health/:provider/plan-medical-history`} component={GroupHealthPlanMedicalHistory} />
+          <Route path={`${url}/group-health/:provider/plan-lifestyle-details`} component={GroupHealthPlanLifestyleDetail} />
           <Route path={`${url}/group-health/:provider/plan-select-city`} component={GroupHealthPlanSelectCity} />
           <Route path={`${url}/group-health/:provider/plan-list`} component={GroupHealthPlanList} />
           <Route path={`${url}/group-health/:provider/plan-details`} component={GroupHealthPlanDetails} />
