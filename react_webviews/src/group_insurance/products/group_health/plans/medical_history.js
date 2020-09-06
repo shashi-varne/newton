@@ -26,7 +26,7 @@ class GroupHealthPlanMedicalHistory extends Component {
 
         let account_type = this.state.groupHealthPlanData.account_type;
 
-        let list = []
+        let list = [];
 
         let radioOptions = [
             {

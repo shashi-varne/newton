@@ -29,10 +29,14 @@ class radioAndCheckboxList extends Component {
     }
 
     handleChangeRadio = (name, index) => event => {
+        let value = this.state.list[index].options[event].value;
+
         this.setState({
-            [name]: this.state.list[index].options[event].value,
+            [name]: value,
             [name + '_error']: ''
-        })
+        });
+
+        this.props.handleChangeRadio(value);
     }
 
     handleChange = name => event => {
@@ -85,7 +89,6 @@ class radioAndCheckboxList extends Component {
     
     render() {
         let { account_type, list, name } = this.state;
-        console.log(this.state.form_data)
 
         return ( 
             <div style={{marginBottom: '40px'}}>
