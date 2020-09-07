@@ -5,11 +5,12 @@ import SelectMembers from "./SelectMembersMobile";
 import toast from "../../common/ui/Toast";
 import { fetchAllPANs } from "../common/ApiCalls";
 import DotDotLoader from "../../common/ui/DotDotLoader";
-import { isEmpty } from "../../utils/validators";
+import { isEmpty, storageService } from "../../utils/validators";
 import { getConfig } from "utils/functions";
 const isMobileView = getConfig().isMobileDevice;
 
 export default function PanSelect(props) {
+  const cachedPan = storageService().getObject('wr-current-pan');
   const [dropdown_open, toggleDropdown] = useState(false);
   const [selectedPan, setPan] = useState("");
   const [panModal, toggleModal] = useState(false);
@@ -19,7 +20,7 @@ export default function PanSelect(props) {
 
   useEffect(() => {
     (async () => {
-      try {
+      try { 
         const data = await fetchAllPANs();
         setPanList(data);
         if (!data.length || isEmpty(data)) {
@@ -27,7 +28,12 @@ export default function PanSelect(props) {
           selectPan('empty'); //To let Main Page know when there's no registered PANs
         } else {
           if (data.length === 1) setTooltipMsg("No more PANs to show");
-          selectPan(data[0]);
+          if (!cachedPan || isEmpty(cachedPan)) {
+            selectPan(data[0]);
+            storageService().setObject('wr-current-pan', data[0]);
+          } else {
+            selectPan(cachedPan);
+          }
         }
       } catch (err) {
         console.log(err);
@@ -39,7 +45,8 @@ export default function PanSelect(props) {
 
   const selectPan = (pan) => {
     toggleDropdown(false);
-    setPan(pan === 'empty' ? {} : pan);
+    setPan(pan === 'empty' ? '' : pan);
+    storageService().setObject('wr-current-pan', pan);
     props.onPanSelect(pan.pan || pan); // send selected pan to parent element
     // TODO: remove fall back
   };
@@ -71,25 +78,26 @@ export default function PanSelect(props) {
               {
                 loadingPans ? 
                   <DotDotLoader className="wr-dot-loader" /> :
-                  <div className="wr-pan">{selectedPan || '--'}</div>
+                  <div className="wr-pan">{selectedPan || 'No PANs linked'}</div>
               }
             </div>
-            
-            <div title={tooltipMsg || ''}>
-              <IconButton
-                classes={{ root: "wr-icon-button" }}
-                color="inherit"
-                aria-label="Menu"
-                disabled={tooltipMsg}
-              >
-                <img
-                  src={require(
-                    `assets/fisdom/${isMobileView ? 'ic-mob' : 'ic'}-dropdown.svg`
-                  )}
-                  alt=""
-                />
-              </IconButton>
-            </div>
+            {selectedPan &&
+              <div title={tooltipMsg || ''}>
+                <IconButton
+                  classes={{ root: "wr-icon-button" }}
+                  color="inherit"
+                  aria-label="Menu"
+                  disabled={tooltipMsg}
+                >
+                  <img
+                    src={require(
+                      `assets/fisdom/${isMobileView ? 'ic-mob' : 'ic'}-dropdown.svg`
+                    )}
+                    alt=""
+                  />
+                </IconButton>
+              </div>
+            }
           </div>
         </ClickAwayListener>
 
@@ -108,7 +116,7 @@ export default function PanSelect(props) {
                       />
                       <div className="wr-pan-detail">
                         <div className="wr-pan-title">{pan.name}</div>
-                        <div className="wr-pan">{pan.pan}</div>
+                        <div className="wr-pan">{pan.pan || pan}</div>
                       </div>
                     </div>
                   </div>

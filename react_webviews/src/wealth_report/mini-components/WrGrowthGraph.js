@@ -59,7 +59,7 @@ const WrGrowthGraph = (props) => {
           tickPadding: 10,
           tickSize: 0,
         }}
-        curve="natural"
+        curve="basis"
         enableGridX={false}
         colors={['#b9abdd', '#502da8']}
         enablePoints={false}

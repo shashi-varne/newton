@@ -50,7 +50,7 @@ class SelectMembers extends Component {
         >
           <div className="wr-select-members">Select Member</div>
           {this.props.pans.map((member, index) => (
-            <div className="wr-members" key={index}>
+            <div className="wr-members" key={index} onClick={() => this.props.selectPan(member)}>
               <div className="wr-container">
                 <div className="wr-head">{member}</div>
                 <div className="wr-level">2nd level data</div>

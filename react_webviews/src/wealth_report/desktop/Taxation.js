@@ -1,14 +1,18 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment, useRef } from "react";
 import WrSelect from "../common/Select";
 import WrButton from "../common/Button";
 import toast from "../../common/ui/Toast";
 import { fetchTaxation, fetchTaxFilters } from "../common/ApiCalls";
-import { inrFormatDecimal } from "../../utils/validators";
+import { inrFormatDecimal, storageService, isEmpty } from "../../utils/validators";
 import WrTooltip from "../common/WrTooltip";
 import CardLoader from "../mini-components/CardLoader";
 import ErrorScreen from "../mini-components/ErrorScreen";
+import InternalStorage from "../InternalStorage";
 
 const Taxation = (props) => {
+  const cachedTabFilters = storageService().getObject('wr-tax-filters');
+  const cachedFinYear = storageService().get('wr-fin-year');
+  const cachedTaxSlab = storageService().get('wr-tax-slab');
   const [tabSelected, selectTab] = useState("stcg");
   const [isLoading, setLoading] = useState(true);
   const [taxationData, setTaxationData] = useState({
@@ -17,18 +21,34 @@ const Taxation = (props) => {
     ltcg_tax_data: {}
   });
   const [taxFilters, setTaxFilters] = useState({ tax_slabs:[], financial_years:[] });
-  const [selectedFinYear, setFinYear] = useState("");
-  const [selectedTaxSlab, setTaxSlab] = useState("");
+  const [selectedFinYear, setFinYear] = useState(cachedFinYear || "");
+  const [selectedTaxSlab, setTaxSlab] = useState(Number(cachedTaxSlab) || "");
   const [pageErr, setPageErr] = useState(false);
+  const firstTimeTrigger = useRef(true);
+  function usePreviousValue(value) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+      firstTimeTrigger.current = false;
+    });
+    if (firstTimeTrigger.current) return value;
+    return ref.current;
+  }
+  const prevPan = usePreviousValue(props.pan);
+  const prevFinYear = usePreviousValue(selectedFinYear);
+  const prevTaxSlab = usePreviousValue(selectedTaxSlab);
 
   useEffect(() => {
     (async () => {
       try {
-        let taxFilters = await fetchTaxFilters({ pan : props.pan });
-        taxFilters = formatFilters(taxFilters);
+        let taxFilters = cachedTabFilters;
+        if (!taxFilters || isEmpty(taxFilters)) {
+          taxFilters = await fetchTaxFilters({ pan : props.pan });
+          taxFilters = formatFilters(taxFilters);
+          storageService().setObject('wr-tax-filters', taxFilters);
+        }
         setTaxFilters(taxFilters);
         setPageErr(false);
-        // TODO: Save values to LS
         const financial_year =
           selectedFinYear || taxFilters.financial_years[0].value;
         const tax_slab = selectedTaxSlab || taxFilters.tax_slabs[0].value;
@@ -46,12 +66,17 @@ const Taxation = (props) => {
     if (!selectedFinYear || !selectedTaxSlab) return;
     (async () => {
       try {
-        setLoading(true);
-        const data = await fetchTaxation({
-          pan: props.pan,
-          financial_year: selectedFinYear,
-          tax_slab: selectedTaxSlab,
-        });
+        let data = InternalStorage.getData('taxationData');
+        const haveDepsChanged = prevPan !== props.pan || prevFinYear !== selectedFinYear || prevTaxSlab !== selectedTaxSlab;
+        if (isEmpty(data) || haveDepsChanged) {
+          setLoading(true);
+          data = await fetchTaxation({
+            pan: props.pan,
+            financial_year: selectedFinYear,
+            tax_slab: selectedTaxSlab,
+          });
+          InternalStorage.setData('taxationData', data);
+        }
         setTaxationData(data);
       } catch (err) {
         console.log(err);
@@ -82,11 +107,13 @@ const Taxation = (props) => {
   const handleSelect = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-
+    console.log(event.target);
     if ((name === "year")) {
       setFinYear(value);
+      storageService().set('wr-fin-year', value);
     } else if ((name === "slab")) {
       setTaxSlab(value);
+      storageService().set('wr-tax-slab', value);
     }
   };
 
@@ -169,8 +196,7 @@ const Taxation = (props) => {
     <div className="wr-xirr-tooltip" style={{ width: "300px" }}>
       <div className="wr-tooltip-head">Estimated Tax</div>
       <div className="wr-tooltip-content">
-        Disclaimer: Calculation is solely based on the statement provided by
-        you.
+        Disclaimer: Calculation is solely based on the statement provided by you.
       </div>
     </div>
   );
@@ -180,97 +206,92 @@ const Taxation = (props) => {
       <ErrorScreen
         useTemplate={true}
         templateSvgPath="fisdom/exclamation"
-        templateText="Sorry! no taxation data available for the provided PAN number."
+        templateText="Currently, no data to show."
       />
     );
-  } else {
-    return (
-      <div id="wr-taxation" className="wr-card-template">
-        {pageErr && <ErrorScreen
-          templateSvgPath="fisdom/exclamation"
-          templateText="Oops! Looks like something went wrong. Please try again later"
-          useTemplate={true}
-        />}
-        <div id="wr-taxation-filter">
-          <WrSelect
-            disableUnderline={true}
-            style={{ marginRight: "24px" }}
-            menu={taxFilters.financial_years}
-            onSelect={handleSelect}
-            selectedValue={selectedFinYear}
-            name="year"
-            classes={{ formControl: "animated animatedFadeInUp fadeInUp" }}
-            disabled={isLoading}
-          />
-  
-          <WrSelect
-            disableUnderline={true}
-            style={{ marginRight: "24px" }}
-            menu={taxFilters.tax_slabs}
-            onSelect={handleSelect}
-            selectedValue={selectedTaxSlab}
-            name="slab"
-            classes={{ formControl: "animated animatedFadeInUp fadeInUp" }}
-            disabled={isLoading}
-          />
-        </div>
-        <div style={{ height: '500px' }}>
-          {
-            isLoading ?
-            (
-              <CardLoader />
-            ) :
-            (
-              <Fragment>
-                <div id="wr-taxation-summary" className="fadeIn">
-                  <div className="wr-taxation-summary-col">
-                    <span className="wr-tsc-value">
-                      {inrFormatDecimal(taxationData.combined_tax_data.estimated_tax || "")}
-                    </span>
-                    <span className="wr-tsc-label">
-                        Estimated Tax
-                      <WrTooltip tipContent={estdTaxTooltip}/>
-                    </span>
-                  </div>
-                  <div className="wr-vertical-divider"></div>
-                  <div className="wr-taxation-summary-col">
-                    <span className="wr-tsc-value">
-                      {inrFormatDecimal(taxationData.combined_tax_data.realized_gains || "")}
-                    </span>
-                    <span className="wr-tsc-label">Total realized gains</span>
-                  </div>
-                  <div className="wr-vertical-divider"></div>
-                  <div className="wr-taxation-summary-col">
-                    <span className="wr-tsc-value">
-                      {inrFormatDecimal(taxationData.combined_tax_data.taxable_gains || "")}
-                    </span>
-                    <span className="wr-tsc-label">Taxable gains</span>
-                  </div>
-                </div>
-                <div id="wr-taxation-detail">
-                  <div className="animated animatedFadeInUp fadeInUp">
-                    {["stcg", "ltcg"].map((tab, index) => (
-                      <WrButton
-                        classes={{
-                          root: tabSelected === tab ? "" : "wr-outlined-btn",
-                        }}
-                        style={{ marginRight: "16px" }}
-                        onClick={() => selectTab(tab)}
-                        key={index}
-                        disableRipple
-                      >
-                        {tab.toUpperCase()}
-                      </WrButton>
-                    ))}
-                  </div>
-                  {renderTaxDetailRows()}
-                </div>
-              </Fragment>
-            )
-          }
-        </div>
+  }
+  return (
+    <div id="wr-taxation" className="wr-card-template">
+      <div id="wr-taxation-filter">
+        <WrSelect
+          disableUnderline={true}
+          style={{ marginRight: "24px" }}
+          menu={taxFilters.financial_years}
+          onSelect={handleSelect}
+          selectedValue={selectedFinYear}
+          name="year"
+          classes={{ formControl: "animated animatedFadeInUp fadeInUp" }}
+          disabled={isLoading}
+        />
+
+        <WrSelect
+          disableUnderline={true}
+          style={{ marginRight: "24px" }}
+          menu={taxFilters.tax_slabs}
+          onSelect={handleSelect}
+          selectedValue={selectedTaxSlab}
+          name="slab"
+          classes={{ formControl: "animated animatedFadeInUp fadeInUp" }}
+          disabled={isLoading}
+        />
       </div>
-    );
+      <div style={{ height: '500px' }}>
+        {
+          isLoading ?
+          (
+            <CardLoader />
+          ) :
+          (
+            <Fragment>
+              <div id="wr-taxation-summary" className="fadeIn">
+                <div className="wr-taxation-summary-col">
+                  <span className="wr-tsc-value">
+                    {inrFormatDecimal(taxationData.combined_tax_data.estimated_tax || "")}
+                  </span>
+                  <span className="wr-tsc-label">
+                      Estimated Tax
+                    <WrTooltip tipContent={estdTaxTooltip}/>
+                  </span>
+                </div>
+                <div className="wr-vertical-divider"></div>
+                <div className="wr-taxation-summary-col">
+                  <span className="wr-tsc-value">
+                    {inrFormatDecimal(taxationData.combined_tax_data.realized_gains || "")}
+                  </span>
+                  <span className="wr-tsc-label">Total realized gains</span>
+                </div>
+                <div className="wr-vertical-divider"></div>
+                <div className="wr-taxation-summary-col">
+                  <span className="wr-tsc-value">
+                    {inrFormatDecimal(taxationData.combined_tax_data.taxable_gains || "")}
+                  </span>
+                  <span className="wr-tsc-label">Taxable gains</span>
+                </div>
+              </div>
+              <div id="wr-taxation-detail">
+                <div className="animated animatedFadeInUp fadeInUp">
+                  {["stcg", "ltcg"].map((tab, index) => (
+                    <WrButton
+                      classes={{
+                        root: tabSelected === tab ? "" : "wr-outlined-btn",
+                      }}
+                      style={{ marginRight: "16px" }}
+                      onClick={() => selectTab(tab)}
+                      key={index}
+                      disableRipple
+                    >
+                      {tab.toUpperCase()}
+                    </WrButton>
+                  ))}
+                </div>
+                {renderTaxDetailRows()}
+              </div>
+            </Fragment>
+          )
+        }
+      </div>
+    </div>
+  );
   }
 };
 

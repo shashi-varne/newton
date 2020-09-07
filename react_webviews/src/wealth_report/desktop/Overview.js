@@ -1,16 +1,17 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, useRef } from 'react';
 import { LinearProgress, createMuiTheme, MuiThemeProvider, IconButton } from 'material-ui';
 import WrGrowthGraph from '../mini-components/WrGrowthGraph';
-import { InsightMap, GraphDateRanges } from '../constants';
+import { InsightMap, GraphDateRanges, genericErrMsg } from '../constants';
 import toast from '../../common/ui/Toast';
 import { getConfig } from "utils/functions";
 import { fetchOverview, fetchPortfolioGrowth, fetchXIRR } from '../common/ApiCalls';
 import { formatGrowthData } from '../common/commonFunctions';
-import { numDifferentiationInr } from '../../utils/validators';
+import { numDifferentiationInr, isEmpty, formattedDate } from '../../utils/validators';
 import CardLoader from '../mini-components/CardLoader';
 import DotDotLoader from '../../common/ui/DotDotLoader';
 import WrTooltip from '../common/WrTooltip';
 import ErrorScreen from '../mini-components/ErrorScreen';
+import InternalStorage from '../InternalStorage';
 const isMobileView = getConfig().isMobileDevice;
 
 const theme = createMuiTheme({
@@ -31,52 +32,103 @@ const theme = createMuiTheme({
 });
 
 export default function Overview(props) {
-  const [selectedRange, setSelectedRange] = useState('1 year');
+  const [selectedRange, setSelectedRange] = useState('5 years');
   const [isLoading, setLoading] = useState(true); //when loading anything else
 
   const [overviewData, setOverviewData] = useState({
     insights: [],
     asset_allocation: {},
   });
+  const firstTimeTrigger = useRef(true);
+  function usePreviousValue(value) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+      firstTimeTrigger.current = false;
+    });
+    if (firstTimeTrigger.current) return value;
+    return ref.current;
+  }
+  const prevPan = usePreviousValue(props.pan);
   useEffect(() => {
     (async() => {
       try {
-        setGraphLoad(true);
-        setLoading(true);
-        const data = await fetchOverview({ pan: props.pan });
+        let data = InternalStorage.getData('overviewData');
+        const haveDepsChanged = prevPan !== props.pan;
+        if (isEmpty(data) || haveDepsChanged) {
+          setLoading(true);
+          data = await fetchOverview({ pan: props.pan });
+        }
         setOverviewData(data);
+        InternalStorage.setData('overviewData', data);
+
+        let portfolio_xirr = InternalStorage.getData('portfolioXirr');
+        let graph_xirr;
+        if (isEmpty(portfolio_xirr) || haveDepsChanged) {
+          ({ portfolio_xirr, xirr: graph_xirr } = await fetchXIRR({
+            pan: props.pan,
+            date_range: selectedRange,
+            portfolio_xirr: true,
+          }));
+        }
+        setPortfolioXirr(portfolio_xirr);
+        InternalStorage.setData('portfolioXirr', portfolio_xirr);
+        InternalStorage.setData('graphXirr', graph_xirr);
       } catch (err) {
         console.log(err);
         toast(err);
       }
-      setGraphLoad(false);
       setLoading(false);
     })();
   }, [props.pan]);
 
-  const [xirrPercent, setXirrPercent] = useState({});
+  const [portfolioXirr, setPortfolioXirr] = useState('');
+  const [graphXirr, setGraphXirr] = useState('');
   const [xirrLoading, setXirrLoading] = useState({});
   const [growthGraphData, setGrowthGraphData] = useState({});
   const [graphLoading, setGraphLoad] = useState(true); // when loading graph
   const [graphErr, setGraphErr] = useState(false); // for graph error handling
+  const prevSelectedRange = usePreviousValue(selectedRange);
   useEffect(() => {
     (async() => {
       try {
-        setGraphLoad(true);
-        setGraphErr(false);
-        setXirrLoading(true);
-        const { current_amount_data, invested_amount_data, date_ticks } = await fetchPortfolioGrowth({
-          pan: props.pan,
-          date_range: selectedRange,
-        });
-        const formattedData = formatGrowthData(current_amount_data, invested_amount_data);
+        let data = InternalStorage.getData('growthGraphData');
+        const haveDepsChanged = prevPan !== props.pan || prevSelectedRange !== selectedRange;
+        if (isEmpty(data)|| haveDepsChanged) {
+          setGraphLoad(true);
+          setGraphErr(false);
+          setXirrLoading(true);
+          const { current_amount_data, invested_amount_data, date_ticks } = await fetchPortfolioGrowth({
+            pan: props.pan,
+            date_range: selectedRange,
+          });
+          if (
+            isEmpty(current_amount_data) ||
+            isEmpty(invested_amount_data) ||
+            isEmpty(date_ticks)
+          ) {
+            throw new Error(genericErrMsg);
+          }
+          data = {
+            formattedData: formatGrowthData(current_amount_data, invested_amount_data),
+            date_ticks,
+          };
+          InternalStorage.setData('growthGraphData', data);
+        }
         setGrowthGraphData({
-          ...formattedData,
-          date_ticks: filterDateTicks(date_ticks),
+          ...data.formattedData,
+          date_ticks: filterDateTicks(data.date_ticks),
         });
         setGraphLoad(false);
-        const xirr_percent = await fetchXIRR({ pan: props.pan, date_range: selectedRange, });
-        setXirrPercent(xirr_percent);
+        let graph_xirr = InternalStorage.getData('graphXirr');
+        if (isEmpty(graph_xirr) || haveDepsChanged) {
+          ({ xirr: graph_xirr } = await fetchXIRR({
+            pan: props.pan,
+            date_range: selectedRange,
+            portfolio_xirr: false,
+          }));
+        }
+        setGraphXirr(graph_xirr);
         setXirrLoading(false);
       } catch (err) {
         setGraphErr(true);
@@ -84,7 +136,7 @@ export default function Overview(props) {
         toast(err);
       }
     })();
-  }, [selectedRange]);
+  }, [props.pan, selectedRange]);
 
   // TODO: Optimize this function
   const filterDateTicks = (ticks = []) => {
@@ -102,9 +154,9 @@ export default function Overview(props) {
         XIRR ( Extended Internal Return Rate)
         </div>
       <div className="wr-tooltip-content">
-        XIRR or extended internal return rate is the standard return metricis
+        XIRR or extended internal return rate is the standard return metrics 
         for measuring the annual performance of the mutual funds
-        </div>
+      </div>
     </div>
   )
 
@@ -122,6 +174,9 @@ export default function Overview(props) {
               <div className="wr-okn-box">
                 <div className="wr-okn-title">Current Value</div>
                 <div className="wr-okn-value">{numDifferentiationInr(overviewData.current_value)}</div>
+                  <div className="wr-okn-nav">
+                    NAV as on {formattedDate(overviewData.latest_nav_date, 'd m, y')}
+                  </div>
               </div>
               <div className="wr-okn-box">
                 <div className="wr-okn-title">Total Invested</div>
@@ -133,7 +188,7 @@ export default function Overview(props) {
                   <WrTooltip tipContent={xirrTooltipContent} tooltipClass="wr-xirr-info" forceDirection={true}/>
                 </div>
                 <div className="wr-okn-value">
-                  {`${xirrPercent.portfolio_xirr ? Math.round(xirrPercent.portfolio_xirr) + '%' : '--'}`}
+                  {`${portfolioXirr ? Number(portfolioXirr).toFixed(1) + '%' : '--'}`}
                 </div>
               </div>
               <div className="wr-okn-box">
@@ -205,15 +260,13 @@ export default function Overview(props) {
                 }}>
                   {xirrLoading ?
                     <DotDotLoader className="wr-dot-loader" /> :
-                    `${xirrPercent.xirr ? Math.round(xirrPercent.xirr) + '%' : '--'}`
+                  `${graphXirr ? Number(graphXirr).toFixed(1) + '%' : '--'}`
                   }
                 </div>
               </div>
               <div id="wr-xirr-mob">
                 <span id="wr-xm-irr">
-                  {
-                    `IRR: ${xirrPercent.xirr ? Math.round(xirrPercent.xirr) + '%' : '--'}`
-                  }
+                  IRR: {`${graphXirr ? Number(graphXirr).toFixed(1) + '%' : '--'}`}
                 </span>
                 <div>
                   <div className="wr-dot"></div>

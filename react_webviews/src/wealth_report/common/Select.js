@@ -7,7 +7,8 @@ import {
   MenuItem,
 } from "material-ui";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-
+import { getConfig } from "utils/functions";
+const isMobileView = getConfig().isMobileDevice;
 const theme = createMuiTheme({
   overrides: {
     MuiSelect: {
@@ -18,7 +19,7 @@ const theme = createMuiTheme({
         borderRadius: "4px",
       },
       select: {
-        fontSize: "15px",
+        fontSize: isMobileView ? "13px" : "15px",
         fontWeight: "600",
         lineHeight: "1.2",
         letterSpacing: "0.76px",

@@ -89,7 +89,7 @@ const MainPage = (props) => {
           <div className="wr-fisdom">
             <img src={require('assets/fisdom/fisdom_logo.png')} alt="fisdom" />
             <span className='wr-vertical-divider'></span>
-            <span className="wr-report">Mutual fund report</span>
+            <span className="wr-report">Mutual Fund Report</span>
           </div>
           
           {/* will be hidden for desktop view and visible for mobile view */}

@@ -87,23 +87,45 @@ export default function EmailList(props) {
     const clickInsideTooltip = path.find((element) =>
       element.nodeName === 'DIV' && element.classList.contains("wr-accounts")
     );
-    if (clickInsideTooltip) return;
+    const clickAddEmail = path.find((element) =>
+      element.nodeName === 'DIV' && element.classList.contains("wr-add-email-btn")
+    );
+    if (!clickAddEmail && clickInsideTooltip) return;
     toggleFunction(false);
   };
 
   const resyncEmail = async(email) => {
     try {
-      setSyncLoad(true);
+      const syncIndex = accounts.findIndex(account => account.email === email);
+      if (isSyncing === syncIndex) return; // To prevent triggering of duplicate sync requests
+      setSyncLoad(syncIndex);
       await requestStatement({
         email: email,
         resync: 'true',
       });
-      await fetchEmailList();
+      setTimeout(() => {
+        setSyncLoad('');
+        fetchEmailList();
+      }, 10000);
     } catch(err) {
       console.log(err);
+      setSyncLoad('');
       toast(err);
     }
-    setSyncLoad(false);
+  };
+
+  const getSyncStatus = (email) => {
+    const { statement_status, dt_updated } = email.latest_statement;
+    const statusMap = {
+      init: `Sync Initiated on ${formatDateAmPm(dt_updated)}`,
+      requested: 'Awaiting CAMS email',
+      success: 'Sync complete',
+      failed: 'Sync Failed',
+      processing: 'Processing statement...',
+      parsing: 'Processing statement...',
+      invalid_statement_uploded: 'Invalid statement uploaded. Try again',
+    };
+    return statusMap[statement_status] || 'Sync Pending';
   };
 
   // will render Listing of emails
@@ -120,21 +142,32 @@ export default function EmailList(props) {
         Add new Email
       </Button>
       {!!accounts.length && 
-        <div style={{ margin: "28px 10px 0 10px" }}>
+        <div id="wr-all-emails" style={{ margin: "28px 0 0" }}>
           <div className="wr-email-list-title">All emails</div>
           {accounts.map((account, index) => (
             <div className="wr-mails" key={index}>
               <div>
                 <div className="wr-eli-email">{account.email}</div>
-                <div className="wr-eli-sync">
-                  {`Synced on ${formatDateAmPm(account.latest_statement.dt_updated)}`}</div>
+                {account.latest_success_statement.dt_updated && 
+                  <div className="wr-eli-sync-date">
+                    {`Last successful sync: ${formatDateAmPm(account.latest_success_statement.dt_updated)}`}
+                  </div>
+                }
+                {account.latest_statement.statement_status !== 'success' &&
+                  <div className="wr-eli-sync-status">
+                    {getSyncStatus(account)}
+                  </div>
+                }
               </div>
               {/* Checking if regenerate time limit has elapsed in order to show resync option */}
-              {/* TODO: Remove key from iconButton */}
               { 
                 (new Date() - new Date(account.latest_statement.dt_updated)) / 60000 >= regenTimeLimit &&
-                <IconButton onClick={() => resyncEmail(account.email)} key={isSyncing}>
-                  <img src={require(`assets/fisdom/ic-email-sync.svg`)} alt="resync" />
+                <IconButton onClick={() => resyncEmail(account.email)} disabled={isSyncing === index}>
+                  <img
+                    src={require(`assets/fisdom/ic-email-sync.svg`)}
+                    alt="resync"
+                    className={isSyncing === index ? "wr-rotate" : ""}
+                  />
                 </IconButton>
               }
             </div>

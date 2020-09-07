@@ -34,8 +34,13 @@ const FisdomRating = (rating = 0) => {
       <span
         className="rating-num"
         style={{ color: 'rgba(129, 129, 129, 0.5)' }}>
-        --
+        -
       </span>
+      <img
+        alt="star"
+        src={require(`assets/ic-star-${rating < 4 ? 'red' : 'green'}.svg`)}
+        className="rating-star"
+      />
     </div>);
   }
 

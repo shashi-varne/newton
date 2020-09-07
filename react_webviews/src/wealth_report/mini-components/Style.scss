@@ -180,9 +180,10 @@ span.wr-small-col-title {
   position: absolute;
   top: 144px;
   left: 0;
-  right: 0;
+  right: 12px; //to offset scrollbar width
   margin: auto;
-  width: 94%;
+  width: 100%;
+  max-width: 1440px;
   height: 124px;
   border-radius: 10px;
   box-shadow: 0 1px 15px 0 rgba(69, 65, 78, 0.05);
@@ -495,6 +496,23 @@ span.wr-small-col-title {
     color: #a9a9a9;
   }
 
+  #wr-all-emails {
+    margin: 28px -12px 0px 0px;
+    overflow-y: scroll;
+    max-height: 400px;
+  }
+
+  #wr-all-emails::-webkit-scrollbar {
+    width: 4px;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
+  }
+
+  #wr-all-emails::-webkit-scrollbar-thumb {
+    border-radius: 2.5px;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+  
   .wr-mails {
     display: flex;
     justify-content: space-between;
@@ -512,11 +530,23 @@ span.wr-small-col-title {
   .wr-eli-email {
     font-size: 15px;
     margin-bottom: 8px;
+    font-weight: 600;
   }
 
-  .wr-eli-sync {
+  .wr-eli-sync-date {
     font-size: 13px;
-    color: #a9a9a9;
+    color: #565656;
+  }
+  
+  .wr-eli-sync-status {
+    padding: 6px 9px;
+    color: rgba(80, 45, 168, 0.8);
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    word-break: break-word;
+    background-color: rgba(80, 45, 168, 0.1);
+    margin-top: 10px;
   }
 }
 
@@ -724,6 +754,19 @@ span.wr-small-col-title {
       text-transform: capitalize;
       color: rgba(0, 0, 0, 0.8);
     }
+  }
+}
+
+.wr-rotate {
+  animation: rotate 2s infinite ease-in-out;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState, Fragment, useRef } from "react";
 import HoldingCard from "../mini-components/HoldingCard";
 import Filter from "../mini-components/Filter";
 import FilterMobile from "../mini-components/FilterMobile";
@@ -7,26 +7,45 @@ import { fetchHoldings, hitNextPage } from "../common/ApiCalls";
 import DotDotLoader from '../../common/ui/DotDotLoader';
 import { CircularProgress } from "material-ui";
 import ErrorScreen from "../mini-components/ErrorScreen";
-import { isEmpty } from "../../utils/validators";
+import { isEmpty, storageService } from "../../utils/validators";
 import { getConfig } from "utils/functions";
 import { debounce } from 'lodash';
+import InternalStorage from "../InternalStorage";
 const isMobileView = getConfig().isMobileDevice;
 
 export default function Holdings(props) {
+  const cachedFilters = storageService().getObject('wr-holdings-filter');
   const [nextPage, setNextPage] = useState('');
   const [loadingMore, setLoadMore] = useState(false);
   const [holdingsData, setHoldingsData] = useState([]);
-  const [selectedFilters, setFilters] = useState({});
+  const [selectedFilters, setFilters] = useState(!isEmpty(cachedFilters) ? cachedFilters : {});
   const [noHoldings, setNoHoldings] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const [pageErr, setPageErr] = useState(false);
+  const firstTimeTrigger = useRef(true);
+  function usePreviousValue(value) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+      firstTimeTrigger.current = false;
+    });
+    if (firstTimeTrigger.current) return value;
+    return ref.current;
+  }
+  const prevPan = usePreviousValue(props.pan);
+  const prevFilters = usePreviousValue(selectedFilters);
   useEffect(() => {
     (async () => {
       try {
-        setPageErr(false);
-        setLoading(true);
-        setNoHoldings(false);
-        const data = await fetchHoldings({ pan: props.pan, ...selectedFilters });
+        let data = InternalStorage.getData('holdingsData');
+        const haveDepsChanged = (prevPan !== props.pan) || JSON.stringify(prevFilters) !== JSON.stringify(selectedFilters);
+        if (isEmpty(data) || haveDepsChanged) {
+          setPageErr(false);
+          setLoading(true);
+          setNoHoldings(false);
+          data = await fetchHoldings({ pan: props.pan, ...selectedFilters });
+          InternalStorage.setData('holdingsData', data);
+        }
         if (!data.holdings || !data.holdings.length) {
           setNoHoldings(true);
         }
@@ -56,7 +75,8 @@ export default function Holdings(props) {
   };
 
   const debouncedFilterChange = debounce((filterObj) => {
-    setFilters(Object.assign({}, selectedFilters, filterObj));
+    const newFilters = Object.assign({}, selectedFilters, filterObj);
+    setFilters(newFilters);
   }, 3000, { trailing: true }); // Debounced to prevent repeated API calls on filter clicks
 
   return (
@@ -92,14 +112,14 @@ export default function Holdings(props) {
         {!isLoading && noHoldings && !isEmpty(selectedFilters) &&
           <ErrorScreen
             templateSvgPath="fisdom/no-filter-results"
-            templateText="No results for the applied filters! Please try removing filters to see holdings data."
+            templateText="Currently, no data to show for the selected filter. Please try removing filters to see holdings data."
             useTemplate={true}
           />
         }
         {!isLoading && noHoldings && isEmpty(selectedFilters) &&
           <ErrorScreen
             templateSvgPath="fisdom/exclamation"
-            templateText="No holdings to show."
+            templateText="Currently, no data to show."
             useTemplate={true}
           />
         }
@@ -111,12 +131,12 @@ export default function Holdings(props) {
       </div>
       <div
         className="wr-load-more"
-        style={{ justifyContent: 'center', fontSize: '18px', marginTop: '70px' }}
+        style={{ justifyContent: 'center', fontSize: isMobileView ? '16px' : '18px', marginTop: isMobileView ? '50px' : '70px' }}
         onClick={loadMoreEntries}>
         {!!nextPage && loadingMore && (
           <Fragment><CircularProgress size={20} /> &nbsp;&nbsp; Fetching ...</Fragment>
         )}
-        {!!nextPage && !loadingMore && !isLoading && 'Load More'}
+        {!!nextPage && !loadingMore && !isLoading && 'See More'}
       </div>
     </div>
   );

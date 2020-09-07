@@ -1,5 +1,4 @@
 import { getConfig } from 'utils/functions';
-import { isEmpty } from '../../utils/validators';
 
 export function navigate(props, pathname, params, replace) {
   if (!replace) {

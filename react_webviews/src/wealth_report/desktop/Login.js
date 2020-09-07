@@ -9,7 +9,7 @@ import toast from '../../common/ui/Toast';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { navigate } from "../common/commonFunctions";
 import LoadingScreen from "../mini-components/LoadingScreen";
-import { Button, FormControl, TextField } from "material-ui";
+import { Button, FormControl, TextField, IconButton } from "material-ui";
 import { validateEmail } from "../../utils/validators";
 const isMobileView = getConfig().isMobileDevice;
 
@@ -183,7 +183,7 @@ const Login = (props) => {
       <img src={require("assets/fisdom/ic-fisdom-logo.jpg")} id="wr-logo" alt="" />
       <div id="wr-title">Login with Phone Number</div>
       <div className="subtitle">
-        Please enter your 10 digit mobile number to access your wealth report
+        Please enter your 10 digit registered mobile number to access the wealth report
       </div>
       <div id="wr-input-label">Enter phone number</div>
       <WrPhoneInput 
@@ -269,7 +269,7 @@ const Login = (props) => {
       <img src={require("assets/fisdom/ic-fisdom-logo.jpg")} id="wr-logo" alt="" />
       <div id="wr-title">Forgot Password</div>
       <div className="subtitle">
-        We will send a link to reset your password on your registered email address
+        We will send a link to reset the password on your registered email address
       </div>
       <div style={{ marginBottom: '28px' }}>
         <FormControl className="wr-form">
@@ -420,6 +420,12 @@ const Login = (props) => {
           }}
         >
           <div id="wr-mobile-view">
+            {!['splash', 'phone'].includes(view) && <IconButton onClick={() => props.history.goBack()}>
+              <img
+                src={require('assets/ic-mob-back.svg')}
+                alt="expand"
+                style={{ cursor: 'pointer', marginLeft: '-50%' }} />
+            </IconButton>}
             {view === 'splash' && renderSplashScreen}
             {view === 'phone' && renderNumberView}
             {view === 'otp' && renderOTPView}

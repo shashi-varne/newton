@@ -21,7 +21,7 @@ const LoadingScreen = (props) => {
         <CircularProgress size={isMobileView ? 65 : 80} thickness={4} />
         <div
           style={{
-            fontSize: isMobileView ? '18px' : '22px',
+            fontSize: isMobileView ? '16px' : '20px',
             marginTop: '45px'
           }}>
           {props.text}

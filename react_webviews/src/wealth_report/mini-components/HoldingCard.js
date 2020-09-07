@@ -66,16 +66,16 @@ export default function HoldingCard(props) {
         <span className="wr-small-col-title">AUM</span>
       </div>
       <div>
-        <span className="wr-small-col-val">{numDifferentiationInr(fund_summary.one_year_return)}</span>
+        <span className="wr-small-col-val">{`${Number(fund_summary.one_year_return).toFixed(1)}%`}</span>
         <span className="wr-small-col-title">1 Year Return</span>
       </div>
       <div id="wr-hce-space"></div> {/*This div is required to create space for mobile view*/}
       <div>
-        <span className="wr-small-col-val">{numDifferentiationInr(fund_summary.three_year_return)}</span>
+        <span className="wr-small-col-val">{`${Number(fund_summary.three_year_return).toFixed(1)}%`}</span>
         <span className="wr-small-col-title">3 Year Return</span>
       </div>
       <div>
-        <span className="wr-small-col-val">{numDifferentiationInr(fund_summary.five_year_return)}</span>
+        <span className="wr-small-col-val">{`${Number(fund_summary.five_year_return).toFixed(1)}%`}</span>
         <span className="wr-small-col-title">5 Year Return</span>
       </div>
     </div>
@@ -90,6 +90,7 @@ export default function HoldingCard(props) {
             (<WrTable
               data={transactions}
               headersMap={tableHeadersMap}
+              errorMsg="Currently, no data to show"
             />)
           }
         </div>
@@ -100,7 +101,7 @@ export default function HoldingCard(props) {
             <Fragment><CircularProgress size={20}/> &nbsp;&nbsp; Fetching ...</Fragment>
           )}
           {!!nextPage && !loadingMore && isMobileView && 'View All'}
-          {!!nextPage && !loadingMore && !isMobileView && 'Load More'}
+          {!!nextPage && !loadingMore && !isMobileView && 'See More'}
         </div>
       </Fragment>
     );

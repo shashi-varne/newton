@@ -5,6 +5,7 @@ import { HoldingFilterOptions as Filters } from "../constants";
 import { Button } from "material-ui";
 import { getConfig } from "utils/functions";
 import CloseIcon from "@material-ui/icons/Close";
+import { storageService } from "../../utils/validators";
 const isMobileView = getConfig().isMobileDevice;
 
 class FilterMobile extends Component {
@@ -17,6 +18,12 @@ class FilterMobile extends Component {
       filters: [],
       open: false
     };
+  }
+
+  componentDidMount() {
+    const cachedFilters = storageService().getObject('wr-mobile-filter-obj') || {};
+    cachedFilters.map(({ category, ...filterObj }) => this.selectCategory(category, filterObj, true));
+    this.setState({ filters: cachedFilters });
   }
 
   handleClick = () => {
@@ -40,7 +47,7 @@ class FilterMobile extends Component {
     }, () => { //to get updated state immediately https://stackoverflow.com/questions/41446560/react-setstate-not-updating-state
       if (reApplyFilter) this.applyFilters();
     });
-  }
+  };
 
   applyFilters = () => {
     const filterKeys = Filters.map(filter => filter.id);
@@ -55,7 +62,9 @@ class FilterMobile extends Component {
     }, {});
 
     this.setState({ filters, open: false });
+    storageService().setObject('wr-mobile-filter-obj', filters);
     this.props.onFilterChange(filtersObj);
+    storageService().setObject('wr-holdings-filter', filtersObj);
   };
 
   clearFilters = () => {

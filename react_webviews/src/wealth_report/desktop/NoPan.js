@@ -52,7 +52,7 @@ export default function NoPan(props) {
   // Added key to div below to prevent React from caching it and causing animations to not replay
   const renderRequestSent = (
     <div id="wr-no-pan-screen" key={emailAdded}>
-      <div className="wr-no-pan-content animated animatedFadeInUp fadeInUp">Email Sync Request Successful.</div>
+      <div className="wr-no-pan-content-head animated animatedFadeInUp fadeInUp">Email Sync Request Successful.</div>
       <div className="wr-no-pan-content animated animatedFadeInUp fadeInUp">
         Within the next 24 hours, you will receive a statement email on
         <b> {emailAdded}</b> from CAMS. Please <b>forward the email</b> to us at
@@ -66,43 +66,50 @@ export default function NoPan(props) {
 
   const renderNoPans = (
     <div id="wr-no-pan-screen" >
-      <div className="wr-no-pan-content animated animatedFadeInUp fadeInUp">
+      <div className="wr-no-pan-content-head animated animatedFadeInUp fadeInUp">
         NO ACTIVE PANS FOUND.
-      </div>
-      <div className="wr-no-pan-content animated animatedFadeInUp fadeInUp">
-        Syncing an Investment Email is a good first step!
       </div>
       <div
         className="animated animatedFadeInUp fadeInUp"
-        style={{ textAlign: 'left' }}>
-        <div
-          onClick={() => clickSync(true)}
-          className={`wr-no-pan-back ${syncClicked ? 'expand' : ''}`}>
-          {syncClicked &&
-            <TextField
-              disabled={isLoading}
-              autoFocus={true}
-              placeholder="Enter Email"
-              InputProps={{
-                disableUnderline: true,
-                classes: {
-                  input: 'wr-no-pan-input',
-                },
-              }}
-              onChange={(e) => handleInput(e)}
-            ></TextField>
-          }
-          {buttonContent()}
+        style={{ 
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}>
+        <div className="wr-no-pan-content">
+          Syncing an Investment Email is a good first step!
         </div>
-        {!!emailErr && <div style={{
-            marginTop: "10px",
-            color: "red",
-            letterSpacing: "0.5px",
-            fontSize: '14px',
-          }}>
-            {emailErr}
+        <div
+          style={{ textAlign: 'left' }}>
+          <div
+            onClick={() => clickSync(true)}
+            className={`wr-no-pan-back ${syncClicked ? 'expand' : ''}`}>
+            {syncClicked &&
+              <TextField
+                disabled={isLoading}
+                autoFocus={true}
+                placeholder="Enter Email"
+                InputProps={{
+                  disableUnderline: true,
+                  classes: {
+                    input: 'wr-no-pan-input',
+                  },
+                }}
+                onChange={(e) => handleInput(e)}
+              ></TextField>
+            }
+            {buttonContent()}
           </div>
-        }
+          {!!emailErr && <div style={{
+              marginTop: "10px",
+              color: "red",
+              letterSpacing: "0.5px",
+              fontSize: '14px',
+            }}>
+              {emailErr}
+            </div>
+          }
+        </div>
       </div>
     </div>
   );

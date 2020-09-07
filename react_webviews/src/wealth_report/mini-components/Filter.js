@@ -2,15 +2,17 @@ import React, { Component } from "react";
 import Grow from "@material-ui/core/Grow";
 import WrButton from "../common/Button";
 import { HoldingFilterOptions as Filters } from '../constants';
+import { storageService } from "../../utils/validators";
 
 export default class HoldingFilter extends Component {
   constructor(props) {
     super(props);
+    const cachedFilters = storageService().getObject('wr-holdings-filter');
     this.state = {
       expand_filter: false,
-      scheme_type: "",
-      current_value_type: "",
-      fisdom_rating: "",
+      scheme_type: (cachedFilters && cachedFilters.scheme_type) || "",
+      current_value_type: (cachedFilters && cachedFilters.current_value_type) || "",
+      fisdom_rating: (cachedFilters && cachedFilters.fisdom_rating) || "",
     };
   }
 
@@ -26,11 +28,13 @@ export default class HoldingFilter extends Component {
     this.setState({
       [category]: currentFilter !== newFilter ? newFilter : '',
     }, () => {
-      this.props.onFilterChange({
+      const filters = {
         scheme_type: this.state.scheme_type,
         current_value_type: this.state.current_value_type,
         fisdom_rating: this.state.fisdom_rating,
-      });
+      };
+      this.props.onFilterChange(filters);
+      storageService().setObject('wr-holdings-filter', filters);
     });
   };
 

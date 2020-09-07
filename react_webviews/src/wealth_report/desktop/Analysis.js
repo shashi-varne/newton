@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, useRef } from 'react';
 import PieChart from '../mini-components/PieChart';
 import toast from '../../common/ui/Toast';
 import { TriColorScheme, MultiColorScheme, QuadColorScheme, PentaColorScheme } from '../constants';
@@ -36,9 +36,9 @@ const tableHeadersMap = [{
   label: 'Instrument',
   accessor: 'holding_type',
 }, {
-  label: '% Share',
+  label: 'Holding Percentage',
   accessor: 'share',
-  formatter: (val) => Number(val).toFixed(2),
+  formatter: (val) => `${Number(val).toFixed(2)}%`,
 }];
 
 export default function Analysis(props) {
@@ -57,12 +57,24 @@ export default function Analysis(props) {
     top_holdings: {},
     percent_split: {},
   });
+  const firstTimeTrigger = useRef(true);
+  function usePreviousValue(value) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+      firstTimeTrigger.current = false;
+    });
+    if (firstTimeTrigger.current) return value;
+    return ref.current;
+  }
+  const prevPan = usePreviousValue(props.pan);
   useEffect(() => {
     (async() => {
       try {
         setGraphLoad(true);
-        let data = InternalStorage.getData('analysisData');
-        if (isEmpty(data)) {
+        let data = InternalStorage.getData('analysisData', props.pan);
+        const haveDepsChanged = prevPan !== props.pan;
+        if (isEmpty(data) || haveDepsChanged) {
           data = await fetchAnalysis({ pan: props.pan });
           InternalStorage.setData('analysisData', data);
         }
@@ -76,7 +88,7 @@ export default function Analysis(props) {
   }, [props.pan]);
 
   useEffect(() => {
-    if (!isEmpty(analysisData)) {
+    if (!isEmpty(analysisData) && !isEmpty(analysisData.percent_split)) {
       if (isEmpty(graph1Data)) setGraph1Err(true);
       if (isEmpty(graph2Data)) setGraph2Err(true);
     }
@@ -189,14 +201,18 @@ export default function Analysis(props) {
                     colors={tabProps.graph2ColorScheme}
                   ></PieChart>
                   <div
-                    className="wr-pie-2-legend animated animatedFadeInUp fadeInUp"
+                  className="wr-pie-2-legend animated animatedFadeInUp fadeInUp"
                     style={selectedTab === 'debt' ? {
                       height: 'auto',
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                     } : {}}>
                     {graph2Data.map(({ label, value }, idx) => (
-                      <div className="wr-p2l-item" key={idx}>
+                      <div className="wr-p2l-item" key={idx}
+                        style={selectedTab === 'debt' ? {
+                          flexBasis : '50%',
+                          textAlign: 'center',
+                        } : {}}>
                         <div
                           className="wr-p2l-item-chip"
                           style={{ backgroundColor: tabProps.graph2ColorScheme[idx] || 'grey' }}></div>

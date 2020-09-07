@@ -21,17 +21,17 @@
   div.wr-no-pan-content {
     line-height: 1.8;
     max-width: 800px;
-  }
-
-  div.wr-no-pan-content:nth-child(n) {
     font-size: 22px;
     margin-bottom: 20px;
+    color: rgba(0, 0, 0, 0.5);
   }
 
-  div.wr-no-pan-content:nth-child(1) {
+  div.wr-no-pan-content-head {
+    @extend div.wr-no-pan-content;
     margin-bottom: 25px;
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 700;
+    color: rgba(0, 0, 0, 0.6);
   }
 
   .wr-no-pan-back {
@@ -212,6 +212,7 @@
   height: 100%;
   background-color: #ffffff;
   overflow-y: scroll;
+  overflow-x: hidden;
   font-family: 'Source Sans Pro', sans-serif;
 
   .MuiButton-disabled {
@@ -248,6 +249,9 @@
     justify-content: space-between;
     padding: 43px 90px 0 90px;
     align-items: center;
+    max-width: 1440px;
+    box-sizing: border-box;
+    margin: auto;
 
     .wr-fisdom {
       display: flex;
@@ -286,7 +290,8 @@
 }
 
 #wr-body {
-  width: 94%;
+  width: 100%;
+  max-width: 1440px;
   height: auto;
   // min-height: 100vh;
   margin: 330px auto 0;
@@ -311,10 +316,10 @@
     opacity: 0.6;
     font-size: 17px;
     font-weight: 600;
-    text-transform: capitalize;
+    text-transform: uppercase;
     line-height: 1;
     color: #000000;
-    text-align: center;
+    text-align: left;
     padding: 24px;
     box-sizing: border-box;
     border-bottom: 1px solid rgba(102, 102, 102, 0.05);
@@ -354,6 +359,12 @@
       font-weight: bold;
       line-height: 0.78;
       margin-top: 26px;
+    }
+
+    .wr-okn-nav {
+      font-size: 15px;
+      color: rgba(0, 0, 0, 0.5);
+      margin-top: 14px;
     }
 
     .wr-metrics {
@@ -557,6 +568,7 @@
 
     .wr-p1l-item-label {
       font-size: 20px;
+      text-transform: capitalize;
       margin-bottom: 10px;
     }
 
@@ -603,7 +615,7 @@
 }
 
 #wr-analysis-top-holdings {
-  padding: 50px;
+  padding: 50px 100px;
 
   .wr-table-container {
     min-height: 200px;
@@ -1033,6 +1045,10 @@
     background-color: #f5f6f8 !important;
   }
 
+  #wr-main::-webkit-scrollbar {
+    display: none;
+  }
+
   #wr-header-hero {
     height: 155px;
     border-radius: 0 0 12px 12px;
@@ -1059,6 +1075,7 @@
 
   #wr-body {
     margin: 220px 3.1% 0;
+    width: 93%;
   }
 
   .wr-card-template {
@@ -1098,6 +1115,12 @@
         font-size: 15px;
         line-height: 0.78;
         margin-top: 10px;
+      }
+
+      .wr-okn-nav {
+        font-size: 10px;
+        color: rgba(0, 0, 0, 0.5);
+        margin-top: 8px;
       }
 
       .wr-metrics {
@@ -1276,7 +1299,6 @@
 
       .wr-p1l-item-label {
         font-size: 13px;
-        text-transform: capitalize;
         margin-bottom: 10px;
       }
 
@@ -1284,10 +1306,6 @@
         line-height: 1;
         font-size: 16px;
       }
-    }
-
-    .wr-p1l-item:nth-last-child(1) {
-      margin-right: 0;
     }
   }
 
@@ -1367,10 +1385,10 @@
       align-items: center;
       justify-content: space-between;
       border-bottom: 1px solid rgba(102, 102, 102, 0.05);
+      padding: 0 10px;
 
       .wr-taxation-summary-col {
         flex-basis: unset;
-        text-align: left;
         padding: 16px 13px;
 
         .wr-tsc-value {
@@ -1400,8 +1418,9 @@
 
           hr {
             width: 68%;
+            height: 0.3px;
             display: inline-block;
-            border: 0.5px solid rgba(21,7,49,0.05);
+            border: 0.5px solid rgba(21, 7, 49, 0.05);
             vertical-align: bottom;
           }
         }
@@ -1415,6 +1434,11 @@
     .wr-vertical-divider {
       height: 20px;
     }
+  }
+
+  .wr-load-more {
+    font-size: 16px;
+    margin-top: 50px;
   }
 
   .wr-user-account {
