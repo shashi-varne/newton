@@ -80,6 +80,12 @@
   display: flex;
   background-color: white;
 
+  #wr-alternate-login-btns {
+    .MuiButton-disabled {
+      background-color: inherit !important;
+    }
+  }
+
   #wr-login-img {
     height: 100%;
   }

@@ -10,7 +10,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { navigate } from "../common/commonFunctions";
 import LoadingScreen from "../mini-components/LoadingScreen";
 import { Button, FormControl, TextField, IconButton } from "material-ui";
-import { validateEmail } from "../../utils/validators";
+import { validateEmail, storageService } from "../../utils/validators";
 const isMobileView = getConfig().isMobileDevice;
 
 const Login = (props) => {
@@ -102,11 +102,8 @@ const Login = (props) => {
     try {
       setOpLoading(true);
       await verifyOtp({ mobileNo: number, countryCode, otp });
-      // setView('loading');
-      // setTimeout(()=>{
+      storageService().set('wr-username', number);
       navigate(props, 'main/overview');
-      // }, 3000); // timeout to give user a sense of loading time
-      // navigate to homepage
     } catch(err) {
       if (err.includes('wrong OTP')) {
         setOtpErr('Incorrect OTP');
@@ -135,6 +132,7 @@ const Login = (props) => {
       }
       setOpLoading(true);
       await emailLogin({ email, password });
+      storageService().set('wr-username', email);
       navigate(props, 'main/overview');
     } catch (err) {
       console.log(err);
@@ -214,14 +212,15 @@ const Login = (props) => {
         }
       </WrButton>
       <img src={require('assets/fisdom/ORDivider.svg')} alt="or" style={{ width: '100%', margin: '30px 0' }} />
-      <Button
+      <div id="wr-alternate-login-btns">
+        <Button
         fullWidth={true}
         classes={{ root: "wr-email-login-btn" }}
         onClick={() => navigate(props, 'login/email')}
         disabled={opLoading}>
           Continue with Email
       </Button>
-      <div style={{ display: 'flex', marginTop: '30px' }}>
+        <div style={{ display: 'flex', marginTop: '30px' }}>
         <Button
           fullWidth={true}
           classes={{ root: "wr-social-btn" }}
@@ -239,6 +238,7 @@ const Login = (props) => {
           <img src={require('assets/google.svg')} alt="google" style={{ marginRight: '12px' }} />
           Google
         </Button>
+      </div>
       </div>
     </div>
   );

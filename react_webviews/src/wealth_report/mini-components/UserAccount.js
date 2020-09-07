@@ -7,8 +7,10 @@ import { logout } from "../common/ApiCalls";
 import { navigate } from '../common/commonFunctions';
 import { CircularProgress } from "material-ui";
 import WrTooltip from "../common/WrTooltip";
+import { storageService } from "../../utils/validators";
 
 export default function UserAccountMobile(props) {
+  const username = storageService().get('wr-username');
   const [loggingOut, setLoggingOut] = useState(false);
 
   function handleTooltipClose(event, toggleFunction) {
@@ -46,7 +48,7 @@ export default function UserAccountMobile(props) {
           />
         </div>
         <div className="wr-head">Welcome</div>
-        <div className="wr-number">+91 92374 82739</div>
+        <div className="wr-number">{username}</div>
       </div>
 
       <div className="wr-logout">

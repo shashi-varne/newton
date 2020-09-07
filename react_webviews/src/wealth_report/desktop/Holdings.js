@@ -82,10 +82,10 @@ export default function Holdings(props) {
   return (
     <div id="wr-holdings">
       {/* will be hidden for the mobile view visible for desktop view */}
-      <Filter onFilterChange={debouncedFilterChange} />
+      {!isMobileView && <Filter onFilterChange={debouncedFilterChange} />}
 
       {/* will be hidden for the desktop view and visible for mobile view */}
-      <FilterMobile onFilterChange={debouncedFilterChange} />
+      {isMobileView && <FilterMobile onFilterChange={debouncedFilterChange} />}
 
       {isLoading && <div style={{
           position: 'relative',

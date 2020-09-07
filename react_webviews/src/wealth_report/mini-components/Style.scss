@@ -667,10 +667,11 @@ span.wr-small-col-title {
   }
 
   .wr-form {
-    width: 88%;
+    width: 100%;
     border: 1px solid #dadaed;
     border-radius: 4px;
     padding: 14px 16px !important;
+    max-width: none !important;
   }
 
   .wr-input-addmail {
