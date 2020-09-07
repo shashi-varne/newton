@@ -2,11 +2,13 @@ import { storageService, inrFormatDecimal, getEditTitle } from 'utils/validators
 import { getConfig, 
     // isFeatureEnabled
  } from 'utils/functions';
-import { health_providers, ghGetMember } from '../../constants';
+import { ghGetMember } from '../../constants';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import {  openPdfCall } from 'utils/native_callback';
 import { nativeCallback } from 'utils/native_callback';
+
+import {getGhProviderConfig} from './constants';
 
 export async function initialize() {
 
@@ -15,16 +17,30 @@ export async function initialize() {
     this.setEditTitle = setEditTitle.bind(this);
 
     let provider = this.props.parent && this.props.parent.props ? this.props.parent.props.match.params.provider : this.props.match.params.provider;
-    let providerData = health_providers[provider];
+    let providerConfig = getGhProviderConfig('HDFCERGO');
+
+    let screenData = {};
+    if(this.state.screen_name && providerConfig[this.state.screen_name]) {
+        screenData = providerConfig[this.state.screen_name];
+    }
+
+    let next_screen = '';
+    if(this.state.screen_name && providerConfig.get_next[this.state.screen_name]) {
+        next_screen = providerConfig.get_next[this.state.screen_name];
+    }
+    
 
     let groupHealthPlanData = storageService().getObject('groupHealthPlanData') || {};
     this.setState({
         productName: getConfig().productName,
         provider: provider,
         groupHealthPlanData: groupHealthPlanData,
-        providerData: providerData,
+        providerData: providerConfig,
+        next_screen: next_screen,
+        providerConfig: providerConfig,
         plan_selected: groupHealthPlanData && groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected : {},
-        insured_account_type: groupHealthPlanData.account_type || ''
+        insured_account_type: groupHealthPlanData.account_type || '',
+        screenData: screenData
     })
     nativeCallback({ action: 'take_control_reset' });
 
@@ -108,8 +124,8 @@ export async function initialize() {
             leftTitle: leftTitle,
             leftSubtitle: leftSubtitle,
             leftArrow: 'up',
-            provider: providerData.key,
-            logo: providerData.logo_cta
+            provider: providerConfig.key,
+            logo: providerConfig.logo_cta
         }
 
         let confirmDialogData = {
