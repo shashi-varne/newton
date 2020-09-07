@@ -1010,6 +1010,8 @@
   }
 }
 
+
+.group-health-insurance-entry{
 .insurance_plans{
   display:flex;
   align-items: center;
@@ -1018,6 +1020,7 @@
   padding-bottom: 15px;
   justify-content: space-between;
   cursor: pointer;
+}
 
   .insurance_plans_types{
     display: flex;
@@ -1053,14 +1056,14 @@
   }
 }
 
-
+.religare-address{
 .address-details{
   display: flex;
   flex-direction: column;
   font-size: 20px;
   color: #0A1D32;
   line-height: 30px;
-
+  }
   .address-subText{
     color: #767E86;
     font-size: 16px;
@@ -1078,9 +1081,6 @@
 .input-religare{
   padding: 20px;
 }
-}
-
-.InputField{
 .permanet-address{
   color: #0A1D32;
   font-size: 18px;
