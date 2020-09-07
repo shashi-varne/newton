@@ -8,7 +8,7 @@ export const HDFCERGO_CONFIG = {
     logo_summary: 'hdfc_ergo_ic_logo_summary.svg',
     get_next: { //have as a separate map and not screen-specific property to reduce duplication across all providers and for all screens
         landing_screen: 'insure-type',
-        city: 'age',
+        plan_dob_screen: 'plan-select-city',
     },
     validation_props: {
         'dob_adult': { min: 19, max: 90 },  //add one year for minimum age here 18 to 19

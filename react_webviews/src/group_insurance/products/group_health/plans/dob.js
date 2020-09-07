@@ -17,7 +17,8 @@ class GroupHealthPlanDob extends Component {
         this.state = {
             header_title: 'Your date of birth',
             final_dob_data: [],
-            ui_members: {}
+            ui_members: {},
+            screen_name: 'plan_dob_screen'
         }
 
         this.initialize = initialize.bind(this);
@@ -308,7 +309,7 @@ class GroupHealthPlanDob extends Component {
 
 
             storageService().setObject('groupHealthPlanData', groupHealthPlanData);
-            this.navigate('plan-select-city');
+            this.navigate(this.state.next_screen);
         }
     }
 
