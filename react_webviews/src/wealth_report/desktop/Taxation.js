@@ -292,7 +292,6 @@ const Taxation = (props) => {
       </div>
     </div>
   );
-  }
 };
 
 export default Taxation;
