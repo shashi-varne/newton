@@ -81,8 +81,7 @@ class HealthInsuranceEntry extends Component {
 
   renderPorducts(props, index) {
     return (
-      <div className="group-health-insurance-entry" key={index} onClick={() => this.handleClick(props.key)} >
-      <div className='insurance_plans'  
+      <div className='insurance_plans' key={index} onClick={() => this.handleClick(props.key)}
       style={{
          borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',
       }}
@@ -96,7 +95,6 @@ class HealthInsuranceEntry extends Component {
             <div className='insurance_plans_logos_subtext'>{props.subtitle}</div>
           </div>
         </div>
-      </div>
       </div>
     )
   }
@@ -127,7 +125,7 @@ class HealthInsuranceEntry extends Component {
         noFooter={true}
         showLoader={this.state.show_loader}
         title="Comprehensive health insurance"> 
-        <div style={{ padding: '20px' }}>
+        <div className="group-health-insurance-entry" style={{ padding: '20px' }}>
           <div className='products'>
             <h1 className='health_insurance'>Health insurance plans</h1>
             <div>
