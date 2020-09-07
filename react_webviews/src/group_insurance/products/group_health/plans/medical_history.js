@@ -131,6 +131,12 @@ class GroupHealthPlanMedicalHistory extends Component {
     handleClick = () => {
         this.sendEvents('next');
     }
+
+    handleChangeRadio = (value) => {
+        this.setState({
+            selectedValue: value
+        })
+    }
     
     render() {
         let { account_type, list } = this.state;
@@ -152,7 +158,8 @@ class GroupHealthPlanMedicalHistory extends Component {
                     <RadioAndCheckboxList
                         account_type={account_type}
                         name="medical history"
-                        list={list} />}
+                        list={list}
+                        handleChangeRadio={this.handleChangeRadio} />}
             </Container>
          );
     }

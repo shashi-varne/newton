@@ -89,6 +89,12 @@ class GroupHealthPlanLifestyleDetail extends Component {
             nativeCallback({ events: eventObj });
         }
     }
+
+    handleChangeRadio = (value) => {
+        this.setState({
+            selectedValue: value
+        })
+    }
     
     render() { 
         let { account_type, list } = this.state;
@@ -110,7 +116,8 @@ class GroupHealthPlanLifestyleDetail extends Component {
                     <RadioAndCheckboxList 
                         account_type={account_type}
                         name='lifeStyle details'
-                        list={list} />}
+                        list={list}
+                        handleChangeRadio={this.handleChangeRadio} />}
             </Container>
          );
     }

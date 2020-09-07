@@ -100,7 +100,7 @@ class radioAndCheckboxList extends Component {
                         {item.input_type === 'radio' && 
                             <div>
                                 <RadioWithoutIcon
-                                    width="20"
+                                    style={{width:'20px'}}
                                     isVertical={false}
                                     options={item.options}
                                     id={name}
@@ -140,21 +140,20 @@ class radioAndCheckboxList extends Component {
                         }
 
                         {item.input_type === 'checkbox' && name === 'medical history' &&
-                            <Grid container spacing={8}>
+                            <Grid container spacing={0}>
                                 {item.options[account_type].map((option, index) => (
                                 <Grid item xs key={index}>
                                     <Grid item xs>
-                                            <Checkbox
-                                                checked={this.state[option]}
-                                                color="primary"
-                                                value={option}
-                                                name={option}
-                                                disableRipple
-                                                onChange={this.handleChange()}
-                                                className="Checkbox" />
-                                            {option}
-                                        </Grid>
-                                        
+                                        <Checkbox
+                                            checked={this.state[option]}
+                                            color="primary"
+                                            value={option}
+                                            name={option}
+                                            disableRipple
+                                            onChange={this.handleChange()}
+                                            className="Checkbox" />
+                                        {option}
+                                    </Grid>
                                 </Grid>))}
                             </Grid>
                         }
