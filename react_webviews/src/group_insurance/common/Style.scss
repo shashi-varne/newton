@@ -1054,3 +1054,35 @@
 }
 
 
+.address-details{
+  display: flex;
+  flex-direction: column;
+  font-size: 20px;
+  color: #0A1D32;
+  line-height: 30px;
+
+  .address-subText{
+    color: #767E86;
+    font-size: 16px;
+    max-width: 290px;
+    margin-top: 20px;
+    margin-bottom: 40px;
+  }
+  .current-address{
+    color: #0A1D32;
+    font-size: 18px;
+  }
+}
+
+.InputField{
+.input-religare{
+  padding: 20px;
+}
+}
+
+.InputField{
+.permanet-address{
+  color: #0A1D32;
+  font-size: 18px;
+}
+}
