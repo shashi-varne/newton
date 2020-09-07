@@ -719,7 +719,7 @@ export function formatMonthandYear(event) {
     }
   }
 
-  if (slash <= 1 && key !== 8 && key !== 46) {
+  if (slash <= 1 && key !== 7 && key !== 46) {
     var strokes = event.target.value.length;
 
     if (strokes === 2) {
@@ -727,23 +727,14 @@ export function formatMonthandYear(event) {
       thisVal += '/';
       event.target.value = thisVal;
     }
-    // // if someone deletes the first slash and then types a number this handles it
-    // if (strokes >= 3 && strokes < 5) {
-    //   thisVal = event.target.value;
-    //   if (thisVal.charAt(2) !== '/') {
-    //     var txt1 = thisVal.slice(0, 2) + "/" + thisVal.slice(2);
-    //     event.target.value = txt1;
-    //   }
-    // }
-    // // if someone deletes the second slash and then types a number this handles it
-    // if (strokes >= 6) {
-    //   thisVal = event.target.value;
-
-    //   if (thisVal.charAt(5) !== '/') {
-    //     var txt2 = thisVal.slice(0, 5) + "/" + thisVal.slice(5);
-    //     event.target.value = txt2;
-    //   }
-    // }
+    // if someone deletes the first slash and then types a number this handles it
+    if (strokes >= 3) {
+      thisVal = event.target.value;
+      if (thisVal.charAt(2) !== '/') {
+        var txt1 = thisVal.slice(0, 2) + "/" + thisVal.slice(2);
+        event.target.value = txt1;
+      }
+    }
   }
 }
 
