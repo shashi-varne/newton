@@ -97,6 +97,13 @@ export const HDFCERGO_CONFIG = {
         daughter_max: 2,
         total_plus_minus_max: 2
     },
+    plan_list_screen: {
+        tile_mid_data: [
+            {'label': 'Sum assured:', 'key': 'sum_assured_options_text'},
+            {'label': 'Recovery benefit:', 'key': 'recovery_benefit_extra', 'tooltip_key': 'recovery_benefit_content'},
+            {'label': 'Allowances:', 'key': 'allowances'}
+        ]
+    },
     nominee_screen: {
         nominee_opts: [],
     },
