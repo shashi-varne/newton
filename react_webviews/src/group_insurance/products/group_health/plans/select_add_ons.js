@@ -7,7 +7,6 @@ import { FormControl } from 'material-ui/Form';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 import DropdownInModal from '../../../../common/ui/DropdownInModal';
-
 import { initialize, updateBottomPremium } from '../common_data';
 
 class GroupHealthPlanAddOns extends Component {
@@ -15,9 +14,7 @@ class GroupHealthPlanAddOns extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            checked: false,
             ctaWithProvider: true,
-            product_name: getConfig().productName,
             add_ons_data: []
         }
 
@@ -31,51 +28,87 @@ class GroupHealthPlanAddOns extends Component {
 
         let add_ons_data = [
             {
-                'title': 'Unlimited Automatic Recharge',
-                'tooltip': 'Unlimited Automatic Recharge',
-                'key': 'UAR',
-                'default_cover_amount': '2000',
-                'default_premium': '2000',
+                "title": "Unlimited Automatic Recharge ",
+                "default_premium": 8050.68,
+                "tooltip_content": "",
+                "key": "UAR",
+                "default_cover_amount": "",
+                "options": []
+                
             },
             {
-                'title': 'OPD care',
-                'tooltip': 'OPD care',
-                'key': 'OPD',
-                'default_cover_amount': '2000',
-                'default_premium': '2000',
-                'OPD_DICT': {
-                    "5000": 3536.0,
-                    "10000": 6467.0,
-                    "15000": 9730.0,
-                    "35000": 20069.0,
-                    "40000": 22507.0,
-                    "45000": 25067.0,
-                    "50000": 27574.0
-                }
+                "title": "OPD care",
+                "default_premium": "50000",
+                "tooltip_content": "",
+                "key": "OPD",
+                "default_cover_amount": '2000',
+                "options": [
+                    {
+                        "key": "OPDCARE-15000",
+                        "premium": 9730.0,
+                        "cover_amount": "15000"
+                    },
+                    {
+                        "key": "OPDCARE-45000",
+                        "premium": 25067.0,
+                        "cover_amount": "45000"
+                    },
+                    {
+                        "key": "OPDCARE-40000",
+                        "premium": 22507.0,
+                        "cover_amount": "40000"
+                    },
+                    {
+                        "key": "OPDCARE-25000",
+                        "premium": 15167.0,
+                        "cover_amount": "25000"
+                    },
+                    {
+                        "key": "OPDCARE-20000",
+                        "premium": 12541.0,
+                        "cover_amount": "20000"
+                    },
+                    {
+                        "key": "OPDCARE-30000",
+                        "premium": 17626.0,
+                        "cover_amount": "30000"
+                    }
+                ]
             },
             {
-                'title': 'Reduction in PED Wait Period',
-                'tooltip': 'Reduction in PED Wait Period',
-                'key': 'REDPEDWAITPRD',
-                'default_cover_amount': '2000',
-                'default_premium': '2000'
+                "title": "Reduction in PED Wait Period",
+                "default_premium": 8050.68,
+                "tooltip_content": "",
+                "key": "REDPEDWAITPRD",
+                "default_cover_amount": "",
+                "options": []
+                
             },
             {
-                'title': 'No Claim Bonus Super',
-                'tooltip': 'No Claim Bonus Super',
-                'key': 'CAREWITHNCB',
-                'default_cover_amount': '2000',
-                'default_premium': '2000'
+                "title": "No Claim Bonus Super ",
+                "default_premium": 10734.24,
+                "tooltip_content": "",
+                "key": "CAREWITHNCB",
+                "default_cover_amount": "",
+                "options": []
+                
             }
-        ];
+        ]
 
-        let amount_options = [];
-        let sum_assured_list = Object.keys(add_ons_data[1].OPD_DICT)
+        let amount_options = {};
 
-        amount_options = sum_assured_list.map(amount => {
-            return {name: formatAmountInr(amount), value: amount}
+        add_ons_data.forEach(item => {
+            if (item.options.length !== 0) {
+                let options = item.options.sort((a,b) => a.cover_amount - b.cover_amount);
+
+                amount_options[item.key] = options.map(item => {
+                    return   {
+                        'name': formatAmountInr(item.cover_amount),
+                        'value': formatAmountInr(item.premium),
+                    }
+                })
+            }
         })
-
 
         this.setState({
             add_ons_data: add_ons_data,
@@ -90,31 +123,36 @@ class GroupHealthPlanAddOns extends Component {
             this.setState({
                 [name]: event.target.checked
             })
-        }
-
-        if (name === 'amount') {
+        } else {
             this.setState({
-                selectedIndex: event
+                selectedIndex: {
+                    [name]: this.state.amount_options[name][event].name
+                }
             }, () => {
               this.setState({
-                amount: this.state.amount_options[this.state.selectedIndex].value
+                selectedValue: {
+                    [name]: this.state.amount_options[name][event].value,
+                }
               })
             });
         }
     }
 
     renderOptions = (add_ons_data) => {
+
+        let { amount_options, selectedValue, selectedIndex } = this.state;
+
         return (
             <div>
-                {add_ons_data.map((option, index) => (
+                {add_ons_data.map((item, index) => (
                     <Grid container spacing={16} key={index}>
                     <Grid item xs={1} className="">
                     <Checkbox
                       style={{alignItems:'start'}}
-                      checked={this.state[option.key]}
+                      checked={this.state[item.key]}
                       color="primary"
-                      value={option.key}
-                      name={option.key}
+                      value={item.key}
+                      name={item.key}
                       disableRipple
                       onChange={this.handleChange()}
                       className="Checkbox" />
@@ -122,28 +160,30 @@ class GroupHealthPlanAddOns extends Component {
                     <Grid item xs={11}>
                     <span className="flex-between" style={{alignItems:'start'}}>
                         <div style={{color:'#0A1D32'}}>
-                            <span style={{fontSize:"16px", fontWeight:'600'}}>{option.title}</span>
+                            <span style={{fontSize:"16px", fontWeight:'600'}}>{item.title}</span>
                             <div style={{marginTop:'10px', fontSize:'14px'}}>
-                                {`in ${option.OPD_DICT ? formatAmountInr(option.OPD_DICT[this.state.amount] || 0) : formatAmountInr(option.default_premium)}`}
+                                {`in ${item.options.length !== 0 ? 
+                                    (selectedValue ? selectedValue[item.key] : formatAmountInr(item.default_premium)) :
+                                    formatAmountInr(item.default_premium)}`}
                             </div>
                         </div>
                         <img
                         className="tooltip-icon"
-                        data-tip={option.tooltip}
-                        src={require(`assets/${this.state.product_name}/info_icon.svg`)} alt="" />
+                        data-tip={item.tooltip}
+                        src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
                     </span>
-                    {option.key === 'OPD' && this.state[option.key] && <DropdownInModal
+                    {this.state[item.key] && item.options.length !== 0 && <DropdownInModal
                         parent={this}
-                        options={this.state.amount_options}
+                        options={amount_options[item.key]}
                         header_title="Select amount"
                         cta_title="SAVE"
-                        selectedIndex={this.state.selectedIndex}
-                        value={this.state.amount}
+                        selectedIndex={selectedIndex || ''}
+                        value={selectedIndex ? selectedIndex[item.key] : ''}
                         width="30"
                         label="Select amount"
                         id="amount"
                         name="amount"
-                        onChange={this.handleChange('amount')} />}
+                        onChange={this.handleChange(item.key)} />}
                     </Grid>
                     </Grid>
                 ))}
