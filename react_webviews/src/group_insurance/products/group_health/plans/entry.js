@@ -46,6 +46,7 @@ class HealthInsuranceEntry extends Component {
       }
     ];
 
+
       this.setState({
         insuranceProducts: insuranceProducts
       })
@@ -66,11 +67,22 @@ class HealthInsuranceEntry extends Component {
   handleClick = (product_key) => {
 
     this.sendEvents('next', product_key)
+    
+
+    let stateMapper = {
+        'HEALTH_SURAKSHA': 'health_suraksha',
+        'RELIGARE': 'religare_care',
+        'STAR': 'star'
+    };
+
+    let fullPath = 'health/' + stateMapper[product_key] + '/plan';
+    this.navigate('/group-insurance/' + fullPath);
   }
 
   renderPorducts(props, index) {
     return (
-      <div className='insurance_plans' key={index} onClick={() => this.handleClick(props.key)} 
+      <div className="group-health-insurance-entry" key={index} onClick={() => this.handleClick(props.key)} >
+      <div className='insurance_plans'  
       style={{
          borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',
       }}
@@ -84,6 +96,7 @@ class HealthInsuranceEntry extends Component {
             <div className='insurance_plans_logos_subtext'>{props.subtitle}</div>
           </div>
         </div>
+      </div>
       </div>
     )
   }
@@ -113,7 +126,7 @@ class HealthInsuranceEntry extends Component {
         events={this.sendEvents('just_set_events')}
         noFooter={true}
         showLoader={this.state.show_loader}
-        title="Comprehensive health insurance">
+        title="Comprehensive health insurance"> 
         <div style={{ padding: '20px' }}>
           <div className='products'>
             <h1 className='health_insurance'>Health insurance plans</h1>
