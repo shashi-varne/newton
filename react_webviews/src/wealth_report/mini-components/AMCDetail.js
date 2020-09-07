@@ -1,5 +1,6 @@
 import React from 'react';
 import { formattedDate } from '../../utils/validators';
+import WrTooltip from '../common/WrTooltip';
 
 export default function AMCDetail(holding) {
   return (
@@ -20,10 +21,24 @@ export default function AMCDetail(holding) {
         {/* // visbility will be modified based on the condition */}
         {holding.free_from_el_lockin && <div className="wr-EL-label">Free from EL / Lock-in</div>}
       </div>
-      {FisdomRating(holding.fisdom_rating)}
+      <WrTooltip
+        tipContent={fisdomTooltip}
+        trigger={FisdomRating(holding.fisdom_rating)}
+      />
     </div>
   );
 }
+
+const fisdomTooltip = (
+  <div className="wr-xirr-tooltip">
+    <div className="wr-tooltip-head">
+      Fisdom Rating
+    </div>
+    <div className="wr-tooltip-content">
+      Proprietary mutual fund rating by Fisdom research team
+    </div>
+  </div>
+);
 
 const FisdomRating = (rating = 0) => {
   rating = parseInt(rating, 10);
@@ -34,13 +49,8 @@ const FisdomRating = (rating = 0) => {
       <span
         className="rating-num"
         style={{ color: 'rgba(129, 129, 129, 0.5)' }}>
-        -
+        --
       </span>
-      <img
-        alt="star"
-        src={require(`assets/ic-star-${rating < 4 ? 'red' : 'green'}.svg`)}
-        className="rating-star"
-      />
     </div>);
   }
 

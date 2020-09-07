@@ -187,8 +187,7 @@ export default function EmailList(props) {
       </div>
 
       <div className="wr-mail-content">
-        Add the email address that you want to track on the fisdom platform and
-        we will share the insights
+        Add the email address to track that you want to track on the fisdom platform
       </div>
 
       <FormControl className="wr-form">
@@ -231,7 +230,7 @@ export default function EmailList(props) {
   const renderEmailAdded = (
     <div className="wr-email-added">
       <img src={require(`assets/fisdom/ic-mob-success.svg`)} alt="success" />
-      <div className="wr-content">Email has been added successfully!</div>
+      <div className="wr-content">Sync successfully initiated for {email}. Forward the CAMS email to <b>cas@fisdom.com</b></div>
       <Button className="wr-email-continue-btn" onClick={handleClose} fullWidth={true}>
         Okay
       </Button>

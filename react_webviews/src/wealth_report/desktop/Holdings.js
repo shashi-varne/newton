@@ -77,7 +77,7 @@ export default function Holdings(props) {
   const debouncedFilterChange = debounce((filterObj) => {
     const newFilters = Object.assign({}, selectedFilters, filterObj);
     setFilters(newFilters);
-  }, 3000, { trailing: true }); // Debounced to prevent repeated API calls on filter clicks
+  }, 2000, { trailing: true }); // Debounced to prevent repeated API calls on filter clicks
 
   return (
     <div id="wr-holdings">
