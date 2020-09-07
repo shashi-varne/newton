@@ -6,6 +6,10 @@ export const HDFCERGO_CONFIG = {
     logo_card: 'hdfc_ergo_ic_logo_card.svg',
     logo_cta: 'hdfc_ergo_ic_logo_cta.svg',
     logo_summary: 'hdfc_ergo_ic_logo_summary.svg',
+    get_next: { //have as a separate map and not screen-specific property to reduce duplication across all providers and for all screens
+        landing_screen: 'insure-type',
+        city: 'age',
+    },
     validation_props: {
         'dob-parents': { min: 21, max: 34 }
     },
@@ -15,9 +19,6 @@ export const HDFCERGO_CONFIG = {
             'addr1',
             'erg-1'
         ]
-    },
-    nominee_screen: {
-        nominee_opts: [],
     },
     landing_screen: {
         offerImageData: [
@@ -69,10 +70,30 @@ export const HDFCERGO_CONFIG = {
             'cta_title': 'OK'
         }
     },
-    get_next: { //have as a separate map and not screen-specific property to reduce duplication across all providers and for all screens
-        landing_screen: 'insure-type',
-        city: 'age',
+    insure_type_screen: {
+        account_type_options: [
+            {
+              'name': 'Self',
+              'value': 'self'
+            },
+            {
+              'name': 'Family members',
+              'value': 'family'
+            },
+            {
+              'name': 'Self & family members',
+              'value': 'selfandfamily'
+            },
+            {
+              'name': 'Parents',
+              'value': 'parents'
+            }
+          ]
     },
+    nominee_screen: {
+        nominee_opts: [],
+    },
+   
 };
 export const religare = {
 

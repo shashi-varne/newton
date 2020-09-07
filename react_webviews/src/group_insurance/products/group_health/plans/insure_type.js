@@ -7,30 +7,12 @@ import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import { storageService } from 'utils/validators';
 import { initialize } from '../common_data';
 
-const account_type_options = [
-  {
-    'name': 'Self',
-    'value': 'self'
-  },
-  {
-    'name': 'Family members',
-    'value': 'family'
-  },
-  {
-    'name': 'Self & family members',
-    'value': 'selfandfamily'
-  },
-  {
-    'name': 'Parents',
-    'value': 'parents'
-  }
-];
-
 class GroupHealthSelectInsureType extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      screen_name: 'insure_type_screen'
     }
     this.initialize = initialize.bind(this);
   }
@@ -41,8 +23,10 @@ class GroupHealthSelectInsureType extends Component {
 
 
   async componentDidMount() {
+    
     this.setState({
-      account_type: this.state.groupHealthPlanData.account_type || ''
+      account_type: this.state.groupHealthPlanData.account_type || '',
+      account_type_options: this.state.screenData.account_type_options
     })
 
   }
@@ -119,7 +103,7 @@ class GroupHealthSelectInsureType extends Component {
 
   handleChangeRadio = name => event => {
     this.setState({
-      [name]: account_type_options[event].value,
+      [name]: this.state.account_type_options[event].value,
       [name + '_error']: ''
     })
 
@@ -144,7 +128,7 @@ class GroupHealthSelectInsureType extends Component {
             label=""
             isVertical={true}
             class="Gender:"
-            options={account_type_options}
+            options={this.state.account_type_options || []}
             id="account_type"
             name="account_type"
             error={(this.state.account_type_error) ? true : false}

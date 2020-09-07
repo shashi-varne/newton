@@ -34,6 +34,7 @@ class GroupHealthLanding extends Component {
       whats_covered: [],
       quoteResume: {},
       common: {},
+      screen_name :screen_name,
       selectedIndex: 0,
       providerConfig: getGhProviderConfig('HDFCERGO')
     }
