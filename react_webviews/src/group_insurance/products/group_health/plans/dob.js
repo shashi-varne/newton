@@ -178,10 +178,10 @@ class GroupHealthPlanDob extends Component {
 
         this.sendEvents('next');
 
-        
+        let validation_props = this.state.validation_props;
+
         let canProceed = true;
         let final_dob_data = this.state.final_dob_data;
-        console.log(final_dob_data);
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let ui_members = groupHealthPlanData.ui_members || {};
         let self_gender = ui_members.self_gender || '';
@@ -211,18 +211,22 @@ class GroupHealthPlanDob extends Component {
 
             if(age) {
                 if(key.indexOf('son') >=0 || key.indexOf('daughter') >=0) {
+                    let dob_child = validation_props.dob_child;
                     // child
-                    if (age.age > 25 || (age.age === 0 && age.month < 3)) {
-                        error = 'Valid age is between 3 months- 25 years';
+                    if (age.age > dob_child.max || (age.age === 0 && age.month < dob_child.minMonth)) {
+                        error = `Valid age is between ${dob_child.minMonth} months- ${dob_child.max} years`;
                     }
                     child_ages.push(age.age);
     
                 } else {
+
+                    let dob_adult = validation_props.dob_adult;
+                    let dob_married_male = validation_props.dob_married_male;
                     // adult
-                    if (age.age > 90 || age.age < 19) {
-                        error = 'Valid age is between 18 - 90 years';
-                    } else if(manAgeCheck === key && age.age < 22) {
-                        error = 'Minimum age is 21 for married male';
+                    if (age.age > dob_adult.max || age.age < dob_adult.min) {
+                        error = `Valid age is between ${dob_adult.min - 1} - ${dob_adult.max} years`;
+                    } else if(manAgeCheck === key && age.age < dob_married_male.min) {
+                        error = `Minimum age is ${dob_adult.min - 1} for married male`;
                     }
                     adult_ages.push(age.age);
                 }

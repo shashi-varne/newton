@@ -11,7 +11,9 @@ export const HDFCERGO_CONFIG = {
         city: 'age',
     },
     validation_props: {
-        'dob-parents': { min: 21, max: 34 }
+        'dob_adult': { min: 19, max: 90 },  //add one year for minimum age here 18 to 19
+        'dob_child': { minMonth: 3, min: 21, max: 25 },
+        'dob_married_male': { min: 22, max: 25 },
     },
     applicant_detail_screen: {
         fields: [
