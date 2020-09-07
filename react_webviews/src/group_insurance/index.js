@@ -448,8 +448,8 @@ const Insurance = (props) => {
           <Route path={`${url}/common/notcover`} component={RenderNotCoverClass} />
           <Route path={`${url}/common/claim`} component={RenderClaimClass} />
 
-          <Route path={`${url}/grouphealth/entry`} component={HealthInsuranceEntry} />
-          <Route path={`${url}/group-health/:provider/address-religare`} component={AddressDetails} />
+          <Route path={`${url}/group-health/entry`} component={HealthInsuranceEntry} />
+          <Route path={`${url}/group-health/address-religare`} component={AddressDetails} />
 
           <Route component={NotFound} />
         </Switch>
