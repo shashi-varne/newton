@@ -38,14 +38,12 @@ class GroupHealthPlanAddMembers extends Component {
         this.state = {
             header_title: 'Your date of birth',
             final_dob_data: [],
-            son_max: 2,
             self_member: 'Self',
-            daughter_max: 2,
-            total_plus_minus_max: 2,
             plus_minus_keys: ['son', 'daughter'],
             father_onlycheckbox: true,
             mother_onlycheckbox: true,
-            ui_members: {}
+            ui_members: {},
+            screen_name: 'add_members_screen'
         }
 
         this.initialize = initialize.bind(this);
@@ -53,13 +51,18 @@ class GroupHealthPlanAddMembers extends Component {
 
     componentWillMount() {
         this.initialize();
-    }Open
+    }
 
 
 
     async componentDidMount() {
 
+        let screenData = this.state.screenData;
+
         this.setState({
+            son_max: screenData.son_max,
+            daughter_max: screenData.daughter_max,
+            total_plus_minus_max: screenData.total_plus_minus_max,
             account_type: this.state.groupHealthPlanData.account_type,
             header_title: this.state.groupHealthPlanData.account_type === 'parents' ? 'Add parents to be insured' :
                 'Add members to be insured'
@@ -387,7 +390,7 @@ class GroupHealthPlanAddMembers extends Component {
 
 
                         <div className="plus-minus-input-label">
-                            Children (upto 2)
+                            Children (upto {this.state.total_plus_minus_max})
                     </div>
                         <div className="generic-hr"></div>
                         <PlusMinusInput

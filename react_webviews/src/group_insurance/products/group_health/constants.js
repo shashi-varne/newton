@@ -90,6 +90,11 @@ export const HDFCERGO_CONFIG = {
             }
           ]
     },
+    add_members_screen: {
+        son_max: 2,
+        daughter_max: 2,
+        total_plus_minus_max: 2
+    },
     nominee_screen: {
         nominee_opts: [],
     },

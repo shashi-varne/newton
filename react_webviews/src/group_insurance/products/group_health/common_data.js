@@ -30,6 +30,8 @@ export async function initialize() {
     }
     
 
+    let validation_props = providerConfig.validation_props || {};
+
     let groupHealthPlanData = storageService().getObject('groupHealthPlanData') || {};
     this.setState({
         productName: getConfig().productName,
@@ -40,7 +42,8 @@ export async function initialize() {
         providerConfig: providerConfig,
         plan_selected: groupHealthPlanData && groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected : {},
         insured_account_type: groupHealthPlanData.account_type || '',
-        screenData: screenData
+        screenData: screenData,
+        validation_props: validation_props
     })
     nativeCallback({ action: 'take_control_reset' });
 
