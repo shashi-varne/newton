@@ -14,12 +14,10 @@ class HealthInsuranceEntry extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      show_loader: false,
       type: getConfig().productName,
       insuranceProducts: [],
-      params: qs.parse(props.history.location.search.slice(1))
     }
-
     this.renderPorducts = this.renderPorducts.bind(this);
   }
 
@@ -48,22 +46,9 @@ class HealthInsuranceEntry extends Component {
       }
     ];
 
-
-    let { params } = this.props.location || {};
-    let openModuleData =  params ? params.openModuleData : {}
-
-    if(openModuleData && openModuleData.sub_module) {
-      let pathname = openModuleData.sub_module;
-      this.handleClick(pathname);
-    } else {
       this.setState({
-        show_loader: false
+        insuranceProducts: insuranceProducts
       })
-    }
-
-    this.setState({
-      insuranceProducts: insuranceProducts
-    })
   }
 
 
@@ -81,20 +66,6 @@ class HealthInsuranceEntry extends Component {
   handleClick = (product_key) => {
 
     this.sendEvents('next', product_key)
-    
-
-    let stateMapper = {
-        'HEALTH_SURAKSHA': 'health_suraksha',
-        'RELIGARE': 'religare_care',
-        'STAR': 'star'
-    };
-
-    var fullPath = 'health/' + stateMapper[product_key] + '/plan';
-
-    if(product_key === 'HEALTH_SURAKSHA' && !getConfig().iOS) {
-      fullPath = 'group-health/landing';
-    }
-    this.navigate('/group-insurance/' + fullPath);
   }
 
   renderPorducts(props, index) {
@@ -113,12 +84,6 @@ class HealthInsuranceEntry extends Component {
             <div className='insurance_plans_logos_subtext'>{props.subtitle}</div>
           </div>
         </div>
-        {props.resume_flag &&
-          <div style={{
-            background: '#ff6868', color: '#fff', fontSize: 8, letterSpacing: 0.1,
-            textTransform: 'uppercase', padding: '2px 5px', borderRadius: 3
-          }}>RESUME</div>
-        }
       </div>
     )
   }
