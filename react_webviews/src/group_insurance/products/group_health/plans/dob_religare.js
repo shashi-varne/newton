@@ -13,7 +13,6 @@ class GroupHealthPlanDobReligare extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            product_name: getConfig().productName,
             value: ''
         }
 
@@ -122,7 +121,8 @@ class GroupHealthPlanDobReligare extends Component {
         input.onkeyup = formatDate;
 
         this.setState({
-            value: event.target.value
+            value: event.target.value,
+            value_error : ''
         })
     }
 

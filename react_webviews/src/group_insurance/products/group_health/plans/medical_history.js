@@ -11,7 +11,6 @@ class GroupHealthPlanMedicalHistory extends Component {
         super(props);
         this.state = {
             ctaWithProvider: true,
-            product_name: getConfig().productName
         }
 
         this.initialize = initialize.bind(this);

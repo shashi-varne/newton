@@ -10,9 +10,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            checked: false,
             ctaWithProvider: true,
-            product_name: getConfig().productName
         }
 
         this.initialize = initialize.bind(this);
