@@ -4,7 +4,6 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import BottomInfo from '../../../../common/ui/BottomInfo';
-import { storageService } from 'utils/validators';
 
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
@@ -56,7 +55,7 @@ class GroupHealthPlanSelectCity extends Component {
             let groupHealthPlanData = this.state.groupHealthPlanData;
             groupHealthPlanData.city = this.state.city;
             groupHealthPlanData.post_body.city = this.state.city;
-            storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+            this.setLocalProviderData(groupHealthPlanData);
     
             this.navigate('plan-list');
         }

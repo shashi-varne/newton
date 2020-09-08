@@ -3,7 +3,6 @@ import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { storageService } from 'utils/validators';
 import {  genderOptions } from '../../../constants';
 
 // calculateAge, isValidDate, IsFutureDate
@@ -238,7 +237,7 @@ class GroupHealthPlanAddMembers extends Component {
             let groupHealthPlanData = this.state.groupHealthPlanData;
             groupHealthPlanData.ui_members = ui_members;
             groupHealthPlanData.post_body = post_body;
-            storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+            this.setLocalProviderData(groupHealthPlanData);
     
             this.navigate('plan-dob');
         }

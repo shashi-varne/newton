@@ -4,7 +4,7 @@ import Container from '../../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 // import { getConfig } from 'utils/functions';
 
-import { storageService, inrFormatDecimal, numDifferentiationInr, numDifferentiation } from 'utils/validators';
+import {  inrFormatDecimal, numDifferentiationInr, numDifferentiation } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
 
 import Api from 'utils/api';
@@ -138,7 +138,7 @@ class GroupHealthPlanSelectFloater extends Component {
         groupHealthPlanData.selectedIndexFloater = this.state.selectedIndex;
         groupHealthPlanData.type_of_plan = type_of_plan;
         groupHealthPlanData.post_body.type_of_plan = type_of_plan;
-        storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+        this.setLocalProviderData(groupHealthPlanData);
 
         this.navigate('plan-select-cover-period');
     }

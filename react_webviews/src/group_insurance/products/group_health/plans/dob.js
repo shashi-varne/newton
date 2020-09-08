@@ -4,7 +4,7 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import BottomInfo from '../../../../common/ui/BottomInfo';
-import { storageService, calculateAge, isValidDate,
+import {  calculateAge, isValidDate,
      IsFutureDate, formatDate, dobFormatTest } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import { initialize } from '../common_data';
@@ -308,7 +308,7 @@ class GroupHealthPlanDob extends Component {
             groupHealthPlanData.post_body = post_body;
 
 
-            storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+            this.setLocalProviderData(groupHealthPlanData);
             this.navigate(this.state.next_screen);
         }
     }

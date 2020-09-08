@@ -15,6 +15,7 @@ export async function initialize() {
     this.navigate = navigate.bind(this);
     this.openInBrowser = openInBrowser.bind(this);
     this.setEditTitle = setEditTitle.bind(this);
+    this.setLocalProviderData = setLocalProviderData.bind(this);
 
     let provider = this.props.parent && this.props.parent.props ? this.props.parent.props.match.params.provider : this.props.match.params.provider;
     let providerConfig = getGhProviderConfig('HDFCERGO');
@@ -32,7 +33,7 @@ export async function initialize() {
 
     let validation_props = providerConfig.validation_props || {};
 
-    let groupHealthPlanData = storageService().getObject('groupHealthPlanData') || {};
+    let groupHealthPlanData = storageService().getObject('groupHealthPlanData_' + provider) || {};
     this.setState({
         productName: getConfig().productName,
         provider: provider,
@@ -404,4 +405,8 @@ export function openMedicalDialog(type) {
         show_loader: false
     })
    
+}
+
+export function setLocalProviderData(data) {
+    storageService().setObject('groupHealthPlanData_' + this.state.provider, data);
 }
