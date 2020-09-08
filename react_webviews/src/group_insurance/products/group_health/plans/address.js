@@ -9,7 +9,6 @@ import { yesNoOptions } from '../../../constants';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import { getConfig } from 'utils/functions';
 import Api from 'utils/api';
-import toast from '../../../../common/ui/Toast';
 
 class AddressDetails extends Component {
 
@@ -22,6 +21,7 @@ class AddressDetails extends Component {
             get_lead: true,
             next_state: 'nominee',
             form_data_permanent:{},
+            checked: false
         }
     }
 
@@ -50,36 +50,13 @@ class AddressDetails extends Component {
 
     };
 
-    handleChangePermanent = name => event => {
-
-        if (!name) {
-            name = event.target.name;
-        }
-        let value = event.target ? event.target.value : '';
-        let form_data = this.state.form_data_permanent|| {};
-
-        if (name === 'mobile_number') {
-            if (value.length <= 10) {
-                form_data[name] = value;
-                form_data[name + '_error'] = '';
-            }
-        } else {
-            form_data[name] = value;
-            form_data[name + '_error'] = '';
-        }
-
-        this.setState({
-            form_data_permanent: form_data
-        })
-    };
-
-
     navigate = (pathname) => {
         this.props.history.push({
             pathname: pathname,
             search: getConfig().searchParams
         });
     }
+
 
     handleClick = async () => {
 
@@ -145,7 +122,7 @@ class AddressDetails extends Component {
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "product": 'health suraksha',
+                "product": 'religare care',
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'address details',
                 'from_edit': this.props.edit ? 'yes' : 'no',
@@ -163,136 +140,88 @@ class AddressDetails extends Component {
     
     handlePincode = name => async (event) => {
         const pincode = event.target.value;
-    
-        if(pincode.length > 6){
+
+        if (pincode.length > 6) {
             return;
         }
-    
+
         let form_data = this.state.form_data;
         form_data[name] = pincode;
         form_data[name + '_error'] = '';
-        form_data.pincode_match = false;
-    
-        
-    
+
         if (pincode.length === 6) {
-            this.setState({
-                form_data: form_data
-              })
-          try {
-            const res = await Api.get((`/api/ins_service/api/insurance/hdfcergo/pincode/validate?pincode=${pincode}&city=${this.state.lead.city}`));
-    
-            if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.pincode_match) {
-              form_data.state = res.pfwresponse.result.state;
-              form_data.pincode_match = true;
-              form_data[name + '_error'] = '';
+            const res = await Api.get((`/api/ins_service/api/insurance/hdfcergo/pincode/validate?pincode=${pincode}`));
+            let resultData = res.pfwresponse.result[0] || '';
+
+            let { city, state, country } = form_data;
+            let pincode_error = '';
+            if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
+                if (resultData.dmi_city_name === 'NA') {
+                    city = resultData.district_name || resultData.division_name || resultData.taluk;
+                } else {
+                    city = resultData.dmi_city_name;
+                }
+                state = resultData.state_name;
+                country = resultData.country_name;
             } else {
-              form_data.state = '';
-              form_data.pincode_match = false;
-              form_data[name + '_error'] = res.pfwresponse.result.error || 'Please enter valid pincode';
+                city = '';
+                state = '';
+                pincode_error = 'Invalid pincode';
             }
-    
-          } catch (err) {
-            this.setState({
-              show_loader: false
-            });
-            toast('Something went wrong');
-          }
-    
-        } else {
-          form_data.state = '';
+            
+            if (name === 'pincode') {
+                form_data.city = city;
+                form_data.state = state;
+                form_data.pincode_error = pincode_error;
+            } else {
+                form_data.pr_city = city;
+                form_data.pr_state = state;
+                form_data.pr_pincode_error = pincode_error;
+            }
+
         }
-    
+
         this.setState({
-          form_data: form_data,
+            form_data: form_data
         })
     }
-
-    handlePincodePermanent = name => async (event) => {
-        const pincode = event.target.value;
-    
-        if(pincode.length > 6){
-            return;
-        }
-    
-        let form_data = this.state.form_data_permanent;
-        form_data[name] = pincode;
-        form_data[name + '_error'] = '';
-        form_data.pincode_match = false;
-    
-        
-    
-        if (pincode.length === 6) {
-            this.setState({
-                form_data_permanent: form_data
-              })
-          try {
-            const res = await Api.get((`/api/ins_service/api/insurance/hdfcergo/pincode/validate?pincode=${pincode}&city=${this.state.lead.city}`));
-    
-            if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.pincode_match) {
-              form_data.state = res.pfwresponse.result.state;
-              form_data.pincode_match = true;
-              form_data[name + '_error'] = '';
-            } else {
-              form_data.state = '';
-              form_data.pincode_match = false;
-              form_data[name + '_error'] = res.pfwresponse.result.error || 'Please enter valid pincode';
-            }
-    
-          } catch (err) {
-            this.setState({
-              show_loader: false
-            });
-            toast('Something went wrong');
-          }
-    
-        } else {
-          form_data.state = '';
-        }
-    
-        this.setState({
-          form_data_permanent: form_data,
-        })
-    }
-
 
     handleChangeRadio = name => event => {
-
 
         let form_data = this.state.form_data || {};
 
         let optionsMapper = {
-            'address': yesNoOptions
+            'checked': yesNoOptions
         }
         form_data[name] = optionsMapper[name][event].value;
         form_data[name + '_error'] = '';
 
         this.setState({
-            form_data: form_data
+            form_data:form_data
         })
 
-        if(form_data.address==='YES'){
+        if(form_data.checked==='YES'){
             let data={
                 addressline:this.state.form_data.addressline,
                 addressline2:this.state.form_data.addressline2,
                 pincode:this.state.form_data.pincode,
                 city:this.state.form_data.city,
-                state:this.state.form_data.state
+                state:this.state.form_data.state,
+
+                pr_addressline:this.state.form_data.addressline,
+                pr_addressline2:this.state.form_data.addressline2,
+                pr_pincode:this.state.form_data.pincode,
+                pr_city:this.state.form_data.city,
+                pr_state:this.state.form_data.state
             }
             this.setState({
-                form_data_permanent:data
+                form_data:data,
+                checked:!this.state.checked
             })
         }
         else{
-            let data={
-                addressline:'',
-                addressline2:'',
-                pincode:'',
-                city:'',
-                state:''
-            }
             this.setState({
-                form_data_permanent:data
+                checked:false
             })
         }
 
@@ -320,7 +249,7 @@ class AddressDetails extends Component {
                 <FormControl fullWidth>
                 <div className="InputField" style={{ marginBottom: '0px !important' }}>
                     
-                    <div className="InputField input-religare">
+                    <div className="InputField">
                         <Input
                             type="text"
                             id="addressline"
@@ -332,7 +261,7 @@ class AddressDetails extends Component {
                             value={this.state.form_data.addressline || ''}
                             onChange={this.handleChange()} />
                     </div>
-                    <div className="InputField input-religare">
+                    <div className="InputField">
                         <Input
                             type="text"
                             id="addressline2"
@@ -345,7 +274,7 @@ class AddressDetails extends Component {
                             onChange={this.handleChange()} />
                     </div>
 
-                    <div className="InputField input-religare">
+                    <div className="InputField">
                         <Input
                             type="number"
                             width="40"
@@ -359,7 +288,7 @@ class AddressDetails extends Component {
                             onChange={this.handlePincode('pincode')} />
                     </div>
 
-                    <div className="InputField input-religare">
+                    <div className="InputField">
                         <Input
                             disabled={true}
                             id="city"
@@ -368,7 +297,7 @@ class AddressDetails extends Component {
                             value={this.state.form_data.city || ''}
                         />
                     </div>
-                    <div className="InputField input-religare">
+                    <div className="InputField">
                         <Input
                             disabled={true}
                             id="state"
@@ -378,6 +307,7 @@ class AddressDetails extends Component {
                         />
                     </div>
                     </div>
+
                     <div className="InputField" style={{ marginBottom: '0px !important' }}>
 
                         <div className="checkbox-text">Is permanent address same as current address?
@@ -385,82 +315,88 @@ class AddressDetails extends Component {
                         <div className="InputField">
                                 <RadioWithoutIcon
                                     width="40"
-                                    class="Gender:"
+                                    class="Address:"
+                                    defaultChecked
+                                    checked={this.state.checked}
                                     options={yesNoOptions}
-                                    id="gender"
-                                    name="gender"
-                                    error={(this.state.form_data.gender_error) ? true : false}
-                                    helperText={this.state.form_data.gender_error}
-                                    value={this.state.form_data.gender || ''}
-                                    onChange={this.handleChangeRadio('address')} />
+                                    id="address"
+                                    name="checked"
+                                    error={(this.state.form_data.address_error) ? true : false}
+                                    helperText={this.state.form_data.address_error}
+                                    value={this.state.form_data.address || ''}
+                                    onChange={this.handleChangeRadio('checked')} />
                             </div>
-
-                        </div>
-                        <div>
                             <div className="permanet-address">
-                                Permanent Address Details
+                                Permanent Address 
+                            </div>
+                        </div>
                         </div>
 
-                        <div className="InputField input-religare">
+                        {!this.state.checked &&
+                        <div>
+                            
+                        <div className="InputField">
                         <Input
                             type="text"
-                            id="addresslinePermanent"
+                            id="pr_addressline"
                             label="Address line 1"
-                            name="addressline"
+                            name="pr_addressline"
                             placeholder="ex: 16/1 Queens paradise"
+                            disabled={this.state.checked}
                             error={(this.state.form_data.addressline_error) ? true : false}
                             helperText={this.state.form_data.addressline_error}
-                            value={this.state.form_data_permanent.addressline|| ''}
-                            onChange={this.handleChangePermanent()} />
+                            value={this.state.form_data.pr_addressline|| ''}
+                            onChange={this.handleChange()} />
                     </div>
-                    <div className="InputField input-religare">
+                    <div className="InputField">
                         <Input
                             type="text"
-                            id="addressline2Permanent"
+                            id="pr_addressline2"
                             label="Address line 2"
-                            name="addressline2"
+                            name="pr_addressline2"
                             placeholder="ex: 16/1 Queens paradise"
+                            disabled={this.state.checked}
                             error={(this.state.form_data.addressline2_error) ? true : false}
                             helperText={this.state.form_data.addressline2_error}
-                            value={this.state.form_data_permanent.addressline2 ||''}
-                            onChange={this.handleChangePermanent()} />
+                            value={this.state.form_data.pr_addressline2 ||''}
+                            onChange={this.handleChange()} />
                     </div>
 
-                            <div className="InputField input-religare">
+                            <div className="InputField">
                                 <Input
                                     type="number"
                                     width="40"
                                     label="Pincode"
-                                    id="pincodePermanent"
-                                    name="pincode"
+                                    id="pr_pincode"
+                                    name="pr_pincode"
                                     maxLength="6"
+                                    disabled={this.state.checked}
                                     error={(this.state.form_data.pincode_error) ? true : false}
                                     helperText={this.state.form_data.pincode_error}
-                                    value={this.state.form_data_permanent.pincode || ''}
-                                    onChange={this.handlePincodePermanent('pincode')} />
+                                    value={this.state.form_data.pr_pincode || ''}
+                                    onChange={this.handlePincode('pr_pincode')} />
                             </div>
 
-                            <div className="InputField input-religare">
+                            <div className="InputField">
                                 <Input
                                     disabled={true}
-                                    id="cityPermanent"
+                                    id="pr_city"
                                     label="City"
-                                    name="city"
+                                    name="pr_city"
                                     value={this.state.form_data_permanent.city || ''}
                                 />
                             </div>
-                            <div className="InputField input-religare">
+                            <div className="InputField">
                                 <Input
                                     disabled={true}
-                                    id="statePermanent"
+                                    id="pr_state"
                                     label="State"
-                                    name="state"
-                                    value={this.state.form_data_permanent.state || ''}
+                                    name="pr_state"
+                                    value={this.state.form_data.pr_state || ''}
                                 />
                             </div>
-
-                        </div>
-                    </div>
+                            </div>
+                        }
 
                 </FormControl>
             </Container>
