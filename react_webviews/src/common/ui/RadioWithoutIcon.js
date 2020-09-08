@@ -14,6 +14,16 @@ class RadioGrp extends Component {
     };
   }
 
+  componentDidUpdate(prevState) {
+
+    if (prevState.options !== this.props.options) {
+      this.setState({
+        options: this.props.options
+      })
+    }
+
+  }
+
   toggleRadioBtn = (index) => {
 
     if(this.props.canUnSelect && this.state.selectedIndex === index) {

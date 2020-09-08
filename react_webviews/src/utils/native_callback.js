@@ -46,7 +46,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   if (callbackData.action === 'open_inapp_tab') {
 
     if (getConfig().Web) {
-      open_browser_web(message.url, '_blank')
+      open_browser_web(message.url, '')
     } else {
       let url = 'https://fis.do/m/module?action_type=native';
       if (getConfig().productName === 'myway') {
