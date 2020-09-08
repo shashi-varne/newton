@@ -104,7 +104,7 @@ class GroupHealthPlanAddOns extends Component {
                 amount_options[item.key] = options.map(item => {
                     return   {
                         'name': formatAmountInr(item.cover_amount),
-                        'value': formatAmountInr(item.premium),
+                        'value': item.premium,
                     }
                 })
             }
@@ -163,7 +163,7 @@ class GroupHealthPlanAddOns extends Component {
                             <span style={{fontSize:"16px", fontWeight:'600'}}>{item.title}</span>
                             <div style={{marginTop:'10px', fontSize:'14px'}}>
                                 {`in ${item.options.length !== 0 ? 
-                                    (selectedValue ? selectedValue[item.key] : formatAmountInr(item.default_premium)) :
+                                    (selectedValue ? formatAmountInr(selectedValue[item.key]) : formatAmountInr(item.default_premium)) :
                                     formatAmountInr(item.default_premium)}`}
                             </div>
                         </div>
@@ -216,25 +216,21 @@ class GroupHealthPlanAddOns extends Component {
 
     handleClick = () => {
         this.sendEvents('next');
+        let { selectedValue } = this.state
 
         let groupHealthPlanData = this.state.groupHealthPlanData;
+        let post_body = groupHealthPlanData.post_body || {};
 
-        let post_body = groupHealthPlanData.post_body || {}
-
-        let add_ons = this.state.add_ons_data.map((item, index) => {
-            return {[`obj${index}`] : {
-                checked: this.state[item.key] ? true : false,
-                selected_cover_amount: item.options.length === 0 ? item.default_cover_amount : this.state.selectedIndex[item.key],
-                selected_premium: item.options.length === 0 ? item.default_premium : this.state.selectedValue[item.key]
-            }}
+        let add_ons = this.state.add_ons_data.map((item) => {
+            
+            if (this.state[item.key]) {
+                return item.key + `-${selectedValue[item.key] ? selectedValue[item.key] : item.default_premium}`
+            } else {
+                return ''
+            }
         })
 
         post_body.add_ons = add_ons;
-
-        groupHealthPlanData.post_body.add_ons = add_ons;
-
-        this.setLocalProviderData(groupHealthPlanData);
-
     }
 
     render() {
