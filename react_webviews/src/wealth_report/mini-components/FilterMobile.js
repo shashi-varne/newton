@@ -21,7 +21,7 @@ class FilterMobile extends Component {
   }
 
   componentDidMount() {
-    const cachedFilters = storageService().getObject('wr-mobile-filter-obj') || {};
+    const cachedFilters = storageService().getObject('wr-mobile-filter-obj') || [];
     cachedFilters.map(({ category, ...filterObj }) => this.selectCategory(category, filterObj, true));
     this.setState({ filters: cachedFilters });
   }

@@ -53,27 +53,25 @@ export default function Overview(props) {
   useEffect(() => {
     (async() => {
       try {
-        let data = InternalStorage.getData('overviewData');
         const haveDepsChanged = prevPan !== props.pan;
-        if (isEmpty(data) || haveDepsChanged) {
-          setLoading(true);
-          data = await fetchOverview({ pan: props.pan });
-        }
-        setOverviewData(data);
-        InternalStorage.setData('overviewData', data);
-
         let portfolio_xirr = InternalStorage.getData('portfolioXirr');
+        let overview = InternalStorage.getData('overviewData');
         let graph_xirr;
-        if (isEmpty(portfolio_xirr) || haveDepsChanged) {
+        if (isEmpty(overview) || isEmpty(portfolio_xirr) || haveDepsChanged) {
+          setLoading(true);
           ({ portfolio_xirr, xirr: graph_xirr } = await fetchXIRR({
             pan: props.pan,
             date_range: selectedRange,
             portfolio_xirr: true,
           }));
+          overview = await fetchOverview({ pan: props.pan });
         }
         setPortfolioXirr(portfolio_xirr);
+        setGraphXirr(graph_xirr);
+        setOverviewData(overview);
         InternalStorage.setData('portfolioXirr', portfolio_xirr);
         InternalStorage.setData('graphXirr', graph_xirr);
+        InternalStorage.setData('overviewData', overview);
       } catch (err) {
         console.log(err);
         toast(err);
@@ -93,11 +91,11 @@ export default function Overview(props) {
     (async() => {
       try {
         let data = InternalStorage.getData('growthGraphData');
-        const haveDepsChanged = prevPan !== props.pan || prevSelectedRange !== selectedRange;
-        if (isEmpty(data)|| haveDepsChanged) {
+        const hasPanChanged = prevPan !== props.pan;
+        const hasRangeChanged = prevSelectedRange !== selectedRange;
+        if (isEmpty(data)|| hasPanChanged || hasRangeChanged) {
           setGraphLoad(true);
           setGraphErr(false);
-          setXirrLoading(true);
           const { current_amount_data, invested_amount_data, date_ticks } = await fetchPortfolioGrowth({
             pan: props.pan,
             date_range: selectedRange,
@@ -119,22 +117,23 @@ export default function Overview(props) {
           ...data.formattedData,
           date_ticks: filterDateTicks(data.date_ticks),
         });
-        setGraphLoad(false);
+        setXirrLoading(true);
         let graph_xirr = InternalStorage.getData('graphXirr');
-        if (isEmpty(graph_xirr) || haveDepsChanged) {
+        if (!isEmpty(graph_xirr) || hasRangeChanged) {
           ({ xirr: graph_xirr } = await fetchXIRR({
             pan: props.pan,
             date_range: selectedRange,
             portfolio_xirr: false,
           }));
+          setGraphXirr(graph_xirr);
         }
-        setGraphXirr(graph_xirr);
-        setXirrLoading(false);
       } catch (err) {
         setGraphErr(true);
         console.log(err);
         toast(err);
       }
+      setGraphLoad(false);
+      setXirrLoading(false);
     })();
   }, [props.pan, selectedRange]);
 
@@ -184,7 +183,7 @@ export default function Overview(props) {
               </div>
               <div className="wr-okn-box">
                 <div className="wr-okn-title">
-                    XIRR
+                  XIRR
                   <WrTooltip tipContent={xirrTooltipContent} tooltipClass="wr-xirr-info" forceDirection={true}/>
                 </div>
                 <div className="wr-okn-value">
@@ -266,7 +265,7 @@ export default function Overview(props) {
               </div>
               <div id="wr-xirr-mob">
                 <span id="wr-xm-irr">
-                  IRR: {`${graphXirr ? Number(graphXirr).toFixed(1) + '%' : '--'}`}
+                  IRR: {`${graphXirr && !xirrLoading ? Number(graphXirr).toFixed(1) + '%' : '--'}`}
                 </span>
                 <div>
                   <div className="wr-dot"></div>

@@ -22,6 +22,7 @@ export default function PanSelect(props) {
     (async () => {
       try { 
         const data = await fetchAllPANs();
+
         setPanList(data);
         if (!data.length || isEmpty(data)) {
           setTooltipMsg("No PANs found");
@@ -29,8 +30,8 @@ export default function PanSelect(props) {
         } else {
           if (data.length === 1) setTooltipMsg("No more PANs to show");
           if (!cachedPan || isEmpty(cachedPan)) {
-            selectPan(data[0]);
-            storageService().setObject('wr-current-pan', data[0]);
+            selectPan(data[0].pan);
+            storageService().setObject('wr-current-pan', data[0].pan);
           } else {
             selectPan(cachedPan);
           }
@@ -47,8 +48,7 @@ export default function PanSelect(props) {
     toggleDropdown(false);
     setPan(pan === 'empty' ? '' : pan);
     storageService().setObject('wr-current-pan', pan);
-    props.onPanSelect(pan.pan || pan); // send selected pan to parent element
-    // TODO: remove fall back
+    props.onPanSelect(pan); // send selected pan to parent element
   };
 
   const handleClick = () => {
@@ -78,7 +78,7 @@ export default function PanSelect(props) {
               {
                 loadingPans ? 
                   <DotDotLoader className="wr-dot-loader" /> :
-                  <div className="wr-pan">{selectedPan || 'No PANs linked'}</div>
+                  <div className="wr-pan">{selectedPan === "NA" ? "Unidentified PAN" : (selectedPan || 'No PANs linked')}</div>
               }
             </div>
             {selectedPan &&
@@ -106,7 +106,7 @@ export default function PanSelect(props) {
           <Collapse in={dropdown_open}>
             <div>
               {panList.map((pan, index) => pan !== selectedPan && (
-                  <div onClick={() => selectPan(pan)} key={index}>
+                  <div onClick={() => selectPan(pan.pan)} key={index}>
                     {index !== 0 && <div className="hr"></div>}
                     <div className="wr-pan-content">
                       <img
@@ -115,8 +115,8 @@ export default function PanSelect(props) {
                         alt=""
                       />
                       <div className="wr-pan-detail">
-                        <div className="wr-pan-title">{pan.name}</div>
-                        <div className="wr-pan">{pan.pan || pan}</div>
+                        <div className="wr-pan-title">{pan.name || "N/A"}</div>
+                        <div className="wr-pan">{pan.pan === "NA" ? "Unidentified PAN" : pan.pan}</div>
                       </div>
                     </div>
                   </div>

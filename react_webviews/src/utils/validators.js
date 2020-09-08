@@ -802,3 +802,7 @@ export function isEmpty(value) {
     (typeof value === "object" && Object.keys(value).length === 0) ||
     (typeof value === "string" && value.trim().length === 0);
 }
+
+export function nonRoundingToFixed(val, decimalPlaces) {
+  return (Math.floor(100 * val) / 100).toFixed(decimalPlaces);
+}

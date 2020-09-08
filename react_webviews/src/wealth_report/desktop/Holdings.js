@@ -14,7 +14,7 @@ import InternalStorage from "../InternalStorage";
 const isMobileView = getConfig().isMobileDevice;
 
 export default function Holdings(props) {
-  const cachedFilters = storageService().getObject('wr-holdings-filter');
+  const cachedFilters = storageService().getObject('wr-holdings-filter') || [];
   const [nextPage, setNextPage] = useState('');
   const [loadingMore, setLoadMore] = useState(false);
   const [holdingsData, setHoldingsData] = useState([]);

@@ -8,7 +8,7 @@ import { fetchAnalysis } from '../common/ApiCalls';
 import CardLoader from '../mini-components/CardLoader';
 import WrButton from '../common/Button';
 import InternalStorage from '../InternalStorage';
-import { isEmpty } from '../../utils/validators';
+import { isEmpty, nonRoundingToFixed } from '../../utils/validators';
 import ErrorScreen from '../mini-components/ErrorScreen';
 const isMobileDevice = getConfig().isMobileDevice;
 const tabSpecificData = {
@@ -165,7 +165,7 @@ export default function Analysis(props) {
                         style={{ backgroundColor: tabProps.graph1ColorScheme[idx] }}
                         key={idx}>
                         <div className="wr-p1l-item-label">{alloc.label}</div>
-                        <div className="wr-p1l-item-value">{Math.round(alloc.value)}%</div>
+                        <div className="wr-p1l-item-value">{nonRoundingToFixed(alloc.value, 1)}%</div>
                       </div>
                     ))}
                   </div>
@@ -216,7 +216,7 @@ export default function Analysis(props) {
                         <div
                           className="wr-p2l-item-chip"
                           style={{ backgroundColor: tabProps.graph2ColorScheme[idx] || 'grey' }}></div>
-                        <span className="wr-p2l-item-label">{label} · {Number(value).toFixed(2)}%</span>
+                        <span className="wr-p2l-item-label">{label} · {nonRoundingToFixed(value, 1)}%</span>
                       </div>
                     ))}
                   </div>

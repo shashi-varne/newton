@@ -137,7 +137,6 @@ span.wr-small-col-title {
       color: #000000;
       white-space: nowrap;
       text-overflow: ellipsis;
-      text-transform: capitalize;
       overflow: hidden;
     }
     .amc-detail-subtitle {
@@ -473,7 +472,7 @@ span.wr-small-col-title {
 
 .wr-email-list .react-tooltip-lite {
   margin-left: -37px !important;
-  width: 350px !important;
+  width: 400px !important;
 }
 
 .wr-estd-tax-info .react-tooltip-lite {
@@ -529,24 +528,26 @@ span.wr-small-col-title {
 
   .wr-eli-email {
     font-size: 15px;
-    margin-bottom: 8px;
     font-weight: 600;
   }
 
   .wr-eli-sync-date {
     font-size: 13px;
+    margin-top: 8px;
     color: #565656;
   }
   
   .wr-eli-sync-status {
     padding: 6px 9px;
-    color: rgba(80, 45, 168, 0.8);
+    color: rgba(0, 0, 0, 0.7);
     border-radius: 4px;
     font-size: 12px;
     font-weight: 600;
     word-break: break-word;
-    background-color: rgba(80, 45, 168, 0.1);
+    background-color: rgba(0, 0, 0, 0.08);
     margin-top: 10px;
+    width: auto;
+    display: inline-block;
   }
 }
 

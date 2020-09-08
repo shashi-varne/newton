@@ -94,15 +94,22 @@ export default function EmailList(props) {
     toggleFunction(false);
   };
 
-  const resyncEmail = async(email) => {
+  const resyncEmail = async(account) => {
+    const { latest_statement, email } = account;
     try {
       const syncIndex = accounts.findIndex(account => account.email === email);
       if (isSyncing === syncIndex) return; // To prevent triggering of duplicate sync requests
       setSyncLoad(syncIndex);
-      await requestStatement({
-        email: email,
-        resync: 'true',
-      });
+      
+      const props = { email };
+      if (latest_statement.statement_status === 'success') {
+        props.resync = 'true';
+      } else {
+        props.statement_id = latest_statement.statement_id;
+        props.retrigger = 'true';
+      }
+      await requestStatement(props);
+
       setTimeout(() => {
         setSyncLoad('');
         fetchEmailList();
@@ -115,15 +122,15 @@ export default function EmailList(props) {
   };
 
   const getSyncStatus = (email) => {
-    const { statement_status, dt_updated } = email.latest_statement;
+    const { statement_status } = email.latest_statement;
     const statusMap = {
-      init: `Sync Initiated on ${formatDateAmPm(dt_updated)}`,
-      requested: 'Awaiting CAMS email',
-      success: 'Sync complete',
-      failed: 'Sync Failed',
-      processing: 'Processing statement...',
-      parsing: 'Processing statement...',
-      invalid_statement_uploded: 'Invalid statement uploaded. Try again',
+      init: 'Wait for statement email to be requested',
+      requested: 'Forward the CAMS email to cas@fisdom.com',
+      success: 'Synced successfully',
+      failed: 'Statement processing failed. Please initiate resync',
+      processing: 'Processing the statement received',
+      parsing: 'Processing the statement received',
+      invalid_statement_uploded: 'Invalid statement received. Try again',
     };
     return statusMap[statement_status] || 'Sync Pending';
   };
@@ -148,7 +155,7 @@ export default function EmailList(props) {
             <div className="wr-mails" key={index}>
               <div>
                 <div className="wr-eli-email">{account.email}</div>
-                {account.latest_success_statement.dt_updated && 
+                {account.latest_statement.statement_status === 'success' &&
                   <div className="wr-eli-sync-date">
                     {`Last successful sync: ${formatDateAmPm(account.latest_success_statement.dt_updated)}`}
                   </div>
@@ -162,7 +169,7 @@ export default function EmailList(props) {
               {/* Checking if regenerate time limit has elapsed in order to show resync option */}
               { 
                 (new Date() - new Date(account.latest_statement.dt_updated)) / 60000 >= regenTimeLimit &&
-                <IconButton onClick={() => resyncEmail(account.email)} disabled={isSyncing === index}>
+                <IconButton onClick={() => resyncEmail(account)} disabled={isSyncing === index}>
                   <img
                     src={require(`assets/fisdom/ic-email-sync.svg`)}
                     alt="resync"

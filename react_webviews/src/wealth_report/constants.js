@@ -2,7 +2,7 @@
 import { getConfig } from "utils/functions";
 const isMobileView = getConfig().isMobileDevice;
 
-export const regenTimeLimit = 30;
+export const regenTimeLimit = 12 * 60; //12 hours
 
 export const heightThreshold = isMobileView ? 160 : 275;
 

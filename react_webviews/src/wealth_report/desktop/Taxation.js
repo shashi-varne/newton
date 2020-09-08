@@ -107,7 +107,7 @@ const Taxation = (props) => {
   const handleSelect = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    console.log(event.target);
+    
     if ((name === "year")) {
       setFinYear(value);
       storageService().set('wr-fin-year', value);

@@ -1,9 +1,10 @@
 import React from 'react';
 import { ResponsivePie } from '@nivo/pie';
+import { nonRoundingToFixed } from '../../utils/validators';
 
 const preProcessData = (data, colors = []) => (
   data.map((dataObj, idx) => {
-    dataObj.value = parseInt(dataObj.value, 10);
+    dataObj.value = nonRoundingToFixed(dataObj.value, 2);
     dataObj.color = colors[idx];
     return dataObj;
   })
@@ -44,7 +45,6 @@ export default function PieChart (props) {
 }
 
 function customTooltip({ label, color }) {
-  console.log(label, color);
   return (
     <div className="wr-pie-tooltip">
       <div

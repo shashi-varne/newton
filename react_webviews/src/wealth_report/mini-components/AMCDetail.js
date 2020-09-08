@@ -10,10 +10,10 @@ export default function AMCDetail(holding) {
         src={holding.amc_logo}
         alt="amc-logo"
       />
-      <div className="wr-amc-detail" title={holding.fund_name.toUpperCase()}>
+      <div className="wr-amc-detail" title={holding.fund_name}>
         <div className="amc-detail-title">
           {/* Setting text to lowercase here so that text-transform can convert it properly to capitalised text */}
-          {holding.fund_name.toLowerCase()}
+          {holding.fund_name}
         </div>
         <div className="amc-detail-subtitle">
           {holding.scheme_type} · Since {formattedDate(holding.investment_since, 'm y')}
