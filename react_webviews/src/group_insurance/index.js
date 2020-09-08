@@ -134,10 +134,10 @@ import GroupHealthLanding from './products/group_health/landing';
 import GroupHealthSelectInsureType from './products/group_health/plans/insure_type';
 import GroupHealthPlanDob from './products/group_health/plans/dob';
 import GroupHealthPlanAddMembers from './products/group_health/plans/add_members';
-import GroupHealthPlanAddOns from './products/group_health/plans/select_add_ons';
-import GroupHealthPlanMedicalHistory from './products/group_health/plans/medical_history';
-import GroupHealthPlanLifestyleDetail from './products/group_health/plans/lifeStyle_details';
-import GroupHealthPlanDobReligare from './products/group_health/plans/dob_religare';
+import GroupHealthPlanAddOns from './products/group_health/religare/select_add_ons';
+import GroupHealthPlanMedicalHistory from './products/group_health/religare/medical_history';
+import GroupHealthPlanLifestyleDetail from './products/group_health/religare/lifeStyle_details';
+import GroupHealthPlanDobReligare from './products/group_health/religare/dob_religare';
 
 import GroupHealthPlanSelectCity from './products/group_health/plans/select_city';
 import GroupHealthPlanList from './products/group_health/plans/plan_list';

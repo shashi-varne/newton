@@ -216,6 +216,25 @@ class GroupHealthPlanAddOns extends Component {
 
     handleClick = () => {
         this.sendEvents('next');
+
+        let groupHealthPlanData = this.state.groupHealthPlanData;
+
+        let post_body = groupHealthPlanData.post_body || {}
+
+        let add_ons = this.state.add_ons_data.map((item, index) => {
+            return {[`obj${index}`] : {
+                checked: this.state[item.key] ? true : false,
+                selected_cover_amount: item.options.length === 0 ? item.default_cover_amount : this.state.selectedIndex[item.key],
+                selected_premium: item.options.length === 0 ? item.default_premium : this.state.selectedValue[item.key]
+            }}
+        })
+
+        post_body.add_ons = add_ons;
+
+        groupHealthPlanData.post_body.add_ons = add_ons;
+
+        this.setLocalProviderData(groupHealthPlanData);
+
     }
 
     render() {

@@ -4,7 +4,7 @@ import Checkbox from 'material-ui/Checkbox';
 import { FormControl } from 'material-ui/Form';
 import Input from '../../../../common/ui/Input';
 import Grid from 'material-ui/Grid';
-import {  formatMonthandYear, dobFormatTest, isValidMonthYear } from 'utils/validators';
+import {  formatMonthandYear, dobFormatTest } from 'utils/validators';
 
 class radioAndCheckboxList extends Component {
     
