@@ -4,6 +4,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import { initialize, updateBottomPremium } from '../common_data';
 import RadioAndCheckboxList from './radioAndCheckboxList';
+import { isValidMonthYear } from 'utils/validators';
 
 class GroupHealthPlanLifestyleDetail extends Component {
     
@@ -93,6 +94,26 @@ class GroupHealthPlanLifestyleDetail extends Component {
             selectedValue: value
         })
     }
+
+    handleChange = (value) => {
+        this.setState({
+            duration: value
+        })
+    }
+
+    handleClick = () => {
+        this.sendEvents('next');
+
+        let error = '';
+        if (!isValidMonthYear(this.state.duration)) {
+            error = 'please enter valid month or year'
+        };
+
+        this.setState({
+            error: error
+        })
+
+    }
     
     render() { 
         let { account_type, list } = this.state;
@@ -115,6 +136,8 @@ class GroupHealthPlanLifestyleDetail extends Component {
                         account_type={account_type}
                         name='lifeStyle details'
                         list={list}
+                        handleChange={this.handleChange}
+                        error={this.state.error}
                         handleChangeRadio={this.handleChangeRadio} />}
             </Container>
          );

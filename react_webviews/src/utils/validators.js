@@ -354,6 +354,34 @@ export function isValidDate(dateInput) {
   return true;
 }
 
+export function isValidMonthYear(input) {
+  if (!input) {
+    return false;
+  }
+  var month, year;
+
+  if (input.length !== 7) {
+    return false;
+  }
+
+  if (input.substring(2, 3) !== '/') {
+    return false;
+  }
+
+  month = input.substring(0, 2) - 0;
+  year = input.substring(3, 7) - 0;
+
+  if (year < 1900 || year > 3000) {
+    return false;
+  }
+
+  if (month < 1 || month > 12) {
+    return false;
+  }
+
+  return true;
+}
+
 export function validateName(string) {
   return string.trim().indexOf(' ') !== -1;
 }

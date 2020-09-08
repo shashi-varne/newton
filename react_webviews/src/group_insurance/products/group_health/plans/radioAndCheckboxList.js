@@ -4,7 +4,7 @@ import Checkbox from 'material-ui/Checkbox';
 import { FormControl } from 'material-ui/Form';
 import Input from '../../../../common/ui/Input';
 import Grid from 'material-ui/Grid';
-import {  formatMonthandYear, dobFormatTest, isValidDate } from 'utils/validators';
+import {  formatMonthandYear, dobFormatTest, isValidMonthYear } from 'utils/validators';
 
 class radioAndCheckboxList extends Component {
     
@@ -58,9 +58,11 @@ class radioAndCheckboxList extends Component {
             input.onkeyup = formatMonthandYear;
 
             this.setState({
-                value: event.target.value,
-                value_error : ''
+                value: value,
+                value_error : '',
             })
+
+            this.props.handleChange(value)
 
         } else {
 
@@ -98,6 +100,8 @@ class radioAndCheckboxList extends Component {
                         placeholder="July 1990"
                         maxLength="7"
                         value={this.state.value || ''}
+                        error={this.props.error ? true : false}
+                        helperText={this.props.error}
                         onChange={this.handleChange('duration')} />
                 </div>
             </FormControl>
