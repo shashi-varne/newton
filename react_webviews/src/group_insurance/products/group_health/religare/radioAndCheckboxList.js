@@ -97,23 +97,25 @@ class radioAndCheckboxList extends Component {
     handleDateInput = name => event => {
         let value = event.target.value;
 
-            if(!dobFormatTest(value)) {
-                return
-            }
+        if(!dobFormatTest(value)) {
+            return;
+        }
 
-            let input = document.getElementById(name);
-            input.onkeyup = formatMonthandYear;
+        let input = document.getElementById(name+'_date');
+        input.onkeyup = formatMonthandYear;
 
-            this.setState({
-                [name]: {
-                    ...this.state[name],
-                    date: value
-                },
-                [name+'_error'] : {
-                    ...this.state[name+'_error'],
-                    date: ''
-                },
-            })
+        this.setState({
+            [name]: {
+                ...this.state[name],
+                date: value
+            },
+            [name+'_error'] : {
+                ...this.state[name+'_error'],
+                date: ''
+            },
+        });
+
+        this.props.handleChange({[name]: value})
     }
 
     renderInputs = (name) => {
@@ -131,14 +133,14 @@ class radioAndCheckboxList extends Component {
                 <div className="InputField">
                     <Input
                         type="text"
-                        id={name}
+                        id={name+'_date'}
                         label="Since When"
                         name={name}
-                        placeholder="July 1990"
+                        placeholder="MM/YYYY"
                         maxLength="7"
                         value={this.state[name].date || ''}
-                        error={this.props.error ? true : false}
-                        helperText={this.props.error}
+                        error={this.props[name+'_error'] ? true : false}
+                        helperText={this.props[name+'_error']}
                         onChange={this.handleDateInput(name)} />
                 </div>
             </FormControl>

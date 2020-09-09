@@ -95,28 +95,31 @@ class GroupHealthPlanLifestyleDetail extends Component {
         })
     }
 
-    handleChange = (value) => {
+    handleChange = (data) => {
         this.setState({
-            duration: value
+            ...data
         })
     }
 
     handleClick = () => {
         this.sendEvents('next');
+        let { account_type, list} = this.state;
 
         let error = '';
-        if (!isValidMonthYear(this.state.duration)) {
-            error = 'please enter valid month or year'
-        };
+        list[0].options[account_type].forEach(item => {
+            if (!isValidMonthYear(this.state[item])) {
+                error = 'please enter valid month or year'
 
-        this.setState({
-            error: error
+                this.setState({
+                    [item+'_error']: error
+                })
+            };
         })
-
     }
     
     render() { 
         let { account_type, list } = this.state;
+        console.log(this.state)
 
         return ( 
             <Container
@@ -137,7 +140,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
                         name='lifeStyle details'
                         list={list}
                         handleChange={this.handleChange}
-                        error={this.state.error}
+                        error={this.state}
                         handleChangeRadio={this.handleChangeRadio} />}
             </Container>
          );
