@@ -121,17 +121,32 @@ class GroupHealthPlanAddOns extends Component {
             name = event.target.name;
 
             this.setState({
-                [name]: event.target.checked
+                [name]: {
+                    checked: event.target.checked
+                },
+                [name+'_error']: {
+                    checked: ''
+                }
             })
         } else {
+            let {amount_options} = this.state;
+            
             this.setState({
                 selectedIndex: {
-                    [name]: this.state.amount_options[name][event].name
+                    [name]: amount_options[name][event].name
+                },
+                [name]: {
+                    ...this.state[name],
+                    selected_cover_amount: amount_options[name][event].name
                 }
             }, () => {
               this.setState({
                 selectedValue: {
-                    [name]: this.state.amount_options[name][event].value,
+                    [name]: amount_options[name][event].value,
+                },
+                [name]: {
+                    ...this.state[name],
+                    selected_premium: amount_options[name][event].value
                 }
               })
             });
@@ -140,7 +155,7 @@ class GroupHealthPlanAddOns extends Component {
 
     renderOptions = (add_ons_data) => {
 
-        let { amount_options, selectedValue, selectedIndex } = this.state;
+        let { amount_options } = this.state;
 
         return (
             <div>
@@ -149,7 +164,7 @@ class GroupHealthPlanAddOns extends Component {
                     <Grid item xs={1} className="">
                     <Checkbox
                       style={{alignItems:'start'}}
-                      checked={this.state[item.key]}
+                      checked={this.state[item.key] ? this.state[item.key].checked : false}
                       color="primary"
                       value={item.key}
                       name={item.key}
@@ -162,9 +177,12 @@ class GroupHealthPlanAddOns extends Component {
                         <div style={{color:'#0A1D32'}}>
                             <span style={{fontSize:"16px", fontWeight:'600'}}>{item.title}</span>
                             <div style={{marginTop:'10px', fontSize:'14px'}}>
-                                {`in ${item.options.length !== 0 ? 
-                                    (selectedValue ? formatAmountInr(selectedValue[item.key]) : formatAmountInr(item.default_premium)) :
-                                    formatAmountInr(item.default_premium)}`}
+                                {item.options.length !== 0 ?
+                                     (!this.state[item.key] || !this.state[item.key].checked) ? formatAmountInr(item.default_premium) :
+                                     this.state[item.key].selected_premium ? formatAmountInr(this.state[item.key].selected_premium)
+                                     : formatAmountInr(item.default_premium)
+                                     : formatAmountInr(item.default_premium)
+                                }
                             </div>
                         </div>
                         <img
@@ -172,13 +190,12 @@ class GroupHealthPlanAddOns extends Component {
                         data-tip={item.tooltip}
                         src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
                     </span>
-                    {this.state[item.key] && item.options.length !== 0 && <DropdownInModal
+                    {(this.state[item.key] && this.state[item.key].checked) && item.options.length !== 0 && <DropdownInModal
                         parent={this}
                         options={amount_options[item.key]}
                         header_title="Select amount"
                         cta_title="SAVE"
-                        selectedIndex={selectedIndex || ''}
-                        value={selectedIndex ? selectedIndex[item.key] : ''}
+                        value={this.state[item.key].selected_cover_amount || ''}
                         width="30"
                         label="Select amount"
                         id="amount"
@@ -216,7 +233,6 @@ class GroupHealthPlanAddOns extends Component {
 
     handleClick = () => {
         this.sendEvents('next');
-        let { selectedValue } = this.state
 
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let post_body = groupHealthPlanData.post_body || {};
@@ -224,7 +240,7 @@ class GroupHealthPlanAddOns extends Component {
         let add_ons = this.state.add_ons_data.map((item) => {
             
             if (this.state[item.key]) {
-                return item.key + `-${selectedValue[item.key] ? selectedValue[item.key] : item.default_premium}`
+                return item.key + '-' + (this.state[item.key].selected_premium || item.default_premium)
             } else {
                 return ''
             }
