@@ -152,7 +152,8 @@ class GroupHealthPlanDobReligare extends Component {
     render() {
         let { account_type, list } = this.state;
 
-        let value = account_type === 'self' ? 'Self' : 'Wife'
+        let value = account_type === 'self' ? 'Self' : 'Wife';
+        console.log(this.state.account_type)
         
         return ( 
             <Container

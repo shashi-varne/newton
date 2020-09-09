@@ -8,6 +8,8 @@ import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 import DropdownInModal from '../../../../common/ui/DropdownInModal';
 import { initialize, updateBottomPremium } from '../common_data';
+import Api from 'utils/api';
+import { toast } from 'react-toastify';
 
 class GroupHealthPlanAddOns extends Component {
 
@@ -15,7 +17,8 @@ class GroupHealthPlanAddOns extends Component {
         super(props);
         this.state = {
             ctaWithProvider: true,
-            add_ons_data: []
+            add_ons_data: [],
+            show_loader: true
         }
 
         this.initialize = initialize.bind(this);
@@ -23,77 +26,45 @@ class GroupHealthPlanAddOns extends Component {
     };
 
     componentWillMount() {
-        
         this.initialize();
+    }
 
-        let add_ons_data = [
-            {
-                "title": "Unlimited Automatic Recharge ",
-                "default_premium": 8050.68,
-                "tooltip_content": "",
-                "key": "UAR",
-                "default_cover_amount": "",
-                "options": []
+    async componentDidMount() {
+
+        let body = {
+            "mem_info": {"adult": "2", "child": "1"},
+            "eldest_dob": "05/09/1995",
+            "sum_assured": "5",
+            "base_premium": "53671.2"
+        }
+
+        let add_ons_data;
+        
+        try {
+
+            const res = await Api.post('/api/ins_service/api/insurance/religare/addons', body);
+
+            this.setState({
+                show_loader: false
+            });
+            var resultData = res.pfwresponse.result;
+            if (res.pfwresponse.status_code === 200) {
+                add_ons_data = resultData.premium.add_ons_data;
                 
-            },
-            {
-                "title": "OPD care",
-                "default_premium": "50000",
-                "tooltip_content": "",
-                "key": "OPD",
-                "default_cover_amount": '2000',
-                "options": [
-                    {
-                        "key": "OPDCARE-15000",
-                        "premium": 9730.0,
-                        "cover_amount": "15000"
-                    },
-                    {
-                        "key": "OPDCARE-45000",
-                        "premium": 25067.0,
-                        "cover_amount": "45000"
-                    },
-                    {
-                        "key": "OPDCARE-40000",
-                        "premium": 22507.0,
-                        "cover_amount": "40000"
-                    },
-                    {
-                        "key": "OPDCARE-25000",
-                        "premium": 15167.0,
-                        "cover_amount": "25000"
-                    },
-                    {
-                        "key": "OPDCARE-20000",
-                        "premium": 12541.0,
-                        "cover_amount": "20000"
-                    },
-                    {
-                        "key": "OPDCARE-30000",
-                        "premium": 17626.0,
-                        "cover_amount": "30000"
-                    }
-                ]
-            },
-            {
-                "title": "Reduction in PED Wait Period",
-                "default_premium": 8050.68,
-                "tooltip_content": "",
-                "key": "REDPEDWAITPRD",
-                "default_cover_amount": "",
-                "options": []
-                
-            },
-            {
-                "title": "No Claim Bonus Super ",
-                "default_premium": 10734.24,
-                "tooltip_content": "",
-                "key": "CAREWITHNCB",
-                "default_cover_amount": "",
-                "options": []
-                
+                this.setState({
+                    add_ons_data: resultData.premium.add_ons_data
+                })
+            } else {
+                toast(resultData.error || resultData.message
+                    || 'Something went wrong');
             }
-        ]
+        } catch (err) {
+            console.log(err)
+            this.setState({
+                show_loader: false
+            });
+            toast('Something went wrong');
+        }
 
         let amount_options = {};
 
@@ -231,7 +202,7 @@ class GroupHealthPlanAddOns extends Component {
         }
     }
 
-    handleClick = () => {
+    handleClick = async () => {
         this.sendEvents('next');
 
         let groupHealthPlanData = this.state.groupHealthPlanData;
@@ -247,6 +218,7 @@ class GroupHealthPlanAddOns extends Component {
         })
 
         post_body.add_ons = add_ons;
+        
     }
 
     render() {
