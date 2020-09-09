@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
-import qs from 'qs';
-
 import hdfc_logo from '../../../../assets/ic_hdfc_logo.svg';
 import religare_logo from '../../../../assets/ic_religare_logo.png';
 import star_logo from '../../../../assets/ic_star_logo.png'
