@@ -122,7 +122,7 @@ class GroupHealthPlanDobReligare extends Component {
 
         this.setState({
             value: event.target.value,
-            value_error : ''
+            [value+'_error'] : ''
         })
     }
 
