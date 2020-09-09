@@ -11,7 +11,6 @@ class radioAndCheckboxList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            form_data: {}
         }
     }
 
@@ -44,11 +43,59 @@ class radioAndCheckboxList extends Component {
         if (!name) {
             name = event.target.name;
 
+            if(name === 'None') {
+                let options = this.state.list[0].options[this.state.account_type];
+                
+                options.forEach(name => {
+                    if (name !== 'None') {
+                        this.setState({
+                            [name]: {
+                                checked: false,
+                            },
+                            [name+'_error']: {
+                                checked: '',
+                            }
+                        })
+                    }
+                })
+            } else {
+                this.setState({
+                    'None': {
+                        checked: false,
+                    },
+                    'None_error': {
+                        checked: '',
+                    }
+                })
+            }
+
             this.setState({
-                [name]: event.target.checked
+                [name]: {
+                    checked: event.target.checked
+                },
+                [name+'_error']: {
+                    checked: ''
+                }
             })
-        } if (name === 'duration') {
-            let value = event.target.value;
+        } else {
+
+            let value = event.target ? event.target.value : '';
+            
+            this.setState({
+                [name]: {
+                    ...this.state[name],
+                    description: value
+                },
+                [name+'_error']: {
+                    ...this.state[name+'_error'],
+                    description: ''
+                }
+            })
+        }
+    }
+
+    handleDateInput = name => event => {
+        let value = event.target.value;
 
             if(!dobFormatTest(value)) {
                 return
@@ -58,51 +105,42 @@ class radioAndCheckboxList extends Component {
             input.onkeyup = formatMonthandYear;
 
             this.setState({
-                value: value,
-                value_error : '',
+                [name]: {
+                    ...this.state[name],
+                    date: value
+                },
+                [name+'_error'] : {
+                    ...this.state[name+'_error'],
+                    date: ''
+                },
             })
-
             this.props.handleChange(value)
-
-        } else {
-
-            var value = event.target ? event.target.value : '';
-            var form_data = this.state.form_data || {};
-
-            form_data[name] = value;
-            form_data[name + '_error'] = '';
-
-            this.setState({
-                form_data: form_data
-            })
-        }
     }
 
-    renderInputs = () => {
+    renderInputs = (name) => {
         return (
             <FormControl fullWidth>
                 <div className="InputField">
                     <Input
                         type="text"
-                        id="description"
                         label="description"
                         name="description"
                         placeholder="Lorem ipsum lorem ipsum"
-                        value={this.state.form_data.description || ''}
-                        onChange={this.handleChange('description')} />
+                        value={this.state[name].description || ''}
+                        onChange={this.handleChange(name)} />
                 </div>
                 <div className="InputField">
                     <Input
                         type="text"
-                        id="duration"
+                        id={name}
                         label="Since When"
-                        name="duration"
+                        name={name}
                         placeholder="July 1990"
                         maxLength="7"
-                        value={this.state.value || ''}
+                        value={this.state[name].date || ''}
                         error={this.props.error ? true : false}
                         helperText={this.props.error}
-                        onChange={this.handleChange('duration')} />
+                        onChange={this.handleDateInput(name)} />
                 </div>
             </FormControl>
         )
@@ -137,9 +175,10 @@ class radioAndCheckboxList extends Component {
                                     <Grid container spacing={16} alignItems="center">
                                         <Grid item xs={1} className="TextCenter">
                                             <Checkbox
-                                                checked={this.state[option]}
+                                                checked={this.state[option] ? this.state[option].checked : false}
                                                 color="primary"
                                                 value={option}
+                                                id={option}
                                                 name={option}
                                                 disableRipple
                                                 onChange={this.handleChange()}
@@ -149,11 +188,11 @@ class radioAndCheckboxList extends Component {
                                             {option}
                                         </Grid>
                                     </Grid>
-                                    {this.state[option] && option !== 'None' &&
+                                    {(this.state[option] && this.state[option].checked) && option !== 'None' &&
                                         <Grid container spacing={16} alignItems="center">
                                         <Grid item xs={1} className="TextCenter"></Grid>
                                             <Grid item xs={11} style={{fontSize:'14px'}}>
-                                                {this.renderInputs()}
+                                                {this.renderInputs(option)}
                                             </Grid>
                                         </Grid>}
                                 </div>
