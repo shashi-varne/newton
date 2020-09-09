@@ -114,7 +114,6 @@ class radioAndCheckboxList extends Component {
                     date: ''
                 },
             })
-            this.props.handleChange(value)
     }
 
     renderInputs = (name) => {
