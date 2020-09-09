@@ -168,7 +168,6 @@ import RenderNotCoverClass from './ui_components/general_insurance/notcover';
 import RenderClaimClass from './ui_components/general_insurance/claim';
 
 import HealthInsuranceEntry from './products/group_health/plans/entry';
-import AddressDetails from './products/group_health/plans/address';
 
 import Tooltip from '../common/ui/Tooltip';
 
@@ -449,7 +448,6 @@ const Insurance = (props) => {
           <Route path={`${url}/common/claim`} component={RenderClaimClass} />
 
           <Route path={`${url}/group-health/entry`} component={HealthInsuranceEntry} />
-          <Route path={`${url}/group-health/address-religare`} component={AddressDetails} />
 
           <Route component={NotFound} />
         </Switch>
