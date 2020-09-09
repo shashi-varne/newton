@@ -52,8 +52,6 @@ class GroupHealthPlanAddMembers extends Component {
         this.initialize();
     }
 
-
-
     async componentDidMount() {
 
         let screenData = this.state.screenData;

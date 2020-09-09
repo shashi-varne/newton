@@ -105,7 +105,6 @@ class GroupHealthSelectInsureType extends Component {
       [name]: this.state.account_type_options[event].value,
       [name + '_error']: ''
     })
-
   };
 
   render() {

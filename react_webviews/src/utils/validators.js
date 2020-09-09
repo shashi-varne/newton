@@ -354,6 +354,34 @@ export function isValidDate(dateInput) {
   return true;
 }
 
+export function isValidMonthYear(input) {
+  if (!input) {
+    return false;
+  }
+  var month, year;
+
+  if (input.length !== 7) {
+    return false;
+  }
+
+  if (input.substring(2, 3) !== '/') {
+    return false;
+  }
+
+  month = input.substring(0, 2) - 0;
+  year = input.substring(3, 7) - 0;
+
+  if (year < 1900 || year > 3000) {
+    return false;
+  }
+
+  if (month < 1 || month > 12) {
+    return false;
+  }
+
+  return true;
+}
+
 export function validateName(string) {
   return string.trim().indexOf(' ') !== -1;
 }
@@ -706,6 +734,37 @@ export function formatDate(event) {
   }
 }
 
+export function formatMonthandYear(event) {
+
+  var key = event.keyCode || event.charCode;
+
+  var thisVal;
+
+  let slash = 0;
+  for (var i = 0; i < event.target.value.length; i++) {
+    if (event.target.value[i] === '/') {
+      slash += 1;
+    }
+  }
+
+  if (slash <= 1 && key !== 7 && key !== 46) {
+    var strokes = event.target.value.length;
+
+    if (strokes === 2) {
+      thisVal = event.target.value;
+      thisVal += '/';
+      event.target.value = thisVal;
+    }
+    // if someone deletes the first slash and then types a number this handles it
+    if (strokes >= 3) {
+      thisVal = event.target.value;
+      if (thisVal.charAt(2) !== '/') {
+        var txt1 = thisVal.slice(0, 2) + "/" + thisVal.slice(2);
+        event.target.value = txt1;
+      }
+    }
+  }
+}
 
 function monthDiff(dateFrom, dateTo) {
 
