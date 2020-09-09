@@ -10,6 +10,9 @@ import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
 import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
+import { yesNoOptions } from '../../../constants';
+import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
+
 class GroupHealthPlanAddressDetails extends Component {
 
     constructor(props) {
@@ -17,7 +20,7 @@ class GroupHealthPlanAddressDetails extends Component {
         this.state = {
             type: getConfig().productName,
             form_data: {},
-            ctaWithProvider: true,
+            // ctaWithProvider: true,
             get_lead: true,
             next_state: 'nominee'
         }
@@ -110,10 +113,13 @@ class GroupHealthPlanAddressDetails extends Component {
         let keysMapper = {
             'addressline': 'Address line 1',
             'addressline2': 'Address line 2',
-            'pincode': 'pincode' 
+            'pincode': 'pincode' ,
+            'pr_addressline': 'Address line 1',
+            'pr_addressline2': 'Address line 2',
+            'pr_pincode': 'pincode' 
         }
 
-        let keys_to_check = ['addressline', 'addressline2', 'pincode']
+        let keys_to_check = ['addressline', 'addressline2', 'pincode','pr_addressline', 'pr_addressline2', 'pr_pincode']
 
         let form_data = this.state.form_data;
         for (var i = 0; i < keys_to_check.length; i++) {
@@ -168,7 +174,7 @@ class GroupHealthPlanAddressDetails extends Component {
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "product": 'health suraksha',
+                "product": 'health religare',
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'address details',
                 'from_edit': this.props.edit ? 'yes' : 'no',
@@ -229,6 +235,47 @@ class GroupHealthPlanAddressDetails extends Component {
           form_data: form_data
         })
     }
+
+    handleChangeRadio = name => event => {
+
+        let form_data = this.state.form_data || {};
+
+        let optionsMapper = {
+            'checked': yesNoOptions
+        }
+        form_data[name] = optionsMapper[name][event].value;
+        form_data[name + '_error'] = '';
+
+        this.setState({
+            form_data:form_data
+        })
+
+        if(form_data.checked==='YES'){
+            let data={
+                addressline:this.state.form_data.addressline,
+                addressline2:this.state.form_data.addressline2,
+                pincode:this.state.form_data.pincode,
+                city:this.state.form_data.city,
+                state:this.state.form_data.state,
+
+                pr_addressline:this.state.form_data.addressline,
+                pr_addressline2:this.state.form_data.addressline2,
+                pr_pincode:this.state.form_data.pincode,
+                pr_city:this.state.form_data.city,
+                pr_state:this.state.form_data.state
+            }
+            this.setState({
+                form_data:data,
+                checked:true
+            })
+        }
+        else{
+            this.setState({
+                checked:false
+            })
+        }
+
+    };
 
     render() {
 
@@ -307,6 +354,96 @@ class GroupHealthPlanAddressDetails extends Component {
                             value={this.state.form_data.state || ''}
                         />
                     </div>
+                    <div className="InputField" style={{ marginBottom: '0px !important' }}>
+
+                        <div className="checkbox-text">Is permanent address same as current address?
+
+                        <div className="InputField">
+                                <RadioWithoutIcon
+                                    width="40"
+                                    class="Address:"
+                                    defaultChecked
+                                    checked={this.state.checked}
+                                    options={yesNoOptions}
+                                    id="address"
+                                    name="checked"
+                                    error={(this.state.form_data.address_error) ? true : false}
+                                    helperText={this.state.form_data.address_error}
+                                    value={this.state.form_data.address || ''}
+                                    onChange={this.handleChangeRadio('checked')} />
+                            </div>
+                            <div className="permanet-address">
+                                Permanent Address 
+                            </div>
+                        </div>
+                        </div>
+
+                        {!this.state.checked &&
+                        <div>
+                            
+                        <div className="InputField">
+                        <Input
+                            type="text"
+                            id="pr_addressline"
+                            label="Address line 1"
+                            name="pr_addressline"
+                            placeholder="ex: 16/1 Queens paradise"
+                            disabled={this.state.checked}
+                            error={(this.state.form_data.pr_addressline_error) ? true : false}
+                            helperText={this.state.form_data.pr_addressline_error}
+                            value={this.state.form_data.pr_addressline|| ''}
+                            onChange={this.handleChange()} />
+                    </div>
+                    <div className="InputField">
+                        <Input
+                            type="text"
+                            id="pr_addressline2"
+                            label="Address line 2"
+                            name="pr_addressline2"
+                            placeholder="ex: 16/1 Queens paradise"
+                            disabled={this.state.checked}
+                            error={(this.state.form_data.pr_addressline2_error) ? true : false}
+                            helperText={this.state.form_data.pr_addressline2_error}
+                            value={this.state.form_data.pr_addressline2 ||''}
+                            onChange={this.handleChange()} />
+                    </div>
+
+                            <div className="InputField">
+                                <Input
+                                    type="number"
+                                    width="40"
+                                    label="Pincode *"
+                                    id="pr_pincode"
+                                    name="pr_pincode"
+                                    maxLength="6"
+                                    disabled={this.state.checked}
+                                    error={(this.state.form_data.pr_pincode_error) ? true : false}
+                                    helperText={this.state.form_data.pr_pincode_error}
+                                    value={this.state.form_data.pr_pincode || ''}
+                                    onChange={this.handlePincode('pr_pincode')} />
+                            </div>
+
+                            <div className="InputField">
+                                <Input
+                                    disabled={true}
+                                    id="pr_city"
+                                    label="City *"
+                                    name="pr_city"
+                                    value={this.state.form_data.pr_city || ''}
+                                />
+                            </div>
+                            <div className="InputField">
+                                <Input
+                                    disabled={true}
+                                    id="pr_state"
+                                    label="State *"
+                                    name="pr_state"
+                                    value={this.state.form_data.pr_state || ''}
+                                />
+                            </div>
+                            </div>
+                        }
+
                 </FormControl>
 
                 <ConfirmDialog parent={this} />
