@@ -55,9 +55,9 @@ class radioAndCheckboxList extends Component {
                             [name+'_error']: {
                                 checked: '',
                             }
-                        })
+                        });
                     }
-                })
+                });
             } else {
                 this.setState({
                     'None': {
@@ -66,7 +66,7 @@ class radioAndCheckboxList extends Component {
                     'None_error': {
                         checked: '',
                     }
-                })
+                });
             }
 
             this.setState({
@@ -165,6 +165,7 @@ class radioAndCheckboxList extends Component {
                                     options={item.options}
                                     id={name}
                                     name={name}
+                                    value={this.props.value || ''}
                                     onChange={this.handleChangeRadio(name, index)} />
                                 {this.state['lifeStyle details'] === 'Yes' && this.renderInputs()}
                             </div>

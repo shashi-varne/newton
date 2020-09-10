@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="320" height="148" viewBox="0 0 320 148">
+    <defs>
+        <path id="spy8tpawza" d="M0 0H320V148H0z"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <g>
+            <g transform="translate(-1006 -41) translate(1006 39)">
+                <mask id="47lcfm9aob" fill="#fff">
+                    <use xlink:href="#spy8tpawza"/>
+                </mask>
+                <use fill="#E8FFEF" xlink:href="#spy8tpawza"/>
+                <path fill="#F2FFF6" fill-rule="nonzero" d="M122.347 95.249C109.183 89.739 102.4 79.656 102 65h212c3.314 0 6 2.686 6 6v79.075c-5.813 8.034-19.62 9.925-40.693 9.925-21.073 0-50.14-2.363-64.673-24.104-14.534-21.742-9.536-27.319-29.067-35.92-19.53-8.603-43.473 3.537-63.22-4.727z" mask="url(#47lcfm9aob)" transform="matrix(1 0 0 -1 0 225)"/>
+                <path fill="#F2FFF6" d="M0 68C23.93 22.667 56.826 0 98.69 0c62.793 0 72.852 60.682 148.583 68H0z" mask="url(#47lcfm9aob)" transform="rotate(180 123.636 34)"/>
+                <text fill="#23743B" font-family="WorkSans-Medium, Work Sans" font-size="13" font-weight="400" mask="url(#47lcfm9aob)">
+                    <tspan x="20" y="88">Free annual health check-up for all</tspan>
+                </text>
+                <text fill="#23743B" font-family="WorkSans-Bold, Work Sans" font-size="17" font-weight="bold" mask="url(#47lcfm9aob)">
+                    <tspan x="20" y="39">Preventive </tspan> <tspan x="20" y="61">Care</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>
