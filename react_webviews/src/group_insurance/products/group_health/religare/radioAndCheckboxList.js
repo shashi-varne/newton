@@ -55,9 +55,9 @@ class radioAndCheckboxList extends Component {
                             [name+'_error']: {
                                 checked: '',
                             }
-                        })
+                        });
                     }
-                })
+                });
             } else {
                 this.setState({
                     'None': {
@@ -66,7 +66,7 @@ class radioAndCheckboxList extends Component {
                     'None_error': {
                         checked: '',
                     }
-                })
+                });
             }
 
             this.setState({

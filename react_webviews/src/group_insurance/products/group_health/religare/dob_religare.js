@@ -7,6 +7,7 @@ import { initialize, updateBottomPremium } from '../common_data';
 import Input from '../../../../common/ui/Input';
 import RadioAndCheckboxList from './radioAndCheckboxList';
 import { formatDate, dobFormatTest, isValidDate } from 'utils/validators';
+import { isEmpty } from '../../../../utils/validators';
 
 class GroupHealthPlanDobReligare extends Component {
     
@@ -16,7 +17,7 @@ class GroupHealthPlanDobReligare extends Component {
         }
 
         this.initialize = initialize.bind(this);
-        this.updateBottomPremium = updateBottomPremium.bind(this)
+        this.updateBottomPremium = updateBottomPremium.bind(this);
     }
 
     componentWillMount() {
@@ -93,7 +94,7 @@ class GroupHealthPlanDobReligare extends Component {
         this.props.history.push({
             pathname: pathname,
             search: getConfig().searchParams
-        })
+        });
     }
 
     sendEvents(user_action) {
@@ -103,7 +104,7 @@ class GroupHealthPlanDobReligare extends Component {
                 "user_action": user_action,
                 "screen_name": "dob_religare"
             }
-        }
+        };
 
         if (user_action === 'just_set_events') {
             return eventObj;
@@ -156,8 +157,8 @@ class GroupHealthPlanDobReligare extends Component {
     handleChangeRadio = (value) => {
         this.setState({
             selectedValue: value
-        })
-    }
+        });
+    };
 
     handleChange = index => event => {
 
@@ -167,7 +168,7 @@ class GroupHealthPlanDobReligare extends Component {
         let value = event.target.value;
 
         if(!dobFormatTest(value)) {
-            return
+            return;
         }
 
         let input = document.getElementById(name);
