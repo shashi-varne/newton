@@ -60,6 +60,10 @@ class GroupHealthPlanDobReligare extends Component {
 
         let show_mem_options = mem_options.length > 1 ? true : false;
 
+        if(!show_mem_options) {
+            eldest_member = mem_options[0].value;
+        }
+
 
         this.setState({
             eldest_dob: eldest_dob,

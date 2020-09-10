@@ -68,7 +68,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
         groupHealthPlanData.sum_assured = this.state.premium_data[this.state.selectedIndex].sum_assured;
         groupHealthPlanData.post_body.sum_assured = this.state.premium_data[this.state.selectedIndex].sum_assured;
         if(this.state.provider === 'RELIGARE') {
-            groupHealthPlanData.post_body.sum_assure = (groupHealthPlanData.post_body.sum_assure)/100000
+            groupHealthPlanData.post_body.sum_assured = (groupHealthPlanData.post_body.sum_assured)/100000
         }
 
         let total_member = groupHealthPlanData.post_body.mem_info.adult + groupHealthPlanData.post_body.mem_info.child;
