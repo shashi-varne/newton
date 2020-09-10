@@ -29,7 +29,8 @@ class GroupHealthPlanDetails extends Component {
             },
             show_loader: true,
             ic_hs_special_benefits: ic_hs_special_benefits,
-            ic_hs_main_benefits: ic_hs_main_benefits
+            ic_hs_main_benefits: ic_hs_main_benefits,
+            screen_name: 'plan_details_screen'
         }
 
         this.initialize = initialize.bind(this);
@@ -80,7 +81,7 @@ class GroupHealthPlanDetails extends Component {
 
                 this.setState({
                     common_data: resultData.common,
-                    premium_data: resultData.premium[0],
+                    premium_data: resultData.premium,
                     extra_data: resultData.quote_info
                 })
 
@@ -194,8 +195,11 @@ class GroupHealthPlanDetails extends Component {
         groupHealthPlanData.plan_selected.common_data = this.state.common_data;
         groupHealthPlanData.plan_selected.extra_data = this.state.extra_data;
         groupHealthPlanData.plan_selected.premium_data = this.state.premium_data;
+
+        groupHealthPlanData.post_body.base_premium = groupHealthPlanData.plan_selected.base_premium;
+        groupHealthPlanData.post_body.premium = groupHealthPlanData.plan_selected.net_premium;
         this.setLocalProviderData(groupHealthPlanData);
-        this.navigate('plan-select-sum-assured');
+        this.navigate(this.state.next_screen || 'plan-select-sum-assured');
     }
 
 

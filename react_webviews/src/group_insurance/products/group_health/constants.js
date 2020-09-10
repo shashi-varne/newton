@@ -125,6 +125,9 @@ export const religare = {
         insure_type_screen: 'plan-dob-religare',
         add_members_screen: 'plan-dob-religare',
         religare_dob: 'plan-list',
+        plan_list_screen: 'plan-details',
+        plan_details_screens: 'plan-select-sum-assured',
+        sum_assured_screen: 'plan-select-add-ons'
     },
     validation_props: {
         'dob_adult': { min: 19, max: 90 },  //add one year for minimum age here 18 to 19

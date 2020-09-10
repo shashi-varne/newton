@@ -29,7 +29,6 @@ export async function initialize() {
     if(this.state.screen_name && providerConfig.get_next[this.state.screen_name]) {
         next_screen = providerConfig.get_next[this.state.screen_name];
     }
-    console.log(next_screen)
 
     let validation_props = providerConfig.validation_props || {};
 
