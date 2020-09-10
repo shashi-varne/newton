@@ -165,6 +165,7 @@ class radioAndCheckboxList extends Component {
                                     options={item.options}
                                     id={name}
                                     name={name}
+                                    value={this.props.value || ''}
                                     onChange={this.handleChangeRadio(name, index)} />
                                 {this.state['lifeStyle details'] === 'Yes' && this.renderInputs()}
                             </div>

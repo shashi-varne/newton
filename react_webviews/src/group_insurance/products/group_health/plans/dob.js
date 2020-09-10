@@ -307,7 +307,6 @@ class GroupHealthPlanDob extends Component {
 
             groupHealthPlanData.post_body = post_body;
 
-
             this.setLocalProviderData(groupHealthPlanData);
             this.navigate(this.state.next_screen);
         }
