@@ -27,7 +27,7 @@ class GroupHealthLanding extends Component {
     this.state = {
       show_loader: true,
       productName: getConfig().productName,
-      provider: 'RELIGARE',
+      provider: this.props.match.params.provider,
       checked: true,
       offerImageData: [],
       whats_not_covered: [],
@@ -36,7 +36,7 @@ class GroupHealthLanding extends Component {
       common: {},
       screen_name :screen_name,
       selectedIndex: 0,
-      providerConfig: getGhProviderConfig('RELIGARE')
+      providerConfig: getGhProviderConfig(this.props.match.params.provider)
     }
 
     this.openInBrowser = openInBrowser.bind(this);
@@ -108,7 +108,7 @@ class GroupHealthLanding extends Component {
 
   navigate = (pathname) => {
     this.props.history.push({
-      pathname: this.state.provider + '/' + pathname,
+      pathname: pathname,
       search: getConfig().searchParams
     });
   }

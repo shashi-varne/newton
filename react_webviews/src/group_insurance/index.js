@@ -332,7 +332,7 @@ const Insurance = (props) => {
 
 
           {/********** Group Health Insurance **********/}
-          <Route path={`${url}/group-health/landing`} component={GroupHealthLanding} />
+          <Route path={`${url}/group-health/:provider/landing`} component={GroupHealthLanding} />
           <Route path={`${url}/group-health/:provider/insure-type`} component={GroupHealthSelectInsureType} />
           <Route path={`${url}/group-health/:provider/plan-dob`} component={GroupHealthPlanDob} />
           <Route path={`${url}/group-health/:provider/plan-add-members`} component={GroupHealthPlanAddMembers} />
