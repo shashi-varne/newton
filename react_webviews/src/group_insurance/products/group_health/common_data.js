@@ -41,6 +41,7 @@ export async function initialize() {
         providerData: providerConfig,
         next_screen: next_screen,
         providerConfig: providerConfig,
+        provider_api: providerConfig.provider_api,
         plan_selected: groupHealthPlanData && groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected : {},
         insured_account_type: groupHealthPlanData.account_type || '',
         screenData: screenData,
@@ -62,7 +63,8 @@ export async function initialize() {
 
             let quote_id = storageService().get('ghs_ergo_quote_id');
 
-            const res = await Api.get('/api/ins_service/api/insurance/hdfcergo/lead/quote?quote_id=' + quote_id);
+            const res = await Api.get(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/
+            lead/quote?quote_id=${quote_id}`);
 
             var resultData = res.pfwresponse.result;
 
@@ -187,8 +189,8 @@ export async function updateLead(body, quote_id) {
             show_loader: true
         });
 
-        const res = await Api.post('/api/ins_service/api/insurance/hdfcergo/lead/update?quote_id=' + quote_id,
-            body);
+        const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/
+        lead/update?quote_id=${quote_id}`,body);
 
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
@@ -253,7 +255,8 @@ export async function resetQuote() {
     });
 
     try {
-        const res = await Api.get(`/api/ins_service/api/insurance/hdfcergo/lead/cancel/` + quote_id);
+        const res = await Api.get(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/
+        lead/cancel/${quote_id}`);
 
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
