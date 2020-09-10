@@ -13,7 +13,6 @@ class GroupHealthPlanDobReligare extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: ''
         }
 
         this.initialize = initialize.bind(this);
@@ -38,31 +37,36 @@ class GroupHealthPlanDobReligare extends Component {
                 'key': 'self',
                 'name': 'Self',
                 'label': groupHealthPlanData.account_type === 'self' ? 'Date of birth (DD/MM/YYYY)' : "Your date of birth (DD/MM/YYYY)",
-                'value': ''
+                'value': '',
+                'backend_key': 'self_account_key'
             },
             {
                 'key': 'wife',
                 'name': 'Wife',
                 'label': "Wife's date of birth (DD/MM/YYYY)",
-                'value': '' 
+                'value': '',
+                'backend_key': 'spouse_account_key'
             },
             {
                 'key': 'husband',
                 'name': 'Husband',
                 'label': "Husband's date of birth (DD/MM/YYYY)",
-                'value': ''
+                'value': '',
+                'backend_key': 'spouse_account_key'
             },
             {
                 'key': 'father',
                 'name': 'Father',
                 'label': "Father's date of birth (DD/MM/YYYY)",
-                'value': ''
+                'value': '',
+                'backend_key': 'parent_account1_key'
             },
             {
                 'key': 'mother',
                 'name': 'Mother',
                 'label': "Mother's date of birth (DD/MM/YYYY)",
-                'value': ''
+                'value': '',
+                'backend_key': 'parent_account2_key'
             }
         ];
 
@@ -72,13 +76,21 @@ class GroupHealthPlanDobReligare extends Component {
 
         dob_data.forEach(item => {
             if (ui_members[item.key]) {
+                
+                item.value = ui_members[item.key + '_dob'] || '';
+
+                if(!ui_members.father && item.key === 'mother') {
+                    item.backend_key = 'parent_account1_key';
+                }
+
                 final_dob_data.push(item)
             }
         });
 
         this.setState({
             final_dob_data: final_dob_data,
-            dob_data: dob_data
+            dob_data: dob_data,
+            selectedValue: groupHealthPlanData.post_body.eldest_member
         })
 
     }
@@ -108,17 +120,61 @@ class GroupHealthPlanDobReligare extends Component {
 
     handleClick = () => {
         this.sendEvents('next');
+        let {selectedValue, groupHealthPlanData, final_dob_data} = this.state;
+        let obj = final_dob_data.find(item => item.key === selectedValue);
+        let index = final_dob_data.indexOf(obj);
 
-        let dob = this.state.value;
+        let dob = final_dob_data[index].value;
+        
+        let canProceed = true;
+        let ui_members = groupHealthPlanData.ui_members || {};
 
         let error = '';
         if (!isValidDate(dob)) {
             error = 'Please enter valid date'
         };
 
+        final_dob_data[index].error = error;
+
         this.setState({
-            error: error
-        })
+            final_dob_data: final_dob_data
+        });
+
+        if(error) {
+            canProceed = false
+        }
+
+        let post_body = groupHealthPlanData.post_body;
+
+        if(canProceed) {
+            groupHealthPlanData.ui_members = ui_members;
+            groupHealthPlanData.final_dob_data = final_dob_data;
+
+            final_dob_data.forEach(item => {
+                let backend_key = item.backend_key;
+                let relation = item.key;
+
+                post_body[backend_key] = {
+                    dob: item.value,
+                    relation: relation
+                }
+
+                post_body.eldest_member = selectedValue;
+            })
+
+            if(final_dob_data.length === 1 && groupHealthPlanData.account_type === 'parent') {
+                final_dob_data[0].backend_key = 'parent_account1_key';
+            }
+
+            if(ui_members.self_gender && post_body.self_account_key) {
+                post_body.self_account_key.gender = ui_members.self_gender;
+            }
+
+            groupHealthPlanData.post_body = post_body;
+
+            this.setLocalProviderData(groupHealthPlanData);
+        }
+
     }
 
     handleChangeRadio = (value) => {
@@ -127,7 +183,10 @@ class GroupHealthPlanDobReligare extends Component {
         })
     }
 
-    handleChange = name => event => {
+    handleChange = index => event => {
+
+        let {final_dob_data} = this.state;
+        let name = final_dob_data[index].key;
 
         let value = event.target.value;
 
@@ -138,15 +197,22 @@ class GroupHealthPlanDobReligare extends Component {
         let input = document.getElementById(name);
         input.onkeyup = formatDate;
 
+        final_dob_data[index].value = value;
+        final_dob_data[index].error = '';
+
         this.setState({
-            value: event.target.value,
-            [value+'_error'] : ''
+            final_dob_data: final_dob_data
         })
     }
 
     renderDob = (account_type) => {
         let currentDate = new Date().toISOString().slice(0, 10);
-        let data = this.state.dob_data.find(item => item.key === account_type)
+        let {final_dob_data} = this.state;
+        let data = final_dob_data.find(item => item.key === account_type);
+        
+        let obj = final_dob_data.find(item => item.key === account_type);
+        let index = final_dob_data.indexOf(obj);
+        let error = final_dob_data[index].error;
 
         return (
             <div className="InputField">
@@ -158,12 +224,12 @@ class GroupHealthPlanDobReligare extends Component {
                     id={account_type}
                     name='dob_religare'
                     max={currentDate}
-                    error={this.state.error ? true : false}
-                    helperText={this.state.error}
-                    value={this.state.value || ''}
+                    error={error ? true : false}
+                    helperText={error}
+                    value={final_dob_data[index].value || ''}
                     placeholder="DD/MM/YYYY"
                     maxLength="10"
-                    onChange={this.handleChange(account_type)} />
+                    onChange={this.handleChange(index)} />
             </div>
         )
     }
@@ -191,7 +257,7 @@ class GroupHealthPlanDobReligare extends Component {
                     'options': this.renderOptions(final_dob_data),
                     'input_type': 'radio'
                 }]
-        }
+        };
 
         return ( 
             <Container
@@ -208,6 +274,7 @@ class GroupHealthPlanDobReligare extends Component {
                         account_type={account_type}
                         name="dob_religare"
                         list={list}
+                        value={this.state.selectedValue}
                         handleChangeRadio={this.handleChangeRadio} />}
                 
                 {this.state.selectedValue &&
