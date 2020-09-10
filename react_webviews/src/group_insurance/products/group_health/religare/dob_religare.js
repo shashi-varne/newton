@@ -65,24 +65,24 @@ class GroupHealthPlanDobReligare extends Component {
             }
         ];
 
-        let final_dob_data = [];
+        let final_dob_list = [];
 
         let ui_members = groupHealthPlanData.ui_members || {};
 
         dob_data.forEach(item => {
             if (ui_members[item.key]) {
-                final_dob_data.push(item)
+                final_dob_list.push(item)
             }
         });
 
-        let {eldest_member, dob} = groupHealthPlanData.final_dob_data
 
-        let obj = final_dob_data.find(item => item.key === eldest_member)
-        let index = final_dob_data.indexOf(obj);
-        final_dob_data[index].value = dob;
+        let {eldest_member, dob} = groupHealthPlanData.final_dob_data;
+
+        const selected_dob_idx = final_dob_list.findIndex(item => item.key === eldest_member);
+        final_dob_list[selected_dob_idx].value = dob;
 
         this.setState({
-            final_dob_data: final_dob_data,
+            final_dob_list: final_dob_list,
             dob_data: dob_data,
             selectedValue: eldest_member
         })
@@ -114,12 +114,11 @@ class GroupHealthPlanDobReligare extends Component {
 
     handleClick = () => {
         this.sendEvents('next');
-        let {selectedValue, groupHealthPlanData, final_dob_data} = this.state;
-        let obj = final_dob_data.find(item => item.key === selectedValue);
-        let index = final_dob_data.indexOf(obj);
+        let {selectedValue, groupHealthPlanData, final_dob_list} = this.state;
 
-        let dob = final_dob_data[index].value;
-        
+        const selected_dob_idx = final_dob_list.findIndex(item => item.key === selectedValue);
+        let dob = final_dob_list[selected_dob_idx].value;
+
         let canProceed = true;
         let ui_members = groupHealthPlanData.ui_members || {};
 
@@ -128,10 +127,10 @@ class GroupHealthPlanDobReligare extends Component {
             error = 'Please enter valid date'
         };
 
-        final_dob_data[index].error = error;
+        final_dob_list[selected_dob_idx].error = error;
 
         this.setState({
-            final_dob_data: final_dob_data
+            final_dob_list: final_dob_list
         });
 
         if(error) {
@@ -147,9 +146,7 @@ class GroupHealthPlanDobReligare extends Component {
                 dob: dob
             }
 
-            post_body.eldest_member_dob = dob;
-
-            groupHealthPlanData.post_body = post_body;
+            post_body.eldest_dob = dob;
 
             this.setLocalProviderData(groupHealthPlanData);
         }
@@ -164,8 +161,8 @@ class GroupHealthPlanDobReligare extends Component {
 
     handleChange = index => event => {
 
-        let {final_dob_data} = this.state;
-        let name = final_dob_data[index].key;
+        let {final_dob_list} = this.state;
+        let name = final_dob_list[index].key;
 
         let value = event.target.value;
 
@@ -176,36 +173,35 @@ class GroupHealthPlanDobReligare extends Component {
         let input = document.getElementById(name);
         input.onkeyup = formatDate;
 
-        final_dob_data[index].value = value;
-        final_dob_data[index].error = '';
+        final_dob_list[index].value = value;
+        final_dob_list[index].error = '';
 
         this.setState({
-            final_dob_data: final_dob_data
+            final_dob_list: final_dob_list
         })
     }
 
     renderDob = (account_type) => {
         let currentDate = new Date().toISOString().slice(0, 10);
-        let {final_dob_data} = this.state;
-        let data = final_dob_data.find(item => item.key === account_type);
+        let {final_dob_list} = this.state;
         
-        let obj = final_dob_data.find(item => item.key === account_type);
-        let index = final_dob_data.indexOf(obj);
-        let error = final_dob_data[index].error;
+        let obj = final_dob_list.find(item => item.key === account_type);
+        let index = final_dob_list.indexOf(obj);
+        let error = final_dob_list[index].error;
 
         return (
             <div className="InputField">
                 <Input
                     type="text"
                     width="40"
-                    label={data.label}
+                    label={obj.label}
                     class="DOB"
                     id={account_type}
                     name='dob_religare'
                     max={currentDate}
                     error={error ? true : false}
                     helperText={error}
-                    value={final_dob_data[index].value || ''}
+                    value={final_dob_list[index].value || ''}
                     placeholder="DD/MM/YYYY"
                     maxLength="10"
                     onChange={this.handleChange(index)} />
@@ -227,13 +223,13 @@ class GroupHealthPlanDobReligare extends Component {
     }
     
     render() {
-        let { account_type, final_dob_data } = this.state;
+        let { account_type, final_dob_list } = this.state;
         
         let list = []
-        if (account_type && final_dob_data.length > 1) {
+        if (account_type && final_dob_list.length > 1) {
             list = [{
                     'label': 'Select eldest member',
-                    'options': this.renderOptions(final_dob_data),
+                    'options': this.renderOptions(final_dob_list),
                     'input_type': 'radio'
                 }]
         };
@@ -248,7 +244,7 @@ class GroupHealthPlanDobReligare extends Component {
                 onlyButton={true}
                 handleClick={() => this.handleClick()}
             >
-                {account_type && final_dob_data.length > 1 &&
+                {account_type && final_dob_list.length > 1 &&
                     <RadioAndCheckboxList
                         account_type={account_type}
                         name="dob_religare"
@@ -259,7 +255,7 @@ class GroupHealthPlanDobReligare extends Component {
                 {this.state.selectedValue &&
                     this.renderDob(this.state.selectedValue)}
 
-                {account_type && final_dob_data.length === 1 && this.renderDob(final_dob_data[0].key)}
+                {account_type && final_dob_list.length === 1 && this.renderDob(final_dob_list[0].key)}
 
                 {account_type === 'self' && <p style={{textAlign:'center', color: '#767e86', fontSize:'13px'}}>Adult member's age should be more than 18 yrs</p>}
 
