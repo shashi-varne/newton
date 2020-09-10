@@ -241,7 +241,11 @@ class GroupHealthPlanDetails extends Component {
                         </div>
 
                         <div className="tc-right">
-                            <img src={require(`assets/${this.state.providerData.logo_card}`)} alt="" />
+                            <img
+                                src={require(`assets/${this.state.providerData.logo_card}`)}
+                                alt=""
+                                style={{ maxWidth: '140px' }}
+                            />
                         </div>
                     </div>
 
