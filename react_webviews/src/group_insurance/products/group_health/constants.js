@@ -1,5 +1,6 @@
 export const HDFCERGO_CONFIG = {
     key: 'HDFCERGO',
+    provider_api: 'hdfcergo',
     title: 'HDFC ERGO',
     subtitle: 'my: health Suraksha',
     logo: 'hdfc_ergo_ic_logo_cta.svg',
@@ -112,6 +113,7 @@ export const HDFCERGO_CONFIG = {
 
 export const religare = {
     key: 'RELIGARE',
+    provider_api: 'religare',
     title: 'Religare',
     subtitle: 'Care',
     logo: 'ic_religare_logo.jpg',
@@ -120,6 +122,8 @@ export const religare = {
     logo_summary: 'ic_religare_logo.jpg',
     get_next: { //have as a separate map and not screen-specific property to reduce duplication across all providers and for all screens
         landing_screen: 'insure-type',
+        insure_type_screen: 'plan-dob-religare',
+        add_members_screen: 'plan-dob-religare',
         religare_dob: 'plan-list',
     },
     validation_props: {
@@ -230,9 +234,9 @@ export const religare = {
     },
     plan_list_screen: {
         tile_mid_data: [
-            { 'label': 'Sum assured:', 'key': 'sum_assured_options_text' },
-            { 'label': 'Recovery benefit:', 'key': 'recovery_benefit_extra', 'tooltip_key': 'recovery_benefit_content' },
-            { 'label': 'Allowances:', 'key': 'allowances' }
+            { 'label': 'Sum insured::', 'key': 'sum_assured_options_text' },
+            { 'label': 'Hospital room:', 'key': 'hospital_room' },
+            { 'label': 'Daily allowance:', 'key': 'alternative_treatment' }
         ]
     },
     nominee_screen: {
@@ -247,7 +251,7 @@ export const star = {
 export function getGhProviderConfig(provider) {
     let mapper = {
         'HDFCERGO': HDFCERGO_CONFIG,
-        'religare': religare,
+        'RELIGARE': religare,
     };
 
     return mapper[provider];

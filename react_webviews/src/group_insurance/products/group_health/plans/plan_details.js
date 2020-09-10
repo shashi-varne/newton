@@ -48,9 +48,15 @@ class GroupHealthPlanDetails extends Component {
         let keys_to_empty = ['tenure', 'sum_assured', 'tenure', 'tax_amount', 'base_premium',
                             'total_amount', 'discount_amount', 'insured_pattern', 'type_of_plan',
                         'selectedIndexFloater', 'selectedIndexCover', 'selectedIndexSumAssured'];
+        let not_req_keys_for_backend = ['selectedIndexFloater', 'selectedIndexCover', 'selectedIndexSumAssured'];
        
+
         for (var i in keys_to_empty) {
-            post_body[keys_to_empty[i]] = '';
+
+            if(not_req_keys_for_backend.indexOf(keys_to_empty[i]) === -1) {
+                post_body[keys_to_empty[i]] = '';
+            }
+            
             groupHealthPlanData[keys_to_empty[i]] = '';
         }
 

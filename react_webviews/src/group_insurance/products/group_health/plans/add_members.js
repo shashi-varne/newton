@@ -237,7 +237,7 @@ class GroupHealthPlanAddMembers extends Component {
             groupHealthPlanData.post_body = post_body;
             this.setLocalProviderData(groupHealthPlanData);
     
-            this.navigate('plan-dob');
+            this.navigate(this.state.next_screen || 'plan-dob');
         }
         
     }

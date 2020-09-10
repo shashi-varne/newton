@@ -18,7 +18,7 @@ export async function initialize() {
     this.setLocalProviderData = setLocalProviderData.bind(this);
 
     let provider = this.props.parent && this.props.parent.props ? this.props.parent.props.match.params.provider : this.props.match.params.provider;
-    let providerConfig = getGhProviderConfig('HDFCERGO');
+    let providerConfig = getGhProviderConfig(provider);
 
     let screenData = {};
     if(this.state.screen_name && providerConfig[this.state.screen_name]) {
@@ -29,7 +29,7 @@ export async function initialize() {
     if(this.state.screen_name && providerConfig.get_next[this.state.screen_name]) {
         next_screen = providerConfig.get_next[this.state.screen_name];
     }
-    
+    console.log(next_screen)
 
     let validation_props = providerConfig.validation_props || {};
 

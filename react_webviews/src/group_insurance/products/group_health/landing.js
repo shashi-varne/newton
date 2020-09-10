@@ -27,7 +27,7 @@ class GroupHealthLanding extends Component {
     this.state = {
       show_loader: true,
       productName: getConfig().productName,
-      provider: 'HDFCERGO',
+      provider: 'RELIGARE',
       checked: true,
       offerImageData: [],
       whats_not_covered: [],
@@ -36,14 +36,13 @@ class GroupHealthLanding extends Component {
       common: {},
       screen_name :screen_name,
       selectedIndex: 0,
-      providerConfig: getGhProviderConfig('HDFCERGO')
+      providerConfig: getGhProviderConfig('RELIGARE')
     }
 
     this.openInBrowser = openInBrowser.bind(this);
   }
 
   componentWillMount() {
-
     let screenData = this.state.providerConfig[screen_name];
 
     nativeCallback({ action: 'take_control_reset' });
@@ -69,7 +68,7 @@ class GroupHealthLanding extends Component {
   async componentDidMount() {
 
     try {
-      const res = await Api.get('api/ins_service/api/insurance/hdfcergo/lead/get/quoteid')
+      const res = await Api.get(`api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/get/quoteid`)
 
       this.setState({
         show_loader: false

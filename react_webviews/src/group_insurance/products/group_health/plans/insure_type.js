@@ -74,7 +74,7 @@ class GroupHealthSelectInsureType extends Component {
 
       this.setLocalProviderData(groupHealthPlanData);
 
-      this.navigate('plan-dob');
+      this.navigate(this.state.next_screen || 'plan-dob');
     } else {
       this.navigate('plan-add-members');
     }
