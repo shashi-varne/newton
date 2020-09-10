@@ -111,7 +111,7 @@ export const HDFCERGO_CONFIG = {
 };
 
 export const religare = {
-    key: 'HDFCERGO',
+    key: 'RELIGARE',
     title: 'Religare',
     subtitle: 'Care',
     logo: 'ic_religare_logo.jpg',
