@@ -3,7 +3,7 @@ import Container from '../../../common/Container';
 
 import { nativeCallback } from 'utils/native_callback';
 
-import { storageService, inrFormatDecimal } from 'utils/validators';
+import { inrFormatDecimal } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
 
 import Api from 'utils/api';
@@ -107,7 +107,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         groupHealthPlanData.tenure = plan_selected_final.tenure;
 
         groupHealthPlanData.selectedIndexCover = this.state.selectedIndex;
-        storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+        this.setLocalProviderData(groupHealthPlanData);
 
         this.navigate('plan-premium-summary');
     }

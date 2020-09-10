@@ -4,7 +4,7 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 
-import { storageService, numDifferentiation } from 'utils/validators';
+import { numDifferentiation } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
 
 
@@ -74,7 +74,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
             groupHealthPlanData.post_body.type_of_plan = 'WF';
         }
 
-        storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+        this.setLocalProviderData(groupHealthPlanData);
 
         if(groupHealthPlanData.account_type === 'self' || total_member === 1) {
             this.navigate('plan-select-cover-period');

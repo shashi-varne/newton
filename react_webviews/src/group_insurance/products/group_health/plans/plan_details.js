@@ -3,7 +3,7 @@ import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { storageService, inrFormatDecimal, numDifferentiation } from 'utils/validators';
+import { inrFormatDecimal, numDifferentiation } from 'utils/validators';
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
@@ -60,7 +60,7 @@ class GroupHealthPlanDetails extends Component {
             groupHealthPlanData: groupHealthPlanData
         })
 
-        storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+        this.setLocalProviderData(groupHealthPlanData);
         try {
 
             const res = await Api.post('/api/ins_service/api/insurance/hdfcergo/premium', post_body);
@@ -187,7 +187,7 @@ class GroupHealthPlanDetails extends Component {
         groupHealthPlanData.plan_selected.common_data = this.state.common_data;
         groupHealthPlanData.plan_selected.extra_data = this.state.extra_data;
         groupHealthPlanData.plan_selected.premium_data = this.state.premium_data;
-        storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+        this.setLocalProviderData(groupHealthPlanData);
         this.navigate('plan-select-sum-assured');
     }
 
