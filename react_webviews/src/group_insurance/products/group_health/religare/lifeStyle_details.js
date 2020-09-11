@@ -6,7 +6,7 @@ import { initialize, updateBottomPremium, updateLead } from "../common_data";
 import RadioAndCheckboxList from "./radioAndCheckboxList";
 import { isValidMonthYear } from "utils/validators";
 import { formatMonthandYear, dobFormatTest } from "utils/validators";
-import toast from '../../../../common/ui/Toast';
+import toast from "../../../../common/ui/Toast";
 
 class GroupHealthPlanLifestyleDetail extends Component {
   constructor(props) {
@@ -26,15 +26,15 @@ class GroupHealthPlanLifestyleDetail extends Component {
   }
 
   async componentDidMount() {
-    let {account_type, ui_members} = this.state.groupHealthPlanData;
+    let { account_type, ui_members } = this.state.groupHealthPlanData;
     let mem_options = [];
 
-    for (var key in ui_members) { 
-      if (key !== '' && ui_members[key] === true) {
-        mem_options.push(key)
+    for (var key in ui_members) {
+      if (key !== "" && ui_members[key] === true) {
+        mem_options.push(key);
       }
     }
-    mem_options.push('None');
+    mem_options.push("None");
 
     let list = [];
 
@@ -53,7 +53,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
               value: "No",
             },
           ],
-          key: 'self',
+          key: "self",
           input_type: "radio",
         },
       ];
@@ -101,38 +101,31 @@ class GroupHealthPlanLifestyleDetail extends Component {
     let { life_style_question } = this.state;
 
     life_style_question = {
-      'answer': event === 0 ? true : false
-    }
+      answer: event === 0 ? true : false,
+    };
 
     this.setState({
-      life_style_question: life_style_question
-    })
+      life_style_question: life_style_question,
+    });
   };
 
   handleChange = (event) => {
-    let {name, value, id} = event.target;
+    let { name, value, id } = event.target;
     let { life_style_question } = this.state;
 
     if (id === "description") {
-      
       if (!name) {
         life_style_question = {
           ...life_style_question,
-          answer_description: value
-        }
+          answer_description: value,
+        };
       } else {
         life_style_question[name] = {
           ...life_style_question[name],
           answer_description: value,
+          desc_error: "",
         };
-
-        life_style_question = {
-          ...life_style_question,
-          [name+'_error']: ''
-        } 
       }
-
-      
     } else {
       if (!dobFormatTest(value)) {
         return;
@@ -140,14 +133,13 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
       let input;
       if (!name) {
-        input = document.getElementById('date')
+        input = document.getElementById("date");
         input.onkeyup = formatMonthandYear;
 
         life_style_question = {
           ...life_style_question,
-          start_date: value
-        }
-
+          start_date: value,
+        };
       } else {
         input = document.getElementById(name + "_date");
         input.onkeyup = formatMonthandYear;
@@ -155,19 +147,14 @@ class GroupHealthPlanLifestyleDetail extends Component {
         life_style_question[name] = {
           ...life_style_question[name],
           start_date: value,
+          date_error: "",
         };
-
-        life_style_question = {
-          ...life_style_question,
-          [name+'_error']: ''
-        }
       }
     }
 
     this.setState({
       life_style_question: life_style_question,
     });
-
   };
 
   handleCheckbox = (event) => {
@@ -175,7 +162,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
     let { life_style_question } = this.state;
 
     if (name === "None") {
-      life_style_question = {}
+      life_style_question = {};
     } else {
       life_style_question["None"] = {
         ...life_style_question[name],
@@ -193,56 +180,66 @@ class GroupHealthPlanLifestyleDetail extends Component {
     });
   };
 
+  validateMonthYear = (date) => {
+    if (!isValidMonthYear(date)) {
+      return "please enter valid month or year";
+    }
+  };
+
+  validateDescription = (desc) => {
+    if (!desc) {
+      return "please enter the description";
+    }
+  };
+
   handleClick = () => {
     this.sendEvents("next");
     let { account_type, life_style_question } = this.state;
+    let array = [];
+    let date_error = "";
+    let desc_error = "";
 
-    let error = "";
-    if (account_type === 'self') {
+    if (account_type === "self") {
       let date = life_style_question.start_date;
+      let description = life_style_question.answer_description;
 
-      if (!isValidMonthYear(date)) {
-        error = "please enter valid month or year";
-      }
+      date_error = this.validateMonthYear(date);
+      desc_error = this.validateDescription(description);
 
       this.setState({
-        error: error
-      })
-
+        desc_error: desc_error,
+        date_error: date_error,
+      });
     } else {
       for (var key in life_style_question) {
-        if (key !== 'None' && life_style_question[key].checked === true) {
-          if (!isValidMonthYear(life_style_question[key].start_date)) {
-            error = "please enter valid month or year"
+        if (key !== "None" && life_style_question[key].checked === true) {
+          let date = life_style_question[key].start_date;
+          let description = life_style_question[key].answer_description;
+          let checked = life_style_question[key].checked;
+
+          if (checked) {
+            array.push(checked);
           }
 
-          life_style_question = {
-            ...life_style_question,
-            [key+'_error']: error
-          }
+          date_error = this.validateMonthYear(date);
+          desc_error = this.validateDescription(description);
+
+          life_style_question[key] = {
+            ...life_style_question[key],
+            date_error: date_error,
+            desc_error: desc_error,
+          };
         }
       }
     }
 
-    console.log(life_style_question)
-
-    if (!Object.keys(life_style_question).length) {
-      toast('select atleast one option')
+    if (!Object.keys(life_style_question).length || !array.length) {
+      toast("Select atleast one option");
     }
 
-    this.setState ({
-      life_style_question: life_style_question
-    })
-    
-    if (life_style_question.answer || !error) { 
-      // let body = {
-      //   'life_style_question_exists': true,
-      //   'life_style_question': life_style_question
-      // }
-
-      // this.updateLead(body);
-    }
-
+    this.setState({
+      life_style_question: life_style_question,
+    });
   };
 
   render() {
@@ -266,9 +263,10 @@ class GroupHealthPlanLifestyleDetail extends Component {
             account_type={account_type}
             name="lifeStyle details"
             list={list}
-            handleChange={this.handleChange}
-            error={this.state.error}
+            date_error={this.state.date_error}
+            desc_error={this.state.desc_error}
             life_style_question={life_style_question}
+            handleChange={this.handleChange}
             handleCheckbox={this.handleCheckbox}
             handleChangeRadio={this.handleChangeRadio}
           />

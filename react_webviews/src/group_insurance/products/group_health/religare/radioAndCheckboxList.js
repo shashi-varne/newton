@@ -10,7 +10,6 @@ class radioAndCheckboxList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      life_style_question: props.life_style_question
     };
   }
 
@@ -29,13 +28,18 @@ class radioAndCheckboxList extends Component {
   }
 
   renderInputs = (name) => {
-    let form_data, error;
+    let form_data, date_error, desc_error;
+
+    let { life_style_question } = this.props;
+
     if (!name) {
-      form_data = this.props.life_style_question || ''
-      error = this.props.error || ''
+      form_data = life_style_question || '';
+      date_error = this.props.date_error || '';
+      desc_error = this.props.desc_error || '';
     } else {
-      form_data = this.props.life_style_question[name] || ""
-      error = this.props.life_style_question[name+'_error'] || ''
+      form_data = life_style_question[name] || '';
+      date_error = life_style_question[name].date_error || '';
+      desc_error = life_style_question[name].desc_error || '';
     }
 
     return (
@@ -48,6 +52,8 @@ class radioAndCheckboxList extends Component {
             id="description"
             placeholder="Lorem ipsum lorem ipsum"
             value={form_data.answer_description || ""}
+            error={desc_error ? true : false}
+            helperText={desc_error}
             onChange={(event) => this.props.handleChange(event)}
           />
         </div>
@@ -61,8 +67,8 @@ class radioAndCheckboxList extends Component {
             placeholder="MM/YYYY"
             maxLength="7"
             value={form_data.start_date || ""}
-            error={error ? true : false}
-            helperText={error}
+            error={date_error ? true : false}
+            helperText={date_error}
             onChange={(event) => this.props.handleChange(event)}
           />
         </div>

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Container from "../../../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { getConfig } from "../../../../utils/functions";
-import { initialize, updateBottomPremium, updateLead } from "../common_data";
+import { initialize, updateBottomPremium } from "../common_data";
 import RadioAndCheckboxList from "./radioAndCheckboxList";
 
 class GroupHealthPlanMedicalHistory extends Component {
