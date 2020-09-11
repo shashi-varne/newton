@@ -38,8 +38,6 @@ class radioAndCheckboxList extends Component {
       error = this.props.life_style_question[name+'_error'] || ''
     }
 
-    console.log(this.props.life_style_question)
-
     return (
       <FormControl fullWidth>
         <div className="InputField">
