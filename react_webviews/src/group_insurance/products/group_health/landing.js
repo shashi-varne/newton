@@ -144,7 +144,7 @@ class GroupHealthLanding extends Component {
     return (
       <div key={index} className="gold-offer-slider">
         <img className="offer-slide-img"
-          src={require(`assets/${this.state.productName}/${props.src}`)} alt="Gold Offer" />
+          src={require(`assets/${props.src}`)} alt="Gold Offer" />
       </div>
     )
   }
@@ -269,7 +269,7 @@ class GroupHealthLanding extends Component {
             </div>}
 
           <div className="generic-page-title">
-            Coverage for all
+            Coverage all age groups
           </div>
           <div className="generic-page-subtitle">
             Option to cover your entire family (spouse, kids and parents)
