@@ -10,8 +10,8 @@ import { formatDate, dobFormatTest, isValidDate, capitalizeFirstLetter } from 'u
 
 const eldMemOptionMapper = {
     'self': ['self'],
-    'family': ['spouse'],
-    'selfandfamily': ['self', 'spouse'],
+    'family': ['spouse', 'husband', 'wife'],
+    'selfandfamily': ['self', 'spouse', 'husband', 'wife'],
     'parents': ['father', 'mother']
 }
 
