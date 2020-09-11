@@ -32,7 +32,8 @@ class GroupHealthPlanList extends Component {
         try {
 
             let body = this.state.groupHealthPlanData.post_body;
-            const res = await Api.post('/api/ins_service/api/insurance/hdfcergo/coverplan', body);
+            const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/coverplan`,
+             body);
 
             this.setState({
                 show_loader: false
@@ -92,14 +93,17 @@ class GroupHealthPlanList extends Component {
     }
 
     selectPlan = (plan, index) => {
+        console.log(plan);
         this.sendEvents('next', plan);
         let groupHealthPlanData = this.state.groupHealthPlanData;
         groupHealthPlanData.plan_selected = plan;
         groupHealthPlanData.base_plan_title = this.state.plan_data.common.base_plan_title
         groupHealthPlanData.post_body.plan = plan.plan_type;
+        groupHealthPlanData.post_body.cover_plan = plan.plan_type;
+       
         this.setLocalProviderData(groupHealthPlanData);
 
-        this.navigate('plan-details');
+        this.navigate(this.state.next_screen || 'plan-details');
     }
 
     renderTileMidData = (props, index, plan_data) => {
@@ -119,7 +123,7 @@ class GroupHealthPlanList extends Component {
     }
 
     renderPlans = (props, index) => {
-        let plan_data  = props;
+        let plan_data = props;
         return (
             <div className="tile" key={index}>
                 <div className="group-health-recommendation" style={{ backgroundColor: props.recommendation_tag === 'Recommended' ? '#E86364' : '' }}>{props.recommendation_tag}</div>
@@ -129,7 +133,10 @@ class GroupHealthPlanList extends Component {
                         <div className="tc-subtitle">{props.plan_title}</div>
                     </div>
                     <div className="tc-right">
-                        <img src={require(`assets/${this.state.providerData.logo_card}`)} alt="" />
+                        <img
+                            src={require(`assets/${this.state.providerData.logo_card}`)}
+                            alt=""
+                            style={{ maxWidth: '140px' }} />
                     </div>
                 </div>
 

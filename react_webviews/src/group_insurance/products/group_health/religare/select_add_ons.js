@@ -9,7 +9,7 @@ import Grid from 'material-ui/Grid';
 import DropdownInModal from '../../../../common/ui/DropdownInModal';
 import { initialize, updateBottomPremium } from '../common_data';
 import Api from 'utils/api';
-import { toast } from 'react-toastify';
+import toast from '../../../../common/ui/Toast';
 
 class GroupHealthPlanAddOns extends Component {
 
@@ -31,14 +31,9 @@ class GroupHealthPlanAddOns extends Component {
 
     async componentDidMount() {
 
-        let body = {
-            "mem_info": {"adult": "2", "child": "1"},
-            "eldest_dob": "05/09/1995",
-            "sum_assured": "5",
-            "base_premium": "53671.2"
-        }
+        let body = this.state.groupHealthPlanData.post_body;
 
-        let add_ons_data;
+        let add_ons_data = [];
         
         try {
 
@@ -49,12 +44,10 @@ class GroupHealthPlanAddOns extends Component {
             });
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
-                add_ons_data = resultData.premium.add_ons_data;
-                
-                this.setState({
-                    add_ons_data: resultData.premium.add_ons_data
-                })
+                add_ons_data = resultData.premium.add_ons_data || [];
+               
             } else {
+                console.log(resultData)
                 toast(resultData.error || resultData.message
                     || 'Something went wrong');
             }
@@ -68,18 +61,22 @@ class GroupHealthPlanAddOns extends Component {
 
         let amount_options = {};
 
-        add_ons_data.forEach(item => {
-            if (item.options.length !== 0) {
-                let options = item.options.sort((a,b) => a.cover_amount - b.cover_amount);
+        if(add_ons_data.length !== 0) {
+            add_ons_data.forEach(item => {
+                if (item.options.length !== 0) {
+                    let options = item.options.sort((a,b) => a.cover_amount - b.cover_amount);
+    
+                    amount_options[item.key] = options.map(item => {
+                        return   {
+                            'name': formatAmountInr(item.cover_amount),
+                            'value': item.premium,
+                        }
+                    })
+                }
+            })
+        }
 
-                amount_options[item.key] = options.map(item => {
-                    return   {
-                        'name': formatAmountInr(item.cover_amount),
-                        'value': item.premium,
-                    }
-                })
-            }
-        })
+       
 
         this.setState({
             add_ons_data: add_ons_data,
@@ -227,7 +224,7 @@ class GroupHealthPlanAddOns extends Component {
         return (
             <Container
                 events={this.sendEvents('just_set_events')}
-                show_loader={this.state.show_loader}
+                showLoader={this.state.show_loader}
                 title='Select add-ons'
                 buttonTitle="CONTINUE"
                 withProvider={true}
