@@ -33,7 +33,7 @@ class GroupHealthPlanPremiumSummary extends Component {
     async componentDidMount() {
 
         let groupHealthPlanData = this.state.groupHealthPlanData || {};
-        let group_health_landing = '/group-insurance/group-health/landing';
+        let group_health_landing = '/group-insurance/group-health/entry';
 
         if (!groupHealthPlanData.post_body) {
             this.navigate(group_health_landing);
@@ -84,7 +84,8 @@ class GroupHealthPlanPremiumSummary extends Component {
             });
 
             let body = this.state.groupHealthPlanData.post_body;
-            const res = await Api.post('/api/ins_service/api/insurance/hdfcergo/lead/quote', body);
+            const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/
+            lead/quote`, body);
 
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {

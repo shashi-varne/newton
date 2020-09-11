@@ -202,6 +202,8 @@ class Container extends Component {
     let pathname = this.props.history.location.pathname;
 
     if(this.checkStringInString('group-health')) {
+
+      // #TODO need to handle back accoridng to entry/landing
       let group_health_landing = '/group-insurance/group-health/landing';
 
       if(this.checkStringInString('insure-type') || this.checkStringInString('payment') || 

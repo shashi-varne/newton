@@ -25,7 +25,7 @@ class HealthInsuranceEntry extends Component {
 
     let insuranceProducts = [
       {
-        key: 'HEALTH_SURAKSHA',
+        key: 'HDFCERGO',
         title: 'HDFC ERGO',
         subtitle: 'My: health suraksha',
         icon: hdfc_logo
@@ -62,24 +62,17 @@ class HealthInsuranceEntry extends Component {
   }
 
  
-  handleClick = (product_key) => {
+  handleClick = (data) => {
 
-    this.sendEvents('next', product_key)
-    
+    this.sendEvents('next', data.key)
 
-    let stateMapper = {
-        'HEALTH_SURAKSHA': 'health_suraksha',
-        'RELIGARE': 'religare_care',
-        'STAR': 'star'
-    };
-
-    let fullPath = 'health/' + stateMapper[product_key] + '/plan';
-    this.navigate('/group-insurance/' + fullPath);
+    let fullPath = data.key + '/landing';
+    this.navigate('/group-insurance/group-health/' + fullPath);
   }
 
   renderPorducts(props, index) {
     return (
-      <div className='insurance_plans' key={index} onClick={() => this.handleClick(props.key)}
+      <div className='insurance_plans' key={index} onClick={() => this.handleClick(props)}
       style={{
          borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',
       }}

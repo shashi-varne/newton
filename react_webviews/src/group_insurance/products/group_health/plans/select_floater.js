@@ -42,7 +42,8 @@ class GroupHealthPlanSelectFloater extends Component {
 
         try {
 
-            const res = await Api.post('/api/ins_service/api/insurance/hdfcergo/premium', post_body);
+            const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/premium`,
+             post_body);
 
             this.setState({
                 show_loader: false

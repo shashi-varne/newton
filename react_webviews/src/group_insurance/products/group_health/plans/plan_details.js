@@ -29,7 +29,8 @@ class GroupHealthPlanDetails extends Component {
             },
             show_loader: true,
             ic_hs_special_benefits: ic_hs_special_benefits,
-            ic_hs_main_benefits: ic_hs_main_benefits
+            ic_hs_main_benefits: ic_hs_main_benefits,
+            screen_name: 'plan_details_screen'
         }
 
         this.initialize = initialize.bind(this);
@@ -48,9 +49,15 @@ class GroupHealthPlanDetails extends Component {
         let keys_to_empty = ['tenure', 'sum_assured', 'tenure', 'tax_amount', 'base_premium',
                             'total_amount', 'discount_amount', 'insured_pattern', 'type_of_plan',
                         'selectedIndexFloater', 'selectedIndexCover', 'selectedIndexSumAssured'];
+        let not_req_keys_for_backend = ['selectedIndexFloater', 'selectedIndexCover', 'selectedIndexSumAssured'];
        
+
         for (var i in keys_to_empty) {
-            post_body[keys_to_empty[i]] = '';
+
+            if(not_req_keys_for_backend.indexOf(keys_to_empty[i]) === -1) {
+                post_body[keys_to_empty[i]] = '';
+            }
+            
             groupHealthPlanData[keys_to_empty[i]] = '';
         }
 
@@ -63,7 +70,8 @@ class GroupHealthPlanDetails extends Component {
         this.setLocalProviderData(groupHealthPlanData);
         try {
 
-            const res = await Api.post('/api/ins_service/api/insurance/hdfcergo/premium', post_body);
+            const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/premium`,
+             post_body);
 
             this.setState({
                 show_loader: false
@@ -73,7 +81,7 @@ class GroupHealthPlanDetails extends Component {
 
                 this.setState({
                     common_data: resultData.common,
-                    premium_data: resultData.premium[0],
+                    premium_data: resultData.premium,
                     extra_data: resultData.quote_info
                 })
 
@@ -187,8 +195,11 @@ class GroupHealthPlanDetails extends Component {
         groupHealthPlanData.plan_selected.common_data = this.state.common_data;
         groupHealthPlanData.plan_selected.extra_data = this.state.extra_data;
         groupHealthPlanData.plan_selected.premium_data = this.state.premium_data;
+
+        groupHealthPlanData.post_body.base_premium = groupHealthPlanData.plan_selected.base_premium;
+        groupHealthPlanData.post_body.premium = groupHealthPlanData.plan_selected.net_premium;
         this.setLocalProviderData(groupHealthPlanData);
-        this.navigate('plan-select-sum-assured');
+        this.navigate(this.state.next_screen || 'plan-select-sum-assured');
     }
 
 

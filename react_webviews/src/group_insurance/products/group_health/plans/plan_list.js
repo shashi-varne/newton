@@ -32,7 +32,8 @@ class GroupHealthPlanList extends Component {
         try {
 
             let body = this.state.groupHealthPlanData.post_body;
-            const res = await Api.post('/api/ins_service/api/insurance/religare/coverplan', body);
+            const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/coverplan`,
+             body);
 
             this.setState({
                 show_loader: false
@@ -99,9 +100,10 @@ class GroupHealthPlanList extends Component {
         groupHealthPlanData.base_plan_title = this.state.plan_data.common.base_plan_title
         groupHealthPlanData.post_body.plan = plan.plan_type;
         groupHealthPlanData.post_body.cover_plan = plan.plan_type;
+       
         this.setLocalProviderData(groupHealthPlanData);
 
-        this.navigate('plan-details');
+        this.navigate(this.state.next_screen || 'plan-details');
     }
 
     renderTileMidData = (props, index, plan_data) => {

@@ -38,7 +38,8 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         try {
 
             let body = this.state.groupHealthPlanData.post_body;
-            const res = await Api.post('/api/ins_service/api/insurance/hdfcergo/premium', body);
+            const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/
+            premium`, body);
 
             this.setState({
                 show_loader: false
