@@ -31,7 +31,7 @@ body[data-device="web"] #root {
 
 body[data-device="web"] {
   height: 100%;
-  overflow: hidden;
+  overflow: scroll;
 
   .MuiAppBar-positionFixed {
     left: 0 !important;
