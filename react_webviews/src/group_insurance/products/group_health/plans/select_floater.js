@@ -18,6 +18,7 @@ class GroupHealthPlanSelectFloater extends Component {
             ctaWithProvider: true,
             premium_data_floater: [],
             show_loader: true,
+            screen_name: 'cover_type_screen'
         }
 
         this.initialize = initialize.bind(this);
@@ -32,12 +33,15 @@ class GroupHealthPlanSelectFloater extends Component {
 
     async componentDidMount() {
 
+
         let post_body = this.state.groupHealthPlanData.post_body;
         let selectedIndex = this.state.groupHealthPlanData.selectedIndexFloater || 0;
+        let total_member = post_body.mem_info.adult + post_body.mem_info.child;
         this.setState({
             selectedIndex: selectedIndex,
-            sum_assured: post_body.sum_assured,
-            total_member: post_body.mem_info.adult + post_body.mem_info.child
+            sum_assured: this.state.groupHealthPlanData.sum_assured || post_body.sum_assured,
+            total_member: total_member,
+            show_ind_mem_premium: this.state.providerConfig.show_ind_mem_premium
         });
 
         try {
@@ -52,20 +56,21 @@ class GroupHealthPlanSelectFloater extends Component {
             if (res.pfwresponse.status_code === 200) {
 
                 
-                let premium_data_wf = resultData.premium[0].WF[0];
-                let premium_data_nf = resultData.premium[0].NF[0];
+                let premium_data_wf = resultData.premium.WF[0];
+                let premium_data_nf = resultData.premium.NF[0];
 
                 let premium_data_floater = [
                     {
-                        'title': 'Family floater',
+                        'title': `${numDifferentiationInr(this.state.sum_assured)} for entire family`,
                         'premium': premium_data_wf.net_premium,
                         'subtitle': 'in ' + inrFormatDecimal(premium_data_wf.net_premium),
                         'discount': premium_data_wf.account_type_discount_percentage ? parseFloat(premium_data_wf.account_type_discount_percentage) : '',
                         'key': 'WF'
                     },
                     {
-                        'title': 'Each member individually',
-                        'subtitle': 'in ' + inrFormatDecimal(premium_data_nf.net_premium),
+                        'title': `${numDifferentiationInr(this.state.sum_assured)} for each member`,
+                        'subtitle': `${numDifferentiationInr(this.state.sum_assured * total_member)}
+                                         sum insured in ${inrFormatDecimal(premium_data_nf.net_premium)} `,
                         'premium': premium_data_nf.net_premium,
                         'discount': premium_data_nf.account_type_discount_percentage ? parseFloat(premium_data_nf.account_type_discount_percentage) : '',
                         'key': 'NF'
@@ -141,7 +146,7 @@ class GroupHealthPlanSelectFloater extends Component {
         groupHealthPlanData.post_body.type_of_plan = type_of_plan;
         this.setLocalProviderData(groupHealthPlanData);
 
-        this.navigate('plan-select-cover-period');
+        this.navigate(this.state.next_screen || 'plan-select-cover-period');
     }
 
     choosePlan = (index) => {
@@ -190,7 +195,7 @@ class GroupHealthPlanSelectFloater extends Component {
 
                 </div>
 
-                {props.key === 'NF' && index === this.state.selectedIndex &&
+                {props.key === 'NF' && index === this.state.selectedIndex && this.state.show_ind_mem_premium &&
                     <div className="detail-info">
                         <div className="di-title">Sum assured</div>
                         <div className="flex-between di-tile">

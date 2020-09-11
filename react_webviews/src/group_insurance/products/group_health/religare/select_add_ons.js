@@ -18,7 +18,8 @@ class GroupHealthPlanAddOns extends Component {
         this.state = {
             ctaWithProvider: true,
             add_ons_data: [],
-            show_loader: true
+            show_loader: true,
+            screen_name: 'add_ons_screen'
         }
 
         this.initialize = initialize.bind(this);
@@ -34,7 +35,7 @@ class GroupHealthPlanAddOns extends Component {
         let body = this.state.groupHealthPlanData.post_body;
 
         let add_ons_data = [];
-        
+
         try {
 
             const res = await Api.post('/api/ins_service/api/insurance/religare/addons', body);
@@ -45,7 +46,7 @@ class GroupHealthPlanAddOns extends Component {
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
                 add_ons_data = resultData.premium.add_ons_data || [];
-               
+
             } else {
                 console.log(resultData)
                 toast(resultData.error || resultData.message
@@ -61,13 +62,13 @@ class GroupHealthPlanAddOns extends Component {
 
         let amount_options = {};
 
-        if(add_ons_data.length !== 0) {
+        if (add_ons_data.length !== 0) {
             add_ons_data.forEach(item => {
                 if (item.options.length !== 0) {
-                    let options = item.options.sort((a,b) => a.cover_amount - b.cover_amount);
-    
+                    let options = item.options.sort((a, b) => a.cover_amount - b.cover_amount);
+
                     amount_options[item.key] = options.map(item => {
-                        return   {
+                        return {
                             'name': formatAmountInr(item.cover_amount),
                             'value': item.premium,
                         }
@@ -76,7 +77,7 @@ class GroupHealthPlanAddOns extends Component {
             })
         }
 
-       
+
 
         this.setState({
             add_ons_data: add_ons_data,
@@ -92,13 +93,13 @@ class GroupHealthPlanAddOns extends Component {
                 [name]: {
                     checked: event.target.checked
                 },
-                [name+'_error']: {
+                [name + '_error']: {
                     checked: ''
                 }
             })
         } else {
-            let {amount_options} = this.state;
-            
+            let { amount_options } = this.state;
+
             this.setState({
                 selectedIndex: {
                     [name]: amount_options[name][event].name
@@ -108,15 +109,15 @@ class GroupHealthPlanAddOns extends Component {
                     selected_cover_amount: amount_options[name][event].name
                 }
             }, () => {
-              this.setState({
-                selectedValue: {
-                    [name]: amount_options[name][event].value,
-                },
-                [name]: {
-                    ...this.state[name],
-                    selected_premium: amount_options[name][event].value
-                }
-              })
+                this.setState({
+                    selectedValue: {
+                        [name]: amount_options[name][event].value,
+                    },
+                    [name]: {
+                        ...this.state[name],
+                        selected_premium: amount_options[name][event].value
+                    }
+                })
             });
         }
     }
@@ -129,47 +130,47 @@ class GroupHealthPlanAddOns extends Component {
             <div>
                 {add_ons_data.map((item, index) => (
                     <Grid container spacing={16} key={index}>
-                    <Grid item xs={1} className="">
-                    <Checkbox
-                      style={{alignItems:'start'}}
-                      checked={this.state[item.key] ? this.state[item.key].checked : false}
-                      color="primary"
-                      value={item.key}
-                      name={item.key}
-                      disableRipple
-                      onChange={this.handleChange()}
-                      className="Checkbox" />
-                    </Grid>
-                    <Grid item xs={11}>
-                    <span className="flex-between" style={{alignItems:'start'}}>
-                        <div style={{color:'#0A1D32'}}>
-                            <span style={{fontSize:"16px", fontWeight:'600'}}>{item.title}</span>
-                            <div style={{marginTop:'10px', fontSize:'14px'}}>
-                                {item.options.length !== 0 ?
-                                     (!this.state[item.key] || !this.state[item.key].checked) ? formatAmountInr(item.default_premium) :
-                                     this.state[item.key].selected_premium ? formatAmountInr(this.state[item.key].selected_premium)
-                                     : formatAmountInr(item.default_premium)
-                                     : formatAmountInr(item.default_premium)
-                                }
-                            </div>
-                        </div>
-                        <img
-                        className="tooltip-icon"
-                        data-tip={item.tooltip}
-                        src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
-                    </span>
-                    {(this.state[item.key] && this.state[item.key].checked) && item.options.length !== 0 && <DropdownInModal
-                        parent={this}
-                        options={amount_options[item.key]}
-                        header_title="Select amount"
-                        cta_title="SAVE"
-                        value={this.state[item.key].selected_cover_amount || ''}
-                        width="30"
-                        label="Select amount"
-                        id="amount"
-                        name="amount"
-                        onChange={this.handleChange(item.key)} />}
-                    </Grid>
+                        <Grid item xs={1} className="">
+                            <Checkbox
+                                style={{ alignItems: 'start' }}
+                                checked={this.state[item.key] ? this.state[item.key].checked : false}
+                                color="primary"
+                                value={item.key}
+                                name={item.key}
+                                disableRipple
+                                onChange={this.handleChange()}
+                                className="Checkbox" />
+                        </Grid>
+                        <Grid item xs={11}>
+                            <span className="flex-between" style={{ alignItems: 'start' }}>
+                                <div style={{ color: '#0A1D32' }}>
+                                    <span style={{ fontSize: "16px", fontWeight: '600' }}>{item.title}</span>
+                                    <div style={{ marginTop: '10px', fontSize: '14px' }}>
+                                        {item.options.length !== 0 ?
+                                            (!this.state[item.key] || !this.state[item.key].checked) ? formatAmountInr(item.default_premium) :
+                                                this.state[item.key].selected_premium ? formatAmountInr(this.state[item.key].selected_premium)
+                                                    : formatAmountInr(item.default_premium)
+                                            : formatAmountInr(item.default_premium)
+                                        }
+                                    </div>
+                                </div>
+                                <img
+                                    className="tooltip-icon"
+                                    data-tip={item.tooltip}
+                                    src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
+                            </span>
+                            {(this.state[item.key] && this.state[item.key].checked) && item.options.length !== 0 && <DropdownInModal
+                                parent={this}
+                                options={amount_options[item.key]}
+                                header_title="Select amount"
+                                cta_title="SAVE"
+                                value={this.state[item.key].selected_cover_amount || ''}
+                                width="30"
+                                label="Select amount"
+                                id="amount"
+                                name="amount"
+                                onChange={this.handleChange(item.key)} />}
+                        </Grid>
                     </Grid>
                 ))}
             </div>
@@ -203,19 +204,33 @@ class GroupHealthPlanAddOns extends Component {
         this.sendEvents('next');
 
         let groupHealthPlanData = this.state.groupHealthPlanData;
-        let post_body = groupHealthPlanData.post_body || {};
 
-        let add_ons = this.state.add_ons_data.map((item) => {
-            
+
+        let add_ons_body = '';
+        this.state.add_ons_data.map((item) => {
+
             if (this.state[item.key]) {
-                return item.key + '-' + (this.state[item.key].selected_premium || item.default_premium)
-            } else {
-                return ''
+                if (add_ons_body) {
+                    add_ons_body += ','
+                }
+
+                if (item.options.length !== 0) {
+                    add_ons_body += item.key + '-' + (this.state[item.key].selected_premium || item.default_premium);
+                } else {
+                    add_ons_body += item.key;
+                }
+
             }
+
+            return add_ons_body;
         })
 
-        post_body.add_ons = add_ons;
-        
+
+        groupHealthPlanData.post_body.add_ons = add_ons_body;
+        this.setLocalProviderData(groupHealthPlanData);
+
+        this.navigate(this.state.next_screen);
+
     }
 
     render() {
