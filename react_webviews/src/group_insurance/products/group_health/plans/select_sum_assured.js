@@ -78,6 +78,9 @@ class GroupHealthPlanSelectSumAssured extends Component {
             groupHealthPlanData.post_body.type_of_plan = 'WF';
         }
 
+        // data reset
+        groupHealthPlanData.add_ons_data = '';
+
         this.setLocalProviderData(groupHealthPlanData);
 
         if(groupHealthPlanData.account_type === 'self' || total_member === 1) {

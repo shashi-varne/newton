@@ -11,8 +11,8 @@ import { calculateAge } from '../../../../utils/validators';
 
 const eldMemOptionMapper = {
     'self': ['self'],
-    'family': ['spouse'],
-    'selfandfamily': ['self', 'spouse'],
+    'family': ['spouse', 'husband', 'wife'],
+    'selfandfamily': ['self', 'spouse', 'husband', 'wife'],
     'parents': ['father', 'mother']
 }
 
