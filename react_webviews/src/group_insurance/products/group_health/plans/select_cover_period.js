@@ -38,8 +38,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         try {
 
             let body = this.state.groupHealthPlanData.post_body;
-            const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/
-            premium`, body);
+            const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/premium`, body);
 
             this.setState({
                 show_loader: false
@@ -48,7 +47,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
             if (res.pfwresponse.status_code === 200) {
 
                 this.setState({
-                    premium_data: resultData.premium[0][type_of_plan],
+                    premium_data: resultData.premium[type_of_plan],
                     type_of_plan: type_of_plan
                 }, () => {
                     this.updateBottomPremium();
