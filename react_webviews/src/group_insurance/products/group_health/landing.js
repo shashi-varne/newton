@@ -37,7 +37,7 @@ class GroupHealthLanding extends Component {
       screen_name :screen_name,
       selectedIndex: 0,
       providerConfig: getGhProviderConfig(this.props.match.params.provider)
-    }
+    };
 
     this.openInBrowser = openInBrowser.bind(this);
   }
