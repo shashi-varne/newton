@@ -7,6 +7,7 @@ export const HDFCERGO_CONFIG = {
     logo_card: 'hdfc_ergo_ic_logo_card.svg',
     logo_cta: 'hdfc_ergo_ic_logo_cta.svg',
     logo_summary: 'hdfc_ergo_ic_logo_summary.svg',
+    show_ind_mem_premium: true,
     get_next: { //have as a separate map and not screen-specific property to reduce duplication across all providers and for all screens
         landing_screen: 'insure-type',
         plan_dob_screen: 'plan-select-city',
@@ -127,7 +128,12 @@ export const religare = {
         religare_dob: 'plan-list',
         plan_list_screen: 'plan-details',
         plan_details_screens: 'plan-select-sum-assured',
-        sum_assured_screen: 'plan-select-add-ons'
+        sum_assured_screen: {
+            floater: 'plan-select-floater',
+            not_floater : 'plan-select-add-ons'
+        },
+        cover_type_screen: 'plan-select-add-ons',
+        add_ons_screen: 'plan-select-cover-period'
     },
     validation_props: {
         'dob_adult': { min: 19, max: 90 },  //add one year for minimum age here 18 to 19

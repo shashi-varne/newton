@@ -81,9 +81,9 @@ class GroupHealthPlanSelectSumAssured extends Component {
         this.setLocalProviderData(groupHealthPlanData);
 
         if(groupHealthPlanData.account_type === 'self' || total_member === 1) {
-            this.navigate(this.state.next_screen || 'plan-select-cover-period');
+            this.navigate(this.state.next_screen.not_floater || 'plan-select-cover-period');
         } else {
-            this.navigate(this.state.next_screen || 'plan-select-floater');
+            this.navigate(this.state.next_screen.floater || 'plan-select-floater');
         }
         
     }
