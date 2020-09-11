@@ -19,11 +19,7 @@ export default class ReligarePremium extends Component {
               this.props.plan_selected_final.sum_assured)}
           </div>
         </div>
-        {this.props.type_of_plan === 'NF' &&
-          <div className="nf-info">
-            {(`${inrFormatDecimal(this.props.plan_selected_final.sum_assured)} x ${this.props.total_member}`)}
-          </div>
-        }
+       
 
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">Cover period</div>
@@ -36,15 +32,6 @@ export default class ReligarePremium extends Component {
           Premium details
         </div>
 
-        {this.props.type_of_plan === 'NF' &&
-          <div>
-            <div className="flex-between pi-tile">
-              <div className="pi-tile-left">Individual premium</div>
-            </div>
-            {this.props.final_dob_data.map(this.renderIndPremium)}
-            <div className="generic-hr"></div>
-          </div>
-        }
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">Base premium</div>
           <div className="pi-tile-right">{inrFormatDecimal(this.props.plan_selected_final.base_premium)}</div>
