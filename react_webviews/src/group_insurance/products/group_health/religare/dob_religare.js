@@ -116,9 +116,17 @@ class GroupHealthPlanDobReligare extends Component {
             return;
         }
 
-        if (!isValidDate(this.state.eldest_dob) || calculateAge(this.state.eldest_dob) < 18) {
+        if (!isValidDate(this.state.eldest_dob)) {
             this.setState({
                 eldest_dob_error: 'Please enter valid date'
+            });
+
+            canProceed = false;
+        }
+
+        if (calculateAge(this.state.eldest_dob) < 18) {
+            this.setState({
+                eldest_dob_error: this.state.default_helper_text
             });
 
             canProceed = false;

@@ -112,7 +112,7 @@ class GroupHealthPlanAddMembers extends Component {
 
         }
 
-        if (this.state.account_type === 'family' && !this.state.other_adult_member) {
+        if (['selfandfamily', 'family'].includes(this.state.account_type) && !this.state.other_adult_member) {
             this.setState({
                 other_adult_member_error: 'Please select this option'
             });
@@ -141,7 +141,7 @@ class GroupHealthPlanAddMembers extends Component {
             }
         }
 
-        if (['selfandfamily', 'family'].indexOf(this.state.account_type) !== -1) {
+        if (['selfandfamily', 'family'].includes(this.state.account_type)) {
             ui_members.other_adult_member = this.state.other_adult_member;
 
 
