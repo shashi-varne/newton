@@ -29,6 +29,12 @@ export default class ReligarePremium extends Component {
               this.props.plan_selected_final.sum_assured)}
           </div>
         </div>
+
+        {this.props.type_of_plan === 'NF' &&
+          <div className="nf-info">
+            {(`${numDifferentiationInr(this.props.plan_selected_final.sum_assured)} x ${this.props.total_member}`)}
+          </div>
+        }
        
 
         <div className="flex-between pi-tile">

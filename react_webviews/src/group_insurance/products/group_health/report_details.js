@@ -58,8 +58,7 @@ class GroupHealthReportDetails extends Component {
 
         try {
 
-            const res = await Api.get(`api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/
-            get/policy/${this.state.policy_id}`);
+            const res = await Api.get(`api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/get/policy/${this.state.policy_id}`);
 
             this.setState({
                 show_loader: false
