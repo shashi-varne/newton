@@ -8,7 +8,7 @@ import toast from '../../../common/ui/Toast';
 import {  openPdfCall } from 'utils/native_callback';
 import { nativeCallback } from 'utils/native_callback';
 
-import {getGhProviderConfig} from './constants';
+import {getGhProviderConfig, memberKeyMapperFunction} from './constants';
 
 export async function initialize() {
 
@@ -16,10 +16,10 @@ export async function initialize() {
     this.openInBrowser = openInBrowser.bind(this);
     this.setEditTitle = setEditTitle.bind(this);
     this.setLocalProviderData = setLocalProviderData.bind(this);
+    this.memberKeyMapper = memberKeyMapper.bind(this);
 
     let provider = this.props.parent && this.props.parent.props ? this.props.parent.props.match.params.provider : this.props.match.params.provider;
     let providerConfig = getGhProviderConfig(provider);
-
     let screenData = {};
     if(this.state.screen_name && providerConfig[this.state.screen_name]) {
         screenData = providerConfig[this.state.screen_name];
@@ -62,8 +62,7 @@ export async function initialize() {
 
             let quote_id = storageService().get('ghs_ergo_quote_id');
 
-            const res = await Api.get(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/
-            lead/quote?quote_id=${quote_id}`);
+            const res = await Api.get(`/api/ins_service/api/insurance/${providerConfig.provider_api}/lead/quote?quote_id=${quote_id}`);
 
             var resultData = res.pfwresponse.result;
 
@@ -188,8 +187,7 @@ export async function updateLead(body, quote_id) {
             show_loader: true
         });
 
-        const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/
-        lead/update?quote_id=${quote_id}`,body);
+        const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/update?quote_id=${quote_id}`,body);
 
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
@@ -254,8 +252,7 @@ export async function resetQuote() {
     });
 
     try {
-        const res = await Api.get(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/
-        lead/cancel/${quote_id}`);
+        const res = await Api.get(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/cancel/${quote_id}`);
 
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
@@ -411,4 +408,8 @@ export function openMedicalDialog(type) {
 
 export function setLocalProviderData(data) {
     storageService().setObject('groupHealthPlanData_' + this.state.provider, data);
+}
+
+export function memberKeyMapper(member_key) {
+    return memberKeyMapperFunction(member_key, this.state.groupHealthPlanData);
 }
