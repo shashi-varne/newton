@@ -87,7 +87,6 @@ class GroupHealthPlanPremiumSummary extends Component {
             });
 
             let body = this.state.groupHealthPlanData.post_body;
-            body.tax_amount = 100;
             const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/quote`, body);
 
             var resultData = res.pfwresponse.result;
