@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
-
+import MmYyInModal from 'common/ui/MmYyInModal';
 import toast from '../../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
@@ -128,8 +128,10 @@ class GroupHealthPlanSelectPed extends Component {
 
     updateParent = (key, value) => {
         this.setState({
-            [key]: value
+            [key]: value,
+            checked: true
         });
+
     }
 
     handleClose = () => {
@@ -266,6 +268,15 @@ class GroupHealthPlanSelectPed extends Component {
 
                     <ConfirmDialog parent={this} />
                 </div>
+
+                {this.state.checked && 
+                    <MmYyInModal
+                        open={true}
+                        header_title='Diabetes'
+                        header_sub_title=''
+                        cta_title='SAVE'
+                    />
+                }
             </Container>
         );
     }

@@ -36,13 +36,13 @@ class GroupHealthPlanIsPed extends Component {
     onload = () => {
         let lead = this.state.lead;
 
-
         let next_state = `/group-insurance/group-health/${this.state.provider}/final-summary`;
         this.setState({
             next_state: next_state
         })
 
         let account_type = lead.account_type;
+
         let radio_title = 'Do you have any pre-existing diseases?';
         if (account_type !== 'self') {
             radio_title = 'Does any of the members have any pre-existing disease?';
@@ -155,8 +155,8 @@ class GroupHealthPlanIsPed extends Component {
         }
 
         if (this.state.lead.account_type !== 'self' && form_data.is_ped === 'YES' && !next_state) {
-            // canSubmitForm = false;
-            // toast('Please select atleast one');
+            canSubmitForm = false;
+            toast('Please select atleast one');
         }
 
         if (this.state.lead.account_type === 'self' && form_data.is_ped === 'YES') {
