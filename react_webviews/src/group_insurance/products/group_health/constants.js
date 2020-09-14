@@ -265,3 +265,83 @@ export function getGhProviderConfig(provider) {
 
     return mapper[provider];
 }
+
+
+export function memberKeyMapperFunction(memeber_key, groupHealthPlanData) {
+
+    let dob_data = [
+        {
+            'key': 'self',
+            'value': '',
+            'backend_key': 'self_account_key'
+        },
+        {
+            'key': 'wife',
+            'value': '',
+            'backend_key': 'spouse_account_key'
+        },
+        {
+            'key': 'husband',
+            'value': '',
+            'backend_key': 'spouse_account_key'
+        },
+
+        {
+            'key': 'father',
+            'value': '',
+            'backend_key': 'parent_account1_key'
+        },
+        {
+            'key': 'mother',
+            'value': '',
+            'backend_key': 'parent_account2_key'
+        },
+        {
+            'key': 'son',
+            'value': '',
+            'backend_key': 'child_account1_key'
+        },
+        {
+            'key': 'son1',
+            'value': '',
+            'backend_key': 'child_account1_key'
+        },
+        {
+            'key': 'son2',
+            'value': '',
+            'backend_key': 'child_account2_key'
+        },
+        {
+            'key': 'daughter',
+            'value': '',
+            'backend_key': 'child_account1_key'
+        },
+        {
+            'key': 'daughter1',
+            'value': '',
+            'backend_key': 'child_account1_key'
+        },
+        {
+            'key': 'daughter2',
+            'value': '',
+            'backend_key': 'child_account2_key'
+        }
+    ]
+
+    let final_dob_data = [];
+
+    let ui_members = groupHealthPlanData.ui_members || {};
+    for (var i = 0; i < dob_data.length; i++) {
+        let key = dob_data[i].key;
+        if (ui_members[key]) {
+
+            if(!ui_members.father && key === 'mother') {
+                dob_data[i].backend_key = 'parent_account1_key';
+            }
+            final_dob_data.push(dob_data[i]);
+        }
+    }
+    let mapper  = final_dob_data.filter(data => data.key === memeber_key);
+
+    return mapper[0];
+}

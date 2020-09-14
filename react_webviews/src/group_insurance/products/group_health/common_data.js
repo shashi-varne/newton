@@ -8,7 +8,7 @@ import toast from '../../../common/ui/Toast';
 import {  openPdfCall } from 'utils/native_callback';
 import { nativeCallback } from 'utils/native_callback';
 
-import {getGhProviderConfig} from './constants';
+import {getGhProviderConfig, memberKeyMapperFunction} from './constants';
 
 export async function initialize() {
 
@@ -16,6 +16,7 @@ export async function initialize() {
     this.openInBrowser = openInBrowser.bind(this);
     this.setEditTitle = setEditTitle.bind(this);
     this.setLocalProviderData = setLocalProviderData.bind(this);
+    this.memberKeyMapper = memberKeyMapper.bind(this);
 
     let provider = this.props.parent && this.props.parent.props ? this.props.parent.props.match.params.provider : this.props.match.params.provider;
     let providerConfig = getGhProviderConfig(provider);
@@ -411,4 +412,8 @@ export function openMedicalDialog(type) {
 
 export function setLocalProviderData(data) {
     storageService().setObject('groupHealthPlanData_' + this.state.provider, data);
+}
+
+export function memberKeyMapper(member_key) {
+    return memberKeyMapperFunction(member_key, this.state.groupHealthPlanData);
 }

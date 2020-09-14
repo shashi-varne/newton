@@ -127,6 +127,7 @@ class GroupHealthPlanDobReligare extends Component {
             groupHealthPlanData.eldest_dob = this.state.eldest_dob;
             groupHealthPlanData.eldest_member = this.state.eldest_member;
             
+            post_body.eldest_member = this.memberKeyMapper(this.state.eldest_member).backend_key;
             post_body.eldest_dob = this.state.eldest_dob;
 
             this.setLocalProviderData(groupHealthPlanData);
