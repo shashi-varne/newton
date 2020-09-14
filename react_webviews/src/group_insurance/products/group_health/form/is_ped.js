@@ -155,8 +155,8 @@ class GroupHealthPlanIsPed extends Component {
         }
 
         if (this.state.lead.account_type !== 'self' && form_data.is_ped === 'YES' && !next_state) {
-            canSubmitForm = false;
-            toast('Please select atleast one');
+            // canSubmitForm = false;
+            // toast('Please select atleast one');
         }
 
         if (this.state.lead.account_type === 'self' && form_data.is_ped === 'YES') {
