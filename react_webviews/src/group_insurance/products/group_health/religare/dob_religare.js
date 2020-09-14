@@ -7,11 +7,13 @@ import { initialize } from '../common_data';
 import Input from '../../../../common/ui/Input';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import { formatDate, dobFormatTest, isValidDate, capitalizeFirstLetter } from 'utils/validators';
+import { calculateAge } from '../../../../utils/validators';
+import {getInsuredMembersUi} from '../constants';
 
 const eldMemOptionMapper = {
     'self': ['self'],
-    'family': ['spouse'],
-    'selfandfamily': ['self', 'spouse'],
+    'family': ['spouse', 'husband', 'wife'],
+    'selfandfamily': ['self', 'spouse', 'husband', 'wife'],
     'parents': ['father', 'mother']
 }
 
@@ -22,7 +24,8 @@ class GroupHealthPlanDobReligare extends Component {
         this.state = {
             eldest_dob: '',
             eldest_dob_error: '',
-            screen_name: 'religare_dob'
+            screen_name: 'religare_dob',
+            default_helper_text: '',
         }
 
         this.initialize = initialize.bind(this);
@@ -35,10 +38,12 @@ class GroupHealthPlanDobReligare extends Component {
     async componentDidMount() {
 
         let groupHealthPlanData = this.state.groupHealthPlanData;
-
+        const isSelf = groupHealthPlanData.account_type === 'self';
+        
         this.setState({
-            header_title: groupHealthPlanData.account_type === 'self' ? 'Your date of birth' : 'Date of birth details'
-        })
+            header_title: isSelf ? 'Your date of birth' : 'Date of birth details',
+            default_helper_text: `${isSelf ? "Your" : "Adult member's"} age should be more than 18 yrs`,
+        });
 
 
 
@@ -100,7 +105,7 @@ class GroupHealthPlanDobReligare extends Component {
     handleClick = () => {
         this.sendEvents('next');
         let { groupHealthPlanData } = this.state;
-
+        let ui_members = groupHealthPlanData.ui_members || {};
         
         let canProceed = true;
 
@@ -117,17 +122,44 @@ class GroupHealthPlanDobReligare extends Component {
                 eldest_dob_error: 'Please enter valid date'
             });
 
-            canProceed = false
-        };
+            canProceed = false;
+        }
 
+        if (calculateAge(this.state.eldest_dob) < 18) {
+            this.setState({
+                eldest_dob_error: this.state.default_helper_text
+            });
+
+            canProceed = false;
+        }
 
         let post_body = groupHealthPlanData.post_body;
+
+        let insured_members = getInsuredMembersUi(groupHealthPlanData);
+
+        for (var i=0; i < insured_members.length; i++){
+            let data = insured_members[i];
+
+            post_body[data.backend_key] = {
+                relation: data.relation
+            };
+
+            if(data.key === this.state.eldest_member) {
+                post_body[data.backend_key].dob = this.state.eldest_dob;
+            }
+        }
+
+        if(ui_members.self_gender && post_body.self_account_key) {
+            post_body.self_account_key.gender = ui_members.self_gender;
+        }
 
         if (canProceed) {
             groupHealthPlanData.eldest_dob = this.state.eldest_dob;
             groupHealthPlanData.eldest_member = this.state.eldest_member;
             
+            post_body.eldest_member = this.memberKeyMapper(this.state.eldest_member).backend_key;
             post_body.eldest_dob = this.state.eldest_dob;
+            post_body.eldest_member = this.state.eldest_member;
 
             this.setLocalProviderData(groupHealthPlanData);
             this.navigate(this.state.next_screen);
@@ -136,20 +168,15 @@ class GroupHealthPlanDobReligare extends Component {
     }
 
     handleChangeRadio = name => event => {
-
         let options = this.state.mem_options;
         this.setState({
             [name]: options[event] ? options[event].value : '',
             [name + '_error']: '',
-            eldest_dob: ''
-        })
-
-
+            eldest_dob: '',
+        });
     };
 
     handleChange = name => event => {
-
-
         let value = event.target.value;
 
         if (!dobFormatTest(value)) {
@@ -161,21 +188,21 @@ class GroupHealthPlanDobReligare extends Component {
 
         this.setState({
             [name]: value,
-            [name + '_error']: ''
-        })
+            [name + '_error']: '',
+        });
     }
 
    
     render() {
         let currentDate = new Date().toISOString().slice(0, 10);
-        let { account_type } = this.state;
-
+        const { eldest_member, default_helper_text } = this.state;
+        const isSelf = eldest_member === 'self';
 
         return (
             <Container
                 events={this.sendEvents('just_set_events')}
                 show_loader={this.state.show_loader}
-                title={account_type === 'self' ? 'Your date of birth' : 'Date of birth details'}
+                title={isSelf ? 'Your date of birth' : 'Date of birth details'}
                 fullWidthButton={true}
                 buttonTitle="CONTINUE"
                 onlyButton={true}
@@ -192,7 +219,7 @@ class GroupHealthPlanDobReligare extends Component {
                             name="eldest_member"
                             error={(this.state.eldest_member_error) ? true : false}
                             helperText={this.state.eldest_member_error}
-                            value={this.state.eldest_member || ''}
+                            value={eldest_member || ''}
                             onChange={this.handleChangeRadio('eldest_member')} />
                     </div>}
 
@@ -202,14 +229,21 @@ class GroupHealthPlanDobReligare extends Component {
                         <Input
                             type="text"
                             width="40"
-                            label={`${capitalizeFirstLetter(this.state.eldest_member)}'s date of birth (DD/MM/YYYY)`}
+                            label={
+                                isSelf ?
+                                'Date of birth (DD/MM/YYYY)' :
+                                `${capitalizeFirstLetter(eldest_member)}'s date of birth (DD/MM/YYYY)`
+                            }
                             class="DOB"
                             id='eldest_dob'
                             name='eldest_dob'
                             max={currentDate}
                             error={!!this.state.eldest_dob_error}
-                            helperText={this.state.account_type === 'self' && !this.state.eldest_dob_error ? "Adult member's age should be more than 18 yrs" :
-                             this.state.eldest_dob_error}
+                            helperText={
+                                isSelf && !this.state.eldest_dob_error ?
+                                default_helper_text :
+                                this.state.eldest_dob_error
+                            }
                             value={this.state.eldest_dob || ''}
                             placeholder="DD/MM/YYYY"
                             maxLength="10"

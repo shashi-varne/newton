@@ -10,6 +10,7 @@ import DropdownInModal from '../../../../common/ui/DropdownInModal';
 import { initialize, updateBottomPremium } from '../common_data';
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
+import ReactTooltip from "react-tooltip";
 
 class GroupHealthPlanAddOns extends Component {
 
@@ -65,10 +66,10 @@ class GroupHealthPlanAddOns extends Component {
                 })
             }
 
-            console.log(add_ons_data);
-    
             this.setState({
                 add_ons_data: add_ons_data
+            }, () => {
+                ReactTooltip.rebuild()
             })
 
     }
@@ -175,8 +176,9 @@ class GroupHealthPlanAddOns extends Component {
                                     </div>
                                 </div>
                                 <img
+                                    id={index}
                                     className="tooltip-icon"
-                                    data-tip={item.tooltip}
+                                    data-tip={item.tooltip_content}
                                     src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
                             </span>
                             {item.checked && item.options.length !== 0 && <DropdownInModal
@@ -227,18 +229,15 @@ class GroupHealthPlanAddOns extends Component {
         let groupHealthPlanData = this.state.groupHealthPlanData;
 
 
-        let add_ons_body = '';
+        let add_ons_body = [];
         this.state.add_ons_data.map((item) => {
 
             if(item.checked) {
-                if (add_ons_body) {
-                    add_ons_body += ','
-                }
 
                 if (item.options.length !== 0) {
-                    add_ons_body += item.key + '-' + (item.selected_premium || item.default_premium);
+                    add_ons_body.push(item.options[item.selectedIndexOption].key);
                 } else {
-                    add_ons_body += item.key;
+                    add_ons_body.push(item.key);
                 }
             }
 
