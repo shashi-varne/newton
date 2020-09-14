@@ -77,20 +77,20 @@ export const HDFCERGO_CONFIG = {
     insure_type_screen: {
         account_type_options: [
             {
-              'name': 'Self',
-              'value': 'self'
+                'name': 'Self',
+                'value': 'self'
             },
             {
-              'name': 'Family members',
-              'value': 'family'
+                'name': 'Family members',
+                'value': 'family'
             },
             {
-              'name': 'Self & family members',
-              'value': 'selfandfamily'
+                'name': 'Self & family members',
+                'value': 'selfandfamily'
             },
             {
-              'name': 'Parents',
-              'value': 'parents'
+                'name': 'Parents',
+                'value': 'parents'
             }
         ]
     },
@@ -101,15 +101,15 @@ export const HDFCERGO_CONFIG = {
     },
     plan_list_screen: {
         tile_mid_data: [
-            {'label': 'Sum assured:', 'key': 'sum_assured_options_text'},
-            {'label': 'Recovery benefit:', 'key': 'recovery_benefit_extra', 'tooltip_key': 'recovery_benefit_content'},
-            {'label': 'Allowances:', 'key': 'allowances'}
+            { 'label': 'Sum assured:', 'key': 'sum_assured_options_text' },
+            { 'label': 'Recovery benefit:', 'key': 'recovery_benefit_extra', 'tooltip_key': 'recovery_benefit_content' },
+            { 'label': 'Allowances:', 'key': 'allowances' }
         ]
     },
     nominee_screen: {
         nominee_opts: [],
     },
-   
+
 };
 
 export const religare = {
@@ -130,7 +130,7 @@ export const religare = {
         plan_details_screens: 'plan-select-sum-assured',
         sum_assured_screen: {
             floater: 'plan-select-floater',
-            not_floater : 'plan-select-add-ons'
+            not_floater: 'plan-select-add-ons'
         },
         cover_type_screen: 'plan-select-add-ons',
         add_ons_screen: 'plan-select-cover-period'
@@ -267,66 +267,9 @@ export function getGhProviderConfig(provider) {
 }
 
 
-export function memberKeyMapperFunction(memeber_key, groupHealthPlanData) {
+export function memberKeyMapperFunction(member_key, groupHealthPlanData) {
 
-    let dob_data = [
-        {
-            'key': 'self',
-            'value': '',
-            'backend_key': 'self_account_key'
-        },
-        {
-            'key': 'wife',
-            'value': '',
-            'backend_key': 'spouse_account_key'
-        },
-        {
-            'key': 'husband',
-            'value': '',
-            'backend_key': 'spouse_account_key'
-        },
-
-        {
-            'key': 'father',
-            'value': '',
-            'backend_key': 'parent_account1_key'
-        },
-        {
-            'key': 'mother',
-            'value': '',
-            'backend_key': 'parent_account2_key'
-        },
-        {
-            'key': 'son',
-            'value': '',
-            'backend_key': 'child_account1_key'
-        },
-        {
-            'key': 'son1',
-            'value': '',
-            'backend_key': 'child_account1_key'
-        },
-        {
-            'key': 'son2',
-            'value': '',
-            'backend_key': 'child_account2_key'
-        },
-        {
-            'key': 'daughter',
-            'value': '',
-            'backend_key': 'child_account1_key'
-        },
-        {
-            'key': 'daughter1',
-            'value': '',
-            'backend_key': 'child_account1_key'
-        },
-        {
-            'key': 'daughter2',
-            'value': '',
-            'backend_key': 'child_account2_key'
-        }
-    ]
+    let dob_data = avilableMembersToInsured;
 
     let final_dob_data = [];
 
@@ -335,46 +278,134 @@ export function memberKeyMapperFunction(memeber_key, groupHealthPlanData) {
     let child_total = 0;
     for (var i = 0; i < dob_data.length; i++) {
         let key = dob_data[i].key;
-        if (ui_members[key]) {
 
-            if(!ui_members.father && key === 'mother') {
-                dob_data[i].backend_key = 'parent_account1_key';
-            }
+        if (!ui_members.father && key === 'mother') {
+            dob_data[i].backend_key = 'parent_account1_key';
+        }
 
-            let relation = key;
-            if(relation.indexOf('son') >= 0) {
-                relation = 'son';
-            }
+        let relation = key;
+        if (relation.indexOf('son') >= 0) {
+            relation = 'son';
+        }
 
-            if(relation.indexOf('daughter') >= 0) {
-                relation = 'daughter';
-            }
+        if (relation.indexOf('daughter') >= 0) {
+            relation = 'daughter';
+        }
 
-            if(relation.indexOf('son') >= 0 || relation.indexOf('daughter') >= 0) {
+        if (relation.indexOf('son') >= 0 || relation.indexOf('daughter') >= 0) {
+            
+            if(ui_members[key]) {
                 child_total++;
                 dob_data[i].backend_key = `child_account${child_total}_key`;
+            } else {
+                dob_data[i].backend_key = `child_account_key_not_insured`;
             }
-            dob_data[i].relation = relation;
-
-            final_dob_data.push(dob_data[i]);
+            
         }
-    }
-    let mapper  = final_dob_data.filter(data => data.key === memeber_key);
+        dob_data[i].relation = relation;
+        dob_data[i].checked = !!ui_members[key];
 
+        final_dob_data.push(dob_data[i]);
+    }
+    let mapper = final_dob_data.filter(data => data.key === member_key);
     return mapper[0];
 }
 
 export function getInsuredMembersUi(groupHealthPlanData) {
 
-  let ui_members = groupHealthPlanData.ui_members || {};
-  let data = [];
+    let ui_members = groupHealthPlanData.ui_members || {};
+    let data = [];
 
-  for (var member in ui_members) {
-      if(ui_members[member] === true) {
-          let obj = memberKeyMapperFunction(member, groupHealthPlanData);
-          data.push(obj);
-      }
-  }
+    for (var member in ui_members) {
+        if (ui_members[member] === true) {
+            let obj = memberKeyMapperFunction(member, groupHealthPlanData);
+            data.push(obj);
+        }
+    }
 
-  return data;
+    return data;
 }
+
+
+export function resetInsuredMembers(groupHealthPlanData) {
+    let post_body = groupHealthPlanData.post_body || {};
+
+    for (var key in post_body) {
+        if (key.indexOf('_account') >= 0 && key.indexOf('_key') >= 0) {
+            delete post_body[key];
+        }
+    }
+
+    groupHealthPlanData.post_body = post_body;
+
+    return groupHealthPlanData;
+}
+
+export const avilableMembersToInsured = [
+    {
+        'key': 'self',
+        'value': '',
+        'backend_key': 'self_account_key'
+    },
+    {
+        'key': 'wife',
+        'value': '',
+        'backend_key': 'spouse_account_key'
+    },
+    {
+        'key': 'husband',
+        'value': '',
+        'backend_key': 'spouse_account_key'
+    },
+
+    {
+        'key': 'father',
+        'value': '',
+        'backend_key': 'parent_account1_key'
+    },
+    {
+        'key': 'mother',
+        'value': '',
+        'backend_key': 'parent_account2_key'
+    },
+    {
+        'key': 'son',
+        'value': '',
+        'backend_key': 'child_account1_key'
+    },
+    {
+        'key': 'son1',
+        'value': '',
+        'backend_key': 'child_account1_key'
+    },
+    {
+        'key': 'son2',
+        'value': '',
+        'backend_key': 'child_account2_key'
+    },
+    {
+        'key': 'son3',
+        'value': '',
+        'backend_key': 'child_account3_key'
+    },
+    {
+        'key': 'daughter',
+        'value': '',
+        'backend_key': 'child_account1_key'
+    },
+    {
+        'key': 'daughter1',
+        'value': '',
+        'backend_key': 'child_account1_key'
+    },
+    {
+        'key': 'daughter2',
+        'value': '',
+        'backend_key': 'child_account2_key'
+    },
+    {
+        'key': 'daughter3',
+        'value': '',
+        'backend_key': 'child_account3_key'
+    }
+];
