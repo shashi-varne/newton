@@ -110,12 +110,12 @@ class GroupHealthPlanList extends Component {
         return (
             <div key={index} className="pi-tile">
                 <div className="pi-left">{props.label}</div>
-                <div className="pi-right">{plan_data[props.key]}</div>
-                {props.tooltip_key && <div className="info-img">
+                <div className="pi-right">{props.value}</div>
+                {props.tooltip_content && <div className="info-img">
                     <img
                         id={index}
                         className="tooltip-icon"
-                        data-tip={plan_data[props.tooltip_key]}
+                        data-tip={props.tooltip_content}
                         src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
                 </div>}
             </div>
@@ -141,7 +141,7 @@ class GroupHealthPlanList extends Component {
                 </div>
 
                 <div className="plan-info">
-                    {this.state.screenData.tile_mid_data.map((props, index) => 
+                    {props.top_plan_benefits.map((props, index) => 
                     this.renderTileMidData(props, index, plan_data))}
                 </div>
 

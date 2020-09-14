@@ -112,15 +112,15 @@ class GroupHealthPlanAddMembers extends Component {
 
         }
 
-        if (this.state.account_type === 'family' && !this.state.other_adult_member) {
+        if (['selfandfamily', 'family'].includes(this.state.account_type) && !this.state.other_adult_member) {
             this.setState({
                 other_adult_member_error: 'Please select this option'
             });
             canProceed = false;
         }
 
-        let keys_to_reset = ['self', 'wife', 'husband', 'father', 'mother', 'son', 'son1', 'son2',
-            'daughter', 'daughter1', 'daughter2'];
+        let keys_to_reset = ['self', 'wife', 'husband', 'father', 'mother', 'son', 'son1', 'son2','son3',
+            'daughter', 'daughter1', 'daughter2', 'daughter3'];
 
 
         for (var kr in keys_to_reset) {
@@ -141,7 +141,7 @@ class GroupHealthPlanAddMembers extends Component {
             }
         }
 
-        if (['selfandfamily', 'family'].indexOf(this.state.account_type) !== -1) {
+        if (['selfandfamily', 'family'].includes(this.state.account_type)) {
             ui_members.other_adult_member = this.state.other_adult_member;
 
 
@@ -235,6 +235,8 @@ class GroupHealthPlanAddMembers extends Component {
             let groupHealthPlanData = this.state.groupHealthPlanData;
             groupHealthPlanData.ui_members = ui_members;
             groupHealthPlanData.post_body = post_body;
+            groupHealthPlanData.eldest_member = ''; //reset
+            groupHealthPlanData.eldest_dob = ''; //reset
             this.setLocalProviderData(groupHealthPlanData);
     
             this.navigate(this.state.next_screen || 'plan-dob');
