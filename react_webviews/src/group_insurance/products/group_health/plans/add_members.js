@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
@@ -23,6 +23,17 @@ const other_adult_member_options = [
     }
 ];
 
+const parents_in_law_options = [
+    {
+        'name': 'Parents',
+        'value': 'parents'
+    },
+    {
+        'name': 'Parents-in-law',
+        'value': 'parents_in_law'
+    }
+];
+
 const self_options = [
     {
         'name': 'Self',
@@ -43,7 +54,7 @@ class GroupHealthPlanAddMembers extends Component {
             mother_onlycheckbox: true,
             ui_members: {},
             screen_name: 'add_members_screen'
-        }
+        };
 
         this.initialize = initialize.bind(this);
     }
@@ -63,7 +74,7 @@ class GroupHealthPlanAddMembers extends Component {
             account_type: this.state.groupHealthPlanData.account_type,
             header_title: this.state.groupHealthPlanData.account_type === 'parents' ? 'Add parents to be insured' :
                 'Add members to be insured'
-        })
+        });
 
         let ui_members = this.state.groupHealthPlanData.ui_members || {};
         this.setState({
@@ -71,14 +82,16 @@ class GroupHealthPlanAddMembers extends Component {
             son_checked: ui_members.son_total ? true : false,
             daughter_total: ui_members.daughter_total || 0,
             daughter_checked: ui_members.daughter_total ? true : false,
-            father_checked: ui_members.father ? true : false,
-            mother_checked: ui_members.mother ? true : false,
+            father_checked: ui_members.father || screenData.preselect_father || false,
+            father_disabled: screenData.disable_father || false,
+            mother_checked: ui_members.mother || screenData.preselect_mother || false,
+            mother_disabled: screenData.disable_mother || false,
             other_adult_member: ui_members.other_adult_member || '',
             ui_members: ui_members,
             self_gender: ui_members.self_gender || ''
         }, () => {
             this.setMinMax();
-        })
+        });
 
     }
 
@@ -86,7 +99,7 @@ class GroupHealthPlanAddMembers extends Component {
     navigate = (pathname) => {
         this.props.history.push({
             pathname: pathname,
-            search: getConfig().searchParams
+            search: getConfig().searchParams,
         });
     }
 
@@ -272,41 +285,41 @@ class GroupHealthPlanAddMembers extends Component {
 
     setMinMax = () => {
         let son_disabled = false;
-        let daughter_disabled = false
+        let daughter_disabled = false;
         if (this.state.son_total === 1 && this.state.daughter_total === 1) {
             this.setState({
                 son_ismax: true,
-                daughter_ismax: true
+                daughter_ismax: true,
             });
 
         } else {
             this.setState({
                 son_ismax: false,
-                daughter_ismax: false
+                daughter_ismax: false,
             });
         }
 
         if (this.state.son_total === 2) {
-            daughter_disabled = true
+            daughter_disabled = true;
         }
 
         if (this.state.daughter_total === 2) {
-            son_disabled = true
+            son_disabled = true;
         }
 
         this.setState({
             son_disabled: son_disabled,
-            daughter_disabled: daughter_disabled
+            daughter_disabled: daughter_disabled,
         });
-    }
+    };
 
     updateParent = (key, value) => {
         this.setState({
             [key]: value
         }, () => {
             this.setMinMax();
-        })
-    }
+        });
+    };
 
     handleChangeRadio = name => event => {
 
@@ -317,7 +330,7 @@ class GroupHealthPlanAddMembers extends Component {
         this.setState({
             [name]: options[event] ? options[event].value : '',
             [name + '_error']: ''
-        })
+        });
 
     };
 
@@ -353,21 +366,21 @@ class GroupHealthPlanAddMembers extends Component {
                     </div>
                 }
 
-            {['selfandfamily'].indexOf(this.state.account_type) !== -1 &&
-          <div className="InputField">
-            <RadioWithoutIcon
-              width="40"
-              label="Gender"
-              class="Gender:"
-              options={genderOptions}
-              id="self_gender"
-              name="self_gender"
-              error={(this.state.self_gender_error) ? true : false}
-              helperText={this.state.self_gender_error}
-              value={this.state.self_gender || ''}
-              onChange={this.handleChangeRadio('self_gender')} />
-          </div>}
-
+                {['selfandfamily'].indexOf(this.state.account_type) !== -1 &&
+                    <div className="InputField">
+                        <RadioWithoutIcon
+                        width="40"
+                        label="Gender"
+                        class="Gender:"
+                        options={genderOptions}
+                        id="self_gender"
+                        name="self_gender"
+                        error={(this.state.self_gender_error) ? true : false}
+                        helperText={this.state.self_gender_error}
+                        value={this.state.self_gender || ''}
+                        onChange={this.handleChangeRadio('self_gender')} />
+                    </div>
+                }
 
                 {['selfandfamily', 'family'].indexOf(this.state.account_type) !== -1 &&
                     <div>
@@ -390,7 +403,7 @@ class GroupHealthPlanAddMembers extends Component {
 
                         <div className="plus-minus-input-label">
                             Children (upto {this.state.total_plus_minus_max})
-                    </div>
+                        </div>
                         <div className="generic-hr"></div>
                         <PlusMinusInput
                             name="son"
@@ -408,7 +421,7 @@ class GroupHealthPlanAddMembers extends Component {
                     <div>
                         <div className="plus-minus-input-label">
                             Parents
-                    </div>
+                        </div>
                         <div className="generic-hr"></div>
                         <PlusMinusInput
                             name="father"
@@ -420,6 +433,41 @@ class GroupHealthPlanAddMembers extends Component {
                             parent={this}
                         />
                         <div className="generic-hr"></div>
+                    </div>}
+                {['parents-in-law'].indexOf(this.state.account_type) !== -1 &&
+                    <div>
+                        <div className="InputField">
+                            <RadioWithoutIcon
+                                width="40"
+                                label={'Select'}
+                                options={parents_in_law_options}
+                                id="other_adult_member"
+                                name="other_adult_member"
+                                error={!!this.state.parents_in_law_error}
+                                helperText={this.state.parents_in_law_error}
+                                value={this.state.parents_in_law || ''}
+                                onChange={this.handleChangeRadio('parents_in_law')}
+                                canUnSelect={true} />
+                        </div>
+                        {this.state.parents_in_law &&
+                            <Fragment>
+                                <div className="plus-minus-input-label">
+                                    Policy includes both the parents
+                                    {/* Add tooltip here: https://marvelapp.com/prototype/69gf086/screen/72572164 */}
+                                </div>
+                                <div className="generic-hr"></div>
+                                <PlusMinusInput
+                                    name="father"
+                                    parent={this}
+                                />
+                                <div className="generic-hr"></div>
+                                <PlusMinusInput
+                                    name="mother"
+                                    parent={this}
+                                />
+                                <div className="generic-hr"></div>
+                            </Fragment>
+                        }
                     </div>}
             </Container>
         );

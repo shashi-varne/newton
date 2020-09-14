@@ -56,8 +56,8 @@ class GroupHealthSelectInsureType extends Component {
 
       groupHealthPlanData.post_body.mem_info = {
         adult: 1,
-        child: 0
-      }
+        child: 0,
+      };
       let ui_members = groupHealthPlanData.ui_members || {};
 
       let keys_to_reset = ['self', 'wife', 'husband', 'father', 'mother', 'son', 'son1', 'son2',
