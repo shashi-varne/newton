@@ -327,7 +327,17 @@ class GroupHealthPlanDetails extends Component {
                         <div className='common-steps-images' style={{marginTop:0}}>
                             {this.state.extra_data.waiting_period.map(this.renderSteps)}
                         </div>
+                    </div>
 
+                    <div className="accident-plan-read" style={{ padding: 0 }}>
+                        <div className="accident-plan-read-text">
+                            *For detailed list of all terms and conditions, please refer
+                            <span
+                                style={{ color: getConfig().primary }}
+                                onClick = {() => this.openInBrowser(this.state.premium_data.read_details_doc, 'read_document')}>
+                                &nbsp;policy prospectus
+                            </span>
+                        </div>
                     </div>
 
                     <div className="bototm-design">
@@ -347,13 +357,6 @@ class GroupHealthPlanDetails extends Component {
                             <div className="bd-content">How to claim?</div>
                         </div>
                         <div className="generic-hr"></div>
-                    </div>
-
-                    <div className="accident-plan-read" style={{ padding: 0 }}
-                        onClick={() => this.openInBrowser(this.state.premium_data.read_details_doc, 'read_document')}>
-                        <img className="accident-plan-read-icon"
-                            src={require(`assets/${this.state.productName}/ic_read.svg`)} alt="" />
-                        <div className="accident-plan-read-text" style={{ color: getConfig().primary }}>For detailed list of terms and condition, please read policy prospectus</div>
                     </div>
                 </div>
             </Container>

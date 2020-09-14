@@ -1,11 +1,21 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { inrFormatDecimal, numDifferentiationInr } from '../../../../utils/validators';
-
 
 export default class ReligarePremium extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    console.log(props);
+    this.state = {
+      selectedAddOns: [],
+    };
+  }
+
+  componentDidMount() {
+    const { add_ons_data = [] } = this.props.groupHealthPlanData;
+    if (add_ons_data.length) {
+      const selectedAddOns = add_ons_data.filter(addOn => addOn.checked);
+      this.setState({ selectedAddOns: selectedAddOns || [] });
+    }
   }
 
   render() {
@@ -19,6 +29,12 @@ export default class ReligarePremium extends Component {
               this.props.plan_selected_final.sum_assured)}
           </div>
         </div>
+
+        {this.props.type_of_plan === 'NF' &&
+          <div className="nf-info">
+            {(`${numDifferentiationInr(this.props.plan_selected_final.sum_assured)} x ${this.props.total_member}`)}
+          </div>
+        }
        
 
         <div className="flex-between pi-tile">
@@ -37,12 +53,25 @@ export default class ReligarePremium extends Component {
           <div className="pi-tile-right">{inrFormatDecimal(this.props.plan_selected_final.base_premium)}</div>
         </div>
 
-        {/* Add add-ons here */}
-        <div className="premium-subtitle">Add on</div>
-        <div className="flex-between pi-tile">
-          <div className="pi-tile-left">Base premium</div>
-          <div className="pi-tile-right">{inrFormatDecimal(this.props.plan_selected_final.base_premium)}</div>
-        </div>
+        {/* TODO: move inline styles to stylesheet */}
+        {this.state.selectedAddOns.length &&
+          <div className="premium-addons" style={{
+            margin: '30px 0 25px'
+          }}>
+            <div className="premium-addon-title" style={{
+              fontSize: '13px',
+              fontWeight: '600',
+              lineHeight: '15px',
+              marginBottom: '-10px',
+            }}>Add on</div>
+            {this.state.selectedAddOns.map(addOn => 
+              <div className="flex-between pi-tile" style={{ marginBottom: '-5px' }}>
+                <div className="pi-tile-left">{addOn.title}</div>
+                <div className="pi-tile-right">{inrFormatDecimal(addOn.default_premium)}</div>
+              </div>
+            )}
+          </div>
+        }
 
 
         {this.props.plan_selected_final.total_discount > 0 &&
