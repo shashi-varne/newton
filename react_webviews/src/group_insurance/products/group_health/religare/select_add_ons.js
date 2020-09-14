@@ -238,7 +238,8 @@ class GroupHealthPlanAddOns extends Component {
                 }
 
                 if (item.options.length !== 0) {
-                    add_ons_body += item.key + '-' + (item.selected_cover_amount || item.default_cover_amount);
+                    // add_ons_body += item.key + '-' + (item.selected_cover_amount || item.default_cover_amount);
+                    add_ons_body += item.options[item.selectedIndexOption].key;
                 } else {
                     add_ons_body += item.key;
                 }
