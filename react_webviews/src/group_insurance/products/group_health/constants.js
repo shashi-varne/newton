@@ -265,3 +265,116 @@ export function getGhProviderConfig(provider) {
 
     return mapper[provider];
 }
+
+
+export function memberKeyMapperFunction(memeber_key, groupHealthPlanData) {
+
+    let dob_data = [
+        {
+            'key': 'self',
+            'value': '',
+            'backend_key': 'self_account_key'
+        },
+        {
+            'key': 'wife',
+            'value': '',
+            'backend_key': 'spouse_account_key'
+        },
+        {
+            'key': 'husband',
+            'value': '',
+            'backend_key': 'spouse_account_key'
+        },
+
+        {
+            'key': 'father',
+            'value': '',
+            'backend_key': 'parent_account1_key'
+        },
+        {
+            'key': 'mother',
+            'value': '',
+            'backend_key': 'parent_account2_key'
+        },
+        {
+            'key': 'son',
+            'value': '',
+            'backend_key': 'child_account1_key'
+        },
+        {
+            'key': 'son1',
+            'value': '',
+            'backend_key': 'child_account1_key'
+        },
+        {
+            'key': 'son2',
+            'value': '',
+            'backend_key': 'child_account2_key'
+        },
+        {
+            'key': 'daughter',
+            'value': '',
+            'backend_key': 'child_account1_key'
+        },
+        {
+            'key': 'daughter1',
+            'value': '',
+            'backend_key': 'child_account1_key'
+        },
+        {
+            'key': 'daughter2',
+            'value': '',
+            'backend_key': 'child_account2_key'
+        }
+    ]
+
+    let final_dob_data = [];
+
+    let ui_members = groupHealthPlanData.ui_members || {};
+
+    let child_total = 0;
+    for (var i = 0; i < dob_data.length; i++) {
+        let key = dob_data[i].key;
+        if (ui_members[key]) {
+
+            if(!ui_members.father && key === 'mother') {
+                dob_data[i].backend_key = 'parent_account1_key';
+            }
+
+            let relation = key;
+            if(relation.indexOf('son') >= 0) {
+                relation = 'son';
+            }
+
+            if(relation.indexOf('daughter') >= 0) {
+                relation = 'daughter';
+            }
+
+            if(relation.indexOf('son') >= 0 || relation.indexOf('daughter') >= 0) {
+                child_total++;
+                dob_data[i].backend_key = `child_account${child_total}_key`;
+            }
+            dob_data[i].relation = relation;
+
+            final_dob_data.push(dob_data[i]);
+        }
+    }
+    let mapper  = final_dob_data.filter(data => data.key === memeber_key);
+
+    return mapper[0];
+}
+
+export function getInsuredMembersUi(groupHealthPlanData) {
+
+  let ui_members = groupHealthPlanData.ui_members || {};
+  let data = [];
+
+  for (var member in ui_members) {
+      if(ui_members[member] === true) {
+          let obj = memberKeyMapperFunction(member, groupHealthPlanData);
+          data.push(obj);
+      }
+  }
+
+  return data;
+}

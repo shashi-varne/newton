@@ -21,7 +21,7 @@ export default class HDFCPremium extends Component {
         </div>
         {this.props.type_of_plan === 'NF' &&
           <div className="nf-info">
-            {(`${inrFormatDecimal(this.props.plan_selected_final.sum_assured)} x ${this.props.total_member}`)}
+            {(`${numDifferentiationInr(this.props.plan_selected_final.sum_assured)} x ${this.props.total_member}`)}
           </div>
         }
 

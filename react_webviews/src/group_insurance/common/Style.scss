@@ -417,17 +417,18 @@
    font-size: 14px;
 }
 .accident-plan-read {
-  margin-top: 30px;
-   display: flex;
-   align-items: center;
-   padding: 0 15px;
-   cursor: pointer;
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  cursor: pointer;
 }
 .accident-plan-read-icon {
   margin-right: 10px;
 }
 .accident-plan-read-text {
-   font-size: 14px;
+  font-size: 13px;
+  line-height: 20px;
 }
 .accident-plan-terms {
   padding: 0 15px;
