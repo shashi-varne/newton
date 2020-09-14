@@ -417,17 +417,18 @@
    font-size: 14px;
 }
 .accident-plan-read {
-  margin-top: 30px;
-   display: flex;
-   align-items: center;
-   padding: 0 15px;
-   cursor: pointer;
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  cursor: pointer;
 }
 .accident-plan-read-icon {
   margin-right: 10px;
 }
 .accident-plan-read-text {
-   font-size: 14px;
+  font-size: 13px;
+  line-height: 20px;
 }
 .accident-plan-terms {
   padding: 0 15px;
@@ -687,7 +688,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 10px 0 30px 0;
+  margin: 10px 0 20px 0;
 
   .tc-title {
     color: #0A1D32;
@@ -765,6 +766,7 @@
   font-size: 10px;
   font-weight: 600;
   border-radius: 4px;
+  margin-bottom: 20px;
   padding: 2px 5px 2px 5px;
 }
 
@@ -773,7 +775,7 @@
   .sum-assured-info {
     display: flex;
     justify-content: space-between;
-    margin: 10px 0 0 0;
+    margin-bottom: 18px;
     color: #0B1E33;
     font-size: 16px;
     font-weight: 400;
@@ -781,7 +783,7 @@
   .copay-info {
     display: flex;
     justify-content: space-between;
-    margin: 10px 0 20px 0;
+    margin-bottom: 30px;
     .ci-left {
       color: #051E35;
       font-size: 14px;

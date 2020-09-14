@@ -35,7 +35,6 @@ class GroupHealthPlanPremiumSummary extends Component {
 
     async componentDidMount() {
         let groupHealthPlanData = this.state.groupHealthPlanData || {};
-        console.log(groupHealthPlanData);
         let group_health_landing = '/group-insurance/group-health/entry';
 
         if (!groupHealthPlanData.post_body) {
@@ -54,7 +53,7 @@ class GroupHealthPlanPremiumSummary extends Component {
             plan_selected_final: groupHealthPlanData.plan_selected_final,
             total_member: post_body.mem_info.adult + post_body.mem_info.child,
             type_of_plan: groupHealthPlanData.type_of_plan,
-            final_dob_data: groupHealthPlanData.final_dob_data
+            final_dob_data: groupHealthPlanData.final_dob_data,
         });
 
     }

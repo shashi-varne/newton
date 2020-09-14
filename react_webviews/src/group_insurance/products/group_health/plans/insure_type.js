@@ -136,7 +136,7 @@ class GroupHealthSelectInsureType extends Component {
             value={this.state.account_type || ''}
             onChange={this.handleChangeRadio('account_type')} />
         </div>
-        <BottomInfo baseData={{ 'content': 'Trusted by 1 crore+ families' }} />
+        <BottomInfo baseData={{ 'content': 'Pro Tip: The first step to get financial stability is to be medically insured along with your family' }} />
       </Container>
     );
   }

@@ -26,9 +26,9 @@ export const HDFCERGO_CONFIG = {
     },
     landing_screen: {
         offerImageData: [
-            { src: 'icn_landing_card_1.svg' },
-            { src: 'icn_landing_card_2.svg' },
-            { src: 'icn_landing_card_3.svg' }
+            { src: 'hdfc_icn_landing_card_1.svg' },
+            { src: 'hdfc_icn_landing_card_2.svg' },
+            { src: 'hdfc_icn_landing_card_3.svg' }
         ],
         whats_covered: [
             'Diseases occurred before policy issuance will be covered after 3 years',
@@ -92,7 +92,7 @@ export const HDFCERGO_CONFIG = {
               'name': 'Parents',
               'value': 'parents'
             }
-          ]
+        ]
     },
     add_members_screen: {
         son_max: 2,
@@ -149,13 +149,13 @@ export const religare = {
     },
     landing_screen: {
         offerImageData: [
-            { src: 'icn_landing_card_1.svg' },
-            { src: 'icn_landing_card_2.svg' },
-            { src: 'icn_landing_card_3.svg' }
+            { src: 'religare_icn_landing_card_1.svg' },
+            { src: 'religare_icn_landing_card_2.svg' },
+            { src: 'religare_icn_landing_card_3.svg' }
         ],
         whats_covered: [
             '30 days pre and 60 days post hospitalization expenses',
-            'Pre-existing disease after 4 years',
+            'Treatment of pre-existing disease after 4 years',
             'Ayurveda, Unani, Sidha and Homeopathy treatments',
             'Organ donor expenses',
             'Domiciliary Hospitalisation'
