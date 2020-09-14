@@ -33,7 +33,7 @@ class radioAndCheckboxList extends Component {
     let { life_style_question } = this.props;
     
     if (!name) { name = 'self'};
-    
+
     form_data = life_style_question[name] || '';
     date_error = life_style_question[name].date_error || '';
     desc_error = life_style_question[name].desc_error || '';
@@ -96,11 +96,11 @@ class radioAndCheckboxList extends Component {
                   name={name}
                   error={object[item.key+'_error'] ? true : false}
                   helperText={object[item.key+'_error'] || ''}
-                  value={object[item.key].answer || object[item.key] || ""}
+                  value={(life_style_question ? object[item.key].answer : object[item.key]) || ""}
                   onChange={(event) => this.props.handleChangeRadio(item.key, event)}
                 />
                 <br />
-                {life_style_question[item.key] && life_style_question[item.key].answer === 'Yes' &&
+                {life_style_question && life_style_question[item.key] && life_style_question[item.key].answer === 'Yes' &&
                   this.renderInputs()}
               </div>
             )}

@@ -145,7 +145,6 @@ class GroupHealthPlanMedicalHistory extends Component {
   handleCheckbox = (event) => {
     let { name, value } = event.target;
     let { medical_questions } = this.state;
-
     medical_questions[name] = {
       ...medical_questions[name],
       [value.toLowerCase()]: event.target.checked,
@@ -190,6 +189,7 @@ class GroupHealthPlanMedicalHistory extends Component {
     let body = {};
 
     if (canProceed) {
+
       list.forEach(item => {
         groupHealthPlanData.medical_questions_data = {
           ...groupHealthPlanData.medical_questions_data,

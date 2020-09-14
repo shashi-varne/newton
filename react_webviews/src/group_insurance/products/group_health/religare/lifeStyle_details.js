@@ -267,7 +267,6 @@ class GroupHealthPlanLifestyleDetail extends Component {
           }
         }
       }
-      console.log(groupHealthPlanData)
 
       this.setLocalProviderData(groupHealthPlanData);
 
