@@ -31,16 +31,16 @@ class radioAndCheckboxList extends Component {
     let form_data, date_error, desc_error;
 
     let { life_style_question } = this.props;
-
-    if (!name) {
-      form_data = life_style_question || '';
-      date_error = this.props.date_error || '';
-      desc_error = this.props.desc_error || '';
-    } else {
+    
+    if (!name) { name = 'self'}
+      // form_data = life_style_question || '';
+      // date_error = this.props.date_error || '';
+      // desc_error = this.props.desc_error || '';
+    // } else {
       form_data = life_style_question[name] || '';
       date_error = life_style_question[name].date_error || '';
       desc_error = life_style_question[name].desc_error || '';
-    }
+    // }
 
     return (
       <FormControl fullWidth>
@@ -78,7 +78,8 @@ class radioAndCheckboxList extends Component {
 
   render() {
     let { account_type, list, name } = this.state;
-    let { life_style_question } = this.props
+    let { life_style_question, medical_questions } = this.props;
+    let object = life_style_question || medical_questions;
 
     return (
       <div style={{ marginBottom: "40px" }}>
@@ -97,11 +98,13 @@ class radioAndCheckboxList extends Component {
                   options={item.options}
                   id={name}
                   name={name}
-                  value={this.props.value || ""}
+                  error={object[item.key+'_error'] ? true : false}
+                  helperText={object[item.key+'_error']}
+                  value={object[item.key] || ""}
                   onChange={(event) => this.props.handleChangeRadio(item.key, event)}
                 />
                 <br />
-                {life_style_question && life_style_question.answer &&
+                {life_style_question[item.key] && life_style_question[item.key].answer &&
                   this.renderInputs()}
               </div>
             )}

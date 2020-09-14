@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Container from "../../../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { getConfig } from "../../../../utils/functions";
-import { initialize, updateBottomPremium } from "../common_data";
+import { initialize, updateBottomPremium, updateLead } from "../common_data";
 import RadioAndCheckboxList from "./radioAndCheckboxList";
 
 class GroupHealthPlanMedicalHistory extends Component {
@@ -15,6 +15,7 @@ class GroupHealthPlanMedicalHistory extends Component {
 
     this.initialize = initialize.bind(this);
     this.updateBottomPremium = updateBottomPremium.bind(this);
+    this.updateLead = updateLead.bind(this);
   }
 
   componentWillMount() {
@@ -22,7 +23,7 @@ class GroupHealthPlanMedicalHistory extends Component {
   }
 
   async componentDidMount() {
-    let account_type = this.state.groupHealthPlanData.account_type;
+    let {account_type, medical_questions_data} = this.state.groupHealthPlanData;
 
     let list = [];
 
@@ -113,6 +114,7 @@ class GroupHealthPlanMedicalHistory extends Component {
 
     this.setState({
       account_type: account_type,
+      medical_questions: medical_questions_data || {},
       list: list,
     });
   }
@@ -154,12 +156,6 @@ class GroupHealthPlanMedicalHistory extends Component {
     });
   };
 
-  handleClick = () => {
-    this.sendEvents("next");
-    
-
-  };
-
   handleChangeRadio = (key, event) => {
     let { medical_questions } = this.state;
 
@@ -167,13 +163,68 @@ class GroupHealthPlanMedicalHistory extends Component {
       answer: event === 0 ? true : false,
     };
 
+    medical_questions[key+'_error'] = ''
+
     this.setState({
       medical_questions: medical_questions,
     });
   };
 
+  handleClick = () => {
+    this.sendEvents("next");
+    let { medical_questions, list, groupHealthPlanData } = this.state;
+    let canProceed = true;
+
+    list.forEach(item => {
+      if (!medical_questions[item.key]) {
+        canProceed = false
+        medical_questions[item.key+'_error'] = 'Please select one option'
+      }
+    })
+
+    this.setState({
+      medical_questions: medical_questions
+    })
+
+    let member_base = this.state.lead.member_base;
+    let body = {};
+
+    if (canProceed) {
+      list.forEach(item => {
+        groupHealthPlanData.medical_questions_data = {
+          ...groupHealthPlanData.medical_questions_data,
+          [item.key]: medical_questions[item.key].answer ? 'Yes' : 'No'
+        }
+      })
+
+      this.setLocalProviderData(groupHealthPlanData);
+
+      for (var i in member_base) {
+        let key = member_base[i].key;
+        let backend_key = member_base[i].backend_key;
+        body[backend_key] = {};
+
+        if (medical_questions[key].answer) {
+          body[backend_key].mand_question_exists = 'true';
+
+          list.forEach(item => {
+            body[backend_key].medical_questions = {
+              ...body[backend_key].medical_questions,
+              [item.key]: {...medical_questions[item.key]}
+            }
+          }) 
+          
+        } else {
+          body[backend_key].mand_question_exists = 'false';
+        }
+      }
+
+      this.updateLead(body);
+    }
+  };
+
   render() {
-    let { account_type, list } = this.state;
+    let { account_type, list, medical_questions } = this.state;
 
     return (
       <Container
@@ -193,6 +244,7 @@ class GroupHealthPlanMedicalHistory extends Component {
             account_type={account_type}
             name="medical history"
             list={list}
+            medical_questions={medical_questions}
             handleCheckbox={this.handleCheckbox}
             handleChangeRadio={this.handleChangeRadio}
           />
