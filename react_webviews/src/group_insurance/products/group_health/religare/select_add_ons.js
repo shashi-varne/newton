@@ -236,7 +236,7 @@ class GroupHealthPlanAddOns extends Component {
                 }
 
                 if (item.options.length !== 0) {
-                    add_ons_body += item.key + '-' + (item.selected_premium || item.default_premium);
+                    add_ons_body += item.key + '-' + (item.selected_cover_amount || item.default_cover_amount);
                 } else {
                     add_ons_body += item.key;
                 }
