@@ -35,6 +35,8 @@ class GroupHealthPlanLifestyleDetail extends Component {
       }
     })
 
+    console.log(life_style_data)
+
     for (var key in ui_members) {
       if (key !== "" && ui_members[key] === true) {
         mem_options.push(key);
@@ -206,13 +208,11 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
   handleClick = () => {
     this.sendEvents("next");
-    let { life_style_question } = this.state;
+    let {account_type, life_style_question } = this.state;
     let date_error = "";
     let desc_error = "";
     let { groupHealthPlanData } = this.state;
     let canProceed = true;
-    console.log(life_style_question);
-
 
     for (let key in life_style_question) {
       if ((key !== "None" && life_style_question[key].checked === true) || life_style_question[key].answer) {
@@ -228,6 +228,11 @@ class GroupHealthPlanLifestyleDetail extends Component {
       }
     }
 
+    if (account_type === 'self' && !life_style_question['self']) {
+      canProceed = false;
+      life_style_question['self_error'] = 'Please select one option';
+    }
+    
     let keys = Object.keys(life_style_question);
     
     if (!keys.length) {
@@ -246,13 +251,23 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
     if(canProceed) {
 
-      for (let key in life_style_question) {
-        groupHealthPlanData.life_style_data[key] = {
-          checked: life_style_question[key].checked,
-          answer_description: life_style_question[key].answer_description,
-          start_date: life_style_question[key].start_date
+      if (account_type === 'self') {
+        groupHealthPlanData.life_style_data['self'] = {
+          answer: life_style_question.self.answer ? 'Yes' : 'No',
+          answer_description: life_style_question['self'].answer_description,
+          start_date: life_style_question['self'].start_date
+        }
+      } else {
+        for (let key in life_style_question) {
+          groupHealthPlanData.life_style_data = {}
+          groupHealthPlanData.life_style_data[key] = {
+            checked: life_style_question[key].checked,
+            answer_description: life_style_question[key].answer_description,
+            start_date: life_style_question[key].start_date
+          }
         }
       }
+      console.log(groupHealthPlanData)
 
       this.setLocalProviderData(groupHealthPlanData);
 
