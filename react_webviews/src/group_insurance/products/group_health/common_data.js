@@ -20,7 +20,6 @@ export async function initialize() {
 
     let provider = this.props.parent && this.props.parent.props ? this.props.parent.props.match.params.provider : this.props.match.params.provider;
     let providerConfig = getGhProviderConfig(provider);
-
     let screenData = {};
     if(this.state.screen_name && providerConfig[this.state.screen_name]) {
         screenData = providerConfig[this.state.screen_name];
@@ -63,8 +62,7 @@ export async function initialize() {
 
             let quote_id = storageService().get('ghs_ergo_quote_id');
 
-            const res = await Api.get(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/
-            lead/quote?quote_id=${quote_id}`);
+            const res = await Api.get(`/api/ins_service/api/insurance/${providerConfig.provider_api}/lead/quote?quote_id=${quote_id}`);
 
             var resultData = res.pfwresponse.result;
 

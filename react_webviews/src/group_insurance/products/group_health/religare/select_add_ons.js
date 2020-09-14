@@ -229,19 +229,15 @@ class GroupHealthPlanAddOns extends Component {
         let groupHealthPlanData = this.state.groupHealthPlanData;
 
 
-        let add_ons_body = '';
+        let add_ons_body = [];
         this.state.add_ons_data.map((item) => {
 
             if(item.checked) {
-                if (add_ons_body) {
-                    add_ons_body += ','
-                }
 
                 if (item.options.length !== 0) {
-                    // add_ons_body += item.key + '-' + (item.selected_cover_amount || item.default_cover_amount);
-                    add_ons_body += item.options[item.selectedIndexOption].key;
+                    add_ons_body.push(item.options[item.selectedIndexOption].key);
                 } else {
-                    add_ons_body += item.key;
+                    add_ons_body.push(item.key);
                 }
             }
 
