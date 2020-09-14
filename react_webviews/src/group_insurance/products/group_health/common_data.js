@@ -187,8 +187,7 @@ export async function updateLead(body, quote_id) {
             show_loader: true
         });
 
-        const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/
-        lead/update?quote_id=${quote_id}`,body);
+        const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/update?quote_id=${quote_id}`,body);
 
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
@@ -253,8 +252,7 @@ export async function resetQuote() {
     });
 
     try {
-        const res = await Api.get(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/
-        lead/cancel/${quote_id}`);
+        const res = await Api.get(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/cancel/${quote_id}`);
 
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
