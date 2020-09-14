@@ -31,7 +31,6 @@ class GroupHealthSelectInsureType extends Component {
   }
 
   handleClick = () => {
-
     
     if (!this.state.account_type) {
       this.setState({
@@ -42,6 +41,9 @@ class GroupHealthSelectInsureType extends Component {
 
     let groupHealthPlanData = this.state.groupHealthPlanData;
     groupHealthPlanData.account_type = this.state.account_type;
+
+    groupHealthPlanData.eldest_member = ''; //reset
+    groupHealthPlanData.eldest_dob = ''; //reset
 
     let post_body = groupHealthPlanData.post_body || {};
 
