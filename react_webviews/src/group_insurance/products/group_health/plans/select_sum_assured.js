@@ -4,7 +4,7 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 
-import { storageService, numDifferentiation } from 'utils/validators';
+import { numDifferentiation } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
 
 
@@ -14,7 +14,8 @@ class GroupHealthPlanSelectSumAssured extends Component {
         super(props);
         this.state = {
             ctaWithProvider: true,
-            premium_data: []
+            premium_data: [],
+            screen_name: 'sum_assured_screen'
         }
 
         this.initialize = initialize.bind(this);
@@ -64,8 +65,11 @@ class GroupHealthPlanSelectSumAssured extends Component {
         this.sendEvents('next');
         let groupHealthPlanData = this.state.groupHealthPlanData;
         groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
+        groupHealthPlanData.sum_assured = this.state.premium_data[this.state.selectedIndex].sum_assured;
         groupHealthPlanData.post_body.sum_assured = this.state.premium_data[this.state.selectedIndex].sum_assured;
-        
+        if(this.state.provider === 'RELIGARE') {
+            groupHealthPlanData.post_body.sum_assured = (groupHealthPlanData.post_body.sum_assured)/100000
+        }
 
         let total_member = groupHealthPlanData.post_body.mem_info.adult + groupHealthPlanData.post_body.mem_info.child;
 
@@ -74,12 +78,15 @@ class GroupHealthPlanSelectSumAssured extends Component {
             groupHealthPlanData.post_body.type_of_plan = 'WF';
         }
 
-        storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+        // data reset
+        groupHealthPlanData.add_ons_data = '';
+
+        this.setLocalProviderData(groupHealthPlanData);
 
         if(groupHealthPlanData.account_type === 'self' || total_member === 1) {
-            this.navigate('plan-select-cover-period');
+            this.navigate(this.state.next_screen.not_floater || 'plan-select-cover-period');
         } else {
-            this.navigate('plan-select-floater');
+            this.navigate(this.state.next_screen.floater || 'plan-select-floater');
         }
         
     }

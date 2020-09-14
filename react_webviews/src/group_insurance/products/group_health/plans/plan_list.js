@@ -3,7 +3,7 @@ import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { storageService, inrFormatDecimal } from 'utils/validators';
+import { inrFormatDecimal } from 'utils/validators';
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
 import ReactTooltip from "react-tooltip";
@@ -17,7 +17,8 @@ class GroupHealthPlanList extends Component {
             show_loader: true,
             plan_data: {
                 coverplan: []
-            }
+            },
+            screen_name: 'plan_list_screen'
         }
 
         this.initialize = initialize.bind(this);
@@ -31,7 +32,8 @@ class GroupHealthPlanList extends Component {
         try {
 
             let body = this.state.groupHealthPlanData.post_body;
-            const res = await Api.post('/api/ins_service/api/insurance/hdfcergo/coverplan', body);
+            const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/coverplan`,
+             body);
 
             this.setState({
                 show_loader: false
@@ -70,7 +72,7 @@ class GroupHealthPlanList extends Component {
     }
 
 
-    sendEvents(user_action, plan ={}) {
+    sendEvents(user_action, plan = {}) {
         let eventObj = {
             "event_name": 'health_insurance',
             "properties": {
@@ -78,7 +80,7 @@ class GroupHealthPlanList extends Component {
                 "product": 'health suraksha',
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'select plan',
-                'plan_health_suraksha' : plan.plan_type || '',
+                'plan_health_suraksha': plan.plan_type || '',
                 'recommendation_tag': plan.recommendation_tag || ''
             }
         };
@@ -91,50 +93,56 @@ class GroupHealthPlanList extends Component {
     }
 
     selectPlan = (plan, index) => {
+        console.log(plan);
         this.sendEvents('next', plan);
         let groupHealthPlanData = this.state.groupHealthPlanData;
         groupHealthPlanData.plan_selected = plan;
         groupHealthPlanData.base_plan_title = this.state.plan_data.common.base_plan_title
         groupHealthPlanData.post_body.plan = plan.plan_type;
-        storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+        groupHealthPlanData.post_body.cover_plan = plan.plan_type;
+       
+        this.setLocalProviderData(groupHealthPlanData);
 
-        this.navigate('plan-details');
+        this.navigate(this.state.next_screen || 'plan-details');
+    }
+
+    renderTileMidData = (props, index, plan_data) => {
+        return (
+            <div key={index} className="pi-tile">
+                <div className="pi-left">{props.label}</div>
+                <div className="pi-right">{plan_data[props.key]}</div>
+                {props.tooltip_key && <div className="info-img">
+                    <img
+                        id={index}
+                        className="tooltip-icon"
+                        data-tip={plan_data[props.tooltip_key]}
+                        src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
+                </div>}
+            </div>
+        )
     }
 
     renderPlans = (props, index) => {
+        let plan_data = props;
         return (
             <div className="tile" key={index}>
-                <div className="group-health-recommendation" style={{backgroundColor: props.recommendation_tag === 'Recommended' ? '#E86364' : ''}}>{props.recommendation_tag}</div>
+                <div className="group-health-recommendation" style={{ backgroundColor: props.recommendation_tag === 'Recommended' ? '#E86364' : '' }}>{props.recommendation_tag}</div>
                 <div className="group-health-top-content-plan-logo">
                     <div className="left">
                         <div className="tc-title">{this.state.plan_data.common.base_plan_title}</div>
                         <div className="tc-subtitle">{props.plan_title}</div>
                     </div>
                     <div className="tc-right">
-                        <img src={require(`assets/${this.state.providerData.logo_card}`)} alt="" />
+                        <img
+                            src={require(`assets/${this.state.providerData.logo_card}`)}
+                            alt=""
+                            style={{ maxWidth: '140px' }} />
                     </div>
                 </div>
 
                 <div className="plan-info">
-                    <div className="pi-tile">
-                        <div className="pi-left">Sum assured:</div>
-                        <div className="pi-right">{props.sum_assured_options_text}</div>
-                    </div>
-                    <div className="pi-tile">
-                        <div className="pi-left">Recovery benefit:</div>
-                        <div className="pi-right">{props.recovery_benefit_extra}</div>
-                        <div className="info-img">
-                            <img 
-                            id={index}
-                             className="tooltip-icon"
-                             data-tip={props.recovery_benefit_content}
-                            src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
-                        </div>
-                    </div>
-                    <div className="pi-tile">
-                        <div className="pi-left">Allowances:</div>
-                        <div className="pi-right">{props.allowances}</div>
-                    </div>
+                    {this.state.screenData.tile_mid_data.map((props, index) => 
+                    this.renderTileMidData(props, index, plan_data))}
                 </div>
 
                 <div className="bottom-cta" onClick={() => this.selectPlan(props, index)}>

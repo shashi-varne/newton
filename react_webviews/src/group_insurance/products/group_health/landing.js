@@ -5,7 +5,7 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { health_providers, ghGetMember } from '../../constants';
+import { ghGetMember } from '../../constants';
 import HowToSteps from '../../../common/ui/HowToSteps';
 import Checkbox from 'material-ui/Checkbox';
 import { inrFormatDecimal, numDifferentiationInr, storageService } from 'utils/validators';
@@ -17,7 +17,9 @@ import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { openInBrowser } from './common_data';
 
+import {getGhProviderConfig} from './constants';
 
+const screen_name = 'landing_screen';
 class GroupHealthLanding extends Component {
 
   constructor(props) {
@@ -25,20 +27,24 @@ class GroupHealthLanding extends Component {
     this.state = {
       show_loader: true,
       productName: getConfig().productName,
-      provider: 'HDFCERGO',
+      provider: this.props.match.params.provider,
       checked: true,
       offerImageData: [],
       whats_not_covered: [],
       whats_covered: [],
       quoteResume: {},
       common: {},
-      selectedIndex: 0
-    }
+      screen_name :screen_name,
+      selectedIndex: 0,
+      providerConfig: getGhProviderConfig(this.props.match.params.provider)
+    };
 
     this.openInBrowser = openInBrowser.bind(this);
   }
 
   componentWillMount() {
+    let screenData = this.state.providerConfig[screen_name];
+
     nativeCallback({ action: 'take_control_reset' });
 
     let stepsContentMapper = {
@@ -49,47 +55,20 @@ class GroupHealthLanding extends Component {
         { 'icon': 'icn_hs_payment', 'title': 'Secure payment', 'subtitle': 'Smooth and secure online payment process via billdesk' }
       ]
     }
-
-    let offerImageData = [
-      {
-        src: 'icn_landing_card_1.svg',
-      },
-      {
-        src: 'icn_landing_card_2.svg',
-      },
-      {
-        src: 'icn_landing_card_3.svg',
-      }
-    ];
-
-    let whats_covered = [
-      'Diseases occurred before policy issuance will be covered after 3 years',
-      'Ayurveda, unani, sidha and homeopathy  treatments',
-      '60 days pre and 180 days post hospitalization expenses',
-      'Organ donor expenses',
-      'Mental health and home health care'
-    ];
-    let whats_not_covered = [
-      'Maternity',
-      'Self-inflicted injuries',
-      'Adventure sport injuries',
-      'Injuries caused due to participation in defense operations/war',
-      'Venereal or Sexually transmitted diseases'
-    ]
-
+   
     this.setState({
-      providerData: health_providers[this.state.provider],
       stepsContentMapper: stepsContentMapper,
-      offerImageData: offerImageData,
-      whats_covered: whats_covered,
-      whats_not_covered: whats_not_covered
+      offerImageData: screenData.offerImageData,
+      whats_covered: screenData.whats_covered,
+      whats_not_covered: screenData.whats_not_covered,
+      screenData: screenData
     })
   }
 
   async componentDidMount() {
 
     try {
-      const res = await Api.get('api/ins_service/api/insurance/hdfcergo/lead/get/quoteid')
+      const res = await Api.get(`api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/get/quoteid`)
 
       this.setState({
         show_loader: false
@@ -129,14 +108,14 @@ class GroupHealthLanding extends Component {
 
   navigate = (pathname) => {
     this.props.history.push({
-      pathname: this.state.provider + '/' + pathname,
+      pathname: pathname,
       search: getConfig().searchParams
     });
   }
 
   handleClick = () => {
     this.sendEvents('next');
-    this.navigate('insure-type')
+    this.navigate(this.state.providerConfig.get_next[screen_name]);
   }
 
 
@@ -165,7 +144,7 @@ class GroupHealthLanding extends Component {
     return (
       <div key={index} className="gold-offer-slider">
         <img className="offer-slide-img"
-          src={require(`assets/${this.state.productName}/${props.src}`)} alt="Gold Offer" />
+          src={require(`assets/${props.src}`)} alt="Gold Offer" />
       </div>
     )
   }
@@ -210,38 +189,7 @@ class GroupHealthLanding extends Component {
   openFaqs = () => {
 
     this.sendEvents('next', { things_to_know: 'faq' })
-    let options = [
-      {
-        'title': 'Why do I need health insurance?',
-        'subtitle': 'With the advancement in technology and the availability of more effective treatments, the cost of healthcare has steeply increased. Health insurance policy ensures that medical bills and hospitalization expenses should not get paid from your hard-earned money. It takes care of the hospitalization and treatment charges as well as provides assured tax benefit under section 80D of Income Tax.'
-      },
-      {
-        'title': 'What are the benefits of having a health insurance policy?',
-        'subtitle': 'Having a health insurance policy covers expenses incurred due to hospitalization. This includes in-patient treatments, pre and post hospitalization expenses, daycare procedures, home healthcare, etc.'
-      },
-      {
-        'title': 'Can I change the hospital during the course of treatment?',
-        'subtitle': 'Yes, if needed you can change the hospital during the treatment. However, you might need to provide the necessary information for a smooth claim process of your health insurance plan.'
-      },
-      {
-        'title': 'Is the health insurance coverage applicable worldwide?',
-        'subtitle': 'In certain conditions, you might be eligible for reimbursement of overseas treatment, such as pre-diagnosed planned hospitalization, outpatient treatment, and second opinion in case of sudden illness while traveling under your health insurance plan.'
-      },
-      {
-        'title': 'Does my policy cover diagnostic charges?',
-        'subtitle': 'Most pre-hospitalization and post-hospitalization expenses (up to 60 days) are covered under the health insurance policy, such as X - rays, CT scans, MRI, ultrasound nursing, physicians, medicines, etc.'
-      }
-    ];
-
-    let renderData = {
-      'header_title': 'Frequently asked questions',
-      'header_subtitle': 'my: health Suraksha',
-      'steps': {
-        'options': options
-      },
-      'cta_title': 'OK'
-    }
-
+    let renderData = this.state.screenData.faq_data;
 
     this.props.history.push({
       pathname: '/gold/common/render-faqs',
@@ -259,14 +207,14 @@ class GroupHealthLanding extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
-        title={this.state.providerData.title}
+        title={this.state.providerConfig.title}
         fullWidthButton={true}
         buttonTitle={this.state.quoteResume && this.state.quoteResume.id ? 'GET A NEW QUOTE' : "GET INSURED"}
         onlyButton={true}
         handleClick={() => this.handleClick()}
       >
         <div className="common-top-page-subtitle-dark">
-          {this.state.providerData.subtitle}
+          {this.state.providerConfig.subtitle}
         </div>
 
         <div className="group-health-landing">
@@ -298,7 +246,7 @@ class GroupHealthLanding extends Component {
               <div className="rc-tile" style={{ marginBottom: 0 }}>
                 <div className="rc-tile-left">
                   <div className="">
-                    <img src={require(`assets/${this.state.providerData.logo_cta}`)} alt="" />
+                    <img src={require(`assets/${this.state.providerConfig.logo_cta}`)} alt="" />
                   </div>
                   <div className="rc-tile-premium-data">
                     <div className="rct-title">{this.state.quoteResume.plan_title}</div>
@@ -321,7 +269,7 @@ class GroupHealthLanding extends Component {
             </div>}
 
           <div className="generic-page-title">
-            Coverage for all
+            Coverage all age groups
           </div>
           <div className="generic-page-subtitle">
             Option to cover your entire family (spouse, kids and parents)
