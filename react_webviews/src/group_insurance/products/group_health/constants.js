@@ -294,48 +294,89 @@ export const religare = {
     nominee_screen: {
         nominee_opts:    [
             {
-                'name': 'Spouse',
-                'value': 'Spouse'
+                'name': 'SPOUSE',
+                'value': 'SPSE'
             },
             {
-                'name': 'Father',
-                'value': 'Father'
+                'name': 'BROTHER',
+                'value': 'BOTH'
             },
             {
-                'name': 'Mother',
-                'value': 'Mother'
+                'name': 'COUSIN',
+                'value': 'COUS'
             },
             {
-                'name': 'Brother',
-                'value': 'Brother'
+                'name': 'DAUGHTER IN LAW',
+                'value': 'DLAW'
             },
             {
-                'name': 'Sister',
-                'value': 'Sister'
+                'name': 'FATHER',
+                'value': 'FATH'
             },
             {
-                'name': 'Son',
-                'value': 'Son'
+                'name': 'FATHER IN LAW',
+                'value': 'FLAW'
             },
             {
-                'name': 'Daughter',
-                'value': 'Daughter'
+                'name': 'GRAND DAUGHTER',
+                'value': 'GDAU'
             },
             {
-                'name': 'Grand father',
-                'value': 'Grand father'
+                'name': 'GRAND FATHER',
+                'value': 'GFAT'
+            },
+            
+            {
+                'name': 'GRAND MOTHER',
+                'value': 'GMOT'
             },
             {
-                'name': 'Grand mother',
-                'value': 'Grand mother'
+                'name': 'GRAND SON',
+                'value': 'GSON'
             },
             {
-                'name': 'Grand son',
-                'value': 'Grand son'
+                'name': 'BROTHER IN LAW',
+                'value': 'MDTR'
             },
             {
-                'name': 'Grand daughter',
-                'value': 'Grand daughter'
+                'name': 'MOTHER IN LAW',
+                'value': 'MLAW'
+            },
+            {
+                'name': 'SISTER IN LAW',
+                'value': 'MMBR'
+            },
+            {
+                'name': 'MOTHER',
+                'value': 'MOTH '
+            },
+            {
+                'name': 'NEPHEW',
+                'value': 'NEPH'
+            },
+            {
+                'name': 'NIECE',
+                'value': 'NIEC'
+            },
+            {
+                'name': 'SELF- PRIMARY MEMBER',
+                'value': 'SELF'
+            },
+            {
+                'name': 'SISTER',
+                'value': 'SIST'
+            },
+            {
+                'name': 'SON IN LAW',
+                'value': 'SLAW'
+            },
+            {
+                'name': 'SON',
+                'value': 'SONM'
+            },
+            {
+                'name': 'DAUGHTER',
+                'value': 'UDTR'
             }
         ],
     },
