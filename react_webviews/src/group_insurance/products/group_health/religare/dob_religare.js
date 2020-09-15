@@ -107,7 +107,7 @@ class GroupHealthPlanDobReligare extends Component {
         let { groupHealthPlanData } = this.state;
 
         groupHealthPlanData = resetInsuredMembers(groupHealthPlanData);
-        
+
         let ui_members = groupHealthPlanData.ui_members || {};
         
         let canProceed = true;
@@ -162,7 +162,6 @@ class GroupHealthPlanDobReligare extends Component {
             
             post_body.eldest_member = this.memberKeyMapper(this.state.eldest_member).backend_key;
             post_body.eldest_dob = this.state.eldest_dob;
-            post_body.eldest_member = this.state.eldest_member;
 
             this.setLocalProviderData(groupHealthPlanData);
             this.navigate(this.state.next_screen);
