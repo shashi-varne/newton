@@ -27,45 +27,35 @@ class radioAndCheckboxList extends Component {
     });
   }
 
-  renderInputs = (name) => {
-    let form_data, date_error, desc_error;
-
-    let { life_style_question } = this.props;
-    
-    if (!name) { name = 'self'};
-
-    form_data = life_style_question[name] || '';
-    date_error = life_style_question[name].date_error || '';
-    desc_error = life_style_question[name].desc_error || '';
-
+  renderInputs = (option, index) => {
     return (
       <FormControl fullWidth>
         <div className="InputField">
           <Input
             type="text"
             label="description"
-            name={name}
-            id="description"
+            name="answer_description"
+            id="answer_description"
             placeholder="Lorem ipsum lorem ipsum"
-            value={form_data.answer_description || ""}
-            error={desc_error ? true : false}
-            helperText={desc_error}
-            onChange={(event) => this.props.handleChange(event)}
+            value={option.life_style_question.answer_description || ""}
+            error={!!option.life_style_question.answer_description_error}
+            helperText={option.life_style_question.answer_description_error}
+            onChange={(event) => this.props.handleChange(event, index)}
           />
         </div>
         <div className="InputField">
           <Input
             type="text"
-            id={!name ? 'date' : name + "_date"}
+            id={"date_" + option.key}
             label="Since When"
-            name={name}
+            name="start_date"
             className="date"
             placeholder="MM/YYYY"
             maxLength="7"
-            value={form_data.start_date || ""}
-            error={date_error ? true : false}
-            helperText={date_error}
-            onChange={(event) => this.props.handleChange(event)}
+            value={option.life_style_question.start_date || ""}
+            error={!!option.life_style_question.start_date_error}
+            helperText={option.life_style_question.start_date_error}
+            onChange={(event) => this.props.handleChange(event, index)}
           />
         </div>
       </FormControl>
@@ -74,8 +64,6 @@ class radioAndCheckboxList extends Component {
 
   render() {
     let { account_type, list, name } = this.state;
-    let { life_style_question, medical_questions } = this.props;
-    let object = life_style_question || medical_questions;
 
     return (
       <div style={{ marginBottom: "40px" }}>
@@ -86,24 +74,25 @@ class radioAndCheckboxList extends Component {
           >
             <p>{item.label}</p>
 
-            {item.input_type === "radio" && (
-              <div>
-                <RadioWithoutIcon
-                  style={{ width: "20px" }}
-                  isVertical={false}
-                  options={item.options}
-                  id={name}
-                  name={name}
-                  error={object[item.key+'_error'] ? true : false}
-                  helperText={object[item.key+'_error'] || ''}
-                  value={(life_style_question ? object[item.key].answer : object[item.key]) || ""}
-                  onChange={(event) => this.props.handleChangeRadio(item.key, event)}
-                />
-                <br />
-                {life_style_question && life_style_question[item.key] && life_style_question[item.key].answer === 'Yes' &&
-                  this.renderInputs()}
-              </div>
-            )}
+            {item.input_type === "radio" &&
+              item.options.map((option, index) => (
+                <div key={index}>
+                  <RadioWithoutIcon
+                    style={{ width: "20px" }}
+                    isVertical={false}
+                    options={option.radio_options}
+                    id={name}
+                    name={name}
+                    value={option.life_style_question_exists || ""}
+                    error={!!option.life_style_question_exists_error}
+                    helperText={option.life_style_question_exists_error}
+                    onChange={(event) => this.props.handleChangeRadio(event, index)}
+                  />
+                  <br />
+                  {option.life_style_question_exists === 'Yes' &&
+                    this.renderInputs(option, index)}
+                </div>
+              ))}
 
             {item.input_type === "checkbox" &&
               name === "lifeStyle details" &&
@@ -112,34 +101,28 @@ class radioAndCheckboxList extends Component {
                   <Grid container spacing={16} alignItems="center">
                     <Grid item xs={1} className="TextCenter">
                       <Checkbox
-                        checked={
-                          life_style_question[option]
-                            ? life_style_question[option].checked
-                            : false
-                        }
+                        checked={option.life_style_question_exists || false}
                         color="primary"
-                        value={option}
-                        id={option}
-                        name={option}
+                        // value={option.life_style_question_exists}
+                        id={option.backend_key}
+                        name={option.backend_key}
                         disableRipple
-                        onChange={(event) => this.props.handleCheckbox(event)}
+                        onChange={(event) => this.props.handleCheckbox(event, index)}
                         className="Checkbox"
                       />
                     </Grid>
                     <Grid item xs={11} style={{ fontSize: "14px" }}>
-                      {capitalizeFirstLetter(option)}
+                      {capitalizeFirstLetter(option.key)}
                     </Grid>
                   </Grid>
-                  {life_style_question[option] &&
-                    life_style_question[option].checked &&
-                    option !== "None" && (
-                      <Grid container spacing={16} alignItems="center">
-                        <Grid item xs={1} className="TextCenter"></Grid>
-                        <Grid item xs={11} style={{ fontSize: "14px" }}>
-                          {this.renderInputs(option)}
-                        </Grid>
+                  {option.life_style_question_exists && option.key !== 'none' && (
+                    <Grid container spacing={16} alignItems="center">
+                      <Grid item xs={1} className="TextCenter"></Grid>
+                      <Grid item xs={11} style={{ fontSize: "14px" }}>
+                        {this.renderInputs(option, index)}
                       </Grid>
-                    )}
+                    </Grid>
+                  )}
                 </div>
               ))}
 

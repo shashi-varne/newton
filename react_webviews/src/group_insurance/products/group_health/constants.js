@@ -11,6 +11,7 @@ export const HDFCERGO_CONFIG = {
     get_next: { //have as a separate map and not screen-specific property to reduce duplication across all providers and for all screens
         landing_screen: 'insure-type',
         plan_dob_screen: 'plan-select-city',
+        nominee_screen: 'is-ped'
     },
     validation_props: {
         'dob_adult': { min: 19, max: 90 },  //add one year for minimum age here 18 to 19
@@ -174,7 +175,8 @@ export const religare = {
             not_floater: 'plan-select-add-ons'
         },
         cover_type_screen: 'plan-select-add-ons',
-        add_ons_screen: 'plan-select-cover-period'
+        add_ons_screen: 'plan-select-cover-period',
+        nominee_screen: 'plan-lifestyle-details'
     },
     validation_props: {
         'dob_adult': { min: 19, max: 90 },  //add one year for minimum age here 18 to 19

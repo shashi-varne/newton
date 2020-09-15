@@ -2,65 +2,67 @@ import React, { Component } from "react";
 import Container from "../../../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { getConfig } from "utils/functions";
-import { initialize, updateBottomPremium, updateLead } from "../common_data";
+import { initialize, updateLead } from "../common_data";
 import RadioAndCheckboxList from "./radioAndCheckboxList";
 import { isValidMonthYear } from "utils/validators";
 import { formatMonthandYear, dobFormatTest } from "utils/validators";
 import toast from "../../../../common/ui/Toast";
+import ConfirmDialog from './../plans/confirm_dialog';
+
 
 class GroupHealthPlanLifestyleDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
       ctaWithProvider: true,
+      get_lead: true,
       life_style_question: {},
+      next_state: 'plan-medical-history'
     };
 
     this.initialize = initialize.bind(this);
     this.updateLead = updateLead.bind(this);
-    this.updateBottomPremium = updateBottomPremium.bind(this);
   }
 
   componentWillMount() {
     this.initialize();
   }
 
-  async componentDidMount() {
-    let { account_type, ui_members, life_style_data } = this.state.groupHealthPlanData;
-    let mem_options = [];
+  onload() {
 
-    this.setState({
-      life_style_question: {
-        ...life_style_data
-      }
-    })
 
-    for (var key in ui_members) {
-      if (key !== "" && ui_members[key] === true) {
-        mem_options.push(key);
-      }
+    let { member_base, account_type } = this.state.lead;
+    console.log(member_base);
+
+
+    if (member_base.length > 1) {
+      member_base.push({
+        key: 'none'
+      })
     }
-    mem_options.push("None");
-
     let list = [];
 
     if (account_type === "self") {
+
+      member_base[0].life_style_question_exists = member_base[0].life_style_question_exists ? 'Yes' : 'No';
+
+      member_base[0].radio_options =  [
+        {
+          name: "Yes",
+          value: "Yes",
+        },
+        {
+          name: "No",
+          value: "No",
+        },
+      ];
       list = [
         {
           label:
             "Do you smoke, consume alcohol, or chew tobacco, ghutka or paan or use any recreational drugs? If ‘Yes’ then please provide the frequency & amount consumed.",
-          options: [
-            {
-              name: "Yes",
-              value: "Yes",
-            },
-            {
-              name: "No",
-              value: "No",
-            },
-          ],
           key: "self",
           input_type: "radio",
+          options: member_base
         },
       ];
     } else {
@@ -68,7 +70,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
         {
           label:
             "Does any of the insured members smoke, consume alcohol, or chew tobacco, ghutka or paan or use any recreational drugs? If ‘Yes’ then please provide the frequency & amount consumed.",
-          options: mem_options,
+          options: member_base,
           input_type: "checkbox",
         },
       ];
@@ -77,7 +79,15 @@ class GroupHealthPlanLifestyleDetail extends Component {
     this.setState({
       account_type: this.state.groupHealthPlanData.account_type,
       list: list,
+      member_base: member_base
     });
+
+    this.setState({
+      bottomButtonData: {
+        ...this.state.bottomButtonData,
+        handleClick: this.handleClick
+      }
+    })
   }
 
   navigate = (pathname) => {
@@ -103,220 +113,208 @@ class GroupHealthPlanLifestyleDetail extends Component {
     }
   }
 
-  handleChangeRadio = (key, event) => {
-    let { life_style_question } = this.state;
+  handleChangeRadio = (event, index) => {
 
-    life_style_question[key] = {
-      answer: event === 0 ? true : false,
-    };
-
-    life_style_question[key+'_error'] = '';
+    console.log(event);
+    let { member_base } = this.state;
+    member_base[index].life_style_question_exists =  member_base[index].radio_options[event].value;
+    member_base[index].life_style_question_exists_error = '';
 
     this.setState({
-      life_style_question: life_style_question,
+      member_base: member_base,
     });
   };
 
-  handleChange = (event) => {
-    let { name, value, id } = event.target;
-    let { life_style_question } = this.state;
+  handleChange = (event, index) => {
 
-    if (id === "description") {
-      if (!name) {
-        life_style_question['self'] = {
-          ...life_style_question['self'],
-          answer_description: value,
-          desc_error: "",
-        };
-      } else {
-        life_style_question[name] = {
-          ...life_style_question[name],
-          answer_description: value,
-          desc_error: "",
-        };
-      }
+    let { value, id } = event.target;
+    let { member_base } = this.state;
+
+
+    if (id === "answer_description") {
+      member_base[index].life_style_question.answer_description = value;
+      member_base[index].life_style_question.answer_description_error = '';
     } else {
       if (!dobFormatTest(value)) {
         return;
       }
 
       let input;
-      if (!name) {
-        input = document.getElementById("date");
-        input.onkeyup = formatMonthandYear;
 
-        life_style_question['self'] = {
-          ...life_style_question['self'],
-          start_date: value,
-          date_error: "",
-        };
-      } else {
-        input = document.getElementById(name + "_date");
-        input.onkeyup = formatMonthandYear;
+      input = document.getElementById(id);
+      input.onkeyup = formatMonthandYear;
 
-        life_style_question[name] = {
-          ...life_style_question[name],
-          start_date: value,
-          date_error: "",
-        };
-      }
+      member_base[index].life_style_question.start_date = event.target.value;
+      member_base[index].life_style_question.start_date_error = '';
     }
 
     this.setState({
-      life_style_question: life_style_question,
+      member_base: member_base,
     });
   };
 
-  handleCheckbox = (event) => {
-    let name = event.target.name;
-    let checked = event.target.checked;
-    let { life_style_question } = this.state;
+  handleCheckbox = (event, index) => {
 
-    if (name === "None") {
-      life_style_question = {}
+    let { member_base, none_option_selected } = this.state;
+    member_base[index].life_style_question_exists = event.target.checked;
+
+    let isNone = member_base[index].key === 'none';
+
+    if (isNone) {
+      for (var key in member_base) {
+
+        if (member_base[key].key !== 'none') {
+          member_base[key].life_style_question_exists = false;  //setting other to un check other than none
+        }
+
+      }
+    }
+
+    if (isNone && event.target.checked) {
+      none_option_selected = true;
     } else {
-      delete life_style_question['None']
+      none_option_selected = false;  //for all ther other clicks , including untick of none
+      member_base[member_base.length - 1].life_style_question_exists = false //removing none
     }
 
-    if (checked) {
-      life_style_question[name] = {
-        ...life_style_question[name],
-        checked: checked,
-      };
-    } else if (!checked) {
-      delete life_style_question[name];
-    }
 
     this.setState({
-      life_style_question: life_style_question,
+      member_base: member_base,
+      none_option_selected: none_option_selected
     });
   };
 
   validateMonthYear = (date) => {
     if (!isValidMonthYear(date)) {
-      return "please enter valid month or year";
+      return "please enter valid month and year";
     }
+    return '';
   };
 
   validateDescription = (desc) => {
     if (!desc) {
       return "please enter the description";
     }
+    return '';
   };
 
   handleClick = () => {
     this.sendEvents("next");
-    let {account_type, life_style_question } = this.state;
-    let date_error = "";
-    let desc_error = "";
-    let { groupHealthPlanData } = this.state;
+    let { member_base, none_option_selected } = this.state;
+
     let canProceed = true;
 
-    for (let key in life_style_question) {
-      if ((key !== "None" && life_style_question[key].checked === true) || life_style_question[key].answer) {
-        let date = life_style_question[key].start_date;
-        let description = life_style_question[key].answer_description;
-        date_error = this.validateMonthYear(date);
-        desc_error = this.validateDescription(description);
-        life_style_question[key] = {
-          ...life_style_question[key],
-          date_error: date_error,
-          desc_error: desc_error,
-        };
-      }
-    }
+    let atlOneOption = none_option_selected || false;
 
-    if (account_type === 'self' && !life_style_question['self']) {
-      canProceed = false;
-      life_style_question['self_error'] = 'Please select one option';
-    }
-    
-    let keys = Object.keys(life_style_question);
-    
-    if (!keys.length) {
-      toast("Select atleast one option");
+    if (!none_option_selected) {
+      for (let key in member_base) {
+
+        let member_data = member_base[key];
+        if ((member_data.life_style_question_exists  === 'Yes' ||
+         member_data.life_style_question_exists === true) && member_data.key !== 'none') {
+          member_data.life_style_question.answer_description_error = this.validateDescription(member_data.life_style_question.answer_description);
+          member_data.life_style_question.start_date_error = this.validateMonthYear(member_data.life_style_question.start_date);
+
+          if (member_data.life_style_question.answer_description_error || member_data.life_style_question.start_date_error) {
+            canProceed = false;
+          }
+          member_base[key] = member_data;
+        }
+
+        if (member_data.life_style_question_exists) {
+          atlOneOption = true;
+        }
+
+      }
+
     }
 
     this.setState({
-      life_style_question: life_style_question,
-    });
+      member_base: member_base
+    })
 
-    canProceed = !date_error && !desc_error && keys.length;
 
-    let member_base = this.state.lead.member_base;
+    if (!atlOneOption) {
+      toast("Select atleast one option");
+    }
+
 
     let body = {};
 
-    if(canProceed) {
-
-      if (account_type === 'self') {
-        groupHealthPlanData.life_style_data['self'] = {
-          answer: life_style_question.self.answer ? 'Yes' : 'No',
-          answer_description: life_style_question['self'].answer_description,
-          start_date: life_style_question['self'].start_date
-        }
-      } else {
-        for (let key in life_style_question) {
-          groupHealthPlanData.life_style_data = {}
-          groupHealthPlanData.life_style_data[key] = {
-            checked: life_style_question[key].checked,
-            answer_description: life_style_question[key].answer_description,
-            start_date: life_style_question[key].start_date
-          }
-        }
-      }
-
-      this.setLocalProviderData(groupHealthPlanData);
+    if (canProceed) {
 
       for (var i in member_base) {
-        let key = member_base[i].key;
-        let backend_key = member_base[i].backend_key;
-        body[backend_key] = {};
+        let member_data = member_base[i];
 
-        if (life_style_question[key].checked) {
-          body[backend_key].life_style_question_exists = 'true';
-          body[backend_key].life_style_question = {
-            answer: life_style_question[key].checked,
-            answer_description: life_style_question[key].answer_description,
-            start_date: life_style_question[key].start_date
+        if (member_data.key !== 'none') {
+          let backend_key = member_data.backend_key;
+          body[backend_key] = {};
+
+          if ((member_data.life_style_question_exists  === 'Yes' ||
+          member_data.life_style_question_exists === true) && !none_option_selected) {
+            body[backend_key].life_style_question_exists = 'true';
+            body[backend_key].life_style_question = {
+              answer: 'true',
+              answer_description: member_data.life_style_question.answer_description,
+              start_date: member_data.life_style_question.start_date
+            }
+          } else {
+            body[backend_key].life_style_question_exists = 'false';
+            body[backend_key].life_style_question = {}
           }
-        } else {
-          body[backend_key].life_style_question_exists = 'false';
         }
+
       }
 
       this.updateLead(body);
     }
   };
 
+  handleClose = () => {
+    this.setState({
+      openConfirmDialog: false
+    });
+
+  }
+
+  handleClick2 = () => {
+    this.setState({
+      openConfirmDialog: true
+    })
+  }
+
   render() {
-    let { account_type, list, life_style_question } = this.state;
+    let { account_type, list } = this.state;
 
     return (
       <Container
         events={this.sendEvents("just_set_events")}
-        show_loader={this.state.show_loader}
+        showLoader={this.state.show_loader}
         title="Lifestyle detail"
         buttonTitle="CONTINUE"
         withProvider={true}
+        handleClick2={this.handleClick2}
         buttonData={this.state.bottomButtonData}
         handleClick={() => this.handleClick()}
       >
         <div className="common-top-page-subtitle">
-          This is important to avoid claims rejection later
+          Please disclose correct details to make hassle-free claim later
         </div>
         {account_type && (
           <RadioAndCheckboxList
+            parent={this}
             account_type={account_type}
             name="lifeStyle details"
             list={list}
             date_error={this.state.date_error}
             desc_error={this.state.desc_error}
-            life_style_question={life_style_question}
+            life_style_question={this.state.member_base}
             handleChange={this.handleChange}
             handleCheckbox={this.handleCheckbox}
             handleChangeRadio={this.handleChangeRadio} />
         )}
+
+        <ConfirmDialog parent={this} />
       </Container>
     );
   }
