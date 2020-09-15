@@ -13,7 +13,6 @@ import SVG from 'react-inlinesvg';
 import close_icn from 'assets/close_icn.svg';
 import { isValidMonthYear } from "utils/validators";
 import { formatMonthandYear, dobFormatTest } from "utils/validators";
-import { DialogContentText } from 'material-ui';
 
 class MmYyInModal extends Component {
     constructor(props) {
@@ -66,6 +65,7 @@ class MmYyInModal extends Component {
                 [name + '_error']: error
             })
         } else {
+            this.props.parent.updateParent(this.props.name, this.state.value)
             this.handleClose();
         }
     }

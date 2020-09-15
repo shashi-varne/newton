@@ -102,7 +102,9 @@ class CheckboxListClass extends Component {
                 <div className="InputField"
                 onClick={() => {
                     this.setState({
-                        openPopUpInputDate: true
+                        openPopUpInputDate: true,
+                        header_title: props.name,
+                        cta_title: 'Ok'
                     })
                 }}
                  style={{margin: '-10px 0px 0px 33px'}}>
@@ -114,7 +116,7 @@ class CheckboxListClass extends Component {
                         id="date"
                         label="Since When"
                         name={props.name}
-                        value={this.props.value}
+                        value={this.state[this.state.name] || this.props.parent.state[this.state.name]}
                     />
                 </div>
                 }
@@ -155,7 +157,7 @@ class CheckboxListClass extends Component {
                     cta_title={this.state.cta_title}
                     name={this.state.name}
                     label={this.state.label}
-                    value={this.state[this.state.otherInputData.name] || this.props.parent.state[this.state.otherInputData.name]}
+                    value={this.state[this.state.name] || this.props.parent.state[this.state.name]}
                     handleChange={this.handleChangeInputPopup()}
                 />
             </div>
