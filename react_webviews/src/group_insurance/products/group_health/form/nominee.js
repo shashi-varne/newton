@@ -19,7 +19,8 @@ class GroupHealthPlanNomineeDetails extends Component {
             ctaWithProvider: true,
             relationshipOptions: [],
             get_lead: true,
-            next_state: 'is-ped'
+            next_state: 'is-ped',
+            screen_name: 'nominee_screen'
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -28,60 +29,15 @@ class GroupHealthPlanNomineeDetails extends Component {
 
     componentWillMount() {
         this.initialize();
+    }
 
-        let relationshipOptions = [
-            {
-                'name': 'SIBLING',
-                'value': 'SIBLING'
-            },
-            {
-                'name': 'CHILD',
-                'value': 'CHILD'
-            },
-            {
-                'name': 'NIECE',
-                'value': 'NIECE'
-            },
-            {
-                'name': 'GRANDPARENT',
-                'value': 'GRANDPARENT'
-            },
-            {
-                'name': 'GRANDCHILD',
-                'value': 'GRANDCHILD'
-            },
-            {
-                'name': 'BROTHER IN LAW',
-                'value': 'BROTHER_IN_LAW'
-            },
-            {
-                'name': 'SISTER IN LAW',
-                'value': 'SISTER_IN_LAW'
-            },
-            {
-                'name': 'NEPHEW',
-                'value': 'NEPHEW'
-            },
-            {
-                'name': 'PARENT',
-                'value': 'PARENT'
-            },
-            {
-                'name': 'SPOUSE',
-                'value': 'SPOUSE'
-            },
-            // {
-            //     'name': 'OTHER',
-            //     'value': 'OTHER'
-            // }
-        ]
+    onload = () => {
+
+        let relationshipOptions = this.state.screenData.nominee_opts;
 
         this.setState({
             relationshipOptions: relationshipOptions
         })
-    }
-
-    onload = () => {
 
         if(this.props.edit) {
             this.setState({
