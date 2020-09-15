@@ -114,9 +114,10 @@ class CheckboxListClass extends Component {
                         type="text"
                         width="40"
                         id="date"
+                        class="date_input"
                         label="Since When"
                         name={props.name}
-                        value={this.state[this.state.name] || this.props.parent.state[this.state.name]}
+                        value={this.state[props.name] || this.props.parent.state[props.name]}
                     />
                 </div>
                 }
@@ -129,6 +130,7 @@ class CheckboxListClass extends Component {
         if (!name) {
             name = event.target.name;
         }
+
         var value = event.target ? event.target.value : event;
         this.setState({
             [this.state.otherInputData.name]: value,
@@ -157,9 +159,7 @@ class CheckboxListClass extends Component {
                     cta_title={this.state.cta_title}
                     name={this.state.name}
                     label={this.state.label}
-                    value={this.state[this.state.name] || this.props.parent.state[this.state.name]}
-                    handleChange={this.handleChangeInputPopup()}
-                />
+                    value={this.state[this.state.name] || this.props.parent.state[this.state.name]} />
             </div>
         );
     }

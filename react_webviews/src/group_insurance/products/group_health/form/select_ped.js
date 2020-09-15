@@ -56,6 +56,7 @@ class GroupHealthPlanSelectPed extends Component {
         let backend_key = data[0].backend_key;
         let ped_diseases_name = data[0].ped_diseases_name;
         ped_diseases_name = ped_diseases_name.split(',');
+        let duration = data[0].duration
 
         let options = [
             { 'name': 'Acute Gastroenteritis/AGE/Diarrhoea/Loose Motions/Vomiting' },
@@ -85,6 +86,7 @@ class GroupHealthPlanSelectPed extends Component {
                 if(options[o].name === ped_diseases_name[p]) {
                     options[o].checked = true;
                     matched = true;
+                    options[0].value = duration[ped_diseases_name[p]]
                 }
             }
 
@@ -169,6 +171,7 @@ class GroupHealthPlanSelectPed extends Component {
 
 
             let ped_diseases_name = '';
+            let duration = {};
 
             for(var j in options) {
                 if(options[j].checked) {
@@ -179,10 +182,15 @@ class GroupHealthPlanSelectPed extends Component {
                         value = this.state[this.state.otherInputData.name];
                     }
 
+                    if(options[j].name !== 'Other') {
+                        options[j].value = this.state[this.state.name];
+                    }
+
                     if(!ped_diseases_name) {
                         ped_diseases_name = value;
                     } else {
                         ped_diseases_name += ',' + value;
+                        duration[ped_diseases_name] = this.state[this.state.name];
                     }
                 } 
             }
@@ -201,7 +209,8 @@ class GroupHealthPlanSelectPed extends Component {
             let body = {
                 [this.state.backend_key] : {
                     ped_diseases_name: ped_diseases_name,
-                    ped_exists: "true"
+                    ped_exists: "true",
+                    duration: duration
                 }
             }
 
@@ -225,6 +234,7 @@ class GroupHealthPlanSelectPed extends Component {
 
     sendEvents(user_action) {
         let eventObj = {
+            console.log(options[o])
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
