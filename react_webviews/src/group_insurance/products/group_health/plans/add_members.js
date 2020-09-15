@@ -119,8 +119,8 @@ class GroupHealthPlanAddMembers extends Component {
             canProceed = false;
         }
 
-        let keys_to_reset = ['self', 'wife', 'husband', 'father', 'mother', 'son', 'son1', 'son2',
-            'daughter', 'daughter1', 'daughter2'];
+        let keys_to_reset = ['self', 'wife', 'husband', 'father', 'mother', 'son', 'son1', 'son2','son3',
+            'daughter', 'daughter1', 'daughter2', 'daughter3'];
 
 
         for (var kr in keys_to_reset) {
