@@ -59,20 +59,20 @@ class GroupHealthPlanSelectPed extends Component {
         let duration = data[0].duration
 
         let options = [
-            { 'name': 'Acute Gastroenteritis/AGE/Diarrhoea/Loose Motions/Vomiting' },
-            { 'name': 'Adenoid/ Adenoidectomy' },
-            { 'name': 'Appendix/Appendicitis/Appendix surgery' },
-            { 'name': 'Asthma' },
-            { 'name': 'Cataract - 1 Eye/Both Eyes' },
-            { 'name': 'Cholesterol/Triglyceride/Dyslipidaemia/Hyperlipidaemia' },
-            { 'name': 'Cholecystectomy/Gall bladder surgery/removal' },
-            { 'name': 'Diabetes/High Sugar' },
-            { 'name': 'Fall/Accidental Injury' },
-            { 'name': 'Fistula' },
-            { 'name': 'Fissure' },
-            { 'name': 'Fever/Viral Fever/Enteric Fever/Typhoid/Malaria/Dengue' },
-            { 'name': 'Fibroid/Myomectomy' },
-            { 'name': 'Fracture with implant/rod/screw/plate' }
+            { 'name': 'Acute Gastroenteritis/AGE/Diarrhoea/Loose Motions/Vomiting', key: 'ped_no_1'},
+            { 'name': 'Adenoid/ Adenoidectomy', key: 'ped_no_2' },
+            { 'name': 'Appendix/Appendicitis/Appendix surgery', key: 'ped_no_3' },
+            { 'name': 'Asthma', key: 'ped_no_4' },
+            { 'name': 'Cataract - 1 Eye/Both Eyes', key: 'ped_no_5' },
+            { 'name': 'Cholesterol/Triglyceride/Dyslipidaemia/Hyperlipidaemia', key: 'ped_no_6' },
+            { 'name': 'Cholecystectomy/Gall bladder surgery/removal', key: 'ped_no_7' },
+            { 'name': 'Diabetes/High Sugar', key: 'ped_no_8' },
+            { 'name': 'Fall/Accidental Injury', key: 'ped_no_9' },
+            { 'name': 'Fistula', key: 'ped_no_10' },
+            { 'name': 'Fissure', key: 'ped_no_11' },
+            { 'name': 'Fever/Viral Fever/Enteric Fever/Typhoid/Malaria/Dengue', key: 'ped_no_12' },
+            { 'name': 'Fibroid/Myomectomy', key: 'ped_no_13' },
+            { 'name': 'Fracture with implant/rod/screw/plate', key: 'ped_no_14' }
         ]
 
         options.push({ 'name': 'Other' });
@@ -171,7 +171,7 @@ class GroupHealthPlanSelectPed extends Component {
 
 
             let ped_diseases_name = '';
-            let duration = {};
+            let ped_diseases = {}
 
             for(var j in options) {
                 if(options[j].checked) {
@@ -184,13 +184,13 @@ class GroupHealthPlanSelectPed extends Component {
 
                     if(options[j].name !== 'Other') {
                         options[j].value = this.state[this.state.name];
+                        ped_diseases[options[j].key] = options[j].value
                     }
 
                     if(!ped_diseases_name) {
                         ped_diseases_name = value;
                     } else {
                         ped_diseases_name += ',' + value;
-                        duration[ped_diseases_name] = this.state[this.state.name];
                     }
                 } 
             }
@@ -210,7 +210,7 @@ class GroupHealthPlanSelectPed extends Component {
                 [this.state.backend_key] : {
                     ped_diseases_name: ped_diseases_name,
                     ped_exists: "true",
-                    duration: duration
+                    ped_diseases: ped_diseases
                 }
             }
 
