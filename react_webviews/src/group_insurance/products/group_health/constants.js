@@ -107,7 +107,48 @@ export const HDFCERGO_CONFIG = {
         ]
     },
     nominee_screen: {
-        nominee_opts: [],
+        nominee_opts:   [
+            {
+                'name': 'SIBLING',
+                'value': 'SIBLING'
+            },
+            {
+                'name': 'CHILD',
+                'value': 'CHILD'
+            },
+            {
+                'name': 'NIECE',
+                'value': 'NIECE'
+            },
+            {
+                'name': 'GRANDPARENT',
+                'value': 'GRANDPARENT'
+            },
+            {
+                'name': 'GRANDCHILD',
+                'value': 'GRANDCHILD'
+            },
+            {
+                'name': 'BROTHER IN LAW',
+                'value': 'BROTHER_IN_LAW'
+            },
+            {
+                'name': 'SISTER IN LAW',
+                'value': 'SISTER_IN_LAW'
+            },
+            {
+                'name': 'NEPHEW',
+                'value': 'NEPHEW'
+            },
+            {
+                'name': 'PARENT',
+                'value': 'PARENT'
+            },
+            {
+                'name': 'SPOUSE',
+                'value': 'SPOUSE'
+            }
+        ]
     },
 
 };
@@ -249,7 +290,52 @@ export const religare = {
         ]
     },
     nominee_screen: {
-        nominee_opts: [],
+        nominee_opts:    [
+            {
+                'name': 'Spouse',
+                'value': 'Spouse'
+            },
+            {
+                'name': 'Father',
+                'value': 'Father'
+            },
+            {
+                'name': 'Mother',
+                'value': 'Mother'
+            },
+            {
+                'name': 'Brother',
+                'value': 'Brother'
+            },
+            {
+                'name': 'Sister',
+                'value': 'Sister'
+            },
+            {
+                'name': 'Son',
+                'value': 'Son'
+            },
+            {
+                'name': 'Daughter',
+                'value': 'Daughter'
+            },
+            {
+                'name': 'Grand father',
+                'value': 'Grand father'
+            },
+            {
+                'name': 'Grand mother',
+                'value': 'Grand mother'
+            },
+            {
+                'name': 'Grand son',
+                'value': 'Grand son'
+            },
+            {
+                'name': 'Grand daughter',
+                'value': 'Grand daughter'
+            }
+        ],
     },
 };
 export const star = {
