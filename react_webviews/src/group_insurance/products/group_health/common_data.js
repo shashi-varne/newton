@@ -2,29 +2,49 @@ import { storageService, inrFormatDecimal, getEditTitle } from 'utils/validators
 import { getConfig, 
     // isFeatureEnabled
  } from 'utils/functions';
-import { health_providers, ghGetMember } from '../../constants';
+import { ghGetMember } from '../../constants';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import {  openPdfCall } from 'utils/native_callback';
 import { nativeCallback } from 'utils/native_callback';
+
+import {getGhProviderConfig, memberKeyMapperFunction} from './constants';
 
 export async function initialize() {
 
     this.navigate = navigate.bind(this);
     this.openInBrowser = openInBrowser.bind(this);
     this.setEditTitle = setEditTitle.bind(this);
+    this.setLocalProviderData = setLocalProviderData.bind(this);
+    this.memberKeyMapper = memberKeyMapper.bind(this);
 
     let provider = this.props.parent && this.props.parent.props ? this.props.parent.props.match.params.provider : this.props.match.params.provider;
-    let providerData = health_providers[provider];
+    let providerConfig = getGhProviderConfig(provider);
+    let screenData = {};
+    if(this.state.screen_name && providerConfig[this.state.screen_name]) {
+        screenData = providerConfig[this.state.screen_name];
+    }
 
-    let groupHealthPlanData = storageService().getObject('groupHealthPlanData') || {};
+    let next_screen = '';
+    if(this.state.screen_name && providerConfig.get_next[this.state.screen_name]) {
+        next_screen = providerConfig.get_next[this.state.screen_name];
+    }
+
+    let validation_props = providerConfig.validation_props || {};
+
+    let groupHealthPlanData = storageService().getObject('groupHealthPlanData_' + provider) || {};
     this.setState({
         productName: getConfig().productName,
         provider: provider,
         groupHealthPlanData: groupHealthPlanData,
-        providerData: providerData,
+        providerData: providerConfig,
+        next_screen: next_screen,
+        providerConfig: providerConfig,
+        provider_api: providerConfig.provider_api,
         plan_selected: groupHealthPlanData && groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected : {},
-        insured_account_type: groupHealthPlanData.account_type || ''
+        insured_account_type: groupHealthPlanData.account_type || '',
+        screenData: screenData,
+        validation_props: validation_props
     })
     nativeCallback({ action: 'take_control_reset' });
 
@@ -42,7 +62,7 @@ export async function initialize() {
 
             let quote_id = storageService().get('ghs_ergo_quote_id');
 
-            const res = await Api.get('/api/ins_service/api/insurance/hdfcergo/lead/quote?quote_id=' + quote_id);
+            const res = await Api.get(`/api/ins_service/api/insurance/${providerConfig.provider_api}/lead/quote?quote_id=${quote_id}`);
 
             var resultData = res.pfwresponse.result;
 
@@ -108,8 +128,8 @@ export async function initialize() {
             leftTitle: leftTitle,
             leftSubtitle: leftSubtitle,
             leftArrow: 'up',
-            provider: providerData.key,
-            logo: providerData.logo_cta
+            provider: providerConfig.key,
+            logo: providerConfig.logo_cta
         }
 
         let confirmDialogData = {
@@ -167,8 +187,7 @@ export async function updateLead(body, quote_id) {
             show_loader: true
         });
 
-        const res = await Api.post('/api/ins_service/api/insurance/hdfcergo/lead/update?quote_id=' + quote_id,
-            body);
+        const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/update?quote_id=${quote_id}`,body);
 
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
@@ -233,7 +252,7 @@ export async function resetQuote() {
     });
 
     try {
-        const res = await Api.get(`/api/ins_service/api/insurance/hdfcergo/lead/cancel/` + quote_id);
+        const res = await Api.get(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/cancel/${quote_id}`);
 
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
@@ -385,4 +404,12 @@ export function openMedicalDialog(type) {
         show_loader: false
     })
    
+}
+
+export function setLocalProviderData(data) {
+    storageService().setObject('groupHealthPlanData_' + this.state.provider, data);
+}
+
+export function memberKeyMapper(member_key) {
+    return memberKeyMapperFunction(member_key, this.state.groupHealthPlanData);
 }

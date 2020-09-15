@@ -3,7 +3,6 @@ import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { storageService } from 'utils/validators';
 import {  genderOptions } from '../../../constants';
 
 // calculateAge, isValidDate, IsFutureDate
@@ -38,14 +37,12 @@ class GroupHealthPlanAddMembers extends Component {
         this.state = {
             header_title: 'Your date of birth',
             final_dob_data: [],
-            son_max: 2,
             self_member: 'Self',
-            daughter_max: 2,
-            total_plus_minus_max: 2,
             plus_minus_keys: ['son', 'daughter'],
             father_onlycheckbox: true,
             mother_onlycheckbox: true,
-            ui_members: {}
+            ui_members: {},
+            screen_name: 'add_members_screen'
         }
 
         this.initialize = initialize.bind(this);
@@ -53,13 +50,16 @@ class GroupHealthPlanAddMembers extends Component {
 
     componentWillMount() {
         this.initialize();
-    }Open
-
-
+    }
 
     async componentDidMount() {
 
+        let screenData = this.state.screenData;
+
         this.setState({
+            son_max: screenData.son_max,
+            daughter_max: screenData.daughter_max,
+            total_plus_minus_max: screenData.total_plus_minus_max,
             account_type: this.state.groupHealthPlanData.account_type,
             header_title: this.state.groupHealthPlanData.account_type === 'parents' ? 'Add parents to be insured' :
                 'Add members to be insured'
@@ -112,15 +112,15 @@ class GroupHealthPlanAddMembers extends Component {
 
         }
 
-        if (this.state.account_type === 'family' && !this.state.other_adult_member) {
+        if (['selfandfamily', 'family'].includes(this.state.account_type) && !this.state.other_adult_member) {
             this.setState({
                 other_adult_member_error: 'Please select this option'
             });
             canProceed = false;
         }
 
-        let keys_to_reset = ['self', 'wife', 'husband', 'father', 'mother', 'son', 'son1', 'son2',
-            'daughter', 'daughter1', 'daughter2'];
+        let keys_to_reset = ['self', 'wife', 'husband', 'father', 'mother', 'son', 'son1', 'son2','son3',
+            'daughter', 'daughter1', 'daughter2', 'daughter3'];
 
 
         for (var kr in keys_to_reset) {
@@ -141,7 +141,7 @@ class GroupHealthPlanAddMembers extends Component {
             }
         }
 
-        if (['selfandfamily', 'family'].indexOf(this.state.account_type) !== -1) {
+        if (['selfandfamily', 'family'].includes(this.state.account_type)) {
             ui_members.other_adult_member = this.state.other_adult_member;
 
 
@@ -235,9 +235,11 @@ class GroupHealthPlanAddMembers extends Component {
             let groupHealthPlanData = this.state.groupHealthPlanData;
             groupHealthPlanData.ui_members = ui_members;
             groupHealthPlanData.post_body = post_body;
-            storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+            groupHealthPlanData.eldest_member = ''; //reset
+            groupHealthPlanData.eldest_dob = ''; //reset
+            this.setLocalProviderData(groupHealthPlanData);
     
-            this.navigate('plan-dob');
+            this.navigate(this.state.next_screen || 'plan-dob');
         }
         
     }
@@ -387,7 +389,7 @@ class GroupHealthPlanAddMembers extends Component {
 
 
                         <div className="plus-minus-input-label">
-                            Children (upto 2)
+                            Children (upto {this.state.total_plus_minus_max})
                     </div>
                         <div className="generic-hr"></div>
                         <PlusMinusInput

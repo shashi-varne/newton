@@ -1,3 +1,5 @@
+import {isEmpty} from 'utils/validators';
+
 export const maritalOptions = [
   {
     'name': 'Single',
@@ -528,7 +530,7 @@ export const back_button_mapper = {
   '/group-insurance/term/etli/personal-details1': '/group-insurance/term/intro',
   '/group-insurance/term/personal-details-redirect' : '/group-insurance/term/intro',
   '/group-insurance/term/intro' : '/group-insurance',
-  '/group-insurance/group-health/landing' : '/group-insurance/health/landing',
+  '/group-insurance/group-health/entry' : '/group-insurance/health/landing',
   '/group-insurance/health/landing': '/group-insurance'
 };
 
@@ -622,7 +624,7 @@ export function ghGetMember(lead) {
   let total_son = 0;
   let total_daughter = 0;
 
-  if(lead.child_account1_key.dob) {
+  if(!isEmpty(lead.child_account1_key)) {
     if((lead.child_account1_key.relation || '').toUpperCase() === 'SON') {
       total_son++;
     } else if((lead.child_account2_key.relation || '').toUpperCase() === 'DAUGHTER') {
@@ -630,7 +632,7 @@ export function ghGetMember(lead) {
     }
   }
 
-  if(lead.child_account2_key.dob) {
+  if(!isEmpty(lead.child_account2_key)) {
     if((lead.child_account2_key.relation || '').toUpperCase() === 'SON') {
       total_son++;
     } else if((lead.child_account2_key.relation || '').toUpperCase() === 'DAUGHTER') {
@@ -644,7 +646,7 @@ export function ghGetMember(lead) {
     let allowed_mapper = allowed_as_per_account[lead.account_type];
 
     if(allowed_mapper.indexOf(key) !== -1 &&
-     lead[key] && lead[key].dob) {
+     lead[key] && !isEmpty(lead[key])) {
       let obj = lead[key];
       obj.backend_key = key;
 

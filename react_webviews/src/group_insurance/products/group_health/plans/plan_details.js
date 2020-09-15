@@ -3,7 +3,7 @@ import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { storageService, inrFormatDecimal, numDifferentiation } from 'utils/validators';
+import { inrFormatDecimal, numDifferentiation } from 'utils/validators';
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
@@ -29,7 +29,8 @@ class GroupHealthPlanDetails extends Component {
             },
             show_loader: true,
             ic_hs_special_benefits: ic_hs_special_benefits,
-            ic_hs_main_benefits: ic_hs_main_benefits
+            ic_hs_main_benefits: ic_hs_main_benefits,
+            screen_name: 'plan_details_screen'
         }
 
         this.initialize = initialize.bind(this);
@@ -48,9 +49,15 @@ class GroupHealthPlanDetails extends Component {
         let keys_to_empty = ['tenure', 'sum_assured', 'tenure', 'tax_amount', 'base_premium',
                             'total_amount', 'discount_amount', 'insured_pattern', 'type_of_plan',
                         'selectedIndexFloater', 'selectedIndexCover', 'selectedIndexSumAssured'];
+        let not_req_keys_for_backend = ['selectedIndexFloater', 'selectedIndexCover', 'selectedIndexSumAssured'];
        
+
         for (var i in keys_to_empty) {
-            post_body[keys_to_empty[i]] = '';
+
+            if(not_req_keys_for_backend.indexOf(keys_to_empty[i]) === -1) {
+                post_body[keys_to_empty[i]] = '';
+            }
+            
             groupHealthPlanData[keys_to_empty[i]] = '';
         }
 
@@ -60,10 +67,11 @@ class GroupHealthPlanDetails extends Component {
             groupHealthPlanData: groupHealthPlanData
         })
 
-        storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+        this.setLocalProviderData(groupHealthPlanData);
         try {
 
-            const res = await Api.post('/api/ins_service/api/insurance/hdfcergo/premium', post_body);
+            const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/premium`,
+             post_body);
 
             this.setState({
                 show_loader: false
@@ -73,7 +81,7 @@ class GroupHealthPlanDetails extends Component {
 
                 this.setState({
                     common_data: resultData.common,
-                    premium_data: resultData.premium[0],
+                    premium_data: resultData.premium,
                     extra_data: resultData.quote_info
                 })
 
@@ -187,8 +195,11 @@ class GroupHealthPlanDetails extends Component {
         groupHealthPlanData.plan_selected.common_data = this.state.common_data;
         groupHealthPlanData.plan_selected.extra_data = this.state.extra_data;
         groupHealthPlanData.plan_selected.premium_data = this.state.premium_data;
-        storageService().setObject('groupHealthPlanData', groupHealthPlanData);
-        this.navigate('plan-select-sum-assured');
+
+        groupHealthPlanData.post_body.base_premium = groupHealthPlanData.plan_selected.base_premium;
+        groupHealthPlanData.post_body.premium = groupHealthPlanData.plan_selected.net_premium;
+        this.setLocalProviderData(groupHealthPlanData);
+        this.navigate(this.state.next_screen || 'plan-select-sum-assured');
     }
 
 
@@ -234,14 +245,18 @@ class GroupHealthPlanDetails extends Component {
                 handleClick={() => this.handleClick()}
             >
                 <div className="group-health-plan-details">
-                    <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
+                    <div className="group-health-top-content-plan-logo">
                         <div className="left">
                             <div className="tc-title">{this.state.common_data.base_plan_title}</div>
                             <div className="tc-subtitle">{this.state.plan_selected.plan_title}</div>
                         </div>
 
                         <div className="tc-right">
-                            <img src={require(`assets/${this.state.providerData.logo_card}`)} alt="" />
+                            <img
+                                src={require(`assets/${this.state.providerData.logo_card}`)}
+                                alt=""
+                                style={{ maxWidth: '140px' }}
+                            />
                         </div>
                     </div>
 
@@ -312,7 +327,17 @@ class GroupHealthPlanDetails extends Component {
                         <div className='common-steps-images' style={{marginTop:0}}>
                             {this.state.extra_data.waiting_period.map(this.renderSteps)}
                         </div>
+                    </div>
 
+                    <div className="accident-plan-read" style={{ padding: 0 }}>
+                        <div className="accident-plan-read-text">
+                            *For detailed list of all terms and conditions, please refer
+                            <span
+                                style={{ color: getConfig().primary }}
+                                onClick = {() => this.openInBrowser(this.state.premium_data.read_details_doc, 'read_document')}>
+                                &nbsp;policy prospectus
+                            </span>
+                        </div>
                     </div>
 
                     <div className="bototm-design">
@@ -332,13 +357,6 @@ class GroupHealthPlanDetails extends Component {
                             <div className="bd-content">How to claim?</div>
                         </div>
                         <div className="generic-hr"></div>
-                    </div>
-
-                    <div className="accident-plan-read" style={{ padding: 0 }}
-                        onClick={() => this.openInBrowser(this.state.premium_data.read_details_doc, 'read_document')}>
-                        <img className="accident-plan-read-icon"
-                            src={require(`assets/${this.state.productName}/ic_read.svg`)} alt="" />
-                        <div className="accident-plan-read-text" style={{ color: getConfig().primary }}>For detailed list of terms and condition, please read policy prospectus</div>
                     </div>
                 </div>
             </Container>

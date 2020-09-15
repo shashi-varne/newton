@@ -232,7 +232,7 @@ class GroupHealthPlanFinalSummary extends Component {
         })
         this.handleClose();
         try {
-            let res = await Api.get(`/api/ins_service/api/insurance/hdfcergo/start/payment?lead_id=${this.state.quote_id}`);
+            let res = await Api.get(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/start/payment?lead_id=${this.state.quote_id}`);
 
            
             var resultData = res.pfwresponse.result;
@@ -299,7 +299,7 @@ class GroupHealthPlanFinalSummary extends Component {
             show_loader: true
         });
         try {
-            let res = await Api.post(`/api/ins_service/api/insurance/hdfcergo/ppc/check?quote_id=${this.state.quote_id}`);
+            let res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/ppc/check?quote_id=${this.state.quote_id}`);
 
            
             var resultData = res.pfwresponse.result;

@@ -3,7 +3,7 @@ import Container from '../../../common/Container';
 
 import { nativeCallback } from 'utils/native_callback';
 
-import { storageService, inrFormatDecimal } from 'utils/validators';
+import { inrFormatDecimal } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
 
 import Api from 'utils/api';
@@ -38,7 +38,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         try {
 
             let body = this.state.groupHealthPlanData.post_body;
-            const res = await Api.post('/api/ins_service/api/insurance/hdfcergo/premium', body);
+            const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/premium`, body);
 
             this.setState({
                 show_loader: false
@@ -47,7 +47,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
             if (res.pfwresponse.status_code === 200) {
 
                 this.setState({
-                    premium_data: resultData.premium[0][type_of_plan],
+                    premium_data: resultData.premium[type_of_plan],
                     type_of_plan: type_of_plan
                 }, () => {
                     this.updateBottomPremium();
@@ -107,7 +107,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         groupHealthPlanData.tenure = plan_selected_final.tenure;
 
         groupHealthPlanData.selectedIndexCover = this.state.selectedIndex;
-        storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+        this.setLocalProviderData(groupHealthPlanData);
 
         this.navigate('plan-premium-summary');
     }

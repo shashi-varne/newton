@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
-
 import toast from '../../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
@@ -31,7 +30,8 @@ class GroupHealthPlanSelectPed extends Component {
                 cta_title: 'OK'
             },
             get_lead: true,
-            show_loader: true
+            show_loader: true,
+            selectedIndex: ''
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -128,7 +128,7 @@ class GroupHealthPlanSelectPed extends Component {
 
     updateParent = (key, value) => {
         this.setState({
-            [key]: value
+            [key]: value,
         });
     }
 
@@ -136,8 +136,8 @@ class GroupHealthPlanSelectPed extends Component {
         this.setState({
             openConfirmDialog: false
         });
-
     }
+
     handleClick2 = () => {
         this.setState({
             openConfirmDialog: true,
