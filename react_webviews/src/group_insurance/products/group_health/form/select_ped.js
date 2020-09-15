@@ -234,7 +234,6 @@ class GroupHealthPlanSelectPed extends Component {
 
     sendEvents(user_action) {
         let eventObj = {
-            console.log(options[o])
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
