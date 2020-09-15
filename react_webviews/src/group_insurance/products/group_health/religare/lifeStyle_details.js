@@ -35,8 +35,6 @@ class GroupHealthPlanLifestyleDetail extends Component {
       }
     })
 
-    console.log(life_style_data)
-
     for (var key in ui_members) {
       if (key !== "" && ui_members[key] === true) {
         mem_options.push(key);
