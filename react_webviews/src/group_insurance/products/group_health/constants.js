@@ -157,12 +157,12 @@ export const HDFCERGO_CONFIG = {
 export const religare = {
     key: 'RELIGARE',
     provider_api: 'religare',
-    title: 'Religare',
+    title: 'Care Health',
     subtitle: 'Care',
-    logo: 'ic_religare_logo.jpg',
-    logo_card: 'ic_logo_card.jpg',
-    logo_cta: 'ic_religare_logo.jpg',
-    logo_summary: 'ic_religare_logo.jpg',
+    logo: 'ic_religare_logo.svg',
+    logo_card: 'ic_religare_logo_card.svg',
+    logo_cta: 'ic_religare_logo.svg',
+    logo_summary: 'ic_religare_logo.svg',
     get_next: { //have as a separate map and not screen-specific property to reduce duplication across all providers and for all screens
         landing_screen: 'insure-type',
         insure_type_screen: 'plan-dob-religare',

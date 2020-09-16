@@ -55,7 +55,7 @@ class GroupHealthPlanSelectPed extends Component {
 
         let backend_key = data[0].backend_key;
         let ped_diseases_name = data[0].ped_diseases_name;
-        ped_diseases_name = ped_diseases_name.split(',');
+        ped_diseases_name = (ped_diseases_name || '').split(',');
         let duration = data[0].duration
 
         let options = [
@@ -74,6 +74,20 @@ class GroupHealthPlanSelectPed extends Component {
             { 'name': 'Fibroid/Myomectomy', id: 'ped_no_13', description: ''},
             { 'name': 'Fracture with implant/rod/screw/plate', id: 'ped_no_14', description: ''}
         ]
+
+        if(this.state.provider === 'RELIGARE') {
+            let ped_data = data.ped_diseases || [];
+
+            ped_data.forEach(item => {
+
+                options.forEach(opt => {
+                    if(opt.id === item.key_mapper) {
+                        opt.checked = true;
+                        opt.start_date = item.start_date;
+                    }
+                })
+            })
+        }
 
         options.push({ 'name': 'Other' });
 
@@ -270,7 +284,9 @@ class GroupHealthPlanSelectPed extends Component {
                 <div className="group-health-select-ped">
                     <FormControl fullWidth>
                         {this.state.options && this.state.show_checkbox &&
-                            <CheckboxList options={this.state.options} parent={this} />}
+                            <CheckboxList 
+                            provider={this.state.provider}
+                            options={this.state.options} parent={this} />}
                     </FormControl>
 
                     <ConfirmDialog parent={this} />

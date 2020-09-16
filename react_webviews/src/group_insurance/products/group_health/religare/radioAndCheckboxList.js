@@ -64,7 +64,6 @@ class radioAndCheckboxList extends Component {
 
   render() {
     let { list, name } = this.state;
-    let { medical_questions } = this.props
 
     return (
       <div style={{ marginBottom: "40px" }}>
@@ -98,20 +97,50 @@ class radioAndCheckboxList extends Component {
 
             {item.input_type === "radio" &&
               name === "medical history" &&
-                  <RadioWithoutIcon
-                    style={{ width: "20px" }}
-                    isVertical={false}
-                    options={item.options}
-                    id={name}
-                    name={name}
-                    // value={(medical_questions[index] && medical_questions[index].answer ? 'Yes' : 'No')}
-                    error={!!medical_questions[item.key + '_error']}
-                    helperText={medical_questions[item.key + '_error']}
-                    onChange={(event) => this.props.handleChangeRadio(event, item.key, index)}
-                  />
-              }
+              <RadioWithoutIcon
+                style={{ width: "20px" }}
+                isVertical={false}
+                options={item.radio_options}
+                id={name}
+                name={name}
+                value={(list[index].question_value)}
+                error={!!list[index].question_value_error}
+                helperText={list[index].question_value_error}
+                onChange={(event) => this.props.handleChangeRadio(event, index)}
+              />
+            }
 
-            {item.input_type === "checkbox" &&
+            {list[index].question_value === 'Yes' && this.props.account_type !== 'self' && name === "medical history" && (
+              <div>
+                <p>Who is the member?</p>
+              <Grid container spacing={0}>
+                
+                {item.members.map((member, index_member) => (
+                  <div key={index_member}>
+                    <Grid item xs key={index}>
+                      <Grid item xs>
+                        <Checkbox
+                          checked={item.inputs[member.backend_key]}
+                          color="primary"
+                          // value={member}
+                          id={member.backend_key}
+                          name={member.backend_key}
+                          disableRipple
+                          onChange={(event) => this.props.handleCheckbox(event, index, member)}
+                          className="Checkbox"
+                        />
+                        <span style={{ fontSize: "14px", marginRight: '50px' }}>
+                          {capitalizeFirstLetter(member.key)}
+                        </span>
+                      </Grid>
+                    </Grid>
+                  </div>
+                ))}
+              </Grid>
+              </div>
+            )}
+
+            { item.input_type === "checkbox" &&
               name === "lifeStyle details" &&
               item.options.map((option, index) => (
                 <div key={index}>
@@ -143,31 +172,7 @@ class radioAndCheckboxList extends Component {
                 </div>
               ))}
 
-            {item.input_type === "checkbox" && name === "medical history" && (
-              <Grid container spacing={0}>
-                {item.options.map((option, index) => (
-                  <div key={index}>
-                    <Grid item xs key={index}>
-                    <Grid item xs>
-                      <Checkbox
-                        checked={this.state[option]}
-                        color="primary"
-                        // value={option}
-                        id={option.backend_key}
-                        name={option.backend_key}
-                        disableRipple
-                        onChange={(event) => this.props.handleCheckbox(event, index)}
-                        className="Checkbox"
-                      />
-                    <span style={{ fontSize: "14px", marginRight: '50px' }}>
-                      {capitalizeFirstLetter(option.key)}
-                    </span>
-                    </Grid>
-                  </Grid>
-                  </div>
-                ))}
-              </Grid>
-            )}
+
           </div>
         ))}
       </div>

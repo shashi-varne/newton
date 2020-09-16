@@ -32,7 +32,6 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
 
     let { member_base, account_type } = this.state.lead;
-    console.log(member_base);
 
 
     if (member_base.length > 1) {

@@ -78,9 +78,14 @@ class MmYyInModal extends Component {
             return (
                 <Dialog
                     fullWidth={true}
-                    open={this.props.parent.state.openPopUpInputDate}
+                    fullScreen={!!getConfig().isMobileDevice}
                     style={{ margin: 0 }}
-                    id="generic-input-popup-dialog"
+                    id="dropdown-in-modal-dialog"
+                    paper={{
+                        margin: '0px'
+                    }}
+                    open={this.props.parent.state.openPopUpInputDate}
+                    // id="generic-input-popup-dialog"
                     onClose={this.handleClose}
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"  

@@ -95,11 +95,11 @@ class CheckboxListClass extends Component {
                         class="data"
                         id="input_popup"
                         name="input_popup"
-                        value={this.state[this.state.otherInputData.name] || this.props.parent.state[this.state.otherInputData.name]}
+                        value={this.state[this.state.otherInputData.name] || this.props.parent.state[this.state.otherInputData.name] || ''}
                     />
                 </div>}
 
-                {props.name !== 'Other' && props.checked &&
+                {this.props.provider === 'RELIGARE' && props.name !== 'Other' && props.checked &&
                 <div className="InputField"
                 onClick={() => {
                     this.setState({
