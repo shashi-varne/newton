@@ -8,7 +8,7 @@ import Input from '../../../../common/ui/Input';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import { formatDate, dobFormatTest, isValidDate, capitalizeFirstLetter } from 'utils/validators';
 import { calculateAge } from '../../../../utils/validators';
-import {getInsuredMembersUi} from '../constants';
+import {getInsuredMembersUi, resetInsuredMembers} from '../constants';
 
 const eldMemOptionMapper = {
     'self': ['self'],
@@ -104,6 +104,9 @@ class GroupHealthPlanDobReligare extends Component {
     handleClick = () => {
         this.sendEvents('next');
         let { groupHealthPlanData } = this.state;
+
+        groupHealthPlanData = resetInsuredMembers(groupHealthPlanData);
+
         let ui_members = groupHealthPlanData.ui_members || {};
         
         let canProceed = true;
@@ -158,7 +161,6 @@ class GroupHealthPlanDobReligare extends Component {
             
             post_body.eldest_member = this.memberKeyMapper(this.state.eldest_member).backend_key;
             post_body.eldest_dob = this.state.eldest_dob;
-            post_body.eldest_member = this.state.eldest_member;
 
             this.setLocalProviderData(groupHealthPlanData);
             this.navigate(this.state.next_screen);

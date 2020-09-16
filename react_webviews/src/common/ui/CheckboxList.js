@@ -4,7 +4,7 @@ import 'react-circular-progressbar/dist/styles.css';
 
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
-
+import MmYyInModal from 'common/ui/MmYyInModal';
 import InputPopup from './InputPopup';
 import Input from './Input';
 
@@ -13,7 +13,7 @@ class CheckboxListClass extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            otherInputData: this.props.parent.state.otherInputData || {}
+            otherInputData: this.props.parent.state.otherInputData || {},
         };
 
     }
@@ -38,11 +38,23 @@ class CheckboxListClass extends Component {
             })
         }
 
+        if(options[index].name !== 'Other' && !options[index].checked) {
+            this.setState({
+                openPopUpInputDate: true,
+                header_title: options[index].name,
+                cta_title: 'OK',
+                label: 'Since When',
+                name: options[index].name,
+                header_sub_title: options[index].description
+            })
+        }
+
         options[index].checked = !options[index].checked;
-        this.updateParent(options);
+        this.updateParent(options, index);
     }
 
     renderList = (props, index) => {
+
         return (
             <div key={index} className="CheckBlock2 plus-minus-input"
                 style={{ opacity: props.disabled ? 0.4 : 1 }}>
@@ -83,9 +95,34 @@ class CheckboxListClass extends Component {
                         class="data"
                         id="input_popup"
                         name="input_popup"
-                        value={this.state[this.state.otherInputData.name] || this.props.parent.state[this.state.otherInputData.name]}
+                        value={this.state[this.state.otherInputData.name] || this.props.parent.state[this.state.otherInputData.name] || ''}
                     />
                 </div>}
+
+                {this.props.provider === 'RELIGARE' && props.name !== 'Other' && props.checked &&
+                <div className="InputField"
+                onClick={() => {
+                    this.setState({
+                        openPopUpInputDate: true,
+                        header_title: props.name,
+                        header_sub_title: props.description,
+                        cta_title: 'Ok'
+                    })
+                }}
+                 style={{margin: '-10px 0px 0px 33px'}}>
+                    <Input
+                        error={(this.state.data_error) ? true : false}
+                        helperText={this.state.data_error}
+                        type="text"
+                        width="40"
+                        id="date"
+                        class="date_input"
+                        label="Since When"
+                        name={props.name}
+                        value={this.state[props.name] || this.props.parent.state[props.name]}
+                    />
+                </div>
+                }
             </div>
         )
     }
@@ -95,6 +132,7 @@ class CheckboxListClass extends Component {
         if (!name) {
             name = event.target.name;
         }
+
         var value = event.target ? event.target.value : event;
         this.setState({
             [this.state.otherInputData.name]: value,
@@ -104,6 +142,7 @@ class CheckboxListClass extends Component {
     };
 
     render() {
+        
         return (
             <div>
                 {this.props.parent.state.options.map(this.renderList)}
@@ -116,6 +155,14 @@ class CheckboxListClass extends Component {
                     value={this.state[this.state.otherInputData.name] || this.props.parent.state[this.state.otherInputData.name]}
                     handleChange={this.handleChangeInputPopup()}
                 />
+                <MmYyInModal
+                    parent={this}
+                    header_title={this.state.header_title}
+                    header_sub_title={this.state.header_sub_title}
+                    cta_title={this.state.cta_title}
+                    name={this.state.name}
+                    label={this.state.label}
+                    value={this.state[this.state.name] || this.props.parent.state[this.state.name]} />
             </div>
         );
     }

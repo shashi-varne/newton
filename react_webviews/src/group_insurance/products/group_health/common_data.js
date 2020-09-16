@@ -64,6 +64,199 @@ export async function initialize() {
 
             const res = await Api.get(`/api/ins_service/api/insurance/${providerConfig.provider_api}/lead/quote?quote_id=${quote_id}`);
 
+            // const res = {
+            //     "pfwutime": "",
+            //     "pfwuser_id": 0,
+            //     "pfwresponse": {
+            //       "status_code": 200,
+            //       "requestapi": "",
+            //       "result": {
+            //         "quote": {
+            //           "vendor_action_required_title": null,
+            //           "policy_number": null,
+            //           "family_size": "1A",
+            //           "dob": "28-01-1997",
+            //           "vendor_action_required_message": "",
+            //           "sum_assured": 5,
+            //           "dt_policy_start": null,
+            //           "transaction_date": null,
+            //           "plan_title": "",
+            //           "data_src": "Health_Insurance_Quotation_Lead",
+            //           "gender": null,
+            //           "payment_status": "init",
+            //           "user_source": "fisdom_dev",
+            //           "account_id": "d5871293308076032",
+            //           "add_ons": [
+            //             "CAREWITHNCB",
+            //             "UAR"
+            //           ],
+            //           "application_number": null,
+            //           "add_ons_amount": 3043.0,
+            //           "city": null,
+            //           "status": "cancelled",
+            //           "premium": 17393.0,
+            //           "plan_code": null,
+            //           "eldest_dob": "28/01/1997",
+            //           "nominee_account_key": {
+            //             "ped_diseases": [
+                          
+            //             ],
+            //             "medical_questions": [
+                          
+            //             ],
+            //             "marital_status": "",
+            //             "mand_question_exists": true,
+            //             "gender": "",
+            //             "nationality": "INDIAN",
+            //             "life_style_question_exists": false,
+            //             "dob": "",
+            //             "correspondence_address": {
+                          
+            //             },
+            //             "mobile_number": "",
+            //             "weight": null,
+            //             "pan_number": "",
+            //             "id": "5626435075047424",
+            //             "life_style_question": {
+                          
+            //             },
+            //             "dt_created": "03-09-2020",
+            //             "name": "ankit mehla ror",
+            //             "height": null,
+            //             "relation": "NEPHEW",
+            //             "permanent_address": {
+                          
+            //             },
+            //             "email": "",
+            //             "dt_updated": "05-09-2020",
+            //             "ped_exists": true,
+            //             "ped_diseases_name": null
+            //           },
+            //           "applicant_dob": "",
+            //           "ppc_check": false,
+            //           "insured_pattern": null,
+            //           "self_account_key": {
+            //             "ped_diseases": [
+            //               {
+            //                 "answer_description": null,
+            //                 "key_mapper": "ped_no_1",
+            //                 "answer": true,
+            //                 "start_date": "01/02/2019",
+            //                 "medical_question": "PEDdiabetesDetails"
+            //               }
+            //             ],
+            //             "medical_questions": [
+            //               {
+            //                 "answer_description": null,
+            //                 "key_mapper": "mand_1",
+            //                 "answer": true,
+            //                 "start_date": null,
+            //                 "medical_question": "HEDHealthHospitalized"
+            //               },
+            //               {
+            //                 "answer_description": null,
+            //                 "key_mapper": "mand_2",
+            //                 "answer": false,
+            //                 "start_date": null,
+            //                 "medical_question": "HEDHealthClaim"
+            //               },
+            //               {
+            //                 "answer_description": null,
+            //                 "key_mapper": "mand_3",
+            //                 "answer": false,
+            //                 "start_date": null,
+            //                 "medical_question": "HEDHealthDeclined"
+            //               },
+            //               {
+            //                 "answer_description": null,
+            //                 "key_mapper": "mand_4",
+            //                 "answer": false,
+            //                 "start_date": null,
+            //                 "medical_question": "HEDHealthCovered"
+            //               }
+            //             ],
+            //             "marital_status": "",
+            //             "mand_question_exists": true,
+            //             "gender": "MALE",
+            //             "nationality": "INDIAN",
+            //             "life_style_question_exists": true,
+            //             "dob": "28-01-1997",
+            //             "correspondence_address": {
+                          
+            //             },
+            //             "mobile_number": "6363566840",
+            //             "weight": "67",
+            //             "pan_number": "",
+            //             "id": "6752334981890048",
+            //             "life_style_question": {
+            //               "answer_description": "sas fdfd dds",
+            //               "key_mapper": "lifestylye_no_1",
+            //               "answer": true,
+            //               "start_date": "01/03/2020",
+            //               "medical_question": "PEDSmokeDetails"
+            //             },
+            //             "dt_created": "03-09-2020",
+            //             "name": "ravinder mehla",
+            //             "height": "163",
+            //             "relation": "SELF",
+            //             "permanent_address": {
+                          
+            //             },
+            //             "email": "ravindermehla77@gmail.com",
+            //             "dt_updated": "05-09-2020",
+            //             "ped_exists": true,
+            //             "ped_diseases_name": null
+            //           },
+            //           "mobile_number": "9717317075",
+            //           "tenure": 1,
+            //           "id": "5063485121626112",
+            //           "cover_type": "WF",
+            //           "vendor_status": null,
+            //           "policy_status": null,
+            //           "dt_created": "03-09-2020",
+            //           "name": null,
+            //           "discount_amount": 1532.0,
+            //           "plan": "plan1",
+            //           "permanent_address": {
+            //             "state": "UTTAR PRADESH",
+            //             "country": "INDIA",
+            //             "street": "",
+            //             "id": 6339296566968320,
+            //             "dt_created": "05-09-2020",
+            //             "addressline2": "maghun",
+            //             "district": "",
+            //             "account_id": "d5871293308076032",
+            //             "dt_updated": "05-09-2020",
+            //             "pincode": "201010",
+            //             "house_no": "",
+            //             "city": "Ghaziabad",
+            //             "address_line": "Vaishali",
+            //             "landmark": "",
+            //             "addressline": "Vaishali"
+            //           },
+            //           "email": "ravindermehla77@gmail.com",
+            //           "dt_updated": "05-09-2020",
+            //           "base_plan_title": null,
+            //           "account_type": "self",
+            //           "total_amount": 18904.0,
+            //           "tax_amount": 187.44,
+            //           "provider": null,
+            //           "ped_check": false,
+            //           "user_id": "5871293308076032",
+            //           "logo": null
+            //         },
+            //         "common": {
+                      
+            //         }
+            //       }
+            //     },
+            //     "pfwmessage": "Success",
+            //     "pfwstatus_code": 200,
+            //     "pfwtime": "2020-09-05 15:10:19.871875"
+            //   }
+               
+               
+              
             var resultData = res.pfwresponse.result;
 
             this.setState({
