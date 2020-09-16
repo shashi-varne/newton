@@ -6,6 +6,8 @@ import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import Dialog, {
     DialogContent
 } from 'material-ui/Dialog';
+import Button from 'material-ui/Button';
+import { getConfig } from 'utils/functions';
 
 class GroupHealthPlanStarHealthDetails extends Component {
 
@@ -59,17 +61,37 @@ class GroupHealthPlanStarHealthDetails extends Component {
         }
     }
 
+    navigate = (pathname) => {
+        console.log(pathname)
+        this.props.history.push({
+            pathname: pathname,
+            search: getConfig().searchParams
+        });
+    }
+
     handleChangeRadio = (event) => {
         let { radio_options } = this.state;
         let value = radio_options[event].value;
 
         if (value === 'yes') {
-            console.log('hi')
+            this.setState({
+                open: true
+            })
         }
 
         this.setState({
             value: value
         })
+    }
+
+    // handleClose = () => {
+        // this.setState({
+            // open: false
+        // })
+    // }
+
+    handleClick2 = () => {
+        // this
     }
 
     renderDialog = () => {
@@ -78,16 +100,30 @@ class GroupHealthPlanStarHealthDetails extends Component {
                 id="bottom-popup"
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
-                open={true}
+                open={this.state.open}
+                // onClose={this.handleClose}
             >
                 <DialogContent>
-                    <div style={{fontWeight:500}}>Sorry</div>
-                    <img
-                      src={ require(`assets/${this.state.productName}/ic_medical_checkup2.svg`)}
-                      alt="" 
-                    />
+                    <div style={{fontWeight:600, display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+                        <div style={{fontSize:'20px'}}>Sorry</div>
+                        <img
+                          src={ require(`assets/${this.state.productName}/ic_medical_checkup2.svg`)}
+                          alt="" />
+                    </div>
+                    
                     <div style={{fontSize:'14px', color:'#767E86', lineHeight:1.5}}>
                         This insurer does not cover members with adverse medical conditions. Please try without the concerned member or try with a different insurer.
+                    </div>
+
+                    <div style={{marginTop:'30px'}}>
+                        <Button
+                            fullWidth={true}
+                            variant="raised"
+                            size="large"
+                            color="secondary"
+                            onClick={this.handleClick2()}
+                            autoFocus>OK
+                        </Button>
                     </div>
                 </DialogContent>
             </Dialog>
