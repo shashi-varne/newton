@@ -3,6 +3,9 @@ import Container from '../../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../common_data';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
+import Dialog, {
+    DialogContent
+} from 'material-ui/Dialog';
 
 class GroupHealthPlanStarHealthDetails extends Component {
 
@@ -69,11 +72,34 @@ class GroupHealthPlanStarHealthDetails extends Component {
         })
     }
 
+    renderDialog = () => {
+        return (
+            <Dialog
+                id="bottom-popup"
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                open={true}
+            >
+                <DialogContent>
+                    <div style={{fontWeight:500}}>Sorry</div>
+                    <img
+                      src={ require(`assets/${this.state.productName}/ic_medical_checkup2.svg`)}
+                      alt="" 
+                    />
+                    <div style={{fontSize:'14px', color:'#767E86', lineHeight:1.5}}>
+                        This insurer does not cover members with adverse medical conditions. Please try without the concerned member or try with a different insurer.
+                    </div>
+                </DialogContent>
+            </Dialog>
+        )
+    }
+
     handleClick = () => {
 
     }
 
     render() {
+        console.log(this.state)
         return (
             <Container
                 events={this.sendEvents('just_set_events')}
@@ -97,6 +123,7 @@ class GroupHealthPlanStarHealthDetails extends Component {
                     id="health"
                     value={this.state.value || ''}
                     onChange={(event) => this.handleChangeRadio(event)} />}
+                {this.renderDialog()}
             </Container>
         )
     }
