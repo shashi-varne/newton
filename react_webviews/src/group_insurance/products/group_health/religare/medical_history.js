@@ -149,7 +149,7 @@ class GroupHealthPlanMedicalHistory extends Component {
     }
   }
 
-  handleChangeRadio = (event, key, index) => {
+  handleChangeRadio = (event, key) => {
     let { member_base, medical_questions, radio_options } = this.state;
  
     medical_questions = {
@@ -206,20 +206,20 @@ class GroupHealthPlanMedicalHistory extends Component {
 
         let backend_key = member_data.backend_key;
         body[backend_key] = {};
-        body[backend_key].mand_question_exists = ''
+        body[backend_key].mand_question_exists = '';
 
-        list.forEach(item => {
-          
-          if (member_data.medical_questions[item.key].answer === 'true') {
-            body[backend_key].mand_question_exists = 'true'
-
-            body[backend_key].medical_questions = {
-              ...body[backend_key].medical_questions,
-              [item.key]: {...member_data.medical_questions[item.key]}
+        if (member_base[i].medical_questions[backend_key]) {
+          list.forEach(item => {
+            if (item.input_type !== 'checkbox' && medical_questions[item.key].answer === 'true') {
+              body[backend_key].mand_question_exists = 'true'
+  
+              body[backend_key].medical_questions = {
+                ...body[backend_key].medical_questions,
+                [item.key]: {...medical_questions[item.key]}
+              }
             }
-          }
-
-        }) 
+          }) 
+        }
           
         if (!body[backend_key].mand_question_exists) {
           body[backend_key].mand_question_exists = 'false'
