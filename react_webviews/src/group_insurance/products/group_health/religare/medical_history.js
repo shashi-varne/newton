@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Container from "../../../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { getConfig } from "../../../../utils/functions";
-import { initialize, updateBottomPremium, updateLead } from "../common_data";
+import { initialize, updateLead } from "../common_data";
 import RadioAndCheckboxList from "./radioAndCheckboxList";
 
 class GroupHealthPlanMedicalHistory extends Component {
@@ -10,11 +10,11 @@ class GroupHealthPlanMedicalHistory extends Component {
     super(props);
     this.state = {
       ctaWithProvider: true,
-      medical_questions: {},
+      get_lead: true,
+      medical_questions: {}
     };
 
     this.initialize = initialize.bind(this);
-    this.updateBottomPremium = updateBottomPremium.bind(this);
     this.updateLead = updateLead.bind(this);
   }
 
@@ -22,49 +22,52 @@ class GroupHealthPlanMedicalHistory extends Component {
     this.initialize();
   }
 
-  async componentDidMount() {
-    let {account_type, medical_questions_data} = this.state.groupHealthPlanData;
+  onload() {
+
+    let { member_base, account_type } = this.state.lead;
+    console.log(member_base)
 
     let list = [];
 
-    let radioOptions = [
+    let radio_options = [
       {
-        name: "yes",
-        value: "Yes",
+        name: 'Yes',
+        value: 'Yes'
       },
       {
-        name: "No",
-        value: "No",
-      },
+        name: 'No',
+        value: 'No'
+      }
     ];
 
-    if (account_type === "self") {
+    if (account_type === 'self') {
+
       list = [
         {
           label:
             "Have you been diagnosed / hospitalized for any illness / injury during the last 48 months?",
-          options: radioOptions,
+          options: radio_options,
           key: "mand_1",
           input_type: "radio",
         },
         {
           label:
             "Have you ever filed a claim with your current / previous insurer?",
-          options: radioOptions,
+          options: radio_options,
           key: "mand_2",
           input_type: "radio",
         },
         {
           label:
             "Has your Health insurance been declined, cancelled or charged a higher premium?",
-          options: radioOptions,
+          options: radio_options,
           key: "mand_3",
           input_type: "radio",
         },
         {
           label:
             "Are you already covered under any other health insurance policy of Religare Health Insurance?",
-          options: radioOptions,
+          options: radio_options,
           key: "mand_4",
           input_type: "radio",
         },
@@ -74,38 +77,34 @@ class GroupHealthPlanMedicalHistory extends Component {
         {
           label:
             "Have any of the person(s) to be insured been diagnosed / hospitalized for any illness / injury during the last 48 months?",
-          options: radioOptions,
+          options: radio_options,
           key: "mand_1",
           input_type: "radio",
         },
         {
           label:
             "Have any of the person(s) to be insured ever filed a claim with their current / previous insurer?",
-          options: radioOptions,
+          options: radio_options,
           key: "mand_2",
           input_type: "radio",
         },
         {
           label: "Who is the member?",
-          options: {
-            family: ["Wife", "Son"],
-            selfandfamily: ["Self", "Wife", "Son"],
-            parents: ["Father", "Mother"],
-          },
+          options: member_base,
           key: "mand_3",
           input_type: "checkbox",
         },
         {
           label:
             "Has any proposal for Health insurance been declined, cancelled or charged a higher premium?",
-          options: radioOptions,
+          options: radio_options,
           key: "mand_4",
           input_type: "radio",
         },
         {
           label:
             "Is any of the person(s) to be insured, already covered under any other health insurance policy of Religare Health Insurance?",
-          options: radioOptions,
+          options: radio_options,
           key: "mand_5",
           input_type: "radio",
         },
@@ -114,15 +113,23 @@ class GroupHealthPlanMedicalHistory extends Component {
 
     this.setState({
       account_type: account_type,
-      medical_questions: medical_questions_data || {},
       list: list,
+      member_base: member_base,
+      radio_options: radio_options
     });
+
+    this.setState({
+      bottomButtonData: {
+        ...this.state.bottomButtonData,
+        handleClick: this.handleClick
+      }
+    })
   }
 
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams,
+      search: getConfig().searchParams
     });
   };
 
@@ -142,89 +149,90 @@ class GroupHealthPlanMedicalHistory extends Component {
     }
   }
 
-  handleCheckbox = (event) => {
-    let { name, value } = event.target;
-    let { medical_questions } = this.state;
-    medical_questions[name] = {
-      ...medical_questions[name],
-      [value.toLowerCase()]: event.target.checked,
+  handleChangeRadio = (event, key) => {
+    let { member_base, medical_questions, radio_options } = this.state;
+ 
+    medical_questions = {
+      ...medical_questions,
+      [key]: {answer: radio_options[event].value === 'Yes' ? 'true' : 'false'},
+      [key+'_error']: ''
     };
 
     this.setState({
-      medical_questions: medical_questions,
+      member_base: member_base,
+      medical_questions: medical_questions
     });
-  };
 
-  handleChangeRadio = (key, event) => {
-    let { medical_questions } = this.state;
+  }
 
-    medical_questions[key] = {
-      answer: event === 0 ? true : false,
+  handleCheckbox = (event, index) => {
+    let { name } = event.target;
+    let { member_base } = this.state;
+
+    member_base[index].medical_questions = {
+      ...member_base[index].medical_questions,
+      [name]: event.target.checked,
     };
 
-    medical_questions[key+'_error'] = ''
-
     this.setState({
-      medical_questions: medical_questions,
+      member_base: member_base,
     });
   };
 
   handleClick = () => {
     this.sendEvents("next");
-    let { medical_questions, list, groupHealthPlanData } = this.state;
+    let {member_base, medical_questions, list} = this.state;
+
     let canProceed = true;
 
     list.forEach(item => {
-      if (!medical_questions[item.key]) {
+      if (!medical_questions[item.key] && item.input_type !== 'checkbox') {
         canProceed = false
         medical_questions[item.key+'_error'] = 'Please select one option'
       }
     })
 
     this.setState({
-      medical_questions: medical_questions
-    })
+      member_base: member_base
+    });
 
-    let member_base = this.state.lead.member_base;
     let body = {};
 
     if (canProceed) {
-
-      list.forEach(item => {
-        groupHealthPlanData.medical_questions_data = {
-          ...groupHealthPlanData.medical_questions_data,
-          [item.key]: medical_questions[item.key].answer ? 'Yes' : 'No'
-        }
-      })
-
-      this.setLocalProviderData(groupHealthPlanData);
+      
 
       for (var i in member_base) {
-        let key = member_base[i].key;
-        let backend_key = member_base[i].backend_key;
+        let member_data = member_base[i];
+
+        let backend_key = member_data.backend_key;
         body[backend_key] = {};
+        body[backend_key].mand_question_exists = '';
 
-        if (medical_questions[key].answer) {
-          body[backend_key].mand_question_exists = 'true';
-
+        if (member_base[i].medical_questions[backend_key]) {
           list.forEach(item => {
-            body[backend_key].medical_questions = {
-              ...body[backend_key].medical_questions,
-              [item.key]: {...medical_questions[item.key]}
+            if (item.input_type !== 'checkbox' && medical_questions[item.key].answer === 'true') {
+              body[backend_key].mand_question_exists = 'true'
+  
+              body[backend_key].medical_questions = {
+                ...body[backend_key].medical_questions,
+                [item.key]: {...medical_questions[item.key]}
+              }
             }
           }) 
+        }
           
-        } else {
-          body[backend_key].mand_question_exists = 'false';
+        if (!body[backend_key].mand_question_exists) {
+          body[backend_key].mand_question_exists = 'false'
         }
       }
 
       this.updateLead(body);
     }
-  };
+  }
+
 
   render() {
-    let { account_type, list, medical_questions } = this.state;
+    let { account_type, member_base, radio_options, list, medical_questions } = this.state;
 
     return (
       <Container
@@ -245,6 +253,8 @@ class GroupHealthPlanMedicalHistory extends Component {
             name="medical history"
             list={list}
             medical_questions={medical_questions}
+            radio_options={radio_options}
+            member_data={member_base}
             handleCheckbox={this.handleCheckbox}
             handleChangeRadio={this.handleChangeRadio}
           />

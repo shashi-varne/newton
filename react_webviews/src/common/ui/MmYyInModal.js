@@ -19,7 +19,7 @@ class MmYyInModal extends Component {
         super(props);
         this.state = {
             value: this.props.value,
-            name: this.props.name
+            name: ''
         }
     };
 
@@ -49,6 +49,7 @@ class MmYyInModal extends Component {
         this.setState({
             value: value,
             name: name,
+            [name]: value,
             [name + '_error']: ''
         })
     }
@@ -57,7 +58,7 @@ class MmYyInModal extends Component {
 
         let error = '';
         let date = this.state.value;
-        let name = this.state.name;
+        let name = this.props.name;
 
         if (!isValidMonthYear(date)) {
             error = "please enter valid month or year";
@@ -65,12 +66,13 @@ class MmYyInModal extends Component {
                 [name + '_error']: error
             })
         } else {
-            this.props.parent.updateParent(this.props.name, this.state.value)
+            this.props.parent.updateParent(this.props.name, this.state[this.props.name])
             this.handleClose();
         }
     }
 
     renderPopUp() {
+        let name = this.props.name;
 
         if (this.props.parent.state.openPopUpInputDate) {
             return (
@@ -99,7 +101,7 @@ class MmYyInModal extends Component {
                             <div className="content">
                                 {this.props.header_sub_title}
                             </div>
-                            <FormControl>
+                            <FormControl disabled={this.props.disabled}>
                                 <div className="InputField">
                                 <Input
                                     type="text"
@@ -109,9 +111,9 @@ class MmYyInModal extends Component {
                                     className="date"
                                     placeholder="MM/YYYY"
                                     maxLength='7'
-                                    value={this.state.value || ''}
-                                    error={this.state[this.state.name+'_error'] ? true : false}
-                                    helperText={this.state[this.state.name+'_error']}
+                                    value={this.state[name] || ''}
+                                    error={this.state[name+'_error'] ? true : false}
+                                    helperText={this.state[name+'_error']}
                                     onChange={this.handleChange()}
                                 />
                                 </div>
@@ -134,6 +136,7 @@ class MmYyInModal extends Component {
     }
 
     render() {
+
         return (
             <div className="generic-input-popup">
                 {this.renderPopUp()}

@@ -44,7 +44,8 @@ class CheckboxListClass extends Component {
                 header_title: options[index].name,
                 cta_title: 'OK',
                 label: 'Since When',
-                name: options[index].name
+                name: options[index].name,
+                header_sub_title: options[index].description
             })
         }
 
@@ -104,6 +105,7 @@ class CheckboxListClass extends Component {
                     this.setState({
                         openPopUpInputDate: true,
                         header_title: props.name,
+                        header_sub_title: props.description,
                         cta_title: 'Ok'
                     })
                 }}
@@ -114,9 +116,10 @@ class CheckboxListClass extends Component {
                         type="text"
                         width="40"
                         id="date"
+                        class="date_input"
                         label="Since When"
                         name={props.name}
-                        value={this.state[this.state.name] || this.props.parent.state[this.state.name]}
+                        value={this.state[props.name] || this.props.parent.state[props.name]}
                     />
                 </div>
                 }
@@ -129,6 +132,7 @@ class CheckboxListClass extends Component {
         if (!name) {
             name = event.target.name;
         }
+
         var value = event.target ? event.target.value : event;
         this.setState({
             [this.state.otherInputData.name]: value,
@@ -154,12 +158,11 @@ class CheckboxListClass extends Component {
                 <MmYyInModal
                     parent={this}
                     header_title={this.state.header_title}
+                    header_sub_title={this.state.header_sub_title}
                     cta_title={this.state.cta_title}
                     name={this.state.name}
                     label={this.state.label}
-                    value={this.state[this.state.name] || this.props.parent.state[this.state.name]}
-                    handleChange={this.handleChangeInputPopup()}
-                />
+                    value={this.state[this.state.name] || this.props.parent.state[this.state.name]} />
             </div>
         );
     }
