@@ -14,7 +14,8 @@ class GroupHealthPlanStarHealthDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            header_title: 'Health details'
+            header_title: 'Health details',
+            open: false
         }
 
         this.initialize = initialize.bind(this);
@@ -80,7 +81,8 @@ class GroupHealthPlanStarHealthDetails extends Component {
         }
 
         this.setState({
-            value: value
+            value: value,
+            error: ''
         })
     }
 
@@ -91,7 +93,7 @@ class GroupHealthPlanStarHealthDetails extends Component {
     // }
 
     handleClick2 = () => {
-        // this
+        this.navigate('insure-type');
     }
 
     renderDialog = () => {
@@ -121,7 +123,7 @@ class GroupHealthPlanStarHealthDetails extends Component {
                             variant="raised"
                             size="large"
                             color="secondary"
-                            onClick={this.handleClick2()}
+                            onClick={() => this.handleClick2()}
                             autoFocus>OK
                         </Button>
                     </div>
@@ -131,11 +133,32 @@ class GroupHealthPlanStarHealthDetails extends Component {
     }
 
     handleClick = () => {
+        this.sendEvents('next');
+        let { groupHealthPlanData } = this.state;
 
+        let canProceed = true;
+        let error = '';
+        if (this.state.value === 'yes') {
+            canProceed = false
+        } else if (!this.state.value) {
+            error = 'Please select one option';
+            canProceed = false;
+        }
+
+        this.setState({
+            error: error
+        })
+
+        if (canProceed) {
+            
+            groupHealthPlanData.health_details = this.state.value;
+
+            this.setLocalProviderData(groupHealthPlanData);
+            this.navigate(this.state.next_screen);
+        }
     }
 
     render() {
-        console.log(this.state)
         return (
             <Container
                 events={this.sendEvents('just_set_events')}
@@ -152,12 +175,15 @@ class GroupHealthPlanStarHealthDetails extends Component {
                 <div style={{color: '#0A1D32', fontSize:'13px', lineHeight:1.5, margin:'30px 20px 0 0'}}>
                     Does any member proposed to be insured, suffered or are suffering from any adverse medical condition of any kind especially Heart/Stroke/ Cancer/Renal disorder/Alzheimer's disease/Parkinson’s disease?
                 </div>
-                {this.state.account_type && <RadioWithoutIcon
+                {this.state.account_type &&
+                <RadioWithoutIcon
                     style={{width: '20px'}}
                     isVertical={false}
                     options={this.state.radio_options}
                     id="health"
                     value={this.state.value || ''}
+                    error={this.state.error ? true : false}
+                    helperText={this.state.error}
                     onChange={(event) => this.handleChangeRadio(event)} />}
                 {this.renderDialog()}
             </Container>
