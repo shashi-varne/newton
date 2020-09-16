@@ -77,7 +77,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
     }
 
     this.setState({
-      account_type: this.state.groupHealthPlanData.account_type,
+      account_type: account_type,
       list: list,
       member_base: member_base
     });

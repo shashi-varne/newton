@@ -63,7 +63,8 @@ class radioAndCheckboxList extends Component {
   };
 
   render() {
-    let { account_type, list, name } = this.state;
+    let { list, name } = this.state;
+    let { medical_questions } = this.props
 
     return (
       <div style={{ marginBottom: "40px" }}>
@@ -75,6 +76,7 @@ class radioAndCheckboxList extends Component {
             <p>{item.label}</p>
 
             {item.input_type === "radio" &&
+              name === "lifeStyle details" &&
               item.options.map((option, index) => (
                 <div key={index}>
                   <RadioWithoutIcon
@@ -93,6 +95,21 @@ class radioAndCheckboxList extends Component {
                     this.renderInputs(option, index)}
                 </div>
               ))}
+
+            {item.input_type === "radio" &&
+              name === "medical history" &&
+                  <RadioWithoutIcon
+                    style={{ width: "20px" }}
+                    isVertical={false}
+                    options={item.options}
+                    id={name}
+                    name={name}
+                    // value={(medical_questions[index] && medical_questions[index].answer ? 'Yes' : 'No')}
+                    error={!!medical_questions[item.key + '_error']}
+                    helperText={medical_questions[item.key + '_error']}
+                    onChange={(event) => this.props.handleChangeRadio(event, item.key, index)}
+                  />
+              }
 
             {item.input_type === "checkbox" &&
               name === "lifeStyle details" &&
@@ -128,21 +145,26 @@ class radioAndCheckboxList extends Component {
 
             {item.input_type === "checkbox" && name === "medical history" && (
               <Grid container spacing={0}>
-                {item.options[account_type].map((option, index) => (
-                  <Grid item xs key={index}>
+                {item.options.map((option, index) => (
+                  <div key={index}>
+                    <Grid item xs key={index}>
                     <Grid item xs>
                       <Checkbox
                         checked={this.state[option]}
                         color="primary"
-                        value={option}
-                        name={item.key}
+                        // value={option}
+                        id={option.backend_key}
+                        name={option.backend_key}
                         disableRipple
-                        onChange={(event) => this.props.handleCheckbox(event)}
+                        onChange={(event) => this.props.handleCheckbox(event, index)}
                         className="Checkbox"
                       />
-                      {option}
+                    <span style={{ fontSize: "14px", marginRight: '50px' }}>
+                      {capitalizeFirstLetter(option.key)}
+                    </span>
                     </Grid>
                   </Grid>
+                  </div>
                 ))}
               </Grid>
             )}
