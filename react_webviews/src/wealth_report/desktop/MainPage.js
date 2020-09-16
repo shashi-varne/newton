@@ -11,10 +11,11 @@ import Analysis from '../desktop/Analysis';
 import LoadingScreen from "../mini-components/LoadingScreen";
 import { navigate } from "../common/commonFunctions";
 import Api from '../../utils/api';
-import { isEmpty } from "../../utils/validators";
+import { isEmpty, storageService } from "../../utils/validators";
 import { heightThreshold } from "../constants";
 import NoPan from "./NoPan";
 import { getConfig } from "utils/functions";
+import InternalStorage from "../InternalStorage";
 const isMobileView = getConfig().isMobileDevice;
 
 const MainPage = (props) => {
@@ -43,6 +44,18 @@ const MainPage = (props) => {
       }
     }
   }
+
+  const clearLSFields = () => {
+    const fieldsToClear = ['wr-tax-filters', 'wr-fin-year', 'wr-tax-slab'];
+    fieldsToClear.map(field => storageService().remove(field));
+  };
+
+  const panChanged = (newPan) => {
+    InternalStorage.clearStore();
+    clearLSFields(); // Clear out any LS fields here that might be dependant on PAN
+    setPan(newPan);
+  };
+
 
   const { params } = props.match;
   const [pan, setPan] = useState('');
@@ -86,14 +99,14 @@ const MainPage = (props) => {
         <div className="wr-hero-container">
 
           {/* will be hidden for mobile view and visible for desktop view */}
-          <div className="wr-fisdom">
+          <div className="wr-fisdom" onClick={() => navigate(props, 'main/overview')}>
             <img src={require('assets/fisdom/fisdom_logo.png')} alt="fisdom" />
             <span className='wr-vertical-divider'></span>
             <span className="wr-report">Mutual Fund Report</span>
           </div>
           
           {/* will be hidden for desktop view and visible for mobile view */}
-          {isMobileView && <PanSelect onPanSelect={setPan}/>}
+          {isMobileView && <PanSelect onPanSelect={panChanged} parentProps={props}/>}
           
           {/* visbility will be modified based on condition in media queries */}
           <div className="wr-user-account">
@@ -104,7 +117,7 @@ const MainPage = (props) => {
         </div>
       </div>
 
-      <Header onPanSelect={setPan} animation={headerAnimation}/>
+      <Header onPanSelect={panChanged} animation={headerAnimation} parentProps={props}/>
 
       {!pan ? 
         (<LoadingScreen text="Preparing your report, please wait..." />) :

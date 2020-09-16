@@ -58,7 +58,7 @@ export default function HoldingCard(props) {
   const renderFundDetails = () => (
     <div id="wr-hce-fund-details">
       <div>
-        <span className="wr-small-col-val">{formattedDate(fund_summary.fund_start_date, 'd m y')}</span>
+        <span className="wr-small-col-val">{formattedDate(fund_summary.fund_start_date, 'd m, y', true)}</span>
         <span className="wr-small-col-title">Launch Date</span>
       </div>
       <div>
@@ -132,7 +132,7 @@ export default function HoldingCard(props) {
       {/* based on the condition visbility is modified */}
       {holding.free_from_el_lockin && 
         <div className="wr-free-EL-label">
-          <img src={require('assets/fisdom/label.svg')} alt="Lock-in free" />
+          <img src={require('assets/fisdom/free_from_el_tag.png')} alt="Lock-in free" />
         </div>
       }
       <div className="wr-holding-card" onClick={() => expandCard(!expanded)}>

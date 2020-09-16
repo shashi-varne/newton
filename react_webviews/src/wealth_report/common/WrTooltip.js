@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { getConfig } from 'utils/functions';
 import Tooltip from 'common/ui/TooltipLite';
 import { Dialog } from 'material-ui';
@@ -15,6 +15,9 @@ export default function WrTooltip(props) {
     openOnClick, // allows for tooltip to be opened/closed only on click
   } = props;
   const [openModal, toggleModal] = useState(false);
+  useEffect(() => {
+    toggleModal(props.forceState);
+  }, [props.forceState]);
 
   const i_btn = (info) => (
     <span style={{ marginLeft: "6px" }}>

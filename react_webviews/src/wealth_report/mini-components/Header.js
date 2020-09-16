@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { withRouter, Link } from "react-router-dom";
 import PanSelect from './PanSelect';
 
@@ -33,6 +33,11 @@ const Header = (props) => {
   const { animation, match, location, onPanSelect } = props;
   const [activeTab, setActiveTab] = useState(match.params.tab);
 
+  useEffect(() => {
+    const newTab = match.params.tab;
+    setActiveTab(newTab);
+  }, [match]);
+
   const onTabClick = (tab) => {
     setActiveTab(tab);
     const elem = document.getElementById('wr-main');
@@ -44,7 +49,7 @@ const Header = (props) => {
       `${animation || ''}
       animated animatedFadeInUp fadeInUp`
     }>
-      <PanSelect onPanSelect={onPanSelect}/>
+      <PanSelect onPanSelect={onPanSelect} parentProps={props.parentProps}/>
 
       {tabs.map((tab, index) => (
         <Link to={`${tab.id + location.search}`}

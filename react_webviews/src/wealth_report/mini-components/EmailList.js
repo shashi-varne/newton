@@ -87,10 +87,8 @@ export default function EmailList(props) {
     const clickInsideTooltip = path.find((element) =>
       element.nodeName === 'DIV' && element.classList.contains("wr-accounts")
     );
-    const clickAddEmail = path.find((element) =>
-      element.nodeName === 'DIV' && element.classList.contains("wr-add-email-btn")
-    );
-    if (!clickAddEmail && clickInsideTooltip) return;
+    
+    if (clickInsideTooltip) return;
     toggleFunction(false);
   };
 
@@ -124,10 +122,10 @@ export default function EmailList(props) {
   const getSyncStatus = (email) => {
     const { statement_status } = email.latest_statement;
     const statusMap = {
-      init: 'Wait for statement email to be requested',
-      requested: 'Forward the CAMS email to cas@fisdom.com',
+      init: 'Statement email request in process. Please wait.',
+      requested: 'Please forward the CAMS email to cas@fisdom.com',
       success: 'Synced successfully',
-      failed: 'Statement processing failed. Please initiate resync',
+      failed: 'Something went wrong! Please reintiate the sync',
       processing: 'Processing the statement received',
       parsing: 'Processing the statement received',
       invalid_statement_uploded: 'Invalid statement received. Try again',
@@ -194,7 +192,7 @@ export default function EmailList(props) {
       </div>
 
       <div className="wr-mail-content">
-        Add the email address to track that you want to track on the fisdom platform
+        Enter your email ID to get insights of your investments.
       </div>
 
       <FormControl className="wr-form">
@@ -264,6 +262,7 @@ export default function EmailList(props) {
         onClickAway={handleTooltipClose}
         content={EmailListElement}
         forceDirection={true}
+        forceState={emailListModal}
         openOnClick={true}
         tooltipClass="wr-email-list"
       />

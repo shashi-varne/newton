@@ -161,6 +161,21 @@ export default function Overview(props) {
 
   return (
     <React.Fragment>
+      {props.pan === 'NA' && 
+        <div className="wr-unidentified-pan">
+          <span style={{ marginRight: "6px", verticalAlign: "middle" }}>
+            <img
+              src={require(`assets/fisdom/ic-info.svg`)}
+              width={12}
+              id="wr-i-btn"
+              alt=""
+            />
+          </span>
+          <span style={{ verticalAlign: "middle" }}>
+            <b>Unidentified PAN:</b> Covers investments for which PAN is not mentioned in all your CAS statements combined.
+          </span>
+        </div>
+      }
       <div className="wr-card-template">
         <div className="wr-card-template-header">Key Numbers</div>
         {

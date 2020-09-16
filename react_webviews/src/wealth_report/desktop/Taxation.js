@@ -50,8 +50,9 @@ const Taxation = (props) => {
         setTaxFilters(taxFilters);
         setPageErr(false);
         const financial_year =
-          selectedFinYear || taxFilters.financial_years[0].value;
-        const tax_slab = selectedTaxSlab || taxFilters.tax_slabs[0].value;
+          selectedFinYear || taxFilters.financial_years[taxFilters.financial_years.length - 1].value;
+        const tax_slab = 
+          selectedTaxSlab || taxFilters.tax_slabs[taxFilters.tax_slabs.length - 1].value;
         setFinYear(financial_year);
         setTaxSlab(tax_slab);
       } catch (err) {
@@ -206,7 +207,7 @@ const Taxation = (props) => {
       <ErrorScreen
         useTemplate={true}
         templateSvgPath="fisdom/exclamation"
-        templateText="Currently, no data to show."
+        templateText="Sorry! No taxation data available for the provided PAN number."
       />
     );
   }

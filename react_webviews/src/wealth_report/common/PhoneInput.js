@@ -53,6 +53,8 @@ class WrPhoneInput extends Component {
                     disableUnderline: true,
                     style: { minHeight: '56px' },
                   }}
+                  onKeyDown={this.props.onKeyDown}
+                  autoFocus={this.props.autoFocus}
                 />
             )}
           </InputMask>

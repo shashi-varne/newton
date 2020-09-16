@@ -7,6 +7,7 @@ import { fetchAllPANs } from "../common/ApiCalls";
 import DotDotLoader from "../../common/ui/DotDotLoader";
 import { isEmpty, storageService } from "../../utils/validators";
 import { getConfig } from "utils/functions";
+import { navigate } from "../common/commonFunctions";
 const isMobileView = getConfig().isMobileDevice;
 
 export default function PanSelect(props) {
@@ -26,14 +27,14 @@ export default function PanSelect(props) {
         setPanList(data);
         if (!data.length || isEmpty(data)) {
           setTooltipMsg("No PANs found");
-          selectPan('empty'); //To let Main Page know when there's no registered PANs
+          selectPan('empty', true); //To let Main Page know when there's no registered PANs
         } else {
           if (data.length === 1) setTooltipMsg("No more PANs to show");
           if (!cachedPan || isEmpty(cachedPan)) {
-            selectPan(data[0].pan);
+            selectPan(data[0].pan, true);
             storageService().setObject('wr-current-pan', data[0].pan);
           } else {
-            selectPan(cachedPan);
+            selectPan(cachedPan, true);
           }
         }
       } catch (err) {
@@ -44,11 +45,14 @@ export default function PanSelect(props) {
     })();
   }, []);
 
-  const selectPan = (pan) => {
+  const selectPan = (pan, firstTime) => {
     toggleDropdown(false);
     setPan(pan === 'empty' ? '' : pan);
     storageService().setObject('wr-current-pan', pan);
     props.onPanSelect(pan); // send selected pan to parent element
+    if (!firstTime) {
+      navigate(props.parentProps, 'main/overview');
+    }
   };
 
   const handleClick = () => {
@@ -81,7 +85,7 @@ export default function PanSelect(props) {
                   <div className="wr-pan">{selectedPan === "NA" ? "Unidentified PAN" : (selectedPan || 'No PANs linked')}</div>
               }
             </div>
-            {selectedPan &&
+            {selectedPan && panList.length > 1   &&
               <div title={tooltipMsg || ''}>
                 <IconButton
                   classes={{ root: "wr-icon-button" }}
@@ -115,7 +119,7 @@ export default function PanSelect(props) {
                         alt=""
                       />
                       <div className="wr-pan-detail">
-                        <div className="wr-pan-title">{pan.name || "N/A"}</div>
+                        <div className="wr-pan-title">{pan.name || "--"}</div>
                         <div className="wr-pan">{pan.pan === "NA" ? "Unidentified PAN" : pan.pan}</div>
                       </div>
                     </div>

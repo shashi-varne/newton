@@ -16,6 +16,8 @@ export default class WrOtpInput extends Component {
           onChange={this.props.onChange}
           hasErrored={!!this.props.errorText}
           value={this.props.value}
+          shouldAutoFocus={true}
+          onKeyDown={this.props.onKeyDown}
         />
         {this.props.errorText &&
           <div style={{ color: 'red', margin: '14px 0 0 0', fontSize: '14px' }}>

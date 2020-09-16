@@ -26,6 +26,10 @@ const Login = (props) => {
   const [email, setEmail] = useState("");
   const [emailErr, setEmailErr] = useState("");
   const [password, setPwd] = useState("");
+  const [resendDisabled, disableResend] = useState(false);
+  // const serverUrl = 'https://wreport-dot-plutus-staging.appspot.com';
+  const serverUrl = 'https://my.fisdom.com';
+  const socialRedirectUrl = 'https://wreport-dot-plutus-web-views.appspot.com/w-report/overview';
 
   useEffect(() => {
     if (params.view) {
@@ -44,14 +48,18 @@ const Login = (props) => {
 
   const onKeyDown = (event) => {
     var code = event.keyCode || event.which;
-    if (code === 13) { //13 is the enter keycode
-        //Do stuff in here
+    if (code === 13) {
+      clickContinue();
     }
   };
 
   const resend = async() => {
     try {
+      if (resendDisabled) return;
+      disableResend(true);
       await resendOtp();
+      setTimeout(() => disableResend(false), 30000);
+      toast('OTP resent successfully');
     } catch(err) {
       console.log(err);
       toast(err);
@@ -180,7 +188,7 @@ const Login = (props) => {
       <img src={require("assets/fisdom/ic-fisdom-logo.jpg")} id="wr-logo" alt="" />
       <div id="wr-title">Login with Phone Number</div>
       <div className="subtitle">
-        Please enter your 10 digit registered mobile number to access the wealth report
+        Please enter your 10 digit registered mobile number to access your wealth report
       </div>
       <div id="wr-input-label">Enter phone number</div>
       <WrPhoneInput 
@@ -189,21 +197,23 @@ const Login = (props) => {
         phone={countryCode}
         format={format}
         number={number}
+        onKeyDown={onKeyDown}
+        autoFocus={true}
       />
-      {phoneErr &&
+      {/* { */}
         <div style={{
           marginTop: "10px",
+          marginBottom: phoneErr ? "20px" : "35px",
           color: "red",
           letterSpacing: "0.5px"
         }}>
           {phoneErr}
         </div>
-      }
+      {/* } */}
       <WrButton
         fullWidth={true}
         classes={{ root: "wr-login-btn" }}
         onClick={clickContinue}
-        onKeyDown={onKeyDown}
         disabled={opLoading}>
         {opLoading ?
           <CircularProgress size={20} thickness={4} color="white" /> :
@@ -220,23 +230,25 @@ const Login = (props) => {
           Continue with Email
       </Button>
         <div style={{ display: 'flex', marginTop: '30px' }}>
-        <Button
-          fullWidth={true}
-          classes={{ root: "wr-social-btn" }}
-          style={{ marginRight: '20px !important' }}
-          onClick={clickContinue}
-          disabled={opLoading}>
-          <img src={require('assets/facebook.svg')} alt="fb" style={{ marginRight: '12px' }} />
-          Facebook
-        </Button>
-        <Button
-          fullWidth={true}
-          classes={{ root: "wr-social-btn" }}
-          onClick={clickContinue}
-          disabled={opLoading}>
-          <img src={require('assets/google.svg')} alt="google" style={{ marginRight: '12px' }} />
-          Google
-        </Button>
+          <Button
+            fullWidth={true}
+            classes={{ root: "wr-social-btn" }}
+            style={{ marginRight: '20px !important' }}
+            href={serverUrl + '/auth/facebook?redirect_url=' + socialRedirectUrl}
+            onClick={clickContinue}
+            disabled={opLoading}>
+            <img src={require('assets/facebook.svg')} alt="fb" style={{ marginRight: '12px' }} />
+            Facebook
+          </Button>
+          <Button
+            fullWidth={true}
+            classes={{ root: "wr-social-btn" }}
+            onClick={clickContinue}
+            href={serverUrl + '/auth/google?redirect_url=' + socialRedirectUrl}
+            disabled={opLoading}>
+            <img src={require('assets/google.svg')} alt="google" style={{ marginRight: '12px' }} />
+            Google
+          </Button>
       </div>
       </div>
     </div>
@@ -247,17 +259,26 @@ const Login = (props) => {
       <img src={require("assets/fisdom/ic-mobile-verification.svg")} id="wr-logo" alt="" />
       <div id="wr-title">One Time Password (OTP)</div>
       <div className="subtitle">
-        Enter the OTP which has been sent on your mobile phone
+        Enter the OTP which has been sent to the mobile number you entered
       </div>
       <div>
         <WrOtpInput
           onChange={handleOtp}
           value={otp}
           errorText={otpErr}
+          onKeyDown={onKeyDown}
         />
       </div>
       <div id="wr-otp-opts">
-        <span onClick={resend}>Resend OTP</span>
+        <span
+          onClick={resend}
+          style={{
+            cursor: resendDisabled ? 'not-allowed' : 'pointer',
+            color: resendDisabled ? 'rgba(0, 0, 0, 0.5)' : 'var(--primary)'
+          }}
+          >
+          Resend OTP
+        </span>
         <span onClick={() => { setOtp(''); navigate(props, 'login/phone') }}>Enter number again?</span>
       </div>
     </div>
@@ -301,7 +322,7 @@ const Login = (props) => {
       <img src={require("assets/fisdom/ic-fisdom-logo.jpg")} id="wr-logo" alt="" />
       <div id="wr-title">Login with Email</div>
       <div className="subtitle">
-        Enter the email address and password to login to your wealth report
+        Enter the email address and password to access your wealth report
       </div>
       <div style={{ marginBottom: '28px' }}>
         <FormControl className="wr-form">
@@ -370,7 +391,6 @@ const Login = (props) => {
             color: view === 'splash' ? 'var(--primary)' : 'white'
           }}
           classes={{ root: "wr-splash-btn" }}
-          onKeyDown={onKeyDown}
           onClick={clickContinue}>
           Login to Continue
         </WrButton>
@@ -388,7 +408,12 @@ const Login = (props) => {
             id="wr-login-img"
           />
           <div id="wr-login-right-panel">
-            <img src={require('assets/fisdom/fisdom_logo_coloured.png')} alt="fisdom" width={130}/>
+            <img
+              src={require('assets/fisdom/fisdom_logo_coloured.png')}
+              style={{ cursor: 'pointer' }}
+              alt="fisdom" width={130}
+              onClick={() => navigate(props, 'login')}
+            />
             <h2>Welcome to Fisdom!</h2>
             {view === 'phone' && renderNumberView}
             {view === 'otp' && renderOTPView}
@@ -398,7 +423,6 @@ const Login = (props) => {
               <WrButton
                 fullWidth={true}
                 classes={{ root: "wr-login-btn" }}
-                onKeyDown={onKeyDown}
                 onClick={clickContinue}>
                 {opLoading ?
                   <CircularProgress size={20} thickness={4} color="white" /> :
@@ -435,7 +459,6 @@ const Login = (props) => {
                   fullWidth={true}
                   classes={{ root: "wr-login-btn" }}
                   onClick={clickContinue}
-                  onKeyDown={onKeyDown}
                   disabled={opLoading}>
                   {opLoading ?
                     <CircularProgress size={20} thickness={4} color="white" /> :

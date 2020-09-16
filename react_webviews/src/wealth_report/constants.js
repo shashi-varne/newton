@@ -30,7 +30,7 @@ export const HoldingFilterOptions = [
       label: '<1L',
       value: '1',
     }, {
-      label: '1.5L',
+      label: '1-5L',
       value: '2',
     }, {
       label: '5-10L',
@@ -122,37 +122,4 @@ export const MultiColorScheme = [
   '#5631c4',
   '#4f2eb4',
   '#4828a3',
-];
-
-export const dummyAlloc = [{
-  id: 'Large Cap',
-  label: 'Large Cap',
-  value: 43,
-  "color": "#856cc1"
-}, {
-  id: 'Mid Cap',
-  label: 'Mid Cap',
-  value: 12,
-  "color": "#7458b9",
-}, {
-  id: 'Small Cap',
-  label: 'Small Cap',
-  value: 45,
-  "color": "#512ea7",
-}];
-
-export const dummyTableData = [
-  { date: '20 Apr 2020', type: 'Investment', amount: '₹ 2.30L' },
-  { date: '8 Oct 2019', type: 'Withdrawal', amount: '₹ 1.80L' },
-  { date: '20 Apr 2020', type: 'Investment', amount: '₹ 2.30L' },
-  { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L' },
-  { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L' },
-  { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L' },
-  { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L' },
-  { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L' },
-  { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L' },
-  { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L' },
-  { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L' },
-  { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L' },
-  { date: '12 Jan 2020', type: 'Switch', amount: '₹ 3.10L' },
 ];

@@ -112,14 +112,14 @@ export default function Holdings(props) {
         {!isLoading && noHoldings && !isEmpty(selectedFilters) &&
           <ErrorScreen
             templateSvgPath="fisdom/no-filter-results"
-            templateText="Currently, no data to show for the selected filter. Please try removing filters to see holdings data."
+            templateText="No results for the applied filters! Please try removing filters to see holdings data."
             useTemplate={true}
           />
         }
         {!isLoading && noHoldings && isEmpty(selectedFilters) &&
           <ErrorScreen
             templateSvgPath="fisdom/exclamation"
-            templateText="Currently, no data to show."
+            templateText="No holdings to show."
             useTemplate={true}
           />
         }

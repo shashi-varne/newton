@@ -190,6 +190,12 @@
 #wr-login-mobile {
   font-family: 'Source Sans Pro', sans-serif;
   display: none;
+
+  #wr-alternate-login-btns {
+    .MuiButton-disabled {
+      background-color: inherit !important;
+    }
+  }
 }
 
 .wr-input-addmail {
@@ -262,6 +268,7 @@
     .wr-fisdom {
       display: flex;
       align-items: center;
+      cursor: pointer;
 
       .wr-vertical-divider {
         height: 33px !important;
@@ -309,6 +316,15 @@
   bottom: 0;
 }
 
+.wr-unidentified-pan {
+  @extend .wr-card-template;
+  margin: -25px 0 25px !important;
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: 600;
+  padding: 15px;
+}
+
 .wr-card-template {
   @extend .animated, .animatedFadeInUp, .fadeInUp;
   box-shadow: 0 1px 15px 0 rgba(215, 199, 250, 0.12);
@@ -319,7 +335,7 @@
 
   .wr-card-template-header {
     min-height: 65px;
-    opacity: 0.6;
+    opacity: 0.8;
     font-size: 17px;
     font-weight: 600;
     text-transform: uppercase;
@@ -615,8 +631,10 @@
   }
 
   .wr-p2l-item:hover {
-    opacity: 1;
-    font-weight: 600;
+    .wr-p2l-item-label {
+      color: rgba(0, 0, 0, 1);
+      font-weight: 600;
+    }
   }
 }
 
@@ -731,7 +749,7 @@
 }
 
 #wr-holdings {
-  min-height: 420px;
+  min-height: 65vh;
 
   .wr-fab-btn {
     background-color: var(--primary) !important;
@@ -750,8 +768,8 @@
 
 #wr-all-trx {
   font-family: 'Source Sans Pro', sans-serif;
-  background-color: '#f5f6f8';
-  height: '100%';
+  background-color: #f5f6f8;
+  height: 100%;
 }
 
 .wr-dot-loader {
@@ -1082,6 +1100,10 @@
   #wr-body {
     margin: 220px 3.1% 0;
     width: 93%;
+  }
+
+  .wr-unidentified-pan {
+    margin: -15px 0 25px !important;
   }
 
   .wr-card-template {
