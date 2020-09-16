@@ -295,68 +295,68 @@ export const religare = {
         nominee_opts:    [
             {
                 'name': 'SPOUSE',
-                'value': 'SPSE'
+                'value': 'SPOUSE'
             },
             {
                 'name': 'BROTHER',
-                'value': 'BOTH'
+                'value': 'BROTHER'
             },
             {
                 'name': 'COUSIN',
-                'value': 'COUS'
+                'value': 'COUSIN'
             },
             {
                 'name': 'DAUGHTER IN LAW',
-                'value': 'DLAW'
+                'value': 'DAUGHTER_IN_LAW'
             },
             {
                 'name': 'FATHER',
-                'value': 'FATH'
+                'value': 'FATHER'
             },
             {
                 'name': 'FATHER IN LAW',
-                'value': 'FLAW'
+                'value': 'FATHER_IN_LAW'
             },
             {
                 'name': 'GRAND DAUGHTER',
-                'value': 'GDAU'
+                'value': 'GRANDDAUGHTER'
             },
             {
                 'name': 'GRAND FATHER',
-                'value': 'GFAT'
+                'value': 'GRANDFATHER'
             },
             
             {
                 'name': 'GRAND MOTHER',
-                'value': 'GMOT'
+                'value': 'GRANDMOTHER'
             },
             {
                 'name': 'GRAND SON',
-                'value': 'GSON'
+                'value': 'GRANDSON'
             },
             {
                 'name': 'BROTHER IN LAW',
-                'value': 'MDTR'
+                'value': 'BROTHER_IN_LAW'
             },
             {
                 'name': 'MOTHER IN LAW',
-                'value': 'MLAW'
+                'value': 'MOTHER_IN_LAW'
             },
             {
                 'name': 'SISTER IN LAW',
-                'value': 'MMBR'
+                'value': 'SISTER_IN_LAW'
             },
             {
                 'name': 'MOTHER',
-                'value': 'MOTH '
+                'value': 'MOTHER '
             },
             {
                 'name': 'NEPHEW',
-                'value': 'NEPH'
+                'value': 'NEPHEW'
             },
             {
                 'name': 'NIECE',
-                'value': 'NIEC'
+                'value': 'NIECE'
             },
             {
                 'name': 'SELF- PRIMARY MEMBER',
@@ -364,19 +364,19 @@ export const religare = {
             },
             {
                 'name': 'SISTER',
-                'value': 'SIST'
+                'value': 'SISTER'
             },
             {
                 'name': 'SON IN LAW',
-                'value': 'SLAW'
+                'value': 'SON_IN_LAW'
             },
             {
                 'name': 'SON',
-                'value': 'SONM'
+                'value': 'SON'
             },
             {
                 'name': 'DAUGHTER',
-                'value': 'UDTR'
+                'value': 'DAUGHTER'
             }
         ],
     },
