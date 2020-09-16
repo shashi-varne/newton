@@ -65,7 +65,6 @@ class radioAndCheckboxList extends Component {
   render() {
     let { list, name } = this.state;
     let { medical_questions } = this.props
-    // console.log(list)
 
     return (
       <div style={{ marginBottom: "40px" }}>

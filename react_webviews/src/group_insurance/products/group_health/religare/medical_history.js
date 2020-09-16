@@ -232,7 +232,7 @@ class GroupHealthPlanMedicalHistory extends Component {
 
 
   render() {
-    let { account_type, list, medical_questions } = this.state;
+    let { account_type, member_base, radio_options, list, medical_questions } = this.state;
 
     return (
       <Container
@@ -253,6 +253,8 @@ class GroupHealthPlanMedicalHistory extends Component {
             name="medical history"
             list={list}
             medical_questions={medical_questions}
+            radio_options={radio_options}
+            member_data={member_base}
             handleCheckbox={this.handleCheckbox}
             handleChangeRadio={this.handleChangeRadio}
           />
