@@ -5,13 +5,14 @@ import BottomInfo from '../../../../common/ui/BottomInfo';
 import Input from '../../../../common/ui/Input';
 import { initialize } from '../common_data';
 import { FormControl } from 'material-ui/Form';
+import { getConfig } from 'utils/functions';
 
 class GroupHealthPlanStarPincode extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            ui_members: {}
+            next_screen: 'health-details'
         }
 
         this.initialize = initialize.bind(this);
@@ -70,6 +71,14 @@ class GroupHealthPlanStarPincode extends Component {
         } else {
             nativeCallback({ events: eventObj });
         }
+    }
+
+    navigate = (pathname) => {
+        console.log(pathname)
+        this.props.history.push({
+            pathname: pathname,
+            search: getConfig().searchParams
+        });
     }
 
     handlePincode = name => event => {
