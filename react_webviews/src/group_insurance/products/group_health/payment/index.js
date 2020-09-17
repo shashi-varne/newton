@@ -43,7 +43,8 @@ class GroupHealthPayment extends Component {
       lead: {},
       policy_data: {},
       providerData: {},
-      productName: getConfig().productName
+      productName: getConfig().productName,
+      force_onload_call: true
     }
 
     this.initialize = initialize.bind(this);
@@ -79,8 +80,12 @@ class GroupHealthPayment extends Component {
     }, () => {
       this.initialize();
     })
+   
+  }
 
-    if(!get_lead) {
+  onload = async() => {
+    console.log(this.state);
+    if(!this.state.get_lead) {
       try {
 
         this.setState({
@@ -89,7 +94,7 @@ class GroupHealthPayment extends Component {
   
         let quote_id = storageService().get('ghs_ergo_quote_id');
   
-        const res = await Api.get('/api/ins_service/api/insurance/hdfcergo/get/policy/' + quote_id);
+        const res = await Api.get(`/api/ins_service/api/insurance/${this.state.provider_api}/get/policy/` + quote_id);
   
         var resultData = res.pfwresponse.result;
   

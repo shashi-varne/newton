@@ -446,8 +446,15 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/:provider/edit-is-ped`}
             render={(props) => <GroupHealthPlanIsPed  {...props} edit={true} />} />
 
+
           <Route path={`${url}/group-health/:provider/edit-select-ped/:member_key`}
             render={(props) => <GroupHealthPlanSelectPed  {...props} edit={true} />} />
+
+          <Route path={`${url}/group-health/:provider/edit-plan-medical-history`}
+            render={(props) => <GroupHealthPlanMedicalHistory  {...props} edit={true} />} />
+
+          <Route path={`${url}/group-health/:provider/edit-plan-lifestyle-details`}
+            render={(props) => <GroupHealthPlanLifestyleDetail  {...props} edit={true} />} />
 
           {/* common */}
           <Route path={`${url}/common/report`} component={Report} />

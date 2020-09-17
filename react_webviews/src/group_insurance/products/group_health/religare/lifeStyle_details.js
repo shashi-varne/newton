@@ -284,7 +284,6 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
   render() {
     let { account_type, list } = this.state;
-
     return (
       <Container
         events={this.sendEvents("just_set_events")}

@@ -18,6 +18,25 @@ import Dialog, {
 import BottomSheet from '../../../../common/ui/BottomSheet'; 
 import {childeNameMapper } from '../../../constants';
 
+const med_ques_mapper_religare = {
+    'mand_1' : {
+        'disc': 'Any illness/injury in last 48 months?',
+        'members': []
+    },
+    'mand_2' : {
+        'disc': 'Previous health insurance claim?',
+        'members': []
+    },
+    'mand_3' : {
+        'disc': 'Previous health insurance declined/increase?',
+        'members': []
+    },
+    'mand_4' : {
+        'disc': 'Already covered with Religare?',
+        'members': []
+    }
+}
+
 class GroupHealthPlanFinalSummary extends Component {
 
     constructor(props) {
@@ -46,8 +65,9 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     onload = () => {
-        let lead = this.state.lead;
+        let {lead, provider} = this.state;
         let member_base = lead.member_base;
+        console.log(member_base);
 
         let pan_needed = false;
         if (lead.total_amount > 100000) {
@@ -81,11 +101,15 @@ class GroupHealthPlanFinalSummary extends Component {
         let accordianData = [];
 
         let diseases_data_backend = [];
+        let life_style_details_data = [];
+        let members_for_life_style = [];
+        let med_ques_data =  med_ques_mapper_religare;
         for (var i = 0; i < member_base.length; i++) {
             let member = Object.assign({}, member_base[i]);
+            let member_display = capitalizeFirstLetter(childeNameMapper(member.key));
 
             let obj = {
-                title: `${capitalizeFirstLetter(childeNameMapper(member.key))}'s details ${member_base.length > 1 ?  ('(insured ' + (i+1) + ')') : ''}`,
+                title: `${member_display}'s details ${member_base.length > 1 ?  ('(insured ' + (i+1) + ')') : ''}`,
                 edit_state: `/group-insurance/group-health/${this.state.provider}/edit-personal-details/${member.key}`
             }
 
@@ -130,16 +154,72 @@ class GroupHealthPlanFinalSummary extends Component {
             obj.data = data;
             accordianData.push(obj);
 
-            if (member.ped_diseases_name) {
-                let dis_data = {
-                    'title': `${member.relation}'s diseases`,
-                    'subtitle': member.ped_diseases_name
+
+            if(provider === 'HDFCERGO') {
+                if (member.ped_diseases_name) {
+                    let dis_data = {
+                        'title': `${member.relation}'s diseases`,
+                        'subtitle': member.ped_diseases_name
+                    }
+    
+                    diseases_data_backend.push(dis_data);
+                }
+            }
+            
+
+            let life_style_question = member.life_style_question;
+            if(provider === 'RELIGARE') {
+
+                // for lifestyle
+
+                if(life_style_question && life_style_question.answer) {
+                    members_for_life_style.push(member_display);
+                
+                    life_style_details_data.push({
+                        'title': `${member_display}'s consumption details`,
+                        'subtitle': life_style_question.answer_description
+                    });
+    
+                    life_style_details_data.push({
+                        'title': `Since when`,
+                        'subtitle': life_style_question.start_date
+                    });
+    
+                }
+              
+
+                // for peds
+                if (member.ped_diseases) {
+                    let p_list = '';
+
+                    for (var p in member.ped_diseases) {
+                        if(p_list) {
+                            p_list += ', ';
+                        }
+                        p_list +=  `${member.ped_diseases[p].key_mapper} (${member.ped_diseases[p].start_date})` 
+                    }
+                    let dis_data = {
+                        'title': `${member_display}'s diseases`,
+                        'subtitle': p_list
+                    }
+    
+                    diseases_data_backend.push(dis_data);
                 }
 
-                diseases_data_backend.push(dis_data);
-            }
+                // for med questions
+                if (member.medical_questions) {
 
+                    for (var qs in member.medical_questions) {
+                        let q_data = member.medical_questions[qs];
+                        if(q_data.answer) {
+                            med_ques_data[q_data.key_mapper].members.push(member_display);
+                        }
+                    }
+                }
+            
+            }
         }
+        console.log(med_ques_data);
 
         let contact_data = {
             'title': 'Contact details',
@@ -204,6 +284,51 @@ class GroupHealthPlanFinalSummary extends Component {
             ]
         }
         accordianData.push(nominee_data);
+
+        if(provider === 'RELIGARE' && members_for_life_style.length !== 0) {
+            let data = [
+                {
+                    'title': 'Smoke/consume alcohol',
+                    'subtitle': 'Yes'
+                },
+                {
+                    'title': 'Who?',
+                    'subtitle': members_for_life_style.join(', ')
+                }
+            ]
+
+            data = data.concat(life_style_details_data);
+
+            let final_data = {
+                'title': 'Lifestyle details',
+                edit_state: `/group-insurance/group-health/${this.state.provider}/edit-plan-lifestyle-details`,
+                data: data
+            }
+
+            accordianData.push(final_data);
+        }
+
+        if(provider === 'RELIGARE') {
+            let data = []
+
+            for (var q in med_ques_data) {
+                let q_data = med_ques_data[q];
+
+                data.push({
+                    title: q_data.disc,
+                    subtitle: q_data.members.length !== 0 ? 'Yes' : 'No',
+                    subtitle2: q_data.members.join(', ') 
+                })
+            }
+
+            let final_data = {
+                'title': 'Medical history details',
+                edit_state: `/group-insurance/group-health/${this.state.provider}/edit-plan-medical-history`,
+                data: data
+            }
+
+            accordianData.push(final_data);
+        }
 
 
         if (diseases_data_backend.length !== 0) {
@@ -423,6 +548,9 @@ class GroupHealthPlanFinalSummary extends Component {
                         <div className="subtitle">
                             {props.subtitle}
                         </div>
+                        {props.subtitle2 && <div className="subtitle">
+                            {props.subtitle2}
+                        </div>}
                     </div>
                 }
             </div>

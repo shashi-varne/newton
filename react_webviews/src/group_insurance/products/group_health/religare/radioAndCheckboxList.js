@@ -64,7 +64,6 @@ class radioAndCheckboxList extends Component {
 
   render() {
     let { list, name } = this.state;
-
     return (
       <div style={{ marginBottom: "40px" }}>
         {list.map((item, index) => (
