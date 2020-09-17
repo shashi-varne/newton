@@ -144,7 +144,7 @@ class GroupHealthPlanPremiumSummary extends Component {
                 <div className="group-health-plan-premium-summary">
                     <div className="group-health-top-content-plan-logo">
                         <div className="tc-right">
-                            <img src={require(`assets/${this.state.providerData.logo}`)} alt="" />
+                            <img src={require(`assets/${this.state.providerData.logo_card}`)} alt="" />
                         </div>
                         <div className="left">
                             <div className="tc-title">{this.state.groupHealthPlanData.base_plan_title}</div>

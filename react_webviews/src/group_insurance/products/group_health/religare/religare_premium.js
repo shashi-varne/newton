@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { inrFormatDecimal, numDifferentiationInr } from '../../../../utils/validators';
 
 export default class ReligarePremium extends Component {
@@ -64,8 +64,8 @@ export default class ReligarePremium extends Component {
               lineHeight: '15px',
               marginBottom: '-10px',
             }}>Add on</div>
-            {this.state.selectedAddOns.map(addOn => 
-              <div className="flex-between pi-tile" style={{ marginBottom: '-5px' }}>
+            {this.state.selectedAddOns.map((addOn, index) => 
+              <div key={index} className="flex-between pi-tile" style={{ marginBottom: '-5px' }}>
                 <div className="pi-tile-left">{addOn.title}</div>
                 <div className="pi-tile-right">{inrFormatDecimal(addOn.default_premium)}</div>
               </div>

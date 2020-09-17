@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
-
 import toast from '../../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
@@ -31,7 +30,8 @@ class GroupHealthPlanSelectPed extends Component {
                 cta_title: 'OK'
             },
             get_lead: true,
-            show_loader: true
+            show_loader: true,
+            selectedIndex: ''
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -55,24 +55,39 @@ class GroupHealthPlanSelectPed extends Component {
 
         let backend_key = data[0].backend_key;
         let ped_diseases_name = data[0].ped_diseases_name;
-        ped_diseases_name = ped_diseases_name.split(',');
+        ped_diseases_name = (ped_diseases_name || '').split(',');
+        let duration = data[0].duration
 
         let options = [
-            { 'name': 'Acute Gastroenteritis/AGE/Diarrhoea/Loose Motions/Vomiting' },
-            { 'name': 'Adenoid/ Adenoidectomy' },
-            { 'name': 'Appendix/Appendicitis/Appendix surgery' },
-            { 'name': 'Asthma' },
-            { 'name': 'Cataract - 1 Eye/Both Eyes' },
-            { 'name': 'Cholesterol/Triglyceride/Dyslipidaemia/Hyperlipidaemia' },
-            { 'name': 'Cholecystectomy/Gall bladder surgery/removal' },
-            { 'name': 'Diabetes/High Sugar' },
-            { 'name': 'Fall/Accidental Injury' },
-            { 'name': 'Fistula' },
-            { 'name': 'Fissure' },
-            { 'name': 'Fever/Viral Fever/Enteric Fever/Typhoid/Malaria/Dengue' },
-            { 'name': 'Fibroid/Myomectomy' },
-            { 'name': 'Fracture with implant/rod/screw/plate' }
+            { 'name': 'Acute Gastroenteritis/AGE/Diarrhoea/Loose Motions/Vomiting',id: 'ped_no_1', description: ''},
+            { 'name': 'Adenoid/ Adenoidectomy', id: 'ped_no_2', description: ''},
+            { 'name': 'Appendix/Appendicitis/Appendix surgery', id: 'ped_no_3', description: ''},
+            { 'name': 'Asthma', id: 'ped_no_4', description: ''},
+            { 'name': 'Cataract - 1 Eye/Both Eyes', id: 'ped_no_5', description: ''},
+            { 'name': 'Cholesterol/Triglyceride/Dyslipidaemia/Hyperlipidaemia', id: 'ped_no_6', description: ''},
+            { 'name': 'Cholecystectomy/Gall bladder surgery/removal', id: 'ped_no_7', description: ''},
+            { 'name': 'Diabetes/High Sugar', id: 'ped_no_8', description: ''},
+            { 'name': 'Fall/Accidental Injury', id: 'ped_no_9', description: ''},
+            { 'name': 'Fistula', id: 'ped_no_10', description: ''},
+            { 'name': 'Fissure', id: 'ped_no_11', description: ''},
+            { 'name': 'Fever/Viral Fever/Enteric Fever/Typhoid/Malaria/Dengue', id: 'ped_no_12', description: ''},
+            { 'name': 'Fibroid/Myomectomy', id: 'ped_no_13', description: ''},
+            { 'name': 'Fracture with implant/rod/screw/plate', id: 'ped_no_14', description: ''}
         ]
+
+        if(this.state.provider === 'RELIGARE') {
+            let ped_data = data.ped_diseases || [];
+
+            ped_data.forEach(item => {
+
+                options.forEach(opt => {
+                    if(opt.id === item.key_mapper) {
+                        opt.checked = true;
+                        opt.start_date = item.start_date;
+                    }
+                })
+            })
+        }
 
         options.push({ 'name': 'Other' });
 
@@ -85,6 +100,7 @@ class GroupHealthPlanSelectPed extends Component {
                 if(options[o].name === ped_diseases_name[p]) {
                     options[o].checked = true;
                     matched = true;
+                    options[0].value = duration[ped_diseases_name[p]]
                 }
             }
 
@@ -128,7 +144,7 @@ class GroupHealthPlanSelectPed extends Component {
 
     updateParent = (key, value) => {
         this.setState({
-            [key]: value
+            [key]: value,
         });
     }
 
@@ -136,8 +152,8 @@ class GroupHealthPlanSelectPed extends Component {
         this.setState({
             openConfirmDialog: false
         });
-
     }
+
     handleClick2 = () => {
         this.setState({
             openConfirmDialog: true,
@@ -169,6 +185,7 @@ class GroupHealthPlanSelectPed extends Component {
 
 
             let ped_diseases_name = '';
+            let ped_diseases = {}
 
             for(var j in options) {
                 if(options[j].checked) {
@@ -177,6 +194,11 @@ class GroupHealthPlanSelectPed extends Component {
 
                     if(options[j].name === 'Other') {
                         value = this.state[this.state.otherInputData.name];
+                    }
+
+                    if(options[j].name !== 'Other') {
+                        options[j].value = this.state[this.state.name];
+                        ped_diseases[options[j].id] = options[j].value
                     }
 
                     if(!ped_diseases_name) {
@@ -201,7 +223,8 @@ class GroupHealthPlanSelectPed extends Component {
             let body = {
                 [this.state.backend_key] : {
                     ped_diseases_name: ped_diseases_name,
-                    ped_exists: "true"
+                    ped_exists: "true",
+                    ped_diseases: ped_diseases
                 }
             }
 
@@ -261,7 +284,9 @@ class GroupHealthPlanSelectPed extends Component {
                 <div className="group-health-select-ped">
                     <FormControl fullWidth>
                         {this.state.options && this.state.show_checkbox &&
-                            <CheckboxList options={this.state.options} parent={this} />}
+                            <CheckboxList 
+                            provider={this.state.provider}
+                            options={this.state.options} parent={this} />}
                     </FormControl>
 
                     <ConfirmDialog parent={this} />
