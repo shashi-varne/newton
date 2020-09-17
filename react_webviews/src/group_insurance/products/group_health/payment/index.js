@@ -151,7 +151,7 @@ class GroupHealthPayment extends Component {
       })
       
     } else if(this.state.paymentPending) {
-      state  = `/group-insurance/group-health/landing`;
+      state  = `/group-insurance/group-health/${this.state.provider}/landing`;
       this.navigate(state);
     } else {
       state  = `/group-insurance/group-health/${this.state.provider}/reportdetails/${this.state.policy_data.lead_id}`;

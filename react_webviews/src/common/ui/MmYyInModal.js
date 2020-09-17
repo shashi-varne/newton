@@ -102,7 +102,7 @@ class MmYyInModal extends Component {
                         </div>
                     </DialogTitle>
                     <DialogContent>
-                        <div className="content" id="alert-dialog-decription">
+                        <div className="content" style={{margin: '20px 0 0 6px'}} id="alert-dialog-decription">
                             <div className="content">
                                 {this.props.header_sub_title}
                             </div>
