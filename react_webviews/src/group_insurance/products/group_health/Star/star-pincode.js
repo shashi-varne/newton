@@ -12,8 +12,8 @@ class GroupHealthPlanStarPincode extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            next_screen: 'health-details'
-        }
+            screen_name: 'star_pincode',
+        };
 
         this.initialize = initialize.bind(this);
     }
@@ -26,7 +26,7 @@ class GroupHealthPlanStarPincode extends Component {
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let account_type = groupHealthPlanData.account_type;
 
-        let { ui_members } = groupHealthPlanData;
+        const { ui_members } = groupHealthPlanData;
 
         this.setState({
             account_type: account_type,
@@ -34,27 +34,22 @@ class GroupHealthPlanStarPincode extends Component {
 
         let header_title, adult_member, pincode = '';
         if (account_type === 'family') {
-            if (ui_members['wife']) {
-                header_title = 'Where does your wife live?';
-                adult_member = 'wife';
-                pincode = ui_members['wife_pincode'] || ''
-
-            } else if (ui_members['husband']) {
-                header_title = 'Where does your husband live?';
-                adult_member = 'husband';
-                pincode = ui_members['husband_pincode'] || ''
-            }
+            header_title = `Where does your ${ui_members.other_adult_member} live?`;
         } else if (account_type === 'selfandfamily') {
             header_title = 'Where do you live?';
-            adult_member = 'self';
-            pincode = ui_members['self_pincode'] || ''
+        } else if (account_type === 'parentsinlaw') {
+            if (ui_members.parents_option === 'parents') {
+                header_title = 'Where do your parents live?';
+            } else {
+                header_title = 'Where do your parents in-law live?';
+            }
         }
+        pincode = groupHealthPlanData.pincode;
 
         this.setState({
-            adult_member: adult_member,
             header_title: header_title,
             pincode: pincode
-        })
+        });
     }
 
     sendEvents(user_action) {
@@ -74,24 +69,21 @@ class GroupHealthPlanStarPincode extends Component {
     }
 
     navigate = (pathname) => {
-        console.log(pathname)
         this.props.history.push({
             pathname: pathname,
-            search: getConfig().searchParams
+            search: getConfig().searchParams,
         });
     }
 
     handlePincode = name => event => {
         const pincode = event.target.value;
 
-        if (pincode.length > 6) {
-            return
-        }
+        if (pincode.length > 6) return;
 
         this.setState({
             [name]: pincode,
-            [name+'_error']: ''
-        })
+            [name+'_error']: '',
+        });
     }
 
     handleClick = () => {
@@ -100,7 +92,7 @@ class GroupHealthPlanStarPincode extends Component {
         
         let canProceed = true;
 
-        let error = ''
+        let error = '';
         if (!this.state.pincode) {
             error = 'Please enter pincode';
             canProceed = false;
@@ -114,13 +106,10 @@ class GroupHealthPlanStarPincode extends Component {
         });
 
         let post_body = groupHealthPlanData.post_body;
-        let {ui_members} = groupHealthPlanData;
 
         if (canProceed) {
-            ui_members[this.state.adult_member+'_pincode'] = this.state.pincode;
-
-            post_body[this.state.adult_member+'_pincode'] = this.state.pincode;
-
+            post_body.pincode = this.state.pincode;
+            groupHealthPlanData.pincode = this.state.pincode;
             this.setLocalProviderData(groupHealthPlanData);
             this.navigate(this.state.next_screen);
         }

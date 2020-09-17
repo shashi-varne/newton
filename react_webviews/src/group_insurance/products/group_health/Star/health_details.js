@@ -15,7 +15,8 @@ class GroupHealthPlanStarHealthDetails extends Component {
         super(props);
         this.state = {
             header_title: 'Health details',
-            open: false
+            open: false,
+            screen_name: 'health_details',
         }
 
         this.initialize = initialize.bind(this);
@@ -152,7 +153,10 @@ class GroupHealthPlanStarHealthDetails extends Component {
         if (canProceed) {
             
             groupHealthPlanData.health_details = this.state.value;
-
+            Object.assign(groupHealthPlanData.post_body, {
+                "sum_assured": "500000",
+                "cover_plan": "FHONEW",
+            });
             this.setLocalProviderData(groupHealthPlanData);
             this.navigate(this.state.next_screen);
         }
