@@ -16,7 +16,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
             ctaWithProvider: true,
             premium_data: [],
             screen_name: 'sum_assured_screen'
-        }
+        };
 
         this.initialize = initialize.bind(this);
         this.updateBottomPremium = updateBottomPremium.bind(this);

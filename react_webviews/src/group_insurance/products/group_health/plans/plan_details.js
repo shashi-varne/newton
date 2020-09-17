@@ -24,7 +24,7 @@ class GroupHealthPlanDetails extends Component {
                 benefits: {
                     main: []
                 },
-                special_benfits: [],
+                special_benefits: [],
                 waiting_period: []
             },
             show_loader: true,
@@ -191,6 +191,7 @@ class GroupHealthPlanDetails extends Component {
 
         this.sendEvents('next');
         let groupHealthPlanData = this.state.groupHealthPlanData;
+        
         groupHealthPlanData.plan_selected.common_data = this.state.common_data;
         groupHealthPlanData.plan_selected.extra_data = this.state.extra_data;
         groupHealthPlanData.plan_selected.premium_data = this.state.premium_data;
@@ -303,7 +304,7 @@ class GroupHealthPlanDetails extends Component {
                             <span className="special-benefit-text">Special benefits</span>
                         </div>
                         <div className='common-steps-images'>
-                            {this.state.extra_data.special_benfits.map(this.renderSteps)}
+                            {this.state.extra_data.special_benefits.map(this.renderSteps)}
                         </div>
 
                         <div className="special-benefit"
