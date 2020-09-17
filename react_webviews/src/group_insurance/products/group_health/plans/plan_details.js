@@ -54,7 +54,7 @@ class GroupHealthPlanDetails extends Component {
 
         for (var i in keys_to_empty) {
 
-            if(not_req_keys_for_backend.indexOf(keys_to_empty[i]) === -1) {
+            if(not_req_keys_for_backend.includes(keys_to_empty[i])) {
                 post_body[keys_to_empty[i]] = '';
             }
             
@@ -69,7 +69,6 @@ class GroupHealthPlanDetails extends Component {
 
         this.setLocalProviderData(groupHealthPlanData);
         try {
-
             const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/premium`,
              post_body);
 
