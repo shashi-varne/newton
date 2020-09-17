@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
-
 import toast from '../../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
@@ -31,7 +30,8 @@ class GroupHealthPlanSelectPed extends Component {
                 cta_title: 'OK'
             },
             get_lead: true,
-            show_loader: true
+            show_loader: true,
+            selectedIndex: ''
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -51,30 +51,45 @@ class GroupHealthPlanSelectPed extends Component {
         let member_key = this.props.match.params.member_key;
 
 
-        let data  = member_base.filter(data => data.key === member_key);
-
-        let backend_key = data[0].backend_key;
-        let ped_diseases_name = data[0].ped_diseases_name;
-        ped_diseases_name = ped_diseases_name.split(',');
+        let member_info  = member_base.filter(data => data.key === member_key);
+        member_info = member_info[0];
+        console.log(member_info)
+        let backend_key = member_info.backend_key;
+        let ped_diseases_name = member_info.ped_diseases_name;
+        ped_diseases_name = (ped_diseases_name || '').split(',');
+        let duration = member_info.duration
 
         let options = [
-            { 'name': 'Acute Gastroenteritis/AGE/Diarrhoea/Loose Motions/Vomiting' },
-            { 'name': 'Adenoid/ Adenoidectomy' },
-            { 'name': 'Appendix/Appendicitis/Appendix surgery' },
-            { 'name': 'Asthma' },
-            { 'name': 'Cataract - 1 Eye/Both Eyes' },
-            { 'name': 'Cholesterol/Triglyceride/Dyslipidaemia/Hyperlipidaemia' },
-            { 'name': 'Cholecystectomy/Gall bladder surgery/removal' },
-            { 'name': 'Diabetes/High Sugar' },
-            { 'name': 'Fall/Accidental Injury' },
-            { 'name': 'Fistula' },
-            { 'name': 'Fissure' },
-            { 'name': 'Fever/Viral Fever/Enteric Fever/Typhoid/Malaria/Dengue' },
-            { 'name': 'Fibroid/Myomectomy' },
-            { 'name': 'Fracture with implant/rod/screw/plate' }
+            { 'name': 'Acute Gastroenteritis/AGE/Diarrhoea/Loose Motions/Vomiting',id: 'ped_no_1', description: ''},
+            { 'name': 'Adenoid/ Adenoidectomy', id: 'ped_no_2', description: ''},
+            { 'name': 'Appendix/Appendicitis/Appendix surgery', id: 'ped_no_3', description: ''},
+            { 'name': 'Asthma', id: 'ped_no_4', description: ''},
+            { 'name': 'Cataract - 1 Eye/Both Eyes', id: 'ped_no_5', description: ''},
+            { 'name': 'Cholesterol/Triglyceride/Dyslipidaemia/Hyperlipidaemia', id: 'ped_no_6', description: ''},
+            { 'name': 'Cholecystectomy/Gall bladder surgery/removal', id: 'ped_no_7', description: ''},
+            { 'name': 'Diabetes/High Sugar', id: 'ped_no_8', description: ''},
+            { 'name': 'Fall/Accidental Injury', id: 'ped_no_9', description: ''},
+            { 'name': 'Fistula', id: 'ped_no_10', description: ''},
+            { 'name': 'Fissure', id: 'ped_no_11', description: ''},
+            { 'name': 'Fever/Viral Fever/Enteric Fever/Typhoid/Malaria/Dengue', id: 'ped_no_12', description: ''},
+            { 'name': 'Fibroid/Myomectomy', id: 'ped_no_13', description: ''},
+            { 'name': 'Fracture with implant/rod/screw/plate', id: 'ped_no_14', description: ''}
         ]
 
-        options.push({ 'name': 'Other' });
+        if(this.state.provider === 'RELIGARE') {
+            let ped_data = member_info.ped_diseases || [];
+            ped_data.forEach(item => {
+
+                options.forEach((opt, index) => {
+                    if(opt.id === item.key_mapper) {
+                        options[index].checked = true;
+                        options[index].start_date = item.start_date || '';
+                    }
+                })
+            })
+        }
+
+        options.push({ 'name': 'Other', 'id': 'ped_no_11' });
 
         let other_diseases = '';
         for (var p in ped_diseases_name) {
@@ -85,6 +100,7 @@ class GroupHealthPlanSelectPed extends Component {
                 if(options[o].name === ped_diseases_name[p]) {
                     options[o].checked = true;
                     matched = true;
+                    options[0].value = duration[ped_diseases_name[p]]
                 }
             }
 
@@ -127,17 +143,39 @@ class GroupHealthPlanSelectPed extends Component {
     }
 
     updateParent = (key, value) => {
-        this.setState({
-            [key]: value
-        });
+
+        let {options, dateModalIndex} = this.state;
+        if(key === 'startDateModal') {
+            
+            options[dateModalIndex].start_date = value;
+
+            this.setState({
+                options: options
+            })
+        } else if(key === 'openPopUpInputDate' && value === false) {
+
+            if(!options[dateModalIndex].start_date) {
+                options[dateModalIndex].checked = false;
+            }
+            this.setState({
+                [key]: value,
+                options: options
+            });
+
+        } else {
+            this.setState({
+                [key]: value,
+            });
+        }
+       
     }
 
     handleClose = () => {
         this.setState({
             openConfirmDialog: false
         });
-
     }
+
     handleClick2 = () => {
         this.setState({
             openConfirmDialog: true,
@@ -147,7 +185,7 @@ class GroupHealthPlanSelectPed extends Component {
     handleClick = async () => {
         this.sendEvents('next');
 
-        let options = this.state.options;
+        let {options, provider} = this.state;
         let member_base = this.state.lead.member_base;
         if (options[options.length - 1].checked &&
             !this.state.pedOther) {
@@ -168,23 +206,77 @@ class GroupHealthPlanSelectPed extends Component {
             }
 
 
-            let ped_diseases_name = '';
+            let body = {};
 
-            for(var j in options) {
-                if(options[j].checked) {
+            if(provider === 'HDFCERGO') {
+                let ped_diseases_name = '';
 
-                    let value = options[j].name;
-
-                    if(options[j].name === 'Other') {
-                        value = this.state[this.state.otherInputData.name];
+                for(var j in options) {
+                    if(options[j].checked) {
+    
+                        let value = options[j].name;
+    
+                        if(options[j].name === 'Other') {
+                            value = this.state[this.state.otherInputData.name];
+                        }
+    
+    
+                        if(!ped_diseases_name) {
+                            ped_diseases_name = value;
+                        } else {
+                            ped_diseases_name += ',' + value;
+                        }
+                    } 
+                }
+    
+                if(!ped_diseases_name) {
+                    toast('Atleast select one or uncheck this member');
+                    return;
+                }
+    
+                body = {
+                    [this.state.backend_key] : {
+                        ped_diseases_name: ped_diseases_name,
+                        ped_exists: "true"
                     }
+                }
+            }
+            
 
-                    if(!ped_diseases_name) {
-                        ped_diseases_name = value;
-                    } else {
-                        ped_diseases_name += ',' + value;
+            if(provider === 'RELIGARE') {
+                let ped_diseases = {};
+
+                let min_one_ped = false;
+                for(var l in options) {
+                    if(options[l].checked) {
+                        min_one_ped = true;
+                        let data = options[l];
+
+                        ped_diseases[data.id] = {
+                            start_date: data.start_date
+                        }
+
+                        if(options[l].name === 'Other') {
+                            ped_diseases[data.id] = {
+                                start_date: data.start_date,
+                                answer_description: this.state[this.state.otherInputData.name] // other input value
+                            }
+                        }
+                    } 
+                }
+    
+    
+                if(!min_one_ped) {
+                    toast('Atleast select one or uncheck this member');
+                    return;
+                }
+    
+                body = {
+                    [this.state.backend_key] : {
+                        ped_exists: "true",
+                        ped_diseases: ped_diseases
                     }
-                } 
+                }
             }
 
             this.setState({
@@ -192,18 +284,7 @@ class GroupHealthPlanSelectPed extends Component {
                 force_forward: !!next_state && this.props.edit
             })
 
-
-            if(!ped_diseases_name) {
-                toast('Atleast select one or uncheck this member');
-                return;
-            }
-
-            let body = {
-                [this.state.backend_key] : {
-                    ped_diseases_name: ped_diseases_name,
-                    ped_exists: "true"
-                }
-            }
+            console.log(body);
 
             this.updateLead(body);
         }
@@ -261,7 +342,9 @@ class GroupHealthPlanSelectPed extends Component {
                 <div className="group-health-select-ped">
                     <FormControl fullWidth>
                         {this.state.options && this.state.show_checkbox &&
-                            <CheckboxList options={this.state.options} parent={this} />}
+                            <CheckboxList 
+                            provider={this.state.provider}
+                            options={this.state.options} parent={this} />}
                     </FormControl>
 
                     <ConfirmDialog parent={this} />

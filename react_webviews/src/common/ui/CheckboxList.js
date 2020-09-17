@@ -4,7 +4,7 @@ import 'react-circular-progressbar/dist/styles.css';
 
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
-
+import MmYyInModal from 'common/ui/MmYyInModal';
 import InputPopup from './InputPopup';
 import Input from './Input';
 
@@ -13,12 +13,14 @@ class CheckboxListClass extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            otherInputData: this.props.parent.state.otherInputData || {}
+            otherInputData: this.props.parent.state.otherInputData || {},
         };
 
     }
 
     updateParent = (key, value) => {
+        console.log(key);
+        console.log(value)
         this.setState({
             [key]: value
         })
@@ -32,17 +34,31 @@ class CheckboxListClass extends Component {
             return;
         }
 
-        if(options[index].name === 'Other' && !options[index].checked) {
+        if (options[index].name === 'Other' && !options[index].checked) {
             this.setState({
                 openPopUpInput: true
+            });
+            this.updateParent('dateModalIndex', index);
+        }
+
+        if (options[index].name !== 'Other' && !options[index].checked) {
+            this.setState({
+                openPopUpInputDate: true,
+                header_title: options[index].name,
+                cta_title: 'OK',
+                label: 'Since When',
+                name: 'startDateModal',
+                header_sub_title: options[index].description
             })
+            this.updateParent('dateModalIndex', index);
         }
 
         options[index].checked = !options[index].checked;
-        this.updateParent(options);
+        // this.updateParent(options, index);
     }
 
     renderList = (props, index) => {
+
         return (
             <div key={index} className="CheckBlock2 plus-minus-input"
                 style={{ opacity: props.disabled ? 0.4 : 1 }}>
@@ -53,7 +69,7 @@ class CheckboxListClass extends Component {
                             checked={props.checked || false}
                             color="default"
                             value="checked"
-                            style={{height: 25}}
+                            style={{ height: 25 }}
                             onChange={() => this.handleClick(index)}
                             className="Checkbox" />
                     </Grid>
@@ -66,26 +82,95 @@ class CheckboxListClass extends Component {
 
                 </Grid>
 
-                {props.name === 'Other' && props.checked &&
-                 <div className="InputField"
-                 onClick={() => {
-                     this.setState({
-                        openPopUpInput: true
-                     })
-                 }}
-                 style={{margin: '-10px 0px 0px 33px'}}>
-                    <Input
-                        error={(this.state.data_error) ? true : false}
-                        helperText={this.state.data_error}
-                        type="text"
-                        width="40"
-                        label={this.state.otherInputData.label}
-                        class="data"
-                        id="input_popup"
-                        name="input_popup"
-                        value={this.state[this.state.otherInputData.name] || this.props.parent.state[this.state.otherInputData.name]}
-                    />
-                </div>}
+                {props.name === 'Other' && this.props.provider === 'HDFCERGO' && props.checked &&
+                    <div className="InputField"
+                        onClick={() => {
+                            this.setState({
+                                openPopUpInput: true
+                            })
+                        }}
+                        style={{ margin: '-10px 0px 0px 33px' }}>
+                        <Input
+                            error={(this.state.data_error) ? true : false}
+                            helperText={this.state.data_error}
+                            type="text"
+                            width="40"
+                            label={this.state.otherInputData.label}
+                            class="data"
+                            id="input_popup"
+                            name="input_popup"
+                            value={this.state[this.state.otherInputData.name] || this.props.parent.state[this.state.otherInputData.name] || ''}
+                        />
+                    </div>}
+
+                {props.name === 'Other' && this.props.provider === 'RELIGARE' && props.checked &&
+
+                    <div>
+                        <div className="InputField"
+                            onClick={() => {
+                                this.setState({
+                                    openPopUpInput: true
+                                })
+                                this.updateParent('dateModalIndex', index);
+                            }}
+                            style={{ margin: '-10px 0px 0px 33px' }}>
+                            <Input
+
+                                error={(this.state.data_error) ? true : false}
+                                helperText={this.state.data_error}
+                                type="text"
+                                width="40"
+                                label={this.state.otherInputData.label}
+                                class="data"
+                                id="input_popup"
+                                name="input_popup"
+                                value={this.state[this.state.otherInputData.name] || this.props.parent.state[this.state.otherInputData.name] || ''}
+                            />
+                        </div>
+
+                        <div className="InputField"
+                            style={{ margin: '10px 0px 0px 33px' }}>
+                            <Input
+                                error={(this.state.data_error) ? true : false}
+                                helperText={this.state.data_error}
+                                type="text"
+                                width="40"
+                                id="date"
+                                class="date_input"
+                                label="Since When"
+                                name={props.name}
+                                value={props.start_date || ''}
+                            />
+                        </div>
+                    </div>
+                }
+
+                {this.props.provider === 'RELIGARE' && props.name !== 'Other' && props.checked &&
+                    <div className="InputField"
+                        onClick={() => {
+                            this.setState({
+                                openPopUpInputDate: true,
+                                dateModalIndex: index,
+                                header_title: props.name,
+                                header_sub_title: props.description,
+                                cta_title: 'Ok'
+                            })
+
+                        }}
+                        style={{ margin: '10px 0px 0px 33px' }}>
+                        <Input
+                            error={(this.state.data_error) ? true : false}
+                            helperText={this.state.data_error}
+                            type="text"
+                            width="40"
+                            id="date"
+                            class="date_input"
+                            label="Since When"
+                            name={props.name}
+                            value={props.start_date || ''}
+                        />
+                    </div>
+                }
             </div>
         )
     }
@@ -95,6 +180,7 @@ class CheckboxListClass extends Component {
         if (!name) {
             name = event.target.name;
         }
+
         var value = event.target ? event.target.value : event;
         this.setState({
             [this.state.otherInputData.name]: value,
@@ -104,10 +190,12 @@ class CheckboxListClass extends Component {
     };
 
     render() {
+
         return (
             <div>
                 {this.props.parent.state.options.map(this.renderList)}
                 <InputPopup
+                    sinceWhenInput={true}
                     parent={this}
                     header_title={this.state.otherInputData.header_title}
                     cta_title={this.state.otherInputData.cta_title}
@@ -116,6 +204,14 @@ class CheckboxListClass extends Component {
                     value={this.state[this.state.otherInputData.name] || this.props.parent.state[this.state.otherInputData.name]}
                     handleChange={this.handleChangeInputPopup()}
                 />
+                <MmYyInModal
+                    parent={this}
+                    header_title={this.state.header_title}
+                    header_sub_title={this.state.header_sub_title}
+                    cta_title={this.state.cta_title}
+                    name={this.state.name}
+                    label={this.state.label}
+                    value={this.state[this.state.name] || this.props.parent.state[this.state.name]} />
             </div>
         );
     }

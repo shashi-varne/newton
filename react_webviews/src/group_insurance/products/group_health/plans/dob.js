@@ -5,10 +5,12 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import BottomInfo from '../../../../common/ui/BottomInfo';
 import {  calculateAge, isValidDate,
-     IsFutureDate, formatDate, dobFormatTest } from 'utils/validators';
+     IsFutureDate, formatDate, dobFormatTest, capitalizeFirstLetter } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import { initialize } from '../common_data';
 import toast from '../../../../common/ui/Toast';
+import {resetInsuredMembers, getInsuredMembersUi} from '../constants';
+import { childeNameMapper } from '../../../constants';
 
 class GroupHealthPlanDob extends Component {
 
@@ -35,77 +37,16 @@ class GroupHealthPlanDob extends Component {
         this.setState({
             account_type: groupHealthPlanData.account_type,
             header_title: groupHealthPlanData.account_type === 'self' ? 'Your date of birth' : 'Date of birth details'
-        })
+        });
 
-        let dob_data = [
-            {
-                'key': 'self',
-                'label': groupHealthPlanData.account_type === 'self' ? 'Date of birth (DD/MM/YYYY)' : "Your date of birth (DD/MM/YYYY)",
-                'value': '',
-                'backend_key': 'self_account_key'
-            },
-            {
-                'key': 'wife',
-                'label': "Wife's date of birth (DD/MM/YYYY)",
-                'value': '',
-                'backend_key': 'spouse_account_key'
-            },
-            {
-                'key': 'husband',
-                'label': "Husband's date of birth (DD/MM/YYYY)",
-                'value': '',
-                'backend_key': 'spouse_account_key'
-            },
-
-            {
-                'key': 'father',
-                'label': "Father's date of birth (DD/MM/YYYY)",
-                'value': '',
-                'backend_key': 'parent_account1_key'
-            },
-            {
-                'key': 'mother',
-                'label': "Mother's date of birth (DD/MM/YYYY)",
-                'value': '',
-                'backend_key': 'parent_account2_key'
-            },
-            {
-                'key': 'son',
-                'label': "Son's date of birth (DD/MM/YYYY)",
-                'value': '',
-                'backend_key': 'child_account1_key'
-            },
-            {
-                'key': 'son1',
-                'label': "1st son's date of birth (DD/MM/YYYY)",
-                'value': '',
-                'backend_key': 'child_account1_key'
-            },
-            {
-                'key': 'son2',
-                'label': "2nd son's date of birth (DD/MM/YYYY)",
-                'value': '',
-                'backend_key': 'child_account2_key'
-            },
-            {
-                'key': 'daughter',
-                'label': "Daughter's date of birth (DD/MM/YYYY)",
-                'value': '',
-                'backend_key': 'child_account1_key'
-            },
-            {
-                'key': 'daughter1',
-                'label': "1st daughter's date of birth (DD/MM/YYYY)",
-                'value': '',
-                'backend_key': 'child_account1_key'
-            },
-            {
-                'key': 'daughter2',
-                'label': "1st daughter's date of birth (DD/MM/YYYY)",
-                'value': '',
-                'backend_key': 'child_account2_key'
+        let dob_data = getInsuredMembersUi(groupHealthPlanData);
+        for (var key in dob_data) {
+            dob_data[key].label = `${capitalizeFirstLetter(childeNameMapper(dob_data[key].key))}'s date of birth (DD/MM/YYYY)`;
+            if(dob_data[key].key === 'self') {
+                dob_data[key].label = groupHealthPlanData.account_type === 'self' ? 'Date of birth (DD/MM/YYYY)' : 
+                "Your date of birth (DD/MM/YYYY)";
             }
-        ]
+        }
 
         let final_dob_data = [];
 
@@ -117,9 +58,6 @@ class GroupHealthPlanDob extends Component {
                 dob_data[i].value = ui_members[key + '_dob'] || '';
                 dob_data[i].age = calculateAge(ui_members[key + '_dob'] || '', 'byMonth');
 
-                if(!ui_members.father && key === 'mother') {
-                    dob_data[i].backend_key = 'parent_account1_key';
-                }
                 final_dob_data.push(dob_data[i]);
             }
         }
@@ -189,9 +127,9 @@ class GroupHealthPlanDob extends Component {
         let manAgeCheck = '';
         if(this.state.account_type === 'selfandfamily' || this.state.account_type === 'family') {
             if(self_gender === 'MALE') {
-                manAgeCheck = 'self'
+                manAgeCheck = 'self';
             } else if((self_gender === 'FEMALE' && ui_members.husband) || ui_members.husband) {
-                manAgeCheck = 'husband'
+                manAgeCheck = 'husband';
             }
         }
 
@@ -248,15 +186,14 @@ class GroupHealthPlanDob extends Component {
             final_dob_data: final_dob_data
         })
 
+
+        //reset data
+        groupHealthPlanData = resetInsuredMembers(groupHealthPlanData);
+
         let post_body = groupHealthPlanData.post_body;
 
         // reset data
 
-        let dob_data_base = this.state.dob_data;
-        for (var mem in dob_data_base) {
-            let backend_key = dob_data_base[mem].backend_key;
-            post_body[backend_key] = {};
-        }
 
         for(var age in child_ages) {
             for(var adult in adult_ages) {
@@ -275,30 +212,13 @@ class GroupHealthPlanDob extends Component {
             
             for (var j in final_dob_data) {
 
-                let key = final_dob_data[j].key;
-                if((key === 'daughter' || key === 'daughter1') && ui_members.son_total === 1) {
-                    final_dob_data[j].backend_key = 'child_account2_key';
-                }
-
-                let backend_key = final_dob_data[j].backend_key;
-
-                let relation = key;
-                if(relation.indexOf('son') >= 0) {
-                    relation = 'son';
-                }
-
-                if(relation.indexOf('daughter') >= 0) {
-                    relation = 'daughter';
-                }
+                let member_data = final_dob_data[j];
+                let backend_key = member_data.backend_key;
 
                 post_body[backend_key] = {
-                    dob: final_dob_data[j].value,
-                    relation: relation
+                    dob: member_data.value,
+                    relation: member_data.relation
                 };
-            }
-
-            if(final_dob_data.length === 1 && groupHealthPlanData.account_type === 'parent') {
-                final_dob_data[0].backend_key = 'parent_account1_key';
             }
 
             if(ui_members.self_gender && post_body.self_account_key) {

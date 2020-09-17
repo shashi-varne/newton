@@ -465,7 +465,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         </div>
         <div className="InputField">
           <Input
-            disabled={this.state.member_key === 'applicant' ? false : true}
+            // disabled={this.state.member_key === 'applicant' ? false : true} #TODO
             type="text"
             width="40"
             label="Date of birth (DD/MM/YYYY)"
