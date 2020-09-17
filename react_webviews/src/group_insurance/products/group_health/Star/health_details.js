@@ -157,6 +157,13 @@ class GroupHealthPlanStarHealthDetails extends Component {
                 "sum_assured": "500000",
                 "cover_plan": "FHONEW",
             });
+            groupHealthPlanData.plan_selected = {
+                copay: '',
+                recommendation_tag: '',
+                plan_title: "Family Health Optima",
+                plan_type: "FHONEW",
+                sum_assured: "500000",
+            }
             this.setLocalProviderData(groupHealthPlanData);
             this.navigate(this.state.next_screen);
         }
