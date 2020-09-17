@@ -13,7 +13,7 @@ class GroupHealthPlanStarSumInsured extends Component {
         this.state = {
             next_screen: '',
             sum_assured: ["300000", "400000", "500000", "1000000", "1500000", "2000000", "2500000"],
-            selectedIndex: 1,
+            // selectedIndex: 1,
             showDotLoader: true
         }
 
@@ -64,7 +64,15 @@ class GroupHealthPlanStarSumInsured extends Component {
     }
 
     async componentDidMount() {
-        this.updatePremium(this.state.selectedIndex)
+        let groupHealthPlanData = this.state.groupHealthPlanData;
+        
+        let selectedIndex = groupHealthPlanData.selectedIndexSumAssured || 0;
+
+        this.setState({
+            selectedIndex: selectedIndex
+        })
+
+        this.updatePremium(selectedIndex)
     }
 
     sendEvents(user_action) {
@@ -110,7 +118,17 @@ class GroupHealthPlanStarSumInsured extends Component {
         )
     }
 
-    handleClick = () => {}
+    handleClick = () => {
+        this.sendEvents('next');
+
+        let groupHealthPlanData = this.state.groupHealthPlanData;
+        groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
+        groupHealthPlanData.sum_assured = this.state.sum_assured[this.state.selectedIndex];
+        groupHealthPlanData.post_body.sum_assured = this.state.sum_assured[this.state.selectedIndex];
+
+
+        this.setLocalProviderData(groupHealthPlanData);
+    }
     
     render() {
         let bottomButtonData = {
