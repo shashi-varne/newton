@@ -51,12 +51,13 @@ class GroupHealthPlanSelectPed extends Component {
         let member_key = this.props.match.params.member_key;
 
 
-        let data  = member_base.filter(data => data.key === member_key);
-
-        let backend_key = data[0].backend_key;
-        let ped_diseases_name = data[0].ped_diseases_name;
+        let member_info  = member_base.filter(data => data.key === member_key);
+        member_info = member_info[0];
+        console.log(member_info)
+        let backend_key = member_info.backend_key;
+        let ped_diseases_name = member_info.ped_diseases_name;
         ped_diseases_name = (ped_diseases_name || '').split(',');
-        let duration = data[0].duration
+        let duration = member_info.duration
 
         let options = [
             { 'name': 'Acute Gastroenteritis/AGE/Diarrhoea/Loose Motions/Vomiting',id: 'ped_no_1', description: ''},
@@ -76,20 +77,19 @@ class GroupHealthPlanSelectPed extends Component {
         ]
 
         if(this.state.provider === 'RELIGARE') {
-            let ped_data = data.ped_diseases || [];
-
+            let ped_data = member_info.ped_diseases || [];
             ped_data.forEach(item => {
 
-                options.forEach(opt => {
+                options.forEach((opt, index) => {
                     if(opt.id === item.key_mapper) {
-                        opt.checked = true;
-                        opt.start_date = item.start_date;
+                        options[index].checked = true;
+                        options[index].start_date = item.start_date || '';
                     }
                 })
             })
         }
 
-        options.push({ 'name': 'Other' });
+        options.push({ 'name': 'Other', 'id': 'ped_no_11' });
 
         let other_diseases = '';
         for (var p in ped_diseases_name) {
@@ -143,9 +143,31 @@ class GroupHealthPlanSelectPed extends Component {
     }
 
     updateParent = (key, value) => {
-        this.setState({
-            [key]: value,
-        });
+
+        let {options, dateModalIndex} = this.state;
+        if(key === 'startDateModal') {
+            
+            options[dateModalIndex].start_date = value;
+
+            this.setState({
+                options: options
+            })
+        } else if(key === 'openPopUpInputDate' && value === false) {
+
+            if(!options[dateModalIndex].start_date) {
+                options[dateModalIndex].checked = false;
+            }
+            this.setState({
+                [key]: value,
+                options: options
+            });
+
+        } else {
+            this.setState({
+                [key]: value,
+            });
+        }
+       
     }
 
     handleClose = () => {
@@ -163,7 +185,7 @@ class GroupHealthPlanSelectPed extends Component {
     handleClick = async () => {
         this.sendEvents('next');
 
-        let options = this.state.options;
+        let {options, provider} = this.state;
         let member_base = this.state.lead.member_base;
         if (options[options.length - 1].checked &&
             !this.state.pedOther) {
@@ -184,29 +206,77 @@ class GroupHealthPlanSelectPed extends Component {
             }
 
 
-            let ped_diseases_name = '';
-            let ped_diseases = {}
+            let body = {};
 
-            for(var j in options) {
-                if(options[j].checked) {
+            if(provider === 'HDFCERGO') {
+                let ped_diseases_name = '';
 
-                    let value = options[j].name;
-
-                    if(options[j].name === 'Other') {
-                        value = this.state[this.state.otherInputData.name];
+                for(var j in options) {
+                    if(options[j].checked) {
+    
+                        let value = options[j].name;
+    
+                        if(options[j].name === 'Other') {
+                            value = this.state[this.state.otherInputData.name];
+                        }
+    
+    
+                        if(!ped_diseases_name) {
+                            ped_diseases_name = value;
+                        } else {
+                            ped_diseases_name += ',' + value;
+                        }
+                    } 
+                }
+    
+                if(!ped_diseases_name) {
+                    toast('Atleast select one or uncheck this member');
+                    return;
+                }
+    
+                body = {
+                    [this.state.backend_key] : {
+                        ped_diseases_name: ped_diseases_name,
+                        ped_exists: "true"
                     }
+                }
+            }
+            
 
-                    if(options[j].name !== 'Other') {
-                        options[j].value = this.state[this.state.name];
-                        ped_diseases[options[j].id] = options[j].value
-                    }
+            if(provider === 'RELIGARE') {
+                let ped_diseases = {};
 
-                    if(!ped_diseases_name) {
-                        ped_diseases_name = value;
-                    } else {
-                        ped_diseases_name += ',' + value;
+                let min_one_ped = false;
+                for(var l in options) {
+                    if(options[l].checked) {
+                        min_one_ped = true;
+                        let data = options[l];
+
+                        ped_diseases[data.id] = {
+                            start_date: data.start_date
+                        }
+
+                        if(options[l].name === 'Other') {
+                            ped_diseases[data.id] = {
+                                start_date: data.start_date,
+                                answer_description: this.state[this.state.otherInputData.name] // other input value
+                            }
+                        }
+                    } 
+                }
+    
+    
+                if(!min_one_ped) {
+                    toast('Atleast select one or uncheck this member');
+                    return;
+                }
+    
+                body = {
+                    [this.state.backend_key] : {
+                        ped_exists: "true",
+                        ped_diseases: ped_diseases
                     }
-                } 
+                }
             }
 
             this.setState({
@@ -214,19 +284,7 @@ class GroupHealthPlanSelectPed extends Component {
                 force_forward: !!next_state && this.props.edit
             })
 
-
-            if(!ped_diseases_name) {
-                toast('Atleast select one or uncheck this member');
-                return;
-            }
-
-            let body = {
-                [this.state.backend_key] : {
-                    ped_diseases_name: ped_diseases_name,
-                    ped_exists: "true",
-                    ped_diseases: ped_diseases
-                }
-            }
+            console.log(body);
 
             this.updateLead(body);
         }

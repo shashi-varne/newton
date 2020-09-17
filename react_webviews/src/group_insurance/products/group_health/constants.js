@@ -395,8 +395,9 @@ export const star = {
         landing_screen: 'insure-type',
         insure_type_screen: 'plan-dob',
         add_members_screen: 'plan-dob',
-        plan_dob_screen: 'plan-list',
-        plan_list_screen: 'plan-details',
+        plan_dob_screen: 'pincode',
+        star_pincode: 'health-details',
+        health_details: 'plan-details',
         plan_details_screens: 'plan-select-sum-assured',
         sum_assured_screen: {
             floater: 'plan-select-floater',
@@ -498,7 +499,7 @@ export const star = {
             },
             {
                 'name': 'Parents/Parents-in-law',
-                'value': 'parents-in-law'
+                'value': 'parentsinlaw'
             }
         ]
     },
@@ -510,6 +511,10 @@ export const star = {
         preselect_mother: true,
         disable_father: true,
         disable_mother: true,
+        preselect_father_in_law: true,
+        preselect_mother_in_law: true,
+        disable_father_in_law: true,
+        disable_mother_in_law: true,
     },
     plan_list_screen: {
         tile_mid_data: [
@@ -535,7 +540,7 @@ export function getGhProviderConfig(provider) {
 }
 
 
-export function memberKeyMapperFunction(member_key, groupHealthPlanData) {
+export function memberKeyMapperFunction(groupHealthPlanData) {
 
     let dob_data = avilableMembersToInsured;
 
@@ -575,18 +580,19 @@ export function memberKeyMapperFunction(member_key, groupHealthPlanData) {
 
         final_dob_data.push(dob_data[i]);
     }
-    let mapper = final_dob_data.filter(data => data.key === member_key);
-    return mapper[0];
+
+    return final_dob_data;
 }
 
 export function getInsuredMembersUi(groupHealthPlanData) {
 
     let ui_members = groupHealthPlanData.ui_members || {};
     let data = [];
-
+    const final_dob_data = memberKeyMapperFunction(groupHealthPlanData);
     for (var member in ui_members) {
         if (ui_members[member] === true) {
-            let obj = memberKeyMapperFunction(member, groupHealthPlanData);
+            // eslint-disable-next-line no-loop-func
+            const [obj] = final_dob_data.filter(data => data.key === member);
             data.push(obj);
         }
     }
@@ -635,6 +641,16 @@ export const avilableMembersToInsured = [
         'key': 'mother',
         'value': '',
         'backend_key': 'parent_account2_key'
+    },
+    {
+        'key': 'father-in-law',
+        'value': '',
+        'backend_key': 'parent_inlaw_account1_key'
+    },
+    {
+        'key': 'mother-in-law',
+        'value': '',
+        'backend_key': 'parent_inlaw_account2_key'
     },
     {
         'key': 'son',
