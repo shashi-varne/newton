@@ -159,8 +159,9 @@ import GroupHealthReportDetails from './products/group_health/report_details';
 
 
 /***************Star Health******************/
-import GroupHealthPlanStarPincode from './products/group_health/Star/star-pincode';
+import GroupHealthPlanStarPincode from './products/group_health/Star/star_pincode';
 import GroupHealthPlanStarHealthDetails from './products/group_health/Star/health_details';
+import GroupHealthPlanStarSumInsured from './products/group_health/Star/star_sum_insured';
 
 // etli
 import EtliPersonalDetails1 from './products/term_insurance/etli/personal_details1';
@@ -356,6 +357,7 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/:provider/how-to-claim`} component={GroupHealthPlanHowToClaim} />
           <Route path={`${url}/group-health/:provider/pincode`} component={GroupHealthPlanStarPincode} />
           <Route path={`${url}/group-health/:provider/health-details`} component={GroupHealthPlanStarHealthDetails} />
+          <Route path={`${url}/group-health/:provider/star-sum-insured`} component={GroupHealthPlanStarSumInsured} />
 
           <Route path={`${url}/group-health/:provider/personal-details/self`}
             render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'self'} />} />

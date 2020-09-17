@@ -97,7 +97,6 @@ class GroupHealthPlanSelectSumAssured extends Component {
         }, () => {
             this.updateBottomPremium();
         });
-
     }
 
     renderPlans = (props, index) => {
@@ -120,7 +119,6 @@ class GroupHealthPlanSelectSumAssured extends Component {
 
 
     render() {
-
 
         return (
             <Container

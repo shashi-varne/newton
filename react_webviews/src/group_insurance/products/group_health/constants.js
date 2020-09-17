@@ -389,7 +389,7 @@ export const star = {
     subtitle: 'Family Health Optima',
     logo: 'ic_religare_logo.jpg',
     logo_card: 'ic_logo_card.jpg',
-    logo_cta: 'ic_religare_logo.jpg',
+    logo_cta: 'ic_star_logo.jpg',
     logo_summary: 'ic_religare_logo.jpg',
     get_next: { //have as a separate map and not screen-specific property to reduce duplication across all providers and for all screens
         landing_screen: 'insure-type',
