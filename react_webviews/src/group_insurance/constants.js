@@ -606,75 +606,79 @@ export const health_providers = {
 
 export function ghGetMember(lead, providerConfig) {
   
-  let backend_keys = ['self_account_key', 'spouse_account_key', 'child_account1_key',
-                      'child_account2_key', 'parent_account1_key', 'parent_account2_key',
-                      'parent_inlaw_account1_key', 'parent_inlaw_account2_key'];
+  let backend_keys = [
+    'self_account_key',
+    'spouse_account_key',
+    'parent_account1_key',
+    'parent_account2_key',
+    'parent_inlaw_account1_key',
+    'parent_inlaw_account2_key'
+  ];
+  const { add_members_screen: { son_max, daughter_max }} = providerConfig;
 
-  let member_base = [];
-
+  let backend_child_keys = [];
+  for (let i = 0; i < (son_max + daughter_max); i++) {
+    backend_child_keys.push(`child_account${i}_key`);
+  }
+  
   let allowed_as_per_account = {
     'self': ['self_account_key'],
-    'family': ['spouse_account_key', 'child_account1_key',
-    'child_account2_key'],
-    'selfandfamily': ['self_account_key', 'spouse_account_key', 'child_account1_key',
-    'child_account2_key'],
+    'family': ['spouse_account_key'].concat(backend_child_keys),
+    'selfandfamily': ['self_account_key', 'spouse_account_key'].concat(backend_child_keys),
     'parents': ['parent_account1_key', 'parent_account2_key'],
     'parentsinlaw': ['parent_inlaw_account1_key', 'parent_inlaw_account2_key'],
   };
-
-
-  let total_son = 0;
-  let total_daughter = 0;
-
-  const { add_members_screen: { son_max, daughter_max }} = providerConfig;
-
-  for(let i = 1 ; i <= son_max; i++) {
+  const allowed_mapper = allowed_as_per_account[lead.account_type];
+  let member_base = [], total_son = 0, total_daughter = 0;
+  
+  for(let i = 1 ; i <= (son_max + daughter_max); i++) {
     if (!isEmpty(lead[`child_account${i}_key`])) {
       if ((lead[`child_account${i}_key`].relation || '').toUpperCase() === 'SON') {
         total_son++;
-      }
-    }
-  }
-  
-  for (let i = 1; i <= daughter_max; i++) {
-    if (!isEmpty(lead[`child_account${i}_key`])) {
-      if ((lead[`child_account${i}_key`].relation || '').toUpperCase() === 'DAUGHTER') {
+      } else if ((lead[`child_account${i}_key`].relation || '').toUpperCase() === 'DAUGHTER') {
         total_daughter++;
       }
     }
   }
 
-  for (var i in backend_keys) {
-    let key = backend_keys[i];
+  const total_kids = total_daughter + total_son;
+  // Map all children keys
+  for (let childKey of backend_child_keys) {
+    let obj = lead[childKey];
+    let daughter_count = 1, son_count = 1;
 
-    let allowed_mapper = allowed_as_per_account[lead.account_type];
+    if (allowed_mapper.includes(childKey) && obj && !isEmpty(obj)) {
+      obj.backend_key = childKey;
+      obj.key = (obj.relation || '').toLowerCase();
 
-    if(allowed_mapper.indexOf(key) !== -1 &&
-     lead[key] && !isEmpty(lead[key])) {
-      let obj = lead[key];
-      obj.backend_key = key;
-
-      obj.key = (lead[key].relation || '').toLowerCase();
-
-      if(total_son > 1) {
-        for (let i = 1; i < total_son; i++) {
-          if (key === `child_account${i}_key`) {
-            obj.key = `son${i}`;
-          }
-        }
-      } else if(total_daughter > 1) {
-        for (let i = 1; i < total_daughter; i++) {
-          if (key === `child_account${i}_key`) {
-            obj.key = `daughter${i}`;
-          }
+      if (total_kids > 2) {
+        if ((obj.relation || '').toUpperCase() === 'SON') {
+          obj.key = `son${son_count}`;
+          son_count++;
+        } else {
+          obj.key = `daughter${daughter_count}`;
+          daughter_count++;
         }
       }
+    }
+    member_base.push(obj);
+  }
+  
+  // Map all remaining keys
+  for (let key of backend_keys) {
+    let obj = lead[key];
 
+    if (allowed_mapper.includes(key) && obj && !isEmpty(obj)) {
+      Object.assign(obj, {
+        backend_key: key,
+        key: (obj.relation || '').toLowerCase(),
+      });
       member_base.push(obj);
     }
   }
 
-  if(['parents', 'parentsinlaw', 'self'].includes(lead.account_type)) {
+  
+  if(['parents', 'parentsinlaw', 'family'].includes(lead.account_type)) {
     let obj = lead['self_account_key'];
     obj.backend_key = 'self_account_key';
     obj.key = 'applicant';

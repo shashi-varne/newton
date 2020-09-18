@@ -632,7 +632,7 @@ export function memberKeyMapperFunction(groupHealthPlanData) {
     let ui_members = groupHealthPlanData.ui_members || {};
 
     let child_total = 0;
-    for (var i = 0; i < dob_data.length; i++) {
+    for (let i = 0; i < dob_data.length; i++) {
         let key = dob_data[i].key;
 
         if (!ui_members.father && key === 'mother') {
