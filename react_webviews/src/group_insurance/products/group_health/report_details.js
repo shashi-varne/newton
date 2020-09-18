@@ -27,7 +27,7 @@ class GroupHealthReportDetails extends Component {
                 benefits: {
                     main: []
                 },
-                special_benfits: [],
+                special_benefits: [],
                 waiting_period: []
             },
             lead: {
@@ -380,6 +380,17 @@ class GroupHealthReportDetails extends Component {
                                         <div>
                                             &nbsp;+&nbsp;
                                         </div>
+                                        {this.state.lead.add_ons_amount &&
+                                        <div>
+                                            <div> {inrFormatDecimal(this.state.lead.add_ons_amount)} </div>
+                                            <div style={{ fontSize: 10 }}> (Add on amount)</div>
+                                        </div>
+                                         }
+                                        {this.state.lead.add_ons_amount &&
+                                            <div>
+                                                &nbsp;+&nbsp;
+                                            </div>
+                                        }
                                         <div>
                                             <div>{inrFormatDecimal(this.state.lead.tax_amount)} </div>
                                             <div style={{fontSize:10}}>(18% GST & other taxes) </div>
@@ -508,7 +519,7 @@ class GroupHealthReportDetails extends Component {
                                     <span className="special-benefit-text">Special benefits</span>
                                 </div>
                                 <div className='common-steps-images'>
-                                    {this.state.extra_data.special_benfits.map(this.renderSteps)}
+                                    {this.state.extra_data.special_benefits.map(this.renderSteps)}
                                 </div>
 
                                 <div className="special-benefit"

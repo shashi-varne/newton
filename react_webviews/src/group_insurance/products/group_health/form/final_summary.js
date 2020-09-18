@@ -6,8 +6,10 @@ import { nativeCallback } from 'utils/native_callback';
 import toast from '../../../../common/ui/Toast';
 import { initialize, updateLead, resetQuote, openMedicalDialog } from '../common_data';
 import BottomInfo from '../../../../common/ui/BottomInfo';
-import { numDifferentiationInr, inrFormatDecimal, 
-    capitalizeFirstLetter, storageService } from 'utils/validators';
+import {
+    numDifferentiationInr, inrFormatDecimal,
+    capitalizeFirstLetter, storageService
+} from 'utils/validators';
 import Api from 'utils/api';
 import Button from 'material-ui/Button';
 import Dialog, {
@@ -15,23 +17,26 @@ import Dialog, {
     DialogContent,
     DialogContentText
 } from 'material-ui/Dialog';
-import BottomSheet from '../../../../common/ui/BottomSheet'; 
-import {childeNameMapper } from '../../../constants';
+import BottomSheet from '../../../../common/ui/BottomSheet';
+import { childeNameMapper } from '../../../constants';
+
+import Checkbox from 'material-ui/Checkbox';
+import Grid from 'material-ui/Grid';
 
 const med_ques_mapper_religare = {
-    'mand_1' : {
+    'mand_1': {
         'disc': 'Any illness/injury in last 48 months?',
         'members': []
     },
-    'mand_2' : {
+    'mand_2': {
         'disc': 'Previous health insurance claim?',
         'members': []
     },
-    'mand_3' : {
+    'mand_3': {
         'disc': 'Previous health insurance declined/increase?',
         'members': []
     },
-    'mand_4' : {
+    'mand_4': {
         'disc': 'Already covered with Religare?',
         'members': []
     }
@@ -65,7 +70,7 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     onload = () => {
-        let {lead, provider} = this.state;
+        let { lead, provider } = this.state;
         let member_base = lead.member_base;
         console.log(member_base);
 
@@ -103,21 +108,21 @@ class GroupHealthPlanFinalSummary extends Component {
         let diseases_data_backend = [];
         let life_style_details_data = [];
         let members_for_life_style = [];
-        let med_ques_data =  med_ques_mapper_religare;
+        let med_ques_data = med_ques_mapper_religare;
         for (var i = 0; i < member_base.length; i++) {
             let member = Object.assign({}, member_base[i]);
             let member_display = capitalizeFirstLetter(childeNameMapper(member.key));
 
             let obj = {
-                title: `${member_display}'s details ${member_base.length > 1 ?  ('(insured ' + (i+1) + ')') : ''}`,
+                title: `${member_display}'s details ${member_base.length > 1 ? ('(insured ' + (i + 1) + ')') : ''}`,
                 edit_state: `/group-insurance/group-health/${this.state.provider}/edit-personal-details/${member.key}`
             }
 
-            if(member.key === 'applicant') {
+            if (member.key === 'applicant') {
                 obj.title = 'Applicant details';
             }
 
-            if(lead.account_type === 'self') {
+            if (lead.account_type === 'self') {
                 obj.title = 'Personal details';
             }
 
@@ -128,13 +133,13 @@ class GroupHealthPlanFinalSummary extends Component {
                 info = Object.assign({}, personal_details_to_copy[pc]);
                 info.subtitle = member[info.key];
 
-                if(member.key === 'applicant') {
+                if (member.key === 'applicant') {
 
-                    if(info.key === 'name') {
+                    if (info.key === 'name') {
                         info.title = 'Applicant name';
                     }
 
-                    if(info.key === 'height' || info.key === 'weight') {
+                    if (info.key === 'height' || info.key === 'weight') {
                         continue;
                     }
                 }
@@ -142,12 +147,12 @@ class GroupHealthPlanFinalSummary extends Component {
             }
 
 
-            if(pan_needed && (member.key === 'applicant' || member.key === 'self') && 
+            if (pan_needed && (member.key === 'applicant' || member.key === 'self') &&
                 lead.self_account_key.pan_number) {
                 data.push({
                     'title': 'PAN number',
                     'key': 'pan',
-                    'subtitle' : lead.self_account_key.pan_number
+                    'subtitle': lead.self_account_key.pan_number
                 })
             }
 
@@ -155,54 +160,54 @@ class GroupHealthPlanFinalSummary extends Component {
             accordianData.push(obj);
 
 
-            if(provider === 'HDFCERGO') {
+            if (provider === 'HDFCERGO') {
                 if (member.ped_diseases_name) {
                     let dis_data = {
                         'title': `${member.relation}'s diseases`,
                         'subtitle': member.ped_diseases_name
                     }
-    
+
                     diseases_data_backend.push(dis_data);
                 }
             }
-            
+
 
             let life_style_question = member.life_style_question;
-            if(provider === 'RELIGARE') {
+            if (provider === 'RELIGARE') {
 
                 // for lifestyle
 
-                if(life_style_question && life_style_question.answer) {
+                if (life_style_question && life_style_question.answer) {
                     members_for_life_style.push(member_display);
-                
+
                     life_style_details_data.push({
                         'title': `${member_display}'s consumption details`,
                         'subtitle': life_style_question.answer_description
                     });
-    
+
                     life_style_details_data.push({
                         'title': `Since when`,
                         'subtitle': life_style_question.start_date
                     });
-    
+
                 }
-              
+
 
                 // for peds
                 if (member.ped_diseases) {
                     let p_list = '';
 
                     for (var p in member.ped_diseases) {
-                        if(p_list) {
+                        if (p_list) {
                             p_list += ', ';
                         }
-                        p_list +=  `${member.ped_diseases[p].key_mapper} (${member.ped_diseases[p].start_date})` 
+                        p_list += `${(member.ped_diseases[p].answer_description || member.ped_diseases[p].key_mapper)} (${member.ped_diseases[p].start_date})`
                     }
                     let dis_data = {
                         'title': `${member_display}'s diseases`,
                         'subtitle': p_list
                     }
-    
+
                     diseases_data_backend.push(dis_data);
                 }
 
@@ -211,12 +216,12 @@ class GroupHealthPlanFinalSummary extends Component {
 
                     for (var qs in member.medical_questions) {
                         let q_data = member.medical_questions[qs];
-                        if(q_data.answer) {
+                        if (q_data.answer) {
                             med_ques_data[q_data.key_mapper].members.push(member_display);
                         }
                     }
                 }
-            
+
             }
         }
         console.log(med_ques_data);
@@ -285,7 +290,7 @@ class GroupHealthPlanFinalSummary extends Component {
         }
         accordianData.push(nominee_data);
 
-        if(provider === 'RELIGARE' && members_for_life_style.length !== 0) {
+        if (provider === 'RELIGARE' && members_for_life_style.length !== 0) {
             let data = [
                 {
                     'title': 'Smoke/consume alcohol',
@@ -308,7 +313,7 @@ class GroupHealthPlanFinalSummary extends Component {
             accordianData.push(final_data);
         }
 
-        if(provider === 'RELIGARE') {
+        if (provider === 'RELIGARE') {
             let data = []
 
             for (var q in med_ques_data) {
@@ -317,7 +322,7 @@ class GroupHealthPlanFinalSummary extends Component {
                 data.push({
                     title: q_data.disc,
                     subtitle: q_data.members.length !== 0 ? 'Yes' : 'No',
-                    subtitle2: q_data.members.join(', ') 
+                    subtitle2: q_data.members.join(', ')
                 })
             }
 
@@ -349,7 +354,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
     startPayment = async () => {
 
-        if(this.state.medical_dialog) {
+        if (this.state.medical_dialog) {
             this.sendEventsPopup('next');
         }
         this.setState({
@@ -359,47 +364,47 @@ class GroupHealthPlanFinalSummary extends Component {
         try {
             let res = await Api.get(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/start/payment?lead_id=${this.state.quote_id}`);
 
-           
+
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
 
-               
-            let current_url =  window.location.href;
-            let nativeRedirectUrl = current_url;
 
-            let paymentRedirectUrl = encodeURIComponent(
-            window.location.origin + `/group-insurance/group-health/${this.state.provider}/payment` + getConfig().searchParams
-            );
+                let current_url = window.location.href;
+                let nativeRedirectUrl = current_url;
 
-
-            var payment_link = resultData.payment_link;
-            var pgLink = payment_link;
-            let app = getConfig().app;
-            var back_url = encodeURIComponent(current_url);
-            // eslint-disable-next-line
-            pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
-            '&app=' + app + '&back_url=' + back_url;
-            if (getConfig().generic_callback) {
-            pgLink += '&generic_callback=' + getConfig().generic_callback;
-            }
+                let paymentRedirectUrl = encodeURIComponent(
+                    window.location.origin + `/group-insurance/group-health/${this.state.provider}/payment` + getConfig().searchParams
+                );
 
 
-            if (getConfig().app === 'ios') {
-            nativeCallback({
-                action: 'show_top_bar', message: {
-                title: 'Payment'
+                var payment_link = resultData.payment_link;
+                var pgLink = payment_link;
+                let app = getConfig().app;
+                var back_url = encodeURIComponent(current_url);
+                // eslint-disable-next-line
+                pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
+                    '&app=' + app + '&back_url=' + back_url;
+                if (getConfig().generic_callback) {
+                    pgLink += '&generic_callback=' + getConfig().generic_callback;
                 }
-            });
-            }
-            
-            nativeCallback({
-                action: 'take_control', message: {
-                    back_url: nativeRedirectUrl,
-                    back_text: 'Are you sure you want to exit the payment process?'
-                }
-            });
 
-            window.location.href = pgLink;
+
+                if (getConfig().app === 'ios') {
+                    nativeCallback({
+                        action: 'show_top_bar', message: {
+                            title: 'Payment'
+                        }
+                    });
+                }
+
+                nativeCallback({
+                    action: 'take_control', message: {
+                        back_url: nativeRedirectUrl,
+                        back_text: 'Are you sure you want to exit the payment process?'
+                    }
+                });
+
+                window.location.href = pgLink;
 
 
             } else {
@@ -426,16 +431,16 @@ class GroupHealthPlanFinalSummary extends Component {
         try {
             let res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/ppc/check?quote_id=${this.state.quote_id}`);
 
-           
+
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
 
                 let lead = resultData.quote_lead || {};
-                if(lead.ped_check) {
+                if (lead.ped_check) {
                     this.openMedicalDialog('ped');
-                } else if(lead.ppc_check) {
+                } else if (lead.ppc_check) {
                     this.openMedicalDialog('ppc');
-                }else if (lead.status === 'ready_to_pay') {
+                } else if (lead.status === 'ready_to_pay') {
                     this.startPayment();
                 }
             } else {
@@ -460,7 +465,7 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
 
-    sendEvents(user_action, data={}) {
+    sendEvents(user_action, data = {}) {
         let eventObj = {
             "event_name": 'health_insurance',
             "properties": {
@@ -468,9 +473,9 @@ class GroupHealthPlanFinalSummary extends Component {
                 "product": 'health suraksha',
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'summary',
-                'restart_clicked' : this.state.restart_clicked ? 'yes' : 'no',
-                'restart_conformation' : this.state.restart_conformation ? 'yes' : 'no',
-                'edit_clicked' : data.edit_clicked || ''
+                'restart_clicked': this.state.restart_clicked ? 'yes' : 'no',
+                'restart_conformation': this.state.restart_conformation ? 'yes' : 'no',
+                'edit_clicked': data.edit_clicked || ''
             }
         };
 
@@ -481,7 +486,7 @@ class GroupHealthPlanFinalSummary extends Component {
         }
     }
 
-    sendEventsPopup(user_action, data={}) {
+    sendEventsPopup(user_action, data = {}) {
         let eventObj = {
             "event_name": 'health_insurance',
             "properties": {
@@ -501,7 +506,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
 
     renderMembertop = (props, index) => {
-        if(props.key === 'applicant') {
+        if (props.key === 'applicant') {
             return (
                 <div className="member-tile" key={index}>
                     <div className="mt-left">
@@ -534,7 +539,7 @@ class GroupHealthPlanFinalSummary extends Component {
                 </div>
             );
         }
-       
+
     }
 
     renderAccordiansubData = (props, index) => {
@@ -603,17 +608,17 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     openEdit = (state, title) => {
-        this.sendEvents('next', {edit_clicked: title});
+        this.sendEvents('next', { edit_clicked: title });
         this.navigate(state);
     }
 
     handleClose = () => {
 
-        if(this.state.medical_dialog) {
+        if (this.state.medical_dialog) {
             this.sendEventsPopup('close');
         }
 
-        if(this.state.openDialogReset) {
+        if (this.state.openDialogReset) {
             this.sendEvents('next');
         }
         this.setState({
@@ -648,7 +653,7 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     showDialog = () => {
-        this.setState({ 
+        this.setState({
             openDialogReset: true,
             restart_clicked: true
         }, () => {
@@ -725,23 +730,34 @@ class GroupHealthPlanFinalSummary extends Component {
                                     TOTAL PREMIUM
                                 </div>
                                 <div className="mtr-bottom flex">
+                                    <div>
+                                        <div> {inrFormatDecimal(this.state.lead.premium)} </div>
+                                        <div style={{ fontSize: 10 }}> (Basic premium)</div>
+                                    </div>
+                                    <div>
+                                        &nbsp;+&nbsp;
+                                    </div>
+                                    {this.state.lead.add_ons_amount &&
                                         <div>
-                                            <div> {inrFormatDecimal(this.state.lead.premium)} </div>
-                                            <div style={{fontSize:10}}> (Basic premium)</div>
+                                            <div> {inrFormatDecimal(this.state.lead.add_ons_amount)} </div>
+                                            <div style={{ fontSize: 10 }}> (Add on amount)</div>
                                         </div>
+                                    }
+                                    {this.state.lead.add_ons_amount &&
                                         <div>
                                             &nbsp;+&nbsp;
                                         </div>
-                                        <div>
-                                            <div>{inrFormatDecimal(this.state.lead.tax_amount)} </div>
-                                            <div style={{fontSize:10}}>(18% GST & other taxes) </div>
-                                        </div>
-                                        <div>
+                                    }
+                                    <div>
+                                        <div>{inrFormatDecimal(this.state.lead.tax_amount)} </div>
+                                        <div style={{ fontSize: 10 }}>(18% GST & other taxes) </div>
+                                    </div>
+                                    <div>
                                         &nbsp;=&nbsp;
                                         </div>
-                                        <div>
-                                         {inrFormatDecimal(this.state.lead.total_amount)}
-                                        </div>
+                                    <div>
+                                        {inrFormatDecimal(this.state.lead.total_amount)}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -755,10 +771,30 @@ class GroupHealthPlanFinalSummary extends Component {
 
                     </div>
 
+                    <div className="CheckBlock2 accident-plan-terms" style={{ padding: 0 }}>
+                        <Grid container spacing={16} alignItems="center">
+                        <Grid item xs={1} className="TextCenter">
+                            <Checkbox
+                            defaultChecked
+                            checked={true}
+                            color="default"
+                            value="checked"
+                            name="checked"
+                            onChange={() => console.log('Clicked')}
+                            className="Checkbox" />
+                        </Grid>
+                        <Grid item xs={11}>
+                            <div className="accident-plan-terms-text" style={{}}>
+                            I agree to the <span onClick={() => this.openInBrowser(this.state.tnc,
+                            'tnc')} className="accident-plan-terms-bold" style={{ color: getConfig().primary }}>
+                                Terms and conditions</span></div>
+                        </Grid>
+                        </Grid>
+                    </div>
                     <BottomInfo baseData={{ 'content': 'Get best health insurance benefits at this amount and have a secured future.' }} />
                 </div>
-                {this.state.medical_dialog_data && 
-                <BottomSheet parent={this} data={this.state.medical_dialog_data} />}
+                {this.state.medical_dialog_data &&
+                    <BottomSheet parent={this} data={this.state.medical_dialog_data} />}
                 {this.renderDialog()}
             </Container>
         );

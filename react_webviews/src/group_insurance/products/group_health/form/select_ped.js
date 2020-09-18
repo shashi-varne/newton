@@ -31,7 +31,8 @@ class GroupHealthPlanSelectPed extends Component {
             },
             get_lead: true,
             show_loader: true,
-            selectedIndex: ''
+            selectedIndex: '',
+            screen_name: 'select_ped_screen'
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -53,28 +54,12 @@ class GroupHealthPlanSelectPed extends Component {
 
         let member_info  = member_base.filter(data => data.key === member_key);
         member_info = member_info[0];
-        console.log(member_info)
         let backend_key = member_info.backend_key;
         let ped_diseases_name = member_info.ped_diseases_name;
         ped_diseases_name = (ped_diseases_name || '').split(',');
         let duration = member_info.duration
 
-        let options = [
-            { 'name': 'Acute Gastroenteritis/AGE/Diarrhoea/Loose Motions/Vomiting',id: 'ped_no_1', description: ''},
-            { 'name': 'Adenoid/ Adenoidectomy', id: 'ped_no_2', description: ''},
-            { 'name': 'Appendix/Appendicitis/Appendix surgery', id: 'ped_no_3', description: ''},
-            { 'name': 'Asthma', id: 'ped_no_4', description: ''},
-            { 'name': 'Cataract - 1 Eye/Both Eyes', id: 'ped_no_5', description: ''},
-            { 'name': 'Cholesterol/Triglyceride/Dyslipidaemia/Hyperlipidaemia', id: 'ped_no_6', description: ''},
-            { 'name': 'Cholecystectomy/Gall bladder surgery/removal', id: 'ped_no_7', description: ''},
-            { 'name': 'Diabetes/High Sugar', id: 'ped_no_8', description: ''},
-            { 'name': 'Fall/Accidental Injury', id: 'ped_no_9', description: ''},
-            { 'name': 'Fistula', id: 'ped_no_10', description: ''},
-            { 'name': 'Fissure', id: 'ped_no_11', description: ''},
-            { 'name': 'Fever/Viral Fever/Enteric Fever/Typhoid/Malaria/Dengue', id: 'ped_no_12', description: ''},
-            { 'name': 'Fibroid/Myomectomy', id: 'ped_no_13', description: ''},
-            { 'name': 'Fracture with implant/rod/screw/plate', id: 'ped_no_14', description: ''}
-        ]
+        let options = this.state.screenData.ped_list;
 
         if(this.state.provider === 'RELIGARE') {
             let ped_data = member_info.ped_diseases || [];
@@ -88,8 +73,6 @@ class GroupHealthPlanSelectPed extends Component {
                 })
             })
         }
-
-        options.push({ 'name': 'Other', 'id': 'ped_no_11' });
 
         let other_diseases = '';
         for (var p in ped_diseases_name) {

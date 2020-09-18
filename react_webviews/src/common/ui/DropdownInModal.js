@@ -134,7 +134,7 @@ class DropdownInModalClass extends Component {
                                 src={close_icn}
                             />
                         </div>
-                        <div className="dialog-head">
+                        <div className="dialog-head" style={{height: this.props.height}}>
                             {this.props.header_title}
                         </div>
                     </DialogTitle>

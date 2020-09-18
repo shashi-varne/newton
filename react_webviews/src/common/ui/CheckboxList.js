@@ -54,7 +54,7 @@ class CheckboxListClass extends Component {
         }
 
         options[index].checked = !options[index].checked;
-        // this.updateParent(options, index);
+        this.updateParent(options, index);
     }
 
     renderList = (props, index) => {

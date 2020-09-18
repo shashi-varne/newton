@@ -90,7 +90,7 @@ class MmYyInModal extends Component {
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"  
                 >
-                    <DialogTitle  id="dropdown-in-modal-dialog-title">
+                    <DialogTitle  id="dropdown-in-modal-dialog-title" style={{height: 60}}>
                         <div onClick={this.handleClose} style={{cursor: 'pointer'}}>
                             <SVG
                                 preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
@@ -103,7 +103,7 @@ class MmYyInModal extends Component {
                     </DialogTitle>
                     <DialogContent>
                         <div className="content" style={{margin: '20px 0 0 6px'}} id="alert-dialog-decription">
-                            <div className="content">
+                            <div className="content" style={{margin: '0 0 20px 0'}}>
                                 {this.props.header_sub_title}
                             </div>
                             <FormControl disabled={this.props.disabled}>

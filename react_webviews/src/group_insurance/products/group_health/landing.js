@@ -361,11 +361,11 @@ class GroupHealthLanding extends Component {
           </div>
           <div className="generic-hr"></div>
 
-          <div className="accident-plan-read" style={{ padding: 0 }}
+          <div className="accident-plan-read" style={{ padding: 0,margin: '20px 0 0 0' }}
             onClick={() => this.openInBrowser(this.state.common.details_doc, 'read_document')}>
             <img className="accident-plan-read-icon"
               src={require(`assets/${this.state.productName}/ic_read.svg`)} alt="" />
-            <div className="accident-plan-read-text" style={{ color: getConfig().primary }}>Read Detailed Document</div>
+            <div className="accident-plan-read-text" style={{ color: getConfig().primary }}>Read full-policy description</div>
           </div>
           <div className="CheckBlock2 accident-plan-terms" style={{ padding: 0 }}>
             <Grid container spacing={16} alignItems="center">
