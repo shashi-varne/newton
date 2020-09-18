@@ -358,7 +358,7 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/:provider/how-to-claim`} component={GroupHealthPlanHowToClaim} />
           <Route path={`${url}/group-health/:provider/pincode`} component={GroupHealthPlanStarPincode} />
           <Route path={`${url}/group-health/:provider/health-details`} component={GroupHealthPlanStarHealthDetails} />
-          <Route path={`${url}/group-health/:provider/star-sum-insured`} component={GroupHealthPlanStarSumInsured} />
+          <Route path={`${url}/group-health/:provider/star-select-sum-assured`} component={GroupHealthPlanStarSumInsured} />
 
           <Route path={`${url}/group-health/:provider/personal-details/self`}
             render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'self'} />} />

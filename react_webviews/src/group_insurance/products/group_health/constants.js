@@ -398,7 +398,7 @@ export const star = {
         plan_dob_screen: 'pincode',
         star_pincode: 'health-details',
         health_details: 'plan-details',
-        plan_details_screens: 'plan-select-sum-assured',
+        plan_details_screen: 'star-select-sum-assured',
         sum_assured_screen: {
             floater: 'plan-select-floater',
             not_floater: 'plan-select-add-ons'
