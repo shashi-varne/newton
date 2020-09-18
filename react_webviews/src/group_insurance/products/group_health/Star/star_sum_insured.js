@@ -5,6 +5,7 @@ import { initialize, updateBottomPremium } from '../common_data';
 import { numDifferentiation, formatAmountInr } from 'utils/validators';
 import Api from 'utils/api';
 import DotDotLoader from 'common/ui/DotDotLoader';
+import { getConfig } from 'utils/functions';
 
 class GroupHealthPlanStarSumInsured extends Component {
     
@@ -25,22 +26,17 @@ class GroupHealthPlanStarSumInsured extends Component {
         this.initialize();
     }
 
-    updatePremium = async (index) => {
+    updatePremium = async () => {
+        let { post_body, dob_data, selectedIndex } = this.state;
+        
+
         let body = {
-            "pincode": "500007",
-            "sum_assured": this.state.sum_assured[index],
-            "cover_plan": "FHONEW",
-            "account_type": "selfandfamily",
-            "mem_info": {
-              "adult": "2",
-              "child": 0
-            },
-            "self_account_key": {
-              "dob": "05/09/1995"
-            },
-            "spouse_account_key": {
-              "dob": "05/09/1995"
-            }
+            "pincode": post_body.pincode,
+            "sum_assured": this.state.sum_assured[selectedIndex],
+            "cover_plan": post_body.cover_plan,
+            "account_type": post_body.account_type,
+            "mem_info": post_body.mem_info,
+            ...dob_data
         }
 
         try {
@@ -65,14 +61,25 @@ class GroupHealthPlanStarSumInsured extends Component {
 
     async componentDidMount() {
         let groupHealthPlanData = this.state.groupHealthPlanData;
+        let post_body = groupHealthPlanData.post_body;
+        let sum_assured = post_body.sum_assured;
         
-        let selectedIndex = groupHealthPlanData.selectedIndexSumAssured || 0;
+        let selectedIndex = this.state.sum_assured.indexOf(sum_assured);
 
+        let dob_data = {};
+        groupHealthPlanData.final_dob_data.forEach(item => {
+            dob_data[item.backend_key] = {
+                dob: item.value
+            }
+        });
+console.log(this.state)
         this.setState({
-            selectedIndex: selectedIndex
-        })
+            selectedIndex: selectedIndex,
+            post_body: post_body,
+            dob_data: dob_data
+        }, () => this.updatePremium())
 
-        this.updatePremium(selectedIndex)
+        
     }
 
     sendEvents(user_action) {
@@ -89,15 +96,22 @@ class GroupHealthPlanStarSumInsured extends Component {
         } else {
             nativeCallback({ events: eventObj });
         }
-    }
+    };
+
+    navigate = (pathname) => {
+        console.log(pathname)
+        this.props.history.push({
+            pathname: pathname,
+            search: getConfig().searchParams
+        });
+    };
 
     choosePlan = (index) => {
         this.setState({
             selectedIndex: index,
             showDotLoader: true
         }, () => {
-            this.updatePremium(index);
-            // this.updateBottomPremium();
+            this.updatePremium();
         });
     }
 
@@ -128,6 +142,7 @@ class GroupHealthPlanStarSumInsured extends Component {
 
 
         this.setLocalProviderData(groupHealthPlanData);
+        this.navigate(this.state.next_screen);
     }
     
     render() {

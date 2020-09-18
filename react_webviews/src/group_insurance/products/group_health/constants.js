@@ -399,10 +399,7 @@ export const star = {
         star_pincode: 'health-details',
         health_details: 'plan-details',
         plan_details_screen: 'star-select-sum-assured',
-        sum_assured_screen: {
-            floater: 'plan-select-floater',
-            not_floater: 'plan-select-add-ons'
-        },
+        sum_assured_screen: 'plan-premium-summary',
         cover_type_screen: 'plan-select-add-ons',
         add_ons_screen: 'plan-select-cover-period'
     },
@@ -524,7 +521,93 @@ export const star = {
         ]
     },
     nominee_screen: {
-        nominee_opts: [],
+        nominee_opts:    [
+            {
+                'name': 'SPOUSE',
+                'value': 'SPOUSE'
+            },
+            {
+                'name': 'BROTHER',
+                'value': 'BROTHER'
+            },
+            {
+                'name': 'COUSIN',
+                'value': 'COUSIN'
+            },
+            {
+                'name': 'DAUGHTER IN LAW',
+                'value': 'DAUGHTER_IN_LAW'
+            },
+            {
+                'name': 'FATHER',
+                'value': 'FATHER'
+            },
+            {
+                'name': 'FATHER IN LAW',
+                'value': 'FATHER_IN_LAW'
+            },
+            {
+                'name': 'GRAND DAUGHTER',
+                'value': 'GRANDDAUGHTER'
+            },
+            {
+                'name': 'GRAND FATHER',
+                'value': 'GRANDFATHER'
+            },
+            
+            {
+                'name': 'GRAND MOTHER',
+                'value': 'GRANDMOTHER'
+            },
+            {
+                'name': 'GRAND SON',
+                'value': 'GRANDSON'
+            },
+            {
+                'name': 'BROTHER IN LAW',
+                'value': 'BROTHER_IN_LAW'
+            },
+            {
+                'name': 'MOTHER IN LAW',
+                'value': 'MOTHER_IN_LAW'
+            },
+            {
+                'name': 'SISTER IN LAW',
+                'value': 'SISTER_IN_LAW'
+            },
+            {
+                'name': 'MOTHER',
+                'value': 'MOTHER '
+            },
+            {
+                'name': 'NEPHEW',
+                'value': 'NEPHEW'
+            },
+            {
+                'name': 'NIECE',
+                'value': 'NIECE'
+            },
+            {
+                'name': 'SELF- PRIMARY MEMBER',
+                'value': 'SELF'
+            },
+            {
+                'name': 'SISTER',
+                'value': 'SISTER'
+            },
+            {
+                'name': 'SON IN LAW',
+                'value': 'SON_IN_LAW'
+            },
+            {
+                'name': 'SON',
+                'value': 'SON'
+            },
+            {
+                'name': 'DAUGHTER',
+                'value': 'DAUGHTER'
+            }
+        ],
     },
 };
 
