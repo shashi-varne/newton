@@ -72,7 +72,7 @@ class GroupHealthPlanStarSumInsured extends Component {
                 dob: item.value
             }
         });
-console.log(this.state)
+
         this.setState({
             selectedIndex: selectedIndex,
             post_body: post_body,
@@ -142,7 +142,7 @@ console.log(this.state)
 
 
         this.setLocalProviderData(groupHealthPlanData);
-        this.navigate(this.state.next_screen);
+        this.navigate(this.state.next_screen || 'plan-premium-summary');
     }
     
     render() {
