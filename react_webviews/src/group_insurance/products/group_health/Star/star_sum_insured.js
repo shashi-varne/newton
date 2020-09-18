@@ -6,6 +6,8 @@ import { numDifferentiation, formatAmountInr } from 'utils/validators';
 import Api from 'utils/api';
 import DotDotLoader from 'common/ui/DotDotLoader';
 import { getConfig } from 'utils/functions';
+import { isEmpty } from '../../../../utils/validators';
+import toast from '../../../../common/ui/Toast';
 
 class GroupHealthPlanStarSumInsured extends Component {
     
@@ -15,8 +17,8 @@ class GroupHealthPlanStarSumInsured extends Component {
             next_screen: '',
             sum_assured: ["300000", "400000", "500000", "1000000", "1500000", "2000000", "2500000"],
             // selectedIndex: 1,
-            showDotLoader: true
-        }
+            loadingPremium: true
+        };
 
         this.initialize = initialize.bind(this);
         this.updateBottomPremium = updateBottomPremium.bind(this);
@@ -40,22 +42,33 @@ class GroupHealthPlanStarSumInsured extends Component {
         }
 
         try {
+            this.setState({ loadingPremium: true });
             const res = await Api.post('api/ins_service/api/insurance/star/premium', body);
 
-            var resultData = res.pfwresponse.result;
+            if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+                throw 'Something went wrong! Please try again.';
+            }
 
-            let premium = resultData.premium.WF[0].net_premium;
+            let resultData = res.pfwresponse.result;
+
+            const [premiumData] = resultData.premium.WF;
 
             this.setState({
-                showDotLoader: false,
-                premium: formatAmountInr(premium)
-            })
+                loadingPremium: false,
+                premiumData,
+                premiumAmt: formatAmountInr(premiumData.net_premium),
+            });
 
             // this.updatePremium(premium)
             
 
         } catch (err) {
-            console.log(err)
+            console.log(err);
+            toast(err);
+            this.setState({
+                premiumAmt: '--',
+                loadingPremium: false,
+            });
         }
     }
 
@@ -109,7 +122,6 @@ class GroupHealthPlanStarSumInsured extends Component {
     choosePlan = (index) => {
         this.setState({
             selectedIndex: index,
-            showDotLoader: true
         }, () => {
             this.updatePremium();
         });
@@ -128,18 +140,31 @@ class GroupHealthPlanStarSumInsured extends Component {
                             <img src={require(`assets/completed_step.svg`)} alt="" />}
                     </div>
                 </div>
-            </div >
+            </div>
         )
     }
 
     handleClick = () => {
+        const { groupHealthPlanData, premiumData } = this.state;
+        
+        if (this.state.loadingPremium || isEmpty(premiumData)) return;
         this.sendEvents('next');
-
-        let groupHealthPlanData = this.state.groupHealthPlanData;
         groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
         groupHealthPlanData.sum_assured = this.state.sum_assured[this.state.selectedIndex];
         groupHealthPlanData.post_body.sum_assured = this.state.sum_assured[this.state.selectedIndex];
+        groupHealthPlanData.plan_selected_final = premiumData;
 
+        const { plan_selected_final } = groupHealthPlanData;
+        Object.assign(groupHealthPlanData.post_body, {
+            tenure: plan_selected_final.tenure,
+            tax_amount: plan_selected_final.gst_tax,
+            base_premium: plan_selected_final.base_premium,
+            premium: plan_selected_final.net_premium,
+            total_amount: plan_selected_final.total_amount,
+            discount_amount: plan_selected_final.total_discount,
+            insured_pattern: plan_selected_final.insured_pattern,
+            plan_code: groupHealthPlanData.plan_selected_final.plan_code,
+        });
 
         this.setLocalProviderData(groupHealthPlanData);
         this.navigate(this.state.next_screen || 'plan-premium-summary');
@@ -148,7 +173,7 @@ class GroupHealthPlanStarSumInsured extends Component {
     render() {
         let bottomButtonData = {
             leftTitle: 'Star Health',
-            leftSubtitle: this.state.showDotLoader ? <DotDotLoader /> : this.state.premium,
+            leftSubtitle: this.state.loadingPremium ? <DotDotLoader /> : this.state.premiumAmt,
             provider: this.state.providerConfig.key,
             logo: this.state.providerConfig.logo_cta
         }
@@ -159,6 +184,7 @@ class GroupHealthPlanStarSumInsured extends Component {
                 showLoader={this.state.show_loader}
                 title="Select sum assured"
                 buttonTitle="CONTINUE"
+                buttonDisabled={this.state.loadingPremium}
                 withProvider={true}
                 buttonData={bottomButtonData}
                 handleClick={() => this.handleClick()}

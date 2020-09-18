@@ -604,10 +604,11 @@ export const health_providers = {
 }
 
 
-export function ghGetMember(lead) {
+export function ghGetMember(lead, providerConfig) {
   
   let backend_keys = ['self_account_key', 'spouse_account_key', 'child_account1_key',
-                      'child_account2_key', 'parent_account1_key', 'parent_account2_key'];
+                      'child_account2_key', 'parent_account1_key', 'parent_account2_key',
+                      'parent_inlaw_account1_key', 'parent_inlaw_account2_key'];
 
   let member_base = [];
 
@@ -617,26 +618,29 @@ export function ghGetMember(lead) {
     'child_account2_key'],
     'selfandfamily': ['self_account_key', 'spouse_account_key', 'child_account1_key',
     'child_account2_key'],
-    'parents': ['parent_account1_key', 'parent_account2_key']
-  }
+    'parents': ['parent_account1_key', 'parent_account2_key'],
+    'parentsinlaw': ['parent_inlaw_account1_key', 'parent_inlaw_account2_key'],
+  };
 
 
   let total_son = 0;
   let total_daughter = 0;
 
-  if(!isEmpty(lead.child_account1_key)) {
-    if((lead.child_account1_key.relation || '').toUpperCase() === 'SON') {
-      total_son++;
-    } else if((lead.child_account2_key.relation || '').toUpperCase() === 'DAUGHTER') {
-      total_daughter++;
+  const { add_members_screen: { son_max, daughter_max }} = providerConfig;
+
+  for(let i = 1 ; i <= son_max; i++) {
+    if (!isEmpty(lead[`child_account${i}_key`])) {
+      if ((lead[`child_account${i}_key`].relation || '').toUpperCase() === 'SON') {
+        total_son++;
+      }
     }
   }
-
-  if(!isEmpty(lead.child_account2_key)) {
-    if((lead.child_account2_key.relation || '').toUpperCase() === 'SON') {
-      total_son++;
-    } else if((lead.child_account2_key.relation || '').toUpperCase() === 'DAUGHTER') {
-      total_daughter++;
+  
+  for (let i = 1; i <= daughter_max; i++) {
+    if (!isEmpty(lead[`child_account${i}_key`])) {
+      if ((lead[`child_account${i}_key`].relation || '').toUpperCase() === 'DAUGHTER') {
+        total_daughter++;
+      }
     }
   }
 
@@ -652,24 +656,17 @@ export function ghGetMember(lead) {
 
       obj.key = (lead[key].relation || '').toLowerCase();
 
-      if(total_son === 2) {
-
-        if(key === 'child_account1_key') {
-          obj.key = 'son1'
+      if(total_son > 1) {
+        for (let i = 1; i < total_son; i++) {
+          if (key === `child_account${i}_key`) {
+            obj.key = `son${i}`;
+          }
         }
-
-        if(key === 'child_account2_key') {
-          obj.key = 'son2'
-        }
-        
-      } else if(total_daughter === 2) {
-
-        if(key === 'child_account1_key') {
-          obj.key = 'daughter1'
-        }
-
-        if(key === 'child_account2_key') {
-          obj.key = 'daughter2'
+      } else if(total_daughter > 1) {
+        for (let i = 1; i < total_daughter; i++) {
+          if (key === `child_account${i}_key`) {
+            obj.key = `daughter${i}`;
+          }
         }
       }
 
@@ -677,7 +674,7 @@ export function ghGetMember(lead) {
     }
   }
 
-  if(lead.account_type === 'parents' || lead.account_type === 'family') {
+  if(['parents', 'parentsinlaw', 'self'].includes(lead.account_type)) {
     let obj = lead['self_account_key'];
     obj.backend_key = 'self_account_key';
     obj.key = 'applicant';
