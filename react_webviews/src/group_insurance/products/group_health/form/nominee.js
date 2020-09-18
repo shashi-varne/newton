@@ -33,7 +33,6 @@ class GroupHealthPlanNomineeDetails extends Component {
     }
 
     onload = () => {
-        console.log(this.state)
 
         this.setState({
             next_state: this.state.next_screen
@@ -321,6 +320,7 @@ class GroupHealthPlanNomineeDetails extends Component {
 
     render() {
         let provider = this.state.providerConfig.provider_api;
+        console.log(this.state.relationshipOptions)
 
         return (
             <Container
