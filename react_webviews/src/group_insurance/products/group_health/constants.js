@@ -292,7 +292,7 @@ export const religare = {
         ]
     },
     nominee_screen: {
-        nominee_opts:    [
+        nominee_opts: [
             {
                 'name': 'SPOUSE',
                 'value': 'SPOUSE'
@@ -444,41 +444,29 @@ export const star = {
             'steps': {
                 'options': [
                     {
-                        'title': 'Is coronavirus treatment covered in this plan?',
-                        'subtitle': 'Yes, this health insurance policy for family covers hospitalisation expenses to Corona Virus (COVID-19) subject to all terms and conditions of the policy.'
+                        'title': 'Is there any pre policy medical check up?',
+                        'subtitle': 'All persons above 50 years of age and those who declare adverse medical history in the proposal form are required to undergo pre-acceptance medical screening. 100% of this cost is borne by the company.'
                     },
                     {
-                        'title': 'Is there any free health check-up in your policy?',
-                        'subtitle': 'Yes, there is a free Annual Health Check-up for all the insured members every year regardless of claim history.'
+                        'title': 'Is there any copay under the policy?',
+                        'subtitle': 'There is a copay of 20% on each and every claim for insured members whose age at the time of entry is more than 60 years.'
                     },
                     {
-                        'title': 'Can I cancel my policy once purchased?',
-                        'subtitle': 'Yes, within 15 days from the receipt of the policy document you may return/cancel the policy, and premium after proportionate deduction would be refunded.'
+                        'title': 'Is there any waiting period in the policy?',
+                        'subtitle': 'There is a waiting period of 24 months for specified diseases and 48 months for pre-existing diseases.'
                     },
                     {
-                        'title': 'How does Auto recharge work?',
+                        'title': 'Can the sum insured under the policy be enhanced?',
+                        'subtitle': 'Yes, this can be done at the time of renewal subject to no claim being lodged or paid under the policy.'
+                    },
+                    {
+                        'title': 'Can I cancel the policy after purchase?',
+                        'subtitle': 'There is a free look period of 15 days from the date of receipt of the policy to the insured; if cancelled during this period premium would be refunded to the customer after adjusting the cost of medical screening, stamp duty charges and proportionate risk premium.'
+                    },
+                    {
+                        'title': 'How does the Auto recharge work?',
                         'subtitle': 'Sum Insured will be automatically restored (once every policy year) in case the sum insured and any no claim bonus accumulated is exhausted during the policy year. It cannot be used against an illness/disease for which a claim has already been made in the current policy year.'
-                    },
-                    {
-                        'title': 'What is the waiting period for existing diseases? Can it be reduced?',
-                        'subtitle': 'There is a waiting period of 48 months for existing and 24 months for specified diseases. This waiting period of 48 months can be reduced by taking the additional cover of ‘Reduction in PED Wait Period’'
-                    },
-                    {
-                        'title': 'What do you mean by Network Hospital?',
-                        'subtitle': 'Network Hospital is one, which has an agreement with Religare Health Insurance for providing Cashless treatment to its customers. You can view the list of Network hospitals here '
-                    },
-                    {
-                        'title': 'What is a No Claim Bonus?',
-                        'subtitle': 'A Policyholder, who hasn’t made any claim in a year, will have his Sum Insured increased by a certain amount (bonus). CARE offers a 10% increase in the policy sum insured for every claim-free year, with no change in premium.'
-                    },
-                    {
-                        'title': 'How to file and track your claim?',
-                        'subtitle': 'You can file a claim by contacting Religare customer help desk at customerfirst@religarehealthinsurance.com or 1800-200-4488. Claim status can be tracked online here or contacting customer care at the above number.'
-                    },
-                    {
-                        'title': 'How much time does it take for a claim to be processed?',
-                        'subtitle': 'For cashless claims it takes 4 hrs and for reimbursement claims, it takes 5 working days to get processed, provided all the documents are in order.'
-                    },
+                    }
                 ],
             },
             'cta_title': 'OK'
@@ -609,6 +597,66 @@ export const star = {
             }
         ],
     },
+    personal_details_screen: {
+        occupation_opts: [
+            {
+                'name': 'none',
+                'value': 'none'
+            },
+            {
+                'name': 'BUSINESS/TRADERS',
+                'value': 'BUSINESS_TRADERS'
+            },
+            {
+                'name': 'PROFESSIONAL-DOCTOR',
+                'value': 'PROFESSIONAL_DOCTOR'
+            },
+            {
+                'name': 'PROFESSIONAL-ENGINEER',
+                'value': 'PROFESSIONAL_ENGINEER'
+            },
+            {
+                'name': 'PROFESSIONAL-LAWYER',
+                'value': 'PROFESSIONAL_LAWYER'
+            },
+            {
+                'name': 'CLERICAL/SUPERVISORY AND RELATED WORKER',
+                'value': 'CLERICAL_SUPERVISORY_AND_RELATED_WROKER'
+            },
+            {
+                'name': 'HOSPITALITY AND SUPPORT WORKERS',
+                'value': 'HOSPITALITY_AND_SUPPORT_WORKERS'
+            },
+            {
+                'name': 'PRODUCTION WORKERS, SKILLED AND NON-AGRICULTURAL',
+                'value': 'PRODUCTION_WORKERS_SKILLED_AND_NON_AGRICULTURAL'
+            },
+            {
+                'name': 'FARMERS AND AGRICULTURAL WORKERS',
+                'value': 'FARMERS_AND_AGRICULTURAL_WORKERS'
+            },
+            {
+                'name': 'POLICE/PARA MILITARY/DEFENCE',
+                'value': 'POLICE_PARA_MILITARY_DEFENCE'
+            },
+            {
+                'name': 'HOUSEWIVES',
+                'value': 'HOUSEWIVES'
+            },
+            {
+                'name': 'RETIRED PERSONS',
+                'value': 'RETIRED_PERSONS'
+            },
+            {
+                'name': 'STUDENTS-SCHOOLS AND COLLEGE',
+                'value': 'STUDENTS_SCHOOLS_AND_COOLLEGE'
+            },
+            {
+                'name': 'INFANT',
+                'value': 'INFANT'
+            }
+        ]
+    }
 };
 
 

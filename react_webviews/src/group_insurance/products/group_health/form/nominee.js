@@ -33,7 +33,6 @@ class GroupHealthPlanNomineeDetails extends Component {
     }
 
     onload = () => {
-        console.log(this.state.relationshipOptions)
 
         this.setState({
             next_state: this.state.next_screen
@@ -265,7 +264,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                     Please add appointee details as the nominee is a minor(less than 18 yrs)
                     <img 
                         className="tooltip-icon"
-                        data-tip="."
+                        data-tip="The appointee must be an adult who will take care of the claim amount in case of death of the insured during the period that the nominee is a minor."
                         src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
                 </div>
                 <div>Apointee details</div>
