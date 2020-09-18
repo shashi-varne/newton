@@ -169,6 +169,7 @@ class GroupHealthPayment extends Component {
   render() {
     return (
       <Container
+        provider={this.state.provider}
         showLoader={this.state.show_loader}
         noHeader={this.state.show_loader}
         title={this.state.commonMapper['top_title']}

@@ -665,7 +665,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
         return (
             <Container
-
+                provider={this.state.provider}
                 resetpage={true}
                 handleReset={this.showDialog}
                 events={this.sendEvents('just_set_events')}
