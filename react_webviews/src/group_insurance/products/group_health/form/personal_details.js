@@ -17,6 +17,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import ReactTooltip from "react-tooltip";
 import Button from 'material-ui/Button';
+import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
 
 class GroupHealthPlanPersonalDetails extends Component {
 
@@ -550,6 +551,19 @@ class GroupHealthPlanPersonalDetails extends Component {
             value={this.state.form_data.weight || ''}
             onChange={this.handleChange('weight')} />
         </div>}
+        {this.state.providerConfig.key === 'star' && 
+        <DropdownWithoutIcon
+          width="40"
+          dataType="AOB"
+          options={this.state.occupationOptions}
+          id="relation"
+          label="Occupation"
+          error={this.state.form_data.occupation_error ? true : false}
+          helperText={this.state.form_data.occupation_error}
+          value={this.state.form_data.occupation || ''}
+          name="occupation"
+          onChange={this.handleChange()} />
+        }
         <ConfirmDialog parent={this} />
         {this.renderBmiDialog()}
         {this.renderResetDialog()}

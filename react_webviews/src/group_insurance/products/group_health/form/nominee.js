@@ -33,7 +33,7 @@ class GroupHealthPlanNomineeDetails extends Component {
     }
 
     onload = () => {
-        console.log(this.state.relationshipOptions)
+        console.log(this.state)
 
         this.setState({
             next_state: this.state.next_screen
