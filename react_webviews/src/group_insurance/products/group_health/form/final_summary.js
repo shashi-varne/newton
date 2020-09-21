@@ -194,7 +194,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
 
                 // for peds
-                if (member.ped_diseases) {
+                if (member.ped_exists) {
                     let p_list = '';
 
                     for (var p in member.ped_diseases) {
