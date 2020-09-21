@@ -641,24 +641,21 @@ export function ghGetMember(lead, providerConfig) {
     }
   }
 
-  const total_kids = total_daughter + total_son;
+  let daughter_count = 1, son_count = 1;
   // Map all children keys
   for (let childKey of backend_child_keys) {
     let obj = lead[childKey];
-    let daughter_count = 1, son_count = 1;
 
     if (allowed_mapper.includes(childKey) && obj && !isEmpty(obj)) {
       obj.backend_key = childKey;
       obj.key = (obj.relation || '').toLowerCase();
 
-      if (total_kids > 2) {
-        if ((obj.relation || '').toUpperCase() === 'SON') {
-          obj.key = `son${son_count}`;
-          son_count++;
-        } else {
-          obj.key = `daughter${daughter_count}`;
-          daughter_count++;
-        }
+      if ((obj.relation || '').toUpperCase() === 'SON' && total_son > 1) {
+        obj.key = `son${son_count}`;
+        son_count++;
+      } else if ((obj.relation || '').toUpperCase() === 'DAUGHTER' && total_daughter > 1) {
+        obj.key = `daughter${daughter_count || ''}`;
+        daughter_count++;
       }
     }
     member_base.push(obj);
