@@ -42,11 +42,12 @@ class GroupHealthPlanAddOns extends Component {
 
                     if (item.options.length !== 0) {
                         let options = item.options.sort((a, b) => a.cover_amount - b.cover_amount);
-                        let selectedIndexOption = 0;
+                        let selectedIndexOption = item.selectedIndexOption || 0;
 
                         final_data.options = options.map((opt, index2) => {
 
-                            if(opt.cover_amount === default_cover_amount) {
+                            if((!final_data.selected_cover_amount && opt.cover_amount === default_cover_amount) || 
+                            (final_data.selected_cover_amount && opt.cover_amount === final_data.selected_cover_amount)) {
                                 selectedIndexOption = index2;
                                 final_data.selected_cover_amount = opt.cover_amount;
                                 final_data.selected_premium = opt.premium;
