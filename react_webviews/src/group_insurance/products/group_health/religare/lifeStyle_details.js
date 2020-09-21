@@ -5,7 +5,7 @@ import { getConfig } from "utils/functions";
 import { initialize, updateLead } from "../common_data";
 import RadioAndCheckboxList from "./radioAndCheckboxList";
 import { isValidMonthYear } from "utils/validators";
-import { formatMonthandYear, dobFormatTest } from "utils/validators";
+import { formatMonthandYear, dobFormatTest, validateAlphabets, IsFutureMonthYear, IsPastMonthYearfromDob } from "utils/validators";
 import toast from "../../../../common/ui/Toast";
 import ConfirmDialog from './../plans/confirm_dialog';
 
@@ -183,16 +183,24 @@ class GroupHealthPlanLifestyleDetail extends Component {
     });
   };
 
-  validateMonthYear = (date) => {
+  validateMonthYear = (date, dob) => {
+
     if (!isValidMonthYear(date)) {
       return "please enter valid month and year";
+    } else if (IsFutureMonthYear(date)) {
+      return "future month or year is not allowed";
+    } else if (IsPastMonthYearfromDob(date, dob)) {
+      return "month or year less than dob is not allowed"
     }
+    
     return '';
   };
 
   validateDescription = (desc) => {
     if (!desc) {
       return "please enter the description";
+    } else if (!validateAlphabets(desc)){
+      return "please enter valid description";
     }
     return '';
   };
@@ -212,7 +220,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
         if ((member_data.life_style_question_exists  === 'Yes' ||
          member_data.life_style_question_exists === true) && member_data.key !== 'none') {
           member_data.life_style_question.answer_description_error = this.validateDescription(member_data.life_style_question.answer_description);
-          member_data.life_style_question.start_date_error = this.validateMonthYear(member_data.life_style_question.start_date);
+          member_data.life_style_question.start_date_error = this.validateMonthYear(member_data.life_style_question.start_date, member_data.dob);
 
           if (member_data.life_style_question.answer_description_error || member_data.life_style_question.start_date_error) {
             canProceed = false;
@@ -234,6 +242,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
 
     if (!atlOneOption) {
+      canProceed = false;
       toast("Select atleast one option");
     }
 
