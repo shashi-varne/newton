@@ -236,14 +236,21 @@ class GroupHealthPlanPersonalDetails extends Component {
     if (this.state.member_key === 'applicant') {
       let age = calculateAge((this.state.form_data.dob || '').replace(/\\-/g, '/').split('-').join('/'));
 
+      let { provider } = this.state;
+      
+      if (provider === 'RELIGARE' && age < 19) {
+        form_data.dob_error = 'Minimum age is 18 applicant';
+        
+      } else {
 
+        if (this.state.form_data.gender === 'MALE' && age < 22) {
+          form_data.dob_error = 'Minimum age is 21 male applicant';
+        }
+  
+        if (this.state.form_data.gender === 'FEMALE' && age < 19) {
+          form_data.dob_error = 'Minimum age is 18 female applicant';
+        }
 
-      if (this.state.form_data.gender === 'MALE' && age < 22) {
-        form_data.dob_error = 'Minimum age is 21 male applicant';
-      }
-
-      if (this.state.form_data.gender === 'FEMALE' && age < 19) {
-        form_data.dob_error = 'Minimum age is 18 female applicant';
       }
 
       if (this.state.lead.account_type === 'parents') {
