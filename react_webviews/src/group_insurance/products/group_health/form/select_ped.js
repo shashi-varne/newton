@@ -64,15 +64,11 @@ class GroupHealthPlanSelectPed extends Component {
         if(this.state.provider === 'RELIGARE') {
             let ped_data = member_info.ped_diseases || [];
             ped_data.forEach(item => {
-                let n = options.length-1;
                 options.forEach((opt, index) => {
                     if(opt.id === item.key_mapper) {
                         options[index].checked = true;
                         options[index].start_date = item.start_date || '';
-                    }
-
-                    if (index === n) {
-                        options[n].value = item.answer_description || '';
+                        options[index].description = item.answer_description || '';
                     }
                 })
 
@@ -93,7 +89,7 @@ class GroupHealthPlanSelectPed extends Component {
             }
 
             if(!matched) {
-                other_diseases += ped_diseases_name[p] || options[options.length-1].value;
+                other_diseases += ped_diseases_name[p] || options[options.length-1].description;
             }
         }
 
