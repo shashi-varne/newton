@@ -77,7 +77,6 @@ export async function initialize() {
 
                 lead = resultData.quote;
                 lead.member_base = ghGetMember(lead);
-                lead.add_ons_amount = 10000;
                 this.setState({
                     lead: resultData.quote || {},
                     common_data: resultData.common,

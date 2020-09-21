@@ -49,6 +49,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     // let member_key = this.props.match.params.member_key;
     let member_key = this.props.member_key;
 
+   
     let pan_needed = false;
     if (lead.total_amount > 100000 && (member_key === 'self' || member_key === 'applicant')) {
       pan_needed = true;
@@ -83,6 +84,8 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     let form_data = lead[backend_key] || {};
+
+    let dobNeeded = lead.eldest_member === backend_key || member_key === 'applicant';
 
     form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
     let age = calculateAge(form_data.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
@@ -129,7 +132,8 @@ class GroupHealthPlanPersonalDetails extends Component {
       selectedIndex: selectedIndex,
       height: height,
       pan_needed: pan_needed,
-      spouse_relation: spouse_relation
+      spouse_relation: spouse_relation,
+      dobNeeded:dobNeeded
     }, () => {
       ReactTooltip.rebuild()
     })
@@ -471,7 +475,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         </div>
         <div className="InputField">
           <Input
-            // disabled={this.state.member_key === 'applicant' ? false : true} #TODO
+            disabled={!this.state.dobNeeded}
             type="text"
             width="40"
             label="Date of birth (DD/MM/YYYY)"
