@@ -224,12 +224,9 @@ export const religare = {
         ],
         whats_not_covered: [
             'Maternity',
-            'Self-inflicted injuries',
             'Plastic surgery',
             'External congenital diseases',
             'Mental health',
-            'Adventure sport injuries',
-            'Venereal or Sexually transmitted diseases',
             'Eye/Dental treatment',
         ],
         faq_data: {
