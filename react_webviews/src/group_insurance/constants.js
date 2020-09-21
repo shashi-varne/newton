@@ -629,9 +629,24 @@ export function ghGetMember(lead, providerConfig) {
     'parentsinlaw': ['parent_inlaw_account1_key', 'parent_inlaw_account2_key'],
   };
   const allowed_mapper = allowed_as_per_account[lead.account_type];
-  let member_base = [], total_son = 0, total_daughter = 0;
+  let member_base = [];
   
-  for(let i = 1 ; i <= (son_max + daughter_max); i++) {
+  // Map all remaining keys
+  for (let key of backend_keys) {
+    let obj = lead[key];
+
+    if (allowed_mapper.includes(key) && obj && !isEmpty(obj)) {
+      Object.assign(obj, {
+        backend_key: key,
+        key: (obj.relation || '').toLowerCase(),
+      });
+      member_base.push(obj);
+    }
+  }
+
+  let total_son = 0, total_daughter = 0;
+
+  for (let i = 1; i <= (son_max + daughter_max); i++) {
     if (!isEmpty(lead[`child_account${i}_key`])) {
       if ((lead[`child_account${i}_key`].relation || '').toUpperCase() === 'SON') {
         total_son++;
@@ -660,19 +675,6 @@ export function ghGetMember(lead, providerConfig) {
       member_base.push(obj);
     }
   }
-  
-  // Map all remaining keys
-  for (let key of backend_keys) {
-    let obj = lead[key];
-
-    if (allowed_mapper.includes(key) && obj && !isEmpty(obj)) {
-      Object.assign(obj, {
-        backend_key: key,
-        key: (obj.relation || '').toLowerCase(),
-      });
-      member_base.push(obj);
-    }
-  }
 
   
   if(['parents', 'parentsinlaw', 'family'].includes(lead.account_type)) {
@@ -681,7 +683,7 @@ export function ghGetMember(lead, providerConfig) {
     obj.key = 'applicant';
     member_base.push(obj);
   }
-  console.log('------', member_base);
+  
   return member_base;
 
 }
