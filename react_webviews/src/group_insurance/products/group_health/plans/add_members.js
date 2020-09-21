@@ -113,9 +113,10 @@ class GroupHealthPlanAddMembers extends Component {
         }
 
         if (['selfandfamily', 'family'].includes(this.state.account_type) && !this.state.other_adult_member) {
-            this.setState({
-                other_adult_member_error: 'Please select this option'
-            });
+            // this.setState({
+            //     other_adult_member_error: 'Please select this option'
+            // });
+            toast('Atleast select one other adult member');
             canProceed = false;
         }
 
@@ -381,7 +382,7 @@ class GroupHealthPlanAddMembers extends Component {
                                 name="other_adult_member"
                                 error={(this.state.other_adult_member_error) ? true : false}
                                 helperText={this.state.other_adult_member_error}
-                                value={this.state.other_adult_member || ''}
+                                // value={this.state.other_adult_member || ''}
                                 onChange={this.handleChangeRadio('other_adult_member')} 
                                 canUnSelect={true}/>
                         </div>
