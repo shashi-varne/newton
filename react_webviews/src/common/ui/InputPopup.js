@@ -108,7 +108,6 @@ class InputPopupClass extends Component {
     }
 
     renderPopUp() {
-        console.log(this.props);
         if (this.props.parent.state.openPopUpInput) {
             return (
                 <Dialog
@@ -152,9 +151,9 @@ class InputPopupClass extends Component {
                                      className="date"
                                      placeholder="MM/YYYY"
                                      maxLength='7'
-                                     value={this.state['startDateModal'] || ''}
-                                     error={this.state['startDateModal_error'] ? true : false}
-                                     helperText={this.state['startDateModal_error']}
+                                     value={this.state[this.props.name] || ''}
+                                     error={this.state[this.props.name+'_error'] ? true : false}
+                                     helperText={this.state[this.props.name+'_error']}
                                      onChange={this.handleChange()}
                                  />
                                  </div>

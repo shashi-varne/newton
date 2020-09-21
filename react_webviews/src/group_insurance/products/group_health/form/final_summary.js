@@ -530,7 +530,7 @@ class GroupHealthPlanFinalSummary extends Component {
                     </div>
                     <div className="mt-right">
                         <div className="mtr-top">
-                            Insured {index + 1} name
+                            {index + 1}st Insured name
                         </div>
                         <div className="mtr-bottom">
                             {props.name} ({props.relation.toLowerCase()})
@@ -662,7 +662,7 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     render() {
-
+console.log(this.state)
         return (
             <Container
                 provider={this.state.provider}
@@ -703,6 +703,34 @@ class GroupHealthPlanFinalSummary extends Component {
                                 </div>
                                 <div className="mtr-bottom">
                                     {numDifferentiationInr(this.state.lead.sum_assured)}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="member-tile">
+                            <div className="mt-left">
+                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
+                            </div>
+                            <div className="mt-right">
+                                <div className="mtr-top">
+                                    ADD ONS
+                                </div>
+                                <div className="mtr-bottom">
+                                    {this.state.lead.add_ons && this.state.lead.add_ons.join(', ')}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="member-tile">
+                            <div className="mt-left">
+                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
+                            </div>
+                            <div className="mt-right">
+                                <div className="mtr-top">
+                                    COVERAGE TYPE
+                                </div>
+                                <div className="mtr-bottom">
+                                    {this.state.lead.cover_type}
                                 </div>
                             </div>
                         </div>

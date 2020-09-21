@@ -66,6 +66,7 @@ class MmYyInModal extends Component {
                 [name + '_error']: error
             })
         } else {
+            console.log(this.props.name, this.state[this.props.name])
             this.props.parent.updateParent(this.props.name, this.state[this.props.name])
             this.handleClose();
         }
