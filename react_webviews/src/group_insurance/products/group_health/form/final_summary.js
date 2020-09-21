@@ -23,25 +23,6 @@ import { childeNameMapper } from '../../../constants';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 
-const med_ques_mapper_religare = {
-    'mand_1': {
-        'disc': 'Any illness/injury in last 48 months?',
-        'members': []
-    },
-    'mand_2': {
-        'disc': 'Previous health insurance claim?',
-        'members': []
-    },
-    'mand_3': {
-        'disc': 'Previous health insurance declined/increase?',
-        'members': []
-    },
-    'mand_4': {
-        'disc': 'Already covered with Religare?',
-        'members': []
-    }
-}
-
 class GroupHealthPlanFinalSummary extends Component {
 
     constructor(props) {
@@ -77,6 +58,25 @@ class GroupHealthPlanFinalSummary extends Component {
         let pan_needed = false;
         if (lead.total_amount > 100000) {
             pan_needed = true;
+        }
+
+        const med_ques_mapper_religare = {
+            'mand_1': {
+                'disc': 'Any illness/injury in last 48 months?',
+                'members': []
+            },
+            'mand_2': {
+                'disc': 'Previous health insurance claim?',
+                'members': []
+            },
+            'mand_3': {
+                'disc': 'Previous health insurance declined/increase?',
+                'members': []
+            },
+            'mand_4': {
+                'disc': 'Already covered with Religare?',
+                'members': []
+            }
         }
 
 

@@ -208,11 +208,12 @@ class GroupHealthPlanMedicalHistory extends Component {
           let q_data = list[q];
           let q_key = q_data.key;
           let inputs = q_data.inputs;
-
+          
           member_data.medical_questions[q_key] = {};
+          member_data.mand_question_exists='false';
           member_data.medical_questions[q_key].answer = 'false';
           for (var mem_key in inputs) {
-            if (mem_key === backend_key) {
+            if (mem_key === backend_key && inputs[mem_key]) {
               body[backend_key].mand_question_exists = 'true'
               member_data.medical_questions[q_key].answer = 'true';
             }
@@ -221,9 +222,7 @@ class GroupHealthPlanMedicalHistory extends Component {
 
         member_base[i] = member_data;
 
-
         body[backend_key].medical_questions = member_data.medical_questions || {};
-
       }
 
 
