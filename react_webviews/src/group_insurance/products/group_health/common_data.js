@@ -265,7 +265,7 @@ export async function initialize() {
             if (res.pfwresponse.status_code === 200) {
 
                 lead = resultData.quote;
-                lead.member_base = ghGetMember(lead);
+                lead.member_base = ghGetMember(lead, this.state.providerConfig);
                 this.setState({
                     lead: resultData.quote || {},
                     common_data: resultData.common,
