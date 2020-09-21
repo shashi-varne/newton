@@ -242,6 +242,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
 
     if (!atlOneOption) {
+      canProceed = false;
       toast("Select atleast one option");
     }
 
