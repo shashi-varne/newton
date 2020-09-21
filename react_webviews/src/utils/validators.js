@@ -789,7 +789,8 @@ export function formatMonthandYear(event) {
     }
   }
 
-  if (slash <= 1 && key !== 7 && key !== 46) {
+  if (slash <= 1 && key !== 8 && key !== 46) {
+    
     var strokes = event.target.value.length;
 
     if (strokes === 2) {
@@ -798,7 +799,7 @@ export function formatMonthandYear(event) {
       event.target.value = thisVal;
     }
     // if someone deletes the first slash and then types a number this handles it
-    if (strokes >= 3 && strokes < 5) {
+    if (strokes >= 3) {
       thisVal = event.target.value;
       if (thisVal.charAt(2) !== '/') {
         var txt1 = thisVal.slice(0, 2) + "/" + thisVal.slice(2);

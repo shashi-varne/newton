@@ -21,7 +21,8 @@ class GroupHealthPlanAddOns extends Component {
             ctaWithProvider: true,
             add_ons_data: [],
             show_loader: true,
-            screen_name: 'add_ons_screen'
+            screen_name: 'add_ons_screen',
+            total_add_on_premiums: 0
         }
 
         this.initialize = initialize.bind(this);
@@ -123,10 +124,25 @@ class GroupHealthPlanAddOns extends Component {
 
     handleChangeCheckboxes = index => event => {
 
-        let add_ons_data = this.state.add_ons_data;
+        let {add_ons_data, bottomButtonData} = this.state;
         add_ons_data[index].checked = !add_ons_data[index].checked;
+
+        // eslint-disable-next-line radix
+        let cta_premium = parseInt(bottomButtonData.leftSubtitle.substring(1).replace(',', ''));
+
+        let selectedIndex = add_ons_data[index].selectedIndexOption
+
+        if (add_ons_data[index].checked) {
+            cta_premium += selectedIndex ? selectedIndex.premium : add_ons_data[index].default_premium;
+        } else if (!add_ons_data[index].checked) {
+            cta_premium -= selectedIndex ? selectedIndex.premium : add_ons_data[index].default_premium;
+        }
+
+        bottomButtonData.leftSubtitle = formatAmountInr(cta_premium);
+
         this.setState({
-            add_ons_data: add_ons_data
+            add_ons_data: add_ons_data,
+            bottomButtonData: bottomButtonData
         })
         
     }
@@ -134,12 +150,16 @@ class GroupHealthPlanAddOns extends Component {
     handleChange = index => event => {
 
         let { add_ons_data } = this.state;
+         
         let data = add_ons_data[index];
 
         let indexOption = event;
         data.selectedIndexOption = indexOption;
+
         data.selected_cover_amount =  data.options[indexOption].cover_amount;
         data.selected_premium =  data.options[indexOption].premium;
+
+
 
         add_ons_data[index] = data;
 
