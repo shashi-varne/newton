@@ -115,7 +115,7 @@ class radioAndCheckboxList extends Component {
               <Grid container spacing={0}>
                 
                 {item.members.map((member, index_member) => (
-                  <div key={index_member}>
+                  member.key !== 'applicant' && <div key={index_member}>
                     <Grid item xs key={index}>
                       <Grid item xs>
                         <Checkbox
@@ -141,8 +141,8 @@ class radioAndCheckboxList extends Component {
 
             { item.input_type === "checkbox" &&
               name === "lifeStyle details" &&
-              item.options.map((option, index) => (
-                <div key={index}>
+              item.options.map((option, index) => 
+                option.key !== 'applicant' && <div key={index}>
                   <Grid container spacing={16} alignItems="center">
                     <Grid item xs={1} className="TextCenter">
                       <Checkbox
@@ -169,7 +169,7 @@ class radioAndCheckboxList extends Component {
                     </Grid>
                   )}
                 </div>
-              ))}
+              )}
 
 
           </div>

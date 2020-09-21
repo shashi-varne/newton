@@ -419,7 +419,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
                         <div>
                             <div style={{ color: '#64778D', fontSize: 13, fontWeight: 300, margin: '-10px 0px 6px' }}>
-                                Permanent Address Details
+                                Permanent Address
                             </div>
 
                             <div className="InputField">
@@ -521,7 +521,9 @@ class GroupHealthPlanAddressDetails extends Component {
                     Policy document will be delivered to this address
                 </div>
 
-
+                <div style={{ color: '#64778D', fontSize: 13, fontWeight: 300, marginTop: '37px' }}>
+                    Current Address
+                </div>
                 <FormControl fullWidth>
 
                     <div className="InputField">
