@@ -314,6 +314,46 @@ export function IsFutureDate(idate) {
 
 }
 
+export function IsFutureMonthYear(input) {
+  var today = new Date();
+
+  var currentMonth = today.getMonth() + 1; 
+  var currentYear = today.getFullYear();
+
+  var inputMonth = input.substring(0, 2) - 0;
+  var inputYear = input.substring(3, 7) - 0;
+
+  if (inputYear > currentYear) {
+    return true;
+  }
+
+  if (inputYear === currentYear && inputMonth > currentMonth) {
+    return true;
+  }
+
+  return false;
+}
+
+export function IsPastMonthYearfromDob(input, dob) {
+  dob = dob.split('-');
+
+  var dobMonth = dob[1]; 
+  var dobYear = dob[2];
+
+  var inputMonth = input.substring(0, 2) - 0;
+  var inputYear = input.substring(3, 7) - 0;
+
+  if (inputYear < dobYear) {
+    return true;
+  }
+
+  if (inputYear === dobYear && inputMonth < dobMonth) {
+    return true;
+  }
+
+  return false;
+}
+
 export function isValidDate(dateInput) {
   if (!dateInput) {
     return false;
@@ -733,6 +773,8 @@ export function formatDate(event) {
     }
   }
 }
+// 12/10/1998
+// 12/1998
 
 export function formatMonthandYear(event) {
 
@@ -756,7 +798,7 @@ export function formatMonthandYear(event) {
       event.target.value = thisVal;
     }
     // if someone deletes the first slash and then types a number this handles it
-    if (strokes >= 3) {
+    if (strokes >= 3 && strokes < 5) {
       thisVal = event.target.value;
       if (thisVal.charAt(2) !== '/') {
         var txt1 = thisVal.slice(0, 2) + "/" + thisVal.slice(2);

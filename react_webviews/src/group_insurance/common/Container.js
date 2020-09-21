@@ -205,6 +205,9 @@ class Container extends Component {
 
       // #TODO need to handle back accoridng to entry/landing
       let group_health_landing = '/group-insurance/group-health/landing';
+      if(this.props.provider) {
+        group_health_landing = `/group-insurance/group-health/${this.props.provider}/landing`;
+      }
 
       if(this.checkStringInString('insure-type') || this.checkStringInString('payment') || 
       this.checkStringInString('final-summary')) {
@@ -214,6 +217,12 @@ class Container extends Component {
 
       if(this.checkStringInString('reportdetails')) {
         this.navigate('/group-insurance/common/report');
+        return;
+      }
+
+
+      if(this.checkStringInString('group-insurance/group-health') && this.checkStringInString('landing')) {
+        this.navigate('/group-insurance/group-health/entry');
         return;
       }
       

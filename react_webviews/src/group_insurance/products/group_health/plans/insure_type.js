@@ -113,6 +113,7 @@ class GroupHealthSelectInsureType extends Component {
 
     return (
       <Container
+        provider={this.state.provider}
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Whom do you want to insure? "

@@ -4,8 +4,10 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { health_providers, genderOptions, childeNameMapper } from '../../../constants';
-import { calculateAge, toFeet, capitalizeFirstLetter, 
-  formatDate, validatePan, validateAlphabets, dobFormatTest } from 'utils/validators';
+import {
+  calculateAge, toFeet, capitalizeFirstLetter,
+  formatDate, validatePan, validateAlphabets, dobFormatTest
+} from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import DropdownInModal from '../../../../common/ui/DropdownInModal';
@@ -55,6 +57,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     // let member_key = this.props.match.params.member_key;
     let member_key = this.props.member_key;
 
+   
     let pan_needed = false;
     if (lead.total_amount > 100000 && (member_key === 'self' || member_key === 'applicant')) {
       pan_needed = true;
@@ -90,6 +93,8 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let form_data = lead[backend_key] || {};
 
+    let dobNeeded = lead.eldest_member === backend_key || member_key === 'applicant';
+
     form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
     let age = calculateAge(form_data.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
 
@@ -108,7 +113,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     let height = form_data.height || height_options[selectedIndex].value;
     if (form_data.height) {
       height_options.forEach(function (x, index) {
-        if (x.value === parseInt(form_data.height,10)) {
+        if (x.value === parseInt(form_data.height, 10)) {
           return selectedIndex = index;
         }
       });
@@ -118,7 +123,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     form_data.selectedIndex = selectedIndex;
 
-    
+
 
     this.setState({
       providerData: health_providers[this.state.provider],
@@ -135,7 +140,8 @@ class GroupHealthPlanPersonalDetails extends Component {
       selectedIndex: selectedIndex,
       height: height,
       pan_needed: pan_needed,
-      spouse_relation: spouse_relation
+      spouse_relation: spouse_relation,
+      dobNeeded:dobNeeded
     }, () => {
       ReactTooltip.rebuild()
     })
@@ -229,34 +235,45 @@ class GroupHealthPlanPersonalDetails extends Component {
       form_data.pan_number_error = 'Invalid PAN number';
     }
 
-    if((this.state.member_key === 'self' || this.state.member_key === 'applicant') && this.state.form_data.gender) {
-      if(this.state.spouse_relation === 'HUSBAND' && this.state.form_data.gender === 'MALE') {
+    if ((this.state.member_key === 'self' || this.state.member_key === 'applicant') && this.state.form_data.gender) {
+      if (this.state.spouse_relation === 'HUSBAND' && this.state.form_data.gender === 'MALE') {
         form_data.gender_error = 'Invalid gender';
       }
 
-      if(this.state.spouse_relation === 'WIFE' && this.state.form_data.gender === 'FEMALE') {
+      if (this.state.spouse_relation === 'WIFE' && this.state.form_data.gender === 'FEMALE') {
         form_data.gender_error = 'Invalid gender';
       }
     }
 
-    if(this.state.member_key === 'applicant') {
+    if (this.state.member_key === 'applicant') {
       let age = calculateAge((this.state.form_data.dob || '').replace(/\\-/g, '/').split('-').join('/'));
 
-      let ageParent1 = calculateAge((this.state.lead.parent_account1_key.dob || '').replace(/\\-/g, '/').split('-').join('/'));
-      let ageParent2 = calculateAge((this.state.lead.parent_account2_key.dob || '').replace(/\\-/g, '/').split('-').join('/'));
+      let { provider } = this.state;
+      
+      if (provider === 'RELIGARE' && age < 19) {
+        form_data.dob_error = 'Minimum age is 18 applicant';
+        
+      } else {
 
-      if(this.state.form_data.gender === 'MALE' && age < 22) {
-        form_data.dob_error = 'Minimum age is 21 male applicant';
+        if (this.state.form_data.gender === 'MALE' && age < 22) {
+          form_data.dob_error = 'Minimum age is 21 male applicant';
+        }
+  
+        if (this.state.form_data.gender === 'FEMALE' && age < 19) {
+          form_data.dob_error = 'Minimum age is 18 female applicant';
+        }
+
       }
 
-      if(this.state.form_data.gender === 'FEMALE' && age < 19) {
-        form_data.dob_error = 'Minimum age is 18 female applicant';
+      if (this.state.lead.account_type === 'parents') {
+        let ageParent1 = calculateAge((this.state.lead.parent_account1_key.dob || '').replace(/\\-/g, '/').split('-').join('/'));
+        let ageParent2 = calculateAge((this.state.lead.parent_account2_key.dob || '').replace(/\\-/g, '/').split('-').join('/'));
+
+        if ((ageParent1 && age >= ageParent1) || (ageParent2 && age >= ageParent2)) {
+          form_data.dob_error = "Applicant's age should be less than parents'age";
+        }
       }
 
-      if(this.state.lead.account_type === 'parents' &&
-       ( (ageParent1 && age >= ageParent1) || (ageParent2 && age >= ageParent2))) {
-        form_data.dob_error = "Applicant's age should be less than parents'age";
-      }
     }
 
     if (this.state.form_data.name &&
@@ -311,10 +328,10 @@ class GroupHealthPlanPersonalDetails extends Component {
   }
 
 
-  sendEvents(user_action, data={}) {
+  sendEvents(user_action, data = {}) {
     let eventObj = {
       "event_name": 'health_insurance',
-       "properties": {
+      "properties": {
         "user_action": user_action,
         "product": 'health suraksha',
         "flow": this.state.insured_account_type || '',
@@ -474,7 +491,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         </div>
         <div className="InputField">
           <Input
-            // disabled={this.state.member_key === 'applicant' ? false : true} #TODO
+            disabled={!this.state.dobNeeded}
             type="text"
             width="40"
             label="Date of birth (DD/MM/YYYY)"
