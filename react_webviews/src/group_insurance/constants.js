@@ -606,7 +606,7 @@ export const health_providers = {
 
 export function ghGetMember(lead, providerConfig) {
   
-  let backend_keys = [
+  const backend_keys = [
     'self_account_key',
     'spouse_account_key',
     'parent_account1_key',
@@ -621,7 +621,7 @@ export function ghGetMember(lead, providerConfig) {
     backend_child_keys.push(`child_account${i}_key`);
   }
   
-  let allowed_as_per_account = {
+  const allowed_as_per_account = {
     'self': ['self_account_key'],
     'family': ['spouse_account_key'].concat(backend_child_keys),
     'selfandfamily': ['self_account_key', 'spouse_account_key'].concat(backend_child_keys),
@@ -657,8 +657,8 @@ export function ghGetMember(lead, providerConfig) {
         obj.key = `daughter${daughter_count}`;
         daughter_count++;
       }
+      member_base.push(obj);
     }
-    member_base.push(obj);
   }
   
   // Map all remaining keys
@@ -681,7 +681,7 @@ export function ghGetMember(lead, providerConfig) {
     obj.key = 'applicant';
     member_base.push(obj);
   }
-
+  console.log('------', member_base);
   return member_base;
 
 }
