@@ -12,6 +12,7 @@ import { childeNameMapper } from '../../../constants';
 import toast from '../../../../common/ui/Toast';
 import ReligarePremium from '../religare/religare_premium';
 import HDFCPremium from '../hdfc/hdfc_premium';
+import StarPremium from '../Star/star_premium';
 class GroupHealthPlanPremiumSummary extends Component {
 
     constructor(props) {
@@ -92,7 +93,7 @@ class GroupHealthPlanPremiumSummary extends Component {
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
                 let lead = resultData.lead;
-                lead.member_base = ghGetMember(lead);
+                lead.member_base = ghGetMember(lead, this.state.providerConfig);
                 storageService().set('ghs_ergo_quote_id', lead.id);
                 this.navigate('personal-details/' + lead.member_base[0].key);
             } else {
@@ -124,6 +125,7 @@ class GroupHealthPlanPremiumSummary extends Component {
         const premiumComponentMap = {
             religare: <ReligarePremium {...this.state} />,
             hdfcergo: <HDFCPremium {...this.state} />,
+            star: <StarPremium {...this.state} />
         };
         return premiumComponentMap[this.state.provider.toLowerCase()];
     }
