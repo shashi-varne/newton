@@ -72,7 +72,12 @@ class GroupHealthPlanFinalSummary extends Component {
     onload = () => {
         let { lead, provider } = this.state;
         let member_base = lead.member_base;
-        console.log(member_base);
+        
+
+        let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
+
+        let applicant = member_base.splice(applicantIndex, 1)
+        member_base.unshift(applicant[0]);
 
         let pan_needed = false;
         if (lead.total_amount > 100000) {
@@ -548,7 +553,7 @@ class GroupHealthPlanFinalSummary extends Component {
                     </div>
                     <div className="mt-right">
                         <div className="mtr-top">
-                            {index + 1}st Insured name
+                            {index}st Insured name
                         </div>
                         <div className="mtr-bottom">
                             {props.name} ({props.relation.toLowerCase()})
@@ -698,7 +703,7 @@ class GroupHealthPlanFinalSummary extends Component {
                 <div className="group-health-final-summary">
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
-                            <div className="tc-title">{this.state.common_data.base_plan_title}</div>
+                            {/* <div className="tc-title">{this.state.common_data.base_plan_title}</div> */}
                             <div className="tc-subtitle">{this.state.lead.plan_title}</div>
                         </div>
 
@@ -725,7 +730,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             </div>
                         </div>
 
-                        <div className="member-tile">
+                        {this.state.lead.add_ons_amount && <div className="member-tile">
                             <div className="mt-left">
                                 <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
                             </div>
@@ -737,7 +742,7 @@ class GroupHealthPlanFinalSummary extends Component {
                                     {this.state.lead.add_ons && this.state.lead.add_ons.join(', ')}
                                 </div>
                             </div>
-                        </div>
+                        </div>}
 
                         <div className="member-tile">
                             <div className="mt-left">
@@ -796,7 +801,7 @@ class GroupHealthPlanFinalSummary extends Component {
                                     }
                                     <div>
                                         <div>{inrFormatDecimal(this.state.lead.tax_amount)} </div>
-                                        <div style={{ fontSize: 10 }}>(18% GST & other taxes) </div>
+                                        <div style={{ fontSize: 10 }}>(18%) </div>
                                     </div>
                                     <div>
                                         &nbsp;=&nbsp;
