@@ -54,7 +54,7 @@ export default class ReligarePremium extends Component {
         </div>
 
         {/* TODO: move inline styles to stylesheet */}
-        {this.state.selectedAddOns.length &&
+        {this.state.selectedAddOns && this.state.selectedAddOns.length !==0 &&
           <div className="premium-addons" style={{
             margin: '30px 0 25px'
           }}>
