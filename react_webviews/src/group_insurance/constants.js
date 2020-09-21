@@ -654,7 +654,7 @@ export function ghGetMember(lead, providerConfig) {
         obj.key = `son${son_count}`;
         son_count++;
       } else if ((obj.relation || '').toUpperCase() === 'DAUGHTER' && total_daughter > 1) {
-        obj.key = `daughter${daughter_count || ''}`;
+        obj.key = `daughter${daughter_count}`;
         daughter_count++;
       }
     }
