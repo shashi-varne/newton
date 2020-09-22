@@ -5,6 +5,7 @@ import AMCDetail from '../mini-components/AMCDetail';
 import WrTable from '../mini-components/WrTable';
 import DotDotLoader from '../../common/ui/DotDotLoader';
 import { IconButton } from 'material-ui';
+import { inrFormatDecimal, isEmpty } from '../../utils/validators';
 const tableHeadersMap = [{
   label: 'Date',
   accessor: 'date',
@@ -14,6 +15,7 @@ const tableHeadersMap = [{
 }, {
   label: 'Amount',
   accessor: 'amount',
+  formatter: (val) => isEmpty(val) ? '--' : inrFormatDecimal(val, 0),
 }];
 
 export default function AllTransactions(props) {
