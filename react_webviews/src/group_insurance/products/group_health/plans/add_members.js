@@ -273,31 +273,63 @@ class GroupHealthPlanAddMembers extends Component {
     setMinMax = () => {
         let son_disabled = false;
         let daughter_disabled = false
-        if (this.state.son_total === 1 && this.state.daughter_total === 1) {
+        
+        if (this.state.provider === 'HDFCERGO') {
+            if (this.state.son_total === 1 && this.state.daughter_total === 1) {
+                this.setState({
+                    son_ismax: true,
+                    daughter_ismax: true
+                });
+    
+            } else {
+                this.setState({
+                    son_ismax: false,
+                    daughter_ismax: false
+                });
+            }
+    
+            if (this.state.son_total === 2) {
+                daughter_disabled = true
+            }
+    
+            if (this.state.daughter_total === 2) {
+                son_disabled = true
+            }
+    
             this.setState({
-                son_ismax: true,
-                daughter_ismax: true
+                son_disabled: son_disabled,
+                daughter_disabled: daughter_disabled
             });
+        }
 
-        } else {
+        // ---------------------------
+        if (this.state.provider === 'RELIGARE') {
+            if (this.state.son_total === 2 && this.state.daughter_total === 2) {
+                this.setState({
+                    son_ismax: true,
+                    daughter_ismax: true
+                });
+    
+            } else {
+                this.setState({
+                    son_ismax: false,
+                    daughter_ismax: false
+                });
+            }
+    
+            if (this.state.son_total === 4) {
+                daughter_disabled = true
+            }
+    
+            if (this.state.daughter_total === 4) {
+                son_disabled = true
+            }
+    
             this.setState({
-                son_ismax: false,
-                daughter_ismax: false
+                son_disabled: son_disabled,
+                daughter_disabled: daughter_disabled
             });
         }
-
-        if (this.state.son_total === 2) {
-            daughter_disabled = true
-        }
-
-        if (this.state.daughter_total === 2) {
-            son_disabled = true
-        }
-
-        this.setState({
-            son_disabled: son_disabled,
-            daughter_disabled: daughter_disabled
-        });
     }
 
     updateParent = (key, value) => {
