@@ -85,7 +85,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let form_data = lead[backend_key] || {};
 
-    let dobNeeded = lead.eldest_member === backend_key || member_key === 'applicant';
+    let dobNeeded = lead.eldest_member === backend_key || member_key === 'applicant' || this.state.provider==='RELIGARE';
 
     form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
     let age = calculateAge(form_data.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
@@ -195,7 +195,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     this.sendEvents('next');
     let keys_to_check = ['name', 'dob', 'height', 'weight'];
-
+    
     if (this.state.member_key === 'self') {
       keys_to_check.push('gender');
     }
@@ -209,6 +209,13 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     let form_data = this.state.form_data;
+    
+    if(this.state.backend_key==='child_account1_key'||this.state.backend_key==='child_account2_key'){
+    if (calculateAge(this.state.form_data.dob) < 5 || calculateAge(this.state.form_data.dob)>25) {
+      form_data.dob_error='kid age cannot be greater than 25 or less than 5'
+    }
+  }
+
     for (var i = 0; i < keys_to_check.length; i++) {
       let key_check = keys_to_check[i];
       let first_error = key_check === 'gender' || key_check === 'height' ? 'Please select ' :
