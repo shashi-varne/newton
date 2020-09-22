@@ -14,7 +14,6 @@ class CheckboxListClass extends Component {
         super(props);
         this.state = {
             otherInputData: this.props.parent.state.otherInputData || {},
-            index: ''
         };
 
     }
@@ -41,7 +40,6 @@ class CheckboxListClass extends Component {
         }
 
         if (options[index].name !== 'Other' && !options[index].checked) {
-            
             this.setState({
                 openPopUpInputDate: true,
                 header_title: options[index].name,
@@ -50,7 +48,6 @@ class CheckboxListClass extends Component {
                 name: 'startDateModal',
                 id: options[index].id,
                 header_sub_title: options[index].description,
-                index: index
             })
             this.updateParent('dateModalIndex', index);
         }
@@ -198,7 +195,6 @@ class CheckboxListClass extends Component {
     };
 
     render() {
-console.log(this.props.parent.state);
         return (
             <div>
                 {this.props.parent.state.options.map(this.renderList)}
@@ -221,7 +217,7 @@ console.log(this.props.parent.state);
                     name={this.state.name}
                     label={this.state.label}
                     id={this.state.id}
-                    value={this.state.index && this.props.parent.state.options[this.state.index].start_date || ''} />
+                    value={this.props.parent.state[this.state.name] || ''} />
             </div>
         );
     }

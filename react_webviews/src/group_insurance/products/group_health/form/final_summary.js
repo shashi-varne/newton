@@ -138,7 +138,7 @@ class GroupHealthPlanFinalSummary extends Component {
             let member_display = capitalizeFirstLetter(childeNameMapper(member.key));
 
             let obj = {
-                title: `${member_display}'s details ${member_base.length > 1 ? ('(insured ' + (i + 1) + ')') : ''}`,
+                title: `${member_display}'s details ${member_base.length > 1 ? ('(insured ' + (i) + ')') : ''}`,
                 edit_state: `/group-insurance/group-health/${this.state.provider}/edit-personal-details/${member.key}`
             }
 
