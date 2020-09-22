@@ -207,7 +207,7 @@ class CheckboxListClass extends Component {
                     header_title={this.state.header_title}
                     header_sub_title={this.state.header_sub_title}
                     cta_title={this.state.cta_title}
-                    name={this.state.id}
+                    name={this.state.name}
                     label={this.state.label}
                     value={this.props.parent.state.options[this.state.id]} />
             </div>

@@ -773,8 +773,6 @@ export function formatDate(event) {
     }
   }
 }
-// 12/10/1998
-// 12/1998
 
 export function formatMonthandYear(event) {
 
