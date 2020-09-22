@@ -6,7 +6,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { health_providers, genderOptions, childeNameMapper } from '../../../constants';
 import {
   calculateAge, toFeet, capitalizeFirstLetter,
-  formatDate, validatePan, validateAlphabets, dobFormatTest
+  formatDate, validatePan, validateAlphabets, dobFormatTest,isValidDate
 } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
@@ -212,9 +212,13 @@ class GroupHealthPlanPersonalDetails extends Component {
     
     if(this.state.backend_key==='child_account1_key'||this.state.backend_key==='child_account2_key'){
     if (calculateAge(this.state.form_data.dob) < 5 || calculateAge(this.state.form_data.dob)>25) {
-      form_data.dob_error='kid age cannot be greater than 25 or less than 5'
+      form_data.dob_error='kid age cannot be greater than 25 or less than 5';
     }
   }
+
+  if (!isValidDate(this.state.form_data.dob)) {
+    form_data.dob_error='Please enter validate date';
+}
 
     for (var i = 0; i < keys_to_check.length; i++) {
       let key_check = keys_to_check[i];
