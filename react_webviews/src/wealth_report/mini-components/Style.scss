@@ -191,6 +191,7 @@ span.wr-small-col-title {
   display: flex;
   z-index: 99999;
   transition: all 0.2s ease-in;
+  box-sizing: border-box;
 
   .wr-header-tab {
     flex: 1;
@@ -262,6 +263,7 @@ span.wr-small-col-title {
   top: 0 !important;
   border-radius: 3px !important;
   transition: all 0.2s ease-in;
+  box-sizing: border-box;
 }
 
 #wr-email-list {
@@ -778,7 +780,7 @@ span.wr-small-col-title {
 
 
 @media only screen 
-  and (min-device-width: 310px) 
+  and (min-device-width: 300px) 
   and (max-device-width: 812px) {
 
   .wr-dialog-paper {
@@ -874,13 +876,16 @@ span.wr-small-col-title {
   .wr-fisdom-rating {
     width: 36px;
     height: 23px;
+    padding: 4px;
 
     span.rating-num {
       font-size: 14px;
+      line-height: 1.1;
     }
 
     img.rating-star {
       height: 13px;
+      margin-left: 4px;
     }
   }
 
@@ -937,19 +942,11 @@ span.wr-small-col-title {
   }
 
   #wr-header-bar {
-    position: absolute;
     top: 110px;
     left: 0;
     right: 0;
-    margin: auto;
     width: 94%;
     height: 74px;
-    border-radius: 10px;
-    box-shadow: 0 1px 15px 0 rgba(69, 65, 78, 0.05);
-    border: solid 0.5px rgba(151, 151, 151, 0.1);
-    background-color: #ffffff;
-    display: flex;
-    z-index: 9999;
     
     .wr-header-tab {
       flex: 1;

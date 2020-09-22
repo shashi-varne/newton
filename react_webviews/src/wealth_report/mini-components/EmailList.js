@@ -19,7 +19,6 @@ import WrTooltip from "../common/WrTooltip";
 export default function EmailList(props) {
   const [accounts, setAccounts] = useState([]);
   const [emailListModal, toggleEmailListModal] = useState(false);
-  const [openTooltip, toggleToolTip] = useState(false);
   const [addEmailModal, toggleEmailModal] = useState(false);
   const [emailAddedModal, toggleEmailAddedModal] = useState(false);
   const [email, setEmail] = useState("");
@@ -47,7 +46,6 @@ export default function EmailList(props) {
 
   const addNewEmail = () => {
     toggleEmailModal(true);
-    toggleToolTip(false);
     toggleEmailListModal(false);
   };
 
@@ -55,6 +53,13 @@ export default function EmailList(props) {
     toggleEmailModal(false);
     toggleEmailAddedModal(false);
     toggleEmailListModal(false);
+  };
+
+  const onKeyDown = (event) => {
+    var code = event.keyCode || event.which;
+    if (code === 13) {
+      addMail();
+    }
   };
 
   const addMail = async () => {
@@ -90,6 +95,7 @@ export default function EmailList(props) {
     
     if (clickInsideTooltip) return;
     toggleFunction(false);
+    handleClose();
   };
 
   const resyncEmail = async(account) => {
@@ -188,21 +194,22 @@ export default function EmailList(props) {
       {/* visibility will be modified based on the condition in media queries */}
       <div className="wr-new-email">
         <img src={require(`assets/fisdom/ic-mob-emails.svg`)} alt="" />
-        <div style={{ marginLeft: "12px" }}>Add new email</div>
+        <div style={{ marginLeft: "12px" }}>Add New Email</div>
       </div>
 
       <div className="wr-mail-content">
-        Enter your email ID to get insights of your investments.
+        Enter your email ID to track your investments
       </div>
 
       <FormControl className="wr-form">
         <TextField
+          autoFocus={true}
           variant="outlined"
           placeholder="Enter new email..."
           InputProps={{
             disableUnderline: true,
-            // className: "wr-input-addmail",
           }}
+          onKeyDown={onKeyDown}
           classes={{ root: "wr-input-addmail" }}
           onChange={(e) => handleInput(e)}
         />
@@ -235,7 +242,7 @@ export default function EmailList(props) {
   const renderEmailAdded = (
     <div className="wr-email-added">
       <img src={require(`assets/fisdom/ic-mob-success.svg`)} alt="success" />
-      <div className="wr-content">Sync successfully initiated for {email}. Forward the CAMS email to <b>cas@fisdom.com</b></div>
+      <div className="wr-content">Sync successfully initiated for {email}. Please forward the CAMS email to <b>cas@fisdom.com</b></div>
       <Button className="wr-email-continue-btn" onClick={handleClose} fullWidth={true}>
         Okay
       </Button>
@@ -247,10 +254,6 @@ export default function EmailList(props) {
       src={require(`assets/fisdom/ic-emails.svg`)}
       alt=""
       id="wr-account-img"
-      onClick={() => {
-        toggleToolTip(!openTooltip);
-        toggleEmailListModal(!emailListModal);
-      }}
     />
   );
 

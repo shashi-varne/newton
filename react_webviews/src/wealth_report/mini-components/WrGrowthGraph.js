@@ -55,7 +55,7 @@ const WrGrowthGraph = (props) => {
         axisLeft={{
           orient: 'left',
           tickValues: 6,
-          format: value => numDifferentiationInr(value), //converts 40000 to 40K
+          format: value => numDifferentiationInr(value, 2, true), //converts 40000 to 40K
           tickPadding: 10,
           tickSize: 0,
         }}

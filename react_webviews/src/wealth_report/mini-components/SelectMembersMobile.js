@@ -52,7 +52,7 @@ class SelectMembers extends Component {
           {this.props.pans.map((member, index) => (
             <div className="wr-members" key={index} onClick={() => this.props.selectPan(member.pan)}>
               <div className="wr-container">
-                <div className="wr-head">{member.pan === "NA" ? "Unidentified PAN" : member.pan}</div>
+                <div className="wr-head">{member.pan === "NA" ? "Unspecified PAN" : member.pan}</div>
                 <div className="wr-level">{member.name || "--"}</div>
               </div>
               <PrimaryRadio

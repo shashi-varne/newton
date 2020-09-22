@@ -10,9 +10,21 @@
 }
 
 .wr-footer {
+  margin-top: 100px;
+
   img {
     margin-right: 8px;
     vertical-align: middle;
+  }
+
+  .wr-footer-secure {
+    text-align: center;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.4);
+    
+    img {
+      width: 24px;
+    }
   }
 
   .wr-register {
@@ -24,7 +36,7 @@
     background-color: rgba(149, 149, 149, 0.08);
     height: 77px;
     align-items: center;
-    margin-top: 100px;
+    margin-top: 18px;
   }
 
   .wr-logo {
@@ -101,7 +113,7 @@
   }
 }
 
-@media only screen and (min-device-width: 375px) and (max-device-width: 812px) {
+@media only screen and (min-device-width: 300px) and (max-device-width: 812px) {
   .wr-otp-input {
     width: 48px !important;
     height: 48px !important;
@@ -151,9 +163,19 @@
   }
 
   .wr-footer {
+    margin-top: 60px;
+
     img {
       margin-right: 6px !important;
       vertical-align: middle;
+    }
+
+    .wr-footer-secure {
+      font-size: 12px;
+
+      img {
+        width: 20px;
+      }
     }
   
     .wr-register {
@@ -168,7 +190,7 @@
       font-size: 8px !important;
       font-weight: normal;
       padding: 0 28px;
-      margin-top: 72px;
+      margin-top: 18px;
     }
   
     .wr-title-mob {

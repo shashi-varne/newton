@@ -127,8 +127,8 @@ export default function Analysis(props) {
             {
               `${tab === 'debt' ? 'Debt & Cash' : tab}
               ${
-                Math.round(analysisData.percent_split[tab] || 0) ? 
-                ` · ${Math.round(analysisData.percent_split[tab] || 0)}%` : ''
+                analysisData.percent_split[tab] ? 
+                ` · ${Number(analysisData.percent_split[tab]).toFixed(1)}%` : ''
               }`
             }
           </WrButton>

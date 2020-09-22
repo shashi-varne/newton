@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import WrButton from '../common/Button';
 import { IconButton } from 'material-ui';
-import { numDifferentiationInr, formattedDate, inrFormatDecimal2 } from '../../utils/validators';
+import { numDifferentiationInr, formattedDate, inrFormatDecimal, isEmpty } from '../../utils/validators';
 import AMCDetail from './AMCDetail';
 import { CircularProgress } from 'material-ui';
 import { navigate } from '../common/commonFunctions';
@@ -21,7 +21,7 @@ const tableHeadersMap = [{
 }, {
   label: 'Amount',
   accessor: 'amount',
-  formatter: (val) => inrFormatDecimal2(val),
+  formatter: (val) => isEmpty(val) ? '--' : inrFormatDecimal(val, 0),
 }];
 
 export default function HoldingCard(props) {
@@ -54,6 +54,11 @@ export default function HoldingCard(props) {
       setLoading(false);
     })();
   }, [tabSelected]);
+
+  const formatNumVal = (val) => {
+    if (isEmpty(val)) return '--';
+    return numDifferentiationInr(val);
+  };
   
   const renderFundDetails = () => (
     <div id="wr-hce-fund-details">
@@ -139,15 +144,15 @@ export default function HoldingCard(props) {
         {AMCDetail(holding)}
         <div className="wr-hc-user-data">
           <div className="wr-small-col">
-            <span className="wr-small-col-val">{numDifferentiationInr(holding.total_amount_invested)}</span>
+            <span className="wr-small-col-val">{formatNumVal(holding.total_amount_invested)}</span>
             <span className="wr-small-col-title">Invested Amount</span>
           </div>
           <div className="wr-small-col">
-            <span className="wr-small-col-val">{numDifferentiationInr(holding.current_value)}</span>
+            <span className="wr-small-col-val">{formatNumVal(holding.current_value)}</span>
             <span className="wr-small-col-title">Current Value</span>
           </div>
           <div className="wr-small-col">
-            <span className="wr-small-col-val">{holding.xirr ? parseInt(holding.xirr || 0, 10) : 'N/A'}%</span>
+            <span className="wr-small-col-val">{holding.xirr ? parseInt(holding.xirr || 0, 10) : '--'}%</span>
             <span className="wr-small-col-title">IRR</span>
           </div>
           <div>

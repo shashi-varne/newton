@@ -11,9 +11,9 @@ class PANSelector extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedPan: '',
+            selectedPan: {},
             pans: [],
-        }
+        };
         this.renderPANs = this.renderPANs.bind(this);
         this.navigate = navigate.bind(this);
         this.setLoader = setLoader.bind(this);
@@ -37,8 +37,8 @@ class PANSelector extends Component {
         try {
             this.setLoader(true);
             let pans = await fetchAllPANs();
-            const selectedPan = storageService().get('user_pan');
-            let selectedIndex = pans.indexOf(selectedPan);
+            const selectedPan = storageService().getObject('user_pan') || {};
+            let selectedIndex = pans.find(pan => pan.pan === selectedPan.pan);
             this.setState({
                 pans,
                 selectedIndex,
@@ -55,10 +55,9 @@ class PANSelector extends Component {
     choosePAN = (index) => {
         const old_pan = this.state.selectedPan;
         const new_pan = this.state.pans[index];
-        if (old_pan === new_pan) return;
+        if (old_pan.pan === new_pan.pan) return;
         this.sendEvents('back', { account_changed: true });
-        storageService().set('user_pan', new_pan);
-        storageService().set('user_pan_rank', index + 1);
+        storageService().setObject('user_pan', new_pan);
         storageService().remove('hni-portfolio');
         this.setState({
             selectedIndex: index,
@@ -86,17 +85,17 @@ class PANSelector extends Component {
                         fontSize: '19px',
                     }}
                 >
-                    {pan[0]}
+                    {pan.name ? pan.name[0] || '-' : '-'}
                 </div>
                 <div className="select-bank" style={{ padding: '3px 0 0 0px', margin: 0, flex: 1 }}>
                     <div >
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <div>
                                 <div className="bank-name" style={{ fontSize: '15px' }}>
-                                    PAN {index + 1}
+                                    {pan.name || '--'}
                                 </div>
                                 <div className="account-number" style={{ textTransform: 'uppercase', lineHeight: '25px' }}>
-                                    {pan}
+                                    {pan.pan === 'NA' ? 'Unspecified PAN' : pan.pan}
                                 </div>
                             </div>
                             <div>

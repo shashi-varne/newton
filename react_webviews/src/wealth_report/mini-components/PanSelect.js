@@ -32,7 +32,6 @@ export default function PanSelect(props) {
           if (data.length === 1) setTooltipMsg("No more PANs to show");
           if (!cachedPan || isEmpty(cachedPan)) {
             selectPan(data[0].pan, true);
-            storageService().setObject('wr-current-pan', data[0].pan);
           } else {
             selectPan(cachedPan, true);
           }
@@ -47,8 +46,12 @@ export default function PanSelect(props) {
 
   const selectPan = (pan, firstTime) => {
     toggleDropdown(false);
-    setPan(pan === 'empty' ? '' : pan);
-    storageService().setObject('wr-current-pan', pan);
+    if (pan === 'empty') {
+      setPan('');
+    } else {
+      setPan(pan);
+      storageService().setObject('wr-current-pan', pan);
+    }
     props.onPanSelect(pan); // send selected pan to parent element
     if (!firstTime) {
       navigate(props.parentProps, 'main/overview');
@@ -82,7 +85,7 @@ export default function PanSelect(props) {
               {
                 loadingPans ? 
                   <DotDotLoader className="wr-dot-loader" /> :
-                  <div className="wr-pan">{selectedPan === "NA" ? "Unidentified PAN" : (selectedPan || 'No PANs linked')}</div>
+                  <div className="wr-pan">{selectedPan === "NA" ? "Unspecified PAN" : (selectedPan || 'No PANs linked')}</div>
               }
             </div>
             {selectedPan && panList.length > 1   &&
@@ -120,7 +123,7 @@ export default function PanSelect(props) {
                       />
                       <div className="wr-pan-detail">
                         <div className="wr-pan-title">{pan.name || "--"}</div>
-                        <div className="wr-pan">{pan.pan === "NA" ? "Unidentified PAN" : pan.pan}</div>
+                        <div className="wr-pan">{pan.pan === "NA" ? "Unspecified PAN" : pan.pan}</div>
                       </div>
                     </div>
                   </div>

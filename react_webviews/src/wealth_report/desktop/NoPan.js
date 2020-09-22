@@ -43,31 +43,31 @@ export default function NoPan(props) {
     if (isLoading) {
       return <CircularProgress size={20} />;
     } else if (syncClicked) {
-      return <span onClick={addEmail} style={{ cursor: 'pointer' }}>Sync</span>;
+      return <span onClick={addEmail} style={{ cursor: 'pointer' }}>Continue</span>;
     } else {
-      return <span style={{ cursor: 'pointer' }}>Sync Email</span>;
+      return <span style={{ cursor: 'pointer' }}>Generate Statement</span>;
     }
   };
 
   // Added key to div below to prevent React from caching it and causing animations to not replay
   const renderRequestSent = (
     <div id="wr-no-pan-screen" key={emailAdded}>
-      <div className="wr-no-pan-content-head animated animatedFadeInUp fadeInUp">Email Sync Request Successful.</div>
+      <div className="wr-no-pan-content-head animated animatedFadeInUp fadeInUp">Email Sync Request Successful!</div>
       <div className="wr-no-pan-content animated animatedFadeInUp fadeInUp">
-        Within the next 24 hours, you will receive a statement email on
-        <b> {emailAdded}</b> from CAMS. Please <b>forward the email</b> to us at
-        <b> cas@fisdom.com</b>
+        You will receive a statement email on
+        <b> {emailAdded}</b> from CAMS within 24 hours. Please
+        <b> forward the email</b> to us at <b> cas@fisdom.com</b>.
       </div>
       <div className="wr-no-pan-content animated animatedFadeInUp fadeInUp">
-        Once forwarded, wait 5 to 10 minutes for us to set up your portfolio and refresh the page to get started.
+        Once forwarded, wait 5-10 minutes for us to set up your portfolio and then refresh the page to get started.
       </div>
     </div>
   );
 
   const renderNoPans = (
-    <div id="wr-no-pan-screen" >
+    <div id="wr-no-pan-screen">
       <div className="wr-no-pan-content-head animated animatedFadeInUp fadeInUp">
-        NO ACTIVE PANS FOUND.
+        Setup your Mutual Fund Report
       </div>
       <div
         className="animated animatedFadeInUp fadeInUp"
@@ -77,7 +77,7 @@ export default function NoPan(props) {
           alignItems: 'center',
         }}>
         <div className="wr-no-pan-content">
-          Syncing an Investment Email is a good first step!
+          Enter your primary investment email ID
         </div>
         <div
           style={{ textAlign: 'left' }}>

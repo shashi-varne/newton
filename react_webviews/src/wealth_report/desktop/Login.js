@@ -10,6 +10,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { navigate } from "../common/commonFunctions";
 import LoadingScreen from "../mini-components/LoadingScreen";
 import { Button, FormControl, TextField, IconButton } from "material-ui";
+import { nativeCallback } from 'utils/native_callback';
 import { validateEmail, storageService } from "../../utils/validators";
 const isMobileView = getConfig().isMobileDevice;
 
@@ -26,10 +27,36 @@ const Login = (props) => {
   const [email, setEmail] = useState("");
   const [emailErr, setEmailErr] = useState("");
   const [password, setPwd] = useState("");
+  const [pwdErr, setPwdErr] = useState("");
+  const [commonLoginErr, setCommonLoginErr] = useState("");
   const [resendDisabled, disableResend] = useState(false);
   // const serverUrl = 'https://wreport-dot-plutus-staging.appspot.com';
   const serverUrl = 'https://my.fisdom.com';
   const socialRedirectUrl = 'https://wreport-dot-plutus-web-views.appspot.com/w-report/overview';
+
+  const sendEvents = (user_action, props) => {
+    let eventObj = {
+      "event_name": 'portfolio web report',
+      "properties": {
+        "user_action": user_action,
+        ...props,
+      }
+    };
+    console.log('Event:', eventObj);
+    nativeCallback({ events: eventObj });
+  };
+
+  useEffect(() => {
+    const storage_val = storageService().get('wr-link-click-time');
+    const link_click_time = storage_val ? new Date(storage_val) : null;
+    const current_time = new Date();
+
+    // If link is clicked again within 30 mins, will not log/trigger the event
+    if (!link_click_time || (current_time - link_click_time)/60000 > 30) {
+      storageService().set('wr-link-click-time', current_time);
+      sendEvents('link clicked', { screen_name: 'link clicked' });
+    }
+  }, []);
 
   useEffect(() => {
     if (params.view) {
@@ -39,6 +66,8 @@ const Login = (props) => {
     } else {
       setView('phone');
     }
+    setEmailErr('');
+    setPwdErr('');
   }, [params.view]);
 
   const handleOtp = (val) => {
@@ -62,7 +91,11 @@ const Login = (props) => {
       toast('OTP resent successfully');
     } catch(err) {
       console.log(err);
-      toast(err);
+      if (err.toLowerCase().includes('correct otp')) {
+        toast('Incorrect OTP! Please check and try again');
+      } else {
+        toast(err);
+      }
     }
   };
 
@@ -89,8 +122,10 @@ const Login = (props) => {
       setEmailErr('');
       setEmail(e.target.value);
     } else if (type === 'password') {
+      setPwdErr('');
       setPwd(e.target.value);
     }
+    setCommonLoginErr('');
   };
 
   const triggerOtp = async() => {
@@ -99,6 +134,11 @@ const Login = (props) => {
       await login({ mobileNo: number, countryCode });
       navigate(props, 'login/otp');
     } catch(err) {
+      sendEvents('login', {
+        screen_name: 'login',
+        status: 'fail',
+        error_message: err,
+      });
       console.log(err);
       toast(err);
     }
@@ -108,16 +148,26 @@ const Login = (props) => {
   const verify = async() => {
     try {
       setOpLoading(true);
-      await verifyOtp({ mobileNo: number, countryCode, otp });
+      const res = await verifyOtp({ mobileNo: number, countryCode, otp });
       storageService().set('wr-username', number);
+      sendEvents('login', {
+        screen_name: 'login',
+        status: 'success',
+        user_id: res.user.user_id,
+      });
       navigate(props, 'main/overview');
     } catch(err) {
       if (err.includes('wrong OTP')) {
-        setOtpErr('Incorrect OTP');
+        setOtpErr('Incorrect OTP! Please check and try again');
       } else {
         console.log(err);
         toast(err);
       }
+      sendEvents('login', {
+        screen_name: 'login',
+        status: 'fail',
+        error_message: err,
+      });
     }
     setOpLoading(false);
   };
@@ -136,14 +186,32 @@ const Login = (props) => {
     try {
       if (!validateEmail(email)) {
         return setEmailErr("Please enter a valid email");
+      } else if (!password) {
+        return setPwdErr('Please enter password');
       }
       setOpLoading(true);
-      await emailLogin({ email, password });
+      const res = await emailLogin({ email, password });
+      sendEvents('login', {
+        screen_name: 'login',
+        status: 'success',
+        user_id: res.user.user_id,
+      });
       storageService().set('wr-username', email);
       navigate(props, 'main/overview');
     } catch (err) {
       console.log(err);
-      toast(err);
+      if (err.includes('registered')) {
+        setEmailErr("This email is not registered!");
+      } else if (err.includes('password')) {
+        setCommonLoginErr("Incorrect email or password!");
+      } else {
+        toast(err);
+      }
+      sendEvents('login', {
+        screen_name: 'login',
+        status: 'fail',
+        error_message: err,
+      });
     }
     setOpLoading(false);
   };
@@ -188,7 +256,7 @@ const Login = (props) => {
       <img src={require("assets/fisdom/ic-fisdom-logo.jpg")} id="wr-logo" alt="" />
       <div id="wr-title">Login with Phone Number</div>
       <div className="subtitle">
-        Please enter your 10 digit registered mobile number to access your wealth report
+        Please enter mobile number to view your Portfolio Report
       </div>
       <div id="wr-input-label">Enter phone number</div>
       <WrPhoneInput 
@@ -259,7 +327,7 @@ const Login = (props) => {
       <img src={require("assets/fisdom/ic-mobile-verification.svg")} id="wr-logo" alt="" />
       <div id="wr-title">One Time Password (OTP)</div>
       <div className="subtitle">
-        Enter the OTP which has been sent to the mobile number you entered
+        We’ve sent an OTP to your mobile number <br/>+91 {number}
       </div>
       <div>
         <WrOtpInput
@@ -289,7 +357,7 @@ const Login = (props) => {
       <img src={require("assets/fisdom/ic-fisdom-logo.jpg")} id="wr-logo" alt="" />
       <div id="wr-title">Forgot Password</div>
       <div className="subtitle">
-        We will send a link to reset the password on your registered email address
+        We will send a link to reset password on your registered email address
       </div>
       <div style={{ marginBottom: '28px' }}>
         <FormControl className="wr-form">
@@ -322,7 +390,7 @@ const Login = (props) => {
       <img src={require("assets/fisdom/ic-fisdom-logo.jpg")} id="wr-logo" alt="" />
       <div id="wr-title">Login with Email</div>
       <div className="subtitle">
-        Enter the email address and password to access your wealth report
+        Enter email address and password to view your Portfolio Report
       </div>
       <div style={{ marginBottom: '28px' }}>
         <FormControl className="wr-form">
@@ -331,36 +399,40 @@ const Login = (props) => {
             placeholder="Enter email"
             InputProps={{
               disableUnderline: true,
-              // className: "wr-input-addmail",
             }}
             type="email"
             classes={{ root: "wr-input-addmail" }}
             onChange={(e) => handleInput(e, 'email')}
           />
         </FormControl>
-        {!!emailErr && <div style={{
-            marginTop: "7px",
-            color: "red",
-            letterSpacing: "0.5px"
-          }}>
+        {!!emailErr && <div className="wr-field-err">
             {emailErr}
           </div>
         }
       </div>
-      <FormControl className="wr-form" style={{ marginBottom: '38px' }}>
-        <TextField
-          variant="outlined"
-          placeholder="Enter password"
-          autoComplete="new-password"
-          InputProps={{
-            disableUnderline: true,
-            // className: "wr-input-addmail",
-          }}
-          type="password"
-          classes={{ root: "wr-input-addmail" }}
-          onChange={(e) => handleInput(e, 'password')}
-        />
-      </FormControl>
+      <div style={{ marginBottom: '38px' }}>
+        <FormControl className="wr-form">
+          <TextField
+            variant="outlined"
+            placeholder="Enter password"
+            autoComplete="new-password"
+            InputProps={{
+              disableUnderline: true,
+            }}
+            type="password"
+            classes={{ root: "wr-input-addmail" }}
+            onChange={(e) => handleInput(e, 'password')}
+          />
+        </FormControl>
+        {!!pwdErr && <div className="wr-field-err">
+          {pwdErr}
+        </div>}
+      </div>
+      {!!commonLoginErr &&
+        <div className="wr-field-err" style={{ marginBottom: '40px' }}>
+          {commonLoginErr}
+        </div>
+      }
       <div
         className="wr-forgot-pwd"
         onClick={() => navigate(props, 'login/forgot-password')}>
@@ -376,11 +448,10 @@ const Login = (props) => {
           src={require('assets/fisdom/fisdom_logo.png')}
           alt="fisdom"
         />
-        <div id="wr-title">Wealth Report</div>
+        <div id="wr-title">Portfolio Report</div>
         <div id="wr-subtitle">
-          Now investing money made more easy and safe. 
-          We at fisdom monitor your money closely at all times to ensure it 
-          is always making the most for you.
+          See a consolidated view of all your Mutual Fund investments along 
+          with a preliminary analysis of your portfolio fundamentals
         </div>
       </div>
       <div className="wr-continue-btn">

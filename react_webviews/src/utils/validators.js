@@ -281,19 +281,21 @@ export function inrFormatDecimalWithoutIcon(number) {
   }
 }
 
-export function numDifferentiation(val, withSymbol) {
+export function numDifferentiation(val, withSymbol, decimalPlaces = 2, retainLeadingZeroes = false) {
   if (!val) {
     val = '';
   }
 
-  if (val >= 10000000) val = (val / 10000000).toFixed(2) + 'Cr';
-  else if (val >= 100000) val = (val / 100000).toFixed(2) + 'L';
-  else if (val >= 1000) val = (val / 1000).toFixed(2) + 'K';
+  if (val >= 10000000) val = (val / 10000000).toFixed(decimalPlaces) + 'Cr';
+  else if (val >= 100000) val = (val / 100000).toFixed(decimalPlaces) + 'L';
+  else if (val >= 1000) val = (val / 1000).toFixed(decimalPlaces) + 'K';
   else if (val) return inrFormatDecimal(val);
 
   val = val.toString();
   // remove .00
-  val = val.replace(/\.00([^\d])/g, '$1');
+  if (!retainLeadingZeroes) {
+    val = val.replace(/\.00([^\d])/g, '$1');
+  }
 
   if(withSymbol) {
     val = '₹' + val;
@@ -301,8 +303,8 @@ export function numDifferentiation(val, withSymbol) {
   return val;
 }
 
-export function numDifferentiationInr(val) {
-  return numDifferentiation(val, true);
+export function numDifferentiationInr(val, decimalPlaces, retainLeadingZeroes) {
+  return numDifferentiation(val, true, decimalPlaces, retainLeadingZeroes);
 }
 
 export function IsFutureDate(idate) {

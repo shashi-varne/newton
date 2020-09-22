@@ -34,6 +34,7 @@ const theme = createMuiTheme({
 export default function Overview(props) {
   const [selectedRange, setSelectedRange] = useState('5 years');
   const [isLoading, setLoading] = useState(true); //when loading anything else
+  const [xirrLoading, setXirrLoading] = useState({});
 
   const [overviewData, setOverviewData] = useState({
     insights: [],
@@ -59,6 +60,7 @@ export default function Overview(props) {
         let graph_xirr;
         if (isEmpty(overview) || isEmpty(portfolio_xirr) || haveDepsChanged) {
           setLoading(true);
+          setXirrLoading(true);
           ({ portfolio_xirr, xirr: graph_xirr } = await fetchXIRR({
             pan: props.pan,
             date_range: selectedRange,
@@ -82,7 +84,6 @@ export default function Overview(props) {
 
   const [portfolioXirr, setPortfolioXirr] = useState('');
   const [graphXirr, setGraphXirr] = useState('');
-  const [xirrLoading, setXirrLoading] = useState({});
   const [growthGraphData, setGrowthGraphData] = useState({});
   const [graphLoading, setGraphLoad] = useState(true); // when loading graph
   const [graphErr, setGraphErr] = useState(false); // for graph error handling
@@ -95,6 +96,7 @@ export default function Overview(props) {
         const hasRangeChanged = prevSelectedRange !== selectedRange;
         if (isEmpty(data)|| hasPanChanged || hasRangeChanged) {
           setGraphLoad(true);
+          setXirrLoading(true);
           setGraphErr(false);
           const { current_amount_data, invested_amount_data, date_ticks } = await fetchPortfolioGrowth({
             pan: props.pan,
@@ -117,7 +119,8 @@ export default function Overview(props) {
           ...data.formattedData,
           date_ticks: filterDateTicks(data.date_ticks),
         });
-        setXirrLoading(true);
+        setGraphLoad(false);
+        
         let graph_xirr = InternalStorage.getData('graphXirr');
         if (!isEmpty(graph_xirr) || hasRangeChanged) {
           ({ xirr: graph_xirr } = await fetchXIRR({
@@ -137,14 +140,18 @@ export default function Overview(props) {
     })();
   }, [props.pan, selectedRange]);
 
-  // TODO: Optimize this function
   const filterDateTicks = (ticks = []) => {
     if (!isMobileView) return ticks;
     else {
-      const dividingFactor = parseInt(ticks.length/4, 10);
-      const tickIndices = [0, dividingFactor+1, dividingFactor*3, ticks.length - 1];
+      const dividingFactor = ticks.length/3;
+      const tickIndices = [0, Math.round(dividingFactor), Math.round(dividingFactor*2), ticks.length - 1];
       return tickIndices.map(tickIdx => ticks[tickIdx]);
     }
+  };
+
+  const formatNumVal = (val) => {
+    if (isEmpty(val)) return '--';
+    return numDifferentiationInr(val);
   };
 
   const xirrTooltipContent = (
@@ -162,7 +169,7 @@ export default function Overview(props) {
   return (
     <React.Fragment>
       {props.pan === 'NA' && 
-        <div className="wr-unidentified-pan">
+        <div className="wr-unspecified-pan">
           <span style={{ marginRight: "6px", verticalAlign: "middle" }}>
             <img
               src={require(`assets/fisdom/ic-info.svg`)}
@@ -172,7 +179,7 @@ export default function Overview(props) {
             />
           </span>
           <span style={{ verticalAlign: "middle" }}>
-            <b>Unidentified PAN:</b> Covers investments for which PAN is not mentioned in all your CAS statements combined.
+          <b>Unspecified PAN:</b> Covers investments across all your CAS(s) for which PAN is not mentioned in the statement.
           </span>
         </div>
       }
@@ -187,14 +194,14 @@ export default function Overview(props) {
             <div id="wr-overview-key-numbers">  
               <div className="wr-okn-box">
                 <div className="wr-okn-title">Current Value</div>
-                <div className="wr-okn-value">{numDifferentiationInr(overviewData.current_value)}</div>
+                  <div className="wr-okn-value">{formatNumVal(overviewData.current_value)}</div>
                   <div className="wr-okn-nav">
                     NAV as on {formattedDate(overviewData.latest_nav_date, 'd m, y')}
                   </div>
               </div>
               <div className="wr-okn-box">
                 <div className="wr-okn-title">Total Invested</div>
-                <div className="wr-okn-value">{numDifferentiationInr(overviewData.total_invested)}</div>
+                <div className="wr-okn-value">{formatNumVal(overviewData.total_invested)}</div>
               </div>
               <div className="wr-okn-box">
                 <div className="wr-okn-title">
@@ -207,7 +214,7 @@ export default function Overview(props) {
               </div>
               <div className="wr-okn-box">
                 <div className="wr-okn-title">Total Realised Gains</div>
-                <div className="wr-okn-value">{numDifferentiationInr(overviewData.realised_gains)}</div>
+                <div className="wr-okn-value">{formatNumVal(overviewData.realised_gains)}</div>
               </div>
               <div className="wr-okn-box">
                 <div className="wr-okn-title">
@@ -215,13 +222,13 @@ export default function Overview(props) {
                     Asset Allocation
                   </span>
                   &nbsp;&nbsp;
-                  {assetAllocNums((overviewData.asset_allocation || {}).debt)}
+                  {assetAllocNums(overviewData.asset_allocation)}
                 </div>
               <div className="wr-okn-value">
                 <MuiThemeProvider theme={theme}>
                   <LinearProgress
                     variant="determinate"
-                    value={parseInt((overviewData.asset_allocation || {}).debt, 10)}
+                    value={Number(overviewData.asset_allocation.equity)}
                   />
                 </MuiThemeProvider>
                 <div className="wr-metrics">
@@ -332,11 +339,11 @@ export default function Overview(props) {
   );
 }
 
-const assetAllocNums = (val = 0) => {
-  val = parseInt(val, 10);
+const assetAllocNums = (obj = {}) => {
+  const { equity, debt } = obj;
   return (
     <span id="wr-okn-asset-alloc-title">
-      <span id="left">Equity ({val})</span> : <span id="right">Debt ({100-val})</span>
+      <span id="left">Equity ({Number(equity).toFixed(1)})</span> : <span id="right">Debt ({Number(debt).toFixed(1)})</span>
     </span>
   );
 };

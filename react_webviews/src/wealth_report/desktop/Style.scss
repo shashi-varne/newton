@@ -44,8 +44,8 @@
     background-color: white;
     padding: 16px;
     border-radius: 3px;
-    width: 130px;
-    min-width: 130px;
+    width: 190px;
+    min-width: 180px;
     cursor: pointer;
     min-height: 55px;
     box-sizing: border-box;
@@ -87,7 +87,8 @@
   }
 
   #wr-login-img {
-    height: 100%;
+    flex-basis: 52%;
+    object-fit: cover;
   }
 
   #wr-login-right-panel {
@@ -113,7 +114,7 @@
       max-width: 420px;
       opacity: 0.5;
       font-size: 20px;
-      line-height: 1.3;
+      line-height: 1.5;
       letter-spacing: 0.4px;
       margin-bottom: 40px;
     }
@@ -157,6 +158,13 @@
   box-sizing: border-box;
 }
 
+.wr-field-err {
+  font-size: 14px;
+  margin-top: 7px;
+  color: red;
+  letter-spacing: 0.5px;
+}
+
 .wr-login-btn {
   max-width: 420px;
   min-height: 56px !important;
@@ -164,6 +172,7 @@
 
   .MuiButton-label {
     font-size: 17px !important;
+    font-weight: 500 !important;
     letter-spacing: 0.4px !important;
     text-transform: none !important;
   }
@@ -316,7 +325,7 @@
   bottom: 0;
 }
 
-.wr-unidentified-pan {
+.wr-unspecified-pan {
   @extend .wr-card-template;
   margin: -25px 0 25px !important;
   font-size: 13px;
@@ -863,6 +872,10 @@
 
 @include animatedDelay(10, 0.6);
 
+#wr-no-pan-screen {
+  @include animatedDelay(4, 1);
+}
+
 #wr-portfolio-insights-container, #wr-taxation-detail, #wr-holdings {
   $delayFactor: 1;
   @for $i from 1 through 30 {
@@ -873,7 +886,7 @@
   }
 }
 
-@media only screen and (min-device-width: 310px) and (max-device-width: 812px) {
+@media only screen and (min-device-width: 300px) and (max-device-width: 812px) {
   #wr-no-pan-screen {
     font-size: 18px;
     
@@ -949,7 +962,8 @@
   }
 
   #wr-continue {
-    padding-top: 100%;
+    position: absolute;
+    bottom: 20vh;
 
     #wr-title {
       font-size: 35px;
@@ -965,7 +979,7 @@
       font-weight: 400;
       color: #ffffff;
       opacity: 0.7;
-      line-height: 20px;
+      line-height: 1.4;
       margin-bottom: 111px;
     }
   }
@@ -994,7 +1008,7 @@
       max-width: 98%;
       opacity: 0.8;
       font-size: 16px;
-      line-height: 1.25;
+      line-height: 1.5;
       letter-spacing: normal;
       font-weight: 600;
       color: #000000;
@@ -1102,7 +1116,7 @@
     width: 93%;
   }
 
-  .wr-unidentified-pan {
+  .wr-unspecified-pan {
     margin: -15px 0 25px !important;
   }
 

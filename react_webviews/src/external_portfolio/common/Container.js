@@ -251,7 +251,7 @@ class Container extends Component {
     return (
       <div className={`ContainerWrapper ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`}  >
         {/* Header Block */}
-        {(!this.props.noHeader && !getConfig().hide_header) &&<Header
+        {(!this.props.noHeader && !getConfig().hide_header) && <Header
           disableBack={this.props.disableBack}
           title={this.props.title}
           smallTitle={this.props.smallTitle}
