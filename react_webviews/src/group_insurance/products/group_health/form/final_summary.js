@@ -73,11 +73,14 @@ class GroupHealthPlanFinalSummary extends Component {
         let { lead, provider } = this.state;
         let member_base = lead.member_base;
         
-
         let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
 
         let applicant = member_base.splice(applicantIndex, 1)
         member_base.unshift(applicant[0]);
+
+        this.setState({
+            applicantIndex: applicantIndex
+        })
 
         let pan_needed = false;
         if (lead.total_amount > 100000) {
@@ -138,7 +141,7 @@ class GroupHealthPlanFinalSummary extends Component {
             let member_display = capitalizeFirstLetter(childeNameMapper(member.key));
 
             let obj = {
-                title: `${member_display}'s details ${member_base.length > 1 ? ('(insured ' + (i) + ')') : ''}`,
+                title: `${member_display}'s details ${member_base.length > 1 ? ('(insured ' + (applicantIndex === -1 ? i + 1 : i) + ')') : ''}`,
                 edit_state: `/group-insurance/group-health/${this.state.provider}/edit-personal-details/${member.key}`
             }
 
@@ -554,7 +557,7 @@ class GroupHealthPlanFinalSummary extends Component {
                     </div>
                     <div className="mt-right">
                         <div className="mtr-top">
-                            {index}st Insured name
+                            {this.state.applicantIndex === -1 ? index + 1 : index}st Insured name
                         </div>
                         <div className="mtr-bottom">
                             {props.name} ({props.relation.toLowerCase()})
