@@ -14,6 +14,7 @@ class CheckboxListClass extends Component {
         super(props);
         this.state = {
             otherInputData: this.props.parent.state.otherInputData || {},
+            index: ''
         };
 
     }
@@ -40,6 +41,7 @@ class CheckboxListClass extends Component {
         }
 
         if (options[index].name !== 'Other' && !options[index].checked) {
+            
             this.setState({
                 openPopUpInputDate: true,
                 header_title: options[index].name,
@@ -47,7 +49,8 @@ class CheckboxListClass extends Component {
                 label: 'Since When',
                 name: 'startDateModal',
                 id: options[index].id,
-                header_sub_title: options[index].description
+                header_sub_title: options[index].description,
+                index: index
             })
             this.updateParent('dateModalIndex', index);
         }
@@ -98,7 +101,7 @@ class CheckboxListClass extends Component {
                             class="data"
                             id="input_popup"
                             name="input_popup"
-                            value={this.state[this.state.otherInputData.name] || this.props.parent.state[this.state.otherInputData.name] || ''}
+                            value={this.state[this.state.otherInputData.name] || ''}
                         />
                     </div>}
 
@@ -128,6 +131,12 @@ class CheckboxListClass extends Component {
                         </div>
 
                         <div className="InputField"
+                            onClick={() => {
+                                this.setState({
+                                    openPopUpInput: true
+                                })
+                                this.updateParent('dateModalIndex', index);
+                            }}
                             style={{ margin: '10px 0px 0px 33px' }}>
                             <Input
                                 error={(this.state.data_error) ? true : false}
@@ -152,7 +161,7 @@ class CheckboxListClass extends Component {
                                 dateModalIndex: index,
                                 header_title: props.name,
                                 header_sub_title: props.description,
-                                cta_title: 'Ok'
+                                cta_title: 'OK'
                             })
 
                         }}
@@ -189,6 +198,7 @@ class CheckboxListClass extends Component {
     };
 
     render() {
+console.log(this.props.parent.state);
         return (
             <div>
                 {this.props.parent.state.options.map(this.renderList)}
@@ -200,6 +210,7 @@ class CheckboxListClass extends Component {
                     name={this.state.otherInputData.name}
                     label={this.state.otherInputData.label}
                     value={this.state[this.state.otherInputData.name] || this.props.parent.state[this.state.otherInputData.name]}
+                    provider={this.props.provider}
                     handleChange={this.handleChangeInputPopup()}
                 />
                 <MmYyInModal
@@ -209,7 +220,8 @@ class CheckboxListClass extends Component {
                     cta_title={this.state.cta_title}
                     name={this.state.name}
                     label={this.state.label}
-                    value={this.props.parent.state.options[this.state.id]} />
+                    id={this.state.id}
+                    value={this.state.index && this.props.parent.state.options[this.state.index].start_date || ''} />
             </div>
         );
     }

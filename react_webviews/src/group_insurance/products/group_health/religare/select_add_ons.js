@@ -133,9 +133,9 @@ class GroupHealthPlanAddOns extends Component {
         let selectedIndex = add_ons_data[index].selectedIndexOption
 
         if (add_ons_data[index].checked) {
-            cta_premium += selectedIndex ? selectedIndex.premium : add_ons_data[index].default_premium;
+            cta_premium += selectedIndex ? add_ons_data[index].options[selectedIndex].premium : add_ons_data[index].default_premium;
         } else if (!add_ons_data[index].checked) {
-            cta_premium -= selectedIndex ? selectedIndex.premium : add_ons_data[index].default_premium;
+            cta_premium -= selectedIndex ? add_ons_data[index].options[selectedIndex].premium : add_ons_data[index].default_premium;
         }
 
         bottomButtonData.leftSubtitle = formatAmountInr(cta_premium);

@@ -8,9 +8,6 @@ import Dialog, {
     DialogTitle
 } from 'material-ui/Dialog';
 import Input from './Input';
-import { isValidMonthYear } from "utils/validators";
-import { formatMonthandYear, dobFormatTest } from "utils/validators";
-
 
 class InputPopupClass extends Component {
     constructor(props) {
@@ -23,7 +20,6 @@ class InputPopupClass extends Component {
 
     handleClose = () => {
         this.props.parent.updateParent('openPopUpInput', false);
-        this.props.parent.updateParent('openPopUpInputDate', false); //to check/ncheck logic
     }
 
     handleCloseAction = () => {
@@ -32,79 +28,29 @@ class InputPopupClass extends Component {
 
     handleChange = name => event => {
 
-        
         if (!name) {
             name = event.target.name;
-        }  
-        var value = event.target ? event.target.value : event;
-
-        if(this.props.sinceWhenInput && name === 'startDateModal') {
-    
-            if (!dobFormatTest(value)) {
-                return
-            }
-    
-            let input = document.getElementById('date_input');
-            input.onkeyup = formatMonthandYear;
-    
-            this.setState({
-                [name]: value,
-                [name + '_error']: ''
-            })
-        } else {
-            
-            this.setState({
-                value: value,
-                [name + '_error']: ''
-            })
         }
 
         
-       
+        var value = event.target ? event.target.value : event;
+        this.setState({
+            value: value,
+            [name + '_error']: ''
+        })
 
     };
 
     handleClick = () => {
-
-        if(this.props.sinceWhenInput) {
-            let error = '';
-            let date = this.state.startDateModal;
-
-            let canProceed = true;
-
-            if (!isValidMonthYear(date)) {
-                canProceed =false;
-                error = "please enter valid month or year";
-                this.setState({
-                    startDateModal_error: error
-                })
-            }
-            
-            if(!this.state.value) {
-                canProceed =false;
-                this.setState({
-                   pedOther_error: "This can't be empty"
-                });
-        
-            } 
-            
-            if(canProceed) {
-                this.props.parent.updateParent('startDateModal', this.state['startDateModal'])
-                this.props.parent.updateParent(this.props.name, this.state.value);
-                this.handleClose();
-            }
+        if(!this.state.value) {
+            this.setState({
+               pedOther_error: "This can't be empty"
+            });
+    
         } else {
-            if(!this.state.value) {
-                this.setState({
-                   pedOther_error: "This can't be empty"
-                });
-        
-            } else {
-                this.props.parent.updateParent(this.props.name, this.state.value);
-                this.handleClose();
-            }
+            this.props.parent.updateParent(this.props.name, this.state.value);
+            this.handleClose();
         }
-       
     }
 
     renderPopUp() {
@@ -138,27 +84,23 @@ class InputPopupClass extends Component {
                                         class="data"
                                         id={this.props.name}
                                         name={this.props.name}
-                                        value={this.state.value || this.props.value}
+                                        value={this.state.value || this.props.value || ''}
                                         onChange={this.handleChange()} />
                                 </div>
-                                {this.props.sinceWhenInput &&
-                                 <div className="InputField">
-                                 <Input
-                                     type="text"
-                                     id="date_input"
-                                     label="Since When"
-                                     name={'startDateModal'}
-                                     className="date"
-                                     placeholder="MM/YYYY"
-                                     maxLength='7'
-                                     value={this.state[this.props.name] || ''}
-                                     error={this.state[this.props.name+'_error'] ? true : false}
-                                     helperText={this.state[this.props.name+'_error']}
-                                     onChange={this.handleChange()}
-                                 />
-                                 </div>
-
-                                }
+                                {this.props.provider === 'RELIGARE' && <div className="InputField">
+                                    <Input
+                                        type="text"
+                                        id="date_input"
+                                        label="Since When"
+                                        name={this.props.name}
+                                        className="date"
+                                        placeholder="MM/YYYY"
+                                        maxLength='7'
+                                        // value={this.state[name] || ''}
+                                        // error={this.state[name+'_error'] ? true : false}
+                                        // helperText={this.state[name+'_error']}
+                                        onChange={this.handleChange()} />
+                                </div>}
                             </FormControl>
                         </div>
                     </DialogContent>

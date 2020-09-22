@@ -66,7 +66,6 @@ class MmYyInModal extends Component {
                 [name + '_error']: error
             })
         } else {
-            console.log(this.props.name, this.state[this.props.name])
             this.props.parent.updateParent(this.props.name, this.state[this.props.name])
             this.handleClose();
         }
@@ -117,7 +116,7 @@ class MmYyInModal extends Component {
                                     className="date"
                                     placeholder="MM/YYYY"
                                     maxLength='7'
-                                    value={this.state[name] || ''}
+                                    value={this.state[name] || this.props.value || ''}
                                     error={this.state[name+'_error'] ? true : false}
                                     helperText={this.state[name+'_error']}
                                     onChange={this.handleChange()}
