@@ -310,6 +310,12 @@ class GroupHealthPlanAddMembers extends Component {
                     daughter_ismax: true
                 });
     
+            } else if (this.state.son_total + this.state.daughter_total === 4) {
+                this.setState({
+                    son_ismax: true,
+                    daughter_ismax: true
+                });
+    
             } else {
                 this.setState({
                     son_ismax: false,
