@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 import { formatAmountInr } from "utils/validators";
@@ -82,9 +81,15 @@ class GroupHealthPlanAddOns extends Component {
         let body = this.state.groupHealthPlanData.post_body;
 
         let add_ons_data = this.state.groupHealthPlanData.add_ons_data || [];
+
+        // eslint-disable-next-line radix
+        let cta_premium = parseInt(this.state.bottomButtonData.leftSubtitle.substring(1).replace(',', ''));
+
         this.setState({
-            add_ons_data: add_ons_data
-        }, () => console.log('hi'))
+            // add_ons_data: add_ons_data,
+            cta_premium: cta_premium
+        });
+        
         if (add_ons_data.length === 0) {
             try {
 
@@ -109,38 +114,46 @@ class GroupHealthPlanAddOns extends Component {
                 toast('Something went wrong');
             }
 
-            this.setState({
-                add_ons_data: add_ons_data
-            }, () => console.log('hi'))
-
         } else {
             this.setState({
                 show_loader: false
             })
         }
+
+        this.setState({
+            add_ons_data: add_ons_data
+        }, () => {
+            this.updateCtaPremium()
+        })
         
         this.setAmountOptions(add_ons_data);
     }
 
+    updateCtaPremium = () => {
+        let { add_ons_data, cta_premium } = this.state;
+
+        let total_premium = 0;
+
+        add_ons_data.forEach((item, index) => {
+            if (item.checked) {
+                total_premium += item.selected_premium || item.default_premium;
+            }
+        });
+
+        let updated_premium = cta_premium + total_premium;
+
+        this.updateBottomPremium(updated_premium);
+    }
+
     handleChangeCheckboxes = index => event => {
-
-        let {add_ons_data, bottomButtonData} = this.state;
+        let { add_ons_data } = this.state;
         add_ons_data[index].checked = !add_ons_data[index].checked;
-
-        // eslint-disable-next-line radix
-        let cta_premium = parseInt(bottomButtonData.leftSubtitle.substring(1).replace(',', ''));
-
-        let selectedIndex = add_ons_data[index].selectedIndexOption
-
-        bottomButtonData.leftSubtitle = formatAmountInr(cta_premium);
 
         this.setState({
             add_ons_data: add_ons_data,
-            // bottomButtonData: bottomButtonData
         }, () => {
-            // this.updateBottomPremium()
+            this.updateCtaPremium()
         })
-        
     }
 
     handleChange = index => event => {
@@ -161,6 +174,8 @@ class GroupHealthPlanAddOns extends Component {
 
         this.setState({
             add_ons_data: add_ons_data
+        }, () => {
+            this.updateCtaPremium()
         })
     }
 
