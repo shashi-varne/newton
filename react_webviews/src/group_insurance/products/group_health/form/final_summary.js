@@ -266,30 +266,31 @@ class GroupHealthPlanFinalSummary extends Component {
 
         accordianData.push(contact_data);
 
-        let address_data_backned = lead.permanent_address;
+        let address_data_backend = lead.permanent_address;
+
         let address_data = {
             'title': 'Address details',
             edit_state: `/group-insurance/group-health/${this.state.provider}/edit-address`,
             data: [
                 {
                     'title': 'Address line 1',
-                    'subtitle': address_data_backned.addressline
+                    'subtitle': address_data_backend.addressline
                 },
                 {
                     'title': 'Address line 2',
-                    'subtitle': address_data_backned.addressline2
+                    'subtitle': address_data_backend.addressline2
                 },
                 {
                     'title': 'Pincode',
-                    'subtitle': address_data_backned.pincode
+                    'subtitle': address_data_backend.pincode
                 },
                 {
                     'title': 'City',
-                    'subtitle': lead.city
+                    'subtitle': address_data_backend.city
                 },
                 {
                     'title': 'State',
-                    'subtitle': address_data_backned.state
+                    'subtitle': address_data_backend.state
                 }
             ]
         }
