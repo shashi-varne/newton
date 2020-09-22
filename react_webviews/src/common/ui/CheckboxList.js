@@ -19,6 +19,8 @@ class CheckboxListClass extends Component {
     }
 
     updateParent = (key, value) => {
+        console.log(key);
+        console.log(value)
         this.setState({
             [key]: value
         })
@@ -47,8 +49,7 @@ class CheckboxListClass extends Component {
                 label: 'Since When',
                 name: 'startDateModal',
                 id: options[index].id,
-                dateModalIndex: index,
-                header_sub_title: options[index].description,
+                header_sub_title: options[index].description
             })
             this.updateParent('dateModalIndex', index);
         }
@@ -99,7 +100,7 @@ class CheckboxListClass extends Component {
                             class="data"
                             id="input_popup"
                             name="input_popup"
-                            value={this.state[this.state.otherInputData.name] || ''}
+                            value={this.state[this.state.otherInputData.name] || this.props.parent.state[this.state.otherInputData.name] || ''}
                         />
                     </div>}
 
@@ -129,12 +130,6 @@ class CheckboxListClass extends Component {
                         </div>
 
                         <div className="InputField"
-                            onClick={() => {
-                                this.setState({
-                                    openPopUpInput: true
-                                })
-                                this.updateParent('dateModalIndex', index);
-                            }}
                             style={{ margin: '10px 0px 0px 33px' }}>
                             <Input
                                 error={(this.state.data_error) ? true : false}
@@ -196,6 +191,7 @@ class CheckboxListClass extends Component {
     };
 
     render() {
+
         return (
             <div>
                 {this.props.parent.state.options.map(this.renderList)}
@@ -207,7 +203,6 @@ class CheckboxListClass extends Component {
                     name={this.state.otherInputData.name}
                     label={this.state.otherInputData.label}
                     value={this.state[this.state.otherInputData.name] || this.props.parent.state[this.state.otherInputData.name]}
-                    provider={this.props.provider}
                     handleChange={this.handleChangeInputPopup()}
                 />
                 <MmYyInModal
@@ -218,7 +213,7 @@ class CheckboxListClass extends Component {
                     name={this.state.name}
                     label={this.state.label}
                     id={this.state.id}
-                    value={this.props.parent.state.options[this.state.dateModalIndex].start_date || ''} />
+                    value={this.state[this.state.name] || this.props.parent.state[this.state.name]} />
             </div>
         );
     }

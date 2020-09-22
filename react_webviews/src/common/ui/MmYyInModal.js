@@ -50,7 +50,7 @@ class MmYyInModal extends Component {
             value: value,
             name: name,
             [this.props.id]: value,
-            [this.props.id + '_error']: ''
+            [name + '_error']: ''
         })
     }
 
@@ -58,12 +58,12 @@ class MmYyInModal extends Component {
 
         let error = '';
         let date = this.state.value;
-        let id = this.props.id;
+        let name = this.props.name;
 
         if (!isValidMonthYear(date)) {
             error = "please enter valid month or year";
             this.setState({
-                [id + '_error']: error
+                [name + '_error']: error
             })
         } else {
             this.props.parent.updateParent(this.props.name, this.state[this.props.id])
@@ -72,6 +72,7 @@ class MmYyInModal extends Component {
     }
 
     renderPopUp() {
+        let name = this.props.name;
 
         if (this.props.parent.state.openPopUpInputDate) {
             return (
@@ -115,9 +116,9 @@ class MmYyInModal extends Component {
                                     className="date"
                                     placeholder="MM/YYYY"
                                     maxLength='7'
-                                    value={this.state[this.props.id] || this.props.value || ''}
-                                    error={this.state[this.props.id+'_error'] ? true : false}
-                                    helperText={this.state[this.props.id+'_error']}
+                                    value={this.state[this.props.id] || ''}
+                                    error={this.state[name+'_error'] ? true : false}
+                                    helperText={this.state[name+'_error']}
                                     onChange={this.handleChange()}
                                 />
                                 </div>
