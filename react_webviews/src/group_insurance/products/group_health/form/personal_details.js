@@ -85,8 +85,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let form_data = lead[backend_key] || {};
 
-    let dobNeeded = lead.eldest_member === backend_key || member_key === 'applicant';
-
+    let dobNeeded = lead.eldest_member === backend_key || member_key === 'applicant' ;
     form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
     let age = calculateAge(form_data.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
 

@@ -47,6 +47,7 @@ class CheckboxListClass extends Component {
                 label: 'Since When',
                 name: 'startDateModal',
                 id: options[index].id,
+                dateModalIndex: index,
                 header_sub_title: options[index].description,
             })
             this.updateParent('dateModalIndex', index);
@@ -217,7 +218,7 @@ class CheckboxListClass extends Component {
                     name={this.state.name}
                     label={this.state.label}
                     id={this.state.id}
-                    value={this.props.parent.state[this.state.name] || ''} />
+                    value={this.props.parent.state.options[this.state.dateModalIndex].start_date || ''} />
             </div>
         );
     }
