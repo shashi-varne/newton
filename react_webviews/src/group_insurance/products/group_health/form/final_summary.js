@@ -72,7 +72,7 @@ class GroupHealthPlanFinalSummary extends Component {
     onload = () => {
         let { lead, provider } = this.state;
         let member_base = lead.member_base;
-        
+        console.log(member_base)
         let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
 
         let applicant = member_base.splice(applicantIndex, 1)
@@ -202,6 +202,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
                 // for peds
                 if (member.ped_exists) {
+                    
                     let p_list = '';
 
                     for (var p in member.ped_diseases) {

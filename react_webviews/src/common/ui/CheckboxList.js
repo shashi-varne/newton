@@ -154,9 +154,11 @@ class CheckboxListClass extends Component {
                                 dateModalIndex: index,
                                 header_title: props.name,
                                 header_sub_title: props.description,
-                                cta_title: 'OK'
+                                cta_title: 'OK',
+                                id: props.id,
+                                name: 'startDateModal',
                             })
-
+                            this.updateParent('dateModalIndex', index);
                         }}
                         style={{ margin: '10px 0px 0px 33px' }}>
                         <Input
