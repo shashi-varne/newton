@@ -6,7 +6,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { health_providers, genderOptions, childeNameMapper } from '../../../constants';
 import {
   calculateAge, toFeet, capitalizeFirstLetter,
-  formatDate, validatePan, validateAlphabets, dobFormatTest,isValidDate
+  formatDate, validatePan, validateAlphabets, dobFormatTest, isValidDate
 } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
@@ -49,7 +49,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     // let member_key = this.props.match.params.member_key;
     let member_key = this.props.member_key;
 
-   
+
     let pan_needed = false;
     if (lead.total_amount > 100000 && (member_key === 'self' || member_key === 'applicant')) {
       pan_needed = true;
@@ -133,7 +133,7 @@ class GroupHealthPlanPersonalDetails extends Component {
       height: height,
       pan_needed: pan_needed,
       spouse_relation: spouse_relation,
-      dobNeeded:dobNeeded
+      dobNeeded: dobNeeded
     }, () => {
       ReactTooltip.rebuild()
     })
@@ -196,7 +196,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     this.sendEvents('next');
     let keys_to_check = ['name', 'dob', 'height', 'weight'];
-    
+
     if (this.state.member_key === 'self') {
       keys_to_check.push('gender');
     }
@@ -210,16 +210,18 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     let form_data = this.state.form_data;
-    
-    if(this.state.backend_key==='child_account1_key'||this.state.backend_key==='child_account2_key'){
-    if (calculateAge(this.state.form_data.dob) < 5 || calculateAge(this.state.form_data.dob)>25) {
-      form_data.dob_error='kid age cannot be greater than 25 or less than 5';
-    }
-  }
 
-  if (!isValidDate(this.state.form_data.dob)) {
-    form_data.dob_error='Please enter validate date';
-}
+    if (this.state.provider === 'RELIGARE') {
+      if (this.state.backend_key === 'child_account1_key' || this.state.backend_key === 'child_account2_key' || this.state.backend_key === 'child_account3_key' || this.state.backend_key === 'child_account4_key') {
+        if (calculateAge(this.state.form_data.dob) < 5 || calculateAge(this.state.form_data.dob) > 25) {
+          form_data.dob_error = 'kid age cannot be greater than 25 or less than 5';
+        }
+      }
+    }
+
+    if (!isValidDate(this.state.form_data.dob)) {
+      form_data.dob_error = 'Please enter validate date';
+    }
 
     for (var i = 0; i < keys_to_check.length; i++) {
       let key_check = keys_to_check[i];
@@ -253,16 +255,16 @@ class GroupHealthPlanPersonalDetails extends Component {
       let age = calculateAge((this.state.form_data.dob || '').replace(/\\-/g, '/').split('-').join('/'));
 
       let { provider } = this.state;
-      
+
       if (provider === 'RELIGARE' && age < 19) {
         form_data.dob_error = 'Minimum age is 18 applicant';
-        
+
       } else {
 
         if (this.state.form_data.gender === 'MALE' && age < 22) {
           form_data.dob_error = 'Minimum age is 21 male applicant';
         }
-  
+
         if (this.state.form_data.gender === 'FEMALE' && age < 19) {
           form_data.dob_error = 'Minimum age is 18 female applicant';
         }
