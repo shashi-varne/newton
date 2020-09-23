@@ -53,7 +53,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let spouse_relation = lead.spouse_account_key ? lead.spouse_account_key.relation : '';
 
-    let member_base = lead.member_base;
+    let member_base = lead.member_base || [];
     // let member_key = this.props.match.params.member_key;
     let member_key = this.props.member_key;
 
@@ -74,7 +74,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let next_state = `/group-insurance/group-health/${this.state.provider}/contact`;
     let backend_key = '';
-    for (var i = 0; i < member_base.length; i++) {
+    for (var i = 0; member_base && i < member_base.length; i++) {
       let key = member_base[i].key;
 
       if (member_key === key) {
