@@ -263,7 +263,7 @@ class GroupHealthLanding extends Component {
               </div>
 
               <div className="rc-bottom flex-between">
-                <div className="rcb-content">Sum assured: {numDifferentiationInr(this.state.quoteResume.sum_assured)}</div>
+                <div className="rcb-content">Sum insured: {numDifferentiationInr(this.state.quoteResume.sum_assured)}</div>
                 <div className="rcb-content">Cover period: {this.state.quoteResume.tenure} year</div>
               </div>
             </div>}

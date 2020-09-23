@@ -124,7 +124,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
-                title="Select sum assured"
+                title="Select sum insured"
                 buttonTitle="CONTINUE"
                 withProvider={true}
                 buttonData={this.state.bottomButtonData}

@@ -294,7 +294,7 @@ class GroupHealthPlanDetails extends Component {
 
                     <div className="sum-assured-info" style={{ fontWeight: 600 }}>
                         <div className="sai-left">
-                            Sum assured
+                            Sum insured
                         </div>
                         <div className="sai-left">
                             Premium
