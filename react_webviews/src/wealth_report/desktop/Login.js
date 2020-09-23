@@ -68,11 +68,13 @@ const Login = (props) => {
     }
     setEmailErr('');
     setPwdErr('');
+    setOtpErr('');
   }, [params.view]);
 
   const handleOtp = (val) => {
     setOtpErr('');
     setOtp(val);
+    if (val.length === 4) verify(val);
   };
 
   const onKeyDown = (event) => {
@@ -88,7 +90,8 @@ const Login = (props) => {
       disableResend(true);
       await resendOtp();
       setTimeout(() => disableResend(false), 30000);
-      toast('OTP resent successfully');
+      setOtp('');
+      toast('OTP resent!');
     } catch(err) {
       console.log(err);
       if (err.toLowerCase().includes('correct otp')) {
@@ -145,10 +148,10 @@ const Login = (props) => {
     setOpLoading(false);
   };
 
-  const verify = async() => {
+  const verify = async(otpVal) => {
     try {
       setOpLoading(true);
-      const res = await verifyOtp({ mobileNo: number, countryCode, otp });
+      const res = await verifyOtp({ mobileNo: number, countryCode, otp: otpVal });
       storageService().set('wr-username', number);
       sendEvents('login', {
         screen_name: 'login',
@@ -243,7 +246,7 @@ const Login = (props) => {
         triggerOtp();
       }
     } else if (view === 'otp') {
-      verify();
+      verify(otp);
     } else if (view === 'email') {
       loginWithEmail();
     } else if (view === 'forgot-password') {
@@ -473,34 +476,39 @@ const Login = (props) => {
     <Fragment>
       {!isMobileView && view !== 'loading' &&
         <div id="wr-login">
-          <img
-            src={require("assets/ic-login-abstract.svg")}
-            alt="banner"
-            id="wr-login-img"
-          />
-          <div id="wr-login-right-panel">
+          <div style={{ flexBasis: '48%' }}>
             <img
-              src={require('assets/fisdom/fisdom_logo_coloured.png')}
-              style={{ cursor: 'pointer' }}
-              alt="fisdom" width={130}
-              onClick={() => navigate(props, 'login')}
+              src={require("assets/ic-login-abstract.svg")}
+              alt="banner"
+              id="wr-login-img"
             />
-            <h2>Welcome to Fisdom!</h2>
-            {view === 'phone' && renderNumberView}
-            {view === 'otp' && renderOTPView}
-            {view === 'email' && renderEmailView}
-            {view === 'forgot-password' && renderForgotPassword}
-            {view !== 'phone' && 
-              <WrButton
-                fullWidth={true}
-                classes={{ root: "wr-login-btn" }}
-                onClick={clickContinue}>
-                {opLoading ?
-                  <CircularProgress size={20} thickness={4} color="white" /> :
-                  'Continue'
-                }
-              </WrButton>
-            }
+          </div>
+          <div style={{ flex: 1 }}>
+            <div id="wr-login-right-panel">
+              <img
+                src={require('assets/fisdom/fisdom_logo_coloured.png')}
+                style={{ cursor: 'pointer' }}
+                alt="fisdom" width={130}
+                onClick={() => navigate(props, 'login')}
+              />
+              <h2>Welcome to Fisdom!</h2>
+              {view === 'phone' && renderNumberView}
+              {view === 'otp' && renderOTPView}
+              {view === 'email' && renderEmailView}
+              {view === 'forgot-password' && renderForgotPassword}
+              {view !== 'phone' &&
+                <WrButton
+                  fullWidth={true}
+                  classes={{ root: "wr-login-btn" }}
+                  disabled={opLoading}
+                  onClick={clickContinue}>
+                  {opLoading ?
+                    <CircularProgress size={20} thickness={4} color="white" /> :
+                    'Continue'
+                  }
+                </WrButton>
+              }
+            </div>
           </div>
         </div>
       }

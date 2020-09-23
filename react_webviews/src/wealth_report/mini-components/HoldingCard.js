@@ -77,11 +77,11 @@ export default function HoldingCard(props) {
       <div id="wr-hce-space"></div> {/*This div is required to create space for mobile view*/}
       <div>
         <span className="wr-small-col-val">{`${Number(fund_summary.three_year_return).toFixed(1)}%`}</span>
-        <span className="wr-small-col-title">3 Year Return</span>
+        <span className="wr-small-col-title">3 Years Return</span>
       </div>
       <div>
         <span className="wr-small-col-val">{`${Number(fund_summary.five_year_return).toFixed(1)}%`}</span>
-        <span className="wr-small-col-title">5 Year Return</span>
+        <span className="wr-small-col-title">5 Years Return</span>
       </div>
     </div>
   );

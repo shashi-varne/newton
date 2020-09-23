@@ -87,13 +87,15 @@
   }
 
   #wr-login-img {
-    flex-basis: 52%;
     object-fit: cover;
+    width: 100%;
+    height: 100%;
   }
 
   #wr-login-right-panel {
     padding: 160px 120px;
     max-width: 420px;
+    width: 420px;
 
     h2 {
       font-size: 36px;

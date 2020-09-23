@@ -35,7 +35,7 @@ const WrGrowthGraph = (props) => {
     <div style={{ width, height }}>
       <ResponsiveLine
         data={data}
-        margin={{ top: 20, right: 20, bottom: 50, left: 50 }}
+        margin={{ top: 20, right: 30, bottom: 50, left: 50 }}
         xScale={{
           type: 'point',
         }}
@@ -47,7 +47,7 @@ const WrGrowthGraph = (props) => {
           reverse: false
         }}
         axisBottom={{
-          format: value => formattedDate(value, 'd m', true),
+          format: value => formattedDate(value, params.dateFormat, true),
           tickValues: params.date_ticks || [],
           tickPadding: 20,
           tickSize: 0,
@@ -55,7 +55,7 @@ const WrGrowthGraph = (props) => {
         axisLeft={{
           orient: 'left',
           tickValues: 6,
-          format: value => numDifferentiationInr(value, 2, true), //converts 40000 to 40K
+          format: value => value === 0 ? 0 : numDifferentiationInr(value, 2, value > 100000), //converts 40000 to 40K
           tickPadding: 10,
           tickSize: 0,
         }}

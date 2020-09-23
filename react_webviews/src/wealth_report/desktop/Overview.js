@@ -13,6 +13,14 @@ import WrTooltip from '../common/WrTooltip';
 import ErrorScreen from '../mini-components/ErrorScreen';
 import InternalStorage from '../InternalStorage';
 const isMobileView = getConfig().isMobileDevice;
+const dateFormatMap = {
+  '1 month': "d m yy'",
+  '3 months': "m yy'",
+  '6 months': "m yy'",
+  '1 year': "m yy'",
+  '3 years': "m yy'",
+  '5 years': "m yy'",
+};
 
 const theme = createMuiTheme({
   overrides: {
@@ -313,6 +321,7 @@ export default function Overview(props) {
                           date_ticks: growthGraphData.date_ticks,
                           min: growthGraphData.min,
                           max: growthGraphData.max,
+                          dateFormat: dateFormatMap[selectedRange],
                         }}
                       ></WrGrowthGraph>
                     </Fragment>

@@ -16,10 +16,13 @@ import { heightThreshold } from "../constants";
 import NoPan from "./NoPan";
 import { getConfig } from "utils/functions";
 import InternalStorage from "../InternalStorage";
+import { fetchEmails } from "../common/ApiCalls";
+import { toast } from "react-toastify";
 const isMobileView = getConfig().isMobileDevice;
 
 const MainPage = (props) => {
   const [headerAnimation, setHeaderAnimation] = useState('');
+  const [isLoading, setLoading] = useState(true);
   function getHeightFromTop() {
     var el = document.getElementById('wr-body');
     if (el && !isEmpty(el)) {
@@ -54,8 +57,34 @@ const MainPage = (props) => {
     InternalStorage.clearStore();
     clearLSFields(); // Clear out any LS fields here that might be dependant on PAN
     setPan(newPan);
+    if (!newPan || newPan === 'empty') {
+      setNoPanContent();
+    } else {
+      setLoading(false);
+    }
   };
 
+  const setNoPanContent = async() => {
+    setLoading(true);
+    try {
+      const emails = await fetchEmails();
+      if (!isEmpty(emails)) {
+        const oneEmailRegistered = emails.some(email => !isEmpty(email.latest_success_statement));
+        
+        if (!oneEmailRegistered) {
+          const sortedByModified = emails.sort((email1, email2) =>
+            (new Date(email1.latest_statement.dt_updated) - new Date(email2.latest_statement.dt_updated))/60000
+          );
+          const registeredEmail = sortedByModified.pop();
+          storageService().set('wr-email-added', registeredEmail.email);
+        }
+      }
+    } catch(err) {
+      console.log(err);
+      toast(err);
+    }
+    setLoading(false);
+  };
 
   const { params } = props.match;
   const [pan, setPan] = useState('');
@@ -119,15 +148,15 @@ const MainPage = (props) => {
 
       <Header onPanSelect={panChanged} animation={headerAnimation} parentProps={props}/>
 
-      {!pan ? 
+      {isLoading ? 
         (<LoadingScreen text="Preparing your report, please wait..." />) :
         (
           <div id="wr-body">
-          {pan === 'empty' ? 
-            <NoPan /> :
-            renderTab(params.tab)
-          }
-        </div>
+            {!pan || pan === 'empty' ? 
+              <NoPan /> :
+              renderTab(params.tab)
+            }
+          </div>
         )
       }
 

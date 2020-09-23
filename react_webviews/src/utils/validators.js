@@ -634,7 +634,7 @@ export function formatDateAmPm(date) {
 
 export function formattedDate(date, pattern = '', usePlainDate = false) {
   pattern = pattern.toLowerCase();
-  const validPatterns = ['d m, t', 'd m y', 'd m', 'm y', 'd m, y'];
+  const validPatterns = ['d m, t', 'd m y', 'd m', 'm y', 'd m, y', "d m yy'", "m yy'"];
 
   if (!date) return '';
   else if (!validPatterns.includes(pattern)) return date;
@@ -646,6 +646,8 @@ export function formattedDate(date, pattern = '', usePlainDate = false) {
     'd m': `${dateVal} ${month}`,
     'm y': `${month} ${year}`,
     'd m, y': `${dateVal} ${month}, ${year}`,
+    "d m yy'": `${dateVal} ${month} ${year.toString().slice(-2)}'`,
+    "m yy'": `${month} ${year.toString().slice(-2)}'`,
     // Enter custom patterns here
   };
   return patternMap[pattern];

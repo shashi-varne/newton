@@ -86,6 +86,7 @@ export default function EmailList(props) {
   };
 
   const handleTooltipClose = (event = {}, toggleFunction) => {
+    if (addEmailModal || emailAddedModal) return;
     var path = event.path || (event.composedPath && event.composedPath());
     if (!event || !path) return;
     // If click event is triggered from within tooltip, skip it
@@ -254,6 +255,7 @@ export default function EmailList(props) {
       src={require(`assets/fisdom/ic-emails.svg`)}
       alt=""
       id="wr-account-img"
+      onClick={() => toggleEmailListModal(true)}
     />
   );
 
@@ -275,6 +277,7 @@ export default function EmailList(props) {
         <Dialog
           open={addEmailModal}
           onClose={handleClose}
+          disableBackdropClick={true}
           classes={{ paper: "wr-dialog-paper" }}
         >
           {renderAddEmail}

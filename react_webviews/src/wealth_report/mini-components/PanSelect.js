@@ -59,6 +59,7 @@ export default function PanSelect(props) {
   };
 
   const handleClick = () => {
+    if (panList.length <= 1) return;
     toggleDropdown(!dropdown_open);
     toggleModal(!panModal);
   };
