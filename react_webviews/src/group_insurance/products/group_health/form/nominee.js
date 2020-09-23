@@ -35,12 +35,6 @@ class GroupHealthPlanNomineeDetails extends Component {
 
     onload = () => {
 
-
-        if(this.state.provider === 'STAR') {
-            this.setState({
-                renderApointee: true
-            })
-        }
         this.setState({
             next_state: this.state.next_screen
         })
@@ -59,11 +53,12 @@ class GroupHealthPlanNomineeDetails extends Component {
 
         let lead = this.state.lead || {};
         let form_data = lead.nominee_account_key || {};
+        form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
 
         this.setState({
             form_data: form_data,
             lead: lead,
-        })
+        });
 
 
         this.setState({
@@ -148,16 +143,18 @@ class GroupHealthPlanNomineeDetails extends Component {
             'apointeerelation': 'apointee relation',
             'apointeedob': 'apointee dob'
         };
+        
+        const keys_to_check = ['name', 'relation', 'dob'];
+        const apointeeKeys = ['apointeename', 'apointeerelation', 'apointeedob'];
+        let form_data = this.state.form_data;
 
-        let keys_to_check = ['name', 'relation', 'dob'];
+        apointeeKeys.map(apKey => form_data[apKey + '_error'] = '');
 
-        if(this.state.renderApointee) {
-            keys_to_check.concat(['apointeename', 'apointeerelation', 'apointeedob']);
+        if (this.state.renderApointee) {
+            keys_to_check.concat(apointeeKeys);
         }
 
-        let form_data = this.state.form_data;
         for (let key_check of keys_to_check) {
-            console.log(key_check);
             let first_error = 'Please enter ';
             if (!form_data[key_check]) {
                 form_data[key_check + '_error'] = first_error + keysMapper[key_check];
@@ -320,7 +317,7 @@ class GroupHealthPlanNomineeDetails extends Component {
     }
 
     render() {
-        let provider = this.state.providerConfig.provider_api;
+        const { showAppointee = false, showDob = false } = this.state.providerConfig.nominee_screen;
 
         return (
             <Container
@@ -361,7 +358,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                             name="relation"
                             onChange={this.handleChange('relation')} />
                     </div>
-                    {provider === 'STAR' && <div className="InputField">
+                    {showDob && <div className="InputField">
                         <Input
                             type="text"
                             width="40"
@@ -379,7 +376,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                     </div>}
                 </FormControl>
 
-                {provider === 'STAR' && this.state.renderApointee && this.renderApointee()}
+                {showAppointee && this.state.renderApointee && this.renderApointee()}
 
 
                 <ConfirmDialog parent={this} />
