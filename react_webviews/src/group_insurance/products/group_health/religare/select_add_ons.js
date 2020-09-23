@@ -263,22 +263,27 @@ class GroupHealthPlanAddOns extends Component {
 
 
         let add_ons_body = [];
+        let  add_ons_json = {};
+        // eslint-disable-next-line
         this.state.add_ons_data.map((item) => {
 
+            
             if(item.checked) {
 
                 if (item.options.length !== 0) {
                     add_ons_body.push(item.options[item.selectedIndexOption].key);
+                    add_ons_json[item.options[item.selectedIndexOption].key] = item.selected_premium || item.default_premium;
                 } else {
+                    add_ons_json[item.key] = item.selected_premium || item.default_premium;
                     add_ons_body.push(item.key);
                 }
             }
 
-            return add_ons_body;
         })
 
 
         groupHealthPlanData.post_body.add_ons = add_ons_body;
+        groupHealthPlanData.post_body.add_ons_json = add_ons_json;
         groupHealthPlanData.add_ons_data = this.state.add_ons_data;
         this.setLocalProviderData(groupHealthPlanData);
 
