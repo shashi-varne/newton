@@ -19,8 +19,6 @@ class CheckboxListClass extends Component {
     }
 
     updateParent = (key, value) => {
-        console.log(key);
-        console.log(value)
         this.setState({
             [key]: value
         })
@@ -42,6 +40,7 @@ class CheckboxListClass extends Component {
         }
 
         if (options[index].name !== 'Other' && !options[index].checked) {
+            console.log(options[index])
             this.setState({
                 openPopUpInputDate: true,
                 header_title: options[index].name,
@@ -49,7 +48,8 @@ class CheckboxListClass extends Component {
                 label: 'Since When',
                 name: 'startDateModal',
                 id: options[index].id,
-                header_sub_title: options[index].description
+                header_sub_title: options[index].description,
+                // value: options[index].start_date || ''
             })
             this.updateParent('dateModalIndex', index);
         }
@@ -157,6 +157,7 @@ class CheckboxListClass extends Component {
                                 cta_title: 'OK',
                                 id: props.id,
                                 name: 'startDateModal',
+                                // value: props.start_date
                             })
                             this.updateParent('dateModalIndex', index);
                         }}
