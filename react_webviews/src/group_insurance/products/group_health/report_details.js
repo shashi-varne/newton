@@ -68,7 +68,7 @@ class GroupHealthReportDetails extends Component {
 
                 let policy_data = resultData.policy_data || {};
                 let lead = policy_data.insured_lead_details || {};
-                lead.member_base = ghGetMember(lead);
+                lead.member_base = ghGetMember(lead, this.state.providerConfig);
 
 
                 let data = getCssMapperReport(policy_data);

@@ -81,7 +81,7 @@ class GroupHealthLanding extends Component {
         lead.member_base = [];
 
         if (resultData.resume_quote) {
-          lead.member_base = ghGetMember(lead);
+          lead.member_base = ghGetMember(lead, this.state.providerConfig);
         }
 
         this.setState({

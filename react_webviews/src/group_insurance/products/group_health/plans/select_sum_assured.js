@@ -16,7 +16,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
             ctaWithProvider: true,
             premium_data: [],
             screen_name: 'sum_assured_screen'
-        }
+        };
 
         this.initialize = initialize.bind(this);
         this.updateBottomPremium = updateBottomPremium.bind(this);
@@ -97,7 +97,6 @@ class GroupHealthPlanSelectSumAssured extends Component {
         }, () => {
             this.updateBottomPremium();
         });
-
     }
 
     renderPlans = (props, index) => {
@@ -120,7 +119,6 @@ class GroupHealthPlanSelectSumAssured extends Component {
 
 
     render() {
-
 
         return (
             <Container

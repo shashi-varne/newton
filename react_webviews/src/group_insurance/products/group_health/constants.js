@@ -1,4 +1,4 @@
-export const HDFCERGO_CONFIG = {
+export const hdfc = {
     key: 'HDFCERGO',
     provider_api: 'hdfcergo',
     title: 'HDFC ERGO',
@@ -308,7 +308,7 @@ export const religare = {
         ]
     },
     nominee_screen: {
-        nominee_opts:    [
+        nominee_opts: [
             {
                 'name': 'SPOUSE',
                 'value': 'SPOUSE'
@@ -492,22 +492,297 @@ export const religare = {
         ]
     }
 };
-export const star = {
 
+export const star = {
+    key: 'STAR',
+    provider_api: 'star',
+    title: 'Star',
+    subtitle: 'Family Health Optima',
+    logo: 'ic_star_logo.svg',
+    logo_card: 'ic_star_logo_card.svg',
+    logo_cta: 'ic_star_logo.svg',
+    logo_summary: 'ic_star_logo.svg',
+    get_next: { //have as a separate map and not screen-specific property to reduce duplication across all providers and for all screens
+        landing_screen: 'insure-type',
+        insure_type_screen: 'plan-dob',
+        add_members_screen: 'plan-dob',
+        plan_dob_screen: 'pincode',
+        star_pincode: 'health-details',
+        health_details: 'plan-details',
+        plan_details_screen: 'star-select-sum-assured',
+        sum_assured_screen: 'plan-premium-summary',
+        cover_type_screen: 'plan-select-add-ons',
+        add_ons_screen: 'plan-select-cover-period'
+    },
+    validation_props: {
+        'dob_adult': { min: 19, max: 90 },  //add one year for minimum age here 18 to 19
+        'dob_child': { minMonth: 3, max: 25 },
+        'dob_married_male': { min: 22, max: 25 },
+    },
+    applicant_detail_screen: {
+        fields: [
+            'fullname',
+            'addr1',
+            'erg-1'
+        ]
+    },
+    landing_screen: {
+        offerImageData: [
+            { src: 'star_icn_landing_card_1.svg' },
+            { src: 'star_icn_landing_card_2.svg' },
+            { src: 'star_icn_landing_card_3.svg' }
+        ],
+        whats_covered: [
+            '60 days pre and 90 days post hospitalization expenses',
+            'Treatment of pre-existing disease after 4 years',
+            'Ayurveda, Unani, Sidha and Homeopathy treatments',
+            'Organ donor expenses',
+            'Domiciliary Hospitalisation'
+        ],
+        whats_not_covered: [
+            'Maternity',
+            'Self-inflicted injuries',
+            'Plastic surgery',
+            'External congenital diseases',
+            'Mental health',
+            'Adventure sport injuries',
+            'Venereal or Sexually transmitted diseases',
+            'Eye/Dental treatment',
+        ],
+        faq_data: {
+            'header_title': 'Frequently asked questions',
+            'header_subtitle': '',
+            'steps': {
+                'options': [
+                    {
+                        'title': 'Is there any pre policy medical check up?',
+                        'subtitle': 'All persons above 50 years of age and those who declare adverse medical history in the proposal form are required to undergo pre-acceptance medical screening. 100% of this cost is borne by the company.'
+                    },
+                    {
+                        'title': 'Is there any copay under the policy?',
+                        'subtitle': 'There is a copay of 20% on each and every claim for insured members whose age at the time of entry is more than 60 years.'
+                    },
+                    {
+                        'title': 'Is there any waiting period in the policy?',
+                        'subtitle': 'There is a waiting period of 24 months for specified diseases and 48 months for pre-existing diseases.'
+                    },
+                    {
+                        'title': 'Can the sum insured under the policy be enhanced?',
+                        'subtitle': 'Yes, this can be done at the time of renewal subject to no claim being lodged or paid under the policy.'
+                    },
+                    {
+                        'title': 'Can I cancel the policy after purchase?',
+                        'subtitle': 'There is a free look period of 15 days from the date of receipt of the policy to the insured; if cancelled during this period premium would be refunded to the customer after adjusting the cost of medical screening, stamp duty charges and proportionate risk premium.'
+                    },
+                    {
+                        'title': 'How does the Auto recharge work?',
+                        'subtitle': 'Sum Insured will be automatically restored (once every policy year) in case the sum insured and any no claim bonus accumulated is exhausted during the policy year. It cannot be used against an illness/disease for which a claim has already been made in the current policy year.'
+                    }
+                ],
+            },
+            'cta_title': 'OK'
+        }
+    },
+    insure_type_screen: {
+        account_type_options: [
+            {
+                'name': 'Family members',
+                'value': 'family'
+            },
+            {
+                'name': 'Self & family members',
+                'value': 'selfandfamily'
+            },
+            {
+                'name': 'Parents/Parents-in-law',
+                'value': 'parentsinlaw'
+            }
+        ]
+    },
+    add_members_screen: {
+        son_max: 2,
+        daughter_max: 2,
+        total_plus_minus_max: 2,
+        preselect_father: true,
+        preselect_mother: true,
+        disable_father: true,
+        disable_mother: true,
+        preselect_father_in_law: true,
+        preselect_mother_in_law: true,
+        disable_father_in_law: true,
+        disable_mother_in_law: true,
+    },
+    plan_list_screen: {
+        tile_mid_data: [
+            { 'label': 'Sum insured::', 'key': 'sum_assured_options_text' },
+            { 'label': 'Hospital room:', 'key': 'hospital_room' },
+            { 'label': 'Daily allowance:', 'key': 'alternative_treatment' }
+        ]
+    },
+    nominee_screen: {
+        nominee_opts:    [
+            {
+                'name': 'SPOUSE',
+                'value': 'SPOUSE'
+            },
+            {
+                'name': 'BROTHER',
+                'value': 'BROTHER'
+            },
+            {
+                'name': 'COUSIN',
+                'value': 'COUSIN'
+            },
+            {
+                'name': 'DAUGHTER IN LAW',
+                'value': 'DAUGHTER_IN_LAW'
+            },
+            {
+                'name': 'FATHER',
+                'value': 'FATHER'
+            },
+            {
+                'name': 'FATHER IN LAW',
+                'value': 'FATHER_IN_LAW'
+            },
+            {
+                'name': 'GRAND DAUGHTER',
+                'value': 'GRANDDAUGHTER'
+            },
+            {
+                'name': 'GRAND FATHER',
+                'value': 'GRANDFATHER'
+            },
+            
+            {
+                'name': 'GRAND MOTHER',
+                'value': 'GRANDMOTHER'
+            },
+            {
+                'name': 'GRAND SON',
+                'value': 'GRANDSON'
+            },
+            {
+                'name': 'BROTHER IN LAW',
+                'value': 'BROTHER_IN_LAW'
+            },
+            {
+                'name': 'MOTHER IN LAW',
+                'value': 'MOTHER_IN_LAW'
+            },
+            {
+                'name': 'SISTER IN LAW',
+                'value': 'SISTER_IN_LAW'
+            },
+            {
+                'name': 'MOTHER',
+                'value': 'MOTHER '
+            },
+            {
+                'name': 'NEPHEW',
+                'value': 'NEPHEW'
+            },
+            {
+                'name': 'NIECE',
+                'value': 'NIECE'
+            },
+            {
+                'name': 'SELF- PRIMARY MEMBER',
+                'value': 'SELF'
+            },
+            {
+                'name': 'SISTER',
+                'value': 'SISTER'
+            },
+            {
+                'name': 'SON IN LAW',
+                'value': 'SON_IN_LAW'
+            },
+            {
+                'name': 'SON',
+                'value': 'SON'
+            },
+            {
+                'name': 'DAUGHTER',
+                'value': 'DAUGHTER'
+            }
+        ],
+    },
+    personal_details_screen: {
+        occupation_opts: [
+            {
+                'name': 'none',
+                'value': 'none'
+            },
+            {
+                'name': 'BUSINESS/TRADERS',
+                'value': 'BUSINESS_TRADERS'
+            },
+            {
+                'name': 'PROFESSIONAL-DOCTOR',
+                'value': 'PROFESSIONAL_DOCTOR'
+            },
+            {
+                'name': 'PROFESSIONAL-ENGINEER',
+                'value': 'PROFESSIONAL_ENGINEER'
+            },
+            {
+                'name': 'PROFESSIONAL-LAWYER',
+                'value': 'PROFESSIONAL_LAWYER'
+            },
+            {
+                'name': 'CLERICAL/SUPERVISORY AND RELATED WORKER',
+                'value': 'CLERICAL_SUPERVISORY_AND_RELATED_WROKER'
+            },
+            {
+                'name': 'HOSPITALITY AND SUPPORT WORKERS',
+                'value': 'HOSPITALITY_AND_SUPPORT_WORKERS'
+            },
+            {
+                'name': 'PRODUCTION WORKERS, SKILLED AND NON-AGRICULTURAL',
+                'value': 'PRODUCTION_WORKERS_SKILLED_AND_NON_AGRICULTURAL'
+            },
+            {
+                'name': 'FARMERS AND AGRICULTURAL WORKERS',
+                'value': 'FARMERS_AND_AGRICULTURAL_WORKERS'
+            },
+            {
+                'name': 'POLICE/PARA MILITARY/DEFENCE',
+                'value': 'POLICE_PARA_MILITARY_DEFENCE'
+            },
+            {
+                'name': 'HOUSEWIVES',
+                'value': 'HOUSEWIVES'
+            },
+            {
+                'name': 'RETIRED PERSONS',
+                'value': 'RETIRED_PERSONS'
+            },
+            {
+                'name': 'STUDENTS-SCHOOLS AND COLLEGE',
+                'value': 'STUDENTS_SCHOOLS_AND_COOLLEGE'
+            },
+            {
+                'name': 'INFANT',
+                'value': 'INFANT'
+            }
+        ]
+    }
 };
 
 
 export function getGhProviderConfig(provider) {
     let mapper = {
-        'HDFCERGO': HDFCERGO_CONFIG,
+        'HDFCERGO': hdfc,
         'RELIGARE': religare,
+        'STAR': star,
     };
 
     return mapper[provider];
 }
 
 
-export function memberKeyMapperFunction(member_key, groupHealthPlanData) {
+export function memberKeyMapperFunction(groupHealthPlanData) {
 
     let dob_data = avilableMembersToInsured;
 
@@ -516,7 +791,7 @@ export function memberKeyMapperFunction(member_key, groupHealthPlanData) {
     let ui_members = groupHealthPlanData.ui_members || {};
 
     let child_total = 0;
-    for (var i = 0; i < dob_data.length; i++) {
+    for (let i = 0; i < dob_data.length; i++) {
         let key = dob_data[i].key;
 
         if (!ui_members.father && key === 'mother') {
@@ -547,18 +822,19 @@ export function memberKeyMapperFunction(member_key, groupHealthPlanData) {
 
         final_dob_data.push(dob_data[i]);
     }
-    let mapper = final_dob_data.filter(data => data.key === member_key);
-    return mapper[0];
+
+    return final_dob_data;
 }
 
 export function getInsuredMembersUi(groupHealthPlanData) {
 
     let ui_members = groupHealthPlanData.ui_members || {};
     let data = [];
-
+    const final_dob_data = memberKeyMapperFunction(groupHealthPlanData);
     for (var member in ui_members) {
-        if (ui_members[member] === true) {
-            let obj = memberKeyMapperFunction(member, groupHealthPlanData);
+        if (member && ui_members[member] === true) {
+            // eslint-disable-next-line no-loop-func
+            const [obj] = final_dob_data.filter(data => data.key === member);
             data.push(obj);
         }
     }
@@ -607,6 +883,16 @@ export const avilableMembersToInsured = [
         'key': 'mother',
         'value': '',
         'backend_key': 'parent_account2_key'
+    },
+    {
+        'key': 'father-in-law',
+        'value': '',
+        'backend_key': 'parent_inlaw_account1_key'
+    },
+    {
+        'key': 'mother-in-law',
+        'value': '',
+        'backend_key': 'parent_inlaw_account2_key'
     },
     {
         'key': 'son',
