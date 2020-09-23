@@ -4,7 +4,8 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
-import { validateAlphabets } from 'utils/validators';
+import { validateAlphabets, calculateAge, isValidDate, 
+    formatDate, dobFormatTest, IsFutureDate} from 'utils/validators';
 import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
 import Input from '../../../../common/ui/Input';
 import { initialize, updateLead } from '../common_data';
@@ -83,6 +84,38 @@ class GroupHealthPlanNomineeDetails extends Component {
 
     };
 
+    handleChangeDob = name => event => {
+        
+        if (!name) {
+            name = event.target.name;
+        }
+        
+        var value = event.target ? event.target.value : event;
+        var form_data = this.state.form_data || {};
+
+        if (!dobFormatTest(value)) {
+            return;
+        }
+
+        if (value.length > 10) {
+            return;
+        }
+
+        var input = document.getElementById(name);
+        input.onkeyup = formatDate;
+
+        form_data[name] = value;
+        form_data[name + '_error'] = '';
+
+        let age = calculateAge(value, 'byMonth');
+        form_data[name + '_age'] = age.age;
+
+        this.setState({
+            form_data: form_data
+        })
+
+    }
+
     handleClose = () => {
         this.setState({
             openConfirmDialog: false
@@ -100,20 +133,28 @@ class GroupHealthPlanNomineeDetails extends Component {
         this.sendEvents('next');
         let keysMapper = {
             'name': 'name',
-            'relation': 'relation'
+            'relation': 'relation',
+            'dob': 'dob',
+            'apointeename': 'apointee name',
+            'apointeerelation': 'apointee relation',
+            'apointeedob': 'apointee dob'
         }
 
-        let keys_to_check = ['name', 'relation']
+        let keys_to_check = ['name', 'relation', 'dob']
+
+        if(this.state.renderApointee) {
+            keys_to_check.push(...['apointeename', 'apointeerelation', 'apointeedob']);
+        }
 
         let form_data = this.state.form_data;
         for (var i = 0; i < keys_to_check.length; i++) {
             let key_check = keys_to_check[i];
+            console.log(key_check);
             let first_error = 'Please enter ';
             if (!form_data[key_check]) {
                 form_data[key_check + '_error'] = first_error + keysMapper[key_check];
             }
         }
-
        
 
         if (this.state.form_data && (this.state.form_data.name || '').split(" ").filter(e => e).length < 2) {
@@ -121,10 +162,40 @@ class GroupHealthPlanNomineeDetails extends Component {
         } else if (this.state.form_data.name &&
             !validateAlphabets(this.state.form_data.name)) {
             form_data.name_error = 'Invalid name';
-          }
+        }
+
+        if (this.state.renderApointee && (this.state.form_data.apointeename || '').split(" ").filter(e => e).length < 2) {
+            form_data.apointeename_error = 'Enter valid full name';
+        } else if (this.state.form_data.apointeename &&
+            !validateAlphabets(this.state.form_data.apointeename)) {
+            form_data.apointeename_error = 'Invalid name';
+        }
+
+        let dob = form_data.dob;
+        let apointeedob = form_data.apointeedob;
+
+        if (this.state.renderApointee && (new Date(dob) > new Date() || !isValidDate(dob))) {
+            form_data.dob_error = 'Please enter valid date';
+        } else if (IsFutureDate(dob)) {
+            form_data.dob_error = 'Future date is not allowed';
+        }
+
+        if (new Date(apointeedob) > new Date() || !isValidDate(apointeedob)) {
+            form_data.apointeedob_error = 'Please enter valid date';
+        } else if (IsFutureDate(apointeedob)) {
+            form_data.apointeedob_error = 'Future date is not allowed';
+        }
+
+        let renderApointee = false;
+        if (!this.state.form_data.dob_error && this.state.form_data.dob_age < 18 ) {
+            renderApointee = true
+        } else {
+            renderApointee = false
+        }
 
         this.setState({
-            form_data: form_data
+            form_data: form_data,
+            renderApointee: renderApointee
         })
 
         let canSubmitForm = true;
@@ -141,7 +212,22 @@ class GroupHealthPlanNomineeDetails extends Component {
             let body = {
                 nominee_account_key: {
                     name: this.state.form_data.name,
-                    relation: this.state.form_data.relation
+                    relation: this.state.form_data.relation,
+                }
+            }
+
+            if (this.state.providerConfig.provider_api === 'star') {
+                body = {
+                    nominee_account_key: {
+                        name: this.state.form_data.name,
+                        relation: this.state.form_data.relation,
+                        dob: this.state.form_data.dob
+                    },
+                    apointee_account_key: {
+                        name: this.state.form_data.apointeename,
+                        relation: this.state.form_data.apointeerelation,
+                        dob: this.state.form_data.apointeedob
+                    }
                 }
             }
             
@@ -171,7 +257,69 @@ class GroupHealthPlanNomineeDetails extends Component {
         }
     }
 
+    renderApointee = () => {
+        return (
+            <React.Fragment>
+                <div className="common-top-page-subtitle flex-between-center" style={{marginTop:'20px'}}>
+                    Please add appointee details as the nominee is a minor(less than 18 yrs)
+                    <img 
+                        className="tooltip-icon"
+                        data-tip="The appointee must be an adult who will take care of the claim amount in case of death of the insured during the period that the nominee is a minor."
+                        src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
+                </div>
+                <div>Apointee details</div>
+
+                <FormControl fullWidth>
+                    <div className="InputField">
+                        <Input
+                            type="text"
+                            width="40"
+                            label="Name"
+                            class="ApointeeName"
+                            id="apointeename"
+                            name="apointeename"
+                            error={this.state.form_data.apointeename_error ? true : false}
+                            helperText={this.state.form_data.apointeename_error}
+                            value={this.state.form_data.apointeename || ''}
+                            onChange={this.handleChange()} />
+                    </div>
+                    <div className="InputField">
+                        <DropdownWithoutIcon
+                            width="40"
+                            dataType="AOB"
+                            options={this.state.relationshipOptions}
+                            id="relation"
+                            label="Relationship"
+                            error={this.state.form_data.apointeerelation_error ? true : false}
+                            helperText={this.state.form_data.apointeerelation_error}
+                            value={this.state.form_data.apointeerelation || ''}
+                            name="apointeerelation"
+                            onChange={this.handleChange()} />
+                    </div>
+                    <div className="InputField">
+                        <Input
+                            type="text"
+                            width="40"
+                            label="Date of birth"
+                            class="DOB"
+                            id="apointeedob"
+                            name="apointeedob"
+                            max="10"
+                            error={this.state.form_data.apointeedob_error ? true : false}
+                            helperText={this.state.form_data.apointeedob_error}
+                            value={this.state.form_data.apointeedob || ''}
+                            placeholder="DD/MM/YYYY"
+                            maxLength="10"
+                            onChange={this.handleChangeDob()}
+                        />
+                    </div>
+                </FormControl>
+            </React.Fragment>
+        )
+    }
+
     render() {
+        let provider = this.state.providerConfig.provider_api;
 
         return (
             <Container
@@ -212,7 +360,26 @@ class GroupHealthPlanNomineeDetails extends Component {
                             name="relation"
                             onChange={this.handleChange('relation')} />
                     </div>
+                    {provider === 'star' && <div className="InputField">
+                        <Input
+                            type="text"
+                            width="40"
+                            label="Date of birth"
+                            class="DOB"
+                            id="dob"
+                            name="dob"
+                            max="10"
+                            error={this.state.form_data.dob_error ? true : false}
+                            helperText={this.state.form_data.dob_error}
+                            value={this.state.form_data.dob || ''}
+                            placeholder="DD/MM/YYYY"
+                            maxLength="10"
+                            onChange={this.handleChangeDob()} />
+                    </div>}
                 </FormControl>
+
+                {provider === 'star' && this.state.renderApointee && this.renderApointee()}
+
 
                 <ConfirmDialog parent={this} />
             </Container>

@@ -157,6 +157,12 @@ import GroupHealthPlanFinalSummary from './products/group_health/form/final_summ
 import GroupHealthPayment from './products/group_health/payment/index';
 import GroupHealthReportDetails from './products/group_health/report_details';
 
+
+/***************Star Health******************/
+import GroupHealthPlanStarPincode from './products/group_health/Star/star_pincode';
+import GroupHealthPlanStarHealthDetails from './products/group_health/Star/health_details';
+import GroupHealthPlanStarSumInsured from './products/group_health/Star/star_sum_insured';
+
 // etli
 import EtliPersonalDetails1 from './products/term_insurance/etli/personal_details1';
 import EtliPersonalDetails2 from './products/term_insurance/etli/personal_details2';
@@ -173,6 +179,7 @@ import RenderNotCoverClass from './ui_components/general_insurance/notcover';
 import RenderClaimClass from './ui_components/general_insurance/claim';
 
 import HealthInsuranceEntry from './products/group_health/plans/entry';
+import GroupHealthPlanHowToClaimStar from './products/group_health/plans/how_to_claim_star';
 import GroupHealthPlanHowToClaimReligare from './products/group_health/plans/how_to_claim_religare';
 
 import Tooltip from '../common/ui/Tooltip';
@@ -349,6 +356,9 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/:provider/plan-select-floater`} component={GroupHealthPlanSelectFloater} />
           <Route path={`${url}/group-health/:provider/plan-premium-summary`} component={GroupHealthPlanPremiumSummary} />
           <Route path={`${url}/group-health/:provider/how-to-claim`} component={GroupHealthPlanHowToClaim} />
+          <Route path={`${url}/group-health/:provider/pincode`} component={GroupHealthPlanStarPincode} />
+          <Route path={`${url}/group-health/:provider/health-details`} component={GroupHealthPlanStarHealthDetails} />
+          <Route path={`${url}/group-health/:provider/star-select-sum-assured`} component={GroupHealthPlanStarSumInsured} />
 
           <Route path={`${url}/group-health/:provider/personal-details/self`}
             render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'self'} />} />
@@ -465,6 +475,7 @@ const Insurance = (props) => {
           <Route path={`${url}/common/claim`} component={RenderClaimClass} />
 
           <Route path={`${url}/group-health/entry`} component={HealthInsuranceEntry} />
+          <Route path={`${url}/group-health/:provider/how-to-claim-star`} component={GroupHealthPlanHowToClaimStar} />
           <Route path={`${url}/group-health/:provider/how-to-claim-religare`} component={GroupHealthPlanHowToClaimReligare} />
 
           <Route component={NotFound} />
