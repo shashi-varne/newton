@@ -249,7 +249,7 @@ class GroupHealthPlanPersonalDetails extends Component {
       let age = calculateAge((this.state.form_data.dob || '').replace(/\\-/g, '/').split('-').join('/'));
 
       let { provider } = this.state;
-      console.log(age)
+
       if (provider === 'RELIGARE') {
 
         if (age < 19) {
