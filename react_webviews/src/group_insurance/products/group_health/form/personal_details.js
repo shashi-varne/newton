@@ -268,7 +268,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         if( age < 19) {
           form_data.dob_error = 'Minimum age is 18 applicant';
         }
-
+        
       } else {
 
         if (this.state.form_data.gender === 'MALE' && age < 22) {
