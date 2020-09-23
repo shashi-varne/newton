@@ -103,9 +103,9 @@ class GroupHealthPlanDobReligare extends Component {
 
     handleClick = () => {
         this.sendEvents('next');
-        let { groupHealthPlanData } = this.state;
+        let { groupHealthPlanData } = this.state || {};
 
-        groupHealthPlanData = resetInsuredMembers(groupHealthPlanData);
+        groupHealthPlanData = resetInsuredMembers(groupHealthPlanData) || {};
 
         let ui_members = groupHealthPlanData.ui_members || {};
         
@@ -135,27 +135,29 @@ class GroupHealthPlanDobReligare extends Component {
             canProceed = false;
         }
 
-        let post_body = groupHealthPlanData.post_body;
-
-        let insured_members = getInsuredMembersUi(groupHealthPlanData);
-
-        for (var i=0; i < insured_members.length; i++){
-            let data = insured_members[i];
-
-            post_body[data.backend_key] = {
-                relation: data.relation
-            };
-
-            if(data.key === this.state.eldest_member) {
-                post_body[data.backend_key].dob = this.state.eldest_dob;
-            }
-        }
-
-        if(ui_members.self_gender && post_body.self_account_key) {
-            post_body.self_account_key.gender = ui_members.self_gender;
-        }
+       
 
         if (canProceed) {
+            let post_body = groupHealthPlanData.post_body || {};
+
+            let insured_members = getInsuredMembersUi(groupHealthPlanData);
+    
+            for (var i=0; i < insured_members.length; i++){
+                let data = insured_members[i];
+    
+                post_body[data.backend_key] = {
+                    relation: data.relation
+                };
+    
+                if(data.key === this.state.eldest_member) {
+                    post_body[data.backend_key].dob = this.state.eldest_dob;
+                }
+            }
+    
+            if(ui_members.self_gender && post_body.self_account_key) {
+                post_body.self_account_key.gender = ui_members.self_gender;
+            }
+
             groupHealthPlanData.eldest_dob = this.state.eldest_dob;
             groupHealthPlanData.eldest_member = this.state.eldest_member;
             

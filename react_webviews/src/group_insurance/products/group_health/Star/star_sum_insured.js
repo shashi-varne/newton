@@ -46,6 +46,7 @@ class GroupHealthPlanStarSumInsured extends Component {
             const res = await Api.post('api/ins_service/api/insurance/star/premium', body);
 
             if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+                // eslint-disable-next-line
                 throw 'Something went wrong! Please try again.';
             }
 
@@ -182,7 +183,7 @@ class GroupHealthPlanStarSumInsured extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
-                title="Select sum assured"
+                title="Select sum insured"
                 buttonTitle="CONTINUE"
                 buttonDisabled={this.state.loadingPremium}
                 withProvider={true}

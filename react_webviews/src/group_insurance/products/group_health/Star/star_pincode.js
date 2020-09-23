@@ -32,7 +32,7 @@ class GroupHealthPlanStarPincode extends Component {
             account_type: account_type,
         });
 
-        let header_title, adult_member, pincode = '';
+        let header_title, pincode = '';
         if (account_type === 'family') {
             header_title = `Where does your ${ui_members.other_adult_member} live?`;
         } else if (account_type === 'selfandfamily') {

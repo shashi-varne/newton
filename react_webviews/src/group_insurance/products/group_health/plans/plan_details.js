@@ -54,7 +54,7 @@ class GroupHealthPlanDetails extends Component {
 
         for (var i in keys_to_empty) {
 
-            if(not_req_keys_for_backend.includes(keys_to_empty[i])) {
+            if(!not_req_keys_for_backend.includes(keys_to_empty[i])) {
                 post_body[keys_to_empty[i]] = '';
             }
             
@@ -254,7 +254,7 @@ class GroupHealthPlanDetails extends Component {
                 showLoader={this.state.show_loader}
                 title="Plan details"
                 fullWidthButton={true}
-                buttonTitle="SELECT SUM ASSURED"
+                buttonTitle="SELECT SUM INSURED"
                 onlyButton={true}
                 handleClick={() => this.handleClick()}
             >
@@ -294,7 +294,7 @@ class GroupHealthPlanDetails extends Component {
 
                     <div className="sum-assured-info" style={{ fontWeight: 600 }}>
                         <div className="sai-left">
-                            Sum assured
+                            Sum insured
                         </div>
                         <div className="sai-left">
                             Premium

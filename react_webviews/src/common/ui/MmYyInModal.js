@@ -12,7 +12,7 @@ import Dialog, {
 import SVG from 'react-inlinesvg';
 import close_icn from 'assets/close_icn.svg';
 import { isValidMonthYear } from "utils/validators";
-import { formatMonthandYear, dobFormatTest } from "utils/validators";
+import { formatMonthandYear, dobFormatTest, IsFutureMonthYear, IsPastMonthYearfromDob } from "utils/validators";
 
 class MmYyInModal extends Component {
     constructor(props) {
@@ -49,7 +49,7 @@ class MmYyInModal extends Component {
         this.setState({
             value: value,
             name: name,
-            [name]: value,
+            [this.props.id]: value,
             [name + '_error']: ''
         })
     }
@@ -59,14 +59,25 @@ class MmYyInModal extends Component {
         let error = '';
         let date = this.state.value;
         let name = this.props.name;
+        let dob = this.props.dob;
 
         if (!isValidMonthYear(date)) {
             error = "please enter valid month or year";
             this.setState({
                 [name + '_error']: error
             })
+        } else if (IsFutureMonthYear(date)) {
+            error = "future month or year is not allowed";
+            this.setState({
+                [name + '_error']: error
+            })
+        } else if (IsPastMonthYearfromDob(date, dob)) {
+            error = "month or year less than dob is not allowed";
+            this.setState({
+                [name + '_error']: error
+            })
         } else {
-            this.props.parent.updateParent(this.props.name, this.state[this.props.name])
+            this.props.parent.updateParent(this.props.name, this.state[this.props.id])
             this.handleClose();
         }
     }
@@ -116,7 +127,7 @@ class MmYyInModal extends Component {
                                     className="date"
                                     placeholder="MM/YYYY"
                                     maxLength='7'
-                                    value={this.state[name] || ''}
+                                    value={this.state[this.props.id] || ''}
                                     error={this.state[name+'_error'] ? true : false}
                                     helperText={this.state[name+'_error']}
                                     onChange={this.handleChange()}

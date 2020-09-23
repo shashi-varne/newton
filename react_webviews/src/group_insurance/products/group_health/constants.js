@@ -102,7 +102,7 @@ export const hdfc = {
     },
     plan_list_screen: {
         tile_mid_data: [
-            { 'label': 'Sum assured:', 'key': 'sum_assured_options_text' },
+            { 'label': 'Sum insured:', 'key': 'sum_assured_options_text' },
             { 'label': 'Recovery benefit:', 'key': 'recovery_benefit_extra', 'tooltip_key': 'recovery_benefit_content' },
             { 'label': 'Allowances:', 'key': 'allowances' }
         ]
@@ -176,7 +176,7 @@ export const hdfc = {
 export const religare = {
     key: 'RELIGARE',
     provider_api: 'religare',
-    title: 'Care Health',
+    title: 'Care Health (formerly Religare)',
     subtitle: 'Care',
     logo: 'ic_religare_logo.svg',
     logo_card: 'ic_religare_logo_card.svg',
@@ -211,12 +211,12 @@ export const religare = {
     },
     landing_screen: {
         offerImageData: [
-            { src: 'religare_icn_landing_card_1.svg' },
-            { src: 'religare_icn_landing_card_2.svg' },
-            { src: 'religare_icn_landing_card_3.svg' }
+            { src: 'religare_icn_landing_card_1.png' },
+            { src: 'religare_icn_landing_card_2.png' },
+            { src: 'religare_icn_landing_card_3.png' }
         ],
         whats_covered: [
-            '30 days pre and 60 days post hospitalization expenses',
+            '30 days pre and 60 days post hospitalisation expenses',
             'Treatment of pre-existing disease after 4 years',
             'Ayurveda, Unani, Sidha and Homeopathy treatments',
             'Organ donor expenses',
@@ -224,12 +224,9 @@ export const religare = {
         ],
         whats_not_covered: [
             'Maternity',
-            'Self-inflicted injuries',
             'Plastic surgery',
             'External congenital diseases',
             'Mental health',
-            'Adventure sport injuries',
-            'Venereal or Sexually transmitted diseases',
             'Eye/Dental treatment',
         ],
         faq_data: {
@@ -299,9 +296,9 @@ export const religare = {
         ]
     },
     add_members_screen: {
-        son_max: 2,
-        daughter_max: 2,
-        total_plus_minus_max: 2
+        son_max: 4,
+        daughter_max: 4,
+        total_plus_minus_max: 4
     },
     plan_list_screen: {
         tile_mid_data: [
@@ -835,7 +832,7 @@ export function getInsuredMembersUi(groupHealthPlanData) {
     let data = [];
     const final_dob_data = memberKeyMapperFunction(groupHealthPlanData);
     for (var member in ui_members) {
-        if (ui_members[member] === true) {
+        if (member && ui_members[member] === true) {
             // eslint-disable-next-line no-loop-func
             const [obj] = final_dob_data.filter(data => data.key === member);
             data.push(obj);

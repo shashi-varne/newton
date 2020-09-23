@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 import { formatAmountInr } from "utils/validators";
@@ -21,7 +20,8 @@ class GroupHealthPlanAddOns extends Component {
             ctaWithProvider: true,
             add_ons_data: [],
             show_loader: true,
-            screen_name: 'add_ons_screen'
+            screen_name: 'add_ons_screen',
+            total_add_on_premiums: 0
         }
 
         this.initialize = initialize.bind(this);
@@ -33,6 +33,8 @@ class GroupHealthPlanAddOns extends Component {
     }
 
     setAmountOptions (add_ons_data) {
+
+        let sum_assured = this.state.groupHealthPlanData.sum_assured;
     
             if (add_ons_data.length !== 0) {
                 add_ons_data.forEach((item, index) => {
@@ -63,6 +65,11 @@ class GroupHealthPlanAddOns extends Component {
                         final_data.selectedIndexOption = selectedIndexOption;
                     }
 
+                    if(sum_assured === 400000 && item.key === 'CAREWITHNCB') {
+                        final_data.checked = true;
+                        final_data.disabled = true;
+                    }
+
 
                     add_ons_data[index] = final_data;
                 })
@@ -71,7 +78,8 @@ class GroupHealthPlanAddOns extends Component {
             this.setState({
                 add_ons_data: add_ons_data
             }, () => {
-                ReactTooltip.rebuild()
+                ReactTooltip.rebuild();
+                this.updateCtaPremium();
             })
 
     }
@@ -81,9 +89,15 @@ class GroupHealthPlanAddOns extends Component {
         let body = this.state.groupHealthPlanData.post_body;
 
         let add_ons_data = this.state.groupHealthPlanData.add_ons_data || [];
+
+        // eslint-disable-next-line radix
+        let cta_premium = parseInt(this.state.bottomButtonData.leftSubtitle.substring(1).replace(',', ''));
+
         this.setState({
-            add_ons_data: add_ons_data
-        })
+            // add_ons_data: add_ons_data,
+            cta_premium: cta_premium
+        });
+        
         if (add_ons_data.length === 0) {
             try {
 
@@ -108,43 +122,68 @@ class GroupHealthPlanAddOns extends Component {
                 toast('Something went wrong');
             }
 
-            this.setState({
-                add_ons_data: add_ons_data
-            })
-
         } else {
             this.setState({
                 show_loader: false
             })
         }
+
+        this.setState({
+            add_ons_data: add_ons_data
+        }, () => {
+            this.updateCtaPremium()
+        })
         
         this.setAmountOptions(add_ons_data);
     }
 
-    handleChangeCheckboxes = index => event => {
+    updateCtaPremium = () => {
+        let { add_ons_data, cta_premium } = this.state;
 
-        let add_ons_data = this.state.add_ons_data;
+        let total_premium = 0;
+
+        add_ons_data.forEach((item, index) => {
+            if (item.checked) {
+                total_premium += item.selected_premium || item.default_premium;
+            }
+        });
+
+        let updated_premium = cta_premium + total_premium;
+
+        this.updateBottomPremium(updated_premium);
+    }
+
+    handleChangeCheckboxes = index => event => {
+        let { add_ons_data } = this.state;
         add_ons_data[index].checked = !add_ons_data[index].checked;
+
         this.setState({
-            add_ons_data: add_ons_data
+            add_ons_data: add_ons_data,
+        }, () => {
+            this.updateCtaPremium()
         })
-        
     }
 
     handleChange = index => event => {
 
         let { add_ons_data } = this.state;
+         
         let data = add_ons_data[index];
 
         let indexOption = event;
         data.selectedIndexOption = indexOption;
+
         data.selected_cover_amount =  data.options[indexOption].cover_amount;
         data.selected_premium =  data.options[indexOption].premium;
+
+
 
         add_ons_data[index] = data;
 
         this.setState({
             add_ons_data: add_ons_data
+        }, () => {
+            this.updateCtaPremium()
         })
     }
 
@@ -158,6 +197,7 @@ class GroupHealthPlanAddOns extends Component {
                                 style={{ alignItems: 'start' }}
                                 checked={item.checked || false}
                                 color="primary"
+                                disabled={item.disabled}
                                 value={item.key}
                                 name={item.key}
                                 disableRipple
@@ -232,22 +272,27 @@ class GroupHealthPlanAddOns extends Component {
 
 
         let add_ons_body = [];
+        let  add_ons_json = {};
+        // eslint-disable-next-line
         this.state.add_ons_data.map((item) => {
 
+            
             if(item.checked) {
 
                 if (item.options.length !== 0) {
                     add_ons_body.push(item.options[item.selectedIndexOption].key);
+                    add_ons_json[item.options[item.selectedIndexOption].key] = item.selected_premium || item.default_premium;
                 } else {
+                    add_ons_json[item.key] = item.selected_premium || item.default_premium;
                     add_ons_body.push(item.key);
                 }
             }
 
-            return add_ons_body;
         })
 
 
         groupHealthPlanData.post_body.add_ons = add_ons_body;
+        groupHealthPlanData.post_body.add_ons_json = add_ons_json;
         groupHealthPlanData.add_ons_data = this.state.add_ons_data;
         this.setLocalProviderData(groupHealthPlanData);
 

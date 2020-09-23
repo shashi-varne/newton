@@ -70,7 +70,7 @@ class GroupHealthPlanMedicalHistory extends Component {
       },
       {
         label:
-          "Is any of the person(s) to be insured, already covered under any other health insurance policy of Religare Health Insurance?",
+          "Are you already covered under any other health insurance policy of Care Health Insurance (formerly Religare Health Insurance)?",
         members: member_base,
         radio_options: radio_options,
         key: "mand_4",
@@ -168,7 +168,7 @@ class GroupHealthPlanMedicalHistory extends Component {
 
     this.setState({
       list: list,
-    });
+    }, () => console.log(list));
   };
 
   handleClick = () => {
@@ -196,7 +196,6 @@ class GroupHealthPlanMedicalHistory extends Component {
 
     if (canProceed) {
 
-
       for (var i in member_base) {
         let member_data = member_base[i];
         let backend_key = member_data.backend_key;
@@ -204,15 +203,17 @@ class GroupHealthPlanMedicalHistory extends Component {
         body[backend_key] = {};
         member_data.medical_questions = {};
         body[backend_key].mand_question_exists = 'false';
+
         for (var q in list) {
           let q_data = list[q];
           let q_key = q_data.key;
           let inputs = q_data.inputs;
-
+          
           member_data.medical_questions[q_key] = {};
+          member_data.mand_question_exists='false';
           member_data.medical_questions[q_key].answer = 'false';
           for (var mem_key in inputs) {
-            if (mem_key === backend_key) {
+            if (mem_key === backend_key && inputs[mem_key]) {
               body[backend_key].mand_question_exists = 'true'
               member_data.medical_questions[q_key].answer = 'true';
             }
@@ -221,13 +222,9 @@ class GroupHealthPlanMedicalHistory extends Component {
 
         member_base[i] = member_data;
 
-
         body[backend_key].medical_questions = member_data.medical_questions || {};
-
       }
 
-
-      console.log(body);
       this.updateLead(body);
     }
   }
@@ -253,7 +250,7 @@ class GroupHealthPlanMedicalHistory extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
-        title="Medical History"
+        title="Medical History Details"
         buttonTitle="CONTINUE"
         withProvider={true}
         handleClick2={this.handleClick2}

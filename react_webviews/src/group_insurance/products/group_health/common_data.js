@@ -388,7 +388,6 @@ export function setEditTitle(string) {
 }
 
 export function openMedicalDialog(type) {
-    
     let data = {
         'header_title': 'Free medical check-up',
         'content': 'Based on your details, a medical checkup will be required to issue the policy. HDFC ERGO team will contact you for the <b>free medical checkup</b> after the policy payment.', //ppc
@@ -396,11 +395,30 @@ export function openMedicalDialog(type) {
         'dialog_name': 'medical_dialog',
         'cta_title': 'CONTINUE TO PAYMENT',
         'handleClick': this.startPayment
+    };
+    let provider = this.state.provider;
+
+    if(provider === 'HDFCERGO') {
+        data = {
+            ...data,
+            'header_title': 'Free medical check-up',
+            'content': 'Based on your details, a medical checkup will be required to issue the policy. HDFC ERGO team will contact you for the <b>free medical checkup</b> after the policy payment.', //ppc
+            
+        }
+    
+        if(type === 'ped') {
+            data.content = 'Your details will be reviewed by the HDFC Ergo team before policy issuance. You may be contacted for a <b>free medical checkup</b> after the policy payment.'
+        }
     }
 
-    if(type === 'ped') {
-        data.content = 'Your details will be reviewed by the HDFC Ergo team before policy issuance. You may be contacted for a <b>free medical checkup</b> after the policy payment.'
+    if(provider === 'RELIGARE') {
+        data = {
+            ...data,
+            'header_title': 'Medical Review',
+            'content': 'Please note that basis your health declaration, Care Health team may contact you for a medical review before policy issuance', //ped only
+        }
     }
+    
 
     this.setState({
         medical_dialog: true,
