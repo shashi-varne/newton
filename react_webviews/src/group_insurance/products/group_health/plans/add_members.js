@@ -138,10 +138,14 @@ class GroupHealthPlanAddMembers extends Component {
         }
 
         if (['selfandfamily', 'family'].includes(this.state.account_type) && !this.state.other_adult_member) {
+            if(this.state.account_type==='family'){
             this.setState({
                 other_adult_member_error: 'Please select this option'
             });
             canProceed = false;
+        }else{
+            canProceed = true;
+        }
         }
 
         let keys_to_reset = ['self', 'wife', 'husband', 'father', 'mother', 'father-in-law', 'mother-in-law', 'son', 'son1', 'son2','son3',
