@@ -13,7 +13,7 @@ export default class HDFCPremium extends Component {
 
       <div className="premium-info">
         <div className="flex-between pi-tile">
-          <div className="pi-tile-left">Sum assured</div>
+          <div className="pi-tile-left">Sum insured</div>
           <div className="pi-tile-right">
             {numDifferentiationInr(this.props.type_of_plan === 'NF' ? this.props.plan_selected_final.sum_assured * this.props.total_member :
               this.props.plan_selected_final.sum_assured)}
