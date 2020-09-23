@@ -176,7 +176,7 @@ export const HDFCERGO_CONFIG = {
 export const religare = {
     key: 'RELIGARE',
     provider_api: 'religare',
-    title: 'Care Health',
+    title: 'Care Health (formerly Religare)',
     subtitle: 'Care',
     logo: 'ic_religare_logo.svg',
     logo_card: 'ic_religare_logo_card.svg',
@@ -216,7 +216,7 @@ export const religare = {
             { src: 'religare_icn_landing_card_3.svg' }
         ],
         whats_covered: [
-            '30 days pre and 60 days post hospitalization expenses',
+            '30 days pre and 60 days post hospitalisation expenses',
             'Treatment of pre-existing disease after 4 years',
             'Ayurveda, Unani, Sidha and Homeopathy treatments',
             'Organ donor expenses',

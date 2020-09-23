@@ -247,6 +247,7 @@ class GroupHealthPlanIsPed extends Component {
     }
 
     render() {
+        let { provider } = this.state;
 
         return (
             <Container
@@ -260,9 +261,14 @@ class GroupHealthPlanIsPed extends Component {
                 handleClick={() => this.handleClick()}
             >
 
-                <div className="common-top-page-subtitle">
+                {provider === 'HDFCERGO' && <div className="common-top-page-subtitle">
                     This is important to avoid claims rejection later
-                </div>
+                </div>}
+
+                {provider === 'RELIGARE' && <div className="common-top-page-subtitle">
+                    Please disclose correct details to make hassle-free claim later
+                </div>}
+
                 <FormControl fullWidth>
 
                     <div className="InputField">
