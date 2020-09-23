@@ -9,8 +9,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Input from './Input';
 import { isValidMonthYear } from "utils/validators";
-import { formatMonthandYear, dobFormatTest } from "utils/validators";
-
+import { formatMonthandYear, dobFormatTest, validateAlphabets } from "utils/validators";
 
 class InputPopupClass extends Component {
     constructor(props) {
@@ -81,12 +80,17 @@ class InputPopupClass extends Component {
             }
             
             if(!this.state.value) {
-                canProceed =false;
+                canProceed = false;
                 this.setState({
                    pedOther_error: "This can't be empty"
                 });
         
-            } 
+            } else if (!validateAlphabets(this.state.value)) {
+                canProceed = false;
+                this.setState({
+                    pedOther_error: "please enter valid description"
+                 });
+            }
             
             if(canProceed) {
                 this.props.parent.updateParent('startDateModal', this.state['startDateModal'])

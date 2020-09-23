@@ -23,25 +23,6 @@ import { childeNameMapper } from '../../../constants';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 
-const med_ques_mapper_religare = {
-    'mand_1': {
-        'disc': 'Any illness/injury in last 48 months?',
-        'members': []
-    },
-    'mand_2': {
-        'disc': 'Previous health insurance claim?',
-        'members': []
-    },
-    'mand_3': {
-        'disc': 'Previous health insurance declined/increase?',
-        'members': []
-    },
-    'mand_4': {
-        'disc': 'Already covered with Religare?',
-        'members': []
-    }
-}
-
 class GroupHealthPlanFinalSummary extends Component {
 
     constructor(props) {
@@ -108,7 +89,26 @@ class GroupHealthPlanFinalSummary extends Component {
                 'title': 'Weight',
                 'key': 'weight'
             }
-        ]
+        ];
+
+        const med_ques_mapper_religare = {
+            'mand_1': {
+                'disc': 'Any illness/injury in last 48 months?',
+                'members': []
+            },
+            'mand_2': {
+                'disc': 'Previous health insurance claim?',
+                'members': []
+            },
+            'mand_3': {
+                'disc': 'Previous health insurance declined/increase?',
+                'members': []
+            },
+            'mand_4': {
+                'disc': 'Already covered with Religare?',
+                'members': []
+            }
+        }
 
         let accordianData = [];
 
@@ -121,7 +121,7 @@ class GroupHealthPlanFinalSummary extends Component {
             let member_display = capitalizeFirstLetter(childeNameMapper(member.key));
 
             let obj = {
-                title: `${member_display}'s details ${member_base.length > 1 ? ('(insured ' + (applicantIndex === -1 ? i + 1 : i) + ')') : ''}`,
+                title: `${member_display}'s details ${member_base.length > 1 ? ('(' + (applicantIndex === -1 ? i + 1 : i) + 'st insured)') : ''}`,
                 edit_state: `/group-insurance/group-health/${this.state.provider}/edit-personal-details/${member.key}`
             }
 
@@ -728,7 +728,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
-                                    SUM ASSURED
+                                    SUM INSURED
                                 </div>
                                 <div className="mtr-bottom">
                                     {numDifferentiationInr(this.state.lead.sum_assured)}
@@ -807,7 +807,7 @@ class GroupHealthPlanFinalSummary extends Component {
                                     }
                                     <div>
                                         <div>{inrFormatDecimal(this.state.lead.tax_amount)} </div>
-                                        <div style={{ fontSize: 10 }}>(18%) </div>
+                                        <div style={{ fontSize: 10 }}>(18% GST) </div>
                                     </div>
                                     <div>
                                         &nbsp;=&nbsp;

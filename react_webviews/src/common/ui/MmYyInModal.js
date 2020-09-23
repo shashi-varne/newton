@@ -12,7 +12,7 @@ import Dialog, {
 import SVG from 'react-inlinesvg';
 import close_icn from 'assets/close_icn.svg';
 import { isValidMonthYear } from "utils/validators";
-import { formatMonthandYear, dobFormatTest } from "utils/validators";
+import { formatMonthandYear, dobFormatTest, IsFutureMonthYear, IsPastMonthYearfromDob } from "utils/validators";
 
 class MmYyInModal extends Component {
     constructor(props) {
@@ -59,9 +59,20 @@ class MmYyInModal extends Component {
         let error = '';
         let date = this.state.value;
         let name = this.props.name;
+        let dob = this.props.dob;
 
         if (!isValidMonthYear(date)) {
             error = "please enter valid month or year";
+            this.setState({
+                [name + '_error']: error
+            })
+        } else if (IsFutureMonthYear(date)) {
+            error = "future month or year is not allowed";
+            this.setState({
+                [name + '_error']: error
+            })
+        } else if (IsPastMonthYearfromDob(date, dob)) {
+            error = "month or year less than dob is not allowed";
             this.setState({
                 [name + '_error']: error
             })

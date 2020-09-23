@@ -254,7 +254,7 @@ class GroupHealthPlanDetails extends Component {
                 showLoader={this.state.show_loader}
                 title="Plan details"
                 fullWidthButton={true}
-                buttonTitle="SELECT SUM ASSURED"
+                buttonTitle="SELECT SUM INSURED"
                 onlyButton={true}
                 handleClick={() => this.handleClick()}
             >

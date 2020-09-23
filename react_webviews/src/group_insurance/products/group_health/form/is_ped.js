@@ -261,8 +261,9 @@ class GroupHealthPlanIsPed extends Component {
             >
 
                 <div className="common-top-page-subtitle">
-                    This is important to avoid claims rejection later
+                    Please disclose correct details to make hassle-free claim later
                 </div>
+
                 <FormControl fullWidth>
 
                     <div className="InputField">
