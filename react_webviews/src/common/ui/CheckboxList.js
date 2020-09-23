@@ -19,8 +19,6 @@ class CheckboxListClass extends Component {
     }
 
     updateParent = (key, value) => {
-        console.log(key);
-        console.log(value)
         this.setState({
             [key]: value
         })
@@ -49,7 +47,7 @@ class CheckboxListClass extends Component {
                 label: 'Since When',
                 name: 'startDateModal',
                 id: options[index].id,
-                header_sub_title: options[index].description
+                header_sub_title: options[index].description,
             })
             this.updateParent('dateModalIndex', index);
         }
@@ -194,6 +192,8 @@ class CheckboxListClass extends Component {
 
     render() {
 
+        let dob = this.props.parent.state.lead.dob;
+
         return (
             <div>
                 {this.props.parent.state.options.map(this.renderList)}
@@ -215,6 +215,7 @@ class CheckboxListClass extends Component {
                     name={this.state.name}
                     label={this.state.label}
                     id={this.state.id}
+                    dob={dob}
                     value={this.state[this.state.name] || this.props.parent.state[this.state.name]} />
             </div>
         );

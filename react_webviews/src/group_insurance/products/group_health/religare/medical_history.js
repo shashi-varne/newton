@@ -70,7 +70,7 @@ class GroupHealthPlanMedicalHistory extends Component {
       },
       {
         label:
-          "Is any of the person(s) to be insured, already covered under any other health insurance policy of Religare Health Insurance?",
+          "Are you already covered under any other health insurance policy of Care Health Insurance (formerly Religare Health Insurance)?",
         members: member_base,
         radio_options: radio_options,
         key: "mand_4",
@@ -225,9 +225,6 @@ class GroupHealthPlanMedicalHistory extends Component {
         body[backend_key].medical_questions = member_data.medical_questions || {};
       }
 
-
-      console.log(body);
-      console.log(member_base)
       this.updateLead(body);
     }
   }
@@ -253,7 +250,7 @@ class GroupHealthPlanMedicalHistory extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
-        title="Medical History"
+        title="Medical History Details"
         buttonTitle="CONTINUE"
         withProvider={true}
         handleClick2={this.handleClick2}
