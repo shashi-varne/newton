@@ -160,7 +160,7 @@ class GroupHealthPlanList extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
-                title={this.state.provider==='HDFCERGO'?"3 smart plans to choose from!":"3 smart plans to choose from"}
+                title="3 smart plans to choose from!"
                 noFooter={true}
                 onlyButton={true}
             >
