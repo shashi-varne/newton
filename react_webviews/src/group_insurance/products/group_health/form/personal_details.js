@@ -280,8 +280,15 @@ return Math.round(Difference_In_Days);
     let { provider } = this.state;
     let age = calculateAge((this.state.form_data.dob || '').replace(/\\-/g, '/').split('-').join('/'));
 
-      if (provider === 'RELIGARE' && age < 19) {
-        form_data.dob_error = 'Minimum age is 18 applicant';
+    if(this.state.dobNeeded) {
+      if(provider === 'RELIGARE') {
+        if( age < 19) {
+          form_data.dob_error = 'Minimum age is 18 applicant';
+        }
+      }
+    }
+    if (this.state.member_key === 'applicant') {
+      
 
       if (provider === 'HDFCERGO') {
         if (this.state.form_data.gender === 'MALE' && age < 22) {
