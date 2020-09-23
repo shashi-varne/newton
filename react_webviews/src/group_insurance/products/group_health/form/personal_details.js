@@ -6,7 +6,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { health_providers, genderOptions, childeNameMapper } from '../../../constants';
 import {
   calculateAge, toFeet, capitalizeFirstLetter,
-  formatDate, validatePan, validateAlphabets, dobFormatTest, isValidDate
+  formatDate, validatePan, validateAlphabets, dobFormatTest, isValidDate,difference_In_Days
 } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
@@ -199,16 +199,6 @@ class GroupHealthPlanPersonalDetails extends Component {
 
   };
 
-  Difference_In_Days=(val) =>{
-const birthday = val.toString().replace(/\\-/g, '/').split('/').reverse().join('/');
-const today = new Date();
-const birthDate = new Date(birthday);
-let Difference_In_Time = today.getTime() - birthDate.getTime(); 
-let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24); 
-return Math.round(Difference_In_Days);
-}
-
-
 
   handleClick = async () => {
 
@@ -232,7 +222,7 @@ return Math.round(Difference_In_Days);
     if(this.state.provider==='RELIGARE'){
     if(this.state.groupHealthPlanData.type_of_plan==='WF'){
       if (this.state.backend_key === 'child_account1_key' || this.state.backend_key === 'child_account2_key' || this.state.backend_key === 'child_account3_key' || this.state.backend_key === 'child_account4_key'){
-      if (this.Difference_In_Days(this.state.form_data.dob) <= 91 ||calculateAge(this.state.form_data.dob) > 25){
+      if (difference_In_Days(this.state.form_data.dob) <= 91 ||calculateAge(this.state.form_data.dob) > 25){
       form_data.dob_error='kid age cannot be greater than 25 or less than 91 days';
       }
     }
