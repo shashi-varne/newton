@@ -48,7 +48,6 @@ class CheckboxListClass extends Component {
                 name: 'startDateModal',
                 id: options[index].id,
                 header_sub_title: options[index].description,
-                // value: options[index].start_date || ''
             })
             this.updateParent('dateModalIndex', index);
         }
@@ -156,7 +155,6 @@ class CheckboxListClass extends Component {
                                 cta_title: 'OK',
                                 id: props.id,
                                 name: 'startDateModal',
-                                // value: props.start_date
                             })
                             this.updateParent('dateModalIndex', index);
                         }}
