@@ -259,18 +259,20 @@ class GroupHealthPlanPersonalDetails extends Component {
       }
     }
 
-    if (this.state.member_key === 'applicant') {
-      let age = calculateAge((this.state.form_data.dob || '').replace(/\\-/g, '/').split('-').join('/'));
+    let { provider } = this.state;
+    let age = calculateAge((this.state.form_data.dob || '').replace(/\\-/g, '/').split('-').join('/'));
 
-      let { provider } = this.state;
-
-      if (provider === 'RELIGARE') {
+    if(this.state.dobNeeded) {
+      if(provider === 'RELIGARE') {
         if( age < 19) {
           form_data.dob_error = 'Minimum age is 18 applicant';
         }
-        
-      } else {
+      }
+    }
+    if (this.state.member_key === 'applicant') {
+      
 
+      if (provider === 'HDFCERGO') {
         if (this.state.form_data.gender === 'MALE' && age < 22) {
           form_data.dob_error = 'Minimum age is 21 male applicant';
         }
@@ -278,12 +280,12 @@ class GroupHealthPlanPersonalDetails extends Component {
         if (this.state.form_data.gender === 'FEMALE' && age < 19) {
           form_data.dob_error = 'Minimum age is 18 female applicant';
         }
-
+        
       }
 
       if (this.state.lead.account_type === 'parents') {
-        let ageParent1 = calculateAge((this.state.lead.parent_account1_key.dob || '').replace(/\\-/g, '/').split('-').join('/'));
-        let ageParent2 = calculateAge((this.state.lead.parent_account2_key.dob || '').replace(/\\-/g, '/').split('-').join('/'));
+        let ageParent1 = calculateAge(((this.state.lead.parent_account1_key || {}).dob || '').replace(/\\-/g, '/').split('-').join('/'));
+        let ageParent2 = calculateAge(((this.state.lead.parent_account2_key || {}).dob || '').replace(/\\-/g, '/').split('-').join('/'));
 
         if ((ageParent1 && age >= ageParent1) || (ageParent2 && age >= ageParent2)) {
           form_data.dob_error = "Applicant's age should be less than parents'age";
