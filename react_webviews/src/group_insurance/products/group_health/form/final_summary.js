@@ -359,8 +359,48 @@ class GroupHealthPlanFinalSummary extends Component {
         })
     }
 
+    redirectToPayment = (pg_data) => {
+        let resultData = pg_data || this.state.pg_data;
+        let current_url = window.location.href;
+        let nativeRedirectUrl = current_url;
 
-    startPayment = async () => {
+        let paymentRedirectUrl = encodeURIComponent(
+            window.location.origin + `/group-insurance/group-health/${this.state.provider}/payment` + getConfig().searchParams
+        );
+
+
+        var payment_link = resultData.payment_link;
+        var pgLink = payment_link;
+        let app = getConfig().app;
+        var back_url = encodeURIComponent(current_url);
+        // eslint-disable-next-line
+        pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
+            '&app=' + app + '&back_url=' + back_url;
+        if (getConfig().generic_callback) {
+            pgLink += '&generic_callback=' + getConfig().generic_callback;
+        }
+
+
+        if (getConfig().app === 'ios') {
+            nativeCallback({
+                action: 'show_top_bar', message: {
+                    title: 'Payment'
+                }
+            });
+        }
+
+        nativeCallback({
+            action: 'take_control', message: {
+                back_url: nativeRedirectUrl,
+                back_text: 'Are you sure you want to exit the payment process?'
+            }
+        });
+
+        window.location.href = pgLink;
+    }
+
+
+    startPayment = async (data={}) => {
 
         if (this.state.medical_dialog) {
             this.sendEventsPopup('next');
@@ -369,51 +409,27 @@ class GroupHealthPlanFinalSummary extends Component {
             show_loader: true
         })
         this.handleClose();
+
+        if(this.state.provider === 'RELIGARE' && !data.showMedDialog) {
+            this.redirectToPayment();
+            return;
+        }
         try {
             let res = await Api.get(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/start/payment?lead_id=${this.state.quote_id}`);
 
 
             var resultData = res.pfwresponse.result;
+            this.setState({
+                pg_data: resultData
+            })
             if (res.pfwresponse.status_code === 200) {
 
-
-                let current_url = window.location.href;
-                let nativeRedirectUrl = current_url;
-
-                let paymentRedirectUrl = encodeURIComponent(
-                    window.location.origin + `/group-insurance/group-health/${this.state.provider}/payment` + getConfig().searchParams
-                );
-
-
-                var payment_link = resultData.payment_link;
-                var pgLink = payment_link;
-                let app = getConfig().app;
-                var back_url = encodeURIComponent(current_url);
-                // eslint-disable-next-line
-                pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
-                    '&app=' + app + '&back_url=' + back_url;
-                if (getConfig().generic_callback) {
-                    pgLink += '&generic_callback=' + getConfig().generic_callback;
+                if(resultData.ped_check && data.showMedDialog) {
+                    this.openMedicalDialog('ped');
+                    return;
+                } else {
+                    this.redirectToPayment(resultData);
                 }
-
-
-                if (getConfig().app === 'ios') {
-                    nativeCallback({
-                        action: 'show_top_bar', message: {
-                            title: 'Payment'
-                        }
-                    });
-                }
-
-                nativeCallback({
-                    action: 'take_control', message: {
-                        back_url: nativeRedirectUrl,
-                        back_text: 'Are you sure you want to exit the payment process?'
-                    }
-                });
-
-                window.location.href = pgLink;
-
 
             } else {
                 this.setState({
@@ -443,14 +459,19 @@ class GroupHealthPlanFinalSummary extends Component {
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
 
-                let lead = resultData.quote_lead || {};
-                if (lead.ped_check) {
-                    this.openMedicalDialog('ped');
-                } else if (lead.ppc_check) {
-                    this.openMedicalDialog('ppc');
-                } else if (lead.status === 'ready_to_pay') {
-                    this.startPayment();
+                if(this.state.provider === 'HDFCERGO') {
+                    let lead = resultData.quote_lead || {};
+                    if (lead.ped_check) {
+                        this.openMedicalDialog('ped');
+                    } else if (lead.ppc_check) {
+                        this.openMedicalDialog('ppc');
+                    } else if (lead.status === 'ready_to_pay') {
+                        this.startPayment();
+                    }
+                } else {
+                    this.startPayment({showMedDialog : true});
                 }
+                
             } else {
                 this.setState({
                     show_loader: false
