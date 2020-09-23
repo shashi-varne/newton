@@ -264,8 +264,10 @@ class GroupHealthPlanPersonalDetails extends Component {
 
       let { provider } = this.state;
 
-      if (provider === 'RELIGARE' && age < 19) {
-        form_data.dob_error = 'Minimum age is 18 applicant';
+      if (provider === 'RELIGARE') {
+        if( age < 19) {
+          form_data.dob_error = 'Minimum age is 18 applicant';
+        }
 
       } else {
 
