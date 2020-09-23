@@ -10,8 +10,6 @@ import Dialog, {
 import Input from './Input';
 import { isValidMonthYear } from "utils/validators";
 import { formatMonthandYear, dobFormatTest, validateAlphabets } from "utils/validators";
-import { validateEmail } from '../../utils/validators';
-
 
 class InputPopupClass extends Component {
     constructor(props) {
