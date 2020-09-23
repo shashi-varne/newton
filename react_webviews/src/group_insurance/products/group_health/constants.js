@@ -832,7 +832,7 @@ export function getInsuredMembersUi(groupHealthPlanData) {
     let data = [];
     const final_dob_data = memberKeyMapperFunction(groupHealthPlanData);
     for (var member in ui_members) {
-        if (ui_members[member] === true) {
+        if (member && ui_members[member] === true) {
             // eslint-disable-next-line no-loop-func
             const [obj] = final_dob_data.filter(data => data.key === member);
             data.push(obj);
