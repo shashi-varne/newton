@@ -40,8 +40,8 @@ class HealthInsuranceLanding extends Component {
     let insuranceProducts = [
       {
         key: 'HEALTH_SURAKSHA',
-        title: 'Health suraksha',
-        subtitle: 'Comprehensive health coverage',
+        title: 'Comprehensive health insurance',
+        subtitle: 'Complete health coverage',
         icon: health_suraksha_icon
       },
       {
