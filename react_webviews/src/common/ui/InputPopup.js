@@ -139,7 +139,7 @@ class InputPopupClass extends Component {
                                         class="data"
                                         id={this.props.name}
                                         name={this.props.name}
-                                        value={this.state.value || this.props.value}
+                                        value={this.state.value || ''}
                                         onChange={this.handleChange()} />
                                 </div>
                                 {this.props.sinceWhenInput &&

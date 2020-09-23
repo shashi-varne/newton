@@ -296,9 +296,9 @@ export const religare = {
         ]
     },
     add_members_screen: {
-        son_max: 2,
-        daughter_max: 2,
-        total_plus_minus_max: 2
+        son_max: 4,
+        daughter_max: 4,
+        total_plus_minus_max: 4
     },
     plan_list_screen: {
         tile_mid_data: [

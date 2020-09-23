@@ -48,6 +48,7 @@ class CheckboxListClass extends Component {
                 cta_title: 'OK',
                 label: 'Since When',
                 name: 'startDateModal',
+                id: options[index].id,
                 header_sub_title: options[index].description
             })
             this.updateParent('dateModalIndex', index);
@@ -153,9 +154,11 @@ class CheckboxListClass extends Component {
                                 dateModalIndex: index,
                                 header_title: props.name,
                                 header_sub_title: props.description,
-                                cta_title: 'Ok'
+                                cta_title: 'OK',
+                                id: props.id,
+                                name: 'startDateModal',
                             })
-
+                            this.updateParent('dateModalIndex', index);
                         }}
                         style={{ margin: '10px 0px 0px 33px' }}>
                         <Input
@@ -211,6 +214,7 @@ class CheckboxListClass extends Component {
                     cta_title={this.state.cta_title}
                     name={this.state.name}
                     label={this.state.label}
+                    id={this.state.id}
                     value={this.state[this.state.name] || this.props.parent.state[this.state.name]} />
             </div>
         );
