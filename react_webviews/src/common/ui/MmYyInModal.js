@@ -49,7 +49,7 @@ class MmYyInModal extends Component {
         this.setState({
             value: value,
             name: name,
-            [name]: value,
+            [this.props.id]: value,
             [name + '_error']: ''
         })
     }
@@ -66,7 +66,7 @@ class MmYyInModal extends Component {
                 [name + '_error']: error
             })
         } else {
-            this.props.parent.updateParent(this.props.name, this.state[this.props.name])
+            this.props.parent.updateParent(this.props.name, this.state[this.props.id])
             this.handleClose();
         }
     }
@@ -116,7 +116,7 @@ class MmYyInModal extends Component {
                                     className="date"
                                     placeholder="MM/YYYY"
                                     maxLength='7'
-                                    value={this.state[name] || ''}
+                                    value={this.state[this.props.id] || ''}
                                     error={this.state[name+'_error'] ? true : false}
                                     helperText={this.state[name+'_error']}
                                     onChange={this.handleChange()}

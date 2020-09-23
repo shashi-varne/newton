@@ -70,7 +70,7 @@ class GroupHealthPlanAddressDetails extends Component {
     
             };
         }
-        form_data.city = lead.city;
+        // form_data.city = lead.city;
 
         if (form_data.pincode) {
             form_data.pincode_match = true;
