@@ -78,7 +78,8 @@ class GroupHealthPlanAddOns extends Component {
             this.setState({
                 add_ons_data: add_ons_data
             }, () => {
-                ReactTooltip.rebuild()
+                ReactTooltip.rebuild();
+                this.updateCtaPremium();
             })
 
     }
