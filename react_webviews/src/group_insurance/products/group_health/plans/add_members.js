@@ -138,10 +138,14 @@ class GroupHealthPlanAddMembers extends Component {
         }
 
         if (['selfandfamily', 'family'].includes(this.state.account_type) && !this.state.other_adult_member) {
+            if(this.state.account_type==='family'){
             this.setState({
                 other_adult_member_error: 'Please select this option'
             });
             canProceed = false;
+        }else{
+            canProceed = true;  
+        }
         }
 
         let keys_to_reset = ['self', 'wife', 'husband', 'father', 'mother', 'father-in-law', 'mother-in-law', 'son', 'son1', 'son2','son3',
@@ -318,7 +322,6 @@ class GroupHealthPlanAddMembers extends Component {
 
     setMinMax = () => {
         let son_disabled = false;
-<<<<<<< HEAD
         let daughter_disabled = false
         if (this.state.son_total === 1 && this.state.daughter_total === 1) {
             this.setState({
@@ -339,41 +342,13 @@ class GroupHealthPlanAddMembers extends Component {
 
         if (this.state.daughter_total === 2) {
             son_disabled = true
-=======
-        let daughter_disabled = false;
-        if ((this.state.son_total + this.state.daughter_total) === this.state.total_plus_minus_max) {
-            this.setState({
-                son_ismax: true,
-                daughter_ismax: true,
-            });
-        } else {
-            this.setState({
-                son_ismax: false,
-                daughter_ismax: false,
-            });
-        }
-
-
-        if (!this.state.daughter_total && this.state.son_total === this.state.total_plus_minus_max) {
-            daughter_disabled = true;
-        }
-
-        if (!this.state.son_total && this.state.daughter_total === this.state.total_plus_minus_max) {
-            son_disabled = true;
->>>>>>> 3036e0e895548a36a3b501910a966b10bc135d8c
         }
 
         this.setState({
             son_disabled: son_disabled,
-<<<<<<< HEAD
             daughter_disabled: daughter_disabled
         });
     }
-=======
-            daughter_disabled: daughter_disabled,
-        });
-    };
->>>>>>> 3036e0e895548a36a3b501910a966b10bc135d8c
 
     updateParent = (key, value) => {
         this.setState({
