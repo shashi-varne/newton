@@ -4,7 +4,7 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 
-import { numDifferentiation } from 'utils/validators';
+import { numDifferentiationInr } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
 
 
@@ -111,7 +111,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
                 className={`tile ${index === this.state.selectedIndex ? 'tile-selected' : ''}`} key={index}>
                 <div className="select-tile">
                     <div className="name">
-                        {`₹${numDifferentiation(props.sum_assured)}`}
+                        {numDifferentiationInr(props.sum_assured)}
                     </div>
                     <div className="completed-icon">
                         {index === this.state.selectedIndex &&
