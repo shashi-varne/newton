@@ -105,7 +105,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
                 className={`tile ${index === this.state.selectedIndex ? 'tile-selected' : ''}`} key={index}>
                 <div className="select-tile">
                     <div className="name">
-                        {numDifferentiation(props.sum_assured)}
+                        {`₹${numDifferentiation(props.sum_assured)}`}
                     </div>
                     <div className="completed-icon">
                         {index === this.state.selectedIndex &&
