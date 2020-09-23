@@ -34,7 +34,7 @@ class GroupHealthPlanList extends Component {
             let body = this.state.groupHealthPlanData.post_body;
             const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/coverplan`,
              body);
-
+            console.log('res',res)
             this.setState({
                 show_loader: false
             });
@@ -124,6 +124,10 @@ class GroupHealthPlanList extends Component {
 
     renderPlans = (props, index) => {
         let plan_data = props;
+<<<<<<< Updated upstream
+=======
+        
+>>>>>>> Stashed changes
         return (
             <div className="tile" key={index}>
                 <div className="group-health-recommendation" style={{ backgroundColor: props.recommendation_tag === 'Recommended' ? '#E86364' : '' }}>{props.recommendation_tag}</div>
