@@ -244,10 +244,10 @@ class GroupHealthPayment extends Component {
                     <div style={{ margin: '5px 0 6px 0' }}>Sum 
                     assured {numDifferentiationInr(this.state.lead.sum_assured)} for {this.state.lead.tenure} year</div>
                     {this.state.policy_data.policy_number && 
-                    <div style={{ margin: '5px 0 6px 0' }}>Policy id: {this.state.policy_data.policy_number || '-'}</div>
+                    <div style={{ margin: '5px 0 6px 0' }}>Policy number: {this.state.policy_data.policy_number || '-'}</div>
                     }
                     {!this.state.policy_data.policy_number && this.state.provider === 'HEFCERGO' &&
-                    <div style={{ margin: '5px 0 6px 0' }}>Transaction no. : {this.state.policy_data.ergo_payment_id || '-'}</div>
+                    <div style={{ margin: '5px 0 6px 0' }}>Transaction number. : {this.state.policy_data.ergo_payment_id || '-'}</div>
                     }
                      {!this.state.policy_data.policy_number && this.state.provider === 'RELIGARE' &&
                     <div style={{ margin: '5px 0 6px 0' }}>Propsal number : {this.state.policy_data.proposal_number || '-'}</div>
