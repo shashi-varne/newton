@@ -137,7 +137,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
                 handleClick={() => this.handleClick()}
             >
                 <div className="common-top-page-subtitle flex-between-center">
-                    {this.state.provider==='Claim can be made upto the selected amount'}     
+                    Claim can be made upto the selected amount     
                  <img 
                  className="tooltip-icon"
                  data-tip="In the last 10 years, the average cost per hospitalisation for urban patients has increased by about 176%. Hence, we recommend to have adequate coverage to manage health expenses"
