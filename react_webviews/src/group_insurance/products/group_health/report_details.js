@@ -354,7 +354,7 @@ class GroupHealthReportDetails extends Component {
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
-                                    SUM ASSURED
+                                    SUM INSURED
                                 </div>
                                 <div className="mtr-bottom">
                                     {numDifferentiationInr(this.state.lead.sum_assured)}

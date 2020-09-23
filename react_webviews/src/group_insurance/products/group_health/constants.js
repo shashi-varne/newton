@@ -102,7 +102,7 @@ export const hdfc = {
     },
     plan_list_screen: {
         tile_mid_data: [
-            { 'label': 'Sum assured:', 'key': 'sum_assured_options_text' },
+            { 'label': 'Sum insured:', 'key': 'sum_assured_options_text' },
             { 'label': 'Recovery benefit:', 'key': 'recovery_benefit_extra', 'tooltip_key': 'recovery_benefit_content' },
             { 'label': 'Allowances:', 'key': 'allowances' }
         ]

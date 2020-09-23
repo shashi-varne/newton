@@ -33,6 +33,8 @@ class GroupHealthPlanAddOns extends Component {
     }
 
     setAmountOptions (add_ons_data) {
+
+        let sum_assured = this.state.groupHealthPlanData.sum_assured;
     
             if (add_ons_data.length !== 0) {
                 add_ons_data.forEach((item, index) => {
@@ -63,6 +65,11 @@ class GroupHealthPlanAddOns extends Component {
                         final_data.selectedIndexOption = selectedIndexOption;
                     }
 
+                    if(sum_assured === 400000 && item.key === 'CAREWITHNCB') {
+                        final_data.checked = true;
+                        final_data.disabled = true;
+                    }
+
 
                     add_ons_data[index] = final_data;
                 })
@@ -71,7 +78,8 @@ class GroupHealthPlanAddOns extends Component {
             this.setState({
                 add_ons_data: add_ons_data
             }, () => {
-                ReactTooltip.rebuild()
+                ReactTooltip.rebuild();
+                this.updateCtaPremium();
             })
 
     }
@@ -189,6 +197,7 @@ class GroupHealthPlanAddOns extends Component {
                                 style={{ alignItems: 'start' }}
                                 checked={item.checked || false}
                                 color="primary"
+                                disabled={item.disabled}
                                 value={item.key}
                                 name={item.key}
                                 disableRipple

@@ -197,7 +197,7 @@ class GroupHealthPlanSelectFloater extends Component {
 
                 {props.key === 'NF' && index === this.state.selectedIndex && this.state.show_ind_mem_premium &&
                     <div className="detail-info">
-                        <div className="di-title">Sum assured</div>
+                        <div className="di-title">Sum insured</div>
                         <div className="flex-between di-tile">
                             <div className="di-tile-left">{numDifferentiation(this.state.sum_assured)} x {this.state.total_member}</div>
                             <div className="di-tile-right">{numDifferentiationInr(this.state.sum_assured * this.state.total_member)}</div>
@@ -253,7 +253,7 @@ class GroupHealthPlanSelectFloater extends Component {
             >
 
                 <div className="common-top-page-subtitle flex-between-center">
-                You can choose how to use the sum assured across family members
+                You can choose how to use the sum insured across family members
                  <img 
                         className="tooltip-icon"
                         data-tip="For entire family -
