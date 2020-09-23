@@ -124,10 +124,6 @@ class GroupHealthPlanList extends Component {
 
     renderPlans = (props, index) => {
         let plan_data = props;
-<<<<<<< Updated upstream
-=======
-        
->>>>>>> Stashed changes
         return (
             <div className="tile" key={index}>
                 <div className="group-health-recommendation" style={{ backgroundColor: props.recommendation_tag === 'Recommended' ? '#E86364' : '' }}>{props.recommendation_tag}</div>
