@@ -68,25 +68,6 @@ class GroupHealthPlanFinalSummary extends Component {
             pan_needed = true;
         }
 
-        const med_ques_mapper_religare = {
-            'mand_1': {
-                'disc': 'Any illness/injury in last 48 months?',
-                'members': []
-            },
-            'mand_2': {
-                'disc': 'Previous health insurance claim?',
-                'members': []
-            },
-            'mand_3': {
-                'disc': 'Previous health insurance declined/increase?',
-                'members': []
-            },
-            'mand_4': {
-                'disc': 'Already covered with Religare?',
-                'members': []
-            }
-        }
-
 
         let personal_details_to_copy = [
             {
