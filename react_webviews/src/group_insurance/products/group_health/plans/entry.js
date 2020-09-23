@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 import hdfc_logo from '../../../../assets/ic_hdfc_logo.svg';
-import religare_logo from '../../../../assets/ic_religare_logo.svg';
-import star_logo from '../../../../assets/ic_star_logo.svg';
+import religare_logo from '../../../../assets/ic_religare_logo_card.svg';
+import star_logo from '../../../../assets/ic_star_logo.svg'
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
@@ -32,7 +32,7 @@ class HealthInsuranceEntry extends Component {
       },
       {
         key: 'RELIGARE',
-        title: 'Religare',
+        title: 'Care Health',
         subtitle: 'Care',
         icon: religare_logo
       },

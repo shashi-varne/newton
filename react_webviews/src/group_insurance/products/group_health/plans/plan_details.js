@@ -54,7 +54,7 @@ class GroupHealthPlanDetails extends Component {
 
         for (var i in keys_to_empty) {
 
-            if(not_req_keys_for_backend.includes(keys_to_empty[i])) {
+            if(!not_req_keys_for_backend.includes(keys_to_empty[i])) {
                 post_body[keys_to_empty[i]] = '';
             }
             

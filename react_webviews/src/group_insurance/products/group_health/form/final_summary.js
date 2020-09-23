@@ -68,6 +68,7 @@ class GroupHealthPlanFinalSummary extends Component {
             pan_needed = true;
         }
 
+
         let personal_details_to_copy = [
             {
                 'title': 'Insured name',

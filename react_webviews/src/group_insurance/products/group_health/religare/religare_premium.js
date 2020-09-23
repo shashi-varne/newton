@@ -23,7 +23,7 @@ export default class ReligarePremium extends Component {
 
       <div className="premium-info">
         <div className="flex-between pi-tile">
-          <div className="pi-tile-left">Sum assured</div>
+          <div className="pi-tile-left">Sum insured</div>
           <div className="pi-tile-right">
             {numDifferentiationInr(this.props.type_of_plan === 'NF' ? this.props.plan_selected_final.sum_assured * this.props.total_member :
               this.props.plan_selected_final.sum_assured)}
@@ -88,12 +88,11 @@ export default class ReligarePremium extends Component {
 
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">Net premium</div>
-          <div className="pi-tile-right">{inrFormatDecimal(this.props.plan_selected_final.base_premium -
-            this.props.plan_selected_final.total_discount)}</div>
+          <div className="pi-tile-right">{inrFormatDecimal(this.props.plan_selected_final.net_premium)}</div>
         </div>
 
         <div className="flex-between pi-tile">
-          <div className="pi-tile-left">GST & other taxes</div>
+          <div className="pi-tile-left">GST</div>
           <div className="pi-tile-right">{inrFormatDecimal(this.props.plan_selected_final.gst_tax)}</div>
         </div>
 
