@@ -161,15 +161,15 @@ class StarAddress extends Component {
 
     if (canSubmitForm) {
       const data_to_send = [...keys_to_check, 'city', 'area'].reduce((acc, key) => {
-        acc[key] = form_data[key];
+        acc[key] = `${form_data[key]}`;
         return acc;
       }, {});
       const body = {
         permanent_address: {
           ...data_to_send,
+          'district': '',
         },
       };
-      console.log(body);
       this.updateLead(body);
     }
   };
