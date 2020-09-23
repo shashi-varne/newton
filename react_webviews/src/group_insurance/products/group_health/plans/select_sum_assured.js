@@ -63,10 +63,16 @@ class GroupHealthPlanSelectSumAssured extends Component {
 
     handleClick = () => {
         this.sendEvents('next');
+        let selectedPlan = this.state.premium_data[this.state.selectedIndex];
         let groupHealthPlanData = this.state.groupHealthPlanData;
         groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
-        groupHealthPlanData.sum_assured = this.state.premium_data[this.state.selectedIndex].sum_assured;
-        groupHealthPlanData.post_body.sum_assured = this.state.premium_data[this.state.selectedIndex].sum_assured;
+        groupHealthPlanData.sum_assured = selectedPlan.sum_assured;
+        groupHealthPlanData.post_body.sum_assured = selectedPlan.sum_assured;
+
+        groupHealthPlanData.post_body.base_premium = selectedPlan.base_premium;
+        groupHealthPlanData.post_body.premium = selectedPlan.net_premium;
+
+
         if(this.state.provider === 'RELIGARE') {
             groupHealthPlanData.post_body.sum_assured = (groupHealthPlanData.post_body.sum_assured)/100000
         }
