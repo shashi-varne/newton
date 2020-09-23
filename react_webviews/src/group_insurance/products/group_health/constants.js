@@ -211,9 +211,9 @@ export const religare = {
     },
     landing_screen: {
         offerImageData: [
-            { src: 'religare_icn_landing_card_1.svg' },
-            { src: 'religare_icn_landing_card_2.svg' },
-            { src: 'religare_icn_landing_card_3.svg' }
+            { src: 'religare_icn_landing_card_1.png' },
+            { src: 'religare_icn_landing_card_2.png' },
+            { src: 'religare_icn_landing_card_3.png' }
         ],
         whats_covered: [
             '30 days pre and 60 days post hospitalisation expenses',
