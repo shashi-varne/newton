@@ -19,6 +19,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import ReactTooltip from "react-tooltip";
 import Button from 'material-ui/Button';
+import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
 
 class GroupHealthPlanPersonalDetails extends Component {
 
@@ -32,7 +33,9 @@ class GroupHealthPlanPersonalDetails extends Component {
       show_loader: true,
       get_lead: true,
       openBmiDialog: false,
-      pan_needed: false
+      pan_needed: false,
+      screen_name: 'personal_details_screen',
+      occupationOptions: []
     }
     this.initialize = initialize.bind(this);
     this.updateLead = updateLead.bind(this);
@@ -42,10 +45,15 @@ class GroupHealthPlanPersonalDetails extends Component {
   onload = () => {
 
     let lead = this.state.lead || {};
+    let occupationOptions = this.state.screenData.occupation_opts;
+
+    this.setState({
+      occupationOptions: occupationOptions
+    })
 
     let spouse_relation = lead.spouse_account_key ? lead.spouse_account_key.relation : '';
 
-    let member_base = lead.member_base;
+    let member_base = lead.member_base || [];
     // let member_key = this.props.match.params.member_key;
     let member_key = this.props.member_key;
 
@@ -66,7 +74,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let next_state = `/group-insurance/group-health/${this.state.provider}/contact`;
     let backend_key = '';
-    for (var i = 0; i < member_base.length; i++) {
+    for (var i = 0; member_base && i < member_base.length; i++) {
       let key = member_base[i].key;
 
       if (member_key === key) {
@@ -161,7 +169,7 @@ class GroupHealthPlanPersonalDetails extends Component {
       name = event.target.name;
     }
 
-    var value = event.target ? event.target.value : '';
+    var value = event.target ? event.target.value : event;
 
     if (name === 'dob' && !dobFormatTest(value)) {
       return;
@@ -181,7 +189,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
 
     } else {
-      form_data[name] = event.target.value;
+      form_data[name] = value;
       form_data[name + '_error'] = '';
     }
 
@@ -319,7 +327,8 @@ class GroupHealthPlanPersonalDetails extends Component {
           "dob": this.state.form_data.dob || '',
           "gender": this.state.form_data.gender || gender,
           "height": this.state.form_data.height || '',
-          "weight": this.state.form_data.weight || ''
+          "weight": this.state.form_data.weight || '',
+          "occupation": this.state.form_data.occupation || ''
         }
       }
 
@@ -580,6 +589,20 @@ class GroupHealthPlanPersonalDetails extends Component {
             helperText={this.state.form_data.weight_error}
             value={this.state.form_data.weight || ''}
             onChange={this.handleChange('weight')} />
+        </div>}
+        {this.state.providerConfig.key === 'STAR' && <div className="InputField">
+          <DropdownWithoutIcon
+            width="40"
+            dataType="AOB"
+            options={this.state.occupationOptions}
+            id="occupation"
+            label="Occupation"
+            name="occupation"
+            error={this.state.form_data.occupation_error ? true : false}
+            helperText={this.state.form_data.occupation_error}
+            value={this.state.form_data.occupation || ''}
+            onChange={this.handleChange('occupation')}
+          />
         </div>}
         <ConfirmDialog parent={this} />
         {this.renderBmiDialog()}

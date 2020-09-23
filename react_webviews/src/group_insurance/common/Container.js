@@ -550,6 +550,7 @@ class Container extends Component {
             twoButtons={this.props.twoButtons}
             logo={this.props.logo}
             buttonTitle={this.props.buttonTitle}
+            buttonDisabled={this.props.buttonDisabled}
             buttonOneTitle={this.props.buttonOneTitle}
             buttonTwoTitle={this.props.buttonTwoTitle}
             provider={this.props.provider}

@@ -93,7 +93,6 @@ class GroupHealthPlanList extends Component {
     }
 
     selectPlan = (plan, index) => {
-        console.log(plan);
         this.sendEvents('next', plan);
         let groupHealthPlanData = this.state.groupHealthPlanData;
         groupHealthPlanData.plan_selected = plan;

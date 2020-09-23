@@ -37,10 +37,9 @@ class GroupHealthPlanDob extends Component {
         this.setState({
             account_type: groupHealthPlanData.account_type,
             header_title: groupHealthPlanData.account_type === 'self' ? 'Your date of birth' : 'Date of birth details'
-        })
+        });
 
         let dob_data = getInsuredMembersUi(groupHealthPlanData);
-
         for (var key in dob_data) {
             dob_data[key].label = `${capitalizeFirstLetter(childeNameMapper(dob_data[key].key))}'s date of birth (DD/MM/YYYY)`;
             if(dob_data[key].key === 'self') {
@@ -128,9 +127,9 @@ class GroupHealthPlanDob extends Component {
         let manAgeCheck = '';
         if(this.state.account_type === 'selfandfamily' || this.state.account_type === 'family') {
             if(self_gender === 'MALE') {
-                manAgeCheck = 'self'
+                manAgeCheck = 'self';
             } else if((self_gender === 'FEMALE' && ui_members.husband) || ui_members.husband) {
-                manAgeCheck = 'husband'
+                manAgeCheck = 'husband';
             }
         }
 

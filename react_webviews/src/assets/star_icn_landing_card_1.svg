@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="320" height="148" viewBox="0 0 320 148">
+    <defs>
+        <path id="26zhbxoo7a" d="M0 0H320V148H0z"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <g>
+            <g transform="translate(-669 -27) translate(669 27)">
+                <mask id="yyp9alevbb" fill="#fff">
+                    <use xlink:href="#26zhbxoo7a"/>
+                </mask>
+                <use fill="#EAF3FF" xlink:href="#26zhbxoo7a"/>
+                <path fill="#DDECFF" fill-rule="nonzero" d="M122.347 95.249C109.183 89.739 102.4 79.656 102 65h212c3.314 0 6 2.686 6 6v79.075c-5.813 8.034-19.62 9.925-40.693 9.925-21.073 0-50.14-2.363-64.673-24.104-14.534-21.742-9.536-27.319-29.067-35.92-19.53-8.603-43.473 3.537-63.22-4.727z" mask="url(#yyp9alevbb)" transform="matrix(1 0 0 -1 0 225)"/>
+                <path fill="#DDECFF" d="M0 68C23.93 22.667 56.826 0 98.69 0c62.793 0 72.852 60.682 148.583 68H0z" mask="url(#yyp9alevbb)" transform="rotate(180 123.636 34)"/>
+                <text fill="#2072D4" font-family="WorkSans-Medium, Work Sans" font-size="13" font-weight="400" mask="url(#yyp9alevbb)">
+                    <tspan x="20" y="88">Family floater policy at an affordable </tspan> <tspan x="20" y="110">premium</tspan>
+                </text>
+                <text fill="#1D63B7" font-family="WorkSans-Bold, Work Sans" font-size="17" font-weight="bold" mask="url(#yyp9alevbb)">
+                    <tspan x="20" y="39">Affordable premium</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>
