@@ -88,8 +88,7 @@ export default class ReligarePremium extends Component {
 
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">Net premium</div>
-          <div className="pi-tile-right">{inrFormatDecimal(this.props.plan_selected_final.base_premium -
-            this.props.plan_selected_final.total_discount)}</div>
+          <div className="pi-tile-right">{inrFormatDecimal(this.props.plan_selected_final.net_premium)}</div>
         </div>
 
         <div className="flex-between pi-tile">
