@@ -194,8 +194,9 @@ class GroupHealthPayment extends Component {
             <div>
               {this.state.paymentSuccess &&
                 <p className="top-content">
-                  Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for {this.state.lead.base_plan_title} {this.state.lead.plan_title} is successful.
-                           {this.state.policy_data.policy_number && <span>Now you have access to 10000+ cashless hospitals.</span>}
+                  {/* Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for {this.state.lead.base_plan_title} {this.state.lead.plan_title} is successful.
+                           {this.state.policy_data.policy_number && <span>Now you have access to 10000+ cashless hospitals.</span>} */}
+                  You will soon be contacted by {this.state.lead.base_plan_title} team for a medical review before issuing the policy!
                 </p>
               }
 
@@ -244,7 +245,7 @@ class GroupHealthPayment extends Component {
                     <div style={{ margin: '5px 0 6px 0' }}>Sum 
                     assured {numDifferentiationInr(this.state.lead.sum_assured)} for {this.state.lead.tenure} year</div>
                     {this.state.policy_data.policy_number && 
-                    <div style={{ margin: '5px 0 6px 0' }}>Policy number: {this.state.policy_data.policy_number || '-'}</div>
+                    <div style={{ margin: '5px 0 6px 0' }}>Policy number: {this.state.policy_data.proposal_number || '-'}</div>
                     }
                     {!this.state.policy_data.policy_number && this.state.provider === 'HEFCERGO' &&
                     <div style={{ margin: '5px 0 6px 0' }}>Transaction number. : {this.state.policy_data.ergo_payment_id || '-'}</div>
