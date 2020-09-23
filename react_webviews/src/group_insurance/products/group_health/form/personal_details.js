@@ -228,7 +228,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     if (!isValidDate(this.state.form_data.dob)) {
-      form_data.dob_error = 'Please enter validate date';
+      form_data.dob_error = 'Please enter valid date';
     }
 
     for (var i = 0; i < keys_to_check.length; i++) {
