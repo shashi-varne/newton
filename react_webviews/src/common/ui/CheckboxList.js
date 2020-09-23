@@ -40,7 +40,6 @@ class CheckboxListClass extends Component {
         }
 
         if (options[index].name !== 'Other' && !options[index].checked) {
-            console.log(options[index])
             this.setState({
                 openPopUpInputDate: true,
                 header_title: options[index].name,
@@ -195,6 +194,8 @@ class CheckboxListClass extends Component {
 
     render() {
 
+        let dob = this.props.parent.state.lead.dob;
+
         return (
             <div>
                 {this.props.parent.state.options.map(this.renderList)}
@@ -216,6 +217,7 @@ class CheckboxListClass extends Component {
                     name={this.state.name}
                     label={this.state.label}
                     id={this.state.id}
+                    dob={dob}
                     value={this.state[this.state.name] || this.props.parent.state[this.state.name]} />
             </div>
         );

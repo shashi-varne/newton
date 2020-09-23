@@ -5,7 +5,7 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { health_providers, genderOptions, childeNameMapper } from '../../../constants';
 import {
-  calculateAge, toFeet, capitalizeFirstLetter, 
+  calculateAge, toFeet, capitalizeFirstLetter,
   formatDate, validatePan, validateAlphabets, dobFormatTest
 } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
@@ -85,7 +85,8 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let form_data = lead[backend_key] || {};
 
-    let dobNeeded = lead.eldest_member === backend_key || member_key === 'applicant';
+    let dobNeeded = (this.state.provider === 'RELIGARE' && lead.eldest_member !== backend_key) || member_key === 'applicant';
+
     form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
     let age = calculateAge(form_data.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
 
