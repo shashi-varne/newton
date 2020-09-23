@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 import { formatAmountInr } from "utils/validators";
@@ -21,7 +20,8 @@ class GroupHealthPlanAddOns extends Component {
             ctaWithProvider: true,
             add_ons_data: [],
             show_loader: true,
-            screen_name: 'add_ons_screen'
+            screen_name: 'add_ons_screen',
+            total_add_on_premiums: 0
         }
 
         this.initialize = initialize.bind(this);
@@ -81,9 +81,15 @@ class GroupHealthPlanAddOns extends Component {
         let body = this.state.groupHealthPlanData.post_body;
 
         let add_ons_data = this.state.groupHealthPlanData.add_ons_data || [];
+
+        // eslint-disable-next-line radix
+        let cta_premium = parseInt(this.state.bottomButtonData.leftSubtitle.substring(1).replace(',', ''));
+
         this.setState({
-            add_ons_data: add_ons_data
-        })
+            // add_ons_data: add_ons_data,
+            cta_premium: cta_premium
+        });
+        
         if (add_ons_data.length === 0) {
             try {
 
@@ -108,43 +114,68 @@ class GroupHealthPlanAddOns extends Component {
                 toast('Something went wrong');
             }
 
-            this.setState({
-                add_ons_data: add_ons_data
-            })
-
         } else {
             this.setState({
                 show_loader: false
             })
         }
+
+        this.setState({
+            add_ons_data: add_ons_data
+        }, () => {
+            this.updateCtaPremium()
+        })
         
         this.setAmountOptions(add_ons_data);
     }
 
-    handleChangeCheckboxes = index => event => {
+    updateCtaPremium = () => {
+        let { add_ons_data, cta_premium } = this.state;
 
-        let add_ons_data = this.state.add_ons_data;
+        let total_premium = 0;
+
+        add_ons_data.forEach((item, index) => {
+            if (item.checked) {
+                total_premium += item.selected_premium || item.default_premium;
+            }
+        });
+
+        let updated_premium = cta_premium + total_premium;
+
+        this.updateBottomPremium(updated_premium);
+    }
+
+    handleChangeCheckboxes = index => event => {
+        let { add_ons_data } = this.state;
         add_ons_data[index].checked = !add_ons_data[index].checked;
+
         this.setState({
-            add_ons_data: add_ons_data
+            add_ons_data: add_ons_data,
+        }, () => {
+            this.updateCtaPremium()
         })
-        
     }
 
     handleChange = index => event => {
 
         let { add_ons_data } = this.state;
+         
         let data = add_ons_data[index];
 
         let indexOption = event;
         data.selectedIndexOption = indexOption;
+
         data.selected_cover_amount =  data.options[indexOption].cover_amount;
         data.selected_premium =  data.options[indexOption].premium;
+
+
 
         add_ons_data[index] = data;
 
         this.setState({
             add_ons_data: add_ons_data
+        }, () => {
+            this.updateCtaPremium()
         })
     }
 
