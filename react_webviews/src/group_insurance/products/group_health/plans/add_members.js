@@ -3,7 +3,7 @@ import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import {  genderOptions } from '../../../constants';
+import { genderOptions } from '../../../constants';
 
 // calculateAge, isValidDate, IsFutureDate
 import PlusMinusInput from '../../../../common/ui/PlusMinusInput';
@@ -113,14 +113,17 @@ class GroupHealthPlanAddMembers extends Component {
         }
 
         if (['selfandfamily', 'family'].includes(this.state.account_type) && !this.state.other_adult_member) {
-            // this.setState({
-            //     other_adult_member_error: 'Please select this option'
-            // });
-            toast('Atleast select one other adult member');
-            canProceed = false;
+            if (this.state.account_type === 'family') {
+                this.setState({
+                    other_adult_member_error: 'Please select this option'
+                });
+                canProceed = false;
+            } else {
+                canProceed = true;
+            }
         }
 
-        let keys_to_reset = ['self', 'wife', 'husband', 'father', 'mother', 'son', 'son1', 'son2','son3',
+        let keys_to_reset = ['self', 'wife', 'husband', 'father', 'mother', 'son', 'son1', 'son2', 'son3',
             'daughter', 'daughter1', 'daughter2', 'daughter3'];
 
 
@@ -193,38 +196,38 @@ class GroupHealthPlanAddMembers extends Component {
             child: child_total
         }
 
-        if(this.state.account_type === 'selfandfamily') {
+        if (this.state.account_type === 'selfandfamily') {
 
-            if(!this.state.self_gender) {
+            if (!this.state.self_gender) {
                 this.setState({
                     self_gender_error: 'Please select gender'
                 })
                 canProceed = false;
             }
 
-            if((child_total + adult_total) <= 1) {
+            if ((child_total + adult_total) <= 1) {
                 toast('Please select atleast one family member');
                 canProceed = false;
             }
 
-            if(this.state.self_gender) {
-                if(this.state.self_gender === 'MALE' && this.state.other_adult_member === 'husband') {
+            if (this.state.self_gender) {
+                if (this.state.self_gender === 'MALE' && this.state.other_adult_member === 'husband') {
                     this.setState({
-                        other_adult_member_error :'Invalid choice'
+                        other_adult_member_error: 'Invalid choice'
                     })
                     canProceed = false;
                 }
 
-                if(this.state.self_gender === 'FEMALE' && this.state.other_adult_member === 'wife') {
+                if (this.state.self_gender === 'FEMALE' && this.state.other_adult_member === 'wife') {
                     this.setState({
-                        other_adult_member_error :'Invalid choice'
+                        other_adult_member_error: 'Invalid choice'
                     })
                     canProceed = false;
                 }
             }
 
             ui_members.self_gender = this.state.self_gender || '';
-            
+
         } else {
             ui_members.self_gender = '';
         }
@@ -232,17 +235,17 @@ class GroupHealthPlanAddMembers extends Component {
         this.sendEvents('next', ui_members);
 
 
-        if(canProceed) {
+        if (canProceed) {
             let groupHealthPlanData = this.state.groupHealthPlanData;
             groupHealthPlanData.ui_members = ui_members;
             groupHealthPlanData.post_body = post_body;
             groupHealthPlanData.eldest_member = ''; //reset
             groupHealthPlanData.eldest_dob = ''; //reset
             this.setLocalProviderData(groupHealthPlanData);
-    
+
             this.navigate(this.state.next_screen || 'plan-dob');
         }
-        
+
     }
 
 
@@ -258,8 +261,8 @@ class GroupHealthPlanAddMembers extends Component {
                 "screen_name": 'add members',
                 'son': ui_members.son_total || '',
                 'daughter': ui_members.daughter_total || '',
-                'self' : this.state.insured_account_type === 'selfandfamily' || this.state.insured_account_type === 'self' ? 'yes' : 'no',
-                'parent' : `${(ui_members.father ? 'father, ' : '')} ${(ui_members.mother ? 'mother' : '') }`,
+                'self': this.state.insured_account_type === 'selfandfamily' || this.state.insured_account_type === 'self' ? 'yes' : 'no',
+                'parent': `${(ui_members.father ? 'father, ' : '')} ${(ui_members.mother ? 'mother' : '')}`,
                 'adult_member': ['selfandfamily', 'family'].indexOf(this.state.account_type) !== -1 ? this.state.other_adult_member : ''
             }
         };
@@ -274,69 +277,31 @@ class GroupHealthPlanAddMembers extends Component {
     setMinMax = () => {
         let son_disabled = false;
         let daughter_disabled = false
-        
-        if (this.state.provider === 'HDFCERGO') {
-            if (this.state.son_total === 1 && this.state.daughter_total === 1) {
-                this.setState({
-                    son_ismax: true,
-                    daughter_ismax: true
-                });
-    
-            } else {
-                this.setState({
-                    son_ismax: false,
-                    daughter_ismax: false
-                });
-            }
-    
-            if (this.state.son_total === 2) {
-                daughter_disabled = true
-            }
-    
-            if (this.state.daughter_total === 2) {
-                son_disabled = true
-            }
-    
+        if (this.state.son_total === 1 && this.state.daughter_total === 1) {
             this.setState({
-                son_disabled: son_disabled,
-                daughter_disabled: daughter_disabled
+                son_ismax: true,
+                daughter_ismax: true
+            });
+
+        } else {
+            this.setState({
+                son_ismax: false,
+                daughter_ismax: false
             });
         }
 
-        // ---------------------------
-        if (this.state.provider === 'RELIGARE') {
-            if (this.state.son_total === 2 && this.state.daughter_total === 2) {
-                this.setState({
-                    son_ismax: true,
-                    daughter_ismax: true
-                });
-    
-            } else if (this.state.son_total + this.state.daughter_total === 4) {
-                this.setState({
-                    son_ismax: true,
-                    daughter_ismax: true
-                });
-    
-            } else {
-                this.setState({
-                    son_ismax: false,
-                    daughter_ismax: false
-                });
-            }
-    
-            if (this.state.son_total === 4) {
-                daughter_disabled = true
-            }
-    
-            if (this.state.daughter_total === 4) {
-                son_disabled = true
-            }
-    
-            this.setState({
-                son_disabled: son_disabled,
-                daughter_disabled: daughter_disabled
-            });
+        if (this.state.son_total === 2) {
+            daughter_disabled = true
         }
+
+        if (this.state.daughter_total === 2) {
+            son_disabled = true
+        }
+
+        this.setState({
+            son_disabled: son_disabled,
+            daughter_disabled: daughter_disabled
+        });
     }
 
     updateParent = (key, value) => {
@@ -350,7 +315,7 @@ class GroupHealthPlanAddMembers extends Component {
     handleChangeRadio = name => event => {
 
         let options = other_adult_member_options;
-        if(name === 'self_gender') {
+        if (name === 'self_gender') {
             options = genderOptions;
         }
         this.setState({
@@ -392,20 +357,20 @@ class GroupHealthPlanAddMembers extends Component {
                     </div>
                 }
 
-            {['selfandfamily'].indexOf(this.state.account_type) !== -1 &&
-          <div className="InputField">
-            <RadioWithoutIcon
-              width="40"
-              label="Gender"
-              class="Gender:"
-              options={genderOptions}
-              id="self_gender"
-              name="self_gender"
-              error={(this.state.self_gender_error) ? true : false}
-              helperText={this.state.self_gender_error}
-              value={this.state.self_gender || ''}
-              onChange={this.handleChangeRadio('self_gender')} />
-          </div>}
+                {['selfandfamily'].indexOf(this.state.account_type) !== -1 &&
+                    <div className="InputField">
+                        <RadioWithoutIcon
+                            width="40"
+                            label="Gender"
+                            class="Gender:"
+                            options={genderOptions}
+                            id="self_gender"
+                            name="self_gender"
+                            error={(this.state.self_gender_error) ? true : false}
+                            helperText={this.state.self_gender_error}
+                            value={this.state.self_gender || ''}
+                            onChange={this.handleChangeRadio('self_gender')} />
+                    </div>}
 
 
                 {['selfandfamily', 'family'].indexOf(this.state.account_type) !== -1 &&
@@ -420,9 +385,9 @@ class GroupHealthPlanAddMembers extends Component {
                                 name="other_adult_member"
                                 error={(this.state.other_adult_member_error) ? true : false}
                                 helperText={this.state.other_adult_member_error}
-                                // value={this.state.other_adult_member || ''}
-                                onChange={this.handleChangeRadio('other_adult_member')} 
-                                canUnSelect={true}/>
+                                value={this.state.other_adult_member || ''}
+                                onChange={this.handleChangeRadio('other_adult_member')}
+                                canUnSelect={true} />
                         </div>
 
 
