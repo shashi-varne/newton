@@ -199,6 +199,16 @@ class GroupHealthPlanPersonalDetails extends Component {
 
   };
 
+  Difference_In_Days=(val) =>{
+const birthday = val.toString().replace(/\\-/g, '/').split('/').reverse().join('/');
+const today = new Date();
+const birthDate = new Date(birthday);
+let Difference_In_Time = today.getTime() - birthDate.getTime(); 
+let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24); 
+return Math.round(Difference_In_Days);
+}
+
+
 
   handleClick = async () => {
 
@@ -218,14 +228,22 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     let form_data = this.state.form_data;
-
-    if (this.state.provider === 'RELIGARE') {
-      if (this.state.backend_key === 'child_account1_key' || this.state.backend_key === 'child_account2_key' || this.state.backend_key === 'child_account3_key' || this.state.backend_key === 'child_account4_key') {
-        if (calculateAge(this.state.form_data.dob) < 5 || calculateAge(this.state.form_data.dob) > 25) {
-          form_data.dob_error = 'kid age cannot be greater than 25 or less than 5';
-        }
+   
+    if(this.state.provider==='RELIGARE'){
+    if(this.state.groupHealthPlanData.type_of_plan==='WF'){
+      if (this.state.backend_key === 'child_account1_key' || this.state.backend_key === 'child_account2_key' || this.state.backend_key === 'child_account3_key' || this.state.backend_key === 'child_account4_key'){
+      if (this.Difference_In_Days(this.state.form_data.dob) <= 91 ||calculateAge(this.state.form_data.dob) > 25){
+      form_data.dob_error='kid age cannot be greater than 25 or less than 91 days';
       }
     }
+    }else{
+      if (this.state.backend_key === 'child_account1_key' || this.state.backend_key === 'child_account2_key' || this.state.backend_key === 'child_account3_key' || this.state.backend_key === 'child_account4_key'){
+      if (calculateAge(this.state.form_data.dob) < 5 || calculateAge(this.state.form_data.dob) > 25) {
+          form_data.dob_error = 'kid age cannot be greater than 25 or less than 5 years';
+        }
+      }
+   }
+  }
 
     if (!isValidDate(this.state.form_data.dob)) {
       form_data.dob_error = 'Please enter valid date';
@@ -264,10 +282,8 @@ class GroupHealthPlanPersonalDetails extends Component {
 
       let { provider } = this.state;
 
-      if (provider === 'RELIGARE') {
-        if( age < 19) {
-          form_data.dob_error = 'Minimum age is 18 applicant';
-        }
+      if (provider === 'RELIGARE' && age < 19) {
+        form_data.dob_error = 'Minimum age is 18 applicant';
 
       } else {
 
