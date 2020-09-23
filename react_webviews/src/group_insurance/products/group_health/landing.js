@@ -240,7 +240,7 @@ class GroupHealthLanding extends Component {
           {this.state.quoteResume && this.state.quoteResume.id &&
             <div className="resume-card" onClick={() => this.handleResume()}>
               <div className="rc-title">
-                Complete your health protection
+                Recent activity
             </div>
 
               <div className="rc-tile" style={{ marginBottom: 0 }}>
@@ -263,13 +263,13 @@ class GroupHealthLanding extends Component {
               </div>
 
               <div className="rc-bottom flex-between">
-                <div className="rcb-content">Sum assured: {numDifferentiationInr(this.state.quoteResume.sum_assured)}</div>
+                <div className="rcb-content">Sum insured: {numDifferentiationInr(this.state.quoteResume.sum_assured)}</div>
                 <div className="rcb-content">Cover period: {this.state.quoteResume.tenure} year</div>
               </div>
             </div>}
 
           <div className="generic-page-title">
-            Coverage all age groups
+            Covers all age groups
           </div>
           <div className="generic-page-subtitle">
             Option to cover your entire family (spouse, kids and parents)
