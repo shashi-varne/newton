@@ -5,6 +5,7 @@ import { FormControl } from "material-ui/Form";
 import Input from "../../../../common/ui/Input";
 import Grid from "material-ui/Grid";
 import { capitalizeFirstLetter } from 'utils/validators';
+import { childeNameMapper } from '../../../constants';
 
 class radioAndCheckboxList extends Component {
   constructor(props) {
@@ -129,7 +130,7 @@ class radioAndCheckboxList extends Component {
                           className="Checkbox"
                         />
                         <span style={{ fontSize: "14px", marginRight: '50px' }}>
-                          {capitalizeFirstLetter(member.key)}
+                          {capitalizeFirstLetter(childeNameMapper(member.key))}
                         </span>
                       </Grid>
                     </Grid>
