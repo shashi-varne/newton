@@ -32,7 +32,7 @@ const Login = (props) => {
   const [resendDisabled, disableResend] = useState(false);
   // const serverUrl = 'https://wreport-dot-plutus-staging.appspot.com';
   const serverUrl = 'https://my.fisdom.com';
-  const socialRedirectUrl = 'https://wreport-dot-plutus-web-views.appspot.com/w-report/overview';
+  const socialRedirectUrl = encodeURIComponent('https://wv.fisdom.com/w-report/main/overview?base_url=https://my.fisdom.com');
 
   const sendEvents = (user_action, props) => {
     let eventObj = {
@@ -306,7 +306,6 @@ const Login = (props) => {
             classes={{ root: "wr-social-btn" }}
             style={{ marginRight: '20px !important' }}
             href={serverUrl + '/auth/facebook?redirect_url=' + socialRedirectUrl}
-            onClick={clickContinue}
             disabled={opLoading}>
             <img src={require('assets/facebook.svg')} alt="fb" style={{ marginRight: '12px' }} />
             Facebook
@@ -314,7 +313,6 @@ const Login = (props) => {
           <Button
             fullWidth={true}
             classes={{ root: "wr-social-btn" }}
-            onClick={clickContinue}
             href={serverUrl + '/auth/google?redirect_url=' + socialRedirectUrl}
             disabled={opLoading}>
             <img src={require('assets/google.svg')} alt="google" style={{ marginRight: '12px' }} />
