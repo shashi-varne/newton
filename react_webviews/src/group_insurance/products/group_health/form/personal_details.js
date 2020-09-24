@@ -6,7 +6,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { health_providers, genderOptions, childeNameMapper } from '../../../constants';
 import {
   calculateAge, toFeet, capitalizeFirstLetter,
-  formatDate, validatePan, validateAlphabets, dobFormatTest, isValidDate
+  formatDate, validatePan, validateAlphabets, dobFormatTest, isValidDate, difference_In_Days
 } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
@@ -220,9 +220,15 @@ class GroupHealthPlanPersonalDetails extends Component {
     let form_data = this.state.form_data;
 
     if (this.state.provider === 'RELIGARE') {
-      if (this.state.backend_key === 'child_account1_key' || this.state.backend_key === 'child_account2_key' || this.state.backend_key === 'child_account3_key' || this.state.backend_key === 'child_account4_key') {
-        if (calculateAge(this.state.form_data.dob) < 5 || calculateAge(this.state.form_data.dob) > 25) {
-          form_data.dob_error = 'kid age cannot be greater than 25 or less than 5';
+      if (form_data.relation.indexOf('SON') || form_data.relation.indexOf('DAUGHTER')) {
+        if (this.state.groupHealthPlanData.type_of_plan === 'WF') {
+          if (difference_In_Days(this.state.form_data.dob) <= 91 || calculateAge(this.state.form_data.dob) > 25) {
+            form_data.dob_error = 'kid age cannot be greater than 25 or less than 91 days';
+          }
+        } else {
+          if (calculateAge(this.state.form_data.dob) < 5 || calculateAge(this.state.form_data.dob) > 25) {
+            form_data.dob_error = 'kid age cannot be greater than 25 or less than 5 years';
+          }
         }
       }
     }
@@ -262,15 +268,15 @@ class GroupHealthPlanPersonalDetails extends Component {
     let { provider } = this.state;
     let age = calculateAge((this.state.form_data.dob || '').replace(/\\-/g, '/').split('-').join('/'));
 
-    if(this.state.dobNeeded) {
-      if(provider === 'RELIGARE') {
-        if( age < 19) {
+    if (this.state.dobNeeded) {
+      if (provider === 'RELIGARE') {
+        if (age < 19) {
           form_data.dob_error = 'Minimum age is 18 applicant';
         }
       }
     }
     if (this.state.member_key === 'applicant') {
-      
+
 
       if (provider === 'HDFCERGO') {
         if (this.state.form_data.gender === 'MALE' && age < 22) {
@@ -280,7 +286,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         if (this.state.form_data.gender === 'FEMALE' && age < 19) {
           form_data.dob_error = 'Minimum age is 18 female applicant';
         }
-        
+
       }
 
       if (this.state.lead.account_type === 'parents') {

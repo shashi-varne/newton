@@ -261,7 +261,7 @@ class GroupHealthPlanDetails extends Component {
                 <div className="group-health-plan-details">
                     <div className="group-health-top-content-plan-logo">
                         <div className="left">
-                            <div className="tc-title">{this.state.common_data.base_plan_title}</div>
+                            <div className="tc-title">{this.state.provider==='HDFCERGO'?this.state.common_data.base_plan_title:''}</div>
                             <div className="tc-subtitle">{this.state.plan_selected.plan_title}</div>
                         </div>
 
@@ -274,7 +274,7 @@ class GroupHealthPlanDetails extends Component {
                         </div>
                     </div>
 
-                    <div className="settlement-info">Claim settlement: 98.88%</div>
+                    <div className="settlement-info">Claim Settlement Ratio: 98.88%</div>
 
                     <div className="recomm-info group-health-recommendation" 
                     style={{backgroundColor: this.state.plan_selected.recommendation_tag === 'Recommended' ? '#E86364' : ''}}>
