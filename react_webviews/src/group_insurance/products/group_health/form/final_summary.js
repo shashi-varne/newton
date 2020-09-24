@@ -695,7 +695,7 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     render() {
-        console.log('gg',this.props.tenure)
+
         return (
             <Container
                 provider={this.state.provider}
