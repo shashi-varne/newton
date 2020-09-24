@@ -76,6 +76,7 @@ export async function initialize() {
             if (res.pfwresponse.status_code === 200) {
 
                 lead = resultData.quote;
+                lead.base_premium = lead.base_premium_showable || lead.premium; // incluesive of addons
                 lead.member_base = ghGetMember(lead, this.state.providerConfig);
                 this.setState({
                     lead: resultData.quote || {},
@@ -112,7 +113,7 @@ export async function initialize() {
             leftSubtitle = inrFormatDecimal(lead.total_amount);
             sum_assured = lead.sum_assured;
             tenure = lead.tenure;
-            base_premium = lead.premium;
+            base_premium = lead.base_premium;
             tax_amount = lead.tax_amount;
             total_amount = lead.total_amount;
 
@@ -155,6 +156,35 @@ export async function initialize() {
             ],
             sum_assured: sum_assured,
             tenure: tenure
+        }
+
+        if(provider === 'RELIGARE' && lead.add_ons_amount) {
+
+            confirmDialogData.content1 = [
+                {
+                    'name': 'Basic premium ', 'value':
+                        inrFormatDecimal(base_premium)
+                }
+            ]
+
+            let add_ons_backend = lead.add_ons_json;
+            let data = [];
+            let heading_added = false;
+            for (var key in add_ons_backend) {
+                data.push({
+                    name: add_ons_backend[key].title,
+                    value: inrFormatDecimal(add_ons_backend[key].premium),
+                    heading: !heading_added ? 'Add ons' : ''
+                })
+
+                heading_added = true;
+            }
+
+            confirmDialogData.content1 = confirmDialogData.content1.concat(data);
+
+            confirmDialogData.content1.push({
+                'name': 'GST', 'value': inrFormatDecimal(tax_amount) 
+            })
         }
 
 
