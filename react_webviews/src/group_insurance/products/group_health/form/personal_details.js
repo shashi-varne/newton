@@ -270,7 +270,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     if (this.state.dobNeeded) {
       if (provider === 'RELIGARE') {
-        if (age < 19 && !isChild) {
+        if (age < 18 && !isChild) {
           form_data.dob_error = 'Minimum age is 18 for adult';
         }
       }
@@ -279,11 +279,11 @@ class GroupHealthPlanPersonalDetails extends Component {
 
 
       if (provider === 'HDFCERGO') {
-        if (this.state.form_data.gender === 'MALE' && age < 22) {
+        if (this.state.form_data.gender === 'MALE' && age < 21) {
           form_data.dob_error = 'Minimum age is 21 male applicant';
         }
 
-        if (this.state.form_data.gender === 'FEMALE' && age < 19) {
+        if (this.state.form_data.gender === 'FEMALE' && age < 18) {
           form_data.dob_error = 'Minimum age is 18 female applicant';
         }
 
