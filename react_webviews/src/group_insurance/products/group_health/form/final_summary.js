@@ -64,7 +64,6 @@ class GroupHealthPlanFinalSummary extends Component {
             member_base.splice(0, 0, appli_data);
         }
         
-
         this.setState({
             applicantIndex: applicantIndex
         })
@@ -227,12 +226,15 @@ class GroupHealthPlanFinalSummary extends Component {
 
                 // for peds
                 if (member.ped_exists) {
-                    diseases_data_backend.push({
-                        'title': `${member_display}'s pre-existing diseases`,
-                        'subtitle': ' ',
-                        'key': 'heading'
-                    })
 
+                    if (this.state.insured_account_type !== 'self') {
+                        diseases_data_backend.push({
+                            'title': `${member_display}'s pre-existing diseases`,
+                            'subtitle': ' ',
+                            'key': 'heading'
+                        })
+                    }
+                    
                     // eslint-disable-next-line no-loop-func
                     member.ped_diseases.forEach(ped_option => {
                         
