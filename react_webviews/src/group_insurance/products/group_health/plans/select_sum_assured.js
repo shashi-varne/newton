@@ -88,6 +88,9 @@ class GroupHealthPlanSelectSumAssured extends Component {
         groupHealthPlanData.add_ons_data = '';
         groupHealthPlanData.net_premium_addons = '';
 
+        groupHealthPlanData.post_body.add_ons = '';
+        groupHealthPlanData.post_body.add_ons_json = '';
+
         this.setLocalProviderData(groupHealthPlanData);
 
         if(groupHealthPlanData.account_type === 'self' || total_member === 1) {
