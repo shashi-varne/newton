@@ -208,18 +208,22 @@ class GroupHealthPlanFinalSummary extends Component {
 
                 // for peds
                 if (member.ped_exists) {
-                    
-                    for (var p in member.ped_diseases) {
-                        // eslint-disable-next-line no-loop-func
-                        let ped = ped_list.find(item => item.id === member.ped_diseases[p].key_mapper);
-                        diseases_data_backend.push({
-                            'title': `${member_display}'s pre-existing diseases`,
-                            'subtitle': member.ped_diseases[p].answer_description || ped.name,
-                            'subtitle2': 'Since - ' + member.ped_diseases[p].start_date
-                        })
-                    }
-                    // console.log(diseases_data_backend)
+                    diseases_data_backend.push({
+                        'title': `${member_display}'s pre-existing diseases`,
+                        'subtitle': ' ',
+                    })
 
+                    // eslint-disable-next-line no-loop-func
+                    member.ped_diseases.forEach(ped_option => {
+                        
+                        // eslint-disable-next-line no-loop-func
+                        let ped = ped_list.find(item => item.id === ped_option.key_mapper);
+                        diseases_data_backend.push({
+                            'title': ped_option.answer_description || ped.name,
+                            'subtitle': 'Since - ' + ped_option.start_date
+                        })
+                    })
+                    
                     diseases_data_backend.push(diseases_data_backend);
                 }
 
