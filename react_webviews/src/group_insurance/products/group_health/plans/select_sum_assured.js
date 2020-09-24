@@ -86,6 +86,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
 
         // data reset
         groupHealthPlanData.add_ons_data = '';
+        groupHealthPlanData.net_premium_addons = '';
 
         this.setLocalProviderData(groupHealthPlanData);
 

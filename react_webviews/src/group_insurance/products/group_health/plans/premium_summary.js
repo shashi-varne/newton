@@ -88,6 +88,7 @@ class GroupHealthPlanPremiumSummary extends Component {
 
             let body = this.state.groupHealthPlanData.post_body;
             body.provider = this.state.providerConfig.provider_api;
+            body.base_premium_showable = this.state.groupHealthPlanData.plan_selected_final.base_premium_showable;
             const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/quote`, body);
 
             var resultData = res.pfwresponse.result;
