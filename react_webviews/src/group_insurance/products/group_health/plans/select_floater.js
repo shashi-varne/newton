@@ -258,7 +258,7 @@ class GroupHealthPlanSelectFloater extends Component {
             >
 
                 <div className="common-top-page-subtitle flex-between-center">
-                You can choose how to use the sum insured across family members
+                    Choose how to use the sum insured across family members
                  <img 
                         className="tooltip-icon"
                         data-tip="For entire family -
