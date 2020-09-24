@@ -209,7 +209,7 @@ class GroupHealthPlanAddOns extends Component {
                                 <div style={{ color: '#0A1D32' }}>
                                     <span style={{ fontSize: "16px", fontWeight: '600' }}>{item.title}</span>
                                     <div style={{ marginTop: '10px', fontSize: '14px' }}>
-                                        {item.options.length !== 0 ?
+                                        in {item.options.length !== 0 ?
                                             (!item.checked) ? formatAmountInr(item.default_premium) :
                                                 item.selected_premium ? formatAmountInr(item.selected_premium)
                                                     : formatAmountInr(item.default_premium)
@@ -314,7 +314,7 @@ class GroupHealthPlanAddOns extends Component {
                 handleClick={() => this.handleClick()}
             >
                 <div className="common-top-page-subtitle">
-                    You can boost your coverage with these optional benefits
+                    Boost your coverage with these optional benefits
                 </div>
                 <div className="group-health-plan-select-add-ons">
                     <FormControl fullWidth>
