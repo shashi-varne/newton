@@ -48,7 +48,7 @@ class GroupHealthLanding extends Component {
     nativeCallback({ action: 'take_control_reset' });
 
     let stepsContentMapper = {
-      title: 'Why buy on fisdom?',
+      title: this.state.productName === 'fisdom' ? 'Why buy on fisdom?' : 'Why buy on myway?',
       options: [
         { 'icon': 'icn_hs_no_document', 'title': 'No document required', 'subtitle': 'Easy and paperless process' },
         { 'icon': 'icn_hs_assistance', 'title': 'Complete assistance', 'subtitle': 'Our experts will help in purchase and claim of policy' },
