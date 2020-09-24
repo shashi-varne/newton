@@ -70,8 +70,6 @@ class GroupHealthPlanDob extends Component {
     }
 
     handleChange = index => event => {
-
-
         var final_dob_data = this.state.final_dob_data;
         let name = final_dob_data[index].key;
         if (!name) {
@@ -232,7 +230,6 @@ class GroupHealthPlanDob extends Component {
         }
     }
 
-
     sendEvents(user_action) {
         let eventObj = {
             "event_name": 'health_insurance',
@@ -241,6 +238,7 @@ class GroupHealthPlanDob extends Component {
                 "product": 'health suraksha',
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'enter birthday',
+                // is_dob_entered: 
                 // 'eldest_member': this.state.groupHealthPlanData.ui_members.other_adult_member || '',
             }
         };

@@ -44,7 +44,7 @@ class GroupHealthPlanStarHealthDetails extends Component {
         this.setState({
             account_type: account_type,
             radio_options: radio_options
-        })
+        });
     }
 
     sendEvents(user_action) {
@@ -52,7 +52,8 @@ class GroupHealthPlanStarHealthDetails extends Component {
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "product": 'health suraksha',
+                "product": this.state.providerConfig.provider_api,
+                medical_condition: this.state.value,
             }
         }
 
@@ -153,10 +154,10 @@ class GroupHealthPlanStarHealthDetails extends Component {
         if (canProceed) {
             
             groupHealthPlanData.health_details = this.state.value;
-            Object.assign(groupHealthPlanData.post_body, {
-                "sum_assured": "500000",
-                "cover_plan": "FHONEW",
-            });
+            groupHealthPlanData.sum_assured = "500000";
+            groupHealthPlanData.cover_plan = "FHONEW";
+            groupHealthPlanData.post_body.sum_assured = "500000";
+            groupHealthPlanData.post_body.cover_plan = "FHONEW";
             groupHealthPlanData.plan_selected = {
                 copay: '',
                 recommendation_tag: '',
@@ -165,7 +166,7 @@ class GroupHealthPlanStarHealthDetails extends Component {
                 sum_assured: "500000",
             }
             this.setLocalProviderData(groupHealthPlanData);
-            this.navigate(this.state.next_screen);
+            // this.navigate(this.state.next_screen);
         }
     }
 

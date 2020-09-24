@@ -239,12 +239,12 @@ class GroupHealthPlanNomineeDetails extends Component {
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "product": 'health suraksha',
+                "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'nominee details',
                 'from_edit': this.props.edit ? 'yes' : 'no',
-                'name': this.state.form_data.name ? 'yes' : 'no',
-                'relation': this.state.form_data.relation ? 'yes' : 'no',
+                'nominee_name': this.state.form_data.name ? 'yes' : 'no',
+                'nominee_relation': this.state.form_data.relation ? 'yes' : 'no',
             }
         };
 

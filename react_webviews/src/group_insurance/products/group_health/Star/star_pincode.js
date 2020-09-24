@@ -57,7 +57,9 @@ class GroupHealthPlanStarPincode extends Component {
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "product": 'health suraksha',
+                "product": 'star',
+                is_pincode_entered: this.state.pincode ? 'valid' : 'empty',
+                flow: this.state.insured_account_type || '',
             }
         }
 

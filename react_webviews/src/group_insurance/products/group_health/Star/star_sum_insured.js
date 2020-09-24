@@ -101,7 +101,10 @@ class GroupHealthPlanStarSumInsured extends Component {
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "product": 'health suraksha',
+                "product": 'star',
+                "flow": this.state.insured_account_type || '',
+                sum_assured: this.state.sum_assured[this.state.selectedIndex],
+                screen_name: 'select sum Insured',
             }
         }
 
@@ -113,7 +116,6 @@ class GroupHealthPlanStarSumInsured extends Component {
     };
 
     navigate = (pathname) => {
-        console.log(pathname)
         this.props.history.push({
             pathname: pathname,
             search: getConfig().searchParams
