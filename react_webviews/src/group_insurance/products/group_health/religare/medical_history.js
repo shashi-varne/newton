@@ -40,10 +40,9 @@ class GroupHealthPlanMedicalHistory extends Component {
       }
     ];
 
-
     let list = [
       {
-        label: member_base[0].key === 'self' ? 
+        label: account_type === 'self' ? 
           "Have you been diagnosed / hospitalized for any illness / injury during the last 48 months?"
           : "Have any of the person(s) to be insured been diagnosed / hospitalized for any illness / injury during the last 48 months?",
         members: member_base,
@@ -52,7 +51,7 @@ class GroupHealthPlanMedicalHistory extends Component {
         input_type: "radio",
       },
       {
-        label: member_base[0].key === 'self' ? 
+        label: account_type === 'self' ? 
         "Have you ever filed a claim with your current / previous insurer?"
         : "Have any of the person(s) to be insured ever filed a claim with their current / previous insurer?",
         members: member_base,
@@ -61,7 +60,7 @@ class GroupHealthPlanMedicalHistory extends Component {
         input_type: "radio",
       },
       {
-        label: member_base[0].key === 'self' ? 
+        label: account_type === 'self' ? 
         "Has your Health insurance been declined, cancelled or charged a higher premium?"
         : "Has any proposal for Health insurance been declined, cancelled or charged a higher premium?",
         members: member_base,
@@ -250,7 +249,7 @@ class GroupHealthPlanMedicalHistory extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
-        title="Medical History Details"
+        title="Medical history details"
         buttonTitle="CONTINUE"
         withProvider={true}
         handleClick2={this.handleClick2}

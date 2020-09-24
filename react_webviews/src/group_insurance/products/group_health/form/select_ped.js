@@ -89,7 +89,7 @@ class GroupHealthPlanSelectPed extends Component {
             }
 
             if(!matched) {
-                other_diseases += ped_diseases_name[p] || options[options.length-1].description;
+                other_diseases += ped_diseases_name[p];
             }
         }
 
