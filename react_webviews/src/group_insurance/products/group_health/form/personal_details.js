@@ -222,11 +222,11 @@ class GroupHealthPlanPersonalDetails extends Component {
     if (this.state.provider === 'RELIGARE') {
       if (isChild) {
         if (this.state.groupHealthPlanData.type_of_plan === 'WF') {
-          if (difference_In_Days(this.state.form_data.dob) <= 91 || calculateAge(this.state.form_data.dob) > 25) {
+          if (difference_In_Days(this.state.form_data.dob) <= 91 || calculateAge(this.state.form_data.dob) >= 25) {
             form_data.dob_error = 'kid age cannot be greater than 25 or less than 91 days';
           }
         } else {
-          if (calculateAge(this.state.form_data.dob) < 5 || calculateAge(this.state.form_data.dob) > 25) {
+          if (calculateAge(this.state.form_data.dob) < 5 || calculateAge(this.state.form_data.dob) >= 25) {
             form_data.dob_error = 'Only children between 5 yrs & 25 yrs can be included';
           }
         }
