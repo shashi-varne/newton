@@ -336,10 +336,10 @@ class GroupHealthLanding extends Component {
 
           <div className="his">
             <div className="horizontal-images-scroll">
-              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs.svg`)} alt="" />
-              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs2.svg`)} alt="" />
-              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs3.svg`)} alt="" />
-              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs4.svg`)} alt="" />
+              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs.png`)} alt="" />
+              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs2.png`)} alt="" />
+              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs3.png`)} alt="" />
+              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs4.png`)} alt="" />
             </div>
           </div>
 

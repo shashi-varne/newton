@@ -212,6 +212,7 @@ class GroupHealthPlanFinalSummary extends Component {
                     diseases_data_backend.push({
                         'title': `${member_display}'s pre-existing diseases`,
                         'subtitle': ' ',
+                        'key': 'heading'
                     })
 
                     // eslint-disable-next-line no-loop-func
@@ -585,7 +586,7 @@ class GroupHealthPlanFinalSummary extends Component {
             <div key={index}>
                 {props.subtitle &&
                     <div className="bctc-tile">
-                        <div className="title">
+                        <div className="title" style={{opacity: props.key === 'heading' ? 0.6 : ''}}>
                             {props.title}
                         </div>
                         <div className="subtitle">
