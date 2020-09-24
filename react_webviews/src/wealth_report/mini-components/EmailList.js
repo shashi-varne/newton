@@ -19,7 +19,7 @@ import WrTooltip from "../common/WrTooltip";
 export default function EmailList(props) {
   const [accounts, setAccounts] = useState([]);
   const [emailListModal, toggleEmailListModal] = useState(false);
-  const [addEmailModal, toggleEmailModal] = useState(false);
+  const [addEmailModal, toggleAddEmailModal] = useState(false);
   const [emailAddedModal, toggleEmailAddedModal] = useState(false);
   const [email, setEmail] = useState("");
   const [emailErr, setEmailErr] = useState("");
@@ -44,13 +44,17 @@ export default function EmailList(props) {
     })();
   },[]);
 
+  useEffect(() => {
+    toggleEmailListModal(false);
+  }, [props.refresh]);
+
   const addNewEmail = () => {
-    toggleEmailModal(true);
+    toggleAddEmailModal(true);
     toggleEmailListModal(false);
   };
 
   const handleClose = () => {
-    toggleEmailModal(false);
+    toggleAddEmailModal(false);
     toggleEmailAddedModal(false);
     toggleEmailListModal(false);
   };
@@ -76,7 +80,7 @@ export default function EmailList(props) {
       toast(err);
     }
     setLoading(false);
-    toggleEmailModal(false);
+    toggleAddEmailModal(false);
     toggleEmailAddedModal(true);
   };
 
@@ -270,6 +274,7 @@ export default function EmailList(props) {
         forceState={emailListModal}
         openOnClick={true}
         tooltipClass="wr-email-list"
+        key={props.refresh}
       />
 
       {addEmailModal && (

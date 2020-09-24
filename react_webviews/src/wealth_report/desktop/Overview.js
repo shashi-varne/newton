@@ -65,8 +65,14 @@ export default function Overview(props) {
         const haveDepsChanged = prevPan !== props.pan;
         let portfolio_xirr = InternalStorage.getData('portfolioXirr');
         let overview = InternalStorage.getData('overviewData');
-        let graph_xirr;
-        if (isEmpty(overview) || isEmpty(portfolio_xirr) || haveDepsChanged) {
+        let graph_xirr = InternalStorage.getData('graphXirr');
+
+        if (isEmpty(overview) || haveDepsChanged) {
+          overview = await fetchOverview({ pan: props.pan });
+        }
+        setOverviewData(overview);
+
+        if (isEmpty(portfolio_xirr) || haveDepsChanged) {
           setLoading(true);
           setXirrLoading(true);
           ({ portfolio_xirr, xirr: graph_xirr } = await fetchXIRR({
@@ -74,11 +80,9 @@ export default function Overview(props) {
             date_range: selectedRange,
             portfolio_xirr: true,
           }));
-          overview = await fetchOverview({ pan: props.pan });
         }
         setPortfolioXirr(portfolio_xirr);
         setGraphXirr(graph_xirr);
-        setOverviewData(overview);
         InternalStorage.setData('portfolioXirr', portfolio_xirr);
         InternalStorage.setData('graphXirr', graph_xirr);
         InternalStorage.setData('overviewData', overview);
@@ -87,6 +91,7 @@ export default function Overview(props) {
         toast(err);
       }
       setLoading(false);
+      setXirrLoading(false);
     })();
   }, [props.pan]);
 

@@ -78,7 +78,7 @@ const Login = (props) => {
   };
 
   const onKeyDown = (event) => {
-    var code = event.keyCode || event.which;
+    var code = event.keyCode;
     if (code === 13) {
       clickContinue();
     }

@@ -1,6 +1,6 @@
 // common for both mobile view and web view
 
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Button } from "material-ui";
 import { toast } from "react-toastify";
 import { logout } from "../common/ApiCalls";
@@ -12,6 +12,11 @@ import { storageService } from "../../utils/validators";
 export default function UserAccountMobile(props) {
   const username = storageService().get('wr-username');
   const [loggingOut, setLoggingOut] = useState(false);
+  const [userAccModal, toggleUserAccModal] = useState(false);
+
+  useEffect(() => {
+    toggleUserAccModal(false);
+  }, [props.refresh]);
 
   function handleTooltipClose(event, toggleFunction) {
     var path = event.path || (event.composedPath && event.composedPath());
@@ -22,6 +27,7 @@ export default function UserAccountMobile(props) {
     );
     if (clickInsideTooltip) return;
     toggleFunction(false);
+    toggleUserAccModal(false);
   }
 
   const logoutUser = async() => {
@@ -72,6 +78,7 @@ export default function UserAccountMobile(props) {
       src={require(`assets/fisdom/ic-account.svg`)}
       alt=""
       id="wr-account-img"
+      onClick={() => toggleUserAccModal(!userAccModal)}
     />
   );
 
@@ -82,6 +89,7 @@ export default function UserAccountMobile(props) {
         tipContent={renderUserAccount()}
         onClickAway={handleTooltipClose}
         forceDirection={true}
+        forceState={userAccModal}
         openOnClick={true}
         tooltipClass="wr-user"
         />

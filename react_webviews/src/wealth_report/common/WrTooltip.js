@@ -13,11 +13,12 @@ export default function WrTooltip(props) {
     forceDirection = false, // tells the tip to allow itself to render out of view if there's not room for the specified direction. If undefined or false, the tip will change direction as needed to render within the confines of the window.
     onClickAway = () => {}, // Used for tooltip, callback for ClickAwayListener
     openOnClick, // allows for tooltip to be opened/closed only on click
+    forceState, // force a particular toggle value for the modal (force it to hide/show)
   } = props;
   const [openModal, toggleModal] = useState(false);
   useEffect(() => {
-    toggleModal(props.forceState);
-  }, [props.forceState]);
+    toggleModal(forceState);
+  }, [forceState]);
 
   const i_btn = (info) => (
     <span style={{ marginLeft: "6px" }}>

@@ -26,6 +26,7 @@ export default function NoPan(props) {
       } else {
         setLoading(true);
         await requestStatement({ email });
+        props.onEmailAdded();
         setEmailAdded(email);
         storageService().set('wr-email-added', email);
       }
@@ -89,6 +90,7 @@ export default function NoPan(props) {
                 disabled={isLoading}
                 autoFocus={true}
                 placeholder="Enter Email"
+                onKeyDown={(e) => e.keyCode === 13 ? addEmail() : ''}
                 InputProps={{
                   disableUnderline: true,
                   classes: {

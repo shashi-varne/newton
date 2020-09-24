@@ -20,6 +20,7 @@ class Tooltips extends React.Component {
           eventToggle={this.props.eventToggle}
           isOpen={this.props.isOpen}
           className={this.props.className}
+          useHover={this.props.useHover}
           arrowContent={(
             <svg style={{ display: 'block' }} viewBox="0 0 21 11" width="20px" height="10px">
               <path
