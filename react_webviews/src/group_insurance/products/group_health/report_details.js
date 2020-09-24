@@ -372,7 +372,7 @@ class GroupHealthReportDetails extends Component {
                                     COVER PERIOD
                                 </div>
                                 <div className="mtr-bottom">
-                                    {this.state.lead.tenure}
+                                    {this.state.lead.tenure} year
                                 </div>
                             </div>
                         </div>
