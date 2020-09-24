@@ -194,6 +194,7 @@ class CheckboxListClass extends Component {
     render() {
 
         let dob = this.props.parent.state.lead.dob;
+        let member_key = this.props.parent.state.member_key
 
         return (
             <div>
@@ -217,6 +218,7 @@ class CheckboxListClass extends Component {
                     label={this.state.label}
                     id={this.state.id}
                     dob={dob}
+                    member_key={member_key}
                     value={this.state[this.state.name] || this.props.parent.state[this.state.name]} />
             </div>
         );
