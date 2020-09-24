@@ -24,7 +24,6 @@ export async function initialize() {
     if(this.state.screen_name && providerConfig[this.state.screen_name]) {
         screenData = providerConfig[this.state.screen_name];
     }
-    console.log(providerConfig)
 
     let next_screen = '';
     if(this.state.screen_name && providerConfig.get_next[this.state.screen_name]) {

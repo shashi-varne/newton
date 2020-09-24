@@ -36,7 +36,8 @@ class GroupHealthPlanFinalSummary extends Component {
             },
             accordianData: [],
             openDialogReset: false,
-            quote_id: storageService().get('ghs_ergo_quote_id')
+            quote_id: storageService().get('ghs_ergo_quote_id'),
+            screen_name:'select_ped_screen'
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -53,6 +54,8 @@ class GroupHealthPlanFinalSummary extends Component {
     onload = () => {
         let { lead, provider } = this.state;
         let member_base = lead.member_base;
+        let ped_list = this.state.screenData.ped_list;
+        
         let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
         console.log(applicantIndex);
         if(applicantIndex >=0) {
@@ -69,6 +72,24 @@ class GroupHealthPlanFinalSummary extends Component {
         let pan_needed = false;
         if (lead.total_amount > 100000) {
             pan_needed = true;
+        }
+
+        if(lead.add_ons_amount) {
+            let add_ons_backend = lead.add_ons_json;
+            let add_ons_show = '';
+            for (var key in add_ons_backend) {
+
+                if(add_ons_show) {
+                    add_ons_show += ', ';
+                }
+
+                add_ons_show += add_ons_backend[key].title;
+               
+            }
+
+            this.setState({
+                add_ons_show: add_ons_show
+            })
         }
 
 
@@ -206,21 +227,24 @@ class GroupHealthPlanFinalSummary extends Component {
 
                 // for peds
                 if (member.ped_exists) {
+                    diseases_data_backend.push({
+                        'title': `${member_display}'s pre-existing diseases`,
+                        'subtitle': ' ',
+                        'key': 'heading'
+                    })
+
+                    // eslint-disable-next-line no-loop-func
+                    member.ped_diseases.forEach(ped_option => {
+                        
+                        // eslint-disable-next-line no-loop-func
+                        let ped = ped_list.find(item => item.id === ped_option.key_mapper);
+                        diseases_data_backend.push({
+                            'title': ped_option.answer_description || ped.name,
+                            'subtitle': 'Since - ' + ped_option.start_date
+                        })
+                    })
                     
-                    let p_list = '';
-
-                    for (var p in member.ped_diseases) {
-                        if (p_list) {
-                            p_list += ', ';
-                        }
-                        p_list += `${(member.ped_diseases[p].answer_description || member.ped_diseases[p].key_mapper)} (${member.ped_diseases[p].start_date})`
-                    }
-                    let dis_data = {
-                        'title': `${member_display}'s diseases`,
-                        'subtitle': p_list
-                    }
-
-                    diseases_data_backend.push(dis_data);
+                    diseases_data_backend.push(diseases_data_backend);
                 }
 
                 // for med questions
@@ -580,7 +604,7 @@ class GroupHealthPlanFinalSummary extends Component {
             <div key={index}>
                 {props.subtitle &&
                     <div className="bctc-tile">
-                        <div className="title">
+                        <div className="title" style={{opacity: props.key === 'heading' ? 0.6 : ''}}>
                             {props.title}
                         </div>
                         <div className="subtitle">
@@ -749,11 +773,12 @@ class GroupHealthPlanFinalSummary extends Component {
                                     ADD ONS
                                 </div>
                                 <div className="mtr-bottom">
-                                    {this.state.lead.add_ons && this.state.lead.add_ons.join(', ')}
+                                    {this.state.add_ons_show}
                                 </div>
                             </div>
                         </div>}
 
+                       {this.state.lead.cover_type &&
                         <div className="member-tile">
                             <div className="mt-left">
                                 <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
@@ -763,10 +788,10 @@ class GroupHealthPlanFinalSummary extends Component {
                                     COVERAGE TYPE
                                 </div>
                                 <div className="mtr-bottom">
-                                    {this.state.lead.cover_type}
+                                {this.state.lead.cover_type === 'WF' ? 'Family floater' : 'Individually for each member'}
                                 </div>
                             </div>
-                        </div>
+                        </div>}
 
                         <div className="member-tile">
                             <div className="mt-left">

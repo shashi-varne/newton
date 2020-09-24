@@ -112,7 +112,7 @@ class InputPopupClass extends Component {
     }
 
     renderPopUp() {
-        console.log(this.props);
+
         if (this.props.parent.state.openPopUpInput) {
             return (
                 <Dialog
@@ -151,7 +151,7 @@ class InputPopupClass extends Component {
                                  <Input
                                      type="text"
                                      id="date_input"
-                                     label="Since When"
+                                     label="Since when"
                                      name={'startDateModal'}
                                      className="date"
                                      placeholder="MM/YYYY"
