@@ -227,7 +227,7 @@ class GroupHealthPlanPersonalDetails extends Component {
           }
         } else {
           if (calculateAge(this.state.form_data.dob) < 5 || calculateAge(this.state.form_data.dob) > 25) {
-            form_data.dob_error = 'kid age cannot be greater than 25 or less than 5 years';
+            form_data.dob_error = 'Only children between 5 yrs & 25 yrs can be included';
           }
         }
       }

@@ -75,7 +75,7 @@ class ConfirmDialogClass extends Component {
                                 <span style={{ fontWeight: 600 }}>Sum insured:</span> {numDifferentiationInr(confirmDialogData.sum_assured)}
                             </div>
                             <div className='ct-right'>
-                                <span style={{ fontWeight: 600 }}>Cover period:</span> {confirmDialogData.tenure} year
+                                <span style={{ fontWeight: 600 }}>Cover period:</span> {confirmDialogData.tenure} {confirmDialogData.tenure>1?'years':'year'}
                     </div>
                         </div>
 
