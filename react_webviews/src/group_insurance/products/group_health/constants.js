@@ -108,7 +108,7 @@ export const hdfc = {
         ]
     },
     nominee_screen: {
-        nominee_opts:   [
+        nominee_opts: [
             {
                 'name': 'SIBLING',
                 'value': 'SIBLING'
@@ -152,7 +152,7 @@ export const hdfc = {
         ]
     },
     select_ped_screen: {
-        ped_list:  [
+        ped_list: [
             { 'name': 'Acute Gastroenteritis/AGE/Diarrhoea/Loose Motions/Vomiting' },
             { 'name': 'Adenoid/ Adenoidectomy' },
             { 'name': 'Appendix/Appendicitis/Appendix surgery' },
@@ -169,6 +169,9 @@ export const hdfc = {
             { 'name': 'Fracture with implant/rod/screw/plate' },
             { 'name': 'Other' }
         ]
+    },
+    payment_screen: {
+        total_cities: 7800
     }
 
 };
@@ -341,7 +344,7 @@ export const religare = {
                 'name': 'GRAND FATHER',
                 'value': 'GRANDFATHER'
             },
-            
+
             {
                 'name': 'GRAND MOTHER',
                 'value': 'GRANDMOTHER'
@@ -490,6 +493,9 @@ export const religare = {
                 description: 'Any other diseases or ailments not mentioned above'
             }
         ]
+    },
+    payment_screen: {
+        total_cities: 7800
     }
 };
 
@@ -620,7 +626,7 @@ export const star = {
         ]
     },
     nominee_screen: {
-        nominee_opts:    [
+        nominee_opts: [
             {
                 'name': 'SPOUSE',
                 'value': 'SPOUSE'
@@ -653,7 +659,7 @@ export const star = {
                 'name': 'GRAND FATHER',
                 'value': 'GRANDFATHER'
             },
-            
+
             {
                 'name': 'GRAND MOTHER',
                 'value': 'GRANDMOTHER'
@@ -767,6 +773,9 @@ export const star = {
                 'value': 'INFANT'
             }
         ]
+    },
+    payment_screen: {
+        total_cities: 7800
     }
 };
 
@@ -808,14 +817,14 @@ export function memberKeyMapperFunction(groupHealthPlanData) {
         }
 
         if (relation.indexOf('son') >= 0 || relation.indexOf('daughter') >= 0) {
-            
-            if(ui_members[key]) {
+
+            if (ui_members[key]) {
                 child_total++;
                 dob_data[i].backend_key = `child_account${child_total}_key`;
             } else {
                 dob_data[i].backend_key = `child_account_key_not_insured`;
             }
-            
+
         }
         dob_data[i].relation = relation;
         dob_data[i].checked = !!ui_members[key];
@@ -915,6 +924,11 @@ export const avilableMembersToInsured = [
         'backend_key': 'child_account3_key'
     },
     {
+        'key': 'son4',
+        'value': '',
+        'backend_key': 'child_account4_key'
+    },
+    {
         'key': 'daughter',
         'value': '',
         'backend_key': 'child_account1_key'
@@ -933,5 +947,10 @@ export const avilableMembersToInsured = [
         'key': 'daughter3',
         'value': '',
         'backend_key': 'child_account3_key'
+    },
+    {
+        'key': 'daughter4',
+        'value': '',
+        'backend_key': 'child_account4_key'
     }
 ];
