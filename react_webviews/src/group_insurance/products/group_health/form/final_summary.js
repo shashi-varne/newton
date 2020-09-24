@@ -667,7 +667,7 @@ class GroupHealthPlanFinalSummary extends Component {
             >
                 <DialogContent>
                     <DialogContentText>
-                        All the data will be saved. Are you sure you want to restart?
+                        You will lose your progress till now. Are you sure you want to restart?
               </DialogContentText>
                 </DialogContent>
                 <DialogActions>
