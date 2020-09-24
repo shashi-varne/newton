@@ -250,7 +250,7 @@ class GroupHealthPlanMedicalHistory extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
-        title="Medical History Details"
+        title="Medical history details"
         buttonTitle="CONTINUE"
         withProvider={true}
         handleClick2={this.handleClick2}
