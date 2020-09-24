@@ -90,9 +90,11 @@ class GroupHealthPlanAddOns extends Component {
 
         let add_ons_data = this.state.groupHealthPlanData.add_ons_data || [];
 
-        // eslint-disable-next-line radix
-        let cta_premium = parseInt(this.state.bottomButtonData.leftSubtitle.substring(1).replace(',', ''));
 
+        // eslint-disable-next-line radix
+        let cta_premium = this.state.groupHealthPlanData.net_premium_addons || parseInt(this.state.bottomButtonData.leftSubtitle.substring(1).replace(',', ''));
+        this.updateBottomPremium(cta_premium);
+        
         this.setState({
             // add_ons_data: add_ons_data,
             cta_premium: cta_premium
@@ -281,9 +283,15 @@ class GroupHealthPlanAddOns extends Component {
 
                 if (item.options.length !== 0) {
                     add_ons_body.push(item.options[item.selectedIndexOption].key);
-                    add_ons_json[item.options[item.selectedIndexOption].key] = item.selected_premium || item.default_premium;
+                    add_ons_json[item.options[item.selectedIndexOption].key] = {
+                        premium: item.selected_premium || item.default_premium,
+                        title: item.title
+                    };
                 } else {
-                    add_ons_json[item.key] = item.selected_premium || item.default_premium;
+                    add_ons_json[item.key] = {
+                        premium: item.selected_premium || item.default_premium,
+                        title: item.title
+                    };
                     add_ons_body.push(item.key);
                 }
             }

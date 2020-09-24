@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 
 import Dialog, {
     DialogContent
-  } from 'material-ui/Dialog';
+} from 'material-ui/Dialog';
 import { WithProviderLayout } from '../../../common/footer/layout';
-import ReactHtmlParser from 'react-html-parser'; 
+import ReactHtmlParser from 'react-html-parser';
 import { numDifferentiationInr } from 'utils/validators';
 
 class ConfirmDialogClass extends Component {
@@ -16,12 +16,18 @@ class ConfirmDialogClass extends Component {
 
     rednerContent1(props, index) {
         return (
-            <div key={index} className="content-points">
-                <div className="content-points-inside-text">
-                    {ReactHtmlParser(props.name)}
-                </div>
-                <div className="content-points-inside-text">
-                    {props.value}
+            <div key={index}>
+                {props.heading && <div className="content2-points-inside-heading">
+                    {props.heading}
+                </div>}
+                <div  className="content-points">
+
+                    <div className="content-points-inside-text">
+                        {ReactHtmlParser(props.name)}
+                    </div>
+                    <div className="content-points-inside-text">
+                        {props.value}
+                    </div>
                 </div>
             </div>
         )
@@ -41,56 +47,56 @@ class ConfirmDialogClass extends Component {
     }
 
     renderConfirmDialog = () => {
-       
+
         let parent = this.props.parent || {};
         let confirmDialogData = parent.state.confirmDialogData || {};
 
         return (
-          <Dialog
-            id="bottom-popup"
-            open={parent.state.openConfirmDialog || false}
-            onClose={parent.handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogContent>
-              <div className="gold-dialog" id="alert-dialog-description">
-                <div className="mid-buttons">
-                  <WithProviderLayout type="default"
-                     handleClick2={parent.handleClose}
-                    handleClick={parent.handleClose}
-                     buttonTitle={confirmDialogData.buttonTitle}
-                     buttonData= {confirmDialogData.buttonData}
-                  />
-                </div>
+            <Dialog
+                id="bottom-popup"
+                open={parent.state.openConfirmDialog || false}
+                onClose={parent.handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogContent>
+                    <div className="gold-dialog" id="alert-dialog-description">
+                        <div className="mid-buttons">
+                            <WithProviderLayout type="default"
+                                handleClick2={parent.handleClose}
+                                handleClick={parent.handleClose}
+                                buttonTitle={confirmDialogData.buttonTitle}
+                                buttonData={confirmDialogData.buttonData}
+                            />
+                        </div>
 
-                <div className="content-top flex-between" style={{margin: '0 0 20px 0'}}>
-                    <div className='ct-left'>
-                        <span style={{fontWeight: 600}}>Sum insured:</span> {numDifferentiationInr(confirmDialogData.sum_assured)}
+                        <div className="content-top flex-between" style={{ margin: '0 0 20px 0' }}>
+                            <div className='ct-left'>
+                                <span style={{ fontWeight: 600 }}>Sum insured:</span> {numDifferentiationInr(confirmDialogData.sum_assured)}
+                            </div>
+                            <div className='ct-right'>
+                                <span style={{ fontWeight: 600 }}>Cover period:</span> {confirmDialogData.tenure} year
                     </div>
-                    <div className='ct-right'>
-                        <span style={{fontWeight: 600}}>Cover period:</span> {confirmDialogData.tenure} year
+                        </div>
+
+                        <div className="hr"></div>
+
+                        <div className="content">
+                            {confirmDialogData.content1.map(this.rednerContent1)}
+                        </div>
+
+                        <div className="hr"></div>
+
+                        <div className="content2">
+                            {confirmDialogData.content2.map(this.rednerContent2)}
+                        </div>
+
+                        <div className="hr"></div>
                     </div>
-                </div>
-    
-                <div className="hr"></div>
-    
-                <div className="content">
-                    {confirmDialogData.content1.map(this.rednerContent1)}
-                </div>
-    
-                <div className="hr"></div>
-    
-                <div className="content2">
-                    {confirmDialogData.content2.map(this.rednerContent2)}
-                </div>
-    
-                <div className="hr"></div>
-              </div>
-            </DialogContent>
-          </Dialog >
+                </DialogContent>
+            </Dialog >
         );
-    
+
     }
 
     render() {
@@ -104,7 +110,7 @@ class ConfirmDialogClass extends Component {
 
 const ConfirmDialog = (props) => (
     <ConfirmDialogClass
-    {...props} />
+        {...props} />
 );
 
 export default ConfirmDialog;

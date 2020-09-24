@@ -99,7 +99,8 @@ class GroupHealthPlanSelectFloater extends Component {
                     premium_data_floater: premium_data_floater,
                     ind_pre_data: ind_pre_data,
                     premium_data_nf: premium_data_nf,
-                    premium_data_wf: premium_data_wf
+                    premium_data_wf: premium_data_wf,
+                    premium_base: resultData.premium
                 })
 
 
@@ -141,6 +142,10 @@ class GroupHealthPlanSelectFloater extends Component {
         this.sendEvents('next');
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let type_of_plan = this.state.premium_data_floater[this.state.selectedIndex].key;
+
+        let selectedPlan = this.state.premium_base[type_of_plan][0]; //first of WF or NF;
+        groupHealthPlanData.net_premium_addons = selectedPlan.net_premium;
+
         groupHealthPlanData.selectedIndexFloater = this.state.selectedIndex;
         groupHealthPlanData.type_of_plan = type_of_plan;
         groupHealthPlanData.post_body.type_of_plan = type_of_plan;
@@ -253,7 +258,7 @@ class GroupHealthPlanSelectFloater extends Component {
             >
 
                 <div className="common-top-page-subtitle flex-between-center">
-                You can choose how to use the sum insured across family members
+                    Choose how to use the sum insured across family members
                  <img 
                         className="tooltip-icon"
                         data-tip="1. For entire family -

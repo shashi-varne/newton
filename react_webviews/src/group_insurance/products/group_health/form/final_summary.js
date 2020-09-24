@@ -8,7 +8,7 @@ import { initialize, updateLead, resetQuote, openMedicalDialog } from '../common
 import BottomInfo from '../../../../common/ui/BottomInfo';
 import {
     numDifferentiationInr, inrFormatDecimal,
-    capitalizeFirstLetter, storageService
+    capitalizeFirstLetter, storageService, dateOrdinal
 } from 'utils/validators';
 import Api from 'utils/api';
 import Button from 'material-ui/Button';
@@ -53,11 +53,13 @@ class GroupHealthPlanFinalSummary extends Component {
     onload = () => {
         let { lead, provider } = this.state;
         let member_base = lead.member_base;
-        console.log(member_base)
         let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
-
-        let applicant = member_base.splice(applicantIndex, 1)
-        member_base.unshift(applicant[0]);
+        if(applicantIndex >=0) {
+            let appli_data = member_base[applicantIndex];
+            member_base.splice(applicantIndex, 1);
+            member_base.splice(0, 1, appli_data);
+        }
+        
 
         this.setState({
             applicantIndex: applicantIndex
@@ -122,7 +124,7 @@ class GroupHealthPlanFinalSummary extends Component {
             let member_display = capitalizeFirstLetter(childeNameMapper(member.key));
 
             let obj = {
-                title: `${member_display}'s details ${member_base.length > 1 ? ('(' + (applicantIndex === -1 ? i + 1 : i) + 'st insured)') : ''}`,
+                title: `${member_display}'s details ${member_base.length > 1 ? ('(' + (applicantIndex === -1 ? dateOrdinal(i + 1) : dateOrdinal(i))  + ' insured)') : ''}`,
                 edit_state: `/group-insurance/group-health/${this.state.provider}/edit-personal-details/${member.key}`
             }
 
@@ -667,7 +669,7 @@ class GroupHealthPlanFinalSummary extends Component {
             >
                 <DialogContent>
                     <DialogContentText>
-                        All the data will be saved. Are you sure you want to restart?
+                        You will lose your progress till now. Are you sure you want to restart?
               </DialogContentText>
                 </DialogContent>
                 <DialogActions>

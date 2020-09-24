@@ -50,7 +50,7 @@ export default class ReligarePremium extends Component {
 
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">Base premium</div>
-          <div className="pi-tile-right">{inrFormatDecimal(this.props.plan_selected_final.base_premium)}</div>
+          <div className="pi-tile-right">{inrFormatDecimal(this.props.plan_selected_final.base_premium_showable)}</div>
         </div>
 
         {/* TODO: move inline styles to stylesheet */}
@@ -67,7 +67,7 @@ export default class ReligarePremium extends Component {
             {this.state.selectedAddOns.map((addOn, index) => 
               <div key={index} className="flex-between pi-tile" style={{ marginBottom: '-5px' }}>
                 <div className="pi-tile-left">{addOn.title}</div>
-                <div className="pi-tile-right">{inrFormatDecimal(addOn.default_premium)}</div>
+                <div className="pi-tile-right">{inrFormatDecimal(addOn.selected_premium  || addOn.default_premium)}</div>
               </div>
             )}
           </div>
