@@ -259,7 +259,7 @@ export const religare = {
                     },
                     {
                         'title': 'What do you mean by Network hospital?',
-                        'subtitle': 'Network hospital is one, which has an agreement with Care Health Insurance for providing cashless treatment to its customers. You can view the list of network hospitals here'
+                        'subtitle': 'Network hospital is one, which has an agreement with Care Health Insurance for providing cashless treatment to its customers.'
                     },
                     {
                         'title': 'What is a No Claim Bonus?',
