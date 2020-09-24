@@ -36,7 +36,8 @@ class GroupHealthPlanFinalSummary extends Component {
             },
             accordianData: [],
             openDialogReset: false,
-            quote_id: storageService().get('ghs_ergo_quote_id')
+            quote_id: storageService().get('ghs_ergo_quote_id'),
+            screen_name:'select_ped_screen'
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -53,6 +54,8 @@ class GroupHealthPlanFinalSummary extends Component {
     onload = () => {
         let { lead, provider } = this.state;
         let member_base = lead.member_base;
+        let ped_list = this.state.screenData.ped_list;
+        
         let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
         console.log(applicantIndex);
         if(applicantIndex >=0) {
@@ -224,21 +227,24 @@ class GroupHealthPlanFinalSummary extends Component {
 
                 // for peds
                 if (member.ped_exists) {
+                    diseases_data_backend.push({
+                        'title': `${member_display}'s pre-existing diseases`,
+                        'subtitle': ' ',
+                        'key': 'heading'
+                    })
+
+                    // eslint-disable-next-line no-loop-func
+                    member.ped_diseases.forEach(ped_option => {
+                        
+                        // eslint-disable-next-line no-loop-func
+                        let ped = ped_list.find(item => item.id === ped_option.key_mapper);
+                        diseases_data_backend.push({
+                            'title': ped_option.answer_description || ped.name,
+                            'subtitle': 'Since - ' + ped_option.start_date
+                        })
+                    })
                     
-                    let p_list = '';
-
-                    for (var p in member.ped_diseases) {
-                        if (p_list) {
-                            p_list += ', ';
-                        }
-                        p_list += `${(member.ped_diseases[p].answer_description || member.ped_diseases[p].key_mapper)} (${member.ped_diseases[p].start_date})`
-                    }
-                    let dis_data = {
-                        'title': `${member_display}'s diseases`,
-                        'subtitle': p_list
-                    }
-
-                    diseases_data_backend.push(dis_data);
+                    diseases_data_backend.push(diseases_data_backend);
                 }
 
                 // for med questions
@@ -598,7 +604,7 @@ class GroupHealthPlanFinalSummary extends Component {
             <div key={index}>
                 {props.subtitle &&
                     <div className="bctc-tile">
-                        <div className="title">
+                        <div className="title" style={{opacity: props.key === 'heading' ? 0.6 : ''}}>
                             {props.title}
                         </div>
                         <div className="subtitle">
@@ -796,7 +802,7 @@ class GroupHealthPlanFinalSummary extends Component {
                                     COVER PERIOD
                                 </div>
                                 <div className="mtr-bottom">
-                                    {this.state.lead.tenure}
+                                    {this.state.lead.tenure} year{this.state.lead.tenure>'1' && <span>s</span>}
                                 </div>
                             </div>
                         </div>

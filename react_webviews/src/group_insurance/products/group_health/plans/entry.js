@@ -27,7 +27,7 @@ class HealthInsuranceEntry extends Component {
       {
         key: 'HDFCERGO',
         title: 'HDFC ERGO',
-        subtitle: 'My: health suraksha',
+        subtitle: 'my: health Suraksha',
         icon: hdfc_logo
       },
       {
