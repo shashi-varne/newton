@@ -8,7 +8,7 @@ const partnersConfigBase = {
     primary_color: "#4DB848",
     code: "obc",
     email: "obc@fisdom.com",
-    mobile: "+11-41-134848",
+    mobile: "+91-7829228887",
     message:
       "Make smart investments with zero paper work, use OBC m-pay app if you're a registered user on m-pay app or download fisdom http:m.onelink.me/32660e84. Use my referral code ",
     banner: "obc_banner.png",
@@ -21,7 +21,7 @@ const partnersConfigBase = {
     primary_color: "#CC0E00",
     code: "lvb",
     email: "lvb@fisdom.com",
-    mobile: "+80-48-093070",
+    mobile: "+91-7829228886",
     message:
       "Make smart investments with zero paper work, use LVB Mobile app if you're a registered user on lvb app or download fisdom http:m.onelink.me/32660e84. Use my referral code ",
     banner: "obc_banner.png",
@@ -34,7 +34,7 @@ const partnersConfigBase = {
     primary_color: "#213B68",
     code: "svc",
     email: "svc@fisdom.com",
-    mobile: "+80-48-093070",
+    mobile: "+91-7829228886",
     message:
       "Make smart investments with zero paper work, use SVC app if you're a registered user on svc app or download fisdom http:m.onelink.me/32660e84. Use my referral code ",
     banner: "obc_banner.png",
@@ -47,7 +47,7 @@ const partnersConfigBase = {
     primary_color: "#4f2da7",
     code: "fisdom",
     email: "ask@fisdom.com",
-    mobile: "+80-48-093070",
+    mobile: "+91-7829228886",
     message: "",
     banner: "obc_banner.png",
     back_button: "back_icon_white.png",
@@ -55,7 +55,11 @@ const partnersConfigBase = {
     search_button: "search.png",
     invest_screen_cards: {
       nps: true,
-      gold: true
+      gold: true,
+      insurance: true,
+      risk_profile: true,
+      instaredeem: true,
+      fhc: true
     }
   },
   myway: {
@@ -63,7 +67,7 @@ const partnersConfigBase = {
     primary_color: "#3792FC",
     code: "myway",
     email: "ask@mywaywealth.com",
-    mobile: "+80-48-039999",
+    mobile: "+91-9916149111",
     message: "",
     banner: "obc_banner.png",
     back_button: "back_icon_white.png",
@@ -71,7 +75,11 @@ const partnersConfigBase = {
     search_button: "search.png",
     invest_screen_cards: {
       nps: true,
-      gold: true
+      gold: true,
+      insurance: true,
+      risk_profile: true,
+      instaredeem: true,
+      fhc: true
     }
   },
   test: {
@@ -79,7 +87,7 @@ const partnersConfigBase = {
     primary_color: "#4f2da7",
     code: "fisdom",
     email: "ask@fisdom.com",
-    mobile: "+80-48-093070",
+    mobile: "+91-7829228886",
     message: "",
     banner: "obc_banner.png",
     back_button: "back_icon_white.png",
@@ -87,23 +95,39 @@ const partnersConfigBase = {
     search_button: "search.png",
     invest_screen_cards: {
       nps: true,
-      gold: true
+      gold: true,
+      insurance: true,
+      risk_profile: true,
+      instaredeem: true,
+      fhc: true
     }
   },
   bfdlmobile: {
     logo: "bfdl_white_sdk_logo.svg",
-    primary_color: '#004164',
+    primary_color: "#004164",
     secondary_color: "#ff5928",
     cta_disabled_color: "#ffffff",
     code: "bfdlmobile",
     email: "bajajfinserv@mywaywealth.com",
-    mobile: "+91-76191-71846",
+    mobile: "+91-7829331118",
     message: "",
     banner: "bfdl_banner.png",
     back_button: "back_icon_white.png",
     close_button: "close_nav_icon.svg",
     search_button: "bfdlmobile_search.png",
-    inputFocusedColor: '#00ffbc'
+    invest_screen_cards: {
+      risk_profile: true
+    },
+    invest_cards_handling: {
+      'our_recommendations': ['100_sip', 'instaredeem', 'buildwealth', 'savetax']
+    },
+    landing_marketing_banners: [{ image: 'mb_4.svg', type: '100_sip' },
+    { image: 'mb_6.svg', type: 'diy' }, { image: 'mb_5.svg', type: 'buildwealth' }
+    ],
+    feature_manager: {
+      hide_apply_refferal: true,
+      hide_share_refferal: true
+    }
   },
   alb: {
     logo: "alb.png",
@@ -114,44 +138,53 @@ const partnersConfigBase = {
     header_title_color: "#2E3192",
     code: "alb",
     email: "alb@fisdom.com",
-    mobile: "+91-76191-71839",
+    mobile: "+91-7829733111",
     message:
       "Make smart investments with zero paper work, use emPower app if you're a registered user on emPower app or download emPower app http://onelink.to/uuxsss. Use my referral code ",
     banner: "alb_banner.png",
     back_button: "alb_back_icon.png",
     close_button: "alb_close_nav_icon.svg",
-    search_button: "alb_search.png"
+    search_button: "alb_search.png",
+    invest_screen_cards: {
+      nps: true
+    }
   },
   tvscredit: {
     logo: "tvs.png",
     primary_color: "#2d2851",
     code: "tvscredit",
     email: "tvscredit@fisdom.com",
-    mobile: "+80-48-093070",
+    mobile: "+91-7829228886",
     message:
       "Make smart investments with zero paper work, use Tvs Credit app if you're a registered user on Tvs Credit app or download fisdom http:m.onelink.me/32660e84. Use my referral code ",
     banner: "tvs_banner.png",
     back_button: "back_icon_white.png",
     close_button: "close_nav_icon.svg",
-    search_button: "search.png"
+    search_button: "search.png",
+    invest_cards_handling: {
+      'our_recommendations': ['100_sip', 'instaredeem', 'buildwealth', 'savetax']
+    }
   },
   ktb: {
     logo: "logo_white.png",
     primary_color: "#8C0094",
     code: "ktb",
     email: "kbl@fisdom.com",
-    mobile: "+91-63663-70477",
+    mobile: "+91-7829229997",
     message: "",
     banner: "obc_banner.png",
     back_button: "back_icon_white.png",
     close_button: "close_nav_icon.svg",
-    search_button: "search.png"
+    search_button: "search.png",
+    feature_manager: {
+      hide_share_refferal: true
+    }
   },
   cub: {
     logo: "cub.png",
     primary_color: "#000180",
     code: "cub",
-    mobile: "+80-48-093070",
+    mobile: "+91-7829228886",
     email: "cub@fisdom.com",
     message: "",
     banner: "bfdl_banner.png",
@@ -160,7 +193,7 @@ const partnersConfigBase = {
     search_button: "search.png"
   },
   fpg: {
-    logo: "fpg.png",
+    logo: "text_investments.svg",
     primary_color: "#EB6024",
     secondary_color: "#EB6024",
     cta_disabled_background: "#F1D5C9",
@@ -173,22 +206,46 @@ const partnersConfigBase = {
     back_button: "back_icon_white.png",
     close_button: "close_nav_icon.svg",
     search_button: "search.png",
+    landing_marketing_banners: [{ image: 'Gold_updated_banner.svg', type: 'gold' }, { image: 'fpg_mb_insta.svg', type: 'instaredeem' },
+    { image: 'fpg_mb_100.svg', type: 'buildwealth' }],
+    feature_manager: {
+      hide_apply_refferal: true,
+      hide_share_refferal: true
+    },
     invest_screen_cards: {
       nps: true,
       gold: true
+    },
+    invest_cards_handling: {
+      'our_recommendations': ['instaredeem', 'buildwealth', 'gold', 'savetax'],
+      'diy': ['diyv2'],
+      'bottom_scroll_cards': ['parkmoney', 'savegoal'],
+      'bottom_cards': ['nfo'],
+      'popular_cards': ['top_equity', 'nps']
+    },
+    invest_render_cards: ['kyc', 'our_recommendations', 'popular_cards', 'diy', 'bottom_scroll_cards',
+      'bottom_cards', 'financial_tools'],
+    entry: {
+      'nps': 'inside_sdk'
     }
   },
   hbl: {
     logo: "hbl.png",
     primary_color: "#0066B3",
     code: "hbl",
-    mobile: "+80-48-093070",
-    email: "hbl@fisdom.com",
+    mobile: "+91-7829228886",
+    email: "ask@fisdom.com",
     message: "",
     banner: "bfdl_banner.png",
     back_button: "back_icon_white.png",
     close_button: "close_nav_icon.svg",
-    search_button: "search.png"
+    search_button: "search.png",
+    invest_screen_cards: {
+      nps: true,
+      gold: true,
+      insurance: true,
+      risk_profile: true
+    }
   },
   subh: {
     logo: "subh.svg",
@@ -202,13 +259,18 @@ const partnersConfigBase = {
     banner: "bfdl_banner.png",
     back_button: "back_icon_white.png",
     close_button: "close_nav_icon.svg",
-    search_button: "search.png"
+    search_button: "search.png",
+    invest_cards_handling: {
+      'our_recommendations': ['100_sip', '300_sip', 'instaredeem'],
+      'diy': ['diyv2']
+    },
+    invest_render_cards: ['kyc', 'our_recommendations', 'diy']
   },
   sbm: {
     logo: "sbm.svg",
     primary_color: "#1e3769",
     code: "sbm",
-    mobile: "+80-48-093070",
+    mobile: "+91-7829228886",
     email: "sbm@fisdom.com",
     message: "",
     banner: "bfdl_banner.png",
@@ -221,7 +283,7 @@ const partnersConfigBase = {
     primary_color: "#4f2da7",
     code: "flexi",
     email: "ask@fisdom.com",
-    mobile: "+80-48-093070",
+    mobile: "+91-7829228886",
     message: "",
     banner: "obc_banner.png",
     back_button: "back_icon_white.png",
@@ -229,7 +291,9 @@ const partnersConfigBase = {
     search_button: "search.png",
     invest_screen_cards: {
       nps: true,
-      gold: true
+      gold: true,
+      insurance: true,
+      risk_profile: true
     }
   },
   medlife: {
@@ -237,7 +301,7 @@ const partnersConfigBase = {
     primary_color: "#4f2da7",
     code: "medlife",
     email: "ask@fisdom.com",
-    mobile: "+80-48-093070",
+    mobile: "+91-7829228886",
     message: "",
     banner: "obc_banner.png",
     back_button: "back_icon_white.png",
@@ -245,8 +309,22 @@ const partnersConfigBase = {
     search_button: "search.png",
     invest_screen_cards: {
       nps: true,
-      gold: true
+      gold: true,
+      insurance: true,
+      risk_profile: true
     }
+  },
+  life99: {
+    logo: "logo_white.png",
+    primary_color: "#4f2da7",
+    code: "life99",
+    email: "ask@fisdom.com",
+    mobile: "+91-7829228886",
+    message: "",
+    banner: "obc_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png"
   },
   google: {
     logo: "logo_white.png",
@@ -367,7 +445,7 @@ function getPartnerConfig(partner_code) {
     'notifications_color': 'notifications_color',
     'header_title_color': 'header_title_color',
     'inputFocusedColor': 'inputFocusedColor',
-    'white_header' : 'white_header'
+    'white_header': 'white_header'
   };
 
   config_to_return.isFinwiz = true;
@@ -414,7 +492,7 @@ export function setWebAppParams(redirect_url) {
 
 
   let web_params = '';
-  if(checkValidString(is_secure)) {
+  if (checkValidString(is_secure)) {
     web_params += 'is_secure=' + is_secure;
   }
 
@@ -573,11 +651,11 @@ export const getConfig = () => {
     }
   }
 
-  if(project === 'loan') {
-    
+  if (project === 'loan') {
+
     // eslint-disable-next-line
     returnConfig.html_camera = ((returnConfig.iOS || returnConfig.Web)) ? true : false;
-    
+
   }
 
   if (project === 'isip') {
@@ -613,17 +691,17 @@ export function isFeatureEnabled(config, feature) {
   let partner_code = config.type;
   let app = config.app;
   let app_version = config.app_version;
-  
-  if(config.isStaging) {
+
+  if (config.isStaging) {
     app_version = '999';
   }
 
-  if(app === 'web') {
+  if (app === 'web') {
     return true;
   }
 
 
-  if(feature === 'etli_download' && app === 'android' && parseInt(app_version, 10) >= 999) {
+  if (feature === 'etli_download' && app === 'android' && parseInt(app_version, 10) >= 999) {
     return true;
   }
 
@@ -640,7 +718,7 @@ export function isFeatureEnabled(config, feature) {
     }
   }
 
-  if(mapper[feature] && mapper[feature][partner_code] && mapper[feature][partner_code][app] &&
+  if (mapper[feature] && mapper[feature][partner_code] && mapper[feature][partner_code][app] &&
     mapper[feature][partner_code][app] === app_version) {
     return true;
   }
@@ -710,7 +788,7 @@ export function setHeights(data) {
   }
 
 }
-export function capitalize (string) {
+export function capitalize(string) {
   if (!string) {
     return;
   }
