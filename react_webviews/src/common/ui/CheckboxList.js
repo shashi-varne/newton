@@ -193,8 +193,9 @@ class CheckboxListClass extends Component {
 
     render() {
 
-        let dob = this.props.parent.state.lead.dob;
-        let member_key = this.props.parent.state.member_key
+        let member_key = this.props.parent.state.member_key;
+        let backend_key = this.props.parent.state.backend_key;
+        let dob = this.props.parent.state.lead[backend_key].dob
 
         return (
             <div>
@@ -208,6 +209,7 @@ class CheckboxListClass extends Component {
                     label={this.state.otherInputData.label}
                     value={this.state[this.state.otherInputData.name] || this.props.parent.state[this.state.otherInputData.name]}
                     handleChange={this.handleChangeInputPopup()}
+                    dob={dob}
                 />
                 <MmYyInModal
                     parent={this}

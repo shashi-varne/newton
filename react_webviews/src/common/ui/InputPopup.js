@@ -9,7 +9,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Input from './Input';
 import { isValidMonthYear } from "utils/validators";
-import { formatMonthandYear, dobFormatTest, validateAlphabets } from "utils/validators";
+import { formatMonthandYear, dobFormatTest, validateAlphabets, IsFutureMonthYear, IsPastMonthYearfromDob } from "utils/validators";
 
 class InputPopupClass extends Component {
     constructor(props) {
@@ -68,12 +68,24 @@ class InputPopupClass extends Component {
         if(this.props.sinceWhenInput) {
             let error = '';
             let date = this.state.startDateModal;
-
+            let dob = this.props.dob;
             let canProceed = true;
 
             if (!isValidMonthYear(date)) {
                 canProceed =false;
                 error = "please enter valid month or year";
+                this.setState({
+                    startDateModal_error: error
+                })
+            } else if (IsFutureMonthYear(date)) {
+                canProceed =false;
+                error = "future month or year is not allowed";
+                this.setState({
+                    startDateModal_error: error
+                })
+            } else if (IsPastMonthYearfromDob(date, dob)) {
+                canProceed =false;
+                error = "month or year less than dob is not allowed";
                 this.setState({
                     startDateModal_error: error
                 })
