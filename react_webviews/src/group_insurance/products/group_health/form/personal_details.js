@@ -94,7 +94,6 @@ class GroupHealthPlanPersonalDetails extends Component {
     let form_data = lead[backend_key] || {};
 
     let dobNeeded = (this.state.provider === 'RELIGARE' && lead.eldest_member !== backend_key) || member_key === 'applicant';
-
     form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
     let age = calculateAge(form_data.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
 
@@ -219,8 +218,9 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let form_data = this.state.form_data;
 
+    let isChild = form_data.relation.includes('SON') || form_data.relation.includes('DAUGHTER');
     if (this.state.provider === 'RELIGARE') {
-      if (form_data.relation.indexOf('SON') || form_data.relation.indexOf('DAUGHTER')) {
+      if (isChild) {
         if (this.state.groupHealthPlanData.type_of_plan === 'WF') {
           if (difference_In_Days(this.state.form_data.dob) <= 91 || calculateAge(this.state.form_data.dob) > 25) {
             form_data.dob_error = 'kid age cannot be greater than 25 or less than 91 days';
@@ -270,8 +270,8 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     if (this.state.dobNeeded) {
       if (provider === 'RELIGARE') {
-        if (age < 19) {
-          form_data.dob_error = 'Minimum age is 18 applicant';
+        if (age < 19 && !isChild) {
+          form_data.dob_error = 'Minimum age is 18 for adult';
         }
       }
     }

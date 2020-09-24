@@ -204,13 +204,14 @@ class GroupHealthReportDetails extends Component {
                     ]
                 }
     
+                let basePath = `/group-insurance/group-health/${provider}/`;
                 if(provider === 'RELIGARE') {
-                    this.navigate('how-to-claim-religare');
+                    this.navigate(basePath + 'how-to-claim-religare');
                     return;
                 }
     
                 if(provider === 'STAR') {
-                    this.navigate('how-to-claim-star');
+                    this.navigate(basePath + 'how-to-claim-star');
                     return;
                 }
     
