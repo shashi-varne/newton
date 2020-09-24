@@ -71,6 +71,24 @@ class GroupHealthPlanFinalSummary extends Component {
             pan_needed = true;
         }
 
+        if(lead.add_ons_amount) {
+            let add_ons_backend = lead.add_ons_json;
+            let add_ons_show = '';
+            for (var key in add_ons_backend) {
+
+                if(add_ons_show) {
+                    add_ons_show += ', ';
+                }
+
+                add_ons_show += add_ons_backend[key].title;
+               
+            }
+
+            this.setState({
+                add_ons_show: add_ons_show
+            })
+        }
+
 
         let personal_details_to_copy = [
             {
@@ -749,11 +767,12 @@ class GroupHealthPlanFinalSummary extends Component {
                                     ADD ONS
                                 </div>
                                 <div className="mtr-bottom">
-                                    {this.state.lead.add_ons && this.state.lead.add_ons.join(', ')}
+                                    {this.state.add_ons_show}
                                 </div>
                             </div>
                         </div>}
 
+                       {this.state.lead.cover_type &&
                         <div className="member-tile">
                             <div className="mt-left">
                                 <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
@@ -763,10 +782,10 @@ class GroupHealthPlanFinalSummary extends Component {
                                     COVERAGE TYPE
                                 </div>
                                 <div className="mtr-bottom">
-                                    {this.state.lead.cover_type}
+                                {this.state.lead.cover_type === 'WF' ? 'Family floater' : 'Individually for each member'}
                                 </div>
                             </div>
-                        </div>
+                        </div>}
 
                         <div className="member-tile">
                             <div className="mt-left">
