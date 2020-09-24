@@ -695,7 +695,7 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     render() {
-
+        console.log('gg',this.props.tenure)
         return (
             <Container
                 provider={this.state.provider}
@@ -777,7 +777,7 @@ class GroupHealthPlanFinalSummary extends Component {
                                     COVER PERIOD
                                 </div>
                                 <div className="mtr-bottom">
-                                    {this.state.lead.tenure} year
+                                    {this.state.lead.tenure} year{this.state.lead.tenure>'1' && <span>s</span>}
                                 </div>
                             </div>
                         </div>
