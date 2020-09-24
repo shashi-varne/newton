@@ -80,7 +80,10 @@ export async function initialize() {
                 lead.member_base = ghGetMember(lead, this.state.providerConfig);
                 this.setState({
                     lead: resultData.quote || {},
-                    common_data: resultData.common,
+                    common_data: {
+                        ...resultData.common,
+                        tnc: resultData.tnc || ''
+                    },
                     insured_account_type: lead.account_type || ''
                 }, () => {
                     if (this.onload && !this.state.ctaWithProvider) {
