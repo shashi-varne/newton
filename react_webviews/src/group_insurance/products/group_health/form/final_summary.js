@@ -36,7 +36,8 @@ class GroupHealthPlanFinalSummary extends Component {
             },
             accordianData: [],
             openDialogReset: false,
-            quote_id: storageService().get('ghs_ergo_quote_id')
+            quote_id: storageService().get('ghs_ergo_quote_id'),
+            screen_name:'select_ped_screen'
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -53,7 +54,8 @@ class GroupHealthPlanFinalSummary extends Component {
     onload = () => {
         let { lead, provider } = this.state;
         let member_base = lead.member_base;
-        console.log(member_base)
+        let ped_list = this.state.screenData.ped_list;
+        
         let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
 
         let applicant = member_base.splice(applicantIndex, 1)
@@ -204,20 +206,18 @@ class GroupHealthPlanFinalSummary extends Component {
                 // for peds
                 if (member.ped_exists) {
                     
-                    let p_list = '';
-
                     for (var p in member.ped_diseases) {
-                        if (p_list) {
-                            p_list += ', ';
-                        }
-                        p_list += `${(member.ped_diseases[p].answer_description || member.ped_diseases[p].key_mapper)} (${member.ped_diseases[p].start_date})`
+                        // eslint-disable-next-line no-loop-func
+                        let ped = ped_list.find(item => item.id === member.ped_diseases[p].key_mapper);
+                        diseases_data_backend.push({
+                            'title': `${member_display}'s pre-existing diseases`,
+                            'subtitle': member.ped_diseases[p].answer_description || ped.name,
+                            'subtitle2': 'Since - ' + member.ped_diseases[p].start_date
+                        })
                     }
-                    let dis_data = {
-                        'title': `${member_display}'s diseases`,
-                        'subtitle': p_list
-                    }
+                    // console.log(diseases_data_backend)
 
-                    diseases_data_backend.push(dis_data);
+                    diseases_data_backend.push(diseases_data_backend);
                 }
 
                 // for med questions

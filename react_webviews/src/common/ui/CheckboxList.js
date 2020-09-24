@@ -136,7 +136,7 @@ class CheckboxListClass extends Component {
                                 width="40"
                                 id="date"
                                 class="date_input"
-                                label="Since When"
+                                label="Since when"
                                 name={props.name}
                                 value={props.start_date || ''}
                             />
@@ -166,7 +166,7 @@ class CheckboxListClass extends Component {
                             width="40"
                             id="date"
                             class="date_input"
-                            label="Since When"
+                            label="Since when"
                             name={props.name}
                             value={props.start_date || ''}
                         />
