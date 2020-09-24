@@ -57,7 +57,7 @@ class GroupHealthPlanFinalSummary extends Component {
         let ped_list = this.state.screenData.ped_list;
         
         let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
-        console.log(applicantIndex);
+ 
         if(applicantIndex >=0) {
             let appli_data = member_base[applicantIndex];
             member_base.splice(applicantIndex, 1);
@@ -372,15 +372,20 @@ class GroupHealthPlanFinalSummary extends Component {
         }
 
 
-        if (diseases_data_backend.length !== 0) {
-            let diseases_data = {
-                'title': 'Pre-existing diseases',
-                edit_state: `/group-insurance/group-health/${this.state.provider}/edit-is-ped`,
-                data: diseases_data_backend
-            }
-
-            accordianData.push(diseases_data);
+        if (diseases_data_backend.length === 0) {
+            diseases_data_backend.push({
+                'title': `Any pre-existing diseases?`,
+                'subtitle': 'No'
+            })
         }
+
+        let diseases_data = {
+            'title': 'Pre-existing diseases',
+            edit_state: `/group-insurance/group-health/${this.state.provider}/edit-is-ped`,
+            data: diseases_data_backend
+        }
+
+        accordianData.push(diseases_data);
 
         this.setState({
             accordianData: accordianData
