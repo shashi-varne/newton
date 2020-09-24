@@ -152,7 +152,6 @@ const Login = (props) => {
     try {
       setOpLoading(true);
       const res = await verifyOtp({ mobileNo: number, countryCode, otp: otpVal });
-      storageService().set('wr-username', number);
       sendEvents('login', {
         screen_name: 'login',
         status: 'success',
@@ -199,7 +198,6 @@ const Login = (props) => {
         status: 'success',
         user_id: res.user.user_id,
       });
-      storageService().set('wr-username', email);
       navigate(props, 'main/overview');
     } catch (err) {
       console.log(err);

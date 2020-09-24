@@ -101,8 +101,12 @@ const MainPage = (props) => {
     (async() => {
       try {
         const res = await Api.get('api/whoami');
-        if (!res || res.pfwstatus_code !== 200) {
+        if (isEmpty(res) || res.pfwstatus_code !== 200) {
           navigate(props, 'login');
+        } else {
+          const { user } = res.pfwresponse.result;
+          const username = user.mobile ? `+${user.mobile.split('|').join('-')}` : user.email;
+          storageService().set('wr-username', username);
         }
       } catch(err) {
         console.log(err);
