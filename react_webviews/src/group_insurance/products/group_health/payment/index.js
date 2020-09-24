@@ -194,8 +194,9 @@ class GroupHealthPayment extends Component {
             <div>
               {this.state.paymentSuccess &&
                 <p className="top-content">
-                  Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for {this.state.lead.base_plan_title} {this.state.lead.plan_title} is successful.
-                           {this.state.policy_data.policy_number && <span>Now you have access to 10000+ cashless hospitals.</span>}
+                  {/* Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for {this.state.lead.base_plan_title} {this.state.lead.plan_title} is successful.
+                           {this.state.policy_data.policy_number && <span>Now you have access to 10000+ cashless hospitals.</span>} */}
+                  You will soon be contacted by {this.state.lead.base_plan_title} team for a medical review before issuing the policy!
                 </p>
               }
 

@@ -3,7 +3,7 @@ import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { inrFormatDecimal, numDifferentiation } from 'utils/validators';
+import { inrFormatDecimal, numDifferentiationInr } from 'utils/validators';
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
@@ -222,7 +222,7 @@ class GroupHealthPlanDetails extends Component {
         return (
             <div className="sum-assured-info" key={index}>
                 <div className="sai-left">
-                    {numDifferentiation(props.sum_assured)}
+                    {numDifferentiationInr(props.sum_assured)}
                 </div>
                 <div className="sai-left">
                     {inrFormatDecimal(props.net_premium)}/year
