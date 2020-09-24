@@ -347,7 +347,8 @@ export function IsPastMonthYearfromDob(input, dob) {
     return true;
   }
 
-  if (inputYear === dobYear && inputMonth < dobMonth) {
+  // eslint-disable-next-line radix
+  if (inputYear === parseInt(dobYear) && inputMonth < dobMonth) {
     return true;
   }
 
