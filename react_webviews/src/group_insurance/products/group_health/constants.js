@@ -169,6 +169,9 @@ export const hdfc = {
             { 'name': 'Fracture with implant/rod/screw/plate' },
             { 'name': 'Other' }
         ]
+    },
+    payment_screen: {
+        total_cities: 7800
     }
 
 };
@@ -490,6 +493,9 @@ export const religare = {
                 description: 'Any other diseases or ailments not mentioned above'
             }
         ]
+    },
+    payment_screen: {
+        total_cities: 7800
     }
 };
 
@@ -767,6 +773,9 @@ export const star = {
                 'value': 'INFANT'
             }
         ]
+    },
+    payment_screen: {
+        total_cities: 7800
     }
 };
 

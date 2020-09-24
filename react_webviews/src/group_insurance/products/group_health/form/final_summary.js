@@ -54,10 +54,11 @@ class GroupHealthPlanFinalSummary extends Component {
         let { lead, provider } = this.state;
         let member_base = lead.member_base;
         let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
+        console.log(applicantIndex);
         if(applicantIndex >=0) {
             let appli_data = member_base[applicantIndex];
             member_base.splice(applicantIndex, 1);
-            member_base.splice(0, 1, appli_data);
+            member_base.splice(0, 0, appli_data);
         }
         
 
