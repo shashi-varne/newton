@@ -27,6 +27,7 @@ class CheckboxListClass extends Component {
 
     handleClick = (index) => {
         let state = this.props.parent.state;
+
         let options = state.options;
         if (options[index].disabled) {
             return;
@@ -64,8 +65,8 @@ class CheckboxListClass extends Component {
                 <Grid container spacing={16} alignItems="center">
                     <Grid item xs={1} className="TextCenter">
                         <Checkbox
-                            defaultChecked
-                            checked={props.checked || false}
+                            // defaultChecked
+                            checked={props.checked}
                             color="default"
                             value="checked"
                             style={{ height: 25 }}
