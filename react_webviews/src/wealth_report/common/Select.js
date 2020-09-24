@@ -48,15 +48,11 @@ const WrSelect = (props) => {
           value={props.selectedValue}
           onChange={(event) => props.onSelect(event)}
           name={props.name}
-          displayEmpty
           IconComponent={ExpandMoreIcon}
           style={props.style}
           classes={classes.select}
           disableUnderline={props.disableUnderline}
         >
-          <MenuItem value="" disabled>
-            {props.placeholder}
-          </MenuItem>
           {props.menu.map((filter, index) => (
             <MenuItem key={index} value={filter.value}>{filter.label}</MenuItem>
           ))}

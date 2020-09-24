@@ -23,8 +23,7 @@ const isMobileView = getConfig().isMobileDevice;
 const MainPage = (props) => {
   const [headerAnimation, setHeaderAnimation] = useState('');
   const [isLoading, setLoading] = useState(true);
-  const [emailRefresh, refreshEmailComponent] = useState(1);
-  const [userRefresh, refreshUserComponent] = useState(1);
+  const [refreshOnScroll, setRefreshOnScroll] = useState(1);
 
   function getHeightFromTop() {
     var el = document.getElementById('wr-body');
@@ -43,9 +42,9 @@ const MainPage = (props) => {
   };
 
   useEffect(() => {
-    refreshEmailComponent(emailRefresh + 1);
-    refreshUserComponent(userRefresh + 1);
+    setRefreshOnScroll(refreshOnScroll + 1);
   }, [headerAnimation]);
+
   function setScrollEvent(setScroll) {
     const elem = document.getElementById('wr-main');
     if (elem && !isEmpty(elem)) {
@@ -148,8 +147,8 @@ const MainPage = (props) => {
           
           {/* visbility will be modified based on condition in media queries */}
           <div className="wr-user-account">
-            <EmailList refresh={emailRefresh}/>
-            <UserAccount parentProps={props} refresh={userRefresh}/>
+            <EmailList refresh={refreshOnScroll}/>
+            <UserAccount parentProps={props} refresh={refreshOnScroll}/>
           </div>
 
         </div>
@@ -162,7 +161,7 @@ const MainPage = (props) => {
         (
           <div id="wr-body">
             {!pan || pan === 'empty' ? 
-              <NoPan onEmailAdded={() => refreshEmailComponent(emailRefresh + 1)} /> :
+              <NoPan onEmailAdded={() => setRefreshOnScroll(refreshOnScroll + 1)} /> :
               renderTab(params.tab)
             }
           </div>
