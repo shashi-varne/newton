@@ -826,6 +826,15 @@ function monthDiff(dateFrom, dateTo) {
 //   return Difference_In_Days;
 // }
 
+export function difference_In_Days(val) {
+  const birthday = val.toString().replace(/\\-/g, '/').split('/').reverse().join('/');
+  const today = new Date();
+  const birthDate = new Date(birthday);
+  let Difference_In_Time = today.getTime() - birthDate.getTime(); 
+  let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24); 
+  return Math.round(Difference_In_Days);
+  }
+
 export function calculateAge(val, byMonth) {
   if (!val) {
     return 0;

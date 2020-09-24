@@ -364,7 +364,7 @@ export const religare = {
             },
             {
                 'name': 'MOTHER',
-                'value': 'MOTHER '
+                'value': 'MOTHER'
             },
             {
                 'name': 'NEPHEW',
