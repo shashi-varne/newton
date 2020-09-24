@@ -336,7 +336,7 @@ class GroupHealthReportDetails extends Component {
                     </div>
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
-                            <div className="tc-title">{this.state.providerData.subtitle}</div>
+                            {this.state.provider !== 'RELIGARE' && <div className="tc-title">{this.state.providerData.subtitle}</div>}
                             <div className="tc-subtitle">{this.state.lead.plan_title}</div>
                         </div>
 
@@ -377,13 +377,28 @@ class GroupHealthReportDetails extends Component {
                             </div>
                         </div>
 
+                       {this.state.lead.cover_type &&
                         <div className="member-tile">
                             <div className="mt-left">
                                 <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
-                                    TOTAL PREMIUM
+                                    COVERAGE TYPE
+                                </div>
+                                <div className="mtr-bottom">
+                                    {this.state.lead.cover_type === 'WF' ? 'Family floater' : 'Individually for each member'}
+                                </div>
+                            </div>
+                        </div>}
+
+                        <div className="member-tile">
+                            <div className="mt-left">
+                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
+                            </div>
+                            <div className="mt-right">
+                                <div className="mtr-top">
+                                 PREMIUM PAID
                                 </div>
 
                                 <div className="mtr-bottom flex">
@@ -449,7 +464,8 @@ class GroupHealthReportDetails extends Component {
                         </div>
                     </div>
 
-                    <div className="member-tile">
+                    {this.state.policy_data.policy_number &&
+                      <div className="member-tile">
                         <div className="mt-left">
                             <img src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
                         </div>
@@ -461,7 +477,22 @@ class GroupHealthReportDetails extends Component {
                                 {this.state.policy_data.policy_number || '-'}
                             </div>
                         </div>
-                    </div>
+                    </div>}
+
+                    {!this.state.policy_data.policy_number && this.state.policy_data.proposal_number &&
+                      <div className="member-tile">
+                        <div className="mt-left">
+                            <img src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
+                        </div>
+                        <div className="mt-right">
+                            <div className="mtr-top">
+                                PROPOSAL NUMBER
+                                </div>
+                            <div className="mtr-bottom">
+                                {this.state.policy_data.proposal_number || '-'}
+                            </div>
+                        </div>
+                    </div>}
 
                    {this.state.policy_data.vendor_action_required_message &&
                     <div style={{ margin: '30px 0 30px 0', display: 'flex', 

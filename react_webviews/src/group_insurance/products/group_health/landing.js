@@ -48,7 +48,7 @@ class GroupHealthLanding extends Component {
     nativeCallback({ action: 'take_control_reset' });
 
     let stepsContentMapper = {
-      title: this.state.productName === 'fisdom' ? 'Why buy on fisdom?' : 'Why buy on myway?',
+      title: `Why buy on ${this.state.productName} ?` ,
       options: [
         { 'icon': 'icn_hs_no_document', 'title': 'No document required', 'subtitle': 'Easy and paperless process' },
         { 'icon': 'icn_hs_assistance', 'title': 'Complete assistance', 'subtitle': 'Our experts will help in purchase and claim of policy' },
@@ -336,10 +336,10 @@ class GroupHealthLanding extends Component {
 
           <div className="his">
             <div className="horizontal-images-scroll">
-              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs.svg`)} alt="" />
-              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs2.svg`)} alt="" />
-              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs3.svg`)} alt="" />
-              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs4.svg`)} alt="" />
+              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs.png`)} alt="" />
+              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs2.png`)} alt="" />
+              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs3.png`)} alt="" />
+              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs4.png`)} alt="" />
             </div>
           </div>
 

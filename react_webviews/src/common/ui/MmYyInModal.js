@@ -122,7 +122,7 @@ class MmYyInModal extends Component {
                                 <Input
                                     type="text"
                                     id="date_input"
-                                    label="Since When"
+                                    label="Since when"
                                     name={this.props.name}
                                     className="date"
                                     placeholder="MM/YYYY"
