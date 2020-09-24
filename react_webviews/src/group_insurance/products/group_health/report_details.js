@@ -406,7 +406,7 @@ class GroupHealthReportDetails extends Component {
                                         }
                                         <div>
                                             <div>{inrFormatDecimal(this.state.lead.tax_amount)} </div>
-                                            <div style={{fontSize:10}}>(18% GST & other taxes) </div>
+                                            <div style={{fontSize:10}}>(18% GST) </div>
                                         </div>
                                         <div>
                                         &nbsp;=&nbsp;

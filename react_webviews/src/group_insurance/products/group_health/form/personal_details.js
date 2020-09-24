@@ -69,7 +69,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     if (member_key === 'self') {
       header_title = 'Personal details';
-      header_subtitle = 'We would need some details to complete your proposal';
+      header_subtitle = 'Policy will be issued basis these details';
     }
 
     let next_state = `/group-insurance/group-health/${this.state.provider}/contact`;
