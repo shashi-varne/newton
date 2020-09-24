@@ -218,21 +218,19 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     let form_data = this.state.form_data;
-   
+
     if(this.state.provider==='RELIGARE'){
-    if(this.state.groupHealthPlanData.type_of_plan==='WF'){
-      if (this.state.backend_key === 'child_account1_key' || this.state.backend_key === 'child_account2_key' || this.state.backend_key === 'child_account3_key' || this.state.backend_key === 'child_account4_key'){
-      if (difference_In_Days(this.state.form_data.dob) <= 91 ||calculateAge(this.state.form_data.dob) > 25){
-      form_data.dob_error='kid age cannot be greater than 25 or less than 91 days';
-      }
-    }
+      if (form_data.relation.indexOf('SON') || form_data.relation.indexOf('DAUGHTER')){
+        if(this.state.groupHealthPlanData.type_of_plan==='WF'){
+          if (difference_In_Days(this.state.form_data.dob) <= 91 ||calculateAge(this.state.form_data.dob) > 25){
+            form_data.dob_error='kid age cannot be greater than 25 or less than 91 days';
+        }
     }else{
-      if (this.state.backend_key === 'child_account1_key' || this.state.backend_key === 'child_account2_key' || this.state.backend_key === 'child_account3_key' || this.state.backend_key === 'child_account4_key'){
       if (calculateAge(this.state.form_data.dob) < 5 || calculateAge(this.state.form_data.dob) > 25) {
           form_data.dob_error = 'kid age cannot be greater than 25 or less than 5 years';
         }
       }
-   }
+    }  
   }
 
     if (!isValidDate(this.state.form_data.dob)) {
