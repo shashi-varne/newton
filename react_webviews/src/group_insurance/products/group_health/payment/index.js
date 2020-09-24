@@ -44,7 +44,8 @@ class GroupHealthPayment extends Component {
       policy_data: {},
       providerData: {},
       productName: getConfig().productName,
-      force_onload_call: true
+      force_onload_call: true,
+      screen_name: 'payment_screen'
     }
 
     this.initialize = initialize.bind(this);
@@ -167,6 +168,7 @@ class GroupHealthPayment extends Component {
   }
 
   render() {
+    let {policy_data, screenData} = this.state;
     return (
       <Container
         provider={this.state.provider}
@@ -193,11 +195,20 @@ class GroupHealthPayment extends Component {
 
             <div>
               {this.state.paymentSuccess &&
+              <div>
+                {policy_data.policy_number && 
                 <p className="top-content">
-                  {/* Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for {this.state.lead.base_plan_title} {this.state.lead.plan_title} is successful.
-                           {this.state.policy_data.policy_number && <span>Now you have access to 10000+ cashless hospitals.</span>} */}
+                  Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for {this.state.lead.base_plan_title} {this.state.lead.plan_title} is successful.
+                {policy_data.policy_number && <span>Now you have access to {screenData.total_cities}+ cashless hospitals.</span>}
+                </p>
+                }
+                {!policy_data.policy_number && 
+                <p className="top-content">
                   You will soon be contacted by {this.state.lead.base_plan_title} team for a medical review before issuing the policy!
                 </p>
+                }
+
+                </div>
               }
 
               {this.state.paymentPending &&
@@ -244,14 +255,14 @@ class GroupHealthPayment extends Component {
                   <div className="highlight-text2" style={{ color: '#767E86', marginLeft: 7 }}>
                     <div style={{ margin: '5px 0 6px 0' }}>Sum 
                     assured {numDifferentiationInr(this.state.lead.sum_assured)} for {this.state.lead.tenure} year</div>
-                    {this.state.policy_data.policy_number && 
-                    <div style={{ margin: '5px 0 6px 0' }}>Policy number: {this.state.policy_data.policy_number || '-'}</div>
+                    {policy_data.policy_number && 
+                    <div style={{ margin: '5px 0 6px 0' }}>Policy number: {policy_data.policy_number || '-'}</div>
                     }
-                    {!this.state.policy_data.policy_number && this.state.provider === 'HEFCERGO' &&
-                    <div style={{ margin: '5px 0 6px 0' }}>Transaction number. : {this.state.policy_data.ergo_payment_id || '-'}</div>
+                    {!policy_data.policy_number && this.state.provider === 'HEFCERGO' &&
+                    <div style={{ margin: '5px 0 6px 0' }}>Transaction number. : {policy_data.ergo_payment_id || '-'}</div>
                     }
-                     {!this.state.policy_data.policy_number && this.state.provider === 'RELIGARE' &&
-                    <div style={{ margin: '5px 0 6px 0' }}>Propsal number : {this.state.policy_data.proposal_number || '-'}</div>
+                     {!policy_data.policy_number && this.state.provider === 'RELIGARE' &&
+                    <div style={{ margin: '5px 0 6px 0' }}>Propsal number : {policy_data.proposal_number || '-'}</div>
                     }
                     {/* <div style={{ margin: '5px 0 6px 0' }}>
                       {formatDateAmPm(this.state.policy_data.transaction_date)}
@@ -271,7 +282,7 @@ class GroupHealthPayment extends Component {
                       Basic premium
                                 </div>
                     <div className="content-points-inside-text">
-                      {inrFormatDecimal2(this.state.lead.base_premium || this.state.lead.premium)}
+                      {inrFormatDecimal2(this.state.lead.base_premium_showable || this.state.lead.premium)}
                     </div>
                   </div>
 
