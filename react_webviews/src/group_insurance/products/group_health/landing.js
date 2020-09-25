@@ -124,7 +124,7 @@ class GroupHealthLanding extends Component {
       "event_name": 'health_insurance',
       "properties": {
         "user_action": user_action,
-        "product": 'health suraksha',
+        "product": this.state.providerConfig.provider_api,
         "screen_name": 'introduction',
         "coverage_overview_click": `${(this.state.whats_covered_clicked ? 'what is covered,' : '')} ${(this.state.whats_not_covered_clicked ? 'what is not covered' : '')}`,
         "things_to_know": data.things_to_know || '',

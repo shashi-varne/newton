@@ -89,7 +89,7 @@ class GroupHealthSelectInsureType extends Component {
       "event_name": 'health_insurance',
       "properties": {
         "user_action": user_action,
-        "product": 'health suraksha',
+        "product": this.state.providerConfig.provider_api,
         "screen_name": 'who is covered',
         "insuring": this.state.account_type
       }

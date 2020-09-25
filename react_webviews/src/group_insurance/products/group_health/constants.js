@@ -512,7 +512,8 @@ export const star = {
         plan_details_screen: 'star-select-sum-assured',
         sum_assured_screen: 'plan-premium-summary',
         cover_type_screen: 'plan-select-add-ons',
-        add_ons_screen: 'plan-select-cover-period'
+        add_ons_screen: 'plan-select-cover-period',
+        nominee_screen: 'is-ped',
     },
     validation_props: {
         'dob_adult': { min: 19, max: 90 },  //add one year for minimum age here 18 to 19
@@ -707,6 +708,8 @@ export const star = {
                 'value': 'DAUGHTER'
             }
         ],
+        showDob: true,
+        showAppointee: true,
     },
     personal_details_screen: {
         occupation_opts: [

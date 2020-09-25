@@ -10,6 +10,7 @@ import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
 import Input from '../../../../common/ui/Input';
 import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
+import { isEmpty } from '../../../../utils/validators';
 class GroupHealthPlanNomineeDetails extends Component {
 
     constructor(props) {
@@ -34,12 +35,6 @@ class GroupHealthPlanNomineeDetails extends Component {
 
     onload = () => {
 
-
-        if(this.state.provider === 'STAR') {
-            this.setState({
-                renderApointee: true
-            })
-        }
         this.setState({
             next_state: this.state.next_screen
         })
@@ -58,11 +53,12 @@ class GroupHealthPlanNomineeDetails extends Component {
 
         let lead = this.state.lead || {};
         let form_data = lead.nominee_account_key || {};
+        form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
 
         this.setState({
             form_data: form_data,
             lead: lead,
-        })
+        });
 
 
         this.setState({
@@ -113,12 +109,13 @@ class GroupHealthPlanNomineeDetails extends Component {
         form_data[name] = value;
         form_data[name + '_error'] = '';
 
-        let age = calculateAge(value, 'byMonth');
-        form_data[name + '_age'] = age.age;
+        const { age } = calculateAge(value, 'byMonth');
+        form_data[name + '_age'] = age;
 
         this.setState({
-            form_data: form_data
-        })
+            form_data: form_data,
+            renderApointee: !!(age && age < 18),
+        });
 
     }
 
@@ -126,65 +123,66 @@ class GroupHealthPlanNomineeDetails extends Component {
         this.setState({
             openConfirmDialog: false
         });
+    };
 
-    }
     handleClick2 = () => {
         this.setState({
             openConfirmDialog: true,
-        })
-    }
+        });
+    };
 
     handleClick = async () => {
-
         this.sendEvents('next');
-        let keysMapper = {
+
+        const noOfWords = (val = '') => val ? val.split(' ').length : 0; 
+        const keysMapper = {
             'name': 'name',
             'relation': 'relation',
             'dob': 'dob',
             'apointeename': 'apointee name',
             'apointeerelation': 'apointee relation',
             'apointeedob': 'apointee dob'
-        }
-
-        let keys_to_check = ['name', 'relation'];
-
-        if(this.state.renderApointee) {
-            keys_to_check.push(...['dob','apointeename', 'apointeerelation', 'apointeedob']);
-        }
-
+        };
+        
+        const keys_to_check = ['name', 'relation', 'dob'];
+        const apointeeKeys = ['apointeename', 'apointeerelation', 'apointeedob'];
         let form_data = this.state.form_data;
-        for (var i = 0; i < keys_to_check.length; i++) {
-            let key_check = keys_to_check[i];
+
+        apointeeKeys.map(apKey => form_data[apKey + '_error'] = '');
+
+        if (this.state.renderApointee) {
+            keys_to_check.concat(apointeeKeys);
+        }
+
+        for (let key_check of keys_to_check) {
             let first_error = 'Please enter ';
             if (!form_data[key_check]) {
                 form_data[key_check + '_error'] = first_error + keysMapper[key_check];
             }
         }
-       
 
-        if (this.state.form_data && (this.state.form_data.name || '').split(" ").filter(e => e).length < 2) {
+        const { name, dob } = form_data;
+       
+        if (!isEmpty(form_data) && noOfWords(name) < 2) {
             form_data.name_error = 'Enter valid full name';
-        } else if (this.state.form_data.name &&
-            !validateAlphabets(this.state.form_data.name)) {
+        } else if (name && !validateAlphabets(name)) {
             form_data.name_error = 'Invalid name';
         }
 
 
-        let dob = form_data.dob;
-        let apointeedob = form_data.apointeedob;
-        let renderApointee = false;
-        if(this.state.renderApointee) {
-            if ((this.state.form_data.apointeename || '').split(" ").filter(e => e).length < 2) {
-                form_data.apointeename_error = 'Enter valid full name';
-            } else if (this.state.form_data.apointeename &&
-                !validateAlphabets(this.state.form_data.apointeename)) {
-                form_data.apointeename_error = 'Invalid name';
-            }
+        if ((new Date(dob) > new Date()) || !isValidDate(dob)) {
+            form_data.dob_error = 'Please enter valid date';
+        } else if (IsFutureDate(dob)) {
+            form_data.dob_error = 'Future date is not allowed';
+        }
 
-            if (this.state.renderApointee && (new Date(dob) > new Date() || !isValidDate(dob))) {
-                form_data.dob_error = 'Please enter valid date';
-            } else if (IsFutureDate(dob)) {
-                form_data.dob_error = 'Future date is not allowed';
+        if (this.state.renderApointee) {
+            const { apointeename, apointeedob } = form_data;
+
+            if (noOfWords(apointeename) < 2) {
+                form_data.apointeename_error = 'Enter valid full name';
+            } else if (apointeename && !validateAlphabets(apointeename)) {
+                form_data.apointeename_error = 'Invalid name';
             }
 
             if (new Date(apointeedob) > new Date() || !isValidDate(apointeedob)) {
@@ -192,21 +190,11 @@ class GroupHealthPlanNomineeDetails extends Component {
             } else if (IsFutureDate(apointeedob)) {
                 form_data.apointeedob_error = 'Future date is not allowed';
             }
-    
-            
-            if (!this.state.form_data.dob_error && this.state.form_data.dob_age < 18 ) { //#TODO shift in handle change for dob
-                renderApointee = true
-            } else {
-                renderApointee = false
-            }
         }
-        
-
 
         this.setState({
             form_data: form_data,
-            renderApointee: renderApointee
-        })
+        });
 
         let canSubmitForm = true;
         for (var key in form_data) {
@@ -217,7 +205,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                 }
             }
         }
-
+        
         if (canSubmitForm) {
             let body = {
                 nominee_account_key: {
@@ -251,12 +239,12 @@ class GroupHealthPlanNomineeDetails extends Component {
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "product": 'health suraksha',
+                "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'nominee details',
                 'from_edit': this.props.edit ? 'yes' : 'no',
-                'name': this.state.form_data.name ? 'yes' : 'no',
-                'relation': this.state.form_data.relation ? 'yes' : 'no',
+                'nominee_name': this.state.form_data.name ? 'yes' : 'no',
+                'nominee_relation': this.state.form_data.relation ? 'yes' : 'no',
             }
         };
 
@@ -271,7 +259,7 @@ class GroupHealthPlanNomineeDetails extends Component {
         return (
             <React.Fragment>
                 <div className="common-top-page-subtitle flex-between-center" style={{marginTop:'20px'}}>
-                    Please add appointee details as the nominee is a minor(less than 18 yrs)
+                    Please add appointee details as the nominee is a minor (less than 18 yrs)
                     <img 
                         className="tooltip-icon"
                         data-tip="The appointee must be an adult who will take care of the claim amount in case of death of the insured during the period that the nominee is a minor."
@@ -329,7 +317,7 @@ class GroupHealthPlanNomineeDetails extends Component {
     }
 
     render() {
-        let provider = this.state.providerConfig.provider_api;
+        const { showAppointee = false, showDob = false } = this.state.providerConfig.nominee_screen;
 
         return (
             <Container
@@ -370,7 +358,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                             name="relation"
                             onChange={this.handleChange('relation')} />
                     </div>
-                    {provider === 'STAR' && <div className="InputField">
+                    {showDob && <div className="InputField">
                         <Input
                             type="text"
                             width="40"
@@ -388,7 +376,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                     </div>}
                 </FormControl>
 
-                {provider === 'STAR' && this.state.renderApointee && this.renderApointee()}
+                {showAppointee && this.state.renderApointee && this.renderApointee()}
 
 
                 <ConfirmDialog parent={this} />

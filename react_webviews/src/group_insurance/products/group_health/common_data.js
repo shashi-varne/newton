@@ -25,7 +25,7 @@ export async function initialize() {
         screenData = providerConfig[this.state.screen_name];
     }
 
-    let next_screen = '';
+    let next_screen = this.state.next_state || '';
     if(this.state.screen_name && providerConfig.get_next[this.state.screen_name]) {
         next_screen = providerConfig.get_next[this.state.screen_name];
     }
@@ -92,7 +92,7 @@ export async function initialize() {
                     || 'Something went wrong');
             }
         } catch (err) {
-            console.log(err)
+            console.log(err);
             this.setState({
                 show_loader: false,
                 lead: lead,
@@ -198,6 +198,7 @@ export async function updateLead(body, quote_id) {
         if (res.pfwresponse.status_code === 200) {
             if(this.props.edit && !this.state.force_forward) {
                 this.props.history.goBack();
+                console.log('if');
             } else {
                 this.navigate(this.state.next_state);
             }
@@ -210,11 +211,14 @@ export async function updateLead(body, quote_id) {
                 this.setState({
                     openBmiDialog: true
                 }, () => {
-                    this.sendEvents('next', {bmi_check: true})
-                })
+                    this.sendEvents('next', {bmi_check: true});
+                });
             } else {
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
+                toast(
+                    resultData.error ||
+                    resultData.message ||
+                    'Something went wrong'
+                );
             }
         }
     } catch (err) {

@@ -199,7 +199,6 @@ class GroupHealthPlanPersonalDetails extends Component {
 
   };
 
-
   handleClick = async () => {
 
     this.sendEvents('next');
@@ -345,20 +344,21 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
   }
 
-
   sendEvents(user_action, data = {}) {
     let eventObj = {
       "event_name": 'health_insurance',
       "properties": {
         "user_action": user_action,
-        "product": 'health suraksha',
+        "product": this.state.providerConfig.provider_api,
         "flow": this.state.insured_account_type || '',
         "screen_name": 'personal details',
         'full_name': this.state.form_data.name ? 'yes' : 'no',
-        'dob': this.state.form_data.dob ? 'yes' : 'no',
+        'dob': this.state.form_data.dob,
         'height': this.state.form_data.height ? 'yes' : 'no',
         'weight': this.state.form_data.weight ? 'yes' : 'no',
-        'gender': this.state.form_data.gender ? 'yes' : 'no',
+        'gender': this.state.form_data.gender,
+        // 'member': ,
+        "occupation": this.state.form_data.occupation ? 'yes' : 'no',
         'from_edit': this.props.edit ? 'yes' : 'no',
         'policy_cannot_be_issued': data.bmi_check ? 'yes' : 'no'
       }
@@ -446,7 +446,7 @@ class GroupHealthPlanPersonalDetails extends Component {
             </div>
           </div>
         </DialogContent>
-      </Dialog >
+      </Dialog>
     );
   }
 

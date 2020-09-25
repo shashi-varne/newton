@@ -183,6 +183,7 @@ import GroupHealthPlanHowToClaimStar from './products/group_health/plans/how_to_
 import GroupHealthPlanHowToClaimReligare from './products/group_health/plans/how_to_claim_religare';
 
 import Tooltip from '../common/ui/Tooltip';
+import StarAddress from './products/group_health/Star/star_address';
 
 
 const generateClassName = createGenerateClassName({
@@ -399,6 +400,7 @@ const Insurance = (props) => {
 
           <Route path={`${url}/group-health/:provider/contact`} component={GroupHealthPlanContactDetails} />
           <Route path={`${url}/group-health/:provider/address`} component={GroupHealthPlanAddressDetails} />
+          <Route path={`${url}/group-health/:provider/star-address`} component={StarAddress} />
           <Route path={`${url}/group-health/:provider/nominee`} component={GroupHealthPlanNomineeDetails} />
           <Route path={`${url}/group-health/:provider/is-ped`} component={GroupHealthPlanIsPed} />
           <Route path={`${url}/group-health/:provider/select-ped/:member_key`} component={GroupHealthPlanSelectPed} />

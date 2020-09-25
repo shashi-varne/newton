@@ -302,14 +302,15 @@ class GroupHealthPlanAddMembers extends Component {
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "product": 'health suraksha',
+                "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'add members',
                 'son': ui_members.son_total || '',
                 'daughter': ui_members.daughter_total || '',
-                'self' : this.state.insured_account_type === 'selfandfamily' || this.state.insured_account_type === 'self' ? 'yes' : 'no',
+                'self': ['selfandfamily', 'self'].includes(this.state.insured_account_type) ? 'yes' : 'no',
                 'parent' : `${(ui_members.father ? 'father, ' : '')} ${(ui_members.mother ? 'mother' : '') }`,
-                'adult_member': ['selfandfamily', 'family'].indexOf(this.state.account_type) !== -1 ? this.state.other_adult_member : ''
+                'parent_in_law': `${(ui_members.father_in_law ? 'father, ' : '')} ${(ui_members.mother_in_law ? 'mother' : '') }`,
+                'adult_member': ['selfandfamily', 'family'].includes(this.state.account_type) ? this.state.other_adult_member : ''
             }
         };
 
