@@ -281,19 +281,21 @@ export function inrFormatDecimalWithoutIcon(number) {
   }
 }
 
-export function numDifferentiation(val, withSymbol) {
+export function numDifferentiation(val, withSymbol, decimalPlaces = 2, retainLeadingZeroes = false) {
   if (!val) {
     val = '';
   }
 
-  if (val >= 10000000) val = (val / 10000000).toFixed(2) + ' Cr';
-  else if (val >= 100000) val = (val / 100000).toFixed(2) + ' Lacs';
-  else if (val >= 1000) val = (val / 1000).toFixed(2) + ' Thousand';
+  if (val >= 10000000) val = (val / 10000000).toFixed(decimalPlaces) + 'Cr';
+  else if (val >= 100000) val = (val / 100000).toFixed(decimalPlaces) + 'L';
+  else if (val >= 1000) val = (val / 1000).toFixed(decimalPlaces) + 'K';
   else if (val) return inrFormatDecimal(val);
 
   val = val.toString();
   // remove .00
-  val = val.replace(/\.00([^\d])/g, '$1');
+  if (!retainLeadingZeroes) {
+    val = val.replace(/\.00([^\d])/g, '$1');
+  }
 
   if(withSymbol) {
     val = '₹' + val;
@@ -301,8 +303,8 @@ export function numDifferentiation(val, withSymbol) {
   return val;
 }
 
-export function numDifferentiationInr(val) {
-  return numDifferentiation(val, true);
+export function numDifferentiationInr(val, decimalPlaces, retainLeadingZeroes) {
+  return numDifferentiation(val, true, decimalPlaces, retainLeadingZeroes);
 }
 
 export function IsFutureDate(idate) {
@@ -616,30 +618,36 @@ export function getDateBreakup(date) {
   date = date.replace(/-/g, '/');
 
   let date2 = new Date(date);
-  let dom = date2.getDate();
-  dom = dateOrdinal(dom);
+  let plainDate = date2.getDate();
+  let dom = dateOrdinal(plainDate); // converts 16 to 16th, 2 to 2nd, etc.
 
   let month = monthNames[date2.getMonth()];
   let year = date2.getFullYear();
   let time = formatAMPM(date2);
 
-  return { dom, month, time, year };
+  return { plainDate, dom, month, time, year };
 }
 
 export function formatDateAmPm(date) {
   return formattedDate(date, 'd m, t');
 }
 
-export function formattedDate(date, pattern = '') {
+export function formattedDate(date, pattern = '', usePlainDate = false) {
   pattern = pattern.toLowerCase();
-  const validPatterns = ['d m, t', 'd m y'];
+  const validPatterns = ['d m, t', 'd m y', 'd m', 'm y', 'd m, y', "d m yy'", "m yy'"];
 
   if (!date) return '';
   else if (!validPatterns.includes(pattern)) return date;
-  let { dom, month, time, year } = getDateBreakup(date);
+  const { plainDate, dom, month, time, year } = getDateBreakup(date);
+  const dateVal = usePlainDate ? plainDate : dom;
   const patternMap = {
-    'd m, t': `${dom} ${month}, ${time}`,
-    'd m y': `${dom} ${month} ${year}`,
+    'd m, t': `${dateVal} ${month}, ${time}`,
+    'd m y': `${dateVal} ${month} ${year}`,
+    'd m': `${dateVal} ${month}`,
+    'm y': `${month} ${year}`,
+    'd m, y': `${dateVal} ${month}, ${year}`,
+    "d m yy'": `${dateVal} ${month} ${year.toString().slice(-2)}'`,
+    "m yy'": `${month} ${year.toString().slice(-2)}'`,
     // Enter custom patterns here
   };
   return patternMap[pattern];
@@ -762,6 +770,14 @@ export function toFeet(n) {
   return feet + 'ft ' + inches + 'in';
 }
 
+export function convertToThousand(val) {
+  const numVal = Number(val);
+  if (isNaN(numVal) || !val) return 0;
+
+  const roundedVal = parseInt(numVal/1000, 10);
+  return `${roundedVal}K`;
+}
+
 export function capitalizeFirstLetter(string) {
   if(!string) {
     return '';
@@ -789,4 +805,8 @@ export function isEmpty(value) {
     value === null ||
     (typeof value === "object" && Object.keys(value).length === 0) ||
     (typeof value === "string" && value.trim().length === 0);
+}
+
+export function nonRoundingToFixed(val, decimalPlaces) {
+  return (Math.floor(100 * val) / 100).toFixed(decimalPlaces);
 }

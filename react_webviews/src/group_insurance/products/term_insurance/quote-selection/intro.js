@@ -6,7 +6,7 @@ import Container from '../../../common/Container';
 import Api from 'utils/api';
 import { getConfig, isFeatureEnabled } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import dropdown_arrow_fisdom from 'assets/down_arrow_fisdom.svg';
+import dropdown_arrow_fisdom from 'assets/fisdom/down_arrow_fisdom.svg';
 import dropdown_arrow_myway from 'assets/down_arrow_myway.svg';
 // import kotak_logo from 'assets/kotak_life_logo.png';
 import {
