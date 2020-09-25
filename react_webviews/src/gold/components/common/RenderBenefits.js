@@ -45,6 +45,7 @@ class CommonRenderBenefits extends Component {
     }
 
     render() {
+        console.log(this.state)
         return (
             <Container
                 fullWidthButton={true}
@@ -62,6 +63,9 @@ class CommonRenderBenefits extends Component {
                 </div>}
                 <div className="generic-render-benefits">
                     <HowToSteps baseData={this.state.renderData.steps} />
+                </div>
+                <div className="common-top-bottom-title-light">
+                    {this.state.renderData.bottom_title}
                 </div>
             </Container>
         );
