@@ -37,7 +37,7 @@ class GroupHealthPlanFinalSummary extends Component {
             accordianData: [],
             openDialogReset: false,
             quote_id: storageService().get('ghs_ergo_quote_id'),
-            screen_name:'select_ped_screen'
+            screen_name:'final_summary_screen'
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -54,7 +54,7 @@ class GroupHealthPlanFinalSummary extends Component {
     onload = () => {
         let { lead, provider } = this.state;
         let member_base = lead.member_base;
-        let ped_list = this.state.screenData.ped_list;
+        let ped_list = this.state.providerConfig.select_ped_screen.ped_list;
         
         let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
  
