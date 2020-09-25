@@ -349,7 +349,7 @@ class GroupHealthPlanDetails extends Component {
                             *For detailed list of all terms and conditions, please refer
                             <span
                                 style={{ color: getConfig().primary }}
-                                onClick = {() => this.openInBrowser(this.state.premium_data.read_details_doc, 'read_document')}>
+                                onClick = {() => this.openInBrowser(this.state.common_data.policy_prospects, 'read_document')}>
                                 &nbsp;policy prospectus
                             </span>
                         </div>

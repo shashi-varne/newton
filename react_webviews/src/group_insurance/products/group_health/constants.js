@@ -490,7 +490,7 @@ export const religare = {
                 'name': 'Other',
                 id: 'ped_no_15',
                 tag: 'PEDotherDetails',
-                description: 'Any other diseases or ailments not mentioned above'
+                description: ''
             }
         ]
     },
