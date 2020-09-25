@@ -555,12 +555,20 @@ export const getConfig = () => {
     generic_callback = "true";
   } else if (main_pathname.indexOf('loan') >= 0) {
     project = 'loan';
+  } else if (main_pathname.indexOf('w-report') >= 0) {
+    project = 'w-report';
   }
+
+  
 
   let search = window.location.search;
   const insurance_v2 = generic_callback === "true" ? true : search.indexOf("insurance_v2") >= 0;
 
   let returnConfig = getPartnerConfig(partner_code);
+
+  if(project === 'w-report') {
+      base_url = 'https://my.fisdom.com';
+  }
 
   let searchParams = `?base_url=${base_url}`;
   let searchParamsMustAppend = `?base_url=${base_url}`;
