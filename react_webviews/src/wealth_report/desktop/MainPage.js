@@ -151,7 +151,7 @@ const MainPage = (props) => {
           
           {/* visbility will be modified based on condition in media queries */}
           <div className="wr-user-account">
-            <EmailList refresh={refreshOnScroll}/>
+            <EmailList refresh={refreshOnScroll} key={refreshOnScroll}/>
             <UserAccount parentProps={props} refresh={refreshOnScroll}/>
           </div>
 

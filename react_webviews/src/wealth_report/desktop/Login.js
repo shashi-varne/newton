@@ -420,6 +420,7 @@ const Login = (props) => {
             }}
             type="password"
             classes={{ root: "wr-input-addmail" }}
+            onKeyDown={onKeyDown}
             onChange={(e) => handleInput(e, 'password')}
           />
         </FormControl>
