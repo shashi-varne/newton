@@ -280,17 +280,12 @@ class GroupHealthPlanFinalSummary extends Component {
 
         accordianData.push(contact_data);
 
-        let address_data_backend = []
-        if(lead.correspondence_address.addresline === lead.permanent_address.addresline) {
-            address_data_backend = [lead.permanent_address]
-        } else {
-            address_data_backend = [lead.correspondence_address ,lead.permanent_address];
-        }
+        let address_data_backend = [lead.correspondence_address ,lead.permanent_address];
 
         let data = address_data_backend.map((item, index) => {
             return [
                 {
-                    'title': index === 0 && address_data_backend.length > 1 ? 'Current address' : 'Permanent address',
+                    'title': index === 0 ? 'Current address' : 'Permanent address',
                     'subtitle': ' ',
                     'key': 'heading'
                 },
@@ -630,7 +625,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             {props.title}
                         </div>
                         <div className="subtitle">
-                            {props.subtitle} {props.title==='Height' && <span>cm</span> || props.title==='Weight' && <span>kg</span>}
+                            {props.subtitle} {(props.title==='Height' && <span>cm</span>) || (props.title==='Weight' && <span>kg</span>)}
                         </div>
                         {props.subtitle2 && <div className="subtitle">
                             {props.subtitle2}
@@ -669,12 +664,10 @@ class GroupHealthPlanFinalSummary extends Component {
                             EDIT
                         </div>
                         <br />
-                        {props.data.length > 1 && <React.Fragment>
-                            {props.data[1].map(this.renderAccordiansubData)}
-                            <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
-                                EDIT
-                            </div>
-                        </React.Fragment>}
+                        {props.data[1].map(this.renderAccordiansubData)}
+                        <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
+                            EDIT
+                        </div>
                 </div>}
             </div>
         );
