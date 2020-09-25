@@ -149,6 +149,10 @@ class GroupHealthPlanSelectFloater extends Component {
         groupHealthPlanData.selectedIndexFloater = this.state.selectedIndex;
         groupHealthPlanData.type_of_plan = type_of_plan;
         groupHealthPlanData.post_body.type_of_plan = type_of_plan;
+
+        groupHealthPlanData.post_body.base_premium = selectedPlan.base_premium;
+        groupHealthPlanData.post_body.premium = selectedPlan.net_premium;
+        
         this.setLocalProviderData(groupHealthPlanData);
 
         this.navigate(this.state.next_screen || 'plan-select-cover-period');
