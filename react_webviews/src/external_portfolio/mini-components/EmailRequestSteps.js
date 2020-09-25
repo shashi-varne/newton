@@ -90,7 +90,7 @@ export default class EmailRequestSteps extends Component {
       );
     }
     return (<Fragment>
-      You'll be receiving the statement email on your email id shortly
+      In a few minutes, you’ll receive a CAS email on your email ID
 
       <div
         className="email_example_link"
@@ -105,7 +105,7 @@ export default class EmailRequestSteps extends Component {
     let classes = this.props.classes || {};
     const { showRegenerateBtn } = this.props;
     return (<Fragment>
-      Please forward the email (and <b>not the statement</b> ) to
+      Forward the exact email to our email address. Please do not modify the email.
       <InfoBox
         classes={{ root: `info-box-cut-out ${classes.emailBox}` }}
         isCopiable={true}
@@ -132,7 +132,7 @@ export default class EmailRequestSteps extends Component {
 
   renderStep3 = () => {
     return (<Fragment>
-      As soon as we receive the email, your portfolio view will get generated
+      As soon as we receive the email, your portfolio statement will get generated.
     </Fragment>);
   }
 

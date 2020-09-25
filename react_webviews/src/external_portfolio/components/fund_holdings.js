@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../common/Container';
 import FundDetailCard from '../mini-components/FundDetailCard';
 import { fetchAllHoldings, hitNextPage } from '../common/ApiCalls';
-import { storageService } from '../../utils/validators';
+import { isEmpty, storageService } from '../../utils/validators';
 import toast from '../../common/ui/Toast';
 import { nativeCallback } from 'utils/native_callback';
 import { setLoader } from '../common/commonFunctions';
@@ -43,12 +43,12 @@ class FundHoldings extends Component {
   async componentDidMount() {
     try {
       this.setLoader(true);
-      const selectedPan = storageService().get('user_pan');
-      if (!selectedPan) {
+      const selectedPan = storageService().getObject('user_pan');
+      if (isEmpty(selectedPan)) {
         // eslint-disable-next-line
         throw 'Please select a PAN';
       }
-      const { holdings, next_page } = await fetchAllHoldings({ pan: selectedPan });
+      const { holdings, next_page } = await fetchAllHoldings({ pan: selectedPan.pan });
       this.setState({
         holdings: holdings || [],
         next_page,

@@ -21,7 +21,7 @@ const colorReplace = (code, headerData) => {
     color = headerData.leftIconColor;
   }
   return (code.replace(/fill=".*?"/g, 'fill=' + color));
-}
+};
 
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, rightIcon, handleRightIconClick, smallTitle, disableBack, provider, 

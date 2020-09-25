@@ -28,8 +28,6 @@ class GroupHealthPlanMedicalHistory extends Component {
   onload() {
 
     let { member_base, account_type } = this.state.lead;
-    console.log(member_base)
-
 
     let radio_options = [
       {
@@ -42,35 +40,36 @@ class GroupHealthPlanMedicalHistory extends Component {
       }
     ];
 
-
     let list = [
       {
-        label:
-          "Have any of the person(s) to be insured been diagnosed / hospitalized for any illness / injury during the last 48 months?",
+        label: account_type === 'self' ? 
+          "Have you been diagnosed / hospitalized for any illness / injury during the last 48 months?"
+          : "Have any of the person(s) to be insured been diagnosed / hospitalized for any illness / injury during the last 48 months?",
         members: member_base,
         radio_options: radio_options,
         key: "mand_1",
         input_type: "radio",
       },
       {
-        label:
-          "Have any of the person(s) to be insured ever filed a claim with their current / previous insurer?",
+        label: account_type === 'self' ? 
+        "Have you ever filed a claim with your current / previous insurer?"
+        : "Have any of the person(s) to be insured ever filed a claim with their current / previous insurer?",
         members: member_base,
         radio_options: radio_options,
         key: "mand_2",
         input_type: "radio",
       },
       {
-        label:
-          "Has any proposal for Health insurance been declined, cancelled or charged a higher premium?",
+        label: account_type === 'self' ? 
+        "Has your Health insurance been declined, cancelled or charged a higher premium?"
+        : "Has any proposal for Health insurance been declined, cancelled or charged a higher premium?",
         members: member_base,
         radio_options: radio_options,
         key: "mand_3",
         input_type: "radio",
       },
       {
-        label:
-          "Are you already covered under any other health insurance policy of Care Health Insurance (formerly Religare Health Insurance)?",
+        label: "Are you already covered under any other health insurance policy of Care Health Insurance (formerly Religare Health Insurance)?",
         members: member_base,
         radio_options: radio_options,
         key: "mand_4",
@@ -250,7 +249,7 @@ class GroupHealthPlanMedicalHistory extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
-        title="Medical History Details"
+        title="Medical history details"
         buttonTitle="CONTINUE"
         withProvider={true}
         handleClick2={this.handleClick2}
@@ -258,7 +257,7 @@ class GroupHealthPlanMedicalHistory extends Component {
         handleClick={() => this.handleClick()}
       >
         <div className="common-top-page-subtitle">
-          This is important to avoid claims rejection later
+          Please disclose correct details to make hassle-free claim later
         </div>
         {account_type && (
           <RadioAndCheckboxList

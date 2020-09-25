@@ -382,6 +382,12 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/:provider/personal-details/son2`}
             render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'son2'} />} />
 
+             <Route path={`${url}/group-health/:provider/personal-details/son3`}
+            render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'son3'} />} />
+
+             <Route path={`${url}/group-health/:provider/personal-details/son4`}
+            render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'son4'} />} />
+
           <Route path={`${url}/group-health/:provider/personal-details/mother`}
             render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'mother'} />} />
 
@@ -393,6 +399,12 @@ const Insurance = (props) => {
 
           <Route path={`${url}/group-health/:provider/personal-details/daughter2`}
             render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'daughter2'} />} />
+
+          <Route path={`${url}/group-health/:provider/personal-details/daughter3`}
+                      render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'daughter3'} />} />
+
+          <Route path={`${url}/group-health/:provider/personal-details/daughter4`}
+            render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'daughter4'} />} />
 
           <Route path={`${url}/group-health/:provider/personal-details/applicant`}
             render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'applicant'} />} />
@@ -434,6 +446,12 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/:provider/edit-personal-details/son2`}
             render={(props) => <GroupHealthPlanPersonalDetails {...props} member_key={'son2'} edit={true} />} />
 
+          <Route path={`${url}/group-health/:provider/edit-personal-details/son3`}
+                      render={(props) => <GroupHealthPlanPersonalDetails {...props} member_key={'son3'} edit={true} />} />
+
+          <Route path={`${url}/group-health/:provider/edit-personal-details/son4`}
+            render={(props) => <GroupHealthPlanPersonalDetails {...props} member_key={'son4'} edit={true} />} />
+
           <Route path={`${url}/group-health/:provider/edit-personal-details/daughter`}
             render={(props) => <GroupHealthPlanPersonalDetails {...props} member_key={'daughter'} edit={true} />} />
 
@@ -442,6 +460,12 @@ const Insurance = (props) => {
 
           <Route path={`${url}/group-health/:provider/edit-personal-details/daughter2`}
             render={(props) => <GroupHealthPlanPersonalDetails {...props} member_key={'daughter2'} edit={true} />} />
+
+<Route path={`${url}/group-health/:provider/edit-personal-details/daughter3`}
+            render={(props) => <GroupHealthPlanPersonalDetails {...props} member_key={'daughter3'} edit={true} />} />
+
+<Route path={`${url}/group-health/:provider/edit-personal-details/daughter4`}
+            render={(props) => <GroupHealthPlanPersonalDetails {...props} member_key={'daughter4'} edit={true} />} />
 
           <Route path={`${url}/group-health/:provider/edit-personal-details/applicant`}
             render={(props) => <GroupHealthPlanPersonalDetails {...props} member_key={'applicant'} edit={true} />} />

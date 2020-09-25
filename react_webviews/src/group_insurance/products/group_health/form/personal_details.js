@@ -6,7 +6,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { health_providers, genderOptions, childeNameMapper } from '../../../constants';
 import {
   calculateAge, toFeet, capitalizeFirstLetter,
-  formatDate, validatePan, validateAlphabets, dobFormatTest, isValidDate
+  formatDate, validatePan, validateAlphabets, dobFormatTest, isValidDate, difference_In_Days
 } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
@@ -69,7 +69,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     if (member_key === 'self') {
       header_title = 'Personal details';
-      header_subtitle = 'We would need some details to complete your proposal';
+      header_subtitle = 'Policy will be issued basis these details';
     }
 
     let next_state = `/group-insurance/group-health/${this.state.provider}/contact`;
@@ -94,7 +94,6 @@ class GroupHealthPlanPersonalDetails extends Component {
     let form_data = lead[backend_key] || {};
 
     let dobNeeded = (this.state.provider === 'RELIGARE' && lead.eldest_member !== backend_key) || member_key === 'applicant';
-
     form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
     let age = calculateAge(form_data.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
 
@@ -218,10 +217,17 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let form_data = this.state.form_data;
 
+    let isChild = form_data.relation.includes('SON') || form_data.relation.includes('DAUGHTER');
     if (this.state.provider === 'RELIGARE') {
-      if (this.state.backend_key === 'child_account1_key' || this.state.backend_key === 'child_account2_key' || this.state.backend_key === 'child_account3_key' || this.state.backend_key === 'child_account4_key') {
-        if (calculateAge(this.state.form_data.dob) < 5 || calculateAge(this.state.form_data.dob) > 25) {
-          form_data.dob_error = 'kid age cannot be greater than 25 or less than 5';
+      if (isChild) {
+        if (this.state.groupHealthPlanData.type_of_plan === 'WF') {
+          if (difference_In_Days(this.state.form_data.dob) <= 91 || calculateAge(this.state.form_data.dob) >= 25) {
+            form_data.dob_error = 'kid age cannot be greater than 25 or less than 91 days';
+          }
+        } else {
+          if (calculateAge(this.state.form_data.dob) < 5 || calculateAge(this.state.form_data.dob) >= 25) {
+            form_data.dob_error = 'Only children between 5 yrs & 25 yrs can be included';
+          }
         }
       }
     }
@@ -261,25 +267,25 @@ class GroupHealthPlanPersonalDetails extends Component {
     let { provider } = this.state;
     let age = calculateAge((this.state.form_data.dob || '').replace(/\\-/g, '/').split('-').join('/'));
 
-    if(this.state.dobNeeded) {
-      if(provider === 'RELIGARE') {
-        if( age < 19) {
-          form_data.dob_error = 'Minimum age is 18 applicant';
+    if (this.state.dobNeeded) {
+      if (provider === 'RELIGARE') {
+        if (age < 18 && !isChild) {
+          form_data.dob_error = 'Minimum age is 18 for adult';
         }
       }
     }
     if (this.state.member_key === 'applicant') {
-      
+
 
       if (provider === 'HDFCERGO') {
-        if (this.state.form_data.gender === 'MALE' && age < 22) {
+        if (this.state.form_data.gender === 'MALE' && age < 21) {
           form_data.dob_error = 'Minimum age is 21 male applicant';
         }
 
-        if (this.state.form_data.gender === 'FEMALE' && age < 19) {
+        if (this.state.form_data.gender === 'FEMALE' && age < 18) {
           form_data.dob_error = 'Minimum age is 18 female applicant';
         }
-        
+
       }
 
       if (this.state.lead.account_type === 'parents') {

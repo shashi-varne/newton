@@ -99,7 +99,8 @@ class GroupHealthPlanSelectFloater extends Component {
                     premium_data_floater: premium_data_floater,
                     ind_pre_data: ind_pre_data,
                     premium_data_nf: premium_data_nf,
-                    premium_data_wf: premium_data_wf
+                    premium_data_wf: premium_data_wf,
+                    premium_base: resultData.premium
                 })
 
 
@@ -141,9 +142,17 @@ class GroupHealthPlanSelectFloater extends Component {
         this.sendEvents('next');
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let type_of_plan = this.state.premium_data_floater[this.state.selectedIndex].key;
+
+        let selectedPlan = this.state.premium_base[type_of_plan][0]; //first of WF or NF;
+        groupHealthPlanData.net_premium_addons = selectedPlan.net_premium;
+
         groupHealthPlanData.selectedIndexFloater = this.state.selectedIndex;
         groupHealthPlanData.type_of_plan = type_of_plan;
         groupHealthPlanData.post_body.type_of_plan = type_of_plan;
+
+        groupHealthPlanData.post_body.base_premium = selectedPlan.base_premium;
+        groupHealthPlanData.post_body.premium = selectedPlan.net_premium;
+        
         this.setLocalProviderData(groupHealthPlanData);
 
         this.navigate(this.state.next_screen || 'plan-select-cover-period');
@@ -253,14 +262,14 @@ class GroupHealthPlanSelectFloater extends Component {
             >
 
                 <div className="common-top-page-subtitle flex-between-center">
-                You can choose how to use the sum insured across family members
+                    Choose how to use the sum insured across family members
                  <img 
                         className="tooltip-icon"
-                        data-tip="For entire family -
-                        Sum insured is shared among the members. For ex- if the sum insured is INR 4 lacs, total claims of all the members together will be covered upto INR 4 lacs.
-
-                        For each member - 
-                        Sum insured limit is applicable for each member individually. For ex- if the sum insured is INR 4 lacs, each member can individually claim upto INR 4 lac"
+                        data-tip="1. For entire family -
+                        Also called 'Family floater', in this case sum insured is shared amongst the members. For ex- if the sum insured is ₹4 lacs, total claims of all the members together will be covered upto ₹4 lacs.
+                        
+                        2. For each member-
+                        Sum insured limit is applicable for each member individually. For ex- if the sum insured is ₹4 lacs, each member can individually claim upto ₹4 lacs."
                         src={require(`assets/${this.state.productName}/info_icon.svg`)}
                         alt="" />
                 </div>

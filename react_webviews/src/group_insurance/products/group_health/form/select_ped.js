@@ -51,7 +51,6 @@ class GroupHealthPlanSelectPed extends Component {
         let member_base = lead.member_base;
         let member_key = this.props.match.params.member_key;
 
-
         let member_info  = member_base.filter(data => data.key === member_key);
         member_info = member_info[0];
         let backend_key = member_info.backend_key;
@@ -59,12 +58,20 @@ class GroupHealthPlanSelectPed extends Component {
         ped_diseases_name = (ped_diseases_name || '').split(',');
         let duration = member_info.duration
 
+        this.state.screenData.ped_list.forEach((item, index) => {
+            item.checked = false;
+            item.start_date = '';
+            item.answer_description = '';
+            item.description = index === this.state.screenData.ped_list.lenght-1 ? '' : item.description;
+        });
+
         let options = this.state.screenData.ped_list;
 
         if(this.state.provider === 'RELIGARE') {
             let ped_data = member_info.ped_diseases || [];
             ped_data.forEach(item => {
                 options.forEach((opt, index) => {
+
                     if(opt.id === item.key_mapper) {
                         options[index].checked = true;
                         options[index].start_date = item.start_date || '';
@@ -89,13 +96,14 @@ class GroupHealthPlanSelectPed extends Component {
             }
 
             if(!matched) {
-                other_diseases += ped_diseases_name[p] || options[options.length-1].description;
+                other_diseases += ped_diseases_name[p];
             }
         }
 
         if(other_diseases) {
             options[options.length - 1].checked = true;
         }
+        // console.log(options[options.length - 1])
 
         this.setState({
             member_key: member_key,
@@ -107,7 +115,8 @@ class GroupHealthPlanSelectPed extends Component {
                 value: other_diseases
             },
             [this.state.otherInputData.name]: other_diseases,
-            next_state: next_state
+            next_state: next_state,
+            pedOther: options[options.length - 1].description
         }, ()=> {
             this.setState({
                 show_checkbox: true,
@@ -315,7 +324,7 @@ class GroupHealthPlanSelectPed extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
-                title={this.setEditTitle(capitalizeFirstLetter(childeNameMapper(this.state.member_key)) + "'s pre-existing diseases")}
+                title={this.state.member_key === 'self' ? this.setEditTitle('Your pre-existing diseases') : this.setEditTitle(capitalizeFirstLetter(childeNameMapper(this.state.member_key)) + "'s pre-existing diseases")}
                 buttonTitle="CONTINUE"
                 withProvider={true}
                 handleClick2={this.handleClick2}

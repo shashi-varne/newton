@@ -27,7 +27,7 @@ export default class HDFCPremium extends Component {
 
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">Cover period</div>
-          <div className="pi-tile-right">{this.props.plan_selected_final.tenure} year</div>
+          <div className="pi-tile-right">{this.props.plan_selected_final.tenure} year{this.props.plan_selected_final.tenure>'1' && <span>s</span>}</div>
         </div>
 
         <div className="generic-hr"></div>
@@ -55,7 +55,7 @@ export default class HDFCPremium extends Component {
           <div className="flex-between pi-tile">
             {/* {this.props.plan_selected_final.total_discount_percentage}% */}
             <div className="pi-tile-left">Total discount</div>
-            <div className="pi-tile-right">-{inrFormatDecimal(this.props.plan_selected_final.total_discount)}</div>
+            <div className="pi-tile-right">{inrFormatDecimal(this.props.plan_selected_final.total_discount)}</div>
           </div>
         }
 

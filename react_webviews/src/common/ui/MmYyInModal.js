@@ -18,8 +18,7 @@ class MmYyInModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: this.props.value,
-            name: ''
+            name: '',
         }
     };
 
@@ -55,11 +54,22 @@ class MmYyInModal extends Component {
     }
 
     handleClick = () => {
+        let value = this.state[this.props.id] !== undefined ? this.state[this.props.id] : this.props.start_date
+        this.setState({
+            [this.props.id]: value
+        })
 
         let error = '';
-        let date = this.state.value;
+        let date = value;
         let name = this.props.name;
         let dob = this.props.dob;
+
+        if (!date) {
+            error = "please enter month and year";
+            this.setState({
+                [name + '_error']: error
+            })
+        }
 
         if (!isValidMonthYear(date)) {
             error = "please enter valid month or year";
@@ -77,7 +87,7 @@ class MmYyInModal extends Component {
                 [name + '_error']: error
             })
         } else {
-            this.props.parent.updateParent(this.props.name, this.state[this.props.id])
+            this.props.parent.updateParent(this.props.name, value)
             this.handleClose();
         }
     }
@@ -122,12 +132,12 @@ class MmYyInModal extends Component {
                                 <Input
                                     type="text"
                                     id="date_input"
-                                    label="Since When"
+                                    label="Since when"
                                     name={this.props.name}
                                     className="date"
                                     placeholder="MM/YYYY"
                                     maxLength='7'
-                                    value={this.state[this.props.id] || ''}
+                                    value={this.state[this.props.id] !== undefined ? (this.state[this.props.id] || '') : this.props.start_date}
                                     error={this.state[name+'_error'] ? true : false}
                                     helperText={this.state[name+'_error']}
                                     onChange={this.handleChange()}
@@ -152,7 +162,6 @@ class MmYyInModal extends Component {
     }
 
     render() {
-
         return (
             <div className="generic-input-popup">
                 {this.renderPopUp()}

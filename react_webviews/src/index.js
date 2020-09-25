@@ -2,6 +2,7 @@ import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import "typeface-roboto";
+import "typeface-source-sans-pro";
 import './index.css';
 import App from './App';
 import $ from 'jquery';
