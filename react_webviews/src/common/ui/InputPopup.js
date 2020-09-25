@@ -15,7 +15,7 @@ class InputPopupClass extends Component {
     constructor(props) {
         super(props);
         this.state = {
-           value: this.props.value
+        //    value: this.props.value
         };
 
     }
@@ -67,7 +67,8 @@ class InputPopupClass extends Component {
 
         if(this.props.sinceWhenInput) {
             let error = '';
-            let date = this.state.startDateModal;
+            let date = this.state.startDateModal !== undefined ? this.state.startDateModal : this.props.start_date;
+            let value = this.state.value ? this.state.value : this.props.description;
             let dob = this.props.dob;
             let canProceed = true;
 
@@ -91,13 +92,13 @@ class InputPopupClass extends Component {
                 })
             }
             
-            if(!this.state.value) {
+            if(!value) {
                 canProceed = false;
                 this.setState({
                    pedOther_error: "This can't be empty"
                 });
         
-            } else if (!validateAlphabets(this.state.value)) {
+            } else if (!validateAlphabets(value)) {
                 canProceed = false;
                 this.setState({
                     pedOther_error: "please enter valid description"
@@ -105,18 +106,20 @@ class InputPopupClass extends Component {
             }
             
             if(canProceed) {
-                this.props.parent.updateParent('startDateModal', this.state['startDateModal'])
-                this.props.parent.updateParent(this.props.name, this.state.value);
+                this.props.parent.updateParent('startDateModal', date)
+                this.props.parent.updateParent(this.props.name, value);
                 this.handleClose();
             }
         } else {
-            if(!this.state.value) {
+            let value = this.state.value ? this.state.value : this.props.description;
+
+            if(!value) {
                 this.setState({
                    pedOther_error: "This can't be empty"
                 });
         
             } else {
-                this.props.parent.updateParent(this.props.name, this.state.value);
+                this.props.parent.updateParent(this.props.name, value);
                 this.handleClose();
             }
         }
@@ -155,7 +158,7 @@ class InputPopupClass extends Component {
                                         class="data"
                                         id={this.props.name}
                                         name={this.props.name}
-                                        value={this.state.value || ''}
+                                        value={this.state.value !== undefined ? (this.state.value || '') : this.props.description}
                                         onChange={this.handleChange()} />
                                 </div>
                                 {this.props.sinceWhenInput &&
@@ -168,7 +171,7 @@ class InputPopupClass extends Component {
                                      className="date"
                                      placeholder="MM/YYYY"
                                      maxLength='7'
-                                     value={this.state['startDateModal'] || ''}
+                                     value={this.state['startDateModal'] !== undefined ? (this.state['startDateModal'] || '') : this.props.start_date}
                                      error={this.state['startDateModal_error'] ? true : false}
                                      helperText={this.state['startDateModal_error']}
                                      onChange={this.handleChange()}
