@@ -51,7 +51,6 @@ class GroupHealthPlanSelectPed extends Component {
         let member_base = lead.member_base;
         let member_key = this.props.match.params.member_key;
 
-
         let member_info  = member_base.filter(data => data.key === member_key);
         member_info = member_info[0];
         let backend_key = member_info.backend_key;
@@ -59,12 +58,19 @@ class GroupHealthPlanSelectPed extends Component {
         ped_diseases_name = (ped_diseases_name || '').split(',');
         let duration = member_info.duration
 
+        this.state.screenData.ped_list.forEach(item => {
+            item.checked = false;
+            item.start_date = '';
+            item.answer_description = '';
+        });
+
         let options = this.state.screenData.ped_list;
 
         if(this.state.provider === 'RELIGARE') {
             let ped_data = member_info.ped_diseases || [];
             ped_data.forEach(item => {
                 options.forEach((opt, index) => {
+
                     if(opt.id === item.key_mapper) {
                         options[index].checked = true;
                         options[index].start_date = item.start_date || '';
@@ -131,7 +137,7 @@ class GroupHealthPlanSelectPed extends Component {
         let {options, dateModalIndex} = this.state;
         if(key === 'startDateModal') {
             
-            options[dateModalIndex].start_date = value;
+            options[dateModalIndex].start_date = value[this.state.member_key];
 
             this.setState({
                 options: options

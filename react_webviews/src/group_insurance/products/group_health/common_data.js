@@ -66,7 +66,12 @@ export async function initialize() {
 
             let quote_id = storageService().get('ghs_ergo_quote_id');
 
-            const res = await Api.get(`/api/ins_service/api/insurance/${providerConfig.provider_api}/lead/quote?quote_id=${quote_id}`);
+            let url = `/api/ins_service/api/insurance/${providerConfig.provider_api}/lead/quote?quote_id=${quote_id}`;
+
+            if(this.state.screen_name === 'final_summary_screen') {
+                url += `&forms_completed=true`;
+            }
+            const res = await Api.get(url);
               
             var resultData = res.pfwresponse.result;
 
@@ -80,7 +85,10 @@ export async function initialize() {
                 lead.member_base = ghGetMember(lead, this.state.providerConfig);
                 this.setState({
                     lead: resultData.quote || {},
-                    common_data: resultData.common,
+                    common_data: {
+                        ...resultData.common,
+                        tnc: resultData.tnc || ''
+                    },
                     insured_account_type: lead.account_type || ''
                 }, () => {
                     if (this.onload && !this.state.ctaWithProvider) {
