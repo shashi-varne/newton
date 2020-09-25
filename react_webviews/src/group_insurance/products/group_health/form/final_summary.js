@@ -280,33 +280,49 @@ class GroupHealthPlanFinalSummary extends Component {
 
         accordianData.push(contact_data);
 
-        let address_data_backend = lead.permanent_address;
+        let address_data_backend = []
+        if(lead.correspondence_address.addresline === lead.permanent_address.addresline) {
+            address_data_backend = [lead.permanent_address]
+        } else {
+            address_data_backend = [lead.correspondence_address ,lead.permanent_address];
+        }
+
+        console.log(lead)
+
+        let data = address_data_backend.map((item, index) => {
+            return [
+                {
+                    'title': index === 0 && address_data_backend.length > 1 ? 'Current address' : 'Permanent address',
+                    'subtitle': ' ',
+                    'key': 'heading'
+                },
+                {
+                    'title': 'Address line 1',
+                    'subtitle': item.addressline
+                },
+                {
+                    'title': 'Address line 2',
+                    'subtitle': item.addressline2
+                },
+                {
+                    'title': 'Pincode',
+                    'subtitle': item.pincode
+                },
+                {
+                    'title': 'City',
+                    'subtitle': item.city
+                },
+                {
+                    'title': 'State',
+                    'subtitle': item.state
+                }
+            ]
+        })
 
         let address_data = {
             'title': 'Address details',
             edit_state: `/group-insurance/group-health/${this.state.provider}/edit-address`,
-            data: [
-                {
-                    'title': 'Address line 1',
-                    'subtitle': address_data_backend.addressline
-                },
-                {
-                    'title': 'Address line 2',
-                    'subtitle': address_data_backend.addressline2
-                },
-                {
-                    'title': 'Pincode',
-                    'subtitle': address_data_backend.pincode
-                },
-                {
-                    'title': 'City',
-                    'subtitle': address_data_backend.city
-                },
-                {
-                    'title': 'State',
-                    'subtitle': address_data_backend.state
-                }
-            ]
+            data: data
         }
 
         accordianData.push(address_data);
@@ -627,6 +643,7 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     renderAccordian = (props, index) => {
+
         return (
             <div key={index} onClick={() => this.handleAccordian(index)} className="bc-tile">
                 <div className="bct-top">
@@ -638,13 +655,28 @@ class GroupHealthPlanFinalSummary extends Component {
                     </div>
                 </div>
 
-                {props.open &&
+                {props.open && props.title !== 'Address details' &&
                     <div className="bct-content">
                         {props.data.map(this.renderAccordiansubData)}
                         <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
                             EDIT
                         </div>
                     </div>}
+
+                {props.open && props.title === 'Address details' &&
+                    <div className="bct-content">
+                        {props.data[0].map(this.renderAccordiansubData)}
+                        <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
+                            EDIT
+                        </div>
+                        <br />
+                        {props.data.length > 1 && <React.Fragment>
+                            {props.data[1].map(this.renderAccordiansubData)}
+                            <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
+                                EDIT
+                            </div>
+                        </React.Fragment>}
+                </div>}
             </div>
         );
     }
