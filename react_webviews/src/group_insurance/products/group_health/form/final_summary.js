@@ -623,6 +623,7 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     renderAccordiansubData = (props, index) => {
+ 
         return (
             <div key={index}>
                 {props.subtitle &&
@@ -631,7 +632,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             {props.title}
                         </div>
                         <div className="subtitle">
-                            {props.subtitle}
+                            {props.subtitle} {props.title==='Height' && <span>cm</span> || props.title==='Weight' && <span>kg</span>}
                         </div>
                         {props.subtitle2 && <div className="subtitle">
                             {props.subtitle2}
