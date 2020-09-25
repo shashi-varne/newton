@@ -113,7 +113,8 @@ class GroupHealthPlanSelectPed extends Component {
                 value: other_diseases
             },
             [this.state.otherInputData.name]: other_diseases,
-            next_state: next_state
+            next_state: next_state,
+            pedOther: options[options.length - 1].description
         }, ()=> {
             this.setState({
                 show_checkbox: true,
