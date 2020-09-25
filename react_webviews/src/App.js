@@ -20,6 +20,7 @@ import HelpSupport from './help_support';
 import CommonLanding from './common/components/landing';
 // import CommonRenderFaqs from './common/components/RenderFaqs';
 import Fhc from './fhc';
+import WealthReport from './wealth_report';
 import Loan from './loan';
 
 class App extends Component {
@@ -38,6 +39,7 @@ class App extends Component {
           <Route path="/risk" component={RiskProfiler} />
           <Route path="/hni/" component={HNI} />
           <Route path="/isip" component={IsipBIller} />
+          <Route path="/w-report" component={WealthReport} />
           <Route path="/help" component={HelpSupport} />
           <Route path="/loan" component={Loan} />
           <Route path="/webview/:main_module/:sub_module" component={CommonLanding} />
