@@ -337,17 +337,28 @@ class GroupHealthPlanFinalSummary extends Component {
         }
         accordianData.push(nominee_data);
 
-        if (provider === 'RELIGARE' && members_for_life_style.length !== 0) {
-            let data = [
-                {
-                    'title': 'Smoke/consume alcohol',
-                    'subtitle': 'Yes'
-                },
-                {
-                    'title': 'Who?',
-                    'subtitle': members_for_life_style.join(', ')
-                }
-            ]
+        if (provider === 'RELIGARE') {
+            let data = [];
+            if (members_for_life_style.length !== 0) {
+                data = [
+                    {
+                        'title': 'Smoke/consume alcohol',
+                        'subtitle': 'Yes'
+                    },
+                    {
+                        'title': 'Who?',
+                        'subtitle': members_for_life_style.join(', ')
+                    }
+                ]
+            } else {
+                data = [
+                    {
+                        'title': 'Smoke/consume alcohol',
+                        'subtitle': 'No'
+                    }
+                ]
+            }
+            
 
             data = data.concat(life_style_details_data);
 
