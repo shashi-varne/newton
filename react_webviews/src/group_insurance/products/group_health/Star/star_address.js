@@ -124,7 +124,7 @@ class StarAddress extends Component {
 
   handleClick = async () => {
 
-    let { provider, form_data } = this.state;
+    let { form_data } = this.state;
 
     this.sendEvents('next');
     const keysMapper = {

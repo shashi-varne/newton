@@ -19,7 +19,8 @@ class GroupHealthPlanContactDetails extends Component {
             form_data: {},
             ctaWithProvider: true,
             get_lead: true,
-            next_state: 'address'
+            next_state: 'address',
+            screen_name: 'contact_screen'
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
