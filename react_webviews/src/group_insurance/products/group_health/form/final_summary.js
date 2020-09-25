@@ -57,14 +57,13 @@ class GroupHealthPlanFinalSummary extends Component {
         let ped_list = this.state.providerConfig.select_ped_screen.ped_list;
         
         let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
-        console.log(applicantIndex);
+ 
         if(applicantIndex >=0) {
             let appli_data = member_base[applicantIndex];
             member_base.splice(applicantIndex, 1);
             member_base.splice(0, 0, appli_data);
         }
         
-
         this.setState({
             applicantIndex: applicantIndex
         })
@@ -227,12 +226,15 @@ class GroupHealthPlanFinalSummary extends Component {
 
                 // for peds
                 if (member.ped_exists) {
-                    diseases_data_backend.push({
-                        'title': `${member_display}'s pre-existing diseases`,
-                        'subtitle': ' ',
-                        'key': 'heading'
-                    })
 
+                    if (this.state.insured_account_type !== 'self') {
+                        diseases_data_backend.push({
+                            'title': `${member_display}'s pre-existing diseases`,
+                            'subtitle': ' ',
+                            'key': 'heading'
+                        })
+                    }
+                    
                     // eslint-disable-next-line no-loop-func
                     member.ped_diseases.forEach(ped_option => {
                         
@@ -372,15 +374,20 @@ class GroupHealthPlanFinalSummary extends Component {
         }
 
 
-        if (diseases_data_backend.length !== 0) {
-            let diseases_data = {
-                'title': 'Pre-existing diseases',
-                edit_state: `/group-insurance/group-health/${this.state.provider}/edit-is-ped`,
-                data: diseases_data_backend
-            }
-
-            accordianData.push(diseases_data);
+        if (diseases_data_backend.length === 0) {
+            diseases_data_backend.push({
+                'title': `Any pre-existing diseases?`,
+                'subtitle': 'No'
+            })
         }
+
+        let diseases_data = {
+            'title': 'Pre-existing diseases',
+            edit_state: `/group-insurance/group-health/${this.state.provider}/edit-is-ped`,
+            data: diseases_data_backend
+        }
+
+        accordianData.push(diseases_data);
 
         this.setState({
             accordianData: accordianData

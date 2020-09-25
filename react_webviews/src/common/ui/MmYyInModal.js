@@ -37,9 +37,13 @@ class MmYyInModal extends Component {
             name = event.target.name;
         }
 
-        let value = event.target.value;
+        let member_key = this.props.member_key;
 
-        if (!dobFormatTest(value)) {
+        let value = {
+            [member_key]: event.target.value
+        };
+
+        if (!dobFormatTest(value[member_key])) {
             return
         }
 
@@ -57,7 +61,8 @@ class MmYyInModal extends Component {
     handleClick = () => {
 
         let error = '';
-        let date = this.state.value;
+        let member_key = this.props.member_key;
+        let date = this.state[this.props.id][member_key];
         let name = this.props.name;
         let dob = this.props.dob;
 
@@ -84,6 +89,8 @@ class MmYyInModal extends Component {
 
     renderPopUp() {
         let name = this.props.name;
+        let member_key = this.props.member_key;
+        let id = this.props.id;
 
         if (this.props.parent.state.openPopUpInputDate) {
             return (
@@ -127,7 +134,7 @@ class MmYyInModal extends Component {
                                     className="date"
                                     placeholder="MM/YYYY"
                                     maxLength='7'
-                                    value={this.state[this.props.id] || ''}
+                                    value={this.state[id] ? this.state[id][member_key] : ''}
                                     error={this.state[name+'_error'] ? true : false}
                                     helperText={this.state[name+'_error']}
                                     onChange={this.handleChange()}
