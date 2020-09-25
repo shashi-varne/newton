@@ -12,7 +12,7 @@ import { fetchExternalPortfolio, fetchAllPANs } from '../common/ApiCalls';
 import { capitalize } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from '../../utils/functions';
-import { storageService, formatAmountInr } from '../../utils/validators';
+import { storageService, formatAmountInr, isEmpty } from '../../utils/validators';
 import SettingsWithBadge from 'assets/ic_setting_active.svg';
 
 const productType = getConfig().productName;
@@ -48,8 +48,7 @@ export default class ExternalPortfolio extends Component {
     this.state = {
       portfolio: {},
       show_loader: false,
-      selectedPan: '',
-      selectedPanRank: '',
+      selectedPan: {},
       seeMoreClicked: false,
     };
     this.navigate = navigate.bind(this);
@@ -78,9 +77,8 @@ export default class ExternalPortfolio extends Component {
   async componentDidMount() {
     try {
       this.setLoader(true);
-      let selectedPan = storageService().get('user_pan') || null;
-      let selectedPanRank = storageService().get('user_pan_rank') || null;
-      if (!selectedPan) {
+      let selectedPan = storageService().getObject('user_pan') || {};
+      if (isEmpty(selectedPan)) {
         /* For whatever reason, if there is no selected PAN in LS, force External Portfolio 
         to get fresh data */
         storageService().remove('hni-portfolio');
@@ -90,15 +88,12 @@ export default class ExternalPortfolio extends Component {
           nativeCallback({ action: 'exit', events: this.sendEvents('back') });
         }
         selectedPan = pans[0];
-        selectedPanRank = 1;
-        storageService().set('user_pan', selectedPan);
-        storageService().set('user_pan_rank', selectedPanRank);
+        storageService().setObject('user_pan', selectedPan);
       }
-      const result = await fetchExternalPortfolio({ pan: selectedPan });
+      const result = await fetchExternalPortfolio({ pan: selectedPan.pan });
       this.setState({
         portfolio: result,
         selectedPan,
-        selectedPanRank,
         show_loader: false, // same as this.setLoader(false);
       });
     } catch(err) {
@@ -157,7 +152,7 @@ export default class ExternalPortfolio extends Component {
   }
 
   render() {
-    const { selectedPan, selectedPanRank, portfolio, show_loader } = this.state;
+    const { selectedPan, portfolio, show_loader } = this.state;
     let {
       total_investment,
       total_current_value,
@@ -182,7 +177,7 @@ export default class ExternalPortfolio extends Component {
           leftIconColor: 'white',
         }}
         styleHeader={{
-          background: 'black',
+          background: 'black !important',
         }}
         goBack={this.goBack}
         showLoader={show_loader}
@@ -204,11 +199,11 @@ export default class ExternalPortfolio extends Component {
             onClick={this.panSelectClicked}
             style={{ background: productType === 'fisdom' ? '#0B0719' : '#061628' }}>
             <div className="selected-pan-initial">
-              {selectedPan[0]}
+              {selectedPan.name ? selectedPan.name[0] || '-' : '-'}
             </div>
             <div id="selected-pan-detail">
-              <span id="selected-pan-header">PAN {selectedPanRank || ''}</span>
-              <span id="selected-pan-num">{selectedPan}</span>
+              <span id="selected-pan-header">{selectedPan.name || '--'}</span>
+              <span id="selected-pan-num">{selectedPan.pan === 'NA' ? 'Unspecified PAN' : selectedPan.pan}</span>
             </div>
             <ChevronRightIcon style={{ color: 'white' }}/>
           </div>
