@@ -1,6 +1,7 @@
 import Api from '../../utils/api';
 import { storageService, isEmpty } from '../../utils/validators';
 import { genericErrMsg } from '../constants';
+import { remove } from 'lodash';
 function resetBootFlag() {
   boot = false;
   storageService().remove('wr-boot');
@@ -213,6 +214,11 @@ export const fetchAllPANs = async (params) => {
 
       if (status === 200) {
         storageService().setObject('wr-pans', result.pans);
+        const unidentifiedPan = remove(result.pans, pan => pan.pan === 'NA');
+        console.log(unidentifiedPan);
+        if (unidentifiedPan.length) {
+          return [...result.pans.sort(), unidentifiedPan[0]];
+        }
         return result.pans.sort();
       } else {
         throw (result.error || result.message || genericErrMsg);
