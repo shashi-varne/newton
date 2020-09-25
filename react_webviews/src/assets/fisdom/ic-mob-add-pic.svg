@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="34" height="33" viewBox="0 0 34 33">
+    <defs>
+        <ellipse id="prefix__b" cx="14" cy="13.5" rx="14" ry="13.5"/>
+        <filter id="prefix__a" width="128.6%" height="129.6%" x="-14.3%" y="-11.1%" filterUnits="objectBoundingBox">
+            <feMorphology in="SourceAlpha" operator="dilate" radius=".5" result="shadowSpreadOuter1"/>
+            <feOffset dy="1" in="shadowSpreadOuter1" result="shadowOffsetOuter1"/>
+            <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="1"/>
+            <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"/>
+            <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
+        </filter>
+    </defs>
+    <g fill="none" fill-rule="evenodd" transform="translate(3 2)">
+        <use fill="#000" filter="url(#prefix__a)" xlink:href="#prefix__b"/>
+        <ellipse cx="14" cy="13.5" fill="#FFF" stroke="#F8F8F8" stroke-width=".5" rx="14.25" ry="13.75"/>
+        <g fill="#4F2CA5" fill-rule="nonzero" opacity=".8">
+            <path d="M14.48 2.806h-2.246L11.583.463H4.417l-.606 2.343H1.526c-.319.015-.618.155-.832.391-.215.236-.327.548-.311.866V12c-.016.318.096.63.31.866.215.235.514.376.833.391H14.48c.318-.015.618-.156.832-.391.215-.236.326-.548.31-.866V4.063c.016-.318-.095-.63-.31-.866-.214-.236-.514-.376-.832-.391zM8 11.194c-1.887-.056-3.374-1.627-3.326-3.514C4.626 5.793 6.113 4.222 8 4.166c1.887.056 3.374 1.627 3.326 3.514.048 1.887-1.439 3.458-3.326 3.514z" transform="translate(6 7)"/>
+        </g>
+    </g>
+</svg>

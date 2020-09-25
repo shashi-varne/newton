@@ -58,10 +58,11 @@ class GroupHealthPlanSelectPed extends Component {
         ped_diseases_name = (ped_diseases_name || '').split(',');
         let duration = member_info.duration
 
-        this.state.screenData.ped_list.forEach(item => {
+        this.state.screenData.ped_list.forEach((item, index) => {
             item.checked = false;
             item.start_date = '';
             item.answer_description = '';
+            item.description = index === this.state.screenData.ped_list.lenght-1 ? '' : item.description;
         });
 
         let options = this.state.screenData.ped_list;
@@ -102,6 +103,7 @@ class GroupHealthPlanSelectPed extends Component {
         if(other_diseases) {
             options[options.length - 1].checked = true;
         }
+        // console.log(options[options.length - 1])
 
         this.setState({
             member_key: member_key,
@@ -113,7 +115,8 @@ class GroupHealthPlanSelectPed extends Component {
                 value: other_diseases
             },
             [this.state.otherInputData.name]: other_diseases,
-            next_state: next_state
+            next_state: next_state,
+            pedOther: options[options.length - 1].description
         }, ()=> {
             this.setState({
                 show_checkbox: true,
