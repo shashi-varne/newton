@@ -45,7 +45,6 @@ class CommonRenderBenefits extends Component {
     }
 
     render() {
-        console.log(this.state)
         return (
             <Container
                 fullWidthButton={true}
