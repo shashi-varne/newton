@@ -137,7 +137,7 @@ class GroupHealthPlanSelectPed extends Component {
         let {options, dateModalIndex} = this.state;
         if(key === 'startDateModal') {
             
-            options[dateModalIndex].start_date = value[this.state.member_key];
+            options[dateModalIndex].start_date = value;
 
             this.setState({
                 options: options

@@ -519,7 +519,7 @@ class GroupHealthPlanAddressDetails extends Component {
             >
 
                 <div className="common-top-page-subtitle">
-                    Policy document will be delivered to this address
+                    Policy will be delivered to the current address
                 </div>
 
                 <div style={{ color: '#64778D', fontSize: 13, fontWeight: 300, marginTop: '37px' }}>

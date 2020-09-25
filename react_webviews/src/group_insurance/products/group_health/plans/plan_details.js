@@ -103,13 +103,13 @@ class GroupHealthPlanDetails extends Component {
         this.sendEvents('next', {more_info: type});
         let data_mapper = {
             'whats_included': {
-                'header_title': "What's included?",
+                'header_title': "What is covered?",
                 'header_subtitle': 'These are some of the benefits that are covered under this policy',
                 'steps': this.state.extra_data.whats_included,
                 'pathname': '/gold/common/render-benefits'
             },
             'whats_not_included': {
-                'header_title': "What's not included?",
+                'header_title': "What is not covered?",
                 'header_subtitle' : 'These are some of the incidences that are not covered under this policy',
                 'steps': this.state.extra_data.whats_not_included,
                 'pathname': '/gold/common/render-benefits'
@@ -126,6 +126,7 @@ class GroupHealthPlanDetails extends Component {
         let renderData = {
             'header_title': mapper_data.header_title,
             'header_subtitle': mapper_data.header_subtitle || `${this.state.common_data.base_plan_title} ${this.state.plan_selected.plan_title}`,
+            'bottom_title': '*For detailed list, please refer policy prospectus',
             'steps': {
                 'options': mapper_data.steps
             },
@@ -358,12 +359,12 @@ class GroupHealthPlanDetails extends Component {
                         <div className="bd-tile" onClick={() => this.navigateBenefits('whats_included')}>
                             <img className="bf-img" src={require(`assets/${this.state.productName}/ic_whats_covered.svg`)}
                                 alt="" />
-                            <div className="bd-content">What's included?</div>
+                            <div className="bd-content">What is covered?</div>
                         </div>
                         <div className="bd-tile" onClick={() => this.navigateBenefits('whats_not_included')}>
                             <img className="bf-img" src={require(`assets/${this.state.productName}/ic_whats_not_covered.svg`)}
                                 alt="" />
-                            <div className="bd-content">What's not included?</div>
+                            <div className="bd-content">What is not covered?</div>
                         </div>
                         <div className="bd-tile" onClick={() => this.navigateBenefits('how_to_claim')}>
                             <img className="bf-img" src={require(`assets/${this.state.productName}/ic_how_to_claim.svg`)}
