@@ -166,7 +166,7 @@ class GroupHealthPlanStarHealthDetails extends Component {
                 sum_assured: "500000",
             }
             this.setLocalProviderData(groupHealthPlanData);
-            // this.navigate(this.state.next_screen);
+            this.navigate(this.state.next_screen);
         }
     }
 

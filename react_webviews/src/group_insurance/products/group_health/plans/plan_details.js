@@ -61,6 +61,10 @@ class GroupHealthPlanDetails extends Component {
             groupHealthPlanData[keys_to_empty[i]] = '';
         }
 
+        if (this.state.providerConfig.provider_api === 'star') {
+            post_body.sum_assured = '500000';
+        }
+
         groupHealthPlanData.post_body = post_body;
 
         this.setState({
