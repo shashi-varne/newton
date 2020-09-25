@@ -59,7 +59,7 @@ class CheckboxListClass extends Component {
     }
 
     renderList = (props, index) => {
-console.log(props)
+
         return (
             <div key={index} className="CheckBlock2 plus-minus-input"
                 style={{ opacity: props.disabled ? 0.4 : 1 }}>
@@ -129,7 +129,7 @@ console.log(props)
                                 class="data"
                                 id="input_popup"
                                 name="input_popup"
-                                value={this.state[this.state.otherInputData.name] || props.description  || this.props.parent.state[this.state.otherInputData.name] || ''}
+                                value={this.state[this.state.otherInputData.name] || props.description || ''}
                             />
                         </div>
 
