@@ -11,10 +11,10 @@ import cover_period from 'assets/cover_period_icon.png';
 import claim_settle_icn from 'assets/claim_settle_icn.png';
 import nominee from 'assets/personal_details_icon.svg';
 import { inrFormatDecimal } from '../../../../utils/validators';
-import dropdown_arrow_fisdom from 'assets/down_arrow_fisdom.svg';
+import dropdown_arrow_fisdom from 'assets/fisdom/down_arrow_fisdom.svg';
 import dropdown_arrow_myway from 'assets/down_arrow_myway.svg';
 
-import dropup_arrow_fisdom from 'assets/down_arrow_fisdom.svg';
+import dropup_arrow_fisdom from 'assets/fisdom/down_arrow_fisdom.svg';
 import dropup_arrow_myway from 'assets/down_arrow_myway.svg';
 
 class FinalReport extends Component {

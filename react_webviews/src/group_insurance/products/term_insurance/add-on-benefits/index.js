@@ -7,7 +7,7 @@ import Container from '../../../common/Container';
 import Api from 'utils/api';
 import { getConfig, manageDialog } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import dropdown_arrow_fisdom from 'assets/down_arrow_fisdom.svg';
+import dropdown_arrow_fisdom from 'assets/fisdom/down_arrow_fisdom.svg';
 import dropdown_arrow_myway from 'assets/down_arrow_myway.svg';
 import DropdownInPage from '../../../../common/ui/DropdownInPage';
 import Button from 'material-ui/Button';
