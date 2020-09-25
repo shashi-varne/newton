@@ -89,8 +89,7 @@ class GroupHealthPlanAddOns extends Component {
         let body = this.state.groupHealthPlanData.post_body;
 
         let add_ons_data = this.state.groupHealthPlanData.add_ons_data || [];
-
-
+        
         // eslint-disable-next-line radix
         let cta_premium = this.state.groupHealthPlanData.net_premium_addons || parseInt(this.state.bottomButtonData.leftSubtitle.substring(1).replace(',', ''));
         this.updateBottomPremium(cta_premium);
@@ -111,7 +110,7 @@ class GroupHealthPlanAddOns extends Component {
                 var resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200) {
                     add_ons_data = resultData.premium.add_ons_data || [];
-
+                    add_ons_data['bottom_text']='This benefit is mandatory with your selected plan';
                 } else {
                     toast(resultData.error || resultData.message
                         || 'Something went wrong');
@@ -190,6 +189,7 @@ class GroupHealthPlanAddOns extends Component {
     }
 
     renderOptions = (add_ons_data) => {
+        console.log(add_ons_data)
         return (
             <div>
                 {add_ons_data.map((item, index) => (
@@ -209,7 +209,7 @@ class GroupHealthPlanAddOns extends Component {
                         <Grid item xs={11}>
                             <span className="flex-between" style={{ alignItems: 'start' }}>
                                 <div style={{ color: '#0A1D32' }}>
-                                    <span style={{ fontSize: "16px", fontWeight: '600' }}>{item.title}</span>
+                                    <span style={{ fontSize: "16px", fontWeight: '600' }}>{item.title}</span> 
                                     <div style={{ marginTop: '10px', fontSize: '14px' }}>
                                         in {item.options.length !== 0 ?
                                             (!item.checked) ? formatAmountInr(item.default_premium) :
@@ -217,6 +217,7 @@ class GroupHealthPlanAddOns extends Component {
                                                     : formatAmountInr(item.default_premium)
                                             : formatAmountInr(item.default_premium)
                                         }
+                                        <div id="add_ons_bottom_text">{item.disabled===true? add_ons_data.bottom_text:''}</div>
                                     </div>
                                 </div>
                                 <img
