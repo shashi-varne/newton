@@ -88,8 +88,7 @@ class GroupHealthPlanAddOns extends Component {
 
         let body = this.state.groupHealthPlanData.post_body;
 
-        let add_ons_data = this.state.groupHealthPlanData.add_ons_data || [];
-        
+        let add_ons_data = this.state.groupHealthPlanData.add_ons_data || []; 
         // eslint-disable-next-line radix
         let cta_premium = this.state.groupHealthPlanData.net_premium_addons || parseInt(this.state.bottomButtonData.leftSubtitle.substring(1).replace(',', ''));
         this.updateBottomPremium(cta_premium);
@@ -189,7 +188,6 @@ class GroupHealthPlanAddOns extends Component {
     }
 
     renderOptions = (add_ons_data) => {
-        console.log(add_ons_data)
         return (
             <div>
                 {add_ons_data.map((item, index) => (
