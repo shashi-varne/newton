@@ -287,8 +287,6 @@ class GroupHealthPlanFinalSummary extends Component {
             address_data_backend = [lead.correspondence_address ,lead.permanent_address];
         }
 
-        console.log(lead)
-
         let data = address_data_backend.map((item, index) => {
             return [
                 {
