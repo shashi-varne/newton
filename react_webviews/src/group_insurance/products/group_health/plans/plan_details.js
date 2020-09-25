@@ -9,6 +9,7 @@ import toast from '../../../../common/ui/Toast';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
 import {initialize} from '../common_data';
+import ReactHtmlParser from 'react-html-parser';
 
 class GroupHealthPlanDetails extends Component {
 
@@ -239,7 +240,7 @@ class GroupHealthPlanDetails extends Component {
                     src={option.img} alt="Gold" />
                 <div className="content">
                     <div className="content">
-                        <div className="content-title">{option.content}</div>
+                        <div className="content-title">{ReactHtmlParser(option.content)}</div>
                     </div>
                 </div>
             </div>
