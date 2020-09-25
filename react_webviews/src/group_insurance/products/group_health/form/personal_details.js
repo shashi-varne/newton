@@ -117,7 +117,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         }
       });
     } else {
-      form_data.height = height;
+      form_data.height = `${height}`;
     }
 
     form_data.selectedIndex = selectedIndex;
@@ -175,18 +175,15 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     if (name === 'height') {
+      const height = `${this.state.height_options[this.state.selectedIndex].value}`;
       this.setState({
         selectedIndex: event
       }, () => {
-        form_data[name] = this.state.height_options[this.state.selectedIndex].value;
+        form_data[name] = height;
         form_data[name + '_error'] = '';
 
-        this.setState({
-          height: this.state.height_options[this.state.selectedIndex].value
-        })
+        this.setState({ height });
       });
-
-
     } else {
       form_data[name] = value;
       form_data[name + '_error'] = '';
@@ -194,7 +191,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     this.setState({
       form_data: form_data
-    })
+    });
 
   };
 
