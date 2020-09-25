@@ -15,6 +15,8 @@ import { initialize } from './common_data';
 import { ghGetMember, getCssMapperReport } from '../../constants';
 import download from 'assets/download.svg';
 import text_error_icon from 'assets/text_error_icon.svg';
+import ReactHtmlParser from 'react-html-parser';
+
 class GroupHealthReportDetails extends Component {
 
     constructor(props) {
@@ -264,7 +266,7 @@ class GroupHealthReportDetails extends Component {
                     src={option.img} alt="Gold" />
                 <div className="content">
                     <div className="content">
-                        <div className="content-title">{option.content}</div>
+                        <div className="content-title">{ReactHtmlParser(option.content)}</div>
                     </div>
                 </div>
             </div>
