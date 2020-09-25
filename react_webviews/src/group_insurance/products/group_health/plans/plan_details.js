@@ -3,12 +3,13 @@ import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { inrFormatDecimal, numDifferentiation } from 'utils/validators';
+import { inrFormatDecimal, numDifferentiationInr } from 'utils/validators';
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
 import {initialize} from '../common_data';
+import ReactHtmlParser from 'react-html-parser';
 
 class GroupHealthPlanDetails extends Component {
 
@@ -107,13 +108,13 @@ class GroupHealthPlanDetails extends Component {
         this.sendEvents('next', {more_info: type});
         let data_mapper = {
             'whats_included': {
-                'header_title': "What's included?",
+                'header_title': "What is covered?",
                 'header_subtitle': 'These are some of the benefits that are covered under this policy',
                 'steps': this.state.extra_data.whats_included,
                 'pathname': '/gold/common/render-benefits'
             },
             'whats_not_included': {
-                'header_title': "What's not included?",
+                'header_title': "What is not covered?",
                 'header_subtitle' : 'These are some of the incidences that are not covered under this policy',
                 'steps': this.state.extra_data.whats_not_included,
                 'pathname': '/gold/common/render-benefits'
@@ -130,6 +131,7 @@ class GroupHealthPlanDetails extends Component {
         let renderData = {
             'header_title': mapper_data.header_title,
             'header_subtitle': mapper_data.header_subtitle || `${this.state.common_data.base_plan_title} ${this.state.plan_selected.plan_title}`,
+            'bottom_title': '*For detailed list, please refer policy prospectus',
             'steps': {
                 'options': mapper_data.steps
             },
@@ -222,7 +224,7 @@ class GroupHealthPlanDetails extends Component {
         return (
             <div className="sum-assured-info" key={index}>
                 <div className="sai-left">
-                    {numDifferentiation(props.sum_assured)}
+                    {numDifferentiationInr(props.sum_assured)}
                 </div>
                 <div className="sai-left">
                     {inrFormatDecimal(props.net_premium)}/year
@@ -238,7 +240,7 @@ class GroupHealthPlanDetails extends Component {
                     src={option.img} alt="Gold" />
                 <div className="content">
                     <div className="content">
-                        <div className="content-title">{option.content}</div>
+                        <div className="content-title">{ReactHtmlParser(option.content)}</div>
                     </div>
                 </div>
             </div>
@@ -261,7 +263,7 @@ class GroupHealthPlanDetails extends Component {
                 <div className="group-health-plan-details">
                     <div className="group-health-top-content-plan-logo">
                         <div className="left">
-                            <div className="tc-title">{this.state.common_data.base_plan_title}</div>
+                            <div className="tc-title">{this.state.provider==='HDFCERGO'?this.state.common_data.base_plan_title:''}</div>
                             <div className="tc-subtitle">{this.state.plan_selected.plan_title}</div>
                         </div>
 
@@ -274,7 +276,7 @@ class GroupHealthPlanDetails extends Component {
                         </div>
                     </div>
 
-                    <div className="settlement-info">Claim settlement: 98.88%</div>
+                    <div className="settlement-info">Claim Settlement Ratio: 98.88%</div>
 
                     <div className="recomm-info group-health-recommendation" 
                     style={{backgroundColor: this.state.plan_selected.recommendation_tag === 'Recommended' ? '#E86364' : ''}}>
@@ -348,7 +350,7 @@ class GroupHealthPlanDetails extends Component {
                             *For detailed list of all terms and conditions, please refer
                             <span
                                 style={{ color: getConfig().primary }}
-                                onClick = {() => this.openInBrowser(this.state.premium_data.read_details_doc, 'read_document')}>
+                                onClick = {() => this.openInBrowser(this.state.common_data.policy_prospects, 'read_document')}>
                                 &nbsp;policy prospectus
                             </span>
                         </div>
@@ -358,12 +360,12 @@ class GroupHealthPlanDetails extends Component {
                         <div className="bd-tile" onClick={() => this.navigateBenefits('whats_included')}>
                             <img className="bf-img" src={require(`assets/${this.state.productName}/ic_whats_covered.svg`)}
                                 alt="" />
-                            <div className="bd-content">What's included?</div>
+                            <div className="bd-content">What is covered?</div>
                         </div>
                         <div className="bd-tile" onClick={() => this.navigateBenefits('whats_not_included')}>
                             <img className="bf-img" src={require(`assets/${this.state.productName}/ic_whats_not_covered.svg`)}
                                 alt="" />
-                            <div className="bd-content">What's not included?</div>
+                            <div className="bd-content">What is not covered?</div>
                         </div>
                         <div className="bd-tile" onClick={() => this.navigateBenefits('how_to_claim')}>
                             <img className="bf-img" src={require(`assets/${this.state.productName}/ic_how_to_claim.svg`)}

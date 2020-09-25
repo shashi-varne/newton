@@ -158,7 +158,7 @@ class GroupHealthPlanAddressDetails extends Component {
                 keys_to_check = ['addressline', 'addressline2', 'pincode'];
             } else {
                 keys_to_check = ['addressline', 'addressline2', 'pincode',
-                'addressline', 'p_addressline2', 'p_pincode'];
+                'p_addressline', 'p_addressline2', 'p_pincode'];
             }
            
         }
@@ -183,6 +183,7 @@ class GroupHealthPlanAddressDetails extends Component {
             if (key.indexOf('error') >= 0) {
                 if (form_data[key]) {
                     canSubmitForm = false;
+                    toast('Please check all the errors');
                     break;
                 }
             }
@@ -518,7 +519,7 @@ class GroupHealthPlanAddressDetails extends Component {
             >
 
                 <div className="common-top-page-subtitle">
-                    Policy document will be delivered to this address
+                    Policy will be delivered to the current address
                 </div>
 
                 <div style={{ color: '#64778D', fontSize: 13, fontWeight: 300, marginTop: '37px' }}>

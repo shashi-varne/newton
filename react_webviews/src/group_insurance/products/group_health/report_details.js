@@ -15,6 +15,8 @@ import { initialize } from './common_data';
 import { ghGetMember, getCssMapperReport } from '../../constants';
 import download from 'assets/download.svg';
 import text_error_icon from 'assets/text_error_icon.svg';
+import ReactHtmlParser from 'react-html-parser';
+
 class GroupHealthReportDetails extends Component {
 
     constructor(props) {
@@ -204,13 +206,14 @@ class GroupHealthReportDetails extends Component {
                     ]
                 }
     
+                let basePath = `/group-insurance/group-health/${provider}/`;
                 if(provider === 'RELIGARE') {
-                    this.navigate('how-to-claim-religare');
+                    this.navigate(basePath + 'how-to-claim-religare');
                     return;
                 }
     
                 if(provider === 'STAR') {
-                    this.navigate('how-to-claim-star');
+                    this.navigate(basePath + 'how-to-claim-star');
                     return;
                 }
     
@@ -263,7 +266,7 @@ class GroupHealthReportDetails extends Component {
                     src={option.img} alt="Gold" />
                 <div className="content">
                     <div className="content">
-                        <div className="content-title">{option.content}</div>
+                        <div className="content-title">{ReactHtmlParser(option.content)}</div>
                     </div>
                 </div>
             </div>
@@ -335,7 +338,7 @@ class GroupHealthReportDetails extends Component {
                     </div>
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
-                            <div className="tc-title">{this.state.providerData.subtitle}</div>
+                            {this.state.provider !== 'RELIGARE' && <div className="tc-title">{this.state.providerData.subtitle}</div>}
                             <div className="tc-subtitle">{this.state.lead.plan_title}</div>
                         </div>
 
@@ -371,10 +374,25 @@ class GroupHealthReportDetails extends Component {
                                     COVER PERIOD
                                 </div>
                                 <div className="mtr-bottom">
-                                    {this.state.lead.tenure}
+                                    {this.state.lead.tenure} year{this.state.lead.tenure>'1' && <span>s</span>}
                                 </div>
                             </div>
                         </div>
+
+                       {this.state.lead.cover_type &&
+                        <div className="member-tile">
+                            <div className="mt-left">
+                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
+                            </div>
+                            <div className="mt-right">
+                                <div className="mtr-top">
+                                    COVERAGE TYPE
+                                </div>
+                                <div className="mtr-bottom">
+                                    {this.state.lead.cover_type === 'WF' ? 'Family floater' : 'Individually for each member'}
+                                </div>
+                            </div>
+                        </div>}
 
                         <div className="member-tile">
                             <div className="mt-left">
@@ -382,7 +400,7 @@ class GroupHealthReportDetails extends Component {
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
-                                    TOTAL PREMIUM
+                                 PREMIUM PAID
                                 </div>
 
                                 <div className="mtr-bottom flex">
@@ -406,7 +424,7 @@ class GroupHealthReportDetails extends Component {
                                         }
                                         <div>
                                             <div>{inrFormatDecimal(this.state.lead.tax_amount)} </div>
-                                            <div style={{fontSize:10}}>(18% GST & other taxes) </div>
+                                            <div style={{fontSize:10}}>(18% GST) </div>
                                         </div>
                                         <div>
                                         &nbsp;=&nbsp;
@@ -448,7 +466,8 @@ class GroupHealthReportDetails extends Component {
                         </div>
                     </div>
 
-                    <div className="member-tile">
+                    {this.state.policy_data.policy_number &&
+                      <div className="member-tile">
                         <div className="mt-left">
                             <img src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
                         </div>
@@ -460,7 +479,22 @@ class GroupHealthReportDetails extends Component {
                                 {this.state.policy_data.policy_number || '-'}
                             </div>
                         </div>
-                    </div>
+                    </div>}
+
+                    {!this.state.policy_data.policy_number && this.state.policy_data.proposal_number &&
+                      <div className="member-tile">
+                        <div className="mt-left">
+                            <img src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
+                        </div>
+                        <div className="mt-right">
+                            <div className="mtr-top">
+                                PROPOSAL NUMBER
+                                </div>
+                            <div className="mtr-bottom">
+                                {this.state.policy_data.proposal_number || '-'}
+                            </div>
+                        </div>
+                    </div>}
 
                    {this.state.policy_data.vendor_action_required_message &&
                     <div style={{ margin: '30px 0 30px 0', display: 'flex', 

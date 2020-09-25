@@ -63,6 +63,9 @@ class CommonRenderBenefits extends Component {
                 <div className="generic-render-benefits">
                     <HowToSteps baseData={this.state.renderData.steps} />
                 </div>
+                <div className="common-top-bottom-title-light">
+                    {this.state.renderData.bottom_title}
+                </div>
             </Container>
         );
     }

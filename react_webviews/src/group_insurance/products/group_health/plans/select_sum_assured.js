@@ -4,7 +4,7 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 
-import { numDifferentiation } from 'utils/validators';
+import { numDifferentiationInr } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
 
 
@@ -86,6 +86,10 @@ class GroupHealthPlanSelectSumAssured extends Component {
 
         // data reset
         groupHealthPlanData.add_ons_data = '';
+        groupHealthPlanData.net_premium_addons = '';
+
+        groupHealthPlanData.post_body.add_ons = '';
+        groupHealthPlanData.post_body.add_ons_json = '';
 
         this.setLocalProviderData(groupHealthPlanData);
 
@@ -111,7 +115,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
                 className={`tile ${index === this.state.selectedIndex ? 'tile-selected' : ''}`} key={index}>
                 <div className="select-tile">
                     <div className="name">
-                        {numDifferentiation(props.sum_assured)}
+                        {numDifferentiationInr(props.sum_assured)}
                     </div>
                     <div className="completed-icon">
                         {index === this.state.selectedIndex &&
@@ -137,10 +141,10 @@ class GroupHealthPlanSelectSumAssured extends Component {
                 handleClick={() => this.handleClick()}
             >
                 <div className="common-top-page-subtitle flex-between-center">
-                    You can make a claim upto this amount
+                    Claim can be made upto the selected amount     
                  <img 
                  className="tooltip-icon"
-                 data-tip="In the last 10 years, the average cost per hospitalization for urban patients (in India) has increased by about 176%. Hence, we recommend to have adequate coverage to manage health expenses."
+                 data-tip="In the last 10 years, the average cost per hospitalisation for urban patients has increased by about 176%. Hence, we recommend to have adequate coverage to manage health expenses"
                  src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
                 </div>
                 <div className="group-health-plan-select-sum-assured">
