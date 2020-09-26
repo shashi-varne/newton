@@ -200,10 +200,10 @@ class GroupHealthStarPlanSelectPed extends Component {
 
           if ((member_data.ped_exists  === 'Yes' ||
           member_data.ped_exists === true) && !none_option_selected) {
-            body[backend_key].ped_exists = true;
+            body[backend_key].ped_exists = 'true';
             body[backend_key].ped_diseases_name = member_data.ped_diseases_name;
           } else {
-            body[backend_key].ped_exists = false;
+            body[backend_key].ped_exists = 'false';
             body[backend_key].ped_diseases_name = '';
           }
         }

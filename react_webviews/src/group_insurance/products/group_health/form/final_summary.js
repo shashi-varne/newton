@@ -558,9 +558,16 @@ class GroupHealthPlanFinalSummary extends Component {
 
     handleClick = async () => {
         this.sendEvents('next');
+        let {lead}  = this.state;
+        lead.ped_check = true;
 
         if(this.state.provider === 'STAR') {
-            this.startPayment();  //#TODO medical dialog for ped
+            if(lead.ped_check) {
+                this.openMedicalDialog('ped');
+                return;
+            } else {
+                this.startPayment();
+            }
         } else {
             this.checkPPC();
         }
