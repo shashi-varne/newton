@@ -278,10 +278,11 @@ class GroupHealthPlanDetails extends Component {
 
                     <div className="settlement-info">Claim Settlement Ratio: 98.88%</div>
 
+                   {this.state.plan_selected.recommendation_ta &&
                     <div className="recomm-info group-health-recommendation" 
                     style={{backgroundColor: this.state.plan_selected.recommendation_tag === 'Recommended' ? '#E86364' : ''}}>
                     {this.state.plan_selected.recommendation_tag}
-                    </div>
+                    </div>}
                     <div className="copay-info">
                         <div className="ci-left">
                             0% copay, assured 100% cashless treatment

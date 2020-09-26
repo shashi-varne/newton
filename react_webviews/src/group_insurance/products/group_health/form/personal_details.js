@@ -218,18 +218,18 @@ class GroupHealthPlanPersonalDetails extends Component {
     if (this.state.provider === 'RELIGARE') {
       if (isChild) {
         if (this.state.groupHealthPlanData.type_of_plan === 'WF') {
-          if (difference_In_Days(this.state.form_data.dob) <= 91 || calculateAge(this.state.form_data.dob) >= 25) {
+          if (difference_In_Days(form_data.dob) <= 91 || calculateAge(form_data.dob) >= 25) {
             form_data.dob_error = 'kid age cannot be greater than 25 or less than 91 days';
           }
         } else {
-          if (calculateAge(this.state.form_data.dob) < 5 || calculateAge(this.state.form_data.dob) >= 25) {
+          if (calculateAge(form_data.dob) < 5 || calculateAge(form_data.dob) >= 25) {
             form_data.dob_error = 'Only children between 5 yrs & 25 yrs can be included';
           }
         }
       }
     }
 
-    if (!isValidDate(this.state.form_data.dob)) {
+    if (!isValidDate(form_data.dob)) {
       form_data.dob_error = 'Please enter valid date';
     }
 
@@ -242,27 +242,27 @@ class GroupHealthPlanPersonalDetails extends Component {
       }
     }
 
-    if (this.state.form_data && (this.state.form_data.name || '').split(" ").filter(e => e).length < 2) {
+    if (form_data && (form_data.name || '').split(" ").filter(e => e).length < 2) {
       form_data.name_error = 'Enter valid full name';
     }
 
-    if (this.state.pan_needed && this.state.form_data.pan_number &&
-      !validatePan(this.state.form_data.pan_number)) {
+    if (this.state.pan_needed && form_data.pan_number &&
+      !validatePan(form_data.pan_number)) {
       form_data.pan_number_error = 'Invalid PAN number';
     }
 
-    if ((this.state.member_key === 'self' || this.state.member_key === 'applicant') && this.state.form_data.gender) {
-      if (this.state.spouse_relation === 'HUSBAND' && this.state.form_data.gender === 'MALE') {
+    if ((this.state.member_key === 'self' || this.state.member_key === 'applicant') && form_data.gender) {
+      if (this.state.spouse_relation === 'HUSBAND' && form_data.gender === 'MALE') {
         form_data.gender_error = 'Invalid gender';
       }
 
-      if (this.state.spouse_relation === 'WIFE' && this.state.form_data.gender === 'FEMALE') {
+      if (this.state.spouse_relation === 'WIFE' && form_data.gender === 'FEMALE') {
         form_data.gender_error = 'Invalid gender';
       }
     }
 
     let { provider } = this.state;
-    let age = calculateAge((this.state.form_data.dob || '').replace(/\\-/g, '/').split('-').join('/'));
+    let age = calculateAge((form_data.dob || '').replace(/\\-/g, '/').split('-').join('/'));
 
     if (this.state.dobNeeded) {
       if (provider === 'RELIGARE') {
@@ -275,11 +275,11 @@ class GroupHealthPlanPersonalDetails extends Component {
 
 
       if (provider === 'HDFCERGO') {
-        if (this.state.form_data.gender === 'MALE' && age < 21) {
+        if (form_data.gender === 'MALE' && age < 21) {
           form_data.dob_error = 'Minimum age is 21 male applicant';
         }
 
-        if (this.state.form_data.gender === 'FEMALE' && age < 18) {
+        if (form_data.gender === 'FEMALE' && age < 18) {
           form_data.dob_error = 'Minimum age is 18 female applicant';
         }
 
@@ -296,8 +296,8 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     }
 
-    if (this.state.form_data.name &&
-      !validateAlphabets(this.state.form_data.name)) {
+    if (form_data.name &&
+      !validateAlphabets(form_data.name)) {
       form_data.name_error = 'Invalid name';
     }
 
@@ -329,17 +329,17 @@ class GroupHealthPlanPersonalDetails extends Component {
 
       let body = {
         [this.state.backend_key]: {
-          "name": this.state.form_data.name || '',
-          "dob": this.state.form_data.dob || '',
-          "gender": this.state.form_data.gender || gender,
-          "height": this.state.form_data.height || '',
-          "weight": this.state.form_data.weight || '',
-          "occupation": this.state.form_data.occupation || ''
+          "name": form_data.name || '',
+          "dob": form_data.dob || '',
+          "gender": form_data.gender || gender,
+          "height": form_data.height || '',
+          "weight": form_data.weight || '',
+          "occupation": form_data.occupation || ''
         }
       }
 
       if (this.state.pan_needed) {
-        body[this.state.backend_key].pan_number = this.state.form_data.pan_number;
+        body[this.state.backend_key].pan_number = form_data.pan_number;
       }
 
 
