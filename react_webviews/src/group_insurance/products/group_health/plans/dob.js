@@ -134,12 +134,10 @@ class GroupHealthPlanDob extends Component {
 
         let adult_ages = [];
         let child_ages = [];
-        for (var i = 0; i < final_dob_data.length; i++) {
-
-            let dob = final_dob_data[i].value;
-            let age = final_dob_data[i].age;
-            let key = final_dob_data[i].key;
+        for (let dob_data of final_dob_data) {
+            const { value: dob, age, key } = dob_data;
             let error = '';
+
             if (new Date(dob) > new Date() || !isValidDate(dob)) {
                 error = 'Please enter valid date';
             } else if (IsFutureDate(dob)) {
@@ -147,16 +145,14 @@ class GroupHealthPlanDob extends Component {
             }
 
             if(age) {
-                if(key.indexOf('son') >=0 || key.indexOf('daughter') >=0) {
+                if(['son', 'daughter'].includes(key)) {
                     let dob_child = validation_props.dob_child;
-                    // child
                     if (age.age > dob_child.max || (age.age === 0 && age.month < dob_child.minMonth)) {
-                        error = `Valid age is between ${dob_child.minMonth} months- ${dob_child.max} years`;
+                        error = `Valid age is between ${dob_child.minMonth} months - ${dob_child.max} years`;
                     }
                     child_ages.push(age.age);
     
                 } else {
-
                     let dob_adult = validation_props.dob_adult;
                     let dob_married_male = validation_props.dob_married_male;
                     // adult
@@ -169,9 +165,9 @@ class GroupHealthPlanDob extends Component {
                 }
             }
            
-            final_dob_data[i].error = error;
+            dob_data.error = error;
 
-            if(!error) {
+            if (!error) {
                 ui_members[key + '_dob'] = dob;
             }
 

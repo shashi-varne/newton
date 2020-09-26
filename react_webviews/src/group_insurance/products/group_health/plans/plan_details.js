@@ -248,12 +248,19 @@ class GroupHealthPlanDetails extends Component {
     }
 
     render() {
-
+        const {
+            show_loader,
+            plan_selected,
+            providerData,
+            premium_data,
+            productName,
+            extra_data,
+        } = this.state;
 
         return (
             <Container
                 events={this.sendEvents('just_set_events')}
-                showLoader={this.state.show_loader}
+                showLoader={show_loader}
                 title="Plan details"
                 fullWidthButton={true}
                 buttonTitle="SELECT SUM INSURED"
@@ -263,13 +270,13 @@ class GroupHealthPlanDetails extends Component {
                 <div className="group-health-plan-details">
                     <div className="group-health-top-content-plan-logo">
                         <div className="left">
-                            <div className="tc-title">{this.state.provider==='HDFCERGO'?this.state.common_data.base_plan_title:''}</div>
-                            <div className="tc-subtitle">{this.state.plan_selected.plan_title}</div>
+                            <div className="tc-title">{this.state.provider === 'HDFCERGO' ? this.state.common_data.base_plan_title : ''}</div>
+                            <div className="tc-subtitle">{plan_selected.plan_title}</div>
                         </div>
 
                         <div className="tc-right">
                             <img
-                                src={require(`assets/${this.state.providerData.logo_card}`)}
+                                src={require(`assets/${providerData.logo_card}`)}
                                 alt=""
                                 style={{ maxWidth: '140px' }}
                             />
@@ -278,11 +285,13 @@ class GroupHealthPlanDetails extends Component {
 
                     <div className="settlement-info">Claim Settlement Ratio: 98.88%</div>
 
-                   {this.state.plan_selected.recommendation_ta &&
-                    <div className="recomm-info group-health-recommendation" 
-                    style={{backgroundColor: this.state.plan_selected.recommendation_tag === 'Recommended' ? '#E86364' : ''}}>
-                    {this.state.plan_selected.recommendation_tag}
-                    </div>}
+                    {plan_selected.recommendation_tag &&
+                        <div
+                            className="recomm-info group-health-recommendation" 
+                            style={{backgroundColor: plan_selected.recommendation_tag === 'Recommended' ? '#E86364' : ''}}>
+                            {plan_selected.recommendation_tag}
+                        </div>
+                    }
                     <div className="copay-info">
                         <div className="ci-left">
                             0% copay, assured 100% cashless treatment
@@ -290,8 +299,8 @@ class GroupHealthPlanDetails extends Component {
                         <div className="ci-right">
                             <img 
                             className="tooltip-icon"
-                            data-tip={this.state.plan_selected.copay}
-                            src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
+                            data-tip={plan_selected.copay}
+                            src={require(`assets/${productName}/info_icon.svg`)} alt="" />
                         </div>
                     </div>
 
@@ -304,9 +313,9 @@ class GroupHealthPlanDetails extends Component {
                         </div>
                     </div>
 
-                    {this.state.premium_data.WF.map(this.renderPremiums)}
+                    {premium_data.WF.map(this.renderPremiums)}
 
-                    <div className="common-how-steps" style={{ border: 'none',marginTop:0 ,marginBottom:0 }}>
+                    <div className="common-how-steps" style={{ border: 'none', marginTop:0, marginBottom:0 }}>
                         <div className="top-tile">
                             <div className="top-title">
                                 Benefits under this plan
@@ -321,7 +330,7 @@ class GroupHealthPlanDetails extends Component {
                             <span className="special-benefit-text">Special benefits</span>
                         </div>
                         <div className='common-steps-images'>
-                            {this.state.extra_data.special_benefits.map(this.renderSteps)}
+                            {extra_data.special_benefits.map(this.renderSteps)}
                         </div>
 
                         <div className="special-benefit"
@@ -331,18 +340,18 @@ class GroupHealthPlanDetails extends Component {
                             <span className="special-benefit-text">Main benefits</span>
                         </div>
                         <div className='common-steps-images'>
-                            {this.state.extra_data.benefits.main.map(this.renderSteps)}
+                            {extra_data.benefits.main.map(this.renderSteps)}
                         </div>
                     </div>
 
-                    <div className="common-how-steps" style={{ border: 'none',marginTop:-30 ,marginBottom:0 }}>
+                    <div className="common-how-steps" style={{ border: 'none', marginTop:-30, marginBottom:0 }}>
                         <div className="top-tile">
                             <div className="top-title">
                                 Waiting period
                             </div>
                         </div>
-                        <div className='common-steps-images' style={{marginTop:0}}>
-                            {this.state.extra_data.waiting_period.map(this.renderSteps)}
+                        <div className='common-steps-images' style={{ marginTop:0 }}>
+                            {extra_data.waiting_period.map(this.renderSteps)}
                         </div>
                     </div>
 
@@ -359,17 +368,17 @@ class GroupHealthPlanDetails extends Component {
 
                     <div className="bototm-design">
                         <div className="bd-tile" onClick={() => this.navigateBenefits('whats_included')}>
-                            <img className="bf-img" src={require(`assets/${this.state.productName}/ic_whats_covered.svg`)}
+                            <img className="bf-img" src={require(`assets/${productName}/ic_whats_covered.svg`)}
                                 alt="" />
                             <div className="bd-content">What is covered?</div>
                         </div>
                         <div className="bd-tile" onClick={() => this.navigateBenefits('whats_not_included')}>
-                            <img className="bf-img" src={require(`assets/${this.state.productName}/ic_whats_not_covered.svg`)}
+                            <img className="bf-img" src={require(`assets/${productName}/ic_whats_not_covered.svg`)}
                                 alt="" />
                             <div className="bd-content">What is not covered?</div>
                         </div>
                         <div className="bd-tile" onClick={() => this.navigateBenefits('how_to_claim')}>
-                            <img className="bf-img" src={require(`assets/${this.state.productName}/ic_how_to_claim.svg`)}
+                            <img className="bf-img" src={require(`assets/${productName}/ic_how_to_claim.svg`)}
                                 alt="" />
                             <div className="bd-content">How to claim?</div>
                         </div>
