@@ -409,7 +409,7 @@ class GroupHealthPlanAddressDetails extends Component {
                                         className="Checkbox" />
                                 </Grid>
                                 <Grid item xs={11}>
-                                    <div className="checkbox-text">Permanent address same as current address
+                                    <div className="checkbox-text">Is permanent address same as current address?
                                 </div>
                                 </Grid>
                             </Grid>
@@ -420,7 +420,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
                         <div>
                             <div style={{ color: '#64778D', fontSize: 13, fontWeight: 300, margin: '-10px 0px 6px' }}>
-                                Permanent Address
+                                Permanent address
                             </div>
 
                             <div className="InputField">
@@ -523,7 +523,7 @@ class GroupHealthPlanAddressDetails extends Component {
                 </div>
 
                 <div style={{ color: '#64778D', fontSize: 13, fontWeight: 300, marginTop: '37px' }}>
-                    Current Address
+                    Current address
                 </div>
                 <FormControl fullWidth>
 
