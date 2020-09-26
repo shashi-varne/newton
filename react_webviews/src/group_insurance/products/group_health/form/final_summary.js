@@ -8,7 +8,7 @@ import { initialize, updateLead, resetQuote, openMedicalDialog } from '../common
 import BottomInfo from '../../../../common/ui/BottomInfo';
 import {
     numDifferentiationInr, inrFormatDecimal,
-    capitalizeFirstLetter, storageService
+    capitalizeFirstLetter, storageService, dateOrdinal
 } from 'utils/validators';
 import Api from 'utils/api';
 import Button from 'material-ui/Button';
@@ -37,7 +37,8 @@ class GroupHealthPlanFinalSummary extends Component {
             tncChecked: true,
             accordianData: [],
             openDialogReset: false,
-            quote_id: storageService().get('ghs_ergo_quote_id')
+            quote_id: storageService().get('ghs_ergo_quote_id'),
+            screen_name:'final_summary_screen'
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -54,12 +55,16 @@ class GroupHealthPlanFinalSummary extends Component {
     onload = () => {
         let { lead, provider } = this.state;
         let member_base = lead.member_base;
-        console.log(member_base)
+        let ped_list = this.state.providerConfig.select_ped_screen.ped_list;
+        
         let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
-
-        let applicant = member_base.splice(applicantIndex, 1)
-        member_base.unshift(applicant[0]);
-
+ 
+        if(applicantIndex >=0) {
+            let appli_data = member_base[applicantIndex];
+            member_base.splice(applicantIndex, 1);
+            member_base.splice(0, 0, appli_data);
+        }
+        
         this.setState({
             applicantIndex: applicantIndex
         })
@@ -67,6 +72,24 @@ class GroupHealthPlanFinalSummary extends Component {
         let pan_needed = false;
         if (lead.total_amount > 100000) {
             pan_needed = true;
+        }
+
+        if(lead.add_ons_amount) {
+            let add_ons_backend = lead.add_ons_json;
+            let add_ons_show = '';
+            for (var key in add_ons_backend) {
+
+                if(add_ons_show) {
+                    add_ons_show += ', ';
+                }
+
+                add_ons_show += add_ons_backend[key].title;
+               
+            }
+
+            this.setState({
+                add_ons_show: add_ons_show
+            })
         }
 
 
@@ -123,7 +146,7 @@ class GroupHealthPlanFinalSummary extends Component {
             let member_display = capitalizeFirstLetter(childeNameMapper(member.key));
 
             let obj = {
-                title: `${member_display}'s details ${member_base.length > 1 ? ('(' + (applicantIndex === -1 ? i + 1 : i) + 'st insured)') : ''}`,
+                title: `${member_display}'s details ${member_base.length > 1 ? ('(' + (applicantIndex === -1 ? dateOrdinal(i + 1) : dateOrdinal(i))  + ' insured)') : ''}`,
                 edit_state: `/group-insurance/group-health/${this.state.provider}/edit-personal-details/${member.key}`
             }
 
@@ -204,21 +227,27 @@ class GroupHealthPlanFinalSummary extends Component {
 
                 // for peds
                 if (member.ped_exists) {
+
+                    if (this.state.insured_account_type !== 'self') {
+                        diseases_data_backend.push({
+                            'title': `${member_display}'s pre-existing diseases`,
+                            'subtitle': ' ',
+                            'key': 'heading'
+                        })
+                    }
                     
-                    let p_list = '';
-
-                    for (var p in member.ped_diseases) {
-                        if (p_list) {
-                            p_list += ', ';
-                        }
-                        p_list += `${(member.ped_diseases[p].answer_description || member.ped_diseases[p].key_mapper)} (${member.ped_diseases[p].start_date})`
-                    }
-                    let dis_data = {
-                        'title': `${member_display}'s diseases`,
-                        'subtitle': p_list
-                    }
-
-                    diseases_data_backend.push(dis_data);
+                    // eslint-disable-next-line no-loop-func
+                    member.ped_diseases.forEach(ped_option => {
+                        
+                        // eslint-disable-next-line no-loop-func
+                        let ped = ped_list.find(item => item.id === ped_option.key_mapper);
+                        diseases_data_backend.push({
+                            'title': ped_option.answer_description || ped.name,
+                            'subtitle': 'Since - ' + ped_option.start_date
+                        })
+                    })
+                    
+                    diseases_data_backend.push(diseases_data_backend);
                 }
 
                 // for med questions
@@ -252,33 +281,42 @@ class GroupHealthPlanFinalSummary extends Component {
 
         accordianData.push(contact_data);
 
-        let address_data_backend = lead.permanent_address;
+        let address_data_backend = [lead.correspondence_address ,lead.permanent_address];
+
+        let data = address_data_backend.map((item, index) => {
+            return [
+                {
+                    'title': index === 0 ? 'Current address' : 'Permanent address',
+                    'subtitle': ' ',
+                    'key': 'heading'
+                },
+                {
+                    'title': 'Address line 1',
+                    'subtitle': item.addressline
+                },
+                {
+                    'title': 'Address line 2',
+                    'subtitle': item.addressline2
+                },
+                {
+                    'title': 'Pincode',
+                    'subtitle': item.pincode
+                },
+                {
+                    'title': 'City',
+                    'subtitle': item.city
+                },
+                {
+                    'title': 'State',
+                    'subtitle': item.state
+                }
+            ]
+        })
 
         let address_data = {
             'title': 'Address details',
             edit_state: `/group-insurance/group-health/${this.state.provider}/edit-address`,
-            data: [
-                {
-                    'title': 'Address line 1',
-                    'subtitle': address_data_backend.addressline
-                },
-                {
-                    'title': 'Address line 2',
-                    'subtitle': address_data_backend.addressline2
-                },
-                {
-                    'title': 'Pincode',
-                    'subtitle': address_data_backend.pincode
-                },
-                {
-                    'title': 'City',
-                    'subtitle': address_data_backend.city
-                },
-                {
-                    'title': 'State',
-                    'subtitle': address_data_backend.state
-                }
-            ]
+            data: data
         }
 
         accordianData.push(address_data);
@@ -346,15 +384,20 @@ class GroupHealthPlanFinalSummary extends Component {
         }
 
 
-        if (diseases_data_backend.length !== 0) {
-            let diseases_data = {
-                'title': 'Pre-existing diseases',
-                edit_state: `/group-insurance/group-health/${this.state.provider}/edit-is-ped`,
-                data: diseases_data_backend
-            }
-
-            accordianData.push(diseases_data);
+        if (diseases_data_backend.length === 0) {
+            diseases_data_backend.push({
+                'title': `Any pre-existing diseases?`,
+                'subtitle': 'No'
+            })
         }
+
+        let diseases_data = {
+            'title': 'Pre-existing diseases',
+            edit_state: `/group-insurance/group-health/${this.state.provider}/edit-is-ped`,
+            data: diseases_data_backend
+        }
+
+        accordianData.push(diseases_data);
 
         this.setState({
             accordianData: accordianData
@@ -575,15 +618,16 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     renderAccordiansubData = (props, index) => {
+ 
         return (
             <div key={index}>
                 {props.subtitle &&
                     <div className="bctc-tile">
-                        <div className="title">
+                        <div className="title" style={{opacity: props.key === 'heading' ? 0.6 : ''}}>
                             {props.title}
                         </div>
                         <div className="subtitle">
-                            {props.subtitle}
+                            {props.subtitle} {(props.title==='Height' && <span>cm</span>) || (props.title==='Weight' && <span>kg</span>)}
                         </div>
                         {props.subtitle2 && <div className="subtitle">
                             {props.subtitle2}
@@ -595,6 +639,7 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     renderAccordian = (props, index) => {
+
         return (
             <div key={index} onClick={() => this.handleAccordian(index)} className="bc-tile">
                 <div className="bct-top">
@@ -606,13 +651,26 @@ class GroupHealthPlanFinalSummary extends Component {
                     </div>
                 </div>
 
-                {props.open &&
+                {props.open && props.title !== 'Address details' &&
                     <div className="bct-content">
                         {props.data.map(this.renderAccordiansubData)}
                         <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
                             EDIT
                         </div>
                     </div>}
+
+                {props.open && props.title === 'Address details' &&
+                    <div className="bct-content">
+                        {props.data[0].map(this.renderAccordiansubData)}
+                        <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
+                            EDIT
+                        </div>
+                        <br />
+                        {props.data[1].map(this.renderAccordiansubData)}
+                        <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
+                            EDIT
+                        </div>
+                </div>}
             </div>
         );
     }
@@ -669,7 +727,7 @@ class GroupHealthPlanFinalSummary extends Component {
             >
                 <DialogContent>
                     <DialogContentText>
-                        All the data will be saved. Are you sure you want to restart?
+                        You will lose your progress till now. Are you sure you want to restart?
               </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -748,7 +806,22 @@ class GroupHealthPlanFinalSummary extends Component {
                                     ADD ONS
                                 </div>
                                 <div className="mtr-bottom">
-                                    {this.state.lead.add_ons && this.state.lead.add_ons.join(', ')}
+                                    {this.state.add_ons_show}
+                                </div>
+                            </div>
+                        </div>}
+
+                       {this.state.lead.cover_type &&
+                        <div className="member-tile">
+                            <div className="mt-left">
+                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
+                            </div>
+                            <div className="mt-right">
+                                <div className="mtr-top">
+                                    COVERAGE TYPE
+                                </div>
+                                <div className="mtr-bottom">
+                                {this.state.lead.cover_type === 'WF' ? 'Family floater' : 'Individually for each member'}
                                 </div>
                             </div>
                         </div>}
@@ -759,24 +832,10 @@ class GroupHealthPlanFinalSummary extends Component {
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
-                                    COVERAGE TYPE
-                                </div>
-                                <div className="mtr-bottom">
-                                    {this.state.lead.cover_type}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="member-tile">
-                            <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
-                            </div>
-                            <div className="mt-right">
-                                <div className="mtr-top">
                                     COVER PERIOD
                                 </div>
                                 <div className="mtr-bottom">
-                                    {this.state.lead.tenure}
+                                    {this.state.lead.tenure} year{this.state.lead.tenure>'1' && <span>s</span>}
                                 </div>
                             </div>
                         </div>
@@ -851,7 +910,7 @@ class GroupHealthPlanFinalSummary extends Component {
                         </Grid>
                         </Grid>
                     </div>
-                    <BottomInfo baseData={{ 'content': 'Get best health insurance benefits at this amount and have a secured future.' }} />
+                    <BottomInfo baseData={{ 'content': 'Get best health insurance benefits at this amount and have a secured future' }} />
                 </div>
                 {this.state.medical_dialog_data &&
                     <BottomSheet parent={this} data={this.state.medical_dialog_data} />}

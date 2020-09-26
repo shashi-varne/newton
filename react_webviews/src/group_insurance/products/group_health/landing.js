@@ -48,11 +48,11 @@ class GroupHealthLanding extends Component {
     nativeCallback({ action: 'take_control_reset' });
 
     let stepsContentMapper = {
-      title: 'Why choose us?',
+      title: `Why buy on ${this.state.productName} ?` ,
       options: [
         { 'icon': 'icn_hs_no_document', 'title': 'No document required', 'subtitle': 'Easy and paperless process' },
         { 'icon': 'icn_hs_assistance', 'title': 'Complete assistance', 'subtitle': 'Our experts will help in purchase and claim of policy' },
-        { 'icon': 'icn_hs_payment', 'title': 'Secure payment', 'subtitle': 'Smooth and secure online payment process via billdesk' }
+        { 'icon': 'icn_hs_payment', 'title': 'Secure payment', 'subtitle': 'Smooth and secure online payment process' }
       ]
     }
    
@@ -174,11 +174,13 @@ class GroupHealthLanding extends Component {
     }, () => {
       this.sendEvents('next');
 
-      storageService().set('ghs_ergo_quote_id', this.state.quoteResume.id);
-      if (this.state.quoteResume.status !== 'init') {
+      let quoteResume = this.state.quoteResume;
+
+      storageService().set('ghs_ergo_quote_id', quoteResume.id);
+      if (quoteResume.status !== 'init' || quoteResume.forms_completed) {
         this.navigate('final-summary');
       } else {
-        this.navigate(`personal-details/${this.state.quoteResume.member_base[0].key}`);
+        this.navigate(`personal-details/${quoteResume.member_base[0].key}`);
       }
 
     })
@@ -272,7 +274,7 @@ class GroupHealthLanding extends Component {
             Covers all age groups
           </div>
           <div className="generic-page-subtitle">
-            Option to cover your entire family (spouse, kids and parents)
+            Buy health insurance for yourself, spouse, kids or parents also.
           </div>
 
           <div className='family-images'>
@@ -336,10 +338,10 @@ class GroupHealthLanding extends Component {
 
           <div className="his">
             <div className="horizontal-images-scroll">
-              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs.svg`)} alt="" />
-              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs2.svg`)} alt="" />
-              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs3.svg`)} alt="" />
-              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs4.svg`)} alt="" />
+              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs.png`)} alt="" />
+              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs2.png`)} alt="" />
+              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs3.png`)} alt="" />
+              <img className='image' src={require(`assets/${this.state.productName}/ic_why_hs4.png`)} alt="" />
             </div>
           </div>
 

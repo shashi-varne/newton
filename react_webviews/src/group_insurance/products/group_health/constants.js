@@ -108,7 +108,7 @@ export const hdfc = {
         ]
     },
     nominee_screen: {
-        nominee_opts:   [
+        nominee_opts: [
             {
                 'name': 'SIBLING',
                 'value': 'SIBLING'
@@ -152,7 +152,7 @@ export const hdfc = {
         ]
     },
     select_ped_screen: {
-        ped_list:  [
+        ped_list: [
             { 'name': 'Acute Gastroenteritis/AGE/Diarrhoea/Loose Motions/Vomiting' },
             { 'name': 'Adenoid/ Adenoidectomy' },
             { 'name': 'Appendix/Appendicitis/Appendix surgery' },
@@ -169,6 +169,9 @@ export const hdfc = {
             { 'name': 'Fracture with implant/rod/screw/plate' },
             { 'name': 'Other' }
         ]
+    },
+    payment_screen: {
+        total_cities: 7800
     }
 
 };
@@ -236,11 +239,11 @@ export const religare = {
                 'options': [
                     {
                         'title': 'Is coronavirus treatment covered in this plan?',
-                        'subtitle': 'Yes, this health insurance policy for family covers hospitalisation expenses to Corona Virus (COVID-19) subject to all terms and conditions of the policy.'
+                        'subtitle': 'Yes, this health insurance policy for family covers hospitalisation expenses to Coronavirus (COVID-19) subject to all terms and conditions of the policy.'
                     },
                     {
                         'title': 'Is there any free health check-up in your policy?',
-                        'subtitle': 'Yes, there is a free Annual Health Check-up for all the insured members every year regardless of claim history.'
+                        'subtitle': 'Yes, there is a free annual health check-up for all the insured members every year regardless of claim history.'
                     },
                     {
                         'title': 'Can I cancel my policy once purchased?',
@@ -255,16 +258,16 @@ export const religare = {
                         'subtitle': 'There is a waiting period of 48 months for existing and 24 months for specified diseases. This waiting period of 48 months can be reduced by taking the additional cover of ‘Reduction in PED Wait Period’'
                     },
                     {
-                        'title': 'What do you mean by Network Hospital?',
-                        'subtitle': 'Network Hospital is one, which has an agreement with Religare Health Insurance for providing Cashless treatment to its customers. You can view the list of Network hospitals here '
+                        'title': 'What do you mean by Network hospital?',
+                        'subtitle': 'Network hospital is one, which has an agreement with Care Health Insurance for providing cashless treatment to its customers.'
                     },
                     {
                         'title': 'What is a No Claim Bonus?',
-                        'subtitle': 'A Policyholder, who hasn’t made any claim in a year, will have his Sum Insured increased by a certain amount (bonus). CARE offers a 10% increase in the policy sum insured for every claim-free year, with no change in premium.'
+                        'subtitle': 'A policyholder, who hasn’t made any claim in a year, will have his Sum insured increased by a certain amount (bonus). CARE offers a 10% increase in the policy sum insured for every claim-free year, with no change in premium.'
                     },
                     {
                         'title': 'How to file and track your claim?',
-                        'subtitle': 'You can file a claim by contacting Religare customer help desk at customerfirst@religarehealthinsurance.com or 1800-200-4488. Claim status can be tracked online here or contacting customer care at the above number.'
+                        'subtitle': 'You can file a claim by contacting Care Health customer help desk at customerfirst@careinsurance.com or 1800-102-4488. Claim status can be tracked online here or contacting customer care at the above number.'
                     },
                     {
                         'title': 'How much time does it take for a claim to be processed?',
@@ -341,7 +344,7 @@ export const religare = {
                 'name': 'GRAND FATHER',
                 'value': 'GRANDFATHER'
             },
-            
+
             {
                 'name': 'GRAND MOTHER',
                 'value': 'GRANDMOTHER'
@@ -364,7 +367,7 @@ export const religare = {
             },
             {
                 'name': 'MOTHER',
-                'value': 'MOTHER '
+                'value': 'MOTHER'
             },
             {
                 'name': 'NEPHEW',
@@ -487,9 +490,12 @@ export const religare = {
                 'name': 'Other',
                 id: 'ped_no_15',
                 tag: 'PEDotherDetails',
-                description: 'Any other diseases or ailments not mentioned above'
+                description: ''
             }
         ]
+    },
+    payment_screen: {
+        total_cities: 7800
     }
 };
 
@@ -621,7 +627,7 @@ export const star = {
         ]
     },
     nominee_screen: {
-        nominee_opts:    [
+        nominee_opts: [
             {
                 'name': 'SPOUSE',
                 'value': 'SPOUSE'
@@ -654,7 +660,7 @@ export const star = {
                 'name': 'GRAND FATHER',
                 'value': 'GRANDFATHER'
             },
-            
+
             {
                 'name': 'GRAND MOTHER',
                 'value': 'GRANDMOTHER'
@@ -770,6 +776,9 @@ export const star = {
                 'value': 'INFANT'
             }
         ]
+    },
+    payment_screen: {
+        total_cities: 7800
     }
 };
 
@@ -811,14 +820,14 @@ export function memberKeyMapperFunction(groupHealthPlanData) {
         }
 
         if (relation.indexOf('son') >= 0 || relation.indexOf('daughter') >= 0) {
-            
-            if(ui_members[key]) {
+
+            if (ui_members[key]) {
                 child_total++;
                 dob_data[i].backend_key = `child_account${child_total}_key`;
             } else {
                 dob_data[i].backend_key = `child_account_key_not_insured`;
             }
-            
+
         }
         dob_data[i].relation = relation;
         dob_data[i].checked = !!ui_members[key];
@@ -918,6 +927,11 @@ export const avilableMembersToInsured = [
         'backend_key': 'child_account3_key'
     },
     {
+        'key': 'son4',
+        'value': '',
+        'backend_key': 'child_account4_key'
+    },
+    {
         'key': 'daughter',
         'value': '',
         'backend_key': 'child_account1_key'
@@ -936,5 +950,10 @@ export const avilableMembersToInsured = [
         'key': 'daughter3',
         'value': '',
         'backend_key': 'child_account3_key'
+    },
+    {
+        'key': 'daughter4',
+        'value': '',
+        'backend_key': 'child_account4_key'
     }
 ];

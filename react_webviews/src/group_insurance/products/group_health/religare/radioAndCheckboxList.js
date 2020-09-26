@@ -5,6 +5,7 @@ import { FormControl } from "material-ui/Form";
 import Input from "../../../../common/ui/Input";
 import Grid from "material-ui/Grid";
 import { capitalizeFirstLetter } from 'utils/validators';
+import { childeNameMapper } from '../../../constants';
 
 class radioAndCheckboxList extends Component {
   constructor(props) {
@@ -33,7 +34,7 @@ class radioAndCheckboxList extends Component {
         <div className="InputField">
           <Input
             type="text"
-            label="description"
+            label="Description"
             name="answer_description"
             id="answer_description"
             placeholder="Lorem ipsum lorem ipsum"
@@ -47,7 +48,7 @@ class radioAndCheckboxList extends Component {
           <Input
             type="text"
             id={"date_" + option.key}
-            label="Since When"
+            label="Since when"
             name="start_date"
             className="date"
             placeholder="MM/YYYY"
@@ -129,7 +130,7 @@ class radioAndCheckboxList extends Component {
                           className="Checkbox"
                         />
                         <span style={{ fontSize: "14px", marginRight: '50px' }}>
-                          {capitalizeFirstLetter(member.key)}
+                          {capitalizeFirstLetter(childeNameMapper(member.key))}
                         </span>
                       </Grid>
                     </Grid>

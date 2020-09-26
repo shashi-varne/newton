@@ -90,9 +90,11 @@ class GroupHealthPlanAddOns extends Component {
 
         let add_ons_data = this.state.groupHealthPlanData.add_ons_data || [];
 
-        // eslint-disable-next-line radix
-        let cta_premium = parseInt(this.state.bottomButtonData.leftSubtitle.substring(1).replace(',', ''));
 
+        // eslint-disable-next-line radix
+        let cta_premium = this.state.groupHealthPlanData.net_premium_addons || parseInt(this.state.bottomButtonData.leftSubtitle.substring(1).replace(',', ''));
+        this.updateBottomPremium(cta_premium);
+        
         this.setState({
             // add_ons_data: add_ons_data,
             cta_premium: cta_premium
@@ -209,7 +211,7 @@ class GroupHealthPlanAddOns extends Component {
                                 <div style={{ color: '#0A1D32' }}>
                                     <span style={{ fontSize: "16px", fontWeight: '600' }}>{item.title}</span>
                                     <div style={{ marginTop: '10px', fontSize: '14px' }}>
-                                        {item.options.length !== 0 ?
+                                        in {item.options.length !== 0 ?
                                             (!item.checked) ? formatAmountInr(item.default_premium) :
                                                 item.selected_premium ? formatAmountInr(item.selected_premium)
                                                     : formatAmountInr(item.default_premium)
@@ -281,9 +283,15 @@ class GroupHealthPlanAddOns extends Component {
 
                 if (item.options.length !== 0) {
                     add_ons_body.push(item.options[item.selectedIndexOption].key);
-                    add_ons_json[item.options[item.selectedIndexOption].key] = item.selected_premium || item.default_premium;
+                    add_ons_json[item.options[item.selectedIndexOption].key] = {
+                        premium: item.selected_premium || item.default_premium,
+                        title: item.title
+                    };
                 } else {
-                    add_ons_json[item.key] = item.selected_premium || item.default_premium;
+                    add_ons_json[item.key] = {
+                        premium: item.selected_premium || item.default_premium,
+                        title: item.title
+                    };
                     add_ons_body.push(item.key);
                 }
             }
@@ -314,7 +322,7 @@ class GroupHealthPlanAddOns extends Component {
                 handleClick={() => this.handleClick()}
             >
                 <div className="common-top-page-subtitle">
-                    You can boost your coverage with these optional benefits
+                    Boost your coverage with these optional benefits
                 </div>
                 <div className="group-health-plan-select-add-ons">
                     <FormControl fullWidth>

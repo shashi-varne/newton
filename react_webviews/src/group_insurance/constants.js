@@ -618,7 +618,7 @@ export function ghGetMember(lead, providerConfig) {
 
   let backend_child_keys = [];
   for (let i = 0; i < (son_max + daughter_max); i++) {
-    backend_child_keys.push(`child_account${i}_key`);
+    backend_child_keys.push(`child_account${i+1}_key`);
   }
   
   const allowed_as_per_account = {
@@ -731,7 +731,7 @@ export function getCssMapperReport(policy) {
     }
   }
 
-  if(provider === 'HDFCERGO') {
+  if(['HDFCERGO', 'STAR', 'RELIGARE'].includes(provider)) {
    
     cssMapper.complete.disc = 'Issued on ' + (policy.dt_policy_start || '');
     cssMapper.success.disc = 'Issued on ' + (policy.dt_policy_start || '');
