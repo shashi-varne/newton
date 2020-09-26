@@ -188,7 +188,6 @@ class GroupHealthPlanAddOns extends Component {
     }
 
     renderOptions = (add_ons_data) => {
-        console.log(add_ons_data)
         return (
             <div>
                 {add_ons_data.map((item, index) => (
