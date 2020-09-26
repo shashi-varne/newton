@@ -1027,6 +1027,7 @@
 
   .insurance_plans_types{
     display: flex;
+    padding: 0 10px;
   }
   
   .insurance_plans_logos{
@@ -1048,10 +1049,10 @@
    font-size:13px;
   }
   .health_insurance{
-    font-weight: bold;
-    line-height: 25px;
+    font-weight: 500;
+    padding: 0 10px;
     color: #160d2e; 
-    font-size: 20px;
+    font-size: 17px;
     margin-bottom: 30px;
   }
 }
