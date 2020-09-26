@@ -68,6 +68,7 @@ class GroupHealthPlanAddOns extends Component {
                     if(sum_assured === 400000 && item.key === 'CAREWITHNCB') {
                         final_data.checked = true;
                         final_data.disabled = true;
+                        final_data.bottom_text = 'This benefit is mandatory with your selected plan';
                     }
 
 
@@ -109,7 +110,6 @@ class GroupHealthPlanAddOns extends Component {
                 var resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200) {
                     add_ons_data = resultData.premium.add_ons_data || [];
-                    add_ons_data['bottom_text']='This benefit is mandatory with your selected plan';
                 } else {
                     toast(resultData.error || resultData.message
                         || 'Something went wrong');
@@ -188,6 +188,7 @@ class GroupHealthPlanAddOns extends Component {
     }
 
     renderOptions = (add_ons_data) => {
+        console.log(add_ons_data)
         return (
             <div>
                 {add_ons_data.map((item, index) => (
@@ -215,7 +216,7 @@ class GroupHealthPlanAddOns extends Component {
                                                     : formatAmountInr(item.default_premium)
                                             : formatAmountInr(item.default_premium)
                                         }
-                                        <div id="add_ons_bottom_text">{item.disabled===true? add_ons_data.bottom_text:''}</div>
+                                        <div id="add_ons_bottom_text">{item.bottom_text}</div>
                                     </div>
                                 </div>
                                 <img
