@@ -520,6 +520,7 @@ export const star = {
         cover_type_screen: 'plan-select-add-ons',
         add_ons_screen: 'plan-select-cover-period',
         nominee_screen: 'is-ped',
+        contact_screen: 'star-address'
     },
     validation_props: {
         'dob_adult': { min: 19, max: 90 },  //add one year for minimum age here 18 to 19
@@ -779,7 +780,7 @@ export const star = {
     },
     payment_screen: {
         total_cities: 7800
-    }
+    },
 };
 
 

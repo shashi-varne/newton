@@ -135,14 +135,14 @@ class GroupHealthPlanStarHealthDetails extends Component {
     }
 
     handleClick = () => {
+
+    
         this.sendEvents('next');
         let { groupHealthPlanData } = this.state;
 
         let canProceed = true;
         let error = '';
-        if (this.state.value === 'yes') {
-            canProceed = false
-        } else if (!this.state.value) {
+        if (!this.state.value) {
             error = 'Please select one option';
             canProceed = false;
         }

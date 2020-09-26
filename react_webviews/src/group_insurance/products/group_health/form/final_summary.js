@@ -55,7 +55,7 @@ class GroupHealthPlanFinalSummary extends Component {
     onload = () => {
         let { lead, provider } = this.state;
         let member_base = lead.member_base;
-        let ped_list = this.state.providerConfig.select_ped_screen.ped_list;
+        let ped_list = (this.state.providerConfig.select_ped_screen || {}).ped_list || [];
         
         let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
  
@@ -535,7 +535,13 @@ class GroupHealthPlanFinalSummary extends Component {
 
     handleClick = async () => {
         this.sendEvents('next');
-        this.checkPPC();
+
+        if(this.state.provider === 'STAR') {
+            this.startPayment();  //#TODO medical dialog for ped
+        } else {
+            this.checkPPC();
+        }
+        
     }
 
 
@@ -770,7 +776,7 @@ class GroupHealthPlanFinalSummary extends Component {
                 <div className="group-health-final-summary">
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
-                            {/* <div className="tc-title">{this.state.common_data.base_plan_title}</div> */}
+                            <div className="tc-title">{this.state.common_data.base_plan_title}</div>
                             <div className="tc-subtitle">{this.state.lead.plan_title}</div>
                         </div>
 

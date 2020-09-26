@@ -28,6 +28,9 @@ export async function initialize() {
     let next_screen = this.state.next_state || '';
     if(this.state.screen_name && providerConfig.get_next[this.state.screen_name]) {
         next_screen = providerConfig.get_next[this.state.screen_name];
+        this.setState({
+            next_state: next_screen  //override
+        })
     }
 
     let validation_props = providerConfig.validation_props || {};
