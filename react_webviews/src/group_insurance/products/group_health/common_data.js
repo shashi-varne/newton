@@ -463,6 +463,14 @@ export function openMedicalDialog(type) {
             'content': 'Please note that basis your health declaration, Care Health team may contact you for a medical review before policy issuance', //ped only
         }
     }
+
+    if(provider === 'STAR') {
+        data = {
+            ...data,
+            'header_title': 'Medical Review',
+            'content': 'Please note that basis your health declaration, Star’s team may contact you for a medical review before policy issuance', //ped only
+        }
+    }
     
 
     this.setState({

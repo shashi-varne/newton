@@ -116,6 +116,13 @@ class GroupHealthPlanFinalSummary extends Component {
             }
         ];
 
+        if(provider === 'STAR') {
+            personal_details_to_copy.push({
+                'title': 'Occupation',
+                'key': 'occupation'
+            })
+        }
+
         const med_ques_mapper_religare = {
             'mand_1': {
                 'disc': 'Any illness/injury in last 48 months?',
@@ -261,6 +268,20 @@ class GroupHealthPlanFinalSummary extends Component {
                 }
 
             }
+
+            if (provider === 'STAR') {
+
+                // for ped
+                if (member.ped_diseases_name) {
+                    members_for_life_style.push(member_display);
+
+                    diseases_data_backend.push({
+                        'title': `${member_display}'s pre-existing disease details`,
+                        'subtitle': member.ped_diseases_name
+                    });
+
+                }
+            }
         }
         // console.log(med_ques_data);
 
@@ -338,17 +359,28 @@ class GroupHealthPlanFinalSummary extends Component {
         }
         accordianData.push(nominee_data);
 
-        if (provider === 'RELIGARE' && members_for_life_style.length !== 0) {
-            let data = [
-                {
-                    'title': 'Smoke/consume alcohol',
-                    'subtitle': 'Yes'
-                },
-                {
-                    'title': 'Who?',
-                    'subtitle': members_for_life_style.join(', ')
-                }
-            ]
+        if (provider === 'RELIGARE') {
+            let data = [];
+            if (members_for_life_style.length !== 0) {
+                data = [
+                    {
+                        'title': 'Smoke/consume alcohol',
+                        'subtitle': 'Yes'
+                    },
+                    {
+                        'title': 'Who?',
+                        'subtitle': members_for_life_style.join(', ')
+                    }
+                ]
+            } else {
+                data = [
+                    {
+                        'title': 'Smoke/consume alcohol',
+                        'subtitle': 'No'
+                    }
+                ]
+            }
+            
 
             data = data.concat(life_style_details_data);
 
@@ -391,9 +423,11 @@ class GroupHealthPlanFinalSummary extends Component {
             })
         }
 
+
+        let ped_edit_state = provider === 'STAR'  ? 'edit-star-select-ped' : 'edit-is-ped';
         let diseases_data = {
             'title': 'Pre-existing diseases',
-            edit_state: `/group-insurance/group-health/${this.state.provider}/edit-is-ped`,
+            edit_state: `/group-insurance/group-health/${this.state.provider}/${ped_edit_state}`,
             data: diseases_data_backend
         }
 
@@ -535,9 +569,16 @@ class GroupHealthPlanFinalSummary extends Component {
 
     handleClick = async () => {
         this.sendEvents('next');
+        let {lead}  = this.state;
+        lead.ped_check = true;
 
         if(this.state.provider === 'STAR') {
-            this.startPayment();  //#TODO medical dialog for ped
+            if(lead.ped_check) {
+                this.openMedicalDialog('ped');
+                return;
+            } else {
+                this.startPayment();
+            }
         } else {
             this.checkPPC();
         }

@@ -58,6 +58,7 @@ class GroupHealthPayment extends Component {
     let { status } = this.state.params;
     let paymentFailed, paymentPending, paymentSuccess = false;
     let get_lead  = false;
+
     if (status === 'success') {
       paymentSuccess = true;
     } else if (status === 'failed') {
@@ -168,7 +169,7 @@ class GroupHealthPayment extends Component {
   }
 
   render() {
-    let {policy_data, screenData} = this.state;
+    let {policy_data, screenData, provider} = this.state;
     return (
       <Container
         provider={this.state.provider}
@@ -194,7 +195,7 @@ class GroupHealthPayment extends Component {
           <div className="main-tile">
 
             <div>
-              {this.state.paymentSuccess &&
+              {this.state.paymentSuccess && provider !== 'STAR' &&
               <div>
                 {policy_data.policy_number && 
                 <p className="top-content">
@@ -207,6 +208,16 @@ class GroupHealthPayment extends Component {
                   You will soon be contacted by {this.state.lead.base_plan_title} team for a medical review before issuing the policy!
                 </p>
                 }
+
+                </div>
+              }
+
+            {this.state.paymentSuccess && provider === 'STAR' &&
+              <div>
+                <p className="top-content">
+                Your application is currently under process, please check 
+                the policy status in 10 minutes from the “Reports section”.
+                </p>
 
                 </div>
               }
