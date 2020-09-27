@@ -176,9 +176,7 @@ class InputPopupClass extends Component {
                                      helperText={this.state['startDateModal_error']}
                                      onChange={this.handleChange()}
                                  />
-                                 </div>
-
-                                }
+                                 </div>}
                             </FormControl>
                         </div>
                     </DialogContent>

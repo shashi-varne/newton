@@ -58,24 +58,26 @@ class GroupHealthPlanSelectPed extends Component {
         ped_diseases_name = (ped_diseases_name || '').split(',');
         let duration = member_info.duration;
 
-        this.state.screenData.ped_list.forEach((item, index) => {
+        let options = this.state.screenData.ped_list.map((item, index) => {
             item.checked = false;
             item.start_date = '';
             item.answer_description = '';
-            item.description = index === this.state.screenData.ped_list.lenght-1 && '';
-        });
+            item.description = index === this.state.screenData.ped_list.length-1 ? '' : item.description;
 
-        let options = this.state.screenData.ped_list;
+            return item;
+        });
 
         if(this.state.provider === 'RELIGARE') {
             let ped_data = member_info.ped_diseases || [];
+
             ped_data.forEach(item => {
+
                 options.forEach((opt, index) => {
 
                     if(opt.id === item.key_mapper) {
                         options[index].checked = true;
                         options[index].start_date = item.start_date || '';
-                        options[index].description = item.answer_description || '';
+                        options[index].description = item.answer_description !== null ? item.answer_description : options[index].description;
                     }
                 })
 
