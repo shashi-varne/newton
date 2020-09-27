@@ -5,7 +5,7 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {
     inrFormatDecimal,
-    numDifferentiationInr
+    numDifferentiationInr, dateOrdinal
 } from 'utils/validators';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
@@ -298,7 +298,7 @@ class GroupHealthReportDetails extends Component {
                     </div>
                     <div className="mt-right">
                         <div className="mtr-top">
-                            Insured {index + 1} name
+                            {this.state.insured_account_type !== 'self' && dateOrdinal(index + 1)} Insured name
                         </div>
                         <div className="mtr-bottom">
                             {props.name} ({props.relation.toLowerCase()})
