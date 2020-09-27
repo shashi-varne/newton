@@ -134,60 +134,61 @@ class GroupHealthPlanDob extends Component {
 
         let adult_ages = [];
         let child_ages = [];
+
         for (let dob_data of final_dob_data) {
             const { value: dob, age, key } = dob_data;
-            let error = '';
-            
-            if (new Date(dob) > new Date() || !isValidDate(dob)) {
-                error = 'Please enter valid date';
+
+            if (!isValidDate(dob)) {
+                dob_data.error = 'Please enter valid date';
+                canProceed = false;
+                break;
             } else if (IsFutureDate(dob)) {
-                error = 'Future date is not allowed';
+                dob_data.error = 'Future date is not allowed';
+                canProceed = false;
+                break;
             }
 
             if(age) {
-                if(['son', 'daughter'].includes(key)) {
-                    let dob_child = validation_props.dob_child;
-                    if (age.roundedAge > dob_child.max || (age.days < dob_child.minDays)) {
-                        error = `Valid age is between ${dob_child.minDays} days - ${dob_child.max} years`;
-                    }
-                    child_ages.push(age.age);
-    
-                } else {
+                if(!['son', 'daughter'].includes(key)) {
                     let dob_adult = validation_props.dob_adult;
                     let dob_married_male = validation_props.dob_married_male;
                     // adult
-                    if (age.age > dob_adult.max || age.age < dob_adult.min) {
-                        error = `Valid age is between ${dob_adult.min} - ${dob_adult.max} years`;
-                    } else if(manAgeCheck === key && age.age < dob_married_male.min) {
-                        error = `Minimum age is ${dob_adult.min} for married male`;
+                    if (age.roundedAge > dob_adult.max || age.roundedAge < dob_adult.min) {
+                        dob_data.error = `Valid age is between ${dob_adult.min} - ${dob_adult.max} years`;
+                        canProceed = false;
+                        break;
+                    } else if (manAgeCheck === key && age.roundedAge < dob_married_male.min) {
+                        dob_data.error = `Minimum age is ${dob_adult.min} for married male`;
+                        canProceed = false;
+                        break;
                     }
                     adult_ages.push(age.age);
+                } else {
+                    let dob_child = validation_props.dob_child;
+                    if (age.roundedAge > dob_child.max || (age.days < dob_child.minDays)) {
+                        dob_data.error = `Valid age is between ${dob_child.minDays} days - ${dob_child.max} years`;
+                        canProceed = false;
+                        break;
+                    }
+                    child_ages.push(age.age);
                 }
             }
            
-            dob_data.error = error;
-
-            if (!error) {
+            if (!dob_data.error) {
                 ui_members[key + '_dob'] = dob;
             }
 
-            if(error) {
-                canProceed = false;
-            }
         }
 
         this.setState({
             final_dob_data: final_dob_data
-        })
+        });
 
 
         //reset data
         groupHealthPlanData = resetInsuredMembers(groupHealthPlanData);
 
         let post_body = groupHealthPlanData.post_body;
-
-        // reset data
-
 
         for(var age in child_ages) {
             for(var adult in adult_ages) {
@@ -197,7 +198,6 @@ class GroupHealthPlanDob extends Component {
                 }
             }
         }
-       
 
         if(canProceed) {
             
@@ -224,7 +224,7 @@ class GroupHealthPlanDob extends Component {
             this.setLocalProviderData(groupHealthPlanData);
             this.navigate(this.state.next_screen);
         }
-    }
+    };
 
     sendEvents(user_action) {
         let eventObj = {

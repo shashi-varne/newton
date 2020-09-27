@@ -369,12 +369,10 @@ export function isValidDate(dateInput) {
     year;
 
   if (dateInput.length !== 10) {
-    console.log("0", dateInput);
     return false;
   }
 
   if (dateInput.substring(2, 3) !== '/' || dateInput.substring(5, 6) !== '/') {
-    console.log("1");
     return false;
   }
 
@@ -383,7 +381,6 @@ export function isValidDate(dateInput) {
   year = dateInput.substring(6, 10) - 0;
   // test year range 		
   if (year < 1900 || year > 3000) {
-    console.log("2");
     return false;
   }
   // convert dateInput to milliseconds 		
@@ -395,7 +392,6 @@ export function isValidDate(dateInput) {
   if (objDate.getFullYear() !== year ||
     objDate.getMonth() !== month ||
     objDate.getDate() !== day) {
-      console.log("3");
     return false;
   }
 
