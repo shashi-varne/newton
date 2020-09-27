@@ -617,7 +617,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             {this.state.applicantIndex === -1 ? (this.state.lead.account_type !== 'self' ? dateOrdinal(index + 1) : '') : dateOrdinal(index)} Insured name
                         </div>
                         <div className="mtr-bottom">
-                            {props.name} ({childeNameMapper(props.relation).toLowerCase()})
+                            {props.name} ({childeNameMapper(props.key)})
                         </div>
                     </div>
                 </div>
