@@ -158,7 +158,7 @@ class InputPopupClass extends Component {
                                         class="data"
                                         id={this.props.name}
                                         name={this.props.name}
-                                        value={this.state.value !== undefined ? (this.state.value || '') : this.props.description}
+                                        value={this.state.value !== undefined ? (this.state.value || '') : (this.props.description || '')}
                                         onChange={this.handleChange()} />
                                 </div>
                                 {this.props.sinceWhenInput &&
@@ -171,7 +171,7 @@ class InputPopupClass extends Component {
                                      className="date"
                                      placeholder="MM/YYYY"
                                      maxLength='7'
-                                     value={this.state['startDateModal'] !== undefined ? (this.state['startDateModal'] || '') : this.props.start_date}
+                                     value={this.state['startDateModal'] !== undefined ? (this.state['startDateModal'] || '') : (this.props.start_date || '')}
                                      error={this.state['startDateModal_error'] ? true : false}
                                      helperText={this.state['startDateModal_error']}
                                      onChange={this.handleChange()}

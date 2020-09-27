@@ -62,7 +62,7 @@ class GroupHealthPlanSelectPed extends Component {
             item.checked = false;
             item.start_date = '';
             item.answer_description = '';
-            item.description = index === this.state.screenData.ped_list.lenght-1 ? '' : item.description;
+            item.description = index === this.state.screenData.ped_list.lenght-1 && '';
         });
 
         let options = this.state.screenData.ped_list;
