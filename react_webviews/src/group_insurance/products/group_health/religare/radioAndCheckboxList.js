@@ -63,6 +63,26 @@ class radioAndCheckboxList extends Component {
     );
   };
 
+  renderInputsPed = (option, index) => {
+    return (
+      <FormControl fullWidth>
+        <div className="InputField">
+          <Input
+            type="text"
+            label="Description"
+            name="ped_diseases_name"
+            id="ped_diseases_name"
+            placeholder="Lorem ipsum lorem ipsum"
+            value={option.ped_diseases_name || ""}
+            error={!!option.ped_diseases_name_error}
+            helperText={option.ped_diseases_name_error}
+            onChange={(event) => this.props.handleChange(event, index)}
+          />
+        </div>
+      </FormControl>
+    );
+  };
+
   render() {
     let { list, name } = this.state;
     return (
@@ -113,37 +133,39 @@ class radioAndCheckboxList extends Component {
             {list[index].question_value === 'Yes' && this.props.account_type !== 'self' && name === "medical history" && (
               <div>
                 <p>Who is the member?</p>
-              <Grid container spacing={0}>
-                
-                {item.members.map((member, index_member) => (
-                  member.key !== 'applicant' && <div key={index_member}>
-                    <Grid item xs key={index}>
-                      <Grid item xs>
-                        <Checkbox
-                          checked={item.inputs[member.backend_key]}
-                          color="primary"
-                          // value={member}
-                          id={member.backend_key}
-                          name={member.backend_key}
-                          disableRipple
-                          onChange={(event) => this.props.handleCheckbox(event, index, member)}
-                          className="Checkbox"
-                        />
-                        <span style={{ fontSize: "14px", marginRight: '50px' }}>
-                          {capitalizeFirstLetter(childeNameMapper(member.key))}
-                        </span>
+                <Grid container spacing={0}>
+
+                  {item.members.map((member, index_member) => (
+                    member.key !== 'applicant' && <div key={index_member}>
+                      <Grid item xs key={index}>
+                        <Grid item xs>
+                          <Checkbox
+                            checked={item.inputs[member.backend_key]}
+                            color="primary"
+                            // value={member}
+                            id={member.backend_key}
+                            name={member.backend_key}
+                            disableRipple
+                            onChange={(event) => this.props.handleCheckbox(event, index, member)}
+                            className="Checkbox"
+                          />
+                          <span style={{ fontSize: "14px", marginRight: '50px' }}>
+                            {capitalizeFirstLetter(childeNameMapper(member.key))}
+                          </span>
+                        </Grid>
                       </Grid>
-                    </Grid>
-                  </div>
-                ))}
-              </Grid>
+                    </div>
+                  ))}
+                </Grid>
               </div>
             )}
 
             { item.input_type === "checkbox" &&
               name === "lifeStyle details" &&
-              item.options.map((option, index) => 
-                option.key !== 'applicant' && <div key={index}>
+              item.options.map((option, index) =>
+                option.key !== 'applicant' && 
+                
+                <div key={index}>
                   <Grid container spacing={16} alignItems="center">
                     <Grid item xs={1} className="TextCenter">
                       <Checkbox
@@ -158,7 +180,7 @@ class radioAndCheckboxList extends Component {
                       />
                     </Grid>
                     <Grid item xs={11} style={{ fontSize: "14px" }}>
-                      {capitalizeFirstLetter(option.key)}
+                      {capitalizeFirstLetter(childeNameMapper(option.key))}
                     </Grid>
                   </Grid>
                   {option.life_style_question_exists && option.key !== 'none' && (
@@ -166,6 +188,40 @@ class radioAndCheckboxList extends Component {
                       <Grid item xs={1} className="TextCenter"></Grid>
                       <Grid item xs={11} style={{ fontSize: "14px" }}>
                         {this.renderInputs(option, index)}
+                      </Grid>
+                    </Grid>
+                  )}
+                </div>
+              )}
+
+            { item.input_type === "checkbox" &&
+              name === "star_select_ped" &&
+              item.options.map((option, index) =>
+                option.key !== 'applicant' && 
+                
+                <div key={index}>
+                  <Grid container spacing={16} alignItems="center">
+                    <Grid item xs={1} className="TextCenter">
+                      <Checkbox
+                        checked={option.ped_exists || false}
+                        color="primary"
+                        // value={option.life_style_question_exists}
+                        id={option.backend_key}
+                        name={option.backend_key}
+                        disableRipple
+                        onChange={(event) => this.props.handleCheckbox(event, index)}
+                        className="Checkbox"
+                      />
+                    </Grid>
+                    <Grid item xs={11} style={{ fontSize: "14px" }}>
+                      {capitalizeFirstLetter(option.key)}
+                    </Grid>
+                  </Grid>
+                  {option.ped_exists && option.key !== 'none' && (
+                    <Grid container spacing={16} alignItems="center">
+                      <Grid item xs={1} className="TextCenter"></Grid>
+                      <Grid item xs={11} style={{ fontSize: "14px" }}>
+                        {this.renderInputsPed(option, index)}
                       </Grid>
                     </Grid>
                   )}

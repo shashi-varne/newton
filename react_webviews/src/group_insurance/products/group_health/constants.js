@@ -519,7 +519,7 @@ export const star = {
         sum_assured_screen: 'plan-premium-summary',
         cover_type_screen: 'plan-select-add-ons',
         add_ons_screen: 'plan-select-cover-period',
-        nominee_screen: 'is-ped',
+        nominee_screen: 'star-select-ped',
         contact_screen: 'star-address'
     },
     validation_props: {
@@ -720,10 +720,10 @@ export const star = {
     },
     personal_details_screen: {
         occupation_opts: [
-            {
-                'name': 'none',
-                'value': 'none'
-            },
+            // {
+            //     'name': 'none',
+            //     'value': 'none'
+            // },
             {
                 'name': 'BUSINESS/TRADERS',
                 'value': 'BUSINESS_TRADERS'
