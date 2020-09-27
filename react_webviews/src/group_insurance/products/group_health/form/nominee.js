@@ -242,6 +242,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                 "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'nominee details',
+                'dob': this.state.form_data.dob ? 'yes' : 'no',
                 'from_edit': this.props.edit ? 'yes' : 'no',
                 'nominee_name': this.state.form_data.name ? 'yes' : 'no',
                 'nominee_relation': this.state.form_data.relation ? 'yes' : 'no',

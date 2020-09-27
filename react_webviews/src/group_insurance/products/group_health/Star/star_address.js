@@ -25,7 +25,7 @@ class StarAddress extends Component {
       screen_name: 'star_address_screen',
       cityList: [],
       areaList: [],
-    }
+    };
     this.initialize = initialize.bind(this);
     this.updateLead = updateLead.bind(this);
     this.addressRef = React.createRef();
@@ -62,7 +62,6 @@ class StarAddress extends Component {
   }
 
   handleChange = name => event => {
-    console.log('=====', name, event);
     if (!name) {
       name = event.target.name;
     }
@@ -90,8 +89,8 @@ class StarAddress extends Component {
           console.log(err);
           toast(err);
         }
+        this.setState({ isLoadingArea: false });
       });
-      this.setState({ isLoadingArea: false });
     } else if (name === 'area_id') {
       form_data.area_id = value;
       form_data.area_id_error = '';
@@ -243,7 +242,6 @@ class StarAddress extends Component {
       } catch (err) {
         this.setState({
           show_loader: false,
-          isLoadingCity: false,
         });
         toast('Something went wrong');
       }
@@ -253,7 +251,8 @@ class StarAddress extends Component {
     }
 
     this.setState({
-      form_data: form_data
+      form_data: form_data,
+      isLoadingCity: false,
     })
   }
 

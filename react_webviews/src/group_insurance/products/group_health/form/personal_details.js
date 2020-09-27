@@ -361,7 +361,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         'height': this.state.form_data.height ? 'yes' : 'no',
         'weight': this.state.form_data.weight ? 'yes' : 'no',
         'gender': this.state.form_data.gender,
-        // 'member': ,
+        'member': this.props.member_key,
         "occupation": this.state.form_data.occupation ? 'yes' : 'no',
         'from_edit': this.props.edit ? 'yes' : 'no',
         'policy_cannot_be_issued': data.bmi_check ? 'yes' : 'no'
