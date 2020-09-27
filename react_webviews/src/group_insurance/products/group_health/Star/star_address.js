@@ -10,6 +10,7 @@ import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
 import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
 import { isEmpty } from '../../../../utils/validators';
+import DotDotLoader from '../../../../common/ui/DotDotLoader';
 
 class StarAddress extends Component {
 
@@ -58,7 +59,6 @@ class StarAddress extends Component {
     }, () => {
       this.handlePincode();
     });
-    console.log('IN HERE 0');
   }
 
   handleChange = name => event => {
@@ -76,6 +76,7 @@ class StarAddress extends Component {
       this.setState({
         areaList: [],
         form_data,
+        isLoadingArea: true,
       }, async () => {
         try {
           const { pincode, city_id } = form_data;
@@ -90,6 +91,7 @@ class StarAddress extends Component {
           toast(err);
         }
       });
+      this.setState({ isLoadingArea: false });
     } else if (name === 'area_id') {
       form_data.area_id = value;
       form_data.area_id_error = '';
@@ -222,6 +224,7 @@ class StarAddress extends Component {
 
     if (pincode.length === 6) {
       try {
+        this.setState({ isLoadingCity: true });
         const res = await Api.get((`/api/ins_service/api/insurance/star/get/city?pincode=${pincode}`));
 
         if (res.pfwresponse.status_code === 200 && !isEmpty(res.pfwresponse.result)) {
@@ -237,10 +240,10 @@ class StarAddress extends Component {
           form_data.city_id = '';
           form_data.pincode_error = res.pfwresponse.result.error || 'Please enter valid pincode';
         }
-
       } catch (err) {
         this.setState({
-          show_loader: false
+          show_loader: false,
+          isLoadingCity: false,
         });
         toast('Something went wrong');
       }
@@ -321,7 +324,11 @@ class StarAddress extends Component {
               name="city"
               disabled={!this.state.cityList.length}
               error={this.state.form_data.city_id_error ? true : false}
-              helperText={this.state.form_data.city_id_error}
+              helperText={
+                this.state.isLoadingCity ? 
+                  <DotDotLoader className="insurance-dot-loader" /> :
+                  this.state.form_data.city_id_error
+              }
               value={this.state.form_data.city_id || ''}
               onChange={this.handleChange('city_id')}
             />
@@ -336,7 +343,11 @@ class StarAddress extends Component {
               name="area"
               disabled={!this.state.areaList.length}
               error={this.state.form_data.area_id_error ? true : false}
-              helperText={this.state.form_data.area_id_error}
+              helperText={
+                this.state.isLoadingArea ?
+                  <DotDotLoader className="insurance-dot-loader" /> :
+                  this.state.form_data.area_id_error
+              }
               value={this.state.form_data.area_id || ''}
               onChange={this.handleChange('area_id')}
             />

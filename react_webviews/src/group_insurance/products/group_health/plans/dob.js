@@ -56,7 +56,7 @@ class GroupHealthPlanDob extends Component {
             let key = dob_data[i].key;
             if (ui_members[key]) {
                 dob_data[i].value = ui_members[key + '_dob'] || '';
-                dob_data[i].age = calculateAge(ui_members[key + '_dob'] || '', 'byMonth');
+                dob_data[i].age = calculateAge(ui_members[key + '_dob'] || '', true);
 
                 final_dob_data.push(dob_data[i]);
             }
@@ -95,7 +95,7 @@ class GroupHealthPlanDob extends Component {
         final_dob_data[index].value = event.target.value;
         final_dob_data[index].error = errorDate;
 
-        let age = calculateAge(event.target.value, 'byMonth');
+        let age = calculateAge(event.target.value, true);
         final_dob_data[index].age = age;
 
         this.setState({
@@ -137,7 +137,7 @@ class GroupHealthPlanDob extends Component {
         for (let dob_data of final_dob_data) {
             const { value: dob, age, key } = dob_data;
             let error = '';
-
+            
             if (new Date(dob) > new Date() || !isValidDate(dob)) {
                 error = 'Please enter valid date';
             } else if (IsFutureDate(dob)) {
@@ -147,8 +147,8 @@ class GroupHealthPlanDob extends Component {
             if(age) {
                 if(['son', 'daughter'].includes(key)) {
                     let dob_child = validation_props.dob_child;
-                    if (age.age > dob_child.max || (age.age === 0 && age.month < dob_child.minMonth)) {
-                        error = `Valid age is between ${dob_child.minMonth} months - ${dob_child.max} years`;
+                    if (age.roundedAge > dob_child.max || (age.days < dob_child.minDays)) {
+                        error = `Valid age is between ${dob_child.minDays} days - ${dob_child.max} years`;
                     }
                     child_ages.push(age.age);
     
@@ -157,9 +157,9 @@ class GroupHealthPlanDob extends Component {
                     let dob_married_male = validation_props.dob_married_male;
                     // adult
                     if (age.age > dob_adult.max || age.age < dob_adult.min) {
-                        error = `Valid age is between ${dob_adult.min - 1} - ${dob_adult.max} years`;
+                        error = `Valid age is between ${dob_adult.min} - ${dob_adult.max} years`;
                     } else if(manAgeCheck === key && age.age < dob_married_male.min) {
-                        error = `Minimum age is ${dob_adult.min - 1} for married male`;
+                        error = `Minimum age is ${dob_adult.min} for married male`;
                     }
                     adult_ages.push(age.age);
                 }

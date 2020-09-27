@@ -109,7 +109,7 @@ class GroupHealthPlanNomineeDetails extends Component {
         form_data[name] = value;
         form_data[name + '_error'] = '';
 
-        const { age } = calculateAge(value, 'byMonth');
+        const { age } = calculateAge(value, true);
         form_data[name + '_age'] = age;
 
         this.setState({

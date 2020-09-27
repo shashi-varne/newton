@@ -5,7 +5,6 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {  genderOptions } from '../../../constants';
 
-// calculateAge, isValidDate, IsFutureDate
 import PlusMinusInput from '../../../../common/ui/PlusMinusInput';
 
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';

@@ -1,5 +1,6 @@
 // import { func } from "prop-types";
 import qs from 'qs';
+import moment from 'moment';
 
 export function validateEmpty(string) {
   let nameSplit = string.split(" ").filter(e => e);
@@ -368,10 +369,12 @@ export function isValidDate(dateInput) {
     year;
 
   if (dateInput.length !== 10) {
+    console.log("0", dateInput);
     return false;
   }
 
   if (dateInput.substring(2, 3) !== '/' || dateInput.substring(5, 6) !== '/') {
+    console.log("1");
     return false;
   }
 
@@ -380,6 +383,7 @@ export function isValidDate(dateInput) {
   year = dateInput.substring(6, 10) - 0;
   // test year range 		
   if (year < 1900 || year > 3000) {
+    console.log("2");
     return false;
   }
   // convert dateInput to milliseconds 		
@@ -391,6 +395,7 @@ export function isValidDate(dateInput) {
   if (objDate.getFullYear() !== year ||
     objDate.getMonth() !== month ||
     objDate.getDate() !== day) {
+      console.log("3");
     return false;
   }
 
@@ -816,61 +821,29 @@ export function formatMonthandYear(event) {
   }
 }
 
-function monthDiff(dateFrom, dateTo) {
-
-  let diff = dateTo.getMonth() - dateFrom.getMonth() + 
-  (12 * (dateTo.getFullYear() - dateFrom.getFullYear()));
-
-
-  if(dateTo.getDate() <= dateFrom.getDate()) {
-    diff--;
-  }
-  return diff
-}
-
-// function Difference_In_Days(dateFrom, dateTo) {
-//   var Difference_In_Time = dateTo.getTime() - dateFrom.getTime(); 
-//   var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24); 
-
-//   return Difference_In_Days;
-// }
-
-export function difference_In_Days(val) {
-  const birthday = val.toString().replace(/\\-/g, '/').split('/').reverse().join('/');
-  const today = new Date();
-  const birthDate = new Date(birthday);
-  let Difference_In_Time = today.getTime() - birthDate.getTime(); 
-  let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24); 
-  return Math.round(Difference_In_Days);
-  }
-
-export function calculateAge(val, byMonth) {
+export function calculateAge(val, withBreakup) {
   if (!val) {
+    if (withBreakup) {
+      return { age: 0 };
+    }
     return 0;
   }
-  const birthday = val.toString().replace(/\\-/g, '/').split('/').reverse().join('/');
-  const today = new Date();
-  const birthDate = new Date(birthday);
-  let age2 = today.getFullYear() - birthDate.getFullYear();
-  const m = today.getMonth() - birthDate.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-    age2--;
-  }
+  const date = val.toString().replace(/\\-/g, '/').split('/').reverse().join('/');
+  const today = moment();
+  const birthDate = moment(date);
+  const duration = moment.duration(today.diff(birthDate));
+  const age = parseInt(duration.asYears(), 10);
 
-  if (age2 && (m === 0 && today.getDate() >= birthDate.getDate())) {
-    age2++;
-  }
-
-  // let age = Difference_In_Days(birthDate, today)/365;
-
-  if(byMonth) {
+  if(withBreakup) {
     return {
-      age: age2,
-      month: monthDiff(birthDate, today)
-    }
+      age,
+      roundedAge: Math.round(duration.asYears()),
+      months: parseInt(duration.asMonths(), 10),
+      days: parseInt(duration.asDays(), 10),
+    };
   }
 
-  return age2;
+  return age;
 }
 
 export function toFeet(n) {
