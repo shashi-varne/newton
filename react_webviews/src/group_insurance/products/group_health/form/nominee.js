@@ -108,13 +108,20 @@ class GroupHealthPlanNomineeDetails extends Component {
 
         form_data[name] = value;
         form_data[name + '_error'] = '';
+        
 
-        const { age } = calculateAge(value, 'byMonth');
-        form_data[name + '_age'] = age;
+        if(isValidDate(value) && !IsFutureDate(value) && name !== 'apointeedob'){
+            const { age } = calculateAge(value, 'byMonth');
+            form_data[name + '_age'] = age;
+
+            this.setState({
+                form_data: form_data,
+                renderApointee: !!(age && age < 18),
+            });
+        }
 
         this.setState({
             form_data: form_data,
-            renderApointee: !!(age && age < 18),
         });
 
     }
@@ -291,8 +298,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                             error={this.state.form_data.apointeerelation_error ? true : false}
                             helperText={this.state.form_data.apointeerelation_error}
                             value={this.state.form_data.apointeerelation || ''}
-                            name="apointeerelation"
-                            onChange={this.handleChange()} />
+                            onChange={this.handleChange('apointeerelation')} />
                     </div>
                     <div className="InputField">
                         <Input
