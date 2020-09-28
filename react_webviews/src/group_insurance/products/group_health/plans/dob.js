@@ -133,12 +133,7 @@ class GroupHealthPlanDob extends Component {
         let adult_ages = [];
         let child_ages = [];
 
-        let child_keys = ['son', 'daughter'];
-
-        if (this.state.provider === 'STAR') {
-            child_keys = ['son1', 'son2', 'son3',
-                            'daughter1', 'daughter2', 'daughter3'];
-        }
+        console.log(final_dob_data);
 
         for (let dob_data of final_dob_data) {
             const { value: dob, age, key, relation } = dob_data;
@@ -152,7 +147,7 @@ class GroupHealthPlanDob extends Component {
             }
 
             if(age) {
-                if(!child_keys.includes(key)) {
+                if(!['son', 'daughter'].includes(relation)) {
                     let dob_adult = validation_props.dob_adult;
                     let dob_married_male = validation_props.dob_married_male;
                     // adult

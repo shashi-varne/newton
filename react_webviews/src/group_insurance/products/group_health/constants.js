@@ -313,56 +313,8 @@ export const religare = {
     nominee_screen: {
         nominee_opts: [
             {
-                'name': 'SPOUSE',
-                'value': 'SPOUSE'
-            },
-            {
-                'name': 'BROTHER',
-                'value': 'BROTHER'
-            },
-            {
-                'name': 'COUSIN SON',
-                'value': 'COUSIN_SON'
-            },
-            {
-                'name': 'DAUGHTER IN LAW',
-                'value': 'DAUGHTER_IN_LAW'
-            },
-            {
                 'name': 'FATHER',
                 'value': 'FATHER'
-            },
-            {
-                'name': 'FATHER IN LAW',
-                'value': 'FATHER_IN_LAW'
-            },
-            {
-                'name': 'GRAND FATHER',
-                'value': 'GRANDFATHER'
-            },
-            {
-                'name': 'GRAND MOTHER',
-                'value': 'GRANDMOTHER'
-            },
-            {
-                'name': 'GRAND DAUGHTER',
-                'value': 'GRANDDAUGHTER'
-            },
-            {
-                'name': 'GRAND SON',
-                'value': 'GRANDSON'
-            },
-            {
-                'name': 'BROTHER IN LAW',
-                'value': 'BROTHER_IN_LAW'
-            },
-            {
-                'name': 'MOTHER IN LAW',
-                'value': 'MOTHER_IN_LAW'
-            },
-            {
-                'name': 'SISTER IN LAW',
-                'value': 'SISTER_IN_LAW'
             },
             {
                 'name': 'MOTHER',
@@ -373,8 +325,8 @@ export const religare = {
                 'value': 'SISTER'
             },
             {
-                'name': 'SON IN LAW',
-                'value': 'SON_IN_LAW'
+                'name': 'BROTHER',
+                'value': 'BROTHER'
             },
             {
                 'name': 'SON',
@@ -383,6 +335,46 @@ export const religare = {
             {
                 'name': 'DAUGHTER',
                 'value': 'DAUGHTER'
+            },
+            {
+                'name': 'SPOUSE',
+                'value': 'SPOUSE'
+            },
+            {
+                'name': 'GRAND FATHER',
+                'value': 'GRANDFATHER'
+            },
+            {
+                'name': 'GRAND MOTHER',
+                'value': 'GRANDMOTHER'
+            },
+            {
+                'name': 'FATHER IN LAW',
+                'value': 'FATHER_IN_LAW'
+            },
+            {
+                'name': 'BROTHER IN LAW',
+                'value': 'BROTHER_IN_LAW'
+            },
+            {
+                'name': 'SON IN LAW',
+                'value': 'SON_IN_LAW'
+            },
+            {
+                'name': 'DAUGHTER IN LAW',
+                'value': 'DAUGHTER_IN_LAW'
+            },
+            {
+                'name': 'COUSIN SON',
+                'value': 'COUSIN_SON'
+            },
+            {
+                'name': 'GRAND DAUGHTER',
+                'value': 'GRANDDAUGHTER'
+            },
+            {
+                'name': 'GRAND SON',
+                'value': 'GRANDSON'
             },
             {
                 'name': 'OTHERS',
@@ -618,56 +610,8 @@ export const star = {
     nominee_screen: {
         nominee_opts: [
             {
-                'name': 'SPOUSE',
-                'value': 'SPOUSE'
-            },
-            {
-                'name': 'BROTHER',
-                'value': 'BROTHER'
-            },
-            {
-                'name': 'COUSIN SON',
-                'value': 'COUSIN_SON'
-            },
-            {
-                'name': 'DAUGHTER IN LAW',
-                'value': 'DAUGHTER_IN_LAW'
-            },
-            {
                 'name': 'FATHER',
                 'value': 'FATHER'
-            },
-            {
-                'name': 'FATHER IN LAW',
-                'value': 'FATHER_IN_LAW'
-            },
-            {
-                'name': 'GRAND FATHER',
-                'value': 'GRANDFATHER'
-            },
-            {
-                'name': 'GRAND MOTHER',
-                'value': 'GRANDMOTHER'
-            },
-            {
-                'name': 'GRAND DAUGHTER',
-                'value': 'GRANDDAUGHTER'
-            },
-            {
-                'name': 'GRAND SON',
-                'value': 'GRANDSON'
-            },
-            {
-                'name': 'BROTHER IN LAW',
-                'value': 'BROTHER_IN_LAW'
-            },
-            {
-                'name': 'MOTHER IN LAW',
-                'value': 'MOTHER_IN_LAW'
-            },
-            {
-                'name': 'SISTER IN LAW',
-                'value': 'SISTER_IN_LAW'
             },
             {
                 'name': 'MOTHER',
@@ -678,8 +622,8 @@ export const star = {
                 'value': 'SISTER'
             },
             {
-                'name': 'SON IN LAW',
-                'value': 'SON_IN_LAW'
+                'name': 'BROTHER',
+                'value': 'BROTHER'
             },
             {
                 'name': 'SON',
@@ -688,6 +632,46 @@ export const star = {
             {
                 'name': 'DAUGHTER',
                 'value': 'DAUGHTER'
+            },
+            {
+                'name': 'SPOUSE',
+                'value': 'SPOUSE'
+            },
+            {
+                'name': 'GRAND FATHER',
+                'value': 'GRANDFATHER'
+            },
+            {
+                'name': 'GRAND MOTHER',
+                'value': 'GRANDMOTHER'
+            },
+            {
+                'name': 'FATHER IN LAW',
+                'value': 'FATHER_IN_LAW'
+            },
+            {
+                'name': 'BROTHER IN LAW',
+                'value': 'BROTHER_IN_LAW'
+            },
+            {
+                'name': 'SON IN LAW',
+                'value': 'SON_IN_LAW'
+            },
+            {
+                'name': 'DAUGHTER IN LAW',
+                'value': 'DAUGHTER_IN_LAW'
+            },
+            {
+                'name': 'COUSIN SON',
+                'value': 'COUSIN_SON'
+            },
+            {
+                'name': 'GRAND DAUGHTER',
+                'value': 'GRANDDAUGHTER'
+            },
+            {
+                'name': 'GRAND SON',
+                'value': 'GRANDSON'
             },
             {
                 'name': 'OTHERS',
