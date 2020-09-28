@@ -650,3 +650,7 @@ body[data-device="mobile"] {
     height: auto;
   }
 }
+
+.MuiMenuItem-root {
+  overflow: scroll !important;
+}
