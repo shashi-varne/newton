@@ -362,21 +362,32 @@ class GroupHealthPlanFinalSummary extends Component {
 
         accordianData.push(address_data);
 
-        let nominee_data_backned = lead.nominee_account_key;
+        let nominee_data_backend = lead.nominee_account_key;
         let nominee_data = {
             'title': 'Nominee',
             edit_state: `/group-insurance/group-health/${this.state.provider}/edit-nominee`,
             data: [
                 {
                     'title': 'Name',
-                    'subtitle': nominee_data_backned.name
+                    'subtitle': nominee_data_backend.name
                 },
                 {
                     'title': 'Relation',
-                    'subtitle': nominee_data_backned.relation
+                    'subtitle': nominee_data_backend.relation
                 }
             ]
         }
+
+        if (provider === 'STAR') {
+
+            nominee_data.data.push(
+                {
+                    'title': 'Date of birth',
+                    'subtitle': nominee_data_backend.dob
+                }
+            )
+        }
+
         accordianData.push(nominee_data);
 
         if (provider === 'RELIGARE') {
