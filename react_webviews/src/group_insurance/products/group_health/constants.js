@@ -321,8 +321,8 @@ export const religare = {
                 'value': 'BROTHER'
             },
             {
-                'name': 'COUSIN',
-                'value': 'COUSIN'
+                'name': 'COUSIN SON',
+                'value': 'COUSIN_SON'
             },
             {
                 'name': 'DAUGHTER IN LAW',
@@ -337,17 +337,16 @@ export const religare = {
                 'value': 'FATHER_IN_LAW'
             },
             {
-                'name': 'GRAND DAUGHTER',
-                'value': 'GRANDDAUGHTER'
-            },
-            {
                 'name': 'GRAND FATHER',
                 'value': 'GRANDFATHER'
             },
-
             {
                 'name': 'GRAND MOTHER',
                 'value': 'GRANDMOTHER'
+            },
+            {
+                'name': 'GRAND DAUGHTER',
+                'value': 'GRANDDAUGHTER'
             },
             {
                 'name': 'GRAND SON',
@@ -370,18 +369,6 @@ export const religare = {
                 'value': 'MOTHER'
             },
             {
-                'name': 'NEPHEW',
-                'value': 'NEPHEW'
-            },
-            {
-                'name': 'NIECE',
-                'value': 'NIECE'
-            },
-            {
-                'name': 'SELF- PRIMARY MEMBER',
-                'value': 'SELF'
-            },
-            {
                 'name': 'SISTER',
                 'value': 'SISTER'
             },
@@ -396,6 +383,10 @@ export const religare = {
             {
                 'name': 'DAUGHTER',
                 'value': 'DAUGHTER'
+            },
+            {
+                'name': 'OTHERS',
+                'value': 'OTHERS'
             }
         ],
     },
@@ -654,7 +645,6 @@ export const star = {
                 'name': 'GRAND FATHER',
                 'value': 'GRANDFATHER'
             },
-
             {
                 'name': 'GRAND MOTHER',
                 'value': 'GRANDMOTHER'
