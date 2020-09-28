@@ -480,7 +480,7 @@ const Login = (props) => {
               id="wr-login-img"
             />
           </div>
-          <div style={{ flex: 1 }}>
+          <div style={{ flex: 1, paddingLeft: '7%'  }}>
             <div id="wr-login-right-panel">
               <img
                 src={require('assets/fisdom/fisdom_logo_coloured.png')}
@@ -496,7 +496,7 @@ const Login = (props) => {
               {view !== 'phone' &&
                 <WrButton
                   fullWidth={true}
-                  classes={{ root: "wr-login-btn" }}
+                  classes={{ root: "wr-login-btn m-t-60" }}
                   disabled={opLoading}
                   onClick={clickContinue}>
                   {opLoading ?
