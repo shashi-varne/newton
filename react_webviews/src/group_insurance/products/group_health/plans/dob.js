@@ -141,7 +141,7 @@ class GroupHealthPlanDob extends Component {
         }
 
         for (let dob_data of final_dob_data) {
-            const { value: dob, age, key } = dob_data;
+            const { value: dob, age, key, relation } = dob_data;
 
             if (!isValidDate(dob)) {
                 dob_data.error = 'Please enter valid date';
@@ -159,11 +159,9 @@ class GroupHealthPlanDob extends Component {
                     if (age.age > dob_adult.max || age.age < dob_adult.min) {
                         dob_data.error = `Valid age is between ${dob_adult.min} - ${dob_adult.max} years`;
                         canProceed = false;
-                        break;
                     } else if (manAgeCheck === key && age.age < dob_married_male.min) {
                         dob_data.error = `Minimum age is ${dob_adult.min} for married male`;
                         canProceed = false;
-                        break;
                     }
                     adult_ages.push(age.age);
                 } else {
@@ -171,7 +169,6 @@ class GroupHealthPlanDob extends Component {
                     if (age.age > dob_child.max || (age.days < dob_child.minDays)) {
                         dob_data.error = `Valid age is between ${dob_child.minDays} days - ${dob_child.max} years`;
                         canProceed = false;
-                        break;
                     }
                     child_ages.push(age.age);
                 }

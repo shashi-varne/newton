@@ -14,9 +14,9 @@ export const hdfc = {
         nominee_screen: 'is-ped'
     },
     validation_props: {
-        'dob_adult': { min: 18, max: 90 },  //add one year for minimum age here 18 to 19
+        'dob_adult': { min: 18, max: 90 },
         'dob_child': { minDays: 90, max: 25 },
-        'dob_married_male': { min: 22, max: 25 },
+        'dob_married_male': { min: 21, max: 25 },
     },
     applicant_detail_screen: {
         fields: [
@@ -201,9 +201,9 @@ export const religare = {
         nominee_screen: 'plan-lifestyle-details'
     },
     validation_props: {
-        'dob_adult': { min: 18, max: 90 },  //add one year for minimum age here 18 to 19
+        'dob_adult': { min: 18, max: 90 }, 
         'dob_child': { minDays: 90, max: 25 },
-        'dob_married_male': { min: 22, max: 25 },
+        'dob_married_male': { min: 21, max: 25 },
     },
     applicant_detail_screen: {
         fields: [
@@ -514,7 +514,7 @@ export const star = {
         contact_screen: 'star-address'
     },
     validation_props: {
-        'dob_adult': { min: 18, max: 65 },  //add one year for minimum age here 18 to 19
+        'dob_adult': { min: 18, max: 65 },
         'dob_child': { minDays: 16, max: 25 },
         'dob_married_male': { min: 18, max: 25 },
     },
