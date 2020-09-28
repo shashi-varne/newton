@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize, updateBottomPremium } from '../common_data';
-import { numDifferentiation, formatAmountInr } from 'utils/validators';
+import { numDifferentiationInr, formatAmountInr } from 'utils/validators';
 import Api from 'utils/api';
 import DotDotLoader from 'common/ui/DotDotLoader';
 import { getConfig } from 'utils/functions';
@@ -136,7 +136,7 @@ class GroupHealthPlanStarSumInsured extends Component {
                 className={`tile ${index === this.state.selectedIndex ? 'tile-selected' : ''}`} key={index}>
                 <div className="select-tile">
                     <div className="name">
-                        {numDifferentiation(sum_amount)}
+                        {numDifferentiationInr(sum_amount)}
                     </div>
                     <div className="completed-icon">
                         {index === this.state.selectedIndex &&
