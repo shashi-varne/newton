@@ -320,6 +320,10 @@ class GroupHealthPlanFinalSummary extends Component {
 
         let address_data_backend = [lead.correspondence_address ,lead.permanent_address];
 
+        if (provider === "STAR") {
+            address_data_backend = [lead.permanent_address]
+        }
+
         let data = address_data_backend.map((item, index) => {
             return [
                 {
@@ -728,10 +732,12 @@ class GroupHealthPlanFinalSummary extends Component {
                             EDIT
                         </div>
                         <br />
-                        {props.data[1].map(this.renderAccordiansubData)}
-                        <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
-                            EDIT
-                        </div>
+                        {this.state.provider === 'RELIGARE' && <React.Fragment>
+                            {props.data[1].map(this.renderAccordiansubData)}
+                            <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
+                                EDIT
+                            </div>
+                        </React.Fragment>}
                 </div>}
             </div>
         );
