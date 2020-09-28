@@ -489,6 +489,9 @@ const Insurance = (props) => {
 
           <Route path={`${url}/group-health/:provider/edit-address`}
             render={(props) => <GroupHealthPlanAddressDetails  {...props} edit={true} />} />
+        
+         <Route path={`${url}/group-health/:provider/edit-address-star`}
+            render={(props) => <StarAddress  {...props} edit={true} />} />
 
           <Route path={`${url}/group-health/:provider/edit-nominee`}
             render={(props) => <GroupHealthPlanNomineeDetails  {...props} edit={true} />} />

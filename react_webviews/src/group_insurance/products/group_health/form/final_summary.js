@@ -353,12 +353,12 @@ class GroupHealthPlanFinalSummary extends Component {
                 }
             ]
         })
-
-        let address_data = {
-            'title': 'Address details',
-            edit_state: `/group-insurance/group-health/${this.state.provider}/edit-address`,
-            data: data
-        }
+        
+            let address_data={
+                'title': 'Address details',
+                edit_state: `${provider==='STAR'?`/group-insurance/group-health/${this.state.provider}/edit-address-star`:`/group-insurance/group-health/${this.state.provider}/edit-address`}`,
+                data: data 
+            }
 
         accordianData.push(address_data);
 
@@ -738,6 +738,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
                 {props.open && props.title === 'Address details' &&
                     <div className="bct-content">
+
                         {props.data[0].map(this.renderAccordiansubData)}
                         <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
                             EDIT
