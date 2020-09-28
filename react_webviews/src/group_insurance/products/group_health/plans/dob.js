@@ -44,7 +44,8 @@ class GroupHealthPlanDob extends Component {
             if(dob_data[key].key === 'self') {
                 dob_data[key].label = groupHealthPlanData.account_type === 'self' ? 'Date of birth (DD/MM/YYYY)' : 
                 "Your date of birth (DD/MM/YYYY)";
-            }
+            };
+            dob_data[key].error = '';
         }
 
         let final_dob_data = [];
