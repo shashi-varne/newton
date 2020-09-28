@@ -51,8 +51,8 @@ class GroupHealthPlanAddMembers extends Component {
             plus_minus_keys: ['son', 'daughter'],
             father_onlycheckbox: true,
             mother_onlycheckbox: true,
-            'father-in-law_onlycheckbox': true,
-            'mother-in-law_onlycheckbox': true,
+            'father_in_law_onlycheckbox': true,
+            'mother_in_law_onlycheckbox': true,
             ui_members: {},
             screen_name: 'add_members_screen'
         };
@@ -84,13 +84,13 @@ class GroupHealthPlanAddMembers extends Component {
             daughter_total: ui_members.daughter_total || 0,
             daughter_checked: ui_members.daughter_total ? true : false,
             father_checked: ui_members.father || screenData.preselect_father || false,
-            'father-in-law_checked': ui_members.father_in_law || screenData.preselect_father_in_law || false,
+            'father_in_law_checked': ui_members.father_in_law || screenData.preselect_father_in_law || false,
             father_disabled: screenData.disable_father || false,
-            'father-in-law_disabled': screenData.disable_father_in_law || false,
+            'father_in_law_disabled': screenData.disable_father_in_law || false,
             mother_checked: ui_members.mother || screenData.preselect_mother || false,
-            'mother-in-law_checked': ui_members.mother_in_law || screenData.preselect_mother_in_law || false,
+            'mother_in_law_checked': ui_members.mother_in_law || screenData.preselect_mother_in_law || false,
             mother_disabled: screenData.disable_mother || false,
-            'mother-in-law_disabled': screenData.disable_mother_in_law || false,
+            'mother_in_law_disabled': screenData.disable_mother_in_law || false,
             other_adult_member: ui_members.other_adult_member || '',
             parents_option: ui_members.parents_option || '',
             ui_members: ui_members,
@@ -147,8 +147,8 @@ class GroupHealthPlanAddMembers extends Component {
         }
         }
 
-        let keys_to_reset = ['self', 'wife', 'husband', 'father', 'mother', 'father-in-law', 
-        'mother-in-law', 'son', 'son1', 'son2','son3', 'son4',
+        let keys_to_reset = ['self', 'wife', 'husband', 'father', 'mother', 'father_in_law', 
+        'mother_in_law', 'son', 'son1', 'son2','son3', 'son4',
             'daughter', 'daughter1', 'daughter2', 'daughter3', 'daughter4'];
 
 
@@ -175,7 +175,7 @@ class GroupHealthPlanAddMembers extends Component {
             if (this.state.parents_option === 'parents') {
                 keysToCheck = ['father', 'mother'];
             } else {
-                keysToCheck = ['father-in-law', 'mother-in-law'];
+                keysToCheck = ['father_in_law', 'mother_in_law'];
             }
             // eslint-disable-next-line
             keysToCheck.map(key => {
@@ -225,7 +225,7 @@ class GroupHealthPlanAddMembers extends Component {
         }
 
 
-        let adult_keys = ['husband', 'wife', 'father', 'mother', 'self', 'mother-in-law', 'father-in-law'];
+        let adult_keys = ['husband', 'wife', 'father', 'mother', 'self', 'mother_in_law', 'father_in_law'];
         let adult_total = 0;
 
         let child_total = (ui_members.son_total || 0) + (ui_members.daughter_total || 0);
@@ -305,7 +305,7 @@ class GroupHealthPlanAddMembers extends Component {
                 'daughter': ui_members.daughter_total || '',
                 'self': ['selfandfamily', 'self'].includes(this.state.insured_account_type) ? 'yes' : 'no',
                 'parent' : `${(ui_members.father ? 'father, ' : '')} ${(ui_members.mother ? 'mother' : '') }`,
-                'parent_in_law': `${(ui_members['father-in-law'] ? 'father, ' : '')} ${(ui_members['mother-in-law'] ? 'mother' : '') }`,
+                'parent_in_law': `${(ui_members['father_in_law'] ? 'father, ' : '')} ${(ui_members['mother_in_law'] ? 'mother' : '') }`,
                 'adult_member': ['selfandfamily', 'family'].includes(this.state.account_type) ? this.state.other_adult_member : ''
             }
         };
@@ -494,12 +494,12 @@ class GroupHealthPlanAddMembers extends Component {
                                 </div>
                                 <div className="generic-hr"></div>
                                 <PlusMinusInput
-                                    name={this.state.parents_option === 'parents_inlaw' ? "father-in-law" : "father"}
+                                    name={this.state.parents_option === 'parents_inlaw' ? "father_in_law" : "father"}
                                     parent={this}
                                 />
                                 <div className="generic-hr"></div>
                                 <PlusMinusInput
-                                    name={this.state.parents_option === 'parents_inlaw' ? "mother-in-law" : "mother"}
+                                    name={this.state.parents_option === 'parents_inlaw' ? "mother_in_law" : "mother"}
                                     parent={this}
                                 />
                                 <div className="generic-hr"></div>
