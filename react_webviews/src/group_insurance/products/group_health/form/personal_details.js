@@ -279,7 +279,15 @@ class GroupHealthPlanPersonalDetails extends Component {
           form_data.dob_error = 'Minimum age is 18 for adult';
         }
       }
+
+      if (provider === 'STAR') {
+        if (age > 65 && !isChild) {
+          form_data.dob_error = 'Valid age is between 18 to 65 year';
+        }
+      }
     }
+
+
     if (this.state.member_key === 'applicant') {
 
 
