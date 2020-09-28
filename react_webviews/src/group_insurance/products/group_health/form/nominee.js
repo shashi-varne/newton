@@ -266,7 +266,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                         data-tip="The appointee must be an adult who will take care of the claim amount in case of death of the insured during the period that the nominee is a minor."
                         src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
                 </div>
-                <div>Apointee details</div>
+                <div>Appointee details</div>
 
                 <FormControl fullWidth>
                     <div className="InputField">
