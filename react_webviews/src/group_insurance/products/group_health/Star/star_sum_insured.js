@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize, updateBottomPremium } from '../common_data';
-import { numDifferentiation, formatAmountInr } from 'utils/validators';
+import { numDifferentiationInr, formatAmountInr } from 'utils/validators';
 import Api from 'utils/api';
 import DotDotLoader from 'common/ui/DotDotLoader';
 import { getConfig } from 'utils/functions';
@@ -42,33 +42,37 @@ class GroupHealthPlanStarSumInsured extends Component {
         }
 
         try {
-            this.setState({ loadingPremium: true });
+            this.setState({ loadingPremium: true, apiError :false });
             const res = await Api.post('api/ins_service/api/insurance/star/premium', body);
 
-            if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
-                // eslint-disable-next-line
-                throw 'Something went wrong! Please try again.';
-            }
-
+            this.setState({ loadingPremium: false, premiumData: [] });
             let resultData = res.pfwresponse.result;
-
-            const [premiumData] = resultData.premium.WF;
-
-            this.setState({
-                loadingPremium: false,
-                premiumData,
-                premiumAmt: formatAmountInr(premiumData.net_premium),
-            });
-
-            // this.updatePremium(premium)
+            if (res.pfwresponse.status_code === 200 && resultData.premium) {
+                const [premiumData] = resultData.premium.WF;
+    
+                this.setState({
+                    premiumData,
+                    premiumAmt: formatAmountInr(premiumData.net_premium),
+                });
+    
+                // this.updatePremium(premium)
+            } else {
+                this.setState({
+                    premiumAmt: '--',
+                    apiError :true
+                })
+                toast(resultData.error || 'Something went wrong! Please try again.');
+            }
+           
             
 
         } catch (err) {
             console.log(err);
-            toast(err);
+            toast('Something went wrong');
             this.setState({
                 premiumAmt: '--',
                 loadingPremium: false,
+                apiError :true
             });
         }
     }
@@ -136,7 +140,7 @@ class GroupHealthPlanStarSumInsured extends Component {
                 className={`tile ${index === this.state.selectedIndex ? 'tile-selected' : ''}`} key={index}>
                 <div className="select-tile">
                     <div className="name">
-                        {numDifferentiation(sum_amount)}
+                        {numDifferentiationInr(sum_amount)}
                     </div>
                     <div className="completed-icon">
                         {index === this.state.selectedIndex &&
@@ -187,7 +191,7 @@ class GroupHealthPlanStarSumInsured extends Component {
                 showLoader={this.state.show_loader}
                 title="Select sum insured"
                 buttonTitle="CONTINUE"
-                buttonDisabled={this.state.loadingPremium}
+                buttonDisabled={this.state.loadingPremium || this.state.apiError}
                 withProvider={true}
                 buttonData={bottomButtonData}
                 handleClick={() => this.handleClick()}

@@ -142,6 +142,7 @@ class GroupHealthPlanNomineeDetails extends Component {
 
     handleClick = async () => {
         this.sendEvents('next');
+        let {provider} = this.state;
 
         const noOfWords = (val = '') => val ? val.split(' ').length : 0; 
         const keysMapper = {
@@ -153,7 +154,13 @@ class GroupHealthPlanNomineeDetails extends Component {
             'appointeedob': 'appointee dob'
         };
         
-        const keys_to_check = ['name', 'relation', 'dob'];
+        const keys_to_check = ['name', 'relation'];
+
+        let isNomineeDobNeeded = provider === 'STAR';
+        if(isNomineeDobNeeded) {
+            keys_to_check.push('dob');
+        }
+
         const appointeeKeys = ['appointeename', 'appointeerelation', 'appointeedob'];
         let form_data = this.state.form_data;
 
@@ -179,11 +186,14 @@ class GroupHealthPlanNomineeDetails extends Component {
         }
 
 
-        if ((new Date(dob) > new Date()) || !isValidDate(dob)) {
-            form_data.dob_error = 'Please enter valid date';
-        } else if (IsFutureDate(dob)) {
-            form_data.dob_error = 'Future date is not allowed';
+        if(isNomineeDobNeeded) {
+            if ((new Date(dob) > new Date()) || !isValidDate(dob)) {
+                form_data.dob_error = 'Please enter valid date';
+            } else if (IsFutureDate(dob)) {
+                form_data.dob_error = 'Future date is not allowed';
+            }
         }
+        
 
         if (!relation) {
             form_data.appointeerelation_error = 'please select relation'
