@@ -760,8 +760,10 @@ export function childeNameMapper(name) {
   let mapper = {
     'son1': '1st Son',
     'son2': '2nd Son',
+    'son3': '3rd Son',
     'daughter1': '1st Daughter',
     'daughter2': '2nd Daughter',
+    'daughter3': '3rd Daughter',
     'father_in_law': 'father in law',
     'mother_in_law': 'mother in law'
   };
