@@ -636,7 +636,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             {props.title}
                         </div>
                         <div className="subtitle">
-                            {props.subtitle} {(props.title==='Height' && <span>cm</span>) || (props.title==='Weight' && <span>kg</span>)}
+                            {capitalizeFirstLetter(props.subtitle.toLowerCase())} {(props.title==='Height' && <span>cm</span>) || (props.title==='Weight' && <span>kg</span>)}
                         </div>
                         {props.subtitle2 && <div className="subtitle">
                             {props.subtitle2}
