@@ -11,6 +11,7 @@ import Input from '../../../../common/ui/Input';
 import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
 import { isEmpty } from '../../../../utils/validators';
+import ReactTooltip from "react-tooltip";
 class GroupHealthPlanNomineeDetails extends Component {
 
     constructor(props) {
@@ -121,6 +122,8 @@ class GroupHealthPlanNomineeDetails extends Component {
             this.setState({
                 form_data: form_data,
                 renderAppointee: !!(age && age < 18),
+            },() => {
+                ReactTooltip.rebuild();
             });
         }
 

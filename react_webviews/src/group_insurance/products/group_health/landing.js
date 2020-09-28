@@ -274,7 +274,7 @@ class GroupHealthLanding extends Component {
             Covers all age groups
           </div>
           <div className="generic-page-subtitle">
-            Buy health insurance for yourself, spouse, kids or parents also.
+           Buy health insurance for yourself, spouse, kids or parents also.
           </div>
 
           <div className='family-images'>
