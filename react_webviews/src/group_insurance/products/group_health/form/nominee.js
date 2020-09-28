@@ -170,7 +170,7 @@ class GroupHealthPlanNomineeDetails extends Component {
             }
         }
 
-        const { name, dob } = form_data;
+        const { name, dob, relation } = form_data;
        
         if (!isEmpty(form_data) && noOfWords(name) < 2) {
             form_data.name_error = 'Enter valid full name';
@@ -185,8 +185,13 @@ class GroupHealthPlanNomineeDetails extends Component {
             form_data.dob_error = 'Future date is not allowed';
         }
 
+        if (!relation) {
+            form_data.appointeerelation_error = 'please select relation'
+        }
+        
+
         if (this.state.renderAppointee) {
-            const { appointeename, appointeedob } = form_data;
+            const { appointeename, appointeedob, appointeerelation } = form_data;
 
             if (noOfWords(appointeename) < 2) {
                 form_data.appointeename_error = 'Enter valid full name';
@@ -198,6 +203,10 @@ class GroupHealthPlanNomineeDetails extends Component {
                 form_data.appointeedob_error = 'Please enter valid date';
             } else if (IsFutureDate(appointeedob)) {
                 form_data.appointeedob_error = 'Future date is not allowed';
+            }
+
+            if (!appointeerelation) {
+                form_data.appointeerelation_error = 'please select appointee relation'
             }
         }
 
