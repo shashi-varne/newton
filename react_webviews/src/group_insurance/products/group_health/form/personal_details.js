@@ -6,7 +6,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { health_providers, genderOptions, childeNameMapper } from '../../../constants';
 import {
   calculateAge, toFeet, capitalizeFirstLetter,
-  formatDate, validatePan, validateAlphabets, dobFormatTest, isValidDate, difference_In_Days
+  formatDate, validatePan, validateAlphabets, dobFormatTest, isValidDate
 } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
@@ -95,7 +95,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let dobNeeded = (this.state.provider === 'RELIGARE' && lead.eldest_member !== backend_key) || member_key === 'applicant';
     form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
-    let age = calculateAge(form_data.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
+    let age = calculateAge(form_data.dob);
 
 
     let height_options = [];
@@ -217,12 +217,13 @@ class GroupHealthPlanPersonalDetails extends Component {
     let isChild = form_data.relation.includes('SON') || form_data.relation.includes('DAUGHTER');
     if (this.state.provider === 'RELIGARE') {
       if (isChild) {
+        const age = calculateAge(form_data.dob);
         if (this.state.groupHealthPlanData.type_of_plan === 'WF') {
-          if (difference_In_Days(form_data.dob) <= 91 || calculateAge(form_data.dob) >= 25) {
-            form_data.dob_error = 'kid age cannot be greater than 25 or less than 91 days';
+          if (age.days <= 91 || age.roundedAge >= 25) {
+            form_data.dob_error = "Kid's age cannot be greater than 25 or less than 91 days";
           }
         } else {
-          if (calculateAge(form_data.dob) < 5 || calculateAge(form_data.dob) >= 25) {
+          if (age.roundedAge < 5 || age.roundedAge >= 25) {
             form_data.dob_error = 'Only children between 5 yrs & 25 yrs can be included';
           }
         }
@@ -262,7 +263,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     let { provider } = this.state;
-    let age = calculateAge((form_data.dob || '').replace(/\\-/g, '/').split('-').join('/'));
+    let age = calculateAge((form_data.dob || ''));
 
     if (this.state.dobNeeded) {
       if (provider === 'RELIGARE') {
@@ -286,8 +287,8 @@ class GroupHealthPlanPersonalDetails extends Component {
       }
 
       if (this.state.lead.account_type === 'parents') {
-        let ageParent1 = calculateAge(((this.state.lead.parent_account1_key || {}).dob || '').replace(/\\-/g, '/').split('-').join('/'));
-        let ageParent2 = calculateAge(((this.state.lead.parent_account2_key || {}).dob || '').replace(/\\-/g, '/').split('-').join('/'));
+        let ageParent1 = calculateAge(((this.state.lead.parent_account1_key || {}).dob || ''));
+        let ageParent2 = calculateAge(((this.state.lead.parent_account2_key || {}).dob || ''));
 
         if ((ageParent1 && age >= ageParent1) || (ageParent2 && age >= ageParent2)) {
           form_data.dob_error = "Applicant's age should be less than parents'age";
@@ -360,7 +361,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         'height': this.state.form_data.height ? 'yes' : 'no',
         'weight': this.state.form_data.weight ? 'yes' : 'no',
         'gender': this.state.form_data.gender,
-        // 'member': ,
+        'member': this.props.member_key,
         "occupation": this.state.form_data.occupation ? 'yes' : 'no',
         'from_edit': this.props.edit ? 'yes' : 'no',
         'policy_cannot_be_issued': data.bmi_check ? 'yes' : 'no'

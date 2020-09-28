@@ -71,6 +71,8 @@ class GroupHealthStarPlanSelectPed extends Component {
       properties: {
         user_action: user_action,
         screen_name: "lifestyle_details",
+        "product": 'star',
+        flow: this.state.insured_account_type || '',
       },
     };
 

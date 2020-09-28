@@ -5,7 +5,6 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {  genderOptions } from '../../../constants';
 
-// calculateAge, isValidDate, IsFutureDate
 import PlusMinusInput from '../../../../common/ui/PlusMinusInput';
 
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
@@ -279,9 +278,6 @@ class GroupHealthPlanAddMembers extends Component {
             ui_members.self_gender = '';
         }
 
-        this.sendEvents('next', ui_members);
-
-
         if(canProceed) {
             let groupHealthPlanData = this.state.groupHealthPlanData;
             groupHealthPlanData.ui_members = ui_members;
@@ -289,7 +285,7 @@ class GroupHealthPlanAddMembers extends Component {
             groupHealthPlanData.eldest_member = ''; //reset
             groupHealthPlanData.eldest_dob = ''; //reset
             this.setLocalProviderData(groupHealthPlanData);
-    
+            this.sendEvents('next', ui_members);
             this.navigate(this.state.next_screen || 'plan-dob');
         }
         
@@ -298,7 +294,6 @@ class GroupHealthPlanAddMembers extends Component {
 
     sendEvents(user_action, ui_members) {
         ui_members = ui_members || this.state.ui_members;
-
         let eventObj = {
             "event_name": 'health_insurance',
             "properties": {
@@ -310,7 +305,7 @@ class GroupHealthPlanAddMembers extends Component {
                 'daughter': ui_members.daughter_total || '',
                 'self': ['selfandfamily', 'self'].includes(this.state.insured_account_type) ? 'yes' : 'no',
                 'parent' : `${(ui_members.father ? 'father, ' : '')} ${(ui_members.mother ? 'mother' : '') }`,
-                'parent_in_law': `${(ui_members.father_in_law ? 'father, ' : '')} ${(ui_members.mother_in_law ? 'mother' : '') }`,
+                'parent_in_law': `${(ui_members['father-in-law'] ? 'father, ' : '')} ${(ui_members['mother-in-law'] ? 'mother' : '') }`,
                 'adult_member': ['selfandfamily', 'family'].includes(this.state.account_type) ? this.state.other_adult_member : ''
             }
         };

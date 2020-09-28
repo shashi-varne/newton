@@ -116,9 +116,9 @@ class HealthInsuranceEntry extends Component {
         noFooter={true}
         showLoader={this.state.show_loader}
         title="Comprehensive health insurance"> 
-        <div className="group-health-insurance-entry" style={{ padding: '20px' }}>
+        <div className="group-health-insurance-entry">
           <div className='products'>
-            <h1 className='health_insurance'>Health insurance plans</h1>
+            <div className='health_insurance'>Health insurance plans</div>
             <div>
               {this.state.insuranceProducts.map(this.renderPorducts)}
             </div>
