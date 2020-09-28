@@ -608,9 +608,9 @@ export const star = {
         ]
     },
     add_members_screen: {
-        son_max: 2,
-        daughter_max: 2,
-        total_plus_minus_max: 2,
+        son_max:3,
+        daughter_max: 3,
+        total_plus_minus_max: 3,
         preselect_father: true,
         preselect_mother: true,
         disable_father: true,
