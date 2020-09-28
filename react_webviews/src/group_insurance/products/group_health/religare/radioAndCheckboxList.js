@@ -214,7 +214,7 @@ class radioAndCheckboxList extends Component {
                       />
                     </Grid>
                     <Grid item xs={11} style={{ fontSize: "14px" }}>
-                      {capitalizeFirstLetter(option.key)}
+                      {capitalizeFirstLetter(childeNameMapper(option.key))}
                     </Grid>
                   </Grid>
                   {option.ped_exists && option.key !== 'none' && (

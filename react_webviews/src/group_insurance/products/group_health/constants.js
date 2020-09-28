@@ -654,7 +654,6 @@ export const star = {
                 'name': 'GRAND FATHER',
                 'value': 'GRANDFATHER'
             },
-
             {
                 'name': 'GRAND MOTHER',
                 'value': 'GRANDMOTHER'
