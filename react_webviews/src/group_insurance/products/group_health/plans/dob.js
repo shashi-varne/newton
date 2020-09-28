@@ -33,7 +33,6 @@ class GroupHealthPlanDob extends Component {
 
     async componentDidMount() {
         let groupHealthPlanData = this.state.groupHealthPlanData;
-
         this.setState({
             account_type: groupHealthPlanData.account_type,
             header_title: groupHealthPlanData.account_type === 'self' ? 'Your date of birth' : 'Date of birth details'
@@ -81,8 +80,6 @@ class GroupHealthPlanDob extends Component {
         if (!dobFormatTest(value)) {
             return;
         }
-
-       
 
         let errorDate = '';
         if (value.length > 10) {
@@ -141,11 +138,9 @@ class GroupHealthPlanDob extends Component {
             if (!isValidDate(dob)) {
                 dob_data.error = 'Please enter valid date';
                 canProceed = false;
-                break;
             } else if (IsFutureDate(dob)) {
                 dob_data.error = 'Future date is not allowed';
                 canProceed = false;
-                break;
             }
 
             if(age) {

@@ -605,9 +605,9 @@ export const star = {
         ]
     },
     add_members_screen: {
-        son_max: 2,
-        daughter_max: 2,
-        total_plus_minus_max: 2,
+        son_max:3,
+        daughter_max: 3,
+        total_plus_minus_max: 3,
         preselect_father: true,
         preselect_mother: true,
         disable_father: true,
@@ -895,12 +895,12 @@ export const avilableMembersToInsured = [
         'backend_key': 'parent_account2_key'
     },
     {
-        'key': 'father-in-law',
+        'key': 'father_in_law',
         'value': '',
         'backend_key': 'parent_inlaw_account1_key'
     },
     {
-        'key': 'mother-in-law',
+        'key': 'mother_in_law',
         'value': '',
         'backend_key': 'parent_inlaw_account2_key'
     },
