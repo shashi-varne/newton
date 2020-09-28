@@ -565,7 +565,8 @@
 }
 .group-health-top-content-plan-logo .tc-title {
   color: #0a1d32;
-  font-size: 10px;
+  font-size: 12px;
+  line-height: 1.3;
   font-weight: 600;
   margin: 0 0 7px 0;
 }

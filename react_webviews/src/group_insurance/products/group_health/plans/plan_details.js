@@ -270,7 +270,7 @@ class GroupHealthPlanDetails extends Component {
                 <div className="group-health-plan-details">
                     <div className="group-health-top-content-plan-logo">
                         <div className="left">
-                            <div className="tc-title">{this.state.provider === 'HDFCERGO' ? this.state.common_data.base_plan_title : ''}</div>
+                            <div className="tc-title">{this.state.providerConfig.title}</div>
                             <div className="tc-subtitle">{plan_selected.plan_title}</div>
                         </div>
 
