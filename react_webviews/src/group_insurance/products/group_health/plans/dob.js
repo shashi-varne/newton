@@ -148,11 +148,11 @@ class GroupHealthPlanDob extends Component {
                     let dob_adult = validation_props.dob_adult;
                     let dob_married_male = validation_props.dob_married_male;
                     // adult
-                    if (age.roundedAge > dob_adult.max || age.roundedAge < dob_adult.min) {
+                    if (age.age > dob_adult.max || age.age < dob_adult.min) {
                         dob_data.error = `Valid age is between ${dob_adult.min} - ${dob_adult.max} years`;
                         canProceed = false;
                         break;
-                    } else if (manAgeCheck === key && age.roundedAge < dob_married_male.min) {
+                    } else if (manAgeCheck === key && age.age < dob_married_male.min) {
                         dob_data.error = `Minimum age is ${dob_adult.min} for married male`;
                         canProceed = false;
                         break;
@@ -160,7 +160,7 @@ class GroupHealthPlanDob extends Component {
                     adult_ages.push(age.age);
                 } else {
                     let dob_child = validation_props.dob_child;
-                    if (age.roundedAge > dob_child.max || (age.days < dob_child.minDays)) {
+                    if (age.age > dob_child.max || (age.days < dob_child.minDays)) {
                         dob_data.error = `Valid age is between ${dob_child.minDays} days - ${dob_child.max} years`;
                         canProceed = false;
                         break;
