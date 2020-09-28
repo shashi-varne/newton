@@ -3,6 +3,7 @@ import './style.scss';
 
 const DotDotLoader = (props) => {
   const { size = '' } = props;
+   // eslint-disable-next-line
   let sizeObj = {};
 
   if (size) {
