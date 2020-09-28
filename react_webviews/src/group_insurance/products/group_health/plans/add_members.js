@@ -369,6 +369,8 @@ class GroupHealthPlanAddMembers extends Component {
         this.setState({
             [name]: options[event] ? options[event].value : '',
             [name + '_error']: ''
+        }, () => {
+            ReactTooltip.rebuild();
         });
 
     };
