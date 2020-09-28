@@ -148,6 +148,22 @@ class GroupHealthPlanFinalSummary extends Component {
         let life_style_details_data = [];
         let members_for_life_style = [];
         let med_ques_data = med_ques_mapper_religare;
+
+        if (provider === 'STAR') {
+            let health_data = {
+                'title': 'Health details',
+                edit_state: `/group-insurance/group-health/${this.state.provider}/health-details`,
+                data: [
+                    {
+                        'title': 'Any critical issues?',
+                        'subtitle': 'No'
+                    }
+                ]
+            }
+        
+            accordianData.push(health_data);
+        }
+
         for (var i = 0; i < member_base.length; i++) {
             let member = Object.assign({}, member_base[i]);
             let member_display = capitalizeFirstLetter(childeNameMapper(member.key));
@@ -304,6 +320,10 @@ class GroupHealthPlanFinalSummary extends Component {
 
         let address_data_backend = [lead.correspondence_address ,lead.permanent_address];
 
+        if (provider === "STAR") {
+            address_data_backend = [lead.permanent_address]
+        }
+
         let data = address_data_backend.map((item, index) => {
             return [
                 {
@@ -342,21 +362,32 @@ class GroupHealthPlanFinalSummary extends Component {
 
         accordianData.push(address_data);
 
-        let nominee_data_backned = lead.nominee_account_key;
+        let nominee_data_backend = lead.nominee_account_key;
         let nominee_data = {
             'title': 'Nominee',
             edit_state: `/group-insurance/group-health/${this.state.provider}/edit-nominee`,
             data: [
                 {
                     'title': 'Name',
-                    'subtitle': nominee_data_backned.name
+                    'subtitle': nominee_data_backend.name
                 },
                 {
                     'title': 'Relation',
-                    'subtitle': nominee_data_backned.relation
+                    'subtitle': nominee_data_backend.relation
                 }
             ]
         }
+
+        if (provider === 'STAR') {
+
+            nominee_data.data.push(
+                {
+                    'title': 'Date of birth',
+                    'subtitle': nominee_data_backend.dob
+                }
+            )
+        }
+
         accordianData.push(nominee_data);
 
         if (provider === 'RELIGARE') {
@@ -713,10 +744,12 @@ class GroupHealthPlanFinalSummary extends Component {
                             EDIT
                         </div>
                         <br />
-                        {props.data[1].map(this.renderAccordiansubData)}
-                        <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
-                            EDIT
-                        </div>
+                        {this.state.provider === 'RELIGARE' && <React.Fragment>
+                            {props.data[1].map(this.renderAccordiansubData)}
+                            <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
+                                EDIT
+                            </div>
+                        </React.Fragment>}
                 </div>}
             </div>
         );

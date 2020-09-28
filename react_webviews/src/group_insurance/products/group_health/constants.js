@@ -14,9 +14,9 @@ export const hdfc = {
         nominee_screen: 'is-ped'
     },
     validation_props: {
-        'dob_adult': { min: 18, max: 90 },  //add one year for minimum age here 18 to 19
+        'dob_adult': { min: 18, max: 90 },
         'dob_child': { minDays: 90, max: 25 },
-        'dob_married_male': { min: 22, max: 25 },
+        'dob_married_male': { min: 21, max: 25 },
     },
     applicant_detail_screen: {
         fields: [
@@ -201,9 +201,9 @@ export const religare = {
         nominee_screen: 'plan-lifestyle-details'
     },
     validation_props: {
-        'dob_adult': { min: 18, max: 90 },  //add one year for minimum age here 18 to 19
+        'dob_adult': { min: 18, max: 90 }, 
         'dob_child': { minDays: 90, max: 25 },
-        'dob_married_male': { min: 22, max: 25 },
+        'dob_married_male': { min: 21, max: 25 },
     },
     applicant_detail_screen: {
         fields: [
@@ -313,56 +313,8 @@ export const religare = {
     nominee_screen: {
         nominee_opts: [
             {
-                'name': 'SPOUSE',
-                'value': 'SPOUSE'
-            },
-            {
-                'name': 'BROTHER',
-                'value': 'BROTHER'
-            },
-            {
-                'name': 'COUSIN SON',
-                'value': 'COUSIN_SON'
-            },
-            {
-                'name': 'DAUGHTER IN LAW',
-                'value': 'DAUGHTER_IN_LAW'
-            },
-            {
                 'name': 'FATHER',
                 'value': 'FATHER'
-            },
-            {
-                'name': 'FATHER IN LAW',
-                'value': 'FATHER_IN_LAW'
-            },
-            {
-                'name': 'GRAND FATHER',
-                'value': 'GRANDFATHER'
-            },
-            {
-                'name': 'GRAND MOTHER',
-                'value': 'GRANDMOTHER'
-            },
-            {
-                'name': 'GRAND DAUGHTER',
-                'value': 'GRANDDAUGHTER'
-            },
-            {
-                'name': 'GRAND SON',
-                'value': 'GRANDSON'
-            },
-            {
-                'name': 'BROTHER IN LAW',
-                'value': 'BROTHER_IN_LAW'
-            },
-            {
-                'name': 'MOTHER IN LAW',
-                'value': 'MOTHER_IN_LAW'
-            },
-            {
-                'name': 'SISTER IN LAW',
-                'value': 'SISTER_IN_LAW'
             },
             {
                 'name': 'MOTHER',
@@ -373,8 +325,8 @@ export const religare = {
                 'value': 'SISTER'
             },
             {
-                'name': 'SON IN LAW',
-                'value': 'SON_IN_LAW'
+                'name': 'BROTHER',
+                'value': 'BROTHER'
             },
             {
                 'name': 'SON',
@@ -383,6 +335,46 @@ export const religare = {
             {
                 'name': 'DAUGHTER',
                 'value': 'DAUGHTER'
+            },
+            {
+                'name': 'SPOUSE',
+                'value': 'SPOUSE'
+            },
+            {
+                'name': 'GRAND FATHER',
+                'value': 'GRANDFATHER'
+            },
+            {
+                'name': 'GRAND MOTHER',
+                'value': 'GRANDMOTHER'
+            },
+            {
+                'name': 'FATHER IN LAW',
+                'value': 'FATHER_IN_LAW'
+            },
+            {
+                'name': 'BROTHER IN LAW',
+                'value': 'BROTHER_IN_LAW'
+            },
+            {
+                'name': 'SON IN LAW',
+                'value': 'SON_IN_LAW'
+            },
+            {
+                'name': 'DAUGHTER IN LAW',
+                'value': 'DAUGHTER_IN_LAW'
+            },
+            {
+                'name': 'COUSIN SON',
+                'value': 'COUSIN_SON'
+            },
+            {
+                'name': 'GRAND DAUGHTER',
+                'value': 'GRANDDAUGHTER'
+            },
+            {
+                'name': 'GRAND SON',
+                'value': 'GRANDSON'
             },
             {
                 'name': 'OTHERS',
@@ -514,7 +506,7 @@ export const star = {
         contact_screen: 'star-address'
     },
     validation_props: {
-        'dob_adult': { min: 18, max: 65 },  //add one year for minimum age here 18 to 19
+        'dob_adult': { min: 18, max: 65 },
         'dob_child': { minDays: 16, max: 25 },
         'dob_married_male': { min: 18, max: 25 },
     },
@@ -618,56 +610,8 @@ export const star = {
     nominee_screen: {
         nominee_opts: [
             {
-                'name': 'SPOUSE',
-                'value': 'SPOUSE'
-            },
-            {
-                'name': 'BROTHER',
-                'value': 'BROTHER'
-            },
-            {
-                'name': 'COUSIN SON',
-                'value': 'COUSIN_SON'
-            },
-            {
-                'name': 'DAUGHTER IN LAW',
-                'value': 'DAUGHTER_IN_LAW'
-            },
-            {
                 'name': 'FATHER',
                 'value': 'FATHER'
-            },
-            {
-                'name': 'FATHER IN LAW',
-                'value': 'FATHER_IN_LAW'
-            },
-            {
-                'name': 'GRAND FATHER',
-                'value': 'GRANDFATHER'
-            },
-            {
-                'name': 'GRAND MOTHER',
-                'value': 'GRANDMOTHER'
-            },
-            {
-                'name': 'GRAND DAUGHTER',
-                'value': 'GRANDDAUGHTER'
-            },
-            {
-                'name': 'GRAND SON',
-                'value': 'GRANDSON'
-            },
-            {
-                'name': 'BROTHER IN LAW',
-                'value': 'BROTHER_IN_LAW'
-            },
-            {
-                'name': 'MOTHER IN LAW',
-                'value': 'MOTHER_IN_LAW'
-            },
-            {
-                'name': 'SISTER IN LAW',
-                'value': 'SISTER_IN_LAW'
             },
             {
                 'name': 'MOTHER',
@@ -678,8 +622,8 @@ export const star = {
                 'value': 'SISTER'
             },
             {
-                'name': 'SON IN LAW',
-                'value': 'SON_IN_LAW'
+                'name': 'BROTHER',
+                'value': 'BROTHER'
             },
             {
                 'name': 'SON',
@@ -688,6 +632,46 @@ export const star = {
             {
                 'name': 'DAUGHTER',
                 'value': 'DAUGHTER'
+            },
+            {
+                'name': 'SPOUSE',
+                'value': 'SPOUSE'
+            },
+            {
+                'name': 'GRAND FATHER',
+                'value': 'GRANDFATHER'
+            },
+            {
+                'name': 'GRAND MOTHER',
+                'value': 'GRANDMOTHER'
+            },
+            {
+                'name': 'FATHER IN LAW',
+                'value': 'FATHER_IN_LAW'
+            },
+            {
+                'name': 'BROTHER IN LAW',
+                'value': 'BROTHER_IN_LAW'
+            },
+            {
+                'name': 'SON IN LAW',
+                'value': 'SON_IN_LAW'
+            },
+            {
+                'name': 'DAUGHTER IN LAW',
+                'value': 'DAUGHTER_IN_LAW'
+            },
+            {
+                'name': 'COUSIN SON',
+                'value': 'COUSIN_SON'
+            },
+            {
+                'name': 'GRAND DAUGHTER',
+                'value': 'GRANDDAUGHTER'
+            },
+            {
+                'name': 'GRAND SON',
+                'value': 'GRANDSON'
             },
             {
                 'name': 'OTHERS',
