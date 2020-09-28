@@ -57,7 +57,6 @@ class GroupHealthPlanPersonalDetails extends Component {
     // let member_key = this.props.match.params.member_key;
     let member_key = this.props.member_key;
 
-
     let pan_needed = false;
     if (lead.total_amount > 100000 && (member_key === 'self' || member_key === 'applicant')) {
       pan_needed = true;
@@ -122,7 +121,11 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     form_data.selectedIndex = selectedIndex;
 
+    let occupation = lead[backend_key].occupation;
+    let occupationIndex = occupationOptions.findIndex(item => item.name === occupation);
 
+    form_data.occupation = occupationOptions[occupationIndex].value;
+    
 
     this.setState({
       providerData: health_providers[this.state.provider],
@@ -263,6 +266,11 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     let { provider } = this.state;
+
+    if (provider === 'STAR' && form_data.occupation === null && this.state.member_key !== 'applicant') {
+      form_data.occupation_error = 'please select one occupation';
+    }
+
     let age = calculateAge((form_data.dob || ''));
 
     if (this.state.dobNeeded) {
