@@ -179,7 +179,7 @@ class GroupHealthPlanStarSumInsured extends Component {
     
     render() {
         let bottomButtonData = {
-            leftTitle: 'Star Health',
+            leftTitle: this.state.groupHealthPlanData.plan_selected.plan_title,
             leftSubtitle: this.state.loadingPremium ? <DotDotLoader /> : this.state.premiumAmt,
             provider: this.state.providerConfig.key,
             logo: this.state.providerConfig.logo_cta
