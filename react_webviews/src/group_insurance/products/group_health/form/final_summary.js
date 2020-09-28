@@ -333,11 +333,19 @@ class GroupHealthPlanFinalSummary extends Component {
                 }
             ]
         })
-
-        let address_data = {
-            'title': 'Address details',
-            edit_state: `/group-insurance/group-health/${this.state.provider}/edit-address`,
-            data: data
+        let address_data={}
+        if(provider==='STAR'){
+            address_data={
+                'title': 'Address details',
+                edit_state: `/group-insurance/group-health/${this.state.provider}/edit-address-star`,
+                data: data 
+            }
+        } else{
+            address_data = {
+                'title': 'Address details',
+                edit_state: `/group-insurance/group-health/${this.state.provider}/edit-address`,
+                data: data
+            }
         }
 
         accordianData.push(address_data);
