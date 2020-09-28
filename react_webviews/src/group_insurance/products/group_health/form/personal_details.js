@@ -122,9 +122,12 @@ class GroupHealthPlanPersonalDetails extends Component {
     form_data.selectedIndex = selectedIndex;
 
     let occupation = lead[backend_key].occupation;
-    let occupationIndex = occupationOptions.findIndex(item => item.name === occupation);
 
-    form_data.occupation = occupationOptions[occupationIndex].value;
+    if (occupation !== null) {
+        let occupationIndex = occupationOptions.findIndex(item => item.name === occupation);
+        form_data.occupation = occupationOptions[occupationIndex].value;
+    }
+
     
 
     this.setState({
