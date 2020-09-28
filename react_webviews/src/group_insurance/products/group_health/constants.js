@@ -635,8 +635,8 @@ export const star = {
                 'value': 'BROTHER'
             },
             {
-                'name': 'COUSIN',
-                'value': 'COUSIN'
+                'name': 'COUSIN SON',
+                'value': 'COUSIN_SON'
             },
             {
                 'name': 'DAUGHTER IN LAW',
@@ -651,10 +651,6 @@ export const star = {
                 'value': 'FATHER_IN_LAW'
             },
             {
-                'name': 'GRAND DAUGHTER',
-                'value': 'GRANDDAUGHTER'
-            },
-            {
                 'name': 'GRAND FATHER',
                 'value': 'GRANDFATHER'
             },
@@ -662,6 +658,10 @@ export const star = {
             {
                 'name': 'GRAND MOTHER',
                 'value': 'GRANDMOTHER'
+            },
+            {
+                'name': 'GRAND DAUGHTER',
+                'value': 'GRANDDAUGHTER'
             },
             {
                 'name': 'GRAND SON',
@@ -684,18 +684,6 @@ export const star = {
                 'value': 'MOTHER'
             },
             {
-                'name': 'NEPHEW',
-                'value': 'NEPHEW'
-            },
-            {
-                'name': 'NIECE',
-                'value': 'NIECE'
-            },
-            {
-                'name': 'SELF- PRIMARY MEMBER',
-                'value': 'SELF'
-            },
-            {
                 'name': 'SISTER',
                 'value': 'SISTER'
             },
@@ -710,6 +698,44 @@ export const star = {
             {
                 'name': 'DAUGHTER',
                 'value': 'DAUGHTER'
+            },
+            {
+                'name': 'OTHERS',
+                'value': 'OTHERS'
+            }
+        ],
+        appointee_opts: [
+            {
+                'name': 'MOTHER',
+                'value': 'MOTHER'
+            },
+            {
+                'name': 'FATHER',
+                'value': 'FATHER'
+            },
+            {
+                'name': 'GRAND FATHER',
+                'value': 'GRANDFATHER'
+            },
+            {
+                'name': 'GRAND MOTHER',
+                'value': 'GRANDMOTHER'
+            },
+            {
+                'name': 'BROTHER',
+                'value': 'BROTHER'
+            },
+            {
+                'name': 'SISTER',
+                'value': 'SISTER'
+            },
+            {
+                'name': 'BROTHER IN LAW',
+                'value': 'BROTHER_IN_LAW'
+            },
+            {
+                'name': 'OTHERS',
+                'value': 'OTHERS'
             }
         ],
         showDob: true,
@@ -739,7 +765,7 @@ export const star = {
             },
             {
                 'name': 'CLERICAL/SUPERVISORY AND RELATED WORKER',
-                'value': 'CLERICAL_SUPERVISORY_AND_RELATED_WROKER'
+                'value': 'CLERICAL_SUPERVISORY_AND_RELATED_WORKER'
             },
             {
                 'name': 'HOSPITALITY AND SUPPORT WORKERS',
@@ -767,7 +793,7 @@ export const star = {
             },
             {
                 'name': 'STUDENTS-SCHOOLS AND COLLEGE',
-                'value': 'STUDENTS_SCHOOLS_AND_COOLLEGE'
+                'value': 'STUDENTS_SCHOOLS_AND_COLLEGE'
             },
             {
                 'name': 'INFANT',

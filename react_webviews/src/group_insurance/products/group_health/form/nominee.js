@@ -40,9 +40,11 @@ class GroupHealthPlanNomineeDetails extends Component {
         })
 
         let relationshipOptions = this.state.screenData.nominee_opts;
+        let appointeeRelationOptions = this.state.screenData.appointee_opts;
 
         this.setState({
-            relationshipOptions: relationshipOptions
+            relationshipOptions: relationshipOptions,
+            appointeeRelationOptions: appointeeRelationOptions
         })
 
         if(this.props.edit) {
@@ -304,7 +306,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                         <DropdownWithoutIcon
                             width="40"
                             dataType="AOB"
-                            options={this.state.relationshipOptions}
+                            options={this.state.appointeeRelationOptions}
                             id="relation"
                             label="Relationship"
                             error={this.state.form_data.appointeerelation_error ? true : false}

@@ -127,7 +127,6 @@ class GroupHealthPlanPersonalDetails extends Component {
     occupationIndex = occupation !== null && occupationOptions.findIndex(item => item.name === occupation || item.value === occupation);
     form_data.occupation = (occupationIndex && occupationIndex !== -1) && occupationOptions[occupationIndex].value;
     
-
     this.setState({
       providerData: health_providers[this.state.provider],
       next_state: next_state,
