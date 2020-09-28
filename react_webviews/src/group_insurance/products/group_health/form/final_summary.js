@@ -153,7 +153,7 @@ class GroupHealthPlanFinalSummary extends Component {
             let member_display = capitalizeFirstLetter(childeNameMapper(member.key));
 
             let obj = {
-                title: `${member_display}'s details ${member_base.length > 1 ? ('(' + (applicantIndex === -1 ? dateOrdinal(i + 1) : dateOrdinal(i))  + ' insured)') : ''}`,
+                title: `${member_display}'s details ${member_base.length > 1 ? ('(' + (applicantIndex === -1 ? lead.account_type !== 'self' ? dateOrdinal(i + 1) : '' : dateOrdinal(i))  + ' insured)') : ''}`,
                 edit_state: `/group-insurance/group-health/${this.state.provider}/edit-personal-details/${member.key}`
             }
 
@@ -652,10 +652,10 @@ class GroupHealthPlanFinalSummary extends Component {
                     </div>
                     <div className="mt-right">
                         <div className="mtr-top">
-                            {this.state.applicantIndex === -1 ? index + 1 : index}st Insured name
+                            {this.state.applicantIndex === -1 ? (this.state.lead.account_type !== 'self' ? dateOrdinal(index + 1) : '') : dateOrdinal(index)} Insured name
                         </div>
                         <div className="mtr-bottom">
-                            {props.name} ({props.relation.toLowerCase()})
+                            {props.name} ({childeNameMapper(props.key)})
                         </div>
                     </div>
                 </div>
@@ -674,7 +674,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             {props.title}
                         </div>
                         <div className="subtitle">
-                            {props.subtitle} {(props.title==='Height' && <span>cm</span>) || (props.title==='Weight' && <span>kg</span>)}
+                            {capitalizeFirstLetter(props.subtitle.toLowerCase())} {(props.title==='Height' && <span>cm</span>) || (props.title==='Weight' && <span>kg</span>)}
                         </div>
                         {props.subtitle2 && <div className="subtitle">
                             {props.subtitle2}
@@ -895,7 +895,7 @@ class GroupHealthPlanFinalSummary extends Component {
                                 <div className="mtr-top">
                                     TOTAL PREMIUM
                                 </div>
-                                <div className="mtr-bottom flex">
+                                <div className="mtr-bottom flex" style={{textTransform:'none'}}>
                                     <div>
                                         <div> {inrFormatDecimal(this.state.lead.premium)} </div>
                                         <div style={{ fontSize: 10 }}> (Basic premium)</div>
