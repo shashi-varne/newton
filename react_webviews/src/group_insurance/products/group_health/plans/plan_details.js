@@ -119,7 +119,7 @@ class GroupHealthPlanDetails extends Component {
                     }
                    
                 }
-                
+
                 this.setState({
                     common_data: resultData.common,
                     premium_data: resultData.premium,
@@ -321,7 +321,7 @@ class GroupHealthPlanDetails extends Component {
                         </div>
                     </div>
 
-                    <div className="settlement-info">Claim Settlement Ratio: 98.88%</div>
+                    <div className="settlement-info">Claim Settlement Ratio: {plan_selected.claim_settlement_ratio}%</div>
 
                     {plan_selected.recommendation_tag &&
                         <div

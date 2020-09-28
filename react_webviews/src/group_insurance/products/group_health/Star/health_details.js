@@ -166,6 +166,7 @@ class GroupHealthPlanStarHealthDetails extends Component {
                 plan_title: "Family Health Optima",
                 plan_type: "FHONEW",
                 sum_assured: "500000",
+                claim_settlement_ratio: '78.15'
             }
             groupHealthPlanData.post_body.plan_title = 'Star Family Health Optima';
             this.setLocalProviderData(groupHealthPlanData);
