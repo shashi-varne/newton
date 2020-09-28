@@ -598,7 +598,7 @@ class GroupHealthPlanPersonalDetails extends Component {
             value={this.state.form_data.weight || ''}
             onChange={this.handleChange('weight')} />
         </div>}
-        {this.state.providerConfig.key === 'STAR' && <div className="InputField">
+        {this.state.providerConfig.key === 'STAR' && this.state.member_key !== 'applicant' && <div className="InputField">
           <DropdownWithoutIcon
             width="40"
             dataType="AOB"
