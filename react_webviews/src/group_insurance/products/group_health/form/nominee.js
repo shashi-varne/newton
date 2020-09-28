@@ -71,7 +71,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                 ...this.state.bottomButtonData,
                 handleClick: this.handleClick
             }
-        },)
+        })
     }
 
     handleChange = name => event => {
