@@ -10,6 +10,7 @@ import PlusMinusInput from '../../../../common/ui/PlusMinusInput';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import toast from '../../../../common/ui/Toast';
 import { initialize } from '../common_data';
+import ReactTooltip from "react-tooltip";
 
 const other_adult_member_options = [
     {
@@ -97,6 +98,7 @@ class GroupHealthPlanAddMembers extends Component {
             self_gender: ui_members.self_gender || ''
         }, () => {
             this.setMinMax();
+            ReactTooltip.rebuild();
         });
     }
 
@@ -488,9 +490,12 @@ class GroupHealthPlanAddMembers extends Component {
                         </div>
                         {this.state.parents_option &&
                             <Fragment>
-                                <div className="plus-minus-input-label">
+                                <div className="plus-minus-input-label flex-between-center">
                                     Policy includes both the parents
-                                    {/* Add tooltip here: https://marvelapp.com/prototype/69gf086/screen/72572164 */}
+                                    <img 
+                                        className="tooltip-icon"
+                                        data-tip= {`This plan requires both the ${this.state.parents_option === 'parentsinlaw' ? "parents in-law" : "parents"} to be covered together.`}
+                                        src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
                                 </div>
                                 <div className="generic-hr"></div>
                                 <PlusMinusInput

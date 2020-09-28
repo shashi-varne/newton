@@ -684,7 +684,7 @@ export const star = {
             },
             {
                 'name': 'MOTHER',
-                'value': 'MOTHER '
+                'value': 'MOTHER'
             },
             {
                 'name': 'NEPHEW',
