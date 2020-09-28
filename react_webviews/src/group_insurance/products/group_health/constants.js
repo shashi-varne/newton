@@ -494,6 +494,7 @@ export const star = {
     key: 'STAR',
     provider_api: 'star',
     title: 'Star',
+    title2: 'Star',
     subtitle: 'Family Health Optima',
     logo: 'ic_star_logo.svg',
     logo_card: 'ic_star_logo_card.svg',
