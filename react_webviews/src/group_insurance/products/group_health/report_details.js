@@ -348,8 +348,8 @@ class GroupHealthReportDetails extends Component {
                     </div>
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
-                            {this.state.provider !== 'RELIGARE' && <div className="tc-title">{this.state.providerData.subtitle}</div>}
-                            <div className="tc-subtitle">{this.state.lead.plan_title}</div>
+                            <div className="tc-title">{this.state.providerData.title}</div>
+                            <div className="tc-subtitle">{this.state.lead.plan_title || this.state.providerData.subtitle}</div>
                         </div>
 
                         <div className="tc-right">
