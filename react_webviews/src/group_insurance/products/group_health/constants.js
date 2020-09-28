@@ -549,13 +549,10 @@ export const star = {
         ],
         whats_not_covered: [
             'Maternity',
-            'Self-inflicted injuries',
             'Plastic surgery',
+            'Substance abuse',
             'External congenital diseases',
-            'Mental health',
-            'Adventure sport injuries',
-            'Venereal or Sexually transmitted diseases',
-            'Eye/Dental treatment',
+            'Eye/Dental treatment'
         ],
         faq_data: {
             'header_title': 'Frequently asked questions',
