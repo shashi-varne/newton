@@ -148,6 +148,22 @@ class GroupHealthPlanFinalSummary extends Component {
         let life_style_details_data = [];
         let members_for_life_style = [];
         let med_ques_data = med_ques_mapper_religare;
+
+        if (provider === 'STAR') {
+            let health_data = {
+                'title': 'Health details',
+                edit_state: `/group-insurance/group-health/${this.state.provider}/health-details`,
+                data: [
+                    {
+                        'title': 'Any critical issues?',
+                        'subtitle': 'No'
+                    }
+                ]
+            }
+        
+            accordianData.push(health_data);
+        }
+
         for (var i = 0; i < member_base.length; i++) {
             let member = Object.assign({}, member_base[i]);
             let member_display = capitalizeFirstLetter(childeNameMapper(member.key));
