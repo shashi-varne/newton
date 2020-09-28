@@ -196,7 +196,7 @@ class GroupHealthPlanStarSumInsured extends Component {
                     Claim can be made upto the selected amount
                 <img 
                     className="tooltip-icon"
-                    data-tip="In the last 10 years, the average cost per hospitalization for urban patients (in India) has increased by about 176%. Hence, we recommend to have adequate coverage to manage health expenses."
+                    data-tip="In the last 10 years, the average cost per hospitalisation for urban patients has increased by about 176%. Also, this amount will be shared amongst all the insured members; hence, we recommend to have adequate coverage to manage health expenses."
                     src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
                 </div>
                 <div className="group-health-plan-select-sum-assured">
