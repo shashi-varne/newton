@@ -898,12 +898,12 @@ export const avilableMembersToInsured = [
         'backend_key': 'parent_account2_key'
     },
     {
-        'key': 'father-in-law',
+        'key': 'father_in_law',
         'value': '',
         'backend_key': 'parent_inlaw_account1_key'
     },
     {
-        'key': 'mother-in-law',
+        'key': 'mother_in_law',
         'value': '',
         'backend_key': 'parent_inlaw_account2_key'
     },
