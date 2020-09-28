@@ -44,7 +44,8 @@ class GroupHealthPlanDob extends Component {
             if(dob_data[key].key === 'self') {
                 dob_data[key].label = groupHealthPlanData.account_type === 'self' ? 'Date of birth (DD/MM/YYYY)' : 
                 "Your date of birth (DD/MM/YYYY)";
-            }
+            };
+            dob_data[key].error = '';
         }
 
         let final_dob_data = [];
@@ -132,6 +133,13 @@ class GroupHealthPlanDob extends Component {
         let adult_ages = [];
         let child_ages = [];
 
+        let child_keys = ['son', 'daughter'];
+
+        if (this.state.provider === 'STAR') {
+            child_keys = ['son1', 'son2', 'son3',
+                            'daughter1', 'daughter2', 'daughter3'];
+        }
+
         for (let dob_data of final_dob_data) {
             const { value: dob, age, key } = dob_data;
 
@@ -144,7 +152,7 @@ class GroupHealthPlanDob extends Component {
             }
 
             if(age) {
-                if(!['son', 'daughter'].includes(key)) {
+                if(!child_keys.includes(key)) {
                     let dob_adult = validation_props.dob_adult;
                     let dob_married_male = validation_props.dob_married_male;
                     // adult
