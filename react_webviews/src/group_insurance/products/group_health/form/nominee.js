@@ -55,8 +55,7 @@ class GroupHealthPlanNomineeDetails extends Component {
         let form_data = lead.nominee_account_key || {};
         form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
 
-        const { age } = calculateAge(form_data['dob'], true);
-        console.log(age);
+        const { age } = calculateAge(form_data['dob'], 'byMonth');
 
         this.setState({
             form_data: form_data,
