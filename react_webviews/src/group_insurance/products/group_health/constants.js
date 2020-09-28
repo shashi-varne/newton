@@ -541,7 +541,7 @@ export const star = {
             { src: 'star_icn_landing_card_3.svg' }
         ],
         whats_covered: [
-            '60 days pre and 90 days post hospitalization expenses',
+            '60 days pre and 90 days post hospitalisation expenses',
             'Treatment of pre-existing disease after 4 years',
             'Ayurveda, Unani, Sidha and Homeopathy treatments',
             'Organ donor expenses',
