@@ -828,12 +828,11 @@ export function calculateAge(val, withBreakup) {
   const today = moment();
   const birthDate = moment(date);
   const duration = moment.duration(today.diff(birthDate));
-  const age = parseInt(duration.asYears(), 10);
+  const age = duration.asYears();
 
   if(withBreakup) {
     return {
       age,
-      roundedAge: Math.round(duration.asYears()),
       months: parseInt(duration.asMonths(), 10),
       days: parseInt(duration.asDays(), 10),
     };
