@@ -85,11 +85,19 @@ class GroupHealthPlanPremiumSummary extends Component {
                 show_loader: true
             });
 
-            let plan_selected_final = this.state.groupHealthPlanData.plan_selected_final || {};
-            let body = this.state.groupHealthPlanData.post_body;
+            let {groupHealthPlanData} = this.state;
+
+            let plan_selected_final = groupHealthPlanData.plan_selected_final || {};
+            let body = groupHealthPlanData.post_body;
             body.provider = this.state.providerConfig.provider_api;
             body.base_premium_showable = plan_selected_final.base_premium_showable;
             body.add_ons_amount = plan_selected_final.add_ons_premium || '';
+
+            if(body.provider === 'star' && body.account_type.includes('parents') && 
+            groupHealthPlanData.ui_members.parents_option) {
+                body.account_type = groupHealthPlanData.ui_members.parents_option;
+            }
+
             const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/quote`, body);
 
             var resultData = res.pfwresponse.result;

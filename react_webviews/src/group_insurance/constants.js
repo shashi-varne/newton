@@ -761,7 +761,9 @@ export function childeNameMapper(name) {
     'son1': '1st Son',
     'son2': '2nd Son',
     'daughter1': '1st Daughter',
-    'daughter2': '2nd Daughter'
+    'daughter2': '2nd Daughter',
+    'father_in_law': 'father in law',
+    'mother_in_law': 'mother in law'
   };
 
   return mapper[name] || name;
