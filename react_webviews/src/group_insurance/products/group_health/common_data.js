@@ -140,10 +140,6 @@ export async function initialize() {
             leftSubtitle = premium_data[selectedIndexSumAssured] ? inrFormatDecimal(premium_data[selectedIndexSumAssured].net_premium) : '';
 
         }
-        
-        if (providerConfig.key === "STAR") {
-            leftTitle = "Star Health"
-        }
 
         let bottomButtonData = {
             leftTitle: leftTitle,
