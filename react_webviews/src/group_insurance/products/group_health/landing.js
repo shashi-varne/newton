@@ -124,7 +124,7 @@ class GroupHealthLanding extends Component {
       "event_name": 'health_insurance',
       "properties": {
         "user_action": user_action,
-        "product": 'health suraksha',
+        "product": this.state.providerConfig.provider_api,
         "screen_name": 'introduction',
         "coverage_overview_click": `${(this.state.whats_covered_clicked ? 'what is covered,' : '')} ${(this.state.whats_not_covered_clicked ? 'what is not covered' : '')}`,
         "things_to_know": data.things_to_know || '',
@@ -266,7 +266,7 @@ class GroupHealthLanding extends Component {
 
               <div className="rc-bottom flex-between">
                 <div className="rcb-content">Sum insured: {numDifferentiationInr(this.state.quoteResume.sum_assured)}</div>
-                <div className="rcb-content">Cover period: {this.state.quoteResume.tenure} year</div>
+                <div className="rcb-content">Cover period: {this.state.quoteResume.tenure} year{this.state.quoteResume.tenure>'1' && <span>s</span>}</div>
               </div>
             </div>}
 
@@ -274,7 +274,7 @@ class GroupHealthLanding extends Component {
             Covers all age groups
           </div>
           <div className="generic-page-subtitle">
-            Buy health insurance for yourself, spouse, kids or parents also.
+           {this.state.provider==="STAR"?'Option to cover your entire family (spouse, kids and parents)':'Buy health insurance for yourself, spouse, kids or parents also.'} 
           </div>
 
           <div className='family-images'>
