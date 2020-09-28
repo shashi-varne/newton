@@ -570,7 +570,6 @@ class GroupHealthPlanFinalSummary extends Component {
     handleClick = async () => {
         this.sendEvents('next');
         let {lead}  = this.state;
-        lead.ped_check = true;
 
         if(this.state.provider === 'STAR') {
             if(lead.ped_check) {
