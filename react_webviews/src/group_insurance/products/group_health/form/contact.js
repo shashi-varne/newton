@@ -98,7 +98,6 @@ class GroupHealthPlanContactDetails extends Component {
 
     handleClick = async () => {
 
-        this.sendEvents('next');
         let keysMapper = {
             'email': 'email',
             'mobile_number': 'mobile number',
@@ -148,7 +147,8 @@ class GroupHealthPlanContactDetails extends Component {
                 "email": this.state.form_data.email,
                 "mobile_number": this.state.form_data.mobile_number
             }
-           this.updateLead(body);
+            this.sendEvents('next');
+            this.updateLead(body);
         }
     }
 
