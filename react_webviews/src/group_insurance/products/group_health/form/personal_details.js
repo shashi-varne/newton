@@ -222,11 +222,11 @@ class GroupHealthPlanPersonalDetails extends Component {
       if (isChild) {
         const age = calculateAge(form_data.dob);
         if (this.state.groupHealthPlanData.type_of_plan === 'WF') {
-          if (age.days <= 91 || age.roundedAge >= 25) {
+          if (age.days <= 91 || age.age >= 25) {
             form_data.dob_error = "Kid's age cannot be greater than 25 or less than 91 days";
           }
         } else {
-          if (age.roundedAge < 5 || age.roundedAge >= 25) {
+          if (age.age < 5 || age.age >= 25) {
             form_data.dob_error = 'Only children between 5 yrs & 25 yrs can be included';
           }
         }

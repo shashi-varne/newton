@@ -3,7 +3,7 @@ import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import {  genderOptions } from '../../../constants';
+import {  genderOptions, childeNameMapper } from '../../../constants';
 
 import PlusMinusInput from '../../../../common/ui/PlusMinusInput';
 
@@ -29,7 +29,7 @@ const parents_category_options = [
     },
     {
         'name': 'Parents in-law',
-        'value': 'parents_inlaw'
+        'value': 'parentsinlaw'
     }
 ];
 
@@ -494,12 +494,14 @@ class GroupHealthPlanAddMembers extends Component {
                                 </div>
                                 <div className="generic-hr"></div>
                                 <PlusMinusInput
-                                    name={this.state.parents_option === 'parents_inlaw' ? "father_in_law" : "father"}
+                                    label={childeNameMapper(this.state.parents_option === 'parentsinlaw' ? "father_in_law" : "father")}
+                                    name={this.state.parents_option === 'parentsinlaw' ? "father_in_law" : "father"}
                                     parent={this}
                                 />
                                 <div className="generic-hr"></div>
                                 <PlusMinusInput
-                                    name={this.state.parents_option === 'parents_inlaw' ? "mother_in_law" : "mother"}
+                                    label={childeNameMapper(this.state.parents_option === 'parentsinlaw' ? "mother_in_law" : "mother")}
+                                    name={this.state.parents_option === 'parentsinlaw' ? "mother_in_law" : "mother"}
                                     parent={this}
                                 />
                                 <div className="generic-hr"></div>
