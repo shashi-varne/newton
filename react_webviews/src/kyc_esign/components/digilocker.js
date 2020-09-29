@@ -14,47 +14,24 @@ class DigiStatus extends Component {
     }
   }
 
-  sendEvents(user_action) {
-    let eventObj = {
-      "event_name": 'lending',
-      "properties": {
-        "user_action": user_action,
-        "screen_name": 'digi_kyc_status'
-      }
-    };
-
-    if (user_action === 'just_set_events') {
-      return eventObj;
-    } else {
-      nativeCallback({ events: eventObj });
-    }
-  }
-
   handleClick = () => {
-    this.sendEvents('ok');
-    nativeCallback({ action: 'exit' });
-  }
-
-  handleClose = () => {
-    nativeCallback({ action: 'exit' });
-    return;
+    nativeCallback({ action: 'exit_web' });
   }
 
   render() {
     const {show_loader, productName} = this.state;
     const {status} = this.state.params;
     const headerData = {
-        icon: "close",
-        goBack: this.handleClose
+      icon: "close",
+      goBack: this.handleClick
     }
 
     return (
       <Container
         showLoader={show_loader}
         title= {status === "success"? 'Digilocker authorisation successful!' : 'Digilocker authorisation failed!'}
-        events={this.sendEvents('just_set_events')}
-        handleClick={status === "success" ? this.handleClick : ""}
-        buttonTitle= {status === "success" ? 'OKAY' : 'RETRY'}
+        handleClick={this.handleClick}
+        buttonTitle='OKAY'
         headerData={headerData}
       >
         <div className="digi-status">
