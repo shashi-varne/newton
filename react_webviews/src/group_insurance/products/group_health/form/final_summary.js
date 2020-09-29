@@ -154,7 +154,7 @@ class GroupHealthPlanFinalSummary extends Component {
                 'title': 'Health details',
                 data: [
                     {
-                        'title': 'Any critical issues?',
+                        'title': 'Any critical illness?',
                         'subtitle': 'No'
                     }
                 ]

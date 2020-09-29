@@ -724,55 +724,55 @@ export const star = {
             // },
             {
                 'name': 'BUSINESS/TRADERS',
-                'value': 'BUSINESS_TRADERS'
+                'value': '1'
             },
             {
                 'name': 'PROFESSIONAL-DOCTOR',
-                'value': 'PROFESSIONAL_DOCTOR'
+                'value': '2'
             },
             {
                 'name': 'PROFESSIONAL-ENGINEER',
-                'value': 'PROFESSIONAL_ENGINEER'
+                'value': '3'
             },
             {
                 'name': 'PROFESSIONAL-LAWYER',
-                'value': 'PROFESSIONAL_LAWYER'
+                'value': '4'
             },
             {
                 'name': 'CLERICAL/SUPERVISORY AND RELATED WORKER',
-                'value': 'CLERICAL_SUPERVISORY_AND_RELATED_WORKER'
+                'value': '5'
             },
             {
                 'name': 'HOSPITALITY AND SUPPORT WORKERS',
-                'value': 'HOSPITALITY_AND_SUPPORT_WORKERS'
+                'value': '6'
             },
             {
                 'name': 'PRODUCTION WORKERS, SKILLED AND NON-AGRICULTURAL',
-                'value': 'PRODUCTION_WORKERS_SKILLED_AND_NON_AGRICULTURAL'
+                'value': '7'
             },
             {
                 'name': 'FARMERS AND AGRICULTURAL WORKERS',
-                'value': 'FARMERS_AND_AGRICULTURAL_WORKERS'
+                'value': '8'
             },
             {
                 'name': 'POLICE/PARA MILITARY/DEFENCE',
-                'value': 'POLICE_PARA_MILITARY_DEFENCE'
+                'value': '9'
             },
             {
                 'name': 'HOUSEWIVES',
-                'value': 'HOUSEWIVES'
+                'value': '10'
             },
             {
                 'name': 'RETIRED PERSONS',
-                'value': 'RETIRED_PERSONS'
+                'value': '11'
             },
             {
                 'name': 'STUDENTS-SCHOOLS AND COLLEGE',
-                'value': 'STUDENTS_SCHOOLS_AND_COLLEGE'
+                'value': '12'
             },
             {
                 'name': 'INFANT',
-                'value': 'INFANT'
+                'value': '13'
             }
         ]
     },

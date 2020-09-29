@@ -222,10 +222,14 @@ class GroupHealthPlanNomineeDetails extends Component {
                 form_data.appointeename_error = 'Invalid name';
             }
 
+            const { age } = calculateAge(form_data['appointeedob'], 'byMonth');  
+
             if (new Date(appointeedob) > new Date() || !isValidDate(appointeedob)) {
                 form_data.appointeedob_error = 'Please enter valid date';
             } else if (IsFutureDate(appointeedob)) {
                 form_data.appointeedob_error = 'Future date is not allowed';
+            } else if (age < 18) {
+                form_data.appointeedob_error = 'Minimum age is 18 for appointee'
             }
 
             if (!appointeerelation) {
