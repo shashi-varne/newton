@@ -152,7 +152,6 @@ class GroupHealthPlanFinalSummary extends Component {
         if (provider === 'STAR') {
             let health_data = {
                 'title': 'Health details',
-                edit_state: `/group-insurance/group-health/${this.state.provider}/health-details`,
                 data: [
                     {
                         'title': 'Any critical issues?',
@@ -353,12 +352,12 @@ class GroupHealthPlanFinalSummary extends Component {
                 }
             ]
         })
-
-        let address_data = {
-            'title': 'Address details',
-            edit_state: `/group-insurance/group-health/${this.state.provider}/edit-address`,
-            data: data
-        }
+        
+            let address_data={
+                'title': 'Address details',
+                edit_state: `${provider==='STAR'?`/group-insurance/group-health/${this.state.provider}/edit-address-star`:`/group-insurance/group-health/${this.state.provider}/edit-address`}`,
+                data: data 
+            }
 
         accordianData.push(address_data);
 
@@ -731,13 +730,15 @@ class GroupHealthPlanFinalSummary extends Component {
                 {props.open && props.title !== 'Address details' &&
                     <div className="bct-content">
                         {props.data.map(this.renderAccordiansubData)}
+                        {props.edit_state && 
                         <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
                             EDIT
-                        </div>
+                        </div>}
                     </div>}
 
                 {props.open && props.title === 'Address details' &&
                     <div className="bct-content">
+
                         {props.data[0].map(this.renderAccordiansubData)}
                         <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
                             EDIT
@@ -849,7 +850,7 @@ class GroupHealthPlanFinalSummary extends Component {
                 <div className="group-health-final-summary">
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
-                            <div className="tc-title">{this.state.common_data.base_plan_title}</div>
+                            <div className="tc-title">{this.state.providerData.title2 || this.state.common_data.base_plan_title}</div>
                             <div className="tc-subtitle">{this.state.lead.plan_title}</div>
                         </div>
 

@@ -60,7 +60,7 @@ class Report extends Component {
     }  else if (provider === 'STAR') {
       obj = {
         ...obj,
-        product_name: policy.base_plan_title + ' ' + policy.product_title,
+        product_name: 'Star Family Health Optima',
         top_title: 'Health insurance',
         key: 'STAR',
         id: policy.lead_id,
