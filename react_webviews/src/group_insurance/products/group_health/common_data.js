@@ -90,7 +90,7 @@ export async function initialize() {
                     lead: resultData.quote || {},
                     common_data: {
                         ...resultData.common,
-                        tnc: resultData.tnc || ''
+                        tnc: resultData.common.tnc || resultData.tnc
                     },
                     insured_account_type: lead.account_type || ''
                 }, () => {
