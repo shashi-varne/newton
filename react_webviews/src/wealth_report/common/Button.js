@@ -26,7 +26,7 @@ const WrButton = withStyles({
   },
   raised: {
     boxShadow: 'none',
-    borderRadius: '6px',
+    borderRadius: '4px',
     padding: isMobileView ? '8px' : '12px 19px',
     backgroundColor: 'var(--primary)',
     '&:hover': {

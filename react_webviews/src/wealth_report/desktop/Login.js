@@ -4,7 +4,7 @@ import WrOtpInput from "../common/OtpInput";
 import WrPhoneInput from "../common/PhoneInput";
 import { getConfig } from "utils/functions";
 import SplashBg from "assets/fisdom/bg_image_hni.png";
-import { resendOtp, login, verifyOtp, emailLogin, forgotPassword } from "../common/ApiCalls";
+import { resendOtp, login, verifyOtp, emailLogin, forgotPassword, emailRegister } from "../common/ApiCalls";
 import toast from '../../common/ui/Toast';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { navigate } from "../common/commonFunctions";
@@ -17,6 +17,7 @@ const isMobileView = getConfig().isMobileDevice;
 const Login = (props) => {
   const { params } = props.match;
   const [view, setView] = useState('');
+  const [mode, setMode] = useState('login');
   const [otp, setOtp] = useState('');
   const [otpErr, setOtpErr] = useState('');
   const [countryCode, setCountryCode] = useState('91');
@@ -70,6 +71,13 @@ const Login = (props) => {
     setPwdErr('');
     setOtpErr('');
   }, [params.view]);
+
+  const changeMode = () => {
+    setEmailErr('');
+    setPwdErr('');
+    if (mode === 'login') setMode('register');
+    else setMode('login');
+  };
 
   const handleOtp = (val) => {
     setOtpErr('');
@@ -217,6 +225,38 @@ const Login = (props) => {
     setOpLoading(false);
   };
 
+  const registerWithEmail = async () => {
+    try {
+      if (!validateEmail(email)) {
+        return setEmailErr("Please enter a valid email");
+      } else if (!password) {
+        return setPwdErr('Please enter password');
+      }
+      setOpLoading(true);
+      const res = await emailRegister({ email, password });
+      sendEvents('register', {
+        screen_name: 'register',
+        status: 'success',
+        user_id: res.user.user_id,
+      });
+      setPwdErr('');
+      setMode('login');
+    } catch (err) {
+      console.log(err);
+      if (err.includes('exists')) {
+        setEmailErr("Account already exists!");
+      } else {
+        toast(err);
+      }
+      sendEvents('register', {
+        screen_name: 'register',
+        status: 'fail',
+        error_message: err,
+      });
+    }
+    setOpLoading(false);
+  };
+
   const resetPassword = async () => {
     try {
       if (!validateEmail(email)) {
@@ -246,7 +286,11 @@ const Login = (props) => {
     } else if (view === 'otp') {
       verify(otp);
     } else if (view === 'email') {
-      loginWithEmail();
+      if (mode === 'login') {
+        loginWithEmail();
+      } else {
+        registerWithEmail();
+      }
     } else if (view === 'forgot-password') {
       resetPassword();
     }
@@ -255,9 +299,9 @@ const Login = (props) => {
   const renderNumberView = (
     <div className="wr-login-input">
       <img src={require("assets/fisdom/ic-fisdom-logo.jpg")} id="wr-logo" alt="" />
-      <div id="wr-title">Login with Phone Number</div>
+      <h2>{isMobileView ? 'Continue with mobile number' : 'Welcome to Fisdom!'}</h2>
       <div className="subtitle">
-        Please enter mobile number to view your Portfolio Report
+        Please enter mobile number to access your Portfolio Report
       </div>
       <div id="wr-input-label">Enter phone number</div>
       <WrPhoneInput 
@@ -324,7 +368,7 @@ const Login = (props) => {
   const renderOTPView = (
     <div className="wr-login-input">
       <img src={require("assets/fisdom/ic-mobile-verification.svg")} id="wr-logo" alt="" />
-      <div id="wr-title">One Time Password (OTP)</div>
+      <h2>One time password (OTP)</h2>
       <div className="subtitle">
         We’ve sent an OTP to your mobile number <br/>+91 {number}
       </div>
@@ -387,9 +431,12 @@ const Login = (props) => {
   const renderEmailView = (
     <div className="wr-login-input">
       <img src={require("assets/fisdom/ic-fisdom-logo.jpg")} id="wr-logo" alt="" />
-      <div id="wr-title">Login with Email</div>
+      <h2>{mode === 'login' ? 'Login' : 'Register'} with email</h2>
       <div className="subtitle">
-        Enter email address and password to view your Portfolio Report
+        {mode === 'login' ?
+          'Enter email address and password to access your Portfolio Report' :
+          'Register with your email address to access your Portfolio Report'
+        }
       </div>
       <div style={{ marginBottom: '28px' }}>
         <FormControl className="wr-form">
@@ -433,11 +480,11 @@ const Login = (props) => {
           {commonLoginErr}
         </div>
       }
-      <div
+      {mode === 'login' && <div
         className="wr-forgot-pwd"
         onClick={() => navigate(props, 'login/forgot-password')}>
         Forgot Password?
-      </div>
+      </div>}
     </div>
   );
 
@@ -454,7 +501,7 @@ const Login = (props) => {
           with a preliminary analysis of your portfolio fundamentals
         </div>
       </div>
-      <div className="wr-continue-btn">
+      <div className="wr-continue-btn" id="wr-splash-btn">
         <WrButton
           fullWidth={true}
           style={{
@@ -488,22 +535,29 @@ const Login = (props) => {
                 alt="fisdom" width={130}
                 onClick={() => navigate(props, 'login')}
               />
-              <h2>Welcome to Fisdom!</h2>
               {view === 'phone' && renderNumberView}
               {view === 'otp' && renderOTPView}
               {view === 'email' && renderEmailView}
               {view === 'forgot-password' && renderForgotPassword}
               {view !== 'phone' &&
-                <WrButton
-                  fullWidth={true}
-                  classes={{ root: "wr-login-btn m-t-60" }}
-                  disabled={opLoading}
-                  onClick={clickContinue}>
-                  {opLoading ?
-                    <CircularProgress size={20} thickness={4} color="white" /> :
-                    'Continue'
-                  }
-                </WrButton>
+                <Fragment>
+                  <WrButton
+                    fullWidth={true}
+                    classes={{ root: "wr-login-btn" }}
+                    disabled={opLoading}
+                    onClick={clickContinue}>
+                    {opLoading ?
+                      <CircularProgress size={20} thickness={4} color="white" /> :
+                      'Continue'
+                    }
+                  </WrButton>
+                  {view === 'email' && <div className="wr-register-login-text">
+                    Already have an account?
+                      <span onClick={changeMode}>
+                        &nbsp;{mode === 'login' ? 'Register' : 'Login'} now
+                      </span>
+                  </div>}
+                </Fragment>
               }
             </div>
           </div>
@@ -530,18 +584,27 @@ const Login = (props) => {
             {view === 'otp' && renderOTPView}
             {view === 'email' && renderEmailView}
             {view === 'forgot-password' && renderForgotPassword}
-            {(view !== 'splash' && view !== 'phone') && <div className="wr-continue-btn">
-                <WrButton
-                  fullWidth={true}
-                  classes={{ root: "wr-login-btn" }}
-                  onClick={clickContinue}
-                  disabled={opLoading}>
-                  {opLoading ?
-                    <CircularProgress size={20} thickness={4} color="white" /> :
-                    'Continue'
-                  }
-                </WrButton>
-              </div>
+            {(view !== 'splash' && view !== 'phone') &&
+              <Fragment>
+                <div className="wr-continue-btn">
+                  <WrButton
+                    fullWidth={true}
+                    classes={{ root: "wr-login-btn" }}
+                    onClick={clickContinue}
+                    disabled={opLoading}>
+                    {opLoading ?
+                      <CircularProgress size={20} thickness={4} color="white" /> :
+                      'Continue'
+                    }
+                  </WrButton>
+                </div>
+                {view === 'email' && <div className="wr-register-login-text">
+                  Already have an account?
+                  <span onClick={changeMode}>
+                    &nbsp;{mode === 'login' ? 'Register' : 'Login'} now
+                  </span>
+                </div>}
+              </Fragment>
             }
           </div>
         </div>

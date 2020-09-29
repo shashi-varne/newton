@@ -73,6 +73,8 @@
     width: 21% !important;
     border-radius: 4px;
     border: 1px solid #dadaed;
+    max-height: 56px;
+    box-sizing: border-box;
 
     .MuiInput-input {
       font-size: 22px !important;
@@ -88,7 +90,7 @@
   }
 
   .wr-select-input {
-    padding: 5px 0px 5px 10px !important;
+    padding: 2px 0px 5px 10px !important;
   }
 
   .MuiFormControl-marginNormal {
@@ -100,11 +102,13 @@
     margin-left: 16px;
     border-radius: 4px;
     border: 1px solid #dadaed;
+    max-height: 56px;
+    box-sizing: border-box;
 
     .MuiInput-input {
       font-size: 22px !important;
       font-weight: 500;
-      padding: 16px;
+      padding: 14px 16px 16px;
     }
   }
 
@@ -129,11 +133,8 @@
     margin-top: 10px;
     
     .wr-code-input {
-      width: 21% !important;
-      border-radius: 4px 0 0 4px;
-      border: 1px solid #dadaed;
       border-right: 0 !important;
-      min-height: 56px !important;
+      max-height: 56px !important;
 
       .MuiInput-input {
         font-size: 16px !important;
