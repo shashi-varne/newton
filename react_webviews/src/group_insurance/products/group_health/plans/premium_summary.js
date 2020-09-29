@@ -66,7 +66,7 @@ class GroupHealthPlanPremiumSummary extends Component {
                 "user_action": user_action,
                 "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
-                "screen_name": 'premium summary'
+                "screen_name": 'premium summary',
             }
         };
 

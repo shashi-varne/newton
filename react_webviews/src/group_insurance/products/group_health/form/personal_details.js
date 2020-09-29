@@ -394,6 +394,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         'member': this.props.member_key,
         "occupation": this.state.form_data.occupation ? 'yes' : 'no',
         'from_edit': this.props.edit ? 'yes' : 'no',
+        'pan_entered': this.state.form_data.pan_number ? 'yes' : 'no',
         'policy_cannot_be_issued': data.bmi_check ? 'yes' : 'no'
       }
     };

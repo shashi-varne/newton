@@ -8,7 +8,7 @@ import { isValidMonthYear } from "utils/validators";
 import { formatMonthandYear, dobFormatTest, validateAlphabets, IsFutureMonthYear, IsPastMonthYearfromDob } from "utils/validators";
 import toast from "../../../../common/ui/Toast";
 import ConfirmDialog from './../plans/confirm_dialog';
-
+import { compact } from 'lodash';
 
 class GroupHealthPlanLifestyleDetail extends Component {
   constructor(props) {
@@ -97,11 +97,16 @@ class GroupHealthPlanLifestyleDetail extends Component {
   };
 
   sendEvents(user_action) {
+    const { member_base = [] } = this.state;
+    const selected_members = member_base.map(member => member.life_style_question_exists ? member.relation : '');
     let eventObj = {
       event_name: "health_insurance",
       properties: {
         user_action: user_action,
         screen_name: "lifestyle_details",
+        "product": this.state.providerConfig.provider_api,
+        "flow": this.state.insured_account_type || '',
+        member_smokes: compact(selected_members).join(', '),
       },
     };
 
@@ -206,7 +211,6 @@ class GroupHealthPlanLifestyleDetail extends Component {
   };
 
   handleClick = () => {
-    this.sendEvents("next");
     let { member_base, none_option_selected } = this.state;
 
     let canProceed = true;
@@ -238,7 +242,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
     this.setState({
       member_base: member_base
-    })
+    });
 
 
     if (!atlOneOption) {
@@ -273,7 +277,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
         }
 
       }
-
+      this.sendEvents("next");
       this.updateLead(body);
     }
   };

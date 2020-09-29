@@ -11,6 +11,7 @@ import { initialize, updateBottomPremium } from '../common_data';
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
 import ReactTooltip from "react-tooltip";
+import { compact } from 'lodash';
 
 class GroupHealthPlanAddOns extends Component {
 
@@ -251,11 +252,15 @@ class GroupHealthPlanAddOns extends Component {
     }
 
     sendEvents(user_action) {
+        const selected_add_ons = this.state.add_ons_data.map(add_on => add_on.checked ? add_on.title : '');
         let eventObj = {
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "screen_name": 'select add ons'
+                "screen_name": 'select add ons',
+                "product": this.state.providerConfig.provider_api,
+                "flow": this.state.insured_account_type || '',
+                "add_ons": compact(selected_add_ons).join(', '),
             }
         }
 

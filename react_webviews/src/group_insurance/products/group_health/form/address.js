@@ -192,11 +192,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
         this.setState({
             form_data: form_data
-        })
-
-        console.log(this.state);
-        console.log(keys_to_check);
-
+        });
 
         if (canSubmitForm) {
 
@@ -249,11 +245,13 @@ class GroupHealthPlanAddressDetails extends Component {
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "product": 'health suraksha',
+                "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'address details',
                 'from_edit': this.props.edit ? 'yes' : 'no',
-                'address_entered': this.state.form_data.addressline ? 'yes' : 'no'
+                'address_entered': this.state.form_data.addressline ? 'yes' : 'no',
+                "permanent_current_same": this.state.checked ? 'yes' : 'no',
+                "permanent_address_entered": this.state.form_data.p_addressline ? 'yes' : 'no',
             }
         };
 
@@ -419,8 +417,8 @@ class GroupHealthPlanAddressDetails extends Component {
                     {!this.state.checked &&
 
                         <div>
-                            <div style={{ color: '#64778D', fontSize: 13, fontWeight: 300, margin: '-10px 0px 6px' }}>
-                                Permanent address
+                            <div style={{ color: '#64778D', fontSize: 13, fontWeight: 300, marginBottom: '20px' }}>
+                                Permanent Address
                             </div>
 
                             <div className="InputField">
@@ -522,8 +520,8 @@ class GroupHealthPlanAddressDetails extends Component {
                     Policy will be delivered to the current address
                 </div>
 
-                <div style={{ color: '#64778D', fontSize: 13, fontWeight: 300, marginTop: '37px' }}>
-                    Current address
+                <div style={{ color: '#64778D', fontSize: 13, fontWeight: 300, marginTop: '37px', marginBottom: '20px' }}>
+                    Current Address
                 </div>
                 <FormControl fullWidth>
 
