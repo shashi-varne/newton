@@ -346,6 +346,11 @@ class GroupHealthPlanPersonalDetails extends Component {
         }
       }
 
+      let { occupationOptions } = this.state;
+
+      let occupation = form_data.occupation || '';
+      let occupationValue = occupation && occupationOptions.find(item => item.name === occupation || item.value === occupation).name;
+
       let body = {
         [this.state.backend_key]: {
           "name": form_data.name || '',
@@ -353,14 +358,14 @@ class GroupHealthPlanPersonalDetails extends Component {
           "gender": form_data.gender || gender,
           "height": form_data.height || '',
           "weight": form_data.weight || '',
-          "occupation": form_data.occupation || ''
+          "occupation": occupationValue
         }
       }
+     
 
       if (this.state.pan_needed) {
         body[this.state.backend_key].pan_number = form_data.pan_number;
       }
-
 
       this.updateLead(body);
     }

@@ -64,6 +64,7 @@ class GroupHealthPlanFinalSummary extends Component {
             member_base.splice(applicantIndex, 1);
             member_base.splice(0, 0, appli_data);
         }
+        console.log(lead)
         
         this.setState({
             applicantIndex: applicantIndex
@@ -388,6 +389,30 @@ class GroupHealthPlanFinalSummary extends Component {
         }
 
         accordianData.push(nominee_data);
+
+        if (provider === 'STAR' && lead.appointee_account_key) {
+            let appointee_data_backend = lead.appointee_account_key;
+            let appointee_data = {
+                'title': 'Appointee',
+                edit_state: `/group-insurance/group-health/${this.state.provider}/edit-nominee`,
+                data: [
+                    {
+                        'title': 'Name',
+                        'subtitle': appointee_data_backend.name
+                    },
+                    {
+                        'title': 'Relation',
+                        'subtitle': appointee_data_backend.relation
+                    },
+                    {
+                        'title': 'Date of birth',
+                        'subtitle': appointee_data_backend.dob
+                    }
+                ]
+            }
+
+            accordianData.push(appointee_data);
+        }
 
         if (provider === 'RELIGARE') {
             let data = [];
