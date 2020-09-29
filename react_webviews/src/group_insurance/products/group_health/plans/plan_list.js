@@ -80,7 +80,7 @@ class GroupHealthPlanList extends Component {
                 "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'select plan',
-                [`plan_${this.state.providerConfig.provider_api}`]: plan.plan_type || '',
+                'plan_type': plan.plan_type || '',
                 'recommendation_tag': plan.recommendation_tag || ''
             }
         };
