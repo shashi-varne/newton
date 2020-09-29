@@ -335,7 +335,8 @@ export function openInBrowser(url, type) {
     if(!url) {
         return;
     }
-    this.sendEvents(type);
+
+    this.sendEvents('next', {more_info: type});
 
     let mapper = {
         'tnc' : {

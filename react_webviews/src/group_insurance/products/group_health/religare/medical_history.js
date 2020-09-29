@@ -145,10 +145,10 @@ class GroupHealthPlanMedicalHistory extends Component {
         screen_name: "medical_history",
         "product": this.state.providerConfig.provider_api,
         "flow": this.state.insured_account_type || '',
-        'hospitalised_last_2_years': findSelectedMembersForKey('hospitalised_last_2_years'),
-        'filed_claim_current_insurer': findSelectedMembersForKey('filed_claim_current_insurer'),
-        'health_insurance_declined': findSelectedMembersForKey('health_insurance_declined'),
-        'already_covered_in_religare': findSelectedMembersForKey('already_covered_in_religare'),
+        'hospitalised_last_2_years': findSelectedMembersForKey('hospitalised_last_2_years') || 'no',
+        'filed_claim_current_insurer': findSelectedMembersForKey('filed_claim_current_insurer') || 'no',
+        'health_insurance_declined': findSelectedMembersForKey('health_insurance_declined') || 'no',
+        'already_covered_in_religare': findSelectedMembersForKey('already_covered_in_religare') || 'no',
       },
     };
 
