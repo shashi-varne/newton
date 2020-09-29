@@ -132,8 +132,6 @@ class GroupHealthPlanNomineeDetails extends Component {
     };
 
     handleClick = async () => {
-        this.sendEvents('next');
-
         const noOfWords = (val = '') => val ? val.split(' ').length : 0; 
         const keysMapper = {
             'name': 'name',
@@ -229,6 +227,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                 }
             }
             
+            this.sendEvents('next');
             this.updateLead(body);
         }
     }

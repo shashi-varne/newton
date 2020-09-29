@@ -6,6 +6,7 @@ import { initialize, updateLead } from "../common_data";
 import RadioAndCheckboxList from "./radioAndCheckboxList";
 import ConfirmDialog from './../plans/confirm_dialog';
 import { isEmpty } from 'utils/validators';
+import { keyBy } from 'lodash';
 
 class GroupHealthPlanMedicalHistory extends Component {
   constructor(props) {
@@ -47,6 +48,7 @@ class GroupHealthPlanMedicalHistory extends Component {
           : "Have any of the person(s) to be insured been diagnosed / hospitalized for any illness / injury during the last 48 months?",
         members: member_base,
         radio_options: radio_options,
+        event_key: 'hospitalised_last_2_years',
         key: "mand_1",
         input_type: "radio",
       },
@@ -56,6 +58,7 @@ class GroupHealthPlanMedicalHistory extends Component {
         : "Have any of the person(s) to be insured ever filed a claim with their current / previous insurer?",
         members: member_base,
         radio_options: radio_options,
+        event_key: 'filed_claim_current_insurer',
         key: "mand_2",
         input_type: "radio",
       },
@@ -65,6 +68,7 @@ class GroupHealthPlanMedicalHistory extends Component {
         : "Has any proposal for Health insurance been declined, cancelled or charged a higher premium?",
         members: member_base,
         radio_options: radio_options,
+        event_key: 'health_insurance_declined',
         key: "mand_3",
         input_type: "radio",
       },
@@ -72,6 +76,7 @@ class GroupHealthPlanMedicalHistory extends Component {
         label: "Are you already covered under any other health insurance policy of Care Health Insurance (formerly Religare Health Insurance)?",
         members: member_base,
         radio_options: radio_options,
+        event_key: 'already_covered_in_religare',
         key: "mand_4",
         input_type: "radio",
       },
@@ -120,11 +125,30 @@ class GroupHealthPlanMedicalHistory extends Component {
   };
 
   sendEvents(user_action) {
+    const findSelectedMembersForKey = (eventKey) => {
+      const listItem = keyedList[eventKey];
+      if (isEmpty(listItem)) return '';
+      const selectedInputs = Object.keys(listItem.inputs).filter(key => listItem.inputs[key]);
+      return selectedInputs.map(input => keyedMemberRelations[input]).join(', ');
+    };
+    const keyedList = keyBy(this.state.list, 'event_key');
+    const [firstListItem = {}] = (this.state.list || []); //take first list item (any list item would be fine, just need the members prop from it)
+    const keyedMemberRelations = (firstListItem.members || []).reduce((obj, currMem) => {
+      obj[currMem.backend_key] = currMem.relation;
+      return obj;
+    }, {});
+
     let eventObj = {
       event_name: "health_insurance",
       properties: {
         user_action: user_action,
         screen_name: "medical_history",
+        "product": this.state.providerConfig.provider_api,
+        "flow": this.state.insured_account_type || '',
+        'hospitalised_last_2_years': findSelectedMembersForKey('hospitalised_last_2_years'),
+        'filed_claim_current_insurer': findSelectedMembersForKey('filed_claim_current_insurer'),
+        'health_insurance_declined': findSelectedMembersForKey('health_insurance_declined'),
+        'already_covered_in_religare': findSelectedMembersForKey('already_covered_in_religare'),
       },
     };
 
@@ -171,7 +195,6 @@ class GroupHealthPlanMedicalHistory extends Component {
   };
 
   handleClick = () => {
-    this.sendEvents("next");
     let { member_base, list } = this.state;
 
     let canProceed = true;
@@ -223,7 +246,8 @@ class GroupHealthPlanMedicalHistory extends Component {
 
         body[backend_key].medical_questions = member_data.medical_questions || {};
       }
-
+      
+      this.sendEvents("next");
       this.updateLead(body);
     }
   }

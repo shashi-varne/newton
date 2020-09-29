@@ -90,7 +90,11 @@ class GroupHealthPlanDobReligare extends Component {
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "screen_name": "dob_religare"
+                "screen_name": "dob_religare",
+                "flow": this.state.insured_account_type || '',
+                product: 'religare',
+                is_dob_entered: this.state.eldest_dob ? 'yes' : 'no',
+                eldest_member: this.state.eldest_member,
             }
         };
 

@@ -186,7 +186,7 @@ class GroupHealthPlanIsPed extends Component {
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "product": 'health suraksha',
+                "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'pre-existing_disease',
                 'from_edit': this.props.edit ? 'yes' : 'no',
