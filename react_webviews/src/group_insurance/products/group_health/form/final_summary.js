@@ -64,7 +64,6 @@ class GroupHealthPlanFinalSummary extends Component {
             member_base.splice(applicantIndex, 1);
             member_base.splice(0, 0, appli_data);
         }
-        console.log(lead)
         
         this.setState({
             applicantIndex: applicantIndex
