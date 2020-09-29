@@ -521,7 +521,6 @@ export const getConfig = () => {
   let { partner_code } = main_query_params;
   let { app_version } = main_query_params;
   let { pc_urlsafe } = main_query_params;
-  let { status } = main_query_params;
 
   let project = 'insurance';
   let project_child = '';
@@ -595,12 +594,6 @@ export const getConfig = () => {
     returnConfig.pc_urlsafe = pc_urlsafe;
     searchParams += `&pc_urlsafe=${pc_urlsafe}`;
     searchParamsMustAppend += `&pc_urlsafe=${pc_urlsafe}`;
-  }
-
-  if (checkValidString(status)) {
-    returnConfig.status = status;
-    searchParams += `&status=${status}`;
-    searchParamsMustAppend += `&status=${status}`;
   }
 
   if (project === 'insurance' || project_child === 'term') {

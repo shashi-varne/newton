@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Container from '../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
+import { getUrlParams } from 'utils/validators';
 import ContactUs from '../../common/components/contact_us';
 
 class DigiStatus extends Component {
@@ -10,7 +11,7 @@ class DigiStatus extends Component {
     this.state = {
       show_loader: false,
       productName: getConfig().productName,
-      status: getConfig().current_params.status
+      params: getUrlParams()
     }
   }
 
@@ -41,9 +42,10 @@ class DigiStatus extends Component {
   }
  
   render() {
-      const {show_loader, productName, status} = this.state;
-      const headerData = {
-        icon: "close",
+    const {show_loader, productName} = this.state;
+    const {status} = this.state.params; 
+    const headerData = {
+    icon: "close",
         goBack: this.handleClose
     }
 
