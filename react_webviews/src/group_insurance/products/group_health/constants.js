@@ -313,32 +313,28 @@ export const religare = {
     nominee_screen: {
         nominee_opts: [
             {
-                'name': 'FATHER',
-                'value': 'FATHER'
-            },
-            {
-                'name': 'MOTHER',
-                'value': 'MOTHER'
-            },
-            {
-                'name': 'SISTER',
-                'value': 'SISTER'
-            },
-            {
                 'name': 'BROTHER',
                 'value': 'BROTHER'
             },
             {
-                'name': 'SON',
-                'value': 'SON'
+                'name': 'COUSIN',
+                'value': 'COUSIN'
             },
             {
-                'name': 'DAUGHTER',
-                'value': 'DAUGHTER'
+                'name': 'DAUGHTER IN LAW',
+                'value': 'DAUGHTER_IN_LAW'
             },
             {
-                'name': 'SPOUSE',
-                'value': 'SPOUSE'
+                'name': 'FATHER',
+                'value': 'FATHER'
+            },
+            {
+                'name': 'FATHER IN LAW',
+                'value': 'FATHER_IN_LAW'
+            },
+            {
+                'name': 'GRAND DAUGHTER',
+                'value': 'GRANDDAUGHTER'
             },
             {
                 'name': 'GRAND FATHER',
@@ -349,38 +345,59 @@ export const religare = {
                 'value': 'GRANDMOTHER'
             },
             {
-                'name': 'FATHER IN LAW',
-                'value': 'FATHER_IN_LAW'
+                'name': 'GRAND SON',
+                'value': 'GRANDSON'
             },
             {
                 'name': 'BROTHER IN LAW',
                 'value': 'BROTHER_IN_LAW'
             },
             {
+                'name': 'MOTHER IN LAW',
+                'value': 'MOTHER_IN_LAW'
+            },
+            {
+                'name': 'SISTER IN LAW',
+                'value': 'SISTER_IN_LAW'
+            },
+            {
+                'name': 'MOTHER',
+                'value': 'MOTHER'
+            },
+            {
+                'name': 'NEPHEW',
+                'value': 'NEPHEW'
+            },
+            {
+                'name': 'NIECE',
+                'value': 'NIECE'
+            },
+            {
+                'name': 'SELF-PRIMARY MEMBER',
+                'value': 'SELF'
+            },
+            {
+                'name': 'SISTER',
+                'value': 'SISTER'
+            },
+            {
                 'name': 'SON IN LAW',
                 'value': 'SON_IN_LAW'
             },
             {
-                'name': 'DAUGHTER IN LAW',
-                'value': 'DAUGHTER_IN_LAW'
+                'name': 'SON',
+                'value': 'SON'
             },
             {
-                'name': 'COUSIN SON',
-                'value': 'COUSIN_SON'
+                'name': 'SPOUSE',
+                'value': 'SPOUSE'
             },
             {
-                'name': 'GRAND DAUGHTER',
-                'value': 'GRANDDAUGHTER'
-            },
-            {
-                'name': 'GRAND SON',
-                'value': 'GRANDSON'
-            },
-            {
-                'name': 'OTHERS',
-                'value': 'OTHERS'
+                'name': 'DAUGHTER',
+                'value': 'DAUGHTER'
             }
         ],
+
     },
     select_ped_screen: {
         ped_list: [
