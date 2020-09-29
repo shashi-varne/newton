@@ -1,0 +1,25 @@
+@mixin status_text {
+    font-size: 14px;
+    line-height: 21px;
+    margin: 20px 0 10px 0;
+}
+
+.digi-status {
+    color: #767E86;
+    
+    .digi-status-text {
+        @include status_text();
+    }
+}
+
+.nsdl-status {
+    color: #8D879B;
+
+    .nsdl-status-text {
+        @include status_text();
+    }
+}
+
+.contact-us {
+    margin-top: 151px;
+}

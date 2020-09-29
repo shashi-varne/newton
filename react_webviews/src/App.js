@@ -21,6 +21,7 @@ import CommonLanding from './common/components/landing';
 // import CommonRenderFaqs from './common/components/RenderFaqs';
 import Fhc from './fhc';
 import Loan from './loan';
+import Kyc_Esign from './kyc_esign'
 
 class App extends Component {
   render() {
@@ -40,6 +41,7 @@ class App extends Component {
           <Route path="/isip" component={IsipBIller} />
           <Route path="/help" component={HelpSupport} />
           <Route path="/loan" component={Loan} />
+          <Route path="/kyc_esign" component={Kyc_Esign} />
           <Route path="/webview/:main_module/:sub_module" component={CommonLanding} />
           <Route path="/webview/:main_module" component={CommonLanding} />
           {/* <Route path="/common/render-faqs" component={CommonRenderFaqs} /> */}
