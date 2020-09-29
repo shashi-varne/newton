@@ -4,7 +4,7 @@ import { getConfig } from 'utils/functions';
 class ContactUsClass extends Component {
     render() {
         return (
-            <div className={`success-bottom ${this.props.className}`}>
+            <div className="success-bottom">
                 <div className="success-bottom1">
                     For any query, reach us at
                 </div>

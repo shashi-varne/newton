@@ -30,19 +30,30 @@ class DigiStatus extends Component {
   }
 
   handleClick = () => {
-      this.sendEvents('next');
+    this.sendEvents('ok');
+    nativeCallback({ action: 'exit' });
+  }
+
+  handleClose = () => {
+    nativeCallback({ action: 'exit' });
+    return;
   }
 
   render() {
       const {show_loader, productName, status} = this.state;
+      const headerData = {
+          icon: "close",
+          goBack: this.handleClose
+      }
+
     return (
       <Container
         showLoader={show_loader}
         title= {status === "success"? 'Digilocker authorisation successful!' : 'Digilocker authorisation failed!'}
         events={this.sendEvents('just_set_events')}
-        handleClick={this.handleClick}
+        handleClick={status === "success" ? this.handleClick : ""}
         buttonTitle= {status === "success" ? 'OKAY' : 'RETRY'}
-        headerData={{icon: "close"}}
+        headerData={headerData}
       >
         <div className="digi-status">
           <img
