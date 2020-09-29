@@ -57,7 +57,8 @@ class GroupHealthPlanStarPincode extends Component {
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "product": 'star',
+                "product": this.state.providerConfig.provider_api,
+                "screen_name": "city of residence",
                 is_pincode_entered: this.state.pincode ? 'valid' : 'empty',
                 flow: this.state.insured_account_type || '',
             }

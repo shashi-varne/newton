@@ -55,6 +55,7 @@ class GroupHealthPlanStarHealthDetails extends Component {
             "properties": {
                 "user_action": user_action,
                 "product": this.state.providerConfig.provider_api,
+                "screen_name": "health details",
                 medical_condition: this.state.value,
             }
         }
