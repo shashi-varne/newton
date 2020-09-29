@@ -16,13 +16,13 @@ const commonMapper = {
   'success': {
     'top_icon': 'ils_covid_success',
     'top_title': 'Payment successful',
-    'mid_title': 'Premiun payment details',
+    'mid_title': 'Premium payment details',
     'button_title': 'CHECK REPORTS'
   },
   'pending': {
     'top_icon': 'ils_covid_pending',
     'top_title': 'Payment pending!',
-    'mid_title': 'Premiun payment details',
+    'mid_title': 'Premium payment details',
     'button_title': 'OK'
   },
   'failed': {
@@ -254,7 +254,7 @@ class GroupHealthPayment extends Component {
                   </div>
                   <div className="highlight-text2" style={{ color: '#767E86', marginLeft: 7 }}>
                     <div style={{ margin: '5px 0 6px 0' }}>Sum 
-                    assured {numDifferentiationInr(this.state.lead.sum_assured)} for {this.state.lead.tenure} year</div>
+                    insured {numDifferentiationInr(this.state.lead.sum_assured)} for {this.state.lead.tenure} year</div>
                     {policy_data.policy_number && 
                     <div style={{ margin: '5px 0 6px 0' }}>Policy number: {policy_data.policy_number || '-'}</div>
                     }

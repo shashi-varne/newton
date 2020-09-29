@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+ import React, { Component } from 'react';
 import Container from '../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {
     inrFormatDecimal,
-    numDifferentiationInr
+    numDifferentiationInr, dateOrdinal
 } from 'utils/validators';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
@@ -16,6 +16,8 @@ import { ghGetMember, getCssMapperReport } from '../../constants';
 import download from 'assets/download.svg';
 import text_error_icon from 'assets/text_error_icon.svg';
 import ReactHtmlParser from 'react-html-parser';
+import { childeNameMapper } from '../../constants';
+import {getCoverageType} from './constants';
 
 class GroupHealthReportDetails extends Component {
 
@@ -72,6 +74,14 @@ class GroupHealthReportDetails extends Component {
                 let lead = policy_data.insured_lead_details || {};
                 lead.member_base = ghGetMember(lead, this.state.providerConfig);
 
+                let member_base = lead.member_base;
+                let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
+
+                if(applicantIndex >= 0) {
+                    let appli_data = member_base[applicantIndex];
+                    member_base.splice(applicantIndex, 1);
+                    member_base.splice(0, 0, appli_data);
+                }
 
                 let data = getCssMapperReport(policy_data);
                 policy_data.status = data.status;
@@ -81,7 +91,8 @@ class GroupHealthReportDetails extends Component {
                     extra_data: resultData.quote_info,
                     policy_data: resultData.policy_data,
                     quote_info: resultData.quote_info,
-                    lead: lead
+                    lead: lead,
+                    applicantIndex: applicantIndex
                 })
 
 
@@ -298,10 +309,10 @@ class GroupHealthReportDetails extends Component {
                     </div>
                     <div className="mt-right">
                         <div className="mtr-top">
-                            Insured {index + 1} name
+                        {this.state.applicantIndex === -1 ? (this.state.lead.account_type !== 'self' ? dateOrdinal(index + 1) : '') : dateOrdinal(index)} Insured name
                         </div>
                         <div className="mtr-bottom">
-                            {props.name} ({props.relation.toLowerCase()})
+                            {props.name} ({childeNameMapper(props.key)})
                         </div>
                     </div>
                 </div>
@@ -379,7 +390,7 @@ class GroupHealthReportDetails extends Component {
                             </div>
                         </div>
 
-                       {this.state.lead.cover_type &&
+                       {this.state.lead.cover_type && 
                         <div className="member-tile">
                             <div className="mt-left">
                                 <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
@@ -389,7 +400,7 @@ class GroupHealthReportDetails extends Component {
                                     COVERAGE TYPE
                                 </div>
                                 <div className="mtr-bottom">
-                                    {this.state.lead.cover_type === 'WF' ? 'Family floater' : 'Individually for each member'}
+                                    {getCoverageType(this.state.lead)}
                                 </div>
                             </div>
                         </div>}
@@ -403,7 +414,7 @@ class GroupHealthReportDetails extends Component {
                                  PREMIUM PAID
                                 </div>
 
-                                <div className="mtr-bottom flex">
+                                <div className="mtr-bottom flex" style={{textTransform:'none'}}>
                                         <div>
                                             <div> {inrFormatDecimal(this.state.lead.premium)} </div>
                                             <div style={{fontSize:10}}> (Basic premium)</div>
