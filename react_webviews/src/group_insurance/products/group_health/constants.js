@@ -956,3 +956,19 @@ export const avilableMembersToInsured = [
         'backend_key': 'child_account4_key'
     }
 ];
+
+
+export function getCoverageType(lead) {
+    let members = lead.member_base || [];
+    let account_type = lead.account_type;
+
+    if(account_type !== 'self' && members.length > 2) { //one extra for applicant
+        if(lead.cover_type === 'WF') {
+            return 'Family floater';
+        }
+
+        return 'Individually for each member';
+    }
+
+    return 'Individual';
+}
