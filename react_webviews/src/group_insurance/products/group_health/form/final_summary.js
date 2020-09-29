@@ -155,7 +155,7 @@ class GroupHealthPlanFinalSummary extends Component {
                 edit_state: `/group-insurance/group-health/${this.state.provider}/health-details`,
                 data: [
                     {
-                        'title': 'Any critical issues?',
+                        'title': 'Any critical illness?',
                         'subtitle': 'No'
                     }
                 ]
