@@ -17,6 +17,7 @@ import download from 'assets/download.svg';
 import text_error_icon from 'assets/text_error_icon.svg';
 import ReactHtmlParser from 'react-html-parser';
 import { childeNameMapper } from '../../constants';
+import {getCoverageType} from './constants';
 
 class GroupHealthReportDetails extends Component {
 
@@ -389,7 +390,7 @@ class GroupHealthReportDetails extends Component {
                             </div>
                         </div>
 
-                       {this.state.lead.cover_type && this.state.lead.account_type !== 'self' &&
+                       {this.state.lead.cover_type && 
                         <div className="member-tile">
                             <div className="mt-left">
                                 <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
@@ -399,7 +400,7 @@ class GroupHealthReportDetails extends Component {
                                     COVERAGE TYPE
                                 </div>
                                 <div className="mtr-bottom">
-                                    {this.state.lead.cover_type === 'WF' ? 'Family floater' : 'Individually for each member'}
+                                    {getCoverageType(this.state.lead)}
                                 </div>
                             </div>
                         </div>}

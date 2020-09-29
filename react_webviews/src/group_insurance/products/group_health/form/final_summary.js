@@ -19,6 +19,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import BottomSheet from '../../../../common/ui/BottomSheet';
 import { childeNameMapper } from '../../../constants';
+import {getCoverageType} from '../constants';
 
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
@@ -820,7 +821,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             </div>
                         </div>}
 
-                       {this.state.lead.cover_type && this.state.lead.account_type !== 'self' &&
+                       {this.state.lead.cover_type &&
                         <div className="member-tile">
                             <div className="mt-left">
                                 <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
@@ -830,7 +831,7 @@ class GroupHealthPlanFinalSummary extends Component {
                                     COVERAGE TYPE
                                 </div>
                                 <div className="mtr-bottom">
-                                {this.state.lead.cover_type === 'WF' ? 'Family floater' : 'Individually for each member'}
+                                {getCoverageType(this.state.lead)}
                                 </div>
                             </div>
                         </div>}
