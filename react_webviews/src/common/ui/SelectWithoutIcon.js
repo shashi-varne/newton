@@ -57,7 +57,7 @@ class SelectGrp extends Component {
           autoWidth={true} >
           {allOptions}
         </Select>
-        {(this.props.error) ? 
+        {(this.props.error) ?
           <span className='error-radiogrp'>
             {this.props.helperText || 'Please select an option'}
           </span> :
