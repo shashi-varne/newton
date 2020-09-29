@@ -57,7 +57,6 @@ class GroupHealthPlanPersonalDetails extends Component {
     // let member_key = this.props.match.params.member_key;
     let member_key = this.props.member_key;
 
-
     let pan_needed = false;
     if (lead.total_amount > 100000 && (member_key === 'self' || member_key === 'applicant')) {
       pan_needed = true;
@@ -122,7 +121,13 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     form_data.selectedIndex = selectedIndex;
 
-
+    if (this.state.provider === 'STAR') {
+      let occupation = lead[backend_key].occupation;
+      let occupationIndex = '';
+  
+      occupationIndex = occupation !== null && occupationOptions.findIndex(item => item.name === occupation || item.value === occupation);
+      form_data.occupation = (occupationIndex && occupationIndex !== -1) && occupationOptions[occupationIndex].value;
+    }
 
     this.setState({
       providerData: health_providers[this.state.provider],
@@ -219,11 +224,11 @@ class GroupHealthPlanPersonalDetails extends Component {
       if (isChild) {
         const age = calculateAge(form_data.dob);
         if (this.state.groupHealthPlanData.type_of_plan === 'WF') {
-          if (age.days <= 91 || age.roundedAge >= 25) {
+          if (age.days <= 91 || age.age >= 25) {
             form_data.dob_error = "Kid's age cannot be greater than 25 or less than 91 days";
           }
         } else {
-          if (age.roundedAge < 5 || age.roundedAge >= 25) {
+          if (age.age < 5 || age.age >= 25) {
             form_data.dob_error = 'Only children between 5 yrs & 25 yrs can be included';
           }
         }
@@ -263,6 +268,11 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     let { provider } = this.state;
+
+    if (provider === 'STAR' && (form_data.occupation === null || form_data.occupation === false) && this.state.member_key !== 'applicant') {
+      form_data.occupation_error = 'please select one occupation';
+    }
+
     let age = calculateAge((form_data.dob || ''));
 
     if (this.state.dobNeeded) {
@@ -271,7 +281,15 @@ class GroupHealthPlanPersonalDetails extends Component {
           form_data.dob_error = 'Minimum age is 18 for adult';
         }
       }
+
+      if (provider === 'STAR') {
+        if (age > 65 && !isChild) {
+          form_data.dob_error = 'Valid age is between 18 to 65 year';
+        }
+      }
     }
+
+
     if (this.state.member_key === 'applicant') {
 
 
@@ -599,7 +617,7 @@ class GroupHealthPlanPersonalDetails extends Component {
             value={this.state.form_data.weight || ''}
             onChange={this.handleChange('weight')} />
         </div>}
-        {this.state.providerConfig.key === 'STAR' && <div className="InputField">
+        {this.state.providerConfig.key === 'STAR' && this.state.member_key !== 'applicant' && <div className="InputField">
           <DropdownWithoutIcon
             width="40"
             dataType="AOB"

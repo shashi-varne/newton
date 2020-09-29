@@ -29,6 +29,7 @@ class GroupHealthPlanStarHealthDetails extends Component {
     async componentDidMount() {
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let account_type = groupHealthPlanData.account_type;
+        let value = groupHealthPlanData.health_details;
 
         let radio_options = [
             {
@@ -43,7 +44,8 @@ class GroupHealthPlanStarHealthDetails extends Component {
 
         this.setState({
             account_type: account_type,
-            radio_options: radio_options
+            radio_options: radio_options,
+            value: value
         });
     }
 
@@ -164,7 +166,9 @@ class GroupHealthPlanStarHealthDetails extends Component {
                 plan_title: "Family Health Optima",
                 plan_type: "FHONEW",
                 sum_assured: "500000",
+                claim_settlement_ratio: '78.15'
             }
+            groupHealthPlanData.post_body.plan_title = 'Family Health Optima';
             this.setLocalProviderData(groupHealthPlanData);
             this.navigate(this.state.next_screen);
         }

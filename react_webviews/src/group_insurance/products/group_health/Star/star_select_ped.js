@@ -8,7 +8,6 @@ import {  validateAlphabets } from "utils/validators";
 import toast from "../../../../common/ui/Toast";
 import ConfirmDialog from './../plans/confirm_dialog';
 
-
 class GroupHealthStarPlanSelectPed extends Component {
   constructor(props) {
     super(props);

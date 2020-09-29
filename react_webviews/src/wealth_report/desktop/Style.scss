@@ -79,6 +79,9 @@
   font-family: 'Source Sans Pro', sans-serif;
   display: flex;
   background-color: white;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
 
   #wr-alternate-login-btns {
     .MuiButton-disabled {
@@ -93,7 +96,7 @@
   }
 
   #wr-login-right-panel {
-    padding: 160px 120px;
+    box-sizing: border-box;
     max-width: 420px;
     width: 420px;
 
@@ -101,11 +104,13 @@
       font-size: 36px;
       font-weight: normal;
     }
+
+    .m-t-60 {
+      margin-top: 60px !important;
+    }
   }
 
   .wr-login-input {
-    margin-bottom: 60px;
-
     #wr-logo,
     #wr-title,
     #wr-input-label {

@@ -14,9 +14,9 @@ export const hdfc = {
         nominee_screen: 'is-ped'
     },
     validation_props: {
-        'dob_adult': { min: 18, max: 90 },  //add one year for minimum age here 18 to 19
+        'dob_adult': { min: 18, max: 90 },
         'dob_child': { minDays: 90, max: 25 },
-        'dob_married_male': { min: 22, max: 25 },
+        'dob_married_male': { min: 21, max: 25 },
     },
     applicant_detail_screen: {
         fields: [
@@ -201,9 +201,9 @@ export const religare = {
         nominee_screen: 'plan-lifestyle-details'
     },
     validation_props: {
-        'dob_adult': { min: 18, max: 90 },  //add one year for minimum age here 18 to 19
+        'dob_adult': { min: 18, max: 90 }, 
         'dob_child': { minDays: 90, max: 25 },
-        'dob_married_male': { min: 22, max: 25 },
+        'dob_married_male': { min: 21, max: 25 },
     },
     applicant_detail_screen: {
         fields: [
@@ -313,81 +313,20 @@ export const religare = {
     nominee_screen: {
         nominee_opts: [
             {
-                'name': 'SPOUSE',
-                'value': 'SPOUSE'
-            },
-            {
-                'name': 'BROTHER',
-                'value': 'BROTHER'
-            },
-            {
-                'name': 'COUSIN',
-                'value': 'COUSIN'
-            },
-            {
-                'name': 'DAUGHTER IN LAW',
-                'value': 'DAUGHTER_IN_LAW'
-            },
-            {
                 'name': 'FATHER',
                 'value': 'FATHER'
-            },
-            {
-                'name': 'FATHER IN LAW',
-                'value': 'FATHER_IN_LAW'
-            },
-            {
-                'name': 'GRAND DAUGHTER',
-                'value': 'GRANDDAUGHTER'
-            },
-            {
-                'name': 'GRAND FATHER',
-                'value': 'GRANDFATHER'
-            },
-
-            {
-                'name': 'GRAND MOTHER',
-                'value': 'GRANDMOTHER'
-            },
-            {
-                'name': 'GRAND SON',
-                'value': 'GRANDSON'
-            },
-            {
-                'name': 'BROTHER IN LAW',
-                'value': 'BROTHER_IN_LAW'
-            },
-            {
-                'name': 'MOTHER IN LAW',
-                'value': 'MOTHER_IN_LAW'
-            },
-            {
-                'name': 'SISTER IN LAW',
-                'value': 'SISTER_IN_LAW'
             },
             {
                 'name': 'MOTHER',
                 'value': 'MOTHER'
             },
             {
-                'name': 'NEPHEW',
-                'value': 'NEPHEW'
-            },
-            {
-                'name': 'NIECE',
-                'value': 'NIECE'
-            },
-            {
-                'name': 'SELF- PRIMARY MEMBER',
-                'value': 'SELF'
-            },
-            {
                 'name': 'SISTER',
                 'value': 'SISTER'
             },
             {
-                'name': 'SON IN LAW',
-                'value': 'SON_IN_LAW'
+                'name': 'BROTHER',
+                'value': 'BROTHER'
             },
             {
                 'name': 'SON',
@@ -396,6 +335,50 @@ export const religare = {
             {
                 'name': 'DAUGHTER',
                 'value': 'DAUGHTER'
+            },
+            {
+                'name': 'SPOUSE',
+                'value': 'SPOUSE'
+            },
+            {
+                'name': 'GRAND FATHER',
+                'value': 'GRANDFATHER'
+            },
+            {
+                'name': 'GRAND MOTHER',
+                'value': 'GRANDMOTHER'
+            },
+            {
+                'name': 'FATHER IN LAW',
+                'value': 'FATHER_IN_LAW'
+            },
+            {
+                'name': 'BROTHER IN LAW',
+                'value': 'BROTHER_IN_LAW'
+            },
+            {
+                'name': 'SON IN LAW',
+                'value': 'SON_IN_LAW'
+            },
+            {
+                'name': 'DAUGHTER IN LAW',
+                'value': 'DAUGHTER_IN_LAW'
+            },
+            {
+                'name': 'COUSIN SON',
+                'value': 'COUSIN_SON'
+            },
+            {
+                'name': 'GRAND DAUGHTER',
+                'value': 'GRANDDAUGHTER'
+            },
+            {
+                'name': 'GRAND SON',
+                'value': 'GRANDSON'
+            },
+            {
+                'name': 'OTHERS',
+                'value': 'OTHERS'
             }
         ],
     },
@@ -503,6 +486,7 @@ export const star = {
     key: 'STAR',
     provider_api: 'star',
     title: 'Star',
+    title2: 'Star',
     subtitle: 'Family Health Optima',
     logo: 'ic_star_logo.svg',
     logo_card: 'ic_star_logo_card.svg',
@@ -523,7 +507,7 @@ export const star = {
         contact_screen: 'star-address'
     },
     validation_props: {
-        'dob_adult': { min: 18, max: 65 },  //add one year for minimum age here 18 to 19
+        'dob_adult': { min: 18, max: 65 },
         'dob_child': { minDays: 16, max: 25 },
         'dob_married_male': { min: 18, max: 25 },
     },
@@ -541,7 +525,7 @@ export const star = {
             { src: 'star_icn_landing_card_3.svg' }
         ],
         whats_covered: [
-            '60 days pre and 90 days post hospitalization expenses',
+            '60 days pre and 90 days post hospitalisation expenses',
             'Treatment of pre-existing disease after 4 years',
             'Ayurveda, Unani, Sidha and Homeopathy treatments',
             'Organ donor expenses',
@@ -549,13 +533,10 @@ export const star = {
         ],
         whats_not_covered: [
             'Maternity',
-            'Self-inflicted injuries',
             'Plastic surgery',
+            'Substance abuse',
             'External congenital diseases',
-            'Mental health',
-            'Adventure sport injuries',
-            'Venereal or Sexually transmitted diseases',
-            'Eye/Dental treatment',
+            'Eye/Dental treatment'
         ],
         faq_data: {
             'header_title': 'Frequently asked questions',
@@ -608,9 +589,9 @@ export const star = {
         ]
     },
     add_members_screen: {
-        son_max: 2,
-        daughter_max: 2,
-        total_plus_minus_max: 2,
+        son_max:3,
+        daughter_max: 3,
+        total_plus_minus_max: 3,
         preselect_father: true,
         preselect_mother: true,
         disable_father: true,
@@ -630,81 +611,20 @@ export const star = {
     nominee_screen: {
         nominee_opts: [
             {
-                'name': 'SPOUSE',
-                'value': 'SPOUSE'
-            },
-            {
-                'name': 'BROTHER',
-                'value': 'BROTHER'
-            },
-            {
-                'name': 'COUSIN',
-                'value': 'COUSIN'
-            },
-            {
-                'name': 'DAUGHTER IN LAW',
-                'value': 'DAUGHTER_IN_LAW'
-            },
-            {
                 'name': 'FATHER',
                 'value': 'FATHER'
             },
             {
-                'name': 'FATHER IN LAW',
-                'value': 'FATHER_IN_LAW'
-            },
-            {
-                'name': 'GRAND DAUGHTER',
-                'value': 'GRANDDAUGHTER'
-            },
-            {
-                'name': 'GRAND FATHER',
-                'value': 'GRANDFATHER'
-            },
-
-            {
-                'name': 'GRAND MOTHER',
-                'value': 'GRANDMOTHER'
-            },
-            {
-                'name': 'GRAND SON',
-                'value': 'GRANDSON'
-            },
-            {
-                'name': 'BROTHER IN LAW',
-                'value': 'BROTHER_IN_LAW'
-            },
-            {
-                'name': 'MOTHER IN LAW',
-                'value': 'MOTHER_IN_LAW'
-            },
-            {
-                'name': 'SISTER IN LAW',
-                'value': 'SISTER_IN_LAW'
-            },
-            {
                 'name': 'MOTHER',
-                'value': 'MOTHER '
-            },
-            {
-                'name': 'NEPHEW',
-                'value': 'NEPHEW'
-            },
-            {
-                'name': 'NIECE',
-                'value': 'NIECE'
-            },
-            {
-                'name': 'SELF- PRIMARY MEMBER',
-                'value': 'SELF'
+                'value': 'MOTHER'
             },
             {
                 'name': 'SISTER',
                 'value': 'SISTER'
             },
             {
-                'name': 'SON IN LAW',
-                'value': 'SON_IN_LAW'
+                'name': 'BROTHER',
+                'value': 'BROTHER'
             },
             {
                 'name': 'SON',
@@ -713,6 +633,84 @@ export const star = {
             {
                 'name': 'DAUGHTER',
                 'value': 'DAUGHTER'
+            },
+            {
+                'name': 'SPOUSE',
+                'value': 'SPOUSE'
+            },
+            {
+                'name': 'GRAND FATHER',
+                'value': 'GRANDFATHER'
+            },
+            {
+                'name': 'GRAND MOTHER',
+                'value': 'GRANDMOTHER'
+            },
+            {
+                'name': 'FATHER IN LAW',
+                'value': 'FATHER_IN_LAW'
+            },
+            {
+                'name': 'BROTHER IN LAW',
+                'value': 'BROTHER_IN_LAW'
+            },
+            {
+                'name': 'SON IN LAW',
+                'value': 'SON_IN_LAW'
+            },
+            {
+                'name': 'DAUGHTER IN LAW',
+                'value': 'DAUGHTER_IN_LAW'
+            },
+            {
+                'name': 'COUSIN SON',
+                'value': 'COUSIN_SON'
+            },
+            {
+                'name': 'GRAND DAUGHTER',
+                'value': 'GRANDDAUGHTER'
+            },
+            {
+                'name': 'GRAND SON',
+                'value': 'GRANDSON'
+            },
+            {
+                'name': 'OTHERS',
+                'value': 'OTHERS'
+            }
+        ],
+        appointee_opts: [
+            {
+                'name': 'MOTHER',
+                'value': 'MOTHER'
+            },
+            {
+                'name': 'FATHER',
+                'value': 'FATHER'
+            },
+            {
+                'name': 'GRAND FATHER',
+                'value': 'GRANDFATHER'
+            },
+            {
+                'name': 'GRAND MOTHER',
+                'value': 'GRANDMOTHER'
+            },
+            {
+                'name': 'BROTHER',
+                'value': 'BROTHER'
+            },
+            {
+                'name': 'SISTER',
+                'value': 'SISTER'
+            },
+            {
+                'name': 'BROTHER IN LAW',
+                'value': 'BROTHER_IN_LAW'
+            },
+            {
+                'name': 'OTHERS',
+                'value': 'OTHERS'
             }
         ],
         showDob: true,
@@ -726,55 +724,55 @@ export const star = {
             // },
             {
                 'name': 'BUSINESS/TRADERS',
-                'value': 'BUSINESS_TRADERS'
+                'value': '1'
             },
             {
                 'name': 'PROFESSIONAL-DOCTOR',
-                'value': 'PROFESSIONAL_DOCTOR'
+                'value': '2'
             },
             {
                 'name': 'PROFESSIONAL-ENGINEER',
-                'value': 'PROFESSIONAL_ENGINEER'
+                'value': '3'
             },
             {
                 'name': 'PROFESSIONAL-LAWYER',
-                'value': 'PROFESSIONAL_LAWYER'
+                'value': '4'
             },
             {
                 'name': 'CLERICAL/SUPERVISORY AND RELATED WORKER',
-                'value': 'CLERICAL_SUPERVISORY_AND_RELATED_WROKER'
+                'value': '5'
             },
             {
                 'name': 'HOSPITALITY AND SUPPORT WORKERS',
-                'value': 'HOSPITALITY_AND_SUPPORT_WORKERS'
+                'value': '6'
             },
             {
                 'name': 'PRODUCTION WORKERS, SKILLED AND NON-AGRICULTURAL',
-                'value': 'PRODUCTION_WORKERS_SKILLED_AND_NON_AGRICULTURAL'
+                'value': '7'
             },
             {
                 'name': 'FARMERS AND AGRICULTURAL WORKERS',
-                'value': 'FARMERS_AND_AGRICULTURAL_WORKERS'
+                'value': '8'
             },
             {
                 'name': 'POLICE/PARA MILITARY/DEFENCE',
-                'value': 'POLICE_PARA_MILITARY_DEFENCE'
+                'value': '9'
             },
             {
                 'name': 'HOUSEWIVES',
-                'value': 'HOUSEWIVES'
+                'value': '10'
             },
             {
                 'name': 'RETIRED PERSONS',
-                'value': 'RETIRED_PERSONS'
+                'value': '11'
             },
             {
                 'name': 'STUDENTS-SCHOOLS AND COLLEGE',
-                'value': 'STUDENTS_SCHOOLS_AND_COOLLEGE'
+                'value': '12'
             },
             {
                 'name': 'INFANT',
-                'value': 'INFANT'
+                'value': '13'
             }
         ]
     },
@@ -898,12 +896,12 @@ export const avilableMembersToInsured = [
         'backend_key': 'parent_account2_key'
     },
     {
-        'key': 'father-in-law',
+        'key': 'father_in_law',
         'value': '',
         'backend_key': 'parent_inlaw_account1_key'
     },
     {
-        'key': 'mother-in-law',
+        'key': 'mother_in_law',
         'value': '',
         'backend_key': 'parent_inlaw_account2_key'
     },

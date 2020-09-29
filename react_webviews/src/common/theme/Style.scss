@@ -157,7 +157,7 @@ body[data-device="web"] {
   padding-bottom: 20px !important;  */
   background-color: #fff;
   overflow-y: scroll;
-  margin-bottom: 56px !important;
+  // margin-bottom: 56px !important;
   height: 100%;
   padding-bottom: 56px !important;
 }
@@ -837,7 +837,7 @@ input#pan {
   font-weight: 600;
   text-align: left;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: break-spaces;
   overflow: hidden;
   width: 95%;
 }
@@ -956,7 +956,7 @@ input#pan {
   font-weight: bold;
 }
 .common-bottom-info {
-  margin: 30px 0 30px 0;
+  margin: 30px 0 30px 0 !important;
   background-color: var(--highlight);
   padding: 15px;
   text-align: center;
@@ -1021,4 +1021,11 @@ input#pan {
 .common-top-bottom-title-light{
   color: #767e86;
   font-size: 13px;
+  margin-bottom: 20px;
+}
+
+#add_ons_bottom_text{
+  font-size: 13px;
+  color: #767E86;
+  margin-top: 10px;
 }

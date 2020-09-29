@@ -45,11 +45,11 @@ class StarAddress extends Component {
 
     const { lead = {} } = this.state;
     lead.permanent_address = lead.permanent_address || {};
-    const groupHealthPlanData = this.state.groupHealthPlanData || {};
     let form_data = lead.permanent_address || {};
 
     form_data.city = lead.permanent_address.city;
-    form_data.pincode = groupHealthPlanData.pincode || lead.permanent_address.pincode || '';
+    form_data.area_id = lead.permanent_address.area_id;
+    form_data.pincode = lead.permanent_address.pincode || '';
     this.setState({
       form_data,
       bottomButtonData: {
@@ -57,7 +57,49 @@ class StarAddress extends Component {
         handleClick: this.handleClick,
       },
     }, () => {
-      this.handlePincode();
+      this.handlePincode(form_data);
+    });
+  }
+
+  fetchAreaList = async(form_data, setOnload) => {
+
+    if(!form_data) {
+      form_data  = this.state.form_data;
+    }
+
+    this.setState({
+      areaList: [],
+      form_data,
+      isLoadingArea: true,
+    }, async () => {
+      try {
+        const { pincode, city_id } = form_data;
+        const res = await Api.get(`/api/ins_service/api/insurance/star/get/area?pincode=${pincode}&city_id=${city_id}`);
+        if (res.pfwresponse.status_code === 200 && !isEmpty(res.pfwresponse.result)) {
+          const areaList = this.formatAreaOpts(res.pfwresponse.result.areas);
+
+          this.setState({ areaList });
+
+          if(setOnload) {
+            let data = areaList.filter(area => area.name === form_data.area);
+            
+            if(data.length > 0) {
+              form_data.area = data[0].name;
+              form_data.area_id = data[0].value;
+              form_data.area_id_error = '';
+            };
+
+          } 
+          this.setState({form_data});
+          
+        }
+      } catch(err) {
+        console.log(err);
+        toast(err);
+
+        return form_data
+      }
+      this.setState({ isLoadingArea: false });
     });
   }
 
@@ -71,26 +113,10 @@ class StarAddress extends Component {
     if (name === 'city_id') {
       form_data.city_id = value;
       form_data.city_id_error = '';
+      form_data.area_id = '';
+      form_data.area_id_error = '';
       form_data.city = this.state.cityList.find(city => city.value === value).name;
-      this.setState({
-        areaList: [],
-        form_data,
-        isLoadingArea: true,
-      }, async () => {
-        try {
-          const { pincode, city_id } = form_data;
-          const res = await Api.get(`/api/ins_service/api/insurance/star/get/area?pincode=${pincode}&city_id=${city_id}`);
-          if (res.pfwresponse.status_code === 200 && !isEmpty(res.pfwresponse.result)) {
-            const areaList = this.formatAreaOpts(res.pfwresponse.result.areas);
-            // form_data.area = areaList[0].name;
-            this.setState({ areaList });
-          }
-        } catch(err) {
-          console.log(err);
-          toast(err);
-        }
-        this.setState({ isLoadingArea: false });
-      });
+      this.fetchAreaList(form_data);
     } else if (name === 'area_id') {
       form_data.area_id = value;
       form_data.area_id_error = '';
@@ -229,9 +255,22 @@ class StarAddress extends Component {
         if (res.pfwresponse.status_code === 200 && !isEmpty(res.pfwresponse.result)) {
           const cityList = this.formatCityOpts(res.pfwresponse.result.cities);
           form_data.state = res.pfwresponse.result.state;
-          // form_data.city = cityList[0].name;
-          // form_data.city_id = cityList[0].value;
+
+          let data = cityList.filter(city => city.name === form_data.city);
+          
+          if(data.length > 0) {
+            form_data.city = data[0].name;
+            form_data.city_id = data[0].value;
+            form_data.city_id_error = '';
+
+            // fetch area
+            if(form_data.area) {
+              this.fetchAreaList(form_data, true);
+            }
+          }
+
           form_data.pincode_error = '';
+
           this.setState({ cityList });
         } else {
           form_data.state = '';

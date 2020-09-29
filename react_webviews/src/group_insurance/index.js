@@ -392,6 +392,12 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/:provider/personal-details/mother`}
             render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'mother'} />} />
 
+          <Route path={`${url}/group-health/:provider/personal-details/father_in_law`}
+            render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'father_in_law'} />} />
+
+          <Route path={`${url}/group-health/:provider/personal-details/mother_in_law`}
+            render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'mother_in_law'} />} />
+
           <Route path={`${url}/group-health/:provider/personal-details/daughter`}
             render={(props) => <GroupHealthPlanPersonalDetails  {...props} member_key={'daughter'} />} />
 
@@ -469,6 +475,12 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/:provider/edit-personal-details/daughter4`}
             render={(props) => <GroupHealthPlanPersonalDetails {...props} member_key={'daughter4'} edit={true} />} />
 
+          <Route path={`${url}/group-health/:provider/edit-personal-details/father_in_law`}
+            render={(props) => <GroupHealthPlanPersonalDetails {...props} member_key={'father_in_law'} edit={true} />} />
+
+          <Route path={`${url}/group-health/:provider/edit-personal-details/mother_in_law`}
+            render={(props) => <GroupHealthPlanPersonalDetails {...props} member_key={'mother_in_law'} edit={true} />} />
+
           <Route path={`${url}/group-health/:provider/edit-personal-details/applicant`}
             render={(props) => <GroupHealthPlanPersonalDetails {...props} member_key={'applicant'} edit={true} />} />
 
@@ -477,6 +489,9 @@ const Insurance = (props) => {
 
           <Route path={`${url}/group-health/:provider/edit-address`}
             render={(props) => <GroupHealthPlanAddressDetails  {...props} edit={true} />} />
+        
+         <Route path={`${url}/group-health/:provider/edit-address-star`}
+            render={(props) => <StarAddress  {...props} edit={true} />} />
 
           <Route path={`${url}/group-health/:provider/edit-nominee`}
             render={(props) => <GroupHealthPlanNomineeDetails  {...props} edit={true} />} />

@@ -33,7 +33,6 @@ class GroupHealthPlanDob extends Component {
 
     async componentDidMount() {
         let groupHealthPlanData = this.state.groupHealthPlanData;
-
         this.setState({
             account_type: groupHealthPlanData.account_type,
             header_title: groupHealthPlanData.account_type === 'self' ? 'Your date of birth' : 'Date of birth details'
@@ -45,7 +44,8 @@ class GroupHealthPlanDob extends Component {
             if(dob_data[key].key === 'self') {
                 dob_data[key].label = groupHealthPlanData.account_type === 'self' ? 'Date of birth (DD/MM/YYYY)' : 
                 "Your date of birth (DD/MM/YYYY)";
-            }
+            };
+            dob_data[key].error = '';
         }
 
         let final_dob_data = [];
@@ -81,8 +81,6 @@ class GroupHealthPlanDob extends Component {
         if (!dobFormatTest(value)) {
             return;
         }
-
-       
 
         let errorDate = '';
         if (value.length > 10) {
@@ -135,40 +133,37 @@ class GroupHealthPlanDob extends Component {
         let adult_ages = [];
         let child_ages = [];
 
+        console.log(final_dob_data);
+
         for (let dob_data of final_dob_data) {
-            const { value: dob, age, key } = dob_data;
+            const { value: dob, age, key, relation } = dob_data;
 
             if (!isValidDate(dob)) {
                 dob_data.error = 'Please enter valid date';
                 canProceed = false;
-                break;
             } else if (IsFutureDate(dob)) {
                 dob_data.error = 'Future date is not allowed';
                 canProceed = false;
-                break;
             }
 
             if(age) {
-                if(!['son', 'daughter'].includes(key)) {
+                if(!['son', 'daughter'].includes(relation)) {
                     let dob_adult = validation_props.dob_adult;
                     let dob_married_male = validation_props.dob_married_male;
                     // adult
-                    if (age.roundedAge > dob_adult.max || age.roundedAge < dob_adult.min) {
+                    if (age.age > dob_adult.max || age.age < dob_adult.min) {
                         dob_data.error = `Valid age is between ${dob_adult.min} - ${dob_adult.max} years`;
                         canProceed = false;
-                        break;
-                    } else if (manAgeCheck === key && age.roundedAge < dob_married_male.min) {
+                    } else if (manAgeCheck === key && age.age < dob_married_male.min) {
                         dob_data.error = `Minimum age is ${dob_adult.min} for married male`;
                         canProceed = false;
-                        break;
                     }
                     adult_ages.push(age.age);
                 } else {
                     let dob_child = validation_props.dob_child;
-                    if (age.roundedAge > dob_child.max || (age.days < dob_child.minDays)) {
+                    if (age.age > dob_child.max || (age.days < dob_child.minDays)) {
                         dob_data.error = `Valid age is between ${dob_child.minDays} days - ${dob_child.max} years`;
                         canProceed = false;
-                        break;
                     }
                     child_ages.push(age.age);
                 }

@@ -148,12 +148,27 @@ class GroupHealthPlanFinalSummary extends Component {
         let life_style_details_data = [];
         let members_for_life_style = [];
         let med_ques_data = med_ques_mapper_religare;
+
+        if (provider === 'STAR') {
+            let health_data = {
+                'title': 'Health details',
+                data: [
+                    {
+                        'title': 'Any critical illness?',
+                        'subtitle': 'No'
+                    }
+                ]
+            }
+        
+            accordianData.push(health_data);
+        }
+
         for (var i = 0; i < member_base.length; i++) {
             let member = Object.assign({}, member_base[i]);
             let member_display = capitalizeFirstLetter(childeNameMapper(member.key));
 
             let obj = {
-                title: `${member_display}'s details ${member_base.length > 1 ? ('(' + (applicantIndex === -1 ? dateOrdinal(i + 1) : dateOrdinal(i))  + ' insured)') : ''}`,
+                title: `${member_display}'s details ${member_base.length > 1 ? ('(' + (applicantIndex === -1 ? lead.account_type !== 'self' ? dateOrdinal(i + 1) : '' : dateOrdinal(i))  + ' insured)') : ''}`,
                 edit_state: `/group-insurance/group-health/${this.state.provider}/edit-personal-details/${member.key}`
             }
 
@@ -304,6 +319,10 @@ class GroupHealthPlanFinalSummary extends Component {
 
         let address_data_backend = [lead.correspondence_address ,lead.permanent_address];
 
+        if (provider === "STAR") {
+            address_data_backend = [lead.permanent_address]
+        }
+
         let data = address_data_backend.map((item, index) => {
             return [
                 {
@@ -333,30 +352,41 @@ class GroupHealthPlanFinalSummary extends Component {
                 }
             ]
         })
-
-        let address_data = {
-            'title': 'Address details',
-            edit_state: `/group-insurance/group-health/${this.state.provider}/edit-address`,
-            data: data
-        }
+        
+            let address_data={
+                'title': 'Address details',
+                edit_state: `${provider==='STAR'?`/group-insurance/group-health/${this.state.provider}/edit-address-star`:`/group-insurance/group-health/${this.state.provider}/edit-address`}`,
+                data: data 
+            }
 
         accordianData.push(address_data);
 
-        let nominee_data_backned = lead.nominee_account_key;
+        let nominee_data_backend = lead.nominee_account_key;
         let nominee_data = {
             'title': 'Nominee',
             edit_state: `/group-insurance/group-health/${this.state.provider}/edit-nominee`,
             data: [
                 {
                     'title': 'Name',
-                    'subtitle': nominee_data_backned.name
+                    'subtitle': nominee_data_backend.name
                 },
                 {
                     'title': 'Relation',
-                    'subtitle': nominee_data_backned.relation
+                    'subtitle': nominee_data_backend.relation
                 }
             ]
         }
+
+        if (provider === 'STAR') {
+
+            nominee_data.data.push(
+                {
+                    'title': 'Date of birth',
+                    'subtitle': nominee_data_backend.dob
+                }
+            )
+        }
+
         accordianData.push(nominee_data);
 
         if (provider === 'RELIGARE') {
@@ -570,7 +600,6 @@ class GroupHealthPlanFinalSummary extends Component {
     handleClick = async () => {
         this.sendEvents('next');
         let {lead}  = this.state;
-        lead.ped_check = true;
 
         if(this.state.provider === 'STAR') {
             if(lead.ped_check) {
@@ -652,10 +681,10 @@ class GroupHealthPlanFinalSummary extends Component {
                     </div>
                     <div className="mt-right">
                         <div className="mtr-top">
-                            {this.state.applicantIndex === -1 ? index + 1 : index}st Insured name
+                            {this.state.applicantIndex === -1 ? (this.state.lead.account_type !== 'self' ? dateOrdinal(index + 1) : '') : dateOrdinal(index)} Insured name
                         </div>
                         <div className="mtr-bottom">
-                            {props.name} ({props.relation.toLowerCase()})
+                            {props.name} ({childeNameMapper(props.key)})
                         </div>
                     </div>
                 </div>
@@ -674,7 +703,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             {props.title}
                         </div>
                         <div className="subtitle">
-                            {props.subtitle} {(props.title==='Height' && <span>cm</span>) || (props.title==='Weight' && <span>kg</span>)}
+                            {capitalizeFirstLetter(props.subtitle.toLowerCase())} {(props.title==='Height' && <span>cm</span>) || (props.title==='Weight' && <span>kg</span>)}
                         </div>
                         {props.subtitle2 && <div className="subtitle">
                             {props.subtitle2}
@@ -701,22 +730,26 @@ class GroupHealthPlanFinalSummary extends Component {
                 {props.open && props.title !== 'Address details' &&
                     <div className="bct-content">
                         {props.data.map(this.renderAccordiansubData)}
+                        {props.edit_state && 
                         <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
                             EDIT
-                        </div>
+                        </div>}
                     </div>}
 
                 {props.open && props.title === 'Address details' &&
                     <div className="bct-content">
+
                         {props.data[0].map(this.renderAccordiansubData)}
                         <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
                             EDIT
                         </div>
                         <br />
-                        {props.data[1].map(this.renderAccordiansubData)}
-                        <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
-                            EDIT
-                        </div>
+                        {this.state.provider === 'RELIGARE' && <React.Fragment>
+                            {props.data[1].map(this.renderAccordiansubData)}
+                            <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
+                                EDIT
+                            </div>
+                        </React.Fragment>}
                 </div>}
             </div>
         );
@@ -817,7 +850,7 @@ class GroupHealthPlanFinalSummary extends Component {
                 <div className="group-health-final-summary">
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
-                            <div className="tc-title">{this.state.common_data.base_plan_title}</div>
+                            <div className="tc-title">{this.state.providerData.title2 || this.state.common_data.base_plan_title}</div>
                             <div className="tc-subtitle">{this.state.lead.plan_title}</div>
                         </div>
 
@@ -895,7 +928,7 @@ class GroupHealthPlanFinalSummary extends Component {
                                 <div className="mtr-top">
                                     TOTAL PREMIUM
                                 </div>
-                                <div className="mtr-bottom flex">
+                                <div className="mtr-bottom flex" style={{textTransform:'none'}}>
                                     <div>
                                         <div> {inrFormatDecimal(this.state.lead.premium)} </div>
                                         <div style={{ fontSize: 10 }}> (Basic premium)</div>

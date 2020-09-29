@@ -28,6 +28,7 @@ class GroupHealthPlanDetails extends Component {
                 special_benefits: [],
                 waiting_period: []
             },
+            premiums_to_show: [],
             show_loader: true,
             ic_hs_special_benefits: ic_hs_special_benefits,
             ic_hs_main_benefits: ic_hs_main_benefits,
@@ -44,6 +45,7 @@ class GroupHealthPlanDetails extends Component {
 
     async componentDidMount() {
 
+        let {provider} = this.state;
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let post_body = groupHealthPlanData.post_body;
 
@@ -62,8 +64,8 @@ class GroupHealthPlanDetails extends Component {
             groupHealthPlanData[keys_to_empty[i]] = '';
         }
 
-        if (this.state.providerConfig.provider_api === 'star') {
-            post_body.sum_assured = '500000';
+        if (provider === 'STAR') {
+            post_body.sum_assured = '300000';
         }
 
         groupHealthPlanData.post_body = post_body;
@@ -81,11 +83,47 @@ class GroupHealthPlanDetails extends Component {
                 show_loader: false
             });
             var resultData = res.pfwresponse.result;
+
+           
+
             if (res.pfwresponse.status_code === 200) {
+                let premiums_to_show_backend = resultData.premium.WF || [];
+
+                let premiums_to_show = [];
+                console.log(premiums_to_show_backend);
+                if(provider === 'STAR') {
+                    premiums_to_show = [
+                        {
+                            'name': '₹3 lacs to ₹25 lacs',
+                            'value': premiums_to_show_backend[0].net_premium
+                        }
+                    ]
+                } else {
+                    let length = premiums_to_show_backend.length  - 1;
+    
+                    if(length  > 1) {
+                        premiums_to_show = [
+                            {
+                                name: `${numDifferentiationInr(premiums_to_show_backend[0].sum_assured)} to ${numDifferentiationInr(premiums_to_show_backend[length - 1].sum_assured)}`,
+                                value: premiums_to_show_backend[0].net_premium
+                            }
+                        ]
+                    } else {
+    
+                        premiums_to_show = [
+                            {
+                                name: `${numDifferentiationInr(premiums_to_show_backend[0].sum_assured)}`,
+                                value: premiums_to_show_backend[0].net_premium
+                            }
+                        ]
+                    }
+                   
+                }
 
                 this.setState({
                     common_data: resultData.common,
                     premium_data: resultData.premium,
+                    premiums_to_show: premiums_to_show,
                     extra_data: resultData.quote_info
                 })
 
@@ -224,11 +262,11 @@ class GroupHealthPlanDetails extends Component {
         return (
             <div className="sum-assured-info" key={index}>
                 <div className="sai-left">
-                    {numDifferentiationInr(props.sum_assured)}
+                    {props.name}
                 </div>
                 <div className="sai-left">
-                    {inrFormatDecimal(props.net_premium)}/year
-                        </div>
+                    starts at   {inrFormatDecimal(props.value)}/year
+                </div>
             </div>
         );
     }
@@ -252,9 +290,9 @@ class GroupHealthPlanDetails extends Component {
             show_loader,
             plan_selected,
             providerData,
-            premium_data,
             productName,
             extra_data,
+            premiums_to_show,
         } = this.state;
 
         return (
@@ -283,7 +321,7 @@ class GroupHealthPlanDetails extends Component {
                         </div>
                     </div>
 
-                    <div className="settlement-info">Claim Settlement Ratio: 98.88%</div>
+                    <div className="settlement-info">Claim Settlement Ratio: {plan_selected.claim_settlement_ratio}%</div>
 
                     {plan_selected.recommendation_tag &&
                         <div
@@ -313,7 +351,7 @@ class GroupHealthPlanDetails extends Component {
                         </div>
                     </div>
 
-                    {premium_data.WF.map(this.renderPremiums)}
+                    {premiums_to_show.map(this.renderPremiums)}
 
                     <div className="common-how-steps" style={{ border: 'none', marginTop:0, marginBottom:0 }}>
                         <div className="top-tile">
@@ -360,7 +398,7 @@ class GroupHealthPlanDetails extends Component {
                             *For detailed list of all terms and conditions, please refer
                             <span
                                 style={{ color: getConfig().primary }}
-                                onClick = {() => this.openInBrowser(this.state.common_data.policy_prospects, 'read_document')}>
+                                onClick = {() => this.openInBrowser(this.state.common_data.policy_prospectus, 'read_document')}>
                                 &nbsp;policy prospectus
                             </span>
                         </div>

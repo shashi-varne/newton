@@ -407,7 +407,7 @@ class GroupHealthPlanAddressDetails extends Component {
                                         className="Checkbox" />
                                 </Grid>
                                 <Grid item xs={11}>
-                                    <div className="checkbox-text">Permanent address same as current address
+                                    <div className="checkbox-text">Is permanent address same as current address?
                                 </div>
                                 </Grid>
                             </Grid>

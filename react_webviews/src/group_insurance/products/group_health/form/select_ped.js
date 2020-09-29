@@ -51,31 +51,33 @@ class GroupHealthPlanSelectPed extends Component {
         let member_base = lead.member_base;
         let member_key = this.props.match.params.member_key;
 
-        let member_info  = member_base.filter(data => data.key === member_key);
-        member_info = member_info[0];
+        let member_info_index  = member_base.findIndex(data => data.key === member_key);
+        let member_info = member_base[member_info_index];
         let backend_key = member_info.backend_key;
         let ped_diseases_name = member_info.ped_diseases_name;
         ped_diseases_name = (ped_diseases_name || '').split(',');
-        let duration = member_info.duration
+        let duration = member_info.duration;
 
-        this.state.screenData.ped_list.forEach((item, index) => {
+        let options = this.state.screenData.ped_list.map((item, index) => {
             item.checked = false;
             item.start_date = '';
             item.answer_description = '';
-            item.description = index === this.state.screenData.ped_list.lenght-1 ? '' : item.description;
-        });
+            item.description = index === this.state.screenData.ped_list.length-1 ? '' : item.description;
 
-        let options = this.state.screenData.ped_list;
+            return item;
+        });
 
         if(this.state.provider === 'RELIGARE') {
             let ped_data = member_info.ped_diseases || [];
+
             ped_data.forEach(item => {
+
                 options.forEach((opt, index) => {
 
                     if(opt.id === item.key_mapper) {
                         options[index].checked = true;
                         options[index].start_date = item.start_date || '';
-                        options[index].description = item.answer_description || '';
+                        options[index].description = item.answer_description !== null ? item.answer_description : options[index].description;
                     }
                 })
 
@@ -103,7 +105,6 @@ class GroupHealthPlanSelectPed extends Component {
         if(other_diseases) {
             options[options.length - 1].checked = true;
         }
-        // console.log(options[options.length - 1])
 
         this.setState({
             member_key: member_key,
@@ -116,7 +117,8 @@ class GroupHealthPlanSelectPed extends Component {
             },
             [this.state.otherInputData.name]: other_diseases,
             next_state: next_state,
-            pedOther: options[options.length - 1].description
+            pedOther: options[options.length - 1].description,
+            member_info_index: member_info_index
         }, ()=> {
             this.setState({
                 show_checkbox: true,
@@ -178,8 +180,9 @@ class GroupHealthPlanSelectPed extends Component {
     handleClick = async () => {
         this.sendEvents('next');
 
-        let {options, provider} = this.state;
-        let member_base = this.state.lead.member_base;
+        let {options, provider ,lead, member_info_index} = this.state;
+        let member_base = lead.member_base;
+        let current_member = member_base[member_info_index];
         if (options[options.length - 1].checked &&
             !this.state.pedOther) {
             toast('Enter details in other or uncheck it');
@@ -226,19 +229,26 @@ class GroupHealthPlanSelectPed extends Component {
                     toast('Atleast select one or uncheck this member');
                     return;
                 }
+
+                let body_to_send =  {
+                    ped_diseases_name: ped_diseases_name,
+                    ped_exists: "true"
+                }
     
                 body = {
-                    [this.state.backend_key] : {
-                        ped_diseases_name: ped_diseases_name,
-                        ped_exists: "true"
-                    }
+                    [this.state.backend_key] :body_to_send
                 }
+
+                current_member = {
+                    ...current_member,
+                    ...body_to_send
+                } //to store the member specific info, because we will not hit the api again
             }
             
 
             if(provider === 'RELIGARE') {
                 let ped_diseases = {};
-
+                
                 let min_one_ped = false;
                 for(var l in options) {
                     if(options[l].checked) {
@@ -263,21 +273,41 @@ class GroupHealthPlanSelectPed extends Component {
                     toast('Atleast select one or uncheck this member');
                     return;
                 }
+
+                let body_to_send = {
+                    ped_exists: "true",
+                    ped_diseases: ped_diseases
+                }
     
                 body = {
-                    [this.state.backend_key] : {
-                        ped_exists: "true",
-                        ped_diseases: ped_diseases
-                    }
+                    [this.state.backend_key] : body_to_send
                 }
+
+                let data_to_store = [];
+
+                for (var key in ped_diseases) {
+                    let d = ped_diseases[key];
+                    data_to_store.push({
+                        key_mapper: key,
+                        ...d
+                    })
+                }
+
+                current_member = {
+                    ...current_member,
+                    ped_diseases: data_to_store,
+                    ped_exists: "true"
+                } //to store the member specific info, because we will not hit the api again
             }
+
+            lead.member_base[member_info_index] = current_member;
 
             this.setState({
                 next_state: next_state || this.state.next_state,
-                force_forward: !!next_state && this.props.edit
+                force_forward: !!next_state && this.props.edit,
+                lead: lead
             })
 
-            console.log(body);
 
             this.updateLead(body);
         }
