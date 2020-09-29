@@ -59,7 +59,7 @@ class GroupHealthPlanNomineeDetails extends Component {
         let appointee_account_key = lead.appointee_account_key || {}
         form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
 
-        if (appointee_account_key) {
+        if (lead.appointee_account_key) {
             form_data.appointeename = appointee_account_key.name;
             form_data.appointeerelation = appointee_account_key.relation;
             form_data['appointeedob'] = appointee_account_key['dob'].replace(/\\-/g, '/').split('-').join('/');
