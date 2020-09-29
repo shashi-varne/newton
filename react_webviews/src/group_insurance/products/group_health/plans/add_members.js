@@ -112,7 +112,7 @@ class GroupHealthPlanAddMembers extends Component {
     handleClick = () => {
 
         let canProceed = true;
-        let ui_members = this.state.ui_members;
+        let {ui_members, provider} = this.state;
 
         if (this.state.account_type === 'family') {
             if (!this.state.other_adult_member && !this.state.son_total &&
@@ -238,6 +238,8 @@ class GroupHealthPlanAddMembers extends Component {
             }
         }
 
+        let total_insured = adult_total + child_total;
+
         let post_body = this.state.groupHealthPlanData.post_body || {};
         post_body.mem_info = {
             adult: adult_total,
@@ -278,6 +280,11 @@ class GroupHealthPlanAddMembers extends Component {
             
         } else {
             ui_members.self_gender = '';
+        }
+
+        if(provider === 'STAR' && total_insured < 2) {
+            toast('Please select atleast one more member');
+            canProceed = false;
         }
 
         if(canProceed) {
