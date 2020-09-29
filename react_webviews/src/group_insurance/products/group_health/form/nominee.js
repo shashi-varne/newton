@@ -56,7 +56,15 @@ class GroupHealthPlanNomineeDetails extends Component {
 
         let lead = this.state.lead || {};
         let form_data = lead.nominee_account_key || {};
+        let appointee_account_key = lead.appointee_account_key || {}
         form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
+
+        if (appointee_account_key) {
+            form_data.appointeename = appointee_account_key.name;
+            form_data.appointeerelation = appointee_account_key.relation;
+            form_data['appointeedob'] = appointee_account_key['dob'].replace(/\\-/g, '/').split('-').join('/');
+        }
+        
 
         const { age } = calculateAge(form_data['dob'], 'byMonth');
 
