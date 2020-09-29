@@ -389,7 +389,7 @@ class GroupHealthReportDetails extends Component {
                             </div>
                         </div>
 
-                       {this.state.lead.cover_type &&
+                       {this.state.lead.cover_type && this.state.lead.account_type !== 'self' &&
                         <div className="member-tile">
                             <div className="mt-left">
                                 <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
