@@ -33,10 +33,22 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
     let { member_base, account_type } = this.state.lead;
 
+    let none_option_selected = true;
+    for (var mem in member_base) {
+      if(member_base[mem].life_style_question_exists) {
+        none_option_selected = false;
+        break;
+      }
+    };
+
+    this.setState({
+      none_option_selected: none_option_selected
+    })
 
     if (member_base.length > 1) {
       member_base.push({
-        key: 'none'
+        key: 'none',
+        life_style_question_exists: none_option_selected
       })
     }
     let list = [];
