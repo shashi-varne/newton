@@ -488,6 +488,6 @@ export function setLocalProviderData(data) {
 }
 
 export function memberKeyMapper(member_key) {
-    const final_dob_list = memberKeyMapperFunction(member_key, this.state.groupHealthPlanData);
+    const final_dob_list = memberKeyMapperFunction(this.state.groupHealthPlanData);
     return final_dob_list.filter(data => data.key === member_key)[0];
 }
