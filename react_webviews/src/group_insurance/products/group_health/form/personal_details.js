@@ -341,7 +341,7 @@ class GroupHealthPlanPersonalDetails extends Component {
       let gender = '';
       if (this.state.member_key !== 'self') {
         gender = 'FEMALE';
-        if (['son', 'son1', 'son2', 'father', 'husband'].indexOf(this.state.member_key) !== -1) {
+        if (['son', 'son1', 'son2','son3','son4', 'father', 'father_in_law', 'husband'].indexOf(this.state.member_key) !== -1) {
           gender = 'MALE';
         }
       }
