@@ -1,3 +1,5 @@
+$status-text-margin: 20px 0 10px 0;
+
 @mixin status_text {
     font-size: 14px;
     line-height: 21px;
@@ -7,7 +9,7 @@
     color: #767E86;
     
     .digi-status-text {
-        margin: 20px 0 10px 0;
+        margin: $status-text-margin;
         @include status_text();
     }
     .digi-desc {
@@ -19,7 +21,7 @@
     color: #8D879B;
 
     .nsdl-status-text {
-        margin: 20px 0 10px 0;
+        margin: $status-text-margin;
         @include status_text();
     }
 }
