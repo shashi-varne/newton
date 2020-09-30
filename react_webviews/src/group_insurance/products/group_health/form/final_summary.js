@@ -353,12 +353,19 @@ class GroupHealthPlanFinalSummary extends Component {
                 }
             ]
         })
-        
-            let address_data={
-                'title': 'Address details',
-                edit_state: `${provider==='STAR'?`/group-insurance/group-health/${this.state.provider}/edit-address-star`:`/group-insurance/group-health/${this.state.provider}/edit-address`}`,
-                data: data 
-            }
+
+        if (provider === 'STAR') {
+            data[0].splice(5, 0, {
+                'title': 'Area',
+                'subtitle': address_data_backend[0].area
+            })
+        };
+
+        let address_data={
+            'title': 'Address details',
+            edit_state: `${provider==='STAR'?`/group-insurance/group-health/${this.state.provider}/edit-address-star`:`/group-insurance/group-health/${this.state.provider}/edit-address`}`,
+            data: data 
+        }
 
         accordianData.push(address_data);
 
