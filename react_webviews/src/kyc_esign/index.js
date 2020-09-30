@@ -11,6 +11,7 @@ import NotFound from "../common/components/NotFound";
 
 import DigiStatus from "./components/digilocker";
 import NsdlStatus from "./components/nsdl";
+import AppUpdate from "./components/app_update";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -51,9 +52,9 @@ const Kyc_Esign = props => {
         <Switch>
           <Route path={`${url}/digilocker`} component={DigiStatus} />
           <Route path={`${url}/nsdl`} component={NsdlStatus} />
+          <Route path={`${url}/app-update`} component={AppUpdate} />
           
           <Route component={NotFound} />
-
         </Switch>
       </MuiThemeProvider>
     </JssProvider>
