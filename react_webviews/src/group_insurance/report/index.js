@@ -63,6 +63,7 @@ class Report extends Component {
         product_name: 'Star Family Health Optima',
         top_title: 'Health insurance',
         key: 'STAR',
+        status_title: 'Star Health',
         id: policy.lead_id,
         premium: policy.total_amount
       };
