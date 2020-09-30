@@ -24,6 +24,8 @@ import { genericErrMsg } from "../constants";
 const isMobileView = getConfig().isMobileDevice;
 
 const Login = (props) => {
+  const storedEmail = storageService().get('wr-login-email');
+  const storedPwd = storageService().get('wr-login-password');
   const { params } = props.match;
   const [view, setView] = useState('');
   const [mode, setMode] = useState('login');
@@ -35,13 +37,12 @@ const Login = (props) => {
   const [opLoading, setOpLoading] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
   const [phoneErr, setPhoneErr] = useState('');
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(storedEmail || "");
   const [emailErr, setEmailErr] = useState("");
-  const [password, setPwd] = useState("");
+  const [password, setPwd] = useState(storedPwd || "");
   const [pwdErr, setPwdErr] = useState("");
   const [commonLoginErr, setCommonLoginErr] = useState("");
   const [resendDisabled, disableResend] = useState(false);
-  // const serverUrl = 'https://wreport-dot-plutus-staging.appspot.com';
   const serverUrl = 'https://my.fisdom.com';
   const socialRedirectUrl = encodeURIComponent('https://wv.fisdom.com/w-report/main/overview?base_url=https://my.fisdom.com');
 
@@ -72,6 +73,12 @@ const Login = (props) => {
   useEffect(() => {
     if (params.view) {
       setView(params.view);
+      if (params.view === 'phone') {
+        storageService().set('wr-login-email', '');
+        setEmail('');
+        storageService().set('wr-login-password', '');
+        setPwd('');
+      }
     } else if (isMobileView) {
       setView('splash');
     } else {
@@ -84,8 +91,12 @@ const Login = (props) => {
 
   const goBack = () => {
     if (view === 'verify-email') {
-      navigate(props, 'email');
+      navigate(props, 'login/email');
     } else {
+      storageService().set('wr-login-email', '');
+      setEmail('');
+      storageService().set('wr-login-password', '');
+      setPwd('');
       navigate(props, 'login/phone');
       setMode('login'); //default flow should always have login first
     }
@@ -264,6 +275,8 @@ const Login = (props) => {
         status: 'success',
         user_id: res.user.user_id,
       });
+      storageService().set('wr-login-email', email);
+      storageService().set('wr-login-password', password);
       if (view === 'email') {
         navigate(props, 'login/verify-email');
       }
@@ -271,7 +284,6 @@ const Login = (props) => {
       console.log(err);
       if (err.includes('exists')) {
         if (view === 'verify-email') {
-          setPwd('');
           setMode('login');
           navigate(props, 'login/email');
         } else {
@@ -535,6 +547,7 @@ const Login = (props) => {
             InputProps={{
               disableUnderline: true,
             }}
+            value={email}
             type="email"
             classes={{ root: "wr-input-addmail" }}
             onChange={(e) => handleInput(e, 'email')}
@@ -555,6 +568,7 @@ const Login = (props) => {
               disableUnderline: true,
             }}
             type="password"
+            value={password}
             classes={{ root: "wr-input-addmail" }}
             onKeyDown={onKeyDown}
             onChange={(e) => handleInput(e, 'password')}
