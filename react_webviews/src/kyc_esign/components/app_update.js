@@ -56,7 +56,7 @@ class AppUpdateInfo extends Component {
             </div>
 
             <div style={{color: '#6d7278', fontSize: 13}}>
-                Hey! Investing is now much easier with the latest update. Experience quick and seamless KYC process with Digilocker in your new fisdom app.
+                Hey! Investing is now much easier with the latest update. Experience quick and seamless KYC process with Digilocker in your new {getConfig().productName} app.
             </div>
         </div>
       </Container>
