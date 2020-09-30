@@ -1,32 +1,25 @@
 import React, { Component } from 'react';
-import qs from 'qs';
-
 import Container from '../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import update_insurance_fisdom from 'assets/update_insurance_fisdom.svg';
 import update_insurance_myway from 'assets/update_insurance_myway.svg';
 
-
 class AppUpdateInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
-      params: qs.parse(props.history.location.search.slice(1)),
-      update_insurance_icon: getConfig().productName !== 'fisdom' ? update_insurance_myway :
-      update_insurance_fisdom
+      update_insurance_icon: getConfig().productName !== 'fisdom' ? update_insurance_myway : update_insurance_fisdom
     }
-
   }
 
-  navigate = (pathname) => {
-    this.props.history.push({
-      pathname: pathname,
-      search: getConfig().searchParams
-    });
-  }
-
+//   navigate = (pathname) => {
+//     this.props.history.push({
+//       pathname: pathname,
+//       search: getConfig().searchParams
+//     });
+//   }
 
   handleClick = async () => {
     let url = getConfig().appLink;
@@ -62,9 +55,9 @@ class AppUpdateInfo extends Component {
                 <span>Update your application</span>
             </div>
 
-            {/* <div style={{color: '#6d7278', fontSize: 13}}>
-                We have addded new insurance products and fixed bugs to make your experience as smooth as possible.
-            </div> */}
+            <div style={{color: '#6d7278', fontSize: 13}}>
+                Hey! Investing is now much easier with the latest update. Experience quick and seamless KYC process with Digilocker in your new fisdom app.
+            </div>
         </div>
       </Container>
     );
