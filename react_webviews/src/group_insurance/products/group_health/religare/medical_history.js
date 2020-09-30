@@ -76,7 +76,7 @@ class GroupHealthPlanMedicalHistory extends Component {
         label: "Are you already covered under any other health insurance policy of Care Health Insurance (formerly Religare Health Insurance)?",
         members: member_base,
         radio_options: radio_options,
-        event_key: 'already_covered_in_religare',
+        event_key: 'already_covered_in_care',
         key: "mand_4",
         input_type: "radio",
       },
