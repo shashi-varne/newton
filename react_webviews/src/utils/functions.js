@@ -555,8 +555,8 @@ export const getConfig = () => {
     generic_callback = "true";
   } else if (main_pathname.indexOf('loan') >= 0) {
     project = 'loan';
-  } else if (main_pathname.indexOf('kyc_esign') >= 0) {
-    project = 'kyc_esign';
+  } else if (main_pathname.indexOf('kyc-esign') >= 0) {
+    project = 'kyc-esign';
   }
 
   let search = window.location.search;
