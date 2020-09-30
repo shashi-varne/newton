@@ -116,6 +116,10 @@
       display: none;
     }
 
+    >div:nth-last-child(1) {
+      margin-bottom: 40px;
+    }
+
     div.subtitle {
       max-width: 420px;
       opacity: 0.5;
@@ -127,7 +131,6 @@
 
     div#wr-otp-opts {
       margin-top: 48px;
-      margin-bottom: 40px;
       
       span {
         font-size: 18px;
@@ -167,6 +170,9 @@
       font-weight: 600;
       color: var(--primary);
       cursor: pointer;
+      min-width: 95px;
+      text-align: center;
+      display: inline-block;
     }
   }
 }
@@ -245,7 +251,6 @@
   font-size: 18px;
   font-weight: 600;
   color: var(--primary);
-  margin-bottom: 40px;
   cursor: pointer;
 }
 
@@ -973,6 +978,9 @@
         font-weight: 600;
         color: var(--primary);
         cursor: pointer;
+        min-width: 85px;
+        text-align: center;
+        display: inline-block;
       }
     }
   }
@@ -1037,6 +1045,10 @@
       color: #000000;
       letter-spacing: normal;
       margin: 24px 0 16px;
+    }
+
+    >div:nth-last-child(1) {
+      margin-bottom: 30px;
     }
 
     div.subtitle {

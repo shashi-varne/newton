@@ -4,7 +4,15 @@ import WrOtpInput from "../common/OtpInput";
 import WrPhoneInput from "../common/PhoneInput";
 import { getConfig } from "utils/functions";
 import SplashBg from "assets/fisdom/bg_image_hni.png";
-import { resendOtp, login, verifyOtp, emailLogin, forgotPassword, emailRegister } from "../common/ApiCalls";
+import {
+  resendOtp,
+  login,
+  verifyOtp,
+  emailLogin,
+  forgotPassword,
+  emailRegister,
+  resendVerification
+} from "../common/ApiCalls";
 import toast from '../../common/ui/Toast';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { navigate } from "../common/commonFunctions";
@@ -12,6 +20,7 @@ import LoadingScreen from "../mini-components/LoadingScreen";
 import { Button, FormControl, TextField, IconButton } from "material-ui";
 import { nativeCallback } from 'utils/native_callback';
 import { validateEmail, storageService } from "../../utils/validators";
+import { genericErrMsg } from "../constants";
 const isMobileView = getConfig().isMobileDevice;
 
 const Login = (props) => {
@@ -24,6 +33,7 @@ const Login = (props) => {
   const [format, setFormat] = useState('99999-99999');
   const [number, setNumber] = useState('');
   const [opLoading, setOpLoading] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
   const [phoneErr, setPhoneErr] = useState('');
   const [email, setEmail] = useState("");
   const [emailErr, setEmailErr] = useState("");
@@ -71,6 +81,15 @@ const Login = (props) => {
     setPwdErr('');
     setOtpErr('');
   }, [params.view]);
+
+  const goBack = () => {
+    if (view === 'verify-email') {
+      navigate(props, 'email');
+    } else {
+      navigate(props, 'login/phone');
+      setMode('login'); //default flow should always have login first
+    }
+  };
 
   const changeMode = () => {
     setEmailErr('');
@@ -141,6 +160,10 @@ const Login = (props) => {
 
   const triggerOtp = async() => {
     try {
+      const err = validatePhone();
+      if (err) {
+        setPhoneErr(err);
+      }
       setOpLoading(true);
       await login({ mobileNo: number, countryCode });
       navigate(props, 'login/otp');
@@ -227,10 +250,12 @@ const Login = (props) => {
 
   const registerWithEmail = async () => {
     try {
-      if (!validateEmail(email)) {
-        return setEmailErr("Please enter a valid email");
-      } else if (!password) {
-        return setPwdErr('Please enter password');
+      if (view === 'email') {
+        if (!validateEmail(email)) {
+          return setEmailErr("Please enter a valid email");
+        } else if (!password) {
+          return setPwdErr('Please enter password');
+        }
       }
       setOpLoading(true);
       const res = await emailRegister({ email, password });
@@ -239,12 +264,24 @@ const Login = (props) => {
         status: 'success',
         user_id: res.user.user_id,
       });
-      setPwdErr('');
-      setMode('login');
+      if (view === 'email') {
+        navigate(props, 'login/verify-email');
+      }
     } catch (err) {
       console.log(err);
       if (err.includes('exists')) {
-        setEmailErr("Account already exists!");
+        if (view === 'verify-email') {
+          setPwd('');
+          setView('login');
+        } else {
+          setEmailErr("Account already exists!");
+        }
+      } if (err.includes('not verified')) {
+        if (view === 'email') {
+          navigate(props, 'login/verify-email');
+        } else {
+          toast('Please verify your email to continue!');
+        }
       } else {
         toast(err);
       }
@@ -255,6 +292,27 @@ const Login = (props) => {
       });
     }
     setOpLoading(false);
+  };
+
+  const resendVerificationEmail = async () => {
+    try {
+      setResendLoading(true);
+      await resendVerification({ email });
+      sendEvents('verify-email', {
+        screen_name: 'verify-email',
+        status: 'success',
+      });
+      toast('Verification link sent!');
+    } catch (err) {
+      console.log(err);
+      toast(genericErrMsg);
+      sendEvents('verify-email', {
+        screen_name: 'verify-email',
+        status: 'fail',
+        error_message: err,
+      });
+    }
+    setResendLoading(false);
   };
 
   const resetPassword = async () => {
@@ -277,12 +335,7 @@ const Login = (props) => {
     if (view === 'splash') {
       navigate(props, 'login/phone');
     } else if (view === 'phone') {
-      const err = validatePhone();
-      if (err) {
-        setPhoneErr(err);
-      } else {
-        triggerOtp();
-      }
+      triggerOtp();
     } else if (view === 'otp') {
       verify(otp);
     } else if (view === 'email') {
@@ -293,7 +346,9 @@ const Login = (props) => {
       }
     } else if (view === 'forgot-password') {
       resetPassword();
-    }
+    } else if (view === 'verify-email') {
+      registerWithEmail();
+    } 
   };
 
   const renderNumberView = (
@@ -398,11 +453,11 @@ const Login = (props) => {
   const renderForgotPassword = (
     <div className="wr-login-input">
       <img src={require("assets/fisdom/ic-fisdom-logo.jpg")} id="wr-logo" alt="" />
-      <div id="wr-title">Forgot Password</div>
+      <h2>Forgot Password</h2>
       <div className="subtitle">
         We will send a link to reset password on your registered email address
       </div>
-      <div style={{ marginBottom: '28px' }}>
+      <div>
         <FormControl className="wr-form">
           <TextField
             variant="outlined"
@@ -424,6 +479,39 @@ const Login = (props) => {
             {emailErr}
           </div>
         }
+      </div>
+    </div>
+  );
+
+  const renderVerifyEmail = (
+    <div className="wr-login-input">
+      <img src={require("assets/fisdom/ic-fisdom-logo.jpg")} id="wr-logo" alt="" />
+      <h2>Verify Email</h2>
+      <div className="subtitle">
+        You’re almost done! We’ve sent an email to <b>{email}</b>. 
+        Please click on the verification link to complete your registration 
+        and access your Portfolio Report.
+      </div>
+      <div className="wr-continue-btn">
+        <WrButton
+          fullWidth={true}
+          classes={{ root: "wr-login-btn" }}
+          onClick={clickContinue}>
+          {opLoading ?
+            <CircularProgress size={20} thickness={4} color="white" /> :
+            'Continue to login'
+          }
+        </WrButton>
+      </div>
+      <div className="wr-register-login-text" style={{ marginBottom: '40px' }}>
+        Didn’t get it?
+        <span onClick={resendVerificationEmail}>
+          &nbsp;
+          {resendLoading ?
+            <CircularProgress size={15} thickness={4} color="primary" /> :
+            'Resend link'
+          }
+        </span>
       </div>
     </div>
   );
@@ -533,13 +621,14 @@ const Login = (props) => {
                 src={require('assets/fisdom/fisdom_logo_coloured.png')}
                 style={{ cursor: 'pointer' }}
                 alt="fisdom" width={130}
-                onClick={() => navigate(props, 'login')}
+                onClick={() => goBack()}
               />
               {view === 'phone' && renderNumberView}
               {view === 'otp' && renderOTPView}
               {view === 'email' && renderEmailView}
               {view === 'forgot-password' && renderForgotPassword}
-              {view !== 'phone' &&
+              {view === 'verify-email' && renderVerifyEmail}
+              {!['phone', 'verify-email'].includes(view) &&
                 <Fragment>
                   <WrButton
                     fullWidth={true}
@@ -553,9 +642,9 @@ const Login = (props) => {
                   </WrButton>
                   {view === 'email' && <div className="wr-register-login-text">
                     Already have an account?
-                      <span onClick={changeMode}>
-                        &nbsp;{mode === 'login' ? 'Register' : 'Login'} now
-                      </span>
+                    <span onClick={changeMode}>
+                      &nbsp;{mode === 'login' ? 'Register' : 'Login'} now
+                    </span>
                   </div>}
                 </Fragment>
               }
@@ -573,7 +662,7 @@ const Login = (props) => {
           }}
         >
           <div id="wr-mobile-view">
-            {!['splash', 'phone'].includes(view) && <IconButton onClick={() => props.history.goBack()}>
+            {!['splash', 'phone'].includes(view) && <IconButton onClick={() => goBack()}>
               <img
                 src={require('assets/ic-mob-back.svg')}
                 alt="expand"
@@ -584,7 +673,8 @@ const Login = (props) => {
             {view === 'otp' && renderOTPView}
             {view === 'email' && renderEmailView}
             {view === 'forgot-password' && renderForgotPassword}
-            {(view !== 'splash' && view !== 'phone') &&
+            {view === 'verify-email' && renderVerifyEmail}
+            {!['splash', 'phone', 'verify-email'].includes(view) &&
               <Fragment>
                 <div className="wr-continue-btn">
                   <WrButton
