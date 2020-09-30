@@ -824,9 +824,11 @@ export function calculateAge(val, withBreakup) {
     }
     return 0;
   }
-  const date = val.toString().replace(/\\-/g, '/').split('/').reverse().join('/');
+
+  let format = '"DD/MM/YYYY"'; //pass value in this format only
+  
   const today = moment();
-  const birthDate = moment(date);
+  const birthDate = moment(val, format);
   const duration = moment.duration(today.diff(birthDate));
   const age = duration.asYears();
 
