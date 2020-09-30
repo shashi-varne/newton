@@ -131,7 +131,7 @@ class GroupHealthPayment extends Component {
       "event_name": 'health_insurance',
        "properties": {
         "user_action": user_action,
-        "product": this.state.providerConfig.provider_api,
+        "product": this.state.provider,
         "flow": this.state.insured_account_type || '',
         "screen_name": 'payment',
         'status': this.state.status
