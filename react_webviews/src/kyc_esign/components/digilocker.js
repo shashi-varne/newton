@@ -20,7 +20,7 @@ class DigiStatus extends Component {
 
   render() {
     const {show_loader, productName} = this.state;
-    const {status} = this.state.params;
+    const {status = "failed"} = this.state.params;
     const headerData = {
       icon: "close",
       goBack: this.handleClick
@@ -29,7 +29,7 @@ class DigiStatus extends Component {
     return (
       <Container
         showLoader={show_loader}
-        title= {status === "success"? 'Digilocker authorisation successful!' : 'Digilocker authorisation failed!'}
+        title= {status === "success" ? 'Digilocker authorisation successful!' : 'Digilocker authorisation failed!'}
         handleClick={this.handleClick}
         buttonTitle='OKAY'
         headerData={headerData}

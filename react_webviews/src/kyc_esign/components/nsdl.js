@@ -21,7 +21,7 @@ class DigiStatus extends Component {
 
   render() {
     const {show_loader, productName} = this.state;
-    const {status} = this.state.params; 
+    const {status = "failed"} = this.state.params; 
     const headerData = {
       icon: "close",
       goBack: this.handleClick
