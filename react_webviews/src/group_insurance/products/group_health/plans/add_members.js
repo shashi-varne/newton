@@ -282,7 +282,7 @@ class GroupHealthPlanAddMembers extends Component {
             ui_members.self_gender = '';
         }
 
-        if(provider === 'STAR' && total_insured < 2) {
+        if(provider === 'STAR' && total_insured < 2 && this.state.account_type !== 'selfandfamily') {
             toast('Please select atleast one more member');
             canProceed = false;
         }

@@ -222,7 +222,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     let isChild = form_data.relation.includes('SON') || form_data.relation.includes('DAUGHTER');
     if (this.state.provider === 'RELIGARE') {
       if (isChild) {
-        const age = calculateAge(form_data.dob);
+        const age = calculateAge(form_data.dob, true);
         if (this.state.groupHealthPlanData.type_of_plan === 'WF') {
           if (age.days <= 91 || age.age >= 25) {
             form_data.dob_error = "Only children between 91 days & 25 yrs can be included";
