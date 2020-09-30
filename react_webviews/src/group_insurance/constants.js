@@ -760,7 +760,11 @@ export function getCssMapperReport(policy) {
   obj.cssMapper = cssMapper[obj.status] || cssMapper['init'];
 
   if(policy_status === 'request_pending') {
-    obj.cssMapper.disc += ` ${policy.status_title || policy.key}`;
+    if(provider === 'STAR') {
+      obj.cssMapper.disc += ` Star Health`;
+    } else {
+      obj.cssMapper.disc += ` ${policy.status_title || policy.key}`;
+    }
   }
 
   return obj;
