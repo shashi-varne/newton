@@ -42,11 +42,11 @@ class DigiStatus extends Component {
             alt="Nsdl Status" 
           />
           {status === "success" ? 
-            <div className="digi-status-text">
+            <div className="nsdl-status-text">
                 You have successfully signed your KYC documents.
             </div>
             :
-            <div>
+            <div className="nsdl-status-text">
                 Sorry! the eSign verification is failed. Please try again.
             </div>
           }

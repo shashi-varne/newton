@@ -16,8 +16,6 @@ import Dialog, {
 import { nativeCallback } from "utils/native_callback";
 import '../../utils/native_listner';
 import { getConfig } from 'utils/functions';
-import {checkStringInString} from 'utils/validators';
-// import { goBackMap} from '../constants';
 
 class Container extends Component {
   constructor(props) {
@@ -57,48 +55,15 @@ class Container extends Component {
     
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
+      return;
     }
-
 
     if(this.props.headerData && this.props.headerData.goBack) {
       this.props.headerData.goBack();
       return;
     }
     
-    // let pathname = this.props.history.location.pathname;
-
-    // if (checkStringInString(pathname, "form-summary")) {
-    //   this.setState({
-    //     callbackType: 'loan_home',
-    //     openPopup: true,
-    //     popupText: 'You are just 2 steps  away from getting money in your account. Do you really want to exit?'
-    //   })
-    //   return;
-    // }
-
-    // if (checkStringInString(pathname, "instant-kyc") && !checkStringInString(pathname, "instant-kyc-status")) {
-    //   this.setState({
-    //     callbackType: 'loan_journey',
-    //     openPopup: true,
-    //     popupText: 'You are just 2 steps  away from getting money in your account. Do you really want to exit?'
-    //   })
-    //   return;
-    // }
-
-    // if (checkStringInString(pathname, "loan-summary")) {
-    //   this.setState({
-    //     callbackType: 'loan_home',
-    //     openPopup: true,
-    //     popupText: 'You are just one steps  away from getting money in your account. Do you really want to exit?'
-    //   })
-    //   return;
-    // }
-
-    // if(goBackMap(pathname)) {
-    //   this.navigate(goBackMap(pathname));
-    //   return;
-    // }
-
+    nativeCallback({ action: 'exit_web' });
 
     // switch (pathname) {
     //   case "/loan/home":

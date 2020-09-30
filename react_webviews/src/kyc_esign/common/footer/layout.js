@@ -1,20 +1,12 @@
 import React, { Component } from 'react';
 
 import Button from '../../../common/ui/Button';
-// import { capitalize } from 'utils/validators';
 import Dialog, {
   DialogActions,
   DialogTitle,
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
-
-import logo_safegold from 'assets/logo_safegold.svg';
-import logo_mmtc from 'assets/logo_mmtc.svg';
-import down_arrow from 'assets/down_arrow.svg';
-import up_arrow from 'assets/up_arrow.svg';
-import SVG from 'react-inlinesvg';
-import { getConfig } from 'utils/functions';
 
 export class DefaultLayout extends Component {
   constructor(props) {
