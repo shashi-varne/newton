@@ -784,7 +784,7 @@ export const star = {
                 'value': '11'
             },
             {
-                'name': 'STUDENTS-SCHOOLS AND COLLEGE',
+                'name': 'STUDENTS-SCHOOL AND COLLEGE',
                 'value': '12'
             },
             {
