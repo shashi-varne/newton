@@ -4,7 +4,7 @@ import { nativeCallback } from "utils/native_callback";
 import { getConfig } from "utils/functions";
 import { initialize, updateLead } from "../common_data";
 import RadioAndCheckboxList from "./radioAndCheckboxList";
-import { isValidMonthYear } from "utils/validators";
+import { isValidMonthYear, isEmpty } from "utils/validators";
 import { formatMonthandYear, dobFormatTest, validateAlphabets, IsFutureMonthYear, IsPastMonthYearfromDob } from "utils/validators";
 import toast from "../../../../common/ui/Toast";
 import ConfirmDialog from './../plans/confirm_dialog';
@@ -109,8 +109,9 @@ class GroupHealthPlanLifestyleDetail extends Component {
   };
 
   sendEvents(user_action) {
+    
     const { member_base = [] } = this.state;
-    const selected_members = member_base.map(member => member.life_style_question_exists ? member.relation : '');
+    const selected_members = member_base.map(member => !isEmpty(member.life_style_question) ? member.relation : '');
     let eventObj = {
       event_name: "health_insurance",
       properties: {
@@ -131,13 +132,13 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
   handleChangeRadio = (event, index) => {
 
-    console.log(event);
     let { member_base } = this.state;
     member_base[index].life_style_question_exists =  member_base[index].radio_options[event].value;
     member_base[index].life_style_question_exists_error = '';
 
     this.setState({
       member_base: member_base,
+      none_option_selected: false
     });
   };
 
@@ -229,6 +230,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
     let atlOneOption = none_option_selected || false;
 
+    this.sendEvents("next");
     if (!none_option_selected) {
       for (let key in member_base) {
 
@@ -289,7 +291,6 @@ class GroupHealthPlanLifestyleDetail extends Component {
         }
 
       }
-      this.sendEvents("next");
       this.updateLead(body);
     }
   };
