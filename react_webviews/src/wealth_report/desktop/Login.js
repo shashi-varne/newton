@@ -272,11 +272,12 @@ const Login = (props) => {
       if (err.includes('exists')) {
         if (view === 'verify-email') {
           setPwd('');
-          setView('login');
+          setMode('login');
+          navigate(props, 'login/email');
         } else {
           setEmailErr("Account already exists!");
         }
-      } if (err.includes('not verified')) {
+      } else if (err.includes('not verified')) {
         if (view === 'email') {
           navigate(props, 'login/verify-email');
         } else {
