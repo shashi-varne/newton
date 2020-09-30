@@ -87,7 +87,7 @@ class GroupHealthPlanAddressDetails extends Component {
             };
 
             if(form_data.p_city) {
-                this.getCityListReligare({form_data, name: 'p_city'});
+                this.getCityListReligare({form_data, name: 'p_pincode'});
             };
         }
         
@@ -367,7 +367,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
 
         this.setState({isLoadingCity: true});
-        const res = await Api.get((`/api/ins_service/api/insurance/religare/pincode/validate?pincode=${form_data.pincode}`));
+        const res = await Api.get((`/api/ins_service/api/insurance/religare/pincode/validate?pincode=${form_data[name]}`));
         this.setState({isLoadingCity: false});
         let { country } = form_data;
         let pincode_error = '';
@@ -395,7 +395,7 @@ class GroupHealthPlanAddressDetails extends Component {
         } else {
             form_data.p_city_list = list;
 
-            let data = list.filter(city => city.name === form_data.city);
+            let data = list.filter(city => city.name === form_data.p_city);
           
             form_data.p_city = '';
             if(data.length > 0) {
