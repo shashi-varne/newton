@@ -860,7 +860,7 @@ class GroupHealthPlanFinalSummary extends Component {
                                 </div>
                                 <div className="mtr-bottom flex" style={{textTransform:'none'}}>
                                     <div>
-                                        <div> {inrFormatDecimal(this.state.lead.premium)} </div>
+                                        <div> {inrFormatDecimal(this.state.lead.base_premium)} </div>
                                         <div style={{ fontSize: 10 }}> (Basic premium)</div>
                                     </div>
                                     <div>
