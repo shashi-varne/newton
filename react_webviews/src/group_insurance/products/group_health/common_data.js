@@ -31,6 +31,7 @@ export async function initialize() {
     }
 
     let validation_props = providerConfig.validation_props || {};
+    let pan_amount = providerConfig.pan_amount || '';
 
     let groupHealthPlanData = storageService().getObject('groupHealthPlanData_' + provider) || {};
     this.setState({
@@ -44,7 +45,8 @@ export async function initialize() {
         plan_selected: groupHealthPlanData && groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected : {},
         insured_account_type: groupHealthPlanData.account_type || '',
         screenData: screenData,
-        validation_props: validation_props
+        validation_props: validation_props,
+        pan_amount: pan_amount
     }, () => {
         if(!this.state.get_lead && this.state.force_onload_call) {
             this.onload();
