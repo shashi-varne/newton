@@ -67,10 +67,12 @@ class GroupHealthPlanFinalSummary extends Component {
         
         this.setState({
             applicantIndex: applicantIndex
-        })
+        });
+
+        let pan_amount = this.state.pan_amount;
 
         let pan_needed = false;
-        if (lead.total_amount > 100000) {
+        if (lead.total_amount > pan_amount) {
             pan_needed = true;
         }
 

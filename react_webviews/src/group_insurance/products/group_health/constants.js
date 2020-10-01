@@ -8,6 +8,7 @@ export const hdfc = {
     logo_cta: 'hdfc_ergo_ic_logo_cta.svg',
     logo_summary: 'hdfc_ergo_ic_logo_summary.svg',
     show_ind_mem_premium: true,
+    pan_amount: 100000,
     get_next: { //have as a separate map and not screen-specific property to reduce duplication across all providers and for all screens
         landing_screen: 'insure-type',
         plan_dob_screen: 'plan-select-city',
@@ -185,6 +186,7 @@ export const religare = {
     logo_card: 'ic_religare_logo_card.svg',
     logo_cta: 'ic_religare_logo.svg',
     logo_summary: 'ic_religare_logo.svg',
+    pan_amount: 50000,
     get_next: { //have as a separate map and not screen-specific property to reduce duplication across all providers and for all screens
         landing_screen: 'insure-type',
         insure_type_screen: 'plan-dob-religare',
@@ -508,6 +510,7 @@ export const star = {
     logo_card: 'ic_star_logo_card.svg',
     logo_cta: 'ic_star_logo.svg',
     logo_summary: 'ic_star_logo.svg',
+    pan_amount: 100000,
     get_next: { //have as a separate map and not screen-specific property to reduce duplication across all providers and for all screens
         landing_screen: 'insure-type',
         insure_type_screen: 'plan-dob',
