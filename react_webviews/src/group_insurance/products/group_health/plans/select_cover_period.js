@@ -172,7 +172,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                     Health expenses will be covered for this period
                  <img 
                         className="tooltip-icon"
-                        data-tip="As premium increases by insured age, policy with longer cover period reduces the overall premium. 70% of our users have taken a cover for 3 years."
+                        data-tip="As premium increases by insured age, policy with longer cover period reduces the overall premium.<br />70% of our users have taken a cover for 3 years."
                         src={require(`assets/${this.state.productName}/info_icon.svg`)}
                         alt="" />
                 </div>
