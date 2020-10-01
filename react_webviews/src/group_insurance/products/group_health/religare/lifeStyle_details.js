@@ -4,7 +4,7 @@ import { nativeCallback } from "utils/native_callback";
 import { getConfig } from "utils/functions";
 import { initialize, updateLead } from "../common_data";
 import RadioAndCheckboxList from "./radioAndCheckboxList";
-import { isValidMonthYear, isEmpty } from "utils/validators";
+import { isValidMonthYear } from "utils/validators";
 import { formatMonthandYear, dobFormatTest, validateAlphabets, IsFutureMonthYear, IsPastMonthYearfromDob } from "utils/validators";
 import toast from "../../../../common/ui/Toast";
 import ConfirmDialog from './../plans/confirm_dialog';
@@ -112,7 +112,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
     
     const member_base = data.member_base || this.state.member_base || [];
 
-    const selected_members = member_base.map(member => !isEmpty(member.life_style_question) ? member.key : '');
+    const selected_members = member_base.map(member => (member.life_style_question_exists || member.life_style_question_exists === 'Yes') ? member.key : '');
     let eventObj = {
       event_name: "health_insurance",
       properties: {
