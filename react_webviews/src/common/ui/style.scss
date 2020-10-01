@@ -654,3 +654,7 @@ body[data-device="mobile"] {
 .MuiMenuItem-root {
   overflow: scroll !important;
 }
+
+.__react_component_tooltip .multi-line {
+  text-align: left !important;
+}
