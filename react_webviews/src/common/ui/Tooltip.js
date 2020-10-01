@@ -26,6 +26,7 @@ class TooltipClass extends Component {
                 // arrowColor={getConfig().highlight_color}
                 arrowColor={'transparent'}
                 // effect="float"
+                multiline={true}
                 />
         );
     }
