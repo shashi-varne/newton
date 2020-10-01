@@ -108,10 +108,11 @@ class GroupHealthPlanLifestyleDetail extends Component {
     });
   };
 
-  sendEvents(user_action) {
+  sendEvents(user_action, data={}) {
     
-    const { member_base = [] } = this.state;
-    const selected_members = member_base.map(member => !isEmpty(member.life_style_question) ? member.relation : '');
+    const member_base = data.member_base || this.state.member_base || [];
+
+    const selected_members = member_base.map(member => !isEmpty(member.life_style_question) ? member.key : '');
     let eventObj = {
       event_name: "health_insurance",
       properties: {
@@ -119,7 +120,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
         screen_name: "lifestyle_details",
         "product": this.state.providerConfig.provider_api,
         "flow": this.state.insured_account_type || '',
-        member_smokes: compact(selected_members).join(', '),
+        member_smokes: !this.state.none_option_selected ? compact(selected_members).join(', ') : '',
       },
     };
 
@@ -230,7 +231,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
     let atlOneOption = none_option_selected || false;
 
-    this.sendEvents("next");
+    
     if (!none_option_selected) {
       for (let key in member_base) {
 
@@ -267,6 +268,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
     let body = {};
 
+    this.sendEvents("next", {member_base: member_base});
     if (canProceed) {
 
       for (var i in member_base) {

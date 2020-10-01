@@ -134,7 +134,7 @@ class GroupHealthPlanMedicalHistory extends Component {
     const keyedList = keyBy(this.state.list, 'event_key');
     const [firstListItem = {}] = (this.state.list || []); //take first list item (any list item would be fine, just need the members prop from it)
     const keyedMemberRelations = (firstListItem.members || []).reduce((obj, currMem) => {
-      obj[currMem.backend_key] = currMem.relation;
+      obj[currMem.backend_key] = currMem.key;
       return obj;
     }, {});
 
