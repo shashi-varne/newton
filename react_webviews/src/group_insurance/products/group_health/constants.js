@@ -319,24 +319,8 @@ export const religare = {
                 'value': 'BROTHER'
             },
             {
-                'name': 'COUSIN',
-                'value': 'COUSIN'
-            },
-            {
-                'name': 'DAUGHTER IN LAW',
-                'value': 'DAUGHTER_IN_LAW'
-            },
-            {
                 'name': 'FATHER',
                 'value': 'FATHER'
-            },
-            {
-                'name': 'FATHER IN LAW',
-                'value': 'FATHER_IN_LAW'
-            },
-            {
-                'name': 'GRAND DAUGHTER',
-                'value': 'GRANDDAUGHTER'
             },
             {
                 'name': 'GRAND FATHER',
@@ -345,10 +329,6 @@ export const religare = {
             {
                 'name': 'GRAND MOTHER',
                 'value': 'GRANDMOTHER'
-            },
-            {
-                'name': 'GRAND SON',
-                'value': 'GRANDSON'
             },
             {
                 'name': 'BROTHER IN LAW',
@@ -367,24 +347,8 @@ export const religare = {
                 'value': 'MOTHER'
             },
             {
-                'name': 'NEPHEW',
-                'value': 'NEPHEW'
-            },
-            {
-                'name': 'NIECE',
-                'value': 'NIECE'
-            },
-            {
-                'name': 'SELF-PRIMARY MEMBER',
-                'value': 'SELF'
-            },
-            {
                 'name': 'SISTER',
                 'value': 'SISTER'
-            },
-            {
-                'name': 'SON IN LAW',
-                'value': 'SON_IN_LAW'
             },
             {
                 'name': 'SON',
@@ -397,6 +361,14 @@ export const religare = {
             {
                 'name': 'DAUGHTER',
                 'value': 'DAUGHTER'
+            },
+            {
+                'name': 'WIFE',
+                'value': 'WIFE'
+            },
+            {
+                'name': 'HUSBAND',
+                'value': 'HUSBAND'
             }
         ],
 

@@ -912,7 +912,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
-                                    ADD ONS
+                                    ADD ON
                                 </div>
                                 <div className="mtr-bottom">
                                     {this.state.add_ons_show}
