@@ -57,8 +57,10 @@ class GroupHealthPlanPersonalDetails extends Component {
     // let member_key = this.props.match.params.member_key;
     let member_key = this.props.member_key;
 
+    let pan_amount = this.state.pan_amount;
+
     let pan_needed = false;
-    if (lead.total_amount > 100000 && (member_key === 'self' || member_key === 'applicant')) {
+    if (lead.total_amount > pan_amount && (member_key === 'self' || member_key === 'applicant')) {
       pan_needed = true;
     }
 
@@ -341,7 +343,7 @@ class GroupHealthPlanPersonalDetails extends Component {
       let gender = '';
       if (this.state.member_key !== 'self') {
         gender = 'FEMALE';
-        if (['son', 'son1', 'son2', 'father', 'husband'].indexOf(this.state.member_key) !== -1) {
+        if (['son', 'son1', 'son2','son3','son4', 'father', 'father_in_law', 'husband'].indexOf(this.state.member_key) !== -1) {
           gender = 'MALE';
         }
       }

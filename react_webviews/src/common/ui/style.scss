@@ -570,7 +570,7 @@ body[data-device="mobile"] {
   .header_title {
     color: #0a1d32;
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 600;
   }
 
   .content {
@@ -653,4 +653,8 @@ body[data-device="mobile"] {
 
 .MuiMenuItem-root {
   overflow: scroll !important;
+}
+
+.__react_component_tooltip .multi-line {
+  text-align: left !important;
 }

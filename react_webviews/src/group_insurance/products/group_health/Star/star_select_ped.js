@@ -7,6 +7,7 @@ import RadioAndCheckboxList from "../religare/radioAndCheckboxList";
 import {  validateAlphabets } from "utils/validators";
 import toast from "../../../../common/ui/Toast";
 import ConfirmDialog from './../plans/confirm_dialog';
+import { compact } from 'lodash';
 
 class GroupHealthStarPlanSelectPed extends Component {
   constructor(props) {
@@ -64,7 +65,11 @@ class GroupHealthStarPlanSelectPed extends Component {
     });
   };
 
-  sendEvents(user_action) {
+  sendEvents(user_action, data={}) {
+
+    const member_base = data.member_base || this.state.member_base || [];
+
+    const selected_members = member_base.map(member => (member.ped_exists || member.ped_exists === 'Yes') ? member.key : '');
     let eventObj = {
       event_name: "health_insurance",
       properties: {
@@ -72,6 +77,7 @@ class GroupHealthStarPlanSelectPed extends Component {
         screen_name: "lifestyle_details",
         "product": 'star',
         flow: this.state.insured_account_type || '',
+        member_smokes: !this.state.none_option_selected ? compact(selected_members).join(', ') : '',
       },
     };
 

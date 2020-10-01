@@ -76,7 +76,7 @@ class GroupHealthPlanMedicalHistory extends Component {
         label: "Are you already covered under any other health insurance policy of Care Health Insurance (formerly Religare Health Insurance)?",
         members: member_base,
         radio_options: radio_options,
-        event_key: 'already_covered_in_religare',
+        event_key: 'already_covered_in_care',
         key: "mand_4",
         input_type: "radio",
       },
@@ -134,7 +134,7 @@ class GroupHealthPlanMedicalHistory extends Component {
     const keyedList = keyBy(this.state.list, 'event_key');
     const [firstListItem = {}] = (this.state.list || []); //take first list item (any list item would be fine, just need the members prop from it)
     const keyedMemberRelations = (firstListItem.members || []).reduce((obj, currMem) => {
-      obj[currMem.backend_key] = currMem.relation;
+      obj[currMem.backend_key] = currMem.key;
       return obj;
     }, {});
 

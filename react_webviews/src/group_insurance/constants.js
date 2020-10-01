@@ -697,6 +697,10 @@ export function getCssMapperReport(policy) {
       color: 'yellow',
       disc: 'Policy Pending'
     },
+    'request_pending': {
+      color: 'yellow',
+      disc: 'Status awaited from'
+    },
     'incomplete': {
       color: 'yellow',
       disc: 'Policy Pending'
@@ -738,20 +742,30 @@ export function getCssMapperReport(policy) {
   }
 
 
-  let obj = {}
+  let obj = {};
+  let policy_status = policy.status;
+
   if (policy.key === 'TERM_INSURANCE') {
-    if (policy.status === 'failed') {
+    if (policy_status === 'failed') {
       obj.status = 'rejected';
-    } else if (policy.status === 'success') {
+    } else if (policy_status === 'success') {
       obj.status = 'policy_issued';
     } else {
       obj.status = 'init';
     }
   } else {
-    obj.status = policy.status;
+    obj.status = policy_status;
   }
 
   obj.cssMapper = cssMapper[obj.status] || cssMapper['init'];
+
+  if(policy_status === 'request_pending') {
+    if(provider === 'STAR') {
+      obj.cssMapper.disc += ` Star Health`;
+    } else {
+      obj.cssMapper.disc += ` ${policy.status_title || policy.key}`;
+    }
+  }
 
   return obj;
 }

@@ -34,6 +34,8 @@ export async function initialize() {
     }
 
     let validation_props = providerConfig.validation_props || {};
+    let pan_amount = providerConfig.pan_amount || '';
+    let claim_settlement_ratio = providerConfig.claim_settlement_ratio || '';
 
     let groupHealthPlanData = storageService().getObject('groupHealthPlanData_' + provider) || {};
     this.setState({
@@ -47,7 +49,9 @@ export async function initialize() {
         plan_selected: groupHealthPlanData && groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected : {},
         insured_account_type: groupHealthPlanData.account_type || '',
         screenData: screenData,
-        validation_props: validation_props
+        validation_props: validation_props,
+        pan_amount: pan_amount,
+        claim_settlement_ratio: claim_settlement_ratio
     }, () => {
         if(!this.state.get_lead && this.state.force_onload_call) {
             this.onload();
@@ -488,6 +492,6 @@ export function setLocalProviderData(data) {
 }
 
 export function memberKeyMapper(member_key) {
-    const final_dob_list = memberKeyMapperFunction(member_key, this.state.groupHealthPlanData);
+    const final_dob_list = memberKeyMapperFunction(this.state.groupHealthPlanData);
     return final_dob_list.filter(data => data.key === member_key)[0];
 }

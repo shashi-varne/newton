@@ -233,6 +233,7 @@ class GroupHealthPlanAddOns extends Component {
                                 selectedIndex={item.selectedIndexOption || 0}
                                 value={item.selected_cover_amount || ''}
                                 width="30"
+                                showInrSymbol={true}
                                 label="Select amount"
                                 id="amount"
                                 name="amount"

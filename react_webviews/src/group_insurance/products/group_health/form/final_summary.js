@@ -68,10 +68,12 @@ class GroupHealthPlanFinalSummary extends Component {
         
         this.setState({
             applicantIndex: applicantIndex
-        })
+        });
+
+        let pan_amount = this.state.pan_amount;
 
         let pan_needed = false;
-        if (lead.total_amount > 100000) {
+        if (lead.total_amount > pan_amount) {
             pan_needed = true;
         }
 
@@ -138,7 +140,7 @@ class GroupHealthPlanFinalSummary extends Component {
                 'members': []
             },
             'mand_4': {
-                'disc': 'Already covered with Religare?',
+                'disc': 'Already covered with Care (formarly Religare)?',
                 'members': []
             }
         }
@@ -352,12 +354,19 @@ class GroupHealthPlanFinalSummary extends Component {
                 }
             ]
         })
-        
-            let address_data={
-                'title': 'Address details',
-                edit_state: `${provider==='STAR'?`/group-insurance/group-health/${this.state.provider}/edit-address-star`:`/group-insurance/group-health/${this.state.provider}/edit-address`}`,
-                data: data,
-            }
+
+        if (provider === 'STAR') {
+            data[0].splice(5, 0, {
+                'title': 'Area',
+                'subtitle': address_data_backend[0].area
+            })
+        };
+
+        let address_data={
+            'title': 'Address details',
+            edit_state: `${provider==='STAR'?`/group-insurance/group-health/${this.state.provider}/edit-address-star`:`/group-insurance/group-health/${this.state.provider}/edit-address`}`,
+            data: data 
+        }
 
         accordianData.push(address_data);
 
@@ -901,7 +910,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
-                                    ADD ONS
+                                    ADD ON
                                 </div>
                                 <div className="mtr-bottom">
                                     {this.state.add_ons_show}
@@ -948,7 +957,7 @@ class GroupHealthPlanFinalSummary extends Component {
                                 </div>
                                 <div className="mtr-bottom flex" style={{textTransform:'none'}}>
                                     <div>
-                                        <div> {inrFormatDecimal(this.state.lead.premium)} </div>
+                                        <div> {inrFormatDecimal(this.state.lead.base_premium)} </div>
                                         <div style={{ fontSize: 10 }}> (Basic premium)</div>
                                     </div>
                                     <div>

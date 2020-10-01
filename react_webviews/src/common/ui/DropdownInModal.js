@@ -15,6 +15,7 @@ import Dialog, {
 import { InputLabel } from 'material-ui/Input';
 import down_arrow from 'assets/down_arrow.svg';
 import SVG from 'react-inlinesvg';
+import { formatAmountInr } from "utils/validators";
 class DropdownInModalClass extends Component {
     constructor(props) {
         super(props);
@@ -159,6 +160,14 @@ class DropdownInModalClass extends Component {
         return null;
     }
 
+    isRuppe = (value) => {
+        if(value && this.props.showInrSymbol) {
+            return formatAmountInr(value);
+        }
+
+        return value;
+    }
+
     render() {
         return (
             <div className="dropdown-in-modal">
@@ -183,7 +192,7 @@ class DropdownInModalClass extends Component {
                     </InputLabel>
 
                     <div className="input-box">
-                    <div className="input-value">{this.props.parent.state[this.props.name] || this.props.value}</div>
+                    <div className="input-value">{this.isRuppe(this.props.parent.state[this.props.name] || this.props.value)}</div>
                         <SVG
                             className="text-block-2-img"
                             preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}

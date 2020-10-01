@@ -8,6 +8,8 @@ export const hdfc = {
     logo_cta: 'hdfc_ergo_ic_logo_cta.svg',
     logo_summary: 'hdfc_ergo_ic_logo_summary.svg',
     show_ind_mem_premium: true,
+    pan_amount: 100000,
+    claim_settlement_ratio: 98.88,
     get_next: { //have as a separate map and not screen-specific property to reduce duplication across all providers and for all screens
         landing_screen: 'insure-type',
         plan_dob_screen: 'plan-select-city',
@@ -185,6 +187,8 @@ export const religare = {
     logo_card: 'ic_religare_logo_card.svg',
     logo_cta: 'ic_religare_logo.svg',
     logo_summary: 'ic_religare_logo.svg',
+    pan_amount: 50000,
+    claim_settlement_ratio: 92.58,
     get_next: { //have as a separate map and not screen-specific property to reduce duplication across all providers and for all screens
         landing_screen: 'insure-type',
         insure_type_screen: 'plan-dob-religare',
@@ -317,24 +321,8 @@ export const religare = {
                 'value': 'BROTHER'
             },
             {
-                'name': 'COUSIN',
-                'value': 'COUSIN'
-            },
-            {
-                'name': 'DAUGHTER IN LAW',
-                'value': 'DAUGHTER_IN_LAW'
-            },
-            {
                 'name': 'FATHER',
                 'value': 'FATHER'
-            },
-            {
-                'name': 'FATHER IN LAW',
-                'value': 'FATHER_IN_LAW'
-            },
-            {
-                'name': 'GRAND DAUGHTER',
-                'value': 'GRANDDAUGHTER'
             },
             {
                 'name': 'GRAND FATHER',
@@ -343,10 +331,6 @@ export const religare = {
             {
                 'name': 'GRAND MOTHER',
                 'value': 'GRANDMOTHER'
-            },
-            {
-                'name': 'GRAND SON',
-                'value': 'GRANDSON'
             },
             {
                 'name': 'BROTHER IN LAW',
@@ -365,24 +349,8 @@ export const religare = {
                 'value': 'MOTHER'
             },
             {
-                'name': 'NEPHEW',
-                'value': 'NEPHEW'
-            },
-            {
-                'name': 'NIECE',
-                'value': 'NIECE'
-            },
-            {
-                'name': 'SELF-PRIMARY MEMBER',
-                'value': 'SELF'
-            },
-            {
                 'name': 'SISTER',
                 'value': 'SISTER'
-            },
-            {
-                'name': 'SON IN LAW',
-                'value': 'SON_IN_LAW'
             },
             {
                 'name': 'SON',
@@ -395,6 +363,14 @@ export const religare = {
             {
                 'name': 'DAUGHTER',
                 'value': 'DAUGHTER'
+            },
+            {
+                'name': 'WIFE',
+                'value': 'WIFE'
+            },
+            {
+                'name': 'HUSBAND',
+                'value': 'HUSBAND'
             }
         ],
 
@@ -509,6 +485,8 @@ export const star = {
     logo_card: 'ic_star_logo_card.svg',
     logo_cta: 'ic_star_logo.svg',
     logo_summary: 'ic_star_logo.svg',
+    pan_amount: 100000,
+    claim_settlement_ratio: 78.15,
     get_next: { //have as a separate map and not screen-specific property to reduce duplication across all providers and for all screens
         landing_screen: 'insure-type',
         insure_type_screen: 'plan-dob',
@@ -784,7 +762,7 @@ export const star = {
                 'value': '11'
             },
             {
-                'name': 'STUDENTS-SCHOOLS AND COLLEGE',
+                'name': 'STUDENTS-SCHOOL AND COLLEGE',
                 'value': '12'
             },
             {
