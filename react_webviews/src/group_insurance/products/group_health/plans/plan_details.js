@@ -321,7 +321,7 @@ class GroupHealthPlanDetails extends Component {
                         </div>
                     </div>
 
-                    <div className="settlement-info">Claim Settlement Ratio: {plan_selected.claim_settlement_ratio}%</div>
+                    <div className="settlement-info">Claim Settlement Ratio: {this.state.claim_settlement_ratio}%</div>
 
                     {plan_selected.recommendation_tag &&
                         <div
