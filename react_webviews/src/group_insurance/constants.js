@@ -766,6 +766,8 @@ export function childeNameMapper(name) {
     'daughter2': '2nd Daughter',
     'daughter3': '3rd Daughter',
     'daughter4': '4th Daughter',
+    'wife': 'wife',
+    'husband': 'husband',
     'father_in_law': 'father in law',
     'mother_in_law': 'mother in law'
   };

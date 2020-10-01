@@ -62,7 +62,7 @@ class GroupHealthPlanSelectPed extends Component {
             item.checked = false;
             item.start_date = '';
             item.answer_description = '';
-            item.description = index === this.state.screenData.ped_list.length-1 ? '' : item.description;
+            item.description = index === this.state.screenData.ped_list.length - 1 ? '' : item.description;
 
             return item;
         });
@@ -85,20 +85,20 @@ class GroupHealthPlanSelectPed extends Component {
         }
 
         let other_diseases = '';
-        for (var p in ped_diseases_name) {
+        for (let disease_name of ped_diseases_name) {
 
             let matched;
 
-            for (var o in options) {
-                if(options[o].name === ped_diseases_name[p]) {
-                    options[o].checked = true;
+            for (let opt of options) {
+                if (opt.name === disease_name) {
+                    opt.checked = true;
                     matched = true;
-                    options[0].value = duration[ped_diseases_name[p]]
+                    opt.value = duration[disease_name];
                 }
             }
 
             if(!matched) {
-                other_diseases += ped_diseases_name[p];
+                other_diseases += disease_name;
             }
         }
 
