@@ -352,10 +352,6 @@ export const religare = {
                 'value': 'SISTER'
             },
             {
-                'name': 'SON IN LAW',
-                'value': 'SON_IN_LAW'
-            },
-            {
                 'name': 'SON',
                 'value': 'SON'
             },
