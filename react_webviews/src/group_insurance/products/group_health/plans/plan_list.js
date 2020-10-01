@@ -140,7 +140,7 @@ class GroupHealthPlanList extends Component {
                 </div>
 
                 <div className="plan-info">
-                    {props.top_plan_benefits.map((props, index) => 
+                    {(props.top_plan_benefits || []).map((props, index) => 
                     this.renderTileMidData(props, index, plan_data))}
                 </div>
 

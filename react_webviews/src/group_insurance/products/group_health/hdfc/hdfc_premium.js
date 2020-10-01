@@ -1,11 +1,21 @@
 import React, { Component } from 'react';
 import { inrFormatDecimal, numDifferentiationInr } from '../../../../utils/validators';
+import { childeNameMapper } from '../../../constants';
 
 
 export default class HDFCPremium extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  renderIndPremium = (props, index) => {
+    return (
+      <div key={index} className="nf-info flex-between" style={{ margin: '0 0 6px 0' }}>
+        <div style={{ textTransform: 'capitalize' }}>{childeNameMapper(props.key)}</div>
+        <div>{inrFormatDecimal(this.props.plan_selected_final[props.backend_key])}</div>
+      </div>
+    )
   }
 
   render() {

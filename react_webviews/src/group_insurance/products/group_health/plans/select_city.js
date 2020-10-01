@@ -66,7 +66,7 @@ class GroupHealthPlanSelectCity extends Component {
         let city = this.state.groupHealthPlanData.city || '';
         this.setState({
             city: this.state.groupHealthPlanData.city || ''
-        })
+        });
         try {
 
 
@@ -77,15 +77,17 @@ class GroupHealthPlanSelectCity extends Component {
                         var resultData = res.pfwresponse.result;
                         let city = resultData.insurance_account.permanent_address.city;
                         this.setState({
-                            city: city
-                        })
-        
+                            city: city === 'NA' ? '' : city,
+                        });
                     } else {
-                        toast(resultData.error || resultData.message
-                            || 'Something went wrong');
+                        toast(
+                            resultData.error ||
+                            resultData.message ||
+                            'Something went wrong'
+                        );
                     }
                 } catch (err) {
-                    console.log(err)
+                    console.log(err);
                     this.setState({
                         show_loader: false
                     });

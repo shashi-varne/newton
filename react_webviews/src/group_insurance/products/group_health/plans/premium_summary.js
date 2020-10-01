@@ -122,15 +122,6 @@ class GroupHealthPlanPremiumSummary extends Component {
         }
     }
 
-    renderIndPremium = (props, index) => {
-        return (
-            <div key={index} className="nf-info flex-between" style={{ margin: '0 0 6px 0' }}>
-                <div style={{textTransform: 'capitalize'}}>{childeNameMapper(props.key)}</div>
-                <div>{inrFormatDecimal(this.state.plan_selected_final[props.backend_key])}</div>
-            </div>
-        )
-    }
-
     renderProviderPremium() {
         const premiumComponentMap = {
             religare: <ReligarePremium {...this.state} />,

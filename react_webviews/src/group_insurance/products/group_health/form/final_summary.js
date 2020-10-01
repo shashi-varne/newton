@@ -214,7 +214,6 @@ class GroupHealthPlanFinalSummary extends Component {
             obj.data = data;
             accordianData.push(obj);
 
-
             if (provider === 'HDFCERGO') {
                 if (member.ped_diseases_name) {
                     let dis_data = {
@@ -320,7 +319,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
         let address_data_backend = [lead.correspondence_address ,lead.permanent_address];
 
-        if (provider === "STAR") {
+        if (['HDFCERGO', 'STAR'].includes(provider)) {
             address_data_backend = [lead.permanent_address]
         }
 
@@ -357,7 +356,7 @@ class GroupHealthPlanFinalSummary extends Component {
             let address_data={
                 'title': 'Address details',
                 edit_state: `${provider==='STAR'?`/group-insurance/group-health/${this.state.provider}/edit-address-star`:`/group-insurance/group-health/${this.state.provider}/edit-address`}`,
-                data: data 
+                data: data,
             }
 
         accordianData.push(address_data);
@@ -482,7 +481,6 @@ class GroupHealthPlanFinalSummary extends Component {
         }
 
         accordianData.push(diseases_data);
-
         this.setState({
             accordianData: accordianData
         })
