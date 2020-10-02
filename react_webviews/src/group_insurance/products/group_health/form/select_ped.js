@@ -47,7 +47,7 @@ class GroupHealthPlanSelectPed extends Component {
         })
         let next_state = `/group-insurance/group-health/${this.state.provider}/final-summary`;
 
-        let lead = this.state.lead;
+        let {lead, provider} = this.state;
         let member_base = lead.member_base;
         let member_key = this.props.match.params.member_key;
 
@@ -56,7 +56,6 @@ class GroupHealthPlanSelectPed extends Component {
         let backend_key = member_info.backend_key;
         let ped_diseases_name = member_info.ped_diseases_name;
         ped_diseases_name = (ped_diseases_name || '').split(',');
-        let duration = member_info.duration;
 
         let options = this.state.screenData.ped_list.map((item, index) => {
             item.checked = false;
@@ -85,25 +84,28 @@ class GroupHealthPlanSelectPed extends Component {
         }
 
         let other_diseases = '';
-        for (let disease_name of ped_diseases_name) {
 
-            let matched;
+        if(provider === 'HDFCERGO') {
+            for (let disease_name of ped_diseases_name) {
 
-            for (let opt of options) {
-                if (opt.name === disease_name) {
-                    opt.checked = true;
-                    matched = true;
-                    opt.value = duration[disease_name];
+                let matched;
+    
+                for (let opt of options) {
+                    if (opt.name === disease_name) {
+                        opt.checked = true;
+                        matched = true;
+                    }
+                }
+    
+                if(!matched) {
+                    other_diseases += disease_name;
                 }
             }
-
-            if(!matched) {
-                other_diseases += disease_name;
+    
+            if(other_diseases) {
+                options[options.length - 1].checked = true;
+                options[options.length - 1].description = other_diseases;
             }
-        }
-
-        if(other_diseases) {
-            options[options.length - 1].checked = true;
         }
 
         this.setState({
@@ -117,7 +119,7 @@ class GroupHealthPlanSelectPed extends Component {
             },
             [this.state.otherInputData.name]: other_diseases,
             next_state: next_state,
-            pedOther: options[options.length - 1].description,
+            pedOther: other_diseases || options[options.length - 1].description,
             member_info_index: member_info_index
         }, ()=> {
             this.setState({
@@ -139,7 +141,7 @@ class GroupHealthPlanSelectPed extends Component {
 
     updateParent = (key, value) => {
 
-        let {options, dateModalIndex} = this.state;
+        let {options, dateModalIndex, provider} = this.state;
         if(key === 'startDateModal') {
             
             options[dateModalIndex].start_date = value;
@@ -149,7 +151,7 @@ class GroupHealthPlanSelectPed extends Component {
             })
         } else if(key === 'openPopUpInputDate' && value === false) {
 
-            if(!options[dateModalIndex].start_date) {
+            if(provider === 'RELIGARE' && !options[dateModalIndex].start_date) {
                 options[dateModalIndex].checked = false;
             }
             this.setState({

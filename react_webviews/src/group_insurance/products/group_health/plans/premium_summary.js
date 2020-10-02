@@ -3,12 +3,11 @@ import Container from '../../../common/Container';
 
 import { nativeCallback } from 'utils/native_callback';
 import { ghGetMember } from '../../../constants';
-import { storageService, inrFormatDecimal } from 'utils/validators';
+import { storageService } from 'utils/validators';
 import { initialize } from '../common_data';
 import BottomInfo from '../../../../common/ui/BottomInfo';
 
 import Api from 'utils/api';
-import { childeNameMapper } from '../../../constants';
 import toast from '../../../../common/ui/Toast';
 import ReligarePremium from '../religare/religare_premium';
 import HDFCPremium from '../hdfc/hdfc_premium';

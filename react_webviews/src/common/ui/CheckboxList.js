@@ -40,7 +40,8 @@ class CheckboxListClass extends Component {
             this.updateParent('dateModalIndex', index);
         }
 
-        if (options[index].name !== 'Other' && !options[index].checked) {
+        if (this.props.provider === 'RELIGARE' && options[index].name !== 'Other' && 
+        !options[index].checked) {
             this.setState({
                 openPopUpInputDate: true,
                 header_title: options[index].name,
@@ -206,7 +207,7 @@ class CheckboxListClass extends Component {
             <div>
                 {this.props.parent.state.options.map(this.renderList)}
                 <InputPopup
-                    sinceWhenInput={true}
+                    sinceWhenInput={this.props.provider === 'RELIGARE'}
                     parent={this}
                     header_title={this.state.otherInputData.header_title}
                     cta_title={this.state.otherInputData.cta_title}
