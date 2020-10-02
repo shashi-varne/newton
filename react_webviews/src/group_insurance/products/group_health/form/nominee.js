@@ -154,6 +154,7 @@ class GroupHealthPlanNomineeDetails extends Component {
     };
 
     handleClick = async () => {
+        this.sendEvents('next');
         let { provider } = this.state;
         const noOfWords = (val = '') => val ? val.split(' ').length : 0; 
         const keysMapper = {
@@ -272,7 +273,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                 }
             }
             
-            this.sendEvents('next');
+            
             this.updateLead(body);
         }
     }

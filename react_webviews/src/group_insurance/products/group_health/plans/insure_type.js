@@ -25,6 +25,7 @@ class GroupHealthSelectInsureType extends Component {
     
     this.setState({
       account_type: this.state.groupHealthPlanData.account_type || '',
+      account_type_name: this.state.groupHealthPlanData.account_type_name || '',
       account_type_options: this.state.screenData.account_type_options
     })
 
@@ -41,6 +42,7 @@ class GroupHealthSelectInsureType extends Component {
 
     let groupHealthPlanData = this.state.groupHealthPlanData;
     groupHealthPlanData.account_type = this.state.account_type;
+    groupHealthPlanData.account_type_name  = this.state.account_type_name;
 
     groupHealthPlanData.eldest_member = ''; //reset
     groupHealthPlanData.eldest_dob = ''; //reset
@@ -91,7 +93,7 @@ class GroupHealthSelectInsureType extends Component {
         "user_action": user_action,
         "product": this.state.providerConfig.provider_api,
         "screen_name": 'who is covered',
-        "insuring": this.state.account_type
+        "insuring": this.state.account_type_name || this.state.account_type
       }
     };
 
@@ -105,6 +107,7 @@ class GroupHealthSelectInsureType extends Component {
   handleChangeRadio = name => event => {
     this.setState({
       [name]: this.state.account_type_options[event].value,
+      account_type_name: this.state.account_type_options[event].name,
       [name + '_error']: ''
     })
   };

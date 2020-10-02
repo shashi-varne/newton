@@ -47,7 +47,8 @@ export async function initialize() {
         providerConfig: providerConfig,
         provider_api: providerConfig.provider_api,
         plan_selected: groupHealthPlanData && groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected : {},
-        insured_account_type: groupHealthPlanData.account_type || '',
+        insured_account_type: provider === 'STAR' && (groupHealthPlanData.account_type || '').indexOf('parents') >=0 ? 
+        (groupHealthPlanData.ui_members || {}).parents_option: groupHealthPlanData.account_type || '',
         screenData: screenData,
         validation_props: validation_props,
         pan_amount: pan_amount,
@@ -57,6 +58,7 @@ export async function initialize() {
             this.onload();
         }
     })
+
     nativeCallback({ action: 'take_control_reset' });
 
 

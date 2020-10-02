@@ -308,7 +308,8 @@ class GroupHealthPlanAddMembers extends Component {
             "properties": {
                 "user_action": user_action,
                 "product": this.state.providerConfig.provider_api,
-                "flow": this.state.insured_account_type || '',
+                "flow": this.state.provider === 'STAR' && (this.state.insured_account_type || '').indexOf('parents') >=0 ? 
+                  this.state.parents_option : this.state.insured_account_type || '',
                 "screen_name": 'add members',
                 'son': ui_members.son_total || '',
                 'daughter': ui_members.daughter_total || '',
@@ -372,6 +373,9 @@ class GroupHealthPlanAddMembers extends Component {
         }
         if (name === 'parents_option') {
             options = parents_category_options;
+            this.setState({
+                parents_option: options[event] ? options[event].value : ''
+            })
         }
         this.setState({
             [name]: options[event] ? options[event].value : '',

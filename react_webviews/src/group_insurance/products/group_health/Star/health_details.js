@@ -79,23 +79,22 @@ class GroupHealthPlanStarHealthDetails extends Component {
         let { radio_options } = this.state;
         let value = radio_options[event].value;
 
-        if (value === 'yes') {
-            this.setState({
-                open: true
-            })
-        }
-
         this.setState({
             value: value,
             error: ''
-        })
-    }
+        }, () => {
 
-    // handleClose = () => {
-        // this.setState({
-            // open: false
-        // })
-    // }
+            if (value === 'yes') {
+                this.sendEvents('next');
+                this.setState({
+                    open: true
+                })
+            }
+            
+        })
+
+       
+    }
 
     handleClick2 = () => {
         this.navigate('insure-type');
