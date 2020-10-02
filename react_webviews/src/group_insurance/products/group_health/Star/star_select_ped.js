@@ -69,7 +69,7 @@ class GroupHealthStarPlanSelectPed extends Component {
 
     const member_base = data.member_base || this.state.member_base || [];
 
-    const selected_members = member_base.map(member => (member.ped_exists || member.ped_exists === 'Yes') ? member.key : '');
+    const selected_members = member_base.map(member => (member.ped_exists && member.ped_exists !== 'No') ? member.key : '');
     let eventObj = {
       event_name: "health_insurance",
       properties: {

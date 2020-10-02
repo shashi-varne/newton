@@ -111,8 +111,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
   sendEvents(user_action, data={}) {
     
     const member_base = data.member_base || this.state.member_base || [];
-
-    const selected_members = member_base.map(member => (member.life_style_question_exists || member.life_style_question_exists === 'Yes') ? member.key : '');
+    const selected_members = member_base.map(member => (member.life_style_question_exists && member.life_style_question_exists !== 'No') ? member.key : '');
     let eventObj = {
       event_name: "health_insurance",
       properties: {
