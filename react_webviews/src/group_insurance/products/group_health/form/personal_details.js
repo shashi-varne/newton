@@ -597,7 +597,7 @@ class GroupHealthPlanPersonalDetails extends Component {
               className="tooltip-icon"
               style={{ margin: '0 0 0 10px' }}
               // ref={ref => this.fooRef = ref} onClick={() => { ReactTooltip.rebuild(); }}
-              data-tip="As per the IRDA guidelines, PAN is required if premium amount is greater than Rs 1 lac"
+              data-tip={`As per the IRDA guidelines, PAN is required if premium amount is greater than Rs ${this.state.pan_amount}`}
               src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
           </div>
         }
