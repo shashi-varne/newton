@@ -99,7 +99,7 @@ class GroupHealthPlanDetails extends Component {
                         }
                     ]
                 } else {
-                    let length = premiums_to_show_backend.length  - 1;
+                    let length = premiums_to_show_backend.length;
     
                     if(length  > 1) {
                         premiums_to_show = [
