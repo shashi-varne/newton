@@ -95,8 +95,8 @@ class HealthInsuranceEntry extends Component {
       "event_name": 'Group Insurance',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'health insurance',
-        "insurance_type": insurance_type ? insurance_type : ''
+        "screen_name": 'comprehensive health insurance',
+        "insurance_provider": insurance_type ? insurance_type : ''
       }
     };
 
