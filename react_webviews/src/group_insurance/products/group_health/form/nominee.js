@@ -259,17 +259,25 @@ class GroupHealthPlanNomineeDetails extends Component {
             }
 
             if (this.state.providerConfig.provider_api === 'star') {
+
+                let appointee_account_key =  {};
+                if(this.state.renderAppointee) {
+                    appointee_account_key =  {
+                        name: this.state.form_data.appointeename,
+                        relation: this.state.form_data.appointeerelation,
+                        dob: this.state.form_data.appointeedob
+                    }
+    
+                }
+
                 body = {
                     nominee_account_key: {
                         name: this.state.form_data.name,
                         relation: this.state.form_data.relation,
                         dob: this.state.form_data.dob
                     },
-                    appointee_account_key: {
-                        name: this.state.form_data.appointeename,
-                        relation: this.state.form_data.appointeerelation,
-                        dob: this.state.form_data.appointeedob
-                    }
+                    appointee_account_key: appointee_account_key
+                    
                 }
             }
             
