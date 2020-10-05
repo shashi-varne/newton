@@ -315,7 +315,7 @@ class GroupHealthPlanAddMembers extends Component {
                 'daughter': ui_members.daughter_total || '',
                 'self': ['selfandfamily', 'self'].includes(this.state.insured_account_type) ? 'yes' : 'no',
                 'parent' : `${(ui_members.father ? 'father, ' : '')} ${(ui_members.mother ? 'mother' : '') }`,
-                'parent_in_law': `${(ui_members['father_in_law'] ? 'father, ' : '')} ${(ui_members['mother_in_law'] ? 'mother' : '') }`,
+                'parent_in_law': `${(ui_members['father_in_law'] ? 'father_in_law, ' : '')} ${(ui_members['mother_in_law'] ? 'mother_in_law' : '') }`,
                 'adult_member': ['selfandfamily', 'family'].includes(this.state.account_type) ? this.state.other_adult_member : ''
             }
         };
