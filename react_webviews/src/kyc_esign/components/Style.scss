@@ -1,0 +1,27 @@
+$status-text-margin: 20px 0 10px 0;
+
+@mixin status_text {
+    font-size: 14px;
+    line-height: 21px;
+}
+
+.digi-status {
+    color: #767E86;
+    
+    .digi-status-text {
+        margin: $status-text-margin;
+        @include status_text();
+    }
+    .digi-desc {
+        @include status_text();
+    }
+}
+
+.nsdl-status {
+    color: #8D879B;
+
+    .nsdl-status-text {
+        margin: $status-text-margin;
+        @include status_text();
+    }
+}

@@ -1,6 +1,7 @@
 import Api from '../../utils/api';
 import { storageService, isEmpty } from '../../utils/validators';
 import { genericErrMsg } from '../constants';
+import { remove } from 'lodash';
 function resetBootFlag() {
   boot = false;
   storageService().remove('wr-boot');
@@ -41,6 +42,46 @@ export const login = async (params) => {
 export const emailLogin = async (params) => {
   try {
     const res = await Api.post('api/user/login', params);
+
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result;
+    } else {
+      throw (result.error || result.message || genericErrMsg);
+    }
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const emailRegister = async (params) => {
+  try {
+    const res = await Api.post(`api/user/register?email=${params.email}&password=${params.password}`);
+
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result;
+    } else {
+      throw (result.error || result.message || genericErrMsg);
+    }
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const resendVerification = async (params) => {
+  try {
+    const res = await Api.get('/api/resendverfication', params);
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
@@ -213,6 +254,11 @@ export const fetchAllPANs = async (params) => {
 
       if (status === 200) {
         storageService().setObject('wr-pans', result.pans);
+        const unidentifiedPan = remove(result.pans, pan => pan.pan === 'NA');
+        console.log(unidentifiedPan);
+        if (unidentifiedPan.length) {
+          return [...result.pans.sort(), unidentifiedPan[0]];
+        }
         return result.pans.sort();
       } else {
         throw (result.error || result.message || genericErrMsg);
