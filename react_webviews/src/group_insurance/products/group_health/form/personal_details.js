@@ -182,9 +182,10 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     if (name === 'height') {
-      const height = `${this.state.height_options[this.state.selectedIndex].value}`;
+      let index = event;
+      const height = `${this.state.height_options[index].value}`;
       this.setState({
-        selectedIndex: event
+        selectedIndex: index
       }, () => {
         form_data[name] = height;
         form_data[name + '_error'] = '';
