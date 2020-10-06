@@ -195,7 +195,7 @@ class GroupHealthPlanSelectPed extends Component {
             for (var i =0; i < member_base.length; i++) {
                 if(member_base[i].key === this.state.member_key && i !== member_base.length -1) {
                     for (var k =i+1; k < member_base.length; k++) {
-                        if(member_base[k].ped_exists) {
+                        if(member_base[k].ped_exists && member_base[k].key !== 'applicant') {
                             next_state = member_base[k].key;
                             break;
                         }
