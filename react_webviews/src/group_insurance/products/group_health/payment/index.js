@@ -195,7 +195,7 @@ class GroupHealthPayment extends Component {
           <div className="main-tile">
 
             <div>
-              {this.state.paymentSuccess && provider !== 'STAR' &&
+              {this.state.paymentSuccess && provider === 'RELIGARE' &&
               <div>
                 {policy_data.policy_number && 
                 <p className="top-content">
@@ -208,6 +208,17 @@ class GroupHealthPayment extends Component {
                   You will soon be contacted by {this.state.lead.base_plan_title} team for a medical review before issuing the policy!
                 </p>
                 }
+
+                </div>
+              }
+
+
+            {this.state.paymentSuccess && provider === 'HDFCERGO' &&
+              <div>
+                <p className="top-content">
+                  Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for {this.state.providerData.title} {this.state.lead.plan_title} is successful.
+                {policy_data.policy_number && <span>Now you have access to {screenData.total_cities}+ cashless hospitals.</span>}
+                </p>
 
                 </div>
               }
@@ -225,7 +236,7 @@ class GroupHealthPayment extends Component {
               {this.state.paymentPending &&
                 <div>
                   <p className="top-content">
-                    Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for {this.state.lead.base_plan_title} {this.state.lead.plan_title} is pending.
+                    Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for {provider === 'HDFCERGO' ? this.state.providerData.title  : this.state.lead.base_plan_title} {this.state.lead.plan_title} is pending.
                           </p>
                 </div>
               }
@@ -233,11 +244,11 @@ class GroupHealthPayment extends Component {
               {this.state.paymentFailed &&
                 <div>
                   <p className="top-content">
-                    Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for {this.state.lead.base_plan_title} {this.state.lead.plan_title} has failed.
+                    Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for {provider === 'HDFCERGO' ? this.state.providerData.title  : this.state.lead.base_plan_title} {this.state.lead.plan_title} has failed.
                             </p>
                   <p className="top-content">
                     If amount has been debited it will be refunded back to you in 3-5 business days.
-                            </p>
+                  </p>
                 </div>
               }
 
