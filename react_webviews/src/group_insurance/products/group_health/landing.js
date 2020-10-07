@@ -400,7 +400,7 @@ class GroupHealthLanding extends Component {
               </Grid>
               <Grid item xs={11}>
                 <div className="accident-plan-terms-text" style={{}}>
-                  I accept <span onClick={() => this.openInBrowser(this.state.common.tnc,
+                I agree to the <span onClick={() => this.openInBrowser(this.state.common.tnc,
                   'tnc')} className="accident-plan-terms-bold" style={{ color: getConfig().primary }}>
                     Terms and conditions</span></div>
               </Grid>
