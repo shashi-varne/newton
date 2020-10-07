@@ -109,7 +109,7 @@ class GroupHealthLanding extends Component {
         }
       });
 
-      
+
     } catch (err) {
       console.log(err)
       this.setState({
@@ -181,6 +181,10 @@ class GroupHealthLanding extends Component {
   }
 
   handleResume = () => {
+
+    if(!this.state.quoteResume || !this.state.quoteResume.id) {
+      return;
+    }
 
     this.setState({
       resume_clicked: true
