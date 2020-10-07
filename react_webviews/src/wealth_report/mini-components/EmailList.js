@@ -141,7 +141,7 @@ export default function EmailList(props) {
       parsing: 'Processing the statement received',
       invalid_statement_uploded: 'Invalid statement received. Try again',
     };
-    return statusMap[statement_status] || 'Sync Pending';
+    return statusMap[statement_status] || 'Processing sync request';
   };
 
   // will render Listing of emails

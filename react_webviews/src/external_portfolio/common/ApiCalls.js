@@ -2,6 +2,7 @@ import Api from '../../utils/api';
 import { getConfig } from '../../utils/functions';
 import { storageService, isEmpty } from '../../utils/validators';
 import { genericErrMsg } from '../constants';
+import { remove } from 'lodash';
 function resetBootFlag() {
   boot = false;
   storageService().remove('hni-boot');
@@ -192,6 +193,10 @@ export const fetchAllPANs = async (params) => {
 
       if (status === 200) {
         storageService().setObject('hni-pans', result.pans);
+        const unidentifiedPan = remove(result.pans, pan => pan.pan === 'NA');
+        if (unidentifiedPan.length) {
+          return [...result.pans.sort(), unidentifiedPan[0]];
+        }
         return result.pans.sort();
       } else {
         throw (result.error || result.message || genericErrMsg);
