@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Container from '../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
+import toast from '../../common/ui/Toast';
+import Api from '../../utils/api';
 
 class ESignInfo extends Component {
   constructor(props) {
@@ -12,15 +14,64 @@ class ESignInfo extends Component {
     }
   }
 
-  handleClick = () => {
+  handleBack = () => {
     nativeCallback({ action: 'exit_web' });
   }
+
+  handleClick = async () => {
+    const redirectUrl = "https://app.fisdom.com/#/kyc-esign/nsdl";
+    // this.sendEvents('next');
+    this.setState({showLoader: true});
+    
+    try {
+        let res = await Api.get(`/api/kyc/formfiller2/kraformfiller/upload_n_esignlink?kyc_platform=app&redirect_url=${redirectUrl}`);
+        var resultData = res.pfwresponse.result;
+        console.log(resultData);
+        this.setState({showLoader: false});
+    } catch(err) {
+        console.log(err)
+        this.setState({
+            show_loader: false
+        });
+        toast('Something went wrong');
+    }
+  }
+
+//   sendEvents(user_action) {
+//     let eventObj = {
+//       "event_name": 'e-mandate',
+//       "properties": {
+//         "user_action": user_action,
+//         "screen_name": 'set_up_easy_sip'
+//       }
+//     };
+
+//     if (user_action ===sendEvents(user_action) {
+//     let eventObj = {
+//       "event_name": 'e-mandate',
+//       "properties": {
+//         "user_action": user_action,
+//         "screen_name": 'set_up_easy_sip'
+//       }
+//     };
+
+//     if (user_action === 'just_set_events') {
+//       return eventObj;
+//     } else {
+//       nativeCallback({ events: eventObj });
+//     }
+//   } 'just_set_events') {
+//       return eventObj;
+//     } else {
+//       nativeCallback({ events: eventObj });
+//     }
+//   }
 
   render() {
     const {show_loader, productName} = this.state;
     const headerData = {
       icon: "close",
-      goBack: this.handleClick
+      goBack: this.handleBack
     }
 
     return (
