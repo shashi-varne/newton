@@ -307,7 +307,7 @@ class GroupHealthPlanFinalSummary extends Component {
             edit_state: `/group-insurance/group-health/${this.state.provider}/edit-contact`,
             data: [
                 {
-                    'title': 'Email',
+                    'title': 'Email id',
                     'subtitle': lead.email
                 },
                 {
