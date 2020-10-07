@@ -256,6 +256,7 @@ class GroupHealthPlanDob extends Component {
                     error={(props.error) ? true : false}
                     helperText={props.error}
                     value={props.value || ''}
+                    placeholder="DD/MM/YYYY"
                     maxLength="10"
                     onChange={this.handleChange(index)} />
             </div>
