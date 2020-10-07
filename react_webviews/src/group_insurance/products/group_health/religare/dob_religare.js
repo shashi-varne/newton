@@ -253,7 +253,6 @@ class GroupHealthPlanDobReligare extends Component {
                                 this.state.eldest_dob_error
                             }
                             value={this.state.eldest_dob || ''}
-                            placeholder="DD/MM/YYYY"
                             maxLength="10"
                             onChange={this.handleChange('eldest_dob')} />
                     </div>
