@@ -67,11 +67,11 @@ class ESignInfo extends Component {
                     3. e-Sign is successfully done
                 </div>
             </div>
-            <div class="esign-bottom">
-                <div class="bottom-text">
+            <div className="esign-bottom">
+                <div className="bottom-text">
                     Initiative by
                 </div>
-                <div class="bottom-image">
+                <div className="bottom-image">
                     <img src={require("assets/ic_gov_meit.svg")} alt="Gov Meit icon" />
                 </div>
             </div>
