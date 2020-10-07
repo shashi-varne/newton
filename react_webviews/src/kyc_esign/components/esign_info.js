@@ -19,56 +19,45 @@ class ESignInfo extends Component {
   }
 
   handleClick = async () => {
-    const redirectUrl = "https://app.fisdom.com/#/kyc-esign/nsdl";
-    // this.sendEvents('next');
-    this.setState({showLoader: true});
-    
+    const redirectUrl = encodeURIComponent(
+      window.location.origin + '/kyc-esign/nsdl' + getConfig().searchParams
+    );
+
+    this.setState({ showLoader: true });
+
     try {
-        let res = await Api.get(`/api/kyc/formfiller2/kraformfiller/upload_n_esignlink?kyc_platform=app&redirect_url=${redirectUrl}`);
-        var resultData = res.pfwresponse.result;
-        console.log(resultData);
-        this.setState({showLoader: false});
-    } catch(err) {
-        console.log(err)
-        this.setState({
-            show_loader: false
+      let res = await Api.get(`/api/kyc/formfiller2/kraformfiller/upload_n_esignlink?kyc_platform=app&redirect_url=${redirectUrl}`);
+      let resultData = res.pfwresponse.result;
+      if (res.pfwresponse.result && !res.pfwresponse.result.error) {
+        if (getConfig().app === 'ios') {
+          nativeCallback({
+            action: 'show_top_bar', message: {
+              title: 'eSign KYC'
+            }
+          });
+        }
+        nativeCallback({
+          action: 'take_control', message: {
+            back_text: 'You are almost there, do you really want to go back?'
+          }
         });
-        toast('Something went wrong');
+        window.location.href = resultData.esign_link;
+      } else {
+        toast(res.pfwresponse.result.error ||
+          res.pfwresponse.result.message || 'Something went wrong', 'error');
+      }
+
+      this.setState({ showLoader: false });
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
     }
   }
 
-//   sendEvents(user_action) {
-//     let eventObj = {
-//       "event_name": 'e-mandate',
-//       "properties": {
-//         "user_action": user_action,
-//         "screen_name": 'set_up_easy_sip'
-//       }
-//     };
-
-//     if (user_action ===sendEvents(user_action) {
-//     let eventObj = {
-//       "event_name": 'e-mandate',
-//       "properties": {
-//         "user_action": user_action,
-//         "screen_name": 'set_up_easy_sip'
-//       }
-//     };
-
-//     if (user_action === 'just_set_events') {
-//       return eventObj;
-//     } else {
-//       nativeCallback({ events: eventObj });
-//     }
-//   } 'just_set_events') {
-//       return eventObj;
-//     } else {
-//       nativeCallback({ events: eventObj });
-//     }
-//   }
-
   render() {
-    const {show_loader, productName} = this.state;
+    const { show_loader, productName } = this.state;
     const headerData = {
       icon: "close",
       goBack: this.handleBack
@@ -77,55 +66,55 @@ class ESignInfo extends Component {
     return (
       <Container
         showLoader={show_loader}
-        title= 'eSign KYC'
+        title='eSign KYC'
         handleClick={this.handleClick}
         buttonTitle='PROCEED'
         headerData={headerData}
       >
         <div className="esign-image">
-            <img
-                src={ require(`assets/${productName}/ils_esign_kyc.svg`)}
-                style={{width:"100%"}}
-                alt="Digilocker Status" 
-            />
+          <img
+            src={require(`assets/${productName}/ils_esign_kyc.svg`)}
+            style={{ width: "100%" }}
+            alt="Digilocker Status"
+          />
         </div>
         <div className="esign-desc">
-            eSign is an online electronic signature service by UIDAI to facilitate <strong>Aadhaar holder to digitally sign</strong> documents.
+          eSign is an online electronic signature service by UIDAI to facilitate <strong>Aadhaar holder to digitally sign</strong> documents.
         </div>
         <div className="esign-subtitle">How to eSign documents</div>
         <div className="esign-steps">
-            <div className="step">
-                <div className="icon-container">
-                    <img src={require(`assets/ic_verify_otp_${productName}.svg`)} alt="Verify OTP" />
-                </div>
-                <div className="step-text">
-                    1. Verify mobile and enter Aadhaar number
-                </div>
+          <div className="step">
+            <div className="icon-container">
+              <img src={require(`assets/ic_verify_otp_${productName}.svg`)} alt="Verify OTP" />
             </div>
-            <div className="step">
-                <div className="icon-container">
-                    <img src={require(`assets/ic_esign_otp_${productName}.svg`)} alt="Esign OTP icon" />
+            <div className="step-text">
+              1. Verify mobile and enter Aadhaar number
                 </div>
-                <div className="step-text">
-                    2. Enter OTP recieved on your Aadhaar linked mobile number
-                </div>
+          </div>
+          <div className="step">
+            <div className="icon-container">
+              <img src={require(`assets/ic_esign_otp_${productName}.svg`)} alt="Esign OTP icon" />
             </div>
-            <div className="step">
-                <div className="icon-container">
-                    <img src={require(`assets/ic_esign_done_${productName}.svg`)} alt="Esign Done icon"/>
+            <div className="step-text">
+              2. Enter OTP recieved on your Aadhaar linked mobile number
                 </div>
-                <div className="step-text">
-                    3. e-Sign is successfully done
-                </div>
+          </div>
+          <div className="step">
+            <div className="icon-container">
+              <img src={require(`assets/ic_esign_done_${productName}.svg`)} alt="Esign Done icon" />
             </div>
-            <div className="esign-bottom">
-                <div className="bottom-text">
-                    Initiative by
+            <div className="step-text">
+              3. e-Sign is successfully done
                 </div>
-                <div className="bottom-image">
-                    <img src={require("assets/ic_gov_meit.svg")} alt="Gov Meit icon" />
+          </div>
+          <div className="esign-bottom">
+            <div className="bottom-text">
+              Initiative by
                 </div>
+            <div className="bottom-image">
+              <img src={require("assets/ic_gov_meit.svg")} alt="Gov Meit icon" />
             </div>
+          </div>
         </div>
       </Container>
     );
