@@ -140,7 +140,7 @@ class GroupHealthPlanFinalSummary extends Component {
                 'members': []
             },
             'mand_4': {
-                'disc': 'Already covered with Care (formarly Religare)?',
+                'disc': 'Already covered with Care (formerly Religare)?',
                 'members': []
             }
         }
