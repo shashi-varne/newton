@@ -43,6 +43,10 @@ class GroupHealthLanding extends Component {
   }
 
   componentWillMount() {
+
+    let { params } = this.props.location || {};
+    let openModuleData = params ? params.openModuleData : {}
+
     let screenData = this.state.providerConfig[screen_name];
 
     nativeCallback({ action: 'take_control_reset' });
@@ -61,22 +65,29 @@ class GroupHealthLanding extends Component {
       offerImageData: screenData.offerImageData,
       whats_covered: screenData.whats_covered,
       whats_not_covered: screenData.whats_not_covered,
-      screenData: screenData
+      screenData: screenData,
+      openModuleData: openModuleData
     })
   }
 
   async componentDidMount() {
 
+    let openModuleData = this.state.openModuleData || {};
+
     try {
       const res = await Api.get(`api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/get/quoteid`)
 
-      this.setState({
-        show_loader: false
-      });
+      if (!openModuleData.sub_module) {
+        this.setState({
+          show_loader: false
+        })
+      }
+     
       var resultData = res.pfwresponse.result;
 
+      let lead = {};
       if (res.pfwresponse.status_code === 200) {
-        let lead = resultData.quote || {};
+        lead = resultData.quote || {};
 
         lead.member_base = [];
 
@@ -84,19 +95,21 @@ class GroupHealthLanding extends Component {
           lead.member_base = ghGetMember(lead, this.state.providerConfig);
         }
 
-        this.setState({
-          quoteResume: lead
-        })
-
-
       } else {
         toast(resultData.error || resultData.message
           || 'Something went wrong');
       }
 
       this.setState({
-        common: resultData
-      })
+        common: resultData,
+        quoteResume: lead
+      }, () => {
+        if(openModuleData.sub_module === 'click-resume') {
+          this.handleResume();
+        }
+      });
+
+      
     } catch (err) {
       console.log(err)
       this.setState({
