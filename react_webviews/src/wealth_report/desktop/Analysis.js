@@ -89,8 +89,14 @@ export default function Analysis(props) {
 
   useEffect(() => {
     if (!isEmpty(analysisData) && !isEmpty(analysisData.percent_split)) {
-      if (isEmpty(graph1Data)) setGraph1Err(true);
-      if (isEmpty(graph2Data)) setGraph2Err(true);
+      if (
+        isEmpty(graph1Data) ||
+        Object.keys(graph1Data).every(key => !Number(graph1Data[key].value))
+      ) setGraph1Err(true);
+      if (
+        isEmpty(graph2Data) ||
+        Object.keys(graph2Data).every(key => !Number(graph2Data[key].value))
+      ) setGraph2Err(true);
     }
   }, [graph1Data, graph2Data]);
 
