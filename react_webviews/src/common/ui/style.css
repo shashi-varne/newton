@@ -104,8 +104,8 @@
   font-weight: 500;
 }
 .RadioWithIcon {
-  color: var(--label);
-  font-size: 0.8rem;
+  color: #0A1D32;
+  font-size: 13px;
   margin-bottom: 15px;
   position: relative;
 }
