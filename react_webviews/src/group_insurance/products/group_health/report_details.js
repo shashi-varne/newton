@@ -328,7 +328,7 @@ class GroupHealthReportDetails extends Component {
     }
 
     render() {
-
+        let {provider} = this.state;
 
         return (
             <Container
@@ -349,7 +349,7 @@ class GroupHealthReportDetails extends Component {
                     </div>
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
-                            <div className="tc-title">{this.state.providerData.title}</div>
+                            <div className="tc-title">{provider === 'HDFCERGO' ? this.state.providerData.subtitle  : this.state.providerData.title}</div>
                             <div className="tc-subtitle">{this.state.lead.plan_title || this.state.providerData.subtitle}</div>
                         </div>
 

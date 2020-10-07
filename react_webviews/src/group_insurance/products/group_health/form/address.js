@@ -82,11 +82,11 @@ class GroupHealthPlanAddressDetails extends Component {
 
             };
 
-            if(form_data.city) {
+            if(form_data.pincode) {
                 this.getCityListReligare({form_data, name: 'pincode'});
             };
 
-            if(form_data.p_city) {
+            if(form_data.p_pincode) {
                 this.getCityListReligare({form_data, name: 'p_pincode'});
             };
         }

@@ -143,15 +143,19 @@ class GroupHealthPlanIsPed extends Component {
             let key = member_base[i].key;
             let backend_key = member_base[i].backend_key;
             body[backend_key] = {};
-            if (form_data[key + '_checked']) {
-                body[backend_key].ped_exists = 'true';
 
-                if (!next_state) {
-                    next_state = key;
+            if(key !== 'applicant') {
+                if (form_data[key + '_checked']) {
+                    body[backend_key].ped_exists = 'true';
+    
+                    if (!next_state) {
+                        next_state = key;
+                    }
+                } else {
+                    body[backend_key].ped_exists = 'false';
                 }
-            } else {
-                body[backend_key].ped_exists = 'false';
             }
+            
         }
 
         if (this.state.lead.account_type !== 'self' && form_data.is_ped === 'YES' && !next_state) {

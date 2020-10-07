@@ -155,7 +155,7 @@ class GroupHealthPlanDob extends Component {
                         dob_data.error = `Valid age is between ${dob_adult.min} - ${dob_adult.max} years`;
                         canProceed = false;
                     } else if (manAgeCheck === key && age.age < dob_married_male.min) {
-                        dob_data.error = `Minimum age is ${dob_adult.min} for married male`;
+                        dob_data.error = `Minimum age is ${dob_married_male.min} for married male`;
                         canProceed = false;
                     }
                     adult_ages.push(age.age);

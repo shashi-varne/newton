@@ -97,6 +97,11 @@ class GroupHealthPlanPremiumSummary extends Component {
                 body.account_type = groupHealthPlanData.ui_members.parents_option;
             }
 
+            let total_member = body.mem_info.adult + body.mem_info.child;
+            if(total_member === 1) {
+                body.type_of_plan = 'NF';  //for backend handlling
+            }
+
             const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/quote`, body);
 
             var resultData = res.pfwresponse.result;

@@ -2,6 +2,7 @@ export const hdfc = {
     key: 'HDFCERGO',
     provider_api: 'hdfcergo',
     title: 'HDFC ERGO',
+    title2: 'my: health Suraksha',
     subtitle: 'my: health Suraksha',
     logo: 'hdfc_ergo_ic_logo_cta.svg',
     logo_card: 'hdfc_ergo_ic_logo_card.svg',
@@ -173,7 +174,7 @@ export const hdfc = {
         ]
     },
     payment_screen: {
-        total_cities: 7800
+        total_cities: 10000
     }
 
 };
