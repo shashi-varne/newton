@@ -109,6 +109,12 @@
   font-family: "Roboto";
   font-weight: 500;
 }
+.RadioWithIcon {
+  color: var(--label);
+  font-size: 0.8rem;
+  margin-bottom: 15px;
+  position: relative;
+  }
 .RadioWithIcon.professional2 {
   color: #4a4a4a !important;
   font-size: 0.8rem;
@@ -539,7 +545,7 @@ body[data-device="mobile"] {
 }
 
 .plus-minus-input-label {
-  color: #0A1D32;
+  color: #8d879b;
   font-size: 13px;
   font-weight: 400;
   margin: 0 0 10px 0;
