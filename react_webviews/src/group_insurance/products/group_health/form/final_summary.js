@@ -328,7 +328,7 @@ class GroupHealthPlanFinalSummary extends Component {
         let data = address_data_backend.map((item, index) => {
             return [
                 {
-                    'title': index === 0 ? 'Current address' : 'Permanent address',
+                    'title': `${provider==='RELIGARE'? index === 0 ? 'Current address' : 'Permanent address':''}`,
                     'subtitle': ' ',
                     'key': 'heading'
                 },
@@ -721,7 +721,7 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     renderAccordiansubData = (props, index) => {
- 
+
         return (
             <div key={index}>
                 {props.subtitle &&
