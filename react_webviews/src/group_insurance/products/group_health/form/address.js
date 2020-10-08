@@ -616,12 +616,12 @@ class GroupHealthPlanAddressDetails extends Component {
             >
 
                 <div className="common-top-page-subtitle">
-                    Policy will be delivered to the current address
+                    {this.state.provider==='RELIGARE'?' Policy will be delivered to the current address':'Policy will be delivered to this address'}
                 </div>
-
+                {this.state.provider==='RELIGARE'&&
                 <div style={{ color: '#64778D', fontSize: 13, fontWeight: 300, marginTop: '37px', marginBottom: '20px' }}>
                     Current Address
-                </div>
+                </div>}
                 <FormControl fullWidth>
 
                     <div className="InputField">
