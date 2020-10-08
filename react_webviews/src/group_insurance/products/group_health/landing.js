@@ -52,7 +52,7 @@ class GroupHealthLanding extends Component {
     nativeCallback({ action: 'take_control_reset' });
 
     let stepsContentMapper = {
-      title: `Why buy on ${this.state.productName} ?` ,
+      title: `Get insured with ease` ,
       options: [
         { 'icon': 'icn_hs_no_document', 'title': 'No document required', 'subtitle': 'Easy and paperless process' },
         { 'icon': 'icn_hs_assistance', 'title': 'Complete assistance', 'subtitle': 'Our experts will help in purchase and claim of policy' },
@@ -350,7 +350,7 @@ class GroupHealthLanding extends Component {
           </div>
 
           <div className="generic-page-title" style={{ margin: '20px 0 15px 0' }}>
-            Why to have health insurance?
+            Benefits of health insurance
           </div>
 
           <div className="his">
