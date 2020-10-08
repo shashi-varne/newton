@@ -368,8 +368,39 @@ export function formCheckUpdate(keys_to_check, form_data, just_check) {
         }
     }
 
+    let validations = {
+        'net_monthly_salary': {
+            value_to_check: 25000,
+            error_message: 'Minimum salary must be greater than or equals to Rs 25000'
+        },
+        'work_experience': {
+            value_to_check: 1,
+            error_message: 'Total work experience must be greater than or equals to 1 yr'
+        },
+        'duration': {
+            value_to_check: 6,
+            error_message: 'No of months in current job must be greater than or equals to 6 months'
+        }
+    }
+
     let canSubmitForm = true;
     for (var key in form_data) {
+        if (Object.keys(validations).includes(key) && form_data[key]) {
+            let value = form_data[key];
+            let screen_name = this.state.screen_name;
+
+            if (value < validations[key].value_to_check) {
+                form_data[key + '_error'] = screen_name === 'address-details' && key === 'duration' ?
+                 'No of months in residence must be greater than or equals to 6 months' 
+                    : validations[key].error_message;
+
+                canSubmitForm = false;
+                break;
+            } else {
+                canSubmitForm = true;
+            }
+        }
+
         if (key.indexOf('error') >= 0) {
             if (form_data[key]) {
                 canSubmitForm = false;
