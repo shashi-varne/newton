@@ -396,8 +396,6 @@ export function formCheckUpdate(keys_to_check, form_data, just_check) {
 
                 canSubmitForm = false;
                 break;
-            } else {
-                canSubmitForm = true;
             }
         }
 
