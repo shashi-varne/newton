@@ -23,7 +23,7 @@ class ESignInfo extends Component {
       window.location.origin + '/kyc-esign/nsdl' + getConfig().searchParams
     );
 
-    this.setState({ showLoader: true });
+    this.setState({ show_loader: true });
 
     try {
       let res = await Api.get(`/api/kyc/formfiller2/kraformfiller/upload_n_esignlink?kyc_platform=app&redirect_url=${redirectUrl}`);
@@ -47,7 +47,7 @@ class ESignInfo extends Component {
           resultData.message || 'Something went wrong', 'error');
       }
 
-      this.setState({ showLoader: false });
+      this.setState({ show_loader: false });
     } catch (err) {
       this.setState({
         show_loader: false
@@ -61,7 +61,7 @@ class ESignInfo extends Component {
     const headerData = {
       icon: "close",
       goBack: this.handleBack
-    }
+    };
 
     return (
       <Container
@@ -118,7 +118,7 @@ class ESignInfo extends Component {
         </div>
       </Container>
     );
-  }
+  };
 }
 
 export default ESignInfo;
