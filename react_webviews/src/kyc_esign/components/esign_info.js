@@ -28,7 +28,7 @@ class ESignInfo extends Component {
     try {
       let res = await Api.get(`/api/kyc/formfiller2/kraformfiller/upload_n_esignlink?kyc_platform=app&redirect_url=${redirectUrl}`);
       let resultData = res.pfwresponse.result;
-      if (res.pfwresponse.result && !res.pfwresponse.result.error) {
+      if (resultData && !resultData.error) {
         if (getConfig().app === 'ios') {
           nativeCallback({
             action: 'show_top_bar', message: {
@@ -43,8 +43,8 @@ class ESignInfo extends Component {
         });
         window.location.href = resultData.esign_link;
       } else {
-        toast(res.pfwresponse.result.error ||
-          res.pfwresponse.result.message || 'Something went wrong', 'error');
+        toast(resultData.error ||
+          resultData.message || 'Something went wrong', 'error');
       }
 
       this.setState({ showLoader: false });
@@ -75,7 +75,7 @@ class ESignInfo extends Component {
           <img
             src={require(`assets/${productName}/ils_esign_kyc.svg`)}
             style={{ width: "100%" }}
-            alt="Digilocker Status"
+            alt="eSign KYC icon"
           />
         </div>
         <div className="esign-desc">
