@@ -721,7 +721,6 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     renderAccordiansubData = (props, index) => {
-
         return (
             <div key={index}>
                 {props.subtitle &&
