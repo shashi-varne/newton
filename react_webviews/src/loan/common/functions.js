@@ -371,15 +371,15 @@ export function formCheckUpdate(keys_to_check, form_data, just_check) {
     let validations = {
         'net_monthly_salary': {
             value_to_check: 25000,
-            error_message: 'Minimum salary must be greater than or equals to Rs 25000'
+            error_message: 'Minimum monthly salary of Rs 25,000 needed'
         },
         'work_experience': {
             value_to_check: 1,
-            error_message: 'Total work experience must be greater than or equals to 1 yr'
+            error_message: 'Minimum work experience of 1 yr needed'
         },
         'duration': {
             value_to_check: 6,
-            error_message: 'No of months in current job must be greater than or equals to 6 months'
+            error_message: 'No of months in current job must be greater than 6 months'
         }
     }
 
@@ -391,7 +391,7 @@ export function formCheckUpdate(keys_to_check, form_data, just_check) {
 
             if (value < validations[key].value_to_check) {
                 form_data[key + '_error'] = screen_name === 'address-details' && key === 'duration' ?
-                 'No of months in residence must be greater than or equals to 6 months' 
+                 'No of months in residence must be greater than 6 months' 
                     : validations[key].error_message;
 
                 canSubmitForm = false;
