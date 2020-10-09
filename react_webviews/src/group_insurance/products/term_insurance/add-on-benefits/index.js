@@ -7,7 +7,7 @@ import Container from '../../../common/Container';
 import Api from 'utils/api';
 import { getConfig, manageDialog } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import dropdown_arrow_fisdom from 'assets/down_arrow_fisdom.svg';
+import dropdown_arrow_fisdom from 'assets/fisdom/down_arrow_fisdom.svg';
 import dropdown_arrow_myway from 'assets/down_arrow_myway.svg';
 import DropdownInPage from '../../../../common/ui/DropdownInPage';
 import Button from 'material-ui/Button';
@@ -25,9 +25,9 @@ import { add_on_benefits_points } from '../../../constants';
 class AddOnBenefits extends Component {
 
   constructor(props) {
-    var quoteSelected = JSON.parse(window.localStorage.getItem('quoteSelected')) || {};
-    let required_providers = window.localStorage.getItem('required_providers') ?
-      JSON.parse(window.localStorage.getItem('required_providers')) : [];
+    var quoteSelected = JSON.parse(window.sessionStorage.getItem('quoteSelected')) || {};
+    let required_providers = window.sessionStorage.getItem('required_providers') ?
+      JSON.parse(window.sessionStorage.getItem('required_providers')) : [];
     let insuranceData = {
       tobacco_choice: quoteSelected.tobacco_choice,
       cover: quoteSelected.cover_amount,
@@ -231,10 +231,10 @@ class AddOnBenefits extends Component {
       quote_id: id
     };
 
-    let show_quotes = window.localStorage.getItem('show_quotes');
+    let show_quotes = window.sessionStorage.getItem('show_quotes');
     if (show_quotes) {
       insuranceData.create = 'Y';
-      window.localStorage.setItem('show_quotes', '');
+      window.sessionStorage.setItem('show_quotes', '');
     }
 
     insuranceData.insurance_all_web = true;
@@ -245,7 +245,7 @@ class AddOnBenefits extends Component {
         show_loader: false
       });
       if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.application) {
-        window.localStorage.setItem('cameFromHome', '');
+        window.sessionStorage.setItem('cameFromHome', '');
         let url = res.pfwresponse.result.profile_start;
         let search = url.split('?')[1];
         let searchParamsMustAppend = getConfig().searchParamsMustAppend.split('?')[1];

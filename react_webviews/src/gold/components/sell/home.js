@@ -267,7 +267,7 @@ class GoldSellHome extends Component {
   selectGoldProduct(index) {
     this.sendEvents('next', this.state.gold_products[index].disc);
     let selectedProduct = this.state.gold_products[index];
-    window.localStorage.setItem('goldProduct', JSON.stringify(selectedProduct));
+    window.sessionStorage.setItem('goldProduct', JSON.stringify(selectedProduct));
     this.navigate(this.state.provider + '/select-gold-product');
   };
 
@@ -512,7 +512,7 @@ class GoldSellHome extends Component {
               </div>
             </div>
 
-            <div className="gold-how-steps pointer" onClick={() => this.showHideSteps()}>
+            <div className="common-how-steps pointer" onClick={() => this.showHideSteps()}>
                 <div className="top-tile">
                   <div className="top-title">
                   How to sell digital gold?
@@ -524,7 +524,7 @@ class GoldSellHome extends Component {
 
 
               {this.state.showSteps &&
-                <div className='gold-steps-images'>
+                <div className='common-steps-images'>
                  {stepsContentMapper.map(this.renderInfoSteps)}
                 </div>
               }

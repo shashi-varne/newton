@@ -6,7 +6,7 @@ import Container from '../../../common/Container';
 import Api from 'utils/api';
 import { getConfig, manageDialog } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import dropdown_arrow_fisdom from 'assets/down_arrow_fisdom.svg';
+import dropdown_arrow_fisdom from 'assets/fisdom/down_arrow_fisdom.svg';
 import dropdown_arrow_myway from 'assets/down_arrow_myway.svg';
 import DropdownInPage from '../../../../common/ui/DropdownInPage';
 import Button from 'material-ui/Button';
@@ -32,7 +32,7 @@ class QuoteGeneration extends Component {
       show_loader: true,
       params: qs.parse(props.history.location.search.slice(1)),
       type: getConfig().productName,
-      quoteData: window.localStorage.getItem('quoteData') ? JSON.parse(window.localStorage.getItem('quoteData')) : '',
+      quoteData: window.sessionStorage.getItem('quoteData') ? JSON.parse(window.sessionStorage.getItem('quoteData')) : '',
       canRenderList: false,
       openPopUp: false,
       renderList: [],
@@ -60,8 +60,8 @@ class QuoteGeneration extends Component {
 
   componentWillMount() {
 
-    let excluded_providers = window.localStorage.getItem('excluded_providers') ?
-        JSON.parse(window.localStorage.getItem('excluded_providers')) : [];
+    let excluded_providers = window.sessionStorage.getItem('excluded_providers') ?
+        JSON.parse(window.sessionStorage.getItem('excluded_providers')) : [];
       let required_providers = [];
       if (excluded_providers.length > 0) {
         for (var j in excluded_providers) {
@@ -72,7 +72,7 @@ class QuoteGeneration extends Component {
         (required_providers).push(key);
       }
 
-      window.localStorage.setItem('required_providers', JSON.stringify(required_providers));
+      window.sessionStorage.setItem('required_providers', JSON.stringify(required_providers));
 
       let intervalId = setInterval(this.countdown, 1000);
 
@@ -216,7 +216,7 @@ class QuoteGeneration extends Component {
       filterAclick:filterAclick,
       quoteData: quoteData
     });
-    window.localStorage.setItem('quoteData', JSON.stringify(quoteData));
+    window.sessionStorage.setItem('quoteData', JSON.stringify(quoteData));
     this.getQuotes();
   }
 
@@ -262,10 +262,10 @@ class QuoteGeneration extends Component {
       quote_id: id
     };
 
-    let show_quotes = window.localStorage.getItem('show_quotes');
+    let show_quotes = window.sessionStorage.getItem('show_quotes');
     if (show_quotes) {
       insuranceData.create = 'Y';
-      window.localStorage.setItem('show_quotes', '');
+      window.sessionStorage.setItem('show_quotes', '');
     }
 
     try {
@@ -274,7 +274,7 @@ class QuoteGeneration extends Component {
         show_loader: false
       });
       if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.application) {
-        window.localStorage.setItem('cameFromHome', '');
+        window.sessionStorage.setItem('cameFromHome', '');
         let url = res.pfwresponse.result.profile_start;
         let search = url.split('?')[1];
         let searchParamsMustAppend = getConfig().searchParamsMustAppend.split('?')[1];

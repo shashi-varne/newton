@@ -88,15 +88,18 @@ class MandateBank extends Component {
   }
 
   sendEvents(user_action) {
+    let { form_data } = this.state;
+
     let eventObj = {
       "event_name": 'lending',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'introduction',
-        'account_no': this.state.form_data.account_no ? 'yes' : 'no',
-        'confirm_account_no': this.state.form_data.confirm_account_no ? 'yes' : 'no',
-        'ifsc_code': this.state.form_data.ifsc_code ? 'yes' : 'no',
-        'account_type': this.state.form_data.account_type ? 'yes' : 'no'
+        "screen_name": 'bank account details',
+        "account_holder_name": form_data.name || '',
+        'account_no': form_data.account_no || '',
+        'confirm_account_no': form_data.confirm_account_no || '',
+        'ifsc_code': form_data.ifsc_code || '',
+        'account_type': form_data.account_type || '',
       }
     };
 
@@ -303,6 +306,7 @@ class MandateBank extends Component {
   };
 
   goBack = () => {
+    this.sendEvents('back');
     this.navigate('upload-pan');
   }
 

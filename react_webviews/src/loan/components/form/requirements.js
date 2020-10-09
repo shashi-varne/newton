@@ -115,23 +115,25 @@ class ContactDetails extends Component {
         this.formCheckUpdate(keys_to_check);
     }
 
-
     sendEvents(user_action) {
+        let { form_data } = this.state; 
+        
         let eventObj = {
             "event_name": 'lending',
             "properties": {
                 "user_action": user_action,
-                "screen_name": 'contact details',
-                'email': this.state.form_data.email ? 'yes' : 'no',
-                'mobile_number': this.state.form_data.mobile_number ? 'yes' : 'no',
-                'from_edit': this.props.edit ? 'yes' : 'no'
+                "screen_name": 'loan requirements',
+                "loan_amount": form_data.amount_required || '',
+                "loan_purpose": form_data.purpose || '',
+                "loan_period": form_data.tenor || '',
+                "employment_type": form_data.employment_type || ''
             }
         };
 
         if (user_action === 'just_set_events') {
             return eventObj;
         } else {
-            nativeCallback({ events: eventObj });
+            nativeCallback({ events: eventObj })
         }
     }
 
@@ -145,7 +147,6 @@ class ContactDetails extends Component {
     }
 
     render() {
-
         return (
             <Container
                 events={this.sendEvents('just_set_events')}

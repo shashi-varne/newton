@@ -86,7 +86,6 @@ class KycStatus extends Component {
     this.initialize();
     
     let { status, okyc_id,flow } = this.state.params;
-
     if(flow === 'kyc') {
       this.setState({
         kyc_checking: true
@@ -97,9 +96,15 @@ class KycStatus extends Component {
       status = 'cancelled'
     }
 
+    let { params } = this.props.location;
+    if (!params) {
+      params = {};
+    }
+
 
     this.setState({
       status: status,
+      rejection_reason: params.rejection_reason,
       okyc_id: okyc_id || this.state.okyc_id,
       commonMapper: commonMapper[status],
       flow:flow
@@ -188,13 +193,47 @@ class KycStatus extends Component {
   }
 
   sendEvents(user_action) {
-    let eventObj = {
-      "event_name": 'lending',
-      "properties": {
-        "user_action": user_action,
-        "screen_name": 'introduction'
+    let stage;
+    if (this.state.status === 'not_eligible')
+      stage = 'dmi fail'
+    else if (this.state.status === 'failed')
+      stage = 'third party fail'
+    else if (this.state.status === 'pending')
+      stage = 'no response'
+    else
+      stage = 'waiting'
+
+    let eventObj;
+    if (this.state.status === 'loan_not_eligible') {
+      eventObj = {
+        "event_name": 'lending',
+        "properties": {
+          "user_action": user_action,
+          "screen_name": 'loan-eligibility',
+          "stage": 'not eligible',
+          "rejection_reason": this.state.rejection_reason === undefined ? 'Rejected by DMI' : this.state.rejection_reason
+        }
+      };
+    } else if (this.state.status === 'sorry') {
+      eventObj = {
+        "event_name": 'lending',
+        "properties": {
+          "user_action": user_action,
+          "screen_name": 'Sorry',
+          "stage": 'creating profile failure'
+        }
+      }
+    } else {
+      eventObj = {
+        "event_name": 'lending',
+        "properties": {
+          "user_action": user_action,
+          "screen_name": 'kyc-response',
+          "stage": stage
+        }
       }
     };
+    
 
     if (user_action === 'just_set_events') {
       return eventObj;
@@ -209,6 +248,7 @@ class KycStatus extends Component {
   }
 
   goBack = () => {
+    this.sendEvents('back');
     this.navigate(this.state.commonMapper.close_state);
   }
 
@@ -300,18 +340,40 @@ class KycStatus extends Component {
               </div>
             }
 
-            {this.state.status === 'loan_not_eligible' &&
+            {(this.state.status === 'loan_not_eligible') &&
               <div>
-                <p className="top-content">
-                  At the outset, we thank you for expressing interest in availing a loan.
-                </p>
-                <p className="top-content">
-                  We regret to inform you that <b>we cannot process your application further at this stage</b>,
-                  as it does not meet our partner’s policy criteria.
-                </p>
-                <p className="top-content">
-                  Hope to be of assistance in future.
-                </p>
+                {(this.state.rejection_reason !== 'location' && this.state.rejection_reason !== 'occupation') && <div>
+                  <p className="top-content">
+                    At the outset, we thank you for expressing interest in availing a loan.
+                  </p>
+
+                  <p className="top-content">
+                    We regret to inform you that <b>we cannot process your application further at this stage</b>,
+                    as it does not meet our partner’s policy criteria.
+                  </p>
+
+                  <p className="top-content">
+                    Hope to be of assistance in future.
+                  </p>
+                </div>}
+
+                {(this.state.rejection_reason === 'location') && 
+                  <div>
+                    <p className="top-content">Sorry! We don't serve in the selected location yet.</p>
+                    <p className="top-content">
+                      Thank you for expressing interest in availing a loan. Hope to be of assistance in future.
+                    </p>
+                  </div>
+                }
+
+                {(this.state.rejection_reason === 'occupation') &&
+                  <div>
+                    <p className="top-content">Sorry! As of now, we are only serving salaried professionals.</p>
+                    <p className="top-content">
+                      Thank you for expressing interest in availing a loan. Hope to be of assistance in future.
+                    </p>
+                  </div>
+                }
               </div>
             }
 

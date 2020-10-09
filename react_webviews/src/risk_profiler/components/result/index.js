@@ -35,7 +35,7 @@ class Result extends Component {
   async componentDidMount() {
     try {
 
-      // let score = JSON.parse(window.localStorage.getItem('score'));
+      // let score = JSON.parse(window.sessionStorage.getItem('score'));
       let score;
       const res = await Api.get('/api/risk/profile/user/recommendation');
       if (res.pfwresponse.result.score) {
@@ -137,7 +137,7 @@ class Result extends Component {
         show_loader: false
       });
       if (res.pfwresponse.result.message === 'success') {
-        window.localStorage.setItem('questionnaireResponse', '');
+        window.sessionStorage.setItem('questionnaireResponse', '');
         this.navigate('intro');
       } else {
         toast(res.pfwresponse.result.message || res.pfwresponse.result.console.error

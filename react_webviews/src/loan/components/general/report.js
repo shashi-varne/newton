@@ -32,16 +32,17 @@ class Report extends Component {
     });
   };
 
-  handleClick = () => {
-    this.sendEvents("next");
+  handleClick = (card_name) => {
+    this.sendEvents("next", { card: card_name });
   };
 
-  sendEvents(user_action) {
+  sendEvents(user_action, data={} ) {
     let eventObj = {
       event_name: "lending",
       properties: {
         user_action: user_action,
-        screen_name: "introduction",
+        screen_name: "loan report",
+        card_click: data.card
       },
     };
 
@@ -95,7 +96,10 @@ class Report extends Component {
             </div>
           </div>
 
-          <div className="block2" onClick={() => this.navigate("schedule-Doc")}>
+          <div className="block2" onClick={() => {
+            this.handleClick('loan schedule document')
+            this.navigate("schedule-Doc")
+          }}>
             <div className="card-info">
               <img
                 src={require(`assets/${this.state.productName}/ic_loan_schedule.svg`)}
@@ -109,6 +113,7 @@ class Report extends Component {
           <div
             className="block2"
             onClick={() => {
+              this.handleClick('customer portal')
               this.openInBrowser("https://portal.dmifinance.in/");
             }}
           >
@@ -122,7 +127,10 @@ class Report extends Component {
             </div>
           </div>
 
-          <div className="block2" onClick={() => this.navigate("help")}>
+          <div className="block2" onClick={() => {
+            this.handleClick('help')
+            this.navigate("help")
+          }}>
             <div className="card-info">
               <img
                 src={require(`assets/${this.state.productName}/ic_help.svg`)}

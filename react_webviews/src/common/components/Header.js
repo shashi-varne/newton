@@ -40,7 +40,6 @@ const Header = ({ classes, title, count, total, current, goBack,
         style={style}
           className={`${classes.flex},PageTitle main-top-title-header ${inPageTitle ? 'slide-fade' : 'slide-fade-show'} ${className}`}
         >
-
           {title}
         </div>
       </div>

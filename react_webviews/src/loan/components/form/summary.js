@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
 
-// import {getConfig} from 'utils/functions';
+import {getConfig} from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import toast from '../../../common/ui/Toast';
 import { initialize } from '../../common/functions';
@@ -40,7 +40,8 @@ class FormSummary extends Component {
             agreement: [],
             agree_check: '',
             vendor_info: {},
-            isScrolledToBottom: false
+            isScrolledToBottom: false,
+            detail_clicked: []
         }
         this.initialize = initialize.bind(this);
         this.agreeRef = React.createRef();
@@ -146,15 +147,15 @@ class FormSummary extends Component {
             edit_state: `/loan/edit-address-details`,
             data: [
                 {
-                    'title': 'Residence type (aadhaar address)',
+                    'title': 'Residence type (Current address)',
                     'subtitle': current_address_data.residence_type
                 },
                 {
-                    'title': 'Duration (aadhaar address)',
+                    'title': 'Duration (Current address)',
                     'subtitle': current_address_data.duration
                 },
                 {
-                    'title': 'Aadhaar address',
+                    'title': 'Current address',
                     'subtitle': `${current_address_data.address}, ${current_address_data.pincode},
                     ${current_address_data.city}, ${current_address_data.state},
                      ${current_address_data.country}`
@@ -260,11 +261,22 @@ class FormSummary extends Component {
             try {
                 let res = await Api.get(`/relay/api/loan/submit/application/${this.state.application_id}`);
 
-
                 var resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200 && !resultData.error) {
 
-                    this.openCreateProfile();
+                    if (resultData.status === 'Application Rejected' && ['location', 'occupation'].indexOf(resultData.rejection_reason) !== -1) {
+                        let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
+                        this.navigate('instant-kyc-status', {
+                            searchParams: searchParams,
+                            params: {
+                                rejection_reason: resultData.rejection_reason
+                            }
+                        });
+                        
+                    } else {
+                        this.openCreateProfile();
+                    }
+
                 } else {
                     this.setState({
                         show_loader: false
@@ -286,16 +298,20 @@ class FormSummary extends Component {
 
 
     sendEvents(user_action, data = {}) {
+        let detail_clicked = this.state.detail_clicked.filter((item, index) => 
+            this.state.detail_clicked.indexOf(item) === index &&
+            item !== false
+        );
+
         let eventObj = {
-            "event_name": 'health_insurance',
+            "event_name": 'lending',
             "properties": {
                 "user_action": user_action,
-                "product": 'health suraksha',
-                "flow": this.state.insured_account_type || '',
-                "screen_name": 'summary',
-                'restart_clicked': this.state.restart_clicked ? 'yes' : 'no',
-                'restart_conformation': this.state.restart_conformation ? 'yes' : 'no',
-                'edit_clicked': data.edit_clicked || ''
+                "screen_name": 'application form',
+                "edit": data.edit_clicked || 'none',
+                "detail_click": detail_clicked.length !== 0 ? detail_clicked.join(',') : 'none',
+                "consent": this.state.agree_check,
+                "confirm_details": this.state.confirm_details_check ? 'yes' : 'no'
             }
         };
 
@@ -340,7 +356,11 @@ class FormSummary extends Component {
                     <div className="bct-content">
                         {props.data.map(this.renderAccordiansubData)}
                         {!this.state.form_submitted &&
-                            <div onClick={() => this.openEdit(props.edit_state)} className="generic-page-button-small">
+                            <div
+                                onClick={() => {
+                                    this.sendEvents('next', { edit_clicked: props.title.split(' ')[0] });
+                                    this.openEdit(props.edit_state)
+                                }} className="generic-page-button-small">
                                 EDIT
                         </div>
                         }
@@ -367,12 +387,13 @@ class FormSummary extends Component {
 
         this.setState({
             accordianData: accordianData,
-            selectedIndex: selectedIndex
+            selectedIndex: selectedIndex,
+            detail_clicked: [...this.state.detail_clicked, selectedIndex !== -1 && accordianData[selectedIndex].title.split(' ')[0]]
         })
     }
 
     openEdit = (state) => {
-        this.sendEvents('next', { edit_clicked: state });
+        
         this.navigate(state);
     }
 

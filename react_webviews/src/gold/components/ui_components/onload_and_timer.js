@@ -217,7 +217,7 @@ class GoldOnloadAndTimerClass extends Component {
             }
             this.updateParent('goldBuyInfo', orderData.goldBuyInfo);
 
-            let minimum_buy_price  = orderData.goldBuyInfo.minimum_buy_price || 1000;
+            let minimum_buy_price  = orderData.goldBuyInfo.minimum_buy_price;
             this.updateParent('minAmount', minimum_buy_price);
 
 
