@@ -36,13 +36,13 @@ class GroupHealthPlanIsPed extends Component {
     onload = () => {
         let lead = this.state.lead;
 
-
         let next_state = `/group-insurance/group-health/${this.state.provider}/final-summary`;
         this.setState({
             next_state: next_state
         })
 
         let account_type = lead.account_type;
+
         let radio_title = 'Do you have any pre-existing diseases?';
         if (account_type !== 'self') {
             radio_title = 'Does any of the members have any pre-existing disease?';
@@ -143,15 +143,19 @@ class GroupHealthPlanIsPed extends Component {
             let key = member_base[i].key;
             let backend_key = member_base[i].backend_key;
             body[backend_key] = {};
-            if (form_data[key + '_checked']) {
-                body[backend_key].ped_exists = 'true';
 
-                if (!next_state) {
-                    next_state = key;
+            if(key !== 'applicant') {
+                if (form_data[key + '_checked']) {
+                    body[backend_key].ped_exists = 'true';
+    
+                    if (!next_state) {
+                        next_state = key;
+                    }
+                } else {
+                    body[backend_key].ped_exists = 'false';
                 }
-            } else {
-                body[backend_key].ped_exists = 'false';
             }
+            
         }
 
         if (this.state.lead.account_type !== 'self' && form_data.is_ped === 'YES' && !next_state) {
@@ -186,7 +190,7 @@ class GroupHealthPlanIsPed extends Component {
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "product": 'health suraksha',
+                "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'pre-existing_disease',
                 'from_edit': this.props.edit ? 'yes' : 'no',
@@ -261,8 +265,9 @@ class GroupHealthPlanIsPed extends Component {
             >
 
                 <div className="common-top-page-subtitle">
-                    This is important to avoid claims rejection later
+                    Please disclose correct details to make hassle-free claim later
                 </div>
+
                 <FormControl fullWidth>
 
                     <div className="InputField">

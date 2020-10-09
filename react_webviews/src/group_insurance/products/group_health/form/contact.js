@@ -19,7 +19,8 @@ class GroupHealthPlanContactDetails extends Component {
             form_data: {},
             ctaWithProvider: true,
             get_lead: true,
-            next_state: 'address'
+            next_state: 'address',
+            screen_name: 'contact_screen'
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -147,7 +148,8 @@ class GroupHealthPlanContactDetails extends Component {
                 "email": this.state.form_data.email,
                 "mobile_number": this.state.form_data.mobile_number
             }
-           this.updateLead(body);
+            
+            this.updateLead(body);
         }
     }
 
@@ -157,11 +159,11 @@ class GroupHealthPlanContactDetails extends Component {
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "product": 'health suraksha',
+                "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'contact details',
-                'email': this.state.form_data.email ? 'yes' : 'no',
-                'mobile_number': this.state.form_data.mobile_number ? 'yes' : 'no',
+                'email_id': this.state.form_data.email,
+                'mobile_number': this.state.form_data.mobile_number,
                 'from_edit': this.props.edit ? 'yes' : 'no'
             }
         };

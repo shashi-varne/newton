@@ -4,7 +4,6 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import BottomInfo from '../../../../common/ui/BottomInfo';
-import { storageService } from 'utils/validators';
 
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
@@ -56,7 +55,7 @@ class GroupHealthPlanSelectCity extends Component {
             let groupHealthPlanData = this.state.groupHealthPlanData;
             groupHealthPlanData.city = this.state.city;
             groupHealthPlanData.post_body.city = this.state.city;
-            storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+            this.setLocalProviderData(groupHealthPlanData);
     
             this.navigate('plan-list');
         }
@@ -67,7 +66,7 @@ class GroupHealthPlanSelectCity extends Component {
         let city = this.state.groupHealthPlanData.city || '';
         this.setState({
             city: this.state.groupHealthPlanData.city || ''
-        })
+        });
         try {
 
 
@@ -78,15 +77,17 @@ class GroupHealthPlanSelectCity extends Component {
                         var resultData = res.pfwresponse.result;
                         let city = resultData.insurance_account.permanent_address.city;
                         this.setState({
-                            city: city
-                        })
-        
+                            city: city === 'NA' ? '' : city,
+                        });
                     } else {
-                        toast(resultData.error || resultData.message
-                            || 'Something went wrong');
+                        toast(
+                            resultData.error ||
+                            resultData.message ||
+                            'Something went wrong'
+                        );
                     }
                 } catch (err) {
-                    console.log(err)
+                    console.log(err);
                     this.setState({
                         show_loader: false
                     });
@@ -141,7 +142,7 @@ class GroupHealthPlanSelectCity extends Component {
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "product": 'health suraksha',
+                "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'city of residence',
                 'is_city_entered': this.state.city ? 'valid' : 'empty'
