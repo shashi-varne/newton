@@ -186,7 +186,7 @@ body[data-device="web"] #bottom-popup .MuiDialog-paper {
   left: 0;
   right: 0;
   box-shadow: 0px 2px 6px 0px rgba(102, 120, 121, 0.25);
-  margin: 0px 7px 7px 7px;
+  margin: 0px 20px 20px 20px;
   border-radius: 7px;
 }
 button.MuiButtonBase-root.MuiButton-root.MuiButton-raised.MuiButton-raisedSecondary.MuiButton-sizeLarge.CustomButton-button-100 {
