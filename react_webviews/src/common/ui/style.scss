@@ -470,10 +470,10 @@ body[data-device="web"] {
 body[data-device="mobile"] {
   .__react_component_tooltip {
     // left: auto !important;
-    // margin-right: 10px !important;
+    margin-right: -1px !important;
     width: 62%;
     // right: 0px;
-    margin-top: 40px !important;
+    margin-top: 70px !important;
   }
   .__react_component_tooltip.show {
     opacity: 1;
