@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Container from '../common/Container';
 import { nativeCallback } from 'utils/native_callback';
-import { initialize } from '../common/functions';
-import BottomInfo from '../../common/ui/BottomInfo';
-import { getConfig } from 'utils/functions';
-import SVG from 'react-inlinesvg';
-import { numDifferentiationInr, inrFormatDecimal } from 'utils/validators';
+// import { initialize } from '../common/functions';
+// import BottomInfo from '../../common/ui/BottomInfo';
+// import { getConfig } from 'utils/functions';
+// import SVG from 'react-inlinesvg';
+// import { numDifferentiationInr, inrFormatDecimal } from 'utils/validators';
 import "./Style.css";
 
 import icn_upi_apps from 'assets/icn_upi_apps.svg';
@@ -44,11 +44,9 @@ let store = {}
 //   generic_callback: true,
 //   partner: 'obc'
 // }
-let show_reason = false;
 let retry_enabled = true;
 let intent_supported = true;
 let upi_others = true;
-let account_types = [];
 
 
 const pushEvent = (eventObj) => {
@@ -121,7 +119,6 @@ class PaymentOption extends React.Component {
     let res = await Api.get(`https://payment-dot-plutus-staging.appspot.com/api/invest/test/pg/summary/ahBzfnBsdXR1cy1zdGFnaW5nch8LEhJJbnZlc3RtZW50X1BheW1lbnQYgYDAmq6p2wsM`);
     let resultData = res.pfwresponse.result;
     store = resultData;
-    console.log(resultData.banks)
     const supportedBanks = store.banks.filter((item, i) => {
       return item.bank_supported;
     });
@@ -163,14 +160,15 @@ class PaymentOption extends React.Component {
     //   window.PlutusInitState.page = 'pg_option';
     // }
     document.addEventListener('click', this.handleClick, false);
-    // $(document).ready(function () {
-    //   $('input[type=radio]').prop('checked', false)[0].checked = true;
-    // })
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelector("input[type=radio]:checked").value = true;
+    }, false);
+
   }
 
   handleClick(e) {
     let upimodal = document.getElementById('upiModal');
-    if (e.target == upimodal) {
+    if (e.target === upimodal) {
       let eventObj = {
         "event_name": "pg_upi_instruction",
         "properties": {
@@ -197,7 +195,7 @@ class PaymentOption extends React.Component {
       subtitle: 'Add Bank A/c Number',
       bank_code: this.state.bank.bank_code,
       pg_code: this.state.bank.pg_code,
-      ifsc: (this.state.unSupportedBanks.length == 1) ? true : false,
+      ifsc: (this.state.unSupportedBanks.length === 1) ? true : false,
       pg_mode: 'bank'
     });
   }
@@ -292,17 +290,17 @@ class PaymentOption extends React.Component {
     };
 
     pushEvent(eventObj);
-    if (type == "debit") {
+    if (type === "debit") {
       this.setState({ isDebitSelected: true, isNetbankingSelected: false, isUpiSelected: false, isNEFTSelected: false, isOpen: true }, () => {
       });
-    } else if (type == "upi") {
+    } else if (type === "upi") {
       this.setState({ isUpiSelected: true, isNetbankingSelected: false, isDebitSelected: false, isNEFTSelected: false }, () => {
       });
-    } else if (type == "netbanking") {
+    } else if (type === "netbanking") {
       this.setState({ isNetbankingSelected: true, isUpiSelected: false, isDebitSelected: false, isNEFTSelected: false }, () => {
 
       });
-    } else if (type == "neft") {
+    } else if (type === "neft") {
       this.setState({ isNEFTSelected: true, isNetbankingSelected: false, isDebitSelected: false, isUpiSelected: false }, () => {
       });
     }
@@ -329,23 +327,19 @@ class PaymentOption extends React.Component {
       nativeCallback('show_toast', 'Pay using bank a/c - ' + this.state.selectedBank.obscured_account_number + ' only');
       this.setState({ showBilldeskLoader: true });
       let that = this;
-      // $.ajax({
-      //   type: 'GET',
-      //   url: store.intent_url + '?bank_id=' + this.state.selectedBank.bank_id + `&gateway_type=UPI`
-      // }).done(function (data) {
-      //   if (data.pfwresponse.status_code == 200) {
-      //     let upi_payment_data = data.pfwresponse.result;
-      //     upi_payment_data.package_name = type;
-      //     nativeCallback('take_control', window.location.href);
-      //     nativeCallback('initiate_upi_payment', upi_payment_data);
-      //     console.log(upi_payment_data)
-      //   } else {
-      //     that.setState({ showBilldeskLoader: false });
-      //     if (data.pfwresponse.result.error == 'failure') {
-      //       nativeCallback('show_toast', data.pfwresponse.result.message);
-      //     }
-      //   }
-      // })
+      Api.get(store.intent_url + '?bank_id=' + this.state.selectedBank.bank_id + `&gateway_type=UPI`).then(data => {
+        if (data.pfwresponse.status_code === 200) {
+          let upi_payment_data = data.pfwresponse.result;
+          upi_payment_data.package_name = type;
+          nativeCallback('take_control', window.location.href);
+          nativeCallback('initiate_upi_payment', upi_payment_data);
+        } else {
+          that.setState({ showBilldeskLoader: false });
+          if (data.pfwresponse.result.error === 'failure') {
+            nativeCallback('show_toast', data.pfwresponse.result.message);
+          }
+        }
+      })
     }
   }
 
@@ -445,7 +439,7 @@ class PaymentOption extends React.Component {
       //   })
       // })
       //   .done(function (data) {
-      //     if (data.pfwresponse.status_code == 200) {
+      //     if (data.pfwresponse.status_code === 200) {
       //       nativeCallback('close_webview');
       //     }
       //     that.setState({ show_loader: false });
@@ -458,41 +452,6 @@ class PaymentOption extends React.Component {
   }
 
   render() {
-    let carouselItems;
-    if (store.banks && store.banks.length) {
-      if (this.state.supportedBanks.length > 0) {
-        carouselItems = this.state.supportedBanks.map((item, i) => {
-          return (
-            <div className={`carousel-item ${(this.state.netbank.code == item.bank_code) ? 'active' : ''}`} key={i} onClick={() => this.selectNetBank(item)}>
-              <div className="flex">
-                <div className="item">
-                  <img src={item.image} width="30" />
-                </div>
-                <div className="item">
-                  <div className="dark-grey-text uppercase">{item.bank_short_name}</div>
-                  <div className="light-grey">{item.obscured_account_number}</div>
-                </div>
-              </div>
-            </div>
-          );
-        });
-      } else {
-        carouselItems = store.preferred_banks.map((item, i) => {
-          return (
-            <div className={`carousel-item ${(this.state.netbank.code == item.bank_code) ? 'active' : ''}`} key={i} onClick={() => this.selectUnsupportedNetBank(item)}>
-              <div className="flex">
-                <div className="item">
-                  <img src={item.image} width="30" />
-                </div>
-                <div className="item">
-                  <div className="dark-grey-text uppercase">{item.bank_short_name}</div>
-                </div>
-              </div>
-            </div>
-          );
-        });
-      }
-    }
     if (this.state.selectedBank && store.banks && store.banks.length) {
       return (
         <Container
@@ -509,7 +468,7 @@ class PaymentOption extends React.Component {
             {this.state.selectedBank &&
               <div className="selectedBank selected-bank" onClick={() => this.openModal('bank')}>
                 <div className="flex">
-                  <div className="icon" ><img src={this.state.selectedBank.image} width="36" /></div>
+                  <div className="icon" ><img src={this.state.selectedBank.image} width="36" alt="bank" /></div>
                   <div>
                     <div className="banktext-header">PAY FROM</div>
                     <div className="banktext-subheader">{this.state.selectedBank.bank_name} - {this.state.selectedBank.obscured_account_number}</div>
@@ -525,18 +484,18 @@ class PaymentOption extends React.Component {
           <div className="tabs">
             {(store.has_upi_banks || (store.upi_add_bank_url && store.upi_enabled)) && this.state.selectedBank.upi_supported && retry_enabled &&
               <div className="card upi tab" onClick={() => this.selectptype('upi')}>
-                <input type="radio" id="rd1" name="rd" checked="true" />
+                <input type="radio" id="rd1" name="rd" />
                 <label className={`tab-label ${store.app}`} htmlFor="rd1">
                   <div className="item-header">
-                    <img src={icn_upi_apps} width="20" />
+                    <img src={icn_upi_apps} width="20" alt="upi" />
                     <div className="bold dark-grey-text">UPI APPs</div>
                   </div>
                 </label>
                 {intent_supported && !upi_others && <div className="add-button tab-content">
-                  <div onClick={() => this.goToPayment('com.google.android.apps.nbu.paisa.user')}><img src={icn_gpay} /><div className="bottomtext">Google Pay</div></div>
-                  <div onClick={() => this.goToPayment('com.phonepe.app')}><img src={icn_phonepe} /><div className="bottomtext">PhonePe</div></div>
-                  <div onClick={() => this.goToPayment('net.one97.paytm')}><img src={icn_paytm} /><div className="bottomtext">Paytm</div></div>
-                  <div onClick={() => this.goToPayment('others')}><img src={icn_more} /><div className="bottomtext">Others</div></div>
+                  <div onClick={() => this.goToPayment('com.google.android.apps.nbu.paisa.user')}><img src={icn_gpay} alt="gpay" /><div className="bottomtext">Google Pay</div></div>
+                  <div onClick={() => this.goToPayment('com.phonepe.app')}><img src={icn_phonepe} alt="phonepe" /><div className="bottomtext">PhonePe</div></div>
+                  <div onClick={() => this.goToPayment('net.one97.paytm')}><img src={icn_paytm} alt="paytm" /><div className="bottomtext">Paytm</div></div>
+                  <div onClick={() => this.goToPayment('others')}><img src={icn_more} alt="more" /><div className="bottomtext">Others</div></div>
                 </div>}
                 {intent_supported && upi_others && <div className="add-button tab-content">
                   <button className={`${store.partner}`} onClick={() => this.goToPayment('others')}>Pay using UPI</button>
@@ -551,7 +510,7 @@ class PaymentOption extends React.Component {
                 <input type="radio" id="rd2" name="rd" />
                 <label className={`tab-label ${store.app}`} htmlFor="rd2">
                   <div className="item-header">
-                    <img src={this.state.selectedBank.image} width="20" />
+                    <img src={this.state.selectedBank.image} width="20" alt="netbanking" />
                     <div className="bold dark-grey-text">Net Banking</div>
                   </div>
                 </label>
@@ -566,7 +525,7 @@ class PaymentOption extends React.Component {
                 <input type="radio" id="rd3" name="rd" />
                 <label className={`tab-label ${store.app}`} htmlFor="rd3">
                   <div className="item-header">
-                    <img src={icn_debit_card} width="20" />
+                    <img src={icn_debit_card} width="20" alt="debit" />
                     <div className="bold dark-grey-text">Debit Cards</div>
                   </div>
                 </label>
@@ -580,7 +539,7 @@ class PaymentOption extends React.Component {
                 <input type="radio" id="rd4" name="rd" />
                 <label className={`tab-label ${store.app}`} htmlFor="rd4">
                   <div className="item-header">
-                    <img src={this.state.selectedBank.image} width="20" />
+                    <img src={this.state.selectedBank.image} width="20" alt="neft" />
                     <div className="bold dark-grey-text">NEFT/RTGS</div>
                   </div>
                 </label>
@@ -591,7 +550,7 @@ class PaymentOption extends React.Component {
             }
           </div>
           <div className="encription">
-            <img src={icn_secure_payment} />
+            <img src={icn_secure_payment} alt="secure" />
           </div>
         </Container>
       );
