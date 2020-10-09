@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import './style.css';
 import 'react-circular-progressbar/dist/styles.css';
-
-import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 import MmYyInModal from 'common/ui/MmYyInModal';
 import InputPopup from './InputPopup';
@@ -66,14 +64,7 @@ class CheckboxListClass extends Component {
                 style={{ opacity: props.disabled ? 0.4 : 1 }}>
                 <Grid container spacing={16} alignItems="center">
                     <Grid item xs={1} className="TextCenter">
-                        <Checkbox
-                            // defaultChecked
-                            checked={props.checked}
-                            color="default"
-                            value="checked"
-                            style={{ height: 25 }}
-                            onChange={() => this.handleClick(index)}
-                            className="Checkbox" />
+                    <input type="checkbox" className="Checkbox" onChange={() => this.handleClick(index)} value="checked" checked={props.checked} style={{height: '22px', width: '18px'}}/>
                     </Grid>
 
                     <Grid item xs={11}>
@@ -201,7 +192,6 @@ class CheckboxListClass extends Component {
     render() {
         let backend_key = this.props.parent.state.backend_key;
         let dob = this.props.parent.state.lead[backend_key].dob;
-
 
         return (
             <div>
