@@ -264,7 +264,7 @@ class AddressDetails extends Component {
                         <Input
                             type="number"
                             width="40"
-                            label="No of months in residence"
+                            label="No. of months in residence"
                             placeholder="Minimum requirement is 6 months"
                             class="Name"
                             id="duration"
