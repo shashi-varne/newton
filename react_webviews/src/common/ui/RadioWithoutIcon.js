@@ -76,7 +76,7 @@ class RadioGrp extends Component {
     return (
       <div>
         <div className="RadioWithIcon">
-        <span style={{ fontWeight: "Regular", fontFamily : "WorkSans-Regular", color : "#0A1D32"}} >{this.props.label}</span>
+          <span className="common-top-page-subtitle"  style= {{color : "#0A1D32"}} >{this.props.label}</span>
           {/* <span className={(this.props.error) ? 'error' : ''}>{(this.props.error) ? 'Mandatory' : ''}</span> */}
         </div>
         <Grid container spacing={16}>
