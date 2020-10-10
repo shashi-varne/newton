@@ -251,6 +251,11 @@ class GroupHealthLanding extends Component {
                   card_swipe_count: this.state.card_swipe_count + 1
                 });
               }}
+              renderIndicator={(onClickHandler, isSelected) => {
+                if (isSelected) {
+                  return (<li style={{...indicatorStyles, background: "#ADD8E6", width: "13.333px",}} />);
+                }
+                return <li onClick={onClickHandler} style={indicatorStyles} />; }}
             >
               {this.state.offerImageData.map(this.renderOfferImages)}
             </Carousel>
@@ -411,5 +416,14 @@ class GroupHealthLanding extends Component {
     );
   }
 }
+
+const indicatorStyles = {
+  background: '#00008B',
+  width: "26px",
+  height: "3.984px",
+  display: 'inline-block',
+  margin: '0 8px',
+  borderRadius : "2px"
+};
 
 export default GroupHealthLanding;
