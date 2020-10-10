@@ -105,7 +105,13 @@ class GroupHealthLanding extends Component {
         quoteResume: lead
       }, () => {
         if(openModuleData.sub_module === 'click-resume') {
-          this.handleResume();
+
+          if(!this.state.quoteResume || !this.state.quoteResume.id) {
+            this.setState({show_loader: false});
+          } else{ 
+            this.handleResume();
+          }
+          
         }
       });
 
