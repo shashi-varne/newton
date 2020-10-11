@@ -14,6 +14,7 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
+import {storageService} from 'utils/validators';
 import '../../utils/native_listner';
 import {checkStringInString} from 'utils/validators';
 import { back_button_mapper } from '../constants';
@@ -200,7 +201,17 @@ class Container extends Component {
       params = {};
     }
     let pathname = this.props.history.location.pathname;
+    
+    if(this.checkStringInString('final-summary') && storageService().getObject('backToResume') === "resume"){
+      this.navigate(`/group-insurance/group-health/${this.props.provider}/landing`);
+      return;
+    }
 
+    if(this.checkStringInString('final-summary')){
+      this.navigate(`is-ped`);
+      return;
+    }
+     
     if(this.checkStringInString('group-health')) {
 
       // #TODO need to handle back accoridng to entry/landing

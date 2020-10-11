@@ -55,7 +55,33 @@ class GroupHealthPlanPremiumSummary extends Component {
             type_of_plan: groupHealthPlanData.type_of_plan,
             final_dob_data: groupHealthPlanData.final_dob_data,
         });
+            let groupHealthPlanDataPost = this.state.groupHealthPlanData;
 
+            let plan_selected_final = groupHealthPlanDataPost.plan_selected_final || {};
+            let body = groupHealthPlanDataPost.post_body;
+            body.provider = this.state.providerConfig.provider_api;
+            body.base_premium_showable = plan_selected_final.base_premium_showable;
+            body.add_ons_amount = plan_selected_final.add_ons_premium || '';
+
+            if(body.provider === 'star' && body.account_type.includes('parents') && 
+            groupHealthPlanDataPost.ui_members.parents_option) {
+                body.account_type = groupHealthPlanDataPost.ui_members.parents_option;
+            }
+
+            let total_member = body.mem_info.adult + body.mem_info.child;
+            if(total_member === 1) {
+                body.type_of_plan = 'NF';  //for backend handlling
+            }
+            
+            try{
+                const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/quote`, body);
+                this.setState({response: res});
+            }catch(e){
+                toast('Something went wrong');
+            }
+            
+            storageService().remove('backToResume');
+            storageService().remove('final-summary-reached');    
     }
 
     sendEvents(user_action) {
@@ -83,27 +109,7 @@ class GroupHealthPlanPremiumSummary extends Component {
             this.setState({
                 show_loader: true
             });
-
-            let {groupHealthPlanData} = this.state;
-
-            let plan_selected_final = groupHealthPlanData.plan_selected_final || {};
-            let body = groupHealthPlanData.post_body;
-            body.provider = this.state.providerConfig.provider_api;
-            body.base_premium_showable = plan_selected_final.base_premium_showable;
-            body.add_ons_amount = plan_selected_final.add_ons_premium || '';
-
-            if(body.provider === 'star' && body.account_type.includes('parents') && 
-            groupHealthPlanData.ui_members.parents_option) {
-                body.account_type = groupHealthPlanData.ui_members.parents_option;
-            }
-
-            let total_member = body.mem_info.adult + body.mem_info.child;
-            if(total_member === 1) {
-                body.type_of_plan = 'NF';  //for backend handlling
-            }
-
-            const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/quote`, body);
-
+            let res = this.state.response;
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
                 let lead = resultData.lead;

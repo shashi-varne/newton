@@ -192,16 +192,14 @@ class GroupHealthLanding extends Component {
       this.sendEvents('next');
 
       let quoteResume = this.state.quoteResume;
-
       storageService().set('ghs_ergo_quote_id', quoteResume.id);
-      if (quoteResume.status !== 'init' || quoteResume.forms_completed) {
+      if (quoteResume.status !== 'init' || quoteResume.forms_completed || storageService().getObject('final-summary-reached')) {
+        storageService().setObject('backToResume', 'resume');
         this.navigate('final-summary');
       } else {
-        this.navigate(`personal-details/${quoteResume.member_base[0].key}`);
+        this.navigate(`plan-premium-summary`);
       }
-
     })
-
 
   }
 

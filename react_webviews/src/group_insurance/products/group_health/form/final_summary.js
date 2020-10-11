@@ -493,6 +493,8 @@ class GroupHealthPlanFinalSummary extends Component {
         this.setState({
             accordianData: accordianData
         })
+
+        storageService().setObject('final-summary-reached','resume');
     }
 
     redirectToPayment = (pg_data) => {
