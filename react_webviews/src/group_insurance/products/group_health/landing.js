@@ -225,6 +225,29 @@ class GroupHealthLanding extends Component {
     });
   }
 
+  onSwipeMoveEvent = () => {
+    this.swipeMargin()
+  }
+
+  swipeMargin = () => {
+    let x = document.getElementsByClassName("offer-slide-img")
+    for (const property in x) {
+      if (!isNaN(property))
+        x[property].style.margin = "0px 20px 0px 20px"
+    }
+  }
+
+  onChangeEvent = () => {
+      let x = document.getElementsByClassName("offer-slide-img")
+      this.swipeMargin()
+      setTimeout(() => {
+        for (const property in x) {
+          if (!isNaN(property))
+            x[property].style.margin = "0px"
+        }
+      }, 350);
+}
+
   render() {
 
 
@@ -250,6 +273,8 @@ class GroupHealthLanding extends Component {
               showArrows={true}
               infiniteLoop={false}
               selectedItem={this.state.selectedIndex}
+              onSwipeMove={this.onSwipeMoveEvent}
+              onChange2 = {this.onChangeEvent}
               onChange={(index) => {
                 this.setState({
                   selectedIndex: index,
@@ -259,7 +284,7 @@ class GroupHealthLanding extends Component {
               }}
               renderIndicator={(onClickHandler, isSelected) => {
                 if (isSelected) {
-                  return (<li style={{...indicatorStyles, background: "#ADD8E6", width: "13.333px",}} />);
+                  return (<li style={{...indicatorStyles, background: "#ADD8E6", width: "10px",}} />);
                 }
                 return <li onClick={onClickHandler} style={indicatorStyles} />; }}
             >
@@ -298,10 +323,10 @@ class GroupHealthLanding extends Component {
               </div>
             </div>}
 
-          <div className="generic-page-title">
+          <div className="generic-page-title" style={{ margin: '20px 0 0 0'}}>
             Covers all age groups
           </div>
-          <div className="generic-page-subtitle">
+          <div className="generic-page-subtitle" style={{ margin: '5px 0 0 0'}}>
            Buy health insurance for yourself, spouse, kids or parents also.
           </div>
 
@@ -360,7 +385,7 @@ class GroupHealthLanding extends Component {
             {this.state.whats_not_covered_open && this.state.whats_not_covered.map(this.renderCoveredPoints)}
           </div>
 
-          <div className="generic-page-title" style={{ margin: '20px 0 15px 0' }}>
+          <div className="generic-page-title" style={{ margin: '40px 0 15px 0' }}>
             Benefits of health insurance
           </div>
 
@@ -373,10 +398,10 @@ class GroupHealthLanding extends Component {
             </div>
           </div>
 
-          <HowToSteps style={{ marginTop: 20, marginBottom: 0 }} baseData={this.state.stepsContentMapper} />
+          <HowToSteps style={{ margin: '10px 0 0 0' }} baseData={this.state.stepsContentMapper} />
 
 
-          <div className="generic-page-title">
+          <div className="generic-page-title" style={{ margin: '10px 0 15px 0' }}>
             Things to know
           </div>
           <div className="generic-hr"></div>
@@ -425,11 +450,11 @@ class GroupHealthLanding extends Component {
 
 const indicatorStyles = {
   background: '#00008B',
-  width: "26px",
-  height: "3.984px",
+  width: "20px",
+  height: "3px",
   display: 'inline-block',
-  margin: '0 8px',
-  borderRadius : "2px"
+  margin: '0 3px',
+  borderRadius : "1.5px"
 };
 
 export default GroupHealthLanding;
