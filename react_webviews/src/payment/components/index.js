@@ -14,7 +14,8 @@ import icn_gpay from 'assets/icn_gpay.svg';
 import icn_phonepe from 'assets/icn_phonepe.svg';
 import icn_paytm from 'assets/icn_paytm.svg';
 import icn_more from 'assets/icn_more.svg';
-import icn_secure_payment from 'assets/icn_secure_payment.svg'
+import icn_secure_payment from 'assets/icn_secure_payment.svg';
+import completed_step from 'assets/completed_step.svg';
 import Api from 'utils/api';
 
 let store = {}
@@ -47,10 +48,235 @@ let store = {}
 let retry_enabled = true;
 let intent_supported = true;
 let upi_others = true;
-
+window.PlutusInitState = {};
 
 const pushEvent = (eventObj) => {
   // todo
+};
+
+const UpiModal = (props) => {
+  window.PlutusInitState.page = 'modal';
+  const bankList = props.banks.map((item, i) => {
+    if (item.upi_supported) {
+      return (
+        <div
+          className={`item ${(props.activeIndex === i) ? 'active' : ''}`}
+          key={i}
+          onClick={() => props.selectedUpiBank(i, item)}>
+          <img src={item.image} alt="bank" />
+          <div className="flex-1">
+            <div className="text">{item.bank_name}</div>
+            <div className="text">{item.obscured_account_number}</div>
+          </div>
+          {props.activeIndex === i && <img src="/static/img/check_selected_blue.svg" width="15" className="margin-0" alt="select" />}
+        </div>
+      );
+    } else {
+      return null;
+    }
+  });
+
+  return (
+    <div id="upiModal" className="modal modal-center">
+      <div className="modal-content page-padding-10">
+        <div className="header">
+          <h1>Select your bank for UPI</h1>
+        </div>
+        <div className="list">
+          {bankList}
+        </div>
+        <div className="flex upitext">
+          <label className="checkbox"><input type="checkbox" onChange={() => props.handleCheck()} /><span className={`checkmark ${store.partner}`}></span></label>
+          <div className={`${props.highlighttnc ? 'active' : ''} ${store.partner}`}>Make sure to use same <b>VPA(UPI ID)</b> linked to above selected account</div>
+        </div>
+        <div className="upi-button margin-top">
+          <button className={`${props.checked ? 'active' : ''} ${store.partner}`} onClick={() => props.loadUPi()}>Continue to Pay ₹ {store.amount}</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const SelectBankModal = (props) => {
+  window.PlutusInitState.page = 'modal';
+  const bankList = props.banks.map((item, i) => {
+    if (item.bank_status === 'verified') {
+      return (
+        <div
+          className={`item ${(props.activeIndex === i) ? 'active' : ''}`}
+          key={i}
+          onClick={() => props.selectedBank(i, item)}>
+          <img src={item.image} width="36" alt="bank" />
+          <div className="flex-1">
+            <div className="text">{item.bank_name}</div>
+            <div className="subtext">{item.obscured_account_number}</div>
+          </div>
+          {props.activeIndex === i && <div className="selected_bank"> {item.is_primary_bank && <div className="primary">PRIMARY</div>}<img src={completed_step} width="15" className="margin-0" alt="selected" /></div>}
+        </div>
+      )
+    } else {
+      return (
+        <div className="item disabled" key={i}>
+          <img src={item.image} width="36" alt="bank" />
+          <div className="flex-1">
+            <div className="text">{item.bank_name}</div>
+            <div className="subtext">{item.obscured_account_number} (Verification pending)</div>
+          </div>
+        </div>
+      )
+    }
+  });
+
+  return (
+    <div id="selectBankModal" className="modal modal-center">
+      <div className="modal-content">
+        <header className={`${store.app}`}>
+          {store.app !== 'pro' && <img src="/static/img/ic_close_fisdom.svg" width="25" onClick={() => props.closeBankModal()} alt="close" />}
+          {store.app === 'pro' && <img src="/static/img/ic_close_myway.svg" width="25" onClick={() => props.closeBankModal()} alt="close" />}
+        </header>
+        <div className="header">
+          <h1>Select preferred bank</h1>
+        </div>
+        <div className="list">
+          {bankList}
+        </div>
+        <div className="footer upi-button margin-top">
+          <button className={`active ${store.partner}`} onClick={() => props.closeBankModal(true)}>Continue</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// const NEFTModal = (props) => {
+//   window.PlutusInitState.page = 'modal';
+//   const bankList = props.banks.map((item, i) => {
+//     if (item.neft_supported) {
+//       return (
+//         <div className={`carousel-item ${(props.activeIndex === i) ? 'active' : ''}`} key={i} onClick={() => props.selectedNEFTBank(i, item)}>
+//           <div className="flex">
+//             <div className="item">
+//               <img src={item.image} width="30" />
+//             </div>
+//             <div className="item">
+//               <div className="dark-grey-text uppercase">{item.bank_short_name}</div>
+//               <div className="light-grey">{item.obscured_account_number}</div>
+//             </div>
+//           </div>
+//         </div>
+//       );
+//     }
+//   });
+
+//   return (
+//     <div id="neftModal" className="modal modal-center">
+//       <div className="modal-content page-padding-10">
+//         <div className="header">
+//           <h1>Select your bank for NEFT/RTGS</h1>
+//         </div>
+//         <div className="carousel">
+//           <div className="carousel-flex">
+//             {bankList}
+//           </div>
+//         </div>
+//         <div className="form-input margin-top-30">
+//           <label>
+//             <input type="text" name="neft" ref={props.setNFFTNumber} id="neft" />
+//             <span className="placeholder">UTR number <span className="tooltip">*Info <span className="tooltiptext">This is Unique Transaction number for every NEFT and RTGS (16-digit or more i.e XXXXAYYDDD999999)</span></span></span>
+//           </label>
+//           {props.neft_error && <div className="validation red-color">Required, 10 characters or more</div>}
+//         </div>
+//         <div className="flex upitext">
+//           <label className="checkbox"><input type="checkbox" onChange={() => props.handleCheck()} /><span className="checkmark"></span></label>
+//           <div className={props.highlighttnc ? 'active' : ''}>Make sure to use same <b>NEFT number</b> linked to above selected account</div>
+//         </div>
+//         <div className="upi-button margin-top">
+//           <button className={`${props.checked ? 'active' : ''} ${store.partner}`} onClick={() => props.saveNEFT()}>Continue to Pay ₹ {store.amount}</button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+const CancelModal = (props) => {
+  window.PlutusInitState.page = 'pg_option_modal';
+  const reasons = [
+    { "key": "reason3", "value": "I don't have net banking/ debit-card/ UPI" },
+    { "key": "reason2", "value": "Bank page not opening" },
+    { "key": "reason6", "value": "Looking for more information" },
+    { "key": "reason1", "value": "Just exploring" },
+    { "key": "reason5", "value": "Amount debited & order not completed" }
+  ];
+
+  const reasonList = reasons.map((item, i) => {
+    return (
+      <div className="list" onClick={() => props.inputOnClick(item.key)} key={i}>
+        <label>
+          <div className="item">
+            <input
+              type="radio"
+              name="reason"
+            />
+          </div>
+          <div className="item">
+            <div className="text">{item.value}</div>
+          </div>
+        </label>
+      </div>
+    );
+  });
+
+  return (
+    <div id="myModal" className="modal modal-center">
+      <div className="modal-content">
+        <div className="header">
+          <h1>Do you really want to cancel the investment? Please share your feedback:</h1>
+        </div>
+        <div className="questions">
+          {reasonList}
+        </div>
+        <div className="buttons">
+          <button className={`border-button ${store.partner}`} onClick={props.sendReason}>OK</button>
+          <button className={`filled-button ${store.partner}`} onClick={props.goBack}>Cancel</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const PaymentModal = (props) => {
+  return (
+    <div id="paymentModal" className="modal modal-center">
+      <div className="modal-content">
+        <div className="loader"><img src="/static/img/loader.gif" alt="loader" /></div>
+        <div className="text-center header">Please wait!</div>
+        {/* <div className="text-center hint-color helper">We're processing your transaction...</div> */}
+      </div>
+    </div>
+  )
+};
+
+const PageLoader = () => {
+  return (
+    <div id="pageLoader">
+      <div className="loader">
+        <div className="sk-fading-circle">
+          <div className="sk-circle1 sk-circle"></div>
+          <div className="sk-circle2 sk-circle"></div>
+          <div className="sk-circle3 sk-circle"></div>
+          <div className="sk-circle4 sk-circle"></div>
+          <div className="sk-circle5 sk-circle"></div>
+          <div className="sk-circle6 sk-circle"></div>
+          <div className="sk-circle7 sk-circle"></div>
+          <div className="sk-circle8 sk-circle"></div>
+          <div className="sk-circle9 sk-circle"></div>
+          <div className="sk-circle10 sk-circle"></div>
+          <div className="sk-circle11 sk-circle"></div>
+          <div className="sk-circle12 sk-circle"></div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 
@@ -116,6 +342,7 @@ class PaymentOption extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
   componentDidMount = async () => {
+    window.PlutusInitState.page = this.props.page;
     let res = await Api.get(`https://payment-dot-plutus-staging.appspot.com/api/invest/test/pg/summary/ahBzfnBsdXR1cy1zdGFnaW5nch8LEhJJbnZlc3RtZW50X1BheW1lbnQYgYDAmq6p2wsM`);
     let resultData = res.pfwresponse.result;
     store = resultData;
@@ -150,15 +377,15 @@ class PaymentOption extends React.Component {
       selectedBank: store.banks[activeIndex]
     })
 
-    // window.PlutusInitState.modalCallback = (bool) => {
-    //   this.setState({ showUpiModal: bool, showNetBankModal: bool });
-    //   window.PlutusInitState.page = 'pg_option';
-    // };
+    window.PlutusInitState.modalCallback = (bool) => {
+      this.setState({ showUpiModal: bool, showNetBankModal: bool });
+      window.PlutusInitState.page = 'pg_option';
+    };
 
-    // window.PlutusInitState.cancelModalCallback = (bool) => {
-    //   this.setState({ showCancelModal: bool });
-    //   window.PlutusInitState.page = 'pg_option';
-    // }
+    window.PlutusInitState.cancelModalCallback = (bool) => {
+      this.setState({ showCancelModal: bool });
+      window.PlutusInitState.page = 'pg_option';
+    }
     document.addEventListener('click', this.handleClick, false);
     document.addEventListener('DOMContentLoaded', function () {
       document.querySelector("input[type=radio]:checked").value = true;
@@ -455,9 +682,9 @@ class PaymentOption extends React.Component {
     if (this.state.selectedBank && store.banks && store.banks.length) {
       return (
         <Container
-          title=""
           subtitle=""
           header={true}
+          noFooter={true}
           page="pg_option"
           showLoader={this.state.show_loader}
           title="Select payment method"
@@ -552,6 +779,39 @@ class PaymentOption extends React.Component {
           <div className="encription">
             <img src={icn_secure_payment} alt="secure" />
           </div>
+          {this.state.showUpiModal &&
+            <UpiModal
+              banks={this.state.upiBanks}
+              accountNumber={this.state.bank.account_number}
+              selectedUpiBank={this.selectedUpiBank}
+              loadUPi={this.loadUPi}
+              handleCheck={this.handleCheck}
+              checked={this.state.checked}
+              activeIndex={this.state.activeIndex}
+              highlighttnc={this.state.highlighttnc} />
+          }
+          {this.state.showNetBankModal &&
+            <SelectBankModal
+              banks={store.banks}
+              selectedBank={this.selectedBank}
+              closeBankModal={this.closeBankModal}
+              activeIndex={this.state.activeIndex} />
+          }
+          {this.state.showCancelModal &&
+            <CancelModal
+              inputOnClick={this.inputOnClick}
+              sendReason={this.sendReason}
+              goBack={this.closeModal} />
+          }
+          {this.state.showDebitLoader &&
+            <PaymentModal type="debit" />
+          }
+          {this.state.showBilldeskLoader &&
+            <PaymentModal type="billdesk" />
+          }
+          {this.state.show_loader &&
+            <PageLoader />
+          }
         </Container>
       );
     } else {
