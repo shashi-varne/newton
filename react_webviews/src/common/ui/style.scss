@@ -470,10 +470,10 @@ body[data-device="web"] {
 body[data-device="mobile"] {
   .__react_component_tooltip {
     // left: auto !important;
-    // margin-right: 10px !important;
+    margin-right: -1px !important;
     width: 62%;
     // right: 0px;
-    margin-top: 40px !important;
+    margin-top: 70px !important;
   }
   .__react_component_tooltip.show {
     opacity: 1;
@@ -491,7 +491,7 @@ body[data-device="mobile"] {
   .input-box {
     display: flex;
     justify-content: space-between;
-    margin: 43px 0 0 0;
+    margin: 50px 0 0 0;
     border-bottom: 1px solid #949494;
     padding: 0 0 3px 0;
     cursor: pointer;
