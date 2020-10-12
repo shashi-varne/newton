@@ -89,8 +89,8 @@ class RadioGrp extends Component {
 }
 
 const RadioWithoutIcon = (props) => { 
-  let xsSize = props.id === "gender" || props.id ===  "is_ped" ? 9 : 12 
-  let smSize = props.id === "gender" || props.id ===  "is_ped" ? 7 : 0 
+  let xsSize = props.id === "account_type" ? 12 : 9
+  let smSize = props.id === "account_type" ? null : 7
   return (
   <Grid container spacing={16} alignItems="flex-start" direction={props.isVertical ? 'column' : 'row'}>
     <Grid item xs={xsSize} sm={smSize}>
