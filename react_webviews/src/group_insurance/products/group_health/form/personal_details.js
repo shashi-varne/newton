@@ -94,7 +94,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let form_data = lead[backend_key] || {};
 
-    let dobNeeded = (this.state.provider === 'RELIGARE' && lead.eldest_member !== backend_key) || member_key === 'applicant';
+    let dobNeeded = member_key === 'applicant';
     form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
     let age = calculateAge(form_data.dob);
 
@@ -221,17 +221,17 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     let form_data = this.state.form_data;
-
+    let validation_props = this.state.validation_props;
     let isChild = form_data.relation.includes('SON') || form_data.relation.includes('DAUGHTER');
     if (this.state.provider === 'RELIGARE') {
       if (isChild) {
         const age = calculateAge(form_data.dob, true);
         if (this.state.groupHealthPlanData.type_of_plan === 'WF') {
-          if (age.days <= 91 || age.age >= 25) {
+          if (age.days <= validation_props.dob_child.minDays || age.age >= validation_props.dob_child.max) {
             form_data.dob_error = "Only children between 91 days & 25 yrs can be included";
           }
         } else {
-          if (age.age < 5 || age.age >= 25) {
+          if (age.age < validation_props.dob_child.minAge || age.age >= validation_props.dob_child.max) {
             form_data.dob_error = 'Only children between 5 yrs & 25 yrs can be included';
           }
         }
@@ -280,13 +280,13 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     if (this.state.dobNeeded) {
       if (provider === 'RELIGARE') {
-        if (age < 18 && !isChild) {
+        if (age < validation_props.dob_adult.min && !isChild) {
           form_data.dob_error = 'Minimum age is 18 for adult';
         }
       }
 
       if (provider === 'STAR') {
-        if (age > 65 && !isChild) {
+        if (age > validation_props.dob_adult.max && !isChild) {
           form_data.dob_error = 'Valid age is between 18 to 65 year';
         }
       }
@@ -297,11 +297,11 @@ class GroupHealthPlanPersonalDetails extends Component {
 
 
       if (provider === 'HDFCERGO') {
-        if (form_data.gender === 'MALE' && age < 21) {
+        if (form_data.gender === 'MALE' && age < validation_props.dob_married_male.min) {
           form_data.dob_error = 'Minimum age is 21 male applicant';
         }
 
-        if (form_data.gender === 'FEMALE' && age < 18) {
+        if (form_data.gender === 'FEMALE' && age < validation_props.dob_married_female.min) {
           form_data.dob_error = 'Minimum age is 18 female applicant';
         }
 

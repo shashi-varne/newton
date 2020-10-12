@@ -18,6 +18,7 @@ class GroupHealthPlanSelectFloater extends Component {
             ctaWithProvider: true,
             premium_data_floater: [],
             show_loader: true,
+            disableFloaterOption: false,
             screen_name: 'cover_type_screen'
         }
 
@@ -26,15 +27,28 @@ class GroupHealthPlanSelectFloater extends Component {
 
     }
 
+    getAge = (dateString) => {
+        var today = new Date();
+        var birthDate = new Date(dateString);
+        var age = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    }
+
 
     componentWillMount() {
         this.initialize();
+        // let post_body = this.state.groupHealthPlanData.post_body;
     }
 
     async componentDidMount() {
 
 
         let post_body = this.state.groupHealthPlanData.post_body;
+        console.log('body',post_body);
         let selectedIndex = this.state.groupHealthPlanData.selectedIndexFloater || 0;
         let total_member = post_body.mem_info.adult + post_body.mem_info.child;
         this.setState({
@@ -43,6 +57,16 @@ class GroupHealthPlanSelectFloater extends Component {
             total_member: total_member,
             show_ind_mem_premium: this.state.providerConfig.show_ind_mem_premium
         });
+
+            
+        for(var key in post_body){
+            if(key.includes('child')){
+                if(this.getAge(post_body[key].dob) < 5){
+                    console.log('yes yes yes');
+                    this.setState({disableFloaterOption: true });
+                }
+            }
+        }
 
         try {
 
@@ -159,6 +183,9 @@ class GroupHealthPlanSelectFloater extends Component {
     }
 
     choosePlan = (index) => {
+        if(index == 1 && this.state.disableFloaterOption){
+            return;
+        }
         this.setState({
             selectedIndex: index
         }, () => {
@@ -179,7 +206,7 @@ class GroupHealthPlanSelectFloater extends Component {
         return (
 
             <div onClick={() => this.choosePlan(index, props)}
-                className={`tile ${index === this.state.selectedIndex ? 'tile-selected' : ''}`} key={index}>
+                className={`tile ${index === this.state.selectedIndex ? 'tile-selected' : ''} ${this.state.disableFloaterOption && index == 1? 'tile-disabled': ''}`} key={index}>
                 <div className="select-tile">
                     <div className="flex-column">
                         <div className="name">
@@ -248,7 +275,7 @@ class GroupHealthPlanSelectFloater extends Component {
 
 
     render() {
-
+        console.log(this.state)
 
         return (
             <Container
