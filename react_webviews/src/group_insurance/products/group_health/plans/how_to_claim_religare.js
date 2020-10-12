@@ -27,7 +27,7 @@ class GroupHealthPlanHowToClaimReligare extends Component {
 
     handleData = () => {
         let renderData = {
-            'header_title': 'How to claim',
+            'header_title': 'How to claim?',
             'cta_title': 'OK'
         }
 

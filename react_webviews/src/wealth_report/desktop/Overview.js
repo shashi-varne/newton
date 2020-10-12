@@ -363,7 +363,7 @@ const assetAllocNums = (obj = {}) => {
 };
 
 const PortfolioCard = (props) => {
-  const { type, tag, Verbatim: verbatim } = props.insight;
+  const { type, tag, Verbatim: verbatim, error } = props.insight;
   const [expanded, toggleExpand] = useState(false);
   const insight = InsightMap[type] || {};
 
@@ -378,10 +378,10 @@ const PortfolioCard = (props) => {
             {insight.title}
           </div>
           <span className="wr-pi-content-subtitle">
-            {tag}
+            {tag || '-'}
           </span>
           <div className="wr-pi-content-desc">
-            {verbatim}
+            {error ? 'No insights available here' : verbatim}
           </div>
         </div>
         <div className="wr-pi-card-expand">

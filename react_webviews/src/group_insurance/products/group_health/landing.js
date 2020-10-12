@@ -43,12 +43,16 @@ class GroupHealthLanding extends Component {
   }
 
   componentWillMount() {
+
+    let { params } = this.props.location || {};
+    let openModuleData = params ? params.openModuleData : {}
+
     let screenData = this.state.providerConfig[screen_name];
 
     nativeCallback({ action: 'take_control_reset' });
 
     let stepsContentMapper = {
-      title: `Why buy on ${this.state.productName} ?` ,
+      title: `Get insured with ease` ,
       options: [
         { 'icon': 'icn_hs_no_document', 'title': 'No document required', 'subtitle': 'Easy and paperless process' },
         { 'icon': 'icn_hs_assistance', 'title': 'Complete assistance', 'subtitle': 'Our experts will help in purchase and claim of policy' },
@@ -61,22 +65,29 @@ class GroupHealthLanding extends Component {
       offerImageData: screenData.offerImageData,
       whats_covered: screenData.whats_covered,
       whats_not_covered: screenData.whats_not_covered,
-      screenData: screenData
+      screenData: screenData,
+      openModuleData: openModuleData
     })
   }
 
   async componentDidMount() {
 
+    let openModuleData = this.state.openModuleData || {};
+
     try {
       const res = await Api.get(`api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/get/quoteid`)
 
-      this.setState({
-        show_loader: false
-      });
+      if (!openModuleData.sub_module) {
+        this.setState({
+          show_loader: false
+        })
+      }
+     
       var resultData = res.pfwresponse.result;
 
+      let lead = {};
       if (res.pfwresponse.status_code === 200) {
-        let lead = resultData.quote || {};
+        lead = resultData.quote || {};
 
         lead.member_base = [];
 
@@ -84,19 +95,27 @@ class GroupHealthLanding extends Component {
           lead.member_base = ghGetMember(lead, this.state.providerConfig);
         }
 
-        this.setState({
-          quoteResume: lead
-        })
-
-
       } else {
         toast(resultData.error || resultData.message
           || 'Something went wrong');
       }
 
       this.setState({
-        common: resultData
-      })
+        common: resultData,
+        quoteResume: lead
+      }, () => {
+        if(openModuleData.sub_module === 'click-resume') {
+
+          if(!this.state.quoteResume || !this.state.quoteResume.id) {
+            this.setState({show_loader: false});
+          } else{ 
+            this.handleResume();
+          }
+          
+        }
+      });
+
+
     } catch (err) {
       console.log(err)
       this.setState({
@@ -168,6 +187,10 @@ class GroupHealthLanding extends Component {
   }
 
   handleResume = () => {
+
+    if(!this.state.quoteResume || !this.state.quoteResume.id) {
+      return;
+    }
 
     this.setState({
       resume_clicked: true
@@ -333,7 +356,7 @@ class GroupHealthLanding extends Component {
           </div>
 
           <div className="generic-page-title" style={{ margin: '20px 0 15px 0' }}>
-            Why to have health insurance?
+            Benefits of health insurance
           </div>
 
           <div className="his">
@@ -383,7 +406,7 @@ class GroupHealthLanding extends Component {
               </Grid>
               <Grid item xs={11}>
                 <div className="accident-plan-terms-text" style={{}}>
-                  I accept <span onClick={() => this.openInBrowser(this.state.common.tnc,
+                I agree to the <span onClick={() => this.openInBrowser(this.state.common.tnc,
                   'tnc')} className="accident-plan-terms-bold" style={{ color: getConfig().primary }}>
                     Terms and conditions</span></div>
               </Grid>
