@@ -197,7 +197,7 @@ class GroupHealthPlanSelectCity extends Component {
                     }
                     </div>
                 </FormControl>
-                <BottomInfo baseData={{ 'content': 'Get cashless treatments at 10000+ cities' }} />
+                <BottomInfo baseData={{ 'content': 'Get cashless treatment at 10000+ cities' }} />
             </Container>
         );
     }

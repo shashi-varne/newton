@@ -389,7 +389,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                         <Input
                             type="text"
                             width="40"
-                            label="Name"
+                            label="Full name"
                             class="NomineeName"
                             id="name"
                             name="name"
