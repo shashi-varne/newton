@@ -48,7 +48,6 @@ class GroupHealthPlanSelectFloater extends Component {
 
 
         let post_body = this.state.groupHealthPlanData.post_body;
-        console.log('body',post_body);
         let selectedIndex = this.state.groupHealthPlanData.selectedIndexFloater || 0;
         let total_member = post_body.mem_info.adult + post_body.mem_info.child;
         this.setState({
@@ -62,7 +61,6 @@ class GroupHealthPlanSelectFloater extends Component {
         for(var key in post_body){
             if(key.includes('child')){
                 if(this.getAge(post_body[key].dob) < 5){
-                    console.log('yes yes yes');
                     this.setState({disableFloaterOption: true });
                 }
             }
@@ -275,7 +273,6 @@ class GroupHealthPlanSelectFloater extends Component {
 
 
     render() {
-        console.log(this.state)
 
         return (
             <Container
