@@ -238,15 +238,15 @@ class GroupHealthLanding extends Component {
   }
 
   onChangeEvent = () => {
-      let x = document.getElementsByClassName("offer-slide-img")
-      this.swipeMargin()
-      setTimeout(() => {
-        for (const property in x) {
-          if (!isNaN(property))
-            x[property].style.margin = "0px"
-        }
-      }, 350);
-}
+    let x = document.getElementsByClassName("offer-slide-img")
+    this.swipeMargin()
+    setTimeout(() => {
+      for (const property in x) {
+        if (!isNaN(property))
+          x[property].style.margin = "0px 0px 0px 0px"
+      }
+    }, 350);
+  }
 
   render() {
 
@@ -267,14 +267,13 @@ class GroupHealthLanding extends Component {
 
         <div className="group-health-landing">
 
-          <div style={{ margin: '20px 0 0 0', cursor: 'pointer' }}>
+          <div style={{ margin: '-10px 0 0 0', cursor: 'pointer' }}>
             <Carousel
               showStatus={false} showThumbs={false}
               showArrows={true}
               infiniteLoop={false}
               selectedItem={this.state.selectedIndex}
               onSwipeMove={this.onSwipeMoveEvent}
-              onChange2 = {this.onChangeEvent}
               onChange={(index) => {
                 this.setState({
                   selectedIndex: index,
@@ -282,6 +281,7 @@ class GroupHealthLanding extends Component {
                   card_swipe_count: this.state.card_swipe_count + 1
                 });
               }}
+              onChange={this.onChangeEvent}
               renderIndicator={(onClickHandler, isSelected) => {
                 if (isSelected) {
                   return (<li style={{...indicatorStyles, background: "#ADD8E6", width: "10px",}} />);
@@ -326,11 +326,11 @@ class GroupHealthLanding extends Component {
           <div className="generic-page-title" style={{ margin: '20px 0 0 0'}}>
             Covers all age groups
           </div>
-          <div className="generic-page-subtitle" style={{ margin: '5px 0 0 0'}}>
+          <div className="generic-page-subtitle" style={{ margin: '10px 0 0 0'}}>
            Buy health insurance for yourself, spouse, kids or parents also.
           </div>
 
-          <div className='family-images'>
+          <div className='family-images' style={{ margin: '15px 0 0 0'}}>
             <img className="accident-plan-read-icon"
               src={require(`assets/${this.state.productName}/icn_couple.svg`)} alt="" />
             <img className="accident-plan-read-icon"
@@ -339,7 +339,7 @@ class GroupHealthLanding extends Component {
               src={require(`assets/${this.state.productName}/icn_parents.svg`)} alt="" />
           </div>
 
-          <div className="generic-page-title" style={{ margin: '40px 0 20px 0' }}>
+          <div className="generic-page-title" style={{ margin: '40px 0 15px 0' }}>
             Overview
           </div>
 
@@ -401,7 +401,7 @@ class GroupHealthLanding extends Component {
           <HowToSteps style={{ margin: '10px 0 0 0' }} baseData={this.state.stepsContentMapper} />
 
 
-          <div className="generic-page-title" style={{ margin: '10px 0 15px 0' }}>
+          <div className="generic-page-title" style={{ margin: '0px 0 15px 0' }}>
             Things to know
           </div>
           <div className="generic-hr"></div>
@@ -414,7 +414,7 @@ class GroupHealthLanding extends Component {
               Frequently asked questions
             </div>
           </div>
-          <div className="generic-hr"></div>
+          <div className="generic-hr" style={{ margin: '0px 0 30px 0' }}></div>
 
           <div className="accident-plan-read" style={{ padding: 0,margin: '20px 0 0 0' }}
             onClick={() => this.openInBrowser(this.state.common.details_doc, 'read_document')}>
@@ -453,7 +453,7 @@ const indicatorStyles = {
   width: "20px",
   height: "3px",
   display: 'inline-block',
-  margin: '0 3px',
+  margin: '1px 3px',
   borderRadius : "1.5px"
 };
 
