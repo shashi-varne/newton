@@ -5,6 +5,7 @@ import Grid from 'material-ui/Grid';
 import MmYyInModal from 'common/ui/MmYyInModal';
 import InputPopup from './InputPopup';
 import Input from './Input';
+import Checkbox from './Checkbox';
 
 class CheckboxListClass extends Component {
 
@@ -24,6 +25,7 @@ class CheckboxListClass extends Component {
     }
 
     handleClick = (index) => {
+        console.log('here')
         let state = this.props.parent.state;
 
         let options = state.options;
@@ -38,8 +40,10 @@ class CheckboxListClass extends Component {
             this.updateParent('dateModalIndex', index);
         }
 
+        console.log(options[index].checked)
         if (this.props.provider === 'RELIGARE' && options[index].name !== 'Other' && 
         !options[index].checked) {
+            console.log('eref')
             this.setState({
                 openPopUpInputDate: true,
                 header_title: options[index].name,
@@ -64,7 +68,16 @@ class CheckboxListClass extends Component {
                 style={{ opacity: props.disabled ? 0.4 : 1 }}>
                 <Grid container spacing={16} alignItems="center">
                     <Grid item xs={1} className="TextCenter">
-                    <input type="checkbox" className="Checkbox" onChange={() => this.handleClick(index)} value="checked" checked={props.checked} style={{height: '22px', width: '18px'}}/>
+                    <Checkbox 
+                        index={index}
+                        type="checkbox"
+                        class="Checkbox"
+                        handleChange={this.handleClick}
+                        value="checked"
+                        checked={props.checked}
+                        width="18px"
+                        height="18px"
+                    />
                     </Grid>
 
                     <Grid item xs={11}>
