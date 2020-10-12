@@ -281,6 +281,7 @@ class GroupHealthLanding extends Component {
                   card_swipe_count: this.state.card_swipe_count + 1
                 });
               }}
+               // eslint-disable-next-line
               onChange={this.onChangeEvent}
               renderIndicator={(onClickHandler, isSelected) => {
                 if (isSelected) {
