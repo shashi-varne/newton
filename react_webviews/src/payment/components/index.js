@@ -3,7 +3,7 @@ import Container from '../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 // import { initialize } from '../common/functions';
 // import BottomInfo from '../../common/ui/BottomInfo';
-// import { getConfig } from 'utils/functions';
+import { getConfig } from 'utils/functions';
 // import SVG from 'react-inlinesvg';
 // import { numDifferentiationInr, inrFormatDecimal } from 'utils/validators';
 import "./Style.css";
@@ -18,36 +18,11 @@ import icn_more from 'assets/icn_more.svg';
 import icn_secure_payment from 'assets/icn_secure_payment.svg';
 import completed_step from 'assets/completed_step.svg';
 import Api from 'utils/api';
+import toast from '../../common/ui/Toast';
 
 let store = {}
-
-// const store = {
-//   message: '',
-//   show_debit: true,
-//   show_netbanking: true,
-//   allow_neft: true,
-//   neft_callback_url: '',
-//   bank_list_url: '',
-//   upi_add_bank_url: '',
-//   banks: [{ "penny_verification_reference": {}, "obscured_account_number": "xx22", "ifsc_details": { "city": "PATNA", "district": "PATNA", "new_ifsc": null, "ifsc": "SBIN0001513", "micr": "800002033", "state": "BIHAR", "contact": "0", "branch": "PATLIPUTRA", "address": "DISTPATNA  BIHAR 800013", "id": 4871689867362304, "bank": "STATE BANK OF INDIA" }, "name_match_state": null, "image": "https://test-dot-plutus-staging.appspot.com/static/img/banks/SBI.png", "bank_status": "submitted", "bank_id": 192870294, "non_editable_details": [], "billdesk_supported": true, "partner": null, "source_of_info": null, "actual_ifsc_code": "SBIN0001513", "received_name": "", "user_id": 6503257211928577, "razorpay_supported": true, "ifsc_code": "SBIN0001513", "rejection_allowed": true, "bank_short_name": "SBI", "bank_name": "STATE BANK OF INDIA", "upi_supported": true, "account_type": "SB-NRE", "bank_code": "SBI", "neft_supported": true, "rejection_details": "None", "kyc_bank_code": "SBIN", "branch_name": "PATLIPUTRA", "dt_created": "01/24/20 05:30:00", "pg_code": "SBI", "dt_updated": "01/28/20 05:30:00", "name": null, "bank_supported": true, "version_flag": "migrated", "user_rejection_attempts": 3, "ifsc_image": "https://test-dot-plutus-staging.appspot.com/static/img/bank_logos/SBI.png", "account_number": "1236", "module_name": "kyc", "is_primary_bank": false }, { "penny_verification_reference": {}, "obscured_account_number": "xx34", "ifsc_details": { "city": "FEROZPUR", "district": "PANJKOSI", "new_ifsc": null, "ifsc": "HDFC0003132", "micr": "152240007", "state": "PUNJAB", "contact": "9815331111", "branch": "PANJE KE", "address": "HDFC BANK LTD PREMISES ADJOINING MAIN MARKET, VPO PANJE KE, DISTT. FEROZEPUR, PANJE KE PUNJAB 152024", "id": 6538793502900224, "bank": "HDFC BANK" }, "name_match_state": null, "image": "https://test-dot-plutus-staging.appspot.com/static/img/banks/HDF.png", "bank_status": "submitted", "bank_id": 200880194, "non_editable_details": [], "billdesk_supported": true, "partner": null, "source_of_info": null, "actual_ifsc_code": "HDFC0003132", "received_name": "", "user_id": 6503257211928577, "razorpay_supported": true, "ifsc_code": "HDFC0003132", "rejection_allowed": true, "bank_short_name": "HDFC", "bank_name": "HDFC BANK", "upi_supported": true, "account_type": "SB", "bank_code": "HDF", "neft_supported": true, "rejection_details": "None", "kyc_bank_code": "HDFC", "branch_name": "PANJE KE", "dt_created": "01/24/20 05:30:00", "pg_code": "HDF", "dt_updated": "01/24/20 05:30:00", "name": null, "bank_supported": true, "version_flag": "migrated", "user_rejection_attempts": 3, "ifsc_image": "https://test-dot-plutus-staging.appspot.com/static/img/bank_logos/HDF.png", "account_number": "1234", "is_primary_bank": false }, { "penny_verification_reference": {}, "obscured_account_number": "xx36", "ifsc_details": { "city": "PATNA", "district": "PATNA", "new_ifsc": null, "ifsc": "SBIN0001513", "micr": "800002033", "state": "BIHAR", "contact": "0", "branch": "PATLIPUTRA", "address": "DISTPATNA  BIHAR 800013", "id": 4871689867362304, "bank": "STATE BANK OF INDIA" }, "name_match_state": null, "image": "https://test-dot-plutus-staging.appspot.com/static/img/banks/SBI.png", "bank_status": "submitted", "bank_id": 192870294, "non_editable_details": [], "billdesk_supported": true, "partner": null, "source_of_info": null, "actual_ifsc_code": "SBIN0001513", "received_name": "", "user_id": 6503257211928577, "razorpay_supported": true, "ifsc_code": "SBIN0001513", "rejection_allowed": true, "bank_short_name": "SBI", "bank_name": "STATE BANK OF INDIA", "upi_supported": true, "account_type": "SB-NRE", "bank_code": "SBI", "neft_supported": true, "rejection_details": "None", "kyc_bank_code": "SBIN", "branch_name": "PATLIPUTRA", "dt_created": "01/24/20 05:30:00", "pg_code": "SBI", "dt_updated": "01/28/20 05:30:00", "name": null, "bank_supported": true, "version_flag": "migrated", "user_rejection_attempts": 3, "ifsc_image": "https://test-dot-plutus-staging.appspot.com/static/img/bank_logos/SBI.png", "account_number": "123456", "module_name": "kyc", "is_primary_bank": true }],
-//   show_warning: '',
-//   url: '',
-//   amount: 5000,
-//   upi_enabled: true,
-//   has_upi_banks: true,
-//   funds: {},
-//   supported_bank_list: {},
-//   flow: '',
-//   investor: '',
-//   is_nri: false,
-//   app: 'fisdom',
-//   user: {},
-//   preferred_banks: [{ "bank_name": "State Bank of India", "image": "https://test-dot-plutus-staging.appspot.com/static/img/banks/SBI.png", "bank_short_name": "SBI", "pg_code": "SBI", "bank_code": "SBIN" }, { "bank_name": "HDFC Bank", "image": "https://test-dot-plutus-staging.appspot.com/static/img/banks/HDF.png", "bank_short_name": "HDFC", "pg_code": "HDF", "bank_code": "HDFC" }, { "bank_name": "SBI Bank", "image": "https://test-dot-plutus-staging.appspot.com/static/img/banks/ICI.png", "bank_short_name": "SBI", "pg_code": "SBI", "bank_code": "SBIN" }],
-//   generic_callback: true,
-//   partner: 'obc'
-// }
 let retry_enabled = true;
-let intent_supported = true;
+let intent_supported = false;
 let upi_others = true;
 window.PlutusInitState = {};
 
@@ -149,56 +124,6 @@ const SelectBankModal = (props) => {
   );
 };
 
-// const NEFTModal = (props) => {
-//   window.PlutusInitState.page = 'modal';
-//   const bankList = props.banks.map((item, i) => {
-//     if (item.neft_supported) {
-//       return (
-//         <div className={`carousel-item ${(props.activeIndex === i) ? 'active' : ''}`} key={i} onClick={() => props.selectedNEFTBank(i, item)}>
-//           <div className="flex">
-//             <div className="item">
-//               <img src={item.image} width="30" />
-//             </div>
-//             <div className="item">
-//               <div className="dark-grey-text uppercase">{item.bank_short_name}</div>
-//               <div className="light-grey">{item.obscured_account_number}</div>
-//             </div>
-//           </div>
-//         </div>
-//       );
-//     }
-//   });
-
-//   return (
-//     <div id="neftModal" className="modal modal-center">
-//       <div className="modal-content page-padding-10">
-//         <div className="header">
-//           <h1>Select your bank for NEFT/RTGS</h1>
-//         </div>
-//         <div className="carousel">
-//           <div className="carousel-flex">
-//             {bankList}
-//           </div>
-//         </div>
-//         <div className="form-input margin-top-30">
-//           <label>
-//             <input type="text" name="neft" ref={props.setNFFTNumber} id="neft" />
-//             <span className="placeholder">UTR number <span className="tooltip">*Info <span className="tooltiptext">This is Unique Transaction number for every NEFT and RTGS (16-digit or more i.e XXXXAYYDDD999999)</span></span></span>
-//           </label>
-//           {props.neft_error && <div className="validation red-color">Required, 10 characters or more</div>}
-//         </div>
-//         <div className="flex upitext">
-//           <label className="checkbox"><input type="checkbox" onChange={() => props.handleCheck()} /><span className="checkmark"></span></label>
-//           <div className={props.highlighttnc ? 'active' : ''}>Make sure to use same <b>NEFT number</b> linked to above selected account</div>
-//         </div>
-//         <div className="upi-button margin-top">
-//           <button className={`${props.checked ? 'active' : ''} ${store.partner}`} onClick={() => props.saveNEFT()}>Continue to Pay ₹ {store.amount}</button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
 const CancelModal = (props) => {
   window.PlutusInitState.page = 'pg_option_modal';
   const reasons = [
@@ -245,43 +170,6 @@ const CancelModal = (props) => {
   );
 }
 
-const PaymentModal = (props) => {
-  return (
-    <div id="paymentModal" className="modal modal-center">
-      <div className="modal-content">
-        <div className="loader"><img src="/static/img/loader.gif" alt="loader" /></div>
-        <div className="text-center header">Please wait!</div>
-        {/* <div className="text-center hint-color helper">We're processing your transaction...</div> */}
-      </div>
-    </div>
-  )
-};
-
-const PageLoader = () => {
-  return (
-    <div id="pageLoader">
-      <div className="loader">
-        <div className="sk-fading-circle">
-          <div className="sk-circle1 sk-circle"></div>
-          <div className="sk-circle2 sk-circle"></div>
-          <div className="sk-circle3 sk-circle"></div>
-          <div className="sk-circle4 sk-circle"></div>
-          <div className="sk-circle5 sk-circle"></div>
-          <div className="sk-circle6 sk-circle"></div>
-          <div className="sk-circle7 sk-circle"></div>
-          <div className="sk-circle8 sk-circle"></div>
-          <div className="sk-circle9 sk-circle"></div>
-          <div className="sk-circle10 sk-circle"></div>
-          <div className="sk-circle11 sk-circle"></div>
-          <div className="sk-circle12 sk-circle"></div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-
-
 class PaymentOption extends React.Component {
   constructor(props) {
     super(props);
@@ -323,7 +211,7 @@ class PaymentOption extends React.Component {
       showCancelModal: false,
       showDebitLoader: false,
       showBilldeskLoader: false,
-      show_loader: false
+      show_loader: true
     };
 
     this.goToBank = this.goToBank.bind(this);
@@ -344,39 +232,48 @@ class PaymentOption extends React.Component {
   }
   componentDidMount = async () => {
     window.PlutusInitState.page = this.props.page;
-    let res = await Api.get(`https://payment-dot-plutus-staging.appspot.com/api/invest/test/pg/summary/ahBzfnBsdXR1cy1zdGFnaW5nch8LEhJJbnZlc3RtZW50X1BheW1lbnQYgYDAmq6p2wsM`);
-    let resultData = res.pfwresponse.result;
-    store = resultData;
-    const supportedBanks = store.banks.filter((item, i) => {
-      return item.bank_supported;
-    });
+    let url = getConfig().base_url + '/api/invest/test/pg/summary/' + getConfig().pc_urlsafe;
+    try {
+      let res = await Api.get(url);
+      let resultData = res.pfwresponse.result;
+      store = resultData;
+      const supportedBanks = store.banks.filter((item, i) => {
+        return item.bank_supported;
+      });
 
-    const upiBanks = store.banks.filter((item, i) => {
-      return item.upi_supported;
-    });
+      const upiBanks = store.banks.filter((item, i) => {
+        return item.upi_supported;
+      });
 
-    const neftBanks = store.banks.filter((item, i) => {
-      return item.neft_supported;
-    });
+      const neftBanks = store.banks.filter((item, i) => {
+        return item.neft_supported;
+      });
 
-    const unSupportedBanks = store.banks.filter((item, i) => {
-      return !item.bank_supported;
-    });
+      const unSupportedBanks = store.banks.filter((item, i) => {
+        return !item.bank_supported;
+      });
 
-    const unSupportedBankNames = unSupportedBanks.map((item, i) => {
-      return item.bank_name;
-    });
-    let activeIndex = store.banks.findIndex(x => x.is_primary_bank === true);
-    this.setState({
-      notSupportedBankCount: unSupportedBanks.length,
-      supportedBanks: supportedBanks,
-      unSupportedBanks: unSupportedBanks,
-      unSupportedBankNames: unSupportedBankNames,
-      upiBanks: upiBanks,
-      neftBanks: neftBanks,
-      activeIndex: activeIndex,
-      selectedBank: store.banks[activeIndex]
-    })
+      const unSupportedBankNames = unSupportedBanks.map((item, i) => {
+        return item.bank_name;
+      });
+      let activeIndex = store.banks.findIndex(x => x.is_primary_bank === true);
+      this.setState({
+        show_loader: false,
+        notSupportedBankCount: unSupportedBanks.length,
+        supportedBanks: supportedBanks,
+        unSupportedBanks: unSupportedBanks,
+        unSupportedBankNames: unSupportedBankNames,
+        upiBanks: upiBanks,
+        neftBanks: neftBanks,
+        activeIndex: activeIndex,
+        selectedBank: store.banks[activeIndex]
+      })
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      })
+      toast("Something went wrong");
+    }
 
     window.PlutusInitState.modalCallback = (bool) => {
       this.setState({ showUpiModal: bool, showNetBankModal: bool });
@@ -452,7 +349,7 @@ class PaymentOption extends React.Component {
       pushEvent(eventObj);
 
       // show loader
-      this.setState({ showBilldeskLoader: true, show_loader: false });
+      this.setState({ show_loader: true });
       nativeCallback('take_control', window.location.href);
       window.location.href = store.url + '&bank_code=' + this.state.bank.bank_code + '&account_number=' + this.state.bank.account_number + '&gateway_type=UPI';
     } else {
@@ -536,11 +433,11 @@ class PaymentOption extends React.Component {
 
   goToPayment(type) {
     if (type === "debit") {
-      this.setState({ showDebitLoader: true });
+      this.setState({ show_loader: true });
       nativeCallback('take_control', window.location.href);
       window.location.href = store.url + '&gateway_type=HMP';
     } else if (type === "netbanking") {
-      this.setState({ showBilldeskLoader: true });
+      this.setState({ show_loader: true });
       nativeCallback('take_control', window.location.href);
       window.location.href = store.url + '&bank_code=' + this.state.selectedBank.bank_code + '&account_number=' + this.state.selectedBank.account_number;
     } else if (type === "neft") {
@@ -548,12 +445,12 @@ class PaymentOption extends React.Component {
         neftBanks: this.state.neftBanks
       });
     } else if (type === "upi") {
-      this.setState({ showBilldeskLoader: true });
+      this.setState({ show_loader: true });
       nativeCallback('take_control', window.location.href);
       window.location.href = store.url + '&account_number=' + this.state.selectedBank.account_number + '&gateway_type=UPI';
     } else {
       nativeCallback('show_toast', 'Pay using bank a/c - ' + this.state.selectedBank.obscured_account_number + ' only');
-      this.setState({ showBilldeskLoader: true });
+      this.setState({ show_loader: true });
       let that = this;
       Api.get(store.intent_url + '?bank_id=' + this.state.selectedBank.bank_id + `&gateway_type=UPI`).then(data => {
         if (data.pfwresponse.status_code === 200) {
@@ -562,7 +459,7 @@ class PaymentOption extends React.Component {
           nativeCallback('take_control', window.location.href);
           nativeCallback('initiate_upi_payment', upi_payment_data);
         } else {
-          that.setState({ showBilldeskLoader: false });
+          that.setState({ show_loader: false });
           if (data.pfwresponse.result.error === 'failure') {
             nativeCallback('show_toast', data.pfwresponse.result.message);
           }
@@ -607,7 +504,7 @@ class PaymentOption extends React.Component {
 
     // show loader
     if (item.bank_code) {
-      this.setState({ showBilldeskLoader: true });
+      this.setState({ show_loader: true });
       nativeCallback('take_control', window.location.href);
       window.location.href = store.url + '&bank_code=' + item.bank_code + '&account_number=' + item.account_number;
     } else {
@@ -803,15 +700,6 @@ class PaymentOption extends React.Component {
               inputOnClick={this.inputOnClick}
               sendReason={this.sendReason}
               goBack={this.closeModal} />
-          }
-          {this.state.showDebitLoader &&
-            <PaymentModal type="debit" />
-          }
-          {this.state.showBilldeskLoader &&
-            <PaymentModal type="billdesk" />
-          }
-          {this.state.show_loader &&
-            <PageLoader />
           }
         </Container>
       );

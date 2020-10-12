@@ -15,6 +15,7 @@ import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
 import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
 import Home from "./components/index.js";
+import Neft from "./components/neft.js";
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -51,6 +52,7 @@ const Payment = props => {
         <Switch>
 
           <Route path={`${url}/`} component={Home} />
+          <Route path={`${url}/neft`} component={Neft} />
           <Route component={NotFound} />
 
         </Switch>
