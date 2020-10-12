@@ -34,13 +34,19 @@ class HealthInsuranceEntry extends Component {
         key: 'RELIGARE',
         title: 'Care Health',
         subtitle: 'Care',
-        icon: religare_logo
+        icon: religare_logo,
+        disabled: true
       },
       {
         key: 'STAR',
         title: 'Star',
         subtitle: 'Family health optima',
+<<<<<<< HEAD
         icon: star_logo
+=======
+        icon: star_logo,
+        disabled: true
+>>>>>>> bab36d8519ace51beab950b56a6a7edee78de691
       }
     ];
 
@@ -71,23 +77,28 @@ class HealthInsuranceEntry extends Component {
   }
 
   renderPorducts(props, index) {
-    return (
-      <div className='insurance_plans' key={index} onClick={() => this.handleClick(props)}
-      style={{
-         borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',
-      }}
-      >
-        <div className='insurance_plans_types'>
-          <img src={props.icon} alt="" className="insurance_plans_logos"/>
-          <div>
-            <div className='insurance_plans_logos_text'
-            >{props.title}
+    if(!props.disabled) {
+      return (
+        <div className='insurance_plans' key={index} onClick={() => this.handleClick(props)}
+        style={{
+           borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',
+        }}
+        >
+          <div className='insurance_plans_types'>
+            <img src={props.icon} alt="" className="insurance_plans_logos"/>
+            <div>
+              <div className='insurance_plans_logos_text'
+              >{props.title}
+              </div>
+              <div className='insurance_plans_logos_subtext'>{props.subtitle}</div>
             </div>
-            <div className='insurance_plans_logos_subtext'>{props.subtitle}</div>
           </div>
         </div>
-      </div>
-    )
+      )
+    }
+
+    return null;
+   
   }
 
   sendEvents(user_action, insurance_type) {
