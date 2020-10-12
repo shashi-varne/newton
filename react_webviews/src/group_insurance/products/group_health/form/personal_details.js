@@ -228,11 +228,11 @@ class GroupHealthPlanPersonalDetails extends Component {
         const age = calculateAge(form_data.dob, true);
         if (this.state.groupHealthPlanData.type_of_plan === 'WF') {
           if (age.days <= validation_props.dob_child.minDays || age.age >= validation_props.dob_child.max) {
-            form_data.dob_error = "Only children between 91 days & 25 yrs can be included";
+            form_data.dob_error = `Only children between ${validation_props.dob_child.minDays} days & ${validation_props.dob_child.max} yrs can be included`;
           }
         } else {
           if (age.age < validation_props.dob_child.minAge || age.age >= validation_props.dob_child.max) {
-            form_data.dob_error = 'Only children between 5 yrs & 25 yrs can be included';
+            form_data.dob_error = `Only children between ${validation_props.dob_child.minAge}  yrs & ${validation_props.dob_child.max} yrs can be included`;
           }
         }
       }
@@ -281,13 +281,13 @@ class GroupHealthPlanPersonalDetails extends Component {
     if (this.state.dobNeeded) {
       if (provider === 'RELIGARE') {
         if (age < validation_props.dob_adult.min && !isChild) {
-          form_data.dob_error = 'Minimum age is 18 for adult';
+          form_data.dob_error = `Minimum age is ${validation_props.dob_adult.min} for adult`;
         }
       }
 
       if (provider === 'STAR') {
         if (age > validation_props.dob_adult.max && !isChild) {
-          form_data.dob_error = 'Valid age is between 18 to 65 year';
+          form_data.dob_error = `Valid age is between ${validation_props.dob_adult.min} to ${validation_props.dob_adult.max} year`;
         }
       }
     }
@@ -298,11 +298,11 @@ class GroupHealthPlanPersonalDetails extends Component {
 
       if (provider === 'HDFCERGO') {
         if (form_data.gender === 'MALE' && age < validation_props.dob_married_male.min) {
-          form_data.dob_error = 'Minimum age is 21 male applicant';
+          form_data.dob_error = `Minimum age is ${validation_props.dob_married_male.min} male applicant`;
         }
 
         if (form_data.gender === 'FEMALE' && age < validation_props.dob_married_female.min) {
-          form_data.dob_error = 'Minimum age is 18 female applicant';
+          form_data.dob_error = `Minimum age is ${validation_props.dob_married_female.min} female applicant`;
         }
 
       }

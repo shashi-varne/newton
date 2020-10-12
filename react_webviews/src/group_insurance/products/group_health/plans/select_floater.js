@@ -4,7 +4,7 @@ import Container from '../../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 // import { getConfig } from 'utils/functions';
 
-import {  inrFormatDecimal, numDifferentiationInr, numDifferentiation } from 'utils/validators';
+import {  inrFormatDecimal, numDifferentiationInr, numDifferentiation, calculateAge } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
 
 import Api from 'utils/api';
@@ -27,21 +27,8 @@ class GroupHealthPlanSelectFloater extends Component {
 
     }
 
-    getAge = (dateString) => {
-        var today = new Date();
-        var birthDate = new Date(dateString);
-        var age = today.getFullYear() - birthDate.getFullYear();
-        var m = today.getMonth() - birthDate.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
-        }
-        return age;
-    }
-
-
     componentWillMount() {
         this.initialize();
-        // let post_body = this.state.groupHealthPlanData.post_body;
     }
 
     async componentDidMount() {
@@ -57,15 +44,14 @@ class GroupHealthPlanSelectFloater extends Component {
             show_ind_mem_premium: this.state.providerConfig.show_ind_mem_premium
         });
 
-            
-        for(var key in post_body){
-            if(key.includes('child')){
-                if(this.getAge(post_body[key].dob) < 5){
-                    this.setState({disableFloaterOption: true });
-                }
+        if(post_body.mem_info.child > 0){
+            for(var key in post_body){
+                    if(calculateAge(post_body[key].dob, false) < 5){
+                        this.setState({disableFloaterOption: true });
+                    }
             }
         }
-
+        
         try {
 
             const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/premium`,
@@ -201,10 +187,11 @@ class GroupHealthPlanSelectFloater extends Component {
     }
 
     renderPlans = (props, index) => {
+        console.log(props);
         return (
 
             <div onClick={() => this.choosePlan(index, props)}
-                className={`tile ${index === this.state.selectedIndex ? 'tile-selected' : ''} ${this.state.disableFloaterOption && index == 1? 'tile-disabled': ''}`} key={index}>
+                className={`tile ${index === this.state.selectedIndex ? 'tile-selected' : ''} ${this.state.disableFloaterOption && props.key == "NF" ? 'tile-disabled': ''}`} key={index}>
                 <div className="select-tile">
                     <div className="flex-column">
                         <div className="name">
