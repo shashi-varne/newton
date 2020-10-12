@@ -40,8 +40,8 @@ class HealthInsuranceLanding extends Component {
     let insuranceProducts = [
       {
         key: 'HEALTH_SURAKSHA',
-        title: 'Health suraksha',
-        subtitle: 'Comprehensive health coverage',
+        title: 'Comprehensive health insurance',
+        subtitle: 'Complete health coverage',
         icon: health_suraksha_icon
       },
       {
@@ -88,9 +88,9 @@ class HealthInsuranceLanding extends Component {
   }
 
  
-  handleClick = (product_key) => {
+  handleClick = (product_key, title) => {
 
-    this.sendEvents('next', product_key)
+    this.sendEvents('next', title)
     
 
     let stateMapper = {
@@ -102,14 +102,14 @@ class HealthInsuranceLanding extends Component {
     var fullPath = 'health/' + stateMapper[product_key] + '/plan';
 
     if(product_key === 'HEALTH_SURAKSHA' && !getConfig().iOS) {
-      fullPath = 'group-health/landing';
+      fullPath = 'group-health/entry';
     }
     this.navigate('/group-insurance/' + fullPath);
   }
 
   renderPorducts(props, index) {
     return (
-      <div key={index} onClick={() => this.handleClick(props.key)} style={{
+      <div key={index} onClick={() => this.handleClick(props.key, props.title)} style={{
         display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
         borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',
         paddingBottom: '15px', justifyContent: 'space-between', cursor: 'pointer'

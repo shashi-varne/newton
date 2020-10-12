@@ -4,7 +4,7 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 
-import { storageService, numDifferentiation } from 'utils/validators';
+import { numDifferentiationInr } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
 
 
@@ -14,8 +14,9 @@ class GroupHealthPlanSelectSumAssured extends Component {
         super(props);
         this.state = {
             ctaWithProvider: true,
-            premium_data: []
-        }
+            premium_data: [],
+            screen_name: 'sum_assured_screen'
+        };
 
         this.initialize = initialize.bind(this);
         this.updateBottomPremium = updateBottomPremium.bind(this);
@@ -46,9 +47,9 @@ class GroupHealthPlanSelectSumAssured extends Component {
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "product": 'health suraksha',
+                "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
-                "screen_name": 'select sum Insured',
+                "screen_name": 'select sum insured',
                 'sum_assured' : (this.state.premium_data || [])[this.state.selectedIndex || 0].sum_assured || ''
             }
         };
@@ -62,10 +63,19 @@ class GroupHealthPlanSelectSumAssured extends Component {
 
     handleClick = () => {
         this.sendEvents('next');
+        let selectedPlan = this.state.premium_data[this.state.selectedIndex];
         let groupHealthPlanData = this.state.groupHealthPlanData;
         groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
-        groupHealthPlanData.post_body.sum_assured = this.state.premium_data[this.state.selectedIndex].sum_assured;
-        
+        groupHealthPlanData.sum_assured = selectedPlan.sum_assured;
+        groupHealthPlanData.post_body.sum_assured = selectedPlan.sum_assured;
+
+        groupHealthPlanData.post_body.base_premium = selectedPlan.base_premium;
+        groupHealthPlanData.post_body.premium = selectedPlan.net_premium;
+
+
+        if(this.state.provider === 'RELIGARE') {
+            groupHealthPlanData.post_body.sum_assured = (groupHealthPlanData.post_body.sum_assured)/100000
+        }
 
         let total_member = groupHealthPlanData.post_body.mem_info.adult + groupHealthPlanData.post_body.mem_info.child;
 
@@ -74,12 +84,19 @@ class GroupHealthPlanSelectSumAssured extends Component {
             groupHealthPlanData.post_body.type_of_plan = 'WF';
         }
 
-        storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+        // data reset
+        groupHealthPlanData.add_ons_data = '';
+        groupHealthPlanData.net_premium_addons = '';
+
+        groupHealthPlanData.post_body.add_ons = '';
+        groupHealthPlanData.post_body.add_ons_json = '';
+
+        this.setLocalProviderData(groupHealthPlanData);
 
         if(groupHealthPlanData.account_type === 'self' || total_member === 1) {
-            this.navigate('plan-select-cover-period');
+            this.navigate(this.state.next_screen.not_floater || 'plan-select-cover-period');
         } else {
-            this.navigate('plan-select-floater');
+            this.navigate(this.state.next_screen.floater || 'plan-select-floater');
         }
         
     }
@@ -90,7 +107,6 @@ class GroupHealthPlanSelectSumAssured extends Component {
         }, () => {
             this.updateBottomPremium();
         });
-
     }
 
     renderPlans = (props, index) => {
@@ -99,7 +115,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
                 className={`tile ${index === this.state.selectedIndex ? 'tile-selected' : ''}`} key={index}>
                 <div className="select-tile">
                     <div className="name">
-                        {numDifferentiation(props.sum_assured)}
+                        {numDifferentiationInr(props.sum_assured)}
                     </div>
                     <div className="completed-icon">
                         {index === this.state.selectedIndex &&
@@ -114,22 +130,21 @@ class GroupHealthPlanSelectSumAssured extends Component {
 
     render() {
 
-
         return (
             <Container
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
-                title="Select sum assured"
+                title="Select sum insured"
                 buttonTitle="CONTINUE"
                 withProvider={true}
                 buttonData={this.state.bottomButtonData}
                 handleClick={() => this.handleClick()}
             >
                 <div className="common-top-page-subtitle flex-between-center">
-                    You can make a claim upto this amount
+                    Claim can be made upto the selected amount     
                  <img 
                  className="tooltip-icon"
-                 data-tip="In the last 10 years, the average cost per hospitalization for urban patients (in India) has increased by about 176%. Hence, we recommend to have adequate coverage to manage health expenses."
+                 data-tip="In the last 10 years, the average cost per hospitalisation for urban patients has increased by about 176%. Hence, we recommend to have adequate coverage to manage health expenses"
                  src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
                 </div>
                 <div className="group-health-plan-select-sum-assured">

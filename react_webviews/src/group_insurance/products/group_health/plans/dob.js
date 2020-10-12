@@ -4,11 +4,13 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import BottomInfo from '../../../../common/ui/BottomInfo';
-import { storageService, calculateAge, isValidDate,
-     IsFutureDate, formatDate, dobFormatTest } from 'utils/validators';
+import {  calculateAge, isValidDate,
+     IsFutureDate, formatDate, dobFormatTest, capitalizeFirstLetter } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import { initialize } from '../common_data';
 import toast from '../../../../common/ui/Toast';
+import {resetInsuredMembers, getInsuredMembersUi} from '../constants';
+import { childeNameMapper } from '../../../constants';
 
 class GroupHealthPlanDob extends Component {
 
@@ -17,7 +19,8 @@ class GroupHealthPlanDob extends Component {
         this.state = {
             header_title: 'Your date of birth',
             final_dob_data: [],
-            ui_members: {}
+            ui_members: {},
+            screen_name: 'plan_dob_screen'
         }
 
         this.initialize = initialize.bind(this);
@@ -30,81 +33,20 @@ class GroupHealthPlanDob extends Component {
 
     async componentDidMount() {
         let groupHealthPlanData = this.state.groupHealthPlanData;
-
         this.setState({
             account_type: groupHealthPlanData.account_type,
             header_title: groupHealthPlanData.account_type === 'self' ? 'Your date of birth' : 'Date of birth details'
-        })
+        });
 
-        let dob_data = [
-            {
-                'key': 'self',
-                'label': groupHealthPlanData.account_type === 'self' ? 'Date of birth (DD/MM/YYYY)' : "Your date of birth (DD/MM/YYYY)",
-                'value': '',
-                'backend_key': 'self_account_key'
-            },
-            {
-                'key': 'wife',
-                'label': "Wife's date of birth (DD/MM/YYYY)",
-                'value': '',
-                'backend_key': 'spouse_account_key'
-            },
-            {
-                'key': 'husband',
-                'label': "Husband's date of birth (DD/MM/YYYY)",
-                'value': '',
-                'backend_key': 'spouse_account_key'
-            },
-
-            {
-                'key': 'father',
-                'label': "Father's date of birth (DD/MM/YYYY)",
-                'value': '',
-                'backend_key': 'parent_account1_key'
-            },
-            {
-                'key': 'mother',
-                'label': "Mother's date of birth (DD/MM/YYYY)",
-                'value': '',
-                'backend_key': 'parent_account2_key'
-            },
-            {
-                'key': 'son',
-                'label': "Son's date of birth (DD/MM/YYYY)",
-                'value': '',
-                'backend_key': 'child_account1_key'
-            },
-            {
-                'key': 'son1',
-                'label': "1st son's date of birth (DD/MM/YYYY)",
-                'value': '',
-                'backend_key': 'child_account1_key'
-            },
-            {
-                'key': 'son2',
-                'label': "2nd son's date of birth (DD/MM/YYYY)",
-                'value': '',
-                'backend_key': 'child_account2_key'
-            },
-            {
-                'key': 'daughter',
-                'label': "Daughter's date of birth (DD/MM/YYYY)",
-                'value': '',
-                'backend_key': 'child_account1_key'
-            },
-            {
-                'key': 'daughter1',
-                'label': "1st daughter's date of birth (DD/MM/YYYY)",
-                'value': '',
-                'backend_key': 'child_account1_key'
-            },
-            {
-                'key': 'daughter2',
-                'label': "1st daughter's date of birth (DD/MM/YYYY)",
-                'value': '',
-                'backend_key': 'child_account2_key'
-            }
-        ]
+        let dob_data = getInsuredMembersUi(groupHealthPlanData);
+        for (var key in dob_data) {
+            dob_data[key].label = `${capitalizeFirstLetter(childeNameMapper(dob_data[key].key))}'s date of birth (DD/MM/YYYY)`;
+            if(dob_data[key].key === 'self') {
+                dob_data[key].label = groupHealthPlanData.account_type === 'self' ? 'Date of birth (DD/MM/YYYY)' : 
+                "Your date of birth (DD/MM/YYYY)";
+            };
+            dob_data[key].error = '';
+        }
 
         let final_dob_data = [];
 
@@ -114,11 +56,8 @@ class GroupHealthPlanDob extends Component {
             let key = dob_data[i].key;
             if (ui_members[key]) {
                 dob_data[i].value = ui_members[key + '_dob'] || '';
-                dob_data[i].age = calculateAge(ui_members[key + '_dob'] || '', 'byMonth');
+                dob_data[i].age = calculateAge(ui_members[key + '_dob'] || '', true);
 
-                if(!ui_members.father && key === 'mother') {
-                    dob_data[i].backend_key = 'parent_account1_key';
-                }
                 final_dob_data.push(dob_data[i]);
             }
         }
@@ -131,8 +70,6 @@ class GroupHealthPlanDob extends Component {
     }
 
     handleChange = index => event => {
-
-
         var final_dob_data = this.state.final_dob_data;
         let name = final_dob_data[index].key;
         if (!name) {
@@ -145,8 +82,6 @@ class GroupHealthPlanDob extends Component {
             return;
         }
 
-       
-
         let errorDate = '';
         if (value.length > 10) {
             return;
@@ -158,7 +93,7 @@ class GroupHealthPlanDob extends Component {
         final_dob_data[index].value = event.target.value;
         final_dob_data[index].error = errorDate;
 
-        let age = calculateAge(event.target.value, 'byMonth');
+        let age = calculateAge(event.target.value, true);
         final_dob_data[index].age = age;
 
         this.setState({
@@ -178,80 +113,77 @@ class GroupHealthPlanDob extends Component {
 
         this.sendEvents('next');
 
-        
+        let validation_props = this.state.validation_props;
+
         let canProceed = true;
         let final_dob_data = this.state.final_dob_data;
-        console.log(final_dob_data);
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let ui_members = groupHealthPlanData.ui_members || {};
         let self_gender = ui_members.self_gender || '';
         let manAgeCheck = '';
         if(this.state.account_type === 'selfandfamily' || this.state.account_type === 'family') {
             if(self_gender === 'MALE') {
-                manAgeCheck = 'self'
+                manAgeCheck = 'self';
             } else if((self_gender === 'FEMALE' && ui_members.husband) || ui_members.husband) {
-                manAgeCheck = 'husband'
+                manAgeCheck = 'husband';
             }
         }
 
 
         let adult_ages = [];
         let child_ages = [];
-        for (var i = 0; i < final_dob_data.length; i++) {
 
-            let dob = final_dob_data[i].value;
-            let age = final_dob_data[i].age;
-            let key = final_dob_data[i].key;
-            let error = '';
-            if (new Date(dob) > new Date() || !isValidDate(dob)) {
-                error = 'Please enter valid date';
+        console.log(final_dob_data);
+
+        for (let dob_data of final_dob_data) {
+            const { value: dob, age, key, relation } = dob_data;
+
+            if (!isValidDate(dob)) {
+                dob_data.error = 'Please enter valid date';
+                canProceed = false;
             } else if (IsFutureDate(dob)) {
-                error = 'Future date is not allowed';
+                dob_data.error = 'Future date is not allowed';
+                canProceed = false;
             }
 
             if(age) {
-                if(key.indexOf('son') >=0 || key.indexOf('daughter') >=0) {
-                    // child
-                    if (age.age > 25 || (age.age === 0 && age.month < 3)) {
-                        error = 'Valid age is between 3 months- 25 years';
-                    }
-                    child_ages.push(age.age);
-    
-                } else {
+                if(!['son', 'daughter'].includes(relation)) {
+                    let dob_adult = validation_props.dob_adult;
+                    let dob_married_male = validation_props.dob_married_male;
                     // adult
-                    if (age.age > 90 || age.age < 19) {
-                        error = 'Valid age is between 18 - 90 years';
-                    } else if(manAgeCheck === key && age.age < 22) {
-                        error = 'Minimum age is 21 for married male';
+                    if (age.age > dob_adult.max || age.age < dob_adult.min) {
+                        dob_data.error = `Valid age is between ${dob_adult.min} - ${dob_adult.max} years`;
+                        canProceed = false;
+                    } else if (manAgeCheck === key && age.age < dob_married_male.min) {
+                        dob_data.error = `Minimum age is ${dob_married_male.min} for married male`;
+                        canProceed = false;
                     }
                     adult_ages.push(age.age);
+                } else {
+                    let dob_child = validation_props.dob_child;
+                    if (age.age > dob_child.max || (age.days < dob_child.minDays)) {
+                        dob_data.error = `Valid age is between ${dob_child.minDays} days - ${dob_child.max} years`;
+                        canProceed = false;
+                    }
+                    child_ages.push(age.age);
                 }
             }
            
-            final_dob_data[i].error = error;
-
-            if(!error) {
+            if (!dob_data.error) {
                 ui_members[key + '_dob'] = dob;
             }
 
-            if(error) {
-                canProceed = false;
-            }
         }
 
         this.setState({
             final_dob_data: final_dob_data
-        })
+        });
+
+
+        //reset data
+        groupHealthPlanData = resetInsuredMembers(groupHealthPlanData);
 
         let post_body = groupHealthPlanData.post_body;
-
-        // reset data
-
-        let dob_data_base = this.state.dob_data;
-        for (var mem in dob_data_base) {
-            let backend_key = dob_data_base[mem].backend_key;
-            post_body[backend_key] = {};
-        }
 
         for(var age in child_ages) {
             for(var adult in adult_ages) {
@@ -261,7 +193,6 @@ class GroupHealthPlanDob extends Component {
                 }
             }
         }
-       
 
         if(canProceed) {
             
@@ -270,30 +201,13 @@ class GroupHealthPlanDob extends Component {
             
             for (var j in final_dob_data) {
 
-                let key = final_dob_data[j].key;
-                if((key === 'daughter' || key === 'daughter1') && ui_members.son_total === 1) {
-                    final_dob_data[j].backend_key = 'child_account2_key';
-                }
-
-                let backend_key = final_dob_data[j].backend_key;
-
-                let relation = key;
-                if(relation.indexOf('son') >= 0) {
-                    relation = 'son';
-                }
-
-                if(relation.indexOf('daughter') >= 0) {
-                    relation = 'daughter';
-                }
+                let member_data = final_dob_data[j];
+                let backend_key = member_data.backend_key;
 
                 post_body[backend_key] = {
-                    dob: final_dob_data[j].value,
-                    relation: relation
+                    dob: member_data.value,
+                    relation: member_data.relation
                 };
-            }
-
-            if(final_dob_data.length === 1 && groupHealthPlanData.account_type === 'parent') {
-                final_dob_data[0].backend_key = 'parent_account1_key';
             }
 
             if(ui_members.self_gender && post_body.self_account_key) {
@@ -302,21 +216,20 @@ class GroupHealthPlanDob extends Component {
 
             groupHealthPlanData.post_body = post_body;
 
-
-            storageService().setObject('groupHealthPlanData', groupHealthPlanData);
-            this.navigate('plan-select-city');
+            this.setLocalProviderData(groupHealthPlanData);
+            this.navigate(this.state.next_screen);
         }
-    }
-
+    };
 
     sendEvents(user_action) {
         let eventObj = {
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "product": 'health suraksha',
+                "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'enter birthday',
+                // is_dob_entered: 
                 // 'eldest_member': this.state.groupHealthPlanData.ui_members.other_adult_member || '',
             }
         };
