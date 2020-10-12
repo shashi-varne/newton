@@ -35,14 +35,14 @@ class HealthInsuranceEntry extends Component {
         title: 'Care Health',
         subtitle: 'Care',
         icon: religare_logo,
-        disabled: true
+        disabled: false
       },
       {
         key: 'STAR',
         title: 'Star',
         subtitle: 'Family health optima',
         icon: star_logo,
-        disabled: true
+        disabled: false
       }
     ];
 
