@@ -7,6 +7,7 @@ import { nativeCallback } from 'utils/native_callback';
 // import SVG from 'react-inlinesvg';
 // import { numDifferentiationInr, inrFormatDecimal } from 'utils/validators';
 import "./Style.css";
+import "./Style.scss";
 
 import icn_upi_apps from 'assets/icn_upi_apps.svg';
 import icn_debit_card from 'assets/icn_debit_card.svg';
