@@ -167,7 +167,7 @@ class GroupHealthPlanSelectFloater extends Component {
     }
 
     choosePlan = (index, props) => {
-        if(props.key == "NF" && this.state.disableFloaterOption){
+        if(props.key === "NF" && this.state.disableFloaterOption){
             return;
         }
         this.setState({
@@ -191,7 +191,7 @@ class GroupHealthPlanSelectFloater extends Component {
         return (
 
             <div onClick={() => this.choosePlan(index, props)}
-                className={`tile ${index === this.state.selectedIndex ? 'tile-selected' : ''} ${this.state.disableFloaterOption && props.key == "NF" ? 'tile-disabled': ''}`} key={index}>
+                className={`tile ${index === this.state.selectedIndex ? 'tile-selected' : ''} ${this.state.disableFloaterOption && props.key === "NF" ? 'tile-disabled': ''}`} key={index}>
                 <div className="select-tile">
                     <div className="flex-column">
                         <div className="name">
