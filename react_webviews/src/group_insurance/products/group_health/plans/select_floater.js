@@ -166,8 +166,8 @@ class GroupHealthPlanSelectFloater extends Component {
         this.navigate(this.state.next_screen || 'plan-select-cover-period');
     }
 
-    choosePlan = (index) => {
-        if(index == 1 && this.state.disableFloaterOption){
+    choosePlan = (index, props) => {
+        if(props.key == "NF" && this.state.disableFloaterOption){
             return;
         }
         this.setState({
