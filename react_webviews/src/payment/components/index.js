@@ -1,11 +1,7 @@
 import React from 'react';
 import Container from '../common/Container';
 import { nativeCallback } from 'utils/native_callback';
-// import { initialize } from '../common/functions';
-// import BottomInfo from '../../common/ui/BottomInfo';
 import { getConfig } from 'utils/functions';
-// import SVG from 'react-inlinesvg';
-// import { numDifferentiationInr, inrFormatDecimal } from 'utils/validators';
 import "./Style.css";
 import "./Style.scss";
 
@@ -441,9 +437,7 @@ class PaymentOption extends React.Component {
       nativeCallback('take_control', window.location.href);
       window.location.href = store.url + '&bank_code=' + this.state.selectedBank.bank_code + '&account_number=' + this.state.selectedBank.account_number;
     } else if (type === "neft") {
-      this.props.history.push('/neft', {
-        neftBanks: this.state.neftBanks
-      });
+      this.props.history.push('neft', { store: store, neftBanks: this.state.neftBanks });
     } else if (type === "upi") {
       this.setState({ show_loader: true });
       nativeCallback('take_control', window.location.href);
@@ -608,7 +602,7 @@ class PaymentOption extends React.Component {
           </div>
           <div className="tabs">
             {(store.has_upi_banks || (store.upi_add_bank_url && store.upi_enabled)) && this.state.selectedBank.upi_supported && retry_enabled &&
-              <div className="card upi tab" onClick={() => this.selectptype('upi')}>
+              <div className="paymentcard upi tab" onClick={() => this.selectptype('upi')}>
                 <input type="radio" id="rd1" name="rd" />
                 <label className={`tab-label ${store.app}`} htmlFor="rd1">
                   <div className="item-header">
@@ -631,7 +625,7 @@ class PaymentOption extends React.Component {
               </div>
             }
             {store.show_netbanking && this.state.selectedBank.bank_supported &&
-              <div className="card tab" onClick={() => this.selectptype('netbanking')}>
+              <div className="paymentcard tab" onClick={() => this.selectptype('netbanking')}>
                 <input type="radio" id="rd2" name="rd" />
                 <label className={`tab-label ${store.app}`} htmlFor="rd2">
                   <div className="item-header">
@@ -646,7 +640,7 @@ class PaymentOption extends React.Component {
               </div>
             }
             {store.show_debit &&
-              <div className="card tab" onClick={() => this.selectptype('debit')}>
+              <div className="paymentcard tab" onClick={() => this.selectptype('debit')}>
                 <input type="radio" id="rd3" name="rd" />
                 <label className={`tab-label ${store.app}`} htmlFor="rd3">
                   <div className="item-header">
@@ -660,7 +654,7 @@ class PaymentOption extends React.Component {
               </div>
             }
             {store.allow_neft && this.state.selectedBank.neft_supported &&
-              <div className="card tab" onClick={() => this.selectptype('neft')}>
+              <div className="paymentcard tab" onClick={() => this.selectptype('neft')}>
                 <input type="radio" id="rd4" name="rd" />
                 <label className={`tab-label ${store.app}`} htmlFor="rd4">
                   <div className="item-header">

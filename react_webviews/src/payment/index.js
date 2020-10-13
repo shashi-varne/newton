@@ -51,7 +51,7 @@ const Payment = props => {
         <ToastContainer autoClose={3000} />
         <Switch>
 
-          <Route path={`${url}/`} component={Home} />
+          <Route path={`${url}/home`} component={Home} />
           <Route path={`${url}/neft`} component={Neft} />
           <Route component={NotFound} />
 

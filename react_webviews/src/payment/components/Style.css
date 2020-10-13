@@ -53,7 +53,7 @@
     padding: 15px;
   }
   
-  .card {
+  .paymentcard {
     background: #fff;
     border-bottom: 1px solid #ededed;
     box-shadow: none;
@@ -62,7 +62,7 @@
     margin-bottom: 0;
   }
   
-  .card.upi {
+  .paymentcard.upi {
     border-top: 1px solid #ededed;
   }
   
@@ -212,13 +212,13 @@
     text-align: center;
   }
   
-  .card .item-header {
+  .paymentcard .item-header {
     display: flex;
     font-size: 12px;
     align-items: center;
   }
   
-  .card .item-header img {
+  .paymentcard .item-header img {
     margin-right: 20px;
   }
   
@@ -627,7 +627,7 @@
     width: 0;
   }
   
-  .checkmark {
+  .neft_checkmark {
     position: absolute;
     left: 0;
     height: 25px;
@@ -635,29 +635,29 @@
     border: 1px solid #35cb5d;
   }
   
-  .checkmark.bfdl {
+  .neft_checkmark.bfdl {
     border: 1px solid #ff5928;
   }
   
-  .upitext .checkbox input:checked ~ .checkmark {
+  .upitext .checkbox input:checked ~ .neft_checkmark {
     background-color: #35cb5d;
   }
   
-  .upitext .checkbox input:checked ~ .checkmark.bfdl {
+  .upitext .checkbox input:checked ~ .neft_checkmark.bfdl {
     background-color: #ff5928;
   }
   
-  .checkmark:after {
+  .neft_checkmark:after {
     content: "";
     position: absolute;
     display: none;
   }
   
-  input:checked ~ .checkmark:after {
+  input:checked ~ .neft_checkmark:after {
     display: block;
   }
   
-  .upitext .checkbox .checkmark:after {
+  .upitext .checkbox .neft_checkmark:after {
     left: 9px;
     top: 5px;
     width: 5px;
@@ -669,7 +669,7 @@
     transform: rotate(45deg);
   }
   
-  .checkmark:after {
+  .neft_checkmark:after {
     left: 9px;
     top: 5px;
     width: 5px;
