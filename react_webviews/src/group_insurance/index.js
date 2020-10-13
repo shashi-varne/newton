@@ -105,6 +105,8 @@ import CoronaPlanDetails from './products/corona';
 import CoronaPlanPayment from './products/corona/payment';
 import CoronaPaymentCallback from './products/corona/payment-callback';
 
+/*************************** Life Insurence **********************************/
+import lifeinsurence from './products/life_insurance/landing';
 
 /*******************  Health ******************/
 import HealthInsuranceLanding from './products/health_insurance/landing';
@@ -213,7 +215,7 @@ const ScrollToTop = withRouter(
 
 const Insurance = (props) => {
   const { url } = props.match;
-
+console.log(url)
   return (
     <JssProvider jss={jss} generateClassName={generateClassName}>
       <MuiThemeProvider theme={theme}>
@@ -317,6 +319,11 @@ const Insurance = (props) => {
           <Route path={`${url}/wallet/payment-failed`} component={SmartwalletFailed} />
           <Route path={`${url}/wallet/payment/:status`} component={SmartwalletPlanPayment} />
           <Route path={`${url}/wallet/payment-callback`} component={SmartwalletPaymentCallback} />
+
+           {/********** Life Insurance **********/}
+           <Route path={`${url}/lifeInsurance/landing`} component={lifeinsurence} />
+           {/* <Route path={`${url}/lifeInsurance/landing/123`} component={HealthInsuranceLanding} /> */}
+           <Route path={`${url}/lifeinsurence/:team/landing`} component={Intro} />                                                                                                                                                                     
 
           {/********** Health Insurance **********/}
           <Route path={`${url}/health/landing`} component={HealthInsuranceLanding} />

@@ -563,7 +563,8 @@ export const insuranceStateMapper = {
   'HOSPICASH': 'hospicash',
   'term_insurance': 'term',
   'DENGUE': 'dengue',
-  'CORONA': 'corona'
+  'CORONA': 'corona',
+  // 'LIFEINSURANCE' : 'lifeinsurance'
 }
 
 export const insuranceProductTitleMapper = {

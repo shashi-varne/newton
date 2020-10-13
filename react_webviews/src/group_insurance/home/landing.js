@@ -17,6 +17,8 @@ import dengue_fisdom from 'assets/ic_dengue_insurance_fisdom.svg';
 import dengue_myway from 'assets/ic_dengue_insurance_myway.svg';
 import corona_fisdom from 'assets/ic_coronavirus_insurance_fisdom.svg';
 import corona_myway from 'assets/ic_coronavirus_insurance_myway.svg';
+import lifeinsurance_fisdom from 'assets/Insurance_fisdom.svg';
+import lifeinsurance_myway from 'assets/Insurance_myway.svg';
 // import resume_tag from 'assets/resume_tag.png';
 
 import instant_fisdom from 'assets/instant_fisdom.svg';
@@ -63,18 +65,25 @@ class Landing extends Component {
     let instant_icon = this.state.type !== 'fisdom' ? instant_myway : instant_fisdom;
     let dengue_icon = this.state.type !== 'fisdom' ? dengue_myway : dengue_fisdom;
     let corona_icon = this.state.type !== 'fisdom' ? corona_myway : corona_fisdom;
+    let insurance_icon = this.state.type !== 'fisdom' ? lifeinsurance_myway : lifeinsurance_fisdom;
 
 
     let health_insurance_icon = this.state.type !== 'fisdom' ? health_myway : health_fisdom;
     let home_insurance_icon = this.state.type !== 'fisdom' ? home_myway : home_fisdom;
 
     let insuranceProducts = [
-      // {
-      //   key: 'HEALTH',
-      //   title: 'Health insurance',
-      //   subtitle: 'Starts from ₹ 200 annually',
-      //   icon: health_icon
-      // },
+      {
+        key: 'LIFEINSURANCE',
+        title: 'Life insurance',
+        subtitle: 'Starts from ₹10,000/year',
+        icon: insurance_icon
+      },
+      {
+        key: 'HEALTH_INSURANCE',
+        title: 'Health insurance',
+        subtitle: 'Cover your health expenses',
+        icon: health_insurance_icon
+      },
       {
         key: 'CORONA',
         title: 'Coronavirus insurance',
@@ -93,19 +102,12 @@ class Landing extends Component {
         subtitle: 'Starts from ₹ 750/year',
         icon: hospicash
       },
-
-      {
-        key: 'HEALTH_INSURANCE',
-        title: 'Health insurance',
-        subtitle: 'Cover your health expenses',
-        icon: health_insurance_icon
-      },
-      {
-        key: 'HOME_INSURANCE',
-        title: 'Home insurance',
-        subtitle: 'Secure your home and interiors',
-        icon: home_insurance_icon
-      },
+      // {
+      //   key: 'HOME_INSURANCE',
+      //   title: 'Home insurance',
+      //   subtitle: 'Secure your home and interiors',
+      //   icon: home_insurance_icon
+      // },
 
       {
         key: 'SMART_WALLET',
@@ -113,12 +115,12 @@ class Landing extends Component {
         subtitle: 'Starts from ₹ 250/year',
         icon: wallet_icon
       },
-      {
-        key: 'DENGUE',
-        title: 'Dengue insurance',
-        subtitle: 'Starts from ₹ 50/year',
-        icon: dengue_icon
-      },
+      // {
+      //   key: 'DENGUE',
+      //   title: 'Dengue insurance',
+      //   subtitle: 'Starts from ₹ 50/year',
+      //   icon: dengue_icon
+      // },
       {
         key: 'TERM_INSURANCE',
         title: 'Term insurance',
@@ -342,9 +344,12 @@ class Landing extends Component {
       }
 
       fullPath = insuranceStateMapper[product_key] + '/' + path;
+    } else if (product_key === 'LIFEINSURANCE') {
+      fullPath = 'lifeinsurance/landing';
     } else if (product_key === 'HEALTH_INSURANCE') {
       fullPath = 'health/landing';
-    } else if (product_key === 'HOME_INSURANCE') {
+    }    
+    else if (product_key === 'HOME_INSURANCE') {
       fullPath = 'home_insurance/general/plan';
     } else {
 
