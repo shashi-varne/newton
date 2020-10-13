@@ -13,9 +13,10 @@ import Grid from 'material-ui/Grid';
 import SVG from 'react-inlinesvg';
 import down_arrow from 'assets/down_arrow.svg';
 import up_arrow from 'assets/up_arrow.svg';
-import { Carousel } from 'react-responsive-carousel';
+// import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { openInBrowser } from './common_data';
+import ReactResponsiveCarousel from '../../../common/ui/carousel'
 
 import {getGhProviderConfig} from './constants';
 
@@ -36,7 +37,8 @@ class GroupHealthLanding extends Component {
       common: {},
       screen_name :screen_name,
       selectedIndex: 0,
-      providerConfig: getGhProviderConfig(this.props.match.params.provider)
+      providerConfig: getGhProviderConfig(this.props.match.params.provider),
+      card_swipe_count : 0
     };
 
     this.openInBrowser = openInBrowser.bind(this);
@@ -225,28 +227,14 @@ class GroupHealthLanding extends Component {
     });
   }
 
-  onSwipeMoveEvent = () => {
-    this.swipeMargin()
-  }
-
-  swipeMargin = () => {
-    let x = document.getElementsByClassName("offer-slide-img")
-    for (const property in x) {
-      if (!isNaN(property))
-        x[property].style.margin = "0px 20px 0px 20px"
-    }
-  }
-
-  onChangeEvent = () => {
-    let x = document.getElementsByClassName("offer-slide-img")
-    this.swipeMargin()
-    setTimeout(() => {
-      for (const property in x) {
-        if (!isNaN(property))
-          x[property].style.margin = "0px 0px 0px 0px"
-      }
-    }, 350);
-  }
+  carouselSwipe_count = (index) => {
+    console.log(this.state.card_swipe_count, index)
+    this.setState({
+      selectedIndex: index,
+      card_swipe: "yes",
+      card_swipe_count: this.state.card_swipe_count + 1,
+    });
+}
 
   render() {
 
@@ -268,29 +256,8 @@ class GroupHealthLanding extends Component {
         <div className="group-health-landing">
 
           <div style={{ margin: '-10px 0 0 0', cursor: 'pointer' }}>
-            <Carousel
-              showStatus={false} showThumbs={false}
-              showArrows={true}
-              infiniteLoop={false}
-              selectedItem={this.state.selectedIndex}
-              onSwipeMove={this.onSwipeMoveEvent}
-              onChange={(index) => {
-                this.setState({
-                  selectedIndex: index,
-                  card_swipe: 'yes',
-                  card_swipe_count: this.state.card_swipe_count + 1
-                });
-              }}
-               // eslint-disable-next-line
-              onChange={this.onChangeEvent}
-              renderIndicator={(onClickHandler, isSelected) => {
-                if (isSelected) {
-                  return (<li style={{...indicatorStyles, background: "#ADD8E6", width: "10px",}} />);
-                }
-                return <li onClick={onClickHandler} style={indicatorStyles} />; }}
-            >
-              {this.state.offerImageData.map(this.renderOfferImages)}
-            </Carousel>
+          <ReactResponsiveCarousel CarouselImg={this.state.offerImageData.map(this.renderOfferImages)} 
+          callbackFromParent={this.carouselSwipe_count}  selectedIndexvalue={this.state.selectedIndex}/>
           </div>
 
           {this.state.quoteResume && this.state.quoteResume.id &&
@@ -449,13 +416,5 @@ class GroupHealthLanding extends Component {
   }
 }
 
-const indicatorStyles = {
-  background: '#00008B',
-  width: "20px",
-  height: "3px",
-  display: 'inline-block',
-  margin: '1px 3px',
-  borderRadius : "1.5px"
-};
 
 export default GroupHealthLanding;
