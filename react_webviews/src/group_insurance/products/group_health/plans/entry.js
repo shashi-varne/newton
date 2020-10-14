@@ -34,8 +34,7 @@ class HealthInsuranceEntry extends Component {
         key: 'RELIGARE',
         title: 'Care Health',
         subtitle: 'Care',
-        icon: religare_logo,
-        disabled: true
+        icon: religare_logo
       },
       {
         key: 'STAR',

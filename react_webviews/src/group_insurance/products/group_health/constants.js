@@ -20,6 +20,7 @@ export const hdfc = {
         'dob_adult': { min: 18, max: 90 },
         'dob_child': { minDays: 90, max: 25 },
         'dob_married_male': { min: 21, max: 25 },
+        'dob_married_female': {min: 18}
     },
     applicant_detail_screen: {
         fields: [
@@ -193,7 +194,8 @@ export const religare = {
     get_next: { //have as a separate map and not screen-specific property to reduce duplication across all providers and for all screens
         landing_screen: 'insure-type',
         insure_type_screen: 'plan-dob-religare',
-        add_members_screen: 'plan-dob-religare',
+        add_members_screen: 'plan-dob',
+        plan_dob_screen: 'plan-list',
         religare_dob: 'plan-list',
         plan_list_screen: 'plan-details',
         plan_details_screens: 'plan-select-sum-assured',
@@ -206,9 +208,10 @@ export const religare = {
         nominee_screen: 'plan-lifestyle-details'
     },
     validation_props: {
-        'dob_adult': { min: 18, max: 90 }, 
-        'dob_child': { minDays: 90, max: 25 },
+        'dob_adult': { min: 18, max: 100 }, 
+        'dob_child': { minDays: 91, minAge: 5, max: 25 },
         'dob_married_male': { min: 21, max: 25 },
+        'dob_married_female': {min: 18}
     },
     applicant_detail_screen: {
         fields: [
@@ -497,7 +500,6 @@ export const star = {
         health_details: 'plan-details',
         plan_details_screen: 'star-select-sum-assured',
         sum_assured_screen: 'plan-premium-summary',
-        cover_type_screen: 'plan-select-add-ons',
         add_ons_screen: 'plan-select-cover-period',
         nominee_screen: 'star-select-ped',
         contact_screen: 'star-address'
@@ -506,6 +508,7 @@ export const star = {
         'dob_adult': { min: 18, max: 65 },
         'dob_child': { minDays: 16, max: 25 },
         'dob_married_male': { min: 18, max: 25 },
+        'dob_married_female': {min: 18}
     },
     applicant_detail_screen: {
         fields: [
