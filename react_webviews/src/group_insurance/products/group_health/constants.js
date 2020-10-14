@@ -500,7 +500,6 @@ export const star = {
         health_details: 'plan-details',
         plan_details_screen: 'star-select-sum-assured',
         sum_assured_screen: 'plan-premium-summary',
-        cover_type_screen: 'plan-select-add-ons',
         add_ons_screen: 'plan-select-cover-period',
         nominee_screen: 'star-select-ped',
         contact_screen: 'star-address'
