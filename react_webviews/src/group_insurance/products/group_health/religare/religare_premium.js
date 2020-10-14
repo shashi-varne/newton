@@ -24,21 +24,21 @@ export default class ReligarePremium extends Component {
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">Sum insured</div>
           <div className="pi-tile-right">
-            {numDifferentiationInr(this.props.properties.type_of_plan === 'NF' ? this.props.properties.sum_assured * this.props.total_members :
-              this.props.properties.sum_assured)}
+            {numDifferentiationInr(this.props.type_of_plan === 'NF' ? this.props.sum_assured * this.props.total_members :
+              this.props.sum_assured)}
           </div>
         </div>
 
         {this.props.type_of_plan === 'NF' &&
           <div className="nf-info">
-            {(`${numDifferentiationInr(this.props.properties.sum_assured)} x ${this.props.properties.total_members}`)}
+            {(`${numDifferentiationInr(this.props.sum_assured)} x ${this.props.total_members}`)}
           </div>
         }
        
 
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">Cover period</div>
-      <div className="pi-tile-right">{this.props.properties.tenure} year{this.props.properties.tenure>'1' && <span>s</span>}</div>
+      <div className="pi-tile-right">{this.props.tenure} year{this.props.tenure>'1' && <span>s</span>}</div>
         </div>
 
         <div className="generic-hr"></div>
@@ -49,14 +49,12 @@ export default class ReligarePremium extends Component {
 
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">Base premium</div>
-          <div className="pi-tile-right">{inrFormatDecimal(this.props.properties.base_premium_showable)}</div>
+          <div className="pi-tile-right">{inrFormatDecimal(this.props.base_premium)}</div>
         </div>
 
         {/* TODO: move inline styles to stylesheet */}
         {this.state.selectedAddOns && this.state.selectedAddOns.length !==0 &&
-          <div className="premium-addons" style={{
-            margin: '30px 0 25px'
-          }}>
+          <div className="premium-addons" style={{margin: '30px 0 25px'}}>
             <div className="premium-addon-title" style={{
               fontSize: '13px',
               fontWeight: '600',
@@ -73,11 +71,11 @@ export default class ReligarePremium extends Component {
         }
 
 
-        {this.props.properties.total_discount > 0 &&
+        {this.props.total_discount > 0 &&
           <div className="flex-between pi-tile">
-            {/* {this.props.properties.total_discount_percentage}% */}
+            {/* {this.props.total_discount_percentage}% */}
             <div className="pi-tile-left">Total discount</div>
-            <div className="pi-tile-right">{inrFormatDecimal(this.props.properties.total_discount)}</div>
+            <div className="pi-tile-right">{inrFormatDecimal(this.props.total_discount)}</div>
           </div>
         }
 
@@ -87,19 +85,19 @@ export default class ReligarePremium extends Component {
 
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">Net premium</div>
-          <div className="pi-tile-right">{inrFormatDecimal(this.props.properties.net_premium)}</div>
+          <div className="pi-tile-right">{inrFormatDecimal(this.props.net_premium)}</div>
         </div>
 
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">GST</div>
-          <div className="pi-tile-right">{inrFormatDecimal(this.props.properties.gst_tax)}</div>
+          <div className="pi-tile-right">{inrFormatDecimal(this.props.gst_tax)}</div>
         </div>
 
         <div className="generic-hr"></div>
 
         <div className="flex-between pi-tile" style={{ fontWeight: 600 }}>
           <div className="pi-tile-left">Total payable</div>
-          <div className="pi-tile-right">{inrFormatDecimal(this.props.properties.total_amount)}</div>
+          <div className="pi-tile-right">{inrFormatDecimal(this.props.total_amount)}</div>
         </div>
 
         <div className="generic-hr"></div>

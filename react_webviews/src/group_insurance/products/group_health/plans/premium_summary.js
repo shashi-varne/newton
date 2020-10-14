@@ -40,7 +40,16 @@ class GroupHealthPlanPremiumSummary extends Component {
         let lead = this.state.lead;
         let groupHealthPlanDataProp = this.state.groupHealthPlanData;
             if(this.state.get_lead){
-                properties.add_ons = lead.add_ons;
+                    let add_ons_data = [];
+                    let add_ons = lead.add_ons_json;
+                    for (var key in add_ons){
+                        add_ons_data.push({
+                            title: add_ons[key].title,
+                            selected_premium: add_ons[key].premium,
+                            checked: true
+                        })
+                    }
+                properties.add_ons = add_ons_data;
                 properties.type_of_plan = lead.cover_type;
                 properties.sum_assured = lead.sum_assured;
                 properties.total_members = lead.member_base.length;
@@ -59,9 +68,9 @@ class GroupHealthPlanPremiumSummary extends Component {
                 properties.members = groupHealthPlanDataProp.final_dob_data;
                 properties.tenure = groupHealthPlanDataProp.plan_selected_final.tenure;
                 properties.base_premium = groupHealthPlanDataProp.plan_selected_final.base_premium; 
+                properties.discount_amount = groupHealthPlanDataProp.plan_selected_final.total_discount;
                 properties.net_premium = groupHealthPlanDataProp.plan_selected_final.net_premium;
                 properties.gst_tax = groupHealthPlanDataProp.plan_selected_final.gst_tax;
-                properties.discount_amount = groupHealthPlanDataProp.plan_selected_final.total_discount;
                 properties.total_amount = groupHealthPlanDataProp.plan_selected_final.total_amount;
             }
         this.setState({properties: properties});
@@ -74,7 +83,7 @@ class GroupHealthPlanPremiumSummary extends Component {
         if (!groupHealthPlanData.post_body) {
             this.navigate(group_health_landing);
             return;
-        } else {
+         } else if(!this.state.get_lead) {
             this.setState({
                 show_loader: false
             });
@@ -169,9 +178,9 @@ class GroupHealthPlanPremiumSummary extends Component {
     renderProviderPremium() {
     
         const premiumComponentMap = {
-            religare: <ReligarePremium properties={this.state.properties} />,
-            hdfcergo: <HDFCPremium properties={this.state.properties} />,
-            star: <StarPremium properties={this.state.properties} />
+            religare: <ReligarePremium {...this.state.properties} />,
+            hdfcergo: <HDFCPremium {...this.state.properties} />,
+            star: <StarPremium {...this.state.properties} />
         };
         return premiumComponentMap[this.state.provider.toLowerCase()];
     }
