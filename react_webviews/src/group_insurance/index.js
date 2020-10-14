@@ -322,8 +322,8 @@ console.log(url)
 
            {/********** Life Insurance **********/}
            <Route path={`${url}/lifeInsurance/landing`} component={lifeinsurence} />
-           {/* <Route path={`${url}/lifeInsurance/landing/123`} component={HealthInsuranceLanding} /> */}
-           <Route path={`${url}/lifeinsurence/:team/landing`} component={Intro} />                                                                                                                                                                     
+           <Route path={`${url}/lifeInsurance/lifeinsurencesavings/landing`} component={HealthInsuranceLanding} />
+           <Route path={`${url}/lifeinsurence/:id/landing`} component={Intro} />                                                                                                                                                                     
 
           {/********** Health Insurance **********/}
           <Route path={`${url}/health/landing`} component={HealthInsuranceLanding} />

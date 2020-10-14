@@ -102,30 +102,11 @@ class Landing extends Component {
         subtitle: 'Starts from ₹ 750/year',
         icon: hospicash
       },
-      // {
-      //   key: 'HOME_INSURANCE',
-      //   title: 'Home insurance',
-      //   subtitle: 'Secure your home and interiors',
-      //   icon: home_insurance_icon
-      // },
-
       {
         key: 'SMART_WALLET',
         title: 'Smart wallet (fraud protection)',
         subtitle: 'Starts from ₹ 250/year',
         icon: wallet_icon
-      },
-      // {
-      //   key: 'DENGUE',
-      //   title: 'Dengue insurance',
-      //   subtitle: 'Starts from ₹ 50/year',
-      //   icon: dengue_icon
-      // },
-      {
-        key: 'TERM_INSURANCE',
-        title: 'Term insurance',
-        subtitle: 'Get comprehensive life coverage',
-        icon: term_icon
       }
     ];
 
@@ -374,11 +355,6 @@ class Landing extends Component {
           <img src={props.icon} alt="" style={{ marginRight: '15px' }} />
           <div>
             <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px', fontWeight: 500 }}>{props.title}
-              {props.key === 'HEALTH_INSURANCE' &&
-                <span style={{
-                  padding: '3px 7px',
-                  borderRadius: 10, fontSize: 10, background: getConfig().primary, margin: '0 0 0 10px', color: 'white'
-                }}>3 Plans</span>}
               {props.key === 'CORONA' && !props.resume_flag &&
                 <span style={{
                   padding: '3px 7px',

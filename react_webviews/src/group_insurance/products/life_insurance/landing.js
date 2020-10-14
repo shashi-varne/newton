@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import Container from  '../../common/Container';
-// import hdfc_logo from '../../../../assets/ic_hdfc_logo.svg';
-// import religare_logo from '../../../../assets/ic_religare_logo_card.svg';
-// import star_logo from '../../../../assets/ic_star_logo.svg'
 
+import term_fisdom from 'assets/ic_term_insurance_fisdom.svg';
+import term_myway from 'assets/ic_term_insurance_myway.svg';
 import { getConfig } from '../../../utils/functions';
 import { nativeCallback } from '../../../utils/native_callback'
 
@@ -23,22 +22,25 @@ class lifeinsurence extends Component {
 
     nativeCallback({ action: 'take_control_reset' });
 
+    let termlogo = this.state.type !== 'fisdom' ? term_myway : term_fisdom
+    let lifeinsurancelogo = this.state.type !== 'fisdom' ? term_myway : term_fisdom
+
     let insuranceProducts = [
       {
         key: 'team',
         title: 'Team Insurence',
         subtitle: 'Get comprensive life coverage',
-        // icon: hdfc_logo
+        icon: termlogo,
+        disabled: false
       },
       {
-        key: 'insurence',
+        key: 'lifeinsurencesavings',
         title: 'Insurence Savings plan',
         subtitle: 'Life coverage with wealth creation',
-        // icon: religare_logo,
+        icon: lifeinsurancelogo,
         disabled: false
       }
     ];
-
 
       this.setState({
         insuranceProducts: insuranceProducts
@@ -60,9 +62,12 @@ class lifeinsurence extends Component {
   handleClick = (data) => {
     console.log(data)
     this.sendEvents('next', data.key)
-
-    let fullPath = data.key + '/landing';
-    this.navigate('/group-insurance/lifeinsurence/' + fullPath);
+    if (data.key == 'lifeinsurencesavings') {
+      this.navigate('/group-insurance/lifeInsurance/lifeinsurencesavings/landing');
+    } else {
+      let fullPath = data.key + '/landing';
+      this.navigate('/group-insurance/lifeinsurence/' + fullPath);
+    }
   }
 
   renderPorducts(props, index) {
@@ -77,7 +82,11 @@ class lifeinsurence extends Component {
             <img src={props.icon} alt="" className="insurance_plans_logos"/>
             <div>
               <div className='insurance_plans_logos_text'
-              >{props.title}
+              >{props.title}{props.key === 'team' && !props.resume_flag &&
+              <span style={{
+                padding: '3px 7px',
+                borderRadius: 10, fontSize: 10, background: getConfig().primary, margin: '0 0 0 10px', color: 'white'
+              }}>Recommended</span>}
               </div>
               <div className='insurance_plans_logos_subtext'>{props.subtitle}</div>
             </div>
