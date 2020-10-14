@@ -113,7 +113,7 @@ class GroupHealthPlanDob extends Component {
 
         this.sendEvents('next');
 
-        let validation_props = this.state.validation_props;
+        let {validation_props, provider} = this.state;
 
         let canProceed = true;
         let final_dob_data = this.state.final_dob_data;
@@ -212,6 +212,11 @@ class GroupHealthPlanDob extends Component {
 
             if(ui_members.self_gender && post_body.self_account_key) {
                 post_body.self_account_key.gender = ui_members.self_gender;
+            }
+
+            if(provider === 'RELIGARE') {  //reset
+                post_body.eldest_member = '';
+                post_body.eldest_dob = '';
             }
 
             groupHealthPlanData.post_body = post_body;
