@@ -161,15 +161,6 @@ class GroupHealthLanding extends Component {
     }
   }
 
-  renderOfferImages = (props, index) => {
-    return (
-      <div key={index} className="gold-offer-slider">
-        <img className="offer-slide-img"
-          src={require(`assets/${props.src}`)} alt="Gold Offer" />
-      </div>
-    )
-  }
-
   renderCoveredPoints = (props, index) => {
     return (
       <div key={index} className="wic-tile">
@@ -228,7 +219,6 @@ class GroupHealthLanding extends Component {
   }
 
   carouselSwipe_count = (index) => {
-    console.log(this.state.card_swipe_count, index)
     this.setState({
       selectedIndex: index,
       card_swipe: "yes",
@@ -256,7 +246,7 @@ class GroupHealthLanding extends Component {
         <div className="group-health-landing">
 
           <div style={{ margin: '-10px 0 0 0', cursor: 'pointer' }}>
-          <ReactResponsiveCarousel CarouselImg={this.state.offerImageData.map(this.renderOfferImages)} 
+          <ReactResponsiveCarousel CarouselImg={this.state.offerImageData }
           callbackFromParent={this.carouselSwipe_count}  selectedIndexvalue={this.state.selectedIndex}/>
           </div>
 

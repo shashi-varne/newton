@@ -24,6 +24,15 @@ class ReactResponsiveCarousel extends Component {
     }, 350);
   };
 
+  renderOfferImages = (props, index) => {
+      return (
+        <div key={index} className="gold-offer-slider">
+          <img className="offer-slide-img"
+            src={require(`assets/${props.src}`)} alt="Gold Offer" />
+        </div>
+      )
+    }
+
   eventChangeFunction = (index) => {
     this.onChangeEvent();
     this.props.callbackFromParent(index);
@@ -63,7 +72,7 @@ class ReactResponsiveCarousel extends Component {
           return <li onClick={onClickHandler} style={indicatorStyles} />;
         }}
       >
-        {this.props.CarouselImg}
+        {this.props.CarouselImg.map(this.renderOfferImages)}
       </Carousel>
     );
   }
