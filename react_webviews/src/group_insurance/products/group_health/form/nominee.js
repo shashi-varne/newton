@@ -207,8 +207,10 @@ class GroupHealthPlanNomineeDetails extends Component {
         }
         
 
-        if (!relation) {
-            form_data.appointeerelation_error = 'please select relation'
+        let relationMap = this.state.relationshipOptions.filter(data => data.value === relation);
+
+        if (!relation || relationMap.length === 0) {
+            form_data.relation_error = 'please select relation'
         }
         
 
