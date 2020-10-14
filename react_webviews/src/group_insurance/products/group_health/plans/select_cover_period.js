@@ -77,7 +77,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                 "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'select cover period',
-                'cover_period' : (this.state.premium_data || [])[(this.state.selectedIndex || 0)].tenure || ''
+                'cover_period' : ((this.state.premium_data || [])[(this.state.selectedIndex || 0)] || {}).tenure || ''
             }
         };
 
