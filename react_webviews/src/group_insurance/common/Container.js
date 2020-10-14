@@ -201,16 +201,6 @@ class Container extends Component {
       params = {};
     }
     let pathname = this.props.history.location.pathname;
-    
-    if(this.checkStringInString('final-summary') && storageService().getObject('backToResume') === "resume"){
-      this.navigate(`/group-insurance/group-health/${this.props.provider}/landing`);
-      return;
-    }
-
-    if(this.checkStringInString('final-summary')){
-      this.navigate(`is-ped`);
-      return;
-    }
      
     if(this.checkStringInString('group-health')) {
 

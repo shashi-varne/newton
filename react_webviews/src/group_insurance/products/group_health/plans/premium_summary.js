@@ -22,6 +22,8 @@ class GroupHealthPlanPremiumSummary extends Component {
             final_dob_data: [],
             show_loader: true,
             plan_selected: {},
+            get_lead: storageService().getObject('resumeToPremium') ? true : false,
+            force_onload_call: true,
             provider: this.props.match.params.provider,
         };
 
@@ -32,6 +34,38 @@ class GroupHealthPlanPremiumSummary extends Component {
     componentWillMount() {
         this.initialize();
     }
+
+    onload =()=>{
+        let properties = {}
+        let lead = this.state.lead;
+        let groupHealthPlanDataProp = this.state.groupHealthPlanData;
+            if(this.state.get_lead){
+                properties.add_ons = lead.add_ons;
+                properties.type_of_plan = lead.cover_type;
+                properties.sum_assured = lead.sum_assured;
+                properties.total_members = lead.member_base.length;
+                properties.members = lead.member_base;
+                properties.tenure = lead.tenure;
+                properties.base_premium = lead.base_premium + lead.discount_amount;
+                properties.discount_amount = lead.discount_amount;
+                properties.net_premium = lead.premium;
+                properties.gst_tax = lead.tax_amount;
+                properties.total_amount = lead.total_amount;
+            }else{
+                properties.add_ons = groupHealthPlanDataProp.add_ons_data || '';
+                properties.type_of_plan = groupHealthPlanDataProp.type_of_plan;
+                properties.sum_assured = groupHealthPlanDataProp.sum_assured;
+                properties.total_members = groupHealthPlanDataProp.post_body.mem_info.adult + groupHealthPlanDataProp.post_body.mem_info.child,
+                properties.members = groupHealthPlanDataProp.final_dob_data;
+                properties.tenure = groupHealthPlanDataProp.plan_selected_final.tenure;
+                properties.base_premium = groupHealthPlanDataProp.plan_selected_final.base_premium; 
+                properties.net_premium = groupHealthPlanDataProp.plan_selected_final.net_premium;
+                properties.gst_tax = groupHealthPlanDataProp.plan_selected_final.gst_tax;
+                properties.discount_amount = groupHealthPlanDataProp.plan_selected_final.total_discount;
+                properties.total_amount = groupHealthPlanDataProp.plan_selected_final.total_amount;
+            }
+        this.setState({properties: properties});
+    }   
 
     async componentDidMount() {
         let groupHealthPlanData = this.state.groupHealthPlanData || {};
@@ -55,33 +89,6 @@ class GroupHealthPlanPremiumSummary extends Component {
             type_of_plan: groupHealthPlanData.type_of_plan,
             final_dob_data: groupHealthPlanData.final_dob_data,
         });
-            let groupHealthPlanDataPost = this.state.groupHealthPlanData;
-
-            let plan_selected_final = groupHealthPlanDataPost.plan_selected_final || {};
-            let body = groupHealthPlanDataPost.post_body;
-            body.provider = this.state.providerConfig.provider_api;
-            body.base_premium_showable = plan_selected_final.base_premium_showable;
-            body.add_ons_amount = plan_selected_final.add_ons_premium || '';
-
-            if(body.provider === 'star' && body.account_type.includes('parents') && 
-            groupHealthPlanDataPost.ui_members.parents_option) {
-                body.account_type = groupHealthPlanDataPost.ui_members.parents_option;
-            }
-
-            let total_member = body.mem_info.adult + body.mem_info.child;
-            if(total_member === 1) {
-                body.type_of_plan = 'NF';  //for backend handlling
-            }
-            
-            try{
-                const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/quote`, body);
-                this.setState({response: res});
-            }catch(e){
-                toast('Something went wrong');
-            }
-            
-            storageService().remove('backToResume');
-            storageService().remove('final-summary-reached');    
     }
 
     sendEvents(user_action) {
@@ -104,45 +111,75 @@ class GroupHealthPlanPremiumSummary extends Component {
 
     handleClick = async () => {
         this.sendEvents('next');
-        try {
 
-            this.setState({
-                show_loader: true
-            });
-            let res = this.state.response;
-            var resultData = res.pfwresponse.result;
-            if (res.pfwresponse.status_code === 200) {
-                let lead = resultData.lead;
-                lead.member_base = ghGetMember(lead, this.state.providerConfig);
-                storageService().set('ghs_ergo_quote_id', lead.id);
-                this.navigate('personal-details/' + lead.member_base[0].key);
-            } else {
+        if(this.state.get_lead){
+
+            let member = this.state.lead.member_base[0].relation.toLowerCase();
+            this.navigate(`personal-details/${member}`);
+            return;
+        }else{
+            try {
+                this.setState({
+                    show_loader: true
+                });
+    
+                let {groupHealthPlanData} = this.state;
+                let plan_selected_final = groupHealthPlanData.plan_selected_final || {};
+                let body = groupHealthPlanData.post_body;
+                body.provider = this.state.providerConfig.provider_api;
+                body.base_premium_showable = plan_selected_final.base_premium_showable;
+                body.add_ons_amount = plan_selected_final.add_ons_premium || '';
+    
+                if(body.provider === 'star' && body.account_type.includes('parents') && 
+                groupHealthPlanData.ui_members.parents_option) {
+                    body.account_type = groupHealthPlanData.ui_members.parents_option;
+                }
+    
+                let total_member = body.mem_info.adult + body.mem_info.child;
+                if(total_member === 1) {
+                    body.type_of_plan = 'NF';  //for backend handlling
+                }
+                console.log('body', body)
+                const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/quote`, body);
+                
+                var resultData = res.pfwresponse.result;
+                if (res.pfwresponse.status_code === 200) {
+                    let lead = resultData.lead;
+                    lead.member_base = ghGetMember(lead, this.state.providerConfig);
+                    storageService().set('ghs_ergo_quote_id', lead.id);
+                    this.navigate('personal-details/' + lead.member_base[0].key);
+                } else {
+                    this.setState({
+                        show_loader: false
+                    });
+                    toast(resultData.error || resultData.message
+                        || 'Something went wrong');
+                }
+            } catch (err) {
+                console.log(err)
                 this.setState({
                     show_loader: false
                 });
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
+                toast('Something went wrong');
             }
-        } catch (err) {
-            console.log(err)
-            this.setState({
-                show_loader: false
-            });
-            toast('Something went wrong');
         }
+        
     }
 
     renderProviderPremium() {
+    
         const premiumComponentMap = {
-            religare: <ReligarePremium {...this.state} />,
-            hdfcergo: <HDFCPremium {...this.state} />,
-            star: <StarPremium {...this.state} />
+            religare: <ReligarePremium properties={this.state.properties} />,
+            hdfcergo: <HDFCPremium properties={this.state.properties} />,
+            star: <StarPremium properties={this.state.properties} />
         };
         return premiumComponentMap[this.state.provider.toLowerCase()];
     }
 
     render() {
-
+        console.log('plan data', this.state.groupHealthPlanData);
+        console.log('lead', this.state.lead);
+        console.log('state', this.state.properties);
         return (
             <Container
                 events={this.sendEvents('just_set_events')}
@@ -164,8 +201,10 @@ class GroupHealthPlanPremiumSummary extends Component {
                             <div className="tc-subtitle">{this.state.plan_selected.plan_title}</div>
                         </div>
                     </div>
-                    
-                    {this.renderProviderPremium()}
+                    {
+                        this.state.properties && this.renderProviderPremium()
+                    }
+                    {/* {()=>this.renderProviderPremium(this.state.properties)} */}
 
                     <BottomInfo baseData={{ 'content': 'Complete your details and get quality medical treatments at affordable cost' }} />
 

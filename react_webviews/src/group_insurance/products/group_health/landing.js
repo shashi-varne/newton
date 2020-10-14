@@ -128,6 +128,7 @@ class GroupHealthLanding extends Component {
 
   handleClick = () => {
     this.sendEvents('next');
+    storageService().setObject('resumeToPremium', false);
     this.navigate(this.state.providerConfig.get_next[screen_name]);
   }
 
@@ -192,11 +193,12 @@ class GroupHealthLanding extends Component {
       this.sendEvents('next');
 
       let quoteResume = this.state.quoteResume;
+      
       storageService().set('ghs_ergo_quote_id', quoteResume.id);
-      if (quoteResume.status !== 'init' || quoteResume.forms_completed || storageService().getObject('final-summary-reached')) {
-        storageService().setObject('backToResume', 'resume');
+      if (quoteResume.status !== 'init' || quoteResume.forms_completed ) {
         this.navigate('final-summary');
       } else {
+        storageService().setObject('resumeToPremium',true);
         this.navigate(`plan-premium-summary`);
       }
     })

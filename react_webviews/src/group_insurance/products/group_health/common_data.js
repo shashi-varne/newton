@@ -83,8 +83,8 @@ export async function initialize() {
             const res = await Api.get(url);
               
             var resultData = res.pfwresponse.result;
-
-            this.setState({
+            
+             this.setState({
                 show_loader: false
             });
             if (res.pfwresponse.status_code === 200) {

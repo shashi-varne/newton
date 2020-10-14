@@ -11,9 +11,8 @@ export default class ReligarePremium extends Component {
   }
 
   componentDidMount() {
-    const { add_ons_data = [] } = this.props.groupHealthPlanData;
-    if (add_ons_data.length) {
-      const selectedAddOns = add_ons_data.filter(addOn => addOn.checked);
+    if (this.props.add_ons.length) {
+      const selectedAddOns = this.props.add_ons.filter(addOn => addOn.checked);
       this.setState({ selectedAddOns: selectedAddOns || [] });
     }
   }
@@ -25,21 +24,21 @@ export default class ReligarePremium extends Component {
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">Sum insured</div>
           <div className="pi-tile-right">
-            {numDifferentiationInr(this.props.type_of_plan === 'NF' ? this.props.plan_selected_final.sum_assured * this.props.total_member :
-              this.props.plan_selected_final.sum_assured)}
+            {numDifferentiationInr(this.props.properties.type_of_plan === 'NF' ? this.props.properties.sum_assured * this.props.total_members :
+              this.props.properties.sum_assured)}
           </div>
         </div>
 
         {this.props.type_of_plan === 'NF' &&
           <div className="nf-info">
-            {(`${numDifferentiationInr(this.props.plan_selected_final.sum_assured)} x ${this.props.total_member}`)}
+            {(`${numDifferentiationInr(this.props.properties.sum_assured)} x ${this.props.properties.total_members}`)}
           </div>
         }
        
 
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">Cover period</div>
-      <div className="pi-tile-right">{this.props.plan_selected_final.tenure} year{this.props.plan_selected_final.tenure>'1' && <span>s</span>}</div>
+      <div className="pi-tile-right">{this.props.properties.tenure} year{this.props.properties.tenure>'1' && <span>s</span>}</div>
         </div>
 
         <div className="generic-hr"></div>
@@ -50,7 +49,7 @@ export default class ReligarePremium extends Component {
 
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">Base premium</div>
-          <div className="pi-tile-right">{inrFormatDecimal(this.props.plan_selected_final.base_premium_showable)}</div>
+          <div className="pi-tile-right">{inrFormatDecimal(this.props.properties.base_premium_showable)}</div>
         </div>
 
         {/* TODO: move inline styles to stylesheet */}
@@ -74,11 +73,11 @@ export default class ReligarePremium extends Component {
         }
 
 
-        {this.props.plan_selected_final.total_discount > 0 &&
+        {this.props.properties.total_discount > 0 &&
           <div className="flex-between pi-tile">
-            {/* {this.props.plan_selected_final.total_discount_percentage}% */}
+            {/* {this.props.properties.total_discount_percentage}% */}
             <div className="pi-tile-left">Total discount</div>
-            <div className="pi-tile-right">{inrFormatDecimal(this.props.plan_selected_final.total_discount)}</div>
+            <div className="pi-tile-right">{inrFormatDecimal(this.props.properties.total_discount)}</div>
           </div>
         }
 
@@ -88,19 +87,19 @@ export default class ReligarePremium extends Component {
 
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">Net premium</div>
-          <div className="pi-tile-right">{inrFormatDecimal(this.props.plan_selected_final.net_premium)}</div>
+          <div className="pi-tile-right">{inrFormatDecimal(this.props.properties.net_premium)}</div>
         </div>
 
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">GST</div>
-          <div className="pi-tile-right">{inrFormatDecimal(this.props.plan_selected_final.gst_tax)}</div>
+          <div className="pi-tile-right">{inrFormatDecimal(this.props.properties.gst_tax)}</div>
         </div>
 
         <div className="generic-hr"></div>
 
         <div className="flex-between pi-tile" style={{ fontWeight: 600 }}>
           <div className="pi-tile-left">Total payable</div>
-          <div className="pi-tile-right">{inrFormatDecimal(this.props.plan_selected_final.total_amount)}</div>
+          <div className="pi-tile-right">{inrFormatDecimal(this.props.properties.total_amount)}</div>
         </div>
 
         <div className="generic-hr"></div>
