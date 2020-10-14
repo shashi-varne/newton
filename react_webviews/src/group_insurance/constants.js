@@ -564,7 +564,6 @@ export const insuranceStateMapper = {
   'term_insurance': 'term',
   'DENGUE': 'dengue',
   'CORONA': 'corona',
-  // 'LIFEINSURANCE' : 'lifeinsurance'
 }
 
 export const insuranceProductTitleMapper = {

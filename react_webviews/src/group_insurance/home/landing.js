@@ -81,13 +81,13 @@ class Landing extends Component {
       {
         key: 'HEALTH_INSURANCE',
         title: 'Health insurance',
-        subtitle: 'Cover your health expenses',
+        subtitle: 'Starts from ₹5,000/year',
         icon: health_insurance_icon
       },
       {
         key: 'CORONA',
         title: 'Coronavirus insurance',
-        subtitle: 'Cover against COVID-19 infection',
+        subtitle: 'starts from ₹459',
         icon: corona_icon
       },
       {
@@ -99,7 +99,7 @@ class Landing extends Component {
       {
         key: 'HOSPICASH',
         title: 'Hospital daily cash',
-        subtitle: 'Starts from ₹ 750/year',
+        subtitle: 'Starts from ₹ 133/year',
         icon: hospicash
       },
       {
