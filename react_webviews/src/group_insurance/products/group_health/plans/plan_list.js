@@ -94,11 +94,19 @@ class GroupHealthPlanList extends Component {
 
     selectPlan = (plan, index) => {
         this.sendEvents('next', plan);
-        let groupHealthPlanData = this.state.groupHealthPlanData;
+        let {provider, groupHealthPlanData, plan_data} = this.state;
+        let common = plan_data.common || {};
+        let eldest_dict  = plan_data.eldest_dict || {};
+
         groupHealthPlanData.plan_selected = plan;
-        groupHealthPlanData.base_plan_title = this.state.plan_data.common.base_plan_title
+        groupHealthPlanData.base_plan_title = common.base_plan_title
         groupHealthPlanData.post_body.plan = plan.plan_type;
         groupHealthPlanData.post_body.cover_plan = plan.plan_type;
+
+        if(provider === 'RELIGARE') {
+            groupHealthPlanData.post_body.eldest_member = eldest_dict.eldest_member;
+            groupHealthPlanData.post_body.eldest_dob = eldest_dict.eldest_dob;
+        }
        
         this.setLocalProviderData(groupHealthPlanData);
 
@@ -124,7 +132,7 @@ class GroupHealthPlanList extends Component {
     renderPlans = (props, index) => {
         let plan_data = props;
         return (
-            <div className="tile" key={index}>
+            <div className="tile" key={index} onClick={() => this.selectPlan(props, index)}>
                 <div className="group-health-recommendation" style={{ backgroundColor: props.recommendation_tag === 'Recommended' ? '#E86364' : '' }}>{props.recommendation_tag}</div>
                 <div className="group-health-top-content-plan-logo">
                     <div className="left">

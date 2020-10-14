@@ -307,7 +307,7 @@ class GroupHealthPlanFinalSummary extends Component {
             edit_state: `/group-insurance/group-health/${this.state.provider}/edit-contact`,
             data: [
                 {
-                    'title': 'Email',
+                    'title': 'Email id',
                     'subtitle': lead.email
                 },
                 {
@@ -328,7 +328,7 @@ class GroupHealthPlanFinalSummary extends Component {
         let data = address_data_backend.map((item, index) => {
             return [
                 {
-                    'title': index === 0 ? 'Current address' : 'Permanent address',
+                    'title': `${provider==='RELIGARE'? index === 0 ? 'Current address' : 'Permanent address':''}`,
                     'subtitle': ' ',
                     'key': 'heading'
                 },
@@ -723,7 +723,7 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     renderAccordiansubData = (props, index) => {
- 
+        
         return (
             <div key={index}>
                 {props.subtitle &&
