@@ -410,7 +410,9 @@ input.default-otp-input {
     background: linear-gradient(to right, #f4f4f4, white);
     padding: 20px 25px 20px 25px;
   }
-
+  .tile-disabled{
+    opacity: 0.4;
+  }
   .select-tile {
     color: rgb(122, 118, 118);
     line-height: 1.4;
