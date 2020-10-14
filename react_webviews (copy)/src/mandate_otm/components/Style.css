@@ -1,0 +1,8 @@
+.result-container {
+  background: #155acf;
+  /* autoprefixer: off */
+  height: -webkit-fill-available; 
+  margin-bottom: 0px;
+  padding-bottom: 0;
+  overflow-y: hidden;
+}

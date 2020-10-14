@@ -1,0 +1,227 @@
+@value secondary: var(--secondary);
+.ReferralContainer {
+  padding: 0px;
+}
+.Refer {
+  text-align: center;
+}
+.Refer img {
+  width: 100%;
+}
+.Refer .margin_top {
+  margin-top: -40px;
+}
+
+.Refer .nomargin {
+  margin-top: 0px;
+}
+
+.Refer h1 {
+  margin: 0;
+  color: #371a83;
+  font-size: 24px;
+}
+.Refer p {
+  color: #4a4a4a;
+  font-size: 18px;
+  line-height: 1.3em;
+}
+.Refer .Share {
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 3px;
+  margin-bottom: 20px;
+}
+.Refer .Share p {
+  color: #878787;
+  margin: 0;
+  margin-bottom: 5px;
+}
+.Refer .Share h2 {
+  color: #4a4a4a;
+  margin: 0;
+  text-transform: uppercase;
+}
+.Refer .ShareButton button {
+  padding: 12px;
+  text-transform: capitalize;
+  font-size: 20px;
+  font-weight: 900;
+}
+.Refer .terms {
+  background-color: #f9f9f9;
+  padding: 15px;
+  color: #878787;
+  font-size: 16px;
+  text-align: left;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+.ReferPaytmGrid {
+  text-align: left;
+}
+.ReferPaytmGrid p {
+  margin: 0;
+  margin-bottom: 5px;
+  color: #4a4a4a;
+  font-size: 16px;
+}
+.ReferPaytmGrid p .blue {
+  color: #1f3368;
+}
+.ReferPaytmGrid p .blue_light {
+  color: #00bdf2;
+}
+.ReferPaytmGrid h1 {
+  color: #371a83;
+  margin: 0;
+}
+.ReferPaytmGrid h1 span {
+  font-size: 22px;
+  margin-right: 5px;
+  font-weight: 400;
+}
+.ReferPaytmGrid h2 {
+  color: secondary;
+  font-size: 16px;
+  text-align: right;
+}
+.Earning .EarningsPaytmGrid h1 {
+  color: #878787;
+  margin: 0;
+}
+.Earning .Refer h1 {
+  padding-top: 30px;
+}
+.Earning .List {
+  text-align: left;
+}
+.Earning .List h1 {
+  color: #4a4a4a;
+  margin: 0;
+  font-size: 21px;
+}
+.Earning .List p {
+  margin: 10px 0;
+  color: #878787;
+  line-height: 1.3em;
+  font-size: 16px;
+  margin-bottom: 30px;
+}
+.Earning .List img {
+  width: 100%;
+  margin: 20px 0;
+}
+.Earning .List .Item {
+  margin-bottom: 15px;
+}
+.Earning .List .Item .icon {
+  background: #58a5ff;
+  border-radius: 100px;
+  width: 50px;
+  height: 50px;
+  margin: 0 auto;
+  position: relative;
+}
+.Earning .List .Item .DarkGreyBackground {
+  background-color: #878787;
+}
+.Earning .List .Item .icon span {
+  color: #fff;
+  font-size: 18px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.Earning .List .Item .name {
+  color: #4a4a4a;
+  font-size: 18px;
+}
+.Earning .List .Item .action {
+  color: secondary;
+  font-size: 16px;
+  margin: 0;
+}
+.Earning .List .Item .GreyText {
+  color: #878787;
+  font-weight: 400;
+}
+.Earning .List .FandF {
+  margin-top: 10px;
+}
+.Earning .List .FandF .Share {
+  text-align: center;
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 3px;
+  margin-bottom: 20px;
+}
+.Earning .List .FandF .Share p {
+  color: #878787;
+  margin: 0;
+  margin-bottom: 5px;
+}
+.Earning .List .FandF .Share h2 {
+  color: #4a4a4a;
+  margin: 0;
+  text-transform: uppercase;
+}
+.Earning .List .FandF .ShareButton button {
+  padding: 12px;
+  text-transform: capitalize;
+  font-size: 20px;
+  font-weight: 900;
+}
+.ReferTermsGrid {
+  text-align: left;
+  padding: 15px;
+}
+.ReferTermsGrid p {
+  color: #4a4a4a;
+  font-size: 16px;
+  margin: 0;
+  margin-bottom: 5px;
+}
+.ReferTermsGrid h3 {
+  margin: 0;
+  color: #4a4a4a;
+  padding-bottom: 10px;
+}
+.Terms .List {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 25px;
+}
+.Terms .List .sl {
+  flex: 1;
+  color: #878787;
+  font-weight: 700;
+  font-size: 21px;
+}
+.Terms .List .text {
+  flex: 10;
+  color: #878787;
+  line-height: 1.3em;
+  font-size: 21px;
+}
+.Terms .List .Number {
+  flex: 1;
+  color: #878787;
+  font-weight: 700;
+  font-size: 18px;
+}
+.Terms .List .Text {
+  flex: 10;
+  color: #878787;
+  line-height: 1.3em;
+  font-size: 16px;
+}
+.Terms .List .BoldText {
+  font-weight: 700;
+}
+.loader {
+  text-align: center;
+  padding: 10px 0;
+  color: #878787;
+}

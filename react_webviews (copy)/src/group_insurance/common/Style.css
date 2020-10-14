@@ -1,0 +1,668 @@
+.fullHeight {
+  height: 100%;
+}
+.plan-summary {
+  background: #f8f8f8;
+}
+.plan-success .Accordion:last-child {
+  border-bottom: 0;
+}
+.plan-success .Accordion {
+  border-top-color: #eaeaea;
+}
+.accident-plan {
+  padding: 20px 0;
+}
+.plan-summary-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.plan-summary-heading-text {
+  color: #160d2e;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 500;
+  padding: 10px;
+}
+.plan-summary-mid {
+  margin-top: 30px;
+}
+.plan-summary-mid1:nth-child(even) {
+  background: #fff;
+}
+.plan-summary-mid1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  background: #f8f8f8;
+}
+.plan-summary-mid1-bg {
+  background: #f8f8f8;
+}
+.plan-summary-mid11 {
+  color: #878787;
+  font-size: 14px;
+}
+.plan-summary-mid12 {
+  color: #4a4a4a;
+  font-size: 14px;
+  font-weight: 500;
+}
+.plan-summary-premium {
+  background: #fff;
+  margin-top: 20px;
+  padding: 15px 15px;
+}
+.plan-summary-premium-heading {
+  color: #4a4a4a;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.plan-summary-premium-list {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+.plan-summary-premium-list1 {
+  color: #878787;
+  font-size: 13px;
+}
+.plan-summary-premium-font {
+  font-size: 14px;
+  color: #4a4a4a;
+}
+.plan-summary-premium-list2 {
+  color: #878787;
+  font-size: 14px;
+  font-weight: 500;
+}
+.plan-summary-premium-amount {
+  color: #4a4a4a;
+}
+.plan-summary .divider {
+  height: 1px;
+  background: #cecece;
+  width: 100%;
+  margin: 10px 0;
+}
+.plan-success {
+  margin-bottom: 15px;
+}
+.plan-success-heading {
+  margin: 30px 0;
+}
+.plan-success-heading-icon {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.plan-success-heading-title {
+  color: #4a4a4a;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.plan-success-heading-subtitle {
+  color: #878787;
+  font-size: 14px;
+  line-height: 22px;
+}
+.AccordionListIcon {
+  position: relative;
+  top: 2px;
+  margin-right: 10px;
+}
+.AccordionList1 {
+  margin-right: 10;
+}
+.AccordionList {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+}
+.AccordionDescription {
+  font-weight: 400;
+  padding-left: 30px;
+}
+.AccordionDescription p {
+  color: #878787;
+}
+.AccordionDescription ul {
+  padding: 10px 0;
+  padding-left: 20px;
+}
+.AccordionDescription ul li {
+  color: #878787;
+  margin-bottom: 10px;
+}
+.AccordionDescription ul li span {
+  font-weight: 700;
+}
+.plan-summary-accordion {
+  margin-top: 10;
+  margin-bottom: 30;
+}
+.AccordionBodyItem {
+  color: #878787;
+  font-size: 14px;
+  font-weight: 400;
+}
+.AccordionBodyItemBold {
+  font-weight: 500;
+}
+.plan-success-heading-subtitle {
+  font-weight: 400;
+}
+.plan-success-heading-subtitle-bold {
+  font-weight: 700;
+}
+.plan-success .AccordionBody ul li {
+  color: #878787;
+}
+.plan-success .AccordionBody ul li span {
+  color: #878787;
+}
+.payment-failed-icon {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.payment-failed-title {
+  color: #160d2e;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.payment-failed-subtitle {
+  color: #878787;
+  font-size: 14px;
+  line-height: 22px;
+  text-align: center;
+}
+.basic-details-heading {
+  color: #160d2e;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.basic-details-subtitle {
+  color: #878787;
+  font-size: 13px;
+}
+.checkbox-text {
+  color: #a2a2a2;
+  font-size: 14px;
+}
+.bottom-info {
+  background: var(--highlight);
+  padding: 10px;
+  text-align: center;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  color: #6f6f6f;
+}
+.payment-success-heading {
+  display: flex;
+  align-items: center;
+  padding: 20px 10px;
+}
+.payment-success-icon {
+  margin-right: 15px;
+}
+.payment-success-title {
+  color: #160d2e;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.payment-success-subtitle {
+  color: #a2a2a2;
+  font-size: 14px;
+  line-height: 20px;
+}
+.payment-success-divider {
+  height: 2px;
+  background: #eaeaea;
+  width: 100%;
+}
+.cover-details-item {
+  display: flex;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+.cover-details-icon {
+  min-width: 70px;
+  margin-right: 15px;
+}
+.cover-details-header {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+.cover-details-text {
+  color: #6f6f6f;
+  font-size: 14px;
+  line-height: 22px;
+}
+.plan-details-item {
+  display: flex;
+  align-items: center;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+.plan-details-icon {
+  margin-right: 15px;
+}
+.plan-details-text {
+  color: #160d2e;
+  font-size: 14px;
+  line-height: 22px;
+}
+.plan-diseases-text {
+  background: #f4f3f6;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: #160d2e;
+  font-size: 14px;
+  line-height: 22px;
+  margin-right: 15px;
+}
+.plan-details-item.disabled {
+  opacity: 0.4;
+}
+.accident-plan-heading-container {
+  margin-top: 10px;
+  margin-bottom: 30px;
+  padding: 0 15px;
+}
+.accident-plan-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.accident-plan-title {
+  color: #160d2e;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 500;
+}
+.accident-plan-subtitle {
+  color: #24154c;
+  font-size: 14px;
+  line-height: 22px;
+}
+.accident-plans {
+  background: #f4f3f6;
+}
+.accident-plan-list-container {
+  overflow-x: auto;
+}
+.accident-plan-heading-title {
+  padding: 0 15px;
+  color: #160d2e;
+  font-size: 16px;
+  font-weight: 500;
+}
+.accident-plan-heading {
+  color: #160d2e;
+  font-size: 16px;
+  font-weight: 500;
+}
+.accident-plan-list {
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  min-width: 100%;
+  float: left;
+  padding-top: 20px;
+  padding-bottom: 30px;
+  padding-left: 15px;
+}
+.accident-plan-list .recommended {
+  background: #ff6868;
+  color: #fff;
+  font-weight: 700;
+  font-size: 8px;
+  padding: 5px;
+  border-radius: 3px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.accident-plan-list .card-top-info {
+  background: #ede9f5;
+  color: #4a4a4a;
+  font-size: 8px;
+  padding: 5px;
+  border-radius: 3px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  text-transform: lowercase;
+  letter-spacing: 0.1px;
+}
+.accident-plan-item {
+  background: #fff;
+  border-radius: 5px;
+  padding: 15px;
+  min-width: 100px;
+  box-shadow: 0px 2px 6px 0px rgba(102, 120, 121, 0.25);
+  margin-right: 20px;
+  position: relative;
+  border: 2px solid #fff;
+  cursor: pointer;
+}
+.accident-plan-item1 {
+  color: #6f6f6f;
+  font-size: 10px;
+  line-height: 16px;
+  margin-bottom: 5px;
+  margin-top: 15px;
+}
+.accident-plan-item2 {
+  color: #160d2e;
+  font-size: 14px;
+}
+.accident-plan-item3 {
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+}
+.accident-plan-item4 {
+  color: #6f6f6f;
+  font-size: 10px;
+  margin-right: 6px;
+}
+.accident-plan-benefit {
+  font-size: 10px;
+  margin-top: 10px;
+}
+.round-visible-button {
+  color: var(--secondary);
+  border: 1px solid var(--secondary);
+  width: fit-content;
+  padding: 5px 10px 5px 10px;
+  border-radius: 4px;
+  font-weight: 500;
+  margin: 7px 0 0 0;
+  cursor: pointer;
+}
+.accident-plan-claim {
+  margin: 15px 0;
+  display: flex;
+  align-items: flex-start;
+  padding: 0 15px;
+}
+.accident-plan-claim-icon {
+  margin-right: 10px;
+}
+.accident-plan-claim-title {
+  color: #160d2e;
+  font-size: 14px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+.accident-plan-claim-subtitle {
+  color: #6d7278;
+  font-size: 14px;
+}
+.accident-plan-read {
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  cursor: pointer;
+}
+.accident-plan-read-icon {
+  margin-right: 10px;
+}
+.accident-plan-read-text {
+  font-size: 13px;
+  line-height: 20px;
+}
+.accident-plan-terms {
+  padding: 0 15px;
+  margin: 10px 0;
+}
+.accident-plan-terms-text {
+  color: #24154c;
+  font-size: 14px;
+}
+.accident-plan-terms-bold {
+  font-weight: 500;
+  cursor: pointer;
+}
+.card {
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+.report-color-state {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+.report-color-state-title {
+  font-size: 10px;
+  letter-spacing: 1.82px;
+  font-weight: 700;
+  text-transform: uppercase;
+  position: relative;
+  top: 1px;
+}
+.report-color-state .circle {
+  width: 8px;
+  height: 8px;
+  border-radius: 100px;
+  margin-right: 5px;
+}
+.red {
+  color: #d26774;
+}
+.red .circle {
+  background: #d26774;
+}
+.green {
+  color: var(--secondary);
+}
+.green .circle {
+  background: var(--secondary);
+}
+.yellow {
+  color: #f7b500;
+}
+.yellow .circle {
+  background: #f7b500;
+}
+.report-ins-name {
+  color: #160d2e;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+.report-cover {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.report-cover-amount {
+  color: #878787;
+  font-size: 14px;
+}
+.report-cover-amount span {
+  font-weight: 700;
+}
+.report-detail-header {
+  display: flex;
+}
+.report-detail-ins-name {
+  color: #160d2e;
+  font-size: 16px;
+  line-height: 22px;
+  margin-bottom: 10px;
+}
+.report-detail-status {
+  font-size: 14px;
+}
+.report-detail-header {
+  align-items: center;
+}
+.report-detail-icon {
+  background: #f4f4f4;
+  padding: 10px;
+  border-radius: 3px;
+  margin-right: 15px;
+}
+.report-detail-summary {
+  margin-top: 30px;
+}
+.report-detail-summary-item {
+  color: #878787;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+.report-detail-summary-item span {
+  font-weight: 700;
+}
+.report-detail-download {
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 15px;
+  padding-top: 15px;
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.report-detail-download img {
+  margin-right: 10px;
+}
+.report-detail-download-text {
+  color: var(--secondary);
+  font-size: 14px;
+  font-weight: 700;
+}
+.report-detail .Accordion:last-child {
+  border-bottom: 0;
+}
+.group-health-landing .family-images {
+  display: flex;
+  justify-content: space-between;
+  margin: 30px 0 0 0;
+}
+.group-health-top-content-plan-logo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0 20px 0;
+}
+.group-health-top-content-plan-logo .tc-title {
+  color: #0a1d32;
+  font-size: 12px;
+  line-height: 1.3;
+  font-weight: 600;
+  margin: 0 0 7px 0;
+}
+.group-health-top-content-plan-logo .tc-subtitle {
+  color: #0a1d32;
+  font-size: 20px;
+  font-weight: 500;
+}
+.group-health-plan-list {
+  padding: 30px 0 0 0;
+}
+.group-health-plan-list .tile {
+  margin: 0px 0 30px 0;
+  padding: 20px;
+  box-shadow: 0px 2px 6px 0px rgba(102, 120, 121, 0.25);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.group-health-plan-list .info-img {
+  position: absolute;
+  right: 0px;
+}
+.group-health-plan-list .pi-tile {
+  display: flex;
+}
+.group-health-plan-list .pi-left {
+  color: #0a1d32;
+  font-size: 14px;
+  font-weight: 400;
+}
+.group-health-plan-list .pi-tile {
+  margin: 5px 0 5px 0;
+}
+.group-health-plan-list .pi-right {
+  color: #767e86;
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0 0 0 10px;
+}
+.group-health-plan-list .plan-info {
+  position: relative;
+}
+.group-health-plan-list .bottom-cta {
+  font-size: 12px;
+  background-color: var(--secondary);
+  color: white;
+  font-weight: 600;
+  padding: 15px 15px 15px 15px;
+  width: fit-content;
+  border-radius: 4px;
+  margin: 20px 0 0 0;
+  text-transform: uppercase;
+}
+.group-health-plan-details {
+  margin: 0 0 30px 0;
+}
+.group-health-plan-details .sum-assured-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  color: #0b1e33;
+  font-size: 16px;
+  font-weight: 400;
+}
+.group-health-plan-details .copay-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+.group-health-plan-details span.special-benefit-text {
+  color: #0a1d32;
+  font-size: 10px;
+  font-weight: 400;
+  margin: 0 0 0 5px;
+}
+.group-health-plan-details .special-benefit {
+  width: fit-content;
+  margin: 30px 0 -30px 0;
+  padding: 2px;
+}
+.group-health-plan-details .bd-tile {
+  display: flex;
+  align-items: center;
+  padding: 15px 0px 15px 0px;
+  border-top: 1px solid #ededed;
+}
+.group-health-plan-details .bd-content {
+  color: #0a1d32;
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0 0 0 20px;
+}
+.group-health-plan-details .bototm-design {
+  margin: 0 0 20px 0;
+}
+.group-health-plan-select-sum-assured {
+  margin: 60px 0 0 0;
+}
+

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="10px" height="10px" viewBox="0 0 10 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>outline-cancel-24px</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="2.2_help_attachment" transform="translate(-326.000000, -531.000000)">
+            <g id="outline-cancel-24px" transform="translate(319.000000, 524.000000)">
+                <polygon id="Shape" opacity="0.87" points="0 0 24 0 24 24 0 24"></polygon>
+                <polygon id="Shape" fill="#878787" fill-rule="nonzero" points="15.59 7 12 10.59 8.41 7 7 8.41 10.59 12 7 15.59 8.41 17 12 13.41 15.59 17 17 15.59 13.41 12 17 8.41"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,414 @@
+.Select {
+  font-size: 14px !important;
+}
+.InputField {
+  margin-bottom: 20px;
+}
+.RadioButton.unchecked label {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+}
+.RadioButton.checked label {
+  color: #fff;
+  border: 1px solid;
+}
+.MuiDialogContent-root:first-child {
+  padding-top: 24px !important;
+}
+.RadioButton label.professional {
+  padding: 8px;
+  display: inline-block;
+  border-radius: 4px;
+  width: auto;
+  min-width: 100px;
+  text-align: center;
+  font-size: 12px;
+  color: #4a4a4a;
+  border-color: #e6e6e6;
+}
+.RadioButton label.professional2 {
+  padding: 4px;
+  display: inline-block;
+  border-radius: 4px;
+  width: auto;
+  min-width: 50px;
+  text-align: center;
+  font-size: 12px;
+  color: #4a4a4a;
+  border-color: #e6e6e6;
+}
+.RadioButton label {
+  padding: 8px;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 4px;
+  width: 100px;
+  text-align: center;
+  font-size: 12px;
+  color: #4a4a4a;
+  border-color: #e6e6e6;
+  cursor: pointer;
+}
+.RadioButton .tickmark-img {
+  width: 10px;
+}
+.RadioLabelChecked {
+  font-weight: 500;
+  border: 1px solid !important;
+}
+.radioDisabledWithValue {
+  border-color: #e6e6e6 !important;
+}
+.Flex {
+  display: flex;
+  flex-direction: row;
+}
+.Flex .radio-btn-group {
+  flex: 1;
+}
+.MobileGrid {
+  display: flex;
+  align-items: baseline;
+}
+.CountryCode {
+  margin-right: 20px;
+  font-size: 16px;
+  color: #444;
+}
+.Banner {
+  position: fixed;
+  top: inherit;
+  background: #faf7ff;
+  font-size: 14px;
+  color: #444;
+  z-index: 1000;
+  width: 100%;
+}
+.Banner .Flex {
+  align-items: center;
+}
+.FlexItem {
+  color: #444;
+}
+.Dropdown {
+  width: 100%;
+}
+.RadioGrpGrid {
+  flex-basis: unset;
+  max-width: 100%;
+}
+.RadioLabel {
+  color: var(--label);
+  font-size: 14px;
+  font-family: "Roboto";
+  font-weight: 500;
+}
+.RadioWithIcon {
+  color: #0A1D32;
+  font-size: 0.8rem;
+  margin-bottom: 15px;
+  position: relative;
+}
+.RadioWithIcon.professional2 {
+  color: #4a4a4a !important;
+  font-size: 0.8rem;
+  margin-bottom: 15px;
+  position: relative;
+}
+.RadioWithIcon .error {
+  position: absolute;
+  right: 0;
+  color: #d0021b;
+  font-size: 14px;
+  font-style: italic;
+}
+.DialogButtonFullWidth {
+  width: 100%;
+  background-color: var(--secondary) !important;
+  color: #fff !important;
+}
+.CheckBlock {
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+.Checkbox {
+  width: auto;
+  height: auto;
+}
+.error-radiogrp {
+  margin: 0;
+  font-size: 0.75rem;
+  text-align: left;
+  margin-top: 8px;
+  min-height: 1em;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  line-height: 1em;
+  color: #f44336;
+  position: relative;
+  top: 5px;
+}
+.MuiDialog-paper {
+  margin: 0 20px 0px 20px !important;
+}
+.MuiDialogContent-root {
+  padding: 0 14px 24px 14px !important;
+}
+.spinner {
+  width: 70px;
+  text-align: center;
+}
+.spinner > div {
+  width: 10px;
+  height: 10px;
+  background-color: #878787;
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+@-webkit-keyframes sk-bouncedelay {
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0);
+  }
+  40% {
+    -webkit-transform: scale(1);
+  }
+}
+@keyframes sk-bouncedelay {
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+  40% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+.carousel .control-dots .dot.selected,
+.carousel .control-dots .dot:hover {
+  opacity: 1;
+  background: black;
+  width: 10px;
+  height: 10px;
+}
+.carousel .control-dots .dot {
+  -webkit-transition: opacity 0.25s ease-in;
+  -o-transition: opacity 0.25s ease-in;
+  transition: opacity 0.25s ease-in;
+  opacity: 0.3;
+  box-shadow: none !important;
+  background: #fff;
+  border-radius: 50%;
+  width: 8px;
+  height: 8px;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0 8px;
+  border: 1px solid black;
+  vertical-align: middle;
+}
+.carousel .control-dots {
+  position: inherit !important;
+  bottom: 0;
+  margin: 10px 0;
+  text-align: center;
+  width: 100%;
+  padding: 0px;
+}
+.CircularProgressbar .CircularProgressbar-text {
+  fill: var(--primary) !important;
+  font-size: 35px !important;
+}
+.CircularProgressbar-background {
+  fill: green;
+}
+.CircularProgressbar .CircularProgressbar-path {
+  stroke: var(--primary) !important;
+}
+.CircularProgressbar {
+  width: 30px !important;
+}
+.default-otp-input-container {
+  display: flex;
+  justify-content: center;
+  margin: 15px 0 0 0;
+}
+input.default-otp-input {
+  width: 33px !important;
+  height: 20px;
+  border-bottom: 2px solid #5446a6 !important;
+  border: none;
+  margin: 0 10px 0 0;
+  width: 20%;
+  text-align: center;
+  padding: 5px 0px;
+  outline: none;
+  background: transparent;
+  color: black;
+  font-size: 20px;
+}
+.default-otp {
+  text-align: center;
+}
+.default-otp .title {
+  font-size: 20px;
+  color: #0a1c32;
+  font-weight: 500;
+}
+.default-otp .content {
+  margin: 20px 0px 0px;
+  font-size: 14px;
+  color: #767e86;
+  font-weight: 400;
+  line-height: 1.5;
+}
+.default-otp .content-auth {
+  font-weight: 600;
+}
+.flex-center {
+  display: flex;
+  align-items: center;
+}
+.input-placeholder-right {
+  line-height: 40px;
+  position: absolute;
+  right: 5px;
+  top: 17px;
+  bottom: 0;
+  -moz-transition: 0.3s right ease;
+  -ms-transition: 0.3s right ease;
+  -o-transition: 0.3s right ease;
+  -webkit-transition: 0.3s right ease;
+  transition: 0.3s right ease;
+  z-index: 0;
+}
+.bottom-short-footer {
+  display: flex;
+  justify-content: space-between;
+  margin: 80px 0 0 0;
+}
+.left-arrow {
+  width: fit-content;
+  background: #ececec;
+  padding: 12px 20px 12px 20px;
+  height: fit-content;
+  border-radius: 4px;
+}
+.left-arrow img {
+  width: 20px;
+}
+.right-arrow {
+  background: var(--secondary);
+  padding: 12px 20px 12px 20px;
+  height: fit-content;
+  border-radius: 4px;
+  text-align: center;
+}
+.right-arrow img {
+  width: 20px;
+}
+.MuiInput-underline.MuiInput-disabled:before {
+  background-image: none !important;
+  border-bottom: 1px solid #d3dbe4;
+}
+.hash-right {
+  color: #878787;
+  font-size: 12px;
+  font-weight: 400;
+  margin: -5px 0 0 0px;
+  position: absolute;
+}
+.plus-minus-input .right-data {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.plus-minus-input .images {
+  display: flex;
+  align-items: center;
+}
+.plus-minus-input .plus-minus-icons {
+  border: 1px solid var(--primary);
+  padding: 2px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.plus-minus-input .content {
+  color: #0a1d32;
+  font-size: 14px;
+  font-weight: 400;
+}
+.plus-minus-input .number {
+  color: #0a1d32;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 10px 0 10px;
+}
+.generic-hr {
+  border-top: 1px solid #ededed;
+}
+.checkmark {
+  display: inline-block;
+  transform: rotate(45deg);
+  height: 25px;
+  width: 12px;
+  margin-left: 60%;
+  border-bottom: 7px solid #78b13f;
+  border-right: 7px solid #78b13f;
+}
+.checkmark:after {
+  border: solid var(--primary);
+}
+.generic-choose-input {
+  margin: 0 -15px 30px -20px;
+}
+.generic-choose-input .tile {
+  margin: 10px 15px 20px 15px;
+  padding: 20px 10px 20px 10px;
+  cursor: pointer;
+}
+.generic-choose-input .tile-selected {
+  margin: 10px 0px 20px 0px;
+  background: linear-gradient(to right, #f4f4f4, white);
+  padding: 20px 25px 20px 25px;
+}
+.generic-choose-input .select-tile {
+  color: #7a7676;
+  line-height: 1.4;
+  font-size: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.generic-choose-input .name {
+  color: #0a1c32;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+.generic-choose-input .content {
+  color: #767e86;
+  font-size: 14px;
+}
+.generic-choose-input .completed-icon img {
+  width: 14px;
+  margin: 4px 0 0 8px;
+}
+.__react_component_tooltip {
+  left: auto !important;
+  margin-right: 10px !important;
+  width: 62%;
+  right: 15px;
+}
