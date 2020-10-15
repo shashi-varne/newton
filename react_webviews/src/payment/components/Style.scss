@@ -16,4 +16,17 @@
 #neftModal {
   z-index: 9999;
 }
-  
+body[data-device="web"] {
+  #selectBankModal.modal {
+    left: unset;
+    max-width: var(--desktop-width);
+    margin: 0 auto;
+    .footer {
+      max-width: var(--desktop-width);
+      margin: 0 auto;
+    }
+  }
+}
+.ic_close {
+  padding: 14px 14px 0;
+}

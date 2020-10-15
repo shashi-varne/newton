@@ -560,7 +560,7 @@
   
   .modal {
     position: fixed; /* Stay in place */
-    z-index: 10; /* Sit on top */
+    z-index: 9999; /* Sit on top */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
@@ -682,7 +682,7 @@
   }
   
   #selectBankModal .modal-content .header {
-    margin-top: 55px;
+    margin-top: 25px;
   }
   
   .modal-content .header h1 {
@@ -1115,10 +1115,10 @@
   }
   
   .tab-label.fisdom::after {
-    content: url('/static/img/down_arrow_fisdom.svg');
+    content: url('../../assets/fisdom/down_arrow.svg');
   }
-  .tab-label.pro::after {
-    content: url('/static/img/down_arrow_myway.svg');
+  .tab-label.myway::after {
+    content: url('../../assets/myway/down_arrow.svg');
   }
   
   .tab-content {

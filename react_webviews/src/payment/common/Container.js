@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router";
 
 import Header from '../../common/components/Header';
-import {didmount} from '../../common/components/container_functions';
+import { didmount } from '../../common/components/container_functions';
 
 import Footer from "./footer";
 import Button from 'material-ui/Button';
@@ -16,8 +16,8 @@ import Dialog, {
 import { nativeCallback } from "utils/native_callback";
 import '../../utils/native_listner';
 import { getConfig } from 'utils/functions';
-import {checkStringInString} from 'utils/validators';
-import { goBackMap} from '../constants';
+//import { checkStringInString } from 'utils/validators';
+import { goBackMap } from '../constants';
 
 class Container extends Component {
   constructor(props) {
@@ -29,8 +29,8 @@ class Container extends Component {
       callbackType: "",
       inPageTitle: true,
       force_hide_inpage_title: this.props.hidePageTitle,
-      new_header:true,
-      project: 'lending' //to use in common functions
+      new_header: true,
+      project: 'payment' //to use in common functions
     };
 
     this.didmount = didmount.bind(this);
@@ -45,60 +45,35 @@ class Container extends Component {
   }
 
   historyGoBack = (backData) => {
-    
+
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
     }
 
 
-    if(this.props.headerData && this.props.headerData.goBack) {
+    if (this.props.headerData && this.props.headerData.goBack) {
       this.props.headerData.goBack();
       return;
     }
-    
+
     let pathname = this.props.history.location.pathname;
 
-    if (checkStringInString(pathname, "form-summary")) {
-      this.setState({
-        callbackType: 'loan_home',
-        openPopup: true,
-        popupText: 'You are just 2 steps  away from getting money in your account. Do you really want to exit?'
-      })
-      return;
-    }
+    this.setState({
+      callbackType: 'exit',
+      openPopup: true,
+      popupText: 'You are almost there, do you really want to go back?'
+    })
 
-    if (checkStringInString(pathname, "instant-kyc") && !checkStringInString(pathname, "instant-kyc-status")) {
-      this.setState({
-        callbackType: 'loan_journey',
-        openPopup: true,
-        popupText: 'You are just 2 steps  away from getting money in your account. Do you really want to exit?'
-      })
-      return;
-    }
-
-    if (checkStringInString(pathname, "loan-summary")) {
-      this.setState({
-        callbackType: 'loan_home',
-        openPopup: true,
-        popupText: 'You are just one steps  away from getting money in your account. Do you really want to exit?'
-      })
-      return;
-    }
-
-    if(goBackMap(pathname)) {
+    if (goBackMap(pathname)) {
       this.navigate(goBackMap(pathname));
       return;
     }
 
 
     switch (pathname) {
-      case "/loan/home":
-      case "/loan/report":
-      case "/loan/app-update":
-        nativeCallback({ action: "native_back"});
-        break;
-      default:
+      case "/payment/neft":
         this.props.history.goBack();
+        break;
     }
   };
 
@@ -107,7 +82,7 @@ class Container extends Component {
   }
 
   headerGoBack = () => {
-    this.historyGoBack({fromHeader: true});
+    this.historyGoBack({ fromHeader: true });
   }
 
   handleClose = () => {
@@ -117,42 +92,35 @@ class Container extends Component {
   }
 
   handlePopup = () => {
-  
+
     this.setState({
       openPopup: false
     });
-
-    if(this.state.callbackType === 'loan_home') {
-      this.navigate('/loan/home');
-    } else if(this.state.callbackType === 'loan_journey') {
-      this.navigate('/loan/journey');
-    } else {
-      nativeCallback({ action: this.state.callbackType });
-    }
+    nativeCallback({ action: this.state.callbackType });
 
   }
 
   renderPopup = () => {
     return (
       <Dialog
-          fullScreen={false}
-          open={this.state.openPopup}
-          onClose={this.handleClose}
-          aria-labelledby="responsive-dialog-title"
+        fullScreen={false}
+        open={this.state.openPopup}
+        onClose={this.handleClose}
+        aria-labelledby="responsive-dialog-title"
       >
-          <DialogContent>
-              <DialogContentText>{this.state.popupText}</DialogContentText>
-          </DialogContent>
-          <DialogActions>
-              <Button onClick={this.handlePopup} color="default" autoFocus>
-                  Yes
+        <DialogContent>
+          <DialogContentText>{this.state.popupText}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handlePopup} color="default" autoFocus>
+            Yes
               </Button>
-              <Button onClick={this.handleClose} color="default">
-                  No
+          <Button onClick={this.handleClose} color="default">
+            No
               </Button>
-          </DialogActions>
+        </DialogActions>
       </Dialog>
-  );
+    );
   }
 
   render() {
@@ -165,44 +133,44 @@ class Container extends Component {
       }
     }
 
-    if (this.state.mounted) { 
+    if (this.state.mounted) {
       return (
         <div className={`ContainerWrapper paymentMainContainer ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`}  >
           {/* Header Block */}
           {(!this.props.noHeader && !getConfig().hide_header) && !this.props.showLoader &&
-          <Header
-            disableBack={this.props.disableBack}
-            title={this.props.title}
-            smallTitle={this.props.smallTitle}
-            provider={this.props.provider}
-            count={this.props.count}
-            total={this.props.total}
-            current={this.props.current}
-            goBack={this.headerGoBack}
-            edit={this.props.edit}
-            type={getConfig().productName}
-            resetpage={this.props.resetpage}
-            handleReset={this.props.handleReset}
-            inPageTitle={this.state.inPageTitle}
-            force_hide_inpage_title={this.state.force_hide_inpage_title}
-            style={this.props.styleHeader}
-            className={this.props.classHeader}
-            headerData={this.props.headerData}
-          />}
-  
+            <Header
+              disableBack={this.props.disableBack}
+              title={this.props.title}
+              smallTitle={this.props.smallTitle}
+              provider={this.props.provider}
+              count={this.props.count}
+              total={this.props.total}
+              current={this.props.current}
+              goBack={this.headerGoBack}
+              edit={this.props.edit}
+              type={getConfig().productName}
+              resetpage={this.props.resetpage}
+              handleReset={this.props.handleReset}
+              inPageTitle={this.state.inPageTitle}
+              force_hide_inpage_title={this.state.force_hide_inpage_title}
+              style={this.props.styleHeader}
+              className={this.props.classHeader}
+              headerData={this.props.headerData}
+            />}
+
           {/* Below Header Block */}
           <div id="HeaderHeight" style={{ top: 56 }}>
             {/* Loader Block */}
             {this.renderPageLoader()}
           </div>
-  
-          {/*  */}
-  
 
-          {!this.state.force_hide_inpage_title &&  !this.props.noHeader && !this.props.hidePageTitle &&
-            this.new_header_scroll() 
+          {/*  */}
+
+
+          {!this.state.force_hide_inpage_title && !this.props.noHeader && !this.props.hidePageTitle &&
+            this.new_header_scroll()
           }
-  
+
           {/* Children Block */}
           <div
             style={this.props.styleContainer}
@@ -210,7 +178,7 @@ class Container extends Component {
           >
             {this.props.children}
           </div>
-  
+
           {/* Footer Block */}
           {!this.props.noFooter && (
             <Footer
@@ -241,7 +209,7 @@ class Container extends Component {
 
     return null;
 
-    
+
   }
 }
 

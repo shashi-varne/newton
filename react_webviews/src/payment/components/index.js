@@ -13,6 +13,8 @@ import icn_paytm from 'assets/icn_paytm.svg';
 import icn_more from 'assets/icn_more.svg';
 import icn_secure_payment from 'assets/icn_secure_payment.svg';
 import completed_step from 'assets/completed_step.svg';
+import ic_close from 'assets/fisdom/ic_close.svg';
+import SVG from 'react-inlinesvg';
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
 
@@ -102,9 +104,8 @@ const SelectBankModal = (props) => {
   return (
     <div id="selectBankModal" className="modal modal-center">
       <div className="modal-content">
-        <header className={`${store.app}`}>
-          {store.app !== 'pro' && <img src="/static/img/ic_close_fisdom.svg" width="25" onClick={() => props.closeBankModal()} alt="close" />}
-          {store.app === 'pro' && <img src="/static/img/ic_close_myway.svg" width="25" onClick={() => props.closeBankModal()} alt="close" />}
+        <header className={`${getConfig().productName}`}>
+          <SVG className="ic_close" preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)} src={ic_close} width="25" onClick={() => props.closeBankModal()} />
         </header>
         <div className="header">
           <h1>Select preferred bank</h1>
@@ -119,52 +120,6 @@ const SelectBankModal = (props) => {
     </div>
   );
 };
-
-const CancelModal = (props) => {
-  window.PlutusInitState.page = 'pg_option_modal';
-  const reasons = [
-    { "key": "reason3", "value": "I don't have net banking/ debit-card/ UPI" },
-    { "key": "reason2", "value": "Bank page not opening" },
-    { "key": "reason6", "value": "Looking for more information" },
-    { "key": "reason1", "value": "Just exploring" },
-    { "key": "reason5", "value": "Amount debited & order not completed" }
-  ];
-
-  const reasonList = reasons.map((item, i) => {
-    return (
-      <div className="list" onClick={() => props.inputOnClick(item.key)} key={i}>
-        <label>
-          <div className="item">
-            <input
-              type="radio"
-              name="reason"
-            />
-          </div>
-          <div className="item">
-            <div className="text">{item.value}</div>
-          </div>
-        </label>
-      </div>
-    );
-  });
-
-  return (
-    <div id="myModal" className="modal modal-center">
-      <div className="modal-content">
-        <div className="header">
-          <h1>Do you really want to cancel the investment? Please share your feedback:</h1>
-        </div>
-        <div className="questions">
-          {reasonList}
-        </div>
-        <div className="buttons">
-          <button className={`border-button ${store.partner}`} onClick={props.sendReason}>OK</button>
-          <button className={`filled-button ${store.partner}`} onClick={props.goBack}>Cancel</button>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 class PaymentOption extends React.Component {
   constructor(props) {
@@ -222,13 +177,14 @@ class PaymentOption extends React.Component {
     this.closeBankModal = this.closeBankModal.bind(this);
     this.selectedUpiBank = this.selectedUpiBank.bind(this);
     this.selectedBank = this.selectedBank.bind(this);
-    this.inputOnClick = this.inputOnClick.bind(this);
-    this.sendReason = this.sendReason.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
   componentDidMount = async () => {
     window.PlutusInitState.page = this.props.page;
-    let url = getConfig().base_url + '/api/invest/test/pg/summary/' + getConfig().pc_urlsafe;
+    this.setState({
+      show_loader: true
+    })
+    let url = getConfig().base_url + '/api/invest/pg/paynow/' + getConfig().pc_urlsafe;
     try {
       let res = await Api.get(url);
       let resultData = res.pfwresponse.result;
@@ -521,64 +477,14 @@ class PaymentOption extends React.Component {
     }
   }
 
-  inputOnClick(reason) {
-    this.setState({ reason: reason });
-  }
-
-  sendReason() {
-    if (!this.state.reason) {
-      nativeCallback('show_toast', 'Please select a reason');
-    } else {
-      this.setState({ show_loader: true });
-
-      let that = this;
-
-      let eventObj = {
-        "event_name": "pg_back_clicked",
-        "properties": {
-          "user_action": "ok",
-          "reason": that.state.reason,
-          "flow": store.flow,
-          "investor": store.investor,
-          "initial_kyc_status": store.initial_kyc_status
-        }
-      };
-      pushEvent(eventObj);
-
-      // $.ajax({
-      //   type: 'POST',
-      //   dataType: 'json',
-      //   contentType: 'application/json',
-      //   url: nativeData.pc_link,
-      //   data: JSON.stringify({
-      //     purpose: nativeData.purpose,
-      //     amount: nativeData.amount,
-      //     order_type: nativeData.order_type,
-      //     reason_key: that.state.reason
-      //   })
-      // })
-      //   .done(function (data) {
-      //     if (data.pfwresponse.status_code === 200) {
-      //       nativeCallback('close_webview');
-      //     }
-      //     that.setState({ show_loader: false });
-      //   })
-      //   .fail(function (jqXHR, textStatus) {
-      //     that.setState({ show_loader: false });
-      //     console.log("Request failed: " + textStatus);
-      //   });
-    }
-  }
-
   render() {
     if (this.state.selectedBank && store.banks && store.banks.length) {
       return (
         <Container
-          subtitle=""
+          showLoader={this.state.show_loader}
           header={true}
           noFooter={true}
           page="pg_option"
-          showLoader={this.state.show_loader}
           title="Select payment method"
           buttonTitle='Continue'
         >
@@ -604,7 +510,7 @@ class PaymentOption extends React.Component {
             {(store.has_upi_banks || (store.upi_add_bank_url && store.upi_enabled)) && this.state.selectedBank.upi_supported && retry_enabled &&
               <div className="paymentcard upi tab" onClick={() => this.selectptype('upi')}>
                 <input type="radio" id="rd1" name="rd" />
-                <label className={`tab-label ${store.app}`} htmlFor="rd1">
+                <label className={`tab-label ${getConfig().productName}`} htmlFor="rd1">
                   <div className="item-header">
                     <img src={icn_upi_apps} width="20" alt="upi" />
                     <div className="bold dark-grey-text">UPI APPs</div>
@@ -627,7 +533,7 @@ class PaymentOption extends React.Component {
             {store.show_netbanking && this.state.selectedBank.bank_supported &&
               <div className="paymentcard tab" onClick={() => this.selectptype('netbanking')}>
                 <input type="radio" id="rd2" name="rd" />
-                <label className={`tab-label ${store.app}`} htmlFor="rd2">
+                <label className={`tab-label ${getConfig().productName}`} htmlFor="rd2">
                   <div className="item-header">
                     <img src={this.state.selectedBank.image} width="20" alt="netbanking" />
                     <div className="bold dark-grey-text">Net Banking</div>
@@ -642,7 +548,7 @@ class PaymentOption extends React.Component {
             {store.show_debit &&
               <div className="paymentcard tab" onClick={() => this.selectptype('debit')}>
                 <input type="radio" id="rd3" name="rd" />
-                <label className={`tab-label ${store.app}`} htmlFor="rd3">
+                <label className={`tab-label ${getConfig().productName}`} htmlFor="rd3">
                   <div className="item-header">
                     <img src={icn_debit_card} width="20" alt="debit" />
                     <div className="bold dark-grey-text">Debit Cards</div>
@@ -656,7 +562,7 @@ class PaymentOption extends React.Component {
             {store.allow_neft && this.state.selectedBank.neft_supported &&
               <div className="paymentcard tab" onClick={() => this.selectptype('neft')}>
                 <input type="radio" id="rd4" name="rd" />
-                <label className={`tab-label ${store.app}`} htmlFor="rd4">
+                <label className={`tab-label ${getConfig().productName}`} htmlFor="rd4">
                   <div className="item-header">
                     <img src={this.state.selectedBank.image} width="20" alt="neft" />
                     <div className="bold dark-grey-text">NEFT/RTGS</div>
@@ -688,12 +594,6 @@ class PaymentOption extends React.Component {
               selectedBank={this.selectedBank}
               closeBankModal={this.closeBankModal}
               activeIndex={this.state.activeIndex} />
-          }
-          {this.state.showCancelModal &&
-            <CancelModal
-              inputOnClick={this.inputOnClick}
-              sendReason={this.sendReason}
-              goBack={this.closeModal} />
           }
         </Container>
       );
