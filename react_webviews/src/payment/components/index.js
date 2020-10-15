@@ -478,128 +478,128 @@ class PaymentOption extends React.Component {
   }
 
   render() {
-    if (this.state.selectedBank && store.banks && store.banks.length) {
-      return (
-        <Container
-          showLoader={this.state.show_loader}
-          header={true}
-          noFooter={true}
-          page="pg_option"
-          title="Select payment method"
-          buttonTitle='Continue'
-        >
-          <div className="block-padding bold payment-option-sub">Payable amount: ₹ {store.amount.toLocaleString()}</div>
-          <div className="block-padding">
-            {this.state.selectedBank &&
-              <div className="selectedBank selected-bank" onClick={() => this.openModal('bank')}>
-                <div className="flex">
-                  <div className="icon" ><img src={this.state.selectedBank.image} width="36" alt="bank" /></div>
-                  <div>
-                    <div className="banktext-header">PAY FROM</div>
-                    <div className="banktext-subheader">{this.state.selectedBank.bank_name} - {this.state.selectedBank.obscured_account_number}</div>
+    return (
+      <Container
+        showLoader={this.state.show_loader}
+        header={true}
+        noFooter={true}
+        page="pg_option"
+        title="Select payment method"
+        buttonTitle='Continue'
+      >
+        {(this.state.selectedBank && store.banks && store.banks.length) &&
+          <div>
+            <div className="block-padding bold payment-option-sub">Payable amount: ₹ {store.amount.toLocaleString()}</div>
+            <div className="block-padding">
+              {this.state.selectedBank &&
+                <div className="selectedBank selected-bank" onClick={() => this.openModal('bank')}>
+                  <div className="flex">
+                    <div className="icon" ><img src={this.state.selectedBank.image} width="36" alt="bank" /></div>
+                    <div>
+                      <div className="banktext-header">PAY FROM</div>
+                      <div className="banktext-subheader">{this.state.selectedBank.bank_name} - {this.state.selectedBank.obscured_account_number}</div>
+                    </div>
                   </div>
+                  {store.banks.length > 1 && <div className="change">CHANGE</div>}
                 </div>
-                {store.banks.length > 1 && <div className="change">CHANGE</div>}
-              </div>
-            }
+              }
+            </div>
+            <div className="block-padding payusing">
+              Pay using
           </div>
-          <div className="block-padding payusing">
-            Pay using
-          </div>
-          <div className="tabs">
-            {(store.has_upi_banks || (store.upi_add_bank_url && store.upi_enabled)) && this.state.selectedBank.upi_supported && retry_enabled &&
-              <div className="paymentcard upi tab" onClick={() => this.selectptype('upi')}>
-                <input type="radio" id="rd1" name="rd" />
-                <label className={`tab-label ${getConfig().productName}`} htmlFor="rd1">
-                  <div className="item-header">
-                    <img src={icn_upi_apps} width="20" alt="upi" />
-                    <div className="bold dark-grey-text">UPI APPs</div>
-                  </div>
-                </label>
-                {intent_supported && !upi_others && <div className="add-button tab-content">
-                  <div onClick={() => this.goToPayment('com.google.android.apps.nbu.paisa.user')}><img src={icn_gpay} alt="gpay" /><div className="bottomtext">Google Pay</div></div>
-                  <div onClick={() => this.goToPayment('com.phonepe.app')}><img src={icn_phonepe} alt="phonepe" /><div className="bottomtext">PhonePe</div></div>
-                  <div onClick={() => this.goToPayment('net.one97.paytm')}><img src={icn_paytm} alt="paytm" /><div className="bottomtext">Paytm</div></div>
-                  <div onClick={() => this.goToPayment('others')}><img src={icn_more} alt="more" /><div className="bottomtext">Others</div></div>
-                </div>}
-                {intent_supported && upi_others && <div className="add-button tab-content">
-                  <button className={`${store.partner}`} onClick={() => this.goToPayment('others')}>Pay using UPI</button>
-                </div>}
-                {!intent_supported && <div className="add-button tab-content">
-                  <button className={`${store.partner}`} onClick={() => this.goToPayment('upi')}>Pay using UPI</button>
-                </div>}
-              </div>
-            }
-            {store.show_netbanking && this.state.selectedBank.bank_supported &&
-              <div className="paymentcard tab" onClick={() => this.selectptype('netbanking')}>
-                <input type="radio" id="rd2" name="rd" />
-                <label className={`tab-label ${getConfig().productName}`} htmlFor="rd2">
-                  <div className="item-header">
-                    <img src={this.state.selectedBank.image} width="20" alt="netbanking" />
-                    <div className="bold dark-grey-text">Net Banking</div>
-                  </div>
-                </label>
-                <div className="add-button tab-content">
-                  <button className={`${store.partner}`} onClick={() => this.goToPayment('netbanking')}>Pay using net banking</button>
+            <div className="tabs">
+              {(store.has_upi_banks || (store.upi_add_bank_url && store.upi_enabled)) && this.state.selectedBank.upi_supported && retry_enabled &&
+                <div className="paymentcard upi tab" onClick={() => this.selectptype('upi')}>
+                  <input type="radio" id="rd1" name="rd" />
+                  <label className={`tab-label ${getConfig().productName}`} htmlFor="rd1">
+                    <div className="item-header">
+                      <img src={icn_upi_apps} width="20" alt="upi" />
+                      <div className="bold dark-grey-text">UPI APPs</div>
+                    </div>
+                  </label>
+                  {intent_supported && !upi_others && <div className="add-button tab-content">
+                    <div onClick={() => this.goToPayment('com.google.android.apps.nbu.paisa.user')}><img src={icn_gpay} alt="gpay" /><div className="bottomtext">Google Pay</div></div>
+                    <div onClick={() => this.goToPayment('com.phonepe.app')}><img src={icn_phonepe} alt="phonepe" /><div className="bottomtext">PhonePe</div></div>
+                    <div onClick={() => this.goToPayment('net.one97.paytm')}><img src={icn_paytm} alt="paytm" /><div className="bottomtext">Paytm</div></div>
+                    <div onClick={() => this.goToPayment('others')}><img src={icn_more} alt="more" /><div className="bottomtext">Others</div></div>
+                  </div>}
+                  {intent_supported && upi_others && <div className="add-button tab-content">
+                    <button className={`${store.partner}`} onClick={() => this.goToPayment('others')}>Pay using UPI</button>
+                  </div>}
+                  {!intent_supported && <div className="add-button tab-content">
+                    <button className={`${store.partner}`} onClick={() => this.goToPayment('upi')}>Pay using UPI</button>
+                  </div>}
                 </div>
+              }
+              {store.show_netbanking && this.state.selectedBank.bank_supported &&
+                <div className="paymentcard tab" onClick={() => this.selectptype('netbanking')}>
+                  <input type="radio" id="rd2" name="rd" />
+                  <label className={`tab-label ${getConfig().productName}`} htmlFor="rd2">
+                    <div className="item-header">
+                      <img src={this.state.selectedBank.image} width="20" alt="netbanking" />
+                      <div className="bold dark-grey-text">Net Banking</div>
+                    </div>
+                  </label>
+                  <div className="add-button tab-content">
+                    <button className={`${store.partner}`} onClick={() => this.goToPayment('netbanking')}>Pay using net banking</button>
+                  </div>
 
-              </div>
-            }
-            {store.show_debit &&
-              <div className="paymentcard tab" onClick={() => this.selectptype('debit')}>
-                <input type="radio" id="rd3" name="rd" />
-                <label className={`tab-label ${getConfig().productName}`} htmlFor="rd3">
-                  <div className="item-header">
-                    <img src={icn_debit_card} width="20" alt="debit" />
-                    <div className="bold dark-grey-text">Debit Cards</div>
-                  </div>
-                </label>
-                <div className="add-button tab-content">
-                  <button className={`${store.partner}`} onClick={() => this.goToPayment('debit')}>Pay using debit card</button>
                 </div>
-              </div>
-            }
-            {store.allow_neft && this.state.selectedBank.neft_supported &&
-              <div className="paymentcard tab" onClick={() => this.selectptype('neft')}>
-                <input type="radio" id="rd4" name="rd" />
-                <label className={`tab-label ${getConfig().productName}`} htmlFor="rd4">
-                  <div className="item-header">
-                    <img src={this.state.selectedBank.image} width="20" alt="neft" />
-                    <div className="bold dark-grey-text">NEFT/RTGS</div>
+              }
+              {store.show_debit &&
+                <div className="paymentcard tab" onClick={() => this.selectptype('debit')}>
+                  <input type="radio" id="rd3" name="rd" />
+                  <label className={`tab-label ${getConfig().productName}`} htmlFor="rd3">
+                    <div className="item-header">
+                      <img src={icn_debit_card} width="20" alt="debit" />
+                      <div className="bold dark-grey-text">Debit Cards</div>
+                    </div>
+                  </label>
+                  <div className="add-button tab-content">
+                    <button className={`${store.partner}`} onClick={() => this.goToPayment('debit')}>Pay using debit card</button>
                   </div>
-                </label>
-                <div className="add-button tab-content">
-                  <button className={`${store.partner}`} onClick={() => this.goToPayment('neft')}>Pay using NEFT</button>
                 </div>
-              </div>
+              }
+              {store.allow_neft && this.state.selectedBank.neft_supported &&
+                <div className="paymentcard tab" onClick={() => this.selectptype('neft')}>
+                  <input type="radio" id="rd4" name="rd" />
+                  <label className={`tab-label ${getConfig().productName}`} htmlFor="rd4">
+                    <div className="item-header">
+                      <img src={this.state.selectedBank.image} width="20" alt="neft" />
+                      <div className="bold dark-grey-text">NEFT/RTGS</div>
+                    </div>
+                  </label>
+                  <div className="add-button tab-content">
+                    <button className={`${store.partner}`} onClick={() => this.goToPayment('neft')}>Pay using NEFT</button>
+                  </div>
+                </div>
+              }
+            </div>
+            <div className="encription">
+              <img src={icn_secure_payment} alt="secure" />
+            </div>
+            {this.state.showUpiModal &&
+              <UpiModal
+                banks={this.state.upiBanks}
+                accountNumber={this.state.bank.account_number}
+                selectedUpiBank={this.selectedUpiBank}
+                loadUPi={this.loadUPi}
+                handleCheck={this.handleCheck}
+                checked={this.state.checked}
+                activeIndex={this.state.activeIndex}
+                highlighttnc={this.state.highlighttnc} />
+            }
+            {this.state.showNetBankModal &&
+              <SelectBankModal
+                banks={store.banks}
+                selectedBank={this.selectedBank}
+                closeBankModal={this.closeBankModal}
+                activeIndex={this.state.activeIndex} />
             }
           </div>
-          <div className="encription">
-            <img src={icn_secure_payment} alt="secure" />
-          </div>
-          {this.state.showUpiModal &&
-            <UpiModal
-              banks={this.state.upiBanks}
-              accountNumber={this.state.bank.account_number}
-              selectedUpiBank={this.selectedUpiBank}
-              loadUPi={this.loadUPi}
-              handleCheck={this.handleCheck}
-              checked={this.state.checked}
-              activeIndex={this.state.activeIndex}
-              highlighttnc={this.state.highlighttnc} />
-          }
-          {this.state.showNetBankModal &&
-            <SelectBankModal
-              banks={store.banks}
-              selectedBank={this.selectedBank}
-              closeBankModal={this.closeBankModal}
-              activeIndex={this.state.activeIndex} />
-          }
-        </Container>
-      );
-    } else {
-      return null
-    }
+        }
+      </Container>
+    );
   }
 }
 

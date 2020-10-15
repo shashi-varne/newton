@@ -16,7 +16,7 @@ import Dialog, {
 import { nativeCallback } from "utils/native_callback";
 import '../../utils/native_listner';
 import { getConfig } from 'utils/functions';
-//import { checkStringInString } from 'utils/validators';
+import { checkStringInString } from 'utils/validators';
 import { goBackMap } from '../constants';
 
 class Container extends Component {
@@ -57,12 +57,14 @@ class Container extends Component {
     }
 
     let pathname = this.props.history.location.pathname;
-
-    this.setState({
-      callbackType: 'exit',
-      openPopup: true,
-      popupText: 'You are almost there, do you really want to go back?'
-    })
+    if (checkStringInString(pathname, "home")) {
+      this.setState({
+        callbackType: 'exit',
+        openPopup: true,
+        popupText: 'You are almost there, do you really want to go back?'
+      })
+      return;
+    }
 
     if (goBackMap(pathname)) {
       this.navigate(goBackMap(pathname));
@@ -72,6 +74,9 @@ class Container extends Component {
 
     switch (pathname) {
       case "/payment/neft":
+        this.props.history.goBack();
+        break;
+      default:
         this.props.history.goBack();
         break;
     }

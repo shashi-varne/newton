@@ -13,11 +13,11 @@
       margin: 0px 20px 15px 20px;
     }
   }
-#neftModal {
+#neftModal, #selectBankModal {
   z-index: 9999;
 }
 body[data-device="web"] {
-  #selectBankModal.modal {
+  #selectBankModal.modal, #neftModal.modal {
     left: unset;
     max-width: var(--desktop-width);
     margin: 0 auto;
