@@ -18,8 +18,7 @@ import SVG from 'react-inlinesvg';
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
 
-let store = {}
-let retry_enabled = true;
+let store = {};
 let intent_supported = false;
 let upi_others = true;
 window.PlutusInitState = {};
@@ -508,9 +507,9 @@ class PaymentOption extends React.Component {
               Pay using
           </div>
             <div className="tabs">
-              {(store.has_upi_banks || (store.upi_add_bank_url && store.upi_enabled)) && this.state.selectedBank.upi_supported && retry_enabled &&
+              {(store.has_upi_banks || (store.upi_add_bank_url && store.upi_enabled)) && this.state.selectedBank.upi_supported &&
                 <div className="paymentcard upi tab" onClick={() => this.selectptype('upi')}>
-                  <input type="radio" id="rd1" name="rd" />
+                  <input type="radio" id="rd1" name="rd" defaultChecked={this.state.isUpiSelected} />
                   <label className={`tab-label ${getConfig().productName}`} htmlFor="rd1">
                     <div className="item-header">
                       <img src={icn_upi_apps} width="20" alt="upi" />
@@ -533,7 +532,7 @@ class PaymentOption extends React.Component {
               }
               {store.show_netbanking && this.state.selectedBank.bank_supported &&
                 <div className="paymentcard tab" onClick={() => this.selectptype('netbanking')}>
-                  <input type="radio" id="rd2" name="rd" />
+                  <input type="radio" id="rd2" name="rd" defaultChecked={this.state.isNetbankingSelected} />
                   <label className={`tab-label ${getConfig().productName}`} htmlFor="rd2">
                     <div className="item-header">
                       <img src={this.state.selectedBank.image} width="20" alt="netbanking" />
@@ -548,7 +547,7 @@ class PaymentOption extends React.Component {
               }
               {store.show_debit &&
                 <div className="paymentcard tab" onClick={() => this.selectptype('debit')}>
-                  <input type="radio" id="rd3" name="rd" />
+                  <input type="radio" id="rd3" name="rd" defaultChecked={this.state.isDebitSelected} />
                   <label className={`tab-label ${getConfig().productName}`} htmlFor="rd3">
                     <div className="item-header">
                       <img src={icn_debit_card} width="20" alt="debit" />
@@ -562,7 +561,7 @@ class PaymentOption extends React.Component {
               }
               {store.allow_neft && this.state.selectedBank.neft_supported &&
                 <div className="paymentcard tab" onClick={() => this.selectptype('neft')}>
-                  <input type="radio" id="rd4" name="rd" />
+                  <input type="radio" id="rd4" name="rd" defaultChecked={this.state.isNEFTSelected} />
                   <label className={`tab-label ${getConfig().productName}`} htmlFor="rd4">
                     <div className="item-header">
                       <img src={this.state.selectedBank.image} width="20" alt="neft" />
