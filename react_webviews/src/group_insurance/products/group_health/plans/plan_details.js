@@ -10,6 +10,7 @@ import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
 import {initialize} from '../common_data';
 import ReactHtmlParser from 'react-html-parser';
+import Tooltip from 'react-tooltip-lite';
 
 class GroupHealthPlanDetails extends Component {
 
@@ -296,135 +297,179 @@ class GroupHealthPlanDetails extends Component {
         } = this.state;
 
         return (
-            <Container
-                events={this.sendEvents('just_set_events')}
-                showLoader={show_loader}
-                title="Plan details"
-                fullWidthButton={true}
-                buttonTitle="SELECT SUM INSURED"
-                onlyButton={true}
-                handleClick={() => this.handleClick()}
-            >
-                <div className="group-health-plan-details">
-                    <div className="group-health-top-content-plan-logo">
-                        <div className="left">
-                            <div className="tc-title">{this.state.providerConfig.title2 || 
-                            this.state.providerConfig.title}</div>
-                            <div className="tc-subtitle">{plan_selected.plan_title}</div>
-                        </div>
-
-                        <div className="tc-right">
-                            <img
-                                src={require(`assets/${providerData.logo_card}`)}
-                                alt=""
-                                style={{ maxWidth: '140px' }}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="settlement-info">Claim Settlement Ratio: {this.state.claim_settlement_ratio}%</div>
-
-                    {plan_selected.recommendation_tag &&
-                        <div
-                            className="recomm-info group-health-recommendation" 
-                            style={{backgroundColor: plan_selected.recommendation_tag === 'Recommended' ? '#E86364' : ''}}>
-                            {plan_selected.recommendation_tag}
-                        </div>
-                    }
-                    <div className="copay-info">
-                        <div className="ci-left">
-                            0% copay, assured 100% cashless treatment
-                        </div>
-                        <div className="ci-right">
-                            <img 
-                            className="tooltip-icon"
-                            data-tip={plan_selected.copay}
-                            src={require(`assets/${productName}/info_icon.svg`)} alt="" />
-                        </div>
-                    </div>
-
-                    <div className="sum-assured-info" style={{ fontWeight: 600 }}>
-                        <div className="sai-left">
-                            Sum insured
-                        </div>
-                        <div className="sai-left">
-                            Premium
-                        </div>
-                    </div>
-
-                    {premiums_to_show.map(this.renderPremiums)}
-
-                    <div className="common-how-steps" style={{ border: 'none', marginTop:0, marginBottom:0 }}>
-                        <div className="top-tile">
-                            <div className="top-title">
-                                Benefits under this plan
-                            </div>
-                        </div>
-
-
-                        <div className="special-benefit"
-                            style={{ backgroundImage: `url(${this.state.ic_hs_special_benefits})` }}>
-                            <img className="special-benefit-img" src={require(`assets/ic_hs_special.svg`)}
-                                alt="" />
-                            <span className="special-benefit-text">Special benefits</span>
-                        </div>
-                        <div className='common-steps-images'>
-                            {extra_data.special_benefits.map(this.renderSteps)}
-                        </div>
-
-                        <div className="special-benefit"
-                            style={{ backgroundImage: `url(${this.state.ic_hs_main_benefits})` }}>
-                            <img className="special-benefit-img" src={require(`assets/ic_hs_main.svg`)}
-                                alt="" />
-                            <span className="special-benefit-text">Main benefits</span>
-                        </div>
-                        <div className='common-steps-images'>
-                            {extra_data.benefits.main.map(this.renderSteps)}
-                        </div>
-                    </div>
-
-                    <div className="common-how-steps" style={{ border: 'none', marginTop:-30, marginBottom:0 }}>
-                        <div className="top-tile">
-                            <div className="top-title">
-                                Waiting period
-                            </div>
-                        </div>
-                        <div className='common-steps-images' style={{ marginTop:0 }}>
-                            {extra_data.waiting_period.map(this.renderSteps)}
-                        </div>
-                    </div>
-
-                    <div className="accident-plan-read" style={{ padding: 0 }}>
-                        <div className="accident-plan-read-text">
-                            *For detailed list of all terms and conditions, please refer
-                            <span
-                                style={{ color: getConfig().primary }}
-                                onClick = {() => this.openInBrowser(this.state.common_data.policy_prospectus, 'read_document')}>
-                                &nbsp;policy prospectus
-                            </span>
-                        </div>
-                    </div>
-
-                    <div className="bototm-design">
-                        <div className="bd-tile" onClick={() => this.navigateBenefits('whats_included')}>
-                            <img className="bf-img" src={require(`assets/${productName}/ic_whats_covered.svg`)}
-                                alt="" />
-                            <div className="bd-content">What is covered?</div>
-                        </div>
-                        <div className="bd-tile" onClick={() => this.navigateBenefits('whats_not_included')}>
-                            <img className="bf-img" src={require(`assets/${productName}/ic_whats_not_covered.svg`)}
-                                alt="" />
-                            <div className="bd-content">What is not covered?</div>
-                        </div>
-                        <div className="bd-tile" onClick={() => this.navigateBenefits('how_to_claim')}>
-                            <img className="bf-img" src={require(`assets/${productName}/ic_how_to_claim.svg`)}
-                                alt="" />
-                            <div className="bd-content">How to claim?</div>
-                        </div>
-                        <div className="generic-hr"></div>
-                    </div>
+          <Container
+            events={this.sendEvents("just_set_events")}
+            showLoader={show_loader}
+            title="Plan details"
+            fullWidthButton={true}
+            buttonTitle="SELECT SUM INSURED"
+            onlyButton={true}
+            handleClick={() => this.handleClick()}
+          >
+            <div className="group-health-plan-details">
+              <div className="group-health-top-content-plan-logo">
+                <div className="left">
+                  <div className="tc-title">
+                    {this.state.providerConfig.title2 ||
+                      this.state.providerConfig.title}
+                  </div>
+                  <div className="tc-subtitle">{plan_selected.plan_title}</div>
                 </div>
-            </Container>
+
+                <div className="tc-right">
+                  <img
+                    src={require(`assets/${providerData.logo_card}`)}
+                    alt=""
+                    style={{ maxWidth: "140px" }}
+                  />
+                </div>
+              </div>
+
+              <div className="settlement-info">
+                Claim Settlement Ratio: {this.state.claim_settlement_ratio}%
+              </div>
+
+              {plan_selected.recommendation_tag && (
+                <div
+                  className="recomm-info group-health-recommendation"
+                  style={{
+                    backgroundColor:
+                      plan_selected.recommendation_tag === "Recommended"
+                        ? "#E86364"
+                        : "",
+                  }}
+                >
+                  {plan_selected.recommendation_tag}
+                </div>
+              )}
+              <div className="copay-info">
+                <div className="ci-left">
+                  0% copay, assured 100% cashless treatment
+                </div>
+                <div className="ci-right">
+                  <Tooltip  arrow={false} direction="down-end" content={plan_selected.copay}>
+                    <img src={require(`assets/${productName}/info_icon.svg`)} alt="" />
+                  </Tooltip>
+                </div>
+              </div>
+
+              <div className="sum-assured-info" style={{ fontWeight: 600 }}>
+                <div className="sai-left">Sum insured</div>
+                <div className="sai-left">Premium</div>
+              </div>
+
+              {premiums_to_show.map(this.renderPremiums)}
+
+              <div
+                className="common-how-steps"
+                style={{ border: "none", marginTop: 0, marginBottom: 0 }}
+              >
+                <div className="top-tile">
+                  <div className="top-title">Benefits under this plan</div>
+                </div>
+
+                <div
+                  className="special-benefit"
+                  style={{
+                    backgroundImage: `url(${this.state.ic_hs_special_benefits})`,
+                  }}
+                >
+                  <img
+                    className="special-benefit-img"
+                    src={require(`assets/ic_hs_special.svg`)}
+                    alt=""
+                  />
+                  <span className="special-benefit-text">Special benefits</span>
+                </div>
+                <div className="common-steps-images">
+                  {extra_data.special_benefits.map(this.renderSteps)}
+                </div>
+
+                <div
+                  className="special-benefit"
+                  style={{
+                    backgroundImage: `url(${this.state.ic_hs_main_benefits})`,
+                  }}
+                >
+                  <img
+                    className="special-benefit-img"
+                    src={require(`assets/ic_hs_main.svg`)}
+                    alt=""
+                  />
+                  <span className="special-benefit-text">Main benefits</span>
+                </div>
+                <div className="common-steps-images">
+                  {extra_data.benefits.main.map(this.renderSteps)}
+                </div>
+              </div>
+
+              <div
+                className="common-how-steps"
+                style={{ border: "none", marginTop: -30, marginBottom: 0 }}
+              >
+                <div className="top-tile">
+                  <div className="top-title">Waiting period</div>
+                </div>
+                <div className="common-steps-images" style={{ marginTop: 0 }}>
+                  {extra_data.waiting_period.map(this.renderSteps)}
+                </div>
+              </div>
+
+              <div className="accident-plan-read" style={{ padding: 0 }}>
+                <div className="accident-plan-read-text">
+                  *For detailed list of all terms and conditions, please refer
+                  <span
+                    style={{ color: getConfig().primary }}
+                    onClick={() =>
+                      this.openInBrowser(
+                        this.state.common_data.policy_prospectus,
+                        "read_document"
+                      )
+                    }
+                  >
+                    &nbsp;policy prospectus
+                  </span>
+                </div>
+              </div>
+
+              <div className="bototm-design">
+                <div
+                  className="bd-tile"
+                  onClick={() => this.navigateBenefits("whats_included")}
+                >
+                  <img
+                    className="bf-img"
+                    src={require(`assets/${productName}/ic_whats_covered.svg`)}
+                    alt=""
+                  />
+                  <div className="bd-content">What is covered?</div>
+                </div>
+                <div
+                  className="bd-tile"
+                  onClick={() => this.navigateBenefits("whats_not_included")}
+                >
+                  <img
+                    className="bf-img"
+                    src={require(`assets/${productName}/ic_whats_not_covered.svg`)}
+                    alt=""
+                  />
+                  <div className="bd-content">What is not covered?</div>
+                </div>
+                <div
+                  className="bd-tile"
+                  onClick={() => this.navigateBenefits("how_to_claim")}
+                >
+                  <img
+                    className="bf-img"
+                    src={require(`assets/${productName}/ic_how_to_claim.svg`)}
+                    alt=""
+                  />
+                  <div className="bd-content">How to claim?</div>
+                </div>
+                <div className="generic-hr"></div>
+              </div>
+            </div>
+          </Container>
         );
     }
 }

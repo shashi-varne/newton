@@ -1097,3 +1097,19 @@
     color: #0A1D32;
   }
 }
+
+.react-tooltip-lite {
+  background: #E6E6FA;
+  color: #767E86;
+  position: absolute;
+  width: 270px;
+  display: block;
+  border-radius: 0%;
+}
+
+// @media only screen and (max-width: 800px) {
+//   .react-tooltip-lite {
+//     background-color: #E6E6FA;;
+//     width: 270px;
+//   }
+// }
