@@ -208,7 +208,7 @@ export const religare = {
         nominee_screen: 'plan-lifestyle-details'
     },
     validation_props: {
-        'dob_adult': { min: 18, max: 100 }, 
+        'dob_adult': { min: 18, max: 99 }, 
         'dob_child': { minDays: 91, minAge: 5, max: 25 },
         'dob_married_male': { min: 21, max: 25 },
         'dob_married_female': {min: 18}
