@@ -13,9 +13,10 @@ import Grid from 'material-ui/Grid';
 import SVG from 'react-inlinesvg';
 import down_arrow from 'assets/down_arrow.svg';
 import up_arrow from 'assets/up_arrow.svg';
-import { Carousel } from 'react-responsive-carousel';
+// import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { openInBrowser } from './common_data';
+import ReactResponsiveCarousel from '../../../common/ui/carousel'
 
 import {getGhProviderConfig} from './constants';
 
@@ -36,7 +37,8 @@ class GroupHealthLanding extends Component {
       common: {},
       screen_name :screen_name,
       selectedIndex: 0,
-      providerConfig: getGhProviderConfig(this.props.match.params.provider)
+      providerConfig: getGhProviderConfig(this.props.match.params.provider),
+      card_swipe_count : 0
     };
 
     this.openInBrowser = openInBrowser.bind(this);
@@ -159,15 +161,6 @@ class GroupHealthLanding extends Component {
     }
   }
 
-  renderOfferImages = (props, index) => {
-    return (
-      <div key={index} className="gold-offer-slider">
-        <img className="offer-slide-img"
-          src={require(`assets/${props.src}`)} alt="Gold Offer" />
-      </div>
-    )
-  }
-
   renderCoveredPoints = (props, index) => {
     return (
       <div key={index} className="wic-tile">
@@ -225,6 +218,14 @@ class GroupHealthLanding extends Component {
     });
   }
 
+  carouselSwipe_count = (index) => {
+    this.setState({
+      selectedIndex: index,
+      card_swipe: "yes",
+      card_swipe_count: this.state.card_swipe_count + 1,
+    });
+}
+
   render() {
 
 
@@ -244,22 +245,9 @@ class GroupHealthLanding extends Component {
 
         <div className="group-health-landing">
 
-          <div style={{ margin: '20px 0 0 0', cursor: 'pointer' }}>
-            <Carousel
-              showStatus={false} showThumbs={false}
-              showArrows={true}
-              infiniteLoop={false}
-              selectedItem={this.state.selectedIndex}
-              onChange={(index) => {
-                this.setState({
-                  selectedIndex: index,
-                  card_swipe: 'yes',
-                  card_swipe_count: this.state.card_swipe_count + 1
-                });
-              }}
-            >
-              {this.state.offerImageData.map(this.renderOfferImages)}
-            </Carousel>
+          <div style={{ margin: '-10px 0 0 0', cursor: 'pointer' }}>
+          <ReactResponsiveCarousel CarouselImg={this.state.offerImageData }
+          callbackFromParent={this.carouselSwipe_count}  selectedIndexvalue={this.state.selectedIndex}/>
           </div>
 
           {this.state.quoteResume && this.state.quoteResume.id &&
@@ -293,14 +281,14 @@ class GroupHealthLanding extends Component {
               </div>
             </div>}
 
-          <div className="generic-page-title">
+          <div className="generic-page-title" style={{ margin: '20px 0 0 0'}}>
             Covers all age groups
           </div>
-          <div className="generic-page-subtitle">
+          <div className="generic-page-subtitle" style={{ margin: '10px 0 0 0'}}>
            Buy health insurance for yourself, spouse, kids or parents also.
           </div>
 
-          <div className='family-images'>
+          <div className='family-images' style={{ margin: '15px 0 0 0'}}>
             <img className="accident-plan-read-icon"
               src={require(`assets/${this.state.productName}/icn_couple.svg`)} alt="" />
             <img className="accident-plan-read-icon"
@@ -309,7 +297,7 @@ class GroupHealthLanding extends Component {
               src={require(`assets/${this.state.productName}/icn_parents.svg`)} alt="" />
           </div>
 
-          <div className="generic-page-title" style={{ margin: '40px 0 20px 0' }}>
+          <div className="generic-page-title" style={{ margin: '40px 0 15px 0' }}>
             Overview
           </div>
 
@@ -355,7 +343,7 @@ class GroupHealthLanding extends Component {
             {this.state.whats_not_covered_open && this.state.whats_not_covered.map(this.renderCoveredPoints)}
           </div>
 
-          <div className="generic-page-title" style={{ margin: '20px 0 15px 0' }}>
+          <div className="generic-page-title" style={{ margin: '40px 0 15px 0' }}>
             Benefits of health insurance
           </div>
 
@@ -368,10 +356,10 @@ class GroupHealthLanding extends Component {
             </div>
           </div>
 
-          <HowToSteps style={{ marginTop: 20, marginBottom: 0 }} baseData={this.state.stepsContentMapper} />
+          <HowToSteps style={{ margin: '10px 0 0 0' }} baseData={this.state.stepsContentMapper} />
 
 
-          <div className="generic-page-title">
+          <div className="generic-page-title" style={{ margin: '0px 0 15px 0' }}>
             Things to know
           </div>
           <div className="generic-hr"></div>
@@ -384,7 +372,7 @@ class GroupHealthLanding extends Component {
               Frequently asked questions
             </div>
           </div>
-          <div className="generic-hr"></div>
+          <div className="generic-hr" style={{ margin: '0px 0 30px 0' }}></div>
 
           <div className="accident-plan-read" style={{ padding: 0,margin: '20px 0 0 0' }}
             onClick={() => this.openInBrowser(this.state.common.details_doc, 'read_document')}>
@@ -417,5 +405,6 @@ class GroupHealthLanding extends Component {
     );
   }
 }
+
 
 export default GroupHealthLanding;
