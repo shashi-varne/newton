@@ -34,12 +34,20 @@ class GroupHealthPlanSelectFloater extends Component {
     async componentDidMount() {
 
 
-        let post_body = this.state.groupHealthPlanData.post_body;
-        let selectedIndex = this.state.groupHealthPlanData.selectedIndexFloater || 0;
+        let {groupHealthPlanData} = this.state;
+        // data reset
+        groupHealthPlanData.add_ons_data = '';
+        groupHealthPlanData.net_premium_addons = '';
+
+        groupHealthPlanData.post_body.add_ons = '';
+        groupHealthPlanData.post_body.add_ons_json = '';
+
+        let post_body = groupHealthPlanData.post_body;
+        let selectedIndex = groupHealthPlanData.selectedIndexFloater || 0;
         let total_member = post_body.mem_info.adult + post_body.mem_info.child;
         this.setState({
             selectedIndex: selectedIndex,
-            sum_assured: this.state.groupHealthPlanData.sum_assured || post_body.sum_assured,
+            sum_assured: groupHealthPlanData.sum_assured || post_body.sum_assured,
             total_member: total_member,
             show_ind_mem_premium: this.state.providerConfig.show_ind_mem_premium
         });
@@ -51,6 +59,8 @@ class GroupHealthPlanSelectFloater extends Component {
                     }
             }
         }
+
+      
         
         try {
 
