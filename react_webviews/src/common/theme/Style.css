@@ -151,6 +151,25 @@ body[data-device="web"] #bottom-popup .MuiDialog-paper {
   font-family: "Roboto";
   font-weight: 500;
 }
+/* fyntune */
+.heading {
+  font-family: "Roboto", sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+}
+.info {
+  color: #8d918e;
+  font-size: 20px;
+  padding-right: 20px;
+}
+
+.faq {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+/* end fyntune */
+
 .CheckBlock {
   margin-top: 20px;
   margin-bottom: 30px;

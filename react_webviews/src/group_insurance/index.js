@@ -186,6 +186,8 @@ import GroupHealthPlanHowToClaimReligare from './products/group_health/plans/how
 import Tooltip from '../common/ui/Tooltip';
 import StarAddress from './products/group_health/Star/star_address';
 
+import FyntuneLanding from './products/life_insurance/landing';
+
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -523,6 +525,10 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/entry`} component={HealthInsuranceEntry} />
           <Route path={`${url}/group-health/:provider/how-to-claim-star`} component={GroupHealthPlanHowToClaimStar} />
           <Route path={`${url}/group-health/:provider/how-to-claim-religare`} component={GroupHealthPlanHowToClaimReligare} />
+
+          {/*Life Insurance */}
+          <Route path={`${url}/life-insurance/:provider/landing`} component={FyntuneLanding} />
+
 
           <Route component={NotFound} />
         </Switch>
