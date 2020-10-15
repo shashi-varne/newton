@@ -21,7 +21,9 @@ class GroupHealthPlanPremiumSummary extends Component {
       final_dob_data: [],
       show_loader: true,
       plan_selected: {},
-      get_lead: storageService().getObject("resumeToPremium") ? true : false,
+      get_lead: storageService().getObject("resumeToPremiumHealthInsurance")
+        ? true
+        : false,
       force_onload_call: true,
       provider: this.props.match.params.provider,
     };
@@ -53,7 +55,7 @@ class GroupHealthPlanPremiumSummary extends Component {
       properties.total_members = lead.member_base.length;
       properties.members = lead.member_base;
       properties.tenure = lead.tenure;
-      properties.base_premium = lead.base_premium + lead.discount_amount;
+      properties.base_premium = lead.base_premium_showable || lead.premium;
       properties.discount_amount = lead.discount_amount;
       properties.net_premium = lead.premium;
       properties.gst_tax = lead.tax_amount;
@@ -62,20 +64,14 @@ class GroupHealthPlanPremiumSummary extends Component {
       properties.add_ons = groupHealthPlanDataProp.add_ons_data || "";
       properties.type_of_plan = groupHealthPlanDataProp.type_of_plan;
       properties.sum_assured = groupHealthPlanDataProp.sum_assured;
-      (properties.total_members =
-        groupHealthPlanDataProp.post_body.mem_info.adult +
-        groupHealthPlanDataProp.post_body.mem_info.child),
-        (properties.members = groupHealthPlanDataProp.final_dob_data);
+      properties.total_members = groupHealthPlanDataProp.post_body.mem_info.adult + groupHealthPlanDataProp.post_body.mem_info.child;
+      properties.members = groupHealthPlanDataProp.final_dob_data;
       properties.tenure = groupHealthPlanDataProp.plan_selected_final.tenure;
-      properties.base_premium =
-        groupHealthPlanDataProp.plan_selected_final.base_premium;
-      properties.discount_amount =
-        groupHealthPlanDataProp.plan_selected_final.total_discount;
-      properties.net_premium =
-        groupHealthPlanDataProp.plan_selected_final.net_premium;
+      properties.base_premium = groupHealthPlanDataProp.plan_selected_final.base_premium;
+      properties.discount_amount = groupHealthPlanDataProp.plan_selected_final.total_discount;
+      properties.net_premium = groupHealthPlanDataProp.plan_selected_final.net_premium;
       properties.gst_tax = groupHealthPlanDataProp.plan_selected_final.gst_tax;
-      properties.total_amount =
-        groupHealthPlanDataProp.plan_selected_final.total_amount;
+      properties.total_amount = groupHealthPlanDataProp.plan_selected_final.total_amount;
     }
     this.setState({ properties: properties });
   };
@@ -84,23 +80,16 @@ class GroupHealthPlanPremiumSummary extends Component {
     let groupHealthPlanData = this.state.groupHealthPlanData || {};
     let group_health_landing = "/group-insurance/group-health/entry";
 
-    if (!groupHealthPlanData.post_body) {
-      this.navigate(group_health_landing);
-      return;
-    } else if (!this.state.get_lead) {
-      this.setState({
-        show_loader: false,
-      });
+    if (!this.state.get_lead)  {
+	    if (!groupHealthPlanData.post_body) {
+	      this.navigate(group_health_landing);
+	      return;
+	    } else {
+	      this.setState({
+	        show_loader: false,
+	      });
+	    }
     }
-
-    let post_body = groupHealthPlanData.post_body;
-
-    this.setState({
-      plan_selected_final: groupHealthPlanData.plan_selected_final,
-      total_member: post_body.mem_info.adult + post_body.mem_info.child,
-      type_of_plan: groupHealthPlanData.type_of_plan,
-      final_dob_data: groupHealthPlanData.final_dob_data,
-    });
   }
 
   sendEvents(user_action) {
@@ -173,7 +162,6 @@ class GroupHealthPlanPremiumSummary extends Component {
           );
         }
       } catch (err) {
-        console.log(err);
         this.setState({
           show_loader: false,
         });
@@ -221,7 +209,6 @@ class GroupHealthPlanPremiumSummary extends Component {
             </div>
           </div>
           {this.state.properties && this.renderProviderPremium()}
-          {/* {()=>this.renderProviderPremium(this.state.properties)} */}
 
           <BottomInfo
             baseData={{
