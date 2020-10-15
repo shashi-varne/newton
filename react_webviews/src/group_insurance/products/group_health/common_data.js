@@ -83,8 +83,8 @@ export async function initialize() {
             const res = await Api.get(url);
               
             var resultData = res.pfwresponse.result;
-
-            this.setState({
+            
+             this.setState({
                 show_loader: false
             });
             if (res.pfwresponse.status_code === 200) {
@@ -127,7 +127,7 @@ export async function initialize() {
         let leftTitle, leftSubtitle, sum_assured, tenure, base_premium, tax_amount, total_amount = '';
         if (this.state.get_lead) {
             leftTitle = lead.plan_title || '';
-            leftSubtitle = inrFormatDecimal(lead.total_amount);
+            leftSubtitle = lead.total_amount;
             sum_assured = lead.sum_assured;
             tenure = lead.tenure;
             base_premium = lead.base_premium;
@@ -143,13 +143,14 @@ export async function initialize() {
             })
 
             leftTitle = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.plan_title : '';
-            leftSubtitle = premium_data[selectedIndexSumAssured] ? inrFormatDecimal(premium_data[selectedIndexSumAssured].net_premium) : '';
+            leftSubtitle = premium_data[selectedIndexSumAssured] ? premium_data[selectedIndexSumAssured].net_premium : '';
 
         }
 
         let bottomButtonData = {
             leftTitle: leftTitle,
-            leftSubtitle: leftSubtitle,
+            leftSubtitle: inrFormatDecimal(leftSubtitle),
+            leftSubtitleUnformatted: leftSubtitle,
             leftArrow: 'up',
             provider: providerConfig.key,
             logo: providerConfig.logo_cta
