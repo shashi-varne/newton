@@ -76,7 +76,7 @@ class RadioGrp extends Component {
     return (
       <div>
         <div className="RadioWithIcon">
-          <span>{this.props.label}</span>
+            {this.props.label}
           {/* <span className={(this.props.error) ? 'error' : ''}>{(this.props.error) ? 'Mandatory' : ''}</span> */}
         </div>
         <Grid container spacing={16}>
@@ -88,13 +88,16 @@ class RadioGrp extends Component {
   }
 }
 
-const RadioWithoutIcon = (props) => (
+const RadioWithoutIcon = (props) => { 
+  let xsSize = props.id === "account_type" ? 12 : 9
+  let smSize = props.id === "account_type" ? null : 7
+  return (
   <Grid container spacing={16} alignItems="flex-start" direction={props.isVertical ? 'column' : 'row'}>
-    <Grid item xs={12}>
-      <RadioGrp
+    <Grid item xs={xsSize} sm={smSize}>
+      <RadioGrp 
         {...props} />
     </Grid>
-  </Grid>
-);
+  </Grid> 
+  )};
 
 export default RadioWithoutIcon;
