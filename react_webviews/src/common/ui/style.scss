@@ -665,11 +665,21 @@ body[data-device="mobile"] {
 
 .generic-tooltip {
   span {
+    width: 20%;
     border-radius: 4px;
+    color: #767E86;
   }
   
   .tooltip-arrrow {
     right: 20px;
     position: relative;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .generic-tooltip {
+    span {
+      width: 270px;
+    }
   }
 }
