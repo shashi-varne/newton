@@ -66,7 +66,7 @@ class lifeinsurence extends Component {
   handleClick = (data) => {
     this.sendEvents('next', data.key)
     if (data.key === 'lifeinsurencesavings') {
-      this.navigate('/group-insurance/life-insurance/lifeinsurencesavings/landing');
+      this.navigate('/group-insurance/life-insurance/savings-plan/landing');
     } else {
       let fullPath = data.key + '/landing';
       this.navigate('/group-insurance/life-insurance/' + fullPath);

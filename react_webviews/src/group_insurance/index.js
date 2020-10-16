@@ -324,7 +324,7 @@ console.log(url)
 
            {/********** Life Insurance **********/}
            <Route path={`${url}/life-insurance/entry`} component={lifeinsurence} />
-           <Route path={`${url}/life-insurance/lifeinsurencesavings/landing`} component={HealthInsuranceLanding} />
+           <Route path={`${url}/life-insurance/savings-plan/landing`} component={FyntuneLanding} />
            <Route path={`${url}/life-insurance/:id/landing`} component={Intro} />                                                                                                                                                                     
 
           {/********** Health Insurance **********/}
@@ -533,8 +533,7 @@ console.log(url)
           <Route path={`${url}/group-health/:provider/how-to-claim-star`} component={GroupHealthPlanHowToClaimStar} />
           <Route path={`${url}/group-health/:provider/how-to-claim-religare`} component={GroupHealthPlanHowToClaimReligare} />
 
-          {/*Life Insurance */}
-          <Route path={`${url}/life-insurance/savings-plan/landing`} component={FyntuneLanding} />
+          
 
 
           <Route component={NotFound} />
