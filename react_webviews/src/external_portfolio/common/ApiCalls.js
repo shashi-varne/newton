@@ -29,6 +29,7 @@ export const requestStatement = async (params) => {
     }
     const res = await Api.post(apiToHit, {
       ...params,
+      request_source: 'wreport',
       platform,
     });
 
