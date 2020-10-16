@@ -3,8 +3,11 @@ import Container from  '../../common/Container';
 
 import term_fisdom from 'assets/ic_term_insurance_fisdom.svg';
 import term_myway from 'assets/ic_term_insurance_myway.svg';
+import money_pig from 'assets/money_pig.svg'
 import { getConfig } from '../../../utils/functions';
 import { nativeCallback } from '../../../utils/native_callback'
+
+
 
 class lifeinsurence extends Component {
 
@@ -23,7 +26,6 @@ class lifeinsurence extends Component {
     nativeCallback({ action: 'take_control_reset' });
 
     let termlogo = this.state.type !== 'fisdom' ? term_myway : term_fisdom
-    let lifeinsurancelogo = this.state.type !== 'fisdom' ? term_myway : term_fisdom
 
     let insuranceProducts = [
       {
@@ -37,7 +39,7 @@ class lifeinsurence extends Component {
         key: 'lifeinsurencesavings',
         title: 'Insurence Savings plan',
         subtitle: 'Life coverage with wealth creation',
-        icon: lifeinsurancelogo,
+        icon: money_pig,
         disabled: false
       }
     ];
@@ -60,9 +62,8 @@ class lifeinsurence extends Component {
 
  
   handleClick = (data) => {
-    console.log(data)
     this.sendEvents('next', data.key)
-    if (data.key == 'lifeinsurencesavings') {
+    if (data.key === 'lifeinsurencesavings') {
       this.navigate('/group-insurance/lifeInsurance/lifeinsurencesavings/landing');
     } else {
       let fullPath = data.key + '/landing';

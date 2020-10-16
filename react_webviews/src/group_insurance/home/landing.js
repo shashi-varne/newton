@@ -11,14 +11,10 @@ import accident_fisdom from 'assets/ic_personal_accident_fisdom.svg';
 import accident_myway from 'assets/ic_personal_accident_myway.svg';
 import wallet_fisdom from 'assets/ic_wallet_fisdom.svg';
 import wallet_myway from 'assets/ic_wallet_myway.svg';
-import term_fisdom from 'assets/ic_term_insurance_fisdom.svg';
-import term_myway from 'assets/ic_term_insurance_myway.svg';
 import dengue_fisdom from 'assets/ic_dengue_insurance_fisdom.svg';
 import dengue_myway from 'assets/ic_dengue_insurance_myway.svg';
 import corona_fisdom from 'assets/ic_coronavirus_insurance_fisdom.svg';
 import corona_myway from 'assets/ic_coronavirus_insurance_myway.svg';
-import lifeinsurance_fisdom from 'assets/Insurance_fisdom.svg';
-import lifeinsurance_myway from 'assets/Insurance_myway.svg';
 // import resume_tag from 'assets/resume_tag.png';
 
 import instant_fisdom from 'assets/instant_fisdom.svg';
@@ -26,8 +22,8 @@ import instant_myway from 'assets/instant_myway.svg';
 
 import health_fisdom from 'assets/ic_health_fisdom.svg';
 import health_myway from 'assets/ic_health_myway.svg';
-import home_fisdom from 'assets/home_insurance_fisdom.svg';
-import home_myway from 'assets/home_insurance_myway.svg';
+import insurancelogo from 'assets/life_insurance.svg'
+
 
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
@@ -61,22 +57,18 @@ class Landing extends Component {
     let hospicash = this.state.type !== 'fisdom' ? hospicash_myway : hospicash_fisdom;
     let accident_icon = this.state.type !== 'fisdom' ? accident_myway : accident_fisdom;
     let wallet_icon = this.state.type !== 'fisdom' ? wallet_myway : wallet_fisdom;
-    let term_icon = this.state.type !== 'fisdom' ? term_myway : term_fisdom;
     let instant_icon = this.state.type !== 'fisdom' ? instant_myway : instant_fisdom;
     let dengue_icon = this.state.type !== 'fisdom' ? dengue_myway : dengue_fisdom;
     let corona_icon = this.state.type !== 'fisdom' ? corona_myway : corona_fisdom;
-    let insurance_icon = this.state.type !== 'fisdom' ? lifeinsurance_myway : lifeinsurance_fisdom;
-
-
     let health_insurance_icon = this.state.type !== 'fisdom' ? health_myway : health_fisdom;
-    let home_insurance_icon = this.state.type !== 'fisdom' ? home_myway : home_fisdom;
+    
 
     let insuranceProducts = [
       {
         key: 'LIFEINSURANCE',
         title: 'Life insurance',
         subtitle: 'Starts from ₹10,000/year',
-        icon: insurance_icon
+        icon: insurancelogo
       },
       {
         key: 'HEALTH_INSURANCE',
