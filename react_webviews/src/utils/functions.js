@@ -566,10 +566,6 @@ export const getConfig = () => {
 
   let returnConfig = getPartnerConfig(partner_code);
 
-  if(project === 'w-report') {
-      base_url = 'https://my.fisdom.com';
-  }
-
   let searchParams = `?base_url=${base_url}`;
   let searchParamsMustAppend = `?base_url=${base_url}`;
 
