@@ -8,7 +8,8 @@ import { initialize, updateBottomPremium } from '../common_data';
 
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
-import Tooltip from 'react-tooltip-lite';
+import GenericTooltip from '../../../../common/ui/GenericTooltip'
+
 class GroupHealthPlanSelectCoverPeriod extends Component {
 
     constructor(props) {
@@ -171,9 +172,14 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
 
                 <div className="common-top-page-subtitle flex-between-center">
                     Health expenses will be covered for this period
-                    <Tooltip  arrow={false} direction="down-end" content="As premium increases by insured age, policy with longer cover period reduces the overall premium.70% of our users have taken a cover for 3 years.">
+
+<  GenericTooltip  productName={this.state.productName} content="As premium increases by insured age, policy with longer cover period reduces the overall premium.70% of our users have taken a cover for 3 years."                  />
+
+
+{/* 
+                    <Tooltip  arrow={false} direction="down-end" >
                     <img src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
-                  </Tooltip>
+                  </Tooltip> */}
                 </div>
                 <div className="group-health-plan-select-sum-assured">
 

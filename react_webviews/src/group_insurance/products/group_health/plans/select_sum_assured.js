@@ -6,7 +6,7 @@ import { nativeCallback } from 'utils/native_callback';
 
 import { numDifferentiationInr } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
-import Tooltip from 'react-tooltip-lite';
+import GenericTooltip from '../../../../common/ui/GenericTooltip';
 
 
 class GroupHealthPlanSelectSumAssured extends Component {
@@ -143,9 +143,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
             >
                 <div className="common-top-page-subtitle flex-between-center">
                     Claim can be made upto the selected amount
-                    <Tooltip  arrow={false} direction="down-end" content="In the last 10 years, the average cost per hospitalisation for urban patients has increased by about 176%. Hence, we recommend to have adequate coverage to manage health expenses">
-                    <img     src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
-                  </Tooltip>
+                  <GenericTooltip  productName={ getConfig().productName} content="In the last 10 years, the average cost per hospitalisation for urban patients has increased by about 176%. Hence, we recommend to have adequate coverage to manage health expenses"/>
                 </div>
                 <div className="group-health-plan-select-sum-assured">
                     <div className="generic-choose-input">

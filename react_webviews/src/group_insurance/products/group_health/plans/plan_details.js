@@ -10,7 +10,7 @@ import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
 import {initialize} from '../common_data';
 import ReactHtmlParser from 'react-html-parser';
-import Tooltips from '../../../../common/ui/TooltipLite';
+import GenericTooltip from '../../../../common/ui/GenericTooltip'
 
 class GroupHealthPlanDetails extends Component {
 
@@ -347,11 +347,7 @@ class GroupHealthPlanDetails extends Component {
                   0% copay, assured 100% cashless treatment
                 </div>
                 <div className="ci-right">
-                  <Tooltips className="generic-tooltip" classNameArrow="tooltip-arrrow" background={getConfig().highlight_color}
-                  backgroundArrow={getConfig().highlight_color}
-                    arrow={false} direction="down-end" content={plan_selected.copay}>
-                    <img src={require(`assets/${productName}/info_icon.svg`)} alt="" />
-                  </Tooltips>
+               <GenericTooltip  content={plan_selected.copay} productName={productName}    />
                 </div>
               </div>
 
