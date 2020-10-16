@@ -227,7 +227,6 @@ class GroupHealthLanding extends Component {
   openFaqs = () => {
     this.sendEvents("next", { things_to_know: "faq" });
     let renderData = this.state.screenData.faq_data;
-    console.log("renderData", renderData);
     this.props.history.push({
       pathname: "/gold/common/render-faqs",
       search: getConfig().searchParams,
@@ -238,7 +237,6 @@ class GroupHealthLanding extends Component {
   };
 
   render() {
-    console.log("ppppp", this.state.productName);
     return (
       <Container
         events={this.sendEvents("just_set_events")}

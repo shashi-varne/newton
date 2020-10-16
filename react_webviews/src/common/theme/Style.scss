@@ -452,6 +452,56 @@ button {
   object-fit: cover;
 }
 
+.resume-card {
+  padding: 20px;
+  margin: 20px 0 20px 0;
+  box-shadow: 0px 2px 6px 0px rgba(102, 120, 121, 0.25);
+  border-radius: 4px;
+  .rc-title {
+    color: #0A1D32;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0 0 20px 0;
+  }
+
+  .rc-tile {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .rc-tile-left {
+      display: flex;
+      /* align-items: center; */
+  }
+  
+  .rct-title {
+      color: #0A1D32;
+      font-size: 10px;
+      font-weight: 600;
+      margin: 4px 0 5px 0;
+  }
+  
+  .rct-subtitle {
+      color: #0A1D32;
+      font-size: 16px;
+      font-weight: 400;
+  }
+  
+  .rc-tile-premium-data {
+      margin: 0 0 0 10px;
+  }
+
+  .rc-bottom {
+    margin: 20px 0 0 0;
+  }
+  
+  .rcb-content {
+      color: #767E86;
+      font-size: 12px;
+      font-weight: 400;
+  }
+}
+
 
 input#pan {
   text-transform: uppercase;

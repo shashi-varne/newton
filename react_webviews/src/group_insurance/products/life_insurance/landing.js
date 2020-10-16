@@ -5,21 +5,7 @@ import Api from "utils/api";
 import toast from "../../../common/ui/Toast";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
-import { ghGetMember } from "../../constants";
 import HowToSteps from "../../../common/ui/HowToSteps";
-import Checkbox from "material-ui/Checkbox";
-import {
-  inrFormatDecimal,
-  numDifferentiationInr,
-  storageService,
-} from "utils/validators";
-import Grid from "material-ui/Grid";
-import SVG from "react-inlinesvg";
-import down_arrow from "assets/down_arrow.svg";
-import up_arrow from "assets/up_arrow.svg";
-import { Carousel } from "react-responsive-carousel";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-// import { openInBrowser } from './common_data';
 import {fyntuneConstants} from './constants';
 import StepsToFollow from './stepsToFollow';
 
@@ -30,13 +16,35 @@ class FyntuneLanding extends Component {
       productName: getConfig().productName,
       stepsContentMapper: fyntuneConstants.stepsContentMapper,
       stepsToFollow: fyntuneConstants.stepsToFollow,
-      faq_data: fyntuneConstants.faq_data
+      faq_data: fyntuneConstants.faq_data,
+      logo_cta: fyntuneConstants.logo_cta
     };
   }
 
   handleClick = () => {
+    this.sendEvents("next");
     console.log("To be done");
   };
+
+
+  sendEvents(user_action, data = {}) {
+    let eventObj = {
+      event_name: "life_insurance_savings",
+      properties: {
+        user_action: user_action,
+        product: fyntuneConstants.provider_api,
+        screen_name: "introduction",
+        faq: data.faq ? "yes": "no", 
+        resume_click: data.resume_clicked ? "yes" : "no",
+      },
+    };
+
+    if (user_action === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   renderOfferImages = (props, index) => {
     return (
@@ -50,8 +58,20 @@ class FyntuneLanding extends Component {
     );
   };
 
+  handleResume = () => {
+    // if (!this.state.quoteResume || !this.state.quoteResume.id) {
+    //   return;
+    // }
+    this.sendEvents("next", {resume_clicked: "yes"});
+  };
+
+
   openFaqs = () => {
-    // this.sendEvents("next", { things_to_know: "faq" });
+
+    // this.setState({ faq_clicked: true}, ()=>{
+    //   this.sendEvents("next");
+    // })
+    this.sendEvents("next", { faq: "yes" });
     let renderData = this.state.faq_data;
 
     this.props.history.push({
@@ -61,13 +81,14 @@ class FyntuneLanding extends Component {
         renderData: renderData,
       },
     });
+    
   };
 
   render() {
 
     return (
       <Container
-        // events={this.sendEvents('just_set_events')}
+        events={this.sendEvents('just_set_events')}
         // showLoader={this.state.show_loader}
         title="Insurance Savings Plan"
         fullWidthButton={true}
@@ -84,6 +105,49 @@ class FyntuneLanding extends Component {
                 alt=""
               />
         </div>
+
+        {/* {this.state.quoteResume && this.state.quoteResume.id && ( */}
+        { true && (
+            <div className="resume-card" onClick={() => this.handleResume()}>
+              <div className="rc-title">Recent activity</div>
+
+              <div className="rc-tile" style={{ marginBottom: 0 }}>
+                <div className="rc-tile-left">
+                  <div className="">
+                    <img
+                      src={require(`assets/${this.state.logo_cta}`)}
+                      alt=""
+                    />
+                  </div>
+                  <div className="rc-tile-premium-data">
+                    <div className="rct-title">
+                      {/* {this.state.quoteResume.plan_title} */}
+                      Click 2 Invest
+                    </div>
+                    <div className="rct-subtitle">
+                      {/* {inrFormatDecimal(this.state.quoteResume.total_amount)} */}
+                      Plan Amount / per year
+                    </div>
+                  </div>
+                </div>
+
+                <div className="generic-page-button-small">RESUME</div>
+              </div>
+
+              <div className="rc-bottom flex-between">
+                <div className="rcb-content">
+                  Sum insured:{" "}
+                  {/* {numDifferentiationInr(this.state.quoteResume.sum_assured)} */}
+                  Sum rupees
+                </div>
+                <div className="rcb-content">
+                  {/* Cover period: {this.state.quoteResume.tenure} year */}
+                  Cover period x year
+                  {/* {this.state.quoteResume.tenure > "1" && <span>s</span>} */}
+                </div>
+              </div>
+            </div>
+          )}
         <div>
           <p className="heading">What are Insurance Savings Plan?</p>
           <p className="info">
@@ -93,8 +157,9 @@ class FyntuneLanding extends Component {
           </p>
         </div>
 
+          {/* TODO: add event to this carousel */}
         <p className="heading">Major Benifits</p>
-        <div className="his">
+        <div className="his" >
           <div className="horizontal-images-scroll">
             <img
               className="image"

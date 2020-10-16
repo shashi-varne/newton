@@ -1,4 +1,6 @@
 export var fyntuneConstants = {
+  logo_cta: 'hdfc_logo.png',
+  provider_api: 'fyntune',
     stepsContentMapper: { 
         options:[
         {
@@ -92,5 +94,5 @@ export var fyntuneConstants = {
           ],
       },
       'cta_title': 'OK'
-  }
+  },
 }
