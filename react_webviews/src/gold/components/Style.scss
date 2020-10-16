@@ -503,8 +503,8 @@
 }
 img.gold-offer-slide-img {
   width: 100%;
-  border-radius: 8px;
-  height: 165px;
+  border-radius: 6px;
+  // height: 165px;
 }
 
 .check-how-gold {
@@ -578,6 +578,11 @@ img.gold-offer-slide-img {
     justify-content: space-between;
     margin: 15px 0 15px 0;
     font-weight: 600;
+  }
+  .content2-points-inside-heading {
+    margin: 0 0 -10px 0;
+    font-size: 11px;
+    color: #372e2e;
   }
   .mid-buttons {
     margin: 0 0 20px 0;

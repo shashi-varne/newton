@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+ import React, { Component } from 'react';
 import Container from '../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {
     inrFormatDecimal,
-    numDifferentiationInr
+    numDifferentiationInr, dateOrdinal
 } from 'utils/validators';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
@@ -15,6 +15,10 @@ import { initialize } from './common_data';
 import { ghGetMember, getCssMapperReport } from '../../constants';
 import download from 'assets/download.svg';
 import text_error_icon from 'assets/text_error_icon.svg';
+import ReactHtmlParser from 'react-html-parser';
+import { childeNameMapper } from '../../constants';
+import {getCoverageType} from './constants';
+
 class GroupHealthReportDetails extends Component {
 
     constructor(props) {
@@ -27,7 +31,7 @@ class GroupHealthReportDetails extends Component {
                 benefits: {
                     main: []
                 },
-                special_benfits: [],
+                special_benefits: [],
                 waiting_period: []
             },
             lead: {
@@ -58,7 +62,7 @@ class GroupHealthReportDetails extends Component {
 
         try {
 
-            const res = await Api.get('api/ins_service/api/insurance/hdfcergo/get/policy/' + this.state.policy_id);
+            const res = await Api.get(`api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/get/policy/${this.state.policy_id}`);
 
             this.setState({
                 show_loader: false
@@ -68,8 +72,16 @@ class GroupHealthReportDetails extends Component {
 
                 let policy_data = resultData.policy_data || {};
                 let lead = policy_data.insured_lead_details || {};
-                lead.member_base = ghGetMember(lead);
+                lead.member_base = ghGetMember(lead, this.state.providerConfig);
 
+                let member_base = lead.member_base;
+                let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
+
+                if(applicantIndex >= 0) {
+                    let appli_data = member_base[applicantIndex];
+                    member_base.splice(applicantIndex, 1);
+                    member_base.splice(0, 0, appli_data);
+                }
 
                 let data = getCssMapperReport(policy_data);
                 policy_data.status = data.status;
@@ -79,7 +91,8 @@ class GroupHealthReportDetails extends Component {
                     extra_data: resultData.quote_info,
                     policy_data: resultData.policy_data,
                     quote_info: resultData.quote_info,
-                    lead: lead
+                    lead: lead,
+                    applicantIndex: applicantIndex
                 })
 
 
@@ -119,7 +132,7 @@ class GroupHealthReportDetails extends Component {
             this.setState({
                 show_loader: true
             });
-            const res = await Api.get(`api/ins_service/api/insurance/hdfcergo/policy/download?policy_number=${this.state.policy_data.policy_number}`);
+            const res = await Api.get(`api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/policy/download?policy_number=${this.state.policy_data.policy_number}`);
 
             this.setState({
                 show_loader: false
@@ -151,6 +164,7 @@ class GroupHealthReportDetails extends Component {
 
     navigateBenefits = (type) => {
 
+        let provider = this.state.provider;
         this.setState({
             how_to_claim_clicked: type === 'how_to_claim' ? true : false
         }, () => {
@@ -188,18 +202,31 @@ class GroupHealthReportDetails extends Component {
             }
     
             if (type === 'how_to_claim') {
-                renderData.page_title = 'HDFC ERGO provides cashless as well as reimbursement claim facility';
-                renderData.contact_email = 'healthclaims@hdfcergo.com';
-                renderData.steps = [
-                    {
-                        'title': 'Cashless claims:',
-                        'subtitle': 'In this type of health insurance claim, the insurer company settles all the hospitalization bills with the hospital directly. However, an insured needs to be hospitalized only at a network hospital and have to show the health card (issued after policy generation)  and valid photo ID'
-                    },
-                    {
-                        'title': 'Reimbusment claims :',
-                        'subtitle': 'In this type of claim process, the policyholder pays for the hospitalization expenses upfront and requests for reimbursement by the insurance provider later. One can get reimbursement facility at both network and non-network hospitals in this case. In order to avail reimbursement claim you have to provide the necessary documents including original bills to the insurance provider. The company will then evaluate the claim to see its scope under the policy cover and then makes a payment to the insured.'
-                    }
-                ]
+                if(provider === 'HDFCERGO') {
+                    renderData.page_title = 'HDFC ERGO provides cashless as well as reimbursement claim facility';
+                    renderData.contact_email = 'healthclaims@hdfcergo.com';
+                    renderData.steps = [
+                        {
+                            'title': 'Cashless claims:',
+                            'subtitle': 'In this type of health insurance claim, the insurer company settles all the hospitalization bills with the hospital directly. However, an insured needs to be hospitalized only at a network hospital and have to show the health card (issued after policy generation)  and valid photo ID'
+                        },
+                        {
+                            'title': 'Reimbusment claims :',
+                            'subtitle': 'In this type of claim process, the policyholder pays for the hospitalization expenses upfront and requests for reimbursement by the insurance provider later. One can get reimbursement facility at both network and non-network hospitals in this case. In order to avail reimbursement claim you have to provide the necessary documents including original bills to the insurance provider. The company will then evaluate the claim to see its scope under the policy cover and then makes a payment to the insured.'
+                        }
+                    ]
+                }
+    
+                let basePath = `/group-insurance/group-health/${provider}/`;
+                if(provider === 'RELIGARE') {
+                    this.navigate(basePath + 'how-to-claim-religare');
+                    return;
+                }
+    
+                if(provider === 'STAR') {
+                    this.navigate(basePath + 'how-to-claim-star');
+                    return;
+                }
     
             }
     
@@ -228,7 +255,7 @@ class GroupHealthReportDetails extends Component {
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "product": 'health suraksha',
+                "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'report details',
                 "how_to_claim": this.state.how_to_claim_clicked ? 'yes' : 'no',
@@ -250,7 +277,7 @@ class GroupHealthReportDetails extends Component {
                     src={option.img} alt="Gold" />
                 <div className="content">
                     <div className="content">
-                        <div className="content-title">{option.content}</div>
+                        <div className="content-title">{ReactHtmlParser(option.content)}</div>
                     </div>
                 </div>
             </div>
@@ -282,10 +309,10 @@ class GroupHealthReportDetails extends Component {
                     </div>
                     <div className="mt-right">
                         <div className="mtr-top">
-                            Insured {index + 1} name
+                        {this.state.applicantIndex === -1 ? (this.state.lead.account_type !== 'self' ? dateOrdinal(index + 1) : '') : dateOrdinal(index)} Insured name
                         </div>
                         <div className="mtr-bottom">
-                            {props.name} ({props.relation.toLowerCase()})
+                            {props.name} ({childeNameMapper(props.key)})
                         </div>
                     </div>
                 </div>
@@ -301,7 +328,7 @@ class GroupHealthReportDetails extends Component {
     }
 
     render() {
-
+        let {provider} = this.state;
 
         return (
             <Container
@@ -322,8 +349,8 @@ class GroupHealthReportDetails extends Component {
                     </div>
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
-                            <div className="tc-title">{this.state.providerData.subtitle}</div>
-                            <div className="tc-subtitle">{this.state.lead.plan_title}</div>
+                            <div className="tc-title">{provider === 'HDFCERGO' ? this.state.providerData.subtitle  : this.state.providerData.title}</div>
+                            <div className="tc-subtitle">{this.state.lead.plan_title || this.state.providerData.subtitle}</div>
                         </div>
 
                         <div className="tc-right">
@@ -341,7 +368,7 @@ class GroupHealthReportDetails extends Component {
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
-                                    SUM ASSURED
+                                    SUM INSURED
                                 </div>
                                 <div className="mtr-bottom">
                                     {numDifferentiationInr(this.state.lead.sum_assured)}
@@ -358,10 +385,25 @@ class GroupHealthReportDetails extends Component {
                                     COVER PERIOD
                                 </div>
                                 <div className="mtr-bottom">
-                                    {this.state.lead.tenure}
+                                    {this.state.lead.tenure} year{this.state.lead.tenure>'1' && <span>s</span>}
                                 </div>
                             </div>
                         </div>
+
+                       {this.state.lead.cover_type && 
+                        <div className="member-tile">
+                            <div className="mt-left">
+                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
+                            </div>
+                            <div className="mt-right">
+                                <div className="mtr-top">
+                                    COVERAGE TYPE
+                                </div>
+                                <div className="mtr-bottom">
+                                    {getCoverageType(this.state.lead)}
+                                </div>
+                            </div>
+                        </div>}
 
                         <div className="member-tile">
                             <div className="mt-left">
@@ -369,20 +411,32 @@ class GroupHealthReportDetails extends Component {
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
-                                    TOTAL PREMIUM
+                                 PREMIUM PAID
                                 </div>
 
-                                <div className="mtr-bottom flex">
+                                <div className="mtr-bottom flex" style={{textTransform:'none'}}>
                                         <div>
-                                            <div> {inrFormatDecimal(this.state.lead.premium)} </div>
+                                            <div> {inrFormatDecimal(this.state.lead.base_premium_showable ||
+                                                 this.state.lead.premium)} </div>
                                             <div style={{fontSize:10}}> (Basic premium)</div>
                                         </div>
                                         <div>
                                             &nbsp;+&nbsp;
                                         </div>
+                                        {this.state.lead.add_ons_amount &&
+                                        <div>
+                                            <div> {inrFormatDecimal(this.state.lead.add_ons_amount)} </div>
+                                            <div style={{ fontSize: 10 }}> (Add on amount)</div>
+                                        </div>
+                                         }
+                                        {this.state.lead.add_ons_amount &&
+                                            <div>
+                                                &nbsp;+&nbsp;
+                                            </div>
+                                        }
                                         <div>
                                             <div>{inrFormatDecimal(this.state.lead.tax_amount)} </div>
-                                            <div style={{fontSize:10}}>(18% GST & other taxes) </div>
+                                            <div style={{fontSize:10}}>(18% GST) </div>
                                         </div>
                                         <div>
                                         &nbsp;=&nbsp;
@@ -424,7 +478,8 @@ class GroupHealthReportDetails extends Component {
                         </div>
                     </div>
 
-                    <div className="member-tile">
+                    {this.state.policy_data.policy_number &&
+                      <div className="member-tile">
                         <div className="mt-left">
                             <img src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
                         </div>
@@ -436,7 +491,22 @@ class GroupHealthReportDetails extends Component {
                                 {this.state.policy_data.policy_number || '-'}
                             </div>
                         </div>
-                    </div>
+                    </div>}
+
+                    {!this.state.policy_data.policy_number && this.state.policy_data.proposal_number &&
+                      <div className="member-tile">
+                        <div className="mt-left">
+                            <img src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
+                        </div>
+                        <div className="mt-right">
+                            <div className="mtr-top">
+                                PROPOSAL NUMBER
+                                </div>
+                            <div className="mtr-bottom">
+                                {this.state.policy_data.proposal_number || '-'}
+                            </div>
+                        </div>
+                    </div>}
 
                    {this.state.policy_data.vendor_action_required_message &&
                     <div style={{ margin: '30px 0 30px 0', display: 'flex', 
@@ -508,7 +578,7 @@ class GroupHealthReportDetails extends Component {
                                     <span className="special-benefit-text">Special benefits</span>
                                 </div>
                                 <div className='common-steps-images'>
-                                    {this.state.extra_data.special_benfits.map(this.renderSteps)}
+                                    {this.state.extra_data.special_benefits.map(this.renderSteps)}
                                 </div>
 
                                 <div className="special-benefit"

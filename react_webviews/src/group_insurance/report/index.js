@@ -48,7 +48,26 @@ class Report extends Component {
         id: policy.lead_id,
         premium: policy.total_amount
       };
-    } else if (provider === 'BHARTIAXA') {
+    } else if (provider === 'RELIGARE') {
+      obj = {
+        ...obj,
+        product_name: policy.product_title,
+        top_title: 'Health insurance',
+        key: 'RELIGARE',
+        id: policy.lead_id,
+        premium: policy.total_amount
+      };
+    }  else if (provider === 'STAR') {
+      obj = {
+        ...obj,
+        product_name: 'Star Family Health Optima',
+        top_title: 'Health insurance',
+        key: 'STAR',
+        status_title: 'Star Health',
+        id: policy.lead_id,
+        premium: policy.total_amount
+      };
+    }  else if (provider === 'BHARTIAXA') {
       obj = {
         ...obj,
         // product_name: policy.product_title,
@@ -201,7 +220,7 @@ class Report extends Component {
       if (this.state.termRedirectionPath) {
         path = this.state.termRedirectionPath;
       }
-    } else if (key === 'HDFCERGO') {
+    } else if (['HDFCERGO', 'RELIGARE', 'STAR'].indexOf(key) !== -1) {
       path = `/group-insurance/group-health/${key}/reportdetails/${policy.id}`;
     } else {
       path = '/group-insurance/common/reportdetails/' + policy.id;
@@ -211,6 +230,7 @@ class Report extends Component {
   }
 
   renderReportCards(props, index) {
+    let health_providers = ['HDFCERGO', 'RELIGARE', 'STAR'];
     return (
       <div className="group-insurance-report card"
         onClick={() => this.redirectCards(props)} key={index} style={{ cursor: 'pointer' }}>
@@ -228,7 +248,7 @@ class Report extends Component {
 
           <div style={{ margin: '0 0 0 7px' }}>
             <div className="report-ins-name">{props.product_name}</div>
-            {props.provider !== 'EDELWEISS' && props.provider !== 'HDFCERGO' &&
+            {props.provider !== 'EDELWEISS' && health_providers.indexOf(props.provider) === -1 &&
               <div className="report-cover">
                 <div className="report-cover-amount"><span>Cover amount:</span> ₹{inrFormatDecimalWithoutIcon(props.sum_assured)}
                   {props.product_key === 'HOSPICASH' && <span style={{ fontWeight: 400 }}>/day</span>}
@@ -250,9 +270,9 @@ class Report extends Component {
               </div>
             }
 
-            {props.provider === 'HDFCERGO' &&
+            {health_providers.indexOf(props.provider) !== -1 &&
               <div className="report-cover">
-                <div className="report-cover-amount"><span>Cover amount:</span>
+                <div className="report-cover-amount"><span>Sum insured:</span>
                     ₹{inrFormatDecimalWithoutIcon(props.sum_assured)}
                 </div>
                 <div className="report-cover-amount"><span>Premium:
