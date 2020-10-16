@@ -557,6 +557,8 @@ export const getConfig = () => {
     project = 'loan';
   } else if (main_pathname.indexOf('w-report') >= 0) {
     project = 'w-report';
+  } else if (main_pathname.indexOf('kyc-esign') >= 0) {
+    project = 'kyc-esign';
   }
 
   
