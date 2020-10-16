@@ -661,3 +661,15 @@ body[data-device="mobile"] {
 .__react_component_tooltip .multi-line {
   text-align: left !important;
 }
+
+
+.generic-tooltip {
+  span {
+    border-radius: 4px;
+  }
+  
+  .tooltip-arrrow {
+    right: 20px;
+    position: relative;
+  }
+}
