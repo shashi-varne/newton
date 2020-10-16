@@ -2,30 +2,63 @@ import { storageService, inrFormatDecimal, getEditTitle } from 'utils/validators
 import { getConfig, 
     // isFeatureEnabled
  } from 'utils/functions';
-import { health_providers, ghGetMember } from '../../constants';
+import { ghGetMember } from '../../constants';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import {  openPdfCall } from 'utils/native_callback';
 import { nativeCallback } from 'utils/native_callback';
+
+import {getGhProviderConfig, memberKeyMapperFunction} from './constants';
 
 export async function initialize() {
 
     this.navigate = navigate.bind(this);
     this.openInBrowser = openInBrowser.bind(this);
     this.setEditTitle = setEditTitle.bind(this);
+    this.setLocalProviderData = setLocalProviderData.bind(this);
+    this.memberKeyMapper = memberKeyMapper.bind(this);
 
     let provider = this.props.parent && this.props.parent.props ? this.props.parent.props.match.params.provider : this.props.match.params.provider;
-    let providerData = health_providers[provider];
+    let providerConfig = getGhProviderConfig(provider);
+    let screenData = {};
+    if(this.state.screen_name && providerConfig[this.state.screen_name]) {
+        screenData = providerConfig[this.state.screen_name];
+    }
 
-    let groupHealthPlanData = storageService().getObject('groupHealthPlanData') || {};
+    let next_screen = this.state.next_state || '';
+    if(this.state.screen_name && providerConfig.get_next[this.state.screen_name]) {
+        next_screen = providerConfig.get_next[this.state.screen_name];
+        this.setState({
+            next_state: next_screen  //override
+        })
+    }
+
+    let validation_props = providerConfig.validation_props || {};
+    let pan_amount = providerConfig.pan_amount || '';
+    let claim_settlement_ratio = providerConfig.claim_settlement_ratio || '';
+
+    let groupHealthPlanData = storageService().getObject('groupHealthPlanData_' + provider) || {};
     this.setState({
         productName: getConfig().productName,
         provider: provider,
         groupHealthPlanData: groupHealthPlanData,
-        providerData: providerData,
+        providerData: providerConfig,
+        next_screen: next_screen,
+        providerConfig: providerConfig,
+        provider_api: providerConfig.provider_api,
         plan_selected: groupHealthPlanData && groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected : {},
-        insured_account_type: groupHealthPlanData.account_type || ''
+        insured_account_type: provider === 'STAR' && (groupHealthPlanData.account_type || '').indexOf('parents') >=0 ? 
+        (groupHealthPlanData.ui_members || {}).parents_option: groupHealthPlanData.account_type || '',
+        screenData: screenData,
+        validation_props: validation_props,
+        pan_amount: pan_amount,
+        claim_settlement_ratio: claim_settlement_ratio
+    }, () => {
+        if(!this.state.get_lead && this.state.force_onload_call) {
+            this.onload();
+        }
     })
+
     nativeCallback({ action: 'take_control_reset' });
 
 
@@ -42,8 +75,13 @@ export async function initialize() {
 
             let quote_id = storageService().get('ghs_ergo_quote_id');
 
-            const res = await Api.get('/api/ins_service/api/insurance/hdfcergo/lead/quote?quote_id=' + quote_id);
+            let url = `/api/ins_service/api/insurance/${providerConfig.provider_api}/lead/quote?quote_id=${quote_id}`;
 
+            if(this.state.screen_name === 'final_summary_screen') {
+                url += `&forms_completed=true`;
+            }
+            const res = await Api.get(url);
+              
             var resultData = res.pfwresponse.result;
 
             this.setState({
@@ -52,10 +90,14 @@ export async function initialize() {
             if (res.pfwresponse.status_code === 200) {
 
                 lead = resultData.quote;
-                lead.member_base = ghGetMember(lead);
+                lead.base_premium = lead.base_premium_showable || lead.premium; // incluesive of addons
+                lead.member_base = ghGetMember(lead, this.state.providerConfig);
                 this.setState({
                     lead: resultData.quote || {},
-                    common_data: resultData.common,
+                    common_data: {
+                        ...resultData.common,
+                        tnc: resultData.common.tnc || resultData.tnc
+                    },
                     insured_account_type: lead.account_type || ''
                 }, () => {
                     if (this.onload && !this.state.ctaWithProvider) {
@@ -68,7 +110,7 @@ export async function initialize() {
                     || 'Something went wrong');
             }
         } catch (err) {
-            console.log(err)
+            console.log(err);
             this.setState({
                 show_loader: false,
                 lead: lead,
@@ -78,16 +120,17 @@ export async function initialize() {
         }
     }
 
+
     if (this.state.ctaWithProvider) {
 
 
         let leftTitle, leftSubtitle, sum_assured, tenure, base_premium, tax_amount, total_amount = '';
         if (this.state.get_lead) {
             leftTitle = lead.plan_title || '';
-            leftSubtitle = inrFormatDecimal(lead.total_amount);
+            leftSubtitle = lead.total_amount;
             sum_assured = lead.sum_assured;
             tenure = lead.tenure;
-            base_premium = lead.premium;
+            base_premium = lead.base_premium;
             tax_amount = lead.tax_amount;
             total_amount = lead.total_amount;
 
@@ -100,16 +143,17 @@ export async function initialize() {
             })
 
             leftTitle = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.plan_title : '';
-            leftSubtitle = premium_data[selectedIndexSumAssured] ? inrFormatDecimal(premium_data[selectedIndexSumAssured].net_premium) : '';
+            leftSubtitle = premium_data[selectedIndexSumAssured] ? premium_data[selectedIndexSumAssured].net_premium : '';
 
         }
 
         let bottomButtonData = {
             leftTitle: leftTitle,
-            leftSubtitle: leftSubtitle,
+            leftSubtitle: inrFormatDecimal(leftSubtitle),
+            leftSubtitleUnformatted: leftSubtitle,
             leftArrow: 'up',
-            provider: providerData.key,
-            logo: providerData.logo_cta
+            provider: providerConfig.key,
+            logo: providerConfig.logo_cta
         }
 
         let confirmDialogData = {
@@ -123,13 +167,42 @@ export async function initialize() {
                     'name': 'Basic premium ', 'value':
                         inrFormatDecimal(base_premium)
                 },
-                { 'name': 'GST & other taxes', 'value': inrFormatDecimal(tax_amount) }
+                { 'name': 'GST', 'value': inrFormatDecimal(tax_amount) }
             ],
             content2: [
                 { 'name': 'Total', 'value': inrFormatDecimal(total_amount) }
             ],
             sum_assured: sum_assured,
             tenure: tenure
+        }
+
+        if(provider === 'RELIGARE' && lead.add_ons_amount) {
+
+            confirmDialogData.content1 = [
+                {
+                    'name': 'Basic premium ', 'value':
+                        inrFormatDecimal(base_premium)
+                }
+            ]
+
+            let add_ons_backend = lead.add_ons_json;
+            let data = [];
+            let heading_added = false;
+            for (var key in add_ons_backend) {
+                data.push({
+                    name: add_ons_backend[key].title,
+                    value: inrFormatDecimal(add_ons_backend[key].premium),
+                    heading: !heading_added ? 'Add ons' : ''
+                })
+
+                heading_added = true;
+            }
+
+            confirmDialogData.content1 = confirmDialogData.content1.concat(data);
+
+            confirmDialogData.content1.push({
+                'name': 'GST', 'value': inrFormatDecimal(tax_amount) 
+            })
         }
 
 
@@ -167,13 +240,13 @@ export async function updateLead(body, quote_id) {
             show_loader: true
         });
 
-        const res = await Api.post('/api/ins_service/api/insurance/hdfcergo/lead/update?quote_id=' + quote_id,
-            body);
+        const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/update?quote_id=${quote_id}`,body);
 
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
             if(this.props.edit && !this.state.force_forward) {
                 this.props.history.goBack();
+                console.log('if');
             } else {
                 this.navigate(this.state.next_state);
             }
@@ -186,11 +259,14 @@ export async function updateLead(body, quote_id) {
                 this.setState({
                     openBmiDialog: true
                 }, () => {
-                    this.sendEvents('next', {bmi_check: true})
-                })
+                    this.sendEvents('next', {bmi_check: true});
+                });
             } else {
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
+                toast(
+                    resultData.error ||
+                    resultData.message ||
+                    'Something went wrong'
+                );
             }
         }
     } catch (err) {
@@ -233,7 +309,7 @@ export async function resetQuote() {
     });
 
     try {
-        const res = await Api.get(`/api/ins_service/api/insurance/hdfcergo/lead/cancel/` + quote_id);
+        const res = await Api.get(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/cancel/${quote_id}`);
 
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
@@ -266,7 +342,8 @@ export function openInBrowser(url, type) {
     if(!url) {
         return;
     }
-    this.sendEvents(type);
+
+    this.sendEvents('next', {more_info: type});
 
     let mapper = {
         'tnc' : {
@@ -364,7 +441,6 @@ export function setEditTitle(string) {
 }
 
 export function openMedicalDialog(type) {
-    
     let data = {
         'header_title': 'Free medical check-up',
         'content': 'Based on your details, a medical checkup will be required to issue the policy. HDFC ERGO team will contact you for the <b>free medical checkup</b> after the policy payment.', //ppc
@@ -372,11 +448,38 @@ export function openMedicalDialog(type) {
         'dialog_name': 'medical_dialog',
         'cta_title': 'CONTINUE TO PAYMENT',
         'handleClick': this.startPayment
+    };
+    let provider = this.state.provider;
+
+    if(provider === 'HDFCERGO') {
+        data = {
+            ...data,
+            'header_title': 'Free medical check-up',
+            'content': 'Based on your details, a medical checkup will be required to issue the policy. HDFC ERGO team will contact you for the <b>free medical checkup</b> after the policy payment.', //ppc
+            
+        }
+    
+        if(type === 'ped') {
+            data.content = 'Your details will be reviewed by the HDFC Ergo team before policy issuance. You may be contacted for a <b>free medical checkup</b> after the policy payment.'
+        }
     }
 
-    if(type === 'ped') {
-        data.content = 'Your details will be reviewed by the HDFC Ergo team before policy issuance. You may be contacted for a <b>free medical checkup</b> after the policy payment.'
+    if(provider === 'RELIGARE') {
+        data = {
+            ...data,
+            'header_title': 'Medical Review',
+            'content': 'Please note that basis your health declaration, Care Health team may contact you for a medical review before policy issuance', //ped only
+        }
     }
+
+    if(provider === 'STAR') {
+        data = {
+            ...data,
+            'header_title': 'Medical Review',
+            'content': 'Please note that basis your health declaration, Star’s team may contact you for a medical review before policy issuance', //ped only
+        }
+    }
+    
 
     this.setState({
         medical_dialog: true,
@@ -385,4 +488,13 @@ export function openMedicalDialog(type) {
         show_loader: false
     })
    
+}
+
+export function setLocalProviderData(data) {
+    storageService().setObject('groupHealthPlanData_' + this.state.provider, data);
+}
+
+export function memberKeyMapper(member_key) {
+    const final_dob_list = memberKeyMapperFunction(this.state.groupHealthPlanData);
+    return final_dob_list.filter(data => data.key === member_key)[0];
 }

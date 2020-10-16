@@ -1,6 +1,16 @@
 .fullHeight {
   height: 100%;
 }
+
+.insurance-dot-loader {
+  text-align: left !important;
+  div {
+    margin-left: 2px;
+    height: 8px !important;
+    width: 8px !important;
+  }
+}
+
 .plan-summary {
   background: #f8f8f8;
 }
@@ -417,17 +427,18 @@
    font-size: 14px;
 }
 .accident-plan-read {
-  margin-top: 30px;
-   display: flex;
-   align-items: center;
-   padding: 0 15px;
-   cursor: pointer;
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  cursor: pointer;
 }
 .accident-plan-read-icon {
   margin-right: 10px;
 }
 .accident-plan-read-text {
-   font-size: 14px;
+  font-size: 13px;
+  line-height: 20px;
 }
 .accident-plan-terms {
   padding: 0 15px;
@@ -578,7 +589,7 @@
 
   .offer-slide-img {
     width: 100%;
-    // border-radius: 8px;
+    border-radius: 6px;
     // height: 165px;
   }
   .faq {
@@ -653,7 +664,7 @@
     .wic-title {
       color: white;
       font-size: 14px;
-      font-weight: 400;
+      font-weight: 500;
     }
     .content {
       margin: 20px 0 0 0;
@@ -687,11 +698,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 10px 0 30px 0;
+  margin: 10px 0 20px 0;
 
   .tc-title {
     color: #0A1D32;
-    font-size: 10px;
+    font-size: 12px;
+    line-height: 1.3;
     font-weight: 600;
     margin: 0 0 7px 0;
   }
@@ -765,6 +777,7 @@
   font-size: 10px;
   font-weight: 600;
   border-radius: 4px;
+  margin-bottom: 20px;
   padding: 2px 5px 2px 5px;
 }
 
@@ -773,7 +786,7 @@
   .sum-assured-info {
     display: flex;
     justify-content: space-between;
-    margin: 10px 0 0 0;
+    margin-bottom: 18px;
     color: #0B1E33;
     font-size: 16px;
     font-weight: 400;
@@ -781,7 +794,7 @@
   .copay-info {
     display: flex;
     justify-content: space-between;
-    margin: 10px 0 20px 0;
+    margin-bottom: 30px;
     .ci-left {
       color: #051E35;
       font-size: 14px;
@@ -863,6 +876,7 @@
     justify-content: flex-start;
     .tc-right {
       margin: 0 20px 0 0px;
+      max-width: 140px;
     }
   }
 
@@ -1007,5 +1021,79 @@
       font-weight: 400;
       margin: 20px 0 20px 0;
       line-height: 1.2;
+  }
+}
+
+
+.group-health-insurance-entry{
+.insurance_plans{
+  display:flex;
+  align-items: center;
+  border-bottom-width: 1px;
+  border-bottom-color:#EFEDF2 ;
+  padding-bottom: 15px;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+  .insurance_plans_types{
+    display: flex;
+    padding: 0 10px;
+  }
+  
+  .insurance_plans_logos{
+    margin-right:25px;
+    width: 40px;
+    height: 40px;
+    border-radius: 2px;
+  }
+  
+  .insurance_plans_logos_text{
+    color: #160d2e;
+    font-size:16px;
+    margin-bottom: 5px; 
+    font-weight: 500;
+  }
+  
+  .insurance_plans_logos_subtext{
+   color: #160D2E; 
+   font-size:13px;
+  }
+  .health_insurance{
+    font-weight: 500;
+    padding: 0 10px;
+    color: #160d2e; 
+    font-size: 17px;
+    margin-bottom: 30px;
+  }
+}
+
+.group-health-how-to-claim-religare{
+  padding: 20px 0 20px 0;
+  .ri-tile {
+    color: #767E86;
+    font-size: 14px;
+    margin: 0 0 10px 0;
+    line-height: 1.6;
+  }
+  .ri-tile-right_details{
+    color: #0A1D32;
+  }
+  .ri-tile-left {
+    color: #0A1D32;
+    font-weight: 500;
+  }
+  #contact-no{
+    color: #2d75f7;
+    font-weight: bold;
+  }
+  #remb-claim{
+    margin-top: 20px;
+  }
+  #cashless-claim{
+    margin-top: 20px;
+  }
+  .contact_mail{
+    color: #0A1D32;
   }
 }

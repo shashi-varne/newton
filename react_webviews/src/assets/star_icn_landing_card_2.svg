@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="320" height="148" viewBox="0 0 320 148">
+    <defs>
+        <path id="w9zoof70ia" d="M0 0H320V148H0z"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <g>
+            <g transform="translate(-1009 -27) translate(1009 27)">
+                <mask id="gi2x0o2ztb" fill="#fff">
+                    <use xlink:href="#w9zoof70ia"/>
+                </mask>
+                <use fill="#EAF3FF" xlink:href="#w9zoof70ia"/>
+                <path fill="#DDECFF" fill-rule="nonzero" d="M122.347 95.249C109.183 89.739 102.4 79.656 102 65h212c3.314 0 6 2.686 6 6v79.075c-5.813 8.034-19.62 9.925-40.693 9.925-21.073 0-50.14-2.363-64.673-24.104-14.534-21.742-9.536-27.319-29.067-35.92-19.53-8.603-43.473 3.537-63.22-4.727z" mask="url(#gi2x0o2ztb)" transform="matrix(1 0 0 -1 0 225)"/>
+                <path fill="#DDECFF" d="M0 68C23.93 22.667 56.826 0 98.69 0c62.793 0 72.852 60.682 148.583 68H0z" mask="url(#gi2x0o2ztb)" transform="rotate(180 123.636 34)"/>
+                <text fill="#2072D4" font-family="WorkSans-Medium, Work Sans" font-size="13" font-weight="400" mask="url(#gi2x0o2ztb)">
+                    <tspan x="20" y="88">Additional sum insured (Recharge benefit) </tspan> <tspan x="20" y="110">at no additional cost</tspan>
+                </text>
+                <text fill="#1D63B7" font-family="WorkSans-Bold, Work Sans" font-size="17" font-weight="bold" mask="url(#gi2x0o2ztb)">
+                    <tspan x="20" y="39">Get extra sum insured</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>
