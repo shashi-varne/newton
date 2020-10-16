@@ -11,8 +11,6 @@ import accident_fisdom from 'assets/ic_personal_accident_fisdom.svg';
 import accident_myway from 'assets/ic_personal_accident_myway.svg';
 import wallet_fisdom from 'assets/ic_wallet_fisdom.svg';
 import wallet_myway from 'assets/ic_wallet_myway.svg';
-import term_fisdom from 'assets/ic_term_insurance_fisdom.svg';
-import term_myway from 'assets/ic_term_insurance_myway.svg';
 import dengue_fisdom from 'assets/ic_dengue_insurance_fisdom.svg';
 import dengue_myway from 'assets/ic_dengue_insurance_myway.svg';
 import corona_fisdom from 'assets/ic_coronavirus_insurance_fisdom.svg';
@@ -24,8 +22,9 @@ import instant_myway from 'assets/instant_myway.svg';
 
 import health_fisdom from 'assets/ic_health_fisdom.svg';
 import health_myway from 'assets/ic_health_myway.svg';
-import home_fisdom from 'assets/home_insurance_fisdom.svg';
-import home_myway from 'assets/home_insurance_myway.svg';
+import life_insurance_fisdom from 'assets/fisdom/life_insurance_logo.svg'
+import life_insurance_myway from 'assets/myway/life_insurance_logo.svg'
+
 
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
@@ -59,71 +58,48 @@ class Landing extends Component {
     let hospicash = this.state.type !== 'fisdom' ? hospicash_myway : hospicash_fisdom;
     let accident_icon = this.state.type !== 'fisdom' ? accident_myway : accident_fisdom;
     let wallet_icon = this.state.type !== 'fisdom' ? wallet_myway : wallet_fisdom;
-    let term_icon = this.state.type !== 'fisdom' ? term_myway : term_fisdom;
     let instant_icon = this.state.type !== 'fisdom' ? instant_myway : instant_fisdom;
     let dengue_icon = this.state.type !== 'fisdom' ? dengue_myway : dengue_fisdom;
     let corona_icon = this.state.type !== 'fisdom' ? corona_myway : corona_fisdom;
-
-
     let health_insurance_icon = this.state.type !== 'fisdom' ? health_myway : health_fisdom;
-    let home_insurance_icon = this.state.type !== 'fisdom' ? home_myway : home_fisdom;
-
+    let insurancelogo = this.state.type !== 'fisdom' ? life_insurance_myway : life_insurance_fisdom;
+  
     let insuranceProducts = [
-      // {
-      //   key: 'HEALTH',
-      //   title: 'Health insurance',
-      //   subtitle: 'Starts from ₹ 200 annually',
-      //   icon: health_icon
-      // },
+      {
+        key: 'LIFEINSURANCE',
+        title: 'Life insurance',
+        subtitle: 'Starts from ₹7,000/year',
+        icon: insurancelogo
+      },
+      {
+        key: 'HEALTH_INSURANCE',
+        title: 'Health Insurance',
+        subtitle: 'Starts from ₹4,000/year',
+        icon: health_insurance_icon
+      },
       {
         key: 'CORONA',
-        title: 'Coronavirus insurance',
-        subtitle: 'Cover against COVID-19 infection',
+        title: 'Coronavirus Insurance',
+        subtitle: 'starts from ₹459',
         icon: corona_icon
       },
       {
         key: 'PERSONAL_ACCIDENT',
-        title: 'Personal accident insurance',
+        title: 'Personal Accident Insurance',
         subtitle: 'Starts from ₹ 200/year',
         icon: accident_icon
       },
       {
         key: 'HOSPICASH',
-        title: 'Hospital daily cash',
-        subtitle: 'Starts from ₹ 750/year',
+        title: 'Hospital Daily Cash',
+        subtitle: 'Starts from ₹750/year',
         icon: hospicash
       },
-
-      {
-        key: 'HEALTH_INSURANCE',
-        title: 'Health insurance',
-        subtitle: 'Cover your health expenses',
-        icon: health_insurance_icon
-      },
-      {
-        key: 'HOME_INSURANCE',
-        title: 'Home insurance',
-        subtitle: 'Secure your home and interiors',
-        icon: home_insurance_icon
-      },
-
       {
         key: 'SMART_WALLET',
-        title: 'Smart wallet (fraud protection)',
-        subtitle: 'Starts from ₹ 250/year',
+        title: 'Smart Wallet(fraud protection)',
+        subtitle: 'Starts from ₹250/year',
         icon: wallet_icon
-      },
-      {
-        key: 'DENGUE',
-        title: 'Dengue insurance',
-        subtitle: 'Starts from ₹ 50/year',
-        icon: dengue_icon
-      },
-      {
-        key: 'TERM_INSURANCE',
-        title: 'Term insurance',
-        subtitle: 'Get comprehensive life coverage',
-        icon: term_icon
       }
     ];
 
@@ -342,9 +318,12 @@ class Landing extends Component {
       }
 
       fullPath = insuranceStateMapper[product_key] + '/' + path;
+    } else if (product_key === 'LIFEINSURANCE') {
+      fullPath = 'life-insurance/entry';
     } else if (product_key === 'HEALTH_INSURANCE') {
       fullPath = 'health/landing';
-    } else if (product_key === 'HOME_INSURANCE') {
+    }    
+    else if (product_key === 'HOME_INSURANCE') {
       fullPath = 'home_insurance/general/plan';
     } else {
 
@@ -366,14 +345,9 @@ class Landing extends Component {
         paddingBottom: '15px', justifyContent: 'space-between', cursor: 'pointer'
       }}>
         <div style={{ display: 'flex' }}>
-          <img src={props.icon} alt="" style={{ marginRight: '15px' }} />
+          <img src={props.icon} alt="" style={{ marginRight: '20px' }} />
           <div>
             <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px', fontWeight: 500 }}>{props.title}
-              {props.key === 'HEALTH_INSURANCE' &&
-                <span style={{
-                  padding: '3px 7px',
-                  borderRadius: 10, fontSize: 10, background: getConfig().primary, margin: '0 0 0 10px', color: 'white'
-                }}>3 Plans</span>}
               {props.key === 'CORONA' && !props.resume_flag &&
                 <span style={{
                   padding: '3px 7px',
@@ -429,11 +403,11 @@ class Landing extends Component {
             display: 'flex'
           }}>
             <img style={{ margin: '0px 5px 0 0' }} src={this.state.instant_icon} alt="" />
-            Instant policy issuance
+            Get instant policy issuance
             </div>
           <div style={{ marginTop: '20px', color: '#4a4a4a', fontSize: '10px', lineHeight: '24px', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '2px' }}>Claim assistance | No medical | Zero paperwork</div>
           <div className='products' style={{ marginTop: '50px' }}>
-            <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '20px' }}>Get started</h1>
+            <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '20px',marginBottom: '25px'  }}>Get started</h1>
             <div>
 
               {this.state.insuranceProducts.map(this.renderPorducts)}

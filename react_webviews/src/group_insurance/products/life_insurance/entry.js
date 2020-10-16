@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
-import Container from '../../../common/Container';
-import hdfc_logo from '../../../../assets/ic_hdfc_logo.svg';
-import religare_logo from '../../../../assets/ic_religare_logo_card.svg';
-import star_logo from '../../../../assets/ic_star_logo.svg'
+import Container from  '../../common/Container';
 
-import { getConfig } from 'utils/functions';
-import { nativeCallback } from 'utils/native_callback';
+import term_fisdom from 'assets/ic_term_insurance_fisdom.svg';
+import term_myway from 'assets/ic_term_insurance_myway.svg';
+import money_pig_fisdom from 'assets/fisdom/money_pig.svg'
+import money_pig_myway from 'assets/myway/money_pig.svg'
+import { getConfig } from '../../../utils/functions';
+import { nativeCallback } from '../../../utils/native_callback'
 
-class HealthInsuranceEntry extends Component {
+
+
+class lifeinsurence extends Component {
 
   constructor(props) {
     super(props);
@@ -23,29 +26,25 @@ class HealthInsuranceEntry extends Component {
 
     nativeCallback({ action: 'take_control_reset' });
 
+    let termlogo = this.state.type !== 'fisdom' ? term_myway : term_fisdom
+    let money_pig =  this.state.type !== 'fisdom' ? money_pig_myway : money_pig_fisdom
+
     let insuranceProducts = [
       {
-        key: 'HDFCERGO',
-        title: 'HDFC ERGO',
-        subtitle: 'my: health Suraksha',
-        icon: hdfc_logo
-      },
-      {
-        key: 'RELIGARE',
-        title: 'Care Health',
-        subtitle: 'Care',
-        icon: religare_logo,
+        key: 'team',
+        title: 'Team Insurence',
+        subtitle: 'Get comprensive life coverage',
+        icon: termlogo,
         disabled: false
       },
       {
-        key: 'STAR',
-        title: 'Star',
-        subtitle: 'Family health optima',
-        icon: star_logo,
+        key: 'lifeinsurencesavings',
+        title: 'Insurence Savings plan',
+        subtitle: 'Life coverage with wealth creation',
+        icon: money_pig,
         disabled: false
       }
     ];
-
 
       this.setState({
         insuranceProducts: insuranceProducts
@@ -65,11 +64,13 @@ class HealthInsuranceEntry extends Component {
 
  
   handleClick = (data) => {
-
     this.sendEvents('next', data.key)
-
-    let fullPath = data.key + '/landing';
-    this.navigate('/group-insurance/group-health/' + fullPath);
+    if (data.key === 'lifeinsurencesavings') {
+      this.navigate('/group-insurance/life-insurance/lifeinsurencesavings/landing');
+    } else {
+      let fullPath = data.key + '/landing';
+      this.navigate('/group-insurance/life-insurance/' + fullPath);
+    }
   }
 
   renderPorducts(props, index) {
@@ -79,12 +80,16 @@ class HealthInsuranceEntry extends Component {
         style={{
            borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',
         }}
-        >
+        >   
           <div className='insurance_plans_types'>
-            <img src={props.icon} alt="" className="insurance_plans_logos"/>
+              <img src={props.icon} alt="" className="insurance_plans_logos"/>
             <div>
               <div className='insurance_plans_logos_text'
-              >{props.title}
+              >{props.title}{props.key === 'team' && !props.resume_flag &&
+              <span style={{
+                padding: '3px 7px',
+                borderRadius: 10, fontSize: 10, background: getConfig().primary, margin: '0 0 0 10px', color: 'white'
+              }}>Recommended</span>}
               </div>
               <div className='insurance_plans_logos_subtext'>{props.subtitle}</div>
             </div>
@@ -92,9 +97,7 @@ class HealthInsuranceEntry extends Component {
         </div>
       )
     }
-
     return null;
-   
   }
 
   sendEvents(user_action, insurance_type) {
@@ -102,7 +105,7 @@ class HealthInsuranceEntry extends Component {
       "event_name": 'Group Insurance',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'comprehensive health insurance',
+        "screen_name": 'Life Insurance',
         "insurance_provider": insurance_type ? insurance_type : ''
       }
     };
@@ -122,10 +125,11 @@ class HealthInsuranceEntry extends Component {
         events={this.sendEvents('just_set_events')}
         noFooter={true}
         showLoader={this.state.show_loader}
-        title="Comprehensive health insurance"> 
+        title="Life Insurance"
+        styleHeader={{marginLeft: '10px'}}> 
         <div className="group-health-insurance-entry">
           <div className='products'>
-            <div className='health_insurance'>Health insurance plans</div>
+            <div className='health_insurance'>Must have plans for your Family</div>
             <div>
               {this.state.insuranceProducts.map(this.renderPorducts)}
             </div>
@@ -136,4 +140,4 @@ class HealthInsuranceEntry extends Component {
   }
 }
 
-export default HealthInsuranceEntry;
+export default lifeinsurence;
