@@ -106,7 +106,7 @@ import CoronaPlanPayment from './products/corona/payment';
 import CoronaPaymentCallback from './products/corona/payment-callback';
 
 /*************************** Life Insurence **********************************/
-import lifeinsurence from './products/life_insurance/landing';
+import lifeinsurence from './products/life_insurance/entry';
 
 /*******************  Health ******************/
 import HealthInsuranceLanding from './products/health_insurance/landing';

@@ -3,7 +3,8 @@ import Container from  '../../common/Container';
 
 import term_fisdom from 'assets/ic_term_insurance_fisdom.svg';
 import term_myway from 'assets/ic_term_insurance_myway.svg';
-import money_pig from 'assets/money_pig.svg'
+import money_pig_fisdom from 'assets/fisdom/money_pig.svg'
+import money_pig_myway from 'assets/myway/money_pig.svg'
 import { getConfig } from '../../../utils/functions';
 import { nativeCallback } from '../../../utils/native_callback'
 
@@ -26,6 +27,7 @@ class lifeinsurence extends Component {
     nativeCallback({ action: 'take_control_reset' });
 
     let termlogo = this.state.type !== 'fisdom' ? term_myway : term_fisdom
+    let money_pig =  this.state.type !== 'fisdom' ? money_pig_myway : money_pig_fisdom
 
     let insuranceProducts = [
       {
@@ -80,11 +82,7 @@ class lifeinsurence extends Component {
         }}
         >   
           <div className='insurance_plans_types'>
-
-         
-
-            <img src={props.icon} alt="" className="insurance_plans_logos"/>
-            {/* <img  src={require(`assets/${this.state.productName}/life_insurence_logo.svg`)} /> */}
+              <img src={props.icon} alt="" className="insurance_plans_logos"/>
             <div>
               <div className='insurance_plans_logos_text'
               >{props.title}{props.key === 'team' && !props.resume_flag &&
