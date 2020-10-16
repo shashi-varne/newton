@@ -10,7 +10,7 @@ import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
 import {initialize} from '../common_data';
 import ReactHtmlParser from 'react-html-parser';
-import GenericTooltip from '../../../../common/ui/GenericTooltip'
+import GenericTooltip from '../../../../common/ui/ GenericTooltip'
 
 class GroupHealthPlanDetails extends Component {
 
