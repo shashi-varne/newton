@@ -64,10 +64,10 @@ class lifeinsurence extends Component {
   handleClick = (data) => {
     this.sendEvents('next', data.key)
     if (data.key === 'lifeinsurencesavings') {
-      this.navigate('/group-insurance/lifeInsurance/lifeinsurencesavings/landing');
+      this.navigate('/group-insurance/life-insurance/lifeinsurencesavings/landing');
     } else {
       let fullPath = data.key + '/landing';
-      this.navigate('/group-insurance/lifeinsurence/' + fullPath);
+      this.navigate('/group-insurance/life-insurance/' + fullPath);
     }
   }
 
@@ -80,7 +80,11 @@ class lifeinsurence extends Component {
         }}
         >   
           <div className='insurance_plans_types'>
+
+         
+
             <img src={props.icon} alt="" className="insurance_plans_logos"/>
+            {/* <img  src={require(`assets/${this.state.productName}/life_insurence_logo.svg`)} /> */}
             <div>
               <div className='insurance_plans_logos_text'
               >{props.title}{props.key === 'team' && !props.resume_flag &&
@@ -103,7 +107,7 @@ class lifeinsurence extends Component {
       "event_name": 'Group Insurance',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'comprehensive health insurance',
+        "screen_name": 'Life Insurance',
         "insurance_provider": insurance_type ? insurance_type : ''
       }
     };
@@ -123,7 +127,8 @@ class lifeinsurence extends Component {
         events={this.sendEvents('just_set_events')}
         noFooter={true}
         showLoader={this.state.show_loader}
-        title="Comprehensive health insurance"> 
+        title="Life Insurance"
+        styleHeader={{marginLeft: '10px'}}> 
         <div className="group-health-insurance-entry">
           <div className='products'>
             <div className='health_insurance'>Must have plans for your Family</div>
