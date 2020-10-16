@@ -559,6 +559,8 @@ export const getConfig = () => {
     project = 'w-report';
   } else if (main_pathname.indexOf('kyc-esign') >= 0) {
     project = 'kyc-esign';
+  } else if (main_pathname.indexOf('pg') >= 0) {
+    project = 'pg';
   }
 
   

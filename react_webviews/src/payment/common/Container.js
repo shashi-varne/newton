@@ -73,7 +73,7 @@ class Container extends Component {
 
 
     switch (pathname) {
-      case "/payment/neft":
+      case "/pg/neft":
         this.props.history.goBack();
         break;
       default:

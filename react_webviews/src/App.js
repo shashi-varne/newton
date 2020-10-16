@@ -44,7 +44,7 @@ class App extends Component {
           <Route path="/w-report" component={WealthReport} />
           <Route path="/help" component={HelpSupport} />
           <Route path="/loan" component={Loan} />
-          <Route path="/payment" component={Payment} />
+          <Route path="/pg" component={Payment} />
           <Route path="/kyc-esign" component={KycEsign} />
           <Route path="/webview/:main_module/:sub_module" component={CommonLanding} />
           <Route path="/webview/:main_module" component={CommonLanding} />
