@@ -20,73 +20,22 @@ import up_arrow from "assets/up_arrow.svg";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 // import { openInBrowser } from './common_data';
+import {fyntuneConstants} from './constants';
+import StepsToFollow from './stepsToFollow';
 
 class FyntuneLanding extends Component {
   constructor(props) {
     super(props);
     this.state = {
       productName: getConfig().productName,
+      stepsContentMapper: fyntuneConstants.stepsContentMapper,
+      stepsToFollow: fyntuneConstants.stepsToFollow,
+      faq_data: fyntuneConstants.faq_data
     };
-  }
-
-  componentWillMount() {
-    let stepsContentMapper = {
-      // title: `We make this process easy with`,
-      options: [
-        {
-          icon: "icn_hs_no_document",
-          title: "No document required",
-          subtitle: "Easy and paperless process",
-        },
-        {
-          icon: "icn_hs_assistance",
-          title: "Complete assistance",
-          subtitle: "Our experts will help in purchase and claim of policy",
-        },
-        {
-          icon: "icn_hs_payment",
-          title: "Secure payment",
-          subtitle: "Smooth and secure online payment process",
-        },
-      ],
-    };
-
-    let stepsToFollow = [
-      {
-        key: "1",
-        title: "Get free quotes",
-        subtitle: "To start, enter a few details & get free quotes",
-      },
-      {
-        key: "2",
-        title: "Complete application form",
-        subtitle: "Now select a plan you like and fill up an application form",
-      },
-      {
-        key: "3",
-        title: "Make payment",
-        subtitle: "Make your first payment securely",
-      },
-      {
-        key: "4",
-        title: "Answer medical and lifestyle questions",
-        subtitle: "Help us with a few answers to evaluate your application",
-      },
-      {
-        key: "5",
-        title: "Upload and request documents",
-        subtitle:
-          "Lastly, upload all the required documents and you're good to go",
-      },
-    ];
-
-    this.setState({
-      stepsContentMapper: stepsContentMapper,
-    });
   }
 
   handleClick = () => {
-    console.log("CTA CLICKED");
+    console.log("To be done");
   };
 
   renderOfferImages = (props, index) => {
@@ -102,8 +51,8 @@ class FyntuneLanding extends Component {
   };
 
   openFaqs = () => {
-    this.sendEvents("next", { things_to_know: "faq" });
-    let renderData = this.state.screenData.faq_data;
+    // this.sendEvents("next", { things_to_know: "faq" });
+    let renderData = this.state.faq_data;
 
     this.props.history.push({
       pathname: "/gold/common/render-faqs",
@@ -115,6 +64,7 @@ class FyntuneLanding extends Component {
   };
 
   render() {
+
     return (
       <Container
         // events={this.sendEvents('just_set_events')}
@@ -126,6 +76,14 @@ class FyntuneLanding extends Component {
         onlyButton={true}
         handleClick={() => this.handleClick()}
       >
+      <div className="fyntune-landing">
+        <div className="landing-hero-container">
+            <img
+                className="landing-hero-img"
+                src={require(`assets/${this.state.productName}/fyntune_landing_page_hero.png`)}
+                alt=""
+              />
+        </div>
         <div>
           <p className="heading">What are Insurance Savings Plan?</p>
           <p className="info">
@@ -140,21 +98,29 @@ class FyntuneLanding extends Component {
           <div className="horizontal-images-scroll">
             <img
               className="image"
-              src={require(`assets/${this.state.productName}/ic_why_hs.png`)}
+              src={require(`assets/${this.state.productName}/ic_why_fyn1.png`)}
               alt=""
             />
             <img
               className="image"
-              src={require(`assets/${this.state.productName}/ic_why_hs2.png`)}
+              src={require(`assets/${this.state.productName}/ic_why_fyn2.png`)}
               alt=""
             />
             <img
               className="image"
-              src={require(`assets/${this.state.productName}/ic_why_hs3.png`)}
+              src={require(`assets/${this.state.productName}/ic_why_fyn3.png`)}
               alt=""
             />
           </div>
         </div>
+
+         <p className="heading">Get your plan in 5 easy steps</p>
+         {
+           this.state.stepsToFollow.map( (step) =>{
+             return <StepsToFollow key={step.key} keyId={step.key} title={step.title} subtitle={step.subtitle} />
+           })
+         }
+         
 
         <div style={{ transform: "translateY(-50px)", marginBottom: "0px" }}>
           <p className="heading" style={{ transform: "translateY(65px)" }}>
@@ -180,6 +146,7 @@ class FyntuneLanding extends Component {
           </div>
           <div className="generic-hr" style={{ marginTop: "12px" }}></div>
         </div>
+      </div>
       </Container>
     );
   }

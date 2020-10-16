@@ -527,7 +527,7 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/:provider/how-to-claim-religare`} component={GroupHealthPlanHowToClaimReligare} />
 
           {/*Life Insurance */}
-          <Route path={`${url}/life-insurance/:provider/landing`} component={FyntuneLanding} />
+          <Route path={`${url}/life-insurance/savings-plan/landing`} component={FyntuneLanding} />
 
 
           <Route component={NotFound} />
