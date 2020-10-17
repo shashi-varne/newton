@@ -61,7 +61,7 @@ class Container extends Component {
       this.setState({
         callbackType: 'exit',
         openPopup: true,
-        popupText: 'You are almost there, do you really want to go back?'
+        popupText: 'Are you sure you want to exit the payment process?'
       })
       return;
     }
