@@ -12,7 +12,7 @@ const NEFTModal = (props) => {
                 <div className={`carousel-item ${(props.activeIndex === i) ? 'active' : ''}`} key={i} onClick={() => props.selectedNEFTBank(i, item)}>
                     <div className="flex">
                         <div className="item">
-                            <img src={item.image} width="30" alt="bank"/>
+                            <img src={item.image} width="30" alt="bank" />
                         </div>
                         <div className="item">
                             <div className="dark-grey-text uppercase">{item.bank_short_name}</div>
@@ -83,7 +83,12 @@ class NEFT extends React.Component {
             this.setState({ neft_error: false });
             if (this.state.checked) {
                 this.setState({ show_loader: true });
-                nativeCallback('take_control', window.location.href);
+                nativeCallback({
+                    action: 'take_control', message: {
+                        back_url: window.location.href,
+                        back_text: 'Are you sure you want to exit the payment process?'
+                    }
+                });
                 window.location.href = this.state.store.neft_callback_url + '&bank_code=' + this.state.bank.bank_code + '&account_number=' + this.state.bank.account_number + '&neft_no=' + neft_number;
             } else {
                 this.setState({ highlighttnc: true });
