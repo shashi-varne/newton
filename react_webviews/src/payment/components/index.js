@@ -373,7 +373,12 @@ class PaymentOption extends React.Component {
 
       // show loader
       this.setState({ show_loader: true });
-      nativeCallback('take_control', window.location.href);
+      nativeCallback({
+        action: 'take_control', message: {
+          back_url: window.location.href,
+          back_text: 'Are you sure you want to exit the payment process?'
+        }
+      });
       window.location.href = store.url + '&bank_code=' + this.state.bank.bank_code + '&account_number=' + this.state.bank.account_number + '&gateway_type=UPI';
     } else {
       let eventObj = {
