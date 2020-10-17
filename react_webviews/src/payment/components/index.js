@@ -457,11 +457,21 @@ class PaymentOption extends React.Component {
   goToPayment(type) {
     if (type === "debit") {
       this.setState({ show_loader: true });
-      nativeCallback('take_control', window.location.href);
+      nativeCallback({
+        action: 'take_control', message: {
+          back_url: window.location.href,
+          back_text: 'Are you sure you want to exit the payment process?'
+        }
+      });
       window.location.href = store.url + '&gateway_type=HMP';
     } else if (type === "netbanking") {
       this.setState({ show_loader: true });
-      nativeCallback('take_control', window.location.href);
+      nativeCallback({
+        action: 'take_control', message: {
+          back_url: window.location.href,
+          back_text: 'Are you sure you want to exit the payment process?'
+        }
+      });
       window.location.href = store.url + '&bank_code=' + this.state.selectedBank.bank_code + '&account_number=' + this.state.selectedBank.account_number;
     } else if (type === "neft") {
       this.props.history.push(
@@ -470,7 +480,12 @@ class PaymentOption extends React.Component {
       );
     } else if (type === "upi") {
       this.setState({ show_loader: true });
-      nativeCallback('take_control', window.location.href);
+      nativeCallback({
+        action: 'take_control', message: {
+          back_url: window.location.href,
+          back_text: 'Are you sure you want to exit the payment process?'
+        }
+      });
       window.location.href = store.url + '&account_number=' + this.state.selectedBank.account_number + '&gateway_type=UPI';
     } else {
       nativeCallback('show_toast', 'Pay using bank a/c - ' + this.state.selectedBank.obscured_account_number + ' only');
@@ -480,7 +495,12 @@ class PaymentOption extends React.Component {
         if (data.pfwresponse.status_code === 200) {
           let upi_payment_data = data.pfwresponse.result;
           upi_payment_data.package_name = type;
-          nativeCallback('take_control', window.location.href);
+          nativeCallback({
+            action: 'take_control', message: {
+              back_url: window.location.href,
+              back_text: 'Are you sure you want to exit the payment process?'
+            }
+          });
           nativeCallback('initiate_upi_payment', upi_payment_data);
         } else {
           that.setState({ show_loader: false });
@@ -529,7 +549,13 @@ class PaymentOption extends React.Component {
     // show loader
     if (item.bank_code) {
       this.setState({ show_loader: true });
-      nativeCallback('take_control', window.location.href);
+      nativeCallback({
+        action: 'take_control', message: {
+          back_url: window.location.href,
+          back_text: 'Are you sure you want to exit the payment process?'
+        }
+      });
+
       window.location.href = store.url + '&bank_code=' + item.bank_code + '&account_number=' + item.account_number;
     } else {
       let eventObj = {
