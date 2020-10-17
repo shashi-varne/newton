@@ -207,6 +207,37 @@
       padding-top: 0;
       font-size: 14px;
     }
+
+    .carousel {
+      margin-top: 20px;
+    }
+    
+    .carousel .carousel-flex {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      -ms-overflow-style: -ms-autohiding-scrollbar; 
+    }
+    
+    .carousel .carousel-flex .carousel-item {
+      background: #f8f8f8;
+      border: 1px solid #f8f8f8;
+      border-radius: 3px;
+      padding: 20px;
+      margin-right: 15px;
+    }
+    
+    .carousel .carousel-flex .carousel-item.active {
+      border: 1px solid #55d677;
+      background: #fff;
+    }
+    
+    .carousel .carousel-flex .carousel-item .item img {
+      margin-right: 10px;
+    }
     
     .dropdown {
       margin: 20px 0;

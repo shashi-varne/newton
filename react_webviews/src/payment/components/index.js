@@ -392,7 +392,10 @@ class PaymentOption extends React.Component {
       nativeCallback('take_control', window.location.href);
       window.location.href = store.url + '&bank_code=' + this.state.selectedBank.bank_code + '&account_number=' + this.state.selectedBank.account_number;
     } else if (type === "neft") {
-      this.props.history.push('neft', { store: store, neftBanks: this.state.neftBanks });
+      this.props.history.push(
+        { pathname: 'neft', search: getConfig().searchParams },
+        { store: store, neftBanks: this.state.neftBanks }
+      );
     } else if (type === "upi") {
       this.setState({ show_loader: true });
       nativeCallback('take_control', window.location.href);
