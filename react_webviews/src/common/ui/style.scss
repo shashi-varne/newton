@@ -234,7 +234,8 @@
   padding: 0px;
 }
 .carousel .slide {
-  background: white;
+  background: white !important;
+  border: 1px solid white !important;
 }
 .CircularProgressbar .CircularProgressbar-text {
   fill: var(--primary) !important;
@@ -410,7 +411,9 @@ input.default-otp-input {
     background: linear-gradient(to right, #f4f4f4, white);
     padding: 20px 25px 20px 25px;
   }
-
+  .tile-disabled{
+    opacity: 0.4;
+  }
   .select-tile {
     color: rgb(122, 118, 118);
     line-height: 1.4;
@@ -538,7 +541,7 @@ body[data-device="mobile"] {
     color: #160d2e;
     font-size: 20px;
     font-weight: 600;
-    width: fit-content;
+    width: auto;
     text-align: left;
     background: white;
   }
@@ -570,7 +573,7 @@ body[data-device="mobile"] {
   .header_title {
     color: #0a1d32;
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 600;
   }
 
   .content {
@@ -649,4 +652,12 @@ body[data-device="mobile"] {
     margin-top: 0px !important;
     height: auto;
   }
+}
+
+.MuiMenuItem-root {
+  overflow: scroll !important;
+}
+
+.__react_component_tooltip .multi-line {
+  text-align: left !important;
 }

@@ -4,8 +4,10 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { health_providers, genderOptions, childeNameMapper } from '../../../constants';
-import { calculateAge, toFeet, capitalizeFirstLetter, 
-  formatDate, validatePan, validateAlphabets, dobFormatTest } from 'utils/validators';
+import {
+  calculateAge, toFeet, capitalizeFirstLetter,
+  formatDate, validatePan, validateAlphabets, dobFormatTest, isValidDate
+} from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import DropdownInModal from '../../../../common/ui/DropdownInModal';
@@ -17,6 +19,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import ReactTooltip from "react-tooltip";
 import Button from 'material-ui/Button';
+import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
 
 class GroupHealthPlanPersonalDetails extends Component {
 
@@ -30,7 +33,9 @@ class GroupHealthPlanPersonalDetails extends Component {
       show_loader: true,
       get_lead: true,
       openBmiDialog: false,
-      pan_needed: false
+      pan_needed: false,
+      screen_name: 'personal_details_screen',
+      occupationOptions: []
     }
     this.initialize = initialize.bind(this);
     this.updateLead = updateLead.bind(this);
@@ -40,15 +45,22 @@ class GroupHealthPlanPersonalDetails extends Component {
   onload = () => {
 
     let lead = this.state.lead || {};
+    let occupationOptions = this.state.screenData.occupation_opts;
+
+    this.setState({
+      occupationOptions: occupationOptions
+    })
 
     let spouse_relation = lead.spouse_account_key ? lead.spouse_account_key.relation : '';
 
-    let member_base = lead.member_base;
+    let member_base = lead.member_base || [];
     // let member_key = this.props.match.params.member_key;
     let member_key = this.props.member_key;
 
+    let pan_amount = this.state.pan_amount;
+
     let pan_needed = false;
-    if (lead.total_amount > 100000 && (member_key === 'self' || member_key === 'applicant')) {
+    if (lead.total_amount > pan_amount && (member_key === 'self' || member_key === 'applicant')) {
       pan_needed = true;
     }
 
@@ -58,12 +70,12 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     if (member_key === 'self') {
       header_title = 'Personal details';
-      header_subtitle = 'We would need some details to complete your proposal';
+      header_subtitle = 'Policy will be issued basis these details';
     }
 
     let next_state = `/group-insurance/group-health/${this.state.provider}/contact`;
     let backend_key = '';
-    for (var i = 0; i < member_base.length; i++) {
+    for (var i = 0; member_base && i < member_base.length; i++) {
       let key = member_base[i].key;
 
       if (member_key === key) {
@@ -82,8 +94,9 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let form_data = lead[backend_key] || {};
 
+    let dobNeeded = member_key === 'applicant';
     form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
-    let age = calculateAge(form_data.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
+    let age = calculateAge(form_data.dob);
 
 
     let height_options = [];
@@ -100,17 +113,23 @@ class GroupHealthPlanPersonalDetails extends Component {
     let height = form_data.height || height_options[selectedIndex].value;
     if (form_data.height) {
       height_options.forEach(function (x, index) {
-        if (x.value === parseInt(form_data.height,10)) {
+        if (x.value === parseInt(form_data.height, 10)) {
           return selectedIndex = index;
         }
       });
     } else {
-      form_data.height = height;
+      form_data.height = `${height}`;
     }
 
     form_data.selectedIndex = selectedIndex;
 
-    
+    if (this.state.provider === 'STAR') {
+      let occupation = lead[backend_key].occupation;
+      let occupationIndex = '';
+  
+      occupationIndex = occupation !== null && occupationOptions.findIndex(item => item.name === occupation || item.value === occupation);
+      form_data.occupation = (occupationIndex && occupationIndex !== -1) && occupationOptions[occupationIndex].value;
+    }
 
     this.setState({
       providerData: health_providers[this.state.provider],
@@ -127,7 +146,8 @@ class GroupHealthPlanPersonalDetails extends Component {
       selectedIndex: selectedIndex,
       height: height,
       pan_needed: pan_needed,
-      spouse_relation: spouse_relation
+      spouse_relation: spouse_relation,
+      dobNeeded: dobNeeded
     }, () => {
       ReactTooltip.rebuild()
     })
@@ -155,33 +175,31 @@ class GroupHealthPlanPersonalDetails extends Component {
       name = event.target.name;
     }
 
-    var value = event.target ? event.target.value : '';
+    var value = event.target ? event.target.value : event;
 
     if (name === 'dob' && !dobFormatTest(value)) {
       return;
     }
 
     if (name === 'height') {
+      let index = event;
+      const height = `${this.state.height_options[index].value}`;
       this.setState({
-        selectedIndex: event
+        selectedIndex: index
       }, () => {
-        form_data[name] = this.state.height_options[this.state.selectedIndex].value;
+        form_data[name] = height;
         form_data[name + '_error'] = '';
 
-        this.setState({
-          height: this.state.height_options[this.state.selectedIndex].value
-        })
+        this.setState({ height });
       });
-
-
     } else {
-      form_data[name] = event.target.value;
+      form_data[name] = value;
       form_data[name + '_error'] = '';
     }
 
     this.setState({
       form_data: form_data
-    })
+    });
 
   };
 
@@ -203,6 +221,27 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     let form_data = this.state.form_data;
+    let validation_props = this.state.validation_props;
+    let isChild = form_data.relation.includes('SON') || form_data.relation.includes('DAUGHTER');
+    if (this.state.provider === 'RELIGARE') {
+      if (isChild) {
+        const age = calculateAge(form_data.dob, true);
+        if (this.state.groupHealthPlanData.type_of_plan === 'WF') {
+          if (age.days <= validation_props.dob_child.minDays || age.age >= validation_props.dob_child.max) {
+            form_data.dob_error = `Only children between ${validation_props.dob_child.minDays} days & ${validation_props.dob_child.max} yrs can be included`;
+          }
+        } else {
+          if (age.age < validation_props.dob_child.minAge || age.age >= validation_props.dob_child.max) {
+            form_data.dob_error = `Only children between ${validation_props.dob_child.minAge}  yrs & ${validation_props.dob_child.max} yrs can be included`;
+          }
+        }
+      }
+    }
+
+    if (!isValidDate(form_data.dob)) {
+      form_data.dob_error = 'Please enter valid date';
+    }
+
     for (var i = 0; i < keys_to_check.length; i++) {
       let key_check = keys_to_check[i];
       let first_error = key_check === 'gender' || key_check === 'height' ? 'Please select ' :
@@ -212,47 +251,75 @@ class GroupHealthPlanPersonalDetails extends Component {
       }
     }
 
-    if (this.state.form_data && (this.state.form_data.name || '').split(" ").filter(e => e).length < 2) {
+    if (form_data && (form_data.name || '').split(" ").filter(e => e).length < 2) {
       form_data.name_error = 'Enter valid full name';
     }
 
-    if (this.state.pan_needed && this.state.form_data.pan_number &&
-      !validatePan(this.state.form_data.pan_number)) {
+    if (this.state.pan_needed && form_data.pan_number &&
+      !validatePan(form_data.pan_number)) {
       form_data.pan_number_error = 'Invalid PAN number';
     }
 
-    if((this.state.member_key === 'self' || this.state.member_key === 'applicant') && this.state.form_data.gender) {
-      if(this.state.spouse_relation === 'HUSBAND' && this.state.form_data.gender === 'MALE') {
+    if ((this.state.member_key === 'self' || this.state.member_key === 'applicant') && form_data.gender) {
+      if (this.state.spouse_relation === 'HUSBAND' && form_data.gender === 'MALE') {
         form_data.gender_error = 'Invalid gender';
       }
 
-      if(this.state.spouse_relation === 'WIFE' && this.state.form_data.gender === 'FEMALE') {
+      if (this.state.spouse_relation === 'WIFE' && form_data.gender === 'FEMALE') {
         form_data.gender_error = 'Invalid gender';
       }
     }
 
-    if(this.state.member_key === 'applicant') {
-      let age = calculateAge((this.state.form_data.dob || '').replace(/\\-/g, '/').split('-').join('/'));
+    let { provider } = this.state;
 
-      let ageParent1 = calculateAge((this.state.lead.parent_account1_key.dob || '').replace(/\\-/g, '/').split('-').join('/'));
-      let ageParent2 = calculateAge((this.state.lead.parent_account2_key.dob || '').replace(/\\-/g, '/').split('-').join('/'));
+    if (provider === 'STAR' && (form_data.occupation === null || form_data.occupation === false) && this.state.member_key !== 'applicant') {
+      form_data.occupation_error = 'please select one occupation';
+    }
 
-      if(this.state.form_data.gender === 'MALE' && age < 22) {
-        form_data.dob_error = 'Minimum age is 21 male applicant';
+    let age = calculateAge((form_data.dob || ''));
+
+    if (this.state.dobNeeded) {
+      if (provider === 'RELIGARE') {
+        if (age < validation_props.dob_adult.min && !isChild) {
+          form_data.dob_error = `Minimum age is ${validation_props.dob_adult.min} for adult`;
+        }
       }
 
-      if(this.state.form_data.gender === 'FEMALE' && age < 19) {
-        form_data.dob_error = 'Minimum age is 18 female applicant';
-      }
-
-      if(this.state.lead.account_type === 'parents' &&
-       ( (ageParent1 && age >= ageParent1) || (ageParent2 && age >= ageParent2))) {
-        form_data.dob_error = "Applicant's age should be less than parents'age";
+      if (provider === 'STAR') {
+        if (age > validation_props.dob_adult.max && !isChild) {
+          form_data.dob_error = `Valid age is between ${validation_props.dob_adult.min} to ${validation_props.dob_adult.max} year`;
+        }
       }
     }
 
-    if (this.state.form_data.name &&
-      !validateAlphabets(this.state.form_data.name)) {
+
+    if (this.state.member_key === 'applicant') {
+
+
+      if (provider === 'HDFCERGO') {
+        if (form_data.gender === 'MALE' && age < validation_props.dob_married_male.min) {
+          form_data.dob_error = `Minimum age is ${validation_props.dob_married_male.min} male applicant`;
+        }
+
+        if (form_data.gender === 'FEMALE' && age < validation_props.dob_married_female.min) {
+          form_data.dob_error = `Minimum age is ${validation_props.dob_married_female.min} female applicant`;
+        }
+
+      }
+
+      if (this.state.lead.account_type === 'parents') {
+        let ageParent1 = calculateAge(((this.state.lead.parent_account1_key || {}).dob || ''));
+        let ageParent2 = calculateAge(((this.state.lead.parent_account2_key || {}).dob || ''));
+
+        if ((ageParent1 && age >= ageParent1) || (ageParent2 && age >= ageParent2)) {
+          form_data.dob_error = "Applicant's age should be less than parents'age";
+        }
+      }
+
+    }
+
+    if (form_data.name &&
+      !validateAlphabets(form_data.name)) {
       form_data.name_error = 'Invalid name';
     }
 
@@ -277,45 +344,60 @@ class GroupHealthPlanPersonalDetails extends Component {
       let gender = '';
       if (this.state.member_key !== 'self') {
         gender = 'FEMALE';
-        if (['son', 'son1', 'son2', 'father', 'husband'].indexOf(this.state.member_key) !== -1) {
+        if (['son', 'son1', 'son2','son3','son4', 'father', 'father_in_law', 'husband'].indexOf(this.state.member_key) !== -1) {
           gender = 'MALE';
         }
       }
 
+      let occupationValue = '';
+      if (provider === 'STAR') {
+        let { occupationOptions } = this.state;
+
+        let occupation = form_data.occupation || '';
+        occupationValue = occupation && occupationOptions.find(item => item.name === occupation || item.value === occupation).name;
+      }
+
+
+
       let body = {
         [this.state.backend_key]: {
-          "name": this.state.form_data.name || '',
-          "dob": this.state.form_data.dob || '',
-          "gender": this.state.form_data.gender || gender,
-          "height": this.state.form_data.height || '',
-          "weight": this.state.form_data.weight || ''
+          "name": form_data.name || '',
+          "dob": form_data.dob || '',
+          "gender": form_data.gender || gender,
+          "height": form_data.height || '',
+          "weight": form_data.weight || '',
         }
+      }
+     
+      if (provider === 'STAR') {
+        body[this.state.backend_key].occupation = occupationValue
       }
 
       if (this.state.pan_needed) {
-        body[this.state.backend_key].pan_number = this.state.form_data.pan_number;
+        body[this.state.backend_key].pan_number = form_data.pan_number;
       }
-
 
       this.updateLead(body);
     }
   }
 
-
-  sendEvents(user_action, data={}) {
+  sendEvents(user_action, data = {}) {
     let eventObj = {
       "event_name": 'health_insurance',
-       "properties": {
+      "properties": {
         "user_action": user_action,
-        "product": 'health suraksha',
+        "product": this.state.providerConfig.provider_api,
         "flow": this.state.insured_account_type || '',
         "screen_name": 'personal details',
         'full_name': this.state.form_data.name ? 'yes' : 'no',
-        'dob': this.state.form_data.dob ? 'yes' : 'no',
+        'dob': this.state.form_data.dob,
         'height': this.state.form_data.height ? 'yes' : 'no',
         'weight': this.state.form_data.weight ? 'yes' : 'no',
         'gender': this.state.form_data.gender ? 'yes' : 'no',
+        'member': this.props.member_key,
+        "occupation": this.state.form_data.occupation ? 'yes' : 'no',
         'from_edit': this.props.edit ? 'yes' : 'no',
+        'pan_entered': this.state.form_data.pan_number ? 'yes' : 'no',
         'policy_cannot_be_issued': data.bmi_check ? 'yes' : 'no'
       }
     };
@@ -402,7 +484,7 @@ class GroupHealthPlanPersonalDetails extends Component {
             </div>
           </div>
         </DialogContent>
-      </Dialog >
+      </Dialog>
     );
   }
 
@@ -465,7 +547,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         </div>
         <div className="InputField">
           <Input
-            disabled={this.state.member_key === 'applicant' ? false : true}
+            disabled={!this.state.dobNeeded}
             type="text"
             width="40"
             label="Date of birth (DD/MM/YYYY)"
@@ -515,7 +597,7 @@ class GroupHealthPlanPersonalDetails extends Component {
               className="tooltip-icon"
               style={{ margin: '0 0 0 10px' }}
               // ref={ref => this.fooRef = ref} onClick={() => { ReactTooltip.rebuild(); }}
-              data-tip="As per the IRDA guidelines, PAN is required if premium amount is greater than Rs 1 lac"
+              data-tip={`As per the IRDA guidelines, PAN is required if premium amount is greater than Rs ${this.state.pan_amount}`}
               src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
           </div>
         }
@@ -549,6 +631,20 @@ class GroupHealthPlanPersonalDetails extends Component {
             helperText={this.state.form_data.weight_error}
             value={this.state.form_data.weight || ''}
             onChange={this.handleChange('weight')} />
+        </div>}
+        {this.state.providerConfig.key === 'STAR' && this.state.member_key !== 'applicant' && <div className="InputField">
+          <DropdownWithoutIcon
+            width="40"
+            dataType="AOB"
+            options={this.state.occupationOptions}
+            id="occupation"
+            label="Occupation"
+            name="occupation"
+            error={this.state.form_data.occupation_error ? true : false}
+            helperText={this.state.form_data.occupation_error}
+            value={this.state.form_data.occupation || ''}
+            onChange={this.handleChange('occupation')}
+          />
         </div>}
         <ConfirmDialog parent={this} />
         {this.renderBmiDialog()}

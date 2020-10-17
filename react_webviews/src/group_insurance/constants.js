@@ -1,3 +1,5 @@
+import {isEmpty} from 'utils/validators';
+
 export const maritalOptions = [
   {
     'name': 'Single',
@@ -528,7 +530,7 @@ export const back_button_mapper = {
   '/group-insurance/term/etli/personal-details1': '/group-insurance/term/intro',
   '/group-insurance/term/personal-details-redirect' : '/group-insurance/term/intro',
   '/group-insurance/term/intro' : '/group-insurance',
-  '/group-insurance/group-health/landing' : '/group-insurance/health/landing',
+  '/group-insurance/group-health/entry' : '/group-insurance/health/landing',
   '/group-insurance/health/landing': '/group-insurance'
 };
 
@@ -602,86 +604,86 @@ export const health_providers = {
 }
 
 
-export function ghGetMember(lead) {
+export function ghGetMember(lead, providerConfig) {
   
-  let backend_keys = ['self_account_key', 'spouse_account_key', 'child_account1_key',
-                      'child_account2_key', 'parent_account1_key', 'parent_account2_key'];
+  const backend_keys = [
+    'self_account_key',
+    'spouse_account_key',
+    'parent_account1_key',
+    'parent_account2_key',
+    'parent_inlaw_account1_key',
+    'parent_inlaw_account2_key'
+  ];
+  const { add_members_screen: { son_max, daughter_max }} = providerConfig;
 
-  let member_base = [];
-
-  let allowed_as_per_account = {
+  let backend_child_keys = [];
+  for (let i = 0; i < (son_max + daughter_max); i++) {
+    backend_child_keys.push(`child_account${i+1}_key`);
+  }
+  
+  const allowed_as_per_account = {
     'self': ['self_account_key'],
-    'family': ['spouse_account_key', 'child_account1_key',
-    'child_account2_key'],
-    'selfandfamily': ['self_account_key', 'spouse_account_key', 'child_account1_key',
-    'child_account2_key'],
-    'parents': ['parent_account1_key', 'parent_account2_key']
-  }
+    'family': ['spouse_account_key'].concat(backend_child_keys),
+    'selfandfamily': ['self_account_key', 'spouse_account_key'].concat(backend_child_keys),
+    'parents': ['parent_account1_key', 'parent_account2_key'],
+    'parentsinlaw': ['parent_inlaw_account1_key', 'parent_inlaw_account2_key'],
+  };
+  const allowed_mapper = allowed_as_per_account[lead.account_type];
+  let member_base = [];
+  
+  // Map all remaining keys
+  for (let key of backend_keys) {
+    let obj = lead[key];
 
-
-  let total_son = 0;
-  let total_daughter = 0;
-
-  if(lead.child_account1_key.dob) {
-    if((lead.child_account1_key.relation || '').toUpperCase() === 'SON') {
-      total_son++;
-    } else if((lead.child_account2_key.relation || '').toUpperCase() === 'DAUGHTER') {
-      total_daughter++;
-    }
-  }
-
-  if(lead.child_account2_key.dob) {
-    if((lead.child_account2_key.relation || '').toUpperCase() === 'SON') {
-      total_son++;
-    } else if((lead.child_account2_key.relation || '').toUpperCase() === 'DAUGHTER') {
-      total_daughter++;
-    }
-  }
-
-  for (var i in backend_keys) {
-    let key = backend_keys[i];
-
-    let allowed_mapper = allowed_as_per_account[lead.account_type];
-
-    if(allowed_mapper.indexOf(key) !== -1 &&
-     lead[key] && lead[key].dob) {
-      let obj = lead[key];
-      obj.backend_key = key;
-
-      obj.key = (lead[key].relation || '').toLowerCase();
-
-      if(total_son === 2) {
-
-        if(key === 'child_account1_key') {
-          obj.key = 'son1'
-        }
-
-        if(key === 'child_account2_key') {
-          obj.key = 'son2'
-        }
-        
-      } else if(total_daughter === 2) {
-
-        if(key === 'child_account1_key') {
-          obj.key = 'daughter1'
-        }
-
-        if(key === 'child_account2_key') {
-          obj.key = 'daughter2'
-        }
-      }
-
+    if (allowed_mapper.includes(key) && obj && !isEmpty(obj)) {
+      Object.assign(obj, {
+        backend_key: key,
+        key: (obj.relation || '').toLowerCase(),
+      });
       member_base.push(obj);
     }
   }
 
-  if(lead.account_type === 'parents' || lead.account_type === 'family') {
+  let total_son = 0, total_daughter = 0;
+
+  for (let i = 1; i <= (son_max + daughter_max); i++) {
+    if (!isEmpty(lead[`child_account${i}_key`])) {
+      if ((lead[`child_account${i}_key`].relation || '').toUpperCase() === 'SON') {
+        total_son++;
+      } else if ((lead[`child_account${i}_key`].relation || '').toUpperCase() === 'DAUGHTER') {
+        total_daughter++;
+      }
+    }
+  }
+
+  let daughter_count = 1, son_count = 1;
+  // Map all children keys
+  for (let childKey of backend_child_keys) {
+    let obj = lead[childKey];
+
+    if (allowed_mapper.includes(childKey) && obj && !isEmpty(obj)) {
+      obj.backend_key = childKey;
+      obj.key = (obj.relation || '').toLowerCase();
+
+      if ((obj.relation || '').toUpperCase() === 'SON' && total_son > 1) {
+        obj.key = `son${son_count}`;
+        son_count++;
+      } else if ((obj.relation || '').toUpperCase() === 'DAUGHTER' && total_daughter > 1) {
+        obj.key = `daughter${daughter_count}`;
+        daughter_count++;
+      }
+      member_base.push(obj);
+    }
+  }
+
+  
+  if(['parents', 'parentsinlaw', 'family'].includes(lead.account_type)) {
     let obj = lead['self_account_key'];
     obj.backend_key = 'self_account_key';
     obj.key = 'applicant';
     member_base.push(obj);
   }
-
+  
   return member_base;
 
 }
@@ -694,6 +696,10 @@ export function getCssMapperReport(policy) {
     'init': {
       color: 'yellow',
       disc: 'Policy Pending'
+    },
+    'request_pending': {
+      color: 'yellow',
+      disc: 'Status awaited from'
     },
     'incomplete': {
       color: 'yellow',
@@ -729,27 +735,37 @@ export function getCssMapperReport(policy) {
     }
   }
 
-  if(provider === 'HDFCERGO') {
+  if(['HDFCERGO', 'STAR', 'RELIGARE'].includes(provider)) {
    
     cssMapper.complete.disc = 'Issued on ' + (policy.dt_policy_start || '');
     cssMapper.success.disc = 'Issued on ' + (policy.dt_policy_start || '');
   }
 
 
-  let obj = {}
+  let obj = {};
+  let policy_status = policy.status;
+
   if (policy.key === 'TERM_INSURANCE') {
-    if (policy.status === 'failed') {
+    if (policy_status === 'failed') {
       obj.status = 'rejected';
-    } else if (policy.status === 'success') {
+    } else if (policy_status === 'success') {
       obj.status = 'policy_issued';
     } else {
       obj.status = 'init';
     }
   } else {
-    obj.status = policy.status;
+    obj.status = policy_status;
   }
 
   obj.cssMapper = cssMapper[obj.status] || cssMapper['init'];
+
+  if(policy_status === 'request_pending') {
+    if(provider === 'STAR') {
+      obj.cssMapper.disc += ` Star Health`;
+    } else {
+      obj.cssMapper.disc += ` ${policy.status_title || policy.key}`;
+    }
+  }
 
   return obj;
 }
@@ -758,8 +774,16 @@ export function childeNameMapper(name) {
   let mapper = {
     'son1': '1st Son',
     'son2': '2nd Son',
+    'son3': '3rd Son',
+    'son4': '4th Son',
     'daughter1': '1st Daughter',
-    'daughter2': '2nd Daughter'
+    'daughter2': '2nd Daughter',
+    'daughter3': '3rd Daughter',
+    'daughter4': '4th Daughter',
+    'wife': 'wife',
+    'husband': 'husband',
+    'father_in_law': 'father in law',
+    'mother_in_law': 'mother in law'
   };
 
   return mapper[name] || name;

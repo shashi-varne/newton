@@ -5,7 +5,7 @@ import Container from '../../../common/Container';
 import { getUrlParams } from 'utils/validators';
 // eslint-disable-next-line
 import { nativeCallback } from 'utils/native_callback';
-import { inrFormatDecimal2, storageService, formatDateAmPm, numDifferentiationInr } from 'utils/validators';
+import { inrFormatDecimal2, storageService, numDifferentiationInr } from 'utils/validators';
 import ContactUs from '../../../../common/components/contact_us';
 import { initialize } from '../common_data';
 import Api from 'utils/api';
@@ -16,13 +16,13 @@ const commonMapper = {
   'success': {
     'top_icon': 'ils_covid_success',
     'top_title': 'Payment successful',
-    'mid_title': 'Insurance payment details',
+    'mid_title': 'Premium payment details',
     'button_title': 'CHECK REPORTS'
   },
   'pending': {
     'top_icon': 'ils_covid_pending',
     'top_title': 'Payment pending!',
-    'mid_title': 'Insurance payment details',
+    'mid_title': 'Premium payment details',
     'button_title': 'OK'
   },
   'failed': {
@@ -43,7 +43,9 @@ class GroupHealthPayment extends Component {
       lead: {},
       policy_data: {},
       providerData: {},
-      productName: getConfig().productName
+      productName: getConfig().productName,
+      force_onload_call: true,
+      screen_name: 'payment_screen'
     }
 
     this.initialize = initialize.bind(this);
@@ -56,6 +58,7 @@ class GroupHealthPayment extends Component {
     let { status } = this.state.params;
     let paymentFailed, paymentPending, paymentSuccess = false;
     let get_lead  = false;
+
     if (status === 'success') {
       paymentSuccess = true;
     } else if (status === 'failed') {
@@ -79,8 +82,12 @@ class GroupHealthPayment extends Component {
     }, () => {
       this.initialize();
     })
+   
+  }
 
-    if(!get_lead) {
+  onload = async() => {
+    console.log(this.state);
+    if(!this.state.get_lead) {
       try {
 
         this.setState({
@@ -89,7 +96,7 @@ class GroupHealthPayment extends Component {
   
         let quote_id = storageService().get('ghs_ergo_quote_id');
   
-        const res = await Api.get('/api/ins_service/api/insurance/hdfcergo/get/policy/' + quote_id);
+        const res = await Api.get(`/api/ins_service/api/insurance/${this.state.provider_api}/get/policy/` + quote_id);
   
         var resultData = res.pfwresponse.result;
   
@@ -124,7 +131,7 @@ class GroupHealthPayment extends Component {
       "event_name": 'health_insurance',
        "properties": {
         "user_action": user_action,
-        "product": 'health suraksha',
+        "product": this.state.provider,
         "flow": this.state.insured_account_type || '',
         "screen_name": 'payment',
         'status': this.state.status
@@ -151,7 +158,7 @@ class GroupHealthPayment extends Component {
       })
       
     } else if(this.state.paymentPending) {
-      state  = `/group-insurance/group-health/landing`;
+      state  = `/group-insurance/group-health/${this.state.provider}/landing`;
       this.navigate(state);
     } else {
       state  = `/group-insurance/group-health/${this.state.provider}/reportdetails/${this.state.policy_data.lead_id}`;
@@ -162,8 +169,10 @@ class GroupHealthPayment extends Component {
   }
 
   render() {
+    let {policy_data, screenData, provider} = this.state;
     return (
       <Container
+        provider={this.state.provider}
         showLoader={this.state.show_loader}
         noHeader={this.state.show_loader}
         title={this.state.commonMapper['top_title']}
@@ -186,18 +195,48 @@ class GroupHealthPayment extends Component {
           <div className="main-tile">
 
             <div>
-              {this.state.paymentSuccess &&
+              {this.state.paymentSuccess && provider === 'RELIGARE' &&
+              <div>
+                {policy_data.policy_number && 
                 <p className="top-content">
-                  Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for HDFC ERGO my health
-                           Suraksha {this.state.lead.plan_title} is successful.
-                           {this.state.policy_data.policy_number && <span>Now you have access to 10000+ cashless hospitals.</span>}
+                  Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for {this.state.lead.base_plan_title} {this.state.lead.plan_title} is successful.
+                {policy_data.policy_number && <span>Now you have access to {screenData.total_cities}+ cashless hospitals.</span>}
                 </p>
+                }
+                {!policy_data.policy_number && 
+                <p className="top-content">
+                  You will soon be contacted by {this.state.lead.base_plan_title} team for a medical review before issuing the policy!
+                </p>
+                }
+
+                </div>
+              }
+
+
+            {this.state.paymentSuccess && provider === 'HDFCERGO' &&
+              <div>
+                <p className="top-content">
+                  Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for {this.state.providerData.title}  {this.state.lead.base_plan_title} {this.state.lead.plan_title} is successful.
+                {policy_data.policy_number && <span>Now you have access to {screenData.total_cities}+ cashless hospitals.</span>}
+                </p>
+
+                </div>
+              }
+
+            {this.state.paymentSuccess && provider === 'STAR' &&
+              <div>
+                <p className="top-content">
+                Your application is currently under process, please check 
+                the policy status in 10 minutes from the “Reports section”.
+                </p>
+
+                </div>
               }
 
               {this.state.paymentPending &&
                 <div>
                   <p className="top-content">
-                    Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for HDFC ERGO my health Suraksha {this.state.lead.plan_title} is pending.
+                    Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.lead.base_plan_title}`  : this.state.lead.base_plan_title} {this.state.lead.plan_title} is pending.
                           </p>
                 </div>
               }
@@ -205,11 +244,11 @@ class GroupHealthPayment extends Component {
               {this.state.paymentFailed &&
                 <div>
                   <p className="top-content">
-                    Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for HDFC ERGO my health Suraksha {this.state.lead.plan_title} has failed.
+                    Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.lead.base_plan_title}`  : this.state.lead.base_plan_title} {this.state.lead.plan_title} has failed.
                             </p>
                   <p className="top-content">
                     If amount has been debited it will be refunded back to you in 3-5 business days.
-                            </p>
+                  </p>
                 </div>
               }
 
@@ -237,16 +276,19 @@ class GroupHealthPayment extends Component {
                   </div>
                   <div className="highlight-text2" style={{ color: '#767E86', marginLeft: 7 }}>
                     <div style={{ margin: '5px 0 6px 0' }}>Sum 
-                    assured {numDifferentiationInr(this.state.lead.sum_assured)} for {this.state.lead.tenure} year</div>
-                    {this.state.policy_data.policy_number && 
-                    <div style={{ margin: '5px 0 6px 0' }}>Policy id: {this.state.policy_data.policy_number || '-'}</div>
+                    insured {numDifferentiationInr(this.state.lead.sum_assured)} for {this.state.lead.tenure} year</div>
+                    {policy_data.policy_number && 
+                    <div style={{ margin: '5px 0 6px 0' }}>Policy number: {policy_data.policy_number || '-'}</div>
                     }
-                    {!this.state.policy_data.policy_number && 
-                    <div style={{ margin: '5px 0 6px 0' }}>Transaction no. : {this.state.policy_data.ergo_payment_id || '-'}</div>
+                    {!policy_data.policy_number && this.state.provider === 'HEFCERGO' &&
+                    <div style={{ margin: '5px 0 6px 0' }}>Transaction number. : {policy_data.ergo_payment_id || '-'}</div>
                     }
-                    <div style={{ margin: '5px 0 6px 0' }}>
+                     {!policy_data.policy_number && this.state.provider === 'RELIGARE' &&
+                    <div style={{ margin: '5px 0 6px 0' }}>Propsal number : {policy_data.proposal_number || '-'}</div>
+                    }
+                    {/* <div style={{ margin: '5px 0 6px 0' }}>
                       {formatDateAmPm(this.state.policy_data.transaction_date)}
-                      </div>
+                      </div> */}
                   </div>
                 </div>
               </div>
@@ -262,9 +304,20 @@ class GroupHealthPayment extends Component {
                       Basic premium
                                 </div>
                     <div className="content-points-inside-text">
-                      {inrFormatDecimal2(this.state.lead.premium)}
+                      {inrFormatDecimal2(this.state.lead.base_premium_showable || this.state.lead.premium)}
                     </div>
                   </div>
+
+                  {this.state.lead.add_ons_amount && 
+                    <div className="content-points">
+                      <div className="content-points-inside-text">
+                       Add ons amount
+                      </div>
+                      <div className="content-points-inside-text">
+                        {inrFormatDecimal2(this.state.lead.add_ons_amount)}
+                      </div>
+                    </div>
+                  }
 
                   <div className="content-points">
                     <div className="content-points-inside-text">
