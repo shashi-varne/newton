@@ -96,7 +96,7 @@ if (urlParams.payment_data) {
 window.PlutusInitState = {};
 
 const pushEvent = (eventObj) => {
-  // todo
+  nativeCallback({ events: eventObj });
 };
 
 const UpiModal = (props) => {
