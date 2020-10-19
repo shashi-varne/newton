@@ -8,7 +8,6 @@ import { FormControl } from "material-ui/Form";
 import { numberShouldStartWith, validateNumber } from "utils/validators";
 import Api from "utils/api";
 import toast from "../../common/ui/Toast";
-import { parse } from "qs";
 
 class WnatsappEditNumber extends Component {
   constructor(props) {
