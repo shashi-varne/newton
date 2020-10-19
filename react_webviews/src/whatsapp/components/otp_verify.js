@@ -122,7 +122,9 @@ class WhatsappOtpVerification extends Component {
           show_loader: false,
         });
 
-        this.navigate("otp-success");
+        this.navigate("otp-success", {
+          mobile: otpBaseData.mobile_no
+        });
       } else {
         this.setState({
           show_loader: false,

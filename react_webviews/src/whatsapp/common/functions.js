@@ -50,6 +50,38 @@ export async function summary() {
   }
 }
 
+export async function getContact(data) {
+
+  try {
+    this.setState({
+      show_loader: true
+    });
+
+    const res = await Api.post(`api/communication/contact/get?user_id=${data.user_id}&contact_value=${data.mobile}`);
+
+    
+    if (res.pfwresponse.status_code === 200) {
+      const resultData = res.pfwresponse.result.contact_details;
+      const { id } = resultData;
+
+      return id;
+    } else {
+      
+      const resultData = res.pfwresponse.result;
+      this.setState({
+        show_loader: false
+      });
+      toast(resultData.error || resultData.message || "Something went wrong");
+    }
+
+  } catch (err) {
+    this.setState({
+      show_loader: false
+    });
+    toast("Something went wrong");
+  }
+}
+
 export function navigate(pathname, data = {}) {
   this.props.history.push({
     pathname: pathname,

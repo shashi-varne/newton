@@ -207,17 +207,17 @@ class FormOtp extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
-        title=""
+        title="OTP verification"
         buttonTitle="CONTINUE"
         handleClick={() => this.handleClick()}
       >
         <div className="default-otp">
 
-          <div className="title">
+          {/* <div className="title">
            OTP Verification
-                    </div>
+                    </div> */}
          {this.state.from_state !== 'loan-summary' &&
-          <div className="content">
+          <div className="content" style={{textAlign:"left"}}>
 
             OTP has been sent by DMI Finance Pvt Ltd to your mobile number 
               {this.state.mobile_no &&
