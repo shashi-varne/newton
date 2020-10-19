@@ -8,6 +8,23 @@ $dark_indigo: #0a1d32;
   }
 }
 
+#CAMS-loader {
+  margin-top: 30px;
+  font-size: 13px;
+  line-height: 15px;
+  min-width: 250px;
+
+  #CAMS-loader-t1 {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  #CAMS-loader-t2 {
+    letter-spacing: 1px;
+    color: #8D879B;
+  }
+}
+
 #info-box {
   padding: 16px 20px;
   display: flex;
@@ -74,10 +91,6 @@ $dark_indigo: #0a1d32;
   border: 1px dashed #e3e3e3;
 }
 
-.info-box-email-expand {
-  background: white !important;
-}
-
 .info-box-body-text {
   font-size: 15px;
   font-weight: bold;
@@ -105,7 +118,6 @@ $dark_indigo: #0a1d32;
     line-height: 32px;
   }
 }
-
 
 #btm_mail_check_img {
   position: absolute;
@@ -305,6 +317,54 @@ $dark_indigo: #0a1d32;
   font-size: 13px;
   font-weight: bold;
   border: 1px solid #ececec;
+}
+
+
+.cas-req-step {
+  margin-bottom: 30px;
+
+  .cas-req-step-title {
+    color: #767E86;
+    font-size: 14px;
+    font-style: normal;
+    line-height: 1.7;
+    letter-spacing: 0px;
+    text-align: left;
+    margin-bottom: 10px;
+
+    span.highlighted-text {
+      color: var(--primary);
+      font-weight: bold;
+    }
+  }
+
+  img {
+    width: 100%;
+  }
+}
+
+#cams-req-footer {
+  padding: 20px;
+  background: var(--highlight);
+  font-size: 13px;
+  line-height: 21px;
+  border-radius: 6px;
+  word-break: break-word;
+  color:#767E86;
+  margin-bottom: 10px;
+
+  span {
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  p:nth-child(1) {
+    margin-top: 0;
+  }
+
+  p:nth-last-child(1) {
+    margin-bottom: 0;
+  }
 }
 
 @media only screen and (max-width: 332px) {
