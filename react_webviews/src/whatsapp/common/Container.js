@@ -5,28 +5,15 @@ import Header from "../../common/components/Header";
 import { didmount } from "../../common/components/container_functions";
 
 import Footer from "./footer";
-// import Button from "material-ui/Button";
-// import Dialog, {
-//   DialogActions,
-//   DialogTitle,
-//   DialogContent,
-//   DialogContentText,
-// } from "material-ui/Dialog";
 
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listner";
 import { getConfig } from "utils/functions";
-// import { checkStringInString } from "utils/validators";
-// import { goBackMap } from "../constants";
 
 class Container extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      openDialog: false,
-      openPopup: false,
-      popupText: "",
-      callbackType: "",
       inPageTitle: true,
       force_hide_inpage_title: this.props.hidePageTitle,
       new_header: true,
@@ -58,11 +45,33 @@ class Container extends Component {
     this.historyGoBack({ fromHeader: true });
   };
 
-  handleClose = () => {
-    this.setState({
-      openPopup: false,
-    });
+  historyGoBack = (backData) => {
+    if (this.getEvents("back")) {
+      nativeCallback({ events: this.getEvents("back") });
+    }
+
+    if (this.props.headerData && this.props.headerData.goBack) {
+      this.props.headerData.goBack();
+      return;
+    }
+
+    let pathname = this.props.history.location.pathname;
+
+    switch (pathname) {
+      case "/whatsapp/whatsapp-confirm":
+        nativeCallback({ action: "native_back" });
+        break;
+      case "/whatsapp/whatsapp-edit":
+        this.navigate("/whatsapp/whatsapp-confirm");
+        break;
+      default:
+        this.props.history.goBack();
+    }
   };
+
+  headerGoBack = () => {
+    this.historyGoBack({fromHeader: true});
+  }
 
   render() {
     let steps = [];
@@ -152,8 +161,6 @@ class Container extends Component {
             />
           )}
           {/* No Internet */}
-          {this.renderDialog()}
-          {this.renderPopup()}
         </div>
       );
     }

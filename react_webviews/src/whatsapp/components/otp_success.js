@@ -2,14 +2,12 @@ import React, { Component } from "react";
 import Container from "../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../common/functions";
-import { getConfig } from "utils/functions";
 
 class WhatsappOtpSuccess extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
-      productName: getConfig().productName,
     };
 
     this.initialize = initialize.bind(this);
@@ -35,6 +33,11 @@ class WhatsappOtpSuccess extends Component {
     }
   }
 
+  handleClick = () => {
+    this.sendEvents('next')
+    nativeCallback({ action: "native_back" });
+  }
+
   render() {
     return (
       <Container
@@ -44,11 +47,19 @@ class WhatsappOtpSuccess extends Component {
         handleClick={this.handleClick}
         buttonTitle="OK"
       >
-        <div>WhatsApp linked!</div>
-        <div>
-          Congratulations! You will now recieve fisdom’s notifications & updates
-          on Whatsapp. To stop recieving updates, go to profile & disable.
+        <div className="otp-success center">
+          <img
+            src={require(`assets/${this.state.productName}/whatsapp.svg`)}
+            alt=""
+          />
+
+          <div className="head">WhatsApp linked!</div>
+          <div className="sub-head">
+            Congratulations! You will now recieve {this.state.productName}’s notifications & updates
+            on Whatsapp. To stop recieving updates, go to profile & disable.
+          </div>
         </div>
+        
       </Container>
     );
   }

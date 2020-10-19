@@ -1,17 +1,53 @@
 // import { storageService } from "utils/validators";
 import { getConfig } from "utils/functions";
-// import Api from "utils/api";
-// import toast from "../../common/ui/Toast";
+import Api from "utils/api";
+import toast from "../../common/ui/Toast";
 import { nativeCallback } from "utils/native_callback";
 
 export async function initialize() {
-  this.navigate = navigate.bind(this);
-
-  nativeCallback({ action: "take_control_rest" });
 
   this.setState({
     productName: getConfig().productName,
   });
+
+  this.navigate = navigate.bind(this);
+
+  nativeCallback({ action: "take_control_rest" });
+}
+
+export async function summary() {
+
+  try {
+    this.setState({
+      show_loader: true
+    });
+
+    let body = {
+      user: ["user"]
+    }
+    const res = await Api.post(`/api/user/account/summary`, body);
+
+    if (res.pfwresponse.status_code === 200) {
+      const resultData = res.pfwresponse.result.data.user.user.data;
+      const { mobile, user_id, verified } = resultData;
+      this.setState({
+        show_loader: false,
+      });
+
+      this.setState({
+        productName: getConfig().productName,
+        mobile: mobile.slice(3),
+        user_id: user_id, 
+        verified: verified
+      });
+    }
+
+  } catch (err) {
+    this.setState({
+      show_loader: false
+    });
+    toast("Something went wrong");
+  }
 }
 
 export function navigate(pathname, data = {}) {

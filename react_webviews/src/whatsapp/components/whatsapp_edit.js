@@ -5,9 +5,10 @@ import { initialize } from "../common/functions";
 import { getConfig } from "utils/functions";
 import Input from "../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
-import { numberShouldStartWith, validateNumber } from 'utils/validators';
-import Api from 'utils/api';
-import { toast } from "react-toastify";
+import { numberShouldStartWith, validateNumber } from "utils/validators";
+import Api from "utils/api";
+import toast from "../../common/ui/Toast";
+import { parse } from "qs";
 
 class WnatsappEditNumber extends Component {
   constructor(props) {
@@ -22,6 +23,16 @@ class WnatsappEditNumber extends Component {
 
   componentWillMount() {
     this.initialize();
+
+    let { params } = this.props.location;
+    if (!params) {
+      params = {};
+    }
+
+    let mobile = params.mobile || "";
+    this.setState({
+      mobile_no: mobile,
+    });
   }
 
   sendEvents(user_action) {
@@ -40,57 +51,77 @@ class WnatsappEditNumber extends Component {
     }
   }
 
-  handleChange = name => event => {
+  handleChange = (name) => (event) => {
     let value = event.target.value;
-    
+    let mobile = value.slice(4);
+
+    if (mobile && !validateNumber(mobile)) {
+      return;
+    }
+
+    if (value.length > 14) {
+      return;
+    }
+
     this.setState({
-      mobile_no: value,
-      mobile_no_error: ''
-    })
-  }
+      mobile_no: mobile,
+      mobile_no_error: "",
+    });
+  };
 
   handleClick = async () => {
-    this.sendEvents('next');
+    this.sendEvents("next");
     let canProceed = true;
     let mobile = this.state.mobile_no;
 
-    if (mobile.length !== 10 || !validateNumber(mobile) ||
-      !numberShouldStartWith(mobile)) {
+    if (
+      mobile.length !== 10 ||
+      !validateNumber(mobile) ||
+      !numberShouldStartWith(mobile)
+    ) {
       canProceed = false;
       this.setState({
-        mobile_no_error: 'Please enter valid mobile no.'
-      })
+        mobile_no_error: "Please enter valid mobile no.",
+      });
     }
 
     if (canProceed) {
       let body = {
-        mobile: mobile
-      }
+        mobile: mobile,
+      };
       try {
-        // let res = await Api.post('/api/communication/send/otp', body);
+        this.setState({
+          show_loader: true,
+        });
 
-        // var resultData = res.pfwresponse.result;
+        let res = await Api.post("/api/communication/send/otp", body);
 
-        // if (res.pfwresponse.status_code === 200 && !resultData.error) {
-        //   console.log(resultData)
-        // }
-        let otp_id = 36;
-        this.navigate('otp-verify', {
-          params: {
-            otp_id: otp_id,
-            mobile: mobile
-          }
-        })
+        var resultData = res.pfwresponse.result;
+
+        if (res.pfwresponse.status_code === 200 && !resultData.error) {
+          let otp_id = resultData.otp_id || "";
+          this.navigate("otp-verify", {
+            params: {
+              otp_id: otp_id,
+              mobile: mobile,
+            },
+          });
+          toast("An OTP send to your mobile number");
+        } else {
+          this.setState({
+            show_loader: false,
+          });
+          toast(resultData.error || resultData.message || "Something went wrong");
+        }
 
       } catch (err) {
-        console.log(err)
         this.setState({
-          show_loader: false
+          show_loader: false,
         });
-        toast('Something went wrong');
+        toast("Something went wrong");
       }
     }
-  }
+  };
 
   render() {
     return (
@@ -99,32 +130,34 @@ class WnatsappEditNumber extends Component {
         title="WhatsApp mobile number"
         events={this.sendEvents("just_set_events")}
         handleClick={this.handleClick}
+        disable={this.state.mobile_no.length !== 10}
         buttonTitle="CONTINUE"
       >
-        <div
-          style={{ fontSize: "13px", color: "#8D879B", marginBottom: "20px" }}
-        >
-          Confirm your WhatsApp mobile number to get the latest updates about
-          your account
-        </div>
-
-        <FormControl fullWidth>
-          <div className="InputField">
-            <Input
-              error={!!this.state.mobile_no_error}
-              helperText={this.state.mobile_no_error}
-              type="number"
-              width="40"
-              label="Enter mobile number"
-              class="Mobile"
-              maxLength={10}
-              id="number"
-              name="mobile_no"
-              value={this.state.mobile_no || ""}
-              onChange={this.handleChange("mobile_no")}
-            />
+        <div className="whatsapp-edit-number">
+          <div className="whatsapp-content">
+            Confirm your WhatsApp mobile number to get the latest updates about
+            your account
           </div>
-        </FormControl>
+
+          <FormControl fullWidth>
+            <div className="InputField">
+              <Input
+                error={!!this.state.mobile_no_error}
+                helperText={this.state.mobile_no_error}
+                type="text"
+                width="40"
+                label="Enter mobile number"
+                class="Mobile"
+                maxLength={14}
+                id="number"
+                name="mobile_no"
+                value={"+91 " + this.state.mobile_no || ""}
+                onChange={this.handleChange("mobile_no")}
+                inputMode="numeric"
+              />
+            </div>
+          </FormControl>
+        </div>
       </Container>
     );
   }

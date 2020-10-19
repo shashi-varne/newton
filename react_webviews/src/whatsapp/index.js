@@ -12,7 +12,7 @@ import NotFound from "../common/components/NotFound";
 import WhastappConfirmNumber from "./components/whatsapp_confirm";
 import WhatsappEdit from "./components/whatsapp_edit";
 import WhatsappOtpVerification from "./components/otp_verify";
-import OtpSuccess from "./components/otp_success";
+import WhatsappOtpSuccess from "./components/otp_success";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -53,8 +53,7 @@ const Whatsapp = (props) => {
             <Route path={`${url}/whatsapp-confirm`} component={WhastappConfirmNumber} />
             <Route path={`${url}/whatsapp-edit`} component={WhatsappEdit} />
             <Route path={`${url}/otp-verify`} component={WhatsappOtpVerification} />
-            <Route path={`${url}/otp-success`} component={OtpSuccess} />
-
+            <Route path={`${url}/otp-success`} component={WhatsappOtpSuccess} />
             <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>
