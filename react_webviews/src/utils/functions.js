@@ -428,7 +428,7 @@ function getPartnerConfig(partner_code) {
   let config_to_return = baseConfig[productType];
 
   if (isStaging) {
-    config_to_return.webAppUrl = 'https://sdk-dot-plutus-web.appspot.com/#!/';
+    config_to_return.webAppUrl = 'https://payment-dot-plutus-web.appspot.com/#!/';
     // config_to_return.webAppUrl = 'http://localhost:3001/#!/';
   }
 
@@ -559,6 +559,8 @@ export const getConfig = () => {
     project = 'w-report';
   } else if (main_pathname.indexOf('kyc-esign') >= 0) {
     project = 'kyc-esign';
+  } else if (main_pathname.indexOf('pg') >= 0) {
+    project = 'pg';
   }
 
   
@@ -567,10 +569,6 @@ export const getConfig = () => {
   const insurance_v2 = generic_callback === "true" ? true : search.indexOf("insurance_v2") >= 0;
 
   let returnConfig = getPartnerConfig(partner_code);
-
-  if(project === 'w-report') {
-      base_url = 'https://my.fisdom.com';
-  }
 
   let searchParams = `?base_url=${base_url}`;
   let searchParamsMustAppend = `?base_url=${base_url}`;
