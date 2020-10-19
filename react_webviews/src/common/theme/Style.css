@@ -121,7 +121,6 @@ body[data-device="web"] #bottom-popup .MuiDialog-paper {
   padding: 20px 20px;
   background-color: #fff;
   overflow-y: scroll;
-  height: 74vh;
   padding-bottom: 56px !important;
 }
 .Container .container-padding {

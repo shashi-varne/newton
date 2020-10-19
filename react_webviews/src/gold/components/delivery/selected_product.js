@@ -247,7 +247,7 @@ class DeliverySelectedProduct extends Component {
                 });
               }}
             >
-              {this.state.product.media.images.map(this.renderOfferImages)}
+              {(this.state.product.media.images || []).map(this.renderOfferImages)}
             </Carousel>
           </div>
 
