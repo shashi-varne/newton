@@ -37,14 +37,14 @@ class WhatsappOtpVerification extends Component {
 
     let { params } = this.props.location;
 
-    // if (!params) {
-    //   this.props.history.goBack();
-    //   return;
-    // }
-
     if (!params) {
-      params = {};
+      this.props.history.goBack();
+      return;
     }
+
+    // if (!params) {
+    //   params = {};
+    // }
 
     let otpBaseData = {
       otp_id: params.otp_id || "",
