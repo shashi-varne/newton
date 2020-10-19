@@ -50,7 +50,7 @@ class WhastappConfirmNumber extends Component {
     if (this.state.verified) {
       this.navigate("otp-success");
     } else {
-      this.navigate("otp-verify", {
+      this.navigate("whatsapp-edit", {
         params: {
           mobile: this.state.mobile,
         },
