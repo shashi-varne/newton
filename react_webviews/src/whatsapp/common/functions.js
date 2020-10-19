@@ -57,16 +57,21 @@ export async function getContact(data) {
       show_loader: true
     });
 
-    const res = await Api.post(`api/communication/contact/get?user_id=${data.user_id}&contact_value=${data.mobile}`);
+    const res = await Api.get(`api/communication/contact/get?user_id=${data.user_id}&contact_value=${data.mobile}`);
 
     
     if (res.pfwresponse.status_code === 200) {
       const resultData = res.pfwresponse.result.contact_details;
       const { id } = resultData;
 
+      this.setState({
+        show_loader: false,
+        // contact_id: id,
+      })
+
       return id;
     } else {
-      
+
       const resultData = res.pfwresponse.result;
       this.setState({
         show_loader: false

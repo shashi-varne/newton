@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import Container from "../common/Container";
 import { nativeCallback } from "utils/native_callback";
-import { initialize } from "../common/functions";
+import { initialize, getContact, summary } from "../common/functions";
+import Api from "utils/api";
+import toast from "../../common/ui/Toast";
 
 class WhatsappOtpSuccess extends Component {
   constructor(props) {
@@ -11,10 +13,22 @@ class WhatsappOtpSuccess extends Component {
     };
 
     this.initialize = initialize.bind(this);
+    this.summary = summary.bind(this);
+    this.getContact = getContact.bind(this);
   }
 
   componentWillMount() {
     this.initialize();
+    this.summary();
+
+    let { params } = this.props.location;
+    if (!params) {
+      params = {};
+    }
+
+    this.setState({
+      mobile_no: params.mobile,
+    });
   }
 
   sendEvents(user_action) {
@@ -33,10 +47,53 @@ class WhatsappOtpSuccess extends Component {
     }
   }
 
-  handleClick = () => {
-    this.sendEvents('next')
-    nativeCallback({ action: "native_back" });
-  }
+  handleClick = async () => {
+    this.sendEvents("next");
+
+    let id = await this.getContact({
+      mobile: this.state.mobile_no,
+      user_id: this.state.user_id,
+    });
+
+    if (id) {
+      let body = {
+        contact_id: id,
+        consent: true,
+        communication_type: "whatsapp"
+      }
+      
+      try {
+        this.setState({
+          show_loader: true,
+        });
+        const res = await Api.post(
+          `/api/communication/contact/consent?user_id=${this.state.user_id}`,
+          body
+        );
+        let resultData = res.pfwresponse.result || {};
+
+        if (res.pfwresponse.status_code === 200 && !resultData.error) {
+          this.setState({
+            show_loader: true,
+          });
+          nativeCallback({ action: "native_back" });
+        } else {
+
+          this.setState({
+            show_loader: false,
+          });
+          toast(resultData.error || resultData.message || "Something went wrong");
+        }
+        
+      } catch (err) {
+        this.setState({
+          show_loader: false,
+          // openDialog: true,
+        });
+        toast("Something went wrong");
+      }
+    }
+  };
 
   render() {
     return (
@@ -55,11 +112,11 @@ class WhatsappOtpSuccess extends Component {
 
           <div className="head">WhatsApp linked!</div>
           <div className="sub-head">
-            Congratulations! You will now recieve {this.state.productName}’s notifications & updates
-            on Whatsapp. To stop recieving updates, go to profile & disable.
+            Congratulations! You will now recieve {this.state.productName}’s
+            notifications & updates on Whatsapp. To stop recieving updates, go
+            to profile & disable.
           </div>
         </div>
-        
       </Container>
     );
   }

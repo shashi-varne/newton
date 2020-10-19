@@ -37,7 +37,7 @@ class WhastappConfirmNumber extends Component {
 
   handleEdit = () => {
     this.sendEvents("edit")
-    this.navigate("whatsapp-edit", {
+    this.navigate("edit-number", {
       params: {
         mobile: this.state.mobile,
       },
@@ -48,7 +48,11 @@ class WhastappConfirmNumber extends Component {
     this.sendEvents("next")
 
     if (this.state.verified) {
-      this.navigate("otp-success");
+      this.navigate("otp-success", {
+        params: {
+          mobile: this.state.mobile,
+        },
+      });
     } else {
       this.navigate("whatsapp-edit", {
         params: {
