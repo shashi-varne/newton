@@ -132,25 +132,28 @@ class GroupHealthPlanSelectSumAssured extends Component {
     render() {
 
         return (
-            <Container
-                events={this.sendEvents('just_set_events')}
-                showLoader={this.state.show_loader}
-                title="Select sum insured"
-                buttonTitle="CONTINUE"
-                withProvider={true}
-                buttonData={this.state.bottomButtonData}
-                handleClick={() => this.handleClick()}
-            >
-                <div className="common-top-page-subtitle flex-between-center">
-                    Claim can be made upto the selected amount
-                  <GenericTooltip  productName={ getConfig().productName} content="In the last 10 years, the average cost per hospitalisation for urban patients has increased by about 176%. Hence, we recommend to have adequate coverage to manage health expenses"/>
-                </div>
-                <div className="group-health-plan-select-sum-assured">
-                    <div className="generic-choose-input">
-                        {this.state.premium_data.map(this.renderPlans)}
-                    </div>
-                </div>
-            </Container>
+          <Container
+            events={this.sendEvents("just_set_events")}
+            showLoader={this.state.show_loader}
+            title="Select sum insured"
+            buttonTitle="CONTINUE"
+            withProvider={true}
+            buttonData={this.state.bottomButtonData}
+            handleClick={() => this.handleClick()}
+          >
+            <div className="common-top-page-subtitle flex-between-center">
+              Claim can be made upto the selected amount
+              <GenericTooltip
+                productName={getConfig().productName}
+                content="In the last 10 years, the average cost per hospitalisation for urban patients has increased by about 176%. Hence, we recommend to have adequate coverage to manage health expenses"
+              />
+            </div>
+            <div className="group-health-plan-select-sum-assured">
+              <div className="generic-choose-input">
+                {this.state.premium_data.map(this.renderPlans)}
+              </div>
+            </div>
+          </Container>
         );
     }
 }
