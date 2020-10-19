@@ -17,6 +17,16 @@ class WhastappConfirmNumber extends Component {
   componentWillMount() {
     this.initialize();
     this.summary();
+
+    let { params } = this.props.location;
+
+    if (!params) {
+      params = {};
+    }
+
+    this.setState({
+      params_mobile: params.mobile || ""
+    })
   }
 
   sendEvents(user_action) {
@@ -50,13 +60,13 @@ class WhastappConfirmNumber extends Component {
     if (this.state.verified) {
       this.navigate("otp-success", {
         params: {
-          mobile: this.state.mobile,
+          mobile: this.state.params_mobile || this.state.mobile,
         },
       });
     } else {
       this.navigate("whatsapp-edit", {
         params: {
-          mobile: this.state.mobile,
+          mobile: this.state.params_mobile || this.state.mobile,
         },
       });
     }
@@ -64,7 +74,8 @@ class WhastappConfirmNumber extends Component {
   }
 
   render() {
-    let { show_loader, mobile } = this.state;
+    let { show_loader } = this.state;
+    let mobile = this.state.params_mobile || this.state.mobile || '';
 
     let ui_mobile;
 

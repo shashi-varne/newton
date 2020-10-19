@@ -103,6 +103,7 @@ class WhatsappOtpSuccess extends Component {
         events={this.sendEvents("just_set_events")}
         handleClick={this.handleClick}
         buttonTitle="OK"
+        mobile_no={this.state.mobile_no}
       >
         <div className="otp-success center">
           <img

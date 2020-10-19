@@ -58,11 +58,16 @@ class Container extends Component {
     let pathname = this.props.history.location.pathname;
 
     switch (pathname) {
-      case "/whatsapp/whatsapp-confirm":
+      case "/whatsapp/confirm-number":
         nativeCallback({ action: "native_back" });
         break;
-      case "/whatsapp/whatsapp-edit":
-        this.navigate("/whatsapp/whatsapp-confirm");
+      case "/whatsapp/edit-number":
+        this.navigate("/whatsapp/confirm-number");
+        break;
+      case "/whatsapp/otp-success":
+        this.navigate("/whatsapp/confirm-number", {
+          mobile: this.props.mobile_no
+        });
         break;
       default:
         this.props.history.goBack();
