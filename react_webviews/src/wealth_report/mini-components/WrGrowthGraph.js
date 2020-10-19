@@ -110,7 +110,7 @@ const WrLineTooltip = ({ slice }) => {
           <div className="wr-ggl-item" key={idx}>
             <div className="wr-ggli-color-bubble" style={{ background: point.color }}></div>
             <span className="wr-ggli-label">{label.split('_')[0]}:</span>
-            &nbsp;&nbsp;<span className="wr-ggli-value">{formatAmountInr(value)}</span>
+            &nbsp;&nbsp;<span className="wr-ggli-value">{value ? formatAmountInr(value) : '₹0'}</span>
           </div>
         );
       })}
