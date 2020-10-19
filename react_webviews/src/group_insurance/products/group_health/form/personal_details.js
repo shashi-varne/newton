@@ -166,6 +166,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
   handleChange = name => event => {
 
+    
     var input = document.getElementById('dob');
     input.onkeyup = formatDate;
 
@@ -177,6 +178,11 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     var value = event.target ? event.target.value : event;
 
+    var specialCharacterAndNumberformat =/[$&+,:;=?@#|'<>.^*()%!"-\d]/g;
+    if(specialCharacterAndNumberformat.test(value) && name !== 'pan_number'){
+     return;
+    }
+    
     if (name === 'dob' && !dobFormatTest(value)) {
       return;
     }
@@ -538,6 +544,7 @@ class GroupHealthPlanPersonalDetails extends Component {
             width="40"
             label="Full name"
             class="Name"
+            maxLength="50"
             id="name"
             name="name"
             error={(this.state.form_data.name_error) ? true : false}

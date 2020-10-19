@@ -147,6 +147,10 @@ class GroupHealthPlanLifestyleDetail extends Component {
     let { value, id } = event.target;
     let { member_base } = this.state;
 
+    var specialCharacterFormat =/[$&+,:;=?@#|'<>.^*()%!"-]/g;
+    if(specialCharacterFormat.test(value)){
+      return;
+    }
 
     if (id === "answer_description") {
       member_base[index].life_style_question.answer_description = value;

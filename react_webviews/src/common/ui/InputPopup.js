@@ -37,6 +37,11 @@ class InputPopupClass extends Component {
         }  
         var value = event.target ? event.target.value : event;
 
+        var specialCharacterFormat =/[$&+,:;=?@#|'<>.^*()%!"-]/g;
+        if(specialCharacterFormat.test(value)){
+            return;
+        }
+    
         if(this.props.sinceWhenInput && name === 'startDateModal') {
     
             if (!dobFormatTest(value)) {

@@ -212,6 +212,7 @@ class GroupHealthPlanContactDetails extends Component {
                             width="40"
                             label="Email id"
                             class="Email"
+                            maxLength="55"
                             id="email"
                             name="email"
                             value={this.state.form_data.email || ''}

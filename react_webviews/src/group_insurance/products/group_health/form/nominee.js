@@ -88,6 +88,11 @@ class GroupHealthPlanNomineeDetails extends Component {
             name = event.target.name;
         }
         var value = event.target ? event.target.value : event;
+
+        var specialCharacterAndNumberformat =/[$&+,:;=?@#|'<>.^*()%!"-\d]/g;
+        if(specialCharacterAndNumberformat.test(value)){
+            return;
+        }
         var form_data = this.state.form_data || {};
 
         form_data[name] = value;
