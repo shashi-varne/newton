@@ -69,10 +69,10 @@ class ConfirmDialogClass extends Component {
                                 buttonData={confirmDialogData.buttonData}
                             />
                         </div>
-
+                       <div style={{ marginRight: '15px'}}>  
                         <div className="content-top flex-between" style={{ margin: '0 0 20px 0' }}>
                             <div className='ct-left'>
-                                <span style={{ fontWeight: 600 }}>Sum insured:</span> {numDifferentiationInr(confirmDialogData.sum_assured)}
+                                <span style={{ fontWeight: 600 }}>Sum assured:</span> {numDifferentiationInr(confirmDialogData.sum_assured)}
                             </div>
                             <div className='ct-right'>
                                 <span style={{ fontWeight: 600 }}>Cover period:</span> {confirmDialogData.tenure} {confirmDialogData.tenure>1?'years':'year'}
@@ -92,6 +92,8 @@ class ConfirmDialogClass extends Component {
                         </div>
 
                         <div className="hr"></div>
+
+                         </div>                     
                     </div>
                 </DialogContent>
             </Dialog >

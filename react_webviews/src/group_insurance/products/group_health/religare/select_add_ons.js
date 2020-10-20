@@ -12,6 +12,7 @@ import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
 import ReactTooltip from "react-tooltip";
 import { compact } from 'lodash';
+import GenericTooltip from '../../../../common/ui/GenericTooltip'
 
 class GroupHealthPlanAddOns extends Component {
 
@@ -219,11 +220,7 @@ class GroupHealthPlanAddOns extends Component {
                                         <div id="add_ons_bottom_text">{item.bottom_text}</div>
                                     </div>
                                 </div>
-                                <img
-                                    id={index}
-                                    className="tooltip-icon"
-                                    data-tip={item.tooltip_content}
-                                    src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
+                          <GenericTooltip content={item.tooltip_content} productName={getConfig().productName} />
                             </span>
                             {item.checked && item.options.length !== 0 && <DropdownInModal
                                 parent={this}

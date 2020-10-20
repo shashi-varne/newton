@@ -11,6 +11,7 @@ import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import toast from '../../../../common/ui/Toast';
 import { initialize } from '../common_data';
 import ReactTooltip from "react-tooltip";
+import GenericTooltip from '../../../../common/ui/GenericTooltip'
 
 const other_adult_member_options = [
     {
@@ -389,144 +390,158 @@ class GroupHealthPlanAddMembers extends Component {
     render() {
 
         return (
-            <Container
-                events={this.sendEvents('just_set_events')}
-                showLoader={this.state.show_loader}
-                title={this.state.header_title}
-                fullWidthButton={true}
-                buttonTitle="CONTINUE"
-                onlyButton={true}
-                handleClick={() => this.handleClick()}
-            >
+          <Container
+            events={this.sendEvents("just_set_events")}
+            showLoader={this.state.show_loader}
+            title={this.state.header_title}
+            fullWidthButton={true}
+            buttonTitle="CONTINUE"
+            onlyButton={true}
+            handleClick={() => this.handleClick()}
+          >
+            {["selfandfamily"].indexOf(this.state.account_type) !== -1 && (
+              <div className="InputField">
+                <RadioWithoutIcon
+                  width="40"
+                  label="Policy already includes"
+                  class="Gender:"
+                  options={self_options}
+                  id="self_member"
+                  name="self_member"
+                  disabledWithValue={true}
+                  error={this.state.self_member_error ? true : false}
+                  helperText={this.state.self_member_error}
+                  value={this.state.self_member || ""}
+                  onChange={() => {}}
+                />
+              </div>
+            )}
 
-                {['selfandfamily'].indexOf(this.state.account_type) !== -1 &&
-                    <div className="InputField">
-                        <RadioWithoutIcon
-                            width="40"
-                            label="Policy already includes"
-                            class="Gender:"
-                            options={self_options}
-                            id="self_member"
-                            name="self_member"
-                            disabledWithValue={true}
-                            error={(this.state.self_member_error) ? true : false}
-                            helperText={this.state.self_member_error}
-                            value={this.state.self_member || ''}
-                            onChange={() => { }}
-                        />
-                    </div>
-                }
+            {["selfandfamily"].indexOf(this.state.account_type) !== -1 && (
+              <div className="InputField">
+                <RadioWithoutIcon
+                  width="40"
+                  label="Gender"
+                  class="Gender:"
+                  options={genderOptions}
+                  id="self_gender"
+                  name="self_gender"
+                  error={this.state.self_gender_error ? true : false}
+                  helperText={this.state.self_gender_error}
+                  value={this.state.self_gender || ""}
+                  onChange={this.handleChangeRadio("self_gender")}
+                />
+              </div>
+            )}
 
-                {['selfandfamily'].indexOf(this.state.account_type) !== -1 &&
-                    <div className="InputField">
-                        <RadioWithoutIcon
-                        width="40"
-                        label="Gender"
-                        class="Gender:"
-                        options={genderOptions}
-                        id="self_gender"
-                        name="self_gender"
-                        error={(this.state.self_gender_error) ? true : false}
-                        helperText={this.state.self_gender_error}
-                        value={this.state.self_gender || ''}
-                        onChange={this.handleChangeRadio('self_gender')} />
-                    </div>
-                }
+            {["selfandfamily", "family"].indexOf(this.state.account_type) !==
+              -1 && (
+              <div>
+                <div className="InputField">
+                  <RadioWithoutIcon
+                    width="40"
+                    label={
+                      this.state.account_type === "selfandfamily"
+                        ? "Other adult member"
+                        : "Adult member"
+                    }
+                    class="Gender:"
+                    options={other_adult_member_options}
+                    id="other_adult_member"
+                    name="other_adult_member"
+                    error={this.state.other_adult_member_error ? true : false}
+                    helperText={this.state.other_adult_member_error}
+                    value={this.state.other_adult_member || ""}
+                    onChange={this.handleChangeRadio("other_adult_member")}
+                    canUnSelect={true}
+                  />
+                </div>
 
-                {['selfandfamily', 'family'].indexOf(this.state.account_type) !== -1 &&
-                    <div>
-                        <div className="InputField">
-                            <RadioWithoutIcon
-                                width="40"
-                                label={this.state.account_type === 'selfandfamily' ? 'Other adult member' : 'Adult member'}
-                                class="Gender:"
-                                options={other_adult_member_options}
-                                id="other_adult_member"
-                                name="other_adult_member"
-                                error={(this.state.other_adult_member_error) ? true : false}
-                                helperText={this.state.other_adult_member_error}
-                                value={this.state.other_adult_member || ''}
-                                onChange={this.handleChangeRadio('other_adult_member')} 
-                                canUnSelect={true}/>
-                        </div>
+                <div className="plus-minus-input-label">
+                  Children (upto {this.state.total_plus_minus_max})
+                </div>
+                <div className="generic-hr"></div>
+                <PlusMinusInput name="son" parent={this} />
+                <div className="generic-hr"></div>
+                <PlusMinusInput name="daughter" parent={this} />
+                <div className="generic-hr"></div>
+              </div>
+            )}
 
+            {["parents"].indexOf(this.state.account_type) !== -1 && (
+              <div>
+                <div className="plus-minus-input-label">Parents</div>
+                <div className="generic-hr"></div>
+                <PlusMinusInput name="father" parent={this} />
+                <div className="generic-hr"></div>
+                <PlusMinusInput name="mother" parent={this} />
+                <div className="generic-hr"></div>
+              </div>
+            )}
 
-
-                        <div className="plus-minus-input-label">
-                            Children (upto {this.state.total_plus_minus_max})
-                        </div>
-                        <div className="generic-hr"></div>
-                        <PlusMinusInput
-                            name="son"
-                            parent={this}
-                        />
-                        <div className="generic-hr"></div>
-                        <PlusMinusInput
-                            name="daughter"
-                            parent={this}
-                        />
-                        <div className="generic-hr"></div>
-                    </div>}
-
-                {['parents'].indexOf(this.state.account_type) !== -1 &&
-                    <div>
-                        <div className="plus-minus-input-label">
-                            Parents
-                        </div>
-                        <div className="generic-hr"></div>
-                        <PlusMinusInput
-                            name="father"
-                            parent={this}
-                        />
-                        <div className="generic-hr"></div>
-                        <PlusMinusInput
-                            name="mother"
-                            parent={this}
-                        />
-                        <div className="generic-hr"></div>
-                    </div>}
-
-                {['parentsinlaw'].includes(this.state.account_type) &&
-                    <div>
-                        <div className="InputField">
-                            <RadioWithoutIcon
-                                width="40"
-                                label={'Select'}
-                                options={parents_category_options}
-                                id="other_adult_member"
-                                name="other_adult_member"
-                                error={(this.state.parents_option_error) ? true : false}
-                                helperText={this.state.parents_option_error}
-                                value={this.state.parents_option || ''}
-                                onChange={this.handleChangeRadio('parents_option')}
-                                canUnSelect={true} />
-                        </div>
-                        {this.state.parents_option &&
-                            <Fragment>
-                                <div className="plus-minus-input-label flex-between-center">
-                                    Policy includes both the parents
-                                    <img 
-                                        className="tooltip-icon"
-                                        data-tip= {`This plan requires both the ${this.state.parents_option === 'parentsinlaw' ? "parents in-law" : "parents"} to be covered together.`}
-                                        src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
-                                </div>
-                                <div className="generic-hr"></div>
-                                <PlusMinusInput
-                                    label={childeNameMapper(this.state.parents_option === 'parentsinlaw' ? "father_in_law" : "father")}
-                                    name={this.state.parents_option === 'parentsinlaw' ? "father_in_law" : "father"}
-                                    parent={this}
-                                />
-                                <div className="generic-hr"></div>
-                                <PlusMinusInput
-                                    label={childeNameMapper(this.state.parents_option === 'parentsinlaw' ? "mother_in_law" : "mother")}
-                                    name={this.state.parents_option === 'parentsinlaw' ? "mother_in_law" : "mother"}
-                                    parent={this}
-                                />
-                                <div className="generic-hr"></div>
-                            </Fragment>
+            {["parentsinlaw"].includes(this.state.account_type) && (
+              <div>
+                <div className="InputField">
+                  <RadioWithoutIcon
+                    width="40"
+                    label={"Select"}
+                    options={parents_category_options}
+                    id="other_adult_member"
+                    name="other_adult_member"
+                    error={this.state.parents_option_error ? true : false}
+                    helperText={this.state.parents_option_error}
+                    value={this.state.parents_option || ""}
+                    onChange={this.handleChangeRadio("parents_option")}
+                    canUnSelect={true}
+                  />
+                </div>
+                {this.state.parents_option && (
+                  <Fragment>
+                    <div className="plus-minus-input-label flex-between-center">
+                      Policy includes both the parents
+                      <GenericTooltip
+                        productName={getConfig().productName}
+                        content={
+                          <div>
+                            This plan requires both the {this.state.parents_option === "parentsinlaw" ? "parents in-law" : "parents"} to be covered together.
+                          </div>
                         }
-                    </div>}
-            </Container>
+                      />
+                    </div>
+                    <div className="generic-hr"></div>
+                    <PlusMinusInput
+                      label={childeNameMapper(
+                        this.state.parents_option === "parentsinlaw"
+                          ? "father_in_law"
+                          : "father"
+                      )}
+                      name={
+                        this.state.parents_option === "parentsinlaw"
+                          ? "father_in_law"
+                          : "father"
+                      }
+                      parent={this}
+                    />
+                    <div className="generic-hr"></div>
+                    <PlusMinusInput
+                      label={childeNameMapper(
+                        this.state.parents_option === "parentsinlaw"
+                          ? "mother_in_law"
+                          : "mother"
+                      )}
+                      name={
+                        this.state.parents_option === "parentsinlaw"
+                          ? "mother_in_law"
+                          : "mother"
+                      }
+                      parent={this}
+                    />
+                    <div className="generic-hr"></div>
+                  </Fragment>
+                )}
+              </div>
+            )}
+          </Container>
         );
     }
 }
