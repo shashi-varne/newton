@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Container from "../common/Container";
 import { nativeCallback } from "utils/native_callback";
-import { initialize, summary } from "../common/functions";
+import { initialize } from "../common/functions";
 import { getConfig } from "utils/functions";
 import OtpDefault from "../../common/ui/otp";
 import Api from "utils/api";
@@ -28,12 +28,10 @@ class WhatsappOtpVerification extends Component {
     };
 
     this.initialize = initialize.bind(this);
-    this.summary = summary.bind(this);
   }
 
   componentWillMount() {
     this.initialize();
-    this.summary();
 
     let { params } = this.props.location;
 
@@ -53,10 +51,6 @@ class WhatsappOtpVerification extends Component {
     this.setState({
       otpBaseData: otpBaseData,
       mobile_no: params.mobile_no || "",
-      resend_link: params.resend_link || "",
-      verify_link: params.verify_link || "",
-      next_state: params.next_state || "",
-      from_state: params.from_state || "",
     });
   }
 
@@ -251,7 +245,7 @@ class WhatsappOtpVerification extends Component {
 
   render() {
     let { otpBaseData, otp, openDialog } = this.state;
-
+console.log(this.state)
     return (
       <Container
         showLoader={this.state.show_loader}

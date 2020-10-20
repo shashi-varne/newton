@@ -662,10 +662,12 @@ body[data-device="mobile"] {
   text-align: left !important;
 }
 
-.didntRec {
-  margin: 0px 0px !important;
-}
+.generic-otp {
+  .didnt-rec {
+    margin: 0px 0px !important;
+  }
 
-.resendOtp {
-  color: #35CB5D !important;
+  .resend-otp {
+    color: #35CB5D !important;
+  }
 }

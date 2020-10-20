@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Container from "../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../common/functions";
-import { getConfig } from "utils/functions";
 import Input from "../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import { numberShouldStartWith, validateNumber } from "utils/validators";
@@ -13,15 +12,12 @@ class WnatsappEditNumber extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false,
-      productName: getConfig().productName,
     };
 
     this.initialize = initialize.bind(this);
   }
 
   componentWillMount() {
-    this.initialize();
 
     let { params } = this.props.location;
     if (!params) {
@@ -31,6 +27,8 @@ class WnatsappEditNumber extends Component {
     let mobile = params.mobile || "";
     this.setState({
       mobile_no: mobile,
+    }, () => {
+      this.initialize();
     });
   }
 
@@ -123,6 +121,7 @@ class WnatsappEditNumber extends Component {
   };
 
   render() {
+
     return (
       <Container
         showLoader={this.state.show_loader}

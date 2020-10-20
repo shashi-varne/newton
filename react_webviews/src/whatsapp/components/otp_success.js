@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Container from "../common/Container";
 import { nativeCallback } from "utils/native_callback";
-import { initialize, getContact, summary } from "../common/functions";
+import { initialize, getContact } from "../common/functions";
 import Api from "utils/api";
 import toast from "../../common/ui/Toast";
 
@@ -13,13 +13,10 @@ class WhatsappOtpSuccess extends Component {
     };
 
     this.initialize = initialize.bind(this);
-    this.summary = summary.bind(this);
     this.getContact = getContact.bind(this);
   }
 
   componentWillMount() {
-    this.initialize();
-    this.summary();
 
     let { params } = this.props.location;
     if (!params) {
@@ -28,6 +25,8 @@ class WhatsappOtpSuccess extends Component {
 
     this.setState({
       mobile_no: params.mobile,
+    }, () => {
+      this.initialize();
     });
   }
 

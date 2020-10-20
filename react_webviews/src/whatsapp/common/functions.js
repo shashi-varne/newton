@@ -10,13 +10,6 @@ export async function initialize() {
     productName: getConfig().productName,
   });
 
-  this.navigate = navigate.bind(this);
-
-  nativeCallback({ action: "take_control_rest" });
-}
-
-export async function summary() {
-
   try {
     this.setState({
       show_loader: true
@@ -30,24 +23,30 @@ export async function summary() {
     if (res.pfwresponse.status_code === 200) {
       const resultData = res.pfwresponse.result.data.user.user.data;
       const { mobile, user_id, verified } = resultData;
-      this.setState({
-        show_loader: false,
-      });
 
       this.setState({
         productName: getConfig().productName,
-        mobile: mobile.slice(3),
+        mobile: (mobile && mobile.slice(3)) || "",
         user_id: user_id, 
         verified: verified
+      });
+
+      this.setState({
+        show_loader: false,
       });
     }
 
   } catch (err) {
+    console.log(err)
     this.setState({
       show_loader: false
     });
     toast("Something went wrong");
   }
+
+  this.navigate = navigate.bind(this);
+
+  nativeCallback({ action: "take_control_rest" });
 }
 
 export async function getContact(data) {

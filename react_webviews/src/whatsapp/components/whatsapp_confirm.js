@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Container from "../common/Container";
 import { nativeCallback } from "utils/native_callback";
-import { initialize, summary } from "../common/functions";
+import { initialize } from "../common/functions";
 
 class WhastappConfirmNumber extends Component {
   constructor(props) {
@@ -11,12 +11,10 @@ class WhastappConfirmNumber extends Component {
     };
 
     this.initialize = initialize.bind(this);
-    this.summary = summary.bind(this);
   }
 
   componentWillMount() {
     this.initialize();
-    this.summary();
 
     let { params } = this.props.location;
 
