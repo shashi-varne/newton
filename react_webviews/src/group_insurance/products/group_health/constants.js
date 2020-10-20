@@ -56,7 +56,7 @@ export const hdfc = {
                 'options': [
                     {
                         'title': 'Why do I need health insurance?',
-                        'subtitle': 'With the advancement in technology and the availability of more effective treatments, the cost of healthcare has steeply increased. Health insurance policy ensures that medical bills and hospitalization expenses should not get paid from your hard-earned money. It takes care of the hospitalization and treatment charges as well as provides assured tax benefit under section 80D of Income Tax.'
+                        'subtitle': 'With the advancement in technology and the availability of more effective treatments, the cost of healthcare has steeply increased. Health insurance policy ensures that medical bills and hospitalisation expenses should not get paid from your hard-earned money. It takes care of the hospitalisation and treatment charges as well as provides assured tax benefit under section 80D of Income Tax.'
                     },
                     {
                         'title': 'What are the benefits of having a health insurance policy?',
@@ -208,7 +208,7 @@ export const religare = {
         nominee_screen: 'plan-lifestyle-details'
     },
     validation_props: {
-        'dob_adult': { min: 18, max: 100 }, 
+        'dob_adult': { min: 18, max: 99 }, 
         'dob_child': { minDays: 91, minAge: 5, max: 25 },
         'dob_married_male': { min: 21, max: 25 },
         'dob_married_female': {min: 18}
