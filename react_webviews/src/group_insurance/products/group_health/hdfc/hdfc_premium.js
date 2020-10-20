@@ -79,7 +79,7 @@ export default class HDFCPremium extends Component {
         </div>
 
         <div className="flex-between pi-tile">
-          <div className="pi-tile-left">GST & other taxes</div>
+          <div className="pi-tile-left">GST</div>
           <div className="pi-tile-right">{inrFormatDecimal(this.props.gst_tax)}</div>
         </div>
 
