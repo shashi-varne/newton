@@ -158,7 +158,6 @@ body[data-device="web"] {
   background-color: #fff;
   overflow-y: scroll;
   // margin-bottom: 56px !important;
-  height: 74vh;
   padding-bottom: 56px !important;
 }
 
@@ -620,7 +619,7 @@ input#pan {
   min-height: 50px;
   display: flex;
   align-items: flex-end;
-  padding: 0 15px 0 15px;
+  padding: 0 20px 0 20px;
   font-size: 20px;
   transition: 0.3s transform ease-in-out;
   justify-content: space-between;
