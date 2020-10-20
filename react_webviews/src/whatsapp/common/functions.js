@@ -1,4 +1,4 @@
-// import { storageService } from "utils/validators";
+import { storageService } from "utils/validators";
 import { getConfig } from "utils/functions";
 import Api from "utils/api";
 import toast from "../../common/ui/Toast";
@@ -24,6 +24,7 @@ export async function initialize() {
       const resultData = res.pfwresponse.result.data.user.user.data;
       const { mobile, user_id, verified } = resultData;
 
+      storageService().set('user_id', user_id);
       this.setState({
         productName: getConfig().productName,
         mobile: (mobile && mobile.slice(3)) || "",
@@ -49,14 +50,16 @@ export async function initialize() {
   nativeCallback({ action: "take_control_rest" });
 }
 
-export async function getContact(data) {
+export async function getContact() {
+  let user_id = storageService().get('user_id');
+  let mobile = storageService().get('mobile')
 
   try {
     this.setState({
       show_loader: true
     });
 
-    const res = await Api.get(`api/communication/contact/get?user_id=${data.user_id}&contact_value=${data.mobile}`);
+    const res = await Api.get(`api/communication/contact/get?user_id=${user_id}&contact_value=${mobile}`);
 
     
     if (res.pfwresponse.status_code === 200) {

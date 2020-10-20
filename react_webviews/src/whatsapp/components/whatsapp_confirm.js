@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Container from "../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../common/functions";
+import { storageService } from "utils/validators";
 
 class WhastappConfirmNumber extends Component {
   constructor(props) {
@@ -23,7 +24,7 @@ class WhastappConfirmNumber extends Component {
     }
 
     this.setState({
-      params_mobile: params.mobile || ""
+      params_mobile: params.mobile || storageService().get('mobile') || ""
     })
   }
 

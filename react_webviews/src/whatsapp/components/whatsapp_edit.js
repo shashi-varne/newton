@@ -4,32 +4,37 @@ import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../common/functions";
 import Input from "../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
-import { numberShouldStartWith, validateNumber } from "utils/validators";
+import {
+  numberShouldStartWith,
+  validateNumber,
+  storageService,
+} from "utils/validators";
 import Api from "utils/api";
 import toast from "../../common/ui/Toast";
 
 class WnatsappEditNumber extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-    };
+    this.state = {};
 
     this.initialize = initialize.bind(this);
   }
 
   componentWillMount() {
-
     let { params } = this.props.location;
     if (!params) {
       params = {};
     }
 
-    let mobile = params.mobile || "";
-    this.setState({
-      mobile_no: mobile,
-    }, () => {
-      this.initialize();
-    });
+    let mobile = params.mobile || storageService().get('mobile') || "";
+    this.setState(
+      {
+        mobile_no: mobile,
+      },
+      () => {
+        this.initialize();
+      }
+    );
   }
 
   sendEvents(user_action) {
@@ -71,6 +76,7 @@ class WnatsappEditNumber extends Component {
     let canProceed = true;
     let mobile = this.state.mobile_no;
 
+    storageService().set('mobile', mobile);
     if (
       mobile.length !== 10 ||
       !validateNumber(mobile) ||
@@ -108,9 +114,10 @@ class WnatsappEditNumber extends Component {
           this.setState({
             show_loader: false,
           });
-          toast(resultData.error || resultData.message || "Something went wrong");
+          toast(
+            resultData.error || resultData.message || "Something went wrong"
+          );
         }
-
       } catch (err) {
         this.setState({
           show_loader: false,
@@ -121,7 +128,7 @@ class WnatsappEditNumber extends Component {
   };
 
   render() {
-
+    console.log(storageService().get('mobile'))
     return (
       <Container
         showLoader={this.state.show_loader}

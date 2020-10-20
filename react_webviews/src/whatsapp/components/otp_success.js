@@ -4,6 +4,7 @@ import { nativeCallback } from "utils/native_callback";
 import { initialize, getContact } from "../common/functions";
 import Api from "utils/api";
 import toast from "../../common/ui/Toast";
+import { storageService } from "utils/validators";
 
 class WhatsappOtpSuccess extends Component {
   constructor(props) {
@@ -17,6 +18,7 @@ class WhatsappOtpSuccess extends Component {
   }
 
   componentWillMount() {
+    this.initialize();
 
     let { params } = this.props.location;
     if (!params) {
@@ -26,7 +28,7 @@ class WhatsappOtpSuccess extends Component {
     this.setState({
       mobile_no: params.mobile,
     }, () => {
-      this.initialize();
+      storageService().set('mobile', params.mobile)
     });
   }
 
@@ -49,10 +51,7 @@ class WhatsappOtpSuccess extends Component {
   handleClick = async () => {
     this.sendEvents("next");
 
-    let id = await this.getContact({
-      mobile: this.state.mobile_no,
-      user_id: this.state.user_id,
-    });
+    let id = await this.getContact();
 
     if (id) {
       let body = {
