@@ -6,7 +6,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { health_providers, genderOptions, childeNameMapper } from '../../../constants';
 import {
   calculateAge, toFeet, capitalizeFirstLetter,
-  formatDate, validatePan, validateAlphabets, dobFormatTest, isValidDate
+  formatDate, validatePan, validateAlphabets, dobFormatTest, isValidDate, containsSpecialCharactersAndNumbers, containsSpecialCharacters
 } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
@@ -167,6 +167,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
   handleChange = name => event => {
 
+    
     var input = document.getElementById('dob');
     input.onkeyup = formatDate;
 
@@ -178,6 +179,14 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     var value = event.target ? event.target.value : event;
 
+    if(containsSpecialCharactersAndNumbers(value) && name !== 'pan_number'){
+      return;
+    }
+
+    if(name === 'pan_number' && containsSpecialCharacters(value)){
+      return;
+    }
+    
     if (name === 'dob' && !dobFormatTest(value)) {
       return;
     }
@@ -539,6 +548,7 @@ class GroupHealthPlanPersonalDetails extends Component {
             width="40"
             label="Full name"
             class="Name"
+            maxLength="50"
             id="name"
             name="name"
             error={this.state.form_data.name_error ? true : false}
