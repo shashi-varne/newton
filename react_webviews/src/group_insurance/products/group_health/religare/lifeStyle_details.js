@@ -5,7 +5,7 @@ import { getConfig } from "utils/functions";
 import { initialize, updateLead } from "../common_data";
 import RadioAndCheckboxList from "./radioAndCheckboxList";
 import { isValidMonthYear } from "utils/validators";
-import { formatMonthandYear, dobFormatTest, validateAlphabets, IsFutureMonthYear, IsPastMonthYearfromDob } from "utils/validators";
+import { formatMonthandYear, dobFormatTest, validateAlphabets, IsFutureMonthYear, IsPastMonthYearfromDob, containsSpecialCharacters } from "utils/validators";
 import toast from "../../../../common/ui/Toast";
 import ConfirmDialog from './../plans/confirm_dialog';
 import { compact } from 'lodash';
@@ -147,8 +147,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
     let { value, id } = event.target;
     let { member_base } = this.state;
 
-    var specialCharacterFormat =/[$&+,:;=?@#|'<>.^*()%!"-]/g;
-    if(specialCharacterFormat.test(value)){
+    if(containsSpecialCharacters(value)){
       return;
     }
 

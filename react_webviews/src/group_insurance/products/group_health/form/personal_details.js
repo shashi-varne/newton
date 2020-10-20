@@ -6,7 +6,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { health_providers, genderOptions, childeNameMapper } from '../../../constants';
 import {
   calculateAge, toFeet, capitalizeFirstLetter,
-  formatDate, validatePan, validateAlphabets, dobFormatTest, isValidDate
+  formatDate, validatePan, validateAlphabets, dobFormatTest, isValidDate, containsSpecialCharactersAndNumbers, containsSpecialCharacters
 } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
@@ -178,9 +178,12 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     var value = event.target ? event.target.value : event;
 
-    var specialCharacterAndNumberformat =/[$&+,:;=?@#|'<>.^*()%!"-\d]/g;
-    if(specialCharacterAndNumberformat.test(value) && name !== 'pan_number'){
-     return;
+    if(containsSpecialCharactersAndNumbers(value) && name !== 'pan_number'){
+      return;
+    }
+
+    if(name === 'pan_number' && containsSpecialCharacters(value)){
+      return;
     }
     
     if (name === 'dob' && !dobFormatTest(value)) {

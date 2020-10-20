@@ -5,7 +5,7 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
 import { validateAlphabets, calculateAge, isValidDate, 
-    formatDate, dobFormatTest, IsFutureDate} from 'utils/validators';
+    formatDate, dobFormatTest, IsFutureDate, containsSpecialCharactersAndNumbers} from 'utils/validators';
 import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
 import Input from '../../../../common/ui/Input';
 import { initialize, updateLead } from '../common_data';
@@ -89,8 +89,7 @@ class GroupHealthPlanNomineeDetails extends Component {
         }
         var value = event.target ? event.target.value : event;
 
-        var specialCharacterAndNumberformat =/[$&+,:;=?@#|'<>.^*()%!"-\d]/g;
-        if(specialCharacterAndNumberformat.test(value)){
+        if(containsSpecialCharactersAndNumbers(value)){
             return;
         }
         var form_data = this.state.form_data || {};
