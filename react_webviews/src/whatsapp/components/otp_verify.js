@@ -245,7 +245,7 @@ class WhatsappOtpVerification extends Component {
 
   render() {
     let { otpBaseData, otp, openDialog } = this.state;
-console.log(this.state)
+
     return (
       <Container
         showLoader={this.state.show_loader}
