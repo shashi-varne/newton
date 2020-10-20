@@ -661,3 +661,26 @@ body[data-device="mobile"] {
 .__react_component_tooltip .multi-line {
   text-align: left !important;
 }
+
+
+.generic-tooltip {
+  span {
+    border-radius: 4px;
+    color: #767E86;
+    text-align: justify;
+    margin: '0 0 0 10px'
+  }
+  
+  .tooltip-arrrow {
+    right: 20px;
+    position: relative;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .generic-tooltip {
+    span {
+      width: 270px;
+    }
+  }
+}
