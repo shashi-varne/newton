@@ -6,12 +6,7 @@ import { checkValidString } from './validators';
 import { encrypt, decrypt } from './encryption';
 import { getConfig } from  'utils/functions'
 const myHistory = createBrowserHistory();
-let serverUrlFisdomProd = 'https://my.fisdom.com';
 let { base_url } = qs.parse(myHistory.location.search.slice(1));
-
-if(getConfig().project === 'w-report') {
-  base_url = serverUrlFisdomProd;
-}
 
 let redirect_url  = getConfig().redirect_url;
 let is_secure = false;

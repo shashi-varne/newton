@@ -16,7 +16,7 @@ import Dialog, {
 import '../../utils/native_listner';
 import { getConfig, setHeights } from 'utils/functions';
 // import {checkStringInString, storageService} from 'utils/validators';
-import { isFunction } from "../../utils/validators";
+import { isEmpty, isFunction } from "../../utils/validators";
 
 class Container extends Component {
   constructor(props) {
@@ -192,6 +192,7 @@ class Container extends Component {
     } else {
       el = document.getElementsByClassName('Container')[0];
     }
+    if (!el || isEmpty(el)) return;
     let height = el.getBoundingClientRect().top;
     return height;
   }
