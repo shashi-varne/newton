@@ -82,8 +82,7 @@ class GroupHealthPlanDetails extends Component {
             this.setState({
                 show_loader: false
             });
-            var resultData = res.pfwresponse.result;          
-
+            var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
             
                 this.setState({
