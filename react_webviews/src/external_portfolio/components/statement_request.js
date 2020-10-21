@@ -154,6 +154,7 @@ class StatementRequest extends Component {
     if (!params || this.state.exitToApp) {
       nativeCallback({ action: 'exit', events: this.sendEvents('back') });
     } else if (params.navigateBackTo) { // available when coming from email_entry
+      nativeCallback({ events: this.sendEvents('back') });
       this.navigate(params.navigateBackTo);
     }
   }
