@@ -198,17 +198,21 @@ class GroupHealthPlanDob extends Component {
             
             groupHealthPlanData.ui_members = ui_members;
             groupHealthPlanData.final_dob_data = final_dob_data;
-            
+            let member_details = {}
             for (var j in final_dob_data) {
 
                 let member_data = final_dob_data[j];
                 let backend_key = member_data.backend_key;
+                let gender = member_data.relation === 'son' || member_data.relation === 'husband' ? "MALE" : "FEMALE";
 
-                post_body[backend_key] = {
+
+                member_details[backend_key] = {
                     dob: member_data.value,
-                    relation: member_data.relation
+                    relation: member_data.relation,
+                    gender: gender
                 };
             }
+            post_body.member_details = member_details;
 
             if(ui_members.self_gender && post_body.self_account_key) {
                 post_body.self_account_key.gender = ui_members.self_gender;

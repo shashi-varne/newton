@@ -242,10 +242,9 @@ class GroupHealthPlanAddMembers extends Component {
         let total_insured = adult_total + child_total;
 
         let post_body = this.state.groupHealthPlanData.post_body || {};
-        post_body.mem_info = {
-            adult: adult_total,
-            child: child_total
-        };
+         
+        post_body.adults = adult_total;
+        post_body.children = child_total;
 
         if(this.state.account_type === 'selfandfamily') {
 

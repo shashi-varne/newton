@@ -1,6 +1,6 @@
 export const hdfc = {
     key: 'HDFCERGO',
-    provider_api: 'hdfcergo',
+    provider_api: 'hdfc_ergo',
     title: 'HDFC ERGO',
     title2: 'my: health Suraksha',
     subtitle: 'my: health Suraksha',

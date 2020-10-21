@@ -77,57 +77,19 @@ class GroupHealthPlanDetails extends Component {
 
         this.setLocalProviderData(groupHealthPlanData);
         try {
-            const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/premium`,
-             post_body);
 
+            const res = await Api.post(`https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/health/quotation/plan_information/${this.state.providerConfig.provider_api}`,post_body);
             this.setState({
                 show_loader: false
             });
-            var resultData = res.pfwresponse.result;
-
-           
+            var resultData = res.pfwresponse.result;          
 
             if (res.pfwresponse.status_code === 200) {
-                let premiums_to_show_backend = resultData.premium.WF || [];
-
-                let premiums_to_show = [];
-                console.log(premiums_to_show_backend);
-                if(provider === 'STAR') {
-                    premiums_to_show = [
-                        {
-                            'name': '₹3 lacs to ₹25 lacs',
-                            'value': premiums_to_show_backend[0].net_premium
-                        }
-                    ]
-                } else {
-                    let length = premiums_to_show_backend.length;
-    
-                    if(length  > 1) {
-                        premiums_to_show = [
-                            {
-                                name: `${numDifferentiationInr(premiums_to_show_backend[0].sum_assured)} to ${numDifferentiationInr(premiums_to_show_backend[length - 1].sum_assured)}`,
-                                value: premiums_to_show_backend[0].net_premium
-                            }
-                        ]
-                    } else {
-    
-                        premiums_to_show = [
-                            {
-                                name: `${numDifferentiationInr(premiums_to_show_backend[0].sum_assured)}`,
-                                value: premiums_to_show_backend[0].net_premium
-                            }
-                        ]
-                    }
-                   
-                }
-
+            
                 this.setState({
-                    common_data: resultData.common,
-                    premium_data: resultData.premium,
-                    premiums_to_show: premiums_to_show,
-                    extra_data: resultData.quote_info
+                  plan_data : resultData,
+                  benefits: resultData.benefits
                 })
-
             } else {
                 toast(resultData.error || resultData.message
                     || 'Something went wrong');
@@ -149,13 +111,13 @@ class GroupHealthPlanDetails extends Component {
             'whats_included': {
                 'header_title': "What is covered?",
                 'header_subtitle': 'These are some of the benefits that are covered under this policy',
-                'steps': this.state.extra_data.whats_included,
+                'steps': this.state.plan_data.whats_included,
                 'pathname': '/gold/common/render-benefits'
             },
             'whats_not_included': {
                 'header_title': "What is not covered?",
                 'header_subtitle' : 'These are some of the incidences that are not covered under this policy',
-                'steps': this.state.extra_data.whats_not_included,
+                'steps': this.state.plan_data.whats_not_included,
                 'pathname': '/gold/common/render-benefits'
             },
             'how_to_claim': {
@@ -257,21 +219,6 @@ class GroupHealthPlanDetails extends Component {
         this.navigate(this.state.next_screen || 'plan-select-sum-assured');
     }
 
-
-    renderPremiums = (props, index) => {
-
-        return (
-            <div className="sum-assured-info" key={index}>
-                <div className="sai-left">
-                    {props.name}
-                </div>
-                <div className="sai-left">
-                    starts at   {inrFormatDecimal(props.value)}/year
-                </div>
-            </div>
-        );
-    }
-
     renderSteps = (option, index) => {
         return (
             <div key={index} className="tile">
@@ -289,13 +236,12 @@ class GroupHealthPlanDetails extends Component {
     render() {
         const {
             show_loader,
+            benefits,
             plan_selected,
             providerData,
             productName,
             extra_data,
-            premiums_to_show,
         } = this.state;
-
         return (
           <Container
             events={this.sendEvents("just_set_events")}
@@ -313,7 +259,7 @@ class GroupHealthPlanDetails extends Component {
                     {this.state.providerConfig.title2 ||
                       this.state.providerConfig.title}
                   </div>
-                  <div className="tc-subtitle">{plan_selected.plan_title}</div>
+                  <div className="tc-subtitle">{plan_selected.plan_name}</div>
                 </div>
 
                 <div className="tc-right">
@@ -329,17 +275,17 @@ class GroupHealthPlanDetails extends Component {
                 Claim Settlement Ratio: {this.state.claim_settlement_ratio}%
               </div>
 
-              {plan_selected.recommendation_tag && (
+              {plan_selected.recommedation_tag && (
                 <div
                   className="recomm-info group-health-recommendation"
                   style={{
                     backgroundColor:
-                      plan_selected.recommendation_tag === "Recommended"
+                      plan_selected.recommedation_tag === "Recommended"
                         ? "#E86364"
                         : "",
                   }}
                 >
-                  {plan_selected.recommendation_tag}
+                  {plan_selected.recommedation_tag}
                 </div>
               )}
               <div className="copay-info">
@@ -347,7 +293,7 @@ class GroupHealthPlanDetails extends Component {
                   0% copay, assured 100% cashless treatment
                 </div>
                 <div className="ci-right">
-               <GenericTooltip  content={plan_selected.copay} productName={productName}    />
+               <GenericTooltip  content={plan_selected.copay} productName={productName} />
                 </div>
               </div>
 
@@ -356,8 +302,18 @@ class GroupHealthPlanDetails extends Component {
                 <div className="sai-left">Premium</div>
               </div>
 
-              {premiums_to_show.map(this.renderPremiums)}
+              {
+                this.state.plan_data && <div className="sum-assured-info">
+                  <div className="sai-left">
+                      {this.state.plan_data.SI}
+                  </div>
+                  <div className="sai-left">
+                  {this.state.plan_data.starts_at}
+                  </div>
+               </div>
 
+              }
+              
               <div
                 className="common-how-steps"
                 style={{ border: "none", marginTop: 0, marginBottom: 0 }}
@@ -380,7 +336,7 @@ class GroupHealthPlanDetails extends Component {
                   <span className="special-benefit-text">Special benefits</span>
                 </div>
                 <div className="common-steps-images">
-                  {extra_data.special_benefits.map(this.renderSteps)}
+                  {benefits && benefits.special.map(this.renderSteps)}
                 </div>
 
                 <div
@@ -397,7 +353,7 @@ class GroupHealthPlanDetails extends Component {
                   <span className="special-benefit-text">Main benefits</span>
                 </div>
                 <div className="common-steps-images">
-                  {extra_data.benefits.main.map(this.renderSteps)}
+                  {benefits && benefits.main.map(this.renderSteps)}
                 </div>
               </div>
 
@@ -420,7 +376,7 @@ class GroupHealthPlanDetails extends Component {
                     style={{ color: getConfig().primary }}
                     onClick={() =>
                       this.openInBrowser(
-                        this.state.common_data.policy_prospectus,
+                        this.state.plan_data.policy_prospectus,
                         "read_document"
                       )
                     }

@@ -16,9 +16,7 @@ class GroupHealthPlanList extends Component {
         super(props);
         this.state = {
             show_loader: true,
-            plan_data: {
-                coverplan: []
-            },
+            plan_data: {},
             screen_name: 'plan_list_screen'
         }
 
@@ -33,7 +31,8 @@ class GroupHealthPlanList extends Component {
         try {
 
             let body = this.state.groupHealthPlanData.post_body;
-            const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/coverplan`,
+
+             const res = await Api.post(`https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/health/quotation/plans/${this.state.providerConfig.provider_api}`,
              body);
 
             this.setState({
@@ -43,7 +42,8 @@ class GroupHealthPlanList extends Component {
             if (res.pfwresponse.status_code === 200) {
 
                 this.setState({
-                    plan_data: resultData
+                    plan_data: resultData,
+                    common: resultData.common
                 }, () => {
                     ReactTooltip.rebuild()
                 })
@@ -100,6 +100,7 @@ class GroupHealthPlanList extends Component {
         let eldest_dict  = plan_data.eldest_dict || {};
 
         groupHealthPlanData.plan_selected = plan;
+        groupHealthPlanData.post_body.plan_id = plan.plan_id;
         groupHealthPlanData.base_plan_title = common.base_plan_title
         groupHealthPlanData.post_body.plan = plan.plan_type;
         groupHealthPlanData.post_body.cover_plan = plan.plan_type;
@@ -130,11 +131,11 @@ class GroupHealthPlanList extends Component {
         let plan_data = props;
         return (
             <div className="tile" key={index} onClick={() => this.selectPlan(props, index)}>
-                <div className="group-health-recommendation" style={{ backgroundColor: props.recommendation_tag === 'Recommended' ? '#E86364' : '' }}>{props.recommendation_tag}</div>
+                <div className="group-health-recommendation" style={{ backgroundColor: props.recommendation_tag === 'Recommended' ? '#E86364' : '' }}>{plan_data.recommedation_tag}</div>
                 <div className="group-health-top-content-plan-logo">
                     <div className="left">
-                        <div className="tc-title">{this.state.provider==='HDFCERGO'? this.state.plan_data.common.base_plan_title:''}</div>
-                        <div className="tc-subtitle">{props.plan_title}</div>
+                        <div className="tc-title">{this.state.provider==='HDFCERGO'? this.state.common.base_plan_title :''}</div>
+                        <div className="tc-subtitle">{plan_data.plan_name}</div>
                     </div>
                     <div className="tc-right">
                         <img
@@ -145,12 +146,12 @@ class GroupHealthPlanList extends Component {
                 </div>
 
                 <div className="plan-info">
-                    {(props.top_plan_benefits || []).map((props, index) => 
+                    {(plan_data.display_content || []).map((props, index) => 
                     this.renderTileMidData(props, index, plan_data))}
                 </div>
 
                 <div className="bottom-cta" onClick={() => this.selectPlan(props, index)}>
-                    starts at {inrFormatDecimal(props.premium)}/year
+                    {props.starts_at}
                 </div>
             </div>
         );
@@ -170,7 +171,7 @@ class GroupHealthPlanList extends Component {
             >
                 <div className="group-health-plan-list">
                     <div className="tiles">
-                        {this.state.plan_data.coverplan.map(this.renderPlans)}
+                        {this.state.plan_data.plans && this.state.plan_data.plans.map(this.renderPlans)}
                     </div>
                 </div>
             </Container>
