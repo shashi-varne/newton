@@ -431,7 +431,7 @@ class GroupHealthLanding extends Component {
 
           <div
             className="generic-page-title"
-            style={{ margin: "-10px 0 10px 0" }}
+            style={{ margin: "-10px 0 15px 0" }}
           >
             Things to know
           </div>
@@ -471,7 +471,7 @@ class GroupHealthLanding extends Component {
             className="CheckBlock2 accident-plan-terms"
             style={{ padding: 0 }}
           >
-            <Grid container spacing={16} alignItems="center"  style={{marginBottom : '15px'}}>
+           <Grid container spacing={16} alignItems="center">
               <Grid item xs={1} className="TextCenter">
                 <Checkbox
                   defaultChecked
@@ -483,8 +483,8 @@ class GroupHealthLanding extends Component {
                   className="Checkbox"
                 />
               </Grid>
-              <Grid item xs={11} >
-                <div className="accident-plan-terms-text">
+              <Grid item xs={11}>
+                <div className="accident-plan-terms-text" style={{}}>
                   I agree to the{" "}
                   <span
                     onClick={() =>
