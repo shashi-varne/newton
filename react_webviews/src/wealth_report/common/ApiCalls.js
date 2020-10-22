@@ -191,6 +191,7 @@ export const requestStatement = async (params) => {
 
     const res = await Api.post('api/external_portfolio/cams/cas/send_mail', {
       ...params,
+      request_source: 'wreport',
       platform,
     });
 
