@@ -168,7 +168,7 @@ class Container extends Component {
       return (
         <div className={`Loader ${this.props.loaderData ? this.props.loaderData.loaderClass : ''}`}>
           <div className="LoaderOverlay">
-            <img src={require(`assets/loader_gif_${this.state.productName}.gif`)} alt="" />
+            <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
               {this.props.loaderData && this.props.loaderData.loadingText && 
                 <div className="LoaderOverlayText">{this.props.loaderData.loadingText}</div>
               }

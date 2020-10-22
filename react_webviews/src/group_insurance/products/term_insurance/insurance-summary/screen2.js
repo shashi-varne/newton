@@ -477,7 +477,7 @@ class Resume extends Component {
       >
         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: '#fff', borderRadius: 4, minWidth: 320, padding: 25, textAlign: 'center' }}>
           <div style={{ padding: '20px 0 30px' }}>
-            <img src={require(`assets/loader_gif_${this.state.productName}.gif`)} alt="" />
+            <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
           </div>
           <Typography variant="subheading" id="simple-modal-description" style={{ color: '#444' }}>
             {this.state.openModalMessage}

@@ -130,7 +130,7 @@ class MandateProcess extends Component {
       return (
         <div className="Loader">
           <div className="LoaderOverlay">
-            <img src={require(`assets/loader_gif_${this.state.productName}.gif`)} alt="" />
+            <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
           </div>
         </div>
       );
