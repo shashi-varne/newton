@@ -264,7 +264,7 @@ class GroupHealthPlanIsPed extends Component {
                 handleClick={() => this.handleClick()}
             >
 
-                <div className="common-top-page-subtitle">
+                <div className="common-top-page-subtitle" style={{fontSize:'13px'}}>
                     Please disclose correct details to make hassle-free claim later
                 </div>
 
