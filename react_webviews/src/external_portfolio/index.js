@@ -11,7 +11,7 @@ import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
 import { ToastContainer } from 'react-toastify';
 
 // Component Paths
-import Email_entry from './components/email_entry';
+import EmailEntry from './components/email_entry';
 import StatementRequestPage from './components/statement_request';
 import EmailNotReceived from './components/email_not_received';
 import EmailExampleView from './components/email_example_view';
@@ -20,6 +20,8 @@ import FundHoldings from './components/fund_holdings';
 import ExternalPortfolio from './components/external_portfolio';
 import Settings from './components/settings';
 import PANSelector from './components/select_PAN';
+import CamsRequestStepsPage from './components/cams_request_steps_page';
+import CamsWebpage from './components/cams_webpage';
 // 
 
 const generateClassName = createGenerateClassName({
@@ -50,9 +52,11 @@ function external_portfolio(props) {
         <ScrollToTop />
         <ToastContainer autoClose={3000} />
         <Switch>
-          <Route path={`${url}/email_entry`} component={Email_entry} />
+          <Route path={`${url}/email_entry`} component={EmailEntry} />
           <Route path={`${url}/statement_request/:email`} component={StatementRequestPage} />
           <Route path={`${url}/statement_request`} component={StatementRequestPage} />
+          <Route path={`${url}/cams_request_steps`} component={CamsRequestStepsPage} />
+          <Route path={`${url}/cams_webpage`} component={CamsWebpage} />
           <Route path={`${url}/email_not_received`} component={EmailNotReceived} />
           <Route path={`${url}/email_example_view`} component={EmailExampleView} />
           <Route path={`${url}/statement_not_received`} component={StatementNotReceived} />
