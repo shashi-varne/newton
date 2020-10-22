@@ -18,8 +18,7 @@ import {
 } from 'utils/validators';
 import { getConfig } from 'utils/functions';
 import { nativeCallback, openPdfCall } from 'utils/native_callback';
-import loader_fisdom from 'assets/loader_gif_fisdom.gif';
-import loader_myway from 'assets/loader_gif_myway.gif';
+
 import Modal from 'material-ui/Modal';
 import Typography from 'material-ui/Typography';
 import TermsAndConditions from '../../../../common/ui/tnc';
@@ -39,7 +38,7 @@ class PersonalDetails1 extends Component {
       provider: '',
       params: qs.parse(props.history.location.search.slice(1)),
       type: getConfig().productName,
-      loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom,
+      productName: getConfig().productName,
       tnc: window.sessionStorage.getItem('term_ins_tnc'),
       checked: true
     }
@@ -271,7 +270,7 @@ class PersonalDetails1 extends Component {
       >
         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: '#fff', borderRadius: 4, minWidth: 320, padding: 25, textAlign: 'center' }}>
           <div style={{ padding: '20px 0 30px' }}>
-            <img src={this.state.loaderMain} alt="" />
+            <img src={require(`assets/loader_gif_${this.state.productName}.gif`)} alt="" />
           </div>
           <Typography variant="subheading" id="simple-modal-description" style={{ color: '#444' }}>
             {this.state.openModalMessage}

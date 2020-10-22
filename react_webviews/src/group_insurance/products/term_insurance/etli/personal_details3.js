@@ -17,8 +17,7 @@ import {
 
 import etli_logo from 'assets/etli_logo2.svg';
 import { nativeCallback } from 'utils/native_callback';
-import loader_fisdom from 'assets/loader_gif_fisdom.gif';
-import loader_myway from 'assets/loader_gif_myway.gif';
+
 
 class EtliPersonalDetails3 extends Component {
     constructor(props) {
@@ -36,7 +35,7 @@ class EtliPersonalDetails3 extends Component {
             },
             provider: 'EDELWEISS',
             productTitle: 'Edelweiss Tokio Life Zindagi Plus',
-            loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
+            productName: getConfig().productName
         };
     }
 
@@ -280,7 +279,7 @@ class EtliPersonalDetails3 extends Component {
           >
             <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: '#fff', borderRadius: 4, minWidth: 320, padding: 25, textAlign: 'center' }}>
               <div style={{ padding: '20px 0 30px' }}>
-                <img src={this.state.loaderMain} alt="" />
+                <img src={require(`assets/loader_gif_${this.state.productName}.gif`)} alt="" />
               </div>
               <Typography variant="subheading" id="simple-modal-description" style={{ color: '#444' }}>
                 {this.state.openModalMessage}
