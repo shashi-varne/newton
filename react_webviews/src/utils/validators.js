@@ -1,5 +1,6 @@
 // import { func } from "prop-types";
 import qs from 'qs';
+import moment from 'moment';
 
 export function validateEmpty(string) {
   let nameSplit = string.split(" ").filter(e => e);
@@ -316,6 +317,47 @@ export function IsFutureDate(idate) {
 
 }
 
+export function IsFutureMonthYear(input) {
+  var today = new Date();
+
+  var currentMonth = today.getMonth() + 1; 
+  var currentYear = today.getFullYear();
+
+  var inputMonth = input.substring(0, 2) - 0;
+  var inputYear = input.substring(3, 7) - 0;
+
+  if (inputYear > currentYear) {
+    return true;
+  }
+
+  if (inputYear === currentYear && inputMonth > currentMonth) {
+    return true;
+  }
+
+  return false;
+}
+
+export function IsPastMonthYearfromDob(input, dob) {
+  dob = dob.split('-');
+
+  var dobMonth = dob[1]; 
+  var dobYear = dob[2];
+
+  var inputMonth = input.substring(0, 2) - 0;
+  var inputYear = input.substring(3, 7) - 0;
+
+  if (inputYear < dobYear) {
+    return true;
+  }
+
+  // eslint-disable-next-line radix
+  if (inputYear === parseInt(dobYear) && inputMonth < dobMonth) {
+    return true;
+  }
+
+  return false;
+}
+
 export function isValidDate(dateInput) {
   if (!dateInput) {
     return false;
@@ -350,6 +392,34 @@ export function isValidDate(dateInput) {
   if (objDate.getFullYear() !== year ||
     objDate.getMonth() !== month ||
     objDate.getDate() !== day) {
+    return false;
+  }
+
+  return true;
+}
+
+export function isValidMonthYear(input) {
+  if (!input) {
+    return false;
+  }
+  var month, year;
+
+  if (input.length !== 7) {
+    return false;
+  }
+
+  if (input.substring(2, 3) !== '/') {
+    return false;
+  }
+
+  month = input.substring(0, 2) - 0;
+  year = input.substring(3, 7) - 0;
+
+  if (year < 1900 || year > 3000) {
+    return false;
+  }
+
+  if (month < 1 || month > 12) {
     return false;
   }
 
@@ -585,7 +655,7 @@ export function getIndexArray(array, value, objKey) {
   }
 }
 
-function dateOrdinal(dom) {
+export function dateOrdinal(dom) {
   if (dom === 31 || dom === 21 || dom === 1) return dom + "st";
   else if (dom === 22 || dom === 2) return dom + "nd";
   else if (dom === 23 || dom === 3) return dom + "rd";
@@ -714,53 +784,63 @@ export function formatDate(event) {
   }
 }
 
+export function formatMonthandYear(event) {
 
-function monthDiff(dateFrom, dateTo) {
+  var key = event.keyCode || event.charCode;
 
-  let diff = dateTo.getMonth() - dateFrom.getMonth() + 
-  (12 * (dateTo.getFullYear() - dateFrom.getFullYear()));
+  var thisVal;
 
-
-  if(dateTo.getDate() <= dateFrom.getDate()) {
-    diff--;
-  }
-  return diff
-}
-
-// function Difference_In_Days(dateFrom, dateTo) {
-//   var Difference_In_Time = dateTo.getTime() - dateFrom.getTime(); 
-//   var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24); 
-
-//   return Difference_In_Days;
-// }
-
-export function calculateAge(val, byMonth) {
-  if (!val) {
-    return 0;
-  }
-  const birthday = val.toString().replace(/\\-/g, '/').split('/').reverse().join('/');
-  const today = new Date();
-  const birthDate = new Date(birthday);
-  let age2 = today.getFullYear() - birthDate.getFullYear();
-  const m = today.getMonth() - birthDate.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-    age2--;
-  }
-
-  if (age2 && (m === 0 && today.getDate() >= birthDate.getDate())) {
-    age2++;
-  }
-
-  // let age = Difference_In_Days(birthDate, today)/365;
-
-  if(byMonth) {
-    return {
-      age: age2,
-      month: monthDiff(birthDate, today)
+  let slash = 0;
+  for (var i = 0; i < event.target.value.length; i++) {
+    if (event.target.value[i] === '/') {
+      slash += 1;
     }
   }
 
-  return age2;
+  if (slash <= 1 && key !== 8 && key !== 46) {
+    
+    var strokes = event.target.value.length;
+
+    if (strokes === 2) {
+      thisVal = event.target.value;
+      thisVal += '/';
+      event.target.value = thisVal;
+    }
+    // if someone deletes the first slash and then types a number this handles it
+    if (strokes >= 3) {
+      thisVal = event.target.value;
+      if (thisVal.charAt(2) !== '/') {
+        var txt1 = thisVal.slice(0, 2) + "/" + thisVal.slice(2);
+        event.target.value = txt1;
+      }
+    }
+  }
+}
+
+export function calculateAge(val, withBreakup) {
+  if (!val) {
+    if (withBreakup) {
+      return { age: 0 };
+    }
+    return 0;
+  }
+
+  let format = '"DD/MM/YYYY"'; //pass value in this format only
+  
+  const today = moment();
+  const birthDate = moment(val, format);
+  const duration = moment.duration(today.diff(birthDate));
+  const age = duration.asYears();
+
+  if(withBreakup) {
+    return {
+      age,
+      months: parseInt(duration.asMonths(), 10),
+      days: parseInt(duration.asDays(), 10),
+    };
+  }
+
+  return age;
 }
 
 export function toFeet(n) {

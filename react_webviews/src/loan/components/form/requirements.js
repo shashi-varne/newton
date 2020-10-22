@@ -239,7 +239,7 @@ class ContactDetails extends Component {
                             id="net_monthly_salary"
                             name="net_monthly_salary"
                             placeholder={this.state.form_data.employment_type === 'Salaried' ? 
-                            "Minimum monthly salary of Rs 30,000 needed" : ""}
+                            "Minimum monthly salary of Rs 25,000 needed" : ""}
                             error={!!this.state.form_data.net_monthly_salary_error}
                             helperText={this.state.form_data.net_monthly_salary_error || numDifferentiationInr(this.state.form_data.net_monthly_salary)}
                             value={this.state.form_data.net_monthly_salary || ''}

@@ -338,6 +338,19 @@ const partnersConfigBase = {
     close_button: "close_nav_icon.svg",
     search_button: "search.png",
     white_header: true
+  },
+  indb: {
+    logo: "logo_white.png",
+    primary_color: "#173883",
+    secondary_color: "#173883",
+    code: "indb",
+    email: "ask@fisdom.com",
+    mobile: "+80-48-093070",
+    message: "",
+    banner: "obc_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png"
   }
 };
 
@@ -451,7 +464,7 @@ function getPartnerConfig(partner_code) {
   let config_to_return = baseConfig[productType];
 
   if (isStaging) {
-    config_to_return.webAppUrl = 'https://sdk-dot-plutus-web.appspot.com/#!/';
+    config_to_return.webAppUrl = 'https://payment-dot-plutus-web.appspot.com/#!/';
     // config_to_return.webAppUrl = 'http://localhost:3001/#!/';
   }
 
@@ -582,6 +595,8 @@ export const getConfig = () => {
     project = 'w-report';
   } else if (main_pathname.indexOf('kyc-esign') >= 0) {
     project = 'kyc-esign';
+  } else if (main_pathname.indexOf('pg') >= 0) {
+    project = 'pg';
   }
 
 
@@ -590,10 +605,6 @@ export const getConfig = () => {
   const insurance_v2 = generic_callback === "true" ? true : search.indexOf("insurance_v2") >= 0;
 
   let returnConfig = getPartnerConfig(partner_code);
-
-  if (project === 'w-report') {
-    base_url = 'https://my.fisdom.com';
-  }
 
   let searchParams = `?base_url=${base_url}`;
   let searchParamsMustAppend = `?base_url=${base_url}`;

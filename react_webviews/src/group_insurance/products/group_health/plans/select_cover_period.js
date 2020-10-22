@@ -3,7 +3,7 @@ import Container from '../../../common/Container';
 
 import { nativeCallback } from 'utils/native_callback';
 
-import { storageService, inrFormatDecimal } from 'utils/validators';
+import { inrFormatDecimal } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
 
 import Api from 'utils/api';
@@ -38,7 +38,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         try {
 
             let body = this.state.groupHealthPlanData.post_body;
-            const res = await Api.post('/api/ins_service/api/insurance/hdfcergo/premium', body);
+            const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/premium`, body);
 
             this.setState({
                 show_loader: false
@@ -47,7 +47,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
             if (res.pfwresponse.status_code === 200) {
 
                 this.setState({
-                    premium_data: resultData.premium[0][type_of_plan],
+                    premium_data: resultData.premium[type_of_plan],
                     type_of_plan: type_of_plan
                 }, () => {
                     this.updateBottomPremium();
@@ -74,10 +74,10 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "product": 'health suraksha',
+                "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'select cover period',
-                'cover_period' : (this.state.premium_data || [])[(this.state.selectedIndex || 0)].tenure || ''
+                'cover_period' : ((this.state.premium_data || [])[(this.state.selectedIndex || 0)] || {}).tenure || ''
             }
         };
 
@@ -107,7 +107,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         groupHealthPlanData.tenure = plan_selected_final.tenure;
 
         groupHealthPlanData.selectedIndexCover = this.state.selectedIndex;
-        storageService().setObject('groupHealthPlanData', groupHealthPlanData);
+        this.setLocalProviderData(groupHealthPlanData);
 
         this.navigate('plan-premium-summary');
     }
@@ -169,10 +169,10 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
             >
 
                 <div className="common-top-page-subtitle flex-between-center">
-                    Your health expenses will be covered for this period
+                    Health expenses will be covered for this period
                  <img 
                         className="tooltip-icon"
-                        data-tip="As premium increases by insurer age, policy with longer cover period reduces the overall premium. 70% of our user has taken cover for 3 year period."
+                        data-tip="As premium increases by insured age, policy with longer cover period reduces the overall premium.<br />70% of our users have taken a cover for 3 years."
                         src={require(`assets/${this.state.productName}/info_icon.svg`)}
                         alt="" />
                 </div>

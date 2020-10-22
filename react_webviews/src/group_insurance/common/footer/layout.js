@@ -334,6 +334,7 @@ export class WithProviderLayout extends Component {
         <div className="FlexItem2 FlexItem2-withProvider-footer" onClick={props.handleClick}>
           <Button
             type={props.type}
+            disable={props.buttonDisabled}
             {...props} />
         </div>
         {this.renderDialog()}
