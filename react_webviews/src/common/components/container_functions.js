@@ -1,7 +1,5 @@
 
 import { getConfig, setHeights } from 'utils/functions';
-import loader_fisdom from 'assets/loader_gif_fisdom.gif';
-import loader_myway from 'assets/loader_gif_myway.gif';
 // import { nativeCallback } from "utils/native_callback";
 
 import React from "react";
@@ -34,7 +32,7 @@ export function didmount() {
     this.new_header_scroll = new_header_scroll.bind(this);
 
     this.setState({
-        loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom,
+        productName: getConfig().productName,
         mounted: true,
         force_show_inpage_title : true,
         inPageTitle: true
@@ -224,7 +222,7 @@ export function renderPageLoader() {
         return (
             <div className={`Loader ${this.props.loaderData ? this.props.loaderData.loaderClass : ''}`}>
                 <div className="LoaderOverlay">
-                    <img src={this.state.loaderMain} alt="" />
+                    <img src={require(`assets/loader_gif_${this.state.productName}.gif`)} alt="" />
                     {this.props.loaderData && this.props.loaderData.loadingText &&
                         <div className="LoaderOverlayText">{this.props.loaderData.loadingText}</div>
                     }
