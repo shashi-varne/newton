@@ -281,7 +281,7 @@ class GroupHealthPlanDob extends Component {
                 onlyButton={true}
                 handleClick={() => this.handleClick()}
             >
-
+                <div style={{margin: '10px 0px'}}></div>
                 {this.state.final_dob_data.map(this.renderDobs)}
 
                 <BottomInfo baseData={{ 'content': 'Illness can hit you any time, get insured today to cover your medical expenses' }} />

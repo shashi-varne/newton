@@ -399,6 +399,7 @@ class GroupHealthPlanAddMembers extends Component {
             onlyButton={true}
             handleClick={() => this.handleClick()}
           >
+            <div style={{margin: '10px 0px'}}></div>
             {["selfandfamily"].indexOf(this.state.account_type) !== -1 && (
               <div className="InputField">
                 <RadioWithoutIcon

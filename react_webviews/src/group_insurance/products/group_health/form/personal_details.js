@@ -542,6 +542,7 @@ class GroupHealthPlanPersonalDetails extends Component {
             {this.state.header_subtitle}
           </div>
         )}
+        <div style={{margin: '10px 0px'}}></div>
         <div className="InputField">
           <Input
             type="text"
