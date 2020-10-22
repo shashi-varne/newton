@@ -135,7 +135,7 @@ export async function initialize() {
             total_amount = lead.total_amount;
 
         } else {
-            let premium_data = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.premium_data.WF : [];
+            let premium_data = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.premium_deta : [];
             let selectedIndexSumAssured = groupHealthPlanData.selectedIndexSumAssured || 0;
 
             this.setState({
@@ -143,7 +143,9 @@ export async function initialize() {
             })
 
             leftTitle = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.plan_title : '';
-            leftSubtitle = premium_data[selectedIndexSumAssured] ? premium_data[selectedIndexSumAssured].net_premium : '';
+            if(selectedIndexSumAssured && premium_data){
+            leftSubtitle = premium_data[selectedIndexSumAssured] ? premium_data[selectedIndexSumAssured].premium : '';
+            }
 
         }
 
@@ -219,13 +221,14 @@ export async function initialize() {
 }
 
 export function updateBottomPremium(premium) {
-
-    this.setState({
-        bottomButtonData: {
-            ...this.state.bottomButtonData,
-            leftSubtitle: inrFormatDecimal(premium || this.state.premium_data[this.state.selectedIndex].net_premium)
-        }
-    })
+    if(this.state.premium_data){
+        this.setState({
+            bottomButtonData: {
+                ...this.state.bottomButtonData,
+                leftSubtitle: inrFormatDecimal(premium || this.state.premium_data[this.state.selectedIndex].premium)
+            }
+        })    
+    }
 }
 
 export async function updateLead(body, quote_id) {
