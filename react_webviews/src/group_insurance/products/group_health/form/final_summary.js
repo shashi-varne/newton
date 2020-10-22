@@ -764,7 +764,7 @@ class GroupHealthPlanFinalSummary extends Component {
                     </div>}
 
                 {props.open && props.title === 'Address details' &&
-                    <div className="bct-content">
+                    <div className={`bct-content bct-content-address`}>
 
                         {props.data[0].map(this.renderAccordiansubData)}
                         <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
