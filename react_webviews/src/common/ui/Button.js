@@ -45,7 +45,7 @@ class CustomButton extends Component {
       );
     } else {
       return (
-        <div style={{width: '140px', marginLeft: 'auto', marginRight : '0px'}}>
+        <div>
           <Button
             fullWidth={(props.reset || props.type === 'summary') ? true : false}
             variant="raised"

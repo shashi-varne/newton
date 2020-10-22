@@ -251,7 +251,7 @@ class GroupHealthLanding extends Component {
         onlyButton={true}
         handleClick={() => this.handleClick()}
       >
-        <div className="common-top-page-subtitle-dark">
+        <div className="common-top-page-subtitle-dark" style={{marginTop: '-20px'}}>
           {this.state.providerConfig.subtitle}
         </div>
 
@@ -332,7 +332,7 @@ class GroupHealthLanding extends Component {
 
           <div
             className="generic-page-title"
-            style={{ margin: "40px 0 15px 0" }}
+            style={{ margin: "40px 0 10px 0" }}
           >
             Overview
           </div>
@@ -394,7 +394,7 @@ class GroupHealthLanding extends Component {
 
           <div
             className="generic-page-title"
-            style={{ margin: "40px 0 15px 0" }}
+            style={{ margin: "40px 0 10px 0" }}
           >
             Benefits of health insurance
           </div>
