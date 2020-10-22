@@ -206,9 +206,9 @@ class InstantKycHome extends Component {
       return (
         <div className="loan-instant-kyc-eligi-checking">
 
-          <div>
+          <div className="loader-container">
             {this.state.productName && <img
-              src={require(`assets/${this.state.productName}/loader_gif.gif`)}
+              src={require(`assets/loader_gif_${this.state.productName}.gif`)}
               style={{ padding: '80px 0 30px 0' }}
               alt="loader" />}
           </div>
