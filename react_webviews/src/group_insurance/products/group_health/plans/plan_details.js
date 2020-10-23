@@ -17,9 +17,7 @@ class GroupHealthPlanDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            premium_data: {
-                WF: []
-            },
+            premium_data:[],
             common_data: {},
             plan_selected: {},
             extra_data: {

@@ -135,7 +135,7 @@ export async function initialize() {
             total_amount = lead.total_amount;
 
         } else {
-            let premium_data = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.premium_deta : [];
+            let premium_data = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.premium_data : [];
             let selectedIndexSumAssured = groupHealthPlanData.selectedIndexSumAssured || 0;
 
             this.setState({

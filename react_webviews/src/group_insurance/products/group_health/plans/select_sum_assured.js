@@ -80,6 +80,8 @@ class GroupHealthPlanSelectSumAssured extends Component {
 
 
     sendEvents(user_action) {
+        let groupHealthPlanData = this.state.groupHealthPlanData;
+
         let eventObj  = {}
             eventObj = {
                 "event_name": 'health_insurance',
@@ -88,7 +90,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
                     "product": this.state.providerConfig.provider_api,
                     "flow": this.state.insured_account_type || '',
                     "screen_name": 'select sum insured',
-                    'sum_assured' : this.state.groupHealthPlanData.plan_selected.premium_data[this.state.selectedIndex || 0].sum_insured || ''
+                    'sum_assured' : groupHealthPlanData.plan_selected.premium_data.length > 0 ? groupHealthPlanData.plan_selected.premium_data[this.state.selectedIndex || 0].sum_insured : ''
                 }
             };
             
