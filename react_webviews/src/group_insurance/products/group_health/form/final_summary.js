@@ -1017,10 +1017,10 @@ class GroupHealthPlanFinalSummary extends Component {
                         </Grid>
                         </Grid>
                     </div>
-                    <div style={{position: 'relative', height: '15vh'}}>
+                    <div className="final-summary-motivator">
                     <BottomInfo 
                         summaryPage={true} 
-                        bottom="20px" 
+                        fixedPosition="20px" 
                         baseData={{ 'content': 'Get best health insurance benefits at this amount and have a secured future' }} />
                     </div>
                 </div>
