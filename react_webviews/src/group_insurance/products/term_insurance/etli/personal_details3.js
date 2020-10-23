@@ -7,8 +7,7 @@ import { getConfig } from 'utils/functions';
 import { FormControl } from 'material-ui/Form';
 
 import MobileInputWithoutIcon from '../../../../common/ui/MobileInputWithoutIcon';
-import Modal from 'material-ui/Modal';
-import Typography from 'material-ui/Typography';
+import LoaderModal from '../../../common/Modal';
 
 import {
     validateEmail, validateNumber, numberShouldStartWith,
@@ -272,22 +271,13 @@ class EtliPersonalDetails3 extends Component {
 
     renderModal = () => {
         return (
-          <Modal
-            aria-labelledby="simple-modal-title"
-            aria-describedby="simple-modal-description"
-            open={this.state.openModal}
-          >
-            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: '#fff', borderRadius: 4, minWidth: 320, padding: 25, textAlign: 'center' }}>
-              <div style={{ padding: '20px 0 30px' }}>
-                <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
-              </div>
-              <Typography variant="subheading" id="simple-modal-description" style={{ color: '#444' }}>
-                {this.state.openModalMessage}
-              </Typography>
-            </div>
-          </Modal>
+            <LoaderModal 
+                open={this.state.openModal}
+                message={this.state.openModalMessage}
+                productName={this.state.productName}
+            />
         );
-      }
+    };
 
     render() {
         return (

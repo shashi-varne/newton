@@ -10,8 +10,7 @@ import expand from 'assets/expand_icn.png';
 import shrink from 'assets/shrink_icn.png';
 
 import Api from 'utils/api';
-import Modal from 'material-ui/Modal';
-import Typography from 'material-ui/Typography';
+import LoaderModal from  '../../../common/Modal';
 import qs from 'qs';
 import { income_pairs } from '../../../constants';
 import { numDifferentiation, formatAmount } from 'utils/validators';
@@ -444,21 +443,13 @@ class Summary extends Component {
   }
 
   renderModal = () => {
+    let message = `Wait a moment, you will be redirected to <b>${this.state.quote_provider}</b>`;
     return (
-      <Modal
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
+      <LoaderModal 
         open={this.state.openModal}
-      >
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: '#fff', borderRadius: 4, minWidth: 320, padding: 25, textAlign: 'center' }}>
-          <div style={{ padding: '20px 0 30px' }}>
-            <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
-          </div>
-          <Typography variant="subheading" id="simple-modal-description" style={{ color: '#444' }}>
-            Wait a moment, you will be redirected to <b>{this.state.quote_provider}</b>.
-          </Typography>
-        </div>
-      </Modal>
+        message={message}
+        productName={this.state.productName}
+      />
     );
   }
 

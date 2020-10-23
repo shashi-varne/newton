@@ -19,8 +19,7 @@ import {
 import { getConfig } from 'utils/functions';
 import { nativeCallback, openPdfCall } from 'utils/native_callback';
 
-import Modal from 'material-ui/Modal';
-import Typography from 'material-ui/Typography';
+import LoaderModal from '../../../common/Modal';
 import TermsAndConditions from '../../../../common/ui/tnc';
 
 class PersonalDetails1 extends Component {
@@ -263,20 +262,11 @@ class PersonalDetails1 extends Component {
 
   renderModal = () => {
     return (
-      <Modal
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
+      <LoaderModal 
         open={this.state.openModal}
-      >
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: '#fff', borderRadius: 4, minWidth: 320, padding: 25, textAlign: 'center' }}>
-          <div style={{ padding: '20px 0 30px' }}>
-            <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
-          </div>
-          <Typography variant="subheading" id="simple-modal-description" style={{ color: '#444' }}>
-            {this.state.openModalMessage}
-          </Typography>
-        </div>
-      </Modal>
+        message={this.state.openModalMessage}
+        productName={this.state.productName}
+      />
     );
   }
 

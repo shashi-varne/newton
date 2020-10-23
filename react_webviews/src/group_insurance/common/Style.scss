@@ -1097,3 +1097,29 @@
     color: #0A1D32;
   }
 }
+
+#loaderModal {
+  .loader-in-dialog-content {
+    position: absolute;
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    background-color: #fff; 
+    border-radius: 4px; 
+    min-width: 320px; 
+    padding: 25px; 
+    text-align: center;
+
+    .loader-container {
+      padding: 20px 0;
+
+      img {
+        width: 30%;
+        height: 30%;
+      }
+    }
+    .message {
+      color: #444;
+    }
+  }
+}
