@@ -747,7 +747,6 @@ class Journey extends Component {
       <LoaderModal 
         open={this.state.openModal}
         message={this.state.openModalMessage}
-        productName={this.state.productName}
       />
     );
   }

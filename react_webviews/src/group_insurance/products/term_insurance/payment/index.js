@@ -53,7 +53,6 @@ class Payment extends Component {
       <LoaderModal 
         open={this.state.openModal}
         message={message}
-        productName={this.state.productName}
       />
     );
   }
