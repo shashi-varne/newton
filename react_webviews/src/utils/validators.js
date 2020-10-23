@@ -890,3 +890,14 @@ export function isEmpty(value) {
 export function nonRoundingToFixed(val, decimalPlaces) {
   return (Math.floor(100 * val) / 100).toFixed(decimalPlaces);
 }
+
+export function containsSpecialCharacters(value){
+  var format = /[$&+,:;=?@#|'<>.^*()%!"-]/g;
+  return format.test(value);
+}
+
+export function containsSpecialCharactersAndNumbers(value){
+  var format = /[$&+,:;=?@#|'<>.^*()%!"-\d]/g;
+  return format.test(value);
+}
+

@@ -122,6 +122,9 @@ class GroupHealthPlanAddressDetails extends Component {
         var value = event.target ? event.target.value : event;
         var form_data = this.state.form_data || {};
 
+        if(name.includes('addressline')){
+            value = event.target ? event.target.value.substr(0, 60) : event;
+        }
         if (name === 'mobile_number') {
             if (value.length <= 10) {
                 form_data[name] = value;
@@ -602,7 +605,7 @@ class GroupHealthPlanAddressDetails extends Component {
     }
 
     render() {
-
+        
         return (
             <Container
                 events={this.sendEvents('just_set_events')}
