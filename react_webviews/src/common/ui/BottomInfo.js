@@ -15,7 +15,7 @@ class BottomInfoClass extends Component {
 
     return (
 
-      <div className="common-bottom-info">
+      <div className={`common-bottom-info ${this.props.summaryPage ? 'common-bottom-info-down' : ''}`} style={{bottom: this.props.bottom}}>
         <div className="content">{this.state.baseData.content}</div>
       </div>
 
