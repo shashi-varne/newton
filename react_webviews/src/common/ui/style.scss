@@ -668,7 +668,7 @@ body[data-device="mobile"] {
     border-radius: 4px;
     color: #767E86;
     margin: '0 0 0 10px';
-    z-index: +10000;
+    z-index: 99999;
   }
   
   .tooltip-arrrow {
