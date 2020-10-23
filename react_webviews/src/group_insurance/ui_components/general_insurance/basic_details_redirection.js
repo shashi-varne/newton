@@ -269,8 +269,8 @@ class BasicDetailsRedirectionForm extends Component {
                 open={this.state.openModal}
             >
                 <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: '#fff', borderRadius: 4, minWidth: 320, padding: 25, textAlign: 'center' }}>
-                    <div style={{ padding: '20px 0 30px' }}>
-                        <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
+                    <div style={{ padding: '20px 0' }}>
+                        <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt=""  style={{ width: '30%', height: '30%' }} />
                     </div>
                     <Typography variant="subheading" id="simple-modal-description" style={{ color: '#444' }}>
                         {this.state.openModalMessage}
