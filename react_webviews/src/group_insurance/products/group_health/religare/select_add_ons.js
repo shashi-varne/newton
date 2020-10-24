@@ -102,8 +102,8 @@ class GroupHealthPlanAddOns extends Component {
     }
 
     updateCtaPremium = () => {
-        let { add_ons_data } = this.state;
-        let cta_premium = 10000;
+        let { add_ons_data, cta_premium } = this.state;
+
         let total_premium = 0;
 
         add_ons_data.forEach((item, index) => {
