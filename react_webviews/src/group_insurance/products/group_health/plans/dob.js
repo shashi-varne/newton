@@ -203,7 +203,7 @@ class GroupHealthPlanDob extends Component {
 
                 let member_data = final_dob_data[j];
                 let backend_key = member_data.backend_key;
-                let gender = member_data.relation === 'son' || member_data.relation === 'husband' || member_data.relation == 'father' || member_data.relation == 'father_in_law' ? "MALE" : "FEMALE";
+                let gender = member_data.relation === 'son' || member_data.relation === 'husband' || member_data.relation === 'father' || member_data.relation === 'father_in_law' ? "MALE" : "FEMALE";
 
 
                 member_details[backend_key] = {

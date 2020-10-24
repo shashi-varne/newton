@@ -221,11 +221,22 @@ export async function initialize() {
 }
 
 export function updateBottomPremium(premium) {
-    if(this.state.premium_data){
+    if(this.state.premium_data || this.state.add_ons_data){
         this.setState({
             bottomButtonData: {
                 ...this.state.bottomButtonData,
-                leftSubtitle: inrFormatDecimal(premium || this.state.premium_data[this.state.selectedIndex].premium)
+                leftSubtitle: inrFormatDecimal(premium || this.state.premium_data[this.state.selectedIndex].premium || '')
+            }
+        })    
+    }
+}
+
+export function updateBottomPremiumAddOns(premium) {
+    if(this.state.add_ons_data){
+        this.setState({
+            bottomButtonData: {
+                ...this.state.bottomButtonData,
+                leftSubtitle: inrFormatDecimal(premium ||'')
             }
         })    
     }
