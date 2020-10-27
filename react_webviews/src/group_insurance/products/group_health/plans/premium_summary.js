@@ -210,17 +210,7 @@ class GroupHealthPlanPremiumSummary extends Component {
           </div>
           {this.state.properties && this.renderProviderPremium()}
 
-          <div className="premium-summary-motivator">
-          <BottomInfo
-            summaryPage={true}
-            fixedPosition="0px"
-            baseData={{
-              content:
-                "Complete your details and get quality medical treatments at affordable cost",
-            }}
-          />
-          </div>
-        </div>
+          <BottomInfo baseData={{ 'content': 'Complete your details and get quality medical treatments at affordable cost' }} />        </div>
       </Container>
     );
   }
