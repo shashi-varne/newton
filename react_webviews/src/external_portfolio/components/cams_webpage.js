@@ -27,7 +27,7 @@ export default class CamsWebpageSwipe extends Component {
       }
     };
 
-    if (['just_set_events', 'back'].includes(user_action)) {
+    if (['just_set_events'].includes(user_action)) {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
@@ -35,6 +35,7 @@ export default class CamsWebpageSwipe extends Component {
   }
 
   goBack = (params) => {
+    this.sendEvents('back');
     if (params && params.comingFrom === 'statement_request') {
       this.navigate(
         `statement_request/${params.email}`,
