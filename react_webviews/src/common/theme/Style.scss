@@ -692,7 +692,7 @@ input#pan {
   color: #767e86;
   font-size: 14px;
   font-weight: 400;
-  margin: -10px 0 20px 0px;
+  margin: -10px 0 30px 0px;
   line-height: 1.6;
 }
 
@@ -700,10 +700,13 @@ input#pan {
   color: #102f50;
   font-size: 16px;
   font-weight: 500;
-  margin: -10px 0 20px 0;
+  margin: -10px 0 30px 0;
   line-height: 1.6;
 }
 
+.common-title-content-gap{
+  margin: 10px 0px;
+}
 .common-how-steps {
   margin: 50px 0 40px 0;
   border-top: 1px solid #ededed;
@@ -716,7 +719,7 @@ input#pan {
   }
   .top-title {
     color: #0a1c32;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
   }
   .top-icon {
@@ -967,6 +970,10 @@ input#pan {
   }
 }
 
+.common-bottom-info-down{
+  position: absolute;
+}
+
 .generic-page-button-small {
   color: var(--secondary);
   font-size: 12px;
@@ -1021,6 +1028,7 @@ input#pan {
   color: #767e86;
   font-size: 13px;
   margin-bottom: 20px;
+  transform: translateY(-45px);
 }
 
 #add_ons_bottom_text{

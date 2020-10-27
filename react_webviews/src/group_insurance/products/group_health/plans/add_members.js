@@ -399,6 +399,7 @@ class GroupHealthPlanAddMembers extends Component {
             onlyButton={true}
             handleClick={() => this.handleClick()}
           >
+            <div className="common-title-content-gap"></div>
             {["selfandfamily"].indexOf(this.state.account_type) !== -1 && (
               <div className="InputField">
                 <RadioWithoutIcon

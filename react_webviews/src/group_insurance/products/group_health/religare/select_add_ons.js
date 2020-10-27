@@ -207,7 +207,7 @@ class GroupHealthPlanAddOns extends Component {
                                 className="Checkbox" />
                         </Grid>
                         <Grid item xs={11}>
-                            <span className="flex-between" style={{ alignItems: 'start' }}>
+                            <span className="flex-between" style={{ alignItems: 'start' }} onClick={this.handleChangeCheckboxes(index)}>
                                 <div style={{ color: '#0A1D32' }}>
                                     <span style={{ fontSize: "16px", fontWeight: '600' }}>{item.title}</span> 
                                     <div style={{ marginTop: '10px', fontSize: '14px' }}>
